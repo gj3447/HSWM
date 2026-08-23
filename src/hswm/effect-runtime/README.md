@@ -140,26 +140,30 @@ remains `BLOCKED_PRE_PREREG`: the bounded adapters and closed current-run Layer
 graph are present, but no issued current-run/dispatch authority, workflow,
 complete replay-closed durable evidence deployment, or external event-10
 finalizer exists. Resume from the repository
-[`current golden vertical-composition design handoff`](../../../docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md)
+[`current golden vertical-composition implementation handoff`](../../../docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and its
-[`v14 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v14.json).
-That documentation-only checkpoint audits the existing public-golden-seed
-numeric path and freezes a root-private `S2SPythonNumericExecutor` composition
-with a distinctly typed test-only golden artifact/readback service. It records
-that local receipts cannot honestly satisfy the production confirmatory-event
-and `S2SArtifactEvidence` inputs of the job-sequence carriers, so the harness
-must not call the production job sequence, success profiles, or durable evidence
-store. It exact-binds golden-verifier and numeric-executor runtime identities and
-terminates immediately on `VOID`. Fresh-Layer recovery uses create-only files
-under the same explicit caller-owned temporary root; an in-memory-only Layer is
-not recovery. The shallow production profile validator is not claimed to reject
-malicious relabeling, so the root-private harness provides no production
-projection adapter or call site. Only 20 of the 48 healthy-success slot
-occurrences currently have
-construct-and-recover validation; the next local slice therefore cannot claim a
+[`v15 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v15.json).
+The root-private composition is now implemented with a distinctly typed
+test-only golden artifact/postcondition codec, an explicit-root create-only
+file Layer, two candidate readbacks, fresh same-root Layer recovery, exact
+golden-verifier/numeric-executor runtime-source binding, and an immediate typed
+`VOID` terminal. One pinned public-seed run completed with exit zero and
+`CANDIDATE_PASS_AWAITING_BUNDLE`, but only as
+`TEST_ONLY_NON_AUTHORIZING / NUMERIC_CANDIDATE_ONLY_UNJUDGED`.
+
+The harness remains absent from the package-root export and does not call the
+production job sequence, success profiles, or durable evidence store. Local
+receipts cannot honestly satisfy the production confirmatory-event and
+`S2SArtifactEvidence` carrier inputs, and no projection adapter or relabeling
+call site exists. Only 20 of the 48 healthy-success slot occurrences have
+construct-and-recover validation, so the implementation does not close a
 complete profile. The Effect runtime owns orchestration, authority, resources,
 typed failure, and evidence, while the pinned Python/NumPy process remains the
-bounded deterministic numeric function cell. The preceding
+bounded deterministic numeric function cell. The immutable
+[`v14 design handoff`](../../../docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md)
+and
+[`v14 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v14.json)
+record the predecessor contract. The preceding
 [`v13 durable replay-profile integration handoff`](../../../docs/operations/HSWM_SWM0W_S2S_DURABLE_REPLAY_PROFILE_INTEGRATED_NEXT_SESSION_2026-08-23.md)
 and
 [`v13 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v13.json), plus the

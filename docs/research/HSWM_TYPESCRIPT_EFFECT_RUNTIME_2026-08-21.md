@@ -341,28 +341,30 @@ verdict remain OPEN. The next claim-critical step is a thin non-authorizing
 golden/public-seed oracle-to-upload/readback dry run, not an unbounded hardening
 program.
 
-That next slice is now audited and frozen, without runtime implementation, in
-the
-[`golden vertical-composition design handoff`](../operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md)
+That slice is now implemented in the
+[`golden vertical-composition implementation handoff`](../operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and
-[`v14 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v14.json).
-The strict TypeScript/Effect v3 shell will directly own the existing pinned
+[`v15 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v15.json).
+The strict TypeScript/Effect v3 shell directly owns the existing pinned
 Python/NumPy numeric function cell through `S2SPythonGoldenVerifier` and
-`S2SPythonNumericExecutor`; the unused generic numeric-oracle port will not
-become a second orchestration model. The audit found 48 healthy-success slot
-occurrences: 20 already have construct-and-recover validation, 19 have semantic
-machinery but no attachment codec, and 9 lack the carrier or source. The next
-claim therefore remains a narrow `TEST_ONLY_NON_AUTHORIZING` golden numeric
-upload/readback harness, not a complete profile. The audit also found a semantic
-type boundary: a local receipt cannot honestly inhabit the production
-confirmatory-event or `S2SArtifactEvidence` inputs required by the existing job
-sequence. The first harness must use a distinctly versioned test-only artifact,
-must not call the production job sequence or durable profile store, must
-exact-bind golden-verifier and numeric-executor runtime identities, and must
-terminate immediately on numeric `VOID`. Its fresh Layer must reopen the same
-explicit caller-owned temporary file root; no in-memory recovery is claimed.
-Because the shallow success-profile validator does not inspect nested bytes, the
-harness provides no adapter or call site that relabels its test ZIP as production
-evidence. A genuine-authority production
-connector, the terminal finalizer, external durability, GitHub origin, source
-freeze, future seed, dispatch, event 10, and scientific judgment remain OPEN.
+`S2SPythonNumericExecutor`; the unused generic numeric-oracle port did not
+become a second orchestration model. A distinct test-only codec, create-only
+file Layer, two candidate readbacks, fresh same-root Layer recovery, exact
+verifier/executor runtime-source binding, and immediate typed `VOID` branch are
+implemented behind a root-private composition. One real public-seed execution
+completed with exit zero and `CANDIDATE_PASS_AWAITING_BUNDLE`, explicitly under
+`TEST_ONLY_NON_AUTHORIZING / NUMERIC_CANDIDATE_ONLY_UNJUDGED`. It created no
+production event, carrier, profile, durable evidence record, or verdict.
+
+The audited inventory is still 48 healthy-success slot occurrences: 20 with
+construct-and-recover validation, 19 with semantic machinery but no attachment
+codec, and 9 without a carrier or source. Local receipts still cannot honestly
+inhabit the production confirmatory-event or `S2SArtifactEvidence` inputs. A
+genuine-authority production connector, stage upload postconditions, the
+terminal finalizer, external durability, GitHub origin, source freeze, future
+seed, dispatch, event 10, and scientific judgment therefore remain OPEN. The
+immutable
+[`v14 design checkpoint`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v14.json)
+and its
+[`v14 design handoff`](../operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md)
+record the contract from which this implementation advanced.

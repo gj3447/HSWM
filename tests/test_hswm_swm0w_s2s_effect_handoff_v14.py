@@ -46,6 +46,48 @@ def _load_handoff() -> dict[str, object]:
     return _load_json(HANDOFF_PATH)
 
 
+def _successor_chain(payload: dict[str, object]) -> list[dict[str, object]]:
+    candidates = [
+        _load_json(path)
+        for path in sorted(HANDOFF_PATH.parent.glob(HANDOFF_GLOB))
+        if path != HANDOFF_PATH
+    ]
+    by_predecessor: dict[object, list[dict[str, object]]] = {}
+    for candidate in candidates:
+        predecessor = candidate.get("supersedes_bundle_uid_for_continuation")
+        if predecessor is not None:
+            by_predecessor.setdefault(predecessor, []).append(candidate)
+
+    chain: list[dict[str, object]] = []
+    current_uid = payload["bundle_uid"]
+    seen = {current_uid}
+    while current_uid in by_predecessor:
+        successors = by_predecessor[current_uid]
+        assert len(successors) == 1
+        successor = successors[0]
+        successor_uid = successor["bundle_uid"]
+        assert successor_uid not in seen
+        chain.append(successor)
+        seen.add(successor_uid)
+        current_uid = successor_uid
+    return chain
+
+
+def _latest_binding_hashes(payload: dict[str, object]) -> dict[str, str]:
+    bindings: dict[str, str] = {}
+    for checkpoint in [payload, *_successor_chain(payload)]:
+        entries = checkpoint.get("artifact_bindings", [])
+        assert type(entries) is list
+        for entry in entries:
+            assert type(entry) is dict
+            path = entry["path"]
+            digest = entry["sha256"]
+            assert type(path) is str
+            assert type(digest) is str
+            bindings[path] = digest
+    return bindings
+
+
 def test_v14_is_duplicate_key_safe_latest_design_only_checkpoint() -> None:
     try:
         json.loads('{"same": 1, "same": 2}', object_pairs_hook=_reject_duplicate_pairs)
@@ -430,6 +472,7 @@ def test_v14_freezes_only_the_local_upload_readback_slice() -> None:
 def test_v14_bindings_chain_indexes_and_verification_are_exact() -> None:
     payload = _load_handoff()
     predecessor = _load_json(PREDECESSOR_PATH)
+    latest_bindings = _latest_binding_hashes(payload)
     assert hashlib.sha256(PREDECESSOR_PATH.read_bytes()).hexdigest() == (
         IMMUTABLE_V13_SHA256
     )
@@ -490,7 +533,9 @@ def test_v14_bindings_chain_indexes_and_verification_are_exact() -> None:
         path = ROOT / relative
         assert path.is_file()
         assert not path.is_symlink()
-        assert hashlib.sha256(path.read_bytes()).hexdigest() == expected
+        current_sha256 = hashlib.sha256(path.read_bytes()).hexdigest()
+        if current_sha256 != expected:
+            assert latest_bindings[relative] == current_sha256
 
     verification = payload["verification"]
     assert verification["runtime_implementation_changed"] is False

@@ -90,7 +90,7 @@ engineering checkpoints:
   freeze, future seed, dispatch, and scientific judgment remain OPEN. Continue
   from
   [`HSWM_SWM0W_S2S_DURABLE_REPLAY_PROFILE_INTEGRATED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_DURABLE_REPLAY_PROFILE_INTEGRATED_NEXT_SESSION_2026-08-23.md).
-- [`v14 current golden vertical-composition design checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v14.json)
+- [`v14 historical golden vertical-composition design checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v14.json)
   records the audited strict TypeScript/Effect-to-Python numeric function-cell
   path, classifies all 48 healthy-success attachment occurrences as 20 with
   construct-and-recover validation, 19 with a semantic core but no attachment
@@ -101,10 +101,22 @@ engineering checkpoints:
   runtime binding plus immediate `VOID` termination. It freezes that corrected
   root-private slice but adds no runtime code or numeric result. Continue from
   [`HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md).
+- [`v15 current golden vertical-composition implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v15.json)
+  records the strict TypeScript/Effect v3 test-only golden artifact and upload
+  postcondition codec, explicit-root create-only file Layer, two candidate
+  readbacks, fresh same-root Layer recovery, exact verifier/executor
+  runtime-source binding, and root-private numeric composition. Its one real
+  public-seed execution completed with exit zero and
+  `CANDIDATE_PASS_AWAITING_BUNDLE`, but remains
+  `TEST_ONLY_NON_AUTHORIZING / NUMERIC_CANDIDATE_ONLY_UNJUDGED`: it produced no
+  production event, carrier, complete profile, durable evidence record, or
+  scientific verdict. Continue from
+  [`HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v14 supersedes v13 only as the
-next-session entrypoint; v1 through v13 remain immutable historical
+runtime graphs, or remote Neo4j publications. v15 supersedes v14 only as the
+next-session entrypoint; v1 through v14 remain immutable historical
 projections. The TypeScript/Effect runtime owns control and evidence while the
 pinned Python/NumPy oracle remains a bounded deterministic numeric function
-cell. This documentation-only checkpoint changes no `H/W/A/F/Π` result.
+cell. V15 advances only the local `Π` engineering boundary; it changes no
+scientific `H/W/A/F` result or outcome-bound causal-learning loop.

@@ -564,9 +564,14 @@ flowchart TB
 > resource policy and a TypeScript/Effect `Π` control/evidence slice now exist as
 > pre-dispatch engineering. Independent exact-byte review cleared the repaired
 > source-A/B binding, pulse chronology, command accounting, and artifact-size
-> invariants, including raw Git replace/graft/environment checks. Live adapters,
-> durable three-job chronology, and preregistration remain pending. Resume
-> from the [exact handoff](docs/operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-21.md).
+> invariants, including raw Git replace/graft/environment checks. Bounded live
+> adapters, local durable replay integration, and a root-private
+> TypeScript/Effect-to-Python golden numeric composition are now implemented.
+> Its public-seed run completed under `TEST_ONLY_NON_AUTHORIZING` and
+> `NUMERIC_CANDIDATE_ONLY_UNJUDGED`; production carrier/upload semantics,
+> externally durable chronology, and preregistration remain pending. Resume
+> from the [current exact handoff](docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+> and [v15 local KG projection](ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v15.json).
 > DS870 never beat epoch zero in the pilot, so the
 > optional compact-competitive phrase is disabled for this protocol.
 > This is `IMPLEMENTED / UNJUDGED` engineering, not a second PASS.
@@ -610,7 +615,7 @@ not rescue an earlier failed premise.
 | stage | build | promotion gate | present boundary |
 |---|---|---|---|
 | **SWM-0R — representation non-collapse** | finite worlds whose exact grouping and incidence roles are jointly necessary | independent native/star paths retain the relation; registered lossy views stay at their exact ceiling; relevant removal and exact restore mediate the output | **engineering PASS** on constructive `q=3` fixture; `IMPLEMENTED / UNJUDGED`; not learned `W` |
-| **SWM-0W — learned n-ary operator** | raw role-incidence features and held-out higher-order configurations with matched lower-order marginals | learned role-conditioned set operator beats the registered lower-order controls; member broadcast, role cycles, and learned-channel removal mediate the gain | **`SUPPORTED_NARROW`** only for the preregistered fixed-three-singleton-role scalar precursor. The separate multi-member S2S core is `IMPLEMENTED / PILOT-ADOPTED / UNJUDGED`: exact configs and an outcome-independent resource-policy/Effect-control scaffold exist, and the repaired pure control core is audit-clear; live adapters, durable three-job chronology, future tasks, adjudication, and an efficacy verdict remain open |
+| **SWM-0W — learned n-ary operator** | raw role-incidence features and held-out higher-order configurations with matched lower-order marginals | learned role-conditioned set operator beats the registered lower-order controls; member broadcast, role cycles, and learned-channel removal mediate the gain | **`SUPPORTED_NARROW`** only for the preregistered fixed-three-singleton-role scalar precursor. The separate multi-member S2S core is `IMPLEMENTED / PILOT-ADOPTED / UNJUDGED`: exact configs, bounded adapters, local replay integration, and a root-private TypeScript/Effect golden numeric composition exist. One public-seed run returned `CANDIDATE_PASS_AWAITING_BUNDLE`, but only as `TEST_ONLY_NON_AUTHORIZING / NUMERIC_CANDIDATE_ONLY_UNJUDGED`; production carriers, external durability, future tasks, confirmatory adjudication, and an efficacy verdict remain open |
 | **SWM-1 — sparse recurrent numeric core** | first-class incidence, local `V→E→V`, member-specific decoding, residual bounded recurrence | role/incidence shuffle and edge ablation destroy the learned advantage under equal compute | not implemented; current core is boolean incidence plus mean/sum/max pooling |
 | **SWM-2 — LLM token function loop** | one frozen LLM executes at least three typed semantic-cell roles inside the active field | weighted HSWM beats fixed workflow and transcript/vector-memory controls under equal calls, tokens, and latency | `CellPort` and self-modification components exist; no integrated operator-`W` loop |
 | **SWM-3 — outcome-bound fast `W`** | pre-outcome eligibility, independent outcome, fast causal efficacy, versioned receipt | correct credit changes the next route; shuffled credit/time, uniform credit, and rollback remove the gain | receipt and scalar precursors exist; no successful active macro-route change |
@@ -1009,13 +1014,13 @@ and [`ontology/field/sheaf/HSWM_SHEAF_ONTOLOGY.v1.json`](ontology/field/sheaf/HS
 
 ## Current evidence boundary
 
-Repository state as of 2026-08-21:
+Repository state as of 2026-08-23:
 
 | area | honest status |
 |---|---|
 | SWM-0R finite n-ary representation witness | **engineering PASS / scientific `UNJUDGED`**: constructive `q=3` representation conformance with independent native/star paths, not learned `W/Θ/R` |
 | SWM-0W scalar compatibility precursor | **`SUPPORTED_NARROW`**: the preregistered 20-task run's candidate-only reducer emitted `CANDIDATE_PASS_AWAITING_BUNDLE`, and the separate live-evidence adjudicator promoted it to `PASS` after GitHub chronology/artifact, pinned-Node BLS, seed/task, receipt, and reducer replay; canonical set-to-set `W` and whole HSWM remain `UNJUDGED` |
-| SWM-0W-S2S multi-member operator core | **engineering `IMPLEMENTED / PILOT-ADOPTED / UNJUDGED`**: exact `Z₅⁶` fixture, `S₂³`-equivariant recipient outputs, three exact 870-parameter arms, additive V2 coefficient/split generator, task-bound constructive Q witness, deterministic analytic-gradient optimizer, history/replay, interventions, and worst-stratum R² instrumentation. A 27-cell train/dev run fixed T16 `.003`, P_CAP18/DS870 `.001` in an exact adoption bundle; DS stayed at epoch zero, so no compact-competitive wording is allowed. V2 draws share one fixed frame. The resource policy and repaired TypeScript/Effect pure control core are engineering-only and audit-clear; the gate remains `BLOCKED_PRE_PREREG` on absent live adapters and durable three-job chronology. Future tasks, adjudication, and efficacy remain absent |
+| SWM-0W-S2S multi-member operator core | **engineering `IMPLEMENTED / PILOT-ADOPTED / UNJUDGED`**: exact `Z₅⁶` fixture, `S₂³`-equivariant recipient outputs, three exact 870-parameter arms, additive V2 coefficient/split generator, task-bound constructive Q witness, deterministic analytic-gradient optimizer, history/replay, interventions, and worst-stratum R² instrumentation. A 27-cell train/dev run fixed T16 `.003`, P_CAP18/DS870 `.001` in an exact adoption bundle; DS stayed at epoch zero, so no compact-competitive wording is allowed. V2 draws share one fixed frame. Bounded adapters, local durable replay integration, and the root-private TypeScript/Effect golden numeric path are implemented. Its real public-seed run returned `CANDIDATE_PASS_AWAITING_BUNDLE` only as `TEST_ONLY_NON_AUTHORIZING / NUMERIC_CANDIDATE_ONLY_UNJUDGED`; production carrier/upload semantics, external durability, future-seeded confirmation, event 10, and efficacy judgment remain absent |
 | evidence-preserving world compiler, stable IDs, immutable cuts, and fail-closed readout | implemented and locally tested |
 | static additive semantic field | narrow positive checked-in retrieval measurement with an asymmetric budget: 100 offline LLM judgments for HSWM and zero for cosine/BM25/PPR/RRF; not continual learning |
 | scalar slow-weight P1 | **scientific RED**: 12 staged candidates, 0 fresh-gate passes/activations, and 0/456 measured top-10 rank changes |

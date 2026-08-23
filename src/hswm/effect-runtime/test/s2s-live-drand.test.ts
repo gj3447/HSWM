@@ -153,6 +153,8 @@ it("verifies the checked-in pulse offline and freezes stable evidence hashes", (
     STABLE_RECEIPT_PROJECTION_SHA256
   )
   expect(result.externalSeedHex).toBe(EXTERNAL_SEED_SHA256)
+  expect(result.exactPulseRawSha256).toBe(rawS2SFileSha256(exactPulseBytes))
+  expect(result.exactPulseByteLength).toBe(exactPulseBytes.byteLength)
   expect(result.receiptRawSha256).toBe(
     rawS2SFileSha256(result.receiptBytes)
   )
@@ -178,6 +180,9 @@ it("verifies the checked-in pulse offline and freezes stable evidence hashes", (
   const firstCopy = result.receiptBytes
   firstCopy[0] = 0x00
   expect(result.receiptBytes[0]).toBe(0x7b)
+  const firstPulseCopy = result.exactPulseBytes
+  firstPulseCopy[0] = 0x00
+  expect(result.exactPulseBytes).toEqual(exactPulseBytes)
   expect(Object.isFrozen(result)).toBe(true)
 })
 

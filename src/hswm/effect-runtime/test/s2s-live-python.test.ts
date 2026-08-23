@@ -35,6 +35,7 @@ import {
   S2S_NUMERIC_GOLDEN_VECTOR_RECEIPT_SHA256,
   S2S_NUMERIC_LOCAL_SOURCE_CLOSURE,
   S2S_NUMERIC_STDERR_MAX_BYTES,
+  S2S_PYTHON_RSS_TELEMETRY_SCHEMA_VERSION,
   S2SPythonGoldenVerifier,
   S2SPythonNumericExecutor,
   interpretS2SPythonNumericProcessResult,
@@ -66,6 +67,19 @@ const numericErrorBytes = (
   const bytes = canonicalS2SControlJsonBytes({
     ...unsigned,
     receipt_sha256: receipt.right
+  })
+  if (Either.isLeft(bytes)) throw bytes.left
+  return bytes.right
+}
+
+const rssTelemetryBytes = (peakRssKiB = 123_456): Uint8Array => {
+  const bytes = canonicalS2SControlJsonBytes({
+    api: "getrusage",
+    oom_observed: false,
+    peak_rss_kib: peakRssKiB,
+    schema_version: S2S_PYTHON_RSS_TELEMETRY_SCHEMA_VERSION,
+    subject: "RUSAGE_SELF",
+    unit: "KiB"
   })
   if (Either.isLeft(bytes)) throw bytes.left
   return bytes.right
@@ -470,26 +484,24 @@ it.effect("surfaces process-group observation denial as an interruption defect",
 it("freezes the confirm and adjudicate process contracts", () => {
   expect("S2SPythonNumericExecutor" in PublicApi).toBe(false)
   expect("makeS2SPythonNumericExecutorProcessLayer" in PublicApi).toBe(false)
-  expect([...S2S_NUMERIC_CONFIRM_ARGUMENTS]).toEqual([
+  expect(S2S_NUMERIC_CONFIRM_ARGUMENTS.slice(0, 4)).toEqual([
     "-B",
     "-P",
     "-s",
-    "-m",
-    "hswm.experiments.swm0w_s2s_numeric_oracle",
-    "confirm"
+    "-c"
   ])
-  expect([...S2S_NUMERIC_ADJUDICATE_ARGUMENTS]).toEqual([
-    "-B",
-    "-P",
-    "-s",
-    "-m",
-    "hswm.experiments.swm0w_s2s_numeric_oracle",
-    "adjudicate"
-  ])
+  expect(S2S_NUMERIC_CONFIRM_ARGUMENTS[4]).toContain(
+    "resource.getrusage(resource.RUSAGE_SELF)"
+  )
+  expect(S2S_NUMERIC_CONFIRM_ARGUMENTS.at(-1)).toBe("confirm")
+  expect(S2S_NUMERIC_ADJUDICATE_ARGUMENTS.slice(0, 5)).toEqual(
+    S2S_NUMERIC_CONFIRM_ARGUMENTS.slice(0, 5)
+  )
+  expect(S2S_NUMERIC_ADJUDICATE_ARGUMENTS.at(-1)).toBe("adjudicate")
   expect(S2S_NUMERIC_CONFIRM_TIMEOUT_MILLIS).toBe(7_200_000)
   expect(S2S_NUMERIC_ADJUDICATE_TIMEOUT_MILLIS).toBe(1_200_000)
   expect(S2S_NUMERIC_CANDIDATE_MAX_BYTES).toBe(60 * 1_048_576)
-  expect(S2S_NUMERIC_ADJUDICATION_MAX_BYTES).toBe(4 * 1_048_576)
+  expect(S2S_NUMERIC_ADJUDICATION_MAX_BYTES).toBe(3 * 1_048_576)
   expect(S2S_NUMERIC_STDERR_MAX_BYTES).toBe(8_192)
 })
 
@@ -575,7 +587,7 @@ it("validates opaque float-bearing output and returns defensive byte copies", ()
     {
       exitCode: 0,
       stdout,
-      stderr: new Uint8Array(),
+      stderr: rssTelemetryBytes(),
       elapsedNanoseconds: 10
     }
   )
@@ -588,6 +600,13 @@ it("validates opaque float-bearing output and returns defensive byte copies", ()
     expect(new TextDecoder().decode(outcome.right.readCanonicalBytes())).toBe(
       '{"metric":1.25}\n'
     )
+    expect(outcome.right.peakRssKiB).toBe(123_456)
+    expect(outcome.right.rssTelemetryRawSha256).toBe(
+      rawS2SFileSha256(rssTelemetryBytes())
+    )
+    const telemetry = outcome.right.readRssTelemetryCanonicalBytes()
+    telemetry.fill(0)
+    expect(outcome.right.readRssTelemetryCanonicalBytes()[0]).toBe(0x7b)
   }
 
   const stderrOutcome = interpretS2SPythonNumericProcessResult(
@@ -715,7 +734,14 @@ it.effect.skipIf(!existsSync(PINNED_VENV_PYTHON))(
         cwd: REPOSITORY_ROOT,
         executable_transport: "PINNED_PROC_SELF_FILE_DESCRIPTOR",
         retry_count: 0,
-        success_stderr_byte_length: 0
+        numeric_success_stderr_contract: {
+          api: "getrusage",
+          canonical_encoding: "ASCII_CANONICAL_UTF8_JSON_PLUS_SINGLE_LF",
+          line_count: 1,
+          schema_version: S2S_PYTHON_RSS_TELEMETRY_SCHEMA_VERSION,
+          subject: "RUSAGE_SELF",
+          unit: "KiB"
+        }
       })
       expect(identityDocument["invocation_contracts"]).toMatchObject({
         adjudicate: {
@@ -723,7 +749,7 @@ it.effect.skipIf(!existsSync(PINNED_VENV_PYTHON))(
           stdin_contract:
             "SNAPSHOTTED_OPAQUE_CANONICAL_NUMERIC_CANDIDATE_BYTES",
           stderr_limit_bytes: 8_192,
-          stdout_limit_bytes: 4 * 1_048_576,
+          stdout_limit_bytes: 3 * 1_048_576,
           timeout_millis: 1_200_000
         },
         confirm: {

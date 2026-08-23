@@ -16,7 +16,10 @@ export const S2S_GITHUB_API_VERSION = "2022-11-28" as const
 export const S2S_GITHUB_REPOSITORY = S2S_CONFIRMATORY_REPOSITORY
 export const S2S_GITHUB_OBSERVATION_SCHEMA_VERSION =
   "hswm-swm0w-s2s-github-observation-receipt/v2" as const
-export const S2S_GITHUB_JSON_MAX_BYTES = 8 * 1_048_576
+// The fixed S2S endpoints admit one run, three jobs, or three artifacts. A
+// one-MiB transport cap keeps complete raw replay evidence inside the envelope
+// budget while remaining well above those exact rosters.
+export const S2S_GITHUB_JSON_MAX_BYTES = 1_048_576 as const
 export const S2S_GITHUB_PAGE_SIZE = 100 as const
 export const S2S_GITHUB_METADATA_TIMEOUT_MILLIS = 120_000 as const
 export const S2S_GITHUB_ARCHIVE_TIMEOUT_MILLIS = 300_000 as const

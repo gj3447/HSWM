@@ -868,7 +868,7 @@ it("rejects an oversized adjudication member before copying it", () => {
   const result = prepareS2SAdjudicationCarrier({
     registrationReadback: scenario.registrationReadback,
     candidateReadback: scenario.candidateReadback,
-    numericAdjudicationBytes: new Uint8Array(4 * 1_048_576 + 1),
+    numericAdjudicationBytes: new Uint8Array(3 * 1_048_576 + 1),
     events: scenario.adjudicationEvents
   })
   expect(Either.isLeft(result)).toBe(true)

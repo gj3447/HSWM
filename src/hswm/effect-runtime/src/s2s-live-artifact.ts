@@ -29,6 +29,7 @@ import {
   S2SCurrentRunStage,
   makeS2SCurrentRunStageAuthorityLiveLayer
 } from "./s2s-run-authority.js"
+import { S2S_NUMERIC_ADJUDICATION_MAX_BYTES } from "./s2s-live-python.js"
 import {
   appendS2SStageArtifactLedgerEntry,
   claimS2SStageArtifactPermitScope,
@@ -110,7 +111,10 @@ const ROLE_POLICY: Readonly<Record<S2SArtifactRole, RolePolicy>> = Object.freeze
       S2S_CONFIRMATORY_POLICY.archive.adjudicationArchiveMaximumBytes,
     expectedMembers: Object.freeze([
       Object.freeze({ name: "control_receipt.json", maximumBytes: 1_048_576 }),
-      Object.freeze({ name: "numeric_adjudication.json", maximumBytes: 3_145_728 })
+      Object.freeze({
+        name: "numeric_adjudication.json",
+        maximumBytes: S2S_NUMERIC_ADJUDICATION_MAX_BYTES
+      })
     ])
   })
 })

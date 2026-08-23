@@ -23,6 +23,7 @@ import {
   makeOpaqueNumericFile,
   projectOpaqueNumericAdjudication
 } from "./s2s-orchestration.js"
+import { S2S_NUMERIC_ADJUDICATION_MAX_BYTES } from "./s2s-live-python.js"
 import {
   S2SArtifactZipValidationError,
   validateS2SArtifactZip,
@@ -517,7 +518,7 @@ export const prepareS2SAdjudicationCarrier = (input: {
   const numericAdjudication = copyBoundedNumericBytes(
     "ADJUDICATE",
     input.numericAdjudicationBytes,
-    S2S_CONFIRMATORY_POLICY.archive.adjudicationArchiveMaximumBytes
+    S2S_NUMERIC_ADJUDICATION_MAX_BYTES
   )
   if (Either.isLeft(numericAdjudication)) {
     return Either.left(numericAdjudication.left)

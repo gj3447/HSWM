@@ -217,6 +217,8 @@ export interface S2SVerifiedDrandPulse {
   readonly pulseSourceUrl: string
   readonly futureRoundCommitmentSelfHashSha256: S2SSha256
   readonly externalSeedHex: S2SSha256
+  readonly exactPulseRawSha256: S2SSha256
+  readonly exactPulseByteLength: number
   readonly inputFixtureSha256: S2SSha256
   readonly acceptedBeaconSha256: S2SSha256
   readonly verificationReceiptSha256: S2SSha256
@@ -225,6 +227,8 @@ export interface S2SVerifiedDrandPulse {
   readonly receiptByteLength: number
   readonly verifiedAtUnix: number
   readonly commandElapsedNanoseconds: number
+  /** A new copy is returned on every access. */
+  readonly exactPulseBytes: Uint8Array
   /** A new copy is returned on every access. */
   readonly receiptBytes: Uint8Array
 }
@@ -842,13 +846,15 @@ const receiptStableProjection = (receipt: S2SDrandVerificationReceipt) => ({
 
 const makeDefensiveResult = (
   receipt: S2SDrandVerificationReceipt,
+  exactPulseBytes: Uint8Array,
   receiptBytes: Uint8Array,
   request: PreparedRequest,
   externalSeedHex: S2SSha256,
   stableProjectionSha256: S2SSha256,
   commandElapsedNanoseconds: number
 ): S2SVerifiedDrandPulse => {
-  const bytesSnapshot = new Uint8Array(receiptBytes)
+  const exactPulseSnapshot = new Uint8Array(exactPulseBytes)
+  const receiptSnapshot = new Uint8Array(receiptBytes)
   return Object.freeze({
     beaconId: "quicknet" as const,
     beaconChainHashHex: S2S_QUICKNET_CHAIN_HASH,
@@ -860,18 +866,27 @@ const makeDefensiveResult = (
     futureRoundCommitmentSelfHashSha256:
       request.futureRoundCommitmentSelfHashSha256,
     externalSeedHex,
+    exactPulseRawSha256: S2SSha256Schema.make(
+      rawS2SFileSha256(exactPulseSnapshot)
+    ),
+    exactPulseByteLength: exactPulseSnapshot.byteLength,
     inputFixtureSha256: S2SSha256Schema.make(receipt.input_fixture_sha256),
     acceptedBeaconSha256: S2SSha256Schema.make(
       receipt.verification.accepted_beacon_sha256
     ),
     verificationReceiptSha256: S2SSha256Schema.make(receipt.receipt_sha256),
-    receiptRawSha256: S2SSha256Schema.make(rawS2SFileSha256(bytesSnapshot)),
+    receiptRawSha256: S2SSha256Schema.make(
+      rawS2SFileSha256(receiptSnapshot)
+    ),
     stableProjectionSha256,
-    receiptByteLength: bytesSnapshot.byteLength,
+    receiptByteLength: receiptSnapshot.byteLength,
     verifiedAtUnix: receipt.verified_at_unix,
     commandElapsedNanoseconds,
+    get exactPulseBytes(): Uint8Array {
+      return new Uint8Array(exactPulseSnapshot)
+    },
     get receiptBytes(): Uint8Array {
-      return new Uint8Array(bytesSnapshot)
+      return new Uint8Array(receiptSnapshot)
     }
   })
 }
@@ -880,6 +895,7 @@ const validateReceipt = (
   receiptBytes: Uint8Array,
   request: PreparedRequest,
   pulse: ExactPulse,
+  exactPulseBytes: Uint8Array,
   fixtureBytes: Uint8Array,
   commandElapsedNanoseconds: number
 ): Either.Either<S2SVerifiedDrandPulse, S2SLiveDrandVerificationError> => {
@@ -996,6 +1012,7 @@ const validateReceipt = (
   return Either.right(
     makeDefensiveResult(
       receipt,
+      exactPulseBytes,
       receiptBytes,
       request,
       S2SSha256Schema.make(seed.right.externalSeedHex),
@@ -1048,6 +1065,7 @@ export const validateS2SDrandVerificationReceipt = (input: {
     receiptBytes.right,
     request.right,
     pulse.right,
+    pulseBytes.right,
     fixture.right,
     input.commandElapsedNanoseconds
   )
@@ -1145,6 +1163,7 @@ export const verifyS2SCommittedDrandPulseFromBytes = (
       processResult.stdout,
       request.right,
       pulse.right,
+      exactPulseBytes.right,
       fixtureBytes.right,
       processResult.elapsedNanoseconds
     )

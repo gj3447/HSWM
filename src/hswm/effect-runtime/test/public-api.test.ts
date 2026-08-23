@@ -49,6 +49,7 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect("probeS2SStageArtifactReadMechanicsForTest" in PublicApi).toBe(false)
   expect("validateS2SRegistrationCommitB" in PublicApi).toBe(false)
   expect("inspectS2SRegistrationCommitAuthority" in PublicApi).toBe(false)
+  expect("inspectS2SRegistrationReplaySnapshot" in PublicApi).toBe(false)
   expect("inspectS2SRegistrationWorkflowManifestBinding" in PublicApi).toBe(
     false
   )

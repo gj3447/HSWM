@@ -30,6 +30,7 @@ import {
   makeS2SPreregGitRepositoryTestLayer,
   parseAndValidateS2SPreregistration,
   inspectS2SRegistrationCommitAuthority,
+  inspectS2SRegistrationReplaySnapshot,
   inspectS2SRegistrationWorkflowManifestBinding,
   s2sPreregCanonicalJson,
   s2sPreregCanonicalSha256,
@@ -889,13 +890,18 @@ it("rejects forged and hostile registration commit authorities", () => {
   })
   const plain = inspectS2SRegistrationCommitAuthority(Object.freeze({}))
   const hostileOutcome = inspectS2SRegistrationCommitAuthority(hostile)
+  const hostileReplay = inspectS2SRegistrationReplaySnapshot(hostile)
   expect(Either.isLeft(plain)).toBe(true)
   expect(Either.isLeft(hostileOutcome)).toBe(true)
+  expect(Either.isLeft(hostileReplay)).toBe(true)
   if (Either.isLeft(plain)) {
     expect(plain.left.reason).toBe("INVALID_REGISTRATION_AUTHORITY")
   }
   if (Either.isLeft(hostileOutcome)) {
     expect(hostileOutcome.left.reason).toBe("INVALID_REGISTRATION_AUTHORITY")
+  }
+  if (Either.isLeft(hostileReplay)) {
+    expect(hostileReplay.left.reason).toBe("INVALID_REGISTRATION_AUTHORITY")
   }
 })
 
@@ -939,9 +945,26 @@ it.effect("snapshots input bytes before asynchronous Git revalidation", () => {
       registrationCommitB
     ).pipe(Effect.provide(processLayer))
     const evidence = inspectS2SRegistrationCommitAuthority(authority)
+    const replay = inspectS2SRegistrationReplaySnapshot(authority)
     expect(Either.isRight(evidence)).toBe(true)
+    expect(Either.isRight(replay)).toBe(true)
     if (Either.isRight(evidence)) {
       expect(evidence.right.registrationCommitB).toBe(registrationCommitB)
+    }
+    if (Either.isRight(replay)) {
+      expect(replay.right.registrationCommitEvidence.registrationCommitB).toBe(
+        registrationCommitB
+      )
+      expect(replay.right.readPreregistrationCanonicalBytes()).toEqual(
+        built.canonicalBytes
+      )
+      const first = replay.right.readPreregistrationCanonicalBytes()
+      first.fill(0)
+      expect(replay.right.readPreregistrationCanonicalBytes()[0]).toBe(0x7b)
+      expect(replay.right.workflowManifestBinding?.workflowPath).toBe(
+        S2S_CONFIRMATORY_WORKFLOW_PATH
+      )
+      expect(Object.isFrozen(replay.right)).toBe(true)
     }
   }).pipe(Effect.ensuring(Effect.sync(fixture.cleanup)))
 })

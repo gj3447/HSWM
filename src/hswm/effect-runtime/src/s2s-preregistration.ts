@@ -167,6 +167,7 @@ export class S2SRegistrationCommitError extends Data.TaggedError(
     | "PREREGISTRATION_ENTRY_INVALID"
     | "PREREGISTRATION_BYTES_DRIFT"
     | "AUTHORITY_EVIDENCE_NOT_CANONICAL"
+    | "REPLAY_SNAPSHOT_DRIFT"
     | "WORKFLOW_MANIFEST_BINDING_INVALID"
   readonly detail: string
 }> {}
@@ -1801,6 +1802,23 @@ export interface S2SRegistrationWorkflowManifestBinding {
   readonly trackedBytesManifestSha256: string
 }
 
+export interface S2SRegistrationReplaySnapshot {
+  readonly registrationCommitEvidence: S2SRegistrationCommitAuthorityEvidence
+  readonly preregistration: S2SPreregistration
+  readonly preregistrationFileSha256: string
+  readonly workflowManifestBinding: S2SRegistrationWorkflowManifestBinding | null
+  /** A new copy is returned on every access. */
+  readonly readPreregistrationCanonicalBytes: () => Uint8Array
+}
+
+interface StoredS2SRegistrationReplaySnapshot {
+  readonly registrationCommitEvidence: S2SRegistrationCommitAuthorityEvidence
+  readonly preregistration: S2SPreregistration
+  readonly preregistrationCanonicalBytes: Uint8Array
+  readonly preregistrationFileSha256: string
+  readonly workflowManifestBinding: S2SRegistrationWorkflowManifestBinding | null
+}
+
 const S2S_REGISTRATION_COMMIT_AUTHORITY_EVIDENCE = new WeakMap<
   object,
   S2SRegistrationCommitAuthorityEvidence
@@ -1809,6 +1827,11 @@ const S2S_REGISTRATION_COMMIT_AUTHORITY_EVIDENCE = new WeakMap<
 const S2S_REGISTRATION_WORKFLOW_MANIFEST_BINDINGS = new WeakMap<
   object,
   S2SRegistrationWorkflowManifestBinding | null
+>()
+
+const S2S_REGISTRATION_REPLAY_SNAPSHOTS = new WeakMap<
+  object,
+  StoredS2SRegistrationReplaySnapshot
 >()
 
 export const inspectS2SRegistrationCommitAuthority = (
@@ -1882,6 +1905,79 @@ export const inspectS2SRegistrationWorkflowManifestBinding = (
       new S2SRegistrationCommitError({
         reason: "INVALID_REGISTRATION_AUTHORITY",
         detail: "registration workflow binding inspection failed closed"
+      })
+    )
+  }
+}
+
+/**
+ * Root-private replay projection retained by the authentic registration-B
+ * bearer. It returns no authority and performs no repository I/O.
+ */
+export const inspectS2SRegistrationReplaySnapshot = (
+  input: unknown
+): Either.Either<S2SRegistrationReplaySnapshot, S2SRegistrationCommitError> => {
+  try {
+    if (input === null || typeof input !== "object") {
+      return Either.left(
+        new S2SRegistrationCommitError({
+          reason: "INVALID_REGISTRATION_AUTHORITY",
+          detail: "registration replay input is not an issued object"
+        })
+      )
+    }
+    const snapshot = S2S_REGISTRATION_REPLAY_SNAPSHOTS.get(input)
+    if (snapshot === undefined) {
+      return Either.left(
+        new S2SRegistrationCommitError({
+          reason: "INVALID_REGISTRATION_AUTHORITY",
+          detail: "registration replay input was not issued by this module"
+        })
+      )
+    }
+    const bytes = new Uint8Array(snapshot.preregistrationCanonicalBytes)
+    const canonical = canonicalBytesWithLf(snapshot.preregistration)
+    const { receiptSha256, ...evidenceCore } =
+      snapshot.registrationCommitEvidence
+    const evidenceHash = s2sPreregCanonicalSha256(evidenceCore)
+    const workflow = snapshot.workflowManifestBinding
+    if (
+      bytes.byteLength < 2 ||
+      s2sPreregSha256Bytes(bytes) !== snapshot.preregistrationFileSha256 ||
+      snapshot.preregistrationFileSha256 !==
+        snapshot.registrationCommitEvidence.preregistrationFileSha256 ||
+      snapshot.preregistration.preregistration_sha256 !==
+        snapshot.registrationCommitEvidence.preregistrationSha256 ||
+      Either.isLeft(canonical) ||
+      !sameBytes(canonical.right, bytes) ||
+      Either.isLeft(evidenceHash) ||
+      evidenceHash.right !== receiptSha256 ||
+      (workflow !== null &&
+        (workflow.trackedBytesManifestSha256 !==
+          snapshot.registrationCommitEvidence.trackedBytesManifestSha256 ||
+          workflow.workflowFileSha256.length !== 64))
+    ) {
+      return Either.left(
+        new S2SRegistrationCommitError({
+          reason: "REPLAY_SNAPSHOT_DRIFT",
+          detail: "registration replay snapshot no longer matches its bindings"
+        })
+      )
+    }
+    return Either.right(
+      Object.freeze({
+        registrationCommitEvidence: snapshot.registrationCommitEvidence,
+        preregistration: snapshot.preregistration,
+        preregistrationFileSha256: snapshot.preregistrationFileSha256,
+        workflowManifestBinding: workflow,
+        readPreregistrationCanonicalBytes: () => new Uint8Array(bytes)
+      })
+    )
+  } catch {
+    return Either.left(
+      new S2SRegistrationCommitError({
+        reason: "INVALID_REGISTRATION_AUTHORITY",
+        detail: "registration replay snapshot inspection failed closed"
       })
     )
   }
@@ -2340,6 +2436,16 @@ export const validateS2SRegistrationCommitB = (
     S2S_REGISTRATION_WORKFLOW_MANIFEST_BINDINGS.set(
       authority,
       workflowBinding
+    )
+    S2S_REGISTRATION_REPLAY_SNAPSHOTS.set(
+      authority,
+      Object.freeze({
+        registrationCommitEvidence: evidence,
+        preregistration,
+        preregistrationCanonicalBytes: new Uint8Array(snapshot.canonicalBytes),
+        preregistrationFileSha256: snapshot.fileSha256,
+        workflowManifestBinding: workflowBinding
+      })
     )
     return authority
   })

@@ -45,9 +45,12 @@ import {
 } from "../src/s2s-preregistration.js"
 import {
   S2S_CURRENT_RUN_BRACKET_TIMEOUT_MILLIS,
+  S2S_CURRENT_RUN_REPLAY_MAX_RAW_BYTES,
+  S2SCurrentRunStage,
   inspectS2SCurrentRunStageAuthority,
   makeS2SCurrentRunStageAuthorityLiveLayer,
-  probeS2SRunAuthorityAcquisitionForTest
+  probeS2SRunAuthorityAcquisitionForTest,
+  snapshotS2SCurrentRunReplay
 } from "../src/s2s-run-authority.js"
 import {
   S2S_CONFIRMATORY_JOB_STAGES,
@@ -1038,6 +1041,35 @@ describe("non-authorizing run-stage policy probe", () => {
     }
   })
 
+  it("keeps replay materialization selector-free and rejects forged services", () => {
+    expect(S2S_CURRENT_RUN_REPLAY_MAX_RAW_BYTES).toBe(5_242_880)
+    let authorityAccessorInvoked = false
+    const forged: Record<string, unknown> = {}
+    Object.defineProperty(forged, "authority", {
+      enumerable: true,
+      get: () => {
+        authorityAccessorInvoked = true
+        return {}
+      }
+    })
+    const outcome = Effect.runSync(
+      snapshotS2SCurrentRunReplay.pipe(
+        Effect.provide(
+          Layer.succeed(
+            S2SCurrentRunStage,
+            forged as unknown as S2SCurrentRunStage["Type"]
+          )
+        ),
+        Effect.either
+      )
+    )
+    expect(Either.isLeft(outcome)).toBe(true)
+    if (Either.isLeft(outcome)) {
+      expect(outcome.left.reason).toBe("INVALID_CURRENT_RUN_AUTHORITY")
+    }
+    expect(authorityAccessorInvoked).toBe(false)
+  })
+
   it("rejects copies and proxies of genuine input authorities before observation", () => {
     const input = makePolicyInput("CONFIRM")
     const genuineRegistration = registrationFixture.registrationAuthority
@@ -1322,12 +1354,14 @@ it("keeps every current-run authority surface out of the package root", async ()
   for (const key of [
     "S2S_CURRENT_RUN_STAGE_EVIDENCE_SCHEMA_VERSION",
     "S2S_CURRENT_RUN_BRACKET_TIMEOUT_MILLIS",
+    "S2S_CURRENT_RUN_REPLAY_MAX_RAW_BYTES",
     "S2SCurrentRunInputError",
     "S2SCurrentRunAcquisitionError",
     "S2SCurrentRunPolicyError",
     "S2SCurrentRunStage",
     "S2SCurrentRunStageAuthority",
     "inspectS2SCurrentRunStageAuthority",
+    "snapshotS2SCurrentRunReplay",
     "makeS2SCurrentRunStageAuthorityLiveLayer",
     "probeS2SRunAuthorityAcquisitionForTest",
     "S2SStageArtifactReads",

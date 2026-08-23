@@ -39,10 +39,14 @@ export const S2S_NUMERIC_CONFIRM_TIMEOUT_MILLIS = 7_200_000 as const
 export const S2S_NUMERIC_ADJUDICATE_TIMEOUT_MILLIS = 1_200_000 as const
 export const S2S_NUMERIC_CONFIRM_REQUEST_MAX_BYTES = 65_536 as const
 export const S2S_NUMERIC_CANDIDATE_MAX_BYTES = 60 * 1_048_576
-export const S2S_NUMERIC_ADJUDICATION_MAX_BYTES = 4 * 1_048_576
+// Reserves one MiB of the frozen four-MiB archive ceiling for the actual
+// control member and ZIP framing; the final archive cap is enforced separately.
+export const S2S_NUMERIC_ADJUDICATION_MAX_BYTES = 3 * 1_048_576
 export const S2S_NUMERIC_STDERR_MAX_BYTES = 8_192 as const
+export const S2S_PYTHON_RSS_TELEMETRY_SCHEMA_VERSION =
+  "hswm-swm0w-s2s-python-rss-telemetry/v1" as const
 export const S2S_PYTHON_RUNTIME_SOURCE_IDENTITY_SCHEMA_VERSION =
-  "hswm-swm0w-s2s-python-runtime-source-identity/v1" as const
+  "hswm-swm0w-s2s-python-runtime-source-identity/v2" as const
 
 const PYTHON_EXECUTABLE_MAX_BYTES = 128 * 1_048_576
 const GOLDEN_STDERR_MAX_BYTES = 8_192
@@ -59,20 +63,33 @@ const NUMERIC_REJECTED_STATUS =
 const LOCAL_SOURCE_CLOSURE_SCHEMA_VERSION =
   "hswm-swm0w-s2s-python-local-source-closure/v1" as const
 
+// The oracle owns stdout and its existing canonical failure document. This
+// fixed wrapper adds exactly one successful stderr line after the oracle has
+// completed, so rejected executions retain the unchanged error transport.
+const NUMERIC_RSS_TELEMETRY_WRAPPER = [
+  "import json,resource,sys",
+  "from hswm.experiments import swm0w_s2s_numeric_oracle as oracle",
+  "code=oracle.main([sys.argv[1]])",
+  "usage=resource.getrusage(resource.RUSAGE_SELF) if code == 0 else None",
+  `value={'api':'getrusage','oom_observed':False,'peak_rss_kib':int(usage.ru_maxrss),'schema_version':'${S2S_PYTHON_RSS_TELEMETRY_SCHEMA_VERSION}','subject':'RUSAGE_SELF','unit':'KiB'} if usage is not None else None`,
+  "sys.stderr.write(json.dumps(value,ensure_ascii=True,separators=(',',':'),sort_keys=True)+'\\n') if value is not None else None",
+  "raise SystemExit(code)"
+].join(";")
+
 export const S2S_NUMERIC_CONFIRM_ARGUMENTS = Object.freeze([
   "-B",
   "-P",
   "-s",
-  "-m",
-  NUMERIC_ORACLE_MODULE,
+  "-c",
+  NUMERIC_RSS_TELEMETRY_WRAPPER,
   "confirm"
 ] as const)
 export const S2S_NUMERIC_ADJUDICATE_ARGUMENTS = Object.freeze([
   "-B",
   "-P",
   "-s",
-  "-m",
-  NUMERIC_ORACLE_MODULE,
+  "-c",
+  NUMERIC_RSS_TELEMETRY_WRAPPER,
   "adjudicate"
 ] as const)
 const S2S_NUMERIC_GOLDEN_ARGUMENTS = Object.freeze([
@@ -260,7 +277,21 @@ export interface S2SPythonNumericOutput {
   readonly rawBytesSha256: S2SSha256
   readonly byteLength: number
   readonly commandElapsedNanoseconds: number
+  readonly peakRssKiB: number
+  readonly rssTelemetryRawSha256: S2SSha256
   readonly runtimeSourceIdentityReceiptSha256: S2SSha256
+  readonly readCanonicalBytes: () => Uint8Array
+  readonly readRssTelemetryCanonicalBytes: () => Uint8Array
+}
+
+export interface S2SPythonRssTelemetry {
+  readonly schemaVersion: typeof S2S_PYTHON_RSS_TELEMETRY_SCHEMA_VERSION
+  readonly api: "getrusage"
+  readonly subject: "RUSAGE_SELF"
+  readonly unit: "KiB"
+  readonly peakRssKiB: number
+  readonly oomObserved: false
+  readonly rawBytesSha256: S2SSha256
   readonly readCanonicalBytes: () => Uint8Array
 }
 
@@ -1019,7 +1050,14 @@ const makeRuntimeSourceIdentity = (
       cwd: config.repositoryRoot,
       executable_transport: "PINNED_PROC_SELF_FILE_DESCRIPTOR",
       retry_count: 0,
-      success_stderr_byte_length: 0
+      numeric_success_stderr_contract: {
+        api: "getrusage",
+        canonical_encoding: "ASCII_CANONICAL_UTF8_JSON_PLUS_SINGLE_LF",
+        line_count: 1,
+        schema_version: S2S_PYTHON_RSS_TELEMETRY_SCHEMA_VERSION,
+        subject: "RUSAGE_SELF",
+        unit: "KiB"
+      }
     },
     process_environment_contract: processEnvironmentContract,
     process_environment_contract_sha256: processEnvironmentContractSha256,
@@ -1131,6 +1169,113 @@ const isOneAsciiJsonLine = (
   } catch {
     return false
   }
+}
+
+/** Validate the exact successful stderr contract emitted by the fixed wrapper. */
+export const validateS2SPythonRssTelemetryBytes = (
+  operation: S2SPythonNumericOperation,
+  input: unknown
+): Either.Either<S2SPythonRssTelemetry, S2SPythonNumericExecutionError> => {
+  let bytes: Uint8Array
+  try {
+    if (
+      !(input instanceof Uint8Array) ||
+      Object.getPrototypeOf(input) !== Uint8Array.prototype ||
+      Object.getOwnPropertySymbols(input).length !== 0 ||
+      Object.getOwnPropertyDescriptor(input, "byteLength") !== undefined ||
+      Object.getOwnPropertyDescriptor(input, "buffer") !== undefined ||
+      (typeof SharedArrayBuffer !== "undefined" &&
+        input.buffer instanceof SharedArrayBuffer)
+    ) {
+      return Either.left(
+        numericError(
+          operation,
+          "STDERR_CONTRACT_REJECTED",
+          "RSS telemetry must be one plain unshared Uint8Array"
+        )
+      )
+    }
+    bytes = new Uint8Array(input)
+  } catch {
+    return Either.left(
+      numericError(
+        operation,
+        "STDERR_CONTRACT_REJECTED",
+        "RSS telemetry bytes could not be inspected safely"
+      )
+    )
+  }
+  if (!isOneAsciiJsonLine(bytes, S2S_NUMERIC_STDERR_MAX_BYTES)) {
+    return Either.left(
+      numericError(
+        operation,
+        "STDERR_CONTRACT_REJECTED",
+        "RSS telemetry is not one bounded canonical ASCII JSON line"
+      )
+    )
+  }
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes))
+  } catch {
+    return Either.left(
+      numericError(
+        operation,
+        "STDERR_CONTRACT_REJECTED",
+        "RSS telemetry is not valid UTF-8 JSON"
+      )
+    )
+  }
+  const keys = [
+    "api",
+    "oom_observed",
+    "peak_rss_kib",
+    "schema_version",
+    "subject",
+    "unit"
+  ]
+  if (
+    !isRecord(parsed) ||
+    !hasExactKeys(parsed, keys) ||
+    parsed["api"] !== "getrusage" ||
+    parsed["oom_observed"] !== false ||
+    !Number.isSafeInteger(parsed["peak_rss_kib"]) ||
+    (parsed["peak_rss_kib"] as number) < 1 ||
+    parsed["schema_version"] !== S2S_PYTHON_RSS_TELEMETRY_SCHEMA_VERSION ||
+    parsed["subject"] !== "RUSAGE_SELF" ||
+    parsed["unit"] !== "KiB"
+  ) {
+    return Either.left(
+      numericError(
+        operation,
+        "STDERR_CONTRACT_REJECTED",
+        "RSS telemetry fixed projection drifted"
+      )
+    )
+  }
+  const canonical = canonicalS2SControlJsonBytes(parsed)
+  if (Either.isLeft(canonical) || !sameBytes(canonical.right, bytes)) {
+    return Either.left(
+      numericError(
+        operation,
+        "STDERR_CONTRACT_REJECTED",
+        "RSS telemetry is not exact canonical control JSON"
+      )
+    )
+  }
+  const snapshot = new Uint8Array(bytes)
+  return Either.right(
+    Object.freeze({
+      schemaVersion: S2S_PYTHON_RSS_TELEMETRY_SCHEMA_VERSION,
+      api: "getrusage" as const,
+      subject: "RUSAGE_SELF" as const,
+      unit: "KiB" as const,
+      peakRssKiB: parsed["peak_rss_kib"] as number,
+      oomObserved: false as const,
+      rawBytesSha256: S2SSha256Schema.make(rawS2SFileSha256(snapshot)),
+      readCanonicalBytes: () => new Uint8Array(snapshot)
+    })
+  )
 }
 
 const snapshotNumericInput = (
@@ -1329,16 +1474,11 @@ export const interpretS2SPythonNumericProcessResult = (
       )
     )
   }
-  if (result.stderr.byteLength !== 0) {
-    return Either.left(
-      numericError(
-        operation,
-        "STDERR_CONTRACT_REJECTED",
-        "successful numeric process emitted stderr",
-        result.exitCode
-      )
-    )
-  }
+  const rssTelemetry = validateS2SPythonRssTelemetryBytes(
+    operation,
+    result.stderr
+  )
+  if (Either.isLeft(rssTelemetry)) return Either.left(rssTelemetry.left)
   const maximumBytes =
     operation === "CONFIRM"
       ? S2S_NUMERIC_CANDIDATE_MAX_BYTES
@@ -1378,8 +1518,12 @@ export const interpretS2SPythonNumericProcessResult = (
       rawBytesSha256: S2SSha256Schema.make(rawS2SFileSha256(outputBytes)),
       byteLength: outputBytes.byteLength,
       commandElapsedNanoseconds: result.elapsedNanoseconds,
+      peakRssKiB: rssTelemetry.right.peakRssKiB,
+      rssTelemetryRawSha256: rssTelemetry.right.rawBytesSha256,
       runtimeSourceIdentityReceiptSha256,
-      readCanonicalBytes: () => new Uint8Array(outputBytes)
+      readCanonicalBytes: () => new Uint8Array(outputBytes),
+      readRssTelemetryCanonicalBytes: () =>
+        rssTelemetry.right.readCanonicalBytes()
     })
   )
 }

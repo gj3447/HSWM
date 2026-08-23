@@ -1,13 +1,19 @@
 import { Context, Data, Effect, Either, Layer } from "effect"
 
-import { canonicalS2SControlSha256 } from "./s2s-canonical.js"
 import {
+  canonicalS2SControlSha256,
+  rawS2SFileSha256
+} from "./s2s-canonical.js"
+import {
+  S2S_CURRENT_INVOCATION_EVENT_MAX_BYTES,
   S2SCurrentInvocation,
   S2SCurrentInvocationLive,
   inspectS2SCurrentInvocationAuthority,
+  readS2SCurrentInvocationEventBytes,
   type S2SCurrentInvocationEvidence
 } from "./s2s-invocation.js"
 import {
+  S2S_GITHUB_JSON_MAX_BYTES,
   S2SGitHubObserver,
   S2SGitHubObserverLive,
   makeS2SGitHubHttpTransportLiveLayer,
@@ -43,6 +49,8 @@ import {
 export const S2S_CURRENT_RUN_STAGE_EVIDENCE_SCHEMA_VERSION =
   "hswm-swm0w-s2s-current-run-stage-evidence/v1" as const
 export const S2S_CURRENT_RUN_BRACKET_TIMEOUT_MILLIS = 480_000 as const
+export const S2S_CURRENT_RUN_REPLAY_MAX_RAW_BYTES =
+  S2S_CURRENT_INVOCATION_EVENT_MAX_BYTES + 4 * S2S_GITHUB_JSON_MAX_BYTES
 
 const SHA256_PATTERN = /^[0-9a-f]{64}$/
 const GIT_SHA_PATTERN = /^[0-9a-f]{40}$/
@@ -117,6 +125,7 @@ export type S2SCurrentRunError =
   | S2SCurrentRunInputError
   | S2SCurrentRunAcquisitionError
   | S2SCurrentRunPolicyError
+  | S2SCurrentRunReplaySnapshotError
 
 export interface S2SCurrentRunObservationEvidence {
   readonly receiptSha256: string
@@ -174,8 +183,37 @@ interface S2SCurrentRunBracketSnapshot {
 
 interface S2SCurrentRunStageSnapshot {
   readonly evidence: S2SCurrentRunStageEvidence
+  readonly invocationEvidence: S2SCurrentInvocationEvidence
+  readonly invocationEventBytes: Uint8Array
   readonly bracket: S2SCurrentRunBracketSnapshot
 }
+
+export interface S2SCurrentRunReplaySnapshot {
+  readonly currentRunEvidence: S2SCurrentRunStageEvidence
+  readonly invocationEvidence: S2SCurrentInvocationEvidence
+  /** A new copy is returned on every access. */
+  readonly readInvocationEventBytes: () => Uint8Array
+  readonly bracket: S2SCurrentRunBracketSnapshot
+  readonly totalRawByteLength: number
+}
+
+export class S2SCurrentRunReplaySnapshotError extends Data.TaggedError(
+  "S2SCurrentRunReplaySnapshotError"
+)<{
+  readonly reason:
+    | "INVOCATION_EVENT_DRIFT"
+    | "OBSERVATION_REVALIDATION_FAILED"
+    | "RECEIPT_BINDING_MISMATCH"
+    | "RAW_BYTE_BUDGET_EXCEEDED"
+  readonly phase:
+    | "CURRENT_RUN_EVIDENCE"
+    | "INVOCATION_EVENT"
+    | "RUN_START"
+    | "JOBS"
+    | "RUNS_FOR_HEAD"
+    | "RUN_END"
+  readonly causeTag: string | null
+}> {}
 
 const S2S_CURRENT_RUN_STAGE_SNAPSHOTS = new WeakMap<
   object,
@@ -246,6 +284,7 @@ const PRODUCTION_WORKFLOW_SOURCE_POLICY: WorkflowSourcePolicy = Object.freeze({
 interface BoundRunInput {
   readonly registration: S2SRegistrationCommitAuthorityEvidence
   readonly invocation: S2SCurrentInvocationEvidence
+  readonly invocationEventBytes: Uint8Array
   readonly workflowBinding: S2SRegistrationWorkflowManifestBinding
 }
 
@@ -386,8 +425,32 @@ const inspectBoundRunInput = (
       )
     )
   }
+  const invocationEventBytes = readS2SCurrentInvocationEventBytes(
+    invocationAuthority
+  )
+  if (Either.isLeft(invocationEventBytes)) {
+    return Either.left(
+      inputFailure(
+        "INVOCATION_AUTHORITY_REJECTED",
+        "current invocation event bytes are not module-authentic"
+      )
+    )
+  }
   const registrationEvidence = registration.right
   const invocationEvidence = invocation.right
+  if (
+    invocationEventBytes.right.byteLength !==
+      invocationEvidence.eventBodyByteLength ||
+    rawS2SFileSha256(invocationEventBytes.right) !==
+      invocationEvidence.eventBodySha256
+  ) {
+    return Either.left(
+      inputFailure(
+        "INVOCATION_AUTHORITY_REJECTED",
+        "current invocation event bytes drifted from their evidence"
+      )
+    )
+  }
   if (
     registrationEvidence.sourceCommitA !== invocationEvidence.pushBeforeSha ||
     registrationEvidence.registrationCommitB !==
@@ -454,6 +517,7 @@ const inspectBoundRunInput = (
     Object.freeze({
       registration: registrationEvidence,
       invocation: invocationEvidence,
+      invocationEventBytes: new Uint8Array(invocationEventBytes.right),
       workflowBinding: binding.right
     })
   )
@@ -900,7 +964,14 @@ const classifyRunAuthorityPolicy = (
       runsForHead: input.runsForHead,
       runEnd: input.runEnd
     })
-    return Either.right(Object.freeze({ evidence, bracket }))
+    return Either.right(
+      Object.freeze({
+        evidence,
+        invocationEvidence: input.invocation,
+        invocationEventBytes: new Uint8Array(input.invocationEventBytes),
+        bracket
+      })
+    )
   } catch {
     return Either.left(
       policyFailure(
@@ -1035,6 +1106,209 @@ const issueCurrentRunStageAuthority = (
   return authority
 }
 
+const replayFailure = (
+  reason: S2SCurrentRunReplaySnapshotError["reason"],
+  phase: S2SCurrentRunReplaySnapshotError["phase"],
+  causeTag: string | null = null
+): S2SCurrentRunReplaySnapshotError =>
+  new S2SCurrentRunReplaySnapshotError({ reason, phase, causeTag })
+
+const compactObservationMatches = (
+  expected: S2SCurrentRunObservationEvidence,
+  observation: S2SGitHubObservation
+): boolean =>
+  expected.receiptSha256 === observation.receipt.receiptSha256 &&
+  expected.githubRequestId === observation.receipt.githubRequestId &&
+  expected.observedAtUnixSeconds === observation.receipt.observedAtUnixSeconds
+
+const materializeS2SCurrentRunReplaySnapshot = (
+  snapshot: S2SCurrentRunStageSnapshot
+): Effect.Effect<
+  S2SCurrentRunReplaySnapshot,
+  S2SCurrentRunReplaySnapshotError
+> =>
+  Effect.gen(function* () {
+    const invocationEventBytes = new Uint8Array(snapshot.invocationEventBytes)
+    const { receiptSha256: invocationReceipt, ...invocationCore } =
+      snapshot.invocationEvidence
+    if (
+      invocationEventBytes.byteLength !==
+        snapshot.invocationEvidence.eventBodyByteLength ||
+      invocationEventBytes.byteLength > S2S_CURRENT_INVOCATION_EVENT_MAX_BYTES ||
+      rawS2SFileSha256(invocationEventBytes) !==
+        snapshot.invocationEvidence.eventBodySha256 ||
+      !canonicalHashMatches(invocationCore, invocationReceipt)
+    ) {
+      return yield* replayFailure(
+        "INVOCATION_EVENT_DRIFT",
+        "INVOCATION_EVENT"
+      )
+    }
+    const { receiptSha256: currentRunReceipt, ...currentRunCore } =
+      snapshot.evidence
+    if (!canonicalHashMatches(currentRunCore, currentRunReceipt)) {
+      return yield* replayFailure(
+        "RECEIPT_BINDING_MISMATCH",
+        "CURRENT_RUN_EVIDENCE"
+      )
+    }
+    const runStart = yield* validateS2SGitHubWorkflowRunObservation(
+      snapshot.bracket.runStart,
+      snapshot.evidence.workflowRunId
+    ).pipe(
+      Effect.mapError((error) =>
+        replayFailure(
+          "OBSERVATION_REVALIDATION_FAILED",
+          "RUN_START",
+          error._tag
+        )
+      )
+    )
+    const jobs = yield* validateS2SGitHubWorkflowAttemptJobsObservation(
+      snapshot.bracket.jobs,
+      snapshot.evidence.workflowRunId
+    ).pipe(
+      Effect.mapError((error) =>
+        replayFailure(
+          "OBSERVATION_REVALIDATION_FAILED",
+          "JOBS",
+          error._tag
+        )
+      )
+    )
+    const runsForHead =
+      yield* validateS2SGitHubWorkflowRunsForHeadObservation(
+        snapshot.bracket.runsForHead,
+        snapshot.evidence.registrationCommitB
+      ).pipe(
+        Effect.mapError((error) =>
+          replayFailure(
+            "OBSERVATION_REVALIDATION_FAILED",
+            "RUNS_FOR_HEAD",
+            error._tag
+          )
+        )
+      )
+    const runEnd = yield* validateS2SGitHubWorkflowRunObservation(
+      snapshot.bracket.runEnd,
+      snapshot.evidence.workflowRunId
+    ).pipe(
+      Effect.mapError((error) =>
+        replayFailure(
+          "OBSERVATION_REVALIDATION_FAILED",
+          "RUN_END",
+          error._tag
+        )
+      )
+    )
+    const bindings = [
+      ["RUN_START", snapshot.evidence.observations.runStart, runStart],
+      ["JOBS", snapshot.evidence.observations.jobs, jobs],
+      [
+        "RUNS_FOR_HEAD",
+        snapshot.evidence.observations.runsForHead,
+        runsForHead
+      ],
+      ["RUN_END", snapshot.evidence.observations.runEnd, runEnd]
+    ] as const
+    for (const [phase, expected, observation] of bindings) {
+      if (!compactObservationMatches(expected, observation)) {
+        return yield* replayFailure(
+          "RECEIPT_BINDING_MISMATCH",
+          phase
+        )
+      }
+    }
+    const totalRawByteLength =
+      invocationEventBytes.byteLength +
+      runStart.receipt.rawBodyByteLength +
+      jobs.receipt.rawBodyByteLength +
+      runsForHead.receipt.rawBodyByteLength +
+      runEnd.receipt.rawBodyByteLength
+    if (
+      !Number.isSafeInteger(totalRawByteLength) ||
+      totalRawByteLength < 1 ||
+      totalRawByteLength > S2S_CURRENT_RUN_REPLAY_MAX_RAW_BYTES
+    ) {
+      return yield* replayFailure(
+        "RAW_BYTE_BUDGET_EXCEEDED",
+        "CURRENT_RUN_EVIDENCE"
+      )
+    }
+    return Object.freeze({
+      currentRunEvidence: snapshot.evidence,
+      invocationEvidence: snapshot.invocationEvidence,
+      readInvocationEventBytes: () => new Uint8Array(invocationEventBytes),
+      bracket: Object.freeze({ runStart, jobs, runsForHead, runEnd }),
+      totalRawByteLength
+    })
+  })
+
+const inspectCurrentRunService = (
+  input: unknown
+): Either.Either<S2SCurrentRunStageSnapshot, S2SCurrentRunInputError> => {
+  try {
+    if (!isPlainExactRecord(input, ["authority"])) {
+      return Either.left(
+        inputFailure(
+          "INVALID_CURRENT_RUN_AUTHORITY",
+          "current-run service is not one exact data record"
+        )
+      )
+    }
+    const descriptor = Object.getOwnPropertyDescriptor(input, "authority")
+    if (descriptor === undefined || !("value" in descriptor)) {
+      return Either.left(
+        inputFailure(
+          "INVALID_CURRENT_RUN_AUTHORITY",
+          "current-run service authority is not a data property"
+        )
+      )
+    }
+    const authority = descriptor.value
+    if (authority === null || typeof authority !== "object") {
+      return Either.left(
+        inputFailure(
+          "INVALID_CURRENT_RUN_AUTHORITY",
+          "current-run service authority is not an issued object"
+        )
+      )
+    }
+    const snapshot = S2S_CURRENT_RUN_STAGE_SNAPSHOTS.get(authority)
+    return snapshot === undefined
+      ? Either.left(
+          inputFailure(
+            "INVALID_CURRENT_RUN_AUTHORITY",
+            "current-run service does not carry a module-issued authority"
+          )
+        )
+      : Either.right(snapshot)
+  } catch {
+    return Either.left(
+      inputFailure(
+        "INVALID_CURRENT_RUN_AUTHORITY",
+        "current-run service inspection failed closed"
+      )
+    )
+  }
+}
+
+/**
+ * Root-private, selector-free replay materializer. It can only inspect the
+ * current Effect service and never exposes or accepts an authority bearer.
+ */
+export const snapshotS2SCurrentRunReplay: Effect.Effect<
+  S2SCurrentRunReplaySnapshot,
+  S2SCurrentRunInputError | S2SCurrentRunReplaySnapshotError,
+  S2SCurrentRunStage
+> = Effect.suspend(() =>
+  Effect.gen(function* () {
+    const current = yield* S2SCurrentRunStage
+    const snapshot = yield* fromEither(inspectCurrentRunService(current))
+    return yield* materializeS2SCurrentRunReplaySnapshot(snapshot)
+  })
+)
+
 const makeOpenS2SCurrentRunStageLayer = () =>
   Layer.effect(
     S2SCurrentRunStage,
@@ -1162,5 +1436,8 @@ export const probeS2SRunAuthorityAcquisitionForTest = (
       github,
       bound.right,
       reviewed.right
-    ).pipe(Effect.asVoid)
+    ).pipe(
+      Effect.flatMap(materializeS2SCurrentRunReplaySnapshot),
+      Effect.asVoid
+    )
   })

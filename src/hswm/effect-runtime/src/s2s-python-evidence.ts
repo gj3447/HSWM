@@ -21,6 +21,7 @@ import {
   S2S_NUMERIC_CONFIRM_TIMEOUT_MILLIS,
   S2S_NUMERIC_ORACLE_SOURCE_SHA256,
   S2S_NUMERIC_STDERR_MAX_BYTES,
+  validateS2SPythonRssTelemetryBytes,
   type S2SPythonNumericOutput,
   type S2SPythonRuntimeSourceIdentityReceipt
 } from "./s2s-live-python.js"
@@ -171,8 +172,10 @@ export const bindS2SPythonExecutionEvidence = (input: {
     )
   }
   let outputBytes: Uint8Array
+  let rssTelemetryBytes: Uint8Array
   try {
     outputBytes = input.output.readCanonicalBytes()
+    rssTelemetryBytes = input.output.readRssTelemetryCanonicalBytes()
   } catch {
     return Either.left(
       evidenceError(
@@ -181,10 +184,28 @@ export const bindS2SPythonExecutionEvidence = (input: {
       )
     )
   }
+  const rssTelemetry = validateS2SPythonRssTelemetryBytes(
+    input.output.operation,
+    rssTelemetryBytes
+  )
+  const maximumOutputBytes =
+    input.output.operation === "CONFIRM"
+      ? S2S_NUMERIC_CANDIDATE_MAX_BYTES
+      : S2S_NUMERIC_ADJUDICATION_MAX_BYTES
   if (
+    (input.output.operation !== "CONFIRM" &&
+      input.output.operation !== "ADJUDICATE") ||
+    Either.isLeft(rssTelemetry) ||
     !(outputBytes instanceof Uint8Array) ||
     outputBytes.byteLength !== input.output.byteLength ||
+    !Number.isSafeInteger(input.output.byteLength) ||
+    input.output.byteLength < 1 ||
+    input.output.byteLength > maximumOutputBytes ||
     rawS2SFileSha256(outputBytes) !== input.output.rawBytesSha256 ||
+    (Either.isRight(rssTelemetry) &&
+      (rssTelemetry.right.peakRssKiB !== input.output.peakRssKiB ||
+        rssTelemetry.right.rawBytesSha256 !==
+          input.output.rssTelemetryRawSha256)) ||
     !Number.isSafeInteger(input.output.commandElapsedNanoseconds) ||
     input.output.commandElapsedNanoseconds < 1 ||
     (input.output.operation === "CONFIRM" &&

@@ -921,7 +921,7 @@ it("uses the same float-free canonical JSON surface as the Python boundary", () 
 
 it("binds the exact adopted protocol-config document at the Python port", () => {
   const bytes = readFileSync(
-    new URL("./fixtures/adopted-protocol-config.json", import.meta.url)
+    new URL("../assets/adopted-protocol-config.json", import.meta.url)
   )
   expect(rawS2SFileSha256(bytes)).toBe(S2S_PROTOCOL_CONFIG_DOCUMENT_SHA256)
   const invocation = makePythonNumericConfirmInvocation(

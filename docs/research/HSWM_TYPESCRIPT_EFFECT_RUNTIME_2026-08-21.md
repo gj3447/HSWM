@@ -490,7 +490,7 @@ Scalar-credit composition, source-provenance migration, `F`, causal learning,
 topology mutation, target-scored damage, the production evidence workflow, and
 scientific judgment remain open.
 
-The current continuation entrypoint is the
+The historical v24 continuation entrypoint is the
 [`v24 test-only hosted process-continuity handoff`](../operations/HSWM_SWM0W_S2S_TEST_ONLY_HOSTED_PROCESS_CONTINUITY_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and
 [`v24 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v24.json).
@@ -506,3 +506,16 @@ pending source-pinned raw-byte provenance and explicit state-transition
 ownership. `H/W/A/F`, production workflow authority, durable profile recovery,
 exactly-once behavior, preregistration, future randomness, Q/B/R, and all
 scientific claims remain unchanged or open.
+
+The current continuation entrypoint is the
+[`v25 pre-freeze resource-policy review decision`](../operations/HSWM_SWM0W_S2S_PRE_FREEZE_RESOURCE_POLICY_REVIEW_DECISION_NEXT_SESSION_2026-08-23.md)
+and
+[`v25 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v25.json).
+V25 closes the review decision only: `75/245/75` is exact arithmetic and stays
+as a non-authorizing fixture, but is rejected for production/preregistration
+freeze. The disclosed evidence has one successful three-draw workflow and no
+workflow p95 or production-equivalent 20-task profile; the 75-minute REGISTER
+candidate also exceeds the existing 65-minute pulse-lead maximum. The next gate
+is a future-seed-free chronology-and-timing protocol design followed by a
+separately disclosed full-scale resource profile. No runtime, policy literal,
+workflow, numerical config, preregistration, or scientific result changed.

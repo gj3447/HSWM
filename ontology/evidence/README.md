@@ -201,7 +201,7 @@ engineering checkpoints:
   update, topology learning, target-scored role damage, production workflow,
   and every scientific verdict remain open. Continue from
   [`HSWM_SWM0_ROLE_AWARE_TYPESCRIPT_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0_ROLE_AWARE_TYPESCRIPT_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
-- [`v24 current test-only hosted process-continuity checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v24.json)
+- [`v24 historical test-only hosted process-continuity checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v24.json)
   records primary implementation commit `9063716`, READY-publication repair
   `e729ef2`, the retained failed diagnostic run `32653755145`, and accepted
   GitHub-hosted run `32654010771`. The accepted run has two individually
@@ -214,12 +214,22 @@ engineering checkpoints:
   Q/B/R, causal learning, and every scientific verdict remain open. Continue
   from
   [`HSWM_SWM0W_S2S_TEST_ONLY_HOSTED_PROCESS_CONTINUITY_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_TEST_ONLY_HOSTED_PROCESS_CONTINUITY_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
+- [`v25 current pre-freeze resource-policy review checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v25.json)
+  records `75/245/75` as locally valid arithmetic but rejects it for production
+  or preregistration freeze. The checked-in evidence has only one successful
+  three-draw pilot, no workflow p95 or intended 20-task end-to-end profile, no
+  production-action CONFIRM upload/readback timing, and no full archive-size
+  observation. The candidate's 75-minute REGISTER bound also exceeds the
+  existing 65-minute maximum pulse lead even though registration must finish
+  before the pulse. No runtime policy, workflow, config, preregistration, future
+  randomness, or scientific claim changed. Continue from
+  [`HSWM_SWM0W_S2S_PRE_FREEZE_RESOURCE_POLICY_REVIEW_DECISION_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_PRE_FREEZE_RESOURCE_POLICY_REVIEW_DECISION_NEXT_SESSION_2026-08-23.md).
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v24 supersedes v23 only as the
-latest continuation entrypoint; v1 through v23 remain immutable historical
+runtime graphs, or remote Neo4j publications. v25 supersedes v24 only as the
+latest continuation entrypoint; v1 through v24 remain immutable historical
 projections. The TypeScript/Effect runtime owns control and evidence while the
-pinned Python scalar equation remains the bounded numeric source oracle. V24
-adds only a test-only `Pi` hosted-process observation; it adds no `H/W/A/F`,
-outcome-bound causal-learning transition, topology mutation, production
-authority, or scientific result.
+pinned Python scalar equation remains the bounded numeric source oracle. V25
+adds only a `Pi` review decision; it adds no `H/W/A/F`, outcome-bound
+causal-learning transition, topology mutation, production authority, or
+scientific result.

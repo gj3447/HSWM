@@ -23,9 +23,12 @@ The boundary is intentionally small:
 The production/scientific SWM-0W-S2S confirmatory control slice is also
 present, but remains pre-dispatch engineering:
 
-- `s2s-confirmatory.ts` freezes the pilot-adoption binding, integer resource
-  policy, exact seed contract, closed monotone phases, seven VOID reasons, and
-  the permanently disabled DS-derived compact-competitive phrase.
+- `s2s-confirmatory.ts` contains a hash-pinned pre-preregistration engineering
+  candidate for the pilot-adoption binding, integer resource policy, exact seed
+  contract, closed monotone phases, seven VOID reasons, and the permanently
+  disabled DS-derived compact-competitive phrase. Its resource literals are not
+  a scientific freeze; v25 records why timing evidence and chronology remain
+  open.
 - `s2s-orchestration.ts` defines typed Effect ports for the Python numeric-only
   oracle, verified pulse source, artifact readback, and durable run evidence.
   It performs no beacon, GitHub, or numeric run.
@@ -177,7 +180,7 @@ composition with the existing scalar credit runtime. No TypeScript training,
 LLM function cell, causal update, topology learning, target-scored damage,
 production occurrence, or scientific verdict is claimed.
 
-The current continuation entrypoint is the
+The historical v24 continuation entrypoint is the
 [`v24 test-only hosted process-continuity implementation`](../../../docs/operations/HSWM_SWM0W_S2S_TEST_ONLY_HOSTED_PROCESS_CONTINUITY_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and its
 [`v24 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v24.json).
@@ -190,6 +193,19 @@ READY cancellation. This closes only the test-only hosted mechanics gate.
 `H/W/A/F`, scalar/T16 composition, package-root exports, production authority,
 shared durability, exactly-once behavior, preregistration, Q/B/R, and every
 scientific claim remain unchanged or open.
+
+The current continuation entrypoint is the
+[`v25 pre-freeze resource-policy review decision`](../../../docs/operations/HSWM_SWM0W_S2S_PRE_FREEZE_RESOURCE_POLICY_REVIEW_DECISION_NEXT_SESSION_2026-08-23.md)
+and its
+[`v25 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v25.json).
+The exact `75/245/75` candidate remains a valid package-internal arithmetic
+fixture but is rejected for production/preregistration freeze. One successful
+three-draw pilot does not supply the required workflow p95 or a production-
+equivalent 20-task profile; REGISTER's 75-minute candidate also conflicts with
+the existing 65-minute maximum pulse lead. No policy literal, workflow,
+protocol config, preregistration, future randomness, or runtime implementation
+changed. Resume at the chronology-and-timing protocol design gate before any
+heavy resource-profile dispatch.
 
 One deeply frozen, root-private `S2S_STAGE_ARTIFACT_SPECS` value now owns the
 fixed REGISTER, CONFIRM, and ADJUDICATE artifact mappings used by live

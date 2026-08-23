@@ -1,0 +1,407 @@
+name: TEST_ONLY NON_AUTHORIZING hosted Effect-root continuity
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: s2s-test-only-hosted-process-continuity-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  EFFECT_RUNTIME_DIRECTORY: src/hswm/effect-runtime
+  HOSTED_PROCESS_CLI: dist/s2s-test-only-hosted-process-cli.js
+
+jobs:
+  continuity:
+    name: Three local shapes, two uploads, and diagnostics
+    if: >-
+      github.repository == 'gj3447/HSWM' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    # Structural feasibility only; this does not enact the 75/245/75-minute
+    # amendment candidate or the production preparation/assertion budgets.
+    timeout-minutes: 20
+    steps:
+      - name: Check out the dispatched main revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install the pinned Node runtime
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24.13.0
+          package-manager-cache: false
+
+      - name: Install the locked Effect package
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Verify the test-only contract and hostile local matrix
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        run: |
+          set -euo pipefail
+          npm run check
+          npx vitest run \
+            test/s2s-hosted-process-continuity-contract.test.ts \
+            test/s2s-test-only-hosted-process-protocol.test.ts \
+            test/s2s-test-only-hosted-process-root.test.ts \
+            test/s2s-test-only-hosted-process-workflow.test.ts
+          npm run build
+
+      - name: Allocate one short private process root
+        id: process_temp
+        run: |
+          set -euo pipefail
+          path="$(mktemp -d /var/tmp/hswm-pc.XXXXXXXX)"
+          chmod 700 "$path"
+          printf 'path=%s\n' "$path" >> "$GITHUB_OUTPUT"
+          printf 'HSWM_PROCESS_TEMP=%s\n' "$path" >> "$GITHUB_ENV"
+
+      - name: Start REGISTER attempt-one Effect root
+        id: register_root
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        background: true
+        env:
+          HSWM_RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          exec node "$HOSTED_PROCESS_CLI" root \
+            --runner-temp "$HSWM_PROCESS_TEMP" \
+            --session hswm-s2s-pc-register \
+            --workflow-run-id "$HSWM_RUN_ID" \
+            --workflow-run-attempt 1 \
+            --feasibility-attempt 1 \
+            --stage REGISTER \
+            --job-id register
+
+      - name: Require authenticated REGISTER readiness before upload
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        env:
+          HSWM_RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          node "$HOSTED_PROCESS_CLI" await-ready \
+            --runner-temp "$HSWM_PROCESS_TEMP" \
+            --session hswm-s2s-pc-register \
+            --workflow-run-id "$HSWM_RUN_ID" \
+            --workflow-run-attempt 1 \
+            --feasibility-attempt 1 \
+            --stage REGISTER \
+            --job-id register \
+            | tee "$HSWM_PROCESS_TEMP/hswm-s2s-pc-register/evidence/ready-client-output.json"
+
+      - name: Upload the REGISTER structural archive shape
+        id: register_upload
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: hswm-test-only-pc-${{ github.run_id }}-register-a1
+          path: ${{ steps.process_temp.outputs.path }}/hswm-s2s-pc-register/upload/registration_archive.zip
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+          overwrite: false
+          include-hidden-files: false
+
+      - name: Reconcile REGISTER without consuming action outputs as authority
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        env:
+          HSWM_RUN_ID: ${{ github.run_id }}
+          HSWM_UPLOAD_OUTCOME: ${{ steps.register_upload.outcome }}
+        run: |
+          set -euo pipefail
+          test "$HSWM_UPLOAD_OUTCOME" = success
+          node "$HOSTED_PROCESS_CLI" reconcile \
+            --runner-temp "$HSWM_PROCESS_TEMP" \
+            --session hswm-s2s-pc-register \
+            --workflow-run-id "$HSWM_RUN_ID" \
+            --workflow-run-attempt 1 \
+            --feasibility-attempt 1 \
+            --stage REGISTER \
+            --job-id register \
+            --outcome success
+
+      - name: Wait for the same REGISTER root to exit
+        wait: register_root
+
+      - name: Verify REGISTER cleanup and terminal files
+        run: |
+          set -euo pipefail
+          session="$HSWM_PROCESS_TEMP/hswm-s2s-pc-register"
+          test ! -e "$session/client.token"
+          test ! -e "$session/control.sock"
+          test ! -e "$session/ready.json"
+          test -f "$session/evidence/ready.consumed.json"
+          test -f "$session/evidence/terminal.json"
+          test -f "$session/evidence/occurrence.json"
+
+      - name: Start CONFIRM attempt-two Effect root
+        id: confirm_root
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        background: true
+        env:
+          HSWM_RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          exec node "$HOSTED_PROCESS_CLI" root \
+            --runner-temp "$HSWM_PROCESS_TEMP" \
+            --session hswm-s2s-pc-confirm \
+            --workflow-run-id "$HSWM_RUN_ID" \
+            --workflow-run-attempt 1 \
+            --feasibility-attempt 2 \
+            --stage CONFIRM \
+            --job-id confirm
+
+      - name: Require authenticated CONFIRM readiness before failed upload
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        env:
+          HSWM_RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          node "$HOSTED_PROCESS_CLI" await-ready \
+            --runner-temp "$HSWM_PROCESS_TEMP" \
+            --session hswm-s2s-pc-confirm \
+            --workflow-run-id "$HSWM_RUN_ID" \
+            --workflow-run-attempt 1 \
+            --feasibility-attempt 2 \
+            --stage CONFIRM \
+            --job-id confirm \
+            | tee "$HSWM_PROCESS_TEMP/hswm-s2s-pc-confirm/evidence/ready-client-output.json"
+
+      - name: Exercise the pinned action's definitive no-files failure
+        id: confirm_upload
+        continue-on-error: true
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: hswm-test-only-pc-${{ github.run_id }}-confirm-a2
+          path: ${{ steps.process_temp.outputs.path }}/hswm-s2s-pc-confirm/intentionally-missing/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+          overwrite: false
+          include-hidden-files: false
+
+      - name: Reconcile CONFIRM failure without upload retry
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        env:
+          HSWM_RUN_ID: ${{ github.run_id }}
+          HSWM_UPLOAD_OUTCOME: ${{ steps.confirm_upload.outcome }}
+        run: |
+          set -euo pipefail
+          test "$HSWM_UPLOAD_OUTCOME" = failure
+          node "$HOSTED_PROCESS_CLI" reconcile \
+            --runner-temp "$HSWM_PROCESS_TEMP" \
+            --session hswm-s2s-pc-confirm \
+            --workflow-run-id "$HSWM_RUN_ID" \
+            --workflow-run-attempt 1 \
+            --feasibility-attempt 2 \
+            --stage CONFIRM \
+            --job-id confirm \
+            --outcome failure
+
+      - name: Wait for the same CONFIRM root to exit
+        wait: confirm_root
+
+      - name: Verify CONFIRM cleanup and terminal files
+        run: |
+          set -euo pipefail
+          session="$HSWM_PROCESS_TEMP/hswm-s2s-pc-confirm"
+          test ! -e "$session/client.token"
+          test ! -e "$session/control.sock"
+          test ! -e "$session/ready.json"
+          test -f "$session/evidence/ready.consumed.json"
+          test -f "$session/evidence/terminal.json"
+          test -f "$session/evidence/occurrence.json"
+
+      - name: Start ADJUDICATE attempt-three Effect root
+        id: adjudicate_root
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        background: true
+        env:
+          HSWM_RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          exec node "$HOSTED_PROCESS_CLI" root \
+            --runner-temp "$HSWM_PROCESS_TEMP" \
+            --session hswm-s2s-pc-adjudicate \
+            --workflow-run-id "$HSWM_RUN_ID" \
+            --workflow-run-attempt 1 \
+            --feasibility-attempt 3 \
+            --stage ADJUDICATE \
+            --job-id adjudicate
+
+      - name: Require authenticated ADJUDICATE readiness before upload
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        env:
+          HSWM_RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          node "$HOSTED_PROCESS_CLI" await-ready \
+            --runner-temp "$HSWM_PROCESS_TEMP" \
+            --session hswm-s2s-pc-adjudicate \
+            --workflow-run-id "$HSWM_RUN_ID" \
+            --workflow-run-attempt 1 \
+            --feasibility-attempt 3 \
+            --stage ADJUDICATE \
+            --job-id adjudicate \
+            | tee "$HSWM_PROCESS_TEMP/hswm-s2s-pc-adjudicate/evidence/ready-client-output.json"
+
+      - name: Upload the ADJUDICATE structural archive shape
+        id: adjudicate_upload
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: hswm-test-only-pc-${{ github.run_id }}-adjudicate-a3
+          path: ${{ steps.process_temp.outputs.path }}/hswm-s2s-pc-adjudicate/upload/adjudication_archive.zip
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+          overwrite: false
+          include-hidden-files: false
+
+      - name: Inject unknown diagnostic and reconcile without blind retry
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        env:
+          HSWM_RUN_ID: ${{ github.run_id }}
+          HSWM_ACTUAL_UPLOAD_OUTCOME: ${{ steps.adjudicate_upload.outcome }}
+        run: |
+          set -euo pipefail
+          test "$HSWM_ACTUAL_UPLOAD_OUTCOME" = success
+          node "$HOSTED_PROCESS_CLI" reconcile \
+            --runner-temp "$HSWM_PROCESS_TEMP" \
+            --session hswm-s2s-pc-adjudicate \
+            --workflow-run-id "$HSWM_RUN_ID" \
+            --workflow-run-attempt 1 \
+            --feasibility-attempt 3 \
+            --stage ADJUDICATE \
+            --job-id adjudicate \
+            --outcome unknown
+
+      - name: Wait for the same ADJUDICATE root to exit
+        wait: adjudicate_root
+
+      - name: Verify ADJUDICATE cleanup and terminal files
+        run: |
+          set -euo pipefail
+          session="$HSWM_PROCESS_TEMP/hswm-s2s-pc-adjudicate"
+          test ! -e "$session/client.token"
+          test ! -e "$session/control.sock"
+          test ! -e "$session/ready.json"
+          test -f "$session/evidence/ready.consumed.json"
+          test -f "$session/evidence/terminal.json"
+          test -f "$session/evidence/occurrence.json"
+
+      - name: Upload non-authorizing hosted occurrence evidence once
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: hswm-test-only-pc-${{ github.run_id }}-occurrence-evidence
+          path: |
+            ${{ steps.process_temp.outputs.path }}/hswm-s2s-pc-register/evidence/
+            ${{ steps.process_temp.outputs.path }}/hswm-s2s-pc-confirm/evidence/
+            ${{ steps.process_temp.outputs.path }}/hswm-s2s-pc-adjudicate/evidence/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+          overwrite: false
+          include-hidden-files: false
+
+  explicit_cancel:
+    name: Explicit runner cancel of the scoped root
+    if: >-
+      github.repository == 'gj3447/HSWM' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out the dispatched main revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install the pinned Node runtime
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24.13.0
+          package-manager-cache: false
+
+      - name: Install and build the locked Effect package
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+
+      - name: Allocate one short private cancellation root
+        id: cancel_temp
+        run: |
+          set -euo pipefail
+          path="$(mktemp -d /var/tmp/hswm-pc.XXXXXXXX)"
+          chmod 700 "$path"
+          printf 'path=%s\n' "$path" >> "$GITHUB_OUTPUT"
+          printf 'HSWM_PROCESS_TEMP=%s\n' "$path" >> "$GITHUB_ENV"
+
+      - name: Start the root that the runner will explicitly cancel
+        id: cancelled_root
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        background: true
+        continue-on-error: true
+        env:
+          HSWM_RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          exec node "$HOSTED_PROCESS_CLI" root \
+            --runner-temp "$HSWM_PROCESS_TEMP" \
+            --session hswm-s2s-pc-cancel \
+            --workflow-run-id "$HSWM_RUN_ID" \
+            --workflow-run-attempt 1 \
+            --feasibility-attempt 1 \
+            --stage REGISTER \
+            --job-id register
+
+      - name: Require authenticated readiness before cancellation
+        working-directory: ${{ env.EFFECT_RUNTIME_DIRECTORY }}
+        env:
+          HSWM_RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          node "$HOSTED_PROCESS_CLI" await-ready \
+            --runner-temp "$HSWM_PROCESS_TEMP" \
+            --session hswm-s2s-pc-cancel \
+            --workflow-run-id "$HSWM_RUN_ID" \
+            --workflow-run-attempt 1 \
+            --feasibility-attempt 1 \
+            --stage REGISTER \
+            --job-id register \
+            | tee "$HSWM_PROCESS_TEMP/hswm-s2s-pc-cancel/evidence/ready-client-output.json"
+
+      - name: Cancel the background root through the runner primitive
+        cancel: cancelled_root
+
+      - name: Verify cancellation left no completion or live control surface
+        run: |
+          set -euo pipefail
+          session="$HSWM_PROCESS_TEMP/hswm-s2s-pc-cancel"
+          test ! -e "$session/client.token"
+          test ! -e "$session/control.sock"
+          test ! -e "$session/ready.json"
+          test ! -e "$session/evidence/terminal.json"
+          test ! -e "$session/evidence/occurrence.json"
+          test -f "$session/evidence/ready-client-output.json"
+
+      - name: Upload the non-completion observation once
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: hswm-test-only-pc-${{ github.run_id }}-cancel-observation
+          path: ${{ steps.cancel_temp.outputs.path }}/hswm-s2s-pc-cancel/evidence/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+          overwrite: false
+          include-hidden-files: false

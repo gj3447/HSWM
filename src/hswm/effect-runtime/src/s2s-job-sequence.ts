@@ -23,7 +23,7 @@ import {
   makeOpaqueNumericFile,
   projectOpaqueNumericAdjudication
 } from "./s2s-orchestration.js"
-import { S2S_NUMERIC_ADJUDICATION_MAX_BYTES } from "./s2s-live-python.js"
+import { S2S_NUMERIC_ADJUDICATION_MAX_BYTES } from "./s2s-resource-limits.js"
 import {
   S2SArtifactZipValidationError,
   validateS2SArtifactZip,

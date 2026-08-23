@@ -24,6 +24,10 @@ import {
   type S2SBoundedProcessResult
 } from "./s2s-bounded-process.js"
 import { S2SSha256Schema, type S2SSha256 } from "./s2s-confirmatory.js"
+import {
+  S2S_NUMERIC_ADJUDICATION_MAX_BYTES,
+  S2S_NUMERIC_CANDIDATE_MAX_BYTES
+} from "./s2s-resource-limits.js"
 
 export const S2S_NUMERIC_ORACLE_SOURCE_SHA256 =
   "27854351f642727dc21ec63e987bf3ae67a205f4664f5e0ad448eb3b7a8c570b" as const
@@ -38,10 +42,10 @@ export const S2S_NUMERIC_GOLDEN_TIMEOUT_MILLIS = 120_000 as const
 export const S2S_NUMERIC_CONFIRM_TIMEOUT_MILLIS = 7_200_000 as const
 export const S2S_NUMERIC_ADJUDICATE_TIMEOUT_MILLIS = 1_200_000 as const
 export const S2S_NUMERIC_CONFIRM_REQUEST_MAX_BYTES = 65_536 as const
-export const S2S_NUMERIC_CANDIDATE_MAX_BYTES = 60 * 1_048_576
-// Reserves one MiB of the frozen four-MiB archive ceiling for the actual
-// control member and ZIP framing; the final archive cap is enforced separately.
-export const S2S_NUMERIC_ADJUDICATION_MAX_BYTES = 3 * 1_048_576
+export {
+  S2S_NUMERIC_ADJUDICATION_MAX_BYTES,
+  S2S_NUMERIC_CANDIDATE_MAX_BYTES
+}
 export const S2S_NUMERIC_STDERR_MAX_BYTES = 8_192 as const
 export const S2S_PYTHON_RSS_TELEMETRY_SCHEMA_VERSION =
   "hswm-swm0w-s2s-python-rss-telemetry/v1" as const

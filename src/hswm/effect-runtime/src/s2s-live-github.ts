@@ -5,6 +5,7 @@ import {
   rawS2SFileSha256
 } from "./s2s-canonical.js"
 import { parseS2SJsonBytes, type S2SJson } from "./s2s-json.js"
+import { S2S_GITHUB_JSON_MAX_BYTES } from "./s2s-resource-limits.js"
 import {
   S2S_CONFIRMATORY_BRANCH,
   S2S_CONFIRMATORY_EVENT,
@@ -19,7 +20,7 @@ export const S2S_GITHUB_OBSERVATION_SCHEMA_VERSION =
 // The fixed S2S endpoints admit one run, three jobs, or three artifacts. A
 // one-MiB transport cap bounds each metadata observation while remaining well
 // above those exact rosters. Aggregate replay owns a separate total budget.
-export const S2S_GITHUB_JSON_MAX_BYTES = 1_048_576 as const
+export { S2S_GITHUB_JSON_MAX_BYTES }
 export const S2S_GITHUB_PAGE_SIZE = 100 as const
 export const S2S_GITHUB_METADATA_TIMEOUT_MILLIS = 120_000 as const
 export const S2S_GITHUB_ARCHIVE_TIMEOUT_MILLIS = 300_000 as const

@@ -74,6 +74,12 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect(
     "validateS2SCurrentRunStageEvidenceForArtifactReplay" in PublicApi
   ).toBe(false)
+  expect("validateS2SCurrentRunStageEvidence" in PublicApi).toBe(false)
+  expect("buildS2SStageUploadPostcondition" in PublicApi).toBe(false)
+  expect("buildS2SStageUploadPostconditionEffect" in PublicApi).toBe(false)
+  expect("reconstructS2SStageUploadPostcondition" in PublicApi).toBe(false)
+  expect("validateS2SStageUploadPostcondition" in PublicApi).toBe(false)
+  expect("validateS2SStageUploadPostconditionEffect" in PublicApi).toBe(false)
   expect("validateS2SCandidateReadReplayPair" in PublicApi).toBe(false)
   expect("validateS2SCandidateReadReplayPairEffect" in PublicApi).toBe(false)
   expect(
@@ -111,6 +117,8 @@ it("keeps stage artifact capability and permit types root-private", () => {
   type ForbiddenLookupTrace = import("../src/index.js").S2SArtifactSuccessfulLookupTrace
   // @ts-expect-error replay snapshot types are deliberately root-private
   type ForbiddenReplay = import("../src/index.js").S2SStageArtifactReadReplaySnapshot
+  // @ts-expect-error upload postcondition types are deliberately root-private
+  type ForbiddenUploadPostcondition = import("../src/index.js").S2SStageUploadPostconditionSnapshot
   // @ts-expect-error durable recovery types are deliberately root-private
   type ForbiddenRecovery = import("../src/index.js").S2SDurableEvidenceRecovery
   // @ts-expect-error durable replay-profile types are deliberately root-private
@@ -121,6 +129,7 @@ it("keeps stage artifact capability and permit types root-private", () => {
     ForbiddenValidatedRead | undefined,
     ForbiddenLookupTrace | undefined,
     ForbiddenReplay | undefined,
+    ForbiddenUploadPostcondition | undefined,
     ForbiddenRecovery | undefined,
     ForbiddenReplayPublication | undefined
   ] = [
@@ -130,9 +139,11 @@ it("keeps stage artifact capability and permit types root-private", () => {
     undefined,
     undefined,
     undefined,
+    undefined,
     undefined
   ]
   expect(absent).toEqual([
+    undefined,
     undefined,
     undefined,
     undefined,

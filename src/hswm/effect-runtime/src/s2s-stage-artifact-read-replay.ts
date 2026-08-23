@@ -109,6 +109,7 @@ const EtagSchema = Schema.String.pipe(Schema.pattern(HTTP_ETAG_PATTERN))
 const TimestampSchema = Schema.String.pipe(
   Schema.pattern(RFC3339_UTC_SECONDS_PATTERN)
 )
+const StageSchema = Schema.Literal("REGISTER", "CONFIRM", "ADJUDICATE")
 const ConsumerStageSchema = Schema.Literal("CONFIRM", "ADJUDICATE")
 const ArtifactRoleSchema = Schema.Literal("REGISTRATION", "CANDIDATE")
 const OperationSchema = Schema.Literal(
@@ -301,11 +302,10 @@ const CurrentRunEvidenceSchema = Schema.Struct({
   ),
   workflowRunId: PositiveSafeIntegerSchema,
   workflowRunAttempt: Schema.Literal(1),
-  stage: ConsumerStageSchema,
-  currentJobId: Schema.Literal("confirm", "adjudicate"),
+  stage: StageSchema,
+  currentJobId: Schema.Literal("register", "confirm", "adjudicate"),
   currentJobDatabaseId: PositiveSafeIntegerSchema,
   predecessorJobDatabaseIds: Schema.Array(PositiveSafeIntegerSchema).pipe(
-    Schema.minItems(1),
     Schema.maxItems(2)
   ),
   workflowRunCreatedAt: TimestampSchema,
@@ -512,7 +512,7 @@ const currentRunFailure = (detail: string) =>
     )
   )
 
-export const validateS2SCurrentRunStageEvidenceForArtifactReplay = (
+export const validateS2SCurrentRunStageEvidence = (
   input: unknown
 ): Either.Either<
   S2SCurrentRunStageEvidence,
@@ -549,7 +549,7 @@ export const validateS2SCurrentRunStageEvidenceForArtifactReplay = (
     const predecessors = snapshotDenseArray(
       root?.["predecessorJobDatabaseIds"],
       2,
-      1
+      0
     )
     const observations = exactDataRecord(root?.["observations"], [
       "runStart",
@@ -598,7 +598,8 @@ export const validateS2SCurrentRunStageEvidenceForArtifactReplay = (
     const { receiptSha256, ...core } = evidence
     const receipt = canonicalS2SControlSha256(core)
     const expectedJobId = S2S_CONFIRMATORY_STAGE_CONTRACTS[evidence.stage].jobId
-    const expectedPredecessorCount = evidence.stage === "CONFIRM" ? 1 : 2
+    const expectedPredecessorCount =
+      evidence.stage === "REGISTER" ? 0 : evidence.stage === "CONFIRM" ? 1 : 2
     const observationValues = Object.values(evidence.observations)
     if (
       Either.isLeft(receipt) ||
@@ -632,6 +633,21 @@ export const validateS2SCurrentRunStageEvidenceForArtifactReplay = (
   } catch {
     return currentRunFailure("current-run evidence validation failed closed")
   }
+}
+
+/** Compatibility wrapper retained with the predecessor-read-only domain. */
+export const validateS2SCurrentRunStageEvidenceForArtifactReplay = (
+  input: unknown
+): Either.Either<
+  S2SCurrentRunStageEvidence,
+  S2SStageArtifactReadReplayError
+> => {
+  const validated = validateS2SCurrentRunStageEvidence(input)
+  return Either.isRight(validated) && validated.right.stage === "REGISTER"
+    ? currentRunFailure(
+        "predecessor artifact replay has no REGISTER consumer surface"
+      )
+    : validated
 }
 
 const decodeReplayManifest = (

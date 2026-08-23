@@ -1,4 +1,4 @@
-import { S2S_GITHUB_JSON_MAX_BYTES } from "./s2s-live-github.js"
+import { S2S_GITHUB_JSON_MAX_BYTES } from "./s2s-resource-limits.js"
 
 export const S2S_STAGE_UPLOAD_POSTCONDITION_SCHEMA_VERSION =
   "hswm-swm0w-s2s-stage-upload-postcondition/v1" as const

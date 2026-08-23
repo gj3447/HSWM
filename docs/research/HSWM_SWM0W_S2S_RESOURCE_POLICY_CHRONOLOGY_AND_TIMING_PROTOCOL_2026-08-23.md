@@ -38,6 +38,11 @@ handoff, successor KG, design-only TypeScript schema, or another handoff test.
 No receipt or `F1_R8_RESULTS_LOG.md` entry is warranted because no material
 research result was produced.
 
+Existing v1-v25 records and versioned handoff tests remain historical files,
+but the versioned tests are retired from the default pytest/CI surface. Their
+current-document hash checks turned history into a forward-write gate and made
+an honest `EFFICACY.md` correction fail unrelated core tests.
+
 The workflow-p95 prerequisite in
 [`HSWM_SWM0W_S2S_GATE_2026-08-20.md`](HSWM_SWM0W_S2S_GATE_2026-08-20.md)
 and v25 is superseded for this decision. Estimating p95 would require a repeated

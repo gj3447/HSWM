@@ -472,3 +472,18 @@ audit separates that `Pi` occurrence machinery from the immediate Occam
 critical path: the next code slice is a pure TypeScript port/capsule of the
 frozen role-aware T16 one-sweep operator, with strict Effect decoding and
 independent Python parity. This is design-only; no `H/W/A/F` result changed.
+
+The current continuation entrypoint is now the
+[`v23 role-aware TypeScript core implementation handoff`](../operations/HSWM_SWM0_ROLE_AWARE_TYPESCRIPT_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and
+[`v23 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v23.json).
+At implementation commit `a9aff88`, one internal pure TypeScript T16 capsule
+joins fixed role-bearing incidence `H`, an exact learned-archive parameter
+projection `W`, and one simultaneous recipient activation sweep `A`. Effect
+3.22.1 Schema/Either/tagged errors own the strict resource-bounded shell. Two
+officially parsed Python learned archives, twelve worlds, all member actions,
+registered role perturbations, Q removal/restoration, and broadcast establish
+the bounded engineering parity claim. The module stays package-root private.
+Scalar-credit composition, source-provenance migration, `F`, causal learning,
+topology mutation, target-scored damage, the production evidence workflow, and
+scientific judgment remain open.

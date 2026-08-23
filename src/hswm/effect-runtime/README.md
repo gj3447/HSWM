@@ -1,13 +1,19 @@
 # HSWM Effect runtime
 
 This private package is the TypeScript/Effect production-runtime seed for
-HSWM. It currently implements one narrow, engineering-only transaction:
-crediting an already eligible trajectory against an existing role-aware
-hyperedge and registered function cell.
+HSWM. It contains two distinct bounded engineering slices: the existing scalar
+outcome-credit transaction for an already eligible trajectory, and a
+package-internal role-aware T16 forward projection over checked-in Python
+learned-archive parameter bytes. They are not yet composed or publicly
+exported as one semantic-weight abstraction.
 
 The boundary is intentionally small:
 
-- `domain.ts` is a deterministic, side-effect-free `H/W/A/F` transition.
+- `domain.ts` is the deterministic scalar credit state transition.
+- `swm0-role-aware-core.ts` is the pure TypeScript numeric T16 center;
+  `swm0-role-aware-core-schema.ts` supplies its strict Effect Schema boundary.
+  Together they project bounded `H/W/A`, not token-native activation, an LLM
+  function cell, training, or causal learning.
 - `schema.ts` decodes unknown input and snapshots accepted values.
 - `runtime.ts` supplies the Effect shell: a capability-service port, typed
   failures, Layers, and one atomic state-plus-journal transaction.
@@ -144,7 +150,7 @@ finalizer exists. Resume from the repository
 and its
 [`v21 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v21.json).
 
-The current continuation entrypoint is the
+The historical v22 design entrypoint is the
 [`v22 Occam-core/process-topology decision`](../../../docs/operations/HSWM_SWM0_OCCAM_CORE_AND_S2S_PROCESS_TOPOLOGY_DECISION_NEXT_SESSION_2026-08-23.md)
 and its
 [`v22 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v22.json).
@@ -154,6 +160,22 @@ implementation target is instead a pure TypeScript T16 capsule that joins
 explicit role-bearing incidences, learned recipient-conditioned transport, and
 one-sweep activation, with Effect at the strict decode/composition boundary and
 independent Python parity. No runtime code or scientific result changed in v22.
+
+The current continuation entrypoint is the
+[`v23 role-aware TypeScript core implementation`](../../../docs/operations/HSWM_SWM0_ROLE_AWARE_TYPESCRIPT_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and its
+[`v23 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v23.json).
+At commit `a9aff88`, the internal `swm0-role-aware-core` modules implement the
+fixed pure TypeScript T16 one-sweep equation behind strict Effect
+Schema/Either/tagged-error boundaries. Exact role/member addresses, all 870
+little-endian float64 parameter bytes, six recipient outputs, Q
+removal/private-snapshot restoration, member actions, registered role
+perturbations, and broadcast are independently pinned to two officially parsed
+Python learned archives. The capsule is intentionally absent from `src/index.ts`.
+Before any root export, review source-provenance/version migration and explicit
+composition with the existing scalar credit runtime. No TypeScript training,
+LLM function cell, causal update, topology learning, target-scored damage,
+production occurrence, or scientific verdict is claimed.
 
 One deeply frozen, root-private `S2S_STAGE_ARTIFACT_SPECS` value now owns the
 fixed REGISTER, CONFIRM, and ADJUDICATE artifact mappings used by live

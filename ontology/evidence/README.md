@@ -179,7 +179,7 @@ engineering checkpoints:
   commit/recovery, GitHub origin, and scientific judgment remain open. Continue
   from
   [`HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
-- [`v22 current Occam-core/process-topology decision checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v22.json)
+- [`v22 historical Occam-core/process-topology decision checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v22.json)
   selects a background TypeScript/Effect root plus authenticated one-shot IPC
   for the future GitHub evidence branch while preserving the exact v16 pinned
   upload action. Selection does not close process continuity: IPC, hosted-runner
@@ -189,12 +189,24 @@ engineering checkpoints:
   recipient-conditioned operator `W`, and one-sweep `A`. This checkpoint is
   design-only and changes no runtime or scientific result. Continue from
   [`HSWM_SWM0_OCCAM_CORE_AND_S2S_PROCESS_TOPOLOGY_DECISION_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0_OCCAM_CORE_AND_S2S_PROCESS_TOPOLOGY_DECISION_NEXT_SESSION_2026-08-23.md).
+- [`v23 current role-aware TypeScript core implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v23.json)
+  records implementation commit `a9aff88`. One bounded internal capsule now
+  joins explicit role/member incidence `H`, the exact 870-parameter
+  recipient-conditioned T16 projection `W`, and one simultaneous six-recipient
+  activation sweep `A`. Effect Schema/Either/tagged errors own the strict,
+  resource-bounded boundary; independent Python scalar fixtures establish exact
+  bytes across two learned archives and six worlds each. Q restoration is bound
+  to a private original-state snapshot, including a coherent forged-receipt
+  regression. Package-root export, scalar-credit composition, `F`, causal
+  update, topology learning, target-scored role damage, production workflow,
+  and every scientific verdict remain open. Continue from
+  [`HSWM_SWM0_ROLE_AWARE_TYPESCRIPT_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0_ROLE_AWARE_TYPESCRIPT_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v22 supersedes v21 only as the
-latest continuation entrypoint; v1 through v21 remain immutable historical
+runtime graphs, or remote Neo4j publications. v23 supersedes v22 only as the
+latest continuation entrypoint; v1 through v22 remain immutable historical
 projections. The TypeScript/Effect runtime owns control and evidence while the
-pinned Python/NumPy oracle remains the bounded numeric source oracle. V22
-selects but does not implement the evidence-branch topology and makes the
-role-aware TypeScript Occam core the next code target; it changes no scientific
-`H/W/A/F` result or outcome-bound causal-learning loop.
+pinned Python scalar equation remains the bounded numeric source oracle. V23
+implements only the fixed T16 `H/W/A` engineering projection; it adds no `F`,
+outcome-bound causal-learning transition, topology mutation, or scientific
+result. The v22 evidence-branch topology remains selected but unimplemented.

@@ -2327,15 +2327,14 @@ export const makeS2SGitHubHttpTransportLiveLayer = (
                 "DOWNLOAD_ARTIFACT_ARCHIVE",
                 archiveResponse.status
               )
-              return makeArtifactDownload(
+              return Object.freeze({
                 artifactId,
                 redirect,
-                archiveResponse.body,
-                Math.floor(Date.now() / 1_000),
+                archive: archiveResponse.body,
                 redirectHeaders,
                 mediaType,
                 archiveResponseEtag
-              )
+              })
             },
             catch: (error: unknown) =>
               error instanceof S2SGitHubTransportError
@@ -2345,7 +2344,34 @@ export const makeS2SGitHubHttpTransportLiveLayer = (
                     "DOWNLOAD_ARTIFACT_ARCHIVE",
                     "artifact download failed closed"
                   )
-          })
+          }).pipe(
+            Effect.flatMap((download) =>
+              Clock.currentTimeMillis.pipe(
+                Effect.flatMap((milliseconds) =>
+                  Effect.try({
+                    try: () =>
+                      makeArtifactDownload(
+                        download.artifactId,
+                        download.redirect,
+                        download.archive,
+                        Math.floor(milliseconds / 1_000),
+                        download.redirectHeaders,
+                        download.mediaType,
+                        download.archiveResponseEtag
+                      ),
+                    catch: (error: unknown) =>
+                      error instanceof S2SGitHubTransportError
+                        ? error
+                        : transportError(
+                            "REQUEST_FAILED",
+                            "DOWNLOAD_ARTIFACT_ARCHIVE",
+                            "artifact download receipt creation failed closed"
+                          )
+                  })
+                )
+              )
+            )
+          )
       })
     })
   )

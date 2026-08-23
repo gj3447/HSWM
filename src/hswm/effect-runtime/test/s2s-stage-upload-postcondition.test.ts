@@ -44,6 +44,7 @@ import {
   S2SStageUploadPostconditionError,
   buildS2SStageUploadPostcondition,
   buildS2SStageUploadPostconditionEffect,
+  buildS2SStageUploadPostconditionFromProductionShell,
   reconstructS2SStageUploadPostcondition,
   validateS2SStageUploadPostcondition,
   validateS2SStageUploadPostconditionEffect,
@@ -1029,6 +1030,14 @@ it("round-trips every stage and successful attempt deterministically", () => {
   }
 })
 
+it("keeps the production-shell assembler fixed to trusted permit evidence", () => {
+  const fixture = makeFixture("REGISTER", 1)
+  expectReason(
+    buildS2SStageUploadPostconditionFromProductionShell(fixture.buildInput),
+    "PERMIT_BINDING_MISMATCH"
+  )
+})
+
 it("returns deep-frozen evidence and fresh defensive byte copies", () => {
   const fixture = makeFixture("ADJUDICATE", 3)
   const snapshot = right(buildS2SStageUploadPostcondition(fixture.buildInput))
@@ -1612,6 +1621,17 @@ it("rejects duplicate, expired, cross-head, and impossible-time artifacts", () =
     {
       name: "expired fixed artifact",
       artifacts: [{ ...fixed, expired: true }],
+      reason: "ARTIFACT_BINDING_MISMATCH"
+    },
+    {
+      name: "expired-by-time fixed artifact with a false boolean",
+      artifacts: [
+        {
+          ...fixed,
+          expired: false,
+          expires_at: "2026-08-21T03:20:00Z"
+        }
+      ],
       reason: "ARTIFACT_BINDING_MISMATCH"
     },
     {

@@ -1671,7 +1671,10 @@ const validateAssertionPermitEvidence = (
   current: S2SCurrentRunStageEvidence,
   observations: ReadonlyArray<ReplayedObservation>,
   download: S2SGitHubArtifactDownloadReceipt,
-  mode: "TEST_ONLY_BUILD" | "STRUCTURAL_RECOVERY"
+  mode:
+    | "TEST_ONLY_BUILD"
+    | "TRUSTED_PRODUCTION_SHELL_BUILD"
+    | "STRUCTURAL_RECOVERY"
 ): Either.Either<
   S2SStageUploadAssertionPermitEvidence,
   S2SStageUploadPostconditionError
@@ -1720,6 +1723,8 @@ const validateAssertionPermitEvidence = (
       !claimsMatch ||
       (mode === "TEST_ONLY_BUILD" &&
         evidence.authorityScope !== "TEST_ONLY_NON_AUTHORIZING") ||
+      (mode === "TRUSTED_PRODUCTION_SHELL_BUILD" &&
+        evidence.authorityScope !== "TRUSTED_SINGLE_MODULE_CURRENT_JOB") ||
       Either.isLeft(receipt) ||
       receipt.right !== receiptSha256 ||
       !sameCanonicalData(evidence.identity, expectedIdentity) ||
@@ -1928,6 +1933,7 @@ const validateStageUploadSemantics = (
     selectedArtifact === undefined ||
     selectedAtUnixSeconds === undefined ||
     selectedArtifact.expired ||
+    selectedArtifact.expiresAtUnixSeconds <= selectedAtUnixSeconds ||
     selectedArtifact.createdAtUnixSeconds < producer.startedAtUnixSeconds ||
     selectedArtifact.createdAtUnixSeconds > selectedAtUnixSeconds ||
     selectedArtifact.id !== manifest.artifact_id ||
@@ -1964,6 +1970,9 @@ const validateStageUploadSemantics = (
     readbackStart.receipt.observedAtUnixSeconds < previousTime ||
     artifactRequery.receipt.observedAtUnixSeconds <
       readbackStart.receipt.observedAtUnixSeconds ||
+    artifactRequery.receipt.projection.expired ||
+    artifactRequery.receipt.projection.expiresAtUnixSeconds <=
+      artifactRequery.receipt.observedAtUnixSeconds ||
     !sameCanonicalData(
       artifactRequery.receipt.projection,
       selectedArtifact
@@ -1999,6 +2008,8 @@ const validateStageUploadSemantics = (
   if (
     downloadReceipt.downloadedAtUnixSeconds <
       artifactRequery.receipt.observedAtUnixSeconds ||
+    selectedArtifact.expiresAtUnixSeconds <=
+      downloadReceipt.downloadedAtUnixSeconds ||
     readbackEnd.receipt.observedAtUnixSeconds <
       downloadReceipt.downloadedAtUnixSeconds ||
     downloadReceipt.archiveByteLength !== manifest.artifact_byte_length ||
@@ -2566,8 +2577,9 @@ export const validateS2SStageUploadPostcondition = (
  * surfaces, recovered archive bytes, and the ordered prepared member tuple.
  * Every policy selector and every derived hash remains internal.
  */
-export const buildS2SStageUploadPostcondition = (
-  input: unknown
+const buildS2SStageUploadPostconditionWithMode = (
+  input: unknown,
+  mode: "TEST_ONLY_BUILD" | "TRUSTED_PRODUCTION_SHELL_BUILD"
 ): Either.Either<
   S2SStageUploadPostconditionSnapshot,
   S2SStageUploadPostconditionError
@@ -2679,7 +2691,7 @@ export const buildS2SStageUploadPostcondition = (
       current.right,
       replayed,
       download.right.receipt,
-      "TEST_ONLY_BUILD"
+      mode
     )
     if (Either.isLeft(permit)) return Either.left(permit.left)
     const identity = identityFromCurrent(current.right)
@@ -2840,6 +2852,29 @@ export const buildS2SStageUploadPostcondition = (
     )
   }
 }
+
+export const buildS2SStageUploadPostcondition = (
+  input: unknown
+): Either.Either<
+  S2SStageUploadPostconditionSnapshot,
+  S2SStageUploadPostconditionError
+> => buildS2SStageUploadPostconditionWithMode(input, "TEST_ONLY_BUILD")
+
+/**
+ * Root-private production-shell assembler. The trusted permit mode is fixed
+ * here and cannot be selected by a caller. Its result remains structural and
+ * non-authorizing until the assertion module authenticates a completion.
+ */
+export const buildS2SStageUploadPostconditionFromProductionShell = (
+  input: unknown
+): Either.Either<
+  S2SStageUploadPostconditionSnapshot,
+  S2SStageUploadPostconditionError
+> =>
+  buildS2SStageUploadPostconditionWithMode(
+    input,
+    "TRUSTED_PRODUCTION_SHELL_BUILD"
+  )
 
 export const buildS2SStageUploadPostconditionEffect = (
   input: unknown

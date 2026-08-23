@@ -1849,6 +1849,7 @@ it.effect("strips authorization across the manual artifact redirect", () => {
   }) as typeof fetch
 
   const program = Effect.gen(function* () {
+    yield* TestClock.setTime(OBSERVED_AT * 1_000)
     const transport = yield* S2SGitHubHttpTransport
     const result = yield* transport.downloadArtifactArchive(
       ARTIFACT_ID,
@@ -1863,6 +1864,7 @@ it.effect("strips authorization across the manual artifact redirect", () => {
     expect(result.receipt.downloadedArchiveSha256).toMatch(/^[0-9a-f]{64}$/)
     expect(result.receipt.receiptSha256).toMatch(/^[0-9a-f]{64}$/)
     expect(result.receipt).toMatchObject({
+      downloadedAtUnixSeconds: OBSERVED_AT,
       redirectHttpStatus: 302,
       redirectGitHubRequestId: "A1B2:C3D4:E5F6:REDIRECT",
       redirectGitHubApiVersionSelected: S2S_GITHUB_API_VERSION,

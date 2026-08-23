@@ -281,6 +281,25 @@ const PRODUCTION_WORKFLOW_SOURCE_POLICY: WorkflowSourcePolicy = Object.freeze({
   status: "OPEN_UNTIL_WORKFLOW_BYTES_EXIST"
 })
 
+/**
+ * Root-private, non-authorizing preflight. It exposes only whether the
+ * production workflow-source gate is closed; it never returns reviewed bytes,
+ * a fixture, or an authority bearer.
+ */
+export const requireS2SProductionWorkflowSourcePolicy = (): Either.Either<
+  void,
+  S2SCurrentRunInputError
+> =>
+  PRODUCTION_WORKFLOW_SOURCE_POLICY.status ===
+  "OPEN_UNTIL_WORKFLOW_BYTES_EXIST"
+    ? Either.left(
+        new S2SCurrentRunInputError({
+          reason: "WORKFLOW_SOURCE_BYTES_OPEN",
+          detail: "reviewed workflow source bytes are not pinned"
+        })
+      )
+    : Either.right(undefined)
+
 interface BoundRunInput {
   readonly registration: S2SRegistrationCommitAuthorityEvidence
   readonly invocation: S2SCurrentInvocationEvidence

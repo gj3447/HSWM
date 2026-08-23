@@ -1,14 +1,38 @@
 import { types as nodeTypes } from "node:util"
 
-import { Data, Effect, Either, Exit, Ref } from "effect"
+import { Cause, Context, Data, Effect, Either, Exit, Layer, Ref } from "effect"
 
 import {
-  canonicalS2SControlSha256
+  canonicalS2SControlSha256,
+  rawS2SFileSha256
 } from "./s2s-canonical.js"
 import {
   S2SGitCommitShaSchema,
   S2SSha256Schema
 } from "./s2s-confirmatory.js"
+import {
+  S2S_GITHUB_ARCHIVE_TIMEOUT_MILLIS,
+  S2S_GITHUB_METADATA_TIMEOUT_MILLIS,
+  S2SGitHubObservationError,
+  S2SGitHubObservationValidationError,
+  S2SGitHubObserver,
+  S2SGitHubObserverLive,
+  S2SGitHubTransportError,
+  makeS2SGitHubHttpTransportLiveLayer,
+  validateS2SGitHubArtifactDownload,
+  validateS2SGitHubArtifactObservation,
+  validateS2SGitHubRunArtifactsObservation,
+  validateS2SGitHubWorkflowAttemptJobsObservation,
+  validateS2SGitHubWorkflowRunObservation,
+  type S2SGitHubArtifactDownload,
+  type S2SGitHubArtifactProjection,
+  type S2SGitHubArtifactsProjection,
+  type S2SGitHubLiveTransportConfig,
+  type S2SGitHubObservation,
+  type S2SGitHubWorkflowJobProjection,
+  type S2SGitHubWorkflowJobsProjection,
+  type S2SGitHubWorkflowRunProjection
+} from "./s2s-live-github.js"
 import {
   inspectS2SPreparedStageCarrierCapability,
   inspectS2SPreparedStageCarrierTestCapability,
@@ -17,14 +41,27 @@ import {
 } from "./s2s-prepared-stage-carrier.js"
 import {
   inspectS2SCurrentRunStageAuthority,
+  requireS2SProductionWorkflowSourcePolicy,
+  S2SCurrentRunStage,
+  type S2SCurrentRunInputError,
   type S2SCurrentRunStageEvidence
 } from "./s2s-run-authority.js"
 import { validateS2SCurrentRunStageEvidence } from "./s2s-stage-artifact-read-replay.js"
+import { S2S_STAGE_ARTIFACT_SPECS } from "./s2s-stage-artifact-spec.js"
 import {
   S2S_STAGE_UPLOAD_ASSERTION_OPERATION,
   S2S_STAGE_UPLOAD_ASSERTION_PERMIT_EVIDENCE_SCHEMA_VERSION
 } from "./s2s-stage-upload-postcondition-contract.js"
-import type { S2SStageUploadAssertionPermitEvidence } from "./s2s-stage-upload-postcondition.js"
+import {
+  S2SStageUploadPostconditionError,
+  buildS2SStageUploadPostcondition,
+  buildS2SStageUploadPostconditionFromProductionShell,
+  validateS2SStageUploadPostcondition,
+  type S2SStageUploadAssertionPermitEvidence,
+  type S2SStageUploadBuildObservation,
+  type S2SStageUploadPostconditionSnapshot,
+  type S2SStageUploadPreparedMember
+} from "./s2s-stage-upload-postcondition.js"
 import {
   classifyS2SStageUploadOutcome,
   type S2SStageUploadOutcome,
@@ -32,8 +69,14 @@ import {
 } from "./s2s-stage-upload-outcome.js"
 import {
   S2S_CONFIRMATORY_BRANCH,
+  S2S_CONFIRMATORY_EVENT,
+  S2S_CONFIRMATORY_JOB_STAGES,
+  S2S_CONFIRMATORY_REPOSITORY,
+  S2S_CONFIRMATORY_STAGE_CONTRACTS,
+  S2S_CONFIRMATORY_WORKFLOW_NAME,
   S2S_CONFIRMATORY_WORKFLOW_PATH
 } from "./s2s-workflow-contract.js"
+import { validateS2SArtifactZip } from "./s2s-zip.js"
 
 const SHA256_PATTERN = /^[0-9a-f]{64}$/
 const REQUEST_ID_PATTERN = /^[\u0021-\u007e]{1,256}$/
@@ -85,9 +128,12 @@ export class S2SStageUploadAssertionPermitError extends Data.TaggedError(
   readonly reason:
     | "INVALID_AUTHORITY"
     | "INVALID_PREPARED_CAPABILITY"
+    | "INVALID_COMPLETION_CAPABILITY"
+    | "INVALID_REPLAY_SNAPSHOT"
     | "PREPARED_CAPABILITY_BINDING_MISMATCH"
     | "PRODUCTION_SEMANTIC_SLOT_OCCUPIED"
     | "PRODUCTION_ASSERTION_SHELL_OPEN"
+    | "PRODUCTION_PROCESS_CONTINUITY_OPEN"
     | "TEST_SEED_INVALID"
     | "SEED_REQUEST_ID_REUSED"
     | "PERMIT_IN_FLIGHT"
@@ -127,10 +173,39 @@ type AssertionIdentity = S2SStageUploadAssertionPermitEvidence["identity"]
 interface AssertionPermitState {
   readonly status: S2SStageUploadAssertionPermitStatus
   readonly ledgerEntries: ReadonlyArray<S2SStageUploadAssertionLedgerEntry>
+  readonly activeLease: AssertionPermitLease | null
+  readonly layerClaims: ReadonlyArray<AssertionLayerClaim>
 }
+
+const ASSERTION_LAYER_CLAIM_BRAND: unique symbol = Symbol(
+  "hswm/S2SStageUploadAssertionLayerClaim"
+)
+
+interface AssertionLayerClaim {
+  readonly [ASSERTION_LAYER_CLAIM_BRAND]: true
+}
+
+const ASSERTION_PERMIT_LEASE_BRAND: unique symbol = Symbol(
+  "hswm/S2SStageUploadAssertionPermitLease"
+)
+
+interface AssertionPermitLease {
+  readonly [ASSERTION_PERMIT_LEASE_BRAND]: true
+}
+
+type AssertionPermitReservation =
+  | {
+      readonly _tag: "Reserved"
+      readonly lease: AssertionPermitLease
+    }
+  | {
+      readonly _tag: "Rejected"
+      readonly error: S2SStageUploadAssertionPermitError
+    }
 
 interface AssertionScopeState {
   readonly mode: "PRODUCTION" | "TEST_ONLY_NON_AUTHORIZING"
+  readonly current: S2SCurrentRunStageEvidence
   readonly identity: AssertionIdentity
   readonly prepared: S2SPreparedStageCarrierSnapshot
   readonly state: Ref.Ref<AssertionPermitState>
@@ -348,12 +423,15 @@ const makeScope = (
   })
   const state: AssertionScopeState = Object.freeze({
     mode,
+    current,
     identity: identity.right,
     prepared,
     state: Ref.unsafeMake<AssertionPermitState>(
       Object.freeze({
         status: "ISSUED" as const,
-        ledgerEntries
+        ledgerEntries,
+        activeLease: null,
+        layerClaims: Object.freeze([])
       })
     )
   })
@@ -653,20 +731,21 @@ const snapshotLedgerObservation = (
   })
 }
 
-/** @internal TEST-ONLY, NON-AUTHORIZING. */
-export const appendS2SStageUploadAssertionLedgerEntryForTest = (
+const appendLedgerEntry = (
   scope: S2SStageUploadAssertionPermitScope,
+  lease: AssertionPermitLease | null,
+  requiredMode: AssertionScopeState["mode"],
   phase: S2SStageUploadAssertionLedgerPhase,
   observation: unknown
 ): Effect.Effect<void, S2SStageUploadAssertionPermitError> => {
   const inspected = scopeState(scope)
   if (Either.isLeft(inspected)) return Effect.fail(inspected.left)
-  if (inspected.right.mode === "PRODUCTION") {
+  if (inspected.right.mode !== requiredMode) {
     return Effect.fail(
       permitError(
-        "PRODUCTION_ASSERTION_SHELL_OPEN",
+        "INVALID_AUTHORITY",
         phase,
-        "production observation admission is closed until the module-local live assertion shell lands"
+        "ledger admission mode does not match the issued scope"
       )
     )
   }
@@ -681,7 +760,10 @@ export const appendS2SStageUploadAssertionLedgerEntryForTest = (
     )
   }
   return Ref.modify(inspected.right.state, (state) => {
-    if (state.status !== "IN_FLIGHT") {
+    if (
+      state.status !== "IN_FLIGHT" ||
+      (lease !== null && state.activeLease !== lease)
+    ) {
       return [
         permitError(
           state.status === "CLOSED" ? "SCOPE_CLOSED" : "STAGE_VOID",
@@ -772,58 +854,113 @@ export const appendS2SStageUploadAssertionLedgerEntryForTest = (
   )
 }
 
+/** @internal TEST-ONLY, NON-AUTHORIZING. */
+export const appendS2SStageUploadAssertionLedgerEntryForTest = (
+  scope: S2SStageUploadAssertionPermitScope,
+  phase: S2SStageUploadAssertionLedgerPhase,
+  observation: unknown
+): Effect.Effect<void, S2SStageUploadAssertionPermitError> =>
+  appendLedgerEntry(
+    scope,
+    null,
+    "TEST_ONLY_NON_AUTHORIZING",
+    phase,
+    observation
+  )
+
 const reservePermit = (
-  scope: S2SStageUploadAssertionPermitScope
-): Effect.Effect<void, S2SStageUploadAssertionPermitError> => {
+  scope: S2SStageUploadAssertionPermitScope,
+  requiredLayerClaim: AssertionLayerClaim | null = null
+): Effect.Effect<AssertionPermitLease, S2SStageUploadAssertionPermitError> => {
   const inspected = scopeState(scope)
   if (Either.isLeft(inspected)) return Effect.fail(inspected.left)
-  return Ref.modify(inspected.right.state, (state) => {
+  const lease: AssertionPermitLease = Object.freeze({
+    [ASSERTION_PERMIT_LEASE_BRAND]: true as const
+  })
+  return Ref.modify(inspected.right.state, (state): readonly [
+    AssertionPermitReservation,
+    AssertionPermitState
+  ] => {
+    if (
+      requiredLayerClaim !== null &&
+      !state.layerClaims.includes(requiredLayerClaim)
+    ) {
+      return [
+        Object.freeze({
+          _tag: "Rejected" as const,
+          error: permitError(
+            "SCOPE_CLOSED",
+            null,
+            "the owning assertion Layer claim is no longer active"
+          )
+        }),
+        state
+      ] as const
+    }
     switch (state.status) {
       case "ISSUED":
         return [
-          null,
-          Object.freeze({ ...state, status: "IN_FLIGHT" as const })
+          Object.freeze({ _tag: "Reserved" as const, lease }),
+          Object.freeze({
+            ...state,
+            status: "IN_FLIGHT" as const,
+            activeLease: lease
+          })
         ] as const
       case "IN_FLIGHT":
         return [
-          permitError(
-            "PERMIT_IN_FLIGHT",
-            null,
-            "the one-use assertion permit is already in flight"
-          ),
+          Object.freeze({
+            _tag: "Rejected" as const,
+            error: permitError(
+              "PERMIT_IN_FLIGHT",
+              null,
+              "the one-use assertion permit is already in flight"
+            )
+          }),
           state
         ] as const
       case "SPENT_SUCCESS":
         return [
-          permitError(
-            "PERMIT_ALREADY_SPENT",
-            null,
-            "the one-use assertion permit was already spent successfully"
-          ),
+          Object.freeze({
+            _tag: "Rejected" as const,
+            error: permitError(
+              "PERMIT_ALREADY_SPENT",
+              null,
+              "the one-use assertion permit was already spent successfully"
+            )
+          }),
           state
         ] as const
       case "SPENT_VOID":
         return [
-          permitError(
-            "STAGE_VOID",
-            null,
-            "the one-use assertion permit was voided by its prior use"
-          ),
+          Object.freeze({
+            _tag: "Rejected" as const,
+            error: permitError(
+              "STAGE_VOID",
+              null,
+              "the one-use assertion permit was voided by its prior use"
+            )
+          }),
           state
         ] as const
       case "CLOSED":
         return [
-          permitError(
-            "SCOPE_CLOSED",
-            null,
-            "the assertion permit scope is closed"
-          ),
+          Object.freeze({
+            _tag: "Rejected" as const,
+            error: permitError(
+              "SCOPE_CLOSED",
+              null,
+              "the assertion permit scope is closed"
+            )
+          }),
           state
         ] as const
     }
   }).pipe(
-    Effect.flatMap((error) =>
-      error === null ? Effect.void : Effect.fail(error)
+    Effect.flatMap((reserved) =>
+      reserved._tag === "Rejected"
+        ? Effect.fail(reserved.error)
+        : Effect.succeed(reserved.lease)
     )
   )
 }
@@ -908,17 +1045,21 @@ const validateHealthyCompletionTopology = <A>(
 
 const finalizePermit = <A, E>(
   scope: S2SStageUploadAssertionPermitScope,
+  lease: AssertionPermitLease,
   exit: Exit.Exit<ClassifiedCompletion<A>, E>
 ): Effect.Effect<void> => {
   const inspected = scopeState(scope)
   if (Either.isLeft(inspected)) return Effect.void
   return Ref.update(inspected.right.state, (state) => {
-    if (state.status === "CLOSED") return state
+    if (state.status !== "IN_FLIGHT" || state.activeLease !== lease) {
+      return state
+    }
     const healthy =
       Exit.isSuccess(exit) && exit.value.classification._tag === "Healthy"
     return Object.freeze({
       ...state,
-      status: healthy ? ("SPENT_SUCCESS" as const) : ("SPENT_VOID" as const)
+      status: healthy ? ("SPENT_SUCCESS" as const) : ("SPENT_VOID" as const),
+      activeLease: null
     })
   })
 }
@@ -951,7 +1092,7 @@ export const useS2SStageUploadAssertionPermitForTest = <A, E, R>(
     }
     return Effect.acquireUseRelease(
       reservePermit(scope),
-      () =>
+      (_lease) =>
         Effect.suspend(use).pipe(
           Effect.flatMap((completion) => {
             const classified = classifyCompletion<A>(completion)
@@ -960,7 +1101,7 @@ export const useS2SStageUploadAssertionPermitForTest = <A, E, R>(
               : validateHealthyCompletionTopology(scope, classified.right)
           })
         ),
-      (_reserved, exit) => finalizePermit(scope, exit)
+      (lease, exit) => finalizePermit(scope, lease, exit)
     ).pipe(
       Effect.map((result) =>
         Object.freeze({
@@ -971,21 +1112,22 @@ export const useS2SStageUploadAssertionPermitForTest = <A, E, R>(
     )
   })
 
-/** @internal TEST-ONLY, NON-AUTHORIZING. */
-export const snapshotS2SStageUploadAssertionPermitEvidenceForTest = (
-  scope: S2SStageUploadAssertionPermitScope
+const sealPermitEvidence = (
+  scope: S2SStageUploadAssertionPermitScope,
+  lease: AssertionPermitLease | null,
+  requiredMode: AssertionScopeState["mode"]
 ): Effect.Effect<
   S2SStageUploadAssertionPermitEvidence,
   S2SStageUploadAssertionPermitError
 > => {
   const inspected = scopeState(scope)
   if (Either.isLeft(inspected)) return Effect.fail(inspected.left)
-  if (inspected.right.mode === "PRODUCTION") {
+  if (inspected.right.mode !== requiredMode) {
     return Effect.fail(
       permitError(
-        "PRODUCTION_ASSERTION_SHELL_OPEN",
+        "INVALID_AUTHORITY",
         null,
-        "production evidence sealing is closed until the module-local live assertion shell lands"
+        "permit evidence mode does not match the issued scope"
       )
     )
   }
@@ -993,6 +1135,7 @@ export const snapshotS2SStageUploadAssertionPermitEvidenceForTest = (
     Effect.flatMap((state) => {
       if (
         state.status !== "IN_FLIGHT" ||
+        (lease !== null && state.activeLease !== lease) ||
         state.ledgerEntries.at(-1)?.phase !== "READBACK_RUN_END" ||
         !isCompleteTopology(state.ledgerEntries)
       ) {
@@ -1056,14 +1199,31 @@ export const snapshotS2SStageUploadAssertionPermitEvidenceForTest = (
   )
 }
 
+/** @internal TEST-ONLY, NON-AUTHORIZING. */
+export const snapshotS2SStageUploadAssertionPermitEvidenceForTest = (
+  scope: S2SStageUploadAssertionPermitScope
+): Effect.Effect<
+  S2SStageUploadAssertionPermitEvidence,
+  S2SStageUploadAssertionPermitError
+> =>
+  sealPermitEvidence(scope, null, "TEST_ONLY_NON_AUTHORIZING")
+
+/** @internal TEST-ONLY, NON-AUTHORIZING compatibility close. */
 export const closeS2SStageUploadAssertionPermitScope = (
   scope: S2SStageUploadAssertionPermitScope
 ): Effect.Effect<void> => {
   const inspected = scopeState(scope)
-  return Either.isLeft(inspected)
+  return Either.isLeft(inspected) ||
+    inspected.right.mode !== "TEST_ONLY_NON_AUTHORIZING"
     ? Effect.void
     : Ref.update(inspected.right.state, (state) =>
-        Object.freeze({ ...state, status: "CLOSED" as const })
+        state.status === "IN_FLIGHT"
+          ? state
+          : Object.freeze({
+              ...state,
+              status: "CLOSED" as const,
+              activeLease: null
+            })
       )
 }
 
@@ -1076,7 +1236,11 @@ const closeTestScopeUnlessForeignUseIsInFlight = (
     : Ref.update(inspected.right.state, (state) =>
         state.status === "IN_FLIGHT"
           ? state
-          : Object.freeze({ ...state, status: "CLOSED" as const })
+          : Object.freeze({
+              ...state,
+              status: "CLOSED" as const,
+              activeLease: null
+            })
       )
 }
 
@@ -1321,3 +1485,2006 @@ export const probeS2SStageUploadAssertionMechanicsForTest = <E, R>(
       Effect.asVoid
     )
   })
+
+export const S2S_STAGE_UPLOAD_ASSERTION_SETTLE_MILLIS = 10_000 as const
+export const S2S_STAGE_UPLOAD_ASSERTION_DOWNLOAD_PHASE_TIMEOUT_MILLIS =
+  420_000 as const
+export const S2S_STAGE_UPLOAD_ASSERTION_DERIVED_EXTERNAL_CAP_MILLIS =
+  1_760_000 as const
+export const S2S_STAGE_UPLOAD_ASSERTION_WHOLE_TIMEOUT_MILLIS =
+  1_800_000 as const
+
+if (
+  S2S_STAGE_UPLOAD_ASSERTION_DOWNLOAD_PHASE_TIMEOUT_MILLIS !==
+    S2S_GITHUB_METADATA_TIMEOUT_MILLIS +
+      S2S_GITHUB_ARCHIVE_TIMEOUT_MILLIS ||
+  S2S_STAGE_UPLOAD_ASSERTION_WHOLE_TIMEOUT_MILLIS -
+    S2S_STAGE_UPLOAD_ASSERTION_DERIVED_EXTERNAL_CAP_MILLIS !==
+    40_000
+) {
+  throw new Error("S2S stage-upload assertion deadline formula drifted")
+}
+
+type S2SStageUploadAssertionEmittableFailureOutcome = Exclude<
+  S2SStageUploadOutcome,
+  | "CURRENT_RUN_FIXED_NAME_ARTIFACT_INDEPENDENTLY_RECOVERED"
+  | "EXTERNAL_ACTION_FAILURE_OR_UNKNOWN_PROFILE_BRANCH"
+  | "COMMITTED_READBACK_FAILED_RECONCILIATION_REQUIRED"
+>
+
+export class S2SStageUploadAssertionShellError extends Data.TaggedError(
+  "S2SStageUploadAssertionShellError"
+)<{
+  readonly outcome: S2SStageUploadAssertionEmittableFailureOutcome
+  readonly phase: S2SStageUploadAssertionLedgerPhase | "WHOLE_ASSERTION"
+  readonly detail: string
+  readonly causeTag: string | null
+}> {}
+
+export type S2SStageUploadAssertionFailure =
+  | S2SStageUploadAssertionPermitError
+  | S2SStageUploadAssertionShellError
+
+const shellError = (
+  outcome: S2SStageUploadAssertionEmittableFailureOutcome,
+  phase: S2SStageUploadAssertionShellError["phase"],
+  detail: string,
+  causeTag: string | null = null
+): S2SStageUploadAssertionShellError =>
+  new S2SStageUploadAssertionShellError({
+    outcome,
+    phase,
+    detail,
+    causeTag
+  })
+
+type ProductionProcessContinuityPolicy =
+  | { readonly status: "OPEN_UNTIL_TOPOLOGY_FROZEN" }
+  | { readonly status: "PINNED_REVIEWED_PROCESS_CONTINUITY" }
+
+const PRODUCTION_PROCESS_CONTINUITY_POLICY: ProductionProcessContinuityPolicy =
+  Object.freeze({ status: "OPEN_UNTIL_TOPOLOGY_FROZEN" })
+
+const productionAssertionPreflight = (
+  workflowGate: Either.Either<void, S2SCurrentRunInputError>
+): Either.Either<
+  void,
+  S2SCurrentRunInputError | S2SStageUploadAssertionPermitError
+> => {
+  if (Either.isLeft(workflowGate)) return workflowGate
+  return PRODUCTION_PROCESS_CONTINUITY_POLICY.status ===
+    "OPEN_UNTIL_TOPOLOGY_FROZEN"
+    ? Either.left(
+        permitError(
+          "PRODUCTION_PROCESS_CONTINUITY_OPEN",
+          null,
+          "production process continuity is not yet pinned and reviewed"
+        )
+      )
+    : Either.right(undefined)
+}
+
+/** @internal TEST-ONLY, NON-AUTHORIZING closed-workflow preflight probe. */
+export const probeS2SProductionProcessContinuityGateForTest = ():
+  Either.Either<void, S2SStageUploadAssertionPermitError> => {
+  const result = productionAssertionPreflight(Either.right(undefined))
+  return Either.isLeft(result) &&
+    result.left instanceof S2SStageUploadAssertionPermitError
+    ? Either.left(result.left)
+    : Either.right(undefined)
+}
+
+const S2S_STAGE_UPLOAD_ASSERTION_COMPLETION_BRAND: unique symbol = Symbol(
+  "hswm/S2SStageUploadAssertionCompletionCapability"
+)
+
+/** Opaque process-local bearer; serialized fields never restore authority. */
+export interface S2SStageUploadAssertionCompletionCapability {
+  readonly [S2S_STAGE_UPLOAD_ASSERTION_COMPLETION_BRAND]: true
+}
+
+const S2S_STAGE_UPLOAD_ASSERTION_REPLAY_BRAND: unique symbol = Symbol(
+  "hswm/S2SStageUploadAssertionReplaySnapshot"
+)
+
+/** Module-authenticated, non-authorizing replay snapshot. */
+export interface S2SStageUploadAssertionReplaySnapshot {
+  readonly [S2S_STAGE_UPLOAD_ASSERTION_REPLAY_BRAND]: true
+  readonly _tag: "ValidatedNonAuthorizingStageUploadAssertionReplay"
+  readonly authorityScope:
+    | "TRUSTED_SINGLE_MODULE_CURRENT_JOB"
+    | "TEST_ONLY_NON_AUTHORIZING"
+  readonly authorizationClaimed: false
+  readonly outcome: "CURRENT_RUN_FIXED_NAME_ARTIFACT_INDEPENDENTLY_RECOVERED"
+  readonly stage: S2SCurrentRunStageEvidence["stage"]
+  readonly completionReceiptSha256: string
+  readonly currentRunEvidenceReceiptSha256: string
+  readonly preparationReceiptSha256: string
+  readonly permitReceiptSha256: string
+  readonly postconditionReceiptSha256: string
+  readonly postconditionCarrierSha256: string
+  readonly currentStageArchiveSha256: string
+  readonly readPostconditionCarrierBytes: () => Uint8Array
+  readonly readCurrentStageArchiveBytes: () => Uint8Array
+}
+
+export interface S2SStageUploadAssertionCompletionSnapshot {
+  readonly authorityScope:
+    | "TRUSTED_SINGLE_MODULE_CURRENT_JOB"
+    | "TEST_ONLY_NON_AUTHORIZING"
+  readonly authorizationClaimed: boolean
+  readonly outcome: "CURRENT_RUN_FIXED_NAME_ARTIFACT_INDEPENDENTLY_RECOVERED"
+  readonly stage: S2SCurrentRunStageEvidence["stage"]
+  readonly completionReceiptSha256: string
+  readonly currentRunEvidenceReceiptSha256: string
+  readonly preparationReceiptSha256: string
+  readonly permitReceiptSha256: string
+  readonly postconditionReceiptSha256: string
+  readonly postconditionCarrierSha256: string
+  readonly currentStageArchiveSha256: string
+  readonly postcondition: S2SStageUploadPostconditionSnapshot
+  readonly readPostconditionCarrierBytes: () => Uint8Array
+  readonly readCurrentStageArchiveBytes: () => Uint8Array
+}
+
+interface RetainedPreparedMember extends S2SStageUploadPreparedMember {
+  readonly bytes: Uint8Array
+}
+
+interface AssertionCompletionRecord {
+  readonly mode: AssertionScopeState["mode"]
+  readonly scope: S2SStageUploadAssertionPermitScope
+  readonly owner: object
+  readonly preparedCapability: object
+  readonly completion: S2SStageUploadAssertionCompletionCapability
+  readonly current: S2SCurrentRunStageEvidence
+  readonly prepared: S2SPreparedStageCarrierSnapshot
+  readonly preparedMembers: ReadonlyArray<RetainedPreparedMember>
+  readonly permit: S2SStageUploadAssertionPermitEvidence
+  readonly postcondition: S2SStageUploadPostconditionSnapshot
+  readonly postconditionCarrierBytes: Uint8Array
+  readonly currentStageArchiveBytes: Uint8Array
+  readonly completionReceiptSha256: string
+}
+
+interface AssertionReplayRecord {
+  readonly record: AssertionCompletionRecord
+  readonly snapshot: S2SStageUploadAssertionReplaySnapshot
+}
+
+interface HealthyAssertionCandidate {
+  readonly witness: object
+  readonly completion: S2SStageUploadAssertionCompletionCapability
+  readonly record: AssertionCompletionRecord
+}
+
+const PRODUCTION_HEALTHY_WITNESSES = new WeakSet<object>()
+const TEST_HEALTHY_WITNESSES = new WeakSet<object>()
+const PRODUCTION_COMPLETIONS = new WeakMap<object, AssertionCompletionRecord>()
+const TEST_COMPLETIONS = new WeakMap<object, AssertionCompletionRecord>()
+const PRODUCTION_REPLAYS = new WeakMap<object, AssertionReplayRecord>()
+const TEST_REPLAYS = new WeakMap<object, AssertionReplayRecord>()
+
+export class S2SStageUploadAssertion extends Context.Tag(
+  "hswm/S2S/StageUploadAssertion"
+)<
+  S2SStageUploadAssertion,
+  {
+    readonly assertAndRecover: Effect.Effect<
+      S2SStageUploadAssertionCompletionCapability,
+      S2SStageUploadAssertionFailure
+    >
+  }
+>() {}
+
+const observationLedgerMetadata = (
+  observation: S2SGitHubObservation
+): S2SStageUploadAssertionLedgerObservation =>
+  Object.freeze({
+    githubRequestId: observation.receipt.githubRequestId,
+    receiptSha256: observation.receipt.receiptSha256,
+    observedAtUnixSeconds: observation.receipt.observedAtUnixSeconds
+  })
+
+const expectedWorkflowPath = (
+  current: S2SCurrentRunStageEvidence
+): string =>
+  current.workflowApiPath === S2S_CONFIRMATORY_WORKFLOW_PATH
+    ? S2S_CONFIRMATORY_WORKFLOW_PATH
+    : S2S_CONFIRMATORY_WORKFLOW_PATH_AT_MAIN
+
+const hasExpectedRunIdentity = (
+  run: S2SGitHubWorkflowRunProjection,
+  current: S2SCurrentRunStageEvidence
+): boolean =>
+  run.id === current.workflowRunId &&
+  run.runAttempt === 1 &&
+  run.repository === S2S_CONFIRMATORY_REPOSITORY &&
+  run.headRepository === S2S_CONFIRMATORY_REPOSITORY &&
+  run.headSha === current.registrationCommitB &&
+  run.name === S2S_CONFIRMATORY_WORKFLOW_NAME &&
+  run.path === expectedWorkflowPath(current) &&
+  run.event === S2S_CONFIRMATORY_EVENT &&
+  run.headBranch === S2S_CONFIRMATORY_BRANCH &&
+  run.createdAt === current.workflowRunCreatedAt &&
+  run.createdAtUnixSeconds === current.workflowRunCreatedAtUnixSeconds &&
+  run.status === "in_progress" &&
+  run.conclusion === null
+
+const sameRunIdentity = (
+  left: S2SGitHubWorkflowRunProjection,
+  right: S2SGitHubWorkflowRunProjection
+): boolean =>
+  left.id === right.id &&
+  left.runAttempt === right.runAttempt &&
+  left.repository === right.repository &&
+  left.headRepository === right.headRepository &&
+  left.headSha === right.headSha &&
+  left.name === right.name &&
+  left.path === right.path &&
+  left.event === right.event &&
+  left.headBranch === right.headBranch &&
+  left.createdAt === right.createdAt &&
+  left.createdAtUnixSeconds === right.createdAtUnixSeconds
+
+const validateLookupJobs = (
+  run: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>,
+  jobs: S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>,
+  current: S2SCurrentRunStageEvidence
+): Either.Either<
+  S2SGitHubWorkflowJobProjection,
+  S2SStageUploadAssertionShellError
+> => {
+  const projection = jobs.receipt.projection
+  if (
+    projection.totalCount !== S2S_CONFIRMATORY_JOB_STAGES.length ||
+    projection.jobs.length !== S2S_CONFIRMATORY_JOB_STAGES.length ||
+    jobs.receipt.observedAtUnixSeconds <
+      run.receipt.observedAtUnixSeconds
+  ) {
+    return Either.left(
+      shellError(
+        "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+        "LOOKUP_JOBS",
+        "job roster count or observation order diverged"
+      )
+    )
+  }
+  const jobsByStage = new Map<
+    (typeof S2S_CONFIRMATORY_JOB_STAGES)[number],
+    S2SGitHubWorkflowJobProjection
+  >()
+  for (const stage of S2S_CONFIRMATORY_JOB_STAGES) {
+    const expectedName = S2S_CONFIRMATORY_STAGE_CONTRACTS[stage].jobName
+    const matches = projection.jobs.filter((job) => job.name === expectedName)
+    if (matches.length !== 1 || matches[0] === undefined) {
+      return Either.left(
+        shellError(
+          "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+          "LOOKUP_JOBS",
+          "job roster does not contain one exact row for every stage"
+        )
+      )
+    }
+    jobsByStage.set(stage, matches[0])
+  }
+  if (
+    projection.jobs.some(
+      (job) =>
+        job.runId !== current.workflowRunId ||
+        job.runAttempt !== 1 ||
+        job.headSha !== current.registrationCommitB ||
+        job.startedAtUnixSeconds <
+          run.receipt.projection.createdAtUnixSeconds ||
+        job.startedAtUnixSeconds > jobs.receipt.observedAtUnixSeconds
+    )
+  ) {
+    return Either.left(
+      shellError(
+        "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+        "LOOKUP_JOBS",
+        "job run, head, or start time diverged"
+      )
+    )
+  }
+  const stageIndex = S2S_CONFIRMATORY_JOB_STAGES.indexOf(current.stage)
+  const producer = jobsByStage.get(current.stage)
+  if (
+    stageIndex < 0 ||
+    producer === undefined ||
+    producer.id !== current.currentJobDatabaseId ||
+    producer.status !== "in_progress" ||
+    producer.conclusion !== null ||
+    producer.completedAt !== null ||
+    producer.completedAtUnixSeconds !== null
+  ) {
+    return Either.left(
+      shellError(
+        "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+        "LOOKUP_JOBS",
+        "authority-bound producer is not the sole current in-progress job"
+      )
+    )
+  }
+  const predecessorIds: Array<number> = []
+  let previousCompletion = run.receipt.projection.createdAtUnixSeconds
+  for (let index = 0; index < stageIndex; index += 1) {
+    const stage = S2S_CONFIRMATORY_JOB_STAGES[index]
+    const predecessor = stage === undefined ? undefined : jobsByStage.get(stage)
+    if (
+      predecessor === undefined ||
+      predecessor.status !== "completed" ||
+      predecessor.conclusion !== "success" ||
+      predecessor.completedAtUnixSeconds === null ||
+      predecessor.startedAtUnixSeconds < previousCompletion ||
+      predecessor.completedAtUnixSeconds < predecessor.startedAtUnixSeconds ||
+      predecessor.completedAtUnixSeconds > producer.startedAtUnixSeconds ||
+      predecessor.completedAtUnixSeconds > jobs.receipt.observedAtUnixSeconds
+    ) {
+      return Either.left(
+        shellError(
+          "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+          "LOOKUP_JOBS",
+          "predecessor completion chain diverged"
+        )
+      )
+    }
+    predecessorIds.push(predecessor.id)
+    previousCompletion = predecessor.completedAtUnixSeconds
+  }
+  if (
+    predecessorIds.length !== current.predecessorJobDatabaseIds.length ||
+    predecessorIds.some(
+      (value, index) => value !== current.predecessorJobDatabaseIds[index]
+    )
+  ) {
+    return Either.left(
+      shellError(
+        "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+        "LOOKUP_JOBS",
+        "predecessor job identities differ from current-run authority"
+      )
+    )
+  }
+  const notStarted = new Set(["queued", "waiting", "pending", "requested"])
+  for (
+    let index = stageIndex + 1;
+    index < S2S_CONFIRMATORY_JOB_STAGES.length;
+    index += 1
+  ) {
+    const stage = S2S_CONFIRMATORY_JOB_STAGES[index]
+    const later = stage === undefined ? undefined : jobsByStage.get(stage)
+    if (
+      later === undefined ||
+      !notStarted.has(later.status) ||
+      later.conclusion !== null ||
+      later.completedAt !== null ||
+      later.completedAtUnixSeconds !== null
+    ) {
+      return Either.left(
+        shellError(
+          "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+          "LOOKUP_JOBS",
+          "a later stage has already started or completed"
+        )
+      )
+    }
+  }
+  return Either.right(producer)
+}
+
+const sameArtifactProjection = (
+  left: S2SGitHubArtifactProjection,
+  right: S2SGitHubArtifactProjection
+): boolean =>
+  left.id === right.id &&
+  left.name === right.name &&
+  left.sizeInBytes === right.sizeInBytes &&
+  left.digestSha256 === right.digestSha256 &&
+  left.expired === right.expired &&
+  left.createdAt === right.createdAt &&
+  left.createdAtUnixSeconds === right.createdAtUnixSeconds &&
+  left.expiresAt === right.expiresAt &&
+  left.expiresAtUnixSeconds === right.expiresAtUnixSeconds &&
+  left.workflowRunId === right.workflowRunId &&
+  left.workflowHeadSha === right.workflowHeadSha
+
+const classifyArtifactListing = (
+  ordinal: 1 | 2 | 3,
+  initialRun: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>,
+  producer: S2SGitHubWorkflowJobProjection,
+  listing: S2SGitHubObservation<S2SGitHubArtifactsProjection>,
+  closingRun: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>,
+  current: S2SCurrentRunStageEvidence,
+  prepared: S2SPreparedStageCarrierSnapshot,
+  previousObservedAtUnixSeconds: number
+): Either.Either<
+  S2SGitHubArtifactProjection | null,
+  S2SStageUploadAssertionShellError
+> => {
+  const phase = `LOOKUP_ARTIFACTS_${ordinal}` as const
+  if (
+    listing.receipt.observedAtUnixSeconds < previousObservedAtUnixSeconds ||
+    closingRun.receipt.observedAtUnixSeconds <
+      listing.receipt.observedAtUnixSeconds ||
+    !hasExpectedRunIdentity(closingRun.receipt.projection, current) ||
+    !sameRunIdentity(
+      initialRun.receipt.projection,
+      closingRun.receipt.projection
+    ) ||
+    listing.receipt.projection.artifacts.some(
+      (artifact) =>
+        artifact.workflowRunId !== current.workflowRunId ||
+        artifact.workflowHeadSha !== current.registrationCommitB
+    )
+  ) {
+    return Either.left(
+      shellError(
+        "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+        phase,
+        "artifact listing bracket has run, head, or time drift"
+      )
+    )
+  }
+  const matching = listing.receipt.projection.artifacts.filter(
+    (artifact) => artifact.name === prepared.artifactName
+  )
+  if (matching.length === 0) return Either.right(null)
+  const selected = matching.length === 1 ? matching[0] : undefined
+  if (
+    selected === undefined ||
+    selected.expired ||
+    selected.createdAtUnixSeconds < producer.startedAtUnixSeconds ||
+    selected.createdAtUnixSeconds > listing.receipt.observedAtUnixSeconds ||
+    selected.expiresAtUnixSeconds <= listing.receipt.observedAtUnixSeconds ||
+    selected.sizeInBytes > prepared.maximumArchiveBytes
+  ) {
+    return Either.left(
+      shellError(
+        "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+        phase,
+        "fixed-name artifact is duplicate, expired, oversized, or temporally impossible"
+      )
+    )
+  }
+  return Either.right(selected)
+}
+
+const githubObservationFailure = (
+  error:
+    | S2SGitHubObservationError
+    | S2SGitHubObservationValidationError
+    | S2SGitHubTransportError,
+  phase: S2SStageUploadAssertionLedgerPhase
+): S2SStageUploadAssertionShellError =>
+  error instanceof S2SGitHubTransportError
+    ? shellError(
+        "GITHUB_TRANSPORT_OR_DOWNLOAD_OUTCOME_UNKNOWN",
+        phase,
+        "GitHub transport outcome is unknown",
+        error._tag
+      )
+    : error instanceof S2SGitHubObservationError &&
+        error.reason === "IDENTITY_MISMATCH"
+      ? shellError(
+          "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+          phase,
+          "GitHub observation identifies a different run, job, or artifact",
+          error._tag
+        )
+    : shellError(
+        "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+        phase,
+        "GitHub observation or strict wrapper validation failed",
+        error._tag
+      )
+
+const mapDirectFailure = <A, E, E2, R>(
+  effect: Effect.Effect<A, E, R>,
+  mapFailure: (error: E) => E2
+): Effect.Effect<A, E2, R> =>
+  Effect.mapErrorCause(effect, Cause.map(mapFailure))
+
+const metadataTimeoutFailure = (
+  phase: S2SStageUploadAssertionLedgerPhase
+): S2SStageUploadAssertionShellError =>
+  shellError(
+    "GITHUB_TRANSPORT_OR_DOWNLOAD_OUTCOME_UNKNOWN",
+    phase,
+    "GitHub metadata phase exceeded the fixed 120-second deadline",
+    "S2SStageUploadAssertionMetadataTimeout"
+  )
+
+const observeValidatedRun = (
+  github: S2SGitHubObserver["Type"],
+  workflowRunId: number,
+  phase: Extract<
+    S2SStageUploadAssertionLedgerPhase,
+    | "LOOKUP_RUN_START"
+    | `LOOKUP_RUN_END_${1 | 2 | 3}`
+    | "READBACK_RUN_START"
+    | "READBACK_RUN_END"
+  >
+): Effect.Effect<
+  S2SGitHubObservation<S2SGitHubWorkflowRunProjection>,
+  S2SStageUploadAssertionShellError
+> =>
+  mapDirectFailure(
+    github.observeWorkflowRun(workflowRunId).pipe(
+    Effect.flatMap((observation) =>
+      validateS2SGitHubWorkflowRunObservation(observation, workflowRunId)
+    )),
+    (error) => githubObservationFailure(error, phase)
+  ).pipe(
+    Effect.timeoutFail({
+      duration: S2S_GITHUB_METADATA_TIMEOUT_MILLIS,
+      onTimeout: () => metadataTimeoutFailure(phase)
+    })
+  )
+
+const observeValidatedJobs = (
+  github: S2SGitHubObserver["Type"],
+  workflowRunId: number
+): Effect.Effect<
+  S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>,
+  S2SStageUploadAssertionShellError
+> =>
+  mapDirectFailure(
+    github.observeWorkflowAttemptJobs(workflowRunId).pipe(
+    Effect.flatMap((observation) =>
+      validateS2SGitHubWorkflowAttemptJobsObservation(
+        observation,
+        workflowRunId
+      )
+    )),
+    (error) => githubObservationFailure(error, "LOOKUP_JOBS")
+  ).pipe(
+    Effect.timeoutFail({
+      duration: S2S_GITHUB_METADATA_TIMEOUT_MILLIS,
+      onTimeout: () => metadataTimeoutFailure("LOOKUP_JOBS")
+    })
+  )
+
+const observeValidatedArtifacts = (
+  github: S2SGitHubObserver["Type"],
+  workflowRunId: number,
+  ordinal: 1 | 2 | 3
+): Effect.Effect<
+  S2SGitHubObservation<S2SGitHubArtifactsProjection>,
+  S2SStageUploadAssertionShellError
+> => {
+  const phase = `LOOKUP_ARTIFACTS_${ordinal}` as const
+  return mapDirectFailure(
+    github.observeRunArtifacts(workflowRunId).pipe(
+    Effect.flatMap((observation) =>
+      validateS2SGitHubRunArtifactsObservation(observation, workflowRunId)
+    )),
+    (error) => githubObservationFailure(error, phase)
+  ).pipe(
+    Effect.timeoutFail({
+      duration: S2S_GITHUB_METADATA_TIMEOUT_MILLIS,
+      onTimeout: () => metadataTimeoutFailure(phase)
+    })
+  )
+}
+
+const observeValidatedArtifact = (
+  github: S2SGitHubObserver["Type"],
+  artifactId: number
+): Effect.Effect<
+  S2SGitHubObservation<S2SGitHubArtifactProjection>,
+  S2SStageUploadAssertionShellError
+> =>
+  mapDirectFailure(
+    github.observeArtifact(artifactId).pipe(
+    Effect.flatMap((observation) =>
+      validateS2SGitHubArtifactObservation(observation, artifactId)
+    )),
+    (error) => githubObservationFailure(error, "READBACK_ARTIFACT")
+  ).pipe(
+    Effect.timeoutFail({
+      duration: S2S_GITHUB_METADATA_TIMEOUT_MILLIS,
+      onTimeout: () => metadataTimeoutFailure("READBACK_ARTIFACT")
+    })
+  )
+
+const observeValidatedDownload = (
+  github: S2SGitHubObserver["Type"],
+  artifactId: number,
+  maximumArchiveBytes: number
+): Effect.Effect<
+  S2SGitHubArtifactDownload,
+  S2SStageUploadAssertionShellError
+> =>
+  mapDirectFailure(
+    github.downloadArtifactArchive(artifactId, maximumArchiveBytes),
+    (error) =>
+      shellError(
+        "GITHUB_TRANSPORT_OR_DOWNLOAD_OUTCOME_UNKNOWN",
+        "READBACK_DOWNLOAD_REDIRECT",
+        "GitHub artifact download outcome is unknown",
+        error._tag
+      )
+  ).pipe(
+    Effect.flatMap((download) => {
+      const validated = validateS2SGitHubArtifactDownload(
+        download,
+        artifactId,
+        maximumArchiveBytes
+      )
+      return Either.isLeft(validated)
+        ? Effect.fail(
+            shellError(
+              "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+              "READBACK_DOWNLOAD_REDIRECT",
+              "artifact download receipt or retained bytes failed validation",
+              validated.left._tag
+            )
+          )
+        : Effect.succeed(validated.right)
+    }),
+    Effect.timeoutFail({
+      duration: S2S_STAGE_UPLOAD_ASSERTION_DOWNLOAD_PHASE_TIMEOUT_MILLIS,
+      onTimeout: () =>
+        shellError(
+          "GITHUB_TRANSPORT_OR_DOWNLOAD_OUTCOME_UNKNOWN",
+          "READBACK_DOWNLOAD_REDIRECT",
+          "artifact download phase exceeded the fixed 420-second deadline",
+          "S2SStageUploadAssertionDownloadTimeout"
+        )
+    })
+  )
+
+const validateArchiveAgainstPreparation = (
+  selected: S2SGitHubArtifactProjection,
+  download: S2SGitHubArtifactDownload,
+  prepared: S2SPreparedStageCarrierSnapshot
+): Either.Either<Uint8Array, S2SStageUploadAssertionShellError> => {
+  try {
+    const archiveBytes = download.readArchiveBytes()
+    if (
+      download.receipt.archiveByteLength !== selected.sizeInBytes ||
+      download.receipt.downloadedArchiveSha256 !== selected.digestSha256 ||
+      archiveBytes.byteLength !== selected.sizeInBytes ||
+      rawS2SFileSha256(archiveBytes) !== selected.digestSha256
+    ) {
+      return Either.left(
+        shellError(
+          "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+          "READBACK_DOWNLOAD_REDIRECT",
+          "download length or digest differs from the selected artifact"
+        )
+      )
+    }
+    const spec = S2S_STAGE_ARTIFACT_SPECS[prepared.stage]
+    const archive = validateS2SArtifactZip(archiveBytes, {
+      expectedArchiveSha256: S2SSha256Schema.make(selected.digestSha256),
+      expectedArchiveByteLength: selected.sizeInBytes,
+      expectedMembers: spec.expectedMembers,
+      maximumArchiveBytes: prepared.maximumArchiveBytes,
+      maximumExpandedBytes: prepared.maximumExpandedBytes
+    })
+    if (Either.isLeft(archive)) {
+      return Either.left(
+        shellError(
+          "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+          "READBACK_DOWNLOAD_REDIRECT",
+          `downloaded stored ZIP failed strict validation: ${archive.left.reason}`,
+          archive.left._tag
+        )
+      )
+    }
+    if (archive.right.members.length !== prepared.members.length) {
+      return Either.left(
+        shellError(
+          "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+          "READBACK_DOWNLOAD_REDIRECT",
+          "archive member count differs from the prepared stage tuple"
+        )
+      )
+    }
+    for (let index = 0; index < archive.right.members.length; index += 1) {
+      const actual = archive.right.members[index]
+      const expected = prepared.members[index]
+      if (actual === undefined || expected === undefined) {
+        return Either.left(
+          shellError(
+            "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+            "READBACK_DOWNLOAD_REDIRECT",
+            "archive member tuple is sparse"
+          )
+        )
+      }
+      const expectedBytes = expected.readBytes()
+      const actualBytes = actual.readBytes()
+      if (
+        actual.name !== expected.name ||
+        actual.byteLength !== expected.byteLength ||
+        actual.rawBytesSha256 !== expected.rawBytesSha256 ||
+        expectedBytes.byteLength !== expected.byteLength ||
+        rawS2SFileSha256(expectedBytes) !== expected.rawBytesSha256 ||
+        actualBytes.byteLength !== expectedBytes.byteLength ||
+        actualBytes.some((byte, byteIndex) => byte !== expectedBytes[byteIndex])
+      ) {
+        return Either.left(
+          shellError(
+            "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+            "READBACK_DOWNLOAD_REDIRECT",
+            "archive member metadata or bytes differ from preparation"
+          )
+        )
+      }
+    }
+    return Either.right(Uint8Array.from(archiveBytes))
+  } catch (error) {
+    return Either.left(
+      shellError(
+        "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+        "READBACK_DOWNLOAD_REDIRECT",
+        "archive or prepared-member byte access failed closed",
+        error instanceof Error ? error.name : null
+      )
+    )
+  }
+}
+
+const postconditionFailure = (
+  error: S2SStageUploadPostconditionError
+): S2SStageUploadAssertionShellError =>
+  error.reason === "STAGE_IDENTITY_MISMATCH" ||
+  error.reason === "ARTIFACT_BINDING_MISMATCH" ||
+  error.reason === "OBSERVATION_TOPOLOGY_INVALID"
+    ? shellError(
+        "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+        "READBACK_RUN_END",
+        error.detail,
+        error._tag
+      )
+    : shellError(
+        "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+        "READBACK_RUN_END",
+        error.detail,
+        error._tag
+      )
+
+const retainPreparedMembers = (
+  prepared: S2SPreparedStageCarrierSnapshot
+): Either.Either<
+  ReadonlyArray<RetainedPreparedMember>,
+  S2SStageUploadAssertionShellError
+> => {
+  try {
+    const retained: Array<RetainedPreparedMember> = []
+    for (const member of prepared.members) {
+      const bytes = member.readBytes()
+      if (
+        bytes.byteLength !== member.byteLength ||
+        rawS2SFileSha256(bytes) !== member.rawBytesSha256
+      ) {
+        return Either.left(
+          shellError(
+            "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+            "READBACK_RUN_END",
+            "prepared member drifted before completion retention"
+          )
+        )
+      }
+      const snapshot = Uint8Array.from(bytes)
+      retained.push(
+        Object.freeze({
+          name: member.name,
+          byteLength: snapshot.byteLength,
+          rawBytesSha256: member.rawBytesSha256,
+          bytes: snapshot,
+          readBytes: (): Uint8Array => Uint8Array.from(snapshot)
+        })
+      )
+    }
+    return Either.right(Object.freeze(retained))
+  } catch {
+    return Either.left(
+      shellError(
+        "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+        "READBACK_RUN_END",
+        "prepared member retention failed closed"
+      )
+    )
+  }
+}
+
+interface FixedAssertionRuntime {
+  readonly scope: S2SStageUploadAssertionPermitScope
+  readonly layerClaim: AssertionLayerClaim
+  readonly lease: AssertionPermitLease
+  readonly mode: AssertionScopeState["mode"]
+  readonly owner: object
+  readonly preparedCapability: object
+  readonly current: S2SCurrentRunStageEvidence
+  readonly prepared: S2SPreparedStageCarrierSnapshot
+  readonly github: S2SGitHubObserver["Type"]
+}
+
+const makeHealthyAssertionCandidate = (
+  runtime: FixedAssertionRuntime,
+  permit: S2SStageUploadAssertionPermitEvidence,
+  postcondition: S2SStageUploadPostconditionSnapshot,
+  archiveBytesInput: Uint8Array
+): Either.Either<
+  HealthyAssertionCandidate,
+  S2SStageUploadAssertionShellError
+> => {
+  try {
+    const retainedMembers = retainPreparedMembers(runtime.prepared)
+    if (Either.isLeft(retainedMembers)) return Either.left(retainedMembers.left)
+    const postconditionCarrierBytes = postcondition.readCarrierBytes()
+    const archiveBytes = Uint8Array.from(archiveBytesInput)
+    const postconditionCarrierSha256 = rawS2SFileSha256(
+      postconditionCarrierBytes
+    )
+    const currentStageArchiveSha256 = rawS2SFileSha256(archiveBytes)
+    if (
+      postconditionCarrierSha256 !== postcondition.carrierRawSha256 ||
+      currentStageArchiveSha256 !==
+        postcondition.manifest.artifact_sha256 ||
+      permit.receiptSha256 !==
+        postcondition.manifest.assertion_permit_evidence.receiptSha256
+    ) {
+      return Either.left(
+        shellError(
+          "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+          "READBACK_RUN_END",
+          "postcondition bytes or permit binding drifted before completion"
+        )
+      )
+    }
+    const authorityScope =
+      runtime.mode === "PRODUCTION"
+        ? ("TRUSTED_SINGLE_MODULE_CURRENT_JOB" as const)
+        : ("TEST_ONLY_NON_AUTHORIZING" as const)
+    const completionCore = Object.freeze({
+      schemaVersion: "hswm-swm0w-s2s-stage-upload-assertion-completion/v1",
+      authorityScope,
+      authorizationClaimed: runtime.mode === "PRODUCTION",
+      outcome:
+        "CURRENT_RUN_FIXED_NAME_ARTIFACT_INDEPENDENTLY_RECOVERED" as const,
+      stage: runtime.current.stage,
+      currentRunEvidenceReceiptSha256: runtime.current.receiptSha256,
+      preparationReceiptSha256: runtime.prepared.preparationReceiptSha256,
+      permitReceiptSha256: permit.receiptSha256,
+      postconditionReceiptSha256:
+        postcondition.manifest.postcondition_receipt_sha256,
+      postconditionCarrierSha256,
+      postconditionCarrierByteLength: postconditionCarrierBytes.byteLength,
+      currentStageArchiveSha256,
+      currentStageArchiveByteLength: archiveBytes.byteLength,
+      historicalUniquenessClaimed: false,
+      crossProcessReplayPreventionClaimed: false,
+      durableReplayPreventionClaimed: false,
+      externalExactlyOnceClaimed: false
+    })
+    const completionReceipt = canonicalS2SControlSha256(completionCore)
+    if (Either.isLeft(completionReceipt)) {
+      return Either.left(
+        shellError(
+          "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+          "READBACK_RUN_END",
+          "completion record is not canonically hashable"
+        )
+      )
+    }
+    const completion: S2SStageUploadAssertionCompletionCapability =
+      Object.freeze({
+        [S2S_STAGE_UPLOAD_ASSERTION_COMPLETION_BRAND]: true as const
+      })
+    const witness = Object.freeze({})
+    const record: AssertionCompletionRecord = Object.freeze({
+      mode: runtime.mode,
+      scope: runtime.scope,
+      owner: runtime.owner,
+      preparedCapability: runtime.preparedCapability,
+      completion,
+      current: runtime.current,
+      prepared: runtime.prepared,
+      preparedMembers: retainedMembers.right,
+      permit,
+      postcondition,
+      postconditionCarrierBytes: Uint8Array.from(postconditionCarrierBytes),
+      currentStageArchiveBytes: archiveBytes,
+      completionReceiptSha256: completionReceipt.right
+    })
+    ;(runtime.mode === "PRODUCTION"
+      ? PRODUCTION_HEALTHY_WITNESSES
+      : TEST_HEALTHY_WITNESSES
+    ).add(witness)
+    return Either.right(Object.freeze({ witness, completion, record }))
+  } catch (error) {
+    return Either.left(
+      shellError(
+        "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+        "READBACK_RUN_END",
+        "completion candidate construction failed closed",
+        error instanceof Error ? error.name : null
+      )
+    )
+  }
+}
+
+const runFixedAssertion = (
+  runtime: FixedAssertionRuntime
+): Effect.Effect<
+  HealthyAssertionCandidate,
+  S2SStageUploadAssertionFailure
+> =>
+  Effect.gen(function* () {
+    const observations: Array<S2SStageUploadBuildObservation> = []
+    const retainObservation = (
+      phase: S2SStageUploadBuildObservation["phase"],
+      observation: S2SGitHubObservation
+    ): Effect.Effect<void, S2SStageUploadAssertionPermitError> =>
+      appendLedgerEntry(
+        runtime.scope,
+        runtime.lease,
+        runtime.mode,
+        phase,
+        observationLedgerMetadata(observation)
+      ).pipe(
+        Effect.tap(() =>
+          Effect.sync(() => {
+            observations.push(Object.freeze({ phase, observation }))
+          })
+        )
+      )
+
+    const initialRun = yield* observeValidatedRun(
+      runtime.github,
+      runtime.current.workflowRunId,
+      "LOOKUP_RUN_START"
+    )
+    if (
+      initialRun.receipt.observedAtUnixSeconds <
+        runtime.current.observations.runEnd.observedAtUnixSeconds ||
+      !hasExpectedRunIdentity(initialRun.receipt.projection, runtime.current)
+    ) {
+      return yield* Effect.fail(
+        shellError(
+          "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+          "LOOKUP_RUN_START",
+          "lookup run identity, state, or observation time diverged"
+        )
+      )
+    }
+    yield* retainObservation("LOOKUP_RUN_START", initialRun)
+
+    const jobs = yield* observeValidatedJobs(
+      runtime.github,
+      runtime.current.workflowRunId
+    )
+    const producer = validateLookupJobs(initialRun, jobs, runtime.current)
+    if (Either.isLeft(producer)) return yield* Effect.fail(producer.left)
+    yield* retainObservation("LOOKUP_JOBS", jobs)
+
+    let selectedArtifact: S2SGitHubArtifactProjection | undefined
+    let successfulAttemptOrdinal: 1 | 2 | 3 | undefined
+    let previousObservedAtUnixSeconds = jobs.receipt.observedAtUnixSeconds
+    for (const ordinal of [1, 2, 3] as const) {
+      const listing = yield* observeValidatedArtifacts(
+        runtime.github,
+        runtime.current.workflowRunId,
+        ordinal
+      )
+      const closingRunPhase = `LOOKUP_RUN_END_${ordinal}` as const
+      const closingRun = yield* observeValidatedRun(
+        runtime.github,
+        runtime.current.workflowRunId,
+        closingRunPhase
+      )
+      const decision = classifyArtifactListing(
+        ordinal,
+        initialRun,
+        producer.right,
+        listing,
+        closingRun,
+        runtime.current,
+        runtime.prepared,
+        previousObservedAtUnixSeconds
+      )
+      if (Either.isLeft(decision)) return yield* Effect.fail(decision.left)
+      const listingPhase = `LOOKUP_ARTIFACTS_${ordinal}` as const
+      yield* retainObservation(listingPhase, listing)
+      yield* retainObservation(closingRunPhase, closingRun)
+      previousObservedAtUnixSeconds =
+        closingRun.receipt.observedAtUnixSeconds
+      if (decision.right === null) {
+        if (ordinal === 3) {
+          return yield* Effect.fail(
+            shellError(
+              "BOUNDED_ABSENCE_NOT_PROOF_OF_NONPUBLICATION",
+              listingPhase,
+              "three valid bracketed observations found no fixed-name artifact"
+            )
+          )
+        }
+        yield* Effect.sleep(S2S_STAGE_UPLOAD_ASSERTION_SETTLE_MILLIS)
+        continue
+      }
+      selectedArtifact = decision.right
+      successfulAttemptOrdinal = ordinal
+      break
+    }
+    if (
+      selectedArtifact === undefined ||
+      successfulAttemptOrdinal === undefined
+    ) {
+      return yield* Effect.fail(
+        shellError(
+          "BOUNDED_ABSENCE_NOT_PROOF_OF_NONPUBLICATION",
+          "LOOKUP_ARTIFACTS_3",
+          "bounded artifact lookup ended without one selected artifact"
+        )
+      )
+    }
+
+    const readbackStart = yield* observeValidatedRun(
+      runtime.github,
+      runtime.current.workflowRunId,
+      "READBACK_RUN_START"
+    )
+    if (
+      readbackStart.receipt.observedAtUnixSeconds <
+        previousObservedAtUnixSeconds ||
+      !hasExpectedRunIdentity(readbackStart.receipt.projection, runtime.current) ||
+      !sameRunIdentity(
+        initialRun.receipt.projection,
+        readbackStart.receipt.projection
+      )
+    ) {
+      return yield* Effect.fail(
+        shellError(
+          "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+          "READBACK_RUN_START",
+          "readback-start run identity or time diverged"
+        )
+      )
+    }
+    yield* retainObservation("READBACK_RUN_START", readbackStart)
+
+    const artifact = yield* observeValidatedArtifact(
+      runtime.github,
+      selectedArtifact.id
+    )
+    if (
+      artifact.receipt.observedAtUnixSeconds <
+        readbackStart.receipt.observedAtUnixSeconds ||
+      artifact.receipt.projection.expired ||
+      artifact.receipt.projection.expiresAtUnixSeconds <=
+        artifact.receipt.observedAtUnixSeconds ||
+      !sameArtifactProjection(
+        artifact.receipt.projection,
+        selectedArtifact
+      )
+    ) {
+      return yield* Effect.fail(
+        shellError(
+          "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+          "READBACK_ARTIFACT",
+          "exact artifact requery or observation time diverged"
+        )
+      )
+    }
+    yield* retainObservation("READBACK_ARTIFACT", artifact)
+
+    const download = yield* observeValidatedDownload(
+      runtime.github,
+      selectedArtifact.id,
+      runtime.prepared.maximumArchiveBytes
+    )
+    if (
+      download.receipt.downloadedAtUnixSeconds <
+        artifact.receipt.observedAtUnixSeconds ||
+      selectedArtifact.expiresAtUnixSeconds <=
+        download.receipt.downloadedAtUnixSeconds
+    ) {
+      return yield* Effect.fail(
+        shellError(
+          "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+          "READBACK_DOWNLOAD_REDIRECT",
+          "download receipt predates the exact artifact requery"
+        )
+      )
+    }
+    yield* appendLedgerEntry(
+      runtime.scope,
+      runtime.lease,
+      runtime.mode,
+      "READBACK_DOWNLOAD_REDIRECT",
+      Object.freeze({
+        githubRequestId: download.receipt.redirectGitHubRequestId,
+        receiptSha256: download.receipt.receiptSha256,
+        observedAtUnixSeconds: download.receipt.downloadedAtUnixSeconds
+      })
+    )
+    const archive = validateArchiveAgainstPreparation(
+      selectedArtifact,
+      download,
+      runtime.prepared
+    )
+    if (Either.isLeft(archive)) return yield* Effect.fail(archive.left)
+
+    const finalRun = yield* observeValidatedRun(
+      runtime.github,
+      runtime.current.workflowRunId,
+      "READBACK_RUN_END"
+    )
+    if (
+      finalRun.receipt.observedAtUnixSeconds <
+        download.receipt.downloadedAtUnixSeconds ||
+      !hasExpectedRunIdentity(finalRun.receipt.projection, runtime.current) ||
+      !sameRunIdentity(
+        readbackStart.receipt.projection,
+        finalRun.receipt.projection
+      )
+    ) {
+      return yield* Effect.fail(
+        shellError(
+          "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+          "READBACK_RUN_END",
+          "final fresh run identity, state, or time diverged"
+        )
+      )
+    }
+    yield* retainObservation("READBACK_RUN_END", finalRun)
+
+    const permit = yield* sealPermitEvidence(
+      runtime.scope,
+      runtime.lease,
+      runtime.mode
+    )
+    const buildInput = Object.freeze({
+      artifactDownload: download,
+      assertionPermitEvidence: permit,
+      currentRunEvidence: runtime.current,
+      observations: Object.freeze([...observations]),
+      preparedMembers: runtime.prepared.members,
+      successfulAttemptOrdinal
+    })
+    const built =
+      runtime.mode === "PRODUCTION"
+        ? buildS2SStageUploadPostconditionFromProductionShell(buildInput)
+        : buildS2SStageUploadPostcondition(buildInput)
+    if (Either.isLeft(built)) {
+      return yield* Effect.fail(postconditionFailure(built.left))
+    }
+    const independentlyValidated = validateS2SStageUploadPostcondition({
+      carrierBytes: built.right.readCarrierBytes(),
+      currentRunEvidence: runtime.current,
+      currentStageArchiveBytes: archive.right,
+      preparedMembers: runtime.prepared.members
+    })
+    if (Either.isLeft(independentlyValidated)) {
+      return yield* Effect.fail(postconditionFailure(independentlyValidated.left))
+    }
+    if (
+      independentlyValidated.right.carrierRawSha256 !==
+        built.right.carrierRawSha256 ||
+      independentlyValidated.right.manifest.postcondition_receipt_sha256 !==
+        built.right.manifest.postcondition_receipt_sha256
+    ) {
+      return yield* Effect.fail(
+        shellError(
+          "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+          "READBACK_RUN_END",
+          "independent postcondition revalidation diverged"
+        )
+      )
+    }
+    const candidate = makeHealthyAssertionCandidate(
+      runtime,
+      permit,
+      independentlyValidated.right,
+      archive.right
+    )
+    return Either.isLeft(candidate)
+      ? yield* Effect.fail(candidate.left)
+      : candidate.right
+  })
+
+const acquireAssertionLayerClaim = (
+  scope: S2SStageUploadAssertionPermitScope,
+  requiredMode: AssertionScopeState["mode"]
+): Effect.Effect<AssertionLayerClaim, S2SStageUploadAssertionPermitError> => {
+  const inspected = scopeState(scope)
+  if (Either.isLeft(inspected)) return Effect.fail(inspected.left)
+  if (inspected.right.mode !== requiredMode) {
+    return Effect.fail(
+      permitError(
+        "INVALID_AUTHORITY",
+        null,
+        "Layer claim mode does not match the issued assertion scope"
+      )
+    )
+  }
+  const claim: AssertionLayerClaim = Object.freeze({
+    [ASSERTION_LAYER_CLAIM_BRAND]: true as const
+  })
+  return Ref.modify(inspected.right.state, (state) =>
+    state.status === "CLOSED"
+      ? [
+          permitError(
+            "SCOPE_CLOSED",
+            null,
+            "the assertion permit scope is closed"
+          ),
+          state
+        ] as const
+      : [
+          null,
+          Object.freeze({
+            ...state,
+            layerClaims: Object.freeze([...state.layerClaims, claim])
+          })
+        ] as const
+  ).pipe(
+    Effect.flatMap((error) =>
+      error === null ? Effect.succeed(claim) : Effect.fail(error)
+    )
+  )
+}
+
+const releaseAssertionLayerClaim = (
+  scope: S2SStageUploadAssertionPermitScope,
+  claim: AssertionLayerClaim
+): Effect.Effect<void> => {
+  const inspected = scopeState(scope)
+  if (Either.isLeft(inspected)) return Effect.void
+  return Ref.update(inspected.right.state, (state) => {
+    if (!state.layerClaims.includes(claim)) return state
+    const layerClaims = Object.freeze(
+      state.layerClaims.filter((candidate) => candidate !== claim)
+    )
+    return Object.freeze({
+      ...state,
+      status:
+        layerClaims.length === 0 && state.status === "ISSUED"
+          ? ("CLOSED" as const)
+          : state.status,
+      activeLease:
+        layerClaims.length === 0 && state.status === "ISSUED"
+          ? null
+          : state.activeLease,
+      layerClaims
+    })
+  })
+}
+
+const finalizeFixedAssertion = (
+  runtime: Omit<FixedAssertionRuntime, "github">,
+  exit: Exit.Exit<HealthyAssertionCandidate, S2SStageUploadAssertionFailure>
+): Effect.Effect<void> => {
+  const inspected = scopeState(runtime.scope)
+  if (Either.isLeft(inspected)) return Effect.void
+  const registry =
+    runtime.mode === "PRODUCTION"
+      ? PRODUCTION_COMPLETIONS
+      : TEST_COMPLETIONS
+  const witnesses =
+    runtime.mode === "PRODUCTION"
+      ? PRODUCTION_HEALTHY_WITNESSES
+      : TEST_HEALTHY_WITNESSES
+  if (!Exit.isSuccess(exit)) {
+    return Ref.update(inspected.right.state, (state) =>
+      state.status === "IN_FLIGHT" && state.activeLease === runtime.lease
+        ? Object.freeze({
+            ...state,
+            status: "SPENT_VOID" as const,
+            activeLease: null
+          })
+        : state
+    )
+  }
+  const candidate = exit.value
+  return Ref.get(inspected.right.state).pipe(
+    Effect.flatMap((state) => {
+      const authentic =
+        state.status === "IN_FLIGHT" &&
+        state.activeLease === runtime.lease &&
+        state.layerClaims.includes(runtime.layerClaim) &&
+        state.ledgerEntries.at(-1)?.phase === "READBACK_RUN_END" &&
+        isCompleteTopology(state.ledgerEntries) &&
+        witnesses.has(candidate.witness) &&
+        candidate.record.mode === runtime.mode &&
+        candidate.record.scope === runtime.scope &&
+        candidate.record.owner === runtime.owner &&
+        candidate.record.preparedCapability === runtime.preparedCapability
+      const registered = authentic
+        ? yieldRegistryRegistration(registry, candidate)
+        : Effect.succeed(false)
+      return registered.pipe(
+        Effect.flatMap((didRegister) =>
+          Ref.modify(inspected.right.state, (latest) => {
+            const leaseExact =
+              latest.status === "IN_FLIGHT" &&
+              latest.activeLease === runtime.lease
+            const committed =
+              leaseExact &&
+              latest.layerClaims.includes(runtime.layerClaim) &&
+              didRegister
+            return [
+              committed,
+              leaseExact
+                ? Object.freeze({
+                    ...latest,
+                    status: committed
+                      ? ("SPENT_SUCCESS" as const)
+                      : ("SPENT_VOID" as const),
+                    activeLease: null
+                  })
+                : latest
+            ] as const
+          })
+        ),
+        Effect.flatMap((committed) =>
+          committed
+            ? Effect.void
+            : Effect.sync(() => {
+                registry.delete(candidate.completion)
+              })
+        )
+      )
+    })
+  )
+}
+
+const yieldRegistryRegistration = (
+  registry: WeakMap<object, AssertionCompletionRecord>,
+  candidate: HealthyAssertionCandidate
+): Effect.Effect<boolean> =>
+  Effect.sync(() => {
+    try {
+      registry.set(candidate.completion, candidate.record)
+      return true
+    } catch {
+      return false
+    }
+  })
+
+const runOneFixedAssertion = <R>(
+  scope: S2SStageUploadAssertionPermitScope,
+  layerClaim: AssertionLayerClaim,
+  mode: AssertionScopeState["mode"],
+  owner: object,
+  preparedCapability: object,
+  acquireObserver: Effect.Effect<
+    S2SGitHubObserver["Type"],
+    S2SStageUploadAssertionShellError,
+    R
+  >
+): Effect.Effect<
+  S2SStageUploadAssertionCompletionCapability,
+  S2SStageUploadAssertionFailure,
+  R
+> =>
+  Effect.suspend(() => {
+    const inspected = scopeState(scope)
+    if (Either.isLeft(inspected)) return Effect.fail(inspected.left)
+    if (inspected.right.mode !== mode) {
+      return Effect.fail(
+        permitError(
+          "INVALID_AUTHORITY",
+          null,
+          "assertion operation mode does not match the issued scope"
+        )
+      )
+    }
+    return Effect.acquireUseRelease(
+      reservePermit(scope, layerClaim),
+      (lease) =>
+        acquireObserver.pipe(
+          Effect.flatMap((github) =>
+            runFixedAssertion({
+              scope,
+              layerClaim,
+              lease,
+              mode,
+              owner,
+              preparedCapability,
+              current: inspected.right.current,
+              prepared: inspected.right.prepared,
+              github
+            })
+          ),
+          Effect.timeoutFail({
+            duration: S2S_STAGE_UPLOAD_ASSERTION_WHOLE_TIMEOUT_MILLIS,
+            onTimeout: () =>
+              shellError(
+                "GITHUB_TRANSPORT_OR_DOWNLOAD_OUTCOME_UNKNOWN",
+                "WHOLE_ASSERTION",
+                "whole assertion use exceeded the fixed 1,800-second deadline",
+                "S2SStageUploadAssertionWholeTimeout"
+              )
+          })
+        ),
+      (lease, exit) =>
+        finalizeFixedAssertion(
+          {
+            scope,
+            layerClaim,
+            lease,
+            mode,
+            owner,
+            preparedCapability,
+            current: inspected.right.current,
+            prepared: inspected.right.prepared
+          },
+          exit
+        )
+    ).pipe(
+      Effect.flatMap((candidate) =>
+        completionRecord(
+          mode,
+          owner,
+          preparedCapability,
+          candidate.completion
+        ).pipe(Effect.as(candidate.completion))
+      )
+    )
+  })
+
+interface AssertionLayerResource {
+  readonly scope: S2SStageUploadAssertionPermitScope
+  readonly claim: AssertionLayerClaim
+  readonly owner: object
+  readonly preparedCapability: object
+}
+
+const makeAssertionService = (
+  resource: AssertionLayerResource,
+  mode: AssertionScopeState["mode"],
+  acquireObserver: Effect.Effect<
+    S2SGitHubObserver["Type"],
+    S2SStageUploadAssertionShellError
+  >
+) =>
+  S2SStageUploadAssertion.of({
+    assertAndRecover: runOneFixedAssertion(
+      resource.scope,
+      resource.claim,
+      mode,
+      resource.owner,
+      resource.preparedCapability,
+      acquireObserver
+    )
+  })
+
+const makeS2SStageUploadAssertionTestLayerWithAcquisition = (
+  fixture: S2SStageUploadAssertionPermitTestSeed | unknown,
+  capability: S2SPreparedStageCarrierCapability | unknown,
+  acquireObserver: Effect.Effect<
+    S2SGitHubObserver["Type"],
+    S2SStageUploadAssertionShellError
+  >
+) =>
+  Layer.scoped(
+    S2SStageUploadAssertion,
+    Effect.acquireRelease(
+      Effect.suspend(() => {
+        const scope = makeS2SStageUploadAssertionPermitTestScope(
+          fixture,
+          capability
+        )
+        if (Either.isLeft(scope)) return Effect.fail(scope.left)
+        if (
+          fixture === null ||
+          typeof fixture !== "object" ||
+          capability === null ||
+          typeof capability !== "object"
+        ) {
+          return Effect.fail(
+            permitError(
+              "TEST_SEED_INVALID",
+              null,
+              "test Layer requires exact object identities"
+            )
+          )
+        }
+        return acquireAssertionLayerClaim(
+          scope.right,
+          "TEST_ONLY_NON_AUTHORIZING"
+        ).pipe(
+          Effect.map((claim) =>
+            Object.freeze({
+              scope: scope.right,
+              claim,
+              owner: fixture,
+              preparedCapability: capability
+            })
+          )
+        )
+      }),
+      (resource) =>
+        releaseAssertionLayerClaim(resource.scope, resource.claim)
+    ).pipe(
+      Effect.map((resource) =>
+        makeAssertionService(
+          resource,
+          "TEST_ONLY_NON_AUTHORIZING",
+          acquireObserver
+        )
+      )
+    )
+  )
+
+/** @internal TEST-ONLY, NON-AUTHORIZING full-semantics Layer. */
+export const makeS2SStageUploadAssertionTestLayer = (
+  fixture: S2SStageUploadAssertionPermitTestSeed | unknown,
+  capability: S2SPreparedStageCarrierCapability | unknown,
+  github: S2SGitHubObserver["Type"]
+) =>
+  makeS2SStageUploadAssertionTestLayerWithAcquisition(
+    fixture,
+    capability,
+    Effect.succeed(github)
+  )
+
+/** @internal TEST-ONLY, NON-AUTHORIZING convenience probe. */
+export const probeS2SStageUploadAssertionShellForTest = (
+  fixture: S2SStageUploadAssertionPermitTestSeed | unknown,
+  capability: S2SPreparedStageCarrierCapability | unknown,
+  github: S2SGitHubObserver["Type"]
+): Effect.Effect<
+  S2SStageUploadAssertionCompletionCapability,
+  S2SStageUploadAssertionFailure
+> =>
+  Effect.gen(function* () {
+    const assertion = yield* S2SStageUploadAssertion
+    return yield* assertion.assertAndRecover
+  }).pipe(
+    Effect.provide(
+      makeS2SStageUploadAssertionTestLayer(fixture, capability, github)
+    )
+  )
+
+/** @internal TEST-ONLY, NON-AUTHORIZING whole-use deadline probe. */
+export const probeS2SStageUploadAssertionWholeTimeoutForTest = (
+  fixture: S2SStageUploadAssertionPermitTestSeed | unknown,
+  capability: S2SPreparedStageCarrierCapability | unknown,
+  onObserverAcquisition: Effect.Effect<void>
+): Effect.Effect<
+  S2SStageUploadAssertionCompletionCapability,
+  S2SStageUploadAssertionFailure
+> =>
+  Effect.gen(function* () {
+    const assertion = yield* S2SStageUploadAssertion
+    return yield* assertion.assertAndRecover
+  }).pipe(
+    Effect.provide(
+      makeS2SStageUploadAssertionTestLayerWithAcquisition(
+        fixture,
+        capability,
+        onObserverAcquisition.pipe(Effect.zipRight(Effect.never))
+      )
+    )
+  )
+
+const closedAssertionLayer = (
+  failure: S2SCurrentRunInputError | S2SStageUploadAssertionPermitError
+) => Layer.effect(S2SStageUploadAssertion, Effect.fail(failure))
+
+/**
+ * Root-private production Layer. Workflow-source and process-continuity gates
+ * are evaluated before current-run service access, capability inspection,
+ * GitHub configuration, transport/observer construction, scope claim, or I/O.
+ */
+export const makeS2SStageUploadAssertionLiveLayer = (
+  preparedCapability: S2SPreparedStageCarrierCapability,
+  githubConfig: S2SGitHubLiveTransportConfig
+) => {
+  const preflight = productionAssertionPreflight(
+    requireS2SProductionWorkflowSourcePolicy()
+  )
+  if (Either.isLeft(preflight)) return closedAssertionLayer(preflight.left)
+  return Layer.scoped(
+    S2SStageUploadAssertion,
+    Effect.gen(function* () {
+      const current = yield* S2SCurrentRunStage
+      const resource = yield* Effect.acquireRelease(
+        Effect.suspend(() => {
+          const scope = claimS2SStageUploadAssertionPermitScope(
+            current.authority,
+            preparedCapability
+          )
+          if (Either.isLeft(scope)) return Effect.fail(scope.left)
+          return acquireAssertionLayerClaim(scope.right, "PRODUCTION").pipe(
+            Effect.map((claim) =>
+              Object.freeze({
+                scope: scope.right,
+                claim,
+                owner: current.authority,
+                preparedCapability
+              })
+            )
+          )
+        }),
+        (acquired) =>
+          releaseAssertionLayerClaim(acquired.scope, acquired.claim)
+      )
+      const liveObserverLayer = S2SGitHubObserverLive.pipe(
+        Layer.provide(makeS2SGitHubHttpTransportLiveLayer(githubConfig))
+      )
+      const liveAssertion = runOneFixedAssertion(
+        resource.scope,
+        resource.claim,
+        "PRODUCTION",
+        resource.owner,
+        resource.preparedCapability,
+        Effect.gen(function* () {
+          return yield* S2SGitHubObserver
+        })
+      ).pipe(Effect.provide(liveObserverLayer))
+      return S2SStageUploadAssertion.of({
+        assertAndRecover: mapDirectFailure(liveAssertion, (error) =>
+          error instanceof S2SGitHubTransportError
+            ? shellError(
+                "GITHUB_TRANSPORT_OR_DOWNLOAD_OUTCOME_UNKNOWN",
+                "LOOKUP_RUN_START",
+                "live GitHub observer construction failed closed",
+                error._tag
+              )
+            : error
+        )
+      })
+    })
+  )
+}
+
+const completionRecord = (
+  mode: AssertionScopeState["mode"],
+  owner: unknown,
+  preparedCapability: unknown,
+  completion: unknown
+): Effect.Effect<
+  AssertionCompletionRecord,
+  S2SStageUploadAssertionPermitError
+> =>
+  Effect.suspend(() => {
+    if (
+      owner === null ||
+      typeof owner !== "object" ||
+      preparedCapability === null ||
+      typeof preparedCapability !== "object" ||
+      completion === null ||
+      typeof completion !== "object"
+    ) {
+      return Effect.fail(
+        permitError(
+          "INVALID_COMPLETION_CAPABILITY",
+          null,
+          "completion inspection requires exact object identities"
+        )
+      )
+    }
+    const registry =
+      mode === "PRODUCTION" ? PRODUCTION_COMPLETIONS : TEST_COMPLETIONS
+    let record: AssertionCompletionRecord | undefined
+    try {
+      record = registry.get(completion)
+    } catch {
+      record = undefined
+    }
+    if (
+      record === undefined ||
+      record.mode !== mode ||
+      record.owner !== owner ||
+      record.preparedCapability !== preparedCapability
+    ) {
+      return Effect.fail(
+        permitError(
+          "INVALID_COMPLETION_CAPABILITY",
+          null,
+          "completion was not issued for these exact module-local bearers"
+        )
+      )
+    }
+    const inspected = scopeState(record.scope)
+    if (Either.isLeft(inspected)) return Effect.fail(inspected.left)
+    return Ref.get(inspected.right.state).pipe(
+      Effect.flatMap((state) =>
+        state.status === "SPENT_SUCCESS" &&
+        state.activeLease === null &&
+        isCompleteTopology(state.ledgerEntries)
+          ? Effect.succeed(record)
+          : Effect.fail(
+              permitError(
+                "INVALID_COMPLETION_CAPABILITY",
+                null,
+                "completion registry and successful permit state diverged"
+              )
+            )
+      )
+    )
+  })
+
+const publicCompletionSnapshot = (
+  record: AssertionCompletionRecord
+): S2SStageUploadAssertionCompletionSnapshot => {
+  const postconditionCarrierBytes = Uint8Array.from(
+    record.postconditionCarrierBytes
+  )
+  const currentStageArchiveBytes = Uint8Array.from(
+    record.currentStageArchiveBytes
+  )
+  return Object.freeze({
+    authorityScope:
+      record.mode === "PRODUCTION"
+        ? ("TRUSTED_SINGLE_MODULE_CURRENT_JOB" as const)
+        : ("TEST_ONLY_NON_AUTHORIZING" as const),
+    authorizationClaimed: record.mode === "PRODUCTION",
+    outcome:
+      "CURRENT_RUN_FIXED_NAME_ARTIFACT_INDEPENDENTLY_RECOVERED" as const,
+    stage: record.current.stage,
+    completionReceiptSha256: record.completionReceiptSha256,
+    currentRunEvidenceReceiptSha256: record.current.receiptSha256,
+    preparationReceiptSha256: record.prepared.preparationReceiptSha256,
+    permitReceiptSha256: record.permit.receiptSha256,
+    postconditionReceiptSha256:
+      record.postcondition.manifest.postcondition_receipt_sha256,
+    postconditionCarrierSha256: record.postcondition.carrierRawSha256,
+    currentStageArchiveSha256: rawS2SFileSha256(currentStageArchiveBytes),
+    postcondition: record.postcondition,
+    readPostconditionCarrierBytes: (): Uint8Array =>
+      Uint8Array.from(postconditionCarrierBytes),
+    readCurrentStageArchiveBytes: (): Uint8Array =>
+      Uint8Array.from(currentStageArchiveBytes)
+  })
+}
+
+export const inspectS2SStageUploadAssertionCompletion = (
+  authority: unknown,
+  preparedCapability: unknown,
+  completion: unknown
+): Effect.Effect<
+  S2SStageUploadAssertionCompletionSnapshot,
+  S2SStageUploadAssertionPermitError
+> =>
+  completionRecord(
+    "PRODUCTION",
+    authority,
+    preparedCapability,
+    completion
+  ).pipe(Effect.map(publicCompletionSnapshot))
+
+/** @internal TEST-ONLY, NON-AUTHORIZING completion inspector. */
+export const inspectS2SStageUploadAssertionCompletionForTest = (
+  fixture: unknown,
+  preparedCapability: unknown,
+  completion: unknown
+): Effect.Effect<
+  S2SStageUploadAssertionCompletionSnapshot,
+  S2SStageUploadAssertionPermitError
+> =>
+  completionRecord(
+    "TEST_ONLY_NON_AUTHORIZING",
+    fixture,
+    preparedCapability,
+    completion
+  ).pipe(Effect.map(publicCompletionSnapshot))
+
+const makeReplaySnapshot = (
+  record: AssertionCompletionRecord
+): Either.Either<
+  S2SStageUploadAssertionReplaySnapshot,
+  S2SStageUploadAssertionShellError
+> => {
+  const preparedMembers = record.preparedMembers.map((member) =>
+    Object.freeze({
+      name: member.name,
+      byteLength: member.byteLength,
+      rawBytesSha256: member.rawBytesSha256,
+      readBytes: (): Uint8Array => Uint8Array.from(member.bytes)
+    })
+  )
+  const validated = validateS2SStageUploadPostcondition({
+    carrierBytes: Uint8Array.from(record.postconditionCarrierBytes),
+    currentRunEvidence: record.current,
+    currentStageArchiveBytes: Uint8Array.from(
+      record.currentStageArchiveBytes
+    ),
+    preparedMembers
+  })
+  if (Either.isLeft(validated)) {
+    return Either.left(postconditionFailure(validated.left))
+  }
+  if (
+    validated.right.carrierRawSha256 !==
+      record.postcondition.carrierRawSha256 ||
+    validated.right.manifest.postcondition_receipt_sha256 !==
+      record.postcondition.manifest.postcondition_receipt_sha256 ||
+    validated.right.assertionPermitEvidence.receiptSha256 !==
+      record.permit.receiptSha256
+  ) {
+    return Either.left(
+      shellError(
+        "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+        "READBACK_RUN_END",
+        "retained completion bytes diverged during replay"
+      )
+    )
+  }
+  const postconditionCarrierBytes = Uint8Array.from(
+    record.postconditionCarrierBytes
+  )
+  const currentStageArchiveBytes = Uint8Array.from(
+    record.currentStageArchiveBytes
+  )
+  return Either.right(
+    Object.freeze({
+      [S2S_STAGE_UPLOAD_ASSERTION_REPLAY_BRAND]: true as const,
+      _tag: "ValidatedNonAuthorizingStageUploadAssertionReplay" as const,
+      authorityScope:
+        record.mode === "PRODUCTION"
+          ? ("TRUSTED_SINGLE_MODULE_CURRENT_JOB" as const)
+          : ("TEST_ONLY_NON_AUTHORIZING" as const),
+      authorizationClaimed: false as const,
+      outcome:
+        "CURRENT_RUN_FIXED_NAME_ARTIFACT_INDEPENDENTLY_RECOVERED" as const,
+      stage: record.current.stage,
+      completionReceiptSha256: record.completionReceiptSha256,
+      currentRunEvidenceReceiptSha256: record.current.receiptSha256,
+      preparationReceiptSha256: record.prepared.preparationReceiptSha256,
+      permitReceiptSha256: record.permit.receiptSha256,
+      postconditionReceiptSha256:
+        record.postcondition.manifest.postcondition_receipt_sha256,
+      postconditionCarrierSha256: record.postcondition.carrierRawSha256,
+      currentStageArchiveSha256: rawS2SFileSha256(currentStageArchiveBytes),
+      readPostconditionCarrierBytes: (): Uint8Array =>
+        Uint8Array.from(postconditionCarrierBytes),
+      readCurrentStageArchiveBytes: (): Uint8Array =>
+        Uint8Array.from(currentStageArchiveBytes)
+    })
+  )
+}
+
+const materializeReplay = (
+  mode: AssertionScopeState["mode"],
+  owner: unknown,
+  preparedCapability: unknown,
+  completion: unknown
+): Effect.Effect<
+  S2SStageUploadAssertionReplaySnapshot,
+  S2SStageUploadAssertionFailure
+> =>
+  completionRecord(mode, owner, preparedCapability, completion).pipe(
+    Effect.flatMap((record) => {
+      const replay = makeReplaySnapshot(record)
+      if (Either.isLeft(replay)) return Effect.fail(replay.left)
+      const registry =
+        mode === "PRODUCTION" ? PRODUCTION_REPLAYS : TEST_REPLAYS
+      return Effect.sync(() => {
+        registry.set(
+          replay.right,
+          Object.freeze({ record, snapshot: replay.right })
+        )
+        return replay.right
+      })
+    })
+  )
+
+export const materializeS2SStageUploadAssertionReplay = (
+  authority: unknown,
+  preparedCapability: unknown,
+  completion: unknown
+): Effect.Effect<
+  S2SStageUploadAssertionReplaySnapshot,
+  S2SStageUploadAssertionFailure
+> =>
+  materializeReplay(
+    "PRODUCTION",
+    authority,
+    preparedCapability,
+    completion
+  )
+
+/** @internal TEST-ONLY, NON-AUTHORIZING replay materializer. */
+export const materializeS2SStageUploadAssertionReplayForTest = (
+  fixture: unknown,
+  preparedCapability: unknown,
+  completion: unknown
+): Effect.Effect<
+  S2SStageUploadAssertionReplaySnapshot,
+  S2SStageUploadAssertionFailure
+> =>
+  materializeReplay(
+    "TEST_ONLY_NON_AUTHORIZING",
+    fixture,
+    preparedCapability,
+    completion
+  )
+
+const inspectReplay = (
+  mode: AssertionScopeState["mode"],
+  owner: unknown,
+  preparedCapability: unknown,
+  replay: unknown
+): Effect.Effect<
+  S2SStageUploadAssertionReplaySnapshot,
+  S2SStageUploadAssertionPermitError
+> =>
+  Effect.suspend(() => {
+    if (
+      owner === null ||
+      typeof owner !== "object" ||
+      preparedCapability === null ||
+      typeof preparedCapability !== "object" ||
+      replay === null ||
+      typeof replay !== "object"
+    ) {
+      return Effect.fail(
+        permitError(
+          "INVALID_REPLAY_SNAPSHOT",
+          null,
+          "replay inspection requires exact object identities"
+        )
+      )
+    }
+    const registry = mode === "PRODUCTION" ? PRODUCTION_REPLAYS : TEST_REPLAYS
+    let replayRecord: AssertionReplayRecord | undefined
+    try {
+      replayRecord = registry.get(replay)
+    } catch {
+      replayRecord = undefined
+    }
+    if (
+      replayRecord === undefined ||
+      replayRecord.snapshot !== replay ||
+      replayRecord.record.mode !== mode ||
+      replayRecord.record.owner !== owner ||
+      replayRecord.record.preparedCapability !== preparedCapability
+    ) {
+      return Effect.fail(
+        permitError(
+          "INVALID_REPLAY_SNAPSHOT",
+          null,
+          "replay was not materialized for these exact module-local bearers"
+        )
+      )
+    }
+    return completionRecord(
+      mode,
+      owner,
+      preparedCapability,
+      replayRecord.record.completion
+    ).pipe(
+      Effect.as(replayRecord.snapshot),
+      Effect.mapError(() =>
+        permitError(
+          "INVALID_REPLAY_SNAPSHOT",
+          null,
+          "replay completion state is no longer authentic"
+        )
+      )
+    )
+  })
+
+export const inspectS2SStageUploadAssertionReplay = (
+  authority: unknown,
+  preparedCapability: unknown,
+  replay: unknown
+): Effect.Effect<
+  S2SStageUploadAssertionReplaySnapshot,
+  S2SStageUploadAssertionPermitError
+> => inspectReplay("PRODUCTION", authority, preparedCapability, replay)
+
+/** @internal TEST-ONLY, NON-AUTHORIZING replay inspector. */
+export const inspectS2SStageUploadAssertionReplayForTest = (
+  fixture: unknown,
+  preparedCapability: unknown,
+  replay: unknown
+): Effect.Effect<
+  S2SStageUploadAssertionReplaySnapshot,
+  S2SStageUploadAssertionPermitError
+> =>
+  inspectReplay(
+    "TEST_ONLY_NON_AUTHORIZING",
+    fixture,
+    preparedCapability,
+    replay
+  )

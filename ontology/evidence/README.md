@@ -101,7 +101,7 @@ engineering checkpoints:
   runtime binding plus immediate `VOID` termination. It freezes that corrected
   root-private slice but adds no runtime code or numeric result. Continue from
   [`HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md).
-- [`v15 current golden vertical-composition implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v15.json)
+- [`v15 historical golden vertical-composition implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v15.json)
   records the strict TypeScript/Effect v3 test-only golden artifact and upload
   postcondition codec, explicit-root create-only file Layer, two candidate
   readbacks, fresh same-root Layer recovery, exact verifier/executor
@@ -112,11 +112,26 @@ engineering checkpoints:
   production event, carrier, complete profile, durable evidence record, or
   scientific verdict. Continue from
   [`HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
+- [`v16 historical stage-upload assertion design checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v16.json)
+  freezes the reviewed `prepare -> external pinned action -> assert/reconcile`
+  boundary, exact stage mapping, replayable postcondition representation and
+  byte model, one-complete-stage commit rule, and the shared-POSIX feasibility
+  gate. It is design-only and adds no runtime codec, authority, upload,
+  postcondition occurrence, or scientific evidence. Continue from
+  [`HSWM_SWM0W_S2S_STAGE_UPLOAD_ASSERTION_DESIGN_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_STAGE_UPLOAD_ASSERTION_DESIGN_NEXT_SESSION_2026-08-23.md).
+- [`v17 current shared stage-artifact specification implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v17.json)
+  records one root-private stage-indexed policy value, literal-safe consumers
+  for live predecessor reads and replay references, and the distinct
+  12,583,176-byte postcondition carrier versus 16 MiB profile-slot ceilings.
+  It implements only the representation and budget skeleton: Effect schemas,
+  strict codec/reconstruction, same-stage assertion, complete stage recovery,
+  workflow authority, and every scientific claim remain OPEN. Continue from
+  [`HSWM_SWM0W_S2S_SHARED_STAGE_ARTIFACT_SPEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_SHARED_STAGE_ARTIFACT_SPEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v15 supersedes v14 only as the
-next-session entrypoint; v1 through v14 remain immutable historical
+runtime graphs, or remote Neo4j publications. v17 supersedes v16 only as the
+next-session entrypoint; v1 through v16 remain immutable historical
 projections. The TypeScript/Effect runtime owns control and evidence while the
 pinned Python/NumPy oracle remains a bounded deterministic numeric function
-cell. V15 advances only the local `Π` engineering boundary; it changes no
+cell. V17 advances only the local `Π` engineering boundary; it changes no
 scientific `H/W/A/F` result or outcome-bound causal-learning loop.

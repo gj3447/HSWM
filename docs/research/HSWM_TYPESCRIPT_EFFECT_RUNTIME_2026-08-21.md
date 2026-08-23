@@ -368,3 +368,28 @@ immutable
 and its
 [`v14 design handoff`](../operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md)
 record the contract from which this implementation advanced.
+
+The production-intended stage-upload assertion boundary is now frozen in the
+[`v16 design handoff`](../operations/HSWM_SWM0W_S2S_STAGE_UPLOAD_ASSERTION_DESIGN_NEXT_SESSION_2026-08-23.md)
+and
+[`v16 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v16.json).
+The reviewed ownership split is `prepare -> external pinned upload action ->
+assert/reconcile`: the workflow owns the future external upload side effect,
+while strict TypeScript/Effect owns root-private preparation and independent
+same-stage assertion programs. Uploader outputs are not evidence. This design
+checkpoint changes no runtime behavior or scientific result.
+
+The first implementation slice from that design is fixed at code checkpoint
+`6c63ea7` and recorded in the
+[`shared stage-artifact specification handoff`](../operations/HSWM_SWM0W_S2S_SHARED_STAGE_ARTIFACT_SPEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and
+[`v17 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v17.json).
+One deeply frozen, stage-indexed, root-private value now binds the three fixed
+stage artifact policies and is consumed by live predecessor readback and replay
+source-reference validation. TypeScript retains stage-specific literal
+correlations, and the exact 12,583,176-byte postcondition carrier ceiling is
+separate from the 16 MiB profile-slot ceiling. This remains a narrow `Pi`
+engineering slice: the postcondition file contains only representation and
+budget constants, not an Effect schema or codec. Reconstruction, same-stage
+assertion, complete profile recovery, external durability, GitHub authority,
+preregistration, event 10, and scientific judgment remain OPEN.

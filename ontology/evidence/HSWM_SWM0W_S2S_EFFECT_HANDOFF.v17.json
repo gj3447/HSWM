@@ -1,0 +1,431 @@
+{
+  "schema_version": "hswm-engineering-handoff-kg/v17",
+  "bundle_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-shared-stage-artifact-specification-implemented-2026-08-23",
+  "supersedes_bundle_uid_for_continuation": "sym:EngineeringDesignCheckpoint:hswm-swm0w-s2s-stage-upload-assertion-2026-08-23",
+  "updated_at": "2026-08-23",
+  "authority": {
+    "typescript_effect_direction": "USER_PRIMARY",
+    "implementation_and_claim_boundary": "AI_IMPLEMENTED_AND_INDEPENDENTLY_AUDITED",
+    "scientific_verdict": "UNJUDGED"
+  },
+  "workspace_parent_commit": "e144c258a7554d8c3806a62ce4887b5a15f95bb0",
+  "workspace_primary_implementation_commit": "6c63ea77559da9ca9725eb99ac7e4c0241c5af3b",
+  "workspace_code_commit": "242ff8a86ab47009a484354fd4e82737723c8a5b",
+  "compatibility_followup_commit": "242ff8a86ab47009a484354fd4e82737723c8a5b",
+  "handoff_path": "docs/operations/HSWM_SWM0W_S2S_SHARED_STAGE_ARTIFACT_SPEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md",
+  "status": "BLOCKED_PRE_PREREG",
+  "scientific_status": "UNJUDGED",
+  "remote_kg_publication_status": "NOT_ATTEMPTED",
+  "design_status": "V16_PRODUCTION_INTENDED_STAGE_UPLOAD_ASSERTION_BOUNDARY_REMAINS_FROZEN",
+  "implementation_status": "IMPLEMENTED_ROOT_PRIVATE_SHARED_STAGE_ARTIFACT_SPEC_AND_POSTCONDITION_REPRESENTATION_BYTE_BUDGET_SKELETON",
+  "structural_status": "SHARED_POLICY_SLICE_CLOSED_STRICT_POSTCONDITION_CODEC_AND_SAME_STAGE_ASSERTION_OPEN",
+  "github_provenance_status": "NOT_OBSERVED",
+  "functional_runtime_status": "USER_PRIMARY_TYPESCRIPT_EFFECT_V3_ACTIVE",
+  "frozen_versions": {
+    "typescript": "5.9.3",
+    "effect": "3.22.1",
+    "node": "24.13.0",
+    "vitest": "3.2.7"
+  },
+  "effect_skill_influence": {
+    "version_route": "EFFECT_3_22_1_V3",
+    "architecture_route": "FUNCTIONAL_CORE_EFFECT_SHELL",
+    "current_slice": "PURE_ROOT_PRIVATE_POLICY_AND_BUDGET_CORE_NO_NEW_SIDE_EFFECT",
+    "type_model": "STAGE_INDEXED_LITERAL_CORRELATION_PRESERVED_WITH_SATISFIES_AND_GENERIC_MAPPING",
+    "failure_model": "MODULE_LOAD_FIXED_ARITHMETIC_DRIFT_DEFECT_ONLY_OPERATIONAL_ERRORS_NOT_YET_INTRODUCED",
+    "verification_model": "STRICT_TYPESCRIPT_EFFECT_VITEST_BUILD_AND_PACK",
+    "verification_influence_only_not_runtime_dependency": true
+  },
+  "architecture_projection": {
+    "H": "UNCHANGED_NO_TOPOLOGY_OR_LIVING_HARNESS_EVIDENCE",
+    "W": "UNCHANGED_NO_LEARNED_SEMANTIC_WEIGHT_RESULT",
+    "A": "UNCHANGED_NO_ACTIVATION_OR_READOUT_RESULT",
+    "F": "UNCHANGED_NO_FUNCTION_CELL_OR_SCIENTIFIC_VERDICT",
+    "Pi": "ROOT_PRIVATE_STAGE_ARTIFACT_POLICY_AND_POSTCONDITION_REPRESENTATION_BYTE_BUDGET_SKELETON_IMPLEMENTED",
+    "outcome_bound_causal_learning_loop": "NOT_ADVANCED"
+  },
+  "implemented_slice": {
+    "root_private_shared_specification": true,
+    "deeply_frozen_stage_mapping": true,
+    "stage_specific_literal_correlation_preserved": true,
+    "live_artifact_policy_consumer_migrated": true,
+    "predecessor_replay_consumer_migrated": true,
+    "predecessor_replay_literal_assertions_removed": true,
+    "profile_descriptor_equivalence_verified": true,
+    "postcondition_representation_and_byte_budget_skeleton": true,
+    "postcondition_carrier_and_profile_caps_distinct": true,
+    "package_root_exported": false
+  },
+  "shared_stage_artifact_specification": {
+    "root_private_symbol": "S2S_STAGE_ARTIFACT_SPECS",
+    "package_root_exported": false,
+    "REGISTER": {
+      "role": "REGISTRATION",
+      "job": "register",
+      "artifact_name": "s2s-registration",
+      "archive_logical_name": "upload/registration_archive.zip",
+      "archive_profile_role": "REGISTRATION_UPLOAD_ARCHIVE",
+      "postcondition_logical_name": "upload/registration_postcondition.zip",
+      "postcondition_profile_role": "REGISTRATION_UPLOAD_POSTCONDITION",
+      "carrier_schema": "hswm-swm0w-s2s-registration-carrier/v1",
+      "postcondition_schema_identifier": "hswm-swm0w-s2s-stage-upload-postcondition/v1",
+      "archive_maximum_bytes": 4194304,
+      "expanded_maximum_bytes": 4194304,
+      "postcondition_carrier_maximum_bytes": 12583176,
+      "postcondition_profile_maximum_bytes": 16777216,
+      "members": [
+        {
+          "name": "control_receipt.json",
+          "maximum_bytes": 1048576
+        }
+      ]
+    },
+    "CONFIRM": {
+      "role": "CANDIDATE",
+      "job": "confirm",
+      "artifact_name": "s2s-candidate",
+      "archive_logical_name": "upload/candidate_archive.zip",
+      "archive_profile_role": "CANDIDATE_UPLOAD_ARCHIVE",
+      "postcondition_logical_name": "upload/candidate_postcondition.zip",
+      "postcondition_profile_role": "CANDIDATE_UPLOAD_POSTCONDITION",
+      "carrier_schema": "hswm-swm0w-s2s-candidate-carrier/v1",
+      "postcondition_schema_identifier": "hswm-swm0w-s2s-stage-upload-postcondition/v1",
+      "archive_maximum_bytes": 67108864,
+      "expanded_maximum_bytes": 67108864,
+      "postcondition_carrier_maximum_bytes": 12583176,
+      "postcondition_profile_maximum_bytes": 16777216,
+      "members": [
+        {
+          "name": "control_receipt.json",
+          "maximum_bytes": 1048576
+        },
+        {
+          "name": "numeric_candidate.json",
+          "maximum_bytes": 62914560
+        }
+      ]
+    },
+    "ADJUDICATE": {
+      "role": "ADJUDICATION",
+      "job": "adjudicate",
+      "artifact_name": "s2s-adjudication",
+      "archive_logical_name": "upload/adjudication_archive.zip",
+      "archive_profile_role": "ADJUDICATION_UPLOAD_ARCHIVE",
+      "postcondition_logical_name": "upload/adjudication_postcondition.zip",
+      "postcondition_profile_role": "ADJUDICATION_UPLOAD_POSTCONDITION",
+      "carrier_schema": "hswm-swm0w-s2s-adjudication-carrier/v1",
+      "postcondition_schema_identifier": "hswm-swm0w-s2s-stage-upload-postcondition/v1",
+      "archive_maximum_bytes": 4194304,
+      "expanded_maximum_bytes": 4194304,
+      "postcondition_carrier_maximum_bytes": 12583176,
+      "postcondition_profile_maximum_bytes": 16777216,
+      "members": [
+        {
+          "name": "control_receipt.json",
+          "maximum_bytes": 1048576
+        },
+        {
+          "name": "numeric_adjudication.json",
+          "maximum_bytes": 3145728
+        }
+      ]
+    }
+  },
+  "stage_upload_postcondition_contract_skeleton": {
+    "schema_identifier": "hswm-swm0w-s2s-stage-upload-postcondition/v1",
+    "representation": "STORED_ZIP_COMPACT_MANIFEST_CONTIGUOUS_OBSERVATIONS_CURRENT_STAGE_ARCHIVE_REFERENCE",
+    "members": [
+      "manifest.json",
+      "observations.bin"
+    ],
+    "manifest_maximum_bytes": 1048576,
+    "observation_maximum_bytes_each": 1048576,
+    "successful_attempt_ordinals": [
+      1,
+      2,
+      3
+    ],
+    "observation_counts": [
+      7,
+      9,
+      11
+    ],
+    "observation_blob_maximum_bytes": 11534336,
+    "zip_framing_bytes": 264,
+    "carrier_maximum_bytes": 12583176,
+    "profile_occurrence_maximum_bytes": 16777216,
+    "literal_observation_count_lookup_without_result_cast": true,
+    "module_load_arithmetic_drift_guard": true,
+    "effect_schema_implemented": false,
+    "manifest_shape_implemented": false,
+    "strict_codec_and_reconstruction_implemented": false,
+    "canonical_self_hash_implemented": false,
+    "archive_and_prepared_member_cross_binding_implemented": false
+  },
+  "healthy_success_profile_inventory": {
+    "total_occurrences": 48,
+    "construct_and_recover_validation": 20,
+    "semantic_core_without_attachment_codec": 19,
+    "missing_carrier_or_source": 9,
+    "production_stage_upload_postcondition_occurrences_filled": 0,
+    "inventory_changed_by_this_slice": false
+  },
+  "stage_upload_postcondition_schema_implemented": false,
+  "stage_upload_postcondition_codec_implemented": false,
+  "prepared_stage_carrier_capability_implemented": false,
+  "same_stage_upload_assertion_mechanics_implemented": false,
+  "complete_stage_profile_commit_bridge_implemented": false,
+  "mandatory_upload_postconditions_implemented": false,
+  "external_shared_durable_store_feasibility_proved": false,
+  "external_shared_durable_store_deployed": false,
+  "external_durable_root_authenticated": false,
+  "independent_process_restart_recovery_observed": false,
+  "genuine_current_run_capability_issued": false,
+  "genuine_stage_artifact_capability_issued": false,
+  "github_origin_established": false,
+  "workflow_source_frozen": false,
+  "preregistration_created": false,
+  "confirmatory_dispatched": false,
+  "event_10_composed": false,
+  "scientific_verdict_produced": false,
+  "open_gates": [
+    {
+      "uid": "sym:OpenGate:s2s-stage-upload-postcondition-codec",
+      "priority": "NEXT",
+      "status": "OPEN",
+      "required_closure": "STRICT_EFFECT_SCHEMA_MANIFEST_CODEC_UNKNOWN_RECONSTRUCTION_SELF_HASH_AND_ARCHIVE_PREPARED_MEMBER_CROSS_BINDING"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-same-stage-upload-assertion",
+      "priority": "AFTER_CODEC",
+      "status": "OPEN",
+      "required_closure": "PREPARED_CARRIER_CAPABILITY_ONE_USE_ASSERTION_PERMIT_INDEPENDENT_CURRENT_STAGE_REQUERY_DOWNLOAD_AND_TYPED_CLASSIFICATION"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-external-shared-posix-feasibility",
+      "priority": "P0_AFTER_CODEC_BEFORE_BROAD_STAGE_EXPANSION",
+      "status": "OPEN",
+      "required_closure": "ISOLATED_GITHUB_HOSTED_JOBS_REACH_ONE_AUTHENTICATED_SHARED_POSIX_NAMESPACE_WITH_CREATE_ONLY_AND_DURABILITY_SEMANTICS"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-complete-stage-profile-commit",
+      "priority": "AFTER_CODEC_ASSERTION_AND_FEASIBILITY",
+      "status": "OPEN",
+      "required_closure": "ONE_COMPLETE_CREATE_ONLY_STAGE_COMMIT_AND_ONE_INDEPENDENT_RECOVERY_WITH_ALL_REQUIRED_ATTACHMENTS"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-workflow-authority-and-scientific-run",
+      "priority": "DOWNSTREAM",
+      "status": "OPEN",
+      "required_closure": "WORKFLOW_SOURCE_FREEZE_PREREGISTRATION_FUTURE_RANDOMNESS_GITHUB_ORIGIN_EVENT_10_AND_QBR_VERDICT"
+    }
+  ],
+  "next_session_entrypoint": {
+    "plan_path": "docs/operations/HSWM_SWM0W_S2S_SHARED_STAGE_ARTIFACT_SPEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md",
+    "first_code_target": "src/hswm/effect-runtime/src/s2s-stage-upload-postcondition.ts",
+    "first_test_target": "src/hswm/effect-runtime/test/s2s-stage-upload-postcondition.test.ts",
+    "required_skill": "effect-ts-functional",
+    "first_claim": "STRICT_NON_AUTHORIZING_POSTCONDITION_CODEC_AND_RECONSTRUCTION_ONLY",
+    "forbidden_claim": "PRODUCTION_UPLOAD_ASSERTION_OR_FILLED_PROFILE_OCCURRENCE"
+  },
+  "next_session_order": [
+    "READ_CONSTITUTION_V16_DESIGN_V17_HANDOFF_V17_KG_AND_EFFECT_SKILL",
+    "PRESERVE_THE_TWO_DIRTY_CONTINUAL_LIVE_PATHS",
+    "IMPLEMENT_STRICT_STAGE_UPLOAD_POSTCONDITION_SCHEMA_CODEC_RECONSTRUCTION_SELF_HASH_AND_CROSS_BINDINGS",
+    "ADD_HOSTILE_UNKNOWN_INPUT_AND_MUTATION_TESTS_BEFORE_ANY_LIVE_SHELL",
+    "IMPLEMENT_PREPARED_CARRIER_CAPABILITY_ONE_USE_ASSERTION_PERMIT_AND_PURE_CLASSIFICATION_ONLY_AFTER_CODEC",
+    "RUN_BOUNDED_EXTERNAL_SHARED_POSIX_FEASIBILITY_BEFORE_BROAD_STAGE_PROGRAM_EXPANSION",
+    "GENERALIZE_ONE_COMPLETE_STAGE_COMMIT_AND_RECOVERY_PATH_WITHOUT_COMPETING_PARTIAL_COMMITS",
+    "KEEP_WORKFLOW_FREEZE_PREREGISTRATION_DISPATCH_EVENT_10_AND_SCIENTIFIC_JUDGMENT_DOWNSTREAM"
+  ],
+  "nonclaims": [
+    "The postcondition contract file implements identifiers and byte budgets only; it is not an Effect Schema or production codec.",
+    "Profile descriptor equality is tested but the profile source is not structurally generated from the shared specification.",
+    "No uploader, prepared carrier capability, assertion permit, or same-stage independent observation was implemented.",
+    "No production upload-postcondition profile occurrence was filled.",
+    "No complete stage profile was committed or recovered.",
+    "No external shared durability or independent-process recovery was observed.",
+    "No workflow authority, GitHub origin, preregistration, dispatch, event 10, or scientific verdict was produced.",
+    "The test-only v15 golden postcondition cannot be relabelled into the production-intended schema.",
+    "The repository KG and runtime remain bounded projections and interfaces, not HSWM cognition.",
+    "No H, W, A, or F result changed and the outcome-bound causal-learning loop did not advance."
+  ],
+  "nodes": [
+    {
+      "uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-shared-stage-artifact-specification-implemented-2026-08-23",
+      "kind": "EngineeringCheckpoint",
+      "name": "Shared stage-artifact policy and postcondition budget skeleton implementation",
+      "scientific_status": "UNJUDGED"
+    },
+    {
+      "uid": "sym:PriorCheckpoint:hswm-swm0w-s2s-stage-upload-assertion-v16",
+      "kind": "PriorCheckpoint",
+      "name": "V16 stage-upload assertion design freeze"
+    },
+    {
+      "uid": "sym:ImplementedContract:s2s-shared-stage-artifact-specification",
+      "kind": "ImplementedContract",
+      "name": "Root-private stage-indexed artifact policy"
+    },
+    {
+      "uid": "sym:ImplementedSkeleton:s2s-stage-upload-postcondition-budget",
+      "kind": "ImplementedSkeleton",
+      "name": "Upload postcondition representation and byte-budget skeleton"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-stage-upload-postcondition-codec",
+      "kind": "OpenGate",
+      "name": "Strict upload postcondition codec and reconstruction"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-same-stage-upload-assertion",
+      "kind": "OpenGate",
+      "name": "Authentic same-stage independent upload assertion"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-external-shared-posix-feasibility",
+      "kind": "OpenGate",
+      "name": "Shared external POSIX substrate feasibility"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-complete-stage-profile-commit",
+      "kind": "OpenGate",
+      "name": "One complete stage profile commit and recovery path"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-workflow-authority-and-scientific-run",
+      "kind": "OpenGate",
+      "name": "Workflow authority and future scientific run"
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-shared-stage-artifact-specification-implemented-2026-08-23",
+      "type": "CONTINUES",
+      "to_uid": "sym:PriorCheckpoint:hswm-swm0w-s2s-stage-upload-assertion-v16"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-shared-stage-artifact-specification-implemented-2026-08-23",
+      "type": "IMPLEMENTS",
+      "to_uid": "sym:ImplementedContract:s2s-shared-stage-artifact-specification"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-shared-stage-artifact-specification-implemented-2026-08-23",
+      "type": "IMPLEMENTS",
+      "to_uid": "sym:ImplementedSkeleton:s2s-stage-upload-postcondition-budget"
+    },
+    {
+      "from_uid": "sym:ImplementedSkeleton:s2s-stage-upload-postcondition-budget",
+      "type": "PRECEDES",
+      "to_uid": "sym:OpenGate:s2s-stage-upload-postcondition-codec"
+    },
+    {
+      "from_uid": "sym:OpenGate:s2s-stage-upload-postcondition-codec",
+      "type": "PRECEDES",
+      "to_uid": "sym:OpenGate:s2s-same-stage-upload-assertion"
+    },
+    {
+      "from_uid": "sym:OpenGate:s2s-external-shared-posix-feasibility",
+      "type": "BLOCKS_BROAD_STAGE_EXPANSION_BEFORE",
+      "to_uid": "sym:OpenGate:s2s-complete-stage-profile-commit"
+    },
+    {
+      "from_uid": "sym:OpenGate:s2s-stage-upload-postcondition-codec",
+      "type": "PRECEDES",
+      "to_uid": "sym:OpenGate:s2s-complete-stage-profile-commit"
+    },
+    {
+      "from_uid": "sym:OpenGate:s2s-same-stage-upload-assertion",
+      "type": "PRECEDES",
+      "to_uid": "sym:OpenGate:s2s-complete-stage-profile-commit"
+    },
+    {
+      "from_uid": "sym:OpenGate:s2s-complete-stage-profile-commit",
+      "type": "PRECEDES",
+      "to_uid": "sym:OpenGate:s2s-workflow-authority-and-scientific-run"
+    }
+  ],
+  "artifact_bindings": [
+    {
+      "path": "ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v16.json",
+      "role": "IMMUTABLE_V16_PREDECESSOR_KG",
+      "sha256": "7f0e4e9e51429390a9777963236872a08c500c75531628f929a331c522bb556b"
+    },
+    {
+      "path": "docs/operations/HSWM_SWM0W_S2S_SHARED_STAGE_ARTIFACT_SPEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md",
+      "role": "V17_NEXT_SESSION_HANDOFF",
+      "sha256": "e3b6801ef7e72170d50b87b167287a7bc27f2bbd0c50d30b3bdbad61f86cc161"
+    },
+    {
+      "path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+      "role": "CANONICAL_TARGET_IDENTITY",
+      "sha256": "ac209c0aa81df0b0f42f5c3358b321ecb42415f7ad527921d40aee250f0fecf4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-artifact-spec.ts",
+      "role": "IMPLEMENTED_ROOT_PRIVATE_SHARED_STAGE_ARTIFACT_SPECIFICATION",
+      "sha256": "1c4b7105762e97312085899a5e977b771299cb901ca35f509a9a2eb8f977816e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-upload-postcondition-contract.ts",
+      "role": "IMPLEMENTED_POSTCONDITION_REPRESENTATION_AND_BYTE_BUDGET_SKELETON",
+      "sha256": "45c65b375e6b06f07325d2835839b5c3a02d94438938d2e7144eb3211373ad28"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-live-artifact.ts",
+      "role": "SHARED_POLICY_LIVE_PREDECESSOR_READ_CONSUMER",
+      "sha256": "29a5a31248ab500f83e9758f42db3895c8c1f9ac71205a79305772e394c416ef"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-artifact-read-replay.ts",
+      "role": "SHARED_POLICY_PREDECESSOR_REPLAY_REFERENCE_CONSUMER",
+      "sha256": "07cd05d92cf7cbe878253904d6d6240c4d5ab14c56a8b7b0ff0e5a896a6798b2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-workflow-contract.ts",
+      "role": "LITERAL_PRESERVING_STAGE_CONTRACT_SOURCE",
+      "sha256": "6009581aa2831839e0bc3cdecbef304aca62714024ecf94e7d69429ee4b890fb"
+    },
+    {
+      "path": "tests/test_hswm_swm0w_s2s_effect_handoff_v17.py",
+      "role": "V17_KG_CONTRACT_TEST",
+      "sha256": "4d604238fdbb9ac03a095cb1341581830f3f513bd3b42c95eebb16aee5df04e8"
+    },
+    {
+      "path": "ontology/evidence/README.md",
+      "role": "LOCAL_KG_CURRENT_CONTINUATION_INDEX_V17",
+      "sha256": "8c3990448def751ac11b4e98a054f1a9909a8174f5fddc5a60b25d6c4a3a72ff"
+    },
+    {
+      "path": "docs/research/HSWM_TYPESCRIPT_EFFECT_RUNTIME_2026-08-21.md",
+      "role": "TYPESCRIPT_EFFECT_RESEARCH_CONTINUATION_INDEX_V17",
+      "sha256": "5850f0927c1490dde7d98320f843942e800a4d9342e10fc548105b0555cd3e48"
+    },
+    {
+      "path": "src/hswm/effect-runtime/README.md",
+      "role": "EFFECT_RUNTIME_CURRENT_CONTINUATION_INDEX_V17",
+      "sha256": "e7dc67ec8d37e2441a558c9f85e67bbb58eb7f110e14bbe5202092361e196e24"
+    }
+  ],
+  "verification": {
+    "runtime_implementation_changed": true,
+    "live_github_run_executed": false,
+    "typescript_check": "PASS",
+    "effect_runtime_tests": "291/291 PASS",
+    "effect_runtime_test_files": "25/25 PASS",
+    "effect_build": "PASS",
+    "package_dry_run": "PASS_198_FILES_APPROX_3_1_MB_UNPACKED",
+    "focused_post_hardening_tests": "33/33 PASS",
+    "independent_read_only_reviews": "THREE_COMPLETE_P1_CAP_AND_TYPE_FINDINGS_RESOLVED",
+    "json_duplicate_key_check": "PASS",
+    "artifact_binding_check": "PASS",
+    "handoff_chain_tests": "81/81 PASS",
+    "diff_check": "PASS",
+    "protected_unrelated_paths_untouched": "PASS",
+    "claim_boundary": "Pi-only implementation checkpoint: shared root-private stage policy and postcondition representation/byte-budget skeleton; no production codec, upload assertion, profile occurrence, external durability, GitHub authority, preregistration, event 10, or scientific verdict."
+  },
+  "protected_unrelated_paths": [
+    "src/hswm/experiments/continual_live.py",
+    "tests/test_hswm_continual_live.py"
+  ]
+}

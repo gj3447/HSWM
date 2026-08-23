@@ -140,55 +140,52 @@ remains `BLOCKED_PRE_PREREG`: the bounded adapters and closed current-run Layer
 graph are present, but no issued current-run/dispatch authority, workflow,
 complete replay-closed durable evidence deployment, or external event-10
 finalizer exists. Resume from the repository
-[`current golden vertical-composition implementation handoff`](../../../docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+[`current shared stage-artifact specification handoff`](../../../docs/operations/HSWM_SWM0W_S2S_SHARED_STAGE_ARTIFACT_SPEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and its
-[`v15 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v15.json).
-The root-private composition is now implemented with a distinctly typed
-test-only golden artifact/postcondition codec, an explicit-root create-only
-file Layer, two candidate readbacks, fresh same-root Layer recovery, exact
-golden-verifier/numeric-executor runtime-source binding, and an immediate typed
-`VOID` terminal. One pinned public-seed run completed with exit zero and
-`CANDIDATE_PASS_AWAITING_BUNDLE`, but only as
-`TEST_ONLY_NON_AUTHORIZING / NUMERIC_CANDIDATE_ONLY_UNJUDGED`.
+[`v17 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v17.json).
 
-The harness remains absent from the package-root export and does not call the
-production job sequence, success profiles, or durable evidence store. Local
-receipts cannot honestly satisfy the production confirmatory-event and
-`S2SArtifactEvidence` carrier inputs, and no projection adapter or relabeling
-call site exists. Only 20 of the 48 healthy-success slot occurrences have
-construct-and-recover validation, so the implementation does not close a
-complete profile. The Effect runtime owns orchestration, authority, resources,
-typed failure, and evidence, while the pinned Python/NumPy process remains the
-bounded deterministic numeric function cell. The immutable
-[`v14 design handoff`](../../../docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md)
+One deeply frozen, root-private `S2S_STAGE_ARTIFACT_SPECS` value now owns the
+fixed REGISTER, CONFIRM, and ADJUDICATE artifact mappings used by live
+predecessor reads and replay source references. Stage-specific literals remain
+correlated in TypeScript. The production-intended upload-postcondition
+representation and byte-budget skeleton also separates its exact
+12,583,176-byte carrier ceiling from the 16 MiB profile slot. These constants
+are not an Effect schema or codec, and none of the three production profile
+occurrences is filled.
+
+The reviewed ownership and gate order remain in the immutable
+[`v16 stage-upload assertion design handoff`](../../../docs/operations/HSWM_SWM0W_S2S_STAGE_UPLOAD_ASSERTION_DESIGN_NEXT_SESSION_2026-08-23.md)
 and
-[`v14 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v14.json)
-record the predecessor contract. The preceding
-[`v13 durable replay-profile integration handoff`](../../../docs/operations/HSWM_SWM0W_S2S_DURABLE_REPLAY_PROFILE_INTEGRATED_NEXT_SESSION_2026-08-23.md)
+[`v16 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v16.json).
+The prior root-private golden vertical composition remains test-only as recorded
+by the
+[`v15 implementation handoff`](../../../docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and
-[`v13 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v13.json), plus the
+[`v15 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v15.json).
+Local receipts still cannot satisfy production confirmatory events or
+`S2SArtifactEvidence` inputs.
+
+Earlier immutable checkpoints remain indexed by the
+[`v14 golden design handoff`](../../../docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md)
+and
+[`v14 KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v14.json),
+the
+[`v13 durable replay-profile handoff`](../../../docs/operations/HSWM_SWM0W_S2S_DURABLE_REPLAY_PROFILE_INTEGRATED_NEXT_SESSION_2026-08-23.md)
+and
+[`v13 KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v13.json),
+and the
 [`v12 stage-read replay-core handoff`](../../../docs/operations/HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and
-[`v12 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v12.json)
-remain immutable historical checkpoints. The canonical
-predecessor-linked envelope and create-only shared-POSIX B/stage claim substrate
-are implemented. The replay prerequisites and top-level healthy-success
-attachment rosters are also fixed. Successful artifact lookup traces are now
-complete in memory, and the bounded stage-read representation, structural
-validator/builder, profile caps, and reserved-slot local durable integration are
-implemented. The remaining nested attachment semantics, full registration
-source snapshot, failure/VOID profiles, closed stage programs,
-mandatory-upload postconditions, external storage wiring, and the terminal
-finalizer remain OPEN. Production remains dormant while workflow bytes and one
-literal API path selection are OPEN. The next claim-critical step is one thin
-non-authorizing golden/public-seed dry run that composes the existing numeric
-oracle with a distinct test-only golden upload/readback postcondition. Implement
-the non-interoperable artifact/postcondition codec first, then runtime identity
-binding, the fixed-role test Layer, and the lazy composition. Design the
-genuine-authority production carrier connector separately. Run the real
-approximately 60-cell workload only as an opt-in Proxmox scratch job. A
-generalized hostile matrix is deferred unless that vertical slice exposes a
-concrete failure.
+[`v12 KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v12.json).
+
+The next claim-critical step is the strict functional upload-postcondition
+codec: exact Effect schemas, deterministic two-member ZIP construction,
+unknown-input reconstruction, self-receipt validation, and archive/prepared
+member cross-binding with hostile mutation tests. Only after that core closes
+should a prepared-carrier capability and one-use same-stage assertion permit be
+added. Run the bounded external shared-POSIX feasibility proof before broad
+complete-stage program expansion. Workflow freeze, preregistration, dispatch,
+event 10, and scientific judgment remain downstream.
 
 The earlier
 [`v11 lookup-trace/shared-Layer handoff`](../../../docs/operations/HSWM_SWM0W_S2S_LOOKUP_TRACE_SHARED_LAYER_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)

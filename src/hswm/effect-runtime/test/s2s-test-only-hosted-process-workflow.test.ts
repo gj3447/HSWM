@@ -68,6 +68,10 @@ it("uses one hosted root across each foreground action and an explicit cancel", 
   expect(occurrences(workflow, "cancel: cancelled_root")).toBe(1)
   expect(occurrences(workflow, 'exec node "$HOSTED_PROCESS_CLI" root')).toBe(4)
   expect(occurrences(workflow, 'node "$HOSTED_PROCESS_CLI" await-ready')).toBe(4)
+  expect(occurrences(workflow, 'ready_output="$(')).toBe(4)
+  expect(
+    occurrences(workflow, `printf '%s\\n' "$ready_output" | tee`)
+  ).toBe(4)
   expect(occurrences(workflow, 'node "$HOSTED_PROCESS_CLI" reconcile')).toBe(3)
   expect(workflow).toContain(
     "test/s2s-test-only-hosted-process-workflow.test.ts"

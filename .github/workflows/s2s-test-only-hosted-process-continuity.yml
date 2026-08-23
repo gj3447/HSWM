@@ -87,15 +87,17 @@ jobs:
           HSWM_RUN_ID: ${{ github.run_id }}
         run: |
           set -euo pipefail
-          node "$HOSTED_PROCESS_CLI" await-ready \
-            --runner-temp "$HSWM_PROCESS_TEMP" \
-            --session hswm-s2s-pc-register \
-            --workflow-run-id "$HSWM_RUN_ID" \
-            --workflow-run-attempt 1 \
-            --feasibility-attempt 1 \
-            --stage REGISTER \
-            --job-id register \
-            | tee "$HSWM_PROCESS_TEMP/hswm-s2s-pc-register/evidence/ready-client-output.json"
+          ready_output="$(
+            node "$HOSTED_PROCESS_CLI" await-ready \
+              --runner-temp "$HSWM_PROCESS_TEMP" \
+              --session hswm-s2s-pc-register \
+              --workflow-run-id "$HSWM_RUN_ID" \
+              --workflow-run-attempt 1 \
+              --feasibility-attempt 1 \
+              --stage REGISTER \
+              --job-id register
+          )"
+          printf '%s\n' "$ready_output" | tee "$HSWM_PROCESS_TEMP/hswm-s2s-pc-register/evidence/ready-client-output.json"
 
       - name: Upload the REGISTER structural archive shape
         id: register_upload
@@ -164,15 +166,17 @@ jobs:
           HSWM_RUN_ID: ${{ github.run_id }}
         run: |
           set -euo pipefail
-          node "$HOSTED_PROCESS_CLI" await-ready \
-            --runner-temp "$HSWM_PROCESS_TEMP" \
-            --session hswm-s2s-pc-confirm \
-            --workflow-run-id "$HSWM_RUN_ID" \
-            --workflow-run-attempt 1 \
-            --feasibility-attempt 2 \
-            --stage CONFIRM \
-            --job-id confirm \
-            | tee "$HSWM_PROCESS_TEMP/hswm-s2s-pc-confirm/evidence/ready-client-output.json"
+          ready_output="$(
+            node "$HOSTED_PROCESS_CLI" await-ready \
+              --runner-temp "$HSWM_PROCESS_TEMP" \
+              --session hswm-s2s-pc-confirm \
+              --workflow-run-id "$HSWM_RUN_ID" \
+              --workflow-run-attempt 1 \
+              --feasibility-attempt 2 \
+              --stage CONFIRM \
+              --job-id confirm
+          )"
+          printf '%s\n' "$ready_output" | tee "$HSWM_PROCESS_TEMP/hswm-s2s-pc-confirm/evidence/ready-client-output.json"
 
       - name: Exercise the pinned action's definitive no-files failure
         id: confirm_upload
@@ -242,15 +246,17 @@ jobs:
           HSWM_RUN_ID: ${{ github.run_id }}
         run: |
           set -euo pipefail
-          node "$HOSTED_PROCESS_CLI" await-ready \
-            --runner-temp "$HSWM_PROCESS_TEMP" \
-            --session hswm-s2s-pc-adjudicate \
-            --workflow-run-id "$HSWM_RUN_ID" \
-            --workflow-run-attempt 1 \
-            --feasibility-attempt 3 \
-            --stage ADJUDICATE \
-            --job-id adjudicate \
-            | tee "$HSWM_PROCESS_TEMP/hswm-s2s-pc-adjudicate/evidence/ready-client-output.json"
+          ready_output="$(
+            node "$HOSTED_PROCESS_CLI" await-ready \
+              --runner-temp "$HSWM_PROCESS_TEMP" \
+              --session hswm-s2s-pc-adjudicate \
+              --workflow-run-id "$HSWM_RUN_ID" \
+              --workflow-run-attempt 1 \
+              --feasibility-attempt 3 \
+              --stage ADJUDICATE \
+              --job-id adjudicate
+          )"
+          printf '%s\n' "$ready_output" | tee "$HSWM_PROCESS_TEMP/hswm-s2s-pc-adjudicate/evidence/ready-client-output.json"
 
       - name: Upload the ADJUDICATE structural archive shape
         id: adjudicate_upload
@@ -371,15 +377,17 @@ jobs:
           HSWM_RUN_ID: ${{ github.run_id }}
         run: |
           set -euo pipefail
-          node "$HOSTED_PROCESS_CLI" await-ready \
-            --runner-temp "$HSWM_PROCESS_TEMP" \
-            --session hswm-s2s-pc-cancel \
-            --workflow-run-id "$HSWM_RUN_ID" \
-            --workflow-run-attempt 1 \
-            --feasibility-attempt 1 \
-            --stage REGISTER \
-            --job-id register \
-            | tee "$HSWM_PROCESS_TEMP/hswm-s2s-pc-cancel/evidence/ready-client-output.json"
+          ready_output="$(
+            node "$HOSTED_PROCESS_CLI" await-ready \
+              --runner-temp "$HSWM_PROCESS_TEMP" \
+              --session hswm-s2s-pc-cancel \
+              --workflow-run-id "$HSWM_RUN_ID" \
+              --workflow-run-attempt 1 \
+              --feasibility-attempt 1 \
+              --stage REGISTER \
+              --job-id register
+          )"
+          printf '%s\n' "$ready_output" | tee "$HSWM_PROCESS_TEMP/hswm-s2s-pc-cancel/evidence/ready-client-output.json"
 
       - name: Cancel the background root through the runner primitive
         cancel: cancelled_root

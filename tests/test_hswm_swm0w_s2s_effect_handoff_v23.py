@@ -48,6 +48,48 @@ def _load_handoff() -> dict[str, object]:
     return _load_json(HANDOFF_PATH)
 
 
+def _successor_chain(payload: dict[str, object]) -> list[dict[str, object]]:
+    candidates = [
+        _load_json(path)
+        for path in sorted(HANDOFF_PATH.parent.glob(HANDOFF_GLOB))
+        if path != HANDOFF_PATH
+    ]
+    by_predecessor: dict[object, list[dict[str, object]]] = {}
+    for candidate in candidates:
+        predecessor = candidate.get("supersedes_bundle_uid_for_continuation")
+        if predecessor is not None:
+            by_predecessor.setdefault(predecessor, []).append(candidate)
+
+    chain: list[dict[str, object]] = []
+    current_uid = payload["bundle_uid"]
+    seen = {current_uid}
+    while current_uid in by_predecessor:
+        successors = by_predecessor[current_uid]
+        assert len(successors) == 1
+        successor = successors[0]
+        successor_uid = successor["bundle_uid"]
+        assert successor_uid not in seen
+        chain.append(successor)
+        seen.add(successor_uid)
+        current_uid = successor_uid
+    return chain
+
+
+def _latest_binding_hashes(payload: dict[str, object]) -> dict[str, str]:
+    bindings: dict[str, str] = {}
+    for checkpoint in [payload, *_successor_chain(payload)]:
+        entries = checkpoint.get("artifact_bindings", [])
+        assert type(entries) is list
+        for entry in entries:
+            assert type(entry) is dict
+            path = entry["path"]
+            digest = entry["sha256"]
+            assert type(path) is str
+            assert type(digest) is str
+            bindings[path] = digest
+    return bindings
+
+
 def test_v23_is_the_unique_v22_successor_and_records_the_bounded_delta() -> None:
     try:
         json.loads('{"same": 1, "same": 2}', object_pairs_hook=_reject_duplicate_pairs)
@@ -282,10 +324,9 @@ def test_v23_artifact_bindings_handoff_indexes_and_verification_are_exact() -> N
         "src/hswm/effect-runtime/README.md",
     ):
         assert required in paths
-    for entry in bindings:
-        expected = entry["sha256"]
+    for relative_path, expected in _latest_binding_hashes(payload).items():
         assert SHA256_PATTERN.fullmatch(expected)
-        actual = hashlib.sha256((ROOT / entry["path"]).read_bytes()).hexdigest()
+        actual = hashlib.sha256((ROOT / relative_path).read_bytes()).hexdigest()
         assert actual == expected
 
     assert payload["handoff_path"] == str(HANDOFF_DOC_PATH.relative_to(ROOT))

@@ -47,8 +47,8 @@ The smallest useful split is:
 | coordinate | first TypeScript responsibility | current boundary |
 |---|---|---|
 | `H` | immutable role-bearing hyperedges | credit may reference an existing edge; it cannot create topology |
-| `W` | fixed-point semantic macro-weight state | one bounded outcome-credit update only |
-| `A` | eligible or credited trajectory state | a prior eligible trajectory is required and consumed |
+| `W` | scalar credit state plus a distinct package-internal T16 forward projection | one bounded scalar outcome-credit update and one fixed T16 parity projection exist; they are not composed |
+| `A` | eligible/credited trajectory state plus a distinct one-sweep T16 activation projection | neither projection is token-native recurrence or a learned causal trajectory |
 | `F` | immutable registry of typed function-cell IDs | the credited cell must already be registered; execution is future work |
 | `Π` | Schema, capability service, budget, provenance field, atomic transaction | syntax, a capability port, and engineering invariants exist; external outcome/provenance verification and a durable adapter remain open |
 
@@ -127,7 +127,8 @@ versioned ports and replay contracts.
 
 ## Current SWM-0W-S2S control-plane checkpoint
 
-The present delta is entirely in `Π`. It does not change `H`, `W`, `A`, or `F`,
+The control-plane delta described in this section is entirely in `Π`. It does
+not itself change `H`, `W`, `A`, or `F`,
 does not close the outcome-bound causal-learning loop, and is therefore not HSWM
 scientific progress by itself. It makes the future S2S measurement boundary more
 faithful to the target identity by preventing transport, chronology, or caller
@@ -152,7 +153,7 @@ The working implementation now adds five bounded engineering pieces:
    root, and remains limited to the oracle-source/runtime-import/frozen-golden
    preflight;
 4. a strict seekable ZIP reader validates the exact stored-entry dialect used by
-   the pinned `actions/upload-artifact` v4.6.2 producer, including central/local
+   the production-pinned `actions/upload-artifact` v4.6.2 producer, including central/local
    agreement, signed data descriptors, CRCs, Unix regular-file metadata, exact
    member rosters, and byte caps; and
 5. a pure structural job-sequence boundary reconstructs isolated registration,
@@ -447,7 +448,7 @@ bearer. A reviewed same-process root or independently authenticated
 reacquisition protocol must be selected before workflow wiring; serialized
 capabilities never restore authority.
 
-The current continuation entrypoint is the implemented
+The historical v21 continuation entrypoint is the implemented
 [`v21 assertion-shell handoff`](../operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and
 [`v21 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v21.json).
@@ -457,10 +458,11 @@ strict download/ZIP/member validation, structural postcondition assembly,
 opaque completion, authenticated replay, and Effect Clock repair are
 implemented. The inherited falsification matrix passes through the disjoint
 `TEST_ONLY_NON_AUTHORIZING` Layer, but the production root has not executed.
-The next session starts with the unresolved workflow process-continuity
-topology decision, then shared-POSIX feasibility and one complete stage-profile
-commit/recovery. This remains a `Pi` engineering advance only; `H/W/A/F` and
-the outcome-bound causal-learning loop did not advance.
+At that checkpoint the workflow process-continuity topology was unresolved.
+V22 selected it and v24 later observed only its disjoint test-only hosted
+mechanics. Shared-POSIX feasibility and one production complete stage-profile
+commit/recovery remain open. This remains a `Pi` engineering boundary only;
+`H/W/A/F` and the outcome-bound causal-learning loop did not advance there.
 
 The subsequent
 [`v22 Occam-core/process-topology decision`](../operations/HSWM_SWM0_OCCAM_CORE_AND_S2S_PROCESS_TOPOLOGY_DECISION_NEXT_SESSION_2026-08-23.md)
@@ -473,7 +475,7 @@ critical path: the next code slice is a pure TypeScript port/capsule of the
 frozen role-aware T16 one-sweep operator, with strict Effect decoding and
 independent Python parity. This is design-only; no `H/W/A/F` result changed.
 
-The current continuation entrypoint is now the
+The historical v23 continuation entrypoint is the
 [`v23 role-aware TypeScript core implementation handoff`](../operations/HSWM_SWM0_ROLE_AWARE_TYPESCRIPT_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and
 [`v23 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v23.json).
@@ -487,3 +489,20 @@ the bounded engineering parity claim. The module stays package-root private.
 Scalar-credit composition, source-provenance migration, `F`, causal learning,
 topology mutation, target-scored damage, the production evidence workflow, and
 scientific judgment remain open.
+
+The current continuation entrypoint is the
+[`v24 test-only hosted process-continuity handoff`](../operations/HSWM_SWM0W_S2S_TEST_ONLY_HOSTED_PROCESS_CONTINUITY_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and
+[`v24 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v24.json).
+At commits `9063716` and `e729ef2`, a package-internal scoped Effect root,
+authenticated READY/RECONCILE/TERMINAL IPC, strict private-filesystem boundary,
+and dispatch-only hosted background/wait/cancel workflow are implemented.
+GitHub run `32654010771` observed two individually successful jobs and the
+expected four artifacts after the earlier `32653755145` READY-output `tee`
+race was diagnosed and retained as a failed occurrence. This establishes only
+test-only hosted mechanics feasibility. The old scalar outcome-credit state is
+not reinterpreted as the T16 forward operator; public composition was refused
+pending source-pinned raw-byte provenance and explicit state-transition
+ownership. `H/W/A/F`, production workflow authority, durable profile recovery,
+exactly-once behavior, preregistration, future randomness, Q/B/R, and all
+scientific claims remain unchanged or open.

@@ -189,7 +189,7 @@ engineering checkpoints:
   recipient-conditioned operator `W`, and one-sweep `A`. This checkpoint is
   design-only and changes no runtime or scientific result. Continue from
   [`HSWM_SWM0_OCCAM_CORE_AND_S2S_PROCESS_TOPOLOGY_DECISION_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0_OCCAM_CORE_AND_S2S_PROCESS_TOPOLOGY_DECISION_NEXT_SESSION_2026-08-23.md).
-- [`v23 current role-aware TypeScript core implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v23.json)
+- [`v23 historical role-aware TypeScript core implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v23.json)
   records implementation commit `a9aff88`. One bounded internal capsule now
   joins explicit role/member incidence `H`, the exact 870-parameter
   recipient-conditioned T16 projection `W`, and one simultaneous six-recipient
@@ -201,12 +201,25 @@ engineering checkpoints:
   update, topology learning, target-scored role damage, production workflow,
   and every scientific verdict remain open. Continue from
   [`HSWM_SWM0_ROLE_AWARE_TYPESCRIPT_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0_ROLE_AWARE_TYPESCRIPT_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
+- [`v24 current test-only hosted process-continuity checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v24.json)
+  records primary implementation commit `9063716`, READY-publication repair
+  `e729ef2`, the retained failed diagnostic run `32653755145`, and accepted
+  GitHub-hosted run `32654010771`. The accepted run has two individually
+  successful jobs and four one-day artifacts; downloaded readback matched the
+  REGISTER/ADJUDICATE inner ZIP hashes and READY/TERMINAL frame hashes without
+  exposing a raw session token. This is
+  `TEST_ONLY_NON_AUTHORIZING` mechanics evidence only. Generic production
+  process continuity, workflow-source freeze, production GitHub authority,
+  durable stage commit/recovery, exactly-once behavior, preregistration,
+  Q/B/R, causal learning, and every scientific verdict remain open. Continue
+  from
+  [`HSWM_SWM0W_S2S_TEST_ONLY_HOSTED_PROCESS_CONTINUITY_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_TEST_ONLY_HOSTED_PROCESS_CONTINUITY_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v23 supersedes v22 only as the
-latest continuation entrypoint; v1 through v22 remain immutable historical
+runtime graphs, or remote Neo4j publications. v24 supersedes v23 only as the
+latest continuation entrypoint; v1 through v23 remain immutable historical
 projections. The TypeScript/Effect runtime owns control and evidence while the
-pinned Python scalar equation remains the bounded numeric source oracle. V23
-implements only the fixed T16 `H/W/A` engineering projection; it adds no `F`,
-outcome-bound causal-learning transition, topology mutation, or scientific
-result. The v22 evidence-branch topology remains selected but unimplemented.
+pinned Python scalar equation remains the bounded numeric source oracle. V24
+adds only a test-only `Pi` hosted-process observation; it adds no `H/W/A/F`,
+outcome-bound causal-learning transition, topology mutation, production
+authority, or scientific result.

@@ -20,8 +20,8 @@ The boundary is intentionally small:
 - the existing Python/NumPy SWM experiments remain research/reference oracles;
   they are not silently relabeled as this runtime.
 
-The SWM-0W-S2S confirmatory control slice is also present, but remains
-pre-dispatch engineering:
+The production/scientific SWM-0W-S2S confirmatory control slice is also
+present, but remains pre-dispatch engineering:
 
 - `s2s-confirmatory.ts` freezes the pilot-adoption binding, integer resource
   policy, exact seed contract, closed monotone phases, seven VOID reasons, and
@@ -145,8 +145,8 @@ carrier boundaries, with regression coverage on the resulting bytes. The slice
 remains `BLOCKED_PRE_PREREG`: the bounded adapters and closed current-run Layer
 graph are present, but no issued current-run/dispatch authority, workflow,
 complete replay-closed durable evidence deployment, or external event-10
-finalizer exists. Resume from the repository
-[`current assertion-shell implementation handoff`](../../../docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+finalizer exists. The immutable v21 checkpoint is recorded in the repository
+[`historical assertion-shell implementation handoff`](../../../docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and its
 [`v21 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v21.json).
 
@@ -161,7 +161,7 @@ explicit role-bearing incidences, learned recipient-conditioned transport, and
 one-sweep activation, with Effect at the strict decode/composition boundary and
 independent Python parity. No runtime code or scientific result changed in v22.
 
-The current continuation entrypoint is the
+The historical v23 implementation entrypoint is the
 [`v23 role-aware TypeScript core implementation`](../../../docs/operations/HSWM_SWM0_ROLE_AWARE_TYPESCRIPT_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and its
 [`v23 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v23.json).
@@ -176,6 +176,20 @@ Before any root export, review source-provenance/version migration and explicit
 composition with the existing scalar credit runtime. No TypeScript training,
 LLM function cell, causal update, topology learning, target-scored damage,
 production occurrence, or scientific verdict is claimed.
+
+The current continuation entrypoint is the
+[`v24 test-only hosted process-continuity implementation`](../../../docs/operations/HSWM_SWM0W_S2S_TEST_ONLY_HOSTED_PROCESS_CONTINUITY_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and its
+[`v24 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v24.json).
+Commits `9063716` and `e729ef2` implement a dispatch-only, package-internal
+Effect root with authenticated one-shot IPC and the exact hosted
+background/wait/cancel workflow. GitHub run `32654010771` observed both jobs as
+individual successes, including REGISTER and ADJUDICATE uploads, the expected
+CONFIRM no-files failure, injected-unknown no-retry diagnostics, and explicit
+READY cancellation. This closes only the test-only hosted mechanics gate.
+`H/W/A/F`, scalar/T16 composition, package-root exports, production authority,
+shared durability, exactly-once behavior, preregistration, Q/B/R, and every
+scientific claim remain unchanged or open.
 
 One deeply frozen, root-private `S2S_STAGE_ARTIFACT_SPECS` value now owns the
 fixed REGISTER, CONFIRM, and ADJUDICATE artifact mappings used by live
@@ -247,9 +261,10 @@ authority, GitHub-origin evidence, external shared durability,
 independent-process recovery, preregistration, future randomness, dispatch,
 event 10, or scientific verdict. This checkpoint changes only `Pi`; `H`, `W`,
 `A`, and `F` remain unchanged, and the outcome-bound causal-learning loop did
-not advance. First freeze the workflow process-continuity topology; then run
-the bounded external shared-POSIX feasibility proof before one complete-stage
-program and independent recovery.
+not advance. V24 now observes the selected topology only in a disjoint
+test-only hosted probe. A production process-continuity decision, bounded
+external shared-POSIX proof, complete-stage program, and independent recovery
+remain required before the production root can advance.
 
 The v20 read-only architecture audit freezes a prerequisite for workflow
 wiring: process-local object/`WeakMap` bearers do not cross ordinary GitHub
@@ -268,8 +283,8 @@ The v21 implementation retains that prerequisite exactly. The production
 preflight checks workflow source and then the separate process-continuity gate
 before config, authority, capability, claim, observer, transport, or I/O.
 Neither gate is bypassed by the test Layer, and serialized values never restore
-authority. Resume from the v21 handoff above; do not wire a workflow until the
-process topology is reviewed and frozen.
+authority. V22 later selected a topology and v24 observed its disjoint test-only
+mechanics; neither checkpoint authorizes production workflow wiring.
 
 The earlier
 [`v11 lookup-trace/shared-Layer handoff`](../../../docs/operations/HSWM_SWM0W_S2S_LOOKUP_TRACE_SHARED_LAYER_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)

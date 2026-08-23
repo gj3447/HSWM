@@ -435,7 +435,7 @@ This advances only `Pi`. The next code target is the live shell and replay
 snapshot, followed by the bounded shared-POSIX feasibility gate before a
 complete stage-profile commit/recovery path.
 
-The current continuation entrypoint is the subsequent read-only
+The subsequent historical design checkpoint is the read-only
 [`v20 assertion-shell architecture audit`](../operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_ARCHITECTURE_AUDIT_NEXT_SESSION_2026-08-23.md)
 and
 [`v20 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v20.json).
@@ -446,3 +446,18 @@ ordinary workflow step processes cannot carry the same module-private object
 bearer. A reviewed same-process root or independently authenticated
 reacquisition protocol must be selected before workflow wiring; serialized
 capabilities never restore authority.
+
+The current continuation entrypoint is the implemented
+[`v21 assertion-shell handoff`](../operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and
+[`v21 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v21.json).
+At code checkpoint `0fe7791`, the selector-free root-private Effect service,
+scoped claim and exact one-use lease, fixed 1/2/3 observation topology,
+strict download/ZIP/member validation, structural postcondition assembly,
+opaque completion, authenticated replay, and Effect Clock repair are
+implemented. The inherited falsification matrix passes through the disjoint
+`TEST_ONLY_NON_AUTHORIZING` Layer, but the production root has not executed.
+The next session starts with the unresolved workflow process-continuity
+topology decision, then shared-POSIX feasibility and one complete stage-profile
+commit/recovery. This remains a `Pi` engineering advance only; `H/W/A/F` and
+the outcome-bound causal-learning loop did not advance.

@@ -145,7 +145,7 @@ engineering checkpoints:
   non-authorizing probe. The root-private Effect assertion shell follows; the
   bounded shared-POSIX feasibility proof remains required before one complete
   stage-profile commit and recovery path.
-- [`v19 current prepared-carrier and assertion-mechanics checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v19.json)
+- [`v19 historical prepared-carrier and assertion-mechanics checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v19.json)
   records code commit `36b4c9b`. It closes the process-local mechanics gate with
   disjoint module-authentic prepared-carrier registries, one anti-replenishing
   production semantic slot, atomic `Ref.modify` permit reservation,
@@ -157,7 +157,7 @@ engineering checkpoints:
   production bearer was issued, no profile occurrence was filled, and no
   GitHub or scientific result is claimed. Continue from
   [`HSWM_SWM0W_S2S_PREPARED_CARRIER_ASSERTION_MECHANICS_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_PREPARED_CARRIER_ASSERTION_MECHANICS_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
-- [`v20 current assertion-shell architecture-audit checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v20.json)
+- [`v20 historical assertion-shell architecture-audit checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v20.json)
   preserves code checkpoint `36b4c9b` and records the next root-private Effect
   v3 shell contract without claiming implementation. It makes the workflow
   process-continuity gate explicit: module-private `WeakMap` bearers cannot be
@@ -167,12 +167,24 @@ engineering checkpoints:
   ownership, Effect lifecycle/Clock boundaries, opaque completion issuance,
   and the hostile test matrix. Continue from
   [`HSWM_SWM0W_S2S_ASSERTION_SHELL_ARCHITECTURE_AUDIT_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_ARCHITECTURE_AUDIT_NEXT_SESSION_2026-08-23.md).
+- [`v21 current assertion-shell implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v21.json)
+  records code commit `0fe7791`. It implements the root-private selector-free
+  Effect v3 assertion service, exact scoped claim/lease ownership, the fixed
+  1/2/3-attempt live-observation topology, strict download/ZIP/member
+  revalidation, trusted structural assembly, opaque completion, authenticated
+  replay, and one Effect Clock boundary. The inherited hostile matrix passes
+  only through a disjoint `TEST_ONLY_NON_AUTHORIZING` Layer: 29 Vitest files and
+  364 tests pass, while the production root remains fail-closed and unexecuted.
+  Workflow process continuity, shared-POSIX feasibility, one complete stage
+  commit/recovery, GitHub origin, and scientific judgment remain open. Continue
+  from
+  [`HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v20 supersedes v19 only as the
-latest continuation entrypoint; v1 through v19 remain immutable historical
+runtime graphs, or remote Neo4j publications. v21 supersedes v20 only as the
+latest continuation entrypoint; v1 through v20 remain immutable historical
 projections. The TypeScript/Effect runtime owns control and evidence while the
 pinned Python/NumPy oracle remains a bounded deterministic numeric function
-cell. V20 adds no implementation; it sharpens only the open local `Π`
-engineering boundary and changes no scientific `H/W/A/F` result or
-outcome-bound causal-learning loop.
+cell. V21 implements and test-only falsifies the audited local `Π` assertion
+shell boundary; it records no production occurrence and changes no scientific
+`H/W/A/F` result or outcome-bound causal-learning loop.

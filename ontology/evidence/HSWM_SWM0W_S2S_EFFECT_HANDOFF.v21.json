@@ -1,0 +1,677 @@
+{
+  "schema_version": "hswm-engineering-handoff-kg/v21",
+  "bundle_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-assertion-shell-implemented-2026-08-23",
+  "supersedes_bundle_uid_for_continuation": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-assertion-shell-architecture-audited-2026-08-23",
+  "authority": {
+    "typescript_effect_direction": "USER_PRIMARY",
+    "target_identity": "CANONICAL_HSWM_CONSTITUTION",
+    "implementation_checkpoint": "AI_IMPLEMENTED_AND_VERIFIED",
+    "falsification_review": "AI_AND_THREE_INDEPENDENT_READ_ONLY_AUDITS",
+    "scientific_verdict": "UNJUDGED"
+  },
+  "workspace_parent_commit": "f50d06f4ab86ec74553e774c3846d953e3c3fd28",
+  "workspace_primary_implementation_commit": "0fe779164b13d844428d66f977d22d51054d272f",
+  "workspace_code_commit": "0fe779164b13d844428d66f977d22d51054d272f",
+  "workspace_documentation_parent": "0fe779164b13d844428d66f977d22d51054d272f",
+  "updated_at": "2026-08-23",
+  "status": "BLOCKED_PRE_PREREG",
+  "status_detail": "ASSERTION_SHELL_IMPLEMENTED_TEST_ONLY_FULL_SEMANTICS_FALSIFICATION_CLOSED_PRODUCTION_ROOT_FAIL_CLOSED_PROCESS_CONTINUITY_OPEN_SCIENTIFICALLY_UNJUDGED",
+  "design_status": "V20_ROOT_PRIVATE_ASSERTION_SHELL_CONTRACT_IMPLEMENTED_PROCESS_CONTINUITY_DECISION_OPEN",
+  "implementation_status": "ROOT_PRIVATE_ASSERTION_COMPLETION_AND_REPLAY_CODE_IMPLEMENTED_TEST_ONLY_NON_AUTHORIZING_EXECUTION_ONLY",
+  "structural_status": "PI_ENGINEERING_GATE_CLOSED_WITHOUT_PRODUCTION_OCCURRENCE",
+  "functional_runtime_status": "USER_PRIMARY_TYPESCRIPT_EFFECT_V3_ACTIVE",
+  "scientific_status": "UNJUDGED",
+  "runtime_implementation_changed": true,
+  "github_provenance_status": "NOT_OBSERVED",
+  "remote_kg_publication_status": "NOT_ATTEMPTED",
+  "frozen_versions": {
+    "typescript": "5.9.3",
+    "effect": "3.22.1",
+    "node": "24.13.0",
+    "vitest": "3.2.7"
+  },
+  "effect_skill_influence": {
+    "version_route": "EFFECT_3_22_1_V3",
+    "architecture_route": "FUNCTIONAL_CORE_ROOT_PRIVATE_EFFECT_SHELL",
+    "service_route": "CONTEXT_TAG_WITH_SELECTOR_FREE_ZERO_ARGUMENT_OPERATION",
+    "layer_route": "LAYER_SCOPED_WITH_EXACT_ACQUIRE_RELEASE_CLAIM",
+    "one_use_route": "EFFECT_ACQUIRE_USE_RELEASE_WITH_PRIVATE_EXACT_LEASE_AND_WITNESS",
+    "failure_route": "TYPED_EXPECTED_FAILURES_CAUSE_MAP_PRESERVES_DEFECT_INTERRUPTION_AND_COMPOSED_CAUSES",
+    "time_route": "ONE_EFFECT_CLOCK_FOR_SLEEP_TIMEOUT_RECEIPT_AND_TEST_CLOCK",
+    "retry_route": "EXPLICIT_ONE_TWO_THREE_ORDINAL_LOOP_ONLY_FOR_VALIDATED_ABSENCE",
+    "authority_route": "NO_CALLER_OBSERVER_TRANSPORT_SELECTOR_CLASSIFIER_CODEC_MODE_OR_SERIALIZED_BEARER",
+    "verification_route": "DEFERRED_TEST_CLOCK_HOSTILE_CONCURRENCY_LAYER_LIFECYCLE_AND_CAPABILITY_IDENTITY",
+    "verification_influence_only_not_runtime_dependency": true
+  },
+  "architecture_projection": {
+    "H": "UNCHANGED_NO_TOPOLOGY_OR_LIVING_HARNESS_EVIDENCE",
+    "W": "UNCHANGED_NO_LEARNED_SEMANTIC_WEIGHT_RESULT",
+    "A": "UNCHANGED_NO_ACTIVATION_OR_READOUT_RESULT",
+    "F": "UNCHANGED_NO_FUNCTION_CELL_OR_SCIENTIFIC_VERDICT",
+    "Pi": "ROOT_PRIVATE_ASSERT_RECONCILE_COMPLETION_AND_REPLAY_CODE_IMPLEMENTED_WITH_TEST_ONLY_NON_AUTHORIZING_EXECUTION",
+    "outcome_bound_causal_learning_loop": "NOT_ADVANCED"
+  },
+  "inherited_v19_mechanics_implemented": true,
+  "inherited_v20_contract_preserved": true,
+  "workflow_process_continuity_gate": {
+    "status": "OPEN_BEFORE_WORKFLOW_WIRING",
+    "code_policy": "PRIVATE_PRODUCTION_PROCESS_CONTINUITY_POLICY_OPEN_UNTIL_TOPOLOGY_FROZEN",
+    "independent_from_workflow_source_policy": true,
+    "evaluated_before_config_authority_capability_claim_transport_observer_and_io": true,
+    "conflict": "V16_SEPARATE_UPLOAD_STEP_VERSUS_PROCESS_LOCAL_WEAKMAP_BEARERS",
+    "ordinary_step_process_continuity_assumed": false,
+    "serialized_capability_restores_authority": false,
+    "serialized_permit_restores_authority": false,
+    "serialized_trusted_evidence_restores_authority": false,
+    "serialized_postcondition_restores_authority": false,
+    "allowed_review_candidates": [
+      "ONE_TRUSTED_LONG_LIVED_PROCESS_AND_EFFECT_ROOT_SCOPE",
+      "INDEPENDENTLY_AUTHENTICATED_DETERMINISTIC_POST_ACTION_REACQUISITION"
+    ],
+    "candidate_acceptance_requirements": {
+      "long_lived_process": [
+        "REVIEWED_REPLACEMENT_FOR_SEPARATE_PINNED_UPLOAD_STEP_OR_AUTHENTICATED_IPC",
+        "ROOT_REMAINS_ALIVE_THROUGH_UPLOAD_ASSERTION_AND_COMPLETION",
+        "PINNED_ACTION_RESULT_INDEPENDENTLY_VERIFIED"
+      ],
+      "reacquisition": [
+        "INDEPENDENT_ROOT_OF_TRUST",
+        "DURABLE_ONE_SLOT_CREATE_ONLY_CAS",
+        "ANTI_REPLENISHMENT",
+        "RESTART_AND_WORKER_REPLAY_RULES",
+        "AUTHENTICATED_RAW_INPUT_RECONSTRUCTION"
+      ]
+    },
+    "determinism_alone_authenticates": false,
+    "candidate_selected": false,
+    "workflow_wiring_authorized": false,
+    "same_process_guarantee_claimed": false,
+    "cross_process_replay_prevention_claimed": false,
+    "external_exactly_once_claimed": false,
+    "production_root_executed_with_closed_workflow_source": false,
+    "evidence_kind": "SOURCE_ORDER_PLUS_ZERO_ACCESS_PRODUCTION_WORKFLOW_GATE_AND_DIRECT_CLOSED_PREMISE_TEST_PROBE"
+  },
+  "production_assertion_shell_contract": {
+    "module_target": "src/hswm/effect-runtime/src/s2s-stage-upload-assertion.ts",
+    "root_layer_constructor_inputs": [
+      "OPAQUE_PREPARED_CAPABILITY",
+      "S2S_GITHUB_LIVE_TRANSPORT_CONFIG"
+    ],
+    "service_operation": "ZERO_ARGUMENT_ASSERT_AND_RECOVER",
+    "caller_supplied_selectors_or_observer": false,
+    "caller_supplied_sleeper_retry_or_classification": false,
+    "observer_and_transport_owned_internally": true,
+    "precondition_order": [
+      "WORKFLOW_SOURCE_POLICY",
+      "PRODUCTION_PROCESS_CONTINUITY_POLICY",
+      "SHARED_CURRENT_RUN_AUTHORITY",
+      "PREPARED_CAPABILITY_INSPECTION",
+      "ONE_ASSERTION_SCOPE_CLAIM",
+      "LIVE_OBSERVER_CONSTRUCTION",
+      "FIXED_ASSERTION_PROGRAM"
+    ],
+    "exact_topology": [
+      "LOOKUP_RUN_START",
+      "LOOKUP_JOBS",
+      "LOOKUP_ARTIFACTS_N",
+      "LOOKUP_RUN_END_N",
+      "READBACK_RUN_START",
+      "READBACK_ARTIFACT",
+      "READBACK_DOWNLOAD_REDIRECT",
+      "STRICT_ZIP_AND_MEMBER_VALIDATION",
+      "READBACK_RUN_END",
+      "SEAL_PERMIT_EVIDENCE",
+      "BUILD_AND_REVALIDATE_POSTCONDITION",
+      "FINALIZE_AUTHENTIC_HEALTHY_WITNESS",
+      "ISSUE_OPAQUE_COMPLETION"
+    ],
+    "validated_attempt_ordinals": [
+      1,
+      2,
+      3
+    ],
+    "settle_milliseconds": 10000,
+    "maximum_settles": 2,
+    "effect_retry_allowed": false,
+    "metadata_timeout_milliseconds": 120000,
+    "download_timeout_milliseconds": 420000,
+    "derived_external_cap_milliseconds": 1760000,
+    "whole_assertion_timeout_milliseconds": 1800000,
+    "validation_and_finalization_margin_milliseconds": 40000,
+    "success_counts": {
+      "observer_calls": [
+        8,
+        10,
+        12
+      ],
+      "stored_observations": [
+        7,
+        9,
+        11
+      ],
+      "permit_ledger_entries": [
+        12,
+        14,
+        16
+      ]
+    },
+    "production_executed": false,
+    "package_root_exported": false
+  },
+  "assertion_shell_implementation": {
+    "selector_free_zero_argument_service": true,
+    "effect_v3_context_tag": true,
+    "effect_v3_layer_scoped": true,
+    "effect_acquire_release_layer_claim": true,
+    "effect_acquire_use_release_one_use_lease": true,
+    "exact_layer_claim_required_through_finalize": true,
+    "stale_service_cannot_consume_foreign_claim": true,
+    "owning_layer_close_during_use_results_in_spent_void": true,
+    "completion_reauthenticated_after_release": true,
+    "fixed_observer_topology": true,
+    "all_observations_strictly_revalidated": true,
+    "current_predecessor_and_later_job_state_validated": true,
+    "listing_requery_and_download_expiry_validated_by_time": true,
+    "download_receipt_identity_redirect_media_digest_and_length_validated": true,
+    "strict_stored_zip_member_roster_and_prepared_bytes_validated": true,
+    "trusted_production_shell_structural_assembler_fixed_mode": true,
+    "structural_postcondition_non_authorizing": true,
+    "opaque_completion_exact_identity_registry": true,
+    "authenticated_replay_exact_identity_registry": true,
+    "disjoint_production_and_test_registries": true,
+    "completion_and_replay_defensive_byte_reads": true,
+    "copy_proxy_clone_and_serialization_rejected": true,
+    "typed_error_mapping_preserves_defect_interruption_and_composed_cause": true,
+    "production_live_observer_layer_scopes_entire_use": true,
+    "test_layer_status": "TEST_ONLY_NON_AUTHORIZING",
+    "production_layer_status": "DORMANT_GATE_CLOSED",
+    "package_root_exported": false
+  },
+  "effect_v3_lifecycle": {
+    "version": "3.22.1",
+    "service": "CONTEXT_TAG_ROOT_PRIVATE",
+    "layer": "LAYER_SCOPED",
+    "layer_claim": "EFFECT_ACQUIRE_RELEASE_EXACT_CLAIM",
+    "one_use_operation": "EFFECT_ACQUIRE_USE_RELEASE_EXACT_LEASE",
+    "timeout": "EFFECT_TIMEOUT_FAIL",
+    "clock": "SHELL_ONE_EFFECT_CLOCK_WITH_TEST_CLOCK_TRANSPORT_NATIVE_WATCHDOG_SEPARATE",
+    "typed_failure_mapping": "EFFECT_MAP_ERROR_CAUSE_WITH_CAUSE_MAP",
+    "finalizer_error_channel": "NEVER",
+    "layer_memoization_is_authority": false
+  },
+  "postcondition_and_completion_contract": {
+    "existing_public_builder_remains_test_only": true,
+    "production_structural_assembler": "DIRECT_MODULE_ROOT_PRIVATE_FIXED_TRUSTED_MODE_NON_AUTHORIZING_OUTPUT",
+    "caller_selectable_trusted_mode": false,
+    "structural_postcondition_is_authority": false,
+    "postcondition_built_inside_one_use_transaction": true,
+    "opaque_completion_registry": "MODULE_PRIVATE_WEAKMAP",
+    "authentic_healthy_witness_registry": "MODULE_PRIVATE_WEAKSET",
+    "completion_after_strict_revalidation": true,
+    "completion_reauthenticated_after_release": true,
+    "registration_or_witness_or_claim_failure_result": "SPENT_VOID_WITHOUT_COMPLETION",
+    "foreign_layer_finalizer_may_close_in_flight_lease": false,
+    "serialized_or_reconstructed_completion_accepted": false,
+    "defensive_raw_bytes_retained": true,
+    "module_authenticated_replay_snapshot_required": true,
+    "replay_snapshot_is_authority_by_itself": false,
+    "cross_process_replay_prevention_claimed": false,
+    "external_exactly_once_claimed": false
+  },
+  "shell_outcome_mapping": {
+    "COMPLETE_STRICT_READBACK_AND_POSTCONDITION": "CURRENT_RUN_FIXED_NAME_ARTIFACT_INDEPENDENTLY_RECOVERED",
+    "THREE_VALID_BRACKETED_ABSENCES": "BOUNDED_ABSENCE_NOT_PROOF_OF_NONPUBLICATION",
+    "DUPLICATE_IDENTITY_RUN_HEAD_REQUERY_EXPIRY_OR_TIME_DRIFT": "DUPLICATE_IDENTITY_OR_TEMPORAL_AMBIGUITY",
+    "TRANSPORT_DOWNLOAD_PHASE_OR_WHOLE_TIMEOUT_OR_FINAL_RUN_UNKNOWN": "GITHUB_TRANSPORT_OR_DOWNLOAD_OUTCOME_UNKNOWN",
+    "DEFINITIVE_RECEIPT_SCHEMA_ZIP_DIGEST_MEMBER_OR_POSTCONDITION_REJECTION": "DEFINITIVE_OBSERVATION_OR_VALIDATION_FAILURE",
+    "DEFECT_OR_INTERRUPTION": "PRESERVE_EFFECT_CAUSE_VOID_PERMIT_NO_OUTCOME",
+    "EXTERNAL_ACTION_FAILURE_OR_UNKNOWN_PROFILE_BRANCH_EMITTABLE_BY_THIS_SHELL": false,
+    "COMMITTED_READBACK_FAILED_RECONCILIATION_REQUIRED_EMITTABLE_BY_THIS_SHELL": false
+  },
+  "clock_boundary_audit": {
+    "deadline_model": "TWO_TIER_SHELL_EFFECT_CLOCK_AND_INNER_TRANSPORT_WALL_CLOCK_WATCHDOG",
+    "shell_effect_sleep_timeout_and_receipt_share_clock": true,
+    "test_clock_regression_passed": true,
+    "native_transport_set_timeout_watchdog_retained": true,
+    "native_transport_watchdog_is_shell_logical_clock": false,
+    "remaining_direct_date_now_path": "src/hswm/effect-runtime/src/s2s-live-github.ts",
+    "remaining_direct_date_now_status": "CLOSED_EFFECT_CLOCK_REGRESSION_VERIFIED",
+    "exact_metadata_timeout_boundary_tested": true,
+    "exact_download_timeout_boundary_tested": true,
+    "exact_whole_use_timeout_boundary_tested": true,
+    "unrelated_480000_millisecond_bracket_reused": false
+  },
+  "required_falsification_matrix": [
+    "ATTEMPT_ONE_TWO_THREE_EXACT_SELECTORS_PHASES_COUNTS_AND_SETTLES",
+    "THREE_BRACKETED_ABSENCES_TWO_SETTLES_NO_READBACK_RECONCILIATION_ONLY",
+    "DUPLICATE_WRONG_RUN_WRONG_HEAD_EXPIRED_TEMPORAL_AND_REQUERY_DRIFT",
+    "DOWNLOAD_RECEIPT_REDIRECT_MEDIA_DIGEST_LENGTH_AND_FINAL_RUN_DRIFT",
+    "ALL_THREE_STAGES_REAL_ACTION_COMPATIBLE_ZIPS_AND_PREPARED_BYTES",
+    "DEFERRED_TWO_CALLER_RACE_ONE_WINNER_ZERO_LOSER_IO",
+    "DISTINCT_LAYER_FINALIZER_CANNOT_CLOSE_FOREIGN_IN_FLIGHT_LEASE",
+    "TYPED_FAILURE_DEFECT_INTERRUPTION_TIMEOUT_NONHEALTHY_VOID_NO_REPLENISHMENT",
+    "DISTINCT_LAYER_FACTORIES_AND_SEPARATE_PROVIDE_RUNS_SAME_BEARER",
+    "MALFORMED_OBSERVER_AND_OUTCOME_PROPERTY_CANNOT_CLASSIFY",
+    "COMPLETION_COPY_PROXY_CLONE_SERIALIZATION_REJECTION_AND_DEFENSIVE_BYTES",
+    "WORKFLOW_SOURCE_CLOSED_PROCESS_CONTINUITY_OPEN_ZERO_CONFIG_AUTHORITY_CAPABILITY_CLAIM_OBSERVER_TRANSPORT_AND_IO",
+    "EXACT_1800000_MILLISECOND_WHOLE_TIMEOUT_TEST_CLOCK_BOUNDARY",
+    "PACKAGE_ROOT_ABSENCE_FOR_SERVICE_LEASE_COMPLETION_AND_PRODUCTION_ASSEMBLER"
+  ],
+  "falsification_matrix_results": {
+    "ATTEMPT_ONE_TWO_THREE_EXACT_SELECTORS_PHASES_COUNTS_AND_SETTLES": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "runs the real-observation full shell at attempts 1/2/3 and authenticates defensive completion replay"
+    },
+    "THREE_BRACKETED_ABSENCES_TWO_SETTLES_NO_READBACK_RECONCILIATION_ONLY": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "classifies three bracketed absences without readback and never replenishes the void permit"
+    },
+    "DUPLICATE_WRONG_RUN_WRONG_HEAD_EXPIRED_TEMPORAL_AND_REQUERY_DRIFT": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "fails closed across duplicate, head, expiry, temporal, requery, download, member, and final-run drift at attempts 1/2/3"
+    },
+    "DOWNLOAD_RECEIPT_REDIRECT_MEDIA_DIGEST_LENGTH_AND_FINAL_RUN_DRIFT": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "fails closed across hostile download receipt fields, strict ZIP members, and final-run drift at attempts 1/2/3"
+    },
+    "ALL_THREE_STAGES_REAL_ACTION_COMPATIBLE_ZIPS_AND_PREPARED_BYTES": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "recovers exact action-compatible REGISTER, CONFIRM, and ADJUDICATE archives from their stage-owned prepared bytes"
+    },
+    "DEFERRED_TWO_CALLER_RACE_ONE_WINNER_ZERO_LOSER_IO": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "keeps one Deferred winner alive across a losing separately scoped Layer and prevents replenishment"
+    },
+    "DISTINCT_LAYER_FINALIZER_CANNOT_CLOSE_FOREIGN_IN_FLIGHT_LEASE": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "rejects a service escaped from its released Layer and voids an owning Layer closed in flight"
+    },
+    "TYPED_FAILURE_DEFECT_INTERRUPTION_TIMEOUT_NONHEALTHY_VOID_NO_REPLENISHMENT": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "typed failure defect composed Cause interruption metadata download and whole-use timeout cases burn without replenishment"
+    },
+    "DISTINCT_LAYER_FACTORIES_AND_SEPARATE_PROVIDE_RUNS_SAME_BEARER": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "does not replenish a closed fixture when its Effect service Layer is rebuilt"
+    },
+    "MALFORMED_OBSERVER_AND_OUTCOME_PROPERTY_CANNOT_CLASSIFY": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "preserves malformed observer TypeError and rejects outcome-bearing observation wrappers"
+    },
+    "COMPLETION_COPY_PROXY_CLONE_SERIALIZATION_REJECTION_AND_DEFENSIVE_BYTES": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "runs attempts 1/2/3 and rejects completion and replay spread proxy structuredClone and JSON copies with defensive bytes"
+    },
+    "WORKFLOW_SOURCE_CLOSED_PROCESS_CONTINUITY_OPEN_ZERO_CONFIG_AUTHORITY_CAPABILITY_CLAIM_OBSERVER_TRANSPORT_AND_IO": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "production workflow-source gate proves zero access and direct closed-premise preflight proves process-continuity remains open"
+    },
+    "EXACT_1800000_MILLISECOND_WHOLE_TIMEOUT_TEST_CLOCK_BOUNDARY": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "fires the exact 1,800,000 ms whole-use boundary before observer acquisition can escape and burns the lease"
+    },
+    "PACKAGE_ROOT_ABSENCE_FOR_SERVICE_LEASE_COMPLETION_AND_PRODUCTION_ASSEMBLER": {
+      "status": "PASS_TEST_ONLY_NON_AUTHORIZING",
+      "test_path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "test_name": "keeps every TEST_ONLY_NON_AUTHORIZING mechanics entrypoint and production assembler out of the package root"
+    }
+  },
+  "assertion_shell_falsification_gate_closed": true,
+  "test_only_full_semantics_executed": true,
+  "production_same_stage_upload_assertion_shell_implemented": true,
+  "production_assertion_shell_executed": false,
+  "production_assertion_completion_capability_implemented": true,
+  "genuine_production_assertion_completion_issued": false,
+  "production_upload_assertion_replay_snapshot_implemented": true,
+  "production_replay_snapshot_materialized": false,
+  "production_assertion_permit_evidence_sealing_implemented": true,
+  "production_assertion_permit_evidence_sealed_in_execution": false,
+  "production_assertion_permit_evidence_sealed": false,
+  "workflow_process_continuity_resolved": false,
+  "external_shared_durable_store_feasibility_proved": false,
+  "complete_stage_profile_commit_bridge_implemented": false,
+  "genuine_current_run_capability_issued": false,
+  "genuine_prepared_stage_carrier_capability_issued": false,
+  "genuine_stage_upload_assertion_scope_issued": false,
+  "github_origin_established": false,
+  "workflow_source_frozen": false,
+  "preregistration_created": false,
+  "confirmatory_dispatched": false,
+  "event_10_composed": false,
+  "scientific_verdict_produced": false,
+  "closed_gates": [
+    {
+      "uid": "sym:ClosedGate:s2s-stage-upload-postcondition-codec",
+      "status": "INHERITED_V18_CLOSED_NON_AUTHORIZING_STRUCTURAL_ONLY"
+    },
+    {
+      "uid": "sym:ClosedGate:s2s-prepared-carrier-assertion-mechanics",
+      "status": "INHERITED_V19_CLOSED_PROCESS_LOCAL_MECHANICS_ONLY"
+    },
+    {
+      "uid": "sym:ClosedGate:s2s-stage-upload-assertion-shell",
+      "status": "V21_CLOSED_TEST_ONLY_NON_AUTHORIZING_FULL_SEMANTICS"
+    }
+  ],
+  "open_gates": [
+    {
+      "uid": "sym:OpenGate:s2s-workflow-process-continuity",
+      "priority": "BEFORE_WORKFLOW_WIRING",
+      "status": "OPEN",
+      "required_closure": "FREEZE_REVIEWED_SAME_PROCESS_ROOT_WITH_UPLOAD_STEP_REPLACEMENT_OR_AUTHENTICATED_IPC_OR_REACQUISITION_WITH_INDEPENDENT_ROOT_OF_TRUST_DURABLE_ONE_SLOT_CAS_ANTI_REPLENISHMENT_AND_RESTART_WORKER_REPLAY_RULES"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-external-shared-posix-feasibility",
+      "priority": "NEXT_EXECUTABLE_GATE_AFTER_PROCESS_TOPOLOGY",
+      "status": "OPEN",
+      "required_closure": "ONE_AUTHENTICATED_SHARED_POSIX_NAMESPACE_SUPPORTS_CREATE_ONLY_HARD_LINK_CAS_FSYNC_AND_PARENT_DIRECTORY_DURABILITY"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-complete-stage-profile-commit",
+      "priority": "AFTER_PROCESS_TOPOLOGY_AND_FEASIBILITY",
+      "status": "OPEN",
+      "required_closure": "ONE_COMPLETE_CREATE_ONLY_STAGE_COMMIT_AND_ONE_INDEPENDENT_RECOVERY_WITH_ALL_REQUIRED_ATTACHMENTS"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-workflow-authority-and-scientific-run",
+      "priority": "DOWNSTREAM",
+      "status": "OPEN",
+      "required_closure": "WORKFLOW_SOURCE_FREEZE_PREREGISTRATION_FUTURE_RANDOMNESS_GITHUB_ORIGIN_EVENT_10_AND_QBR_VERDICT"
+    }
+  ],
+  "next_session_entrypoint": {
+    "plan_path": "docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md",
+    "required_skill": "effect-ts-functional",
+    "first_action_kind": "REVIEWED_ARCHITECTURE_DECISION_NOT_CODE",
+    "first_decision": "WORKFLOW_PROCESS_CONTINUITY_TOPOLOGY",
+    "first_code_target": null,
+    "workflow_wiring_authorized": false,
+    "production_layer_rule": "GATE_CLOSED_WHILE_WORKFLOW_SOURCE_OR_PROCESS_CONTINUITY_IS_OPEN",
+    "next_executable_gate_after_topology": "BOUNDED_SHARED_EXTERNAL_POSIX_FEASIBILITY",
+    "next_program_after_feasibility": "ONE_COMPLETE_STAGE_PROFILE_COMMIT_AND_INDEPENDENT_RECOVERY"
+  },
+  "next_session_order": [
+    "READ_CONSTITUTION_V16_V19_V20_V21_HANDOFFS_KGS_AND_EFFECT_SKILL",
+    "PRESERVE_THE_TWO_DIRTY_CONTINUAL_LIVE_PATHS",
+    "FREEZE_WORKFLOW_PROCESS_CONTINUITY_BEFORE_WIRING",
+    "DO_NOT_SERIALIZE_OR_RECONSTRUCT_AUTHORITY_ACROSS_STEPS",
+    "KEEP_PRODUCTION_ASSERTION_ROOT_GATE_CLOSED",
+    "RUN_BOUNDED_SHARED_EXTERNAL_POSIX_FEASIBILITY",
+    "IMPLEMENT_ONE_COMPLETE_STAGE_PROFILE_COMMIT_AND_INDEPENDENT_RECOVERY",
+    "KEEP_WORKFLOW_FREEZE_PREREGISTRATION_DISPATCH_EVENT_10_AND_SCIENTIFIC_JUDGMENT_DOWNSTREAM"
+  ],
+  "nonclaims": [
+    "Test-only full-semantics execution is not a production assertion occurrence.",
+    "No workflow process-continuity candidate was selected or implemented.",
+    "Ordinary GitHub Actions steps are not assumed to share a process-local object bearer.",
+    "Serialized capabilities permits trusted evidence postconditions completions and replays never restore authority.",
+    "No production observer assertion completion replay or permit-evidence sealing occurred.",
+    "No genuine current-run prepared-carrier assertion-scope or completion bearer was issued.",
+    "No test observation is claimed to have GitHub origin.",
+    "No upload-postcondition production occurrence or complete stage-profile commit was produced.",
+    "No cross-process replay prevention durable root historical uniqueness or external exactly-once behavior was established.",
+    "No external shared durability or independent-process recovery was observed.",
+    "No workflow source freeze GitHub origin preregistration dispatch event 10 or scientific verdict was produced.",
+    "The repository KG and Effect runtime remain bounded projections and interfaces not HSWM cognition.",
+    "No H W A or F result changed and the outcome-bound causal-learning loop did not advance."
+  ],
+  "nodes": [
+    {
+      "uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-assertion-shell-implemented-2026-08-23",
+      "kind": "EngineeringImplementationCheckpoint",
+      "name": "Root-private Effect assertion completion and replay shell implemented",
+      "scientific_status": "UNJUDGED"
+    },
+    {
+      "uid": "sym:PriorCheckpoint:hswm-swm0w-s2s-assertion-shell-architecture-audited-v20",
+      "kind": "PriorCheckpoint",
+      "name": "V20 assertion-shell architecture and process-continuity audit"
+    },
+    {
+      "uid": "sym:ClosedGate:s2s-stage-upload-postcondition-codec",
+      "kind": "ClosedGate",
+      "name": "Inherited strict structural upload-postcondition codec gate"
+    },
+    {
+      "uid": "sym:ClosedGate:s2s-prepared-carrier-assertion-mechanics",
+      "kind": "ClosedGate",
+      "name": "Inherited process-local prepared-carrier and assertion mechanics gate"
+    },
+    {
+      "uid": "sym:ClosedGate:s2s-stage-upload-assertion-shell",
+      "kind": "ClosedGate",
+      "name": "Root-private test-only-falsified assertion completion and replay shell gate"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-workflow-process-continuity",
+      "kind": "OpenGate",
+      "name": "Workflow process continuity or authenticated reacquisition decision"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-external-shared-posix-feasibility",
+      "kind": "OpenGate",
+      "name": "Shared external POSIX substrate feasibility"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-complete-stage-profile-commit",
+      "kind": "OpenGate",
+      "name": "One complete stage-profile commit and independent recovery"
+    },
+    {
+      "uid": "sym:OpenGate:s2s-workflow-authority-and-scientific-run",
+      "kind": "OpenGate",
+      "name": "Workflow authority and future scientific run"
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-assertion-shell-implemented-2026-08-23",
+      "type": "CONTINUES",
+      "to_uid": "sym:PriorCheckpoint:hswm-swm0w-s2s-assertion-shell-architecture-audited-v20"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-assertion-shell-implemented-2026-08-23",
+      "type": "RECORDS_IMPLEMENTATION_OF",
+      "to_uid": "sym:ClosedGate:s2s-stage-upload-assertion-shell"
+    },
+    {
+      "from_uid": "sym:ClosedGate:s2s-stage-upload-postcondition-codec",
+      "type": "PRECEDES",
+      "to_uid": "sym:ClosedGate:s2s-prepared-carrier-assertion-mechanics"
+    },
+    {
+      "from_uid": "sym:ClosedGate:s2s-prepared-carrier-assertion-mechanics",
+      "type": "PRECEDES",
+      "to_uid": "sym:ClosedGate:s2s-stage-upload-assertion-shell"
+    },
+    {
+      "from_uid": "sym:OpenGate:s2s-workflow-process-continuity",
+      "type": "PRECEDES",
+      "to_uid": "sym:OpenGate:s2s-external-shared-posix-feasibility"
+    },
+    {
+      "from_uid": "sym:ClosedGate:s2s-stage-upload-assertion-shell",
+      "type": "PRECEDES",
+      "to_uid": "sym:OpenGate:s2s-complete-stage-profile-commit"
+    },
+    {
+      "from_uid": "sym:OpenGate:s2s-external-shared-posix-feasibility",
+      "type": "BLOCKS_BROAD_STAGE_EXPANSION_BEFORE",
+      "to_uid": "sym:OpenGate:s2s-complete-stage-profile-commit"
+    },
+    {
+      "from_uid": "sym:OpenGate:s2s-workflow-process-continuity",
+      "type": "BLOCKS_WORKFLOW_WIRING_BEFORE",
+      "to_uid": "sym:OpenGate:s2s-workflow-authority-and-scientific-run"
+    },
+    {
+      "from_uid": "sym:OpenGate:s2s-complete-stage-profile-commit",
+      "type": "PRECEDES",
+      "to_uid": "sym:OpenGate:s2s-workflow-authority-and-scientific-run"
+    }
+  ],
+  "handoff_path": "docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md",
+  "artifact_bindings": [
+    {
+      "path": "ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v20.json",
+      "role": "IMMUTABLE_V20_PREDECESSOR_KG",
+      "sha256": "c020826320d580ae50df18ce86fb928746ecd0556447ad771ff7ced1aecd99b1"
+    },
+    {
+      "path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+      "role": "CANONICAL_TARGET_IDENTITY",
+      "sha256": "ac209c0aa81df0b0f42f5c3358b321ecb42415f7ad527921d40aee250f0fecf4"
+    },
+    {
+      "path": "docs/operations/HSWM_SWM0W_S2S_STAGE_UPLOAD_ASSERTION_DESIGN_NEXT_SESSION_2026-08-23.md",
+      "role": "IMMUTABLE_V16_FROZEN_ASSERTION_DESIGN",
+      "sha256": "275e550255b112540ac12f73c80eef1b69d15971f0b070162d88f641a71936a4"
+    },
+    {
+      "path": "docs/operations/HSWM_SWM0W_S2S_PREPARED_CARRIER_ASSERTION_MECHANICS_IMPLEMENTED_NEXT_SESSION_2026-08-23.md",
+      "role": "IMMUTABLE_V19_MECHANICS_HANDOFF",
+      "sha256": "34a7fecb4ea86bc6e5b5e794f15e97931002b930081af2624012888126d9160e"
+    },
+    {
+      "path": "docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_ARCHITECTURE_AUDIT_NEXT_SESSION_2026-08-23.md",
+      "role": "IMMUTABLE_V20_ARCHITECTURE_HANDOFF",
+      "sha256": "7aa9d937f191e654297ddbd8713d03a9e64742f0140520e208b96908e8695fdc"
+    },
+    {
+      "path": "docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md",
+      "role": "V21_CURRENT_NEXT_SESSION_HANDOFF",
+      "sha256": "eb493c72797bc0929164ae44c5236a3ec70c01503c53122d7204a6e68a1ec09b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-live-github.ts",
+      "role": "EFFECT_CLOCK_REPAIRED_LIVE_GITHUB_OBSERVER",
+      "sha256": "345000d95fe0d3dbb05082b8d2250aa5c65348d18f001f905a052ae3b772af47"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-run-authority.ts",
+      "role": "DIRECT_MODULE_PRODUCTION_WORKFLOW_SOURCE_POLICY",
+      "sha256": "0965b49eafd9b72de9f83daecd3781becef25f61db452c4ff18e529cac65ad8d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-prepared-stage-carrier.ts",
+      "role": "INHERITED_PROCESS_LOCAL_PREPARED_CAPABILITY_BOUNDARY",
+      "sha256": "9442c53872a3fd3d98fc5414b116af5535f8c574eab99bbd3a09bb3c1edd2c41"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-upload-assertion.ts",
+      "role": "V21_ROOT_PRIVATE_ASSERTION_COMPLETION_AND_REPLAY_IMPLEMENTATION",
+      "sha256": "44ced27c7c12da8af1af17cbf38467d1a58f721fa1c174952125c709741a60c8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-upload-postcondition.ts",
+      "role": "V21_FIXED_TRUSTED_STRUCTURAL_ASSEMBLER_AND_EXPIRY_REVALIDATION",
+      "sha256": "503a649998095b5d66e251201896c0c168a82b8b7674cda752a2a0a858f73210"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/s2s-live-github.test.ts",
+      "role": "EFFECT_CLOCK_DOWNLOAD_RECEIPT_REGRESSION",
+      "sha256": "2f3e4b01f72c290110479ade3248fc1d34c31d0cb5265fe6600cae252a323eaa"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/s2s-stage-upload-assertion.test.ts",
+      "role": "V21_PRIMARY_FULL_SHELL_FALSIFICATION_MATRIX",
+      "sha256": "8ce012f07c3eaf7c9a381bbb78fdc4ba14ee00bde2457f6fab14b3e4992e1444"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/s2s-stage-upload-postcondition.test.ts",
+      "role": "TRUSTED_ASSEMBLER_AND_EXPIRY_BOUNDARY_REGRESSION",
+      "sha256": "c5fb62d3f4119f00e94c7fd42649c9aa8d3eec38f66b0fa26a2b14b578cbf156"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/support/s2s-three-stage-carrier-inputs.ts",
+      "role": "INDEPENDENT_ALL_STAGE_ACTION_COMPATIBLE_CARRIER_FIXTURE",
+      "sha256": "f0cbc2ad1da7fe4e0a26c08704df9df830067467e2f8b6a86d4fe9a14714118c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/support/s2s-action-zip.ts",
+      "role": "INDEPENDENT_PINNED_ACTION_ZIP_DIALECT_FIXTURE",
+      "sha256": "024eca558cc4d42a5c63e46cc467a772185c605c5b9b3331c71c3900f0e11cd6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/index.ts",
+      "role": "PACKAGE_ROOT_PRIVACY_BOUNDARY",
+      "sha256": "0c4b0a51361106b1c38c074b55e496513f8e958c8748dffb489b0f7bcc0da38a"
+    },
+    {
+      "path": "tests/test_hswm_swm0w_s2s_effect_handoff_v20.py",
+      "role": "IMMUTABLE_V20_KG_CONTRACT_TEST",
+      "sha256": "3cd902618476263d985c5eaea435abe5353e734a3b65182b293d638137a4b4b0"
+    },
+    {
+      "path": "tests/test_hswm_swm0w_s2s_effect_handoff_v21.py",
+      "role": "V21_KG_CONTRACT_TEST",
+      "sha256": "55e747cfe2ec6a3068cba3982dc52724dc15e658c339d8fa6516850a4053cc83"
+    },
+    {
+      "path": "ontology/evidence/README.md",
+      "role": "LOCAL_KG_CURRENT_CONTINUATION_INDEX_V21",
+      "sha256": "c405e12630a1511f3a88b79e11361f8637bbcd09f8dc8d326ba665d73a8e19ca"
+    },
+    {
+      "path": "docs/research/HSWM_TYPESCRIPT_EFFECT_RUNTIME_2026-08-21.md",
+      "role": "TYPESCRIPT_EFFECT_RESEARCH_CONTINUATION_INDEX_V21",
+      "sha256": "85d5e5aa93417f6560e9b086d14b9e5fac53a44e08bc953d0da2673febd08f0b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/README.md",
+      "role": "EFFECT_RUNTIME_CURRENT_CONTINUATION_INDEX_V21",
+      "sha256": "a95229d0a73454ce374b30f2dcb77be3cfc44d98c11eb34a7d1cfc453d03cb8d"
+    }
+  ],
+  "verification": {
+    "runtime_implementation_changed": true,
+    "effect_runtime_check": "PASS",
+    "typescript_test_files": 29,
+    "typescript_tests": "364/364 PASS",
+    "assertion_shell_tests": "36/36 PASS",
+    "effect_runtime_build": "PASS",
+    "npm_pack_dry_run": "PASS",
+    "npm_pack_dry_run_files": 223,
+    "npm_pack_dry_run_package_size": "658.8 kB",
+    "repository_pytest": "2057 passed, 3 skipped",
+    "repository_pytest_duration_seconds": 485.41,
+    "three_independent_read_only_audits": "PASS_SOURCE_LIFECYCLE_AND_FALSIFICATION_REVIEW",
+    "json_duplicate_key_check": "PASS",
+    "artifact_binding_check": "PASS",
+    "historical_handoff_chain_tests": "105/105 PASS",
+    "historical_handoff_tests_collected": 105,
+    "typescript_shell_tests_executed": true,
+    "test_only_full_semantics_executed": true,
+    "production_assertion_shell_executed": false,
+    "live_github_run_executed": false,
+    "kg_contract_tests_close_runtime_gate": false,
+    "diff_check": "PASS",
+    "protected_unrelated_paths_untouched": "PASS",
+    "claim_boundary": "Pi assertion shell code and test-only falsification gate closed; production occurrence workflow origin durability complete profile and scientific result remain open."
+  },
+  "protected_user_changes": [
+    {
+      "path": "src/hswm/experiments/continual_live.py",
+      "included_in_code_checkpoint": false,
+      "included_in_v21_documentation_checkpoint": false
+    },
+    {
+      "path": "tests/test_hswm_continual_live.py",
+      "included_in_code_checkpoint": false,
+      "included_in_v21_documentation_checkpoint": false
+    }
+  ]
+}

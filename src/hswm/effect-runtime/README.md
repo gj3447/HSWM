@@ -140,9 +140,9 @@ remains `BLOCKED_PRE_PREREG`: the bounded adapters and closed current-run Layer
 graph are present, but no issued current-run/dispatch authority, workflow,
 complete replay-closed durable evidence deployment, or external event-10
 finalizer exists. Resume from the repository
-[`current assertion-shell architecture-audit handoff`](../../../docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_ARCHITECTURE_AUDIT_NEXT_SESSION_2026-08-23.md)
+[`current assertion-shell implementation handoff`](../../../docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and its
-[`v20 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v20.json).
+[`v21 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v21.json).
 
 One deeply frozen, root-private `S2S_STAGE_ARTIFACT_SPECS` value now owns the
 fixed REGISTER, CONFIRM, and ADJUDICATE artifact mappings used by live
@@ -196,18 +196,29 @@ and the
 and
 [`v12 KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v12.json).
 
-The immediate next gate is the root-private production Effect assertion shell
-and replay snapshot. There is still no live production assertion, genuine
-issued production bearer, filled upload-postcondition profile occurrence,
-complete-stage durable commit/recovery, reviewed workflow
+At code checkpoint `0fe7791`, the root-private selector-free Effect assertion
+service and replay snapshot are implemented. One scoped Layer claim owns one
+exact `Effect.acquireUseRelease` lease; the shell derives the 1/2/3-attempt
+selectors internally, revalidates raw GitHub-shaped observations and strict
+stored ZIP/member bytes, builds the structural postcondition, and issues only
+module-authenticated opaque completion/replay values. The remaining
+archive-receipt `Date.now()` path now uses the Effect Clock. All 364 package
+tests pass, including the inherited hostile matrix under the disjoint
+`TEST_ONLY_NON_AUTHORIZING` Layer.
+
+The production root remains deliberately fail-closed and has not executed.
+There is still no genuine issued production bearer, filled
+upload-postcondition profile occurrence, complete-stage durable
+commit/recovery, reviewed workflow
 authority, GitHub-origin evidence, external shared durability,
 independent-process recovery, preregistration, future randomness, dispatch,
 event 10, or scientific verdict. This checkpoint changes only `Pi`; `H`, `W`,
 `A`, and `F` remain unchanged, and the outcome-bound causal-learning loop did
-not advance. Run the bounded external shared-POSIX feasibility proof before
-broad complete-stage program expansion.
+not advance. First freeze the workflow process-continuity topology; then run
+the bounded external shared-POSIX feasibility proof before one complete-stage
+program and independent recovery.
 
-The v20 read-only architecture audit also freezes a prerequisite for workflow
+The v20 read-only architecture audit freezes a prerequisite for workflow
 wiring: process-local object/`WeakMap` bearers do not cross ordinary GitHub
 Actions step processes. The reviewed workflow must either retain one trusted
 long-lived Effect root or define independently authenticated deterministic
@@ -215,7 +226,17 @@ reacquisition; serialized capabilities and trusted evidence remain data, not
 authority. The production shell owns the real observer internally, uses one
 Effect Clock for sleeps and timeouts, issues completion only after strict
 postcondition revalidation, and remains fail-closed until workflow bytes and
-process continuity are resolved.
+process continuity are resolved. Its immutable contract remains in the
+[`v20 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v20.json)
+and
+[`v20 architecture-audit handoff`](../../../docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_ARCHITECTURE_AUDIT_NEXT_SESSION_2026-08-23.md).
+
+The v21 implementation retains that prerequisite exactly. The production
+preflight checks workflow source and then the separate process-continuity gate
+before config, authority, capability, claim, observer, transport, or I/O.
+Neither gate is bypassed by the test Layer, and serialized values never restore
+authority. Resume from the v21 handoff above; do not wire a workflow until the
+process topology is reviewed and frozen.
 
 The earlier
 [`v11 lookup-trace/shared-Layer handoff`](../../../docs/operations/HSWM_SWM0W_S2S_LOOKUP_TRACE_SHARED_LAYER_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)

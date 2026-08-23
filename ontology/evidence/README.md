@@ -51,14 +51,21 @@ engineering checkpoints:
   validation, and independent candidate reread. Production remains dormant
   while workflow bytes and API path policy are OPEN; its one-use claim is only
   for one trusted process/module identity slot, not durable replay prevention.
-- [`v9 current durable-evidence substrate checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v9.json)
+- [`v9 historical durable-evidence substrate checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v9.json)
   records canonical predecessor-linked stage envelopes, bounded content
   objects, and create-only B/stage claim anchors on one caller-provisioned
   shared POSIX root. It is structural durability only: complete replay
   attachment profiles, closed stage programs, upload postconditions, external
   storage wiring, and the terminal finalizer remain OPEN.
+- [`v10 current replay-prerequisite checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v10.json)
+  records the pinned production protocol asset, selector-free current-run and
+  partial registration replay projections, exact drand-pulse retention, Python
+  peak-RSS telemetry, coherent response/output caps, and the exact top-level
+  healthy-success rosters. Nested replay semantics, complete source/read
+  snapshots, failure/VOID profiles, closed stage programs, upload
+  postconditions, external storage, and the finalizer remain OPEN.
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v9 supersedes v8 only as the
-next-session entrypoint; v1 through v8 remain immutable historical
+runtime graphs, or remote Neo4j publications. v10 supersedes v9 only as the
+next-session entrypoint; v1 through v9 remain immutable historical
 projections.

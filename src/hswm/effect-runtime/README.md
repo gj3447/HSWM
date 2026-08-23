@@ -112,13 +112,15 @@ remains `BLOCKED_PRE_PREREG`: the bounded adapters and closed current-run Layer
 graph are present, but no issued current-run/dispatch authority, workflow,
 complete replay-closed durable evidence deployment, or external event-10
 finalizer exists. Resume from the repository
-[`current next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_DURABLE_EVIDENCE_SUBSTRATE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+[`current next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_REPLAY_PREREQUISITES_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 before composing stage programs, workflow, or a future round. The canonical
 predecessor-linked envelope and create-only shared-POSIX B/stage claim substrate
-are implemented, but the complete replay attachment profiles, closed stage
-programs, mandatory-upload postconditions, external storage wiring, and
-terminal finalizer remain OPEN. Production remains dormant while workflow
-bytes and one literal API path selection are OPEN.
+are implemented. The replay prerequisites and top-level healthy-success
+attachment rosters are also fixed, but complete artifact lookup traces, the
+full registration source snapshot, nested replay semantics, failure/VOID
+profiles, closed stage programs, mandatory-upload postconditions, external
+storage wiring, and the terminal finalizer remain OPEN. Production remains
+dormant while workflow bytes and one literal API path selection are OPEN.
 
 The in-memory Layer's static capability-ID allowlist is configuration for tests
 and local scaffolding, not identity authentication. This slice is not evidence

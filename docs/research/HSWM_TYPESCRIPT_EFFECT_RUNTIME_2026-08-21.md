@@ -279,3 +279,17 @@ caller-provisioned shared POSIX root. This advances only `Π`. It does not yet
 fix the complete replay attachment profiles, close stage programs or upload
 postconditions, deploy external storage, establish GitHub origin, or create a
 scientific result.
+
+The replay-prerequisite slice is implemented at code checkpoint `443f17f` and
+recorded in the
+[`replay-prerequisite handoff`](../operations/HSWM_SWM0W_S2S_REPLAY_PREREQUISITES_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and
+[`v10 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v10.json).
+It pins the packaged protocol configuration, retains current-run,
+preregistration, raw drand-pulse, and Python RSS replay inputs, unifies the
+GitHub/adjudication byte caps, and fixes the top-level healthy-success
+attachment rosters. This advances only `Π`. The rosters are not complete replay
+evidence until artifact lookup traces, the full registration source snapshot,
+nested schemas and cross-bindings, failure/VOID profiles, closed stage
+programs, mandatory upload postconditions, external storage, and the terminal
+finalizer are implemented.

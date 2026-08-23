@@ -41,16 +41,46 @@ def _load_handoff() -> dict[str, object]:
     return _load_json(HANDOFF_PATH)
 
 
-def _successors(payload: dict[str, object]) -> list[dict[str, object]]:
-    return [
-        candidate
+def _successor_chain(payload: dict[str, object]) -> list[dict[str, object]]:
+    candidates = [
+        _load_json(path)
         for path in sorted(HANDOFF_PATH.parent.glob(HANDOFF_GLOB))
         if path != HANDOFF_PATH
-        if (candidate := _load_json(path)).get(
-            "supersedes_bundle_uid_for_continuation"
-        )
-        == payload["bundle_uid"]
     ]
+    by_predecessor: dict[object, list[dict[str, object]]] = {}
+    for candidate in candidates:
+        predecessor = candidate.get("supersedes_bundle_uid_for_continuation")
+        if predecessor is not None:
+            by_predecessor.setdefault(predecessor, []).append(candidate)
+
+    chain: list[dict[str, object]] = []
+    current_uid = payload["bundle_uid"]
+    seen = {current_uid}
+    while current_uid in by_predecessor:
+        successors = by_predecessor[current_uid]
+        assert len(successors) == 1
+        successor = successors[0]
+        successor_uid = successor["bundle_uid"]
+        assert successor_uid not in seen
+        chain.append(successor)
+        seen.add(successor_uid)
+        current_uid = successor_uid
+    return chain
+
+
+def _latest_binding_hashes(payload: dict[str, object]) -> dict[str, str]:
+    bindings: dict[str, str] = {}
+    for checkpoint in [payload, *_successor_chain(payload)]:
+        entries = checkpoint.get("artifact_bindings", [])
+        assert type(entries) is list
+        for entry in entries:
+            assert type(entry) is dict
+            path = entry["path"]
+            digest = entry["sha256"]
+            assert type(path) is str
+            assert type(digest) is str
+            bindings[path] = digest
+    return bindings
 
 
 def test_v9_is_a_pi_structural_checkpoint_not_a_scientific_verdict() -> None:
@@ -375,6 +405,7 @@ def test_v9_gate_transition_and_continuation_order_are_exact() -> None:
 
 def test_v9_paths_hashes_verification_indexes_and_nonclaims_are_exact() -> None:
     payload = _load_handoff()
+    latest_bindings = _latest_binding_hashes(payload)
     bindings = payload["artifact_bindings"]
     assert type(bindings) is list
     paths = [binding["path"] for binding in bindings]
@@ -414,7 +445,9 @@ def test_v9_paths_hashes_verification_indexes_and_nonclaims_are_exact() -> None:
         path = ROOT / relative
         assert path.is_file()
         assert not path.is_symlink()
-        assert hashlib.sha256(path.read_bytes()).hexdigest() == expected
+        current_sha256 = hashlib.sha256(path.read_bytes()).hexdigest()
+        if current_sha256 != expected:
+            assert latest_bindings[relative] == current_sha256
 
     verification = payload["verification"]
     assert verification["effect_tests"] == "234/234 PASS"
@@ -439,9 +472,13 @@ def test_v9_paths_hashes_verification_indexes_and_nonclaims_are_exact() -> None:
         ROOT / "src/hswm/effect-runtime/README.md",
     ):
         index_text = index_path.read_text(encoding="utf-8")
-        assert (
-            "HSWM_SWM0W_S2S_EFFECT_HANDOFF.v9.json" in index_text
-            or "HSWM_SWM0W_S2S_DURABLE_EVIDENCE_SUBSTRATE_IMPLEMENTED" in index_text
+        assert any(
+            (
+                f"HSWM_SWM0W_S2S_EFFECT_HANDOFF.v{checkpoint['schema_version'].removeprefix('hswm-engineering-handoff-kg/v')}.json"
+                in index_text
+            )
+            or Path(checkpoint["handoff_path"]).name in index_text
+            for checkpoint in [payload, *_successor_chain(payload)]
         )
 
     assert payload["protected_unrelated_paths"] == [
@@ -489,4 +526,22 @@ def test_v9_predecessor_is_immutable_and_successor_chain_is_unique() -> None:
     assert [candidate["bundle_uid"] for candidate in v8_successors] == [
         payload["bundle_uid"]
     ]
-    assert _successors(payload) == []
+    current_path = HANDOFF_PATH
+    for successor in _successor_chain(payload):
+        successor_bindings = successor["artifact_bindings"]
+        assert type(successor_bindings) is list
+        binding = next(
+            entry
+            for entry in successor_bindings
+            if entry["path"] == current_path.relative_to(ROOT).as_posix()
+        )
+        assert binding["sha256"] == hashlib.sha256(
+            current_path.read_bytes()
+        ).hexdigest()
+        version = successor["schema_version"].removeprefix(
+            "hswm-engineering-handoff-kg/v"
+        )
+        assert version.isdigit()
+        current_path = HANDOFF_PATH.parent / (
+            f"HSWM_SWM0W_S2S_EFFECT_HANDOFF.v{version}.json"
+        )

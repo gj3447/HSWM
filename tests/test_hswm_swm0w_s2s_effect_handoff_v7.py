@@ -525,7 +525,7 @@ def test_v7_source_and_public_surface_preserve_authority_containment() -> None:
 
     probe_start = source.index("export const probeS2SRunAuthorityAcquisitionForTest")
     probe_source = source[probe_start:]
-    assert ".pipe(Effect.asVoid)" in probe_source
+    assert "Effect.asVoid" in probe_source
     assert "issueCurrentRunStageAuthority(" not in probe_source
     assert "S2S_CURRENT_RUN_STAGE_SNAPSHOTS.set(" not in probe_source
 

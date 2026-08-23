@@ -72,7 +72,7 @@ engineering checkpoints:
   durable stage-read replay is still OPEN: its 16 MiB profile and 64 MiB
   envelope cap cannot contain the 75 MiB worst-case candidate read before
   framing.
-- [`v12 current stage-read replay-core checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v12.json)
+- [`v12 historical stage-read replay-core checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v12.json)
   records the frozen two-member stored-ZIP representation, exact
   12,583,176-byte profile cap, strict unknown-input reconstruction, source-chain
   and permit cross-bindings, and candidate FIRST/REREAD current-receipt plus
@@ -80,8 +80,18 @@ engineering checkpoints:
   getters/readers, the full hostile and every-phase matrix, production stage
   emission, external durability, and GitHub origin remain OPEN. Continue from
   [`HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
+- [`v13 current durable replay-profile integration checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v13.json)
+  records process-local file-store recovery provenance, one-read predecessor
+  byte snapshots, and the root-private lazy Effect bridge that prevalidates the
+  fixed `CONFIRM`/`ADJUDICATE` replay slots before one local create-only commit
+  and exact recovery comparison. Its non-authorizing fixture covers one
+  `REGISTER -> CONFIRM -> ADJUDICATE` chain and Layer restart. Other nested
+  attachments, stage programs, external durability, GitHub origin, source
+  freeze, future seed, dispatch, and scientific judgment remain OPEN. Continue
+  from
+  [`HSWM_SWM0W_S2S_DURABLE_REPLAY_PROFILE_INTEGRATED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_DURABLE_REPLAY_PROFILE_INTEGRATED_NEXT_SESSION_2026-08-23.md).
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v12 supersedes v11 only as the
-next-session entrypoint; v1 through v11 remain immutable historical
+runtime graphs, or remote Neo4j publications. v13 supersedes v12 only as the
+next-session entrypoint; v1 through v12 remain immutable historical
 projections.

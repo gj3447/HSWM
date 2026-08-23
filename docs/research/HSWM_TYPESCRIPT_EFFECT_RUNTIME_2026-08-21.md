@@ -323,3 +323,20 @@ only `Π`. Recovered getters and attachment readers remain an unbranded callable
 boundary; the aggregate hostile/every-phase matrix, production stage emission,
 external durable root, GitHub origin, genuine capabilities, and all scientific
 claims remain OPEN.
+
+The reserved-slot durable replay-profile vertical slice is implemented at code
+checkpoint `8d9f254` and recorded in the
+[`durable replay-profile integration handoff`](../operations/HSWM_SWM0W_S2S_DURABLE_REPLAY_PROFILE_INTEGRATED_NEXT_SESSION_2026-08-23.md)
+and
+[`v13 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v13.json).
+File-store recoveries now carry process-local issuance provenance, selected
+predecessor bytes are snapshotted once, and one root-private lazy Effect bridge
+prevalidates the fixed `CONFIRM`/`ADJUDICATE` replay slots before one create-only
+local commit and exact recovered-byte comparison. One test-only three-stage
+chain survives Layer restart and rejects wrong predecessor and swapped replay
+operations. This remains a `Π` engineering slice: the other profile attachments,
+closed stage programs, mandatory upload postconditions, external durable-root
+wiring, GitHub origin, source freeze, future seed, dispatch, and scientific
+verdict remain OPEN. The next claim-critical step is a thin non-authorizing
+golden/public-seed oracle-to-upload/readback dry run, not an unbounded hardening
+program.

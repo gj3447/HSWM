@@ -86,9 +86,20 @@ pre-dispatch engineering:
   wrappers use `Effect.suspend`. Source envelopes, claims, archive bytes,
   observation receipts, permits, and candidate FIRST/REREAD ledger continuity
   are independently revalidated. Builders accept only module-issued validated
-  reads. This is not yet production attachment emission or durable integration:
-  recovered getters/readers and the full hostile/every-phase matrix remain
-  OPEN.
+  reads. File-store recoveries are now process-locally branded, and the selected
+  predecessor attachment is copied and read exactly once before producer
+  self-validation reuses that inert snapshot.
+- `s2s-stage-read-replay-durable-profile.ts` is the root-private local
+  create-only bridge for the four reserved success-profile replay slots. It
+  exact-binds current-run and predecessor evidence, fully validates every
+  carrier and the candidate FIRST/REREAD pair before one non-retried commit,
+  then checks the recovered predecessor prefix, latest manifest and claim, and
+  replay bytes against the prevalidated snapshots. A non-authorizing fixture
+  now exercises one local `REGISTER -> CONFIRM -> ADJUDICATE` chain, byte-equal
+  duplicate recovery, fresh-Layer recovery, wrong-predecessor and
+  swapped-operation rejection, and lazy hostile-root rejection. This does not
+  validate the other profile attachments, implement a closed stage program,
+  establish external durability or GitHub origin, or emit production evidence.
 - `s2s-preregistration.ts` keeps the validated preregistration and direct-child
   registration-commit lineage runtime-authentic. Commit-B validation now
   returns a module-issued, WeakMap-backed capability with self-hashed immutable
@@ -129,24 +140,33 @@ remains `BLOCKED_PRE_PREREG`: the bounded adapters and closed current-run Layer
 graph are present, but no issued current-run/dispatch authority, workflow,
 complete replay-closed durable evidence deployment, or external event-10
 finalizer exists. Resume from the repository
-[`current stage-read replay-core handoff`](../../../docs/operations/HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+[`current durable replay-profile integration handoff`](../../../docs/operations/HSWM_SWM0W_S2S_DURABLE_REPLAY_PROFILE_INTEGRATED_NEXT_SESSION_2026-08-23.md)
 and its
-[`v12 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v12.json)
-before composing stage programs, workflow, or a future round. The preceding
-[`v11 lookup-trace/shared-Layer handoff`](../../../docs/operations/HSWM_SWM0W_S2S_LOOKUP_TRACE_SHARED_LAYER_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+[`v13 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v13.json).
+The preceding
+[`v12 stage-read replay-core handoff`](../../../docs/operations/HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and
-[`v11 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v11.json)
+[`v12 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v12.json)
 remain immutable historical checkpoints. The canonical
 predecessor-linked envelope and create-only shared-POSIX B/stage claim substrate
 are implemented. The replay prerequisites and top-level healthy-success
 attachment rosters are also fixed. Successful artifact lookup traces are now
 complete in memory, and the bounded stage-read representation, structural
-validator/builder, and profile caps are implemented. Durable stage integration,
-the complete hostile/phase matrix, full registration source snapshot, nested
-replay semantics, failure/VOID profiles, closed stage programs,
+validator/builder, profile caps, and reserved-slot local durable integration are
+implemented. The remaining nested attachment semantics, full registration
+source snapshot, failure/VOID profiles, closed stage programs,
 mandatory-upload postconditions, external storage wiring, and the terminal
 finalizer remain OPEN. Production remains dormant while workflow bytes and one
-literal API path selection are OPEN.
+literal API path selection are OPEN. The next claim-critical step is one thin
+non-authorizing golden/public-seed dry run that composes the existing numeric
+oracle with mandatory upload/readback evidence; a generalized hostile matrix is
+deferred unless that vertical slice exposes a concrete failure.
+
+The earlier
+[`v11 lookup-trace/shared-Layer handoff`](../../../docs/operations/HSWM_SWM0W_S2S_LOOKUP_TRACE_SHARED_LAYER_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and
+[`v11 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v11.json)
+also remain immutable historical checkpoints.
 
 The in-memory Layer's static capability-ID allowlist is configuration for tests
 and local scaffolding, not identity authentication. This slice is not evidence

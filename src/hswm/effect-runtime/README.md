@@ -140,10 +140,29 @@ remains `BLOCKED_PRE_PREREG`: the bounded adapters and closed current-run Layer
 graph are present, but no issued current-run/dispatch authority, workflow,
 complete replay-closed durable evidence deployment, or external event-10
 finalizer exists. Resume from the repository
-[`current durable replay-profile integration handoff`](../../../docs/operations/HSWM_SWM0W_S2S_DURABLE_REPLAY_PROFILE_INTEGRATED_NEXT_SESSION_2026-08-23.md)
+[`current golden vertical-composition design handoff`](../../../docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md)
 and its
-[`v13 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v13.json).
-The preceding
+[`v14 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v14.json).
+That documentation-only checkpoint audits the existing public-golden-seed
+numeric path and freezes a root-private `S2SPythonNumericExecutor` composition
+with a distinctly typed test-only golden artifact/readback service. It records
+that local receipts cannot honestly satisfy the production confirmatory-event
+and `S2SArtifactEvidence` inputs of the job-sequence carriers, so the harness
+must not call the production job sequence, success profiles, or durable evidence
+store. It exact-binds golden-verifier and numeric-executor runtime identities and
+terminates immediately on `VOID`. Fresh-Layer recovery uses create-only files
+under the same explicit caller-owned temporary root; an in-memory-only Layer is
+not recovery. The shallow production profile validator is not claimed to reject
+malicious relabeling, so the root-private harness provides no production
+projection adapter or call site. Only 20 of the 48 healthy-success slot
+occurrences currently have
+construct-and-recover validation; the next local slice therefore cannot claim a
+complete profile. The Effect runtime owns orchestration, authority, resources,
+typed failure, and evidence, while the pinned Python/NumPy process remains the
+bounded deterministic numeric function cell. The preceding
+[`v13 durable replay-profile integration handoff`](../../../docs/operations/HSWM_SWM0W_S2S_DURABLE_REPLAY_PROFILE_INTEGRATED_NEXT_SESSION_2026-08-23.md)
+and
+[`v13 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v13.json), plus the
 [`v12 stage-read replay-core handoff`](../../../docs/operations/HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and
 [`v12 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v12.json)
@@ -159,8 +178,13 @@ mandatory-upload postconditions, external storage wiring, and the terminal
 finalizer remain OPEN. Production remains dormant while workflow bytes and one
 literal API path selection are OPEN. The next claim-critical step is one thin
 non-authorizing golden/public-seed dry run that composes the existing numeric
-oracle with mandatory upload/readback evidence; a generalized hostile matrix is
-deferred unless that vertical slice exposes a concrete failure.
+oracle with a distinct test-only golden upload/readback postcondition. Implement
+the non-interoperable artifact/postcondition codec first, then runtime identity
+binding, the fixed-role test Layer, and the lazy composition. Design the
+genuine-authority production carrier connector separately. Run the real
+approximately 60-cell workload only as an opt-in Proxmox scratch job. A
+generalized hostile matrix is deferred unless that vertical slice exposes a
+concrete failure.
 
 The earlier
 [`v11 lookup-trace/shared-Layer handoff`](../../../docs/operations/HSWM_SWM0W_S2S_LOOKUP_TRACE_SHARED_LAYER_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)

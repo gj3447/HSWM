@@ -80,7 +80,7 @@ engineering checkpoints:
   getters/readers, the full hostile and every-phase matrix, production stage
   emission, external durability, and GitHub origin remain OPEN. Continue from
   [`HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
-- [`v13 current durable replay-profile integration checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v13.json)
+- [`v13 historical durable replay-profile integration checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v13.json)
   records process-local file-store recovery provenance, one-read predecessor
   byte snapshots, and the root-private lazy Effect bridge that prevalidates the
   fixed `CONFIRM`/`ADJUDICATE` replay slots before one local create-only commit
@@ -90,8 +90,21 @@ engineering checkpoints:
   freeze, future seed, dispatch, and scientific judgment remain OPEN. Continue
   from
   [`HSWM_SWM0W_S2S_DURABLE_REPLAY_PROFILE_INTEGRATED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_DURABLE_REPLAY_PROFILE_INTEGRATED_NEXT_SESSION_2026-08-23.md).
+- [`v14 current golden vertical-composition design checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v14.json)
+  records the audited strict TypeScript/Effect-to-Python numeric function-cell
+  path, classifies all 48 healthy-success attachment occurrences as 20 with
+  construct-and-recover validation, 19 with a semantic core but no attachment
+  codec, and 9 without a carrier or source. It also records that local test
+  receipts cannot honestly inhabit production confirmatory events or artifact
+  evidence, separates a distinctly typed golden upload/readback harness from
+  production stage upload and the terminal finalizer, and requires exact verifier/executor
+  runtime binding plus immediate `VOID` termination. It freezes that corrected
+  root-private slice but adds no runtime code or numeric result. Continue from
+  [`HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md).
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v13 supersedes v12 only as the
-next-session entrypoint; v1 through v12 remain immutable historical
-projections.
+runtime graphs, or remote Neo4j publications. v14 supersedes v13 only as the
+next-session entrypoint; v1 through v13 remain immutable historical
+projections. The TypeScript/Effect runtime owns control and evidence while the
+pinned Python/NumPy oracle remains a bounded deterministic numeric function
+cell. This documentation-only checkpoint changes no `H/W/A/F/Π` result.

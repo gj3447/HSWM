@@ -340,3 +340,29 @@ wiring, GitHub origin, source freeze, future seed, dispatch, and scientific
 verdict remain OPEN. The next claim-critical step is a thin non-authorizing
 golden/public-seed oracle-to-upload/readback dry run, not an unbounded hardening
 program.
+
+That next slice is now audited and frozen, without runtime implementation, in
+the
+[`golden vertical-composition design handoff`](../operations/HSWM_SWM0W_S2S_GOLDEN_VERTICAL_COMPOSITION_DESIGN_NEXT_SESSION_2026-08-23.md)
+and
+[`v14 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v14.json).
+The strict TypeScript/Effect v3 shell will directly own the existing pinned
+Python/NumPy numeric function cell through `S2SPythonGoldenVerifier` and
+`S2SPythonNumericExecutor`; the unused generic numeric-oracle port will not
+become a second orchestration model. The audit found 48 healthy-success slot
+occurrences: 20 already have construct-and-recover validation, 19 have semantic
+machinery but no attachment codec, and 9 lack the carrier or source. The next
+claim therefore remains a narrow `TEST_ONLY_NON_AUTHORIZING` golden numeric
+upload/readback harness, not a complete profile. The audit also found a semantic
+type boundary: a local receipt cannot honestly inhabit the production
+confirmatory-event or `S2SArtifactEvidence` inputs required by the existing job
+sequence. The first harness must use a distinctly versioned test-only artifact,
+must not call the production job sequence or durable profile store, must
+exact-bind golden-verifier and numeric-executor runtime identities, and must
+terminate immediately on numeric `VOID`. Its fresh Layer must reopen the same
+explicit caller-owned temporary file root; no in-memory recovery is claimed.
+Because the shallow success-profile validator does not inspect nested bytes, the
+harness provides no adapter or call site that relabels its test ZIP as production
+evidence. A genuine-authority production
+connector, the terminal finalizer, external durability, GitHub origin, source
+freeze, future seed, dispatch, event 10, and scientific judgment remain OPEN.

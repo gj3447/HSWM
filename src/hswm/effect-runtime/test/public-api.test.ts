@@ -63,7 +63,16 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect("appendS2SStageArtifactLedgerEntry" in PublicApi).toBe(false)
   expect("useS2SStageArtifactPermit" in PublicApi).toBe(false)
   expect("snapshotS2SStageArtifactPermitEvidence" in PublicApi).toBe(false)
+  expect("validateS2SStageArtifactPermitEvidence" in PublicApi).toBe(false)
   expect("closeS2SStageArtifactPermitScope" in PublicApi).toBe(false)
+  expect("isAuthenticS2SValidatedStageArtifactRead" in PublicApi).toBe(false)
+  expect("buildS2SStageArtifactReadReplay" in PublicApi).toBe(false)
+  expect("buildS2SStageArtifactReadReplayEffect" in PublicApi).toBe(false)
+  expect("validateS2SStageArtifactReadReplay" in PublicApi).toBe(false)
+  expect("validateS2SStageArtifactReadReplayEffect" in PublicApi).toBe(false)
+  expect("validateS2SCandidateReadReplayPair" in PublicApi).toBe(false)
+  expect("validateS2SCandidateReadReplayPairEffect" in PublicApi).toBe(false)
+  expect("S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES" in PublicApi).toBe(false)
   expect("validateS2SRegistrationCommitB" in PublicApi).toBe(false)
   expect("inspectS2SRegistrationCommitAuthority" in PublicApi).toBe(false)
   expect("inspectS2SRegistrationReplaySnapshot" in PublicApi).toBe(false)
@@ -92,11 +101,14 @@ it("keeps stage artifact capability and permit types root-private", () => {
   type ForbiddenValidatedRead = import("../src/index.js").S2SValidatedStageArtifactRead
   // @ts-expect-error raw lookup trace types are deliberately root-private
   type ForbiddenLookupTrace = import("../src/index.js").S2SArtifactSuccessfulLookupTrace
+  // @ts-expect-error replay snapshot types are deliberately root-private
+  type ForbiddenReplay = import("../src/index.js").S2SStageArtifactReadReplaySnapshot
   const absent: readonly [
     ForbiddenReads | undefined,
     ForbiddenPermit | undefined,
     ForbiddenValidatedRead | undefined,
-    ForbiddenLookupTrace | undefined
-  ] = [undefined, undefined, undefined, undefined]
-  expect(absent).toEqual([undefined, undefined, undefined, undefined])
+    ForbiddenLookupTrace | undefined,
+    ForbiddenReplay | undefined
+  ] = [undefined, undefined, undefined, undefined, undefined]
+  expect(absent).toEqual([undefined, undefined, undefined, undefined, undefined])
 })

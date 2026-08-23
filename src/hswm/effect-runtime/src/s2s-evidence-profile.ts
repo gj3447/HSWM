@@ -10,6 +10,7 @@ import {
   type S2SEvidenceEnvelopeSnapshot,
   type S2SEvidenceStage
 } from "./s2s-evidence-envelope.js"
+import { S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES } from "./s2s-stage-artifact-read-replay-contract.js"
 
 export const S2S_SUCCESS_STAGE_ATTACHMENT_PROFILE_SCHEMA_VERSION =
   "hswm-swm0w-s2s-success-stage-attachment-profile/v1" as const
@@ -243,7 +244,7 @@ const CONFIRM = sortedProfile([
     "CONFIRM_REGISTRATION_READ_REPLAY",
     "hswm-swm0w-s2s-stage-artifact-read-replay/v1",
     "application/zip",
-    16 * MEBIBYTE
+    S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES
   ),
   entry(
     "numeric/confirm_request.json",
@@ -277,21 +278,21 @@ const ADJUDICATE = sortedProfile([
     "ADJUDICATE_CANDIDATE_FIRST_READ_REPLAY",
     "hswm-swm0w-s2s-stage-artifact-read-replay/v1",
     "application/zip",
-    16 * MEBIBYTE
+    S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES
   ),
   entry(
     "input/candidate_reread.zip",
     "ADJUDICATE_CANDIDATE_REREAD_REPLAY",
     "hswm-swm0w-s2s-stage-artifact-read-replay/v1",
     "application/zip",
-    16 * MEBIBYTE
+    S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES
   ),
   entry(
     "input/registration_read.zip",
     "ADJUDICATE_REGISTRATION_READ_REPLAY",
     "hswm-swm0w-s2s-stage-artifact-read-replay/v1",
     "application/zip",
-    16 * MEBIBYTE
+    S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES
   ),
   ...pythonAttachments("adjudicate"),
   ...drandAttachments("adjudicate"),

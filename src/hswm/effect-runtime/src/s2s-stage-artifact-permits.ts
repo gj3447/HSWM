@@ -1,7 +1,10 @@
+import { types as nodeTypes } from "node:util"
+
 import { Data, Effect, Either, Exit, Ref } from "effect"
 
 import { canonicalS2SControlSha256 } from "./s2s-canonical.js"
 import {
+  S2S_CURRENT_RUN_STAGE_EVIDENCE_SCHEMA_VERSION,
   inspectS2SCurrentRunStageAuthority,
   type S2SCurrentRunInputError,
   type S2SCurrentRunStageAuthority,
@@ -23,6 +26,70 @@ const GIT_SHA_PATTERN = /^[0-9a-f]{40}$/
 const REQUEST_ID_PATTERN = /^[\u0021-\u007e]{1,256}$/
 const RFC3339_UTC_SECONDS_PATTERN =
   /^\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\dZ$/
+
+const PERMIT_EVIDENCE_KEYS = Object.freeze([
+  "authorityScope",
+  "authorizationClaimed",
+  "crossModuleCopyReplayPreventionClaimed",
+  "crossProcessReplayPreventionClaimed",
+  "crossWorkerReplayPreventionClaimed",
+  "durableReplayPreventionClaimed",
+  "identity",
+  "ledgerCapacity",
+  "ledgerEntries",
+  "oneUseClaim",
+  "operation",
+  "receiptSha256",
+  "schemaVersion"
+] as const)
+
+const PERMIT_IDENTITY_KEYS = Object.freeze([
+  "currentJobDatabaseId",
+  "predecessorJobDatabaseIds",
+  "registrationCommitB",
+  "stage",
+  "workflowApiPath",
+  "workflowRunAttempt",
+  "workflowRunCreatedAt",
+  "workflowRunCreatedAtUnixSeconds",
+  "workflowRunId"
+] as const)
+
+const LEDGER_ENTRY_KEYS = Object.freeze([
+  "githubRequestId",
+  "observedAtUnixSeconds",
+  "operation",
+  "phase",
+  "receiptSha256"
+] as const)
+
+const CURRENT_RUN_EVIDENCE_KEYS = Object.freeze([
+  "authorityScope",
+  "crossExecutionReplayPreventionClaimed",
+  "currentInvocationReceiptSha256",
+  "currentJobDatabaseId",
+  "currentJobId",
+  "durableCommitRequiresFreshTerminalObservation",
+  "historicalUniquenessClaimed",
+  "invocationCapturedAtUnixSeconds",
+  "observations",
+  "predecessorJobDatabaseIds",
+  "receiptSha256",
+  "registrationAuthorityReceiptSha256",
+  "registrationCommitB",
+  "schemaVersion",
+  "sourceCommitA",
+  "stage",
+  "trackedBytesManifestSha256",
+  "uniquenessClaim",
+  "workflowApiPath",
+  "workflowContractSha256",
+  "workflowFileSha256",
+  "workflowRunAttempt",
+  "workflowRunCreatedAt",
+  "workflowRunCreatedAtUnixSeconds",
+  "workflowRunId"
+] as const)
 
 export type S2SStageArtifactLedgerPhase =
   | "CURRENT_RUN_RUN_START"
@@ -161,11 +228,17 @@ const exactPlainRecord = (
   expectedKeys: ReadonlyArray<string>
 ): Readonly<Record<string, unknown>> | null => {
   try {
-    if (input === null || typeof input !== "object") return null
+    if (
+      input === null ||
+      typeof input !== "object" ||
+      nodeTypes.isProxy(input)
+    ) {
+      return null
+    }
     const prototype = Object.getPrototypeOf(input)
     if (prototype !== Object.prototype && prototype !== null) return null
     if (Object.getOwnPropertySymbols(input).length !== 0) return null
-    const keys = Object.keys(input).sort()
+    const keys = Object.getOwnPropertyNames(input).sort()
     const expected = [...expectedKeys].sort()
     if (
       keys.length !== expected.length ||
@@ -196,7 +269,11 @@ const snapshotPositiveIntegerArray = (
   input: unknown
 ): ReadonlyArray<number> | null => {
   try {
-    if (!Array.isArray(input) || Object.getPrototypeOf(input) !== Array.prototype) {
+    if (
+      !Array.isArray(input) ||
+      nodeTypes.isProxy(input) ||
+      Object.getPrototypeOf(input) !== Array.prototype
+    ) {
       return null
     }
     if (Object.getOwnPropertySymbols(input).length !== 0) return null
@@ -226,8 +303,14 @@ const snapshotPositiveIntegerArray = (
       }
       values.push(descriptor.value)
     }
+    const expectedNames = [
+      ...values.map((_value, index) => String(index)),
+      "length"
+    ].sort()
+    const names = Object.getOwnPropertyNames(input).sort()
     if (
-      Object.keys(input).length !== values.length ||
+      names.length !== expectedNames.length ||
+      names.some((name, index) => name !== expectedNames[index]) ||
       new Set(values).size !== values.length
     ) {
       return null
@@ -291,6 +374,302 @@ const snapshotObservationSeed = (
   }
   return Object.freeze({ runStart, jobs, runsForHead, runEnd })
 }
+
+const isSafeNonNegativeInteger = (input: unknown): input is number =>
+  typeof input === "number" && Number.isSafeInteger(input) && input >= 0
+
+const isSafePositiveInteger = (input: unknown): input is number =>
+  typeof input === "number" && Number.isSafeInteger(input) && input >= 1
+
+const isArtifactReadOperation = (
+  input: unknown
+): input is S2SConfirmatoryArtifactReadOperation =>
+  input === "CONFIRM_READ_REGISTRATION" ||
+  input === "ADJUDICATE_READ_REGISTRATION" ||
+  input === "ADJUDICATE_READ_CANDIDATE_FIRST" ||
+  input === "ADJUDICATE_REREAD_CANDIDATE"
+
+const isLedgerPhase = (input: unknown): input is S2SStageArtifactLedgerPhase => {
+  switch (input) {
+    case "CURRENT_RUN_RUN_START":
+    case "CURRENT_RUN_JOBS":
+    case "CURRENT_RUN_RUNS_FOR_HEAD":
+    case "CURRENT_RUN_RUN_END":
+    case "LOOKUP_RUN_START":
+    case "LOOKUP_JOBS":
+    case "LOOKUP_ARTIFACTS_1":
+    case "LOOKUP_RUN_END_1":
+    case "LOOKUP_ARTIFACTS_2":
+    case "LOOKUP_RUN_END_2":
+    case "LOOKUP_ARTIFACTS_3":
+    case "LOOKUP_RUN_END_3":
+    case "READBACK_RUN_START":
+    case "READBACK_ARTIFACT":
+    case "READBACK_DOWNLOAD_REDIRECT":
+    case "READBACK_RUN_END":
+      return true
+    default:
+      return false
+  }
+}
+
+const snapshotPermitIdentity = (
+  input: unknown
+): S2SStageArtifactPermitIdentity | null => {
+  const record = exactPlainRecord(input, PERMIT_IDENTITY_KEYS)
+  if (record === null) return null
+  const workflowRunId = record["workflowRunId"]
+  const workflowRunAttempt = record["workflowRunAttempt"]
+  const registrationCommitB = record["registrationCommitB"]
+  const workflowApiPath = record["workflowApiPath"]
+  const workflowRunCreatedAt = record["workflowRunCreatedAt"]
+  const workflowRunCreatedAtUnixSeconds =
+    record["workflowRunCreatedAtUnixSeconds"]
+  const stage = record["stage"]
+  const currentJobDatabaseId = record["currentJobDatabaseId"]
+  const predecessorJobDatabaseIds = snapshotPositiveIntegerArray(
+    record["predecessorJobDatabaseIds"]
+  )
+  if (
+    !isSafePositiveInteger(workflowRunId) ||
+    workflowRunAttempt !== 1 ||
+    typeof registrationCommitB !== "string" ||
+    !GIT_SHA_PATTERN.test(registrationCommitB) ||
+    (workflowApiPath !== S2S_CONFIRMATORY_WORKFLOW_PATH &&
+      workflowApiPath !==
+        `${S2S_CONFIRMATORY_WORKFLOW_PATH}@${S2S_CONFIRMATORY_BRANCH}`) ||
+    typeof workflowRunCreatedAt !== "string" ||
+    !RFC3339_UTC_SECONDS_PATTERN.test(workflowRunCreatedAt) ||
+    !isSafeNonNegativeInteger(workflowRunCreatedAtUnixSeconds) ||
+    Date.parse(workflowRunCreatedAt) / 1_000 !==
+      workflowRunCreatedAtUnixSeconds ||
+    (stage !== "REGISTER" && stage !== "CONFIRM" && stage !== "ADJUDICATE") ||
+    !isSafePositiveInteger(currentJobDatabaseId) ||
+    predecessorJobDatabaseIds === null ||
+    predecessorJobDatabaseIds.length !==
+      (stage === "REGISTER" ? 0 : stage === "CONFIRM" ? 1 : 2) ||
+    predecessorJobDatabaseIds.includes(currentJobDatabaseId)
+  ) {
+    return null
+  }
+  return Object.freeze({
+    workflowRunId,
+    workflowRunAttempt: 1 as const,
+    registrationCommitB,
+    workflowApiPath,
+    workflowRunCreatedAt,
+    workflowRunCreatedAtUnixSeconds,
+    stage,
+    currentJobDatabaseId,
+    predecessorJobDatabaseIds: Object.freeze([...predecessorJobDatabaseIds])
+  })
+}
+
+const snapshotLedgerEntries = (
+  input: unknown
+): ReadonlyArray<S2SStageArtifactLedgerEntry> | null => {
+  try {
+    if (
+      !Array.isArray(input) ||
+      nodeTypes.isProxy(input) ||
+      Object.getPrototypeOf(input) !== Array.prototype ||
+      Object.getOwnPropertySymbols(input).length !== 0
+    ) {
+      return null
+    }
+    const lengthDescriptor = Object.getOwnPropertyDescriptor(input, "length")
+    if (
+      lengthDescriptor === undefined ||
+      !("value" in lengthDescriptor) ||
+      !Number.isSafeInteger(lengthDescriptor.value) ||
+      lengthDescriptor.value < 1 ||
+      lengthDescriptor.value > 40
+    ) {
+      return null
+    }
+    const expectedNames = [
+      ...Array.from({ length: lengthDescriptor.value }, (_value, index) =>
+        String(index)
+      ),
+      "length"
+    ].sort()
+    const names = Object.getOwnPropertyNames(input).sort()
+    if (
+      names.length !== expectedNames.length ||
+      names.some((name, index) => name !== expectedNames[index])
+    ) {
+      return null
+    }
+    const entries: Array<S2SStageArtifactLedgerEntry> = []
+    for (let index = 0; index < lengthDescriptor.value; index += 1) {
+      const descriptor = Object.getOwnPropertyDescriptor(input, String(index))
+      if (
+        descriptor === undefined ||
+        descriptor.enumerable !== true ||
+        !("value" in descriptor)
+      ) {
+        return null
+      }
+      const record = exactPlainRecord(descriptor.value, LEDGER_ENTRY_KEYS)
+      if (record === null) return null
+      const operation = record["operation"]
+      const phase = record["phase"]
+      const githubRequestId = record["githubRequestId"]
+      const receiptSha256 = record["receiptSha256"]
+      const observedAtUnixSeconds = record["observedAtUnixSeconds"]
+      if (
+        (operation !== "CURRENT_RUN_AUTHORITY" &&
+          !isArtifactReadOperation(operation)) ||
+        !isLedgerPhase(phase) ||
+        typeof githubRequestId !== "string" ||
+        !REQUEST_ID_PATTERN.test(githubRequestId) ||
+        typeof receiptSha256 !== "string" ||
+        !SHA256_PATTERN.test(receiptSha256) ||
+        !isSafeNonNegativeInteger(observedAtUnixSeconds)
+      ) {
+        return null
+      }
+      entries.push(
+        Object.freeze({
+          operation,
+          phase,
+          githubRequestId,
+          receiptSha256,
+          observedAtUnixSeconds
+        })
+      )
+    }
+    return Object.freeze(entries)
+  } catch {
+    return null
+  }
+}
+
+interface ExpectedCurrentRunBinding {
+  readonly identity: S2SStageArtifactPermitIdentity
+  readonly observations: S2SCurrentRunStageEvidence["observations"]
+}
+
+const snapshotExpectedCurrentRunBinding = (
+  input: S2SCurrentRunStageEvidence
+): ExpectedCurrentRunBinding | null => {
+  const record = exactPlainRecord(input, CURRENT_RUN_EVIDENCE_KEYS)
+  if (record === null) return null
+  const identity = snapshotPermitIdentity(
+    Object.freeze({
+      workflowRunId: record["workflowRunId"],
+      workflowRunAttempt: record["workflowRunAttempt"],
+      registrationCommitB: record["registrationCommitB"],
+      workflowApiPath: record["workflowApiPath"],
+      workflowRunCreatedAt: record["workflowRunCreatedAt"],
+      workflowRunCreatedAtUnixSeconds:
+        record["workflowRunCreatedAtUnixSeconds"],
+      stage: record["stage"],
+      currentJobDatabaseId: record["currentJobDatabaseId"],
+      predecessorJobDatabaseIds: record["predecessorJobDatabaseIds"]
+    })
+  )
+  const observations = snapshotObservationSeed(record["observations"])
+  const stage = identity?.stage
+  const sourceCommitA = record["sourceCommitA"]
+  const invocationCapturedAtUnixSeconds =
+    record["invocationCapturedAtUnixSeconds"]
+  const currentRunReceiptSha256 = record["receiptSha256"]
+  if (
+    identity === null ||
+    observations === null ||
+    record["schemaVersion"] !==
+      S2S_CURRENT_RUN_STAGE_EVIDENCE_SCHEMA_VERSION ||
+    record["authorityScope"] !== "PROCESS_LOCAL_STAGE_ENTRY" ||
+    record["uniquenessClaim"] !== "ROSTER_OBSERVATION_INSTANT_ONLY" ||
+    record["historicalUniquenessClaimed"] !== false ||
+    record["crossExecutionReplayPreventionClaimed"] !== false ||
+    record["durableCommitRequiresFreshTerminalObservation"] !== true ||
+    typeof sourceCommitA !== "string" ||
+    !GIT_SHA_PATTERN.test(sourceCommitA) ||
+    typeof record["registrationAuthorityReceiptSha256"] !== "string" ||
+    !SHA256_PATTERN.test(record["registrationAuthorityReceiptSha256"]) ||
+    typeof record["currentInvocationReceiptSha256"] !== "string" ||
+    !SHA256_PATTERN.test(record["currentInvocationReceiptSha256"]) ||
+    typeof record["workflowContractSha256"] !== "string" ||
+    !SHA256_PATTERN.test(record["workflowContractSha256"]) ||
+    typeof record["workflowFileSha256"] !== "string" ||
+    !SHA256_PATTERN.test(record["workflowFileSha256"]) ||
+    typeof record["trackedBytesManifestSha256"] !== "string" ||
+    !SHA256_PATTERN.test(record["trackedBytesManifestSha256"]) ||
+    stage === undefined ||
+    record["currentJobId"] !==
+      S2S_CONFIRMATORY_STAGE_CONTRACTS[stage].jobId ||
+    !isSafeNonNegativeInteger(invocationCapturedAtUnixSeconds) ||
+    invocationCapturedAtUnixSeconds >
+      observations.runStart.observedAtUnixSeconds ||
+    typeof currentRunReceiptSha256 !== "string" ||
+    !SHA256_PATTERN.test(currentRunReceiptSha256)
+  ) {
+    return null
+  }
+  const core = Object.freeze({
+    schemaVersion: record["schemaVersion"],
+    authorityScope: record["authorityScope"],
+    uniquenessClaim: record["uniquenessClaim"],
+    historicalUniquenessClaimed: record["historicalUniquenessClaimed"],
+    crossExecutionReplayPreventionClaimed:
+      record["crossExecutionReplayPreventionClaimed"],
+    durableCommitRequiresFreshTerminalObservation:
+      record["durableCommitRequiresFreshTerminalObservation"],
+    sourceCommitA,
+    registrationCommitB: identity.registrationCommitB,
+    registrationAuthorityReceiptSha256:
+      record["registrationAuthorityReceiptSha256"],
+    currentInvocationReceiptSha256: record["currentInvocationReceiptSha256"],
+    workflowContractSha256: record["workflowContractSha256"],
+    workflowFileSha256: record["workflowFileSha256"],
+    trackedBytesManifestSha256: record["trackedBytesManifestSha256"],
+    workflowApiPath: identity.workflowApiPath,
+    workflowRunId: identity.workflowRunId,
+    workflowRunAttempt: identity.workflowRunAttempt,
+    stage: identity.stage,
+    currentJobId: record["currentJobId"],
+    currentJobDatabaseId: identity.currentJobDatabaseId,
+    predecessorJobDatabaseIds: identity.predecessorJobDatabaseIds,
+    workflowRunCreatedAt: identity.workflowRunCreatedAt,
+    workflowRunCreatedAtUnixSeconds:
+      identity.workflowRunCreatedAtUnixSeconds,
+    invocationCapturedAtUnixSeconds,
+    observations
+  })
+  const expectedReceipt = canonicalS2SControlSha256(core)
+  if (
+    Either.isLeft(expectedReceipt) ||
+    expectedReceipt.right !== currentRunReceiptSha256
+  ) {
+    return null
+  }
+  return Object.freeze({ identity, observations })
+}
+
+const sameIdentity = (
+  left: S2SStageArtifactPermitIdentity,
+  right: S2SStageArtifactPermitIdentity
+): boolean => {
+  const leftHash = canonicalS2SControlSha256(left)
+  const rightHash = canonicalS2SControlSha256(right)
+  return (
+    Either.isRight(leftHash) &&
+    Either.isRight(rightHash) &&
+    leftHash.right === rightHash.right
+  )
+}
+
+const sameLedgerEntry = (
+  left: S2SStageArtifactLedgerEntry,
+  right: S2SStageArtifactLedgerEntry
+): boolean =>
+  left.operation === right.operation &&
+  left.phase === right.phase &&
+  left.githubRequestId === right.githubRequestId &&
+  left.receiptSha256 === right.receiptSha256 &&
+  left.observedAtUnixSeconds === right.observedAtUnixSeconds
 
 const identityFromEvidence = (
   evidence: S2SCurrentRunStageEvidence
@@ -687,6 +1066,278 @@ const nextArtifactLedgerPhases = (
     case "CURRENT_RUN_RUNS_FOR_HEAD":
     case "CURRENT_RUN_RUN_END":
       return new Set()
+  }
+}
+
+const isCompleteArtifactLedgerTopology = (
+  phases: ReadonlyArray<S2SStageArtifactLedgerPhase>
+): boolean => {
+  const accepted: Array<S2SStageArtifactLedgerPhase> = []
+  for (const phase of phases) {
+    if (!nextArtifactLedgerPhases(accepted).has(phase)) return false
+    accepted.push(phase)
+  }
+  return accepted.at(-1) === "READBACK_RUN_END"
+}
+
+/**
+ * Pure unknown-input boundary for one sealed artifact-read permit receipt.
+ * The expected current-run evidence is independently self-hashed and supplies
+ * the identity plus exact four-entry seed; serialized evidence never issues or
+ * restores a process-local permit capability.
+ */
+export const validateS2SStageArtifactPermitEvidence = (
+  input: unknown,
+  expectedCurrentRunEvidence: S2SCurrentRunStageEvidence
+): Either.Either<S2SStageArtifactPermitEvidence, S2SStageArtifactPermitError> => {
+  try {
+    const record = exactPlainRecord(input, PERMIT_EVIDENCE_KEYS)
+    const operationInput = record?.["operation"]
+    const operation = isArtifactReadOperation(operationInput)
+      ? operationInput
+      : null
+    if (record === null || operation === null) {
+      return Either.left(
+        permitError(
+          "EVIDENCE_NOT_CANONICAL",
+          operation,
+          "permit evidence must be one exact plain data record"
+        )
+      )
+    }
+    const authorityScope = record["authorityScope"]
+    const authorizationClaimed = record["authorizationClaimed"]
+    const oneUseClaim = record["oneUseClaim"]
+    const ledgerCapacity = record["ledgerCapacity"]
+    const receiptSha256 = record["receiptSha256"]
+    const identity = snapshotPermitIdentity(record["identity"])
+    const ledgerEntries = snapshotLedgerEntries(record["ledgerEntries"])
+    const authorityClaimsAreExact =
+      (authorityScope === "TRUSTED_SINGLE_MODULE_CURRENT_JOB" &&
+        authorizationClaimed === true &&
+        oneUseClaim ===
+          "ONE_USE_PER_GENUINE_AUTHORITY_AND_PROCESS_IDENTITY_SLOT") ||
+      (authorityScope === "TEST_ONLY_NON_AUTHORIZING" &&
+        authorizationClaimed === false &&
+        oneUseClaim === "MECHANICS_ONLY_EPHEMERAL_TEST_SCOPE")
+    if (
+      record["schemaVersion"] !==
+        S2S_STAGE_ARTIFACT_PERMIT_EVIDENCE_SCHEMA_VERSION ||
+      !authorityClaimsAreExact ||
+      record["crossWorkerReplayPreventionClaimed"] !== false ||
+      record["crossModuleCopyReplayPreventionClaimed"] !== false ||
+      record["crossProcessReplayPreventionClaimed"] !== false ||
+      record["durableReplayPreventionClaimed"] !== false ||
+      identity === null ||
+      (ledgerCapacity !== 16 && ledgerCapacity !== 40) ||
+      ledgerEntries === null ||
+      typeof receiptSha256 !== "string" ||
+      !SHA256_PATTERN.test(receiptSha256)
+    ) {
+      return Either.left(
+        permitError(
+          "EVIDENCE_NOT_CANONICAL",
+          operation,
+          "permit evidence contains a noncanonical field or nested value"
+        )
+      )
+    }
+    const core: Omit<S2SStageArtifactPermitEvidence, "receiptSha256"> =
+      Object.freeze({
+        schemaVersion: S2S_STAGE_ARTIFACT_PERMIT_EVIDENCE_SCHEMA_VERSION,
+        authorityScope,
+        authorizationClaimed,
+        oneUseClaim,
+        crossWorkerReplayPreventionClaimed: false,
+        crossModuleCopyReplayPreventionClaimed: false,
+        crossProcessReplayPreventionClaimed: false,
+        durableReplayPreventionClaimed: false,
+        identity,
+        operation,
+        ledgerCapacity,
+        ledgerEntries
+      })
+    const expectedReceipt = canonicalS2SControlSha256(core)
+    if (
+      Either.isLeft(expectedReceipt) ||
+      expectedReceipt.right !== receiptSha256
+    ) {
+      return Either.left(
+        permitError(
+          "EVIDENCE_NOT_CANONICAL",
+          operation,
+          "permit evidence receipt self-hash disagrees with its exact core"
+        )
+      )
+    }
+    const expected = snapshotExpectedCurrentRunBinding(
+      expectedCurrentRunEvidence
+    )
+    if (expected === null) {
+      return Either.left(
+        permitError(
+          "INVALID_AUTHORITY",
+          operation,
+          "expected current-run evidence is not one canonical self-hashed value"
+        )
+      )
+    }
+    if (!sameIdentity(identity, expected.identity)) {
+      return Either.left(
+        permitError(
+          "INVALID_AUTHORITY",
+          operation,
+          "permit identity disagrees with the expected current-run evidence"
+        )
+      )
+    }
+    const stage = identity.stage
+    const stageContracts =
+      S2S_CONFIRMATORY_STAGE_CONTRACTS[stage].artifactReadOperations
+    const activeOperationIndex = stageContracts.findIndex(
+      (contract) => contract.operation === operation
+    )
+    if (stage === "REGISTER" || activeOperationIndex < 0) {
+      return Either.left(
+        permitError(
+          "OPERATION_NOT_PERMITTED",
+          operation,
+          "permit operation is absent from the identity-bound stage contract"
+        )
+      )
+    }
+    if (ledgerCapacity !== ledgerCapacityForStage(stage)) {
+      return Either.left(
+        permitError(
+          "EVIDENCE_NOT_CANONICAL",
+          operation,
+          "permit ledger capacity disagrees with the identity-bound stage"
+        )
+      )
+    }
+    if (ledgerEntries.length > ledgerCapacity) {
+      return Either.left(
+        permitError(
+          "REQUEST_ID_LEDGER_EXHAUSTED",
+          operation,
+          "permit evidence exceeds the exact non-evicting ledger capacity"
+        )
+      )
+    }
+    const expectedSeed = seedLedger(expected.observations)
+    if (
+      ledgerEntries.length < expectedSeed.length ||
+      expectedSeed.some(
+        (entry, index) =>
+          ledgerEntries[index] === undefined ||
+          !sameLedgerEntry(entry, ledgerEntries[index])
+      )
+    ) {
+      return Either.left(
+        permitError(
+          "INVALID_AUTHORITY",
+          operation,
+          "permit ledger does not begin with the exact current-run receipt seed"
+        )
+      )
+    }
+    const requestIds = new Set<string>()
+    const receiptHashes = new Set<string>()
+    for (let index = 0; index < ledgerEntries.length; index += 1) {
+      const entry = ledgerEntries[index]
+      if (entry === undefined) {
+        return Either.left(
+          permitError(
+            "LEDGER_ENTRY_REJECTED",
+            operation,
+            "permit ledger contains a missing entry"
+          )
+        )
+      }
+      if (requestIds.has(entry.githubRequestId)) {
+        return Either.left(
+          permitError(
+            "REQUEST_ID_REUSED",
+            operation,
+            "permit ledger repeats a GitHub request ID"
+          )
+        )
+      }
+      if (receiptHashes.has(entry.receiptSha256)) {
+        return Either.left(
+          permitError(
+            "LEDGER_ENTRY_REJECTED",
+            operation,
+            "permit ledger repeats a receipt hash"
+          )
+        )
+      }
+      const previous = ledgerEntries[index - 1]
+      if (
+        previous !== undefined &&
+        entry.observedAtUnixSeconds < previous.observedAtUnixSeconds
+      ) {
+        return Either.left(
+          permitError(
+            "LEDGER_ENTRY_REJECTED",
+            operation,
+            "permit ledger observation timestamps are not monotonic"
+          )
+        )
+      }
+      requestIds.add(entry.githubRequestId)
+      receiptHashes.add(entry.receiptSha256)
+    }
+    let cursor = expectedSeed.length
+    const expectedOperations = stageContracts.slice(
+      0,
+      activeOperationIndex + 1
+    )
+    for (const contract of expectedOperations) {
+      const phases: Array<S2SStageArtifactLedgerPhase> = []
+      while (ledgerEntries[cursor]?.operation === contract.operation) {
+        const entry = ledgerEntries[cursor]
+        if (entry === undefined) break
+        phases.push(entry.phase)
+        cursor += 1
+      }
+      if (!isCompleteArtifactLedgerTopology(phases)) {
+        return Either.left(
+          permitError(
+            "LEDGER_ENTRY_REJECTED",
+            operation,
+            `operation ${contract.operation} does not have one exact completed phase topology`
+          )
+        )
+      }
+    }
+    if (
+      cursor !== ledgerEntries.length ||
+      ledgerEntries.at(-1)?.operation !== operation ||
+      ledgerEntries.at(-1)?.phase !== "READBACK_RUN_END"
+    ) {
+      return Either.left(
+        permitError(
+          "LEDGER_ENTRY_REJECTED",
+          operation,
+          "permit ledger is not the exact completed operation prefix through its active operation"
+        )
+      )
+    }
+    return Either.right(
+      Object.freeze({
+        ...core,
+        receiptSha256
+      })
+    )
+  } catch {
+    return Either.left(
+      permitError(
+        "EVIDENCE_NOT_CANONICAL",
+        null,
+        "permit evidence validation failed closed"
+      )
+    )
   }
 }
 

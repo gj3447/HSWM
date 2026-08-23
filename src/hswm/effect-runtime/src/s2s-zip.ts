@@ -1,3 +1,5 @@
+import { types as nodeTypes } from "node:util"
+
 import { Data, Either } from "effect"
 
 import { rawS2SFileSha256 } from "./s2s-canonical.js"
@@ -18,6 +20,11 @@ const ZIP64_EXTRA_FIELD = 0x0001
 const AES_EXTRA_FIELD = 0x9901
 const MAX_MEMBER_NAME_BYTES = 512
 const MAX_ARCHIVE_OR_EXPANDED_BYTES = 64 * 1024 * 1024
+const DETERMINISTIC_DOS_TIME = 0
+const DETERMINISTIC_DOS_DATE = 0x0021
+const REGULAR_FILE_EXTERNAL_ATTRIBUTES =
+  ((0o100644 << 16) | DOS_ARCHIVE_ATTRIBUTE) >>> 0
+const textEncoder = new TextEncoder()
 
 export interface S2SExpectedZipMember {
   readonly name: string
@@ -47,6 +54,32 @@ export interface S2SValidatedArtifactZip {
   readonly largestMemberByteLength: number
   readonly members: ReadonlyArray<S2SValidatedZipMember>
 }
+
+export interface S2SStoredZipMemberInput {
+  readonly name: string
+  readonly bytes: Uint8Array
+}
+
+export interface S2SStoredZipSnapshot {
+  readonly archiveByteLength: number
+  readonly archiveSha256: S2SSha256
+  readonly readArchiveBytes: () => Uint8Array
+}
+
+export class S2SStoredZipBuildError extends Data.TaggedError(
+  "S2SStoredZipBuildError"
+)<{
+  readonly reason:
+    | "ARCHIVE_SIZE_INVALID"
+    | "DUPLICATE_MEMBER"
+    | "INPUT_INVALID"
+    | "MEMBER_BYTES_INVALID"
+    | "MEMBER_COUNT_INVALID"
+    | "MEMBER_NAME_UNSAFE"
+    | "MEMBER_SIZE_INVALID"
+  readonly memberName: string | null
+  readonly detail: string
+}> {}
 
 export class S2SArtifactZipValidationError extends Data.TaggedError(
   "S2SArtifactZipValidationError"
@@ -86,6 +119,29 @@ interface CentralEntry {
   readonly compressedSize: number
   readonly uncompressedSize: number
   readonly localHeaderOffset: number
+}
+
+interface BuildMemberSnapshot {
+  readonly name: string
+  readonly nameBytes: Uint8Array
+  readonly bytes: Uint8Array
+  readonly crc32: number
+  readonly localHeaderOffset: number
+}
+
+const buildError = (
+  reason: S2SStoredZipBuildError["reason"],
+  detail: string,
+  memberName: string | null = null
+): S2SStoredZipBuildError =>
+  new S2SStoredZipBuildError({ reason, memberName, detail })
+
+const rejectBuild = (
+  reason: S2SStoredZipBuildError["reason"],
+  detail: string,
+  memberName: string | null = null
+): never => {
+  throw buildError(reason, detail, memberName)
 }
 
 const validationError = (
@@ -156,6 +212,297 @@ const crc32 = (bytes: Uint8Array): number => {
     value = next ^ (value >>> 8)
   }
   return (value ^ 0xffffffff) >>> 0
+}
+
+const snapshotBuildMembers = (input: unknown): ReadonlyArray<{
+  readonly name: string
+  readonly nameBytes: Uint8Array
+  readonly bytes: Uint8Array
+  readonly crc32: number
+}> => {
+  const memberInputs = Array.isArray(input)
+    ? input
+    : rejectBuild("INPUT_INVALID", "ZIP members must be one plain array")
+  if (
+    nodeTypes.isProxy(memberInputs) ||
+    Object.getPrototypeOf(memberInputs) !== Array.prototype
+  ) {
+    rejectBuild("INPUT_INVALID", "ZIP members must be one plain array")
+  }
+  const length = memberInputs.length
+  if (!Number.isSafeInteger(length) || length < 1 || length > 4) {
+    rejectBuild(
+      "MEMBER_COUNT_INVALID",
+      "ZIP builder accepts between one and four members"
+    )
+  }
+  const ownKeys = Reflect.ownKeys(memberInputs)
+  if (
+    ownKeys.length !== length + 1 ||
+    ownKeys.some((key) => typeof key !== "string")
+  ) {
+    rejectBuild(
+      "INPUT_INVALID",
+      "ZIP member array must be dense and contain no extra properties"
+    )
+  }
+
+  const names = new Set<string>()
+  const snapshots: Array<{
+    readonly name: string
+    readonly nameBytes: Uint8Array
+    readonly bytes: Uint8Array
+    readonly crc32: number
+  }> = []
+  let expandedByteLength = 0
+  for (let index = 0; index < length; index += 1) {
+    const itemDescriptor =
+      Object.getOwnPropertyDescriptor(memberInputs, String(index)) ??
+      rejectBuild("INPUT_INVALID", "ZIP member array contains a hostile entry")
+    const item =
+      itemDescriptor.enumerable === true && "value" in itemDescriptor
+        ? itemDescriptor.value
+        : rejectBuild(
+            "INPUT_INVALID",
+            "ZIP member array contains a hostile entry"
+          )
+    const record =
+      item !== null && typeof item === "object" && !nodeTypes.isProxy(item)
+        ? item
+        : rejectBuild("INPUT_INVALID", "ZIP member must be one plain data record")
+    if (
+      Object.getPrototypeOf(record) !== Object.prototype &&
+      Object.getPrototypeOf(record) !== null
+    ) {
+      rejectBuild("INPUT_INVALID", "ZIP member must be one plain data record")
+    }
+    const itemKeys = Reflect.ownKeys(record)
+    if (
+      itemKeys.length !== 2 ||
+      itemKeys.some((key) => key !== "name" && key !== "bytes")
+    ) {
+      rejectBuild(
+        "INPUT_INVALID",
+        "ZIP member record must contain exactly name and bytes"
+      )
+    }
+    const nameDescriptor =
+      Object.getOwnPropertyDescriptor(record, "name") ??
+      rejectBuild("INPUT_INVALID", "ZIP member fields must be plain data fields")
+    const bytesDescriptor =
+      Object.getOwnPropertyDescriptor(record, "bytes") ??
+      rejectBuild("INPUT_INVALID", "ZIP member fields must be plain data fields")
+    const name =
+      nameDescriptor.enumerable === true && "value" in nameDescriptor
+        ? nameDescriptor.value
+        : rejectBuild(
+            "INPUT_INVALID",
+            "ZIP member fields must be plain data fields"
+          )
+    const rawBytes =
+      bytesDescriptor.enumerable === true && "value" in bytesDescriptor
+        ? bytesDescriptor.value
+        : rejectBuild(
+            "INPUT_INVALID",
+            "ZIP member fields must be plain data fields"
+          )
+    if (typeof name !== "string" || !isSafeMemberName(name)) {
+      rejectBuild(
+        "MEMBER_NAME_UNSAFE",
+        "ZIP member name is not one bounded printable ASCII file",
+        typeof name === "string" ? name : null
+      )
+    }
+    if (names.has(name)) {
+      rejectBuild("DUPLICATE_MEMBER", "ZIP member name is duplicated", name)
+    }
+    if (
+      !(rawBytes instanceof Uint8Array) ||
+      nodeTypes.isProxy(rawBytes) ||
+      Object.getPrototypeOf(rawBytes) !== Uint8Array.prototype ||
+      Object.getOwnPropertySymbols(rawBytes).length !== 0 ||
+      Object.getOwnPropertyDescriptor(rawBytes, "byteLength") !== undefined ||
+      Object.getOwnPropertyDescriptor(rawBytes, "buffer") !== undefined ||
+      (typeof SharedArrayBuffer !== "undefined" &&
+        rawBytes.buffer instanceof SharedArrayBuffer)
+    ) {
+      rejectBuild(
+        "MEMBER_BYTES_INVALID",
+        "ZIP member bytes must be one unshared plain Uint8Array",
+        name
+      )
+    }
+    if (
+      rawBytes.byteLength < 1 ||
+      rawBytes.byteLength > MAX_ARCHIVE_OR_EXPANDED_BYTES
+    ) {
+      rejectBuild(
+        "MEMBER_SIZE_INVALID",
+        "ZIP member violates the fixed nonzero byte bound",
+        name
+      )
+    }
+    const bytes = Uint8Array.from(rawBytes)
+    if (bytes.byteLength !== rawBytes.byteLength) {
+      rejectBuild(
+        "MEMBER_BYTES_INVALID",
+        "ZIP member bytes changed while being snapshotted",
+        name
+      )
+    }
+    expandedByteLength += bytes.byteLength
+    if (
+      !Number.isSafeInteger(expandedByteLength) ||
+      expandedByteLength > MAX_ARCHIVE_OR_EXPANDED_BYTES
+    ) {
+      rejectBuild(
+        "MEMBER_SIZE_INVALID",
+        "ZIP member roster exceeds the fixed expanded-byte bound",
+        name
+      )
+    }
+    const nameBytes = textEncoder.encode(name)
+    if (nameBytes.byteLength !== name.length) {
+      rejectBuild(
+        "MEMBER_NAME_UNSAFE",
+        "ZIP member name is not exact printable ASCII",
+        name
+      )
+    }
+    names.add(name)
+    snapshots.push(
+      Object.freeze({ name, nameBytes, bytes, crc32: crc32(bytes) })
+    )
+  }
+  snapshots.sort((left, right) =>
+    left.name < right.name ? -1 : left.name > right.name ? 1 : 0
+  )
+  return Object.freeze(snapshots)
+}
+
+/**
+ * Root-private deterministic writer for the exact stored streaming dialect
+ * accepted by `validateS2SArtifactZip`. Members are canonically ordered by
+ * printable-ASCII name and snapshotted before any archive bytes are emitted.
+ */
+export const buildS2SStoredZip = (
+  inputMembers: unknown
+): Either.Either<S2SStoredZipSnapshot, S2SStoredZipBuildError> => {
+  try {
+    const inputs = snapshotBuildMembers(inputMembers)
+    const members: Array<BuildMemberSnapshot> = []
+    let localRegionByteLength = 0
+    let centralDirectoryByteLength = 0
+    for (const input of inputs) {
+      const localHeaderOffset = localRegionByteLength
+      localRegionByteLength +=
+        30 + input.nameBytes.byteLength + input.bytes.byteLength + 16
+      centralDirectoryByteLength += 46 + input.nameBytes.byteLength
+      if (
+        !Number.isSafeInteger(localRegionByteLength) ||
+        !Number.isSafeInteger(centralDirectoryByteLength)
+      ) {
+        rejectBuild(
+          "ARCHIVE_SIZE_INVALID",
+          "ZIP framing exceeds the safe-integer range"
+        )
+      }
+      members.push(Object.freeze({ ...input, localHeaderOffset }))
+    }
+    const archiveByteLength =
+      localRegionByteLength + centralDirectoryByteLength + 22
+    if (
+      !Number.isSafeInteger(archiveByteLength) ||
+      archiveByteLength > MAX_ARCHIVE_OR_EXPANDED_BYTES
+    ) {
+      rejectBuild(
+        "ARCHIVE_SIZE_INVALID",
+        "ZIP archive including exact framing exceeds the fixed byte bound"
+      )
+    }
+
+    const archive = new Uint8Array(archiveByteLength)
+    const view = new DataView(
+      archive.buffer,
+      archive.byteOffset,
+      archive.byteLength
+    )
+    let cursor = 0
+    for (const member of members) {
+      view.setUint32(cursor, LOCAL_FILE_HEADER_SIGNATURE, true)
+      view.setUint16(cursor + 4, DATA_DESCRIPTOR_VERSION_NEEDED, true)
+      view.setUint16(cursor + 6, DATA_DESCRIPTOR_FLAG, true)
+      view.setUint16(cursor + 8, STORED_COMPRESSION_METHOD, true)
+      view.setUint16(cursor + 10, DETERMINISTIC_DOS_TIME, true)
+      view.setUint16(cursor + 12, DETERMINISTIC_DOS_DATE, true)
+      view.setUint16(cursor + 26, member.nameBytes.byteLength, true)
+      archive.set(member.nameBytes, cursor + 30)
+      const dataOffset = cursor + 30 + member.nameBytes.byteLength
+      archive.set(member.bytes, dataOffset)
+      const descriptorOffset = dataOffset + member.bytes.byteLength
+      view.setUint32(descriptorOffset, DATA_DESCRIPTOR_SIGNATURE, true)
+      view.setUint32(descriptorOffset + 4, member.crc32, true)
+      view.setUint32(descriptorOffset + 8, member.bytes.byteLength, true)
+      view.setUint32(descriptorOffset + 12, member.bytes.byteLength, true)
+      cursor = descriptorOffset + 16
+    }
+    if (cursor !== localRegionByteLength) {
+      rejectBuild(
+        "ARCHIVE_SIZE_INVALID",
+        "ZIP local framing length diverged during emission"
+      )
+    }
+
+    for (const member of members) {
+      view.setUint32(cursor, CENTRAL_DIRECTORY_HEADER_SIGNATURE, true)
+      view.setUint16(cursor + 4, ARCHIVER_VERSION_MADE_BY, true)
+      view.setUint16(cursor + 6, DATA_DESCRIPTOR_VERSION_NEEDED, true)
+      view.setUint16(cursor + 8, DATA_DESCRIPTOR_FLAG, true)
+      view.setUint16(cursor + 10, STORED_COMPRESSION_METHOD, true)
+      view.setUint16(cursor + 12, DETERMINISTIC_DOS_TIME, true)
+      view.setUint16(cursor + 14, DETERMINISTIC_DOS_DATE, true)
+      view.setUint32(cursor + 16, member.crc32, true)
+      view.setUint32(cursor + 20, member.bytes.byteLength, true)
+      view.setUint32(cursor + 24, member.bytes.byteLength, true)
+      view.setUint16(cursor + 28, member.nameBytes.byteLength, true)
+      view.setUint32(cursor + 38, REGULAR_FILE_EXTERNAL_ATTRIBUTES, true)
+      view.setUint32(cursor + 42, member.localHeaderOffset, true)
+      archive.set(member.nameBytes, cursor + 46)
+      cursor += 46 + member.nameBytes.byteLength
+    }
+    const endOffset = cursor
+    view.setUint32(endOffset, END_OF_CENTRAL_DIRECTORY_SIGNATURE, true)
+    view.setUint16(endOffset + 8, members.length, true)
+    view.setUint16(endOffset + 10, members.length, true)
+    view.setUint32(
+      endOffset + 12,
+      centralDirectoryByteLength,
+      true
+    )
+    view.setUint32(endOffset + 16, localRegionByteLength, true)
+    cursor = endOffset + 22
+    if (cursor !== archive.byteLength) {
+      rejectBuild(
+        "ARCHIVE_SIZE_INVALID",
+        "ZIP end-record framing length diverged during emission"
+      )
+    }
+
+    const snapshot = Uint8Array.from(archive)
+    return Either.right(
+      Object.freeze({
+        archiveByteLength: snapshot.byteLength,
+        archiveSha256: S2SSha256Schema.make(rawS2SFileSha256(snapshot)),
+        readArchiveBytes: (): Uint8Array => Uint8Array.from(snapshot)
+      })
+    )
+  } catch (error) {
+    return Either.left(
+      error instanceof S2SStoredZipBuildError
+        ? error
+        : buildError("INPUT_INVALID", "ZIP construction failed closed")
+    )
+  }
 }
 
 const requireRange = (

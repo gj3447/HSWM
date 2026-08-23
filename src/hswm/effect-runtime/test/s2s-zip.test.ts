@@ -7,6 +7,8 @@ import { fileURLToPath } from "node:url"
 import { rawS2SFileSha256 } from "../src/s2s-canonical.js"
 import { S2SSha256Schema } from "../src/s2s-confirmatory.js"
 import {
+  S2SStoredZipBuildError,
+  buildS2SStoredZip,
   validateS2SArtifactZip,
   type S2SArtifactZipValidationError,
   type S2SArtifactZipValidationPolicy,
@@ -276,6 +278,201 @@ const mutateUint16 = (
   new DataView(bytes.buffer).setUint16(offset, value, true)
   return bytes
 }
+
+it("deterministically builds the exact stored dialect and round-trips through the validator", () => {
+  const members = [
+    { name: "payload.bin", bytes: encoder.encode("bravo\n") },
+    { name: "control.json", bytes: encoder.encode("alpha\n") }
+  ]
+  const first = buildS2SStoredZip(members)
+  const second = buildS2SStoredZip([...members].reverse())
+  if (Either.isLeft(first)) throw first.left
+  if (Either.isLeft(second)) throw second.left
+
+  const firstBytes = first.right.readArchiveBytes()
+  expect(second.right.readArchiveBytes()).toEqual(firstBytes)
+  expect(second.right.archiveSha256).toBe(first.right.archiveSha256)
+  expect(firstBytes).toEqual(
+    buildStoredZip(
+      [
+        { name: "control.json", bytes: encoder.encode("alpha\n") },
+        { name: "payload.bin", bytes: encoder.encode("bravo\n") }
+      ],
+      { centralTime: 0, centralDate: 0x0021 }
+    ).bytes
+  )
+  const validated = validateS2SArtifactZip(firstBytes, {
+    expectedArchiveSha256: first.right.archiveSha256,
+    expectedArchiveByteLength: first.right.archiveByteLength,
+    expectedMembers: [
+      { name: "payload.bin", maximumBytes: 6 },
+      { name: "control.json", maximumBytes: 6 }
+    ],
+    maximumArchiveBytes: first.right.archiveByteLength,
+    maximumExpandedBytes: 12
+  })
+  if (Either.isLeft(validated)) throw validated.left
+  expect(validated.right.members.map(({ name }) => name)).toEqual([
+    "control.json",
+    "payload.bin"
+  ])
+  expect(validated.right.members.map((member) => member.readBytes())).toEqual([
+    encoder.encode("alpha\n"),
+    encoder.encode("bravo\n")
+  ])
+})
+
+it("snapshots hostile caller-owned input and returns defensive archive reads", () => {
+  const control = encoder.encode("alpha\n")
+  const payload = encoder.encode("bravo\n")
+  const members: Array<{ name: string; bytes: Uint8Array }> = [
+    { name: "control.json", bytes: control },
+    { name: "payload.bin", bytes: payload }
+  ]
+  const built = buildS2SStoredZip(members)
+  if (Either.isLeft(built)) throw built.left
+  const expected = built.right.readArchiveBytes()
+
+  control.fill(0)
+  payload.fill(0)
+  members[0] = { name: "counterfeit.json", bytes: Uint8Array.of(1) }
+  members.length = 1
+  const exposed = built.right.readArchiveBytes()
+  exposed.fill(0)
+
+  expect(built.right.readArchiveBytes()).toEqual(expected)
+  expect(rawS2SFileSha256(built.right.readArchiveBytes())).toBe(
+    built.right.archiveSha256
+  )
+})
+
+it("pins exact two-member framing to 264 bytes and 100644 signed-descriptor records", () => {
+  const built = buildS2SStoredZip([
+    { name: "payload.bin", bytes: encoder.encode("bravo\n") },
+    { name: "control.json", bytes: encoder.encode("alpha\n") }
+  ])
+  if (Either.isLeft(built)) throw built.left
+  const bytes = built.right.readArchiveBytes()
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+
+  expect(bytes.byteLength).toBe(264)
+  expect(view.getUint32(48, true)).toBe(DATA_DESCRIPTOR_SIGNATURE)
+  expect(view.getUint32(111, true)).toBe(DATA_DESCRIPTOR_SIGNATURE)
+  const endOffset = bytes.byteLength - 22
+  const centralOffset = view.getUint32(endOffset + 16, true)
+  expect(centralOffset).toBe(127)
+  expect(view.getUint32(centralOffset, true)).toBe(
+    CENTRAL_DIRECTORY_HEADER_SIGNATURE
+  )
+  expect(view.getUint32(centralOffset + 38, true)).toBe(
+    (((0o100644 << 16) | 0x20) >>> 0)
+  )
+  const secondCentralOffset = centralOffset + 46 + "control.json".length
+  expect(view.getUint32(secondCentralOffset + 38, true)).toBe(
+    (((0o100644 << 16) | 0x20) >>> 0)
+  )
+})
+
+it("rejects hostile and invalid builder inputs with typed failures", () => {
+  let accessorReads = 0
+  const accessorMember = Object.create(null) as Record<string, unknown>
+  Object.defineProperties(accessorMember, {
+    name: { enumerable: true, value: "control.json" },
+    bytes: {
+      enumerable: true,
+      get: () => {
+        accessorReads += 1
+        return Uint8Array.of(1)
+      }
+    }
+  })
+  const hostileArray = new Proxy([], {
+    getPrototypeOf: () => {
+      throw new Error("hostile prototype trap")
+    }
+  })
+  const transparentArray = new Proxy(
+    [{ name: "control.json", bytes: Uint8Array.of(1) }],
+    {}
+  )
+  const transparentMember = new Proxy(
+    { name: "control.json", bytes: Uint8Array.of(1) },
+    {}
+  )
+  const transparentBytes = new Proxy(Uint8Array.of(1), {})
+  class ExoticBytes extends Uint8Array {}
+  const cases: ReadonlyArray<{
+    readonly label: string
+    readonly input: unknown
+    readonly reason: S2SStoredZipBuildError["reason"]
+  }> = [
+    { label: "not an array", input: {}, reason: "INPUT_INVALID" },
+    { label: "hostile array", input: hostileArray, reason: "INPUT_INVALID" },
+    {
+      label: "transparent array proxy",
+      input: transparentArray,
+      reason: "INPUT_INVALID"
+    },
+    { label: "empty roster", input: [], reason: "MEMBER_COUNT_INVALID" },
+    {
+      label: "too many members",
+      input: Array.from({ length: 5 }, (_, index) => ({
+        name: `member-${index}.bin`,
+        bytes: Uint8Array.of(index + 1)
+      })),
+      reason: "MEMBER_COUNT_INVALID"
+    },
+    {
+      label: "unsafe name",
+      input: [{ name: "../escape", bytes: Uint8Array.of(1) }],
+      reason: "MEMBER_NAME_UNSAFE"
+    },
+    {
+      label: "duplicate name",
+      input: [
+        { name: "same.bin", bytes: Uint8Array.of(1) },
+        { name: "same.bin", bytes: Uint8Array.of(2) }
+      ],
+      reason: "DUPLICATE_MEMBER"
+    },
+    {
+      label: "empty member",
+      input: [{ name: "empty.bin", bytes: new Uint8Array() }],
+      reason: "MEMBER_SIZE_INVALID"
+    },
+    {
+      label: "exotic bytes",
+      input: [{ name: "exotic.bin", bytes: new ExoticBytes([1]) }],
+      reason: "MEMBER_BYTES_INVALID"
+    },
+    {
+      label: "transparent member proxy",
+      input: [transparentMember],
+      reason: "INPUT_INVALID"
+    },
+    {
+      label: "transparent byte proxy",
+      input: [{ name: "proxy.bin", bytes: transparentBytes }],
+      reason: "MEMBER_BYTES_INVALID"
+    },
+    {
+      label: "accessor member",
+      input: [accessorMember],
+      reason: "INPUT_INVALID"
+    }
+  ]
+
+  for (const sample of cases) {
+    const result = buildS2SStoredZip(sample.input)
+    expect(Either.isLeft(result), sample.label).toBe(true)
+    if (Either.isRight(result)) {
+      throw new Error(`${sample.label}: unexpectedly accepted`)
+    }
+    expect(result.left).toBeInstanceOf(S2SStoredZipBuildError)
+    expect(result.left.reason, sample.label).toBe(sample.reason)
+  }
+  expect(accessorReads).toBe(0)
+})
 
 it("accepts only the exact stored streaming layout and returns defensive members", () => {
   const markerPayload = Uint8Array.from([

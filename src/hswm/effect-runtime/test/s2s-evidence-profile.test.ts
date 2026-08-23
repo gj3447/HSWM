@@ -8,6 +8,13 @@ import {
   buildS2SSuccessStageEvidenceEnvelope,
   validateS2SSuccessStageEvidenceEnvelope
 } from "../src/s2s-evidence-profile.js"
+import {
+  S2S_STAGE_ARTIFACT_READ_REPLAY_MANIFEST_MAX_BYTES,
+  S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES,
+  S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_OBSERVATION_COUNT,
+  S2S_STAGE_ARTIFACT_READ_REPLAY_OBSERVATIONS_MAX_BYTES,
+  S2S_STAGE_ARTIFACT_READ_REPLAY_ZIP_FRAMING_BYTES
+} from "../src/s2s-stage-artifact-read-replay-contract.js"
 import type {
   S2SEvidenceEnvelopeInput,
   S2SEvidenceStage
@@ -53,6 +60,20 @@ it("freezes the exact incremental success rosters within substrate bounds", () =
   expect(S2S_SUCCESS_STAGE_ATTACHMENT_PROFILES.REGISTER).toHaveLength(13)
   expect(S2S_SUCCESS_STAGE_ATTACHMENT_PROFILES.CONFIRM).toHaveLength(17)
   expect(S2S_SUCCESS_STAGE_ATTACHMENT_PROFILES.ADJUDICATE).toHaveLength(18)
+  expect(
+    Object.fromEntries(
+      Object.entries(S2S_SUCCESS_STAGE_ATTACHMENT_PROFILES).map(
+        ([stage, profile]) => [
+          stage,
+          profile.reduce((total, attachment) => total + attachment.maximumBytes, 0)
+        ]
+      )
+    )
+  ).toEqual({
+    REGISTER: 108_068_864,
+    CONFIRM: 112_484_616,
+    ADJUDICATE: 74_670_872
+  })
   for (const stage of ["REGISTER", "CONFIRM", "ADJUDICATE"] as const) {
     const profile = S2S_SUCCESS_STAGE_ATTACHMENT_PROFILES[stage]
     expect(Object.isFrozen(profile)).toBe(true)
@@ -65,6 +86,59 @@ it("freezes the exact incremental success rosters within substrate bounds", () =
     expect(new Set(profile.map((entry) => entry.role)).size).toBe(profile.length)
     const built = buildS2SSuccessStageEvidenceEnvelope(inputFor(stage))
     expect(Either.isRight(built)).toBe(true)
+  }
+})
+
+it("pins the exact stage-artifact read replay byte formula", () => {
+  expect(S2S_STAGE_ARTIFACT_READ_REPLAY_MANIFEST_MAX_BYTES).toBe(1_048_576)
+  expect(S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_OBSERVATION_COUNT).toBe(11)
+  expect(S2S_STAGE_ARTIFACT_READ_REPLAY_OBSERVATIONS_MAX_BYTES).toBe(
+    11 * 1_048_576
+  )
+  expect(S2S_STAGE_ARTIFACT_READ_REPLAY_ZIP_FRAMING_BYTES).toBe(264)
+  expect(S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES).toBe(12_583_176)
+  expect(S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES).toBe(
+    S2S_STAGE_ARTIFACT_READ_REPLAY_MANIFEST_MAX_BYTES +
+      S2S_STAGE_ARTIFACT_READ_REPLAY_OBSERVATIONS_MAX_BYTES +
+      S2S_STAGE_ARTIFACT_READ_REPLAY_ZIP_FRAMING_BYTES
+  )
+})
+
+it("accepts the exact replay profile cap and rejects cap plus one", () => {
+  const boundary = new Uint8Array(
+    S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES + 1
+  )
+  const withRegistrationRead = (
+    byteLength: number
+  ): S2SEvidenceEnvelopeInput => {
+    const input = inputFor("CONFIRM")
+    return {
+      ...input,
+      attachments: input.attachments.map((attachment) =>
+        attachment.logicalName === "input/registration_read.zip"
+          ? { ...attachment, bytes: boundary.subarray(0, byteLength) }
+          : attachment
+      )
+    }
+  }
+
+  expect(
+    Either.isRight(
+      buildS2SSuccessStageEvidenceEnvelope(
+        withRegistrationRead(S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES)
+      )
+    )
+  ).toBe(true)
+
+  const oversized = buildS2SSuccessStageEvidenceEnvelope(
+    withRegistrationRead(S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES + 1)
+  )
+  expect(Either.isLeft(oversized)).toBe(true)
+  if (Either.isLeft(oversized)) {
+    expect(oversized.left).toMatchObject({
+      reason: "ATTACHMENT_PROFILE_LIMIT_EXCEEDED",
+      logicalName: "input/registration_read.zip"
+    })
   }
 })
 
@@ -120,6 +194,7 @@ it("keeps success-profile builders out of the package root", () => {
   expect("S2S_SUCCESS_STAGE_ATTACHMENT_PROFILES" in PublicApi).toBe(false)
   expect("buildS2SSuccessStageEvidenceEnvelope" in PublicApi).toBe(false)
   expect("validateS2SSuccessStageEvidenceEnvelope" in PublicApi).toBe(false)
+  expect("S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES" in PublicApi).toBe(false)
 })
 
 it("does not misreport a structurally invalid envelope as REGISTER", () => {

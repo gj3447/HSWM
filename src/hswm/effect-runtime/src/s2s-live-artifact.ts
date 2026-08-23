@@ -304,6 +304,16 @@ export interface S2SValidatedStageArtifactRead {
   readonly readArchiveBytes: () => Uint8Array
 }
 
+const AUTHENTIC_VALIDATED_STAGE_ARTIFACT_READS = new WeakSet<object>()
+
+/** Root-private process-local provenance check for reads issued by this module. */
+export const isAuthenticS2SValidatedStageArtifactRead = (
+  input: unknown
+): input is S2SValidatedStageArtifactRead =>
+  input !== null &&
+  typeof input === "object" &&
+  AUTHENTIC_VALIDATED_STAGE_ARTIFACT_READS.has(input)
+
 export class S2SStageArtifactReadError extends Data.TaggedError(
   "S2SStageArtifactReadError"
 )<{
@@ -1427,7 +1437,7 @@ const validatedRead = (
   if (stage === "REGISTER" || role === "ADJUDICATION") {
     throw new Error("validated stage artifact read contract invariant violated")
   }
-  return Object.freeze({
+  const snapshot: S2SValidatedStageArtifactRead = Object.freeze({
     _tag: "ValidatedStageArtifactRead" as const,
     stage,
     operation,
@@ -1448,6 +1458,8 @@ const validatedRead = (
     permitEvidence,
     readArchiveBytes: core.readArchiveBytes
   })
+  AUTHENTIC_VALIDATED_STAGE_ARTIFACT_READS.add(snapshot)
+  return snapshot
 }
 
 const performStageRead = (

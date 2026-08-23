@@ -9,9 +9,19 @@ import {
 } from "effect"
 
 import {
+  canonicalS2SControlJsonBytes,
   canonicalS2SControlSha256,
   rawS2SFileSha256
 } from "../src/s2s-canonical.js"
+import {
+  buildS2SEvidenceClaim,
+  type S2SEvidenceEnvelopeSnapshot
+} from "../src/s2s-evidence-envelope.js"
+import {
+  S2S_SUCCESS_STAGE_ATTACHMENT_PROFILES,
+  buildS2SSuccessStageEvidenceEnvelope
+} from "../src/s2s-evidence-profile.js"
+import type { S2SDurableEvidenceRecovery } from "../src/s2s-evidence-file.js"
 import {
   S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_MAX_RAW_BYTES,
   S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_SCHEMA_VERSION,
@@ -39,12 +49,38 @@ import {
   type S2SGitHubArtifactDownloadReceipt,
   type S2SGitHubObservation
 } from "../src/s2s-live-github.js"
-import type { S2SConfirmatoryJobStage } from "../src/s2s-workflow-contract.js"
+import {
+  S2S_CURRENT_RUN_STAGE_EVIDENCE_SCHEMA_VERSION,
+  type S2SCurrentRunStageEvidence
+} from "../src/s2s-run-authority.js"
+import {
+  buildS2SStageArtifactReadReplay,
+  buildS2SStageArtifactReadReplayEffect,
+  validateS2SCandidateReadReplayPair,
+  validateS2SStageArtifactReadReplayEffect,
+  validateS2SStageArtifactReadReplay,
+  type S2SStageArtifactReadReplaySnapshot
+} from "../src/s2s-stage-artifact-read-replay.js"
+import {
+  S2S_STAGE_ARTIFACT_READ_REPLAY_MANIFEST_MAX_BYTES,
+  S2S_STAGE_ARTIFACT_READ_REPLAY_MANIFEST_MEMBER_NAME,
+  S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES,
+  S2S_STAGE_ARTIFACT_READ_REPLAY_OBSERVATIONS_MAX_BYTES,
+  S2S_STAGE_ARTIFACT_READ_REPLAY_OBSERVATIONS_MEMBER_NAME
+} from "../src/s2s-stage-artifact-read-replay-contract.js"
 import {
   appendS2SStageArtifactLedgerEntry,
   makeS2SStageArtifactPermitTestScope,
   useS2SStageArtifactPermit
 } from "../src/s2s-stage-artifact-permits.js"
+import {
+  s2sConfirmatoryWorkflowContractSha256,
+  type S2SConfirmatoryJobStage
+} from "../src/s2s-workflow-contract.js"
+import {
+  buildS2SStoredZip,
+  validateS2SArtifactZip
+} from "../src/s2s-zip.js"
 
 const RUN_ID = 32_442_437_970
 const REGISTER_JOB_ID = 96_655_652_099
@@ -53,6 +89,8 @@ const ADJUDICATE_JOB_ID = 96_655_652_101
 const REGISTRATION_ARTIFACT_ID = 9_433_344_546
 const CANDIDATE_ARTIFACT_ID = 9_433_344_547
 const HEAD_SHA = "75686549b1f6c65aea87ebd0f912a6e62909445a"
+const SOURCE_COMMIT_A = "a".repeat(40)
+const WORKFLOW_FILE_SHA256 = "b".repeat(64)
 const WORKFLOW_PATH = ".github/workflows/swm0w-s2s-confirmatory.yml"
 const CREATED_AT = "2026-08-21T03:10:32Z"
 const CREATED_AT_UNIX_SECONDS = Date.parse(CREATED_AT) / 1_000
@@ -178,6 +216,10 @@ const right = <A, E>(outcome: Either.Either<A, E>): A => {
   return outcome.right
 }
 
+const WORKFLOW_CONTRACT_SHA256 = right(
+  s2sConfirmatoryWorkflowContractSha256()
+)
+
 const currentJobId = (stage: S2SConfirmatoryJobStage): number =>
   stage === "REGISTER"
     ? REGISTER_JOB_ID
@@ -231,6 +273,130 @@ const makeSeed = (
       })
     })
   })
+
+const makeCurrentRunEvidence = (
+  stage: "CONFIRM" | "ADJUDICATE",
+  trackedBytesManifestSha256 = "7".repeat(64)
+): S2SCurrentRunStageEvidence => {
+  const seed = makeSeed(stage)
+  const core: Omit<S2SCurrentRunStageEvidence, "receiptSha256"> = {
+    schemaVersion: S2S_CURRENT_RUN_STAGE_EVIDENCE_SCHEMA_VERSION,
+    authorityScope: "PROCESS_LOCAL_STAGE_ENTRY",
+    uniquenessClaim: "ROSTER_OBSERVATION_INSTANT_ONLY",
+    historicalUniquenessClaimed: false,
+    crossExecutionReplayPreventionClaimed: false,
+    durableCommitRequiresFreshTerminalObservation: true,
+    sourceCommitA: SOURCE_COMMIT_A,
+    registrationCommitB: seed.registrationCommitB,
+    registrationAuthorityReceiptSha256: "5".repeat(64),
+    currentInvocationReceiptSha256: "6".repeat(64),
+    workflowContractSha256: WORKFLOW_CONTRACT_SHA256,
+    workflowFileSha256: WORKFLOW_FILE_SHA256,
+    trackedBytesManifestSha256,
+    workflowApiPath: seed.workflowApiPath,
+    workflowRunId: seed.workflowRunId,
+    workflowRunAttempt: 1,
+    stage,
+    currentJobId: stage === "CONFIRM" ? "confirm" : "adjudicate",
+    currentJobDatabaseId: seed.currentJobDatabaseId,
+    predecessorJobDatabaseIds: seed.predecessorJobDatabaseIds,
+    workflowRunCreatedAt: seed.workflowRunCreatedAt,
+    workflowRunCreatedAtUnixSeconds: seed.workflowRunCreatedAtUnixSeconds,
+    invocationCapturedAtUnixSeconds: OBSERVED_AT - 100,
+    observations: seed.observations
+  }
+  return Object.freeze({
+    ...core,
+    receiptSha256: right(canonicalS2SControlSha256(core))
+  })
+}
+
+const makeRegistrationRecovery = (
+  archive: Uint8Array,
+  current: S2SCurrentRunStageEvidence,
+  overrides: Readonly<{
+    workflowFileSha256?: string
+    currentJobDatabaseId?: number
+  }> = {}
+): S2SDurableEvidenceRecovery => {
+  const envelope: S2SEvidenceEnvelopeSnapshot = right(
+    buildS2SSuccessStageEvidenceEnvelope({
+      sourceCommitA: current.sourceCommitA,
+      registrationCommitB: current.registrationCommitB,
+      workflowRunId: current.workflowRunId,
+      workflowRunCreatedAtUnixSeconds: current.workflowRunCreatedAtUnixSeconds,
+      workflowApiPath: current.workflowApiPath,
+      workflowFileSha256:
+        overrides.workflowFileSha256 ?? current.workflowFileSha256,
+      workflowContractSha256: current.workflowContractSha256,
+      stage: "REGISTER",
+      currentJobDatabaseId:
+        overrides.currentJobDatabaseId ?? REGISTER_JOB_ID,
+      predecessor: null,
+      attachments: S2S_SUCCESS_STAGE_ATTACHMENT_PROFILES.REGISTER.map((spec) => ({
+        logicalName: spec.logicalName,
+        role: spec.role,
+        schemaVersion: spec.schemaVersion,
+        mediaType: spec.mediaType,
+        bytes:
+          spec.logicalName === "upload/registration_archive.zip"
+            ? Uint8Array.from(archive)
+            : new Uint8Array([0x31])
+      }))
+    })
+  )
+  const claim = right(buildS2SEvidenceClaim(envelope))
+  const stage = Object.freeze({ envelope, claim })
+  const chain = Object.freeze([stage])
+  return Object.freeze({ chain, latest: stage })
+}
+
+const makeAdjudicationRecovery = (
+  registration: Uint8Array,
+  candidate: Uint8Array,
+  current: S2SCurrentRunStageEvidence
+): S2SDurableEvidenceRecovery => {
+  const registrationRecovery = makeRegistrationRecovery(registration, current)
+  const registrationStage = registrationRecovery.latest
+  const confirmationEnvelope = right(
+    buildS2SSuccessStageEvidenceEnvelope({
+      sourceCommitA: current.sourceCommitA,
+      registrationCommitB: current.registrationCommitB,
+      workflowRunId: current.workflowRunId,
+      workflowRunCreatedAtUnixSeconds: current.workflowRunCreatedAtUnixSeconds,
+      workflowApiPath: current.workflowApiPath,
+      workflowFileSha256: current.workflowFileSha256,
+      workflowContractSha256: current.workflowContractSha256,
+      stage: "CONFIRM",
+      currentJobDatabaseId: CONFIRM_JOB_ID,
+      predecessor: {
+        stage: "REGISTER",
+        manifestRawSha256:
+          registrationStage.envelope.manifestRawSha256,
+        claimRawSha256: registrationStage.claim.claimRawSha256
+      },
+      attachments: S2S_SUCCESS_STAGE_ATTACHMENT_PROFILES.CONFIRM.map((spec) => ({
+        logicalName: spec.logicalName,
+        role: spec.role,
+        schemaVersion: spec.schemaVersion,
+        mediaType: spec.mediaType,
+        bytes:
+          spec.logicalName === "upload/candidate_archive.zip"
+            ? Uint8Array.from(candidate)
+            : new Uint8Array([0x31])
+      }))
+    })
+  )
+  const confirmationClaim = right(
+    buildS2SEvidenceClaim(confirmationEnvelope)
+  )
+  const confirmationStage = Object.freeze({
+    envelope: confirmationEnvelope,
+    claim: confirmationClaim
+  })
+  const chain = Object.freeze([registrationStage, confirmationStage])
+  return Object.freeze({ chain, latest: confirmationStage })
+}
 
 const responseProvenance = (githubRequestId: string) =>
   Object.freeze({
@@ -582,6 +748,605 @@ it.effect("exposes only lazy fixed zero-identity stage Effects", () => {
           // @ts-expect-error fixed operation is an Effect property, not a method
           fixed.confirmReadRegistration(RUN_ID, HEAD_SHA, "REGISTRATION")
         }
+      })
+  )
+})
+
+it.effect("builds and independently replays the bounded poll-three registration read", () => {
+  const scenario = makeScenario({ stage: "CONFIRM", positivePoll: 3 })
+  const currentRunEvidence = makeCurrentRunEvidence("CONFIRM")
+  const sourceArchive = scenario.plans[0]?.archive
+  if (sourceArchive === undefined) {
+    return Effect.dieMessage("registration source archive fixture is absent")
+  }
+  const predecessorRecovery = makeRegistrationRecovery(
+    sourceArchive,
+    currentRunEvidence
+  )
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("CONFIRM"),
+    scenario.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const validatedRead = yield* confirmationReads(
+          reads
+        ).confirmReadRegistration
+        const built = right(
+          buildS2SStageArtifactReadReplay({
+            validatedRead,
+            currentRunEvidence,
+            predecessorRecovery
+          })
+        )
+        const carrierBytes = built.readCarrierBytes()
+        const replayed = right(
+          validateS2SStageArtifactReadReplay({
+            carrierBytes,
+            currentRunEvidence,
+            predecessorRecovery
+          })
+        )
+        const rebuilt = right(
+          buildS2SStageArtifactReadReplay({
+            validatedRead,
+            currentRunEvidence,
+            predecessorRecovery
+          })
+        )
+        expect(
+          buildS2SStageArtifactReadReplay({
+            validatedRead,
+            currentRunEvidence,
+            predecessorRecovery: makeRegistrationRecovery(
+              sourceArchive,
+              currentRunEvidence,
+              { workflowFileSha256: "e".repeat(64) }
+            )
+          })
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "ARCHIVE_REFERENCE_INVALID" }
+        })
+        expect(
+          buildS2SStageArtifactReadReplay({
+            validatedRead,
+            currentRunEvidence,
+            predecessorRecovery: makeRegistrationRecovery(
+              sourceArchive,
+              currentRunEvidence,
+              { currentJobDatabaseId: REGISTER_JOB_ID + 99 }
+            )
+          })
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "ARCHIVE_REFERENCE_INVALID" }
+        })
+        expect(
+          buildS2SStageArtifactReadReplay({
+            validatedRead: Object.freeze({ ...validatedRead }),
+            currentRunEvidence,
+            predecessorRecovery
+          })
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "INPUT_INVALID" }
+        })
+        let recoveryReadCount = 0
+        const lazyRecovery: S2SDurableEvidenceRecovery = Object.freeze({
+          get chain() {
+            recoveryReadCount += 1
+            return predecessorRecovery.chain
+          },
+          latest: predecessorRecovery.latest
+        })
+        const lazyBuild = buildS2SStageArtifactReadReplayEffect({
+          validatedRead,
+          currentRunEvidence,
+          predecessorRecovery: lazyRecovery
+        })
+        expect(recoveryReadCount).toBe(0)
+        const effectBuilt = yield* lazyBuild
+        expect(recoveryReadCount).toBeGreaterThan(0)
+        expect(effectBuilt.carrierRawSha256).toBe(built.carrierRawSha256)
+        const invalidEffect = yield* validateS2SStageArtifactReadReplayEffect(
+          {}
+        ).pipe(Effect.either)
+        expect(invalidEffect).toMatchObject({
+          _tag: "Left",
+          left: { reason: "INPUT_INVALID" }
+        })
+        expect(replayed.manifest.operation).toBe(
+          "CONFIRM_READ_REGISTRATION"
+        )
+        expect(replayed.manifest.successful_attempt_ordinal).toBe(3)
+        expect(replayed.manifest.observation_count).toBe(11)
+        expect(replayed.observations).toHaveLength(11)
+        expect({
+          carrierRawSha256: built.carrierRawSha256,
+          manifestRawSha256: built.manifestRawSha256,
+          carrierByteLength: built.carrierByteLength
+        }).toEqual({
+          carrierRawSha256:
+            "92c7eafc1229f2e32bc9a91771278d53f329cb46970b6ee14eeb758677bd0c90",
+          manifestRawSha256:
+            "78d121dc38df0d61232f372dd9755f9e5c35c976c3c8d0280a15238299b257c0",
+          carrierByteLength: 17_803
+        })
+        expect(replayed.manifest.archive_reference).toMatchObject({
+          source_stage: "REGISTER",
+          logical_name: "upload/registration_archive.zip",
+          raw_sha256: rawS2SFileSha256(sourceArchive)
+        })
+        expect(rebuilt.carrierRawSha256).toBe(built.carrierRawSha256)
+        expect(rebuilt.readCarrierBytes()).toEqual(carrierBytes)
+        expect(replayed.readArchiveBytes()).toEqual(sourceArchive)
+
+        const parsedCarrier = right(
+          validateS2SArtifactZip(carrierBytes, {
+            expectedArchiveSha256: built.carrierRawSha256,
+            expectedArchiveByteLength: carrierBytes.byteLength,
+            expectedMembers: [
+              {
+                name: S2S_STAGE_ARTIFACT_READ_REPLAY_MANIFEST_MEMBER_NAME,
+                maximumBytes:
+                  S2S_STAGE_ARTIFACT_READ_REPLAY_MANIFEST_MAX_BYTES
+              },
+              {
+                name: S2S_STAGE_ARTIFACT_READ_REPLAY_OBSERVATIONS_MEMBER_NAME,
+                maximumBytes:
+                  S2S_STAGE_ARTIFACT_READ_REPLAY_OBSERVATIONS_MAX_BYTES
+              }
+            ],
+            maximumArchiveBytes: S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES,
+            maximumExpandedBytes:
+              S2S_STAGE_ARTIFACT_READ_REPLAY_MANIFEST_MAX_BYTES +
+              S2S_STAGE_ARTIFACT_READ_REPLAY_OBSERVATIONS_MAX_BYTES
+          })
+        )
+        expect(parsedCarrier.members.map(({ name }) => name)).toEqual([
+          S2S_STAGE_ARTIFACT_READ_REPLAY_MANIFEST_MEMBER_NAME,
+          S2S_STAGE_ARTIFACT_READ_REPLAY_OBSERVATIONS_MEMBER_NAME
+        ])
+        const manifestMember = parsedCarrier.members[0]
+        const observationsMember = parsedCarrier.members[1]
+        if (manifestMember === undefined || observationsMember === undefined) {
+          throw new Error("fixed replay members are absent")
+        }
+        expect(manifestMember.readBytes()).toEqual(
+          right(canonicalS2SControlJsonBytes(built.manifest))
+        )
+        expect(observationsMember.readBytes()).toEqual(
+          built.readObservationBlob()
+        )
+
+        const mutatedObservationBytes = observationsMember.readBytes()
+        mutatedObservationBytes[0] = (mutatedObservationBytes[0] ?? 0) ^ 1
+        const observationMutation = right(
+          buildS2SStoredZip([
+            {
+              name: manifestMember.name,
+              bytes: manifestMember.readBytes()
+            },
+            {
+              name: observationsMember.name,
+              bytes: mutatedObservationBytes
+            }
+          ])
+        )
+        const observationRejected = validateS2SStageArtifactReadReplay({
+          carrierBytes: observationMutation.readArchiveBytes(),
+          currentRunEvidence,
+          predecessorRecovery
+        })
+        expect(Either.isLeft(observationRejected)).toBe(true)
+        if (Either.isLeft(observationRejected)) {
+          expect(observationRejected.left.reason).toBe(
+            "POLL_TOPOLOGY_INVALID"
+          )
+        }
+
+        const coherentlyMutatedManifest = structuredClone(built.manifest)
+        const [firstDescriptor, ...remainingDescriptors] =
+          coherentlyMutatedManifest.observations
+        if (firstDescriptor === undefined) {
+          throw new Error("golden replay has no first observation")
+        }
+        const {
+          replay_receipt_sha256: declaredCoherentReceipt,
+          ...coherentlyMutatedCore
+        } = {
+          ...coherentlyMutatedManifest,
+          observations: [
+            {
+              ...firstDescriptor,
+              github_request_id: "REQ:COHERENT-MANIFEST-TAMPER"
+            },
+            ...remainingDescriptors
+          ]
+        }
+        void declaredCoherentReceipt
+        const coherentlyMutatedBytes = right(
+          canonicalS2SControlJsonBytes({
+            ...coherentlyMutatedCore,
+            replay_receipt_sha256: right(
+              canonicalS2SControlSha256(coherentlyMutatedCore)
+            )
+          })
+        )
+        const coherentMutationCarrier = right(
+          buildS2SStoredZip([
+            {
+              name: manifestMember.name,
+              bytes: coherentlyMutatedBytes
+            },
+            {
+              name: observationsMember.name,
+              bytes: observationsMember.readBytes()
+            }
+          ])
+        )
+        expect(
+          validateS2SStageArtifactReadReplay({
+            carrierBytes: coherentMutationCarrier.readArchiveBytes(),
+            currentRunEvidence,
+            predecessorRecovery
+          })
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "OBSERVATION_REPLAY_INVALID" }
+        })
+
+        const manifestMutation = {
+          ...structuredClone(built.manifest),
+          source_commit_a: "c".repeat(40)
+        }
+        const manifestMutationBytes = right(
+          canonicalS2SControlJsonBytes(manifestMutation)
+        )
+        const manifestMutationCarrier = right(
+          buildS2SStoredZip([
+            {
+              name: manifestMember.name,
+              bytes: manifestMutationBytes
+            },
+            {
+              name: observationsMember.name,
+              bytes: observationsMember.readBytes()
+            }
+          ])
+        )
+        const manifestRejected = validateS2SStageArtifactReadReplay({
+          carrierBytes: manifestMutationCarrier.readArchiveBytes(),
+          currentRunEvidence,
+          predecessorRecovery
+        })
+        expect(Either.isLeft(manifestRejected)).toBe(true)
+        if (Either.isLeft(manifestRejected)) {
+          expect(manifestRejected.left.reason).toBe(
+            "MANIFEST_SELF_HASH_MISMATCH"
+          )
+        }
+
+        const missingSource = validateS2SStageArtifactReadReplay({
+          carrierBytes,
+          currentRunEvidence,
+          predecessorRecovery: { chain: [], latest: null }
+        })
+        expect(Either.isLeft(missingSource)).toBe(true)
+        if (Either.isLeft(missingSource)) {
+          expect(missingSource.left.reason).toBe("ARCHIVE_REFERENCE_INVALID")
+        }
+
+        const sourceStage = predecessorRecovery.latest
+        const corruptClaimBytes = sourceStage.claim.canonicalBytes
+        corruptClaimBytes[0] = (corruptClaimBytes[0] ?? 0) ^ 1
+        const wrongClaimStage = Object.freeze({
+          envelope: sourceStage.envelope,
+          claim: Object.freeze({
+            document: sourceStage.claim.document,
+            canonicalBytes: corruptClaimBytes,
+            claimRawSha256: sourceStage.claim.claimRawSha256
+          })
+        })
+        const wrongClaim = validateS2SStageArtifactReadReplay({
+          carrierBytes,
+          currentRunEvidence,
+          predecessorRecovery: Object.freeze({
+            chain: Object.freeze([wrongClaimStage]),
+            latest: wrongClaimStage
+          })
+        })
+        expect(wrongClaim).toMatchObject({
+          _tag: "Left",
+          left: { reason: "ARCHIVE_REFERENCE_INVALID" }
+        })
+
+        const unavailableAttachments = sourceStage.envelope.attachments.map(
+          (attachment) =>
+            attachment.descriptor.logical_name ===
+            "upload/registration_archive.zip"
+              ? Object.freeze({
+                  descriptor: attachment.descriptor,
+                  readBytes: (): Uint8Array => {
+                    throw new Error("source bytes unavailable")
+                  }
+                })
+              : attachment
+        )
+        const unavailableEnvelope = Object.freeze({
+          document: sourceStage.envelope.document,
+          canonicalBytes: sourceStage.envelope.canonicalBytes,
+          manifestRawSha256: sourceStage.envelope.manifestRawSha256,
+          attachments: Object.freeze(unavailableAttachments)
+        })
+        const unavailableStage = Object.freeze({
+          envelope: unavailableEnvelope,
+          claim: sourceStage.claim
+        })
+        expect(
+          validateS2SStageArtifactReadReplay({
+            carrierBytes,
+            currentRunEvidence,
+            predecessorRecovery: Object.freeze({
+              chain: Object.freeze([unavailableStage]),
+              latest: unavailableStage
+            })
+          })
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "ARCHIVE_REFERENCE_INVALID" }
+        })
+
+        const exposedCarrier = built.readCarrierBytes()
+        exposedCarrier.fill(0)
+        expect(rawS2SFileSha256(built.readCarrierBytes())).toBe(
+          built.carrierRawSha256
+        )
+        const exposedObservations = built.readObservationBlob()
+        exposedObservations.fill(0)
+        expect(rawS2SFileSha256(built.readObservationBlob())).toBe(
+          built.manifest.observation_blob_sha256
+        )
+        const exposedArchive = built.readArchiveBytes()
+        exposedArchive.fill(0)
+        expect(rawS2SFileSha256(built.readArchiveBytes())).toBe(
+          built.manifest.artifact_sha256
+        )
+        const exposedManifest = built.manifest as {
+          source_commit_a: string
+        }
+        exposedManifest.source_commit_a = "d".repeat(40)
+        expect(built.manifest.source_commit_a).toBe(SOURCE_COMMIT_A)
+        expect(
+          validateS2SStageArtifactReadReplay({
+            carrierBytes: Buffer.from(carrierBytes),
+            currentRunEvidence,
+            predecessorRecovery
+          })
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "BYTE_BUDGET_EXCEEDED" }
+        })
+        expect(
+          validateS2SStageArtifactReadReplay({
+            carrierBytes: new Uint8Array(
+              S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES + 1
+            ),
+            currentRunEvidence,
+            predecessorRecovery
+          })
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "BYTE_BUDGET_EXCEEDED" }
+        })
+        if (typeof SharedArrayBuffer !== "undefined") {
+          expect(
+            validateS2SStageArtifactReadReplay({
+              carrierBytes: new Uint8Array(new SharedArrayBuffer(1)),
+              currentRunEvidence,
+              predecessorRecovery
+            })
+          ).toMatchObject({
+            _tag: "Left",
+            left: { reason: "BYTE_BUDGET_EXCEEDED" }
+          })
+        }
+        const accessorRoot = Object.create(null, {
+          carrierBytes: {
+            enumerable: true,
+            get: () => carrierBytes
+          },
+          currentRunEvidence: {
+            enumerable: true,
+            value: currentRunEvidence
+          },
+          predecessorRecovery: {
+            enumerable: true,
+            value: predecessorRecovery
+          }
+        })
+        expect(validateS2SStageArtifactReadReplay(accessorRoot)).toMatchObject({
+          _tag: "Left",
+          left: { reason: "INPUT_INVALID" }
+        })
+        expect(
+          validateS2SStageArtifactReadReplay(
+            new Proxy(
+              { carrierBytes, currentRunEvidence, predecessorRecovery },
+              {}
+            )
+          )
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "INPUT_INVALID" }
+        })
+        expect(
+          validateS2SStageArtifactReadReplay({
+            carrierBytes,
+            currentRunEvidence: new Proxy(currentRunEvidence, {}),
+            predecessorRecovery
+          })
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "CURRENT_RUN_BINDING_MISMATCH" }
+        })
+        expect(
+          validateS2SStageArtifactReadReplay({
+            carrierBytes,
+            currentRunEvidence,
+            predecessorRecovery: new Proxy(predecessorRecovery, {})
+          })
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "ARCHIVE_REFERENCE_INVALID" }
+        })
+      })
+  )
+})
+
+it.effect("replays the adjudication chain and binds the two candidate reads", () => {
+  const scenario = makeScenario({ stage: "ADJUDICATE", positivePoll: 3 })
+  const currentRunEvidence = makeCurrentRunEvidence("ADJUDICATE")
+  const registration = scenario.plans[0]?.archive
+  const candidate = scenario.plans[1]?.archive
+  if (registration === undefined || candidate === undefined) {
+    return Effect.dieMessage("adjudication archive fixtures are absent")
+  }
+  const predecessorRecovery = makeAdjudicationRecovery(
+    registration,
+    candidate,
+    currentRunEvidence
+  )
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("ADJUDICATE"),
+    scenario.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const fixed = adjudicationReads(reads)
+        const registrationRead = yield* fixed.adjudicateReadRegistration
+        const firstRead = yield* fixed.adjudicateReadCandidateFirst
+        const reread = yield* fixed.adjudicateRereadCandidate
+        const registrationReplay = right(
+          buildS2SStageArtifactReadReplay({
+            validatedRead: registrationRead,
+            currentRunEvidence,
+            predecessorRecovery
+          })
+        )
+        const firstReplay = right(
+          buildS2SStageArtifactReadReplay({
+            validatedRead: firstRead,
+            currentRunEvidence,
+            predecessorRecovery
+          })
+        )
+        const rereadReplay = right(
+          buildS2SStageArtifactReadReplay({
+            validatedRead: reread,
+            currentRunEvidence,
+            predecessorRecovery
+          })
+        )
+        const pair = right(
+          validateS2SCandidateReadReplayPair(firstReplay, rereadReplay)
+        )
+        expect(registrationReplay.manifest.archive_reference.source_stage).toBe(
+          "REGISTER"
+        )
+        expect(firstReplay.manifest.archive_reference.source_stage).toBe(
+          "CONFIRM"
+        )
+        expect(firstReplay.manifest.successful_attempt_ordinal).toBe(3)
+        expect(firstReplay.manifest.observation_count).toBe(11)
+        expect(firstReplay.manifest.candidate_fingerprint_sha256).not.toBeNull()
+        expect(pair[0].manifest.candidate_fingerprint_sha256).toBe(
+          pair[1].manifest.candidate_fingerprint_sha256
+        )
+        expect(pair[0].readArchiveBytes()).toEqual(candidate)
+        expect(pair[1].readArchiveBytes()).toEqual(candidate)
+
+        const otherCurrentRunEvidence = makeCurrentRunEvidence(
+          "ADJUDICATE",
+          "8".repeat(64)
+        )
+        const otherCurrentRereadReplay = right(
+          buildS2SStageArtifactReadReplay({
+            validatedRead: reread,
+            currentRunEvidence: otherCurrentRunEvidence,
+            predecessorRecovery
+          })
+        )
+        expect(
+          validateS2SCandidateReadReplayPair(
+            firstReplay,
+            otherCurrentRereadReplay
+          )
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "LEDGER_BINDING_MISMATCH" }
+        })
+
+        const alternateScenario = makeScenario({
+          stage: "ADJUDICATE",
+          positivePoll: 3,
+          requestIdOverrides: { 0: "REQ:ALTERNATE:0" }
+        })
+        let alternateRereadReplay:
+          | S2SStageArtifactReadReplaySnapshot
+          | undefined
+        yield* probeS2SStageArtifactReadMechanicsForTest(
+          makeSeed("ADJUDICATE"),
+          alternateScenario.observer,
+          (alternateReads) =>
+            Effect.gen(function* () {
+              const alternateFixed = adjudicationReads(alternateReads)
+              yield* alternateFixed.adjudicateReadRegistration
+              yield* alternateFixed.adjudicateReadCandidateFirst
+              const alternateReread =
+                yield* alternateFixed.adjudicateRereadCandidate
+              alternateRereadReplay = right(
+                buildS2SStageArtifactReadReplay({
+                  validatedRead: alternateReread,
+                  currentRunEvidence,
+                  predecessorRecovery
+                })
+              )
+            })
+        )
+        if (alternateRereadReplay === undefined) {
+          return yield* Effect.dieMessage(
+            "alternate candidate reread replay fixture was not produced"
+          )
+        }
+        expect(
+          validateS2SCandidateReadReplayPair(
+            firstReplay,
+            alternateRereadReplay
+          )
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "LEDGER_BINDING_MISMATCH" }
+        })
+
+        const reversed = validateS2SCandidateReadReplayPair(
+          rereadReplay,
+          firstReplay
+        )
+        expect(Either.isLeft(reversed)).toBe(true)
+        if (Either.isLeft(reversed)) {
+          expect(reversed.left.reason).toBe(
+            "CANDIDATE_FINGERPRINT_MISMATCH"
+          )
+        }
+        expect(
+          validateS2SCandidateReadReplayPair(
+            structuredClone(firstReplay.manifest),
+            rereadReplay
+          )
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "INPUT_INVALID" }
+        })
       })
   )
 })

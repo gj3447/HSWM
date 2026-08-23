@@ -45,14 +45,20 @@ engineering checkpoints:
   non-authorizing under an injected observer; production issuance remains
   closed while workflow bytes and API path policy are OPEN, so GitHub origin and
   a genuine current-run capability are not claimed.
-- [`v8 current stage-artifact permit implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v8.json)
+- [`v8 historical stage-artifact permit implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v8.json)
   records fixed zero-identity stage Effects, authority-derived atomically spent
   permits, one seeded bounded request/receipt ledger, fresh run/job/artifact
   validation, and independent candidate reread. Production remains dormant
   while workflow bytes and API path policy are OPEN; its one-use claim is only
   for one trusted process/module identity slot, not durable replay prevention.
+- [`v9 current durable-evidence substrate checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v9.json)
+  records canonical predecessor-linked stage envelopes, bounded content
+  objects, and create-only B/stage claim anchors on one caller-provisioned
+  shared POSIX root. It is structural durability only: complete replay
+  attachment profiles, closed stage programs, upload postconditions, external
+  storage wiring, and the terminal finalizer remain OPEN.
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v8 supersedes v7 only as the
-next-session entrypoint; v1 through v7 remain immutable historical
+runtime graphs, or remote Neo4j publications. v9 supersedes v8 only as the
+next-session entrypoint; v1 through v8 remain immutable historical
 projections.

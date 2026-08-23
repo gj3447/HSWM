@@ -267,3 +267,15 @@ rereads the candidate. Its production claim is limited to one trusted
 process/module identity slot and remains dormant while workflow bytes and API
 path selection are OPEN. This advances only `Π`; it is not durable replay
 protection, GitHub-origin evidence, learned `W`, or scientific efficacy.
+
+The following structural durable-evidence substrate is implemented at code
+checkpoint `8936487` and recorded in the
+[`durable-evidence substrate handoff`](../operations/HSWM_SWM0W_S2S_DURABLE_EVIDENCE_SUBSTRATE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and
+[`v9 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v9.json).
+It adds canonical predecessor-linked stage envelopes, bounded attachment and
+manifest content objects, and one create-only B/stage claim anchor on a
+caller-provisioned shared POSIX root. This advances only `Π`. It does not yet
+fix the complete replay attachment profiles, close stage programs or upload
+postconditions, deploy external storage, establish GitHub origin, or create a
+scientific result.

@@ -26,6 +26,7 @@ import {
 import {
   S2SDurableEvidenceFileStore,
   S2SDurableEvidenceFileStoreError,
+  isAuthenticS2SDurableEvidenceRecovery,
   makeS2SDurableEvidenceFileStoreLayer,
   type S2SEvidenceStageIdentity
 } from "../src/s2s-evidence-file.js"
@@ -163,6 +164,31 @@ it.effect("commits attachment objects, manifest objects, then durable claim anch
     expect(publications.duplicate._tag).toBe("AlreadyCommitted")
     expect(publications.second._tag).toBe("Committed")
     expect(publications.third._tag).toBe("Committed")
+    expect(
+      [
+        publications.first.recovery,
+        publications.duplicate.recovery,
+        publications.second.recovery,
+        publications.third.recovery
+      ].every(isAuthenticS2SDurableEvidenceRecovery)
+    ).toBe(true)
+    expect(
+      Object.getOwnPropertyDescriptor(
+        publications.third.recovery,
+        "chain"
+      )?.get
+    ).toBeUndefined()
+    expect(
+      isAuthenticS2SDurableEvidenceRecovery({
+        chain: publications.third.recovery.chain,
+        latest: publications.third.recovery.latest
+      })
+    ).toBe(false)
+    expect(
+      isAuthenticS2SDurableEvidenceRecovery(
+        new Proxy(publications.third.recovery, {})
+      )
+    ).toBe(false)
     expect(publications.third.recovery.chain.map(({ envelope }) =>
       envelope.document.stage
     )).toEqual(["REGISTER", "CONFIRM", "ADJUDICATE"])
@@ -187,6 +213,7 @@ it.effect("commits attachment objects, manifest objects, then durable claim anch
       return yield* store.recover(identityOf(adjudication))
     }).pipe(Effect.provide(provisionedStoreLayer(storeRoot)))
 
+    expect(isAuthenticS2SDurableEvidenceRecovery(recovered)).toBe(true)
     expect(recovered.chain).toHaveLength(3)
     expect(recovered.latest.envelope.manifestRawSha256).toBe(
       adjudication.manifestRawSha256

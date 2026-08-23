@@ -1,4 +1,7 @@
 import { expect, it } from "@effect/vitest"
+import { mkdtempSync, rmSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 import {
   Cause,
   Deferred,
@@ -15,13 +18,18 @@ import {
 } from "../src/s2s-canonical.js"
 import {
   buildS2SEvidenceClaim,
+  type S2SEvidenceEnvelopeInput,
   type S2SEvidenceEnvelopeSnapshot
 } from "../src/s2s-evidence-envelope.js"
 import {
   S2S_SUCCESS_STAGE_ATTACHMENT_PROFILES,
   buildS2SSuccessStageEvidenceEnvelope
 } from "../src/s2s-evidence-profile.js"
-import type { S2SDurableEvidenceRecovery } from "../src/s2s-evidence-file.js"
+import {
+  S2SDurableEvidenceFileStore,
+  isAuthenticS2SDurableEvidenceRecovery,
+  makeS2SDurableEvidenceFileStoreLayer
+} from "../src/s2s-evidence-file.js"
 import {
   S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_MAX_RAW_BYTES,
   S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_SCHEMA_VERSION,
@@ -56,11 +64,16 @@ import {
 import {
   buildS2SStageArtifactReadReplay,
   buildS2SStageArtifactReadReplayEffect,
+  validateS2SCurrentRunStageEvidenceForArtifactReplay,
   validateS2SCandidateReadReplayPair,
   validateS2SStageArtifactReadReplayEffect,
   validateS2SStageArtifactReadReplay,
   type S2SStageArtifactReadReplaySnapshot
 } from "../src/s2s-stage-artifact-read-replay.js"
+import {
+  commitS2SStageReadReplayProfileAttachments,
+  type S2SStageReadReplayDurablePublication
+} from "../src/s2s-stage-read-replay-durable-profile.js"
 import {
   S2S_STAGE_ARTIFACT_READ_REPLAY_MANIFEST_MAX_BYTES,
   S2S_STAGE_ARTIFACT_READ_REPLAY_MANIFEST_MEMBER_NAME,
@@ -311,15 +324,66 @@ const makeCurrentRunEvidence = (
   })
 }
 
-const makeRegistrationRecovery = (
+const makeConsumerEnvelopeInput = (
+  current: S2SCurrentRunStageEvidence,
+  predecessor: NonNullable<S2SEvidenceEnvelopeInput["predecessor"]>,
+  attachmentBytes: Readonly<Record<string, Uint8Array>>
+): S2SEvidenceEnvelopeInput => ({
+  sourceCommitA: current.sourceCommitA,
+  registrationCommitB: current.registrationCommitB,
+  workflowRunId: current.workflowRunId,
+  workflowRunCreatedAtUnixSeconds: current.workflowRunCreatedAtUnixSeconds,
+  workflowApiPath: current.workflowApiPath,
+  workflowFileSha256: current.workflowFileSha256,
+  workflowContractSha256: current.workflowContractSha256,
+  stage: current.stage,
+  currentJobDatabaseId: current.currentJobDatabaseId,
+  predecessor,
+  attachments: S2S_SUCCESS_STAGE_ATTACHMENT_PROFILES[current.stage].map(
+    (spec) => ({
+      logicalName: spec.logicalName,
+      role: spec.role,
+      schemaVersion: spec.schemaVersion,
+      mediaType: spec.mediaType,
+      bytes: Uint8Array.from(
+        attachmentBytes[spec.logicalName] ?? new Uint8Array([0x31])
+      )
+    })
+  )
+})
+
+const issueDurableRecovery = (
+  envelopes: ReadonlyArray<S2SEvidenceEnvelopeSnapshot>
+) =>
+  Effect.acquireUseRelease(
+    Effect.sync(() => mkdtempSync(join(tmpdir(), "hswm-s2s-replay-source-"))),
+    (root) =>
+      Effect.gen(function* () {
+        const [first, ...remaining] = envelopes
+        if (first === undefined) {
+          return yield* Effect.dieMessage(
+            "durable recovery fixture requires a nonempty envelope chain"
+          )
+        }
+        const store = yield* S2SDurableEvidenceFileStore
+        let publication = yield* store.commit(first)
+        for (const envelope of remaining) {
+          publication = yield* store.commit(envelope)
+        }
+        return publication.recovery
+      }).pipe(Effect.provide(makeS2SDurableEvidenceFileStoreLayer(root))),
+    (root) => Effect.sync(() => rmSync(root, { force: true, recursive: true }))
+  )
+
+const makeRegistrationEnvelope = (
   archive: Uint8Array,
   current: S2SCurrentRunStageEvidence,
   overrides: Readonly<{
     workflowFileSha256?: string
     currentJobDatabaseId?: number
   }> = {}
-): S2SDurableEvidenceRecovery => {
-  const envelope: S2SEvidenceEnvelopeSnapshot = right(
+): S2SEvidenceEnvelopeSnapshot =>
+  right(
     buildS2SSuccessStageEvidenceEnvelope({
       sourceCommitA: current.sourceCommitA,
       registrationCommitB: current.registrationCommitB,
@@ -345,19 +409,26 @@ const makeRegistrationRecovery = (
       }))
     })
   )
-  const claim = right(buildS2SEvidenceClaim(envelope))
-  const stage = Object.freeze({ envelope, claim })
-  const chain = Object.freeze([stage])
-  return Object.freeze({ chain, latest: stage })
-}
+
+const makeRegistrationRecovery = (
+  archive: Uint8Array,
+  current: S2SCurrentRunStageEvidence,
+  overrides: Readonly<{
+    workflowFileSha256?: string
+    currentJobDatabaseId?: number
+  }> = {}
+) =>
+  issueDurableRecovery([
+    makeRegistrationEnvelope(archive, current, overrides)
+  ])
 
 const makeAdjudicationRecovery = (
   registration: Uint8Array,
   candidate: Uint8Array,
   current: S2SCurrentRunStageEvidence
-): S2SDurableEvidenceRecovery => {
-  const registrationRecovery = makeRegistrationRecovery(registration, current)
-  const registrationStage = registrationRecovery.latest
+) => {
+  const registrationEnvelope = makeRegistrationEnvelope(registration, current)
+  const registrationClaim = right(buildS2SEvidenceClaim(registrationEnvelope))
   const confirmationEnvelope = right(
     buildS2SSuccessStageEvidenceEnvelope({
       sourceCommitA: current.sourceCommitA,
@@ -371,9 +442,8 @@ const makeAdjudicationRecovery = (
       currentJobDatabaseId: CONFIRM_JOB_ID,
       predecessor: {
         stage: "REGISTER",
-        manifestRawSha256:
-          registrationStage.envelope.manifestRawSha256,
-        claimRawSha256: registrationStage.claim.claimRawSha256
+        manifestRawSha256: registrationEnvelope.manifestRawSha256,
+        claimRawSha256: registrationClaim.claimRawSha256
       },
       attachments: S2S_SUCCESS_STAGE_ATTACHMENT_PROFILES.CONFIRM.map((spec) => ({
         logicalName: spec.logicalName,
@@ -387,15 +457,7 @@ const makeAdjudicationRecovery = (
       }))
     })
   )
-  const confirmationClaim = right(
-    buildS2SEvidenceClaim(confirmationEnvelope)
-  )
-  const confirmationStage = Object.freeze({
-    envelope: confirmationEnvelope,
-    claim: confirmationClaim
-  })
-  const chain = Object.freeze([registrationStage, confirmationStage])
-  return Object.freeze({ chain, latest: confirmationStage })
+  return issueDurableRecovery([registrationEnvelope, confirmationEnvelope])
 }
 
 const responseProvenance = (githubRequestId: string) =>
@@ -759,15 +821,32 @@ it.effect("builds and independently replays the bounded poll-three registration 
   if (sourceArchive === undefined) {
     return Effect.dieMessage("registration source archive fixture is absent")
   }
-  const predecessorRecovery = makeRegistrationRecovery(
-    sourceArchive,
-    currentRunEvidence
-  )
   return probeS2SStageArtifactReadMechanicsForTest(
     makeSeed("CONFIRM"),
     scenario.observer,
     (reads) =>
       Effect.gen(function* () {
+        const predecessorRecovery = yield* makeRegistrationRecovery(
+          sourceArchive,
+          currentRunEvidence
+        )
+        expect(isAuthenticS2SDurableEvidenceRecovery(predecessorRecovery)).toBe(
+          true
+        )
+        const validatedCurrent = right(
+          validateS2SCurrentRunStageEvidenceForArtifactReplay(currentRunEvidence)
+        )
+        expect(validatedCurrent.receiptSha256).toBe(
+          currentRunEvidence.receiptSha256
+        )
+        expect(
+          validateS2SCurrentRunStageEvidenceForArtifactReplay(
+            new Proxy(currentRunEvidence, {})
+          )
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "CURRENT_RUN_BINDING_MISMATCH" }
+        })
         const validatedRead = yield* confirmationReads(
           reads
         ).confirmReadRegistration
@@ -793,29 +872,31 @@ it.effect("builds and independently replays the bounded poll-three registration 
             predecessorRecovery
           })
         )
+        const wrongWorkflowRecovery = yield* makeRegistrationRecovery(
+          sourceArchive,
+          currentRunEvidence,
+          { workflowFileSha256: "e".repeat(64) }
+        )
         expect(
           buildS2SStageArtifactReadReplay({
             validatedRead,
             currentRunEvidence,
-            predecessorRecovery: makeRegistrationRecovery(
-              sourceArchive,
-              currentRunEvidence,
-              { workflowFileSha256: "e".repeat(64) }
-            )
+            predecessorRecovery: wrongWorkflowRecovery
           })
         ).toMatchObject({
           _tag: "Left",
           left: { reason: "ARCHIVE_REFERENCE_INVALID" }
         })
+        const wrongJobRecovery = yield* makeRegistrationRecovery(
+          sourceArchive,
+          currentRunEvidence,
+          { currentJobDatabaseId: REGISTER_JOB_ID + 99 }
+        )
         expect(
           buildS2SStageArtifactReadReplay({
             validatedRead,
             currentRunEvidence,
-            predecessorRecovery: makeRegistrationRecovery(
-              sourceArchive,
-              currentRunEvidence,
-              { currentJobDatabaseId: REGISTER_JOB_ID + 99 }
-            )
+            predecessorRecovery: wrongJobRecovery
           })
         ).toMatchObject({
           _tag: "Left",
@@ -831,22 +912,40 @@ it.effect("builds and independently replays the bounded poll-three registration 
           _tag: "Left",
           left: { reason: "INPUT_INVALID" }
         })
-        let recoveryReadCount = 0
-        const lazyRecovery: S2SDurableEvidenceRecovery = Object.freeze({
-          get chain() {
-            recoveryReadCount += 1
-            return predecessorRecovery.chain
+        let recoveryGetterCount = 0
+        const counterfeitRecovery = Object.create(null, {
+          chain: {
+            enumerable: true,
+            get: () => {
+              recoveryGetterCount += 1
+              throw new Error("counterfeit chain getter must remain inert")
+            }
           },
-          latest: predecessorRecovery.latest
+          latest: {
+            enumerable: true,
+            get: () => {
+              recoveryGetterCount += 1
+              throw new Error("counterfeit latest getter must remain inert")
+            }
+          }
         })
         const lazyBuild = buildS2SStageArtifactReadReplayEffect({
           validatedRead,
           currentRunEvidence,
-          predecessorRecovery: lazyRecovery
+          predecessorRecovery: counterfeitRecovery
         })
-        expect(recoveryReadCount).toBe(0)
-        const effectBuilt = yield* lazyBuild
-        expect(recoveryReadCount).toBeGreaterThan(0)
+        expect(recoveryGetterCount).toBe(0)
+        const counterfeitOutcome = yield* lazyBuild.pipe(Effect.either)
+        expect(counterfeitOutcome).toMatchObject({
+          _tag: "Left",
+          left: { reason: "ARCHIVE_REFERENCE_INVALID" }
+        })
+        expect(recoveryGetterCount).toBe(0)
+        const effectBuilt = yield* buildS2SStageArtifactReadReplayEffect({
+          validatedRead,
+          currentRunEvidence,
+          predecessorRecovery
+        })
         expect(effectBuilt.carrierRawSha256).toBe(built.carrierRawSha256)
         const invalidEffect = yield* validateS2SStageArtifactReadReplayEffect(
           {}
@@ -1061,6 +1160,7 @@ it.effect("builds and independently replays the bounded poll-three registration 
           left: { reason: "ARCHIVE_REFERENCE_INVALID" }
         })
 
+        let counterfeitAttachmentReadCount = 0
         const unavailableAttachments = sourceStage.envelope.attachments.map(
           (attachment) =>
             attachment.descriptor.logical_name ===
@@ -1068,6 +1168,7 @@ it.effect("builds and independently replays the bounded poll-three registration 
               ? Object.freeze({
                   descriptor: attachment.descriptor,
                   readBytes: (): Uint8Array => {
+                    counterfeitAttachmentReadCount += 1
                     throw new Error("source bytes unavailable")
                   }
                 })
@@ -1096,6 +1197,7 @@ it.effect("builds and independently replays the bounded poll-three registration 
           _tag: "Left",
           left: { reason: "ARCHIVE_REFERENCE_INVALID" }
         })
+        expect(counterfeitAttachmentReadCount).toBe(0)
 
         const exposedCarrier = built.readCarrierBytes()
         exposedCarrier.fill(0)
@@ -1200,6 +1302,16 @@ it.effect("builds and independently replays the bounded poll-three registration 
           _tag: "Left",
           left: { reason: "ARCHIVE_REFERENCE_INVALID" }
         })
+        expect(
+          validateS2SStageArtifactReadReplay({
+            carrierBytes,
+            currentRunEvidence,
+            predecessorRecovery: Object.freeze({ ...predecessorRecovery })
+          })
+        ).toMatchObject({
+          _tag: "Left",
+          left: { reason: "ARCHIVE_REFERENCE_INVALID" }
+        })
       })
   )
 })
@@ -1212,16 +1324,16 @@ it.effect("replays the adjudication chain and binds the two candidate reads", ()
   if (registration === undefined || candidate === undefined) {
     return Effect.dieMessage("adjudication archive fixtures are absent")
   }
-  const predecessorRecovery = makeAdjudicationRecovery(
-    registration,
-    candidate,
-    currentRunEvidence
-  )
   return probeS2SStageArtifactReadMechanicsForTest(
     makeSeed("ADJUDICATE"),
     scenario.observer,
     (reads) =>
       Effect.gen(function* () {
+        const predecessorRecovery = yield* makeAdjudicationRecovery(
+          registration,
+          candidate,
+          currentRunEvidence
+        )
         const fixed = adjudicationReads(reads)
         const registrationRead = yield* fixed.adjudicateReadRegistration
         const firstRead = yield* fixed.adjudicateReadCandidateFirst
@@ -1348,6 +1460,283 @@ it.effect("replays the adjudication chain and binds the two candidate reads", ()
           left: { reason: "INPUT_INVALID" }
         })
       })
+  )
+})
+
+it.effect("preserves fully validated replay carriers through one create-only three-stage chain", () => {
+  const durableRoot = mkdtempSync(join(tmpdir(), "hswm-s2s-replay-profile-"))
+  const confirmScenario = makeScenario({ stage: "CONFIRM", positivePoll: 3 })
+  const adjudicateScenario = makeScenario({
+    stage: "ADJUDICATE",
+    positivePoll: 3
+  })
+  const registrationArchiveBytes = confirmScenario.plans[0]?.archive
+  const adjudicateRegistrationBytes = adjudicateScenario.plans[0]?.archive
+  const candidateArchiveBytes = adjudicateScenario.plans[1]?.archive
+  if (
+    registrationArchiveBytes === undefined ||
+    adjudicateRegistrationBytes === undefined ||
+    candidateArchiveBytes === undefined
+  ) {
+    rmSync(durableRoot, { force: true, recursive: true })
+    return Effect.dieMessage("durable replay-profile fixtures are incomplete")
+  }
+  expect(adjudicateRegistrationBytes).toEqual(registrationArchiveBytes)
+
+  const confirmCurrent = makeCurrentRunEvidence("CONFIRM")
+  const adjudicateCurrent = makeCurrentRunEvidence("ADJUDICATE")
+  const layer = makeS2SDurableEvidenceFileStoreLayer(durableRoot)
+  const program = Effect.gen(function* () {
+    const store = yield* S2SDurableEvidenceFileStore
+    const registrationEnvelope = makeRegistrationEnvelope(
+      registrationArchiveBytes,
+      confirmCurrent
+    )
+    const registrationPublication = yield* store.commit(registrationEnvelope)
+
+    const confirmationResult: {
+      publication?: S2SStageReadReplayDurablePublication
+      replay?: S2SStageArtifactReadReplaySnapshot
+    } = {}
+    yield* probeS2SStageArtifactReadMechanicsForTest(
+      makeSeed("CONFIRM"),
+      confirmScenario.observer,
+      (reads) =>
+        Effect.gen(function* () {
+          const registrationRead = yield* confirmationReads(
+            reads
+          ).confirmReadRegistration
+          const replay = right(
+            buildS2SStageArtifactReadReplay({
+              validatedRead: registrationRead,
+              currentRunEvidence: confirmCurrent,
+              predecessorRecovery: registrationPublication.recovery
+            })
+          )
+          const predecessor = registrationPublication.recovery.latest
+          const predecessorBinding = {
+            stage: "REGISTER" as const,
+            manifestRawSha256: predecessor.envelope.manifestRawSha256,
+            claimRawSha256: predecessor.claim.claimRawSha256
+          }
+          const attachmentBytes = {
+            "input/registration_read.zip": replay.readCarrierBytes(),
+            "upload/candidate_archive.zip": candidateArchiveBytes
+          }
+          const envelopeInput = makeConsumerEnvelopeInput(
+            confirmCurrent,
+            predecessorBinding,
+            attachmentBytes
+          )
+          const wrongPredecessor = makeConsumerEnvelopeInput(
+            confirmCurrent,
+            {
+              ...predecessorBinding,
+              claimRawSha256: "f".repeat(64)
+            },
+            attachmentBytes
+          )
+          const wrongPredecessorOutcome =
+            yield* commitS2SStageReadReplayProfileAttachments({
+              envelopeInput: wrongPredecessor,
+              currentRunEvidence: confirmCurrent
+            }).pipe(Effect.either)
+          expect(wrongPredecessorOutcome).toMatchObject({
+            _tag: "Left",
+            left: { reason: "PREDECESSOR_ENVELOPE_MISMATCH" }
+          })
+          const publication =
+            yield* commitS2SStageReadReplayProfileAttachments({
+              envelopeInput,
+              currentRunEvidence: confirmCurrent
+            })
+          confirmationResult.publication = publication
+          confirmationResult.replay = replay
+        })
+    )
+    const confirmationPublication = confirmationResult.publication
+    const confirmationReplay = confirmationResult.replay
+    if (
+      confirmationPublication === undefined ||
+      confirmationReplay === undefined
+    ) {
+      return yield* Effect.dieMessage(
+        "confirmation replay-profile publication was not produced"
+      )
+    }
+    expect(confirmationPublication._tag).toBe(
+      "StageReadReplayProfileCommitted"
+    )
+    expect(confirmationPublication.replayAttachments).toMatchObject([
+      {
+        logicalName: "input/registration_read.zip",
+        operation: "CONFIRM_READ_REGISTRATION",
+        carrierRawSha256: confirmationReplay.carrierRawSha256
+      }
+    ])
+
+    const adjudicationResult: {
+      duplicate?: S2SStageReadReplayDurablePublication
+      publication?: S2SStageReadReplayDurablePublication
+    } = {}
+    yield* probeS2SStageArtifactReadMechanicsForTest(
+      makeSeed("ADJUDICATE"),
+      adjudicateScenario.observer,
+      (reads) =>
+        Effect.gen(function* () {
+          const fixed = adjudicationReads(reads)
+          const registrationRead = yield* fixed.adjudicateReadRegistration
+          const candidateFirst = yield* fixed.adjudicateReadCandidateFirst
+          const candidateReread = yield* fixed.adjudicateRereadCandidate
+          const predecessorRecovery = confirmationPublication.recovery
+          const registrationReplay = right(
+            buildS2SStageArtifactReadReplay({
+              validatedRead: registrationRead,
+              currentRunEvidence: adjudicateCurrent,
+              predecessorRecovery
+            })
+          )
+          const candidateFirstReplay = right(
+            buildS2SStageArtifactReadReplay({
+              validatedRead: candidateFirst,
+              currentRunEvidence: adjudicateCurrent,
+              predecessorRecovery
+            })
+          )
+          const candidateRereadReplay = right(
+            buildS2SStageArtifactReadReplay({
+              validatedRead: candidateReread,
+              currentRunEvidence: adjudicateCurrent,
+              predecessorRecovery
+            })
+          )
+          const predecessor = predecessorRecovery.latest
+          const predecessorBinding = {
+            stage: "CONFIRM" as const,
+            manifestRawSha256: predecessor.envelope.manifestRawSha256,
+            claimRawSha256: predecessor.claim.claimRawSha256
+          }
+          const envelopeInput = makeConsumerEnvelopeInput(
+            adjudicateCurrent,
+            predecessorBinding,
+            {
+              "input/registration_read.zip":
+                registrationReplay.readCarrierBytes(),
+              "input/candidate_first_read.zip":
+                candidateFirstReplay.readCarrierBytes(),
+              "input/candidate_reread.zip":
+                candidateRereadReplay.readCarrierBytes()
+            }
+          )
+          const swapped = makeConsumerEnvelopeInput(
+            adjudicateCurrent,
+            predecessorBinding,
+            {
+              "input/registration_read.zip":
+                registrationReplay.readCarrierBytes(),
+              "input/candidate_first_read.zip":
+                candidateRereadReplay.readCarrierBytes(),
+              "input/candidate_reread.zip":
+                candidateFirstReplay.readCarrierBytes()
+            }
+          )
+          const rejected =
+            yield* commitS2SStageReadReplayProfileAttachments({
+              envelopeInput: swapped,
+              currentRunEvidence: adjudicateCurrent
+            }).pipe(Effect.either)
+          expect(rejected).toMatchObject({
+            _tag: "Left",
+            left: { reason: "REPLAY_OPERATION_MISMATCH" }
+          })
+
+          const publication =
+            yield* commitS2SStageReadReplayProfileAttachments({
+              envelopeInput,
+              currentRunEvidence: adjudicateCurrent
+            })
+          const duplicate =
+            yield* commitS2SStageReadReplayProfileAttachments({
+              envelopeInput,
+              currentRunEvidence: adjudicateCurrent
+            })
+          adjudicationResult.duplicate = duplicate
+          adjudicationResult.publication = publication
+        })
+    )
+    const adjudicationPublication = adjudicationResult.publication
+    const adjudicationDuplicate = adjudicationResult.duplicate
+    if (
+      adjudicationPublication === undefined ||
+      adjudicationDuplicate === undefined
+    ) {
+      return yield* Effect.dieMessage(
+        "adjudication replay-profile publication was not produced"
+      )
+    }
+    expect(adjudicationPublication._tag).toBe(
+      "StageReadReplayProfileCommitted"
+    )
+    expect(adjudicationDuplicate._tag).toBe(
+      "StageReadReplayProfileAlreadyCommitted"
+    )
+    expect(
+      adjudicationPublication.replayAttachments.map(({ operation }) =>
+        operation
+      )
+    ).toEqual([
+      "ADJUDICATE_READ_CANDIDATE_FIRST",
+      "ADJUDICATE_REREAD_CANDIDATE",
+      "ADJUDICATE_READ_REGISTRATION"
+    ])
+
+    const restarted = yield* Effect.gen(function* () {
+      const restartedStore = yield* S2SDurableEvidenceFileStore
+      const identity = adjudicationPublication.recovery.latest.envelope.document
+      return yield* restartedStore.recover({
+        sourceCommitA: identity.source_commit_a,
+        registrationCommitB: identity.registration_commit_b,
+        workflowRunId: identity.workflow_run_id,
+        stage: "ADJUDICATE"
+      })
+    }).pipe(Effect.provide(makeS2SDurableEvidenceFileStoreLayer(durableRoot)))
+    expect(isAuthenticS2SDurableEvidenceRecovery(restarted)).toBe(true)
+    expect(
+      restarted.chain.map(({ envelope }) => envelope.document.stage)
+    ).toEqual(["REGISTER", "CONFIRM", "ADJUDICATE"])
+    expect(restarted.latest.envelope.manifestRawSha256).toBe(
+      adjudicationPublication.manifestRawSha256
+    )
+
+    let accessorReads = 0
+    const accessorInput = Object.create(Object.prototype, {
+      envelopeInput: {
+        enumerable: true,
+        get: () => {
+          accessorReads += 1
+          throw new Error("accessor input must remain inert")
+        }
+      },
+      currentRunEvidence: {
+        enumerable: true,
+        value: confirmCurrent
+      }
+    })
+    const lazy = commitS2SStageReadReplayProfileAttachments(accessorInput)
+    expect(accessorReads).toBe(0)
+    const accessorOutcome = yield* lazy.pipe(Effect.either)
+    expect(accessorOutcome).toMatchObject({
+      _tag: "Left",
+      left: { reason: "INPUT_INVALID" }
+    })
+    expect(accessorReads).toBe(0)
+  })
+
+  return program.pipe(
+    Effect.provide(layer),
+    Effect.ensuring(
+      Effect.sync(() => rmSync(durableRoot, { force: true, recursive: true }))
+    )
   )
 })
 

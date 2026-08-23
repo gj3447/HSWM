@@ -18,6 +18,7 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect("S2SPythonGoldenVerifier" in PublicApi).toBe(false)
   expect("S2SDurableJournalFileStore" in PublicApi).toBe(false)
   expect("S2SDurableEvidenceFileStore" in PublicApi).toBe(false)
+  expect("isAuthenticS2SDurableEvidenceRecovery" in PublicApi).toBe(false)
   expect("buildS2SEvidenceEnvelope" in PublicApi).toBe(false)
   expect("validateS2SEvidenceEnvelope" in PublicApi).toBe(false)
   expect("validateS2SEvidenceEnvelopeSnapshot" in PublicApi).toBe(false)
@@ -70,8 +71,15 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect("buildS2SStageArtifactReadReplayEffect" in PublicApi).toBe(false)
   expect("validateS2SStageArtifactReadReplay" in PublicApi).toBe(false)
   expect("validateS2SStageArtifactReadReplayEffect" in PublicApi).toBe(false)
+  expect(
+    "validateS2SCurrentRunStageEvidenceForArtifactReplay" in PublicApi
+  ).toBe(false)
   expect("validateS2SCandidateReadReplayPair" in PublicApi).toBe(false)
   expect("validateS2SCandidateReadReplayPairEffect" in PublicApi).toBe(false)
+  expect(
+    "commitS2SStageReadReplayProfileAttachments" in PublicApi
+  ).toBe(false)
+  expect("S2SStageReadReplayDurableProfileError" in PublicApi).toBe(false)
   expect("S2S_STAGE_ARTIFACT_READ_REPLAY_MAX_BYTES" in PublicApi).toBe(false)
   expect("validateS2SRegistrationCommitB" in PublicApi).toBe(false)
   expect("inspectS2SRegistrationCommitAuthority" in PublicApi).toBe(false)
@@ -103,12 +111,34 @@ it("keeps stage artifact capability and permit types root-private", () => {
   type ForbiddenLookupTrace = import("../src/index.js").S2SArtifactSuccessfulLookupTrace
   // @ts-expect-error replay snapshot types are deliberately root-private
   type ForbiddenReplay = import("../src/index.js").S2SStageArtifactReadReplaySnapshot
+  // @ts-expect-error durable recovery types are deliberately root-private
+  type ForbiddenRecovery = import("../src/index.js").S2SDurableEvidenceRecovery
+  // @ts-expect-error durable replay-profile types are deliberately root-private
+  type ForbiddenReplayPublication = import("../src/index.js").S2SStageReadReplayDurablePublication
   const absent: readonly [
     ForbiddenReads | undefined,
     ForbiddenPermit | undefined,
     ForbiddenValidatedRead | undefined,
     ForbiddenLookupTrace | undefined,
-    ForbiddenReplay | undefined
-  ] = [undefined, undefined, undefined, undefined, undefined]
-  expect(absent).toEqual([undefined, undefined, undefined, undefined, undefined])
+    ForbiddenReplay | undefined,
+    ForbiddenRecovery | undefined,
+    ForbiddenReplayPublication | undefined
+  ] = [
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined
+  ]
+  expect(absent).toEqual([
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined
+  ])
 })

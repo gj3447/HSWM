@@ -22,9 +22,10 @@ import {
   type S2SEvidenceEnvelopeSnapshot
 } from "./s2s-evidence-envelope.js"
 import { validateS2SSuccessStageEvidenceEnvelope } from "./s2s-evidence-profile.js"
-import type {
-  S2SDurableEvidenceRecovery,
-  S2SDurableEvidenceStage
+import {
+  isAuthenticS2SDurableEvidenceRecovery,
+  type S2SDurableEvidenceRecovery,
+  type S2SDurableEvidenceStage
 } from "./s2s-evidence-file.js"
 import { parseS2SJsonBytes } from "./s2s-json.js"
 import {
@@ -510,7 +511,7 @@ const currentRunFailure = (detail: string) =>
     )
   )
 
-const validateCurrentRunEvidence = (
+export const validateS2SCurrentRunStageEvidenceForArtifactReplay = (
   input: unknown
 ): Either.Either<
   S2SCurrentRunStageEvidence,
@@ -840,7 +841,7 @@ const matchesCurrentWorkflowLineage = (
 }
 
 interface ResolvedSourceArchive {
-  readonly stage: S2SDurableEvidenceStage
+  readonly reference: S2SStageArtifactReadReplayManifest["archive_reference"]
   readonly bytes: Uint8Array
 }
 
@@ -852,15 +853,13 @@ const validateRecoveredPredecessorChain = (
   S2SStageArtifactReadReplayError
 > => {
   try {
-    if (
-      input === null ||
-      typeof input !== "object" ||
-      nodeTypes.isProxy(input)
-    ) {
-      throw new Error("recovery is not an object")
+    if (!isAuthenticS2SDurableEvidenceRecovery(input)) {
+      throw new Error(
+        "recovery was not issued by the durable evidence file store"
+      )
     }
-    const chainInput = Reflect.get(input, "chain")
-    const latestInput = Reflect.get(input, "latest")
+    const chainInput = input.chain
+    const latestInput = input.latest
     const chain = snapshotDenseArray(chainInput, 2, 1)
     const expectedStages =
       current.stage === "CONFIRM"
@@ -947,55 +946,70 @@ const validateRecoveredPredecessorChain = (
   }
 }
 
-const resolveSourceArchive = (
+const snapshotSourceArchiveFromRecovery = (
   input: unknown,
-  manifest: S2SStageArtifactReadReplayManifest,
-  current: S2SCurrentRunStageEvidence
+  current: S2SCurrentRunStageEvidence,
+  role: "REGISTRATION" | "CANDIDATE"
 ): Either.Either<ResolvedSourceArchive, S2SStageArtifactReadReplayError> => {
   const validated = validateRecoveredPredecessorChain(input, current)
   if (Either.isLeft(validated)) return Either.left(validated.left)
   try {
-    const reference = manifest.archive_reference
+    const policy = expectedSourceReference(role)
     const source = validated.right.find(
-      (stage) => stage.envelope.document.stage === reference.source_stage
+      (stage) => stage.envelope.document.stage === policy.sourceStage
     )
-    if (
-      source === undefined ||
-      source.envelope.manifestRawSha256 !==
-        reference.source_manifest_raw_sha256 ||
-      source.claim.claimRawSha256 !== reference.source_claim_raw_sha256
-    ) {
-      throw new Error("archive source stage address is absent from the chain")
+    if (source === undefined) {
+      throw new Error("exact source stage is absent from the chain")
     }
     const matches = source.envelope.attachments.filter((attachment) => {
       const descriptor = attachment.descriptor
       return (
-        descriptor.logical_name === reference.logical_name &&
-        descriptor.role === reference.role &&
-        descriptor.schema_version === reference.schema_version &&
-        descriptor.media_type === reference.media_type &&
-        descriptor.byte_length === reference.byte_length &&
-        descriptor.raw_sha256 === reference.raw_sha256
+        descriptor.logical_name === policy.logicalName &&
+        descriptor.role === policy.role &&
+        descriptor.schema_version === policy.schemaVersion &&
+        descriptor.media_type === "application/zip"
       )
     })
     if (matches.length !== 1 || matches[0] === undefined) {
-      throw new Error("archive reference does not select one exact attachment")
+      throw new Error("exact source upload attachment is absent")
     }
-    const bytes = snapshotPlainBytes(matches[0].readBytes(), 64 * MEBIBYTE)
+    const attachment = matches[0]
+    const descriptor = attachment.descriptor
+    const bytes = snapshotPlainBytes(
+      attachment.readBytes(),
+      policy.maximumArchiveBytes
+    )
     if (
       bytes === null ||
-      bytes.byteLength !== reference.byte_length ||
-      rawS2SFileSha256(bytes) !== reference.raw_sha256
+      bytes.byteLength !== descriptor.byte_length ||
+      rawS2SFileSha256(bytes) !== descriptor.raw_sha256
     ) {
-      throw new Error("referenced archive bytes are unavailable or corrupt")
+      throw new Error("exact source upload bytes are unavailable or corrupt")
     }
-    return Either.right(Object.freeze({ stage: source, bytes }))
+    return Either.right(
+      Object.freeze({
+        reference: Object.freeze({
+          source_stage: policy.sourceStage,
+          source_manifest_raw_sha256: source.envelope.manifestRawSha256,
+          source_claim_raw_sha256: source.claim.claimRawSha256,
+          logical_name: policy.logicalName,
+          role: policy.role,
+          schema_version: policy.schemaVersion,
+          media_type: "application/zip" as const,
+          byte_length: descriptor.byte_length,
+          raw_sha256: descriptor.raw_sha256
+        }),
+        bytes
+      })
+    )
   } catch (error) {
     return Either.left(
       replayError(
         "ARCHIVE_REFERENCE_INVALID",
         "ARCHIVE_REFERENCE",
-        error instanceof Error ? error.message : "source resolution failed closed"
+        error instanceof Error
+          ? error.message
+          : "source snapshot failed closed"
       )
     )
   }
@@ -1472,6 +1486,15 @@ const validateReplaySemantics = (
   ValidatedReplaySemantics,
   S2SStageArtifactReadReplayError
 > => {
+  if (!sameCanonicalData(manifest.archive_reference, source.reference)) {
+    return Either.left(
+      replayError(
+        "ARCHIVE_REFERENCE_INVALID",
+        "ARCHIVE_REFERENCE",
+        "replay archive reference differs from the recovered source snapshot"
+      )
+    )
+  }
   const contract = s2sArtifactReadContract(
     manifest.identity.stage,
     manifest.operation
@@ -1887,6 +1910,30 @@ const makeReplaySnapshot = (
   return snapshot
 }
 
+const validateDecodedReplayWithPreparedSource = (
+  carrier: DecodedReplayCarrier,
+  current: S2SCurrentRunStageEvidence,
+  source: ResolvedSourceArchive
+): Either.Either<
+  S2SStageArtifactReadReplaySnapshot,
+  S2SStageArtifactReadReplayError
+> => {
+  const observations = reconstructObservations(
+    carrier.manifest,
+    carrier.observationBytes
+  )
+  if (Either.isLeft(observations)) return Either.left(observations.left)
+  const semantics = validateReplaySemantics(
+    carrier.manifest,
+    current,
+    observations.right,
+    source
+  )
+  return Either.isLeft(semantics)
+    ? Either.left(semantics.left)
+    : Either.right(makeReplaySnapshot(carrier, semantics.right))
+}
+
 export const validateS2SStageArtifactReadReplay = (
   input: unknown
 ): Either.Either<
@@ -1908,30 +1955,24 @@ export const validateS2SStageArtifactReadReplay = (
         )
       )
     }
-    const current = validateCurrentRunEvidence(root["currentRunEvidence"])
+    const current =
+      validateS2SCurrentRunStageEvidenceForArtifactReplay(
+        root["currentRunEvidence"]
+      )
     if (Either.isLeft(current)) return Either.left(current.left)
     const carrier = decodeReplayCarrier(root["carrierBytes"])
     if (Either.isLeft(carrier)) return Either.left(carrier.left)
-    const source = resolveSourceArchive(
+    const source = snapshotSourceArchiveFromRecovery(
       root["predecessorRecovery"],
-      carrier.right.manifest,
-      current.right
+      current.right,
+      carrier.right.manifest.role
     )
     if (Either.isLeft(source)) return Either.left(source.left)
-    const observations = reconstructObservations(
-      carrier.right.manifest,
-      carrier.right.observationBytes
-    )
-    if (Either.isLeft(observations)) return Either.left(observations.left)
-    const semantics = validateReplaySemantics(
-      carrier.right.manifest,
+    return validateDecodedReplayWithPreparedSource(
+      carrier.right,
       current.right,
-      observations.right,
       source.right
     )
-    return Either.isLeft(semantics)
-      ? Either.left(semantics.left)
-      : Either.right(makeReplaySnapshot(carrier.right, semantics.right))
   } catch {
     return Either.left(
       replayError(
@@ -2083,78 +2124,6 @@ export interface S2SStageArtifactReadReplayBuildInput {
   readonly predecessorRecovery: S2SDurableEvidenceRecovery
 }
 
-interface BuildSourceArchive {
-  readonly reference: S2SStageArtifactReadReplayManifest["archive_reference"]
-  readonly bytes: Uint8Array
-}
-
-const deriveBuildSourceArchive = (
-  recoveryInput: unknown,
-  current: S2SCurrentRunStageEvidence,
-  role: "REGISTRATION" | "CANDIDATE"
-): Either.Either<BuildSourceArchive, S2SStageArtifactReadReplayError> => {
-  const validated = validateRecoveredPredecessorChain(recoveryInput, current)
-  if (Either.isLeft(validated)) return Either.left(validated.left)
-  try {
-    const policy = expectedSourceReference(role)
-    const source = validated.right.find(
-      (stage) => stage.envelope.document.stage === policy.sourceStage
-    )
-    if (source === undefined) {
-      throw new Error("exact source stage is absent")
-    }
-    const attachments = source.envelope.attachments.filter((attachment) => {
-      const descriptor = attachment.descriptor
-      return (
-        descriptor.logical_name === policy.logicalName &&
-        descriptor.role === policy.role &&
-        descriptor.schema_version === policy.schemaVersion &&
-        descriptor.media_type === "application/zip"
-      )
-    })
-    if (attachments.length !== 1 || attachments[0] === undefined) {
-      throw new Error("exact source upload attachment is absent")
-    }
-    const attachment = attachments[0]
-    const descriptor = attachment.descriptor
-    const bytes = snapshotPlainBytes(
-      attachment.readBytes(),
-      policy.maximumArchiveBytes
-    )
-    if (
-      bytes === null ||
-      bytes.byteLength !== descriptor.byte_length ||
-      rawS2SFileSha256(bytes) !== descriptor.raw_sha256
-    ) {
-      throw new Error("exact source upload bytes are unavailable or corrupt")
-    }
-    return Either.right(
-      Object.freeze({
-        reference: Object.freeze({
-          source_stage: policy.sourceStage,
-          source_manifest_raw_sha256: source.envelope.manifestRawSha256,
-          source_claim_raw_sha256: source.claim.claimRawSha256,
-          logical_name: policy.logicalName,
-          role: policy.role,
-          schema_version: policy.schemaVersion,
-          media_type: "application/zip" as const,
-          byte_length: descriptor.byte_length,
-          raw_sha256: descriptor.raw_sha256
-        }),
-        bytes
-      })
-    )
-  } catch (error) {
-    return Either.left(
-      replayError(
-        "ARCHIVE_REFERENCE_INVALID",
-        "ARCHIVE_REFERENCE",
-        error instanceof Error ? error.message : "source derivation failed closed"
-      )
-    )
-  }
-}
-
 interface BuildObservation {
   readonly phase: ExpectedObservation["phase"]
   readonly observation: S2SGitHubObservation
@@ -2245,7 +2214,7 @@ const concatenateObservationBytes = (
 
 const inputArchiveSurfacesMatch = (
   read: S2SValidatedStageArtifactRead,
-  source: BuildSourceArchive,
+  source: ResolvedSourceArchive,
   freshArchive: S2SValidatedArtifactZip
 ): boolean => {
   try {
@@ -2345,7 +2314,10 @@ export const buildS2SStageArtifactReadReplay = (
         )
       )
     }
-    const current = validateCurrentRunEvidence(root["currentRunEvidence"])
+    const current =
+      validateS2SCurrentRunStageEvidenceForArtifactReplay(
+        root["currentRunEvidence"]
+      )
     if (Either.isLeft(current)) return Either.left(current.left)
     const read = validatedReadInput
     if (
@@ -2362,7 +2334,7 @@ export const buildS2SStageArtifactReadReplay = (
         )
       )
     }
-    const source = deriveBuildSourceArchive(
+    const source = snapshotSourceArchiveFromRecovery(
       root["predecessorRecovery"],
       current.right,
       read.role
@@ -2647,11 +2619,14 @@ export const buildS2SStageArtifactReadReplay = (
         )
       )
     }
-    return validateS2SStageArtifactReadReplay({
-      carrierBytes: zip.right.readArchiveBytes(),
-      currentRunEvidence: root["currentRunEvidence"],
-      predecessorRecovery: root["predecessorRecovery"]
-    })
+    const decodedCarrier = decodeReplayCarrier(zip.right.readArchiveBytes())
+    return Either.isLeft(decodedCarrier)
+      ? Either.left(decodedCarrier.left)
+      : validateDecodedReplayWithPreparedSource(
+          decodedCarrier.right,
+          current.right,
+          source.right
+        )
   } catch (error) {
     return Either.left(
       replayError(

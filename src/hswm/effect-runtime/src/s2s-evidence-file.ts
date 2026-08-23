@@ -82,6 +82,16 @@ export interface S2SDurableEvidenceRecovery {
   readonly latest: S2SDurableEvidenceStage
 }
 
+const AUTHENTIC_DURABLE_EVIDENCE_RECOVERIES = new WeakSet<object>()
+
+/** Root-private process-local provenance check for file-store-issued recovery. */
+export const isAuthenticS2SDurableEvidenceRecovery = (
+  input: unknown
+): input is S2SDurableEvidenceRecovery =>
+  input !== null &&
+  typeof input === "object" &&
+  AUTHENTIC_DURABLE_EVIDENCE_RECOVERIES.has(input)
+
 export interface S2SDurableEvidencePublication {
   readonly _tag: "Committed" | "AlreadyCommitted"
   readonly recovery: S2SDurableEvidenceRecovery
@@ -810,12 +820,12 @@ const makeRecovery = (
       "a recovered evidence chain must be nonempty"
     )
   }
-  return Object.freeze({
-    get chain(): ReadonlyArray<S2SDurableEvidenceStage> {
-      return Object.freeze(Array.from(chainSnapshot))
-    },
+  const recovery = Object.freeze({
+    chain: chainSnapshot,
     latest
   })
+  AUTHENTIC_DURABLE_EVIDENCE_RECOVERIES.add(recovery)
+  return recovery
 }
 
 const recoverCommittedClaim = (

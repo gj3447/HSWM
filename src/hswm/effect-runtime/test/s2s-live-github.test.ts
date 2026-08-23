@@ -9,6 +9,7 @@ import {
 import {
   S2S_GITHUB_API_VERSION,
   S2S_GITHUB_ARTIFACT_DOWNLOAD_SCHEMA_VERSION,
+  S2S_GITHUB_JSON_MAX_BYTES,
   S2S_GITHUB_OBSERVATION_SCHEMA_VERSION,
   S2S_GITHUB_REPOSITORY,
   S2SGitHubHttpTransport,
@@ -116,6 +117,42 @@ it("binds the exact run API body and normalized run projection", () => {
     expect(firstRead[0]).toBe(0x7b)
     firstRead.fill(0)
     expect(outcome.right.readRawBody()[0]).toBe(0x7b)
+  }
+})
+
+it("pins the exact one-MiB GitHub JSON acceptance boundary", () => {
+  expect(S2S_GITHUB_JSON_MAX_BYTES).toBe(1_048_576)
+  const fixture = jsonBytes(runFixture())
+  const exact = new Uint8Array(S2S_GITHUB_JSON_MAX_BYTES)
+  exact.fill(0x20)
+  exact.set(fixture)
+  const accepted = observeS2SGitHubWorkflowRun(
+    exact,
+    RUN_ID,
+    OBSERVED_AT,
+    responseProvenance("A1B2:C3D4:E5F6:EXACT")
+  )
+  expect(Either.isRight(accepted)).toBe(true)
+  if (Either.isRight(accepted)) {
+    expect(accepted.right.receipt.rawBodyByteLength).toBe(
+      S2S_GITHUB_JSON_MAX_BYTES
+    )
+  }
+  const over = new Uint8Array(S2S_GITHUB_JSON_MAX_BYTES + 1)
+  over.set(exact)
+  over[S2S_GITHUB_JSON_MAX_BYTES] = 0x20
+  const rejected = observeS2SGitHubWorkflowRun(
+    over,
+    RUN_ID,
+    OBSERVED_AT,
+    responseProvenance("A1B2:C3D4:E5F6:OVER")
+  )
+  expect(Either.isLeft(rejected)).toBe(true)
+  if (Either.isLeft(rejected)) {
+    expect(rejected.left).toMatchObject({
+      reason: "INVALID_ARGUMENT",
+      path: "$rawBody"
+    })
   }
 })
 
@@ -548,7 +585,7 @@ it.effect("rejects hostile raw readers and byte drift without invoking byte acce
     () => byteLengthAccessorBytes,
     () => symbolBytes,
     () => detachedBytes,
-    () => new Uint8Array(8 * 1_048_576 + 1)
+    () => new Uint8Array(S2S_GITHUB_JSON_MAX_BYTES + 1)
   ]
   if (typeof SharedArrayBuffer !== "undefined") {
     const crossRealmShared: unknown = runInNewContext(
@@ -2007,7 +2044,7 @@ it.effect("cancels an unconsumed body rejected by Content-Length", () => {
       {
         status: 200,
         headers: {
-          "content-length": String(9 * 1_048_576),
+          "content-length": String(S2S_GITHUB_JSON_MAX_BYTES + 1),
           "content-type": "application/json"
         }
       }

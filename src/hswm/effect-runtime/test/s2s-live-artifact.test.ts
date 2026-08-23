@@ -32,8 +32,12 @@ import {
   observeS2SGitHubRunArtifacts,
   observeS2SGitHubWorkflowAttemptJobs,
   observeS2SGitHubWorkflowRun,
+  validateS2SGitHubRunArtifactsObservation,
+  validateS2SGitHubWorkflowAttemptJobsObservation,
+  validateS2SGitHubWorkflowRunObservation,
   type S2SGitHubArtifactDownload,
-  type S2SGitHubArtifactDownloadReceipt
+  type S2SGitHubArtifactDownloadReceipt,
+  type S2SGitHubObservation
 } from "../src/s2s-live-github.js"
 import type { S2SConfirmatoryJobStage } from "../src/s2s-workflow-contract.js"
 import {
@@ -615,6 +619,15 @@ it.effect("retains the complete bounded raw lookup trace on poll one, two, and t
               ),
               "ARTIFACT_OBSERVED"
             ])
+            for (const attempt of trace.attempts) {
+              const targetArtifacts =
+                attempt.artifactsObservation.receipt.projection.artifacts.filter(
+                  (artifact) => artifact.name === "s2s-registration"
+                )
+              expect(targetArtifacts).toHaveLength(
+                attempt.classification === "ARTIFACT_OBSERVED" ? 1 : 0
+              )
+            }
             const observations = [
               trace.initialWorkflowRunObservation,
               trace.workflowJobsObservation,
@@ -649,6 +662,51 @@ it.effect("retains the complete bounded raw lookup trace on poll one, two, and t
             expect(result.permitEvidence.ledgerEntries.slice(4)).toHaveLength(
               6 + 2 * positivePoll
             )
+            const ledgerEntry = (
+              phase: string,
+              observation: S2SGitHubObservation
+            ) => ({
+              operation: "CONFIRM_READ_REGISTRATION",
+              phase,
+              githubRequestId: observation.receipt.githubRequestId,
+              receiptSha256: observation.receipt.receiptSha256,
+              observedAtUnixSeconds: observation.receipt.observedAtUnixSeconds
+            })
+            expect(result.permitEvidence.ledgerEntries.slice(4)).toEqual([
+              ledgerEntry("LOOKUP_RUN_START", trace.initialWorkflowRunObservation),
+              ledgerEntry("LOOKUP_JOBS", trace.workflowJobsObservation),
+              ...trace.attempts.flatMap((attempt) => [
+                ledgerEntry(
+                  `LOOKUP_ARTIFACTS_${attempt.ordinal}`,
+                  attempt.artifactsObservation
+                ),
+                ledgerEntry(
+                  `LOOKUP_RUN_END_${attempt.ordinal}`,
+                  attempt.workflowRunObservation
+                )
+              ]),
+              ledgerEntry(
+                "READBACK_RUN_START",
+                result.readbackStartRunObservation
+              ),
+              ledgerEntry(
+                "READBACK_ARTIFACT",
+                result.artifactRequeryObservation
+              ),
+              {
+                operation: "CONFIRM_READ_REGISTRATION",
+                phase: "READBACK_DOWNLOAD_REDIRECT",
+                githubRequestId:
+                  result.artifactDownload.receipt.redirectGitHubRequestId,
+                receiptSha256: result.artifactDownload.receipt.receiptSha256,
+                observedAtUnixSeconds:
+                  result.artifactDownload.receipt.downloadedAtUnixSeconds
+              },
+              ledgerEntry(
+                "READBACK_RUN_END",
+                result.readbackFinalRunObservation
+              )
+            ])
             for (const observation of observations) {
               const original = observation.readRawBody()
               expect(rawS2SFileSha256(original)).toBe(
@@ -658,21 +716,61 @@ it.effect("retains the complete bounded raw lookup trace on poll one, two, and t
               callerCopy[0] = (callerCopy[0] ?? 0) ^ 0xff
               expect(observation.readRawBody()).toEqual(original)
             }
+            yield* validateS2SGitHubWorkflowRunObservation(
+              trace.initialWorkflowRunObservation,
+              RUN_ID
+            )
+            yield* validateS2SGitHubWorkflowAttemptJobsObservation(
+              trace.workflowJobsObservation,
+              RUN_ID
+            )
+            for (const attempt of trace.attempts) {
+              yield* validateS2SGitHubRunArtifactsObservation(
+                attempt.artifactsObservation,
+                RUN_ID
+              )
+              yield* validateS2SGitHubWorkflowRunObservation(
+                attempt.workflowRunObservation,
+                RUN_ID
+              )
+            }
             const successfulAttempt = trace.attempts.find(
               (attempt) => attempt.classification === "ARTIFACT_OBSERVED"
             )
             expect(
               successfulAttempt?.artifactsObservation.receipt.receiptSha256
             ).toBe(result.artifactsObservation.receipt.receiptSha256)
+            expect(successfulAttempt?.artifactsObservation).toBe(
+              result.artifactsObservation
+            )
             expect(
               successfulAttempt?.workflowRunObservation.receipt.receiptSha256
             ).toBe(result.workflowRunObservation.receipt.receiptSha256)
-            expect(trace.initialWorkflowRunObservation.receipt.receiptSha256).toBe(
-              result.initialWorkflowRunObservation.receipt.receiptSha256
+            expect(successfulAttempt?.workflowRunObservation).toBe(
+              result.workflowRunObservation
             )
-            expect(trace.workflowJobsObservation.receipt.receiptSha256).toBe(
-              result.workflowJobsObservation.receipt.receiptSha256
+            expect(trace.initialWorkflowRunObservation).toBe(
+              result.initialWorkflowRunObservation
             )
+            expect(trace.workflowJobsObservation).toBe(
+              result.workflowJobsObservation
+            )
+            const resultArchive = result.readArchiveBytes()
+            const resultArchiveCopy = result.readArchiveBytes()
+            resultArchiveCopy[0] = (resultArchiveCopy[0] ?? 0) ^ 0xff
+            expect(result.readArchiveBytes()).toEqual(resultArchive)
+            const downloadArchive = result.artifactDownload.readArchiveBytes()
+            const downloadArchiveCopy = result.artifactDownload.readArchiveBytes()
+            downloadArchiveCopy[0] = (downloadArchiveCopy[0] ?? 0) ^ 0xff
+            expect(result.artifactDownload.readArchiveBytes()).toEqual(
+              downloadArchive
+            )
+            for (const member of result.validatedArchive.members) {
+              const memberBytes = member.readBytes()
+              const memberCopy = member.readBytes()
+              memberCopy[0] = (memberCopy[0] ?? 0) ^ 0xff
+              expect(member.readBytes()).toEqual(memberBytes)
+            }
             expect(Object.isFrozen(trace)).toBe(true)
             expect(Object.isFrozen(trace.attempts)).toBe(true)
             expect(trace.attempts.every(Object.isFrozen)).toBe(true)

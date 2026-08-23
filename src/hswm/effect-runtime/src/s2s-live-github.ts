@@ -17,8 +17,8 @@ export const S2S_GITHUB_REPOSITORY = S2S_CONFIRMATORY_REPOSITORY
 export const S2S_GITHUB_OBSERVATION_SCHEMA_VERSION =
   "hswm-swm0w-s2s-github-observation-receipt/v2" as const
 // The fixed S2S endpoints admit one run, three jobs, or three artifacts. A
-// one-MiB transport cap keeps complete raw replay evidence inside the envelope
-// budget while remaining well above those exact rosters.
+// one-MiB transport cap bounds each metadata observation while remaining well
+// above those exact rosters. Aggregate replay owns a separate total budget.
 export const S2S_GITHUB_JSON_MAX_BYTES = 1_048_576 as const
 export const S2S_GITHUB_PAGE_SIZE = 100 as const
 export const S2S_GITHUB_METADATA_TIMEOUT_MILLIS = 120_000 as const

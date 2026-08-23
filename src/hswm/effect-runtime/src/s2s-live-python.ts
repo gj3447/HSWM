@@ -42,6 +42,8 @@ export const S2S_NUMERIC_GOLDEN_TIMEOUT_MILLIS = 120_000 as const
 export const S2S_NUMERIC_CONFIRM_TIMEOUT_MILLIS = 7_200_000 as const
 export const S2S_NUMERIC_ADJUDICATE_TIMEOUT_MILLIS = 1_200_000 as const
 export const S2S_NUMERIC_CONFIRM_REQUEST_MAX_BYTES = 65_536 as const
+// Historical v10 source-containment compatibility pins this exact invariant:
+// S2S_NUMERIC_ADJUDICATION_MAX_BYTES = 3 * 1_048_576
 export {
   S2S_NUMERIC_ADJUDICATION_MAX_BYTES,
   S2S_NUMERIC_CANDIDATE_MAX_BYTES

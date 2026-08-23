@@ -1,4 +1,17 @@
-# Project-local intent. The active Codex wrapper also permits this documented
-# 32 KiB limit so HSWM's AGENTS.md is included in new sessions.
+# Ensure HSWM's repository instructions are loaded completely for contributors
+# who do not share the maintainer's user-level Codex configuration.
 project_doc_max_bytes = 32768
 project_doc_fallback_filenames = []
+
+# HSWM requires its bounded ontology readout, while the same shared MCP remains
+# optional for unrelated repositories through the user-level configuration.
+# Keep the complete server definition here: Codex validates a project-local MCP
+# table as a complete transport rather than a field-only override on exec paths.
+[mcp_servers.ontology]
+url = "http://127.0.0.1:5501/mcp"
+enabled = true
+required = true
+startup_timeout_sec = 30.0
+tool_timeout_sec = 60.0
+default_tools_approval_mode = "writes"
+enabled_tools = ["ontology_search", "ontology_get", "ontology_neighbors", "ontology_claim_history"]

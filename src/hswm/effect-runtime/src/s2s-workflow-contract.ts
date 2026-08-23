@@ -80,9 +80,7 @@ export interface S2SConfirmatoryStageContract {
   >
 }
 
-export const S2S_CONFIRMATORY_STAGE_CONTRACTS: Readonly<
-  Record<S2SConfirmatoryJobStage, S2SConfirmatoryStageContract>
-> = Object.freeze({
+export const S2S_CONFIRMATORY_STAGE_CONTRACTS = Object.freeze({
   REGISTER: Object.freeze({
     stage: "REGISTER",
     jobId: "register",
@@ -139,7 +137,9 @@ export const S2S_CONFIRMATORY_STAGE_CONTRACTS: Readonly<
       })
     ] as const)
   })
-})
+}) satisfies Readonly<
+  Record<S2SConfirmatoryJobStage, S2SConfirmatoryStageContract>
+>
 
 export const S2S_CONFIRMATORY_JOB_IDS = Object.freeze([
   S2S_CONFIRMATORY_STAGE_CONTRACTS.REGISTER.jobId,
@@ -203,8 +203,11 @@ export const s2sArtifactRoleProducedByStage = (
 export const s2sArtifactRoleMayBeConsumedByStage = (
   stage: S2SConfirmatoryJobStage,
   role: S2SConfirmatoryArtifactRole
-): boolean =>
-  S2S_CONFIRMATORY_STAGE_CONTRACTS[stage].consumesArtifactRoles.includes(role)
+): boolean => {
+  const consumedRoles: ReadonlyArray<S2SConfirmatoryArtifactRole> =
+    S2S_CONFIRMATORY_STAGE_CONTRACTS[stage].consumesArtifactRoles
+  return consumedRoles.includes(role)
+}
 
 export const s2sArtifactReadContract = (
   stage: S2SConfirmatoryJobStage,

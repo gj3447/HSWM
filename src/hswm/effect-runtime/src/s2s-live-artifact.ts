@@ -30,7 +30,7 @@ import {
   S2SCurrentRunStage,
   makeS2SCurrentRunStageAuthorityLiveLayer
 } from "./s2s-run-authority.js"
-import { S2S_NUMERIC_ADJUDICATION_MAX_BYTES } from "./s2s-live-python.js"
+import { s2sStageArtifactSpecForRole } from "./s2s-stage-artifact-spec.js"
 import {
   appendS2SStageArtifactLedgerEntry,
   claimS2SStageArtifactPermitScope,
@@ -58,7 +58,6 @@ import {
 import {
   validateS2SArtifactZip,
   type S2SArtifactZipValidationError,
-  type S2SExpectedZipMember,
   type S2SValidatedArtifactZip
 } from "./s2s-zip.js"
 
@@ -72,58 +71,10 @@ export const S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_SCHEMA_VERSION =
 export const S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_MAX_RAW_BYTES =
   8 * S2S_GITHUB_JSON_MAX_BYTES
 
-interface RolePolicy {
-  readonly jobName: string
-  readonly artifactName: string
-  readonly maximumArchiveBytes: number
-  readonly maximumExpandedBytes: number
-  readonly expectedMembers: ReadonlyArray<S2SExpectedZipMember>
-}
-
-const ROLE_POLICY: Readonly<Record<S2SArtifactRole, RolePolicy>> = Object.freeze({
-  REGISTRATION: Object.freeze({
-    jobName: S2S_CONFIRMATORY_STAGE_CONTRACTS.REGISTER.jobName,
-    artifactName:
-      S2S_CONFIRMATORY_STAGE_CONTRACTS.REGISTER.producesArtifactName,
-    maximumArchiveBytes:
-      S2S_CONFIRMATORY_POLICY.archive.registrationArchiveMaximumBytes,
-    maximumExpandedBytes:
-      S2S_CONFIRMATORY_POLICY.archive.registrationArchiveMaximumBytes,
-    expectedMembers: Object.freeze([
-      Object.freeze({ name: "control_receipt.json", maximumBytes: 1_048_576 })
-    ])
-  }),
-  CANDIDATE: Object.freeze({
-    jobName: S2S_CONFIRMATORY_STAGE_CONTRACTS.CONFIRM.jobName,
-    artifactName: S2S_CONFIRMATORY_STAGE_CONTRACTS.CONFIRM.producesArtifactName,
-    maximumArchiveBytes:
-      S2S_CONFIRMATORY_POLICY.archive.candidateArchiveMaximumBytes,
-    maximumExpandedBytes:
-      S2S_CONFIRMATORY_POLICY.archive.candidateArchiveMaximumBytes,
-    expectedMembers: Object.freeze([
-      Object.freeze({ name: "control_receipt.json", maximumBytes: 1_048_576 }),
-      Object.freeze({
-        name: "numeric_candidate.json",
-        maximumBytes: S2S_CONFIRMATORY_POLICY.archive.candidateMemberMaximumBytes
-      })
-    ])
-  }),
-  ADJUDICATION: Object.freeze({
-    jobName: S2S_CONFIRMATORY_STAGE_CONTRACTS.ADJUDICATE.jobName,
-    artifactName:
-      S2S_CONFIRMATORY_STAGE_CONTRACTS.ADJUDICATE.producesArtifactName,
-    maximumArchiveBytes:
-      S2S_CONFIRMATORY_POLICY.archive.adjudicationArchiveMaximumBytes,
-    maximumExpandedBytes:
-      S2S_CONFIRMATORY_POLICY.archive.adjudicationArchiveMaximumBytes,
-    expectedMembers: Object.freeze([
-      Object.freeze({ name: "control_receipt.json", maximumBytes: 1_048_576 }),
-      Object.freeze({
-        name: "numeric_adjudication.json",
-        maximumBytes: S2S_NUMERIC_ADJUDICATION_MAX_BYTES
-      })
-    ])
-  })
+const ROLE_POLICY = Object.freeze({
+  REGISTRATION: s2sStageArtifactSpecForRole("REGISTRATION"),
+  CANDIDATE: s2sStageArtifactSpecForRole("CANDIDATE"),
+  ADJUDICATION: s2sStageArtifactSpecForRole("ADJUDICATION")
 })
 
 export type S2SArtifactLookupAmbiguity =

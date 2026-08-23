@@ -52,6 +52,7 @@ import {
   type S2SValidatedStageArtifactRead
 } from "./s2s-live-artifact.js"
 import type { S2SCurrentRunStageEvidence } from "./s2s-run-authority.js"
+import { S2S_STAGE_ARTIFACT_SPECS } from "./s2s-stage-artifact-spec.js"
 import {
   validateS2SStageArtifactPermitEvidence,
   type S2SStageArtifactPermitEvidence,
@@ -1404,45 +1405,32 @@ const archiveProjection = (
 
 const expectedSourceReference = (
   role: "REGISTRATION" | "CANDIDATE"
-) =>
-  role === "REGISTRATION"
-    ? Object.freeze({
-        sourceStage: "REGISTER" as const,
-        logicalName: "upload/registration_archive.zip" as const,
-        role: "REGISTRATION_UPLOAD_ARCHIVE" as const,
-        schemaVersion: "hswm-swm0w-s2s-registration-carrier/v1" as const,
-        artifactName: S2S_REGISTRATION_ARTIFACT_NAME,
-        producerJobName: "register" as const,
-        maximumArchiveBytes:
-          S2S_CONFIRMATORY_POLICY.archive.registrationArchiveMaximumBytes,
-        expectedMembers: Object.freeze([
-          Object.freeze({
-            name: "control_receipt.json",
-            maximumBytes: 1 * MEBIBYTE
-          })
-        ])
-      })
-    : Object.freeze({
-        sourceStage: "CONFIRM" as const,
-        logicalName: "upload/candidate_archive.zip" as const,
-        role: "CANDIDATE_UPLOAD_ARCHIVE" as const,
-        schemaVersion: "hswm-swm0w-s2s-candidate-carrier/v1" as const,
-        artifactName: S2S_CANDIDATE_ARTIFACT_NAME,
-        producerJobName: "confirm" as const,
-        maximumArchiveBytes:
-          S2S_CONFIRMATORY_POLICY.archive.candidateArchiveMaximumBytes,
-        expectedMembers: Object.freeze([
-          Object.freeze({
-            name: "control_receipt.json",
-            maximumBytes: 1 * MEBIBYTE
-          }),
-          Object.freeze({
-            name: "numeric_candidate.json",
-            maximumBytes:
-              S2S_CONFIRMATORY_POLICY.archive.candidateMemberMaximumBytes
-          })
-        ])
-      })
+) => {
+  if (role === "REGISTRATION") {
+    const spec = S2S_STAGE_ARTIFACT_SPECS.REGISTER
+    return Object.freeze({
+      sourceStage: spec.stage,
+      logicalName: spec.archiveLogicalName,
+      role: spec.archiveProfileRole,
+      schemaVersion: spec.carrierSchemaVersion,
+      artifactName: spec.artifactName,
+      producerJobName: spec.jobName,
+      maximumArchiveBytes: spec.maximumArchiveBytes,
+      expectedMembers: spec.expectedMembers
+    })
+  }
+  const spec = S2S_STAGE_ARTIFACT_SPECS.CONFIRM
+  return Object.freeze({
+    sourceStage: spec.stage,
+    logicalName: spec.archiveLogicalName,
+    role: spec.archiveProfileRole,
+    schemaVersion: spec.carrierSchemaVersion,
+    artifactName: spec.artifactName,
+    producerJobName: spec.jobName,
+    maximumArchiveBytes: spec.maximumArchiveBytes,
+    expectedMembers: spec.expectedMembers
+  })
+}
 
 const candidateFingerprint = (
   artifact: Readonly<

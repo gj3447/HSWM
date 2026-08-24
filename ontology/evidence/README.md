@@ -214,7 +214,7 @@ engineering checkpoints:
   Q/B/R, causal learning, and every scientific verdict remain open. Continue
   from
   [`HSWM_SWM0W_S2S_TEST_ONLY_HOSTED_PROCESS_CONTINUITY_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_TEST_ONLY_HOSTED_PROCESS_CONTINUITY_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
-- [`v25 current pre-freeze resource-policy review checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v25.json)
+- [`v25 final historical pre-freeze resource-policy review checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v25.json)
   records `75/245/75` as locally valid arithmetic but rejects it for production
   or preregistration freeze. The checked-in evidence has only one successful
   three-draw pilot, no workflow p95 or intended 20-task end-to-end profile, no
@@ -222,14 +222,17 @@ engineering checkpoints:
   observation. The candidate's 75-minute REGISTER bound also exceeds the
   existing 65-minute maximum pulse lead even though registration must finish
   before the pulse. No runtime policy, workflow, config, preregistration, future
-  randomness, or scientific claim changed. Continue from
-  [`HSWM_SWM0W_S2S_PRE_FREEZE_RESOURCE_POLICY_REVIEW_DECISION_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_PRE_FREEZE_RESOURCE_POLICY_REVIEW_DECISION_NEXT_SESSION_2026-08-23.md).
+  randomness, or scientific claim changed. The later executable-gate audit
+  killed and pruned the source-freeze implementation before commit or dispatch.
+  Continue from the canonical
+  [`resource-policy stop decision`](../../docs/research/HSWM_SWM0W_S2S_RESOURCE_POLICY_CHRONOLOGY_AND_TIMING_PROTOCOL_2026-08-23.md),
+  not from a v26 projection.
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v25 supersedes v24 only as the
-latest continuation entrypoint; v1 through v24 remain immutable historical
-projections. The TypeScript/Effect runtime owns control and evidence while the
-pinned Python scalar equation remains the bounded numeric source oracle. V25
-adds only a `Pi` review decision; it adds no `H/W/A/F`, outcome-bound
-causal-learning transition, topology mutation, production authority, or
-scientific result.
+runtime graphs, or remote Neo4j publications. V25 is the final immutable S2S
+handoff projection; no v26 is authorized. The TypeScript/Effect preference
+remains, but the killed source-freeze added no retained runtime. V25 and the
+stop decision add only `Pi` review information; they add no `H/W/A/F`,
+outcome-bound causal-learning transition, topology mutation, production
+authority, or scientific result. The next research gate is the bounded L1
+causal-lesson concept/registration decision.

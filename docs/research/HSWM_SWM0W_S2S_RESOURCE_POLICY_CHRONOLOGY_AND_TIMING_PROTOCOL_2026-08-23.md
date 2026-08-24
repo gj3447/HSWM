@@ -1,8 +1,9 @@
 # HSWM S2S resource-policy stop decision
 
 - Date: 2026-08-23
-- Status: `POLICY_DECISION_CLOSED / EXECUTABLE_BINDINGS_OPEN / NON_DISPATCHABLE`
-- Next gate: `SWM0W_S2S_RESOURCE_PROFILE_WORKFLOW_AND_COLLECTOR_SOURCE_FREEZE_V1`
+- Executable-gate audit: 2026-08-24
+- Status: `SOURCE_FREEZE_KILLED_RAGNAROK / S2S_RESOURCE_PATH_CLOSED / NON_DISPATCHABLE`
+- Next gate: `L1_CAUSAL_LESSON_CONCEPT_AND_REGISTRATION_DECISION`
 
 ## Canonical role and current evidence
 
@@ -31,6 +32,34 @@ evidence. This is a research-allocation failure signal, not evidence that HSWM
 itself is refuted. The corrective action is to stop transport-layer growth and
 return to bounded falsifiers.
 
+## 2026-08-24 executable source-freeze gate: `KILL_AND_PRUNE`
+
+The permitted source-freeze attempt was audited before commit or dispatch. It
+created 13 new files containing 5,833 lines and changed seven existing files by
+1,228 additions and 20 deletions: about 7,061 added lines before a workflow or
+functional manifest existed. Every added layer was `Pi` evidence transport;
+`H/W/A/F` and the outcome-bound causal-learning loop remained unchanged.
+
+The candidate also failed its own executable standard:
+
+- TypeScript checking failed on six unfinished symbols.
+- `CONFIRM` and `ADJUDICATE` failures escaped before a failure measurement could
+  be written.
+- sealing required the success-path files and hard-coded external censoring as
+  absent.
+- the classifier could emit `ALL_FROZEN_RESOURCE_BOUNDS_OBSERVED_ONCE` while
+  cleanup/margin/job caps, compression, retention, overwrite, and external
+  censoring were not all observed or adjudicated.
+
+The gate therefore kills this source-freeze implementation, not HSWM and not
+TypeScript/Effect as the preferred runtime language. All task-created profile
+code was discarded. No workflow, manifest, dispatch, receipt, result-log entry,
+successor handoff, or KG record is authorized. Reopening the same transport
+campaign would require an explicit new user decision; a small stage-chain
+safety envelope, if ever needed, must remain an ordinary bounded adapter and
+must not be presented as HSWM progress or as this resource-profile source
+freeze.
+
 ## Stop decision
 
 This file is the final resource-policy design record. Do not create a v26/v27
@@ -50,11 +79,11 @@ population study and would recreate the transport campaign this stop decision
 rejects. Exactly one occurrence may describe or falsify that occurrence only;
 it cannot estimate a distribution or freeze a production timeout.
 
-## One permitted profile occurrence
+## Rejected profile design retained for audit
 
-After the next source-freeze gate and explicit dispatch authorization, exactly
-one workflow run ID at `run_attempt = 1` may profile one disclosed 20-task
-batch. The frozen workload is:
+The following was the candidate design reviewed by the killed source-freeze
+gate. It is retained so that the rejection remains inspectable, but it no
+longer grants permission to dispatch any occurrence. The proposed workload was:
 
 - arms `T16`, `P_CAP18`, and `DS870` in that order;
 - 60 task-arm cells and exact fit/replay for each cell;
@@ -64,11 +93,12 @@ batch. The frozen workload is:
 - full production-shaped evaluation, upload, downloaded readback, and
   optimizer-free adjudication.
 
-A timing-only continuation to update 300 is allowed only if the source freeze
-adds a seam that captures terminal parameters and Adam state without changing
-natural receipt bytes, exposes no test/scientific value to the resource
-collector, and destroys the continuation state before evaluation. The current
-Python trainer does not expose this seam, so dispatch remains forbidden.
+A timing-only continuation to update 300 would have been allowed only if the
+source freeze added a seam that captured terminal parameters and Adam state
+without changing natural receipt bytes, exposed no test/scientific value to the
+resource collector, and destroyed the continuation state before evaluation.
+The current Python trainer does not expose this seam, so dispatch remains
+forbidden.
 
 Natural early stopping may branch on its already-frozen dev loss. Scientific
 reducers may compute their already-frozen results. Those values remain opaque
@@ -86,7 +116,8 @@ accounted_future_CONFIRM = 3,900 + observed_profile_CONFIRM_work
 ```
 
 The rejected `75/245/75` minutes remain a test-only arithmetic fixture, not a
-production policy. The one occurrence tests these declared hypotheses:
+production policy. The one occurrence would have tested these declared
+hypotheses:
 
 - natural plus timing-continuation work: at most 7,200 seconds;
 - accounted CONFIRM preparation/command: `3,900 + 7,200 + 300 = 11,400`
@@ -102,8 +133,9 @@ the currently documented maximum 21,600 seconds. Controlled computation must
 stop at its declared hypothesis boundary while enough job time remains for
 telemetry, upload/readback, and process-group cleanup. A provider hard kill is
 `INCONCLUSIVE`, never a valid `RESOURCE_FALSIFIED` receipt. GitHub says limits
-are subject to change, so source freeze must reread the official
-[Actions limits](https://docs.github.com/en/actions/reference/limits).
+are subject to change, so a source freeze would have had to reread the official
+[Actions limits](https://docs.github.com/en/actions/reference/limits) before
+any source freeze; that path is now closed.
 
 Terminals are deliberately small:
 
@@ -120,9 +152,10 @@ Terminals are deliberately small:
 There is no retry, rerun, resume, replacement, timeout extension, task skip, or
 post-observation mutation.
 
-## What the next source freeze must bind
+## Bindings left open by the rejected source freeze
 
-All of the following remain `OPEN`; therefore the profile is non-dispatchable:
+All of the following remain `OPEN`. They now explain why the rejected profile
+is non-dispatchable; they are not a queue for another transport campaign:
 
 ```text
 SOURCE_COMMIT_OID_AND_GITHUB_SHA_EQUALITY
@@ -139,26 +172,28 @@ FULL_OCCURRENCE_RECEIPT_SCHEMA
 
 `refs/heads/main` is trigger metadata only, never frozen source identity. The
 current adopted reducer checks provenance exclusions but not structural task or
-target collisions; the source freeze must add that capability before making
-the future-collision `VOID` rule enforceable. Any second run ID, even with
-`run_attempt = 1`, is `VOID_PROTOCOL` and receives no replacement.
+target collisions; the rejected source freeze would have had to add that
+capability before making the future-collision `VOID` rule enforceable. Under
+the rejected design, any second run ID, even with `run_attempt = 1`, would have
+been `VOID_PROTOCOL` with no replacement.
 
-New orchestration, collector, resource, concurrency, and adapter code is
-TypeScript-first on pinned Effect v3, using functional-core/effect-shell,
-typed errors, scoped resources, and explicit Python numeric-kernel adapters.
-No design-only Effect wrapper is added here; code begins only with the
-executable source-freeze gate.
+TypeScript with pinned Effect v3 remains the preferred implementation language
+for runtime work that maps to the causal HSWM path. That preference does not
+justify an evidence-transport subsystem whose static surface grows faster than
+the hypothesis it is meant to test.
 
 ## Research order after this stop
 
-1. restore main CI and correct the P1v2->P1v4/L1 efficacy boundary;
-2. freeze the one executable TypeScript/Effect workflow and collector;
-3. with explicit authorization, run the bounded profile exactly once;
-4. separately preregister and run one S2S confirmatory for `PASS` or `KILL`;
-5. run the decisive L1 causal-lesson falsifier: outcome -> learned typed state
-   -> stronger than no-memory/raw/shuffled/removed controls -> content-addressed
-   `delta-W/delta-H` -> changed next behavior.
+1. Main CI restoration and the P1v2->P1v4/L1 efficacy correction are complete.
+2. The S2S resource-profile source freeze is `KILL_AND_PRUNE`; do not dispatch
+   it and do not replace it with another handoff/KG series.
+3. Decide whether the existing `DRAFT_NOT_REGISTERED` L1 causal-lesson concept
+   can be reduced to one non-ceiling, preregisterable falsifier; otherwise kill
+   it before implementation.
+4. If registered, run the decisive L1 causal-lesson falsifier: outcome ->
+   learned typed state -> stronger than no-memory/raw/shuffled/removed controls
+   -> content-addressed `delta-W/delta-H` -> changed next behavior.
 
-Until step 5 succeeds, `H/W/A/F` and the causal loop remain unchanged. If L1
+Until step 4 succeeds, `H/W/A/F` and the causal loop remain unchanged. If L1
 fails, the honest scope contracts toward a strong compiler plus safe static
 graph memory.

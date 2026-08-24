@@ -515,7 +515,14 @@ V25 closes the review decision only: `75/245/75` is exact arithmetic and stays
 as a non-authorizing fixture, but is rejected for production/preregistration
 freeze. The disclosed evidence has one successful three-draw workflow and no
 workflow p95 or production-equivalent 20-task profile; the 75-minute REGISTER
-candidate also exceeds the existing 65-minute pulse-lead maximum. The next gate
-is a future-seed-free chronology-and-timing protocol design followed by a
-separately disclosed full-scale resource profile. No runtime, policy literal,
-workflow, numerical config, preregistration, or scientific result changed.
+candidate also exceeds the existing 65-minute pulse-lead maximum.
+
+The current continuation authority is now the
+[`resource-policy stop decision`](HSWM_SWM0W_S2S_RESOURCE_POLICY_CHRONOLOGY_AND_TIMING_PROTOCOL_2026-08-23.md).
+On 2026-08-24 the executable source-freeze attempt was rejected before commit:
+about 7,061 added lines across 20 files still left failure terminals and several
+policy bounds unobserved, while changing only `Pi`. That entire task-created
+surface was pruned; there is no profile workflow, dispatch, v26 handoff, or new
+KG. TypeScript with pinned Effect v3 remains the runtime preference, but the
+next research gate is the bounded L1 causal-lesson concept/registration
+decision, not another evidence-transport layer. No scientific result changed.

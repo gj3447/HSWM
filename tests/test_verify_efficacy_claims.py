@@ -100,7 +100,7 @@ def test_checked_in_efficacy_snapshot_matches_public_claims() -> None:
     lineage = snapshot["p1_typed_policy_lineage"]
     assert lineage["status"] == (
         "P1V2_KILL_P1V3_P1V4_NARROW_L0_PASS_"
-        "L1_DRAFT_NOT_REGISTERED_NOT_IMPLEMENTED"
+        "L1_KILLED_BEFORE_REGISTRATION"
     )
     assert lineage["p1v2_type6_oracle_actuation"] == {
         "verdict": "KILL",
@@ -120,15 +120,25 @@ def test_checked_in_efficacy_snapshot_matches_public_claims() -> None:
         "typed_improvements_vs_no_memory"
     ] == 4
     assert lineage["l1_causal_lesson"] == {
-        "registration_state": "DRAFT_NOT_REGISTERED",
-        "measurement_authorized_for_stage": "NONE_UNTIL_REGISTERED",
+        "registration_state": "KILLED_BEFORE_REGISTRATION",
+        "measurement_authorized_for_stage": "NONE_DRAFT_KILLED",
         "implementation_status": "NOT_IMPLEMENTED",
         "scientific_status": "UNMEASURED_UNJUDGED",
+        "design_verdict": "KILL_AND_PRUNE_BEFORE_IMPLEMENTATION",
         "transitive_provenance_complete": False,
         "stale_file_sha256_references": [
             "receipts/p1v2_l0_r2_512_closeout_20260724.json",
             "receipts/p1v2_l0_diagnosis_r2_512_20260724.json",
         ],
+        "next_candidate": {
+            "registration_state": "UNREGISTERED_UNAUTHORIZED",
+            "scope": (
+                "durable numeric delta-routing/W-only diagnostic; delta-H and "
+                "topology are explicit nonclaims"
+            ),
+            "physical_model_call_ceiling": 160,
+            "efficacy_verdict_permitted": False,
+        },
     }
     assert snapshot["graded_supersession"][
         "wrong_write_primary_recall_cost_points"

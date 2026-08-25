@@ -1,7 +1,7 @@
 # HSWM efficacy status
 
-Last reconciled: 2026-08-23 (P1v2→P1v4 typed-policy lineage and verifier
-scope made explicit; no historical metric was recomputed).
+Last reconciled: 2026-08-25 (the unregistered P1 L1 causal-lesson design was
+killed before implementation; no historical metric was recomputed).
 
 > **Current state lives in checked-in measurements and their explicit provenance
 > boundaries, not a standing external verdict service.**
@@ -45,8 +45,9 @@ six-case Type-6 cut: no-memory was already exact on 6/6, typed actuation was
 0/6, and all four arms were identical under a baseline-ceiling/intervention-
 inert failure mode. P1v3 and P1v4 passed only their preregistered synthetic
 six-case L0 policy-actuation gates against no-memory (6/6 and 4/6 typed
-improvements, respectively). The proposed L1 causal-lesson experiment remains
-`DRAFT_NOT_REGISTERED`, unauthorized, unimplemented, and unmeasured.
+improvements, respectively). The proposed L1 causal-lesson experiment is now
+`KILLED_BEFORE_REGISTRATION`: it remained unauthorized, unimplemented, and
+unmeasured, so this is a design closeout and not a negative efficacy result.
 
 The preregistered SWM-0R finite representation witness is also an engineering
 result, not efficacy evidence. Its constructive native and independent
@@ -261,17 +262,26 @@ next falsifier are in `RESEARCH_P1_FAILURE_HSWM_LOCAL_RECORD` and
 | P1v2 frozen Type-6 L0 | **`KILL`** | 6 valid cases; no-memory exact 6, typed actuation 0, typed-over-raw 0, all four arms identical 6; `BASELINE_CEILING_AND_INTERVENTION_INERT`; same-environment reuse forbidden |
 | P1v3 policy actuation | **`PASS`** | synthetic PhantomWiki L0, n=6; typed exact 6, no-memory exact 0, typed improvements vs no-memory 6; preregistered pass gate ≥3/6 |
 | P1v4 fresh replication | **`PASS`** | synthetic PhantomWiki L0, n=6; typed exact 6, no-memory exact 2, typed improvements vs no-memory 4; preregistered pass gate ≥3/6 |
-| proposed L1 causal lesson | **unmeasured / unjudged** | `DRAFT_NOT_REGISTERED`; measurement authorization `NONE_UNTIL_REGISTERED`; L1 modules do not exist |
+| proposed L1 causal lesson | **`KILLED_BEFORE_REGISTRATION` / unmeasured / unjudged** | No measurement was authorized or run. The global RHO/TAU policy makes the proposed binding shuffle an identity intervention; the proposed compiler reads the trusted class directly; prompt lesson injection does not isolate durable outcome-bound `ΔW/Δrouting/ΔH`; T3 and content-removal T4b are redundant. |
 
 The P1v3/P1v4 preregistrations explicitly exclude learned-compiler superiority
 over raw transcript, Agent A→B transfer, parameter `ΔW` learning, topology
 rewiring, and long-term consolidation. Their passes satisfy only an L0
 precondition for a possible future L1 test.
 
-The unregistered L1 draft is not a complete transitive provenance ledger: its
+The killed L1 draft is not a complete transitive provenance ledger: its
 `file_sha256` references for the P1v2 closeout and diagnosis do not match the
-current checked-in file bytes. This does not change either L0 result, but those
-references must be repaired and rechecked before any L1 registration.
+current checked-in file bytes. This does not change either L0 result. Those
+historical references are deliberately not repaired because the draft may not
+be registered or executed.
+
+The next candidate is narrower and remains **unregistered and unauthorized**:
+a four-arm, 160-call-ceiling development diagnostic of durable numeric
+`Δrouting/W` against rollback/no-memory, equal-budget raw transcript, and a
+binding-deranged numeric placebo. It may test only headroom, leakage/parity,
+state persistence across a clean process restart, and exact effect removal on
+rollback. It cannot emit an efficacy PASS, and `ΔH`, topology creation, role
+specialization, transfer, and general HSWM learning remain explicit nonclaims.
 
 Sources: `receipts/p1v2_l0_r2_512_closeout_20260724.json`,
 `prereg/PREREG_P1V3_POLICY_ACTUATION_2026-07-24.json`,
@@ -501,5 +511,6 @@ receipts.
 - no SWM-0W support beyond the fixed-three-singleton-role scalar precursor;
 - no canonical recipient-conditioned set-to-set semantic-weight operator;
 - no passed recurrent/deep HSWM gate or causal `ΔW/ΔH` gate;
-- no registered, implemented, or measured P1 L1 causal typed-lesson result;
+- no surviving, registered, implemented, or measured P1 L1 causal typed-lesson result;
+- no registered or measured durable numeric `Δrouting/W` diagnostic;
 - no evidence for a distributed Human Universal Body.

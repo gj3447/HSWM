@@ -779,15 +779,24 @@ def build_snapshot(root: str | Path | None = DEFAULT_ROOT) -> dict[str, Any]:
     l1_module_status = str(p1_l1_draft.get("module_sha256", {}).get("status", ""))
     l1_status_note = str(p1_l1_draft.get("status_note", ""))
     l1_precondition = p1_l1_draft.get("l0_precondition", {})
+    l1_kill = p1_l1_draft.get("kill_decision", {})
+    l1_next_candidate = l1_kill.get("next_candidate_not_authorized", {})
     _require(
-        p1_l1_draft.get("registration_state") == "DRAFT_NOT_REGISTERED"
+        p1_l1_draft.get("registration_state") == "KILLED_BEFORE_REGISTRATION"
+        and p1_l1_draft.get("registered_before_measurement") is False
         and p1_l1_draft.get("measurement_authorized_for_stage")
-        == "NONE_UNTIL_REGISTERED"
-        and "registers nothing, freezes nothing, and authorizes nothing"
-        in l1_status_note
-        and "no module implementing L1 exists yet" in l1_status_note
-        and "do not exist yet" in l1_module_status,
-        "P1v3/v4 L1 draft registration or implementation boundary drifted",
+        == "NONE_DRAFT_KILLED"
+        and "KILLED_BEFORE_REGISTRATION" in l1_status_note
+        and "must not be revived or executed as written" in l1_status_note
+        and l1_kill.get("decision") == "KILL_AND_PRUNE_BEFORE_IMPLEMENTATION"
+        and l1_kill.get("scientific_result") == "NONE_UNMEASURED_UNJUDGED"
+        and len(l1_kill.get("reasons", [])) == 5
+        and l1_next_candidate.get("verdict_boundary")
+        == "diagnostic mechanics/headroom only; no efficacy PASS is permitted"
+        and "160 physical model calls total"
+        in str(l1_next_candidate.get("diagnostic_ceiling", ""))
+        and "NOT_APPLICABLE_DRAFT_KILLED" in l1_module_status,
+        "P1v3/v4 L1 killed-draft boundary drifted",
     )
     l1_p1v2_paths = {
         "closeout_file_sha256": (
@@ -905,7 +914,7 @@ def build_snapshot(root: str | Path | None = DEFAULT_ROOT) -> dict[str, Any]:
         "p1_typed_policy_lineage": {
             "status": (
                 "P1V2_KILL_P1V3_P1V4_NARROW_L0_PASS_"
-                "L1_DRAFT_NOT_REGISTERED_NOT_IMPLEMENTED"
+                "L1_KILLED_BEFORE_REGISTRATION"
             ),
             "p1v2_type6_oracle_actuation": {
                 "verdict": "KILL",
@@ -929,12 +938,19 @@ def build_snapshot(root: str | Path | None = DEFAULT_ROOT) -> dict[str, Any]:
             "p1v4_fresh_policy_replication": policy_summaries["p1v4"],
             "p1v3_p1v4_not_supported": expected_policy_exclusions,
             "l1_causal_lesson": {
-                "registration_state": "DRAFT_NOT_REGISTERED",
-                "measurement_authorized_for_stage": "NONE_UNTIL_REGISTERED",
+                "registration_state": "KILLED_BEFORE_REGISTRATION",
+                "measurement_authorized_for_stage": "NONE_DRAFT_KILLED",
                 "implementation_status": "NOT_IMPLEMENTED",
                 "scientific_status": "UNMEASURED_UNJUDGED",
+                "design_verdict": "KILL_AND_PRUNE_BEFORE_IMPLEMENTATION",
                 "transitive_provenance_complete": not stale_l1_p1v2_file_hashes,
                 "stale_file_sha256_references": stale_l1_p1v2_file_hashes,
+                "next_candidate": {
+                    "registration_state": "UNREGISTERED_UNAUTHORIZED",
+                    "scope": l1_next_candidate["scope"],
+                    "physical_model_call_ceiling": 160,
+                    "efficacy_verdict_permitted": False,
+                },
             },
         },
         "graded_supersession": {

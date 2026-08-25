@@ -2,8 +2,9 @@
 
 - Date: 2026-08-23
 - Executable-gate audit: 2026-08-24
+- L1 design audit: 2026-08-25
 - Status: `SOURCE_FREEZE_KILLED_RAGNAROK / S2S_RESOURCE_PATH_CLOSED / NON_DISPATCHABLE`
-- Next gate: `L1_CAUSAL_LESSON_CONCEPT_AND_REGISTRATION_DECISION`
+- Next gate: `DURABLE_NUMERIC_ROUTING_DIAGNOSTIC_PREREGISTRATION_DECISION`
 
 ## Canonical role and current evidence
 
@@ -187,13 +188,23 @@ the hypothesis it is meant to test.
 1. Main CI restoration and the P1v2->P1v4/L1 efficacy correction are complete.
 2. The S2S resource-profile source freeze is `KILL_AND_PRUNE`; do not dispatch
    it and do not replace it with another handoff/KG series.
-3. Decide whether the existing `DRAFT_NOT_REGISTERED` L1 causal-lesson concept
-   can be reduced to one non-ceiling, preregisterable falsifier; otherwise kill
-   it before implementation.
-4. If registered, run the decisive L1 causal-lesson falsifier: outcome ->
-   learned typed state -> stronger than no-memory/raw/shuffled/removed controls
-   -> content-addressed `delta-W/delta-H` -> changed next behavior.
+3. The existing causal-lesson draft is `KILLED_BEFORE_REGISTRATION`. Its global
+   RHO/TAU policy makes binding shuffle an identity intervention, its proposed
+   compiler reads the trusted class instead of learning it from outcomes, and
+   prompt lesson injection cannot isolate durable `delta-W/delta-routing/delta-H`.
+   Do not implement, repair, register, or measure that draft.
+4. The only next candidate is a separately preregistered development diagnostic
+   of durable numeric `delta-routing/W`: FULL outcome-bound state versus exact
+   rollback/no-memory, equal-budget raw transcript, and a binding-deranged
+   numeric placebo. Its hard ceiling is 160 physical model calls (128 four-arm
+   evaluation calls plus at most 32 shared learning/compiler calls). It may
+   judge headroom, leakage/parity, clean-process restart persistence, and exact
+   rollback only; it may not emit an efficacy PASS.
+5. A sealed confirmatory design is opened only if that diagnostic survives.
+   Sample size and resource bounds must then be frozen from independent-stream
+   variance; topology, `delta-H`, role specialization, transfer, and
+   consolidation remain closed.
 
-Until step 4 succeeds, `H/W/A/F` and the causal loop remain unchanged. If L1
-fails, the honest scope contracts toward a strong compiler plus safe static
-graph memory.
+Until a later confirmatory run succeeds, `H/W/A/F` and the causal loop remain
+scientifically unchanged. The present design KILL narrows the next test toward
+one durable routing seam; it is not itself an HSWM efficacy result.

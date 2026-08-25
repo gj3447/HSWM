@@ -112,7 +112,8 @@ durability, complete-stage recovery, preregistration, future seed, and
 adjudication remain open. See the
 [pilot adoption result](results/SWM0W_S2S_TRAIN_DEV_PILOT_ADOPTION_RESULTS_2026-08-21.md),
 the [historical pilot handoff](docs/operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-21.md),
-and the [current v24 continuation handoff](docs/operations/HSWM_SWM0W_S2S_TEST_ONLY_HOSTED_PROCESS_CONTINUITY_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
+the [historical v24 hosted-process handoff](docs/operations/HSWM_SWM0W_S2S_TEST_ONLY_HOSTED_PROCESS_CONTINUITY_IMPLEMENTED_NEXT_SESSION_2026-08-23.md),
+and the [authoritative S2S resource-policy stop decision](docs/research/HSWM_SWM0W_S2S_RESOURCE_POLICY_CHRONOLOGY_AND_TIMING_PROTOCOL_2026-08-23.md).
 
 The exact claim boundaries are:
 

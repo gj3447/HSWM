@@ -90,14 +90,14 @@ from .continual import (
 LIVE_PROTOCOL = "hswm-continual-live/v1"
 AUTHOR_ID = "agent:continual-memory-author"
 CAPABILITY = "nonce_graph_lookup"
-COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v9"
+COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v10"
 INDEXED_AUTHORING_VIEW_SCHEMA = "hswm-indexed-authoring-view/v1"
 RELATION_HANDLE_TABLE_SCHEMA = "hswm-relation-handle-table/v1"
 RELATION_HANDLE_WIDTH = 3
 MUTATION_EXPRESSIVITY = "full-author-then-keep-routing-append/v1"
 FULL_AUTHOR_MODE = "FULL_AUTHOR"
 KEEP_ROUTING_APPEND_MODE = "KEEP_ROUTING_APPEND_MEMBERSHIP"
-STRUCTURE_COMPILATION_RECEIPT_SCHEMA = "hswm-structure-compilation-receipt/v2"
+STRUCTURE_COMPILATION_RECEIPT_SCHEMA = "hswm-structure-compilation-receipt/v3"
 RELATION_QUALITY_DIAGNOSTIC_SCHEMA = "hswm-relation-quality-diagnostic/v1"
 DISCARDED_CONTROL_STRUCTURE_DIAGNOSTIC_SCHEMA = (
     "hswm-discarded-control-structure-diagnostic/v1"
@@ -119,7 +119,7 @@ PUBLIC_SCHEMA_GATE_FIXTURE_DOMAIN = "hswm-public-schema-gate/v3"
 PUBLIC_SCHEMA_GATE_FIXTURE_COMPACT_PATCH_SCHEMA = (
     "hswm-compact-structure-patch/v3"
 )
-PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v10"
+PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v11"
 PUBLIC_SCHEMA_GATE_EPISODE = "public-schema-gate-never-evaluation"
 PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS = 32_768
 PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING = 6144
@@ -770,9 +770,9 @@ _SUPPORTED_JSON_SCHEMA_KEYS = frozenset(
         "minimum",
         "minLength",
         "properties",
+        "pattern",
         "required",
         "type",
-        "uniqueItems",
     }
 )
 
@@ -788,12 +788,25 @@ def _validate_bounded_json_schema(node: object, *, path: str = "$") -> None:
     node_type = node.get("type")
     if node_type not in {"array", "integer", "null", "object", "string"}:
         raise ContinualLiveError(f"response schema type at {path} is unsupported")
-    if "uniqueItems" in node and (
-        node_type != "array" or node["uniqueItems"] is not True
-    ):
-        raise ContinualLiveError(
-            f"response schema uniqueItems at {path} must be exact true on an array"
+    if "pattern" in node:
+        maximum = node.get("maxLength")
+        minimum = node.get("minLength")
+        expected_pattern = (
+            f"^[01]{{{maximum}}}$"
+            if isinstance(maximum, int) and not isinstance(maximum, bool)
+            else None
         )
+        if (
+            node_type != "string"
+            or isinstance(minimum, bool)
+            or not isinstance(minimum, int)
+            or minimum != maximum
+            or maximum <= 0
+            or node["pattern"] != expected_pattern
+        ):
+            raise ContinualLiveError(
+                f"response schema pattern at {path} is not an exact binary width"
+            )
     if "enum" in node:
         enum = node["enum"]
         if not isinstance(enum, list) or not enum:
@@ -877,12 +890,6 @@ def _validate_json_schema_instance(
             schema.get("minItems", 0) <= len(value) <= schema["maxItems"]
         ):
             raise ContinualLiveError(f"model response violates array bound at {path}")
-        if schema.get("uniqueItems") is True:
-            encoded = [canonical_json_bytes(item) for item in value]
-            if len(encoded) != len(set(encoded)):
-                raise ContinualLiveError(
-                    f"model response violates unique array items at {path}"
-                )
         for index, item in enumerate(value):
             _validate_json_schema_instance(
                 item, schema["items"], path=f"{path}[{index}]"
@@ -894,6 +901,12 @@ def _validate_json_schema_instance(
             <= schema.get("maxLength", len(value))
         ):
             raise ContinualLiveError(f"model response violates string bound at {path}")
+        if "pattern" in schema and re.fullmatch(
+            rf"[01]{{{schema['maxLength']}}}", value
+        ) is None:
+            raise ContinualLiveError(
+                f"model response violates binary string pattern at {path}"
+            )
     elif node_type == "integer":
         if isinstance(value, bool) or not isinstance(value, int) or not (
             schema["minimum"] <= value <= schema["maximum"]
@@ -901,6 +914,26 @@ def _validate_json_schema_instance(
             raise ContinualLiveError(f"model response violates integer bound at {path}")
     elif node_type == "null" and value is not None:
         raise ContinualLiveError(f"model response violates null schema at {path}")
+
+
+def _validate_local_response_invariants(
+    value: Mapping[str, Any],
+    schema: Mapping[str, Any],
+) -> None:
+    properties = schema.get("properties")
+    if not isinstance(properties, Mapping) or (
+        "new_memory_relation_bitmasks" not in properties
+    ):
+        return
+    bitmasks = value.get("new_memory_relation_bitmasks")
+    if not isinstance(bitmasks, list) or any(
+        not isinstance(bitmask, str)
+        or bitmask.count("1") > MAX_RELATED_MEMORY_IDS
+        for bitmask in bitmasks
+    ):
+        raise ContinualLiveError(
+            "related memory bitmask exceeds the local relation bound"
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -1566,6 +1599,9 @@ def _validate_relation_handle_table(value: Mapping[str, Any]) -> None:
 def _relation_handle_contract(table: Mapping[str, Any]) -> dict[str, Any]:
     _validate_relation_handle_table(table)
     return {
+        "bit_encoding": "fixed-width-binary-target-set/v1",
+        "bit_order": "existing_then_new",
+        "bit_width": len(table["existing"]) + len(table["new"]),
         "existing": {
             "count": len(table["existing"]),
             "memory_id_order": "current_hswm_indexed_read_only.memories",
@@ -1582,13 +1618,37 @@ def _relation_handle_contract(table: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-def _relation_handle_lookup(table: Mapping[str, Any]) -> dict[str, str]:
+def _relation_bitmask_targets(table: Mapping[str, Any]) -> tuple[str, ...]:
+    """Return the one exact E-then-N target order encoded by relation masks."""
+
     _validate_relation_handle_table(table)
-    return {
-        str(item["handle"]): str(item["memory_id"])
+    return tuple(
+        str(item["memory_id"])
         for namespace in ("existing", "new")
         for item in table[namespace]
-    }
+    )
+
+
+def _expand_relation_bitmask(
+    bitmask: object,
+    table: Mapping[str, Any],
+) -> tuple[tuple[int, ...], tuple[str, ...]]:
+    targets = _relation_bitmask_targets(table)
+    width = len(targets)
+    if (
+        not isinstance(bitmask, str)
+        or len(bitmask) != width
+        or re.fullmatch(rf"[01]{{{width}}}", bitmask) is None
+    ):
+        raise ContinualLiveError(
+            "related memory bitmask is not the exact binary target width"
+        )
+    set_bit_indices = tuple(
+        index for index, selected in enumerate(bitmask) if selected == "1"
+    )
+    if len(set_bit_indices) > MAX_RELATED_MEMORY_IDS:
+        raise ContinualLiveError("related memory bitmask exceeds the relation bound")
+    return set_bit_indices, tuple(targets[index] for index in set_bit_indices)
 
 
 def _compact_patch_response_schema(
@@ -1604,23 +1664,7 @@ def _compact_patch_response_schema(
     if source_count <= 0:
         raise ContinualLiveError("compact response schema requires public tokens")
     relation_table = _relation_handle_table(active, source_tokens)
-    relation_handles = tuple(_relation_handle_lookup(relation_table))
-    memory_relation = _strict_json_object(
-        {
-            "related_memory_handles": {
-                "items": {
-                    "enum": list(relation_handles),
-                    "type": "string",
-                },
-                "maxItems": min(
-                    len(relation_handles),
-                    MAX_RELATED_MEMORY_IDS,
-                ),
-                "type": "array",
-                "uniqueItems": True,
-            },
-        }
-    )
+    relation_width = len(_relation_bitmask_targets(relation_table))
     common: dict[str, Any] = {
         "base_generation": {
             "const": generation,
@@ -1631,7 +1675,12 @@ def _compact_patch_response_schema(
         "base_snapshot_id": {"const": active.snapshot_id, "type": "string"},
     }
     relation_vector = {
-        "items": memory_relation,
+        "items": {
+            "maxLength": relation_width,
+            "minLength": relation_width,
+            "pattern": f"^[01]{{{relation_width}}}$",
+            "type": "string",
+        },
         "maxItems": source_count,
         "minItems": source_count,
         "type": "array",
@@ -1679,11 +1728,11 @@ def _compact_patch_response_schema(
                     "minItems": source_count,
                     "type": "array",
                 },
-                "new_memory_relations": relation_vector,
+                "new_memory_relation_bitmasks": relation_vector,
                 "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
             }
         )
-        return JSONSchemaContract.make("hswm_full_author_patch_v4", schema)
+        return JSONSchemaContract.make("hswm_full_author_patch_v5", schema)
 
     active_cell_ids = tuple(cell.cell_id for cell in active.cells)
     if len(active_cell_ids) != len(set(active_cell_ids)):
@@ -1698,11 +1747,11 @@ def _compact_patch_response_schema(
                 "minItems": source_count,
                 "type": "array",
             },
-            "new_memory_relations": relation_vector,
+            "new_memory_relation_bitmasks": relation_vector,
             "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
         }
     )
-    return JSONSchemaContract.make("hswm_keep_routing_append_patch_v4", schema)
+    return JSONSchemaContract.make("hswm_keep_routing_append_patch_v5", schema)
 
 
 def _plain_memory_response_schema() -> JSONSchemaContract:
@@ -2272,7 +2321,12 @@ class _ModelArm:
                 token_preflight=token_preflight,
                 completion=completion,
             )
-            response_schema.validate_instance(_strict_object(completion.text))
+            response_value = _strict_object(completion.text)
+            response_schema.validate_instance(response_value)
+            _validate_local_response_invariants(
+                response_value,
+                response_schema.schema(),
+            )
             if self.completion_validator is not None:
                 # Gate-specific acceptance happens before an update response can
                 # be parsed, committed, or followed by another provider call.
@@ -2776,37 +2830,17 @@ def _parse_structure_proposal(
         raise ContinualLiveError("new deterministic memory ids collide with HSWM state")
 
     relation_table = _relation_handle_table(active, source_tokens)
-    relation_lookup = _relation_handle_lookup(relation_table)
-    relation_fields = {"related_memory_handles"}
-    if not isinstance(value["new_memory_relations"], list) or len(
-        value["new_memory_relations"]
+    relation_bitmasks = value["new_memory_relation_bitmasks"]
+    if not isinstance(relation_bitmasks, list) or len(
+        relation_bitmasks
     ) != len(source_tokens):
         raise ContinualLiveError(
-            "new_memory_relations must have one ordered item per public token"
+            "new_memory_relation_bitmasks must align with every public token"
         )
     parsed_relations: list[tuple[str, ...]] = []
-    for source_index, item in enumerate(value["new_memory_relations"]):
-        if not isinstance(item, Mapping) or set(item) != relation_fields:
-            raise ContinualLiveError("new_memory_relations item field set is invalid")
-        related_value = item["related_memory_handles"]
-        if not isinstance(related_value, list) or any(
-            not isinstance(handle, str) for handle in related_value
-        ):
-            raise ContinualLiveError(
-                "related_memory_handles must contain namespaced strings"
-            )
-        related_handles = tuple(related_value)
-        if (
-            len(related_handles) > MAX_RELATED_MEMORY_IDS
-            or len(related_handles) != len(set(related_handles))
-            or any(handle not in relation_lookup for handle in related_handles)
-        ):
-            raise ContinualLiveError(
-                "related_memory_handles contains duplicate or unknown handles"
-            )
-        parsed_relations.append(
-            tuple(relation_lookup[handle] for handle in related_handles)
-        )
+    for bitmask in relation_bitmasks:
+        _, expanded = _expand_relation_bitmask(bitmask, relation_table)
+        parsed_relations.append(expanded)
 
     memories = tuple(
         MemoryRecord(
@@ -2983,15 +3017,17 @@ def _structure_update_payload(
     )
     mode = _structure_authoring_mode(active)
     relation_table = _relation_handle_table(active, source_tokens)
+    relation_width = len(_relation_bitmask_targets(relation_table))
     common_contract: dict[str, Any] = {
         "base_generation": generation,
         "base_snapshot_id": active.snapshot_id,
         "mode": mode,
-        "new_memory_relations": {
+        "new_memory_relation_bitmasks": {
             "exact_length": len(source_tokens),
-            "item_fields": ["related_memory_handles"],
+            "item_binary_width": relation_width,
+            "maximum_set_bits_per_item": MAX_RELATED_MEMORY_IDS,
             "source_order": "public_source_tokens",
-            "target_domain": "E### or N### handles from relation_handle_contract",
+            "target_bit_order": "all E### handles, then all N### handles",
         },
         "rationale": "non-empty bounded string",
     }
@@ -3026,7 +3062,7 @@ def _structure_update_payload(
                 "entry_cell_index",
                 "mode",
                 "new_memory_cell_indices",
-                "new_memory_relations",
+                "new_memory_relation_bitmasks",
                 "rationale",
             ],
         }
@@ -3051,7 +3087,7 @@ def _structure_update_payload(
                 "base_snapshot_id",
                 "mode",
                 "new_memory_cell_ids",
-                "new_memory_relations",
+                "new_memory_relation_bitmasks",
                 "rationale",
             ],
         }
@@ -3064,12 +3100,15 @@ def _structure_update_payload(
         "instruction": (
             "Author only the bounded HSWM mutation described below. The adapter copies "
             "each public token's fixed content, deterministic ID, and provenance into "
-            "one MemoryRecord. You author the ordered related_memory_handles for every "
-            "new memory. E### handles cite existing memories in exact indexed-view "
-            "memory order; N### handles cite this batch's new memories in exact public "
-            "token order. Handles are opaque memory references, never cell IDs or cell "
-            "indices. Relation targets must be known handles, unique, and "
-            "bounded; the source memory itself is structurally allowed and scored only "
+            "one MemoryRecord. You author one exact-width binary relation mask for "
+            "every new memory. Each mask bit selects one deterministic memory target: "
+            "all E### handles first in exact indexed-view memory order, followed by "
+            "all N### handles in exact public-token order. A 1 selects that target and "
+            "a 0 does not. The mask is a target set, not an ordered relation list. Set "
+            f"at most {MAX_RELATED_MEMORY_IDS} bits per mask; masks over that bound are "
+            "rejected without truncation or repair. Handles are opaque memory "
+            "references, never cell IDs or cell indices. The source memory itself is "
+            "structurally allowed and scored only "
             "as a diagnostic relation choice; semantic quality is not repaired or "
             "used to accept, retry, prompt, or select a seed. Cell IDs and numeric "
             "indices are never memory relation IDs. "
@@ -3081,8 +3120,8 @@ def _structure_update_payload(
             "existing_memory_count": len(active.memories),
             "new_memory_count": len(source_tokens),
             "new_memory_indices": "public_source_tokens array order",
-            "relation_source": "new_memory_relations array position",
-            "relation_targets": "namespaced handles expanded one-to-one to memory IDs",
+            "relation_source": "new_memory_relation_bitmasks array position",
+            "relation_targets": "binary positions expand one-to-one in E-then-N handle order",
         },
         "output_bounds": {
             "cell_id_max_chars": MAX_CELL_ID_CHARS,
@@ -3110,18 +3149,19 @@ def _structure_update_system(mode: str) -> str:
         return (
             "Return only the strict FULL_AUTHOR JSON object described by "
             "response_contract. It must author exactly sixteen reachable HSWM cells, "
-            "entry/routing, one cell assignment per new memory, and ordered namespaced "
-            "memory-handle relations. E### and N### are memory handles, never cell "
-            "indices. Use only public tokens and never infer a gold answer."
+            "entry/routing, one cell assignment per new memory, and exact-width binary "
+            "memory-relation masks in E-then-N handle order. Bits select a target set; "
+            "E### and N### are memory handles, never cell indices. Use only public "
+            "tokens and never infer a gold answer."
         )
     if mode == KEEP_ROUTING_APPEND_MODE:
         return (
             "Return only the strict KEEP_ROUTING_APPEND_MEMBERSHIP JSON object described "
             "by response_contract. Do not return cells, entry, routing, existing-memory "
             "assignments, or deletion fields. Choose one exact active cell_id per new "
-            "memory and author ordered namespaced memory-handle relations. E### and "
-            "N### are memory handles, never cell indices. Use only public tokens and "
-            "never infer a gold answer."
+            "memory and author exact-width binary memory-relation masks in E-then-N "
+            "handle order. Bits select a target set; E### and N### are memory handles, "
+            "never cell indices. Use only public tokens and never infer a gold answer."
         )
     raise ContinualLiveError("unknown compact structure authoring mode")
 
@@ -3168,32 +3208,21 @@ def _raw_authored_relation_sequences(
 ) -> list[dict[str, Any]]:
     value = _strict_object(text)
     relation_table = _relation_handle_table(active, source_tokens)
-    relation_lookup = _relation_handle_lookup(relation_table)
-    relations = value.get("new_memory_relations")
-    if not isinstance(relations, list) or len(relations) != len(source_tokens):
-        raise ContinualLiveError("raw authored relation vector drifted after parsing")
+    bitmasks = value.get("new_memory_relation_bitmasks")
+    if not isinstance(bitmasks, list) or len(bitmasks) != len(source_tokens):
+        raise ContinualLiveError("raw authored bitmask vector drifted after parsing")
     result: list[dict[str, Any]] = []
-    for source_token, item in zip(source_tokens, relations, strict=True):
-        if not isinstance(item, Mapping) or set(item) != {"related_memory_handles"}:
-            raise ContinualLiveError("raw authored relation item drifted after parsing")
-        related = item["related_memory_handles"]
-        if not isinstance(related, list) or any(
-            not isinstance(handle, str) for handle in related
-        ):
-            raise ContinualLiveError("raw authored relation sequence is invalid")
-        if (
-            len(related) > MAX_RELATED_MEMORY_IDS
-            or len(related) != len(set(related))
-            or any(handle not in relation_lookup for handle in related)
-        ):
-            raise ContinualLiveError("raw authored relation handles drifted after parsing")
+    for source_token, bitmask in zip(source_tokens, bitmasks, strict=True):
+        set_bit_indices, expanded = _expand_relation_bitmask(
+            bitmask,
+            relation_table,
+        )
         result.append(
             {
+                "expanded_related_memory_ids": list(expanded),
                 "memory_id": str(source_token["suggested_memory_id"]),
-                "related_memory_handles": list(related),
-                "expanded_related_memory_ids": [
-                    relation_lookup[handle] for handle in related
-                ],
+                "related_memory_bitmask": bitmask,
+                "set_bit_indices": list(set_bit_indices),
             }
         )
     return result
@@ -3331,15 +3360,23 @@ def _structure_compilation_receipt(
         != {
             "expanded_related_memory_ids",
             "memory_id",
-            "related_memory_handles",
+            "related_memory_bitmask",
+            "set_bit_indices",
         }
         for item in authored_relations
     ):
         raise ContinualLiveError("raw authored relation evidence field set drifted")
-    authored_handle_sequences = [
+    authored_bitmask_sequences = [
         {
             "memory_id": item["memory_id"],
-            "related_memory_handles": list(item["related_memory_handles"]),
+            "related_memory_bitmask": item["related_memory_bitmask"],
+        }
+        for item in authored_relations
+    ]
+    authored_set_bit_index_sequences = [
+        {
+            "memory_id": item["memory_id"],
+            "set_bit_indices": list(item["set_bit_indices"]),
         }
         for item in authored_relations
     ]
@@ -3365,15 +3402,15 @@ def _structure_compilation_receipt(
         for item in expanded_relations
     ]
     if authored_canonical_sets != stored_relations or any(
-        len(item["related_memory_handles"])
-        != len(set(item["related_memory_handles"]))
+        len(item["set_bit_indices"])
+        != len(set(item["set_bit_indices"]))
         or len(item["expanded_related_memory_ids"])
         != len(set(item["expanded_related_memory_ids"]))
         for item in authored_relations
     ):
         raise ContinualLiveError("compiled target added or dropped an authored relation")
     authored_relation_count = sum(
-        len(item["related_memory_handles"]) for item in authored_relations
+        len(item["set_bit_indices"]) for item in authored_relations
     )
     target_sha256 = _snapshot_sha256(target)
     reread_sha256 = (
@@ -3390,16 +3427,21 @@ def _structure_compilation_receipt(
         "activation_id": activation_id,
         "append_only_membership": append_only_membership,
         "authored_placement_sha256": canonical_sha256(authored_placements),
-        "authored_relation_handle_count": authored_relation_count,
-        "authored_relation_handle_sequences": authored_handle_sequences,
-        "authored_relation_handle_sequence_sha256": canonical_sha256(
-            authored_handle_sequences
+        "authored_relation_bit_count": authored_relation_count,
+        "authored_relation_bitmask_sequences": authored_bitmask_sequences,
+        "authored_relation_bitmask_sequence_sha256": canonical_sha256(
+            authored_bitmask_sequences
+        ),
+        "authored_relation_set_bit_index_sequences": (
+            authored_set_bit_index_sequences
+        ),
+        "authored_relation_set_bit_index_sequence_sha256": canonical_sha256(
+            authored_set_bit_index_sequences
         ),
         "authored_relation_canonical_set_sha256": canonical_sha256(
             authored_canonical_sets
         ),
         "authored_relation_count": authored_relation_count,
-        "authored_relation_sequence_sha256": canonical_sha256(expanded_relations),
         "base_cell_count": len(base.cells),
         "base_generation": generation,
         "base_memberships_sha256": canonical_sha256(base_memberships),
@@ -3418,8 +3460,8 @@ def _structure_compilation_receipt(
             authored_canonical_sets
         ),
         "expanded_relation_count": authored_relation_count,
-        "expanded_relation_sequences": expanded_relations,
-        "expanded_relation_sequence_sha256": canonical_sha256(
+        "expanded_relation_table_order_sequences": expanded_relations,
+        "expanded_relation_table_order_sequence_sha256": canonical_sha256(
             expanded_relations
         ),
         "proposal_sha256": canonical_sha256(proposal.canonical()),
@@ -3459,12 +3501,13 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         "activation_id",
         "append_only_membership",
         "authored_placement_sha256",
-        "authored_relation_handle_count",
-        "authored_relation_handle_sequences",
-        "authored_relation_handle_sequence_sha256",
+        "authored_relation_bit_count",
+        "authored_relation_bitmask_sequences",
+        "authored_relation_bitmask_sequence_sha256",
         "authored_relation_canonical_set_sha256",
         "authored_relation_count",
-        "authored_relation_sequence_sha256",
+        "authored_relation_set_bit_index_sequences",
+        "authored_relation_set_bit_index_sequence_sha256",
         "base_cell_count",
         "base_generation",
         "base_memberships_sha256",
@@ -3483,8 +3526,8 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         "mutation_expressivity",
         "expanded_relation_canonical_set_sha256",
         "expanded_relation_count",
-        "expanded_relation_sequences",
-        "expanded_relation_sequence_sha256",
+        "expanded_relation_table_order_sequences",
+        "expanded_relation_table_order_sequence_sha256",
         "new_memory_count",
         "proposal_sha256",
         "proposal_mutation_id",
@@ -3506,9 +3549,9 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         raise ContinualLiveError("structure compilation receipt field set drifted")
     required_hashes = (
         "authored_placement_sha256",
-        "authored_relation_handle_sequence_sha256",
+        "authored_relation_bitmask_sequence_sha256",
         "authored_relation_canonical_set_sha256",
-        "authored_relation_sequence_sha256",
+        "authored_relation_set_bit_index_sequence_sha256",
         "base_memberships_sha256",
         "base_routing_sha256",
         "base_snapshot_id",
@@ -3516,7 +3559,7 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         "completion_response_sha256",
         "completion_request_sha256",
         "expanded_relation_canonical_set_sha256",
-        "expanded_relation_sequence_sha256",
+        "expanded_relation_table_order_sequence_sha256",
         "proposal_sha256",
         "proposal_mutation_id",
         "relation_handle_table_sha256",
@@ -3546,7 +3589,7 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
                 "structure compilation receipt optional digest is invalid"
             )
     for count_field in (
-        "authored_relation_handle_count",
+        "authored_relation_bit_count",
         "authored_relation_count",
         "base_cell_count",
         "expanded_relation_count",
@@ -3568,12 +3611,10 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         or value.get("core_membership_order") != "canonical-lexicographic"
         or value.get("mutation_expressivity") != MUTATION_EXPRESSIVITY
         or value.get("authored_relation_count") != value.get("stored_relation_count")
-        or value.get("authored_relation_handle_count")
+        or value.get("authored_relation_bit_count")
         != value.get("expanded_relation_count")
         or value.get("expanded_relation_count")
         != value.get("stored_relation_count")
-        or value.get("authored_relation_sequence_sha256")
-        != value.get("expanded_relation_sequence_sha256")
         or value.get("authored_relation_canonical_set_sha256")
         != value.get("expanded_relation_canonical_set_sha256")
         or value.get("expanded_relation_canonical_set_sha256")
@@ -3590,48 +3631,67 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         or len(relation_table.get("new", ())) != value.get("new_memory_count")
     ):
         raise ContinualLiveError("structure compilation relation handle binding drifted")
-    handle_sequences = value.get("authored_relation_handle_sequences")
-    expanded_sequences = value.get("expanded_relation_sequences")
-    if not isinstance(handle_sequences, list) or not isinstance(expanded_sequences, list):
+    bitmask_sequences = value.get("authored_relation_bitmask_sequences")
+    set_bit_index_sequences = value.get(
+        "authored_relation_set_bit_index_sequences"
+    )
+    expanded_sequences = value.get("expanded_relation_table_order_sequences")
+    if (
+        not isinstance(bitmask_sequences, list)
+        or not isinstance(set_bit_index_sequences, list)
+        or not isinstance(expanded_sequences, list)
+    ):
         raise ContinualLiveError("structure compilation relation sequences are invalid")
     new_entries = relation_table["new"]
     if (
-        len(handle_sequences) != len(new_entries)
+        len(bitmask_sequences) != len(new_entries)
+        or len(set_bit_index_sequences) != len(new_entries)
         or len(expanded_sequences) != len(new_entries)
-        or value.get("authored_relation_handle_sequence_sha256")
-        != canonical_sha256(handle_sequences)
-        or value.get("expanded_relation_sequence_sha256")
+        or value.get("authored_relation_bitmask_sequence_sha256")
+        != canonical_sha256(bitmask_sequences)
+        or value.get("authored_relation_set_bit_index_sequence_sha256")
+        != canonical_sha256(set_bit_index_sequences)
+        or value.get("expanded_relation_table_order_sequence_sha256")
         != canonical_sha256(expanded_sequences)
     ):
         raise ContinualLiveError("structure compilation relation sequence binding drifted")
-    handle_lookup = _relation_handle_lookup(relation_table)
     rebuilt_expanded: list[dict[str, Any]] = []
-    for new_entry, handle_item in zip(new_entries, handle_sequences, strict=True):
+    rebuilt_set_bit_indices: list[dict[str, Any]] = []
+    for new_entry, bitmask_item, index_item in zip(
+        new_entries,
+        bitmask_sequences,
+        set_bit_index_sequences,
+        strict=True,
+    ):
         if (
-            not isinstance(handle_item, Mapping)
-            or set(handle_item) != {"memory_id", "related_memory_handles"}
-            or handle_item.get("memory_id") != new_entry["memory_id"]
-            or not isinstance(handle_item.get("related_memory_handles"), list)
-            or any(
-                not isinstance(handle, str) or handle not in handle_lookup
-                for handle in handle_item["related_memory_handles"]
-            )
-            or len(handle_item["related_memory_handles"]) > MAX_RELATED_MEMORY_IDS
-            or len(handle_item["related_memory_handles"])
-            != len(set(handle_item["related_memory_handles"]))
+            not isinstance(bitmask_item, Mapping)
+            or set(bitmask_item) != {"memory_id", "related_memory_bitmask"}
+            or bitmask_item.get("memory_id") != new_entry["memory_id"]
+            or not isinstance(index_item, Mapping)
+            or set(index_item) != {"memory_id", "set_bit_indices"}
+            or index_item.get("memory_id") != new_entry["memory_id"]
+            or not isinstance(index_item.get("set_bit_indices"), list)
         ):
-            raise ContinualLiveError("structure compilation authored handles are invalid")
+            raise ContinualLiveError("structure compilation authored bitmasks are invalid")
+        set_bit_indices, expanded_ids = _expand_relation_bitmask(
+            bitmask_item.get("related_memory_bitmask"),
+            relation_table,
+        )
+        rebuilt_index_item = {
+            "memory_id": new_entry["memory_id"],
+            "set_bit_indices": list(set_bit_indices),
+        }
+        if index_item != rebuilt_index_item:
+            raise ContinualLiveError("structure compilation set-bit indices drifted")
+        rebuilt_set_bit_indices.append(rebuilt_index_item)
         rebuilt_expanded.append(
             {
                 "memory_id": new_entry["memory_id"],
-                "related_memory_ids": [
-                    handle_lookup[handle]
-                    for handle in handle_item["related_memory_handles"]
-                ],
+                "related_memory_ids": list(expanded_ids),
             }
         )
     if rebuilt_expanded != expanded_sequences:
-        raise ContinualLiveError("structure compilation handle expansion drifted")
+        raise ContinualLiveError("structure compilation bitmask expansion drifted")
     rebuilt_sets = [
         {
             "memory_id": item["memory_id"],
@@ -3641,8 +3701,9 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
     ]
     rebuilt_count = sum(len(item["related_memory_ids"]) for item in rebuilt_expanded)
     if (
-        rebuilt_count != value.get("authored_relation_handle_count")
+        rebuilt_count != value.get("authored_relation_bit_count")
         or rebuilt_count != value.get("expanded_relation_count")
+        or rebuilt_set_bit_indices != set_bit_index_sequences
         or canonical_sha256(rebuilt_sets)
         != value.get("expanded_relation_canonical_set_sha256")
     ):
@@ -3692,7 +3753,7 @@ def _replay_structure_compilation_receipt(
     entry: Mapping[str, Any],
     receipt: Mapping[str, Any],
 ) -> MutationProposal:
-    """Rebuild handle expansion and core target from one persisted update call."""
+    """Rebuild bitmask expansion and core target from one persisted update call."""
 
     _validate_structure_compilation_receipt(receipt)
     try:
@@ -9113,8 +9174,13 @@ def main(argv: Sequence[str] | None = None) -> int:
                                     raise ContinualLiveError(
                                         "persisted completion canonical form changed"
                                     )
-                                response_schema.validate_instance(
-                                    _strict_object(completion["text"])
+                                response_value = _strict_object(
+                                    completion["text"]
+                                )
+                                response_schema.validate_instance(response_value)
+                                _validate_local_response_invariants(
+                                    response_value,
+                                    response_schema.schema(),
                                 )
                             except (
                                 KeyError,

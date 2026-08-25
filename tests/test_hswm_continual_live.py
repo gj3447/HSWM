@@ -154,7 +154,11 @@ class ScriptedRelationalBackend:
         active = payload["current_hswm_indexed_read_only"]
         existing = list(active["memories"])
         source_tokens = payload["public_source_tokens"]
-        new_relations: list[dict[str, Any]] = []
+        target_handles = [
+            *(f"E{index:03d}" for index in range(len(existing))),
+            *(f"N{index:03d}" for index in range(len(source_tokens))),
+        ]
+        relation_bitmasks: list[str] = []
         for source_token in payload["public_source_tokens"]:
             content = source_token["content"]
             related_existing = [
@@ -169,18 +173,15 @@ class ScriptedRelationalBackend:
                 and other["suggested_memory_id"]
                 != source_token["suggested_memory_id"]
             )
-            new_relations.append(
-                {
-                    "related_memory_handles": sorted(
-                        related_existing + related_new
-                    ),
-                }
+            selected = set(related_existing + related_new)
+            relation_bitmasks.append(
+                "".join("1" if handle in selected else "0" for handle in target_handles)
             )
         common = {
             "base_generation": active["active_generation"],
             "base_snapshot_id": active["snapshot_id"],
             "mode": payload["authoring_mode"],
-            "new_memory_relations": new_relations,
+            "new_memory_relation_bitmasks": relation_bitmasks,
             "rationale": "Absorb each public atomic relation into persistent HSWM.",
         }
         if payload["authoring_mode"] == live.FULL_AUTHOR_MODE:
@@ -400,6 +401,11 @@ def _one_token_batch() -> LearningBatch:
         correct=False,
         learning_tokens=(PublicLearningToken("node-a", "rel-x", "node-b"),),
     )
+
+
+def _relation_mask(width: int, selected_indices: Sequence[int] = ()) -> str:
+    selected = set(selected_indices)
+    return "".join("1" if index in selected else "0" for index in range(width))
 
 
 def _small_stream():
@@ -1738,14 +1744,13 @@ def test_invalid_provider_json_is_retained_before_parsing(
     assert arm.ledger == []
 
 
-def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Path) -> None:
+def test_rejects_nonbinary_relation_target_position(tmp_path: Path) -> None:
     class BadBackend(ScriptedRelationalBackend):
         @staticmethod
         def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            value["new_memory_relations"][0]["related_memory_handles"] = [
-                "N999"
-            ]
+            mask = value["new_memory_relation_bitmasks"][0]
+            value["new_memory_relation_bitmasks"][0] = "2" + mask[1:]
             return json.dumps(value)
 
     arm = StructuredHSWMArm(
@@ -1754,7 +1759,7 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
         isolation_id="bad-source",
         store_path=tmp_path / "state.sqlite3",
     )
-    with pytest.raises(ContinualLiveError, match="schema enum"):
+    with pytest.raises(ContinualLiveError, match="binary string pattern"):
         arm.update(
             LearningBatch(
                 episode_id="episode-bad",
@@ -1774,7 +1779,7 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
     ("mutation", "error_match"),
     [
         (
-            lambda value: value["new_memory_relations"].pop(),
+            lambda value: value["new_memory_relation_bitmasks"].pop(),
             "array bound",
         ),
         (
@@ -1794,10 +1799,20 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
             "reachable from entry",
         ),
         (
-            lambda value: value["new_memory_relations"][0].update(
-                {"related_memory_handles": [0]}
+            lambda value: value["new_memory_relation_bitmasks"].__setitem__(0, 0),
+            "string bound",
+        ),
+        (
+            lambda value: value["new_memory_relation_bitmasks"].__setitem__(
+                0, value["new_memory_relation_bitmasks"][0][:-1]
             ),
-            "schema enum",
+            "string bound",
+        ),
+        (
+            lambda value: value["new_memory_relation_bitmasks"].__setitem__(
+                0, " " + value["new_memory_relation_bitmasks"][0][1:]
+            ),
+            "binary string pattern",
         ),
         (
             lambda value: value.update(
@@ -1907,23 +1922,26 @@ def test_compact_patch_relies_on_global_memory_policy_for_concentrated_cell(
     assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
 
 
-def test_compact_patch_binds_nonlexical_wrong_relations_without_add_or_drop(
+def test_compact_patch_binds_wrong_relation_bitset_without_add_or_drop(
     tmp_path: Path,
 ) -> None:
     class WrongRelationBackend(ScriptedRelationalBackend):
         @staticmethod
         def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            for relation in value["new_memory_relations"]:
-                relation["related_memory_handles"] = []
             ordered = sorted(
                 enumerate(payload["public_source_tokens"]),
                 key=lambda item: item[1]["suggested_memory_id"],
                 reverse=True,
             )[:2]
-            value["new_memory_relations"][0]["related_memory_handles"] = [
-                f"N{index:03d}" for index, _ in ordered
+            width = len(payload["public_source_tokens"])
+            value["new_memory_relation_bitmasks"] = [
+                _relation_mask(width) for _ in payload["public_source_tokens"]
             ]
+            value["new_memory_relation_bitmasks"][0] = _relation_mask(
+                width,
+                [index for index, _ in ordered],
+            )
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
     backend = WrongRelationBackend()
@@ -1952,9 +1970,8 @@ def test_compact_patch_binds_nonlexical_wrong_relations_without_add_or_drop(
         key=lambda item: item[1]["suggested_memory_id"],
         reverse=True,
     )[:2]
-    raw_handles = [f"N{index:03d}" for index, _ in ordered]
-    raw_related = [item["suggested_memory_id"] for _, item in ordered]
-    assert raw_related != sorted(raw_related)
+    selected_indices = sorted(index for index, _ in ordered)
+    raw_related = [source_tokens[index]["suggested_memory_id"] for index in selected_indices]
     expected = tuple(sorted(raw_related))
     raw_authored = [
         {
@@ -1979,21 +1996,32 @@ def test_compact_patch_binds_nonlexical_wrong_relations_without_add_or_drop(
     receipt = arm.structure_compilation_receipts[0]
     assert receipt["authored_relation_count"] == 2
     assert receipt["stored_relation_count"] == 2
-    assert receipt["authored_relation_sequence_sha256"] == live.canonical_sha256(
-        raw_authored
-    )
-    raw_handle_authored = [
+    raw_bitmask_authored = [
         {
             "memory_id": source_token["suggested_memory_id"],
-            "related_memory_handles": raw_handles if index == 0 else [],
+            "related_memory_bitmask": (
+                _relation_mask(len(source_tokens), selected_indices)
+                if index == 0
+                else _relation_mask(len(source_tokens))
+            ),
         }
         for index, source_token in enumerate(source_tokens)
     ]
-    assert receipt["authored_relation_handle_sequence_sha256"] == (
-        live.canonical_sha256(raw_handle_authored)
+    set_bit_index_authored = [
+        {
+            "memory_id": source_token["suggested_memory_id"],
+            "set_bit_indices": selected_indices if index == 0 else [],
+        }
+        for index, source_token in enumerate(source_tokens)
+    ]
+    assert receipt["authored_relation_bitmask_sequence_sha256"] == (
+        live.canonical_sha256(raw_bitmask_authored)
     )
-    assert receipt["expanded_relation_sequence_sha256"] == (
-        receipt["authored_relation_sequence_sha256"]
+    assert receipt["authored_relation_set_bit_index_sequence_sha256"] == (
+        live.canonical_sha256(set_bit_index_authored)
+    )
+    assert receipt["expanded_relation_table_order_sequence_sha256"] == (
+        live.canonical_sha256(raw_authored)
     )
     assert receipt["authored_relation_canonical_set_sha256"] == (
         live.canonical_sha256(canonical_sets)
@@ -2001,7 +2029,7 @@ def test_compact_patch_binds_nonlexical_wrong_relations_without_add_or_drop(
     assert receipt["authored_relation_canonical_set_sha256"] == receipt[
         "stored_relation_canonical_set_sha256"
     ]
-    assert receipt["authored_relation_sequence_sha256"] != receipt[
+    assert receipt["expanded_relation_table_order_sequence_sha256"] != receipt[
         "authored_relation_canonical_set_sha256"
     ]
 
@@ -2013,7 +2041,7 @@ def test_full_author_persists_self_relation_as_diagnostic_false_positive(
         @staticmethod
         def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            value["new_memory_relations"][0]["related_memory_handles"] = ["N000"]
+            value["new_memory_relation_bitmasks"][0] = "1"
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
     diagnostics: list[dict[str, Any]] = []
@@ -2040,11 +2068,12 @@ def test_full_author_persists_self_relation_as_diagnostic_false_positive(
     response_schema = json.loads(
         backend.requests[0]["response_schema"]["schema_json"]
     )
-    relation_ids_schema = response_schema["properties"]["new_memory_relations"][
-        "items"
-    ]["properties"]["related_memory_handles"]
-    assert relation_ids_schema["maxItems"] == 1
-    assert relation_ids_schema["uniqueItems"] is True
+    relation_mask_schema = response_schema["properties"][
+        "new_memory_relation_bitmasks"
+    ]["items"]
+    assert relation_mask_schema["minLength"] == 1
+    assert relation_mask_schema["maxLength"] == 1
+    assert relation_mask_schema["pattern"] == "^[01]{1}$"
     assert "source memory itself is structurally allowed" in (
         backend.requests[0]["system"]
         + " "
@@ -2077,12 +2106,17 @@ def test_full_author_persists_self_relation_as_diagnostic_false_positive(
     ]
     assert receipt["logical_mode"] == live.FULL_AUTHOR_MODE
     assert receipt["authored_relation_count"] == receipt["stored_relation_count"] == 1
-    assert receipt["authored_relation_sequence_sha256"] == live.canonical_sha256(
-        authored
+    assert receipt["expanded_relation_table_order_sequence_sha256"] == (
+        live.canonical_sha256(authored)
     )
-    assert receipt["authored_relation_handle_sequence_sha256"] == (
+    assert receipt["authored_relation_bitmask_sequence_sha256"] == (
         live.canonical_sha256(
-            [{"memory_id": memory.memory_id, "related_memory_handles": ["N000"]}]
+            [{"memory_id": memory.memory_id, "related_memory_bitmask": "1"}]
+        )
+    )
+    assert receipt["authored_relation_set_bit_index_sequence_sha256"] == (
+        live.canonical_sha256(
+            [{"memory_id": memory.memory_id, "set_bit_indices": [0]}]
         )
     )
     assert (
@@ -2102,9 +2136,7 @@ def test_keep_routing_persists_self_relation_without_rewriting_prior_state(
         def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
             if payload["authoring_mode"] == live.KEEP_ROUTING_APPEND_MODE:
-                value["new_memory_relations"][0]["related_memory_handles"] = [
-                    "N000"
-                ]
+                value["new_memory_relation_bitmasks"][0] = "01"
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
     arm = StructuredHSWMArm(
@@ -2145,6 +2177,28 @@ def test_keep_routing_persists_self_relation_without_rewriting_prior_state(
     )
 
 
+def test_all_zero_relation_bitmask_persists_an_empty_authored_target_set(
+    tmp_path: Path,
+) -> None:
+    arm = StructuredHSWMArm(
+        backend=ScriptedRelationalBackend(),
+        budget=_budget(),
+        isolation_id="all-zero-relation-mask",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    arm.update(_one_token_batch())
+    completion = json.loads(arm.ledger[0].completion.text)
+    assert completion["new_memory_relation_bitmasks"] == ["0"]
+    memory = arm.store.active_snapshot().snapshot.memories[0]
+    assert memory.related_memory_ids == ()
+    receipt = arm.structure_compilation_receipts[0]
+    assert receipt["authored_relation_bit_count"] == 0
+    assert receipt["stored_relation_count"] == 0
+    assert receipt["authored_relation_set_bit_index_sequences"] == [
+        {"memory_id": memory.memory_id, "set_bit_indices": []}
+    ]
+
+
 def test_related_memory_bound_still_fails_closed_when_self_is_allowed(
     tmp_path: Path,
 ) -> None:
@@ -2152,10 +2206,9 @@ def test_related_memory_bound_still_fails_closed_when_self_is_allowed(
         @staticmethod
         def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            value["new_memory_relations"][0]["related_memory_handles"] = [
-                f"N{index:03d}"
-                for index in range(live.MAX_RELATED_MEMORY_IDS + 1)
-            ]
+            value["new_memory_relation_bitmasks"][0] = "1" * (
+                live.MAX_RELATED_MEMORY_IDS + 1
+            )
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
     arm = StructuredHSWMArm(
@@ -2174,8 +2227,12 @@ def test_related_memory_bound_still_fails_closed_when_self_is_allowed(
             for index in range(live.MAX_RELATED_MEMORY_IDS + 1)
         ),
     )
-    with pytest.raises(ContinualLiveError, match="array bound"):
+    with pytest.raises(ContinualLiveError, match="relation bound"):
         arm.update(batch)
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert events[-1]["event"] == "rejected_response"
+    assert not any(item["event"] == "completed" for item in events)
+    assert arm.ledger == []
     assert arm.store.active_snapshot().generation == 0
     assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
 
@@ -2187,9 +2244,9 @@ def test_eight_unique_relation_handles_are_schema_valid_and_persisted(
         @staticmethod
         def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            value["new_memory_relations"][0]["related_memory_handles"] = [
-                f"N{index:03d}" for index in range(live.MAX_RELATED_MEMORY_IDS)
-            ]
+            value["new_memory_relation_bitmasks"][0] = "1" * (
+                live.MAX_RELATED_MEMORY_IDS
+            )
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
     backend = EightUniqueRelationsBackend()
@@ -2224,11 +2281,12 @@ def test_eight_unique_relation_handles_are_schema_valid_and_persisted(
     assert len(source_memory.related_memory_ids) == live.MAX_RELATED_MEMORY_IDS
     assert set(source_memory.related_memory_ids) == expected_ids
     schema = json.loads(backend.requests[0]["response_schema"]["schema_json"])
-    relation_schema = schema["properties"]["new_memory_relations"]["items"][
-        "properties"
-    ]["related_memory_handles"]
-    assert relation_schema["maxItems"] == live.MAX_RELATED_MEMORY_IDS
-    assert relation_schema["uniqueItems"] is True
+    relation_schema = schema["properties"]["new_memory_relation_bitmasks"][
+        "items"
+    ]
+    assert relation_schema["minLength"] == live.MAX_RELATED_MEMORY_IDS
+    assert relation_schema["maxLength"] == live.MAX_RELATED_MEMORY_IDS
+    assert relation_schema["pattern"] == "^[01]{8}$"
     receipt = arm.structure_compilation_receipts[0]
     assert receipt["authored_relation_count"] == live.MAX_RELATED_MEMORY_IDS
     assert receipt["stored_relation_count"] == live.MAX_RELATED_MEMORY_IDS
@@ -2476,16 +2534,10 @@ def test_compact_patch_materializes_public_content_without_echoing_records(
     assert "upsert_memories" not in completion_value
     assert "memories" not in completion_value
     assert "node-a" not in arm.ledger[0].completion.text
-    assert completion_value["new_memory_relations"][0] == {
-        "related_memory_handles": ["N001"]
-    }
+    assert completion_value["new_memory_relation_bitmasks"][0] == "01"
     assert all(
-        set(relation) == {"related_memory_handles"}
-        and all(
-            isinstance(handle, str)
-            for handle in relation["related_memory_handles"]
-        )
-        for relation in completion_value["new_memory_relations"]
+        isinstance(bitmask, str) and len(bitmask) == 2
+        for bitmask in completion_value["new_memory_relation_bitmasks"]
     )
     assigned_ids = [
         memory_id for cell in snapshot.cells for memory_id in cell.memory_ids
@@ -2496,103 +2548,82 @@ def test_compact_patch_materializes_public_content_without_echoing_records(
     )
 
 
-def test_direct_memory_relations_reject_duplicate_and_cell_index_namespaces(
+def test_relation_bit_positions_are_not_cell_or_handle_namespaces(
     tmp_path: Path,
 ) -> None:
-    class InvalidDirectRelationBackend(ScriptedRelationalBackend):
-        def __init__(self, violation: str) -> None:
-            super().__init__()
-            self.violation = violation
-
-        def _author(self, payload: Mapping[str, Any]) -> str:
+    class PositionalRelationBackend(ScriptedRelationalBackend):
+        @staticmethod
+        def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            relation = value["new_memory_relations"][0]
-            if self.violation == "duplicate":
-                target = relation["related_memory_handles"][0]
-                relation["related_memory_handles"] = [target, target]
-            else:
-                relation["related_memory_handles"] = [
-                    value["new_memory_cell_indices"][1]
-                ]
+            value["new_memory_relation_bitmasks"][0] = "010"
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
-    batch = LearningBatch(
-        episode_id="direct-relation-namespace",
-        after_step=0,
-        chosen=None,
-        correct=False,
-        learning_tokens=(
-            PublicLearningToken("node-a", "rel", "node-b"),
-            PublicLearningToken("node-b", "rel", "node-c"),
-            PublicLearningToken("node-c", "rel", "node-d"),
-        ),
+    backend = PositionalRelationBackend()
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id="relation-bit-position",
+        store_path=tmp_path / "state.sqlite3",
     )
-    for violation, message in (
-        ("duplicate", "unique array items"),
-        ("cell-index", "schema enum"),
-    ):
-        arm = StructuredHSWMArm(
-            backend=InvalidDirectRelationBackend(violation),
-            budget=_budget(),
-            isolation_id=f"direct-relation-{violation}",
-            store_path=tmp_path / violation / "state.sqlite3",
+    arm.update(
+        LearningBatch(
+            episode_id="relation-bit-position",
+            after_step=0,
+            chosen=None,
+            correct=False,
+            learning_tokens=(
+                PublicLearningToken("node-a", "rel", "node-b"),
+                PublicLearningToken("node-b", "rel", "node-c"),
+                PublicLearningToken("node-c", "rel", "node-d"),
+            ),
         )
-        with pytest.raises(ContinualLiveError, match=message):
-            arm.update(batch)
-        assert arm.store.active_snapshot().generation == 0
-        assert arm.state_canonical_bytes() == canonical_json_bytes(
-            GENESIS.canonical()
-        )
-        if violation == "duplicate":
-            events = [
-                json.loads(line)
-                for line in arm.journal_path.read_text().splitlines()
-            ]
-            assert events[-1]["event"] == "rejected_response"
-            assert not any(item["event"] == "completed" for item in events)
-            assert arm.structure_compilation_receipts == []
+    )
+    source_tokens = backend.requests[0]["payload"]["public_source_tokens"]
+    by_id = {
+        memory.memory_id: memory for memory in arm.store.active_snapshot().snapshot.memories
+    }
+    assert by_id[source_tokens[0]["suggested_memory_id"]].related_memory_ids == (
+        source_tokens[1]["suggested_memory_id"],
+    )
 
 
-def test_relation_handle_namespaces_fail_closed_without_reinterpretation(
+@pytest.mark.parametrize("invalid_mask", ["N01", "1", "0000", "0 0"])
+def test_relation_bitmask_namespace_confusion_fails_before_adapter(
     tmp_path: Path,
+    invalid_mask: str,
 ) -> None:
     class NamespaceConfusionBackend(ScriptedRelationalBackend):
-        def __init__(self, bad_handle: str) -> None:
-            super().__init__()
-            self.bad_handle = bad_handle
-
-        def _author(self, payload: Mapping[str, Any]) -> str:
+        @staticmethod
+        def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            value["new_memory_relations"][0]["related_memory_handles"] = [
-                self.bad_handle
-            ]
+            value["new_memory_relation_bitmasks"][0] = invalid_mask
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
-    batch = LearningBatch(
-        episode_id="relation-handle-namespace",
-        after_step=0,
-        chosen=None,
-        correct=False,
-        learning_tokens=(
-            PublicLearningToken("node-a", "rel", "node-b"),
-            PublicLearningToken("node-b", "rel", "node-c"),
-        ),
+    arm = StructuredHSWMArm(
+        backend=NamespaceConfusionBackend(),
+        budget=_budget(),
+        isolation_id=f"bitmask-confusion:{invalid_mask}",
+        store_path=tmp_path / sha256(invalid_mask.encode()).hexdigest() / "state.sqlite3",
     )
-    for label, bad_handle in (
-        ("existing-at-genesis", "E000"),
-        ("cell-index-string", "0"),
-        ("wrong-width", "N00"),
-        ("unknown-new", "N002"),
-    ):
-        arm = StructuredHSWMArm(
-            backend=NamespaceConfusionBackend(bad_handle),
-            budget=_budget(),
-            isolation_id=f"namespace-confusion:{label}",
-            store_path=tmp_path / label / "state.sqlite3",
+    with pytest.raises(ContinualLiveError, match="string bound|binary string pattern"):
+        arm.update(
+            LearningBatch(
+                episode_id="bitmask-confusion",
+                after_step=0,
+                chosen=None,
+                correct=False,
+                learning_tokens=(
+                    PublicLearningToken("node-a", "rel", "node-b"),
+                    PublicLearningToken("node-b", "rel", "node-c"),
+                    PublicLearningToken("node-c", "rel", "node-d"),
+                ),
+            )
         )
-        with pytest.raises(ContinualLiveError, match="schema enum"):
-            arm.update(batch)
-        assert arm.store.active_snapshot().generation == 0
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert events[-1]["event"] == "rejected_response"
+    assert not any(item["event"] == "completed" for item in events)
+    assert arm.store.active_snapshot().generation == 0
+    assert arm.structure_compilation_receipts == []
 
 
 @pytest.mark.parametrize("invalid_id", [None, 7, True, ""])
@@ -2659,7 +2690,7 @@ def test_relation_handle_table_and_replay_reject_rehashed_mapping_tamper(
     receipt["receipt_sha256"] = live.canonical_sha256(unsigned)
     with pytest.raises(
         ContinualLiveError,
-        match="authored handles are invalid|replay handle table drifted",
+        match="authored bitmasks are invalid|replay handle table drifted",
     ):
         live._replay_structure_compilation_receipt(entry, receipt)
 
@@ -2780,7 +2811,7 @@ def test_post_reveal_rejects_swapped_same_target_reset_activations(
         )
 
 
-def test_dense_sixty_four_by_three_handle_response_is_compact_and_valid() -> None:
+def test_full_sixty_four_bitmask_response_bytes_are_density_independent() -> None:
     batch = LearningBatch(
         episode_id="dense-relation-handle-response",
         after_step=0,
@@ -2793,37 +2824,41 @@ def test_dense_sixty_four_by_three_handle_response_is_compact_and_valid() -> Non
     )
     source_tokens = live._public_source_tokens(batch)
     payload = live._structure_update_payload(GENESIS, source_tokens, generation=0)
-    response = json.loads(ScriptedRelationalBackend._author(payload))
-    for index, relation in enumerate(response["new_memory_relations"]):
-        relation["related_memory_handles"] = [
-            f"N{target:03d}"
-            for target in (
-                (index + 1) % 64,
-                (index + 2) % 64,
-                (index + 3) % 64,
-            )
-        ]
-    text = json.dumps(response, sort_keys=True, separators=(",", ":"))
     schema = live._compact_patch_response_schema(
         GENESIS,
         source_tokens,
         live._proposal_policy(_budget()),
         generation=0,
     )
-    schema.validate_instance(response)
-    proposal = live._parse_structure_proposal(
-        text,
-        active=GENESIS,
-        source_tokens=source_tokens,
-        generation=0,
-        policy=live._proposal_policy(_budget()),
+    texts: dict[int, str] = {}
+    for degree in (3, live.MAX_RELATED_MEMORY_IDS):
+        response = json.loads(ScriptedRelationalBackend._author(payload))
+        for index in range(64):
+            response["new_memory_relation_bitmasks"][index] = _relation_mask(
+                64,
+                tuple((index + offset) % 64 for offset in range(1, degree + 1)),
+            )
+        text = json.dumps(response, sort_keys=True, separators=(",", ":"))
+        schema.validate_instance(response)
+        live._validate_local_response_invariants(response, schema.schema())
+        proposal = live._parse_structure_proposal(
+            text,
+            active=GENESIS,
+            source_tokens=source_tokens,
+            generation=0,
+            policy=live._proposal_policy(_budget()),
+        )
+        assert sum(
+            len(memory.related_memory_ids) for memory in proposal.upsert_memories
+        ) == 64 * degree
+        texts[degree] = text
+    # Fixed-width masks bound response bytes independently of relation density.
+    # This is not a frozen-tokenizer proof; exact Qwen FULL/KEEP headroom remains
+    # a generation-free ops seal before any public call.
+    assert len(texts[3].encode("utf-8")) == len(
+        texts[live.MAX_RELATED_MEMORY_IDS].encode("utf-8")
     )
-    assert sum(len(memory.related_memory_ids) for memory in proposal.upsert_memories) == 192
-    # This is a byte-regression for the observed degree-three shape, not a
-    # tokenizer proof or a claim that every schema-valid degree-eight response
-    # fits the provider's output cap. Runtime finish_reason and token guards
-    # remain fail-closed; the frozen tokenizer preflight is an ops evidence gate.
-    assert len(text.encode("utf-8")) < 8_000
+    assert len(texts[3].encode("utf-8")) < 8_000
 
 
 @pytest.mark.parametrize(
@@ -2936,7 +2971,7 @@ def test_keep_routing_preserves_topology_and_old_memberships_byte_exact(
         "base_snapshot_id",
         "mode",
         "new_memory_cell_ids",
-        "new_memory_relations",
+        "new_memory_relation_bitmasks",
         "rationale",
     }
     assert after.entry_cell_id == before.entry_cell_id
@@ -2972,8 +3007,8 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         state_dir=tmp_path / "gate-state",
     )
     assert result["valid"] is True
-    assert result["adapter_schema"] == "hswm-compact-structure-patch/v9"
-    assert result["protocol"] == "hswm-public-schema-gate/v10"
+    assert result["adapter_schema"] == "hswm-compact-structure-patch/v10"
+    assert result["protocol"] == "hswm-public-schema-gate/v11"
     assert result["indexed_authoring_view_schema"] == (
         "hswm-indexed-authoring-view/v1"
     )
@@ -3111,27 +3146,22 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
             completion_value = json.loads(completion_event["completion"]["text"])
             contract.validate_instance(completion_value)
             contract_schema = contract.schema()
-            if "new_memory_relations" in contract_schema["properties"]:
-                duplicate_value = deepcopy(completion_value)
-                relation_schema = contract_schema["properties"][
-                    "new_memory_relations"
-                ]["items"]["properties"]["related_memory_handles"]
-                duplicate_handle = relation_schema["items"]["enum"][0]
-                duplicate_value["new_memory_relations"][0][
-                    "related_memory_handles"
-                ] = [duplicate_handle, duplicate_handle]
+            if "new_memory_relation_bitmasks" in contract_schema["properties"]:
+                invalid_value = deepcopy(completion_value)
+                mask = invalid_value["new_memory_relation_bitmasks"][0]
+                invalid_value["new_memory_relation_bitmasks"][0] = "2" + mask[1:]
                 with pytest.raises(
                     ContinualLiveError,
-                    match="unique array items",
+                    match="binary string pattern",
                 ):
-                    contract.validate_instance(duplicate_value)
+                    contract.validate_instance(invalid_value)
     assert [
         item["response_schema_name"]
         for item in structured_events
         if item["event"] == "intent"
     ] == [
-        "hswm_full_author_patch_v4",
-        "hswm_keep_routing_append_patch_v4",
+        "hswm_full_author_patch_v5",
+        "hswm_keep_routing_append_patch_v5",
         "hswm_choice_v1",
     ]
     assert [
@@ -3153,9 +3183,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     )
     first_schema = json.loads(structured_intents[0]["response_schema_json"])
     cell_properties = first_schema["properties"]["cells"]["items"]["properties"]
-    relation_properties = first_schema["properties"]["new_memory_relations"]["items"][
-        "properties"
-    ]
+    relation_vector = first_schema["properties"]["new_memory_relation_bitmasks"]
     assert first_schema["properties"]["cells"]["maxItems"] == 16
     assert first_schema["properties"]["cells"]["minItems"] == 16
     assert cell_properties["next_cell_indices"]["maxItems"] == live.MAX_CELL_EDGES
@@ -3167,18 +3195,14 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     )
     assert first_schema["properties"]["new_memory_cell_indices"]["minItems"] == 64
     assert first_schema["properties"]["new_memory_cell_indices"]["maxItems"] == 64
-    assert first_schema["properties"]["new_memory_relations"]["minItems"] == 64
-    assert first_schema["properties"]["new_memory_relations"]["maxItems"] == 64
-    assert set(relation_properties) == {"related_memory_handles"}
-    first_relation_ids = relation_properties["related_memory_handles"]
-    assert first_relation_ids["maxItems"] == live.MAX_RELATED_MEMORY_IDS
-    assert first_relation_ids["uniqueItems"] is True
-    assert first_relation_ids["items"]["type"] == "string"
-    assert len(first_relation_ids["items"]["enum"]) == 64
-    assert all(
-        isinstance(memory_id, str)
-        for memory_id in first_relation_ids["items"]["enum"]
-    )
+    assert relation_vector["minItems"] == 64
+    assert relation_vector["maxItems"] == 64
+    assert relation_vector["items"] == {
+        "maxLength": 64,
+        "minLength": 64,
+        "pattern": "^[01]{64}$",
+        "type": "string",
+    }
     assert "new_memory_links" not in first_schema["properties"]
     assert "delete_memory_ids" not in first_schema["properties"]
     assert "existing_memory_cell_indices" not in first_schema["properties"]
@@ -3189,7 +3213,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         "base_snapshot_id",
         "mode",
         "new_memory_cell_ids",
-        "new_memory_relations",
+        "new_memory_relation_bitmasks",
         "rationale",
     }
     assert second_schema["properties"]["mode"]["const"] == (
@@ -3200,13 +3224,14 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     assert len(
         second_schema["properties"]["new_memory_cell_ids"]["items"]["enum"]
     ) == live.MAX_AUTHORED_CELLS
-    assert second_schema["properties"]["new_memory_relations"]["minItems"] == 4
-    assert second_schema["properties"]["new_memory_relations"]["maxItems"] == 4
-    second_relation_ids = second_schema["properties"]["new_memory_relations"][
-        "items"
-    ]["properties"]["related_memory_handles"]
-    assert second_relation_ids["uniqueItems"] is True
-    assert len(second_relation_ids["items"]["enum"]) == 144
+    second_relation_vector = second_schema["properties"][
+        "new_memory_relation_bitmasks"
+    ]
+    assert second_relation_vector["minItems"] == 4
+    assert second_relation_vector["maxItems"] == 4
+    assert second_relation_vector["items"]["minLength"] == 144
+    assert second_relation_vector["items"]["maxLength"] == 144
+    assert second_relation_vector["items"]["pattern"] == "^[01]{144}$"
     for completion_event in (
         item for item in structured_events if item["event"] == "completed"
     ):
@@ -3221,7 +3246,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
                 "entry_cell_index",
                 "mode",
                 "new_memory_cell_indices",
-                "new_memory_relations",
+                "new_memory_relation_bitmasks",
                 "rationale",
             }
             if completion_value["mode"] == live.FULL_AUTHOR_MODE
@@ -3230,7 +3255,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
                 "base_snapshot_id",
                 "mode",
                 "new_memory_cell_ids",
-                "new_memory_relations",
+                "new_memory_relation_bitmasks",
                 "rationale",
             }
         )
@@ -3241,8 +3266,8 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
             "token_index",
         } & set(completion_value)
         assert all(
-            set(relation) == {"related_memory_handles"}
-            for relation in completion_value["new_memory_relations"]
+            isinstance(bitmask, str)
+            for bitmask in completion_value["new_memory_relation_bitmasks"]
         )
     structured_update_values = [
         json.loads(item["completion"]["text"])
@@ -3271,10 +3296,11 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     first_contract = first_payload["response_contract"]
     assert first_contract["cells"]["exact_length"] == 16
     assert first_contract["new_memory_cell_indices"]["exact_length"] == 64
-    assert first_contract["new_memory_relations"]["exact_length"] == 64
-    assert first_contract["new_memory_relations"]["item_fields"] == [
-        "related_memory_handles"
-    ]
+    assert first_contract["new_memory_relation_bitmasks"]["exact_length"] == 64
+    assert first_contract["new_memory_relation_bitmasks"]["item_binary_width"] == 64
+    assert first_contract["new_memory_relation_bitmasks"][
+        "maximum_set_bits_per_item"
+    ] == live.MAX_RELATED_MEMORY_IDS
     assert "memory_assignments_max_per_cell_field" not in first_payload[
         "output_bounds"
     ]
@@ -3290,20 +3316,23 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
             if item["event"] == "completed" and item["operation"] == "update"
         ][1]
     )
-    authored_target_handles = [
-        handle
-        for relation in second_update_completion["new_memory_relations"]
-        for handle in relation["related_memory_handles"]
+    authored_target_positions = [
+        index
+        for bitmask in second_update_completion["new_memory_relation_bitmasks"]
+        for index, selected in enumerate(bitmask)
+        if selected == "1"
     ]
-    assert sum(item.startswith("E") for item in authored_target_handles) == 1
-    assert sum(item.startswith("N") for item in authored_target_handles) == 2
-    assert all(isinstance(item, str) for item in authored_target_handles)
+    assert sum(index < 140 for index in authored_target_positions) == 1
+    assert sum(index >= 140 for index in authored_target_positions) == 2
     handle_contract = second_payload["relation_handle_contract"]
     assert handle_contract["existing"]["count"] == 140
     assert handle_contract["new"]["count"] == 4
     assert handle_contract["existing"]["prefix"] == "E"
     assert handle_contract["new"]["prefix"] == "N"
     assert handle_contract["width"] == 3
+    assert handle_contract["bit_width"] == 144
+    assert handle_contract["bit_order"] == "existing_then_new"
+    assert handle_contract["bit_encoding"] == "fixed-width-binary-target-set/v1"
     assert len(expanded_second["memories"]) == 140
     assert len(expanded_second["cells"]) >= 1
     assert second_projection["active_generation"] == 2
@@ -3366,7 +3395,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     )
     second_contract = second_payload["response_contract"]
     assert second_contract["new_memory_cell_ids"]["exact_length"] == 4
-    assert second_contract["new_memory_relations"]["exact_length"] == 4
+    assert second_contract["new_memory_relation_bitmasks"]["exact_length"] == 4
     assert first_contract["top_level_fields"] == [
         "base_generation",
         "base_snapshot_id",
@@ -3374,7 +3403,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         "entry_cell_index",
         "mode",
         "new_memory_cell_indices",
-        "new_memory_relations",
+        "new_memory_relation_bitmasks",
         "rationale",
     ]
     assert second_contract["top_level_fields"] == [
@@ -3382,7 +3411,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         "base_snapshot_id",
         "mode",
         "new_memory_cell_ids",
-        "new_memory_relations",
+        "new_memory_relation_bitmasks",
         "rationale",
     ]
     combined_instruction = (
@@ -3408,7 +3437,14 @@ def test_public_gate_self_relation_is_persisted_and_scored_without_gating(
         @staticmethod
         def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            value["new_memory_relations"][0]["related_memory_handles"] = ["N000"]
+            existing_count = payload["relation_handle_contract"]["existing"][
+                "count"
+            ]
+            width = payload["relation_handle_contract"]["bit_width"]
+            value["new_memory_relation_bitmasks"][0] = _relation_mask(
+                width,
+                [existing_count],
+            )
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
     backends: list[InvalidRelationBackend] = []
@@ -3529,23 +3565,26 @@ def test_public_gate_wrong_known_relation_is_diagnostic_only_and_commits(
                 )
                 relation_index = next(
                     index
-                    for index, relation in enumerate(value["new_memory_relations"])
-                    if any(
-                        handle.startswith("E")
-                        for handle in relation["related_memory_handles"]
+                    for index, bitmask in enumerate(
+                        value["new_memory_relation_bitmasks"]
+                    )
+                    if "1" in bitmask[: len(active["memories"])]
+                )
+                correct_index = value["new_memory_relation_bitmasks"][
+                    relation_index
+                ].index("1")
+                wrong_index = next(
+                    index
+                    for index in range(len(active["memories"]))
+                    if index != correct_index
+                )
+                value["new_memory_relation_bitmasks"][relation_index] = (
+                    _relation_mask(
+                        len(active["memories"])
+                        + len(payload["public_source_tokens"]),
+                        [wrong_index],
                     )
                 )
-                correct_handle = value["new_memory_relations"][relation_index][
-                    "related_memory_handles"
-                ][0]
-                wrong_handle = next(
-                    f"E{index:03d}"
-                    for index in range(len(active["memories"]))
-                    if f"E{index:03d}" != correct_handle
-                )
-                value["new_memory_relations"][relation_index]["related_memory_handles"] = [
-                    wrong_handle
-                ]
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
     backends: list[WrongExistingIndexBackend] = []
@@ -3673,6 +3712,123 @@ def test_rehashed_structure_receipt_semantic_tamper_is_rejected(
     )
     with pytest.raises(ContinualLiveError, match="core mode drifted"):
         live._validate_structure_compilation_receipt(hash_tamper)
+
+    bitmask_tamper = deepcopy(keep_receipt)
+    nonzero_index = next(
+        index
+        for index, item in enumerate(
+            bitmask_tamper["authored_relation_bitmask_sequences"]
+        )
+        if "1" in item["related_memory_bitmask"]
+    )
+    mask = bitmask_tamper["authored_relation_bitmask_sequences"][nonzero_index][
+        "related_memory_bitmask"
+    ]
+    bitmask_tamper["authored_relation_bitmask_sequences"][nonzero_index][
+        "related_memory_bitmask"
+    ] = "0" * len(mask)
+    bitmask_tamper["authored_relation_bitmask_sequence_sha256"] = (
+        live.canonical_sha256(
+            bitmask_tamper["authored_relation_bitmask_sequences"]
+        )
+    )
+    bitmask_tamper = rehash(bitmask_tamper)
+    with pytest.raises(
+        ContinualLiveError,
+        match="set-bit indices drifted|bitmask expansion drifted",
+    ):
+        live._validate_structure_compilation_receipt(bitmask_tamper)
+
+    dropped_bitmask = deepcopy(keep_receipt)
+    dropped_bitmask["authored_relation_bitmask_sequences"].pop()
+    dropped_bitmask["authored_relation_bitmask_sequence_sha256"] = (
+        live.canonical_sha256(
+            dropped_bitmask["authored_relation_bitmask_sequences"]
+        )
+    )
+    dropped_bitmask = rehash(dropped_bitmask)
+    with pytest.raises(ContinualLiveError, match="sequence binding drifted"):
+        live._validate_structure_compilation_receipt(dropped_bitmask)
+
+    swapped_bitmasks = deepcopy(keep_receipt)
+    sequences = swapped_bitmasks["authored_relation_bitmask_sequences"]
+    sequences[0], sequences[1] = sequences[1], sequences[0]
+    swapped_bitmasks["authored_relation_bitmask_sequence_sha256"] = (
+        live.canonical_sha256(sequences)
+    )
+    swapped_bitmasks = rehash(swapped_bitmasks)
+    with pytest.raises(ContinualLiveError, match="authored bitmasks are invalid"):
+        live._validate_structure_compilation_receipt(swapped_bitmasks)
+
+    expanded_tamper = deepcopy(keep_receipt)
+    expanded_row = next(
+        item
+        for item in expanded_tamper["expanded_relation_table_order_sequences"]
+        if item["related_memory_ids"]
+    )
+    expanded_row["related_memory_ids"] = []
+    expanded_tamper["expanded_relation_table_order_sequence_sha256"] = (
+        live.canonical_sha256(
+            expanded_tamper["expanded_relation_table_order_sequences"]
+        )
+    )
+    expanded_tamper = rehash(expanded_tamper)
+    with pytest.raises(ContinualLiveError, match="bitmask expansion drifted"):
+        live._validate_structure_compilation_receipt(expanded_tamper)
+
+
+def test_structure_receipt_replay_rejects_coherently_rehashed_bitmask_claim(
+    tmp_path: Path,
+) -> None:
+    arm = StructuredHSWMArm(
+        backend=ScriptedRelationalBackend(),
+        budget=_budget(),
+        isolation_id="coherent-bitmask-replay-tamper",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    arm.update(_one_token_batch())
+    entry = arm.ledger[0].canonical()
+    receipt = deepcopy(arm.structure_compilation_receipts[0])
+    memory_id = receipt["relation_handle_table"]["new"][0]["memory_id"]
+    bitmask_sequences = [
+        {"memory_id": memory_id, "related_memory_bitmask": "1"}
+    ]
+    set_bit_sequences = [{"memory_id": memory_id, "set_bit_indices": [0]}]
+    expanded = [{"memory_id": memory_id, "related_memory_ids": [memory_id]}]
+    receipt.update(
+        {
+            "authored_relation_bit_count": 1,
+            "authored_relation_bitmask_sequences": bitmask_sequences,
+            "authored_relation_bitmask_sequence_sha256": live.canonical_sha256(
+                bitmask_sequences
+            ),
+            "authored_relation_canonical_set_sha256": live.canonical_sha256(
+                expanded
+            ),
+            "authored_relation_count": 1,
+            "authored_relation_set_bit_index_sequences": set_bit_sequences,
+            "authored_relation_set_bit_index_sequence_sha256": (
+                live.canonical_sha256(set_bit_sequences)
+            ),
+            "expanded_relation_canonical_set_sha256": live.canonical_sha256(
+                expanded
+            ),
+            "expanded_relation_count": 1,
+            "expanded_relation_table_order_sequences": expanded,
+            "expanded_relation_table_order_sequence_sha256": (
+                live.canonical_sha256(expanded)
+            ),
+            "stored_relation_canonical_set_sha256": live.canonical_sha256(
+                expanded
+            ),
+            "stored_relation_count": 1,
+        }
+    )
+    unsigned = {key: value for key, value in receipt.items() if key != "receipt_sha256"}
+    receipt["receipt_sha256"] = live.canonical_sha256(unsigned)
+    live._validate_structure_compilation_receipt(receipt)
+    with pytest.raises(ContinualLiveError, match="receipt replay mismatch"):
+        live._replay_structure_compilation_receipt(entry, receipt)
 
 
 def test_rehashed_relation_diagnostic_arithmetic_tamper_is_rejected(
@@ -5004,6 +5160,7 @@ def test_reported_answer_usage_cannot_exceed_request_budget(tmp_path: Path) -> N
 @pytest.mark.parametrize(
     "unsupported",
     [
+        "uniqueItems",
         "contains",
         "minContains",
         "maxContains",
@@ -5024,6 +5181,34 @@ def test_unsupported_json_schema_keyword_fails_before_call(
     with pytest.raises(ContinualLiveError, match="unsupported keywords"):
         live.JSONSchemaContract.make("unsupported_schema", schema)
     assert backend.requests == []
+
+
+@pytest.mark.parametrize(
+    ("minimum", "maximum", "pattern"),
+    [
+        (4, 4, "^[01]+$"),
+        (4, 4, "^[01]{3}$"),
+        (3, 4, "^[01]{4}$"),
+        (4, 4, "^.{4}$"),
+    ],
+)
+def test_response_schema_allows_only_exact_generated_binary_patterns(
+    minimum: int,
+    maximum: int,
+    pattern: str,
+) -> None:
+    schema = live._strict_json_object(
+        {
+            "value": {
+                "maxLength": maximum,
+                "minLength": minimum,
+                "pattern": pattern,
+                "type": "string",
+            }
+        }
+    )
+    with pytest.raises(ContinualLiveError, match="exact binary width"):
+        live.JSONSchemaContract.make("unsafe_pattern", schema)
 
 
 def test_schema_and_raw_envelope_tampering_are_rejected(tmp_path: Path) -> None:
@@ -5121,7 +5306,7 @@ def test_public_schema_gate_cli_has_no_seed_path_and_binds_artifacts(
     assert result["outbound_http_requests_observed"] == 8
     prereg = json.loads((output / "gate_preregistration.json").read_text())
     assert prereg["no_precommit_or_seed_path"] is True
-    assert prereg["protocol"] == "hswm-public-schema-gate/v10"
+    assert prereg["protocol"] == "hswm-public-schema-gate/v11"
     assert prereg["indexed_authoring_view_schema"] == (
         "hswm-indexed-authoring-view/v1"
     )

@@ -11,6 +11,25 @@ it("exports the bounded core ontology contract without a mutation capability", (
   expect("publishHSWMCoreResponsibilityOntology" in PublicApi).toBe(false)
 })
 
+it("exports the bounded v2 reference kernel but not its receipt internals", () => {
+  expect(typeof PublicApi.decodeHSWMCanonicalSchemaV2).toBe("function")
+  expect(typeof PublicApi.decodeCommitCanonicalAtomsV2Command).toBe(
+    "function"
+  )
+  expect(typeof PublicApi.decodeCanonicalAtomV2AuthorizationGrants).toBe(
+    "function"
+  )
+  expect(typeof PublicApi.validateHSWMCanonicalSchemaV2).toBe("function")
+  expect(typeof PublicApi.evolveCanonicalAtomsV2).toBe("function")
+  expect(typeof PublicApi.makeCanonicalAtomV2ReferenceLayer).toBe("function")
+  expect("makeCanonicalAtomV2AcceptedReceipt" in PublicApi).toBe(false)
+  expect("snapshotCanonicalAtomV2" in PublicApi).toBe(false)
+  expect("snapshotCanonicalAtomV2Receipt" in PublicApi).toBe(false)
+  expect("snapshotCanonicalAtomV2State" in PublicApi).toBe(false)
+  expect("snapshotCommitCanonicalAtomsV2Command" in PublicApi).toBe(false)
+  expect("snapshotHSWMCanonicalSchemaV2" in PublicApi).toBe(false)
+})
+
 it("does not export privileged store or authorizer capabilities", () => {
   expect("CommitStore" in PublicApi).toBe(false)
   expect("CreditAuthorizer" in PublicApi).toBe(false)

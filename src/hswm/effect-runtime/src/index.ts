@@ -1,6 +1,53 @@
 export * from "./contracts.js"
 export * from "./domain.js"
 export {
+  HSWM_CANONICAL_ATOM_V2_CONTRACT_VERSION,
+  HSWM_CANONICAL_RECEIPT_V2_CONTRACT_VERSION,
+  HSWM_CANONICAL_SCHEMA_V2_CONTRACT_VERSION,
+  HSWM_CANONICAL_TRANSITION_V2_CONTRACT_VERSION,
+  HSWM_SUPERSEDES_REFERENCE_ROLE,
+  HSWM_SUPERSEDES_REFERENCE_TYPE,
+  CanonicalAtomV2AuthorizationGrantSchema,
+  CanonicalAtomV2KeySchema,
+  CanonicalAtomV2Schema,
+  CommitCanonicalAtomsV2CommandSchema,
+  HSWMCanonicalSchemaV2Schema,
+  canonicalAtomV2KeyId,
+  decodeCanonicalAtomV2AuthorizationGrants,
+  decodeCommitCanonicalAtomsV2Command,
+  decodeHSWMCanonicalSchemaV2,
+  type CanonicalAtomV2,
+  type CanonicalAtomV2AuthorizationGrant,
+  type CanonicalAtomV2Content,
+  type CanonicalAtomV2Key,
+  type CanonicalAtomV2KindContract,
+  type CanonicalAtomV2OwnerContract,
+  type CanonicalAtomV2Provenance,
+  type CanonicalAtomV2Reference,
+  type CanonicalAtomV2ReferenceContract,
+  type CanonicalAtomV2ReferenceRoleContract,
+  type CommitCanonicalAtomsV2Command,
+  type HSWMCanonicalSchemaV2
+} from "./canonical-atom-v2-schema.js"
+export {
+  CanonicalAtomV2Error,
+  evolveCanonicalAtomsV2,
+  initialCanonicalAtomV2State,
+  validateCanonicalAtomV2State,
+  validateHSWMCanonicalSchemaV2,
+  type CanonicalAtomV2EffectReceipt,
+  type CanonicalAtomV2ErrorCode,
+  type CanonicalAtomV2Evolution,
+  type CanonicalAtomV2GuardReceipt,
+  type CanonicalAtomV2State
+} from "./canonical-atom-v2-domain.js"
+export {
+  CanonicalAtomV2AuthorizationConfigurationError,
+  CanonicalAtomV2AuthorizationDenied,
+  CanonicalAtomV2Runtime,
+  makeCanonicalAtomV2ReferenceLayer
+} from "./canonical-atom-v2-runtime.js"
+export {
   HSWM_CORE_RESPONSIBILITY_ONTOLOGY_SCHEMA_VERSION,
   type HSWMCoreResponsibilityOntology
 } from "./hswm-core-ontology-schema.js"

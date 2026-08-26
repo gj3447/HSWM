@@ -22,12 +22,19 @@ continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 �
 atom kind나 owner class가 아니다.
 이미 `4cdfcb1`에 체크인된 `hswm-core-responsibility-ontology/v1`과 대응
 TypeScript validator도 같은 historical compatibility 지위다. v1 bytes는 재현을 위해
-보존하지만 새 canonical write의 target이 아니며, generic owner-registry v2는 아직 없다.
+보존하지만 새 canonical write의 target이 아니다. generic owner-registry v2에는 이제
+strict TypeScript + Effect
+[`비내구성 reference kernel`](docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md)이
+있다. 이는 schema/state validation, typed role-bearing reference, immutable revision,
+owner·actor·reference grant 분리, 단일 프로세스 atomic commit과 receipt까지만 닫는다.
+durable store, canonical permit evidence, migration, projection compiler, LLM execution과
+outcome-bound learning은 아직 열려 있다.
 
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
-구조로 개발하라고 확정했다. 현재 첫 Effect v3 패키지는 폐기 전의 `H/F/A/W` 표기를
-사용한 원자적 credit transaction만 제공하는 역사적 scaffold이며 `ENGINEERING_SCAFFOLD /
-SCIENTIFIC_UNJUDGED`다. Python/NumPy 실험은 독립 수치·evidence oracle로 보존한다.
+구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,
+폐기 전 `H/F/A/W` 표기를 사용하는 역사적 원자적 credit scaffold를 서로 분리해
+보존한다. 둘 다 `ENGINEERING_SCAFFOLD / SCIENTIFIC_UNJUDGED`이며 Python/NumPy 실험은
+독립 수치·evidence oracle로 남는다.
 정확한 경계와 단계적 전환 gate는
 [`HSWM TypeScript + Effect runtime boundary`](docs/research/HSWM_TYPESCRIPT_EFFECT_RUNTIME_2026-08-21.md)에
 있다. 현재 S2S 제어면의 exact 작업 바이트, 독립 감사에서 닫힌 6개

@@ -4,8 +4,11 @@
 > `H/W/A/F/Pi` responsibility bundle are retained v1 compatibility artifacts.
 > They are not the current HSWM ontology and must not be used as a fixed owner
 > registry for new canonical writes. The current target requires exactly one
-> schema-relative responsibility owner per admitted canonical atom; a generic
-> runtime v2 for that contract is not implemented yet. See the
+> schema-relative responsibility owner per admitted canonical atom. The first
+> generic v2 reference kernel for that contract is now implemented, but it is a
+> non-durable, single-process engineering witness rather than a production
+> canonical store, migration system, learning result, or scientific verdict.
+> See the
 > [single-owner canon](../../../docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md).
 
 This private package is the TypeScript/Effect production-runtime seed for
@@ -15,7 +18,22 @@ package-internal role-aware T16 forward projection over checked-in Python
 learned-archive parameter bytes. They are not yet composed or publicly
 exported as one semantic-weight abstraction.
 
-The boundary is intentionally small:
+The current v2 boundary is intentionally small:
+
+- `canonical-atom-v2-schema.ts` defines strict Effect Schema ingress for an
+  open owner/kind registry, fork-safe atom keys, content descriptors, typed
+  role-bearing references, transition proposals, and deep immutable snapshots.
+- `canonical-atom-v2-domain.ts` validates schemas and complete prior states,
+  rejects implicit migration and unsealed trace claims, and implements the pure
+  append-only atom/relation/revision transition. It does not implement learning.
+- `canonical-atom-v2-runtime.ts` separates owner, actor claim, and an opaque
+  reference-layer grant; atomically commits state plus one receipt with
+  `Ref.modify`. A matched grant is explicitly not claimed to be a canonical,
+  revocation-aware permit.
+- The exact implementation and nonclaims are recorded in the
+  [v2 reference-kernel handoff](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md).
+
+The retained historical boundary is also intentionally small:
 
 - `domain.ts` is the deterministic scalar credit state transition.
 - `swm0-role-aware-core.ts` is the pure TypeScript numeric T16 center;

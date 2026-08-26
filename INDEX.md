@@ -32,9 +32,16 @@ owner·actor·reference grant 분리, 단일 프로세스 atomic commit과 recei
 duplicate-aware canonical schema bytes, raw payload bytes, owner·reference·provenance를
 포함한 atom-envelope bytes를 서로 다른 SHA-256 domain으로 결속하고, schema version의
 immutable binding과 local POSIX create-only content adapter를 추가했다. 단, durable한 것은
-content bytes뿐이며 canonical state·receipt journal은 여전히 process-local이다. canonical
-permit evidence, state recovery, migration, projection compiler, LLM execution과
-outcome-bound learning은 아직 열려 있다.
+그 facade의 content bytes뿐이며 그 facade 자체의 canonical state·receipt journal은
+process-local이다. 이어진
+[`durable journal runtime`](docs/operations/HSWM_CANONICAL_ATOM_V2_DURABLE_JOURNAL_RUNTIME_2026-08-26.md)은
+별도의 `journalLineageId`, exact revision-0 genesis, full predecessor descriptor와
+previous/resulting state commitment를 갖는 immutable record를 local POSIX fixed slot에
+create-only 공개한다. 새 runtime은 snapshot·history·submit마다 schema/payload/envelope와
+receipt를 genesis부터 다시 검증해 관측된 intact 로컬 선형 prefix를 복구한다. 외부
+monotonic-head witness가 없으므로 완전한 tail 삭제에 대한 anti-rollback을 증명하지 않으며,
+canonical Permit, 분산 합의, migration, LLM 실행이나 outcome-bound learning의 구현·효능
+주장도 아니다.
 
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,

@@ -1,0 +1,257 @@
+import { createHash, randomUUID } from "node:crypto"
+import { constants } from "node:fs"
+import { link, lstat, mkdir, open, readdir, realpath, unlink } from "node:fs/promises"
+import { dirname, isAbsolute, join, resolve } from "node:path"
+
+import { Effect, Either, Layer } from "effect"
+
+import {
+  CANONICAL_ATOM_V2_STATE_JOURNAL_MAX_BYTES,
+  HSWM_CANONICAL_ATOM_V2_STATE_JOURNAL_MEDIA_TYPE,
+  CanonicalAtomV2StateJournalStore,
+  CanonicalAtomV2StateJournalStoreError,
+  makeCanonicalAtomV2StateJournalStoreError,
+  snapshotCanonicalAtomV2StateJournalRecovery,
+  type CanonicalAtomV2StateJournalEntry,
+  type CanonicalAtomV2StateJournalPublish,
+  type CanonicalAtomV2StateJournalPublication,
+  type CanonicalAtomV2StateJournalStoreFailure
+} from "./canonical-atom-v2-state-journal-store.js"
+import { makeCanonicalAtomV2ContentDescriptor } from "./canonical-atom-v2-content.js"
+import type { CanonicalAtomV2StateJournalRecordDescriptor } from "./canonical-atom-v2-state-journal.js"
+
+const OBJECTS = "journal-objects"
+const SLOTS = "journal-slots"
+const DIGEST = /^[0-9a-f]{64}$/
+
+interface DirectoryIdentity { readonly path: string; readonly device: number; readonly inode: number }
+interface Identity { readonly root: DirectoryIdentity; readonly objects: DirectoryIdentity; readonly slots: DirectoryIdentity }
+
+const error = makeCanonicalAtomV2StateJournalStoreError
+const hash = (text: string): string => createHash("sha256").update(text, "utf8").digest("hex")
+const sameBytes = (a: Uint8Array, b: Uint8Array): boolean => a.byteLength === b.byteLength && a.every((x, i) => x === b[i])
+const hasCode = (input: unknown): input is { readonly code: string } =>
+  typeof input === "object" && input !== null && "code" in input &&
+  typeof input.code === "string"
+const sameDescriptor = (
+  left: CanonicalAtomV2StateJournalRecordDescriptor | null,
+  right: CanonicalAtomV2StateJournalRecordDescriptor | null
+): boolean =>
+  left === null || right === null
+    ? left === right
+    : left.mediaType === right.mediaType &&
+      left.byteLength === right.byteLength &&
+      left.sha256 === right.sha256
+
+const snapshotExpectedPredecessor = (
+  input: CanonicalAtomV2StateJournalRecordDescriptor | null
+): CanonicalAtomV2StateJournalRecordDescriptor | null => {
+  if (input === null) return null
+  if (
+    typeof input !== "object" ||
+    input.mediaType !== HSWM_CANONICAL_ATOM_V2_STATE_JOURNAL_MEDIA_TYPE ||
+    !Number.isSafeInteger(input.byteLength) ||
+    input.byteLength < 1 ||
+    input.byteLength > CANONICAL_ATOM_V2_STATE_JOURNAL_MAX_BYTES ||
+    !DIGEST.test(input.sha256)
+  ) {
+    throw error("PUBLISH", "PREDECESSOR_MISMATCH", "predecessor must be an exact journal record descriptor or null")
+  }
+  return Object.freeze({ ...input })
+}
+
+const recordDescriptor = (
+  bytes: Uint8Array,
+  operation: "RECOVER" | "PUBLISH"
+): CanonicalAtomV2StateJournalRecordDescriptor => {
+  const descriptor = makeCanonicalAtomV2ContentDescriptor(
+    HSWM_CANONICAL_ATOM_V2_STATE_JOURNAL_MEDIA_TYPE,
+    bytes
+  )
+  if (Either.isLeft(descriptor)) {
+    throw error(
+      operation,
+      operation === "RECOVER" ? "CORRUPT_ENTRY" : "BYTE_LENGTH_INVALID",
+      "journal bytes cannot form a record descriptor"
+    )
+  }
+  return Object.freeze({
+    mediaType: HSWM_CANONICAL_ATOM_V2_STATE_JOURNAL_MEDIA_TYPE,
+    byteLength: descriptor.right.byteLength,
+    sha256: descriptor.right.sha256
+  })
+}
+
+export const canonicalAtomV2StateJournalSlotName = (
+  journalLineageId: string,
+  schemaContentSha256: string,
+  stateRevision: number
+): string => hash(`hswm-canonical-atom-v2-state-journal-slot/v1\u0000${journalLineageId}\u0000${schemaContentSha256}\u0000${stateRevision}`)
+
+const inspectDirectory = async (path: string, operation: "INITIALIZE" | "RECOVER" | "PUBLISH"): Promise<DirectoryIdentity> => {
+  const stat = await lstat(path)
+  if (stat.isSymbolicLink() || !stat.isDirectory() || (stat.mode & 0o777) !== 0o700) throw error(operation, "ROOT_UNSAFE", "journal directory must be a private plain 0700 directory")
+  return Object.freeze({ path, device: stat.dev, inode: stat.ino })
+}
+const assertDirectory = async (directory: DirectoryIdentity, operation: "INITIALIZE" | "RECOVER" | "PUBLISH"): Promise<void> => {
+  const stat = await lstat(directory.path)
+  if (stat.isSymbolicLink() || !stat.isDirectory() || stat.dev !== directory.device || stat.ino !== directory.inode || (stat.mode & 0o777) !== 0o700) throw error(operation, "ROOT_UNSAFE", "journal directory identity or permissions changed")
+}
+const syncPlainDirectoryPath = async (path: string): Promise<void> => {
+  const handle = await open(path, constants.O_RDONLY | constants.O_DIRECTORY | constants.O_NOFOLLOW)
+  try { await handle.sync() } finally { await handle.close() }
+}
+const initialize = async (rootPath: string): Promise<Identity> => {
+  if (!isAbsolute(rootPath)) throw error("INITIALIZE", "ROOT_UNSAFE", "journal root must be absolute")
+  const requested = resolve(rootPath)
+  try { await mkdir(requested, { mode: 0o700 }) } catch (cause) {
+    if (!hasCode(cause) || cause.code !== "EEXIST") throw cause
+  }
+  const requestedStat = await lstat(requested)
+  if (requestedStat.isSymbolicLink() || !requestedStat.isDirectory()) {
+    throw error("INITIALIZE", "ROOT_UNSAFE", "requested journal root must be a plain directory")
+  }
+  const root = await inspectDirectory(await realpath(requested), "INITIALIZE")
+  await syncPlainDirectoryPath(dirname(root.path))
+  for (const name of [OBJECTS, SLOTS]) {
+    try { await mkdir(join(root.path, name), { mode: 0o700 }) } catch (cause) {
+      if (!hasCode(cause) || cause.code !== "EEXIST") throw cause
+    }
+  }
+  const objects = await inspectDirectory(join(root.path, OBJECTS), "INITIALIZE")
+  const slots = await inspectDirectory(join(root.path, SLOTS), "INITIALIZE")
+  await syncPlainDirectoryPath(root.path)
+  return Object.freeze({ root, objects, slots })
+}
+
+const readRegular = async (directory: DirectoryIdentity, name: string, operation: "RECOVER" | "PUBLISH"): Promise<{ readonly bytes: Uint8Array; readonly device: number; readonly inode: number }> => {
+  await assertDirectory(directory, operation)
+  const handle = await open(join(directory.path, name), constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK)
+  try {
+    const before = await handle.stat()
+    if (!before.isFile() || (before.mode & 0o777) !== 0o400) throw error(operation, "FILE_TYPE_INVALID", "journal entry must be immutable regular 0400 file")
+    if (before.size < 1 || before.size > CANONICAL_ATOM_V2_STATE_JOURNAL_MAX_BYTES) throw error(operation, "CORRUPT_ENTRY", "journal entry violates byte bound")
+    const buffer = Buffer.alloc(before.size + 1)
+    let total = 0
+    while (total < buffer.byteLength) { const result = await handle.read(buffer, total, buffer.byteLength - total, total); if (result.bytesRead === 0) break; total += result.bytesRead }
+    const after = await handle.stat()
+    if (total !== before.size || after.dev !== before.dev || after.ino !== before.ino || after.size !== before.size) throw error(operation, "CORRUPT_ENTRY", "journal entry changed during bounded read")
+    return Object.freeze({ bytes: Uint8Array.from(buffer.subarray(0, total)), device: before.dev, inode: before.ino })
+  } finally { await handle.close() }
+}
+const syncDirectory = async (directory: DirectoryIdentity, operation: "PUBLISH" | "RECOVER"): Promise<void> => {
+  await assertDirectory(directory, operation)
+  const handle = await open(directory.path, constants.O_RDONLY | constants.O_DIRECTORY | constants.O_NOFOLLOW)
+  try { await handle.sync() } finally { await handle.close() }
+}
+const syncKnownCommit = async (identity: Identity): Promise<void> => {
+  try {
+    await syncDirectory(identity.objects, "PUBLISH")
+    await syncDirectory(identity.slots, "PUBLISH")
+  } catch {
+    try {
+      await syncDirectory(identity.objects, "PUBLISH")
+      await syncDirectory(identity.slots, "PUBLISH")
+    } catch {
+      throw error("PUBLISH", "PUBLICATION_OUTCOME_UNKNOWN", "journal object and slot durability could not be re-established")
+    }
+  }
+}
+const publishObject = async (directory: DirectoryIdentity, name: string, bytes: Uint8Array): Promise<void> => {
+  await assertDirectory(directory, "PUBLISH")
+  const finalPath = join(directory.path, name)
+  const temporary = join(directory.path, `.journal-${randomUUID()}.tmp`)
+  let made = false
+  try {
+    const handle = await open(temporary, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600)
+    made = true
+    try { await handle.writeFile(bytes); await handle.chmod(0o400); await handle.sync() } finally { await handle.close() }
+    try { await link(temporary, finalPath) } catch (cause) {
+      try { const existing = await readRegular(directory, name, "PUBLISH"); if (!sameBytes(existing.bytes, bytes)) throw error("PUBLISH", "CONCURRENT_PUBLICATION_CONFLICT", "immutable journal destination has different bytes") } catch (readCause) {
+        if (readCause instanceof Error && "_tag" in readCause) throw readCause
+        const code = typeof cause === "object" && cause !== null && "code" in cause ? cause.code : ""
+        if (["ENOSYS", "ENOTSUP", "EOPNOTSUPP", "EXDEV"].includes(String(code))) throw error("PUBLISH", "ATOMIC_PUBLICATION_UNSUPPORTED", String(code))
+        throw readCause
+      }
+    }
+    try { await syncDirectory(directory, "PUBLISH") } catch {
+      try { const existing = await readRegular(directory, name, "PUBLISH"); if (!sameBytes(existing.bytes, bytes)) throw error("PUBLISH", "PUBLICATION_OUTCOME_UNKNOWN", "journal entry differs after directory sync failure"); await syncDirectory(directory, "PUBLISH") } catch (cause) {
+        if (cause instanceof Error && "_tag" in cause) throw cause
+        throw error("PUBLISH", "PUBLICATION_OUTCOME_UNKNOWN", "journal directory sync outcome is unknown")
+      }
+    }
+    const exact = await readRegular(directory, name, "PUBLISH")
+    if (!sameBytes(exact.bytes, bytes)) throw error("PUBLISH", "PUBLICATION_OUTCOME_UNKNOWN", "journal readback differs")
+  } finally { if (made) { try { await unlink(temporary) } catch { /* orphan temporary has no journal meaning */ } } }
+}
+
+const recover = async (identity: Identity, lineage: string, schema: string): Promise<ReadonlyArray<CanonicalAtomV2StateJournalEntry>> => {
+  await assertDirectory(identity.root, "RECOVER"); await assertDirectory(identity.objects, "RECOVER"); await assertDirectory(identity.slots, "RECOVER")
+  const entries: ReadonlyArray<import("node:fs").Dirent> = await readdir(identity.slots.path, { withFileTypes: true })
+  if (entries.some((entry) => !entry.isFile() || !DIGEST.test(entry.name))) throw error("RECOVER", "SLOT_LAYOUT_INVALID", "journal slots contain malformed or nonregular entry")
+  const finalNames = entries.map((entry) => entry.name)
+  const expected = new Set(Array.from({ length: finalNames.length }, (_, revision) => canonicalAtomV2StateJournalSlotName(lineage, schema, revision)))
+  if (finalNames.length !== expected.size || finalNames.some((name) => !expected.has(name))) throw error("RECOVER", "SLOT_LAYOUT_INVALID", "journal slots must be exactly the contiguous revision prefix")
+  const recovered: Array<CanonicalAtomV2StateJournalEntry> = []
+  for (let revision = 0; revision < finalNames.length; revision += 1) {
+    const slot = canonicalAtomV2StateJournalSlotName(lineage, schema, revision)
+    const slotEntry = await readRegular(identity.slots, slot, "RECOVER")
+    const descriptor = recordDescriptor(slotEntry.bytes, "RECOVER")
+    const objectEntry = await readRegular(identity.objects, descriptor.sha256, "RECOVER")
+    if (!sameBytes(slotEntry.bytes, objectEntry.bytes) || slotEntry.device !== objectEntry.device || slotEntry.inode !== objectEntry.inode) throw error("RECOVER", "CORRUPT_ENTRY", "journal slot and object must be identical hard links")
+    recovered.push(Object.freeze({ descriptor, bytes: Uint8Array.from(slotEntry.bytes) }))
+  }
+  await assertDirectory(identity.root, "RECOVER"); await assertDirectory(identity.objects, "RECOVER"); await assertDirectory(identity.slots, "RECOVER")
+  return snapshotCanonicalAtomV2StateJournalRecovery(recovered)
+}
+
+/** POSIX/local filesystem adapter; controlled parents required because Node lacks openat2. */
+export const makeCanonicalAtomV2StateJournalFileStoreLayer = (rootPath: string, journalLineageId: string, schemaContentSha256: string) =>
+  Layer.effect(CanonicalAtomV2StateJournalStore, Effect.gen(function* () {
+    if (!/^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$/.test(journalLineageId) || !DIGEST.test(schemaContentSha256)) return yield* Effect.fail(error("INITIALIZE", "ROOT_UNSAFE", "journal configuration is invalid"))
+    const identity = yield* Effect.tryPromise({ try: () => initialize(rootPath), catch: (cause) => cause instanceof CanonicalAtomV2StateJournalStoreError ? cause : error("INITIALIZE", "IO_FAILED", "journal initialization failed") })
+    return CanonicalAtomV2StateJournalStore.of({
+      journalLineageId, schemaContentSha256,
+      recover: Effect.tryPromise({ try: () => recover(identity, journalLineageId, schemaContentSha256), catch: (cause) => cause instanceof Error && "_tag" in cause ? cause as CanonicalAtomV2StateJournalStoreFailure : error("RECOVER", "IO_FAILED", "journal recovery failed") }),
+      publish: (input: CanonicalAtomV2StateJournalPublish) => Effect.tryPromise({ try: async (): Promise<CanonicalAtomV2StateJournalPublication> => {
+        if (!Number.isSafeInteger(input.stateRevision) || input.stateRevision < 0 || !(input.bytes instanceof Uint8Array) || input.bytes.byteLength < 1 || input.bytes.byteLength > CANONICAL_ATOM_V2_STATE_JOURNAL_MAX_BYTES) throw error("PUBLISH", "BYTE_LENGTH_INVALID", "journal publication input is invalid")
+        const expectedPredecessor = snapshotExpectedPredecessor(input.expectedPredecessor)
+        const bytes = Uint8Array.from(input.bytes)
+        const descriptor = recordDescriptor(bytes, "PUBLISH")
+        const before = await recover(identity, journalLineageId, schemaContentSha256)
+        const revisionPredecessor = input.stateRevision === 0
+          ? null
+          : before[input.stateRevision - 1]?.descriptor ?? null
+        if (!sameDescriptor(expectedPredecessor, revisionPredecessor)) throw error("PUBLISH", "PREDECESSOR_MISMATCH", "journal predecessor does not match the exact preceding record descriptor")
+        const existing = before[input.stateRevision]
+        if (existing !== undefined) {
+          if (sameBytes(existing.bytes, bytes)) {
+            await syncKnownCommit(identity)
+            return Object.freeze({ _tag: "AlreadyCommitted", recovery: before })
+          }
+          throw error("PUBLISH", "CONCURRENT_PUBLICATION_CONFLICT", "journal revision is occupied by different bytes")
+        }
+        if (input.stateRevision !== before.length) throw error("PUBLISH", "REVISION_CONFLICT", "journal revision is not next contiguous slot")
+        if (!sameDescriptor(before.at(-1)?.descriptor ?? null, expectedPredecessor)) throw error("PUBLISH", "PREDECESSOR_MISMATCH", "journal predecessor does not match recovered tail")
+        await publishObject(identity.objects, descriptor.sha256, bytes)
+        const slot = canonicalAtomV2StateJournalSlotName(journalLineageId, schemaContentSha256, input.stateRevision)
+        await assertDirectory(identity.objects, "PUBLISH"); await assertDirectory(identity.slots, "PUBLISH")
+        try { await link(join(identity.objects.path, descriptor.sha256), join(identity.slots.path, slot)) } catch (cause) {
+          const after = await recover(identity, journalLineageId, schemaContentSha256)
+          const winner = after[input.stateRevision]
+          if (winner !== undefined && sameBytes(winner.bytes, bytes)) {
+            await syncKnownCommit(identity)
+            return Object.freeze({ _tag: "AlreadyCommitted", recovery: after })
+          }
+          if (winner !== undefined) throw error("PUBLISH", "CONCURRENT_PUBLICATION_CONFLICT", "journal slot has a different winner")
+          const code = typeof cause === "object" && cause !== null && "code" in cause ? cause.code : ""
+          if (["ENOSYS", "ENOTSUP", "EOPNOTSUPP", "EXDEV"].includes(String(code))) throw error("PUBLISH", "ATOMIC_PUBLICATION_UNSUPPORTED", String(code))
+          throw cause
+        }
+        try { await syncDirectory(identity.slots, "PUBLISH") } catch { const after = await recover(identity, journalLineageId, schemaContentSha256); const winner = after[input.stateRevision]; if (winner === undefined || !sameBytes(winner.bytes, bytes)) throw error("PUBLISH", "PUBLICATION_OUTCOME_UNKNOWN", "slot durability is unknown"); await syncDirectory(identity.slots, "PUBLISH") }
+        const after = await recover(identity, journalLineageId, schemaContentSha256)
+        if (!sameBytes(after[input.stateRevision]?.bytes ?? new Uint8Array(), bytes)) throw error("PUBLISH", "PUBLICATION_OUTCOME_UNKNOWN", "journal readback differs")
+        return Object.freeze({ _tag: "Committed", recovery: after })
+      }, catch: (cause) => cause instanceof Error && "_tag" in cause ? cause as CanonicalAtomV2StateJournalStoreFailure : error("PUBLISH", "IO_FAILED", "journal publication failed") })
+    })
+  }))

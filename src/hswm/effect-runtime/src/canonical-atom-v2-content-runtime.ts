@@ -134,7 +134,7 @@ const snapshotContentReceipt = (
     contentDurability: receipt.contentDurability
   })
 
-const snapshotContentState = (
+export const snapshotCanonicalAtomV2ContentState = (
   schema: CanonicalAtomV2SchemaContentBinding,
   memory: CanonicalAtomV2ContentMemory
 ): CanonicalAtomV2ContentBoundState =>
@@ -146,7 +146,7 @@ const snapshotContentState = (
     )
   })
 
-const makeAuthorizer = (
+export const makeCanonicalAtomV2ContentAuthorizer = (
   activeSchema: CanonicalAtomV2SchemaContentBinding,
   grants: ReadonlyArray<CanonicalAtomV2ContentAuthorizationGrant>
 ) => {
@@ -214,17 +214,17 @@ const makeAuthorizer = (
   }
 }
 
-const decodeContentBoundInput = Schema.decodeUnknown(
+export const decodeCanonicalAtomV2ContentBoundInput = Schema.decodeUnknown(
   CommitCanonicalAtomsV2ContentBoundSchema,
   { onExcessProperty: "error" }
 )
 
-const decodeContentGrants = Schema.decodeUnknown(
+export const decodeCanonicalAtomV2ContentGrants = Schema.decodeUnknown(
   CanonicalAtomV2ContentAuthorizationGrantsSchema,
   { onExcessProperty: "error" }
 )
 
-const validateGrantConfiguration = (
+export const validateCanonicalAtomV2ContentGrantConfiguration = (
   schema: CanonicalAtomV2SchemaContentBinding,
   grants: ReadonlyArray<CanonicalAtomV2ContentAuthorizationGrant>
 ): Effect.Effect<
@@ -253,7 +253,7 @@ const validateGrantConfiguration = (
     : Effect.succeed(Object.freeze(grants.map(snapshotGrant)))
 }
 
-const prepareWriteContent = (
+export const prepareCanonicalAtomV2WriteContent = (
   store: CanonicalAtomV2ContentStore["Type"],
   command: CommitCanonicalAtomsV2Command,
   bindings: ReadonlyArray<CanonicalAtomV2WriteContentBinding>
@@ -369,12 +369,15 @@ export const makeCanonicalAtomV2ContentRuntimeLayer = (
         })
       }
 
-      const decodedGrants = yield* decodeContentGrants(rawGrants)
-      const grants = yield* validateGrantConfiguration(
+      const decodedGrants = yield* decodeCanonicalAtomV2ContentGrants(rawGrants)
+      const grants = yield* validateCanonicalAtomV2ContentGrantConfiguration(
         schemaContent.binding,
         decodedGrants
       )
-      const authorize = makeAuthorizer(schemaContent.binding, grants)
+      const authorize = makeCanonicalAtomV2ContentAuthorizer(
+        schemaContent.binding,
+        grants
+      )
       const memory = yield* Ref.make<CanonicalAtomV2ContentMemory>({
         state: initialCanonicalAtomV2State(
           schemaContent.schema.schemaVersion
@@ -427,7 +430,7 @@ export const makeCanonicalAtomV2ContentRuntimeLayer = (
               journal: Object.freeze([...current.journal, receipt])
             }
             const value = Object.freeze({
-              state: snapshotContentState(
+              state: snapshotCanonicalAtomV2ContentState(
                 schemaContent.binding,
                 nextMemory
               ),
@@ -456,7 +459,10 @@ export const makeCanonicalAtomV2ContentRuntimeLayer = (
         readContent: (descriptor) => store.get(descriptor),
         snapshot: Ref.get(memory).pipe(
           Effect.map((current) =>
-            snapshotContentState(schemaContent.binding, current)
+            snapshotCanonicalAtomV2ContentState(
+              schemaContent.binding,
+              current
+            )
           )
         ),
         history: Ref.get(memory).pipe(
@@ -466,7 +472,7 @@ export const makeCanonicalAtomV2ContentRuntimeLayer = (
         ),
         submit: (input) =>
           Effect.gen(function* () {
-            const decoded = yield* decodeContentBoundInput(input)
+            const decoded = yield* decodeCanonicalAtomV2ContentBoundInput(input)
             const command = snapshotCommitCanonicalAtomsV2Command(
               decoded.command
             )
@@ -499,7 +505,7 @@ export const makeCanonicalAtomV2ContentRuntimeLayer = (
               command
             )
             if (Either.isLeft(candidate)) return yield* candidate.left
-            const bindings = yield* prepareWriteContent(
+            const bindings = yield* prepareCanonicalAtomV2WriteContent(
               store,
               command,
               contentInput.writeBindings

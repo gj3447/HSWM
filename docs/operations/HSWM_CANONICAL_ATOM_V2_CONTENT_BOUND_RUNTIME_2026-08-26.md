@@ -138,6 +138,12 @@ restart durability. Both facades retain the phase-1 reference grant label; a
 schema digest does not add expiry, revocation, consent or canonical permit
 semantics.
 
+A later, separate
+[`durable journal runtime`](HSWM_CANONICAL_ATOM_V2_DURABLE_JOURNAL_RUNTIME_2026-08-26.md)
+now composes these content guarantees with an explicit revision-zero genesis
+and immutable predecessor-bound state/receipt records. That continuation does
+not retroactively change this facade's `STATE_JOURNAL_NON_DURABLE` contract.
+
 ## 6. Verification and next order
 
 Tests cover duplicate keys and hostile runtime values, canonical digest
@@ -146,17 +152,15 @@ schema-version conflict, corrupt and unsafe files, schema/grant/command digest
 drift, missing payloads, forged envelopes, preflight no-write behavior and
 concurrent one-winner state admission.
 
-The next implementation order is now:
+The durable-journal continuation completed the former first two steps for one
+bounded observed local linear prefix, without an external anti-rollback
+witness. The next implementation order is now:
 
-1. make an immutable predecessor-bound state-and-receipt journal the recovery
-   truth source, with create-only cross-process revision publication;
-2. replay that journal while verifying every referenced schema, payload and
-   atom-envelope blob, failing closed on gaps or corruption;
-3. represent authorization decisions, expiry/revocation evidence, sealed
+1. represent authorization decisions, expiry/revocation evidence, sealed
    trajectories, outcomes and provenance evidence as typed canonical atoms;
-4. add quarantine/rejection receipts, migration, fork/merge and compensating
+2. add quarantine/rejection receipts, migration, fork/merge and compensating
    restore;
-5. add loss-declared projections and only then outcome-bound learning
+3. add loss-declared projections and only then outcome-bound learning
    proposals.
 
 No research receipt or results-log entry is created because this is engineering

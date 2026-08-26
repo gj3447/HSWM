@@ -5,11 +5,12 @@
 > They are not the current HSWM ontology and must not be used as a fixed owner
 > registry for new canonical writes. The current target requires exactly one
 > schema-relative responsibility owner per admitted canonical atom. The generic
-> v2 reference kernel and its optional content-bound facade are now implemented.
-> Schema, payload and atom-envelope bytes can use a local durable adapter, but
-> canonical state and its receipt journal remain non-durable. This is not a
-> production canonical store, migration system, learning result, or scientific
-> verdict.
+> v2 reference kernel, content-bound facade, and predecessor-bound durable
+> journal facade are now implemented. The content-bound facade alone still has
+> process-local state; the newer file-backed durable runtime can reconstruct one
+> local linear state-and-receipt lineage from exact immutable records. This is
+> not a production canonical store, distributed consensus, canonical Permit,
+> migration system, learning result, or scientific verdict.
 > See the
 > [single-owner canon](../../../docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md).
 
@@ -42,10 +43,21 @@ The current v2 boundary is intentionally small:
   validity and every required byte before the process-local `Ref` commit. Its
   receipt says `CONTENT_ONLY_STATE_JOURNAL_NOT_DURABLE`; concurrent losers may
   leave unreferenced immutable blobs but never an admitted atom or receipt.
+- `canonical-atom-v2-state-journal*.ts` define exact canonical genesis/commit
+  records and a root-private Effect store. The local POSIX adapter publishes a
+  content-addressed record object and one create-only fixed revision slot. Its
+  one-winner property assumes the observed slot remains intact; it is not an
+  external anti-rollback witness.
+- `canonical-atom-v2-durable-runtime.ts` treats that journal—not a mutable
+  cache—as the recovery truth. Every snapshot, history read and submit replays
+  the chain, verifies schema/payload/envelope content and recomputes each pure
+  transition and receipt before exposing state.
 - The exact implementation and nonclaims are recorded in the
   [v2 reference-kernel handoff](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md)
   and the
-  [content-bound continuation](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_CONTENT_BOUND_RUNTIME_2026-08-26.md).
+  [content-bound continuation](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_CONTENT_BOUND_RUNTIME_2026-08-26.md),
+  followed by the
+  [durable-journal continuation](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_DURABLE_JOURNAL_RUNTIME_2026-08-26.md).
 
 The retained historical boundary is also intentionally small:
 

@@ -55,6 +55,50 @@ it("exports the content-bound v2 facade without raw store mutation ports", () =>
   expect("snapshotCanonicalAtomV2WriteContentBinding" in PublicApi).toBe(
     false
   )
+  expect("snapshotCanonicalAtomV2ContentState" in PublicApi).toBe(false)
+  expect("makeCanonicalAtomV2ContentAuthorizer" in PublicApi).toBe(false)
+  expect("decodeCanonicalAtomV2ContentBoundInput" in PublicApi).toBe(false)
+  expect("decodeCanonicalAtomV2ContentGrants" in PublicApi).toBe(false)
+  expect(
+    "validateCanonicalAtomV2ContentGrantConfiguration" in PublicApi
+  ).toBe(false)
+  expect("prepareCanonicalAtomV2WriteContent" in PublicApi).toBe(false)
+})
+
+it("exports durable v2 replay without raw journal publication or receipt construction", () => {
+  expect(typeof PublicApi.decodeCanonicalAtomV2StateJournalRecordBytes).toBe(
+    "function"
+  )
+  expect(typeof PublicApi.CanonicalAtomV2DurableRuntime).toBe("function")
+  expect(
+    typeof PublicApi.makeCanonicalAtomV2DurableRuntimeFileLayer
+  ).toBe("function")
+  expect(PublicApi.HSWM_CANONICAL_ATOM_V2_LOCAL_DURABLE_STATE).toBe(
+    "LOCAL_PREDECESSOR_BOUND_STATE_AND_RECEIPT_JOURNAL_V1"
+  )
+  expect("CanonicalAtomV2StateJournalStore" in PublicApi).toBe(false)
+  expect(
+    "makeCanonicalAtomV2StateJournalFileStoreLayer" in PublicApi
+  ).toBe(false)
+  expect(
+    "makeCanonicalAtomV2StateJournalStoreMemoryLayer" in PublicApi
+  ).toBe(false)
+  expect("makeCanonicalAtomV2DurableRuntimeLayer" in PublicApi).toBe(false)
+  expect(
+    "makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest" in PublicApi
+  ).toBe(false)
+  expect("makeCanonicalAtomV2StateJournalGenesis" in PublicApi).toBe(false)
+  expect("makeCanonicalAtomV2StateJournalCommit" in PublicApi).toBe(false)
+  expect("applyCanonicalAtomV2StateJournalGenesis" in PublicApi).toBe(false)
+  expect("applyCanonicalAtomV2StateJournalCommit" in PublicApi).toBe(false)
+  expect("canonicalAtomV2StateJournalRecordBytes" in PublicApi).toBe(false)
+  expect("describeCanonicalAtomV2StateJournalRecord" in PublicApi).toBe(
+    false
+  )
+  expect("canonicalAtomV2StateSha256" in PublicApi).toBe(false)
+  expect("snapshotCanonicalAtomV2StateJournalRecord" in PublicApi).toBe(
+    false
+  )
 })
 
 it("does not export privileged store or authorizer capabilities", () => {

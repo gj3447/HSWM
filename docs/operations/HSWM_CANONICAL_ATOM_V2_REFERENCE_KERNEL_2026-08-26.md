@@ -58,6 +58,13 @@ now supplies duplicate-aware schema bytes, atom-envelope digests and a local
 durable content-addressed port without changing this pure reducer. Its state and
 receipt journal are still explicitly non-durable.
 
+The subsequent, separate
+[`durable journal runtime`](HSWM_CANONICAL_ATOM_V2_DURABLE_JOURNAL_RUNTIME_2026-08-26.md)
+reuses the same reducer and content bindings while making one observed local
+linear state-and-receipt prefix replayable from an explicit genesis. It does
+not change the phase-1 Layer's non-durable contract or provide an external
+anti-rollback witness.
+
 ## 3. Enforced invariants
 
 1. Schema owner addresses, atom kinds, and per-kind reference contracts are
@@ -131,18 +138,16 @@ identity, owner validity, relation endpoints, hidden reads, immutable revision,
 owner-change rejection, migration rejection, permission separation, frozen
 snapshots, all-or-nothing batch failure, and concurrent one-winner commit.
 
-The content-bound continuation completed the former first step and bound schema
-and atom-envelope bytes without claiming durable state. The next implementation
-order is:
+The content-bound continuation bound schema and atom-envelope bytes, and the
+durable-journal continuation now supplies exact local replay against every
+referenced content blob. The next implementation order is:
 
-1. add a predecessor-bound durable state-and-receipt journal with exact replay
-   against every referenced content blob;
-2. represent authorization, trace, outcome, and provenance evidence as typed
+1. represent authorization, trace, outcome, and provenance evidence as typed
    canonical atoms without creating a bootstrap regress;
-3. add explicit quarantine and rejected-decision receipts;
-4. specify schema migration, fork, merge, and rollback/compensating restore;
-5. add loss-declared projection compilation and forbid direct view commit-back;
-6. only then introduce sealed trajectories and outcome-bound learning
+2. add explicit quarantine and rejected-decision receipts;
+3. specify schema migration, fork, merge, and rollback/compensating restore;
+4. add loss-declared projection compilation and forbid direct view commit-back;
+5. only then introduce sealed trajectories and outcome-bound learning
    proposals.
 
 No research receipt or results-log entry is created for this change because it

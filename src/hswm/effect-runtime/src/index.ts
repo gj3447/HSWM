@@ -104,6 +104,31 @@ export {
   makeCanonicalAtomV2ContentRuntimeMemoryLayer
 } from "./canonical-atom-v2-content-runtime.js"
 export {
+  HSWM_CANONICAL_ATOM_V2_STATE_JOURNAL_V1_CONTRACT_VERSION,
+  HSWM_CANONICAL_ATOM_V2_STATE_JOURNAL_V1_MEDIA_TYPE,
+  CanonicalAtomV2StateJournalCommitSchema,
+  CanonicalAtomV2StateJournalError,
+  CanonicalAtomV2StateJournalGenesisSchema,
+  CanonicalAtomV2StateJournalRecordDescriptorSchema,
+  CanonicalAtomV2StateJournalRecordSchema,
+  decodeCanonicalAtomV2StateJournalRecordBytes,
+  type CanonicalAtomV2StateJournalCommit,
+  type CanonicalAtomV2StateJournalGenesis,
+  type CanonicalAtomV2StateJournalRecord,
+  type CanonicalAtomV2StateJournalRecordDescriptor
+} from "./canonical-atom-v2-state-journal.js"
+export {
+  HSWM_CANONICAL_ATOM_V2_LOCAL_DURABLE_STATE,
+  CanonicalAtomV2DurableRuntime,
+  CanonicalAtomV2DurableRuntimeError,
+  makeCanonicalAtomV2DurableRuntimeFileLayer,
+  type CanonicalAtomV2DurableEvolution,
+  type CanonicalAtomV2DurableReceipt,
+  type CanonicalAtomV2DurableRecoveryFailure,
+  type CanonicalAtomV2DurableState,
+  type CanonicalAtomV2DurableSubmitFailure
+} from "./canonical-atom-v2-durable-runtime.js"
+export {
   HSWM_CORE_RESPONSIBILITY_ONTOLOGY_SCHEMA_VERSION,
   type HSWMCoreResponsibilityOntology
 } from "./hswm-core-ontology-schema.js"

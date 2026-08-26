@@ -334,12 +334,32 @@ contest·exit·fork 가능성을 요구하는 헌법 사건이다. 부재와 침
 권한·동의·출처·rollback이 없는 연결은 HSWM의 더 자유로운 버전이 아니라 HSWM의 개체성과
 자기교정 능력을 잃은 버전이다.
 
+여기의 `H/W/A/F/Π`는 존재자의 다섯 자연종이나 서로 독립된 다섯 기계가 아니라, 한 HSWM의
+상태·전이·권리 관계를 혼동 없이 다루기 위한 **의존적 typed responsibility coordinate
+chart**다. 따라서 역할별 canonical ownership은 하나의 원자가 최종 책임질 의미와 변경
+권한을 정할 뿐, 데이터가 물리적으로 한 장소에만 있거나 역할 사이에 통계적·인과적 의존이
+없다는 뜻은 아니다. `H`의 incidence와 provenance가 `W/A/F/Π`의 다음 상태를 조건화하고,
+그 역할들의 적법한 결과가 다시 `H/W`의 계보에 남는 것이 바로 하나의 HSWM이라는 주장이다.
+
 물리적 저장 위치가 겹쳐도 canonical ownership은 다음처럼 분리한다. `H`는 claim, evidence,
 judgment, outcome **record**와 provenance의 계보를 소유한다. `W`는 semantic compatibility와 causal
 influence를 소유하고 `H`의 epistemic record를 파생 참조할 뿐 truth를 소유하지 않는다.
 `A`는 momentary activation과 pre-outcome used-path/eligibility를, `F`는 typed proposal·검사·
 전이를, `Π`는 permission과 절차 경계를 소유한다. `F`가 자기 output을 최종 판정하거나 `W`가
 인기도를 truth로, `Π`가 절차 권한을 judgment 내용으로 바꾸면 역할 분해가 무너진다.
+
+`Π`의 policy는 rule text, configuration, evidence나 readout으로 다른 좌표에 투사될 수 있다.
+하지만 투사된 표현은 권한 집행을 대신하지 않는다. admission, commit, external effect와
+rollback은 해당 scope의 현재 `Π` 조건을 실제로 만족해야 하며, `W`의 높은 효능, `F`의 설득력
+있는 output, `A`의 긴급 activation 또는 `H`의 기록만으로 이 경계를 우회할 수 없다. 이는
+정본 policy 표현의 위치를 하나로 고정하는 명제가 아니라, 권리 보존 행동이 어떤 동등한
+표현에서도 보존되어야 한다는 명제다.
+
+서로 다른 encoding이 이 chart의 동등한 표현이라고 주장하려면 적어도 단일 책임 ownership과
+provenance, 선언된 readout의 역할 의미, 허용 intervention에 대한 transition behavior,
+consent·scope·authority·rollback을 포함한 권리 결과를 모두 보존해야 한다. 이는 현재
+`SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`인 설계 판별선이며, 다섯 항이 자연적으로
+유일·최소·완전하게 분해된다는 형이상학적 또는 과학적 결론은 아직 열려 있다.
 
 ### 11.1 철학의 기술적 종착점 — Semantic Weight Map
 

@@ -43,6 +43,38 @@ S_t = \mathrm{HSWM}_t = (H_t, W_t, A_t, F_t, \Pi_t),
 \qquad \Pi_t \equiv (\Pi^*, \Gamma_t)
 ```
 
+### 2.1 다섯 항의 지위 — 의존적 책임 좌표계
+
+이 5-tuple은 하나의 HSWM 상태를 읽고 바꾸기 위한 **typed responsibility
+factorization/coordinate chart**다. `H/W/A/F/Π`는 다섯 개의 통계적으로 독립된 변수,
+인과적으로 고립된 모듈, 물리적으로 서로소인 저장소, 최소 차원, 또는 세계에 본래 하나만
+있는 유일 존재론이라는 주장이 아니다. 같은 원자·바이트·프로세스가 여러 역할의 projection을
+담을 수 있고, 역할들은 typed reference와 state transition을 통해 의존적으로 함께 다음
+상태를 조건화한다. 다섯 항이 각각 정본으로 소유하는 책임은 구분하되, HSWM 자체는 그
+책임들이 결합된 하나의 token-native macro-neural network다.
+
+이 chart에서 승인된 정본 원자는 정확히 하나의 책임 소유자를 가져야 한다. `H`는 durable
+object/event/evidence/outcome와 committed incidence 및 provenance, `W`는 learned
+operator-valued efficacy와 transport, `A`는 episode-local activation과 used path, `F`는
+typed LLM-function transition, `Π`는 admission·권한·transaction·rollback의 집행 경계를
+소유한다. 다른 역할은 그 원자를 typed reference 또는 재생성 가능한 projection으로만
+가리킨다. 이 ownership 원칙은 저장 위치의 물리적 분리를 요구하지 않는다.
+`H`에 기록된 authority·capability·revocation field는 누가 무엇을 주장·부여·철회했는지의
+역사적 record이고, 현재 effective allow/deny와 effect commit을 소유하는 것은 `Π_t`다.
+
+다른 내부 encoding이나 factorization은 다음을 모두 보존함을 명시적으로 보일 때에만 이
+chart와 동등한 HSWM 표현으로 취급할 수 있다: (1) 각 정본 원자의 단일 책임 소유권과
+provenance, (2) 선언된 관측·readout 아래의 역할별 의미, (3) 허용된 intervention 아래의
+state-transition 행동, (4) `Π`가 부과하는 consent·scope·authority·rollback 권리. 이 조건을
+보이지 못한 압축, projection, KG, prompt, cache 또는 agent workflow는 HSWM의 동등한 본체가
+아니라 bounded interface 또는 lossy view다.
+
+이 절은 `SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`다. 현재 증거는 위 책임 분리가
+목표 정체성을 판별하는 유용한 설계 계약이라는 데까지이며, 자연적·최소적·유일한
+분해이거나 완전한 canonicalization 정리가 이미 성립한다는 과학적 증거는 아니다.
+독립성·유일성 반례와 graph representation 계약의 상세 감사는
+[`HSWM_DEPENDENT_FACTORIZATION_GRAPH_ENGINEERING_AUDIT_2026-08-26.md`](../research/HSWM_DEPENDENT_FACTORIZATION_GRAPH_ENGINEERING_AUDIT_2026-08-26.md)에 둔다.
+
 | 기호 | 헌법적 의미 |
 |---|---|
 | `H_t` | 세계의 객체·사건·기억·함수·도구·evidence를 n-ary relation으로 잇는 가변 hypergraph. HSWM의 몸과 가능한 상호작용의 해부학이다. |
@@ -63,6 +95,14 @@ mandate 아래 versioned·철회 가능한 capability, budget, evaluator와 운�
 여섯 번째 subsystem을 추가하는 것이 아니라,
 시간을 건너 지켜야 할 경계와 시간에 따라 바뀌는 grant를 같은 `Π_t` 안에서 구분한다.
 `Π_t`는 별도 여섯 번째 subsystem이 아니라 다섯 번째 객체 `Π`의 시점별 상태다.
+
+`Π`의 policy text, configuration, compiled rule 또는 readout은 `H`나 다른 역할에
+projection으로 나타날 수 있다. 그러나 그 projection 자체가 허가가 되지는 않는다. canonical
+transition과 external effect는 현재 `Π_t`의 scope·capability·transaction·rollback 검사를
+통과하지 않고는 commit될 수 없어야 하며, `W`의 효능값, `F`의 output, `A`의 activation 또는
+readout 편집이 그 검사를 대체하거나 우회할 수 없다. 이는 인지를 외부 policy engine으로
+치환하라는 뜻이 아니라, 하나의 HSWM 안에서 권리 경계가 non-bypassable한 상태 전이 조건으로
+남아야 한다는 뜻이다.
 
 HSWM 내부의 통시적 동일성은 UID나 lineage만으로 충분하지 않다. 공통 계보, `Π*`, 이후
 activation을 실제로 조건화하는 `H/W`의 인과 연속성과 합성 member의 분리 가능성이 함께
@@ -165,10 +205,33 @@ typed token/action/tool trajectory
 이를 축약하면 다음과 같다.
 
 ```math
-S_{t+1} = U(S_t, \tau_t, o_t)
+\Sigma_{\mathrm{HSWM}}
+= (\mathcal X, \mathcal I, \mathcal O, \mathcal Y, \mathcal T,
+   \mathsf{Step}, \mathsf{Learn}, \Pi^*),
+\qquad
+\mathsf{Step}\subseteq
+\mathcal X \times \mathcal I \times \mathcal X \times \mathcal O,
+\qquad
+\mathsf{Learn}_{\Pi^*}\subseteq
+\mathcal X \times \mathcal T \times \mathcal Y \times \mathcal X,
+\qquad
+(S_t,\tau_t,y_t,S_{t+1})\in\mathsf{Learn}_{\Pi^*}
 ```
 
-단, `U`는 모든 경험을 무조건 영구화하지 않는다. outcome 결속, 허용된 권한, provenance,
+여기서 `Σ_HSWM`은 새 subsystem이 아니라 하나의 HSWM이 어떤 admissible typed state
+space `X`, observation/event input `I`, HSWM이 낸 token/action/tool/readout `O`, 환경·분리된
+evaluator가 반환한 outcome `Y`, sealed trajectory space `T`, episode 내 전이
+`Step`, outcome-bound durable update `Learn`과 헌법 불변식 `Π*` 아래 움직이는지를 적는
+**system signature**다. 운영 policy `Γ_t`는 `S_t∈X` 안에 남는다. 관계 표기는 transition이
+부분적·비결정적일 수 있음을 허용한다. 결정적 함수나 provenance에 RNG/model version까지
+결속한 stochastic kernel은 이 관계를 더 구체화한 realization이다. 결과가 `H/W/A/F/Π`의
+어떤 책임 원자를 바꾸는지는 transition provenance로 명시한다.
+`τ_t∈T`는 `Step` 전이와 그때 방출한 `O`의 provenance-bound 유한 경로를 outcome 전에
+seal한 것이며, 이후 환경·분리된 evaluator가 반환한 `y_t∈Y`와 같은 변수가 아니다.
+따라서 transition·learning law는 tuple 밖의 여섯 번째 학습기가 아니라, 동일한 한 시스템의
+시간적 인터페이스다.
+
+단, `Learn_{Π*}`는 모든 경험을 무조건 영구화하지 않는다. outcome 결속, 허용된 권한, provenance,
 stability, rollback 조건을 통과한 변화만 지속된다. 저장은 기억이고, 현재 run의 activation
 변화는 적응이며, 검증된 durable 변화가 다음 행동의 원인이 될 때 학습이다.
 

@@ -1060,6 +1060,7 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | What user-ratified identity makes HSWM a deep Set-Hypergraph neural structure? | [`USER_PRIMARY deep Set-Hypergraph clarification`](docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt) |
 | What is the precise `H/W/A/F/Π` target and SWM-0–5 ladder? | [`token-hypergraph core`](docs/canon/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md) |
 | Which philosophical commitments constrain the architecture? | [`HSWM philosophical foundations`](docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md) |
+| Are `H/W/A/F/Π` independent or uniquely necessary, and what graph-engineering contract follows? | [`dependent-factorization and graph-engineering adversarial audit`](docs/research/HSWM_DEPENDENT_FACTORIZATION_GRAPH_ENGINEERING_AUDIT_2026-08-26.md) |
 | What is the Human Universal Body and HSWM Human Complementation Plan? | [`Human Universal Body distinction`](docs/canon/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md) |
 | How directly does Hyperon 2026 overlap, and what is actually implemented? | [`Hyperon 2026 direct-prior deep dive`](docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md) |
 | How do the fragmented identity, mathematics, runtime, learning, and evidence meanings fit together? | [`HSWM unified meaning map`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md) |

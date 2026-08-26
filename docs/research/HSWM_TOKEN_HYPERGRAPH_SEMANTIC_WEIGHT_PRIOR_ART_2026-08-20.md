@@ -133,13 +133,54 @@ activation을 만들고 결과가 `W/H`를 바꾸는 반복 회로를 만들어�
 compiled tensor graph를 분리해야 하며, backend 객체를 HSWM의 진실 원장으로 삼으면
 안 된다.
 
+### 5.1 graph engineering: projection, rewrite, incremental state
+
+이 절의 소스는 **인지·학습 효능의 증거가 아니라**, canonical `H/W/A/F/Π`를 손실 없이
+표현·갱신·검증하기 위한 import 가능한 graph-engineering mechanism이다. 특히 graph
+expansion, sparse backend, CRDT는 HSWM의 cognition·routing·causal credit을 대신하지
+않는다.
+
+| 1차 소스 | 확인된 engineering mechanism | HSWM import 경계 |
+|---|---|---|
+| [From Graphs to Hypergraphs](https://arxiv.org/abs/2401.08519) | nested hyperedge와 uncovered-triangle 계열에서 pairwise projection이 higher-order grouping을 잃고, 추가 정보 없이 원 hypergraph 복원이 조합적으로 불가능해질 수 있음을 분석 | role-bearing native `H`를 canonical record/lineage 단위로 유지하고 clique/2-section을 명시적 lossy view로 제한한다 |
+| [HENN: spectral similarity](https://proceedings.mlr.press/v231/hayhoe24a.html) | 하나의 hypergraph에 대한 여러 graph representation의 spectral similarity를 이용해 expansion 기반 operator의 transfer-error bound를 제시 | canonical incidence를 보존한 채 여러 compiled view를 교차 검증하는 근거. clique/star/line graph 어느 하나도 정본 `H`로 승격하지 않는다 |
+| [WidthWall](https://arxiv.org/abs/2605.13690) **(2026-05 arXiv preprint; 미심사)** | hypertree-width 계층으로 HGNN expressivity를 분석하고 clique expansion이 잃는 pattern 정보를 주장 | native n-ary/role incidence와 projection-loss receipt를 유지해야 한다는 강한 설계 가설. 독립 재현 전에는 확정 이론·HSWM 효능 근거로 쓰지 않는다 |
+| [Hypergraph energy functions](https://proceedings.mlr.press/v202/wang23d.html) | parameterized hypergraph energy와 여러 expansion의 관계를 하나의 bilevel factorization으로 해석 | compiled operator 선택을 명시적 energy/regularizer 계약으로 비교할 수 있음. energy 최소화가 truth, authority, outcome-bound learning을 정의하지는 않는다 |
+| [Open Graphs and Monoidal Theories](https://arxiv.org/abs/1011.4114), [computational category-theoretic rewriting](https://arxiv.org/abs/2111.03784) | typed input/output을 보존하는 open-graph DPO rewrite와 DPO/SPO/SqPO의 executable categorical specification | `ΔH`를 free-form mutation이 아니라 typed match·precondition·postcondition을 가진 transaction으로 만든다. category formalism 자체는 HSWM ontology의 유일성을 주지 않는다 |
+| [DPOI confluence](https://arxiv.org/abs/2109.06049), [SqPO rewriting](https://doi.org/10.1007/11841883_4) | interface를 보존하는 terminating DPOI system의 critical-pair confluence와, unknown context의 deletion·cloning을 다루는 SqPO semantics | `H` topology rewrite는 typed interface와 pre/postcondition을 가진 유한 rule로 제한한다. inverse가 정의되면 inverse receipt를, 아니면 이전 snapshot 또는 compensating restore transaction을 남긴다. 임의 LLM text/Python guard는 이 정리의 전제를 만족하지 않으므로 후보 생성만 맡는다 |
+| [Locality-aware rewiring](https://proceedings.iclr.cc/paper_files/paper/2024/hash/7b7db41ea66d624587f211aa15c07e45-Abstract-Conference.html) | over-squashing 완화·locality·sparsity의 trade-off를 분리하고 locality-aware sequential rewiring을 제시 | `W/H` topology 후보의 locality/sparsity guard와 baseline으로 사용. 모델 성능용 temporary shortcut을 lineage 없는 world rewrite로 commit하지 않는다 |
+| [Differential Dataflow](https://www.cidrdb.org/cidr2013/Papers/CIDR13_Paper111.pdf), [Naiad](https://www.microsoft.com/en-us/research/wp-content/uploads/2013/11/naiad_sosp2013.pdf), [GraphBLAS](https://graphblas.org/graphblas-api-cpp/) | nested iterative incremental computation, timestamp/frontier coordination, sparse matrix·incidence algebra | append/retract event에서 activation/readout/index를 증분 유지하는 execution backend 후보. dataflow timestamp와 matrix value는 `H` provenance·`W` semantic operator의 정본 의미가 아니다 |
+| [W3C PROV-DM](https://www.w3.org/TR/2013/REC-prov-dm-20130430/), [Merkle-CRDTs](https://arxiv.org/abs/2004.00107) | entity/activity/agent/derivation provenance model과 hash-DAG 기반 convergent replication | `H` event·derivation·responsibility를 PROV-compatible로 export하고, content-addressed branch/merge를 transport에 사용. CRDT merge가 conflicting truth·authority·causal credit을 자동 판정하지는 않는다 |
+| [EdgeBank / dynamic evaluation](https://proceedings.neurips.cc/paper_files/paper/2022/hash/d49042a5d49818711c401d34172f9900-Abstract-Datasets_and_Benchmarks.html) | 과거 edge 재발만으로 강한 동적-link 성능이 나올 수 있음을 보이고 harder negative sampling을 제안 | topology/weight learning 평가는 EdgeBank와 recurrence-matched baseline을 반드시 포함한다. 단순 edge recall을 morphogenesis·causal learning으로 오인하지 않는다 |
+
+따라서 compiled projection은 다음처럼 일방향·명시적 손실 계약을 가져야 한다.
+
+```text
+canonical typed hypergraph (H + role-bearing incidence)
+  → lossless incidence/star compiler + compiler receipt
+  → one or more sparse graph/tensor views
+  → backend execution / differential maintenance
+  → proposed ΔW/ΔH
+  → Π-governed validation and canonical rewrite commit
+```
+
+clique/2-section처럼 n-ary grouping·role·multiplicity를 버리는 view는 retrieval/analysis
+cache일 수는 있어도 round-trip target이나 commit source가 될 수 없다. projection이
+불가피할 때는 discarded fields, source root, compiler version, and reconstruction status를
+receipt에 남긴다. 이 구분은 `H`의 계보·구조, `W`의 operator, `A`의 증분 활성,
+`F`의 cell execution, `Π`의 commit 권한을 혼합하지 않기 위한 것이다.
+`H`나 compiled view에 들어가는 authority·capability 값은 grant/revocation의
+`authority_ref`, `capability_grant_ref`, `policy_version_ref`와 검증 당시 attestation이다.
+현재 effective allow/deny, scope 해석과 transaction decision의 정본 소유자는 계속 `Π_t`다.
+
 ## 6. 구현에 대한 구체적 결론
 
 ```text
 Canonical persistent hypergraph
   node + hyperedge + first-class incidence
   incidence = (node, hyperedge, role, direction, source,
-               valid_time, observed_at, authority, polarity, capability)
+               valid_time, observed_at, authority_ref, polarity,
+               capability_grant_ref, policy_version_ref, attestation)
 
 LLM token event
   → immutable artifact/span record
@@ -158,8 +199,9 @@ LLM token event
 
 1. **tokenizer 중립 원문 계보:** token ID를 semantic identity로 쓰지 않고 raw
    bytes/text, tokenizer/model digest, character/span map을 보존한다.
-2. **first-class incidence:** role, direction, source, time, authority는 node/edge의 자유로운
-   metadata 문자열이 아니라 propagation을 바꾸는 typed input이다.
+2. **first-class incidence:** role, direction, source, time, authority/grant reference와
+   attestation은 node/edge의 자유로운 metadata 문자열이 아니라 propagation과 검증을
+   바꾸는 typed input이다. 현재 effective permission은 `Π_t`가 판정한다.
 3. **operator projections 분리:** `retrieve(W)`, `dispatch(W)`, `update(W)`는 같은 scalar를
    공유하지 않아도 된다. 진실, 효용, 활성, 권한을 혼합하지 않는다.
 4. **canonical/compiled 분리:** GPU star expansion을 써도 n-ary relation과 role의 원장은

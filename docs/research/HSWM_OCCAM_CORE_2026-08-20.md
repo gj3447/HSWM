@@ -6,7 +6,8 @@
 > [`USER_PRIMARY_HSWM_OCCAM_CORE_DIRECTION_2026-08-20.txt`](../canon/sources/USER_PRIMARY_HSWM_OCCAM_CORE_DIRECTION_2026-08-20.txt)
 > **권위 경계:** 사용자는 HSWM을 오캄의 면도날처럼 줄이고, 기억 가능한
 > 연구 명제로 만들며, 그 연구를 KG에 올리라고 요청했다. 아래 표제, 공리,
-> 수식, 구현 절단선과 반증 기준은 `SECONDARY_AI_PROPOSED`다.
+> §2.1 외 수식, 구현 절단선과 반증 기준은 `SECONDARY_AI_PROPOSED`다. §2.1의 책임 좌표계
+> 해석만 `SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`로 구분한다.
 > **비주장:** 이 문서는 현재 구현, 효능, 절대적 새로움, 의식, 인격 또는
 > 인류보편체의 완성을 주장하지 않는다.
 
@@ -41,7 +42,9 @@
 
 인지 계산은 관계의 가중된 전이로 최대한 압축할 수 있지만, consent·capability·
 privacy·rollback을 정하는 `Π`는 reward나 weight로 환원하면 안 된다. 따라서
-최소 HSWM은 **계산핵 하나와 독립 경계 하나**다.
+최소 HSWM은 **계산핵 하나와 별도로 비보상적인 경계 하나**다. 여기서
+`별도`는 물리적으로 분리된 subsystem이라는 뜻이 아니라, 학습된 score나 reward가
+권한 거부를 상쇄할 수 없다는 책임·집행상의 비환원성을 뜻한다.
 
 ```math
 \mathrm{HSWM}_{\min}=\bigl(\text{learned causal semantic transport},\;\Pi\bigr)
@@ -88,6 +91,74 @@ HSWM에 적용할 면도날은 다음이다.
   `W`, 그리고 훨씬 나중에 `H`를 바꾸는 일이다.
 
 이 압축은 형식적 역할을 지우지 않는다. 중복된 존재론을 제거한다.
+
+### 2.1 책임 좌표계의 지위와 유일성 부담
+
+아래 `H/W/A/F/Π`는 다섯 개의 통계적으로 독립한 변수, 인과적으로 고립된 원인,
+물리적으로 분리된 저장소, 최소 차원의 latent axis, 또는 자연계가 이미 제공하는
+유일 분해가 아니다. 이것은 하나의 HSWM 상태를 읽고 바꾸기 위한
+**interdependent canonical typed-responsibility chart**다. 즉 각 정본 원자는 한
+책임 역할을 가지되, 전체 상태와 전이는 typed incidence, reference, permission,
+outcome을 통해 결합한다. 이 해석은 `SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`이며
+과학 상태는 `UNJUDGED`다. HSWM의 현재 구현 또는 효능을 증명하지 않는다.
+
+스키마 버전 `σ`에서 HSWM이 정본으로 admit한 원자 집합을 `X_σ`라고 할 때, 이
+chart가 주장할 수 있는 가장 강한 유일성은 다음이다.
+
+```math
+\operatorname{owner}_σ:X_σ\to\{H,W,A,F,\Pi\},
+\qquad
+\forall x\in X_σ\;\exists!r:\operatorname{owner}_σ(x)=r.
+```
+
+이 식이 말하는 유일성은 **승인된 정본 원자의 schema-relative owner**뿐이다. 전체
+상태는 다섯 항의 독립 곱이 아니며, 한 유용한 해석은 다음 의존합이다.
+
+```math
+S\in
+\sum_{H:\mathcal H}
+\sum_{\Pi:\mathcal P(H)}
+\sum_{F:\mathcal F(H,\Pi)}
+\sum_{W:\mathcal W(H,F,\Pi)}
+\mathcal A(H,W,F,\Pi).
+```
+
+이 순서는 시간 순서나 별도 subsystem 계층이 아니라 의존성을 드러내는 표기다. Occam
+판정은 각 경계를 다음 matched counterfactual로 방어할 수 있을 때에만 다섯 역할을
+유지한다.
+
+| 경계 | 최소 반증 시험 |
+|---|---|
+| `H↔W` | committed incidence 삭제와 `W=0` gate가 history·rollback·`do(W)`에서 구별되는가 |
+| `A↔H` | episode-local activation과 event-log 재구성이 지속성·미래 개입에서 구별되는가 |
+| `W↔F` | transport 교란과 typed cell swap이 서로 다른 failure를 내는가 |
+| `Π` 표현↔집행 | policy 저장·컴파일 위치를 옮겨도 current deny·revocation·rollback이 우회 불가능한가 |
+
+경계가 독자적인 failure와 책임을 만들지 못하면 합치거나 다시 factorize해야 한다. 반대로
+시험을 통과해도 자연적 유일성은 증명되지 않는다. 현재 방어 가능한 것은 폐쇄된 primitive
+grammar와 관측·개입·권리 계약 아래의 **schema-relative responsibility normal form**뿐이다.
+gauge 반례, 정규화와 `unique up to typed isomorphism`의 증명 부담은 상세 감사 문서가
+단일 책임을 가진다.
+
+### 2.2 약어와 update/evidence 표기
+
+공식 헌법 표기는 `H/W/A/F/Π`다. 문자 그대로의 `HWAFN`은 canonical 약어가 아니며
+`N`의 뜻을 먼저 밝혀야 한다. `N=normative boundary`라면 `Π`의 비공식 ASCII 별칭일
+뿐이고, `N=network/neural`이라면 `H/W/A/F`가 이루는 전체 또는 그 projection이라서
+독립 owner가 아니다. `N=learning/update`라면 snapshot의 여섯째 물질이 아니라 system
+transition/learning signature에서 다룬다. 특히 저장소의 `\mathcal N_t`는
+network/Internet projection으로 이미 쓰이므로, 연구 수식과 정본 schema에는 `Π`를
+유지하고 새 canonical object를 추가하지 않는다.
+
+또한 update operator의 관습적 `U`와 §3.3 evidence channel `U_e`는 읽을 때 충돌하기
+쉽다. 이 문서 이후의 새 설계에서는 episode transition과 durable update를
+`\mathsf{Step}`·`\mathsf{Learn}_{\Pi^*}`, evidence/uncertainty channel을
+`\mathcal E_e`로 쓰는
+것을 권한다. 역사 수식과 이미 hash-bound인 기록은 이 이유만으로 일괄 재작성하지
+않는다.
+
+독립성·유일성 반례, 열린 system signature와 graph-engineering 계약의 전체 감사는
+[`HSWM_DEPENDENT_FACTORIZATION_GRAPH_ENGINEERING_AUDIT_2026-08-26.md`](./HSWM_DEPENDENT_FACTORIZATION_GRAPH_ENGINEERING_AUDIT_2026-08-26.md)에 둔다.
 
 ## 3. 최소 수학핵
 

@@ -15,6 +15,12 @@ WIRING_FORMALIZATION = CANON_DIR / "DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_202
 TOKEN_RAGNAROK_CANON = CANON_DIR / "USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md"
 TOKEN_RAGNAROK_SOURCE = SOURCE_DIR / "USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.txt"
 USER_UTTERANCE_SOURCE = SOURCE_DIR / "내가 주는 말.txt"
+SINGLE_OWNER_CANON = (
+    CANON_DIR / "USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md"
+)
+SINGLE_OWNER_SOURCE = (
+    SOURCE_DIR / "USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.txt"
+)
 
 
 def _sha256(path: Path) -> str:
@@ -64,8 +70,38 @@ def test_umbrella_canon_keeps_authority_and_nonclaim_boundaries() -> None:
     assert "LLM, 인간, 센서, 도구와 문서를\n교체 가능한" not in text
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "`A`: recurrent run-local activation and working state" in readme
+    assert "not partitioned a priori into `H/W/A/F/Π`" in readme
+    assert "| `owner_{σ,t}` |" in readme
+    assert "schema-relative responsibility owner" in readme
+    assert "`A`: recurrent run-local activation and working state" not in readme
     assert "`A`: recurrent activation and persistent state" not in readme
+
+
+def test_schema_relative_single_owner_supersession_preserves_authority_boundary() -> None:
+    source_digest = (
+        "2093d9bb68219d6ba859444dc00aeef985a5c9151163e56972516addb2cd0ec6"
+    )
+    assert SINGLE_OWNER_CANON.is_file()
+    assert SINGLE_OWNER_SOURCE.is_file()
+    assert _sha256(SINGLE_OWNER_SOURCE) == source_digest
+
+    text = SINGLE_OWNER_CANON.read_text(encoding="utf-8")
+    for required in (
+        "USER_PRIMARY_DIRECTION / SECONDARY_AI_FORMALIZATION",
+        "H/W/A/F",
+        "schema-relative",
+        "C_{σ,t}",
+        r"\operatorname{owner}_{σ,t}",
+        "UNJUDGED",
+        source_digest,
+    ):
+        assert required in text
+
+    core_readme = (
+        ROOT / "ontology" / "identity" / "hswm_core" / "README.md"
+    ).read_text(encoding="utf-8")
+    assert "RETIRED_FIXED_ROLE_V1" in core_readme
+    assert "generic schema-declared owner-registry v2는 아직 구현되지 않았다" in core_readme
 
 
 def test_canon_pins_exact_user_sources_and_secondary_formalization() -> None:

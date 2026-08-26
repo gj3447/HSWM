@@ -9,6 +9,13 @@
 > **관계:**
 > [`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md`](../canon/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md)의
 > 선행성·구현 선택·gap 판별을 담당한다.
+>
+> **2026-08-26 current-interpretation notice:** 이 감사의 논문 판독과 gap은
+> 보존하지만, 본문의 `H/W/A/F/Π`는 당시 secondary formalization의 local notation이다.
+> 현행 정본은 fixed role을 요구하지 않으며, schema-approved atom/reference/transition과
+> exactly-one responsibility owner로 읽는다. 현재 형식과 과학철학적 한계는
+> [`schema-relative single-owner research`](HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_SCIENTIFIC_PHILOSOPHY_2026-08-26.md)에
+> 둔다.
 
 ## 0. 판정
 
@@ -44,7 +51,8 @@ matched-budget 비교, causal ablation, scale/stability로 자신을 증명해�
 | [MeTTa reflective metagraph rewriting](https://arxiv.org/abs/2112.08272) | 타입, 변수, pattern matching, program과 rewrite rule 자체를 metagraph로 표현하는 자기기술 구조 | 외부 outcome이 n-ary semantic macro-synapse를 학습시키는 계약은 별개 |
 | [Hyperon Deep-Dive 2026](https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf) | LLM을 external/bridge/native route로 통합; transformer token-position hidden state에서 AtomSpace read; neural state의 typed graph candidate write; source-token provenance, validation/promotion/permission; predictive-coding local learning; evaluator-minted attention fuel; individual/shared AtomSpace; rollback | HSWM의 가장 강한 competitor/conceptual prior. 문서의 상당 부분은 연구 program/hypothesis이므로 통합 구현·효능을 별도로 확인해야 함 |
 
-백서의 page-level claim audit, 공식 공개 코드 범위, HSWM `H/W/A/F/Π` 대응과
+백서의 page-level claim audit, 공식 공개 코드 범위, schema-approved atom/reference/transition
+계약과
 직접 비교 실험은
 [`HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md`](./HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md)에
 분리했다.
@@ -135,8 +143,9 @@ compiled tensor graph를 분리해야 하며, backend 객체를 HSWM의 진실 �
 
 ### 5.1 graph engineering: projection, rewrite, incremental state
 
-이 절의 소스는 **인지·학습 효능의 증거가 아니라**, canonical `H/W/A/F/Π`를 손실 없이
-표현·갱신·검증하기 위한 import 가능한 graph-engineering mechanism이다. 특히 graph
+이 절의 소스는 **인지·학습 효능의 증거가 아니라**, schema가 승인한 정본
+atom/reference/transition 계약을 손실 없이 표현·갱신·검증하기 위한 import 가능한
+graph-engineering mechanism이다. 특히 graph
 expansion, sparse backend, CRDT는 HSWM의 cognition·routing·causal credit을 대신하지
 않는다.
 
@@ -156,22 +165,24 @@ expansion, sparse backend, CRDT는 HSWM의 cognition·routing·causal credit을 
 따라서 compiled projection은 다음처럼 일방향·명시적 손실 계약을 가져야 한다.
 
 ```text
-canonical typed hypergraph (H + role-bearing incidence)
+schema-approved canonical relation/incidence atoms
   → lossless incidence/star compiler + compiler receipt
   → one or more sparse graph/tensor views
   → backend execution / differential maintenance
-  → proposed ΔW/ΔH
-  → Π-governed validation and canonical rewrite commit
+  → proposed owner-valid atom/reference/disposition revision
+  → Inv/Permit-governed validation and canonical rewrite commit
 ```
 
 clique/2-section처럼 n-ary grouping·role·multiplicity를 버리는 view는 retrieval/analysis
 cache일 수는 있어도 round-trip target이나 commit source가 될 수 없다. projection이
 불가피할 때는 discarded fields, source root, compiler version, and reconstruction status를
-receipt에 남긴다. 이 구분은 `H`의 계보·구조, `W`의 operator, `A`의 증분 활성,
-`F`의 cell execution, `Π`의 commit 권한을 혼합하지 않기 위한 것이다.
-`H`나 compiled view에 들어가는 authority·capability 값은 grant/revocation의
+receipt에 남긴다. 이 구분은 canonical relation lineage, semantic disposition,
+증분 activation state, LLM-executable transition과 commit authorization을 서로
+혼합하지 않기 위한 것이다. canonical atom이나 compiled view에 들어가는
+authority·capability 값은 grant/revocation의
 `authority_ref`, `capability_grant_ref`, `policy_version_ref`와 검증 당시 attestation이다.
-현재 effective allow/deny, scope 해석과 transaction decision의 정본 소유자는 계속 `Π_t`다.
+현재 effective allow/deny와 scope 해석은 record owner가 아니라 `Inv_σ/Permit_σ`가
+검증하는 transition decision이다.
 
 ## 6. 구현에 대한 구체적 결론
 
@@ -201,7 +212,8 @@ LLM token event
    bytes/text, tokenizer/model digest, character/span map을 보존한다.
 2. **first-class incidence:** role, direction, source, time, authority/grant reference와
    attestation은 node/edge의 자유로운 metadata 문자열이 아니라 propagation과 검증을
-   바꾸는 typed input이다. 현재 effective permission은 `Π_t`가 판정한다.
+   바꾸는 typed input이다. 현재 effective permission은 `Inv_σ/Permit_σ`가 판정하며
+   해당 record의 responsibility owner가 self-authorize하지 못한다.
 3. **operator projections 분리:** `retrieve(W)`, `dispatch(W)`, `update(W)`는 같은 scalar를
    공유하지 않아도 된다. 진실, 효용, 활성, 권한을 혼합하지 않는다.
 4. **canonical/compiled 분리:** GPU star expansion을 써도 n-ary relation과 role의 원장은

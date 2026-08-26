@@ -9,7 +9,10 @@
 - For philosophy, research direction, or architecture work, establish the
   canonical role, separate target identity from current evidence, and state the
   conceptual delta before implementing. Do not default to code or tests.
-- Map implementation to `H/W/A/F/Π` and the outcome-bound causal-learning loop.
+- Do not map implementation to the retired fixed `H/W/A/F/Π` decomposition.
+  Map it instead to schema-approved canonical atoms, exactly one
+  schema-relative responsibility owner per atom, typed references,
+  provenance-bound transitions, and the outcome-bound causal-learning loop.
   Tests are evidence instruments, not HSWM progress by themselves.
 - Treat repository ontology and MCPs as bounded projections and interfaces, not
   as HSWM cognition, routing, or learning.

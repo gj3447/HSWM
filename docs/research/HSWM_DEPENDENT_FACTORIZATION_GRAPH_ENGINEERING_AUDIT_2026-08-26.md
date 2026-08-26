@@ -1,7 +1,7 @@
 # HSWM dependent factorization + graph engineering 적대 감사
 
-> **상태:** `SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE` /
-> `GRAPH_ENGINEERING_PROPOSED` / `UNJUDGED`
+> **상태:** `HISTORICAL_SECONDARY_AI_FORMALIZATION / SUPERSEDED` /
+> `UNJUDGED`
 > **기준일:** 2026-08-26
 > **대상:** `H/W/A/F/Π`의 독립성·최소성·완전성·유일성과 이를 보존하는
 > graph/hypergraph engineering 계약
@@ -16,6 +16,13 @@
 > representation theorem의 연구 설계는 `SECONDARY_AI_PROPOSED`다.
 > **비주장:** 이 문서는 구현 완료, 효능, 5역할의 유일성, HSWM의 절대적 새로움,
 > 의식·인격 또는 인류보편체의 실현을 주장하지 않는다.
+> **2026-08-26 supersession notice:** 이 감사의 고정 `H/W/A/F/Π` dependent
+> factorization은 현행 target identity나 canon이 아니다. 그 independence/gauge/graph
+> engineering 분석은 해당 형식이 왜 유일 존재론이 될 수 없는지를 재현하는 historical
+> `SECONDARY_AI` record로 남긴다. 현행 기준은 schema가 승인한 정본 원자에 대한 단일
+> 책임 owner의 schema-relative 계약이며, 다음 문서가 이를 대체한다:
+> [`USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md`](../canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md),
+> [`HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_SCIENTIFIC_PHILOSOPHY_2026-08-26.md`](HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_SCIENTIFIC_PHILOSOPHY_2026-08-26.md).
 
 ## 0. 답부터
 
@@ -152,7 +159,8 @@ Cartesian product 주장이 아니다. 더 정확한 타입은 다음과 같은 
 
 ## 5. `HWAFN`의 `N` 판별
 
-현재 canonical state 표기는 `H/W/A/F/Π`이며 literal `HWAFN`은 정본 객체가 아니다.
+2026-08-26 supersession 전 canonical state 표기는 `H/W/A/F/Π`였으며 literal `HWAFN`은
+당시 정본 객체가 아니었다.
 
 | `N` 의도 | 판정 |
 |---|---|
@@ -341,9 +349,9 @@ HSWM cognition, world-model efficacy 또는 continuous learning이 증명되지�
   evolving hypergraph learner라는 정체성은 유지한다.
 - `DIRECT_EVIDENCE`: 이 감사는 새 효능 증거를 만들지 않는다. 현재 과학 상태는
   `UNJUDGED`다.
-- `CLOSURE_CANDIDATE`: `H/W/A/F/Π`는 의존형 canonical responsibility chart이며, graph
-  backend와 readout은 bounded projection이라는 해석이 현재 정전과 선행연구를 가장 적게
-  과장한다.
+- `SUPERSEDED_CLOSURE_CANDIDATE`: `H/W/A/F/Π`를 의존형 canonical responsibility chart로,
+  graph backend와 readout을 bounded projection으로 읽는 해석은 당시 정전과 선행연구를
+  가장 적게 과장하려던 secondary proposal이었다.
 - `PROPOSED`: rewrite transaction, compiled-plane receipt와 representation-theorem 시험은
   아직 구현·판정되지 않은 공학 연구 계약이다.
 - `OPEN`: 5역할의 최소성, architecture-global identifiability, 대안 encoding 대비 우월성,

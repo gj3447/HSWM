@@ -1,5 +1,13 @@
 # HSWM Effect runtime
 
+> **Ontology boundary (2026-08-26):** `hswm-core-ontology*.ts` and the fixed
+> `H/W/A/F/Pi` responsibility bundle are retained v1 compatibility artifacts.
+> They are not the current HSWM ontology and must not be used as a fixed owner
+> registry for new canonical writes. The current target requires exactly one
+> schema-relative responsibility owner per admitted canonical atom; a generic
+> runtime v2 for that contract is not implemented yet. See the
+> [single-owner canon](../../../docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md).
+
 This private package is the TypeScript/Effect production-runtime seed for
 HSWM. It contains two distinct bounded engineering slices: the existing scalar
 outcome-credit transaction for an already eligible trajectory, and a

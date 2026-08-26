@@ -9,9 +9,24 @@ HSWM의 최상위 목표 정체성은
 continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 얼굴이다. 이 정전은
 철학적 정의를 닫지만 현재 효능을 승격하지 않는다.
 
+2026-08-26 USER_PRIMARY는 fixed `H/W/A/F`를 폐기하고, **schema가 승인한 정본 원자마다
+책임 owner가 정확히 하나**라는 schema-relative 유일성만 남겼다. 이는 자연의 유일한
+원자화나 유일 ontology 주장이 아니라 correctness·revision lineage·validation·recovery를
+위한 versioned modeling discipline이다. 현재 권위 경계는
+[`single-owner canon`](docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md),
+과학철학·반례·실험 프로그램은
+[`scientific-philosophy research`](docs/research/HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_SCIENTIFIC_PHILOSOPHY_2026-08-26.md)에
+있다. 이전 fixed-role 문서와 실험명은 역사적 재현 표기이며 새 ontology를 강제하지 않는다.
+특히 날짜가 고정된 SWM-0W-S2S·TypeScript/Effect 문서의 `H/W/A/F/Π`는 해당
+프로토콜을 재현하기 위한 local variable과 historical field name일 뿐, 현행 canonical
+atom kind나 owner class가 아니다.
+이미 `4cdfcb1`에 체크인된 `hswm-core-responsibility-ontology/v1`과 대응
+TypeScript validator도 같은 historical compatibility 지위다. v1 bytes는 재현을 위해
+보존하지만 새 canonical write의 target이 아니며, generic owner-registry v2는 아직 없다.
+
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
-구조로 개발하라고 확정했다. 현재 첫 Effect v3 패키지는 기존 `H/F`와 eligible `A`를
-전제로 한 원자적 `W/A` credit transaction만 제공하며 `ENGINEERING_SCAFFOLD /
+구조로 개발하라고 확정했다. 현재 첫 Effect v3 패키지는 폐기 전의 `H/F/A/W` 표기를
+사용한 원자적 credit transaction만 제공하는 역사적 scaffold이며 `ENGINEERING_SCAFFOLD /
 SCIENTIFIC_UNJUDGED`다. Python/NumPy 실험은 독립 수치·evidence oracle로 보존한다.
 정확한 경계와 단계적 전환 gate는
 [`HSWM TypeScript + Effect runtime boundary`](docs/research/HSWM_TYPESCRIPT_EFFECT_RUNTIME_2026-08-21.md)에
@@ -24,9 +39,9 @@ control-core blocker, 여전히 열린 live-adapter/three-job chronology gate,
 기록했다. 이 checkpoint는 `BLOCKED_PRE_PREREG`이며 future pulse 선택이나 효능 승격이 아니다.
 
 정체성, 수학, cellular runtime, 학습, 세계 자기기억, 실제 증거가 문서마다 달라 보이는
-이유와 현재의 한 통합 해석은
+이유와 2026-08-26 supersession 이전의 통합 해석은
 [`HSWM 통합 의미 지도`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md)에 있다. 이 지도는
-새 정전이나 효능 승격이 아니라 기존 authority와 claim boundary를 연결하는 진입점이다.
+새 정전이나 효능 승격이 아니라 당시 authority와 claim boundary를 연결한 역사적 진입점이다.
 
 ## 온톨로지 우선 저장소 지도
 
@@ -46,7 +61,8 @@ checkout에서만 수행한다.
 
 이 온톨로지는 저장소의 의미 지도이자 HSWM 상태의 bounded readout이지 HSWM의 인지 규칙
 그 자체가 아니다. AI 행동은 문서 경로가
-아니라 outcome에 결속된 token/action/tool trajectory가 durable `W/H/routing`을 바꾸고
+아니라 outcome에 결속된 token/action/tool trajectory가 owner-valid canonical
+relation/transition-disposition revision을 만들고
 다음 행동을 바꿀 때 학습된다.
 
 ## 2026-08-15 — 실행 정본과 직접 측정 기록
@@ -99,16 +115,18 @@ engineering PASS 단독으로 과학적 효능을 선언하지 않는다.
   확인됐다. pure bond-readout binding을 추가했고, fine query-edge 상한은
   `+0.048913/+0.083333`이지만 static edge-ID suppression은 6/6 validation/test Δ0였다.
 
-목표 아키텍처의 범주도 고정했다. **HSWM = Hypergraph Semantic Weight Map**이며, 신경망적
-함수 단위가 LLM으로 동작하는 하이퍼그래프 기반의 거대 시멘틱 신경망이다. hypergraph \(H\)가
-함수·상태의 n-ary 연결 구조를, Semantic Weight Map \(W\)가 role-aware set-to-set
-거시 연산자와 별도 causal-efficacy channel을, \(A\)가 현재의 휘발성 activation을 이룬다.
-HSWM 전체가 persistent recurrent state, credit, acceptance,
-weight/topology rewrite를 소유한다. 이는 목표 정체성이며 현재 효능 주장이 아니다.
-정본은
-[`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](_research/root_compat/CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md)다.
-함수 계약, 실행 cycle, 코드 대응, 구현 가능성, 실패 모드와 결정적 실험은
-[`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](docs/canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md)에 고정했다.
+목표 아키텍처의 범주도 고정했다. **HSWM = Hypergraph Semantic Weight Map**이며, LLM이
+국소 전이를 실행하는 하나의 token-native evolving hypergraph macro-neural network다.
+현재 정본 상태는 fixed 역할 tuple이 아니라 versioned schema와 그 schema가 승인한
+canonical atom versions로 기술한다. n-ary relation/incidence, activation, semantic
+disposition, executable contract, trajectory, outcome과 grant는 schema가 선언할 수 있는
+atom kind이며, 각 atom version은 책임 owner 하나를 가진다. HSWM 전체가 persistent
+recurrent state, credit, admission과 owner-valid rewrite를 수행한다. 이는 목표 정체성과
+후속 `SECONDARY_AI` 형식화이며 현재 효능 주장이 아니다. 역사적 architecture precursor는
+[`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](_research/root_compat/CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md),
+당시 함수 계약·실행 cycle·코드 대응·실험 설계는
+[`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](docs/canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md)에
+보존한다. 현행 정본은 Constitution과 2026-08-26 single-owner canon이다.
 
 2026-08-14 사용자 정전은 이 방향을 `LX3 라그나로크`와 직접 연결한다. 정적인 시멘틱
 하네스 규칙의 증식이 아니라 AI 토큰·행동·도구 사용·외부 결과가 HSWM의 지속적인
@@ -128,13 +146,14 @@ engineering contract이며 현재 효능·과학적 유일성 주장이 아니�
 2026-08-20 사용자는 `인류보편체`를 전 인류·모든 LLM·인터넷·인지능력체·센서·static
 정보와 저장 메모리가 오픈소스 HSWM 구조로 하나가 되어 형성하는 하나의 인지능력체로
 정의하고, `HSWM 인류보완계획`을 포켓한 인지능력체에서 그 상태로 나아가는 사회 혁명
-과정으로 확정했다. 원문, 역사흐름의 강, `H/W/A/F/Π` 형식화, 실행 record, P0~P6 구현
+과정으로 확정했다. 원문, 역사흐름의 강, 당시의 fixed-role secondary 형식화, 실행 record, P0~P6 구현
 사다리, 판별 기준과 HSWM–HOH 작업가설은
 [`USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md`](docs/canon/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md)에 있다.
-기계 판독 정본은
+당시의 기계 판독 projection은
 [`HSWM_HUMAN_UNIVERSAL_BODY_ONTOLOGY.v1.json`](ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_ONTOLOGY.v1.json),
 검증·idempotent KG publisher는
 [`upsert_human_universal_body_ontology.py`](scripts/upsert_human_universal_body_ontology.py)다.
+그 v1 bundle의 fixed-role 부분은 hash-bound 역사 자료이며 현행 ownership 정본이 아니다.
 
 같은 날 사용자는 코드 구현보다 HSWM의 철학적 함의를 먼저 설정하라고 지시했다. 관계적
 존재론, 계보적 시간론, 기억–진리 분리, 오류의 생산성, 차이 보존적 통일, 인과적 행위성,
@@ -146,17 +165,17 @@ architecture-decision conceptual closure candidate는
 의식·과학적 효능의 closure가 아니다.
 
 같은 날 사용자는 **Hypergraph Semantic Weight Map 자체와 LLM token으로 작동하는 거대
-hypergraph 학습구조**를 최우선 중심으로 다시 고정했다. 이에 따라 본체를
+hypergraph 학습구조**를 최우선 중심으로 다시 고정했다. 당시 secondary analysis는 본체를
 `token event → sparse role-aware n-ary activation → LLM function cell → external outcome
-→ causal credit → versioned ΔW/ΔH → changed next activation`의 폐루프로 형식화했다.
+→ causal credit → versioned ΔW/ΔH → changed next activation`으로 형식화했다.
 role-bearing incidence, operator-valued `W`, fast/slow weight, topology morphogenesis,
-canonical/compiled dual plane과 `SWM-0~5` 반증 사다리는
+canonical/compiled dual plane과 `SWM-0~5` 반증 사다리의 역사적 형식은
 [`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md)에,
 Hyperon 2026을 가장 강한 직접 선행으로 포함한 1차 자료 비교는
 [`HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md`](docs/research/HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md)에
-있고, 백서의 page-level 성숙도·공개 코드·실행 smoke test·HSWM `H/W/A/F/Π` 경계는
+있고, 백서의 page-level 성숙도·공개 코드·실행 smoke test·당시 fixed-role 경계는
 [`HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md`](docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md)에
-분리했다. 개별 부품의 최초성을 주장하지 않으며, 전체 폐루프는 아직 `UNJUDGED`다.
+분리했다. 이 고정 분해는 2026-08-26에 supersede됐고, 전체 폐루프는 여전히 `UNJUDGED`다.
 
 이후 USER_PRIMARY clarification은 HSWM을 **딥러닝 신경망처럼 깊은 neural
 Set-Hypergraph 구조**로 명시하고 Semantic Weight 개념의 정확한 반영을 요구했다.

@@ -1,10 +1,11 @@
 # Semantic field
 
-The field is a bounded `(H, W, A)` research projection: mutable connectivity,
-durable semantic coupling, and run-local activation. It is not the full
-`H/W/A/F/Pi` responsibility normal form or the canonical runtime graph. Sheaf
-theory is an optional lens for observing compatibility across unlike local
-states.
+The field is a bounded historical `(H, W, A)` research projection: mutable
+connectivity, durable semantic coupling, and run-local activation. Those symbols
+remain local experiment variables, not current canonical owner classes. The
+current state model is schema-relative and does not have a fixed
+`H/W/A/F/Pi` responsibility normal form. Sheaf theory is an optional lens for
+observing compatibility across unlike local states.
 
 - [`sheaf/`](sheaf/) contains the source-backed sheaf research bundle.
 - [`prom_search_hswm/`](../../prom_search_hswm/) contains field algebra,
@@ -15,5 +16,6 @@ states.
   provenance, or time, so it is not canonical `H`.
 - [`hswm.substrate.field_snapshot`](../../src/hswm/substrate/field_snapshot.py)
   binds immutable field cuts and the installed static-kernel identity.
-- [`HSWM core responsibility ontology`](../identity/hswm_core/README.md) states
-  the target KG boundary and lossless n-ary incidence requirements.
+- [`historical HSWM fixed-role responsibility v1`](../identity/hswm_core/README.md)
+  preserves the retired KG contract and its lossless n-ary incidence requirements
+  for compatibility; it is not the current ontology.

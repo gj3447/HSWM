@@ -1,10 +1,16 @@
 # HSWM 통합 의미 지도
 
-> **상태:** `CURRENT_SYNTHESIS / NAVIGATION`
+> **상태:** `HISTORICAL_SYNTHESIS / SUPERSEDED_NAVIGATION`
 > **기준 시점:** 2026-08-20
 > **과학적 상태:** `UNJUDGED`
 > **권위 경계:** 이 문서는 흩어진 뜻을 한 좌표계에 놓는 파생 지도다. 사용자 원문을
 > 새로 쓰거나, 기존 정전을 소급 변경하거나, 실험 결과를 승격하지 않는다.
+> **2026-08-26 supersession notice:** 이 문서의 fixed `H/W/A/F/Π` 통합은 당시의
+> `SECONDARY_AI` navigation formalization으로만 보존한다. 현행 정본은 fixed roles를
+> 폐기하고 schema-approved canonical atom마다 exactly one responsibility owner를 둔다.
+> 현재 진입점은
+> [`single-owner canon`](../canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md)과
+> [`scientific-philosophy research`](HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_SCIENTIFIC_PHILOSOPHY_2026-08-26.md)다.
 
 HSWM은 문서마다 메모리 substrate, semantic field, LLM function network, cellular
 metaneural system, plastic cognitive wiring, larger AI, world self-model로 불려 왔다.
@@ -12,7 +18,7 @@ metaneural system, plastic cognitive wiring, larger AI, world self-model로 불�
 완성도에서 본 말**이다. 혼란의 주원인은 목표와 현재 구현, scalar 측정치와 target
 operator, 철학적 목적과 과학적 증거가 같은 문장 안에서 자주 만났다는 데 있다.
 
-이 문서는 그 파편을 하나로 읽기 위한 현재 진입점이다.
+이 문서는 그 파편을 하나로 읽기 위한 2026-08-20 당시 진입점이다.
 
 ## 1. 가장 짧은 통합 정의
 

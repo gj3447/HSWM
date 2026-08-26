@@ -1,35 +1,42 @@
 # HSWM core responsibility ontology
 
-> 상태: `CANONICAL_TARGET_IDENTITY_PROJECTION_WITH_SECONDARY_AI_RESPONSIBILITY_NORMAL_FORM_CANDIDATE`
+> 상태: `RETIRED_FIXED_ROLE_V1 / RETAINED_REPRODUCIBILITY_ARTIFACT`
 >
 > 기계 계약: [`HSWM_CORE_RESPONSIBILITY_ONTOLOGY.v1.json`](HSWM_CORE_RESPONSIBILITY_ONTOLOGY.v1.json)
 >
 > 과학적 상태: `UNJUDGED`
+>
+> **2026-08-26 supersession:** 이 v1의 고정 `H/W/A/F/Π` owner registry와
+> exactly-five validator는 후속 USER_PRIMARY에 의해 현행 정본에서 폐기됐다.
+> JSON·TypeScript·시험 bytes는 이미 발표된 v1의 재현을 위해 보존하며 새 의미로
+> 조용히 수정하지 않는다. 현행 규칙은
+> [`schema-relative single-owner canon`](../../../docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md)이다.
+> generic schema-declared owner-registry v2는 아직 구현되지 않았다.
 
 이 디렉터리는 HSWM을 하나의 token-native LLM-function macro-neural network로
-이해한 뒤, 그 한 시스템의 canonical state를 `H/W/A/F/Π` 책임으로 읽는 로컬 KG
-온톨로지다. 저장소 파일, Neo4j, MCP, 이 JSON 문서가 HSWM의 인지 본체라는 뜻은
+이해한 뒤, 그 한 시스템의 canonical state를 당시 `H/W/A/F/Π` 책임으로 읽었던 로컬 KG
+온톨로지 v1이다. 저장소 파일, Neo4j, MCP, 이 JSON 문서가 HSWM의 인지 본체라는 뜻은
 아니다. 이들은 target identity와 향후 runtime state 사이의 **bounded projection**이다.
 
 ## 권위 경계
 
-- 하나의 HSWM, `S_t=(H_t,W_t,A_t,F_t,Π_t)`, token-native activation,
-  outcome-bound continuous-learning loop는 canonical target identity다.
-- 역할별 상세 소유권, primitive taxonomy, seam, 유일 책임 정규형은
-  `SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`다.
+- 하나의 token-native HSWM과 outcome-bound continuous-learning loop라는 target은
+  유지된다. 고정 `S_t=(H_t,W_t,A_t,F_t,Π_t)` 분해는 유지되지 않는다.
+- 역할별 상세 소유권, primitive taxonomy, seam과 유일 책임 정규형은 당시의
+  `SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`이며 현재는 superseded다.
 - 현재 통합 L1 causal macro-learning은 증명되지 않았다. 이 온톨로지는 목표를
-  정리하지 효능을 승격하지 않는다.
+  정리했던 역사 자료이지 효능을 승격하지 않는다.
 
 정전 시작점은
 [`HSWM_CONSTITUTION_2026-08-20.md`](../../../docs/canon/HSWM_CONSTITUTION_2026-08-20.md)이며,
 철학적 소유권 경계는
 [`HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md`](../../../docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md),
-최소 역할은
+당시 fixed-role 최소화 근거는
 [`HSWM_OCCAM_CORE_2026-08-20.md`](../../../docs/research/HSWM_OCCAM_CORE_2026-08-20.md)에
 둔다. 기계 번들의 `source_bindings`는 작성 중 변경이 감지되지 않은 source만 exact
 hash로 결속한다.
 
-## 유일 책임 정규형
+## v1 유일 책임 정규형 — 역사적 계약
 
 승인된 canonical primitive atom의 집합을 `X`, 역할 집합을
 `R={H,W,A,F,Π}`라고 하면 이 온톨로지가 요구하는 첫 번째 법은 다음이다.

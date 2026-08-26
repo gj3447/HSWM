@@ -17,6 +17,15 @@
   발화로 바꾸는 포괄 비준이 아니다.
 - **과학적 지위**: `UNJUDGED`. 이 문서는 목적·정체성·설계 불변식과 반증 경계를 고정한다.
   성능, 개인 동일성, 물리학 또는 구현 완성을 판결하지 않는다.
+- **2026-08-26 형식 supersession**: 세계기억·living world-model·token-native learning이라는
+  hard core는 보존한다. 다만 이 문서 안의 fixed `H/W/A/F/Π` tuple과 owner 해석은 당시의
+  `SECONDARY_AI_FORMALIZATION`으로서 역사적으로만 유효하고 현행 정본 형식이 아니다.
+  현재는 versioned schema가 승인한 canonical atom마다 exactly one responsibility owner를
+  두며, 관계·projection·transition·`Inv/Permit`을 고정 owner compartment와 구별한다.
+  현재 권위는
+  [`schema-relative single-owner canon`](USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md)과
+  [`scientific-philosophy research`](../research/HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_SCIENTIFIC_PHILOSOPHY_2026-08-26.md)에
+  있다.
 - **권위 분리**:
   - `USER_PRIMARY`: §10의 직접 사용자 원문과 그 원문에서 직접 추적되는 §0, §5.1의
     방향 명제. 정규화된 문장은 원문의 뜻을 보존한 요약이지 새로운 사용자 발화가 아니다.
@@ -449,11 +458,16 @@ outbox, replay와 일부 좁은 실험 기반이다. 다음은 완료 주장할 
 
 ### USER_PRIMARY 직접 원천
 
+- 2026-08-26 fixed `H/W/A/F` 폐기와 schema-approved canonical atom의
+  schema-relative single-owner 방향
+  - [`USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.txt`](sources/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.txt)
+  - SHA-256: `2093d9bb68219d6ba859444dc00aeef985a5c9151163e56972516addb2cd0ec6`
+  - current canon: [`USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md`](USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md)
 - 2026-08-20 Hypergraph Semantic Weight Map 자체와 LLM token 기반 거대 학습구조를
   최우선 중심으로 둔 사용자 원문
   - [`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.txt`](sources/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.txt)
   - SHA-256: `03ddd83fae4b98f8e1ee7cfa5e139d3bc98a7614cae7e33e0e55899651506c8c`
-  - canonical formalization: [`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md`](USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md)
+  - historical superseded formalization: [`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md`](USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md)
 - 2026-08-20 구현보다 철학적 함의를 먼저 설정한다는 HSWM 연구 순서
   - [`USER_PRIMARY_HSWM_PHILOSOPHICAL_PRECEDENCE_2026-08-20.txt`](sources/USER_PRIMARY_HSWM_PHILOSOPHICAL_PRECEDENCE_2026-08-20.txt)
   - SHA-256: `888428000431731ba805f067e5753e667baa314243ead9d03d508504507d69a8`

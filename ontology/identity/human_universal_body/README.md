@@ -1,5 +1,11 @@
 # Human Universal Body ontology
 
+> **2026-08-26 boundary:** the Human Universal Body target and HSWM Human
+> Complementation Plan remain current. Fixed `H/W/A/F/Pi` decomposition in this
+> README and its machine bundle is a superseded `SECONDARY_AI` v1 formalization,
+> retained as a hash-bound historical projection. Current ownership guidance is
+> the [schema-relative single-owner canon](../../../docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md).
+
 This bundle is the machine-readable philosophical and architectural spine that
 connects three user-ratified directions:
 
@@ -47,7 +53,7 @@ exact USER_PRIMARY source
       → difference-preserving composite individuation
       → routing as distributed cognitive power
       → constitutionally bounded plural teleology
-  → existing token-hypergraph H/W/A/F/Π core
+  → historical token-hypergraph H/W/A/F/Π v1 projection
   → USER_PRIMARY Occam-minimization direction
       → SECONDARY Counterfactual Continuation Axiom
       → computation / constitution two-irreducible boundary
@@ -62,7 +68,7 @@ engineering thesis is:
 
 > **Semantic Weight = learned, role-conditioned causal difference.**
 
-This does not replace the canonical `H/W/A/F/Π` identity. It removes duplicated
+At the time, this did not replace the then-canonical `H/W/A/F/Π` identity. It removed duplicated
 ontology around it: `H` addresses and preserves the relation, `W` is the
 relation's recipient-sensitive disposition, `A` is its current finite
 application, `F` realizes the local transition, and `Π` independently decides

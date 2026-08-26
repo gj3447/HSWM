@@ -10,6 +10,15 @@
 > 해석만 `SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`로 구분한다.
 > **비주장:** 이 문서는 현재 구현, 효능, 절대적 새로움, 의식, 인격 또는
 > 인류보편체의 완성을 주장하지 않는다.
+>
+> **2026-08-26 supersession notice:** §2.1의 고정 `H/W/A/F/Π` 책임 좌표계는
+> 더 이상 현행 연구 형식이 아니다. 그것은 당시의 `SECONDARY_AI` 최소화 시도와
+> 반례를 재현하기 위한 historical record로 보존한다. 현행 최소 원칙은
+> “schema가 승인한 정본 원자마다 정확히 하나의 책임 owner”라는
+> schema-relative 계약이며, 그 USER_PRIMARY 지시와 과학철학적 연구 설계는
+> [`USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md`](../canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md)와
+> [`HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_SCIENTIFIC_PHILOSOPHY_2026-08-26.md`](HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_SCIENTIFIC_PHILOSOPHY_2026-08-26.md)에
+> 둔다.
 
 ## 0. 결론
 
@@ -135,20 +144,21 @@ S\in
 | `Π` 표현↔집행 | policy 저장·컴파일 위치를 옮겨도 current deny·revocation·rollback이 우회 불가능한가 |
 
 경계가 독자적인 failure와 책임을 만들지 못하면 합치거나 다시 factorize해야 한다. 반대로
-시험을 통과해도 자연적 유일성은 증명되지 않는다. 현재 방어 가능한 것은 폐쇄된 primitive
+시험을 통과해도 자연적 유일성은 증명되지 않는다. 2026-08-26 supersession 전 당시
+방어하려던 것은 폐쇄된 primitive
 grammar와 관측·개입·권리 계약 아래의 **schema-relative responsibility normal form**뿐이다.
 gauge 반례, 정규화와 `unique up to typed isomorphism`의 증명 부담은 상세 감사 문서가
 단일 책임을 가진다.
 
 ### 2.2 약어와 update/evidence 표기
 
-공식 헌법 표기는 `H/W/A/F/Π`다. 문자 그대로의 `HWAFN`은 canonical 약어가 아니며
+당시 공식 헌법 표기는 `H/W/A/F/Π`였다. 문자 그대로의 `HWAFN`은 당시 canonical 약어가 아니며
 `N`의 뜻을 먼저 밝혀야 한다. `N=normative boundary`라면 `Π`의 비공식 ASCII 별칭일
 뿐이고, `N=network/neural`이라면 `H/W/A/F`가 이루는 전체 또는 그 projection이라서
 독립 owner가 아니다. `N=learning/update`라면 snapshot의 여섯째 물질이 아니라 system
 transition/learning signature에서 다룬다. 특히 저장소의 `\mathcal N_t`는
-network/Internet projection으로 이미 쓰이므로, 연구 수식과 정본 schema에는 `Π`를
-유지하고 새 canonical object를 추가하지 않는다.
+network/Internet projection으로 이미 쓰였으므로, 당시 연구 수식과 schema에는 `Π`를
+유지하고 새 object를 추가하지 않는다고 제안했다.
 
 또한 update operator의 관습적 `U`와 §3.3 evidence channel `U_e`는 읽을 때 충돌하기
 쉽다. 이 문서 이후의 새 설계에서는 episode transition과 durable update를

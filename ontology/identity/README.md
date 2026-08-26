@@ -1,21 +1,22 @@
 # Identity
 
-HSWM is the larger persistent neural system: LLMs execute local semantic
-functions, while the hypergraph field owns recurrent activation, macro-weights,
-connectivity, and learning across those functions.
+HSWM is the larger persistent neural process: a versioned schema admits
+canonical atom versions and typed relations, while LLM-executed transitions and
+outcome-bound revision make the evolving hypergraph a recurrent world model and
+learner. The current ownership rule is defined by the
+[schema-relative single-owner canon](../../docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md).
 
 Start with the repository [README](../../README.md) and the
-[unified meaning map](../../docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md),
+[historical unified meaning map](../../docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md),
 then follow the preserved
 [token-learning direction](../../docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md)
 and [The World Remembers](../../docs/canon/THE_WORLD_REMEMBERS.md).
 
-The bounded machine-readable projection of the core `H/W/A/F/Π`
-responsibility contract lives in [`hswm_core/`](hswm_core/). It defines a
-versioned unique-owner target normal form, seams, transition families, and
-projection nonclaims. It is not the runtime HSWM graph, and its detailed
-responsibility closure remains a `SECONDARY_AI` candidate rather than present
-scientific evidence.
+The checked-in [`hswm_core/`](hswm_core/) bundle records the superseded fixed
+`H/W/A/F/Π` responsibility v1. It is retained unchanged as a historical,
+hash-bound compatibility and reproducibility artifact; it is not the current
+target ontology or an admissible template for new canonical writes. A
+schema-generic owner-registry v2 has not yet been implemented.
 
 The maximum target composition is the
 [Human Universal Body](../../docs/canon/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md):

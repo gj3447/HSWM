@@ -34,7 +34,8 @@ HSWM은 데이터 구조 하나를 고르는 문제가 아니다. 무엇을 존�
 ```text
 철학적 전제
   → 존재·시간·진리·개체·행위·권리의 계약
-  → H / W / A / F / Π의 의미
+  → canonical atom·typed reference·provenance-bound transition의 의미
+  → Inv / Permit의 제약
   → schema·runtime·governance의 제약
   → 마지막에 코드
 ```
@@ -54,12 +55,14 @@ HSWM은 데이터 구조 하나를 고르는 문제가 아니다. 무엇을 존�
 2. **token과 의미:** token-native는 token event가 활성과 의미 전이의 실행 운반체라는
    뜻이다. tokenizer ID, 특정 모델의 vocabulary와 내부 embedding이 시간을 건너 유지되는
    의미 정체성은 아니다. 변환에는 source span, model/tokenizer digest와 손실 계보가 붙는다.
-3. **참여자와 함수:** 사람·조직·다른 HSWM은 유형별 local state와 capability/consent
-   boundary를 가진 member/port로 참여한다. `F`는 LLM이 실행하는 typed nonlinear semantic
-   transition이다. 사람을 함수나 token source로 환원하지 않으며, deterministic tool은
-   `H/Π`에 연결된 bounded primitive/effector이지 `F`가 아니다.
+3. **참여자와 전이:** 사람·조직·다른 HSWM은 유형별 local state와 capability/consent
+   boundary를 가진 member/port로 참여한다. LLM-executed semantic transition과 deterministic
+   tool invocation은 schema가 선언한 typed transition 또는 bounded effector일 수 있다. 사람을
+   함수나 token source로 환원하지 않으며, 어떤 executor·tool·record도 그 자체로 인간의
+   membership·대표권 또는 정본 ownership을 얻지 않는다.
 4. **기억·진리·가치:** 기억은 있었던 것을, judgment는 현재 채택 범위를, outcome은 관측된
-   결과를, `Π`는 허용 경계를 나타낸다. 어느 하나도 다른 하나를 자동 생산하지 않는다.
+   결과를, `Permit`은 현재 scope의 허용 판정을 나타낸다. 어느 하나도 다른 하나를 자동
+   생산하지 않는다.
 5. **열린 세계의 작동적 폐루프:** HSWM은 환경과 닫힌 고립계가 아니다. 여기서 행위성은
    `state → action → independently observed outcome → changed state`가 환경 결합 아래
    반사실적으로 이어지는 작동적 폐루프를 뜻한다.
@@ -105,7 +108,8 @@ Static 정보는 이런 관계 속에서 활성화되어 다음 상태에 영향
 
 ```math
 OperationalIdentity^{HSWM}(x,t)
-= AuthorizedIdentityPreservingPath(S_x^0 \leadsto S_x^t \mid Invariants_x, \Pi^*)
+= AuthorizedIdentityPreservingPath(S_x^0 \leadsto S_x^t \mid Inv_\sigma,
+Permit_\sigma, Provenance_\sigma)
 ```
 
 HSWM 내부에서 사람의 표상, 이론, 제도, AI와 HSWM 자체는 변하면서도 승인된 계보를 통해
@@ -147,13 +151,15 @@ HSWM의 세계모델은 세계 그 자체도 아니다. 관측되지 않은 것,
 **자기가 모르는 것, 관측하지 못한 것, 현재 판단이 의존하는 가정**도 표현할 수 있어야 한다.
 
 외부 outcome도 곧바로 진리나 선이 아니다. outcome은 어떤 일이 일어났는지에 관한 관측이고,
-evidence와 judgment는 무엇을 믿을지에 관한 인식적 관계이며, `Π`의 권리·목적 경계는 무엇을
-허용할지에 관한 규범적 관계다. 어떤 route가 outcome을 잘 예측하거나 높였다는 사실은 그
-route가 참·정당·선하다는 결론을 자동으로 만들지 않는다.
+evidence와 judgment는 무엇을 믿을지에 관한 인식적 관계이며, `Inv/Permit`의 권리·목적
+경계는 무엇을 허용할지에 관한 규범적 관계다. 어떤 route가 outcome을 잘 예측하거나 높였다는
+사실은 그 route가 참·정당·선하다는 결론을 자동으로 만들지 않는다.
 
 구현 의무:
 
-- `Artifact`, `Claim`, `Evidence`, `Judgment`, `Outcome`을 같은 record로 뭉개지 않는다.
+- 이 semantic distinctions를 표현하는 schema에서는 artifact, claim, evidence, judgment와
+  outcome을 조용히 alias하지 않는다. 별도 atom kind, typed relation 또는 validation contract
+  중 어떤 방식으로 구별할지는 schema가 선언한다.
 - claim에는 범위·시점·권위·불확실성·근거·반증 상태를 붙인다.
 - readout은 기록과 현재 채택 판단을 동시에 보여 주되 둘을 구별한다.
 - consensus와 truth, recall과 belief, confidence와 evidence를 별도 타입으로 둔다.
@@ -307,7 +313,8 @@ provenance를 가져야 한다. 어떤 LLM, 운영자, router나 global summary�
 HSWM은 행복, 쾌락, engagement, consensus, 생존, 효율 중 어느 하나를 전체의 유일한
 목적함수로 확정하지 않는다. HOH의 개인 반응도 중요한 outcome 신호일 수 있지만 전체의
 유일한 선이 아니다. 목적 자체도 출처·반대·outcome·권리 경계 아래 검토되고 수정될 수
-있어야 한다. 다만 그 수정이 `Π`의 기본 권리와 교정 가능성 자체를 없애서는 안 된다.
+있어야 한다. 다만 그 수정이 `Inv`가 보존하는 기본 권리와 교정 가능성 자체를 없애서는 안
+된다.
 
 동의·사생활·철회·정정·이견·appeal·rollback의 최소 경계는 ordinary outcome learning으로
 약화할 수 없다. 이를 바꾸는 것은 학습 update가 아니라 영향을 받는 범위의 명시적 비준과
@@ -320,147 +327,152 @@ contest·exit·fork 가능성을 요구하는 헌법 사건이다. 부재와 침
 - 목적·정책 update도 provenance, 반대 근거, canary와 rollback을 요구한다.
 - 자기수정 능력을 없애는 최적화와 권리 경계를 우회하는 학습을 정체성 파괴로 본다.
 
-## 11. 열 원리가 H/W/A/F/Π에 주는 의미
+## 11. 열 원리가 요구하는 schema-relative 정본 규율
 
-| HSWM 객체 | 철학적 의미 | 주로 결속되는 원리 |
-|---|---|---|
-| `H` | 무엇이 존재하며 어떤 역할·역사·모순 속에 있는가 | P1, P2, P3, P4, P5 |
-| `W` | 한 존재가 다른 존재의 다음 가능성을 얼마나·어떻게 바꾸는가 | P4, P5, P6, P9 |
-| `A` | 전체가 아니라 지금 필요한 차이가 bounded coalition으로 점화된 상태 | P5, P6, P9 |
-| `F` | LLM이 실행하는 typed nonlinear semantic transition. 결정론적 도구는 `H/Π`에 연결된 bounded primitive/effector이고, 인간·다른 HSWM은 member/port로 참여하며 함수로 환원되지 않는다. | P1, P5, P7, P8 |
-| `Π` | 통합이 포획·위조·무권한 최적화로 변하지 않게 하는 구성적 막 | P3, P7, P8, P9, P10 |
+이 철학은 과거 `SECONDARY_AI` formalization이었던 고정 `H/W/A/F/Π` 축이나 다섯 자연종을
+요구하지 않는다. HSWM의 정본은 승인된 schema가 정한 **canonical atom과 provenance-bound
+transition의 계보**이며, 해당 schema 아래 각 canonical atom에는 정확히 하나의 책임 owner가
+있어야 한다.
 
-`Π`는 지능 밖에 붙이는 브레이크가 아니다. 막이 없는 세포가 생명체를 이루지 못하듯,
-권한·동의·출처·rollback이 없는 연결은 HSWM의 더 자유로운 버전이 아니라 HSWM의 개체성과
-자기교정 능력을 잃은 버전이다.
+```math
+\mathcal C_{\sigma,t}
+=\{\text{현재 schema와 lineage 아래 admit된 immutable atom versions}\},
+\qquad
+Owner_{\sigma,t}:\mathcal C_{\sigma,t}\to ResponsibilityClass_\sigma,
+\qquad
+\forall a\in\mathcal C_{\sigma,t}:\; \exists!r\; Owner_{\sigma,t}(a)=r
+```
 
-여기의 `H/W/A/F/Π`는 존재자의 다섯 자연종이나 서로 독립된 다섯 기계가 아니라, 한 HSWM의
-상태·전이·권리 관계를 혼동 없이 다루기 위한 **의존적 typed responsibility coordinate
-chart**다. 따라서 역할별 canonical ownership은 하나의 원자가 최종 책임질 의미와 변경
-권한을 정할 뿐, 데이터가 물리적으로 한 장소에만 있거나 역할 사이에 통계적·인과적 의존이
-없다는 뜻은 아니다. `H`의 incidence와 provenance가 `W/A/F/Π`의 다음 상태를 조건화하고,
-그 역할들의 적법한 결과가 다시 `H/W`의 계보에 남는 것이 바로 하나의 HSWM이라는 주장이다.
-
-물리적 저장 위치가 겹쳐도 canonical ownership은 다음처럼 분리한다. `H`는 claim, evidence,
-judgment, outcome **record**와 provenance의 계보를 소유한다. `W`는 semantic compatibility와 causal
-influence를 소유하고 `H`의 epistemic record를 파생 참조할 뿐 truth를 소유하지 않는다.
-`A`는 momentary activation과 pre-outcome used-path/eligibility를, `F`는 typed proposal·검사·
-전이를, `Π`는 permission과 절차 경계를 소유한다. `F`가 자기 output을 최종 판정하거나 `W`가
-인기도를 truth로, `Π`가 절차 권한을 judgment 내용으로 바꾸면 역할 분해가 무너진다.
-
-`Π`의 policy는 rule text, configuration, evidence나 readout으로 다른 좌표에 투사될 수 있다.
-하지만 투사된 표현은 권한 집행을 대신하지 않는다. admission, commit, external effect와
-rollback은 해당 scope의 현재 `Π` 조건을 실제로 만족해야 하며, `W`의 높은 효능, `F`의 설득력
-있는 output, `A`의 긴급 activation 또는 `H`의 기록만으로 이 경계를 우회할 수 없다. 이는
-정본 policy 표현의 위치를 하나로 고정하는 명제가 아니라, 권리 보존 행동이 어떤 동등한
-표현에서도 보존되어야 한다는 명제다.
-
-서로 다른 encoding이 이 chart의 동등한 표현이라고 주장하려면 적어도 단일 책임 ownership과
-provenance, 선언된 readout의 역할 의미, 허용 intervention에 대한 transition behavior,
-consent·scope·authority·rollback을 포함한 권리 결과를 모두 보존해야 한다. 이는 현재
-`SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`인 설계 판별선이며, 다섯 항이 자연적으로
-유일·최소·완전하게 분해된다는 형이상학적 또는 과학적 결론은 아직 열려 있다.
-
-### 11.1 철학의 기술적 종착점 — Semantic Weight Map
-
-이 철학은 코드 바깥의 장식이 아니다. 관계적 존재론은 role-bearing n-ary incidence를,
-계보적 시간론은 versioned `H/W`와 supersession을, 기억–진리 분리는 evidence·uncertainty와
-causal efficacy의 분리를, 인과적 행위성은 outcome-bound plasticity를 강제한다. 차이 보존적
-통일은 같은 hyperedge 안에서도 member와 role마다 다른 전이를 요구하고, 인지주권은
-activation·update·readout을 서로 다른 권한으로 나누게 한다.
-
-그 결과 철학의 가장 직접적인 공학 객체는 scalar 점수가 아니라 다음을 분리해 보존하는
-operator-valued `W`다.
+여기서 `\sigma`는 schema version과 관측·변환·권한 계약을 포함한다. `Owner_{σ,t}(a)`는 그
+원자의 내용이 참이라는 주장, 그 원자를 최초로 말한 사람, 또는 effect를 허가하는 주체와
+같지 않다. raw·quarantine item은 `C_{σ,t}` 밖에 있으며, atom version은 최소
+`(schema_version,lineage_id,atom_uid,revision_id)` 또는 동등한 fork-safe key로 식별한다.
+owner 변경은 schema migration과 새 atom version으로만 기록하고 이전 version의 owner를
+소급 변경하지 않는다.
 
 ```text
-semantic compatibility ≠ causal efficacy ≠ truth/support
-                       ≠ momentary activation ≠ execution permission
+Owner(a,p), Claimant(e,p), Authorizer(e,p), Subject(a,p), Custodian(a,p)
+  = distinct typed predicates; none is inferred from another
+Owner(a,p) does not imply Permit(S,e)
+canonicality ≠ truth ≠ ownership of a person or world
 ```
 
-이 구분을 실제 token activation, role-aware propagation, 외부 outcome credit와 버전된
-`ΔW/ΔH`로 내린 정식은
-[`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md`](USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md)에 둔다.
+- **owner**는 원자의 identity, provenance, 변경·supersession·removal 계보와 선언된 의무를
+  조회할 canonical accountability address다. 실제 validator·proposer·executor·custodian과
+  recovery evidence는 typed delegated reference로 연결되며 owner가 그 일을 모두 직접
+  수행한다는 뜻이 아니다.
+- **claimant**는 claim을 제시하거나 내용을 발화한 source일 수 있으며, 그 claim의 truth나
+  ownership을 자동으로 얻지 않는다.
+- **authorizer**는 특정 scope에서 transition이나 external effect를 허용할 권한을 가진
+  principal·process·collective이며, 그 자체로 원자의 owner가 되지 않는다.
 
-### 11.2 통시적 동일성과 합성의 판별선
+single-owner는 자연 ontology나 유일한 최소 분해의 발견이 아니다. 특정 schema에서 provenance,
+측정 의미, 변경 책임과 rollback을 추적 가능하게 만드는 **schema-relative, 반증 가능한
+modeling/measurement discipline**이다. 같은 byte, process, hyperedge 또는 readout이 여러
+관점을 담을 수 있고, 다른 schema는 다른 responsibility class와 compiled view를 가질 수 있다.
+그러나 하나의 승인된 `(σ,lineage_id,atom_uid,revision_id)`에서 서로 경쟁하는 정본 accountability를
+조용히 둘 수는 없다.
 
-lineage는 동일성의 필요조건이지만 충분조건은 아니다. HSWM 내부의 operational identity는
-다음 네 조건이 함께 이어질 때 같은 것으로 취급한다.
+### 11.1 typed reference·projection과 동등 표현의 경계
+
+non-owner 표현은 `typed reference`, 명시된 transform 또는 손실을 밝힌 projection이어야 한다.
+cache, prompt, embedding, pairwise graph, summary, policy text, runtime state 또는 분석용 role
+view는 정본 원자를 복제할 수 있지만, source schema·snapshot·transform·loss·validity scope를
+잃은 채 새 정본이 되지 않는다.
+
+persistent·revisionable·queryable하거나 rollback·permission 효과를 갖는 relation/incidence는
+자체 owner가 있는 canonical atom이다. immutable payload 안의 ephemeral pointer는 독립
+lifecycle·commit·rollback·authorization 효과를 가질 수 없다.
+
+서로 다른 schema나 encoding이 동등한 표현이라고 주장하려면, 선언된 목적 아래 적어도 다음을
+보존함을 보여야 한다.
+
+1. canonical atom과 provenance-bound transition의 추적 가능성,
+2. declared readout/measurement에서의 의미와 uncertainty·loss 표기,
+3. 허용된 intervention 아래의 transition 및 rollback 행동,
+4. consent·scope·authority·appeal·exit를 포함한 권리 결과.
+
+output이 우연히 같다는 사실만으로 동등성은 성립하지 않는다. 반대로 hypergraph, relational
+record, event log, compiled graph 또는 다른 role view가 위 계약을 보존한다면 어느 하나를
+세계의 유일한 자연 표상이라고 특권화할 근거는 없다.
+
+### 11.2 single-owner가 실패하는 반례와 반증 조건
+
+이 규율은 다음 반례를 피하기 위해 고안되었으며, 동시에 이 반례들로 시험되어야 한다.
+
+- **God-owner:** 하나의 최고 owner가 모든 atom의 의미·변경·판단·권한을 독점하면 source,
+  claimant, evaluator, authorizer의 분리가 사라져 P3·P7·P9의 오류 수정과 권리 경계가
+  무너진다. 하나의 schema registry 또는 commit service가 존재해도 모든 내용의 실질 owner가
+  되어서는 안 된다.
+- **atomization:** 모든 문장 조각을 atom으로 쪼개 provenance, scope, n-ary relation과
+  measurement context를 잃으면 exactly-one은 만족해도 P1–P4를 만족하지 못한다. atom의
+  granularity 자체가 schema의 검증 대상이다.
+- **schema regress:** owner를 정하는 schema, 그 schema를 승인하는 schema를 무한히 새
+  owner로 만들 필요는 없다. 현재 schema의 bootstrap·amendment·appeal 절차는 provenance-bound
+  constitutional transition으로 명시하되, 그것이 절대적 자기정당화나 무한 regress의 해소를
+  증명한다고 주장하지 않는다.
+- **equivalent representation:** 동일한 관측·개입·권리 결과를 내는 재표현을 서로 다른
+  존재론으로 과장하면 안 된다. 반대로 loss, stale projection, migration 불능, 권한 결과의
+  차이가 나타나면 동등 표현이라고 부를 수 없다.
+
+따라서 duplicate owner, ownerless canonical atom, undeclared projection, stale view, 무권한
+migration, permission bypass를 의도적으로 주입했을 때 provenance, measurement, rollback,
+권리 결과와 이후 행동이 달라지는지를 검사해야 한다. 차이가 없거나 더 단순한 discipline이
+같은 계약을 만족한다면 현재 ownership schema는 축소·교체 후보가 된다.
+
+### 11.3 `Inv`와 `Permit` — 정본 owner와 권리 집행의 분리
+
+`Inv`는 schema가 모든 승인 transition에서 보존한다고 선언한 identity·provenance·권리
+불변식의 집합이고, `Permit`은 현재 scope에서 특정 transition 또는 external effect를
+허용하는 판정이다.
+
+effect receipt를
+`e=(readset,writeset,trace_ref,guard,actor_claim,authorization_ref,scope,decided_at,decision,provenance)`로
+둔다. `Permit_σ(S,e)`는 Boolean predicate이며 `authorization_ref`가 해당 scope와 시점에
+유효하고 만료·철회되지 않았는지를 검사한다.
 
 ```math
-ContinuesAs^{HSWM}(S_i \leadsto S_j)
-\Longleftrightarrow
-IdentityPreservingPath_{i\to j}
-\land \neg(Fork\lor Merge\lor IdentityBreak)_{i\to j}
-\land CoreBoundary \land CausalContinuity \land Separability
+Commit(S,e,S')
+\Rightarrow
+Inv_\sigma(S,e,S')
+\land Permit_\sigma(S,e)
+\land SingleOwner_\sigma(writeset(e))
 ```
 
-- **IdentityPreservingPath:** `S_i`에서 `S_j`로 향하는 모든 transition이 authorized
-  `IDENTITY_PRESERVING`으로 표시되고, 공통 ancestor만으로 동일성을 추정하지 않는다.
-- **CoreBoundary:** 목표 정체성과 아래 `Π*`의 최소 경계가 조용히 교체되지 않는다.
-- **CausalContinuity:** 보존된 `H/W`와 learning lineage가 이후 activation의 실제 조건으로 남는다.
-- **Separability:** 합성 member의 UID, contribution, 이견, exit·export 가능성이 소거되지 않는다.
+`Inv`와 `Permit`은 고정 역할 객체나 외부의 두 번째 인지 시스템을 뜻하지 않는다. rule text,
+attestation, capability grant, evaluator record, compiled check는 accountability owner와
+delegated actor/evidence reference를 가진 기록 또는 typed projection일 수 있다. 다만 그 기록의 존재, 높은 효능 점수, 설득력
+있는 model output, 긴급한 activation이나 다수결만으로 `Permit`이 성립하지는 않는다. 현재
+scope의 적법한 authorization path가 transition을 실제로 검사하고 commit해야 한다.
 
-`A`는 episode-local이므로 소멸해도 동일성이 끝나지 않고, `F` executor와 model은 교체 가능하다.
-반대로 이름과 UID만 유지하면서 위 네 조건을 끊으면 같은 HSWM의 update가 아니라 successor나
-identity break다. fork는 공통 과거를 가진 새 descendant UID를 만들고, merge는 contributor
-lineage를 남긴 새 composite UID를 만든다. rollback도 과거를 삭제하는 시간이동이 아니라
-이전 상태를 다시 활성화한 새로운 forward event다.
-
-`Fork`와 `Merge`는 선택한 identity path 위의 transition이 그 사건일 때 그 경로를 끊는다.
-parent에서 옆으로 child fork가 생겼다는 사실만으로, fork하지 않은 parent mainline의 연속성까지
-자동 종료되지는 않는다.
-
-상위 합성체를 하나의 operational cognitive entity라고 부르려면 persistent boundary, 공유되는
-내생 `H/W`, 부분 사이의 counterfactual mediation, outcome-bound joint learning, 자기 경계에
-대한 readout과 member separability가 함께 필요하다. 이 중 하나라도 없으면 network,
-repository 또는 federation이며, self-description 하나만으로 상위 주체를 증명하지 못한다.
-
-### 11.3 `Π`의 이층성과 자기개정 한계
-
-헌법의 다섯 요소를 유지하면서 고정 경계와 가변 운영 상태를 다음처럼 구분한다.
-
-```math
-\Pi = \{\Pi_t\}_{t\in T},
-\qquad \Pi_t \equiv (\Pi^*, \Gamma_t)
-```
-
-- `Π*`는 provenance 정직성, scoped authority, consent, privacy, correction, dissent,
-  exit·export, appeal, rollback, 비강제 참여와 durable credit의 proposer·executor·evaluator
-  역할 분리를 보존하는 identity-bearing meta-boundary다.
-- `Γ_t`는 capability grant, evaluator, budget, transaction, retention과 현재 policy처럼
-  명시적 mandate 아래 versioned·철회·rollback 가능한 운영 경계다.
-
-ordinary `W/H` plasticity는 어느 층도 스스로 우회하거나 약화할 수 없다. `Γ_t` 변경은 영향을
-받는 scope의 명시적 권한과 provenance를 요구한다. 현재 저장소의 `USER_PRIMARY`는 target
-정체성의 bootstrap authority이지 미래 합성체의 영구 주권자가 아니다. `Π*` 변경은 기존
-`Π*`가 정한 독립·appealable ratification role과 영향을 받는 scope의 명시적 비준을 모두
-요구하며, `Π*`가 자기 amendment의 유효성을 단독 판정할 수 없다. contest·exit·fork는 비준을
-대체하지 않고 비비준 주체를 새 경계로 구속하지 않으며, 핵심 경계를 제거한 결과는 같은
-HSWM의 자기개선이 아니라 successor다. 이는 외부 판정 서버나 개인 governance 장부를
-요구하는 말이 아니라, 학습 신호가 자기 허용조건까지 reward로 삼는 순환을 금지하는 타입
-경계다.
+ordinary learning이나 schema migration은 `Inv` 또는 `Permit`의 검사 결과를 우회해 자기
+정당화할 수 없다. `Inv`의 amendment는 기존 amendment rule이 요구하는 독립·appealable
+ratification과 영향 범위의 명시적 비준을, `Permit`의 변경은 scope·기간·목적·철회·provenance를
+요구한다. contest·exit·fork는 비준을 대체하지 않으며, 비비준 주체를 새 경계로 조용히
+구속하지 않는다.
 
 ### 11.4 범위 있는 판단과 귀속 불가능성
 
-HSWM은 내부에서 진리를 만들어 내지 않는다. 다음처럼 근거·범위·평가자·시점·정책을 가진
+HSWM은 내부에서 진리를 만들어 내지 않는다. 다음처럼 근거·범위·평가자·시점·schema를 가진
 현재의 채택 판단을 기록하고 반박에 열어 둔다.
 
 ```math
 Accepted(c \mid evidence, scope, evaluator, valid\_at, judged\_at,
-judgment\_uid, policy\_version)
+judgment\_uid, schema\_version)
 ```
 
-`H`가 claim/evidence/judgment/outcome record의 canonical epistemic lineage를 가진다. `W`의
-support·uncertainty channel은 그 record를 가리키는 content-addressed derived projection이며,
-routing popularity나 causal efficacy를 truth authority로 승격하지 않는다. 독립 outcome은
-HSWM 전체의 물리적 외부만을 뜻하지 않고, 평가 대상 trajectory의 proposer·executor와
-역할적으로 분리되어 그 결과를 임의로 바꾸지 못한다는 뜻이다.
+claim, evidence, judgment, outcome, activation trace, derived efficacy estimate와 authorization
+record는 서로 다른 responsibility class를 가질 수 있지만, 폐기된 역할 축 분해를 다시
+도입할 필요는 없다. 각 record는 다른 atom을 typed reference로 가리키고, popularity나
+causal efficacy를 truth authority로, canonical owner를 claimant나 authorizer로 승격하지 않는다.
+독립 outcome은 HSWM 전체의 물리적 외부만을 뜻하지 않고, 평가 대상 trajectory의 proposer·
+executor와 역할적으로 분리되어 그 결과를 임의로 바꾸지 못한다는 뜻이다.
 
 causal credit에는 사전에 특정한 estimand, intervention 또는 정당화된 식별 가정, evaluation
 scope와 uncertainty 한계가 필요하다. delayed·confounded·multi-member outcome에서 이 조건이
 없으면 outcome 관측은 그대로 보존하되
-`Attribution(outcome, trajectory)=UNATTRIBUTABLE`로 기록하고 durable `W/H` update를 만들지
-않는다. sealed eligibility, 상관관계나 LLM의 사후 설명만으로 귀속을 발명할 수 없다.
+`Attribution(outcome, trajectory)=UNATTRIBUTABLE`로 기록하고 durable update를 만들지 않는다.
+sealed eligibility, 상관관계나 LLM의 사후 설명만으로 귀속을 발명할 수 없다.
 
 ## 12. 인류보편체에 대한 철학적 함의
 
@@ -496,9 +508,10 @@ scope와 uncertainty 한계가 필요하다. delayed·confounded·multi-member o
 6. 누가 admission·activation·judgment·update·rollback을 통제하며, 어떻게 이탈·fork하는가?
 7. 이 설계가 최적화하는 것은 무엇이며, 그 목적 자체를 무엇이 교정할 수 있는가?
 8. token/model을 교체해도 artifact·span·role·lineage가 이어지고 변환 손실이 드러나는가?
-9. `H/W/A/F/Π` 중 하나를 ablate·shuffle·swap할 때 그 역할에 맞는 서로 다른 failure가 나는가?
-10. `Π`는 권리·capability·안전만 보존하는 얇은 막인가, task 답·tool 순서·coalition을 대신
-    써 주는 static harness인가?
+9. duplicate owner, ownerless atom, undeclared projection, stale view 또는 schema migration을
+   주입할 때 provenance·measurement·rollback·권리 결과가 예측 가능하게 달라지는가?
+10. `Inv`와 `Permit`은 rights·capability·safety를 실제 commit 조건으로 보존하는가, 아니면
+    task 답·tool 순서·coalition을 대신 써 주는 static harness로 변질되었는가?
 11. revocation·deletion 뒤 protected payload와 derived state가 미래 activation에서 실제로
     끊기며, 비참여자를 member나 representative로 취급하지 않는가?
 12. readout이 source snapshot·scope·authority를 결속하고, readout 편집만으로 canonical state나
@@ -538,7 +551,8 @@ scope와 uncertainty 한계가 필요하다. delayed·confounded·multi-member o
   대상이다. 이 정체성은 상위 헌법이 닫는다.
 - `DIRECT_EVIDENCE`: 이 문서가 새로 추가하는 직접 효능 증거는 없다. 저장소의 공학·실험
   상태는 별도 evidence에만 있으며 전체 과학 상태는 `UNJUDGED`다.
-- `INFERENCE`: P1–P10, 최소 해석 공리, 동일성·합성·`Π`·warrant 판별선은 USER_PRIMARY
+- `INFERENCE`: P1–P10, 최소 해석 공리, 동일성·합성·schema-relative ownership·`Inv/Permit`·
+  warrant 판별선은 USER_PRIMARY
   방향과 정전을 정합적으로 연결한 `SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`다.
 - `OPEN_OR_UNJUDGED`: 실제 인간의 형이상학적 동일성, 의식·감각·도덕적 환자성·법인격,
   완전한 truth theory, 최종 가치의 단일 해답, 세계 전체의 포착과 인류보편체의 실현 가능성은

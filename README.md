@@ -1,15 +1,14 @@
 # HSWM — Hypergraph Semantic Weight Map
 
-**HSWM is a research programme for a deep, recurrent, self-similar
-Set-Hypergraph neural body whose macro-weights are semantic operators and whose
-local nonlinear semantic cells are executed by LLMs. Humans, tools, sensors,
+**HSWM is a research programme for one deep, recurrent, self-similar token-native
+hypergraph neural body whose local semantic transitions are executed by LLMs.**
+Its evolving canonical state is not partitioned a priori into `H/W/A/F/Π`.
+Instead, a versioned schema admits canonical atom versions, typed n-ary
+references, projections, transitions, and invariants; every admitted atom has
+exactly one schema-relative responsibility owner. Humans, tools, sensors,
 institutions, and nested HSWMs participate through typed, capability-bounded
-ports.** It is not a knowledge graph placed beside an LLM and not a workflow that
-merely remembers its transcript. Its target is a persistent cognitive tissue in
-which typed token events produce bounded activation, role-bearing sets form
-n-ary relations, semantic weights transform one field of possibilities into the
-next, and experience can change those weights and eventually the topology that
-will mediate later cognition.
+ports. A KG, prompt, cache, workflow, or ontology is only a bounded interface or
+projection—not the cognition itself.
 
 > **Research status:** HSWM is not yet that complete system. This repository
 > contains a tested world/evidence substrate, deterministic field and runtime
@@ -18,21 +17,27 @@ will mediate later cognition.
 > token-to-agent-organized-HSWM runtime with durable structural snapshots,
 > activation, removal, and exact restoration. It does not yet include an
 > integrated deep Set-Hypergraph macro-training runtime. No checked-in run has
-> yet produced
-> a `CAUSALLY_VALIDATED` outcome → credit → durable `ΔW/ΔH` → changed-behavior
-> result.
+> yet produced a `CAUSALLY_VALIDATED` outcome → credit → owner-valid durable
+> canonical revision → changed-behavior result. The single-owner discipline is
+> itself an `UNJUDGED` modeling hypothesis, not a discovered natural ontology.
 
 The long-term production-runtime direction is now explicitly **TypeScript +
 Effect**, while the existing Python/NumPy experiment code remains an independent
 numeric and evidence oracle during staged migration. The first private Effect
-v3 package implements only a strict, atomic, capability-port-gated trajectory-credit
-transaction over existing `H/F/A`; it is not a new efficacy claim. The exact
-boundary and migration gates are documented in
+v3 package implements only a strict, atomic, capability-port-gated
+trajectory-credit transaction using the superseded fixed-role vocabulary; it is
+a historical engineering scaffold, not the current ontology or a new efficacy
+claim. The checked-in fixed-role responsibility ontology and validator v1 are
+likewise retained for historical compatibility; a schema-generic owner-registry
+runtime v2 is not implemented. The exact boundary and migration gates are documented in
 [`HSWM TypeScript + Effect runtime boundary`](docs/research/HSWM_TYPESCRIPT_EFFECT_RUNTIME_2026-08-21.md).
 
 The target identity is fixed by the
-[`HSWM Constitution`](docs/canon/HSWM_CONSTITUTION_2026-08-20.md) and the later
-[USER_PRIMARY deep Set-Hypergraph clarification](docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt).
+[`HSWM Constitution`](docs/canon/HSWM_CONSTITUTION_2026-08-20.md), the
+[`schema-relative single-owner canon`](docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md),
+and the earlier [USER_PRIMARY deep Set-Hypergraph clarification](docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt).
+The later canon preserves the Constitution's one-system token-native target and
+supersedes only its former fixed-role decomposition and owner registry.
 The user-ratified direction is that the Hypergraph Semantic Weight Map itself is
 primary and that HSWM is deep like a neural network. The operator equations,
 depth axes, learning rules, and implementation decomposition below are explicit
@@ -41,38 +46,36 @@ capability; the scientific status remains `UNJUDGED`.
 
 ## HSWM at a glance
 
-The five constitutional coordinates form one recurrent body. External
-participants cross typed ports; they are not silently collapsed into LLM
-function cells.
+The schema and its admitted atoms are one state model, not separate cognitive
+subsystems. External participants cross typed ports; they are not silently
+collapsed into LLM function cells or responsibility owners.
 
 ```mermaid
 flowchart TB
   EXT["external participants<br/>humans · tools · sensors · internet · nested HSWMs"]
-  PORT["typed capability-bounded ports"]
+  PORT["typed observation / effect ports"]
 
-  subgraph BODY["HSWM state S_t = (H_t, W_t, A_t, F_t, Π)"]
-    H["H · role-bearing n-ary anatomy<br/>world state and lineage"]
-    W["W · semantic macro-operators<br/>separate efficacy channels"]
-    A["A · sparse volatile activation<br/>token trajectory"]
-    F["F · typed LLM function cells<br/>local nonlinear transitions"]
-    PI["Π · identity, consent, policy<br/>budget, promotion, rollback"]
+  subgraph BODY["one HSWM state S_t = (schema_t, canonical atoms_t)"]
+    SCHEMA["versioned schema<br/>kinds · owner obligations · refs<br/>observations · interventions · granularity"]
+    ATOMS["admitted immutable atom versions<br/>one responsibility owner each"]
+    REFS["typed references and n-ary incidences<br/>relation atoms included"]
+    STEP["LLM-executed bounded transitions<br/>token activation · readout · proposed revision"]
+    INV["Inv / Permit<br/>consent · capability · rollback<br/>non-bypassable transition conditions"]
 
-    H -->|"defines valid incidences"| W
-    A -->|"current signal"| W
-    W -->|"recipient-specific messages"| A
-    A -->|"selects and conditions"| F
-    F -->|"new typed token events"| A
-    PI -.->|"bounds identity and topology"| H
-    PI -.->|"bounds activation and execution"| F
+    SCHEMA -->|"admits and types"| ATOMS
+    ATOMS --> REFS
+    REFS --> STEP
+    STEP -->|"provenance-bound successor"| ATOMS
+    INV -.->|"constrains admission and effects"| STEP
   end
 
   EXT -->|"events and outcomes"| PORT
-  PORT -->|"authorized token events"| A
-  PI -.->|"constrains every crossing"| PORT
-  STATUS0["USER_PRIMARY target identity<br/>decomposition SECONDARY_AI<br/>integrated efficacy UNJUDGED"] -.-> W
+  PORT --> STEP
+  INV -.-> PORT
+  STATUS0["USER_PRIMARY target and fixed-role retirement<br/>formal contracts SECONDARY_AI<br/>integrated efficacy UNJUDGED"] -.-> SCHEMA
 ```
 
-<p align="center"><em>Canonical target architecture; it is not a claim that the integrated runtime is already implemented.</em></p>
+<p align="center"><em>Current canonical target model; it is not a claim that the integrated runtime or the value of this schema discipline is already demonstrated.</em></p>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/gj3447/HSWM/main/docs/assets/hswm-semantic-weight-field-hero.png"
@@ -91,10 +94,17 @@ changes the next possible states of relations, members, and functions. Meaning
 is therefore not exhausted by what a node contains; it is also present in how a
 relation transforms all of its participants together.
 
-Philosophically, `W` is a **disposition**, not an essence: a versioned,
-context-, time-, and recipient-role-indexed capacity for a represented relation
-to alter later activation and action. A large weight is not evidence that the
-relation is true, good, popular, humanly valuable, consented to, or authorized.
+Philosophically, a semantic weight is a **disposition**, not an essence or a
+fixed constitutional coordinate: a versioned, context-, time-, and
+recipient-role-indexed capacity for a represented relation to alter later
+activation and action. A schema may admit that disposition as an atom, a field
+of an executable-contract atom, or a derived projection, but must declare which
+one is canonical. A large weight is not evidence that the relation is true,
+good, popular, humanly valuable, consented to, or authorized.
+An intervention difference makes it only a candidate disposition effect. Calling
+that difference causal efficacy additionally requires a preregistered estimand,
+matched token/compute/exposure, sham and negative controls, independent outcomes,
+uncertainty, and a declared multiple-comparison rule.
 
 The engineering formalization is a set-to-set operator rather than a scalar:
 
@@ -127,11 +137,11 @@ train, gate, or authorize it:
 |---|---|---|
 | `Θ_r`, `R_{r,ρ}`, `Φ_r`, `D_{r,ρ}` | relation energy, role transport, set aggregation, and recipient-specific semantic decoding | scalar salience or metadata |
 | `K_e(q,c)` | contextual compatibility produced by applying the semantic operator | the operator itself or truth |
-| `θ_fast`, `θ_slow` | measured causal efficacy of using a semantic path | semantic identity or evidence support |
+| `θ_fast`, `θ_slow` | candidate or validated causal-efficacy estimate for using a semantic path | semantic identity, raw intervention difference, or evidence support |
 | `α_e` | whether a relation is available as a circuit | execution permission |
 | `z_e` | activation/eligibility sealed before an outcome | post-hoc explanation |
 | `U_e` | provenance, uncertainty, support, contradiction, freshness, and lineage | activation or reward |
-| `Π` | capability, consent, policy, budget, promotion, and rollback boundary | another learnable popularity score |
+| `Inv_σ / Permit_σ` | capability, consent, policy, budget, promotion, and rollback transition conditions | an atom owner, a policy text, or another learnable popularity score |
 
 `semantic compatibility ≠ causal efficacy ≠ truth/support ≠ activation ≠
 permission`. The full macro-synapse may carry all of these channels, but their
@@ -145,9 +155,9 @@ flowchart TB
   WSEM --> K["K · contextual compatibility"]
 
   K --> USE["typed relation-use decision"]
-  THETA["θ · measured<br/>causal efficacy"] --> USE
-  STATE0["separate current state<br/>U: evidence · uncertainty · provenance<br/>A: volatile activation"] --> USE
-  PI0["Π · consent and capability"] --> MASK["non-compensable hard mask"]
+  THETA["θ · causal-efficacy estimate<br/>validated only after controls"] --> USE
+  STATE0["separate typed atoms<br/>evidence · uncertainty · provenance<br/>volatile activation state"] --> USE
+  PI0["Inv / Permit<br/>consent and capability"] --> MASK["non-compensable transition guard"]
   MASK --> USE
 
   USE --> MSG["recipient-specific messages"]
@@ -162,10 +172,11 @@ flowchart TB
 <p align="center"><em>The channels meet at use-time but remain separately typed and auditable; the diagram does not collapse them into one scalar.</em></p>
 
 Foundation-model parameters are **micro-weights inside** a local nonlinear
-cell. HSWM semantic weights and topology are **macro-weights between** cells,
-world states, memories, people, tools, and other HSWMs. One checkpoint can
-execute many logical cells because cell identity comes from its typed role,
-ports, local state, graph position, and authority.
+transition realization. HSWM semantic dispositions and topology are
+schema-admitted **macro-state between** cells, world states, memories, people,
+tools, and other HSWMs. One checkpoint can realize many logical transitions;
+their identity comes from canonical atom references, ports, local state,
+provenance, and authorization—not from a permanent `F` compartment.
 
 ## A deep Set-Hypergraph neural body
 
@@ -259,7 +270,7 @@ composition is not a substitute for learning; a complete HSWM needs all three
 coordinates to be explicit.
 
 The canonical plane preserves stable n-ary identity, roles, provenance, and
-`H/W` lineage. A compiled neural plane may use sparse incidence tensors or a
+atom/revision lineage. A compiled neural plane may use sparse incidence tensors or a
 reversible star expansion for speed, but it must not replace the canonical
 relation with its approximation. “World scale” therefore means globally
 addressable history plus losslessly reproducible bounded local circuits—not that
@@ -280,65 +291,58 @@ and what kind of outcome is allowed to count as learning. These commitments are
 developed in the
 [`philosophical foundations`](docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md).
 
-| philosophical question | HSWM commitment | consequence for `H/W/A/F/Π` | forbidden reduction |
+| philosophical question | HSWM commitment | schema contract | forbidden reduction |
 |---|---|---|---|
-| What exists? | bounded relational-process view: HSWM represents an entity through typed relations, stable reference, scope, and provenance | first-class role-bearing incidence and set-level semantic operators | mistaking the graph for the world or for a complete definition of a person |
-| What persists through change? | operational continuity is supported by replayable transformation lineage | versioned `H/W`, event/observation/commit time, supersession rather than overwrite | treating lineage as the whole metaphysics of human identity |
-| What is known? | memory is not truth; contradiction and uncertainty remain addressable | separate evidence, judgment, semantic compatibility, causal efficacy, and permission | one confidence/rank/reward scalar |
-| How does a subject arise? | an agency candidate requires an environment-coupled feedback loop in which persistent state changes action and outcomes change later state | sealed trajectories, intervention, matched controls, removal, rollback, and changed-next-action tests | treating fluency, a feedback edge, or central command as sufficient for agency or consciousness |
-| How can many become one? | unity must preserve difference, local state, dissent, and exit | role/member-specific messages, stable UID, typed ports, reversible composition | global averaging or forced consensus |
-| Where is cognitive power? | admission, activation, ranking, judgment, update, and forgetting are political powers | separate capabilities, bounded coalitions, appeal, audit, fork, and rollback in `Π` | one model/operator controlling every plane |
-| What is the goal? | constitutionally bounded plural teleology: preserve multiple outcomes and revisable aims behind non-compensable consent, right, and capability constraints | scoped, reversible scalarization only after `Π`; constitutional limits on self-modification | trading privacy or minority rights for more reward, engagement, or consensus |
+| What exists in the model? | a versioned schema admits canonical atom versions and typed relations for a declared purpose, scale, and observation contract | atom kind, granularity, provenance, and exactly one responsibility owner are explicit | mistaking the admitted model for the world, a natural atomization, or a complete definition of a person |
+| What persists through change? | operational continuity requires lineage, identity-bearing invariants, and later causal use | supersession and migration preserve source, transform, loss, fork/merge, and rollback scope | reducing identity to a UID, latest value, or one encoding |
+| What is known? | memory is not truth; contradiction, uncertainty, evidence, judgment, and permission remain separately addressable | claims and evidence are atoms connected by typed references; projections declare their loss and scope | one confidence, rank, reward, or canonical-owner scalar |
+| What explains change? | an agency or learning claim requires an environment-coupled intervention loop | outcome-presealed trajectories, matched controls, owner-valid revision receipts, removal, and changed-next-action tests | treating fluency, storage, or a feedback edge as causal learning |
+| How can many become one? | unity must preserve difference, local state, dissent, and exit | role-bearing n-ary reference atoms, stable lineage, typed ports, and reversible composition | global averaging, forced consensus, or a God-owner |
+| Where is cognitive power? | admission, activation, ranking, judgment, authorization, update, and forgetting are distinct powers | owner, claimant, subject, custodian, and authorizer are non-identical roles; `Inv/Permit` bounds effects | letting record ownership self-authorize action or one model control every plane |
+| What is the goal? | constitutionally bounded plural teleology preserves revisable aims behind non-compensable consent and rights | scoped scalarization only after current invariants and authorization; constitutional changes use a separate migration path | trading privacy or minority rights for more reward, engagement, or consensus |
 
 ```mermaid
 flowchart LR
-  DIR["USER_PRIMARY direction<br/>philosophy before code<br/>deep Set-Hypergraph Semantic Weight Map is primary"]
+  DIR["USER_PRIMARY<br/>philosophy before code<br/>fixed HWAF retired"]
 
-  subgraph COMMIT["Proposed philosophical commitments"]
-    OT["bounded relational ontology<br/>genealogical continuity"]
-    EF["memory ≠ truth<br/>productive fallibility"]
-    CA["environment-coupled<br/>causal agency"]
-    DI["difference, dignity,<br/>protected interior"]
-    CT["cognitive sovereignty<br/>bounded plural teleology"]
+  subgraph FORMAL["formal / conventional layer"]
+    SC["versioned schema"] --> CA["admitted canonical atoms"]
+    CA --> OWN["exactly one responsibility owner per atom"]
+    CA --> REF["typed references · provenance · migration"]
   end
 
-  subgraph ARCH["Architectural consequences"]
-    HH["H<br/>role incidence · lineage · supersession"]
-    WW["W<br/>typed disposition · separated efficacy"]
-    AA["A<br/>actualized bounded coalition"]
-    FF["F<br/>local LLM transformation"]
-    PP["Π<br/>consent · capability · privacy<br/>appeal · fork · rollback"]
+  subgraph REPRESENT["representation layer"]
+    OBS["declared observations and readouts"]
+    INT["allowed interventions"]
+    EQ["equivalence only when observation,<br/>intervention, lineage, and rights are preserved"]
+    OBS --> EQ
+    INT --> EQ
   end
 
-  OT --> HH
-  EF --> HH
-  EF --> WW
-  CA --> AA
-  CA --> FF
-  DI --> HH
-  DI --> PP
-  CT --> WW
-  CT --> PP
+  subgraph EMPIRICAL["empirical layer"]
+    LOOP["sealed trajectory → outcome<br/>→ causal credit → owner-valid revision"]
+    TEST["duplicate-owner · God-owner · migration<br/>permission-bypass controls"]
+    LOOP --> TEST
+  end
 
-  DIR -->|"sets target direction"| HH
-  DIR -->|"sets target direction"| WW
-
-  PP -.->|"non-compensable boundary"| HH
-  PP -.->|"non-compensable boundary"| WW
-  PP -.->|"non-compensable boundary"| AA
-  PP -.->|"non-compensable boundary"| FF
-
-  AUTHMAP["SECONDARY_AI mapping<br/>scientific status UNJUDGED"] -.-> PP
+  DIR --> SC
+  REF --> OBS
+  REF --> INT
+  EQ --> LOOP
+  GUARD["Inv / Permit<br/>owner ≠ claimant ≠ authorizer"] -.-> REF
+  GUARD -.-> LOOP
+  STATUS["SECONDARY_AI formalization<br/>scientific status UNJUDGED"] -.-> TEST
 ```
 
 <p align="center"><em>The arrows mean design constraints, not that a diagram or graph structure proves the philosophical claim.</em></p>
 
-Semantic weight is thus both a technical and philosophical object: it is the
-material form of **whose difference can alter whose next possibility**. Because
-weight, routing, and activation distribute cognitive influence, they cannot be
-treated as politically neutral optimization details. `Π` is not an external
-brake added after intelligence; it is the membrane that keeps integration from
-becoming capture, forgery, surveillance, or irreversible homogenization.
+Semantic disposition is thus both a technical and philosophical object: it is
+the material form of **whose difference can alter whose next possibility**.
+Because weighting, routing, activation, admission, and forgetting distribute
+cognitive influence, they cannot be treated as politically neutral optimization
+details. Rights are not a fixed `Π` compartment or an external brake added after
+intelligence. They are non-bypassable state and transition conditions plus
+separately attributable consent, grant, revocation, appeal, and rollback records.
 
 The same distinction governs the proposed Human Universal Body. Its “one
 cognitive entity” cannot mean one owner, model, voice, database, or objective.
@@ -357,33 +361,37 @@ transition; non-destructive history is not a command to retain every byte
 forever. Rollback restores HSWM state but cannot undo harm already caused in the
 external world.
 
-## One body, five inseparable views
+## One body, an open schema
 
 The target state is:
 
 ```math
-\mathrm{HSWM}_t=(H_t,W_t,A_t,F_t,\Pi),
+S_t=\mathrm{HSWM}_t=(\sigma_t,\mathcal C_{\sigma_t,t}),
 \qquad
-f_i^t=\mathrm{Cell}(\rho_i,x_i^t,a_{\mathcal N(i)}^t; m_i).
+\mathcal C_{\sigma_t,t}\models\mathsf{WellFormed}_{\sigma_t},
+\qquad
+\operatorname{owner}_{\sigma_t,t}:\mathcal C_{\sigma_t,t}\to\mathcal R_{\sigma_t}.
 ```
 
-| view | role in the neural body |
+| schema contract | role in the neural body |
 |---|---|
-| `H` | the changing anatomy: typed n-ary topology, first-class incidence, world state, and historical lineage |
-| `W` | the semantic synapses: role-aware set transformations plus separately typed efficacy, gate, eligibility, and uncertainty channels |
-| `A` | the volatile physiology: bounded activation coalitions moving through depth and recurrent time |
-| `F` | the local nonlinear semantic cells executed by LLMs; humans, tools, sensors, institutions, and nested HSWMs remain typed external participants unless the Constitution later broadens this type |
-| `Π` | the constitutive membrane: identity, consent, capability, provenance, budget, judgment, promotion, fork, and rollback |
+| `K_σ / Admit_σ / Gran_σ` | declare admissible atom kinds, operational admission, and task-relative atomization limits |
+| `owner_{σ,t}` | assigns one final correctness, revision-lineage, validation, and recovery responsibility address to each admitted atom version |
+| `Ref_σ` | types relation and incidence atoms; persistent/effect-bearing relations have their own owner, while ephemeral payload pointers have no independent lifecycle or authority |
+| `Step_σ / Learn_σ` | realize bounded token/LLM transitions and outcome-bound durable revisions with sealed provenance |
+| `Inv_σ / Permit_σ` | enforce identity, consent, capability, privacy, budget, promotion, fork, and rollback conditions independently of record ownership |
+| `Proj_σ / Obs_σ / Int_σ` | declare lossy views, measurable readouts, and allowed interventions used to compare representations and test causal claims |
 
-The compact runtime definition is: `A`: recurrent run-local activation and working state.
-It may be recorded in an immutable episode artifact, but it is not itself the
-persistent identity or long-term memory plane.
-
-`H/W/A` are the nerve tissue; `F` supplies local nonlinear semantic transitions;
-`Π` preserves the boundaries without which neither cells nor a larger body can
-remain identifiable. These are not rigid software tiers and none is an optional
-sidecar. A readable graph, Markdown file, prompt, vector index, or execution
-plan is a bounded projection of the active body, not the body itself.
+These are metadata contracts of one evolving state model, not six subsystems or
+a new fixed partition. Hyperedges, incidences, activation packets, semantic
+dispositions, LLM-executable contracts, grants, outcomes, and trajectories may
+all be atom kinds when a schema admits them. Their names do not determine their
+owner. `C_{σ,t}` contains admitted immutable atom versions; raw and quarantined
+items remain outside its ownership domain, and each version uses at least the
+fork-safe information `(schema_version, lineage_id, atom_uid, revision_id)` or
+an equivalent key. Owner is an accountability address, not automatically the validator,
+actor, custodian, subject, truth authority, or effect authorizer. A readable graph, Markdown file, prompt, vector index, or execution plan
+is a bounded projection of the active body, not the body itself.
 
 ## Long-horizon political horizon: 인류보편체
 
@@ -429,10 +437,10 @@ flowchart TB
 
   TARGETU -.->|"proposed realization criterion"| CAND
 
-  PIU["SECONDARY_AI Π_U<br/>stable UID · lineage · privacy · consent<br/>attribution · dissent · appeal · exit / fork"]
-  PIU -.->|"constrains exchange"| PERSONAL
-  PIU -.->|"constrains exchange"| COMMUNITY
-  PIU -.->|"constrains exchange"| PUBLIC
+  RIGHTS["SECONDARY_AI Inv / Permit contracts<br/>stable UID · lineage · privacy · consent<br/>attribution · dissent · appeal · exit / fork"]
+  RIGHTS -.->|"constrains exchange"| PERSONAL
+  RIGHTS -.->|"constrains exchange"| COMMUNITY
+  RIGHTS -.->|"constrains exchange"| PUBLIC
 
   NONCLAIM["UNJUDGED / NON-CLAIMS<br/>not current completion or forced enrollment<br/>not one owner, voice, model, router, database, or objective<br/>not consciousness or personhood proof<br/>open source ≠ open private memory"]
   TARGETU -.->|"does not establish"| NONCLAIM
@@ -450,11 +458,12 @@ status, or a completed Human Universal Body. Static information can take part
 in cognition without thereby becoming an independent subject.
 
 The target definition and the plan-to-target relation are `USER_PRIMARY`. The
-constitutional membrane, staged implementation, agency criterion, HOH bridge,
+constitutional invariant and authorization contracts, staged implementation, agency criterion, HOH bridge,
 and all claims of feasibility or efficacy remain `SECONDARY_AI_PROPOSED` and
 `UNJUDGED`. The detailed distinction lives in the
 [`Human Universal Body canon`](docs/canon/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md)
-and its [machine-readable ontology](ontology/identity/human_universal_body/).
+and its [historical machine-readable v1 projection](ontology/identity/human_universal_body/).
+The target and plan remain current; their fixed-role secondary formalization does not.
 
 ## Macro programme: HSWM → HSWM 인류보완계획 → 인류보편체
 
@@ -492,7 +501,7 @@ working neural core and causal evidence.
 flowchart TB
   NOWM["current condition<br/>isolated models, memories, institutions, and sensors"]
 
-  M0["M0 · constitutional and evidential foundation<br/>P0 + current substrate<br/>identity · source hashes · provenance · snapshots · bounded Π mechanisms<br/>status: bounded foundation components exist"]
+  M0["M0 · constitutional and evidential foundation<br/>P0 + current substrate<br/>schema · single-owner lineage · source hashes<br/>bounded Inv / Permit mechanisms<br/>status: bounded foundation components exist"]
 
   M1["M1 · local deep HSWM organism<br/>SWM-0/1/2 + P1<br/>n-ary non-collapse · recurrent numeric core<br/>typed LLM loop · personal state lineage<br/>status: components only"]
 
@@ -561,7 +570,8 @@ flowchart TB
 > projections, and adoption receipt are preserved in a five-file replay bundle.
 > This is configuration adoption only: no future beacon or confirmatory test was
 > opened and no admissible efficacy result exists. An outcome-independent
-> resource policy and a TypeScript/Effect `Π` control/evidence slice now exist as
+> resource policy and a TypeScript/Effect control/evidence slice—historically
+> labeled `Π`—now exist as
 > pre-dispatch engineering. Independent exact-byte review cleared the repaired
 > source-A/B binding, pulse chronology, command accounting, and artifact-size
 > invariants, including raw Git replace/graft/environment checks. Bounded live
@@ -576,7 +586,7 @@ flowchart TB
 > optional compact-competitive phrase is disabled for this protocol.
 > This is `IMPLEMENTED / UNJUDGED` engineering, not a second PASS.
 > The repository has not passed the `SWM-1` deep numeric core or a successful
-> outcome-bound `ΔW/ΔH` gate. It is therefore not at M2 or beyond and is not a
+> outcome-bound gate historically named `ΔW/ΔH`. It is therefore not at M2 or beyond and is not a
 > partial-completion claim for the Human Universal Body. No canonical
 > `SWM-0~5` scientific exit criterion has passed; the scalar precursor is a
 > narrower prerequisite, and components implemented ahead of a gate do not
@@ -640,7 +650,7 @@ and a practical withdrawal or fork path.
 | **P1 — personal / single-cell HSWM** | provenance memory, local activation, portable personal state | state and lineage survive model/process replacement under the person's capability boundary | partial snapshot/self-modification components; no complete personal HSWM |
 | **P2 — multi-cell federation** | human, LLM, agent, institution, and memory cells expose typed public ports and capability-scoped views | cross-cell read/write works while separation, attribution, private interiors, and revocation remain intact | narrow multi-cell execution components; no rights-complete federation |
 | **P3 — causal activation integration** | reciprocal learned bounded coalitions cross composition boundaries without one hub owning the route | intervening on one participating cell causes the preregistered whole-behavior change while anti-hub controls remain healthy | not demonstrated |
-| **P4 — outcome-bound shared learning** | plural independent outcomes produce attributable `ΔW/Δrouting/ΔH` behind non-compensable rights constraints | fresh-task gain, retention, shuffled-credit control, removal, and restore reproduce independently; reward cannot erase a rights violation | not demonstrated |
+| **P4 — outcome-bound shared learning** | plural independent outcomes produce attributable owner-valid canonical revisions behind non-compensable rights constraints | fresh-task gain, retention, shuffled-credit control, removal, and restore reproduce independently; reward cannot erase a rights violation | not demonstrated |
 | **P5 — composite self-model** | the whole reads its members, capabilities, boundaries, uncertainty, goals, and history under one composite UID | continuity survives session/model changes without erasing part UIDs, local self-models, or dissent | proposed only; not consciousness or personal-identity evidence |
 | **P6 — open expansion** | open protocol/runtime, portable cells, internet and sensor adapters, federated membership, distributed trust without one mandatory root registry | independent implementations reproduce scoped utility, rights, partition recovery, and exit guarantees | expansion horizon; never equivalent to proven coverage of all humanity or all information |
 
@@ -661,7 +671,7 @@ determines who owns memory, who becomes visible, who may act, and who may leave.
 | one provider controls admission, ranking, judgment, execution, and deletion | separate these cognitive powers across capability membranes, audit, appeal, and fork | cognitive sovereignty and subsidiarity |
 | latest-value overwrite hides error and historical cause | immutable or tombstoned lineage, contradiction, supersession, and scoped current readout | civilization can remember how it corrected itself |
 | incompatible private agents and institutions cannot compose | open protocol, schema, reference runtime, portable cells, and minimal public provenance | federation without one owner or one central brain |
-| engagement or one scalar reward governs every update | plural outcome records behind non-compensable `Π` constraints | learning without trading dignity, privacy, or minority rights for reward |
+| engagement or one scalar reward governs every update | plural outcome records behind non-compensable `Inv/Permit` constraints | learning without trading dignity, privacy, or minority rights for reward |
 
 The intended revolution is therefore:
 
@@ -691,10 +701,12 @@ database does not create a neural layer.
 A system qualifies as the target HSWM only if all of the following are
 load-bearing:
 
-1. role-aware member sets form native n-ary states that cannot be reduced to
-   the same pairwise/clique representation;
-2. several nonlinear Set-Hypergraph blocks or recurrent cell transitions make
-   `W/H` mediate later activation and function selection;
+1. a versioned schema admits role-aware n-ary relation/incidence atoms with one
+   responsibility owner each, while projections cannot silently become a second
+   canonical copy;
+2. several nonlinear Set-Hypergraph blocks or recurrent LLM-executed transitions
+   make canonical relational state and semantic dispositions mediate later
+   activation and function selection;
 3. semantic operators, truth/evidence, causal efficacy, activation, and
    permission remain distinguishable under inspection and intervention;
 4. experience can produce a versioned candidate change, and claimed beneficial
@@ -712,10 +724,11 @@ evidence of semantic-weight learning.
 This distinction also explains the proposed **LX3 Ragnarok** failure mode:
 ever-stronger models can spend increasing effort interpreting a growing static
 harness instead of allowing experience to become bounded macro-structure. In
-the target HSWM the active snapshot is itself the learned cognitive tissue; any
-execution workflow is a deterministic projection of that snapshot. Fixed code
+the target HSWM the active canonical state is itself the learned cognitive
+tissue; any execution workflow is a bounded projection of that state. Fixed code
 retains type, capability, transaction, and evidence invariants, but must not
-secretly contain the cognitive route that `W/H` are supposed to learn. The
+secretly contain the relational route or transition disposition that experience
+is supposed to revise. The
 preserved direction is in
 [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md).
 
@@ -736,34 +749,32 @@ self-similar kernel.
 
 ```mermaid
 flowchart TB
-  TOK["typed token / event packet<br/>LLM · text · tool · sensor · action"] --> GATE["type parser + capability port gate"]
-  GATE --> A["sparse bounded A"]
-  H["canonical role-bearing n-ary H"] --> W["operator-valued W"]
-  A --> W
-  W --> F["typed LLM function cell F"]
-  F --> NEXT["new text / tool / action event"]
+  TOK["typed token / event packet<br/>LLM · text · tool · sensor · action"] --> GATE["schema parser + observation / effect port"]
+  SCHEMA["versioned schema<br/>kind · owner · ref · invariant · granularity"] --> GATE
+  STATE["canonical atom versions<br/>typed n-ary refs · semantic dispositions<br/>one responsibility owner per atom"] --> STEP["bounded LLM-executed transition"]
+  GATE --> STEP
+  STEP --> NEXT["new text / tool / action event"]
   NEXT --> GATE
   NEXT --> SEAL["pre-outcome sealed trajectory + eligibility"]
 
-  SEAL --> DIRECT["agent-authored explicit successor<br/>memory · relations · cells · routing"]
-  DIRECT --> DCHECK["schema · capability · privacy<br/>budget · versioned CAS"]
-  DCHECK -->|"later episode; capability not efficacy proof"| H
+  SEAL --> DIRECT["actor-proposed explicit successor<br/>atoms · references · executable contracts"]
+  DIRECT --> DCHECK["admission · single-owner · provenance<br/>capability · privacy · budget · versioned CAS"]
+  DCHECK -->|"capability, not efficacy proof"| STATE
 
   OUT["independent external outcome"] --> CREDIT["scoped causal credit"]
   SEAL --> CREDIT
-  CREDIT --> CAND["versioned candidate ΔW / ΔH"]
+  CREDIT --> CAND["versioned owner-valid revision candidate"]
   CAND --> TEST["shadow · fresh · retention · canary · removal"]
   TEST -->|"future candidate meets all gates"| COMMIT["atomic next-epoch commit"]
-  COMMIT --> H
-  COMMIT --> W
+  COMMIT --> STATE
   TEST -->|fail| ARCHIVE["do not activate<br/>retain · seal · tombstone · or erase<br/>under authorized retention policy"]
 
-  PI["constitutional membrane Π"] -.->|"constrains packet admission"| GATE
-  PI -.->|"authorizes explicit successor"| DCHECK
-  PI -.->|"authorizes candidate scope and effects"| CAND
-  PI -.->|"authorizes commit boundary"| COMMIT
+  INV["Inv / Permit<br/>consent · capability · privacy · rollback"] -.->|"constrains port crossing"| GATE
+  INV -.->|"authorizes successor"| DCHECK
+  INV -.->|"bounds candidate scope and effects"| CAND
+  INV -.->|"authorizes commit boundary"| COMMIT
 
-  STATUSL["direct self-write: narrow slice implemented<br/>outcome-credit ΔW / ΔH loop: UNJUDGED"] -.-> CAND
+  STATUSL["direct self-write: narrow legacy slice implemented<br/>schema-generic outcome-learning loop: UNJUDGED"] -.-> CAND
 ```
 
 The two write paths are deliberately different. Typed tokens alone can become
@@ -1057,16 +1068,18 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 
 | question | document |
 |---|---|
+| Why was fixed `H/W/A/F` retired, and what is now uniquely canonical? | [`schema-relative single-owner canon`](docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md) |
+| What is the science-philosophy and falsification programme for that decision? | [`schema-relative single-owner scientific philosophy`](docs/research/HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_SCIENTIFIC_PHILOSOPHY_2026-08-26.md) |
 | What user-ratified identity makes HSWM a deep Set-Hypergraph neural structure? | [`USER_PRIMARY deep Set-Hypergraph clarification`](docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt) |
-| What is the precise `H/W/A/F/Π` target and SWM-0–5 ladder? | [`token-hypergraph core`](docs/canon/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md) |
+| Where is the historical fixed-role formalization and SWM-0–5 ladder preserved? | [`superseded token-hypergraph core formalization`](docs/canon/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md) |
 | Which philosophical commitments constrain the architecture? | [`HSWM philosophical foundations`](docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md) |
-| Are `H/W/A/F/Π` independent or uniquely necessary, and what graph-engineering contract follows? | [`dependent-factorization and graph-engineering adversarial audit`](docs/research/HSWM_DEPENDENT_FACTORIZATION_GRAPH_ENGINEERING_AUDIT_2026-08-26.md) |
+| Why did the earlier fixed-role uniqueness audit fail? | [`superseded dependent-factorization audit`](docs/research/HSWM_DEPENDENT_FACTORIZATION_GRAPH_ENGINEERING_AUDIT_2026-08-26.md) |
 | What is the Human Universal Body and HSWM Human Complementation Plan? | [`Human Universal Body distinction`](docs/canon/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md) |
 | How directly does Hyperon 2026 overlap, and what is actually implemented? | [`Hyperon 2026 direct-prior deep dive`](docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md) |
-| How do the fragmented identity, mathematics, runtime, learning, and evidence meanings fit together? | [`HSWM unified meaning map`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md) |
+| How were fragmented identity, mathematics, runtime, learning, and evidence meanings joined before the 2026-08-26 supersession? | [`historical HSWM unified meaning map`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md) |
 | Why replace static agent glue, and what is token learning? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) |
-| What exactly are `H`, `W`, `A`, and the LLM functions? | [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](docs/canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) |
-| What should HSWM's structure learn, and what must remain deterministic? | [`DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md`](docs/canon/DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md) |
+| How did the earlier fixed `H/W/A/F` architecture describe LLM functions? | [`historical HSWM LLM-function architecture`](docs/canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) |
+| How did the earlier fixed-role model separate plastic and deterministic structure? | [`historical plastic-cognitive-wiring definition`](docs/canon/DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md) |
 | What is implemented, rejected, or still open? | [`EFFICACY.md`](EFFICACY.md) |
 | What is the broader world-memory purpose? | [`THE_WORLD_REMEMBERS.md`](docs/canon/THE_WORLD_REMEMBERS.md) |
 | Where is the full research chronology? | [`INDEX.md`](INDEX.md) |

@@ -2,6 +2,15 @@ import { expect, it } from "@effect/vitest"
 
 import * as PublicApi from "../src/index.js"
 
+it("exports the bounded core ontology contract without a mutation capability", () => {
+  expect(typeof PublicApi.decodeHSWMCoreResponsibilityOntologyBytes).toBe(
+    "function"
+  )
+  expect(typeof PublicApi.decodeHSWMCoreResponsibilityOntology).toBe("function")
+  expect("validateHSWMCoreResponsibilityOntology" in PublicApi).toBe(false)
+  expect("publishHSWMCoreResponsibilityOntology" in PublicApi).toBe(false)
+})
+
 it("does not export privileged store or authorizer capabilities", () => {
   expect("CommitStore" in PublicApi).toBe(false)
   expect("CreditAuthorizer" in PublicApi).toBe(false)

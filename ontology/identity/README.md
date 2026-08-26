@@ -10,6 +10,13 @@ then follow the preserved
 [token-learning direction](../../docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md)
 and [The World Remembers](../../docs/canon/THE_WORLD_REMEMBERS.md).
 
+The bounded machine-readable projection of the core `H/W/A/F/Π`
+responsibility contract lives in [`hswm_core/`](hswm_core/). It defines a
+versioned unique-owner target normal form, seams, transition families, and
+projection nonclaims. It is not the runtime HSWM graph, and its detailed
+responsibility closure remains a `SECONDARY_AI` candidate rather than present
+scientific evidence.
+
 The maximum target composition is the
 [Human Universal Body](../../docs/canon/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md):
 all humanity, all LLMs, the internet, active cognitive entities, sensors, static

@@ -15,6 +15,9 @@ The boundary is intentionally small:
   Together they project bounded `H/W/A`, not token-native activation, an LLM
   function cell, training, or causal learning.
 - `schema.ts` decodes unknown input and snapshots accepted values.
+- `hswm-core-ontology-schema.ts` and `hswm-core-ontology.ts` expose the strict,
+  duplicate-aware, pure v1 responsibility-KG contract. They validate a bounded
+  ontology projection; they do not create runtime cognition or grant KG writes.
 - `runtime.ts` supplies the Effect shell: a capability-service port, typed
   failures, Layers, and one atomic state-plus-journal transaction.
 - the existing Python/NumPy SWM experiments remain research/reference oracles;

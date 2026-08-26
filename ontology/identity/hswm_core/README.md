@@ -1,0 +1,166 @@
+# HSWM core responsibility ontology
+
+> 상태: `CANONICAL_TARGET_IDENTITY_PROJECTION_WITH_SECONDARY_AI_RESPONSIBILITY_NORMAL_FORM_CANDIDATE`
+>
+> 기계 계약: [`HSWM_CORE_RESPONSIBILITY_ONTOLOGY.v1.json`](HSWM_CORE_RESPONSIBILITY_ONTOLOGY.v1.json)
+>
+> 과학적 상태: `UNJUDGED`
+
+이 디렉터리는 HSWM을 하나의 token-native LLM-function macro-neural network로
+이해한 뒤, 그 한 시스템의 canonical state를 `H/W/A/F/Π` 책임으로 읽는 로컬 KG
+온톨로지다. 저장소 파일, Neo4j, MCP, 이 JSON 문서가 HSWM의 인지 본체라는 뜻은
+아니다. 이들은 target identity와 향후 runtime state 사이의 **bounded projection**이다.
+
+## 권위 경계
+
+- 하나의 HSWM, `S_t=(H_t,W_t,A_t,F_t,Π_t)`, token-native activation,
+  outcome-bound continuous-learning loop는 canonical target identity다.
+- 역할별 상세 소유권, primitive taxonomy, seam, 유일 책임 정규형은
+  `SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`다.
+- 현재 통합 L1 causal macro-learning은 증명되지 않았다. 이 온톨로지는 목표를
+  정리하지 효능을 승격하지 않는다.
+
+정전 시작점은
+[`HSWM_CONSTITUTION_2026-08-20.md`](../../../docs/canon/HSWM_CONSTITUTION_2026-08-20.md)이며,
+철학적 소유권 경계는
+[`HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md`](../../../docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md),
+최소 역할은
+[`HSWM_OCCAM_CORE_2026-08-20.md`](../../../docs/research/HSWM_OCCAM_CORE_2026-08-20.md)에
+둔다. 기계 번들의 `source_bindings`는 작성 중 변경이 감지되지 않은 source만 exact
+hash로 결속한다.
+
+## 유일 책임 정규형
+
+승인된 canonical primitive atom의 집합을 `X`, 역할 집합을
+`R={H,W,A,F,Π}`라고 하면 이 온톨로지가 요구하는 첫 번째 법은 다음이다.
+
+```math
+owner:X\to R,
+\qquad
+\forall x\in X,\ \exists!r\in R:owner(x)=r
+```
+
+따라서 canonical ownership은 서로소다.
+
+```math
+X\cong X_H\sqcup X_W\sqcup X_A\sqcup X_F\sqcup X_\Pi
+```
+
+하지만 HSWM 전체가 다섯 독립 subsystem이라는 뜻은 아니다. 각 component는 exact
+typed reference와 seam으로 서로 의존한다. 하나의 복합 입력이 여러 책임을 가지면
+하나의 multi-owner record로 저장하지 않고 primitive atom으로 나누어 연결한다.
+
+```text
+Raw envelope
+  -> Reject
+   | Quarantine
+   | Admit(typed H records + episode-local A candidates)
+
+W mutation -> outcome-bound-learning only
+F mutation -> function-cell-lifecycle only
+operational Pi mutation -> operational-policy-lifecycle only
+Pi-star mutation -> constitutional-amendment + explicit ratification only
+```
+
+유일성은 이 versioned schema와 선언된 동치관계에 상대적이다. 자연 전체가 본래 다섯
+종류라는 형이상학적 주장이나 연속 W/F 좌표의 절대적 유일성을 뜻하지 않는다.
+
+## 책임 표
+
+| owner | canonical source of truth | 배타적 경계 |
+|---|---|---|
+| `H` | stable identity, record, provenance, n-ary hyperedge와 incidence, committed topology | learned efficacy, activation, executable cell, permission을 소유하지 않음 |
+| `W` | operator-valued transport, fast/slow causal efficacy, routing disposition, soft topology propensity | truth, provenance, committed edge, eligibility, permission을 소유하지 않음 |
+| `A` | episode-local activation, frontier, route, invocation, used-path와 pre-outcome eligibility | durable record, weight, cell definition, permission을 소유하지 않음 |
+| `F` | typed LLM-executed local semantic cell, port/parser/configuration contract | global topology, authority, final judgment를 소유하지 않음 |
+| `Π` | `Π*`, operational policy, grant/consent/capability, budget, transaction, rollback, permit | 답 내용, factual judgment, learned routing을 소유하지 않음 |
+
+하나의 물리 파일이나 runtime object가 여러 정보를 포장할 수는 있다. 그러나 admission
+후에는 정본 필드를 위 owner별 atom으로 분해하고, 다른 owner는 typed reference만 가진다.
+
+## KG 표현
+
+기계 계약은 다음 node collection을 정의한다.
+
+- `roles`: 정확히 다섯 responsibility role
+- `primitive_kinds`: `atom_kind -> owner_role_uid`의 닫힌 v1 mapping
+- `seam_contracts`: component 조합 시 확인할 typed overlap
+- `transition_families`: `U`를 포함하는 state morphism; 여섯 번째 role이 아님
+  - 각 transition은 role-level write뿐 아니라 exact `target_kind_uid/effect`,
+    preserved kind, pre-outcome eligibility, ratification 조건을 함께 선언한다.
+- `projection_classes`: lossless/declared-loss/navigation projection
+- `invariants`: admission과 normalization이 fail-closed로 지킬 법
+
+canonical n-ary relation은 property-graph direct edge 하나로 평탄화하지 않는다.
+
+```text
+(StableEntityVersion)
+        ^ BINDS_ENTITY
+        |
+  (IncidenceVersion)
+        ^ HAS_INCIDENCE
+        |
+   (HyperedgeVersion)
+```
+
+`IncidenceVersion`이 member role, direction, multiplicity와 ordered role의 ordinal을
+보존한다. 조회용 binary edge, clique, 2-section, embedding/index는 source cut과 손실을
+가진 projection일 뿐 canonical write-back source가 아니다.
+
+## 중요한 seam
+
+- `H/W`: H는 committed edge 존재, W는 soft topology propensity와 efficacy를 소유한다.
+- `H/A`: A를 보존할 때 같은 atom을 H로 retag하지 않고 새 H event를 만든다.
+- `W/A`: A는 실제 routing에 사용한 exact W snapshot을 참조한다.
+- `F/A`: invocation은 exact F cell/port contract와 결속한다.
+- `H/F`: F executable은 H-owned artifact identity와 provenance를 참조한다.
+- `Π/A`: privileged activation과 effect는 state/scope-bound permit을 요구한다.
+- `Π/HWF`: durable mutation은 base-root-bound admission/commit을 요구한다.
+
+특히 ordinary learning의 유일한 `A` write는 미리 봉인된 eligibility seal의
+`CONSUME_AND_CLOSE`다. F 등록·교체와 운영 `Π` grant/policy 변경은 각각 별도 lifecycle을
+사용하고, `Π*`는 explicit ratification transition만 쓸 수 있다. rollback은 과거 내용을
+새 `H/W/F` revision으로 전진 복원할 뿐, 과거 `A`를 되살리거나 어떤 `Π`도 바꾸지 않는다.
+
+실행 가능성은 최소한 다음 세 채널을 분리한다.
+
+```math
+Executable(e,c)=H.exists(e)\land W.open(e,c)\land\Pi.allow(e,c)
+```
+
+높은 `W`는 `Π` 거부를 보상하지 못하며, `Π` 허가는 진실을 만들지 않는다.
+
+## 구현 경계
+
+현재 단계에서는 로컬 ontology JSON과 strict validator만 둔다.
+
+- TypeScript/Effect schema와 순수 semantic validator:
+  `src/hswm/effect-runtime/src/hswm-core-ontology*.ts`
+- 적대적 fixture와 source-hash 검증:
+  `src/hswm/effect-runtime/test/hswm-core-ontology.test.ts`
+
+Effect는 unknown JSON decode와 typed failure 경계에 쓰며, owner 판정과 graph closure는
+I/O 없는 순수 함수로 유지한다. 이 bundle을 원격 Neo4j에 쓰는 publisher는 만들지 않았다.
+향후 publisher는 별도 schema-registry review, explicit apply authority, source-hash 재검증을
+거쳐야 한다.
+
+여기서 검증되는 것은 **v1 taxonomy와 graph-level responsibility contract**까지다.
+`CanonicalAtom`, `ProjectionArtifact`, claim/evidence payload의 runtime tagged-union schema,
+실제 payload atomization, normalization receipt, projection manifest는 아직 구현하지 않았다.
+따라서 이 계약은 runtime owner enforcement나 canonical incidence roundtrip이 이미 완성됐다는
+주장을 하지 않는다. UID, owner/lifecycle mapping, relation triple, seam, transition, projection,
+invariant code는 개별 규칙으로 닫고, 역할 경계·불변식 설명을 포함한 나머지 의미 필드도 전체
+canonical-content SHA-256으로 결속한다. 따라서 의미 문구 변경도 조용히 같은 v1로 통과하지
+않으며 명시적인 schema revision과 검토가 필요하다.
+
+## 다음 구현 전에 닫아야 할 정리
+
+1. 모든 runtime payload schema를 현재 33 primitive kind 중 하나로 atomize할 수 있는가.
+2. normalization rewrite가 종료하고 모든 critical pair가 합류하는가.
+3. typed-incidence compile/decompile이 canonical H를 bit-exact로 복원하는가.
+4. component seam이 모두 맞을 때 global state cut이 하나로 glue되는가.
+5. `Π` deny, stale permit, lossy commit-back, 사후 eligibility가 상태를 바꾸지 못하는가.
+6. 새 primitive kind가 한 owner로 분해되지 않으면 schema extension을 fail-closed 하는가.
+
+이 정리가 증명되기 전의 정확한 주장은 “유일 책임 정규형을 위한 v1 계약”이며,
+“보편적으로 유일한 존재론”이나 “완성된 HSWM”이 아니다.

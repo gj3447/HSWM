@@ -1,5 +1,15 @@
 export * from "./contracts.js"
 export * from "./domain.js"
+export {
+  HSWM_CORE_RESPONSIBILITY_ONTOLOGY_SCHEMA_VERSION,
+  type HSWMCoreResponsibilityOntology
+} from "./hswm-core-ontology-schema.js"
+export {
+  HSWMCoreOntologyError,
+  decodeHSWMCoreResponsibilityOntology,
+  decodeHSWMCoreResponsibilityOntologyBytes,
+  type HSWMCoreOntologyErrorCode
+} from "./hswm-core-ontology.js"
 export * from "./schema.js"
 export * from "./s2s-canonical.js"
 export * from "./s2s-seed.js"

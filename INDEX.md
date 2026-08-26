@@ -41,7 +41,9 @@ create-only 공개한다. 새 runtime은 snapshot·history·submit마다 schema/
 receipt를 genesis부터 다시 검증해 관측된 intact 로컬 선형 prefix를 복구한다. 외부
 monotonic-head witness가 없으므로 완전한 tail 삭제에 대한 anti-rollback을 증명하지 않으며,
 canonical Permit, 분산 합의, migration, LLM 실행이나 outcome-bound learning의 구현·효능
-주장도 아니다.
+주장도 아니다. package-root-private internal test seam의 14-checkpoint interruption
+suite는 fresh replay의 old-or-exact-new prefix 불변식을 검증하지만 실제 power
+loss·kernel writeback·device flush 실험은 아니다.
 
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,

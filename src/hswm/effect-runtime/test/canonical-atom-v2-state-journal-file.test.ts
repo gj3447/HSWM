@@ -1,4 +1,12 @@
-import { chmodSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, unlinkSync } from "node:fs"
+import {
+  chmodSync,
+  mkdirSync,
+  mkdtempSync,
+  rmSync,
+  symlinkSync,
+  truncateSync,
+  unlinkSync
+} from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 
@@ -105,6 +113,62 @@ it.effect("keeps complete tail deletion an explicit external-witness anti-rollba
     const observedPrefix = yield* store.recover
     expect(observedPrefix).toHaveLength(1)
     expect(observedPrefix[0]?.descriptor).toEqual(predecessor)
+  }).pipe(Effect.provide(layer(root)))
+  return program.pipe(Effect.ensuring(cleanup(root)))
+})
+
+it.effect("fails closed when a non-tail slot deletion creates a revision gap", () => {
+  const root = mkdtempSync(join(tmpdir(), "hswm-canonical-v2-journal-gap-"))
+  const program = Effect.gen(function* () {
+    const store = yield* CanonicalAtomV2StateJournalStore
+    const first = yield* store.publish({ stateRevision: 0, expectedPredecessor: null, bytes: bytes("zero") })
+    const firstDescriptor = first.recovery[0]?.descriptor
+    if (firstDescriptor === undefined) return
+    const second = yield* store.publish({ stateRevision: 1, expectedPredecessor: firstDescriptor, bytes: bytes("one") })
+    const secondDescriptor = second.recovery[1]?.descriptor
+    if (secondDescriptor === undefined) return
+    yield* store.publish({ stateRevision: 2, expectedPredecessor: secondDescriptor, bytes: bytes("two") })
+    unlinkSync(join(
+      root,
+      "journal-slots",
+      canonicalAtomV2StateJournalSlotName(lineage, schema, 1)
+    ))
+    const recovery = yield* store.recover.pipe(Effect.either)
+    expect(Either.isLeft(recovery)).toBe(true)
+    if (Either.isLeft(recovery)) expect(recovery.left.reason).toBe("SLOT_LAYOUT_INVALID")
+  }).pipe(Effect.provide(layer(root)))
+  return program.pipe(Effect.ensuring(cleanup(root)))
+})
+
+it.effect("fails closed when a hard-linked journal record is truncated", () => {
+  const root = mkdtempSync(join(tmpdir(), "hswm-canonical-v2-journal-truncated-"))
+  const program = Effect.gen(function* () {
+    const store = yield* CanonicalAtomV2StateJournalStore
+    const published = yield* store.publish({ stateRevision: 0, expectedPredecessor: null, bytes: bytes("record-to-truncate") })
+    const descriptor = published.recovery[0]?.descriptor
+    if (descriptor === undefined) return
+    const objectPath = join(root, "journal-objects", descriptor.sha256)
+    chmodSync(objectPath, 0o600)
+    truncateSync(objectPath, descriptor.byteLength - 1)
+    chmodSync(objectPath, 0o400)
+    const recovery = yield* store.recover.pipe(Effect.either)
+    expect(Either.isLeft(recovery)).toBe(true)
+    if (Either.isLeft(recovery)) expect(recovery.left.reason).toBe("CORRUPT_ENTRY")
+  }).pipe(Effect.provide(layer(root)))
+  return program.pipe(Effect.ensuring(cleanup(root)))
+})
+
+it.effect("fails closed when the content-addressed object link is missing", () => {
+  const root = mkdtempSync(join(tmpdir(), "hswm-canonical-v2-journal-object-missing-"))
+  const program = Effect.gen(function* () {
+    const store = yield* CanonicalAtomV2StateJournalStore
+    const published = yield* store.publish({ stateRevision: 0, expectedPredecessor: null, bytes: bytes("record") })
+    const descriptor = published.recovery[0]?.descriptor
+    if (descriptor === undefined) return
+    unlinkSync(join(root, "journal-objects", descriptor.sha256))
+    const recovery = yield* store.recover.pipe(Effect.either)
+    expect(Either.isLeft(recovery)).toBe(true)
+    if (Either.isLeft(recovery)) expect(recovery.left.reason).toBe("CORRUPT_ENTRY")
   }).pipe(Effect.provide(layer(root)))
   return program.pipe(Effect.ensuring(cleanup(root)))
 })

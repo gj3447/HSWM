@@ -47,7 +47,10 @@ The current v2 boundary is intentionally small:
   records and a root-private Effect store. The local POSIX adapter publishes a
   content-addressed record object and one create-only fixed revision slot. Its
   one-winner property assumes the observed slot remains intact; it is not an
-  external anti-rollback witness.
+  external anti-rollback witness. A package-root-private, internal test-only
+  seam interrupts 14 logical publication checkpoints and verifies fresh
+  replay; it is absent from the package-root API and is not a physical
+  power-loss simulator.
 - `canonical-atom-v2-durable-runtime.ts` treats that journal—not a mutable
   cache—as the recovery truth. Every snapshot, history read and submit replays
   the chain, verifies schema/payload/envelope content and recomputes each pure

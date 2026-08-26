@@ -83,6 +83,14 @@ it("exports durable v2 replay without raw journal publication or receipt constru
   expect(
     "makeCanonicalAtomV2StateJournalStoreMemoryLayer" in PublicApi
   ).toBe(false)
+  expect(
+    "CANONICAL_ATOM_V2_STATE_JOURNAL_FILE_PUBLICATION_CHECKPOINTS_FOR_TEST" in
+      PublicApi
+  ).toBe(false)
+  expect(
+    "makeCanonicalAtomV2StateJournalFileStoreLayerWithInterruptionForTest" in
+      PublicApi
+  ).toBe(false)
   expect("makeCanonicalAtomV2DurableRuntimeLayer" in PublicApi).toBe(false)
   expect(
     "makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest" in PublicApi

@@ -187,9 +187,9 @@ In particular, this phase does **not** provide:
 - a power-loss proof for every OS, device, filesystem, network filesystem, or
   hostile-parent-path environment;
 - schema migration, atom/journal fork or merge, rollback/compensation, or a
-  cross-version identity proof; or
+  cross-version identity proof;
 - external-effect exactly-once delivery. The journal records a local accepted
-  state transition, not completion of an arbitrary external action; or
+  state transition, not completion of an arbitrary external action;
 - an externally witnessed monotonic head, anti-rollback protection, or proof
   that a freshly opened valid prefix has not lost a complete trailing suffix.
 
@@ -204,9 +204,25 @@ genesis, two-step pure replay, receipt/binding/state/envelope tamper rejection,
 memory-store contiguity, file restart, exact retry, stale predecessor and
 independent-writer races, runtime restart through two revisions, finalized-slot
 permission drift, complete-descriptor CAS mismatch, unsafe root symlinks,
-missing reachable payload content, frozen results and failed proposal prefix
-invariance. These tests exercise the reference contract; they are not a
-physical power-loss experiment.
+missing reachable payload content, frozen results, and failed proposal prefix
+invariance. It now also interrupts every ordinary commit at 14 exact
+before/after checkpoints spanning object file fsync, object link,
+object-directory fsync, object readback, slot link, slot-directory fsync and
+final journal readback, plus genesis at representative pre-slot and post-slot
+checkpoints. Every case opens a fresh Layer and observes only the old exact
+prefix or the old prefix plus the exact new record. Non-tail gaps, hard-linked
+record truncation, and missing journal objects fail closed. Fresh
+durable-runtime reopening separately demonstrates that a non-tail gap and a
+missing referenced object fail closed, while complete tail deletion can expose
+an intact shorter prefix and therefore remains an explicit anti-rollback
+nonclaim. A re-addressed `{}` journal object also demonstrates the boundary
+between the raw store and the runtime: structural hard-link recovery succeeds,
+but strict canonical replay rejects the record as `RECORD_INVALID`.
+
+The interruption seam throws a tagged exception inside a still-running test
+process; JavaScript cleanup may therefore run. It demonstrates fresh-replay
+exposure invariants, not physical power loss, kernel writeback behavior, device
+flush behavior, or universal crash durability.
 
 Implementation and review must retain at least these categories:
 
@@ -216,7 +232,7 @@ Implementation and review must retain at least these categories:
 | Canonical ingress | duplicate-key, malformed, non-UTF-8/bounded, and noncanonical-record rejection |
 | Chain integrity | predecessor/hash/state-commitment tamper, gap, reorder, duplicate slot, fork, and truncated record bytes fail closed; complete trailing-slot deletion remains an explicit anti-rollback nonclaim |
 | Content integrity | missing or changed schema/payload/envelope bytes and descriptor/schema drift reject replay |
-| Publication/crash | deterministic failures before/after object fsync, slot link, directory fsync and readback yield either no claimed slot or one wholly replayable record; unclaimed orphans are allowed |
+| Publication/interruption | package-root-private, internal test-only deterministic interruptions before/after object fsync/link/readback and slot link/fsync/final readback yield either no claimed slot or one wholly replayable record; unclaimed orphans are allowed |
 | Concurrency | independent writers have one slot winner; stale predecessor fails; exact winner retry is idempotent |
 | Snapshot/failure | receipt/state nested snapshots cannot mutate future reads; rejected domain/permission/store paths leave committed prefix unchanged |
 | Public boundary | package root exposes no raw slot overwrite, journal bypass, mutable cache, or unsafe receipt-construction path |
@@ -233,12 +249,19 @@ publication, the fixed slot is the commit point, and the returned state and
 receipt come from a fresh verified replay. No process-local state cache is
 accepted as recovery truth.
 
+The file adapter now has one package-root-private, internal test-only
+interruption factory covering the 14 logical publication checkpoints above. It
+is compiled into the internal module but disabled by a fixed `null` in the
+production factory, and is not exposed as a runtime command, environment
+variable, or public mutation capability. This is an evidence instrument for the
+existing transition contract, not an HSWM state component or a learning
+advance.
+
 The next implementation order is:
 
-1. Add deterministic fault injection around each fsync/link/readback window,
-   explicit gap/truncated-record fixtures, a trailing-deletion fixture that
-   preserves the anti-rollback nonclaim, and longer multi-process local stress
-   runs.
+1. Add low-level `EIO`/unsupported-operation injection for actual link/fsync
+   error branches, exact-retry resync failures, and longer multi-process local
+   stress runs. Keep physical power-cut testing as a separate platform claim.
 2. Specify typed canonical authorization, trace, provenance, outcome and
    rejection/quarantine evidence without treating them as automatically
    authorized or learned.

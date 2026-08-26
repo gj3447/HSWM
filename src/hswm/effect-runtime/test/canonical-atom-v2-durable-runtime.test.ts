@@ -1,13 +1,22 @@
-import { chmodSync, mkdtempSync, rmSync, unlinkSync } from "node:fs"
+import { createHash } from "node:crypto"
+import {
+  chmodSync,
+  linkSync,
+  mkdtempSync,
+  rmSync,
+  unlinkSync,
+  writeFileSync
+} from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 
 import { expect, it } from "@effect/vitest"
-import { Effect, Either } from "effect"
+import { Effect, Either, Layer } from "effect"
 
 import {
   HSWM_CANONICAL_ATOM_V2_LOCAL_DURABLE_STATE,
   CanonicalAtomV2DurableRuntime,
+  makeCanonicalAtomV2DurableRuntimeLayer,
   makeCanonicalAtomV2DurableRuntimeFileLayer,
   makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest
 } from "../src/canonical-atom-v2-durable-runtime.js"
@@ -18,8 +27,17 @@ import {
   type CanonicalAtomV2ContentAuthorizationGrant,
   type CanonicalAtomV2WriteContentBinding
 } from "../src/canonical-atom-v2-content-bound.js"
+import { makeCanonicalAtomV2ContentFileStoreLayer } from "../src/canonical-atom-v2-content-file.js"
 import type { CanonicalAtomV2ContentDescriptor } from "../src/canonical-atom-v2-content.js"
-import { canonicalAtomV2StateJournalSlotName } from "../src/canonical-atom-v2-state-journal-file.js"
+import {
+  CANONICAL_ATOM_V2_STATE_JOURNAL_FILE_PUBLICATION_CHECKPOINTS_FOR_TEST,
+  canonicalAtomV2StateJournalSlotName,
+  makeCanonicalAtomV2StateJournalFileStoreLayer,
+  makeCanonicalAtomV2StateJournalFileStoreLayerWithInterruptionForTest,
+  type CanonicalAtomV2StateJournalFilePublicationCheckpointForTest
+} from "../src/canonical-atom-v2-state-journal-file.js"
+import { CanonicalAtomV2StateJournalStore } from "../src/canonical-atom-v2-state-journal-store.js"
+import { decodeCanonicalAtomV2StateJournalRecordBytes } from "../src/canonical-atom-v2-state-journal.js"
 import {
   HSWM_CANONICAL_ATOM_V2_CONTRACT_VERSION,
   HSWM_CANONICAL_SCHEMA_V2_CONTRACT_VERSION,
@@ -38,6 +56,8 @@ const AUTHORIZATION = "authorization:durable-writer"
 const WRITE_SCOPE = "scope:canonical-write"
 
 const utf8 = (value: string): Uint8Array => new TextEncoder().encode(value)
+const sha256 = (value: Uint8Array): string =>
+  createHash("sha256").update(value).digest("hex")
 
 const rightOrThrow = <A, E>(value: Either.Either<A, E>): A => {
   if (Either.isLeft(value)) throw new Error("fixture construction failed")
@@ -188,6 +208,41 @@ const fileLayer = (root: string) =>
     grants()
   )
 
+const interruptedFileLayer = (
+  root: string,
+  checkpoint: CanonicalAtomV2StateJournalFilePublicationCheckpointForTest
+) => makeCanonicalAtomV2DurableRuntimeLayer(
+  JOURNAL_LINEAGE,
+  rawSchemaBytes(),
+  grants()
+).pipe(
+  Layer.provide([
+    makeCanonicalAtomV2ContentFileStoreLayer(root),
+    makeCanonicalAtomV2StateJournalFileStoreLayerWithInterruptionForTest(
+      root,
+      JOURNAL_LINEAGE,
+      schemaContent().binding.content.sha256,
+      checkpoint
+    )
+  ])
+)
+
+const rawJournalLayer = (root: string) =>
+  makeCanonicalAtomV2StateJournalFileStoreLayer(
+    root,
+    JOURNAL_LINEAGE,
+    schemaContent().binding.content.sha256
+  )
+
+const commitMayBeVisible = (
+  checkpoint: CanonicalAtomV2StateJournalFilePublicationCheckpointForTest
+): boolean =>
+  checkpoint === "slot-link:after" ||
+  checkpoint === "slot-directory-fsync:before" ||
+  checkpoint === "slot-directory-fsync:after" ||
+  checkpoint === "journal-readback:before" ||
+  checkpoint === "journal-readback:after"
+
 const withTemporaryRoot = <A, E>(
   use: (root: string) => Effect.Effect<A, E>
 ): Effect.Effect<A, E> => {
@@ -195,6 +250,129 @@ const withTemporaryRoot = <A, E>(
   return use(root).pipe(
     Effect.ensuring(
       Effect.sync(() => rmSync(root, { recursive: true, force: true }))
+    )
+  )
+}
+
+const commitTwoAtomRevisions = (root: string, atomUid: string) =>
+  Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const firstPayload = yield* runtime.stageContent(
+      "text/plain",
+      utf8(`${atomUid}:v0`)
+    )
+    const first = yield* runtime.submit(
+      inputFor(atomFixture(atomUid, firstPayload))
+    )
+    const secondPayload = yield* runtime.stageContent(
+      "text/plain",
+      utf8(`${atomUid}:v1`)
+    )
+    const second = yield* runtime.submit(
+      inputFor(atomFixture(atomUid, secondPayload, 1), 1)
+    )
+    return { first, second }
+  }).pipe(Effect.provide(fileLayer(root)))
+
+for (const checkpoint of CANONICAL_ATOM_V2_STATE_JOURNAL_FILE_PUBLICATION_CHECKPOINTS_FOR_TEST) {
+  it.effect(`fresh replay exposes only an exact old or new prefix after ${checkpoint}`, () =>
+    withTemporaryRoot((root) =>
+      Effect.gen(function* () {
+        yield* Effect.gen(function* () {
+          const runtime = yield* CanonicalAtomV2DurableRuntime
+          return yield* runtime.snapshot
+        }).pipe(Effect.provide(fileLayer(root)))
+
+        const attempt = yield* Effect.gen(function* () {
+          const runtime = yield* CanonicalAtomV2DurableRuntime
+          const payload = yield* runtime.stageContent(
+            "text/plain",
+            utf8(`fault:${checkpoint}`)
+          )
+          return yield* runtime.submit(
+            inputFor(atomFixture("atom:fault", payload))
+          )
+        }).pipe(
+          Effect.provide(interruptedFileLayer(root, checkpoint)),
+          Effect.either
+        )
+
+        expect(Either.isLeft(attempt)).toBe(true)
+        if (Either.isLeft(attempt)) {
+          expect(attempt.left).toMatchObject({
+            operation: "PUBLISH",
+            reason: commitMayBeVisible(checkpoint)
+              ? "PUBLICATION_OUTCOME_UNKNOWN"
+              : "IO_FAILED"
+          })
+        }
+
+        const recovered = yield* Effect.gen(function* () {
+          const runtime = yield* CanonicalAtomV2DurableRuntime
+          return {
+            state: yield* runtime.snapshot,
+            history: yield* runtime.history
+          }
+        }).pipe(Effect.provide(fileLayer(root)))
+        const expectedRevision = commitMayBeVisible(checkpoint) ? 1 : 0
+        expect(recovered.state.canonical.revision).toBe(expectedRevision)
+        expect(recovered.history).toHaveLength(expectedRevision)
+        if (expectedRevision === 1) {
+          expect(recovered.state.canonical.atoms[0]?.key.atomUid).toBe(
+            "atom:fault"
+          )
+          expect(recovered.history[0]?.commit.receipt.transitionId).toBe(
+            "transition:atom:fault:0"
+          )
+        }
+      })
+    )
+  )
+}
+
+for (const checkpoint of [
+  "object-file-fsync:after",
+  "slot-link:after"
+] as const) {
+  it.effect(`genesis interruption has an exact recoverable meaning after ${checkpoint}`, () =>
+    withTemporaryRoot((root) =>
+      Effect.gen(function* () {
+        const attempt = yield* Effect.gen(function* () {
+          return yield* CanonicalAtomV2DurableRuntime
+        }).pipe(
+          Effect.provide(interruptedFileLayer(root, checkpoint)),
+          Effect.either
+        )
+        expect(Either.isLeft(attempt)).toBe(true)
+
+        const observed = yield* Effect.gen(function* () {
+          const store = yield* CanonicalAtomV2StateJournalStore
+          return yield* store.recover
+        }).pipe(Effect.provide(rawJournalLayer(root)))
+        expect(observed).toHaveLength(checkpoint === "slot-link:after" ? 1 : 0)
+        if (observed[0] !== undefined) {
+          const decoded = decodeCanonicalAtomV2StateJournalRecordBytes(
+            observed[0].bytes
+          )
+          expect(Either.isRight(decoded)).toBe(true)
+          if (Either.isRight(decoded)) {
+            expect(decoded.right._tag).toBe(
+              "CanonicalAtomV2StateJournalGenesis"
+            )
+            expect(decoded.right.stateRevision).toBe(0)
+          }
+        }
+
+        const initialized = yield* Effect.gen(function* () {
+          const runtime = yield* CanonicalAtomV2DurableRuntime
+          return {
+            state: yield* runtime.snapshot,
+            history: yield* runtime.history
+          }
+        }).pipe(Effect.provide(fileLayer(root)))
+        expect(initialized.state.canonical.revision).toBe(0)
+        expect(initialized.history).toEqual([])
+      })
     )
   )
 }
@@ -330,6 +508,115 @@ it.effect("fails closed on a changed finalized journal inode and on missing reac
       }).pipe(Effect.provide(fileLayer(root)), Effect.either)
       expect(Either.isLeft(missingPayload)).toBe(true)
       expect(committed.result.state.canonical.revision).toBe(1)
+    })
+  )
+)
+
+it.effect("fresh durable recovery fails closed on a non-tail journal gap", () =>
+  withTemporaryRoot((root) =>
+    Effect.gen(function* () {
+      yield* commitTwoAtomRevisions(root, "atom:gap")
+      unlinkSync(join(
+        root,
+        "journal-slots",
+        canonicalAtomV2StateJournalSlotName(
+          JOURNAL_LINEAGE,
+          schemaContent().binding.content.sha256,
+          1
+        )
+      ))
+      const reopened = yield* Effect.gen(function* () {
+        return yield* CanonicalAtomV2DurableRuntime
+      }).pipe(Effect.provide(fileLayer(root)), Effect.either)
+      expect(Either.isLeft(reopened)).toBe(true)
+      if (Either.isLeft(reopened)) {
+        expect(reopened.left).toMatchObject({ reason: "SLOT_LAYOUT_INVALID" })
+      }
+    })
+  )
+)
+
+it.effect("fresh durable recovery preserves the complete-tail anti-rollback nonclaim", () =>
+  withTemporaryRoot((root) =>
+    Effect.gen(function* () {
+      const committed = yield* commitTwoAtomRevisions(root, "atom:tail")
+      unlinkSync(join(
+        root,
+        "journal-slots",
+        canonicalAtomV2StateJournalSlotName(
+          JOURNAL_LINEAGE,
+          schemaContent().binding.content.sha256,
+          2
+        )
+      ))
+      const reopened = yield* Effect.gen(function* () {
+        const runtime = yield* CanonicalAtomV2DurableRuntime
+        return {
+          state: yield* runtime.snapshot,
+          history: yield* runtime.history
+        }
+      }).pipe(Effect.provide(fileLayer(root)))
+      expect(reopened.state.canonical.revision).toBe(1)
+      expect(reopened.history).toEqual([committed.first.receipt])
+      expect(reopened.state.canonical.atoms).toHaveLength(1)
+      expect(reopened.state.canonical.atoms[0]?.key.revisionId).toBe(0)
+    })
+  )
+)
+
+it.effect("fresh durable recovery fails closed when a referenced journal object link is missing", () =>
+  withTemporaryRoot((root) =>
+    Effect.gen(function* () {
+      const committed = yield* commitTwoAtomRevisions(root, "atom:object")
+      unlinkSync(join(
+        root,
+        "journal-objects",
+        committed.second.receipt.record.sha256
+      ))
+      const reopened = yield* Effect.gen(function* () {
+        return yield* CanonicalAtomV2DurableRuntime
+      }).pipe(Effect.provide(fileLayer(root)), Effect.either)
+      expect(Either.isLeft(reopened)).toBe(true)
+      if (Either.isLeft(reopened)) {
+        expect(reopened.left).toMatchObject({ reason: "CORRUPT_ENTRY" })
+      }
+    })
+  )
+)
+
+it.effect("strict replay rejects re-addressed noncanonical journal bytes that pass raw hard-link recovery", () =>
+  withTemporaryRoot((root) =>
+    Effect.gen(function* () {
+      const committed = yield* commitTwoAtomRevisions(root, "atom:noncanonical")
+      const oldObject = join(
+        root,
+        "journal-objects",
+        committed.second.receipt.record.sha256
+      )
+      const invalidRecord = utf8("{}")
+      const newObject = join(root, "journal-objects", sha256(invalidRecord))
+      chmodSync(oldObject, 0o600)
+      writeFileSync(oldObject, invalidRecord)
+      chmodSync(oldObject, 0o400)
+      linkSync(oldObject, newObject)
+      unlinkSync(oldObject)
+
+      const structurallyRecovered = yield* Effect.gen(function* () {
+        const store = yield* CanonicalAtomV2StateJournalStore
+        return yield* store.recover
+      }).pipe(Effect.provide(rawJournalLayer(root)))
+      expect(structurallyRecovered).toHaveLength(3)
+      expect(structurallyRecovered[2]?.descriptor.sha256).toBe(
+        sha256(invalidRecord)
+      )
+
+      const reopened = yield* Effect.gen(function* () {
+        return yield* CanonicalAtomV2DurableRuntime
+      }).pipe(Effect.provide(fileLayer(root)), Effect.either)
+      expect(Either.isLeft(reopened)).toBe(true)
+      if (Either.isLeft(reopened)) {
+        expect(reopened.left).toMatchObject({ code: "RECORD_INVALID" })
+      }
     })
   )
 )

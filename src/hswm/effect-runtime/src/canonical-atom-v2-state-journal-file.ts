@@ -24,6 +24,31 @@ const OBJECTS = "journal-objects"
 const SLOTS = "journal-slots"
 const DIGEST = /^[0-9a-f]{64}$/
 
+/** Package-root-private in-process interruption points for tests, not power-loss simulation. */
+export const CANONICAL_ATOM_V2_STATE_JOURNAL_FILE_PUBLICATION_CHECKPOINTS_FOR_TEST =
+  Object.freeze([
+    "object-file-fsync:before",
+    "object-file-fsync:after",
+    "object-link:before",
+    "object-link:after",
+    "object-directory-fsync:before",
+    "object-directory-fsync:after",
+    "object-readback:before",
+    "object-readback:after",
+    "slot-link:before",
+    "slot-link:after",
+    "slot-directory-fsync:before",
+    "slot-directory-fsync:after",
+    "journal-readback:before",
+    "journal-readback:after"
+  ] as const)
+
+export type CanonicalAtomV2StateJournalFilePublicationCheckpointForTest =
+  typeof CANONICAL_ATOM_V2_STATE_JOURNAL_FILE_PUBLICATION_CHECKPOINTS_FOR_TEST[number]
+
+type PublicationInterruptionForTest =
+  CanonicalAtomV2StateJournalFilePublicationCheckpointForTest | null
+
 interface DirectoryIdentity { readonly path: string; readonly device: number; readonly inode: number }
 interface Identity { readonly root: DirectoryIdentity; readonly objects: DirectoryIdentity; readonly slots: DirectoryIdentity }
 
@@ -42,6 +67,28 @@ const sameDescriptor = (
     : left.mediaType === right.mediaType &&
       left.byteLength === right.byteLength &&
       left.sha256 === right.sha256
+
+const COMMIT_MAY_BE_VISIBLE_CHECKPOINTS = new Set<CanonicalAtomV2StateJournalFilePublicationCheckpointForTest>([
+  "slot-link:after",
+  "slot-directory-fsync:before",
+  "slot-directory-fsync:after",
+  "journal-readback:before",
+  "journal-readback:after"
+])
+
+const interruptPublicationForTest = (
+  interruption: PublicationInterruptionForTest,
+  checkpoint: CanonicalAtomV2StateJournalFilePublicationCheckpointForTest
+): void => {
+  if (interruption !== checkpoint) return
+  throw error(
+    "PUBLISH",
+    COMMIT_MAY_BE_VISIBLE_CHECKPOINTS.has(checkpoint)
+      ? "PUBLICATION_OUTCOME_UNKNOWN"
+      : "IO_FAILED",
+    `test-only publication interruption at ${checkpoint}`
+  )
+}
 
 const snapshotExpectedPredecessor = (
   input: CanonicalAtomV2StateJournalRecordDescriptor | null
@@ -157,7 +204,12 @@ const syncKnownCommit = async (identity: Identity): Promise<void> => {
     }
   }
 }
-const publishObject = async (directory: DirectoryIdentity, name: string, bytes: Uint8Array): Promise<void> => {
+const publishObject = async (
+  directory: DirectoryIdentity,
+  name: string,
+  bytes: Uint8Array,
+  interruption: PublicationInterruptionForTest
+): Promise<void> => {
   await assertDirectory(directory, "PUBLISH")
   const finalPath = join(directory.path, name)
   const temporary = join(directory.path, `.journal-${randomUUID()}.tmp`)
@@ -165,7 +217,14 @@ const publishObject = async (directory: DirectoryIdentity, name: string, bytes: 
   try {
     const handle = await open(temporary, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600)
     made = true
-    try { await handle.writeFile(bytes); await handle.chmod(0o400); await handle.sync() } finally { await handle.close() }
+    try {
+      await handle.writeFile(bytes)
+      await handle.chmod(0o400)
+      interruptPublicationForTest(interruption, "object-file-fsync:before")
+      await handle.sync()
+      interruptPublicationForTest(interruption, "object-file-fsync:after")
+    } finally { await handle.close() }
+    interruptPublicationForTest(interruption, "object-link:before")
     try { await link(temporary, finalPath) } catch (cause) {
       try { const existing = await readRegular(directory, name, "PUBLISH"); if (!sameBytes(existing.bytes, bytes)) throw error("PUBLISH", "CONCURRENT_PUBLICATION_CONFLICT", "immutable journal destination has different bytes") } catch (readCause) {
         if (readCause instanceof Error && "_tag" in readCause) throw readCause
@@ -174,14 +233,19 @@ const publishObject = async (directory: DirectoryIdentity, name: string, bytes: 
         throw readCause
       }
     }
+    interruptPublicationForTest(interruption, "object-link:after")
+    interruptPublicationForTest(interruption, "object-directory-fsync:before")
     try { await syncDirectory(directory, "PUBLISH") } catch {
       try { const existing = await readRegular(directory, name, "PUBLISH"); if (!sameBytes(existing.bytes, bytes)) throw error("PUBLISH", "PUBLICATION_OUTCOME_UNKNOWN", "journal entry differs after directory sync failure"); await syncDirectory(directory, "PUBLISH") } catch (cause) {
         if (cause instanceof Error && "_tag" in cause) throw cause
         throw error("PUBLISH", "PUBLICATION_OUTCOME_UNKNOWN", "journal directory sync outcome is unknown")
       }
     }
+    interruptPublicationForTest(interruption, "object-directory-fsync:after")
+    interruptPublicationForTest(interruption, "object-readback:before")
     const exact = await readRegular(directory, name, "PUBLISH")
     if (!sameBytes(exact.bytes, bytes)) throw error("PUBLISH", "PUBLICATION_OUTCOME_UNKNOWN", "journal readback differs")
+    interruptPublicationForTest(interruption, "object-readback:after")
   } finally { if (made) { try { await unlink(temporary) } catch { /* orphan temporary has no journal meaning */ } } }
 }
 
@@ -197,7 +261,15 @@ const recover = async (identity: Identity, lineage: string, schema: string): Pro
     const slot = canonicalAtomV2StateJournalSlotName(lineage, schema, revision)
     const slotEntry = await readRegular(identity.slots, slot, "RECOVER")
     const descriptor = recordDescriptor(slotEntry.bytes, "RECOVER")
-    const objectEntry = await readRegular(identity.objects, descriptor.sha256, "RECOVER")
+    let objectEntry
+    try {
+      objectEntry = await readRegular(identity.objects, descriptor.sha256, "RECOVER")
+    } catch (cause) {
+      if (hasCode(cause) && cause.code === "ENOENT") {
+        throw error("RECOVER", "CORRUPT_ENTRY", "journal slot has no exact content-addressed object")
+      }
+      throw cause
+    }
     if (!sameBytes(slotEntry.bytes, objectEntry.bytes) || slotEntry.device !== objectEntry.device || slotEntry.inode !== objectEntry.inode) throw error("RECOVER", "CORRUPT_ENTRY", "journal slot and object must be identical hard links")
     recovered.push(Object.freeze({ descriptor, bytes: Uint8Array.from(slotEntry.bytes) }))
   }
@@ -205,8 +277,12 @@ const recover = async (identity: Identity, lineage: string, schema: string): Pro
   return snapshotCanonicalAtomV2StateJournalRecovery(recovered)
 }
 
-/** POSIX/local filesystem adapter; controlled parents required because Node lacks openat2. */
-export const makeCanonicalAtomV2StateJournalFileStoreLayer = (rootPath: string, journalLineageId: string, schemaContentSha256: string) =>
+const makeLayer = (
+  rootPath: string,
+  journalLineageId: string,
+  schemaContentSha256: string,
+  interruption: PublicationInterruptionForTest
+) =>
   Layer.effect(CanonicalAtomV2StateJournalStore, Effect.gen(function* () {
     if (!/^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$/.test(journalLineageId) || !DIGEST.test(schemaContentSha256)) return yield* Effect.fail(error("INITIALIZE", "ROOT_UNSAFE", "journal configuration is invalid"))
     const identity = yield* Effect.tryPromise({ try: () => initialize(rootPath), catch: (cause) => cause instanceof CanonicalAtomV2StateJournalStoreError ? cause : error("INITIALIZE", "IO_FAILED", "journal initialization failed") })
@@ -233,9 +309,10 @@ export const makeCanonicalAtomV2StateJournalFileStoreLayer = (rootPath: string, 
         }
         if (input.stateRevision !== before.length) throw error("PUBLISH", "REVISION_CONFLICT", "journal revision is not next contiguous slot")
         if (!sameDescriptor(before.at(-1)?.descriptor ?? null, expectedPredecessor)) throw error("PUBLISH", "PREDECESSOR_MISMATCH", "journal predecessor does not match recovered tail")
-        await publishObject(identity.objects, descriptor.sha256, bytes)
+        await publishObject(identity.objects, descriptor.sha256, bytes, interruption)
         const slot = canonicalAtomV2StateJournalSlotName(journalLineageId, schemaContentSha256, input.stateRevision)
         await assertDirectory(identity.objects, "PUBLISH"); await assertDirectory(identity.slots, "PUBLISH")
+        interruptPublicationForTest(interruption, "slot-link:before")
         try { await link(join(identity.objects.path, descriptor.sha256), join(identity.slots.path, slot)) } catch (cause) {
           const after = await recover(identity, journalLineageId, schemaContentSha256)
           const winner = after[input.stateRevision]
@@ -248,10 +325,30 @@ export const makeCanonicalAtomV2StateJournalFileStoreLayer = (rootPath: string, 
           if (["ENOSYS", "ENOTSUP", "EOPNOTSUPP", "EXDEV"].includes(String(code))) throw error("PUBLISH", "ATOMIC_PUBLICATION_UNSUPPORTED", String(code))
           throw cause
         }
+        interruptPublicationForTest(interruption, "slot-link:after")
+        interruptPublicationForTest(interruption, "slot-directory-fsync:before")
         try { await syncDirectory(identity.slots, "PUBLISH") } catch { const after = await recover(identity, journalLineageId, schemaContentSha256); const winner = after[input.stateRevision]; if (winner === undefined || !sameBytes(winner.bytes, bytes)) throw error("PUBLISH", "PUBLICATION_OUTCOME_UNKNOWN", "slot durability is unknown"); await syncDirectory(identity.slots, "PUBLISH") }
+        interruptPublicationForTest(interruption, "slot-directory-fsync:after")
+        interruptPublicationForTest(interruption, "journal-readback:before")
         const after = await recover(identity, journalLineageId, schemaContentSha256)
         if (!sameBytes(after[input.stateRevision]?.bytes ?? new Uint8Array(), bytes)) throw error("PUBLISH", "PUBLICATION_OUTCOME_UNKNOWN", "journal readback differs")
+        interruptPublicationForTest(interruption, "journal-readback:after")
         return Object.freeze({ _tag: "Committed", recovery: after })
       }, catch: (cause) => cause instanceof Error && "_tag" in cause ? cause as CanonicalAtomV2StateJournalStoreFailure : error("PUBLISH", "IO_FAILED", "journal publication failed") })
     })
   }))
+
+/** POSIX/local filesystem adapter; controlled parents required because Node lacks openat2. */
+export const makeCanonicalAtomV2StateJournalFileStoreLayer = (
+  rootPath: string,
+  journalLineageId: string,
+  schemaContentSha256: string
+) => makeLayer(rootPath, journalLineageId, schemaContentSha256, null)
+
+/** Package-root-private deterministic interruption seam for internal tests. */
+export const makeCanonicalAtomV2StateJournalFileStoreLayerWithInterruptionForTest = (
+  rootPath: string,
+  journalLineageId: string,
+  schemaContentSha256: string,
+  checkpoint: CanonicalAtomV2StateJournalFilePublicationCheckpointForTest
+) => makeLayer(rootPath, journalLineageId, schemaContentSha256, checkpoint)

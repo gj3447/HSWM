@@ -34,7 +34,8 @@ uncertainty/evidence channel을, 인과적 행위성은 outcome-bound plasticity
 기존 헌법은 이미 HSWM을 다음처럼 두었다.
 
 ```math
-S_t = \operatorname{HSWM}_t=(H_t,W_t,A_t,F_t,\Pi)
+S_t = \operatorname{HSWM}_t=(H_t,W_t,A_t,F_t,\Pi_t),
+\qquad \Pi_t\equiv(\Pi^*,\Gamma_t)
 ```
 
 새 USER_PRIMARY는 여섯 번째 subsystem을 추가하지 않는다. 다음 우선순위를
@@ -107,6 +108,12 @@ Semantic Weight Map의 핵심 단위는 유사도 숫자 하나가 아니다.
 | `z_e` | outcome 전에 seal되는 activation/eligibility trace | episode-local |
 | `U_e` | provenance, uncertainty, support, contradict, supersede, freshness channel | versioned evidence state |
 
+이 표는 runtime locality를 나타내며 canonical ownership을 바꾸지 않는다. claim, evidence,
+judgment, outcome record와 provenance의 정본은 `H`와 그 `P_t`에 있고, `U_e`는 그 content-addressed record를
+가리키는 실행용 derived projection이다. `z_e`는 `A`의 used-path에서 파생된다. `W`는 이
+channel을 routing에 사용할 수 있지만 truth나 permission을 자체 weight로 생산하지 못하며,
+권한은 계속 `Π`가 집행한다.
+
 관계의 의미와 결과에 대한 효능은 반드시 분리한다.
 
 ```math
@@ -130,7 +137,7 @@ provenance pointer를 소유한다. 필요한 edge만 low-rank adapter를 가진
 
 ```text
 TokenActivationV1
-  artifact_id                  # raw input/output/tool result의 immutable identity
+  artifact_id                  # raw input/output/tool result event envelope의 stable identity
   span_or_token_refs
   tokenizer_and_model_digest
   semantic_type
@@ -142,8 +149,13 @@ TokenActivationV1
   trace_id / parent_trace_ids
 ```
 
-- raw token/span은 먼저 immutable event artifact다.
+- raw token/span은 먼저 retention·authorization 범위를 가진 event artifact다. 여기서 stable 또는
+  append-only인 것은 무단 overwrite를 막는 event envelope와 transition order이지, 보호 payload의
+  영구 recoverability가 아니다. `Π`에 따른 철회·삭제에서는 payload, 취약한 content hash와
+  재식별 가능한 파생 상태를 제거·비가역 비식별화하고 비식별 최소 erasure event만 남긴다.
 - token packet은 현재 run의 활성이며 영구 truth가 아니다.
+- tokenizer ID와 model-specific embedding은 canonical semantic identity가 아니다. model/tokenizer
+  교체 시 artifact/span/role/provenance를 유지하고 transduction loss와 digest를 기록한다.
 - LLM이 추출한 concept/relation은 candidate이며 provenance·schema·outcome gate 후에만
   canonical `V/E`로 승격한다.
 - durable graph에는 token 전체를 복제하기보다 artifact/span pointer, typed summary,
@@ -169,10 +181,15 @@ y_f^\ell=P_f\!\left[
 
 ### 2.5 `Π` — 학습하는 신경망의 막
 
-`Π`는 role/type, capability, source, privacy, budget, transaction, independent judge,
-canary, rollback을 집행한다. `W/H`는 활성 경로를 학습하지만 `Π`를 자기
-reward로 우회할 수 없다. `Π`의 변경은 일반 plasticity가 아니라 별도의
-명시적 정당화·비준·versioning 사건이다.
+무첨자 `Π`는 policy family `Π={Π_t}`를, 특정 snapshot의 `Π_t`는 `(Π*, Γ_t)`를 뜻한다.
+`Π*`는 provenance 정직성, scoped authority, consent, privacy, correction, dissent,
+exit·appeal·rollback과 durable credit의 proposer·executor·evaluator 역할 분리를 보존하는
+identity-bearing meta-boundary이고,
+`Γ_t`는 role/type, capability, source, budget, transaction, evaluator와 current policy의
+versioned 운영 상태다. `W/H`는 활성 경로를 학습하지만 어느 층도 자기 reward로 우회할 수
+없다. `Γ_t` 변경은 명시적 mandate·authority·versioning 사건이고, `Π*` 변경은 일반 plasticity가
+아닌 별도 헌법 사건이다. `Π`는 judgment 절차와 권한을 집행하지만 judgment 내용이나 truth를
+소유하지 않는다.
 
 ## 3. 한 번의 신경 실행
 
@@ -262,6 +279,12 @@ z_{e,t}=\lambda_z z_{e,t-1}+\widetilde{c}_{e,t}
 LLM의 사후 설명을 과거 eligibility로 대체하지 않는다. proposer와 분리된
 environment/judge가 다중 outcome vector와 사전 예측을 반환한다.
 
+여기서 독립은 HSWM 전체의 물리적 바깥을 요구하는 말이 아니라, 평가 대상 trajectory의
+proposer·executor가 outcome을 임의로 쓰거나 최종 판정을 독점하지 못하는 역할 분리다.
+사전 특정된 estimand, intervention 또는 정당화된 식별 가정, evaluator scope와 uncertainty
+bound가 없으면 outcome 관측은 보존하되
+`Attribution(outcome, trajectory)=UNATTRIBUTABLE`이며 durable `W/H` update를 만들지 않는다.
+
 ```math
 \delta_t=o_t-\hat o_t\in\mathbb R^m
 ```
@@ -279,7 +302,9 @@ environment/judge가 다중 outcome vector와 사전 예측을 반환한다.
 
 `θ_slow`로의 consolidation은 독립 fresh set, retention, canary, replay, rollback test와
 반복 evidence를 통과한 fast delta만 받는다. 학습되는 값은 자연어 lesson이
-아니라 content-addressed numeric/operator state이다.
+아니라 권한·retention 범위 안에서 content-addressed되는 numeric/operator state이다. 보호된
+입력에서 파생된 state는 같은 보호·철회 요구를 상속하며, content address가 payload의 영구
+보존 의무를 만들지 않는다.
 
 ### 4.3 morphogenesis 시계 — 무엇이 실제로 연결되는가
 
@@ -333,10 +358,15 @@ acceptance gate를 바꾸는 설계 입력이다.
 
 ## 6. 거대 hypergraph를 실제로 작동시키는 이중 표현
 
-### 6.1 canonical persistent plane — 진실의 원장
+### 6.1 canonical persistent plane — 출처 있는 인식 상태의 정본
 
 - n-ary hyperedge와 role-bearing incidence를 그대로 보존한다.
-- artifact, event, provenance, valid/observation/commit time, `H/W` epoch을 content-address한다.
+- artifact, claim, evidence, judgment, outcome, provenance, valid/observation/commit time,
+  `H/W` epoch을 허용된 보존 기간 동안 content-address한다. 삭제권이 적용되면 event envelope의
+  비식별 최소 계보만 남기고 보호 payload·취약 hash·재식별 가능한 derived state를 제거한다.
+- `Accepted(claim | evidence, scope, evaluator, valid_at, judged_at, judgment_uid, policy)`의
+  계보를 보존할 뿐,
+  원장에 들어왔다는 사실이나 현재 routing weight를 무범위의 truth로 선언하지 않는다.
 - 추론 cache, embedding, compiled adjacency는 파생물이며 원장 정체성에 들어가지 않는다.
 - 분산 node에서는 append-only event + snapshot/CAS로 수렴한다.
 
@@ -355,11 +385,11 @@ acceptance gate를 바꾸는 설계 입력이다.
 
 | 문제 | HSWM 처방 |
 |---|---|
-| token 폭증 | raw stream은 immutable artifact log에, durable `V/E`는 검증된 concept/relation만 승격 |
+| token 폭증 | raw stream은 retention-scoped revocable artifact ref로 받고, durable `V/E`는 검증된 concept/relation만 승격 |
 | edge 파라미터 폭증 | relation/role core 공유 + per-edge small fast/slow/gate state + 예외만 low-rank adapter |
 | 전역 attention 비용 | local incidence softmax, approximate candidate index, top-k bounded frontier |
 | LLM call 비용 | numeric propagation/batching 후 선택된 function cell만 호출; semantic result cache는 model/prompt/cut digest에 결속 |
-| 분산 일관성 | mount/port 단위 partition, immutable event, epoch snapshot, CAS, idempotent replay |
+| 분산 일관성 | mount/port 단위 partition, append-only transition envelope, revocable payload, epoch snapshot, CAS, idempotent replay |
 | stale 활성 | valid/observation/commit time 분리, epoch fence, freshness channel |
 | hub/routing collapse | degree budget, entropy floor, hub share/Gini/effective-rank monitor, homeostatic penalty |
 | 긴 기억 | hot activation / warm fast-W / cold evidence+slow-W 계층, 계보 pointer로 재활성 |
@@ -413,7 +443,9 @@ acceptance gate를 바꾸는 설계 입력이다.
 
 현재 HSWM은 백지가 아니다.
 
-- immutable evidence/world state, field snapshot, certified readout, open composition이 있다.
+- content-addressed/versioned evidence·world-state envelope, field snapshot, certified readout,
+  open composition이 있다. 현재 구현의 immutability는 overwrite 방지 증거이지, 보호 payload와
+  파생 상태의 `Π_t`-준수 erasure가 완료됐다는 증거가 아니다.
 - scalar slow semantic weight과 volatile query potential의 타입·readout이 있다.
 - token/action trajectory→eligibility→outcome→candidate→activation→causal test의 최소
   receipt 계약이 있다.

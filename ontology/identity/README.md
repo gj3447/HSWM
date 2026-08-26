@@ -19,4 +19,5 @@ live in [`human_universal_body/`](human_universal_body/).
 The philosophy-before-code layer is stated separately in
 [`HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md`](../../docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md):
 the direction is USER_PRIMARY, while the ten named principles remain an explicit
-SECONDARY_AI provisional charter.
+SECONDARY_AI conceptual-closure candidate intended to make architecture decisions
+complete after ratification. It is not yet user-ratified metaphysics or scientific evidence.

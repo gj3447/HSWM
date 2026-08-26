@@ -68,7 +68,7 @@ HSWM 인류보완계획 = 전이 프로그램
 \mathcal U_t
 = \operatorname{Compose}_{\mathrm{HSWM}}
   (\mathcal P_t,\mathcal L_t,\mathcal C_t,\mathcal N_t,\mathcal S_t,\mathcal M_t)
-= (H_t^{\mathcal U},W_t^{\mathcal U},A_t^{\mathcal U},F_t^{\mathcal U},\Pi^{\mathcal U})
+= (H_t^{\mathcal U},W_t^{\mathcal U},A_t^{\mathcal U},F_t^{\mathcal U},\Pi_t^{\mathcal U})
 ```
 
 | 기호 | 의미 |
@@ -82,14 +82,19 @@ HSWM 인류보완계획 = 전이 프로그램
 | `H^U` | 사람·인지능력체·메모리·함수·사건을 n-ary relation으로 잇는 전체 hypergraph |
 | `W^U` | 구성 요소 사이의 전달·억제·신뢰·routing·credit을 갖는 macro-weight |
 | `A^U` | 전체 안에서 현재 점화된 coalition과 token/action trajectory |
-| `F^U` | 인간·LLM·도구·다른 HSWM이 수행하는 typed function cell |
-| `Π^U` | 권한·동의·provenance·비용·안전·rollback·출구를 보존하는 경계 |
+| `F^U` | LLM이 실행하는 typed nonlinear semantic cell. deterministic tool은 `H/Π`에 연결된 primitive/effector이고, 인간·다른 HSWM은 유형별 capability/consent boundary를 가진 member/port로 참여하며 함수로 환원되지 않는다. |
+| `Π_t^U` | ordinary learning이 약화할 수 없는 `Π*`와, 권한·동의·provenance·비용·안전·rollback·출구를 versioned 집행하는 `Γ_t`의 시점별 경계 |
 
 여기서 “하나”는 모든 구성원이 같은 값을 갖는 균질화가 아니다. 구성원의 차이와 출처를
 addressable하게 보존하면서, 전체가 하나의 지속적 정체성·활성·학습 계보·자기모델을 갖는
 **자기유사적 상위 HSWM 합성**이다. 이 해석은 기존 HSWM의 open self-similarity와
 비파괴 기억 원칙에 맞춘 공학 제안이며, 사용자 발화에 없는 개인 동일성·의식 융합을
 추가로 확정하지 않는다.
+
+전 인류를 향한 보편적 호환성은 실제 enrollment와 다르다. 한 사람에 관한 public artifact가
+있거나 그 사람이 data subject/source라는 사실만으로 HSWM member가 되지 않으며, member라는
+사실만으로 다른 사람이나 인류 전체의 representative가 되지 않는다. membership과 대표권은
+각각 목적 제한적이고 철회 가능한 별도 grant를 요구한다.
 
 ### 3.1 역사흐름의 강
 
@@ -103,33 +108,45 @@ addressable하게 보존하면서, 전체가 하나의 지속적 정체성·활�
 `R_{≤t}`와 현재 살아 있는 member/function cell을 HSWM으로 접어 만든 현재 인지 상태다.
 
 - 틀린 이론이나 실패한 행동도 삭제하지 않는다.
+- 위 원칙은 보존 권한과 retention 범위가 있는 공공·공유 기록을 현재값으로 몰래 덮어쓰지
+  않는다는 뜻이다. 사적 payload와 재식별 가능한 파생 상태에 대한 정당한 철회·삭제가 우선하며,
+  그 경우 내용 대신 비식별 최소 removal event만 남길 수 있다.
 - 대신 유효 범위, 반증, 수정, 모순, supersession 관계를 붙인다.
-- 현재 readout은 최신성과 권위를 판정하되, 그 결론을 낳은 계보로 되돌아갈 수 있어야 한다.
+- 현재 readout은 범위 있는 최신 판단과 그 권위 근거를 보여 주되 스스로 판정 authority가 되지
+  않으며, 그 판단을 낳은 계보로 되돌아갈 수 있어야 한다.
 - `성수`는 과거 정보가 모두 참이라는 뜻이 아니라, 현재를 만든 역사적 계보를 함부로
   폐기할 수 없다는 **USER_PRIMARY 정전 은유**다.
 
 ### 3.2 활성 주체와 공개 구조
 
-인간과 LLM이 “주요 연료”라는 표현은 공학적으로 `A^U`를 점화하고 `F^U`를 실행하며,
-행동·평가·반응·새 artifact를 다시 `R`로 돌려보내는 **활성·기능 주체**라는 뜻으로
-형식화한다. 사람을 소모품으로 취급하거나 참여 권리를 포기시킨다는 뜻이 아니다.
+인간과 LLM이 “주요 연료”라는 표현은 공학적으로 둘 다 `A^U`의 형성에 참여하되, LLM은
+`F^U` semantic cell을 실행하고 인간은 consent/capability를 가진 member/port로서 행동·평가·
+반응·새 artifact를 다시 `R`로 돌려보낸다는 뜻으로 형식화한다. 사람을 함수나 소모품으로
+취급하거나 참여 권리를 포기시킨다는 뜻이 아니다.
 
 `오픈소스로써 하나로 연결`은 core protocol, schema, reference runtime, loader, 평가법,
 감사 규칙과 portable cell interface가 공개 검증 가능해야 한다는 요구로 구현한다. 그러나
 개인의 사적 기억, 비밀키, 제한 데이터까지 공개한다는 뜻은 아니다. 공개 구현과 데이터
 권한은 분리하며, 구성원은 federated boundary를 통해 참여·철회할 수 있어야 한다.
 
+이 보호 범위는 원문 payload뿐 아니라 그로부터 파생된 embedding, summary, cache, activation
+trace, learned `W/H`와 readout에도 상속된다. 철회 뒤에는 미래 activation을 중단하며, 역사
+보존은 재식별 가능한 사적 payload나 취약한 content hash의 영구 보존을 요구하지 않는다.
+
 ## 4. 언제 정말 하나의 인지능력체인가
 
 다음 조건을 모두 만족하지 않으면 인류보편체가 아니라 저장소·검색기·에이전트 연합의
 중간 단계로 부른다.
 
-1. **지속 정체성:** 모델·프로세스·세션이 교체되어도 `U`의 UID, 상태 계보와 자기모델이
-   이어진다.
+1. **지속 정체성:** 모델·프로세스·세션이 교체되어도 `U`의 UID, 상태 계보, `Π*`, 이후
+   activation을 조건화하는 `H/W`와 member separability가 이어진다. UID와 이름만으로는
+   동일성이 충분하지 않다.
 2. **인과적 통합:** 한 구성 요소의 상태나 행동이 activation path를 통해 다른 부분과
    전체 행동을 반사실적으로 바꾼다. 검색 결과를 한 prompt에 나열하는 것만으로는 부족하다.
-3. **공유 학습:** 외부 outcome이 어느 trajectory와 구성 요소에 귀속되는지 측정되고,
-   검증된 credit이 전체 `W/routing/H`의 다음 상태를 바꾼다.
+3. **공유 학습:** 대상 trajectory의 proposer·executor와 역할적으로 분리된 outcome이 어느
+   trajectory와 구성 요소에 귀속되는지 식별되고, 검증된 credit이 전체 `W/routing/H`의 다음
+   상태를 바꾼다. 식별할 수 없으면 outcome 관측은 보존하되
+   `Attribution(outcome, trajectory)=UNATTRIBUTABLE`로 남겨 update하지 않는다.
 4. **전역 자기모델:** 전체가 현재 구성, 경계, 기억, 능력, 불확실성과 열린 목표를 자기
    상태로 읽고 갱신한다.
 5. **비파괴 구성:** 인간·인지능력체·메모리의 출처, 시점, 권위, 모순과 supersession을
@@ -137,28 +154,59 @@ addressable하게 보존하면서, 전체가 하나의 지속적 정체성·활�
 6. **헌법 경계:** 참여·철회·권한·비용·위험·rollback이 `Π^U`에서 실제로 집행된다.
 7. **범위 정직성:** 일부 참여자와 일부 memory만 연결한 prototype을 `전 인류`나 완성된
    인류보편체라고 부르지 않는다.
+8. **위임과 책임:** 전체 명의의 발화·행동은 coalition, mandate, scope, expiry와 책임 주체를
+   결속하며, 중앙 LLM·운영자·summary가 인류의 의지를 추정하지 않는다.
 
 ## 5. 최소 실행 데이터 계약
 
 | record | 필수 필드 | 역할 |
 |---|---|---|
-| `MemberCellV1` | `member_uid`, `kind`, `state_ref`, `capability_ref`, `authority_ref`, `participation_scope`, `provenance` | 인간·AI·다른 HSWM을 실행 가능한 cell로 주소화 |
-| `MemoryArtifactV1` | `artifact_uid`, `content_hash`, `source_uid`, `authority`, `observed_at`, `visibility`, `supersedes` | 저장 메모리를 삭제 없는 현재성 계보로 보존 |
+| `MemberCellV1` | `member_uid`, `kind`, `state_ref`, `capability_ref`, `membership_grant_ref`, `participation_scope`, `provenance`, `representation_mandate_ref?` | 인간·AI·다른 HSWM을 주소화하되 membership과 대표권을 분리 |
+| `MemoryArtifactV1` | `artifact_uid`, `content_ref`, `source_ref`, `authorization_basis_ref`, `protection_refs`, `observed_at`, `visibility`, `retention`, `supersedes` | 허용된 live/revocable memory와 보호 범위를 결속 |
+| `ErasureEventV1` | `erasure_uid`, `artifact_scope_marker`, `authorization_basis_ref`, `committed_at`, `residual_disclosure`, `restricted_audit_ref?` | source UID·원문 hash를 요구하지 않는 비식별 최소 removal fact와 잔여 범위 기록 |
 | `HyperRelationV1` | `relation_uid`, `predicate`, `members[{role,uid}]`, `evidence_refs`, `scope` | 이항 edge로 손실되는 n-ary 관계 보존 |
 | `ActivationEventV1` | `snapshot_uid`, `trigger_ref`, `activated_members`, `function_cell`, `output_ref` | `A^U`의 실제 점화 경로 기록 |
-| `OutcomeEventV1` | `trajectory_uid`, `outcome_ref`, `evaluator`, `observed_at`, `counterfactual_arm` | 반응·행동 결과를 독립 측정에 결속 |
-| `LearningUpdateV1` | `before`, `delta_w`, `delta_routing`, `delta_h`, `evidence_refs`, `rollback_ref`, `after` | 저장과 학습을 구분하고 durable 변화만 반영 |
-| `BoundaryGrantV1` | `subject`, `controller`, `agent`, `capability`, `purpose`, `expiry`, `revocation` | `Π^U`의 권한·동의·철회 경계 실행 |
+| `OutcomeEventV1` | `outcome_uid`, `trajectory_ref`, `observation_ref`, `evaluator_ref`, `observed_at`, `scope`, `counterfactual_arm?`, `uncertainty` | 관측 결과를 귀속 판단과 분리해 보존 |
+| `AttributionAssessmentV1` | `attribution_uid`, `outcome_ref`, `trajectory_ref`, `estimand_ref`, `identification_basis`, `evaluator_scope`, `uncertainty`, `attribution_status`, `judged_at` | 반사실적 귀속과 `UNATTRIBUTABLE`을 명시 |
+| `ActionEventV1` | `action_uid`, `actor_or_coalition_ref`, `action_ref`, `mandate_ref`, `scope`, `expiry`, `accountable_actor_ref`, `effect_receipt_ref` | 전체 명의의 행동을 위임·범위·책임에 결속 |
+| `LearningUpdateV1` | `before`, `attribution_refs`, `delta_w`, `delta_routing`, `delta_h`, `promotion_gate`, `protection_refs`, `rollback_ref`, `after` | 귀속·권리 gate를 통과한 durable 변화만 반영 |
+| `OperationalGrantV1` | `grant_uid`, `layer=Γ_t`, `subject`, `controller`, `agent`, `capability`, `purpose`, `policy_version`, `expiry`, `revocation` | 시점별 권한·동의·철회를 실행하되 `Π*`를 수정하지 않음 |
+| `ConstitutionalAmendmentEventV1` | `amendment_uid`, `target_layer=Π*`, `prior_boundary_ref`, `proposal_ref`, `affected_scope_refs`, `ratification_refs`, `independent_appeal_role_ref`, `nonratifier_disposition`, `resulting_identity_uid`, `committed_at` | `Π*` 변경을 ordinary grant와 분리하고 비비준 범위·successor identity를 명시 |
+
+`ArtifactRecordV1 = Present(MemoryArtifactV1) | Erased(ErasureEventV1)`로 읽는다. 즉 live artifact와
+erasure receipt는 한 record의 nullable field 조합이 아니라 서로 다른 tagged variant다.
+마찬가지로 `BoundaryEventV1 = Operational(OperationalGrantV1) |
+Constitutional(ConstitutionalAmendmentEventV1)`이며, operational grant로 `Π*`를 고칠 수 없다.
+
+여기서 `Π^U={Π_t^U}`이고 `Π_t^U \equiv (Π^{U*},\Gamma_t^U)`다. 이 표는 구현 schema의 최소 의미 계약이지,
+모든 record를 공개하거나 영구 복구 가능하게 저장하라는 명령이 아니다. `content_ref`와
+`protection_refs`도 철회 뒤에는 접근 불가·삭제·비가역 비식별화될 수 있으며, 삭제 사실을
+보존한다는 이유로 취약한 content hash나 source identifier를 tombstone에 복제하지 않는다.
+
+모든 파생 record에는 다음 비약화 상속 invariant가 적용된다.
+
+```math
+Protection(r_{out}) \succeq
+\bigvee_{r_{in}\leadsto r_{out}} Protection(r_{in})
+```
+
+즉 protected input의 relation, activation trace, outcome/attribution link, action receipt,
+learning state와 readout은 직접 `protection_refs`를 carry하거나 같은 protected envelope 아래
+있어야 한다. `\succeq`는 입력 경계보다 덜 제한적일 수 없다는 뜻이며, 여러 입력의 경계는
+그중 가장 강한 제한을 보존하는 join으로 합성한다. protection metadata를 생략한 materialization은
+admission invalid이고, revocation은 허용된 비식별 최소 erasure/residual receipt를 제외한
+모든 후속 파생물의 access·activation·promotion에 전이된다.
 
 ## 6. 실행 루프
 
 ```text
 member/memory admission
   → provenance·authority·participation 검사
-  → immutable artifact와 n-ary relation compile
+  → retention-scoped revocable content ref와 n-ary relation compile
+  → 무단 overwrite를 막는 transition envelope; 삭제 시 payload/ref 제거와 비식별 erasure event
   → 전체 snapshot 고정
   → 현재 자극이 bounded coalition 활성화
-  → 인간/LLM/tool/HSWM function cell 실행
+  → human/nested-HSWM member port, LLM semantic cell, tool primitive 실행
   → 외부 outcome 관측과 반사실 비교
   → trajectory별 causal credit 계산
   → ΔW / Δrouting / ΔH candidate
@@ -223,6 +271,8 @@ HOH의 반응 데이터는 `OutcomeEventV1`의 한 신호원이 될 수 있지�
 - 인간과 LLM이 활성 주체임 ≠ 인간을 시스템의 소모품으로 취급
 - 전 인류를 지향함 ≠ 모든 인간을 강제로 가입시킴
 - 모든 구성원의 표현이 같아지는 oversmoothing ≠ 하나의 상위 인지능력체
+- 구조적으로 같은 HSWM port를 가짐 ≠ 인간·AI·sensor·artifact의 도덕적 상호대체성
+- 인간에 관한 record가 있음 ≠ 그 인간이 member이거나 대표권을 위임함
 - HOH preference profile ≠ 인류보편체
 - memory 저장량 증가 ≠ outcome-bound learning
 - 다수결·단일 응답 ≠ 전체의 진리 또는 의지

@@ -1,7 +1,12 @@
 # HSWM Constitution — 살아 있는 토큰 신경 월드모델
 
 > **상태:** `CANONICAL_TARGET_IDENTITY`
-> **권위:** `USER_PRIMARY` 원문을 보존한 통합 헌법
+> **권위:** `MIXED_EXPLICIT` — `USER_PRIMARY` target hard core를 보존한 통합 헌법과
+> `SECONDARY_AI` 해석·형식화
+> **권위 경계:** 한 문장 대상 정체성, living harness/world model/token-hypergraph 우선순위와
+> 인류보편체 목표는 연결된 USER 원문에서 추적한다. 수식, `H/W/A/F/Π` 세부 타입,
+> 2026-08-26의 `Π*`·통시적 동일성·readout·권리 판별선은
+> `SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`이며 사용자 직접 발화로 소급하지 않는다.
 > **과학적 상태:** `UNJUDGED`
 > **적용 범위:** HSWM의 존재론, 연구 방향, 설계 판별 기준
 > **비적용 범위:** 현재 구현의 완성·효능, Wolfram 물리학의 참, 특정 LLM의 우월성
@@ -34,7 +39,8 @@ HSWM을 작동 관점에서 보면 **신경망**, 조정 관점에서 보면 **�
 ## 2. 헌법적 객체
 
 ```math
-S_t = \mathrm{HSWM}_t = (H_t, W_t, A_t, F_t, \Pi)
+S_t = \mathrm{HSWM}_t = (H_t, W_t, A_t, F_t, \Pi_t),
+\qquad \Pi_t \equiv (\Pi^*, \Gamma_t)
 ```
 
 | 기호 | 헌법적 의미 |
@@ -42,12 +48,26 @@ S_t = \mathrm{HSWM}_t = (H_t, W_t, A_t, F_t, \Pi)
 | `H_t` | 세계의 객체·사건·기억·함수·도구·evidence를 n-ary relation으로 잇는 가변 hypergraph. HSWM의 몸과 가능한 상호작용의 해부학이다. |
 | `W_t` | 관계와 function cell 사이의 의미적 전달·억제·신뢰·routing·eligibility를 가진 거시 시냅스다. 단순 similarity 숫자 하나가 아니다. |
 | `A_t` | 지금 token을 운반체로 흐르는 활성, working state, 점화된 coalition과 trajectory다. context에 들어온 token 자체가 영구 학습인 것은 아니다. |
-| `F_t` | LLM이 실행하는 typed semantic function cell들의 집합이다. LLM은 HSWM 전체가 아니라 국소 비선형 의미 전이 연산자다. |
-| `Π` | capability, 권한, 타입, provenance, transaction, budget, rollback, safety를 보존하는 얇은 헌법 경계다. 인지 경로를 손으로 대신 작성하지 않는다. |
+| `F_t` | LLM이 실행하는 typed semantic function cell들의 집합이다. LLM은 HSWM 전체가 아니라 국소 비선형 의미 전이 연산자다. 인간·다른 HSWM은 유형별 capability/consent boundary를 가진 member/port로 참여하며 `F`로 환원되지 않는다. 결정론적 도구는 `H/Π`에 연결된 primitive/effector이지 `F`가 아니다. |
+| `Π_t` | capability, 권한, 타입, provenance, transaction, budget, rollback, safety를 보존하는 얇은 헌법 경계다. 인지 경로를 손으로 대신 작성하지 않는다. `Π*`의 identity-bearing 경계와 versioned 운영 상태 `Γ_t`를 포함한다. |
 
 Foundation model 내부 parameter는 세포 안의 **micro-weight**이고, HSWM의 `W/H`는 세포와
 세계 상태 사이의 **macro-weight/connectivity**다. 따라서 HSWM은 LLM checkpoint 하나와
 동일하지 않으며, checkpoint가 바뀌어도 정체성과 학습 계보를 지속할 수 있어야 한다.
+
+무첨자 `Π`는 다섯 번째 헌법 객체인 policy family `Π={Π_t}`를, 특정 snapshot의 `Π_t`는
+`(Π*, Γ_t)`를 뜻한다. `Π*`는 provenance 정직성, scoped authority, consent,
+privacy, correction, dissent, exit·appeal·rollback과 durable credit의 proposer·executor·evaluator
+역할 분리 같은 최소 경계이고 ordinary learning이 스스로 약화할 수 없다. `Γ_t`는 명시적
+mandate 아래 versioned·철회 가능한 capability, budget, evaluator와 운영 policy다. 이는
+여섯 번째 subsystem을 추가하는 것이 아니라,
+시간을 건너 지켜야 할 경계와 시간에 따라 바뀌는 grant를 같은 `Π_t` 안에서 구분한다.
+`Π_t`는 별도 여섯 번째 subsystem이 아니라 다섯 번째 객체 `Π`의 시점별 상태다.
+
+HSWM 내부의 통시적 동일성은 UID나 lineage만으로 충분하지 않다. 공통 계보, `Π*`, 이후
+activation을 실제로 조건화하는 `H/W`의 인과 연속성과 합성 member의 분리 가능성이 함께
+이어져야 한다. fork는 공통 과거를 가진 descendant를, merge는 contributor lineage를 남긴
+새 composite를 만든다. 이 판별선은 인간의 형이상학적 동일성을 증명하지 않는다.
 
 ## 3. Token-native 신경망
 
@@ -93,12 +113,17 @@ HSWM은 고정된 외부 harness 문서를 따라가는 시스템이 아니다. 
 읽고 비판하고 수정 계보를 추적할 수 있어야 하므로 살아 있는 문서 역할도 한다.
 
 ```math
-D_t = \operatorname{Readout}(H_t, W_t, A_t, F_t, \Pi)
+D_t = \operatorname{Readout}(H_t, W_t, A_t, F_t, \Pi_t)
 ```
 
 `D_t`는 HSWM 밖에서 명령하는 두 번째 규칙집이 아니다. HSWM이 자기 상태와 근거를
 사람·agent에게 가독 형태로 투사한 **자기기술적 phenotype**이다. Markdown, graph view,
 snapshot, prompt context는 모두 이 readout의 가능한 표현일 뿐이다.
+
+모든 `D_t`는 source snapshot, scope, authority와 변환 손실을 가진 fallible·lossy projection이다.
+readout 문구나 prompt를 편집한 것만으로 `S_t`가 학습·수정된 것이 아니며, 권한 있는 state
+transition으로 admission되어 이후 activation을 바꿀 때에만 본체 변화가 된다. 자기기술은
+자기 정당화나 자기 판정의 진실성을 보장하지 않는다.
 
 그러므로 “별도 하네스 문서가 없다”와 “HSWM이 능동적으로 변하는 하네스 문서 역할을
 한다”는 모순이 아니다. 전자는 외부의 고정 controller를 부정하고, 후자는 HSWM 상태의
@@ -183,11 +208,12 @@ HSWM 구조로 하나가 되어 하나의 인지능력체를 이루는 상태다
 
 후속 USER_PRIMARY는 HSWM 구현을 코드부터 밀어붙이지 말고 철학적 함의를 먼저 설정하라고
 지시했다. 관계적 존재론, 계보적 시간론, 기억과 진리의 분리, 차이 보존적 통일, 인과적
-행위성, 참여자의 존엄, 공개 구조와 사적 경계, 인지주권과 열린 목적론을 하나의 provisional
-charter로 정식화한 문서는
+행위성, 참여자의 존엄, 공개 구조와 사적 경계, 인지주권과 열린 목적론을 하나의 conceptual
+closure candidate로 정식화한 문서는
 [`HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md`](HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md)다.
-철학 우선이라는 방향은 USER_PRIMARY이고, 개별 원리의 명명·수식·구현 의무는 사용자 비준
-전까지 `SECONDARY_AI_PROPOSED`다.
+철학 우선이라는 방향은 USER_PRIMARY이고, 개별 원리의 명명·수식·구현 의무와 2026-08-26
+교차원리 closure는 사용자 비준 전까지
+`SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`다.
 
 ## 8. 대상 정체성의 closure와 철학·과학의 개방성
 
@@ -204,6 +230,13 @@ charter로 정식화한 문서는
 통합된 causal macro-learning, 안정적 operator-`W`, learned topology, world-scale utility는
 직접 증명되지 않았다. 이 헌법은 **무엇을 만들어야 HSWM인가**를 닫고, 저장소의 실험은
 **그것이 실제로 가능한가**를 계속 열어 둔다.
+
+여기서 canonical target-identity closure는 architecture decision의 기준점을 닫는다는 제한된
+뜻이다. 2026-08-26 교차원리 규칙은 HSWM과 bounded projection, federation, 중앙 aggregator,
+surveillance system을 더 세밀하게 구분하려는 closure candidate이며 사용자 비준 전에는
+완료된 규범 헌법이 아니다. 세계가 정보적 구조인지, HSWM이 의식·도덕적 지위·법인격을
+갖는지, 어떤 최종 가치가 옳은지는 계속 열려 있다. token-native는 내부 활성 운반체에 관한
+명제이지 인간이나 외부 세계가 token으로 환원된다는 명제가 아니다.
 
 ## 9. 이후 작업의 헌법 적합성
 

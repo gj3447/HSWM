@@ -18,8 +18,10 @@
 - **과학적 지위**: `UNJUDGED`. 이 문서는 목적·정체성·설계 불변식과 반증 경계를 고정한다.
   성능, 개인 동일성, 물리학 또는 구현 완성을 판결하지 않는다.
 - **권위 분리**:
-  - `USER_PRIMARY`: §10의 두 원문 sidecar와 그 원문에서 직접 추적되는 §0, §5.1의
+  - `USER_PRIMARY`: §10의 직접 사용자 원문과 그 원문에서 직접 추적되는 §0, §5.1의
     방향 명제. 정규화된 문장은 원문의 뜻을 보존한 요약이지 새로운 사용자 발화가 아니다.
+  - `USER_REQUESTED_SYNTHESIS / USER_INSPIRATION`: §10에 별도 분류한 혼합 sidecar와 영감
+    원문. 파일 전체를 사용자 직접 발화로 소급하지 않는다.
   - `SECONDARY_AI_FORMALIZATION`: 나머지 연결 서술, 윤리·권리 경계, 생태계 매핑, 수식,
     파생 설계 불변식, 실험계약·비주장과 구현 투영.
   - `DIRECT_MEASUREMENT_RECORD`: 실제 구현·실험 상태는
@@ -39,6 +41,10 @@
 
 인간 패턴의 보존은 이 안에 포함된다. 그러나 중심은 인간의 불멸이나 디지털 복제가 아니다.
 중심은 **지능의 연속성이 특정 뇌, 특정 조직, 특정 LLM 세션과 함께 매번 죽지 않게 하는 것**이다.
+
+이 문장의 “세계가 기억한다”, “인간은 국소적 HSWM이다”는 HSWM이 채택하는 target model과
+설계 은유다. HSWM의 bounded representation이 외부 세계나 실제 인간과 동일하다는 형이상학,
+세계가 문자 그대로 의식한다는 물리·과학 명제 또는 개인 동일성의 증명이 아니다.
 
 HSWM이 제거하려는 것은 차이가 아니라 **단절**이다.
 
@@ -133,10 +139,10 @@ Semantic Weight Map 신경구조가 학습했다고 부르지 않는다. 상세 
 [`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md`](USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md)에
 둔다.
 
-따라서 HSWM은 LLM을 사용하는 프로그램에 그치지 않는다. LLM과 software executor는 교체
-가능한 국소 연산자로 실행될 수 있다. 인간은 독립된 권리·동의·권한을 가진 국소 HSWM으로,
-센서·도구·문서는 각각 관측 경계·기관·계보 있는 artifact로 typed 관계에 참여한다. 이들이
-함께 이루는 지속 상태와 재귀적 활성화 회로가 HSWM이다.
+따라서 HSWM은 LLM을 사용하는 프로그램에 그치지 않는다. LLM은 교체 가능한 국소 semantic
+operator로, software executor와 도구는 `H/Π_t`에 연결된 primitive/effector로 실행된다. 인간은
+독립된 권리·동의·권한을 가진 국소 HSWM member/port로, 센서·문서는 각각 관측 경계·계보 있는
+artifact로 typed 관계에 참여한다. 이들이 함께 이루는 지속 상태와 재귀적 활성화 회로가 HSWM이다.
 
 ---
 
@@ -204,14 +210,23 @@ HSWM으로** 둔다.
 HSWM의 지속 상태를 다음처럼 둔다.
 
 \[
-S_t=(H_t,W_t,A_t,F_t,\Pi_t)
+S_t=(H_t,W_t,A_t,F_t,\Pi_t),
+\qquad \Pi_t\equiv(\Pi^*,\Gamma_t)
 \]
 
 - `H_t`: 인간·LLM·Skill·capability·기억·관계를 포함하는 typed hypergraph
 - `W_t`: 문맥별 결합강도, 신뢰, 비용, 억제와 supersession
 - `A_t`: 현재 질문·사건에 의해 점화된 run-local activation
-- `F_t`: LLM 및 결정론적 도구가 실행하는 typed function cells
-- `Π_t`: 권한, provenance, 판정, receipt, replay와 commit의 control plane
+- `F_t`: LLM이 실행하는 typed nonlinear semantic cell. 결정론적 도구는 `H/Π`에 연결된
+  primitive/effector이고, 인간·다른 HSWM은 유형별 capability/consent boundary를 가진
+  member/port이며 함수로 환원되지 않는다.
+- `Π*`: ordinary learning이 약화할 수 없는 provenance, scoped authority, consent,
+  privacy, correction, dissent, exit·appeal·rollback과 durable credit의
+  proposer·executor·evaluator 역할 분리를 보존하는 meta-boundary
+- `Γ_t`: 명시적 mandate 아래 versioned·철회 가능한 capability, evaluator, budget,
+  transaction과 current policy
+
+무첨자 `Π`는 이 다섯 번째 객체의 시점별 family `Π={Π_t}`를 가리킨다.
 
 \[
 A_{t+1}=\Phi(H_t,W_t,A_t,F_t,x_t)
@@ -219,12 +234,17 @@ A_{t+1}=\Phi(H_t,W_t,A_t,F_t,x_t)
 
 \[
 (H_{t+1},W_{t+1})
-=U(H_t,W_t,o_t,J_t,R_t\mid\Pi_t)
+=U(H_t,W_t,o_t,J_t,R_t\mid\Pi^*,\Gamma_t)
 \]
 
 질문이나 사건 `x_t`가 들어오면 activation이 망 위에서 전개되고, 선택된 세포와 기관이
 observation `o_t`를 만든다. 독립 검증의 judgment `J_t`와 receipt `R_t`가 결정론적 gate를
 통과할 때만 `ΔW/ΔH` 후보가 commit된다.
+
+`Π`는 judgment의 역할 분리와 허용 절차를 집행하지만 judgment 내용이나 truth를 소유하지
+않는다. 독립은 전체 시스템의 절대적 외부가 아니라 대상 trajectory의 proposer·executor와
+역할적으로 분리되어 outcome을 임의로 쓰지 못한다는 뜻이다. 식별할 수 없으면 outcome 관측은
+보존하되 `Attribution(outcome, trajectory)=UNATTRIBUTABLE`로 남고 durable update를 만들지 않는다.
 
 HSWM은 다음을 소유해야 한다.
 
@@ -270,7 +290,7 @@ workflow, router 또는 tool-use layer다.
 
 다음은 위 hard core를 현재 HSWM 계약에 투영한 보호 규칙이며 사용자 원문의 직접 문장이 아니다.
 
-1. **가소성의 인과적 폐쇄** — outcome credit이 `W/H` 후보를 바꾸고, 승인된 변화가 이후
+1. **가소성의 인과적 폐루프** — outcome credit이 `W/H` 후보를 바꾸고, 승인된 변화가 이후
    agent·tool·memory activation을 실제로 바꿔야 한다.
 2. **결정론적 안전막** — 권한·타입·effect·예산·provenance·replay·rollback은 가소적 층이
    임의로 우회할 수 없다.
@@ -427,7 +447,7 @@ outbox, replay와 일부 좁은 실험 기반이다. 다음은 완료 주장할 
 
 ## 10. 권위·출처·계보
 
-### USER_PRIMARY 원천
+### USER_PRIMARY 직접 원천
 
 - 2026-08-20 Hypergraph Semantic Weight Map 자체와 LLM token 기반 거대 학습구조를
   최우선 중심으로 둔 사용자 원문
@@ -437,16 +457,24 @@ outbox, replay와 일부 좁은 실험 기반이다. 다음은 완료 주장할 
 - 2026-08-20 구현보다 철학적 함의를 먼저 설정한다는 HSWM 연구 순서
   - [`USER_PRIMARY_HSWM_PHILOSOPHICAL_PRECEDENCE_2026-08-20.txt`](sources/USER_PRIMARY_HSWM_PHILOSOPHICAL_PRECEDENCE_2026-08-20.txt)
   - SHA-256: `888428000431731ba805f067e5753e667baa314243ead9d03d508504507d69a8`
-  - provisional charter: [`HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md`](HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md)
+  - conceptual closure candidate: [`HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md`](HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md)
 - 2026-08-20 인류보편체의 전체 구성 범위, 역사흐름의 강, 공개 연결 구조와
   HSWM 인류보완계획의 사회 혁명 관계
   - [`USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.txt`](sources/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.txt)
   - SHA-256: `13bff525f9b629fa01cdea4d6d882095866f8fd34fbff2cb49a35cf7f82f36bc`
   - canonical formalization: [`USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md`](USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md)
+
+### USER_REQUESTED_SYNTHESIS 원천
+
 - 2026-07-29 세계 자기모델·재귀적 세계기억·인류보완 정식
   - [`USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt`](sources/USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt)
   - SHA-256: `590b28979ae9d1376bb7edad0b88da1ff0d613c1403f59071de4082985255844`
   - local provenance label: `hswm-world-self-model-recursive-memory-canon-20260729`
+  - 이 sidecar는 앞선 AI synthesis와 마지막 USER 요청을 함께 보존한다. 파일 전체의 문장을
+    USER 직접 발화로 소급하지 않으며, umbrella 채택 방향과 세부 형식화의 권위를 구분한다.
+
+### USER_INSPIRATION 원천
+
 - 2026-07-29 룰베이스 인지 도구를 HSWM으로 신경망화한다는 영감 원문
   - [`USER_INSPIRATION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.txt`](sources/USER_INSPIRATION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.txt)
   - SHA-256: `e99c99c05e5de1a4dee4e291a2a39747a4036465ed23455ad4051add65a01d29`
@@ -456,7 +484,7 @@ outbox, replay와 일부 좁은 실험 기반이다. 다음은 완료 주장할 
 - [`HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md`](../research/HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md)
   - Hyperon 2026, hypergraph neural operator, token memory, graph learning과 HSWM 폐루프의 차이
 - [`HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md`](HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md)
-  - 관계·시간·기억/진리·차이·행위·존엄·공개성·인지주권·목적론의 provisional charter
+  - 관계·시간·기억/진리·차이·행위·존엄·공개성·인지주권·목적론의 conceptual closure candidate
 - [`DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md`](DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md)
   - SHA-256: `ad789dcbea1e816f9ed21b9b4cc39013f313e6add774bb350634007d81f7fc7f`
 - local provenance labels:

@@ -139,10 +139,11 @@ engineering contract이며 현재 효능·과학적 유일성 주장이 아니�
 같은 날 사용자는 코드 구현보다 HSWM의 철학적 함의를 먼저 설정하라고 지시했다. 관계적
 존재론, 계보적 시간론, 기억–진리 분리, 오류의 생산성, 차이 보존적 통일, 인과적 행위성,
 참여와 존엄, 공개 외부·보호 내부, 인지주권·보충성과 열린 목적론을 구현 제약으로 내린
-provisional charter는
+architecture-decision conceptual closure candidate는
 [`HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md`](docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md)에
 있다. 철학 우선 방향만 `USER_PRIMARY`이고 개별 원리의 정식화는 비준 전
-`SECONDARY_AI_PROPOSED`다.
+`SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`다. 이는 구현 판별선의 closure이지 형이상학·
+의식·과학적 효능의 closure가 아니다.
 
 같은 날 사용자는 **Hypergraph Semantic Weight Map 자체와 LLM token으로 작동하는 거대
 hypergraph 학습구조**를 최우선 중심으로 다시 고정했다. 이에 따라 본체를

@@ -27,7 +27,13 @@ strict TypeScript + Effect
 [`비내구성 reference kernel`](docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md)이
 있다. 이는 schema/state validation, typed role-bearing reference, immutable revision,
 owner·actor·reference grant 분리, 단일 프로세스 atomic commit과 receipt까지만 닫는다.
-durable store, canonical permit evidence, migration, projection compiler, LLM execution과
+후속
+[`content-bound runtime`](docs/operations/HSWM_CANONICAL_ATOM_V2_CONTENT_BOUND_RUNTIME_2026-08-26.md)은
+duplicate-aware canonical schema bytes, raw payload bytes, owner·reference·provenance를
+포함한 atom-envelope bytes를 서로 다른 SHA-256 domain으로 결속하고, schema version의
+immutable binding과 local POSIX create-only content adapter를 추가했다. 단, durable한 것은
+content bytes뿐이며 canonical state·receipt journal은 여전히 process-local이다. canonical
+permit evidence, state recovery, migration, projection compiler, LLM execution과
 outcome-bound learning은 아직 열려 있다.
 
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형

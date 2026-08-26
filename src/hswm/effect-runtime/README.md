@@ -4,10 +4,12 @@
 > `H/W/A/F/Pi` responsibility bundle are retained v1 compatibility artifacts.
 > They are not the current HSWM ontology and must not be used as a fixed owner
 > registry for new canonical writes. The current target requires exactly one
-> schema-relative responsibility owner per admitted canonical atom. The first
-> generic v2 reference kernel for that contract is now implemented, but it is a
-> non-durable, single-process engineering witness rather than a production
-> canonical store, migration system, learning result, or scientific verdict.
+> schema-relative responsibility owner per admitted canonical atom. The generic
+> v2 reference kernel and its optional content-bound facade are now implemented.
+> Schema, payload and atom-envelope bytes can use a local durable adapter, but
+> canonical state and its receipt journal remain non-durable. This is not a
+> production canonical store, migration system, learning result, or scientific
+> verdict.
 > See the
 > [single-owner canon](../../../docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md).
 
@@ -30,8 +32,20 @@ The current v2 boundary is intentionally small:
   reference-layer grant; atomically commits state plus one receipt with
   `Ref.modify`. A matched grant is explicitly not claimed to be a canonical,
   revocation-aware permit.
+- `canonical-atom-v2-json.ts` defines a bounded duplicate-aware, safe-integer
+  canonical JSON domain distinct from the historical S2S codecs.
+- `canonical-atom-v2-content*.ts` bind exact raw payload bytes, canonical schema
+  bytes and canonical atom metadata envelopes. The local POSIX adapter uses
+  create-only publication, file and directory fsync, immutable readback and one
+  durable schema-version binding.
+- `canonical-atom-v2-content-runtime.ts` verifies authorization, pure-domain
+  validity and every required byte before the process-local `Ref` commit. Its
+  receipt says `CONTENT_ONLY_STATE_JOURNAL_NOT_DURABLE`; concurrent losers may
+  leave unreferenced immutable blobs but never an admitted atom or receipt.
 - The exact implementation and nonclaims are recorded in the
-  [v2 reference-kernel handoff](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md).
+  [v2 reference-kernel handoff](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md)
+  and the
+  [content-bound continuation](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_CONTENT_BOUND_RUNTIME_2026-08-26.md).
 
 The retained historical boundary is also intentionally small:
 

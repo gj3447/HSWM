@@ -48,6 +48,62 @@ export {
   makeCanonicalAtomV2ReferenceLayer
 } from "./canonical-atom-v2-runtime.js"
 export {
+  HSWM_CANONICAL_JSON_MEDIA_TYPE,
+  HSWM_CANONICAL_JSON_V1_CONTRACT_VERSION,
+  HSWM_CANONICAL_JSON_V1_MAX_BYTES,
+  HSWM_CANONICAL_JSON_V1_MAX_DEPTH,
+  HSWM_CANONICAL_JSON_V1_MAX_NODES,
+  HSWM_CANONICAL_JSON_VERSION,
+  CanonicalJsonError,
+  canonicalJsonBytes,
+  canonicalJsonSha256,
+  decodeCanonicalJsonBytes,
+  type CanonicalJson,
+  type CanonicalJsonErrorCode
+} from "./canonical-atom-v2-json.js"
+export {
+  CANONICAL_ATOM_V2_CONTENT_MAX_BYTES,
+  CanonicalAtomV2ContentDescriptorSchema,
+  CanonicalAtomV2SchemaContentBindingSchema,
+  makeCanonicalAtomV2ContentDescriptor,
+  sameCanonicalAtomV2ContentDescriptor,
+  type CanonicalAtomV2ContentDescriptor,
+  type CanonicalAtomV2SchemaContentBinding
+} from "./canonical-atom-v2-content.js"
+export {
+  HSWM_CANONICAL_ATOM_ENVELOPE_V2_MEDIA_TYPE,
+  HSWM_CANONICAL_CONTENT_BOUND_RECEIPT_V2_CONTRACT_VERSION,
+  HSWM_CANONICAL_CONTENT_BOUND_TRANSITION_V2_CONTRACT_VERSION,
+  HSWM_CANONICAL_SCHEMA_CONTENT_V2_MEDIA_TYPE,
+  HSWM_CANONICAL_SCHEMA_JSON_ENCODING,
+  CanonicalAtomV2ContentAuthorizationGrantSchema,
+  CanonicalAtomV2ContentAuthorizationGrantsSchema,
+  CanonicalAtomV2ContentBindingError,
+  CanonicalAtomV2WriteContentBindingSchema,
+  CommitCanonicalAtomsV2ContentBoundSchema,
+  canonicalAtomV2EnvelopeBytes,
+  canonicalAtomV2SchemaContentBytes,
+  decodeCanonicalAtomV2SchemaContent,
+  describeCanonicalAtomV2Envelope,
+  makeCanonicalAtomV2ContentBoundInput,
+  sameCanonicalAtomV2SchemaBinding,
+  validateCanonicalAtomV2WriteContentBindings,
+  type CanonicalAtomV2ContentAuthorizationGrant,
+  type CanonicalAtomV2ContentBoundEvolution,
+  type CanonicalAtomV2ContentBoundReceipt,
+  type CanonicalAtomV2ContentBoundState,
+  type CanonicalAtomV2ValidatedSchemaContent,
+  type CanonicalAtomV2WriteContentBinding,
+  type CommitCanonicalAtomsV2ContentBound
+} from "./canonical-atom-v2-content-bound.js"
+export {
+  CanonicalAtomV2ContentAuthorizationConfigurationError,
+  CanonicalAtomV2ContentAuthorizationDenied,
+  CanonicalAtomV2ContentRuntime,
+  makeCanonicalAtomV2ContentRuntimeFileLayer,
+  makeCanonicalAtomV2ContentRuntimeMemoryLayer
+} from "./canonical-atom-v2-content-runtime.js"
+export {
   HSWM_CORE_RESPONSIBILITY_ONTOLOGY_SCHEMA_VERSION,
   type HSWMCoreResponsibilityOntology
 } from "./hswm-core-ontology-schema.js"

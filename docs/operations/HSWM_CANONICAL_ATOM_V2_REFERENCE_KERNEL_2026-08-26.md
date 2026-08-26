@@ -51,10 +51,12 @@ Raw inputs that fail Effect Schema decoding or domain invariants never enter the
 state. The kernel currently returns typed rejection errors rather than making
 rejected or quarantined input a canonical atom.
 
-Atom content is bound by media type, exact byte length, and SHA-256. The bytes
-themselves remain outside this in-memory kernel; a durable content-addressed
-store is a later port. This avoids pretending that an ephemeral JavaScript
-object is durable canonical content.
+Atom content is bound here by media type, exact byte length, and SHA-256 while
+the phase-1 reference Layer remains entirely in memory. The optional
+[`content-bound runtime`](HSWM_CANONICAL_ATOM_V2_CONTENT_BOUND_RUNTIME_2026-08-26.md)
+now supplies duplicate-aware schema bytes, atom-envelope digests and a local
+durable content-addressed port without changing this pure reducer. Its state and
+receipt journal are still explicitly non-durable.
 
 ## 3. Enforced invariants
 
@@ -104,10 +106,11 @@ an accepted receipt.
 
 ## 4. Explicit nonclaims and deferred work
 
-This reference kernel is not:
+This reference kernel, including its optional content-bound facade, is not:
 
-- a durable database, distributed log, CRDT, or production authorization
-  service;
+- a durable canonical-state database, distributed log, CRDT, or production
+  authorization service; only the optional facade's content bytes have a local
+  POSIX durability adapter;
 - a schema-migration or branch/merge implementation;
 - a projection compiler or a canonical commit-back path;
 - a canonical permit verifier—the configured grant adapter has no expiry or
@@ -128,12 +131,13 @@ identity, owner validity, relation endpoints, hidden reads, immutable revision,
 owner-change rejection, migration rejection, permission separation, frozen
 snapshots, all-or-nothing batch failure, and concurrent one-winner commit.
 
-The next implementation order is:
+The content-bound continuation completed the former first step and bound schema
+and atom-envelope bytes without claiming durable state. The next implementation
+order is:
 
-1. add a generic duplicate-aware canonical JSON/byte ingress and durable
-   content/store port;
-2. bind each schema version to immutable schema bytes/content digest, then
-   represent authorization, trace, outcome, and provenance evidence as typed
+1. add a predecessor-bound durable state-and-receipt journal with exact replay
+   against every referenced content blob;
+2. represent authorization, trace, outcome, and provenance evidence as typed
    canonical atoms without creating a bootstrap regress;
 3. add explicit quarantine and rejected-decision receipts;
 4. specify schema migration, fork, merge, and rollback/compensating restore;

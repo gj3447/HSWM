@@ -30,6 +30,33 @@ it("exports the bounded v2 reference kernel but not its receipt internals", () =
   expect("snapshotHSWMCanonicalSchemaV2" in PublicApi).toBe(false)
 })
 
+it("exports the content-bound v2 facade without raw store mutation ports", () => {
+  expect(typeof PublicApi.decodeCanonicalJsonBytes).toBe("function")
+  expect(typeof PublicApi.canonicalJsonBytes).toBe("function")
+  expect(typeof PublicApi.decodeCanonicalAtomV2SchemaContent).toBe(
+    "function"
+  )
+  expect(typeof PublicApi.describeCanonicalAtomV2Envelope).toBe("function")
+  expect(typeof PublicApi.makeCanonicalAtomV2ContentBoundInput).toBe(
+    "function"
+  )
+  expect(typeof PublicApi.makeCanonicalAtomV2ContentRuntimeMemoryLayer).toBe(
+    "function"
+  )
+  expect(typeof PublicApi.makeCanonicalAtomV2ContentRuntimeFileLayer).toBe(
+    "function"
+  )
+  expect("CanonicalAtomV2ContentStore" in PublicApi).toBe(false)
+  expect("makeCanonicalAtomV2ContentRuntimeLayer" in PublicApi).toBe(false)
+  expect("makeCanonicalAtomV2ContentFileStoreLayer" in PublicApi).toBe(false)
+  expect("makeCanonicalAtomV2ContentStoreMemoryLayer" in PublicApi).toBe(
+    false
+  )
+  expect("snapshotCanonicalAtomV2WriteContentBinding" in PublicApi).toBe(
+    false
+  )
+})
+
 it("does not export privileged store or authorizer capabilities", () => {
   expect("CommitStore" in PublicApi).toBe(false)
   expect("CreditAuthorizer" in PublicApi).toBe(false)

@@ -117,6 +117,7 @@ jobs:
             "$(command -v node)" | sha256sum --check --strict
       - name: Verify the Python scorer executable and Unicode runtime
         run: |
+          uv python install 3.12.13
           python_path="$(uv python find --managed-python --no-project --resolve-links 3.12.13)"
           test "$("${python_path}" -c 'import platform; print(platform.python_version())')" = "3.12.13"
           test "$("${python_path}" -c 'import unicodedata; print(unicodedata.unidata_version)')" = "15.0.0"

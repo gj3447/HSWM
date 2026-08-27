@@ -23,9 +23,10 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "build:dnrd": "tsc -p tsconfig.dnrd.json",
     "check": "tsc --noEmit",
     "test": "vitest run",
-    "verify": "npm run check && npm run test && npm run build && npm pack --dry-run"
+    "verify": "npm run check && npm run test && npm run build && npm run build:dnrd && npm pack --dry-run"
   },
   "dependencies": {
     "effect": "3.22.1"

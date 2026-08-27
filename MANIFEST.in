@@ -13,6 +13,10 @@ exclude tests/test_hswm_swm0w_ontology.py
 # below, so transporting these tests in the Python sdist creates an impossible
 # test surface rather than validating the published Python package.
 recursive-exclude tests test_hswm_swm0w_s2s_effect_handoff_v*.py
+# DNRD is a repository-only cross-language research diagnostic. Its tests bind
+# the checked-in Effect sources, Git chronology, and hosted-CI workflow, all of
+# which are intentionally outside the Python source distribution below.
+recursive-exclude tests test_hswm_dnrd_*.py
 # Frozen test receipts are read directly by source-distribution tests.
 recursive-include tests/fixtures *.json
 # SWM-0W's repository-only cryptographic verifier is required by its source

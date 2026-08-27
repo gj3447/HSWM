@@ -277,11 +277,16 @@ be registered or executed.
 
 The next candidate is narrower and remains **unregistered and unauthorized**:
 a four-arm, 160-call-ceiling development diagnostic of durable numeric
-`Δrouting/W` against rollback/no-memory, equal-budget raw transcript, and a
-binding-deranged numeric placebo. It may test only headroom, leakage/parity,
-state persistence across a clean process restart, and exact effect removal on
-rollback. It cannot emit an efficacy PASS, and `ΔH`, topology creation, role
-specialization, transfer, and general HSWM learning remain explicit nonclaims.
+`Δrouting/W` against rollback/no-memory, deterministic numeric replay fidelity,
+and a binding-deranged numeric placebo. The ceiling means 160
+client-dispatched generation requests; provider-side physical computation and
+cache behavior are unobservable. The implemented Source-A candidate uses
+repeated contexts after exhaustive context-by-route exposure, so it may test
+only headroom, leakage/parity, state persistence across a clean process
+restart, exact effect removal on rollback, and fixed-rule replay fidelity. It
+cannot emit an efficacy PASS or support unseen-context generalization, LLM
+learning, independent outcome, `ΔH`, topology creation, role specialization,
+transfer, or general HSWM learning.
 
 Sources: `receipts/p1v2_l0_r2_512_closeout_20260724.json`,
 `prereg/PREREG_P1V3_POLICY_ACTUATION_2026-07-24.json`,
@@ -512,5 +517,7 @@ receipts.
 - no canonical recipient-conditioned set-to-set semantic-weight operator;
 - no passed recurrent/deep HSWM gate or causal `ΔW/ΔH` gate;
 - no surviving, registered, implemented, or measured P1 L1 causal typed-lesson result;
-- no registered or measured durable numeric `Δrouting/W` diagnostic;
+- a Source-A candidate instrument exists for repeated-context numeric routing
+  mechanics, but there is no registered or measured durable numeric
+  `Δrouting/W` result and no efficacy claim;
 - no evidence for a distributed Human Universal Body.

@@ -195,9 +195,11 @@ the hypothesis it is meant to test.
    Do not implement, repair, register, or measure that draft.
 4. The only next candidate is a separately preregistered development diagnostic
    of durable numeric `delta-routing/W`: FULL outcome-bound state versus exact
-   rollback/no-memory, equal-budget raw transcript, and a binding-deranged
-   numeric placebo. Its hard ceiling is 160 physical model calls (128 four-arm
-   evaluation calls plus at most 32 shared learning/compiler calls). It may
+   rollback/no-memory, deterministic numeric replay fidelity, and a
+   binding-deranged numeric placebo. Its hard ceiling is 160 client-dispatched
+   generation requests (128 four-arm evaluation requests plus at most 32 shared
+   update requests). Provider-side physical computation and cache behavior are
+   unobservable and are not claimed. It may
    judge headroom, leakage/parity, clean-process restart persistence, and exact
    rollback only; it may not emit an efficacy PASS.
 5. A sealed confirmatory design is opened only if that diagnostic survives.
@@ -208,3 +210,20 @@ the hypothesis it is meant to test.
 Until a later confirmatory run succeeds, `H/W/A/F` and the causal loop remain
 scientifically unchanged. The present design KILL narrows the next test toward
 one durable routing seam; it is not itself an HSWM efficacy result.
+
+### 2026-08-27 implementation-alignment note
+
+The Source-A candidate implements a narrower control than the earlier phrase
+“equal-budget raw transcript” implied. `RAW_EQUAL_BUDGET` replays the same eight
+sealed scorer records through the frozen integer update rule from exact `W0`.
+It is not model-visible transcript injection and does not establish equal input
+tokens, equal histories, or durable-state superiority. Its only admissible use
+is checking that the FULL numeric payload can be reproduced from its retained
+records without a hidden second update rule.
+
+The fixture also repeats the same four context keys after exhaustive forced
+context-by-route exposure. Therefore a route difference relative to rollback
+or context-binding derangement is a mechanics/causal-trace diagnostic, not
+unseen-context generalization, LLM learning, utility, or HSWM efficacy. The
+local scorer has a private-material API boundary but shares the same OS user;
+its role separation remains `DECLARED_ROLE_SEPARATION_NOT_PROVEN`.

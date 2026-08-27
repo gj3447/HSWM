@@ -59,8 +59,21 @@ key가 proposal의 declared pre-existing read이고 self-write가 아님을 검�
 실제 current-state membership이나 durable head freshness를 증명하지는 않는다.
 모든 authorization 분류는 `NOT_PERMIT`, outcome은 `NOT_CAUSAL_CREDIT`, disposition
 candidate는 `NOT_ADMITTED_NOT_PERMITTED_NOT_LEARNING`으로 남는다. current reducer와
-journal은 바뀌지 않았으며 non-null trace commit, Permit resolver, external effect,
-truth/independence, causal credit와 learning은 아직 구현되지 않았다.
+journal은 바뀌지 않았으며 non-null trace commit, canonical/global Permit, external
+effect, truth/independence, causal credit와 learning은 아직 구현되지 않았다.
+
+같은 날의
+[`current-state Permit eligibility boundary`](docs/operations/HSWM_CANONICAL_ATOM_V2_CURRENT_STATE_PERMIT_ELIGIBILITY_2026-08-27.md)는
+stable policy/authorization-decision/consent/trajectory-contract atom을 exact
+schema·state·local journal head에 결속해 local-head-relative eligibility만
+계산한다. 순수 checker는 caller-supplied snapshot package의 내부 일관성만 보는
+evidence instrument이고, public positive wrapper는 정확히 한 durable-runtime
+recovery snapshot과 그 package를 대조한다. caller-supplied evaluation time은 trusted
+now가 아니며 local head도 anti-rollback이나 canonical/global Permit이 아니다.
+policy가 승인한 일반 write kind만 후보가 쓸 수 있고 v1에서 permission-bearing kind
+생성 및 모든 admitted permission-bearing logical lineage의 self-revision은 금지된다.
+이 결과는 commit capability가 아니므로 reducer
+admission, external effect, outcome causal credit 및 learning은 여전히 미구현이다.
 
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,

@@ -6,11 +6,12 @@
 > registry for new canonical writes. The current target requires exactly one
 > schema-relative responsibility owner per admitted canonical atom. The generic
 > v2 reference kernel, content-bound facade, predecessor-bound durable journal
-> facade, and pure typed transition-evidence contract are now implemented. The
+> facade, pure typed transition-evidence contract, and local-head-relative
+> current-state eligibility checker are now implemented. The
 > content-bound facade alone still has
 > process-local state; the newer file-backed durable runtime can reconstruct one
 > local linear state-and-receipt lineage from exact immutable records. This is
-> not a production canonical store, distributed consensus, canonical Permit,
+> not a production canonical store, distributed consensus, canonical/global Permit,
 > migration system, learning result, or scientific verdict.
 > See the
 > [single-owner canon](../../../docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md).
@@ -69,6 +70,18 @@ The current v2 boundary is intentionally small:
   Every authorization classification remains `NOT_PERMIT`; outcome
   independence remains declared rather than proved, and no issuer, evidence
   store, runtime admission or learning path is exported.
+- `canonical-atom-v2-current-state-permit.ts` checks stable admitted Permit
+  policy, authorization-decision, consent-decision and trajectory-contract
+  records against exact schema/state/head evidence. Its pure checker only
+  assesses caller-supplied snapshot evidence. Its public positive wrapper first
+  compares that package with exactly one recovered durable-runtime snapshot;
+  caller-supplied `evaluatedAt` still is not trusted “now”, and the local head
+  remains neither anti-rollback proof nor a canonical/global Permit. The result
+  is read-only, is not accepted by `submit`, and does not implement admission,
+  external effects or learning. Bounded v1 does not permit a policy or candidate
+  to write any permission-bearing kind, and no admitted permission-bearing
+  logical lineage can be self-revised; only ordinary policy-approved write kinds
+  are eligible.
 - The exact implementation and nonclaims are recorded in the
   [v2 reference-kernel handoff](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md)
   and the
@@ -77,6 +90,8 @@ The current v2 boundary is intentionally small:
   [durable-journal continuation](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_DURABLE_JOURNAL_RUNTIME_2026-08-26.md)
   and the
   [typed transition-evidence continuation](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_TRANSITION_EVIDENCE_CONTRACT_2026-08-27.md).
+  The next bounded continuation is the
+  [current-state Permit eligibility boundary](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_CURRENT_STATE_PERMIT_ELIGIBILITY_2026-08-27.md).
 
 The retained historical boundary is also intentionally small:
 

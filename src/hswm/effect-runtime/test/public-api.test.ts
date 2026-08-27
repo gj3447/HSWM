@@ -121,7 +121,7 @@ it("exports durable v2 replay without raw journal publication or receipt constru
   )
 })
 
-it("exports read-safe typed transition evidence without an issuer, resolver, or admission bypass", () => {
+it("exports read-safe typed transition evidence without an issuer or admission bypass", () => {
   expect(
     PublicApi.HSWM_CANONICAL_TRANSITION_EVIDENCE_V1_CONTRACT_VERSION
   ).toBe("hswm-canonical-transition-evidence/v1")
@@ -157,6 +157,33 @@ it("exports read-safe typed transition evidence without an issuer, resolver, or 
   expect("commitCanonicalAtomV2TransitionEvidence" in PublicApi).toBe(false)
   expect("admitCanonicalAtomV2TransitionEvidence" in PublicApi).toBe(false)
   expect("learnCanonicalAtomV2Outcome" in PublicApi).toBe(false)
+})
+
+it("exports exact local-head Permit eligibility without a canonical Permit or commit capability", () => {
+  expect(
+    PublicApi.HSWM_CANONICAL_CURRENT_STATE_PERMIT_V1_CONTRACT_VERSION
+  ).toBe("hswm-canonical-current-state-permit/v1")
+  expect(
+    typeof PublicApi.validateCanonicalAtomV2CurrentStatePermitRecord
+  ).toBe("function")
+  expect(
+    typeof PublicApi.decodeCanonicalAtomV2CurrentStatePermitInputBytes
+  ).toBe("function")
+  expect(
+    typeof PublicApi.resolveCanonicalAtomV2CurrentStatePermitEligibilityAtDurableRuntime
+  ).toBe("function")
+  expect(
+    "resolveCanonicalAtomV2CurrentStatePermitEligibility" in PublicApi
+  ).toBe(false)
+  expect("CanonicalAtomV2CurrentPermitResolver" in PublicApi).toBe(false)
+  expect("CanonicalAtomV2CanonicalPermit" in PublicApi).toBe(false)
+  expect("issueCanonicalAtomV2Permit" in PublicApi).toBe(false)
+  expect("commitCanonicalAtomV2WithPermit" in PublicApi).toBe(false)
+  expect("submitCanonicalAtomV2WithPermit" in PublicApi).toBe(false)
+  expect("makeCanonicalAtomV2MonotonicHeadWitness" in PublicApi).toBe(false)
+  expect("verifyCanonicalAtomV2MonotonicHeadWitness" in PublicApi).toBe(false)
+  expect("admitCanonicalAtomV2PermitResolution" in PublicApi).toBe(false)
+  expect("learnCanonicalAtomV2PermitResolution" in PublicApi).toBe(false)
 })
 
 it("does not export privileged store or authorizer capabilities", () => {

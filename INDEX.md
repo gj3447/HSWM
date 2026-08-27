@@ -43,7 +43,11 @@ monotonic-head witness가 없으므로 완전한 tail 삭제에 대한 anti-roll
 canonical Permit, 분산 합의, migration, LLM 실행이나 outcome-bound learning의 구현·효능
 주장도 아니다. package-root-private internal test seam의 14-checkpoint interruption
 suite는 fresh replay의 old-or-exact-new prefix 불변식을 검증하지만 실제 power
-loss·kernel writeback·device flush 실험은 아니다.
+loss·kernel writeback·device flush 실험은 아니다. Layer-local native-like
+I/O fault plan은 link/fsync/readback 오류 분류와 exact-retry resync를 검증하고,
+독립 PID barrier 행렬은 같은 prefix 뒤 local POSIX hard-link slot의 one-winner CAS를
+검증한다.
+이들도 분산 합의·실제 OS fault·power-cut 증거는 아니다.
 
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,

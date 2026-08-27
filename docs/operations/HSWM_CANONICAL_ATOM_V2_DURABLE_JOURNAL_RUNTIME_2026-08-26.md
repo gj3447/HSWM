@@ -224,6 +224,30 @@ process; JavaScript cleanup may therefore run. It demonstrates fresh-replay
 exposure invariants, not physical power loss, kernel writeback behavior, device
 flush behavior, or universal crash durability.
 
+A separate Layer-local fault plan now throws raw native-like `Error{code}`
+values immediately before or after selected adapter calls. It exercises the
+actual link/fsync catch paths and bounded readback normalization without a
+global toggle, environment switch, or package-root export. One-shot object/slot
+fsync errors must resynchronize; repeated exact-retry resync errors remain typed as
+`PUBLICATION_OUTCOME_UNKNOWN`. Once a slot may be visible, persistent slot
+fsync failure or final readback `EIO` is also classified as outcome-unknown,
+and a fresh fault-free Layer independently determines the exact visible
+prefix. Before-slot link/readback failures retain the old prefix. Synthetic
+native-like errors validate adapter control flow, not actual kernel or device
+fault semantics.
+
+The live-process suite additionally coordinates two distinct PIDs at the
+pre-slot-link boundary after both observed the same empty prefix. This creates
+a deterministic stale-prefix hard-link CAS competition without claiming
+simultaneous kernel scheduling. One different-byte round yields exactly one
+`Committed` record and one typed
+conflict; an identical-byte round yields one `Committed` and one
+`AlreadyCommitted`. A third fresh observer process recovers one exact record,
+and the winning slot and content-addressed object have the same device/inode.
+This is bounded evidence for the pinned Node/vite-node toolchain on a local
+POSIX filesystem, not NFS/SMB behavior, distributed exclusion, prolonged load,
+or crash/power-cut durability.
+
 Implementation and review must retain at least these categories:
 
 | Category | Required evidence |
@@ -233,7 +257,8 @@ Implementation and review must retain at least these categories:
 | Chain integrity | predecessor/hash/state-commitment tamper, gap, reorder, duplicate slot, fork, and truncated record bytes fail closed; complete trailing-slot deletion remains an explicit anti-rollback nonclaim |
 | Content integrity | missing or changed schema/payload/envelope bytes and descriptor/schema drift reject replay |
 | Publication/interruption | package-root-private, internal test-only deterministic interruptions before/after object fsync/link/readback and slot link/fsync/final readback yield either no claimed slot or one wholly replayable record; unclaimed orphans are allowed |
-| Concurrency | independent writers have one slot winner; stale predecessor fails; exact winner retry is idempotent |
+| Native-like I/O faults | Layer-local raw `EIO` and unsupported-link errors exercise actual adapter catch branches; persistent post-slot failures are outcome-unknown and fresh replay decides visibility |
+| Concurrency | in-process writers and barrier-coordinated independent PIDs have one fixed-slot winner; stale predecessor fails; exact winner retry is idempotent; different bytes conflict |
 | Snapshot/failure | receipt/state nested snapshots cannot mutate future reads; rejected domain/permission/store paths leave committed prefix unchanged |
 | Public boundary | package root exposes no raw slot overwrite, journal bypass, mutable cache, or unsafe receipt-construction path |
 
@@ -249,19 +274,20 @@ publication, the fixed slot is the commit point, and the returned state and
 receipt come from a fresh verified replay. No process-local state cache is
 accepted as recovery truth.
 
-The file adapter now has one package-root-private, internal test-only
-interruption factory covering the 14 logical publication checkpoints above. It
-is compiled into the internal module but disabled by a fixed `null` in the
-production factory, and is not exposed as a runtime command, environment
-variable, or public mutation capability. This is an evidence instrument for the
-existing transition contract, not an HSWM state component or a learning
-advance.
+The file adapter now has package-root-private, internal test-only factories for
+the 14 logical interruption checkpoints, a sequential native-like I/O fault
+plan, and a pre-slot-link process barrier. They are compiled into the internal
+module but production fixes interruption/fault/hook inputs to
+`null`/empty/`null`; none is exposed as a runtime command, environment variable,
+or public mutation capability. These are evidence instruments for the existing
+transition contract, not HSWM state components or a learning advance.
 
 The next implementation order is:
 
-1. Add low-level `EIO`/unsupported-operation injection for actual link/fsync
-   error branches, exact-retry resync failures, and longer multi-process local
-   stress runs. Keep physical power-cut testing as a separate platform claim.
+1. Add a platform fault harness outside the process for actual filesystem
+   failure semantics, then expand process count, duration, filesystems and
+   supported-OS coverage. Keep physical power-cut testing as a separate
+   platform claim.
 2. Specify typed canonical authorization, trace, provenance, outcome and
    rejection/quarantine evidence without treating them as automatically
    authorized or learned.

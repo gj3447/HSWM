@@ -50,7 +50,11 @@ The current v2 boundary is intentionally small:
   external anti-rollback witness. A package-root-private, internal test-only
   seam interrupts 14 logical publication checkpoints and verifies fresh
   replay; it is absent from the package-root API and is not a physical
-  power-loss simulator.
+  power-loss simulator. A second Layer-local seam injects raw native-like
+  link/fsync/readback errors to exercise typed retry and unknown-outcome
+  branches. A test-only pre-link barrier drives distinct live processes into
+  the same-prefix fixed-slot hard-link competition. Neither seam is production
+  wiring, distributed consensus, or an OS/device fault experiment.
 - `canonical-atom-v2-durable-runtime.ts` treats that journal—not a mutable
   cache—as the recovery truth. Every snapshot, history read and submit replays
   the chain, verifies schema/payload/envelope content and recomputes each pure

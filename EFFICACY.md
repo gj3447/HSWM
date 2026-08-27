@@ -275,25 +275,32 @@ current checked-in file bytes. This does not change either L0 result. Those
 historical references are deliberately not repaired because the draft may not
 be registered or executed.
 
-The next candidate is narrower and remains **unregistered and unauthorized**:
-a four-arm, 160-call-ceiling development diagnostic of durable numeric
-`Δrouting/W` against rollback/no-memory, deterministic numeric replay fidelity,
-and a binding-deranged numeric placebo. The ceiling means 160
-client-dispatched generation requests; provider-side physical computation and
-cache behavior are unobservable. The implemented Source-A candidate uses
-repeated contexts after exhaustive context-by-route exposure, so it may test
-only headroom, leakage/parity, state persistence across a clean process
-restart, exact effect removal on rollback, and fixed-rule replay fidelity. It
-cannot emit an efficacy PASS or support unseen-context generalization, LLM
-learning, independent outcome, `ΔH`, topology creation, role specialization,
-transfer, or general HSWM learning.
+The narrower HSWM-DNRD-1 candidate was subsequently frozen, exact-hash
+ratified, and given one 160-call-ceiling singleton occurrence. Its three-call
+deployment preflight passed, but the first training completion violated the
+frozen exact-`stop` response contract. The runner retained a one-call
+inconclusive record, after which a deterministic file/directory-prefix ordering
+bug prevented the mandatory bundle index from being sealed. The frozen judge
+therefore returned **`VOID_PROTOCOL / UNJUDGED`**. No scorer outcome, routing
+update, persistence, rollback, derangement, or replay comparison completed.
+The occurrence marker is consumed and may not be retried or repaired post hoc.
+
+This result is an instrument-readiness failure, not a durable numeric
+`Δrouting/W` result. A successor requires a new source freeze,
+preregistration, ratification, and singleton identity after the response and
+bundle-sealing contracts are hardened. Even a future mechanics GO could not
+emit an efficacy PASS or support unseen-context generalization, LLM learning,
+independent outcome, `ΔH`, topology creation, role specialization, transfer,
+or general HSWM learning.
 
 Sources: `receipts/p1v2_l0_r2_512_closeout_20260724.json`,
 `prereg/PREREG_P1V3_POLICY_ACTUATION_2026-07-24.json`,
 `receipts/p1v3_policy_heldout_judge_seed3_20260724.json`,
 `prereg/PREREG_P1V4_FRESH_POLICY_REPLICATION_2026-07-24.json`,
 `receipts/p1v4_policy_heldout_judge_seed5_r2_20260724.json`, and
-`prereg/PREREG_P1V3V4_L1_CAUSAL_LESSON_2026-07-25.json`.
+`prereg/PREREG_P1V3V4_L1_CAUSAL_LESSON_2026-07-25.json`. DNRD-1 is recorded in
+`results/HSWM_DNRD_1_DIAGNOSTIC_RESULTS_2026-08-27.md` and
+`evidence/EVIDENCE_HSWM_DNRD_1_ADJUDICATION_2026-08-27.json`.
 
 ## 4. Traversal and relational composition
 
@@ -517,7 +524,7 @@ receipts.
 - no canonical recipient-conditioned set-to-set semantic-weight operator;
 - no passed recurrent/deep HSWM gate or causal `ΔW/ΔH` gate;
 - no surviving, registered, implemented, or measured P1 L1 causal typed-lesson result;
-- a Source-A candidate instrument exists for repeated-context numeric routing
-  mechanics, but there is no registered or measured durable numeric
-  `Δrouting/W` result and no efficacy claim;
+- HSWM-DNRD-1 consumed its single registered occurrence and ended
+  `VOID_PROTOCOL / UNJUDGED`; no durable numeric `Δrouting/W` mechanics were
+  measured and there is no efficacy claim;
 - no evidence for a distributed Human Universal Body.

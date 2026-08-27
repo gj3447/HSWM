@@ -379,7 +379,7 @@ S_t=\mathrm{HSWM}_t=(\sigma_t,\mathcal C_{\sigma_t,t}),
 \qquad
 \mathcal C_{\sigma_t,t}\models\mathsf{WellFormed}_{\sigma_t},
 \qquad
-\operatorname{owner}_{\sigma_t,t}:\mathcal C_{\sigma_t,t}\to\mathcal R_{\sigma_t}.
+\mathrm{owner}_{\sigma_t,t}:\mathcal C_{\sigma_t,t}\to\mathcal R_{\sigma_t}.
 ```
 
 | schema contract | role in the neural body |

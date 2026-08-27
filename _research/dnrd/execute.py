@@ -168,13 +168,45 @@ ATTEMPT_MARKER_SCOPE = (
     "DETERMINISTIC_DURABLE_MARKER_UNDER_CONFIGURED_REGISTRY_ONLY_GLOBAL_SINGLETON_NOT_PROVEN"
 )
 RUNTIME_TREE_MANIFEST_SCHEMA = "hswm-dnrd-bridge-runtime-tree-manifest/v3"
-RUNTIME_RECEIPT_SCHEMA = "hswm-dnrd-runtime-receipt/v2"
+RUNTIME_RECEIPT_SCHEMA = "hswm-dnrd-runtime-receipt/v3"
 EXECUTION_CLOSURE_ISOLATION_CLAIM = (
     "OWNER_READ_EXECUTE_ONLY_COPIED_CLOSURES_PER_INVOCATION_ENTRYPOINT_REHASHED_"
     "SAME_UID_ADVERSARIAL_IMMUTABILITY_NOT_PROVEN"
 )
 RUNTIME_CLOSURE_MAX_FILES = 8_192
 RUNTIME_CLOSURE_MAX_TOTAL_BYTES = 67_108_864
+VERIFIER_TIMEOUT_SECONDS = 60
+VERIFIER_ARGUMENT_CONTRACT = (
+    "online", "--expected-round", "{FIRST_ELIGIBLE_ROUND}"
+)
+VERIFIER_RUNTIME_BUNDLE_EVIDENCE_PATH = "verifier_runtime_bundle.mjs"
+VERIFIER_RUNTIME_BUNDLE_MAX_BYTES = 1_048_576
+OFFICIAL_DRAND_CLIENT_RUNTIME_BUNDLE_SHA256 = (
+    "c5f6eff0d5692efd8f2e19953a49713d17554739016f9d0f3235380aab9ea904"
+)
+OFFICIAL_NODE_EXECUTABLE_SHA256 = (
+    "53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc"
+)
+OFFICIAL_NODE_VERSION = "v24.13.0"
+OFFICIAL_PYTHON_EXECUTABLE_SHA256 = (
+    "021044895e95be79dc2f110367607e684119afbc8ce75f6f0eec94844e0acec7"
+)
+OFFICIAL_PYTHON_VERSION = "3.12.13"
+OFFICIAL_UNICODE_DATA_VERSION = "15.0.0"
+VERIFIER_RUNTIME_BUNDLE_DEPENDENCY_POLICY = (
+    "EXACT_OFFICIAL_DRAND_CLIENT_1_4_2_ESM_BYTES_NO_ORDINARY_STATIC_DYNAMIC_ESM_IMPORTS"
+)
+PRODUCTION_EXECUTION_ADAPTER_BOUNDARY = (
+    "PRODUCTION_HASH_BOUND_ADAPTERS_NO_INJECTED_IO"
+)
+TEST_EXECUTION_ADAPTER_BOUNDARY = (
+    "TEST_ONLY_INJECTED_DEPENDENCIES_NOT_ADMISSIBLE_SCIENTIFIC_EVIDENCE"
+)
+SCORER_ISOLATED_LAUNCH_CODE = (
+    "import runpy,sys;sys.path.insert(0,'.');"
+    "runpy.run_module('_research.dnrd.scorer',run_name='__main__')"
+)
+SCORER_ARGUMENT_CONTRACT = ("-I", "-S", "-c", SCORER_ISOLATED_LAUNCH_CODE)
 BRIDGE_MOUNT_CLOSURE_SCHEMA = "hswm-dnrd-bridge-mount-closure/v1"
 BRIDGE_MOUNT_CLOSURE_LAYOUT = "hswm-dnrd-ts-file-adapter-mount-closure/v1"
 BRIDGE_MOUNT_CLOSURE_MAX_FILE_BYTES = 1_048_576
@@ -366,7 +398,8 @@ CORE_SOURCE_FILES = frozenset(
         "tools/swm0w_drand/.npmrc",
         "tools/swm0w_drand/package.json",
         "tools/swm0w_drand/package-lock.json",
-        "tools/swm0w_drand/verify-beacon.mjs",
+        "tools/swm0w_drand/fixtures/quicknet-round-1000.json",
+        "_research/dnrd/verify-beacon.mjs",
         "docs/research/HSWM_DNRD_SOURCE_A_SCIENTIFIC_BOUNDARY_2026-08-27.md",
     }
 )
@@ -379,6 +412,45 @@ def _sha_bytes(value: bytes) -> str:
 def _hash_file(path: Path) -> str:
     _plain_file(path, f"required file {path}")
     return _sha_bytes(path.read_bytes())
+
+
+_ORDINARY_ESM_DEPENDENCY_PATTERNS = (
+    re.compile(r"(?m)^[ \t]*import(?:[ \t\r\n({*\"']|$)"),
+    re.compile(r"\bimport[ \t\r\n]*\("),
+    re.compile(
+        r"(?ms)^[ \t]*export[ \t\r\n]+(?:\*|\{).{0,4096}?\bfrom"
+        r"[ \t\r\n]*[\"']"
+    ),
+)
+
+
+def _validated_verifier_runtime_bundle_bytes(
+    path: Path, *, require_official_identity: bool
+) -> bytes:
+    """Read one bounded UTF-8 ESM bundle before Node is allowed to load it."""
+    _plain_file(path, "verifier runtime bundle")
+    raw = path.read_bytes()
+    if not raw or len(raw) > VERIFIER_RUNTIME_BUNDLE_MAX_BYTES:
+        raise ExecutionRefusal("verifier runtime bundle exceeds its exact byte boundary")
+    try:
+        source = raw.decode("utf-8", errors="strict")
+    except UnicodeDecodeError as error:
+        raise ExecutionRefusal("verifier runtime bundle must be strict UTF-8") from error
+    if "\x00" in source or any(
+        pattern.search(source) is not None
+        for pattern in _ORDINARY_ESM_DEPENDENCY_PATTERNS
+    ):
+        raise ExecutionRefusal(
+            "verifier runtime bundle contains an ordinary external ESM dependency"
+        )
+    if (
+        require_official_identity
+        and _sha_bytes(raw) != OFFICIAL_DRAND_CLIENT_RUNTIME_BUNDLE_SHA256
+    ):
+        raise ExecutionRefusal(
+            "production verifier runtime bundle is not the Source-A-pinned official artifact"
+        )
+    return raw
 
 
 def _hex(value: str, label: str, length: int = 64) -> None:
@@ -1977,7 +2049,9 @@ def _execution_closure_paths(config: ExecutionConfig) -> dict[str, Path]:
     }
 
 
-def _runtime_receipt(config: ExecutionConfig) -> dict[str, Any]:
+def _runtime_receipt(
+    config: ExecutionConfig, *, execution_adapter_boundary: str
+) -> dict[str, Any]:
     assert config.bridge_runtime_tree_manifest_sha256 is not None
     assert config.bridge_runtime_root is not None
     assert config.bridge_state_root is not None
@@ -1999,6 +2073,7 @@ def _runtime_receipt(config: ExecutionConfig) -> dict[str, Any]:
     ).as_posix()
     unsigned = {
         "schema_version": RUNTIME_RECEIPT_SCHEMA,
+        "execution_adapter_boundary": execution_adapter_boundary,
         "bridge_implementation_sha256": config.bridge_implementation_sha256,
         "bridge_runtime_root": str(config.bridge_runtime_root),
         "execution_path_base": "CONFIGURED_OUTPUT_ROOT",
@@ -2025,6 +2100,18 @@ def _runtime_receipt(config: ExecutionConfig) -> dict[str, Any]:
         "python_version": config.python_version,
         "unicode_data_version": config.unicode_data_version,
         "subprocess_environment": _pinned_subprocess_environment(),
+        "verifier_command": list(config.verifier_command),
+        "verifier_helper_sha256": config.verifier_helper_sha256,
+        "verifier_package_lock_sha256": config.verifier_package_lock_sha256,
+        "verifier_runtime_bundle_sha256": config.verifier_runtime_bundle_sha256,
+        "verifier_runtime_bundle_evidence_path": VERIFIER_RUNTIME_BUNDLE_EVIDENCE_PATH,
+        "verifier_runtime_bundle_dependency_policy": (
+            VERIFIER_RUNTIME_BUNDLE_DEPENDENCY_POLICY
+        ),
+        "verifier_argument_contract": list(VERIFIER_ARGUMENT_CONTRACT),
+        "verifier_working_directory": str(config.verifier_helper_path.parent),
+        "verifier_subprocess_environment": _pinned_subprocess_environment(),
+        "verifier_timeout_seconds": VERIFIER_TIMEOUT_SECONDS,
         "execution_closure_file_mode": "0400",
         "execution_closure_directory_mode": "0500",
         "execution_closure_isolation_claim": EXECUTION_CLOSURE_ISOLATION_CLAIM,
@@ -2055,7 +2142,9 @@ def _assert_distinct_roots(config: ExecutionConfig) -> None:
                 raise ExecutionRefusal(f"mutable DNRD root {left} overlaps {right}")
 
 
-def _verify_static_pins(config: ExecutionConfig) -> dict[str, Any]:
+def _verify_static_pins(
+    config: ExecutionConfig, *, require_official_runtime_identity: bool = False
+) -> dict[str, Any]:
     for label, path in (
         ("repository root", config.repo_root),
         ("output root", config.output_root),
@@ -2077,6 +2166,10 @@ def _verify_static_pins(config: ExecutionConfig) -> dict[str, Any]:
         _hex(digest, label)
         if _hash_file(path) != digest:
             raise ExecutionRefusal(f"{label} hash drifted")
+    _validated_verifier_runtime_bundle_bytes(
+        config.verifier_runtime_bundle_path,
+        require_official_identity=require_official_runtime_identity,
+    )
     required = (
         config.attempt_registry_root,
         config.ratification_receipt_path,
@@ -2138,9 +2231,30 @@ def _verify_static_pins(config: ExecutionConfig) -> dict[str, Any]:
         raise ExecutionRefusal("node executable hash drifted")
     if _hash_file(config.python_executable_path) != config.python_executable_sha256:
         raise ExecutionRefusal("python executable hash drifted")
-    node_version = subprocess.run(
-        [str(config.node_executable_path), "--version"], text=True, capture_output=True, check=False
-    )
+    if require_official_runtime_identity and (
+        config.verifier_runtime_bundle_sha256
+        != OFFICIAL_DRAND_CLIENT_RUNTIME_BUNDLE_SHA256
+        or config.node_executable_sha256 != OFFICIAL_NODE_EXECUTABLE_SHA256
+        or config.node_version != OFFICIAL_NODE_VERSION
+        or config.python_executable_sha256 != OFFICIAL_PYTHON_EXECUTABLE_SHA256
+        or config.python_version != OFFICIAL_PYTHON_VERSION
+        or config.unicode_data_version != OFFICIAL_UNICODE_DATA_VERSION
+    ):
+        raise ExecutionRefusal(
+            "production Node/Python/Unicode/verifier identities differ from Source-A protocol constants"
+        )
+    try:
+        node_version = subprocess.run(
+            [str(config.node_executable_path), "--version"],
+            text=True,
+            capture_output=True,
+            check=False,
+            cwd=config.repo_root,
+            env=_pinned_subprocess_environment(),
+            timeout=VERIFIER_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as error:
+        raise ExecutionRefusal("node executable version preflight timed out") from error
     if node_version.returncode != 0 or node_version.stdout.strip() != config.node_version:
         raise ExecutionRefusal("node executable version drifted")
     expected_python = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
@@ -2156,12 +2270,25 @@ def _verify_static_pins(config: ExecutionConfig) -> dict[str, Any]:
         config.repo_root / "_research/dnrd/scorer.py"
     ).resolve():
         raise ExecutionRefusal("scorer implementation must be the frozen DNRD scorer source")
+    expected_verifier_helper = config.repo_root / "_research/dnrd/verify-beacon.mjs"
+    expected_verifier_lock = config.repo_root / "tools/swm0w_drand/package-lock.json"
+    expected_verifier_bundle = (
+        config.repo_root
+        / "tools/swm0w_drand/node_modules/drand-client/build/esm/index.mjs"
+    )
+    if (
+        config.verifier_helper_path != expected_verifier_helper
+        or config.verifier_package_lock_path != expected_verifier_lock
+        or config.verifier_runtime_bundle_path != expected_verifier_bundle
+    ):
+        raise ExecutionRefusal("verifier helper/lock/bundle topology drifted")
     if (
         tuple(config.bridge_command)
         != (str(config.node_executable_path), str(config.bridge_implementation_path))
         or tuple(config.scorer_command)
-        != (str(config.python_executable_path), "-m", "_research.dnrd.scorer")
-        or not config.verifier_command
+        != (str(config.python_executable_path), *SCORER_ARGUMENT_CONTRACT)
+        or tuple(config.verifier_command)
+        != (str(config.node_executable_path), str(config.verifier_helper_path))
     ):
         raise ExecutionRefusal("bridge/scorer/verifier command binding drifted")
     if set(config.bridge_config) != {"root_path", "frozen_scorer_source_sha256"}:
@@ -2179,7 +2306,14 @@ def _verify_static_pins(config: ExecutionConfig) -> dict[str, Any]:
     if not config.model_endpoint.startswith(("http://", "https://")) or base_endpoint != config.model_endpoint.rstrip("/").removesuffix("/v1"):
         raise ExecutionRefusal("model endpoint normalization drifted")
     _runtime_tree_manifest(config)
-    return _runtime_receipt(config)
+    return _runtime_receipt(
+        config,
+        execution_adapter_boundary=(
+            PRODUCTION_EXECUTION_ADAPTER_BOUNDARY
+            if require_official_runtime_identity
+            else TEST_EXECUTION_ADAPTER_BOUNDARY
+        ),
+    )
 
 
 def _generated_overlap(root: Path, public: Mapping[str, Any], git_paths: Sequence[str]) -> None:
@@ -2458,7 +2592,29 @@ def _production_dependencies(config: ExecutionConfig) -> ExecutionDependencies:
     )
 
     def verifier(command: Sequence[str]) -> bytes:
-        completed = subprocess.run(command, capture_output=True, check=False)
+        expected_prefix = (
+            *config.verifier_command,
+            "online",
+            "--expected-round",
+        )
+        if (
+            len(command) != len(expected_prefix) + 1
+            or tuple(command[:-1]) != expected_prefix
+            or not str(command[-1]).isdigit()
+            or int(command[-1]) < 1
+        ):
+            raise ExecutionRefusal("online pulse verifier invocation drifted")
+        try:
+            completed = subprocess.run(
+                command,
+                capture_output=True,
+                check=False,
+                cwd=config.verifier_helper_path.parent,
+                env=_pinned_subprocess_environment(),
+                timeout=VERIFIER_TIMEOUT_SECONDS,
+            )
+        except subprocess.TimeoutExpired as error:
+            raise ExecutionRefusal("pinned online pulse verifier timed out") from error
         if completed.returncode != 0:
             raise ExecutionRefusal("pinned online pulse verifier refused")
         return bytes(completed.stdout)
@@ -2482,14 +2638,27 @@ def _production_dependencies(config: ExecutionConfig) -> ExecutionDependencies:
     )
 
 
-def _execute(config: ExecutionConfig, dependencies: ExecutionDependencies) -> ExecutionResult:
-    """Shared implementation; public ``execute`` never accepts injected I/O."""
-    runtime_receipt = _verify_static_pins(config)
+def _execute(
+    config: ExecutionConfig,
+    dependencies: ExecutionDependencies | None,
+) -> ExecutionResult:
+    """Bind production status to internal dependency construction, never a flag."""
+    require_official_runtime_identity = dependencies is None
+    runtime_receipt = _verify_static_pins(
+        config,
+        require_official_runtime_identity=require_official_runtime_identity,
+    )
+    verifier_runtime_bundle_bytes = _validated_verifier_runtime_bundle_bytes(
+        config.verifier_runtime_bundle_path,
+        require_official_identity=require_official_runtime_identity,
+    )
     source_ci_receipt, source_ci_bytes = _load_source_ci_receipt(config)
     ratification_receipt, ratification_bytes = _load_ratification_receipt(config)
     source_manifest = _load_source_manifest(config)
     runtime_tree_manifest = _runtime_tree_manifest(config)
     preregistration = _validate_preregistration(config, source_ci_receipt=source_ci_receipt)
+    if dependencies is None:
+        dependencies = _production_dependencies(config)
     source_time, git_chronology_evidence = _preflight_git(config, dependencies)
     if config.output_root.exists():
         raise ExecutionRefusal("output root must be a new dedicated path")
@@ -2510,13 +2679,15 @@ def _execute(config: ExecutionConfig, dependencies: ExecutionDependencies) -> Ex
         user_ratification_unix=config.ratification_unix,
     )
     verifier_bytes = dependencies.verifier_runner(
-        [*config.verifier_command, "--mode", "online", "--round", str(eligible_round)]
+        [*config.verifier_command, "online", "--expected-round", str(eligible_round)]
     )
     projection = projection_from_verifier_receipt_bytes(
         verifier_bytes,
         expected_helper_sha256=config.verifier_helper_sha256,
         expected_package_lock_sha256=config.verifier_package_lock_sha256,
         expected_runtime_bundle_sha256=config.verifier_runtime_bundle_sha256,
+        expected_runtime_exec_sha256=config.node_executable_sha256,
+        expected_runtime_version=config.node_version,
     )
     pulse = bind_future_pulse(
         source_freeze_unix=source_time,
@@ -2564,6 +2735,11 @@ def _execute(config: ExecutionConfig, dependencies: ExecutionDependencies) -> Ex
     _atomic_json(config.output_root / "pulse_binding.json", pulse.canonical())
     _atomic_json(config.output_root / "deployment_receipt.json", deployment)
     _atomic_json(config.output_root / "runtime_receipt.json", runtime_receipt)
+    _atomic_bytes(
+        config.output_root / VERIFIER_RUNTIME_BUNDLE_EVIDENCE_PATH,
+        verifier_runtime_bundle_bytes,
+        0o400,
+    )
     assert config.bridge_runtime_tree_manifest_path is not None
     assert config.bridge_runtime_root is not None
     _atomic_bytes(
@@ -2687,7 +2863,7 @@ def execute_with_dependencies(config: ExecutionConfig, dependencies: ExecutionDe
 
 def execute(config: ExecutionConfig) -> ExecutionResult:
     """Run one production DNRD occurrence through only hash-bound adapters."""
-    return _execute(config, _production_dependencies(config))
+    return _execute(config, None)
 
 
 def _config_from_json(path: Path) -> ExecutionConfig:

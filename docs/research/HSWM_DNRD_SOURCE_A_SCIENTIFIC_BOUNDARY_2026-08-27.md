@@ -67,12 +67,50 @@ TypeScript runtime and recursive package closure are copied into the occurrence
 bundle; the bridge and scorer execute from owner-read/execute-only copied
 closures, and each subprocess entrypoint is rehashed before invocation.
 
+The public-pulse verifier command is derived exactly from the pinned Node
+executable and DNRD helper and uses the helper's literal
+`online --expected-round N` ABI. It runs with a fixed working directory,
+secret-free subprocess environment, and timeout. Source A fixes the exact
+Linux x86-64 Node 24.13.0 and CPython 3.12.13 executable hashes, Python and
+Unicode versions, and the official npm-installed `drand-client` 1.4.2 ESM
+bundle SHA-256. B may only repeat those identities; it cannot select arbitrary
+self-consistent runtimes.
+
+The scorer uses an exact `-I -S -c` launch contract that disables Python's
+global `site`, `.pth`, and `sitecustomize` startup path, then inserts only the
+owner-read-only copied source-closure root before running the frozen scorer
+module. The Python standard library, dynamic loader, OS, and same-UID host still
+remain within the declared trusted-runtime boundary.
+
+The helper checks the exact bundle hash and a bounded lexical policy forbidding
+ordinary static, export-from, and dynamic ESM dependencies before loading that
+file by exact URL. The occurrence retains those bundle bytes as an owner-read-
+only indexed artifact, and the independent adjudicator rehashes them against
+the Source-A constant, B, config, runtime receipt, and pulse provenance. This
+prevents package-export redirection and ordinary ESM dependency substitution;
+it is not a universal JavaScript non-dependency or benign-code proof. The
+official round-1000 Quicknet fixture used by CI's offline BLS regression is
+also a member of the Source-A closure.
+
+Only the path that internally constructs the frozen production adapters emits
+the admissible hash-bound-adapter marker; no caller-supplied dependency path has
+a production-admissibility switch. The dependency-injected executor exists for
+hermetic tests and marks its output explicitly inadmissible as scientific evidence. DNRD execution is a
+repository-checkout-only research surface; the Python source distribution does
+not claim to carry or replay its cross-language live verifier closure.
+
 This is not hostile same-UID isolation. The scorer API and runner code path do
 not receive, read, or parse private answers, but the scorer process shares the
 same OS user and output tree. Its strongest status is
 `DECLARED_ROLE_SEPARATION_NOT_PROVEN`. The retained build inputs, compiler, and
 selected packages are pinned, but the bundle adjudicator does not independently
-re-execute the build.
+re-execute the build. The verifier's preflight file hashes and exact-file load do
+not defend a hostile same-UID race between those two operations. The
+adjudicator also does not itself re-run BLS verification of the online pulse;
+it validates the retained receipt and its exact frozen identities under the
+declared source/runtime-trusted boundary. Therefore this is not cryptographic
+host attestation and cannot establish provenance against a malicious local
+operator capable of fabricating an entire self-consistent evidence directory.
 
 Training provenance canaries are derived from the future pulse and placed only
 in training prompts. Candidate emission is forbidden if they appear in any

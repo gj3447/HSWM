@@ -227,21 +227,25 @@ def projection_from_verifier_receipt_bytes(
     expected_helper_sha256: str,
     expected_package_lock_sha256: str,
     expected_runtime_bundle_sha256: str,
+    expected_runtime_exec_sha256: str,
+    expected_runtime_version: str,
 ) -> VerifiedQuicknetProjection:
     """Parse one pinned ``verify-beacon.mjs`` stdout receipt into a projection.
 
-    The caller supplies the expected helper, package-lock, and runtime-bundle
-    SHA-256 pins.  This parser validates their occurrence in the receipt but
-    does not itself perform BLS verification or network I/O; that happened in
-    the verifier process which emitted these exact bytes.
+    The caller supplies the expected helper, package-lock, runtime-bundle, and
+    Node executable identities.  This parser validates their occurrence in the
+    receipt but does not itself perform BLS verification or network I/O; that
+    happened in the verifier process which emitted these exact bytes.
     """
 
     for name, value in (
         ("expected_helper_sha256", expected_helper_sha256),
         ("expected_package_lock_sha256", expected_package_lock_sha256),
         ("expected_runtime_bundle_sha256", expected_runtime_bundle_sha256),
+        ("expected_runtime_exec_sha256", expected_runtime_exec_sha256),
     ):
         _hex(value, name, length=64)
+    _nonempty_string(expected_runtime_version, "expected_runtime_version")
     receipt = _strict_verifier_json_object(receipt_bytes)
     top = _exact_keys(
         receipt,
@@ -376,6 +380,10 @@ def projection_from_verifier_receipt_bytes(
         raise DNRDSeedBindingError("verifier package-lock SHA pin mismatch")
     if verifier["runtime_bundle_sha256"] != expected_runtime_bundle_sha256:
         raise DNRDSeedBindingError("verifier runtime-bundle SHA pin mismatch")
+    if verifier["runtime_exec_sha256"] != expected_runtime_exec_sha256:
+        raise DNRDSeedBindingError("verifier Node executable SHA pin mismatch")
+    if verifier["runtime_version"] != expected_runtime_version:
+        raise DNRDSeedBindingError("verifier Node version pin mismatch")
     if (
         verifier["package"] != "drand-client"
         or verifier["version"] != "1.4.2"

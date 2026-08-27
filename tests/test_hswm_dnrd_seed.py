@@ -25,6 +25,8 @@ RATIFICATION = 1_700_000_001
 HELPER_PIN = "3" * 64
 LOCK_PIN = "4" * 64
 BUNDLE_PIN = "5" * 64
+NODE_PIN = "9" * 64
+NODE_VERSION = "v24.test"
 
 
 def _canonical(value: object) -> bytes:
@@ -95,9 +97,9 @@ def _verifier_receipt_value(*, round_number: int | None = None) -> dict[str, obj
             "package_lock_sha256": LOCK_PIN,
             "runtime_bundle_sha256": BUNDLE_PIN,
             "runtime_engine": "Node.js",
-            "runtime_exec_sha256": "9" * 64,
+            "runtime_exec_sha256": NODE_PIN,
             "runtime_trust_status": "TRUSTED_LOCAL_OS_AND_NODE_RUNTIME_REQUIRED",
-            "runtime_version": "v24.test",
+            "runtime_version": NODE_VERSION,
             "source_tarball": "https://example.invalid/drand-client.tgz",
             "version": "1.4.2",
         },
@@ -123,6 +125,8 @@ def _parse_verifier(receipt_bytes: bytes) -> object:
         expected_helper_sha256=HELPER_PIN,
         expected_package_lock_sha256=LOCK_PIN,
         expected_runtime_bundle_sha256=BUNDLE_PIN,
+        expected_runtime_exec_sha256=NODE_PIN,
+        expected_runtime_version=NODE_VERSION,
     )
 
 
@@ -303,6 +307,8 @@ def test_only_the_strict_verifier_parser_can_create_a_usable_projection() -> Non
         lambda value: value["verifier"].__setitem__("helper_sha256", "0" * 64),
         lambda value: value["verifier"].__setitem__("package_lock_sha256", "0" * 64),
         lambda value: value["verifier"].__setitem__("runtime_bundle_sha256", "0" * 64),
+        lambda value: value["verifier"].__setitem__("runtime_exec_sha256", "0" * 64),
+        lambda value: value["verifier"].__setitem__("runtime_version", "v0.attacker"),
         lambda value: value["verifier"].__setitem__("runtime_engine", "Python"),
         lambda value: value.__setitem__("chronology_claim_allowed", True),
         lambda value: value.__setitem__("pulse_source_url", "https://wrong.invalid"),
@@ -334,6 +340,8 @@ def test_caller_supplied_verifier_pins_are_required() -> None:
             expected_helper_sha256="0" * 64,
             expected_package_lock_sha256=LOCK_PIN,
             expected_runtime_bundle_sha256=BUNDLE_PIN,
+            expected_runtime_exec_sha256=NODE_PIN,
+            expected_runtime_version=NODE_VERSION,
         )
     with pytest.raises(seed.DNRDSeedBindingError, match="package-lock SHA pin"):
         seed.projection_from_verifier_receipt_bytes(
@@ -341,6 +349,8 @@ def test_caller_supplied_verifier_pins_are_required() -> None:
             expected_helper_sha256=HELPER_PIN,
             expected_package_lock_sha256="0" * 64,
             expected_runtime_bundle_sha256=BUNDLE_PIN,
+            expected_runtime_exec_sha256=NODE_PIN,
+            expected_runtime_version=NODE_VERSION,
         )
     with pytest.raises(seed.DNRDSeedBindingError, match="runtime-bundle SHA pin"):
         seed.projection_from_verifier_receipt_bytes(
@@ -348,4 +358,24 @@ def test_caller_supplied_verifier_pins_are_required() -> None:
             expected_helper_sha256=HELPER_PIN,
             expected_package_lock_sha256=LOCK_PIN,
             expected_runtime_bundle_sha256="0" * 64,
+            expected_runtime_exec_sha256=NODE_PIN,
+            expected_runtime_version=NODE_VERSION,
+        )
+    with pytest.raises(seed.DNRDSeedBindingError, match="Node executable SHA pin"):
+        seed.projection_from_verifier_receipt_bytes(
+            receipt,
+            expected_helper_sha256=HELPER_PIN,
+            expected_package_lock_sha256=LOCK_PIN,
+            expected_runtime_bundle_sha256=BUNDLE_PIN,
+            expected_runtime_exec_sha256="0" * 64,
+            expected_runtime_version=NODE_VERSION,
+        )
+    with pytest.raises(seed.DNRDSeedBindingError, match="Node version pin"):
+        seed.projection_from_verifier_receipt_bytes(
+            receipt,
+            expected_helper_sha256=HELPER_PIN,
+            expected_package_lock_sha256=LOCK_PIN,
+            expected_runtime_bundle_sha256=BUNDLE_PIN,
+            expected_runtime_exec_sha256=NODE_PIN,
+            expected_runtime_version="v0.wrong",
         )

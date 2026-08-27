@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 import hashlib
+import inspect
 import json
 from pathlib import Path
 import re
@@ -26,12 +27,15 @@ from _research.dnrd.execute import (
     RATIFICATION_TEMPLATE,
     RATIFICATION_TEMPLATE_VERSION,
     RUNTIME_TREE_MANIFEST_SCHEMA,
+    SCORER_ARGUMENT_CONTRACT,
     _ProductionBridgeMountClosureExporter,
+    _execute,
     _json_object_unformatted,
     _load_source_manifest,
     _production_dependencies,
     _runtime_tree_manifest,
     _validate_preregistration,
+    _verify_static_pins,
     execute_with_dependencies,
 )
 from _research.dnrd.live import (
@@ -266,7 +270,15 @@ def _git(repo: Path, *args: str, env: dict[str, str] | None = None) -> str:
     return completed.stdout.strip()
 
 
-def _verifier_receipt(source_unix: int, ratification_unix: int, helper: str, lock: str, bundle: str) -> bytes:
+def _verifier_receipt(
+    source_unix: int,
+    ratification_unix: int,
+    helper: str,
+    lock: str,
+    bundle: str,
+    node_sha256: str,
+    node_version: str,
+) -> bytes:
     round_number = first_eligible_quicknet_round(source_freeze_unix=source_unix, user_ratification_unix=ratification_unix)
     signature = "ab" * 48
     pulse = {
@@ -312,9 +324,9 @@ def _verifier_receipt(source_unix: int, ratification_unix: int, helper: str, loc
             "package_lock_sha256": lock,
             "runtime_bundle_sha256": bundle,
             "runtime_engine": "Node.js",
-            "runtime_exec_sha256": "9" * 64,
+            "runtime_exec_sha256": node_sha256,
             "runtime_trust_status": "TRUSTED_LOCAL_OS_AND_NODE_RUNTIME_REQUIRED",
-            "runtime_version": "v24.fixture",
+            "runtime_version": node_version,
             "source_tarball": "https://example.invalid/drand.tgz",
             "version": "1.4.2",
         },
@@ -411,9 +423,14 @@ def _fixture(
 
     pin_root = tmp_path / "pins"
     pin_root.mkdir()
-    helper, lock, bundle = pin_root / "helper", pin_root / "package-lock", pin_root / "runtime-bundle"
-    for path, body in ((helper, b"helper"), (lock, b"lock"), (bundle, b"bundle")):
-        path.write_bytes(body)
+    helper = repo / "_research/dnrd/verify-beacon.mjs"
+    lock = repo / "tools/swm0w_drand/package-lock.json"
+    bundle = repo / "tools/swm0w_drand/node_modules/drand-client/build/esm/index.mjs"
+    (repo / ".git/info/exclude").write_text(
+        "tools/swm0w_drand/node_modules/\n", encoding="utf-8"
+    )
+    bundle.parent.mkdir(parents=True)
+    bundle.write_bytes(b"fixture pinned self-contained verifier bundle\n")
     runtime_root = tmp_path / "runtime"
     runtime_root.mkdir()
     bridge_impl = runtime_root / "bridge.js"
@@ -667,7 +684,7 @@ def _fixture(
         "http://127.0.0.1:9999", bridge_impl, _hash(bridge_impl),
         (str(node), str(bridge_impl)), bridge_config,
         scorer_source.resolve(), _hash(scorer_source),
-        (str(python), "-m", "_research.dnrd.scorer"), ("fixture-verifier",),
+        (str(python), *SCORER_ARGUMENT_CONTRACT), (str(node), str(helper)),
         helper, _hash(helper), lock, _hash(lock), bundle, _hash(bundle),
         attempt_registry_root=attempt_root, ratification_receipt_path=rat_path,
         ratification_receipt_sha256=rat_sha, source_ci_receipt_path=ci_path,
@@ -686,7 +703,9 @@ def _fixture(
 
     def verifier(command: list[str]) -> bytes:
         calls.append(list(command))
-        return _verifier_receipt(1, 3, _hash(helper), _hash(lock), _hash(bundle))
+        return _verifier_receipt(
+            1, 3, _hash(helper), _hash(lock), _hash(bundle), _hash(node), node_version
+        )
 
     def preflight(_: ExecutionConfig) -> dict:
         return preflight_deployment_and_tokenizer(OpenAICompatibleDnrdConfig(config.model_endpoint), transport, tokenizer_prompt="frozen preflight")
@@ -698,7 +717,13 @@ def _fixture(
 def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None:
     config, dependencies, calls = _fixture(tmp_path)
     result = execute_with_dependencies(config, dependencies)
-    assert len(calls) == 1 and calls[0][-2] == "--round"
+    assert len(calls) == 1
+    assert calls[0] == [
+        *config.verifier_command,
+        "online",
+        "--expected-round",
+        str(first_eligible_quicknet_round(source_freeze_unix=1, user_ratification_unix=3)),
+    ]
     assert result.runner_result.candidate is not None
     artifacts = {
         "source_manifest.json", "preregistration.json", "source_ci_receipt.json",
@@ -707,7 +732,7 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
         "runtime_receipt.json", "bridge_runtime_tree_manifest.json", "attempt_lock_receipt.json",
         "config_readback.json", "runner_events.jsonl", "model_events.jsonl",
         "bridge_state_evidence.json", "candidate.json", "bundle_index.json",
-        "bridge_mount_closure.json",
+        "bridge_mount_closure.json", "verifier_runtime_bundle.mjs",
     }
     assert all((result.output_dir / name).is_file() for name in artifacts)
     assert (result.output_dir / "source_closure" / "_research/dnrd/runner.py").is_file()
@@ -735,10 +760,29 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
         (result.output_dir / "source_closure/_research/dnrd/scorer.py").stat().st_mode
     ) == 0o400
     runtime = json.loads((result.output_dir / "runtime_receipt.json").read_text())
-    assert runtime["schema_version"] == "hswm-dnrd-runtime-receipt/v2"
+    assert runtime["schema_version"] == "hswm-dnrd-runtime-receipt/v3"
     assert runtime["bridge_execution_root"] == "bridge_runtime_closure"
     assert runtime["scorer_execution_root"] == "source_closure"
     assert runtime["bridge_command"][1].startswith("{OUTPUT_ROOT}/bridge_runtime_closure/")
+    assert runtime["verifier_command"] == list(config.verifier_command)
+    assert runtime["verifier_argument_contract"] == [
+        "online", "--expected-round", "{FIRST_ELIGIBLE_ROUND}"
+    ]
+    assert runtime["verifier_subprocess_environment"] == runtime["subprocess_environment"]
+    assert runtime["verifier_timeout_seconds"] == 60
+    assert runtime["verifier_helper_sha256"] == config.verifier_helper_sha256
+    assert runtime["verifier_package_lock_sha256"] == config.verifier_package_lock_sha256
+    assert runtime["verifier_runtime_bundle_sha256"] == config.verifier_runtime_bundle_sha256
+    assert runtime["verifier_runtime_bundle_evidence_path"] == "verifier_runtime_bundle.mjs"
+    assert runtime["execution_adapter_boundary"] == (
+        "TEST_ONLY_INJECTED_DEPENDENCIES_NOT_ADMISSIBLE_SCIENTIFIC_EVIDENCE"
+    )
+    assert stat.S_IMODE(
+        (result.output_dir / "verifier_runtime_bundle.mjs").stat().st_mode
+    ) == 0o400
+    assert (result.output_dir / "verifier_runtime_bundle.mjs").read_bytes() == (
+        config.verifier_runtime_bundle_path.read_bytes()
+    )
     chronology_value = json.loads(chronology.read_text())
     source_value = json.loads((result.output_dir / "source_manifest.json").read_text())
     assert [row["path"] for row in chronology_value["source"]["file_blobs"]] == [
@@ -751,12 +795,79 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
         (result.output_dir / "attempt_lock_receipt.json").read_text()
     )
     dnrd_judge._validate_config_readback(config_readback, candidate_value, runtime)
-    dnrd_judge._validate_runtime_and_attempt(runtime, attempt_receipt, candidate_value)
+    with pytest.raises(dnrd_judge.BundleRefusal, match="production hash-bound"):
+        dnrd_judge._validate_runtime_and_attempt(
+            runtime, attempt_receipt, candidate_value
+        )
     source_path_runtime = json.loads(json.dumps(runtime))
     source_path_runtime["bridge_command"][1] = config_readback["bridge_command"][1]
     with pytest.raises(dnrd_judge.BundleRefusal, match="copied execution paths"):
         dnrd_judge._validate_config_readback(
             config_readback, candidate_value, source_path_runtime
+        )
+    verifier_path_runtime = json.loads(json.dumps(runtime))
+    verifier_path_runtime["verifier_command"][1] = "/tmp/unpinned-verifier.mjs"
+    with pytest.raises(dnrd_judge.BundleRefusal, match="copied execution paths"):
+        dnrd_judge._validate_config_readback(
+            config_readback, candidate_value, verifier_path_runtime
+        )
+    verifier_env_runtime = json.loads(json.dumps(runtime))
+    verifier_env_runtime["verifier_subprocess_environment"]["NODE_OPTIONS"] = "--import=attacker"
+    with pytest.raises(dnrd_judge.BundleRefusal, match="copied execution paths"):
+        dnrd_judge._validate_config_readback(
+            config_readback, candidate_value, verifier_env_runtime
+        )
+    jointly_poisoned_env_runtime = json.loads(json.dumps(runtime))
+    jointly_poisoned_env_runtime["subprocess_environment"]["NODE_OPTIONS"] = (
+        "--import=attacker"
+    )
+    jointly_poisoned_env_runtime["verifier_subprocess_environment"]["NODE_OPTIONS"] = (
+        "--import=attacker"
+    )
+    with pytest.raises(dnrd_judge.BundleRefusal, match="copied execution paths"):
+        dnrd_judge._validate_config_readback(
+            config_readback, candidate_value, jointly_poisoned_env_runtime
+        )
+    for field in ("node_version", "python_version", "unicode_data_version"):
+        drifted_config = json.loads(json.dumps(config_readback))
+        drifted_config[field] = "forged-runtime-version"
+        with pytest.raises(dnrd_judge.BundleRefusal, match="chronology/runtime pins"):
+            dnrd_judge._validate_config_readback(
+                drifted_config, candidate_value, runtime
+            )
+
+    pulse_value = json.loads((result.output_dir / "pulse_binding.json").read_text())
+    verifier_value = json.loads(
+        (result.output_dir / "pulse_verifier_receipt.json").read_text()
+    )
+    verifier_value["verifier"]["runtime_exec_sha256"] = "0" * 64
+    verifier_unsigned = {
+        key: value for key, value in verifier_value.items() if key != "receipt_sha256"
+    }
+    verifier_value["receipt_sha256"] = commitment(verifier_unsigned)
+    tampered_verifier_bytes = canonical_json(verifier_value) + b"\n"
+    pulse_value["projection"]["verification_receipt_sha256"] = hashlib.sha256(
+        tampered_verifier_bytes
+    ).hexdigest()
+    pulse_unsigned = {
+        key: value for key, value in pulse_value.items() if key != "receipt_sha256"
+    }
+    pulse_value["receipt_sha256"] = commitment(pulse_unsigned)
+    tampered_candidate = json.loads(json.dumps(candidate_value))
+    tampered_candidate["bindings"]["pulse_receipt_sha256"] = pulse_value[
+        "receipt_sha256"
+    ]
+    ratification_value = json.loads(
+        (result.output_dir / "ratification_receipt.json").read_text()
+    )
+    preregistration_value = json.loads(preregistration_bytes)
+    with pytest.raises(dnrd_judge.BundleRefusal, match="verifier provenance"):
+        dnrd_judge._validate_pulse(
+            pulse_value,
+            tampered_verifier_bytes,
+            tampered_candidate,
+            ratification_value,
+            preregistration_value,
         )
     dnrd_judge._validate_git_chronology(
         result.output_dir,
@@ -783,6 +894,12 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
     assert "import judge" not in Path("_research/dnrd/execute.py").read_text()
 
 
+def test_injected_executor_has_no_production_admissibility_switch() -> None:
+    parameters = inspect.signature(_execute).parameters
+    assert tuple(parameters) == ("config", "dependencies")
+    assert "require_official_runtime_identity" not in parameters
+
+
 def test_production_adapters_target_output_copied_execution_closures(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -803,6 +920,106 @@ def test_production_adapters_target_output_copied_execution_closures(
     assert Path(scorer._working_directory) == (  # type: ignore[attr-defined]
         config.output_root / "source_closure"
     )
+    assert tuple(scorer._command) == config.scorer_command  # type: ignore[attr-defined]
+    assert tuple(scorer._command[1:4]) == ("-I", "-S", "-c")  # type: ignore[attr-defined]
+
+
+def test_static_pins_refuse_free_verifier_command_or_path_topology(
+    tmp_path: Path,
+) -> None:
+    config, _, _ = _fixture(tmp_path)
+    with pytest.raises(ExecutionRefusal, match="command binding"):
+        _verify_static_pins(replace(config, verifier_command=("fixture-verifier",)))
+
+    alternate_helper = tmp_path / "alternate-helper.mjs"
+    alternate_helper.write_bytes(config.verifier_helper_path.read_bytes())
+    with pytest.raises(ExecutionRefusal, match="topology"):
+        _verify_static_pins(
+            replace(
+                config,
+                verifier_helper_path=alternate_helper,
+                verifier_command=(str(config.node_executable_path), str(alternate_helper)),
+            )
+        )
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        b'import { forged } from "./mutable.mjs";\n',
+        b'export { forged } from "./mutable.mjs";\n',
+        b'const forged = await import("./mutable.mjs");\n',
+    ],
+)
+def test_static_pins_refuse_verifier_bundle_external_esm_dependencies(
+    tmp_path: Path, source: bytes
+) -> None:
+    config, _, _ = _fixture(tmp_path)
+    config.verifier_runtime_bundle_path.write_bytes(source)
+    config = replace(
+        config,
+        verifier_runtime_bundle_sha256=_hash(config.verifier_runtime_bundle_path),
+    )
+    with pytest.raises(ExecutionRefusal, match="external ESM dependency"):
+        _verify_static_pins(config)
+
+
+def test_production_static_pins_refuse_nonofficial_test_bundle(tmp_path: Path) -> None:
+    config, _, _ = _fixture(tmp_path)
+    with pytest.raises(ExecutionRefusal, match="official artifact"):
+        _verify_static_pins(config, require_official_runtime_identity=True)
+
+
+def test_production_verifier_uses_exact_abi_clean_environment_and_timeout(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    config, _, _ = _fixture(tmp_path)
+    monkeypatch.setenv(config.model_api_key_environment, "fixture-secret")
+    dependencies = _production_dependencies(config)
+    observed: dict[str, object] = {}
+
+    class Completed:
+        returncode = 0
+        stdout = b"fixture-receipt\n"
+
+    def fake_run(command, **kwargs):
+        observed["command"] = list(command)
+        observed.update(kwargs)
+        return Completed()
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    command = [
+        *config.verifier_command,
+        "online",
+        "--expected-round",
+        "123",
+    ]
+    assert dependencies.verifier_runner(command) == b"fixture-receipt\n"
+    assert observed["command"] == command
+    assert observed["cwd"] == config.verifier_helper_path.parent
+    assert observed["timeout"] == 60
+    environment = observed["env"]
+    assert isinstance(environment, dict)
+    assert config.model_api_key_environment not in environment
+    assert "NODE_OPTIONS" not in environment
+    assert environment["PATH"] == "/usr/bin:/bin"
+
+    with pytest.raises(ExecutionRefusal, match="invocation drifted"):
+        dependencies.verifier_runner(
+            [*config.verifier_command, "--mode", "online", "--round", "123"]
+        )
+
+
+def test_dnrd_verifier_imports_the_exact_bundle_without_package_export_routing() -> None:
+    source = Path("_research/dnrd/verify-beacon.mjs").read_text(encoding="utf-8")
+    assert '"node_modules", "drand-client", "build", "esm", "index.mjs"' in source
+    assert "validateRuntimeBundleSource(bundleBytes);" in source
+    assert "await import(pathToFileURL(bundlePath).href)" in source
+    assert source.index("validateRuntimeBundleSource(bundleBytes);") < source.index(
+        "await import(pathToFileURL(bundlePath).href)"
+    )
+    assert 'from "drand-client"' not in source
+    assert 'from "../../tools/swm0w_drand/node_modules/drand-client' not in source
 
 
 @pytest.mark.parametrize(

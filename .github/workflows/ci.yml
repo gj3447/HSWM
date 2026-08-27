@@ -104,6 +104,10 @@ jobs:
           node-version: "24.13.0"
           cache: npm
           cache-dependency-path: src/hswm/effect-runtime/package-lock.json
+      - name: Install the DNRD scorer Python version
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          python-version: "3.12.13"
       - name: Verify the Node and npm runtime bytes/version
         run: |
           test "$(node --version)" = "v24.13.0"
@@ -111,12 +115,34 @@ jobs:
           printf '%s  %s\n' \
             '53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc' \
             "$(command -v node)" | sha256sum --check --strict
+      - name: Verify the Python scorer executable and Unicode runtime
+        run: |
+          python_path="$(uv python find --managed-python --no-project --resolve-links 3.12.13)"
+          test "$("${python_path}" -c 'import platform; print(platform.python_version())')" = "3.12.13"
+          test "$("${python_path}" -c 'import unicodedata; print(unicodedata.unidata_version)')" = "15.0.0"
+          printf '%s  %s\n' \
+            '021044895e95be79dc2f110367607e684119afbc8ce75f6f0eec94844e0acec7' \
+            "${python_path}" | sha256sum --check --strict
       - name: Install the locked Effect dependency graph
         working-directory: src/hswm/effect-runtime
         run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Install the byte-pinned offline drand verifier
         working-directory: tools/swm0w_drand
         run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Exercise the DNRD exact-bundle verifier ABI on the official offline vector
+        run: |
+          printf '%s  %s\n' \
+            'c5f6eff0d5692efd8f2e19953a49713d17554739016f9d0f3235380aab9ea904' \
+            'tools/swm0w_drand/node_modules/drand-client/build/esm/index.mjs' | \
+            sha256sum --check --strict
+          node _research/dnrd/verify-beacon.mjs \
+            offline \
+            --expected-round 1000 \
+            --pulse-file tools/swm0w_drand/fixtures/quicknet-round-1000.json \
+            > "${RUNNER_TEMP}/dnrd-offline-verifier-receipt.json"
+          jq -e \
+            '.mode == "offline" and .pulse.round == 1000 and .verification.accepted_by == "drand-client.fetchBeacon"' \
+            "${RUNNER_TEMP}/dnrd-offline-verifier-receipt.json"
       - name: Typecheck, test, build, and inspect the npm artifact
         working-directory: src/hswm/effect-runtime
         run: npm run verify

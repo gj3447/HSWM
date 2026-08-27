@@ -42,7 +42,7 @@ RUNNER_EVENT_SCHEMA = "hswm-dnrd-runner-event/v1"
 LIVE_EVENT_SCHEMA = "hswm-dnrd-live-model-event/v1"
 PUBLIC_MANIFEST_SCHEMA = "hswm-dnrd-public-manifest/v1"
 PULSE_BINDING_SCHEMA = "hswm-dnrd-pulse-binding/v1"
-RUNTIME_RECEIPT_SCHEMA = "hswm-dnrd-runtime-receipt/v2"
+RUNTIME_RECEIPT_SCHEMA = "hswm-dnrd-runtime-receipt/v3"
 EXECUTION_CLOSURE_ISOLATION_CLAIM = (
     "OWNER_READ_EXECUTE_ONLY_COPIED_CLOSURES_PER_INVOCATION_ENTRYPOINT_REHASHED_"
     "SAME_UID_ADVERSARIAL_IMMUTABILITY_NOT_PROVEN"
@@ -50,6 +50,53 @@ EXECUTION_CLOSURE_ISOLATION_CLAIM = (
 RUNTIME_TREE_MANIFEST_SCHEMA = "hswm-dnrd-bridge-runtime-tree-manifest/v3"
 RUNTIME_CLOSURE_MAX_FILES = 8_192
 RUNTIME_CLOSURE_MAX_TOTAL_BYTES = 67_108_864
+VERIFIER_TIMEOUT_SECONDS = 60
+VERIFIER_ARGUMENT_CONTRACT = (
+    "online", "--expected-round", "{FIRST_ELIGIBLE_ROUND}"
+)
+VERIFIER_RUNTIME_BUNDLE_EVIDENCE_PATH = "verifier_runtime_bundle.mjs"
+VERIFIER_RUNTIME_BUNDLE_MAX_BYTES = 1_048_576
+OFFICIAL_DRAND_CLIENT_RUNTIME_BUNDLE_SHA256 = (
+    "c5f6eff0d5692efd8f2e19953a49713d17554739016f9d0f3235380aab9ea904"
+)
+OFFICIAL_NODE_EXECUTABLE_SHA256 = (
+    "53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc"
+)
+OFFICIAL_NODE_VERSION = "v24.13.0"
+OFFICIAL_PYTHON_EXECUTABLE_SHA256 = (
+    "021044895e95be79dc2f110367607e684119afbc8ce75f6f0eec94844e0acec7"
+)
+OFFICIAL_PYTHON_VERSION = "3.12.13"
+OFFICIAL_UNICODE_DATA_VERSION = "15.0.0"
+VERIFIER_RUNTIME_BUNDLE_DEPENDENCY_POLICY = (
+    "EXACT_OFFICIAL_DRAND_CLIENT_1_4_2_ESM_BYTES_NO_ORDINARY_STATIC_DYNAMIC_ESM_IMPORTS"
+)
+PRODUCTION_EXECUTION_ADAPTER_BOUNDARY = (
+    "PRODUCTION_HASH_BOUND_ADAPTERS_NO_INJECTED_IO"
+)
+SCORER_ISOLATED_LAUNCH_CODE = (
+    "import runpy,sys;sys.path.insert(0,'.');"
+    "runpy.run_module('_research.dnrd.scorer',run_name='__main__')"
+)
+SCORER_ARGUMENT_CONTRACT = ("-I", "-S", "-c", SCORER_ISOLATED_LAUNCH_CODE)
+PINNED_SUBPROCESS_ENVIRONMENT = {
+    "PYTHONNOUSERSITE": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONHASHSEED": "0",
+    "PYTHONUTF8": "1",
+    "TZ": "UTC",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "PATH": "/usr/bin:/bin",
+}
+_ORDINARY_ESM_DEPENDENCY_PATTERNS = (
+    re.compile(r"(?m)^[ \t]*import(?:[ \t\r\n({*\"']|$)"),
+    re.compile(r"\bimport[ \t\r\n]*\("),
+    re.compile(
+        r"(?ms)^[ \t]*export[ \t\r\n]+(?:\*|\{).{0,4096}?\bfrom"
+        r"[ \t\r\n]*[\"']"
+    ),
+)
 RUNTIME_DEPENDENCY_MATERIALIZATION_COMMAND = (
     "npm", "ci", "--ignore-scripts", "--no-audit", "--no-fund"
 )
@@ -139,7 +186,8 @@ FROZEN_DNRD_SOURCE_CLOSURE = frozenset(
         "tools/swm0w_drand/.npmrc",
         "tools/swm0w_drand/package.json",
         "tools/swm0w_drand/package-lock.json",
-        "tools/swm0w_drand/verify-beacon.mjs",
+        "tools/swm0w_drand/fixtures/quicknet-round-1000.json",
+        "_research/dnrd/verify-beacon.mjs",
         "docs/research/HSWM_DNRD_SOURCE_A_SCIENTIFIC_BOUNDARY_2026-08-27.md",
     }
 )
@@ -218,6 +266,7 @@ BUNDLE_COMMON_REQUIRED_FILES = frozenset(
         "git_chronology_evidence.json",
         "private/private_manifest.json",
         "bridge_runtime_tree_manifest.json",
+        VERIFIER_RUNTIME_BUNDLE_EVIDENCE_PATH,
         "bundle_index.json",
     }
 )
@@ -1740,8 +1789,63 @@ def _validate_preregistration_runtime_binding(
             )
     if binding["bridge_config_sha256"] != _canonical_hash(runtime.get("bridge_config")):
         raise BundleRefusal("preregistration bridge config binding differs from runtime receipt")
-    if binding["subprocess_environment"] != runtime.get("subprocess_environment"):
+    if (
+        binding["subprocess_environment"] != PINNED_SUBPROCESS_ENVIRONMENT
+        or runtime.get("subprocess_environment") != PINNED_SUBPROCESS_ENVIRONMENT
+    ):
         raise BundleRefusal("preregistration subprocess environment differs from runtime receipt")
+    if (
+        binding["verifier_runtime_bundle_sha256"]
+        != OFFICIAL_DRAND_CLIENT_RUNTIME_BUNDLE_SHA256
+        or binding["node_executable_sha256"] != OFFICIAL_NODE_EXECUTABLE_SHA256
+        or binding["node_version"] != OFFICIAL_NODE_VERSION
+        or binding["python_executable_sha256"]
+        != OFFICIAL_PYTHON_EXECUTABLE_SHA256
+        or binding["python_version"] != OFFICIAL_PYTHON_VERSION
+        or binding["unicode_data_version"] != OFFICIAL_UNICODE_DATA_VERSION
+    ):
+        raise BundleRefusal(
+            "preregistration runtime identities differ from Source-A protocol constants"
+        )
+
+
+def _validate_verifier_source_binding(
+    source: Mapping[str, Any],
+    preregistration: Mapping[str, Any],
+    config: Mapping[str, Any],
+) -> None:
+    """Join retained Source-A verifier bytes to config and preregistration pins."""
+    rows = source.get("files")
+    if type(rows) is not list:
+        raise BundleRefusal("source manifest verifier binding has no file rows")
+    hashes: dict[str, str] = {}
+    for index, raw in enumerate(rows):
+        row = _check_exact_keys(
+            raw, {"path", "sha256"}, f"source manifest verifier row[{index}]"
+        )
+        path = _string(row["path"], f"source manifest verifier row[{index}].path")
+        if path in hashes:
+            raise BundleRefusal("source manifest verifier binding repeats a path")
+        hashes[path] = _sha(
+            row["sha256"], f"source manifest verifier row[{index}].sha256"
+        )
+    binding = preregistration.get("runtime_bindings")
+    if type(binding) is not dict:
+        raise BundleRefusal("preregistration verifier source binding is absent")
+    expected = {
+        "_research/dnrd/verify-beacon.mjs": "verifier_helper_sha256",
+        "tools/swm0w_drand/package-lock.json": "verifier_package_lock_sha256",
+    }
+    for path, field in expected.items():
+        source_sha = hashes.get(path)
+        if (
+            source_sha is None
+            or source_sha != config.get(field)
+            or source_sha != binding.get(field)
+        ):
+            raise BundleRefusal(
+                f"retained Source-A bytes do not bind preregistered {field}"
+            )
 
 
 def _preregistration_active_state_byte_ceiling(preregistration: Mapping[str, Any]) -> int:
@@ -3432,6 +3536,47 @@ def _validate_bridge_mount_closure(
         raise BundleRefusal("raw V2 closure trajectories do not exactly cover all runner/model/scorer events")
 
 
+def _validate_verifier_runtime_bundle_evidence(
+    root: Path,
+    raw: bytes,
+    preregistration: Mapping[str, Any],
+    config: Mapping[str, Any],
+    runtime: Mapping[str, Any],
+) -> None:
+    """Rehash and inspect the exact verifier bytes retained by the occurrence."""
+    if not raw or len(raw) > VERIFIER_RUNTIME_BUNDLE_MAX_BYTES:
+        raise BundleRefusal("retained verifier runtime bundle exceeds its byte boundary")
+    try:
+        source = raw.decode("utf-8", errors="strict")
+    except UnicodeDecodeError as error:
+        raise BundleRefusal("retained verifier runtime bundle must be strict UTF-8") from error
+    if "\x00" in source or any(
+        pattern.search(source) is not None
+        for pattern in _ORDINARY_ESM_DEPENDENCY_PATTERNS
+    ):
+        raise BundleRefusal(
+            "retained verifier runtime bundle contains an ordinary external ESM dependency"
+        )
+    target = _bundle_plain_file(root, VERIFIER_RUNTIME_BUNDLE_EVIDENCE_PATH)
+    if stat.S_IMODE(target.stat().st_mode) != 0o400:
+        raise BundleRefusal("retained verifier runtime bundle mode is not owner-read-only")
+    digest = _sha_bytes(raw)
+    binding = preregistration.get("runtime_bindings")
+    if type(binding) is not dict or (
+        digest != OFFICIAL_DRAND_CLIENT_RUNTIME_BUNDLE_SHA256
+        or config.get("verifier_runtime_bundle_sha256") != digest
+        or binding.get("verifier_runtime_bundle_sha256") != digest
+        or runtime.get("verifier_runtime_bundle_sha256") != digest
+        or runtime.get("verifier_runtime_bundle_evidence_path")
+        != VERIFIER_RUNTIME_BUNDLE_EVIDENCE_PATH
+        or runtime.get("verifier_runtime_bundle_dependency_policy")
+        != VERIFIER_RUNTIME_BUNDLE_DEPENDENCY_POLICY
+    ):
+        raise BundleRefusal(
+            "retained verifier runtime bundle does not match the official Source-A/B/runtime identity"
+        )
+
+
 def _validate_bundle_index(root: Path) -> Mapping[str, str]:
     """Close the evidence input set before interpreting any candidate fields."""
     index, raw = _bundle_object(root, "bundle_index.json")
@@ -3505,7 +3650,7 @@ def _validate_runtime_and_attempt(
     runtime_data = _check_exact_keys(
         runtime,
         {
-            "schema_version", "bridge_implementation_sha256", "bridge_runtime_root", "bridge_state_root",
+            "schema_version", "execution_adapter_boundary", "bridge_implementation_sha256", "bridge_runtime_root", "bridge_state_root",
             "execution_path_base",
             "bridge_execution_root", "bridge_implementation_execution_path",
             "bridge_runtime_tree_manifest_sha256", "bridge_command", "bridge_config",
@@ -3514,6 +3659,10 @@ def _validate_runtime_and_attempt(
             "scorer_command", "scorer_import_root",
             "node_executable_path", "node_executable_sha256", "node_version", "python_executable_path",
             "python_executable_sha256", "python_version", "unicode_data_version", "subprocess_environment",
+            "verifier_command", "verifier_helper_sha256", "verifier_package_lock_sha256",
+            "verifier_runtime_bundle_sha256", "verifier_runtime_bundle_evidence_path",
+            "verifier_runtime_bundle_dependency_policy", "verifier_argument_contract", "verifier_working_directory",
+            "verifier_subprocess_environment", "verifier_timeout_seconds",
             "execution_closure_file_mode", "execution_closure_directory_mode",
             "execution_closure_isolation_claim",
             "receipt_sha256",
@@ -3525,9 +3674,14 @@ def _validate_runtime_and_attempt(
     runtime_id = _bundle_sha_receipt(runtime_data, "runtime receipt")
     if candidate["bindings"]["runtime_receipt_sha256"] != runtime_id:
         raise BundleRefusal("candidate runtime receipt binding does not match retained receipt")
+    if runtime_data["execution_adapter_boundary"] != PRODUCTION_EXECUTION_ADAPTER_BOUNDARY:
+        raise BundleRefusal(
+            "runtime receipt was not emitted by the production hash-bound adapter boundary"
+        )
     for key in (
         "bridge_implementation_sha256", "bridge_runtime_tree_manifest_sha256", "scorer_implementation_sha256",
-        "node_executable_sha256", "python_executable_sha256",
+        "node_executable_sha256", "python_executable_sha256", "verifier_helper_sha256",
+        "verifier_package_lock_sha256", "verifier_runtime_bundle_sha256",
     ):
         _sha(runtime_data[key], f"runtime receipt.{key}")
     for key in (
@@ -3536,16 +3690,34 @@ def _validate_runtime_and_attempt(
         "bridge_state_root", "scorer_implementation_source_path", "scorer_execution_root",
         "scorer_implementation_execution_path", "scorer_import_root", "node_executable_path",
         "node_version", "python_executable_path", "python_version", "unicode_data_version",
+        "verifier_working_directory",
+        "verifier_runtime_bundle_evidence_path", "verifier_runtime_bundle_dependency_policy",
         "execution_closure_file_mode", "execution_closure_directory_mode",
         "execution_closure_isolation_claim",
     ):
         _string(runtime_data[key], f"runtime receipt.{key}")
-    for key in ("bridge_command", "scorer_command"):
+    for key in ("bridge_command", "scorer_command", "verifier_command", "verifier_argument_contract"):
         command = runtime_data[key]
         if type(command) is not list or not command or any(type(item) is not str or not item for item in command):
             raise BundleRefusal(f"runtime receipt.{key} must be a nonempty command string list")
-    if type(runtime_data["bridge_config"]) is not dict or type(runtime_data["subprocess_environment"]) is not dict:
+    if (
+        type(runtime_data["bridge_config"]) is not dict
+        or type(runtime_data["subprocess_environment"]) is not dict
+        or type(runtime_data["verifier_subprocess_environment"]) is not dict
+    ):
         raise BundleRefusal("runtime receipt bridge config/environment must be objects")
+    if (
+        runtime_data["verifier_argument_contract"] != list(VERIFIER_ARGUMENT_CONTRACT)
+        or runtime_data["subprocess_environment"] != PINNED_SUBPROCESS_ENVIRONMENT
+        or runtime_data["verifier_subprocess_environment"] != PINNED_SUBPROCESS_ENVIRONMENT
+        or runtime_data["verifier_runtime_bundle_evidence_path"]
+        != VERIFIER_RUNTIME_BUNDLE_EVIDENCE_PATH
+        or runtime_data["verifier_runtime_bundle_dependency_policy"]
+        != VERIFIER_RUNTIME_BUNDLE_DEPENDENCY_POLICY
+        or runtime_data["verifier_timeout_seconds"] != VERIFIER_TIMEOUT_SECONDS
+        or type(runtime_data["verifier_timeout_seconds"]) is not int
+    ):
+        raise BundleRefusal("runtime receipt verifier invocation boundary drifted")
     if runtime_data["scorer_implementation_sha256"] != candidate["bindings"]["scorer_sha256"]:
         raise BundleRefusal("runtime receipt scorer identity differs from candidate binding")
     if (
@@ -3628,8 +3800,18 @@ def _validate_config_readback(
         or data["scorer_implementation_sha256"] != runtime["scorer_implementation_sha256"]
         or data["bridge_config"] != runtime["bridge_config"]
         or data["bridge_runtime_tree_manifest_sha256"] != runtime["bridge_runtime_tree_manifest_sha256"]
+        or data["node_executable_path"] != runtime["node_executable_path"]
         or data["node_executable_sha256"] != runtime["node_executable_sha256"]
+        or data["node_version"] != runtime["node_version"]
+        or data["python_executable_path"] != runtime["python_executable_path"]
         or data["python_executable_sha256"] != runtime["python_executable_sha256"]
+        or data["python_version"] != runtime["python_version"]
+        or data["unicode_data_version"] != runtime["unicode_data_version"]
+        or data["verifier_helper_sha256"] != runtime["verifier_helper_sha256"]
+        or data["verifier_package_lock_sha256"]
+        != runtime["verifier_package_lock_sha256"]
+        or data["verifier_runtime_bundle_sha256"]
+        != runtime["verifier_runtime_bundle_sha256"]
     ):
         raise BundleRefusal("execution config readback does not match candidate chronology/runtime pins")
     for key in (
@@ -3659,11 +3841,17 @@ def _validate_config_readback(
     source_runtime_root = Path(str(data["bridge_runtime_root"]))
     source_bridge = Path(str(data["bridge_implementation_path"]))
     source_scorer = Path(str(data["scorer_implementation_path"]))
+    verifier_helper = Path(str(data["verifier_helper_path"]))
+    verifier_lock = Path(str(data["verifier_package_lock_path"]))
+    verifier_bundle = Path(str(data["verifier_runtime_bundle_path"]))
     node_path = str(data["node_executable_path"])
     python_path = str(data["python_executable_path"])
     if not all(
         path.is_absolute()
-        for path in (repo_root, output_root, source_runtime_root, source_bridge, source_scorer)
+        for path in (
+            repo_root, output_root, source_runtime_root, source_bridge, source_scorer,
+            verifier_helper, verifier_lock, verifier_bundle,
+        )
     ):
         raise BundleRefusal("execution config source/output/runtime paths must be absolute")
     try:
@@ -3675,12 +3863,21 @@ def _validate_config_readback(
     expected_bridge = expected_bridge_root / bridge_relative
     expected_scorer_root = Path("source_closure")
     expected_scorer = expected_scorer_root / scorer_relative
+    expected_verifier_helper = repo_root / "_research/dnrd/verify-beacon.mjs"
+    expected_verifier_lock = repo_root / "tools/swm0w_drand/package-lock.json"
+    expected_verifier_bundle = (
+        repo_root / "tools/swm0w_drand/node_modules/drand-client/build/esm/index.mjs"
+    )
     if (
         scorer_relative.as_posix() != "_research/dnrd/scorer.py"
         or data["scorer_import_root"] != data["repo_root"]
         or data["bridge_command"] != [node_path, str(source_bridge)]
         or data["scorer_command"]
-        != [python_path, "-m", "_research.dnrd.scorer"]
+        != [python_path, *SCORER_ARGUMENT_CONTRACT]
+        or verifier_helper != expected_verifier_helper
+        or verifier_lock != expected_verifier_lock
+        or verifier_bundle != expected_verifier_bundle
+        or data["verifier_command"] != [node_path, str(verifier_helper)]
         or runtime["bridge_runtime_root"] != str(source_runtime_root)
         or runtime["bridge_execution_root"] != str(expected_bridge_root)
         or runtime["bridge_implementation_execution_path"] != str(expected_bridge)
@@ -3691,6 +3888,16 @@ def _validate_config_readback(
         or runtime["scorer_implementation_execution_path"] != str(expected_scorer)
         or runtime["scorer_command"] != data["scorer_command"]
         or runtime["scorer_import_root"] != str(expected_scorer_root)
+        or runtime["verifier_command"] != data["verifier_command"]
+        or runtime["verifier_argument_contract"] != list(VERIFIER_ARGUMENT_CONTRACT)
+        or runtime["verifier_working_directory"] != str(verifier_helper.parent)
+        or runtime["subprocess_environment"] != PINNED_SUBPROCESS_ENVIRONMENT
+        or runtime["verifier_subprocess_environment"] != PINNED_SUBPROCESS_ENVIRONMENT
+        or runtime["verifier_runtime_bundle_evidence_path"]
+        != VERIFIER_RUNTIME_BUNDLE_EVIDENCE_PATH
+        or runtime["verifier_runtime_bundle_dependency_policy"]
+        != VERIFIER_RUNTIME_BUNDLE_DEPENDENCY_POLICY
+        or runtime["verifier_timeout_seconds"] != VERIFIER_TIMEOUT_SECONDS
     ):
         raise BundleRefusal(
             "runtime receipt does not distinguish frozen source paths from copied execution paths"
@@ -3977,6 +4184,8 @@ def _validate_pulse(
         verifier_identity["helper_sha256"] != pins.get("verifier_helper_sha256")
         or verifier_identity["package_lock_sha256"] != pins.get("verifier_package_lock_sha256")
         or verifier_identity["runtime_bundle_sha256"] != pins.get("verifier_runtime_bundle_sha256")
+        or verifier_identity["runtime_exec_sha256"] != pins.get("node_executable_sha256")
+        or verifier_identity["runtime_version"] != pins.get("node_version")
         or verifier_identity["package"] != "drand-client"
         or verifier_identity["version"] != "1.4.2"
         or verifier_identity["runtime_engine"] != "Node.js"
@@ -5640,6 +5849,14 @@ def judge_bundle(bundle_dir: str | Path) -> dict[str, Any]:
         config = _validate_config_readback(config_readback, candidate, runtime)
         _validate_runtime_and_attempt(runtime, attempt, candidate)
         _validate_preregistration_runtime_binding(preregistration, runtime, config)
+        _validate_verifier_source_binding(source, preregistration, config)
+        _validate_verifier_runtime_bundle_evidence(
+            root,
+            raw_artifacts[VERIFIER_RUNTIME_BUNDLE_EVIDENCE_PATH],
+            preregistration,
+            config,
+            runtime,
+        )
         active_state_byte_ceiling = _preregistration_active_state_byte_ceiling(preregistration)
         endpoint, model, chat_config = _validate_deployment(deployment, candidate, config)
         _validate_pulse(pulse, verifier_bytes, candidate, ratification, preregistration)

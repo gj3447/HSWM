@@ -3,12 +3,14 @@ from __future__ import annotations
 import json
 import hashlib
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 
 import pytest
 
 from _research.dnrd.scorer import RESPONSE_SCHEMA, score_response
+from _research.dnrd.execute import SCORER_ARGUMENT_CONTRACT
 from _research.dnrd.task_family import (
     ManifestError,
     audit_manifest_pair,
@@ -141,7 +143,7 @@ def test_scorer_is_strict_and_never_returns_gold() -> None:
         score_response(record, private)
 
 
-def test_normalization_and_standalone_cli(tmp_path: Path) -> None:
+def test_normalization_and_isolated_copied_closure_cli(tmp_path: Path) -> None:
     assert normalize_answer("  R\u00c9PONSE\t") == "r\u00e9ponse"
     public, private = generate_manifests(SEED)
     episode = public["streams"][1]["training"][0]
@@ -152,11 +154,43 @@ def test_normalization_and_standalone_cli(tmp_path: Path) -> None:
     response_path = tmp_path / "response.json"
     private_path.write_text(json.dumps(private), encoding="utf-8")
     response_path.write_text(json.dumps(_response(private, episode["episode_id"], route, answer)), encoding="utf-8")
+    copied_root = tmp_path / "source_closure"
+    copied_package = copied_root / "_research/dnrd"
+    copied_package.mkdir(parents=True)
+    repository = Path(__file__).resolve().parents[1]
+    for relative in (
+        "_research/dnrd/__init__.py",
+        "_research/dnrd/scorer.py",
+        "_research/dnrd/task_family.py",
+    ):
+        source = repository / relative
+        destination = copied_root / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+        destination.chmod(0o400)
     completed = subprocess.run(
-        [sys.executable, "-m", "_research.dnrd.scorer", "--private-manifest", str(private_path), "--sealed-response", str(response_path)],
+        [
+            sys.executable,
+            *SCORER_ARGUMENT_CONTRACT,
+            "--private-manifest",
+            str(private_path),
+            "--sealed-response",
+            str(response_path),
+        ],
         check=True,
         capture_output=True,
         text=True,
+        cwd=copied_root,
+        env={
+            "PYTHONNOUSERSITE": "1",
+            "PYTHONDONTWRITEBYTECODE": "1",
+            "PYTHONHASHSEED": "0",
+            "PYTHONUTF8": "1",
+            "TZ": "UTC",
+            "LANG": "C.UTF-8",
+            "LC_ALL": "C.UTF-8",
+            "PATH": "/usr/bin:/bin",
+        },
     )
     result = json.loads(completed.stdout)
     assert result["reward"] == 1_000_000

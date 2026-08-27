@@ -123,18 +123,20 @@ def _runtime_binding_fixture() -> tuple[dict[str, object], dict[str, object], di
         "bridge_runtime_tree_manifest_sha256": _sha("tree"),
         "bridge_config": {"schemaVersion": "fixture"},
         "scorer_implementation_sha256": _sha("scorer"),
-        "node_executable_sha256": _sha("node"),
-        "node_version": "v24.13.0",
-        "python_executable_sha256": _sha("python"),
-        "python_version": "3.12.13",
-        "unicode_data_version": "15.1.0",
-        "subprocess_environment": {"PYTHONHASHSEED": "0"},
+        "node_executable_sha256": judge.OFFICIAL_NODE_EXECUTABLE_SHA256,
+        "node_version": judge.OFFICIAL_NODE_VERSION,
+        "python_executable_sha256": judge.OFFICIAL_PYTHON_EXECUTABLE_SHA256,
+        "python_version": judge.OFFICIAL_PYTHON_VERSION,
+        "unicode_data_version": judge.OFFICIAL_UNICODE_DATA_VERSION,
+        "subprocess_environment": dict(judge.PINNED_SUBPROCESS_ENVIRONMENT),
     }
     config = {
         "model_endpoint": "http://127.0.0.1:8000",
         "verifier_helper_sha256": _sha("helper"),
         "verifier_package_lock_sha256": _sha("lock"),
-        "verifier_runtime_bundle_sha256": _sha("bundle"),
+        "verifier_runtime_bundle_sha256": (
+            judge.OFFICIAL_DRAND_CLIENT_RUNTIME_BUNDLE_SHA256
+        ),
     }
     binding = {
         "model_endpoint": config["model_endpoint"],
@@ -176,6 +178,134 @@ def test_independent_judge_refuses_every_drifted_preregistration_runtime_binding
     binding[field] = "CLAIM_LLM_LEARNING_EFFICACY_AND_UNSEEN_GENERALIZATION"
     with pytest.raises(judge.BundleRefusal, match="preregistration"):
         judge._validate_preregistration_runtime_binding(prereg, runtime, config)
+
+
+@pytest.mark.parametrize(
+    ("field", "forged"),
+    [
+        ("node_executable_sha256", _sha("forged-node")),
+        ("node_version", "v24.13.0-forged"),
+        ("python_executable_sha256", _sha("forged-python")),
+        ("python_version", "3.12.13-forged"),
+        ("unicode_data_version", "15.0.0-forged"),
+        ("verifier_runtime_bundle_sha256", _sha("forged-bundle")),
+    ],
+)
+def test_independent_judge_refuses_self_consistent_nonofficial_runtime_identity(
+    field: str, forged: str
+) -> None:
+    prereg, runtime, config = _runtime_binding_fixture()
+    binding = prereg["runtime_bindings"]
+    assert isinstance(binding, dict)
+    binding[field] = forged
+    if field in runtime:
+        runtime[field] = forged
+    if field in config:
+        config[field] = forged
+    with pytest.raises(judge.BundleRefusal, match="Source-A protocol constants"):
+        judge._validate_preregistration_runtime_binding(prereg, runtime, config)
+
+
+def test_independent_judge_refuses_self_consistent_nonfixed_subprocess_environment() -> None:
+    prereg, runtime, config = _runtime_binding_fixture()
+    forged = {**judge.PINNED_SUBPROCESS_ENVIRONMENT, "NODE_OPTIONS": "--import=attacker"}
+    prereg["runtime_bindings"]["subprocess_environment"] = forged
+    runtime["subprocess_environment"] = forged
+    with pytest.raises(judge.BundleRefusal, match="subprocess environment"):
+        judge._validate_preregistration_runtime_binding(prereg, runtime, config)
+
+
+@pytest.mark.parametrize(
+    ("path", "field"),
+    [
+        ("_research/dnrd/verify-beacon.mjs", "verifier_helper_sha256"),
+        ("tools/swm0w_drand/package-lock.json", "verifier_package_lock_sha256"),
+    ],
+)
+def test_independent_judge_joins_verifier_source_bytes_to_preregistration_pins(
+    path: str, field: str
+) -> None:
+    prereg, _, config = _runtime_binding_fixture()
+    source = {
+        "files": [
+            {
+                "path": "_research/dnrd/verify-beacon.mjs",
+                "sha256": config["verifier_helper_sha256"],
+            },
+            {
+                "path": "tools/swm0w_drand/package-lock.json",
+                "sha256": config["verifier_package_lock_sha256"],
+            },
+        ]
+    }
+    judge._validate_verifier_source_binding(source, prereg, config)
+    target = next(row for row in source["files"] if row["path"] == path)
+    target["sha256"] = _sha(f"forged-{field}")
+    with pytest.raises(judge.BundleRefusal, match="Source-A bytes"):
+        judge._validate_verifier_source_binding(source, prereg, config)
+
+
+def _retained_bundle_fixture(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, raw: bytes
+) -> tuple[dict[str, object], dict[str, object], dict[str, object]]:
+    digest = sha256(raw).hexdigest()
+    monkeypatch.setattr(
+        judge, "OFFICIAL_DRAND_CLIENT_RUNTIME_BUNDLE_SHA256", digest
+    )
+    target = tmp_path / judge.VERIFIER_RUNTIME_BUNDLE_EVIDENCE_PATH
+    target.write_bytes(raw)
+    target.chmod(0o400)
+    preregistration = {
+        "runtime_bindings": {"verifier_runtime_bundle_sha256": digest}
+    }
+    config = {"verifier_runtime_bundle_sha256": digest}
+    runtime = {
+        "verifier_runtime_bundle_sha256": digest,
+        "verifier_runtime_bundle_evidence_path": (
+            judge.VERIFIER_RUNTIME_BUNDLE_EVIDENCE_PATH
+        ),
+        "verifier_runtime_bundle_dependency_policy": (
+            judge.VERIFIER_RUNTIME_BUNDLE_DEPENDENCY_POLICY
+        ),
+    }
+    return preregistration, config, runtime
+
+
+def test_independent_judge_rehashes_exact_retained_verifier_bundle(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    raw = b"var pinnedVerifierFixture = true;\n"
+    preregistration, config, runtime = _retained_bundle_fixture(
+        tmp_path, monkeypatch, raw
+    )
+    judge._validate_verifier_runtime_bundle_evidence(
+        tmp_path, raw, preregistration, config, runtime
+    )
+    config["verifier_runtime_bundle_sha256"] = _sha("substituted-bundle")
+    with pytest.raises(judge.BundleRefusal, match="official Source-A/B/runtime"):
+        judge._validate_verifier_runtime_bundle_evidence(
+            tmp_path, raw, preregistration, config, runtime
+        )
+
+
+@pytest.mark.parametrize(
+    "raw",
+    [
+        b'import { forged } from "./mutable.mjs";\n',
+        b'export { forged } from "./mutable.mjs";\n',
+        b'const forged = await import("./mutable.mjs");\n',
+    ],
+)
+def test_independent_judge_refuses_retained_bundle_external_esm_dependencies(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, raw: bytes
+) -> None:
+    preregistration, config, runtime = _retained_bundle_fixture(
+        tmp_path, monkeypatch, raw
+    )
+    with pytest.raises(judge.BundleRefusal, match="external ESM dependency"):
+        judge._validate_verifier_runtime_bundle_evidence(
+            tmp_path, raw, preregistration, config, runtime
+        )
 
 
 def _route(label: str) -> dict[str, str]:

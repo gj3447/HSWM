@@ -39,12 +39,15 @@ whether the LLM discovers the routing rule, generalizes it, or improves utility.
 - Training forces all eight context-by-route cells once per stream.
 - Heldout evaluation reuses the same four contexts; it is not new-context
   generalization.
-- `FULL` applies locally declared scorer outcomes to the durable numeric field.
+- `FULL` applies exactly eight locally declared scorer outcomes per stream to
+  the durable numeric field (32 training calls across four streams).
 - `NO_MEMORY_ROLLBACK` recovers exact `W0`.
-- `RAW_EQUAL_BUDGET` deterministically replays the same eight sealed scorer
-  records through the same fixed integer rule from `W0`. It is a replay
-  fidelity control, not a model-visible raw-transcript arm and not an
-  equal-token comparison.
+- `RAW_EQUAL_BUDGET` deterministically replays the same eight retained training
+  update records per stream, whose integer rewards come from scorer outcomes
+  and whose provenance fields come from sealed responses and outcome digests,
+  through the same fixed integer rule from `W0`. The records are not
+  cryptographically signed. This is a replay-fidelity control, not a
+  model-visible raw-transcript arm and not an equal-token comparison.
 - `BINDING_DERANGED_NUMERIC_PLACEBO` preserves the matched numeric payload
   byte count, precision, update multiset, and norms while permuting context
   bindings within stratum. It does not claim full history, atom, or reference
@@ -124,6 +127,11 @@ The strongest possible terminal is
 `DIAGNOSTIC_INTEGRITY_GO_NO_UTILITY_CLAIM`. It means only that the frozen
 mechanics and evidence-integrity checks were observed in this one occurrence.
 It cannot be promoted to an efficacy PASS.
+
+The exact non-GO terminals are `DIAGNOSTIC_NO_GO`, `VOID_PROTOCOL`, and
+`INCONCLUSIVE_OCCURRENCE`. The last label is reserved for a retained,
+post-first-call occurrence that could not reach candidate adjudication; it is
+not a retry authorization.
 
 The occurrence may not establish any of the following:
 

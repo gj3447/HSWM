@@ -218,9 +218,13 @@ _MOUNT_ID_RE = re.compile(
 _DIGEST_FILENAME_RE = re.compile(r"^[0-9a-f]{64}$")
 PREREG_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v1"
 RAW_REPLAY_DESCRIPTION = (
-    "Replay exactly eight sealed signed training records into the frozen numeric "
-    "score rule from W0; this is an engineering replay control, not a model-visible "
-    "raw-transcript, equal-token, or durable-state-superiority comparison."
+    "For each stream, replay exactly eight retained training update records containing "
+    "scorer-outcome integer rewards through the frozen numeric score rule from W0; the "
+    "records are derived from sealed responses and outcome digests. This is an "
+    "engineering replay control, not a model-visible raw-transcript, equal-token, or "
+    "durable-state-superiority comparison, and it does not claim cryptographic "
+    "signatures on the "
+    "update records."
 )
 PREREG_CLAIM_BOUNDARY = {
     "canonical_role": (
@@ -243,7 +247,7 @@ PREREG_CLAIM_BOUNDARY = {
         "does a fixed scorer-outcome-bound integer routing payload persist across "
         "fresh-process recovery and alter pre-model route selection relative to exact "
         "W0 rollback and context-binding derangement, while fixed-rule replay of the "
-        "same sealed records reproduces the numeric payload?"
+        "same retained training update records reproduces the numeric payload?"
     ),
     "hypotheses": {
         "integrity_go": (
@@ -274,12 +278,12 @@ PREREG_CLAIM_BOUNDARY = {
         ),
         "model_role": "SELECTED_EVIDENCE_ECHO_BOUNDARY_NOT_THE_LEARNER_UNDER_TEST",
         "scorer_role": "DECLARED_ROLE_SEPARATION_NOT_PROVEN",
-        "raw_role": "FIXED_RULE_SEALED_RECORD_NUMERIC_REPLAY_FIDELITY_ONLY",
+        "raw_role": "FIXED_RULE_RETAINED_UPDATE_RECORD_NUMERIC_REPLAY_FIDELITY_ONLY",
     },
     "arms": {
         "FULL": (
-            "Apply exactly eight locally declared scorer outcomes to the durable integer "
-            "routing payload before read-only repeated-context evaluation."
+            "For each stream, apply exactly eight locally declared scorer outcomes to the "
+            "durable integer routing payload before read-only repeated-context evaluation."
         ),
         "NO_MEMORY_ROLLBACK": (
             "Recover and evaluate the exact immutable W0 genesis payload with no learned update."
@@ -294,7 +298,7 @@ PREREG_CLAIM_BOUNDARY = {
     "interventions": {
         "rollback": "EXACT_W0_RECOVERY_AND_POST_FULL_RESTORE_REPLAY",
         "binding_derangement": "WITHIN_STRATUM_NO_FIXED_POINT_CONTEXT_PERMUTATION",
-        "raw_replay": "SAME_SEALED_RECORDS_SAME_FIXED_INTEGER_UPDATE_RULE_FROM_W0",
+        "raw_replay": "SAME_RETAINED_UPDATE_RECORDS_SAME_FIXED_INTEGER_UPDATE_RULE_FROM_W0",
     },
     "parity_claims": {
         "compiler_input_audit": (
@@ -334,7 +338,11 @@ PREREG_CLAIM_BOUNDARY = {
     ],
     "result_promotion": {
         "only_go_terminal": "DIAGNOSTIC_INTEGRITY_GO_NO_UTILITY_CLAIM",
-        "non_go_terminals": ["DIAGNOSTIC_NO_GO", "VOID_PROTOCOL", "INCONCLUSIVE"],
+        "non_go_terminals": [
+            "DIAGNOSTIC_NO_GO",
+            "VOID_PROTOCOL",
+            "INCONCLUSIVE_OCCURRENCE",
+        ],
         "confirmatory_effect": (
             "MAY_ONLY_OPEN_A_SEPARATELY_PREREGISTERED_CONFIRMATORY_DESIGN"
         ),

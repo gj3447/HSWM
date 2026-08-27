@@ -118,7 +118,7 @@ MAX_OUTPUT_TOKENS = 16
 TRAINING_CANARY_PREFIX = "dnrd-training-provenance:"
 PREREGISTRATION_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v1"
 PREREG_CLAIM_BOUNDARY_SHA256 = (
-    "1a48a770fdfab2a8bde16c37948aad1cd2af3b2a6bdee05b95b835bb907760a5"
+    "e8d3ae69a6c2d91d5288e922d4a4f8a3a884106e4ce0538db5a79bf6f03b2844"
 )
 RATIFICATION_TEMPLATE_VERSION = "hswm-dnrd-ratification-statement/v1"
 RATIFICATION_TEMPLATE = (

@@ -108,6 +108,22 @@ def test_independent_judge_refuses_any_broadened_preregistration_claim(
         judge._validate_preregistration_claim_boundary(prereg)
 
 
+def test_preregistration_names_exact_terminals_and_does_not_claim_record_signatures() -> None:
+    promotion = PREREG_CLAIM_BOUNDARY["result_promotion"]
+    assert promotion["non_go_terminals"] == [
+        "DIAGNOSTIC_NO_GO",
+        "VOID_PROTOCOL",
+        "INCONCLUSIVE_OCCURRENCE",
+    ]
+    full_description = PREREG_CLAIM_BOUNDARY["arms"]["FULL"]
+    raw_description = PREREG_CLAIM_BOUNDARY["arms"]["RAW_EQUAL_BUDGET"]
+    assert full_description.startswith("For each stream, apply exactly eight")
+    assert raw_description.startswith("For each stream, replay exactly eight")
+    assert "retained training update records" in raw_description
+    assert "does not claim cryptographic signatures" in raw_description
+    assert "sealed signed training records" not in raw_description
+
+
 def test_independent_judge_refuses_claim_text_hidden_in_preregistration_created_at() -> None:
     prereg = _claim_bound_preregistration()
     prereg["created_at"] = (

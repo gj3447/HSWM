@@ -49,6 +49,19 @@ I/O fault plan은 link/fsync/readback 오류 분류와 exact-retry resync를 검
 검증한다.
 이들도 분산 합의·실제 OS fault·power-cut 증거는 아니다.
 
+2026-08-27
+[`typed transition-evidence contract`](docs/operations/HSWM_CANONICAL_ATOM_V2_TRANSITION_EVIDENCE_CONTRACT_2026-08-27.md)은
+authorization decision, provenance claim, pre-outcome sealed trajectory,
+reference-effect, later outcome observation과 rejection/quarantine disposition을
+각각 strict canonical-JSON record로 만들고, exact proposal/schema/claimed-predecessor/
+read-write/role descriptor를 한 pure bundle에서 교차 검증한다. decision/trace
+key가 proposal의 declared pre-existing read이고 self-write가 아님을 검사하지만,
+실제 current-state membership이나 durable head freshness를 증명하지는 않는다.
+모든 authorization 분류는 `NOT_PERMIT`, outcome은 `NOT_CAUSAL_CREDIT`, disposition
+candidate는 `NOT_ADMITTED_NOT_PERMITTED_NOT_LEARNING`으로 남는다. current reducer와
+journal은 바뀌지 않았으며 non-null trace commit, Permit resolver, external effect,
+truth/independence, causal credit와 learning은 아직 구현되지 않았다.
+
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,
 폐기 전 `H/F/A/W` 표기를 사용하는 역사적 원자적 credit scaffold를 서로 분리해

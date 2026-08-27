@@ -28,8 +28,11 @@ v3 package implements only a strict, atomic, capability-port-gated
 trajectory-credit transaction using the superseded fixed-role vocabulary; it is
 a historical engineering scaffold, not the current ontology or a new efficacy
 claim. The checked-in fixed-role responsibility ontology and validator v1 are
-likewise retained for historical compatibility; a schema-generic owner-registry
-runtime v2 is not implemented. The exact boundary and migration gates are documented in
+likewise retained for historical compatibility. A bounded schema-generic v2
+reference kernel, durable local journal and pure typed transition-evidence
+contract are now implemented, but current Permit resolution, trace-enabled
+commit, external outcome attribution and learning are not. The exact boundary
+and migration gates are documented in
 [`HSWM TypeScript + Effect runtime boundary`](docs/research/HSWM_TYPESCRIPT_EFFECT_RUNTIME_2026-08-21.md).
 
 The target identity is fixed by the
@@ -1070,6 +1073,7 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 |---|---|
 | Why was fixed `H/W/A/F` retired, and what is now uniquely canonical? | [`schema-relative single-owner canon`](docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md) |
 | What is the science-philosophy and falsification programme for that decision? | [`schema-relative single-owner scientific philosophy`](docs/research/HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_SCIENTIFIC_PHILOSOPHY_2026-08-26.md) |
+| What typed v2 evidence exists before canonical Permit, outcome credit, or learning? | [`canonical-atom v2 transition-evidence contract`](docs/operations/HSWM_CANONICAL_ATOM_V2_TRANSITION_EVIDENCE_CONTRACT_2026-08-27.md) |
 | What user-ratified identity makes HSWM a deep Set-Hypergraph neural structure? | [`USER_PRIMARY deep Set-Hypergraph clarification`](docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt) |
 | Where is the historical fixed-role formalization and SWM-0–5 ladder preserved? | [`superseded token-hypergraph core formalization`](docs/canon/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md) |
 | Which philosophical commitments constrain the architecture? | [`HSWM philosophical foundations`](docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md) |

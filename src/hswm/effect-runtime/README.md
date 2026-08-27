@@ -5,8 +5,9 @@
 > They are not the current HSWM ontology and must not be used as a fixed owner
 > registry for new canonical writes. The current target requires exactly one
 > schema-relative responsibility owner per admitted canonical atom. The generic
-> v2 reference kernel, content-bound facade, and predecessor-bound durable
-> journal facade are now implemented. The content-bound facade alone still has
+> v2 reference kernel, content-bound facade, predecessor-bound durable journal
+> facade, and pure typed transition-evidence contract are now implemented. The
+> content-bound facade alone still has
 > process-local state; the newer file-backed durable runtime can reconstruct one
 > local linear state-and-receipt lineage from exact immutable records. This is
 > not a production canonical store, distributed consensus, canonical Permit,
@@ -59,12 +60,23 @@ The current v2 boundary is intentionally small:
   cache—as the recovery truth. Every snapshot, history read and submit replays
   the chain, verifies schema/payload/envelope content and recomputes each pure
   transition and receipt before exposing state.
+- `canonical-atom-v2-transition-evidence.ts` gives authorization-decision,
+  provenance, pre-outcome trajectory, reference-effect, outcome-observation and
+  rejection/quarantine evidence separate strict record codecs plus one exact
+  cross-binding bundle. Decision/trace keys are declared pre-existing reads,
+  not self-written evidence; their actual state membership and whether the
+  claimed predecessor is the current head still require a later resolver.
+  Every authorization classification remains `NOT_PERMIT`; outcome
+  independence remains declared rather than proved, and no issuer, evidence
+  store, runtime admission or learning path is exported.
 - The exact implementation and nonclaims are recorded in the
   [v2 reference-kernel handoff](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md)
   and the
   [content-bound continuation](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_CONTENT_BOUND_RUNTIME_2026-08-26.md),
   followed by the
-  [durable-journal continuation](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_DURABLE_JOURNAL_RUNTIME_2026-08-26.md).
+  [durable-journal continuation](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_DURABLE_JOURNAL_RUNTIME_2026-08-26.md)
+  and the
+  [typed transition-evidence continuation](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_TRANSITION_EVIDENCE_CONTRACT_2026-08-27.md).
 
 The retained historical boundary is also intentionally small:
 

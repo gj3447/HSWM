@@ -121,6 +121,44 @@ it("exports durable v2 replay without raw journal publication or receipt constru
   )
 })
 
+it("exports read-safe typed transition evidence without an issuer, resolver, or admission bypass", () => {
+  expect(
+    PublicApi.HSWM_CANONICAL_TRANSITION_EVIDENCE_V1_CONTRACT_VERSION
+  ).toBe("hswm-canonical-transition-evidence/v1")
+  expect(
+    typeof PublicApi.validateCanonicalAtomV2TransitionEvidenceRecord
+  ).toBe("function")
+  expect(
+    typeof PublicApi.decodeCanonicalAtomV2TransitionEvidenceRecordBytes
+  ).toBe("function")
+  expect(
+    typeof PublicApi.validateCanonicalAtomV2TransitionEvidenceBundle
+  ).toBe("function")
+  expect(
+    typeof PublicApi.decodeCanonicalAtomV2TransitionEvidenceBundleBytes
+  ).toBe("function")
+  expect(
+    typeof PublicApi.classifyCanonicalAtomV2AuthorizationEvidence
+  ).toBe("function")
+  expect("snapshotCanonicalAtomV2TransitionEvidenceRecord" in PublicApi).toBe(
+    false
+  )
+  expect("snapshotCanonicalAtomV2TransitionEvidenceBundle" in PublicApi).toBe(
+    false
+  )
+  expect("CanonicalAtomV2CurrentPermitResolver" in PublicApi).toBe(false)
+  expect("CanonicalAtomV2TransitionEvidenceStore" in PublicApi).toBe(false)
+  expect("issueCanonicalAtomV2AuthorizationDecision" in PublicApi).toBe(false)
+  expect("makeCanonicalAtomV2TransitionEvidenceBundle" in PublicApi).toBe(false)
+  expect("createCanonicalAtomV2TransitionEvidence" in PublicApi).toBe(false)
+  expect("publishCanonicalAtomV2TransitionEvidence" in PublicApi).toBe(false)
+  expect("storeCanonicalAtomV2TransitionEvidence" in PublicApi).toBe(false)
+  expect("applyCanonicalAtomV2TransitionEvidence" in PublicApi).toBe(false)
+  expect("commitCanonicalAtomV2TransitionEvidence" in PublicApi).toBe(false)
+  expect("admitCanonicalAtomV2TransitionEvidence" in PublicApi).toBe(false)
+  expect("learnCanonicalAtomV2Outcome" in PublicApi).toBe(false)
+})
+
 it("does not export privileged store or authorizer capabilities", () => {
   expect("CommitStore" in PublicApi).toBe(false)
   expect("CreditAuthorizer" in PublicApi).toBe(false)

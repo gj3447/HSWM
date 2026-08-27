@@ -1258,6 +1258,36 @@ def test_source_freeze_lists_exact_transitive_ts_runtime_closure() -> None:
     assert discovered == frozen
 
 
+def test_checked_in_dnrd2_source_manifest_is_canonical_and_exact() -> None:
+    """The real Source-A manifest must satisfy the production byte contract."""
+    repository = Path(__file__).resolve().parents[1]
+    manifest_path = (
+        repository
+        / "manifests/HSWM_DNRD_2_SOURCE_FREEZE_MANIFEST_2026-08-27.json"
+    )
+    raw = manifest_path.read_bytes()
+    manifest = json.loads(raw)
+    assert raw == canonical_json(manifest)
+    assert set(manifest) == {
+        "schema_version",
+        "experiment_id",
+        "source_commit_tree_bound_externally",
+        "files",
+    }
+    assert manifest["schema_version"] == "hswm-dnrd-source-freeze-manifest/v1"
+    assert manifest["experiment_id"] == "HSWM-DNRD-2"
+    assert (
+        manifest["source_commit_tree_bound_externally"]
+        == "SOURCE_COMMIT_TREE_BOUND_EXTERNALLY_NO_SELF_CYCLE"
+    )
+    rows = manifest["files"]
+    assert [row["path"] for row in rows] == sorted(CORE_SOURCE_FILES)
+    assert {row["path"] for row in rows} == CORE_SOURCE_FILES
+    for row in rows:
+        assert set(row) == {"path", "sha256"}
+        assert _hash(repository / row["path"]) == row["sha256"]
+
+
 def test_source_manifest_refuses_any_path_outside_the_exact_frozen_closure(
     tmp_path: Path,
 ) -> None:

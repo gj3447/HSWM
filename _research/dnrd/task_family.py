@@ -1,4 +1,4 @@
-"""Strict, deterministic task fixture for DNRD-1.
+"""Strict, deterministic task fixture for DNRD-2.
 
 The public manifest is safe to hand to a future runner: it deliberately has no
 answer, correct-route, or latent-policy material.  The private scorer manifest
@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 import json
+import re
 import unicodedata
 from typing import Any
 
@@ -19,6 +20,9 @@ PUBLIC_SCHEMA = "hswm-dnrd-public-manifest/v1"
 PRIVATE_SCHEMA = "hswm-dnrd-private-scorer-manifest/v1"
 SEED_BYTES = 32
 TRAINING_CANARY_PREFIX = "dnrd-training-provenance:"
+RESPONSE_TOKEN_PATTERN = r"token-[0-9a-f]{20}"
+RESPONSE_TOKEN_RE = re.compile(rf"^{RESPONSE_TOKEN_PATTERN}$", re.ASCII)
+RESPONSE_TOKEN_ASCII_BYTES = 26
 EVALUATION_ARMS = (
     "FULL",
     "NO_MEMORY_ROLLBACK",
@@ -50,6 +54,20 @@ def normalize_answer(value: str) -> str:
 
 def _token(seed: bytes, label: str, length: int = 20) -> str:
     return hashlib.sha256(seed + b"\0" + label.encode("ascii")).hexdigest()[:length]
+
+
+def is_response_token(value: object) -> bool:
+    """Whether ``value`` is the one admissible DNRD-2 response-token form.
+
+    Every generated token and every runner-accepted answer is exactly 26 ASCII
+    bytes: ``token-`` followed by 20 lowercase hexadecimal characters.
+    """
+
+    return (
+        type(value) is str
+        and RESPONSE_TOKEN_RE.fullmatch(value) is not None
+        and len(value.encode("ascii")) == RESPONSE_TOKEN_ASCII_BYTES
+    )
 
 
 def _permutation(seed: bytes, label: str, values: list[str]) -> list[str]:
@@ -360,6 +378,8 @@ def _audit_episode(episode: dict[str, Any], routes: list[str], contexts: list[st
     if len({record["response_token"] for record in evidence}) != 2:
         raise ManifestError("route evidence response tokens must differ")
     for record in evidence:
+        if not is_response_token(record["response_token"]):
+            raise ManifestError("route evidence response token violates exact DNRD-2 form")
         if record["route_id"] not in record["evidence_text"] or record["response_token"] not in record["evidence_text"]:
             raise ManifestError("route evidence does not bind its route and response token")
 

@@ -1,4 +1,4 @@
-"""Standalone private outcome scorer for the DNRD-1 mechanics diagnostic.
+"""Standalone private outcome scorer for the DNRD-2 mechanics diagnostic.
 
 It accepts exactly one sealed response record and a private scorer manifest.
 Its stdout is intentionally a seven-field outcome record with no gold or latent

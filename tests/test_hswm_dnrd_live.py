@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import base64
+import hashlib
 import json
 import socket
 from urllib import error as urlerror
@@ -8,6 +10,8 @@ import pytest
 
 from _research.dnrd.live import (
     CHAT_CONFIG,
+    EVENT_SCHEMA,
+    MAX_ANSWERER_RESPONSE_BYTES,
     MODEL_ID,
     MODEL_MAX_LENGTH,
     MODEL_ROOT,
@@ -20,8 +24,11 @@ from _research.dnrd.live import (
     UrllibHttpTransport,
     preflight_deployment_and_tokenizer,
 )
-from _research.dnrd.runner import ModelRequest, PreDispatchAnswererError
+from _research.dnrd.runner import MAX_OUTPUT_TOKENS, ModelRequest, PreDispatchAnswererError
 from _research.dnrd.task_family import commitment
+
+
+VALID_RESPONSE_TOKEN = "token-aaaaaaaaaaaaaaaaaaaa"
 
 
 class RecordingTransport:
@@ -37,7 +44,7 @@ class RecordingTransport:
         return outcome
 
 
-def _completion(*, content: str = "  token-abc  ", model: str = MODEL_ID) -> HttpResponse:
+def _completion(*, content: str = f"  {VALID_RESPONSE_TOKEN}  ", model: str = MODEL_ID) -> HttpResponse:
     return HttpResponse(200, json.dumps({
         "model": model,
         "choices": [{"finish_reason": "stop", "message": {"content": content}}],
@@ -46,7 +53,7 @@ def _completion(*, content: str = "  token-abc  ", model: str = MODEL_ID) -> Htt
 
 
 def _request() -> ModelRequest:
-    return ModelRequest("episode-1", "route-1", "return only a token", 16, 1, "training", None)
+    return ModelRequest("episode-1", "route-1", "return only a token", MAX_OUTPUT_TOKENS, 1, "training", None)
 
 
 def test_answerer_sends_frozen_body_once_and_records_raw_observations() -> None:
@@ -56,7 +63,7 @@ def test_answerer_sends_frozen_body_once_and_records_raw_observations() -> None:
         OpenAICompatibleDnrdConfig("http://dgx.local:8000/"), transport, event_sink=events.append
     )
     reply = answerer.answer(_request())
-    assert reply.response_token == "token-abc"
+    assert reply.response_token == VALID_RESPONSE_TOKEN
     assert (reply.input_tokens, reply.output_tokens) == (11, 2)
     assert reply.server_usage == {"cached_tokens": 3}
     assert len(transport.calls) == 1
@@ -66,7 +73,7 @@ def test_answerer_sends_frozen_body_once_and_records_raw_observations() -> None:
     body = json.loads(call["body"])
     assert body == {
         "chat_template_kwargs": {"enable_thinking": False},
-        "max_tokens": 16,
+        "max_tokens": MAX_OUTPUT_TOKENS,
         "messages": [{"content": "return only a token", "role": "user"}],
         "model": MODEL_ID,
         "n": 1,
@@ -86,10 +93,10 @@ def test_answerer_sends_frozen_body_once_and_records_raw_observations() -> None:
 @pytest.mark.parametrize(
     "payload, message",
     [
-        ({"model": "wrong", "choices": [{"finish_reason": "stop", "message": {"content": "token"}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2}}, "model"),
+        ({"model": "wrong", "choices": [{"finish_reason": "stop", "message": {"content": VALID_RESPONSE_TOKEN}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2}}, "model"),
         ({"model": MODEL_ID, "choices": [{"finish_reason": "stop", "message": {"content": "one"}}, {"finish_reason": "stop", "message": {"content": "two"}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2}}, "exactly one"),
         ({"model": MODEL_ID, "choices": [{"finish_reason": "stop", "message": {"content": 3}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2}}, "textual"),
-        ({"model": MODEL_ID, "choices": [{"finish_reason": "stop", "message": {"content": "token"}}], "usage": {"prompt_tokens": True, "completion_tokens": 1, "total_tokens": 2}}, "integer"),
+        ({"model": MODEL_ID, "choices": [{"finish_reason": "stop", "message": {"content": VALID_RESPONSE_TOKEN}}], "usage": {"prompt_tokens": True, "completion_tokens": 1, "total_tokens": 2}}, "integer"),
     ],
 )
 def test_answerer_rejects_malformed_completion_without_repair(payload: dict, message: str) -> None:
@@ -173,11 +180,182 @@ def test_endpoint_normalizes_v1_and_refuses_query_fragment_or_non_http() -> None
 
 def test_answerer_requires_stop_and_exact_usage_arithmetic() -> None:
     unfinished = HttpResponse(200, json.dumps({"model": MODEL_ID, "choices": [{"finish_reason": "length", "message": {"content": "token"}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2}}).encode())
+    events: list[dict] = []
     with pytest.raises(LiveBoundaryError, match="finish"):
-        OpenAICompatibleDnrdAnswerer(OpenAICompatibleDnrdConfig("http://endpoint"), RecordingTransport([unfinished])).answer(_request())
-    arithmetic = HttpResponse(200, json.dumps({"model": MODEL_ID, "choices": [{"finish_reason": "stop", "message": {"content": "token"}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 3}}).encode())
+        OpenAICompatibleDnrdAnswerer(
+            OpenAICompatibleDnrdConfig("http://endpoint"), RecordingTransport([unfinished]), event_sink=events.append
+        ).answer(_request())
+    assert [event["event"] for event in events] == ["CHAT_COMPLETION_OBSERVED", "CHAT_COMPLETION_REJECTED"]
+    rejected = events[1]
+    assert rejected["failure_stage_code"] == "FINISH_REASON_NOT_STOP"
+    assert rejected["failure_message_sha256"] == hashlib.sha256(
+        b"chat completion choice must finish with exact reason 'stop'"
+    ).hexdigest()
+    assert rejected["failure_message"] == "chat completion choice must finish with exact reason 'stop'"
+    assert rejected["raw_response_encoding"] == "base64"
+    assert rejected["raw_response_bytes"] == len(unfinished.body)
+    assert base64.b64decode(rejected["raw_response_base64"], validate=True) == unfinished.body
+    assert rejected["raw_response_sha256"] == hashlib.sha256(unfinished.body).hexdigest()
+    assert "authorization" not in rejected and "api_key" not in rejected
+    arithmetic = HttpResponse(200, json.dumps({"model": MODEL_ID, "choices": [{"finish_reason": "stop", "message": {"content": VALID_RESPONSE_TOKEN}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 3}}).encode())
     with pytest.raises(LiveBoundaryError, match="total_tokens"):
         OpenAICompatibleDnrdAnswerer(OpenAICompatibleDnrdConfig("http://endpoint"), RecordingTransport([arithmetic])).answer(_request())
+
+
+def test_answerer_retains_non_utf8_rejection_as_exact_base64() -> None:
+    raw = b"\xffnot-json"
+    events: list[dict] = []
+    with pytest.raises(LiveBoundaryError, match="UTF-8"):
+        OpenAICompatibleDnrdAnswerer(
+            OpenAICompatibleDnrdConfig("http://endpoint"), RecordingTransport([HttpResponse(200, raw)]), event_sink=events.append
+        ).answer(_request())
+    rejected = events[-1]
+    assert rejected["event"] == "CHAT_COMPLETION_REJECTED"
+    assert rejected["failure_stage_code"] == "CHAT_COMPLETION_NOT_UTF8_JSON"
+    assert base64.b64decode(rejected["raw_response_base64"], validate=True) == raw
+
+
+def test_answerer_rejects_noncanonical_dnrd2_response_token_at_live_boundary() -> None:
+    events: list[dict] = []
+    with pytest.raises(LiveBoundaryError, match="exact DNRD-2 form"):
+        OpenAICompatibleDnrdAnswerer(
+            OpenAICompatibleDnrdConfig("http://endpoint"),
+            RecordingTransport([_completion(content="token-short")]),
+            event_sink=events.append,
+        ).answer(_request())
+    assert [event["event"] for event in events] == [
+        "CHAT_COMPLETION_OBSERVED",
+        "CHAT_COMPLETION_REJECTED",
+    ]
+    assert events[-1]["failure_stage_code"] == "RESPONSE_TOKEN_FORM_INVALID"
+
+
+def test_answerer_retains_non_2xx_body_for_exact_replay() -> None:
+    raw = b'{"error":"overloaded"}'
+    events: list[dict] = []
+    with pytest.raises(LiveBoundaryError, match="HTTP response status 503"):
+        OpenAICompatibleDnrdAnswerer(
+            OpenAICompatibleDnrdConfig("http://endpoint"), RecordingTransport([HttpResponse(503, raw)]), event_sink=events.append
+        ).answer(_request())
+    assert [event["event"] for event in events] == ["CHAT_COMPLETION_OBSERVED", "CHAT_COMPLETION_REJECTED"]
+    rejected = events[-1]
+    assert rejected["failure_stage_code"] == "HTTP_STATUS_NOT_2XX"
+    assert rejected["failure_message"] == "HTTP response status 503"
+    assert base64.b64decode(rejected["raw_response_base64"], validate=True) == raw
+
+
+@pytest.mark.parametrize(
+    ("usage", "stage_code"),
+    [
+        ({"prompt_tokens": True, "completion_tokens": 1, "total_tokens": 2}, "USAGE_PROMPT_TOKENS_INVALID"),
+        ({"prompt_tokens": 1, "completion_tokens": -1, "total_tokens": 0}, "USAGE_COMPLETION_TOKENS_INVALID"),
+        ({"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": "2"}, "USAGE_TOTAL_TOKENS_INVALID"),
+    ],
+)
+def test_answerer_assigns_exhaustive_usage_rejection_codes(usage: dict, stage_code: str) -> None:
+    raw = json.dumps({
+        "model": MODEL_ID,
+        "choices": [{"finish_reason": "stop", "message": {"content": VALID_RESPONSE_TOKEN}}],
+        "usage": usage,
+    }).encode()
+    events: list[dict] = []
+    with pytest.raises(LiveBoundaryError):
+        OpenAICompatibleDnrdAnswerer(
+            OpenAICompatibleDnrdConfig("http://endpoint"), RecordingTransport([HttpResponse(200, raw)]), event_sink=events.append
+        ).answer(_request())
+    assert [event["event"] for event in events] == ["CHAT_COMPLETION_OBSERVED", "CHAT_COMPLETION_REJECTED"]
+    assert events[-1]["failure_stage_code"] == stage_code
+    assert events[-1]["failure_message_sha256"] == hashlib.sha256(events[-1]["failure_message"].encode()).hexdigest()
+
+
+def test_answerer_rejects_non_http_transport_without_fake_empty_response() -> None:
+    events: list[dict] = []
+    transport = RecordingTransport([])
+    transport.outcomes.append(object())  # type: ignore[arg-type]
+    with pytest.raises(LiveBoundaryError, match="exact HTTP observation"):
+        OpenAICompatibleDnrdAnswerer(
+            OpenAICompatibleDnrdConfig("http://endpoint", api_key="must-not-appear"), transport, event_sink=events.append
+        ).answer(_request())
+    assert [event["event"] for event in events] == ["TRANSPORT_RESPONSE_REJECTED"]
+    rejected = events[0]
+    assert rejected["schema_version"] == EVENT_SCHEMA
+    assert rejected["failure_stage_code"] == "TRANSPORT_RESPONSE_NOT_EXACT_HTTP_RESPONSE"
+    assert not any(key.startswith("raw_response") for key in rejected)
+    assert "headers" not in rejected and "api_key" not in rejected and "must-not-appear" not in json.dumps(rejected)
+
+
+def test_answerer_distinguishes_an_actual_empty_http_body_from_invalid_transport_shape() -> None:
+    events: list[dict] = []
+    with pytest.raises(LiveBoundaryError, match="UTF-8 JSON"):
+        OpenAICompatibleDnrdAnswerer(
+            OpenAICompatibleDnrdConfig("http://endpoint"), RecordingTransport([HttpResponse(200, b"")]), event_sink=events.append
+        ).answer(_request())
+    assert [event["event"] for event in events] == ["CHAT_COMPLETION_OBSERVED", "CHAT_COMPLETION_REJECTED"]
+    rejected = events[-1]
+    assert rejected["raw_response_bytes"] == 0
+    assert rejected["raw_response_base64"] == ""
+
+
+def test_answerer_enforces_own_response_cap_without_serializing_oversized_body() -> None:
+    raw = b"x" * (MAX_ANSWERER_RESPONSE_BYTES + 9)
+    events: list[dict] = []
+    with pytest.raises(LiveBoundaryError, match="1 MiB"):
+        OpenAICompatibleDnrdAnswerer(
+            OpenAICompatibleDnrdConfig("http://endpoint"), RecordingTransport([HttpResponse(200, raw)]), event_sink=events.append
+        ).answer(_request())
+    assert [event["event"] for event in events] == ["CHAT_COMPLETION_REJECTED"]
+    rejected = events[0]
+    assert rejected["failure_stage_code"] == "RESPONSE_BODY_EXCEEDS_1_MIB"
+    prefix = raw[:MAX_ANSWERER_RESPONSE_BYTES + 1]
+    assert rejected["retained_response_prefix_encoding"] == "base64"
+    assert base64.b64decode(rejected["retained_response_prefix_base64"], validate=True) == prefix
+    assert rejected["retained_response_prefix_sha256"] == hashlib.sha256(prefix).hexdigest()
+    assert rejected["retained_response_prefix_bytes"] == MAX_ANSWERER_RESPONSE_BYTES + 1
+    assert rejected["response_body_bytes_lower_bound"] == MAX_ANSWERER_RESPONSE_BYTES + 1
+    assert not any(key.startswith("raw_response_") for key in rejected)
+
+
+def test_production_urllib_oversize_retains_exact_prefix_instead_of_ambiguous_failure() -> None:
+    raw = b"z" * (MAX_ANSWERER_RESPONSE_BYTES + 23)
+
+    class Response:
+        status = 200
+
+        def read(self, limit: int) -> bytes:
+            assert limit == MAX_ANSWERER_RESPONSE_BYTES + 1
+            return raw[:limit]
+
+        def __enter__(self) -> "Response":
+            return self
+
+        def __exit__(self, *_: object) -> None:
+            return None
+
+    class Opener:
+        calls = 0
+
+        def open(self, *_: object, **__: object) -> Response:
+            self.calls += 1
+            return Response()
+
+    transport = UrllibHttpTransport()
+    opener = Opener()
+    transport._opener = opener  # type: ignore[attr-defined]
+    events: list[dict] = []
+    with pytest.raises(LiveBoundaryError, match="1 MiB"):
+        OpenAICompatibleDnrdAnswerer(
+            OpenAICompatibleDnrdConfig("http://endpoint", api_key="must-not-appear"), transport, event_sink=events.append
+        ).answer(_request())
+    assert opener.calls == 1
+    assert [event["event"] for event in events] == ["CHAT_COMPLETION_REJECTED"]
+    rejected = events[0]
+    prefix = raw[:MAX_ANSWERER_RESPONSE_BYTES + 1]
+    assert base64.b64decode(rejected["retained_response_prefix_base64"], validate=True) == prefix
+    assert rejected["retained_response_prefix_sha256"] == hashlib.sha256(prefix).hexdigest()
+    assert rejected["retained_response_prefix_bytes"] == MAX_ANSWERER_RESPONSE_BYTES + 1
+    assert rejected["response_body_bytes_lower_bound"] == MAX_ANSWERER_RESPONSE_BYTES + 1
+    assert rejected["http_status"] == 200
+    assert "must-not-appear" not in json.dumps(rejected)
 
 
 def test_urllib_transport_is_single_shot_and_classifies_only_provable_pre_dispatch() -> None:

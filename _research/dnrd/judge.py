@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pure, strict adjudicator for the DNRD-1 diagnostic candidate.
+"""Pure, strict adjudicator for the DNRD-2 diagnostic candidate.
 
 This file intentionally imports only the Python standard library.  It judges
 the candidate artifact, never a live runtime: a passing judgment is an
@@ -10,6 +10,7 @@ verdict.
 from __future__ import annotations
 
 from datetime import datetime
+import base64
 from hashlib import sha256
 import json
 from pathlib import Path
@@ -23,8 +24,8 @@ from uuid import UUID
 
 CANDIDATE_SCHEMA = "hswm-dnrd-candidate/v1"
 INCONCLUSIVE_SCHEMA = "hswm-dnrd-inconclusive-occurrence/v1"
-JUDGMENT_SCHEMA = "hswm-dnrd-judgment/v1"
-EXPERIMENT_ID = "HSWM-DNRD-1"
+JUDGMENT_SCHEMA = "hswm-dnrd-judgment/v2"
+EXPERIMENT_ID = "HSWM-DNRD-2"
 ARMS = (
     "FULL",
     "NO_MEMORY_ROLLBACK",
@@ -39,9 +40,9 @@ MOUNT_ROLES = {
 }
 HEX64 = frozenset("0123456789abcdef")
 RUNNER_EVENT_SCHEMA = "hswm-dnrd-runner-event/v1"
-LIVE_EVENT_SCHEMA = "hswm-dnrd-live-model-event/v1"
+LIVE_EVENT_SCHEMA = "hswm-dnrd-live-model-event/v2"
 PUBLIC_MANIFEST_SCHEMA = "hswm-dnrd-public-manifest/v1"
-PULSE_BINDING_SCHEMA = "hswm-dnrd-pulse-binding/v1"
+PULSE_BINDING_SCHEMA = "hswm-dnrd-pulse-binding/v2"
 RUNTIME_RECEIPT_SCHEMA = "hswm-dnrd-runtime-receipt/v3"
 EXECUTION_CLOSURE_ISOLATION_CLAIM = (
     "OWNER_READ_EXECUTE_ONLY_COPIED_CLOSURES_PER_INVOCATION_ENTRYPOINT_REHASHED_"
@@ -114,16 +115,17 @@ RUNTIME_SOURCE_TSCONFIG = "src/hswm/effect-runtime/tsconfig.dnrd.json"
 SCORER_ROLE_SEPARATION = "DECLARED_ROLE_SEPARATION_NOT_PROVEN"
 TRACE_STATUS = "SEALED_PRE_OUTCOME_LOCAL_EXPERIMENTAL_NOT_CANONICAL_PERMIT_NOT_ADMISSION_NOT_LEARNING"
 PROVIDER_CACHE_UNOBSERVABLE = "NOT_OBSERVABLE_BY_CLIENT"
-MAX_OUTPUT_TOKENS = 16
+MAX_OUTPUT_TOKENS = 64
+TOKENIZER_PREFLIGHT_PROMPT = "token-ffffffffffffffffffff"
 TRAINING_CANARY_PREFIX = "dnrd-training-provenance:"
-PREREGISTRATION_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v1"
+PREREGISTRATION_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v2"
 PREREG_CLAIM_BOUNDARY_SHA256 = (
-    "e8d3ae69a6c2d91d5288e922d4a4f8a3a884106e4ce0538db5a79bf6f03b2844"
+    "13156c5d62170beed3dfe45d5432e9398771f790a2495cc5bd9d5f922ba6cb94"
 )
-RATIFICATION_TEMPLATE_VERSION = "hswm-dnrd-ratification-statement/v1"
+RATIFICATION_TEMPLATE_VERSION = "hswm-dnrd-ratification-statement/v2"
 RATIFICATION_TEMPLATE = (
-    "I ratify HSWM-DNRD-1 preregistration SHA-256 {preregistration_sha256} "
-    "under hswm-dnrd-ratification-statement/v1."
+    "I ratify HSWM-DNRD-2 preregistration SHA-256 {preregistration_sha256} "
+    "under hswm-dnrd-ratification-statement/v2."
 )
 QUICKNET_CHAIN = {
     "beacon_id": "quicknet",
@@ -188,7 +190,7 @@ FROZEN_DNRD_SOURCE_CLOSURE = frozenset(
         "tools/swm0w_drand/package-lock.json",
         "tools/swm0w_drand/fixtures/quicknet-round-1000.json",
         "_research/dnrd/verify-beacon.mjs",
-        "docs/research/HSWM_DNRD_SOURCE_A_SCIENTIFIC_BOUNDARY_2026-08-27.md",
+        "docs/research/HSWM_DNRD_2_SOURCE_A_SCIENTIFIC_BOUNDARY_2026-08-27.md",
     }
 )
 
@@ -227,6 +229,7 @@ V2_MOUNT_ID = re.compile(
     r"^dnrd-mount-v1-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 )
 V2_INSTANT = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$")
+RESPONSE_TOKEN_RE = re.compile(r"^token-[0-9a-f]{20}$", re.ASCII)
 
 # The candidate is only a projection.  A GO terminal is available solely from
 # ``judge_bundle`` after all of these names have been re-derived from retained
@@ -883,7 +886,7 @@ def _sha_bytes(value: bytes) -> str:
     return sha256(value).hexdigest()
 
 
-def _bundle_plain_file(root: Path, relative: str) -> Path:
+def _bundle_plain_file(root: Path, relative: str, *, allow_empty: bool = False) -> Path:
     if (
         type(relative) is not str
         or not relative
@@ -898,7 +901,7 @@ def _bundle_plain_file(root: Path, relative: str) -> Path:
         raise BundleRefusal(f"bundle is missing required artifact {relative!r}") from error
     if not path.is_relative_to(root) or path.is_symlink() or not path.is_file():
         raise BundleRefusal(f"bundle artifact {relative!r} must be a plain regular file")
-    if info.st_size < 1:
+    if info.st_size < 1 and not allow_empty:
         raise BundleRefusal(f"bundle artifact {relative!r} is empty")
     return path
 
@@ -939,8 +942,10 @@ def _bundle_object(root: Path, relative: str, *, canonical: bool = True) -> tupl
     return value, raw
 
 
-def _bundle_jsonl(root: Path, relative: str) -> tuple[list[dict[str, Any]], bytes]:
-    raw = _bundle_plain_file(root, relative).read_bytes()
+def _bundle_jsonl(root: Path, relative: str, *, allow_empty: bool = False) -> tuple[list[dict[str, Any]], bytes]:
+    raw = _bundle_plain_file(root, relative, allow_empty=allow_empty).read_bytes()
+    if allow_empty and raw == b"":
+        return [], raw
     if not raw.endswith(b"\n") or raw.endswith(b"\n\n"):
         raise BundleRefusal(f"{relative} must be canonical JSONL with exactly one terminal LF")
     rows: list[dict[str, Any]] = []
@@ -1172,7 +1177,7 @@ def _validate_source_and_preregistration(
     if (
         prereg["schema_version"] != PREREGISTRATION_SCHEMA
         or prereg["experiment_id"] != EXPERIMENT_ID
-        or prereg["protocol_version"] != "v1"
+        or prereg["protocol_version"] != "v2"
         or prereg["status"] != "FROZEN_AWAITING_EXACT_HASH_RATIFICATION"
     ):
         raise BundleRefusal("preregistration is not the frozen external-ratification DNRD contract")
@@ -1250,7 +1255,7 @@ def _validate_source_and_preregistration(
         },
         "ratification receipt",
     )
-    if ratified["schema_version"] != "hswm-dnrd-ratification-receipt/v1":
+    if ratified["schema_version"] != "hswm-dnrd-ratification-receipt/v2":
         raise BundleRefusal("ratification receipt schema mismatch")
     _bundle_sha_receipt(ratified, "ratification receipt")
     if (
@@ -3601,9 +3606,13 @@ def _validate_bundle_index(root: Path) -> Mapping[str, str]:
         ):
             raise BundleRefusal("bundle index paths must be sorted safe input paths")
         previous = path
-        target = _bundle_plain_file(root, path)
+        target = _bundle_plain_file(root, path, allow_empty=path in {"runner_events.jsonl", "model_events.jsonl"})
         content = target.read_bytes()
-        if row["bytes"] != len(content) or row["bytes"] <= 0 or row["sha256"] != _sha_bytes(content):
+        if (
+            row["bytes"] != len(content)
+            or (row["bytes"] <= 0 and not (path in {"runner_events.jsonl", "model_events.jsonl"} and len(content) == 0))
+            or row["sha256"] != _sha_bytes(content)
+        ):
             raise BundleRefusal(f"bundle index artifact hash/size mismatch: {path}")
         listed[path] = str(row["sha256"])
 
@@ -3739,9 +3748,10 @@ def _validate_runtime_and_attempt(
         "durable attempt marker",
     )
     if (
-        attempt_data["schema_version"] != "hswm-dnrd-durable-attempt-marker/v1"
+        attempt_data["schema_version"] != "hswm-dnrd-durable-attempt-marker/v2"
         or attempt_data["enforcement_scope"]
-        != "DETERMINISTIC_DURABLE_MARKER_UNDER_CONFIGURED_REGISTRY_ONLY_GLOBAL_SINGLETON_NOT_PROVEN"
+        != "DETERMINISTIC_FILE_AND_PARENT_DIRECTORY_FSYNC_MARKER_UNDER_CONFIGURED_"
+        "REGISTRY_ONLY_GLOBAL_SINGLETON_NOT_PROVEN"
     ):
         raise BundleRefusal("durable attempt marker schema/scope mismatch")
     _bundle_sha_receipt(attempt_data, "durable attempt marker")
@@ -3814,6 +3824,8 @@ def _validate_config_readback(
         != runtime["verifier_runtime_bundle_sha256"]
     ):
         raise BundleRefusal("execution config readback does not match candidate chronology/runtime pins")
+    if data["tokenizer_preflight_prompt"] != TOKENIZER_PREFLIGHT_PROMPT:
+        raise BundleRefusal("execution config tokenizer preflight prompt differs from the frozen DNRD-2 response-form probe")
     for key in (
         "repo_root", "source_manifest_path", "prereg_path", "output_root", "model_endpoint",
         "bridge_implementation_path", "scorer_implementation_path", "verifier_helper_path",
@@ -4199,7 +4211,7 @@ def _validate_pulse(
     # binding's seed as an unexplained fixture selector.  ``seed.py`` uses
     # ensure_ascii=False; retain that exact serialization choice here.
     seed_material = {
-        "domain": "HSWM-DNRD-FUTURE-SEED-V1",
+        "domain": "HSWM-DNRD-FUTURE-SEED-V2",
         "experiment_id": EXPERIMENT_ID,
         "preregistration_blob_sha256": binding["preregistration_blob_sha256"],
         "preregistration_commit": binding["preregistration_commit"],
@@ -4212,7 +4224,7 @@ def _validate_pulse(
         "source_manifest_sha256": binding["source_manifest_sha256"],
         "source_tree_oid": binding["source_tree_oid"],
         "verification_receipt_sha256": projection["verification_receipt_sha256"],
-        "schema_version": "hswm-dnrd-future-seed-material/v1",
+        "schema_version": "hswm-dnrd-future-seed-material/v2",
     }
     try:
         expected_seed = sha256(
@@ -4572,6 +4584,8 @@ def _check_episode(
             raise BundleRefusal(f"{label}.route_evidence has invalid route support")
         seen.add(route)
         text, token = _string(record["evidence_text"], f"{label}.evidence_text"), _string(record["response_token"], f"{label}.response_token")
+        if RESPONSE_TOKEN_RE.fullmatch(token) is None or len(token.encode("ascii")) != 26:
+            raise BundleRefusal(f"{label}.route_evidence response token violates exact DNRD-2 form")
         if route not in text or token not in text:
             raise BundleRefusal(f"{label}.route_evidence does not bind route/token")
     if [record["route_id"] for record in evidence] != stream["route_ids"]:
@@ -4698,7 +4712,28 @@ def _expected_prompt(episode: Mapping[str, Any], route: str) -> str:
 
 
 def _model_request_digest(request: Mapping[str, Any]) -> str:
-    return _canonical_hash(dict(request))
+    value = _check_exact_keys(
+        request,
+        {
+            "episode_id", "selected_route_id", "prompt", "max_output_tokens",
+            "ordinal", "phase", "arm",
+        },
+        "model request",
+    )
+    for key in ("episode_id", "selected_route_id", "prompt"):
+        _string(value[key], f"model request.{key}")
+    ordinal = _integer(value["ordinal"], "model request.ordinal", minimum=1)
+    phase, arm = value["phase"], value["arm"]
+    if (
+        value["max_output_tokens"] != MAX_OUTPUT_TOKENS
+        or phase not in {"training", "heldout"}
+        or (phase == "training" and arm is not None)
+        or (phase == "heldout" and arm not in ARMS)
+        or (ordinal <= 32 and phase != "training")
+        or (ordinal > 32 and phase != "heldout")
+    ):
+        raise BundleRefusal("model request identity/configuration violates the frozen schedule")
+    return _canonical_hash(dict(value))
 
 
 def _response_digest_from_raw(raw_text: str, model: str) -> tuple[str, str, int, int, Mapping[str, int]]:
@@ -4715,6 +4750,8 @@ def _response_digest_from_raw(raw_text: str, model: str) -> tuple[str, str, int,
     token = message["content"].strip(" \t\r\n")
     if not token or any(character.isspace() for character in token):
         raise BundleRefusal("accepted model body does not yield one frozen response token")
+    if RESPONSE_TOKEN_RE.fullmatch(token) is None:
+        raise BundleRefusal("accepted model body does not yield an exact DNRD-2 response token")
     usage = raw.get("usage")
     if type(usage) is not dict:
         raise BundleRefusal("accepted model body lacks usage")
@@ -5026,6 +5063,293 @@ def _reconcile_model_events(
         if observed[request_id]["raw_response_sha256"] != accepted[request_id]["raw_response_sha256"]:
             raise BundleRefusal("observed and accepted model event raw-response digest mismatch")
     return accepted
+
+
+_REJECTED_RESPONSE_FIXED_MESSAGES = {
+    "chat completion is not UTF-8 JSON": "CHAT_COMPLETION_NOT_UTF8_JSON",
+    "chat completion must be a JSON object": "CHAT_COMPLETION_NOT_OBJECT",
+    "chat completion model does not match frozen DNRD model": "MODEL_ID_MISMATCH",
+    "chat completion must contain exactly one object choice": "CHOICE_CARDINALITY",
+    "chat completion choice must finish with exact reason 'stop'": "FINISH_REASON_NOT_STOP",
+    "chat completion choice must contain textual message.content": "MESSAGE_CONTENT_NOT_TEXT",
+    "chat completion must contain one non-whitespace response token": "RESPONSE_TOKEN_INVALID",
+    "chat completion response token violates exact DNRD-2 form": "RESPONSE_TOKEN_FORM_INVALID",
+    "chat completion must contain object usage": "USAGE_NOT_OBJECT",
+    "usage.prompt_tokens must be a nonnegative integer": "USAGE_PROMPT_TOKENS_INVALID",
+    "usage.completion_tokens must be a nonnegative integer": "USAGE_COMPLETION_TOKENS_INVALID",
+    "usage.total_tokens must be a nonnegative integer": "USAGE_TOTAL_TOKENS_INVALID",
+    "usage.total_tokens must equal prompt_tokens + completion_tokens": "USAGE_ARITHMETIC_MISMATCH",
+    "chat completion response exceeds frozen 1 MiB byte limit": "RESPONSE_BODY_EXCEEDS_1_MIB",
+}
+_AMBIGUOUS_FAILURE_MESSAGE = "model request outcome is ambiguous or post-dispatch"
+
+
+def _rejected_response_stage(message: str) -> str | None:
+    if re.fullmatch(r"HTTP response status [0-9]+", message, re.ASCII):
+        return "HTTP_STATUS_NOT_2XX"
+    return _REJECTED_RESPONSE_FIXED_MESSAGES.get(message)
+
+
+def _inconclusive_call_context(value: Mapping[str, Any], label: str) -> tuple[int, str, str | None, str]:
+    """Validate the public identity common to every DNRD-2 live event."""
+    ordinal = _integer(value["ordinal"], f"{label}.ordinal", minimum=1)
+    phase = value["phase"]
+    arm = value["arm"]
+    if (
+        phase not in {"training", "heldout"}
+        or (phase == "training" and arm is not None)
+        or (phase == "heldout" and arm not in ARMS)
+    ):
+        raise BundleRefusal(f"{label} phase/arm identity is malformed")
+    if (ordinal <= 32 and (phase != "training" or arm is not None)) or (
+        ordinal > 32 and (phase != "heldout" or arm not in ARMS)
+    ):
+        raise BundleRefusal(f"{label} does not match the frozen ordinal phase/arm schedule")
+    return ordinal, str(phase), arm, _sha(value["dnrd_request_sha256"], f"{label}.dnrd_request_sha256")
+
+
+def _validate_inconclusive_ledgers(
+    occurrence: Mapping[str, Any],
+    runner_events: Sequence[Mapping[str, Any]],
+    model_events: Sequence[Mapping[str, Any]],
+) -> None:
+    """Replay the prefix observed before a post-dispatch DNRD-2 interruption.
+
+    An incomplete occurrence cannot replay state/credit effects, but it can
+    still prove that its retained boundary ledger is one ordered, no-retry
+    prefix.  This deliberately permits no runner event for the failing call:
+    a runner event exists only after an accepted response has been sealed.
+    """
+    calls = _integer(occurrence["calls_completed"], "inconclusive occurrence.calls_completed", minimum=1)
+    if not model_events:
+        raise BundleRefusal("inconclusive occurrence with dispatched calls must retain model boundary events")
+    common = {
+        "schema_version", "event", "ordinal", "phase", "arm", "dnrd_request_sha256", "endpoint", "model",
+        "request_sha256", "chat_config", "elapsed_nanoseconds", "provider_cache_independence",
+    }
+    observed_keys = common | {"raw_response_sha256", "http_status"}
+    accepted_keys = common | {"raw_response_sha256", "usage", "dnrd_response_sha256", "raw_response_utf8"}
+    rejected_keys = common | {
+        "raw_response_sha256", "raw_response_encoding", "raw_response_base64", "raw_response_bytes", "http_status",
+        "failure_stage_code", "failure_message", "failure_message_sha256",
+    }
+    ambiguous_keys = common | {"failure_type"}
+    # The response-rejected transport variant retains no body because there was
+    # no exact HTTP observation to hash.  Its occurrence failure is fixed.
+    rejected_oversize_keys = common | {
+        "retained_response_prefix_encoding", "retained_response_prefix_base64",
+        "retained_response_prefix_sha256", "retained_response_prefix_bytes",
+        "response_body_bytes_lower_bound", "http_status", "failure_stage_code",
+        "failure_message", "failure_message_sha256",
+    }
+    transport_rejected_keys = common | {"failure_stage_code", "failure_message", "failure_message_sha256"}
+    expected_chat_config = {
+        "chat_template_kwargs": {"enable_thinking": False}, "logprobs": False,
+        "n": 1, "stream": False, "temperature": 0, "top_p": 1,
+        "max_tokens": MAX_OUTPUT_TOKENS,
+    }
+    by_ordinal: dict[int, list[Mapping[str, Any]]] = {}
+    failure_message: str | None = None
+    last_ordinal = 0
+    for index, item in enumerate(model_events):
+        if type(item) is not dict:
+            raise BundleRefusal(f"model_events[{index}] must be an object")
+        name = item.get("event")
+        if name == "CHAT_COMPLETION_OBSERVED":
+            value = _check_exact_keys(item, observed_keys, f"model_events[{index}]")
+        elif name == "CHAT_COMPLETION_ACCEPTED":
+            value = _check_exact_keys(item, accepted_keys, f"model_events[{index}]")
+        elif name == "CHAT_COMPLETION_REJECTED":
+            # Response-size rejection intentionally binds its hash and size but
+            # does not expose an unbounded body in the public ledger.
+            keys = rejected_oversize_keys if item.get("failure_stage_code") == "RESPONSE_BODY_EXCEEDS_1_MIB" else rejected_keys
+            value = _check_exact_keys(item, keys, f"model_events[{index}]")
+        elif name == "AMBIGUOUS_OR_POST_DISPATCH_FAILURE":
+            value = _check_exact_keys(item, ambiguous_keys, f"model_events[{index}]")
+        elif name == "TRANSPORT_RESPONSE_REJECTED":
+            value = _check_exact_keys(item, transport_rejected_keys, f"model_events[{index}]")
+        else:
+            raise BundleRefusal("inconclusive model ledger has an unknown event type")
+        ordinal, _, _, _ = _inconclusive_call_context(value, f"model_events[{index}]")
+        if ordinal < last_ordinal or ordinal > last_ordinal + 1:
+            raise BundleRefusal("inconclusive model ledger ordinals are out of order")
+        last_ordinal = ordinal
+        if (
+            value["schema_version"] != LIVE_EVENT_SCHEMA
+            or value["model"] != "qwen3.6-35b-a3b"
+            or not isinstance(value["endpoint"], str)
+            or not value["endpoint"].endswith("/v1/chat/completions")
+            or value["chat_config"] != expected_chat_config
+            or value["provider_cache_independence"] != PROVIDER_CACHE_UNOBSERVABLE
+            or type(value["elapsed_nanoseconds"]) is not int
+            or value["elapsed_nanoseconds"] < 0
+        ):
+            raise BundleRefusal("inconclusive model event live-boundary identity/configuration mismatch")
+        _sha(value["request_sha256"], f"model_events[{index}].request_sha256")
+        if name in {"CHAT_COMPLETION_OBSERVED", "CHAT_COMPLETION_ACCEPTED"} or (
+            name == "CHAT_COMPLETION_REJECTED"
+            and value["failure_stage_code"] != "RESPONSE_BODY_EXCEEDS_1_MIB"
+        ):
+            _sha(value["raw_response_sha256"], f"model_events[{index}].raw_response_sha256")
+        if name == "CHAT_COMPLETION_OBSERVED" and type(value["http_status"]) is not int:
+            raise BundleRefusal("inconclusive observed model event lacks exact HTTP status")
+        if name == "CHAT_COMPLETION_ACCEPTED":
+            raw = _string(value["raw_response_utf8"], f"model_events[{index}].raw_response_utf8")
+            if _sha_bytes(raw.encode("utf-8")) != value["raw_response_sha256"]:
+                raise BundleRefusal("inconclusive accepted raw body digest mismatch")
+            response_digest, _, prompt_tokens, completion_tokens, extra = _response_digest_from_raw(raw, str(value["model"]))
+            if value["dnrd_response_sha256"] != response_digest or value["usage"] != {"prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens, **extra}:
+                raise BundleRefusal("inconclusive accepted model response does not replay from raw body")
+        if name == "CHAT_COMPLETION_REJECTED":
+            if type(value["http_status"]) is not int:
+                raise BundleRefusal("rejected response lacks exact HTTP status")
+            message = _string(value["failure_message"], f"model_events[{index}].failure_message")
+            if _rejected_response_stage(message) != value["failure_stage_code"]:
+                raise BundleRefusal("rejected response message does not derive its frozen failure stage")
+            if value["failure_stage_code"] == "HTTP_STATUS_NOT_2XX" and message != f"HTTP response status {value['http_status']}":
+                raise BundleRefusal("HTTP rejection message does not bind the observed status")
+            if value["failure_stage_code"] == "RESPONSE_BODY_EXCEEDS_1_MIB":
+                if (
+                    value["retained_response_prefix_encoding"] != "base64"
+                    or type(value["retained_response_prefix_base64"]) is not str
+                ):
+                    raise BundleRefusal("oversize response does not retain a canonical base64 prefix")
+                try:
+                    prefix = base64.b64decode(value["retained_response_prefix_base64"], validate=True)
+                except Exception as error:
+                    raise BundleRefusal("oversize response retained prefix base64 is invalid") from error
+                if (
+                    type(value["retained_response_prefix_bytes"]) is not int
+                    or type(value["response_body_bytes_lower_bound"]) is not int
+                    or value["retained_response_prefix_bytes"] != len(prefix)
+                    or value["retained_response_prefix_bytes"] != 1_048_577
+                    or value["response_body_bytes_lower_bound"] != 1_048_577
+                    or _sha_bytes(prefix) != _sha(
+                        value["retained_response_prefix_sha256"],
+                        f"model_events[{index}].retained_response_prefix_sha256",
+                    )
+                ):
+                    raise BundleRefusal("oversize response retained prefix does not bind the frozen byte boundary")
+            else:
+                if type(value["raw_response_bytes"]) is not int or value["raw_response_bytes"] < 0:
+                    raise BundleRefusal("rejected response byte length is invalid")
+                if value["raw_response_encoding"] != "base64" or type(value["raw_response_base64"]) is not str:
+                    raise BundleRefusal("rejected response does not retain canonical base64 bytes")
+                try:
+                    raw = base64.b64decode(value["raw_response_base64"], validate=True)
+                except Exception as error:
+                    raise BundleRefusal("rejected response base64 is invalid") from error
+                if value["raw_response_bytes"] != len(raw) or _sha_bytes(raw) != value["raw_response_sha256"]:
+                    raise BundleRefusal("rejected response raw bytes/hash do not replay")
+            if _sha_bytes(message.encode("utf-8")) != _sha(value["failure_message_sha256"], f"model_events[{index}].failure_message_sha256"):
+                raise BundleRefusal("rejected response failure message digest mismatch")
+            failure_message = message
+        if name == "AMBIGUOUS_OR_POST_DISPATCH_FAILURE":
+            _string(value["failure_type"], f"model_events[{index}].failure_type")
+            failure_message = _AMBIGUOUS_FAILURE_MESSAGE
+        if name == "TRANSPORT_RESPONSE_REJECTED":
+            if value["failure_stage_code"] != "TRANSPORT_RESPONSE_NOT_EXACT_HTTP_RESPONSE":
+                raise BundleRefusal("transport response rejection has a non-frozen stage code")
+            message = _string(value["failure_message"], f"model_events[{index}].failure_message")
+            if message != "transport did not return an exact HTTP observation" or _sha_bytes(message.encode("utf-8")) != _sha(value["failure_message_sha256"], f"model_events[{index}].failure_message_sha256"):
+                raise BundleRefusal("transport response rejection does not retain fixed failure semantics")
+            failure_message = message
+        by_ordinal.setdefault(ordinal, []).append(value)
+
+    if set(by_ordinal) != set(range(1, calls + 1)):
+        raise BundleRefusal("inconclusive model calls must form ordinal prefix 1..calls_completed")
+    terminal_count = 0
+    accepted_by_digest: dict[str, Mapping[str, Any]] = {}
+    call_request_digests: set[str] = set()
+    for ordinal in range(1, calls + 1):
+        events = by_ordinal[ordinal]
+        names = [event["event"] for event in events]
+        identities = {(event["phase"], event["arm"], event["dnrd_request_sha256"], event["endpoint"], event["request_sha256"]) for event in events}
+        if len(identities) != 1:
+            raise BundleRefusal("inconclusive model call events disagree on exact identity")
+        call_request_digest = str(events[0]["dnrd_request_sha256"])
+        if call_request_digest in call_request_digests:
+            raise BundleRefusal("inconclusive model ledger repeats a request identity across ordinals")
+        call_request_digests.add(call_request_digest)
+        if names == ["CHAT_COMPLETION_OBSERVED", "CHAT_COMPLETION_ACCEPTED"]:
+            if events[0]["raw_response_sha256"] != events[1]["raw_response_sha256"]:
+                raise BundleRefusal("observed/accepted raw response digest mismatch")
+            digest = str(events[1]["dnrd_request_sha256"])
+            if digest in accepted_by_digest:
+                raise BundleRefusal("inconclusive model ledger repeats accepted request identity")
+            accepted_by_digest[digest] = events[1]
+        elif names == ["CHAT_COMPLETION_OBSERVED", "CHAT_COMPLETION_REJECTED"]:
+            if events[0]["raw_response_sha256"] != events[1]["raw_response_sha256"]:
+                raise BundleRefusal("observed/rejected raw response digest mismatch")
+            terminal_count += 1
+        elif (
+            names == ["CHAT_COMPLETION_REJECTED"]
+            and events[0]["failure_stage_code"] == "RESPONSE_BODY_EXCEEDS_1_MIB"
+        ):
+            terminal_count += 1
+        elif names in (["AMBIGUOUS_OR_POST_DISPATCH_FAILURE"], ["TRANSPORT_RESPONSE_REJECTED"]):
+            terminal_count += 1
+        else:
+            raise BundleRefusal("inconclusive model call event ordering is invalid")
+    if terminal_count != 1 or by_ordinal[calls][-1]["event"] == "CHAT_COMPLETION_ACCEPTED":
+        raise BundleRefusal("inconclusive occurrence must end in exactly one rejected post-dispatch call")
+    if failure_message is None or occurrence["failure_digest"] != _canonical_hash({"type": occurrence["failure_type"], "message": failure_message}):
+        raise BundleRefusal("inconclusive occurrence failure digest does not bind retained terminal event")
+
+    seen_runner_digests: set[str] = set()
+    previous_ordinal = 0
+    for index, event in enumerate(runner_events):
+        runner = _check_exact_keys(
+            event,
+            {
+                "schema_version", "ordinal", "phase", "arm", "request",
+                "sealed_response", "trace", "scorer_outcome", "credit_receipt",
+                "route_digest_sha256", "route_replay",
+            },
+            f"runner_events[{index}]",
+        )
+        request = runner["request"]
+        if type(request) is not dict:
+            raise BundleRefusal(f"runner_events[{index}] has no request object")
+        try:
+            digest = _model_request_digest(request)
+        except JudgeRefusal as error:
+            raise BundleRefusal(f"runner_events[{index}] request is malformed") from error
+        ordinal = request.get("ordinal")
+        if (
+            runner["schema_version"] != RUNNER_EVENT_SCHEMA
+            or runner["ordinal"] != ordinal
+            or runner["phase"] != request["phase"]
+            or runner["arm"] != request["arm"]
+            or type(ordinal) is not int
+            or ordinal <= previous_ordinal
+            or digest in seen_runner_digests
+        ):
+            raise BundleRefusal("runner events must be an ordered unique accepted-call prefix")
+        previous_ordinal = ordinal
+        seen_runner_digests.add(digest)
+        accepted = accepted_by_digest.get(digest)
+        provider_body = {
+            "chat_template_kwargs": {"enable_thinking": False},
+            "max_tokens": MAX_OUTPUT_TOKENS,
+            "messages": [{"content": request["prompt"], "role": "user"}],
+            "model": "qwen3.6-35b-a3b",
+            "n": 1,
+            "stream": False,
+            "temperature": 0,
+            "top_p": 1,
+            "logprobs": False,
+        }
+        if (
+            accepted is None
+            or any(accepted[key] != request[key] for key in ("ordinal", "phase", "arm"))
+            or accepted["request_sha256"] != _sha_bytes(_canonical_bytes(provider_body))
+        ):
+            raise BundleRefusal("runner event does not map to an exact accepted model call")
+    if seen_runner_digests != set(accepted_by_digest):
+        raise BundleRefusal(
+            "runner event identities do not exactly cover accepted prior model calls"
+        )
 
 
 def _runner_event(
@@ -5633,14 +5957,20 @@ def _validate_git_chronology(
 
 
 def _bundle_receipt_sha(
-    *, candidate_bytes: bytes, artifact_hashes: Mapping[str, str], terminal: str, detail: str | None
+    *,
+    candidate_bytes: bytes,
+    artifact_hashes: Mapping[str, str],
+    terminal: str,
+    detail: str | None,
+    verification_status: str,
 ) -> str:
     receipt = {
-        "schema_version": "hswm-dnrd-bundle-verification-receipt/v1",
+        "schema_version": "hswm-dnrd-bundle-verification-receipt/v2",
         "candidate_artifact_sha256": _sha_bytes(candidate_bytes),
         "artifact_sha256": dict(sorted(artifact_hashes.items())),
         "terminal": terminal,
         "detail": detail,
+        "verification_status": verification_status,
     }
     return _canonical_hash(receipt)
 
@@ -5654,6 +5984,7 @@ def _bundle_result(
     stream_checks: Sequence[Mapping[str, Any]] = (),
     utility_report: Sequence[Mapping[str, Any]] = (),
     failure_reason: str | None = None,
+    bundle_verified: bool = True,
 ) -> dict[str, Any]:
     result = _judgment(
         candidate,
@@ -5662,28 +5993,41 @@ def _bundle_result(
         utility_report=[dict(item) for item in utility_report],
         failure_reason=failure_reason,
     )
-    result["authority"] = "AUTHORITATIVE_EVIDENCE_BUNDLE_VERIFIED"
+    if bundle_verified:
+        authority = "AUTHORITATIVE_EVIDENCE_BUNDLE_VERIFIED"
+        verification_status = "FULL_BUNDLE_REPLAY_VERIFIED"
+        claim_boundary = (
+            "Evidence-bundle integrity diagnostic only; no efficacy, general intelligence, "
+            "canonical Permit, admission, or learning claim is established. Scorer role separation "
+            "is declared only as DECLARED_ROLE_SEPARATION_NOT_PROVEN; no stronger scorer-role "
+            "property is established, and model-serving identity/determinism remains unproven. "
+            "The retained verifier receipt is rehashed and internally cross-checked, not "
+            "re-verified for BLS cryptography by this stdlib adjudicator. The durable attempt "
+            "marker is observed under its declared registry scope; global singleton/no-rerun "
+            "enforcement is not proven by this bundle. Fixture generation beyond its seed "
+            "commitment/private-public embedding and dynamically loaded/host runtime dependencies "
+            "remain source/runtime-trusted rather than independently re-executed here. The selected "
+            "runtime build is not independently reexecuted by this adjudicator. Paired mount "
+            "comparisons are retained-state observations, not a claim of one temporal remount or restoration."
+        )
+    else:
+        authority = "INCOMPLETE_OR_INVALID_EVIDENCE_BUNDLE_NOT_VERIFIED"
+        verification_status = "FAILED"
+        claim_boundary = (
+            "The candidate artifact was retained, but full evidence-bundle replay failed. This "
+            "VOID_PROTOCOL record cannot establish a verified occurrence, efficacy, general intelligence, "
+            "canonical Permit, admission, or learning."
+        )
+    result["authority"] = authority
     result["candidate_artifact_sha256"] = _sha_bytes(candidate_bytes)
     result["bundle_verification_receipt_sha256"] = _bundle_receipt_sha(
         candidate_bytes=candidate_bytes,
         artifact_hashes=artifact_hashes,
         terminal=terminal,
         detail=failure_reason,
+        verification_status=verification_status,
     )
-    result["claim_boundary"] = (
-        "Evidence-bundle integrity diagnostic only; no efficacy, general intelligence, "
-        "canonical Permit, admission, or learning claim is established. Scorer role separation "
-        "is declared only as DECLARED_ROLE_SEPARATION_NOT_PROVEN; no stronger scorer-role "
-        "property is established, and model-serving identity/determinism remains unproven. "
-        "The retained verifier receipt is rehashed and internally cross-checked, not "
-        "re-verified for BLS cryptography by this stdlib adjudicator. The durable attempt "
-        "marker is observed under its declared registry scope; global singleton/no-rerun "
-        "enforcement is not proven by this bundle. Fixture generation beyond its seed "
-        "commitment/private-public embedding and dynamically loaded/host runtime dependencies "
-        "remain source/runtime-trusted rather than independently re-executed here. The selected "
-        "runtime build is not independently reexecuted by this adjudicator. Paired mount "
-        "comparisons are retained-state observations, not a claim of one temporal remount or restoration."
-    )
+    result["claim_boundary"] = claim_boundary
     return result
 
 
@@ -5695,17 +6039,41 @@ def _inconclusive_bundle_result(
     artifact_hashes: Mapping[str, str],
     failure_reason: str | None = None,
 ) -> dict[str, Any]:
+    if terminal == "INCONCLUSIVE_OCCURRENCE":
+        authority = "INDEXED_INCONCLUSIVE_MODEL_BOUNDARY_AND_RUNNER_IDENTITY_LEDGER_VERIFIED"
+        verification_status = "PARTIAL_MODEL_BOUNDARY_AND_RUNNER_IDENTITY_LEDGER_VERIFIED"
+        claim_boundary = (
+            "The indexed model-boundary ledger and accepted-call-to-runner-row identity coverage "
+            "were verified. Runner-row semantic contents, the terminal request preimage, and retained "
+            "common context were not replayed as a completed candidate. This partial occurrence cannot "
+            "establish efficacy, general intelligence, canonical Permit, admission, or learning."
+        )
+    elif terminal == "VOID_PROTOCOL":
+        # A retained inconclusive artifact is useful forensic context, but a
+        # missing or contradictory index means the bundle itself was not
+        # verified.  Do not let the valid-inconclusive wording overstate that
+        # partial observation as an authoritative evidence bundle.
+        authority = "INCOMPLETE_OR_INVALID_EVIDENCE_BUNDLE_NOT_VERIFIED"
+        verification_status = "FAILED"
+        claim_boundary = (
+            "A post-first-call inconclusive artifact was retained, but the evidence bundle failed "
+            "structural verification. This VOID_PROTOCOL record cannot establish a verified occurrence, "
+            "efficacy, general intelligence, canonical Permit, admission, or learning."
+        )
+    else:
+        raise BundleRefusal("inconclusive bundle result has an unknown terminal")
     receipt = {
-        "schema_version": "hswm-dnrd-bundle-verification-receipt/v1",
+        "schema_version": "hswm-dnrd-bundle-verification-receipt/v2",
         "inconclusive_artifact_sha256": _sha_bytes(occurrence_bytes),
         "artifact_sha256": dict(sorted(artifact_hashes.items())),
         "terminal": terminal,
         "detail": failure_reason,
+        "verification_status": verification_status,
     }
     return {
         "schema_version": JUDGMENT_SCHEMA,
         "experiment_id": EXPERIMENT_ID,
-        "authority": "AUTHORITATIVE_EVIDENCE_BUNDLE_VERIFIED",
+        "authority": authority,
         "terminal": terminal,
         "inconclusive_artifact_sha256": _sha_bytes(occurrence_bytes),
         "calls_completed": occurrence.get("calls_completed"),
@@ -5715,11 +6083,7 @@ def _inconclusive_bundle_result(
         "learning_claim": "NOT_ESTABLISHED",
         "failure_reason": failure_reason,
         "bundle_verification_receipt_sha256": _canonical_hash(receipt),
-        "claim_boundary": (
-            "An indexed post-first-call inconclusive occurrence was retained; it is not a completed "
-            "candidate and cannot establish efficacy, general intelligence, canonical Permit, admission, "
-            "or learning."
-        ),
+        "claim_boundary": claim_boundary,
     }
 
 
@@ -5738,7 +6102,9 @@ def _judge_inconclusive_bundle(root: Path) -> dict[str, Any]:
         if missing:
             raise BundleRefusal("inconclusive bundle is missing common artifacts: " + ", ".join(missing))
         for relative in sorted({*BUNDLE_COMMON_REQUIRED_FILES, "inconclusive.json"}):
-            artifact_hashes[relative] = _sha_bytes(_bundle_plain_file(root, relative).read_bytes())
+            artifact_hashes[relative] = _sha_bytes(
+                _bundle_plain_file(root, relative, allow_empty=relative in {"runner_events.jsonl", "model_events.jsonl"}).read_bytes()
+            )
         data = _check_exact_keys(
             occurrence,
             {
@@ -5757,10 +6123,9 @@ def _judge_inconclusive_bundle(root: Path) -> dict[str, Any]:
             raise BundleRefusal("inconclusive occurrence does not retain the frozen no-retry boundary")
         _string(data["failure_type"], "inconclusive occurrence.failure_type")
         _sha(data["failure_digest"], "inconclusive occurrence.failure_digest")
-        runner_events, _ = _bundle_jsonl(root, "runner_events.jsonl")
-        model_events, _ = _bundle_jsonl(root, "model_events.jsonl")
-        if len(runner_events) > data["calls_completed"] or len(model_events) > 2 * data["calls_completed"]:
-            raise BundleRefusal("inconclusive ledgers exceed the declared completed-call boundary")
+        runner_events, _ = _bundle_jsonl(root, "runner_events.jsonl", allow_empty=True)
+        model_events, _ = _bundle_jsonl(root, "model_events.jsonl", allow_empty=True)
+        _validate_inconclusive_ledgers(data, runner_events, model_events)
         return _inconclusive_bundle_result(
             occurrence, occurrence_bytes, terminal="INCONCLUSIVE_OCCURRENCE",
             artifact_hashes=artifact_hashes,
@@ -5917,7 +6282,7 @@ def judge_bundle(bundle_dir: str | Path) -> dict[str, Any]:
     except BundleRefusal as failure:
         return _bundle_result(
             candidate, candidate_bytes, terminal="VOID_PROTOCOL", artifact_hashes=artifact_hashes,
-            failure_reason=str(failure),
+            failure_reason=str(failure), bundle_verified=False,
         )
 
 

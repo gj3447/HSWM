@@ -27,6 +27,7 @@ from _research.dnrd.runner import (
     SubprocessOutcomeScorer,
     TRACE_STATUS,
     _derive_overlap_observation,
+    _validate_reply,
     model_request_commitment,
     run_diagnostic,
 )
@@ -163,7 +164,7 @@ class EvidenceAnswerer:
             "server_usage": {},
         }
         common = {
-            "schema_version": "hswm-dnrd-live-model-event/v1",
+            "schema_version": "hswm-dnrd-live-model-event/v2",
             "ordinal": request.ordinal,
             "phase": request.phase,
             "arm": request.arm,
@@ -562,9 +563,14 @@ def test_scorer_failure_and_reply_limit_are_counted() -> None:
     failed = _run(EvidenceAnswerer(), RecordingBridge(), FailingScorer())
     assert failed.inconclusive_occurrence is not None
     assert failed.inconclusive_occurrence["calls_completed"] == 1
-    over_limit = _run(EvidenceAnswerer(output_tokens=17), RecordingBridge(), RecordingScorer())
+    over_limit = _run(EvidenceAnswerer(output_tokens=MAX_OUTPUT_TOKENS + 1), RecordingBridge(), RecordingScorer())
     assert over_limit.inconclusive_occurrence is not None
     assert over_limit.inconclusive_occurrence["calls_completed"] == 1
+
+
+def test_runner_refuses_malformed_response_token() -> None:
+    with pytest.raises(RuntimeError, match="exact DNRD-2 form"):
+        _validate_reply(ModelReply("not-a-dnrd-token", input_tokens=1, output_tokens=1))
 
 
 def test_raw_control_must_match_independent_record_replay() -> None:

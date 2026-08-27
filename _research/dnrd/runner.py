@@ -22,6 +22,7 @@ from .task_family import (
     audit_public_manifest,
     canonical_json,
     commitment,
+    is_response_token,
     training_provenance_canaries,
 )
 
@@ -35,9 +36,9 @@ MOUNT_ROLES = {
 }
 CANDIDATE_SCHEMA = "hswm-dnrd-candidate/v1"
 INCONCLUSIVE_SCHEMA = "hswm-dnrd-inconclusive-occurrence/v1"
-EXPERIMENT_ID = "HSWM-DNRD-1"
+EXPERIMENT_ID = "HSWM-DNRD-2"
 RAW_DELTA_RULE = "signed_reward_times_100000_div_1000000/v1"
-MAX_OUTPUT_TOKENS = 16
+MAX_OUTPUT_TOKENS = 64
 SCORER_ROLE_SEPARATION = "DECLARED_ROLE_SEPARATION_NOT_PROVEN"
 SCORER_OUTCOME_FIELDS = frozenset(
     {
@@ -51,7 +52,7 @@ SCORER_OUTCOME_FIELDS = frozenset(
     }
 )
 TRACE_STATUS = "SEALED_PRE_OUTCOME_LOCAL_EXPERIMENTAL_NOT_CANONICAL_PERMIT_NOT_ADMISSION_NOT_LEARNING"
-LIVE_EVENT_SCHEMA = "hswm-dnrd-live-model-event/v1"
+LIVE_EVENT_SCHEMA = "hswm-dnrd-live-model-event/v2"
 PREFLIGHT_SCHEMA = "hswm-dnrd-live-preflight-receipt/v1"
 PROVIDER_CACHE_UNOBSERVABLE = "NOT_OBSERVABLE_BY_CLIENT"
 BRIDGE_STATE_EVIDENCE_SCHEMA = "hswm-dnrd-bridge-state-evidence/v1"
@@ -938,8 +939,8 @@ def _response_object(reply: ModelReply) -> dict[str, Any]:
 
 
 def _validate_reply(reply: ModelReply) -> None:
-    if not isinstance(reply.response_token, str) or not reply.response_token:
-        raise RuntimeError("answerer did not return a response token")
+    if not is_response_token(reply.response_token):
+        raise RuntimeError("answerer response token violates exact DNRD-2 form")
     for label, value in (("input_tokens", reply.input_tokens), ("output_tokens", reply.output_tokens)):
         if type(value) is not int or value < 0:
             raise RuntimeError(f"answerer {label} must be a nonnegative integer")
@@ -1305,9 +1306,7 @@ def _validate_model_event_ledger(
                 or type(choice) is not dict
                 or type(choice.get("message")) is not dict
                 or choice.get("finish_reason") != "stop"
-                or not isinstance(response_token, str)
-                or not response_token
-                or any(character.isspace() for character in response_token)
+                or not is_response_token(response_token)
                 or type(raw_usage.get("prompt_tokens")) is not int
                 or type(raw_usage.get("completion_tokens")) is not int
                 or raw_usage.get("total_tokens")

@@ -4,6 +4,7 @@ from dataclasses import replace
 import hashlib
 import inspect
 import json
+import os
 from pathlib import Path
 import re
 import shutil
@@ -28,10 +29,15 @@ from _research.dnrd.execute import (
     RATIFICATION_TEMPLATE_VERSION,
     RUNTIME_TREE_MANIFEST_SCHEMA,
     SCORER_ARGUMENT_CONTRACT,
+    TOKENIZER_PREFLIGHT_PROMPT,
+    _DurableJsonlEventLedger,
     _ProductionBridgeMountClosureExporter,
+    _attempt_lock,
+    _bundle_index,
     _execute,
     _json_object_unformatted,
     _load_source_manifest,
+    _plain_file,
     _production_dependencies,
     _runtime_tree_manifest,
     _validate_preregistration,
@@ -63,6 +69,7 @@ from _research.dnrd.runner import (
     ARMS,
     BRIDGE_MOUNT_CLOSURE_PLAN_SCHEMA,
     BridgeMountClosureExport,
+    MAX_OUTPUT_TOKENS,
     MOUNT_ROLES,
 )
 from test_hswm_dnrd_runner import EvidenceAnswerer, RecordingBridge, RecordingScorer
@@ -406,7 +413,7 @@ def _fixture(
     )
     source_manifest_value = {
         "schema_version": "hswm-dnrd-source-freeze-manifest/v1",
-        "experiment_id": "HSWM-DNRD-1",
+        "experiment_id": "HSWM-DNRD-2",
         "source_commit_tree_bound_externally": "SOURCE_COMMIT_TREE_BOUND_EXTERNALLY_NO_SELF_CYCLE",
         "files": [
             {"path": relative, "sha256": _hash(repo / relative)}
@@ -569,9 +576,9 @@ def _fixture(
 
     prereg_path = "prereg/dnrd.json"
     prereg = {
-        "schema_version": "hswm-durable-numeric-routing-diagnostic-preregistration/v1",
-        "experiment_id": "HSWM-DNRD-1",
-        "protocol_version": "v1",
+        "schema_version": "hswm-durable-numeric-routing-diagnostic-preregistration/v2",
+        "experiment_id": "HSWM-DNRD-2",
+        "protocol_version": "v2",
         "created_at": "2026-08-27",
         "status": "FROZEN_AWAITING_EXACT_HASH_RATIFICATION",
         "authority": {
@@ -603,7 +610,7 @@ def _fixture(
                 "substitution_allowed": False,
                 "temperature": 0,
                 "thinking": False,
-                "max_output_tokens": 16,
+                "max_output_tokens": MAX_OUTPUT_TOKENS,
                 "deployment_readback_required": True,
                 "exact_weight_revision_attested": False,
                 "exact_weight_identity_claimed": False,
@@ -667,7 +674,7 @@ def _fixture(
 
     ratification_text = RATIFICATION_TEMPLATE.format(preregistration_sha256=prereg_sha)
     rat_unsigned = {
-        "schema_version": "hswm-dnrd-ratification-receipt/v1",
+        "schema_version": "hswm-dnrd-ratification-receipt/v2",
         "preregistration_sha256": prereg_sha,
         "statement_sha256": hashlib.sha256(ratification_text.encode()).hexdigest(),
         "ratified_at_unix": 3,
@@ -688,7 +695,7 @@ def _fixture(
         helper, _hash(helper), lock, _hash(lock), bundle, _hash(bundle),
         attempt_registry_root=attempt_root, ratification_receipt_path=rat_path,
         ratification_receipt_sha256=rat_sha, source_ci_receipt_path=ci_path,
-        source_ci_receipt_sha256=ci_sha, tokenizer_preflight_prompt="frozen preflight",
+        source_ci_receipt_sha256=ci_sha, tokenizer_preflight_prompt=TOKENIZER_PREFLIGHT_PROMPT,
         bridge_runtime_root=runtime_root, bridge_state_root=state_root,
         bridge_runtime_tree_manifest_path=runtime_manifest,
         bridge_runtime_tree_manifest_sha256=runtime_manifest_sha,
@@ -708,7 +715,7 @@ def _fixture(
         )
 
     def preflight(_: ExecutionConfig) -> dict:
-        return preflight_deployment_and_tokenizer(OpenAICompatibleDnrdConfig(config.model_endpoint), transport, tokenizer_prompt="frozen preflight")
+        return preflight_deployment_and_tokenizer(OpenAICompatibleDnrdConfig(config.model_endpoint), transport, tokenizer_prompt=TOKENIZER_PREFLIGHT_PROMPT)
 
     dependencies = ExecutionDependencies(answerer, RecordingBridge(), _PublicOnlyFixtureScorer(_hash(scorer_source)), verifier, preflight, model_event_ledger=lambda: tuple(answerer.events), closure_exporter=_FixtureClosureExporter(output_root))
     return config, dependencies, calls
@@ -752,6 +759,9 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
     assert index["schema_version"] == "hswm-dnrd-evidence-bundle-index/v1"
     assert "candidate.json" in {entry["path"] for entry in index["artifacts"]}
     assert "private/private_manifest.json" in {entry["path"] for entry in index["artifacts"]}
+    assert dnrd_judge._validate_bundle_index(result.output_dir)["candidate.json"] == _hash(
+        result.output_dir / "candidate.json"
+    )
     assert stat.S_IMODE(result.output_dir.stat().st_mode) == 0o700
     assert stat.S_IMODE((result.output_dir / "private" / "private_manifest.json").stat().st_mode) == 0o600
     assert stat.S_IMODE((result.output_dir / "source_closure").stat().st_mode) == 0o500
@@ -894,6 +904,38 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
     assert "import judge" not in Path("_research/dnrd/execute.py").read_text()
 
 
+def test_bundle_index_sorts_serialized_posix_paths_at_file_directory_prefix_collision(
+    tmp_path: Path,
+) -> None:
+    output_root = tmp_path / "evidence"
+    output_root.mkdir()
+    (output_root / "assert.d.ts").write_text("file\n", encoding="utf-8")
+    prefixed_directory = output_root / "assert"
+    prefixed_directory.mkdir()
+    (prefixed_directory / "strict.d.ts").write_text("nested\n", encoding="utf-8")
+
+    index = _bundle_index(output_root)
+
+    assert [entry["path"] for entry in index["artifacts"]] == [
+        "assert.d.ts",
+        "assert/strict.d.ts",
+    ]
+
+
+def test_execute_module_without_runtime_config_prints_usage_and_exits_two() -> None:
+    completed = subprocess.run(
+        [sys.executable, "-m", "_research.dnrd.execute"],
+        cwd=Path(__file__).parents[1],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert completed.returncode == 2
+    assert "usage:" in completed.stderr
+    assert "RUNTIME_CONFIG.json" in completed.stderr
+
+
 def test_injected_executor_has_no_production_admissibility_switch() -> None:
     parameters = inspect.signature(_execute).parameters
     assert tuple(parameters) == ("config", "dependencies")
@@ -941,6 +983,9 @@ def test_static_pins_refuse_free_verifier_command_or_path_topology(
                 verifier_command=(str(config.node_executable_path), str(alternate_helper)),
             )
         )
+
+    with pytest.raises(ExecutionRefusal, match="response-form probe"):
+        _verify_static_pins(replace(config, tokenizer_preflight_prompt="arbitrary probe"))
 
 
 @pytest.mark.parametrize(
@@ -1319,3 +1364,55 @@ def test_execute_refuses_repeat_marker_and_bad_exact_ratification(tmp_path: Path
             ),
             bad_dependencies,
         )
+
+
+def test_attempt_marker_fsyncs_its_registry_directory(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    config, _, _ = _fixture(tmp_path)
+    original_fsync = os.fsync
+    fsynced_kinds: list[str] = []
+
+    def recording_fsync(descriptor: int) -> None:
+        mode = os.fstat(descriptor).st_mode
+        fsynced_kinds.append("directory" if stat.S_ISDIR(mode) else "file")
+        original_fsync(descriptor)
+
+    monkeypatch.setattr(os, "fsync", recording_fsync)
+    _attempt_lock(
+        config,
+        pulse_receipt_sha256="a" * 64,
+        runtime_receipt_sha256="b" * 64,
+    )
+
+    assert fsynced_kinds == ["file", "directory"]
+
+
+def test_live_model_event_ledger_is_fsynced_before_snapshot(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    output = tmp_path / "output"
+    output.mkdir(mode=0o700)
+    output.chmod(0o700)
+    ledger = _DurableJsonlEventLedger(output / "model_events.jsonl")
+    original_fsync = os.fsync
+    fsynced_kinds: list[str] = []
+
+    def recording_fsync(descriptor: int) -> None:
+        mode = os.fstat(descriptor).st_mode
+        fsynced_kinds.append("directory" if stat.S_ISDIR(mode) else "file")
+        original_fsync(descriptor)
+
+    monkeypatch.setattr(os, "fsync", recording_fsync)
+    ledger({"ordinal": 1, "event": "OBSERVED"})
+    ledger({"ordinal": 1, "event": "ACCEPTED"})
+
+    _plain_file(ledger.path, "durable fixture ledger", mode=0o600)
+    assert ledger.path.read_bytes() == canonical_json(
+        {"ordinal": 1, "event": "OBSERVED"}
+    ) + b"\n" + canonical_json({"ordinal": 1, "event": "ACCEPTED"}) + b"\n"
+    assert ledger.snapshot() == (
+        {"ordinal": 1, "event": "OBSERVED"},
+        {"ordinal": 1, "event": "ACCEPTED"},
+    )
+    assert fsynced_kinds == ["file", "directory", "file"]

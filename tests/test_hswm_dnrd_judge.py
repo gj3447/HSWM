@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 from copy import deepcopy
 from hashlib import sha256
 import importlib.util
@@ -9,7 +10,7 @@ from pathlib import Path
 import pytest
 
 from _research.dnrd.execute import PREREG_CLAIM_BOUNDARY
-from _research.dnrd.task_family import commitment
+from _research.dnrd.task_family import canonical_json, commitment
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -53,7 +54,7 @@ def _claim_bound_preregistration() -> dict[str, object]:
                 "substitution_allowed": False,
                 "temperature": 0,
                 "thinking": False,
-                "max_output_tokens": 16,
+                "max_output_tokens": judge.MAX_OUTPUT_TOKENS,
                 "deployment_readback_required": True,
                 "exact_weight_revision_attested": False,
                 "exact_weight_identity_claimed": False,
@@ -440,7 +441,7 @@ def _stream(index: int) -> dict[str, object]:
 def candidate() -> dict[str, object]:
     return {
         "schema_version": "hswm-dnrd-candidate/v1",
-        "experiment_id": "HSWM-DNRD-1",
+        "experiment_id": judge.EXPERIMENT_ID,
         "bindings": {
             "source_manifest_sha256": _sha("source-manifest"),
             "preregistration_sha256": _sha("preregistration"),
@@ -545,7 +546,7 @@ def _public_canary_fixture(seed: bytes) -> dict[str, object]:
 
 def test_positive_candidate_is_integrity_go_without_utility_claim() -> None:
     judgment = judge.judge(candidate())
-    assert judgment["schema_version"] == "hswm-dnrd-judgment/v1"
+    assert judgment["schema_version"] == "hswm-dnrd-judgment/v2"
     assert judgment["terminal"] == "DIAGNOSTIC_INTEGRITY_GO_NO_UTILITY_CLAIM"
     assert judgment["scientific_status"] == "UNJUDGED"
     assert judgment["efficacy_claim"] == "NOT_EVALUATED"
@@ -750,6 +751,41 @@ def test_bridge_state_evidence_binds_the_expected_mount_role_for_each_arm() -> N
         judge._scores_from_state_entry(entry, stream, "FULL", "state")
 
 
+def test_episode_replay_rejects_noncanonical_retained_response_token() -> None:
+    stream = {
+        "stream_id": "stream-0",
+        "context_keys": ["context-0"],
+        "route_ids": ["route-a", "route-b"],
+    }
+    episode = {
+        "episode_id": "heldout:0:0",
+        "stream_id": "stream-0",
+        "phase": "heldout",
+        "context_key": "context-0",
+        "candidate_route_ids": ["route-a", "route-b"],
+        "entity": "entity-0",
+        "aliases": ["alias-0"],
+        "surface_template": "template-0",
+            "prompt": "return only the response token from selected evidence.",
+        "route_evidence": [
+            {
+                "route_id": "route-a",
+                "evidence_text": "route-a gives token-00000000000000000000",
+                "response_token": "token-00000000000000000000",
+            },
+            {
+                "route_id": "route-b",
+                "evidence_text": "route-b gives token-gggggggggggggggggggg",
+                "response_token": "token-gggggggggggggggggggg",
+            },
+        ],
+        "arm_order": list(judge.ARMS),
+    }
+
+    with pytest.raises(judge.BundleRefusal, match="exact DNRD-2 form"):
+        judge._check_episode(episode, stream, "heldout", "episode")
+
+
 def test_full_raw_route_or_digest_divergence_is_no_go() -> None:
     value = candidate()
     value["streams"][0]["probes"][0]["arms"]["RAW_EQUAL_BUDGET"][
@@ -779,8 +815,397 @@ def test_candidate_only_bundle_can_never_upgrade_to_go(tmp_path: Path) -> None:
     )
     result = judge.judge_bundle(tmp_path)
     assert result["terminal"] == "VOID_PROTOCOL"
-    assert result["authority"] == "AUTHORITATIVE_EVIDENCE_BUNDLE_VERIFIED"
+    assert result["authority"] == "INCOMPLETE_OR_INVALID_EVIDENCE_BUNDLE_NOT_VERIFIED"
     assert len(result["bundle_verification_receipt_sha256"]) == 64
+
+
+def _write_indexed_inconclusive_bundle(root: Path) -> None:
+    """Build the minimal structurally closed aborted-occurrence bundle."""
+    raw = canonical_json({
+        "model": "qwen3.6-35b-a3b",
+        "choices": [{"finish_reason": "length", "message": {"content": "x"}}],
+        "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
+    })
+    failure_message = "chat completion choice must finish with exact reason 'stop'"
+    occurrence = {
+        "schema_version": judge.INCONCLUSIVE_SCHEMA,
+        "experiment_id": judge.EXPERIMENT_ID,
+        "post_first_call": True,
+        "calls_completed": 1,
+        "client_cache_hits": 0,
+        "failure_type": "LiveBoundaryError",
+        "failure_digest": commitment({"type": "LiveBoundaryError", "message": failure_message}),
+    }
+    (root / "inconclusive.json").write_bytes(canonical_json(occurrence))
+    for relative in judge.BUNDLE_COMMON_REQUIRED_FILES - {"bundle_index.json"}:
+        path = root / relative
+        if path.name == "inconclusive.json":
+            continue
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(b"{}\n" if path.name.endswith(".jsonl") else b"x")
+    event_common = {
+        "schema_version": judge.LIVE_EVENT_SCHEMA,
+        "ordinal": 1,
+        "phase": "training",
+        "arm": None,
+        "dnrd_request_sha256": _sha("request"),
+        "endpoint": "http://example.invalid/v1/chat/completions",
+        "model": "qwen3.6-35b-a3b",
+        "request_sha256": _sha("body"),
+        "raw_response_sha256": sha256(raw).hexdigest(),
+        "http_status": 200,
+        "chat_config": {
+            "chat_template_kwargs": {"enable_thinking": False}, "logprobs": False,
+            "n": 1, "stream": False, "temperature": 0, "top_p": 1,
+            "max_tokens": judge.MAX_OUTPUT_TOKENS,
+        },
+        "elapsed_nanoseconds": 1,
+        "provider_cache_independence": judge.PROVIDER_CACHE_UNOBSERVABLE,
+    }
+    observed = {"event": "CHAT_COMPLETION_OBSERVED", **event_common}
+    rejected = {
+        "event": "CHAT_COMPLETION_REJECTED", **event_common,
+        "raw_response_encoding": "base64",
+        "raw_response_base64": base64.b64encode(raw).decode("ascii"),
+        "raw_response_bytes": len(raw),
+        "failure_stage_code": "FINISH_REASON_NOT_STOP",
+        "failure_message": failure_message,
+        "failure_message_sha256": sha256(failure_message.encode()).hexdigest(),
+    }
+    (root / "model_events.jsonl").write_bytes(canonical_json(observed) + b"\n" + canonical_json(rejected) + b"\n")
+    (root / "runner_events.jsonl").write_bytes(b"")
+    _refresh_bundle_index(root)
+
+
+def _prepend_accepted_call_to_inconclusive_bundle(root: Path) -> None:
+    """Make the minimal bundle contain one accepted call before its rejection."""
+    request = {
+        "episode_id": "training:0:0",
+        "selected_route_id": "route-a",
+        "prompt": "fixture accepted prompt",
+        "max_output_tokens": judge.MAX_OUTPUT_TOKENS,
+        "ordinal": 1,
+        "phase": "training",
+        "arm": None,
+    }
+    provider_body = {
+        "chat_template_kwargs": {"enable_thinking": False},
+        "max_tokens": judge.MAX_OUTPUT_TOKENS,
+        "messages": [{"content": request["prompt"], "role": "user"}],
+        "model": "qwen3.6-35b-a3b",
+        "n": 1,
+        "stream": False,
+        "temperature": 0,
+        "top_p": 1,
+        "logprobs": False,
+    }
+    raw = canonical_json({
+        "model": "qwen3.6-35b-a3b",
+        "choices": [{
+            "finish_reason": "stop",
+            "message": {"content": "token-0123456789abcdef0123"},
+        }],
+        "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
+    })
+    common = {
+        "schema_version": judge.LIVE_EVENT_SCHEMA,
+        "ordinal": 1,
+        "phase": "training",
+        "arm": None,
+        "dnrd_request_sha256": commitment(request),
+        "endpoint": "http://example.invalid/v1/chat/completions",
+        "model": "qwen3.6-35b-a3b",
+        "request_sha256": sha256(canonical_json(provider_body)).hexdigest(),
+        "raw_response_sha256": sha256(raw).hexdigest(),
+        "chat_config": {
+            "chat_template_kwargs": {"enable_thinking": False}, "logprobs": False,
+            "n": 1, "stream": False, "temperature": 0, "top_p": 1,
+            "max_tokens": judge.MAX_OUTPUT_TOKENS,
+        },
+        "elapsed_nanoseconds": 1,
+        "provider_cache_independence": judge.PROVIDER_CACHE_UNOBSERVABLE,
+    }
+    observed = {"event": "CHAT_COMPLETION_OBSERVED", **common, "http_status": 200}
+    accepted = {
+        "event": "CHAT_COMPLETION_ACCEPTED",
+        **common,
+        "raw_response_utf8": raw.decode("utf-8"),
+        "dnrd_response_sha256": commitment({
+            "response_token": "token-0123456789abcdef0123",
+            "input_tokens": 1,
+            "output_tokens": 1,
+            "client_cache_hit": False,
+            "server_usage": {},
+        }),
+        "usage": {"prompt_tokens": 1, "completion_tokens": 1},
+    }
+    terminal = [
+        json.loads(line)
+        for line in (root / "model_events.jsonl").read_text().splitlines()
+    ]
+    for event in terminal:
+        event["ordinal"] = 2
+    (root / "model_events.jsonl").write_bytes(
+        b"".join(
+            canonical_json(event) + b"\n"
+            for event in (observed, accepted, *terminal)
+        )
+    )
+    runner = {
+        "schema_version": judge.RUNNER_EVENT_SCHEMA,
+        "ordinal": 1,
+        "phase": "training",
+        "arm": None,
+        "request": request,
+        "sealed_response": {},
+        "trace": {},
+        "scorer_outcome": {},
+        "credit_receipt": {},
+        "route_digest_sha256": _sha("route"),
+        "route_replay": None,
+    }
+    (root / "runner_events.jsonl").write_bytes(canonical_json(runner) + b"\n")
+    occurrence = json.loads((root / "inconclusive.json").read_text())
+    occurrence["calls_completed"] = 2
+    (root / "inconclusive.json").write_bytes(canonical_json(occurrence))
+    _refresh_bundle_index(root)
+
+
+def _refresh_bundle_index(root: Path, *, reverse_prefix_collision: bool = False) -> None:
+    """Rebind test mutations so the adjudicator reaches ledger replay."""
+    index_path = root / "bundle_index.json"
+    if index_path.exists():
+        index_path.unlink()
+    rows = []
+    for path in sorted(root.rglob("*"), key=lambda item: item.relative_to(root).as_posix()):
+        if path.is_file():
+            body = path.read_bytes()
+            rows.append(
+                {
+                    "path": path.relative_to(root).as_posix(),
+                    "sha256": sha256(body).hexdigest(),
+                    "bytes": len(body),
+                }
+            )
+    if reverse_prefix_collision:
+        first = next(index for index, row in enumerate(rows) if row["path"].endswith("assert.d.ts"))
+        second = next(index for index, row in enumerate(rows) if row["path"].endswith("assert/strict.d.ts"))
+        rows[first], rows[second] = rows[second], rows[first]
+    unsigned = {"schema_version": "hswm-dnrd-evidence-bundle-index/v1", "artifacts": rows}
+    index = {**unsigned, "receipt_sha256": commitment(unsigned)}
+    (root / "bundle_index.json").write_bytes(canonical_json(index))
+
+
+def test_missing_bundle_index_void_is_not_claimed_as_verified_or_indexed(tmp_path: Path) -> None:
+    occurrence = {
+        "schema_version": judge.INCONCLUSIVE_SCHEMA,
+        "experiment_id": judge.EXPERIMENT_ID,
+        "post_first_call": True,
+        "calls_completed": 1,
+        "client_cache_hits": 0,
+        "failure_type": "LiveBoundaryError",
+        "failure_digest": _sha("inconclusive-failure"),
+    }
+    (tmp_path / "inconclusive.json").write_bytes(canonical_json(occurrence))
+
+    result = judge.judge_bundle(tmp_path)
+
+    assert result["terminal"] == "VOID_PROTOCOL"
+    assert result["authority"] == "INCOMPLETE_OR_INVALID_EVIDENCE_BUNDLE_NOT_VERIFIED"
+    assert "indexed" not in result["claim_boundary"].casefold()
+    assert "failed structural verification" in result["claim_boundary"]
+
+
+def test_indexed_inconclusive_is_verified_only_as_a_partial_occurrence(tmp_path: Path) -> None:
+    _write_indexed_inconclusive_bundle(tmp_path)
+
+    result = judge.judge_bundle(tmp_path)
+
+    assert result["terminal"] == "INCONCLUSIVE_OCCURRENCE"
+    assert result["authority"] == "INDEXED_INCONCLUSIVE_MODEL_BOUNDARY_AND_RUNNER_IDENTITY_LEDGER_VERIFIED"
+    assert result["claim_boundary"] == (
+        "The indexed model-boundary ledger and accepted-call-to-runner-row identity coverage "
+        "were verified. Runner-row semantic contents, the terminal request preimage, and retained "
+        "common context were not replayed as a completed candidate. This partial occurrence cannot "
+        "establish efficacy, general intelligence, canonical Permit, admission, or learning."
+    )
+
+
+@pytest.mark.parametrize("mutation", ["base64", "identity", "order"])
+def test_inconclusive_rejected_ledger_tampering_is_void(tmp_path: Path, mutation: str) -> None:
+    _write_indexed_inconclusive_bundle(tmp_path)
+    events = [json.loads(line) for line in (tmp_path / "model_events.jsonl").read_text().splitlines()]
+    if mutation == "base64":
+        events[1]["raw_response_base64"] = "eA=="
+    elif mutation == "identity":
+        events[1]["request_sha256"] = _sha("tampered-body")
+    else:
+        events.reverse()
+    (tmp_path / "model_events.jsonl").write_bytes(b"".join(canonical_json(event) + b"\n" for event in events))
+    _refresh_bundle_index(tmp_path)
+
+    assert judge.judge_bundle(tmp_path)["terminal"] == "VOID_PROTOCOL"
+
+
+def test_inconclusive_calls_completed_requires_at_least_one_model_event(tmp_path: Path) -> None:
+    _write_indexed_inconclusive_bundle(tmp_path)
+    (tmp_path / "model_events.jsonl").write_bytes(b"")
+    _refresh_bundle_index(tmp_path)
+
+    result = judge.judge_bundle(tmp_path)
+
+    assert result["terminal"] == "VOID_PROTOCOL"
+    assert "must retain model boundary events" in result["failure_reason"]
+
+
+def test_inconclusive_runner_identities_exactly_cover_accepted_prior_calls(
+    tmp_path: Path,
+) -> None:
+    _write_indexed_inconclusive_bundle(tmp_path)
+    _prepend_accepted_call_to_inconclusive_bundle(tmp_path)
+    assert judge.judge_bundle(tmp_path)["terminal"] == "INCONCLUSIVE_OCCURRENCE"
+
+    (tmp_path / "runner_events.jsonl").write_bytes(b"")
+    _refresh_bundle_index(tmp_path)
+    result = judge.judge_bundle(tmp_path)
+
+    assert result["terminal"] == "VOID_PROTOCOL"
+    assert "exactly cover accepted prior model calls" in result["failure_reason"]
+
+
+def test_inconclusive_malformed_runner_request_is_void_not_an_adjudicator_error(
+    tmp_path: Path,
+) -> None:
+    _write_indexed_inconclusive_bundle(tmp_path)
+    _prepend_accepted_call_to_inconclusive_bundle(tmp_path)
+    runner = json.loads((tmp_path / "runner_events.jsonl").read_text())
+    del runner["request"]["phase"]
+    (tmp_path / "runner_events.jsonl").write_bytes(canonical_json(runner) + b"\n")
+    _refresh_bundle_index(tmp_path)
+
+    result = judge.judge_bundle(tmp_path)
+
+    assert result["terminal"] == "VOID_PROTOCOL"
+    assert "request is malformed" in result["failure_reason"]
+
+
+def test_inconclusive_terminal_call_cannot_replay_a_prior_dnrd_request_identity(
+    tmp_path: Path,
+) -> None:
+    _write_indexed_inconclusive_bundle(tmp_path)
+    _prepend_accepted_call_to_inconclusive_bundle(tmp_path)
+    events = [
+        json.loads(line)
+        for line in (tmp_path / "model_events.jsonl").read_text().splitlines()
+    ]
+    for event in events[2:]:
+        event["dnrd_request_sha256"] = events[0]["dnrd_request_sha256"]
+    (tmp_path / "model_events.jsonl").write_bytes(
+        b"".join(canonical_json(event) + b"\n" for event in events)
+    )
+    _refresh_bundle_index(tmp_path)
+
+    result = judge.judge_bundle(tmp_path)
+
+    assert result["terminal"] == "VOID_PROTOCOL"
+    assert "repeats a request identity across ordinals" in result["failure_reason"]
+
+
+@pytest.mark.parametrize("mutation", ["stage", "message"])
+def test_inconclusive_rejected_stage_must_derive_from_exact_message(
+    tmp_path: Path, mutation: str
+) -> None:
+    _write_indexed_inconclusive_bundle(tmp_path)
+    events = [json.loads(line) for line in (tmp_path / "model_events.jsonl").read_text().splitlines()]
+    rejected = events[1]
+    if mutation == "stage":
+        rejected["failure_stage_code"] = "USAGE_NOT_OBJECT"
+    else:
+        rejected["failure_message"] = "chat completion must contain object usage"
+        rejected["failure_message_sha256"] = sha256(rejected["failure_message"].encode()).hexdigest()
+    (tmp_path / "model_events.jsonl").write_bytes(
+        b"".join(canonical_json(event) + b"\n" for event in events)
+    )
+    _refresh_bundle_index(tmp_path)
+
+    result = judge.judge_bundle(tmp_path)
+
+    assert result["terminal"] == "VOID_PROTOCOL"
+    assert result["authority"] == "INCOMPLETE_OR_INVALID_EVIDENCE_BUNDLE_NOT_VERIFIED"
+    assert "message does not derive" in result["failure_reason"]
+
+
+def _write_oversize_single_rejected_occurrence(tmp_path: Path) -> None:
+    _write_indexed_inconclusive_bundle(tmp_path)
+    raw = b"x" * 1_048_577
+    message = "chat completion response exceeds frozen 1 MiB byte limit"
+    events = [json.loads(line) for line in (tmp_path / "model_events.jsonl").read_text().splitlines()]
+    rejected = events[1]
+    del rejected["raw_response_sha256"]
+    del rejected["raw_response_bytes"]
+    rejected["retained_response_prefix_encoding"] = "base64"
+    rejected["retained_response_prefix_base64"] = base64.b64encode(raw).decode("ascii")
+    rejected["retained_response_prefix_sha256"] = sha256(raw).hexdigest()
+    rejected["retained_response_prefix_bytes"] = len(raw)
+    rejected["response_body_bytes_lower_bound"] = len(raw)
+    rejected["failure_stage_code"] = "RESPONSE_BODY_EXCEEDS_1_MIB"
+    rejected["failure_message"] = message
+    rejected["failure_message_sha256"] = sha256(message.encode()).hexdigest()
+    del rejected["raw_response_encoding"]
+    del rejected["raw_response_base64"]
+    (tmp_path / "model_events.jsonl").write_bytes(canonical_json(rejected) + b"\n")
+    occurrence = json.loads((tmp_path / "inconclusive.json").read_text())
+    occurrence["failure_digest"] = commitment({"type": "LiveBoundaryError", "message": message})
+    (tmp_path / "inconclusive.json").write_bytes(canonical_json(occurrence))
+    _refresh_bundle_index(tmp_path)
+
+
+def test_inconclusive_oversize_single_rejected_event_is_a_valid_partial_occurrence(
+    tmp_path: Path,
+) -> None:
+    _write_oversize_single_rejected_occurrence(tmp_path)
+
+    result = judge.judge_bundle(tmp_path)
+
+    assert result["terminal"] == "INCONCLUSIVE_OCCURRENCE"
+    assert result["authority"] == "INDEXED_INCONCLUSIVE_MODEL_BOUNDARY_AND_RUNNER_IDENTITY_LEDGER_VERIFIED"
+
+
+@pytest.mark.parametrize(
+    "field, replacement",
+    [
+        ("retained_response_prefix_base64", "eA=="),
+        ("retained_response_prefix_sha256", _sha("forged-prefix")),
+        ("retained_response_prefix_bytes", 1_048_576),
+        ("response_body_bytes_lower_bound", 1_048_576),
+    ],
+)
+def test_inconclusive_oversize_prefix_evidence_tampering_is_void(
+    tmp_path: Path, field: str, replacement: str | int
+) -> None:
+    _write_oversize_single_rejected_occurrence(tmp_path)
+    event = json.loads((tmp_path / "model_events.jsonl").read_text())
+    event[field] = replacement
+    (tmp_path / "model_events.jsonl").write_bytes(canonical_json(event) + b"\n")
+    _refresh_bundle_index(tmp_path)
+
+    result = judge.judge_bundle(tmp_path)
+
+    assert result["terminal"] == "VOID_PROTOCOL"
+    assert "retained prefix" in result["failure_reason"]
+
+
+def test_bundle_index_rejects_native_path_sort_prefix_collision(tmp_path: Path) -> None:
+    _write_indexed_inconclusive_bundle(tmp_path)
+    (tmp_path / "node_modules" / "@types" / "node" / "assert").mkdir(parents=True)
+    (tmp_path / "node_modules" / "@types" / "node" / "assert.d.ts").write_text("a", encoding="ascii")
+    (tmp_path / "node_modules" / "@types" / "node" / "assert" / "strict.d.ts").write_text("b", encoding="ascii")
+    _refresh_bundle_index(tmp_path, reverse_prefix_collision=True)
+
+    result = judge.judge_bundle(tmp_path)
+
+    assert result["terminal"] == "VOID_PROTOCOL"
+    assert "paths must be sorted" in result["failure_reason"]
 
 
 def test_malformed_bundle_candidate_is_refused(tmp_path: Path) -> None:

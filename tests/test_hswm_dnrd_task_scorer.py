@@ -16,6 +16,7 @@ from _research.dnrd.task_family import (
     audit_manifest_pair,
     commitment,
     generate_manifests,
+    is_response_token,
     normalize_answer,
     training_provenance_canaries,
 )
@@ -64,6 +65,7 @@ def test_generator_is_deterministic_private_and_public_are_separated() -> None:
             assert [record["route_id"] for record in evidence] == episode["candidate_route_ids"]
             assert len({len(record["evidence_text"].encode()) for record in evidence}) == 1
             assert len({len(record["response_token"].encode()) for record in evidence}) == 1
+            assert all(is_response_token(record["response_token"]) for record in evidence)
         assert all("arm_order" not in episode for episode in stream["training"])
         assert all(
             episode["provenance_canary"] in episode["prompt"]
@@ -77,6 +79,29 @@ def test_generator_is_deterministic_private_and_public_are_separated() -> None:
         for position in range(4):
             assert {arm: sum(episode["arm_order"][position] == arm for episode in stream["heldout"]) for arm in stream["heldout"][0]["arm_order"]} == {arm: 2 for arm in stream["heldout"][0]["arm_order"]}
     assert len(training_provenance_canaries(public)) == 32
+
+
+@pytest.mark.parametrize(
+    "value",
+    (
+        "token-0123456789abcdef012x",
+        "token-0123456789abcdef012",
+        "token-0123456789abcdef01234",
+        "token-0123456789abcdef012G",
+        "TOKEN-0123456789abcdef0123",
+        "token-0123456789abcdef0123 ",
+        "token-é" + "0" * 19,
+        b"token-0123456789abcdef0123",
+    ),
+)
+def test_response_token_has_one_exact_ascii_form(value: object) -> None:
+    assert not is_response_token(value)
+
+
+def test_response_token_exact_ascii_form() -> None:
+    token = "token-0123456789abcdef0123"
+    assert is_response_token(token)
+    assert len(token.encode("ascii")) == 26
 
 
 def test_auditor_refuses_tamper_and_overlap() -> None:

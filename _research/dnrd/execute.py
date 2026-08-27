@@ -142,6 +142,7 @@ class ExecutionDependencies:
     git_bytes_runner: GitBytesRunner | None = None
     model_event_ledger: Callable[[], Sequence[Mapping[str, Any]]] | None = None
     closure_exporter: BridgeMountClosureExporter | None = None
+    model_event_ledger_path: Path | None = None
 
 
 @dataclass(frozen=True)
@@ -155,17 +156,18 @@ class ExecutionResult:
 _HEX = frozenset("0123456789abcdef")
 SOURCE_MANIFEST_SCHEMA = "hswm-dnrd-source-freeze-manifest/v1"
 SOURCE_CI_RECEIPT_SCHEMA = "hswm-dnrd-source-ci-receipt/v1"
-RATIFICATION_RECEIPT_SCHEMA = "hswm-dnrd-ratification-receipt/v1"
-RATIFICATION_TEMPLATE_VERSION = "hswm-dnrd-ratification-statement/v1"
+RATIFICATION_RECEIPT_SCHEMA = "hswm-dnrd-ratification-receipt/v2"
+RATIFICATION_TEMPLATE_VERSION = "hswm-dnrd-ratification-statement/v2"
 RATIFICATION_TEMPLATE = (
-    "I ratify HSWM-DNRD-1 preregistration SHA-256 {preregistration_sha256} "
-    "under hswm-dnrd-ratification-statement/v1."
+    "I ratify HSWM-DNRD-2 preregistration SHA-256 {preregistration_sha256} "
+    "under hswm-dnrd-ratification-statement/v2."
 )
-ATTEMPT_LOCK_SCHEMA = "hswm-dnrd-durable-attempt-marker/v1"
+ATTEMPT_LOCK_SCHEMA = "hswm-dnrd-durable-attempt-marker/v2"
 GIT_CHRONOLOGY_EVIDENCE_SCHEMA = "hswm-dnrd-git-chronology-evidence/v2"
 BUNDLE_INDEX_SCHEMA = "hswm-dnrd-evidence-bundle-index/v1"
 ATTEMPT_MARKER_SCOPE = (
-    "DETERMINISTIC_DURABLE_MARKER_UNDER_CONFIGURED_REGISTRY_ONLY_GLOBAL_SINGLETON_NOT_PROVEN"
+    "DETERMINISTIC_FILE_AND_PARENT_DIRECTORY_FSYNC_MARKER_UNDER_CONFIGURED_"
+    "REGISTRY_ONLY_GLOBAL_SINGLETON_NOT_PROVEN"
 )
 RUNTIME_TREE_MANIFEST_SCHEMA = "hswm-dnrd-bridge-runtime-tree-manifest/v3"
 RUNTIME_RECEIPT_SCHEMA = "hswm-dnrd-runtime-receipt/v3"
@@ -176,6 +178,7 @@ EXECUTION_CLOSURE_ISOLATION_CLAIM = (
 RUNTIME_CLOSURE_MAX_FILES = 8_192
 RUNTIME_CLOSURE_MAX_TOTAL_BYTES = 67_108_864
 VERIFIER_TIMEOUT_SECONDS = 60
+TOKENIZER_PREFLIGHT_PROMPT = "token-ffffffffffffffffffff"
 VERIFIER_ARGUMENT_CONTRACT = (
     "online", "--expected-round", "{FIRST_ELIGIBLE_ROUND}"
 )
@@ -216,7 +219,7 @@ _MOUNT_ID_RE = re.compile(
     r"^dnrd-mount-v1-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 )
 _DIGEST_FILENAME_RE = re.compile(r"^[0-9a-f]{64}$")
-PREREG_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v1"
+PREREG_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v2"
 RAW_REPLAY_DESCRIPTION = (
     "For each stream, replay exactly eight retained training update records containing "
     "scorer-outcome integer rewards through the frozen numeric score rule from W0; the "
@@ -235,10 +238,12 @@ PREREG_CLAIM_BOUNDARY = {
         "P1_SCALAR_SLOW_WEIGHT_SCIENTIFIC_RED_ZERO_ACTIVE_UPDATES",
         "P1V3_P1V4_SYNTHETIC_L0_ACTUATION_ONLY_NO_L1_INHERITANCE",
         "P1V3V4_L1_CAUSAL_LESSON_KILLED_BEFORE_REGISTRATION_NO_REVIVAL",
+        "DNRD1_VOID_PROTOCOL_POST_FIRST_CALL_NO_MECHANICS_RESULT_NO_RETRY",
     ],
     "forbidden_rescues": [
         "NO_POST_FREEZE_TUNING_OR_GATE_RELAXATION",
         "NO_RETRY_RERUN_RESUME_REPLACEMENT_OR_SECOND_PULSE",
+        "NO_RELABELING_DNRD2_AS_A_DNRD1_RETRY_REPAIR_OR_RESULT",
         "NO_RELABELING_NUMERIC_REPLAY_AS_RAW_TRANSCRIPT_COMPARISON",
         "NO_PROMOTION_TO_LLM_LEARNING_UNSEEN_GENERALIZATION_UTILITY_OR_HSWM_EFFICACY",
     ],
@@ -277,6 +282,10 @@ PREREG_CLAIM_BOUNDARY = {
             "ALL_CONTEXT_ROUTE_CELLS_FORCED_ONCE_AND_SAME_CONTEXTS_REUSED_AT_HELDOUT"
         ),
         "model_role": "SELECTED_EVIDENCE_ECHO_BOUNDARY_NOT_THE_LEARNER_UNDER_TEST",
+        "response_boundary": (
+            "EXACT_26_ASCII_BYTE_RESPONSE_TOKEN_MAX_OUTPUT_64_EXACT_STOP_REQUIRED_PER_CALL_"
+            "FULL_TOKENIZER_FAMILY_FIT_NOT_PROVEN"
+        ),
         "scorer_role": "DECLARED_ROLE_SEPARATION_NOT_PROVEN",
         "raw_role": "FIXED_RULE_RETAINED_UPDATE_RECORD_NUMERIC_REPLAY_FIDELITY_ONLY",
     },
@@ -327,7 +336,8 @@ PREREG_CLAIM_BOUNDARY = {
         "SECOND_SINGLETON_ATTEMPT_OR_POST_OBSERVATION_REPLACEMENT",
     ],
     "single_attempt_policy": (
-        "ONE_DURABLE_MARKER_SCOPED_SINGLETON_OCCURRENCE_NO_RETRY_RERUN_RESUME_OR_REPLACEMENT"
+        "ONE_NEW_DNRD2_FILE_AND_PARENT_DIRECTORY_FSYNC_MARKER_SCOPED_SINGLETON_OCCURRENCE_"
+        "DNRD1_REMAINS_CONSUMED_NO_RETRY_RERUN_RESUME_OR_REPLACEMENT"
     ),
     "required_before_measurement": [
         "CLEAN_PUSHED_SOURCE_A_WITH_EXACT_SOURCE_MANIFEST",
@@ -335,6 +345,7 @@ PREREG_CLAIM_BOUNDARY = {
         "DIRECT_CHILD_PREREGISTRATION_B_CHANGING_EXACTLY_ONE_PREREG_PATH",
         "EXTERNAL_EXACT_PREREGISTRATION_SHA256_RATIFICATION_RECEIPT",
         "FIRST_ELIGIBLE_QUICKNET_PULSE_AT_LEAST_900_SECONDS_AFTER_SOURCE_A_AND_RATIFICATION",
+        "DNRD1_ATTEMPT_MARKER_AND_VOID_OCCURRENCE_REMAIN_UNCHANGED_AND_CONSUMED",
     ],
     "result_promotion": {
         "only_go_terminal": "DIAGNOSTIC_INTEGRITY_GO_NO_UTILITY_CLAIM",
@@ -408,7 +419,7 @@ CORE_SOURCE_FILES = frozenset(
         "tools/swm0w_drand/package-lock.json",
         "tools/swm0w_drand/fixtures/quicknet-round-1000.json",
         "_research/dnrd/verify-beacon.mjs",
-        "docs/research/HSWM_DNRD_SOURCE_A_SCIENTIFIC_BOUNDARY_2026-08-27.md",
+        "docs/research/HSWM_DNRD_2_SOURCE_A_SCIENTIFIC_BOUNDARY_2026-08-27.md",
     }
 )
 
@@ -534,13 +545,15 @@ def _plain_directory(path: Path, label: str, *, mode: int | None = None) -> None
         raise ExecutionRefusal(f"{label} must have mode {mode:04o}")
 
 
-def _plain_file(path: Path, label: str) -> None:
+def _plain_file(path: Path, label: str, *, mode: int | None = None) -> None:
     try:
         info = path.lstat()
     except FileNotFoundError as error:
         raise ExecutionRefusal(f"{label} is absent") from error
     if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
         raise ExecutionRefusal(f"{label} must be a plain regular file")
+    if mode is not None and stat.S_IMODE(info.st_mode) != mode:
+        raise ExecutionRefusal(f"{label} must have mode {mode:04o}")
 
 
 def _plain_relative_file(root: Path, relative: str, label: str) -> Path:
@@ -975,7 +988,7 @@ class _ProductionBridgeMountClosureExporter:
 def _bundle_index(output_root: Path) -> dict[str, Any]:
     """Self-address every emitted artifact except this index (avoids a cycle)."""
     entries: list[dict[str, Any]] = []
-    for path in sorted(output_root.rglob("*")):
+    for path in output_root.rglob("*"):
         if path == output_root / "bundle_index.json" or path.is_dir():
             continue
         _plain_file(path, f"bundle artifact {path}")
@@ -988,6 +1001,10 @@ def _bundle_index(output_root: Path) -> dict[str, Any]:
                 "bytes": len(body),
             }
         )
+    # Canonical order is defined over the serialized receipt paths, not
+    # pathlib's component-wise ordering (which differs at file/directory
+    # prefix collisions such as ``assert.d.ts`` and ``assert/strict.d.ts``).
+    entries.sort(key=lambda entry: entry["path"])
     if [entry["path"] for entry in entries] != sorted(entry["path"] for entry in entries):
         raise ExecutionRefusal("bundle index artifact paths are not canonical")
     unsigned = {
@@ -1049,7 +1066,7 @@ def _load_source_manifest(config: ExecutionConfig) -> dict[str, Any]:
     )
     if (
         manifest["schema_version"] != SOURCE_MANIFEST_SCHEMA
-        or manifest["experiment_id"] != "HSWM-DNRD-1"
+        or manifest["experiment_id"] != "HSWM-DNRD-2"
         or manifest["source_commit_tree_bound_externally"]
         != "SOURCE_COMMIT_TREE_BOUND_EXTERNALLY_NO_SELF_CYCLE"
     ):
@@ -1222,8 +1239,8 @@ def _validate_preregistration(
     data = _exact_keys(prereg, required, "preregistration")
     if (
         data["schema_version"] != PREREG_SCHEMA
-        or data["experiment_id"] != "HSWM-DNRD-1"
-        or data["protocol_version"] != "v1"
+        or data["experiment_id"] != "HSWM-DNRD-2"
+        or data["protocol_version"] != "v2"
         or data["status"] != "FROZEN_AWAITING_EXACT_HASH_RATIFICATION"
     ):
         raise ExecutionRefusal("preregistration identity/status is not the frozen pre-ratification contract")
@@ -2225,8 +2242,8 @@ def _verify_static_pins(
     _plain_directory(config.bridge_state_root, "bridge mutable state root", mode=0o700)
     if any(config.bridge_state_root.iterdir()):
         raise ExecutionRefusal("bridge mutable state root must be empty before a singleton occurrence")
-    if not config.tokenizer_preflight_prompt:
-        raise ExecutionRefusal("tokenizer preflight prompt must be frozen nonempty text")
+    if config.tokenizer_preflight_prompt != TOKENIZER_PREFLIGHT_PROMPT:
+        raise ExecutionRefusal("tokenizer preflight prompt differs from the frozen DNRD-2 response-form probe")
     _assert_distinct_roots(config)
     if _sha_bytes(config.ratification_text.encode("utf-8")) != config.ratification_text_sha256:
         raise ExecutionRefusal("ratification text hash drifted")
@@ -2536,6 +2553,7 @@ def _attempt_lock(
             handle.flush()
             os.fsync(handle.fileno())
         os.chmod(target, 0o400)
+        _fsync_directory(config.attempt_registry_root)
     except Exception:
         # Do not remove a possibly-visible marker: ambiguity must consume the
         # identity rather than permit a replacement attempt.
@@ -2545,6 +2563,67 @@ def _attempt_lock(
 
 def _jsonl(events: Sequence[Mapping[str, Any]]) -> bytes:
     return b"".join(canonical_json(dict(event)) + b"\n" for event in events)
+
+
+def _fsync_directory(path: Path) -> None:
+    """Durably order a just-created directory entry on a local Unix filesystem."""
+    flags = os.O_RDONLY
+    if hasattr(os, "O_DIRECTORY"):
+        flags |= os.O_DIRECTORY
+    descriptor = os.open(path, flags)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+class _DurableJsonlEventLedger:
+    """Append and fsync each live-model observation before control proceeds."""
+
+    def __init__(self, path: Path) -> None:
+        self.path = path
+        self._events: list[Mapping[str, Any]] = []
+        self._created = False
+
+    def __call__(self, event: Mapping[str, Any]) -> None:
+        value = dict(event)
+        row = canonical_json(value) + b"\n"
+        _plain_directory(
+            self.path.parent, "live model event ledger parent", mode=0o700
+        )
+        flags = os.O_WRONLY
+        if self._created:
+            flags |= os.O_APPEND
+        else:
+            flags |= os.O_CREAT | os.O_EXCL
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        descriptor = os.open(self.path, flags, 0o600)
+        try:
+            info = os.fstat(descriptor)
+            if (
+                not stat.S_ISREG(info.st_mode)
+                or stat.S_IMODE(info.st_mode) != 0o600
+            ):
+                raise ExecutionRefusal(
+                    "live model event ledger is not a plain owner-only file"
+                )
+            view = memoryview(row)
+            while view:
+                written = os.write(descriptor, view)
+                if written <= 0:
+                    raise OSError("live model event ledger write made no progress")
+                view = view[written:]
+            os.fsync(descriptor)
+        finally:
+            os.close(descriptor)
+        if not self._created:
+            _fsync_directory(self.path.parent)
+            self._created = True
+        self._events.append(value)
+
+    def snapshot(self) -> tuple[Mapping[str, Any], ...]:
+        return tuple(dict(event) for event in self._events)
 
 
 def _pinned_subprocess_environment() -> dict[str, str]:
@@ -2568,10 +2647,14 @@ def _production_dependencies(config: ExecutionConfig) -> ExecutionDependencies:
         raise ExecutionRefusal(
             f"required model credential environment variable is absent: {config.model_api_key_environment}"
         )
-    events: list[Mapping[str, Any]] = []
+    model_event_ledger = _DurableJsonlEventLedger(
+        config.output_root / "model_events.jsonl"
+    )
     transport = UrllibHttpTransport()
     live_config = OpenAICompatibleDnrdConfig(config.model_endpoint, api_key=api_key)
-    answerer = OpenAICompatibleDnrdAnswerer(live_config, transport, event_sink=events.append)
+    answerer = OpenAICompatibleDnrdAnswerer(
+        live_config, transport, event_sink=model_event_ledger
+    )
     if config.node_executable_path is None or config.python_executable_path is None:
         raise ExecutionRefusal("production subprocess executable pins are incomplete")
     paths = _execution_closure_paths(config)
@@ -2641,8 +2724,9 @@ def _production_dependencies(config: ExecutionConfig) -> ExecutionDependencies:
         scorer=scorer,
         verifier_runner=verifier,
         live_preflight=preflight,
-        model_event_ledger=lambda: tuple(events),
+        model_event_ledger=model_event_ledger.snapshot,
         closure_exporter=closure_exporter,
+        model_event_ledger_path=model_event_ledger.path,
     )
 
 
@@ -2672,6 +2756,14 @@ def _execute(
         raise ExecutionRefusal("output root must be a new dedicated path")
     if dependencies.model_event_ledger is None:
         raise ExecutionRefusal("execution requires the actual live answerer event ledger")
+    if (
+        dependencies.model_event_ledger_path is not None
+        and dependencies.model_event_ledger_path
+        != config.output_root / "model_events.jsonl"
+    ):
+        raise ExecutionRefusal(
+            "durable live model event ledger path is outside the output root"
+        )
     if dependencies.closure_exporter is None:
         raise ExecutionRefusal("execution requires the production/raw bridge mount-closure exporter")
     source_binding = SourceFreezeBinding(
@@ -2827,7 +2919,17 @@ def _execute(
     model_events = tuple(dict(event) for event in dependencies.model_event_ledger())
     runner_bytes, model_bytes = _jsonl(runner_events), _jsonl(model_events)
     _atomic_bytes(config.output_root / "runner_events.jsonl", runner_bytes)
-    _atomic_bytes(config.output_root / "model_events.jsonl", model_bytes)
+    model_event_path = config.output_root / "model_events.jsonl"
+    if dependencies.model_event_ledger_path is None:
+        _atomic_bytes(model_event_path, model_bytes)
+    else:
+        retained_model_bytes = _plain_file(
+            model_event_path, "durable live model event ledger", mode=0o600
+        ).read_bytes()
+        if retained_model_bytes != model_bytes:
+            raise RuntimeError(
+                "durable live model event ledger differs from in-memory event sequence"
+            )
     runner_digest = _sha_bytes(runner_bytes)
     model_digest = _sha_bytes(model_bytes)
     if result.candidate is not None:
@@ -2975,3 +3077,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"DNRD execution refused: {error}", file=sys.stderr)
         return 2
     return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

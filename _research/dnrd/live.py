@@ -8,6 +8,7 @@ receipt never asserts provider-side cache independence or model determinism.
 
 from __future__ import annotations
 
+import base64
 from dataclasses import dataclass
 import hashlib
 import json
@@ -20,7 +21,7 @@ from urllib import parse as urlparse
 from urllib import request as urlrequest
 
 from .runner import MAX_OUTPUT_TOKENS, ModelReply, ModelRequest, PreDispatchAnswererError, model_request_commitment
-from .task_family import canonical_json, commitment
+from .task_family import canonical_json, commitment, is_response_token
 
 
 MODEL_ID = "qwen3.6-35b-a3b"
@@ -35,9 +36,31 @@ CHAT_CONFIG = {
     "temperature": 0,
     "top_p": 1,
 }
-EVENT_SCHEMA = "hswm-dnrd-live-model-event/v1"
+EVENT_SCHEMA = "hswm-dnrd-live-model-event/v2"
 PREFLIGHT_SCHEMA = "hswm-dnrd-live-preflight-receipt/v1"
 ASCII_EDGE_WHITESPACE = " \t\r\n"
+REJECTED_RAW_ENCODING = "base64"
+MAX_ANSWERER_RESPONSE_BYTES = 1_048_576
+
+# These codes identify the frozen boundary check without making forensic
+# consumers parse an exception's human-readable text. They deliberately do
+# not name any request header or authentication material.
+_RESPONSE_FAILURE_STAGE_CODES = {
+    "HTTP response status": "HTTP_STATUS_NOT_2XX",
+    "chat completion is not UTF-8 JSON": "CHAT_COMPLETION_NOT_UTF8_JSON",
+    "chat completion must be a JSON object": "CHAT_COMPLETION_NOT_OBJECT",
+    "chat completion model does not match frozen DNRD model": "MODEL_ID_MISMATCH",
+    "chat completion must contain exactly one object choice": "CHOICE_CARDINALITY",
+    "chat completion choice must finish with exact reason 'stop'": "FINISH_REASON_NOT_STOP",
+    "chat completion choice must contain textual message.content": "MESSAGE_CONTENT_NOT_TEXT",
+    "chat completion must contain one non-whitespace response token": "RESPONSE_TOKEN_INVALID",
+    "chat completion response token violates exact DNRD-2 form": "RESPONSE_TOKEN_FORM_INVALID",
+    "chat completion must contain object usage": "USAGE_NOT_OBJECT",
+    "usage.prompt_tokens must be a nonnegative integer": "USAGE_PROMPT_TOKENS_INVALID",
+    "usage.completion_tokens must be a nonnegative integer": "USAGE_COMPLETION_TOKENS_INVALID",
+    "usage.total_tokens must be a nonnegative integer": "USAGE_TOTAL_TOKENS_INVALID",
+    "usage.total_tokens must equal prompt_tokens + completion_tokens": "USAGE_ARITHMETIC_MISMATCH",
+}
 
 
 class LiveBoundaryError(RuntimeError):
@@ -46,6 +69,15 @@ class LiveBoundaryError(RuntimeError):
 
 class PreDispatchTransportError(PreDispatchAnswererError):
     """The transport can prove that it sent no HTTP request."""
+
+
+class _ObservedResponseBodyLimitError(LiveBoundaryError):
+    """A single HTTP exchange supplied the fixed retained oversize prefix."""
+
+    def __init__(self, *, http_status: int, retained_prefix: bytes) -> None:
+        super().__init__("chat completion response exceeds frozen 1 MiB byte limit")
+        self.http_status = http_status
+        self.retained_prefix = retained_prefix
 
 
 @dataclass(frozen=True)
@@ -91,10 +123,17 @@ class UrllibHttpTransport:
         self._max_response_bytes = max_response_bytes
         self._opener = urlrequest.build_opener(_NoRedirect())
 
-    def _read_bounded(self, stream: Any) -> bytes:
+    def _read_bounded(self, stream: Any, *, http_status: object) -> bytes:
         body = stream.read(self._max_response_bytes + 1)
-        if not isinstance(body, bytes) or len(body) > self._max_response_bytes:
+        if not isinstance(body, bytes):
             raise LiveBoundaryError("HTTP response exceeds frozen byte limit")
+        if len(body) > self._max_response_bytes:
+            if type(http_status) is not int:
+                raise LiveBoundaryError("HTTP response exceeds frozen byte limit")
+            raise _ObservedResponseBodyLimitError(
+                http_status=http_status,
+                retained_prefix=body,
+            )
         return body
 
     @staticmethod
@@ -132,9 +171,9 @@ class UrllibHttpTransport:
             # returns 30x as HTTPError rather than following it.
             with self._opener.open(request, timeout=float(timeout_seconds)) as response:
                 status = getattr(response, "status", None)
-                return HttpResponse(status=status, body=self._read_bounded(response))
+                return HttpResponse(status=status, body=self._read_bounded(response, http_status=status))
         except urlerror.HTTPError as error:
-            return HttpResponse(status=error.code, body=self._read_bounded(error))
+            return HttpResponse(status=error.code, body=self._read_bounded(error, http_status=error.code))
         except urlerror.URLError as error:
             if self._provably_pre_dispatch(error.reason):
                 raise PreDispatchTransportError("DNS/connect failure before HTTP dispatch") from error
@@ -214,7 +253,7 @@ def _request_identity_bytes(method: str, url: str, body: bytes | None) -> bytes:
 
 
 def _require_response(response: HttpResponse) -> HttpResponse:
-    if type(response.status) is not int or not isinstance(response.body, bytes):
+    if type(response) is not HttpResponse or type(response.status) is not int or not isinstance(response.body, bytes):
         raise LiveBoundaryError("transport did not return an exact HTTP observation")
     if response.status < 200 or response.status >= 300:
         raise LiveBoundaryError(f"HTTP response status {response.status}")
@@ -255,6 +294,8 @@ def _parse_completion(raw: bytes) -> ModelReply:
     response_token = message["content"].strip(ASCII_EDGE_WHITESPACE)
     if not response_token or any(char.isspace() for char in response_token):
         raise LiveBoundaryError("chat completion must contain one non-whitespace response token")
+    if not is_response_token(response_token):
+        raise LiveBoundaryError("chat completion response token violates exact DNRD-2 form")
     usage = value.get("usage")
     if type(usage) is not dict:
         raise LiveBoundaryError("chat completion must contain object usage")
@@ -275,6 +316,122 @@ def _parse_completion(raw: bytes) -> ModelReply:
             and type(item) is int
         },
     )
+
+
+def _failure_stage_code(error: LiveBoundaryError) -> str:
+    """Return a stable, non-secret label for one observed-response refusal."""
+    message = str(error)
+    for prefix, code in _RESPONSE_FAILURE_STAGE_CODES.items():
+        if message.startswith(prefix):
+            return code
+    # All _require_response and _parse_completion failure messages are covered
+    # above.  Keep a fixed final label should a future boundary check be added
+    # without a corresponding schema code; never encode exception internals.
+    return "UNMAPPED_FROZEN_RESPONSE_CONTRACT_REJECTED"
+
+
+def _rejected_completion_event(
+    *,
+    call_context: Mapping[str, Any],
+    endpoint: str,
+    request_body: bytes,
+    raw_response: bytes,
+    response: object,
+    elapsed_nanoseconds: int,
+    max_tokens: int,
+    error: LiveBoundaryError,
+) -> dict[str, Any]:
+    """Retain the exact bounded response body after a parser/HTTP refusal.
+
+    The production urllib transport already enforces its 1 MiB response cap.
+    This event serializes only the response body, never request headers or the
+    environment-supplied API key.
+    """
+    return {
+        "schema_version": EVENT_SCHEMA,
+        "event": "CHAT_COMPLETION_REJECTED",
+        **call_context,
+        "endpoint": endpoint,
+        "model": MODEL_ID,
+        "request_sha256": _sha_bytes(request_body),
+        "raw_response_sha256": _sha_bytes(raw_response),
+        "raw_response_encoding": REJECTED_RAW_ENCODING,
+        "raw_response_base64": base64.b64encode(raw_response).decode("ascii"),
+        "raw_response_bytes": len(raw_response),
+        "http_status": response.status if isinstance(response, HttpResponse) else None,
+        "chat_config": {**CHAT_CONFIG, "max_tokens": max_tokens},
+        "elapsed_nanoseconds": elapsed_nanoseconds,
+        "provider_cache_independence": "NOT_OBSERVABLE_BY_CLIENT",
+        "failure_stage_code": _failure_stage_code(error),
+        "failure_message": str(error),
+        "failure_message_sha256": _sha_bytes(str(error).encode("utf-8")),
+    }
+
+
+def _transport_response_rejected_event(
+    *,
+    call_context: Mapping[str, Any],
+    endpoint: str,
+    request_body: bytes,
+    elapsed_nanoseconds: int,
+    max_tokens: int,
+) -> dict[str, Any]:
+    """Describe a malformed transport return without inventing response bytes."""
+    failure_message = "transport did not return an exact HTTP observation"
+    return {
+        "schema_version": EVENT_SCHEMA,
+        "event": "TRANSPORT_RESPONSE_REJECTED",
+        **call_context,
+        "endpoint": endpoint,
+        "model": MODEL_ID,
+        "request_sha256": _sha_bytes(request_body),
+        "chat_config": {**CHAT_CONFIG, "max_tokens": max_tokens},
+        "elapsed_nanoseconds": elapsed_nanoseconds,
+        "provider_cache_independence": "NOT_OBSERVABLE_BY_CLIENT",
+        "failure_stage_code": "TRANSPORT_RESPONSE_NOT_EXACT_HTTP_RESPONSE",
+        "failure_message": failure_message,
+        "failure_message_sha256": _sha_bytes(failure_message.encode("utf-8")),
+    }
+
+
+def _oversize_response_rejected_event(
+    *,
+    call_context: Mapping[str, Any],
+    endpoint: str,
+    request_body: bytes,
+    retained_prefix: bytes,
+    http_status: int,
+    elapsed_nanoseconds: int,
+    max_tokens: int,
+) -> dict[str, Any]:
+    """Retain only the exact fixed prefix that proves an oversized response.
+
+    The prefix establishes a lower bound, not the full response's byte length
+    or digest.  Request headers and credentials never enter this event.
+    """
+    failure_message = "chat completion response exceeds frozen 1 MiB byte limit"
+    if len(retained_prefix) != MAX_ANSWERER_RESPONSE_BYTES + 1:
+        raise RuntimeError("oversize response prefix must be exactly 1 MiB + 1 byte")
+    return {
+        "schema_version": EVENT_SCHEMA,
+        "event": "CHAT_COMPLETION_REJECTED",
+        **call_context,
+        "endpoint": endpoint,
+        "model": MODEL_ID,
+        "request_sha256": _sha_bytes(request_body),
+        "retained_response_prefix_encoding": REJECTED_RAW_ENCODING,
+        "retained_response_prefix_base64": base64.b64encode(retained_prefix).decode("ascii"),
+        "retained_response_prefix_sha256": _sha_bytes(retained_prefix),
+        "retained_response_prefix_bytes": len(retained_prefix),
+        "response_body_bytes_lower_bound": len(retained_prefix),
+        "http_status": http_status,
+        "chat_config": {**CHAT_CONFIG, "max_tokens": max_tokens},
+        "elapsed_nanoseconds": elapsed_nanoseconds,
+        "provider_cache_independence": "NOT_OBSERVABLE_BY_CLIENT",
+        "failure_stage_code": "RESPONSE_BODY_EXCEEDS_1_MIB",
+        "failure_message": failure_message,
+        "failure_message_sha256": _sha_bytes(failure_message.encode("utf-8")),
+    }
 
 
 def _append(sink: EventSink | None, event: Mapping[str, Any]) -> None:
@@ -348,6 +505,19 @@ class OpenAICompatibleDnrdAnswerer:
             )
         except PreDispatchTransportError:
             raise
+        except _ObservedResponseBodyLimitError as error:
+            elapsed_ns = time.monotonic_ns() - started_ns
+            endpoint = f"{self.config.base_url}/v1/chat/completions"
+            _append(self._event_sink, _oversize_response_rejected_event(
+                call_context=call_context,
+                endpoint=endpoint,
+                request_body=body,
+                retained_prefix=error.retained_prefix,
+                http_status=error.http_status,
+                elapsed_nanoseconds=elapsed_ns,
+                max_tokens=request.max_output_tokens,
+            ))
+            raise LiveBoundaryError("chat completion response exceeds frozen 1 MiB byte limit") from error
         except Exception as error:
             # The transport did not prove no bytes left the process.  The runner
             # must conservatively treat this as a post-first-call interruption.
@@ -365,12 +535,43 @@ class OpenAICompatibleDnrdAnswerer:
             })
             raise LiveBoundaryError("model request outcome is ambiguous or post-dispatch") from error
         elapsed_ns = time.monotonic_ns() - started_ns
-        raw = response.body if isinstance(response, HttpResponse) else b""
+        endpoint = f"{self.config.base_url}/v1/chat/completions"
+        if type(response) is not HttpResponse:
+            _append(self._event_sink, _transport_response_rejected_event(
+                call_context=call_context,
+                endpoint=endpoint,
+                request_body=body,
+                elapsed_nanoseconds=elapsed_ns,
+                max_tokens=request.max_output_tokens,
+            ))
+            raise LiveBoundaryError("transport did not return an exact HTTP observation")
+        if type(response.status) is not int or type(response.body) is not bytes:
+            _append(self._event_sink, _transport_response_rejected_event(
+                call_context=call_context,
+                endpoint=endpoint,
+                request_body=body,
+                elapsed_nanoseconds=elapsed_ns,
+                max_tokens=request.max_output_tokens,
+            ))
+            raise LiveBoundaryError("transport did not return an exact HTTP observation")
+        raw = response.body
+        if len(raw) > MAX_ANSWERER_RESPONSE_BYTES:
+            retained_prefix = raw[:MAX_ANSWERER_RESPONSE_BYTES + 1]
+            _append(self._event_sink, _oversize_response_rejected_event(
+                call_context=call_context,
+                endpoint=endpoint,
+                request_body=body,
+                retained_prefix=retained_prefix,
+                http_status=response.status,
+                elapsed_nanoseconds=elapsed_ns,
+                max_tokens=request.max_output_tokens,
+            ))
+            raise LiveBoundaryError("chat completion response exceeds frozen 1 MiB byte limit")
         _append(self._event_sink, {
             "schema_version": EVENT_SCHEMA,
             "event": "CHAT_COMPLETION_OBSERVED",
             **call_context,
-            "endpoint": f"{self.config.base_url}/v1/chat/completions",
+            "endpoint": endpoint,
             "model": MODEL_ID,
             "request_sha256": _sha_bytes(body),
             "raw_response_sha256": _sha_bytes(raw),
@@ -379,13 +580,26 @@ class OpenAICompatibleDnrdAnswerer:
             "elapsed_nanoseconds": elapsed_ns,
             "provider_cache_independence": "NOT_OBSERVABLE_BY_CLIENT",
         })
-        checked = _require_response(response)
-        reply = _parse_completion(checked.body)
+        try:
+            checked = _require_response(response)
+            reply = _parse_completion(checked.body)
+        except LiveBoundaryError as error:
+            _append(self._event_sink, _rejected_completion_event(
+                call_context=call_context,
+                endpoint=endpoint,
+                request_body=body,
+                raw_response=raw,
+                response=response,
+                elapsed_nanoseconds=elapsed_ns,
+                max_tokens=request.max_output_tokens,
+                error=error,
+            ))
+            raise
         _append(self._event_sink, {
             "schema_version": EVENT_SCHEMA,
             "event": "CHAT_COMPLETION_ACCEPTED",
             **call_context,
-            "endpoint": f"{self.config.base_url}/v1/chat/completions",
+            "endpoint": endpoint,
             "model": MODEL_ID,
             "request_sha256": _sha_bytes(body),
             "raw_response_sha256": _sha_bytes(checked.body),

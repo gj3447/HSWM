@@ -103,6 +103,8 @@ def validate_data(data: dict[str, Any], repo_root: Path) -> None:
         ("deep_set_hypergraph_source_path", "deep_set_hypergraph_source_sha256"),
         ("occam_direction_source_path", "occam_direction_source_sha256"),
         ("occam_research_path", "occam_research_sha256"),
+        ("fractal_composition_source_path", "fractal_composition_source_sha256"),
+        ("fractal_composition_canon_path", "fractal_composition_canon_sha256"),
     )
     for path_key, hash_key in source_pairs:
         source_path = repo_root / data[path_key]
@@ -162,11 +164,12 @@ def _publish_transaction(tx: Any, data: dict[str, Any]) -> dict[str, int]:
         logical = row["properties"]
         authority_class = logical["authority_class"]
         if authority_class == "USER_PRIMARY":
-            authority_scope = "USER_UTTERANCE_2026_08_20"
+            default_authority_scope = "USER_UTTERANCE_2026_08_20"
         elif authority_class == "SECONDARY_AI":
-            authority_scope = "HSWM_ENGINEERING_FORMALIZATION_2026_08_20"
+            default_authority_scope = "HSWM_ENGINEERING_FORMALIZATION_2026_08_20"
         else:
-            authority_scope = "EXPLICIT_MIXED_BUNDLE_BOUNDARY"
+            default_authority_scope = "EXPLICIT_MIXED_BUNDLE_BOUNDARY"
+        authority_scope = logical.get("authority_scope", default_authority_scope)
         upper_uid = (
             "sym:KG_KNOW:informationentity"
             if {"SourceDocument", "ResearchArtifact"} & set(row["labels"])
@@ -220,10 +223,13 @@ def _publish_transaction(tx: Any, data: dict[str, Any]) -> dict[str, int]:
             to_eid=element_ids[relation["to_uid"]],
             bundle_uid=data["bundle_uid"],
             authority_class=relation["authority_class"],
-            scope=(
-                "USER_UTTERANCE_2026_08_20"
-                if relation["authority_class"] == "USER_PRIMARY"
-                else "HSWM_ENGINEERING_FORMALIZATION_2026_08_20"
+            scope=relation.get(
+                "scope",
+                (
+                    "USER_UTTERANCE_2026_08_20"
+                    if relation["authority_class"] == "USER_PRIMARY"
+                    else "HSWM_ENGINEERING_FORMALIZATION_2026_08_20"
+                ),
             ),
             status=relation["status"],
         ).consume()

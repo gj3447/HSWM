@@ -4,7 +4,8 @@
 > **권위:** `MIXED_EXPLICIT` — `USER_PRIMARY` target hard core를 보존한 통합 헌법과
 > `SECONDARY_AI` 해석·형식화
 > **권위 경계:** 한 문장 대상 정체성, living harness/world model/token-hypergraph 우선순위와
-> 인류보편체 목표, fixed `H/W/A/F` 폐기와 schema-relative single-owner 방향은 연결된
+> 인류보편체 목표, fractal cognitive composition의 이유, fixed `H/W/A/F` 폐기와
+> schema-relative single-owner 방향은 연결된
 > USER 원문에서 추적한다. atom·schema·owner 수식, 통시적 동일성·readout·권리 판별선은
 > `SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`이며 사용자 직접 발화로 소급하지 않는다.
 > **과학적 상태:** `UNJUDGED`
@@ -24,6 +25,9 @@
 - 최신 ownership supersession 원문:
   [`USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.txt`](sources/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.txt)
 - SHA-256: `2093d9bb68219d6ba859444dc00aeef985a5c9151163e56972516addb2cd0ec6`
+- 프랙탈 인지 합성 원문:
+  [`USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.txt`](sources/USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.txt)
+- SHA-256: `c453034f1d13c2bd7498a2e6b488a3bf07af74a3a7ee0f4d1ba7d4c74b2e685e`
 - 선행 정전: [`THE_WORLD_REMEMBERS.md`](THE_WORLD_REMEMBERS.md),
   [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md)
 
@@ -312,7 +316,24 @@ continuous learning이 아니라 정체성 파괴다.
 지속되는 canonical state, identity-bearing invariant, provenance, owner-valid revision과
 learning lineage에 있다.
 
-### 7.1 최대 목표 합성 — 인류보편체
+### 7.1 왜 프랙탈인가 — 인지적 합성 closure
+
+2026-08-28 USER_PRIMARY는 프랙탈의 이유를 단순한 graph nesting이 아니라 **LLM을 포함한
+인지능력체들이 붙어 작동하는 HSWM 전체가 하나의 scale-relative 거대한 인지능력체가 되고,
+그 전체가 다시 상위 HSWM의 cognitive cell로 참여하여 동일한 점화식 아래 더 큰 HSWM을
+이룰 수 있음**으로 확정했다. 이 cognitive closure는 개인·agent·조직·사회 규모로 반복될 수
+있는 HSWM-of-HSWMs의 target identity다.
+
+여기서 동일한 점화식은 scale마다 숫자 weight·LLM·clock·topology가 같다는 뜻이 아니다.
+schema-approved atom, 정확히 하나의 schema-relative responsibility owner, typed reference,
+provenance-bound `Step`, outcome-bound `Learn`, invariant·permission과 identity/learning
+lineage라는 **같은 전이 문법이 합성 결과에도 다시 적용된다**는 뜻이다. 상위 HSWM은 부분의
+주소성·차이·provenance를 지우지 않는다. 구조적 type closure와 이 인지적 이유의 구분,
+여덟 scale-crossing 법칙과 비주장은
+[`USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md`](USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md)에
+둔다. 이것은 목표 정체성이며 무한 scale invariance·의식·효능의 증명이 아니다.
+
+### 7.2 최대 목표 합성 — 인류보편체
 
 2026-08-20 USER_PRIMARY는 HSWM의 최대 목표 합성을 **인류보편체**로 명명했다. 이는
 전 인류·모든 LLM·인터넷·작동 중인 인지능력체·센서·static 정보와 저장 메모리가 공개된
@@ -324,7 +345,7 @@ HSWM 구조로 하나가 되어 하나의 인지능력체를 이루는 상태다
 [`USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md`](USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md)에
 둔다. 이는 목표 정체성의 확장이며 현재 구현·효능·의식 융합의 완료 주장이 아니다.
 
-### 7.2 코드 이전의 철학층
+### 7.3 코드 이전의 철학층
 
 후속 USER_PRIMARY는 HSWM 구현을 코드부터 밀어붙이지 말고 철학적 함의를 먼저 설정하라고
 지시했다. 관계적 존재론, 계보적 시간론, 기억과 진리의 분리, 차이 보존적 통일, 인과적

@@ -458,6 +458,11 @@ outbox, replay와 일부 좁은 실험 기반이다. 다음은 완료 주장할 
 
 ### USER_PRIMARY 직접 원천
 
+- 2026-08-28 HSWM이 프랙탈인 인지적 이유, 동일 점화식의 HSWM-of-HSWMs 방향과 여덟
+  scale-crossing 연구 법칙
+  - [`USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.txt`](sources/USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.txt)
+  - SHA-256: `c453034f1d13c2bd7498a2e6b488a3bf07af74a3a7ee0f4d1ba7d4c74b2e685e`
+  - canonical formalization: [`USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md`](USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md)
 - 2026-08-26 fixed `H/W/A/F` 폐기와 schema-approved canonical atom의
   schema-relative single-owner 방향
   - [`USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.txt`](sources/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.txt)

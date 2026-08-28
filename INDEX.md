@@ -207,6 +207,16 @@ engineering contract이며 현재 효능·과학적 유일성 주장이 아니�
 [`upsert_human_universal_body_ontology.py`](scripts/upsert_human_universal_body_ontology.py)다.
 그 v1 bundle의 fixed-role 부분은 hash-bound 역사 자료이며 현행 ownership 정본이 아니다.
 
+2026-08-28 사용자는 HSWM이 왜 프랙탈인지도 정본으로 확정했다. LLM을 포함한 인지능력체가
+결속된 HSWM 전체가 하나의 scale-relative 거대한 인지능력체로 작동하고, 그 전체가 다시
+상위 HSWM의 cognitive cell이 되어 같은 schema-level 점화·전이·outcome-learning 법칙으로
+더 큰 HSWM을 이룰 수 있기 때문이다. 국소 인과학습, 합성 보존, 창발 coalition,
+다중규모 credit, 형태발생, 세계·자기 공동모델, 장기 연속성과 HSWM-of-HSWMs라는 여덟
+법칙, 선행이론 지도, 권위 경계와 비주장은
+[`USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md`](docs/canon/USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md)에
+있다. 이는 `USER_PRIMARY` 목표 정체성과 `SECONDARY_AI` 반증 계약이며 현재 효능·의식·무한
+scale invariance의 증명이 아니다.
+
 같은 날 사용자는 코드 구현보다 HSWM의 철학적 함의를 먼저 설정하라고 지시했다. 관계적
 존재론, 계보적 시간론, 기억–진리 분리, 오류의 생산성, 차이 보존적 통일, 인과적 행위성,
 참여와 존엄, 공개 외부·보호 내부, 인지주권·보충성과 열린 목적론을 구현 제약으로 내린

@@ -44,6 +44,7 @@ and migration gates are documented in
 The target identity is fixed by the
 [`HSWM Constitution`](docs/canon/HSWM_CONSTITUTION_2026-08-20.md), the
 [`schema-relative single-owner canon`](docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md),
+the [`fractal cognitive composition canon`](docs/canon/USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md),
 and the earlier [USER_PRIMARY deep Set-Hypergraph clarification](docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt).
 The later canon preserves the Constitution's one-system token-native target and
 supersedes only its former fixed-role decomposition and owner registry.
@@ -52,6 +53,18 @@ primary and that HSWM is deep like a neural network. The operator equations,
 depth axes, learning rules, and implementation decomposition below are explicit
 `SECONDARY_AI` formalizations of that direction. Target identity is not present
 capability; the scientific status remains `UNJUDGED`.
+
+**Why fractal:** an HSWM that binds LLMs and other cognitive entities is meant
+to operate as one scale-relative larger cognitive entity. That whole can then
+participate as an addressable cognitive cell in a still larger HSWM under the
+same schema-level ignition, transition, outcome-learning, invariant, and
+lineage grammar. This is operational cognitive closure under composition—not a
+claim of literal geometric scale invariance, infinite scaling, consciousness,
+or current implementation. The eight required falsification axes are local
+causal learning, composition preservation, emergent coalition, multiscale
+credit, topology morphogenesis, joint world/self modeling, diachronic
+continuity, and HSWM-of-HSWMs transfer across personal, agent, organizational,
+and social scales.
 
 ## HSWM at a glance
 

@@ -5,6 +5,13 @@
 > **HSWM_LOCAL_RECORD**: `HSWM_LOCAL_RECORD`
 > **claim boundary**: 이 문서는 구조 계약이다. 과학적 `progressive` 판정을 주장하지 않는다.
 
+> **2026-08-28 인지적 closure 보강:** 이 문서의 open-type closure는 유지된다. 다만 HSWM이
+> 왜 프랙탈인지에 대한 최신 USER_PRIMARY 이유는 단순한 구조 재귀가 아니라, 인지능력체를
+> 결속한 HSWM 전체가 다시 하나의 scale-relative 인지 cell이 되어 같은 점화·전이·학습
+> 문법으로 상위 HSWM을 이룬다는 것이다. 정본 권위 경계와 여덟 법칙은
+> [`USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md`](USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md)를
+> 따른다.
+
 ## 0. 권위가 섞이지 않게 먼저 분리한다
 
 ### CANONICAL_USER — 원문

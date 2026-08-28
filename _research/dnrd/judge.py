@@ -1847,6 +1847,7 @@ def _validate_preregistration_runtime_binding(
             "bridge_config_sha256", "scorer_implementation_sha256", "node_executable_sha256",
             "node_version", "python_executable_sha256", "python_version", "unicode_data_version",
             "verifier_helper_sha256", "verifier_package_lock_sha256", "verifier_runtime_bundle_sha256",
+            "structured_output_qualification_sha256",
             "subprocess_environment",
         },
         "preregistration.runtime_bindings",
@@ -1858,7 +1859,7 @@ def _validate_preregistration_runtime_binding(
     )
     config_keys = (
         "model_endpoint", "verifier_helper_sha256", "verifier_package_lock_sha256",
-        "verifier_runtime_bundle_sha256",
+        "verifier_runtime_bundle_sha256", "structured_output_qualification_sha256",
     )
     for key in runtime_keys:
         if binding[key] != runtime.get(key):

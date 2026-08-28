@@ -257,6 +257,7 @@ def _runtime_binding_fixture() -> tuple[dict[str, object], dict[str, object], di
         "verifier_runtime_bundle_sha256": (
             judge.OFFICIAL_DRAND_CLIENT_RUNTIME_BUNDLE_SHA256
         ),
+        "structured_output_qualification_sha256": _sha("qualification"),
     }
     binding = {
         "model_endpoint": config["model_endpoint"],
@@ -272,6 +273,9 @@ def _runtime_binding_fixture() -> tuple[dict[str, object], dict[str, object], di
         "verifier_helper_sha256": config["verifier_helper_sha256"],
         "verifier_package_lock_sha256": config["verifier_package_lock_sha256"],
         "verifier_runtime_bundle_sha256": config["verifier_runtime_bundle_sha256"],
+        "structured_output_qualification_sha256": config[
+            "structured_output_qualification_sha256"
+        ],
         "subprocess_environment": runtime["subprocess_environment"],
     }
     return {"runtime_bindings": binding}, runtime, config
@@ -285,7 +289,8 @@ def _runtime_binding_fixture() -> tuple[dict[str, object], dict[str, object], di
         "scorer_implementation_sha256", "node_executable_sha256", "node_version",
         "python_executable_sha256", "python_version", "unicode_data_version",
         "verifier_helper_sha256", "verifier_package_lock_sha256",
-        "verifier_runtime_bundle_sha256", "subprocess_environment",
+        "verifier_runtime_bundle_sha256", "structured_output_qualification_sha256",
+        "subprocess_environment",
     ],
 )
 def test_independent_judge_refuses_every_drifted_preregistration_runtime_binding(

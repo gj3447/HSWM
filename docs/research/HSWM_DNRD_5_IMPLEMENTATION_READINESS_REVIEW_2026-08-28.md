@@ -162,11 +162,15 @@ The checked-in candidate slice now contains:
     `hswm-canonical-json/v1`.  Two independently implemented Python codecs and
     one independently implemented TypeScript codec consume one content-addressed
     adversarial KAT over the exact restricted key/value and byte domain.  The
-    two Python paths additionally rederive and compare two complete 300-block,
-    2,700-slot plans.  TypeScript currently qualifies only the shared codec; it
-    does not independently rederive the allocation algorithm or either full
-    plan known answer.  This narrows one serialization seam but is not Source-A
-    qualification, occurrence evidence, or an efficacy observation.
+    two Python paths rederive and compare two complete 300-block, 2,700-slot
+    plans.  A third, independently implemented TypeScript randomization path now
+    also rederives both full plans byte-for-byte, including raw byte length,
+    blob SHA-256, and root plan SHA-256, without importing Python or process
+    execution.  This closes the design-instrument cross-language allocation
+    rederivation seam.  It does not bind the selected Source-A source/tree,
+    build output, semantic import graph, or actual-byte evidence schema and is
+    not source-freeze qualification, occurrence evidence, efficacy evidence, or
+    a scientific result.
 
 The focused Python and TypeScript checks pass.  Those checks establish that
 the declared contracts reject their tested mutations.  They are not efficacy
@@ -264,13 +268,13 @@ before Source A can be frozen:
     strict re-encoding, and explicit byte/depth/node limits are covered by a
     shared content-addressed KAT in two Python implementations and one
     TypeScript implementation.  Two complete plan known answers are rederived
-    by the independent Python producer/consumer algorithms.  This remains a
-    codec-level qualification, not a full cross-language randomization
-    qualification.  Before Source A, an independent TypeScript randomization
-    rederiver and semantic plan validator must reproduce both 300-block,
-    2,700-slot vectors and their raw-byte, blob-SHA, and root-plan-SHA values;
-    production build/import closure and evidence-schema binding must also pin
-    the selected codec and KAT.  Source A remains forbidden until those checks
+    by the independent Python producer/consumer algorithms and by the
+    independent TypeScript randomization rederiver and exact semantic validator;
+    all three agree on both 300-block, 2,700-slot vectors and their raw-byte,
+    blob-SHA, and root-plan-SHA values.  The remaining blocker is production
+    binding: Source A must pin and independently recheck the selected source
+    trees, TypeScript build output, semantic import graph, shared KAT, and
+    actual-byte evidence schema.  Source A remains forbidden until that closure
     and the other blockers above close.
 
 ## Operational decision

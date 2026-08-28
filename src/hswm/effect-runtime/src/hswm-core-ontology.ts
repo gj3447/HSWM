@@ -43,7 +43,7 @@ const EXPECTED_ROLES = [
 const EXPECTED_BUNDLE_UID = "hswm:ontology:core-responsibility:v1" as const
 const EXPECTED_ROOT_UID = "hswm:concept:core-state" as const
 const EXPECTED_CANONICAL_CONTENT_SHA256 =
-  "c5f11257cd6b17a6c3055dcad772ddcd41149a3779370565728e74ec7d4fc6f2" as const
+  "e1f8873de6910843b608c4636c24befd62f44d3a3ef985f8ab5ad27fc664268b" as const
 
 const EXPECTED_INVARIANTS = [
   ["hswm:invariant:owner-total", "OWNER_TOTAL"],
@@ -363,7 +363,7 @@ const EXPECTED_PROJECTIONS = [
 const EXTERNAL_ANCHOR_BUNDLE =
   "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_ONTOLOGY.v1.json" as const
 const EXTERNAL_ANCHOR_BUNDLE_SHA256 =
-  "4b7bd2574491c0c6f17f00226db53811311e993e6f995b6e3e076e8f1d457238" as const
+  "e4fcd304ec8b5a9b6dc4aef271622690b9e6a8d55c7aee987b3ef72c7b6c8895" as const
 
 const EXPECTED_EXTERNAL_ANCHORS = [
   [

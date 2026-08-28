@@ -76,6 +76,35 @@ from _research.dnrd.runner import (
 from test_hswm_dnrd_runner import EvidenceAnswerer, RecordingBridge, RecordingScorer
 
 
+@pytest.fixture(autouse=True)
+def _bind_hermetic_fixture_python_runtime(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Keep synthetic DNRD fixtures interpreter-consistent on CI.
+
+    The fixture intentionally executes with ``sys.executable`` rather than
+    the separately pinned live scorer runtime.  These tests exercise injected
+    evidence plumbing, so bind only their Python/Unicode identity constants to
+    the active test interpreter; production's 3.12.13 pin remains in source.
+    """
+    executable = Path(sys.executable).resolve()
+    monkeypatch.setattr(
+        dnrd_execute,
+        "OFFICIAL_PYTHON_EXECUTABLE_SHA256",
+        hashlib.sha256(executable.read_bytes()).hexdigest(),
+    )
+    monkeypatch.setattr(
+        dnrd_execute,
+        "OFFICIAL_PYTHON_VERSION",
+        f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+    )
+    monkeypatch.setattr(
+        dnrd_execute,
+        "OFFICIAL_UNICODE_DATA_VERSION",
+        unicodedata.unidata_version,
+    )
+
+
 def _hash(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 

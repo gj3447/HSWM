@@ -39,7 +39,9 @@ class RecordingTransport:
         return HttpResponse(200, raw)
 
 
-def test_three_disjoint_pretty_and_compact_calls_emit_exact_round_trip(tmp_path: Path) -> None:
+def test_three_disjoint_pretty_and_compact_calls_emit_exact_round_trip(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     output = tmp_path / "qualification.json"
     transport = RecordingTransport(pretty_ordinals={1, 3})
 
@@ -70,6 +72,19 @@ def test_three_disjoint_pretty_and_compact_calls_emit_exact_round_trip(tmp_path:
     assert len(tokens) == 6
     assert [source_file["path"] for source_file in result["source_files"]] == list(
         dnrd_execute.QUALIFICATION_SOURCE_PATHS
+    )
+    # This is a hermetic receipt round-trip test, not a production-runtime
+    # preflight.  Bind its synthetic "official" identity to the interpreter
+    # that produced the fixture so the test remains valid on CI's CPython 3.11;
+    # production constants remain the fixed 3.12.13 / Unicode 15.0.0 pins.
+    monkeypatch.setattr(
+        dnrd_execute,
+        "OFFICIAL_PYTHON_EXECUTABLE_SHA256",
+        result["python_executable_sha256"],
+    )
+    monkeypatch.setattr(dnrd_execute, "OFFICIAL_PYTHON_VERSION", result["python_version"])
+    monkeypatch.setattr(
+        dnrd_execute, "OFFICIAL_UNICODE_DATA_VERSION", result["unicode_data_version"]
     )
     # The executor accepts the same exact canonical receipt that was written.
     loaded, loaded_raw, loaded_tokens = dnrd_execute._load_structured_output_qualification(

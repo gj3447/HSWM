@@ -30,6 +30,29 @@ _FIXTURES = importlib.util.module_from_spec(_SPEC)
 _SPEC.loader.exec_module(_FIXTURES)
 
 
+@pytest.fixture(autouse=True)
+def _bind_hermetic_fixture_python_runtime(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Match the imported execute fixture's Python identity to CI's runtime."""
+    executable = _FIXTURES.Path(_FIXTURES.sys.executable).resolve()
+    monkeypatch.setattr(
+        _FIXTURES.dnrd_execute,
+        "OFFICIAL_PYTHON_EXECUTABLE_SHA256",
+        _FIXTURES.hashlib.sha256(executable.read_bytes()).hexdigest(),
+    )
+    monkeypatch.setattr(
+        _FIXTURES.dnrd_execute,
+        "OFFICIAL_PYTHON_VERSION",
+        f"{_FIXTURES.sys.version_info.major}.{_FIXTURES.sys.version_info.minor}.{_FIXTURES.sys.version_info.micro}",
+    )
+    monkeypatch.setattr(
+        _FIXTURES.dnrd_execute,
+        "OFFICIAL_UNICODE_DATA_VERSION",
+        _FIXTURES.unicodedata.unidata_version,
+    )
+
+
 def _regular_runtime_files(root: Path) -> dict[str, Path]:
     files: dict[str, Path] = {}
     for path in root.rglob("*"):
@@ -153,6 +176,7 @@ def test_rehearsal_execute_to_judge_preserves_production_shape_but_not_authority
             "production hash-bound adapter boundary",
             "exact frozen dnrd source closure",
             "runtime identities differ from source-a protocol constants",
+            "structured-output qualification python/unicode runtime identities",
         )
     )
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pure, strict adjudicator for the DNRD-2 diagnostic candidate.
+"""Pure, strict adjudicator for the DNRD-3 diagnostic candidate.
 
 This file intentionally imports only the Python standard library.  It judges
 the candidate artifact, never a live runtime: a passing judgment is an
@@ -22,27 +22,29 @@ from urllib.parse import urlsplit
 from uuid import UUID
 
 
-CANDIDATE_SCHEMA = "hswm-dnrd-candidate/v1"
-INCONCLUSIVE_SCHEMA = "hswm-dnrd-inconclusive-occurrence/v1"
+CANDIDATE_SCHEMA = "hswm-dnrd-candidate/v2"
+INCONCLUSIVE_SCHEMA = "hswm-dnrd-inconclusive-occurrence/v2"
 JUDGMENT_SCHEMA = "hswm-dnrd-judgment/v2"
-EXPERIMENT_ID = "HSWM-DNRD-2"
+EXPERIMENT_ID = "HSWM-DNRD-3"
 ARMS = (
     "FULL",
     "NO_MEMORY_ROLLBACK",
-    "RAW_EQUAL_BUDGET",
     "BINDING_DERANGED_NUMERIC_PLACEBO",
 )
 MOUNT_ROLES = {
     "FULL": "FULL_TRAINABLE",
     "NO_MEMORY_ROLLBACK": "W0_ROLLBACK",
-    "RAW_EQUAL_BUDGET": "RAW_CONTROL",
     "BINDING_DERANGED_NUMERIC_PLACEBO": "DERANGED_CONTROL",
 }
+# RAW_EQUAL_BUDGET is retained only as the fixed-rule replay gate's durable
+# mount label.  It is deliberately excluded from the scientific arm set.
+CLOSURE_ARMS = (*ARMS, "RAW_EQUAL_BUDGET")
+CLOSURE_MOUNT_ROLES = {**MOUNT_ROLES, "RAW_EQUAL_BUDGET": "RAW_CONTROL"}
 HEX64 = frozenset("0123456789abcdef")
-RUNNER_EVENT_SCHEMA = "hswm-dnrd-runner-event/v1"
-LIVE_EVENT_SCHEMA = "hswm-dnrd-live-model-event/v2"
-PUBLIC_MANIFEST_SCHEMA = "hswm-dnrd-public-manifest/v1"
-PULSE_BINDING_SCHEMA = "hswm-dnrd-pulse-binding/v2"
+RUNNER_EVENT_SCHEMA = "hswm-dnrd-runner-event/v2"
+LIVE_EVENT_SCHEMA = "hswm-dnrd-live-model-event/v3"
+PUBLIC_MANIFEST_SCHEMA = "hswm-dnrd-public-manifest/v2"
+PULSE_BINDING_SCHEMA = "hswm-dnrd-pulse-binding/v3"
 RUNTIME_RECEIPT_SCHEMA = "hswm-dnrd-runtime-receipt/v3"
 EXECUTION_CLOSURE_ISOLATION_CLAIM = (
     "OWNER_READ_EXECUTE_ONLY_COPIED_CLOSURES_PER_INVOCATION_ENTRYPOINT_REHASHED_"
@@ -116,16 +118,16 @@ SCORER_ROLE_SEPARATION = "DECLARED_ROLE_SEPARATION_NOT_PROVEN"
 TRACE_STATUS = "SEALED_PRE_OUTCOME_LOCAL_EXPERIMENTAL_NOT_CANONICAL_PERMIT_NOT_ADMISSION_NOT_LEARNING"
 PROVIDER_CACHE_UNOBSERVABLE = "NOT_OBSERVABLE_BY_CLIENT"
 MAX_OUTPUT_TOKENS = 64
-TOKENIZER_PREFLIGHT_PROMPT = "token-ffffffffffffffffffff"
+TOKENIZER_PREFLIGHT_PROMPT = '{"response_token":"token-ffffffffffffffffffff"}'
 TRAINING_CANARY_PREFIX = "dnrd-training-provenance:"
-PREREGISTRATION_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v2"
+PREREGISTRATION_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v3"
 PREREG_CLAIM_BOUNDARY_SHA256 = (
-    "13156c5d62170beed3dfe45d5432e9398771f790a2495cc5bd9d5f922ba6cb94"
+    "41ee5b08699b6c1174e2fb58c9d5459f7208058ad181f3a1fb6e11a20ea839c1"
 )
-RATIFICATION_TEMPLATE_VERSION = "hswm-dnrd-ratification-statement/v2"
+RATIFICATION_TEMPLATE_VERSION = "hswm-dnrd-ratification-statement/v3"
 RATIFICATION_TEMPLATE = (
-    "I ratify HSWM-DNRD-2 preregistration SHA-256 {preregistration_sha256} "
-    "under hswm-dnrd-ratification-statement/v2."
+    "I ratify HSWM-DNRD-3 preregistration SHA-256 {preregistration_sha256} "
+    "under hswm-dnrd-ratification-statement/v3."
 )
 QUICKNET_CHAIN = {
     "beacon_id": "quicknet",
@@ -154,6 +156,7 @@ FROZEN_DNRD_SOURCE_CLOSURE = frozenset(
         "_research/dnrd/judge.py",
         "tests/test_hswm_dnrd_execute.py",
         "tests/test_hswm_dnrd_judge.py",
+        "tests/test_hswm_dnrd_integration.py",
         "tests/test_hswm_dnrd_live.py",
         "tests/test_hswm_dnrd_runner.py",
         "tests/test_hswm_dnrd_seed.py",
@@ -190,7 +193,7 @@ FROZEN_DNRD_SOURCE_CLOSURE = frozenset(
         "tools/swm0w_drand/package-lock.json",
         "tools/swm0w_drand/fixtures/quicknet-round-1000.json",
         "_research/dnrd/verify-beacon.mjs",
-        "docs/research/HSWM_DNRD_2_SOURCE_A_SCIENTIFIC_BOUNDARY_2026-08-27.md",
+        "docs/research/HSWM_DNRD_3_SOURCE_A_SCIENTIFIC_BOUNDARY_2026-08-28.md",
     }
 )
 
@@ -199,7 +202,7 @@ FROZEN_DNRD_SOURCE_CLOSURE = frozenset(
 # imports or executes the runtime it is evaluating.
 MOUNT_CLOSURE_SCHEMA = "hswm-dnrd-bridge-mount-closure/v1"
 MOUNT_CLOSURE_LAYOUT = "hswm-dnrd-ts-file-adapter-mount-closure/v1"
-MOUNT_CLOSURE_PLAN_SCHEMA = "hswm-dnrd-bridge-mount-closure-plan/v1"
+MOUNT_CLOSURE_PLAN_SCHEMA = "hswm-dnrd-bridge-mount-closure-plan/v2"
 PROCESS_ROOT_CONFIG_SCHEMA = "hswm-dnrd-routing-diagnostic-process-root-config/v1"
 STREAM_RESERVATION_SCHEMA = "hswm-dnrd-routing-diagnostic-stream-reservation/v1"
 CONTROL_RESERVATION_SCHEMA = "hswm-dnrd-routing-diagnostic-control-reservation/v1"
@@ -262,9 +265,11 @@ BUNDLE_COMMON_REQUIRED_FILES = frozenset(
         "source_manifest.json",
         "preregistration.json",
         "source_ci_receipt.json",
+        "structured_output_qualification.json",
         "ratification_receipt.json",
         "runtime_receipt.json",
         "attempt_lock_receipt.json",
+        "terminal-intent.json",
         "config_readback.json",
         "git_chronology_evidence.json",
         "private/private_manifest.json",
@@ -389,11 +394,11 @@ def _route_only(value: object, where: str) -> tuple[str, str]:
 
 
 def _arm_observation(value: object, where: str) -> tuple[str, str, int]:
-    data = _keys(value, {"selected_route_id", "route_digest_sha256", "utility"}, where)
+    data = _keys(value, {"selected_route_id", "route_digest_sha256", "route_reward_micros"}, where)
     return (
         _string(data["selected_route_id"], f"{where}.selected_route_id"),
         _sha(data["route_digest_sha256"], f"{where}.route_digest_sha256"),
-        _reward(data["utility"], f"{where}.utility"),
+        _reward(data["route_reward_micros"], f"{where}.route_reward_micros"),
     )
 
 
@@ -488,9 +493,11 @@ def _validate_parity(value: object) -> None:
         "equal_generation_limits_input_token_parity_not_claimed",
         "equal_candidate_evidence_universe",
         "all_active_payloads_within_byte_ceiling",
-        "full_raw_numeric_payload_bytes_equal",
+        "full_fixed_rule_replay_numeric_payload_bytes_equal",
         "full_deranged_numeric_payload_byte_count_equal",
         "arm_labels_hidden_from_model",
+        "pre_dispatch_readout_bound_before_model_response",
+        "scorer_outcome_response_independent",
         "fresh_process_recovery_observed",
         "distinct_arm_mount_ids",
         "evaluation_read_only_wrt_routing_observed",
@@ -538,12 +545,12 @@ def _validate_call_ledger(value: object) -> None:
             "VOID_PROTOCOL",
             "completed candidate cannot report an operational failure; use the separate inconclusive occurrence",
         )
-    expected = (32, 128, 160, 160)
+    expected = (32, 96, 128, 128)
     if (training, evaluation, dispatched, logical) != expected:
         raise DiagnosticFailure(
             "VOID_PROTOCOL",
-            "completed call ledger must retain 32 training + 128 evaluation = "
-            "160 client-dispatched generation requests",
+            "completed call ledger must retain 32 training + 96 evaluation = "
+            "128 client-dispatched generation requests",
         )
 
 
@@ -556,6 +563,7 @@ def _validate_stream(value: object, index: int) -> tuple[dict[str, object], bool
             "w0",
             "w1",
             "clean_process_recovery",
+            "fixed_rule_replay",
             "local_v2_linkage",
             "derangement",
             "w0_replay_mismatch_probe_ids",
@@ -663,10 +671,9 @@ def _validate_stream(value: object, index: int) -> tuple[dict[str, object], bool
     if type(probes) is not list or len(probes) != 8:
         raise JudgeRefusal(f"{where}.probes must contain exactly eight probes")
     seen_probe_ids: set[str] = set()
-    positive_w0_rewards = 0
-    full_changed_from_w0 = False
-    full_changed_from_deranged = False
-    utility_by_arm = {arm: [] for arm in ARMS}
+    positive_counts = {arm: 0 for arm in ARMS}
+    full_w0_differences = 0
+    full_deranged_differences = 0
     for probe_index, probe in enumerate(probes):
         probe_where = f"{where}.probes[{probe_index}]"
         entry = _keys(
@@ -682,20 +689,11 @@ def _validate_stream(value: object, index: int) -> tuple[dict[str, object], bool
         observations = {
             arm: _arm_observation(arms[arm], f"{probe_where}.arms.{arm}") for arm in ARMS
         }
-        w0_route, w0_digest, w0_utility = observations["NO_MEMORY_ROLLBACK"]
-        positive_w0_rewards += int(w0_utility > 0)
+        w0_route, w0_digest, _ = observations["NO_MEMORY_ROLLBACK"]
         full_route, full_digest, _ = observations["FULL"]
-        raw_route, raw_digest, _ = observations["RAW_EQUAL_BUDGET"]
         deranged_route, deranged_digest, _ = observations["BINDING_DERANGED_NUMERIC_PLACEBO"]
-        # A digest-only perturbation is not behavioral actuation.  The GO gate
-        # requires a selected route identity change under the frozen tie-break.
-        full_changed_from_w0 |= full_route != w0_route
-        full_changed_from_deranged |= full_route != deranged_route
-        if (full_route, full_digest) != (raw_route, raw_digest):
-            raise DiagnosticFailure(
-                "DIAGNOSTIC_NO_GO",
-                f"{probe_where} FULL and RAW_EQUAL_BUDGET route observations diverge",
-            )
+        full_w0_differences += int(full_route != w0_route)
+        full_deranged_differences += int(full_route != deranged_route)
         rollback = _route_only(entry["rollback"], f"{probe_where}.rollback")
         restore = _route_only(entry["restore"], f"{probe_where}.restore")
         if rollback != (w0_route, w0_digest):
@@ -708,27 +706,22 @@ def _validate_stream(value: object, index: int) -> tuple[dict[str, object], bool
                 "DIAGNOSTIC_NO_GO",
                 f"{probe_where} FULL-mount route observation does not match the retained FULL baseline",
             )
-        for arm, (_, _, utility) in observations.items():
-            utility_by_arm[arm].append(utility)
-    if not 3 <= positive_w0_rewards <= 5:
-        return {
-            "stream_id": stream_id,
-            "headroom_positive_w0_rewards": positive_w0_rewards,
-            "full_changed_from_w0": full_changed_from_w0,
-            "full_changed_from_deranged": full_changed_from_deranged,
-            "utility_by_arm": utility_by_arm,
-        }, False
-    return {
+        for arm, (_, _, reward) in observations.items():
+            positive_counts[arm] += int(reward > 0)
+    summary = {
         "stream_id": stream_id,
-        "headroom_positive_w0_rewards": positive_w0_rewards,
-        "full_changed_from_w0": full_changed_from_w0,
-        "full_changed_from_deranged": full_changed_from_deranged,
-        "utility_by_arm": utility_by_arm,
-    }, full_changed_from_w0 and full_changed_from_deranged
-
-
-def _mean(values: list[float]) -> float:
-    return sum(values) / len(values)
+        "positive_route_reward_counts": positive_counts,
+        "full_vs_w0_selected_route_differences": full_w0_differences,
+        "full_vs_deranged_selected_route_differences": full_deranged_differences,
+    }
+    passes = (
+        positive_counts["FULL"] == 8
+        and positive_counts["NO_MEMORY_ROLLBACK"] == 4
+        and positive_counts["BINDING_DERANGED_NUMERIC_PLACEBO"] <= 4
+        and full_w0_differences == 4
+        and full_deranged_differences >= 4
+    )
+    return summary, passes
 
 
 def _judgment(
@@ -751,13 +744,13 @@ def _judgment(
         "canonical_permit": "NOT_ESTABLISHED",
         "learning_claim": "NOT_ESTABLISHED",
         "claim_boundary": (
-            "Declared process separation diagnostic only; utility directions are reported without "
+            "Declared process separation diagnostic only; response-independent route-reward "
+            "counts are reported without "
             "an efficacy, Permit, or learning claim. Scorer role separation is declared only "
             "as DECLARED_ROLE_SEPARATION_NOT_PROVEN; no stronger scorer-role property is "
             "established. Model-serving identity/determinism is not proven."
         ),
         "stream_route_checks": stream_route_checks or [],
-        "utility_report": utility_report or [],
     }
     if failure_reason is not None:
         result["failure_reason"] = failure_reason
@@ -818,29 +811,18 @@ def judge(candidate: Mapping[str, Any]) -> dict[str, Any]:
         terminal = "DIAGNOSTIC_INTEGRITY_GO_NO_UTILITY_CLAIM"
     else:
         terminal = "DIAGNOSTIC_NO_GO"
-    utility_report = [
-        {
-            "stream_id": summary["stream_id"],
-            "means": {
-                arm: _mean(summary["utility_by_arm"][arm])  # type: ignore[index]
-                for arm in ARMS
-            },
-        }
-        for summary in summaries
-    ]
     return _judgment(
         candidate,
         terminal=terminal,
         stream_route_checks=[
             {
                 "stream_id": item["stream_id"],
-                "headroom_positive_w0_rewards": item["headroom_positive_w0_rewards"],
-                "full_changed_from_w0": item["full_changed_from_w0"],
-                "full_changed_from_deranged": item["full_changed_from_deranged"],
+                "positive_route_reward_counts": item["positive_route_reward_counts"],
+                "full_vs_w0_selected_route_differences": item["full_vs_w0_selected_route_differences"],
+                "full_vs_deranged_selected_route_differences": item["full_vs_deranged_selected_route_differences"],
             }
             for item in summaries
         ],
-        utility_report=utility_report,
     )
 
 
@@ -961,6 +943,99 @@ def _bundle_jsonl(root: Path, relative: str, *, allow_empty: bool = False) -> tu
     return rows, raw
 
 
+def _structured_output_qualification(
+    raw: bytes, *, config: Mapping[str, Any], public: Mapping[str, Any], private: Mapping[str, Any]
+) -> Mapping[str, Any]:
+    """Verify the non-scientific structured-output qualification byte-for-byte."""
+    if not raw.endswith(b"\n") or raw.count(b"\n") != 1:
+        raise BundleRefusal("structured-output qualification must be one canonical JSON object followed by exactly one LF")
+    value = _parse_json_bytes(raw[:-1], "structured-output qualification", canonical=True)
+    required = {
+        "schema_version", "domain", "event_schema", "experiment_occurrence",
+        "future_seed_material_used", "record_role", "raw_full_stdout_record_persisted",
+        "retry_count", "max_output_tokens", "model_endpoint", "served_model_id",
+        "vllm_version", "provider_cache_independence", "calls", "started_at_unix_ns",
+        "ended_at_unix_ns", "live_source_sha256", "runner_source_sha256",
+    }
+    data = _check_exact_keys(value, required, "structured-output qualification")
+    if (
+        data["schema_version"] != "hswm-dnrd3-structured-output-qualification-summary/v1"
+        or data["domain"] != "HSWM-DNRD3-STRUCTURED-OUTPUT-QUALIFICATION-v1"
+        or data["event_schema"] != LIVE_EVENT_SCHEMA
+        or data["experiment_occurrence"] is not False
+        or data["future_seed_material_used"] is not False
+        or data["record_role"] != (
+            "CONTENT_ADDRESSED_OPERATOR_SUMMARY_OF_DISJOINT_NONSCIENTIFIC_LIVE_"
+            "QUALIFICATION_NOT_SCIENTIFIC_EVIDENCE"
+        )
+        or data["raw_full_stdout_record_persisted"] is not False
+        or type(data["retry_count"]) is not int
+        or data["retry_count"] != 0
+        or type(data["max_output_tokens"]) is not int
+        or data["max_output_tokens"] != MAX_OUTPUT_TOKENS
+        or data["model_endpoint"] != config["model_endpoint"]
+        or data["served_model_id"] != "qwen3.6-35b-a3b"
+        or data["vllm_version"] != "0.25.1"
+        or data["provider_cache_independence"] != PROVIDER_CACHE_UNOBSERVABLE
+        or type(data["calls"]) is not list or len(data["calls"]) != 3
+    ):
+        raise BundleRefusal("structured-output qualification violates its non-scientific frozen contract")
+    if (
+        type(data["started_at_unix_ns"]) is not int
+        or type(data["ended_at_unix_ns"]) is not int
+        or data["started_at_unix_ns"] <= 0
+        or data["ended_at_unix_ns"] <= data["started_at_unix_ns"]
+    ):
+        raise BundleRefusal("structured-output qualification time interval is invalid")
+    _sha(data["live_source_sha256"], "structured-output qualification.live_source_sha256")
+    _sha(data["runner_source_sha256"], "structured-output qualification.runner_source_sha256")
+    tokens: set[str] = set()
+    requested_candidate_indices: set[int] = set()
+    call_keys = {"candidate_response_tokens", "completion_tokens", "dnrd_request_sha256", "dnrd_response_sha256", "finish_reason", "http_request_sha256", "http_status", "ordinal", "prompt_tokens", "raw_response_sha256", "requested_token", "response_format_schema_sha256", "returned_token"}
+    for ordinal, raw_call in enumerate(data["calls"], start=1):
+        call = _check_exact_keys(raw_call, call_keys, f"structured-output qualification.calls[{ordinal - 1}]")
+        candidates = _candidate_response_tokens(call["candidate_response_tokens"], f"structured-output qualification.calls[{ordinal - 1}].candidate_response_tokens")
+        if (
+            type(call["ordinal"]) is not int or call["ordinal"] != ordinal
+            or type(call["http_status"]) is not int or call["http_status"] != 200
+            or call["finish_reason"] != "stop"
+            or call["requested_token"] not in candidates
+            or call["returned_token"] != call["requested_token"]
+            or type(call["prompt_tokens"]) is not int or call["prompt_tokens"] < 0
+            or type(call["completion_tokens"]) is not int
+            or not 0 < call["completion_tokens"] <= MAX_OUTPUT_TOKENS
+        ):
+            raise BundleRefusal("structured-output qualification call does not retain the fixed successful contract")
+        for field in ("dnrd_request_sha256", "dnrd_response_sha256", "http_request_sha256", "raw_response_sha256", "response_format_schema_sha256"):
+            _sha(call[field], f"structured-output qualification.calls[{ordinal - 1}].{field}")
+        expected_schema = {
+            "type": "object",
+            "properties": {
+                "response_token": {
+                    "type": "string",
+                    "enum": list(candidates),
+                    "pattern": r"^token-[0-9a-f]{20}$",
+                    "minLength": 26,
+                    "maxLength": 26,
+                }
+            },
+            "required": ["response_token"],
+            "additionalProperties": False,
+        }
+        if call["response_format_schema_sha256"] != _canonical_hash(expected_schema):
+            raise BundleRefusal("structured-output qualification response schema digest drifted")
+        requested_candidate_indices.add(candidates.index(call["requested_token"]))
+        tokens.update(candidates)
+    if len(tokens) != 6:
+        raise BundleRefusal("structured-output qualification must retain exactly six distinct candidate tokens")
+    if requested_candidate_indices != {0, 1}:
+        raise BundleRefusal("structured-output qualification must exercise both candidate enum positions")
+    fixture_bytes = _canonical_bytes({"public": public, "private": private})
+    if any(token.encode("ascii") in fixture_bytes for token in tokens):
+        raise BundleRefusal("future-seeded public/private fixture overlaps structured-output qualification candidate tokens")
+    return data
+
+
 def _bundle_sha_receipt(value: Mapping[str, Any], label: str) -> str:
     if "receipt_sha256" not in value:
         raise BundleRefusal(f"{label} has no receipt_sha256")
@@ -1027,14 +1102,14 @@ def _validate_preregistration_claim_boundary(prereg: Mapping[str, Any]) -> None:
         "preregistration.testbed.model",
     )
     if (
-        testbed["family"] != "REPEATED_CONTEXT_TABULAR_ROUTING_MECHANICS_V1"
+        testbed["family"] != "REPEATED_CONTEXT_TABULAR_ROUTING_MECHANICS_V2"
         or testbed["development_streams"] != 4
         or testbed["training_calls_per_stream_maximum"] != 8
         or testbed["paired_heldout_probes_per_stream"] != 8
-        or testbed["evaluation_arms"] != 4
-        or testbed["evaluation_calls"] != 128
+        or testbed["evaluation_arms"] != 3
+        or testbed["evaluation_calls"] != 96
         or testbed["shared_learning_or_compiler_calls_maximum"] != 32
-        or testbed["client_dispatched_generation_request_ceiling"] != 160
+        or testbed["client_dispatched_generation_request_ceiling"] != 128
         or model["served_model_id"] != "qwen3.6-35b-a3b"
         or model["substitution_allowed"] is not False
         or model["temperature"] != 0
@@ -1049,7 +1124,7 @@ def _validate_preregistration_claim_boundary(prereg: Mapping[str, Any]) -> None:
         )
     arms = _check_exact_keys(
         prereg.get("arms"),
-        {"FULL", "NO_MEMORY_ROLLBACK", "RAW_EQUAL_BUDGET", "BINDING_DERANGED_NUMERIC_PLACEBO"},
+        set(ARMS),
         "preregistration.arms",
     )
     parity = _check_exact_keys(
@@ -1059,11 +1134,12 @@ def _validate_preregistration_claim_boundary(prereg: Mapping[str, Any]) -> None:
             "equal_client_dispatched_and_logical_requests",
             "equal_generation_limits_input_token_parity_not_claimed",
             "equal_candidate_evidence_universe", "all_active_payloads_within_byte_ceiling",
-            "active_state_byte_ceiling", "full_raw_numeric_payload_bytes_equal",
+            "active_state_byte_ceiling", "full_fixed_rule_replay_numeric_payload_bytes_equal",
             "full_deranged_numeric_payload_byte_count_equal", "arm_labels_hidden_from_model",
             "fresh_process_recovery_observed", "distinct_arm_mount_ids",
             "evaluation_read_only_wrt_routing_observed", "cache_hits_required",
-            "gold_open_only_after_response_seal", "compiler_input_audit", "canary",
+            "private_route_binding_open_only_after_response_seal", "pre_dispatch_readout_bound_before_model_response",
+            "scorer_outcome_response_independent", "compiler_input_audit", "canary",
         },
         "preregistration.parity_and_leakage",
     )
@@ -1073,13 +1149,15 @@ def _validate_preregistration_claim_boundary(prereg: Mapping[str, Any]) -> None:
         "equal_generation_limits_input_token_parity_not_claimed",
         "equal_candidate_evidence_universe",
         "all_active_payloads_within_byte_ceiling",
-        "full_raw_numeric_payload_bytes_equal",
+        "full_fixed_rule_replay_numeric_payload_bytes_equal",
         "full_deranged_numeric_payload_byte_count_equal",
         "arm_labels_hidden_from_model",
         "fresh_process_recovery_observed",
         "distinct_arm_mount_ids",
         "evaluation_read_only_wrt_routing_observed",
-        "gold_open_only_after_response_seal",
+        "private_route_binding_open_only_after_response_seal",
+        "pre_dispatch_readout_bound_before_model_response",
+        "scorer_outcome_response_independent",
     }
     if (
         any(parity[key] is not True for key in required_true)
@@ -1177,7 +1255,7 @@ def _validate_source_and_preregistration(
     if (
         prereg["schema_version"] != PREREGISTRATION_SCHEMA
         or prereg["experiment_id"] != EXPERIMENT_ID
-        or prereg["protocol_version"] != "v2"
+        or prereg["protocol_version"] != "v3"
         or prereg["status"] != "FROZEN_AWAITING_EXACT_HASH_RATIFICATION"
     ):
         raise BundleRefusal("preregistration is not the frozen external-ratification DNRD contract")
@@ -1255,7 +1333,7 @@ def _validate_source_and_preregistration(
         },
         "ratification receipt",
     )
-    if ratified["schema_version"] != "hswm-dnrd-ratification-receipt/v2":
+    if ratified["schema_version"] != "hswm-dnrd-ratification-receipt/v3":
         raise BundleRefusal("ratification receipt schema mismatch")
     _bundle_sha_receipt(ratified, "ratification receipt")
     if (
@@ -1860,20 +1938,22 @@ def _preregistration_active_state_byte_ceiling(preregistration: Mapping[str, Any
             "same_served_model_id_and_chat_endpoint", "equal_client_dispatched_and_logical_requests",
             "equal_generation_limits_input_token_parity_not_claimed", "equal_candidate_evidence_universe",
             "all_active_payloads_within_byte_ceiling", "active_state_byte_ceiling",
-            "full_raw_numeric_payload_bytes_equal", "full_deranged_numeric_payload_byte_count_equal",
+            "full_fixed_rule_replay_numeric_payload_bytes_equal", "full_deranged_numeric_payload_byte_count_equal",
             "arm_labels_hidden_from_model", "fresh_process_recovery_observed", "distinct_arm_mount_ids",
             "evaluation_read_only_wrt_routing_observed", "cache_hits_required",
-            "gold_open_only_after_response_seal", "compiler_input_audit", "canary",
+            "private_route_binding_open_only_after_response_seal", "pre_dispatch_readout_bound_before_model_response",
+            "scorer_outcome_response_independent", "compiler_input_audit", "canary",
         },
         "preregistration.parity_and_leakage",
     )
     required_true = {
         "same_served_model_id_and_chat_endpoint", "equal_client_dispatched_and_logical_requests",
         "equal_generation_limits_input_token_parity_not_claimed", "equal_candidate_evidence_universe",
-        "all_active_payloads_within_byte_ceiling", "full_raw_numeric_payload_bytes_equal",
+        "all_active_payloads_within_byte_ceiling", "full_fixed_rule_replay_numeric_payload_bytes_equal",
         "full_deranged_numeric_payload_byte_count_equal", "arm_labels_hidden_from_model",
         "fresh_process_recovery_observed", "distinct_arm_mount_ids",
-        "evaluation_read_only_wrt_routing_observed", "gold_open_only_after_response_seal",
+        "evaluation_read_only_wrt_routing_observed", "private_route_binding_open_only_after_response_seal",
+        "pre_dispatch_readout_bound_before_model_response", "scorer_outcome_response_independent",
     }
     if any(parity[key] is not True for key in required_true) or parity["cache_hits_required"] != 0:
         raise BundleRefusal("preregistration does not freeze the required observable parity boundaries")
@@ -2246,12 +2326,12 @@ def _closure_state_evidence_map(
     state_evidence: Mapping[str, Any], public: Mapping[str, Any]
 ) -> dict[tuple[str, str], Mapping[str, Any]]:
     top = _check_exact_keys(state_evidence, {"schema_version", "streams"}, "bridge state evidence for closure")
-    if top["schema_version"] != "hswm-dnrd-bridge-state-evidence/v1" or type(top["streams"]) is not list:
+    if top["schema_version"] != "hswm-dnrd-bridge-state-evidence/v2" or type(top["streams"]) is not list:
         raise BundleRefusal("bridge state evidence does not have the frozen closure-bindable schema")
     public_ids = {str(stream["stream_id"]) for stream in public["streams"]}
     result: dict[tuple[str, str], Mapping[str, Any]] = {}
     for stream_index, raw_stream in enumerate(top["streams"]):
-        stream = _check_exact_keys(raw_stream, {"stream_id", "pre_evaluation", "post_evaluation"}, f"bridge state closure streams[{stream_index}]")
+        stream = _check_exact_keys(raw_stream, {"stream_id", "pre_evaluation", "post_evaluation", "fixed_rule_replay"}, f"bridge state closure streams[{stream_index}]")
         stream_id = _string(stream["stream_id"], f"bridge state closure streams[{stream_index}].stream_id")
         if stream_id not in public_ids:
             raise BundleRefusal("bridge state closure evidence names an unknown public stream")
@@ -2299,7 +2379,28 @@ def _closure_state_evidence_map(
                     if previous is None:
                         raise BundleRefusal("bridge state closure post-evaluation evidence lacks a pre-evaluation entry")
                     result[key] = {**previous, "post": entry, "post_recovery": rec}
-    expected = {(stream_id, arm) for stream_id in public_ids for arm in ARMS}
+        replay = _check_exact_keys(
+            stream["fixed_rule_replay"], {"state", "fresh_recovery", "post_evaluation"},
+            f"bridge state closure {stream_id}.fixed_rule_replay",
+        )
+        replay_post = _check_exact_keys(
+            replay["post_evaluation"], {"state", "fresh_recovery"},
+            f"bridge state closure {stream_id}.fixed_rule_replay.post_evaluation",
+        )
+        for timing, entry_value, recovery_value in (
+            ("pre", replay["state"], replay["fresh_recovery"]),
+            ("post", replay_post["state"], replay_post["fresh_recovery"]),
+        ):
+            entry = _check_exact_keys(entry_value, set(arms["FULL"]), f"bridge state closure {stream_id}.fixed_rule_replay.{timing}")
+            rec = _check_exact_keys(recovery_value, {"recovered", "fresh_process", "journal_sha256", "process_instance_id"}, f"bridge state closure {stream_id}.fixed_rule_replay.{timing}.fresh_recovery")
+            if entry["mount_role"] != "RAW_CONTROL" or rec["recovered"] is not True or rec["fresh_process"] is not True:
+                raise BundleRefusal("fixed-rule replay closure evidence is not a fresh RAW_CONTROL recovery")
+            key = (stream_id, "RAW_EQUAL_BUDGET")
+            if timing == "pre":
+                result[key] = {"pre": entry, "pre_recovery": rec}
+            else:
+                result[key] = {**result[key], "post": entry, "post_recovery": rec}
+    expected = {(stream_id, arm) for stream_id in public_ids for arm in CLOSURE_ARMS}
     if set(result) != expected or any("post" not in item for item in result.values()):
         raise BundleRefusal("bridge state closure evidence does not cover exact public stream/arm support")
     return result
@@ -2324,7 +2425,11 @@ def _closure_plan_from_mounts(
         "schema_version": MOUNT_CLOSURE_PLAN_SCHEMA,
         "bridge_state_evidence_sha256": bridge_state_sha256,
         "streams": [
-            {"stream_id": stream_id, "arms": by_stream[stream_id]}
+            {
+                "stream_id": stream_id,
+                "arms": {arm: by_stream[stream_id][arm] for arm in ARMS},
+                "fixed_rule_replay": by_stream[stream_id]["RAW_EQUAL_BUDGET"],
+            }
             for stream_id in sorted(by_stream)
         ],
     }
@@ -3318,7 +3423,7 @@ def _validate_bridge_mount_closure(
     previous: tuple[str, str] | None = None
     mount_ids: set[str] = set()
     public_streams = {str(stream["stream_id"]): stream for stream in public["streams"]}
-    expected_pairs = {(stream_id, arm) for stream_id in public_streams for arm in ARMS}
+    expected_pairs = {(stream_id, arm) for stream_id in public_streams for arm in CLOSURE_ARMS}
     seen_pairs: set[tuple[str, str]] = set()
     for index, raw_mount in enumerate(mounts_raw):
         mount = _check_exact_keys(
@@ -3338,7 +3443,7 @@ def _validate_bridge_mount_closure(
         previous = pair
         seen_pairs.add(pair)
         mount_id = _string(mount["mount_id"], f"bridge mount closure.mounts[{index}].mount_id")
-        if not V2_MOUNT_ID.fullmatch(mount_id) or mount_id in mount_ids or mount["mount_role"] != MOUNT_ROLES[arm]:
+        if not V2_MOUNT_ID.fullmatch(mount_id) or mount_id in mount_ids or mount["mount_role"] != CLOSURE_MOUNT_ROLES[arm]:
             raise BundleRefusal("bridge mount closure does not retain distinct raw mount IDs and expected immutable roles")
         mount_ids.add(mount_id)
         for key in (
@@ -3639,8 +3744,9 @@ def _validate_bundle_index(root: Path) -> Mapping[str, str]:
         raise BundleRefusal("bundle index omits a required complete-occurrence artifact")
     has_candidate = "candidate.json" in listed
     has_inconclusive = "inconclusive.json" in listed
-    if has_candidate == has_inconclusive:
-        raise BundleRefusal("bundle must index exactly one candidate.json or inconclusive.json occurrence artifact")
+    has_void = "void_protocol.json" in listed
+    if sum((has_candidate, has_inconclusive, has_void)) != 1:
+        raise BundleRefusal("bundle must index exactly one candidate, inconclusive, or void-protocol terminal artifact")
     if has_candidate and not (set(BUNDLE_CANDIDATE_REQUIRED_FILES) - {"bundle_index.json"}).issubset(listed):
         raise BundleRefusal("candidate bundle index omits required state-evidence artifacts")
     return {**listed, "bundle_index.json": _sha_bytes(raw)}
@@ -3743,18 +3849,24 @@ def _validate_runtime_and_attempt(
         {
             "schema_version", "source_commit", "source_tree_oid", "source_manifest_sha256",
             "preregistration_commit", "preregistration_sha256", "ratification_statement_sha256",
-            "pulse_receipt_sha256", "runtime_receipt_sha256", "enforcement_scope", "receipt_sha256",
+            "pulse_receipt_sha256", "runtime_receipt_sha256", "terminal_intent_schema",
+            "terminal_artifact_relative_path", "enforcement_scope", "receipt_sha256",
         },
         "durable attempt marker",
     )
     if (
-        attempt_data["schema_version"] != "hswm-dnrd-durable-attempt-marker/v2"
+        attempt_data["schema_version"] != "hswm-dnrd-durable-attempt-marker/v3"
         or attempt_data["enforcement_scope"]
         != "DETERMINISTIC_FILE_AND_PARENT_DIRECTORY_FSYNC_MARKER_UNDER_CONFIGURED_"
         "REGISTRY_ONLY_GLOBAL_SINGLETON_NOT_PROVEN"
     ):
         raise BundleRefusal("durable attempt marker schema/scope mismatch")
     _bundle_sha_receipt(attempt_data, "durable attempt marker")
+    if (
+        attempt_data["terminal_intent_schema"] != "hswm-dnrd-terminal-intent/v1"
+        or attempt_data["terminal_artifact_relative_path"] != "terminal-intent.json"
+    ):
+        raise BundleRefusal("durable attempt marker terminal-intent binding mismatch")
     bindings = candidate["bindings"]
     for key in (
         "source_manifest_sha256", "preregistration_sha256", "pulse_receipt_sha256",
@@ -3789,6 +3901,7 @@ def _validate_config_readback(
             "verifier_package_lock_sha256", "verifier_runtime_bundle_path",
             "verifier_runtime_bundle_sha256", "attempt_registry_root", "ratification_receipt_path",
             "ratification_receipt_sha256", "source_ci_receipt_path", "source_ci_receipt_sha256",
+            "structured_output_qualification_path", "structured_output_qualification_sha256",
             "tokenizer_preflight_prompt", "bridge_runtime_root", "bridge_state_root",
             "bridge_runtime_tree_manifest_path", "bridge_runtime_tree_manifest_sha256",
             "node_executable_path", "node_executable_sha256", "node_version", "python_executable_path",
@@ -3825,12 +3938,12 @@ def _validate_config_readback(
     ):
         raise BundleRefusal("execution config readback does not match candidate chronology/runtime pins")
     if data["tokenizer_preflight_prompt"] != TOKENIZER_PREFLIGHT_PROMPT:
-        raise BundleRefusal("execution config tokenizer preflight prompt differs from the frozen DNRD-2 response-form probe")
+        raise BundleRefusal("execution config tokenizer preflight prompt differs from the frozen DNRD-3 structured-response probe")
     for key in (
         "repo_root", "source_manifest_path", "prereg_path", "output_root", "model_endpoint",
         "bridge_implementation_path", "scorer_implementation_path", "verifier_helper_path",
         "verifier_package_lock_path", "verifier_runtime_bundle_path", "attempt_registry_root",
-        "ratification_receipt_path", "source_ci_receipt_path", "tokenizer_preflight_prompt",
+        "ratification_receipt_path", "source_ci_receipt_path", "structured_output_qualification_path", "tokenizer_preflight_prompt",
         "bridge_runtime_root", "bridge_state_root", "bridge_runtime_tree_manifest_path",
         "node_executable_path", "node_version", "python_executable_path", "python_version",
         "unicode_data_version", "scorer_import_root", "model_api_key_environment",
@@ -3839,6 +3952,7 @@ def _validate_config_readback(
     for key in (
         "ratification_text_sha256", "verifier_helper_sha256", "verifier_package_lock_sha256",
         "verifier_runtime_bundle_sha256", "ratification_receipt_sha256", "source_ci_receipt_sha256",
+        "structured_output_qualification_sha256",
     ):
         _sha(data[key], f"execution config readback.{key}")
     for key in ("bridge_command", "scorer_command", "verifier_command"):
@@ -3856,13 +3970,14 @@ def _validate_config_readback(
     verifier_helper = Path(str(data["verifier_helper_path"]))
     verifier_lock = Path(str(data["verifier_package_lock_path"]))
     verifier_bundle = Path(str(data["verifier_runtime_bundle_path"]))
+    qualification_path = Path(str(data["structured_output_qualification_path"]))
     node_path = str(data["node_executable_path"])
     python_path = str(data["python_executable_path"])
     if not all(
         path.is_absolute()
         for path in (
             repo_root, output_root, source_runtime_root, source_bridge, source_scorer,
-            verifier_helper, verifier_lock, verifier_bundle,
+            verifier_helper, verifier_lock, verifier_bundle, qualification_path,
         )
     ):
         raise BundleRefusal("execution config source/output/runtime paths must be absolute")
@@ -4211,7 +4326,7 @@ def _validate_pulse(
     # binding's seed as an unexplained fixture selector.  ``seed.py`` uses
     # ensure_ascii=False; retain that exact serialization choice here.
     seed_material = {
-        "domain": "HSWM-DNRD-FUTURE-SEED-V2",
+        "domain": "HSWM-DNRD-FUTURE-SEED-V3",
         "experiment_id": EXPERIMENT_ID,
         "preregistration_blob_sha256": binding["preregistration_blob_sha256"],
         "preregistration_commit": binding["preregistration_commit"],
@@ -4224,7 +4339,7 @@ def _validate_pulse(
         "source_manifest_sha256": binding["source_manifest_sha256"],
         "source_tree_oid": binding["source_tree_oid"],
         "verification_receipt_sha256": projection["verification_receipt_sha256"],
-        "schema_version": "hswm-dnrd-future-seed-material/v2",
+        "schema_version": "hswm-dnrd-future-seed-material/v3",
     }
     try:
         expected_seed = sha256(
@@ -4448,20 +4563,19 @@ def _public_manifest_index(public: Mapping[str, Any], private: Mapping[str, Any]
         {"schema_version", "family", "seed_commitment", "streams", "private_manifest_commitment"},
         "public manifest",
     )
-    if top["schema_version"] != PUBLIC_MANIFEST_SCHEMA or top["family"] != "REPEATED_CONTEXT_TABULAR_ROUTING_MECHANICS_V1":
+    if top["schema_version"] != PUBLIC_MANIFEST_SCHEMA or top["family"] != "REPEATED_CONTEXT_TABULAR_ROUTING_MECHANICS_V2":
         raise BundleRefusal("public manifest identity mismatch")
     _sha(top["seed_commitment"], "public manifest.seed_commitment")
     if type(top["streams"]) is not list or len(top["streams"]) != 4:
         raise BundleRefusal("public manifest must contain exactly four streams")
     private_top = _check_exact_keys(
         private,
-        {"schema_version", "family", "seed_hex", "public_manifest", "private_bindings", "normalization"},
+        {"schema_version", "family", "seed_hex", "public_manifest", "private_bindings"},
         "private manifest",
     )
     if (
-        private_top["schema_version"] != "hswm-dnrd-private-scorer-manifest/v1"
+        private_top["schema_version"] != "hswm-dnrd-private-scorer-manifest/v2"
         or private_top["family"] != top["family"]
-        or private_top["normalization"] != "NFKC_CASEFOLD_TRIM_COLLAPSE_SPACE_V1"
         or private_top["public_manifest"] != {key: value for key, value in public.items() if key != "private_manifest_commitment"}
         or _canonical_hash(private) != top["private_manifest_commitment"]
     ):
@@ -4515,12 +4629,12 @@ def _public_manifest_index(public: Mapping[str, Any], private: Mapping[str, Any]
         if forced_pairs != {(context, route) for context in contexts for route in routes}:
             raise BundleRefusal("public training forced-exposure support is incomplete")
         if any(count != 2 for count in heldout_context_count.values()) or any(
-            values != {arm: 2 for arm in ARMS} for values in positional_balance
+            sorted(values.values()) != [2, 3, 3] for values in positional_balance
         ):
             raise BundleRefusal("public heldout context or arm-order support is unbalanced")
 
         raw_binding = private_top["private_bindings"][index]
-        binding = _check_exact_keys(raw_binding, {"stream_id", "context_correct_route", "episode_gold_answers"}, f"private binding[{index}]")
+        binding = _check_exact_keys(raw_binding, {"stream_id", "context_correct_route"}, f"private binding[{index}]")
         if binding["stream_id"] != expected_stream_id:
             raise BundleRefusal("private/public stream binding order mismatch")
         correct = binding["context_correct_route"]
@@ -4528,10 +4642,6 @@ def _public_manifest_index(public: Mapping[str, Any], private: Mapping[str, Any]
             raise BundleRefusal("private correct-route support is malformed")
         if [correct[context] for context in contexts].count(routes[0]) != 2 or [correct[context] for context in contexts].count(routes[1]) != 2:
             raise BundleRefusal("private correct routes are not 2/2 balanced")
-        stream_episode_ids = {episode["episode_id"] for episode in training + heldout}
-        gold = binding["episode_gold_answers"]
-        if type(gold) is not dict or set(gold) != stream_episode_ids or any(type(answer) is not str for answer in gold.values()):
-            raise BundleRefusal("private gold-answer support is malformed")
         bindings[expected_stream_id] = binding
 
     # Recompute the public training/heldout leakage indicators.  The historical
@@ -4569,8 +4679,8 @@ def _check_episode(
         raise BundleRefusal(f"{label} does not retain exact stream support")
     for key in ("episode_id", "entity", "surface_template", "prompt"):
         _string(episode[key], f"{label}.{key}")
-    if "return only the response token from selected evidence." not in episode["prompt"]:
-        raise BundleRefusal(f"{label} does not retain the frozen echo instruction")
+    if "return a JSON object whose only field is response_token from selected evidence." not in episode["prompt"]:
+        raise BundleRefusal(f"{label} does not retain the frozen structured response instruction")
     if type(episode["aliases"]) is not list or not episode["aliases"] or any(type(alias) is not str or not alias for alias in episode["aliases"]):
         raise BundleRefusal(f"{label}.aliases is malformed")
     evidence = episode["route_evidence"]
@@ -4585,7 +4695,7 @@ def _check_episode(
         seen.add(route)
         text, token = _string(record["evidence_text"], f"{label}.evidence_text"), _string(record["response_token"], f"{label}.response_token")
         if RESPONSE_TOKEN_RE.fullmatch(token) is None or len(token.encode("ascii")) != 26:
-            raise BundleRefusal(f"{label}.route_evidence response token violates exact DNRD-2 form")
+            raise BundleRefusal(f"{label}.route_evidence response token violates exact DNRD-3 form")
         if route not in text or token not in text:
             raise BundleRefusal(f"{label}.route_evidence does not bind route/token")
     if [record["route_id"] for record in evidence] != stream["route_ids"]:
@@ -4601,8 +4711,8 @@ def _check_episode(
         ):
             raise BundleRefusal(f"{label}.provenance_canary is not confined to its declared training prompt")
     else:
-        if type(episode["arm_order"]) is not list or len(episode["arm_order"]) != 4 or set(episode["arm_order"]) != set(ARMS):
-            raise BundleRefusal(f"{label}.arm_order must be one exact four-arm permutation")
+        if type(episode["arm_order"]) is not list or len(episode["arm_order"]) != 3 or set(episode["arm_order"]) != set(ARMS):
+            raise BundleRefusal(f"{label}.arm_order must be one exact three-arm permutation")
     return episode
 
 
@@ -4716,7 +4826,7 @@ def _model_request_digest(request: Mapping[str, Any]) -> str:
         request,
         {
             "episode_id", "selected_route_id", "prompt", "max_output_tokens",
-            "ordinal", "phase", "arm",
+            "ordinal", "phase", "arm", "candidate_response_tokens", "pre_dispatch_receipt_sha256",
         },
         "model request",
     )
@@ -4733,10 +4843,54 @@ def _model_request_digest(request: Mapping[str, Any]) -> str:
         or (ordinal > 32 and phase != "heldout")
     ):
         raise BundleRefusal("model request identity/configuration violates the frozen schedule")
+    _candidate_response_tokens(value["candidate_response_tokens"], "model request.candidate_response_tokens")
+    _sha(value["pre_dispatch_receipt_sha256"], "model request.pre_dispatch_receipt_sha256")
     return _canonical_hash(dict(value))
 
 
-def _response_digest_from_raw(raw_text: str, model: str) -> tuple[str, str, int, int, Mapping[str, int]]:
+def _candidate_response_tokens(value: object, label: str) -> tuple[str, str]:
+    if type(value) is not list or len(value) != 2 or any(type(token) is not str for token in value):
+        raise BundleRefusal(f"{label} must contain exactly two response tokens")
+    first, second = value
+    if (
+        RESPONSE_TOKEN_RE.fullmatch(first) is None
+        or RESPONSE_TOKEN_RE.fullmatch(second) is None
+        or first >= second
+    ):
+        raise BundleRefusal(f"{label} must contain distinct lexically sorted DNRD-3 response tokens")
+    return first, second
+
+
+def _structured_response_token(content: str, candidates: tuple[str, str]) -> str:
+    def no_duplicate_object_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        result: dict[str, Any] = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError("duplicate object key")
+            result[key] = value
+        return result
+
+    try:
+        value = json.loads(
+            content,
+            object_pairs_hook=no_duplicate_object_keys,
+            parse_constant=lambda _value: (_ for _ in ()).throw(ValueError("non-finite number")),
+        )
+    except (json.JSONDecodeError, ValueError) as error:
+        raise BundleRefusal("accepted model body is not one strict structured JSON response") from error
+    if type(value) is not dict or set(value) != {"response_token"}:
+        raise BundleRefusal("accepted model body structured response has an invalid key set")
+    token = value["response_token"]
+    if type(token) is not str or RESPONSE_TOKEN_RE.fullmatch(token) is None:
+        raise BundleRefusal("accepted model body structured response token violates DNRD-3 form")
+    if token not in candidates:
+        raise BundleRefusal("accepted model body structured response token is outside its request candidates")
+    return token
+
+
+def _response_digest_from_raw(
+    raw_text: str, model: str, candidates: tuple[str, str]
+) -> tuple[str, str, int, int, Mapping[str, int]]:
     raw = _parse_json_bytes(raw_text.encode("utf-8"), "accepted model raw response", canonical=False)
     if type(raw) is not dict or raw.get("model") != model:
         raise BundleRefusal("accepted model body does not attest frozen served model")
@@ -4747,11 +4901,7 @@ def _response_digest_from_raw(raw_text: str, model: str) -> tuple[str, str, int,
     message = choice.get("message")
     if choice.get("finish_reason") != "stop" or type(message) is not dict or type(message.get("content")) is not str:
         raise BundleRefusal("accepted model body choice is not an exact stopped textual completion")
-    token = message["content"].strip(" \t\r\n")
-    if not token or any(character.isspace() for character in token):
-        raise BundleRefusal("accepted model body does not yield one frozen response token")
-    if RESPONSE_TOKEN_RE.fullmatch(token) is None:
-        raise BundleRefusal("accepted model body does not yield an exact DNRD-2 response token")
+    token = _structured_response_token(message["content"], candidates)
     usage = raw.get("usage")
     if type(usage) is not dict:
         raise BundleRefusal("accepted model body lacks usage")
@@ -4770,6 +4920,62 @@ def _response_digest_from_raw(raw_text: str, model: str) -> tuple[str, str, int,
         "server_usage": extra,
     }
     return _canonical_hash(response), token, prompt_tokens, completion_tokens, extra
+
+
+def _structured_chat_config(value: object, label: str) -> tuple[Mapping[str, Any], tuple[str, str]]:
+    """Validate the complete DNRD-3 provider constraint retained per event."""
+    if type(value) is not dict:
+        raise BundleRefusal(f"{label} must be an object")
+    response_format = value.get("response_format")
+    if type(response_format) is not dict:
+        raise BundleRefusal(f"{label}.response_format must be an object")
+    json_schema = response_format.get("json_schema")
+    if type(json_schema) is not dict:
+        raise BundleRefusal(f"{label}.response_format.json_schema must be an object")
+    schema = json_schema.get("schema")
+    if type(schema) is not dict:
+        raise BundleRefusal(f"{label}.response_format.json_schema.schema must be an object")
+    token_schema = schema.get("properties", {}).get("response_token") if type(schema.get("properties")) is dict else None
+    candidates = _candidate_response_tokens(
+        token_schema.get("enum") if type(token_schema) is dict else None,
+        f"{label}.response_format.json_schema.schema.properties.response_token.enum",
+    )
+    expected_schema = {
+        "type": "object",
+        "properties": {
+            "response_token": {
+                "type": "string",
+                "enum": list(candidates),
+                "pattern": r"^token-[0-9a-f]{20}$",
+                "minLength": 26,
+                "maxLength": 26,
+            },
+        },
+        "required": ["response_token"],
+        "additionalProperties": False,
+    }
+    expected_format = {
+        "type": "json_schema",
+        "json_schema": {
+            "name": "hswm_dnrd_response_token",
+            "strict": True,
+            "schema": expected_schema,
+        },
+    }
+    expected = {
+        "chat_template_kwargs": {"enable_thinking": False},
+        "logprobs": False,
+        "n": 1,
+        "stream": False,
+        "temperature": 0,
+        "top_p": 1,
+        "max_tokens": MAX_OUTPUT_TOKENS,
+        "response_format": expected_format,
+        "response_format_schema_sha256": _canonical_hash(expected_schema),
+    }
+    if value != expected:
+        raise BundleRefusal(f"{label} differs from the frozen DNRD-3 structured-output contract")
+    return value, candidates
 
 
 def _validate_trace(
@@ -4847,7 +5053,7 @@ def _validate_sealed_and_outcome(
     )
     unsigned = {key: value for key, value in sealed_data.items() if key != "response_commitment"}
     if (
-        sealed_data["schema_version"] != "hswm-dnrd-sealed-response/v1"
+        sealed_data["schema_version"] != "hswm-dnrd-sealed-response/v2"
         or sealed_data["episode_id"] != episode["episode_id"]
         or sealed_data["selected_route_id"] != route
         or sealed_data["answer"] != answer
@@ -4870,22 +5076,20 @@ def _validate_sealed_and_outcome(
         raise BundleRefusal(f"{label}.scorer_outcome scorer provenance mismatch")
     reward = _reward(outcome_data["reward"], f"{label}.scorer_outcome.reward")
     correct_route = private_binding["context_correct_route"][episode["context_key"]]
-    gold = private_binding["episode_gold_answers"][episode["episode_id"]]
-    expected_reward = 1_000_000 if route == correct_route and _normalize(answer) == _normalize(gold) else (0 if route == correct_route else -1_000_000)
+    expected_reward = 1_000_000 if route == correct_route else -1_000_000
     if reward != expected_reward:
         raise BundleRefusal(f"{label}.scorer_outcome reward does not replay from retained private scorer manifest")
     expected_digest = _canonical_hash(
         {
             "episode_id": episode["episode_id"],
             "selected_route_id": route,
-            "response_commitment": sealed_data["response_commitment"],
             "private_manifest_commitment": private_commitment,
             "reward": reward,
             "scorer_source_identity": scorer_sha256,
         }
     )
     if outcome_data["outcome_digest"] != expected_digest:
-        raise BundleRefusal(f"{label}.scorer_outcome digest does not bind sealed response/scorer/reward")
+        raise BundleRefusal(f"{label}.scorer_outcome digest does not bind the response-independent route/scorer/reward basis")
     return sealed_data, outcome_data
 
 
@@ -4967,10 +5171,15 @@ def _reconcile_model_events(
     model: str,
     chat_config: Mapping[str, Any],
 ) -> Mapping[str, Mapping[str, Any]]:
-    if len(model_events) != 320:
-        raise BundleRefusal("complete candidate requires exactly 320 observed+accepted model boundary events")
+    # The durable runner ledger retains one PRE row and one completed row per
+    # successful call.  Only the completed row has a model-bound request.
+    runner_events = [
+        item for item in runner_events
+        if item.get("event") == "COMPLETED_CALL"
+    ]
+    if len(model_events) != 256:
+        raise BundleRefusal("complete candidate requires exactly 256 observed+accepted model boundary events")
     chat_endpoint = f"{endpoint.rstrip('/')}/v1/chat/completions"
-    event_chat_config = {**dict(chat_config), "max_tokens": MAX_OUTPUT_TOKENS}
     expected_common = {
         "schema_version", "event", "ordinal", "phase", "arm", "dnrd_request_sha256", "endpoint", "model",
         "request_sha256", "raw_response_sha256", "chat_config", "elapsed_nanoseconds", "provider_cache_independence",
@@ -4996,12 +5205,14 @@ def _reconcile_model_events(
             value["schema_version"] != LIVE_EVENT_SCHEMA
             or value["endpoint"] != chat_endpoint
             or value["model"] != model
-            or value["chat_config"] != event_chat_config
             or value["provider_cache_independence"] != PROVIDER_CACHE_UNOBSERVABLE
             or type(value["elapsed_nanoseconds"]) is not int
             or value["elapsed_nanoseconds"] < 0
         ):
             raise BundleRefusal("model event live-boundary identity/configuration mismatch")
+        _, event_candidates = _structured_chat_config(
+            value["chat_config"], f"model_events[{index}].chat_config"
+        )
         _sha(value["request_sha256"], f"model_events[{index}].request_sha256")
         _sha(value["raw_response_sha256"], f"model_events[{index}].raw_response_sha256")
         if name == "CHAT_COMPLETION_OBSERVED":
@@ -5011,7 +5222,7 @@ def _reconcile_model_events(
             raw = _string(value["raw_response_utf8"], f"model_events[{index}].raw_response_utf8")
             if _sha_bytes(raw.encode("utf-8")) != value["raw_response_sha256"]:
                 raise BundleRefusal("accepted model raw body digest mismatch")
-            response_digest, _, prompt_tokens, completion_tokens, extra = _response_digest_from_raw(raw, model)
+            response_digest, _, prompt_tokens, completion_tokens, extra = _response_digest_from_raw(raw, model, event_candidates)
             if value["dnrd_response_sha256"] != response_digest:
                 raise BundleRefusal("accepted model response digest does not replay from raw body")
             expected_usage = {"prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens, **extra}
@@ -5044,6 +5255,9 @@ def _reconcile_model_events(
             "temperature": 0,
             "top_p": 1,
             "logprobs": False,
+            "response_format": _structured_chat_config(
+                observed[request_id]["chat_config"], "observed event chat_config"
+            )[0]["response_format"],
         }
         expected_body_hash = _sha_bytes(_canonical_bytes(body))
         trace = runner_event.get("trace")
@@ -5055,7 +5269,8 @@ def _reconcile_model_events(
                 or event["phase"] != request["phase"]
                 or event["arm"] != request["arm"]
                 or event["request_sha256"] != expected_body_hash
-                or event["chat_config"].get("max_tokens") != MAX_OUTPUT_TOKENS
+                or _structured_chat_config(event["chat_config"], "model event chat_config")[1]
+                != _candidate_response_tokens(request["candidate_response_tokens"], "runner request.candidate_response_tokens")
             ):
                 raise BundleRefusal("model event does not bind exact runner request/provider body")
         if accepted[request_id]["dnrd_response_sha256"] != trace.get("response_sha256"):
@@ -5072,8 +5287,10 @@ _REJECTED_RESPONSE_FIXED_MESSAGES = {
     "chat completion must contain exactly one object choice": "CHOICE_CARDINALITY",
     "chat completion choice must finish with exact reason 'stop'": "FINISH_REASON_NOT_STOP",
     "chat completion choice must contain textual message.content": "MESSAGE_CONTENT_NOT_TEXT",
-    "chat completion must contain one non-whitespace response token": "RESPONSE_TOKEN_INVALID",
-    "chat completion response token violates exact DNRD-2 form": "RESPONSE_TOKEN_FORM_INVALID",
+    "chat completion structured response is not strict JSON": "STRUCTURED_RESPONSE_NOT_STRICT_JSON",
+    "chat completion structured response must be an object with exactly response_token": "STRUCTURED_RESPONSE_KEYSET_INVALID",
+    "chat completion structured response_token violates exact DNRD-3 form": "RESPONSE_TOKEN_FORM_INVALID",
+    "chat completion structured response_token is not one of the request candidates": "RESPONSE_TOKEN_NOT_REQUEST_CANDIDATE",
     "chat completion must contain object usage": "USAGE_NOT_OBJECT",
     "usage.prompt_tokens must be a nonnegative integer": "USAGE_PROMPT_TOKENS_INVALID",
     "usage.completion_tokens must be a nonnegative integer": "USAGE_COMPLETION_TOKENS_INVALID",
@@ -5091,7 +5308,7 @@ def _rejected_response_stage(message: str) -> str | None:
 
 
 def _inconclusive_call_context(value: Mapping[str, Any], label: str) -> tuple[int, str, str | None, str]:
-    """Validate the public identity common to every DNRD-2 live event."""
+    """Validate the public identity common to every DNRD-3 live event."""
     ordinal = _integer(value["ordinal"], f"{label}.ordinal", minimum=1)
     phase = value["phase"]
     arm = value["arm"]
@@ -5113,7 +5330,7 @@ def _validate_inconclusive_ledgers(
     runner_events: Sequence[Mapping[str, Any]],
     model_events: Sequence[Mapping[str, Any]],
 ) -> None:
-    """Replay the prefix observed before a post-dispatch DNRD-2 interruption.
+    """Replay the prefix observed before a post-dispatch DNRD-3 interruption.
 
     An incomplete occurrence cannot replay state/credit effects, but it can
     still prove that its retained boundary ledger is one ordered, no-retry
@@ -5143,11 +5360,6 @@ def _validate_inconclusive_ledgers(
         "failure_message", "failure_message_sha256",
     }
     transport_rejected_keys = common | {"failure_stage_code", "failure_message", "failure_message_sha256"}
-    expected_chat_config = {
-        "chat_template_kwargs": {"enable_thinking": False}, "logprobs": False,
-        "n": 1, "stream": False, "temperature": 0, "top_p": 1,
-        "max_tokens": MAX_OUTPUT_TOKENS,
-    }
     by_ordinal: dict[int, list[Mapping[str, Any]]] = {}
     failure_message: str | None = None
     last_ordinal = 0
@@ -5179,12 +5391,14 @@ def _validate_inconclusive_ledgers(
             or value["model"] != "qwen3.6-35b-a3b"
             or not isinstance(value["endpoint"], str)
             or not value["endpoint"].endswith("/v1/chat/completions")
-            or value["chat_config"] != expected_chat_config
             or value["provider_cache_independence"] != PROVIDER_CACHE_UNOBSERVABLE
             or type(value["elapsed_nanoseconds"]) is not int
             or value["elapsed_nanoseconds"] < 0
         ):
             raise BundleRefusal("inconclusive model event live-boundary identity/configuration mismatch")
+        _, event_candidates = _structured_chat_config(
+            value["chat_config"], f"model_events[{index}].chat_config"
+        )
         _sha(value["request_sha256"], f"model_events[{index}].request_sha256")
         if name in {"CHAT_COMPLETION_OBSERVED", "CHAT_COMPLETION_ACCEPTED"} or (
             name == "CHAT_COMPLETION_REJECTED"
@@ -5197,7 +5411,9 @@ def _validate_inconclusive_ledgers(
             raw = _string(value["raw_response_utf8"], f"model_events[{index}].raw_response_utf8")
             if _sha_bytes(raw.encode("utf-8")) != value["raw_response_sha256"]:
                 raise BundleRefusal("inconclusive accepted raw body digest mismatch")
-            response_digest, _, prompt_tokens, completion_tokens, extra = _response_digest_from_raw(raw, str(value["model"]))
+            response_digest, _, prompt_tokens, completion_tokens, extra = _response_digest_from_raw(
+                raw, str(value["model"]), event_candidates
+            )
             if value["dnrd_response_sha256"] != response_digest or value["usage"] != {"prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens, **extra}:
                 raise BundleRefusal("inconclusive accepted model response does not replay from raw body")
         if name == "CHAT_COMPLETION_REJECTED":
@@ -5296,6 +5512,49 @@ def _validate_inconclusive_ledgers(
     if failure_message is None or occurrence["failure_digest"] != _canonical_hash({"type": occurrence["failure_type"], "message": failure_message}):
         raise BundleRefusal("inconclusive occurrence failure digest does not bind retained terminal event")
 
+    # Retain durable pre-dispatch provenance even when the following model
+    # call does not complete.  Every completed row must immediately follow
+    # its PRE row; one final PRE-only row is allowed for the terminal call.
+    normalized_runner_events: list[Mapping[str, Any]] = []
+    terminal_pre: Mapping[str, Any] | None = None
+    cursor = 0
+    while cursor < len(runner_events):
+        pre = _check_exact_keys(
+            runner_events[cursor],
+            {"schema_version", "event", "ordinal", "phase", "arm", "request", "pre_dispatch_readout"},
+            f"runner_events[{cursor}]",
+        )
+        if pre["schema_version"] != RUNNER_EVENT_SCHEMA or pre["event"] != "PRE_DISPATCH_READOUT" or pre["request"].get("pre_dispatch_receipt_sha256") is not None:
+            raise BundleRefusal("inconclusive runner PRE_DISPATCH_READOUT is malformed")
+        pre_receipt = _canonical_hash(pre)
+        if cursor + 1 < len(runner_events) and runner_events[cursor + 1].get("event") == "COMPLETED_CALL":
+            completed = _check_exact_keys(
+                runner_events[cursor + 1],
+                {"schema_version", "event", "ordinal", "phase", "arm", "request", "sealed_response", "trace", "scorer_outcome", "credit_receipt", "route_digest_sha256", "pre_dispatch_receipt_sha256", "route_replay"},
+                f"runner_events[{cursor + 1}]",
+            )
+            if (
+                completed["schema_version"] != RUNNER_EVENT_SCHEMA
+                or completed["ordinal"] != pre["ordinal"]
+                or any(completed[key] != pre[key] for key in ("phase", "arm"))
+                or completed["pre_dispatch_receipt_sha256"] != pre_receipt
+                or completed["request"].get("pre_dispatch_receipt_sha256") != pre_receipt
+                or {key: value for key, value in completed["request"].items() if key != "pre_dispatch_receipt_sha256"}
+                != {key: value for key, value in pre["request"].items() if key != "pre_dispatch_receipt_sha256"}
+            ):
+                raise BundleRefusal("inconclusive runner completed row does not bind its pre-dispatch receipt")
+            row = dict(completed)
+            row.pop("event")
+            row.pop("pre_dispatch_receipt_sha256")
+            row["pre_dispatch_readout"] = pre["pre_dispatch_readout"]
+            normalized_runner_events.append(row)
+            cursor += 2
+        else:
+            if cursor != len(runner_events) - 1:
+                raise BundleRefusal("inconclusive runner ledger has a nonterminal PRE-only row")
+            terminal_pre = pre
+            cursor += 1
+    runner_events = normalized_runner_events
     seen_runner_digests: set[str] = set()
     previous_ordinal = 0
     for index, event in enumerate(runner_events):
@@ -5304,7 +5563,7 @@ def _validate_inconclusive_ledgers(
             {
                 "schema_version", "ordinal", "phase", "arm", "request",
                 "sealed_response", "trace", "scorer_outcome", "credit_receipt",
-                "route_digest_sha256", "route_replay",
+                "route_digest_sha256", "pre_dispatch_readout", "route_replay",
             },
             f"runner_events[{index}]",
         )
@@ -5329,6 +5588,8 @@ def _validate_inconclusive_ledgers(
         previous_ordinal = ordinal
         seen_runner_digests.add(digest)
         accepted = accepted_by_digest.get(digest)
+        if accepted is None:
+            raise BundleRefusal("runner event does not map to an exact accepted model call")
         provider_body = {
             "chat_template_kwargs": {"enable_thinking": False},
             "max_tokens": MAX_OUTPUT_TOKENS,
@@ -5339,10 +5600,13 @@ def _validate_inconclusive_ledgers(
             "temperature": 0,
             "top_p": 1,
             "logprobs": False,
+            "response_format": _structured_chat_config(
+                accepted["chat_config"],
+                "accepted model event chat_config",
+            )[0]["response_format"],
         }
         if (
-            accepted is None
-            or any(accepted[key] != request[key] for key in ("ordinal", "phase", "arm"))
+            any(accepted[key] != request[key] for key in ("ordinal", "phase", "arm"))
             or accepted["request_sha256"] != _sha_bytes(_canonical_bytes(provider_body))
         ):
             raise BundleRefusal("runner event does not map to an exact accepted model call")
@@ -5350,6 +5614,26 @@ def _validate_inconclusive_ledgers(
         raise BundleRefusal(
             "runner event identities do not exactly cover accepted prior model calls"
         )
+    if terminal_pre is None:
+        raise BundleRefusal("inconclusive runner ledger lacks the terminal pre-dispatch receipt")
+    terminal_context = by_ordinal[calls][0]
+    pre_request = _check_exact_keys(
+        terminal_pre["request"],
+        {"episode_id", "selected_route_id", "prompt", "max_output_tokens", "ordinal", "phase", "arm", "candidate_response_tokens", "pre_dispatch_receipt_sha256"},
+        "terminal PRE_DISPATCH_READOUT.request",
+    )
+    if terminal_pre["ordinal"] != calls or any(
+        terminal_pre[key] != terminal_context[key] for key in ("phase", "arm")
+    ) or pre_request["ordinal"] != calls or pre_request["phase"] != terminal_context["phase"] or pre_request["arm"] != terminal_context["arm"]:
+        raise BundleRefusal("terminal PRE_DISPATCH_READOUT does not bind the terminal model-call schedule")
+    reconstructed_request = dict(pre_request)
+    reconstructed_request["pre_dispatch_receipt_sha256"] = _canonical_hash(terminal_pre)
+    try:
+        terminal_digest = _model_request_digest(reconstructed_request)
+    except JudgeRefusal as error:
+        raise BundleRefusal("terminal PRE_DISPATCH_READOUT request is malformed") from error
+    if terminal_digest != terminal_context["dnrd_request_sha256"]:
+        raise BundleRefusal("terminal PRE_DISPATCH_READOUT receipt does not bind the terminal model request")
 
 
 def _runner_event(
@@ -5360,6 +5644,7 @@ def _runner_event(
         {
             "schema_version", "ordinal", "phase", "arm", "request", "sealed_response", "trace",
             "scorer_outcome", "credit_receipt", "route_digest_sha256", "route_replay",
+            "pre_dispatch_readout",
         },
         label,
     )
@@ -5367,7 +5652,7 @@ def _runner_event(
         raise BundleRefusal(f"{label} ordinal/phase/arm does not match frozen global schedule")
     request = _check_exact_keys(
         event["request"],
-        {"episode_id", "selected_route_id", "prompt", "max_output_tokens", "ordinal", "phase", "arm"},
+        {"episode_id", "selected_route_id", "prompt", "max_output_tokens", "ordinal", "phase", "arm", "candidate_response_tokens", "pre_dispatch_receipt_sha256"},
         f"{label}.request",
     )
     if (
@@ -5378,9 +5663,35 @@ def _runner_event(
         or request["max_output_tokens"] != MAX_OUTPUT_TOKENS
         or request["selected_route_id"] not in episode["candidate_route_ids"]
         or request["prompt"] != _expected_prompt(episode, str(request["selected_route_id"]))
+        or _candidate_response_tokens(request["candidate_response_tokens"], f"{label}.request.candidate_response_tokens")
+        != tuple(sorted(record["response_token"] for record in episode["route_evidence"]))
     ):
         raise BundleRefusal(f"{label}.request is not a frozen public episode/selected-evidence request")
     _sha(event["route_digest_sha256"], f"{label}.route_digest_sha256")
+    readout = _check_exact_keys(
+        event["pre_dispatch_readout"],
+        {
+            "selected_route_id", "route_digest_sha256", "pre_outcome_score_micros",
+            "recovery", "routing_payload_sha256",
+        },
+        f"{label}.pre_dispatch_readout",
+    )
+    if (
+        readout["selected_route_id"] != request["selected_route_id"]
+        or readout["route_digest_sha256"] != event["route_digest_sha256"]
+    ):
+        raise BundleRefusal(f"{label}.pre_dispatch_readout does not bind the selected route")
+    _integer(readout["pre_outcome_score_micros"], f"{label}.pre_dispatch_readout.pre_outcome_score_micros")
+    _sha(readout["routing_payload_sha256"], f"{label}.pre_dispatch_readout.routing_payload_sha256")
+    recovery = _check_exact_keys(
+        readout["recovery"],
+        {"recovered", "fresh_process", "journal_sha256", "process_instance_id"},
+        f"{label}.pre_dispatch_readout.recovery",
+    )
+    if recovery["recovered"] is not True or recovery["fresh_process"] is not True:
+        raise BundleRefusal(f"{label}.pre_dispatch_readout lacks fresh recovery")
+    _sha(recovery["journal_sha256"], f"{label}.pre_dispatch_readout.recovery.journal_sha256")
+    _process_instance_id(recovery["process_instance_id"], f"{label}.pre_dispatch_readout.recovery.process_instance_id")
     return event
 
 
@@ -5403,25 +5714,56 @@ def _reconcile_events_and_state(
     active_state_byte_ceiling: int,
     training_canaries: frozenset[str],
 ) -> tuple[dict[str, bool], list[dict[str, object]], list[dict[str, object]]]:
-    if len(runner_events) != 160:
-        raise BundleRefusal("complete candidate requires exactly 160 runner events")
+    if len(runner_events) != 256:
+        raise BundleRefusal("complete candidate requires exactly 128 PRE_DISPATCH_READOUT and 128 COMPLETED_CALL rows")
+    completed_rows: list[Mapping[str, Any]] = []
+    for ordinal in range(1, 129):
+        first, second = runner_events[(ordinal - 1) * 2 : ordinal * 2]
+        pre = _check_exact_keys(
+            first,
+            {"schema_version", "event", "ordinal", "phase", "arm", "request", "pre_dispatch_readout"},
+            f"runner_events[{(ordinal - 1) * 2}]",
+        )
+        completed = _check_exact_keys(
+            second,
+            {"schema_version", "event", "ordinal", "phase", "arm", "request", "sealed_response", "trace", "scorer_outcome", "credit_receipt", "route_digest_sha256", "pre_dispatch_receipt_sha256", "route_replay"},
+            f"runner_events[{(ordinal - 1) * 2 + 1}]",
+        )
+        if (
+            pre["schema_version"] != RUNNER_EVENT_SCHEMA or completed["schema_version"] != RUNNER_EVENT_SCHEMA
+            or pre["event"] != "PRE_DISPATCH_READOUT" or completed["event"] != "COMPLETED_CALL"
+            or pre["ordinal"] != ordinal or completed["ordinal"] != ordinal
+            or any(pre[key] != completed[key] for key in ("phase", "arm"))
+            or pre["request"].get("pre_dispatch_receipt_sha256") is not None
+            or completed["pre_dispatch_receipt_sha256"] != _canonical_hash(pre)
+            or completed["request"].get("pre_dispatch_receipt_sha256") != completed["pre_dispatch_receipt_sha256"]
+        ):
+            raise BundleRefusal("runner PRE_DISPATCH_READOUT/COMPLETED_CALL linkage is not exact")
+        pre_base = {key: value for key, value in pre["request"].items() if key != "pre_dispatch_receipt_sha256"}
+        completed_base = {key: value for key, value in completed["request"].items() if key != "pre_dispatch_receipt_sha256"}
+        if pre_base != completed_base:
+            raise BundleRefusal("completed runner request differs from its pre-dispatch readout request")
+        normalized = dict(completed)
+        normalized.pop("event")
+        normalized.pop("pre_dispatch_receipt_sha256")
+        normalized["pre_dispatch_readout"] = pre["pre_dispatch_readout"]
+        completed_rows.append(normalized)
+    runner_events = completed_rows
     episodes, stream_by_episode, private_bindings = _public_manifest_index(public, private)
-    expected_normalizer = _sha_bytes(b"NFKC_CASEFOLD_TRIM_COLLAPSE_SPACE_V1")
     overlap = candidate["overlap"]
     if (
-        overlap["normalizer_sha256"] != expected_normalizer
-        or overlap["training_heldout_exact_overlap"] != 0
+        overlap["training_heldout_exact_overlap"] != 0
         or overlap["training_heldout_normalized_overlap"] != 0
         or overlap["prior_item_overlap"] != 0
     ):
         raise BundleRefusal("candidate overlap projection does not match retained public fixture checks")
     evidence_data = _check_exact_keys(state_evidence, {"schema_version", "streams"}, "bridge state evidence")
-    if evidence_data["schema_version"] != "hswm-dnrd-bridge-state-evidence/v1" or type(evidence_data["streams"]) is not list:
+    if evidence_data["schema_version"] != "hswm-dnrd-bridge-state-evidence/v2" or type(evidence_data["streams"]) is not list:
         raise BundleRefusal("bridge state evidence schema mismatch")
     public_streams = {stream["stream_id"]: stream for stream in public["streams"]}
     evidence_by_stream: dict[str, Mapping[str, Any]] = {}
     for index, raw in enumerate(evidence_data["streams"]):
-        row = _check_exact_keys(raw, {"stream_id", "pre_evaluation", "post_evaluation"}, f"bridge state evidence.streams[{index}]")
+        row = _check_exact_keys(raw, {"stream_id", "pre_evaluation", "post_evaluation", "fixed_rule_replay"}, f"bridge state evidence.streams[{index}]")
         stream_id = _string(row["stream_id"], f"bridge state evidence.streams[{index}].stream_id")
         if stream_id in evidence_by_stream or stream_id not in public_streams:
             raise BundleRefusal("bridge state evidence stream coverage mismatch")
@@ -5475,7 +5817,7 @@ def _reconcile_events_and_state(
             if post_process_id in all_recovery_process_ids:
                 raise DiagnosticFailure("VOID_PROTOCOL", "post-evaluation state evidence reuses a recovery process instance across streams")
             all_recovery_process_ids.add(post_process_id)
-        if len({state_entries[stream_id][arm]["mount_id"] for arm in ARMS}) != 4:
+        if len({state_entries[stream_id][arm]["mount_id"] for arm in ARMS}) != 3:
             raise DiagnosticFailure("VOID_PROTOCOL", f"state evidence reuses an arm mount for {stream_id}")
         if any(
             value != 0
@@ -5493,8 +5835,8 @@ def _reconcile_events_and_state(
     for stream in public["streams"]:
         for episode in stream["heldout"]:
             expected_schedule.extend((episode, arm) for arm in episode["arm_order"])
-    if len(expected_schedule) != 160:
-        raise BundleRefusal("public manifest does not regenerate frozen 160-call schedule")
+    if len(expected_schedule) != 128:
+        raise BundleRefusal("public manifest does not regenerate frozen 128-call schedule")
 
     by_stream_events: dict[str, list[Mapping[str, Any]]] = {stream_id: [] for stream_id in public_streams}
     training_current_scores: dict[str, dict[str, dict[str, int]]] = {
@@ -5528,7 +5870,11 @@ def _reconcile_events_and_state(
         if accepted is None:
             raise BundleRefusal("runner event lacks matching accepted model-boundary observation")
         call_canary_evidence.append((event, accepted))
-        _, answer, _, _, _ = _response_digest_from_raw(str(accepted["raw_response_utf8"]), str(accepted["model"]))
+        _, answer, _, _, _ = _response_digest_from_raw(
+            str(accepted["raw_response_utf8"]),
+            str(accepted["model"]),
+            _structured_chat_config(accepted["chat_config"], "accepted model event chat_config")[1],
+        )
         stream_id = str(episode["stream_id"])
         by_stream_events[stream_id].append(event)
         route = str(request["selected_route_id"])
@@ -5596,12 +5942,11 @@ def _reconcile_events_and_state(
             observations[stream_id].setdefault(str(episode["episode_id"]), {})[str(arm)] = {
                 "selected_route_id": route,
                 "route_digest_sha256": digest,
-                "utility": int(outcome["reward"]),
+                "route_reward_micros": int(outcome["reward"]),
             }
             replay_by_probe[stream_id][str(episode["episode_id"])] = expected_replay
 
     stream_checks: list[dict[str, object]] = []
-    utility_report: list[dict[str, object]] = []
     for stream_id, stream in public_streams.items():
         candidate_stream = candidates[stream_id]
         state = state_entries[stream_id]
@@ -5619,14 +5964,52 @@ def _reconcile_events_and_state(
             )
         if training_current_sha[stream_id] != state["FULL"]["state_sha256"] or training_current_scores[stream_id] != score["FULL"]:
             raise BundleRefusal("training credit chain does not reproduce retained FULL state evidence")
-        if training_current_scores[stream_id] != score["RAW_EQUAL_BUDGET"]:
-            raise BundleRefusal("RAW control does not replay W0 plus exact eight training outcome records")
+        full_entry = state["FULL"]
+        fixed_replay = _check_exact_keys(
+            candidate_stream["fixed_rule_replay"],
+            {
+                "schema_version", "rule", "w1_state_sha256", "w1_journal_sha256",
+                "w1_routing_payload_sha256", "w1_routing_payload_bytes",
+                "replay_state_sha256", "replay_journal_sha256",
+                "replay_routing_payload_sha256", "replay_routing_payload_bytes",
+                "replay_process_instance_id", "heldout_readouts",
+            },
+            f"candidate fixed-rule replay {stream_id}",
+        )
+        expected_readouts = [
+            {
+                "episode_id": episode["episode_id"],
+                "selected_route_id": _select(score["FULL"], episode),
+                "route_digest_sha256": _route_digest(
+                    str(episode["context_key"]),
+                    _select(score["FULL"], episode),
+                    score["FULL"][str(episode["context_key"])][_select(score["FULL"], episode)],
+                ),
+            }
+            for episode in stream["heldout"]
+        ]
+        if (
+            fixed_replay["schema_version"] != "hswm-dnrd-fixed-rule-replay-observation/v1"
+            or fixed_replay["rule"] != "signed_reward_times_100000_div_1000000/v1"
+            or fixed_replay["w1_state_sha256"] != state["FULL"]["state_sha256"]
+            or fixed_replay["replay_state_sha256"] != fixed_replay["w1_state_sha256"]
+            or fixed_replay["w1_routing_payload_sha256"] != full_entry["routing_payload_sha256"]
+            or fixed_replay["w1_routing_payload_bytes"] != full_entry["routing_payload_bytes"]
+            or fixed_replay["replay_routing_payload_sha256"] != fixed_replay["w1_routing_payload_sha256"]
+            or fixed_replay["replay_routing_payload_bytes"] != fixed_replay["w1_routing_payload_bytes"]
+            or fixed_replay["heldout_readouts"] != expected_readouts
+        ):
+            raise BundleRefusal("fixed-rule replay gate does not reproduce FULL state/routing payload/readouts")
+        _process_instance_id(
+            fixed_replay["replay_process_instance_id"],
+            f"candidate fixed-rule replay {stream_id}.replay_process_instance_id",
+        )
         expected_deranged = {
             receiver: dict(score["FULL"][donor]) for receiver, donor in stream["matched_derangement"].items()
         }
         if expected_deranged != score["BINDING_DERANGED_NUMERIC_PLACEBO"]:
             raise BundleRefusal("DERANGED control does not equal exact public context permutation of FULL scores")
-        full_entry, raw_entry, deranged_entry = state["FULL"], state["RAW_EQUAL_BUDGET"], state["BINDING_DERANGED_NUMERIC_PLACEBO"]
+        deranged_entry = state["BINDING_DERANGED_NUMERIC_PLACEBO"]
         full_values, deranged_values = _flat_scores(score["FULL"]), _flat_scores(score["BINDING_DERANGED_NUMERIC_PLACEBO"])
         derived_derangement = {
             "algorithm": "within-stratum-no-fixed-point/v1",
@@ -5662,17 +6045,29 @@ def _reconcile_events_and_state(
             or linkage["transition_evidence_sha256"] != _canonical_hash(traces)
         ):
             raise BundleRefusal("candidate local V2 linkage hashes do not replay from retained event records")
-        w0_reward_count = sum(observation["utility"] > 0 for observation in observations[stream_id].values() for arm_name, observation in observation.items() if arm_name == "NO_MEMORY_ROLLBACK")
-        full_changed_w0 = any(
+        positive_counts = {
+            arm: sum(
+                observation["route_reward_micros"] > 0
+                for arm_observations in observations[stream_id].values()
+                for observed_arm, observation in arm_observations.items()
+                if observed_arm == arm
+            )
+            for arm in ARMS
+        }
+        full_changed_w0 = sum(
             arms["FULL"]["selected_route_id"] != arms["NO_MEMORY_ROLLBACK"]["selected_route_id"]
             for arms in observations[stream_id].values()
         )
-        full_changed_deranged = any(
+        full_changed_deranged = sum(
             arms["FULL"]["selected_route_id"] != arms["BINDING_DERANGED_NUMERIC_PLACEBO"]["selected_route_id"]
             for arms in observations[stream_id].values()
         )
-        stream_checks.append({"stream_id": stream_id, "headroom_positive_w0_rewards": w0_reward_count, "full_changed_from_w0": full_changed_w0, "full_changed_from_deranged": full_changed_deranged})
-        utility_report.append({"stream_id": stream_id, "means": {arm: _mean([int(arms[arm]["utility"]) for arms in observations[stream_id].values()]) for arm in ARMS}})
+        stream_checks.append({
+            "stream_id": stream_id,
+            "positive_route_reward_counts": positive_counts,
+            "full_vs_w0_selected_route_differences": full_changed_w0,
+            "full_vs_deranged_selected_route_differences": full_changed_deranged,
+        })
 
     observed_canary_leakage = _recompute_training_canary_leakage(
         canaries=training_canaries,
@@ -5696,10 +6091,6 @@ def _reconcile_events_and_state(
             entry["routing_payload_bytes"] <= active_state_byte_ceiling
             for entries in state_entries.values() for entry in entries.values()
         ),
-        "full_raw_numeric_payload_bytes_equal": all(
-            entries["FULL"]["routing_payload_utf8"] == entries["RAW_EQUAL_BUDGET"]["routing_payload_utf8"]
-            for entries in state_entries.values()
-        ),
         "full_deranged_numeric_payload_byte_count_equal": all(
             entries["FULL"]["routing_payload_bytes"] == entries["BINDING_DERANGED_NUMERIC_PLACEBO"]["routing_payload_bytes"]
             for entries in state_entries.values()
@@ -5714,14 +6105,14 @@ def _reconcile_events_and_state(
     if candidate["parity"] != derived_parity:
         raise BundleRefusal("candidate parity values do not equal independently replayed evidence")
     derived_calls = {
-        "common_training_model_calls": 32, "evaluation_model_calls": 128,
-        "client_dispatched_generation_requests": 160,
-        "logical_model_calls": 160, "route_only_model_calls": 0, "scorer_model_calls": 0,
+        "common_training_model_calls": 32, "evaluation_model_calls": 96,
+        "client_dispatched_generation_requests": 128,
+        "logical_model_calls": 128, "route_only_model_calls": 0, "scorer_model_calls": 0,
         "retries": 0, "client_cache_hits": 0, "post_first_call_operational_failure": False,
     }
     if candidate["call_ledger"] != derived_calls:
         raise BundleRefusal("candidate call ledger does not equal independently replayed schedule")
-    return derived_parity, stream_checks, utility_report
+    return derived_parity, stream_checks, []
 
 
 def _route_only_from_scores(scores: Mapping[str, Mapping[str, int]], episode: Mapping[str, Any]) -> dict[str, str]:
@@ -5825,7 +6216,7 @@ def _validate_git_chronology(
         {"schema_version", "source", "preregistration", "a_to_b_changed_paths", "tree_objects", "receipt_sha256"},
         "git chronology evidence",
     )
-    if source_data["schema_version"] != "hswm-dnrd-git-chronology-evidence/v2":
+    if source_data["schema_version"] != "hswm-dnrd-git-chronology-evidence/v3":
         raise BundleRefusal("git chronology evidence schema mismatch")
     _bundle_sha_receipt(source_data, "git chronology evidence")
     # This binding is deliberately raw artifact bytes rather than the internal
@@ -6087,6 +6478,74 @@ def _inconclusive_bundle_result(
     }
 
 
+def _missing_terminal_artifacts_result() -> dict[str, Any]:
+    """Seal the absence of both permitted terminal artifacts conservatively.
+
+    A post-dispatch executor failure can occur after the attempt marker and
+    boundary ledgers exist but before it writes either terminal projection.
+    That is *not* evidence for an inconclusive occurrence: the required
+    occurrence object was never retained.  Returning a deterministic negative
+    judgment lets the caller retain a machine-readable terminal without
+    inventing an artifact or turning this adjudicator failure into an exit-2
+    refusal.
+    """
+    terminalization_check = "CANDIDATE_AND_INCONCLUSIVE_ARTIFACTS_ABSENT"
+    failure_reason = (
+        "bounded evidence bundle contains neither candidate.json nor "
+        "inconclusive.json; no scientific occurrence artifact was retained"
+    )
+    receipt = {
+        "schema_version": "hswm-dnrd-bundle-verification-receipt/v2",
+        "artifact_sha256": {},
+        "terminal": "VOID_PROTOCOL",
+        "detail": failure_reason,
+        "verification_status": "TERMINAL_ARTIFACT_ABSENCE",
+        "terminalization_check": terminalization_check,
+    }
+    return {
+        "schema_version": JUDGMENT_SCHEMA,
+        "experiment_id": EXPERIMENT_ID,
+        "authority": "TERMINAL_ARTIFACT_ABSENCE_NOT_A_SCIENTIFIC_OCCURRENCE",
+        "terminal": "VOID_PROTOCOL",
+        "scientific_status": "UNJUDGED",
+        "efficacy_claim": "NOT_EVALUATED",
+        "canonical_permit": "NOT_ESTABLISHED",
+        "learning_claim": "NOT_ESTABLISHED",
+        "failure_reason": failure_reason,
+        "terminalization_check": terminalization_check,
+        "bundle_verification_receipt_sha256": _canonical_hash(receipt),
+        "claim_boundary": (
+            "Neither candidate nor inconclusive occurrence artifact was retained. "
+            "This VOID_PROTOCOL terminal is a protocol-closure record, not a verified "
+            "occurrence and establishes no efficacy, general intelligence, canonical Permit, "
+            "admission, or learning."
+        ),
+    }
+
+
+def _void_protocol_bundle_result(root: Path) -> dict[str, Any]:
+    """Validate a pre-dispatch terminal without inventing an occurrence."""
+    value, raw = _bundle_object(root, "void_protocol.json")
+    data = _check_exact_keys(
+        value,
+        {"schema_version", "experiment_id", "post_first_call", "failure_type", "failure_digest"},
+        "void protocol terminal",
+    )
+    if (
+        data["schema_version"] != "hswm-dnrd-void-protocol/v1"
+        or data["experiment_id"] != EXPERIMENT_ID
+        or data["post_first_call"] is not False
+    ):
+        raise BundleRefusal("pre-dispatch void terminal schema/identity is invalid")
+    _string(data["failure_type"], "void protocol terminal.failure_type")
+    _sha(data["failure_digest"], "void protocol terminal.failure_digest")
+    result = _missing_terminal_artifacts_result()
+    result["authority"] = "PRE_DISPATCH_VOID_PROTOCOL_TERMINAL_RETAINED"
+    result["void_protocol_artifact_sha256"] = _sha_bytes(raw)
+    result["terminalization_check"] = "PRE_DISPATCH_VOID_PROTOCOL_ARTIFACT_VALIDATED"
+    return result
+
+
 def _judge_inconclusive_bundle(root: Path) -> dict[str, Any]:
     """Validate a retained aborted occurrence without treating it as a candidate."""
     occurrence, occurrence_bytes = _bundle_object(root, "inconclusive.json")
@@ -6117,7 +6576,7 @@ def _judge_inconclusive_bundle(root: Path) -> dict[str, Any]:
             data["schema_version"] != INCONCLUSIVE_SCHEMA
             or data["experiment_id"] != EXPERIMENT_ID
             or data["post_first_call"] is not True
-            or _integer(data["calls_completed"], "inconclusive occurrence.calls_completed", minimum=1) > 160
+            or _integer(data["calls_completed"], "inconclusive occurrence.calls_completed", minimum=1) > 128
             or _integer(data["client_cache_hits"], "inconclusive occurrence.client_cache_hits") != 0
         ):
             raise BundleRefusal("inconclusive occurrence does not retain the frozen no-retry boundary")
@@ -6141,7 +6600,7 @@ def judge_bundle(bundle_dir: str | Path) -> dict[str, Any]:
     """Authoritatively adjudicate one retained DNRD evidence bundle.
 
     A structural candidate can never be upgraded by this function unless every
-    hash-bound artifact and every 160-call event replay agrees.  Artifact
+    hash-bound artifact and every 128-call event replay agrees.  Artifact
     absence or contradiction produces a conservative ``VOID_PROTOCOL``
     judgment (with a generated receipt), while a malformed candidate itself is
     refused just like the legacy structural helper.
@@ -6154,6 +6613,12 @@ def judge_bundle(bundle_dir: str | Path) -> dict[str, Any]:
         raise BundleRefusal("bundle directory is absent") from error
     if root.is_symlink() or not root.is_dir() or not info:
         raise BundleRefusal("bundle root must be a plain directory")
+    if (root / "void_protocol.json").exists():
+        if (root / "candidate.json").exists() or (root / "inconclusive.json").exists():
+            raise BundleRefusal("void protocol terminal may not coexist with a scientific occurrence artifact")
+        return _void_protocol_bundle_result(root)
+    if not (root / "candidate.json").exists() and not (root / "inconclusive.json").exists():
+        return _missing_terminal_artifacts_result()
     if not (root / "candidate.json").exists() and (root / "inconclusive.json").exists():
         return _judge_inconclusive_bundle(root)
     candidate, candidate_bytes = _bundle_object(root, "candidate.json")
@@ -6176,9 +6641,11 @@ def judge_bundle(bundle_dir: str | Path) -> dict[str, Any]:
         source, source_bytes = _bundle_object(root, "source_manifest.json")
         preregistration, preregistration_bytes = _bundle_object(root, "preregistration.json")
         source_ci, _ = _bundle_object(root, "source_ci_receipt.json")
+        qualification_bytes = _bundle_plain_file(root, "structured_output_qualification.json").read_bytes()
         ratification, _ = _bundle_object(root, "ratification_receipt.json")
         runtime, _ = _bundle_object(root, "runtime_receipt.json")
         attempt, _ = _bundle_object(root, "attempt_lock_receipt.json")
+        terminal_intent, _ = _bundle_object(root, "terminal-intent.json")
         config_readback, _ = _bundle_object(root, "config_readback.json")
         public, public_bytes = _bundle_object(root, "public_manifest.json")
         private, _ = _bundle_object(root, "private/private_manifest.json")
@@ -6212,7 +6679,25 @@ def judge_bundle(bundle_dir: str | Path) -> dict[str, Any]:
         )
         _validate_source_closure(root, source)
         config = _validate_config_readback(config_readback, candidate, runtime)
+        if _sha_bytes(qualification_bytes) != config["structured_output_qualification_sha256"]:
+            raise BundleRefusal("structured-output qualification bytes do not match the pinned config digest")
+        _structured_output_qualification(
+            qualification_bytes, config=config, public=public, private=private
+        )
         _validate_runtime_and_attempt(runtime, attempt, candidate)
+        intent = _check_exact_keys(
+            terminal_intent,
+            {"schema_version", "experiment_id", "attempt_lock_receipt_sha256", "terminal_artifact_paths", "no_retry_or_resume"},
+            "terminal intent",
+        )
+        if (
+            intent["schema_version"] != "hswm-dnrd-terminal-intent/v1"
+            or intent["experiment_id"] != EXPERIMENT_ID
+            or intent["attempt_lock_receipt_sha256"] != attempt["receipt_sha256"]
+            or intent["terminal_artifact_paths"] != ["candidate.json", "inconclusive.json", "void_protocol.json"]
+            or intent["no_retry_or_resume"] is not True
+        ):
+            raise BundleRefusal("terminal intent does not bind the consumed attempt and exact terminal paths")
         _validate_preregistration_runtime_binding(preregistration, runtime, config)
         _validate_verifier_source_binding(source, preregistration, config)
         _validate_verifier_runtime_bundle_evidence(
@@ -6264,9 +6749,11 @@ def judge_bundle(bundle_dir: str | Path) -> dict[str, Any]:
         terminal = structural["terminal"]
         if terminal == "DIAGNOSTIC_INTEGRITY_GO_NO_UTILITY_CLAIM":
             if not all(
-                3 <= int(item["headroom_positive_w0_rewards"]) <= 5
-                and item["full_changed_from_w0"]
-                and item["full_changed_from_deranged"]
+                item["positive_route_reward_counts"].get("FULL") == 8
+                and item["positive_route_reward_counts"].get("NO_MEMORY_ROLLBACK") == 4
+                and int(item["positive_route_reward_counts"].get("BINDING_DERANGED_NUMERIC_PLACEBO", 9)) <= 4
+                and item["full_vs_w0_selected_route_differences"] == 4
+                and int(item["full_vs_deranged_selected_route_differences"]) >= 4
                 for item in stream_checks
             ):
                 terminal = "DIAGNOSTIC_NO_GO"

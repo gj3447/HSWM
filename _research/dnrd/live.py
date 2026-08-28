@@ -36,9 +36,8 @@ CHAT_CONFIG = {
     "temperature": 0,
     "top_p": 1,
 }
-EVENT_SCHEMA = "hswm-dnrd-live-model-event/v2"
+EVENT_SCHEMA = "hswm-dnrd-live-model-event/v3"
 PREFLIGHT_SCHEMA = "hswm-dnrd-live-preflight-receipt/v1"
-ASCII_EDGE_WHITESPACE = " \t\r\n"
 REJECTED_RAW_ENCODING = "base64"
 MAX_ANSWERER_RESPONSE_BYTES = 1_048_576
 
@@ -53,8 +52,10 @@ _RESPONSE_FAILURE_STAGE_CODES = {
     "chat completion must contain exactly one object choice": "CHOICE_CARDINALITY",
     "chat completion choice must finish with exact reason 'stop'": "FINISH_REASON_NOT_STOP",
     "chat completion choice must contain textual message.content": "MESSAGE_CONTENT_NOT_TEXT",
-    "chat completion must contain one non-whitespace response token": "RESPONSE_TOKEN_INVALID",
-    "chat completion response token violates exact DNRD-2 form": "RESPONSE_TOKEN_FORM_INVALID",
+    "chat completion structured response is not strict JSON": "STRUCTURED_RESPONSE_NOT_STRICT_JSON",
+    "chat completion structured response must be an object with exactly response_token": "STRUCTURED_RESPONSE_KEYSET_INVALID",
+    "chat completion structured response_token violates exact DNRD-3 form": "RESPONSE_TOKEN_FORM_INVALID",
+    "chat completion structured response_token is not one of the request candidates": "RESPONSE_TOKEN_NOT_REQUEST_CANDIDATE",
     "chat completion must contain object usage": "USAGE_NOT_OBJECT",
     "usage.prompt_tokens must be a nonnegative integer": "USAGE_PROMPT_TOKENS_INVALID",
     "usage.completion_tokens must be a nonnegative integer": "USAGE_COMPLETION_TOKENS_INVALID",
@@ -276,7 +277,91 @@ def _integer(value: Any, label: str) -> int:
     return value
 
 
-def _parse_completion(raw: bytes) -> ModelReply:
+def _candidate_response_tokens(request: ModelRequest) -> tuple[str, str]:
+    """Read DNRD-3's per-episode, two-token output contract.
+
+    The runner owns construction and commitment of this field.  The transport
+    independently validates it before any dispatch, so a malformed request
+    cannot weaken the schema sent to a provider.
+    """
+    candidates = getattr(request, "candidate_response_tokens", None)
+    if type(candidates) is not tuple or len(candidates) != 2:
+        raise PreDispatchAnswererError("DNRD-3 request must carry exactly two candidate response tokens")
+    first, second = candidates
+    if (
+        not is_response_token(first)
+        or not is_response_token(second)
+        or first >= second
+    ):
+        raise PreDispatchAnswererError(
+            "DNRD-3 request candidate response tokens must be distinct canonical response tokens in sorted order"
+        )
+    return first, second
+
+
+def _response_format(candidates: tuple[str, str]) -> dict[str, Any]:
+    schema = {
+        "type": "object",
+        "properties": {
+            "response_token": {
+                "type": "string",
+                "enum": list(candidates),
+                "pattern": r"^token-[0-9a-f]{20}$",
+                "minLength": 26,
+                "maxLength": 26,
+            },
+        },
+        "required": ["response_token"],
+        "additionalProperties": False,
+    }
+    return {
+        "type": "json_schema",
+        "json_schema": {
+            "name": "hswm_dnrd_response_token",
+            "strict": True,
+            "schema": schema,
+        },
+    }
+
+
+def _chat_config(request: ModelRequest) -> dict[str, Any]:
+    response_format = _response_format(_candidate_response_tokens(request))
+    return {
+        **CHAT_CONFIG,
+        "max_tokens": request.max_output_tokens,
+        "response_format": response_format,
+        "response_format_schema_sha256": commitment(response_format["json_schema"]["schema"]),
+    }
+
+
+def _strict_structured_response(content: str, candidates: tuple[str, str]) -> str:
+    def no_duplicate_object_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        result: dict[str, Any] = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError("duplicate object key")
+            result[key] = value
+        return result
+
+    try:
+        value = json.loads(
+            content,
+            object_pairs_hook=no_duplicate_object_keys,
+            parse_constant=lambda _value: (_ for _ in ()).throw(ValueError("non-finite number")),
+        )
+    except (json.JSONDecodeError, ValueError) as error:
+        raise LiveBoundaryError("chat completion structured response is not strict JSON") from error
+    if type(value) is not dict or set(value) != {"response_token"}:
+        raise LiveBoundaryError("chat completion structured response must be an object with exactly response_token")
+    response_token = value["response_token"]
+    if not is_response_token(response_token):
+        raise LiveBoundaryError("chat completion structured response_token violates exact DNRD-3 form")
+    if response_token not in candidates:
+        raise LiveBoundaryError("chat completion structured response_token is not one of the request candidates")
+    return response_token
+
+
+def _parse_completion(raw: bytes, candidates: tuple[str, str]) -> ModelReply:
     value = _decode_object(raw, "chat completion")
     if value.get("model") != MODEL_ID:
         raise LiveBoundaryError("chat completion model does not match frozen DNRD model")
@@ -288,14 +373,7 @@ def _parse_completion(raw: bytes) -> ModelReply:
     message = choices[0].get("message")
     if type(message) is not dict or type(message.get("content")) is not str:
         raise LiveBoundaryError("chat completion choice must contain textual message.content")
-    # Frozen handling is intentionally limited to ASCII edge whitespace.  No
-    # case folding, token extraction, JSON repair, or interior-whitespace repair
-    # occurs at the live boundary.
-    response_token = message["content"].strip(ASCII_EDGE_WHITESPACE)
-    if not response_token or any(char.isspace() for char in response_token):
-        raise LiveBoundaryError("chat completion must contain one non-whitespace response token")
-    if not is_response_token(response_token):
-        raise LiveBoundaryError("chat completion response token violates exact DNRD-2 form")
+    response_token = _strict_structured_response(message["content"], candidates)
     usage = value.get("usage")
     if type(usage) is not dict:
         raise LiveBoundaryError("chat completion must contain object usage")
@@ -338,7 +416,7 @@ def _rejected_completion_event(
     raw_response: bytes,
     response: object,
     elapsed_nanoseconds: int,
-    max_tokens: int,
+    chat_config: Mapping[str, Any],
     error: LiveBoundaryError,
 ) -> dict[str, Any]:
     """Retain the exact bounded response body after a parser/HTTP refusal.
@@ -359,7 +437,7 @@ def _rejected_completion_event(
         "raw_response_base64": base64.b64encode(raw_response).decode("ascii"),
         "raw_response_bytes": len(raw_response),
         "http_status": response.status if isinstance(response, HttpResponse) else None,
-        "chat_config": {**CHAT_CONFIG, "max_tokens": max_tokens},
+        "chat_config": dict(chat_config),
         "elapsed_nanoseconds": elapsed_nanoseconds,
         "provider_cache_independence": "NOT_OBSERVABLE_BY_CLIENT",
         "failure_stage_code": _failure_stage_code(error),
@@ -374,7 +452,7 @@ def _transport_response_rejected_event(
     endpoint: str,
     request_body: bytes,
     elapsed_nanoseconds: int,
-    max_tokens: int,
+    chat_config: Mapping[str, Any],
 ) -> dict[str, Any]:
     """Describe a malformed transport return without inventing response bytes."""
     failure_message = "transport did not return an exact HTTP observation"
@@ -385,7 +463,7 @@ def _transport_response_rejected_event(
         "endpoint": endpoint,
         "model": MODEL_ID,
         "request_sha256": _sha_bytes(request_body),
-        "chat_config": {**CHAT_CONFIG, "max_tokens": max_tokens},
+        "chat_config": dict(chat_config),
         "elapsed_nanoseconds": elapsed_nanoseconds,
         "provider_cache_independence": "NOT_OBSERVABLE_BY_CLIENT",
         "failure_stage_code": "TRANSPORT_RESPONSE_NOT_EXACT_HTTP_RESPONSE",
@@ -402,7 +480,7 @@ def _oversize_response_rejected_event(
     retained_prefix: bytes,
     http_status: int,
     elapsed_nanoseconds: int,
-    max_tokens: int,
+    chat_config: Mapping[str, Any],
 ) -> dict[str, Any]:
     """Retain only the exact fixed prefix that proves an oversized response.
 
@@ -425,7 +503,7 @@ def _oversize_response_rejected_event(
         "retained_response_prefix_bytes": len(retained_prefix),
         "response_body_bytes_lower_bound": len(retained_prefix),
         "http_status": http_status,
-        "chat_config": {**CHAT_CONFIG, "max_tokens": max_tokens},
+        "chat_config": dict(chat_config),
         "elapsed_nanoseconds": elapsed_nanoseconds,
         "provider_cache_independence": "NOT_OBSERVABLE_BY_CLIENT",
         "failure_stage_code": "RESPONSE_BODY_EXCEEDS_1_MIB",
@@ -451,7 +529,6 @@ def _call_context(request: ModelRequest) -> dict[str, Any]:
     if request.phase == "heldout" and request.arm not in {
         "FULL",
         "NO_MEMORY_ROLLBACK",
-        "RAW_EQUAL_BUDGET",
         "BINDING_DERANGED_NUMERIC_PLACEBO",
     }:
         raise PreDispatchAnswererError("heldout request arm is invalid")
@@ -482,6 +559,8 @@ class OpenAICompatibleDnrdAnswerer:
             raise PreDispatchAnswererError("DNRD request max_output_tokens must equal the frozen limit")
         if not isinstance(request.prompt, str) or not request.prompt:
             raise PreDispatchAnswererError("DNRD request prompt must be nonempty text")
+        chat_config = _chat_config(request)
+        candidates = _candidate_response_tokens(request)
         call_context = _call_context(request)
         body = _json_bytes({
             "chat_template_kwargs": CHAT_CONFIG["chat_template_kwargs"],
@@ -493,6 +572,7 @@ class OpenAICompatibleDnrdAnswerer:
             "temperature": CHAT_CONFIG["temperature"],
             "top_p": CHAT_CONFIG["top_p"],
             "logprobs": CHAT_CONFIG["logprobs"],
+            "response_format": chat_config["response_format"],
         })
         started_ns = time.monotonic_ns()
         try:
@@ -515,7 +595,7 @@ class OpenAICompatibleDnrdAnswerer:
                 retained_prefix=error.retained_prefix,
                 http_status=error.http_status,
                 elapsed_nanoseconds=elapsed_ns,
-                max_tokens=request.max_output_tokens,
+                chat_config=chat_config,
             ))
             raise LiveBoundaryError("chat completion response exceeds frozen 1 MiB byte limit") from error
         except Exception as error:
@@ -528,7 +608,7 @@ class OpenAICompatibleDnrdAnswerer:
                 "endpoint": f"{self.config.base_url}/v1/chat/completions",
                 "model": MODEL_ID,
                 "request_sha256": _sha_bytes(body),
-                "chat_config": {**CHAT_CONFIG, "max_tokens": request.max_output_tokens},
+                "chat_config": chat_config,
                 "elapsed_nanoseconds": time.monotonic_ns() - started_ns,
                 "provider_cache_independence": "NOT_OBSERVABLE_BY_CLIENT",
                 "failure_type": type(error).__name__,
@@ -542,7 +622,7 @@ class OpenAICompatibleDnrdAnswerer:
                 endpoint=endpoint,
                 request_body=body,
                 elapsed_nanoseconds=elapsed_ns,
-                max_tokens=request.max_output_tokens,
+                chat_config=chat_config,
             ))
             raise LiveBoundaryError("transport did not return an exact HTTP observation")
         if type(response.status) is not int or type(response.body) is not bytes:
@@ -551,7 +631,7 @@ class OpenAICompatibleDnrdAnswerer:
                 endpoint=endpoint,
                 request_body=body,
                 elapsed_nanoseconds=elapsed_ns,
-                max_tokens=request.max_output_tokens,
+                chat_config=chat_config,
             ))
             raise LiveBoundaryError("transport did not return an exact HTTP observation")
         raw = response.body
@@ -564,7 +644,7 @@ class OpenAICompatibleDnrdAnswerer:
                 retained_prefix=retained_prefix,
                 http_status=response.status,
                 elapsed_nanoseconds=elapsed_ns,
-                max_tokens=request.max_output_tokens,
+                chat_config=chat_config,
             ))
             raise LiveBoundaryError("chat completion response exceeds frozen 1 MiB byte limit")
         _append(self._event_sink, {
@@ -576,13 +656,13 @@ class OpenAICompatibleDnrdAnswerer:
             "request_sha256": _sha_bytes(body),
             "raw_response_sha256": _sha_bytes(raw),
             "http_status": response.status if isinstance(response, HttpResponse) else None,
-            "chat_config": {**CHAT_CONFIG, "max_tokens": request.max_output_tokens},
+            "chat_config": chat_config,
             "elapsed_nanoseconds": elapsed_ns,
             "provider_cache_independence": "NOT_OBSERVABLE_BY_CLIENT",
         })
         try:
             checked = _require_response(response)
-            reply = _parse_completion(checked.body)
+            reply = _parse_completion(checked.body, candidates)
         except LiveBoundaryError as error:
             _append(self._event_sink, _rejected_completion_event(
                 call_context=call_context,
@@ -591,7 +671,7 @@ class OpenAICompatibleDnrdAnswerer:
                 raw_response=raw,
                 response=response,
                 elapsed_nanoseconds=elapsed_ns,
-                max_tokens=request.max_output_tokens,
+                chat_config=chat_config,
                 error=error,
             ))
             raise
@@ -604,6 +684,7 @@ class OpenAICompatibleDnrdAnswerer:
             "request_sha256": _sha_bytes(body),
             "raw_response_sha256": _sha_bytes(checked.body),
             "raw_response_utf8": checked.body.decode("utf-8", errors="strict"),
+            "chat_config": chat_config,
             "dnrd_response_sha256": commitment({
                 "response_token": reply.response_token,
                 "input_tokens": reply.input_tokens,

@@ -1,4 +1,4 @@
-"""Strict, deterministic task fixture for DNRD-2.
+"""Strict, deterministic task fixture for DNRD-3.
 
 The public manifest is safe to hand to a future runner: it deliberately has no
 answer, correct-route, or latent-policy material.  The private scorer manifest
@@ -15,9 +15,9 @@ import unicodedata
 from typing import Any
 
 
-FAMILY = "REPEATED_CONTEXT_TABULAR_ROUTING_MECHANICS_V1"
-PUBLIC_SCHEMA = "hswm-dnrd-public-manifest/v1"
-PRIVATE_SCHEMA = "hswm-dnrd-private-scorer-manifest/v1"
+FAMILY = "REPEATED_CONTEXT_TABULAR_ROUTING_MECHANICS_V2"
+PUBLIC_SCHEMA = "hswm-dnrd-public-manifest/v2"
+PRIVATE_SCHEMA = "hswm-dnrd-private-scorer-manifest/v2"
 SEED_BYTES = 32
 TRAINING_CANARY_PREFIX = "dnrd-training-provenance:"
 RESPONSE_TOKEN_PATTERN = r"token-[0-9a-f]{20}"
@@ -26,7 +26,6 @@ RESPONSE_TOKEN_ASCII_BYTES = 26
 EVALUATION_ARMS = (
     "FULL",
     "NO_MEMORY_ROLLBACK",
-    "RAW_EQUAL_BUDGET",
     "BINDING_DERANGED_NUMERIC_PLACEBO",
 )
 
@@ -57,7 +56,7 @@ def _token(seed: bytes, label: str, length: int = 20) -> str:
 
 
 def is_response_token(value: object) -> bool:
-    """Whether ``value`` is the one admissible DNRD-2 response-token form.
+    """Whether ``value`` is the one admissible DNRD-3 response-token form.
 
     Every generated token and every runner-accepted answer is exactly 26 ASCII
     bytes: ``token-`` followed by 20 lowercase hexadecimal characters.
@@ -89,7 +88,7 @@ def _episode(
     template = f"{phase}-template-{marker}"
     prompt = (
         f"{phase} nonce {marker}: select one supplied evidence record for {entity} and "
-        "return only the response token from selected evidence."
+        "return a JSON object whose only field is response_token from selected evidence."
     )
     route_evidence = []
     for route in routes:
@@ -183,19 +182,10 @@ def _generate(seed: bytes) -> tuple[dict[str, Any], dict[str, Any]]:
                 "heldout": heldout,
             }
         )
-        all_episodes = training + heldout
         private_bindings.append(
             {
                 "stream_id": f"stream-{stream}",
                 "context_correct_route": correct_routes,
-                "episode_gold_answers": {
-                    episode["episode_id"]: next(
-                        evidence["response_token"]
-                        for evidence in episode["route_evidence"]
-                        if evidence["route_id"] == correct_routes[episode["context_key"]]
-                    )
-                    for episode in all_episodes
-                },
             }
         )
 
@@ -211,7 +201,6 @@ def _generate(seed: bytes) -> tuple[dict[str, Any], dict[str, Any]]:
         "seed_hex": seed.hex(),
         "public_manifest": public_base,
         "private_bindings": private_bindings,
-        "normalization": "NFKC_CASEFOLD_TRIM_COLLAPSE_SPACE_V1",
     }
     public = {
         **public_base,
@@ -315,8 +304,12 @@ def audit_public_manifest(public: dict[str, Any]) -> None:
                 raise ManifestError("heldout must not force a route")
             heldout_context_count[episode["context_key"]] += 1
         for position in range(len(EVALUATION_ARMS)):
-            if {arm: sum(episode["arm_order"][position] == arm for episode in heldout) for arm in EVALUATION_ARMS} != {arm: 2 for arm in EVALUATION_ARMS}:
-                raise ManifestError("heldout arm-order position is not exactly balanced")
+            position_counts = sorted(
+                sum(episode["arm_order"][position] == arm for episode in heldout)
+                for arm in EVALUATION_ARMS
+            )
+            if position_counts != [2, 3, 3]:
+                raise ManifestError("heldout arm-order position is not maximally balanced")
         if observed_pairs != expected_pairs or any(count != 2 for count in heldout_context_count.values()):
             raise ManifestError("exposure or heldout balance mismatch")
         all_training.extend(training)
@@ -361,7 +354,10 @@ def _audit_episode(episode: dict[str, Any], routes: list[str], contexts: list[st
             raise ManifestError("heldout arm order must be one exact arm permutation")
     if not isinstance(episode["aliases"], list) or not episode["aliases"]:
         raise ManifestError("episode aliases missing")
-    if "return only the response token from selected evidence." not in episode["prompt"]:
+    if (
+        "return a JSON object whose only field is response_token from selected evidence."
+        not in episode["prompt"]
+    ):
         raise ManifestError("prompt does not freeze response-token instruction")
     evidence = episode["route_evidence"]
     if not isinstance(evidence, list) or len(evidence) != 2:
@@ -379,7 +375,7 @@ def _audit_episode(episode: dict[str, Any], routes: list[str], contexts: list[st
         raise ManifestError("route evidence response tokens must differ")
     for record in evidence:
         if not is_response_token(record["response_token"]):
-            raise ManifestError("route evidence response token violates exact DNRD-2 form")
+            raise ManifestError("route evidence response token violates exact DNRD-3 form")
         if record["route_id"] not in record["evidence_text"] or record["response_token"] not in record["evidence_text"]:
             raise ManifestError("route evidence does not bind its route and response token")
 
@@ -419,13 +415,11 @@ def audit_manifest_pair(public: dict[str, Any], private: dict[str, Any]) -> None
     audit_public_manifest(public)
     _assert_exact_keys(
         private,
-        {"schema_version", "family", "seed_hex", "public_manifest", "private_bindings", "normalization"},
+        {"schema_version", "family", "seed_hex", "public_manifest", "private_bindings"},
         "private manifest",
     )
     if private["schema_version"] != PRIVATE_SCHEMA or private["family"] != FAMILY:
         raise ManifestError("wrong private schema or family")
-    if private["normalization"] != "NFKC_CASEFOLD_TRIM_COLLAPSE_SPACE_V1":
-        raise ManifestError("normalization drift")
     try:
         seed = bytes.fromhex(private["seed_hex"])
     except (TypeError, ValueError) as exc:
@@ -440,6 +434,11 @@ def audit_manifest_pair(public: dict[str, Any], private: dict[str, Any]) -> None
     if len(private["private_bindings"]) != 4:
         raise ManifestError("private stream binding count mismatch")
     for stream, binding in zip(public["streams"], private["private_bindings"], strict=True):
+        _assert_exact_keys(
+            binding,
+            {"stream_id", "context_correct_route"},
+            "private stream binding",
+        )
         if binding["stream_id"] != stream["stream_id"]:
             raise ManifestError("private binding stream mismatch")
         routes = stream["route_ids"]
@@ -448,19 +447,6 @@ def audit_manifest_pair(public: dict[str, Any], private: dict[str, Any]) -> None
             raise ManifestError("private context binding mismatch")
         if route_values.count(routes[0]) != 2 or route_values.count(routes[1]) != 2:
             raise ManifestError("correct routes must be 2/2 balanced per stream")
-        episode_ids = {episode["episode_id"] for episode in stream["training"] + stream["heldout"]}
-        if set(binding["episode_gold_answers"]) != episode_ids:
-            raise ManifestError("private gold episode mismatch")
-        training_gold = {
-            normalize_answer(binding["episode_gold_answers"][episode["episode_id"]])
-            for episode in stream["training"]
-        }
-        heldout_gold = {
-            normalize_answer(binding["episode_gold_answers"][episode["episode_id"]])
-            for episode in stream["heldout"]
-        }
-        if training_gold & heldout_gold:
-            raise ManifestError("train/heldout gold overlap")
 
 
 @dataclass(frozen=True)

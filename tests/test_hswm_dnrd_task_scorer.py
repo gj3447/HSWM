@@ -76,8 +76,11 @@ def test_generator_is_deterministic_private_and_public_are_separated() -> None:
             and "dnrd-training-provenance:" not in episode["prompt"]
             for episode in stream["heldout"]
         )
-        for position in range(4):
-            assert {arm: sum(episode["arm_order"][position] == arm for episode in stream["heldout"]) for arm in stream["heldout"][0]["arm_order"]} == {arm: 2 for arm in stream["heldout"][0]["arm_order"]}
+        for position in range(3):
+            assert sorted(
+                sum(episode["arm_order"][position] == arm for episode in stream["heldout"])
+                for arm in stream["heldout"][0]["arm_order"]
+            ) == [2, 3, 3]
     assert len(training_provenance_canaries(public)) == 32
 
 
@@ -140,16 +143,18 @@ def test_auditor_refuses_tamper_and_overlap() -> None:
         audit_manifest_pair(public, private)
 
 
-def test_scorer_is_strict_and_never_returns_gold() -> None:
+def test_scorer_outcome_is_route_bound_not_model_text_bound() -> None:
     public, private = generate_manifests(SEED)
     stream = public["streams"][0]
     episode = stream["heldout"][0]
     binding = private["private_bindings"][0]
     correct_route = binding["context_correct_route"][episode["context_key"]]
-    answer = binding["episode_gold_answers"][episode["episode_id"]]
-    correct_evidence = next(record for record in episode["route_evidence"] if record["route_id"] == correct_route)
-    assert answer == correct_evidence["response_token"]
-    result = score_response(_response(private, episode["episode_id"], correct_route, answer.upper()), private)
+    answer = next(
+        record["response_token"]
+        for record in episode["route_evidence"]
+        if record["route_id"] == correct_route
+    )
+    result = score_response(_response(private, episode["episode_id"], correct_route, answer), private)
     assert set(result) == {
         "episode_id", "selected_route_id", "reward", "outcome_digest", "scorer_source_identity",
         "scorer_address", "role_separation",
@@ -161,7 +166,21 @@ def test_scorer_is_strict_and_never_returns_gold() -> None:
     wrong_token = next(record["response_token"] for record in episode["route_evidence"] if record["route_id"] == wrong_route)
     assert wrong_token != answer
     assert score_response(_response(private, episode["episode_id"], wrong_route, wrong_token), private)["reward"] == -1_000_000
-    assert score_response(_response(private, episode["episode_id"], correct_route, "wrong"), private)["reward"] == 0
+    alternate_token = next(
+        record["response_token"]
+        for record in episode["route_evidence"]
+        if record["response_token"] != answer
+    )
+    alternate = score_response(
+        _response(private, episode["episode_id"], correct_route, alternate_token),
+        private,
+    )
+    assert alternate["reward"] == 1_000_000
+    assert alternate["outcome_digest"] == result["outcome_digest"]
+    with pytest.raises(ManifestError, match="episode candidate token"):
+        score_response(
+            _response(private, episode["episode_id"], correct_route, "wrong"), private
+        )
     record = _response(private, episode["episode_id"], correct_route, answer)
     record["extra"] = "forbidden"
     with pytest.raises(ManifestError, match="fields drifted"):
@@ -174,7 +193,11 @@ def test_normalization_and_isolated_copied_closure_cli(tmp_path: Path) -> None:
     episode = public["streams"][1]["training"][0]
     binding = private["private_bindings"][1]
     route = binding["context_correct_route"][episode["context_key"]]
-    answer = binding["episode_gold_answers"][episode["episode_id"]]
+    answer = next(
+        record["response_token"]
+        for record in episode["route_evidence"]
+        if record["route_id"] == route
+    )
     private_path = tmp_path / "private.json"
     response_path = tmp_path / "response.json"
     private_path.write_text(json.dumps(private), encoding="utf-8")

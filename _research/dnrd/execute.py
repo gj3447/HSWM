@@ -115,6 +115,8 @@ class ExecutionConfig:
     ratification_receipt_sha256: str | None = None
     source_ci_receipt_path: Path | None = None
     source_ci_receipt_sha256: str | None = None
+    structured_output_qualification_path: Path | None = None
+    structured_output_qualification_sha256: str | None = None
     tokenizer_preflight_prompt: str | None = None
     bridge_runtime_root: Path | None = None
     bridge_state_root: Path | None = None
@@ -156,15 +158,22 @@ class ExecutionResult:
 _HEX = frozenset("0123456789abcdef")
 SOURCE_MANIFEST_SCHEMA = "hswm-dnrd-source-freeze-manifest/v1"
 SOURCE_CI_RECEIPT_SCHEMA = "hswm-dnrd-source-ci-receipt/v1"
-RATIFICATION_RECEIPT_SCHEMA = "hswm-dnrd-ratification-receipt/v2"
-RATIFICATION_TEMPLATE_VERSION = "hswm-dnrd-ratification-statement/v2"
-RATIFICATION_TEMPLATE = (
-    "I ratify HSWM-DNRD-2 preregistration SHA-256 {preregistration_sha256} "
-    "under hswm-dnrd-ratification-statement/v2."
+STRUCTURED_OUTPUT_QUALIFICATION_SCHEMA = "hswm-dnrd3-structured-output-qualification-summary/v1"
+STRUCTURED_OUTPUT_QUALIFICATION_RECORD_ROLE = (
+    "CONTENT_ADDRESSED_OPERATOR_SUMMARY_OF_DISJOINT_NONSCIENTIFIC_LIVE_"
+    "QUALIFICATION_NOT_SCIENTIFIC_EVIDENCE"
 )
-ATTEMPT_LOCK_SCHEMA = "hswm-dnrd-durable-attempt-marker/v2"
-GIT_CHRONOLOGY_EVIDENCE_SCHEMA = "hswm-dnrd-git-chronology-evidence/v2"
+RATIFICATION_RECEIPT_SCHEMA = "hswm-dnrd-ratification-receipt/v3"
+RATIFICATION_TEMPLATE_VERSION = "hswm-dnrd-ratification-statement/v3"
+RATIFICATION_TEMPLATE = (
+    "I ratify HSWM-DNRD-3 preregistration SHA-256 {preregistration_sha256} "
+    "under hswm-dnrd-ratification-statement/v3."
+)
+ATTEMPT_LOCK_SCHEMA = "hswm-dnrd-durable-attempt-marker/v3"
+GIT_CHRONOLOGY_EVIDENCE_SCHEMA = "hswm-dnrd-git-chronology-evidence/v3"
 BUNDLE_INDEX_SCHEMA = "hswm-dnrd-evidence-bundle-index/v1"
+VOID_PROTOCOL_SCHEMA = "hswm-dnrd-void-protocol/v1"
+TERMINAL_INTENT_SCHEMA = "hswm-dnrd-terminal-intent/v1"
 ATTEMPT_MARKER_SCOPE = (
     "DETERMINISTIC_FILE_AND_PARENT_DIRECTORY_FSYNC_MARKER_UNDER_CONFIGURED_"
     "REGISTRY_ONLY_GLOBAL_SINGLETON_NOT_PROVEN"
@@ -178,7 +187,9 @@ EXECUTION_CLOSURE_ISOLATION_CLAIM = (
 RUNTIME_CLOSURE_MAX_FILES = 8_192
 RUNTIME_CLOSURE_MAX_TOTAL_BYTES = 67_108_864
 VERIFIER_TIMEOUT_SECONDS = 60
-TOKENIZER_PREFLIGHT_PROMPT = "token-ffffffffffffffffffff"
+TOKENIZER_PREFLIGHT_PROMPT = (
+    '{"response_token":"token-ffffffffffffffffffff"}'
+)
 VERIFIER_ARGUMENT_CONTRACT = (
     "online", "--expected-round", "{FIRST_ELIGIBLE_ROUND}"
 )
@@ -219,16 +230,7 @@ _MOUNT_ID_RE = re.compile(
     r"^dnrd-mount-v1-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 )
 _DIGEST_FILENAME_RE = re.compile(r"^[0-9a-f]{64}$")
-PREREG_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v2"
-RAW_REPLAY_DESCRIPTION = (
-    "For each stream, replay exactly eight retained training update records containing "
-    "scorer-outcome integer rewards through the frozen numeric score rule from W0; the "
-    "records are derived from sealed responses and outcome digests. This is an "
-    "engineering replay control, not a model-visible raw-transcript, equal-token, or "
-    "durable-state-superiority comparison, and it does not claim cryptographic "
-    "signatures on the "
-    "update records."
-)
+PREREG_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v3"
 PREREG_CLAIM_BOUNDARY = {
     "canonical_role": (
         "BOUNDED_SCHEMA_APPROVED_DURABLE_NUMERIC_ROUTING_MECHANICS_PROJECTION_"
@@ -239,20 +241,21 @@ PREREG_CLAIM_BOUNDARY = {
         "P1V3_P1V4_SYNTHETIC_L0_ACTUATION_ONLY_NO_L1_INHERITANCE",
         "P1V3V4_L1_CAUSAL_LESSON_KILLED_BEFORE_REGISTRATION_NO_REVIVAL",
         "DNRD1_VOID_PROTOCOL_POST_FIRST_CALL_NO_MECHANICS_RESULT_NO_RETRY",
+        "DNRD2_JUDGMENT_REFUSED_POST_THIRD_CALL_NO_MECHANICS_RESULT_NO_RETRY",
     ],
     "forbidden_rescues": [
         "NO_POST_FREEZE_TUNING_OR_GATE_RELAXATION",
         "NO_RETRY_RERUN_RESUME_REPLACEMENT_OR_SECOND_PULSE",
-        "NO_RELABELING_DNRD2_AS_A_DNRD1_RETRY_REPAIR_OR_RESULT",
+        "NO_RELABELING_DNRD3_AS_A_DNRD1_OR_DNRD2_RETRY_REPAIR_OR_RESULT",
         "NO_RELABELING_NUMERIC_REPLAY_AS_RAW_TRANSCRIPT_COMPARISON",
         "NO_PROMOTION_TO_LLM_LEARNING_UNSEEN_GENERALIZATION_UTILITY_OR_HSWM_EFFICACY",
     ],
     "scientific_question": (
         "Under source/runtime-trusted repeated-context exhaustive forced exposure, "
-        "does a fixed scorer-outcome-bound integer routing payload persist across "
+        "does a response-independent scorer-outcome-bound integer routing payload persist across "
         "fresh-process recovery and alter pre-model route selection relative to exact "
         "W0 rollback and context-binding derangement, while fixed-rule replay of the "
-        "same retained training update records reproduces the numeric payload?"
+        "same retained training update records reproduces W1 without model dispatch?"
     ),
     "hypotheses": {
         "integrity_go": (
@@ -266,6 +269,11 @@ PREREG_CLAIM_BOUNDARY = {
         "void": (
             "Identity, chronology, leakage, parity, call accounting, immutable evidence, "
             "or singleton protocol integrity is contradicted."
+        ),
+        "primary_finite_rule": (
+            "IN_EACH_OF_FOUR_STREAMS_FULL_ROUTE_REWARD_POSITIVE_8_OF_8_W0_POSITIVE_"
+            "4_OF_8_DERANGED_POSITIVE_AT_MOST_4_OF_8_FULL_DIFFERS_FROM_W0_EXACTLY_"
+            "4_OF_8_AND_FROM_DERANGED_AT_LEAST_4_OF_8_ALL_READ_BEFORE_MODEL_DISPATCH"
         ),
     },
     "testbed_claims": {
@@ -283,11 +291,13 @@ PREREG_CLAIM_BOUNDARY = {
         ),
         "model_role": "SELECTED_EVIDENCE_ECHO_BOUNDARY_NOT_THE_LEARNER_UNDER_TEST",
         "response_boundary": (
-            "EXACT_26_ASCII_BYTE_RESPONSE_TOKEN_MAX_OUTPUT_64_EXACT_STOP_REQUIRED_PER_CALL_"
-            "FULL_TOKENIZER_FAMILY_FIT_NOT_PROVEN"
+            "SERVER_CONSTRAINED_STRICT_JSON_TWO_PUBLIC_CANDIDATE_ENUM_MAX_OUTPUT_64_"
+            "EXACT_STOP_REQUIRED_PER_CALL_RESPONSE_IS_POST_ROUTE_NUISANCE_NOT_OUTCOME"
         ),
         "scorer_role": "DECLARED_ROLE_SEPARATION_NOT_PROVEN",
-        "raw_role": "FIXED_RULE_RETAINED_UPDATE_RECORD_NUMERIC_REPLAY_FIDELITY_ONLY",
+        "replay_role": (
+            "NO_MODEL_ADMISSION_GATE_FOR_FIXED_RULE_RETAINED_UPDATE_RECORD_REPLAY_ONLY"
+        ),
     },
     "arms": {
         "FULL": (
@@ -297,7 +307,6 @@ PREREG_CLAIM_BOUNDARY = {
         "NO_MEMORY_ROLLBACK": (
             "Recover and evaluate the exact immutable W0 genesis payload with no learned update."
         ),
-        "RAW_EQUAL_BUDGET": RAW_REPLAY_DESCRIPTION,
         "BINDING_DERANGED_NUMERIC_PLACEBO": (
             "Permute context bindings within stratum while preserving the matched numeric "
             "payload byte count, precision, update multiset, and L1/L2 norms; full history, "
@@ -307,7 +316,10 @@ PREREG_CLAIM_BOUNDARY = {
     "interventions": {
         "rollback": "EXACT_W0_RECOVERY_AND_POST_FULL_RESTORE_REPLAY",
         "binding_derangement": "WITHIN_STRATUM_NO_FIXED_POINT_CONTEXT_PERMUTATION",
-        "raw_replay": "SAME_RETAINED_UPDATE_RECORDS_SAME_FIXED_INTEGER_UPDATE_RULE_FROM_W0",
+        "fixed_rule_replay_gate": (
+            "NO_MODEL_DISPATCH_SAME_RETAINED_UPDATE_RECORDS_SAME_FIXED_INTEGER_UPDATE_RULE_"
+            "FROM_W0_MUST_REPRODUCE_W1_NUMERIC_PAYLOAD_AND_ROUTE_READOUT"
+        ),
     },
     "parity_claims": {
         "compiler_input_audit": (
@@ -322,7 +334,7 @@ PREREG_CLAIM_BOUNDARY = {
         "W0_HEADROOM_ON_REPEATED_CONTEXTS",
         "FULL_VS_W0_PRE_MODEL_ROUTE_DIFFERENCE",
         "FULL_VS_BINDING_DERANGEMENT_PRE_MODEL_ROUTE_DIFFERENCE",
-        "FULL_VS_RAW_FIXED_RULE_NUMERIC_REPLAY_EQUALITY",
+        "FIXED_RULE_REPLAY_W1_NUMERIC_PAYLOAD_AND_PRE_MODEL_READOUT_EQUALITY_GATE",
         "FRESH_PROCESS_STATE_RECOVERY",
         "EXACT_ROLLBACK_AND_RESTORE",
         "LEAKAGE_PARITY_AND_CALL_ACCOUNTING",
@@ -336,8 +348,8 @@ PREREG_CLAIM_BOUNDARY = {
         "SECOND_SINGLETON_ATTEMPT_OR_POST_OBSERVATION_REPLACEMENT",
     ],
     "single_attempt_policy": (
-        "ONE_NEW_DNRD2_FILE_AND_PARENT_DIRECTORY_FSYNC_MARKER_SCOPED_SINGLETON_OCCURRENCE_"
-        "DNRD1_REMAINS_CONSUMED_NO_RETRY_RERUN_RESUME_OR_REPLACEMENT"
+        "ONE_NEW_DNRD3_FILE_AND_PARENT_DIRECTORY_FSYNC_MARKER_SCOPED_SINGLETON_OCCURRENCE_"
+        "DNRD1_AND_DNRD2_REMAIN_CONSUMED_NO_RETRY_RERUN_RESUME_OR_REPLACEMENT"
     ),
     "required_before_measurement": [
         "CLEAN_PUSHED_SOURCE_A_WITH_EXACT_SOURCE_MANIFEST",
@@ -345,7 +357,7 @@ PREREG_CLAIM_BOUNDARY = {
         "DIRECT_CHILD_PREREGISTRATION_B_CHANGING_EXACTLY_ONE_PREREG_PATH",
         "EXTERNAL_EXACT_PREREGISTRATION_SHA256_RATIFICATION_RECEIPT",
         "FIRST_ELIGIBLE_QUICKNET_PULSE_AT_LEAST_900_SECONDS_AFTER_SOURCE_A_AND_RATIFICATION",
-        "DNRD1_ATTEMPT_MARKER_AND_VOID_OCCURRENCE_REMAIN_UNCHANGED_AND_CONSUMED",
+        "DNRD1_AND_DNRD2_ATTEMPT_MARKERS_AND_OCCURRENCES_REMAIN_UNCHANGED_AND_CONSUMED",
     ],
     "result_promotion": {
         "only_go_terminal": "DIAGNOSTIC_INTEGRITY_GO_NO_UTILITY_CLAIM",
@@ -382,6 +394,7 @@ CORE_SOURCE_FILES = frozenset(
         "_research/dnrd/execute.py",
         "_research/dnrd/judge.py",
         "tests/test_hswm_dnrd_execute.py",
+        "tests/test_hswm_dnrd_integration.py",
         "tests/test_hswm_dnrd_judge.py",
         "tests/test_hswm_dnrd_live.py",
         "tests/test_hswm_dnrd_runner.py",
@@ -419,7 +432,7 @@ CORE_SOURCE_FILES = frozenset(
         "tools/swm0w_drand/package-lock.json",
         "tools/swm0w_drand/fixtures/quicknet-round-1000.json",
         "_research/dnrd/verify-beacon.mjs",
-        "docs/research/HSWM_DNRD_2_SOURCE_A_SCIENTIFIC_BOUNDARY_2026-08-27.md",
+        "docs/research/HSWM_DNRD_3_SOURCE_A_SCIENTIFIC_BOUNDARY_2026-08-28.md",
     }
 )
 
@@ -758,7 +771,10 @@ def _closure_plan_mounts(plan: Mapping[str, Any]) -> tuple[str, list[dict[str, A
         "post_evaluation_routing_payload_sha256",
     }
     for index, item in enumerate(streams):
-        stream = _exact_keys(item, {"stream_id", "arms"}, "bridge mount closure plan stream")
+        stream = _exact_keys(
+            item, {"stream_id", "arms", "fixed_rule_replay"},
+            "bridge mount closure plan stream",
+        )
         stream_id = stream["stream_id"]
         if (
             not isinstance(stream_id, str)
@@ -811,10 +827,29 @@ def _closure_plan_mounts(plan: Mapping[str, Any]) -> tuple[str, list[dict[str, A
                     ],
                 }
             )
+        replay = _exact_keys(
+            stream["fixed_rule_replay"], expected_arm_fields,
+            "bridge mount closure plan fixed-rule replay",
+        )
+        replay_mount_id = replay["mount_id"]
+        if (
+            not isinstance(replay_mount_id, str)
+            or _MOUNT_ID_RE.fullmatch(replay_mount_id) is None
+            or replay_mount_id in seen_mounts
+            or replay["mount_role"] != MOUNT_ROLES["RAW_EQUAL_BUDGET"]
+        ):
+            raise ExecutionRefusal("bridge mount closure replay-gate identity/role drifted")
+        seen_mounts.add(replay_mount_id)
+        for key in (
+            "pre_evaluation_journal_sha256", "post_evaluation_journal_sha256",
+            "pre_evaluation_routing_payload_sha256", "post_evaluation_routing_payload_sha256",
+        ):
+            _hex(replay[key], f"bridge mount closure replay-gate {key}")
+        mounts.append({"stream_id": stream_id, "arm": "RAW_EQUAL_BUDGET", **dict(replay)})
     if seen_streams != {"stream-0", "stream-1", "stream-2", "stream-3"} or len(
         seen_mounts
     ) != 16:
-        raise ExecutionRefusal("bridge mount closure plan does not name exact DNRD mounts")
+        raise ExecutionRefusal("bridge mount closure plan must name twelve scientific-arm mounts and four replay-gate mounts")
     return bridge_state_evidence_sha256, sorted(
         mounts, key=lambda item: (item["stream_id"], item["arm"])
     )
@@ -861,7 +896,7 @@ class _ProductionBridgeMountClosureExporter:
         streams_root, controls_root = root / "streams", root / "controls"
         mount_ids = {item["mount_id"] for item in mounts}
         if set(_closure_directory_names(mounts_root, "bridge mounts root")) != mount_ids:
-            raise ExecutionRefusal("bridge mounts root does not equal the sixteen observed mounts")
+            raise ExecutionRefusal("bridge mounts root does not equal the observed scientific-arm and replay-gate mounts")
         expected_registry = {f"{mount_id}.json" for mount_id in mount_ids}
         if set(_closure_directory_names(registry_root, "bridge registry root")) != expected_registry:
             raise ExecutionRefusal("bridge registry root does not equal observed mount metadata")
@@ -1066,7 +1101,7 @@ def _load_source_manifest(config: ExecutionConfig) -> dict[str, Any]:
     )
     if (
         manifest["schema_version"] != SOURCE_MANIFEST_SCHEMA
-        or manifest["experiment_id"] != "HSWM-DNRD-2"
+        or manifest["experiment_id"] != "HSWM-DNRD-3"
         or manifest["source_commit_tree_bound_externally"]
         != "SOURCE_COMMIT_TREE_BOUND_EXTERNALLY_NO_SELF_CYCLE"
     ):
@@ -1197,6 +1232,119 @@ def _load_source_ci_receipt(config: ExecutionConfig) -> tuple[dict[str, Any], by
     return receipt, raw
 
 
+def _load_structured_output_qualification(
+    config: ExecutionConfig,
+) -> tuple[dict[str, Any], bytes, frozenset[str]]:
+    """Load only the bounded, non-scientific output-format qualification.
+
+    The raw provider bodies were deliberately not retained.  This receipt is
+    an operational qualification and supplies no experiment outcome.
+    """
+    path, digest = (
+        config.structured_output_qualification_path,
+        config.structured_output_qualification_sha256,
+    )
+    if path is None or digest is None:
+        raise ExecutionRefusal("structured-output qualification path and SHA-256 pin are required")
+    _hex(digest, "structured-output qualification SHA-256")
+    raw = path.read_bytes()
+    if _sha_bytes(raw) != digest:
+        raise ExecutionRefusal("structured-output qualification content hash drifted")
+    # This external operator receipt deliberately uses canonical JSONL-style
+    # encoding: one canonical object followed by exactly one LF.  Preserve
+    # and hash those original bytes, but parse only its canonical object.
+    if not raw.endswith(b"\n") or raw.count(b"\n") != 1:
+        raise ExecutionRefusal("structured-output qualification must be one canonical JSON object followed by LF")
+    value = _strict_json_bytes(raw[:-1], "structured-output qualification")
+    required = {
+        "schema_version", "domain", "event_schema", "experiment_occurrence",
+        "future_seed_material_used", "record_role", "raw_full_stdout_record_persisted",
+        "retry_count", "max_output_tokens", "model_endpoint", "served_model_id",
+        "vllm_version", "provider_cache_independence", "calls", "started_at_unix_ns",
+        "ended_at_unix_ns", "live_source_sha256", "runner_source_sha256",
+    }
+    data = _exact_keys(value, required, "structured-output qualification")
+    if (
+        data["schema_version"] != STRUCTURED_OUTPUT_QUALIFICATION_SCHEMA
+        or data["domain"] != "HSWM-DNRD3-STRUCTURED-OUTPUT-QUALIFICATION-v1"
+        or data["event_schema"] != "hswm-dnrd-live-model-event/v3"
+        or data["experiment_occurrence"] is not False
+        or data["future_seed_material_used"] is not False
+        or data["record_role"] != STRUCTURED_OUTPUT_QUALIFICATION_RECORD_ROLE
+        or data["raw_full_stdout_record_persisted"] is not False
+        or type(data["retry_count"]) is not int
+        or data["retry_count"] != 0
+        or type(data["max_output_tokens"]) is not int
+        or data["max_output_tokens"] != MAX_OUTPUT_TOKENS
+        or data["model_endpoint"] != config.model_endpoint
+        or data["served_model_id"] != MODEL_ID
+        or data["vllm_version"] != VLLM_VERSION
+        or data["provider_cache_independence"] != PROVIDER_CACHE_UNOBSERVABLE
+        or type(data["calls"]) is not list or len(data["calls"]) != 3
+    ):
+        raise ExecutionRefusal("structured-output qualification does not bind the frozen non-scientific contract")
+    if (
+        type(data["started_at_unix_ns"]) is not int
+        or type(data["ended_at_unix_ns"]) is not int
+        or data["started_at_unix_ns"] <= 0
+        or data["ended_at_unix_ns"] <= data["started_at_unix_ns"]
+    ):
+        raise ExecutionRefusal("structured-output qualification time interval is invalid")
+    _hex(data["live_source_sha256"], "structured-output qualification live source SHA-256")
+    _hex(data["runner_source_sha256"], "structured-output qualification runner source SHA-256")
+    tokens: set[str] = set()
+    requested_candidate_indices: set[int] = set()
+    expected_call = {
+        "candidate_response_tokens", "completion_tokens", "dnrd_request_sha256",
+        "dnrd_response_sha256", "finish_reason", "http_request_sha256", "http_status",
+        "ordinal", "prompt_tokens", "raw_response_sha256", "requested_token",
+        "response_format_schema_sha256", "returned_token",
+    }
+    for ordinal, call in enumerate(data["calls"], start=1):
+        call = _exact_keys(call, expected_call, f"structured-output qualification.calls[{ordinal - 1}]")
+        candidates = call["candidate_response_tokens"]
+        if (
+            type(call["ordinal"]) is not int or call["ordinal"] != ordinal
+            or type(call["http_status"]) is not int or call["http_status"] != 200
+            or call["finish_reason"] != "stop" or type(candidates) is not list
+            or len(candidates) != 2 or candidates != sorted(candidates)
+            or len(set(candidates)) != 2 or call["requested_token"] not in candidates
+            or call["returned_token"] != call["requested_token"]
+            or type(call["prompt_tokens"]) is not int or call["prompt_tokens"] < 0
+            or type(call["completion_tokens"]) is not int
+            or not 0 < call["completion_tokens"] <= MAX_OUTPUT_TOKENS
+        ):
+            raise ExecutionRefusal("structured-output qualification call contract drifted")
+        for token in candidates:
+            if not isinstance(token, str) or re.fullmatch(r"token-[0-9a-f]{20}", token) is None:
+                raise ExecutionRefusal("structured-output qualification token form drifted")
+            tokens.add(token)
+        for key in ("dnrd_request_sha256", "dnrd_response_sha256", "http_request_sha256", "raw_response_sha256", "response_format_schema_sha256"):
+            _hex(call[key], f"structured-output qualification {key}")
+        expected_schema = {
+            "type": "object",
+            "properties": {
+                "response_token": {
+                    "type": "string",
+                    "enum": candidates,
+                    "pattern": r"^token-[0-9a-f]{20}$",
+                    "minLength": 26,
+                    "maxLength": 26,
+                }
+            },
+            "required": ["response_token"],
+            "additionalProperties": False,
+        }
+        if call["response_format_schema_sha256"] != commitment(expected_schema):
+            raise ExecutionRefusal("structured-output qualification response schema digest drifted")
+        requested_candidate_indices.add(candidates.index(call["requested_token"]))
+    if len(tokens) != 6:
+        raise ExecutionRefusal("structured-output qualification must contain six disjoint candidate tokens")
+    if requested_candidate_indices != {0, 1}:
+        raise ExecutionRefusal("structured-output qualification must exercise both candidate enum positions")
+    return dict(data), raw, frozenset(tokens)
+
+
 def _validate_preregistration(
     config: ExecutionConfig,
     *,
@@ -1239,8 +1387,8 @@ def _validate_preregistration(
     data = _exact_keys(prereg, required, "preregistration")
     if (
         data["schema_version"] != PREREG_SCHEMA
-        or data["experiment_id"] != "HSWM-DNRD-2"
-        or data["protocol_version"] != "v2"
+        or data["experiment_id"] != "HSWM-DNRD-3"
+        or data["protocol_version"] != "v3"
         or data["status"] != "FROZEN_AWAITING_EXACT_HASH_RATIFICATION"
     ):
         raise ExecutionRefusal("preregistration identity/status is not the frozen pre-ratification contract")
@@ -1304,6 +1452,7 @@ def _validate_preregistration(
             "verifier_helper_sha256",
             "verifier_package_lock_sha256",
             "verifier_runtime_bundle_sha256",
+            "structured_output_qualification_sha256",
             "subprocess_environment",
         },
         "preregistration.runtime_bindings",
@@ -1323,6 +1472,8 @@ def _validate_preregistration(
         or runtime["verifier_helper_sha256"] != config.verifier_helper_sha256
         or runtime["verifier_package_lock_sha256"] != config.verifier_package_lock_sha256
         or runtime["verifier_runtime_bundle_sha256"] != config.verifier_runtime_bundle_sha256
+        or runtime["structured_output_qualification_sha256"]
+        != config.structured_output_qualification_sha256
         or runtime["subprocess_environment"] != _pinned_subprocess_environment()
     ):
         raise ExecutionRefusal("preregistration runtime identities do not match the supplied frozen config")
@@ -1359,14 +1510,14 @@ def _validate_preregistration(
         "preregistration.testbed.model",
     )
     if (
-        testbed["family"] != "REPEATED_CONTEXT_TABULAR_ROUTING_MECHANICS_V1"
+        testbed["family"] != "REPEATED_CONTEXT_TABULAR_ROUTING_MECHANICS_V2"
         or testbed["development_streams"] != 4
         or testbed["training_calls_per_stream_maximum"] != 8
         or testbed["paired_heldout_probes_per_stream"] != 8
-        or testbed["evaluation_arms"] != 4
-        or testbed["evaluation_calls"] != 128
+        or testbed["evaluation_arms"] != 3
+        or testbed["evaluation_calls"] != 96
         or testbed["shared_learning_or_compiler_calls_maximum"] != 32
-        or testbed["client_dispatched_generation_request_ceiling"] != 160
+        or testbed["client_dispatched_generation_request_ceiling"] != 128
         or model["served_model_id"] != MODEL_ID
         or model["substitution_allowed"] is not False
         or model["temperature"] != 0
@@ -1382,13 +1533,10 @@ def _validate_preregistration(
         {
             "FULL",
             "NO_MEMORY_ROLLBACK",
-            "RAW_EQUAL_BUDGET",
             "BINDING_DERANGED_NUMERIC_PLACEBO",
         },
         "preregistration.arms",
     )
-    if arms["RAW_EQUAL_BUDGET"] != RAW_REPLAY_DESCRIPTION:
-        raise ExecutionRefusal("preregistration RAW arm overclaims transcript/token/state parity")
     parity = _exact_keys(
         data["parity_and_leakage"],
         {
@@ -1398,14 +1546,16 @@ def _validate_preregistration(
             "equal_candidate_evidence_universe",
             "all_active_payloads_within_byte_ceiling",
             "active_state_byte_ceiling",
-            "full_raw_numeric_payload_bytes_equal",
+            "full_fixed_rule_replay_numeric_payload_bytes_equal",
             "full_deranged_numeric_payload_byte_count_equal",
             "arm_labels_hidden_from_model",
             "fresh_process_recovery_observed",
             "distinct_arm_mount_ids",
             "evaluation_read_only_wrt_routing_observed",
+            "pre_dispatch_readout_bound_before_model_response",
+            "scorer_outcome_response_independent",
             "cache_hits_required",
-            "gold_open_only_after_response_seal",
+            "private_route_binding_open_only_after_response_seal",
             "compiler_input_audit",
             "canary",
         },
@@ -1417,13 +1567,15 @@ def _validate_preregistration(
         "equal_generation_limits_input_token_parity_not_claimed",
         "equal_candidate_evidence_universe",
         "all_active_payloads_within_byte_ceiling",
-        "full_raw_numeric_payload_bytes_equal",
+        "full_fixed_rule_replay_numeric_payload_bytes_equal",
         "full_deranged_numeric_payload_byte_count_equal",
         "arm_labels_hidden_from_model",
         "fresh_process_recovery_observed",
         "distinct_arm_mount_ids",
         "evaluation_read_only_wrt_routing_observed",
-        "gold_open_only_after_response_seal",
+        "pre_dispatch_readout_bound_before_model_response",
+        "scorer_outcome_response_independent",
+        "private_route_binding_open_only_after_response_seal",
     }
     if (
         any(parity[key] is not True for key in required_true)
@@ -2201,6 +2353,8 @@ def _verify_static_pins(
         config.ratification_receipt_sha256,
         config.source_ci_receipt_path,
         config.source_ci_receipt_sha256,
+        config.structured_output_qualification_path,
+        config.structured_output_qualification_sha256,
         config.tokenizer_preflight_prompt,
         config.bridge_state_root,
         config.node_executable_path,
@@ -2217,6 +2371,7 @@ def _verify_static_pins(
     assert config.attempt_registry_root is not None
     assert config.ratification_receipt_path is not None
     assert config.source_ci_receipt_path is not None
+    assert config.structured_output_qualification_path is not None
     assert config.tokenizer_preflight_prompt is not None
     assert config.bridge_state_root is not None
     assert config.node_executable_path is not None
@@ -2231,6 +2386,7 @@ def _verify_static_pins(
         ("singleton attempt registry", config.attempt_registry_root),
         ("ratification receipt", config.ratification_receipt_path),
         ("source CI receipt", config.source_ci_receipt_path),
+        ("structured-output qualification", config.structured_output_qualification_path),
         ("bridge mutable state root", config.bridge_state_root),
         ("node executable", config.node_executable_path),
         ("python executable", config.python_executable_path),
@@ -2243,7 +2399,7 @@ def _verify_static_pins(
     if any(config.bridge_state_root.iterdir()):
         raise ExecutionRefusal("bridge mutable state root must be empty before a singleton occurrence")
     if config.tokenizer_preflight_prompt != TOKENIZER_PREFLIGHT_PROMPT:
-        raise ExecutionRefusal("tokenizer preflight prompt differs from the frozen DNRD-2 response-form probe")
+        raise ExecutionRefusal("tokenizer preflight prompt differs from the frozen DNRD-3 structured-response probe")
     _assert_distinct_roots(config)
     if _sha_bytes(config.ratification_text.encode("utf-8")) != config.ratification_text_sha256:
         raise ExecutionRefusal("ratification text hash drifted")
@@ -2537,6 +2693,8 @@ def _attempt_lock(
         "ratification_statement_sha256": config.ratification_text_sha256,
         "pulse_receipt_sha256": pulse_receipt_sha256,
         "runtime_receipt_sha256": runtime_receipt_sha256,
+        "terminal_intent_schema": TERMINAL_INTENT_SCHEMA,
+        "terminal_artifact_relative_path": "terminal-intent.json",
     }
     lock = {**unsigned, "receipt_sha256": commitment(unsigned)}
     target = config.attempt_registry_root / f"{lock['receipt_sha256']}.json"
@@ -2559,6 +2717,108 @@ def _attempt_lock(
         # identity rather than permit a replacement attempt.
         raise
     return lock
+
+
+def _terminal_record(*, post_first_call: bool, calls_completed: int, error: Exception) -> dict[str, Any]:
+    """A conservative terminal, never a scientific judgment."""
+    digest = commitment({"type": type(error).__name__, "message": str(error)})
+    if post_first_call:
+        return {
+            "schema_version": "hswm-dnrd-inconclusive-occurrence/v2",
+            "experiment_id": "HSWM-DNRD-3", "post_first_call": True,
+            "calls_completed": calls_completed, "client_cache_hits": 0,
+            "failure_type": type(error).__name__, "failure_digest": digest,
+        }
+    return {
+        "schema_version": VOID_PROTOCOL_SCHEMA, "experiment_id": "HSWM-DNRD-3",
+        "post_first_call": False, "failure_type": type(error).__name__,
+        "failure_digest": digest,
+    }
+
+
+def _persist_terminal_if_possible(
+    output_root: Path, *, post_first_call: bool, calls_completed: int = 0, error: Exception
+) -> None:
+    """Best-effort fail-closed record; never masks the triggering error."""
+    try:
+        if not output_root.exists():
+            return
+        terminal_exists = any(
+            (output_root / terminal).exists()
+            for terminal in ("candidate.json", "inconclusive.json", "void_protocol.json")
+        )
+        name = "inconclusive.json" if post_first_call else "void_protocol.json"
+        if not terminal_exists and not (output_root / name).exists():
+            _atomic_json(output_root / name, _terminal_record(
+                post_first_call=post_first_call, calls_completed=calls_completed, error=error
+            ))
+        if not (output_root / "bundle_index.json").exists():
+            _atomic_json(output_root / "bundle_index.json", _bundle_index(output_root))
+    except Exception:
+        # terminal-intent is written before any post-lock action and remains
+        # the durable fail-closed pointer when this filesystem is unusable.
+        pass
+
+
+def _post_dispatch_progress(dependencies: ExecutionDependencies) -> tuple[bool, int]:
+    """Use durable live-boundary observations, never runner bookkeeping."""
+    try:
+        # A production occurrence must derive this decision from the fsynced
+        # ledger, rather than a mutable answerer/runner snapshot.  Test seams
+        # without a ledger path retain the provider fallback solely because
+        # they cannot exercise the production durable boundary.
+        if dependencies.model_event_ledger_path is not None:
+            path = dependencies.model_event_ledger_path
+            if not path.exists():
+                return False, 0
+            _plain_file(path, "durable live model event ledger", mode=0o600)
+            raw = path.read_bytes()
+            if not raw:
+                return False, 0
+            if not raw.endswith(b"\n"):
+                raise ExecutionRefusal(
+                    "durable model event ledger lacks its terminal LF"
+                )
+            rows = raw[:-1].split(b"\n")
+            if not rows or any(not row for row in rows):
+                raise ExecutionRefusal(
+                    "durable model event ledger contains an empty JSONL row"
+                )
+            events = tuple(
+                _strict_json_bytes(line, "durable model event row")
+                for line in rows
+            )
+        elif dependencies.model_event_ledger is not None:
+            events = tuple(dependencies.model_event_ledger())
+        else:
+            return False, 0
+        # Any durable live-boundary row is conservative post-dispatch evidence:
+        # rejected/ambiguous transport outcomes cannot reopen a singleton.
+        identities = {
+            (event.get("ordinal"), event.get("dnrd_request_sha256"))
+            for event in events
+            if isinstance(event, Mapping)
+            and isinstance(event.get("ordinal"), int)
+            and isinstance(event.get("dnrd_request_sha256"), str)
+        }
+        return bool(events), max(1, len(identities)) if events else 0
+    except Exception:
+        # A failed reread after dispatch is conservatively post-call.
+        present = dependencies.model_event_ledger_path is not None and dependencies.model_event_ledger_path.exists()
+        return present, 1 if present else 0
+
+
+def _post_lock_step(
+    output_root: Path, dependencies: ExecutionDependencies, operation: Callable[[], Any]
+) -> Any:
+    """Apply the terminal guarantee to one post-lock operation."""
+    try:
+        return operation()
+    except Exception as error:
+        post_first_call, calls_completed = _post_dispatch_progress(dependencies)
+        _persist_terminal_if_possible(output_root, post_first_call=post_first_call,
+            calls_completed=calls_completed, error=error)
+        raise
 
 
 def _jsonl(events: Sequence[Mapping[str, Any]]) -> bytes:
@@ -2745,6 +3005,9 @@ def _execute(
         require_official_identity=require_official_runtime_identity,
     )
     source_ci_receipt, source_ci_bytes = _load_source_ci_receipt(config)
+    qualification, qualification_bytes, qualification_tokens = (
+        _load_structured_output_qualification(config)
+    )
     ratification_receipt, ratification_bytes = _load_ratification_receipt(config)
     source_manifest = _load_source_manifest(config)
     runtime_tree_manifest = _runtime_tree_manifest(config)
@@ -2803,69 +3066,109 @@ def _execute(
         pulse_receipt_sha256=pulse.receipt_sha256,
         runtime_receipt_sha256=runtime_receipt["receipt_sha256"],
     )
-    public, private = generate_manifests(bytes.fromhex(pulse.seed_hex))
-    tracked = [item for item in _git(config, dependencies, "ls-files").splitlines() if item]
-    _generated_overlap(config.repo_root, public, tracked)
-    assert config.tokenizer_preflight_prompt is not None
-    deployment = _deployment_receipt(
-        dependencies.live_preflight(config),
-        config.model_endpoint,
-        tokenizer_prompt=config.tokenizer_preflight_prompt,
-    )
+    # Establish a durable owner-only terminal pointer before any post-lock
+    # materialization or provider request.  If the output filesystem later
+    # fails completely, the immutable attempt marker still declares that this
+    # consumed occurrence has no retry/resume path.
+    try:
+        config.output_root.mkdir(mode=0o700, parents=False)
+        os.chmod(config.output_root, 0o700)
+        _fsync_directory(config.output_root.parent)
+        _atomic_json(config.output_root / "terminal-intent.json", {
+            "schema_version": TERMINAL_INTENT_SCHEMA,
+            "experiment_id": "HSWM-DNRD-3",
+            "attempt_lock_receipt_sha256": attempt_lock["receipt_sha256"],
+            "terminal_artifact_paths": ["candidate.json", "inconclusive.json", "void_protocol.json"],
+            "no_retry_or_resume": True,
+        })
+    except Exception as error:
+        # The immutable attempt marker already consumes this identity.  If the
+        # output directory exists and remains usable, also retain the strongest
+        # possible pre-dispatch terminal/index; otherwise the marker is the
+        # final durable no-retry record.
+        _persist_terminal_if_possible(
+            config.output_root,
+            post_first_call=False,
+            calls_completed=0,
+            error=error,
+        )
+        raise
+    # From this point forward the occurrence is consumed *and* has a durable
+    # terminal pointer.  Every post-lock operation goes through this small
+    # guard; do not add an unguarded write/validation/copy below it.
+    def post_lock(operation: Callable[[], Any]) -> Any:
+        return _post_lock_step(config.output_root, dependencies, operation)
 
-    config.output_root.mkdir(mode=0o700, parents=False)
-    os.chmod(config.output_root, 0o700)
+    public, private = post_lock(lambda: generate_manifests(bytes.fromhex(pulse.seed_hex)))
+    fixture_bytes = post_lock(lambda: canonical_json({"public": public, "private": private}))
+    def validate_fixture() -> None:
+        if any(token.encode("ascii") in fixture_bytes for token in qualification_tokens):
+            raise ExecutionRefusal("future-seeded DNRD fixture overlaps structured-output qualification candidate tokens")
+        tracked = [item for item in _git(config, dependencies, "ls-files").splitlines() if item]
+        _generated_overlap(config.repo_root, public, tracked)
+    post_lock(validate_fixture)
+    assert config.tokenizer_preflight_prompt is not None
+    deployment = post_lock(lambda: _deployment_receipt(
+        dependencies.live_preflight(config), config.model_endpoint,
+        tokenizer_prompt=config.tokenizer_preflight_prompt,
+    ))
+
     private_dir = config.output_root / "private"
-    private_dir.mkdir(mode=0o700)
-    _atomic_bytes(
+    post_lock(lambda: private_dir.mkdir(mode=0o700))
+    post_lock(lambda: _atomic_bytes(
         config.output_root / "source_manifest.json",
         _plain_relative_file(config.repo_root, config.source_manifest_path, "source manifest").read_bytes(),
-    )
-    _copy_source_closure(config.output_root, config.repo_root, source_manifest)
-    _atomic_bytes(
+    ))
+    post_lock(lambda: _copy_source_closure(config.output_root, config.repo_root, source_manifest))
+    post_lock(lambda: _atomic_bytes(
         config.output_root / "preregistration.json",
         _plain_relative_file(config.repo_root, config.prereg_path, "preregistration").read_bytes(),
-    )
-    _atomic_bytes(config.output_root / "source_ci_receipt.json", source_ci_bytes)
-    _atomic_bytes(config.output_root / "ratification_receipt.json", ratification_bytes)
-    _atomic_json(config.output_root / "git_chronology_evidence.json", git_chronology_evidence)
-    _atomic_json(config.output_root / "public_manifest.json", public)
-    _atomic_json(private_dir / "private_manifest.json", private, 0o600)
-    _atomic_bytes(config.output_root / "pulse_verifier_receipt.json", verifier_bytes)
-    _atomic_json(config.output_root / "pulse_binding.json", pulse.canonical())
-    _atomic_json(config.output_root / "deployment_receipt.json", deployment)
-    _atomic_json(config.output_root / "runtime_receipt.json", runtime_receipt)
-    _atomic_bytes(
+    ))
+    post_lock(lambda: _atomic_bytes(config.output_root / "source_ci_receipt.json", source_ci_bytes))
+    post_lock(lambda: _atomic_bytes(config.output_root / "ratification_receipt.json", ratification_bytes))
+    post_lock(lambda: _atomic_json(config.output_root / "git_chronology_evidence.json", git_chronology_evidence))
+    post_lock(lambda: _atomic_json(config.output_root / "public_manifest.json", public))
+    post_lock(lambda: _atomic_json(private_dir / "private_manifest.json", private, 0o600))
+    post_lock(lambda: _atomic_bytes(config.output_root / "pulse_verifier_receipt.json", verifier_bytes))
+    post_lock(lambda: _atomic_json(config.output_root / "pulse_binding.json", pulse.canonical()))
+    post_lock(lambda: _atomic_json(config.output_root / "deployment_receipt.json", deployment))
+    post_lock(lambda: _atomic_bytes(
+        config.output_root / "structured_output_qualification.json",
+        qualification_bytes,
+        0o400,
+    ))
+    post_lock(lambda: _atomic_json(config.output_root / "runtime_receipt.json", runtime_receipt))
+    post_lock(lambda: _atomic_bytes(
         config.output_root / VERIFIER_RUNTIME_BUNDLE_EVIDENCE_PATH,
         verifier_runtime_bundle_bytes,
         0o400,
-    )
+    ))
     assert config.bridge_runtime_tree_manifest_path is not None
     assert config.bridge_runtime_root is not None
-    _atomic_bytes(
+    post_lock(lambda: _atomic_bytes(
         config.output_root / "bridge_runtime_tree_manifest.json",
         config.bridge_runtime_tree_manifest_path.read_bytes(),
         0o400,
-    )
-    _copy_runtime_closure(
-        config.output_root,
-        config.bridge_runtime_root,
-        runtime_tree_manifest,
-    )
-    _atomic_json(config.output_root / "attempt_lock_receipt.json", attempt_lock)
+    ))
+    post_lock(lambda: _copy_runtime_closure(
+        config.output_root, config.bridge_runtime_root, runtime_tree_manifest
+    ))
+    post_lock(lambda: _atomic_json(config.output_root / "attempt_lock_receipt.json", attempt_lock))
     readback = {
         key: str(value) if isinstance(value, Path) else value
         for key, value in asdict(config).items()
         if key not in {"ratification_text"}
     }
-    _atomic_json(config.output_root / "config_readback.json", readback)
+    post_lock(lambda: _atomic_json(config.output_root / "config_readback.json", readback))
 
-    runner_events: list[Mapping[str, Any]] = []
+    runner_event_ledger = post_lock(lambda: _DurableJsonlEventLedger(
+        config.output_root / "runner_events.jsonl"
+    ))
 
     def sink(event: Mapping[str, Any]) -> None:
-        runner_events.append(dict(event))
+        runner_event_ledger(event)
 
-    bindings = {
+    bindings = post_lock(lambda: {
         "source_manifest_sha256": config.source_manifest_sha256,
         "preregistration_sha256": config.prereg_sha256,
         "pulse_receipt_sha256": pulse.receipt_sha256,
@@ -2876,8 +3179,8 @@ def _execute(
         "git_chronology_evidence_sha256": _sha_bytes(
             (config.output_root / "git_chronology_evidence.json").read_bytes()
         ),
-    }
-    metadata = MeasurementMetadata(
+    })
+    metadata = post_lock(lambda: MeasurementMetadata(
         bindings=bindings,
         chronology={
             "source_commit": config.source_a_commit,
@@ -2904,36 +3207,46 @@ def _execute(
         # The byte ceiling comes from the parsed preregistration; W0 is not
         # padded to imitate byte equality with W1.
         active_state_byte_ceiling=preregistration["parity_and_leakage"]["active_state_byte_ceiling"],
+    ))
+    result = post_lock(lambda: run_diagnostic(
+            public,
+            private_manifest_commitment=public["private_manifest_commitment"],
+            answerer=dependencies.answerer,
+            bridge=dependencies.bridge,
+            scorer=dependencies.scorer,
+            metadata=metadata,
+            event_sink=sink,
+            model_event_ledger_provider=dependencies.model_event_ledger,
+            closure_exporter=dependencies.closure_exporter,
+    ))
+    model_events = post_lock(lambda: tuple(dict(event) for event in dependencies.model_event_ledger()))
+    runner_events = post_lock(lambda: tuple(dict(event) for event in runner_event_ledger.snapshot()))
+    runner_bytes, model_bytes = post_lock(
+        lambda: (_jsonl(runner_events), _jsonl(model_events))
     )
-    result = run_diagnostic(
-        public,
-        private_manifest_commitment=public["private_manifest_commitment"],
-        answerer=dependencies.answerer,
-        bridge=dependencies.bridge,
-        scorer=dependencies.scorer,
-        metadata=metadata,
-        event_sink=sink,
-        model_event_ledger_provider=dependencies.model_event_ledger,
-        closure_exporter=dependencies.closure_exporter,
-    )
-    model_events = tuple(dict(event) for event in dependencies.model_event_ledger())
-    runner_bytes, model_bytes = _jsonl(runner_events), _jsonl(model_events)
-    _atomic_bytes(config.output_root / "runner_events.jsonl", runner_bytes)
+    runner_event_path = config.output_root / "runner_events.jsonl"
+    def validate_runner_ledger() -> None:
+        _plain_file(runner_event_path, "durable runner event ledger", mode=0o600)
+        if runner_event_path.read_bytes() != runner_bytes:
+            raise RuntimeError("durable runner event ledger differs from in-memory event sequence")
+    post_lock(validate_runner_ledger)
     model_event_path = config.output_root / "model_events.jsonl"
     if dependencies.model_event_ledger_path is None:
-        _atomic_bytes(model_event_path, model_bytes)
+        post_lock(lambda: _atomic_bytes(model_event_path, model_bytes))
     else:
-        retained_model_bytes = _plain_file(
-            model_event_path, "durable live model event ledger", mode=0o600
-        ).read_bytes()
-        if retained_model_bytes != model_bytes:
-            raise RuntimeError(
-                "durable live model event ledger differs from in-memory event sequence"
+        def validate_model_ledger() -> None:
+            _plain_file(
+                model_event_path, "durable live model event ledger", mode=0o600
             )
+            retained_model_bytes = model_event_path.read_bytes()
+            if retained_model_bytes != model_bytes:
+                raise RuntimeError("durable live model event ledger differs from in-memory event sequence")
+        post_lock(validate_model_ledger)
     runner_digest = _sha_bytes(runner_bytes)
     model_digest = _sha_bytes(model_bytes)
     if result.candidate is not None:
-        if (
+        def validate_candidate_bindings() -> None:
+            if (
             result.runner_event_ledger_sha256 != runner_digest
             or result.model_event_ledger_sha256 != model_digest
             or result.bridge_state_evidence is None
@@ -2945,24 +3258,27 @@ def _execute(
             != result.bridge_state_evidence_sha256
             or result.candidate["bindings"].get("bridge_mount_closure_sha256")
             != result.bridge_mount_closure_sha256
-        ):
-            raise RuntimeError("runner candidate ledger binding differs from exact emitted JSONL")
-        _atomic_json(config.output_root / "bridge_state_evidence.json", result.bridge_state_evidence)
-        if _sha_bytes((config.output_root / "bridge_state_evidence.json").read_bytes()) != result.bridge_state_evidence_sha256:
-            raise RuntimeError("bridge state evidence bytes differ from runner-bound receipt")
-        closure_manifest = config.output_root / "bridge_mount_closure.json"
-        if (
-            not closure_manifest.is_file()
-            or _sha_bytes(closure_manifest.read_bytes())
-            != result.bridge_mount_closure_sha256
-        ):
-            raise RuntimeError("bridge mount closure bytes differ from runner-bound receipt")
-        _atomic_json(config.output_root / "candidate.json", result.candidate)
+            ):
+                raise RuntimeError("runner candidate ledger binding differs from exact emitted JSONL")
+        post_lock(validate_candidate_bindings)
+        post_lock(lambda: _atomic_json(config.output_root / "bridge_state_evidence.json", result.bridge_state_evidence))
+        def validate_candidate_artifacts() -> None:
+            if _sha_bytes((config.output_root / "bridge_state_evidence.json").read_bytes()) != result.bridge_state_evidence_sha256:
+                raise RuntimeError("bridge state evidence bytes differ from runner-bound receipt")
+            closure_manifest = config.output_root / "bridge_mount_closure.json"
+            if (
+                not closure_manifest.is_file()
+                or _sha_bytes(closure_manifest.read_bytes())
+                != result.bridge_mount_closure_sha256
+            ):
+                raise RuntimeError("bridge mount closure bytes differ from runner-bound receipt")
+        post_lock(validate_candidate_artifacts)
+        post_lock(lambda: _atomic_json(config.output_root / "candidate.json", result.candidate))
     elif result.inconclusive_occurrence is not None:
-        _atomic_json(config.output_root / "inconclusive.json", result.inconclusive_occurrence)
+        post_lock(lambda: _atomic_json(config.output_root / "inconclusive.json", result.inconclusive_occurrence))
     else:
-        raise RuntimeError("runner returned neither candidate nor inconclusive occurrence")
-    _atomic_json(config.output_root / "bundle_index.json", _bundle_index(config.output_root))
+        post_lock(lambda: (_ for _ in ()).throw(RuntimeError("runner returned neither candidate nor inconclusive occurrence")))
+    post_lock(lambda: _atomic_json(config.output_root / "bundle_index.json", _bundle_index(config.output_root)))
     return ExecutionResult(config.output_root, result, runner_digest, result.model_event_ledger_sha256)
 
 
@@ -3013,6 +3329,8 @@ def _config_from_json(path: Path) -> ExecutionConfig:
         "ratification_receipt_sha256",
         "source_ci_receipt_path",
         "source_ci_receipt_sha256",
+        "structured_output_qualification_path",
+        "structured_output_qualification_sha256",
         "tokenizer_preflight_prompt",
         "bridge_runtime_root",
         "bridge_state_root",
@@ -3043,6 +3361,7 @@ def _config_from_json(path: Path) -> ExecutionConfig:
         "attempt_registry_root",
         "ratification_receipt_path",
         "source_ci_receipt_path",
+        "structured_output_qualification_path",
         "bridge_runtime_root",
         "bridge_state_root",
         "bridge_runtime_tree_manifest_path",

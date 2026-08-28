@@ -1,13 +1,13 @@
 """Single-purpose DNRD measurement runner.
 
 This module is deliberately not a generic harness.  It runs only the frozen
-32-training/128-evaluation DNRD shape through injected model, local-V2 bridge,
+32-training/96-evaluation/128-total DNRD-3 call shape through injected model, local-V2 bridge,
 and separate scorer-process interfaces.  It never imports or invokes a judge.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import hashlib
 import json
 import os
@@ -27,16 +27,19 @@ from .task_family import (
 )
 
 
-ARMS = ("FULL", "NO_MEMORY_ROLLBACK", "RAW_EQUAL_BUDGET", "BINDING_DERANGED_NUMERIC_PLACEBO")
+ARMS = ("FULL", "NO_MEMORY_ROLLBACK", "BINDING_DERANGED_NUMERIC_PLACEBO")
 MOUNT_ROLES = {
     "NO_MEMORY_ROLLBACK": "W0_ROLLBACK",
     "FULL": "FULL_TRAINABLE",
+    # Wire-level bridge role is retained for compatibility.  The runner never
+    # places this mount in ARMS; its sole DNRD-3 meaning is an admission replay
+    # gate.
     "RAW_EQUAL_BUDGET": "RAW_CONTROL",
     "BINDING_DERANGED_NUMERIC_PLACEBO": "DERANGED_CONTROL",
 }
-CANDIDATE_SCHEMA = "hswm-dnrd-candidate/v1"
-INCONCLUSIVE_SCHEMA = "hswm-dnrd-inconclusive-occurrence/v1"
-EXPERIMENT_ID = "HSWM-DNRD-2"
+CANDIDATE_SCHEMA = "hswm-dnrd-candidate/v2"
+INCONCLUSIVE_SCHEMA = "hswm-dnrd-inconclusive-occurrence/v2"
+EXPERIMENT_ID = "HSWM-DNRD-3"
 RAW_DELTA_RULE = "signed_reward_times_100000_div_1000000/v1"
 MAX_OUTPUT_TOKENS = 64
 SCORER_ROLE_SEPARATION = "DECLARED_ROLE_SEPARATION_NOT_PROVEN"
@@ -52,11 +55,11 @@ SCORER_OUTCOME_FIELDS = frozenset(
     }
 )
 TRACE_STATUS = "SEALED_PRE_OUTCOME_LOCAL_EXPERIMENTAL_NOT_CANONICAL_PERMIT_NOT_ADMISSION_NOT_LEARNING"
-LIVE_EVENT_SCHEMA = "hswm-dnrd-live-model-event/v2"
+LIVE_EVENT_SCHEMA = "hswm-dnrd-live-model-event/v3"
 PREFLIGHT_SCHEMA = "hswm-dnrd-live-preflight-receipt/v1"
 PROVIDER_CACHE_UNOBSERVABLE = "NOT_OBSERVABLE_BY_CLIENT"
-BRIDGE_STATE_EVIDENCE_SCHEMA = "hswm-dnrd-bridge-state-evidence/v1"
-BRIDGE_MOUNT_CLOSURE_PLAN_SCHEMA = "hswm-dnrd-bridge-mount-closure-plan/v1"
+BRIDGE_STATE_EVIDENCE_SCHEMA = "hswm-dnrd-bridge-state-evidence/v2"
+BRIDGE_MOUNT_CLOSURE_PLAN_SCHEMA = "hswm-dnrd-bridge-mount-closure-plan/v2"
 SUBPROCESS_TIMEOUT_SECONDS = 30.0
 MAX_SUBPROCESS_STDOUT_BYTES = 1_048_576
 MAX_SUBPROCESS_STDERR_BYTES = 65_536
@@ -82,6 +85,8 @@ class ModelRequest:
     ordinal: int = 0
     phase: str = "UNSPECIFIED"
     arm: str | None = None
+    candidate_response_tokens: tuple[str, str] = ()
+    pre_dispatch_receipt_sha256: str | None = None
 
 
 @dataclass(frozen=True)
@@ -343,7 +348,7 @@ class SubprocessJsonBridge:
 
     def materialize_control(self, state: RoutingState, stream_id: str, arm: str, training_update_records: Sequence[Mapping[str, Any]], matched_derangement: Mapping[str, str]) -> ControlMaterialization:
         if arm not in {"RAW_EQUAL_BUDGET", "BINDING_DERANGED_NUMERIC_PLACEBO"}:
-            raise RunnerRefusal("only RAW and DERANGED controls may be materialized")
+            raise RunnerRefusal("only the fixed-rule replay gate or DERANGED placebo may be materialized")
         payload: dict[str, Any] = {"state": _state_wire(state), "stream_id": stream_id, "arm": arm}
         if arm == "RAW_EQUAL_BUDGET":
             payload.update({"raw_delta_rule": RAW_DELTA_RULE, "training_update_records": list(training_update_records), "required_training_outcome_count": 8})
@@ -609,6 +614,13 @@ def _request(
     evidence = _selected_evidence(episode, route)
     # This is intentionally the only episode material presented to a model.
     prompt = f"{episode['prompt']}\nSelected evidence:\n{evidence['evidence_text']}"
+    candidate_response_tokens = tuple(
+        sorted(str(record["response_token"]) for record in episode["route_evidence"])
+    )
+    if len(candidate_response_tokens) != 2 or not all(
+        is_response_token(token) for token in candidate_response_tokens
+    ):
+        raise RunnerRefusal("episode must expose exactly two canonical response tokens")
     return ModelRequest(
         str(episode["episode_id"]),
         route,
@@ -617,11 +629,14 @@ def _request(
         ordinal,
         phase,
         arm,
+        candidate_response_tokens,  # type: ignore[arg-type]
     )
 
 
 def _sealed_response(episode: Mapping[str, Any], route: str, reply: ModelReply, private_commitment: str) -> dict[str, Any]:
-    payload = {"schema_version": "hswm-dnrd-sealed-response/v1", "episode_id": episode["episode_id"], "selected_route_id": route, "answer": reply.response_token, "private_manifest_commitment": private_commitment}
+    # The answer is retained solely as live-boundary provenance. DNRD-3 fixes
+    # outcome from the selected route/binding, not this post-route observation.
+    payload = {"schema_version": "hswm-dnrd-sealed-response/v2", "episode_id": episode["episode_id"], "selected_route_id": route, "answer": reply.response_token, "private_manifest_commitment": private_commitment}
     return {**payload, "response_commitment": _sha(payload)}
 
 
@@ -692,6 +707,25 @@ def _recovery_evidence(recovery: RecoveryObservation) -> dict[str, Any]:
     }
 
 
+def _pre_dispatch_readout(
+    recovery: RecoveryObservation, episode: Mapping[str, Any], route: str
+) -> dict[str, Any]:
+    """Bind the route readout to a fresh durable recovery before dispatch."""
+    _validate_recovery_observation(recovery)
+    if route not in recovery.state.scores[episode["context_key"]]:
+        raise RuntimeError("pre-dispatch route is absent from recovered routing state")
+    return {
+        "selected_route_id": route,
+        "route_digest_sha256": _sha(
+            {"context_key": episode["context_key"], "selected_route_id": route,
+             "score": recovery.state.scores[episode["context_key"]][route]}
+        ),
+        "pre_outcome_score_micros": recovery.state.scores[episode["context_key"]][route],
+        "recovery": _recovery_evidence(recovery),
+        "routing_payload_sha256": recovery.routing_payload_sha256,
+    }
+
+
 def _bridge_mount_closure_plan(
     bridge_state_evidence: Mapping[str, Any],
     bridge_state_evidence_sha256: str,
@@ -699,7 +733,8 @@ def _bridge_mount_closure_plan(
     """Freeze the only mount files an occurrence is allowed to export.
 
     This is deliberately a small plan rather than a filesystem walk: the
-    exporter must copy exactly the sixteen post-evaluation arm mounts already
+    exporter must copy exactly the twelve scientific-arm mounts plus four
+    fixed-rule replay-gate mounts already
     observed by the runner, with their pre/post journal and durable-routing
     identities.  It cannot broaden the closure by discovering another mount.
     """
@@ -718,6 +753,7 @@ def _bridge_mount_closure_plan(
             "stream_id",
             "pre_evaluation",
             "post_evaluation",
+            "fixed_rule_replay",
         }:
             raise RuntimeError("bridge state evidence stream schema drifted")
         stream_id = item["stream_id"]
@@ -803,7 +839,34 @@ def _bridge_mount_closure_plan(
                     "routing_payload_sha256"
                 ],
             }
-        streams.append({"stream_id": stream_id, "arms": arms})
+        replay = item["fixed_rule_replay"]
+        if type(replay) is not dict or set(replay) != {"state", "fresh_recovery", "post_evaluation"}:
+            raise RuntimeError("fixed-rule replay evidence schema drifted")
+        replay_before, replay_after = replay["state"], replay["post_evaluation"].get("state") if type(replay["post_evaluation"]) is dict else None
+        if (
+            type(replay_before) is not dict or type(replay_after) is not dict
+            or set(replay_before) != expected_entry or replay_before != replay_after
+            or replay_before["mount_role"] != MOUNT_ROLES["RAW_EQUAL_BUDGET"]
+            or replay_before["mount_id"] in seen_mounts
+        ):
+            raise RuntimeError("fixed-rule replay durable state is not post-audited")
+        seen_mounts.add(replay_before["mount_id"])
+        replay_recovery = replay["fresh_recovery"]
+        replay_post_recovery = replay["post_evaluation"].get("fresh_recovery")
+        if (
+            type(replay_recovery) is not dict or type(replay_post_recovery) is not dict
+            or not _is_sha256(replay_recovery.get("journal_sha256"))
+            or not _is_sha256(replay_post_recovery.get("journal_sha256"))
+        ):
+            raise RuntimeError("fixed-rule replay journal evidence is malformed")
+        streams.append({"stream_id": stream_id, "arms": arms, "fixed_rule_replay": {
+            "mount_id": replay_before["mount_id"],
+            "mount_role": replay_before["mount_role"],
+            "pre_evaluation_journal_sha256": replay_recovery["journal_sha256"],
+            "post_evaluation_journal_sha256": replay_post_recovery["journal_sha256"],
+            "pre_evaluation_routing_payload_sha256": replay_before["routing_payload_sha256"],
+            "post_evaluation_routing_payload_sha256": replay_after["routing_payload_sha256"],
+        }})
     if len(seen_streams) != 4 or len(seen_mounts) != 16:
         raise RuntimeError("bridge mount closure plan lacks exactly four streams and sixteen mounts")
     return {
@@ -878,30 +941,83 @@ def _derangement_observation(full: RoutingState, deranged: RoutingState, stream:
     }
 
 
-def _expected_raw_scores(w0: RoutingState, records: Sequence[Mapping[str, Any]], stream: Mapping[str, Any]) -> dict[str, dict[str, int]]:
+def _expected_fixed_rule_scores(w0: RoutingState, records: Sequence[Mapping[str, Any]], stream: Mapping[str, Any]) -> dict[str, dict[str, int]]:
     if len(records) != 8:
-        raise RuntimeError("RAW control requires exactly eight training update records")
+        raise RuntimeError("fixed-rule replay requires exactly eight training update records")
     expected_ids = {episode["episode_id"] for episode in stream["training"]}
     seen_ids: set[str] = set()
     scores = {context: dict(routes) for context, routes in w0.scores.items()}
     for record in records:
         required = {"episode_id", "context_key", "selected_route_id", "reward", "trace_id", "outcome_digest"}
         if set(record) != required:
-            raise RuntimeError("RAW training update record fields drifted")
+            raise RuntimeError("fixed-rule training update record fields drifted")
         episode_id, context, route = record["episode_id"], record["context_key"], record["selected_route_id"]
         reward = record["reward"]
         if not all(isinstance(value, str) and value for value in (episode_id, context, route, record["trace_id"], record["outcome_digest"])):
-            raise RuntimeError("RAW training update record identity drifted")
+            raise RuntimeError("fixed-rule training update record identity drifted")
         if episode_id in seen_ids or episode_id not in expected_ids or context not in scores or route not in scores[context]:
-            raise RuntimeError("RAW training update record support drifted")
+            raise RuntimeError("fixed-rule training update record support drifted")
         if type(reward) is not int or reward not in {-1_000_000, 0, 1_000_000}:
-            raise RuntimeError("RAW training update reward violates frozen contract")
+            raise RuntimeError("fixed-rule training update reward violates frozen contract")
         seen_ids.add(episode_id)
         delta = reward * 100_000 // 1_000_000
         scores[context][route] = max(-100_000, min(100_000, scores[context][route] + delta))
     if seen_ids != expected_ids:
-        raise RuntimeError("RAW training update record set differs from public forced exposures")
+        raise RuntimeError("fixed-rule training update record set differs from public forced exposures")
     return scores
+
+
+def _fixed_rule_replay_observation(
+    w0: RecoveryObservation,
+    w1: RecoveryObservation,
+    replay: RecoveryObservation,
+    records: Sequence[Mapping[str, Any]],
+    stream: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Admission-only deterministic replay of the trained W1 routing state.
+
+    This is deliberately not an arm and performs no model dispatch.  It checks
+    that the frozen numeric update rule, exact durable routing-payload bytes,
+    and heldout routing readouts all reproduce from an independently
+    materialized mount before scientific-arm evaluation begins.  The replay
+    mount has distinct provenance: its journal identity is recorded, but is
+    not required to equal FULL's journal identity.
+    """
+    expected_scores = _expected_fixed_rule_scores(w0.state, records, stream)
+    if w1.state.scores != expected_scores:
+        raise RuntimeError("trained FULL routing scores do not equal fixed-rule replay")
+    if replay.state.scores != expected_scores or replay.state.scores != w1.state.scores:
+        raise RuntimeError("fixed-rule replay mount does not reproduce FULL numeric state")
+    if (
+        replay.routing_payload_utf8 != w1.routing_payload_utf8
+        or replay.routing_payload_sha256 != w1.routing_payload_sha256
+        or replay.routing_payload_bytes != w1.routing_payload_bytes
+    ):
+        raise RuntimeError("fixed-rule replay mount does not reproduce FULL durable routing payload bytes")
+    first_readouts = [
+        {"episode_id": episode["episode_id"], "selected_route_id": _select(w1.state, episode), "route_digest_sha256": _route_digest(w1.state, episode)}
+        for episode in stream["heldout"]
+    ]
+    replay_readouts = [
+        {"episode_id": episode["episode_id"], "selected_route_id": _select(replay.state, episode), "route_digest_sha256": _route_digest(replay.state, episode)}
+        for episode in stream["heldout"]
+    ]
+    if first_readouts != replay_readouts:
+        raise RuntimeError("FULL fixed-rule replay heldout readouts are not reproducible")
+    return {
+        "schema_version": "hswm-dnrd-fixed-rule-replay-observation/v1",
+        "rule": RAW_DELTA_RULE,
+        "w1_state_sha256": w1.state.state_sha256,
+        "w1_journal_sha256": w1.journal_sha256,
+        "w1_routing_payload_sha256": w1.routing_payload_sha256,
+        "w1_routing_payload_bytes": w1.routing_payload_bytes,
+        "replay_state_sha256": replay.state.state_sha256,
+        "replay_journal_sha256": replay.journal_sha256,
+        "replay_routing_payload_sha256": replay.routing_payload_sha256,
+        "replay_routing_payload_bytes": replay.routing_payload_bytes,
+        "replay_process_instance_id": replay.process_instance_id,
+        "heldout_readouts": first_readouts,
+    }
 
 
 def _expected_deranged_scores(full: RoutingState, mapping: Mapping[str, str]) -> dict[str, dict[str, int]]:
@@ -926,6 +1042,8 @@ def _request_object(request: ModelRequest) -> dict[str, Any]:
         "ordinal": request.ordinal,
         "phase": request.phase,
         "arm": request.arm,
+        "candidate_response_tokens": list(request.candidate_response_tokens),
+        "pre_dispatch_receipt_sha256": request.pre_dispatch_receipt_sha256,
     }
 
 
@@ -940,7 +1058,7 @@ def _response_object(reply: ModelReply) -> dict[str, Any]:
 
 def _validate_reply(reply: ModelReply) -> None:
     if not is_response_token(reply.response_token):
-        raise RuntimeError("answerer response token violates exact DNRD-2 form")
+        raise RuntimeError("answerer response token violates exact DNRD-3 form")
     for label, value in (("input_tokens", reply.input_tokens), ("output_tokens", reply.output_tokens)):
         if type(value) is not int or value < 0:
             raise RuntimeError(f"answerer {label} must be a nonnegative integer")
@@ -1035,14 +1153,16 @@ def _validate_scorer_outcome(
         {
             "episode_id": sealed["episode_id"],
             "selected_route_id": sealed["selected_route_id"],
-            "response_commitment": sealed["response_commitment"],
             "private_manifest_commitment": sealed["private_manifest_commitment"],
             "reward": reward,
             "scorer_source_identity": metadata.scorer_source_identity,
         }
     )
     if outcome["outcome_digest"] != expected_digest:
-        raise RuntimeError("scorer outcome digest does not bind the sealed response and frozen scorer")
+        raise RuntimeError(
+            "scorer outcome digest does not match the response-independent "
+            "episode/route/private-commitment/reward/scorer-identity basis"
+        )
 
 
 def _observe_call(
@@ -1058,9 +1178,16 @@ def _observe_call(
     ordinal: int,
     phase: str,
     arm: str | None,
+    pre_dispatch_readout: Mapping[str, Any],
+    on_pre_dispatch: Callable[[ModelRequest, Mapping[str, Any]], ModelRequest],
     on_response: Callable[[ModelReply | None], None],
 ) -> tuple[ModelRequest, ModelReply, Mapping[str, Any], Mapping[str, Any], Mapping[str, Any]]:
     request = _request(episode, route, ordinal=ordinal, phase=phase, arm=arm)
+    # This callback must synchronously durably append the canonical row before
+    # returning. The receipt is then part of the model request commitment.
+    request = on_pre_dispatch(request, pre_dispatch_readout)
+    if not _is_sha256(request.pre_dispatch_receipt_sha256):
+        raise RuntimeError("pre-dispatch ledger receipt was not bound into model request")
     try:
         reply = answerer.answer(request)
     except PreDispatchAnswererError:
@@ -1071,6 +1198,8 @@ def _observe_call(
         raise
     on_response(reply)
     _validate_reply(reply)
+    if reply.response_token not in request.candidate_response_tokens:
+        raise RuntimeError("answerer response is outside the pre-dispatch two-token contract")
     sealed = _sealed_response(episode, route, reply, private_manifest_commitment)
     request_sha256 = model_request_commitment(request)
     response_sha256 = _sha(_response_object(reply))
@@ -1220,7 +1349,7 @@ def _validate_model_event_ledger(
     runner_events: Sequence[Mapping[str, Any]],
     deployment: Mapping[str, Any],
 ) -> None:
-    """Reconcile raw OpenAI-boundary observations with all 160 runner calls."""
+    """Reconcile raw OpenAI-boundary observations with all 128 runner calls."""
     observed: dict[str, Mapping[str, Any]] = {}
     accepted: dict[str, Mapping[str, Any]] = {}
     expected_common = {
@@ -1284,7 +1413,16 @@ def _validate_model_event_ledger(
                 raw_completion = json.loads(event["raw_response_utf8"])
                 choice = raw_completion["choices"][0]
                 raw_usage = raw_completion["usage"]
-                response_token = choice["message"]["content"].strip(" \t\r\n")
+                content = choice["message"]["content"]
+                structured = json.loads(content)
+                if (
+                    type(structured) is not dict
+                    or set(structured) != {"response_token"}
+                    or not isinstance(structured["response_token"], str)
+                    or canonical_json(structured).decode("utf-8") != content
+                ):
+                    raise ValueError("completion content is not exact structured response")
+                response_token = structured["response_token"]
                 response_object = {
                     "response_token": response_token,
                     "input_tokens": raw_usage["prompt_tokens"],
@@ -1327,35 +1465,148 @@ def _validate_model_event_ledger(
         if (ordinal, phase, arm, digest) != _model_event_call_identity(event, "model event"):
             raise RuntimeError("unreachable inconsistent model event identity")
 
-    expected_calls: dict[str, Mapping[str, Any]] = {}
+    pre_rows: dict[str, Mapping[str, Any]] = {}
+    completed_rows: list[Mapping[str, Any]] = []
+    pre_fields = {
+        "schema_version", "event", "ordinal", "phase", "arm", "request",
+        "pre_dispatch_readout",
+    }
+    completed_fields = {
+        "schema_version", "event", "ordinal", "phase", "arm", "request",
+        "sealed_response", "trace", "scorer_outcome", "credit_receipt",
+        "route_digest_sha256", "pre_dispatch_receipt_sha256", "route_replay",
+    }
+    pending_pre_receipt: str | None = None
+    expected_ordinal = 1
     for event in runner_events:
+        event_name = event.get("event")
+        if event_name == "PRE_DISPATCH_READOUT":
+            if pending_pre_receipt is not None or event.get("ordinal") != expected_ordinal:
+                raise RuntimeError("pre-dispatch rows must precede exactly one next ordinal completion")
+            pending_pre_receipt = _sha(event)
+        elif event_name == "COMPLETED_CALL":
+            if (
+                pending_pre_receipt is None
+                or event.get("ordinal") != expected_ordinal
+                or event.get("pre_dispatch_receipt_sha256") != pending_pre_receipt
+            ):
+                raise RuntimeError("completed row is not immediately paired with its pre-dispatch row")
+            pending_pre_receipt = None
+            expected_ordinal += 1
+        else:
+            raise RuntimeError("runner event has an unknown discriminated-union tag")
+    if pending_pre_receipt is not None:
+        raise RuntimeError("complete candidate runner ledger ends with an uncompleted pre-dispatch row")
+    for event in runner_events:
+        if event.get("schema_version") != "hswm-dnrd-runner-event/v2":
+            raise RuntimeError("runner event schema drifted")
+        if event.get("event") == "PRE_DISPATCH_READOUT":
+            if set(event) != pre_fields:
+                raise RuntimeError("pre-dispatch runner event exact schema drifted")
+            request, readout = event["request"], event["pre_dispatch_readout"]
+            if not isinstance(request, Mapping) or request.get("pre_dispatch_receipt_sha256") is not None:
+                raise RuntimeError("pre-dispatch row must bind an unsealed request")
+            if (
+                not isinstance(readout, Mapping)
+                or set(readout) != {
+                    "selected_route_id", "route_digest_sha256", "pre_outcome_score_micros",
+                    "recovery", "routing_payload_sha256",
+                }
+                or readout["selected_route_id"] != request["selected_route_id"]
+                or not _is_sha256(readout["route_digest_sha256"])
+                or not _is_sha256(readout["routing_payload_sha256"])
+                or type(readout["pre_outcome_score_micros"]) is not int
+                or not isinstance(readout["recovery"], Mapping)
+            ):
+                raise RuntimeError("pre-dispatch row lacks a recovered selected-route readout")
+            recovery = readout["recovery"]
+            if (
+                set(recovery) != {"recovered", "fresh_process", "journal_sha256", "process_instance_id"}
+                or recovery["recovered"] is not True
+                or recovery["fresh_process"] is not True
+                or not _is_sha256(recovery["journal_sha256"])
+                or not PROCESS_INSTANCE_UUID_RE.fullmatch(str(recovery["process_instance_id"]))
+            ):
+                raise RuntimeError("pre-dispatch readout is not bound to a fresh recovery")
+            receipt = _sha(event)
+            if receipt in pre_rows:
+                raise RuntimeError("runner ledger repeats a pre-dispatch receipt")
+            pre_rows[receipt] = event
+        elif event.get("event") == "COMPLETED_CALL":
+            if set(event) != completed_fields:
+                raise RuntimeError("completed runner event exact schema drifted")
+            completed_rows.append(event)
+        else:
+            raise RuntimeError("runner event has an unknown discriminated-union tag")
+    expected_calls: dict[str, Mapping[str, Any]] = {}
+    used_pre_receipts: set[str] = set()
+    for event in completed_rows:
         request = event["request"]
+        receipt = event["pre_dispatch_receipt_sha256"]
+        pre = pre_rows.get(receipt)
+        if not _is_sha256(receipt) or pre is None:
+            raise RuntimeError("completed row does not bind a preceding pre-dispatch receipt")
+        if receipt in used_pre_receipts:
+            raise RuntimeError("one pre-dispatch receipt may bind only one completed call")
+        used_pre_receipts.add(receipt)
+        pre_request = pre["request"]
+        expected_pre_request = dict(request)
+        expected_pre_request["pre_dispatch_receipt_sha256"] = None
+        if (
+            pre_request != expected_pre_request
+            or pre["ordinal"] != event["ordinal"]
+            or pre["phase"] != event["phase"]
+            or pre["arm"] != event["arm"]
+            or request.get("pre_dispatch_receipt_sha256") != receipt
+        ):
+            raise RuntimeError("completed row is not cryptographically bound to its pre-dispatch row")
         request_value = ModelRequest(
-            request["episode_id"],
-            request["selected_route_id"],
-            request["prompt"],
-            request["max_output_tokens"],
-            request["ordinal"],
-            request["phase"],
-            request["arm"],
+            request["episode_id"], request["selected_route_id"], request["prompt"],
+            request["max_output_tokens"], request["ordinal"], request["phase"],
+            request["arm"], tuple(request["candidate_response_tokens"]), receipt,
         )
         digest = model_request_commitment(request_value)
         if digest in expected_calls:
-            raise RuntimeError("runner ledger repeats a call identity")
+            raise RuntimeError("runner ledger repeats a completed call identity")
         expected_calls[digest] = event
+    if len(pre_rows) != len(completed_rows):
+        raise RuntimeError("complete candidate requires one pre-dispatch row per completed call")
+    if set(pre_rows) != used_pre_receipts:
+        raise RuntimeError("complete candidate has an unpaired pre-dispatch receipt")
     if set(observed) != set(expected_calls) or set(accepted) != set(expected_calls):
         raise RuntimeError("model boundary ledger does not exactly cover all runner calls")
     for digest, runner_event in expected_calls.items():
         request = runner_event["request"]
         trace = runner_event["trace"]
+        candidates = request["candidate_response_tokens"]
+        response_schema = {
+            "type": "object", "properties": {"response_token": {
+                "type": "string", "enum": candidates,
+                "pattern": r"^token-[0-9a-f]{20}$", "minLength": 26,
+                "maxLength": 26,
+            }}, "required": ["response_token"], "additionalProperties": False,
+        }
+        expected_chat_config = {
+            "chat_template_kwargs": {"enable_thinking": False}, "logprobs": False,
+            "n": 1, "stream": False, "temperature": 0, "top_p": 1,
+            "max_tokens": MAX_OUTPUT_TOKENS,
+            "response_format": {"type": "json_schema", "json_schema": {
+                "name": "hswm_dnrd_response_token", "strict": True,
+                "schema": response_schema,
+            }},
+            "response_format_schema_sha256": _sha(response_schema),
+        }
         for model_event in (observed[digest], accepted[digest]):
             if (
                 model_event["ordinal"] != request["ordinal"]
                 or model_event["phase"] != request["phase"]
                 or model_event["arm"] != request["arm"]
-                or model_event["chat_config"].get("max_tokens") != MAX_OUTPUT_TOKENS
+                or dict(model_event["chat_config"]) != expected_chat_config
             ):
                 raise RuntimeError("model event is not bound to the exact runner call")
+        accepted_content = json.loads(accepted[digest]["raw_response_utf8"])["choices"][0]["message"]["content"]
+        if json.loads(accepted_content)["response_token"] not in candidates:
+            raise RuntimeError("accepted model event response is outside the committed candidate set")
         if accepted[digest]["dnrd_response_sha256"] != trace["response_sha256"]:
             raise RuntimeError("accepted model event does not bind the bridge-sealed response")
 
@@ -1378,7 +1629,7 @@ def _derive_parity(
     evaluation_read_only: Sequence[bool],
 ) -> dict[str, bool]:
     """Derive every candidate parity bit from concrete observations only."""
-    if len(runner_events) != 160 or len(model_events) != 320:
+    if len(runner_events) != 256 or len(model_events) != 256:
         raise RuntimeError("complete parity requires exact runner and model event ledgers")
     episodes = {
         episode["episode_id"]: episode
@@ -1387,7 +1638,19 @@ def _derive_parity(
     }
     candidate_evidence = True
     labels_hidden = True
-    for event in runner_events:
+    pre_dispatch_bound = True
+    response_independent_outcomes = True
+    pre_rows = {
+        _sha(event): event
+        for event in runner_events
+        if event.get("event") == "PRE_DISPATCH_READOUT"
+    }
+    completed_rows = [
+        event for event in runner_events if event.get("event") == "COMPLETED_CALL"
+    ]
+    if len(pre_rows) != 128 or len(completed_rows) != 128:
+        raise RuntimeError("complete parity requires 128 pre-dispatch and 128 completed rows")
+    for event in completed_rows:
         request = event["request"]
         episode = episodes.get(request["episode_id"])
         if episode is None or request["selected_route_id"] not in episode["candidate_route_ids"]:
@@ -1400,9 +1663,26 @@ def _derive_parity(
             or request["arm"] != expected_arm
             or request["prompt"] != _expected_prompt(episode, request["selected_route_id"])
             or request["max_output_tokens"] != MAX_OUTPUT_TOKENS
+            or request["candidate_response_tokens"]
+            != sorted(record["response_token"] for record in episode["route_evidence"])
         ):
             candidate_evidence = False
         labels_hidden = labels_hidden and all(arm not in request["prompt"] for arm in ARMS)
+        readout, trace, sealed, outcome = (
+            pre_rows[event["pre_dispatch_receipt_sha256"]]["pre_dispatch_readout"], event["trace"], event["sealed_response"],
+            event["scorer_outcome"],
+        )
+        pre_dispatch_bound = pre_dispatch_bound and (
+            readout["selected_route_id"] == request["selected_route_id"]
+            and readout["routing_payload_sha256"] == trace["routing_payload_sha256"]
+            and readout["pre_outcome_score_micros"] == trace["pre_outcome_score_micros"]
+            and readout["route_digest_sha256"]
+            == _sha({"context_key": episode["context_key"], "selected_route_id": request["selected_route_id"], "score": readout["pre_outcome_score_micros"]})
+        )
+        response_independent_outcomes = response_independent_outcomes and (
+            outcome["outcome_digest"]
+            == _sha({"episode_id": sealed["episode_id"], "selected_route_id": sealed["selected_route_id"], "private_manifest_commitment": sealed["private_manifest_commitment"], "reward": outcome["reward"], "scorer_source_identity": outcome["scorer_source_identity"]})
+        )
     return {
         # A live boundary can observe only a served model identifier and
         # endpoint.  It cannot establish checkpoint-weight identity.
@@ -1411,7 +1691,7 @@ def _derive_parity(
             and event["endpoint"] == _chat_completion_endpoint(deployment)
             for event in model_events
         ),
-        "equal_client_dispatched_and_logical_requests": len(runner_events) == 160 and len(model_events) == 320,
+        "equal_client_dispatched_and_logical_requests": len(completed_rows) == 128 and len(model_events) == 256,
         # Provider-reported input-token counts remain in the raw event ledger,
         # but this small repeated-context mechanics diagnostic does not claim
         # input-token parity across different selected-evidence prompts.
@@ -1425,18 +1705,20 @@ def _derive_parity(
         # ceiling, while the intended numeric controls are paired to FULL.
         "all_active_payloads_within_byte_ceiling": bool(active_state_byte_sizes)
         and all(size <= active_state_byte_ceiling for row in active_state_byte_sizes for size in row.values()),
-        "full_raw_numeric_payload_bytes_equal": bool(active_state_byte_sizes)
-        and all(row["FULL"] == row["RAW_EQUAL_BUDGET"] for row in active_state_byte_sizes),
         "full_deranged_numeric_payload_byte_count_equal": bool(active_state_byte_sizes)
         and all(row["FULL"] == row["BINDING_DERANGED_NUMERIC_PLACEBO"] for row in active_state_byte_sizes),
+        "full_fixed_rule_replay_numeric_payload_bytes_equal": bool(active_state_byte_sizes)
+        and all(row["FULL"] == row["FIXED_RULE_REPLAY"] for row in active_state_byte_sizes),
         "arm_labels_hidden_from_model": labels_hidden,
+        "pre_dispatch_readout_bound_before_model_response": pre_dispatch_bound,
+        "scorer_outcome_response_independent": response_independent_outcomes,
         # The boolean emitted by a child is not enough on its own.  The
         # production adapter launches one bridge process per operation, and
         # independently supplied process-instance IDs must all differ.
         "fresh_process_recovery_observed": bool(recovery_process_ids)
         and subprocess_per_operation
         and len(set(recovery_process_ids)) == len(recovery_process_ids),
-        "distinct_arm_mount_ids": bool(arm_mount_sets) and all(len(mounts) == 4 for mounts in arm_mount_sets),
+        "distinct_arm_mount_ids": bool(arm_mount_sets) and all(len(mounts) == 3 for mounts in arm_mount_sets),
         "evaluation_read_only_wrt_routing_observed": bool(evaluation_read_only)
         and all(evaluation_read_only),
     }
@@ -1467,14 +1749,21 @@ def _derive_overlap_observation(
     """Derive leakage bits from retained observations, never a hard-coded flag."""
 
     canaries = training_provenance_canaries(dict(public))
-    heldout_events = [event for event in runner_events if event["phase"] == "heldout"]
+    completed_events = [
+        event for event in runner_events if event.get("event") == "COMPLETED_CALL"
+    ]
+    # Unit-level leakage probes may supply a minimal synthetic completed row
+    # without the production discriminated-union tag.
+    if not completed_events:
+        completed_events = list(runner_events)
+    heldout_events = [event for event in completed_events if event["phase"] == "heldout"]
     heldout_canary_seen = any(
         _contains_any_canary(event["request"], canaries)
         for event in heldout_events
     )
     response_canary_seen = any(
         _contains_any_canary(event["sealed_response"], canaries)
-        for event in runner_events
+        for event in completed_events
     ) or any(
         event.get("event") == "CHAT_COMPLETION_ACCEPTED"
         and _contains_any_canary(event.get("raw_response_utf8"), canaries)
@@ -1564,6 +1853,31 @@ def run_diagnostic(
         if event_sink is not None:
             event_sink(frozen)
 
+    def emit_pre_dispatch(
+        request: ModelRequest, readout: Mapping[str, Any]
+    ) -> ModelRequest:
+        """Seal a pre-dispatch row before the answerer can make a request.
+
+        ``event_sink`` is the durable production boundary and must return only
+        after its append/fsync succeeds.  The returned receipt is committed in
+        the request that is passed to the answerer, making a later completed
+        call cryptographically dependent on this prior row.
+        """
+        if request.pre_dispatch_receipt_sha256 is not None:
+            raise RuntimeError("unsealed request unexpectedly carries a pre-dispatch receipt")
+        row = {
+            "schema_version": "hswm-dnrd-runner-event/v2",
+            "event": "PRE_DISPATCH_READOUT",
+            "ordinal": request.ordinal,
+            "phase": request.phase,
+            "arm": request.arm,
+            "request": _request_object(request),
+            "pre_dispatch_readout": dict(readout),
+        }
+        receipt = _sha(row)
+        emit(row)
+        return replace(request, pre_dispatch_receipt_sha256=receipt)
+
     def count_response(reply: ModelReply | None) -> None:
         nonlocal calls, cache_hits
         calls += 1
@@ -1593,6 +1907,14 @@ def run_diagnostic(
             stream, w1 = work["stream"], work["w1"]
             for episode in stream["training"]:
                 route = episode["forced_route_id"]
+                recovered_pre_dispatch = bridge.recover(w1)
+                require_fresh_recovery(recovered_pre_dispatch, "training pre-dispatch")
+                _require_mount_role(recovered_pre_dispatch.state, "FULL", "recovered training state")
+                work["trusted_mount_ids"].add(recovered_pre_dispatch.state.mount_id)
+                w1 = recovered_pre_dispatch.state
+                pre_dispatch_readout = _pre_dispatch_readout(
+                    recovered_pre_dispatch, episode, route
+                )
                 if w1.mount_id not in work["trusted_mount_ids"]:
                     raise RunnerRefusal("unbacked synthetic state may not enter SEAL_TRACE")
                 _require_mount_role(w1, "FULL", "training state")
@@ -1609,6 +1931,8 @@ def run_diagnostic(
                     ordinal=calls + 1,
                     phase="training",
                     arm=None,
+                    pre_dispatch_readout=pre_dispatch_readout,
+                    on_pre_dispatch=emit_pre_dispatch,
                     on_response=count_response,
                 )
                 w1, receipt = bridge.apply_outcome(w1, trace, outcome)
@@ -1621,7 +1945,8 @@ def run_diagnostic(
                 work["training_update_records"].append(raw_record)
                 work["traces"].append(trace); work["outcomes"].append(outcome); work["receipts"].append(receipt)
                 emit({
-                    "schema_version": "hswm-dnrd-runner-event/v1",
+                    "schema_version": "hswm-dnrd-runner-event/v2",
+                    "event": "COMPLETED_CALL",
                     "ordinal": calls,
                     "phase": "training",
                     "arm": None,
@@ -1631,6 +1956,7 @@ def run_diagnostic(
                     "scorer_outcome": outcome,
                     "credit_receipt": receipt,
                     "route_digest_sha256": _route_digest(pre_state, episode),
+                    "pre_dispatch_receipt_sha256": request.pre_dispatch_receipt_sha256,
                     "route_replay": None,
                 })
             work["w1"] = w1
@@ -1649,34 +1975,38 @@ def run_diagnostic(
             _require_mount_role(w0_recovery.state, "NO_MEMORY_ROLLBACK", "recovered W0")
             _require_mount_role(w1_recovery.state, "FULL", "recovered FULL")
             recovered_w1 = w1_recovery.state
-            raw_expected = _expected_raw_scores(w0_recovery.state, work["training_update_records"], stream)
-            if recovered_w1.scores != raw_expected:
-                raise RuntimeError("trained FULL routing scores do not equal independent frozen RAW replay")
+            # Fixed-rule replay is an admission gate, never a fourth scientific
+            # arm. It makes no model request and cannot contribute an outcome.
+            raw_material = bridge.materialize_control(
+                w0_recovery.state, stream["stream_id"], "RAW_EQUAL_BUDGET",
+                work["training_update_records"], stream["matched_derangement"],
+            )
+            _require_mount_role(raw_material.state, "RAW_EQUAL_BUDGET", "fixed-rule replay mount")
+            w1_replay = bridge.recover(raw_material.state)
+            require_fresh_recovery(w1_replay, "fixed-rule replay mount")
+            work["trusted_mount_ids"].add(w1_replay.state.mount_id)
+            _require_mount_role(w1_replay.state, "RAW_EQUAL_BUDGET", "recovered fixed-rule replay")
+            fixed_rule_replay = _fixed_rule_replay_observation(
+                w0_recovery, w1_recovery, w1_replay,
+                work["training_update_records"], stream,
+            )
             deranged_expected = _expected_deranged_scores(recovered_w1, stream["matched_derangement"])
-            _require_mount_role(w0_recovery.state, "NO_MEMORY_ROLLBACK", "RAW materialization source")
             _require_mount_role(recovered_w1, "FULL", "DERANGED materialization source")
-            raw_material = bridge.materialize_control(w0_recovery.state, stream["stream_id"], "RAW_EQUAL_BUDGET", work["training_update_records"], stream["matched_derangement"])
             deranged_material = bridge.materialize_control(recovered_w1, stream["stream_id"], "BINDING_DERANGED_NUMERIC_PLACEBO", work["training_update_records"], stream["matched_derangement"])
-            if raw_material.state.mount_id == recovered_w1.mount_id or deranged_material.state.mount_id == recovered_w1.mount_id:
+            if deranged_material.state.mount_id == recovered_w1.mount_id:
                 raise RuntimeError("control materialization reused the FULL durable mount")
-            _require_mount_role(raw_material.state, "RAW_EQUAL_BUDGET", "materialized RAW control")
             _require_mount_role(deranged_material.state, "BINDING_DERANGED_NUMERIC_PLACEBO", "materialized DERANGED control")
-            raw_recovery, deranged_recovery = bridge.recover(raw_material.state), bridge.recover(deranged_material.state)
-            for recovery in (raw_recovery, deranged_recovery):
-                require_fresh_recovery(recovery, "pre-evaluation control")
-                work["trusted_mount_ids"].add(recovery.state.mount_id)
-            raw, deranged = raw_recovery.state, deranged_recovery.state
-            _require_mount_role(raw, "RAW_EQUAL_BUDGET", "recovered RAW control")
+            deranged_recovery = bridge.recover(deranged_material.state)
+            require_fresh_recovery(deranged_recovery, "pre-evaluation DERANGED control")
+            work["trusted_mount_ids"].add(deranged_recovery.state.mount_id)
+            deranged = deranged_recovery.state
             _require_mount_role(deranged, "BINDING_DERANGED_NUMERIC_PLACEBO", "recovered DERANGED control")
-            if raw.scores != raw_expected:
-                raise RuntimeError("bridge RAW materialization does not equal frozen independent record replay")
             if deranged.scores != deranged_expected:
                 raise RuntimeError("bridge DERANGED materialization does not equal exact public binding map")
-            arm_states = {"FULL": recovered_w1, "NO_MEMORY_ROLLBACK": w0_recovery.state, "RAW_EQUAL_BUDGET": raw, "BINDING_DERANGED_NUMERIC_PLACEBO": deranged}
+            arm_states = {"FULL": recovered_w1, "NO_MEMORY_ROLLBACK": w0_recovery.state, "BINDING_DERANGED_NUMERIC_PLACEBO": deranged}
             pre_recoveries = {
                 "FULL": w1_recovery,
                 "NO_MEMORY_ROLLBACK": w0_recovery,
-                "RAW_EQUAL_BUDGET": raw_recovery,
                 "BINDING_DERANGED_NUMERIC_PLACEBO": deranged_recovery,
             }
             mounts = {state.mount_id for state in arm_states.values()}
@@ -1684,8 +2014,6 @@ def run_diagnostic(
                 raise RuntimeError("evaluation arms do not occupy separate bridge-owned mounts")
             arm_mount_sets.append(mounts)
             pre_entries = {arm: _bridge_state_entry(pre_recoveries[arm]) for arm in ARMS}
-            if pre_entries["FULL"]["routing_payload_utf8"] != pre_entries["RAW_EQUAL_BUDGET"]["routing_payload_utf8"]:
-                raise RuntimeError("FULL and RAW durable routing payload bytes differ")
             derangement = _derangement_observation(recovered_w1, deranged, stream)
             if not (
                 derangement["fixed_point_count"] == 0
@@ -1704,7 +2032,7 @@ def run_diagnostic(
                 {
                     arm: int(pre_entries[arm]["routing_payload_bytes"])
                     for arm in ARMS
-                }
+                } | {"FIXED_RULE_REPLAY": int(w1_replay.routing_payload_bytes)}
             )
             bridge_stream_evidence: dict[str, Any] = {
                 "stream_id": stream["stream_id"],
@@ -1713,6 +2041,10 @@ def run_diagnostic(
                     "fresh_recovery": {
                         arm: _recovery_evidence(pre_recoveries[arm]) for arm in ARMS
                     },
+                },
+                "fixed_rule_replay": {
+                    "state": _bridge_state_entry(w1_replay),
+                    "fresh_recovery": _recovery_evidence(w1_replay),
                 },
             }
             bridge_state_streams.append(bridge_stream_evidence)
@@ -1738,11 +2070,21 @@ def run_diagnostic(
                 }
                 observations: dict[str, Any] = {}
                 for arm in episode["arm_order"]:
-                    state = arm_states[arm]
+                    recovered_pre_dispatch = bridge.recover(arm_states[arm])
+                    require_fresh_recovery(
+                        recovered_pre_dispatch, f"heldout {arm} pre-dispatch"
+                    )
+                    _require_mount_role(recovered_pre_dispatch.state, arm, "recovered heldout state")
+                    state = recovered_pre_dispatch.state
+                    arm_states[arm] = state
+                    work["trusted_mount_ids"].add(state.mount_id)
                     if state.mount_id not in work["trusted_mount_ids"]:
                         raise RunnerRefusal("unbacked synthetic state may not enter evaluation SEAL_TRACE")
                     _require_mount_role(state, arm, "heldout evaluation state")
                     route = _select(state, episode)
+                    pre_dispatch_readout = _pre_dispatch_readout(
+                        recovered_pre_dispatch, episode, route
+                    )
                     request, _, sealed, trace, outcome = _observe_call(
                         answerer,
                         bridge,
@@ -1752,17 +2094,20 @@ def run_diagnostic(
                         route,
                         private_manifest_commitment,
                         metadata,
-                        ordinal=calls + 1,
-                        phase="heldout",
-                        arm=arm,
-                        on_response=count_response,
+                    ordinal=calls + 1,
+                    phase="heldout",
+                    arm=arm,
+                    pre_dispatch_readout=pre_dispatch_readout,
+                    on_pre_dispatch=emit_pre_dispatch,
+                    on_response=count_response,
                     )
                     # Evaluation is read-only: outcome is sealed and ledgered but
                     # is never fed back into any shared or durable arm state.
                     work["traces"].append(trace); work["outcomes"].append(outcome)
                     route_digest = _route_digest(state, episode)
                     emit({
-                        "schema_version": "hswm-dnrd-runner-event/v1",
+                        "schema_version": "hswm-dnrd-runner-event/v2",
+                        "event": "COMPLETED_CALL",
                         "ordinal": calls,
                         "phase": "heldout",
                         "arm": arm,
@@ -1772,9 +2117,10 @@ def run_diagnostic(
                         "scorer_outcome": outcome,
                         "credit_receipt": None,
                         "route_digest_sha256": route_digest,
+                        "pre_dispatch_receipt_sha256": request.pre_dispatch_receipt_sha256,
                         "route_replay": route_replay,
                     })
-                    observations[arm] = {"selected_route_id": route, "route_digest_sha256": route_digest, "utility": int(outcome["reward"])}
+                    observations[arm] = {"selected_route_id": route, "route_digest_sha256": route_digest, "route_reward_micros": int(outcome["reward"])}
                 probes.append({"probe_id": episode["episode_id"], "arms": observations, "rollback": {"selected_route_id": rollback_route, "route_digest_sha256": rollback_digest}, "restore": {"selected_route_id": restore_route, "route_digest_sha256": restore_digest}})
             pending_post_evaluations.append(
                 {
@@ -1782,21 +2128,23 @@ def run_diagnostic(
                     "stream": stream,
                     "w0_recovery": w0_recovery,
                     "w1_recovery": w1_recovery,
+                    "w1_replay": w1_replay,
                     "recovered_w1": recovered_w1,
                     "pre_recoveries": pre_recoveries,
                     "arm_states": arm_states,
                     "bridge_stream_evidence": bridge_stream_evidence,
-                    "raw_material": raw_material,
                     "deranged_material": deranged_material,
+                    "raw_material": raw_material,
+                    "fixed_rule_replay": fixed_rule_replay,
                     "derangement": derangement,
                     "w0_mismatches": w0_mismatches,
                     "probes": probes,
                 }
             )
-        if calls != 160:
+        if calls != 128:
             raise RuntimeError(f"frozen DNRD call arithmetic drifted: {calls}")
-        # Only after every one of the 128 heldout calls has completed do we
-        # fresh-recover all sixteen arm mounts.  This catches a mutation on a
+        # Only after every one of the 96 heldout calls has completed do we
+        # fresh-recover all twelve arm mounts. This catches a mutation on a
         # final arm trace that no later model call would otherwise expose.
         for pending in pending_post_evaluations:
             arm_states = pending["arm_states"]
@@ -1811,9 +2159,18 @@ def run_diagnostic(
                 all(_same_routing_state(pre_recoveries[arm], post_recoveries[arm]) for arm in ARMS)
             )
             bridge_stream_evidence = pending["bridge_stream_evidence"]
+            replay_post = bridge.recover(pending["raw_material"].state)
+            require_fresh_recovery(replay_post, "post-evaluation fixed-rule replay")
+            _require_mount_role(replay_post.state, "RAW_EQUAL_BUDGET", "post-evaluation fixed-rule replay")
+            if not _same_routing_state(pending["w1_replay"], replay_post):
+                raise RuntimeError("evaluation changed the fixed-rule replay gate state")
             bridge_stream_evidence["post_evaluation"] = {
                 "arms": {arm: _bridge_state_entry(post_recoveries[arm]) for arm in ARMS},
                 "fresh_recovery": {arm: _recovery_evidence(post_recoveries[arm]) for arm in ARMS},
+            }
+            bridge_stream_evidence["fixed_rule_replay"]["post_evaluation"] = {
+                "state": _bridge_state_entry(replay_post),
+                "fresh_recovery": _recovery_evidence(replay_post),
             }
             work = pending["work"]
             stream = pending["stream"]
@@ -1821,7 +2178,7 @@ def run_diagnostic(
             w1_recovery = pending["w1_recovery"]
             recovered_w1 = pending["recovered_w1"]
             local_hash = _sha({"traces": work["traces"], "outcomes": work["outcomes"], "receipts": work["receipts"]})
-            stream_runs.append({"stream_id": stream["stream_id"], "w0": _state_observation(w0_recovery.state, owner=False), "w1": _state_observation(recovered_w1, owner=True), "clean_process_recovery": {"recovered": w1_recovery.recovered, "fresh_process": w1_recovery.fresh_process, "journal_sha256": w1_recovery.journal_sha256, "recovered_state_sha256": recovered_w1.state_sha256, "process_instance_id": w1_recovery.process_instance_id}, "local_v2_linkage": {"experimental_schema_id": "hswm:dnrd:v1", "owner_id": recovered_w1.owner_id, "outcome_ledger_sha256": _sha(work["outcomes"]), "credit_ledger_sha256": _sha(work["receipts"]), "local_structural_receipt_sha256": _sha({"local": local_hash, "init": work["initial"].initialization_receipt_sha256, "raw": pending["raw_material"].receipt_sha256, "deranged": pending["deranged_material"].receipt_sha256}), "transition_evidence_sha256": _sha(work["traces"]), "local_only": True, "schema_owner_matches": recovered_w1.owner_id == work["w1"].owner_id, "outcome_present": bool(work["outcomes"]), "reference_grant_matched_not_canonical_permit": True}, "derangement": pending["derangement"], "w0_replay_mismatch_probe_ids": pending["w0_mismatches"], "probes": pending["probes"]})
+            stream_runs.append({"stream_id": stream["stream_id"], "w0": _state_observation(w0_recovery.state, owner=False), "w1": _state_observation(recovered_w1, owner=True), "clean_process_recovery": {"recovered": w1_recovery.recovered, "fresh_process": w1_recovery.fresh_process, "journal_sha256": w1_recovery.journal_sha256, "recovered_state_sha256": recovered_w1.state_sha256, "process_instance_id": w1_recovery.process_instance_id}, "fixed_rule_replay": pending["fixed_rule_replay"], "local_v2_linkage": {"experimental_schema_id": "hswm:dnrd:v1", "owner_id": recovered_w1.owner_id, "outcome_ledger_sha256": _sha(work["outcomes"]), "credit_ledger_sha256": _sha(work["receipts"]), "local_structural_receipt_sha256": _sha({"local": local_hash, "init": work["initial"].initialization_receipt_sha256, "deranged": pending["deranged_material"].receipt_sha256}), "transition_evidence_sha256": _sha(work["traces"]), "local_only": True, "schema_owner_matches": recovered_w1.owner_id == work["w1"].owner_id, "outcome_present": bool(work["outcomes"]), "reference_grant_matched_not_canonical_permit": True}, "derangement": pending["derangement"], "w0_replay_mismatch_probe_ids": pending["w0_mismatches"], "probes": pending["probes"]})
         assert model_event_ledger_provider is not None  # pre-call contract above
         supplied_model_events = tuple(dict(event) for event in model_event_ledger_provider())
         _validate_model_event_ledger(
@@ -1876,7 +2233,7 @@ def run_diagnostic(
         bindings["model_event_ledger_sha256"] = model_ledger_sha256
         bindings["bridge_state_evidence_sha256"] = bridge_state_evidence_sha256
         bindings["bridge_mount_closure_sha256"] = bridge_mount_closure_sha256
-        candidate = {"schema_version": CANDIDATE_SCHEMA, "experiment_id": EXPERIMENT_ID, "bindings": bindings, "chronology": dict(metadata.chronology), "overlap": overlap, "parity": parity, "call_ledger": {"common_training_model_calls": 32, "evaluation_model_calls": 128, "client_dispatched_generation_requests": 160, "logical_model_calls": 160, "route_only_model_calls": 0, "scorer_model_calls": 0, "retries": 0, "client_cache_hits": 0, "post_first_call_operational_failure": False}, "streams": stream_runs}
+        candidate = {"schema_version": CANDIDATE_SCHEMA, "experiment_id": EXPERIMENT_ID, "bindings": bindings, "chronology": dict(metadata.chronology), "overlap": overlap, "parity": parity, "call_ledger": {"common_training_model_calls": 32, "evaluation_model_calls": 96, "client_dispatched_generation_requests": 128, "logical_model_calls": 128, "route_only_model_calls": 0, "scorer_model_calls": 0, "retries": 0, "client_cache_hits": 0, "post_first_call_operational_failure": False}, "streams": stream_runs}
         return RunnerResult(
             candidate,
             None,

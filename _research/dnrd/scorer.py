@@ -1,4 +1,4 @@
-"""Standalone private outcome scorer for the DNRD-2 mechanics diagnostic.
+"""Standalone private outcome scorer for the DNRD-3 mechanics diagnostic.
 
 It accepts exactly one sealed response record and a private scorer manifest.
 Its stdout is intentionally a seven-field outcome record with no gold or latent
@@ -15,11 +15,11 @@ from pathlib import Path
 import sys
 from typing import Any
 
-from .task_family import ManifestError, audit_manifest_pair, canonical_json, commitment, normalize_answer
+from .task_family import ManifestError, audit_manifest_pair, canonical_json, commitment, is_response_token
 
 
 SCORER_ADDRESS = "_research/dnrd/scorer.py"
-RESPONSE_SCHEMA = "hswm-dnrd-sealed-response/v1"
+RESPONSE_SCHEMA = "hswm-dnrd-sealed-response/v2"
 
 
 def _source_identity() -> str:
@@ -80,14 +80,20 @@ def score_response(record: dict[str, Any], private_manifest: dict[str, Any]) -> 
         raise ManifestError("selected route is not a candidate")
 
     correct_route = binding["context_correct_route"][episode["context_key"]]
-    gold_answer = binding["episode_gold_answers"][episode["episode_id"]]
+    candidate_tokens = {
+        record["response_token"] for record in episode["route_evidence"]
+    }
+    if not is_response_token(payload["answer"]) or payload["answer"] not in candidate_tokens:
+        raise ManifestError("sealed response is not one exact episode candidate token")
     route_correct = payload["selected_route_id"] == correct_route
-    answer_correct = normalize_answer(payload["answer"]) == normalize_answer(gold_answer)
-    reward = 1_000_000 if route_correct and answer_correct else 0 if route_correct else -1_000_000
+    # DNRD-3 isolates the durable routing transition from the live model's
+    # response.  The response remains a sealed liveness/provenance observation,
+    # but the externally fixed outcome is a function only of the preregistered
+    # route binding and the already-selected route.
+    reward = 1_000_000 if route_correct else -1_000_000
     outcome_basis = {
         "episode_id": payload["episode_id"],
         "selected_route_id": payload["selected_route_id"],
-        "response_commitment": record["response_commitment"],
         "private_manifest_commitment": private_commitment,
         "reward": reward,
         "scorer_source_identity": _source_identity(),

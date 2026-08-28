@@ -166,10 +166,10 @@ def test_binding_is_deterministic_content_addressed_and_32_bytes() -> None:
     canonical = first.canonical()
     assert canonical["receipt_sha256"] == first.receipt_sha256
     material = seed.seed_material(projection=_projection(), source_binding=_source_binding())
-    assert material["domain"] == "HSWM-DNRD-FUTURE-SEED-V2"
-    assert material["experiment_id"] == "HSWM-DNRD-2"
-    assert material["schema_version"] == "hswm-dnrd-future-seed-material/v2"
-    assert first.schema_version == "hswm-dnrd-pulse-binding/v2"
+    assert material["domain"] == "HSWM-DNRD-FUTURE-SEED-V3"
+    assert material["experiment_id"] == "HSWM-DNRD-3"
+    assert material["schema_version"] == "hswm-dnrd-future-seed-material/v3"
+    assert first.schema_version == "hswm-dnrd-pulse-binding/v3"
     assert {
         "quicknet_randomness_hex",
         "source_commit",

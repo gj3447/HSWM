@@ -16,6 +16,7 @@ import unicodedata
 import pytest
 
 from _research.dnrd import judge as dnrd_judge
+import _research.dnrd.execute as dnrd_execute
 from _research.dnrd.execute import (
     ATTEMPT_MARKER_SCOPE,
     BRIDGE_MOUNT_CLOSURE_LAYOUT,
@@ -38,6 +39,7 @@ from _research.dnrd.execute import (
     _json_object_unformatted,
     _load_source_manifest,
     _plain_file,
+    _post_dispatch_progress,
     _production_dependencies,
     _runtime_tree_manifest,
     _validate_preregistration,
@@ -107,6 +109,14 @@ class _FixtureClosureExporter:
             for stream in frozen["streams"]
             for arm, arm_value in stream["arms"].items()
         ]
+        mounts.extend(
+            {
+                "stream_id": stream["stream_id"],
+                "arm": "RAW_EQUAL_BUDGET",
+                **stream["fixed_rule_replay"],
+            }
+            for stream in frozen["streams"]
+        )
         mounts.sort(key=lambda value: (value["stream_id"], value["arm"]))
         unsigned = {
             "schema_version": BRIDGE_MOUNT_CLOSURE_SCHEMA,
@@ -138,7 +148,6 @@ class _PublicOnlyFixtureScorer:
         digest = commitment({
             "episode_id": sealed_response["episode_id"],
             "selected_route_id": sealed_response["selected_route_id"],
-            "response_commitment": sealed_response["response_commitment"],
             "private_manifest_commitment": sealed_response["private_manifest_commitment"],
             "reward": reward,
             "scorer_source_identity": self.source_sha256,
@@ -226,7 +235,8 @@ def _closure_fixture(state_root: Path, output_root: Path) -> dict:
                 ),
             )
         arms: dict[str, dict] = {}
-        for arm in ARMS:
+        fixed_rule_replay: dict | None = None
+        for arm in (*ARMS, "RAW_EQUAL_BUDGET"):
             mount_id = _mount_id(next_mount)
             next_mount += 1
             mount_root = state_root / "mounts" / mount_id
@@ -255,7 +265,7 @@ def _closure_fixture(state_root: Path, output_root: Path) -> dict:
                 state_root / "registry" / f"{mount_id}.json",
                 canonical_json({"mount_id": mount_id, "mount_role": MOUNT_ROLES[arm]}),
             )
-            arms[arm] = {
+            entry = {
                 "mount_id": mount_id,
                 "mount_role": MOUNT_ROLES[arm],
                 "pre_evaluation_journal_sha256": journal_digest,
@@ -263,7 +273,15 @@ def _closure_fixture(state_root: Path, output_root: Path) -> dict:
                 "pre_evaluation_routing_payload_sha256": object_digest,
                 "post_evaluation_routing_payload_sha256": object_digest,
             }
-        streams.append({"stream_id": stream_id, "arms": arms})
+            if arm == "RAW_EQUAL_BUDGET":
+                fixed_rule_replay = entry
+            else:
+                arms[arm] = entry
+        assert fixed_rule_replay is not None
+        streams.append({
+            "stream_id": stream_id, "arms": arms,
+            "fixed_rule_replay": fixed_rule_replay,
+        })
     return {
         "schema_version": BRIDGE_MOUNT_CLOSURE_PLAN_SCHEMA,
         "bridge_state_evidence_sha256": "d" * 64,
@@ -413,7 +431,7 @@ def _fixture(
     )
     source_manifest_value = {
         "schema_version": "hswm-dnrd-source-freeze-manifest/v1",
-        "experiment_id": "HSWM-DNRD-2",
+        "experiment_id": "HSWM-DNRD-3",
         "source_commit_tree_bound_externally": "SOURCE_COMMIT_TREE_BOUND_EXTERNALLY_NO_SELF_CYCLE",
         "files": [
             {"path": relative, "sha256": _hash(repo / relative)}
@@ -574,12 +592,59 @@ def _fixture(
     ci_path = pin_root / "source-ci.json"
     ci_sha = _write_json(ci_path, ci_receipt)
 
+    qualification_path = pin_root / "structured-output-qualification.json"
+    qualification_calls = []
+    for ordinal, pair in enumerate(
+        (("token-00000000000000000001", "token-00000000000000000002"),
+         ("token-00000000000000000003", "token-00000000000000000004"),
+         ("token-00000000000000000005", "token-00000000000000000006")),
+        start=1,
+    ):
+        requested_token = pair[1] if ordinal == 2 else pair[0]
+        response_schema = {
+            "type": "object",
+            "properties": {"response_token": {
+                "type": "string", "enum": list(pair),
+                "pattern": "^token-[0-9a-f]{20}$", "minLength": 26,
+                "maxLength": 26,
+            }},
+            "required": ["response_token"],
+            "additionalProperties": False,
+        }
+        qualification_calls.append({
+            "candidate_response_tokens": list(pair), "completion_tokens": 1,
+            "dnrd_request_sha256": hashlib.sha256(f"request-{ordinal}".encode()).hexdigest(),
+            "dnrd_response_sha256": hashlib.sha256(f"response-{ordinal}".encode()).hexdigest(),
+            "finish_reason": "stop",
+            "http_request_sha256": hashlib.sha256(f"http-{ordinal}".encode()).hexdigest(),
+            "http_status": 200, "ordinal": ordinal, "prompt_tokens": 1,
+            "raw_response_sha256": hashlib.sha256(f"raw-{ordinal}".encode()).hexdigest(),
+            "requested_token": requested_token,
+            "response_format_schema_sha256": commitment(response_schema),
+            "returned_token": requested_token,
+        })
+    qualification = {
+        "schema_version": "hswm-dnrd3-structured-output-qualification-summary/v1",
+        "domain": "HSWM-DNRD3-STRUCTURED-OUTPUT-QUALIFICATION-v1",
+        "event_schema": "hswm-dnrd-live-model-event/v3",
+        "experiment_occurrence": False, "future_seed_material_used": False,
+        "record_role": "CONTENT_ADDRESSED_OPERATOR_SUMMARY_OF_DISJOINT_NONSCIENTIFIC_LIVE_QUALIFICATION_NOT_SCIENTIFIC_EVIDENCE",
+        "raw_full_stdout_record_persisted": False, "retry_count": 0,
+        "max_output_tokens": MAX_OUTPUT_TOKENS, "model_endpoint": "http://127.0.0.1:9999",
+        "served_model_id": MODEL_ID, "vllm_version": VLLM_VERSION,
+        "provider_cache_independence": "NOT_OBSERVABLE_BY_CLIENT", "calls": qualification_calls,
+        "started_at_unix_ns": 1, "ended_at_unix_ns": 2,
+        "live_source_sha256": "a" * 64, "runner_source_sha256": "b" * 64,
+    }
+    qualification_path.write_bytes(canonical_json(qualification) + b"\n")
+    qualification_sha = _hash(qualification_path)
+
     prereg_path = "prereg/dnrd.json"
     prereg = {
-        "schema_version": "hswm-durable-numeric-routing-diagnostic-preregistration/v2",
-        "experiment_id": "HSWM-DNRD-2",
-        "protocol_version": "v2",
-        "created_at": "2026-08-27",
+        "schema_version": "hswm-durable-numeric-routing-diagnostic-preregistration/v3",
+        "experiment_id": "HSWM-DNRD-3",
+        "protocol_version": "v3",
+        "created_at": "2026-08-28",
         "status": "FROZEN_AWAITING_EXACT_HASH_RATIFICATION",
         "authority": {
             "broad_research_continuation_requested": True,
@@ -595,15 +660,15 @@ def _fixture(
         "scientific_question": PREREG_CLAIM_BOUNDARY["scientific_question"],
         "hypotheses": PREREG_CLAIM_BOUNDARY["hypotheses"],
         "testbed": {
-            "family": "REPEATED_CONTEXT_TABULAR_ROUTING_MECHANICS_V1",
+            "family": "REPEATED_CONTEXT_TABULAR_ROUTING_MECHANICS_V2",
             "relationship_to_prior_p1": PREREG_CLAIM_BOUNDARY["testbed_claims"]["relationship_to_prior_p1"],
             "development_streams": 4,
             "training_calls_per_stream_maximum": 8,
             "paired_heldout_probes_per_stream": 8,
-            "evaluation_arms": 4,
-            "evaluation_calls": 128,
+            "evaluation_arms": 3,
+            "evaluation_calls": 96,
             "shared_learning_or_compiler_calls_maximum": 32,
-            "client_dispatched_generation_request_ceiling": 160,
+            "client_dispatched_generation_request_ceiling": 128,
             "analysis_unit": PREREG_CLAIM_BOUNDARY["testbed_claims"]["analysis_unit"],
             "model": {
                 "served_model_id": MODEL_ID,
@@ -627,14 +692,16 @@ def _fixture(
             "equal_candidate_evidence_universe": True,
             "all_active_payloads_within_byte_ceiling": True,
             "active_state_byte_ceiling": 16_384,
-            "full_raw_numeric_payload_bytes_equal": True,
+            "full_fixed_rule_replay_numeric_payload_bytes_equal": True,
             "full_deranged_numeric_payload_byte_count_equal": True,
             "arm_labels_hidden_from_model": True,
             "fresh_process_recovery_observed": True,
             "distinct_arm_mount_ids": True,
             "evaluation_read_only_wrt_routing_observed": True,
+            "pre_dispatch_readout_bound_before_model_response": True,
+            "scorer_outcome_response_independent": True,
             "cache_hits_required": 0,
-            "gold_open_only_after_response_seal": True,
+            "private_route_binding_open_only_after_response_seal": True,
             "compiler_input_audit": PREREG_CLAIM_BOUNDARY["parity_claims"]["compiler_input_audit"],
             "canary": PREREG_CLAIM_BOUNDARY["parity_claims"]["canary"],
         },
@@ -660,6 +727,7 @@ def _fixture(
             "verifier_helper_sha256": _hash(helper),
             "verifier_package_lock_sha256": _hash(lock),
             "verifier_runtime_bundle_sha256": _hash(bundle),
+            "structured_output_qualification_sha256": qualification_sha,
             "subprocess_environment": {
                 "PYTHONNOUSERSITE": "1", "PYTHONDONTWRITEBYTECODE": "1", "PYTHONHASHSEED": "0", "PYTHONUTF8": "1", "TZ": "UTC", "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "PATH": "/usr/bin:/bin",
             },
@@ -674,7 +742,7 @@ def _fixture(
 
     ratification_text = RATIFICATION_TEMPLATE.format(preregistration_sha256=prereg_sha)
     rat_unsigned = {
-        "schema_version": "hswm-dnrd-ratification-receipt/v2",
+        "schema_version": "hswm-dnrd-ratification-receipt/v3",
         "preregistration_sha256": prereg_sha,
         "statement_sha256": hashlib.sha256(ratification_text.encode()).hexdigest(),
         "ratified_at_unix": 3,
@@ -696,6 +764,8 @@ def _fixture(
         attempt_registry_root=attempt_root, ratification_receipt_path=rat_path,
         ratification_receipt_sha256=rat_sha, source_ci_receipt_path=ci_path,
         source_ci_receipt_sha256=ci_sha, tokenizer_preflight_prompt=TOKENIZER_PREFLIGHT_PROMPT,
+        structured_output_qualification_path=qualification_path,
+        structured_output_qualification_sha256=qualification_sha,
         bridge_runtime_root=runtime_root, bridge_state_root=state_root,
         bridge_runtime_tree_manifest_path=runtime_manifest,
         bridge_runtime_tree_manifest_sha256=runtime_manifest_sha,
@@ -721,6 +791,41 @@ def _fixture(
     return config, dependencies, calls
 
 
+def test_structured_output_qualification_rejects_semantic_drift(tmp_path: Path) -> None:
+    config, _, _ = _fixture(tmp_path)
+    assert config.structured_output_qualification_path is not None
+    base = json.loads(config.structured_output_qualification_path.read_text())
+    dnrd_execute._load_structured_output_qualification(config)
+
+    mutants: dict[str, dict] = {}
+    for label in (
+        "record-role", "time", "source-hash", "ordinal-bool", "token-count-bool",
+        "schema-digest", "enum-position-coverage",
+    ):
+        mutants[label] = json.loads(json.dumps(base))
+    mutants["record-role"]["record_role"] = "SCIENTIFIC_EVIDENCE"
+    mutants["time"]["ended_at_unix_ns"] = mutants["time"]["started_at_unix_ns"]
+    mutants["source-hash"]["live_source_sha256"] = "not-a-sha"
+    mutants["ordinal-bool"]["calls"][0]["ordinal"] = True
+    mutants["token-count-bool"]["calls"][0]["completion_tokens"] = True
+    mutants["schema-digest"]["calls"][0]["response_format_schema_sha256"] = "0" * 64
+    second = mutants["enum-position-coverage"]["calls"][1]
+    second["requested_token"] = second["candidate_response_tokens"][0]
+    second["returned_token"] = second["requested_token"]
+
+    for label, value in mutants.items():
+        path = tmp_path / f"qualification-{label}.json"
+        raw = canonical_json(value) + b"\n"
+        path.write_bytes(raw)
+        altered = replace(
+            config,
+            structured_output_qualification_path=path,
+            structured_output_qualification_sha256=hashlib.sha256(raw).hexdigest(),
+        )
+        with pytest.raises(ExecutionRefusal, match="structured-output qualification"):
+            dnrd_execute._load_structured_output_qualification(altered)
+
+
 def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None:
     config, dependencies, calls = _fixture(tmp_path)
     result = execute_with_dependencies(config, dependencies)
@@ -736,6 +841,7 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
         "source_manifest.json", "preregistration.json", "source_ci_receipt.json",
         "ratification_receipt.json", "git_chronology_evidence.json", "public_manifest.json",
         "pulse_verifier_receipt.json", "pulse_binding.json", "deployment_receipt.json",
+        "structured_output_qualification.json",
         "runtime_receipt.json", "bridge_runtime_tree_manifest.json", "attempt_lock_receipt.json",
         "config_readback.json", "runner_events.jsonl", "model_events.jsonl",
         "bridge_state_evidence.json", "candidate.json", "bundle_index.json",
@@ -753,8 +859,11 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
     )
     marker = json.loads((result.output_dir / "attempt_lock_receipt.json").read_text())
     assert marker["enforcement_scope"] == ATTEMPT_MARKER_SCOPE
-    assert len((result.output_dir / "model_events.jsonl").read_text().splitlines()) == 320
+    assert len((result.output_dir / "model_events.jsonl").read_text().splitlines()) == 256
     assert "raw_response_utf8" in (result.output_dir / "model_events.jsonl").read_text()
+    assert (result.output_dir / "structured_output_qualification.json").read_bytes() == (
+        config.structured_output_qualification_path.read_bytes()  # type: ignore[union-attr]
+    )
     index = json.loads((result.output_dir / "bundle_index.json").read_text())
     assert index["schema_version"] == "hswm-dnrd-evidence-bundle-index/v1"
     assert "candidate.json" in {entry["path"] for entry in index["artifacts"]}
@@ -901,7 +1010,201 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
             (result.output_dir / "source_manifest.json").read_bytes(),
             preregistration_bytes,
         )
+
+
+def test_execute_finalizes_candidate_with_production_style_durable_model_ledger(
+    tmp_path: Path,
+) -> None:
+    """The real ledger path is retained, reread, and indexed before finalization."""
+    config, dependencies, _ = _fixture(tmp_path)
+    ledger = _DurableJsonlEventLedger(config.output_root / "model_events.jsonl")
+
+    class DurableEvidenceAnswerer(EvidenceAnswerer):
+        def answer(self, request: object):  # type: ignore[override]
+            before = len(self.events)
+            reply = super().answer(request)  # type: ignore[arg-type]
+            for event in self.events[before:]:
+                ledger(event)
+            return reply
+
+    answerer = DurableEvidenceAnswerer(model=MODEL_ID, endpoint=config.model_endpoint)
+    durable_dependencies = replace(
+        dependencies,
+        answerer=answerer,
+        model_event_ledger=ledger.snapshot,
+        model_event_ledger_path=ledger.path,
+    )
+
+    result = execute_with_dependencies(config, durable_dependencies)
+
+    assert result.runner_result.candidate is not None
+    assert ledger.path.read_bytes() == b"".join(
+        canonical_json(event) + b"\n" for event in answerer.events
+    )
+    index = dnrd_judge._validate_bundle_index(result.output_dir)
+    assert index["model_events.jsonl"] == _hash(ledger.path)
     assert "import judge" not in Path("_research/dnrd/execute.py").read_text()
+
+
+def test_post_lock_copy_failure_persists_conservative_void_terminal(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    config, dependencies, _ = _fixture(tmp_path)
+
+    def fail_copy(*_args: object, **_kwargs: object) -> None:
+        raise OSError("injected source closure copy failure")
+
+    monkeypatch.setattr(dnrd_execute, "_copy_source_closure", fail_copy)
+    with pytest.raises(OSError, match="injected source closure"):
+        execute_with_dependencies(config, dependencies)
+    terminal = json.loads((config.output_root / "void_protocol.json").read_text())
+    assert terminal["schema_version"] == "hswm-dnrd-void-protocol/v1"
+    assert terminal["post_first_call"] is False
+    assert (config.output_root / "terminal-intent.json").is_file()
+    assert (config.output_root / "bundle_index.json").is_file()
+
+
+def test_output_bootstrap_failure_uses_attempt_marker_and_best_effort_void(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A failure between output mkdir and terminal-intent cannot reopen the run."""
+    config, dependencies, _ = _fixture(tmp_path)
+    original = dnrd_execute._fsync_directory
+
+    def fail_output_parent(directory: Path) -> None:
+        if directory == config.output_root.parent and config.output_root.exists():
+            raise OSError("injected output bootstrap parent fsync failure")
+        original(directory)
+
+    monkeypatch.setattr(dnrd_execute, "_fsync_directory", fail_output_parent)
+    with pytest.raises(OSError, match="output bootstrap"):
+        execute_with_dependencies(config, dependencies)
+
+    assert any(config.attempt_registry_root.iterdir())  # type: ignore[union-attr]
+    assert (config.output_root / "void_protocol.json").is_file()
+    assert (config.output_root / "bundle_index.json").is_file()
+    assert not (config.output_root / "candidate.json").exists()
+
+
+def test_durable_model_ledger_reread_mismatch_persists_inconclusive_terminal(
+    tmp_path: Path,
+) -> None:
+    config, dependencies, _ = _fixture(tmp_path)
+    ledger = _DurableJsonlEventLedger(config.output_root / "model_events.jsonl")
+
+    class DurableAnswerer(EvidenceAnswerer):
+        def answer(self, request: object):  # type: ignore[override]
+            before = len(self.events)
+            reply = super().answer(request)  # type: ignore[arg-type]
+            for event in self.events[before:]:
+                ledger(event)
+            return reply
+
+    answerer = DurableAnswerer(model=MODEL_ID, endpoint=config.model_endpoint)
+    reads = 0
+    def snapshot() -> tuple[dict, ...]:
+        nonlocal reads
+        reads += 1
+        if reads == 2:
+            ledger.path.chmod(0o600)
+            with ledger.path.open("ab") as handle:
+                handle.write(b"tamper\n")
+                handle.flush(); os.fsync(handle.fileno())
+        return ledger.snapshot()
+    altered = replace(dependencies, answerer=answerer,
+        model_event_ledger=snapshot, model_event_ledger_path=ledger.path)
+    with pytest.raises(RuntimeError, match="differs from in-memory"):
+        execute_with_dependencies(config, altered)
+    terminal = json.loads((config.output_root / "inconclusive.json").read_text())
+    assert terminal["post_first_call"] is True
+    # The durable ledger has a corrupt trailing row.  The executor must not
+    # use its mutable snapshot to infer an exact count; durable evidence only
+    # supports the conservative minimum.
+    assert terminal["calls_completed"] == 1
+
+
+def test_durable_ledger_parent_fsync_failure_is_still_post_dispatch(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A row may be durable even when ledger bookkeeping never completes."""
+    path = tmp_path / "model_events.jsonl"
+    ledger = _DurableJsonlEventLedger(path)
+    original = dnrd_execute._fsync_directory
+
+    def fail_after_row(directory: Path) -> None:
+        if directory == path.parent and path.exists():
+            raise OSError("injected parent fsync failure after durable row")
+        original(directory)
+
+    monkeypatch.setattr(dnrd_execute, "_fsync_directory", fail_after_row)
+    with pytest.raises(OSError, match="parent fsync"):
+        ledger({"ordinal": 7, "dnrd_request_sha256": "a" * 64})
+    assert ledger.snapshot() == ()
+    dependencies = ExecutionDependencies(
+        answerer=object(), bridge=object(), scorer=object(),  # type: ignore[arg-type]
+        verifier_runner=lambda _: b"", live_preflight=lambda _: {},
+        model_event_ledger=ledger.snapshot, model_event_ledger_path=path,
+    )
+    assert _post_dispatch_progress(dependencies) == (True, 1)
+
+
+def test_late_candidate_write_failure_preserves_single_inconclusive_terminal(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    config, dependencies, _ = _fixture(tmp_path)
+    original = dnrd_execute._atomic_json
+
+    def fail_candidate(path: Path, value: dict, mode: int = 0o600) -> None:
+        if path.name == "candidate.json":
+            raise OSError("injected candidate write failure")
+        original(path, value, mode)
+
+    monkeypatch.setattr(dnrd_execute, "_atomic_json", fail_candidate)
+    with pytest.raises(OSError, match="candidate write"):
+        execute_with_dependencies(config, dependencies)
+    assert (config.output_root / "inconclusive.json").is_file()
+    assert not (config.output_root / "candidate.json").exists()
+    assert (config.output_root / "bundle_index.json").is_file()
+
+
+def test_late_candidate_binding_failure_persists_inconclusive_terminal(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    config, dependencies, _ = _fixture(tmp_path)
+    original = dnrd_execute.run_diagnostic
+
+    def bind_wrong_ledger(*args: object, **kwargs: object):
+        result = original(*args, **kwargs)
+        assert result.candidate is not None
+        candidate = json.loads(json.dumps(result.candidate))
+        candidate["bindings"]["event_ledger_sha256"] = "0" * 64
+        return replace(result, candidate=candidate)
+
+    monkeypatch.setattr(dnrd_execute, "run_diagnostic", bind_wrong_ledger)
+    with pytest.raises(RuntimeError, match="candidate ledger binding"):
+        execute_with_dependencies(config, dependencies)
+    terminal = json.loads((config.output_root / "inconclusive.json").read_text())
+    assert terminal["post_first_call"] is True
+    assert terminal["calls_completed"] == 128
+    assert (config.output_root / "bundle_index.json").is_file()
+
+
+def test_late_bundle_index_failure_keeps_existing_candidate_terminal(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    config, dependencies, _ = _fixture(tmp_path)
+    original = dnrd_execute._atomic_json
+
+    def fail_index(path: Path, value: dict, mode: int = 0o600) -> None:
+        if path.name == "bundle_index.json":
+            raise OSError("injected index failure")
+        original(path, value, mode)
+
+    monkeypatch.setattr(dnrd_execute, "_atomic_json", fail_index)
+    with pytest.raises(OSError, match="index failure"):
+        execute_with_dependencies(config, dependencies)
+    assert (config.output_root / "candidate.json").is_file()
+    assert not (config.output_root / "inconclusive.json").exists()
 
 
 def test_bundle_index_sorts_serialized_posix_paths_at_file_directory_prefix_collision(
@@ -984,7 +1287,7 @@ def test_static_pins_refuse_free_verifier_command_or_path_topology(
             )
         )
 
-    with pytest.raises(ExecutionRefusal, match="response-form probe"):
+    with pytest.raises(ExecutionRefusal, match="structured-response probe"):
         _verify_static_pins(replace(config, tokenizer_preflight_prompt="arbitrary probe"))
 
 
@@ -1079,7 +1382,7 @@ def test_dnrd_verifier_imports_the_exact_bundle_without_package_export_routing()
         ("testbed", "analysis_unit"),
         ("testbed", "freshness"),
         ("learning_boundary",),
-        ("arms", "RAW_EQUAL_BUDGET"),
+        ("arms", "FULL"),
         ("interventions",),
         ("parity_and_leakage", "compiler_input_audit"),
         ("parity_and_leakage", "canary"),
@@ -1107,7 +1410,7 @@ def test_executor_refuses_any_broadened_preregistration_scientific_claim(
     source_ci = json.loads(config.source_ci_receipt_path.read_text(encoding="utf-8"))
     with pytest.raises(
         ExecutionRefusal,
-        match="scientific claim boundary|RAW arm overclaims",
+        match="scientific claim boundary",
     ):
         _validate_preregistration(config, source_ci_receipt=source_ci)
 
@@ -1258,14 +1561,17 @@ def test_source_freeze_lists_exact_transitive_ts_runtime_closure() -> None:
     assert discovered == frozen
 
 
-def test_checked_in_dnrd2_source_manifest_is_canonical_and_exact() -> None:
-    """The real Source-A manifest must satisfy the production byte contract."""
+def test_checked_in_dnrd2_source_manifest_is_canonical_and_historically_pinned() -> None:
+    """The consumed DNRD-2 manifest stays exact as later source evolves."""
     repository = Path(__file__).resolve().parents[1]
     manifest_path = (
         repository
         / "manifests/HSWM_DNRD_2_SOURCE_FREEZE_MANIFEST_2026-08-27.json"
     )
     raw = manifest_path.read_bytes()
+    assert hashlib.sha256(raw).hexdigest() == (
+        "0ba82ba0311dcf6d9e1dc624066545056738ed7465f0a4c0aaec002116c18fbf"
+    )
     manifest = json.loads(raw)
     assert raw == canonical_json(manifest)
     assert set(manifest) == {
@@ -1281,11 +1587,14 @@ def test_checked_in_dnrd2_source_manifest_is_canonical_and_exact() -> None:
         == "SOURCE_COMMIT_TREE_BOUND_EXTERNALLY_NO_SELF_CYCLE"
     )
     rows = manifest["files"]
-    assert [row["path"] for row in rows] == sorted(CORE_SOURCE_FILES)
-    assert {row["path"] for row in rows} == CORE_SOURCE_FILES
+    # DNRD-2 is a historical, content-hash-bound record.  Its closure must
+    # not be reinterpreted against the evolving DNRD-3 source closure.
+    historical_paths = [row["path"] for row in rows]
+    assert historical_paths == sorted(historical_paths)
+    assert len(historical_paths) == len(set(historical_paths))
+    assert "_research/dnrd/execute.py" in historical_paths
     for row in rows:
         assert set(row) == {"path", "sha256"}
-        assert _hash(repository / row["path"]) == row["sha256"]
 
 
 def test_source_manifest_refuses_any_path_outside_the_exact_frozen_closure(

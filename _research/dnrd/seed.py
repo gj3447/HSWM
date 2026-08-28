@@ -37,10 +37,10 @@ MAX_QUICKNET_ROUND = (
     (MAX_SAFE_INTEGER - QUICKNET_GENESIS_TIME_UNIX) // QUICKNET_PERIOD_SECONDS
 ) + 1
 
-EXPERIMENT_ID = "HSWM-DNRD-2"
-SEED_DOMAIN = "HSWM-DNRD-FUTURE-SEED-V2"
-SEED_MATERIAL_SCHEMA = "hswm-dnrd-future-seed-material/v2"
-PULSE_BINDING_SCHEMA = "hswm-dnrd-pulse-binding/v2"
+EXPERIMENT_ID = "HSWM-DNRD-3"
+SEED_DOMAIN = "HSWM-DNRD-FUTURE-SEED-V3"
+SEED_MATERIAL_SCHEMA = "hswm-dnrd-future-seed-material/v3"
+PULSE_BINDING_SCHEMA = "hswm-dnrd-pulse-binding/v3"
 VERIFIER_RECEIPT_SCHEMA = "hswm-swm0w-drand-verification-receipt/v1"
 VERIFIER_HELPER_VERSION = "hswm-swm0w-drand-node-verifier/v1"
 VERIFIER_ACCEPTED_BY = "drand-client.fetchBeacon"

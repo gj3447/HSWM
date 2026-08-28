@@ -30,7 +30,7 @@ const episode = (phase: "training" | "heldout", index: number, context: string, 
     { route_id: "route:a", evidence_text: "a", response_token: "a" },
     { route_id: "route:b", evidence_text: "b", response_token: "b" }
   ],
-  ...(phase === "training" ? { forced_route_id: route, provenance_canary: canary } : { arm_order: ["FULL", "NO_MEMORY_ROLLBACK", "RAW_EQUAL_BUDGET", "BINDING_DERANGED_NUMERIC_PLACEBO"] })
+  ...(phase === "training" ? { forced_route_id: route, provenance_canary: canary } : { arm_order: ["FULL", "NO_MEMORY_ROLLBACK", "BINDING_DERANGED_NUMERIC_PLACEBO"] })
   })
 }
 
@@ -315,6 +315,22 @@ it("requires a prompt-bound provenance canary only on training episodes", async 
   const heldout = stream() as unknown as { readonly heldout: Wire[] }
   heldout.heldout[0]!["provenance_canary"] = `dnrd-training-provenance:${"f".repeat(32)}`
   await expect(request(heldoutRoot, "INIT_STREAM", { stream: heldout })).rejects.toThrow(/missing or excess fields/)
+})
+
+it("accepts only the three DNRD-3 scientific arms in heldout order", async () => {
+  const root = await mkdtemp(join(tmpdir(), "hswm-dnrd-process-arm-order-"))
+  roots.push(root)
+  await chmod(root, 0o700)
+  const source = stream() as unknown as { readonly heldout: Wire[] }
+  source.heldout[0]!["arm_order"] = [
+    "FULL",
+    "NO_MEMORY_ROLLBACK",
+    "RAW_EQUAL_BUDGET",
+    "BINDING_DERANGED_NUMERIC_PLACEBO"
+  ]
+  await expect(request(root, "INIT_STREAM", { stream: source })).rejects.toThrow(
+    /heldout arm order differs from frozen arm set/
+  )
 })
 
 it("accepts the exact public stream emitted by the Python fixture generator", async () => {

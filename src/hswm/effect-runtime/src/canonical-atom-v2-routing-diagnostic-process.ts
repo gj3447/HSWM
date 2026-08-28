@@ -797,7 +797,7 @@ const parseStream = (value: unknown): { readonly metadata: MountBaseMetadata; re
       return Object.freeze({ episodeId, contextKey, phase, forcedRouteId: route })
     }
     const armOrder = requiredArray(episode["arm_order"], `stream.heldout[${index}].arm_order`)
-    const arms = ["FULL", "NO_MEMORY_ROLLBACK", "RAW_EQUAL_BUDGET", "BINDING_DERANGED_NUMERIC_PLACEBO"]
+    const arms = ["FULL", "NO_MEMORY_ROLLBACK", "BINDING_DERANGED_NUMERIC_PLACEBO"]
     if (armOrder.length !== arms.length || new Set(armOrder).size !== arms.length || armOrder.some((arm) => typeof arm !== "string" || !arms.includes(arm))) throw new ProcessRefusal("heldout arm order differs from frozen arm set")
     return Object.freeze({ episodeId, contextKey, phase, forcedRouteId: null })
   }

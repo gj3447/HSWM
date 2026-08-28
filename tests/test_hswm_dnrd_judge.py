@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 from _research.dnrd.execute import PREREG_CLAIM_BOUNDARY
-from _research.dnrd.task_family import canonical_json, commitment
+from _research.dnrd.task_family import canonical_json, commitment, generate_manifests
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -23,6 +23,110 @@ _SPEC.loader.exec_module(judge)
 
 def _sha(label: str) -> str:
     return (label.encode("ascii").hex() + "0" * 64)[:64]
+
+
+def _chat_config() -> dict[str, object]:
+    candidates = ["token-0123456789abcdef0123", "token-ffffffffffffffffffff"]
+    schema = {
+        "type": "object",
+        "properties": {"response_token": {
+            "type": "string", "enum": candidates,
+            "pattern": "^token-[0-9a-f]{20}$", "minLength": 26, "maxLength": 26,
+        }},
+        "required": ["response_token"],
+        "additionalProperties": False,
+    }
+    response_format = {
+        "type": "json_schema",
+        "json_schema": {"name": "hswm_dnrd_response_token", "strict": True, "schema": schema},
+    }
+    return {
+        "chat_template_kwargs": {"enable_thinking": False}, "logprobs": False,
+        "n": 1, "stream": False, "temperature": 0, "top_p": 1,
+        "max_tokens": judge.MAX_OUTPUT_TOKENS,
+        "response_format": response_format,
+        "response_format_schema_sha256": commitment(schema),
+    }
+
+
+def _qualification_summary() -> dict[str, object]:
+    calls: list[dict[str, object]] = []
+    pairs = (
+        ("token-00000000000000000001", "token-00000000000000000002"),
+        ("token-00000000000000000003", "token-00000000000000000004"),
+        ("token-00000000000000000005", "token-00000000000000000006"),
+    )
+    for ordinal, pair in enumerate(pairs, start=1):
+        requested = pair[1] if ordinal == 2 else pair[0]
+        schema = {
+            "type": "object",
+            "properties": {"response_token": {
+                "type": "string", "enum": list(pair),
+                "pattern": "^token-[0-9a-f]{20}$", "minLength": 26,
+                "maxLength": 26,
+            }},
+            "required": ["response_token"],
+            "additionalProperties": False,
+        }
+        calls.append({
+            "candidate_response_tokens": list(pair),
+            "completion_tokens": 1,
+            "dnrd_request_sha256": _sha(f"request-{ordinal}"),
+            "dnrd_response_sha256": _sha(f"response-{ordinal}"),
+            "finish_reason": "stop",
+            "http_request_sha256": _sha(f"http-{ordinal}"),
+            "http_status": 200,
+            "ordinal": ordinal,
+            "prompt_tokens": 1,
+            "raw_response_sha256": _sha(f"raw-{ordinal}"),
+            "requested_token": requested,
+            "response_format_schema_sha256": commitment(schema),
+            "returned_token": requested,
+        })
+    return {
+        "schema_version": "hswm-dnrd3-structured-output-qualification-summary/v1",
+        "domain": "HSWM-DNRD3-STRUCTURED-OUTPUT-QUALIFICATION-v1",
+        "event_schema": "hswm-dnrd-live-model-event/v3",
+        "experiment_occurrence": False,
+        "future_seed_material_used": False,
+        "record_role": (
+            "CONTENT_ADDRESSED_OPERATOR_SUMMARY_OF_DISJOINT_NONSCIENTIFIC_LIVE_"
+            "QUALIFICATION_NOT_SCIENTIFIC_EVIDENCE"
+        ),
+        "raw_full_stdout_record_persisted": False,
+        "retry_count": 0,
+        "max_output_tokens": judge.MAX_OUTPUT_TOKENS,
+        "model_endpoint": "http://127.0.0.1:18000",
+        "served_model_id": "qwen3.6-35b-a3b",
+        "vllm_version": "0.25.1",
+        "provider_cache_independence": judge.PROVIDER_CACHE_UNOBSERVABLE,
+        "calls": calls,
+        "started_at_unix_ns": 1,
+        "ended_at_unix_ns": 2,
+        "live_source_sha256": "a" * 64,
+        "runner_source_sha256": "b" * 64,
+    }
+
+
+def test_structured_output_qualification_independently_rejects_semantic_drift() -> None:
+    config = {"model_endpoint": "http://127.0.0.1:18000"}
+    base = _qualification_summary()
+    raw = canonical_json(base) + b"\n"
+    judge._structured_output_qualification(raw, config=config, public={}, private={})
+
+    altered = deepcopy(base)
+    altered["calls"][0]["response_format_schema_sha256"] = "0" * 64
+    with pytest.raises(judge.BundleRefusal, match="response schema digest"):
+        judge._structured_output_qualification(
+            canonical_json(altered) + b"\n", config=config, public={}, private={}
+        )
+
+    altered = deepcopy(base)
+    altered["calls"][0]["ordinal"] = True
+    with pytest.raises(judge.BundleRefusal, match="fixed successful contract"):
+        judge._structured_output_qualification(
+            canonical_json(altered) + b"\n", config=config, public={}, private={}
+        )
 
 
 def _claim_bound_preregistration() -> dict[str, object]:
@@ -40,15 +144,15 @@ def _claim_bound_preregistration() -> dict[str, object]:
             )
         },
         "testbed": {
-            "family": "REPEATED_CONTEXT_TABULAR_ROUTING_MECHANICS_V1",
+            "family": "REPEATED_CONTEXT_TABULAR_ROUTING_MECHANICS_V2",
             **boundary["testbed_claims"],
             "development_streams": 4,
             "training_calls_per_stream_maximum": 8,
             "paired_heldout_probes_per_stream": 8,
-            "evaluation_arms": 4,
-            "evaluation_calls": 128,
+            "evaluation_arms": 3,
+            "evaluation_calls": 96,
             "shared_learning_or_compiler_calls_maximum": 32,
-            "client_dispatched_generation_request_ceiling": 160,
+            "client_dispatched_generation_request_ceiling": 128,
             "model": {
                 "served_model_id": "qwen3.6-35b-a3b",
                 "substitution_allowed": False,
@@ -67,14 +171,16 @@ def _claim_bound_preregistration() -> dict[str, object]:
             "equal_candidate_evidence_universe": True,
             "all_active_payloads_within_byte_ceiling": True,
             "active_state_byte_ceiling": 16_384,
-            "full_raw_numeric_payload_bytes_equal": True,
+            "full_fixed_rule_replay_numeric_payload_bytes_equal": True,
             "full_deranged_numeric_payload_byte_count_equal": True,
             "arm_labels_hidden_from_model": True,
             "fresh_process_recovery_observed": True,
             "distinct_arm_mount_ids": True,
             "evaluation_read_only_wrt_routing_observed": True,
             "cache_hits_required": 0,
-            "gold_open_only_after_response_seal": True,
+            "private_route_binding_open_only_after_response_seal": True,
+            "pre_dispatch_readout_bound_before_model_response": True,
+            "scorer_outcome_response_independent": True,
             **boundary["parity_claims"],
         },
     }
@@ -87,7 +193,7 @@ def _claim_bound_preregistration() -> dict[str, object]:
         ("scientific_question",), ("hypotheses",),
         ("testbed", "relationship_to_prior_p1"), ("testbed", "analysis_unit"),
         ("testbed", "freshness"), ("learning_boundary",),
-        ("arms", "RAW_EQUAL_BUDGET"), ("interventions",),
+        ("arms", "FULL"), ("interventions",),
         ("parity_and_leakage", "compiler_input_audit"),
         ("parity_and_leakage", "canary"), ("diagnostic_readouts",),
         ("void_conditions",), ("single_attempt_policy",),
@@ -117,12 +223,9 @@ def test_preregistration_names_exact_terminals_and_does_not_claim_record_signatu
         "INCONCLUSIVE_OCCURRENCE",
     ]
     full_description = PREREG_CLAIM_BOUNDARY["arms"]["FULL"]
-    raw_description = PREREG_CLAIM_BOUNDARY["arms"]["RAW_EQUAL_BUDGET"]
+    raw_description = PREREG_CLAIM_BOUNDARY["interventions"]["fixed_rule_replay_gate"]
     assert full_description.startswith("For each stream, apply exactly eight")
-    assert raw_description.startswith("For each stream, replay exactly eight")
-    assert "retained training update records" in raw_description
-    assert "does not claim cryptographic signatures" in raw_description
-    assert "sealed signed training records" not in raw_description
+    assert raw_description.startswith("NO_MODEL_DISPATCH")
 
 
 def test_independent_judge_refuses_claim_text_hidden_in_preregistration_created_at() -> None:
@@ -365,22 +468,21 @@ def _state_evidence_entry(*, arm: str, mount_role: str) -> tuple[dict[str, objec
     }
 
 
-def _observation(label: str, utility: int) -> dict[str, object]:
-    return {**_route(label), "utility": utility}
+def _observation(label: str, route_reward_micros: int) -> dict[str, object]:
+    return {**_route(label), "route_reward_micros": route_reward_micros}
 
 
 def _probe(stream: int, probe: int) -> dict[str, object]:
     w0_label = f"w0-{stream}-{probe}"
-    full_label = f"full-{stream}-{probe}" if probe == 0 else w0_label
-    deranged_label = f"deranged-{stream}-{probe}" if probe == 0 else w0_label
-    w0_utility = 1_000_000 if probe < 4 else 0
+    full_label = w0_label if probe < 4 else f"full-{stream}-{probe}"
+    deranged_label = f"deranged-{stream}-{probe}"
+    w0_reward = 1_000_000 if probe < 4 else -1_000_000
     return {
         "probe_id": f"probe:{stream}:{probe}",
         "arms": {
-            "FULL": _observation(full_label, 0),
-            "NO_MEMORY_ROLLBACK": _observation(w0_label, w0_utility),
-            "RAW_EQUAL_BUDGET": _observation(full_label, 0),
-            "BINDING_DERANGED_NUMERIC_PLACEBO": _observation(deranged_label, 0),
+            "FULL": _observation(full_label, 1_000_000),
+            "NO_MEMORY_ROLLBACK": _observation(w0_label, w0_reward),
+            "BINDING_DERANGED_NUMERIC_PLACEBO": _observation(deranged_label, -1_000_000),
         },
         "rollback": _route(w0_label),
         "restore": _route(full_label),
@@ -411,6 +513,20 @@ def _stream(index: int) -> dict[str, object]:
             "fresh_process": True,
             "process_instance_id": _process_id(index),
         },
+        "fixed_rule_replay": {
+            "schema_version": "hswm-dnrd-fixed-rule-replay-observation/v1",
+            "rule": "signed_reward_times_100000_div_1000000/v1",
+            "w1_state_sha256": _sha(f"w1-state-{index}"),
+            "w1_journal_sha256": _sha(f"journal-{index}"),
+            "w1_routing_payload_sha256": _sha(f"payload-{index}"),
+            "w1_routing_payload_bytes": 1,
+            "replay_state_sha256": _sha(f"w1-state-{index}"),
+            "replay_journal_sha256": _sha(f"journal-{index}"),
+            "replay_routing_payload_sha256": _sha(f"payload-{index}"),
+            "replay_routing_payload_bytes": 1,
+            "replay_process_instance_id": _process_id(index + 100),
+            "heldout_readouts": [],
+        },
         "local_v2_linkage": {
             "experimental_schema_id": "hswm:dnrd:v1",
             "owner_id": owner,
@@ -440,7 +556,7 @@ def _stream(index: int) -> dict[str, object]:
 
 def candidate() -> dict[str, object]:
     return {
-        "schema_version": "hswm-dnrd-candidate/v1",
+        "schema_version": judge.CANDIDATE_SCHEMA,
         "experiment_id": judge.EXPERIMENT_ID,
         "bindings": {
             "source_manifest_sha256": _sha("source-manifest"),
@@ -481,18 +597,20 @@ def candidate() -> dict[str, object]:
             "equal_generation_limits_input_token_parity_not_claimed": True,
             "equal_candidate_evidence_universe": True,
             "all_active_payloads_within_byte_ceiling": True,
-            "full_raw_numeric_payload_bytes_equal": True,
+            "full_fixed_rule_replay_numeric_payload_bytes_equal": True,
             "full_deranged_numeric_payload_byte_count_equal": True,
             "arm_labels_hidden_from_model": True,
+            "pre_dispatch_readout_bound_before_model_response": True,
+            "scorer_outcome_response_independent": True,
             "fresh_process_recovery_observed": True,
             "distinct_arm_mount_ids": True,
             "evaluation_read_only_wrt_routing_observed": True,
         },
         "call_ledger": {
             "common_training_model_calls": 32,
-            "evaluation_model_calls": 128,
-            "client_dispatched_generation_requests": 160,
-            "logical_model_calls": 160,
+            "evaluation_model_calls": 96,
+            "client_dispatched_generation_requests": 128,
+            "logical_model_calls": 128,
             "route_only_model_calls": 0,
             "scorer_model_calls": 0,
             "retries": 0,
@@ -706,20 +824,19 @@ def test_measurement_provided_verdict_is_strictly_refused() -> None:
 def test_valid_but_inert_route_mechanics_is_no_go() -> None:
     value = candidate()
     for stream in value["streams"]:
-        stream["probes"][0]["arms"]["FULL"] = deepcopy(
-            stream["probes"][0]["arms"]["NO_MEMORY_ROLLBACK"]
+        stream["probes"][4]["arms"]["FULL"] = deepcopy(
+            stream["probes"][4]["arms"]["NO_MEMORY_ROLLBACK"]
         )
-        stream["probes"][0]["restore"] = deepcopy(stream["probes"][0]["rollback"])
+        stream["probes"][4]["restore"] = deepcopy(stream["probes"][4]["rollback"])
     assert judge.judge(value)["terminal"] == "DIAGNOSTIC_NO_GO"
 
 
 def test_digest_only_perturbation_is_no_go() -> None:
     value = candidate()
     for stream in value["streams"]:
-        probe = stream["probes"][0]
+        probe = stream["probes"][4]
         w0 = probe["arms"]["NO_MEMORY_ROLLBACK"]
         probe["arms"]["FULL"]["selected_route_id"] = w0["selected_route_id"]
-        probe["arms"]["RAW_EQUAL_BUDGET"]["selected_route_id"] = w0["selected_route_id"]
         probe["restore"]["selected_route_id"] = w0["selected_route_id"]
     assert judge.judge(value)["terminal"] == "DIAGNOSTIC_NO_GO"
 
@@ -766,7 +883,7 @@ def test_episode_replay_rejects_noncanonical_retained_response_token() -> None:
         "entity": "entity-0",
         "aliases": ["alias-0"],
         "surface_template": "template-0",
-            "prompt": "return only the response token from selected evidence.",
+        "prompt": "return a JSON object whose only field is response_token from selected evidence.",
         "route_evidence": [
             {
                 "route_id": "route-a",
@@ -782,15 +899,24 @@ def test_episode_replay_rejects_noncanonical_retained_response_token() -> None:
         "arm_order": list(judge.ARMS),
     }
 
-    with pytest.raises(judge.BundleRefusal, match="exact DNRD-2 form"):
+    with pytest.raises(judge.BundleRefusal, match="exact DNRD-3 form"):
         judge._check_episode(episode, stream, "heldout", "episode")
 
 
-def test_full_raw_route_or_digest_divergence_is_no_go() -> None:
+def test_generated_dnrd3_manifest_pair_replays_under_the_judge() -> None:
+    public, private = generate_manifests(bytes(range(32)))
+
+    episodes, stream_by_episode, bindings = judge._public_manifest_index(public, private)
+
+    assert len(episodes) == 64
+    assert set(stream_by_episode) == set(episodes)
+    assert set(bindings) == {"stream-0", "stream-1", "stream-2", "stream-3"}
+
+
+def test_deranged_positive_route_reward_excess_is_no_go() -> None:
     value = candidate()
-    value["streams"][0]["probes"][0]["arms"]["RAW_EQUAL_BUDGET"][
-        "route_digest_sha256"
-    ] = _sha("raw-divergence")
+    for probe in value["streams"][0]["probes"]:
+        probe["arms"]["BINDING_DERANGED_NUMERIC_PLACEBO"]["route_reward_micros"] = 1_000_000
     assert judge.judge(value)["terminal"] == "DIAGNOSTIC_NO_GO"
 
 
@@ -804,6 +930,26 @@ def test_valid_negative_cli_result_exits_zero(tmp_path: Path) -> None:
     path = tmp_path / "candidate.json"
     path.write_text(json.dumps(value), encoding="utf-8")
     assert judge.main([str(path)]) == 0
+
+
+def test_missing_both_terminal_artifacts_is_machine_void_not_refusal(tmp_path: Path) -> None:
+    """An executor crash before terminal projection still gets a sealed negative."""
+    result = judge.judge_bundle(tmp_path)
+
+    assert result["terminal"] == "VOID_PROTOCOL"
+    assert result["authority"] == "TERMINAL_ARTIFACT_ABSENCE_NOT_A_SCIENTIFIC_OCCURRENCE"
+    assert result["scientific_status"] == "UNJUDGED"
+    assert result["terminalization_check"] == "CANDIDATE_AND_INCONCLUSIVE_ARTIFACTS_ABSENT"
+    assert len(result["bundle_verification_receipt_sha256"]) == 64
+
+
+def test_missing_both_terminal_artifacts_cli_exits_zero(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    assert judge.main([str(tmp_path)]) == 0
+    rendered = json.loads(capsys.readouterr().out)
+    assert rendered["terminal"] == "VOID_PROTOCOL"
+    assert rendered["terminalization_check"] == "CANDIDATE_AND_INCONCLUSIVE_ARTIFACTS_ABSENT"
 
 
 def test_candidate_only_bundle_can_never_upgrade_to_go(tmp_path: Path) -> None:
@@ -854,11 +1000,7 @@ def _write_indexed_inconclusive_bundle(root: Path) -> None:
         "request_sha256": _sha("body"),
         "raw_response_sha256": sha256(raw).hexdigest(),
         "http_status": 200,
-        "chat_config": {
-            "chat_template_kwargs": {"enable_thinking": False}, "logprobs": False,
-            "n": 1, "stream": False, "temperature": 0, "top_p": 1,
-            "max_tokens": judge.MAX_OUTPUT_TOKENS,
-        },
+        "chat_config": _chat_config(),
         "elapsed_nanoseconds": 1,
         "provider_cache_independence": judge.PROVIDER_CACHE_UNOBSERVABLE,
     }
@@ -872,8 +1014,36 @@ def _write_indexed_inconclusive_bundle(root: Path) -> None:
         "failure_message": failure_message,
         "failure_message_sha256": sha256(failure_message.encode()).hexdigest(),
     }
+    terminal_request = {
+        "episode_id": "training:0:0",
+        "selected_route_id": "route-a",
+        "prompt": "fixture terminal prompt",
+        "max_output_tokens": judge.MAX_OUTPUT_TOKENS,
+        "ordinal": 1,
+        "phase": "training",
+        "arm": None,
+        "candidate_response_tokens": ["token-0123456789abcdef0123", "token-ffffffffffffffffffff"],
+        "pre_dispatch_receipt_sha256": None,
+    }
+    terminal_pre = {
+        "schema_version": judge.RUNNER_EVENT_SCHEMA,
+        "event": "PRE_DISPATCH_READOUT",
+        "ordinal": 1,
+        "phase": "training",
+        "arm": None,
+        "request": terminal_request,
+        "pre_dispatch_readout": {
+            "selected_route_id": "route-a", "route_digest_sha256": _sha("terminal-route"),
+            "pre_outcome_score_micros": 0,
+            "recovery": {"recovered": True, "fresh_process": True, "journal_sha256": _sha("terminal-journal"), "process_instance_id": _process_id(98)},
+            "routing_payload_sha256": _sha("terminal-payload"),
+        },
+    }
+    terminal_bound_request = {**terminal_request, "pre_dispatch_receipt_sha256": commitment(terminal_pre)}
+    for event in (observed, rejected):
+        event["dnrd_request_sha256"] = commitment(terminal_bound_request)
     (root / "model_events.jsonl").write_bytes(canonical_json(observed) + b"\n" + canonical_json(rejected) + b"\n")
-    (root / "runner_events.jsonl").write_bytes(b"")
+    (root / "runner_events.jsonl").write_bytes(canonical_json(terminal_pre) + b"\n")
     _refresh_bundle_index(root)
 
 
@@ -887,6 +1057,8 @@ def _prepend_accepted_call_to_inconclusive_bundle(root: Path) -> None:
         "ordinal": 1,
         "phase": "training",
         "arm": None,
+        "candidate_response_tokens": ["token-0123456789abcdef0123", "token-ffffffffffffffffffff"],
+        "pre_dispatch_receipt_sha256": _sha("pre-dispatch"),
     }
     provider_body = {
         "chat_template_kwargs": {"enable_thinking": False},
@@ -898,12 +1070,13 @@ def _prepend_accepted_call_to_inconclusive_bundle(root: Path) -> None:
         "temperature": 0,
         "top_p": 1,
         "logprobs": False,
+        "response_format": _chat_config()["response_format"],
     }
     raw = canonical_json({
         "model": "qwen3.6-35b-a3b",
         "choices": [{
             "finish_reason": "stop",
-            "message": {"content": "token-0123456789abcdef0123"},
+            "message": {"content": '{"response_token":"token-0123456789abcdef0123"}'},
         }],
         "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
     })
@@ -917,11 +1090,7 @@ def _prepend_accepted_call_to_inconclusive_bundle(root: Path) -> None:
         "model": "qwen3.6-35b-a3b",
         "request_sha256": sha256(canonical_json(provider_body)).hexdigest(),
         "raw_response_sha256": sha256(raw).hexdigest(),
-        "chat_config": {
-            "chat_template_kwargs": {"enable_thinking": False}, "logprobs": False,
-            "n": 1, "stream": False, "temperature": 0, "top_p": 1,
-            "max_tokens": judge.MAX_OUTPUT_TOKENS,
-        },
+        "chat_config": _chat_config(),
         "elapsed_nanoseconds": 1,
         "provider_cache_independence": judge.PROVIDER_CACHE_UNOBSERVABLE,
     }
@@ -951,20 +1120,69 @@ def _prepend_accepted_call_to_inconclusive_bundle(root: Path) -> None:
             for event in (observed, accepted, *terminal)
         )
     )
-    runner = {
+    readout = {
+        "selected_route_id": "route-a",
+        "route_digest_sha256": _sha("route"),
+        "pre_outcome_score_micros": 0,
+        "recovery": {
+            "recovered": True, "fresh_process": True,
+            "journal_sha256": _sha("journal"), "process_instance_id": _process_id(99),
+        },
+        "routing_payload_sha256": _sha("payload"),
+    }
+    pre_request = {**request, "pre_dispatch_receipt_sha256": None}
+    pre = {
         "schema_version": judge.RUNNER_EVENT_SCHEMA,
+        "event": "PRE_DISPATCH_READOUT",
         "ordinal": 1,
         "phase": "training",
         "arm": None,
-        "request": request,
+        "request": pre_request,
+        "pre_dispatch_readout": readout,
+    }
+    receipt = commitment(pre)
+    runner = {
+        "schema_version": judge.RUNNER_EVENT_SCHEMA,
+        "event": "COMPLETED_CALL",
+        "ordinal": 1,
+        "phase": "training",
+        "arm": None,
+        "request": {**request, "pre_dispatch_receipt_sha256": receipt},
         "sealed_response": {},
         "trace": {},
         "scorer_outcome": {},
         "credit_receipt": {},
         "route_digest_sha256": _sha("route"),
+        "pre_dispatch_receipt_sha256": receipt,
         "route_replay": None,
     }
-    (root / "runner_events.jsonl").write_bytes(canonical_json(runner) + b"\n")
+    request_id = commitment(runner["request"])
+    events = [observed, accepted, *terminal]
+    for event in events[:2]:
+        event["dnrd_request_sha256"] = request_id
+    (root / "model_events.jsonl").write_bytes(
+        b"".join(canonical_json(event) + b"\n" for event in events)
+    )
+    terminal_request = {
+        "episode_id": "training:0:1", "selected_route_id": "route-a", "prompt": "fixture terminal prompt",
+        "max_output_tokens": judge.MAX_OUTPUT_TOKENS, "ordinal": 2, "phase": "training", "arm": None,
+        "candidate_response_tokens": ["token-0123456789abcdef0123", "token-ffffffffffffffffffff"],
+        "pre_dispatch_receipt_sha256": None,
+    }
+    terminal_pre = {
+        "schema_version": judge.RUNNER_EVENT_SCHEMA, "event": "PRE_DISPATCH_READOUT",
+        "ordinal": 2, "phase": "training", "arm": None, "request": terminal_request,
+        "pre_dispatch_readout": readout,
+    }
+    terminal_bound_request = {**terminal_request, "pre_dispatch_receipt_sha256": commitment(terminal_pre)}
+    for event in terminal:
+        event["dnrd_request_sha256"] = commitment(terminal_bound_request)
+    (root / "model_events.jsonl").write_bytes(
+        b"".join(canonical_json(event) + b"\n" for event in (observed, accepted, *terminal))
+    )
+    (root / "runner_events.jsonl").write_bytes(
+        canonical_json(pre) + b"\n" + canonical_json(runner) + b"\n" + canonical_json(terminal_pre) + b"\n"
+    )
     occurrence = json.loads((root / "inconclusive.json").read_text())
     occurrence["calls_completed"] = 2
     (root / "inconclusive.json").write_bytes(canonical_json(occurrence))
@@ -1078,15 +1296,17 @@ def test_inconclusive_malformed_runner_request_is_void_not_an_adjudicator_error(
 ) -> None:
     _write_indexed_inconclusive_bundle(tmp_path)
     _prepend_accepted_call_to_inconclusive_bundle(tmp_path)
-    runner = json.loads((tmp_path / "runner_events.jsonl").read_text())
-    del runner["request"]["phase"]
-    (tmp_path / "runner_events.jsonl").write_bytes(canonical_json(runner) + b"\n")
+    rows = [json.loads(line) for line in (tmp_path / "runner_events.jsonl").read_text().splitlines()]
+    del rows[1]["request"]["phase"]
+    (tmp_path / "runner_events.jsonl").write_bytes(
+        b"".join(canonical_json(row) + b"\n" for row in rows)
+    )
     _refresh_bundle_index(tmp_path)
 
     result = judge.judge_bundle(tmp_path)
 
     assert result["terminal"] == "VOID_PROTOCOL"
-    assert "request is malformed" in result["failure_reason"]
+    assert "pre-dispatch receipt" in result["failure_reason"]
 
 
 def test_inconclusive_terminal_call_cannot_replay_a_prior_dnrd_request_identity(

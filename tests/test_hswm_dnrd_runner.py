@@ -119,6 +119,43 @@ def _metadata() -> MeasurementMetadata:
     )
 
 
+def _structured_chat_config(request: ModelRequest) -> dict:
+    """Independent fixture copy of DNRD-3's frozen per-call wire contract."""
+    schema = {
+        "type": "object",
+        "properties": {
+            "response_token": {
+                "type": "string",
+                "enum": list(request.candidate_response_tokens),
+                "pattern": r"^token-[0-9a-f]{20}$",
+                "minLength": 26,
+                "maxLength": 26,
+            }
+        },
+        "required": ["response_token"],
+        "additionalProperties": False,
+    }
+    response_format = {
+        "type": "json_schema",
+        "json_schema": {
+            "name": "hswm_dnrd_response_token",
+            "strict": True,
+            "schema": schema,
+        },
+    }
+    return {
+        "chat_template_kwargs": {"enable_thinking": False},
+        "logprobs": False,
+        "n": 1,
+        "stream": False,
+        "temperature": 0,
+        "top_p": 1,
+        "max_tokens": request.max_output_tokens,
+        "response_format": response_format,
+        "response_format_schema_sha256": commitment(schema),
+    }
+
+
 class EvidenceAnswerer:
     """Public-evidence answerer with a raw live-boundary event ledger."""
 
@@ -147,7 +184,7 @@ class EvidenceAnswerer:
         raw = canonical_json(
             {
                 "model": self.model,
-                "choices": [{"finish_reason": "stop", "message": {"content": token}}],
+                "choices": [{"finish_reason": "stop", "message": {"content": canonical_json({"response_token": token}).decode()}}],
                 "usage": {
                     "prompt_tokens": 1,
                     "completion_tokens": self.output_tokens,
@@ -164,7 +201,7 @@ class EvidenceAnswerer:
             "server_usage": {},
         }
         common = {
-            "schema_version": "hswm-dnrd-live-model-event/v2",
+            "schema_version": "hswm-dnrd-live-model-event/v3",
             "ordinal": request.ordinal,
             "phase": request.phase,
             "arm": request.arm,
@@ -173,7 +210,7 @@ class EvidenceAnswerer:
             "model": self.model,
             "request_sha256": _sha({"provider_request": request_digest}),
             "raw_response_sha256": hashlib.sha256(raw.encode()).hexdigest(),
-            "chat_config": {"max_tokens": MAX_OUTPUT_TOKENS},
+            "chat_config": _structured_chat_config(request),
             "elapsed_nanoseconds": 1,
             "provider_cache_independence": "NOT_OBSERVABLE_BY_CLIENT",
         }
@@ -361,12 +398,22 @@ class FailingScorer(RecordingScorer):
         raise RuntimeError("injected scorer failure after sealed response")
 
 
-class CloningRawBridge(RecordingBridge):
-    def materialize_control(self, state: RoutingState, stream_id: str, arm: str, training_update_records: list[dict], matched_derangement: dict[str, str]) -> ControlMaterialization:
-        if arm == "RAW_EQUAL_BUDGET":
-            clone = self._state({context: dict(routes) for context, routes in state.scores.items()}, revision=state.revision_id, lineage=state.lineage_id, mount=self._mount("bad-raw"), role=MOUNT_ROLES["RAW_EQUAL_BUDGET"])
-            return ControlMaterialization(clone, _sha("bad-raw"))
-        return super().materialize_control(state, stream_id, arm, training_update_records, matched_derangement)
+class NonReproducibleReplayBridge(RecordingBridge):
+    def recover(self, state: RoutingState) -> RecoveryObservation:
+        result = super().recover(state)
+        if state.mount_role == MOUNT_ROLES["RAW_EQUAL_BUDGET"]:
+            scores = {context: dict(routes) for context, routes in state.scores.items()}
+            context = next(iter(scores))
+            route = next(iter(scores[context]))
+            scores[context][route] += 1
+            mutated = self._state(scores, revision="bad-replay", lineage=state.lineage_id, mount=state.mount_id, role=state.mount_role)
+            payload = self._payload(scores)
+            return RecoveryObservation(
+                mutated, result.journal_sha256, result.recovered,
+                result.fresh_process, result.process_instance_id, payload.decode(),
+                hashlib.sha256(payload).hexdigest(), len(payload),
+            )
+        return result
 
 
 class MutatingEvaluationBridge(RecordingBridge):
@@ -379,8 +426,8 @@ class MutatingEvaluationBridge(RecordingBridge):
         if episode["phase"] == "heldout":
             self._heldout_calls += 1
             # Alter only the final heldout trace.  No next model call can
-            # expose it; the post-160 recovery audit must do so.
-            if self._heldout_calls == 128:
+            # expose it; the post-evaluation recovery audit must do so.
+            if self._heldout_calls == 96:
                 state.scores[episode["context_key"]][selected_route_id] += 1
         return trace
 
@@ -390,6 +437,7 @@ def _run(
     bridge: RecordingBridge,
     scorer: RecordingScorer,
     closure_exporter: RecordingClosureExporter | None = None,
+    runner_rows: list[dict] | None = None,
 ):
     public, private = generate_manifests(SEED)
     return run_diagnostic(
@@ -399,6 +447,7 @@ def _run(
         bridge=bridge,
         scorer=scorer,
         metadata=_metadata(),
+        event_sink=(lambda row: runner_rows.append(dict(row))) if runner_rows is not None else None,
         model_event_ledger_provider=lambda: tuple(answerer.events),
         closure_exporter=closure_exporter or RecordingClosureExporter(),
     )
@@ -408,24 +457,37 @@ def test_runner_call_shape_ledger_and_no_verdict() -> None:
     timeline: list[str] = []
     answerer, bridge, scorer = EvidenceAnswerer(), RecordingBridge(timeline), RecordingScorer(timeline)
     closure_exporter = RecordingClosureExporter(timeline)
-    result = _run(answerer, bridge, scorer, closure_exporter)
+    runner_rows: list[dict] = []
+    result = _run(answerer, bridge, scorer, closure_exporter, runner_rows)
     assert result.inconclusive_occurrence is None
-    assert len(answerer.requests) == len(scorer.seen_sealed) == 160
-    assert len(answerer.events) == 320
-    assert bridge.events.count("seal") == 160
+    assert len(answerer.requests) == len(scorer.seen_sealed) == 128
+    assert len(answerer.events) == 256
+    assert len(runner_rows) == 256
+    assert [row["event"] for row in runner_rows[::2]] == ["PRE_DISPATCH_READOUT"] * 128
+    assert [row["event"] for row in runner_rows[1::2]] == ["COMPLETED_CALL"] * 128
+    for pre, completed in zip(runner_rows[::2], runner_rows[1::2], strict=True):
+        assert completed["pre_dispatch_receipt_sha256"] == _sha(pre)
+        assert completed["request"]["pre_dispatch_receipt_sha256"] == _sha(pre)
+    assert bridge.events.count("seal") == 128
     assert bridge.events.count("apply") == 32
     assert [request.phase for request in answerer.requests[:32]] == ["training"] * 32
-    assert [request.phase for request in answerer.requests[32:]] == ["heldout"] * 128
+    assert [request.phase for request in answerer.requests[32:]] == ["heldout"] * 96
+    assert all(
+        request.candidate_response_tokens
+        == tuple(sorted(request.candidate_response_tokens))
+        and len(request.candidate_response_tokens) == 2
+        for request in answerer.requests
+    )
     assert all(timeline[index:index + 3] == ["seal", "score", "apply"] for index in range(0, 96, 3))
     assert all(
         timeline[index:index + 2] == ["seal", "score"]
-        for index in range(96, 96 + 128 * 2, 2)
+        for index in range(96, 96 + 96 * 2, 2)
     )
     candidate = result.candidate
     assert candidate is not None
     assert set(candidate) == {"schema_version", "experiment_id", "bindings", "chronology", "overlap", "parity", "call_ledger", "streams"}
     assert "verdict" not in json.dumps(candidate).casefold()
-    assert candidate["call_ledger"]["client_dispatched_generation_requests"] == 160
+    assert candidate["call_ledger"]["client_dispatched_generation_requests"] == 128
     assert candidate["parity"]["fresh_process_recovery_observed"] is False
     assert candidate["parity"]["evaluation_read_only_wrt_routing_observed"] is True
     assert candidate["parity"]["equal_generation_limits_input_token_parity_not_claimed"] is True
@@ -433,7 +495,7 @@ def test_runner_call_shape_ledger_and_no_verdict() -> None:
     assert result.bridge_state_evidence is not None
     assert result.bridge_state_evidence["schema_version"] == BRIDGE_STATE_EVIDENCE_SCHEMA
     for stream in result.bridge_state_evidence["streams"]:
-        assert set(stream) == {"stream_id", "pre_evaluation", "post_evaluation"}
+        assert set(stream) == {"stream_id", "pre_evaluation", "post_evaluation", "fixed_rule_replay"}
         assert stream["pre_evaluation"]["arms"] == stream["post_evaluation"]["arms"]
     assert all("private_manifest" not in request.prompt for request in answerer.requests)
     assert all("context_correct_route" not in canonical_json(episode).decode() for episode in bridge.sealed_episodes)
@@ -446,10 +508,16 @@ def test_runner_call_shape_ledger_and_no_verdict() -> None:
         "stream-2",
         "stream-3",
     ]
-    assert all(set(stream["arms"]) == set(ARMS) for stream in plan["streams"])
+    assert all(set(stream["arms"]) == set(ARMS) and "fixed_rule_replay" in stream for stream in plan["streams"])
     assert result.bridge_mount_closure_sha256 == commitment(plan)
     assert candidate["bindings"]["bridge_mount_closure_sha256"] == commitment(plan)
     assert timeline[-1] == "closure"
+    for stream in candidate["streams"]:
+        replay = stream["fixed_rule_replay"]
+        assert replay["rule"] == "signed_reward_times_100000_div_1000000/v1"
+        assert len(replay["heldout_readouts"]) == 8
+        assert replay["w1_routing_payload_sha256"] == replay["replay_routing_payload_sha256"]
+        assert replay["w1_routing_payload_bytes"] == replay["replay_routing_payload_bytes"]
 
 
 def test_training_canary_leakage_bit_is_derived_from_heldout_observation() -> None:
@@ -529,12 +597,11 @@ def test_raw_closure_canary_observation_propagates_to_candidate() -> None:
     assert exporter.forbidden_markers == training_provenance_canaries(public)
 
 
-def test_raw_replay_derangement_and_post_eval_payload_evidence() -> None:
+def test_fixed_rule_replay_derangement_and_post_eval_payload_evidence() -> None:
     result = _run(EvidenceAnswerer(), RecordingBridge(), RecordingScorer())
     assert result.candidate is not None and result.bridge_state_evidence is not None
     for stream in result.bridge_state_evidence["streams"]:
         arms = stream["pre_evaluation"]["arms"]
-        assert arms["FULL"]["routing_payload_utf8"] == arms["RAW_EQUAL_BUDGET"]["routing_payload_utf8"]
         assert arms["FULL"]["routing_payload_bytes"] == arms["BINDING_DERANGED_NUMERIC_PLACEBO"]["routing_payload_bytes"]
         assert arms["FULL"]["routing_payload_utf8"] != arms["BINDING_DERANGED_NUMERIC_PLACEBO"]["routing_payload_utf8"]
         assert set(arms["FULL"]) == {"mount_id", "mount_role", "state_sha256", "routing_payload_utf8", "routing_payload_sha256", "routing_payload_bytes", "score_projection_utf8", "score_projection_sha256", "score_projection_bytes"}
@@ -544,19 +611,52 @@ def test_post_eval_routing_mutation_is_inconclusive_after_all_calls() -> None:
     result = _run(EvidenceAnswerer(), MutatingEvaluationBridge(), RecordingScorer())
     assert result.candidate is None
     assert result.inconclusive_occurrence is not None
-    assert result.inconclusive_occurrence["calls_completed"] == 160
+    assert result.inconclusive_occurrence["calls_completed"] == 128
 
 
 def test_post_call_failure_emits_one_inconclusive_occurrence_without_retry(tmp_path: Path) -> None:
     public, private = generate_manifests(SEED)
     path = tmp_path / "inconclusive.json"
     answerer = EvidenceAnswerer(fail_on=2)
-    result = run_diagnostic(public, private_manifest_commitment=commitment(private), answerer=answerer, bridge=RecordingBridge(), scorer=RecordingScorer(), metadata=_metadata(), inconclusive_path=path, model_event_ledger_provider=lambda: tuple(answerer.events), closure_exporter=RecordingClosureExporter())
+    runner_rows: list[dict] = []
+    result = run_diagnostic(public, private_manifest_commitment=commitment(private), answerer=answerer, bridge=RecordingBridge(), scorer=RecordingScorer(), metadata=_metadata(), inconclusive_path=path, event_sink=lambda row: runner_rows.append(dict(row)), model_event_ledger_provider=lambda: tuple(answerer.events), closure_exporter=RecordingClosureExporter())
     assert result.candidate is None
     assert result.inconclusive_occurrence is not None
     assert result.inconclusive_occurrence["calls_completed"] == 1
     assert len(answerer.requests) == 2
     assert json.loads(path.read_text()) == result.inconclusive_occurrence
+    assert [row["event"] for row in runner_rows] == [
+        "PRE_DISPATCH_READOUT", "COMPLETED_CALL", "PRE_DISPATCH_READOUT"
+    ]
+    final_pre = runner_rows[-1]
+    assert final_pre["request"]["pre_dispatch_receipt_sha256"] is None
+    assert _sha(final_pre) not in {
+        row.get("pre_dispatch_receipt_sha256") for row in runner_rows
+    }
+
+
+def test_pre_dispatch_row_is_emitted_before_answerer_and_committed_into_request() -> None:
+    public, private = generate_manifests(SEED)
+    rows: list[dict] = []
+
+    class OrderingAnswerer(EvidenceAnswerer):
+        def answer(self, request: ModelRequest) -> ModelReply:
+            assert rows and rows[-1]["event"] == "PRE_DISPATCH_READOUT"
+            assert request.pre_dispatch_receipt_sha256 == _sha(rows[-1])
+            return super().answer(request)
+
+    answerer = OrderingAnswerer(fail_on=2)
+    result = run_diagnostic(
+        public, private_manifest_commitment=commitment(private), answerer=answerer,
+        bridge=RecordingBridge(), scorer=RecordingScorer(), metadata=_metadata(),
+        event_sink=lambda row: rows.append(dict(row)),
+        model_event_ledger_provider=lambda: tuple(answerer.events),
+        closure_exporter=RecordingClosureExporter(),
+    )
+    assert result.inconclusive_occurrence is not None
+    assert [row["event"] for row in rows[:3]] == [
+        "PRE_DISPATCH_READOUT", "COMPLETED_CALL", "PRE_DISPATCH_READOUT"
+    ]
 
 
 def test_scorer_failure_and_reply_limit_are_counted() -> None:
@@ -569,12 +669,12 @@ def test_scorer_failure_and_reply_limit_are_counted() -> None:
 
 
 def test_runner_refuses_malformed_response_token() -> None:
-    with pytest.raises(RuntimeError, match="exact DNRD-2 form"):
+    with pytest.raises(RuntimeError, match="exact DNRD-3 form"):
         _validate_reply(ModelReply("not-a-dnrd-token", input_tokens=1, output_tokens=1))
 
 
-def test_raw_control_must_match_independent_record_replay() -> None:
-    result = _run(EvidenceAnswerer(), CloningRawBridge(), RecordingScorer())
+def test_fixed_rule_replay_must_reproduce_payload_and_readouts_before_evaluation() -> None:
+    result = _run(EvidenceAnswerer(), NonReproducibleReplayBridge(), RecordingScorer())
     assert result.candidate is None
     assert result.inconclusive_occurrence is not None
     assert result.inconclusive_occurrence["calls_completed"] == 32
@@ -615,7 +715,7 @@ if req['operation'] == 'INIT_STREAM':
     base = {'state_sha256': 'a'*64, 'revision_id': 'genesis', 'lineage_id': 'lineage:' + stream['stream_id'], 'owner_id': 'owner:dnrd:routing', 'immutable': True, 'scores': scores}
     result = {'w0': {**base, 'mount_id': 'mount:w0', 'mount_role': 'W0_ROLLBACK'}, 'w1': {**base, 'mount_id': 'mount:w1', 'mount_role': 'FULL_TRAINABLE'}, 'initialization_receipt_sha256': 'b'*64, 'common_prefix_sha256': 'c'*64, 'equal_genesis_content': True}
 elif req['operation'] == 'MATERIALIZE_CONTROL':
-    state = dict(payload['state']); state['mount_id'] = 'mount:' + payload['arm']; state['revision_id'] = payload['arm']; state['mount_role'] = 'RAW_CONTROL' if payload['arm'] == 'RAW_EQUAL_BUDGET' else 'DERANGED_CONTROL'
+    state = dict(payload['state']); state['mount_id'] = 'mount:' + payload['arm']; state['revision_id'] = payload['arm']; state['mount_role'] = 'DERANGED_CONTROL'
     result = {'state': state, 'receipt_sha256': 'd'*64}
 else:
     raise SystemExit(2)
@@ -628,8 +728,8 @@ sys.stdout.write(json.dumps(result, sort_keys=True, separators=(',', ':')) + '\\
     bridge = SubprocessJsonBridge([sys.executable, str(script)], implementation_path=script, implementation_sha256=digest, config={"fixture": "v1"})
     initial = bridge.initialize(public["streams"][0])
     assert initial.w0.mount_role == "W0_ROLLBACK"
-    control = bridge.materialize_control(initial.w0, "stream-0", "RAW_EQUAL_BUDGET", [], public["streams"][0]["matched_derangement"])
-    assert control.state.mount_role == "RAW_CONTROL"
+    control = bridge.materialize_control(initial.w1, "stream-0", "BINDING_DERANGED_NUMERIC_PLACEBO", [], public["streams"][0]["matched_derangement"])
+    assert control.state.mount_role == "DERANGED_CONTROL"
     script.write_text(script.read_text(encoding="utf-8") + "# drift\n", encoding="utf-8")
     with pytest.raises(RuntimeError, match="bytes drifted before invocation"):
         bridge.initialize(public["streams"][0])

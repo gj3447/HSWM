@@ -29,6 +29,9 @@ from _research.dnrd.task_family import commitment
 
 
 VALID_RESPONSE_TOKEN = "token-aaaaaaaaaaaaaaaaaaaa"
+OTHER_VALID_RESPONSE_TOKEN = "token-bbbbbbbbbbbbbbbbbbbb"
+CANDIDATE_RESPONSE_TOKENS = (VALID_RESPONSE_TOKEN, OTHER_VALID_RESPONSE_TOKEN)
+VALID_STRUCTURED_CONTENT = json.dumps({"response_token": VALID_RESPONSE_TOKEN})
 
 
 class RecordingTransport:
@@ -44,7 +47,9 @@ class RecordingTransport:
         return outcome
 
 
-def _completion(*, content: str = f"  {VALID_RESPONSE_TOKEN}  ", model: str = MODEL_ID) -> HttpResponse:
+def _completion(*, content: str | None = None, model: str = MODEL_ID) -> HttpResponse:
+    if content is None:
+        content = json.dumps({"response_token": VALID_RESPONSE_TOKEN})
     return HttpResponse(200, json.dumps({
         "model": model,
         "choices": [{"finish_reason": "stop", "message": {"content": content}}],
@@ -53,7 +58,10 @@ def _completion(*, content: str = f"  {VALID_RESPONSE_TOKEN}  ", model: str = MO
 
 
 def _request() -> ModelRequest:
-    return ModelRequest("episode-1", "route-1", "return only a token", MAX_OUTPUT_TOKENS, 1, "training", None)
+    return ModelRequest(
+        "episode-1", "route-1", "return only a token", MAX_OUTPUT_TOKENS,
+        1, "training", None, CANDIDATE_RESPONSE_TOKENS,
+    )
 
 
 def test_answerer_sends_frozen_body_once_and_records_raw_observations() -> None:
@@ -81,22 +89,44 @@ def test_answerer_sends_frozen_body_once_and_records_raw_observations() -> None:
         "temperature": 0,
         "top_p": 1,
         "logprobs": False,
+        "response_format": {
+            "type": "json_schema",
+            "json_schema": {
+                "name": "hswm_dnrd_response_token",
+                "strict": True,
+                "schema": {
+                    "type": "object",
+                    "properties": {"response_token": {
+                        "type": "string", "enum": list(CANDIDATE_RESPONSE_TOKENS),
+                        "pattern": "^token-[0-9a-f]{20}$", "minLength": 26, "maxLength": 26,
+                    }},
+                    "required": ["response_token"],
+                    "additionalProperties": False,
+                },
+            },
+        },
     }
     assert len(events) == 2
     assert events[0]["event"] == "CHAT_COMPLETION_OBSERVED"
     assert events[0]["provider_cache_independence"] == "NOT_OBSERVABLE_BY_CLIENT"
     assert events[1]["usage"] == {"prompt_tokens": 11, "completion_tokens": 2, "cached_tokens": 3}
     assert events[1]["raw_response_utf8"] == _completion().body.decode()
+    assert events[1]["chat_config"] == {
+        **CHAT_CONFIG,
+        "max_tokens": MAX_OUTPUT_TOKENS,
+        "response_format": body["response_format"],
+        "response_format_schema_sha256": commitment(body["response_format"]["json_schema"]["schema"]),
+    }
     assert events[1]["ordinal"] == 1 and events[1]["phase"] == "training"
 
 
 @pytest.mark.parametrize(
     "payload, message",
     [
-        ({"model": "wrong", "choices": [{"finish_reason": "stop", "message": {"content": VALID_RESPONSE_TOKEN}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2}}, "model"),
+        ({"model": "wrong", "choices": [{"finish_reason": "stop", "message": {"content": VALID_STRUCTURED_CONTENT}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2}}, "model"),
         ({"model": MODEL_ID, "choices": [{"finish_reason": "stop", "message": {"content": "one"}}, {"finish_reason": "stop", "message": {"content": "two"}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2}}, "exactly one"),
         ({"model": MODEL_ID, "choices": [{"finish_reason": "stop", "message": {"content": 3}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2}}, "textual"),
-        ({"model": MODEL_ID, "choices": [{"finish_reason": "stop", "message": {"content": VALID_RESPONSE_TOKEN}}], "usage": {"prompt_tokens": True, "completion_tokens": 1, "total_tokens": 2}}, "integer"),
+        ({"model": MODEL_ID, "choices": [{"finish_reason": "stop", "message": {"content": VALID_STRUCTURED_CONTENT}}], "usage": {"prompt_tokens": True, "completion_tokens": 1, "total_tokens": 2}}, "integer"),
     ],
 )
 def test_answerer_rejects_malformed_completion_without_repair(payload: dict, message: str) -> None:
@@ -197,7 +227,7 @@ def test_answerer_requires_stop_and_exact_usage_arithmetic() -> None:
     assert base64.b64decode(rejected["raw_response_base64"], validate=True) == unfinished.body
     assert rejected["raw_response_sha256"] == hashlib.sha256(unfinished.body).hexdigest()
     assert "authorization" not in rejected and "api_key" not in rejected
-    arithmetic = HttpResponse(200, json.dumps({"model": MODEL_ID, "choices": [{"finish_reason": "stop", "message": {"content": VALID_RESPONSE_TOKEN}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 3}}).encode())
+    arithmetic = HttpResponse(200, json.dumps({"model": MODEL_ID, "choices": [{"finish_reason": "stop", "message": {"content": VALID_STRUCTURED_CONTENT}}], "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 3}}).encode())
     with pytest.raises(LiveBoundaryError, match="total_tokens"):
         OpenAICompatibleDnrdAnswerer(OpenAICompatibleDnrdConfig("http://endpoint"), RecordingTransport([arithmetic])).answer(_request())
 
@@ -215,12 +245,12 @@ def test_answerer_retains_non_utf8_rejection_as_exact_base64() -> None:
     assert base64.b64decode(rejected["raw_response_base64"], validate=True) == raw
 
 
-def test_answerer_rejects_noncanonical_dnrd2_response_token_at_live_boundary() -> None:
+def test_answerer_rejects_noncanonical_dnrd3_response_token_at_live_boundary() -> None:
     events: list[dict] = []
-    with pytest.raises(LiveBoundaryError, match="exact DNRD-2 form"):
+    with pytest.raises(LiveBoundaryError, match="exact DNRD-3 form"):
         OpenAICompatibleDnrdAnswerer(
             OpenAICompatibleDnrdConfig("http://endpoint"),
-            RecordingTransport([_completion(content="token-short")]),
+            RecordingTransport([_completion(content=json.dumps({"response_token": "token-short"}))]),
             event_sink=events.append,
         ).answer(_request())
     assert [event["event"] for event in events] == [
@@ -228,6 +258,27 @@ def test_answerer_rejects_noncanonical_dnrd2_response_token_at_live_boundary() -
         "CHAT_COMPLETION_REJECTED",
     ]
     assert events[-1]["failure_stage_code"] == "RESPONSE_TOKEN_FORM_INVALID"
+
+
+@pytest.mark.parametrize(
+    ("content", "stage_code"),
+    [
+        ("not-json", "STRUCTURED_RESPONSE_NOT_STRICT_JSON"),
+        (json.dumps({"token": VALID_RESPONSE_TOKEN}), "STRUCTURED_RESPONSE_KEYSET_INVALID"),
+        (json.dumps({"response_token": VALID_RESPONSE_TOKEN, "extra": "x"}), "STRUCTURED_RESPONSE_KEYSET_INVALID"),
+        (json.dumps({"response_token": "token-cccccccccccccccccccc"}), "RESPONSE_TOKEN_NOT_REQUEST_CANDIDATE"),
+    ],
+)
+def test_answerer_refuses_wrong_structured_json_key_or_candidate_token(content: str, stage_code: str) -> None:
+    events: list[dict] = []
+    with pytest.raises(LiveBoundaryError):
+        OpenAICompatibleDnrdAnswerer(
+            OpenAICompatibleDnrdConfig("http://endpoint"),
+            RecordingTransport([_completion(content=content)]),
+            event_sink=events.append,
+        ).answer(_request())
+    assert [event["event"] for event in events] == ["CHAT_COMPLETION_OBSERVED", "CHAT_COMPLETION_REJECTED"]
+    assert events[-1]["failure_stage_code"] == stage_code
 
 
 def test_answerer_retains_non_2xx_body_for_exact_replay() -> None:
@@ -255,7 +306,7 @@ def test_answerer_retains_non_2xx_body_for_exact_replay() -> None:
 def test_answerer_assigns_exhaustive_usage_rejection_codes(usage: dict, stage_code: str) -> None:
     raw = json.dumps({
         "model": MODEL_ID,
-        "choices": [{"finish_reason": "stop", "message": {"content": VALID_RESPONSE_TOKEN}}],
+        "choices": [{"finish_reason": "stop", "message": {"content": VALID_STRUCTURED_CONTENT}}],
         "usage": usage,
     }).encode()
     events: list[dict] = []

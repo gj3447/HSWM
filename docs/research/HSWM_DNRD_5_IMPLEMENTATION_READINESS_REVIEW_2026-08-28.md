@@ -2,7 +2,8 @@
 
 - Date: 2026-08-28
 - Review scope: post-R2 task, evaluator, randomization, lifecycle, provider,
-  schema, and local durable-Permit candidate slices
+  schema, local durable-Permit, and structural occurrence-preflight candidate
+  slices
 - Decision: `NOT_READY_FOR_SOURCE_FREEZE / NOT_READY_FOR_PREREGISTRATION / NO_MODEL_CALLS`
 - Scientific status: `DESIGN-INSTRUMENT PROGRESS / UNMEASURED / NO EFFECT RESULT`
 - Governing design:
@@ -143,6 +144,22 @@ The checked-in candidate slice now contains:
     W0/rollback placeholders, and Permit fields.  Its terminal explicitly says
     it is neither execution nor integrity evidence, and it is not yet joined to
     the provider, evaluator, state, and custody records in one end-to-end vector.
+12. A pure two-stage Source-A/Source-B structural preflight scaffold.  It pins
+    the historical R2 and exactness-amendment identities, exact 300-block
+    universe, ordered retained-assumption profile, and Q0-to-Q-closure binding;
+    binds caller-supplied Source-B, beacon-selection, build, runtime, and
+    no-prior-dispatch descriptors; independently rebuilds both complete
+    2,700-slot randomization plans; and derives the occurrence-root descriptor
+    from the exact Source-A binding, canonical Source-B descriptor, beacon
+    receipt, future-randomness digest, and study binding.  Both success and
+    typed-refusal surfaces fix dispatch authority to false and budget to zero.
+    Its terminals are deliberately `*_STRUCTURAL_*_CALLER_DESCRIPTORS_ONLY`,
+    and `source_freeze_eligible` is always false.  It performs no Git, CI,
+    beacon-cryptography, trusted-time, external-authority, gateway, marker, or
+    durable-root I/O and therefore establishes none of those facts.  The large
+    plan blobs also remain on the explicitly nonqualified legacy Python
+    `sort_keys` encoding outside bounded `hswm-canonical-json/v1`; Source A
+    requires a reviewed migration or formally restricted cross-language KAT.
 
 The focused Python and TypeScript checks pass.  Those checks establish that
 the declared contracts reject their tested mutations.  They are not efficacy
@@ -179,7 +196,11 @@ before Source A can be frozen:
    checked tree, a non-durable DNRD-shaped projection, or a test bootstrap from
    being mislabeled as a production occurrence.  The Python provider gateway
    must also require a preflight-issued single-use capability; its presently
-   callable raw `execute` method is not yet the sole dispatcher.
+   callable raw `execute` method is not yet the sole dispatcher.  The new pure
+   structural scaffold is not this production preflight: its Q, Git/CI,
+   Source-B, beacon, runtime, and no-prior-dispatch values are unopened caller
+   descriptors, and it intentionally cannot make a Source-A qualification or
+   chronology finding.
 3. Policy, authorization, revocation, and evaluated time are content-addressed
    and internally closed, but no independently authenticated authority,
    revocation service, or trusted time receipt establishes their production
@@ -230,6 +251,13 @@ before Source A can be frozen:
     Cloned roots or replayed stores can consume the same nonce, so production
     needs one globally selected occurrence root or an external uniqueness
     witness before the capability can be called globally one-shot.
+11. The randomization-plan producer and independent consumer currently agree
+    on a large, content-addressed legacy Python `sort_keys` byte stream.  That
+    exact agreement is useful structural evidence, but it is not the bounded
+    cross-language canonical contract required by the exactness amendment.
+    Source A remains forbidden until the plan encoding is migrated to a
+    reviewed shared codec or its complete dynamic key domain and byte behavior
+    are formally restricted and covered by an adversarial cross-language KAT.
 
 ## Operational decision
 

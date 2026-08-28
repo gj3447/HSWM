@@ -1,8 +1,8 @@
 # HSWM-DNRD-5 local source/build/import closure
 
 - Date: 2026-08-28
-- Status: `CHECKED LOCAL INSTRUMENT CANDIDATE / DETACHED CAPTURE PENDING`
-- Decision: `NOT SOURCE-A / NOT SOURCE FREEZE / NO PROVIDER OR MODEL CALLS`
+- Status: `DETACHED LOCAL REPLAY + INDEPENDENT PHYSICAL JUDGE PASSED`
+- Decision: `NOT SOURCE-A / NOT SOURCE FREEZE / NO OCCURRENCE AUTHORITY`
 - Dispatch authority: `false`
 - Dispatch budget: `0`
 
@@ -65,17 +65,18 @@ following local-only derivation:
    actual-byte corpus, Python and npm lockfiles, Node/Python executable bytes,
    source graph, build tree, and explicit zero-call claim boundary.
 
-The raw generic durable `submit()` surface now also refuses both DNRD-5 v1 and
-v2 schema identities with `DNRD5_PERMIT_DISPATCH_REQUIRED`.  This prevents the
-ordinary checked runtime path from treating v2 writes as generic submissions;
-it does not yet create a v2 Permit dispatcher.
+The raw generic durable `submit()` surface now refuses the complete DNRD-5
+schema-version family, including v1 and v2, with
+`DNRD5_PERMIT_DISPATCH_REQUIRED`.  This prevents a successor version from
+silently reopening the ordinary checked runtime path; it does not yet create a
+v2 Permit dispatcher.
 
 ## What this can and cannot establish
 
-If the detached capture and its independent structural judge pass, the result
-may establish that one exact local commit, locked toolchain, selected import
-graph, and emitted tree were bound consistently by the checked instruments.
-It still cannot establish:
+The passed detached capture and independent structural judge establish that
+one exact local commit, locked toolchain, selected import graph, and emitted
+tree were bound consistently by the checked instruments.  They still cannot
+establish:
 
 - compiler or interpreter soundness;
 - semantic import/call analysis of every hash-selected test, workflow, or
@@ -97,11 +98,36 @@ success.
 
 Focused tests cover raw Git object rederivation, replacement-ref resistance,
 detached-HEAD/commit equality, dirty checkout refusal, nested Python source,
-dynamic-loader aliases, canonical and hostile Node inputs, build-root drift,
-runtime-loader drift, sole-seam drift, v2 raw-submit refusal, deterministic
-TypeScript emission, and temporary-output cleanup.  The exact detached capture
-commit, descriptor, counts, and independent-judge terminal will be added only
-after the candidate is committed and replayed from that immutable commit.
+dynamic-loader aliases and constructor chains, canonical and hostile Node
+inputs, build-root drift, runtime-loader drift, sole-seam drift, v2 raw-submit
+refusal, deterministic TypeScript emission, and temporary-output cleanup.
+
+The immutable candidate commit
+`8e0c4e0c18a4b10689bbb07e28adc3436f0c2f33` was checked out into two distinct
+detached clones.  Each clone performed the locked offline, script-disabled npm
+installation, producer capture, and physical independent judge.  The two raw
+canonical manifests were byte-identical:
+
+- manifest: 449,592 bytes, SHA-256
+  `e7dd5742ecd80df24ae2886741f663d5395f77a1a224eb03b68ec8a606fdd388`;
+- selected Git files / raw tree objects / evidence pins: `620 / 204 / 18`;
+- Python files / import edges / syntactic call sites: `22 / 223 / 4,889`;
+- TypeScript sources / external files / emitted files: `29 / 487 / 116`;
+- emitted-tree SHA-256:
+  `f2c15f3a65297211d749cb1bd7a4094fa8d35a217fa015e29f5cef181902130c`;
+- physical repository, external toolchain, Python import graph, and Python call
+  summary independently verified: `true`;
+- independent emitted-byte rebuild, compiler-semantic proof, and Source-A
+  authorization: `false`.
+
+The independent terminal was
+`INDEPENDENT_LOCAL_SOURCE_BUILD_IMPORT_CLOSURE_STRUCTURAL_VALIDATED_NOT_SOURCE_A_PROVIDER_OCCURRENCE_EMITTED_BYTE_REBUILD_OR_COMPILER_SEMANTIC_PROOF`.
+The full Python repository replay passed with 2,530 tests and three skips.  The
+Effect suite passed 676 of 681 tests under default file parallelism; all three
+resource-contended files then passed 40 of 40 tests serially.  Typecheck, normal
+build, DNRD build, npm package inspection, focused sdist tests, and the exact
+source-closure tests also passed.
+
 The Effect-runtime CI candidate keeps that detached checkout alive while the
 producer and physical judge run, rather than accepting a producer manifest
 after its source checkout has already been deleted.  Its `0` call field is a

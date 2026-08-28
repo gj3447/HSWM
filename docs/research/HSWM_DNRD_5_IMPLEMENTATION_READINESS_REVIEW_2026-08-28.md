@@ -258,9 +258,14 @@ The checked-in candidate slice now contains:
     and compiler semantics unproved.  Hash-selected tests, workflow, and the
     capture script are byte-bound but lie outside the two declared semantic
     analyses.  Both success and refusal remain zero-budget, no-dispatch, and
-    ineligible for Source A.  The exact immutable detached capture and
-    independent-judge result are still pending; this is an instrument
-    candidate, not source-freeze evidence.
+    ineligible for Source A.  Commit
+    `8e0c4e0c18a4b10689bbb07e28adc3436f0c2f33` was replayed from two distinct
+    detached clones; both produced the same 449,592-byte manifest with SHA-256
+    `e7dd5742ecd80df24ae2886741f663d5395f77a1a224eb03b68ec8a606fdd388`.
+    The physical judge independently verified the Git/worktree, external
+    executables, and Python import/call evidence while explicitly leaving a
+    second emitted-byte rebuild and compiler-semantic proof false.  This is a
+    passed local instrument replay, not source-freeze evidence.
 
 The focused Python and TypeScript checks pass.  Those checks establish that
 the declared contracts reject their tested mutations.  They are not efficacy
@@ -277,12 +282,15 @@ before Source A can be frozen:
    authenticated predecessor-chain custody, and a globally selected occurrence
    root.  Fixture provider, Permit, source, build, and custody declarations
    cannot be promoted to production facts.
-2. The next source qualification must independently bind and recheck the exact
-   Git source/tree, selected build output, lockfile/toolchain, semantic allowed
-   import/call graph, cross-language canonical KATs, v2 schema, lifecycle and
-   alignment pins, and the actual-byte root.  The present structural preflight
-   accepts caller descriptors and therefore cannot supply that evidence.  A
-   later production occurrence vector and independent judge must then join
+2. The local closure now binds and rechecks one exact Git source/tree, selected
+   emitted output, lockfile/toolchain, Python AST and TypeScript Program import
+   graphs, cross-language canonical KATs, v2 schema, lifecycle/alignment pins,
+   and the actual-byte root.  Source qualification still needs an externally
+   anchored builder/authority, an independent emitted-byte rebuild and semantic
+   comparison, and observed egress/process isolation before it can adopt such a
+   manifest as Source A.  The present structural preflight still accepts caller
+   descriptors and therefore cannot supply those facts.  A later production
+   occurrence vector and independent judge must then join
    authenticated hidden/placebo entropy and custody, evaluator openings, all
    model-visible request bytes, real provider receipts, W0/forks, Permit,
    journal CAS, projections, and every lifecycle seal.  It must reconstruct the
@@ -292,10 +300,9 @@ before Source A can be frozen:
 3. A production occurrence preflight must be the sole executor entrypoint and
    bind the frozen source/preregistration/runtime identities, 300-block
    universe, future-randomness receipt, custody commitments, nine-call plan,
-   and provider evidence root before any model dispatch.  Source qualification
-   must bind and independently recheck the source tree, semantic import/call
-   graph, and selected build outputs rather than trusting the local textual
-   allowlist alone.  The new schema-discriminated raw-submit guard does not by
+   and provider evidence root before any model dispatch.  It must consume an
+   adopted source manifest and its physical-judge result rather than trusting a
+   local textual allowlist alone.  The new schema-family raw-submit guard does not by
    itself prevent altered repository source, a deep-module consumer outside the
    checked tree, a non-durable DNRD-shaped projection, or a test bootstrap from
    being mislabeled as a production occurrence.  The Python provider gateway

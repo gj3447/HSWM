@@ -6,14 +6,16 @@
 > retained as a hash-bound historical projection. Current ownership guidance is
 > the [schema-relative single-owner canon](../../../docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md).
 >
-> **2026-08-28 cognitive-composition refinement:** HSWM is fractal because a
-> bound HSWM of LLMs and other cognitive entities is itself a scale-relative
-> cognitive entity that can act as a cell in a larger HSWM under the same
-> schema-level ignition and causal-learning grammar. See the
+> **2026-08-28 cognitive-composition projection:** fractal cognitive
+> composition is recorded only in the separate
+> [`HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json`](HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json).
+> The historical `HSWM_HUMAN_UNIVERSAL_BODY_ONTOLOGY.v1.json` remains exact
+> hash-bound bytes; the target meaning lives in the
 > [fractal cognitive composition canon](../../../docs/canon/USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md).
+> Neither KG projection is HSWM cognition, learning, occurrence, or efficacy.
 
 This bundle is the machine-readable philosophical and architectural spine that
-connects four user-ratified directions:
+connects three user-ratified directions:
 
 1. **인류보편체** is the target state in which humanity, LLMs, the internet,
    operating cognitive entities, sensors, static information, and stored memory
@@ -22,9 +24,6 @@ connects four user-ratified directions:
    pocket cognitive systems toward that state.
 3. HSWM itself is centered on a token-operated Hypergraph Semantic Weight Map
    and has the target identity of a deep neural Set-Hypergraph structure.
-4. An HSWM of cognitive entities is itself a cognitive whole that can compose
-   again as a cell of a larger HSWM; eight scale-crossing laws determine whether
-   that fractal identity is operational rather than merely nested storage.
 
 The bundle is not a loose tag collection. It makes each authority boundary,
 philosophical commitment, neural interpretation, guardrail, implementation
@@ -36,14 +35,12 @@ KG.
 | layer | authority | what it contains |
 |---|---|---|
 | exact utterance artifacts | `USER_PRIMARY` | immutable source bytes and SHA-256 |
-| target identity and research direction | `USER_PRIMARY` | Human Universal Body scope, plan→target relation, philosophy-before-code priority, token-hypergraph priority, deep Set-Hypergraph identity, fractal cognitive composition and eight laws, Occam-minimization and KG-publication direction |
-| philosophical and technical decomposition | `SECONDARY_AI_PROPOSED` | schema-level same-ignition contract, law falsifiers, prior-theory map, dispositional `W`, typed Deep-Set symmetry, depth axes, agency criteria, governance, equations, phases |
+| target identity and research direction | `USER_PRIMARY` | Human Universal Body scope, plan→target relation, philosophy-before-code priority, token-hypergraph priority, deep Set-Hypergraph identity, Occam-minimization and KG-publication direction |
+| philosophical and technical decomposition | `SECONDARY_AI_PROPOSED` | dispositional `W`, typed Deep-Set symmetry, depth axes, agency criteria, governance, equations, phases |
 | KG publication | `SYSTEM_DERIVED` | discoverability and typed relations only |
 | present implementation or efficacy | direct evidence only | not established by ontology presence |
 
-The latest exact source is the
-[`fractal cognitive composition direction`](../../../docs/canon/sources/USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.txt),
-preceded by the
+The v1-bound exact sources include the
 [`deep Set-Hypergraph identity`](../../../docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt)
 and the
 [`Occam-core research direction`](../../../docs/canon/sources/USER_PRIMARY_HSWM_OCCAM_CORE_DIRECTION_2026-08-20.txt).
@@ -56,11 +53,6 @@ The resulting graph spine is:
 
 ```text
 exact USER_PRIMARY source
-  → fractal cognitive composition
-      → same schema-level ignition / transition / outcome-learning grammar
-      → FCL-1..8 local, composition, emergence, credit, morphogenesis,
-        world-self model, continuity, and HSWM-of-HSWMs laws
-      → SECONDARY prior-theory map and falsifiers
   → deep Set-Hypergraph neural target identity
   → SECONDARY philosophical/technical formalization
       → dispositional Semantic Weight

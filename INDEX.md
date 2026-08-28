@@ -206,6 +206,11 @@ engineering contract이며 현재 효능·과학적 유일성 주장이 아니�
 검증·idempotent KG publisher는
 [`upsert_human_universal_body_ontology.py`](scripts/upsert_human_universal_body_ontology.py)다.
 그 v1 bundle의 fixed-role 부분은 hash-bound 역사 자료이며 현행 ownership 정본이 아니다.
+2026-08-28 fractal cognitive composition은 별도
+[`HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json`](ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json)에만
+투사되고, 전용 scoped publisher는
+[`upsert_human_universal_body_fractal_projection.py`](scripts/upsert_human_universal_body_fractal_projection.py)다.
+그 projection은 v1 bundle을 갱신하거나 대체하지 않으며, KG 투사는 cognition·learning·발생·효능의 증거가 아니다.
 
 2026-08-28 사용자는 HSWM이 왜 프랙탈인지도 정본으로 확정했다. LLM을 포함한 인지능력체가
 결속된 HSWM 전체가 하나의 scale-relative 거대한 인지능력체로 작동하고, 그 전체가 다시

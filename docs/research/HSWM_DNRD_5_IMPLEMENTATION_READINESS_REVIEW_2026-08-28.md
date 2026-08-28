@@ -157,9 +157,16 @@ The checked-in candidate slice now contains:
     and `source_freeze_eligible` is always false.  It performs no Git, CI,
     beacon-cryptography, trusted-time, external-authority, gateway, marker, or
     durable-root I/O and therefore establishes none of those facts.  The large
-    plan blobs also remain on the explicitly nonqualified legacy Python
-    `sort_keys` encoding outside bounded `hswm-canonical-json/v1`; Source A
-    requires a reviewed migration or formally restricted cross-language KAT.
+    plan blobs now use the separate, plan-specific
+    `hswm-dnrd5-plan-json/v1` contract rather than widening bounded
+    `hswm-canonical-json/v1`.  Two independently implemented Python codecs and
+    one independently implemented TypeScript codec consume one content-addressed
+    adversarial KAT over the exact restricted key/value and byte domain.  The
+    two Python paths additionally rederive and compare two complete 300-block,
+    2,700-slot plans.  TypeScript currently qualifies only the shared codec; it
+    does not independently rederive the allocation algorithm or either full
+    plan known answer.  This narrows one serialization seam but is not Source-A
+    qualification, occurrence evidence, or an efficacy observation.
 
 The focused Python and TypeScript checks pass.  Those checks establish that
 the declared contracts reject their tested mutations.  They are not efficacy
@@ -251,13 +258,20 @@ before Source A can be frozen:
     Cloned roots or replayed stores can consume the same nonce, so production
     needs one globally selected occurrence root or an external uniqueness
     witness before the capability can be called globally one-shot.
-11. The randomization-plan producer and independent consumer currently agree
-    on a large, content-addressed legacy Python `sort_keys` byte stream.  That
-    exact agreement is useful structural evidence, but it is not the bounded
-    cross-language canonical contract required by the exactness amendment.
-    Source A remains forbidden until the plan encoding is migrated to a
-    reviewed shared codec or its complete dynamic key domain and byte behavior
-    are formally restricted and covered by an adversarial cross-language KAT.
+11. The former unqualified legacy Python `sort_keys` plan-byte seam is narrowed
+    by the reviewed `hswm-dnrd5-plan-json/v1` contract: exact printable-ASCII
+    object keys, Unicode-scalar string values, safe integers, compact UTF-8,
+    strict re-encoding, and explicit byte/depth/node limits are covered by a
+    shared content-addressed KAT in two Python implementations and one
+    TypeScript implementation.  Two complete plan known answers are rederived
+    by the independent Python producer/consumer algorithms.  This remains a
+    codec-level qualification, not a full cross-language randomization
+    qualification.  Before Source A, an independent TypeScript randomization
+    rederiver and semantic plan validator must reproduce both 300-block,
+    2,700-slot vectors and their raw-byte, blob-SHA, and root-plan-SHA values;
+    production build/import closure and evidence-schema binding must also pin
+    the selected codec and KAT.  Source A remains forbidden until those checks
+    and the other blockers above close.
 
 ## Operational decision
 

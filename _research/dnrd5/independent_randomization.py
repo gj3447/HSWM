@@ -9,13 +9,20 @@ evidence.
 from __future__ import annotations
 
 import hashlib
-import json
 from collections.abc import Mapping, Sequence
 from typing import Any
 
+from _research.dnrd5.independent_plan_json import (
+    CONTRACT_VERSION as PLAN_JSON_CONTRACT_VERSION,
+    IndependentPlanJsonError,
+    canonical_bytes as _independent_plan_bytes,
+    canonical_sha256 as _independent_plan_sha256,
+    parse_canonical as _parse_independent_plan,
+)
+
 
 SCHEMA_VERSION = "hswm-dnrd5-randomization/v1"
-CANONICAL_JSON_ENCODING = "UTF-8 JSON: sort_keys=true, separators=(',', ':'), ensure_ascii=false, allow_nan=false"
+CANONICAL_JSON_ENCODING = PLAN_JSON_CONTRACT_VERSION
 BLOCK_COUNT = 300
 BLOCK_ID_PREFIX = "DNRD5-BLOCK-"
 ARMS = ("ACTIVE", "OUTCOME_INDEPENDENT_SHAM", "DELAYED_NO_CREDIT", "EXACT_W0_ROLLBACK")
@@ -30,13 +37,16 @@ class IndependentRandomizationRefusal(ValueError):
 
 def canonical_json_bytes(value: Any) -> bytes:
     try:
-        return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode("utf-8")
-    except (TypeError, ValueError) as error:
+        return _independent_plan_bytes(value)
+    except IndependentPlanJsonError as error:
         raise IndependentRandomizationRefusal("value is not canonical JSON") from error
 
 
 def canonical_json_sha256(value: Any) -> str:
-    return hashlib.sha256(canonical_json_bytes(value)).hexdigest()
+    try:
+        return _independent_plan_sha256(value)
+    except IndependentPlanJsonError as error:
+        raise IndependentRandomizationRefusal("value is not canonical JSON") from error
 
 
 def expected_block_ids() -> tuple[str, ...]:
@@ -139,4 +149,4 @@ def validate_study_plan(plan: Mapping[str, Any], *, future_randomness_hex: str, 
     expected = derive_study_plan(future_randomness_hex=future_randomness_hex, study_binding_sha256=study_binding_sha256)
     if canonical_json_bytes(plan) != canonical_json_bytes(expected):
         raise IndependentRandomizationRefusal("study plan does not exactly rederive from pinned inputs")
-    return json.loads(canonical_json_bytes(plan))
+    return _parse_independent_plan(canonical_json_bytes(plan))

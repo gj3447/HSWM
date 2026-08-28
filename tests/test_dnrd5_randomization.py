@@ -6,7 +6,7 @@ import copy
 
 import pytest
 
-from _research.dnrd5 import randomization
+from _research.dnrd5 import independent_randomization, randomization
 
 
 FUTURE_RANDOMNESS = "01" * 32
@@ -98,6 +98,20 @@ def test_study_plan_rederives_all_300_blocks_and_2700_opaque_call_slots() -> Non
     assert plan["block_count"] == 300
     assert plan["total_call_slots"] == 2700
     assert [block["block_id"] for block in plan["blocks"]] == list(randomization.expected_block_ids())
+
+
+def test_producer_and_independent_consumer_agree_on_exact_300_block_plan_bytes() -> None:
+    producer = randomization.derive_study_plan(
+        future_randomness_hex=FUTURE_RANDOMNESS,
+        study_binding_sha256=STUDY_BINDING,
+    )
+    independent = independent_randomization.derive_study_plan(
+        future_randomness_hex=FUTURE_RANDOMNESS,
+        study_binding_sha256=STUDY_BINDING,
+    )
+    assert randomization.CANONICAL_JSON_ENCODING == "hswm-dnrd5-plan-json/v1"
+    assert independent_randomization.CANONICAL_JSON_ENCODING == randomization.CANONICAL_JSON_ENCODING
+    assert randomization.canonical_json_bytes(producer) == independent_randomization.canonical_json_bytes(independent)
 
 
 @pytest.mark.parametrize(

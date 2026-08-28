@@ -10,15 +10,22 @@ the preassigned randomness of a clone.
 from __future__ import annotations
 
 import hashlib
-import json
 from collections.abc import Mapping, Sequence
 from typing import Any
+
+from _research.dnrd5.plan_json import (
+    CONTRACT_VERSION as PLAN_JSON_CONTRACT_VERSION,
+    PlanJsonError,
+    canonical_bytes as _plan_canonical_bytes,
+    canonical_sha256 as _plan_canonical_sha256,
+    parse_canonical as _parse_plan_canonical,
+)
 
 
 SCHEMA_VERSION = "hswm-dnrd5-randomization/v1"
 MODEL_PROJECTION_SCHEMA = "hswm-dnrd5-model-randomization-projection/v1"
 EVALUATOR_PROJECTION_SCHEMA = "hswm-dnrd5-evaluator-randomization-projection/v1"
-CANONICAL_JSON_ENCODING = "UTF-8 JSON: sort_keys=true, separators=(',', ':'), ensure_ascii=false, allow_nan=false"
+CANONICAL_JSON_ENCODING = PLAN_JSON_CONTRACT_VERSION
 BLOCK_COUNT = 300
 BLOCK_ID_PREFIX = "DNRD5-BLOCK-"
 ARMS = (
@@ -57,19 +64,16 @@ class RandomizationValidationError(ValueError):
 def canonical_json_bytes(value: Any) -> bytes:
     """Encode the narrow JSON domain used by the randomization contract."""
     try:
-        return json.dumps(
-            value,
-            sort_keys=True,
-            separators=(",", ":"),
-            ensure_ascii=False,
-            allow_nan=False,
-        ).encode("utf-8")
-    except (TypeError, ValueError) as error:
+        return _plan_canonical_bytes(value)
+    except PlanJsonError as error:
         raise RandomizationValidationError("value is not canonical JSON encodable") from error
 
 
 def canonical_json_sha256(value: Any) -> str:
-    return hashlib.sha256(canonical_json_bytes(value)).hexdigest()
+    try:
+        return _plan_canonical_sha256(value)
+    except PlanJsonError as error:
+        raise RandomizationValidationError("value is not canonical JSON encodable") from error
 
 
 def expected_block_ids() -> tuple[str, ...]:
@@ -422,7 +426,7 @@ def validate_block_plan(
         raise RandomizationValidationError(
             "block plan does not independently rederive from the pinned randomness and study binding"
         )
-    return json.loads(canonical_json_bytes(dict(plan)))
+    return _parse_plan_canonical(canonical_json_bytes(dict(plan)))
 
 
 def derive_study_plan(*, future_randomness_hex: str, study_binding_sha256: str) -> dict[str, Any]:
@@ -475,7 +479,7 @@ def validate_study_plan(
         raise RandomizationValidationError(
             "study plan does not independently rederive from the pinned randomness and study binding"
         )
-    return json.loads(canonical_json_bytes(dict(plan)))
+    return _parse_plan_canonical(canonical_json_bytes(dict(plan)))
 
 
 def extract_private_custodian_view(plan: Mapping[str, Any]) -> dict[str, Any]:
@@ -500,7 +504,7 @@ def extract_private_custodian_view(plan: Mapping[str, Any]) -> dict[str, Any]:
     )
     view = {key: plan[key] for key in required}
     view["custody_status"] = COMBINED_CUSTODY_STATUS
-    return json.loads(canonical_json_bytes(view))
+    return _parse_plan_canonical(canonical_json_bytes(view))
 
 
 def derive_model_visible_projection(study_binding_sha256: str, block_id: str) -> dict[str, Any]:
@@ -542,7 +546,7 @@ def validate_model_visible_projection(value: Mapping[str, Any]) -> dict[str, Any
         or b"assignment" in encoded
     ):
         raise RandomizationValidationError("model projection leaks private allocation material")
-    return json.loads(encoded)
+    return _parse_plan_canonical(encoded)
 
 
 def derive_evaluator_visible_projection(study_binding_sha256: str, block_id: str) -> dict[str, Any]:
@@ -580,4 +584,4 @@ def validate_evaluator_visible_projection(value: Mapping[str, Any]) -> dict[str,
         or b"assignment" in encoded
     ):
         raise RandomizationValidationError("evaluator projection leaks private allocation material")
-    return json.loads(encoded)
+    return _parse_plan_canonical(encoded)

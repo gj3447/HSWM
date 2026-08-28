@@ -38,7 +38,13 @@ PLAN_MEDIA_TYPE = "application/vnd.hswm.dnrd5.randomization-plan-v1+json"
 PLAN_ENCODING = randomization.CANONICAL_JSON_ENCODING
 PLAN_BLOB_TRANSPORT = "CONTENT_ADDRESSED_BLOB_OUTSIDE_BOUNDED_CANONICAL_JSON_V1"
 PLAN_MAX_BLOB_BYTES = 2_000_000
-PLAN_CROSS_LANGUAGE_STATUS = "NOT_QUALIFIED_PENDING_MIGRATION_OR_RESTRICTION_KAT"
+PLAN_JSON_KAT_MEDIA_TYPE = "application/vnd.hswm.dnrd5.plan-json-kat-v1+json"
+PLAN_JSON_KAT_SHA256 = "012dcc2ebf71dd6b54dfceec9aeeb72673961c64830694ab7bb7c678deb6051f"
+PLAN_JSON_KAT_BYTE_LENGTH = 3_618
+PLAN_CROSS_LANGUAGE_STATUS = (
+    "THREE_CODEC_IMPLEMENTATIONS_SHARED_KAT_SUPPORTED_CODEC_ONLY_NOT_FULL_"
+    "TYPESCRIPT_RANDOMIZATION_NOT_SOURCE_FREEZE_NOT_OCCURRENCE_NOT_SCIENTIFIC_RESULT"
+)
 ROOT_SCHEMA = "hswm-dnrd5-future-occurrence-root/v1"
 ROOT_MEDIA_TYPE = "application/vnd.hswm.dnrd5.future-occurrence-root-v1+json"
 ROOT_IDENTITY_BYTE_LENGTH = 510
@@ -190,11 +196,11 @@ def validate_source_a_instrument_binding(raw: bytes) -> dict[str, Any]:
     if canonical["contract_version"] != "hswm-canonical-json/v1":
         _refuse(terminal, "canonical_json contract drifted")
     _sha(canonical["corpus_sha256"], terminal, "canonical_json.corpus_sha256")
-    plan_contract = _object(root["plan_descriptor_contract"], {"media_type", "producer_schema", "independent_schema", "encoding", "blob_transport", "max_blob_bytes", "cross_language_status"}, terminal, "plan_descriptor_contract")
+    plan_contract = _object(root["plan_descriptor_contract"], {"media_type", "producer_schema", "independent_schema", "encoding", "codec_contract_version", "codec_kat_media_type", "codec_kat_sha256", "codec_kat_byte_length", "blob_transport", "max_blob_bytes", "cross_language_status"}, terminal, "plan_descriptor_contract")
     if (
         independent_randomization.CANONICAL_JSON_ENCODING != PLAN_ENCODING
         or plan_contract
-        != {"media_type": PLAN_MEDIA_TYPE, "producer_schema": randomization.SCHEMA_VERSION, "independent_schema": independent_randomization.SCHEMA_VERSION, "encoding": PLAN_ENCODING, "blob_transport": PLAN_BLOB_TRANSPORT, "max_blob_bytes": PLAN_MAX_BLOB_BYTES, "cross_language_status": PLAN_CROSS_LANGUAGE_STATUS}
+        != {"media_type": PLAN_MEDIA_TYPE, "producer_schema": randomization.SCHEMA_VERSION, "independent_schema": independent_randomization.SCHEMA_VERSION, "encoding": PLAN_ENCODING, "codec_contract_version": PLAN_ENCODING, "codec_kat_media_type": PLAN_JSON_KAT_MEDIA_TYPE, "codec_kat_sha256": PLAN_JSON_KAT_SHA256, "codec_kat_byte_length": PLAN_JSON_KAT_BYTE_LENGTH, "blob_transport": PLAN_BLOB_TRANSPORT, "max_blob_bytes": PLAN_MAX_BLOB_BYTES, "cross_language_status": PLAN_CROSS_LANGUAGE_STATUS}
     ):
         _refuse(terminal, "plan descriptor contract drifted")
     root_contract = _object(root["root_identity_contract"], {"schema_version", "media_type", "byte_length"}, terminal, "root_identity_contract")

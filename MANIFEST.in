@@ -56,4 +56,8 @@ recursive-exclude prom_search_hswm/data *
 include prom_search_hswm/data/README.md
 include prom_search_hswm/data/gold_badiou24.json
 recursive-include _research *.py *.json *.md *.sh *.tsv
+# DNRD-5's content-addressed actual-byte fixture uses extensionless SHA-256
+# filenames.  Its Python judge test ships in the sdist, so the bound CAS bytes
+# must travel with the manifest rather than leaving an impossible test surface.
+recursive-include _research/dnrd5/vectors/actual_byte_corpus_v1/blobs *
 include _research/root_compat/pyproject.toml

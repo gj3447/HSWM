@@ -452,6 +452,7 @@ CORE_SOURCE_FILES = frozenset(
         "src/hswm/effect-runtime/src/canonical-atom-v2-content-runtime.ts",
         "src/hswm/effect-runtime/src/canonical-atom-v2-content.ts",
         "src/hswm/effect-runtime/src/canonical-atom-v2-domain.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-identity.ts",
         "src/hswm/effect-runtime/src/canonical-atom-v2-durable-runtime.ts",
         "src/hswm/effect-runtime/src/canonical-atom-v2-json.ts",
         "src/hswm/effect-runtime/src/canonical-atom-v2-schema.ts",

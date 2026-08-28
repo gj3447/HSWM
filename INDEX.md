@@ -222,6 +222,17 @@ engineering contract이며 현재 효능·과학적 유일성 주장이 아니�
 있다. 이는 `USER_PRIMARY` 목표 정체성과 `SECONDARY_AI` 반증 계약이며 현재 효능·의식·무한
 scale invariance의 증명이 아니다.
 
+이 정체성의 과학적 연결은
+[`HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md`](docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md)에
+별도로 전개했다. 16개 1차 자료에서 source document와 18개 reported construct를 분리하고,
+그것들을 10개 HSWM bridge hypothesis 및 모든 bridge를 겨누는 null/control로 연결한
+기계 투사는
+[`HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json`](ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json),
+fail-closed publisher는
+[`upsert_hswm_fractal_scientific_connections.py`](scripts/upsert_hswm_fractal_scientific_connections.py)다.
+문헌 보고는 `EXTERNAL_PRIMARY_SOURCE_REPORTED`, HSWM 대응은 `SECONDARY_AI /
+WORKING_HYPOTHESIS`, 반증안은 `PROPOSED_TEST`로 분리되며 `EVIDENCE_FOR`를 만들지 않는다.
+
 같은 날 사용자는 코드 구현보다 HSWM의 철학적 함의를 먼저 설정하라고 지시했다. 관계적
 존재론, 계보적 시간론, 기억–진리 분리, 오류의 생산성, 차이 보존적 통일, 인과적 행위성,
 참여와 존엄, 공개 외부·보호 내부, 인지주권·보충성과 열린 목적론을 구현 제약으로 내린

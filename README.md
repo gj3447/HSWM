@@ -65,6 +65,12 @@ causal learning, composition preservation, emergent coalition, multiscale
 credit, topology morphogenesis, joint world/self modeling, diachronic
 continuity, and HSWM-of-HSWMs transfer across personal, agent, organizational,
 and social scales.
+The source-expanded
+[`scientific connection synthesis`](docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md)
+keeps sixteen primary works, eighteen literature-reported constructs, ten
+`SECONDARY_AI` bridge hypotheses, and their falsification nulls separate. Its
+[`machine ontology`](ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json)
+is a research projection, not scientific evidence for the integrated claim.
 
 ## HSWM at a glance
 

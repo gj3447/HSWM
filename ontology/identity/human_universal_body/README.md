@@ -13,6 +13,13 @@
 > hash-bound bytes; the target meaning lives in the
 > [fractal cognitive composition canon](../../../docs/canon/USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md).
 > Neither KG projection is HSWM cognition, learning, occurrence, or efficacy.
+>
+> **2026-08-28 scientific-prior projection:** the separate
+> [`HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json`](HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json)
+> expands sixteen primary sources into literature-reported constructs,
+> `SECONDARY_AI` HSWM bridge hypotheses, and proposed falsification nulls. Its
+> [research synthesis](../../../docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md)
+> is not HSWM canon or evidence for the integrated claim.
 
 This bundle is the machine-readable philosophical and architectural spine that
 connects three user-ratified directions:
@@ -200,3 +207,15 @@ The loader rejects duplicate UIDs and relations, uses one transaction, and
 performs exact node/property and relationship readback. KG presence proves
 publication only; implementation and efficacy still require code, tests, and
 independent experimental receipts.
+
+Validate and explicitly publish the non-overwriting scientific-prior projection:
+
+```bash
+uv run --extra kg python scripts/upsert_hswm_fractal_scientific_connections.py
+uv run --extra kg python scripts/upsert_hswm_fractal_scientific_connections.py \
+  --apply --source-config ~/.config/symposium-ontology/source.yaml
+```
+
+That publisher matches the eleven existing FCL/canon anchors without mutating
+them, creates only its 54 owned nodes and 150 owned relations, checks the live
+schema registry, and performs exact transactional readback.

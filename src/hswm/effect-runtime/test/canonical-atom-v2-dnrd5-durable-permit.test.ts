@@ -908,9 +908,12 @@ it.effect("rejects a stale snapshot and an altered command before durable admiss
   }).pipe(Effect.provide(layer()))
 )
 
-it("keeps the internal durable commit capability out of the package root", async () => {
+it("keeps internal durable commit and recovery capabilities out of the package root", async () => {
   const publicApi: Record<string, unknown> = await import("../src/index.js")
-  expect(
-    "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal" in publicApi
-  ).toBe(false)
+  for (const capability of [
+    "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal",
+    "recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal"
+  ]) {
+    expect(capability in publicApi).toBe(false)
+  }
 })

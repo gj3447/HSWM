@@ -12,6 +12,7 @@ import {
 import {
   CanonicalAtomV2DurableRuntime,
   commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal,
+  recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal,
   type CanonicalAtomV2DurableEvolution,
   type CanonicalAtomV2DurableSubmitFailure
 } from "./canonical-atom-v2-durable-runtime.js"
@@ -21,6 +22,10 @@ import {
   canonicalJsonSha256
 } from "./canonical-atom-v2-json.js"
 import { canonicalAtomV2StateSha256 } from "./canonical-atom-v2-state-journal.js"
+import {
+  canonicalAtomV2StateJournalRecordBytes,
+  describeCanonicalAtomV2StateJournalRecord
+} from "./canonical-atom-v2-state-journal.js"
 import {
   canonicalAtomV2KeyId,
   type CanonicalAtomV2,
@@ -79,6 +84,87 @@ export class Dnrd5DurablePermitError extends Data.TaggedError(
 export type Dnrd5DurablePermitSubmitFailure =
   | Dnrd5DurablePermitError
   | CanonicalAtomV2DurableSubmitFailure
+
+/**
+ * Explicitly non-success terminal states for the successor two-CAS path.
+ * A main effect is never reported as sealed until the independent R2 receipt
+ * record has been recovered and checked.
+ */
+export type Dnrd5V2TwoCasMilestone =
+  | "CAS1_EXACT_R1_RECEIPT_PENDING"
+  | "CAS2_EXACT_R2_CONFIRMED"
+  | "CAS1_PREDECESSOR_LOST"
+  | "CAS2_PREDECESSOR_LOST"
+  | "RECOVERY_INDETERMINATE"
+
+export class Dnrd5V2TwoCasRecoveryError extends Data.TaggedError(
+  "Dnrd5V2TwoCasRecoveryError"
+)<{
+  readonly milestone: Exclude<Dnrd5V2TwoCasMilestone, "CAS2_EXACT_R2_CONFIRMED">
+  readonly detail: string
+}> {}
+
+/**
+ * Re-reads the durable prefix rather than trusting a process-local CAS
+ * return.  It is intentionally usable before any v2 submission: callers use
+ * it to classify a crash window as pending/indeterminate, never as success.
+ */
+export const recoverDnrd5V2DurableHistoryBinding = (): Effect.Effect<
+  {
+    readonly snapshot: CanonicalAtomV2DurableEvolution["state"]
+    readonly history: ReadonlyArray<CanonicalAtomV2DurableEvolution["receipt"]>
+  },
+  CanonicalAtomV2DurableSubmitFailure | Dnrd5V2TwoCasRecoveryError,
+  CanonicalAtomV2DurableRuntime
+> =>
+  Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const witness = yield* recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal(runtime)
+    const snapshot = witness.state
+    const history = witness.history
+    if (history.length !== snapshot.canonical.revision || witness.journal.length !== history.length + 1) {
+      return yield* new Dnrd5V2TwoCasRecoveryError({
+        milestone: "RECOVERY_INDETERMINATE",
+        detail: "recovered history length is not the recovered state revision"
+      })
+    }
+    const tail = history.at(-1)
+    if (
+      (tail === undefined && snapshot.canonical.revision !== 0) ||
+      (tail !== undefined && !sameCanonicalAtomV2ContentDescriptor(tail.record, snapshot.journalHead))
+    ) {
+      return yield* new Dnrd5V2TwoCasRecoveryError({
+        milestone: "RECOVERY_INDETERMINATE",
+        detail: "recovered history tail is not the recovered durable head"
+      })
+    }
+    for (let index = 0; index < history.length; index += 1) {
+      const entry = history.at(index)
+      const raw = witness.journal.at(index + 1)
+      if (entry === undefined || raw === undefined) {
+        return yield* new Dnrd5V2TwoCasRecoveryError({
+          milestone: "RECOVERY_INDETERMINATE",
+          detail: "recovered journal prefix is shorter than its declared revision"
+        })
+      }
+      const bytes = canonicalAtomV2StateJournalRecordBytes(entry.commit)
+      const descriptor = describeCanonicalAtomV2StateJournalRecord(entry.commit)
+      if (
+        Either.isLeft(bytes) ||
+        Either.isLeft(descriptor) ||
+        !sameCanonicalAtomV2ContentDescriptor(descriptor.right, entry.record) ||
+        !sameCanonicalAtomV2ContentDescriptor(raw.descriptor, entry.record) ||
+        !exactBytes(bytes.right, raw.bytes) ||
+        entry.commit.stateRevision !== index + 1
+      ) {
+        return yield* new Dnrd5V2TwoCasRecoveryError({
+          milestone: "RECOVERY_INDETERMINATE",
+          detail: "recovered durable history contains a non-canonical or non-contiguous record"
+        })
+      }
+    }
+    return Object.freeze({ snapshot, history })
+  })
 
 const error = (
   code: Dnrd5DurablePermitErrorCode,

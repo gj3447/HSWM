@@ -532,7 +532,10 @@ def _validate_typescript(value: Any, selected: Mapping[str, Mapping[str, Any]]) 
                 if type(name["typeOnly"]) is not bool:
                     _refuse("TYPE_INVALID", "TypeScript import name.typeOnly must be boolean")
                 checked_names.append(name)
-                if name["imported"] == "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal":
+                if name["imported"] in {
+                    "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal",
+                    "recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal",
+                }:
                     seam_hits.append((row["path"], binding, name))
             name_keys = [(name["imported"], name["local"]) for name in checked_names]
             if name_keys != sorted(name_keys) or len(name_keys) != len(set(name_keys)):
@@ -557,19 +560,24 @@ def _validate_typescript(value: Any, selected: Mapping[str, Mapping[str, Any]]) 
         _refuse("TS_ENTRYPOINT_INVALID", "TypeScript entrypoints drifted")
     if not set(entrypoints).issubset(source_by_path):
         _refuse("TS_ENTRYPOINT_INVALID", "TypeScript entrypoint not in resolved sources")
-    if len(seam_hits) != 1:
-        _refuse("TS_SEAM_INVALID", "durable commit seam must have one importer")
-    seam_path, seam_binding, seam_name = seam_hits[0]
-    if (
-        seam_path != "src/canonical-atom-v2-dnrd5-durable-permit.ts"
-        or seam_binding["kind"] != "static-import"
-        or seam_binding["source"] != "./canonical-atom-v2-durable-runtime.js"
-        or seam_binding["targetKind"] != "local-source"
-        or seam_binding["typeOnly"] is not False
-        or seam_name["local"] != "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal"
-        or seam_name["typeOnly"] is not False
+    expected_seams = {
+        "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal",
+        "recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal",
+    }
+    if len(seam_hits) != 2 or {hit[2]["imported"] for hit in seam_hits} != expected_seams:
+        _refuse("TS_SEAM_INVALID", "durable dispatcher seam set drifted")
+    seam_path, seam_binding, _ = seam_hits[0]
+    if any(
+        path != "src/canonical-atom-v2-dnrd5-durable-permit.ts"
+        or binding["kind"] != "static-import"
+        or binding["source"] != "./canonical-atom-v2-durable-runtime.js"
+        or binding["targetKind"] != "local-source"
+        or binding["typeOnly"] is not False
+        or name["local"] != name["imported"]
+        or name["typeOnly"] is not False
+        for path, binding, name in seam_hits
     ):
-        _refuse("TS_SEAM_INVALID", "durable commit seam binding drifted")
+        _refuse("TS_SEAM_INVALID", "durable dispatcher seam binding drifted")
     target = seam_binding["target"]
     if type(target) is not dict or target.get("path") != "src/canonical-atom-v2-durable-runtime.ts":
         _refuse("TS_SEAM_INVALID", "durable commit seam target drifted")

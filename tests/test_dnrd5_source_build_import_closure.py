@@ -23,20 +23,23 @@ def _descriptor(path: str, byte: str) -> dict[str, object]:
     return {"path": path, "byteLength": 1, "sha256": byte * 64}
 
 
+_DURABLE_INTERNAL_SEAMS = (
+    "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal",
+    "recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal",
+)
+
+
 def _binding(*, seam: bool = False) -> dict[str, object]:
     return {
         "kind": "static-import",
-        "names": [
-            {
-                "imported": (
-                    "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal"
-                    if seam
-                    else "Effect"
-                ),
-                "local": "Effect",
-                "typeOnly": False,
-            }
-        ],
+        "names": (
+            [
+                {"imported": name, "local": name, "typeOnly": False}
+                for name in _DURABLE_INTERNAL_SEAMS
+            ]
+            if seam
+            else [{"imported": "Effect", "local": "Effect", "typeOnly": False}]
+        ),
         "position": 0,
         "source": "./canonical-atom-v2-durable-runtime.js",
         "target": _descriptor("src/canonical-atom-v2-durable-runtime.ts", "8"),
@@ -221,10 +224,22 @@ def test_typescript_closure_recomputes_build_root_and_dispatch_seam() -> None:
         validate_typescript_closure(canonical_bytes(loader))
     assert caught.value.code == "TS_RUNTIME_LOADER_FORBIDDEN"
 
-    seam = deepcopy(fixture)
-    seam["sources"][0]["imports"][0]["names"][0]["imported"] = "Effect"
+    missing = deepcopy(fixture)
+    missing["sources"][0]["imports"][0]["names"].pop()
     with pytest.raises(SourceBuildImportClosureRefusal) as caught:
-        validate_typescript_closure(canonical_bytes(seam))
+        validate_typescript_closure(canonical_bytes(missing))
+    assert caught.value.code == "TS_DISPATCH_SEAM_INVALID"
+
+    renamed = deepcopy(fixture)
+    renamed["sources"][0]["imports"][0]["names"][0]["local"] = "renamed"
+    with pytest.raises(SourceBuildImportClosureRefusal) as caught:
+        validate_typescript_closure(canonical_bytes(renamed))
+    assert caught.value.code == "TS_DISPATCH_SEAM_INVALID"
+
+    additional = deepcopy(fixture)
+    additional["sources"][1]["imports"].append(_binding(seam=True))
+    with pytest.raises(SourceBuildImportClosureRefusal) as caught:
+        validate_typescript_closure(canonical_bytes(additional))
     assert caught.value.code == "TS_DISPATCH_SEAM_INVALID"
 
 

@@ -128,7 +128,12 @@ def _structural_manifest() -> dict[str, Any]:
                             "imported": "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal",
                             "local": "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal",
                             "typeOnly": False,
-                        }
+                        },
+                        {
+                            "imported": "recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal",
+                            "local": "recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal",
+                            "typeOnly": False,
+                        },
                     ],
                     "position": 1,
                     "source": "./canonical-atom-v2-durable-runtime.js",
@@ -271,6 +276,20 @@ def test_structural_baseline_is_local_only_and_never_authority() -> None:
         ),
         (
             lambda value: value["typescript"]["sources"][0]["imports"][0].update({"source": "./different-runtime.js"}),
+            "TS_SEAM_INVALID",
+        ),
+        (
+            lambda value: value["typescript"]["sources"][0]["imports"][0]["names"].pop(),
+            "TS_SEAM_INVALID",
+        ),
+        (
+            lambda value: value["typescript"]["sources"][0]["imports"][0]["names"][0].update({"local": "renamed"}),
+            "TS_SEAM_INVALID",
+        ),
+        (
+            lambda value: value["typescript"]["sources"][1]["imports"].append(
+                deepcopy(value["typescript"]["sources"][0]["imports"][0])
+            ),
             "TS_SEAM_INVALID",
         ),
     ],

@@ -878,7 +878,10 @@ def validate_typescript_closure(raw: bytes) -> Mapping[str, Any]:
     if type(sources) is not list or not sources:
         _refuse("TS_RESOLUTION_INVALID", "TypeScript source closure is empty")
     source_paths: list[str] = []
-    seam_importers: list[str] = []
+    seam_hits: dict[str, list[tuple[str, Mapping[str, Any], Mapping[str, Any]]]] = {
+        "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal": [],
+        "recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal": [],
+    }
     allowed_kinds = {"static-import", "static-export", "type-import"}
     for index, source in enumerate(sources):
         if type(source) is not dict or set(source) != {
@@ -965,13 +968,14 @@ def validate_typescript_closure(raw: bytes) -> Mapping[str, Any]:
                 _refuse("TS_RESOLUTION_INVALID", "import names are not sorted")
             if binding["kind"] == "type-import" and binding["typeOnly"] is not True:
                 _refuse("TS_RESOLUTION_INVALID", "type import lost its type-only flag")
-            if any(
-                type(name) is dict
-                and name.get("imported")
-                == "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal"
-                for name in binding["names"]
-            ):
-                seam_importers.append(source["path"])
+            for name in binding["names"]:
+                if (
+                    type(name) is dict
+                    and name.get("imported") in seam_hits
+                ):
+                    seam_hits[name["imported"]].append(
+                        (source["path"], binding, name)
+                    )
     if source_paths != sorted(source_paths) or len(source_paths) != len(set(source_paths)):
         _refuse("TS_RESOLUTION_INVALID", "TypeScript source paths are not sorted unique")
     entrypoints = value["entrypoints"]
@@ -985,8 +989,29 @@ def validate_typescript_closure(raw: bytes) -> Mapping[str, Any]:
         _refuse("TS_RESOLUTION_INVALID", "TypeScript entrypoint set drifted")
     if not set(entrypoints).issubset(source_paths):
         _refuse("TS_RESOLUTION_INVALID", "entrypoint escaped the resolved source graph")
-    if seam_importers != ["src/canonical-atom-v2-dnrd5-durable-permit.ts"]:
-        _refuse("TS_DISPATCH_SEAM_INVALID", "durable commit seam importer set drifted")
+    for symbol, hits in seam_hits.items():
+        if len(hits) != 1:
+            _refuse(
+                "TS_DISPATCH_SEAM_INVALID",
+                f"durable dispatcher seam importer set drifted for {symbol}",
+            )
+        path, binding, name = hits[0]
+        target = binding["target"]
+        if (
+            path != "src/canonical-atom-v2-dnrd5-durable-permit.ts"
+            or binding["kind"] != "static-import"
+            or binding["source"] != "./canonical-atom-v2-durable-runtime.js"
+            or binding["targetKind"] != "local-source"
+            or binding["typeOnly"] is not False
+            or name["local"] != symbol
+            or name["typeOnly"] is not False
+            or type(target) is not dict
+            or target.get("path") != "src/canonical-atom-v2-durable-runtime.ts"
+        ):
+            _refuse(
+                "TS_DISPATCH_SEAM_INVALID",
+                f"durable dispatcher seam binding drifted for {symbol}",
+            )
     return value
 
 

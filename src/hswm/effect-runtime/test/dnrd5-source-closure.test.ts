@@ -58,12 +58,15 @@ it("emits a canonical local-only source/build/import closure", () => {
   const imports = closure.sources.flatMap((source) => source.imports)
   expect(imports.some((item) => item.kind === "type-import" && item.typeOnly)).toBe(true)
   expect(imports.some((item) => item.kind === "runtime-dynamic-import" && !item.typeOnly)).toBe(false)
-  const durableCommitImporters = closure.sources.filter((source) =>
+  const durableDispatcherImporters = closure.sources.filter((source) =>
     source.imports.some((item) =>
-      item.names.some((name) => name.imported === "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal")
+      item.names.some((name) =>
+        name.imported === "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal" ||
+        name.imported === "recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal"
+      )
     )
   )
-  expect(durableCommitImporters.map((source) => source.path)).toEqual([
+  expect(durableDispatcherImporters.map((source) => source.path)).toEqual([
     "src/canonical-atom-v2-dnrd5-durable-permit.ts"
   ])
 }, 120_000)

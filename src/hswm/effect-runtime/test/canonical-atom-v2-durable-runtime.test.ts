@@ -18,7 +18,8 @@ import {
   CanonicalAtomV2DurableRuntime,
   makeCanonicalAtomV2DurableRuntimeLayer,
   makeCanonicalAtomV2DurableRuntimeFileLayer,
-  makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest
+  makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest,
+  recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal
 } from "../src/canonical-atom-v2-durable-runtime.js"
 import {
   decodeCanonicalAtomV2SchemaContent,
@@ -273,6 +274,54 @@ const commitTwoAtomRevisions = (root: string, atomUid: string) =>
     )
     return { first, second }
   }).pipe(Effect.provide(fileLayer(root)))
+
+it.effect("provides a defensive raw journal recovery witness replayed from one durable prefix", () =>
+  withTemporaryRoot((root) =>
+    Effect.gen(function* () {
+      const runtime = yield* CanonicalAtomV2DurableRuntime
+      const payload = yield* runtime.stageContent("text/plain", utf8("witness"))
+      yield* runtime.submit(inputFor(atomFixture("atom:witness", payload)))
+
+      const witness = yield* recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal(runtime)
+      const raw = yield* Effect.gen(function* () {
+        const store = yield* CanonicalAtomV2StateJournalStore
+        return yield* store.recover
+      }).pipe(Effect.provide(rawJournalLayer(root)))
+      expect(witness.journal).toHaveLength(2)
+      expect(witness.journal.map((entry) => entry.descriptor)).toEqual(
+        raw.map((entry) => entry.descriptor)
+      )
+      expect(witness.journal.map((entry) => Array.from(entry.bytes))).toEqual(
+        raw.map((entry) => Array.from(entry.bytes))
+      )
+      expect(witness.journal[0]?.bytes).not.toBe(raw[0]?.bytes)
+      expect(witness.state.canonical.revision).toBe(1)
+      expect(witness.history).toHaveLength(1)
+      expect(witness.history[0]?.record).toEqual(witness.journal[1]?.descriptor)
+
+      const retainedFirstByte = witness.journal[0]!.bytes[0]!
+      witness.journal[0]!.bytes[0] = retainedFirstByte ^ 0xff
+      const afterMutation = yield* recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal(runtime)
+      expect(afterMutation.journal[0]?.bytes).toEqual(raw[0]?.bytes)
+    }).pipe(Effect.provide(fileLayer(root)))
+  )
+)
+
+it.effect("rejects an unregistered runtime at the internal recovery seam", () =>
+  recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal(
+    {} as CanonicalAtomV2DurableRuntime["Type"]
+  ).pipe(
+    Effect.flip,
+    Effect.tap((error) =>
+      Effect.sync(() =>
+        expect(error).toMatchObject({
+          reason: "CONFIGURATION_INVALID",
+          detail: expect.stringContaining("not registered")
+        })
+      )
+    )
+  )
+)
 
 for (const checkpoint of CANONICAL_ATOM_V2_STATE_JOURNAL_FILE_PUBLICATION_CHECKPOINTS_FOR_TEST) {
   it.effect(`fresh replay exposes only an exact old or new prefix after ${checkpoint}`, () =>

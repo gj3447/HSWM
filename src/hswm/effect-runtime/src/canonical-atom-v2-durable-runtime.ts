@@ -55,6 +55,7 @@ import {
   CanonicalAtomV2StateJournalStore,
   CanonicalAtomV2StateJournalStoreError,
   makeCanonicalAtomV2StateJournalStoreMemoryLayer,
+  snapshotCanonicalAtomV2StateJournalRecovery,
   type CanonicalAtomV2StateJournalEntry
 } from "./canonical-atom-v2-state-journal-store.js"
 import {
@@ -98,6 +99,19 @@ export interface CanonicalAtomV2DurableState {
 export interface CanonicalAtomV2DurableEvolution {
   readonly state: CanonicalAtomV2DurableState
   readonly receipt: CanonicalAtomV2DurableReceipt
+}
+
+/**
+ * Read-only internal recovery witness for the DNRD-5 Permit dispatcher.
+ *
+ * `journal`, `state`, and `history` are all derived from one recovered
+ * journal snapshot. This is deliberately absent from the package root export
+ * and does not confer authority to mutate the durable journal.
+ */
+export interface CanonicalAtomV2DurableRecoveryWitness {
+  readonly journal: ReadonlyArray<CanonicalAtomV2StateJournalEntry>
+  readonly state: CanonicalAtomV2DurableState
+  readonly history: ReadonlyArray<CanonicalAtomV2DurableReceipt>
 }
 
 export type CanonicalAtomV2DurableRecoveryFailure =
@@ -169,6 +183,16 @@ const internalCommitByRuntime = new WeakMap<
   CanonicalAtomV2DurableCommit
 >()
 
+type CanonicalAtomV2DurableRecoveryWitnessEffect = Effect.Effect<
+  CanonicalAtomV2DurableRecoveryWitness,
+  CanonicalAtomV2DurableRecoveryFailure
+>
+
+const internalRecoveryWitnessByRuntime = new WeakMap<
+  CanonicalAtomV2DurableRuntime["Type"],
+  () => CanonicalAtomV2DurableRecoveryWitnessEffect
+>()
+
 export const commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal = (
   runtime: CanonicalAtomV2DurableRuntime["Type"],
   input: unknown
@@ -185,6 +209,25 @@ export const commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal = (
         )
       )
     : commit(input)
+}
+
+/**
+ * Module-held read-only capability for DNRD-5 dispatcher recovery. The
+ * recovered raw entries and semantic replay share one journalStore.recover
+ * observation; callers receive defensive copies only.
+ */
+export const recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal = (
+  runtime: CanonicalAtomV2DurableRuntime["Type"]
+): CanonicalAtomV2DurableRecoveryWitnessEffect => {
+  const recoverWitness = internalRecoveryWitnessByRuntime.get(runtime)
+  return recoverWitness === undefined
+    ? Effect.fail(
+        runtimeError(
+          "CONFIGURATION_INVALID",
+          "durable runtime is not registered for internal dispatcher recovery"
+        )
+      )
+    : recoverWitness()
 }
 
 interface RecoveredJournal {
@@ -290,11 +333,15 @@ const orderedAtomsForBindings = (
 const recoverCanonicalAtomV2Journal = (
   contentStore: CanonicalAtomV2ContentStore["Type"],
   journalStore: CanonicalAtomV2StateJournalStore["Type"],
-  schemaContent: CanonicalAtomV2ValidatedSchemaContent
+  schemaContent: CanonicalAtomV2ValidatedSchemaContent,
+  recoveredEntries?: ReadonlyArray<CanonicalAtomV2StateJournalEntry>
 ): Effect.Effect<RecoveredJournal, CanonicalAtomV2DurableRecoveryFailure> =>
   Effect.gen(function* () {
     yield* contentStore.verify(schemaContent.binding.content)
-    const entries = yield* journalStore.recover
+    const entries =
+      recoveredEntries === undefined
+        ? yield* journalStore.recover
+        : snapshotCanonicalAtomV2StateJournalRecovery(recoveredEntries)
     const first = entries[0]
     if (first === undefined) {
       return yield* runtimeError(
@@ -524,6 +571,26 @@ export const makeCanonicalAtomV2DurableRuntimeLayer = (
           schemaContent
         )
 
+      const recoverWitness = (): CanonicalAtomV2DurableRecoveryWitnessEffect =>
+        Effect.gen(function* () {
+          const journal = yield* journalStore.recover
+          const recovered = yield* recoverCanonicalAtomV2Journal(
+            contentStore,
+            journalStore,
+            schemaContent,
+            journal
+          )
+          return Object.freeze({
+            journal: snapshotCanonicalAtomV2StateJournalRecovery(journal),
+            state: snapshotDurableState(
+              journalLineageId,
+              schemaContent.binding,
+              recovered
+            ),
+            history: Object.freeze(recovered.history.map(snapshotDurableReceipt))
+          })
+        })
+
       const commit: CanonicalAtomV2DurableCommit = (input) =>
         Effect.gen(function* () {
           const decoded = yield* decodeCanonicalAtomV2ContentBoundInput(input)
@@ -664,6 +731,7 @@ export const makeCanonicalAtomV2DurableRuntimeLayer = (
             : commit(input)
       })
       internalCommitByRuntime.set(runtime, commit)
+      internalRecoveryWitnessByRuntime.set(runtime, recoverWitness)
       return runtime
     })
   )

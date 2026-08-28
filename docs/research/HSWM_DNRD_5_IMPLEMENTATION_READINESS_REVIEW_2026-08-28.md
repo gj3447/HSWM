@@ -4,7 +4,8 @@
 - Review scope: post-R2 task, evaluator, randomization, lifecycle, provider,
   schema, lifecycle-to-atom alignment, local durable-Permit, and structural
   occurrence-preflight candidate slices, plus the deterministic one-block
-  actual-byte fixture and independent judge
+  actual-byte fixture, local source/build/import closure candidate, and their
+  independent judges
 - Decision: `NOT_READY_FOR_SOURCE_FREEZE / NOT_READY_FOR_PREREGISTRATION / NO_MODEL_CALLS`
 - Scientific status: `DESIGN-INSTRUMENT PROGRESS / UNMEASURED / NO EFFECT RESULT`
 - Governing design:
@@ -128,7 +129,7 @@ The checked-in candidate slice now contains:
    already-consumed nonce only when the exact validated winning atom exists.
    Memory admission/replay, concurrent one-winner, normal file reopen, and
    stale/altered-input integration tests pass.  The public generic durable
-   `submit` now fails closed for the DNRD-5 schema with
+   `submit` now fails closed for both the DNRD-5 v1 and v2 schemas with
    `DNRD5_PERMIT_DISPATCH_REQUIRED`; the Permit dispatcher alone invokes a
    module-held commit capability that is absent from the package root.  A
    static textual allowlist test fails if the exact capability identifier
@@ -235,6 +236,31 @@ The checked-in candidate slice now contains:
     roles remain typed placeholders, and fixture receipts explicitly are not
     transport/provider observations.  This is instrument-validity progress,
     not Source-A qualification, occurrence, learning, or efficacy evidence.
+16. A local source/tree/build/import closure candidate.  It disables Git
+    replacement objects, rehashes raw commit/tree/subtree/blob objects, parses
+    the raw tree modes, requires requested commit equality with a detached
+    clean `HEAD`, and compares every selected worktree byte with its Git blob.
+    It parses the complete tracked DNRD-5 Python source set without importing
+    it, exposes network-capable deferred imports, and refuses dynamic-loader
+    roots and common aliases.  In a temporary detached clone it performs an
+    offline, script-disabled npm install and runs the checked-in Node capture
+    itself; caller-supplied TypeScript reports cannot enter the production
+    capture path.  The Node path reuses the pinned TypeScript Program's actual
+    resolution table, rejects runtime loaders, emits at a fixed checkout-
+    independent depth, and binds the exact eight entrypoints, transitive local
+    source, external compiler inputs, and complete emitted tree.  Python then
+    independently canonical-parses that report, recomputes its declared roots,
+    checks the sole durable-commit seam importer, and physically rehashes all
+    non-emitted descriptors.  A separate Python judge imports neither producer
+    nor TypeScript tooling: it independently rewalks raw Git objects and the
+    Python AST evidence and can physically rehash the same detached worktree
+    and external executables.  It explicitly leaves emitted-byte rebuilding
+    and compiler semantics unproved.  Hash-selected tests, workflow, and the
+    capture script are byte-bound but lie outside the two declared semantic
+    analyses.  Both success and refusal remain zero-budget, no-dispatch, and
+    ineligible for Source A.  The exact immutable detached capture and
+    independent-judge result are still pending; this is an instrument
+    candidate, not source-freeze evidence.
 
 The focused Python and TypeScript checks pass.  Those checks establish that
 the declared contracts reject their tested mutations.  They are not efficacy

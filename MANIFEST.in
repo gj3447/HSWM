@@ -17,6 +17,9 @@ recursive-exclude tests test_hswm_swm0w_s2s_effect_handoff_v*.py
 # the checked-in Effect sources, Git chronology, and hosted-CI workflow, all of
 # which are intentionally outside the Python source distribution below.
 recursive-exclude tests test_hswm_dnrd_*.py
+# The narrowly named test_dnrd5_* suites below are synthetic Python contract
+# tests; they neither import the pruned Effect runtime nor require Git history.
+# Keep them in the sdist with their _research/dnrd5 Python implementations.
 # Frozen test receipts are read directly by source-distribution tests.
 recursive-include tests/fixtures *.json
 # SWM-0W's repository-only cryptographic verifier is required by its source

@@ -57,6 +57,7 @@ import {
   makeDnrd5CanonicalSchemaV2,
   type Dnrd5CanonicalAtomKind
 } from "../src/canonical-atom-v2-dnrd5-schema.js"
+import { makeDnrd5V2CanonicalSchema } from "../src/canonical-atom-v2-dnrd5-v2-schema.js"
 import { canonicalJsonBytes } from "../src/canonical-atom-v2-json.js"
 import { canonicalAtomV2StateSha256 } from "../src/canonical-atom-v2-state-journal.js"
 import {
@@ -153,6 +154,9 @@ const bindingFor = (candidate: CanonicalAtomV2): CanonicalAtomV2WriteContentBind
 
 const schemaBytes = rightOrThrow(
   canonicalAtomV2SchemaContentBytes(makeDnrd5CanonicalSchemaV2())
+)
+const v2SchemaBytes = rightOrThrow(
+  canonicalAtomV2SchemaContentBytes(makeDnrd5V2CanonicalSchema())
 )
 const schemaContent = rightOrThrow(decodeCanonicalAtomV2SchemaContent(schemaBytes))
 const grants: ReadonlyArray<CanonicalAtomV2ContentAuthorizationGrant> = [
@@ -717,6 +721,12 @@ const layer = () =>
     grants
   )
 
+const v2RawSubmitGuardLayer = () =>
+  makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest(
+    "journal:dnrd5:v2:raw-submit-guard",
+    v2SchemaBytes
+  )
+
 const withTemporaryRoot = <A, E>(
   use: (root: string) => Effect.Effect<A, E>
 ): Effect.Effect<A, E> => {
@@ -727,6 +737,24 @@ const withTemporaryRoot = <A, E>(
     )
   )
 }
+
+it.effect("refuses raw durable submit for the DNRD-5 v2 successor schema", () =>
+  Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const bypass = yield* runtime.submit({
+      _tag: "RawDnrd5V2SubmitBypass"
+    }).pipe(Effect.either)
+
+    expect(Either.isLeft(bypass)).toBe(true)
+    if (Either.isLeft(bypass)) {
+      expect(bypass.left).toMatchObject({
+        _tag: "CanonicalAtomV2DurableRuntimeError",
+        reason: "DNRD5_PERMIT_DISPATCH_REQUIRED"
+      })
+    }
+    expect((yield* runtime.snapshot).canonical.revision).toBe(0)
+  }).pipe(Effect.provide(v2RawSubmitGuardLayer()))
+)
 
 it.effect("commits admission and one-shot capability consumption in one durable command", () =>
   Effect.gen(function* () {

@@ -127,6 +127,104 @@ jobs:
       - name: Install the locked Effect dependency graph
         working-directory: src/hswm/effect-runtime
         run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Rebuild and independently judge the bounded DNRD-5 source closure
+        run: |
+          dnrd5_snapshot_root="$(mktemp -d "${RUNNER_TEMP}/dnrd5-source-closure.XXXXXX")"
+          dnrd5_snapshot="${dnrd5_snapshot_root}/repository"
+          dnrd5_commit="$(git rev-parse --verify 'HEAD^{commit}')"
+          dnrd5_npm_cache="$(npm config get cache)"
+          git clone --shared --no-checkout --quiet "${GITHUB_WORKSPACE}" "${dnrd5_snapshot}"
+          git -C "${dnrd5_snapshot}" checkout --detach --quiet "${dnrd5_commit}"
+          env \
+            npm_config_cache="${dnrd5_npm_cache}" \
+            npm_config_userconfig="${dnrd5_snapshot}/src/hswm/effect-runtime/.npmrc" \
+            npm_config_offline=true \
+            npm_config_ignore_scripts=true \
+            npm_config_audit=false \
+            npm_config_fund=false \
+            npm_config_update_notifier=false \
+            HTTP_PROXY= HTTPS_PROXY= ALL_PROXY= NO_PROXY='*' \
+            http_proxy= https_proxy= all_proxy= no_proxy='*' \
+            npm ci --offline --ignore-scripts --no-audit --no-fund \
+            --prefix "${dnrd5_snapshot}/src/hswm/effect-runtime"
+          (
+            cd "${dnrd5_snapshot}"
+            DNRD5_SNAPSHOT="${dnrd5_snapshot}" \
+            DNRD5_COMMIT="${dnrd5_commit}" \
+            DNRD5_NPM_CACHE="${dnrd5_npm_cache}" \
+              uv run --project "${GITHUB_WORKSPACE}" --locked --extra dev python - <<'PY'
+          import os
+          from pathlib import Path
+          import shutil
+          import sys
+
+          snapshot = Path(os.environ["DNRD5_SNAPSHOT"])
+          from _research.dnrd5.independent_source_build_import_judge import (
+              judge_source_build_import_closure,
+          )
+          from _research.dnrd5.source_build_import_closure import (
+              capture_local_source_build_import_closure,
+          )
+          import _research.dnrd5.independent_source_build_import_judge as judge_module
+          import _research.dnrd5.source_build_import_closure as capture_module
+
+          for module in (capture_module, judge_module):
+              module_path = Path(module.__file__).resolve()
+              if not module_path.is_relative_to(snapshot):
+                  raise RuntimeError(f"closure module escaped detached snapshot: {module_path}")
+          package = snapshot / "src" / "hswm" / "effect-runtime"
+          environment = {
+              "PATH": os.environ["PATH"],
+              "LANG": "C.UTF-8",
+              "LC_ALL": "C.UTF-8",
+              "TZ": "UTC",
+              "npm_config_cache": os.environ["DNRD5_NPM_CACHE"],
+              "npm_config_userconfig": str(package / ".npmrc"),
+              "npm_config_offline": "true",
+              "npm_config_ignore_scripts": "true",
+              "npm_config_audit": "false",
+              "npm_config_fund": "false",
+              "npm_config_update_notifier": "false",
+              "HTTP_PROXY": "",
+              "HTTPS_PROXY": "",
+              "ALL_PROXY": "",
+              "NO_PROXY": "*",
+              "http_proxy": "",
+              "https_proxy": "",
+              "all_proxy": "",
+              "no_proxy": "*",
+          }
+          captured = capture_local_source_build_import_closure(
+              snapshot,
+              commit=os.environ["DNRD5_COMMIT"],
+              require_detached_clean=True,
+              environment=environment,
+          )
+          node = shutil.which("node", path=environment["PATH"])
+          if node is None:
+              raise RuntimeError("pinned Node executable is unavailable")
+          result = judge_source_build_import_closure(
+              captured.raw,
+              repository_root=snapshot,
+              node_executable=Path(node).resolve(),
+              python_executable=Path(sys.executable).resolve(),
+          )
+          expected = (
+              result.physical_repository_verified
+              and result.external_toolchains_verified
+              and result.python_import_graph_independently_verified
+              and result.python_call_summary_independently_verified
+              and not result.emitted_bytes_independently_verified
+              and not result.compiler_semantics_independently_verified
+              and not result.source_a_authorized
+              and result.provider_or_model_calls == 0
+          )
+          if not expected:
+              raise RuntimeError(f"DNRD-5 closure boundary drifted: {result!r}")
+          sys.stdout.buffer.write(captured.raw)
+          PY
+          ) > "${RUNNER_TEMP}/dnrd5-local-source-build-import-closure.json"
+          test -s "${RUNNER_TEMP}/dnrd5-local-source-build-import-closure.json"
       - name: Install the byte-pinned offline drand verifier
         working-directory: tools/swm0w_drand
         run: npm ci --ignore-scripts --no-audit --no-fund

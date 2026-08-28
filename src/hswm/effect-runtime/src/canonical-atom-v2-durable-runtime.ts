@@ -63,7 +63,7 @@ import {
   type CanonicalAtomV2,
   type HSWMCanonicalSchemaV2
 } from "./canonical-atom-v2-schema.js"
-import { DNRD5_SCHEMA_VERSION } from "./canonical-atom-v2-dnrd5-identity.js"
+import { DNRD5_PERMIT_DISPATCH_SCHEMA_VERSION_PREFIX } from "./canonical-atom-v2-dnrd5-identity.js"
 
 export const HSWM_CANONICAL_ATOM_V2_LOCAL_DURABLE_STATE =
   "LOCAL_PREDECESSOR_BOUND_STATE_AND_RECEIPT_JOURNAL_V1" as const
@@ -652,7 +652,9 @@ export const makeCanonicalAtomV2DurableRuntimeLayer = (
           )
         ),
         submit: (input) =>
-          schemaContent.binding.schemaVersion === DNRD5_SCHEMA_VERSION
+          schemaContent.binding.schemaVersion.startsWith(
+            DNRD5_PERMIT_DISPATCH_SCHEMA_VERSION_PREFIX
+          )
             ? Effect.fail(
                 runtimeError(
                   "DNRD5_PERMIT_DISPATCH_REQUIRED",

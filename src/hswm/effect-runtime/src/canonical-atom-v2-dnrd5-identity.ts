@@ -8,3 +8,13 @@
  */
 export const DNRD5_SCHEMA_VERSION =
   "hswm:dnrd5:causal-macroplasticity:v1" as const
+
+/**
+ * The durable raw-submit surface is closed for the DNRD-5 experiment family.
+ *
+ * This is intentionally a family prefix, rather than an enumeration of
+ * successor identities: a new DNRD-5 schema cannot silently reopen the raw
+ * path merely because generic durable infrastructure has not imported it.
+ */
+export const DNRD5_PERMIT_DISPATCH_SCHEMA_VERSION_PREFIX =
+  "hswm:dnrd5:causal-macroplasticity:" as const

@@ -140,8 +140,8 @@ Then open `http://127.0.0.1:6006` and `http://127.0.0.1:8233` locally.
 Run one no-secret infrastructure smoke:
 
 ```bash
-uv run --locked --extra research-infra \
-  python _research/infrastructure_smoke/research_fabric_smoke.py
+uv run --locked --script \
+  _research/infrastructure_smoke/research_fabric_smoke.py
 ```
 
 The smoke starts one Temporal workflow/activity and emits one Phoenix span. Its
@@ -149,6 +149,9 @@ payload contains only a generated run ID, bounded status, and content hash. It
 does not record prompts, completions, credentials, private data, an HSWM
 outcome, or a canonical revision. Phoenix's OTEL integration is documented at
 [Setup OTEL](https://www.arize.com/docs/phoenix/tracing/how-to-tracing/setup-tracing/setup-using-phoenix-otel).
+Its PEP 723 dependencies and adjacent script lock are intentionally isolated
+from the repository root `uv.lock`, whose historical SWM-0W evidence binding
+must remain byte-exact.
 
 ## Instrumentation contract for later HSWM work
 

@@ -1,3 +1,10 @@
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#   "arize-phoenix-otel==0.17.1",
+#   "temporalio==1.32.0",
+# ]
+# ///
 """Send one non-sensitive trace and one durable smoke workflow.
 
 This is an infrastructure check, not an HSWM experiment or efficacy result.

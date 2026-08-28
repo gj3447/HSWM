@@ -11,10 +11,6 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "hypothesis>=6.0"]
 kg = ["neo4j>=5.20"]
-research-infra = [
-  "arize-phoenix-otel==0.17.1",
-  "temporalio==1.32.0",
-]
 
 [project.scripts]
 hswm-p1-gate-diagnostic = "hswm.diagnostics.p1_gate:main"

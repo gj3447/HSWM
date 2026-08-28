@@ -6,6 +6,18 @@
   entrypoint. HSWM is one token-native LLM-function macro-neural network whose
   evolving hypergraph plays the roles of living harness, world model, and
   continuous learner; these are not separate subsystems.
+- For fractal, multiscale, hypergraph, or HSWM-of-HSWMs work, next read
+  `docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md` and its
+  checked-in/live-KG projection
+  `ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json`
+  (bundle UID
+  `sym:AbstractNode:hswm-fractal-scientific-connections-ontology-2026-08-28`).
+  Preserve the eight FCL laws and the core invariant: a cognition-bearing HSWM
+  is a composable cell, and HSWMs may recursively form larger cognition-bearing
+  HSWMs under the same typed, outcome-bound dynamics. The scientific status is
+  `SCIENTIFICALLY_CONNECTED / INTEGRATED_CLAIM_UNJUDGED`: the cited theories
+  establish typed connections and falsifiable bridges, not evidence that HSWM
+  already realizes consciousness, selfhood, or scale-invariant causal closure.
 - For philosophy, research direction, or architecture work, establish the
   canonical role, separate target identity from current evidence, and state the
   conceptual delta before implementing. Do not default to code or tests.

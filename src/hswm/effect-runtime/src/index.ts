@@ -96,6 +96,13 @@ export {
   type Dnrd5ValidatedLifecycleVector
 } from "./canonical-atom-v2-dnrd5-lifecycle-vector.js"
 export {
+  DNRD5_LIFECYCLE_ATOM_ALIGNMENT_VERSION,
+  Dnrd5LifecycleAtomAlignmentError,
+  validateDnrd5LifecycleAtomAlignment,
+  type Dnrd5LifecycleAtomAlignmentErrorCode,
+  type Dnrd5LifecycleAtomAlignmentValidation
+} from "./canonical-atom-v2-dnrd5-lifecycle-alignment.js"
+export {
   HSWM_CANONICAL_ATOM_V2_CONTRACT_VERSION,
   HSWM_CANONICAL_RECEIPT_V2_CONTRACT_VERSION,
   HSWM_CANONICAL_SCHEMA_V2_CONTRACT_VERSION,

@@ -2,8 +2,8 @@
 
 - Date: 2026-08-28
 - Review scope: post-R2 task, evaluator, randomization, lifecycle, provider,
-  schema, local durable-Permit, and structural occurrence-preflight candidate
-  slices
+  schema, lifecycle-to-atom alignment, local durable-Permit, and structural
+  occurrence-preflight candidate slices
 - Decision: `NOT_READY_FOR_SOURCE_FREEZE / NOT_READY_FOR_PREREGISTRATION / NO_MODEL_CALLS`
 - Scientific status: `DESIGN-INSTRUMENT PROGRESS / UNMEASURED / NO EFFECT RESULT`
 - Governing design:
@@ -105,11 +105,15 @@ The checked-in candidate slice now contains:
    only, including exactly one trajectory call, four opaque proposal calls,
    four opaque fresh-probe calls, and terminal block closure.  Its synthetic
    descriptors prove neither custody nor a provider/evaluator/state execution
-   connection; the vector is contract evidence, not an occurrence.
+   connection; the vector is contract evidence, not an occurrence.  The exact
+   lifecycle cardinality is 15 events and 59 artifact descriptors, not 53.
 7. A DNRD-5 canonical-atom V2 schema with 37 schema-approved kinds, exactly one
    responsibility owner per kind, typed references, exact four arms,
    actual-principal inequality, strict provenance, and a dedicated persistent
-   `capability_consumption` atom.
+   `capability_consumption` atom.  An alignment audit found that delayed outcome
+   disclosure has no owned canonical kind in this v1 schema.  The v1 identity
+   is preserved; this omission must be repaired under a successor schema rather
+   than by silently changing v1 semantics.
 8. A pure fail-closed local non-human `Permit_sigma` resolver, frozen revision
    envelope, ACTIVE/SHAM admitted-shape matcher, W0/four-fork identity validator,
    rollback projection validator, and exact nine-call manifest validator.  Each
@@ -171,6 +175,18 @@ The checked-in candidate slice now contains:
     build output, semantic import graph, or actual-byte evidence schema and is
     not source-freeze qualification, occurrence evidence, efficacy evidence, or
     a scientific result.
+13. A content-addressed lifecycle-to-atom alignment contract with independent
+    Python and TypeScript validation.  It rederives the exact 15/59/27/9
+    lifecycle cardinalities, binds the exact canonical schema bytes, and keeps
+    all lifecycle rows non-authoritative.  It exposes 46 direct but unbound
+    projections, four assignment slots that must map to one assignment atom and
+    four distinct forks, four arm-transition rows that are derived multi-atom
+    projections, and four probe-response seals requiring a semantic adapter to
+    probe trajectories, plus one delayed audit-release row for which schema v1
+    has no canonical kind.  It also enumerates ten support kinds absent from
+    lifecycle rows and classifies the current block seal as insufficient for
+    production closure.  This closes a category-error risk, not the actual
+    atom/content/provider evidence seam.
 
 The focused Python and TypeScript checks pass.  Those checks establish that
 the declared contracts reject their tested mutations.  They are not efficacy
@@ -181,7 +197,19 @@ observations and do not authorize a source freeze.
 The following must exist and undergo another independent adversarial review
 before Source A can be frozen:
 
-1. One production-shaped evidence vector and independently implemented judge
+1. A successor DNRD-5 schema identity must repair two semantic gaps without
+   changing the preserved v1 bytes.  First, it must add an owned delayed
+   `audit_release` and an evidence manifest that lets `block_seal` close the
+   complete atom/event/call/provider/Permit byte set.  Second, it must separate
+   a pre-commit admission/rollback decision from a post-commit transition
+   receipt that binds the recovered durable journal receipt.  The generic
+   canonical transaction kernel already permits and cycle-checks same-command
+   references; the v1 `validateDnrd5ChronologicalAtoms` instrument instead
+   checks a flat sequence of already-materialized atoms and intentionally
+   cannot represent an atomic write batch.  The repair is therefore a new
+   transaction/batch chronology validator under the successor experiment
+   identity, not a weakened v1 validator or a split of the atomic main CAS.
+2. One production-shaped evidence vector and independently implemented judge
    must join task commitments, independent hidden/placebo entropy and custody,
    pre-outcome openings, actual evaluator records, all model-visible request
    bytes, provider calls, W0/forks, Permit, journal CAS, projections, and every
@@ -195,8 +223,12 @@ before Source A can be frozen:
    separate slices.  The verifier closure must bind its source/tree, selected
    build output, semantic allowed-import graph, cross-language canonical corpus,
    and actual-byte evidence schema; the existing synthetic structural vectors
-   do not meet that requirement.
-2. A production occurrence preflight must be the sole executor entrypoint and
+   do not meet that requirement.  The alignment audit is a mandatory input: all
+   59 lifecycle rows must bind actual canonical atoms or declared derived slots
+   without inventing row owners, and the judge must resolve the 4-to-1
+   assignment mapping, arm-dependent transition sources, probe-trajectory
+   adapter, ten support kinds, and underclosed block seal.
+3. A production occurrence preflight must be the sole executor entrypoint and
    bind the frozen source/preregistration/runtime identities, 300-block
    universe, future-randomness receipt, custody commitments, nine-call plan,
    and provider evidence root before any model dispatch.  Source qualification
@@ -212,21 +244,21 @@ before Source A can be frozen:
    Source-B, beacon, runtime, and no-prior-dispatch values are unopened caller
    descriptors, and it intentionally cannot make a Source-A qualification or
    chronology finding.
-3. Policy, authorization, revocation, and evaluated time are content-addressed
+4. Policy, authorization, revocation, and evaluated time are content-addressed
    and internally closed, but no independently authenticated authority,
    revocation service, or trusted time receipt establishes their production
    currentness immediately before CAS.
-4. Durable W0/fork identity, independent state recompilation, ACTIVE/SHAM
+5. Durable W0/fork identity, independent state recompilation, ACTIVE/SHAM
    admitted-shape matching, exact rollback, and behavior-projection
    non-traversability.
-5. Production process/root isolation for the outcome, placebo, and probe
+6. Production process/root isolation for the outcome, placebo, and probe
    custodians/evaluators plus
    denied network, undeclared file, session, prefix-cache, and cross-call paths.
-6. Provider-side exactly-once/idempotency or an external dispatch witness,
+7. Provider-side exactly-once/idempotency or an external dispatch witness,
    exact TLS/provider identity evidence, and explicit treatment of provider
    cache and ambiguous remote outcomes.  The gateway proves client-observed
    application bytes only, and separate roots remain outside its lock domain.
-7. An independently implemented occurrence judge that verifies all integrity
+8. An independently implemented occurrence judge that verifies all integrity
    facts before handing the exact 300-block universe to the arithmetic module.
 8. The model/provider reproducibility qualification.  Until the frozen
    block-level label-exchangeability and deterministic-potential-outcome
@@ -282,9 +314,11 @@ before Source A can be frozen:
 No manual user hash echo is required for the remaining preparation.  No DNRD-5
 source freeze, preregistration, future-randomness selection, semantic occurrence
 marker, model call, efficacy analysis, content-addressed result receipt, or
-`F1_R8_RESULTS_LOG.md` entry is warranted at this stage.  Work proceeds to the
-production occurrence preflight and production-shaped end-to-end
-custody/occurrence judge.  Even a successful Source-A instrument audit may emit
+`F1_R8_RESULTS_LOG.md` entry is warranted at this stage.  Work proceeds from
+the lifecycle/atom alignment contract to the successor DNRD-5 schema and
+transaction/batch chronology contract, then to production-shaped actual-byte
+closure, the independent custody/occurrence judge, and the sole production
+preflight.  Even a successful Source-A instrument audit may emit
 only `SOURCE_A_INSTRUMENT_QUALIFIED_FUTURE_OCCURRENCE_EVIDENCE_REQUIRED`, not an
 exactness, custody, or efficacy terminal.  The next decision point is another
 source-freeze audit, not an execution attempt.  The conditional

@@ -1,4 +1,4 @@
-"""Production-shaped DNRD-3 rehearsal boundary tests.
+"""Production-shaped DNRD-4 rehearsal boundary tests.
 
 These tests deliberately use the execute test's injected bridge/scorer and
 closure exporter.  They prove byte-boundary plumbing, not an authoritative
@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import importlib.util
 import json
-import os
 from hashlib import sha256
 from dataclasses import replace
 from pathlib import Path
@@ -19,7 +18,8 @@ import stat
 import pytest
 
 from _research.dnrd.execute import _copy_runtime_closure, execute_with_dependencies
-from _research.dnrd.judge import judge_bundle
+from _research.dnrd.judge import _runtime_closure_files, judge_bundle
+from _research.dnrd.live import HttpResponse, OpenAICompatibleDnrdAnswerer, OpenAICompatibleDnrdConfig
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -42,7 +42,7 @@ def _regular_runtime_files(root: Path) -> dict[str, Path]:
     return files
 
 
-def _runtime_manifest_rows(runtime_root: Path, relative_root: str) -> list[dict[str, str]]:
+def _runtime_manifest_rows(runtime_root: Path, relative_root: str) -> list[dict[str, str | int]]:
     source_root = runtime_root / relative_root
     if not source_root.is_dir():
         pytest.skip(f"current runtime closure input is unavailable: {relative_root}")
@@ -52,18 +52,26 @@ def _runtime_manifest_rows(runtime_root: Path, relative_root: str) -> list[dict[
             {
                 "path": f"{relative_root}/{relative}",
                 "sha256": sha256(path.read_bytes()).hexdigest(),
+                "bytes": path.stat().st_size,
             }
         )
     return sorted(rows, key=lambda row: row["path"])
 
 
-def test_current_runtime_closure_copies_all_4050_manifest_selected_files(
+def test_current_runtime_closure_copies_all_4050_manifest_selected_files_and_judge_reads_it(
     tmp_path: Path,
 ) -> None:
     """Exercise the checkout's production-selected runtime tree and sealing.
 
-    This is a closure construction rehearsal, separate from the raw 16-mount
-    closure and from a scientific candidate or authority judgment.
+    This is the strongest checkout-faithful runtime edge that can be exercised
+    without fabricating a Source-A/B-CI provenance chain: execute's copier
+    seals the complete 4,050-file manifest and the judge-side closure reader
+    consumes those sealed bytes.  The terminal tests below intentionally use
+    a small source/runtime fixture, because a full candidate judgment also
+    requires the checkout's source closure, lockfile, Node pin, and CI
+    chronology to be the same frozen occurrence.  Splicing this checkout
+    runtime into that fixture would test invented provenance rather than a
+    production-shaped occurrence.
     """
     runtime_root = REPO_ROOT / "src" / "hswm" / "effect-runtime"
     packages = (
@@ -90,12 +98,31 @@ def test_current_runtime_closure_copies_all_4050_manifest_selected_files(
     )
     assert all(stat.S_IMODE(path.stat().st_mode) == 0o400 for path in copied.values())
     assert all(stat.S_IMODE(path.stat().st_mode) == 0o500 for path in [copied_root, *copied_root.rglob("*")] if path.is_dir())
+    known_zero = "node_modules/@standard-schema/spec/dist/index.js"
+    assert known_zero in expected
+    assert expected[known_zero] == sha256(b"").hexdigest()
+    assert copied[known_zero].stat().st_size == 0
+    # This is the judge-side closure walk used after execute's copy and
+    # bundle-indexing.  It must retain the manifest-addressed zero-byte npm
+    # member instead of voiding the occurrence before exact row rehashing.
+    judge_files = _runtime_closure_files(tmp_path)
+    assert len(judge_files) == 4_050
+    assert judge_files[known_zero] == b""
+    # The production copy is intentionally sealed. Re-open this test-owned
+    # temporary tree so pytest can remove it without emitting cleanup noise.
+    for path in sorted(copied_root.rglob("*"), key=lambda item: len(item.parts), reverse=True):
+        path.chmod(0o700 if path.is_dir() else 0o600)
+    copied_root.chmod(0o700)
 
 
 def test_rehearsal_execute_to_judge_preserves_production_shape_but_not_authority(
     tmp_path: Path,
 ) -> None:
     config, dependencies, _ = _FIXTURES._fixture(tmp_path)
+    answerer = _FIXTURES.EvidenceAnswerer(
+        pretty_response=True, model=_FIXTURES.MODEL_ID, endpoint=config.model_endpoint,
+    )
+    dependencies = replace(dependencies, answerer=answerer, model_event_ledger=lambda: tuple(answerer.events))
     result = execute_with_dependencies(config, dependencies)
     assert result.runner_result.candidate is not None
 
@@ -112,14 +139,60 @@ def test_rehearsal_execute_to_judge_preserves_production_shape_but_not_authority
     ]
     assert len(closure["mounts"]) == 16
     assert candidate["call_ledger"]["client_dispatched_generation_requests"] == 128
+    assert all(
+        '\n  "response_token" :' in json.loads(row["raw_response_utf8"])["choices"][0]["message"]["content"]
+        for row in model_rows if row["event"] == "CHAT_COMPLETION_ACCEPTED"
+    )
 
     judgment = judge_bundle(output)
     assert judgment["terminal"] == "VOID_PROTOCOL"
     assert judgment["authority"] == "INCOMPLETE_OR_INVALID_EVIDENCE_BUNDLE_NOT_VERIFIED"
     assert any(
         reason in judgment["failure_reason"].casefold()
-        for reason in ("production hash-bound adapter boundary", "exact frozen dnrd source closure")
+        for reason in (
+            "production hash-bound adapter boundary",
+            "exact frozen dnrd source closure",
+            "runtime identities differ from source-a protocol constants",
+        )
     )
+
+
+def test_execute_terminal_model_boundary_rejection_stays_indexed_inconclusive(
+    tmp_path: Path,
+) -> None:
+    """A real retained response rejection is the only partial INCONCLUSIVE path."""
+    config, dependencies, _ = _FIXTURES._fixture(tmp_path)
+    events: list[dict] = []
+
+    class BoundaryTransport:
+        calls = 0
+
+        def request(self, **kwargs: object) -> HttpResponse:
+            self.calls += 1
+            if self.calls == 1:
+                prompt = json.loads(kwargs["body"])["messages"][0]["content"]  # type: ignore[index]
+                token = prompt.rsplit("nonce=", 1)[1]
+                return HttpResponse(200, json.dumps({
+                    "model": _FIXTURES.MODEL_ID,
+                    "choices": [{"finish_reason": "stop", "message": {"content": '{\n  "response_token" : "' + token + '"\n}'}}],
+                    "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
+                }).encode())
+            return HttpResponse(200, json.dumps({
+                "model": _FIXTURES.MODEL_ID,
+                "choices": [{"finish_reason": "length", "message": {"content": "x"}}],
+                "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
+            }).encode())
+
+    answerer = OpenAICompatibleDnrdAnswerer(
+        OpenAICompatibleDnrdConfig(config.model_endpoint), BoundaryTransport(), event_sink=events.append,
+    )
+    altered = replace(dependencies, answerer=answerer, model_event_ledger=lambda: tuple(events))
+    result = execute_with_dependencies(config, altered)
+    assert result.runner_result.inconclusive_occurrence is not None
+    assert (config.output_root / "inconclusive.json").is_file()
+    judgment = judge_bundle(config.output_root)
+    assert judgment["terminal"] == "INCONCLUSIVE_OCCURRENCE"
+    assert judgment["authority"] == "INDEXED_INCONCLUSIVE_MODEL_BOUNDARY_AND_RUNNER_IDENTITY_LEDGER_VERIFIED"
 
 
 def test_execute_void_terminal_crosses_the_same_bundle_boundary(
@@ -142,46 +215,28 @@ def test_execute_void_terminal_crosses_the_same_bundle_boundary(
     assert result["authority"] == "PRE_DISPATCH_VOID_PROTOCOL_TERMINAL_RETAINED"
 
 
-def test_execute_inconclusive_terminal_preserves_the_partial_ledger_boundary(
-    tmp_path: Path,
+def test_execute_internal_post_dispatch_fault_seals_a_ledger_bound_void_terminal(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """A post-dispatch durability fault produces an indexed partial terminal."""
+    """A post-acceptance finalization fault is a ledger-bound VOID, not INCONCLUSIVE."""
     config, dependencies, _ = _FIXTURES._fixture(tmp_path)
-    ledger = _FIXTURES._DurableJsonlEventLedger(config.output_root / "model_events.jsonl")
+    original = _FIXTURES.dnrd_execute.run_diagnostic
 
-    class DurableAnswerer(_FIXTURES.EvidenceAnswerer):
-        def answer(self, request: object):  # type: ignore[override]
-            before = len(self.events)
-            reply = super().answer(request)  # type: ignore[arg-type]
-            for event in self.events[before:]:
-                ledger(event)
-            return reply
+    def bad_final_binding(*args: object, **kwargs: object):
+        result = original(*args, **kwargs)
+        candidate = json.loads(json.dumps(result.candidate))
+        assert candidate is not None
+        candidate["bindings"]["event_ledger_sha256"] = "0" * 64
+        return replace(result, candidate=candidate)
 
-    answerer = DurableAnswerer(model=_FIXTURES.MODEL_ID, endpoint=config.model_endpoint)
-    reads = 0
+    monkeypatch.setattr(_FIXTURES.dnrd_execute, "run_diagnostic", bad_final_binding)
+    with pytest.raises(RuntimeError, match="candidate ledger binding"):
+        execute_with_dependencies(config, dependencies)
 
-    def tampered_snapshot() -> tuple[dict, ...]:
-        nonlocal reads
-        reads += 1
-        if reads == 2:
-            ledger.path.chmod(0o600)
-            with ledger.path.open("ab") as handle:
-                handle.write(b"tamper\n")
-                handle.flush()
-                os.fsync(handle.fileno())
-        return ledger.snapshot()
-
-    altered = replace(
-        dependencies, answerer=answerer, model_event_ledger=tampered_snapshot,
-        model_event_ledger_path=ledger.path,
-    )
-    with pytest.raises(RuntimeError, match="differs from in-memory"):
-        execute_with_dependencies(config, altered)
-
-    assert (config.output_root / "inconclusive.json").is_file()
+    assert (config.output_root / "void_protocol.json").is_file()
     assert not (config.output_root / "candidate.json").exists()
     result = judge_bundle(config.output_root)
     # The injected rehearsal still reaches the same production authority gate;
     # it is deliberately not promoted to an indexed scientific occurrence.
     assert result["terminal"] == "VOID_PROTOCOL"
-    assert result["authority"] == "INCOMPLETE_OR_INVALID_EVIDENCE_BUNDLE_NOT_VERIFIED"
+    assert result["authority"] == "POST_DISPATCH_VOID_PROTOCOL_TERMINAL_LEDGER_BOUND"

@@ -1,7 +1,7 @@
 """Single-purpose DNRD measurement runner.
 
 This module is deliberately not a generic harness.  It runs only the frozen
-32-training/96-evaluation/128-total DNRD-3 call shape through injected model, local-V2 bridge,
+32-training/96-evaluation/128-total DNRD-4 call shape through injected model, local-V2 bridge,
 and separate scorer-process interfaces.  It never imports or invokes a judge.
 """
 
@@ -32,14 +32,14 @@ MOUNT_ROLES = {
     "NO_MEMORY_ROLLBACK": "W0_ROLLBACK",
     "FULL": "FULL_TRAINABLE",
     # Wire-level bridge role is retained for compatibility.  The runner never
-    # places this mount in ARMS; its sole DNRD-3 meaning is an admission replay
+    # places this mount in ARMS; its sole DNRD-4 meaning is an admission replay
     # gate.
     "RAW_EQUAL_BUDGET": "RAW_CONTROL",
     "BINDING_DERANGED_NUMERIC_PLACEBO": "DERANGED_CONTROL",
 }
-CANDIDATE_SCHEMA = "hswm-dnrd-candidate/v2"
+CANDIDATE_SCHEMA = "hswm-dnrd-candidate/v3"
 INCONCLUSIVE_SCHEMA = "hswm-dnrd-inconclusive-occurrence/v2"
-EXPERIMENT_ID = "HSWM-DNRD-3"
+EXPERIMENT_ID = "HSWM-DNRD-4"
 RAW_DELTA_RULE = "signed_reward_times_100000_div_1000000/v1"
 MAX_OUTPUT_TOKENS = 64
 SCORER_ROLE_SEPARATION = "DECLARED_ROLE_SEPARATION_NOT_PROVEN"
@@ -65,6 +65,52 @@ MAX_SUBPROCESS_STDOUT_BYTES = 1_048_576
 MAX_SUBPROCESS_STDERR_BYTES = 65_536
 PROCESS_INSTANCE_UUID_RE = re.compile(
     r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+)
+
+# ``source_ci_completed_at_unix`` is input-only provenance used to reject an
+# impossible A→B chronology before the first model call.  It deliberately is
+# not projected into the public candidate: the frozen candidate/v3 chronology
+# remains the exact judge-facing DNRD-4 schema, while the retained source-CI
+# receipt is revalidated from raw provider bytes at the execute/judge boundary.
+METADATA_BINDING_KEYS = frozenset(
+    {
+        "source_manifest_sha256",
+        "preregistration_sha256",
+        "preregistration_ci_receipt_sha256",
+        "pulse_receipt_sha256",
+        "split_manifest_sha256",
+        "model_deployment_sha256",
+        "scorer_sha256",
+        "runtime_receipt_sha256",
+        "git_chronology_evidence_sha256",
+    }
+)
+METADATA_CHRONOLOGY_KEYS = frozenset(
+    {
+        "source_commit",
+        "preregistration_commit",
+        "source_tree_oid",
+        "preregistration_tree_oid",
+        "source_frozen_at_unix",
+        "source_ci_completed_at_unix",
+        "preregistration_committed_at_unix",
+        "preregistration_ci_completed_at_unix",
+        "pulse_round",
+        "pulse_chain_hash",
+        "pulse_at_unix",
+    }
+)
+CANDIDATE_CHRONOLOGY_KEYS = (
+    "source_commit",
+    "preregistration_commit",
+    "source_tree_oid",
+    "preregistration_tree_oid",
+    "source_frozen_at_unix",
+    "preregistration_committed_at_unix",
+    "preregistration_ci_completed_at_unix",
+    "pulse_round",
+    "pulse_chain_hash",
+    "pulse_at_unix",
 )
 
 
@@ -634,7 +680,7 @@ def _request(
 
 
 def _sealed_response(episode: Mapping[str, Any], route: str, reply: ModelReply, private_commitment: str) -> dict[str, Any]:
-    # The answer is retained solely as live-boundary provenance. DNRD-3 fixes
+    # The answer is retained solely as live-boundary provenance. DNRD-4 fixes
     # outcome from the selected route/binding, not this post-route observation.
     payload = {"schema_version": "hswm-dnrd-sealed-response/v2", "episode_id": episode["episode_id"], "selected_route_id": route, "answer": reply.response_token, "private_manifest_commitment": private_commitment}
     return {**payload, "response_commitment": _sha(payload)}
@@ -1058,7 +1104,7 @@ def _response_object(reply: ModelReply) -> dict[str, Any]:
 
 def _validate_reply(reply: ModelReply) -> None:
     if not is_response_token(reply.response_token):
-        raise RuntimeError("answerer response token violates exact DNRD-3 form")
+        raise RuntimeError("answerer response token violates exact DNRD-4 form")
     for label, value in (("input_tokens", reply.input_tokens), ("output_tokens", reply.output_tokens)):
         if type(value) is not int or value < 0:
             raise RuntimeError(f"answerer {label} must be a nonnegative integer")
@@ -1329,6 +1375,41 @@ def _validate_metadata(metadata: MeasurementMetadata) -> None:
         raise RunnerRefusal("active state byte ceiling must be a positive frozen integer")
     if metadata.bindings.get("scorer_sha256") != metadata.scorer_source_identity:
         raise RunnerRefusal("scorer binding does not match the expected scorer source identity")
+    if set(metadata.bindings) != METADATA_BINDING_KEYS:
+        raise RunnerRefusal("DNRD-4 metadata binding key set drifted")
+    for key in METADATA_BINDING_KEYS:
+        _require_sha256(metadata.bindings[key], f"metadata.bindings.{key}")
+    chronology = metadata.chronology
+    if set(chronology) != METADATA_CHRONOLOGY_KEYS:
+        raise RunnerRefusal("DNRD-4 chronology key set drifted")
+    for key in ("source_commit", "preregistration_commit", "source_tree_oid", "preregistration_tree_oid"):
+        value = chronology[key]
+        if not isinstance(value, str) or len(value) != 40 or any(char not in "0123456789abcdef" for char in value):
+            raise RunnerRefusal(f"DNRD-4 chronology {key} must be a lowercase Git OID")
+    for key in (
+        "source_frozen_at_unix",
+        "source_ci_completed_at_unix",
+        "preregistration_committed_at_unix",
+        "preregistration_ci_completed_at_unix",
+        "pulse_round",
+        "pulse_at_unix",
+    ):
+        if type(chronology[key]) is not int or chronology[key] <= 0:
+            raise RunnerRefusal(f"DNRD-4 chronology {key} must be positive integer")
+    source_frozen_at = chronology["source_frozen_at_unix"]
+    source_ci_completed_at = chronology["source_ci_completed_at_unix"]
+    preregistration_committed_at = chronology["preregistration_committed_at_unix"]
+    preregistration_ci_completed_at = chronology["preregistration_ci_completed_at_unix"]
+    pulse_at = chronology["pulse_at_unix"]
+    if source_ci_completed_at < source_frozen_at:
+        raise RunnerRefusal("DNRD-4 source-A CI completion precedes source freeze")
+    if preregistration_committed_at < source_ci_completed_at:
+        raise RunnerRefusal("DNRD-4 preregistration B commit precedes source-A CI completion")
+    if preregistration_ci_completed_at < preregistration_committed_at:
+        raise RunnerRefusal("DNRD-4 preregistration B-CI completion precedes B commit")
+    if pulse_at < max(source_frozen_at, preregistration_ci_completed_at) + 900:
+        raise RunnerRefusal("DNRD-4 future pulse is earlier than the frozen source/B-CI lead gate")
+    _require_sha256(chronology["pulse_chain_hash"], "DNRD-4 chronology pulse_chain_hash")
     _validate_deployment_receipt(metadata.deployment_receipt, metadata.bindings)
 
 
@@ -1409,20 +1490,45 @@ def _validate_model_event_ledger(
             usage = event["usage"]
             if any(not isinstance(key, str) or type(value) is not int or value < 0 for key, value in usage.items()):
                 raise RuntimeError("accepted model event usage is malformed")
+            def strict_response_token(content: object) -> str:
+                """Parse the remote structured field semantically, never by pretty-print bytes.
+
+                The live boundary retains and hashes the original provider body.  JSON
+                whitespace and member layout are not part of the response-token
+                protocol, so the durable-ledger replay must use the same
+                duplicate-free/finite semantic acceptance rule.
+                """
+                if not isinstance(content, str):
+                    raise ValueError("completion content is not text")
+
+                def no_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+                    result: dict[str, Any] = {}
+                    for key, value in pairs:
+                        if key in result:
+                            raise ValueError("completion content repeats a JSON key")
+                        result[key] = value
+                    return result
+
+                value = json.loads(
+                    content,
+                    object_pairs_hook=no_duplicate_keys,
+                    parse_constant=lambda _value: (_ for _ in ()).throw(
+                        ValueError("completion content has non-finite JSON")
+                    ),
+                )
+                if type(value) is not dict or set(value) != {"response_token"}:
+                    raise ValueError("completion content has invalid structured key set")
+                token = value["response_token"]
+                if not isinstance(token, str) or not is_response_token(token):
+                    raise ValueError("completion content has invalid response token")
+                return token
+
             try:
                 raw_completion = json.loads(event["raw_response_utf8"])
                 choice = raw_completion["choices"][0]
                 raw_usage = raw_completion["usage"]
                 content = choice["message"]["content"]
-                structured = json.loads(content)
-                if (
-                    type(structured) is not dict
-                    or set(structured) != {"response_token"}
-                    or not isinstance(structured["response_token"], str)
-                    or canonical_json(structured).decode("utf-8") != content
-                ):
-                    raise ValueError("completion content is not exact structured response")
-                response_token = structured["response_token"]
+                response_token = strict_response_token(content)
                 response_object = {
                     "response_token": response_token,
                     "input_tokens": raw_usage["prompt_tokens"],
@@ -1435,7 +1541,7 @@ def _validate_model_event_ledger(
                         and type(value) is int
                     },
                 }
-            except (AttributeError, KeyError, IndexError, TypeError, json.JSONDecodeError) as error:
+            except (AttributeError, KeyError, IndexError, TypeError, ValueError, json.JSONDecodeError) as error:
                 raise RuntimeError("accepted model event raw completion is not independently parseable") from error
             if (
                 raw_completion.get("model") != deployment["model"]
@@ -2233,7 +2339,10 @@ def run_diagnostic(
         bindings["model_event_ledger_sha256"] = model_ledger_sha256
         bindings["bridge_state_evidence_sha256"] = bridge_state_evidence_sha256
         bindings["bridge_mount_closure_sha256"] = bridge_mount_closure_sha256
-        candidate = {"schema_version": CANDIDATE_SCHEMA, "experiment_id": EXPERIMENT_ID, "bindings": bindings, "chronology": dict(metadata.chronology), "overlap": overlap, "parity": parity, "call_ledger": {"common_training_model_calls": 32, "evaluation_model_calls": 96, "client_dispatched_generation_requests": 128, "logical_model_calls": 128, "route_only_model_calls": 0, "scorer_model_calls": 0, "retries": 0, "client_cache_hits": 0, "post_first_call_operational_failure": False}, "streams": stream_runs}
+        candidate_chronology = {
+            key: metadata.chronology[key] for key in CANDIDATE_CHRONOLOGY_KEYS
+        }
+        candidate = {"schema_version": CANDIDATE_SCHEMA, "experiment_id": EXPERIMENT_ID, "bindings": bindings, "chronology": candidate_chronology, "overlap": overlap, "parity": parity, "call_ledger": {"common_training_model_calls": 32, "evaluation_model_calls": 96, "client_dispatched_generation_requests": 128, "logical_model_calls": 128, "route_only_model_calls": 0, "scorer_model_calls": 0, "retries": 0, "client_cache_hits": 0, "post_first_call_operational_failure": False}, "streams": stream_runs}
         return RunnerResult(
             candidate,
             None,

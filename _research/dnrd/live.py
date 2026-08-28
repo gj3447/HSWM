@@ -54,7 +54,7 @@ _RESPONSE_FAILURE_STAGE_CODES = {
     "chat completion choice must contain textual message.content": "MESSAGE_CONTENT_NOT_TEXT",
     "chat completion structured response is not strict JSON": "STRUCTURED_RESPONSE_NOT_STRICT_JSON",
     "chat completion structured response must be an object with exactly response_token": "STRUCTURED_RESPONSE_KEYSET_INVALID",
-    "chat completion structured response_token violates exact DNRD-3 form": "RESPONSE_TOKEN_FORM_INVALID",
+    "chat completion structured response_token violates exact DNRD-4 form": "RESPONSE_TOKEN_FORM_INVALID",
     "chat completion structured response_token is not one of the request candidates": "RESPONSE_TOKEN_NOT_REQUEST_CANDIDATE",
     "chat completion must contain object usage": "USAGE_NOT_OBJECT",
     "usage.prompt_tokens must be a nonnegative integer": "USAGE_PROMPT_TOKENS_INVALID",
@@ -278,7 +278,7 @@ def _integer(value: Any, label: str) -> int:
 
 
 def _candidate_response_tokens(request: ModelRequest) -> tuple[str, str]:
-    """Read DNRD-3's per-episode, two-token output contract.
+    """Read DNRD-4's per-episode, two-token output contract.
 
     The runner owns construction and commitment of this field.  The transport
     independently validates it before any dispatch, so a malformed request
@@ -286,7 +286,7 @@ def _candidate_response_tokens(request: ModelRequest) -> tuple[str, str]:
     """
     candidates = getattr(request, "candidate_response_tokens", None)
     if type(candidates) is not tuple or len(candidates) != 2:
-        raise PreDispatchAnswererError("DNRD-3 request must carry exactly two candidate response tokens")
+        raise PreDispatchAnswererError("DNRD-4 request must carry exactly two candidate response tokens")
     first, second = candidates
     if (
         not is_response_token(first)
@@ -294,7 +294,7 @@ def _candidate_response_tokens(request: ModelRequest) -> tuple[str, str]:
         or first >= second
     ):
         raise PreDispatchAnswererError(
-            "DNRD-3 request candidate response tokens must be distinct canonical response tokens in sorted order"
+            "DNRD-4 request candidate response tokens must be distinct canonical response tokens in sorted order"
         )
     return first, second
 
@@ -355,7 +355,7 @@ def _strict_structured_response(content: str, candidates: tuple[str, str]) -> st
         raise LiveBoundaryError("chat completion structured response must be an object with exactly response_token")
     response_token = value["response_token"]
     if not is_response_token(response_token):
-        raise LiveBoundaryError("chat completion structured response_token violates exact DNRD-3 form")
+        raise LiveBoundaryError("chat completion structured response_token violates exact DNRD-4 form")
     if response_token not in candidates:
         raise LiveBoundaryError("chat completion structured response_token is not one of the request candidates")
     return response_token

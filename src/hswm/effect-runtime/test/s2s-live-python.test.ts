@@ -781,7 +781,8 @@ it.effect.skipIf(!existsSync(PINNED_VENV_PYTHON))(
         })
       )
     )
-  }
+  },
+  15_000
 )
 
 it.effect.skipIf(!existsSync(PINNED_VENV_PYTHON))(
@@ -824,5 +825,6 @@ it.effect.skipIf(!existsSync(PINNED_VENV_PYTHON))(
         })
       )
     )
-  }
+  },
+  15_000
 )

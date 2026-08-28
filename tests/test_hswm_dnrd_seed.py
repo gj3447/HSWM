@@ -21,7 +21,7 @@ _SPEC.loader.exec_module(seed)
 
 
 SOURCE_FREEZE = 1_700_000_000
-RATIFICATION = 1_700_000_001
+PREREGISTRATION_CI_COMPLETED = 1_700_000_001
 HELPER_PIN = "3" * 64
 LOCK_PIN = "4" * 64
 BUNDLE_PIN = "5" * 64
@@ -41,15 +41,17 @@ def _source_binding() -> object:
         source_tree_oid="b" * 40,
         source_manifest_sha256="c" * 64,
         preregistration_commit="d" * 40,
+        preregistration_tree_oid="e" * 40,
         preregistration_blob_sha256="e" * 64,
-        ratification_statement_sha256="f" * 64,
+        preregistration_ci_completed_unix=PREREGISTRATION_CI_COMPLETED,
+        preregistration_ci_receipt_sha256="f" * 64,
     )
 
 
 def _verifier_receipt_value(*, round_number: int | None = None) -> dict[str, object]:
     selected_round = round_number or seed.first_eligible_quicknet_round(
         source_freeze_unix=SOURCE_FREEZE,
-        user_ratification_unix=RATIFICATION,
+        preregistration_ci_completed_unix=PREREGISTRATION_CI_COMPLETED,
     )
     signature = "ab" * 48
     randomness = sha256(bytes.fromhex(signature)).hexdigest()
@@ -137,7 +139,7 @@ def _projection(*, round_number: int | None = None) -> object:
 def _receipt() -> object:
     return seed.bind_future_pulse(
         source_freeze_unix=SOURCE_FREEZE,
-        user_ratification_unix=RATIFICATION,
+        preregistration_ci_completed_unix=PREREGISTRATION_CI_COMPLETED,
         projection=_projection(),
         source_binding=_source_binding(),
     )
@@ -146,9 +148,9 @@ def _receipt() -> object:
 def test_first_eligible_round_is_minimal_and_has_exact_lead() -> None:
     round_number = seed.first_eligible_quicknet_round(
         source_freeze_unix=SOURCE_FREEZE,
-        user_ratification_unix=RATIFICATION,
+        preregistration_ci_completed_unix=PREREGISTRATION_CI_COMPLETED,
     )
-    threshold = max(SOURCE_FREEZE, RATIFICATION) + 900
+    threshold = max(SOURCE_FREEZE, PREREGISTRATION_CI_COMPLETED) + 900
     assert seed.quicknet_round_time_unix(round_number) >= threshold
     if round_number > 1:
         assert seed.quicknet_round_time_unix(round_number - 1) < threshold
@@ -166,19 +168,33 @@ def test_binding_is_deterministic_content_addressed_and_32_bytes() -> None:
     canonical = first.canonical()
     assert canonical["receipt_sha256"] == first.receipt_sha256
     material = seed.seed_material(projection=_projection(), source_binding=_source_binding())
-    assert material["domain"] == "HSWM-DNRD-FUTURE-SEED-V3"
-    assert material["experiment_id"] == "HSWM-DNRD-3"
-    assert material["schema_version"] == "hswm-dnrd-future-seed-material/v3"
-    assert first.schema_version == "hswm-dnrd-pulse-binding/v3"
-    assert {
-        "quicknet_randomness_hex",
-        "source_commit",
-        "source_tree_oid",
-        "source_manifest_sha256",
-        "preregistration_commit",
+    assert material["domain"] == "HSWM-DNRD-FUTURE-SEED-V5"
+    assert material["experiment_id"] == "HSWM-DNRD-4"
+    assert material["schema_version"] == "hswm-dnrd-future-seed-material/v5"
+    assert first.schema_version == "hswm-dnrd-pulse-binding/v5"
+    assert set(material) == {"domain", "experiment_id", "schema_version", "source_commit", "preregistration_commit", "quicknet_chain_hash", "quicknet_round", "quicknet_randomness_hex"}
+    assert set(canonical) == {
+        "minimum_eligible_time_unix",
+        "preregistration_ci_completed_unix",
+        "projection",
+        "receipt_sha256",
+        "schema_version",
+        "seed_hex",
+        "source_binding",
+        "source_freeze_unix",
+    }
+    assert set(canonical["source_binding"]) == {
+        "experiment_id",
         "preregistration_blob_sha256",
-        "ratification_statement_sha256",
-    } <= set(material)
+        "preregistration_ci_completed_unix",
+        "preregistration_ci_receipt_sha256",
+        "preregistration_commit",
+        "preregistration_tree_oid",
+        "source_commit",
+        "source_manifest_sha256",
+        "source_tree_oid",
+    }
+    assert "ratification" not in json.dumps(canonical).casefold()
 
 
 @pytest.mark.parametrize(
@@ -196,7 +212,7 @@ def test_tampered_verified_projection_is_rejected(projection) -> None:
     with pytest.raises(seed.DNRDSeedBindingError):
         seed.bind_future_pulse(
             source_freeze_unix=SOURCE_FREEZE,
-            user_ratification_unix=RATIFICATION,
+            preregistration_ci_completed_unix=PREREGISTRATION_CI_COMPLETED,
             projection=projection(),
             source_binding=_source_binding(),
         )
@@ -207,14 +223,14 @@ def test_early_or_nonfirst_round_is_rejected() -> None:
     with pytest.raises(seed.DNRDSeedBindingError, match="early or not the first eligible"):
         seed.bind_future_pulse(
             source_freeze_unix=SOURCE_FREEZE,
-            user_ratification_unix=RATIFICATION,
+            preregistration_ci_completed_unix=PREREGISTRATION_CI_COMPLETED,
             projection=_projection(round_number=expected - 1),
             source_binding=_source_binding(),
         )
     with pytest.raises(seed.DNRDSeedBindingError, match="early or not the first eligible"):
         seed.bind_future_pulse(
             source_freeze_unix=SOURCE_FREEZE,
-            user_ratification_unix=RATIFICATION,
+            preregistration_ci_completed_unix=PREREGISTRATION_CI_COMPLETED,
             projection=_projection(round_number=expected + 1),
             source_binding=_source_binding(),
         )
@@ -224,7 +240,7 @@ def test_chronology_tamper_rejects_precomputed_round() -> None:
     with pytest.raises(seed.DNRDSeedBindingError, match="early or not the first eligible"):
         seed.bind_future_pulse(
             source_freeze_unix=SOURCE_FREEZE + 3_000,
-            user_ratification_unix=RATIFICATION,
+            preregistration_ci_completed_unix=PREREGISTRATION_CI_COMPLETED,
             projection=_projection(),
             source_binding=_source_binding(),
         )
@@ -246,14 +262,53 @@ def test_source_or_preregistration_binding_tamper_is_rejected() -> None:
             projection=_projection(),
             source_binding=replace(_source_binding(), experiment_id="HSWM-DNRD-OTHER"),
         )
+    with pytest.raises(seed.DNRDSeedBindingError):
+        seed.derive_seed_hex(
+            projection=_projection(),
+            source_binding=replace(
+                _source_binding(), preregistration_ci_completed_unix=True
+            ),
+        )
     assert seed.derive_seed_hex(
         projection=_projection(), source_binding=_source_binding()
-    ) != seed.derive_seed_hex(
+    ) == seed.derive_seed_hex(
         projection=_projection(),
         source_binding=replace(
-            _source_binding(), ratification_statement_sha256="0" * 64
+            _source_binding(), preregistration_tree_oid="0" * 40
         ),
     )
+    assert seed.derive_seed_hex(
+        projection=_projection(), source_binding=_source_binding()
+    ) == seed.derive_seed_hex(
+        projection=_projection(),
+        source_binding=replace(
+            _source_binding(), preregistration_ci_receipt_sha256="0" * 64
+        ),
+    )
+    assert seed.derive_seed_hex(
+        projection=_projection(), source_binding=_source_binding()
+    ) == seed.derive_seed_hex(
+        projection=_projection(),
+        source_binding=replace(
+            _source_binding(),
+            preregistration_ci_completed_unix=PREREGISTRATION_CI_COMPLETED + 1,
+        ),
+    )
+
+
+def test_seed_v5_excludes_raw_carriers_but_changes_for_immutable_preimage() -> None:
+    baseline = seed.derive_seed_hex(projection=_projection(), source_binding=_source_binding())
+    assert baseline == seed.derive_seed_hex(
+        projection=replace(_projection(), verification_receipt_sha256="0" * 64),
+        source_binding=_source_binding(),
+    )
+    assert baseline == seed.derive_seed_hex(
+        projection=_projection(),
+        source_binding=replace(_source_binding(), preregistration_ci_receipt_sha256="0" * 64),
+    )
+    assert baseline != seed.derive_seed_hex(projection=_projection(), source_binding=replace(_source_binding(), source_commit="0" * 40))
+    assert baseline != seed.derive_seed_hex(projection=_projection(), source_binding=replace(_source_binding(), preregistration_commit="0" * 40))
+    assert baseline != seed.derive_seed_hex(projection=replace(_projection(), randomness_hex="0" * 64), source_binding=_source_binding())
 
 
 def test_content_addressed_receipt_rejects_tamper() -> None:
@@ -268,7 +323,22 @@ def test_bool_is_not_a_valid_chronology_integer() -> None:
     with pytest.raises(seed.DNRDSeedBindingError):
         seed.first_eligible_quicknet_round(
             source_freeze_unix=True,
-            user_ratification_unix=RATIFICATION,
+            preregistration_ci_completed_unix=PREREGISTRATION_CI_COMPLETED,
+        )
+
+
+def test_ci_completion_must_be_positive_and_match_the_source_binding() -> None:
+    with pytest.raises(seed.DNRDSeedBindingError, match="must be positive"):
+        seed.first_eligible_quicknet_round(
+            source_freeze_unix=SOURCE_FREEZE,
+            preregistration_ci_completed_unix=0,
+        )
+    with pytest.raises(seed.DNRDSeedBindingError, match="CI completion time differs"):
+        seed.bind_future_pulse(
+            source_freeze_unix=SOURCE_FREEZE,
+            preregistration_ci_completed_unix=PREREGISTRATION_CI_COMPLETED + 1,
+            projection=_projection(),
+            source_binding=_source_binding(),
         )
 
 

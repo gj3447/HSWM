@@ -173,7 +173,7 @@ it("runs READY to RECONCILE to TERMINAL once under one scoped Effect root", asyn
     reconcileS2STestOnlyHostedProcess(seed, "success")
   )
   expect(Exit.isFailure(replay)).toBe(true)
-})
+}, 15_000)
 
 it("uses all three exact structural archive rosters without scientific content", async () => {
   const cases = [

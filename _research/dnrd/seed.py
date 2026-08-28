@@ -37,10 +37,10 @@ MAX_QUICKNET_ROUND = (
     (MAX_SAFE_INTEGER - QUICKNET_GENESIS_TIME_UNIX) // QUICKNET_PERIOD_SECONDS
 ) + 1
 
-EXPERIMENT_ID = "HSWM-DNRD-3"
-SEED_DOMAIN = "HSWM-DNRD-FUTURE-SEED-V3"
-SEED_MATERIAL_SCHEMA = "hswm-dnrd-future-seed-material/v3"
-PULSE_BINDING_SCHEMA = "hswm-dnrd-pulse-binding/v3"
+EXPERIMENT_ID = "HSWM-DNRD-4"
+SEED_DOMAIN = "HSWM-DNRD-FUTURE-SEED-V5"
+SEED_MATERIAL_SCHEMA = "hswm-dnrd-future-seed-material/v5"
+PULSE_BINDING_SCHEMA = "hswm-dnrd-pulse-binding/v5"
 VERIFIER_RECEIPT_SCHEMA = "hswm-swm0w-drand-verification-receipt/v1"
 VERIFIER_HELPER_VERSION = "hswm-swm0w-drand-node-verifier/v1"
 VERIFIER_ACCEPTED_BY = "drand-client.fetchBeacon"
@@ -150,13 +150,17 @@ def quicknet_round_time_unix(round_number: int) -> int:
 
 
 def first_eligible_quicknet_round(
-    *, source_freeze_unix: int, user_ratification_unix: int
+    *, source_freeze_unix: int, preregistration_ci_completed_unix: int
 ) -> int:
-    """First round at least 900 seconds after both frozen chronology events."""
+    """First round at least 900 seconds after source freeze and B-CI completion."""
 
     source_time = _unix_second(source_freeze_unix, "source_freeze_unix")
-    ratification_time = _unix_second(user_ratification_unix, "user_ratification_unix")
-    threshold = max(source_time, ratification_time) + MINIMUM_LEAD_SECONDS
+    ci_completed_time = _unix_second(
+        preregistration_ci_completed_unix, "preregistration_ci_completed_unix"
+    )
+    if ci_completed_time <= 0:
+        raise DNRDSeedBindingError("preregistration_ci_completed_unix must be positive")
+    threshold = max(source_time, ci_completed_time) + MINIMUM_LEAD_SECONDS
     if threshold > MAX_SAFE_INTEGER:
         raise DNRDSeedBindingError("eligible-round threshold exceeds safe integer range")
     if threshold <= QUICKNET_GENESIS_TIME_UNIX:
@@ -419,14 +423,16 @@ def projection_from_verifier_receipt_bytes(
 
 @dataclass(frozen=True, slots=True)
 class SourceFreezeBinding:
-    """Exact source and preregistration identities included in seed material."""
+    """Exact A/B/CI identities included in seed material."""
 
     source_commit: str
     source_tree_oid: str
     source_manifest_sha256: str
     preregistration_commit: str
+    preregistration_tree_oid: str
     preregistration_blob_sha256: str
-    ratification_statement_sha256: str
+    preregistration_ci_completed_unix: int
+    preregistration_ci_receipt_sha256: str
     experiment_id: str = EXPERIMENT_ID
 
     def validate(self) -> None:
@@ -434,22 +440,31 @@ class SourceFreezeBinding:
         _hex(self.source_tree_oid, "source_tree_oid", length=40)
         _hex(self.source_manifest_sha256, "source_manifest_sha256", length=64)
         _hex(self.preregistration_commit, "preregistration_commit", length=40)
+        _hex(self.preregistration_tree_oid, "preregistration_tree_oid", length=40)
         _hex(self.preregistration_blob_sha256, "preregistration_blob_sha256", length=64)
+        ci_completed_time = _unix_second(
+            self.preregistration_ci_completed_unix,
+            "preregistration_ci_completed_unix",
+        )
+        if ci_completed_time <= 0:
+            raise DNRDSeedBindingError("preregistration_ci_completed_unix must be positive")
         _hex(
-            self.ratification_statement_sha256,
-            "ratification_statement_sha256",
+            self.preregistration_ci_receipt_sha256,
+            "preregistration_ci_receipt_sha256",
             length=64,
         )
         if self.experiment_id != EXPERIMENT_ID:
             raise DNRDSeedBindingError(f"experiment_id must be {EXPERIMENT_ID!r}")
 
-    def canonical(self) -> dict[str, str]:
+    def canonical(self) -> dict[str, object]:
         self.validate()
         return {
             "experiment_id": self.experiment_id,
             "preregistration_blob_sha256": self.preregistration_blob_sha256,
+            "preregistration_ci_completed_unix": self.preregistration_ci_completed_unix,
+            "preregistration_ci_receipt_sha256": self.preregistration_ci_receipt_sha256,
             "preregistration_commit": self.preregistration_commit,
-            "ratification_statement_sha256": self.ratification_statement_sha256,
+            "preregistration_tree_oid": self.preregistration_tree_oid,
             "source_commit": self.source_commit,
             "source_manifest_sha256": self.source_manifest_sha256,
             "source_tree_oid": self.source_tree_oid,
@@ -463,20 +478,17 @@ def seed_material(
 
     projection.validate()
     source_binding.validate()
+    # Seed v5 deliberately excludes receipts, timestamps, trees, blobs, and
+    # manifests: those remain mandatory audit evidence but are mutable carriers
+    # or retrieval/provenance facts rather than immutable experiment entropy.
     return {
         "domain": SEED_DOMAIN,
         "experiment_id": source_binding.experiment_id,
-        "preregistration_blob_sha256": source_binding.preregistration_blob_sha256,
         "preregistration_commit": source_binding.preregistration_commit,
-        "ratification_statement_sha256": source_binding.ratification_statement_sha256,
         "quicknet_chain_hash": projection.chain_hash,
         "quicknet_randomness_hex": projection.randomness_hex,
         "quicknet_round": projection.round,
-        "quicknet_round_time_unix": projection.round_time_unix,
         "source_commit": source_binding.source_commit,
-        "source_manifest_sha256": source_binding.source_manifest_sha256,
-        "source_tree_oid": source_binding.source_tree_oid,
-        "verification_receipt_sha256": projection.verification_receipt_sha256,
         "schema_version": SEED_MATERIAL_SCHEMA,
     }
 
@@ -494,7 +506,7 @@ class DNRDPulseBindingReceipt:
     """Content-addressed proof of one exact, already-verified future pulse binding."""
 
     source_freeze_unix: int
-    user_ratification_unix: int
+    preregistration_ci_completed_unix: int
     minimum_eligible_time_unix: int
     projection: VerifiedQuicknetProjection
     source_binding: SourceFreezeBinding
@@ -506,15 +518,27 @@ class DNRDPulseBindingReceipt:
         if self.schema_version != PULSE_BINDING_SCHEMA:
             raise DNRDSeedBindingError("pulse binding schema version is invalid")
         source_time = _unix_second(self.source_freeze_unix, "source_freeze_unix")
-        ratification_time = _unix_second(self.user_ratification_unix, "user_ratification_unix")
-        expected_minimum = max(source_time, ratification_time) + MINIMUM_LEAD_SECONDS
+        ci_completed_time = _unix_second(
+            self.preregistration_ci_completed_unix,
+            "preregistration_ci_completed_unix",
+        )
+        if ci_completed_time <= 0:
+            raise DNRDSeedBindingError("preregistration_ci_completed_unix must be positive")
+        expected_minimum = max(source_time, ci_completed_time) + MINIMUM_LEAD_SECONDS
         if self.minimum_eligible_time_unix != expected_minimum:
             raise DNRDSeedBindingError("minimum eligible time does not match frozen chronology")
         self.projection.validate()
         self.source_binding.validate()
+        if (
+            self.source_binding.preregistration_ci_completed_unix
+            != ci_completed_time
+        ):
+            raise DNRDSeedBindingError(
+                "pulse binding CI completion time differs from source binding"
+            )
         expected_round = first_eligible_quicknet_round(
             source_freeze_unix=source_time,
-            user_ratification_unix=ratification_time,
+            preregistration_ci_completed_unix=ci_completed_time,
         )
         if self.projection.round != expected_round:
             raise DNRDSeedBindingError("projection round is not the first eligible frozen Quicknet round")
@@ -531,7 +555,7 @@ class DNRDPulseBindingReceipt:
             "seed_hex": self.seed_hex,
             "source_binding": self.source_binding.canonical(),
             "source_freeze_unix": self.source_freeze_unix,
-            "user_ratification_unix": self.user_ratification_unix,
+            "preregistration_ci_completed_unix": self.preregistration_ci_completed_unix,
         }
 
     def validate(self) -> None:
@@ -550,20 +574,28 @@ class DNRDPulseBindingReceipt:
 def bind_future_pulse(
     *,
     source_freeze_unix: int,
-    user_ratification_unix: int,
+    preregistration_ci_completed_unix: int,
     projection: VerifiedQuicknetProjection,
     source_binding: SourceFreezeBinding,
 ) -> DNRDPulseBindingReceipt:
     """Validate one exact eligible pulse and emit its self-addressed receipt."""
 
     source_time = _unix_second(source_freeze_unix, "source_freeze_unix")
-    ratification_time = _unix_second(user_ratification_unix, "user_ratification_unix")
-    minimum_time = max(source_time, ratification_time) + MINIMUM_LEAD_SECONDS
+    ci_completed_time = _unix_second(
+        preregistration_ci_completed_unix, "preregistration_ci_completed_unix"
+    )
+    if ci_completed_time <= 0:
+        raise DNRDSeedBindingError("preregistration_ci_completed_unix must be positive")
+    minimum_time = max(source_time, ci_completed_time) + MINIMUM_LEAD_SECONDS
     projection.validate()
     source_binding.validate()
+    if source_binding.preregistration_ci_completed_unix != ci_completed_time:
+        raise DNRDSeedBindingError(
+            "pulse CI completion time differs from source binding"
+        )
     expected_round = first_eligible_quicknet_round(
         source_freeze_unix=source_time,
-        user_ratification_unix=ratification_time,
+        preregistration_ci_completed_unix=ci_completed_time,
     )
     if projection.round != expected_round:
         raise DNRDSeedBindingError("supplied Quicknet round is early or not the first eligible round")
@@ -577,11 +609,11 @@ def bind_future_pulse(
         "seed_hex": seed_hex,
         "source_binding": source_binding.canonical(),
         "source_freeze_unix": source_time,
-        "user_ratification_unix": ratification_time,
+        "preregistration_ci_completed_unix": ci_completed_time,
     }
     receipt = DNRDPulseBindingReceipt(
         source_freeze_unix=source_time,
-        user_ratification_unix=ratification_time,
+        preregistration_ci_completed_unix=ci_completed_time,
         minimum_eligible_time_unix=minimum_time,
         projection=projection,
         source_binding=source_binding,

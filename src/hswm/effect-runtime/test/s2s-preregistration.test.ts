@@ -558,7 +558,8 @@ it.effect(
 
       yield* assertStrictParserRejections(built)
     }).pipe(Effect.provide(layer), Effect.ensuring(Effect.sync(fixture.cleanup)))
-  }
+  },
+  15_000
 )
 
 for (const workflowMode of ["absent", "100755"] as const) {

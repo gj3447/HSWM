@@ -1,4 +1,4 @@
-"""Standalone private outcome scorer for the DNRD-3 mechanics diagnostic.
+"""Standalone private outcome scorer for the DNRD-4 mechanics diagnostic.
 
 It accepts exactly one sealed response record and a private scorer manifest.
 Its stdout is intentionally a seven-field outcome record with no gold or latent
@@ -86,7 +86,7 @@ def score_response(record: dict[str, Any], private_manifest: dict[str, Any]) -> 
     if not is_response_token(payload["answer"]) or payload["answer"] not in candidate_tokens:
         raise ManifestError("sealed response is not one exact episode candidate token")
     route_correct = payload["selected_route_id"] == correct_route
-    # DNRD-3 isolates the durable routing transition from the live model's
+    # DNRD-4 isolates the durable routing transition from the live model's
     # response.  The response remains a sealed liveness/provenance observation,
     # but the externally fixed outcome is a function only of the preregistered
     # route binding and the already-selected route.

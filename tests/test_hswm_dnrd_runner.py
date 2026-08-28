@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 import hashlib
 import json
 from pathlib import Path
@@ -27,6 +28,8 @@ from _research.dnrd.runner import (
     SubprocessOutcomeScorer,
     TRACE_STATUS,
     _derive_overlap_observation,
+    _validate_metadata,
+    _validate_model_event_ledger,
     _validate_reply,
     model_request_commitment,
     run_diagnostic,
@@ -87,19 +90,23 @@ def _metadata() -> MeasurementMetadata:
         bindings={
             "source_manifest_sha256": _sha("source"),
             "preregistration_sha256": _sha("prereg"),
+            "preregistration_ci_receipt_sha256": _sha("prereg-ci"),
             "pulse_receipt_sha256": _sha("pulse"),
             "split_manifest_sha256": _sha("split"),
             "model_deployment_sha256": commitment(deployment),
             "scorer_sha256": SCORER_SHA256,
             "runtime_receipt_sha256": _sha("runtime"),
+            "git_chronology_evidence_sha256": _sha("git-chronology"),
         },
         chronology={
             "source_commit": "a" * 40,
             "preregistration_commit": "b" * 40,
             "source_tree_oid": "c" * 40,
+            "preregistration_tree_oid": "d" * 40,
             "source_frozen_at_unix": 1,
+            "source_ci_completed_at_unix": 1,
             "preregistration_committed_at_unix": 1,
-            "external_ratification_at_unix": 2,
+            "preregistration_ci_completed_at_unix": 2,
             "pulse_round": 1,
             "pulse_chain_hash": _sha("chain"),
             "pulse_at_unix": 1000,
@@ -120,7 +127,7 @@ def _metadata() -> MeasurementMetadata:
 
 
 def _structured_chat_config(request: ModelRequest) -> dict:
-    """Independent fixture copy of DNRD-3's frozen per-call wire contract."""
+    """Independent fixture copy of DNRD-4's frozen per-call wire contract."""
     schema = {
         "type": "object",
         "properties": {
@@ -164,6 +171,7 @@ class EvidenceAnswerer:
         *,
         fail_on: int | None = None,
         output_tokens: int = 1,
+        pretty_response: bool = False,
         model: str = "model-fixture",
         endpoint: str = "http://model.fixture",
     ) -> None:
@@ -171,6 +179,7 @@ class EvidenceAnswerer:
         self.events: list[dict] = []
         self.fail_on = fail_on
         self.output_tokens = output_tokens
+        self.pretty_response = pretty_response
         self.model = model
         self.endpoint = endpoint.rstrip("/")
 
@@ -181,10 +190,14 @@ class EvidenceAnswerer:
         assert request.max_output_tokens == MAX_OUTPUT_TOKENS
         token = request.prompt.rsplit("nonce=", 1)[1]
         reply = ModelReply(token, input_tokens=1, output_tokens=self.output_tokens)
+        content = (
+            '{\n  "response_token" : "' + token + '"\n}'
+            if self.pretty_response else canonical_json({"response_token": token}).decode()
+        )
         raw = canonical_json(
             {
                 "model": self.model,
-                "choices": [{"finish_reason": "stop", "message": {"content": canonical_json({"response_token": token}).decode()}}],
+                "choices": [{"finish_reason": "stop", "message": {"content": content}}],
                 "usage": {
                     "prompt_tokens": 1,
                     "completion_tokens": self.output_tokens,
@@ -486,8 +499,21 @@ def test_runner_call_shape_ledger_and_no_verdict() -> None:
     candidate = result.candidate
     assert candidate is not None
     assert set(candidate) == {"schema_version", "experiment_id", "bindings", "chronology", "overlap", "parity", "call_ledger", "streams"}
+    assert candidate["schema_version"] == "hswm-dnrd-candidate/v3"
+    assert candidate["experiment_id"] == "HSWM-DNRD-4"
+    assert candidate["bindings"]["preregistration_ci_receipt_sha256"] == _sha("prereg-ci")
+    assert candidate["bindings"]["git_chronology_evidence_sha256"] == _sha("git-chronology")
+    assert set(candidate["chronology"]) == {
+        "source_commit", "preregistration_commit", "source_tree_oid",
+        "preregistration_tree_oid", "source_frozen_at_unix",
+        "preregistration_committed_at_unix", "preregistration_ci_completed_at_unix",
+        "pulse_round", "pulse_chain_hash", "pulse_at_unix",
+    }
+    assert "source_ci_completed_at_unix" not in candidate["chronology"]
     assert "verdict" not in json.dumps(candidate).casefold()
     assert candidate["call_ledger"]["client_dispatched_generation_requests"] == 128
+
+
     assert candidate["parity"]["fresh_process_recovery_observed"] is False
     assert candidate["parity"]["evaluation_read_only_wrt_routing_observed"] is True
     assert candidate["parity"]["equal_generation_limits_input_token_parity_not_claimed"] is True
@@ -518,6 +544,118 @@ def test_runner_call_shape_ledger_and_no_verdict() -> None:
         assert len(replay["heldout_readouts"]) == 8
         assert replay["w1_routing_payload_sha256"] == replay["replay_routing_payload_sha256"]
         assert replay["w1_routing_payload_bytes"] == replay["replay_routing_payload_bytes"]
+
+
+@pytest.mark.parametrize(
+    ("updates", "message"),
+    [
+        (
+            {
+                "source_frozen_at_unix": 2,
+                "source_ci_completed_at_unix": 1,
+                "preregistration_committed_at_unix": 2,
+                "preregistration_ci_completed_at_unix": 3,
+                "pulse_at_unix": 903,
+            },
+            "source-A CI completion precedes source freeze",
+        ),
+        (
+            {
+                "source_ci_completed_at_unix": 2,
+                "preregistration_committed_at_unix": 1,
+                "preregistration_ci_completed_at_unix": 2,
+                "pulse_at_unix": 902,
+            },
+            "B commit precedes source-A CI completion",
+        ),
+        (
+            {
+                "preregistration_committed_at_unix": 3,
+                "preregistration_ci_completed_at_unix": 2,
+                "pulse_at_unix": 902,
+            },
+            "B-CI completion precedes B commit",
+        ),
+        ({"pulse_at_unix": 901}, "future pulse is earlier"),
+    ],
+)
+def test_runner_metadata_refuses_invalid_dnrd4_chronology_order(
+    updates: dict[str, int], message: str
+) -> None:
+    metadata = _metadata()
+    chronology = {**metadata.chronology, **updates}
+    with pytest.raises(RunnerRefusal, match=message):
+        _validate_metadata(replace(metadata, chronology=chronology))
+
+
+@pytest.mark.parametrize(
+    "bindings",
+    [
+        lambda value: {key: item for key, item in value.items() if key != "git_chronology_evidence_sha256"},
+        lambda value: {**value, "ratification_statement_sha256": _sha("obsolete-ratification")},
+    ],
+)
+def test_runner_metadata_requires_exact_dnrd4_binding_set(bindings) -> None:
+    metadata = _metadata()
+    with pytest.raises(RunnerRefusal, match="metadata binding key set drifted"):
+        _validate_metadata(replace(metadata, bindings=bindings(dict(metadata.bindings))))
+
+
+def test_runner_refuses_invalid_chronology_before_any_model_call() -> None:
+    public, private = generate_manifests(SEED)
+    answerer = EvidenceAnswerer()
+    metadata = _metadata()
+    invalid = replace(
+        metadata,
+        chronology={
+            **metadata.chronology,
+            "preregistration_ci_completed_at_unix": 2,
+            "pulse_at_unix": 901,
+        },
+    )
+    with pytest.raises(RunnerRefusal, match="DNRD-4 future pulse"):
+        run_diagnostic(
+            public,
+            private_manifest_commitment=commitment(private),
+            answerer=answerer,
+            bridge=RecordingBridge(),
+            scorer=RecordingScorer(),
+            metadata=invalid,
+            model_event_ledger_provider=lambda: tuple(answerer.events),
+            closure_exporter=RecordingClosureExporter(),
+        )
+    assert answerer.requests == []
+
+
+def test_runner_accepts_pretty_semantic_structured_response_and_retains_raw_hash() -> None:
+    answerer = EvidenceAnswerer(pretty_response=True)
+    result = _run(answerer, RecordingBridge(), RecordingScorer())
+    assert result.candidate is not None
+    accepted = [event for event in answerer.events if event["event"] == "CHAT_COMPLETION_ACCEPTED"]
+    assert len(accepted) == 128
+    assert all(
+        '\n  "response_token" :' in json.loads(event["raw_response_utf8"])["choices"][0]["message"]["content"]
+        for event in accepted
+    )
+    assert all(hashlib.sha256(event["raw_response_utf8"].encode()).hexdigest() == event["raw_response_sha256"] for event in accepted)
+
+
+@pytest.mark.parametrize("content", [
+    '{"response_token":"token-aaaaaaaaaaaaaaaaaaaa","response_token":"token-bbbbbbbbbbbbbbbbbbbb"}',
+    '{"response_token":"token-aaaaaaaaaaaaaaaaaaaa","extra":"x"}',
+    '{"response_token":"token-cccccccccccccccccccc"}',
+])
+def test_runner_durable_ledger_rejects_semantic_structured_response_negatives(content: str) -> None:
+    answerer, rows = EvidenceAnswerer(), []
+    _run(answerer, RecordingBridge(), RecordingScorer(), runner_rows=rows)
+    events = json.loads(json.dumps(answerer.events))
+    accepted = next(event for event in events if event["event"] == "CHAT_COMPLETION_ACCEPTED")
+    raw = json.loads(accepted["raw_response_utf8"])
+    raw["choices"][0]["message"]["content"] = content
+    accepted["raw_response_utf8"] = canonical_json(raw).decode()
+    accepted["raw_response_sha256"] = hashlib.sha256(accepted["raw_response_utf8"].encode()).hexdigest()
+    with pytest.raises(RuntimeError):
+        _validate_model_event_ledger(events, rows, _deployment())
 
 
 def test_training_canary_leakage_bit_is_derived_from_heldout_observation() -> None:
@@ -669,7 +807,7 @@ def test_scorer_failure_and_reply_limit_are_counted() -> None:
 
 
 def test_runner_refuses_malformed_response_token() -> None:
-    with pytest.raises(RuntimeError, match="exact DNRD-3 form"):
+    with pytest.raises(RuntimeError, match="exact DNRD-4 form"):
         _validate_reply(ModelReply("not-a-dnrd-token", input_tokens=1, output_tokens=1))
 
 

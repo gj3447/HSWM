@@ -26,8 +26,6 @@ from _research.dnrd.execute import (
     ExecutionDependencies,
     ExecutionRefusal,
     PREREG_CLAIM_BOUNDARY,
-    RATIFICATION_TEMPLATE,
-    RATIFICATION_TEMPLATE_VERSION,
     RUNTIME_TREE_MANIFEST_SCHEMA,
     SCORER_ARGUMENT_CONTRACT,
     TOKENIZER_PREFLIGHT_PROMPT,
@@ -73,6 +71,7 @@ from _research.dnrd.runner import (
     BridgeMountClosureExport,
     MAX_OUTPUT_TOKENS,
     MOUNT_ROLES,
+    RunnerResult,
 )
 from test_hswm_dnrd_runner import EvidenceAnswerer, RecordingBridge, RecordingScorer
 
@@ -297,14 +296,14 @@ def _git(repo: Path, *args: str, env: dict[str, str] | None = None) -> str:
 
 def _verifier_receipt(
     source_unix: int,
-    ratification_unix: int,
+    preregistration_ci_unix: int,
     helper: str,
     lock: str,
     bundle: str,
     node_sha256: str,
     node_version: str,
 ) -> bytes:
-    round_number = first_eligible_quicknet_round(source_freeze_unix=source_unix, user_ratification_unix=ratification_unix)
+    round_number = first_eligible_quicknet_round(source_freeze_unix=source_unix, preregistration_ci_completed_unix=preregistration_ci_unix)
     signature = "ab" * 48
     pulse = {
         "randomness": hashlib.sha256(bytes.fromhex(signature)).hexdigest(),
@@ -431,7 +430,7 @@ def _fixture(
     )
     source_manifest_value = {
         "schema_version": "hswm-dnrd-source-freeze-manifest/v1",
-        "experiment_id": "HSWM-DNRD-3",
+        "experiment_id": "HSWM-DNRD-4",
         "source_commit_tree_bound_externally": "SOURCE_COMMIT_TREE_BOUND_EXTERNALLY_NO_SELF_CYCLE",
         "files": [
             {"path": relative, "sha256": _hash(repo / relative)}
@@ -521,6 +520,7 @@ def _fixture(
                     {
                         "path": path.relative_to(runtime_root).as_posix(),
                         "sha256": _hash(path),
+                        "bytes": path.stat().st_size,
                     }
                     for path in sorted(package_root.rglob("*"))
                     if path.is_file()
@@ -532,7 +532,7 @@ def _fixture(
         "schema_version": RUNTIME_TREE_MANIFEST_SCHEMA,
         "root_path": str(runtime_root),
         "entrypoint": "bridge.js",
-        "files": [{"path": "bridge.js", "sha256": _hash(bridge_impl)}],
+        "files": [{"path": "bridge.js", "sha256": _hash(bridge_impl), "bytes": bridge_impl.stat().st_size}],
         "external_packages": external_packages,
         "build_provenance": {
             "source_a_commit": source_a,
@@ -559,7 +559,9 @@ def _fixture(
         },
     }
     runtime_manifest_sha = _write_json(runtime_manifest, runtime_manifest_value)
-    state_root, attempt_root = tmp_path / "state", tmp_path / "attempts"
+    mutable_root = tmp_path / "b-pinned-mutable"
+    mutable_root.mkdir()
+    state_root, attempt_root = mutable_root / "state", mutable_root / "attempt-registry"
     state_root.mkdir(mode=0o700)
     attempt_root.mkdir(mode=0o700)
     state_root.chmod(0o700)
@@ -574,19 +576,35 @@ def _fixture(
         "frozen_scorer_source_sha256": _hash(scorer_source),
     }
 
+    source_ci_api = {
+        "id": 7, "workflow_id": 3, "run_number": 4, "name": "CI", "path": ".github/workflows/ci.yml",
+        "event": "push", "head_branch": "main", "run_attempt": 1,
+        "head_sha": source_a,
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "1970-01-01T00:00:00Z", "run_started_at": "1970-01-01T00:00:01Z",
+        "updated_at": "1970-01-01T00:00:01Z",
+        "head_commit": {"id": source_a, "tree_id": source_tree},
+        "pull_requests": [], "repository": {"id": 1, "full_name": "gj3447/HSWM"},
+        "head_repository": {"id": 1, "full_name": "gj3447/HSWM"},
+    }
     ci_raw = (
-        f'{{ "conclusion" : "success", "head_sha" : "{source_a}", "id" : 7 }}'
+        json.dumps(source_ci_api, ensure_ascii=False, indent=2)
         if noncanonical_ci_raw
-        else canonical_json({"id": 7, "head_sha": source_a, "conclusion": "success"}).decode()
+        else canonical_json(source_ci_api).decode()
     )
     ci_unsigned = {
-        "schema_version": "hswm-dnrd-source-ci-receipt/v1",
+        "schema_version": "hswm-dnrd-source-ci-receipt/v2",
         "provider": "GITHUB_ACTIONS",
         "run_id": 7,
         "head_sha": source_a,
         "conclusion": "success",
         "raw_response_sha256": hashlib.sha256(ci_raw.encode()).hexdigest(),
         "raw_response_utf8": ci_raw,
+        "discovery_query": {"request_path": f"/repos/gj3447/HSWM/actions/workflows/ci.yml/runs?event=push&branch=main&head_sha={source_a}&per_page=100&page=1", "workflow_path": ".github/workflows/ci.yml", "event": "push", "branch": "main", "head_sha": source_a, "per_page": 100, "page": 1},
+        "critical_projection": {key: source_ci_api[key] for key in ("id", "workflow_id", "run_number", "name", "path", "event", "head_branch", "head_sha", "run_attempt", "status", "conclusion", "created_at", "run_started_at", "updated_at", "pull_requests", "head_commit", "repository", "head_repository")},
+        "raw_list_response_sha256": hashlib.sha256(canonical_json({"total_count": 1, "workflow_runs": [source_ci_api]})).hexdigest(),
+        "raw_list_response_utf8": canonical_json({"total_count": 1, "workflow_runs": [source_ci_api]}).decode(),
     }
     ci_receipt, _ = _receipt(ci_unsigned)
     ci_path = pin_root / "source-ci.json"
@@ -624,8 +642,8 @@ def _fixture(
             "returned_token": requested_token,
         })
     qualification = {
-        "schema_version": "hswm-dnrd3-structured-output-qualification-summary/v1",
-        "domain": "HSWM-DNRD3-STRUCTURED-OUTPUT-QUALIFICATION-v1",
+        "schema_version": "hswm-dnrd4-structured-output-qualification-summary/v2",
+        "domain": "HSWM-DNRD4-STRUCTURED-OUTPUT-QUALIFICATION-v1",
         "event_schema": "hswm-dnrd-live-model-event/v3",
         "experiment_occurrence": False, "future_seed_material_used": False,
         "record_role": "CONTENT_ADDRESSED_OPERATOR_SUMMARY_OF_DISJOINT_NONSCIENTIFIC_LIVE_QUALIFICATION_NOT_SCIENTIFIC_EVIDENCE",
@@ -634,23 +652,30 @@ def _fixture(
         "served_model_id": MODEL_ID, "vllm_version": VLLM_VERSION,
         "provider_cache_independence": "NOT_OBSERVABLE_BY_CLIENT", "calls": qualification_calls,
         "started_at_unix_ns": 1, "ended_at_unix_ns": 2,
-        "live_source_sha256": "a" * 64, "runner_source_sha256": "b" * 64,
+        "source_files": [
+            {"path": relative, "sha256": _hash(repo / relative)}
+            for relative in dnrd_execute.QUALIFICATION_SOURCE_PATHS
+        ],
+        "python_executable_sha256": _hash(python),
+        "python_version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+        "unicode_data_version": unicodedata.unidata_version,
     }
     qualification_path.write_bytes(canonical_json(qualification) + b"\n")
     qualification_sha = _hash(qualification_path)
 
     prereg_path = "prereg/dnrd.json"
     prereg = {
-        "schema_version": "hswm-durable-numeric-routing-diagnostic-preregistration/v3",
-        "experiment_id": "HSWM-DNRD-3",
-        "protocol_version": "v3",
+        "schema_version": "hswm-durable-numeric-routing-diagnostic-preregistration/v4",
+        "experiment_id": "HSWM-DNRD-4",
+        "protocol_version": "v4",
         "created_at": "2026-08-28",
-        "status": "FROZEN_AWAITING_EXACT_HASH_RATIFICATION",
+        "status": "FROZEN_AWAITING_SUCCESSFUL_PREREGISTRATION_B_CI_AND_FUTURE_PULSE",
         "authority": {
             "broad_research_continuation_requested": True,
-            "exact_content_hash_user_ratified_at_freeze": False,
-            "measurement_authorized_at_freeze": False,
-            "measurement_requires_external_exact_hash_ratification_receipt": True,
+            "measurement_authorized_by_user_broad_continuation": True,
+            "authorization_is_scientific_evidence": False,
+            "measurement_requires_external_exact_hash_ratification_receipt": False,
+            "measurement_requires_successful_preregistration_b_ci_receipt": True,
             "scientific_judgment_emitted": False,
             "external_governance_required": False,
         },
@@ -711,7 +736,7 @@ def _fixture(
         "required_before_measurement": PREREG_CLAIM_BOUNDARY["required_before_measurement"],
         "result_promotion": PREREG_CLAIM_BOUNDARY["result_promotion"],
         "measurement_gate": PREREG_CLAIM_BOUNDARY["measurement_gate"],
-        "ratification": {"statement_template_version": RATIFICATION_TEMPLATE_VERSION, "statement_template": RATIFICATION_TEMPLATE},
+        "preregistration_b_ci_gate": {"receipt_schema": "hswm-dnrd-preregistration-b-ci-receipt/v2", "provider": "GITHUB_ACTIONS", "status": "completed", "conclusion": "success", "minimum_lead_seconds": 900, "selection_rule": "EXACT_UNFILTERED_PUSH_MAIN_HEAD_SHA_WORKFLOW_LIST_TOTAL_COUNT_ONE_FIRST_ATTEMPT"},
         "source_a_ci": {"receipt_sha256": ci_sha, "run_id": 7, "head_sha": source_a, "conclusion": "success"},
         "runtime_bindings": {
             "model_endpoint": "http://127.0.0.1:9999",
@@ -739,30 +764,41 @@ def _fixture(
     date_b = {"GIT_AUTHOR_DATE": "1970-01-01T00:00:02 +0000", "GIT_COMMITTER_DATE": "1970-01-01T00:00:02 +0000"}
     _git(repo, "commit", "-m", "preregistration B", env={**dict(__import__("os").environ), **date_b})
     prereg_b = _git(repo, "rev-parse", "HEAD")
-
-    ratification_text = RATIFICATION_TEMPLATE.format(preregistration_sha256=prereg_sha)
-    rat_unsigned = {
-        "schema_version": "hswm-dnrd-ratification-receipt/v3",
-        "preregistration_sha256": prereg_sha,
-        "statement_sha256": hashlib.sha256(ratification_text.encode()).hexdigest(),
-        "ratified_at_unix": 3,
-        "attested_by": "fixture",
+    prereg_tree = _git(repo, "rev-parse", f"{prereg_b}^{{tree}}")
+    prereg_blob = _git(repo, "rev-parse", f"{prereg_b}:{prereg_path}")
+    remote = tmp_path / "remote.git"
+    _git(tmp_path, "init", "--bare", str(remote))
+    _git(repo, "remote", "add", "origin", str(remote))
+    _git(repo, "push", "origin", "HEAD:main")
+    b_ci_api = {"id": 8, "workflow_id": 3, "run_number": 5, "name": "CI", "path": ".github/workflows/ci.yml", "event": "push", "head_branch": "main", "head_sha": prereg_b, "run_attempt": 1, "status": "completed", "conclusion": "success", "created_at": "1970-01-01T00:00:02Z", "run_started_at": "1970-01-01T00:00:02Z", "updated_at": "1970-01-01T00:00:03Z", "head_commit": {"id": prereg_b, "tree_id": prereg_tree}, "pull_requests": [], "repository": {"id": 1, "full_name": "gj3447/HSWM"}, "head_repository": {"id": 1, "full_name": "gj3447/HSWM"}}
+    b_ci_raw = canonical_json(b_ci_api).decode()
+    b_ci_unsigned = {
+        "schema_version": "hswm-dnrd-preregistration-b-ci-receipt/v2",
+        "provider": "GITHUB_ACTIONS", "run_id": 8, "head_sha": prereg_b,
+        "head_tree_oid": prereg_tree, "preregistration_path": prereg_path,
+        "preregistration_git_blob_oid": prereg_blob, "preregistration_sha256": prereg_sha,
+        "status": "completed", "conclusion": "success", "completed_at_utc": "1970-01-01T00:00:03Z",
+        "completed_at_unix": 3, "raw_response_sha256": hashlib.sha256(b_ci_raw.encode()).hexdigest(),
+        "raw_response_utf8": b_ci_raw,
+        "discovery_query": {"request_path": f"/repos/gj3447/HSWM/actions/workflows/ci.yml/runs?event=push&branch=main&head_sha={prereg_b}&per_page=100&page=1", "workflow_path": ".github/workflows/ci.yml", "event": "push", "branch": "main", "head_sha": prereg_b, "per_page": 100, "page": 1},
+        "critical_projection": {key: b_ci_api[key] for key in ("id", "workflow_id", "run_number", "name", "path", "event", "head_branch", "head_sha", "run_attempt", "status", "conclusion", "created_at", "run_started_at", "updated_at", "pull_requests", "head_commit", "repository", "head_repository")},
+        "raw_list_response_sha256": hashlib.sha256(canonical_json({"total_count": 1, "workflow_runs": [b_ci_api]})).hexdigest(),
+        "raw_list_response_utf8": canonical_json({"total_count": 1, "workflow_runs": [b_ci_api]}).decode(),
     }
-    rat_receipt, _ = _receipt(rat_unsigned)
-    rat_path = pin_root / "ratification.json"
-    rat_sha = _write_json(rat_path, rat_receipt)
+    b_ci_receipt, _ = _receipt(b_ci_unsigned)
+    b_ci_path = pin_root / "preregistration-b-ci.json"
+    b_ci_sha = _write_json(b_ci_path, b_ci_receipt)
     output_root = tmp_path / "output"
     config = ExecutionConfig(
         repo, source_a, source_tree, "source_manifest.json", source_manifest_sha,
-        prereg_b, prereg_path, prereg_sha, 1, 3, ratification_text,
-        hashlib.sha256(ratification_text.encode()).hexdigest(), output_root,
+        prereg_b, prereg_tree, prereg_path, prereg_sha, 1, 3, output_root,
         "http://127.0.0.1:9999", bridge_impl, _hash(bridge_impl),
         (str(node), str(bridge_impl)), bridge_config,
         scorer_source.resolve(), _hash(scorer_source),
         (str(python), *SCORER_ARGUMENT_CONTRACT), (str(node), str(helper)),
         helper, _hash(helper), lock, _hash(lock), bundle, _hash(bundle),
-        attempt_registry_root=attempt_root, ratification_receipt_path=rat_path,
-        ratification_receipt_sha256=rat_sha, source_ci_receipt_path=ci_path,
+        attempt_registry_root=attempt_root, preregistration_ci_receipt_path=b_ci_path,
+        preregistration_ci_receipt_sha256=b_ci_sha, source_ci_receipt_path=ci_path,
         source_ci_receipt_sha256=ci_sha, tokenizer_preflight_prompt=TOKENIZER_PREFLIGHT_PROMPT,
         structured_output_qualification_path=qualification_path,
         structured_output_qualification_sha256=qualification_sha,
@@ -795,23 +831,28 @@ def test_structured_output_qualification_rejects_semantic_drift(tmp_path: Path) 
     config, _, _ = _fixture(tmp_path)
     assert config.structured_output_qualification_path is not None
     base = json.loads(config.structured_output_qualification_path.read_text())
-    dnrd_execute._load_structured_output_qualification(config)
+    source_manifest = dnrd_execute._load_source_manifest(config)
+    dnrd_execute._load_structured_output_qualification(
+        config, source_manifest=source_manifest
+    )
 
     mutants: dict[str, dict] = {}
     for label in (
         "record-role", "time", "source-hash", "ordinal-bool", "token-count-bool",
-        "schema-digest", "enum-position-coverage",
+        "source-order", "schema-digest", "enum-position-coverage", "python-runtime",
     ):
         mutants[label] = json.loads(json.dumps(base))
     mutants["record-role"]["record_role"] = "SCIENTIFIC_EVIDENCE"
     mutants["time"]["ended_at_unix_ns"] = mutants["time"]["started_at_unix_ns"]
-    mutants["source-hash"]["live_source_sha256"] = "not-a-sha"
+    mutants["source-hash"]["source_files"][0]["sha256"] = "0" * 64
+    mutants["source-order"]["source_files"].reverse()
     mutants["ordinal-bool"]["calls"][0]["ordinal"] = True
     mutants["token-count-bool"]["calls"][0]["completion_tokens"] = True
     mutants["schema-digest"]["calls"][0]["response_format_schema_sha256"] = "0" * 64
     second = mutants["enum-position-coverage"]["calls"][1]
     second["requested_token"] = second["candidate_response_tokens"][0]
     second["returned_token"] = second["requested_token"]
+    mutants["python-runtime"]["python_version"] = "0.0.0"
 
     for label, value in mutants.items():
         path = tmp_path / f"qualification-{label}.json"
@@ -823,7 +864,19 @@ def test_structured_output_qualification_rejects_semantic_drift(tmp_path: Path) 
             structured_output_qualification_sha256=hashlib.sha256(raw).hexdigest(),
         )
         with pytest.raises(ExecutionRefusal, match="structured-output qualification"):
-            dnrd_execute._load_structured_output_qualification(altered)
+            dnrd_execute._load_structured_output_qualification(
+                altered, source_manifest=source_manifest
+            )
+
+    manifest_mismatch = json.loads(json.dumps(source_manifest))
+    for row in manifest_mismatch["files"]:
+        if row["path"] == "_research/dnrd/live.py":
+            row["sha256"] = "0" * 64
+            break
+    with pytest.raises(ExecutionRefusal, match="source identities"):
+        dnrd_execute._load_structured_output_qualification(
+            config, source_manifest=manifest_mismatch
+        )
 
 
 def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None:
@@ -834,12 +887,12 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
         *config.verifier_command,
         "online",
         "--expected-round",
-        str(first_eligible_quicknet_round(source_freeze_unix=1, user_ratification_unix=3)),
+        str(first_eligible_quicknet_round(source_freeze_unix=1, preregistration_ci_completed_unix=3)),
     ]
     assert result.runner_result.candidate is not None
     artifacts = {
         "source_manifest.json", "preregistration.json", "source_ci_receipt.json",
-        "ratification_receipt.json", "git_chronology_evidence.json", "public_manifest.json",
+        "preregistration_ci_receipt.json", "git_chronology_evidence.json", "public_manifest.json",
         "pulse_verifier_receipt.json", "pulse_binding.json", "deployment_receipt.json",
         "structured_output_qualification.json",
         "runtime_receipt.json", "bridge_runtime_tree_manifest.json", "attempt_lock_receipt.json",
@@ -916,7 +969,11 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
     dnrd_judge._validate_config_readback(config_readback, candidate_value, runtime)
     with pytest.raises(dnrd_judge.BundleRefusal, match="production hash-bound"):
         dnrd_judge._validate_runtime_and_attempt(
-            runtime, attempt_receipt, candidate_value
+            runtime,
+            attempt_receipt,
+            candidate_value,
+            json.loads((result.output_dir / "preregistration_ci_receipt.json").read_text()),
+            json.loads((result.output_dir / "pulse_binding.json").read_text()),
         )
     source_path_runtime = json.loads(json.dumps(runtime))
     source_path_runtime["bridge_command"][1] = config_readback["bridge_command"][1]
@@ -976,8 +1033,8 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
     tampered_candidate["bindings"]["pulse_receipt_sha256"] = pulse_value[
         "receipt_sha256"
     ]
-    ratification_value = json.loads(
-        (result.output_dir / "ratification_receipt.json").read_text()
+    preregistration_ci_value = json.loads(
+        (result.output_dir / "preregistration_ci_receipt.json").read_text()
     )
     preregistration_value = json.loads(preregistration_bytes)
     with pytest.raises(dnrd_judge.BundleRefusal, match="verifier provenance"):
@@ -985,7 +1042,7 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
             pulse_value,
             tampered_verifier_bytes,
             tampered_candidate,
-            ratification_value,
+            preregistration_ci_value,
             preregistration_value,
         )
     dnrd_judge._validate_git_chronology(
@@ -995,6 +1052,7 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
         source_value,
         (result.output_dir / "source_manifest.json").read_bytes(),
         preregistration_bytes,
+        preregistration_ci_value,
     )
     tampered_chronology = json.loads(json.dumps(chronology_value))
     tampered_chronology["source"]["file_blobs"][0]["blob_oid"] = "0" * 40
@@ -1009,6 +1067,7 @@ def test_execute_writes_self_contained_no_verdict_bundle(tmp_path: Path) -> None
             source_value,
             (result.output_dir / "source_manifest.json").read_bytes(),
             preregistration_bytes,
+            preregistration_ci_value,
         )
 
 
@@ -1058,7 +1117,7 @@ def test_post_lock_copy_failure_persists_conservative_void_terminal(
     with pytest.raises(OSError, match="injected source closure"):
         execute_with_dependencies(config, dependencies)
     terminal = json.loads((config.output_root / "void_protocol.json").read_text())
-    assert terminal["schema_version"] == "hswm-dnrd-void-protocol/v1"
+    assert terminal["schema_version"] == "hswm-dnrd-void-protocol/v2"
     assert terminal["post_first_call"] is False
     assert (config.output_root / "terminal-intent.json").is_file()
     assert (config.output_root / "bundle_index.json").is_file()
@@ -1086,7 +1145,7 @@ def test_output_bootstrap_failure_uses_attempt_marker_and_best_effort_void(
     assert not (config.output_root / "candidate.json").exists()
 
 
-def test_durable_model_ledger_reread_mismatch_persists_inconclusive_terminal(
+def test_durable_model_ledger_reread_mismatch_persists_post_dispatch_void_terminal(
     tmp_path: Path,
 ) -> None:
     config, dependencies, _ = _fixture(tmp_path)
@@ -1115,12 +1174,13 @@ def test_durable_model_ledger_reread_mismatch_persists_inconclusive_terminal(
         model_event_ledger=snapshot, model_event_ledger_path=ledger.path)
     with pytest.raises(RuntimeError, match="differs from in-memory"):
         execute_with_dependencies(config, altered)
-    terminal = json.loads((config.output_root / "inconclusive.json").read_text())
+    terminal = json.loads((config.output_root / "void_protocol.json").read_text())
     assert terminal["post_first_call"] is True
     # The durable ledger has a corrupt trailing row.  The executor must not
     # use its mutable snapshot to infer an exact count; durable evidence only
     # supports the conservative minimum.
-    assert terminal["calls_completed"] == 1
+    assert terminal["calls_observed"] == 1
+    assert terminal["failure_stage"] == "POST_DISPATCH_INTERNAL_FINALIZATION"
 
 
 def test_durable_ledger_parent_fsync_failure_is_still_post_dispatch(
@@ -1148,7 +1208,7 @@ def test_durable_ledger_parent_fsync_failure_is_still_post_dispatch(
     assert _post_dispatch_progress(dependencies) == (True, 1)
 
 
-def test_late_candidate_write_failure_preserves_single_inconclusive_terminal(
+def test_late_candidate_write_failure_preserves_single_post_dispatch_void_terminal(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     config, dependencies, _ = _fixture(tmp_path)
@@ -1162,12 +1222,12 @@ def test_late_candidate_write_failure_preserves_single_inconclusive_terminal(
     monkeypatch.setattr(dnrd_execute, "_atomic_json", fail_candidate)
     with pytest.raises(OSError, match="candidate write"):
         execute_with_dependencies(config, dependencies)
-    assert (config.output_root / "inconclusive.json").is_file()
+    assert (config.output_root / "void_protocol.json").is_file()
     assert not (config.output_root / "candidate.json").exists()
     assert (config.output_root / "bundle_index.json").is_file()
 
 
-def test_late_candidate_binding_failure_persists_inconclusive_terminal(
+def test_late_candidate_binding_failure_persists_post_dispatch_void_terminal(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     config, dependencies, _ = _fixture(tmp_path)
@@ -1183,10 +1243,67 @@ def test_late_candidate_binding_failure_persists_inconclusive_terminal(
     monkeypatch.setattr(dnrd_execute, "run_diagnostic", bind_wrong_ledger)
     with pytest.raises(RuntimeError, match="candidate ledger binding"):
         execute_with_dependencies(config, dependencies)
-    terminal = json.loads((config.output_root / "inconclusive.json").read_text())
+    terminal = json.loads((config.output_root / "void_protocol.json").read_text())
     assert terminal["post_first_call"] is True
-    assert terminal["calls_completed"] == 128
+    assert terminal["calls_observed"] == 128
+    assert terminal["failure_stage"] == "POST_DISPATCH_INTERNAL_FINALIZATION"
     assert (config.output_root / "bundle_index.json").is_file()
+    judgment = dnrd_judge.judge_bundle(config.output_root)
+    assert judgment["terminal"] == "VOID_PROTOCOL"
+    assert judgment["authority"] == "POST_DISPATCH_VOID_PROTOCOL_TERMINAL_LEDGER_BOUND"
+
+
+@pytest.mark.parametrize(
+    "terminal_event",
+    (
+        "CHAT_COMPLETION_REJECTED",
+        "AMBIGUOUS_OR_POST_DISPATCH_FAILURE",
+        "TRANSPORT_RESPONSE_REJECTED",
+    ),
+)
+def test_128th_retained_model_boundary_failure_seals_inconclusive(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    terminal_event: str,
+) -> None:
+    """The final allowed dispatch may fail at the model boundary, not internally."""
+    config, dependencies, _ = _fixture(tmp_path)
+    occurrence = {
+        "schema_version": "hswm-dnrd-inconclusive-occurrence/v2",
+        "experiment_id": "HSWM-DNRD-4",
+        "post_first_call": True,
+        "calls_completed": 128,
+        "client_cache_hits": 0,
+        "failure_type": "RuntimeError",
+        "failure_digest": commitment(
+            {"type": "RuntimeError", "message": "retained terminal model-boundary failure"}
+        ),
+    }
+
+    def terminal_runner(*_args: object, **kwargs: object) -> RunnerResult:
+        # Retain a durable runner-prefix row as a real interrupted runner
+        # would have done before dispatching the terminal request.
+        event_sink = kwargs["event_sink"]
+        assert callable(event_sink)
+        event_sink({"event": "PRE_DISPATCH_READOUT"})
+        return RunnerResult(
+            candidate=None,
+            inconclusive_occurrence=occurrence,
+            client_cache_hits=0,
+            model_usage={"input_tokens": 0, "output_tokens": 0},
+        )
+
+    monkeypatch.setattr(dnrd_execute, "run_diagnostic", terminal_runner)
+    altered = replace(
+        dependencies,
+        model_event_ledger=lambda: ({"event": terminal_event},),
+    )
+
+    result = execute_with_dependencies(config, altered)
+
+    assert result.runner_result.inconclusive_occurrence == occurrence
+    assert json.loads((config.output_root / "inconclusive.json").read_text()) == occurrence
+    assert not (config.output_root / "void_protocol.json").exists()
 
 
 def test_late_bundle_index_failure_keeps_existing_candidate_terminal(
@@ -1588,7 +1705,7 @@ def test_checked_in_dnrd2_source_manifest_is_canonical_and_historically_pinned()
     )
     rows = manifest["files"]
     # DNRD-2 is a historical, content-hash-bound record.  Its closure must
-    # not be reinterpreted against the evolving DNRD-3 source closure.
+    # not be reinterpreted against the evolving successor source closure.
     historical_paths = [row["path"] for row in rows]
     assert historical_paths == sorted(historical_paths)
     assert len(historical_paths) == len(set(historical_paths))
@@ -1668,6 +1785,7 @@ def test_runtime_tree_requires_recursive_declared_package_dependency_rows(tmp_pa
     for row in package["files"]:
         if row["path"] == "node_modules/effect/package.json":
             row["sha256"] = _hash(package_json)
+            row["bytes"] = package_json.stat().st_size
     config = _rewrite_runtime_manifest(config, manifest)
     with pytest.raises(ExecutionRefusal, match="dependencies are not recursively pinned"):
         _runtime_tree_manifest(config)
@@ -1676,7 +1794,7 @@ def test_execute_preserves_and_reparses_noncanonical_raw_ci_body(tmp_path: Path)
     config, dependencies, _ = _fixture(tmp_path, noncanonical_ci_raw=True)
     result = execute_with_dependencies(config, dependencies)
     receipt = json.loads((result.output_dir / "source_ci_receipt.json").read_text())
-    assert receipt["raw_response_utf8"].startswith('{ "conclusion"')
+    assert receipt["raw_response_utf8"].startswith("{\n  ")
 
 
 def test_external_raw_json_rejects_duplicate_keys_and_nonfinite_constants() -> None:
@@ -1687,22 +1805,53 @@ def test_external_raw_json_rejects_duplicate_keys_and_nonfinite_constants() -> N
         _json_object_unformatted('{"id":NaN}', "fixture")
 
 
-def test_execute_refuses_repeat_marker_and_bad_exact_ratification(tmp_path: Path) -> None:
+def test_execute_refuses_repeat_marker_and_bad_preregistration_b_ci_receipt(tmp_path: Path) -> None:
     config, dependencies, _ = _fixture(tmp_path)
     execute_with_dependencies(config, dependencies)
     second = replace(config, output_root=tmp_path / "output-second")
     with pytest.raises(ExecutionRefusal, match="durable attempt lock"):
         execute_with_dependencies(second, dependencies)
     bad, bad_dependencies, _ = _fixture(tmp_path / "bad")
-    with pytest.raises(ExecutionRefusal, match="exact preregistration-bound statement"):
+    with pytest.raises(ExecutionRefusal, match="content hash drifted"):
         execute_with_dependencies(
             replace(
                 bad,
-                ratification_text="arbitrary",
-                ratification_text_sha256=hashlib.sha256(b"arbitrary").hexdigest(),
+                preregistration_ci_receipt_sha256="0" * 64,
             ),
             bad_dependencies,
         )
+
+
+def test_execute_refuses_b_ci_raw_time_tree_and_remote_drift(tmp_path: Path) -> None:
+    config, dependencies, _ = _fixture(tmp_path)
+    assert config.preregistration_ci_receipt_path is not None
+    receipt = json.loads(config.preregistration_ci_receipt_path.read_text())
+    raw = json.loads(receipt["raw_response_utf8"])
+    raw["updated_at"] = "1970-01-01T00:00:04Z"
+    receipt["raw_response_utf8"] = canonical_json(raw).decode()
+    receipt["raw_response_sha256"] = hashlib.sha256(receipt["raw_response_utf8"].encode()).hexdigest()
+    unsigned = {key: value for key, value in receipt.items() if key != "receipt_sha256"}
+    receipt["receipt_sha256"] = commitment(unsigned)
+    raw_path = tmp_path / "bad-b-ci-raw.json"
+    raw_sha = _write_json(raw_path, receipt)
+    with pytest.raises(
+        ExecutionRefusal,
+        match="selected/listed CI critical projection|raw API response",
+    ):
+        execute_with_dependencies(replace(
+            config, preregistration_ci_receipt_path=raw_path,
+            preregistration_ci_receipt_sha256=raw_sha,
+        ), dependencies)
+
+    with pytest.raises(ExecutionRefusal, match="identity/status/completion"):
+        execute_with_dependencies(replace(config, preregistration_ci_completed_unix=True), dependencies)
+    with pytest.raises(ExecutionRefusal, match="identity/status/completion"):
+        execute_with_dependencies(replace(config, prereg_b_tree="0" * 40), dependencies)
+
+    remote = tmp_path / "remote.git"
+    _git(remote, "update-ref", "refs/heads/main", config.source_a_commit)
+    with pytest.raises(ExecutionRefusal, match="remote canonical main head"):
+        execute_with_dependencies(config, dependencies)
 
 
 def test_attempt_marker_fsyncs_its_registry_directory(
@@ -1720,11 +1869,57 @@ def test_attempt_marker_fsyncs_its_registry_directory(
     monkeypatch.setattr(os, "fsync", recording_fsync)
     _attempt_lock(
         config,
+        preregistration_ci_run_id=8,
+        preregistration_ci_completed_unix=3,
+        quicknet_chain_hash=QUICKNET_CHAIN_HASH,
+        quicknet_round=1,
+        quicknet_randomness_hex="c" * 64,
+        seed_hex="d" * 64,
         pulse_receipt_sha256="a" * 64,
         runtime_receipt_sha256="b" * 64,
     )
 
     assert fsynced_kinds == ["file", "directory"]
+
+
+def test_attempt_marker_is_semantic_singleton_despite_audit_receipt_variants(
+    tmp_path: Path,
+) -> None:
+    config, _, _ = _fixture(tmp_path)
+    first = _attempt_lock(
+        config,
+        preregistration_ci_run_id=8,
+        preregistration_ci_completed_unix=3,
+        quicknet_chain_hash=QUICKNET_CHAIN_HASH,
+        quicknet_round=1,
+        quicknet_randomness_hex="c" * 64,
+        seed_hex="d" * 64,
+        pulse_receipt_sha256="a" * 64,
+        runtime_receipt_sha256="b" * 64,
+    )
+    assert (config.attempt_registry_root / f"{first['occurrence_id']}.json").is_file()  # type: ignore[operator]
+    with pytest.raises(ExecutionRefusal, match="durable attempt lock"):
+        _attempt_lock(
+            config,
+            preregistration_ci_run_id=8,
+            preregistration_ci_completed_unix=3,
+            quicknet_chain_hash=QUICKNET_CHAIN_HASH,
+            quicknet_round=1,
+            quicknet_randomness_hex="c" * 64,
+            seed_hex="d" * 64,
+            pulse_receipt_sha256="e" * 64,
+            runtime_receipt_sha256="f" * 64,
+        )
+
+
+def test_execute_refuses_registry_not_sibling_of_b_pinned_state_root(tmp_path: Path) -> None:
+    config, dependencies, _ = _fixture(tmp_path)
+    wrong = tmp_path / "wrong-registry"
+    wrong.mkdir(mode=0o700)
+    with pytest.raises(ExecutionRefusal, match="bridge-state parent/attempt-registry"):
+        execute_with_dependencies(
+            replace(config, attempt_registry_root=wrong), dependencies
+        )
 
 
 def test_live_model_event_ledger_is_fsynced_before_snapshot(

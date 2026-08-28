@@ -120,6 +120,18 @@ def test_answerer_sends_frozen_body_once_and_records_raw_observations() -> None:
     assert events[1]["ordinal"] == 1 and events[1]["phase"] == "training"
 
 
+def test_answerer_accepts_pretty_semantic_response_without_reformatting_raw_body() -> None:
+    content = '{\n  "response_token" : "' + VALID_RESPONSE_TOKEN + '"\n}'
+    events: list[dict] = []
+    reply = OpenAICompatibleDnrdAnswerer(
+        OpenAICompatibleDnrdConfig("http://endpoint"),
+        RecordingTransport([_completion(content=content)]), event_sink=events.append,
+    ).answer(_request())
+    assert reply.response_token == VALID_RESPONSE_TOKEN
+    assert json.loads(events[-1]["raw_response_utf8"])["choices"][0]["message"]["content"] == content
+    assert hashlib.sha256(events[-1]["raw_response_utf8"].encode()).hexdigest() == events[-1]["raw_response_sha256"]
+
+
 @pytest.mark.parametrize(
     "payload, message",
     [
@@ -245,9 +257,9 @@ def test_answerer_retains_non_utf8_rejection_as_exact_base64() -> None:
     assert base64.b64decode(rejected["raw_response_base64"], validate=True) == raw
 
 
-def test_answerer_rejects_noncanonical_dnrd3_response_token_at_live_boundary() -> None:
+def test_answerer_rejects_noncanonical_dnrd4_response_token_at_live_boundary() -> None:
     events: list[dict] = []
-    with pytest.raises(LiveBoundaryError, match="exact DNRD-3 form"):
+    with pytest.raises(LiveBoundaryError, match="exact DNRD-4 form"):
         OpenAICompatibleDnrdAnswerer(
             OpenAICompatibleDnrdConfig("http://endpoint"),
             RecordingTransport([_completion(content=json.dumps({"response_token": "token-short"}))]),
@@ -264,6 +276,7 @@ def test_answerer_rejects_noncanonical_dnrd3_response_token_at_live_boundary() -
     ("content", "stage_code"),
     [
         ("not-json", "STRUCTURED_RESPONSE_NOT_STRICT_JSON"),
+        ('{"response_token":"' + VALID_RESPONSE_TOKEN + '","response_token":"' + OTHER_VALID_RESPONSE_TOKEN + '"}', "STRUCTURED_RESPONSE_NOT_STRICT_JSON"),
         (json.dumps({"token": VALID_RESPONSE_TOKEN}), "STRUCTURED_RESPONSE_KEYSET_INVALID"),
         (json.dumps({"response_token": VALID_RESPONSE_TOKEN, "extra": "x"}), "STRUCTURED_RESPONSE_KEYSET_INVALID"),
         (json.dumps({"response_token": "token-cccccccccccccccccccc"}), "RESPONSE_TOKEN_NOT_REQUEST_CANDIDATE"),

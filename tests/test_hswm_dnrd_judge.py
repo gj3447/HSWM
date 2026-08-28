@@ -84,8 +84,8 @@ def _qualification_summary() -> dict[str, object]:
             "returned_token": requested,
         })
     return {
-        "schema_version": "hswm-dnrd3-structured-output-qualification-summary/v1",
-        "domain": "HSWM-DNRD3-STRUCTURED-OUTPUT-QUALIFICATION-v1",
+        "schema_version": "hswm-dnrd4-structured-output-qualification-summary/v2",
+        "domain": "HSWM-DNRD4-STRUCTURED-OUTPUT-QUALIFICATION-v1",
         "event_schema": "hswm-dnrd-live-model-event/v3",
         "experiment_occurrence": False,
         "future_seed_material_used": False,
@@ -103,29 +103,102 @@ def _qualification_summary() -> dict[str, object]:
         "calls": calls,
         "started_at_unix_ns": 1,
         "ended_at_unix_ns": 2,
-        "live_source_sha256": "a" * 64,
-        "runner_source_sha256": "b" * 64,
+        "source_files": [
+            {"path": "_research/dnrd/live.py", "sha256": "a" * 64},
+            {"path": "_research/dnrd/qualify.py", "sha256": "b" * 64},
+            {"path": "_research/dnrd/runner.py", "sha256": "c" * 64},
+            {"path": "_research/dnrd/task_family.py", "sha256": "d" * 64},
+        ],
+        "python_executable_sha256": judge.OFFICIAL_PYTHON_EXECUTABLE_SHA256,
+        "python_version": judge.OFFICIAL_PYTHON_VERSION,
+        "unicode_data_version": judge.OFFICIAL_UNICODE_DATA_VERSION,
     }
 
 
 def test_structured_output_qualification_independently_rejects_semantic_drift() -> None:
-    config = {"model_endpoint": "http://127.0.0.1:18000"}
+    config = {
+        "model_endpoint": "http://127.0.0.1:18000",
+        "python_executable_sha256": judge.OFFICIAL_PYTHON_EXECUTABLE_SHA256,
+        "python_version": judge.OFFICIAL_PYTHON_VERSION,
+        "unicode_data_version": judge.OFFICIAL_UNICODE_DATA_VERSION,
+    }
     base = _qualification_summary()
+    source = {"files": deepcopy(base["source_files"])}
+    preregistration = {
+        "runtime_bindings": {
+            "python_executable_sha256": judge.OFFICIAL_PYTHON_EXECUTABLE_SHA256,
+            "python_version": judge.OFFICIAL_PYTHON_VERSION,
+            "unicode_data_version": judge.OFFICIAL_UNICODE_DATA_VERSION,
+        }
+    }
     raw = canonical_json(base) + b"\n"
-    judge._structured_output_qualification(raw, config=config, public={}, private={})
+    judge._structured_output_qualification(
+        raw,
+        config=config,
+        public={},
+        private={},
+        source=source,
+        preregistration=preregistration,
+    )
 
     altered = deepcopy(base)
     altered["calls"][0]["response_format_schema_sha256"] = "0" * 64
     with pytest.raises(judge.BundleRefusal, match="response schema digest"):
         judge._structured_output_qualification(
-            canonical_json(altered) + b"\n", config=config, public={}, private={}
+            canonical_json(altered) + b"\n",
+            config=config,
+            public={},
+            private={},
+            source=source,
+            preregistration=preregistration,
         )
 
     altered = deepcopy(base)
     altered["calls"][0]["ordinal"] = True
     with pytest.raises(judge.BundleRefusal, match="fixed successful contract"):
         judge._structured_output_qualification(
-            canonical_json(altered) + b"\n", config=config, public={}, private={}
+            canonical_json(altered) + b"\n",
+            config=config,
+            public={},
+            private={},
+            source=source,
+            preregistration=preregistration,
+        )
+
+    altered = deepcopy(base)
+    altered["source_files"][2]["sha256"] = "e" * 64
+    with pytest.raises(judge.BundleRefusal, match="source identities"):
+        judge._structured_output_qualification(
+            canonical_json(altered) + b"\n",
+            config=config,
+            public={},
+            private={},
+            source=source,
+            preregistration=preregistration,
+        )
+
+    altered = deepcopy(base)
+    altered["source_files"].reverse()
+    with pytest.raises(judge.BundleRefusal, match="source-file order"):
+        judge._structured_output_qualification(
+            canonical_json(altered) + b"\n",
+            config=config,
+            public={},
+            private={},
+            source=source,
+            preregistration=preregistration,
+        )
+
+    altered = deepcopy(base)
+    altered["unicode_data_version"] = "0.0.0"
+    with pytest.raises(judge.BundleRefusal, match="Python/Unicode runtime identities"):
+        judge._structured_output_qualification(
+            canonical_json(altered) + b"\n",
+            config=config,
+            public={},
+            private={},
+            source=source,
+            preregistration=preregistration,
         )
 
 
@@ -186,6 +259,268 @@ def _claim_bound_preregistration() -> dict[str, object]:
     }
 
 
+def _self_addressed_receipt(unsigned: dict[str, object]) -> dict[str, object]:
+    return {**unsigned, "receipt_sha256": commitment(unsigned)}
+
+
+def _preregistration_ci_fixture() -> dict[str, object]:
+    """One self-consistent DNRD-4 source/prereg/CI fixture for negative joins."""
+    scorer_sha256 = _sha("fixture-scorer")
+    source = {
+        "schema_version": "hswm-dnrd-source-freeze-manifest/v1",
+        "experiment_id": judge.EXPERIMENT_ID,
+        "source_commit_tree_bound_externally": (
+            "SOURCE_COMMIT_TREE_BOUND_EXTERNALLY_NO_SELF_CYCLE"
+        ),
+        "files": [
+            {
+                "path": path,
+                "sha256": scorer_sha256 if path == "_research/dnrd/scorer.py" else _sha("fixture-source"),
+            }
+            for path in sorted(judge.FROZEN_DNRD_SOURCE_CLOSURE)
+        ],
+    }
+    source_bytes = canonical_json(source)
+    source_commit = "a" * 40
+    preregistration_commit = "b" * 40
+    source_tree_oid = "e" * 40
+    preregistration_tree_oid = "c" * 40
+    preregistration_blob_oid = "d" * 40
+    source_ci_completed_at_utc = "2026-08-27T23:00:00Z"
+    def ci_api(run_id: int, commit: str, tree: str, updated: str) -> dict[str, object]:
+        return {"id": run_id, "workflow_id": 3, "run_number": 4, "name": "CI", "path": ".github/workflows/ci.yml", "event": "push", "head_branch": "main", "head_sha": commit, "run_attempt": 1, "status": "completed", "conclusion": "success", "created_at": "2026-08-27T22:00:00Z", "run_started_at": "2026-08-27T22:00:01Z", "updated_at": updated, "pull_requests": [], "head_commit": {"id": commit, "tree_id": tree}, "repository": {"id": 1, "full_name": "gj3447/HSWM"}, "head_repository": {"id": 1, "full_name": "gj3447/HSWM"}}
+    def ci_projection(api: dict[str, object]) -> dict[str, object]:
+        keys = ("id", "workflow_id", "run_number", "name", "path", "event", "head_branch", "head_sha", "run_attempt", "status", "conclusion", "created_at", "run_started_at", "updated_at", "pull_requests")
+        return {**{key: api[key] for key in keys}, "head_commit": api["head_commit"], "repository": api["repository"], "head_repository": api["head_repository"]}
+    source_api = ci_api(101, source_commit, source_tree_oid, source_ci_completed_at_utc)
+    source_ci_raw = canonical_json(source_api).decode("utf-8")
+    source_ci = _self_addressed_receipt({
+        "schema_version": "hswm-dnrd-source-ci-receipt/v2",
+        "provider": "GITHUB_ACTIONS",
+        "run_id": 101,
+        "head_sha": source_commit,
+        "conclusion": "success",
+        "raw_response_sha256": sha256(source_ci_raw.encode("utf-8")).hexdigest(),
+        "raw_response_utf8": source_ci_raw,
+        "discovery_query": {"request_path": f"/repos/gj3447/HSWM/actions/workflows/ci.yml/runs?event=push&branch=main&head_sha={source_commit}&per_page=100&page=1", "workflow_path": ".github/workflows/ci.yml", "event": "push", "branch": "main", "head_sha": source_commit, "per_page": 100, "page": 1},
+        "critical_projection": ci_projection(source_api),
+        "raw_list_response_sha256": sha256(canonical_json({"total_count": 1, "workflow_runs": [source_api]})).hexdigest(),
+        "raw_list_response_utf8": canonical_json({"total_count": 1, "workflow_runs": [source_api]}).decode(),
+    })
+    preregistration = _claim_bound_preregistration()
+    preregistration.update({
+        "schema_version": judge.PREREGISTRATION_SCHEMA,
+        "experiment_id": judge.EXPERIMENT_ID,
+        "protocol_version": "v4",
+        "status": "FROZEN_AWAITING_SUCCESSFUL_PREREGISTRATION_B_CI_AND_FUTURE_PULSE",
+        "authority": {
+            "broad_research_continuation_requested": True,
+            "measurement_authorized_by_user_broad_continuation": True,
+            "authorization_is_scientific_evidence": False,
+            "measurement_requires_external_exact_hash_ratification_receipt": False,
+            "measurement_requires_successful_preregistration_b_ci_receipt": True,
+            "scientific_judgment_emitted": False,
+            "external_governance_required": False,
+        },
+        "preregistration_b_ci_gate": {
+            "receipt_schema": "hswm-dnrd-preregistration-b-ci-receipt/v2",
+            "provider": "GITHUB_ACTIONS",
+            "status": "completed",
+            "conclusion": "success",
+            "minimum_lead_seconds": 900,
+            "selection_rule": "EXACT_UNFILTERED_PUSH_MAIN_HEAD_SHA_WORKFLOW_LIST_TOTAL_COUNT_ONE_FIRST_ATTEMPT",
+        },
+        "source_a_ci": {
+            "receipt_sha256": sha256(canonical_json(source_ci)).hexdigest(),
+            "run_id": 101,
+            "head_sha": source_commit,
+            "conclusion": "success",
+        },
+        "runtime_bindings": {},
+    })
+    preregistration_bytes = canonical_json(preregistration)
+    completed_at_utc = "2026-08-28T00:00:00Z"
+    completed_at_unix = judge._strict_utc_unix(completed_at_utc, "fixture B-CI completion")
+    preregistration_api = ci_api(202, preregistration_commit, preregistration_tree_oid, completed_at_utc)
+    preregistration_ci_raw = canonical_json(preregistration_api).decode("utf-8")
+    preregistration_ci = _self_addressed_receipt({
+        "schema_version": "hswm-dnrd-preregistration-b-ci-receipt/v2",
+        "provider": "GITHUB_ACTIONS",
+        "run_id": 202,
+        "head_sha": preregistration_commit,
+        "head_tree_oid": preregistration_tree_oid,
+        "preregistration_path": "_research/dnrd/preregistration.json",
+        "preregistration_git_blob_oid": preregistration_blob_oid,
+        "preregistration_sha256": sha256(preregistration_bytes).hexdigest(),
+        "status": "completed",
+        "conclusion": "success",
+        "completed_at_utc": completed_at_utc,
+        "completed_at_unix": completed_at_unix,
+        "raw_response_sha256": sha256(preregistration_ci_raw.encode("utf-8")).hexdigest(),
+        "raw_response_utf8": preregistration_ci_raw,
+        "discovery_query": {"request_path": f"/repos/gj3447/HSWM/actions/workflows/ci.yml/runs?event=push&branch=main&head_sha={preregistration_commit}&per_page=100&page=1", "workflow_path": ".github/workflows/ci.yml", "event": "push", "branch": "main", "head_sha": preregistration_commit, "per_page": 100, "page": 1},
+        "critical_projection": ci_projection(preregistration_api),
+        "raw_list_response_sha256": sha256(canonical_json({"total_count": 1, "workflow_runs": [preregistration_api]})).hexdigest(),
+        "raw_list_response_utf8": canonical_json({"total_count": 1, "workflow_runs": [preregistration_api]}).decode(),
+    })
+    preregistration_ci_bytes = canonical_json(preregistration_ci)
+    candidate_value = {
+        "bindings": {
+            "source_manifest_sha256": sha256(source_bytes).hexdigest(),
+            "preregistration_sha256": sha256(preregistration_bytes).hexdigest(),
+            "preregistration_ci_receipt_sha256": sha256(preregistration_ci_bytes).hexdigest(),
+            "scorer_sha256": scorer_sha256,
+        },
+        "chronology": {
+            "source_commit": source_commit,
+            "preregistration_commit": preregistration_commit,
+            "source_tree_oid": source_tree_oid,
+            "preregistration_tree_oid": preregistration_tree_oid,
+            "source_frozen_at_unix": judge._strict_utc_unix(
+                source_ci_completed_at_utc, "fixture source-CI completion"
+            ) - 1,
+            "preregistration_committed_at_unix": completed_at_unix - 1,
+            "preregistration_ci_completed_at_unix": completed_at_unix,
+        },
+    }
+    return {
+        "source": source,
+        "source_bytes": source_bytes,
+        "source_ci": source_ci,
+        "preregistration": preregistration,
+        "preregistration_bytes": preregistration_bytes,
+        "preregistration_ci": preregistration_ci,
+        "preregistration_ci_bytes": preregistration_ci_bytes,
+        "candidate": candidate_value,
+        "preregistration_blob_oid": preregistration_blob_oid,
+    }
+
+
+def _validate_preregistration_ci_fixture(fixture: dict[str, object]) -> None:
+    judge._validate_source_and_preregistration(
+        source=fixture["source"],
+        preregistration=fixture["preregistration"],
+        source_ci=fixture["source_ci"],
+        preregistration_ci=fixture["preregistration_ci"],
+        candidate=fixture["candidate"],
+        source_bytes=fixture["source_bytes"],
+        preregistration_bytes=fixture["preregistration_bytes"],
+        preregistration_ci_bytes=fixture["preregistration_ci_bytes"],
+    )
+
+
+def _reserialize_preregistration_ci(fixture: dict[str, object]) -> None:
+    receipt = fixture["preregistration_ci"]
+    assert isinstance(receipt, dict)
+    unsigned = {key: value for key, value in receipt.items() if key != "receipt_sha256"}
+    receipt["receipt_sha256"] = commitment(unsigned)
+    raw = canonical_json(receipt)
+    fixture["preregistration_ci_bytes"] = raw
+    candidate_value = fixture["candidate"]
+    assert isinstance(candidate_value, dict)
+    bindings = candidate_value["bindings"]
+    assert isinstance(bindings, dict)
+    bindings["preregistration_ci_receipt_sha256"] = sha256(raw).hexdigest()
+
+
+def test_preregistration_b_ci_receipt_refuses_self_consistent_completion_time_drift() -> None:
+    fixture = _preregistration_ci_fixture()
+    _validate_preregistration_ci_fixture(fixture)
+
+    altered = deepcopy(fixture)
+    receipt = altered["preregistration_ci"]
+    assert isinstance(receipt, dict)
+    receipt["completed_at_unix"] = receipt["completed_at_unix"] + 1
+    _reserialize_preregistration_ci(altered)
+    with pytest.raises(judge.BundleRefusal, match="UTC completion time drifted"):
+        _validate_preregistration_ci_fixture(altered)
+
+
+def test_source_ci_receipt_refuses_completion_before_source_freeze() -> None:
+    fixture = _preregistration_ci_fixture()
+    altered = deepcopy(fixture)
+    candidate = altered["candidate"]
+    assert isinstance(candidate, dict)
+    chronology = candidate["chronology"]
+    assert isinstance(chronology, dict)
+    source_ci = altered["source_ci"]
+    assert isinstance(source_ci, dict)
+    raw = json.loads(source_ci["raw_response_utf8"])
+    completed_at = judge._strict_utc_unix(raw["updated_at"], "fixture source-CI completion")
+    chronology["source_frozen_at_unix"] = completed_at + 1
+    with pytest.raises(judge.BundleRefusal, match="source-A tree/freeze/precedence"):
+        _validate_preregistration_ci_fixture(altered)
+
+
+def test_preregistration_b_ci_receipt_refuses_self_consistent_raw_provider_drift() -> None:
+    fixture = _preregistration_ci_fixture()
+    altered = deepcopy(fixture)
+    receipt = altered["preregistration_ci"]
+    assert isinstance(receipt, dict)
+    raw = json.loads(receipt["raw_response_utf8"])
+    raw["head_commit"]["tree_id"] = "f" * 40
+    receipt["raw_response_utf8"] = canonical_json(raw).decode("utf-8")
+    receipt["raw_response_sha256"] = sha256(receipt["raw_response_utf8"].encode("utf-8")).hexdigest()
+    _reserialize_preregistration_ci(altered)
+    with pytest.raises(judge.BundleRefusal, match="raw response does not attest"):
+        _validate_preregistration_ci_fixture(altered)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("head_tree_oid", "f" * 40),
+        ("preregistration_git_blob_oid", "f" * 40),
+    ],
+)
+def test_preregistration_b_ci_receipt_refuses_raw_git_tree_or_blob_drift(
+    field: str, value: str
+) -> None:
+    fixture = _preregistration_ci_fixture()
+    receipt = deepcopy(fixture["preregistration_ci"])
+    assert isinstance(receipt, dict)
+    receipt[field] = value
+    candidate_value = fixture["candidate"]
+    assert isinstance(candidate_value, dict)
+    with pytest.raises(judge.BundleRefusal, match="raw A-to-B Git tree/blob/chronology"):
+        judge._validate_preregistration_ci_git_binding(
+            preregistration_ci=receipt,
+            candidate=candidate_value,
+            preregistration_commit="b" * 40,
+            preregistration_tree_oid="c" * 40,
+            preregistration_path="_research/dnrd/preregistration.json",
+            preregistration_git_blob_oid=fixture["preregistration_blob_oid"],
+            preregistration_sha256=candidate_value["bindings"]["preregistration_sha256"],
+            preregistration_committed_at_unix=candidate_value["chronology"]["preregistration_committed_at_unix"],
+        )
+
+
+def test_preregistration_b_ci_receipt_refuses_completion_before_b_commit() -> None:
+    fixture = _preregistration_ci_fixture()
+    receipt = deepcopy(fixture["preregistration_ci"])
+    candidate_value = deepcopy(fixture["candidate"])
+    assert isinstance(receipt, dict) and isinstance(candidate_value, dict)
+    receipt["completed_at_unix"] = candidate_value["chronology"]["preregistration_committed_at_unix"] - 1
+    candidate_value["chronology"]["preregistration_ci_completed_at_unix"] = receipt["completed_at_unix"]
+    with pytest.raises(judge.BundleRefusal, match="raw A-to-B Git tree/blob/chronology"):
+        judge._validate_preregistration_ci_git_binding(
+            preregistration_ci=receipt,
+            candidate=candidate_value,
+            preregistration_commit="b" * 40,
+            preregistration_tree_oid="c" * 40,
+            preregistration_path="_research/dnrd/preregistration.json",
+            preregistration_git_blob_oid=fixture["preregistration_blob_oid"],
+            preregistration_sha256=candidate_value["bindings"]["preregistration_sha256"],
+            preregistration_committed_at_unix=candidate_value["chronology"]["preregistration_committed_at_unix"],
+        )
+
+
+def test_dnr_d4_bundle_rejects_obsolete_ratification_artifact(tmp_path: Path) -> None:
+    (tmp_path / "ratification_receipt.json").write_text("{}", encoding="utf-8")
+    with pytest.raises(judge.BundleRefusal, match="must not retain obsolete ratification_receipt"):
+        judge.judge_bundle(tmp_path)
+
+
 @pytest.mark.parametrize(
     "field_path",
     [
@@ -226,6 +561,18 @@ def test_preregistration_names_exact_terminals_and_does_not_claim_record_signatu
     raw_description = PREREG_CLAIM_BOUNDARY["interventions"]["fixed_rule_replay_gate"]
     assert full_description.startswith("For each stream, apply exactly eight")
     assert raw_description.startswith("NO_MODEL_DISPATCH")
+
+
+def test_dnrd3_predecessor_identity_is_hard_bound_in_the_v4_claim_boundary() -> None:
+    assert PREREG_CLAIM_BOUNDARY["predecessor_bindings"][-4:] == [
+        "DNRD3_STRUCTURAL_VOID_POST_128_CALLS_NO_MECHANICS_RESULT_NO_RETRY",
+        "DNRD3_PREREGISTRATION_SHA256="
+        "2bcbe110cac8b69b3889761c05635a8af62b09a443e2a10a2a4a62aad0791226",
+        "DNRD3_RESULT_COMMIT=43c1b9885352ed99e6845884b0adec0445f1be4b",
+        "DNRD3_CHECKED_EVIDENCE_RECEIPT_SELF_SHA256="
+        "55c9de56932b3b28ab049e056e93051312442ca84c29c90182ffc485d996e829",
+    ]
+    assert commitment(PREREG_CLAIM_BOUNDARY) == judge.PREREG_CLAIM_BOUNDARY_SHA256
 
 
 def test_independent_judge_refuses_claim_text_hidden_in_preregistration_created_at() -> None:
@@ -566,6 +913,7 @@ def candidate() -> dict[str, object]:
         "bindings": {
             "source_manifest_sha256": _sha("source-manifest"),
             "preregistration_sha256": _sha("preregistration"),
+            "preregistration_ci_receipt_sha256": _sha("preregistration-ci-receipt"),
             "pulse_receipt_sha256": _sha("pulse-receipt"),
             "split_manifest_sha256": _sha("split-manifest"),
             "model_deployment_sha256": _sha("deployment"),
@@ -581,9 +929,10 @@ def candidate() -> dict[str, object]:
             "source_commit": "a" * 40,
             "preregistration_commit": "b" * 40,
             "source_tree_oid": "c" * 40,
+            "preregistration_tree_oid": "d" * 40,
             "source_frozen_at_unix": 1_000,
             "preregistration_committed_at_unix": 1_050,
-            "external_ratification_at_unix": 1_100,
+            "preregistration_ci_completed_at_unix": 1_100,
             "pulse_round": 7,
             "pulse_chain_hash": _sha("quicknet-chain"),
             "pulse_at_unix": 2_000,
@@ -669,13 +1018,14 @@ def _public_canary_fixture(seed: bytes) -> dict[str, object]:
 
 def test_positive_candidate_is_integrity_go_without_utility_claim() -> None:
     judgment = judge.judge(candidate())
-    assert judgment["schema_version"] == "hswm-dnrd-judgment/v2"
+    assert judgment["schema_version"] == "hswm-dnrd-judgment/v3"
     assert judgment["terminal"] == "DIAGNOSTIC_INTEGRITY_GO_NO_UTILITY_CLAIM"
     assert judgment["scientific_status"] == "UNJUDGED"
     assert judgment["efficacy_claim"] == "NOT_EVALUATED"
     assert judgment["canonical_permit"] == "NOT_ESTABLISHED"
     assert judgment["learning_claim"] == "NOT_ESTABLISHED"
-    assert "Declared process separation" in judgment["claim_boundary"]
+    assert "engineering-conformance diagnostic" in judgment["claim_boundary"]
+    assert "not scientific effect evidence" in judgment["claim_boundary"]
     assert "DECLARED_ROLE_SEPARATION_NOT_PROVEN" in judgment["claim_boundary"]
     assert "Model-serving identity/determinism is not proven" in judgment["claim_boundary"]
     linkage = candidate()["streams"][0]["local_v2_linkage"]
@@ -904,11 +1254,11 @@ def test_episode_replay_rejects_noncanonical_retained_response_token() -> None:
         "arm_order": list(judge.ARMS),
     }
 
-    with pytest.raises(judge.BundleRefusal, match="exact DNRD-3 form"):
+    with pytest.raises(judge.BundleRefusal, match="exact DNRD-4 form"):
         judge._check_episode(episode, stream, "heldout", "episode")
 
 
-def test_generated_dnrd3_manifest_pair_replays_under_the_judge() -> None:
+def test_generated_dnrd4_manifest_pair_replays_under_the_judge() -> None:
     public, private = generate_manifests(bytes(range(32)))
 
     episodes, stream_by_episode, bindings = judge._public_manifest_index(public, private)
@@ -1716,7 +2066,7 @@ def _validate_source_closure_for_test(paths: set[str] | frozenset[str]) -> None:
         },
         preregistration={},
         source_ci={},
-        ratification={},
+        preregistration_ci={},
         candidate={
             "bindings": {
                 "source_manifest_sha256": sha256(source_bytes).hexdigest(),
@@ -1726,6 +2076,7 @@ def _validate_source_closure_for_test(paths: set[str] | frozenset[str]) -> None:
         },
         source_bytes=source_bytes,
         preregistration_bytes=preregistration_bytes,
+        preregistration_ci_bytes=b"fixture preregistration CI receipt bytes",
     )
 
 
@@ -1896,7 +2247,7 @@ def _runtime_v3_closure_fixture(
                 "resolved_entrypoint_path": entrypoint_path,
                 "resolved_entrypoint_sha256": written[entrypoint_path],
                 "files": [
-                    {"path": path, "sha256": digest}
+                    {"path": path, "sha256": digest, "bytes": len((tmp_path / "bridge_runtime_closure" / path).read_bytes())}
                     for path, digest in sorted(written.items())
                 ],
             }
@@ -1908,7 +2259,7 @@ def _runtime_v3_closure_fixture(
         "schema_version": judge.RUNTIME_TREE_MANIFEST_SCHEMA,
         "root_path": "/fixture/runtime-root",
         "entrypoint": "bridge.js",
-        "files": [{"path": "bridge.js", "sha256": bridge_sha}],
+        "files": [{"path": "bridge.js", "sha256": bridge_sha, "bytes": len((tmp_path / "bridge_runtime_closure" / "bridge.js").read_bytes())}],
         "external_packages": external_packages,
         "build_provenance": {
             "source_a_commit": "a" * 40,
@@ -1990,6 +2341,37 @@ def _validate_runtime_v3_fixture(
 def test_runtime_v3_closure_rehashes_selected_recursive_package_tree_and_build_provenance(tmp_path: Path) -> None:
     _, runtime, candidate_value, support = _runtime_v3_closure_fixture(tmp_path)
     _validate_runtime_v3_fixture(tmp_path, runtime, candidate_value, support)
+
+
+def test_runtime_v4_closure_allows_only_manifest_addressed_zero_byte_regular_file(tmp_path: Path) -> None:
+    manifest, runtime, candidate_value, support = _runtime_v3_closure_fixture(tmp_path)
+    package = next(item for item in manifest["external_packages"] if item["name"] == "effect")
+    relative = "node_modules/effect/dist/intentional-empty.js"
+    digest = _write_runtime_closure_file(tmp_path, relative, b"")
+    package["files"].append({"path": relative, "sha256": digest, "bytes": 0})
+    package["files"].sort(key=lambda row: row["path"])
+    _rewrite_runtime_v3_manifest(tmp_path, manifest, runtime)
+    _validate_runtime_v3_fixture(tmp_path, runtime, candidate_value, support)
+
+    # A zero-byte file outside the exact selected closure is still refused.
+    extra_root = tmp_path / "extra-zero"
+    extra_root.mkdir()
+    _, runtime, candidate_value, support = _runtime_v3_closure_fixture(extra_root)
+    _write_runtime_closure_file(extra_root, "node_modules/effect/dist/unlisted-empty.js", b"")
+    with pytest.raises(judge.BundleRefusal, match="file closure is not exact"):
+        _validate_runtime_v3_fixture(extra_root, runtime, candidate_value, support)
+
+    mismatch_root = tmp_path / "size-mismatch"
+    mismatch_root.mkdir()
+    manifest, runtime, candidate_value, support = _runtime_v3_closure_fixture(mismatch_root)
+    package = next(item for item in manifest["external_packages"] if item["name"] == "effect")
+    relative = "node_modules/effect/dist/intentional-empty.js"
+    digest = _write_runtime_closure_file(mismatch_root, relative, b"")
+    package["files"].append({"path": relative, "sha256": digest, "bytes": 1})
+    package["files"].sort(key=lambda row: row["path"])
+    _rewrite_runtime_v3_manifest(mismatch_root, manifest, runtime)
+    with pytest.raises(judge.BundleRefusal, match="copy hash mismatch"):
+        _validate_runtime_v3_fixture(mismatch_root, runtime, candidate_value, support)
 
 
 def test_runtime_v3_closure_refuses_omitted_or_extra_deep_package_bytes(tmp_path: Path) -> None:

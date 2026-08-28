@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pure, strict adjudicator for the DNRD-3 diagnostic candidate.
+"""Pure, strict adjudicator for the DNRD-4 diagnostic candidate.
 
 This file intentionally imports only the Python standard library.  It judges
 the candidate artifact, never a live runtime: a passing judgment is an
@@ -9,7 +9,7 @@ verdict.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 import base64
 from hashlib import sha256
 import json
@@ -22,10 +22,44 @@ from urllib.parse import urlsplit
 from uuid import UUID
 
 
-CANDIDATE_SCHEMA = "hswm-dnrd-candidate/v2"
+CANDIDATE_SCHEMA = "hswm-dnrd-candidate/v3"
 INCONCLUSIVE_SCHEMA = "hswm-dnrd-inconclusive-occurrence/v2"
-JUDGMENT_SCHEMA = "hswm-dnrd-judgment/v2"
-EXPERIMENT_ID = "HSWM-DNRD-3"
+JUDGMENT_SCHEMA = "hswm-dnrd-judgment/v3"
+EXPERIMENT_ID = "HSWM-DNRD-4"
+
+
+def _validate_ci_v2_receipt(receipt: Mapping[str, Any], label: str) -> None:
+    """Recheck the raw GitHub run/list anti-selection proof without network access."""
+    query = receipt["discovery_query"]
+    head_sha = receipt["head_sha"]
+    expected = {"request_path": f"/repos/gj3447/HSWM/actions/workflows/ci.yml/runs?event=push&branch=main&head_sha={head_sha}&per_page=100&page=1", "workflow_path": ".github/workflows/ci.yml", "event": "push", "branch": "main", "head_sha": head_sha, "per_page": 100, "page": 1}
+    if query != expected:
+        raise BundleRefusal(f"{label} discovery query drifted")
+    raw_list = _string(receipt["raw_list_response_utf8"], f"{label}.raw_list_response_utf8")
+    if _sha_bytes(raw_list.encode()) != _sha(receipt["raw_list_response_sha256"], f"{label}.raw_list_response_sha256"):
+        raise BundleRefusal(f"{label} raw workflow-runs list digest mismatch")
+    listed = _parse_json_bytes(raw_list.encode(), f"{label} raw workflow-runs list", canonical=False)
+    raw = _parse_json_bytes(_string(receipt["raw_response_utf8"], f"{label}.raw_response_utf8").encode(), f"{label} raw response", canonical=False)
+    rows = listed.get("workflow_runs") if type(listed) is dict else None
+    if type(raw) is not dict or type(listed) is not dict or listed.get("total_count") != 1:
+        raise BundleRefusal(f"{label} workflow-runs list is malformed")
+    if not isinstance(rows, list) or len(rows) != 1 or not isinstance(rows[0], dict):
+        raise BundleRefusal(f"{label} workflow-runs list does not prove one run")
+    fields = ("id", "workflow_id", "run_number", "name", "path", "event", "head_branch", "head_sha", "run_attempt", "status", "conclusion", "created_at", "run_started_at", "updated_at", "pull_requests")
+    if any(raw.get(k) != rows[0].get(k) for k in (*fields, "head_commit", "repository", "head_repository")):
+        raise BundleRefusal(f"{label} raw response does not attest selected/listed critical projection")
+    def projection(value: Mapping[str, Any]) -> dict[str, Any]:
+        head, repo, hrepo = value["head_commit"], value["repository"], value["head_repository"]
+        return {**{key: value.get(key) for key in fields}, "head_commit": {"id": head.get("id"), "tree_id": head.get("tree_id")}, "repository": {"id": repo.get("id"), "full_name": repo.get("full_name")}, "head_repository": {"id": hrepo.get("id"), "full_name": hrepo.get("full_name")}}
+    if receipt["critical_projection"] != projection(raw) or projection(rows[0]) != projection(raw):
+        raise BundleRefusal(f"{label} retained critical projection mismatch")
+    if (raw.get("id") != receipt["run_id"] or type(raw.get("workflow_id")) is not int or raw.get("workflow_id") <= 0 or type(raw.get("run_number")) is not int or raw.get("run_number") <= 0 or raw.get("name") != "CI" or raw.get("path") != ".github/workflows/ci.yml" or raw.get("event") != "push" or raw.get("head_branch") != "main" or raw.get("head_sha") != head_sha or raw.get("run_attempt") != 1 or raw.get("status") != "completed" or raw.get("conclusion") != "success" or raw.get("pull_requests") != []):
+        raise BundleRefusal(f"{label} is not an eligible first-attempt CI run")
+    head, repo, hrepo = raw.get("head_commit"), raw.get("repository"), raw.get("head_repository")
+    if not isinstance(head, dict) or not isinstance(repo, dict) or not isinstance(hrepo, dict) or head.get("id") != head_sha or repo != hrepo or repo.get("full_name") != "gj3447/HSWM" or type(repo.get("id")) is not int or repo["id"] <= 0:
+        raise BundleRefusal(f"{label} GitHub head/repository binding drifted")
+    if not (_strict_utc_unix(raw.get("created_at"), f"{label}.created_at") <= _strict_utc_unix(raw.get("run_started_at"), f"{label}.run_started_at") <= _strict_utc_unix(raw.get("updated_at"), f"{label}.updated_at")):
+        raise BundleRefusal(f"{label} timestamps not ordered")
 ARMS = (
     "FULL",
     "NO_MEMORY_ROLLBACK",
@@ -43,14 +77,20 @@ CLOSURE_MOUNT_ROLES = {**MOUNT_ROLES, "RAW_EQUAL_BUDGET": "RAW_CONTROL"}
 HEX64 = frozenset("0123456789abcdef")
 RUNNER_EVENT_SCHEMA = "hswm-dnrd-runner-event/v2"
 LIVE_EVENT_SCHEMA = "hswm-dnrd-live-model-event/v3"
+QUALIFICATION_SOURCE_PATHS = (
+    "_research/dnrd/live.py",
+    "_research/dnrd/qualify.py",
+    "_research/dnrd/runner.py",
+    "_research/dnrd/task_family.py",
+)
 PUBLIC_MANIFEST_SCHEMA = "hswm-dnrd-public-manifest/v2"
-PULSE_BINDING_SCHEMA = "hswm-dnrd-pulse-binding/v3"
+PULSE_BINDING_SCHEMA = "hswm-dnrd-pulse-binding/v5"
 RUNTIME_RECEIPT_SCHEMA = "hswm-dnrd-runtime-receipt/v3"
 EXECUTION_CLOSURE_ISOLATION_CLAIM = (
     "OWNER_READ_EXECUTE_ONLY_COPIED_CLOSURES_PER_INVOCATION_ENTRYPOINT_REHASHED_"
     "SAME_UID_ADVERSARIAL_IMMUTABILITY_NOT_PROVEN"
 )
-RUNTIME_TREE_MANIFEST_SCHEMA = "hswm-dnrd-bridge-runtime-tree-manifest/v3"
+RUNTIME_TREE_MANIFEST_SCHEMA = "hswm-dnrd-bridge-runtime-tree-manifest/v4"
 RUNTIME_CLOSURE_MAX_FILES = 8_192
 RUNTIME_CLOSURE_MAX_TOTAL_BYTES = 67_108_864
 VERIFIER_TIMEOUT_SECONDS = 60
@@ -120,14 +160,9 @@ PROVIDER_CACHE_UNOBSERVABLE = "NOT_OBSERVABLE_BY_CLIENT"
 MAX_OUTPUT_TOKENS = 64
 TOKENIZER_PREFLIGHT_PROMPT = '{"response_token":"token-ffffffffffffffffffff"}'
 TRAINING_CANARY_PREFIX = "dnrd-training-provenance:"
-PREREGISTRATION_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v3"
+PREREGISTRATION_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v4"
 PREREG_CLAIM_BOUNDARY_SHA256 = (
-    "41ee5b08699b6c1174e2fb58c9d5459f7208058ad181f3a1fb6e11a20ea839c1"
-)
-RATIFICATION_TEMPLATE_VERSION = "hswm-dnrd-ratification-statement/v3"
-RATIFICATION_TEMPLATE = (
-    "I ratify HSWM-DNRD-3 preregistration SHA-256 {preregistration_sha256} "
-    "under hswm-dnrd-ratification-statement/v3."
+    "8b91c02b2953d1baaec9d0f223a1c3796abf63a5aeb16dfc155d4d138f6ef6a0"
 )
 QUICKNET_CHAIN = {
     "beacon_id": "quicknet",
@@ -147,6 +182,10 @@ QUICKNET_CHAIN = {
 FROZEN_DNRD_SOURCE_CLOSURE = frozenset(
     {
         "_research/dnrd/__init__.py",
+        "_research/dnrd/prepare.py",
+        "_research/dnrd/qualify.py",
+        "_research/dnrd/register.py",
+        "_research/dnrd/configure.py",
         "_research/dnrd/task_family.py",
         "_research/dnrd/scorer.py",
         "_research/dnrd/seed.py",
@@ -155,9 +194,13 @@ FROZEN_DNRD_SOURCE_CLOSURE = frozenset(
         "_research/dnrd/execute.py",
         "_research/dnrd/judge.py",
         "tests/test_hswm_dnrd_execute.py",
+        "tests/test_hswm_dnrd_configure.py",
         "tests/test_hswm_dnrd_judge.py",
         "tests/test_hswm_dnrd_integration.py",
         "tests/test_hswm_dnrd_live.py",
+        "tests/test_hswm_dnrd_prepare.py",
+        "tests/test_hswm_dnrd_qualify.py",
+        "tests/test_hswm_dnrd_register.py",
         "tests/test_hswm_dnrd_runner.py",
         "tests/test_hswm_dnrd_seed.py",
         "tests/test_hswm_dnrd_task_scorer.py",
@@ -193,7 +236,7 @@ FROZEN_DNRD_SOURCE_CLOSURE = frozenset(
         "tools/swm0w_drand/package-lock.json",
         "tools/swm0w_drand/fixtures/quicknet-round-1000.json",
         "_research/dnrd/verify-beacon.mjs",
-        "docs/research/HSWM_DNRD_3_SOURCE_A_SCIENTIFIC_BOUNDARY_2026-08-28.md",
+        "docs/research/HSWM_DNRD_4_SUCCESSOR_SCIENTIFIC_BOUNDARY_2026-08-28.md",
     }
 )
 
@@ -241,6 +284,7 @@ CANDIDATE_BINDING_KEYS = frozenset(
     {
         "source_manifest_sha256",
         "preregistration_sha256",
+        "preregistration_ci_receipt_sha256",
         "pulse_receipt_sha256",
         "split_manifest_sha256",
         "model_deployment_sha256",
@@ -265,8 +309,8 @@ BUNDLE_COMMON_REQUIRED_FILES = frozenset(
         "source_manifest.json",
         "preregistration.json",
         "source_ci_receipt.json",
+        "preregistration_ci_receipt.json",
         "structured_output_qualification.json",
-        "ratification_receipt.json",
         "runtime_receipt.json",
         "attempt_lock_receipt.json",
         "terminal-intent.json",
@@ -426,16 +470,22 @@ def _validate_chronology(value: object) -> None:
             "source_commit",
             "preregistration_commit",
             "source_tree_oid",
+            "preregistration_tree_oid",
             "source_frozen_at_unix",
             "preregistration_committed_at_unix",
-            "external_ratification_at_unix",
+            "preregistration_ci_completed_at_unix",
             "pulse_round",
             "pulse_chain_hash",
             "pulse_at_unix",
         },
         "chronology",
     )
-    for key in ("source_commit", "preregistration_commit", "source_tree_oid"):
+    for key in (
+        "source_commit",
+        "preregistration_commit",
+        "source_tree_oid",
+        "preregistration_tree_oid",
+    ):
         digest = _string(data[key], f"chronology.{key}")
         if len(digest) != 40 or any(char not in HEX64 for char in digest):
             raise JudgeRefusal(f"chronology.{key} must be a lowercase 40-hex Git OID")
@@ -445,18 +495,24 @@ def _validate_chronology(value: object) -> None:
         "chronology.preregistration_committed_at_unix",
         minimum=1,
     )
-    ratified_at = _integer(
-        data["external_ratification_at_unix"],
-        "chronology.external_ratification_at_unix",
+    ci_completed_at = _integer(
+        data["preregistration_ci_completed_at_unix"],
+        "chronology.preregistration_ci_completed_at_unix",
         minimum=1,
     )
     pulse_at = _integer(data["pulse_at_unix"], "chronology.pulse_at_unix", minimum=1)
     _integer(data["pulse_round"], "chronology.pulse_round", minimum=1)
     _sha(data["pulse_chain_hash"], "chronology.pulse_chain_hash")
-    if preregistered_at < source_at or preregistered_at > ratified_at:
-        raise DiagnosticFailure("VOID_PROTOCOL", "preregistration commit must fall after source freeze and no later than ratification")
-    if pulse_at < max(source_at, ratified_at) + 900:
-        raise DiagnosticFailure("VOID_PROTOCOL", "future pulse must be at least 900 seconds after freeze and ratification")
+    if preregistered_at < source_at or preregistered_at > ci_completed_at:
+        raise DiagnosticFailure(
+            "VOID_PROTOCOL",
+            "preregistration commit must fall after source freeze and no later than B-CI completion",
+        )
+    if pulse_at < max(source_at, ci_completed_at) + 900:
+        raise DiagnosticFailure(
+            "VOID_PROTOCOL",
+            "future pulse must be at least 900 seconds after freeze and B-CI completion",
+        )
 
 
 def _validate_overlap(value: object) -> None:
@@ -744,11 +800,12 @@ def _judgment(
         "canonical_permit": "NOT_ESTABLISHED",
         "learning_claim": "NOT_ESTABLISHED",
         "claim_boundary": (
-            "Declared process separation diagnostic only; response-independent route-reward "
-            "counts are reported without "
-            "an efficacy, Permit, or learning claim. Scorer role separation is declared only "
-            "as DECLARED_ROLE_SEPARATION_NOT_PROVEN; no stronger scorer-role property is "
-            "established. Model-serving identity/determinism is not proven."
+            "Finite engineering-conformance diagnostic only, not scientific effect evidence; "
+            "response-independent route-reward counts are reported without an efficacy, Permit, "
+            "or learning claim. Model responses are format/liveness observations and need not "
+            "match selected-route evidence. Scorer role separation is declared only as "
+            "DECLARED_ROLE_SEPARATION_NOT_PROVEN; no stronger scorer-role property is established. "
+            "Model-serving identity/determinism is not proven."
         ),
         "stream_route_checks": stream_route_checks or [],
     }
@@ -944,7 +1001,13 @@ def _bundle_jsonl(root: Path, relative: str, *, allow_empty: bool = False) -> tu
 
 
 def _structured_output_qualification(
-    raw: bytes, *, config: Mapping[str, Any], public: Mapping[str, Any], private: Mapping[str, Any]
+    raw: bytes,
+    *,
+    config: Mapping[str, Any],
+    public: Mapping[str, Any],
+    private: Mapping[str, Any],
+    source: Mapping[str, Any],
+    preregistration: Mapping[str, Any],
 ) -> Mapping[str, Any]:
     """Verify the non-scientific structured-output qualification byte-for-byte."""
     if not raw.endswith(b"\n") or raw.count(b"\n") != 1:
@@ -955,12 +1018,13 @@ def _structured_output_qualification(
         "future_seed_material_used", "record_role", "raw_full_stdout_record_persisted",
         "retry_count", "max_output_tokens", "model_endpoint", "served_model_id",
         "vllm_version", "provider_cache_independence", "calls", "started_at_unix_ns",
-        "ended_at_unix_ns", "live_source_sha256", "runner_source_sha256",
+        "ended_at_unix_ns", "source_files", "python_executable_sha256",
+        "python_version", "unicode_data_version",
     }
     data = _check_exact_keys(value, required, "structured-output qualification")
     if (
-        data["schema_version"] != "hswm-dnrd3-structured-output-qualification-summary/v1"
-        or data["domain"] != "HSWM-DNRD3-STRUCTURED-OUTPUT-QUALIFICATION-v1"
+        data["schema_version"] != "hswm-dnrd4-structured-output-qualification-summary/v2"
+        or data["domain"] != "HSWM-DNRD4-STRUCTURED-OUTPUT-QUALIFICATION-v1"
         or data["event_schema"] != LIVE_EVENT_SCHEMA
         or data["experiment_occurrence"] is not False
         or data["future_seed_material_used"] is not False
@@ -987,8 +1051,57 @@ def _structured_output_qualification(
         or data["ended_at_unix_ns"] <= data["started_at_unix_ns"]
     ):
         raise BundleRefusal("structured-output qualification time interval is invalid")
-    _sha(data["live_source_sha256"], "structured-output qualification.live_source_sha256")
-    _sha(data["runner_source_sha256"], "structured-output qualification.runner_source_sha256")
+    source_rows = source.get("files")
+    if type(source_rows) is not list:
+        raise BundleRefusal("source manifest files are unavailable to qualification validation")
+    source_hashes = {
+        row.get("path"): row.get("sha256")
+        for row in source_rows
+        if type(row) is dict
+    }
+    source_files = data["source_files"]
+    if type(source_files) is not list or len(source_files) != len(QUALIFICATION_SOURCE_PATHS):
+        raise BundleRefusal("structured-output qualification source-file closure drifted")
+    for index, expected_path in enumerate(QUALIFICATION_SOURCE_PATHS):
+        source_file = _check_exact_keys(
+            source_files[index],
+            {"path", "sha256"},
+            f"structured-output qualification.source_files[{index}]",
+        )
+        if source_file["path"] != expected_path:
+            raise BundleRefusal("structured-output qualification source-file order drifted")
+        _sha(
+            source_file["sha256"],
+            f"structured-output qualification.source_files[{index}].sha256",
+        )
+        if source_file["sha256"] != source_hashes.get(expected_path):
+            raise BundleRefusal(
+                "structured-output qualification source identities do not match Source A"
+            )
+    _sha(
+        data["python_executable_sha256"],
+        "structured-output qualification.python_executable_sha256",
+    )
+    runtime = preregistration.get("runtime_bindings")
+    if type(runtime) is not dict:
+        raise BundleRefusal(
+            "preregistration runtime bindings are unavailable to qualification validation"
+        )
+    if (
+        data["python_executable_sha256"] != config.get("python_executable_sha256")
+        or data["python_executable_sha256"]
+        != runtime.get("python_executable_sha256")
+        or data["python_executable_sha256"] != OFFICIAL_PYTHON_EXECUTABLE_SHA256
+        or data["python_version"] != config.get("python_version")
+        or data["python_version"] != runtime.get("python_version")
+        or data["python_version"] != OFFICIAL_PYTHON_VERSION
+        or data["unicode_data_version"] != config.get("unicode_data_version")
+        or data["unicode_data_version"] != runtime.get("unicode_data_version")
+        or data["unicode_data_version"] != OFFICIAL_UNICODE_DATA_VERSION
+    ):
+        raise BundleRefusal(
+            "structured-output qualification Python/Unicode runtime identities do not match frozen runtime"
+        )
     tokens: set[str] = set()
     requested_candidate_indices: set[int] = set()
     call_keys = {"candidate_response_tokens", "completion_tokens", "dnrd_request_sha256", "dnrd_response_sha256", "finish_reason", "http_request_sha256", "http_status", "ordinal", "prompt_tokens", "raw_response_sha256", "requested_token", "response_format_schema_sha256", "returned_token"}
@@ -1075,6 +1188,17 @@ def _frozen_date(value: object, label: str) -> str:
     except ValueError as error:
         raise BundleRefusal(f"{label} must be a valid calendar date") from error
     return result
+
+
+def _strict_utc_unix(value: object, label: str) -> int:
+    """Parse the sole accepted GitHub UTC timestamp form without local-time drift."""
+    result = _string(value, label)
+    if re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z", result) is None:
+        raise BundleRefusal(f"{label} must be exact UTC RFC3339 seconds")
+    try:
+        return int(datetime.strptime(result, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc).timestamp())
+    except ValueError as error:
+        raise BundleRefusal(f"{label} must be a valid UTC RFC3339 timestamp") from error
 
 
 def _validate_preregistration_claim_boundary(prereg: Mapping[str, Any]) -> None:
@@ -1190,7 +1314,7 @@ def _validate_preregistration_claim_boundary(prereg: Mapping[str, Any]) -> None:
     }
     if _canonical_hash(claim_boundary) != PREREG_CLAIM_BOUNDARY_SHA256:
         raise BundleRefusal(
-            "preregistration scientific claim boundary differs from the frozen mechanics-only contract"
+            "preregistration claim boundary differs from the frozen engineering-conformance contract"
         )
 
 
@@ -1199,10 +1323,11 @@ def _validate_source_and_preregistration(
     source: Mapping[str, Any],
     preregistration: Mapping[str, Any],
     source_ci: Mapping[str, Any],
-    ratification: Mapping[str, Any],
+    preregistration_ci: Mapping[str, Any],
     candidate: Mapping[str, Any],
     source_bytes: bytes,
     preregistration_bytes: bytes,
+    preregistration_ci_bytes: bytes,
 ) -> None:
     bindings = candidate["bindings"]
     if bindings["source_manifest_sha256"] != _sha_bytes(source_bytes):
@@ -1248,24 +1373,26 @@ def _validate_source_and_preregistration(
             "scientific_question", "hypotheses", "testbed", "learning_boundary", "arms",
             "interventions", "parity_and_leakage", "diagnostic_readouts", "void_conditions",
             "single_attempt_policy", "required_before_measurement", "result_promotion",
-            "measurement_gate", "ratification", "source_a_ci", "runtime_bindings",
+            "measurement_gate", "preregistration_b_ci_gate", "source_a_ci", "runtime_bindings",
         },
         "preregistration",
     )
     if (
         prereg["schema_version"] != PREREGISTRATION_SCHEMA
         or prereg["experiment_id"] != EXPERIMENT_ID
-        or prereg["protocol_version"] != "v3"
-        or prereg["status"] != "FROZEN_AWAITING_EXACT_HASH_RATIFICATION"
+        or prereg["protocol_version"] != "v4"
+        or prereg["status"]
+        != "FROZEN_AWAITING_SUCCESSFUL_PREREGISTRATION_B_CI_AND_FUTURE_PULSE"
     ):
-        raise BundleRefusal("preregistration is not the frozen external-ratification DNRD contract")
+        raise BundleRefusal("preregistration is not the frozen DNRD-4 B-CI chronology contract")
     authority = _check_exact_keys(
         prereg["authority"],
         {
             "broad_research_continuation_requested",
-            "exact_content_hash_user_ratified_at_freeze",
-            "measurement_authorized_at_freeze",
+            "measurement_authorized_by_user_broad_continuation",
+            "authorization_is_scientific_evidence",
             "measurement_requires_external_exact_hash_ratification_receipt",
+            "measurement_requires_successful_preregistration_b_ci_receipt",
             "scientific_judgment_emitted",
             "external_governance_required",
         },
@@ -1273,36 +1400,44 @@ def _validate_source_and_preregistration(
     )
     if (
         authority["broad_research_continuation_requested"] is not True
-        or authority["exact_content_hash_user_ratified_at_freeze"] is not False
-        or authority["measurement_authorized_at_freeze"] is not False
-        or authority["measurement_requires_external_exact_hash_ratification_receipt"] is not True
+        or authority["measurement_authorized_by_user_broad_continuation"] is not True
+        or authority["authorization_is_scientific_evidence"] is not False
+        or authority["measurement_requires_external_exact_hash_ratification_receipt"] is not False
+        or authority["measurement_requires_successful_preregistration_b_ci_receipt"] is not True
         or authority["scientific_judgment_emitted"] is not False
         or authority["external_governance_required"] is not False
     ):
-        raise BundleRefusal("preregistration authority does not preserve external-ratification gating")
+        raise BundleRefusal("preregistration authority does not preserve B-CI chronology gating")
     _validate_preregistration_claim_boundary(prereg)
-    prereg_ratification = _check_exact_keys(
-        prereg["ratification"],
-        {"statement_template_version", "statement_template"},
-        "preregistration.ratification",
+    preregistration_b_ci_gate = _check_exact_keys(
+        prereg["preregistration_b_ci_gate"],
+        {"receipt_schema", "provider", "status", "conclusion", "minimum_lead_seconds", "selection_rule"},
+        "preregistration.preregistration_b_ci_gate",
     )
     if (
-        prereg_ratification["statement_template_version"] != RATIFICATION_TEMPLATE_VERSION
-        or prereg_ratification["statement_template"] != RATIFICATION_TEMPLATE
+        preregistration_b_ci_gate["receipt_schema"]
+        != "hswm-dnrd-preregistration-b-ci-receipt/v2"
+        or preregistration_b_ci_gate["provider"] != "GITHUB_ACTIONS"
+        or preregistration_b_ci_gate["status"] != "completed"
+        or preregistration_b_ci_gate["conclusion"] != "success"
+        or type(preregistration_b_ci_gate["minimum_lead_seconds"]) is not int
+        or preregistration_b_ci_gate["minimum_lead_seconds"] != 900
+        or preregistration_b_ci_gate["selection_rule"] != "EXACT_UNFILTERED_PUSH_MAIN_HEAD_SHA_WORKFLOW_LIST_TOTAL_COUNT_ONE_FIRST_ATTEMPT"
     ):
-        raise BundleRefusal("preregistration does not freeze the exact ratification statement")
+        raise BundleRefusal("preregistration does not freeze the B-CI receipt chronology gate")
 
     ci = _check_exact_keys(
         source_ci,
         {
             "schema_version", "provider", "run_id", "head_sha", "conclusion",
-            "raw_response_sha256", "raw_response_utf8", "receipt_sha256",
+            "raw_response_sha256", "raw_response_utf8", "discovery_query", "critical_projection", "raw_list_response_sha256", "raw_list_response_utf8", "receipt_sha256",
         },
         "source CI receipt",
     )
-    if ci["schema_version"] != "hswm-dnrd-source-ci-receipt/v1":
+    if ci["schema_version"] != "hswm-dnrd-source-ci-receipt/v2":
         raise BundleRefusal("source CI receipt schema mismatch")
     _bundle_sha_receipt(ci, "source CI receipt")
+    _validate_ci_v2_receipt(ci, "source CI receipt")
     if (
         ci["provider"] != "GITHUB_ACTIONS"
         or type(ci["run_id"]) is not int
@@ -1318,38 +1453,102 @@ def _validate_source_and_preregistration(
     # emitter-owned canonical document.  It still has to be strict JSON with
     # no duplicate/non-finite ambiguity before its attested fields are used.
     ci_api = _parse_json_bytes(raw_ci.encode("utf-8"), "source CI raw response", canonical=False)
-    if type(ci_api) is not dict or (
-        ci_api.get("id") != ci["run_id"]
-        or ci_api.get("head_sha") != ci["head_sha"]
-        or ci_api.get("conclusion") != ci["conclusion"]
-    ):
-        raise BundleRefusal("source CI raw response does not attest its receipt fields")
-
-    ratified = _check_exact_keys(
-        ratification,
-        {
-            "schema_version", "preregistration_sha256", "statement_sha256", "ratified_at_unix",
-            "attested_by", "receipt_sha256",
-        },
-        "ratification receipt",
+    source_head_commit = ci_api.get("head_commit") if type(ci_api) is dict else None
+    source_ci_completed_at = (
+        _strict_utc_unix(ci_api.get("updated_at"), "source CI raw response.updated_at")
+        if type(ci_api) is dict
+        else None
     )
-    if ratified["schema_version"] != "hswm-dnrd-ratification-receipt/v3":
-        raise BundleRefusal("ratification receipt schema mismatch")
-    _bundle_sha_receipt(ratified, "ratification receipt")
     if (
-        ratified["preregistration_sha256"] != bindings["preregistration_sha256"]
-        or ratified["statement_sha256"]
-        != _sha_bytes(
-            RATIFICATION_TEMPLATE.format(
-                preregistration_sha256=bindings["preregistration_sha256"]
-            ).encode("utf-8")
-        )
-        or type(ratified["ratified_at_unix"]) is not int
-        or ratified["ratified_at_unix"] <= 0
+        type(ci_api) is not dict
+        or ci_api.get("id") != ci["run_id"]
+        or ci_api.get("head_sha") != ci["head_sha"]
+        or ci_api.get("status") != "completed"
+        or ci_api.get("conclusion") != ci["conclusion"]
+        or type(source_head_commit) is not dict
+        or source_head_commit.get("id") != ci["head_sha"]
+        or source_head_commit.get("tree_id") != candidate["chronology"]["source_tree_oid"]
+        or candidate["chronology"]["source_frozen_at_unix"]
+        > source_ci_completed_at
+        or candidate["chronology"]["preregistration_committed_at_unix"]
+        < source_ci_completed_at
     ):
-        raise BundleRefusal("ratification receipt does not bind the exact preregistration and time")
-    _sha(ratified["statement_sha256"], "ratification receipt.statement_sha256")
-    _string(ratified["attested_by"], "ratification receipt.attested_by")
+        raise BundleRefusal(
+            "source CI raw response does not attest completed source-A tree/freeze/precedence"
+        )
+
+    preregistration_ci_data = _check_exact_keys(
+        preregistration_ci,
+        {
+            "schema_version", "provider", "run_id", "head_sha", "head_tree_oid",
+            "preregistration_path", "preregistration_git_blob_oid", "preregistration_sha256",
+            "status", "conclusion", "completed_at_utc", "completed_at_unix",
+            "raw_response_sha256", "raw_response_utf8", "discovery_query", "critical_projection", "raw_list_response_sha256", "raw_list_response_utf8", "receipt_sha256",
+        },
+        "preregistration B CI receipt",
+    )
+    if preregistration_ci_data["schema_version"] != "hswm-dnrd-preregistration-b-ci-receipt/v2":
+        raise BundleRefusal("preregistration B CI receipt schema mismatch")
+    _bundle_sha_receipt(preregistration_ci_data, "preregistration B CI receipt")
+    _validate_ci_v2_receipt(preregistration_ci_data, "preregistration B CI receipt")
+    if (
+        preregistration_ci_data["provider"] != "GITHUB_ACTIONS"
+        or type(preregistration_ci_data["run_id"]) is not int
+        or preregistration_ci_data["run_id"] <= 0
+        or preregistration_ci_data["status"] != "completed"
+        or preregistration_ci_data["conclusion"] != "success"
+        or preregistration_ci_data["preregistration_sha256"]
+        != bindings["preregistration_sha256"]
+        or _sha_bytes(preregistration_ci_bytes)
+        != bindings["preregistration_ci_receipt_sha256"]
+    ):
+        raise BundleRefusal("preregistration B CI receipt does not bind the candidate/status contract")
+    for key in ("head_sha", "head_tree_oid", "preregistration_git_blob_oid"):
+        _git_oid(preregistration_ci_data[key], f"preregistration B CI receipt.{key}")
+    _string(
+        preregistration_ci_data["preregistration_path"],
+        "preregistration B CI receipt.preregistration_path",
+    )
+    raw_preregistration_ci = _string(
+        preregistration_ci_data["raw_response_utf8"],
+        "preregistration B CI receipt.raw_response_utf8",
+    )
+    if _sha_bytes(raw_preregistration_ci.encode("utf-8")) != _sha(
+        preregistration_ci_data["raw_response_sha256"],
+        "preregistration B CI receipt.raw_response_sha256",
+    ):
+        raise BundleRefusal("preregistration B CI raw response digest mismatch")
+    completed_at_unix = _integer(
+        preregistration_ci_data["completed_at_unix"],
+        "preregistration B CI receipt.completed_at_unix",
+        minimum=1,
+    )
+    completed_at_utc = _strict_utc_unix(
+        preregistration_ci_data["completed_at_utc"],
+        "preregistration B CI receipt.completed_at_utc",
+    )
+    if completed_at_utc != completed_at_unix:
+        raise BundleRefusal("preregistration B CI receipt UTC completion time drifted")
+    raw_api = _parse_json_bytes(
+        raw_preregistration_ci.encode("utf-8"),
+        "preregistration B CI raw response",
+        canonical=False,
+    )
+    head_commit = raw_api.get("head_commit") if type(raw_api) is dict else None
+    if (
+        type(raw_api) is not dict
+        or raw_api.get("id") != preregistration_ci_data["run_id"]
+        or raw_api.get("head_sha") != preregistration_ci_data["head_sha"]
+        or raw_api.get("status") != "completed"
+        or raw_api.get("conclusion") != "success"
+        or raw_api.get("updated_at") != preregistration_ci_data["completed_at_utc"]
+        or type(head_commit) is not dict
+        or head_commit.get("id") != preregistration_ci_data["head_sha"]
+        or head_commit.get("tree_id") != preregistration_ci_data["head_tree_oid"]
+    ):
+        raise BundleRefusal(
+            "preregistration B CI raw response does not attest frozen run/head/tree/completion"
+        )
 
     prereg_ci = _check_exact_keys(
         prereg["source_a_ci"],
@@ -1444,10 +1643,10 @@ def _runtime_closure_files(root: Path) -> dict[str, bytes]:
             if stat.S_ISDIR(child_info.st_mode):
                 visit(child)
             elif stat.S_ISREG(child_info.st_mode):
-                body = child.read_bytes()
-                if not body:
-                    raise BundleRefusal(f"bridge runtime closure contains an empty file: {relative}")
-                result[relative] = body
+                # npm package closures can contain intentional zero-byte
+                # marker modules.  Their admissibility is decided below only
+                # by the complete manifest's exact path, byte count and hash.
+                result[relative] = child.read_bytes()
             else:
                 raise BundleRefusal(f"bridge runtime closure contains a nonregular path: {relative}")
 
@@ -1463,6 +1662,7 @@ def _runtime_manifest_rows(
     label: str,
     closure_files: Mapping[str, bytes] | None = None,
     required_prefix: str | None = None,
+    require_bytes: bool = True,
 ) -> dict[str, str]:
     """Parse sorted `{path,sha256}` rows and optionally rehash copied bytes."""
     if type(rows) is not list or not rows:
@@ -1470,16 +1670,18 @@ def _runtime_manifest_rows(
     result: dict[str, str] = {}
     previous = ""
     for index, raw in enumerate(rows):
-        row = _check_exact_keys(raw, {"path", "sha256"}, f"{label}[{index}]")
+        row = _check_exact_keys(raw, {"path", "sha256", "bytes"} if require_bytes else {"path", "sha256"}, f"{label}[{index}]")
         path = _runtime_relative_path(row["path"], f"{label}[{index}].path")
         digest = _sha(row["sha256"], f"{label}[{index}].sha256")
+        if require_bytes and (type(row["bytes"]) is not int or row["bytes"] < 0):
+            raise BundleRefusal(f"{label}[{index}].bytes must be a nonnegative integer")
         if path <= previous or path in result:
             raise BundleRefusal(f"{label} must be strictly sorted and duplicate-free")
         if required_prefix is not None and not path.startswith(f"{required_prefix}/"):
             raise BundleRefusal(f"{label} escapes its declared package root")
         if closure_files is not None:
             body = closure_files.get(path)
-            if body is None or _sha_bytes(body) != digest:
+            if body is None or (require_bytes and len(body) != row["bytes"]) or _sha_bytes(body) != digest:
                 raise BundleRefusal(f"{label} copy hash mismatch: {path}")
         result[path] = digest
         previous = path
@@ -1730,9 +1932,9 @@ def _validate_runtime_closure(
         provenance["claim_boundary"], "bridge runtime build provenance.claim_boundary"
     )
     source_inputs = _runtime_manifest_rows(
-        provenance["source_inputs"], label="bridge runtime build source inputs"
+        provenance["source_inputs"], label="bridge runtime build source inputs", require_bytes=False
     )
-    source_rows = _runtime_manifest_rows(source["files"], label="retained source manifest inputs")
+    source_rows = _runtime_manifest_rows(source["files"], label="retained source manifest inputs", require_bytes=False)
     if source_inputs != source_rows:
         raise BundleRefusal("bridge runtime build source inputs do not exactly reproduce the source-A manifest")
     for path, digest in source_inputs.items():
@@ -3712,11 +3914,16 @@ def _validate_bundle_index(root: Path) -> Mapping[str, str]:
         ):
             raise BundleRefusal("bundle index paths must be sorted safe input paths")
         previous = path
-        target = _bundle_plain_file(root, path, allow_empty=path in {"runner_events.jsonl", "model_events.jsonl"})
+        # A runtime closure is later re-walked against its pinned v4 manifest.
+        # Permit an empty member here only in that narrow namespace so the
+        # index can reach that exact-path/hash/size authorization; ordinary
+        # evidence artifacts remain nonempty.
+        empty_permitted = path in {"runner_events.jsonl", "model_events.jsonl"} or path.startswith("bridge_runtime_closure/")
+        target = _bundle_plain_file(root, path, allow_empty=empty_permitted)
         content = target.read_bytes()
         if (
             row["bytes"] != len(content)
-            or (row["bytes"] <= 0 and not (path in {"runner_events.jsonl", "model_events.jsonl"} and len(content) == 0))
+            or (row["bytes"] <= 0 and not (empty_permitted and len(content) == 0))
             or row["sha256"] != _sha_bytes(content)
         ):
             raise BundleRefusal(f"bundle index artifact hash/size mismatch: {path}")
@@ -3761,7 +3968,11 @@ def _git_oid(value: object, label: str) -> str:
 
 
 def _validate_runtime_and_attempt(
-    runtime: Mapping[str, Any], attempt: Mapping[str, Any], candidate: Mapping[str, Any]
+    runtime: Mapping[str, Any],
+    attempt: Mapping[str, Any],
+    candidate: Mapping[str, Any],
+    preregistration_ci: Mapping[str, Any],
+    pulse: Mapping[str, Any],
 ) -> None:
     runtime_data = _check_exact_keys(
         runtime,
@@ -3848,18 +4059,18 @@ def _validate_runtime_and_attempt(
     attempt_data = _check_exact_keys(
         attempt,
         {
-            "schema_version", "source_commit", "source_tree_oid", "source_manifest_sha256",
-            "preregistration_commit", "preregistration_sha256", "ratification_statement_sha256",
-            "pulse_receipt_sha256", "runtime_receipt_sha256", "terminal_intent_schema",
+            "schema_version", "occurrence_id", "source_commit", "source_tree_oid", "source_manifest_sha256",
+            "preregistration_commit", "preregistration_tree_oid", "preregistration_sha256",
+            "preregistration_ci_receipt_sha256", "pulse_receipt_sha256", "runtime_receipt_sha256", "terminal_intent_schema",
             "terminal_artifact_relative_path", "enforcement_scope", "receipt_sha256",
         },
         "durable attempt marker",
     )
     if (
-        attempt_data["schema_version"] != "hswm-dnrd-durable-attempt-marker/v3"
+        attempt_data["schema_version"] != "hswm-dnrd-durable-attempt-marker/v5"
         or attempt_data["enforcement_scope"]
-        != "DETERMINISTIC_FILE_AND_PARENT_DIRECTORY_FSYNC_MARKER_UNDER_CONFIGURED_"
-        "REGISTRY_ONLY_GLOBAL_SINGLETON_NOT_PROVEN"
+        != "DETERMINISTIC_OCCURRENCE_ID_FILE_AND_PARENT_DIRECTORY_FSYNC_MARKER_UNDER_"
+        "B_PINNED_LOCAL_REGISTRY_ONLY_SAME_UID_CROSS_HOST_AND_GLOBAL_SINGLETON_NOT_PROVEN"
     ):
         raise BundleRefusal("durable attempt marker schema/scope mismatch")
     _bundle_sha_receipt(attempt_data, "durable attempt marker")
@@ -3870,8 +4081,8 @@ def _validate_runtime_and_attempt(
         raise BundleRefusal("durable attempt marker terminal-intent binding mismatch")
     bindings = candidate["bindings"]
     for key in (
-        "source_manifest_sha256", "preregistration_sha256", "pulse_receipt_sha256",
-        "runtime_receipt_sha256",
+        "source_manifest_sha256", "preregistration_sha256", "preregistration_ci_receipt_sha256",
+        "pulse_receipt_sha256", "runtime_receipt_sha256",
     ):
         if attempt_data.get(key) != bindings[key]:
             raise BundleRefusal(f"attempt lock does not bind candidate {key}")
@@ -3880,9 +4091,57 @@ def _validate_runtime_and_attempt(
         attempt_data["source_commit"] != chronology["source_commit"]
         or attempt_data["source_tree_oid"] != chronology["source_tree_oid"]
         or attempt_data["preregistration_commit"] != chronology["preregistration_commit"]
+        or attempt_data["preregistration_tree_oid"] != chronology["preregistration_tree_oid"]
     ):
         raise BundleRefusal("durable attempt marker Git identities differ from candidate chronology")
-    _sha(attempt_data["ratification_statement_sha256"], "durable attempt marker.ratification_statement_sha256")
+
+    # Deliberately rederive the registry filename identity from semantic
+    # commitments only.  Receipt/pulse-verifier/runtime hashes remain audit
+    # bindings above, but may not turn one science occurrence into multiple
+    # local markers merely because their byte representation changes.
+    pulse_value = _check_exact_keys(
+        pulse,
+        {
+            "minimum_eligible_time_unix", "projection", "schema_version", "seed_hex",
+            "source_binding", "source_freeze_unix", "preregistration_ci_completed_unix",
+            "receipt_sha256",
+        },
+        "pulse binding for attempt occurrence identity",
+    )
+    projection = _check_exact_keys(
+        pulse_value["projection"],
+        {
+            "chain_hash", "round", "round_time_unix", "randomness_hex",
+            "verification_receipt_sha256", "verification_succeeded",
+        },
+        "pulse projection for attempt occurrence identity",
+    )
+    run_id = _integer(
+        preregistration_ci["run_id"], "preregistration B CI run ID for attempt occurrence identity", minimum=1
+    )
+    completed_at = _integer(
+        preregistration_ci["completed_at_unix"], "preregistration B CI completion for attempt occurrence identity", minimum=1
+    )
+    if pulse_value["preregistration_ci_completed_unix"] != completed_at:
+        raise BundleRefusal("attempt occurrence identity B-CI completion differs from pulse")
+    occurrence = {
+        "experiment_id": EXPERIMENT_ID,
+        "occurrence_schema": "hswm-dnrd-occurrence-id/v1",
+        "source_commit": chronology["source_commit"],
+        "source_manifest_sha256": bindings["source_manifest_sha256"],
+        "source_tree_oid": chronology["source_tree_oid"],
+        "preregistration_ci_completed_at_unix": completed_at,
+        "preregistration_ci_run_id": run_id,
+        "preregistration_commit": chronology["preregistration_commit"],
+        "preregistration_sha256": bindings["preregistration_sha256"],
+        "preregistration_tree_oid": chronology["preregistration_tree_oid"],
+        "quicknet_chain_hash": _sha(projection["chain_hash"], "attempt occurrence Quicknet chain hash"),
+        "quicknet_randomness_hex": _sha(projection["randomness_hex"], "attempt occurrence Quicknet randomness"),
+        "quicknet_round": _integer(projection["round"], "attempt occurrence Quicknet round", minimum=1),
+        "seed_hex": _sha(pulse_value["seed_hex"], "attempt occurrence future seed"),
+    }
+    if attempt_data["occurrence_id"] != _canonical_hash(occurrence):
+        raise BundleRefusal("durable attempt marker occurrence ID does not rederive from immutable semantics")
 
 
 def _validate_config_readback(
@@ -3893,15 +4152,15 @@ def _validate_config_readback(
         config,
         {
             "repo_root", "source_a_commit", "source_a_tree", "source_manifest_path",
-            "source_manifest_sha256", "prereg_b_commit", "prereg_path", "prereg_sha256",
-            "source_freeze_unix", "ratification_unix", "ratification_text_sha256", "output_root",
+            "source_manifest_sha256", "prereg_b_commit", "prereg_b_tree", "prereg_path", "prereg_sha256",
+            "source_freeze_unix", "preregistration_ci_completed_unix", "output_root",
             "model_endpoint", "bridge_implementation_path", "bridge_implementation_sha256",
             "bridge_command", "bridge_config", "scorer_implementation_path",
             "scorer_implementation_sha256", "scorer_command", "verifier_command",
             "verifier_helper_path", "verifier_helper_sha256", "verifier_package_lock_path",
             "verifier_package_lock_sha256", "verifier_runtime_bundle_path",
-            "verifier_runtime_bundle_sha256", "attempt_registry_root", "ratification_receipt_path",
-            "ratification_receipt_sha256", "source_ci_receipt_path", "source_ci_receipt_sha256",
+            "verifier_runtime_bundle_sha256", "attempt_registry_root", "preregistration_ci_receipt_path",
+            "preregistration_ci_receipt_sha256", "source_ci_receipt_path", "source_ci_receipt_sha256",
             "structured_output_qualification_path", "structured_output_qualification_sha256",
             "tokenizer_preflight_prompt", "bridge_runtime_root", "bridge_state_root",
             "bridge_runtime_tree_manifest_path", "bridge_runtime_tree_manifest_sha256",
@@ -3917,9 +4176,13 @@ def _validate_config_readback(
         or data["source_a_tree"] != chronology["source_tree_oid"]
         or data["source_manifest_sha256"] != bindings["source_manifest_sha256"]
         or data["prereg_b_commit"] != chronology["preregistration_commit"]
+        or data["prereg_b_tree"] != chronology["preregistration_tree_oid"]
         or data["prereg_sha256"] != bindings["preregistration_sha256"]
         or data["source_freeze_unix"] != chronology["source_frozen_at_unix"]
-        or data["ratification_unix"] != chronology["external_ratification_at_unix"]
+        or data["preregistration_ci_completed_unix"]
+        != chronology["preregistration_ci_completed_at_unix"]
+        or data["preregistration_ci_receipt_sha256"]
+        != bindings["preregistration_ci_receipt_sha256"]
         or data["bridge_implementation_sha256"] != runtime["bridge_implementation_sha256"]
         or data["scorer_implementation_sha256"] != runtime["scorer_implementation_sha256"]
         or data["bridge_config"] != runtime["bridge_config"]
@@ -3939,20 +4202,25 @@ def _validate_config_readback(
     ):
         raise BundleRefusal("execution config readback does not match candidate chronology/runtime pins")
     if data["tokenizer_preflight_prompt"] != TOKENIZER_PREFLIGHT_PROMPT:
-        raise BundleRefusal("execution config tokenizer preflight prompt differs from the frozen DNRD-3 structured-response probe")
+        raise BundleRefusal("execution config tokenizer preflight prompt differs from the frozen DNRD-4 structured-response probe")
+    if (
+        type(data["preregistration_ci_completed_unix"]) is not int
+        or data["preregistration_ci_completed_unix"] <= 0
+    ):
+        raise BundleRefusal("execution config preregistration B-CI completion time is malformed")
     for key in (
         "repo_root", "source_manifest_path", "prereg_path", "output_root", "model_endpoint",
         "bridge_implementation_path", "scorer_implementation_path", "verifier_helper_path",
         "verifier_package_lock_path", "verifier_runtime_bundle_path", "attempt_registry_root",
-        "ratification_receipt_path", "source_ci_receipt_path", "structured_output_qualification_path", "tokenizer_preflight_prompt",
+        "preregistration_ci_receipt_path", "source_ci_receipt_path", "structured_output_qualification_path", "tokenizer_preflight_prompt",
         "bridge_runtime_root", "bridge_state_root", "bridge_runtime_tree_manifest_path",
         "node_executable_path", "node_version", "python_executable_path", "python_version",
         "unicode_data_version", "scorer_import_root", "model_api_key_environment",
     ):
         _string(data[key], f"execution config readback.{key}")
     for key in (
-        "ratification_text_sha256", "verifier_helper_sha256", "verifier_package_lock_sha256",
-        "verifier_runtime_bundle_sha256", "ratification_receipt_sha256", "source_ci_receipt_sha256",
+        "preregistration_ci_receipt_sha256", "verifier_helper_sha256", "verifier_package_lock_sha256",
+        "verifier_runtime_bundle_sha256", "source_ci_receipt_sha256",
         "structured_output_qualification_sha256",
     ):
         _sha(data[key], f"execution config readback.{key}")
@@ -3972,6 +4240,7 @@ def _validate_config_readback(
     verifier_lock = Path(str(data["verifier_package_lock_path"]))
     verifier_bundle = Path(str(data["verifier_runtime_bundle_path"]))
     qualification_path = Path(str(data["structured_output_qualification_path"]))
+    preregistration_ci_path = Path(str(data["preregistration_ci_receipt_path"]))
     node_path = str(data["node_executable_path"])
     python_path = str(data["python_executable_path"])
     if not all(
@@ -3979,6 +4248,7 @@ def _validate_config_readback(
         for path in (
             repo_root, output_root, source_runtime_root, source_bridge, source_scorer,
             verifier_helper, verifier_lock, verifier_bundle, qualification_path,
+            preregistration_ci_path,
         )
     ):
         raise BundleRefusal("execution config source/output/runtime paths must be absolute")
@@ -4133,8 +4403,8 @@ def _quicknet_time(round_number: int) -> int:
     return 1_692_803_367 + (round_number - 1) * 3
 
 
-def _first_eligible_round(source_unix: int, ratification_unix: int) -> int:
-    threshold = max(source_unix, ratification_unix) + 900
+def _first_eligible_round(source_unix: int, preregistration_ci_unix: int) -> int:
+    threshold = max(source_unix, preregistration_ci_unix) + 900
     genesis = 1_692_803_367
     if threshold <= genesis:
         return 1
@@ -4145,12 +4415,12 @@ def _validate_pulse(
     pulse: Mapping[str, Any],
     verifier_bytes: bytes,
     candidate: Mapping[str, Any],
-    ratification: Mapping[str, Any],
+    preregistration_ci: Mapping[str, Any],
     preregistration: Mapping[str, Any],
 ) -> None:
     keys = {
         "minimum_eligible_time_unix", "projection", "schema_version", "seed_hex", "source_binding",
-        "source_freeze_unix", "user_ratification_unix", "receipt_sha256",
+        "source_freeze_unix", "preregistration_ci_completed_unix", "receipt_sha256",
     }
     value = _check_exact_keys(pulse, keys, "pulse binding")
     if value["schema_version"] != PULSE_BINDING_SCHEMA:
@@ -4159,39 +4429,63 @@ def _validate_pulse(
     if candidate["bindings"]["pulse_receipt_sha256"] != receipt:
         raise BundleRefusal("candidate pulse receipt binding does not match retained pulse binding")
     source_time = _integer(value["source_freeze_unix"], "pulse.source_freeze_unix", minimum=1)
-    ratified_time = _integer(value["user_ratification_unix"], "pulse.user_ratification_unix", minimum=1)
-    if ratified_time != ratification["ratified_at_unix"]:
-        raise BundleRefusal("pulse binding ratification time differs from retained receipt")
+    ci_completed_time = _integer(
+        value["preregistration_ci_completed_unix"],
+        "pulse.preregistration_ci_completed_unix",
+        minimum=1,
+    )
+    if ci_completed_time != preregistration_ci["completed_at_unix"]:
+        raise BundleRefusal("pulse binding B-CI completion time differs from retained receipt")
     if (
         candidate["chronology"]["source_frozen_at_unix"] != source_time
-        or candidate["chronology"]["external_ratification_at_unix"] != ratified_time
+        or candidate["chronology"]["preregistration_ci_completed_at_unix"]
+        != ci_completed_time
     ):
-        raise BundleRefusal("candidate chronology source/ratification times differ from pulse binding")
-    if value["minimum_eligible_time_unix"] != max(source_time, ratified_time) + 900:
+        raise BundleRefusal("candidate chronology source/B-CI times differ from pulse binding")
+    if value["minimum_eligible_time_unix"] != max(source_time, ci_completed_time) + 900:
         raise BundleRefusal("pulse binding minimum eligible time is incorrect")
     binding = _check_exact_keys(
         value["source_binding"],
         {
-            "experiment_id", "preregistration_blob_sha256", "preregistration_commit",
-            "ratification_statement_sha256", "source_commit", "source_manifest_sha256", "source_tree_oid",
+            "experiment_id", "preregistration_blob_sha256", "preregistration_ci_completed_unix",
+            "preregistration_ci_receipt_sha256", "preregistration_commit", "preregistration_tree_oid",
+            "source_commit", "source_manifest_sha256", "source_tree_oid",
         },
         "pulse source binding",
     )
     if binding["experiment_id"] != EXPERIMENT_ID:
         raise BundleRefusal("pulse source binding experiment identity mismatch")
-    for key in ("preregistration_blob_sha256", "ratification_statement_sha256", "source_manifest_sha256"):
+    for key in (
+        "preregistration_blob_sha256",
+        "preregistration_ci_receipt_sha256",
+        "source_manifest_sha256",
+    ):
         _sha(binding[key], f"pulse source binding.{key}")
-    for key in ("preregistration_commit", "source_commit", "source_tree_oid"):
+    for key in (
+        "preregistration_commit",
+        "preregistration_tree_oid",
+        "source_commit",
+        "source_tree_oid",
+    ):
         _git_oid(binding[key], f"pulse source binding.{key}")
+    if _integer(
+        binding["preregistration_ci_completed_unix"],
+        "pulse source binding.preregistration_ci_completed_unix",
+        minimum=1,
+    ) != ci_completed_time:
+        raise BundleRefusal("pulse source binding B-CI completion time differs from pulse binding")
     if (
         binding["source_manifest_sha256"] != candidate["bindings"]["source_manifest_sha256"]
         or binding["preregistration_blob_sha256"] != candidate["bindings"]["preregistration_sha256"]
-        or binding["ratification_statement_sha256"] != ratification["statement_sha256"]
+        or binding["preregistration_ci_receipt_sha256"]
+        != candidate["bindings"]["preregistration_ci_receipt_sha256"]
         or binding["source_commit"] != candidate["chronology"]["source_commit"]
         or binding["source_tree_oid"] != candidate["chronology"]["source_tree_oid"]
         or binding["preregistration_commit"] != candidate["chronology"]["preregistration_commit"]
+        or binding["preregistration_tree_oid"]
+        != candidate["chronology"]["preregistration_tree_oid"]
     ):
-        raise BundleRefusal("pulse source binding differs from candidate/source ratification identities")
+        raise BundleRefusal("pulse source binding differs from candidate/source B-CI identities")
     projection = _check_exact_keys(
         value["projection"],
         {"chain_hash", "round", "round_time_unix", "randomness_hex", "verification_receipt_sha256", "verification_succeeded"},
@@ -4204,7 +4498,7 @@ def _validate_pulse(
         raise BundleRefusal("pulse projection does not attest the frozen verified Quicknet chain")
     round_number = _integer(projection["round"], "pulse projection.round", minimum=1)
     if (
-        round_number != _first_eligible_round(source_time, ratified_time)
+        round_number != _first_eligible_round(source_time, ci_completed_time)
         or projection["round_time_unix"] != _quicknet_time(round_number)
         or projection["round_time_unix"] < value["minimum_eligible_time_unix"]
         or candidate["chronology"]["pulse_round"] != round_number
@@ -4327,20 +4621,14 @@ def _validate_pulse(
     # binding's seed as an unexplained fixture selector.  ``seed.py`` uses
     # ensure_ascii=False; retain that exact serialization choice here.
     seed_material = {
-        "domain": "HSWM-DNRD-FUTURE-SEED-V3",
+        "domain": "HSWM-DNRD-FUTURE-SEED-V5",
         "experiment_id": EXPERIMENT_ID,
-        "preregistration_blob_sha256": binding["preregistration_blob_sha256"],
         "preregistration_commit": binding["preregistration_commit"],
-        "ratification_statement_sha256": binding["ratification_statement_sha256"],
         "quicknet_chain_hash": projection["chain_hash"],
         "quicknet_randomness_hex": projection["randomness_hex"],
         "quicknet_round": round_number,
-        "quicknet_round_time_unix": projection["round_time_unix"],
         "source_commit": binding["source_commit"],
-        "source_manifest_sha256": binding["source_manifest_sha256"],
-        "source_tree_oid": binding["source_tree_oid"],
-        "verification_receipt_sha256": projection["verification_receipt_sha256"],
-        "schema_version": "hswm-dnrd-future-seed-material/v3",
+        "schema_version": "hswm-dnrd-future-seed-material/v5",
     }
     try:
         expected_seed = sha256(
@@ -4696,7 +4984,7 @@ def _check_episode(
         seen.add(route)
         text, token = _string(record["evidence_text"], f"{label}.evidence_text"), _string(record["response_token"], f"{label}.response_token")
         if RESPONSE_TOKEN_RE.fullmatch(token) is None or len(token.encode("ascii")) != 26:
-            raise BundleRefusal(f"{label}.route_evidence response token violates exact DNRD-3 form")
+            raise BundleRefusal(f"{label}.route_evidence response token violates exact DNRD-4 form")
         if route not in text or token not in text:
             raise BundleRefusal(f"{label}.route_evidence does not bind route/token")
     if [record["route_id"] for record in evidence] != stream["route_ids"]:
@@ -4858,7 +5146,7 @@ def _candidate_response_tokens(value: object, label: str) -> tuple[str, str]:
         or RESPONSE_TOKEN_RE.fullmatch(second) is None
         or first >= second
     ):
-        raise BundleRefusal(f"{label} must contain distinct lexically sorted DNRD-3 response tokens")
+        raise BundleRefusal(f"{label} must contain distinct lexically sorted DNRD-4 response tokens")
     return first, second
 
 
@@ -4883,7 +5171,7 @@ def _structured_response_token(content: str, candidates: tuple[str, str]) -> str
         raise BundleRefusal("accepted model body structured response has an invalid key set")
     token = value["response_token"]
     if type(token) is not str or RESPONSE_TOKEN_RE.fullmatch(token) is None:
-        raise BundleRefusal("accepted model body structured response token violates DNRD-3 form")
+        raise BundleRefusal("accepted model body structured response token violates DNRD-4 form")
     if token not in candidates:
         raise BundleRefusal("accepted model body structured response token is outside its request candidates")
     return token
@@ -4924,7 +5212,7 @@ def _response_digest_from_raw(
 
 
 def _structured_chat_config(value: object, label: str) -> tuple[Mapping[str, Any], tuple[str, str]]:
-    """Validate the complete DNRD-3 provider constraint retained per event."""
+    """Validate the complete DNRD-4 provider constraint retained per event."""
     if type(value) is not dict:
         raise BundleRefusal(f"{label} must be an object")
     response_format = value.get("response_format")
@@ -4975,7 +5263,7 @@ def _structured_chat_config(value: object, label: str) -> tuple[Mapping[str, Any
         "response_format_schema_sha256": _canonical_hash(expected_schema),
     }
     if value != expected:
-        raise BundleRefusal(f"{label} differs from the frozen DNRD-3 structured-output contract")
+        raise BundleRefusal(f"{label} differs from the frozen DNRD-4 structured-output contract")
     return value, candidates
 
 
@@ -5290,7 +5578,7 @@ _REJECTED_RESPONSE_FIXED_MESSAGES = {
     "chat completion choice must contain textual message.content": "MESSAGE_CONTENT_NOT_TEXT",
     "chat completion structured response is not strict JSON": "STRUCTURED_RESPONSE_NOT_STRICT_JSON",
     "chat completion structured response must be an object with exactly response_token": "STRUCTURED_RESPONSE_KEYSET_INVALID",
-    "chat completion structured response_token violates exact DNRD-3 form": "RESPONSE_TOKEN_FORM_INVALID",
+    "chat completion structured response_token violates exact DNRD-4 form": "RESPONSE_TOKEN_FORM_INVALID",
     "chat completion structured response_token is not one of the request candidates": "RESPONSE_TOKEN_NOT_REQUEST_CANDIDATE",
     "chat completion must contain object usage": "USAGE_NOT_OBJECT",
     "usage.prompt_tokens must be a nonnegative integer": "USAGE_PROMPT_TOKENS_INVALID",
@@ -5309,7 +5597,7 @@ def _rejected_response_stage(message: str) -> str | None:
 
 
 def _inconclusive_call_context(value: Mapping[str, Any], label: str) -> tuple[int, str, str | None, str]:
-    """Validate the public identity common to every DNRD-3 live event."""
+    """Validate the public identity common to every DNRD-4 live event."""
     ordinal = _integer(value["ordinal"], f"{label}.ordinal", minimum=1)
     phase = value["phase"]
     arm = value["arm"]
@@ -5331,7 +5619,7 @@ def _validate_inconclusive_ledgers(
     runner_events: Sequence[Mapping[str, Any]],
     model_events: Sequence[Mapping[str, Any]],
 ) -> None:
-    """Replay the prefix observed before a post-dispatch DNRD-3 interruption.
+    """Replay the prefix observed before a post-dispatch DNRD-4 interruption.
 
     An incomplete occurrence cannot replay state/credit effects, but it can
     still prove that its retained boundary ledger is one ordered, no-retry
@@ -6204,6 +6492,49 @@ def _tree_blob_oid(
     raise AssertionError("unreachable path traversal")
 
 
+def _validate_preregistration_ci_git_binding(
+    *,
+    preregistration_ci: Mapping[str, Any],
+    candidate: Mapping[str, Any],
+    preregistration_commit: str,
+    preregistration_tree_oid: str,
+    preregistration_path: str,
+    preregistration_git_blob_oid: str,
+    preregistration_sha256: str,
+    preregistration_committed_at_unix: int,
+) -> None:
+    """Join the B-CI identity to raw A→B Git objects, not config projections."""
+    receipt = _check_exact_keys(
+        preregistration_ci,
+        {
+            "schema_version", "provider", "run_id", "head_sha", "head_tree_oid",
+            "preregistration_path", "preregistration_git_blob_oid", "preregistration_sha256",
+            "status", "conclusion", "completed_at_utc", "completed_at_unix",
+            "raw_response_sha256", "raw_response_utf8", "discovery_query", "critical_projection",
+            "raw_list_response_sha256", "raw_list_response_utf8", "receipt_sha256",
+        },
+        "preregistration B CI receipt",
+    )
+    ci_completed_at = _integer(
+        receipt["completed_at_unix"],
+        "preregistration B CI receipt.completed_at_unix",
+        minimum=1,
+    )
+    chronology = candidate["chronology"]
+    if (
+        receipt["head_sha"] != preregistration_commit
+        or receipt["head_tree_oid"] != preregistration_tree_oid
+        or receipt["preregistration_path"] != preregistration_path
+        or receipt["preregistration_git_blob_oid"] != preregistration_git_blob_oid
+        or receipt["preregistration_sha256"] != preregistration_sha256
+        or ci_completed_at < preregistration_committed_at_unix
+        or chronology["preregistration_ci_completed_at_unix"] != ci_completed_at
+    ):
+        raise BundleRefusal(
+            "preregistration B CI receipt does not cross-check raw A-to-B Git tree/blob/chronology"
+        )
+
+
 def _validate_git_chronology(
     root: Path,
     chronology: Mapping[str, Any],
@@ -6211,13 +6542,14 @@ def _validate_git_chronology(
     source_manifest: Mapping[str, Any],
     source_bytes: bytes,
     prereg_bytes: bytes,
+    preregistration_ci: Mapping[str, Any],
 ) -> None:
     source_data = _check_exact_keys(
         chronology,
         {"schema_version", "source", "preregistration", "a_to_b_changed_paths", "tree_objects", "receipt_sha256"},
         "git chronology evidence",
     )
-    if source_data["schema_version"] != "hswm-dnrd-git-chronology-evidence/v3":
+    if source_data["schema_version"] != "hswm-dnrd-git-chronology-evidence/v4":
         raise BundleRefusal("git chronology evidence schema mismatch")
     _bundle_sha_receipt(source_data, "git chronology evidence")
     # This binding is deliberately raw artifact bytes rather than the internal
@@ -6234,7 +6566,10 @@ def _validate_git_chronology(
     )
     prereg = _check_exact_keys(
         source_data["preregistration"],
-        {"commit_oid", "commit_raw_utf8", "parent_oid", "tree_oid", "commit_time_unix", "path", "blob_sha256"},
+        {
+            "commit_oid", "commit_raw_utf8", "parent_oid", "tree_oid", "commit_time_unix",
+            "path", "blob_oid", "blob_sha256",
+        },
         "git chronology preregistration",
     )
     source_raw = _string(source["commit_raw_utf8"], "git chronology source.commit_raw_utf8")
@@ -6257,12 +6592,11 @@ def _validate_git_chronology(
     ):
         raise BundleRefusal("Git chronology commit parent/tree/time projection does not replay raw commits")
     candidate_chronology = candidate["chronology"]
-    # The candidate ratification time is checked independently against the user
-    # receipt/pulse; it is deliberately not inferred from the B commit time.
     if (
         candidate_chronology["source_commit"] != source_oid
         or candidate_chronology["preregistration_commit"] != prereg_oid
         or candidate_chronology["source_tree_oid"] != source_tree
+        or candidate_chronology["preregistration_tree_oid"] != prereg_tree
         or candidate_chronology["source_frozen_at_unix"] != source_time
     ):
         raise BundleRefusal("candidate chronology does not replay raw Git source-A/B evidence")
@@ -6294,10 +6628,21 @@ def _validate_git_chronology(
     if (
         source_blob != _git_object_oid("blob", source_bytes)
         or prereg_blob != _git_object_oid("blob", prereg_bytes)
+        or prereg["blob_oid"] != prereg_blob
         or source["source_manifest_blob_sha256"] != _sha_bytes(source_bytes)
         or prereg["blob_sha256"] != _sha_bytes(prereg_bytes)
     ):
         raise BundleRefusal("Git chronology tree proof does not bind retained source/preregistration blobs")
+    _validate_preregistration_ci_git_binding(
+        preregistration_ci=preregistration_ci,
+        candidate=candidate,
+        preregistration_commit=prereg_oid,
+        preregistration_tree_oid=prereg_tree,
+        preregistration_path=prereg_path,
+        preregistration_git_blob_oid=prereg_blob,
+        preregistration_sha256=_sha_bytes(prereg_bytes),
+        preregistration_committed_at_unix=prereg_time,
+    )
     manifest_rows = source_manifest.get("files")
     file_blobs = source["file_blobs"]
     if type(manifest_rows) is not list or type(file_blobs) is not list:
@@ -6389,8 +6734,10 @@ def _bundle_result(
         authority = "AUTHORITATIVE_EVIDENCE_BUNDLE_VERIFIED"
         verification_status = "FULL_BUNDLE_REPLAY_VERIFIED"
         claim_boundary = (
-            "Evidence-bundle integrity diagnostic only; no efficacy, general intelligence, "
-            "canonical Permit, admission, or learning claim is established. Scorer role separation "
+            "Verified finite engineering-conformance bundle only, not scientific effect evidence; "
+            "no efficacy, general intelligence, canonical Permit, admission, or learning claim is "
+            "established. Model responses are format/liveness observations rather than causes of "
+            "the route rewards or updates. Scorer role separation "
             "is declared only as DECLARED_ROLE_SEPARATION_NOT_PROVEN; no stronger scorer-role "
             "property is established, and model-serving identity/determinism remains unproven. "
             "The retained verifier receipt is rehashed and internally cross-checked, not "
@@ -6527,23 +6874,57 @@ def _missing_terminal_artifacts_result() -> dict[str, Any]:
 def _void_protocol_bundle_result(root: Path) -> dict[str, Any]:
     """Validate a pre-dispatch terminal without inventing an occurrence."""
     value, raw = _bundle_object(root, "void_protocol.json")
-    data = _check_exact_keys(
-        value,
-        {"schema_version", "experiment_id", "post_first_call", "failure_type", "failure_digest"},
-        "void protocol terminal",
-    )
-    if (
-        data["schema_version"] != "hswm-dnrd-void-protocol/v1"
-        or data["experiment_id"] != EXPERIMENT_ID
-        or data["post_first_call"] is not False
-    ):
-        raise BundleRefusal("pre-dispatch void terminal schema/identity is invalid")
+    if value.get("schema_version") != "hswm-dnrd-void-protocol/v2" or value.get("experiment_id") != EXPERIMENT_ID:
+        raise BundleRefusal("void protocol terminal schema/identity is invalid")
+    if value.get("post_first_call") is False:
+        data = _check_exact_keys(
+            value,
+            {"schema_version", "experiment_id", "post_first_call", "failure_type", "failure_digest"},
+            "pre-dispatch void protocol terminal",
+        )
+    elif value.get("post_first_call") is True:
+        data = _check_exact_keys(
+            value,
+            {
+                "schema_version", "experiment_id", "post_first_call", "calls_observed",
+                "accepted_model_calls", "runner_completed_calls", "model_events_sha256",
+                "runner_events_sha256", "failure_stage", "failure_type", "failure_digest",
+            },
+            "post-dispatch void protocol terminal",
+        )
+        if (
+            data["failure_stage"] != "POST_DISPATCH_INTERNAL_FINALIZATION"
+            or type(data["calls_observed"]) is not int or not 1 <= data["calls_observed"] <= 128
+            or type(data["accepted_model_calls"]) is not int or not 0 <= data["accepted_model_calls"] <= data["calls_observed"]
+            or type(data["runner_completed_calls"]) is not int or not 0 <= data["runner_completed_calls"] <= data["accepted_model_calls"]
+        ):
+            raise BundleRefusal("post-dispatch void terminal counters/stage are invalid")
+        indexed = _validate_bundle_index(root)
+        for relative, field in (("model_events.jsonl", "model_events_sha256"), ("runner_events.jsonl", "runner_events_sha256")):
+            body = _bundle_plain_file(root, relative, allow_empty=True).read_bytes()
+            if _sha_bytes(body) != data[field] or indexed.get(relative) != data[field]:
+                raise BundleRefusal("post-dispatch void terminal ledger hash does not bind indexed bytes")
+        model_rows, _ = _bundle_jsonl(root, "model_events.jsonl", allow_empty=True)
+        runner_rows, _ = _bundle_jsonl(root, "runner_events.jsonl", allow_empty=True)
+        if (
+            sum(row.get("event") == "CHAT_COMPLETION_ACCEPTED" for row in model_rows) != data["accepted_model_calls"]
+            or sum(row.get("event") == "COMPLETED_CALL" for row in runner_rows) != data["runner_completed_calls"]
+        ):
+            raise BundleRefusal("post-dispatch void terminal counters do not replay from retained ledgers")
+    else:
+        raise BundleRefusal("void protocol terminal post_first_call must be boolean")
     _string(data["failure_type"], "void protocol terminal.failure_type")
     _sha(data["failure_digest"], "void protocol terminal.failure_digest")
     result = _missing_terminal_artifacts_result()
-    result["authority"] = "PRE_DISPATCH_VOID_PROTOCOL_TERMINAL_RETAINED"
+    result["authority"] = (
+        "POST_DISPATCH_VOID_PROTOCOL_TERMINAL_LEDGER_BOUND"
+        if value["post_first_call"] else "PRE_DISPATCH_VOID_PROTOCOL_TERMINAL_RETAINED"
+    )
     result["void_protocol_artifact_sha256"] = _sha_bytes(raw)
-    result["terminalization_check"] = "PRE_DISPATCH_VOID_PROTOCOL_ARTIFACT_VALIDATED"
+    result["terminalization_check"] = (
+        "POST_DISPATCH_VOID_PROTOCOL_LEDGER_HASHES_VALIDATED"
+        if value["post_first_call"] else "PRE_DISPATCH_VOID_PROTOCOL_ARTIFACT_VALIDATED"
+    )
     return result
 
 
@@ -6614,6 +6995,11 @@ def judge_bundle(bundle_dir: str | Path) -> dict[str, Any]:
         raise BundleRefusal("bundle directory is absent") from error
     if root.is_symlink() or not root.is_dir() or not info:
         raise BundleRefusal("bundle root must be a plain directory")
+    obsolete_ratification = root / "ratification_receipt.json"
+    if obsolete_ratification.exists() or obsolete_ratification.is_symlink():
+        raise BundleRefusal(
+            "DNRD-4 evidence bundles must not retain obsolete ratification_receipt.json"
+        )
     if (root / "void_protocol.json").exists():
         if (root / "candidate.json").exists() or (root / "inconclusive.json").exists():
             raise BundleRefusal("void protocol terminal may not coexist with a scientific occurrence artifact")
@@ -6642,8 +7028,10 @@ def judge_bundle(bundle_dir: str | Path) -> dict[str, Any]:
         source, source_bytes = _bundle_object(root, "source_manifest.json")
         preregistration, preregistration_bytes = _bundle_object(root, "preregistration.json")
         source_ci, _ = _bundle_object(root, "source_ci_receipt.json")
+        preregistration_ci, preregistration_ci_bytes = _bundle_object(
+            root, "preregistration_ci_receipt.json"
+        )
         qualification_bytes = _bundle_plain_file(root, "structured_output_qualification.json").read_bytes()
-        ratification, _ = _bundle_object(root, "ratification_receipt.json")
         runtime, _ = _bundle_object(root, "runtime_receipt.json")
         attempt, _ = _bundle_object(root, "attempt_lock_receipt.json")
         terminal_intent, _ = _bundle_object(root, "terminal-intent.json")
@@ -6675,17 +7063,22 @@ def judge_bundle(bundle_dir: str | Path) -> dict[str, Any]:
 
         _validate_source_and_preregistration(
             source=source, preregistration=preregistration, source_ci=source_ci,
-            ratification=ratification, candidate=candidate, source_bytes=source_bytes,
-            preregistration_bytes=preregistration_bytes,
+            preregistration_ci=preregistration_ci, candidate=candidate,
+            source_bytes=source_bytes, preregistration_bytes=preregistration_bytes,
+            preregistration_ci_bytes=preregistration_ci_bytes,
         )
         _validate_source_closure(root, source)
         config = _validate_config_readback(config_readback, candidate, runtime)
         if _sha_bytes(qualification_bytes) != config["structured_output_qualification_sha256"]:
             raise BundleRefusal("structured-output qualification bytes do not match the pinned config digest")
         _structured_output_qualification(
-            qualification_bytes, config=config, public=public, private=private
+            qualification_bytes,
+            config=config,
+            public=public,
+            private=private,
+            source=source,
+            preregistration=preregistration,
         )
-        _validate_runtime_and_attempt(runtime, attempt, candidate)
         intent = _check_exact_keys(
             terminal_intent,
             {"schema_version", "experiment_id", "attempt_lock_receipt_sha256", "terminal_artifact_paths", "no_retry_or_resume"},
@@ -6710,7 +7103,12 @@ def judge_bundle(bundle_dir: str | Path) -> dict[str, Any]:
         )
         active_state_byte_ceiling = _preregistration_active_state_byte_ceiling(preregistration)
         endpoint, model, chat_config = _validate_deployment(deployment, candidate, config)
-        _validate_pulse(pulse, verifier_bytes, candidate, ratification, preregistration)
+        _validate_pulse(
+            pulse, verifier_bytes, candidate, preregistration_ci, preregistration
+        )
+        _validate_runtime_and_attempt(
+            runtime, attempt, candidate, preregistration_ci, pulse
+        )
         training_canaries = _validate_fixture_seed_binding(public, private, pulse)
         _validate_git_chronology(
             root,
@@ -6719,6 +7117,7 @@ def judge_bundle(bundle_dir: str | Path) -> dict[str, Any]:
             source,
             source_bytes,
             preregistration_bytes,
+            preregistration_ci,
         )
         _validate_runtime_closure(
             root, runtime, source=source, candidate=candidate, chronology=chronology

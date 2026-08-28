@@ -8,6 +8,7 @@
 import { Data, Either, Schema } from "effect"
 
 import { validateHSWMCanonicalSchemaV2 } from "./canonical-atom-v2-domain.js"
+import { DNRD5_SCHEMA_VERSION } from "./canonical-atom-v2-dnrd5-identity.js"
 import {
   HSWM_CANONICAL_SCHEMA_V2_CONTRACT_VERSION,
   CanonicalAtomV2Schema,
@@ -19,7 +20,7 @@ import {
   type HSWMCanonicalSchemaV2
 } from "./canonical-atom-v2-schema.js"
 
-export const DNRD5_SCHEMA_VERSION = "hswm:dnrd5:causal-macroplasticity:v1" as const
+export { DNRD5_SCHEMA_VERSION } from "./canonical-atom-v2-dnrd5-identity.js"
 export const DNRD5_REFERENCE_TYPE = "hswm:dnrd5:reference" as const
 export const DNRD5_ARM_LABELS = [
   "ACTIVE",

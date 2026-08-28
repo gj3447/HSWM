@@ -20,6 +20,7 @@ import {
 } from "../src/canonical-atom-v2-content.js"
 import {
   CanonicalAtomV2DurableRuntime,
+  commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal,
   makeCanonicalAtomV2DurableRuntimeFileLayer,
   makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest
 } from "../src/canonical-atom-v2-durable-runtime.js"
@@ -527,7 +528,10 @@ const buildFixture = Effect.gen(function* () {
     writes: initialAtoms,
     provenanceSha256: "b".repeat(64)
   }
-  yield* runtime.submit(
+  // Fixture-only bootstrap. This internal seam is deliberately absent from
+  // the package root; production DNRD-5 state changes use the Permit dispatcher.
+  yield* commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal(
+    runtime,
     makeCanonicalAtomV2ContentBoundInput(
       schemaContent.binding.content.sha256,
       initialCommand,
@@ -727,6 +731,19 @@ const withTemporaryRoot = <A, E>(
 it.effect("commits admission and one-shot capability consumption in one durable command", () =>
   Effect.gen(function* () {
     const fixture = yield* buildFixture
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const bypass = yield* runtime.submit(fixture.input.transition).pipe(
+      Effect.either
+    )
+    expect(Either.isLeft(bypass)).toBe(true)
+    if (Either.isLeft(bypass)) {
+      expect(bypass.left).toMatchObject({
+        _tag: "CanonicalAtomV2DurableRuntimeError",
+        reason: "DNRD5_PERMIT_DISPATCH_REQUIRED"
+      })
+    }
+    expect((yield* runtime.snapshot).canonical.revision).toBe(1)
+
     const result = yield* submitDnrd5LocalExperimentalState(fixture.input)
     expect(result.state.canonical.revision).toBe(2)
     expect(result.receipt.commit.receipt.transitionId).toBe(
@@ -755,7 +772,6 @@ it.effect("commits admission and one-shot capability consumption in one durable 
         code: "NONCE_ALREADY_CONSUMED"
       })
     }
-    const runtime = yield* CanonicalAtomV2DurableRuntime
     expect((yield* runtime.history)).toHaveLength(2)
   }).pipe(Effect.provide(layer()))
 )
@@ -799,6 +815,16 @@ it.effect("recovers the consumption atom after a fresh file-runtime open", () =>
       )
     return Effect.gen(function* () {
       const fixture = yield* buildFixture
+      const runtime = yield* CanonicalAtomV2DurableRuntime
+      const bypass = yield* runtime.submit(fixture.input.transition).pipe(
+        Effect.either
+      )
+      expect(Either.isLeft(bypass)).toBe(true)
+      if (Either.isLeft(bypass)) {
+        expect(bypass.left).toMatchObject({
+          reason: "DNRD5_PERMIT_DISPATCH_REQUIRED"
+        })
+      }
       yield* submitDnrd5LocalExperimentalState(fixture.input)
       return fixture
     }).pipe(
@@ -853,3 +879,10 @@ it.effect("rejects a stale snapshot and an altered command before durable admiss
     expect((yield* runtime.snapshot).canonical.revision).toBe(1)
   }).pipe(Effect.provide(layer()))
 )
+
+it("keeps the internal durable commit capability out of the package root", async () => {
+  const publicApi: Record<string, unknown> = await import("../src/index.js")
+  expect(
+    "commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal" in publicApi
+  ).toBe(false)
+})

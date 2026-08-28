@@ -11,6 +11,7 @@ import {
 } from "./canonical-atom-v2-content.js"
 import {
   CanonicalAtomV2DurableRuntime,
+  commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal,
   type CanonicalAtomV2DurableEvolution,
   type CanonicalAtomV2DurableSubmitFailure
 } from "./canonical-atom-v2-durable-runtime.js"
@@ -833,7 +834,10 @@ export const submitDnrd5LocalExperimentalState = (
         "staged consumption payload differs from the command atom"
       )
     }
-    const result = yield* runtime.submit(supplied.transition).pipe(
+    const result = yield* commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal(
+      runtime,
+      supplied.transition
+    ).pipe(
       Effect.catchAll((submitFailure) =>
         isSubmitConcurrencyConflict(submitFailure)
           ? runtime.snapshot.pipe(

@@ -63,6 +63,7 @@ import {
   type CanonicalAtomV2,
   type HSWMCanonicalSchemaV2
 } from "./canonical-atom-v2-schema.js"
+import { DNRD5_SCHEMA_VERSION } from "./canonical-atom-v2-dnrd5-identity.js"
 
 export const HSWM_CANONICAL_ATOM_V2_LOCAL_DURABLE_STATE =
   "LOCAL_PREDECESSOR_BOUND_STATE_AND_RECEIPT_JOURNAL_V1" as const
@@ -76,6 +77,7 @@ export class CanonicalAtomV2DurableRuntimeError extends Data.TaggedError(
     | "JOURNAL_DESCRIPTOR_MISMATCH"
     | "JOURNAL_HEAD_MISMATCH"
     | "JOURNAL_RECORD_ORDER_INVALID"
+    | "DNRD5_PERMIT_DISPATCH_REQUIRED"
   readonly detail: string
 }> {}
 
@@ -146,6 +148,44 @@ export class CanonicalAtomV2DurableRuntime extends Context.Tag(
     >
   }
 >() {}
+
+type CanonicalAtomV2DurableCommit = (
+  input: unknown
+) => Effect.Effect<
+  CanonicalAtomV2DurableEvolution,
+  CanonicalAtomV2DurableSubmitFailure
+>
+
+/**
+ * Module-held capability registry for schema-specific dispatchers.
+ *
+ * This seam is intentionally absent from the package root export.  It is not
+ * an authority by itself: the DNRD-5 dispatcher must validate and atomically
+ * consume the durable Permit before invoking it.  Source qualification must
+ * also reject any other repository-internal importer of this seam.
+ */
+const internalCommitByRuntime = new WeakMap<
+  CanonicalAtomV2DurableRuntime["Type"],
+  CanonicalAtomV2DurableCommit
+>()
+
+export const commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal = (
+  runtime: CanonicalAtomV2DurableRuntime["Type"],
+  input: unknown
+): Effect.Effect<
+  CanonicalAtomV2DurableEvolution,
+  CanonicalAtomV2DurableSubmitFailure
+> => {
+  const commit = internalCommitByRuntime.get(runtime)
+  return commit === undefined
+    ? Effect.fail(
+        runtimeError(
+          "CONFIGURATION_INVALID",
+          "durable runtime is not registered for internal dispatcher commit"
+        )
+      )
+    : commit(input)
+}
 
 interface RecoveredJournal {
   readonly state: CanonicalAtomV2State
@@ -484,7 +524,110 @@ export const makeCanonicalAtomV2DurableRuntimeLayer = (
           schemaContent
         )
 
-      return CanonicalAtomV2DurableRuntime.of({
+      const commit: CanonicalAtomV2DurableCommit = (input) =>
+        Effect.gen(function* () {
+          const decoded = yield* decodeCanonicalAtomV2ContentBoundInput(input)
+          const command = snapshotCommitCanonicalAtomsV2Command(
+            decoded.command
+          )
+          const contentInput: CommitCanonicalAtomsV2ContentBound =
+            Object.freeze({
+              _tag: decoded._tag,
+              contractVersion: decoded.contractVersion,
+              schemaContentSha256: decoded.schemaContentSha256,
+              command,
+              writeBindings: Object.freeze(
+                decoded.writeBindings.map(
+                  snapshotCanonicalAtomV2WriteContentBinding
+                )
+              )
+            })
+          yield* authorize(contentInput)
+          const current = yield* recover()
+          const candidate = evolveCanonicalAtomsV2(
+            schemaContent.schema,
+            current.state,
+            command
+          )
+          if (Either.isLeft(candidate)) return yield* candidate.left
+
+          const checkedBindings = validateCanonicalAtomV2WriteContentBindings(
+            command.writes,
+            contentInput.writeBindings
+          )
+          if (Either.isLeft(checkedBindings)) {
+            return yield* checkedBindings.left
+          }
+          const orderedAtoms = yield* orderedAtomsForBindings(
+            command.writes,
+            checkedBindings.right
+          )
+          const receipt = makeCanonicalAtomV2AcceptedReceipt(
+            command,
+            current.state.revision,
+            candidate.right.revision
+          )
+          const record = makeCanonicalAtomV2StateJournalCommit(
+            schemaContent.schema,
+            {
+              state: current.state,
+              descriptor: current.head,
+              journalLineageId,
+              schema: schemaContent.binding
+            },
+            receipt,
+            checkedBindings.right,
+            orderedAtoms
+          )
+          if (Either.isLeft(record)) return yield* record.left
+          const recordBytes = canonicalAtomV2StateJournalRecordBytes(
+            record.right
+          )
+          if (Either.isLeft(recordBytes)) return yield* recordBytes.left
+          const expectedRecord = describeCanonicalAtomV2StateJournalRecord(
+            record.right
+          )
+          if (Either.isLeft(expectedRecord)) return yield* expectedRecord.left
+
+          const durableBindings = yield* prepareCanonicalAtomV2WriteContent(
+            contentStore,
+            command,
+            checkedBindings.right
+          )
+          yield* journalStore.publish({
+            stateRevision: candidate.right.revision,
+            expectedPredecessor: current.head,
+            bytes: recordBytes.right
+          })
+          const recovered = yield* recover()
+          if (!sameJournalDescriptor(expectedRecord.right, recovered.head)) {
+            return yield* runtimeError(
+              "JOURNAL_HEAD_MISMATCH",
+              "published record is not the exact recovered journal head"
+            )
+          }
+          const committed = recovered.history.at(-1)
+          if (
+            committed === undefined ||
+            committed.commit.receipt.transitionId !== command.transitionId ||
+            committed.commit.writeBindings.length !== durableBindings.length
+          ) {
+            return yield* runtimeError(
+              "JOURNAL_HEAD_MISMATCH",
+              "recovered head does not contain the submitted receipt"
+            )
+          }
+          return Object.freeze({
+            state: snapshotDurableState(
+              journalLineageId,
+              schemaContent.binding,
+              recovered
+            ),
+            receipt: snapshotDurableReceipt(committed)
+          })
+        })
+
+      const runtime = CanonicalAtomV2DurableRuntime.of({
         schema: schemaContent.schema,
         schemaContent: snapshotCanonicalAtomV2SchemaContentBinding(
           schemaContent.binding
@@ -509,112 +652,17 @@ export const makeCanonicalAtomV2DurableRuntimeLayer = (
           )
         ),
         submit: (input) =>
-          Effect.gen(function* () {
-            const decoded = yield* decodeCanonicalAtomV2ContentBoundInput(
-              input
-            )
-            const command = snapshotCommitCanonicalAtomsV2Command(
-              decoded.command
-            )
-            const contentInput: CommitCanonicalAtomsV2ContentBound =
-              Object.freeze({
-                _tag: decoded._tag,
-                contractVersion: decoded.contractVersion,
-                schemaContentSha256: decoded.schemaContentSha256,
-                command,
-                writeBindings: Object.freeze(
-                  decoded.writeBindings.map(
-                    snapshotCanonicalAtomV2WriteContentBinding
-                  )
+          schemaContent.binding.schemaVersion === DNRD5_SCHEMA_VERSION
+            ? Effect.fail(
+                runtimeError(
+                  "DNRD5_PERMIT_DISPATCH_REQUIRED",
+                  "DNRD-5 durable state changes require the Permit dispatcher"
                 )
-              })
-            yield* authorize(contentInput)
-            const current = yield* recover()
-            const candidate = evolveCanonicalAtomsV2(
-              schemaContent.schema,
-              current.state,
-              command
-            )
-            if (Either.isLeft(candidate)) return yield* candidate.left
-
-            const checkedBindings = validateCanonicalAtomV2WriteContentBindings(
-              command.writes,
-              contentInput.writeBindings
-            )
-            if (Either.isLeft(checkedBindings)) {
-              return yield* checkedBindings.left
-            }
-            const orderedAtoms = yield* orderedAtomsForBindings(
-              command.writes,
-              checkedBindings.right
-            )
-            const receipt = makeCanonicalAtomV2AcceptedReceipt(
-              command,
-              current.state.revision,
-              candidate.right.revision
-            )
-            const record = makeCanonicalAtomV2StateJournalCommit(
-              schemaContent.schema,
-              {
-                state: current.state,
-                descriptor: current.head,
-                journalLineageId,
-                schema: schemaContent.binding
-              },
-              receipt,
-              checkedBindings.right,
-              orderedAtoms
-            )
-            if (Either.isLeft(record)) return yield* record.left
-            const recordBytes = canonicalAtomV2StateJournalRecordBytes(
-              record.right
-            )
-            if (Either.isLeft(recordBytes)) return yield* recordBytes.left
-            const expectedRecord = describeCanonicalAtomV2StateJournalRecord(
-              record.right
-            )
-            if (Either.isLeft(expectedRecord)) return yield* expectedRecord.left
-
-            const durableBindings = yield* prepareCanonicalAtomV2WriteContent(
-              contentStore,
-              command,
-              checkedBindings.right
-            )
-            yield* journalStore.publish({
-              stateRevision: candidate.right.revision,
-              expectedPredecessor: current.head,
-              bytes: recordBytes.right
-            })
-            const recovered = yield* recover()
-            if (
-              !sameJournalDescriptor(expectedRecord.right, recovered.head)
-            ) {
-              return yield* runtimeError(
-                "JOURNAL_HEAD_MISMATCH",
-                "published record is not the exact recovered journal head"
               )
-            }
-            const committed = recovered.history.at(-1)
-            if (
-              committed === undefined ||
-              committed.commit.receipt.transitionId !== command.transitionId ||
-              committed.commit.writeBindings.length !== durableBindings.length
-            ) {
-              return yield* runtimeError(
-                "JOURNAL_HEAD_MISMATCH",
-                "recovered head does not contain the submitted receipt"
-              )
-            }
-            return Object.freeze({
-              state: snapshotDurableState(
-                journalLineageId,
-                schemaContent.binding,
-                recovered
-              ),
-              receipt: snapshotDurableReceipt(committed)
-            })
-          })
+            : commit(input)
       })
+      internalCommitByRuntime.set(runtime, commit)
+      return runtime
     })
   )
 }

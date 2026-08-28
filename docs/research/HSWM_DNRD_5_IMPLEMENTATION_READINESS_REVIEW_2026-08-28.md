@@ -119,9 +119,16 @@ The checked-in candidate slice now contains:
    restore.  A documented CAS-conflict loser is re-read and classified as an
    already-consumed nonce only when the exact validated winning atom exists.
    Memory admission/replay, concurrent one-winner, normal file reopen, and
-   stale/altered-input integration tests pass.  This is not yet a mandatory
-   runtime dispatcher, crash-fault proof, global capability ledger, or trusted
-   external authority/time service.
+   stale/altered-input integration tests pass.  The public generic durable
+   `submit` now fails closed for the DNRD-5 schema with
+   `DNRD5_PERMIT_DISPATCH_REQUIRED`; the Permit dispatcher alone invokes a
+   module-held commit capability that is absent from the package root.  A
+   static textual allowlist test fails if the exact capability identifier
+   occurs in any other checked `src/` TypeScript file.  This closes the ordinary
+   checked-source/package-root durable bypass.  It is not yet an
+   occurrence preflight, a proof against arbitrary modified repository source,
+   a crash-fault proof, a global capability ledger, or a trusted external
+   authority/time service.
 10. A client-side OpenAI-compatible provider gateway that constructs the exact
     request internally, persists content-addressed request/projection/response
     bytes and a hash-chained START/terminal ledger, validates a bounded closed
@@ -151,13 +158,21 @@ before Source A can be frozen:
    lifecycle seal.  It must reconstruct the complete history `H` from actual
    allowed-input bytes, including public-task stratum categories, sealed
    trajectory, fixed instruction/RNG/runtime identities, and declared
-   timing/capability projection, then independently establish the conditional
-   `theta`/placebo source law.  The present validators remain separate slices.
-2. The DNRD-5 durable submitter must become the mandatory dispatcher for every
-   DNRD-5 state-changing command.  The public generic durable `submit` path can
-   still be configured against the schema and bypass the dedicated Permit and
-   consumption checks.  The one-shot atom is unique only within one recovered
-   journal/root; cloned roots or replayed stores can consume the same nonce.
+   timing/capability projection, then independently verify the prespecified
+   provenance, separation, and chronology evidence required for the declared
+   conditional `theta`/placebo law.  A finite occurrence cannot empirically
+   prove fairness or conditional independence.  The present validators remain
+   separate slices.
+2. A production occurrence preflight must be the sole executor entrypoint and
+   bind the frozen source/preregistration/runtime identities, 300-block
+   universe, future-randomness receipt, custody commitments, nine-call plan,
+   and provider evidence root before any model dispatch.  Source qualification
+   must bind and independently recheck the source tree, semantic import/call
+   graph, and selected build outputs rather than trusting the local textual
+   allowlist alone.  The new schema-discriminated raw-submit guard does not by
+   itself prevent altered repository source, a deep-module consumer outside the
+   checked tree, a non-durable DNRD-shaped projection, or a test bootstrap from
+   being mislabeled as a production occurrence.
 3. Policy, authorization, revocation, and evaluated time are content-addressed
    and internally closed, but no independently authenticated authority,
    revocation service, or trusted time receipt establishes their production
@@ -176,7 +191,25 @@ before Source A can be frozen:
    facts before handing the exact 300-block universe to the arithmetic module.
 8. The model/provider reproducibility qualification.  Until block-level label
    exchangeability and deterministic potential outcomes are demonstrated, the
-   sign-test output must not be called finite-sample exact.
+   sign-test output must not be called finite-sample exact.  The occurrence
+   judge must also verify that the selected beacon follows Source B, is bound to
+   the frozen study, and independently rederives the prespecified uniform
+   `S4` permutation and pairwise ACTIVE/control label-swap symmetry in every
+   block.  One observed beacon cannot prove its declared uniformity or PRF law;
+   that remains an explicit assumption.
+9. The R2 downgrade path is not yet an analysis plan.  If deterministic
+   potential outcomes cannot be qualified, Source A must either refuse the
+   exact-GO design or preregister and validate a concrete asymptotic alternative
+   with its own dependence, standard-error, missingness, and terminal rules.
+   The present normal lower bound is not automatically valid under provider
+   stochasticity, cross-block dependence, or failed clone exchangeability.  Any
+   fallback must operate at the block-cluster level, retain all 300 valid
+   complete blocks without outcome- or discordance-based exclusion, and define
+   a scientific decision terminal distinct from every `ARITHMETIC_*` terminal.
+10. One-shot consumption is unique only within one recovered journal/root.
+    Cloned roots or replayed stores can consume the same nonce, so production
+    needs one globally selected occurrence root or an external uniqueness
+    witness before the capability can be called globally one-shot.
 
 ## Operational decision
 
@@ -184,7 +217,10 @@ No manual user hash echo is required for the remaining preparation.  No DNRD-5
 source freeze, preregistration, future-randomness selection, semantic occurrence
 marker, model call, efficacy analysis, content-addressed result receipt, or
 `F1_R8_RESULTS_LOG.md` entry is warranted at this stage.  Work proceeds to the
-mandatory DNRD-5 dispatcher and production-shaped end-to-end custody/occurrence
-judge; the next decision point is another source-freeze audit, not an execution
-attempt.  The conditional byte-distribution statement above is algebra under a
-declared latent law, not proof of a production placebo distribution.
+production occurrence preflight and production-shaped end-to-end
+custody/occurrence judge.  Even a successful Source-A instrument audit may emit
+only `SOURCE_A_INSTRUMENT_QUALIFIED_FUTURE_OCCURRENCE_EVIDENCE_REQUIRED`, not an
+exactness, custody, or efficacy terminal.  The next decision point is another
+source-freeze audit, not an execution attempt.  The conditional
+byte-distribution statement above is algebra under a declared latent law, not
+proof of a production placebo distribution.

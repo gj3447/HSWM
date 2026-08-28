@@ -1,0 +1,80 @@
+{
+  "schema_version": "hswm-dnrd5-analysis-vector/v1",
+  "encoding": "Each run expands to count ordered blocks named prefix-000 through prefix-(count-1), with the listed binary outcomes.",
+  "cases": [
+    {
+      "name": "all_tie",
+      "runs": [{"count": 3, "prefix": "tie", "ACTIVE": 1, "OUTCOME_INDEPENDENT_SHAM": 1, "DELAYED_NO_CREDIT": 1, "EXACT_W0_ROLLBACK": 1}],
+      "expected": {"sham_exact_p": {"numerator": 1, "denominator": 1}, "decision": "not_a_300_block_study"}
+    },
+    {
+      "name": "known_small_tail",
+      "runs": [
+        {"count": 2, "prefix": "tail-a", "ACTIVE": 1, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 0, "EXACT_W0_ROLLBACK": 0},
+        {"count": 1, "prefix": "tail-z", "ACTIVE": 0, "OUTCOME_INDEPENDENT_SHAM": 1, "DELAYED_NO_CREDIT": 1, "EXACT_W0_ROLLBACK": 1}
+      ],
+      "expected": {"sham_exact_p": {"numerator": 1, "denominator": 2}, "sham_adjusted_p": {"numerator": 1, "denominator": 1}}
+    },
+    {
+      "name": "go",
+      "runs": [{"count": 300, "prefix": "go", "ACTIVE": 1, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 0, "EXACT_W0_ROLLBACK": 0}],
+      "expected": {"decision": "ARITHMETIC_GO_PENDING_INTEGRITY"}
+    },
+    {
+      "name": "mechanism_incomplete",
+      "runs": [
+        {"count": 220, "prefix": "mi-a", "ACTIVE": 1, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 1, "EXACT_W0_ROLLBACK": 1},
+        {"count": 80, "prefix": "mi-z", "ACTIVE": 0, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 0, "EXACT_W0_ROLLBACK": 0}
+      ],
+      "expected": {"decision": "ARITHMETIC_PRIMARY_SIGNAL_MECHANISM_INCOMPLETE_PENDING_INTEGRITY"}
+    },
+    {
+      "name": "valid_no_go",
+      "runs": [{"count": 300, "prefix": "nogo", "ACTIVE": 1, "OUTCOME_INDEPENDENT_SHAM": 1, "DELAYED_NO_CREDIT": 1, "EXACT_W0_ROLLBACK": 1}],
+      "expected": {"decision": "ARITHMETIC_NO_GO_PENDING_INTEGRITY"}
+    },
+    {
+      "name": "invalid_duplicate",
+      "raw_blocks": [
+        {"block_id": "dup", "ACTIVE": 1, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 0, "EXACT_W0_ROLLBACK": 0},
+        {"block_id": "dup", "ACTIVE": 1, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 0, "EXACT_W0_ROLLBACK": 0}
+      ],
+      "expected_error": "unique and strictly ordered"
+    },
+    {
+      "name": "invalid_nonbinary",
+      "raw_blocks": [
+        {"block_id": "a", "ACTIVE": 2, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 0, "EXACT_W0_ROLLBACK": 0},
+        {"block_id": "b", "ACTIVE": 1, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 0, "EXACT_W0_ROLLBACK": 0}
+      ],
+      "expected_error": "binary integer"
+    },
+    {
+      "name": "invalid_extra_field",
+      "raw_blocks": [
+        {"block_id": "a", "ACTIVE": 1, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 0, "EXACT_W0_ROLLBACK": 0, "hidden": 1},
+        {"block_id": "b", "ACTIVE": 1, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 0, "EXACT_W0_ROLLBACK": 0, "hidden": 1}
+      ],
+      "expected_error": "exactly keys"
+    },
+    {
+      "name": "invalid_count",
+      "runs": [{"count": 299, "prefix": "short", "ACTIVE": 1, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 0, "EXACT_W0_ROLLBACK": 0}],
+      "expected_error": "exactly 300 blocks"
+    },
+    {
+      "name": "nontrivial_large_tail",
+      "runs": [
+        {"count": 180, "prefix": "tail-win", "ACTIVE": 1, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 0, "EXACT_W0_ROLLBACK": 0},
+        {"count": 120, "prefix": "tail-loss", "ACTIVE": 0, "OUTCOME_INDEPENDENT_SHAM": 1, "DELAYED_NO_CREDIT": 1, "EXACT_W0_ROLLBACK": 1}
+      ]
+    },
+    {
+      "name": "lcb_positive_exact_p_fails",
+      "runs": [
+        {"count": 5, "prefix": "split-a", "ACTIVE": 1, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 0, "EXACT_W0_ROLLBACK": 0},
+        {"count": 295, "prefix": "split-z", "ACTIVE": 0, "OUTCOME_INDEPENDENT_SHAM": 0, "DELAYED_NO_CREDIT": 0, "EXACT_W0_ROLLBACK": 0}
+      ]
+    }
+  ]
+}

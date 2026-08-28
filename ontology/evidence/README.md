@@ -226,13 +226,24 @@ engineering checkpoints:
   killed and pruned the source-freeze implementation before commit or dispatch.
   Continue from the canonical
   [`resource-policy stop decision`](../../docs/research/HSWM_SWM0W_S2S_RESOURCE_POLICY_CHRONOLOGY_AND_TIMING_PROTOCOL_2026-08-23.md),
-  not from a v26 projection.
+  rather than treating a later byte-binding projection as permission to resume
+  the stopped S2S program.
+- [`v26 DNRD-4 Source-A successor binding`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v26.json)
+  preserves v25 and records only the new exact bytes of a historically bound
+  S2S regression file changed by DNRD-4 engineering. It does not reopen the S2S
+  source-freeze decision or create runtime or scientific evidence.
+- [`v27 atomic control-file publication successor binding`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v27.json)
+  records the test-only hosted-process repair that prepares a complete private
+  file before atomically publishing its pathname. Its evidence is limited to
+  namespace visibility under concurrent local readers; it does not establish
+  crash or power-loss durability, production authority, or scientific effect.
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. V25 is the final immutable S2S
-handoff projection; no v26 is authorized. The TypeScript/Effect preference
-remains, but the killed source-freeze added no retained runtime. V25 and the
-stop decision add only `Pi` review information; they add no `H/W/A/F`,
+runtime graphs, or remote Neo4j publications. V25 remains the final historical
+S2S pre-freeze decision; v26 and v27 are immutable-successor byte bindings, not
+authorization to continue that retired line. The TypeScript/Effect preference
+remains, but the killed source-freeze added no retained runtime. V25 through
+v27 add only bounded engineering projection information; they add no `H/W/A/F`,
 outcome-bound causal-learning transition, topology mutation, production
 authority, or scientific result. The next research gate is the bounded L1
 causal-lesson concept/registration decision.

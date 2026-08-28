@@ -2,6 +2,7 @@ import { createHash, randomBytes } from "node:crypto"
 import { constants, createReadStream } from "node:fs"
 import {
   chmod,
+  link,
   lstat,
   mkdir,
   open,
@@ -435,15 +436,27 @@ const writeExclusiveFile = async (
   bytes: Uint8Array,
   phase: S2STestOnlyHostedProcessRuntimeError["phase"] = "PREPARE"
 ): Promise<void> => {
+  // A client begins polling as soon as the session directory exists.  Publishing
+  // the destination with O_EXCL and then writing it exposed a short-lived,
+  // zero-length regular file to that client.  Build a private inode first and
+  // atomically link it into the one-shot destination instead: the destination
+  // is consequently either absent or fully sealed, never partly written.
+  const temporaryPath = join(
+    dirname(path),
+    `.${basename(path)}.${randomBytes(16).toString("hex")}.partial`
+  )
+  let temporaryCreated = false
+  let primaryError: unknown = null
   try {
     const handle = await open(
-      path,
+      temporaryPath,
       constants.O_WRONLY |
         constants.O_CREAT |
         constants.O_EXCL |
         constants.O_NOFOLLOW,
       0o600
     )
+    temporaryCreated = true
     try {
       await handle.writeFile(bytes)
       await handle.sync()
@@ -463,8 +476,23 @@ const writeExclusiveFile = async (
     } finally {
       await handle.close()
     }
+    await link(temporaryPath, path)
   } catch (error) {
+    primaryError = error
     throw ioError(phase, error, "exclusive private file write failed")
+  } finally {
+    if (temporaryCreated) {
+      try {
+        await unlink(temporaryPath)
+      } catch (cleanupError) {
+        // Preserve the write/link failure; cleanup must not conceal its cause.
+        // A cleanup failure after an otherwise successful publication is itself
+        // fatal because it leaves an unexpected private control-file residue.
+        if (!(hasCode(cleanupError) && cleanupError.code === "ENOENT") && primaryError === null) {
+          throw cleanupError
+        }
+      }
+    }
   }
 }
 

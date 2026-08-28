@@ -6,6 +6,7 @@ import {
   lstat,
   mkdtemp,
   readFile,
+  readdir,
   rm,
   writeFile
 } from "node:fs/promises"
@@ -238,6 +239,38 @@ it("uses all three exact structural archive rosters without scientific content",
       causal_learning_claimed: false
     })
   }
+}, 15_000)
+
+it("publishes READY control files atomically to concurrent local readers", async () => {
+  const runnerTempPath = await temporaryRoot()
+  const seed = input(runnerTempPath, "REGISTER", "register", 1, "atomic-ready")
+  const root = Effect.runFork(runS2STestOnlyHostedProcessRoot(seed))
+  const observations = await Promise.all(
+    Array.from({ length: 16 }, () =>
+      Effect.runPromise(awaitS2STestOnlyHostedProcessReady(seed))
+    )
+  )
+  expect(observations).toHaveLength(16)
+  expect(
+    new Set(observations.map((observation) => observation.ready.binding.nonce))
+      .size
+  ).toBe(1)
+  const sessionPath = s2sTestOnlyHostedProcessSessionPath(
+    runnerTempPath,
+    seed.sessionName
+  )
+  for (const directory of [
+    sessionPath,
+    join(sessionPath, "upload"),
+    join(sessionPath, "evidence")
+  ]) {
+    expect(
+      (await readdir(directory)).filter((name) => name.endsWith(".partial"))
+    ).toEqual([])
+  }
+
+  await Effect.runPromise(reconcileS2STestOnlyHostedProcess(seed, "success"))
+  await Effect.runPromise(Fiber.join(root))
 }, 15_000)
 
 const cliArguments = (
@@ -558,6 +591,11 @@ it("never returns client success when occurrence commit is preoccupied", async (
   expect(Exit.isFailure(rootExit)).toBe(true)
   await expectAbsent(ready.paths.terminalPath)
   expect(await readFile(ready.paths.occurrencePath, "utf8")).toBe("occupied\n")
+  expect(
+    (await readdir(ready.paths.evidencePath)).filter((name) =>
+      name.endsWith(".partial")
+    )
+  ).toEqual([])
 }, 20_000)
 
 it("SIGTERM interrupts the scoped root without a terminal or orphaned socket", async () => {

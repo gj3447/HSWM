@@ -36,6 +36,11 @@ LAW_UIDS = {
 }
 
 
+def _is_python_sdist() -> bool:
+    """The Effect runtime is intentionally absent from the Python sdist."""
+    return (ROOT / "PKG-INFO").is_file()
+
+
 def _data() -> dict[str, object]:
     return json.loads(PROJECTION.read_text(encoding="utf-8"))
 
@@ -82,9 +87,15 @@ def test_retired_core_v1_bytes_and_anchor_are_restored_not_refreshed() -> None:
     assert hashlib.sha256(CORE_V1.read_bytes()).hexdigest() == CORE_V1_SHA256
     core = json.loads(CORE_V1.read_text(encoding="utf-8"))
     assert all(anchor["source_bundle_sha256"] == V1_SHA256 for anchor in core["external_anchors"])
-    ts = CORE_TS.read_text(encoding="utf-8")
-    assert CORE_CONTENT_SHA256 in ts
-    assert V1_SHA256 in ts
+    if _is_python_sdist():
+        # The Python distribution transports the authoritative JSON ontology but
+        # deliberately prunes the separate npm/Effect artifact.  Its absence is
+        # a packaging boundary, not evidence that the historical anchor changed.
+        assert not CORE_TS.exists()
+    else:
+        ts = CORE_TS.read_text(encoding="utf-8")
+        assert CORE_CONTENT_SHA256 in ts
+        assert V1_SHA256 in ts
 
 
 def test_projection_is_uid_disjoint_and_preserves_complete_scientific_fields() -> None:

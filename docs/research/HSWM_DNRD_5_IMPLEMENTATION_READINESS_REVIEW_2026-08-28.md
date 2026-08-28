@@ -7,6 +7,8 @@
 - Scientific status: `DESIGN-INSTRUMENT PROGRESS / UNMEASURED / NO EFFECT RESULT`
 - Governing design:
   [`HSWM_DNRD_5_CAUSAL_MACROPLASTICITY_DESIGN_2026-08-28.md`](HSWM_DNRD_5_CAUSAL_MACROPLASTICITY_DESIGN_2026-08-28.md)
+- Exactness policy:
+  [`HSWM_DNRD_5_EXACTNESS_POLICY_AMENDMENT_2026-08-28.md`](HSWM_DNRD_5_EXACTNESS_POLICY_AMENDMENT_2026-08-28.md)
 
 ## Canonical role and present evidence
 
@@ -162,7 +164,10 @@ before Source A can be frozen:
    provenance, separation, and chronology evidence required for the declared
    conditional `theta`/placebo law.  A finite occurrence cannot empirically
    prove fairness or conditional independence.  The present validators remain
-   separate slices.
+   separate slices.  The verifier closure must bind its source/tree, selected
+   build output, semantic allowed-import graph, cross-language canonical corpus,
+   and actual-byte evidence schema; the existing synthetic structural vectors
+   do not meet that requirement.
 2. A production occurrence preflight must be the sole executor entrypoint and
    bind the frozen source/preregistration/runtime identities, 300-block
    universe, future-randomness receipt, custody commitments, nine-call plan,
@@ -172,7 +177,9 @@ before Source A can be frozen:
    allowlist alone.  The new schema-discriminated raw-submit guard does not by
    itself prevent altered repository source, a deep-module consumer outside the
    checked tree, a non-durable DNRD-shaped projection, or a test bootstrap from
-   being mislabeled as a production occurrence.
+   being mislabeled as a production occurrence.  The Python provider gateway
+   must also require a preflight-issued single-use capability; its presently
+   callable raw `execute` method is not yet the sole dispatcher.
 3. Policy, authorization, revocation, and evaluated time are content-addressed
    and internally closed, but no independently authenticated authority,
    revocation service, or trusted time receipt establishes their production
@@ -189,23 +196,36 @@ before Source A can be frozen:
    application bytes only, and separate roots remain outside its lock domain.
 7. An independently implemented occurrence judge that verifies all integrity
    facts before handing the exact 300-block universe to the arithmetic module.
-8. The model/provider reproducibility qualification.  Until block-level label
-   exchangeability and deterministic potential outcomes are demonstrated, the
-   sign-test output must not be called finite-sample exact.  The occurrence
+8. The model/provider reproducibility qualification.  Until the frozen
+   block-level label-exchangeability and deterministic-potential-outcome
+   assumption profile has its prespecified supporting evidence without a
+   falsifying observation, the sign-test output must not be called finite-sample
+   exact.  The occurrence
    judge must also verify that the selected beacon follows Source B, is bound to
    the frozen study, and independently rederives the prespecified uniform
    `S4` permutation and pairwise ACTIVE/control label-swap symmetry in every
    block.  One observed beacon cannot prove its declared uniformity or PRF law;
    that remains an explicit assumption.
-9. The R2 downgrade path is not yet an analysis plan.  If deterministic
-   potential outcomes cannot be qualified, Source A must either refuse the
-   exact-GO design or preregister and validate a concrete asymptotic alternative
-   with its own dependence, standard-error, missingness, and terminal rules.
-   The present normal lower bound is not automatically valid under provider
-   stochasticity, cross-block dependence, or failed clone exchangeability.  Any
-   fallback must operate at the block-cluster level, retain all 300 valid
-   complete blocks without outcome- or discordance-based exclusion, and define
-   a scientific decision terminal distinct from every `ARITHMETIC_*` terminal.
+9. The exactness-policy amendment resolves the R2 downgrade ambiguity in favor
+   of an exact-test-required, no-fallback policy.  Source A needs prespecified
+   finite evidence standards for the distinct assignment, deterministic
+   potential-outcome, clone-exchangeability, consistency, no-interference, and
+   evaluator assumptions.  Those checks may falsify or support the profile;
+   they cannot prove unobserved provider or isolation behavior.  A missing or
+   falsified exact-test profile produces the Source-A decision
+   `SOURCE_A_REFUSED_EXACTNESS_UNQUALIFIED`.  The R2 normal lower bound remains a
+   separate mandatory directional component, not a fallback, and needs its own
+   block-cluster justification; otherwise the decision is
+   `SOURCE_A_REFUSED_LCB_UNQUALIFIED`.  Any future standalone asymptotic route
+   requires a separate reviewed revision with a block-cluster estimator,
+   dependence and standard-error rules, all 300 valid complete blocks, no
+   outcome- or discordance-based exclusion, and a scientific terminal distinct
+   from every `ARITHMETIC_*` terminal.
+   Before any disjoint reproducibility calls, a Q0 protocol/source/build/root
+   commitment and Q-start marker must fix the corpus, replicates, comparator,
+   order/randomness rule, budget, verifier, and failure handling.  Source A may
+   bind the sealed Q closure afterward but may not retroactively authorize or
+   tune Q from its outputs.
 10. One-shot consumption is unique only within one recovered journal/root.
     Cloned roots or replayed stores can consume the same nonce, so production
     needs one globally selected occurrence root or an external uniqueness

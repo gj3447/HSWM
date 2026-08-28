@@ -56,6 +56,36 @@ not durable recovery, a Permit, or a CAS. A future dispatcher may use it only
 after supplying a state obtained from the internal recovery witness and after
 independently binding the exact command and journal record.
 
+The next local instrument now validates one cycle-free consumption candidate
+for each of `MAIN_ADMIT`, `MAIN_RESTORE`, `RECEIPT_ADMIT`, and
+`RECEIPT_RESTORE`. Each candidate binds canonical payload and intent bytes to:
+
+- the full validated caller state and its exact revision and canonical hash;
+- the recovered journal lineage and exact raw-head descriptor;
+- one phase-specific authority chain, purpose atom, nonce, and evaluation
+  timestamp;
+- one deterministic consumption-atom UID and four exact typed references;
+- one full companion write with the phase-appropriate kind and reciprocal
+  consumption reference; and
+- the exact external dependency read set and a reconstructed, schema-valid
+  two-write atomic chronology.
+
+The command projection deliberately omits the consumption write whose content
+commits to that projection. Reconstructing the omitted write before chronology
+validation avoids a self-hash cycle while preserving the exact command
+commitment. The validator rejects noncanonical bytes, descriptor drift,
+surplus or missing reads, cross-wired references, wrong state-member kinds,
+reused local atom or transition identities, and invalid two-write topology.
+Its result remains a deeply immutable structural binding summary with an
+explicit terminal status of `NOT_DURABLE_RECOVERY`, `NOT_CONSUMED`,
+`NOT_PERMIT`, `NOT_CAS`, `NOT_OCCURRENCE`, `NOT_LEARNING`, and
+`NOT_SCIENTIFIC_RESULT`.
+
+This candidate check detects replay only against the supplied state. It does
+not establish global or cross-purpose nonce consumption; the durable
+dispatcher must make that guarantee from recovered state and compare-and-swap
+outcomes.
+
 Exactly one schema-relative responsibility owner per atom does not by itself
 require a different runtime principal for every custodian role. This bounded
 verifier requires the declared authorizer to differ from the actor and each
@@ -103,8 +133,8 @@ bound.
 
 The next implementation gate is therefore narrow:
 
-1. bind the validated main authority payload to an exact recovered S0 and
-   exact ADMIT command;
+1. bind validated main authority and consumption candidates to an exact
+   recovered S0 and exact ADMIT command;
 2. execute CAS1 once and recover its exact raw record as R1;
 3. revalidate distinct evidence authority at R1, derive the receipt solely
    from R1, and execute CAS2 once;

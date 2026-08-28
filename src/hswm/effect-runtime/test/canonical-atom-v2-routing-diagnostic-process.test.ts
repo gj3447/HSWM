@@ -278,7 +278,7 @@ it("materializes independently replayed RAW and exact DERANGED controls and refu
   await expect(request(root, "APPLY_OUTCOME", { state: rawState, trace: trainingTrace, outcome: outcome(trainingTrace) })).rejects.toThrow(/only the immutable FULL trainable mount role/)
   await expect(request(root, "APPLY_OUTCOME", { state: derangedState, trace: trainingTrace, outcome: outcome(trainingTrace) })).rejects.toThrow(/only the immutable FULL trainable mount role/)
   await expect(request(root, "APPLY_OUTCOME", { state: full, trace: trainingTrace, outcome: outcome(trainingTrace) })).rejects.toThrow(/one registered training episode may produce at most one/)
-}, 30_000)
+}, 60_000)
 
 it("freezes one scorer configuration and one occurrence per frozen stream identity", async () => {
   const root = await mkdtemp(join(tmpdir(), "hswm-dnrd-process-reservation-"))

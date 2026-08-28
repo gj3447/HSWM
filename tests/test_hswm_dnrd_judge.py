@@ -84,8 +84,8 @@ def _qualification_summary() -> dict[str, object]:
             "returned_token": requested,
         })
     return {
-        "schema_version": "hswm-dnrd4-structured-output-qualification-summary/v2",
-        "domain": "HSWM-DNRD4-STRUCTURED-OUTPUT-QUALIFICATION-v1",
+        "schema_version": "hswm-dnrd4s1-structured-output-qualification-summary/v1",
+        "domain": "HSWM-DNRD4S1-STRUCTURED-OUTPUT-QUALIFICATION-v1",
         "event_schema": "hswm-dnrd-live-model-event/v3",
         "experiment_occurrence": False,
         "future_seed_material_used": False,
@@ -264,7 +264,7 @@ def _self_addressed_receipt(unsigned: dict[str, object]) -> dict[str, object]:
 
 
 def _preregistration_ci_fixture() -> dict[str, object]:
-    """One self-consistent DNRD-4 source/prereg/CI fixture for negative joins."""
+    """One self-consistent DNRD-4S1 source/prereg/CI fixture for negative joins."""
     scorer_sha256 = _sha("fixture-scorer")
     source = {
         "schema_version": "hswm-dnrd-source-freeze-manifest/v1",
@@ -311,7 +311,7 @@ def _preregistration_ci_fixture() -> dict[str, object]:
     preregistration.update({
         "schema_version": judge.PREREGISTRATION_SCHEMA,
         "experiment_id": judge.EXPERIMENT_ID,
-        "protocol_version": "v4",
+        "protocol_version": "v4s1",
         "status": "FROZEN_AWAITING_SUCCESSFUL_PREREGISTRATION_B_CI_AND_FUTURE_PULSE",
         "authority": {
             "broad_research_continuation_requested": True,
@@ -563,14 +563,22 @@ def test_preregistration_names_exact_terminals_and_does_not_claim_record_signatu
     assert raw_description.startswith("NO_MODEL_DISPATCH")
 
 
-def test_dnrd3_predecessor_identity_is_hard_bound_in_the_v4_claim_boundary() -> None:
-    assert PREREG_CLAIM_BOUNDARY["predecessor_bindings"][-4:] == [
+def test_dnrd3_and_dnrd4_predecessor_identities_are_hard_bound() -> None:
+    predecessors = PREREG_CLAIM_BOUNDARY["predecessor_bindings"]
+    assert predecessors[-9:-5] == [
         "DNRD3_STRUCTURAL_VOID_POST_128_CALLS_NO_MECHANICS_RESULT_NO_RETRY",
         "DNRD3_PREREGISTRATION_SHA256="
         "2bcbe110cac8b69b3889761c05635a8af62b09a443e2a10a2a4a62aad0791226",
         "DNRD3_RESULT_COMMIT=43c1b9885352ed99e6845884b0adec0445f1be4b",
         "DNRD3_CHECKED_EVIDENCE_RECEIPT_SELF_SHA256="
         "55c9de56932b3b28ab049e056e93051312442ca84c29c90182ffc485d996e829",
+    ]
+    assert predecessors[-5:] == [
+        "DNRD4_FROZEN_UNEXECUTED_PREMARKER_STATIC_INSTRUMENT_REFUSAL_NO_QUICKNET_NO_MARKER_NO_GENERATION_NO_OCCURRENCE_NO_JUDGMENT",
+        "DNRD4_SOURCE_A_COMMIT=276fc42354169cb5f0f0bc6cbaf34052047cd630",
+        "DNRD4_PREREGISTRATION_B_COMMIT=b1dc53d8efdaee24d1ffad10cc558a48321bc6ac",
+        "DNRD4_PREREGISTRATION_SHA256=87cdf810e3c4c88a8b755f5b31bd3b98dad6bff9d5c320e58eaeb7b2659a3762",
+        "DNRD4_INVALID_RUNTIME_MANIFEST_SHA256=fbca6ec3d59fc575f7a9effc4f7add15da8d56e280b5434981f84355f9cdd737",
     ]
     assert commitment(PREREG_CLAIM_BOUNDARY) == judge.PREREG_CLAIM_BOUNDARY_SHA256
 
@@ -1254,11 +1262,11 @@ def test_episode_replay_rejects_noncanonical_retained_response_token() -> None:
         "arm_order": list(judge.ARMS),
     }
 
-    with pytest.raises(judge.BundleRefusal, match="exact DNRD-4 form"):
+    with pytest.raises(judge.BundleRefusal, match="exact DNRD-4S1 form"):
         judge._check_episode(episode, stream, "heldout", "episode")
 
 
-def test_generated_dnrd4_manifest_pair_replays_under_the_judge() -> None:
+def test_generated_dnrd4s1_manifest_pair_replays_under_the_judge() -> None:
     public, private = generate_manifests(bytes(range(32)))
 
     episodes, stream_by_episode, bindings = judge._public_manifest_index(public, private)

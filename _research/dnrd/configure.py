@@ -1,4 +1,4 @@
-"""Offline, deterministic post-B execution-config construction for DNRD-4.
+"""Offline, deterministic post-B execution-config construction for DNRD-4S1.
 
 This is intentionally an operational boundary, not an execution boundary.  It
 does not contact a model, network, beacon, or seed source, and it never invokes
@@ -25,7 +25,7 @@ from . import execute
 
 
 class ConfigurationRefusal(ValueError):
-    """The retained post-B evidence cannot produce a safe DNRD-4 config."""
+    """The retained post-B evidence cannot produce a safe DNRD-4S1 config."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -429,7 +429,7 @@ def _path(value: str) -> Path:
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m _research.dnrd.configure",
-        description="Offline DNRD-4 post-B config builder; never calls model/network/seed/pulse/execute.",
+        description="Offline DNRD-4S1 post-B config builder; never calls model/network/seed/pulse/execute.",
     )
     for name in (
         "repo-root", "source-ci-receipt", "preregistration-ci-receipt", "qualification",
@@ -455,7 +455,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             python_executable_path=_path(args.python_executable),
         ))
     except (OSError, ConfigurationRefusal, execute.ExecutionRefusal) as error:
-        print(f"DNRD-4 configuration refused: {error}", file=sys.stderr)
+        print(f"DNRD-4S1 configuration refused: {error}", file=sys.stderr)
         return 2
     print(digest)
     return 0

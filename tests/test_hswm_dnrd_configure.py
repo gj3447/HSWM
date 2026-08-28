@@ -1,4 +1,4 @@
-"""Tests for the offline post-B DNRD-4 execution-config builder."""
+"""Tests for the offline post-B DNRD-4S1 execution-config builder."""
 
 from __future__ import annotations
 
@@ -79,7 +79,7 @@ def _inputs(tmp_path: Path, config: dnrd_execute.ExecutionConfig) -> Configurati
         bridge_state_root=config.bridge_state_root,
         attempt_registry_root=config.attempt_registry_root,
         output_root=tmp_path / "future-evidence",
-        config_output_path=config_parent / "dnrd4-config.json",
+        config_output_path=config_parent / "dnrd4s1-config.json",
         node_executable_path=config.node_executable_path,
         python_executable_path=config.python_executable_path,
     )

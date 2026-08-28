@@ -1,4 +1,4 @@
-"""Deterministic, offline preregistration-B construction for DNRD-4.
+"""Deterministic, offline preregistration-B construction for DNRD-4S1.
 
 This module turns already frozen Source-A evidence into the *one* new B-path
 payload.  It neither makes a commit nor opens a network connection, starts a
@@ -24,6 +24,7 @@ from typing import Any, Mapping, Sequence
 from . import execute as _execute
 
 from .execute import (
+    EXPERIMENT_ID,
     MAX_OUTPUT_TOKENS,
     MODEL_ID,
     OFFICIAL_DRAND_CLIENT_RUNTIME_BUNDLE_SHA256,
@@ -35,12 +36,14 @@ from .execute import (
     PREREGISTRATION_B_CI_RECEIPT_SCHEMA,
     PREREG_CLAIM_BOUNDARY,
     PREREG_SCHEMA,
+    PROTOCOL_VERSION,
     QUALIFICATION_SOURCE_PATHS,
     RUNTIME_TREE_MANIFEST_SCHEMA,
     SCORER_ARGUMENT_CONTRACT,
     SOURCE_CI_RECEIPT_SCHEMA,
     SOURCE_MANIFEST_SCHEMA,
     STRUCTURED_OUTPUT_QUALIFICATION_RECORD_ROLE,
+    STRUCTURED_OUTPUT_QUALIFICATION_DOMAIN,
     STRUCTURED_OUTPUT_QUALIFICATION_SCHEMA,
     TOKENIZER_PREFLIGHT_PROMPT,
     VLLM_VERSION,
@@ -50,7 +53,7 @@ from .task_family import canonical_json, commitment
 
 
 class RegistrationRefusal(ValueError):
-    """A supplied Source-A pin cannot safely form the DNRD-4 B artifact."""
+    """A supplied Source-A pin cannot safely form the DNRD-4S1 B artifact."""
 
 
 _HEX = frozenset("0123456789abcdef")
@@ -203,7 +206,7 @@ def _source_identity(inputs: RegistrationInputs) -> tuple[str, str, int, str, li
     raw = manifest_path.read_bytes()
     manifest = _object(raw, "source manifest", canonical=True)
     data = _keys(manifest, {"schema_version", "experiment_id", "source_commit_tree_bound_externally", "files"}, "source manifest")
-    if (data["schema_version"] != SOURCE_MANIFEST_SCHEMA or data["experiment_id"] != "HSWM-DNRD-4" or
+    if (data["schema_version"] != SOURCE_MANIFEST_SCHEMA or data["experiment_id"] != EXPERIMENT_ID or
             data["source_commit_tree_bound_externally"] != "SOURCE_COMMIT_TREE_BOUND_EXTERNALLY_NO_SELF_CYCLE"):
         raise RegistrationRefusal("source manifest identity drifted")
     rows = data["files"]
@@ -280,9 +283,54 @@ def _runtime_manifest(
         raise RegistrationRefusal("bridge implementation must reside under the runtime root") from error
     if entrypoint != bridge_relative:
         raise RegistrationRefusal("runtime manifest entrypoint differs from the CLI bridge implementation")
+    try:
+        _execute._runtime_manifest_rows(
+            data["files"],
+            label="runtime manifest files",
+            root=runtime_root,
+        )
+        packages = data["external_packages"]
+        if type(packages) is not list or not packages:
+            raise RegistrationRefusal("runtime manifest external packages must be a nonempty list")
+        package_names: list[str] = []
+        for index, raw_package in enumerate(packages):
+            package = _keys(
+                raw_package,
+                {
+                    "name",
+                    "version",
+                    "package_root",
+                    "package_json_path",
+                    "package_json_sha256",
+                    "resolved_entrypoint_path",
+                    "resolved_entrypoint_sha256",
+                    "files",
+                },
+                f"runtime manifest external_packages[{index}]",
+            )
+            name = package["name"]
+            if type(name) is not str or not name:
+                raise RegistrationRefusal("runtime manifest external package name is malformed")
+            root_relative = _relative(
+                package["package_root"],
+                f"runtime manifest external_packages[{index}].package_root",
+            )
+            if root_relative != f"node_modules/{name}":
+                raise RegistrationRefusal("runtime manifest external package root drifted")
+            _execute._runtime_manifest_rows(
+                package["files"],
+                label=f"runtime manifest external package {name} files",
+                root=runtime_root,
+                required_prefix=root_relative,
+            )
+            package_names.append(name)
+        if package_names != sorted(set(package_names)):
+            raise RegistrationRefusal(
+                "runtime manifest external packages must be canonically sorted and duplicate-free"
+            )
+    except _execute.ExecutionRefusal as error:
+        raise RegistrationRefusal(str(error)) from error
     entries = data["files"]
-    if type(entries) is not list:
-        raise RegistrationRefusal("runtime manifest files must be a list")
     matching = [
         _keys(row, {"path", "sha256", "bytes"}, "runtime manifest file")
         for row in entries
@@ -308,13 +356,13 @@ def _qualification(
     value = _object(raw[:-1], "qualification", canonical=True)
     required = {"schema_version", "domain", "event_schema", "experiment_occurrence", "future_seed_material_used", "record_role", "raw_full_stdout_record_persisted", "retry_count", "max_output_tokens", "model_endpoint", "served_model_id", "vllm_version", "provider_cache_independence", "calls", "started_at_unix_ns", "ended_at_unix_ns", "source_files", "python_executable_sha256", "python_version", "unicode_data_version"}
     data = _keys(value, required, "qualification")
-    if (data["schema_version"] != STRUCTURED_OUTPUT_QUALIFICATION_SCHEMA or data["domain"] != "HSWM-DNRD4-STRUCTURED-OUTPUT-QUALIFICATION-v1" or
+    if (data["schema_version"] != STRUCTURED_OUTPUT_QUALIFICATION_SCHEMA or data["domain"] != STRUCTURED_OUTPUT_QUALIFICATION_DOMAIN or
             data["event_schema"] != "hswm-dnrd-live-model-event/v3" or data["experiment_occurrence"] is not False or
             data["future_seed_material_used"] is not False or data["record_role"] != STRUCTURED_OUTPUT_QUALIFICATION_RECORD_ROLE or
             data["raw_full_stdout_record_persisted"] is not False or data["retry_count"] != 0 or
             data["max_output_tokens"] != MAX_OUTPUT_TOKENS or data["model_endpoint"] != endpoint or
             data["served_model_id"] != MODEL_ID or data["vllm_version"] != VLLM_VERSION):
-        raise RegistrationRefusal("qualification does not bind the DNRD-4 non-scientific contract")
+        raise RegistrationRefusal("qualification does not bind the DNRD-4S1 non-scientific contract")
     source_hashes = {row["path"]: row["sha256"] for row in source_rows}
     source_files = data["source_files"]
     if type(source_files) is not list or len(source_files) != len(QUALIFICATION_SOURCE_PATHS):
@@ -357,7 +405,7 @@ def _version(path: Path, argument: str, label: str) -> str:
 
 
 def build_preregistration(inputs: RegistrationInputs) -> dict[str, Any]:
-    """Return, but do not write, the exact canonical DNRD-4 B payload."""
+    """Return, but do not write, the exact canonical DNRD-4S1 B payload."""
 
     _date(inputs.created_at)
     if not inputs.model_endpoint.startswith(("http://", "https://")):
@@ -416,7 +464,7 @@ def build_preregistration(inputs: RegistrationInputs) -> dict[str, Any]:
         raise RegistrationRefusal("planned bridge state root must be absolute")
     bridge_config = {"root_path": str(bridge_state), "frozen_scorer_source_sha256": scorer_sha}
     value = {
-        "schema_version": PREREG_SCHEMA, "experiment_id": "HSWM-DNRD-4", "protocol_version": "v4", "created_at": inputs.created_at,
+        "schema_version": PREREG_SCHEMA, "experiment_id": EXPERIMENT_ID, "protocol_version": PROTOCOL_VERSION, "created_at": inputs.created_at,
         "status": "FROZEN_AWAITING_SUCCESSFUL_PREREGISTRATION_B_CI_AND_FUTURE_PULSE",
         "authority": {"broad_research_continuation_requested": True, "measurement_authorized_by_user_broad_continuation": True, "authorization_is_scientific_evidence": False, "measurement_requires_external_exact_hash_ratification_receipt": False, "measurement_requires_successful_preregistration_b_ci_receipt": True, "scientific_judgment_emitted": False, "external_governance_required": False},
         "canonical_role": PREREG_CLAIM_BOUNDARY["canonical_role"], "predecessor_bindings": PREREG_CLAIM_BOUNDARY["predecessor_bindings"], "forbidden_rescues": PREREG_CLAIM_BOUNDARY["forbidden_rescues"], "scientific_question": PREREG_CLAIM_BOUNDARY["scientific_question"], "hypotheses": PREREG_CLAIM_BOUNDARY["hypotheses"],
@@ -439,7 +487,7 @@ def validate_preregistration_value(value: Mapping[str, Any]) -> None:
 
     expected = {"schema_version", "experiment_id", "protocol_version", "created_at", "status", "authority", "canonical_role", "predecessor_bindings", "forbidden_rescues", "scientific_question", "hypotheses", "testbed", "learning_boundary", "arms", "interventions", "parity_and_leakage", "diagnostic_readouts", "void_conditions", "single_attempt_policy", "required_before_measurement", "result_promotion", "measurement_gate", "preregistration_b_ci_gate", "source_a_ci", "runtime_bindings"}
     data = _keys(value, expected, "preregistration")
-    if data["schema_version"] != PREREG_SCHEMA or data["experiment_id"] != "HSWM-DNRD-4" or data["protocol_version"] != "v4" or data["status"] != "FROZEN_AWAITING_SUCCESSFUL_PREREGISTRATION_B_CI_AND_FUTURE_PULSE":
+    if data["schema_version"] != PREREG_SCHEMA or data["experiment_id"] != EXPERIMENT_ID or data["protocol_version"] != PROTOCOL_VERSION or data["status"] != "FROZEN_AWAITING_SUCCESSFUL_PREREGISTRATION_B_CI_AND_FUTURE_PULSE":
         raise RegistrationRefusal("preregistration identity/status drifted")
     _date(data["created_at"])
     authority = _keys(data["authority"], {"broad_research_continuation_requested", "measurement_authorized_by_user_broad_continuation", "authorization_is_scientific_evidence", "measurement_requires_external_exact_hash_ratification_receipt", "measurement_requires_successful_preregistration_b_ci_receipt", "scientific_judgment_emitted", "external_governance_required"}, "preregistration.authority")
@@ -491,7 +539,7 @@ def _path(value: str) -> Path:
 
 
 def _parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="python -m _research.dnrd.register", description="Offline deterministic DNRD-4 preregistration-B builder; no network, model, config, or commit.")
+    parser = argparse.ArgumentParser(prog="python -m _research.dnrd.register", description="Offline deterministic DNRD-4S1 preregistration-B builder; no network, model, config, or commit.")
     for name in ("repo-root", "source-ci-receipt", "runtime-manifest", "qualification", "bridge-runtime-root", "bridge-implementation", "bridge-state-root", "scorer-implementation", "node-executable", "python-executable", "verifier-helper", "verifier-package-lock", "verifier-runtime-bundle", "output"):
         parser.add_argument(f"--{name}", required=True)
     parser.add_argument("--source-manifest-path", required=True)
@@ -506,7 +554,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         inputs = RegistrationInputs(repo_root=_path(args.repo_root), source_manifest_path=args.source_manifest_path, source_ci_receipt_path=_path(args.source_ci_receipt), runtime_manifest_path=_path(args.runtime_manifest), qualification_path=_path(args.qualification), model_endpoint=args.model_endpoint, bridge_runtime_root=_path(args.bridge_runtime_root), bridge_implementation_path=_path(args.bridge_implementation), bridge_state_root=_path(args.bridge_state_root), scorer_implementation_path=_path(args.scorer_implementation), node_executable_path=_path(args.node_executable), python_executable_path=_path(args.python_executable), verifier_helper_path=_path(args.verifier_helper), verifier_package_lock_path=_path(args.verifier_package_lock), verifier_runtime_bundle_path=_path(args.verifier_runtime_bundle), created_at=args.created_at)
         digest = write_preregistration(inputs=inputs, output=_path(args.output))
     except (OSError, RegistrationRefusal, subprocess.SubprocessError) as error:
-        print(f"DNRD-4 registration refused: {error}", file=sys.stderr)
+        print(f"DNRD-4S1 registration refused: {error}", file=sys.stderr)
         return 2
     print(digest)
     return 0

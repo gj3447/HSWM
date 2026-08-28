@@ -11,6 +11,7 @@ import pytest
 from _research.dnrd.execute import CORE_SOURCE_FILES
 from _research.dnrd.prepare import (
     PreparationRefusal,
+    _regular_files,
     generate_preregistration_b_ci_receipt,
     generate_source_ci_receipt,
     generate_source_manifest,
@@ -62,6 +63,23 @@ def test_source_manifest_is_canonical_exact_closure_and_never_overwrites(tmp_pat
     )
     with pytest.raises(PreparationRefusal, match="overwrite"):
         generate_source_manifest(repo_root=repo, output=output)
+
+
+def test_runtime_rows_use_serialized_path_order_not_path_component_order(
+    tmp_path: Path,
+) -> None:
+    runtime = tmp_path / "runtime"
+    package = runtime / "node_modules" / "fixture"
+    (package / "assert").mkdir(parents=True)
+    (package / "assert.d.ts").write_bytes(b"sibling\n")
+    (package / "assert" / "strict.d.ts").write_bytes(b"descendant\n")
+
+    rows = _regular_files(runtime, "node_modules/fixture")
+
+    assert [row["path"] for row in rows] == [
+        "node_modules/fixture/assert.d.ts",
+        "node_modules/fixture/assert/strict.d.ts",
+    ]
 
 
 def test_source_ci_receipt_preserves_noncanonical_raw_api_bytes(tmp_path: Path) -> None:

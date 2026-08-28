@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Pure, strict adjudicator for the DNRD-4 diagnostic candidate.
+"""Pure, strict adjudicator for the DNRD-4S1 diagnostic candidate.
 
 This file intentionally imports only the Python standard library.  It judges
 the candidate artifact, never a live runtime: a passing judgment is an
@@ -25,7 +25,11 @@ from uuid import UUID
 CANDIDATE_SCHEMA = "hswm-dnrd-candidate/v3"
 INCONCLUSIVE_SCHEMA = "hswm-dnrd-inconclusive-occurrence/v2"
 JUDGMENT_SCHEMA = "hswm-dnrd-judgment/v3"
-EXPERIMENT_ID = "HSWM-DNRD-4"
+EXPERIMENT_ID = "HSWM-DNRD-4S1"
+PROTOCOL_VERSION = "v4s1"
+SEED_DOMAIN = "HSWM-DNRD-4S1-FUTURE-SEED-V1"
+STRUCTURED_OUTPUT_QUALIFICATION_SCHEMA = "hswm-dnrd4s1-structured-output-qualification-summary/v1"
+STRUCTURED_OUTPUT_QUALIFICATION_DOMAIN = "HSWM-DNRD4S1-STRUCTURED-OUTPUT-QUALIFICATION-v1"
 
 
 def _validate_ci_v2_receipt(receipt: Mapping[str, Any], label: str) -> None:
@@ -84,7 +88,7 @@ QUALIFICATION_SOURCE_PATHS = (
     "_research/dnrd/task_family.py",
 )
 PUBLIC_MANIFEST_SCHEMA = "hswm-dnrd-public-manifest/v2"
-PULSE_BINDING_SCHEMA = "hswm-dnrd-pulse-binding/v5"
+PULSE_BINDING_SCHEMA = "hswm-dnrd4s1-pulse-binding/v1"
 RUNTIME_RECEIPT_SCHEMA = "hswm-dnrd-runtime-receipt/v3"
 EXECUTION_CLOSURE_ISOLATION_CLAIM = (
     "OWNER_READ_EXECUTE_ONLY_COPIED_CLOSURES_PER_INVOCATION_ENTRYPOINT_REHASHED_"
@@ -162,7 +166,7 @@ TOKENIZER_PREFLIGHT_PROMPT = '{"response_token":"token-ffffffffffffffffffff"}'
 TRAINING_CANARY_PREFIX = "dnrd-training-provenance:"
 PREREGISTRATION_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v4"
 PREREG_CLAIM_BOUNDARY_SHA256 = (
-    "8b91c02b2953d1baaec9d0f223a1c3796abf63a5aeb16dfc155d4d138f6ef6a0"
+    "e3b28ffd6ca4102ad522bbe84db5c2621f91650584088165071969b62f2f362d"
 )
 QUICKNET_CHAIN = {
     "beacon_id": "quicknet",
@@ -237,6 +241,7 @@ FROZEN_DNRD_SOURCE_CLOSURE = frozenset(
         "tools/swm0w_drand/fixtures/quicknet-round-1000.json",
         "_research/dnrd/verify-beacon.mjs",
         "docs/research/HSWM_DNRD_4_SUCCESSOR_SCIENTIFIC_BOUNDARY_2026-08-28.md",
+        "docs/research/HSWM_DNRD_4S1_SUCCESSOR_SCIENTIFIC_BOUNDARY_2026-08-28.md",
     }
 )
 
@@ -1023,8 +1028,8 @@ def _structured_output_qualification(
     }
     data = _check_exact_keys(value, required, "structured-output qualification")
     if (
-        data["schema_version"] != "hswm-dnrd4-structured-output-qualification-summary/v2"
-        or data["domain"] != "HSWM-DNRD4-STRUCTURED-OUTPUT-QUALIFICATION-v1"
+        data["schema_version"] != STRUCTURED_OUTPUT_QUALIFICATION_SCHEMA
+        or data["domain"] != STRUCTURED_OUTPUT_QUALIFICATION_DOMAIN
         or data["event_schema"] != LIVE_EVENT_SCHEMA
         or data["experiment_occurrence"] is not False
         or data["future_seed_material_used"] is not False
@@ -1380,11 +1385,11 @@ def _validate_source_and_preregistration(
     if (
         prereg["schema_version"] != PREREGISTRATION_SCHEMA
         or prereg["experiment_id"] != EXPERIMENT_ID
-        or prereg["protocol_version"] != "v4"
+        or prereg["protocol_version"] != PROTOCOL_VERSION
         or prereg["status"]
         != "FROZEN_AWAITING_SUCCESSFUL_PREREGISTRATION_B_CI_AND_FUTURE_PULSE"
     ):
-        raise BundleRefusal("preregistration is not the frozen DNRD-4 B-CI chronology contract")
+        raise BundleRefusal("preregistration is not the frozen DNRD-4S1 B-CI chronology contract")
     authority = _check_exact_keys(
         prereg["authority"],
         {
@@ -4202,7 +4207,7 @@ def _validate_config_readback(
     ):
         raise BundleRefusal("execution config readback does not match candidate chronology/runtime pins")
     if data["tokenizer_preflight_prompt"] != TOKENIZER_PREFLIGHT_PROMPT:
-        raise BundleRefusal("execution config tokenizer preflight prompt differs from the frozen DNRD-4 structured-response probe")
+        raise BundleRefusal("execution config tokenizer preflight prompt differs from the frozen DNRD-4S1 structured-response probe")
     if (
         type(data["preregistration_ci_completed_unix"]) is not int
         or data["preregistration_ci_completed_unix"] <= 0
@@ -4621,7 +4626,7 @@ def _validate_pulse(
     # binding's seed as an unexplained fixture selector.  ``seed.py`` uses
     # ensure_ascii=False; retain that exact serialization choice here.
     seed_material = {
-        "domain": "HSWM-DNRD-FUTURE-SEED-V5",
+        "domain": SEED_DOMAIN,
         "experiment_id": EXPERIMENT_ID,
         "preregistration_commit": binding["preregistration_commit"],
         "quicknet_chain_hash": projection["chain_hash"],
@@ -4984,7 +4989,7 @@ def _check_episode(
         seen.add(route)
         text, token = _string(record["evidence_text"], f"{label}.evidence_text"), _string(record["response_token"], f"{label}.response_token")
         if RESPONSE_TOKEN_RE.fullmatch(token) is None or len(token.encode("ascii")) != 26:
-            raise BundleRefusal(f"{label}.route_evidence response token violates exact DNRD-4 form")
+            raise BundleRefusal(f"{label}.route_evidence response token violates exact DNRD-4S1 form")
         if route not in text or token not in text:
             raise BundleRefusal(f"{label}.route_evidence does not bind route/token")
     if [record["route_id"] for record in evidence] != stream["route_ids"]:
@@ -5146,7 +5151,7 @@ def _candidate_response_tokens(value: object, label: str) -> tuple[str, str]:
         or RESPONSE_TOKEN_RE.fullmatch(second) is None
         or first >= second
     ):
-        raise BundleRefusal(f"{label} must contain distinct lexically sorted DNRD-4 response tokens")
+        raise BundleRefusal(f"{label} must contain distinct lexically sorted DNRD-4S1 response tokens")
     return first, second
 
 
@@ -5171,7 +5176,7 @@ def _structured_response_token(content: str, candidates: tuple[str, str]) -> str
         raise BundleRefusal("accepted model body structured response has an invalid key set")
     token = value["response_token"]
     if type(token) is not str or RESPONSE_TOKEN_RE.fullmatch(token) is None:
-        raise BundleRefusal("accepted model body structured response token violates DNRD-4 form")
+        raise BundleRefusal("accepted model body structured response token violates DNRD-4S1 form")
     if token not in candidates:
         raise BundleRefusal("accepted model body structured response token is outside its request candidates")
     return token
@@ -5212,7 +5217,7 @@ def _response_digest_from_raw(
 
 
 def _structured_chat_config(value: object, label: str) -> tuple[Mapping[str, Any], tuple[str, str]]:
-    """Validate the complete DNRD-4 provider constraint retained per event."""
+    """Validate the complete DNRD-4S1 provider constraint retained per event."""
     if type(value) is not dict:
         raise BundleRefusal(f"{label} must be an object")
     response_format = value.get("response_format")
@@ -5263,7 +5268,7 @@ def _structured_chat_config(value: object, label: str) -> tuple[Mapping[str, Any
         "response_format_schema_sha256": _canonical_hash(expected_schema),
     }
     if value != expected:
-        raise BundleRefusal(f"{label} differs from the frozen DNRD-4 structured-output contract")
+        raise BundleRefusal(f"{label} differs from the frozen DNRD-4S1 structured-output contract")
     return value, candidates
 
 
@@ -5578,7 +5583,7 @@ _REJECTED_RESPONSE_FIXED_MESSAGES = {
     "chat completion choice must contain textual message.content": "MESSAGE_CONTENT_NOT_TEXT",
     "chat completion structured response is not strict JSON": "STRUCTURED_RESPONSE_NOT_STRICT_JSON",
     "chat completion structured response must be an object with exactly response_token": "STRUCTURED_RESPONSE_KEYSET_INVALID",
-    "chat completion structured response_token violates exact DNRD-4 form": "RESPONSE_TOKEN_FORM_INVALID",
+    "chat completion structured response_token violates exact DNRD-4S1 form": "RESPONSE_TOKEN_FORM_INVALID",
     "chat completion structured response_token is not one of the request candidates": "RESPONSE_TOKEN_NOT_REQUEST_CANDIDATE",
     "chat completion must contain object usage": "USAGE_NOT_OBJECT",
     "usage.prompt_tokens must be a nonnegative integer": "USAGE_PROMPT_TOKENS_INVALID",
@@ -5597,7 +5602,7 @@ def _rejected_response_stage(message: str) -> str | None:
 
 
 def _inconclusive_call_context(value: Mapping[str, Any], label: str) -> tuple[int, str, str | None, str]:
-    """Validate the public identity common to every DNRD-4 live event."""
+    """Validate the public identity common to every DNRD-4S1 live event."""
     ordinal = _integer(value["ordinal"], f"{label}.ordinal", minimum=1)
     phase = value["phase"]
     arm = value["arm"]
@@ -5619,7 +5624,7 @@ def _validate_inconclusive_ledgers(
     runner_events: Sequence[Mapping[str, Any]],
     model_events: Sequence[Mapping[str, Any]],
 ) -> None:
-    """Replay the prefix observed before a post-dispatch DNRD-4 interruption.
+    """Replay the prefix observed before a post-dispatch DNRD-4S1 interruption.
 
     An incomplete occurrence cannot replay state/credit effects, but it can
     still prove that its retained boundary ledger is one ordered, no-retry
@@ -6998,7 +7003,7 @@ def judge_bundle(bundle_dir: str | Path) -> dict[str, Any]:
     obsolete_ratification = root / "ratification_receipt.json"
     if obsolete_ratification.exists() or obsolete_ratification.is_symlink():
         raise BundleRefusal(
-            "DNRD-4 evidence bundles must not retain obsolete ratification_receipt.json"
+            "DNRD-4S1 evidence bundles must not retain obsolete ratification_receipt.json"
         )
     if (root / "void_protocol.json").exists():
         if (root / "candidate.json").exists() or (root / "inconclusive.json").exists():

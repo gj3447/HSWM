@@ -1,4 +1,4 @@
-"""Cross-contract tests for the offline DNRD-4 preregistration-B builder."""
+"""Cross-contract tests for the offline DNRD-4S1 preregistration-B builder."""
 
 from __future__ import annotations
 
@@ -131,7 +131,7 @@ def test_registration_is_canonical_new_file_and_round_trips_executor_contract(
     assert dnrd_register.OFFICIAL_DRAND_CLIENT_RUNTIME_BUNDLE_SHA256 == hashlib.sha256(
         inputs.verifier_runtime_bundle_path.read_bytes()
     ).hexdigest()
-    output = config.repo_root / "prereg" / "PREREG_HSWM_DNRD_4_2026-08-28.json"
+    output = config.repo_root / "prereg" / "PREREG_HSWM_DNRD_4S1_2026-08-28.json"
     output.parent.mkdir()
 
     digest = write_preregistration(inputs=inputs, output=output)
@@ -163,6 +163,27 @@ def test_registration_is_canonical_new_file_and_round_trips_executor_contract(
 
     with pytest.raises(RegistrationRefusal, match="overwrite"):
         write_preregistration(inputs=inputs, output=output)
+
+
+def test_registration_refuses_noncanonical_external_runtime_file_order(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    config, _, _ = _fixture(tmp_path)
+    _source_a_checkout(config)
+    inputs = _inputs(config)
+    _bind_fixture_qualification(inputs)
+    _fixture_production_pins(monkeypatch, inputs)
+    runtime = json.loads(inputs.runtime_manifest_path.read_bytes())
+    rows = next(
+        package["files"]
+        for package in runtime["external_packages"]
+        if len(package["files"]) >= 2
+    )
+    rows.reverse()
+    inputs.runtime_manifest_path.write_bytes(canonical_json(runtime))
+
+    with pytest.raises(RegistrationRefusal, match="canonically sorted"):
+        build_preregistration(inputs)
 
 
 def test_registration_refuses_dynamic_pin_or_fixed_contract_drift(
@@ -210,7 +231,7 @@ def test_registration_refuses_dynamic_pin_or_fixed_contract_drift(
     runtime = json.loads(inputs.runtime_manifest_path.read_bytes())
     runtime["files"][0]["sha256"] = "0" * 64
     inputs.runtime_manifest_path.write_bytes(canonical_json(runtime))
-    with pytest.raises(RegistrationRefusal, match="entrypoint bytes/hash"):
+    with pytest.raises(RegistrationRefusal, match="file hash drifted"):
         build_preregistration(inputs)
 
     # Restore the manifest before isolating the official drand content-address.

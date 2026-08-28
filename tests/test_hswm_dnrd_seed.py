@@ -168,10 +168,10 @@ def test_binding_is_deterministic_content_addressed_and_32_bytes() -> None:
     canonical = first.canonical()
     assert canonical["receipt_sha256"] == first.receipt_sha256
     material = seed.seed_material(projection=_projection(), source_binding=_source_binding())
-    assert material["domain"] == "HSWM-DNRD-FUTURE-SEED-V5"
-    assert material["experiment_id"] == "HSWM-DNRD-4"
-    assert material["schema_version"] == "hswm-dnrd-future-seed-material/v5"
-    assert first.schema_version == "hswm-dnrd-pulse-binding/v5"
+    assert material["domain"] == "HSWM-DNRD-4S1-FUTURE-SEED-V1"
+    assert material["experiment_id"] == "HSWM-DNRD-4S1"
+    assert material["schema_version"] == "hswm-dnrd4s1-future-seed-material/v1"
+    assert first.schema_version == "hswm-dnrd4s1-pulse-binding/v1"
     assert set(material) == {"domain", "experiment_id", "schema_version", "source_commit", "preregistration_commit", "quicknet_chain_hash", "quicknet_round", "quicknet_randomness_hex"}
     assert set(canonical) == {
         "minimum_eligible_time_unix",
@@ -260,7 +260,7 @@ def test_source_or_preregistration_binding_tamper_is_rejected() -> None:
     with pytest.raises(seed.DNRDSeedBindingError):
         seed.derive_seed_hex(
             projection=_projection(),
-            source_binding=replace(_source_binding(), experiment_id="HSWM-DNRD-OTHER"),
+            source_binding=replace(_source_binding(), experiment_id="HSWM-DNRD-4"),
         )
     with pytest.raises(seed.DNRDSeedBindingError):
         seed.derive_seed_hex(

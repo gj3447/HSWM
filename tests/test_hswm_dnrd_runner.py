@@ -127,7 +127,7 @@ def _metadata() -> MeasurementMetadata:
 
 
 def _structured_chat_config(request: ModelRequest) -> dict:
-    """Independent fixture copy of DNRD-4's frozen per-call wire contract."""
+    """Independent fixture copy of DNRD-4S1's frozen per-call wire contract."""
     schema = {
         "type": "object",
         "properties": {
@@ -500,7 +500,7 @@ def test_runner_call_shape_ledger_and_no_verdict() -> None:
     assert candidate is not None
     assert set(candidate) == {"schema_version", "experiment_id", "bindings", "chronology", "overlap", "parity", "call_ledger", "streams"}
     assert candidate["schema_version"] == "hswm-dnrd-candidate/v3"
-    assert candidate["experiment_id"] == "HSWM-DNRD-4"
+    assert candidate["experiment_id"] == "HSWM-DNRD-4S1"
     assert candidate["bindings"]["preregistration_ci_receipt_sha256"] == _sha("prereg-ci")
     assert candidate["bindings"]["git_chronology_evidence_sha256"] == _sha("git-chronology")
     assert set(candidate["chronology"]) == {
@@ -579,7 +579,7 @@ def test_runner_call_shape_ledger_and_no_verdict() -> None:
         ({"pulse_at_unix": 901}, "future pulse is earlier"),
     ],
 )
-def test_runner_metadata_refuses_invalid_dnrd4_chronology_order(
+def test_runner_metadata_refuses_invalid_dnrd4s1_chronology_order(
     updates: dict[str, int], message: str
 ) -> None:
     metadata = _metadata()
@@ -595,7 +595,7 @@ def test_runner_metadata_refuses_invalid_dnrd4_chronology_order(
         lambda value: {**value, "ratification_statement_sha256": _sha("obsolete-ratification")},
     ],
 )
-def test_runner_metadata_requires_exact_dnrd4_binding_set(bindings) -> None:
+def test_runner_metadata_requires_exact_dnrd4s1_binding_set(bindings) -> None:
     metadata = _metadata()
     with pytest.raises(RunnerRefusal, match="metadata binding key set drifted"):
         _validate_metadata(replace(metadata, bindings=bindings(dict(metadata.bindings))))
@@ -613,7 +613,7 @@ def test_runner_refuses_invalid_chronology_before_any_model_call() -> None:
             "pulse_at_unix": 901,
         },
     )
-    with pytest.raises(RunnerRefusal, match="DNRD-4 future pulse"):
+    with pytest.raises(RunnerRefusal, match="DNRD-4S1 future pulse"):
         run_diagnostic(
             public,
             private_manifest_commitment=commitment(private),
@@ -807,7 +807,7 @@ def test_scorer_failure_and_reply_limit_are_counted() -> None:
 
 
 def test_runner_refuses_malformed_response_token() -> None:
-    with pytest.raises(RuntimeError, match="exact DNRD-4 form"):
+    with pytest.raises(RuntimeError, match="exact DNRD-4S1 form"):
         _validate_reply(ModelReply("not-a-dnrd-token", input_tokens=1, output_tokens=1))
 
 

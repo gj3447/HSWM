@@ -257,9 +257,9 @@ def test_answerer_retains_non_utf8_rejection_as_exact_base64() -> None:
     assert base64.b64decode(rejected["raw_response_base64"], validate=True) == raw
 
 
-def test_answerer_rejects_noncanonical_dnrd4_response_token_at_live_boundary() -> None:
+def test_answerer_rejects_noncanonical_dnrd4s1_response_token_at_live_boundary() -> None:
     events: list[dict] = []
-    with pytest.raises(LiveBoundaryError, match="exact DNRD-4 form"):
+    with pytest.raises(LiveBoundaryError, match="exact DNRD-4S1 form"):
         OpenAICompatibleDnrdAnswerer(
             OpenAICompatibleDnrdConfig("http://endpoint"),
             RecordingTransport([_completion(content=json.dumps({"response_token": "token-short"}))]),

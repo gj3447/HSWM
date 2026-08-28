@@ -1,7 +1,7 @@
 """Single-purpose DNRD measurement runner.
 
 This module is deliberately not a generic harness.  It runs only the frozen
-32-training/96-evaluation/128-total DNRD-4 call shape through injected model, local-V2 bridge,
+32-training/96-evaluation/128-total DNRD-4S1 call shape through injected model, local-V2 bridge,
 and separate scorer-process interfaces.  It never imports or invokes a judge.
 """
 
@@ -25,6 +25,7 @@ from .task_family import (
     is_response_token,
     training_provenance_canaries,
 )
+from .seed import EXPERIMENT_ID
 
 
 ARMS = ("FULL", "NO_MEMORY_ROLLBACK", "BINDING_DERANGED_NUMERIC_PLACEBO")
@@ -32,14 +33,13 @@ MOUNT_ROLES = {
     "NO_MEMORY_ROLLBACK": "W0_ROLLBACK",
     "FULL": "FULL_TRAINABLE",
     # Wire-level bridge role is retained for compatibility.  The runner never
-    # places this mount in ARMS; its sole DNRD-4 meaning is an admission replay
+    # places this mount in ARMS; its sole DNRD-4S1 meaning is an admission replay
     # gate.
     "RAW_EQUAL_BUDGET": "RAW_CONTROL",
     "BINDING_DERANGED_NUMERIC_PLACEBO": "DERANGED_CONTROL",
 }
 CANDIDATE_SCHEMA = "hswm-dnrd-candidate/v3"
 INCONCLUSIVE_SCHEMA = "hswm-dnrd-inconclusive-occurrence/v2"
-EXPERIMENT_ID = "HSWM-DNRD-4"
 RAW_DELTA_RULE = "signed_reward_times_100000_div_1000000/v1"
 MAX_OUTPUT_TOKENS = 64
 SCORER_ROLE_SEPARATION = "DECLARED_ROLE_SEPARATION_NOT_PROVEN"
@@ -70,7 +70,7 @@ PROCESS_INSTANCE_UUID_RE = re.compile(
 # ``source_ci_completed_at_unix`` is input-only provenance used to reject an
 # impossible A→B chronology before the first model call.  It deliberately is
 # not projected into the public candidate: the frozen candidate/v3 chronology
-# remains the exact judge-facing DNRD-4 schema, while the retained source-CI
+# remains the exact judge-facing DNRD-4S1 schema, while the retained source-CI
 # receipt is revalidated from raw provider bytes at the execute/judge boundary.
 METADATA_BINDING_KEYS = frozenset(
     {
@@ -680,7 +680,7 @@ def _request(
 
 
 def _sealed_response(episode: Mapping[str, Any], route: str, reply: ModelReply, private_commitment: str) -> dict[str, Any]:
-    # The answer is retained solely as live-boundary provenance. DNRD-4 fixes
+    # The answer is retained solely as live-boundary provenance. DNRD-4S1 fixes
     # outcome from the selected route/binding, not this post-route observation.
     payload = {"schema_version": "hswm-dnrd-sealed-response/v2", "episode_id": episode["episode_id"], "selected_route_id": route, "answer": reply.response_token, "private_manifest_commitment": private_commitment}
     return {**payload, "response_commitment": _sha(payload)}
@@ -1104,7 +1104,7 @@ def _response_object(reply: ModelReply) -> dict[str, Any]:
 
 def _validate_reply(reply: ModelReply) -> None:
     if not is_response_token(reply.response_token):
-        raise RuntimeError("answerer response token violates exact DNRD-4 form")
+        raise RuntimeError("answerer response token violates exact DNRD-4S1 form")
     for label, value in (("input_tokens", reply.input_tokens), ("output_tokens", reply.output_tokens)):
         if type(value) is not int or value < 0:
             raise RuntimeError(f"answerer {label} must be a nonnegative integer")
@@ -1376,16 +1376,16 @@ def _validate_metadata(metadata: MeasurementMetadata) -> None:
     if metadata.bindings.get("scorer_sha256") != metadata.scorer_source_identity:
         raise RunnerRefusal("scorer binding does not match the expected scorer source identity")
     if set(metadata.bindings) != METADATA_BINDING_KEYS:
-        raise RunnerRefusal("DNRD-4 metadata binding key set drifted")
+        raise RunnerRefusal("DNRD-4S1 metadata binding key set drifted")
     for key in METADATA_BINDING_KEYS:
         _require_sha256(metadata.bindings[key], f"metadata.bindings.{key}")
     chronology = metadata.chronology
     if set(chronology) != METADATA_CHRONOLOGY_KEYS:
-        raise RunnerRefusal("DNRD-4 chronology key set drifted")
+        raise RunnerRefusal("DNRD-4S1 chronology key set drifted")
     for key in ("source_commit", "preregistration_commit", "source_tree_oid", "preregistration_tree_oid"):
         value = chronology[key]
         if not isinstance(value, str) or len(value) != 40 or any(char not in "0123456789abcdef" for char in value):
-            raise RunnerRefusal(f"DNRD-4 chronology {key} must be a lowercase Git OID")
+            raise RunnerRefusal(f"DNRD-4S1 chronology {key} must be a lowercase Git OID")
     for key in (
         "source_frozen_at_unix",
         "source_ci_completed_at_unix",
@@ -1395,21 +1395,21 @@ def _validate_metadata(metadata: MeasurementMetadata) -> None:
         "pulse_at_unix",
     ):
         if type(chronology[key]) is not int or chronology[key] <= 0:
-            raise RunnerRefusal(f"DNRD-4 chronology {key} must be positive integer")
+            raise RunnerRefusal(f"DNRD-4S1 chronology {key} must be positive integer")
     source_frozen_at = chronology["source_frozen_at_unix"]
     source_ci_completed_at = chronology["source_ci_completed_at_unix"]
     preregistration_committed_at = chronology["preregistration_committed_at_unix"]
     preregistration_ci_completed_at = chronology["preregistration_ci_completed_at_unix"]
     pulse_at = chronology["pulse_at_unix"]
     if source_ci_completed_at < source_frozen_at:
-        raise RunnerRefusal("DNRD-4 source-A CI completion precedes source freeze")
+        raise RunnerRefusal("DNRD-4S1 source-A CI completion precedes source freeze")
     if preregistration_committed_at < source_ci_completed_at:
-        raise RunnerRefusal("DNRD-4 preregistration B commit precedes source-A CI completion")
+        raise RunnerRefusal("DNRD-4S1 preregistration B commit precedes source-A CI completion")
     if preregistration_ci_completed_at < preregistration_committed_at:
-        raise RunnerRefusal("DNRD-4 preregistration B-CI completion precedes B commit")
+        raise RunnerRefusal("DNRD-4S1 preregistration B-CI completion precedes B commit")
     if pulse_at < max(source_frozen_at, preregistration_ci_completed_at) + 900:
-        raise RunnerRefusal("DNRD-4 future pulse is earlier than the frozen source/B-CI lead gate")
-    _require_sha256(chronology["pulse_chain_hash"], "DNRD-4 chronology pulse_chain_hash")
+        raise RunnerRefusal("DNRD-4S1 future pulse is earlier than the frozen source/B-CI lead gate")
+    _require_sha256(chronology["pulse_chain_hash"], "DNRD-4S1 chronology pulse_chain_hash")
     _validate_deployment_receipt(metadata.deployment_receipt, metadata.bindings)
 
 

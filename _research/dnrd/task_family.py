@@ -1,4 +1,4 @@
-"""Strict, deterministic task fixture for DNRD-4.
+"""Strict, deterministic task fixture for DNRD-4S1.
 
 The public manifest is safe to hand to a future runner: it deliberately has no
 answer, correct-route, or latent-policy material.  The private scorer manifest
@@ -56,7 +56,7 @@ def _token(seed: bytes, label: str, length: int = 20) -> str:
 
 
 def is_response_token(value: object) -> bool:
-    """Whether ``value`` is the one admissible DNRD-4 response-token form.
+    """Whether ``value`` is the one admissible DNRD-4S1 response-token form.
 
     Every generated token and every runner-accepted answer is exactly 26 ASCII
     bytes: ``token-`` followed by 20 lowercase hexadecimal characters.
@@ -375,7 +375,7 @@ def _audit_episode(episode: dict[str, Any], routes: list[str], contexts: list[st
         raise ManifestError("route evidence response tokens must differ")
     for record in evidence:
         if not is_response_token(record["response_token"]):
-            raise ManifestError("route evidence response token violates exact DNRD-4 form")
+            raise ManifestError("route evidence response token violates exact DNRD-4S1 form")
         if record["route_id"] not in record["evidence_text"] or record["response_token"] not in record["evidence_text"]:
             raise ManifestError("route evidence does not bind its route and response token")
 

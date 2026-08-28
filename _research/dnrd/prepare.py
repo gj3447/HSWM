@@ -1,4 +1,4 @@
-"""Deterministic, offline preparation artifacts for a DNRD-4 occurrence.
+"""Deterministic, offline preparation artifacts for a DNRD-4S1 occurrence.
 
 This operator utility deliberately stops before all scientific work: it neither
 contacts GitHub nor a model, runs npm/TypeScript, creates a preregistration, or
@@ -28,6 +28,7 @@ from typing import Any, Mapping, Sequence
 
 from .execute import (
     CORE_SOURCE_FILES,
+    EXPERIMENT_ID,
     OFFICIAL_NODE_EXECUTABLE_SHA256,
     OFFICIAL_NODE_VERSION,
     PREREGISTRATION_B_CI_RECEIPT_SCHEMA,
@@ -39,7 +40,7 @@ from .task_family import canonical_json, commitment
 
 
 class PreparationRefusal(ValueError):
-    """The supplied local bytes cannot form a DNRD-4 preparation artifact."""
+    """The supplied local bytes cannot form a DNRD-4S1 preparation artifact."""
 
 
 _HEX = frozenset("0123456789abcdef")
@@ -191,7 +192,7 @@ def _source_manifest_value(repo_root: Path) -> dict[str, Any]:
         files.append({"path": relative, "sha256": _sha_file(target)})
     return {
         "schema_version": SOURCE_MANIFEST_SCHEMA,
-        "experiment_id": "HSWM-DNRD-4",
+        "experiment_id": EXPERIMENT_ID,
         "source_commit_tree_bound_externally": "SOURCE_COMMIT_TREE_BOUND_EXTERNALLY_NO_SELF_CYCLE",
         "files": files,
     }
@@ -216,7 +217,7 @@ def _load_source_manifest(repo_root: Path, source_manifest_path: str) -> tuple[d
     )
     if (
         manifest["schema_version"] != SOURCE_MANIFEST_SCHEMA
-        or manifest["experiment_id"] != "HSWM-DNRD-4"
+        or manifest["experiment_id"] != EXPERIMENT_ID
         or manifest["source_commit_tree_bound_externally"]
         != "SOURCE_COMMIT_TREE_BOUND_EXTERNALLY_NO_SELF_CYCLE"
     ):
@@ -238,7 +239,7 @@ def _load_source_manifest(repo_root: Path, source_manifest_path: str) -> tuple[d
         seen.add(path)
         ordered.append(path)
     if ordered != sorted(ordered) or seen != CORE_SOURCE_FILES:
-        raise PreparationRefusal("source manifest is not the exact DNRD-4 source closure")
+        raise PreparationRefusal("source manifest is not the exact DNRD-4S1 source closure")
     return dict(manifest), _sha(raw)
 
 
@@ -246,7 +247,7 @@ def _regular_files(root: Path, relative_root: str) -> list[dict[str, Any]]:
     directory = root / relative_root
     _plain_directory(directory, f"runtime directory {relative_root}")
     rows: list[dict[str, Any]] = []
-    for path in sorted(directory.rglob("*")):
+    for path in directory.rglob("*"):
         info = path.lstat()
         rel = path.relative_to(root).as_posix()
         if stat.S_ISLNK(info.st_mode):
@@ -258,6 +259,10 @@ def _regular_files(root: Path, relative_root: str) -> list[dict[str, Any]]:
         rows.append({"path": rel, "sha256": _sha_file(path), "bytes": info.st_size})
     if not rows:
         raise PreparationRefusal(f"runtime closure is empty: {relative_root}")
+    # Canonical order is defined over the serialized POSIX path, not Path's
+    # component-wise ordering.  Those orders differ for a sibling such as
+    # ``assert.d.ts`` and a descendant such as ``assert/strict.d.ts``.
+    rows.sort(key=lambda row: row["path"])
     return rows
 
 
@@ -366,7 +371,7 @@ def generate_runtime_manifest(
     compiled = _regular_files(runtime_root, _COMPILED_RELATIVE.as_posix())
     if len(compiled) != _EXPECTED_COMPILED_FILE_COUNT:
         raise PreparationRefusal(
-            f"DNRD-4 requires exactly {_EXPECTED_COMPILED_FILE_COUNT} compiled dist-dnrd files, got {len(compiled)}"
+            f"DNRD-4S1 requires exactly {_EXPECTED_COMPILED_FILE_COUNT} compiled dist-dnrd files, got {len(compiled)}"
         )
     entrypoint = runtime_root / _ENTRYPOINT_RELATIVE
     _plain_file(entrypoint, "DNRD runtime bridge entrypoint")
@@ -393,7 +398,7 @@ def generate_runtime_manifest(
         != _EXPECTED_EXTERNAL_FILE_COUNT
     ):
         raise PreparationRefusal(
-            "DNRD-4 requires the exact seven-package, 3,994-file external runtime closure"
+            "DNRD-4S1 requires the exact seven-package, 3,994-file external runtime closure"
         )
     source_manifest, _ = _load_source_manifest(repo_root, source_manifest_path)
     compiler_paths = {
@@ -593,7 +598,7 @@ def _path(value: str) -> Path:
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="python -m _research.dnrd.prepare",
-        description="Offline deterministic DNRD-4 Source-A/B preparation artifacts; never contacts a model or network.",
+        description="Offline deterministic DNRD-4S1 Source-A/B preparation artifacts; never contacts a model or network.",
     )
     commands = parser.add_subparsers(dest="command", required=True)
     source = commands.add_parser("source-manifest", help="write the canonical CORE_SOURCE_FILES manifest")
@@ -650,7 +655,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 output=_path(args.output),
             )
     except (OSError, PreparationRefusal, subprocess.SubprocessError) as error:
-        print(f"DNRD-4 preparation refused: {error}", file=sys.stderr)
+        print(f"DNRD-4S1 preparation refused: {error}", file=sys.stderr)
         return 2
     print(digest)
     return 0

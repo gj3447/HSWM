@@ -459,7 +459,7 @@ def _fixture(
     )
     source_manifest_value = {
         "schema_version": "hswm-dnrd-source-freeze-manifest/v1",
-        "experiment_id": "HSWM-DNRD-4",
+        "experiment_id": "HSWM-DNRD-4S1",
         "source_commit_tree_bound_externally": "SOURCE_COMMIT_TREE_BOUND_EXTERNALLY_NO_SELF_CYCLE",
         "files": [
             {"path": relative, "sha256": _hash(repo / relative)}
@@ -671,8 +671,8 @@ def _fixture(
             "returned_token": requested_token,
         })
     qualification = {
-        "schema_version": "hswm-dnrd4-structured-output-qualification-summary/v2",
-        "domain": "HSWM-DNRD4-STRUCTURED-OUTPUT-QUALIFICATION-v1",
+        "schema_version": "hswm-dnrd4s1-structured-output-qualification-summary/v1",
+        "domain": "HSWM-DNRD4S1-STRUCTURED-OUTPUT-QUALIFICATION-v1",
         "event_schema": "hswm-dnrd-live-model-event/v3",
         "experiment_occurrence": False, "future_seed_material_used": False,
         "record_role": "CONTENT_ADDRESSED_OPERATOR_SUMMARY_OF_DISJOINT_NONSCIENTIFIC_LIVE_QUALIFICATION_NOT_SCIENTIFIC_EVIDENCE",
@@ -695,8 +695,8 @@ def _fixture(
     prereg_path = "prereg/dnrd.json"
     prereg = {
         "schema_version": "hswm-durable-numeric-routing-diagnostic-preregistration/v4",
-        "experiment_id": "HSWM-DNRD-4",
-        "protocol_version": "v4",
+        "experiment_id": "HSWM-DNRD-4S1",
+        "protocol_version": "v4s1",
         "created_at": "2026-08-28",
         "status": "FROZEN_AWAITING_SUCCESSFUL_PREREGISTRATION_B_CI_AND_FUTURE_PULSE",
         "authority": {
@@ -1299,7 +1299,7 @@ def test_128th_retained_model_boundary_failure_seals_inconclusive(
     config, dependencies, _ = _fixture(tmp_path)
     occurrence = {
         "schema_version": "hswm-dnrd-inconclusive-occurrence/v2",
-        "experiment_id": "HSWM-DNRD-4",
+        "experiment_id": "HSWM-DNRD-4S1",
         "post_first_call": True,
         "calls_completed": 128,
         "client_cache_hits": 0,

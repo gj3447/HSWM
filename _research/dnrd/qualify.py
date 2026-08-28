@@ -1,4 +1,4 @@
-"""One-shot, non-scientific DNRD-4 structured-output qualification.
+"""One-shot, non-scientific DNRD-4S1 structured-output qualification.
 
 This is deliberately a tiny operational check, not an experiment runner.  It
 uses the production OpenAI-compatible boundary three times to establish that a
@@ -28,8 +28,8 @@ from .runner import MAX_OUTPUT_TOKENS, ModelRequest
 from .task_family import canonical_json
 
 
-QUALIFICATION_SCHEMA = "hswm-dnrd4-structured-output-qualification-summary/v2"
-QUALIFICATION_DOMAIN = "HSWM-DNRD4-STRUCTURED-OUTPUT-QUALIFICATION-v1"
+QUALIFICATION_SCHEMA = "hswm-dnrd4s1-structured-output-qualification-summary/v1"
+QUALIFICATION_DOMAIN = "HSWM-DNRD4S1-STRUCTURED-OUTPUT-QUALIFICATION-v1"
 QUALIFICATION_RECORD_ROLE = (
     "CONTENT_ADDRESSED_OPERATOR_SUMMARY_OF_DISJOINT_NONSCIENTIFIC_LIVE_"
     "QUALIFICATION_NOT_SCIENTIFIC_EVIDENCE"
@@ -224,7 +224,7 @@ def run_qualification(
         pair = _fresh_token_pair(used_tokens)
         requested_token = pair[(ordinal + 1) % 2]
         request = ModelRequest(
-            episode_id=f"dnrd4-qualification-{ordinal}",
+            episode_id=f"dnrd4s1-qualification-{ordinal}",
             selected_route_id=f"qualification-route-{ordinal}",
             prompt=(
                 "Return exactly the requested structured response token and no other "

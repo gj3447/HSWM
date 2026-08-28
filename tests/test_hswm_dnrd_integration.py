@@ -1,4 +1,4 @@
-"""Production-shaped DNRD-4 rehearsal boundary tests.
+"""Production-shaped DNRD-4S1 rehearsal boundary tests.
 
 These tests deliberately use the execute test's injected bridge/scorer and
 closure exporter.  They prove byte-boundary plumbing, not an authoritative

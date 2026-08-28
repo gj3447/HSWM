@@ -53,7 +53,13 @@ from .runner import (
     SubprocessOutcomeScorer,
     run_diagnostic,
 )
-from .seed import SourceFreezeBinding, bind_future_pulse, first_eligible_quicknet_round, projection_from_verifier_receipt_bytes
+from .seed import (
+    EXPERIMENT_ID,
+    SourceFreezeBinding,
+    bind_future_pulse,
+    first_eligible_quicknet_round,
+    projection_from_verifier_receipt_bytes,
+)
 from .task_family import canonical_json, commitment, generate_manifests
 
 
@@ -157,7 +163,8 @@ class ExecutionResult:
 _HEX = frozenset("0123456789abcdef")
 SOURCE_MANIFEST_SCHEMA = "hswm-dnrd-source-freeze-manifest/v1"
 SOURCE_CI_RECEIPT_SCHEMA = "hswm-dnrd-source-ci-receipt/v2"
-STRUCTURED_OUTPUT_QUALIFICATION_SCHEMA = "hswm-dnrd4-structured-output-qualification-summary/v2"
+STRUCTURED_OUTPUT_QUALIFICATION_SCHEMA = "hswm-dnrd4s1-structured-output-qualification-summary/v1"
+STRUCTURED_OUTPUT_QUALIFICATION_DOMAIN = "HSWM-DNRD4S1-STRUCTURED-OUTPUT-QUALIFICATION-v1"
 STRUCTURED_OUTPUT_QUALIFICATION_RECORD_ROLE = (
     "CONTENT_ADDRESSED_OPERATOR_SUMMARY_OF_DISJOINT_NONSCIENTIFIC_LIVE_"
     "QUALIFICATION_NOT_SCIENTIFIC_EVIDENCE"
@@ -231,6 +238,7 @@ _MOUNT_ID_RE = re.compile(
 )
 _DIGEST_FILENAME_RE = re.compile(r"^[0-9a-f]{64}$")
 PREREG_SCHEMA = "hswm-durable-numeric-routing-diagnostic-preregistration/v4"
+PROTOCOL_VERSION = "v4s1"
 PREREG_CLAIM_BOUNDARY = {
     "canonical_role": (
         "BOUNDED_SCHEMA_APPROVED_DURABLE_NUMERIC_ROUTING_ENGINEERING_CONFORMANCE_"
@@ -247,11 +255,16 @@ PREREG_CLAIM_BOUNDARY = {
         "DNRD3_PREREGISTRATION_SHA256=2bcbe110cac8b69b3889761c05635a8af62b09a443e2a10a2a4a62aad0791226",
         "DNRD3_RESULT_COMMIT=43c1b9885352ed99e6845884b0adec0445f1be4b",
         "DNRD3_CHECKED_EVIDENCE_RECEIPT_SELF_SHA256=55c9de56932b3b28ab049e056e93051312442ca84c29c90182ffc485d996e829",
+        "DNRD4_FROZEN_UNEXECUTED_PREMARKER_STATIC_INSTRUMENT_REFUSAL_NO_QUICKNET_NO_MARKER_NO_GENERATION_NO_OCCURRENCE_NO_JUDGMENT",
+        "DNRD4_SOURCE_A_COMMIT=276fc42354169cb5f0f0bc6cbaf34052047cd630",
+        "DNRD4_PREREGISTRATION_B_COMMIT=b1dc53d8efdaee24d1ffad10cc558a48321bc6ac",
+        "DNRD4_PREREGISTRATION_SHA256=87cdf810e3c4c88a8b755f5b31bd3b98dad6bff9d5c320e58eaeb7b2659a3762",
+        "DNRD4_INVALID_RUNTIME_MANIFEST_SHA256=fbca6ec3d59fc575f7a9effc4f7add15da8d56e280b5434981f84355f9cdd737",
     ],
     "forbidden_rescues": [
         "NO_POST_FREEZE_TUNING_OR_GATE_RELAXATION",
         "NO_RETRY_RERUN_RESUME_REPLACEMENT_OR_SECOND_PULSE",
-        "NO_RELABELING_DNRD4_AS_A_DNRD1_DNRD2_OR_DNRD3_RETRY_REPAIR_OR_RESULT",
+        "NO_RELABELING_DNRD4S1_AS_A_DNRD1_DNRD2_DNRD3_OR_DNRD4_RETRY_REPAIR_REPLACEMENT_OR_RESULT",
         "NO_RELABELING_NUMERIC_REPLAY_AS_RAW_TRANSCRIPT_COMPARISON",
         "NO_PROMOTION_TO_SCIENTIFIC_EFFECT_EVIDENCE_LLM_LEARNING_UNSEEN_GENERALIZATION_"
         "UTILITY_OR_HSWM_EFFICACY",
@@ -364,9 +377,10 @@ PREREG_CLAIM_BOUNDARY = {
         "SECOND_SINGLETON_ATTEMPT_OR_POST_OBSERVATION_REPLACEMENT",
     ],
     "single_attempt_policy": (
-        "ONE_OCCURRENCE_ID_DERIVED_ONLY_FROM_IMMUTABLE_DNRD4_SEMANTICS_FILE_AND_PARENT_"
+        "ONE_OCCURRENCE_ID_DERIVED_ONLY_FROM_IMMUTABLE_DNRD4S1_SEMANTICS_FILE_AND_PARENT_"
         "DIRECTORY_FSYNC_MARKER_UNDER_B_PINNED_LOCAL_REGISTRY_SCOPED_SINGLETON_OCCURRENCE_"
-        "DNRD1_DNRD2_AND_DNRD3_REMAIN_CONSUMED_NO_RETRY_RERUN_RESUME_OR_REPLACEMENT"
+        "DNRD1_DNRD2_AND_DNRD3_REMAIN_CONSUMED_DNRD4_REMAINS_FROZEN_UNEXECUTED_"
+        "NO_RETRY_RERUN_RESUME_OR_REPLACEMENT"
     ),
     "required_before_measurement": [
         "CLEAN_PUSHED_SOURCE_A_WITH_EXACT_SOURCE_MANIFEST",
@@ -375,6 +389,7 @@ PREREG_CLAIM_BOUNDARY = {
         "SUCCESSFUL_GITHUB_ACTIONS_RECEIPT_FOR_EXACT_PREREGISTRATION_B",
         "FIRST_ELIGIBLE_QUICKNET_PULSE_AT_LEAST_900_SECONDS_AFTER_SOURCE_A_AND_PREREGISTRATION_B_CI",
         "DNRD1_DNRD2_AND_DNRD3_ATTEMPT_MARKERS_AND_OCCURRENCES_REMAIN_UNCHANGED_AND_CONSUMED",
+        "DNRD4_FROZEN_A_B_MANIFEST_AND_ABSENT_OCCURRENCE_REMAIN_UNCHANGED_AND_UNCONSUMED",
     ],
     "result_promotion": {
         "only_go_terminal": "DIAGNOSTIC_INTEGRITY_GO_NO_UTILITY_CLAIM",
@@ -462,6 +477,7 @@ CORE_SOURCE_FILES = frozenset(
         "tools/swm0w_drand/fixtures/quicknet-round-1000.json",
         "_research/dnrd/verify-beacon.mjs",
         "docs/research/HSWM_DNRD_4_SUCCESSOR_SCIENTIFIC_BOUNDARY_2026-08-28.md",
+        "docs/research/HSWM_DNRD_4S1_SUCCESSOR_SCIENTIFIC_BOUNDARY_2026-08-28.md",
     }
 )
 
@@ -1130,7 +1146,7 @@ def _load_source_manifest(config: ExecutionConfig) -> dict[str, Any]:
     )
     if (
         manifest["schema_version"] != SOURCE_MANIFEST_SCHEMA
-        or manifest["experiment_id"] != "HSWM-DNRD-4"
+        or manifest["experiment_id"] != EXPERIMENT_ID
         or manifest["source_commit_tree_bound_externally"]
         != "SOURCE_COMMIT_TREE_BOUND_EXTERNALLY_NO_SELF_CYCLE"
     ):
@@ -1419,7 +1435,7 @@ def _load_structured_output_qualification(
     data = _exact_keys(value, required, "structured-output qualification")
     if (
         data["schema_version"] != STRUCTURED_OUTPUT_QUALIFICATION_SCHEMA
-        or data["domain"] != "HSWM-DNRD4-STRUCTURED-OUTPUT-QUALIFICATION-v1"
+        or data["domain"] != STRUCTURED_OUTPUT_QUALIFICATION_DOMAIN
         or data["event_schema"] != "hswm-dnrd-live-model-event/v3"
         or data["experiment_occurrence"] is not False
         or data["future_seed_material_used"] is not False
@@ -1582,8 +1598,8 @@ def _validate_preregistration(
     data = _exact_keys(prereg, required, "preregistration")
     if (
         data["schema_version"] != PREREG_SCHEMA
-        or data["experiment_id"] != "HSWM-DNRD-4"
-        or data["protocol_version"] != "v4"
+        or data["experiment_id"] != EXPERIMENT_ID
+        or data["protocol_version"] != PROTOCOL_VERSION
         or data["status"] != "FROZEN_AWAITING_SUCCESSFUL_PREREGISTRATION_B_CI_AND_FUTURE_PULSE"
     ):
         raise ExecutionRefusal("preregistration identity/status is not the frozen B-CI contract")
@@ -2559,7 +2575,7 @@ def _occurrence_id(
     quicknet_randomness_hex: str,
     seed_hex: str,
 ) -> str:
-    """Content-address the immutable semantics of one DNRD-4 occurrence.
+    """Content-address the immutable semantics of one DNRD-4S1 occurrence.
 
     Receipt bytes and local paths deliberately do not participate: they are
     mandatory audit bindings, but changing their representation must not open
@@ -2578,7 +2594,7 @@ def _occurrence_id(
     ):
         _hex(value, label)
     return commitment({
-        "experiment_id": "HSWM-DNRD-4",
+        "experiment_id": EXPERIMENT_ID,
         "occurrence_schema": "hswm-dnrd-occurrence-id/v1",
         "source_commit": config.source_a_commit,
         "source_manifest_sha256": config.source_manifest_sha256,
@@ -2681,7 +2697,7 @@ def _verify_static_pins(
     if any(config.bridge_state_root.iterdir()):
         raise ExecutionRefusal("bridge mutable state root must be empty before a singleton occurrence")
     if config.tokenizer_preflight_prompt != TOKENIZER_PREFLIGHT_PROMPT:
-        raise ExecutionRefusal("tokenizer preflight prompt differs from the frozen DNRD-4 structured-response probe")
+        raise ExecutionRefusal("tokenizer preflight prompt differs from the frozen DNRD-4S1 structured-response probe")
     _assert_distinct_roots(config)
     _hex(config.node_executable_sha256, "node executable")
     _hex(config.python_executable_sha256, "python executable")
@@ -3050,14 +3066,14 @@ def _terminal_record(*, output_root: Path, post_first_call: bool, calls_complete
         # scientific occurrence.
         return {
             "schema_version": VOID_PROTOCOL_SCHEMA,
-            "experiment_id": "HSWM-DNRD-4", "post_first_call": True,
+            "experiment_id": EXPERIMENT_ID, "post_first_call": True,
             "calls_observed": calls_completed,
             "failure_stage": "POST_DISPATCH_INTERNAL_FINALIZATION",
             "failure_type": type(error).__name__, "failure_digest": digest,
             **_post_dispatch_ledger_snapshot(output_root),
         }
     return {
-        "schema_version": VOID_PROTOCOL_SCHEMA, "experiment_id": "HSWM-DNRD-4",
+        "schema_version": VOID_PROTOCOL_SCHEMA, "experiment_id": EXPERIMENT_ID,
         "post_first_call": False, "failure_type": type(error).__name__,
         "failure_digest": digest,
     }
@@ -3082,7 +3098,7 @@ def _runner_post_dispatch_void(
 ) -> dict[str, Any]:
     return {
         "schema_version": VOID_PROTOCOL_SCHEMA,
-        "experiment_id": "HSWM-DNRD-4",
+        "experiment_id": EXPERIMENT_ID,
         "post_first_call": True,
         "calls_observed": occurrence["calls_completed"],
         "failure_stage": "POST_DISPATCH_INTERNAL_FINALIZATION",
@@ -3450,7 +3466,7 @@ def _execute(
         _fsync_directory(config.output_root.parent)
         _atomic_json(config.output_root / "terminal-intent.json", {
             "schema_version": TERMINAL_INTENT_SCHEMA,
-            "experiment_id": "HSWM-DNRD-4",
+            "experiment_id": EXPERIMENT_ID,
             "attempt_lock_receipt_sha256": attempt_lock["receipt_sha256"],
             "terminal_artifact_paths": ["candidate.json", "inconclusive.json", "void_protocol.json"],
             "no_retry_or_resume": True,

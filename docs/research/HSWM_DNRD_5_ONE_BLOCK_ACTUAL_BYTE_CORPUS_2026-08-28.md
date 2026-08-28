@@ -2,11 +2,48 @@
 
 - Date: 2026-08-28
 - Corpus contract: `hswm-dnrd5-one-block-actual-byte-corpus/v1`
-- Judge contract: `hswm-dnrd5-independent-actual-byte-judge/v1`
+- Judge contract: `hswm-dnrd5-independent-actual-byte-judge/v2`
 - Intended success terminal:
   `FIXTURE_BYTE_CLOSURE_VALIDATED_NOT_PROVIDER_OCCURRENCE_OR_SCIENTIFIC_RESULT`
 - Provider/model calls authorized by this design: `0`
-- Status: `DESIGN FROZEN FOR IMPLEMENTATION / SOURCE-A BLOCKED`
+- Status: `FIXTURE BYTE CLOSURE VALIDATED / SOURCE-A BLOCKED`
+
+## Validation outcome
+
+The deterministic fixture producer and the separately implemented judge now
+close one complete block under this contract.  Two consecutive clean
+regenerations produced the same canonical root SHA-256:
+`ccf11bb67b406e226da7efc4b76c9512e7d581a54af109a650a914dbf8775271`.
+The judge independently rederived 390 unique indexed blobs, 87 admitted atoms,
+78 journal listings (one genesis plus 77 commits), all 59 lifecycle adapter
+rows, nine fixture receipts, ninety receipt-bound raw content roles, and the
+99 logical provider bindings.
+
+The mutation suite and independent read-only falsification covered missing and
+extra blobs, descriptor substitution, lifecycle same-kind arm swaps, journal
+predecessor and listing mutations, effect/write-set mutation, provider order,
+projection substitution, hidden-field leakage, evidence-source substitution,
+counter drift, terminal-order drift, filesystem aliasing, and root-identity
+drift.  Initially passing same-kind lifecycle and journal-schedule swaps were
+treated as false positives; the v2 judge now requires exact ordered atom, arm,
+slot, derived transition, canonical admission schedule, audit, receipt, and
+terminal key equality.  Later fresh mutation rounds confirmed those attacks
+now fail closed.
+
+The judge validates structurally conforming candidate corpora and returns each
+candidate's independently derived root; it does not make one known hash the
+definition of validity.  The `ccf11b...5271` root above is the checked-in known
+answer and is pinned by its regression test.  A fully resealed candidate may
+use different otherwise-valid nonreceipt atom identifiers and therefore have a
+different root; this is intentional.  Receipt UIDs, by contrast, remain
+cryptographically bound to their postcommit identities.
+
+This validates only the deterministic fixture's byte coherence and the tested
+falsifiers.  The four source/tree/build/import evidence roles remain explicitly
+typed placeholders, the fixture transport vocabulary is not a provider
+receipt, and no model or provider call occurred.  Source/build/import closure,
+the sole Permit/provider dispatcher, authenticated authority/time/custody, and
+all occurrence and efficacy evidence remain open.
 
 ## Canonical role, present evidence, and conceptual delta
 
@@ -16,18 +53,19 @@ world model, and continuous learner.  A corpus, repository KG, lifecycle
 projection, or judge is only bounded evidence about that state.  None is a
 separate cognition or learning subsystem.
 
-The present DNRD-5 evidence contains separately checked task, randomization,
-lifecycle, provider-gateway, Permit, successor-schema, transaction, main-effect,
-and postcommit-receipt instruments.  It contains no block in which all of their
-actual bytes are closed under one independently replayable manifest.  Passing
-the individual instruments therefore cannot establish that one coherent block
-occurred, and it says nothing about a learning effect.
+The present DNRD-5 evidence now includes one deterministic, production-shaped
+fixture block whose instrument bytes are closed under one manifest and replayed
+by a separately implemented judge.  That closes the earlier integration gap
+between the task, randomization, lifecycle, provider vocabulary, Permit,
+successor-schema, transaction, main-effect, and postcommit-receipt instruments.
+It does not establish that a provider occurrence happened or that the modeled
+block learned anything.
 
-The next conceptual delta is one production-shaped, deliberately non-scientific
-block whose complete raw-byte closure is produced once and judged by a second
-implementation.  This is the smallest useful integration falsifier before a
-Source-A freeze.  It is not another scientific arm, pilot observation, or
-unregistered model run.
+The next conceptual delta is to replace the fixture's typed source, build, and
+import placeholders with locally rederived no-call closure, then enforce one
+Permit-mediated dispatcher before any Source-A freeze can be considered.  This
+remains instrument qualification, not another scientific arm, pilot
+observation, or unregistered model run.
 
 ## Closed corpus object
 
@@ -48,14 +86,17 @@ The object must close these sets for exactly one block:
    canonical envelope bytes, typed references, responsibility owner, and
    provenance source.  Atom keys are unique, all external references resolve,
    and every atom kind has exactly its schema-relative owner.
-3. One genesis plus the complete ordered journal lineage.  The corpus lists and
-   replays every support commit rather than prescribing a convenient total
-   journal-record count.  It contains exactly three ADMIT main-effect records,
+3. One genesis plus the complete ordered journal lineage.  The v2 judge
+   independently rebuilds the canonical stable topological schedule from atom
+   references, provenance, core atom order, and the frozen special-group
+   priority.  For this 87-atom corpus that schedule is exactly 77 commits: 67
+   singleton support/decision commits and ten two-atom effect, receipt, audit,
+   or terminal commits.  It contains exactly three ADMIT main-effect records,
    one RESTORE main-effect record, three revision receipt-seal records, one
    rollback receipt-seal record, one delayed audit-release seal, and one
-   terminal manifest/block-seal record.  Each main effect is immediately
-   followed by its matching receipt seal before a later state effect or probe
-   may depend on it.
+   terminal manifest/block-seal record.  ACTIVE, SHAM, EXACT, and rollback
+   occur in that order, and each main effect is immediately followed by its
+   matching receipt seal before a later state effect or probe may depend on it.
 4. The exact block, assignment, W0/four-fork, proposal, validation, credit,
    decision, projection, trajectory, blind-probe, hidden-outcome, placebo,
    escrow, rollback, audit-release, evidence-manifest, and block-seal closures.
@@ -92,7 +133,9 @@ judge implements this frozen replay grammar directly:
   object-key order, a 1 MiB object bound, depth 128, and 100,000 nodes.
 - A canonical atom key ID is exactly
   `schemaVersion|lineageId|atomUid|revisionId`.  State atoms and journal write
-  bindings are strictly sorted by that text ID.  Atom envelope bytes are the
+  bindings are strictly sorted by that text ID.  Every key component uses the
+  Canonical Atom V2 ASCII Identifier domain and the revision is a safe
+  nonnegative integer.  Atom envelope bytes are the
   exact canonical atom object and use
   `application/vnd.hswm.canonical-atom-v2+json`.
 - The initial state is exactly `{schemaVersion, revision: 0,
@@ -110,6 +153,10 @@ judge implements this frozen replay grammar directly:
   is recomputed from exact record bytes.  Every commit names the immediately
   prior descriptor, same journal lineage and exact schema-content binding, and
   state revision `prior + 1`.
+- The corpus root is a regular directory containing exactly one regular
+  `manifest.json` and one regular `blobs/` directory.  Symlinked roots,
+  manifests, blob directories, or blobs and any unbound top-level entry are
+  rejected; content hashing is not used to disguise filesystem aliasing.
 - A commit's accepted receipt reconstructs its command.  Its read set must be
   duplicate-free and present in prior state; writes must be new, schema-valid,
   owner-valid, and content/envelope-bound.  Each external typed/provenance
@@ -179,8 +226,9 @@ change.
 
 ## Scientific boundary and next decision
 
-A passing one-block corpus can show that the evidence instruments describe one
-byte-coherent candidate and that tested substitution attacks fail.  It cannot
+This passing one-block fixture shows that the evidence instruments describe one
+byte-coherent deterministic candidate and that the tested substitution attacks
+fail.  It cannot
 show that a provider call occurred, that hidden/placebo entropy was fair or
 conditionally independent, that isolation declarations were true, that the
 model learned, or that any arm improved a fresh probe.  It produces no effect

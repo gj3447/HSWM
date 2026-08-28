@@ -1,8 +1,8 @@
 # HSWM-DNRD-5 lifecycle projection / canonical-atom alignment
 
 - Date: 2026-08-28
-- Status: `DESIGN_INSTRUMENT / UNJUDGED / NO_OCCURRENCE`
-- Decision: `ACTUAL-BYTE CLOSURE BLOCKED UNTIL PROJECTION ADAPTERS ARE BOUND`
+- Status: `STRUCTURAL ALIGNMENT PRESERVED / DETERMINISTIC FIXTURE BOUND / NO_OCCURRENCE`
+- Decision: `FIXTURE PROJECTION ADAPTERS CLOSED / PRODUCTION SOURCE AND OCCURRENCE BINDING OPEN`
 - Machine-readable contract:
   [`lifecycle_atom_alignment_v1.json`](../../_research/dnrd5/vectors/lifecycle_atom_alignment_v1.json)
 - Governing design:
@@ -29,6 +29,14 @@ projection records and to require an adapter from each row to admitted atoms
 or atom-derived slots before constructing a production-shaped byte corpus.
 No owner is assigned to a projection row merely because its uppercase name
 resembles a canonical kind.
+
+The later v2 successor and one-block actual-byte fixture now resolve this
+document's reported gaps for one deterministic candidate without changing the
+pinned alignment bytes.  The fixture binds all 59 rows to exact v2 atom keys or
+derived tuples, adds the owned audit-release and support kinds, and closes its
+terminal manifest/seal under the independent v2 judge.  This is a bounded
+resolution of the alignment instrument; production source/build, Permit,
+provider occurrence, custody, learning, and efficacy remain unestablished.
 
 ## Exact audit
 

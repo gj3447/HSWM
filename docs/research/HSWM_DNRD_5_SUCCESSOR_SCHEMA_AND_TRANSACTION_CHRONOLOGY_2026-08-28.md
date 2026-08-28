@@ -7,8 +7,8 @@
 - Canonical schema-content SHA-256:
   `a921264c5d1b5d9186d291e6a17ddc0282ce4eaa8832b1a599b7237c23d4b357`
 - Generic substrate: Canonical Atom V2, unchanged
-- Status: `CHECKED STRUCTURAL IMPLEMENTATION / UNJUDGED / SOURCE-A BLOCKED`
-- Decision: `ACTUAL-BYTE CORPUS AND SOURCE-A FREEZE REMAIN BLOCKED`
+- Status: `CHECKED STRUCTURAL IMPLEMENTATION / ACTUAL-BYTE FIXTURE JUDGED / SOURCE-A BLOCKED`
+- Decision: `FIXTURE BYTE CLOSURE PASSED / SOURCE-BUILD-IMPORT AND DISPATCH QUALIFICATION REMAIN BLOCKED`
 - Model/provider calls: `0`
 
 ## Target identity, current evidence, and conceptual delta
@@ -26,9 +26,11 @@ instruments validate its same-batch dependency topology, canonical
 ADMIT/RESTORE journal records, postcommit revision/rollback receipt seals, and
 delayed audit-release record.  A separate adapter closes the preserved
 lifecycle's 15 events, 59 artifact rows, 27 artifact kinds, and nine planned
-generation calls to the v2 structural vocabulary.  No production atom payload
-corpus, provider call, occurrence, state-learning effect, or efficacy
-observation exists.
+generation calls to the v2 structural vocabulary.  A deterministic one-block
+fixture now closes the corresponding v2 atom, journal, lifecycle-adapter,
+receipt, audit, terminal, and fixture-transport bytes under an independent
+judge.  No authenticated production source/build closure, provider call,
+occurrence, state-learning effect, or efficacy observation exists.
 
 The lifecycle/atom alignment audit exposed three conceptual gaps:
 
@@ -286,20 +288,23 @@ directly resolvable fork/validation/credit/receipt/restore/projection/outcome
 link; and derives the exact 16-kind v2 support closure.  Its remaining staging,
 consumption, disposition, rollback-receipt, probe-trajectory, and audit-release
 values are deliberately opaque unique handles, not atom keys or byte evidence.
-Only the actual-byte corpus judge may resolve those handles to canonical atoms.
+The actual-byte fixture now resolves all 59 projected rows to exact canonical
+atom keys for one deterministic block; this does not resolve them for a future
+production occurrence.
 
 A separate four-effect trace instrument checks the declared three-admission
 plus one-restore partial order and deterministic future receipt identity.  It
 only compares caller-supplied trace fields and therefore terminates at
 `DECLARED_TRACE_CONSISTENT_ONLY`; it is not independent raw-record evidence.
 
-These instruments do **not** yet validate a durable replay registry, full
-predecessor-chain custody, raw content payload closure, exact block/arm
-semantics, the manifest/block-seal record, Permit, provider/model dispatch,
-occurrence, learning, or efficacy.  Each effect, receipt, and audit invocation
-must now supply its bounded used-record-descriptor scope explicitly, but that
-scope remains a local consistency input rather than a globally one-shot
-registry.
+Together with the one-block fixture, these instruments now validate a bounded
+local predecessor replay, raw deterministic payload closure, exact fixture
+block/arm semantics, and the fixture manifest/block-seal record.  They do
+**not** validate production source/build/import identity, a durable global
+replay registry, authenticated custody, Permit/provider dispatch, occurrence,
+learning, or efficacy.  Each effect, receipt, and audit invocation still
+supplies a bounded used-record-descriptor scope; that scope is not a globally
+one-shot registry.
 
 ## Evidence boundary and next gate
 
@@ -309,11 +314,11 @@ does not establish production byte closure, custody, independence, occurrence,
 causal learning, utility, or efficacy.  No research-result receipt or
 `F1_R8_RESULTS_LOG.md` entry is warranted.
 
-The schema, batch graph, main-effect, postcommit receipt, delayed-audit, and
-lifecycle-adapter slices have passed focused structural and mutation checks.
-The next gate is the manifest/block-seal record inside the one-block
-production-shaped fixture-byte corpus and its independently implemented judge,
-under the frozen contract in
+The schema, batch graph, main-effect, postcommit receipt, delayed-audit,
+lifecycle-adapter, and one-block deterministic actual-byte fixture have passed
+focused structural, replay, and mutation checks under
 [`HSWM_DNRD_5_ONE_BLOCK_ACTUAL_BYTE_CORPUS_2026-08-28.md`](HSWM_DNRD_5_ONE_BLOCK_ACTUAL_BYTE_CORPUS_2026-08-28.md).
-Source A remains forbidden until that byte closure and later source/build and
-sole-dispatch qualifications pass.
+The next gate is local source/tree/build/import closure followed by the sole
+Permit/provider dispatch boundary and its no-call audit.  Source A remains
+forbidden until those later qualifications and the other declared evidence
+obligations pass.

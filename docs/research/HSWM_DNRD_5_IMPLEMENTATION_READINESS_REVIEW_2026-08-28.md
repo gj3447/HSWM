@@ -3,7 +3,8 @@
 - Date: 2026-08-28
 - Review scope: post-R2 task, evaluator, randomization, lifecycle, provider,
   schema, lifecycle-to-atom alignment, local durable-Permit, and structural
-  occurrence-preflight candidate slices
+  occurrence-preflight candidate slices, plus the deterministic one-block
+  actual-byte fixture and independent judge
 - Decision: `NOT_READY_FOR_SOURCE_FREEZE / NOT_READY_FOR_PREREGISTRATION / NO_MODEL_CALLS`
 - Scientific status: `DESIGN-INSTRUMENT PROGRESS / UNMEASURED / NO EFFECT RESULT`
 - Governing design:
@@ -213,11 +214,27 @@ The checked-in candidate slice now contains:
     block/assignment/randomness, sealed-trajectory/W0, and bijective
     four-distinct-probe disclosure graph.  A pinned structural adapter maps all
     59 v1 lifecycle rows into 46 direct and 13 derived v2 projections and
-    derives the 16 support kinds.  Its non-direct handles remain intentionally
-    unresolved until the actual-byte judge.  None of these instruments proves
-    full journal-chain custody, a durable global replay registry, manifest
-    closure, complete block/arm semantics, Permit, occurrence, learning, or
-    efficacy.
+    derives the 16 support kinds.  Its non-direct structural handles remain
+    non-authoritative; the actual-byte fixture below resolves them for one
+    deterministic block only.  None of these instruments proves production
+    journal custody, a durable global replay registry, Permit, occurrence,
+    learning, or efficacy.
+15. A deterministic one-block actual-byte corpus and independently implemented
+    Python judge.  The canonical root SHA-256 is
+    `ccf11bb67b406e226da7efc4b76c9512e7d581a54af109a650a914dbf8775271`.
+    The judge rederives 390 unique blobs, 87 v2 atoms, one genesis plus 77
+    commits, all 59 exact lifecycle bindings, three ADMIT/receipt pairs, one
+    RESTORE/rollback-receipt pair, the audit and terminal pairs, nine fixture
+    receipts, ninety raw call-role descriptors, and 99 logical provider
+    bindings.  It reconstructs state hashes, exact read/write closure,
+    postcommit identities, evidence sources, terminal exact sets, and all
+    four-arm semantic joins.  Deterministic regeneration and focused mutation
+    tests pass, including same-kind lifecycle and alternate ready-queue/arm
+    schedules that initially exposed and then closed judge false positives.
+    The source/tree/build/import evidence
+    roles remain typed placeholders, and fixture receipts explicitly are not
+    transport/provider observations.  This is instrument-validity progress,
+    not Source-A qualification, occurrence, learning, or efficacy evidence.
 
 The focused Python and TypeScript checks pass.  Those checks establish that
 the declared contracts reject their tested mutations.  They are not efficacy
@@ -227,38 +244,25 @@ observations and do not authorize a source freeze.
 The following must exist and undergo another independent adversarial review
 before Source A can be frozen:
 
-1. The successor identity, owned `audit_release`, distinct precommit decisions
-   and postcommit receipt kinds, schema-level manifest/seal references,
-   same-batch dependency chronology, record-bound ADMIT/RESTORE verifier, raw
-   revision/rollback receipt seals, delayed-audit record, and exact 59-row
-   structural lifecycle adapter now exist without changing preserved v1 bytes.
-   The remaining transaction closure is the raw manifest/block-seal record,
-   durable evidence/effect replay registry, full predecessor-chain custody,
-   exact block/arm byte semantics, and resolution of every opaque adapter handle
-   to one canonical atom.  The manifest must close actual lifecycle, call,
-   fixture/provider, Permit, content, source, and build bytes rather than rely
-   on schema-reference cardinalities or caller-selected subsets.  Receipt,
-   effect, and audit used-descriptor arrays are mandatory bounded inputs, but
-   are not a global one-shot registry.
-2. One production-shaped evidence vector and independently implemented judge
-   must join task commitments, independent hidden/placebo entropy and custody,
-   pre-outcome openings, actual evaluator records, all model-visible request
-   bytes, provider calls, W0/forks, Permit, journal CAS, projections, and every
-   lifecycle seal.  It must reconstruct the complete history `H` from actual
-   allowed-input bytes, including public-task stratum categories, sealed
-   trajectory, fixed instruction/RNG/runtime identities, and declared
-   timing/capability projection, then independently verify the prespecified
-   provenance, separation, and chronology evidence required for the declared
-   conditional `theta`/placebo law.  A finite occurrence cannot empirically
-   prove fairness or conditional independence.  The present validators remain
-   separate slices.  The verifier closure must bind its source/tree, selected
-   build output, semantic allowed-import graph, cross-language canonical corpus,
-   and actual-byte evidence schema; the existing synthetic structural vectors
-   do not meet that requirement.  The alignment audit is a mandatory input: all
-   59 lifecycle rows must bind actual canonical atoms or declared derived slots
-   without inventing row owners, and the judge must resolve the 4-to-1
-   assignment mapping, arm-dependent transition sources, probe-trajectory
-   adapter, ten support kinds, and underclosed block seal.
+1. The deterministic fixture now closes the raw manifest/block-seal record,
+   local predecessor replay, exact block/arm byte semantics, all 59 lifecycle
+   adapter rows, and the v2 effect/receipt/audit identities for one bounded
+   block.  Production still requires a durable evidence/effect replay registry,
+   authenticated predecessor-chain custody, and a globally selected occurrence
+   root.  Fixture provider, Permit, source, build, and custody declarations
+   cannot be promoted to production facts.
+2. The next source qualification must independently bind and recheck the exact
+   Git source/tree, selected build output, lockfile/toolchain, semantic allowed
+   import/call graph, cross-language canonical KATs, v2 schema, lifecycle and
+   alignment pins, and the actual-byte root.  The present structural preflight
+   accepts caller descriptors and therefore cannot supply that evidence.  A
+   later production occurrence vector and independent judge must then join
+   authenticated hidden/placebo entropy and custody, evaluator openings, all
+   model-visible request bytes, real provider receipts, W0/forks, Permit,
+   journal CAS, projections, and every lifecycle seal.  It must reconstruct the
+   complete history `H` and test the prespecified provenance, separation, and
+   chronology evidence.  A finite occurrence still cannot prove fairness or
+   conditional independence.
 3. A production occurrence preflight must be the sole executor entrypoint and
    bind the frozen source/preregistration/runtime identities, 300-block
    universe, future-randomness receipt, custody commitments, nine-call plan,
@@ -345,11 +349,10 @@ before Source A can be frozen:
 No manual user hash echo is required for the remaining preparation.  No DNRD-5
 source freeze, preregistration, future-randomness selection, semantic occurrence
 marker, model call, efficacy analysis, content-addressed result receipt, or
-`F1_R8_RESULTS_LOG.md` entry is warranted at this stage.  Work proceeds from
-the checked successor schema, effect/receipt/audit record validators, and exact
-lifecycle adapter to the terminal manifest/block record inside the
-production-shaped fixture-byte closure, its independent judge, and then the
-sole production preflight.  Even
+`F1_R8_RESULTS_LOG.md` entry is warranted at this stage.  The deterministic
+fixture-byte closure and independent judge are complete.  Work proceeds next
+to source/tree/build/import qualification, then the single-use Permit/provider
+dispatch boundary and its no-call audit.  Even
 a successful Source-A instrument audit may emit
 only `SOURCE_A_INSTRUMENT_QUALIFIED_FUTURE_OCCURRENCE_EVIDENCE_REQUIRED`, not an
 exactness, custody, or efficacy terminal.  The next decision point is another

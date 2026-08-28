@@ -187,6 +187,26 @@ The checked-in candidate slice now contains:
     lifecycle rows and classifies the current block seal as insufficient for
     production closure.  This closes a category-error risk, not the actual
     atom/content/provider evidence seam.
+14. A distinct DNRD-5 v2 successor schema with 44 kinds, exactly one
+    schema-relative owner per kind, and test-pinned canonical schema content of
+    31,298 bytes with SHA-256
+    `a921264c5d1b5d9186d291e6a17ddc0282ce4eaa8832b1a599b7237c23d4b357`.
+    It adds the owned delayed `audit_release` and a distinct block/policy-bound
+    audit-release capability kind, directly scopes revision/rollback decisions
+    to block/assignment/fork, separates those precommit decisions from
+    postcommit revision/rollback receipts, represents main-effect and
+    evidence-seal consumption separately, and fixes schema-level receipt/restore
+    cardinalities.  An atomic-batch instrument validates
+    same-command typed/provenance dependencies, external pre-state/read-set
+    closure, cycles, deterministic topological order, and exact dependency-edge
+    hashes while retaining the unchanged generic evolution kernel.  A
+    record-bound verifier recomputes actual canonical command/state/journal
+    records and envelope bytes for one ADMIT or RESTORE main effect.  It and the
+    separate four-effect protocol checker now share one postcommit receipt
+    identity formula; the latter remains caller-declared consistency only.
+    None of these instruments verifies a raw receipt-seal record, full
+    journal-chain custody, a durable replay registry, complete block/arm
+    semantics, Permit, occurrence, learning, or efficacy.
 
 The focused Python and TypeScript checks pass.  Those checks establish that
 the declared contracts reject their tested mutations.  They are not efficacy
@@ -197,18 +217,22 @@ observations and do not authorize a source freeze.
 The following must exist and undergo another independent adversarial review
 before Source A can be frozen:
 
-1. A successor DNRD-5 schema identity must repair two semantic gaps without
-   changing the preserved v1 bytes.  First, it must add an owned delayed
-   `audit_release` and an evidence manifest that lets `block_seal` close the
-   complete atom/event/call/provider/Permit byte set.  Second, it must separate
-   a pre-commit admission/rollback decision from a post-commit transition
-   receipt that binds the recovered durable journal receipt.  The generic
-   canonical transaction kernel already permits and cycle-checks same-command
-   references; the v1 `validateDnrd5ChronologicalAtoms` instrument instead
-   checks a flat sequence of already-materialized atoms and intentionally
-   cannot represent an atomic write batch.  The repair is therefore a new
-   transaction/batch chronology validator under the successor experiment
-   identity, not a weakened v1 validator or a split of the atomic main CAS.
+1. The successor identity, owned `audit_release`, distinct precommit decisions
+   and postcommit receipt kinds, schema-level manifest/seal references,
+   same-batch dependency chronology, and record-bound ADMIT/RESTORE main-effect
+   validator now exist without changing the preserved v1 bytes.  The remaining
+   transaction closure is a raw postcommit receipt-seal command/record verifier,
+   receipt-payload-to-effect-record byte binding, durable evidence-consumption
+   and effect-record replay registry, full predecessor-chain custody, exact
+   block/arm semantic validation, and raw audit-release/manifest/block-seal
+   validation.  That semantic layer must equate each receipt decision or audit
+   release capability with its evidence-consumption purpose instead of relying
+   on kind-correct but potentially different reference paths.  The manifest
+   must close actual lifecycle, call, provider,
+   Permit, content, source, and build bytes rather than relying on its current
+   schema-reference cardinalities.  The exact 59-row lifecycle adapter must
+   bind three revision receipts and the restore transaction plus fourth
+   rollback receipt without inventing row owners.
 2. One production-shaped evidence vector and independently implemented judge
    must join task commitments, independent hidden/placebo entropy and custody,
    pre-outcome openings, actual evaluator records, all model-visible request
@@ -260,7 +284,7 @@ before Source A can be frozen:
    application bytes only, and separate roots remain outside its lock domain.
 8. An independently implemented occurrence judge that verifies all integrity
    facts before handing the exact 300-block universe to the arithmetic module.
-8. The model/provider reproducibility qualification.  Until the frozen
+9. The model/provider reproducibility qualification.  Until the frozen
    block-level label-exchangeability and deterministic-potential-outcome
    assumption profile has its prespecified supporting evidence without a
    falsifying observation, the sign-test output must not be called finite-sample
@@ -270,7 +294,7 @@ before Source A can be frozen:
    `S4` permutation and pairwise ACTIVE/control label-swap symmetry in every
    block.  One observed beacon cannot prove its declared uniformity or PRF law;
    that remains an explicit assumption.
-9. The exactness-policy amendment resolves the R2 downgrade ambiguity in favor
+10. The exactness-policy amendment resolves the R2 downgrade ambiguity in favor
    of an exact-test-required, no-fallback policy.  Source A needs prespecified
    finite evidence standards for the distinct assignment, deterministic
    potential-outcome, clone-exchangeability, consistency, no-interference, and
@@ -290,11 +314,11 @@ before Source A can be frozen:
    order/randomness rule, budget, verifier, and failure handling.  Source A may
    bind the sealed Q closure afterward but may not retroactively authorize or
    tune Q from its outputs.
-10. One-shot consumption is unique only within one recovered journal/root.
+11. One-shot consumption is unique only within one recovered journal/root.
     Cloned roots or replayed stores can consume the same nonce, so production
     needs one globally selected occurrence root or an external uniqueness
     witness before the capability can be called globally one-shot.
-11. The former unqualified legacy Python `sort_keys` plan-byte seam is narrowed
+12. The former unqualified legacy Python `sort_keys` plan-byte seam is narrowed
     by the reviewed `hswm-dnrd5-plan-json/v1` contract: exact printable-ASCII
     object keys, Unicode-scalar string values, safe integers, compact UTF-8,
     strict re-encoding, and explicit byte/depth/node limits are covered by a
@@ -315,10 +339,11 @@ No manual user hash echo is required for the remaining preparation.  No DNRD-5
 source freeze, preregistration, future-randomness selection, semantic occurrence
 marker, model call, efficacy analysis, content-addressed result receipt, or
 `F1_R8_RESULTS_LOG.md` entry is warranted at this stage.  Work proceeds from
-the lifecycle/atom alignment contract to the successor DNRD-5 schema and
-transaction/batch chronology contract, then to production-shaped actual-byte
-closure, the independent custody/occurrence judge, and the sole production
-preflight.  Even a successful Source-A instrument audit may emit
+the checked successor schema, batch chronology, and main-effect record verifier
+to raw receipt-seal and terminal block-record validation plus the exact
+lifecycle adapter, then to production-shaped actual-byte closure, the
+independent custody/occurrence judge, and the sole production preflight.  Even
+a successful Source-A instrument audit may emit
 only `SOURCE_A_INSTRUMENT_QUALIFIED_FUTURE_OCCURRENCE_EVIDENCE_REQUIRED`, not an
 exactness, custody, or efficacy terminal.  The next decision point is another
 source-freeze audit, not an execution attempt.  The conditional

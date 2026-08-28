@@ -1,0 +1,23 @@
+[Unit]
+Description=HSWM loopback-only research-development fabric
+Documentation=/home/lagyeongjun/CD/HSWM/docs/operations/HSWM_PROXMOX_RESEARCH_FABRIC_2026-08-28.md
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/home/lagyeongjun/CD/HSWM
+Environment=HSWM_RESEARCH_FABRIC_STATE_DIR=/home/lagyeongjun/.local/state/hswm-research-fabric
+ExecStart=/home/lagyeongjun/.local/bin/uv run --locked hswm-research-fabric start --timeout 120
+ExecStartPost=/home/lagyeongjun/.local/bin/uv run --locked hswm-research-fabric doctor
+ExecStop=/home/lagyeongjun/.local/bin/uv run --locked hswm-research-fabric stop
+TimeoutStartSec=180
+TimeoutStopSec=60
+KillMode=control-group
+NoNewPrivileges=yes
+PrivateTmp=yes
+UMask=0077
+
+[Install]
+WantedBy=default.target

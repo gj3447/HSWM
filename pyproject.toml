@@ -11,11 +11,16 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "hypothesis>=6.0"]
 kg = ["neo4j>=5.20"]
+research-infra = [
+  "arize-phoenix-otel==0.17.1",
+  "temporalio==1.32.0",
+]
 
 [project.scripts]
 hswm-p1-gate-diagnostic = "hswm.diagnostics.p1_gate:main"
 hswm-verify-efficacy = "scripts.verify_efficacy_claims:main"
 hswm-legacy-replay = "hswm.infrastructure.legacy_replay:main"
+hswm-research-fabric = "hswm.infrastructure.research_fabric:main"
 
 [project.urls]
 Homepage = "https://github.com/gj3447/HSWM"

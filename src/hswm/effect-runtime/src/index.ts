@@ -1,6 +1,101 @@
 export * from "./contracts.js"
 export * from "./domain.js"
 export {
+  DNRD5_ARM_LABELS,
+  DNRD5_CURRENT_STATE_PERMIT_BOUNDARY,
+  DNRD5_OWNER_ROLE_BY_KIND,
+  DNRD5_REFERENCE_TYPE,
+  DNRD5_SCHEMA_VERSION,
+  Dnrd5SchemaError,
+  makeDnrd5CanonicalSchemaV2,
+  validateDnrd5ArmLabel,
+  validateDnrd5CanonicalSchemaV2,
+  validateDnrd5ChronologicalAtoms,
+  validateDnrd5StateChangePrincipals,
+  type Dnrd5ArmLabel,
+  type Dnrd5CanonicalAtomKind,
+  type Dnrd5SchemaErrorCode,
+  type Dnrd5StateChangePrincipals
+} from "./canonical-atom-v2-dnrd5-schema.js"
+export {
+  DNRD5_BLOCK_EVENT_SEQUENCE,
+  DNRD5_LIFECYCLE_BOUNDARY,
+  DNRD5_LIFECYCLE_CONTRACT_VERSION,
+  Dnrd5LifecycleError,
+  makeDnrd5LifecycleEventSeal,
+  validateDnrd5SealedBlockLifecycle,
+  type Dnrd5BlockEvent,
+  type Dnrd5LifecycleArtifact,
+  type Dnrd5LifecycleArtifactKind,
+  type Dnrd5LifecycleErrorCode,
+  type Dnrd5LifecycleEventSeal,
+  type Dnrd5SealedBlockLifecycle
+} from "./canonical-atom-v2-dnrd5-lifecycle.js"
+export {
+  DNRD5_AUTHORIZATION_DECISION_MEDIA_TYPE,
+  DNRD5_CAPABILITY_ISSUANCE_MEDIA_TYPE,
+  DNRD5_GRANT_SNAPSHOT_MEDIA_TYPE,
+  DNRD5_LOCAL_EXPERIMENTAL_DOMAIN,
+  DNRD5_LOCAL_EXPERIMENTAL_PERMIT_V1,
+  DNRD5_PERMIT_POLICY_MEDIA_TYPE,
+  DNRD5_REVOCATION_MEDIA_TYPE,
+  Dnrd5LocalExperimentalPermitError,
+  Dnrd5LocalExperimentalPermitInputSchema,
+  resolveDnrd5LocalExperimentalPermit,
+  type Dnrd5LocalExperimentalPermitErrorCode,
+  type Dnrd5LocalExperimentalPermitInput,
+  type Dnrd5LocalExperimentalPermitResolution
+} from "./canonical-atom-v2-dnrd5-permit.js"
+export {
+  DNRD5_REVISION_MAX_CANONICAL_BYTES,
+  DNRD5_REVISION_PROPOSAL_V1,
+  DNRD5_REVISION_STATUS,
+  Dnrd5AdmittedRevisionShapeSchema,
+  Dnrd5RevisionError,
+  matchDnrd5ActiveShamAdmittedShapes,
+  validateDnrd5RevisionProposalBytes,
+  type Dnrd5AdmittedRevisionShape,
+  type Dnrd5RevisionEnvelope,
+  type Dnrd5RevisionErrorCode,
+  type Dnrd5RevisionExpected
+} from "./canonical-atom-v2-dnrd5-revision.js"
+export {
+  DNRD5_W0_FORK_V1,
+  DNRD5_W0_STATUS,
+  Dnrd5W0Error,
+  validateDnrd5W0ForkManifestBytes,
+  type Dnrd5ValidatedW0ForkIdentity,
+  type Dnrd5W0ErrorCode,
+  type Dnrd5W0ForkManifest
+} from "./canonical-atom-v2-dnrd5-w0.js"
+export {
+  DNRD5_NINE_CALL_V1,
+  Dnrd5NineCallError,
+  validateDnrd5NineCallManifestBytes,
+  type Dnrd5NineCallErrorCode,
+  type Dnrd5NineCallManifest
+} from "./canonical-atom-v2-dnrd5-nine-call.js"
+export {
+  DNRD5_RESTORE_PROJECTION_V1,
+  Dnrd5RestoreProjectionError,
+  validateDnrd5RestoreProjectionBytes,
+  type Dnrd5RestoreProjectionErrorCode,
+  type Dnrd5RestoreProjectionRecord,
+  type Dnrd5ValidatedRestoreProjection
+} from "./canonical-atom-v2-dnrd5-restore.js"
+export {
+  DNRD5_LIFECYCLE_VECTOR_CONTENT_MEDIA_TYPE,
+  DNRD5_LIFECYCLE_VECTOR_CONTENT_SCOPE,
+  DNRD5_LIFECYCLE_VECTOR_FIXTURE_SCOPE,
+  DNRD5_LIFECYCLE_VECTOR_TERMINAL,
+  DNRD5_LIFECYCLE_VECTOR_V1,
+  Dnrd5LifecycleVectorError,
+  validateDnrd5LifecycleVectorBytes,
+  type Dnrd5LifecycleCrossLanguageVector,
+  type Dnrd5LifecycleVectorErrorCode,
+  type Dnrd5ValidatedLifecycleVector
+} from "./canonical-atom-v2-dnrd5-lifecycle-vector.js"
+export {
   HSWM_CANONICAL_ATOM_V2_CONTRACT_VERSION,
   HSWM_CANONICAL_RECEIPT_V2_CONTRACT_VERSION,
   HSWM_CANONICAL_SCHEMA_V2_CONTRACT_VERSION,

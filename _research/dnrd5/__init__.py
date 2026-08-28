@@ -1,5 +1,8 @@
-"""Deterministic planning utilities for proposed DNRD-5 work.
+"""Design-time instruments for the proposed DNRD-5 causal study.
 
-Nothing in this package is an executor, evaluator, or source of inferential
-evidence.
+The package includes pure task construction, arithmetic, structural contracts,
+local evaluator functions, and a client-observed provider gateway.  A separate
+TypeScript slice contains an internal local durable-Permit candidate.  Together
+they still do not provide a mandatory production admission dispatcher,
+production-isolated evaluator, occurrence executor, or scientific evidence.
 """

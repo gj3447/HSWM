@@ -201,38 +201,45 @@ The checked-in candidate slice now contains:
     closure, cycles, deterministic topological order, and exact dependency-edge
     hashes while retaining the unchanged generic evolution kernel.  A
     record-bound verifier recomputes actual canonical command/state/journal
-    records and envelope bytes for one ADMIT or RESTORE main effect.  It and the
-    separate four-effect protocol checker now share one postcommit receipt
-    identity formula; the latter remains caller-declared consistency only.
-    None of these instruments verifies a raw receipt-seal record, full
-    journal-chain custody, a durable replay registry, complete block/arm
-    semantics, Permit, occurrence, learning, or efficacy.
+    records and envelope bytes for one ADMIT or RESTORE main effect, and equates
+    the decision, authority, proposal/W0, staging, policy, consumption,
+    block/assignment/fork, evaluator/probe/randomness, and effect paths for the
+    relevant branch.  It and the separate four-effect
+    protocol checker share one postcommit receipt identity formula; the latter
+    remains caller-declared consistency only.  Raw receipt-seal validation now
+    revalidates the preceding main effect and exact payload, tuple, authority,
+    journal and descriptor for both revision and rollback receipts.  A raw
+    delayed-audit validator closes the purpose/internal-authority,
+    block/assignment/randomness, sealed-trajectory/W0, and bijective
+    four-distinct-probe disclosure graph.  A pinned structural adapter maps all
+    59 v1 lifecycle rows into 46 direct and 13 derived v2 projections and
+    derives the 16 support kinds.  Its non-direct handles remain intentionally
+    unresolved until the actual-byte judge.  None of these instruments proves
+    full journal-chain custody, a durable global replay registry, manifest
+    closure, complete block/arm semantics, Permit, occurrence, learning, or
+    efficacy.
 
 The focused Python and TypeScript checks pass.  Those checks establish that
 the declared contracts reject their tested mutations.  They are not efficacy
 observations and do not authorize a source freeze.
 
 ## Remaining source-freeze blockers
-
 The following must exist and undergo another independent adversarial review
 before Source A can be frozen:
 
 1. The successor identity, owned `audit_release`, distinct precommit decisions
    and postcommit receipt kinds, schema-level manifest/seal references,
-   same-batch dependency chronology, and record-bound ADMIT/RESTORE main-effect
-   validator now exist without changing the preserved v1 bytes.  The remaining
-   transaction closure is a raw postcommit receipt-seal command/record verifier,
-   receipt-payload-to-effect-record byte binding, durable evidence-consumption
-   and effect-record replay registry, full predecessor-chain custody, exact
-   block/arm semantic validation, and raw audit-release/manifest/block-seal
-   validation.  That semantic layer must equate each receipt decision or audit
-   release capability with its evidence-consumption purpose instead of relying
-   on kind-correct but potentially different reference paths.  The manifest
-   must close actual lifecycle, call, provider,
-   Permit, content, source, and build bytes rather than relying on its current
-   schema-reference cardinalities.  The exact 59-row lifecycle adapter must
-   bind three revision receipts and the restore transaction plus fourth
-   rollback receipt without inventing row owners.
+   same-batch dependency chronology, record-bound ADMIT/RESTORE verifier, raw
+   revision/rollback receipt seals, delayed-audit record, and exact 59-row
+   structural lifecycle adapter now exist without changing preserved v1 bytes.
+   The remaining transaction closure is the raw manifest/block-seal record,
+   durable evidence/effect replay registry, full predecessor-chain custody,
+   exact block/arm byte semantics, and resolution of every opaque adapter handle
+   to one canonical atom.  The manifest must close actual lifecycle, call,
+   fixture/provider, Permit, content, source, and build bytes rather than rely
+   on schema-reference cardinalities or caller-selected subsets.  Receipt,
+   effect, and audit used-descriptor arrays are mandatory bounded inputs, but
+   are not a global one-shot registry.
 2. One production-shaped evidence vector and independently implemented judge
    must join task commitments, independent hidden/placebo entropy and custody,
    pre-outcome openings, actual evaluator records, all model-visible request
@@ -339,10 +346,10 @@ No manual user hash echo is required for the remaining preparation.  No DNRD-5
 source freeze, preregistration, future-randomness selection, semantic occurrence
 marker, model call, efficacy analysis, content-addressed result receipt, or
 `F1_R8_RESULTS_LOG.md` entry is warranted at this stage.  Work proceeds from
-the checked successor schema, batch chronology, and main-effect record verifier
-to raw receipt-seal and terminal block-record validation plus the exact
-lifecycle adapter, then to production-shaped actual-byte closure, the
-independent custody/occurrence judge, and the sole production preflight.  Even
+the checked successor schema, effect/receipt/audit record validators, and exact
+lifecycle adapter to the terminal manifest/block record inside the
+production-shaped fixture-byte closure, its independent judge, and then the
+sole production preflight.  Even
 a successful Source-A instrument audit may emit
 only `SOURCE_A_INSTRUMENT_QUALIFIED_FUTURE_OCCURRENCE_EVIDENCE_REQUIRED`, not an
 exactness, custody, or efficacy terminal.  The next decision point is another

@@ -22,11 +22,13 @@ that state; they are not independent cognition or learning systems.
 The current evidence establishes structural contracts only.  The preserved
 DNRD-5 v1 experiment schema has 37 kinds and a durable generic transaction
 kernel.  The distinct v2 successor schema now has 44 kinds, and checked
-instruments validate its same-batch dependency topology and the canonical
-journal record for one ADMIT or RESTORE main effect.  Its exact lifecycle
-vector contains 15 events, 59 artifact rows, 27 artifact kinds, and nine
-planned generation calls.  No production atom payload corpus, provider call,
-occurrence, state-learning effect, or efficacy observation exists.
+instruments validate its same-batch dependency topology, canonical
+ADMIT/RESTORE journal records, postcommit revision/rollback receipt seals, and
+delayed audit-release record.  A separate adapter closes the preserved
+lifecycle's 15 events, 59 artifact rows, 27 artifact kinds, and nine planned
+generation calls to the v2 structural vocabulary.  No production atom payload
+corpus, provider call, occurrence, state-learning effect, or efficacy
+observation exists.
 
 The lifecycle/atom alignment audit exposed three conceptual gaps:
 
@@ -244,23 +246,59 @@ bindings, exact envelopes, journal replay, resulting state, canonical record
 bytes, and record descriptor.  Its success terminal is deliberately
 `RECORD_BOUND_EFFECT_VALIDATED_NOT_PERMIT_OR_OCCURRENCE`.
 
+The effect grammar additionally equates the consumption's grant, capability,
+and revocation to the selected decision's authority chain.  ADMIT equates the
+decision proposal and same-batch disposition/consumption, and closes its
+block/assignment/four-fork/W0, trajectory contract, evaluator, committed probe,
+and randomness scope.  RESTORE equates the rollback decision's W0, restore
+policy, grant, staging successor, and same-batch restore/consumption.
+Schema-valid alternate authority, proposal, W0, policy, staging, subject, and
+decision cross-wires are rejected rather than merely failing a kind check.
+
 Both this verifier and the declared trace instrument use the same
 `hswm-dnrd5-v2-postcommit-receipt-identity/v1` derivation over the effect-record
 descriptor SHA, journal lineage, transition, decision, effect consumption, and
 effect atom keys.  The shared hash prevents two incompatible local receipt UID
 formulas; it does not prove record custody or receipt admission.
 
+A raw postcommit receipt-seal verifier now revalidates the exact preceding
+main-effect input, immediate record descriptor, lineage and resulting state;
+recomputes canonical receipt payload bytes and its content descriptor; equates
+the receipt decision/effect tuple and evidence purpose; equates the evidence
+authority triple to that decision; replays the two-write journal command; and
+recomputes its record bytes and descriptor.  A single chronological fixture
+covers both ADMIT-to-revision-receipt and RESTORE-to-rollback-receipt paths.
+Schema-valid alternate decision, effect, and authority cross-wires fail closed.
+Its terminal remains `RAW_RECEIPT_SEAL_VALIDATED_NOT_PERMIT_OR_OCCURRENCE`.
+
+A raw delayed-audit-release verifier likewise replays exactly
+`{evidence_seal_consumption, audit_release}`.  It equates release purpose,
+block, assignment, hidden-outcome/escrow chain, evaluator and release authority
+chains, sealed-trajectory contract/W0, block randomness, and the bijective four
+trajectory/outcome/evaluator-release closure over four distinct probe
+commitments.  It still cannot establish delayed timing, custody, arm semantics,
+or an actual provider event.
+
+The v1-to-v2 lifecycle adapter pins both immutable source hashes and the exact
+v2 schema hash.  It reconstructs all 46 direct rows plus four assignment, four
+arm-transition, four probe, and one audit derived adapter rows; equates every
+directly resolvable fork/validation/credit/receipt/restore/projection/outcome
+link; and derives the exact 16-kind v2 support closure.  Its remaining staging,
+consumption, disposition, rollback-receipt, probe-trajectory, and audit-release
+values are deliberately opaque unique handles, not atom keys or byte evidence.
+Only the actual-byte corpus judge may resolve those handles to canonical atoms.
+
 A separate four-effect trace instrument checks the declared three-admission
 plus one-restore partial order and deterministic future receipt identity.  It
 only compares caller-supplied trace fields and therefore terminates at
 `DECLARED_TRACE_CONSISTENT_ONLY`; it is not independent raw-record evidence.
 
-These instruments do **not** yet validate a raw post-commit receipt-seal
-command or receipt payload, a durable replay registry, the full predecessor
-journal chain and custody, raw content payload blobs, complete block/arm
-semantics, the 59-row lifecycle adapter, Permit, provider/model dispatch,
-occurrence, learning, or efficacy.  The caller-supplied list of previously used
-record descriptors is a local consistency input, not a globally one-shot
+These instruments do **not** yet validate a durable replay registry, full
+predecessor-chain custody, raw content payload closure, exact block/arm
+semantics, the manifest/block-seal record, Permit, provider/model dispatch,
+occurrence, learning, or efficacy.  Each effect, receipt, and audit invocation
+must now supply its bounded used-record-descriptor scope explicitly, but that
+scope remains a local consistency input rather than a globally one-shot
 registry.
 
 ## Evidence boundary and next gate
@@ -271,10 +309,11 @@ does not establish production byte closure, custody, independence, occurrence,
 causal learning, utility, or efficacy.  No research-result receipt or
 `F1_R8_RESULTS_LOG.md` entry is warranted.
 
-The schema, batch graph, and one-main-effect record slices have passed focused
-structural and mutation checks.  The next implementation gate is raw
-receipt-seal/audit/manifest/block-seal record validation plus the exact
-lifecycle adapter.  Only then may work proceed to the one-block
-production-shaped actual-byte corpus and independently implemented judge.
-Source A remains forbidden until those instruments and the corpus are also
-qualified.
+The schema, batch graph, main-effect, postcommit receipt, delayed-audit, and
+lifecycle-adapter slices have passed focused structural and mutation checks.
+The next gate is the manifest/block-seal record inside the one-block
+production-shaped fixture-byte corpus and its independently implemented judge,
+under the frozen contract in
+[`HSWM_DNRD_5_ONE_BLOCK_ACTUAL_BYTE_CORPUS_2026-08-28.md`](HSWM_DNRD_5_ONE_BLOCK_ACTUAL_BYTE_CORPUS_2026-08-28.md).
+Source A remains forbidden until that byte closure and later source/build and
+sole-dispatch qualifications pass.

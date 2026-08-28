@@ -19,7 +19,7 @@ import { deriveDnrd5V2PostcommitReceiptIdentity } from "./canonical-atom-v2-dnrd
 export const DNRD5_V2_RECORD_BOUND_EFFECT_V1 = "hswm-dnrd5-v2-record-bound-effect/v1" as const
 export const DNRD5_V2_RECORD_BOUND_EFFECT_BOUNDARY = Object.freeze({
   validates: "EXACT_V2_COMMAND_STATE_JOURNAL_RECORD_AND_EFFECT_GRAMMAR",
-  doesNotValidate: Object.freeze(["PERMIT", "EFFECT_SUBMISSION", "PROVIDER_OR_MODEL_CALL", "OCCURRENCE", "LEARNING", "EFFICACY", "DURABLE_REPLAY_REGISTRY", "FULL_PREDECESSOR_CHAIN_CUSTODY", "RAW_CONTENT_PAYLOAD_BYTES", "RECEIPT_SEAL", "RAW_RECEIPT_CONTENT_TO_RECORD_DESCRIPTOR_BINDING"])
+  doesNotValidate: Object.freeze(["PERMIT", "EFFECT_SUBMISSION", "PROVIDER_OR_MODEL_CALL", "OCCURRENCE", "LEARNING", "EFFICACY", "DURABLE_REPLAY_REGISTRY", "FULL_PREDECESSOR_CHAIN_CUSTODY", "RAW_CONTENT_PAYLOAD_BYTES", "RECEIPT_SEAL", "RAW_RECEIPT_CONTENT_TO_RECORD_DESCRIPTOR_BINDING", "RAW_STAGING_RECEIPT_RECORD_OR_PAYLOAD_CUSTODY"])
 } as const)
 
 export type Dnrd5V2RecordBoundEffectErrorCode =
@@ -33,7 +33,12 @@ export class Dnrd5V2RecordBoundEffectError extends Data.TaggedError("Dnrd5V2Reco
 const fail = (code: Dnrd5V2RecordBoundEffectErrorCode, detail: string) => Either.left(new Dnrd5V2RecordBoundEffectError({ code, detail }))
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b)
 const keyId = (key: CanonicalAtomV2Key) => canonicalAtomV2KeyId(key)
-const ref = (atom: CanonicalAtomV2, role: string, target: string): boolean => atom.references.some((r) => r.referenceType === DNRD5_V2_REFERENCE_TYPE && r.role === `role:dnrd5:v2:${role}` && keyId(r.target) === target)
+const singletonReferenceTarget = (atom: CanonicalAtomV2, role: string): string | undefined => {
+  const targets = atom.references
+    .filter((reference) => reference.referenceType === DNRD5_V2_REFERENCE_TYPE && reference.role === `role:dnrd5:v2:${role}`)
+    .map((reference) => keyId(reference.target))
+  return targets.length === 1 ? targets[0] : undefined
+}
 const descriptorSame = (a: CanonicalAtomV2StateJournalRecordDescriptor, b: CanonicalAtomV2StateJournalRecordDescriptor) => a.mediaType === b.mediaType && a.byteLength === b.byteLength && a.sha256 === b.sha256
 
 export interface Dnrd5V2RecordBoundEffectInput {
@@ -47,7 +52,7 @@ export interface Dnrd5V2RecordBoundEffectInput {
   readonly recordDescriptor: CanonicalAtomV2StateJournalRecordDescriptor
   readonly envelopes: ReadonlyArray<Uint8Array>
   /** Existing descriptors in this scope; prevents accepting the same record as a new effect. */
-  readonly usedRecordDescriptorSha256s?: ReadonlyArray<string>
+  readonly usedRecordDescriptorSha256s: ReadonlyArray<string>
 }
 export interface Dnrd5V2RecordBoundEffectValidated {
   readonly status: "RECORD_BOUND_EFFECT_VALIDATED_NOT_PERMIT_OR_OCCURRENCE"
@@ -64,14 +69,97 @@ const validateGrammar = (preState: CanonicalAtomV2State, command: CommitCanonica
   const restore = command.writes.find((a) => a.kind === "hswm:dnrd5:v2:restore_transaction")
   if (consumption === undefined || (disposition === undefined && restore === undefined) || (disposition !== undefined && restore !== undefined)) return fail("GRAMMAR_INVALID", "effect writes must be {capability_consumption, macro_disposition} or {capability_consumption, restore_transaction}")
   const decisionRole = disposition === undefined ? "rollback_decision" : "revision_admission_decision"
-  const decision = consumption.references.find((r) => r.referenceType === DNRD5_V2_REFERENCE_TYPE && r.role === "role:dnrd5:v2:decision")
-  if (decision === undefined) return fail("GRAMMAR_INVALID", "consumption must name one decision")
-  const preDecision = preState.atoms.find((atom) => keyId(atom.key) === keyId(decision.target))
+  const decisionTarget = singletonReferenceTarget(consumption, "decision")
+  if (decisionTarget === undefined) return fail("GRAMMAR_INVALID", "consumption must name exactly one decision")
+  const preDecision = preState.atoms.find((atom) => keyId(atom.key) === decisionTarget)
   if (preDecision === undefined || preDecision.kind !== `hswm:dnrd5:v2:${decisionRole}`) return fail("GRAMMAR_INVALID", "consumption must name the correct decision branch in preState")
   const effect = disposition ?? restore!
   const effectDecisionRole = disposition === undefined ? "decision" : "revision-admission-decision"
-  if (!ref(effect, "effect-consumption", keyId(consumption.key)) && !ref(effect, "consumption", keyId(consumption.key))) return fail("GRAMMAR_INVALID", "effect must reference its same-batch capability consumption")
-  if (!ref(effect, effectDecisionRole, keyId(decision.target))) return fail("GRAMMAR_INVALID", "effect must reference the same decision as consumption")
+  const effectConsumptionRole = disposition === undefined ? "consumption" : "effect-consumption"
+  if (singletonReferenceTarget(effect, effectConsumptionRole) !== keyId(consumption.key)) return fail("GRAMMAR_INVALID", "effect must reference its exact same-batch capability consumption")
+  if (singletonReferenceTarget(effect, effectDecisionRole) !== decisionTarget) return fail("GRAMMAR_INVALID", "effect must reference the exact same decision as consumption")
+  const singleton = singletonReferenceTarget
+  const equal = (left: CanonicalAtomV2, leftRole: string, right: CanonicalAtomV2, rightRole: string): boolean => {
+    const leftTarget = singleton(left, leftRole)
+    const rightTarget = singleton(right, rightRole)
+    return leftTarget !== undefined && leftTarget === rightTarget
+  }
+  const pointsTo = (atom: CanonicalAtomV2, role: string, target: CanonicalAtomV2): boolean => singleton(atom, role) === keyId(target.key)
+  const resolve = (atom: CanonicalAtomV2, role: string, kind: string): CanonicalAtomV2 | undefined => {
+    const target = singleton(atom, role)
+    const resolved = target === undefined ? undefined : preState.atoms.find((candidate) => keyId(candidate.key) === target)
+    return resolved?.kind === `hswm:dnrd5:v2:${kind}` ? resolved : undefined
+  }
+  const contains = (atom: CanonicalAtomV2, role: string, target: CanonicalAtomV2): boolean => atom.references.some((reference) => reference.referenceType === DNRD5_V2_REFERENCE_TYPE && reference.role === `role:dnrd5:v2:${role}` && keyId(reference.target) === keyId(target.key))
+  const targets = (atom: CanonicalAtomV2, role: string): ReadonlyArray<string> => atom.references
+    .filter((reference) => reference.referenceType === DNRD5_V2_REFERENCE_TYPE && reference.role === `role:dnrd5:v2:${role}`)
+    .map((reference) => keyId(reference.target))
+  const sameFour = (left: ReadonlyArray<string>, right: ReadonlyArray<string>): boolean => left.length === 4 && right.length === 4 && new Set(left).size === 4 && new Set(right).size === 4 && left.every((target) => right.includes(target))
+  // The batch chronology establishes typed reachability.  These comparisons
+  // additionally bind the authority and semantic subject of this particular
+  // effect to its one chosen decision, preventing a schema-valid cross-wire.
+  if (!equal(consumption, "grant", preDecision, "grant") || !equal(consumption, "capability", preDecision, "capability") || !equal(consumption, "revocation", preDecision, "revocation")) {
+    return fail("GRAMMAR_INVALID", "capability consumption authority must exactly equal its chosen decision")
+  }
+  const grant = resolve(preDecision, "grant", "grant_snapshot")
+  const authorization = resolve(preDecision, "authorization", "authorization_decision")
+  const capability = resolve(preDecision, "capability", "capability_issuance")
+  const revocation = resolve(preDecision, "revocation", "revocation_status")
+  const policy = grant === undefined ? undefined : resolve(grant, "policy", "permit_policy")
+  if (grant === undefined || authorization === undefined || capability === undefined || revocation === undefined || policy === undefined) return fail("GRAMMAR_INVALID", "decision authority chain must resolve to exact valid preState atoms")
+  if (!pointsTo(grant, "authorization", authorization) || !pointsTo(grant, "capability", capability) || !pointsTo(grant, "revocation", revocation) || !pointsTo(capability, "authorization", authorization) || !pointsTo(capability, "policy", policy) || !pointsTo(revocation, "authorization", authorization) || !pointsTo(revocation, "capability", capability) || !pointsTo(authorization, "policy", policy)) {
+    return fail("GRAMMAR_INVALID", "decision authority chain is internally cross-wired")
+  }
+  const restorePolicy = disposition === undefined
+    ? resolve(preDecision, "policy", "restore_policy")
+    : resolve(disposition, "restore-policy", "restore_policy")
+  if (restorePolicy === undefined || !pointsTo(restorePolicy, "policy", policy) || !pointsTo(restorePolicy, "capability", capability)) return fail("GRAMMAR_INVALID", "effect restore policy must bind the exact decision authority chain")
+  if (disposition !== undefined) {
+    if (!equal(disposition, "proposal", preDecision, "proposal") || !pointsTo(disposition, "revision-admission-decision", preDecision) || !pointsTo(disposition, "effect-consumption", consumption)) {
+      return fail("GRAMMAR_INVALID", "admit disposition must exactly bind the decision proposal and same-batch consumption")
+    }
+    const proposal = resolve(preDecision, "proposal", "revision_proposal")
+    const validation = resolve(preDecision, "validation", "candidate_validation")
+    const credit = resolve(preDecision, "credit", "credit_decision")
+    const block = resolve(preDecision, "block", "block_spec")
+    const assignment = resolve(preDecision, "assignment", "block_assignment")
+    const fork = resolve(preDecision, "fork", "fork_incidence")
+    const forkW0 = fork === undefined ? undefined : resolve(fork, "w0", "w0_snapshot")
+    const feedback = proposal === undefined ? undefined : resolve(proposal, "feedback", "feedback_assignment")
+    const trajectory = proposal === undefined ? undefined : resolve(proposal, "trajectory", "trajectory_seal")
+    const activation = trajectory === undefined ? undefined : resolve(trajectory, "activation", "episode_activation")
+    const activationW0 = activation === undefined ? undefined : resolve(activation, "w0", "w0_snapshot")
+    const trajectoryW0 = trajectory === undefined ? undefined : resolve(trajectory, "w0", "w0_snapshot")
+    const trajectoryContract = trajectory === undefined ? undefined : resolve(trajectory, "contract", "trajectory_contract")
+    const activationProbe = activation === undefined ? undefined : resolve(activation, "probe", "probe_commitment")
+    const assignmentForks = assignment === undefined ? [] : targets(assignment, "fork")
+    const activationForks = activation === undefined ? [] : targets(activation, "fork")
+    const assignmentForksShareW0 = assignmentForks.every((forkTarget) => {
+      const candidate = preState.atoms.find((atom) => keyId(atom.key) === forkTarget)
+      return candidate?.kind === "hswm:dnrd5:v2:fork_incidence" && singleton(candidate, "w0") === (activationW0 === undefined ? undefined : keyId(activationW0.key))
+    })
+    if (proposal === undefined || validation === undefined || credit === undefined || block === undefined || assignment === undefined || fork === undefined || forkW0 === undefined || feedback === undefined || trajectory === undefined || activation === undefined || activationW0 === undefined || trajectoryW0 === undefined || trajectoryContract === undefined || activationProbe === undefined) return fail("GRAMMAR_INVALID", "admit decision subject chain must resolve to exact valid preState atoms")
+    if (!pointsTo(validation, "proposal", proposal) || !pointsTo(credit, "proposal", proposal) || !pointsTo(credit, "grant", grant) || !pointsTo(credit, "feedback", feedback) || !pointsTo(credit, "trajectory", trajectory) || !pointsTo(feedback, "fork", fork) || !pointsTo(feedback, "assignment", assignment) || !equal(credit, "credit-source", feedback, "source") || !pointsTo(assignment, "block-spec", block) || !equal(assignment, "randomness", block, "randomness") || !contains(assignment, "fork", fork) || !pointsTo(forkW0, "block-spec", block) || !pointsTo(trajectoryContract, "activation", activation) || !pointsTo(activation, "block-spec", block) || !pointsTo(activation, "assignment", assignment) || !equal(activation, "evaluator", block, "evaluator") || !pointsTo(activationProbe, "block-spec", block) || !equal(activationProbe, "randomness", block, "randomness") || !pointsTo(activationW0, "block-spec", block) || keyId(trajectoryW0.key) !== keyId(activationW0.key) || keyId(forkW0.key) !== keyId(activationW0.key) || !sameFour(assignmentForks, activationForks) || !assignmentForksShareW0) {
+      return fail("GRAMMAR_INVALID", "admit decision subject chain is internally cross-wired")
+    }
+  } else {
+    if (!equal(restore!, "w0", preDecision, "w0") || !equal(restore!, "grant", preDecision, "grant") || !equal(restore!, "policy", preDecision, "policy") || !equal(restore!, "staging-successor", preDecision, "staging-successor") || !pointsTo(restore!, "decision", preDecision) || !pointsTo(restore!, "consumption", consumption)) {
+      return fail("GRAMMAR_INVALID", "restore transaction must exactly bind the rollback decision and same-batch consumption")
+    }
+    const block = resolve(preDecision, "block", "block_spec")
+    const assignment = resolve(preDecision, "assignment", "block_assignment")
+    const fork = resolve(preDecision, "fork", "fork_incidence")
+    const w0 = resolve(preDecision, "w0", "w0_snapshot")
+    const stagingSuccessor = resolve(preDecision, "staging-successor", "macro_disposition")
+    const stagingReceipt = resolve(preDecision, "staging-receipt", "revision_transition_receipt")
+    const stagingDecision = stagingSuccessor === undefined ? undefined : resolve(stagingSuccessor, "revision-admission-decision", "revision_admission_decision")
+    const stagingConsumption = stagingSuccessor === undefined ? undefined : resolve(stagingSuccessor, "effect-consumption", "capability_consumption")
+    const evidenceConsumption = stagingReceipt === undefined ? undefined : resolve(stagingReceipt, "evidence-consumption", "evidence_seal_consumption")
+    if (block === undefined || assignment === undefined || fork === undefined || w0 === undefined || stagingSuccessor === undefined || stagingReceipt === undefined || stagingDecision === undefined || stagingConsumption === undefined || evidenceConsumption === undefined) return fail("GRAMMAR_INVALID", "rollback staging chain must resolve to exact valid preState atoms")
+    if (!pointsTo(stagingReceipt, "successor", stagingSuccessor) || !pointsTo(stagingReceipt, "decision", stagingDecision) || !pointsTo(stagingReceipt, "effect-consumption", stagingConsumption) || !pointsTo(stagingConsumption, "decision", stagingDecision) || !pointsTo(evidenceConsumption, "purpose", stagingDecision) || !pointsTo(stagingDecision, "block", block) || !pointsTo(stagingDecision, "assignment", assignment) || !pointsTo(stagingDecision, "fork", fork) || !pointsTo(assignment, "block-spec", block) || !contains(assignment, "fork", fork) || !pointsTo(w0, "block-spec", block) || !pointsTo(fork, "w0", w0)) {
+      return fail("GRAMMAR_INVALID", "rollback staging receipt or structural scope is internally cross-wired")
+    }
+  }
   return Either.right(undefined)
 }
 
@@ -106,7 +194,7 @@ export const validateDnrd5V2RecordBoundEffect = (input: Dnrd5V2RecordBoundEffect
   if (Either.isLeft(canonicalBytes) || (Either.isRight(canonicalBytes) && (canonicalBytes.right.byteLength !== input.recordBytes.byteLength || !canonicalBytes.right.every((v, i) => v === input.recordBytes[i])))) return fail("RECORD_INVALID", "supplied record bytes are not exact canonical journal bytes")
   const descriptor = describeCanonicalAtomV2StateJournalRecord(input.record)
   if (Either.isLeft(descriptor) || (Either.isRight(descriptor) && !descriptorSame(descriptor.right, input.recordDescriptor))) return fail("DESCRIPTOR_INVALID", "record descriptor is not recomputed from actual record bytes")
-  if (input.usedRecordDescriptorSha256s?.includes(input.recordDescriptor.sha256)) return fail("REPLAY_INVALID", "record descriptor was already used in this effect scope")
+  if (input.usedRecordDescriptorSha256s.includes(input.recordDescriptor.sha256)) return fail("REPLAY_INVALID", "record descriptor was already used in this effect scope")
   const consumption = input.command.writes.find((a) => a.kind === "hswm:dnrd5:v2:capability_consumption")!
   const effect = input.command.writes.find((a) => a.kind !== "hswm:dnrd5:v2:capability_consumption")!
   const identity = deriveDnrd5V2PostcommitReceiptIdentity({

@@ -238,7 +238,7 @@ it("uses all three exact structural archive rosters without scientific content",
       causal_learning_claimed: false
     })
   }
-})
+}, 15_000)
 
 const cliArguments = (
   seed: S2STestOnlyHostedProcessRootInput

@@ -5,8 +5,10 @@ from __future__ import annotations
 from contextlib import contextmanager
 from copy import deepcopy
 from dataclasses import replace
+import ast
 from hashlib import sha256
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import inspect
 from pathlib import Path
 import threading
 from typing import Any, Iterator
@@ -22,10 +24,17 @@ from _research.dnrd5.provider_gateway import (
     ProviderGatewayExecutionError,
     ProviderGatewayRefusal,
     read_provider_attempt_ledger,
+    provider_evidence_root_identity,
+    provider_call_commitment,
     validate_completed_block_gateway_evidence,
     validate_provider_attempt_ledger_closed,
     validate_provider_receipt,
 )
+from _research.dnrd5.preflight_dispatch_capability import (
+    DispatchSlot,
+    PreflightDispatchCapability,
+)
+import _research.dnrd5.provider_gateway as gateway_module
 
 
 MODEL = "test-model-v1"
@@ -207,6 +216,28 @@ def _block_call(ordinal: int, call_class: str) -> Dnrd5ProviderCall:
     )
 
 
+def _capability(root: Path, calls: list[Dnrd5ProviderCall], config: Dnrd5ProviderConfig) -> PreflightDispatchCapability:
+    return PreflightDispatchCapability.create(
+        root / "dispatch-capability",
+        block_id="DNRD5-BLOCK-0001",
+        evidence_root_bytes=provider_evidence_root_identity(root),
+        slots=tuple(DispatchSlot(call.call_id, call.call_class, provider_call_commitment(call, config)) for call in calls),
+    )
+
+
+def _single_call_capability(root: Path, call: Dnrd5ProviderCall, config: Dnrd5ProviderConfig) -> PreflightDispatchCapability:
+    tail_classes = ["REVISION_PROPOSAL"] * 4 + ["FRESH_PROBE"] * 4
+    return PreflightDispatchCapability.create(
+        root / "dispatch-capability",
+        block_id=call.block_id,
+        evidence_root_bytes=provider_evidence_root_identity(root),
+        slots=(
+            DispatchSlot(call.call_id, call.call_class, provider_call_commitment(call, config)),
+            *(DispatchSlot(f"unused-capability-slot-{index}", call_class, f"{index:064x}") for index, call_class in enumerate(tail_classes, 1)),
+        ),
+    )
+
+
 def test_real_loopback_gateway_sends_and_seals_the_exact_constructed_bytes(
     tmp_path: Path,
 ) -> None:
@@ -214,7 +245,7 @@ def test_real_loopback_gateway_sends_and_seals_the_exact_constructed_bytes(
         root = tmp_path / "evidence"
         gateway = Dnrd5ProviderGateway.create(root, _config(server))
         call = _call()
-        result = gateway.execute(call)
+        result = gateway.execute(call, capability=_single_call_capability(root, call, gateway._config))
 
         assert len(server.observations) == 1
         observed = server.observations[0]
@@ -268,15 +299,94 @@ def test_real_loopback_gateway_sends_and_seals_the_exact_constructed_bytes(
         assert API_KEY.encode() not in all_durable_bytes
 
 
+def test_no_capability_refuses_before_provider_start_or_network(tmp_path: Path) -> None:
+    with _server() as server:
+        root = tmp_path / "evidence"
+        gateway = Dnrd5ProviderGateway.create(root, _config(server))
+        with pytest.raises(ProviderGatewayRefusal, match="capability is required"):
+            gateway.execute(_call())
+        assert server.observations == []
+        assert read_provider_attempt_ledger(root) == ()
+
+
+def test_raw_path_and_capability_subclass_refuse_before_provider_start(tmp_path: Path) -> None:
+    class MaliciousCapability(PreflightDispatchCapability):
+        pass
+
+    with _server() as server:
+        root = tmp_path / "evidence"
+        gateway = Dnrd5ProviderGateway.create(root, _config(server))
+        call = _call()
+        with pytest.raises(ProviderGatewayRefusal, match="module-held capability token"):
+            gateway._execute_capability_checked(call, object(), None)  # type: ignore[arg-type]
+        real = _single_call_capability(root, call, gateway._config)
+        # Construction is intentionally not bypassable through a subclass object.
+        malicious = object.__new__(MaliciousCapability)
+        with pytest.raises(ProviderGatewayRefusal, match="capability is required"):
+            gateway.execute(call, capability=malicious)
+        assert server.observations == []
+        assert read_provider_attempt_ledger(root) == ()
+
+
+def test_evidence_root_replacement_refuses_even_when_path_is_reused(tmp_path: Path) -> None:
+    root = tmp_path / "evidence"
+    gateway = Dnrd5ProviderGateway.create(root, Dnrd5ProviderConfig("http://127.0.0.1:1/v1/chat/completions", MODEL))
+    original = provider_evidence_root_identity(root)
+    moved = tmp_path / "old-evidence"
+    root.rename(moved)
+    root.mkdir()
+    (root / "content").mkdir()
+    (root / "attempts.jsonl").touch()
+    (root / "evidence_root_genesis.json").write_bytes((moved / "evidence_root_genesis.json").read_bytes())
+    with pytest.raises(ProviderGatewayRefusal, match="genesis identity drifted"):
+        provider_evidence_root_identity(root)
+    assert original != b""
+
+
+def test_checked_source_has_one_provider_transport_callsite_under_private_capability_path() -> None:
+    import _research.dnrd5.provider_gateway as gateway_module
+
+    tree = ast.parse(inspect.getsource(gateway_module))
+    parents: list[str] = []
+    for node in tree.body:
+        if isinstance(node, ast.ClassDef) and node.name == "Dnrd5ProviderGateway":
+            for member in node.body:
+                if isinstance(member, ast.FunctionDef) and any(
+                    isinstance(child, ast.Call)
+                    and isinstance(child.func, ast.Attribute)
+                    and child.func.attr == "request"
+                    and isinstance(child.func.value, ast.Name)
+                    and child.func.value.id == "transport"
+                    for child in ast.walk(member)
+                ):
+                    parents.append(member.name)
+    assert parents == ["_execute_capability_checked"]
+
+
+def test_checked_source_allows_module_raw_token_only_in_gateway_capability_path() -> None:
+    import _research.dnrd5.provider_gateway as gateway_module
+
+    tree = ast.parse(inspect.getsource(gateway_module))
+    holders: list[str] = []
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and any(
+            isinstance(child, ast.Name) and child.id == "_CAPABILITY_RAW_TOKEN"
+            for child in ast.walk(node)
+        ):
+            holders.append(node.name)
+    assert holders == ["execute", "_execute_capability_checked"]
+
+
 def test_consumed_call_id_cannot_retry_after_success(tmp_path: Path) -> None:
     with _server() as server:
         root = tmp_path / "evidence"
         gateway = Dnrd5ProviderGateway.create(root, _config(server))
         call = _call()
-        gateway.execute(call)
+        capability = _single_call_capability(root, call, gateway._config)
+        gateway.execute(call, capability=capability)
         recovered = Dnrd5ProviderGateway(root, _config(server))
-        with pytest.raises(ProviderGatewayRefusal, match="already consumed"):
-            recovered.execute(call)
+        with pytest.raises(ProviderGatewayRefusal, match="next evidence-bound"):
+            recovered.execute(call, capability=capability)
         assert len(server.observations) == 1
         assert len(read_provider_attempt_ledger(root)) == 2
 
@@ -287,7 +397,9 @@ def test_unterminated_start_irrecoverably_closes_root_to_later_dispatch(
     with _server() as server:
         root = tmp_path / "evidence"
         gateway = Dnrd5ProviderGateway.create(root, _config(server))
-        gateway.execute(_call())
+        call = _call()
+        capability = _single_call_capability(root, call, gateway._config)
+        gateway.execute(call, capability=capability)
         first_line = (root / "attempts.jsonl").read_bytes().splitlines(keepends=True)[0]
         (root / "attempts.jsonl").write_bytes(first_line)
 
@@ -295,8 +407,8 @@ def test_unterminated_start_irrecoverably_closes_root_to_later_dispatch(
             validate_provider_attempt_ledger_closed(root)
         with pytest.raises(ProviderGatewayRefusal, match="irrecoverably incomplete"):
             Dnrd5ProviderGateway(root, _config(server))
-        with pytest.raises(ProviderGatewayRefusal, match="no later call"):
-            gateway.execute(_block_call(2, "REVISION_PROPOSAL"))
+        with pytest.raises(ProviderGatewayRefusal, match="next evidence-bound"):
+            gateway.execute(_block_call(2, "REVISION_PROPOSAL"), capability=capability)
         assert len(server.observations) == 1
         assert [record["recordType"] for record in read_provider_attempt_ledger(root)] == [
             "START"
@@ -307,11 +419,10 @@ def test_receipt_rejects_response_descriptor_content_and_keyset_mutation(
     tmp_path: Path,
 ) -> None:
     with _server() as server:
-        gateway = Dnrd5ProviderGateway.create(
-            tmp_path / "evidence", _config(server)
-        )
+        root = tmp_path / "evidence"
+        gateway = Dnrd5ProviderGateway.create(root, _config(server))
         call = _call()
-        result = gateway.execute(call)
+        result = gateway.execute(call, capability=_single_call_capability(root, call, gateway._config))
         content = _content(call, result)
         forged = dict(content)
         forged["response"] = content["response"] + b" "
@@ -328,18 +439,19 @@ def test_observed_http_failure_is_terminal_and_nonretryable(tmp_path: Path) -> N
         root = tmp_path / "evidence"
         gateway = Dnrd5ProviderGateway.create(root, _config(server))
         call = _call()
+        capability = _single_call_capability(root, call, gateway._config)
         with pytest.raises(
             ProviderGatewayExecutionError, match="status is not exactly 200"
         ) as caught:
-            gateway.execute(call)
+            gateway.execute(call, capability=capability)
         assert caught.value.failure_code == "HTTP_STATUS_NOT_200"
         ledger = read_provider_attempt_ledger(root)
         assert [record["recordType"] for record in ledger] == ["START", "TERMINAL"]
         assert ledger[1]["outcome"] == "FAILED"
         assert ledger[1]["failureCode"] == "HTTP_STATUS_NOT_200"
         assert ledger[1]["observedResponse"] is not None
-        with pytest.raises(ProviderGatewayRefusal, match="already consumed"):
-            gateway.execute(call)
+        with pytest.raises(ProviderGatewayRefusal, match="permanently closed"):
+            gateway.execute(call, capability=capability)
         assert len(server.observations) == 1
 
 
@@ -347,15 +459,15 @@ def test_concurrent_same_call_has_one_durable_start_and_one_http_dispatch(
     tmp_path: Path,
 ) -> None:
     with _server() as server:
-        gateway = Dnrd5ProviderGateway.create(
-            tmp_path / "evidence", _config(server)
-        )
+        root = tmp_path / "evidence"
+        gateway = Dnrd5ProviderGateway.create(root, _config(server))
         call = _call()
+        capability = _single_call_capability(root, call, gateway._config)
         outcomes: list[str] = []
 
         def invoke() -> None:
             try:
-                gateway.execute(call)
+                gateway.execute(call, capability=capability)
                 outcomes.append("SUCCEEDED")
             except ProviderGatewayRefusal:
                 outcomes.append("REFUSED")
@@ -367,15 +479,14 @@ def test_concurrent_same_call_has_one_durable_start_and_one_http_dispatch(
             thread.join(timeout=10)
         assert sorted(outcomes) == ["REFUSED", "SUCCEEDED"]
         assert len(server.observations) == 1
-        ledger = read_provider_attempt_ledger(tmp_path / "evidence")
+        ledger = read_provider_attempt_ledger(root)
         assert [record["recordType"] for record in ledger] == ["START", "TERMINAL"]
 
 
 def test_call_inputs_are_exact_and_response_schema_is_closed(tmp_path: Path) -> None:
     with _server() as server:
-        gateway = Dnrd5ProviderGateway.create(
-            tmp_path / "evidence", _config(server)
-        )
+        root = tmp_path / "evidence"
+        gateway = Dnrd5ProviderGateway.create(root, _config(server))
         bad_schema = deepcopy(parse_canonical(_call().response_schema_bytes))
         bad_schema["additionalProperties"] = True
         bad = replace(
@@ -383,18 +494,17 @@ def test_call_inputs_are_exact_and_response_schema_is_closed(tmp_path: Path) -> 
             response_schema_bytes=canonical_bytes(bad_schema),
         )
         with pytest.raises(ProviderGatewayRefusal, match="closed required"):
-            gateway.execute(bad)
+            gateway.execute(bad, capability=_single_call_capability(root, bad, gateway._config))
         assert server.observations == []
-        assert read_provider_attempt_ledger(tmp_path / "evidence") == ()
+        assert read_provider_attempt_ledger(root) == ()
 
 
 def test_hidden_identity_and_answer_material_are_refused_before_dispatch(
     tmp_path: Path,
 ) -> None:
     with _server() as server:
-        gateway = Dnrd5ProviderGateway.create(
-            tmp_path / "evidence", _config(server)
-        )
+        root = tmp_path / "evidence"
+        gateway = Dnrd5ProviderGateway.create(root, _config(server))
         base = _call("opaque-call-hidden-input")
         leaked = replace(
             base,
@@ -416,7 +526,7 @@ def test_hidden_identity_and_answer_material_are_refused_before_dispatch(
         with pytest.raises(ProviderGatewayRefusal, match="call identity"):
             gateway.execute(identity_leak)
         assert server.observations == []
-        assert read_provider_attempt_ledger(tmp_path / "evidence") == ()
+        assert read_provider_attempt_ledger(root) == ()
 
 
 def test_schema_invalid_model_content_consumes_call_and_fails_terminally(
@@ -446,8 +556,9 @@ def test_schema_invalid_model_content_consumes_call_and_fails_terminally(
     with _server(body=invalid_response) as server:
         root = tmp_path / "evidence"
         gateway = Dnrd5ProviderGateway.create(root, _config(server))
+        call = _call()
         with pytest.raises(ProviderGatewayExecutionError) as caught:
-            gateway.execute(_call())
+            gateway.execute(call, capability=_single_call_capability(root, call, gateway._config))
         assert caught.value.failure_code == "MODEL_CONTENT_SCHEMA_INVALID"
         ledger = read_provider_attempt_ledger(root)
         assert ledger[1]["outcome"] == "FAILED"
@@ -466,10 +577,12 @@ def test_completed_block_validator_closes_exact_one_four_four_gateway_calls(
     with _server() as server:
         root = tmp_path / "evidence"
         gateway = Dnrd5ProviderGateway.create(root, _config(server))
-        for ordinal, call_class in enumerate(classes, start=1):
-            gateway.execute(_block_call(ordinal, call_class))
+        calls = [_block_call(ordinal, call_class) for ordinal, call_class in enumerate(classes, start=1)]
+        capability = _capability(root, calls, gateway._config)
+        for call in calls:
+            gateway.execute(call, capability=capability)
         summary = validate_completed_block_gateway_evidence(
-            root, "DNRD5-BLOCK-0001"
+            root, "DNRD5-BLOCK-0001", capability_root=root / "dispatch-capability"
         )
         assert summary.generation_call_count == 9
         assert summary.trajectory_call_count == 1
@@ -488,8 +601,9 @@ def test_incomplete_block_cannot_be_promoted_to_completed_gateway_evidence(
     with _server() as server:
         root = tmp_path / "evidence"
         gateway = Dnrd5ProviderGateway.create(root, _config(server))
-        gateway.execute(_block_call(1, "PRE_OUTCOME_TRAJECTORY"))
-        with pytest.raises(ProviderGatewayRefusal, match="exactly nine"):
+        call = _block_call(1, "PRE_OUTCOME_TRAJECTORY")
+        gateway.execute(call, capability=_single_call_capability(root, call, gateway._config))
+        with pytest.raises(ProviderGatewayRefusal, match="capability ledger|exactly nine"):
             validate_completed_block_gateway_evidence(
-                root, "DNRD5-BLOCK-0001"
+                root, "DNRD5-BLOCK-0001", capability_root=root / "dispatch-capability"
             )

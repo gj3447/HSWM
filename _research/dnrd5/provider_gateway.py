@@ -22,6 +22,7 @@ import json
 import os
 from pathlib import Path
 import re
+import secrets
 import socket
 import tempfile
 import time
@@ -36,6 +37,14 @@ from _research.dnrd5.canonical_json import (
     canonical_bytes,
     canonical_sha256,
     parse_canonical,
+)
+from _research.dnrd5.preflight_dispatch_capability import (
+    DispatchSlot,
+    PreflightDispatchCapability,
+    PreflightDispatchRefusal,
+    ProviderDispatchBinding,
+    ProviderDispatchEvidence,
+    validate_completed_dispatch_capability,
 )
 
 
@@ -75,6 +84,9 @@ CALL_CLASSES = (
     "REVISION_PROPOSAL",
     "FRESH_PROBE",
 )
+EVIDENCE_ROOT_IDENTITY_VERSION = "hswm-dnrd5-provider-evidence-root-identity/v1"
+_ROOT_GENESIS_NAME = "evidence_root_genesis.json"
+_CAPABILITY_RAW_TOKEN = object()
 
 _BLOCK_ID = re.compile(
     r"^DNRD5-BLOCK-(?:000[1-9]|00[1-9][0-9]|0[12][0-9]{2}|0300)$"
@@ -108,6 +120,49 @@ class ProviderGatewayExecutionError(RuntimeError):
     def __init__(self, failure_code: str, detail: str) -> None:
         super().__init__(detail)
         self.failure_code = failure_code
+
+
+def provider_evidence_root_identity(root: Path) -> bytes:
+    """Exact local identity that a dispatch capability must bind before use.
+
+    This is a local root identity, not a source freeze or an occurrence
+    attestation.  It prevents a capability minted for one durable gateway root
+    from authorizing a provider call against another root.
+    """
+    if not isinstance(root, Path) or not root.is_dir():
+        raise ProviderGatewayRefusal("provider evidence root identity is unavailable")
+    genesis = _load_root_genesis(root)
+    return canonical_bytes(
+        {
+            "schema_version": EVIDENCE_ROOT_IDENTITY_VERSION,
+            "genesis_sha256": canonical_sha256(genesis),
+            "canonical_root_path": genesis["canonical_root_path"],
+            "root_device": genesis["root_device"],
+            "root_inode": genesis["root_inode"],
+            "attempt_ledger": "attempts.jsonl",
+            "content_directory": "content",
+        }
+    )
+
+
+def _load_root_genesis(root: Path) -> dict[str, Any]:
+    path = root / _ROOT_GENESIS_NAME
+    try:
+        value = parse_canonical(path.read_bytes())
+        stat = root.stat(follow_symlinks=False)
+    except (OSError, CanonicalJsonError) as error:
+        raise ProviderGatewayRefusal("provider evidence root genesis is unavailable") from error
+    expected = {"schema_version", "canonical_root_path", "root_device", "root_inode", "creation_nonce_sha256"}
+    if (
+        type(value) is not dict or set(value) != expected
+        or value["schema_version"] != EVIDENCE_ROOT_IDENTITY_VERSION
+        or value["canonical_root_path"] != str(root.resolve())
+        or type(value["root_device"]) is not int or type(value["root_inode"]) is not int
+        or value["root_device"] != stat.st_dev or value["root_inode"] != stat.st_ino
+        or _SHA256.fullmatch(value["creation_nonce_sha256"] or "") is None
+    ):
+        raise ProviderGatewayRefusal("provider evidence root genesis identity drifted")
+    return value
 
 
 @dataclass(frozen=True, slots=True)
@@ -198,6 +253,23 @@ class Dnrd5ProviderCallResult:
     request_projection_bytes: bytes
     request_bytes: bytes
     response_bytes: bytes
+    dispatch_evidence: ProviderDispatchEvidence
+
+
+def provider_call_commitment(call: Dnrd5ProviderCall, config: Dnrd5ProviderConfig) -> str:
+    """Frozen provider-visible and identity/input binding before capability START."""
+    _validate_call(call)
+    projection, request = build_provider_request(call, config)
+    return canonical_sha256({
+        "request_sha256": sha256(request).hexdigest(), "projection_sha256": sha256(projection).hexdigest(),
+        "block_id": call.block_id, "call_id": call.call_id, "call_class": call.call_class,
+        "session_id": call.session_id, "worker_id": call.worker_id, "private_binding_sha256": call.private_binding_sha256,
+        "request_nonce": call.request_nonce, "rng_sha256": sha256(call.rng_bytes).hexdigest(),
+        "model_identity_sha256": sha256(call.model_identity_bytes).hexdigest(), "runtime_identity_sha256": sha256(call.runtime_identity_bytes).hexdigest(),
+        "isolation_sha256": sha256(call.isolation_bytes).hexdigest(), "instruction_sha256": sha256(call.instruction_bytes).hexdigest(),
+        "model_input_sha256": sha256(call.model_input_bytes).hexdigest(), "response_schema_sha256": sha256(call.response_schema_bytes).hexdigest(),
+        "endpoint": config.endpoint, "expected_model": config.expected_model, "timeout_milliseconds": config.timeout_milliseconds,
+    })
 
 
 @dataclass(frozen=True, slots=True)
@@ -890,6 +962,22 @@ def initialize_provider_evidence_root(root: Path) -> None:
         os.fsync(fd)
     finally:
         os.close(fd)
+    stat = root.stat(follow_symlinks=False)
+    genesis = {
+        "schema_version": EVIDENCE_ROOT_IDENTITY_VERSION,
+        "canonical_root_path": str(root.resolve()),
+        "root_device": stat.st_dev,
+        "root_inode": stat.st_ino,
+        "creation_nonce_sha256": sha256(secrets.token_bytes(32)).hexdigest(),
+    }
+    genesis_fd = os.open(
+        root / _ROOT_GENESIS_NAME, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600
+    )
+    try:
+        os.write(genesis_fd, canonical_bytes(genesis))
+        os.fsync(genesis_fd)
+    finally:
+        os.close(genesis_fd)
     _fsync_directory(root)
     _fsync_directory(root.parent)
 
@@ -957,6 +1045,8 @@ def _parse_ledger(raw: bytes) -> list[dict[str, Any]]:
         "requestNonce",
         "requestProjection",
         "request",
+        "capabilityBindingSha256",
+        "capabilitySlotOrdinal",
         "startedAtUnixMs",
         "retry",
         "terminal",
@@ -971,6 +1061,8 @@ def _parse_ledger(raw: bytes) -> list[dict[str, Any]]:
         "callId",
         "callClass",
         "startRecordSha256",
+        "capabilityBindingSha256",
+        "capabilitySlotOrdinal",
         "outcome",
         "receipt",
         "observedResponse",
@@ -1009,6 +1101,9 @@ def _parse_ledger(raw: bytes) -> list[dict[str, Any]]:
             _identifier(value.get("workerId"), "ledger workerId")
             _hash(value.get("privateBindingSha256"), "ledger private binding")
             _hash(value.get("requestNonce"), "ledger request nonce")
+            _hash(value.get("capabilityBindingSha256"), "ledger capability binding")
+            if type(value.get("capabilitySlotOrdinal")) is not int or not 1 <= value["capabilitySlotOrdinal"] <= 9:
+                raise ProviderGatewayRefusal("attempt capability slot ordinal drifted")
             _descriptor_from_projection(
                 value.get("requestProjection"), "ledger request projection"
             )
@@ -1023,6 +1118,9 @@ def _parse_ledger(raw: bytes) -> list[dict[str, Any]]:
                 raise ProviderGatewayRefusal("attempt start contract drifted")
         else:
             _hash(value.get("startRecordSha256"), "ledger start binding")
+            _hash(value.get("capabilityBindingSha256"), "ledger capability binding")
+            if type(value.get("capabilitySlotOrdinal")) is not int or not 1 <= value["capabilitySlotOrdinal"] <= 9:
+                raise ProviderGatewayRefusal("attempt capability slot ordinal drifted")
             if (
                 type(value.get("finishedAtUnixMs")) is not int
                 or not 0 <= value["finishedAtUnixMs"] <= MAX_SAFE_INTEGER
@@ -1087,6 +1185,8 @@ def _parse_ledger(raw: bytes) -> list[dict[str, Any]]:
                 raise ProviderGatewayRefusal("attempt ledger terminal lacks one prior start")
             if record.get("startRecordSha256") != starts[call_id]["recordSha256"]:
                 raise ProviderGatewayRefusal("attempt terminal binds the wrong start")
+            if any(record[key] != starts[call_id][key] for key in ("capabilityBindingSha256", "capabilitySlotOrdinal")):
+                raise ProviderGatewayRefusal("attempt terminal capability correlation drifted")
             terminals.add(call_id)
     return records
 
@@ -1148,11 +1248,25 @@ def _load_content_descriptor(
 
 
 def validate_completed_block_gateway_evidence(
-    root: Path, block_id: str
+    root: Path, block_id: str, *, capability_root: Path | None = None
 ) -> Dnrd5CompletedBlockGatewaySummary:
     """Close one actual block's nine durable START/terminal/receipt chains."""
     if _BLOCK_ID.fullmatch(block_id) is None:
         raise ProviderGatewayRefusal("completed block identity is invalid")
+    if capability_root is None:
+        raise ProviderGatewayRefusal("completed block requires an explicit capability-root join")
+    try:
+        capability_calls = validate_completed_dispatch_capability(capability_root)
+    except PreflightDispatchRefusal as error:
+        raise ProviderGatewayRefusal("completed block capability ledger is not independently complete") from error
+    capability_binding = parse_canonical((capability_root / "dispatch_capability.json").read_bytes())
+    if (
+        type(capability_binding) is not dict
+        or capability_binding.get("block_id") != block_id
+        or capability_binding.get("evidence_root_sha256")
+        != sha256(provider_evidence_root_identity(root)).hexdigest()
+    ):
+        raise ProviderGatewayRefusal("completed block capability binding is not this provider root and block")
     records = read_provider_attempt_ledger(root)
     starts = [
         record
@@ -1168,6 +1282,7 @@ def validate_completed_block_gateway_evidence(
         raise ProviderGatewayRefusal(
             "completed block requires exactly nine starts and nine terminals"
         )
+    cap_by_slot = {row["slot_ordinal"]: row for row in capability_calls}
     expected_classes = [
         "PRE_OUTCOME_TRAJECTORY",
         *(["REVISION_PROPOSAL"] * 4),
@@ -1175,6 +1290,11 @@ def validate_completed_block_gateway_evidence(
     ]
     if [record["callClass"] for record in starts] != expected_classes:
         raise ProviderGatewayRefusal("completed block call grammar drifted")
+    if (
+        len({record["capabilityBindingSha256"] for record in starts}) != 1
+        or [record["capabilitySlotOrdinal"] for record in starts] != list(range(1, 10))
+    ):
+        raise ProviderGatewayRefusal("completed block capability correlation is not one exact nine-slot schedule")
     for key in ("callId", "sessionId", "workerId", "privateBindingSha256"):
         if len({record[key] for record in starts}) != 9:
             raise ProviderGatewayRefusal(
@@ -1239,6 +1359,10 @@ def validate_completed_block_gateway_evidence(
             or checked["attemptStartRecordSha256"]
             != start["recordSha256"]
             or checked["attemptOrdinal"] != start["ordinal"]
+            or checked["capabilityBindingSha256"] != start["capabilityBindingSha256"]
+            or checked["capabilitySlotOrdinal"] != start["capabilitySlotOrdinal"]
+            or terminal["capabilityBindingSha256"] != start["capabilityBindingSha256"]
+            or terminal["capabilitySlotOrdinal"] != start["capabilitySlotOrdinal"]
             or checked["requestProjection"] != start["requestProjection"]
             or checked["request"] != start["request"]
             or terminal["observedResponse"] != checked["response"]
@@ -1246,6 +1370,16 @@ def validate_completed_block_gateway_evidence(
             raise ProviderGatewayRefusal(
                 "block receipt does not close its exact durable attempt"
             )
+        if start["capabilitySlotOrdinal"] != starts.index(start) + 1:
+            raise ProviderGatewayRefusal("completed block capability slot order drifted")
+        capability_call = cap_by_slot.get(start["capabilitySlotOrdinal"])
+        if capability_call is None or (
+            capability_call["capability_binding_sha256"] != start["capabilityBindingSha256"]
+            or capability_call["provider_start_record_sha256"] != start["recordSha256"]
+            or capability_call["provider_terminal_record_sha256"] != terminal["recordSha256"]
+            or capability_call["receipt_sha256"] != checked["receiptSha256"]
+        ):
+            raise ProviderGatewayRefusal("completed block provider/capability evidence join drifted")
         rng_digest = checked["rng"]["sha256"]
         if rng_digest in rng_digests:
             raise ProviderGatewayRefusal(
@@ -1308,6 +1442,7 @@ def _append_start(
     request_projection: ContentDescriptor,
     request: ContentDescriptor,
     started_at_unix_ms: int,
+    capability_binding: ProviderDispatchBinding,
 ) -> dict[str, Any]:
     def build(records: list[dict[str, Any]]) -> dict[str, Any]:
         if _unterminated_starts(records):
@@ -1341,6 +1476,8 @@ def _append_start(
             "requestNonce": call.request_nonce,
             "requestProjection": request_projection.projection(),
             "request": request.projection(),
+            "capabilityBindingSha256": capability_binding.capability_binding_sha256,
+            "capabilitySlotOrdinal": capability_binding.slot_ordinal,
             "startedAtUnixMs": started_at_unix_ms,
             "retry": "NONE",
             "terminal": "DURABLY_VISIBLE_BEFORE_SINGLE_DISPATCH",
@@ -1360,6 +1497,7 @@ def _append_terminal(
     observed_response: ContentDescriptor | None,
     failure_code: str | None,
     finished_at_unix_ms: int,
+    capability_binding: ProviderDispatchBinding,
 ) -> dict[str, Any]:
     def build(records: list[dict[str, Any]]) -> dict[str, Any]:
         matching = [
@@ -1378,6 +1516,8 @@ def _append_terminal(
             "callId": call.call_id,
             "callClass": call.call_class,
             "startRecordSha256": start["recordSha256"],
+            "capabilityBindingSha256": capability_binding.capability_binding_sha256,
+            "capabilitySlotOrdinal": capability_binding.slot_ordinal,
             "outcome": outcome,
             "receipt": None if receipt is None else receipt.projection(),
             "observedResponse": (
@@ -1429,6 +1569,7 @@ def _receipt(
     started_at_unix_ms: int,
     finished_at_unix_ms: int,
     elapsed_monotonic_ms: int,
+    capability_binding: ProviderDispatchBinding,
 ) -> dict[str, Any]:
     core = {
         "schemaVersion": RECEIPT_VERSION,
@@ -1441,6 +1582,8 @@ def _receipt(
         "privateBindingSha256": call.private_binding_sha256,
         "attemptOrdinal": start["ordinal"],
         "attemptStartRecordSha256": start["recordSha256"],
+        "capabilityBindingSha256": capability_binding.capability_binding_sha256,
+        "capabilitySlotOrdinal": capability_binding.slot_ordinal,
         "endpoint": config.endpoint,
         "method": "POST",
         "requestHeaders": dict(header_projection),
@@ -1527,6 +1670,8 @@ def validate_provider_receipt(
         "privateBindingSha256",
         "attemptOrdinal",
         "attemptStartRecordSha256",
+        "capabilityBindingSha256",
+        "capabilitySlotOrdinal",
         "endpoint",
         "method",
         "requestHeaders",
@@ -1577,7 +1722,7 @@ def validate_provider_receipt(
         raise ProviderGatewayRefusal("provider receipt frozen constants drifted")
     for key in ("callId", "sessionId", "workerId"):
         _identifier(record[key], f"receipt {key}")
-    for key in ("privateBindingSha256", "attemptStartRecordSha256"):
+    for key in ("privateBindingSha256", "attemptStartRecordSha256", "capabilityBindingSha256"):
         _hash(record[key], f"receipt {key}")
     _validate_endpoint(record["endpoint"])
     if _MODEL_ID.fullmatch(record["expectedModel"] or "") is None:
@@ -1599,6 +1744,7 @@ def validate_provider_receipt(
         raise ProviderGatewayRefusal("receipt provider request id is invalid")
     for key in (
         "attemptOrdinal",
+        "capabilitySlotOrdinal",
         "startedAtUnixMs",
         "finishedAtUnixMs",
         "elapsedMonotonicMs",
@@ -1609,6 +1755,7 @@ def validate_provider_receipt(
             raise ProviderGatewayRefusal(f"receipt {key} is not a safe integer")
     if (
         record["attemptOrdinal"] < 1
+        or not 1 <= record["capabilitySlotOrdinal"] <= 9
         or record["startedAtUnixMs"] > record["finishedAtUnixMs"]
         or record["timeoutMilliseconds"] < 1
     ):
@@ -1779,6 +1926,7 @@ class Dnrd5ProviderGateway:
             or not (root / "attempts.jsonl").is_file()
         ):
             raise ProviderGatewayRefusal("provider evidence root is not initialized")
+        _load_root_genesis(root)
         validate_provider_attempt_ledger_closed(root)
         self._root = root
         self._config = config
@@ -1790,9 +1938,56 @@ class Dnrd5ProviderGateway:
         initialize_provider_evidence_root(root)
         return cls(root, config)
 
-    def execute(self, call: Dnrd5ProviderCall) -> Dnrd5ProviderCallResult:
-        """Consume exactly one call ID and either return accepted bytes or fail terminally."""
+    def execute(
+        self,
+        call: Dnrd5ProviderCall,
+        *,
+        capability: PreflightDispatchCapability | None = None,
+    ) -> Dnrd5ProviderCallResult:
+        """Dispatch only through one live, root-bound nine-slot capability."""
+        # Pure call validation runs before capability consumption and before a
+        # provider START, so malformed inputs cannot burn a block or reach a
+        # transport merely because a caller supplied a capability object.
         _validate_call(call)
+        if type(capability) is not PreflightDispatchCapability:
+            raise ProviderGatewayRefusal(
+                "a live preflight dispatch capability is required before provider START"
+            )
+        identity = provider_evidence_root_identity(self._root)
+        if not capability.binds_evidence_root(identity, call.block_id):
+            raise ProviderGatewayRefusal(
+                "preflight dispatch capability is not bound to this gateway root and block"
+            )
+        slot = DispatchSlot(call.call_id, call.call_class, provider_call_commitment(call, self._config))
+        try:
+            binding = capability.provider_dispatch_binding(slot)
+            return capability.dispatch(
+                slot,
+                lambda: self._execute_capability_checked(
+                    call,
+                    _CAPABILITY_RAW_TOKEN,
+                    binding,
+                ),
+            )
+        except PreflightDispatchRefusal as error:
+            raise ProviderGatewayRefusal(str(error)) from error
+
+    def _execute_capability_checked(
+        self,
+        call: Dnrd5ProviderCall,
+        token: object,
+        capability_binding: ProviderDispatchBinding,
+    ) -> Dnrd5ProviderCallResult:
+        """Module-private raw path; not a hostile-reflection security boundary."""
+        if token is not _CAPABILITY_RAW_TOKEN or type(capability_binding) is not ProviderDispatchBinding:
+            raise ProviderGatewayRefusal("raw provider path refuses without the module-held capability token")
+        if (
+            capability_binding.call_id != call.call_id
+            or capability_binding.call_class != call.call_class
+            or capability_binding.call_commitment_sha256 != provider_call_commitment(call, self._config)
+            or not 1 <= capability_binding.slot_ordinal <= 9
+        ):
+            raise ProviderGatewayRefusal("raw provider path capability correlation drifted")
         request_projection_bytes, request_bytes = build_provider_request(
             call, self._config
         )
@@ -1819,6 +2014,7 @@ class Dnrd5ProviderGateway:
             request_projection,
             request,
             started_at_unix_ms,
+            capability_binding,
         )
         headers, header_projection = _request_headers(
             self._config, call.request_nonce
@@ -1866,6 +2062,7 @@ class Dnrd5ProviderGateway:
                 started_at_unix_ms=started_at_unix_ms,
                 finished_at_unix_ms=finished_at_unix_ms,
                 elapsed_monotonic_ms=elapsed_ms,
+                capability_binding=capability_binding,
             )
             receipt_bytes = canonical_bytes(receipt)
             receipt_descriptor = _descriptor(RECEIPT_MEDIA_TYPE, receipt_bytes)
@@ -1874,7 +2071,7 @@ class Dnrd5ProviderGateway:
                 call, request_projection_bytes, request_bytes, observation.body
             )
             validate_provider_receipt(receipt_bytes, content)
-            _append_terminal(
+            terminal_record = _append_terminal(
                 self._root,
                 call,
                 start,
@@ -1883,6 +2080,7 @@ class Dnrd5ProviderGateway:
                 observed_response=response,
                 failure_code=None,
                 finished_at_unix_ms=finished_at_unix_ms,
+                capability_binding=capability_binding,
             )
             return Dnrd5ProviderCallResult(
                 receipt=dict(receipt),
@@ -1890,8 +2088,12 @@ class Dnrd5ProviderGateway:
                 request_projection_bytes=request_projection_bytes,
                 request_bytes=request_bytes,
                 response_bytes=observation.body,
+                dispatch_evidence=ProviderDispatchEvidence(
+                    "PROVIDER_EVIDENCE", capability_binding.call_commitment_sha256,
+                    start["recordSha256"], terminal_record["recordSha256"], receipt["receiptSha256"],
+                ),
             )
-        except ProviderGatewayExecutionError as error:
+        except BaseException as error:
             finished_at_unix_ms = max(
                 started_at_unix_ms, time.time_ns() // 1_000_000
             )
@@ -1900,16 +2102,18 @@ class Dnrd5ProviderGateway:
                 if observation is None
                 else _descriptor(JSON_MEDIA_TYPE, observation.body)
             )
-            _append_terminal(
-                self._root,
-                call,
-                start,
-                outcome="FAILED",
-                receipt=None,
-                observed_response=observed,
-                failure_code=error.failure_code,
-                finished_at_unix_ms=finished_at_unix_ms,
-            )
+            failure_code = error.failure_code if isinstance(error, ProviderGatewayExecutionError) else "POST_START_BASE_EXCEPTION"
+            try:
+                _append_terminal(
+                    self._root, call, start, outcome="FAILED", receipt=None,
+                    observed_response=observed, failure_code=failure_code,
+                    finished_at_unix_ms=finished_at_unix_ms,
+                    capability_binding=capability_binding,
+                )
+            except BaseException:
+                # A durable START without a verifiable terminal is permanently
+                # refused by constructor/ledger validation on every later use.
+                pass
             raise
 
 
@@ -1922,11 +2126,13 @@ __all__ = [
     "Dnrd5ProviderConfig",
     "Dnrd5ProviderGateway",
     "GATEWAY_VERSION",
+    "EVIDENCE_ROOT_IDENTITY_VERSION",
     "ProviderGatewayExecutionError",
     "ProviderGatewayRefusal",
     "RECEIPT_VERSION",
     "build_provider_request",
     "initialize_provider_evidence_root",
+    "provider_evidence_root_identity",
     "read_provider_attempt_ledger",
     "validate_provider_attempt_ledger_closed",
     "validate_provider_receipt",

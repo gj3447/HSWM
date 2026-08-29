@@ -20,9 +20,16 @@ from _research.dgx_mi.launcher import MiLease, MiLeaseSpec
 from _research.dgx_q1.github_ci_receipt import GitHubCiReceiptRefusal, parse_github_actions_ci_receipt
 from _research.dgx_q1.live_protocol import validate_response_schema
 
-LEDGER_SCHEMA = "hswm-dgx-qcase024-mi-ledger/v3"
+LEDGER_SCHEMA = "hswm-dgx-qcase024-mi-ledger/v4"
 ZERO = "0" * 64
 MAX_BLOB = 16 * 1024 * 1024
+MAX_CONTENT = 1_048_576
+TERMINAL_TOKEN = "<|im_end|>"
+TERMINAL_BYTES = TERMINAL_TOKEN.encode("utf-8")
+
+
+class MiLogprobUnavailable(MiRefusal):
+    """The provider response cannot satisfy the frozen v4 trace contract."""
 
 
 @dataclass(frozen=True, slots=True)
@@ -102,8 +109,8 @@ def _strict_provider_json(raw: bytes) -> Any:
         raise MiRefusal("MI provider JSON is not strict finite UTF-8 JSON") from error
 
 
-def _normalize_usage_v3(value: Any) -> dict[str, int]:
-    """Validate the closed v3 usage surface while retaining the raw envelope."""
+def _normalize_usage_v4(value: Any) -> dict[str, int]:
+    """Validate the closed v4 usage surface while retaining the raw envelope."""
     core = ("prompt_tokens", "completion_tokens", "total_tokens")
     required = set(core)
     allowed = required | {"prompt_tokens_details"}
@@ -119,6 +126,130 @@ def _normalize_usage_v3(value: Any) -> dict[str, int]:
     if value["prompt_tokens"] + value["completion_tokens"] != value["total_tokens"]:
         raise MiRefusal("MI usage token accounting drifted")
     return {name: value[name] for name in core}
+
+
+def _normalize_content_v4(content: bytes, schema: dict[str, Any]) -> tuple[Any, bytes]:
+    """Parse ordinary strict JSON, then derive a bounded canonical diagnostic."""
+    if type(content) is not bytes or not content or len(content) > MAX_CONTENT:
+        raise MiRefusal("MI assistant content UTF-8 byte bound drifted")
+    instance = _strict_provider_json(content)
+    try:
+        validate_response_schema(schema, instance, instance=True)
+        diagnostic = canonical_bytes(instance)
+    except Exception as error:
+        raise MiRefusal("MI assistant content schema or bounded JSON value drifted") from error
+    return instance, diagnostic
+
+
+def _token_row_v4(value: Any) -> tuple[bytes, Decimal, list[tuple[str, bytes, Decimal]]]:
+    if type(value) is not dict or set(value) != {"token", "bytes", "logprob", "top_logprobs"}:
+        raise MiLogprobUnavailable("MI logprob token row key set drifted")
+    if type(value["token"]) is not str or not value["token"]:
+        raise MiLogprobUnavailable("MI logprob token text drifted")
+    byte_values = value["bytes"]
+    if (type(byte_values) is not list or not byte_values
+            or any(type(item) is not int or not 0 <= item <= 255 for item in byte_values)):
+        raise MiLogprobUnavailable("MI logprob token bytes drifted")
+    score = value["logprob"]
+    if type(score) not in {int, Decimal} or not Decimal(score).is_finite():
+        raise MiLogprobUnavailable("MI logprob selected score drifted")
+    top = value["top_logprobs"]
+    if type(top) is not list or len(top) != 20:
+        raise MiLogprobUnavailable("MI logprob top20 cardinality drifted")
+    candidates: list[tuple[str, bytes, Decimal]] = []
+    identities: set[tuple[str, bytes]] = set()
+    for candidate in top:
+        if type(candidate) is not dict or set(candidate) != {"token", "bytes", "logprob"}:
+            raise MiLogprobUnavailable("MI logprob candidate key set drifted")
+        candidate_bytes = candidate["bytes"]
+        candidate_score = candidate["logprob"]
+        if (type(candidate["token"]) is not str or not candidate["token"]
+                or type(candidate_bytes) is not list or not candidate_bytes
+                or any(type(item) is not int or not 0 <= item <= 255 for item in candidate_bytes)
+                or type(candidate_score) not in {int, Decimal}
+                or not Decimal(candidate_score).is_finite()):
+            raise MiLogprobUnavailable("MI logprob candidate value drifted")
+        identity = (candidate["token"], bytes(candidate_bytes))
+        if identity in identities:
+            raise MiLogprobUnavailable("MI logprob top20 candidate identity is duplicated")
+        identities.add(identity)
+        candidates.append((candidate["token"], bytes(candidate_bytes), Decimal(candidate_score)))
+    selected = (value["token"], bytes(byte_values), Decimal(score))
+    if selected not in candidates:
+        raise MiLogprobUnavailable("MI selected token is absent from its exact logprob top20")
+    return selected[1], selected[2], candidates
+
+
+def _decimal_lexeme_v4(value: Any) -> str:
+    decimal = Decimal(value)
+    if not decimal.is_finite():
+        raise MiLogprobUnavailable("MI logprob projection contains a nonfinite score")
+    if decimal == 0:
+        return "0"
+    sign, raw_digits, exponent = decimal.as_tuple()
+    digits = list(raw_digits)
+    while len(digits) > 1 and digits[-1] == 0:
+        digits.pop(); exponent += 1
+    adjusted = exponent + len(digits) - 1
+    coefficient = str(digits[0])
+    if len(digits) > 1:
+        coefficient += "." + "".join(str(item) for item in digits[1:])
+    suffix = "" if adjusted == 0 else f"E{adjusted}"
+    return ("-" if sign else "") + coefficient + suffix
+
+
+def _trace_projection_v4(rows: list[dict[str, Any]]) -> bytes:
+    projection = []
+    for row in rows:
+        projection.append({
+            "token": row["token"],
+            "bytes": row["bytes"],
+            "logprob": _decimal_lexeme_v4(row["logprob"]),
+            "top_logprobs": [{
+                "token": candidate["token"],
+                "bytes": candidate["bytes"],
+                "logprob": _decimal_lexeme_v4(candidate["logprob"]),
+            } for candidate in row["top_logprobs"]],
+        })
+    try:
+        return canonical_bytes(projection)
+    except Exception as error:
+        raise MiLogprobUnavailable("MI canonical logprob trace projection drifted") from error
+
+
+def _trace_v4(envelope_value: Any, envelope_raw: bytes, content: bytes) -> bytes:
+    """Validate content rows plus one final Qwen terminal row; retain all rows."""
+    try:
+        choices = envelope_value.get("choices") if type(envelope_value) is dict else None
+        if type(choices) is not list or len(choices) != 1 or type(choices[0]) is not dict:
+            raise MiLogprobUnavailable("MI logprob choice surface drifted")
+        choice = choices[0]
+        message = choice.get("message")
+        if (type(message) is not dict or type(message.get("content")) is not str
+                or message["content"].encode("utf-8", errors="strict") != content):
+            raise MiLogprobUnavailable("MI logprob content join drifted")
+        logprobs = choice.get("logprobs")
+        if type(logprobs) is not dict or set(logprobs) != {"content"}:
+            raise MiLogprobUnavailable("MI logprobs key set drifted")
+        raw_rows = logprobs["content"]
+        if type(raw_rows) is not list or len(raw_rows) < 2:
+            raise MiLogprobUnavailable("MI logprob rows lack content plus terminal")
+        rows = [_token_row_v4(row) for row in raw_rows]
+        terminal_raw = raw_rows[-1]
+        if terminal_raw["token"] != TERMINAL_TOKEN or rows[-1][0] != TERMINAL_BYTES:
+            raise MiLogprobUnavailable("MI logprob final terminal token drifted")
+        for prior_raw, prior in zip(raw_rows[:-1], rows[:-1]):
+            if prior_raw["token"] == TERMINAL_TOKEN or prior[0] == TERMINAL_BYTES:
+                raise MiLogprobUnavailable("MI logprob terminal token is nonfinal or repeated")
+        if b"".join(row[0] for row in rows[:-1]) != content:
+            raise MiLogprobUnavailable("MI logprob semantic token byte alignment drifted")
+        if type(envelope_raw) is not bytes or not envelope_raw:
+            raise MiLogprobUnavailable("MI raw logprob envelope is absent")
+        return _trace_projection_v4(raw_rows)
+    except MiLogprobUnavailable:
+        raise
+    except Exception as error:
+        raise MiLogprobUnavailable("MI response lacks the frozen token logprob alignment") from error
 
 
 class MiRunner:
@@ -179,7 +310,7 @@ class MiRunner:
             cache_paths |= {spec.hf_cache,spec.compile_cache}
 
     def _burn(self) -> dict[str, Any]:
-        digest = sha256(self.plan_raw).hexdigest(); raw = canonical_bytes({"schema_version":"hswm-dgx-qcase024-mi-plan-consumption/v3", "plan_sha256":digest, "closure_manifest_sha256":sha256(self.closure_raw).hexdigest(), "evidence_root":str(self.root), "registry_path":str(self.registry), "terminal":"PLAN_BURNED_BEFORE_ANY_MI_TARGET_LAUNCH_NO_REUSE"})
+        digest = sha256(self.plan_raw).hexdigest(); raw = canonical_bytes({"schema_version":"hswm-dgx-qcase024-mi-plan-consumption/v4", "plan_sha256":digest, "closure_manifest_sha256":sha256(self.closure_raw).hexdigest(), "evidence_root":str(self.root), "registry_path":str(self.registry), "terminal":"PLAN_BURNED_BEFORE_ANY_MI_TARGET_LAUNCH_NO_REUSE"})
         target = self.registry / (digest + ".consumed"); fd, tmp = tempfile.mkstemp(prefix=".mi-burn-", dir=self.registry)
         try:
             with os.fdopen(fd,"wb") as f: f.write(raw); f.flush(); os.fsync(f.fileno())
@@ -192,24 +323,6 @@ class MiRunner:
 
     def _seal(self, status: str, started: int, succeeded: int, failure: str | None, blocks: list[dict[str,Any]]) -> None:
         _append(self.root, {"schema_version":LEDGER_SCHEMA,"record_type":"RUN_SEAL","status":status,"started_slots":started,"successful_slots":succeeded,"failed_slots":started-succeeded,"failure_code":failure,"blocks":blocks,"retry":"NONE","retry_allowed":False,"terminal":"MI_ROOT_SEALED_NO_RESUME_OR_REPLACEMENT"}); self.sealed=True
-
-    @staticmethod
-    def _trace(envelope: bytes) -> bytes:
-        try:
-            # Provider logprob values are JSON numbers (normally floats), which
-            # are intentionally outside canonical-json/v1.  Preserve a strict,
-            # deterministic JSON projection of the trace as evidence while the
-            # raw envelope remains the primary exact byte artifact.
-            value=_strict_provider_json(envelope); choice=value["choices"][0]; log=choice["logprobs"]["content"]
-            if type(log) is not list: raise ValueError
-            if any(type(row) is not dict or type(row.get("top_logprobs")) is not list or not 1 <= len(row["top_logprobs"]) <= 20 for row in log):
-                raise ValueError
-            # Keep the projection byte-compatible with the independent
-            # verifier.  `_strict_provider_json` above still rejects duplicate
-            # and nonfinite input before ordinary JSON renders the trace.
-            ordinary=json.loads(envelope.decode("utf-8", errors="strict"))
-            return json.dumps(ordinary["choices"][0]["logprobs"]["content"], ensure_ascii=True, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("ascii")
-        except Exception as e: raise MiRefusal("MI response lacks bounded token logprob trace") from e
 
     def execute(self) -> None:
         if self.sealed: raise MiRefusal("MI root sealed")
@@ -235,24 +348,25 @@ class MiRunner:
                         _append(self.root,{"schema_version":LEDGER_SCHEMA,"record_type":"BLOCK_START","arm":arm,"block_id":block,"block_index":index,"server_identity":server_identity,"pre_boundary_attestation":_put(self.root,pre),"retry":"NONE","terminal":"FRESH_SERVER_AND_CACHE_BOUND_BEFORE_BLOCK_POSTS"})
                         block_ok=0
                         for rep in range(1,5):
-                            attempt=f"MI-024-V3-{arm}-{block}-R{rep:03d}"; pre=lease.attest("PRE",rep-1)
+                            attempt=f"MI-024-V4-{arm}-{block}-R{rep:03d}"; pre=lease.attest("PRE",rep-1)
                             start=_append(self.root,{"schema_version":LEDGER_SCHEMA,"record_type":"START","attempt_id":attempt,"arm":arm,"block_id":block,"replicate":rep,"request":_desc(self.request_raw),"response_schema":_desc(self.schema_raw),"plan_sha256":sha256(self.plan_raw).hexdigest(),"pre_boundary_attestation":_put(self.root,pre),"retry":"NONE","terminal":"DURABLY_VISIBLE_BEFORE_SINGLE_MI_POST"}); started+=1
                             obs: MiObservation | None = None; raw = None; post = None
                             try:
                                 obs=self.transport(spec.endpoint,self.request_raw); raw=_put(self.root,obs.body); post=_put(self.root,lease.attest("POST",rep)); value=_strict_provider_json(obs.body)
                                 choice=value.get("choices") if type(value) is dict else None
-                                usage=_normalize_usage_v3(value.get("usage") if type(value) is dict else None)
+                                usage=_normalize_usage_v4(value.get("usage") if type(value) is dict else None)
                                 expected_model=parse_canonical(self.identities[arm]["model_identity_sha256"])["model"]
                                 if (obs.status != 200 or value.get("model") != expected_model or type(choice) is not list or len(choice) != 1
                                         or type(choice[0]) is not dict or choice[0].get("finish_reason") != "stop"
                                         or type(choice[0].get("message")) is not dict or type(choice[0]["message"].get("content")) is not str
                                         or set(usage)!={"prompt_tokens","completion_tokens","total_tokens"}): raise MiRefusal("MI response envelope/content drifted")
-                                content=choice[0]["message"]["content"].encode("utf-8"); trace=self._trace(obs.body)
-                                instance=parse_canonical(content); validate_response_schema(parse_canonical(self.schema_raw), instance, instance=True)
-                                _append(self.root,{"schema_version":LEDGER_SCHEMA,"record_type":"TERMINAL","attempt_id":attempt,"arm":arm,"block_id":block,"replicate":rep,"start_record_sha256":start["record_sha256"],"observation":{"status":obs.status,"response_content_type":obs.content_type,"provider_request_id":obs.request_id},"raw_envelope":raw,"model_content_utf8":_put(self.root,content),"structured_content_diagnostic":_put(self.root,canonical_bytes(parse_canonical(content))),"token_logprob_trace":_put(self.root,trace),"post_boundary_attestation":post,"outcome":"SUCCEEDED","failure_code":None,"retry":"NONE","retry_allowed":False,"terminal":"MI_SLOT_CONSUMED_NO_RETRY_OR_REPLACEMENT"}); succeeded+=1; block_ok+=1
+                                content=choice[0]["message"]["content"].encode("utf-8", errors="strict")
+                                _, diagnostic=_normalize_content_v4(content, parse_canonical(self.schema_raw))
+                                trace=_trace_v4(value, obs.body, content)
+                                _append(self.root,{"schema_version":LEDGER_SCHEMA,"record_type":"TERMINAL","attempt_id":attempt,"arm":arm,"block_id":block,"replicate":rep,"start_record_sha256":start["record_sha256"],"observation":{"status":obs.status,"response_content_type":obs.content_type,"provider_request_id":obs.request_id},"raw_envelope":raw,"model_content_utf8":_put(self.root,content),"structured_content_diagnostic":_put(self.root,diagnostic),"token_logprob_trace":_put(self.root,trace),"post_boundary_attestation":post,"outcome":"SUCCEEDED","failure_code":None,"retry":"NONE","retry_allowed":False,"terminal":"MI_SLOT_CONSUMED_NO_RETRY_OR_REPLACEMENT"}); succeeded+=1; block_ok+=1
                             except Exception as e:
                                 observation = None if obs is None else {"status":obs.status,"response_content_type":obs.content_type,"provider_request_id":obs.request_id}
-                                _append(self.root,{"schema_version":LEDGER_SCHEMA,"record_type":"TERMINAL","attempt_id":attempt,"arm":arm,"block_id":block,"replicate":rep,"start_record_sha256":start["record_sha256"],"observation":observation,"raw_envelope":raw,"model_content_utf8":None,"structured_content_diagnostic":None,"token_logprob_trace":None,"post_boundary_attestation":post,"outcome":"FAILED","failure_code":type(e).__name__.upper(),"retry":"NONE","retry_allowed":False,"terminal":"MI_SLOT_CONSUMED_NO_RETRY_OR_REPLACEMENT"}); block_summaries.append({"arm":arm,"block_id":block,"server_identity":server_identity,"started_slots":rep,"successful_slots":block_ok,"final_boundary_attestation":None}); status="INCONCLUSIVE_DGX_QCASE024_MI_REQUIRED_LOGPROB_OR_ALIGNMENT_UNAVAILABLE" if raw is not None and "logprob" in str(e).lower() else "INCONCLUSIVE_DGX_QCASE024_MI_INCOMPLETE_LIVE_SLOTS"; self._seal(status,started,succeeded,type(e).__name__.upper(),block_summaries); return
+                                _append(self.root,{"schema_version":LEDGER_SCHEMA,"record_type":"TERMINAL","attempt_id":attempt,"arm":arm,"block_id":block,"replicate":rep,"start_record_sha256":start["record_sha256"],"observation":observation,"raw_envelope":raw,"model_content_utf8":None,"structured_content_diagnostic":None,"token_logprob_trace":None,"post_boundary_attestation":post,"outcome":"FAILED","failure_code":type(e).__name__.upper(),"retry":"NONE","retry_allowed":False,"terminal":"MI_SLOT_CONSUMED_NO_RETRY_OR_REPLACEMENT"}); block_summaries.append({"arm":arm,"block_id":block,"server_identity":server_identity,"started_slots":rep,"successful_slots":block_ok,"final_boundary_attestation":None}); status="INCONCLUSIVE_DGX_QCASE024_MI_REQUIRED_LOGPROB_OR_ALIGNMENT_UNAVAILABLE" if isinstance(e, MiLogprobUnavailable) else "INCONCLUSIVE_DGX_QCASE024_MI_INCOMPLETE_LIVE_SLOTS"; self._seal(status,started,succeeded,type(e).__name__.upper(),block_summaries); return
                         final=_put(self.root,lease.attest("FINAL",4)); block_summaries.append({"arm":arm,"block_id":block,"server_identity":server_identity,"started_slots":4,"successful_slots":block_ok,"final_boundary_attestation":final})
                 except Exception as e: self._seal("VOID_DGX_QCASE024_MI_PROTOCOL_LEDGER_HASH_ORDER_OR_BOUNDARY_BREACH",started,succeeded,type(e).__name__.upper(),block_summaries); return
             self._seal("LIVE_COMPLETE_DGX_QCASE024_MECHANISM_DIAGNOSTIC",started,succeeded,None,block_summaries)

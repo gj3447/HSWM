@@ -13,25 +13,53 @@ from typing import Any, Mapping
 from _research.dnrd5.canonical_json import CanonicalJsonError, canonical_bytes, parse_canonical
 from _research.dgx_q1.live_protocol import SYSTEM_MESSAGE, validate_response_schema
 
-PLAN_SCHEMA = "hswm-dgx-qcase024-mi-plan/v3"
-MARKER_SCHEMA = "hswm-dgx-qcase024-mi-start-marker/v3"
-NAMESPACE = "DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v3"
-RUNNER_VERSION = "hswm-dgx-qcase024-mi-runner/v3"
-FREEZE_SCHEMA = "hswm-dgx-qcase024-mi-preregistration-freeze/v3"
+PLAN_SCHEMA = "hswm-dgx-qcase024-mi-plan/v4"
+MARKER_SCHEMA = "hswm-dgx-qcase024-mi-start-marker/v4"
+NAMESPACE = "DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v4"
+RUNNER_VERSION = "hswm-dgx-qcase024-mi-runner/v4"
+FREEZE_SCHEMA = "hswm-dgx-qcase024-mi-preregistration-freeze/v4"
 REGISTRY = {
-    "schema_version": "hswm-dgx-qcase024-mi-plan-consumption-registry/v3",
-    "path": "/mnt/hswm/evidence/hswm-dnrd5-qcase024-mi-1-usage-v3-consumption-v3",
+    "schema_version": "hswm-dgx-qcase024-mi-plan-consumption-registry/v4",
+    "path": "/mnt/hswm/evidence/hswm-dnrd5-qcase024-mi-1-content-v4-consumption-v4",
     "scope": "PINNED_DGX_NODE_LOCAL_DURABLE_PLAN_HASH_REGISTRY",
     "boundary": "NODE_LOCAL_PATH_BINDING_NOT_DISTRIBUTED_GLOBAL_CONSENSUS",
     "terminal": "ONE_DURABLE_BURN_PER_PLAN_HASH_AT_THE_DECLARED_PATH",
 }
 USAGE_NORMALIZATION = {
-    "schema_version": "hswm-dgx-qcase024-mi-usage-normalization/v3",
+    "schema_version": "hswm-dgx-qcase024-mi-usage-normalization/v4",
     "required_integer_fields": ["prompt_tokens", "completion_tokens", "total_tokens"],
     "optional_null_fields": ["prompt_tokens_details"],
     "unknown_fields": "REFUSE",
     "invariant": "PROMPT_TOKENS_PLUS_COMPLETION_TOKENS_EQUALS_TOTAL_TOKENS",
     "boundary": "RAW_PROVIDER_ENVELOPE_RETAINED_WITHOUT_DROPPING_NULL_DETAIL_FIELD",
+}
+CONTENT_NORMALIZATION = {
+    "schema_version": "hswm-dgx-qcase024-mi-content-normalization/v4",
+    "content_encoding": "UTF8",
+    "assistant_content_json": "STRICT_FINITE_DUPLICATE_KEY_REFUSING_JSON",
+    "content_max_utf8_bytes": 1_048_576,
+    "max_json_depth": 128,
+    "max_json_nodes": 100_000,
+    "max_safe_integer": 9_007_199_254_740_991,
+    "assistant_content_bytes": "RETAIN_EXACT_PROVIDER_UTF8",
+    "structured_diagnostic": "CANONICAL_JSON_PROJECTION_AFTER_RESPONSE_SCHEMA_VALIDATION",
+    "unknown_normalization": "REFUSE",
+}
+TOKEN_ALIGNMENT = {
+    "schema_version": "hswm-dgx-qcase024-mi-token-alignment/v4",
+    "logprob_path": "choices[0].logprobs.content",
+    "semantic_alignment": "NONTERMINAL_TOKEN_BYTES_EXACTLY_EQUAL_ASSISTANT_CONTENT_UTF8",
+    "terminal_token": "<|im_end|>",
+    "terminal_token_bytes": [60, 124, 105, 109, 95, 101, 110, 100, 124, 62],
+    "terminal_token_utf8_sha256": "d6b60b51acc9448b15da9cb03f644d0ec8c410e37735817f39e15764aa75a37f",
+    "terminal_position": "EXACTLY_ONE_FINAL_LOGPROB_ROW",
+    "terminal_in_semantic_content": False,
+    "terminal_in_full_trace": True,
+    "top_logprobs_per_row": 20,
+    "top_logprob_candidate_identity": "UNIQUE_TOKEN_AND_BYTES_PER_ROW",
+    "trace_projection": "CANONICAL_JSON_WITH_EXACT_NORMALIZED_DECIMAL_STRINGS",
+    "unknown_alignment": "REFUSE",
+    "boundary": "TERMINAL_ROW_RETAINED_IN_RAW_ENVELOPE_AND_TRACE_EXCLUDED_FROM_CONTENT_COMPARISONS",
 }
 ARMS = ("ASYNC_ENABLED", "ASYNC_DISABLED")
 BLOCKS = (
@@ -55,7 +83,7 @@ IDENTITY_NAMES = (
 )
 _SHA = re.compile(r"^[0-9a-f]{64}$")
 _GIT = re.compile(r"^[0-9a-f]{40}$")
-_ATTEMPT = re.compile(r"^MI-024-V3-(ASYNC_ENABLED|ASYNC_DISABLED)-B0[12]-R00[1-4]$")
+_ATTEMPT = re.compile(r"^MI-024-V4-(ASYNC_ENABLED|ASYNC_DISABLED)-B0[12]-R00[1-4]$")
 EXPECTED_MATERIAL_SHA256 = {
     "instruction.txt": "8e13131449ba0f31cb7305490dec680f6808006db2e5b50cc8614b172c85b907",
     "model_input.json": "5902dec004e606aaf46b8a5d80c45ab855f275d714d111b2430d86d0e1c1a273",
@@ -193,7 +221,7 @@ def validate_arm_identities(identities: Mapping[str, Mapping[str, bytes]]) -> No
             raise MiRefusal("MI endpoint/model/snapshot/TLS identity join drifted")
         runtime_keys = {"schema_version", "container_image", "image_id", "vllm_version", "gpu_uuid", "gpu_name", "gpu_driver_version", "gpu_compute_capability", "endpoint", "served_model", "model_revision", "model_snapshot_manifest_sha256", "max_model_len", "max_num_seqs", "gpu_memory_utilization_milli", "prefix_cache", "enforce_eager", "batch_invariant", "v1_multiprocessing", "model_loading_offline", "generation_config", "engine_seed", "language_model_only", "container_internal_port", "container_network_mode", "container_ipc_mode", "host_publish_ip", "async_scheduling", "server_arguments", "required_environment", "max_logprobs", "logprobs_mode"}
         if (set(runtime) != runtime_keys
-                or runtime.get("schema_version") != "hswm-dgx-qcase024-mi-runtime-identity/v3"
+                or runtime.get("schema_version") != "hswm-dgx-qcase024-mi-runtime-identity/v4"
                 or runtime.get("max_num_seqs") != 1 or runtime.get("prefix_cache") is not False
                 or runtime.get("enforce_eager") is not True or runtime.get("batch_invariant") is not False
                 or runtime.get("v1_multiprocessing") is not False or runtime.get("engine_seed") != 0
@@ -241,14 +269,17 @@ def validate_mi_plan(raw: bytes) -> dict[str, Any]:
     plan = _canonical(raw, "MI plan")
     keys = {"schema_version", "namespace", "source", "runner_version", "material", "request_sha256", "attempt_ids",
             "post_result_selection", "arms", "block_order", "attempts_per_block", "budget", "zero_retry",
-            "consumption_registry", "usage_normalization", "verifier", "evidence_root_genesis_sha256", "allowed_terminals", "nonclaims"}
+            "consumption_registry", "usage_normalization", "content_normalization", "token_alignment",
+            "verifier", "evidence_root_genesis_sha256", "allowed_terminals", "nonclaims"}
     plan = _obj(plan, keys, "MI plan")
     if (plan["schema_version"] != PLAN_SCHEMA or plan["namespace"] != NAMESPACE
             or plan["runner_version"] != RUNNER_VERSION or plan["attempts_per_block"] != 4
             or plan["budget"] != 16 or plan["zero_retry"] is not True
             or plan["consumption_registry"] != REGISTRY or plan["nonclaims"] != list(NONCLAIMS)
             or plan["allowed_terminals"] != list(TERMINALS)
-            or plan["usage_normalization"] != USAGE_NORMALIZATION):
+            or plan["usage_normalization"] != USAGE_NORMALIZATION
+            or plan["content_normalization"] != CONTENT_NORMALIZATION
+            or plan["token_alignment"] != TOKEN_ALIGNMENT):
         raise MiRefusal("MI plan static boundary drifted")
     _source(plan["source"], "MI source")
     material = _obj(plan["material"], {"case_id", "instruction_sha256", "model_input_sha256", "response_schema_sha256", "rng_sha256", "max_output_tokens"}, "MI material")
@@ -276,7 +307,7 @@ def validate_mi_plan(raw: bytes) -> dict[str, Any]:
         for digest in item.values(): _digest(digest, arm)
     if plan["block_order"] != [{"arm": arm, "block_id": block} for arm, block in BLOCKS]:
         raise MiRefusal("MI must use the fixed ABBA fresh-server block order")
-    attempts = [f"MI-024-V3-{arm}-{block}-R{rep:03d}" for arm, block in BLOCKS for rep in range(1, 5)]
+    attempts = [f"MI-024-V4-{arm}-{block}-R{rep:03d}" for arm, block in BLOCKS for rep in range(1, 5)]
     if len(attempts) != 16 or plan["attempt_ids"] != attempts or any(_ATTEMPT.fullmatch(item) is None for item in attempts):
         raise MiRefusal("MI attempt domain drifted")
     verifier = _obj(plan["verifier"], {"source", "build_output_sha256"}, "MI verifier")
@@ -289,7 +320,7 @@ def make_mi_start_marker(plan_raw: bytes) -> bytes:
     plan = validate_mi_plan(plan_raw)
     return canonical_bytes({"schema_version": MARKER_SCHEMA, "namespace": NAMESPACE,
         "plan_sha256": sha256(plan_raw).hexdigest(), "request_sha256": plan["request_sha256"],
-        "scheduled_attempts": [f"MI-024-V3-{arm}-{block}-R{rep:03d}" for arm, block in BLOCKS for rep in range(1, 5)],
+        "scheduled_attempts": [f"MI-024-V4-{arm}-{block}-R{rep:03d}" for arm, block in BLOCKS for rep in range(1, 5)],
         "terminal": "ALL_16_SERIALIZED_POSTS_AND_LOGPROB_OBSERVABILITY_BOUND_BEFORE_LIVE_START",
         "nonclaims": list(NONCLAIMS)})
 

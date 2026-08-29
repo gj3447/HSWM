@@ -5,8 +5,9 @@ import pytest
 
 from _research.dnrd5.canonical_json import canonical_bytes, parse_canonical
 from _research.dgx_mi.protocol import (
-    ARMS, BLOCKS, EXPECTED_REQUEST_SHA256, MiRefusal, build_mi_request, make_mi_start_marker,
-    USAGE_NORMALIZATION, validate_arm_identities, validate_mi_plan,
+    ARMS, BLOCKS, CONTENT_NORMALIZATION, EXPECTED_REQUEST_SHA256, MiRefusal,
+    TOKEN_ALIGNMENT, USAGE_NORMALIZATION, build_mi_request, make_mi_start_marker,
+    validate_arm_identities, validate_mi_plan,
 )
 from _research.dgx_mi.preregistration import load_qcase024_material
 from _research.dgx_q1.live_protocol import LiveQ1CaseMaterial, build_live_q1_request
@@ -85,11 +86,14 @@ def test_start_marker_uses_exact_abba_sixteen_attempts(mi_plan_raw: bytes) -> No
     marker = parse_canonical(make_mi_start_marker(mi_plan_raw))
     assert [(row["arm"], row["block_id"]) for row in parse_canonical(mi_plan_raw)["block_order"]] == list(BLOCKS)
     assert len(marker["scheduled_attempts"]) == 16
-    assert marker["scheduled_attempts"][:4] == ["MI-024-V3-ASYNC_ENABLED-B01-R001", "MI-024-V3-ASYNC_ENABLED-B01-R002", "MI-024-V3-ASYNC_ENABLED-B01-R003", "MI-024-V3-ASYNC_ENABLED-B01-R004"]
+    assert marker["scheduled_attempts"][:4] == ["MI-024-V4-ASYNC_ENABLED-B01-R001", "MI-024-V4-ASYNC_ENABLED-B01-R002", "MI-024-V4-ASYNC_ENABLED-B01-R003", "MI-024-V4-ASYNC_ENABLED-B01-R004"]
 
 
-def test_plan_binds_the_closed_usage_normalization_contract(mi_plan_raw: bytes) -> None:
-    assert parse_canonical(mi_plan_raw)["usage_normalization"] == USAGE_NORMALIZATION
+def test_plan_binds_all_closed_measurement_contracts(mi_plan_raw: bytes) -> None:
+    plan = parse_canonical(mi_plan_raw)
+    assert plan["usage_normalization"] == USAGE_NORMALIZATION
+    assert plan["content_normalization"] == CONTENT_NORMALIZATION
+    assert plan["token_alignment"] == TOKEN_ALIGNMENT
 
 
 def test_plan_refuses_nonzero_retry_or_wrong_budget(mi_plan_raw: bytes) -> None:
@@ -103,3 +107,6 @@ def test_plan_refuses_nonzero_retry_or_wrong_budget(mi_plan_raw: bytes) -> None:
     with pytest.raises(MiRefusal): validate_mi_plan(canonical_bytes(plan))
     plan = parse_canonical(mi_plan_raw); plan["request_sha256"] = "1" * 64
     with pytest.raises(MiRefusal): validate_mi_plan(canonical_bytes(plan))
+    for contract in ("usage_normalization", "content_normalization", "token_alignment"):
+        plan = parse_canonical(mi_plan_raw); plan[contract]["schema_version"] += "-drift"
+        with pytest.raises(MiRefusal): validate_mi_plan(canonical_bytes(plan))

@@ -104,7 +104,7 @@ def run_mi_experiment(*, evidence_root: Path, plan_raw: bytes, marker_raw: bytes
         if restore_shared_services is not None: restore_shared_services()
     rows=[parse_canonical(x) for x in (evidence_root / "mi_ledger.jsonl").read_bytes().splitlines()]
     terminal=rows[-1].get("status") if rows and type(rows[-1]) is dict else "VOID_DGX_QCASE024_MI_PROTOCOL_LEDGER_HASH_ORDER_OR_BOUNDARY_BREACH"
-    return {"schema_version":"hswm-dgx-qcase024-mi-experiment-result/v3",
+    return {"schema_version":"hswm-dgx-qcase024-mi-experiment-result/v4",
             "plan_sha256":sha256(plan_raw).hexdigest(),"terminal":terminal,
             "provider_or_model_call_bounds":call_bounds(evidence_root),"nonclaims":plan["nonclaims"]}
 
@@ -146,7 +146,7 @@ def main(argv: list[str] | None = None) -> int:
             mode,kind,oid=entries[path]
             blob=subprocess.run(("git","-C",str(repo),"cat-file","blob",oid),check=True,stdout=subprocess.PIPE).stdout
             if mode!="100644" or kind!="blob" or blob!=raw: raise ValueError("publication freeze blob bytes drifted")
-        cache_base=Path(os.environ["HSWM_CACHE_ROOT"])/"mi-qcase024-v3"; output=Path(os.environ["HSWM_OUTPUT_ROOT"])
+        cache_base=Path(os.environ["HSWM_CACHE_ROOT"])/"mi-qcase024-v4"; output=Path(os.environ["HSWM_OUTPUT_ROOT"])
         identities={arm:{name:files[f"identities/{arm}/{name}.json"] for name in IDENTITY_NAMES} for arm in ARMS}
         specs=make_specs(plan=plan,identities=identities,cache_root=cache_base,lock_path=Path(args.lock_path),model_snapshot=Path(args.model_snapshot))
         result=run_mi_experiment(evidence_root=output/"mi_evidence",plan_raw=files["plan.json"],marker_raw=files["start_marker.json"],closure_raw=files["closure_manifest.json"],genesis_raw=files["root_genesis.json"],material_raw=files["material_provenance.json"],request_raw=files["request.json"],schema_raw=files["materials/QCASE-024/response_schema.json"],identities=identities,provenance={name:files[f"provenance/{name}.json"] for name in ("source_ci_receipt_sha256","verifier_ci_receipt_sha256","verifier_build_output_sha256")},consumption_root=Path(plan["consumption_registry"]["path"]),specs=specs,publication_commit=args.publication_commit,publication_tree=args.publication_tree,publication_ci_receipt=receipt)

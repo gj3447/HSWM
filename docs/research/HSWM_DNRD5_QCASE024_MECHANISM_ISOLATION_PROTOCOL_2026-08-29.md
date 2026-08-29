@@ -1,30 +1,98 @@
 # HSWM-DNRD-5 QCASE-024 mechanism-isolation diagnostic
 
 - Date: `2026-08-29`
-- Instrument: `DNRD5-QCASE024-MI-1-USAGE-V3`
-- Status: `PREREGISTERED / UNRUN / AWAITING_PUBLICATION_CI`
-- Namespace: `DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v3`
+- Instrument: `DNRD5-QCASE024-MI-1-CONTENT-V4`
+- Status: `IMPLEMENTED / PRE-FREEZE / UNRUN`
+- Namespace: `DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v4`
 - Scope: post-result-selected finite mechanism diagnostic
 - DNRD-5 causal effect: `NOT_EVALUATED`
 - Source-A disposition remains: `SOURCE_A_REFUSED_EXACTNESS_UNQUALIFIED`
-- Qualified v3 source/verifier commit/tree:
-  `a29230adadb273b98837981424bdb4b1b2a218d7` /
-  `94721df4543000da8a740dabdab26b7af808f988`
-- First-attempt source CI run: `33265653993` (`8/8 SUCCESS`)
-- Qualified source CI receipt SHA-256:
-  `766494ce20254a9ec0d02fb72fb3eacc6d02b74b85c2dee04a1be9227910c7ce`
-- Active v3 freeze:
-  `_research/dgx_mi/preregistrations/hswm-dnrd5-qcase024-mi-1-usage-v3-2026-08-29`
-- Frozen plan SHA-256:
-  `3aeaebbaed690c6b7cc53bafdea32979c42a74f45990030ab07fcea3452af4ea`
-- Frozen start-marker SHA-256:
-  `890748b6e4a526de075c6a53a2ae0cf025ed738b38670f926364a317bc5fb8ea`
-- Frozen closure-manifest SHA-256:
-  `33c8d500c496112f5f9b9968a57876aaaf30738e27a065a9c715b24d38989cf9`
-- Fresh root-genesis SHA-256:
-  `17926235302366fb367aac22ec6060e695939124316345578d92ce3c20561fb1`
-- Active v3 node-local consumption registry:
-  `/mnt/hswm/evidence/hswm-dnrd5-qcase024-mi-1-usage-v3-consumption-v3`
+- v4 is a fresh content/trace-qualification experiment identity.  Its source
+  and publication identities, CI receipts, freeze, plan hash, marker, closure,
+  genesis, consumption registry, and live-run identifiers do not exist yet and
+  must be bound before any target launch.
+
+## Historical v3 one-call content-normalization incompatibility
+
+v3 qualified the closed `usage` rule after the v2 failure.  Its source/verifier
+commit was `a29230adadb273b98837981424bdb4b1b2a218d7`, with tree
+`94721df4543000da8a740dabdab26b7af808f988`.  First-attempt source CI run
+`33265653993` completed `8/8 SUCCESS`; its receipt SHA-256 is
+`766494ce20254a9ec0d02fb72fb3eacc6d02b74b85c2dee04a1be9227910c7ce`.
+The separately qualified publication commit was
+`97fd9032680f78324fce1a437b73fca833879b0d`, with tree
+`c304cb9b8065e7d4bc29138fcee7fad8beff1c77`.  Publication CI run
+`33266180588` completed `8/8 SUCCESS`; its receipt SHA-256 is
+`3756f1b72d319c2a2395ab9811e97c1069846dd766b5e7e75a47da7060a6261f`.
+
+The immutable v3 freeze is
+`_research/dgx_mi/preregistrations/hswm-dnrd5-qcase024-mi-1-usage-v3-2026-08-29`.
+It bound plan SHA-256
+`3aeaebbaed690c6b7cc53bafdea32979c42a74f45990030ab07fcea3452af4ea`,
+start-marker SHA-256
+`890748b6e4a526de075c6a53a2ae0cf025ed738b38670f926364a317bc5fb8ea`,
+closure-manifest SHA-256
+`33c8d500c496112f5f9b9968a57876aaaf30738e27a065a9c715b24d38989cf9`, and
+root-genesis SHA-256
+`17926235302366fb367aac22ec6060e695939124316345578d92ce3c20561fb1`.
+
+That one-time plan was consumed once in its declared registry
+`/mnt/hswm/evidence/hswm-dnrd5-qcase024-mi-1-usage-v3-consumption-v3` and
+launched as `dgx-qcase024-mi-1-v3-live-97fd903-001`.  The external consumption
+marker SHA-256 is
+`85e15079c3e9974d3b9958701076d1cee909ce2ee685b004765f7a97947e2ea4`.
+The wrapper receipt SHA-256 is
+`c42f1e340fbc3ea4d0d5e771f18f93e21d18bb772f5f94b0ddeb587bb802c5ee`; its
+archived artifact SHA-256 is
+`6bb23380fdfc611d10afcdb9a9da5bb921a3191e8e4931a23d31487acaa5c5c1`.
+The six-record ledger SHA-256 is
+`947620c9dd1fb0e4b4d6cd3922ecf0e3f9797aa08cac75bf1661e2aa3e03fd12`, and
+the final-record SHA-256 is
+`55707fd38d8e977c498813642f6901fb9a1fc4e9ea8a6a4040f6a4f058495284`.
+It sealed as `INCONCLUSIVE_DGX_QCASE024_MI_INCOMPLETE_LIVE_SLOTS`: one START,
+one preserved raw envelope, zero accepted slots, zero completed blocks, and no
+observation-pattern label or arm inference.
+
+The sole started slot was `MI-024-V3-ASYNC_ENABLED-B01-R001`.  Its HTTP status
+was `200`; the 94,727-byte raw envelope SHA-256 is
+`b148d859f093f2bc032847779e0a79608849b595874cb2dea1ac6e7f479e4d5f`.
+The v3 usage rule passed: `prompt_tokens=168`, `completion_tokens=59`,
+`total_tokens=227`, and `prompt_tokens_details=null`.  The assistant content
+was valid ordinary pretty UTF-8 JSON (234 bytes), with answer `VISTA` and the
+same Q1 modal rationale.  The runner nevertheless applied canonical-JSON
+parsing directly to that ordinary provider content and raised
+`CANONICALJSONERROR`.  This is an instrumentation content-normalization
+failure, not a model-content failure and not a scientific observation.
+
+The preserved logprob trace has 59 rows of 20 candidates.  The first 58 row
+byte arrays concatenate exactly to the 234 content bytes.  The final, excluded
+row is the exact Qwen terminal token `<|im_end|>` with UTF-8 bytes
+`b"<|im_end|>"`, log probability `0.0`, and SHA-256
+`d6b60b51acc9448b15da9cb03f644d0ec8c410e37735817f39e15764aa75a37f`.
+The provider correctly omitted that terminal token from `message.content`; v3
+incorrectly treated all returned token rows as content-aligned.  Independent
+verification ran once as `dgx-qcase024-mi-1-v3-verify-97fd903-001`; its output
+SHA-256 is
+`6d24263135a6701753f8b0d3b7eb07e4f66e7d9418185e703a0f8acbede086ca`, its
+receipt SHA-256 is
+`8dc02a306e7231936b4ecbd85fc1802c1a2988224ba70e248ea04cbcecef808d`, and its
+archived verifier artifact SHA-256 is
+`da77923ed5a21ce1e8474abafb82b1d39a8276876b4b861d1191740ff651f97e`.
+
+The exact archived raw envelope was also streamed through the candidate v4
+producer parser before freeze.  The bounded qualification record is
+`_research/dgx_mi/qualifications/hswm-dnrd5-qcase024-mi-1-content-v4-v3-envelope-replay-2026-08-29.json`.
+It records the 234-byte exact provider content, 225-byte structured diagnostic,
+and 97,220-byte exact-decimal trace projection: all 59 rows had a selected
+candidate in 20 unique `(token, bytes)` candidates, while the 58 nonterminal
+rows alone reconstructed the assistant content.  This qualifies one preserved
+historical envelope against the candidate v4 parser.  It is not a live v4
+observation, an observation-pattern label, or a scientific result.
+
+v3 is permanently sealed and must never be retried, resumed, replaced,
+transferred, or reused.  v4 is not a continuation or repair of the v3 plan: it
+is a fresh identity that preserves the science design and changes only the
+content normalization and token-boundary qualification described below.
 
 ## Historical v2 one-call envelope incompatibility
 
@@ -84,18 +152,16 @@ wrapper receipt SHA-256 is
 independently reported the same v2 plan, ledger, final record, and
 `INCONCLUSIVE_DGX_QCASE024_MI_INCOMPLETE_LIVE_SLOTS` terminal.
 
-v3 is a fresh experiment identity, not a continuation, retry, or repair of v2.
-It preserves the question, Q1-selected material, pinned model/runtime, ABBA
+v3 was a fresh experiment identity, not a continuation, retry, or repair of v2.
+It preserved the question, Q1-selected material, pinned model/runtime, ABBA
 order, four fresh-server blocks, 16-call budget, zero-retry rule, and causal
-nonclaims. It changes only the closed acceptance rule for the provider `usage`
-object: the three required count fields must be non-Boolean, non-negative JSON
-integers satisfying `prompt_tokens + completion_tokens = total_tokens`; the sole
-optional field is `prompt_tokens_details`, which is accepted only when literally
-`null`; unknown fields, a missing count, a non-null optional value, non-integer
-number, Boolean, negative value, or failed sum invariant refuse the slot. The
-raw provider envelope remains retained without dropping the null detail field.
-A fresh v3 namespace, identifiers, source and publication qualification,
-freeze, plan burn, cache namespace, evidence root, and verifier are mandatory.
+nonclaims.  Its closed `usage` acceptance rule required the three count fields
+to be non-Boolean, non-negative JSON integers satisfying
+`prompt_tokens + completion_tokens = total_tokens`; the sole optional field was
+`prompt_tokens_details`, accepted only when literally `null`.  Unknown fields,
+a missing count, a non-null optional value, non-integer number, Boolean,
+negative value, or failed sum invariant refused the slot.  That corrected
+usage rule passed in the sealed v3 call; it is retained unchanged by v4.
 
 ## Historical v1 pre-launch refusal
 
@@ -120,12 +186,13 @@ Therefore the exact target/model-call count and plan-burn count are both zero.
 This is a pre-launch software integration defect, not a scientific observation
 or one of the frozen MI observation patterns.
 
-The active v3 qualification changes only the usage-envelope acceptance boundary
-identified by the sealed v2 run. It does not change the research question,
-material, request, model/runtime pins, ABBA order, 16-call budget, zero-retry
-rule, terminal taxonomy, reductions, or nonclaims. The v2 freeze, consumption
-record, raw envelope, ledger, verification output, and historical result remain
-immutable evidence; no v2 identifier or plan may be reused.
+The fresh v4 qualification retains the corrected v3 usage boundary and adds
+only the content and token-boundary rules identified by the sealed v3 run.  It
+does not change the research question, material, request, model/runtime pins,
+ABBA order, 16-call budget, zero-retry rule, reductions, or nonclaims.  The v2
+and v3 freezes, consumption records, raw envelopes, ledgers, verification
+outputs, and historical results remain immutable evidence; no historical
+identifier or plan may be reused.
 
 ## Question and conceptual delta
 
@@ -190,13 +257,21 @@ vLLM `0.25.1`, and the pinned NVIDIA GB10 GPU. The Qwen
 describes a 35B-total/3B-active hybrid Gated DeltaNet/full-attention MoE with
 FP8 weights and a native 262,144-token context. NVIDIA's
 [DGX Spark hardware guide](https://docs.nvidia.com/dgx/dgx-spark/hardware.html)
-documents the Grace Blackwell GB10 platform and 128 GB unified memory.
+documents the Grace Blackwell GB10 platform and 128 GB unified memory.  The
+version-matched [vLLM engine-argument reference](https://docs.vllm.ai/en/v0.25.1/configuration/engine_args/)
+also documents the frozen 20-logprob cap and `processed_logprobs` mode.
 
 Those are current, capable research components, not proof that this checkpoint
 is universally state of the art. This diagnostic uses only a short text-only,
 non-thinking request at a frozen 32,768-token server limit. It does not test
 vision, long context, coding benchmarks, tool use, throughput, fine-tuning, or
-model superiority.
+model superiority.  NVIDIA's 2026-08-25
+[DGX Spark release notes](https://docs.nvidia.com/dgx/dgx-spark/release-notes.html)
+list driver `580.159.03`, newer than the observed and frozen `580.126.09` on
+this node.  The study does not upgrade it: changing the driver would add a
+second intervention and destroy the intended Q1-to-MI runtime comparison.
+Thus “advanced-model boundary” means a revision- and hardware-pinned capable
+stack, not the latest available version of every component.
 
 ## Frozen 2×2 blocked design
 
@@ -250,6 +325,56 @@ this exact pinned checkpoint/runtime pair. It is therefore retained only as an
 alternative implementation hypothesis, not as a discovered cause or a factor
 in MI-1.
 
+## Fresh v4 content and trace qualification
+
+Before v4 may freeze, its producer and independent verifier must implement and
+offline-qualify the same two fail-closed contracts against the preserved v3 raw
+envelope.  This is a measurement-boundary correction only; it does not turn the
+v3 response into an accepted observation or alter the fixed scientific design.
+
+`CONTENT_NORMALIZATION/v4` requires strict, finite UTF-8 JSON with duplicate
+object keys refused.  The exact provider `message.content` UTF-8 bytes are
+retained as received.  After ordinary JSON parsing and response-schema
+validation, a separate canonical structured diagnostic may be derived; the
+provider content itself must not be required to be canonical JSON.
+
+`TOKEN_ALIGNMENT/v4` requires every returned processed-logprob row to retain
+its provider byte array and exactly 20 top-logprob candidates whose
+`(token, bytes)` identities are unique within that row.  The concatenated
+bytes of all nonterminal rows must equal the exact assistant-content UTF-8
+bytes.  Exactly one final, excluded terminal row is required; its token and
+bytes must be `<|im_end|>` and `b"<|im_end|>"`, respectively, with the pinned
+terminal-byte SHA-256
+`d6b60b51acc9448b15da9cb03f644d0ec8c410e37735817f39e15764aa75a37f`.
+That terminal row remains in the raw envelope and deterministic full-trace
+projection but is
+excluded from byte-content comparisons and divergence reductions.  Missing,
+extra, misplaced, malformed, or nonmatching terminal rows, nonmatching content
+bytes, a malformed row/candidate, or a candidate count other than 20 refuse the
+slot.  Its derived full-trace projection is canonical JSON whose log
+probabilities are exact normalized decimal strings; the raw envelope remains
+the byte-exact source for original numeric lexemes.
+
+The implementation was offline-qualified against the exact 94,727-byte v3 raw
+envelope, read from the archived artifact whose SHA-256 is
+`6bb23380fdfc611d10afcdb9a9da5bb921a3191e8e4931a23d31487acaa5c5c1`.
+The v4 parser accepted the 234 exact content bytes, derived structured-content
+SHA-256
+`58b4830cb693325699dfbbd123ef8c266a005f6627b8eab15c8c75865d6a78eb`,
+split 59 full trace rows into 58 semantic rows plus one terminal row, and
+reproduced terminal-byte SHA-256
+`d6b60b51acc9448b15da9cb03f644d0ec8c410e37735817f39e15764aa75a37f`.
+The resulting exact-decimal canonical trace-projection SHA-256 is
+`ef4a90844d96afb471f5bc5865efc5063bb9f2ad2d23eb6ed141ca01e2e1cb9a`.
+This qualification repairs the instrument boundary only; it is not a v3
+observation, an arm comparison, or a scientific result.
+
+The fresh v4 namespace, source/build and independent-verifier identities,
+source and publication qualification, freeze, plan burn, cache namespace,
+evidence root, consumption registry, and verifier run must all be new.  The
+offline v3-envelope qualification is complete; no v4 target call is authorized
+until the remaining source/publication and freeze bindings are complete.
+
 ## Primary observations
 
 The diagnostic has no efficacy endpoint and no causal “winner.” The frozen
@@ -262,15 +387,17 @@ reducer reports:
    the corresponding completion-token spans, the emitted tokens, their
    reported processed log probabilities, and available competing-token gaps;
 4. exact raw-envelope, assistant-content, canonical structured-content, and
-   canonical token-trace hashes.
+   deterministic full token-trace projection hashes.
 
-Token alignment uses the response's explicit byte arrays. Concatenating emitted
-token bytes must reproduce assistant-content UTF-8 exactly. Numeric log
-probabilities are parsed losslessly and published as normalized decimal strings,
-not binary floating-point values. If the peer token or best competitor is not
-available in the returned top 20, the reducer records an explicit unavailable
-state and never invents a gap. No arbitrary “near-tie” threshold is declared;
-the exact observed gaps are descriptive diagnostics.
+Token alignment uses the response's explicit byte arrays under
+`TOKEN_ALIGNMENT/v4`: nonterminal emitted-token bytes must reproduce
+assistant-content UTF-8 exactly, while the single pinned final terminal row is
+retained but excluded. Numeric log probabilities are parsed losslessly and
+published as normalized decimal strings, not binary floating-point values. If
+the peer token or best competitor is not available in the returned top 20, the
+reducer records an explicit unavailable state and never invents a gap. No
+arbitrary “near-tie” threshold is declared; the exact observed gaps are
+descriptive diagnostics.
 
 The complete observation pattern is one of:
 
@@ -301,10 +428,10 @@ later blocks. The top-level terminals are:
 
 The independent verifier rederives the freeze, plan burn, exact request, 16-slot
 order, hash chain, per-block server identity continuity, cross-block server
-identity separation, response/content/schema join, byte-token alignment, and
-all descriptive reductions. Raw OpenAI-compatible envelopes contain decimal
-numbers and are preserved as ordinary strict JSON; they are not falsely labeled
-canonical-json/v1.
+identity separation, response/content/schema join, `CONTENT_NORMALIZATION/v4`,
+`TOKEN_ALIGNMENT/v4`, and all descriptive reductions. Raw OpenAI-compatible
+envelopes contain decimal numbers and are preserved as ordinary strict JSON;
+they are not falsely labeled canonical-json/v1.
 
 No user echo or hash-ratification message is required. The checked-in freeze,
 clean source/publication commits, first-attempt successful CI receipts,

@@ -23,7 +23,7 @@ def _arm_identities() -> dict[str, dict[str, bytes]]:
     common = {name: (identities_root / f"{name}.json").read_bytes() for name in IDENTITY_NAMES}
     def row(async_value: bool) -> dict[str, bytes]:
         runtime = parse_canonical(common["runtime_identity_sha256"])
-        runtime |= {"schema_version": "hswm-dgx-qcase024-mi-runtime-identity/v3", "async_scheduling": async_value,
+        runtime |= {"schema_version": "hswm-dgx-qcase024-mi-runtime-identity/v4", "async_scheduling": async_value,
                     "server_arguments": ["--model", "/model-repository/snapshots/95a723d08a9490559dae23d0cff1d9466213d989", "--served-model-name", "qwen3.6-35b-a3b", "--host", "0.0.0.0", "--port", "8000", "--max-num-seqs", "1", "--no-enable-prefix-caching", "--max-model-len", "32768", "--gpu-memory-utilization", "0.500", "--generation-config", "vllm", "--seed", "0", "--enforce-eager", "--language-model-only", "--max-logprobs", "20", "--logprobs-mode", "processed_logprobs", "--async-scheduling" if async_value else "--no-async-scheduling"],
                     "required_environment": ["HF_HOME=/cache/huggingface", "HUGGINGFACE_HUB_CACHE=/cache/huggingface/hub", "VLLM_CACHE_ROOT=/cache/compile/vllm", "TORCHINDUCTOR_CACHE_DIR=/cache/compile/torchinductor", "TRITON_CACHE_DIR=/cache/compile/triton", "HF_HUB_OFFLINE=1", "TRANSFORMERS_OFFLINE=1", "VLLM_ENABLE_V1_MULTIPROCESSING=0", "PYTHONHASHSEED=0", "CUBLAS_WORKSPACE_CONFIG=:4096:8"], "max_logprobs": 20, "logprobs_mode": "processed_logprobs"}
         return {**common, "runtime_identity_sha256": canonical_bytes(runtime)}
@@ -50,8 +50,8 @@ def _inputs() -> MiPreregistrationInputs:
             "selected_case": "QCASE-024", "selection_status": "POST_RESULT_SELECTED_NOT_CONFIRMATORY",
             "selection_basis": "ONE_SEMANTIC_ASSISTANT_CONTENT_VARIANT_IN_Q1_V3",
         },
-        root_genesis=canonical_bytes({"schema_version": "hswm-dgx-qcase024-mi-evidence-root-genesis/v3",
-            "nonce_hex": "3" * 64, "purpose": "FRESH_SINGLE_USE_QCASE024_MI_USAGE_V3_EVIDENCE_ROOT",
+        root_genesis=canonical_bytes({"schema_version": "hswm-dgx-qcase024-mi-evidence-root-genesis/v4",
+            "nonce_hex": "3" * 64, "purpose": "FRESH_SINGLE_USE_QCASE024_MI_CONTENT_V4_EVIDENCE_ROOT",
             "terminal": "GENESIS_BOUND_BEFORE_ANY_MI_LIVE_START"}),
     )
 
@@ -118,7 +118,7 @@ def test_refuses_exact_selection_and_zero_genesis_drift() -> None:
     selection = dict(values["post_result_selection"]); selection["q1_result_commit"] = "0" * 40; values["post_result_selection"] = selection
     with pytest.raises(MiFreezeRefusal): build_mi_preregistration(MiPreregistrationInputs(**values))
     values = {name: getattr(inputs, name) for name in inputs.__dataclass_fields__}
-    values["root_genesis"] = canonical_bytes({"schema_version": "hswm-dgx-qcase024-mi-evidence-root-genesis/v3", "nonce_hex": "0" * 64, "purpose": "FRESH_SINGLE_USE_QCASE024_MI_USAGE_V3_EVIDENCE_ROOT", "terminal": "GENESIS_BOUND_BEFORE_ANY_MI_LIVE_START"})
+    values["root_genesis"] = canonical_bytes({"schema_version": "hswm-dgx-qcase024-mi-evidence-root-genesis/v4", "nonce_hex": "0" * 64, "purpose": "FRESH_SINGLE_USE_QCASE024_MI_CONTENT_V4_EVIDENCE_ROOT", "terminal": "GENESIS_BOUND_BEFORE_ANY_MI_LIVE_START"})
     with pytest.raises(MiFreezeRefusal): build_mi_preregistration(MiPreregistrationInputs(**values))
 
 

@@ -1,5 +1,34 @@
 # HSWM core responsibility ontology
 
+## Current Ragnarok/PIDNA research projection
+
+The fixed-role v1 below remains a retired historical artifact. It is not edited
+to host new concepts. Current work on the USER_PRIMARY `LX3 Ragnarok` warning and
+the recovered `PIDNA — Pure Intelligence DNA` concept lives in the separate
+[`HSWM_RAGNAROK_PIDNA_RESEARCH_ONTOLOGY.v1.json`](HSWM_RAGNAROK_PIDNA_RESEARCH_ONTOLOGY.v1.json).
+That projection binds the two lean research projects in
+[`_research/ragnarok/`](../../../_research/ragnarok/) and
+[`_research/pidna/`](../../../_research/pidna/), keeps historical LakatoTree
+source digests read-only, and connects its hypotheses to the current fractal
+laws without making PIDNA HSWM canon or claiming a scientific result.
+The active mapping covers FCL-1/2/3/4/5/7/8; FCL-6 world-self co-modeling is
+explicitly outside these two projects' present experiment scope.
+
+Validate locally and publish only by explicit apply:
+
+```bash
+uv run --extra kg python scripts/upsert_hswm_ragnarok_pidna_research.py
+uv run --extra kg python scripts/upsert_hswm_ragnarok_pidna_research.py \
+  --apply --source-config ~/.config/symposium-ontology/source.yaml
+```
+
+The publisher matches existing HSWM, Ragnarok, canon, and FCL anchors without
+mutating them. It creates, verifies, and exactly reads back only bundle-owned
+research nodes and relations; its one historical revision path is additionally
+pinned to the complete prior digest, labels, properties, owners, and relation
+set. KG presence remains a bounded projection, not HSWM cognition, PIDNA
+ascent, Ragnarok avoidance, or evidence.
+
 > 상태: `RETIRED_FIXED_ROLE_V1 / RETAINED_REPRODUCIBILITY_ARTIFACT`
 >
 > 기계 계약: [`HSWM_CORE_RESPONSIBILITY_ONTOLOGY.v1.json`](HSWM_CORE_RESPONSIBILITY_ONTOLOGY.v1.json)

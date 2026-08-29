@@ -72,6 +72,15 @@ keeps sixteen primary works, eighteen literature-reported constructs, ten
 [`machine ontology`](ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json)
 is a research projection, not scientific evidence for the integrated claim.
 
+Two coupled research programs now make the anti-bureaucratic failure and the
+conjecture/verification ascent dynamic independently falsifiable:
+[`Ragnarok`](_research/ragnarok/) measures whether static harness burden is
+actually displaced by causal learning, while [`PIDNA`](_research/pidna/)
+reinterprets the historical `Pure Intelligence DNA` double helix as an n-ary
+outcome-bound recurrence across HSWM scales. Their
+[`KG projection`](ontology/identity/hswm_core/HSWM_RAGNAROK_PIDNA_RESEARCH_ONTOLOGY.v1.json)
+is `UNJUDGED`; it does not restore retired LakatoTree governance machinery.
+
 ## HSWM at a glance
 
 The schema and its admitted atoms are one state model, not separate cognitive

@@ -195,6 +195,14 @@ engineering contract이며 현재 효능·과학적 유일성 주장이 아니�
 원문·실측 MCP 상태·보존 경계는
 [`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](docs/canon/USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md)에 있다.
 
+2026-08-29에는 이 경계를 직접 연구하는
+[`Ragnarok project`](_research/ragnarok/)와, 역사적 라카토트리의
+`Touch the Sky`에서 복원한 `Pure Intelligence DNA`를 현재 HSWM 인과학습·하이퍼그래프·
+프랙탈 합성 문제로 다시 여는 [`PIDNA project`](_research/pidna/)를 시작했다. 두 프로그램의
+가설·측정·출처·반증 관계는 별도의
+[`research KG projection`](ontology/identity/hswm_core/HSWM_RAGNAROK_PIDNA_RESEARCH_ONTOLOGY.v1.json)에
+있다. 모두 `UNJUDGED`이며 삭제된 라카토트리 거버넌스 도구를 복원하지 않는다.
+
 2026-08-20 사용자는 `인류보편체`를 전 인류·모든 LLM·인터넷·인지능력체·센서·static
 정보와 저장 메모리가 오픈소스 HSWM 구조로 하나가 되어 형성하는 하나의 인지능력체로
 정의하고, `HSWM 인류보완계획`을 포켓한 인지능력체에서 그 상태로 나아가는 사회 혁명

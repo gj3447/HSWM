@@ -10,9 +10,10 @@ from _research.dnrd5.canonical_json import canonical_bytes, parse_canonical
 from _research.dgx_mi import launcher
 from _research.dgx_mi.launcher import MiLease, MiLeaseSpec
 from _research.dgx_q1.live_launcher import LaunchRefused
+from _research.dgx_mi.experiment import load_checked_in_freeze
 from _research.dgx_mi.runner import MiObservation, MiRunner
 from tests.test_dgx_mi_preregistration import _inputs
-from _research.dgx_mi.preregistration import build_mi_preregistration
+from _research.dgx_mi.preregistration import build_mi_preregistration, freeze_mi_preregistration
 from _research.dgx_mi.protocol import BLOCKS
 
 
@@ -40,6 +41,52 @@ def _specs(root: Path) -> dict[tuple[str, str], MiLeaseSpec]:
             async_scheduling=arm == "ASYNC_ENABLED", model_repository="Qwen/Qwen3.6-35B-A3B-FP8",
             snapshot_manifest_raw=(Path(__file__).parents[1] / "_research/dgx_q1/preregistrations/hswm-dnrd5-dgx-live-q1-v3-2026-08-29/identities/model_snapshot_manifest_sha256.json").read_bytes())
     return result
+
+
+def test_checked_in_freeze_loader_returns_validated_closure_for_runner_handoff(
+    tmp_path: Path,
+) -> None:
+    freeze = tmp_path / "freeze"
+    artifacts = freeze_mi_preregistration(freeze, _inputs())
+
+    files, plan = load_checked_in_freeze(freeze)
+
+    closure = parse_canonical(artifacts["closure_manifest.json"])
+    declared = {row["path"] for row in closure["artifacts"]}
+    assert files["closure_manifest.json"] == artifacts["closure_manifest.json"]
+    assert set(files) == declared | {"closure_manifest.json"}
+    assert plan["budget"] == 16
+
+
+def test_checked_in_freeze_loader_refuses_undeclared_file_before_handoff(
+    tmp_path: Path,
+) -> None:
+    freeze = tmp_path / "freeze"
+    freeze_mi_preregistration(freeze, _inputs())
+    (freeze / "undeclared.json").write_bytes(b"{}")
+
+    with pytest.raises(ValueError, match="filesystem closure"):
+        load_checked_in_freeze(freeze)
+
+
+@pytest.mark.parametrize("change", ("namespace", "duplicate"))
+def test_checked_in_freeze_loader_refuses_closure_identity_drift_before_handoff(
+    tmp_path: Path, change: str,
+) -> None:
+    freeze = tmp_path / "freeze"
+    freeze_mi_preregistration(freeze, _inputs())
+    closure_path = freeze / "closure_manifest.json"
+    closure = parse_canonical(closure_path.read_bytes())
+    if change == "namespace":
+        closure["namespace"] = "DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v1"
+        expected = "closure drifted"
+    else:
+        closure["artifacts"].append(dict(closure["artifacts"][0]))
+        expected = "path duplicated"
+    closure_path.write_bytes(canonical_bytes(closure))
+
+    with pytest.raises(ValueError, match=expected):
+        load_checked_in_freeze(freeze)
 
 
 def test_lease_readiness_does_not_retry_identity_failure(

@@ -20,7 +20,7 @@ from _research.dgx_mi.launcher import MiLease, MiLeaseSpec
 from _research.dgx_q1.github_ci_receipt import GitHubCiReceiptRefusal, parse_github_actions_ci_receipt
 from _research.dgx_q1.live_protocol import validate_response_schema
 
-LEDGER_SCHEMA = "hswm-dgx-qcase024-mi-ledger/v1"
+LEDGER_SCHEMA = "hswm-dgx-qcase024-mi-ledger/v2"
 ZERO = "0" * 64
 MAX_BLOB = 16 * 1024 * 1024
 
@@ -160,7 +160,7 @@ class MiRunner:
             cache_paths |= {spec.hf_cache,spec.compile_cache}
 
     def _burn(self) -> dict[str, Any]:
-        digest = sha256(self.plan_raw).hexdigest(); raw = canonical_bytes({"schema_version":"hswm-dgx-qcase024-mi-plan-consumption/v1", "plan_sha256":digest, "closure_manifest_sha256":sha256(self.closure_raw).hexdigest(), "evidence_root":str(self.root), "registry_path":str(self.registry), "terminal":"PLAN_BURNED_BEFORE_ANY_MI_TARGET_LAUNCH_NO_REUSE"})
+        digest = sha256(self.plan_raw).hexdigest(); raw = canonical_bytes({"schema_version":"hswm-dgx-qcase024-mi-plan-consumption/v2", "plan_sha256":digest, "closure_manifest_sha256":sha256(self.closure_raw).hexdigest(), "evidence_root":str(self.root), "registry_path":str(self.registry), "terminal":"PLAN_BURNED_BEFORE_ANY_MI_TARGET_LAUNCH_NO_REUSE"})
         target = self.registry / (digest + ".consumed"); fd, tmp = tempfile.mkstemp(prefix=".mi-burn-", dir=self.registry)
         try:
             with os.fdopen(fd,"wb") as f: f.write(raw); f.flush(); os.fsync(f.fileno())
@@ -216,7 +216,7 @@ class MiRunner:
                         _append(self.root,{"schema_version":LEDGER_SCHEMA,"record_type":"BLOCK_START","arm":arm,"block_id":block,"block_index":index,"server_identity":server_identity,"pre_boundary_attestation":_put(self.root,pre),"retry":"NONE","terminal":"FRESH_SERVER_AND_CACHE_BOUND_BEFORE_BLOCK_POSTS"})
                         block_ok=0
                         for rep in range(1,5):
-                            attempt=f"MI-024-{arm}-{block}-R{rep:03d}"; pre=lease.attest("PRE",rep-1)
+                            attempt=f"MI-024-V2-{arm}-{block}-R{rep:03d}"; pre=lease.attest("PRE",rep-1)
                             start=_append(self.root,{"schema_version":LEDGER_SCHEMA,"record_type":"START","attempt_id":attempt,"arm":arm,"block_id":block,"replicate":rep,"request":_desc(self.request_raw),"response_schema":_desc(self.schema_raw),"plan_sha256":sha256(self.plan_raw).hexdigest(),"pre_boundary_attestation":_put(self.root,pre),"retry":"NONE","terminal":"DURABLY_VISIBLE_BEFORE_SINGLE_MI_POST"}); started+=1
                             obs: MiObservation | None = None; raw = None; post = None
                             try:

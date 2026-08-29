@@ -19,12 +19,12 @@ from typing import Any
 from _research.dnrd5.canonical_json import canonical_bytes, canonical_sha256, parse_canonical
 from _research.dgx_q1.github_ci_receipt import parse_github_actions_ci_receipt
 
-PLAN = "hswm-dgx-qcase024-mi-plan/v1"
-MARKER = "hswm-dgx-qcase024-mi-start-marker/v1"
-FREEZE = "hswm-dgx-qcase024-mi-preregistration-freeze/v1"
-LEDGER = "hswm-dgx-qcase024-mi-ledger/v1"
-NAMESPACE = "DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v1"
-RUNNER = "hswm-dgx-qcase024-mi-runner/v1"
+PLAN = "hswm-dgx-qcase024-mi-plan/v2"
+MARKER = "hswm-dgx-qcase024-mi-start-marker/v2"
+FREEZE = "hswm-dgx-qcase024-mi-preregistration-freeze/v2"
+LEDGER = "hswm-dgx-qcase024-mi-ledger/v2"
+NAMESPACE = "DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v2"
+RUNNER = "hswm-dgx-qcase024-mi-runner/v2"
 ARMS = ("ASYNC_ENABLED", "ASYNC_DISABLED")
 BLOCKS = (("ASYNC_ENABLED", "B01"), ("ASYNC_DISABLED", "B01"),
           ("ASYNC_DISABLED", "B02"), ("ASYNC_ENABLED", "B02"))
@@ -35,11 +35,11 @@ VOID = "VOID_DGX_QCASE024_MI_PROTOCOL_LEDGER_HASH_ORDER_OR_BOUNDARY_BREACH"
 TERMINALS = (COMPLETE, INCOMPLETE, UNAVAILABLE, VOID)
 ZERO = "0" * 64
 SHA = re.compile(r"^[0-9a-f]{64}$")
-ATTEMPT = re.compile(r"^MI-024-(ASYNC_ENABLED|ASYNC_DISABLED)-B0[12]-R00[1-4]$")
+ATTEMPT = re.compile(r"^MI-024-V2-(ASYNC_ENABLED|ASYNC_DISABLED)-B0[12]-R00[1-4]$")
 SYSTEM = ("Act only as the bounded DNRD-5 token-native model function. Read the "
           "declared public synthetic input, follow its instruction, and return "
           "exactly one object satisfying the supplied strict JSON schema.")
-REGISTRY = {"schema_version": "hswm-dgx-qcase024-mi-plan-consumption-registry/v1", "path": "/mnt/hswm/evidence/hswm-dnrd5-qcase024-mi-1-consumption-v1", "scope": "PINNED_DGX_NODE_LOCAL_DURABLE_PLAN_HASH_REGISTRY", "boundary": "NODE_LOCAL_PATH_BINDING_NOT_DISTRIBUTED_GLOBAL_CONSENSUS", "terminal": "ONE_DURABLE_BURN_PER_PLAN_HASH_AT_THE_DECLARED_PATH"}
+REGISTRY = {"schema_version": "hswm-dgx-qcase024-mi-plan-consumption-registry/v2", "path": "/mnt/hswm/evidence/hswm-dnrd5-qcase024-mi-1-closure-v2-consumption-v2", "scope": "PINNED_DGX_NODE_LOCAL_DURABLE_PLAN_HASH_REGISTRY", "boundary": "NODE_LOCAL_PATH_BINDING_NOT_DISTRIBUTED_GLOBAL_CONSENSUS", "terminal": "ONE_DURABLE_BURN_PER_PLAN_HASH_AT_THE_DECLARED_PATH"}
 NONCLAIMS = ("POST_RESULT_SELECTED_QCASE024_DIAGNOSTIC_NOT_CONFIRMATORY_OR_GENERALIZABLE", "NOT_A_Q1_RETRY_OR_BATCH_INVARIANCE_QUALIFICATION", "NOT_A_DNRD5_300_BLOCK_OCCURRENCE_OR_SOURCE_A_AUTHORIZATION", "NOT_CAUSAL_ATTRIBUTION_TO_SCHEDULING_GDN_FP8_OR_PROVIDER_INTERNALS", "NOT_PROOF_OF_NO_INTERFERENCE_OR_HSWM_CAUSAL_LEARNING", "NOT_PROOF_OF_CONSCIOUSNESS_SELFHOOD_OR_SCALE_INVARIANT_CAUSAL_CLOSURE")
 EXPECTED_MATERIAL = {"instruction_sha256": "8e13131449ba0f31cb7305490dec680f6808006db2e5b50cc8614b172c85b907", "model_input_sha256": "5902dec004e606aaf46b8a5d80c45ab855f275d714d111b2430d86d0e1c1a273", "response_schema_sha256": "a623afd2cace659731c46b336fd4cb75c071e60f425fa583e8995abe7ff83940", "rng_sha256": "69b1f0ef2be0d6519baa19562928cc6ed3a458e382e48508a4cb47292063bd78"}
 EXPECTED_SELECTION = {"q1_source_commit": "4e3238b472c88c3e51e7849472f46d8f8e368d9d", "q1_result_commit": "a6f13445375f8195a35e025810cc1628c41b5641", "q1_v3_plan_sha256": "b054396e68620c2bcc97a9da9c429edda3182c93d41a573e6eef6fe30c997c22", "q1_live_receipt_sha256": "a10d107463823218ada992945d7b72167669e0948b3019dd680607a530c30978", "q1_evidence_receipt_sha256": "cc53ba6d42ebe52d648fbd777850b9b96c9ae50e7fda99aa5cf7456a6344b51f", "q1_exact_ledger_sha256": "f3cdfff46e1ee4ff0973531296863970f7bc9fa21eff1ea60ddc4da7a6e13f00", "q1_result_projection_sha256": "17649d84046297a0ad5ecaadb5efdcc35d02f8ef58b9784ff8de65048b611d22", "selected_request_sha256": "c24c74241bbf670b3e2c640f3acd18cb449d3172659bde5fcb08262950a53a19", "q1_terminal": "LIVE_FALSIFIED_EXACT_ASSISTANT_CONTENT_UTF8_ON_FROZEN_Q1", "selected_case": "QCASE-024", "selection_status": "POST_RESULT_SELECTED_NOT_CONFIRMATORY", "selection_basis": "ONE_SEMANTIC_ASSISTANT_CONTENT_VARIANT_IN_Q1_V3"}
@@ -47,8 +47,8 @@ PINNED_MODEL = "qwen3.6-35b-a3b"
 PINNED_REQUEST_SHA256 = "fec3b64ce00d750e67a34374fe9d1e5e7fa6232294b8990e0aa4f352bc52fac9"
 SERVER_PREFIX = ("--model", "/model-repository/snapshots/95a723d08a9490559dae23d0cff1d9466213d989", "--served-model-name", PINNED_MODEL, "--host", "0.0.0.0", "--port", "8000", "--max-num-seqs", "1", "--no-enable-prefix-caching", "--max-model-len", "32768", "--gpu-memory-utilization", "0.500", "--generation-config", "vllm", "--seed", "0", "--enforce-eager", "--language-model-only", "--max-logprobs", "20", "--logprobs-mode", "processed_logprobs")
 PINNED_IDENTITIES = {
-    "ASYNC_ENABLED": {"endpoint_sha256": "d8af93d15021cde9f992a8037a9120403c241a18106a6e732d15e88ca8e42995", "model_identity_sha256": "cbb9ffc9ccc837e65396254cfc08b8831a32c87a28c9275c445593aa6fb235d1", "tls_identity_sha256": "7e1ab55efb6f198c4afb7d5d85360fad5eb398cedfedf86e0b18bc27dedc941d", "declared_isolation_contract_sha256": "ac594ec24eb2a096b0053096c8650aeca33aa290d7146bd0793abddcd64e9ba1", "model_snapshot_manifest_sha256": "2ece6b46248e818cbf93aa30299300f7dd4c60d9351960ec790cc8b420376e47", "runtime_identity_sha256": "742586b6e4790b0d6b8debd24be69f0f08a4977b39bdf91a4e0352da0a574ff1"},
-    "ASYNC_DISABLED": {"endpoint_sha256": "d8af93d15021cde9f992a8037a9120403c241a18106a6e732d15e88ca8e42995", "model_identity_sha256": "cbb9ffc9ccc837e65396254cfc08b8831a32c87a28c9275c445593aa6fb235d1", "tls_identity_sha256": "7e1ab55efb6f198c4afb7d5d85360fad5eb398cedfedf86e0b18bc27dedc941d", "declared_isolation_contract_sha256": "ac594ec24eb2a096b0053096c8650aeca33aa290d7146bd0793abddcd64e9ba1", "model_snapshot_manifest_sha256": "2ece6b46248e818cbf93aa30299300f7dd4c60d9351960ec790cc8b420376e47", "runtime_identity_sha256": "7e0c29da01b637cdc1322124ae4cfc51542a8e8bed3916e94836628ebca48606"},
+    "ASYNC_ENABLED": {"endpoint_sha256": "d8af93d15021cde9f992a8037a9120403c241a18106a6e732d15e88ca8e42995", "model_identity_sha256": "cbb9ffc9ccc837e65396254cfc08b8831a32c87a28c9275c445593aa6fb235d1", "tls_identity_sha256": "7e1ab55efb6f198c4afb7d5d85360fad5eb398cedfedf86e0b18bc27dedc941d", "declared_isolation_contract_sha256": "ac594ec24eb2a096b0053096c8650aeca33aa290d7146bd0793abddcd64e9ba1", "model_snapshot_manifest_sha256": "2ece6b46248e818cbf93aa30299300f7dd4c60d9351960ec790cc8b420376e47", "runtime_identity_sha256": "26012aba0e9c61539ccce34a7e55e1550d0c97ae3414f80b8399e1bfed9e633f"},
+    "ASYNC_DISABLED": {"endpoint_sha256": "d8af93d15021cde9f992a8037a9120403c241a18106a6e732d15e88ca8e42995", "model_identity_sha256": "cbb9ffc9ccc837e65396254cfc08b8831a32c87a28c9275c445593aa6fb235d1", "tls_identity_sha256": "7e1ab55efb6f198c4afb7d5d85360fad5eb398cedfedf86e0b18bc27dedc941d", "declared_isolation_contract_sha256": "ac594ec24eb2a096b0053096c8650aeca33aa290d7146bd0793abddcd64e9ba1", "model_snapshot_manifest_sha256": "2ece6b46248e818cbf93aa30299300f7dd4c60d9351960ec790cc8b420376e47", "runtime_identity_sha256": "c5fb1af9762b2214a74b3595c37e4ac6254701c550f7b8ad4bbcc814a14914d8"},
 }
 
 
@@ -290,17 +290,17 @@ def _plan(raw: bytes) -> dict[str, Any]:
 
 
 def _expected_attempts() -> list[str]:
-    return [f"MI-024-{arm}-{block}-R{rep:03d}" for arm, block in BLOCKS for rep in range(1, 5)]
+    return [f"MI-024-V2-{arm}-{block}-R{rep:03d}" for arm, block in BLOCKS for rep in range(1, 5)]
 
 
 def _pattern(contents: dict[str, bytes]) -> tuple[str, dict[str, int], dict[str, int]]:
     block_counts: dict[str, int] = {}
     arm_counts: dict[str, int] = {}
     for arm, block in BLOCKS:
-        values = [contents[f"MI-024-{arm}-{block}-R{rep:03d}"] for rep in range(1, 5)]
+        values = [contents[f"MI-024-V2-{arm}-{block}-R{rep:03d}"] for rep in range(1, 5)]
         block_counts[f"{arm}/{block}"] = len(set(values))
     for arm in ARMS:
-        values = [contents[f"MI-024-{arm}-{block}-R{rep:03d}"] for a, block in BLOCKS if a == arm for rep in range(1, 5)]
+        values = [contents[f"MI-024-V2-{arm}-{block}-R{rep:03d}"] for a, block in BLOCKS if a == arm for rep in range(1, 5)]
         arm_counts[arm] = len(set(values))
     enabled, disabled = arm_counts["ASYNC_ENABLED"], arm_counts["ASYNC_DISABLED"]
     if enabled == disabled == 1: label = "ALL_ARM_BLOCKS_EXACT"
@@ -313,10 +313,10 @@ def _pattern(contents: dict[str, bytes]) -> tuple[str, dict[str, int], dict[str,
 def _modal_counts(contents: dict[str, bytes]) -> tuple[dict[str, int], dict[str, int]]:
     block: dict[str, int] = {}; arm: dict[str, int] = {}
     for a, b in BLOCKS:
-        values = [contents[f"MI-024-{a}-{b}-R{r:03d}"] for r in range(1, 5)]
+        values = [contents[f"MI-024-V2-{a}-{b}-R{r:03d}"] for r in range(1, 5)]
         block[f"{a}/{b}"] = max(Counter(values).values())
     for a in ARMS:
-        values = [contents[f"MI-024-{a}-{b}-R{r:03d}"] for aa, b in BLOCKS if aa == a for r in range(1, 5)]
+        values = [contents[f"MI-024-V2-{a}-{b}-R{r:03d}"] for aa, b in BLOCKS if aa == a for r in range(1, 5)]
         arm[a] = max(Counter(values).values())
     return block, arm
 
@@ -334,7 +334,7 @@ def _boundary(root: Path, descriptor: Any, *, arm: str, block: str, phase: str, 
     value = _canonical(_blob(root, descriptor))
     keys = {"schema_version", "arm", "block_id", "phase", "completed", "async_scheduling", "server_argv", "server_argv_sha256", "server_identity", "request_success_total", "raw_metrics_sha256", "terminal"}
     value = _object(value, keys)
-    if (value["schema_version"], value["arm"], value["block_id"], value["phase"], value["completed"], value["async_scheduling"], value["server_identity"], value["request_success_total"], value["terminal"]) != ("hswm-dgx-qcase024-mi-boundary/v1", arm, block, phase, completed, arm == "ASYNC_ENABLED", server["observed"], completed, "FINITE_BLOCK_BOUNDARY_NOT_NO_INTERFERENCE_PROOF"):
+    if (value["schema_version"], value["arm"], value["block_id"], value["phase"], value["completed"], value["async_scheduling"], value["server_identity"], value["request_success_total"], value["terminal"]) != ("hswm-dgx-qcase024-mi-boundary/v2", arm, block, phase, completed, arm == "ASYNC_ENABLED", server["observed"], completed, "FINITE_BLOCK_BOUNDARY_NOT_NO_INTERFERENCE_PROOF"):
         _bad("boundary continuity")
     if type(value["server_argv"]) is not list or sha256("\0".join(value["server_argv"]).encode()).hexdigest() != value["server_argv_sha256"]:
         _bad("boundary argv")
@@ -406,7 +406,7 @@ def verify(root: Path, *, external_registry_root: Path | None = None) -> dict[st
             runtime = _canonical(_blob(root, marker["identities"][arm]["runtime_identity_sha256"]))
             tls = _canonical(_blob(root, marker["identities"][arm]["tls_identity_sha256"]))
             if (_object(endpoint, {"schema_version","endpoint","method","transport"}) != {"schema_version":"hswm-dgx-q1-endpoint-identity/v1","endpoint":"http://127.0.0.1:18080/v1/chat/completions","method":"POST","transport":"LOOPBACK_HTTP_NO_TLS"} or set(model) != {"schema_version","model","repository","revision","snapshot_manifest_sha256"} or (model.get("model"),model.get("repository"),model.get("revision")) != (PINNED_MODEL,"Qwen/Qwen3.6-35B-A3B-FP8","95a723d08a9490559dae23d0cff1d9466213d989") or tls != {"schema_version":"hswm-dgx-q1-tls-identity/v1","endpoint_scheme":"http","tls":"NOT_APPLICABLE_LOOPBACK_ONLY"}): _bad("identity semantic")
-            if runtime.get("schema_version") != "hswm-dgx-qcase024-mi-runtime-identity/v1" or runtime.get("async_scheduling") != (arm == "ASYNC_ENABLED") or tuple(runtime.get("server_arguments", [])) != SERVER_PREFIX + (("--async-scheduling",) if arm == "ASYNC_ENABLED" else ("--no-async-scheduling",)) or runtime.get("served_model") != PINNED_MODEL or runtime.get("endpoint") != endpoint["endpoint"]: _bad("runtime identity")
+            if runtime.get("schema_version") != "hswm-dgx-qcase024-mi-runtime-identity/v2" or runtime.get("async_scheduling") != (arm == "ASYNC_ENABLED") or tuple(runtime.get("server_arguments", [])) != SERVER_PREFIX + (("--async-scheduling",) if arm == "ASYNC_ENABLED" else ("--no-async-scheduling",)) or runtime.get("served_model") != PINNED_MODEL or runtime.get("endpoint") != endpoint["endpoint"]: _bad("runtime identity")
         provenance = marker.get("provenance")
         if type(provenance) is not dict or set(provenance) != {"source_ci_receipt_sha256", "verifier_ci_receipt_sha256", "verifier_build_output_sha256"}: _bad("provenance keys")
         source_ci = _blob(root, provenance["source_ci_receipt_sha256"])
@@ -417,7 +417,7 @@ def verify(root: Path, *, external_registry_root: Path | None = None) -> dict[st
         parse_github_actions_ci_receipt(verifier_ci, repository="gj3447/HSWM", commit=plan["verifier"]["source"]["commit"], tree=plan["verifier"]["source"]["tree"])
         build = _canonical(_blob(root, provenance["verifier_build_output_sha256"]))
         build = _object(build, {"schema_version", "source_path", "source_sha256", "source_utf8", "imports", "terminal"})
-        if (build["schema_version"], build["source_path"], build["terminal"]) != ("hswm-dgx-qcase024-mi-independent-verifier-build/v1", "_research/dgx_mi/independent_verifier.py", "MI_INDEPENDENT_VERIFIER_SOURCE_AND_IMPORTS_BOUND") or sha256(build["source_utf8"].encode()).hexdigest() != build["source_sha256"] or sha256(Path(__file__).read_bytes()).hexdigest() != build["source_sha256"] or any(item in {"_research.dgx_mi.protocol", "_research.dgx_mi.preregistration", "_research.dgx_mi.runner"} for item in build["imports"]): _bad("verifier build")
+        if (build["schema_version"], build["source_path"], build["terminal"]) != ("hswm-dgx-qcase024-mi-independent-verifier-build/v2", "_research/dgx_mi/independent_verifier.py", "MI_INDEPENDENT_VERIFIER_SOURCE_AND_IMPORTS_BOUND") or sha256(build["source_utf8"].encode()).hexdigest() != build["source_sha256"] or sha256(Path(__file__).read_bytes()).hexdigest() != build["source_sha256"] or any(item in {"_research.dgx_mi.protocol", "_research.dgx_mi.preregistration", "_research.dgx_mi.runner"} for item in build["imports"]): _bad("verifier build")
         if sha256(_blob(root, provenance["verifier_build_output_sha256"])).hexdigest() != plan["verifier"].get("build_output_sha256"): _bad("verifier build digest")
         publication = _object(marker.get("publication"), {"commit", "tree", "ci_receipt"})
         if (type(publication["commit"]) is not str or not re.fullmatch(r"[0-9a-f]{40}", publication["commit"]) or publication["commit"] == "0" * 40 or type(publication["tree"]) is not str or not re.fullmatch(r"[0-9a-f]{40}", publication["tree"]) or publication["tree"] == "0" * 40): _bad("publication identity")
@@ -426,7 +426,7 @@ def verify(root: Path, *, external_registry_root: Path | None = None) -> dict[st
         parse_github_actions_ci_receipt(receipt, repository="gj3447/HSWM", commit=publication["commit"], tree=publication["tree"])
         consumption = _blob(root, burn["consumption"])
         burn_record = _canonical(consumption)
-        if _object(burn_record, {"schema_version", "plan_sha256", "closure_manifest_sha256", "evidence_root", "registry_path", "terminal"})["schema_version"] != "hswm-dgx-qcase024-mi-plan-consumption/v1" or burn_record["plan_sha256"] != plan_sha or burn_record["closure_manifest_sha256"] != sha256(closure_raw).hexdigest() or burn_record["registry_path"] != burn["registry_path"] or burn_record["terminal"] != "PLAN_BURNED_BEFORE_ANY_MI_TARGET_LAUNCH_NO_REUSE" or type(burn_record["evidence_root"]) is not str or not burn_record["evidence_root"]: _bad("consumption semantics")
+        if _object(burn_record, {"schema_version", "plan_sha256", "closure_manifest_sha256", "evidence_root", "registry_path", "terminal"})["schema_version"] != "hswm-dgx-qcase024-mi-plan-consumption/v2" or burn_record["plan_sha256"] != plan_sha or burn_record["closure_manifest_sha256"] != sha256(closure_raw).hexdigest() or burn_record["registry_path"] != burn["registry_path"] or burn_record["terminal"] != "PLAN_BURNED_BEFORE_ANY_MI_TARGET_LAUNCH_NO_REUSE" or type(burn_record["evidence_root"]) is not str or not burn_record["evidence_root"]: _bad("consumption semantics")
         if external_registry_root is None:
             return {"terminal": INCOMPLETE}
         path = external_registry_root / (plan_sha + ".consumed")
@@ -457,7 +457,7 @@ def verify(root: Path, *, external_registry_root: Path | None = None) -> dict[st
             server_ids.add(incarnation); block_servers.append(server)
             _boundary(root, block_start["pre_boundary_attestation"], arm=arm, block=block, phase="PRE", completed=0, server=server)
             for rep in range(1, 5):
-                attempt = f"MI-024-{arm}-{block}-R{rep:03d}"
+                attempt = f"MI-024-V2-{arm}-{block}-R{rep:03d}"
                 start, terminal = rows[index], rows[index + 1]; index += 2
                 if (start.get("schema_version"), start.get("record_type"), start.get("attempt_id"), start.get("arm"), start.get("block_id"), start.get("replicate")) != (LEDGER, "START", attempt, arm, block, rep): _bad("start")
                 _object(start, {"schema_version","record_type","attempt_id","arm","block_id","replicate","request","response_schema","plan_sha256","pre_boundary_attestation","retry","terminal","ordinal","previous_record_sha256","record_sha256"})
@@ -505,10 +505,10 @@ def verify(root: Path, *, external_registry_root: Path | None = None) -> dict[st
         unavailable = False
         for arm in ARMS:
             blocks = [block for a, block in BLOCKS if a == arm]
-            baseline = f"MI-024-{arm}-{blocks[0]}-R001"
+            baseline = f"MI-024-V2-{arm}-{blocks[0]}-R001"
             for block in blocks:
                 for rep in range(1, 5):
-                    target = f"MI-024-{arm}-{block}-R{rep:03d}"
+                    target = f"MI-024-V2-{arm}-{block}-R{rep:03d}"
                     if target == baseline: continue
                     row = _comparison(baseline, (contents[baseline], token_rows[baseline]), target, (contents[target], token_rows[target]))
                     if row is not None:

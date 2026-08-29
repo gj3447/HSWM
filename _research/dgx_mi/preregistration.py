@@ -22,8 +22,8 @@ from _research.dgx_mi.protocol import (
     validate_arm_identities, validate_mi_plan, validate_mi_start_marker,
 )
 
-CORPUS_SCHEMA = "hswm-dgx-qcase024-mi-material-provenance/v1"
-VERIFIER_SCHEMA = "hswm-dgx-qcase024-mi-independent-verifier-build/v1"
+CORPUS_SCHEMA = "hswm-dgx-qcase024-mi-material-provenance/v2"
+VERIFIER_SCHEMA = "hswm-dgx-qcase024-mi-independent-verifier-build/v2"
 
 
 class MiFreezeRefusal(ValueError):
@@ -159,7 +159,7 @@ def derive_q1_v3_arm_identities(identity_root: Path) -> dict[str, dict[str, byte
         raise MiFreezeRefusal("Q1 v3 runtime identity must be an object")
     runtime_common = dict(q1_runtime)
     runtime_common.update({
-        "schema_version": "hswm-dgx-qcase024-mi-runtime-identity/v1",
+        "schema_version": "hswm-dgx-qcase024-mi-runtime-identity/v2",
         "container_image": PINNED["image"], "image_id": PINNED["image_id"],
         "vllm_version": PINNED["vllm"], "gpu_uuid": PINNED["gpu_uuid"],
         "gpu_name": PINNED["gpu_name"], "gpu_driver_version": PINNED["driver"],
@@ -191,9 +191,9 @@ def derive_q1_v3_arm_identities(identity_root: Path) -> dict[str, dict[str, byte
 def fresh_root_genesis() -> bytes:
     """Create an internally generated, single-use 32-byte evidence-root nonce."""
     return canonical_bytes({
-        "schema_version": "hswm-dgx-qcase024-mi-evidence-root-genesis/v1",
+        "schema_version": "hswm-dgx-qcase024-mi-evidence-root-genesis/v2",
         "nonce_hex": secrets.token_bytes(32).hex(),
-        "purpose": "FRESH_SINGLE_USE_QCASE024_MI_EVIDENCE_ROOT",
+        "purpose": "FRESH_SINGLE_USE_QCASE024_MI_CLOSURE_V2_EVIDENCE_ROOT",
         "terminal": "GENESIS_BOUND_BEFORE_ANY_MI_LIVE_START",
     })
 
@@ -232,10 +232,10 @@ def _genesis(raw: bytes) -> None:
     try: item = parse_canonical(raw)
     except Exception as error: raise MiFreezeRefusal("MI root genesis is not canonical") from error
     if (type(item) is not dict or set(item) != {"schema_version", "nonce_hex", "purpose", "terminal"}
-            or item.get("schema_version") != "hswm-dgx-qcase024-mi-evidence-root-genesis/v1"
+            or item.get("schema_version") != "hswm-dgx-qcase024-mi-evidence-root-genesis/v2"
             or type(item.get("nonce_hex")) is not str or len(item["nonce_hex"]) != 64 or item["nonce_hex"] == "0" * 64
             or any(c not in "0123456789abcdef" for c in item["nonce_hex"])
-            or item.get("purpose") != "FRESH_SINGLE_USE_QCASE024_MI_EVIDENCE_ROOT"
+            or item.get("purpose") != "FRESH_SINGLE_USE_QCASE024_MI_CLOSURE_V2_EVIDENCE_ROOT"
             or item.get("terminal") != "GENESIS_BOUND_BEFORE_ANY_MI_LIVE_START"):
         raise MiFreezeRefusal("MI root genesis binding drifted")
 
@@ -276,7 +276,7 @@ def build_mi_preregistration(inputs: MiPreregistrationInputs) -> dict[str, bytes
         "post_result_selection": selection,
         "arms": {arm: {name: sha256(raw).hexdigest() for name, raw in inputs.arm_identities[arm].items()} for arm in ARMS},
         "block_order": [{"arm": arm, "block_id": block} for arm, block in BLOCKS],
-        "attempt_ids": [f"MI-024-{arm}-{block}-R{rep:03d}" for arm, block in BLOCKS for rep in range(1, 5)],
+        "attempt_ids": [f"MI-024-V2-{arm}-{block}-R{rep:03d}" for arm, block in BLOCKS for rep in range(1, 5)],
         "attempts_per_block": 4, "budget": 16, "zero_retry": True, "consumption_registry": dict(REGISTRY),
         "verifier": {"source": {"commit": verifier_commit, "tree": verifier_tree,
             "ci_receipt_sha256": sha256(inputs.verifier_ci_receipt).hexdigest(), "ci_terminal": "FIRST_ATTEMPT_SUCCESSFUL_CI_BUILD"},
@@ -403,7 +403,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     artifacts = freeze_mi_preregistration(args.output_dir, inputs)
     print(canonical_bytes({
-        "schema_version": "hswm-dgx-qcase024-mi-freeze-cli-result/v1",
+        "schema_version": "hswm-dgx-qcase024-mi-freeze-cli-result/v2",
         "output_dir": str(args.output_dir),
         "plan_sha256": sha256(artifacts["plan.json"]).hexdigest(),
         "start_marker_sha256": sha256(artifacts["start_marker.json"]).hexdigest(),

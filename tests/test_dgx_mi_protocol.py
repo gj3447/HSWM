@@ -85,7 +85,7 @@ def test_start_marker_uses_exact_abba_sixteen_attempts(mi_plan_raw: bytes) -> No
     marker = parse_canonical(make_mi_start_marker(mi_plan_raw))
     assert [(row["arm"], row["block_id"]) for row in parse_canonical(mi_plan_raw)["block_order"]] == list(BLOCKS)
     assert len(marker["scheduled_attempts"]) == 16
-    assert marker["scheduled_attempts"][:4] == ["MI-024-ASYNC_ENABLED-B01-R001", "MI-024-ASYNC_ENABLED-B01-R002", "MI-024-ASYNC_ENABLED-B01-R003", "MI-024-ASYNC_ENABLED-B01-R004"]
+    assert marker["scheduled_attempts"][:4] == ["MI-024-V2-ASYNC_ENABLED-B01-R001", "MI-024-V2-ASYNC_ENABLED-B01-R002", "MI-024-V2-ASYNC_ENABLED-B01-R003", "MI-024-V2-ASYNC_ENABLED-B01-R004"]
 
 
 def test_plan_refuses_nonzero_retry_or_wrong_budget(mi_plan_raw: bytes) -> None:

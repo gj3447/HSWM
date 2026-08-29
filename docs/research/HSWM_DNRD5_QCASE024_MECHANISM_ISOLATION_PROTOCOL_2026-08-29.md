@@ -1,24 +1,44 @@
 # HSWM-DNRD-5 QCASE-024 mechanism-isolation diagnostic
 
 - Date: `2026-08-29`
-- Instrument: `DNRD5-QCASE024-MI-1`
-- Status: `PREREGISTERED / UNRUN / AWAITING_PUBLICATION_CI`
-- Namespace: `DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v1`
+- Instrument: `DNRD5-QCASE024-MI-1-CLOSURE-V2`
+- Status: `CLOSURE_LOADER_QUALIFICATION_V2_IMPLEMENTED / UNRUN /
+  AWAITING_SOURCE_CI_AND_FRESH_PREREGISTRATION`
+- Namespace: `DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v2`
 - Scope: post-result-selected finite mechanism diagnostic
 - DNRD-5 causal effect: `NOT_EVALUATED`
 - Source-A disposition remains: `SOURCE_A_REFUSED_EXACTNESS_UNQUALIFIED`
-- Qualified source commit/tree: `ee562166088ebb62b9d12efd2a3d5c77b1c22658` /
-  `877e88a8b9a9d93d4a3e43fa01acdedbd86ae8af`
-- Qualified source CI receipt SHA-256:
-  `d877d69a49b9b46526f30226e095290a9497e5c9dbdf5f96076269a5fb346761`
-- Frozen plan SHA-256:
-  `eae4f428a02d16d89500bbbbc26157f82dc7a956f4b319ea5df1b4a8902b82b9`
-- Frozen start-marker SHA-256:
-  `4c158f819ab91f1e6382c61e4545af131f74dddcda5f6a310d51136057e5a6d8`
-- Frozen closure-manifest SHA-256:
-  `4b79f7020db05f9682a5506d3477878a8af219a491db997b58839870fe76355d`
-- Fresh root-genesis SHA-256:
-  `19c1229a1e9bf33115ccea4875ab77cb88d31b1cc335414044177524e3b6c530`
+
+## Historical v1 pre-launch refusal
+
+The first checked-in freeze remains immutable at
+`_research/dgx_mi/preregistrations/hswm-dnrd5-qcase024-mi-1-2026-08-29`.
+Its plan, start marker, closure, and genesis SHA-256 values are respectively
+`eae4f428a02d16d89500bbbbc26157f82dc7a956f4b319ea5df1b4a8902b82b9`,
+`4c158f819ab91f1e6382c61e4545af131f74dddcda5f6a310d51136057e5a6d8`,
+`4b79f7020db05f9682a5506d3477878a8af219a491db997b58839870fe76355d`,
+and `19c1229a1e9bf33115ccea4875ab77cb88d31b1cc335414044177524e3b6c530`.
+
+Publication commit `9ae0e9ade26d663535bdeaf1b9af478396734132` was invoked once as
+DGX wrapper run `dgx-qcase024-mi-1-live-9ae0e9a-001`. It exited with
+`MI_REFUSED:KeyError` before `MiRunner` construction because the validated
+closure loader returned only the closure-declared artifacts while the
+production handoff then requested `closure_manifest.json` from that mapping.
+The wrapper receipt SHA-256 is
+`6e22a16ae07f20bf52bbd11a370d995277205ad0c1faff18fe3bf01de38cfe7c`.
+The run artifact contains no MI evidence root, ledger, START record, raw
+response, or plan-consumption marker; the declared v1 registry is empty.
+Therefore the exact target/model-call count and plan-burn count are both zero.
+This is a pre-launch software integration defect, not a scientific observation
+or one of the frozen MI observation patterns.
+
+The active v2 qualification changes only this handoff: after validating every
+declared artifact and the complete filesystem closure, the loader returns the
+already validated closure bytes separately to the runner assembly. It also uses
+v2 typed identifiers, attempt IDs, fresh genesis, cache namespace, and a distinct
+node-local consumption registry so the v1 freeze cannot be launched as v2. The
+question, material, request, model/runtime pins, ABBA order, 16-call budget,
+zero-retry rule, terminal taxonomy, reductions, and nonclaims are unchanged.
 
 ## Question and conceptual delta
 

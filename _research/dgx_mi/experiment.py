@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from _research.dnrd5.canonical_json import canonical_bytes, parse_canonical
-from _research.dgx_mi.protocol import ARMS, BLOCKS, FREEZE_SCHEMA, IDENTITY_NAMES, validate_arm_identities, validate_mi_plan
+from _research.dgx_mi.protocol import ARMS, BLOCKS, FREEZE_SCHEMA, IDENTITY_NAMES, NAMESPACE, validate_arm_identities, validate_mi_plan
 from _research.dgx_mi.launcher import MiLeaseSpec
 from _research.dgx_mi.runner import MiRunner
 from _research.dgx_q1.github_ci_receipt import parse_github_actions_ci_receipt
@@ -25,10 +25,14 @@ def load_checked_in_freeze(root: Path) -> tuple[dict[str, bytes], dict[str, Any]
     """Read a hash-closed MI freeze; no target is launched by this function."""
     if root.is_symlink() or not root.is_dir(): raise ValueError("MI freeze root unavailable")
     closure_raw=(root/"closure_manifest.json").read_bytes(); closure=parse_canonical(closure_raw)
-    if type(closure) is not dict or closure.get("schema_version") != FREEZE_SCHEMA or type(closure.get("artifacts")) is not list: raise ValueError("MI freeze closure drifted")
+    if (type(closure) is not dict or set(closure) != {"schema_version", "namespace", "artifacts"}
+            or closure.get("schema_version") != FREEZE_SCHEMA or closure.get("namespace") != NAMESPACE
+            or type(closure.get("artifacts")) is not list):
+        raise ValueError("MI freeze closure drifted")
     files: dict[str,bytes]={}
     for row in closure["artifacts"]:
         if type(row) is not dict or set(row)!={"path","sha256","byte_length"} or not isinstance(row["path"],str): raise ValueError("MI closure entry drifted")
+        if row["path"] in files: raise ValueError("MI closure artifact path duplicated")
         path=root/row["path"]
         if path.is_symlink() or not path.is_file(): raise ValueError("MI freeze artifact absent")
         raw=path.read_bytes()
@@ -43,6 +47,10 @@ def load_checked_in_freeze(root: Path) -> tuple[dict[str, bytes], dict[str, Any]
     if sha256(files["request.json"]).hexdigest()!=plan["request_sha256"]: raise ValueError("MI request plan binding drifted")
     for name, digest in (("instruction.txt",plan["material"]["instruction_sha256"]),("model_input.json",plan["material"]["model_input_sha256"]),("response_schema.json",plan["material"]["response_schema_sha256"]),("rng.bin",plan["material"]["rng_sha256"])):
         if sha256(files[f"materials/QCASE-024/{name}"]).hexdigest()!=digest: raise ValueError("MI material plan binding drifted")
+    # The closure deliberately excludes itself from its artifact list.  Return
+    # its already-validated bytes only after the declared filesystem closure
+    # has been checked so the production handoff can bind the runner to it.
+    files["closure_manifest.json"] = closure_raw
     return files, plan
 
 
@@ -96,7 +104,7 @@ def run_mi_experiment(*, evidence_root: Path, plan_raw: bytes, marker_raw: bytes
         if restore_shared_services is not None: restore_shared_services()
     rows=[parse_canonical(x) for x in (evidence_root / "mi_ledger.jsonl").read_bytes().splitlines()]
     terminal=rows[-1].get("status") if rows and type(rows[-1]) is dict else "VOID_DGX_QCASE024_MI_PROTOCOL_LEDGER_HASH_ORDER_OR_BOUNDARY_BREACH"
-    return {"schema_version":"hswm-dgx-qcase024-mi-experiment-result/v1",
+    return {"schema_version":"hswm-dgx-qcase024-mi-experiment-result/v2",
             "plan_sha256":sha256(plan_raw).hexdigest(),"terminal":terminal,
             "provider_or_model_call_bounds":call_bounds(evidence_root),"nonclaims":plan["nonclaims"]}
 
@@ -128,7 +136,6 @@ def main(argv: list[str] | None = None) -> int:
         for commit in (plan["source"]["commit"],plan["verifier"]["source"]["commit"]):
             subprocess.run(("git","-C",str(repo),"merge-base","--is-ancestor",commit,args.publication_commit),check=True,stdout=subprocess.DEVNULL)
         expected={relative.as_posix()+"/"+path: raw for path,raw in files.items()}
-        expected[relative.as_posix()+"/closure_manifest.json"]=(freeze/"closure_manifest.json").read_bytes()
         listing=subprocess.run(("git","-C",str(repo),"ls-tree","-r","-z",args.publication_commit,"--",relative.as_posix()),check=True,stdout=subprocess.PIPE).stdout
         entries={}
         for row in listing.split(b"\0"):
@@ -139,7 +146,7 @@ def main(argv: list[str] | None = None) -> int:
             mode,kind,oid=entries[path]
             blob=subprocess.run(("git","-C",str(repo),"cat-file","blob",oid),check=True,stdout=subprocess.PIPE).stdout
             if mode!="100644" or kind!="blob" or blob!=raw: raise ValueError("publication freeze blob bytes drifted")
-        cache_base=Path(os.environ["HSWM_CACHE_ROOT"])/"mi-qcase024"; output=Path(os.environ["HSWM_OUTPUT_ROOT"])
+        cache_base=Path(os.environ["HSWM_CACHE_ROOT"])/"mi-qcase024-v2"; output=Path(os.environ["HSWM_OUTPUT_ROOT"])
         identities={arm:{name:files[f"identities/{arm}/{name}.json"] for name in IDENTITY_NAMES} for arm in ARMS}
         specs=make_specs(plan=plan,identities=identities,cache_root=cache_base,lock_path=Path(args.lock_path),model_snapshot=Path(args.model_snapshot))
         result=run_mi_experiment(evidence_root=output/"mi_evidence",plan_raw=files["plan.json"],marker_raw=files["start_marker.json"],closure_raw=files["closure_manifest.json"],genesis_raw=files["root_genesis.json"],material_raw=files["material_provenance.json"],request_raw=files["request.json"],schema_raw=files["materials/QCASE-024/response_schema.json"],identities=identities,provenance={name:files[f"provenance/{name}.json"] for name in ("source_ci_receipt_sha256","verifier_ci_receipt_sha256","verifier_build_output_sha256")},consumption_root=Path(plan["consumption_registry"]["path"]),specs=specs,publication_commit=args.publication_commit,publication_tree=args.publication_tree,publication_ci_receipt=receipt)

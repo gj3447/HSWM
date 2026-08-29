@@ -19,6 +19,7 @@ import {
 import {
   CanonicalAtomV2DurableRuntime,
   commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal,
+  makeCanonicalAtomV2DurableRuntimeFileLayer,
   makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest,
   type CanonicalAtomV2DurableState
 } from "../../src/canonical-atom-v2-durable-runtime.js"
@@ -151,6 +152,15 @@ const grants: ReadonlyArray<CanonicalAtomV2ContentAuthorizationGrant> = [
 
 export const makeDnrd5V2TwoCasLayer = () =>
   makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest(
+    JOURNAL_LINEAGE,
+    dnrd5V2TwoCasSchemaBytes,
+    grants
+  )
+
+/** Fresh calls over the same root reopen only file-backed durable state. */
+export const makeDnrd5V2TwoCasFileLayer = (rootPath: string) =>
+  makeCanonicalAtomV2DurableRuntimeFileLayer(
+    rootPath,
     JOURNAL_LINEAGE,
     dnrd5V2TwoCasSchemaBytes,
     grants

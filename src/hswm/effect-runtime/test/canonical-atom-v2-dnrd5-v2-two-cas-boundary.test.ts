@@ -240,9 +240,11 @@ it.effect("rejects generic-schema-valid main cross-wiring before CAS1", () =>
         _tag: "Dnrd5V2TwoCasRecoveryError",
         milestone: "RECOVERY_INDETERMINATE"
       })
-      expect(submitted.left.detail).toContain(
-        "main effect failed pre-CAS DNRD grammar: GRAMMAR_INVALID"
-      )
+      if (submitted.left._tag === "Dnrd5V2TwoCasRecoveryError") {
+        expect(submitted.left.detail).toContain(
+          "main effect failed pre-CAS DNRD grammar: GRAMMAR_INVALID"
+        )
+      }
     }
     const after = yield* runtime.snapshot
     expect(after.canonical.revision).toBe(before.canonical.revision)
@@ -265,9 +267,11 @@ it.effect("rejects generic-schema-valid receipt cross-wiring before CAS2", () =>
         _tag: "Dnrd5V2TwoCasRecoveryError",
         milestone: "CAS1_EXACT_R1_RECEIPT_PENDING"
       })
-      expect(submitted.left.detail).toContain(
-        "receipt failed pre-CAS DNRD grammar: GRAMMAR_INVALID"
-      )
+      if (submitted.left._tag === "Dnrd5V2TwoCasRecoveryError") {
+        expect(submitted.left.detail).toContain(
+          "receipt failed pre-CAS DNRD grammar: GRAMMAR_INVALID"
+        )
+      }
     }
     const after = yield* runtime.snapshot
     expect(after.canonical.revision).toBe(fixture.s0Revision + 1)

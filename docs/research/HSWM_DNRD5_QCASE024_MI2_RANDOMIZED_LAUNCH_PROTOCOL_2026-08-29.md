@@ -2,11 +2,38 @@
 
 - Date: `2026-08-29`
 - Instrument: `DNRD5-QCASE024-MI-2-RANDOMIZED-LAUNCH`
-- Status: `SOURCE_IMPLEMENTATION_COMPLETE / NO_MI2_TARGET_CALLS`
+- Status: `PREREGISTRATION_FROZEN_FOR_PUBLICATION / NO_MI2_TARGET_CALLS`
 - Scope: post-result-selected, finite, randomized mechanism diagnostic
 - Predecessor result: `DNRD5-QCASE024-MI-1-CONTENT-V4 / BOTH_ARMS_VARIATION`
 - DNRD-5 causal effect: `NOT_EVALUATED`
 - Source-A disposition: `SOURCE_A_REFUSED_EXACTNESS_UNQUALIFIED`
+
+## Frozen preregistration identity
+
+- Source and independent-verifier commit:
+  `728cee961bebf799999b364042e7088a794b735e`
+- Source and independent-verifier tree:
+  `afcb9714d30a17e85f9668948813269f0bfb4318`
+- First-attempt successful-CI receipt SHA-256:
+  `a00a54c8ddbaada90060a26799ba6335353d043e0716f1e0d0a059f96c0a63a6`
+- Freeze path:
+  `_research/dgx_mi2/preregistrations/hswm-dnrd5-qcase024-mi-2-launch-crossed-v1-2026-08-29`
+- Plan SHA-256:
+  `e05f3f09bde04f4dae1ddced7c2c730f26b0d1236e3e7b94f7547898bb9b8702`
+- Closure-manifest SHA-256:
+  `5a0b901379c8cd8455867a66027b2d629f8ed33dc5429d2823f5a25473b86105`
+- Start-marker SHA-256:
+  `7409e89df7b1a27f2067c649ddec7e54989ccaace7bf9d021e2280608a61ad95`
+- Accepted schedule-seed artifact SHA-256:
+  `c90c06dc8b8eaf54a214f60c25c452c04b91b5a856b1694d9638d68155f40dc4`
+- Selected schedule index: `33` of the zero-based 400-schedule domain
+- Pair orientations `P01..P12`:
+  `ED, ED, DE, ED, DE, DE, DE, ED, DE, ED, ED, DE`
+
+The freeze contains 24 closure-bound artifacts plus its closure manifest. It
+was created only after the source commit's eight GitHub CI jobs completed
+successfully on attempt one. No MI-2 target call was made while generating or
+validating the freeze.
 
 ## Result sought and conceptual delta
 

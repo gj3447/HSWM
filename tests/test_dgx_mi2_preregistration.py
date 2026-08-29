@@ -14,11 +14,13 @@ from _research.dgx_mi2.protocol import (
     EXPECTED_MI1_SELECTION, IDENTITY_NAMES, make_seed_material, parse_seed_material,
     SCHEDULE_SELECTION_LIMIT, validate_mi2_plan,
 )
+from _research.dgx_q1.github_ci_receipt import parse_github_actions_ci_receipt
 from tests.test_dgx_q1_live_preregistration import ci_receipt
 
 
 ROOT = Path(__file__).parents[1]
 Q1 = ROOT / "_research/dgx_q1/preregistrations/hswm-dnrd5-dgx-live-q1-v3-2026-08-29"
+FROZEN = ROOT / "_research/dgx_mi2/preregistrations/hswm-dnrd5-qcase024-mi-2-launch-crossed-v1-2026-08-29"
 
 
 def _identities() -> dict[str, dict[str, bytes]]:
@@ -44,6 +46,47 @@ def test_builds_closed_mi2_freeze_plan() -> None:
     artifacts = build_mi2_preregistration(_inputs())
     plan = validate_mi2_plan(artifacts["plan.json"], seed_material_raw=artifacts["schedule_seed_material.json"])
     assert plan["budget"] == 48 and len(plan["block_order"]) == 24 and len(plan["attempt_ids"]) == 48
+
+
+def test_checked_in_mi2_freeze_replays_exactly() -> None:
+    closure_raw = (FROZEN / "closure_manifest.json").read_bytes()
+    assert sha256(closure_raw).hexdigest() == "5a0b901379c8cd8455867a66027b2d629f8ed33dc5429d2823f5a25473b86105"
+    closure = parse_canonical(closure_raw)
+    declared = {row["path"]: row for row in closure["artifacts"]}
+    assert len(declared) == len(closure["artifacts"]) == 24
+    actual = {path.relative_to(FROZEN).as_posix() for path in FROZEN.rglob("*") if path.is_file()}
+    assert actual == set(declared) | {"closure_manifest.json"}
+    for path, row in declared.items():
+        target = FROZEN / path
+        assert not target.is_symlink()
+        raw = target.read_bytes()
+        assert {"sha256": sha256(raw).hexdigest(), "byte_length": len(raw)} == {
+            "sha256": row["sha256"], "byte_length": row["byte_length"],
+        }
+    plan_raw = (FROZEN / "plan.json").read_bytes()
+    seed_raw = (FROZEN / "schedule_seed_material.json").read_bytes()
+    assert sha256(plan_raw).hexdigest() == "e05f3f09bde04f4dae1ddced7c2c730f26b0d1236e3e7b94f7547898bb9b8702"
+    assert sha256(seed_raw).hexdigest() == "c90c06dc8b8eaf54a214f60c25c452c04b91b5a856b1694d9638d68155f40dc4"
+    plan = validate_mi2_plan(plan_raw, seed_material_raw=seed_raw)
+    assert plan["schedule_selection"]["schedule_index"] == 33
+    assert plan["schedule_selection"]["schedule"] == ["ED", "ED", "DE", "ED", "DE", "DE", "DE", "ED", "DE", "ED", "ED", "DE"]
+    assert plan["source"] == plan["verifier"]["source"] == {
+        "commit": "728cee961bebf799999b364042e7088a794b735e",
+        "tree": "afcb9714d30a17e85f9668948813269f0bfb4318",
+        "ci_receipt_sha256": "a00a54c8ddbaada90060a26799ba6335353d043e0716f1e0d0a059f96c0a63a6",
+        "ci_terminal": "FIRST_ATTEMPT_SUCCESSFUL_CI_BUILD",
+    }
+    source_ci = (FROZEN / "provenance/source_ci_receipt_sha256.json").read_bytes()
+    verifier_ci = (FROZEN / "provenance/verifier_ci_receipt_sha256.json").read_bytes()
+    assert source_ci == verifier_ci
+    parse_github_actions_ci_receipt(
+        source_ci, repository="gj3447/HSWM",
+        commit=plan["source"]["commit"], tree=plan["source"]["tree"],
+    )
+    build = parse_canonical((FROZEN / "provenance/verifier_build_output_sha256.json").read_bytes())
+    verifier_source = (ROOT / "_research/dgx_mi2/independent_verifier.py").read_bytes()
+    assert build["source_utf8"].encode() == verifier_source
+    assert build["source_sha256"] == sha256(verifier_source).hexdigest()
 
 
 def test_freeze_writes_hash_closed_files_once(tmp_path: Path) -> None:

@@ -28,8 +28,8 @@ from _research.dnrd5.canonical_json import (
 PLAN_SCHEMA = "hswm-dgx-q1-live-response-exactness/v1"
 MARKER_SCHEMA = "hswm-dgx-q1-live-start-marker/v1"
 NAMESPACE = "DNRD5-Q1-LIVE-QUALIFICATION-ONLY/v1"
-RUNNER_VERSION = "hswm-dgx-q1-live-runner/v2"
-BOUNDARY_SCHEMA = "hswm-dgx-q1-live-boundary-attestation/v2"
+RUNNER_VERSION = "hswm-dgx-q1-live-runner/v3"
+BOUNDARY_SCHEMA = "hswm-dgx-q1-live-boundary-attestation/v3"
 CONSUMPTION_REGISTRY_SCHEMA = "hswm-dgx-q1-plan-consumption-registry/v1"
 CONSUMPTION_REGISTRY_PATH = (
     "/mnt/hswm/evidence/hswm-dnrd5-q1-live-consumption-v1"
@@ -49,6 +49,8 @@ TERMINALS = (REPRODUCED, FALSIFIED, INCONCLUSIVE, VOID)
 NONCLAIMS = (
     "NOT_A_DNRD5_300_BLOCK_OCCURRENCE_CALL_OR_PILOT_EFFECT_DATA",
     "NOT_SOURCE_A_AUTHORIZATION_OR_SOURCE_A_FREEZE",
+    "NOT_A_BATCH_INVARIANCE_QUALIFICATION",
+    "NOT_MODEL_SUPPORT_BEYOND_THE_OBSERVED_SERIALIZED_CONFIGURATION",
     "NOT_PROOF_OF_PROVIDER_INTERNAL_CACHE_SCHEDULING_OR_GLOBAL_DETERMINISM",
     "NOT_PROOF_OF_NO_INTERFERENCE_OR_HSWM_CAUSAL_LEARNING",
     "NOT_PROOF_OF_CONSCIOUSNESS_SELFHOOD_OR_SCALE_INVARIANT_CAUSAL_CLOSURE",
@@ -74,8 +76,8 @@ _LISTENER_ENDPOINT = re.compile(
     r":(?P<port>[0-9]{1,5})$"
 )
 _DECLARED_ISOLATION_STATIC = {
-    "batch_invariant": True,
-    "boundary": "FINITE_DECLARED_CONTROL_CONTRACT_NOT_OBSERVED_PROOF",
+    "batch_invariant": False,
+    "boundary": "FINITE_DECLARED_SERIALIZED_CONTROL_CONTRACT_WITHOUT_BATCH_INVARIANCE",
     "dedicated_gpu": True,
     "dedicated_node": True,
     "dedicated_process": True,
@@ -287,7 +289,7 @@ def validate_declared_isolation_contract(raw: bytes, *, target: str) -> dict[str
     }
     declared = _object(declared, keys, "declared isolation identity")
     if (
-        declared["schema_version"] != "hswm-dgx-q1-declared-isolation/v2"
+        declared["schema_version"] != "hswm-dgx-q1-declared-isolation/v3"
         or any(declared[name] != value for name, value in _DECLARED_ISOLATION_STATIC.items())
         or declared["host_listener_policy"]
         != "EXACT_FROZEN_STATIC_PLUS_RPCBOUND_DYNAMIC_NLOCKMGR_PLUS_ONE_Q1_TARGET"

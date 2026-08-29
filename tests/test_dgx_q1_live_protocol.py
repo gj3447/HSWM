@@ -21,13 +21,15 @@ def test_independent_verifier_closes_missing_or_malformed_roots_to_void(tmp_path
     assert verify(root)["terminal"] == VOID
 
 
-def test_declared_isolation_v2_freezes_a_validated_listener_baseline() -> None:
+def test_declared_isolation_v3_freezes_serialized_non_batch_invariant_boundary() -> None:
     allowlist = ["127.0.0.54%lo:53", "[::1]:22", "[fd00::1]:443"]
     raw = canonical_bytes(
         {
-            "schema_version": "hswm-dgx-q1-declared-isolation/v2",
-            "batch_invariant": True,
-            "boundary": "FINITE_DECLARED_CONTROL_CONTRACT_NOT_OBSERVED_PROOF",
+            "schema_version": "hswm-dgx-q1-declared-isolation/v3",
+            "batch_invariant": False,
+            "boundary": (
+                "FINITE_DECLARED_SERIALIZED_CONTROL_CONTRACT_WITHOUT_BATCH_INVARIANCE"
+            ),
             "dedicated_gpu": True,
             "dedicated_node": True,
             "dedicated_process": True,
@@ -63,6 +65,17 @@ def test_declared_isolation_v2_freezes_a_validated_listener_baseline() -> None:
     invalid = raw.replace(b"[::1]:22", b"127.0.0.1:11434")
     with pytest.raises(LiveQ1Refusal):
         validate_declared_isolation_contract(invalid, target="127.0.0.1:18080")
+
+    unsupported = canonical_bytes(
+        {
+            **__import__("json").loads(raw),
+            "batch_invariant": True,
+        }
+    )
+    with pytest.raises(LiveQ1Refusal, match="declared isolation"):
+        validate_declared_isolation_contract(
+            unsupported, target="127.0.0.1:18080"
+        )
 
 
 @pytest.mark.parametrize(

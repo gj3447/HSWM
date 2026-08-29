@@ -179,7 +179,7 @@ def _validate_runtime_identity(raw: bytes) -> dict[str, Any]:
         or not 100 <= runtime["gpu_memory_utilization_milli"] <= 990
         or runtime["prefix_cache"] is not False
         or runtime["enforce_eager"] is not True
-        or runtime["batch_invariant"] is not True
+        or runtime["batch_invariant"] is not False
         or runtime["v1_multiprocessing"] is not False
         or runtime["model_loading_offline"] is not True
         or runtime["generation_config"] != "vllm"
@@ -815,7 +815,6 @@ class LiveQ1Lease:
             "TRITON_CACHE_DIR=/cache/compile/triton",
             "HF_HUB_OFFLINE=1",
             "TRANSFORMERS_OFFLINE=1",
-            "VLLM_BATCH_INVARIANT=1",
             "VLLM_ENABLE_V1_MULTIPROCESSING=0",
             "PYTHONHASHSEED=0",
             "CUBLAS_WORKSPACE_CONFIG=:4096:8",
@@ -868,6 +867,11 @@ class LiveQ1Lease:
             or config.get("Cmd") != list(self._server_arguments)
             or type(config.get("Env")) is not list
             or not set(self._required_environment).issubset(set(config["Env"]))
+            or any(
+                value.startswith("VLLM_BATCH_INVARIANT=")
+                for value in config["Env"]
+                if type(value) is str
+            )
             or type(host) is not dict
             or host.get("NetworkMode") != "bridge"
             or host.get("IpcMode") != runtime["container_ipc_mode"]

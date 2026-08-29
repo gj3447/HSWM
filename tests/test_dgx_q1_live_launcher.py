@@ -6,8 +6,13 @@ from pathlib import Path
 
 import pytest
 
-from _research.dnrd5.canonical_json import parse_canonical
-from _research.dgx_q1.live_launcher import LaunchRefused, LiveQ1Lease, LiveQ1Spec
+from _research.dnrd5.canonical_json import canonical_bytes, parse_canonical
+from _research.dgx_q1.live_launcher import (
+    LaunchRefused,
+    LiveQ1Lease,
+    LiveQ1Spec,
+    _validate_runtime_identity,
+)
 from _research.dgx_q1.live_preregistration import freeze_live_preregistration
 from tests.test_dgx_q1_live_preregistration import (
     REVISION,
@@ -266,13 +271,46 @@ def test_digest_pinned_lease_attests_actual_boundary_and_removes(tmp_path: Path)
     launch = next(argv for argv in calls if argv[:2] == ("docker", "run"))
     assert launch[launch.index("--network") + 1] == "bridge"
     assert launch[launch.index("--ipc") + 1] == "private"
-    assert "VLLM_BATCH_INVARIANT=1" in launch
+    assert not any(
+        value.startswith("VLLM_BATCH_INVARIANT=") for value in launch
+    )
     assert "VLLM_ENABLE_V1_MULTIPROCESSING=0" in launch
     assert "--no-enable-prefix-caching" in launch
     assert "--language-model-only" in launch
     assert any("dst=/model-repository" in value and "readonly" in value for value in launch)
     assert "/model-repository/snapshots/" + REVISION in launch
     assert all("POST" not in " ".join(argv) for argv in calls)
+
+
+def test_inherited_batch_invariance_environment_refuses_actual_container(
+    tmp_path: Path,
+) -> None:
+    spec, runtime = _spec(tmp_path)
+    command, http_get, _, _ = _observations(spec, runtime)
+
+    def inherited(argv: tuple[str, ...]) -> bytes:
+        raw = command(argv)
+        if argv[:2] == ("docker", "inspect"):
+            document = json.loads(raw)
+            document[0]["Config"]["Env"].append("VLLM_BATCH_INVARIANT=1")
+            return json.dumps(document, separators=(",", ":")).encode()
+        return raw
+
+    with pytest.raises(LaunchRefused, match="actual container configuration"):
+        with LiveQ1Lease(spec, inherited, http_get):
+            pass
+
+
+def test_runtime_identity_requires_batch_invariance_to_be_explicitly_false(
+    tmp_path: Path,
+) -> None:
+    _, runtime = _spec(tmp_path)
+    assert _validate_runtime_identity(canonical_bytes(runtime))[
+        "batch_invariant"
+    ] is False
+    runtime["batch_invariant"] = True
+    with pytest.raises(LaunchRefused, match="runtime identity semantic boundary"):
+        _validate_runtime_identity(canonical_bytes(runtime))
 
 
 def test_existing_container_refuses_before_launch(tmp_path: Path) -> None:

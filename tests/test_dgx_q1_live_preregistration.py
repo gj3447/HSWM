@@ -142,7 +142,7 @@ def identity_blobs() -> dict[str, bytes]:
             "gpu_memory_utilization_milli": 800,
             "prefix_cache": False,
             "enforce_eager": True,
-            "batch_invariant": True,
+            "batch_invariant": False,
             "v1_multiprocessing": False,
             "model_loading_offline": True,
             "generation_config": "vllm",
@@ -174,9 +174,11 @@ def identity_blobs() -> dict[str, bytes]:
         ),
         "declared_isolation_contract_sha256": canonical_bytes(
             {
-                "schema_version": "hswm-dgx-q1-declared-isolation/v2",
-                "batch_invariant": True,
-                "boundary": "FINITE_DECLARED_CONTROL_CONTRACT_NOT_OBSERVED_PROOF",
+                "schema_version": "hswm-dgx-q1-declared-isolation/v3",
+                "batch_invariant": False,
+                "boundary": (
+                    "FINITE_DECLARED_SERIALIZED_CONTROL_CONTRACT_WITHOUT_BATCH_INVARIANCE"
+                ),
                 "dedicated_gpu": True,
                 "dedicated_node": True,
                 "dedicated_process": True,

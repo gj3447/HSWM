@@ -439,10 +439,11 @@ const makeLayer = (
   schemaContentSha256: string,
   interruption: PublicationInterruptionForTest,
   ioFaultPlan: ReadonlyArray<CanonicalAtomV2StateJournalFileIoFaultForTest>,
-  beforeSlotLink: BeforeSlotLinkForTest
+  beforeSlotLink: BeforeSlotLinkForTest,
+  minimumInjectedRevision: number
 ) =>
   Layer.effect(CanonicalAtomV2StateJournalStore, Effect.gen(function* () {
-    if (!/^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$/.test(journalLineageId) || !DIGEST.test(schemaContentSha256)) return yield* Effect.fail(error("INITIALIZE", "ROOT_UNSAFE", "journal configuration is invalid"))
+    if (!/^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$/.test(journalLineageId) || !DIGEST.test(schemaContentSha256) || !Number.isSafeInteger(minimumInjectedRevision) || minimumInjectedRevision < 0) return yield* Effect.fail(error("INITIALIZE", "ROOT_UNSAFE", "journal configuration is invalid"))
     const identity = yield* Effect.tryPromise({ try: () => initialize(rootPath), catch: (cause) => cause instanceof CanonicalAtomV2StateJournalStoreError ? cause : error("INITIALIZE", "IO_FAILED", "journal initialization failed") })
     const injectIoFault = makeIoFaultInjectorForTest(ioFaultPlan)
     return CanonicalAtomV2StateJournalStore.of({
@@ -453,6 +454,10 @@ const makeLayer = (
         const expectedPredecessor = snapshotExpectedPredecessor(input.expectedPredecessor)
         const bytes = Uint8Array.from(input.bytes)
         const descriptor = recordDescriptor(bytes, "PUBLISH")
+        const injected = input.stateRevision >= minimumInjectedRevision
+        const activeInterruption = injected ? interruption : null
+        const activeInjectIoFault: IoFaultInjectorForTest = injected ? injectIoFault : () => undefined
+        const activeBeforeSlotLink = injected ? beforeSlotLink : null
         const before = await recover(identity, journalLineageId, schemaContentSha256)
         const revisionPredecessor = input.stateRevision === 0
           ? null
@@ -461,7 +466,7 @@ const makeLayer = (
         const existing = before[input.stateRevision]
         if (existing !== undefined) {
           if (sameBytes(existing.bytes, bytes)) {
-            await syncKnownCommit(identity, injectIoFault)
+            await syncKnownCommit(identity, activeInjectIoFault)
             return Object.freeze({ _tag: "AlreadyCommitted", recovery: before })
           }
           throw error("PUBLISH", "CONCURRENT_PUBLICATION_CONFLICT", "journal revision is occupied by different bytes")
@@ -472,31 +477,31 @@ const makeLayer = (
           identity.objects,
           descriptor.sha256,
           bytes,
-          interruption,
-          injectIoFault
+          activeInterruption,
+          activeInjectIoFault
         )
         const slot = canonicalAtomV2StateJournalSlotName(journalLineageId, schemaContentSha256, input.stateRevision)
         await assertDirectory(identity.objects, "PUBLISH"); await assertDirectory(identity.slots, "PUBLISH")
-        interruptPublicationForTest(interruption, "slot-link:before")
-        if (beforeSlotLink !== null) await beforeSlotLink()
+        interruptPublicationForTest(activeInterruption, "slot-link:before")
+        if (activeBeforeSlotLink !== null) await activeBeforeSlotLink()
         try {
-          injectIoFault("slot-link", "before")
+          activeInjectIoFault("slot-link", "before")
           await link(
             join(identity.objects.path, descriptor.sha256),
             join(identity.slots.path, slot)
           )
-          injectIoFault("slot-link", "after")
+          activeInjectIoFault("slot-link", "after")
         } catch (cause) {
           const after = await recoverAfterSlotMayBeVisible(
             identity,
             journalLineageId,
             schemaContentSha256,
             "slot-link outcome could not be reconciled",
-            injectIoFault
+            activeInjectIoFault
           )
           const winner = after[input.stateRevision]
           if (winner !== undefined && sameBytes(winner.bytes, bytes)) {
-            await syncKnownCommit(identity, injectIoFault)
+            await syncKnownCommit(identity, activeInjectIoFault)
             return Object.freeze({ _tag: "AlreadyCommitted", recovery: after })
           }
           if (winner !== undefined) throw error("PUBLISH", "CONCURRENT_PUBLICATION_CONFLICT", "journal slot has a different winner")
@@ -504,13 +509,13 @@ const makeLayer = (
           if (["ENOSYS", "ENOTSUP", "EOPNOTSUPP", "EXDEV"].includes(String(code))) throw error("PUBLISH", "ATOMIC_PUBLICATION_UNSUPPORTED", String(code))
           throw cause
         }
-        interruptPublicationForTest(interruption, "slot-link:after")
-        interruptPublicationForTest(interruption, "slot-directory-fsync:before")
+        interruptPublicationForTest(activeInterruption, "slot-link:after")
+        interruptPublicationForTest(activeInterruption, "slot-directory-fsync:before")
         try {
           await syncDirectory(
             identity.slots,
             "PUBLISH",
-            injectIoFault,
+            activeInjectIoFault,
             "slot-directory-fsync"
           )
         } catch {
@@ -519,7 +524,7 @@ const makeLayer = (
             journalLineageId,
             schemaContentSha256,
             "slot durability could not be reconciled",
-            injectIoFault
+            activeInjectIoFault
           )
           const winner = after[input.stateRevision]
           if (winner === undefined || !sameBytes(winner.bytes, bytes)) {
@@ -529,7 +534,7 @@ const makeLayer = (
             await syncDirectory(
               identity.slots,
               "PUBLISH",
-              injectIoFault,
+              activeInjectIoFault,
               "slot-directory-fsync"
             )
           } catch (cause) {
@@ -541,13 +546,13 @@ const makeLayer = (
             )
           }
         }
-        interruptPublicationForTest(interruption, "slot-directory-fsync:after")
-        interruptPublicationForTest(interruption, "journal-readback:before")
+        interruptPublicationForTest(activeInterruption, "slot-directory-fsync:after")
+        interruptPublicationForTest(activeInterruption, "journal-readback:before")
         let after: ReadonlyArray<CanonicalAtomV2StateJournalEntry>
         try {
-          injectIoFault("journal-readback", "before")
+          activeInjectIoFault("journal-readback", "before")
           after = await recover(identity, journalLineageId, schemaContentSha256)
-          injectIoFault("journal-readback", "after")
+          activeInjectIoFault("journal-readback", "after")
         } catch (cause) {
           if (cause instanceof Error && "_tag" in cause) throw cause
           throw error(
@@ -557,7 +562,7 @@ const makeLayer = (
           )
         }
         if (!sameBytes(after[input.stateRevision]?.bytes ?? new Uint8Array(), bytes)) throw error("PUBLISH", "PUBLICATION_OUTCOME_UNKNOWN", "journal readback differs")
-        interruptPublicationForTest(interruption, "journal-readback:after")
+        interruptPublicationForTest(activeInterruption, "journal-readback:after")
         return Object.freeze({ _tag: "Committed", recovery: after })
       }, catch: (cause) => cause instanceof Error && "_tag" in cause ? cause as CanonicalAtomV2StateJournalStoreFailure : error("PUBLISH", "IO_FAILED", "journal publication failed") })
     })
@@ -568,35 +573,39 @@ export const makeCanonicalAtomV2StateJournalFileStoreLayer = (
   rootPath: string,
   journalLineageId: string,
   schemaContentSha256: string
-) => makeLayer(rootPath, journalLineageId, schemaContentSha256, null, [], null)
+) => makeLayer(rootPath, journalLineageId, schemaContentSha256, null, [], null, 0)
 
 /** Package-root-private deterministic interruption seam for internal tests. */
 export const makeCanonicalAtomV2StateJournalFileStoreLayerWithInterruptionForTest = (
   rootPath: string,
   journalLineageId: string,
   schemaContentSha256: string,
-  checkpoint: CanonicalAtomV2StateJournalFilePublicationCheckpointForTest
-) => makeLayer(rootPath, journalLineageId, schemaContentSha256, checkpoint, [], null)
+  checkpoint: CanonicalAtomV2StateJournalFilePublicationCheckpointForTest,
+  minimumInjectedRevisionForTest = 0
+) => makeLayer(rootPath, journalLineageId, schemaContentSha256, checkpoint, [], null, minimumInjectedRevisionForTest)
 
 /** Package-root-private native-like I/O fault seam for internal tests. */
 export const makeCanonicalAtomV2StateJournalFileStoreLayerWithIoFaultsForTest = (
   rootPath: string,
   journalLineageId: string,
   schemaContentSha256: string,
-  faults: ReadonlyArray<CanonicalAtomV2StateJournalFileIoFaultForTest>
-) => makeLayer(rootPath, journalLineageId, schemaContentSha256, null, faults, null)
+  faults: ReadonlyArray<CanonicalAtomV2StateJournalFileIoFaultForTest>,
+  minimumInjectedRevisionForTest = 0
+) => makeLayer(rootPath, journalLineageId, schemaContentSha256, null, faults, null, minimumInjectedRevisionForTest)
 
 /** Package-root-private coordination hook for deterministic process-race tests. */
 export const makeCanonicalAtomV2StateJournalFileStoreLayerWithBeforeSlotLinkForTest = (
   rootPath: string,
   journalLineageId: string,
   schemaContentSha256: string,
-  beforeSlotLink: () => Promise<void>
+  beforeSlotLink: () => Promise<void>,
+  minimumInjectedRevisionForTest = 0
 ) => makeLayer(
   rootPath,
   journalLineageId,
   schemaContentSha256,
   null,
   [],
-  beforeSlotLink
+  beforeSlotLink,
+  minimumInjectedRevisionForTest
 )

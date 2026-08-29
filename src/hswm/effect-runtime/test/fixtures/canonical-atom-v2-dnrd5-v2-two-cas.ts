@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto"
 
-import { Effect, Either } from "effect"
+import { Effect, Either, Layer } from "effect"
 
 import {
   canonicalAtomV2EnvelopeBytes,
@@ -20,9 +20,12 @@ import {
   CanonicalAtomV2DurableRuntime,
   commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal,
   makeCanonicalAtomV2DurableRuntimeFileLayer,
+  makeCanonicalAtomV2DurableRuntimeFileLayerWithBeforeSlotLinkForTest,
+  makeCanonicalAtomV2DurableRuntimeFileLayerWithIoFaultsForTest,
   makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest,
   type CanonicalAtomV2DurableState
 } from "../../src/canonical-atom-v2-durable-runtime.js"
+import type { CanonicalAtomV2StateJournalFileIoFaultForTest } from "../../src/canonical-atom-v2-state-journal-file.js"
 import {
   DNRD5_V2_AUTHORITY_PAYLOAD_V1,
   DNRD5_V2_AUTHORIZATION_DECISION_MEDIA_TYPE,
@@ -163,6 +166,30 @@ export const makeDnrd5V2TwoCasFileLayer = (rootPath: string) =>
     rootPath,
     JOURNAL_LINEAGE,
     dnrd5V2TwoCasSchemaBytes,
+    grants
+  )
+
+export const makeDnrd5V2TwoCasIoFaultFileLayer = (
+  rootPath: string,
+  faults: ReadonlyArray<CanonicalAtomV2StateJournalFileIoFaultForTest>
+): Layer.Layer<CanonicalAtomV2DurableRuntime, unknown, never> =>
+  makeCanonicalAtomV2DurableRuntimeFileLayerWithIoFaultsForTest(
+    rootPath,
+    JOURNAL_LINEAGE,
+    dnrd5V2TwoCasSchemaBytes,
+    faults,
+    grants
+  )
+
+export const makeDnrd5V2TwoCasBeforeSlotLinkFileLayer = (
+  rootPath: string,
+  beforeSlotLink: () => Promise<void>
+): Layer.Layer<CanonicalAtomV2DurableRuntime, unknown, never> =>
+  makeCanonicalAtomV2DurableRuntimeFileLayerWithBeforeSlotLinkForTest(
+    rootPath,
+    JOURNAL_LINEAGE,
+    dnrd5V2TwoCasSchemaBytes,
+    beforeSlotLink,
     grants
   )
 

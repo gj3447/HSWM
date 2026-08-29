@@ -103,6 +103,18 @@ it("exports durable v2 replay without raw journal publication or receipt constru
     "makeCanonicalAtomV2StateJournalFileStoreLayerWithBeforeSlotLinkForTest" in
       PublicApi
   ).toBe(false)
+  expect(
+    "makeCanonicalAtomV2DurableRuntimeFileLayerWithInterruptionForTest" in
+      PublicApi
+  ).toBe(false)
+  expect(
+    "makeCanonicalAtomV2DurableRuntimeFileLayerWithIoFaultsForTest" in
+      PublicApi
+  ).toBe(false)
+  expect(
+    "makeCanonicalAtomV2DurableRuntimeFileLayerWithBeforeSlotLinkForTest" in
+      PublicApi
+  ).toBe(false)
   expect("makeCanonicalAtomV2DurableRuntimeLayer" in PublicApi).toBe(false)
   expect(
     "makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest" in PublicApi

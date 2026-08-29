@@ -18,6 +18,9 @@ import {
   CanonicalAtomV2DurableRuntime,
   makeCanonicalAtomV2DurableRuntimeLayer,
   makeCanonicalAtomV2DurableRuntimeFileLayer,
+  makeCanonicalAtomV2DurableRuntimeFileLayerWithBeforeSlotLinkForTest,
+  makeCanonicalAtomV2DurableRuntimeFileLayerWithInterruptionForTest,
+  makeCanonicalAtomV2DurableRuntimeFileLayerWithIoFaultsForTest,
   makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest,
   recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal
 } from "../src/canonical-atom-v2-durable-runtime.js"
@@ -35,6 +38,7 @@ import {
   canonicalAtomV2StateJournalSlotName,
   makeCanonicalAtomV2StateJournalFileStoreLayer,
   makeCanonicalAtomV2StateJournalFileStoreLayerWithInterruptionForTest,
+  type CanonicalAtomV2StateJournalFileIoFaultForTest,
   type CanonicalAtomV2StateJournalFilePublicationCheckpointForTest
 } from "../src/canonical-atom-v2-state-journal-file.js"
 import { CanonicalAtomV2StateJournalStore } from "../src/canonical-atom-v2-state-journal-store.js"
@@ -254,6 +258,86 @@ const withTemporaryRoot = <A, E>(
     )
   )
 }
+
+it.effect("durable interruption factory initializes genesis cleanly and arms revision one", () =>
+  withTemporaryRoot((root) =>
+    Effect.gen(function* () {
+      const initialized = yield* Effect.gen(function* () {
+        const runtime = yield* CanonicalAtomV2DurableRuntime
+        return yield* runtime.snapshot
+      }).pipe(Effect.provide(
+        makeCanonicalAtomV2DurableRuntimeFileLayerWithInterruptionForTest(
+          root, JOURNAL_LINEAGE, rawSchemaBytes(), "object-file-fsync:before", grants()
+        )
+      ))
+      expect(initialized.canonical.revision).toBe(0)
+      const attempted = yield* Effect.gen(function* () {
+        const runtime = yield* CanonicalAtomV2DurableRuntime
+        const payload = yield* runtime.stageContent("text/plain", utf8("armed-interruption"))
+        return yield* runtime.submit(inputFor(atomFixture("atom:armed-interruption", payload)))
+      }).pipe(
+        Effect.provide(makeCanonicalAtomV2DurableRuntimeFileLayerWithInterruptionForTest(
+          root, JOURNAL_LINEAGE, rawSchemaBytes(), "object-file-fsync:before", grants()
+        )),
+        Effect.either
+      )
+      expect(Either.isLeft(attempted)).toBe(true)
+    })
+  )
+)
+
+it.effect("durable I/O-fault factory initializes genesis cleanly and arms revision one", () =>
+  withTemporaryRoot((root) =>
+    Effect.gen(function* () {
+      const fault: CanonicalAtomV2StateJournalFileIoFaultForTest = {
+        point: "object-file-fsync", phase: "before", code: "EIO"
+      }
+      const initialized = yield* Effect.gen(function* () {
+        const runtime = yield* CanonicalAtomV2DurableRuntime
+        return yield* runtime.snapshot
+      }).pipe(Effect.provide(makeCanonicalAtomV2DurableRuntimeFileLayerWithIoFaultsForTest(
+        root, JOURNAL_LINEAGE, rawSchemaBytes(), [fault], grants()
+      )))
+      expect(initialized.canonical.revision).toBe(0)
+      const attempted = yield* Effect.gen(function* () {
+        const runtime = yield* CanonicalAtomV2DurableRuntime
+        const payload = yield* runtime.stageContent("text/plain", utf8("armed-io"))
+        return yield* runtime.submit(inputFor(atomFixture("atom:armed-io", payload)))
+      }).pipe(
+        Effect.provide(makeCanonicalAtomV2DurableRuntimeFileLayerWithIoFaultsForTest(
+          root, JOURNAL_LINEAGE, rawSchemaBytes(), [fault], grants()
+        )),
+        Effect.either
+      )
+      expect(Either.isLeft(attempted)).toBe(true)
+    })
+  )
+)
+
+it.effect("durable before-slot-link factory bypasses genesis and arms revision one", () =>
+  withTemporaryRoot((root) =>
+    Effect.gen(function* () {
+      let calls = 0
+      const barrier = () => { calls += 1; return Promise.resolve() }
+      const layer = makeCanonicalAtomV2DurableRuntimeFileLayerWithBeforeSlotLinkForTest(
+        root, JOURNAL_LINEAGE, rawSchemaBytes(), barrier, grants()
+      )
+      const initialized = yield* Effect.gen(function* () {
+        const runtime = yield* CanonicalAtomV2DurableRuntime
+        return yield* runtime.snapshot
+      }).pipe(Effect.provide(layer))
+      expect(initialized.canonical.revision).toBe(0)
+      expect(calls).toBe(0)
+      const committed = yield* Effect.gen(function* () {
+        const runtime = yield* CanonicalAtomV2DurableRuntime
+        const payload = yield* runtime.stageContent("text/plain", utf8("armed-barrier"))
+        return yield* runtime.submit(inputFor(atomFixture("atom:armed-barrier", payload)))
+      }).pipe(Effect.provide(layer))
+      expect(committed.state.canonical.revision).toBe(1)
+      expect(calls).toBe(1)
+    })
+  )
+)
 
 const commitTwoAtomRevisions = (root: string, atomUid: string) =>
   Effect.gen(function* () {

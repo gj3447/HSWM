@@ -50,7 +50,14 @@ import {
   type CanonicalAtomV2StateJournalCommit,
   type CanonicalAtomV2StateJournalRecordDescriptor
 } from "./canonical-atom-v2-state-journal.js"
-import { makeCanonicalAtomV2StateJournalFileStoreLayer } from "./canonical-atom-v2-state-journal-file.js"
+import {
+  makeCanonicalAtomV2StateJournalFileStoreLayer,
+  makeCanonicalAtomV2StateJournalFileStoreLayerWithInterruptionForTest as makeJournalFileStoreLayerWithInterruptionForTest,
+  makeCanonicalAtomV2StateJournalFileStoreLayerWithIoFaultsForTest as makeJournalFileStoreLayerWithIoFaultsForTest,
+  makeCanonicalAtomV2StateJournalFileStoreLayerWithBeforeSlotLinkForTest as makeJournalFileStoreLayerWithBeforeSlotLinkForTest,
+  type CanonicalAtomV2StateJournalFileIoFaultForTest,
+  type CanonicalAtomV2StateJournalFilePublicationCheckpointForTest
+} from "./canonical-atom-v2-state-journal-file.js"
 import {
   CanonicalAtomV2StateJournalStore,
   CanonicalAtomV2StateJournalStoreError,
@@ -764,11 +771,12 @@ export const makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest = (
  * Local POSIX content and predecessor-bound state/receipt durability. This is
  * neither distributed consensus nor canonical Permit or learning evidence.
  */
-export const makeCanonicalAtomV2DurableRuntimeFileLayer = (
+const makeCanonicalAtomV2DurableRuntimeFileLayerWithJournalStore = (
   rootPath: string,
   journalLineageId: string,
   rawSchemaBytes: Uint8Array,
-  rawGrants: unknown = []
+  rawGrants: unknown,
+  journalStoreLayer: ReturnType<typeof makeCanonicalAtomV2StateJournalFileStoreLayer>
 ) => {
   const decoded = decodeCanonicalAtomV2SchemaContent(rawSchemaBytes)
   if (Either.isLeft(decoded)) return Layer.fail(decoded.left)
@@ -779,11 +787,107 @@ export const makeCanonicalAtomV2DurableRuntimeFileLayer = (
   ).pipe(
     Layer.provide([
       makeCanonicalAtomV2ContentFileStoreLayer(rootPath),
-      makeCanonicalAtomV2StateJournalFileStoreLayer(
-        rootPath,
-        journalLineageId,
-        decoded.right.binding.content.sha256
-      )
+      journalStoreLayer
     ])
+  )
+}
+
+/**
+ * Local POSIX content and predecessor-bound state/receipt durability. This is
+ * neither distributed consensus nor canonical Permit or learning evidence.
+ */
+export const makeCanonicalAtomV2DurableRuntimeFileLayer = (
+  rootPath: string,
+  journalLineageId: string,
+  rawSchemaBytes: Uint8Array,
+  rawGrants: unknown = []
+) => {
+  const decoded = decodeCanonicalAtomV2SchemaContent(rawSchemaBytes)
+  if (Either.isLeft(decoded)) return Layer.fail(decoded.left)
+  return makeCanonicalAtomV2DurableRuntimeFileLayerWithJournalStore(
+    rootPath,
+    journalLineageId,
+    rawSchemaBytes,
+    rawGrants,
+    makeCanonicalAtomV2StateJournalFileStoreLayer(
+      rootPath,
+      journalLineageId,
+      decoded.right.binding.content.sha256
+    )
+  )
+}
+
+/** Package-root-private interruption composition seam for durable-runtime tests. */
+export const makeCanonicalAtomV2DurableRuntimeFileLayerWithInterruptionForTest = (
+  rootPath: string,
+  journalLineageId: string,
+  rawSchemaBytes: Uint8Array,
+  checkpoint: CanonicalAtomV2StateJournalFilePublicationCheckpointForTest,
+  rawGrants: unknown = []
+) => {
+  const decoded = decodeCanonicalAtomV2SchemaContent(rawSchemaBytes)
+  if (Either.isLeft(decoded)) return Layer.fail(decoded.left)
+  return makeCanonicalAtomV2DurableRuntimeFileLayerWithJournalStore(
+    rootPath,
+    journalLineageId,
+    rawSchemaBytes,
+    rawGrants,
+    makeJournalFileStoreLayerWithInterruptionForTest(
+      rootPath,
+      journalLineageId,
+      decoded.right.binding.content.sha256,
+      checkpoint,
+      1
+    )
+  )
+}
+
+/** Package-root-private I/O-fault composition seam for durable-runtime tests. */
+export const makeCanonicalAtomV2DurableRuntimeFileLayerWithIoFaultsForTest = (
+  rootPath: string,
+  journalLineageId: string,
+  rawSchemaBytes: Uint8Array,
+  faults: ReadonlyArray<CanonicalAtomV2StateJournalFileIoFaultForTest>,
+  rawGrants: unknown = []
+) => {
+  const decoded = decodeCanonicalAtomV2SchemaContent(rawSchemaBytes)
+  if (Either.isLeft(decoded)) return Layer.fail(decoded.left)
+  return makeCanonicalAtomV2DurableRuntimeFileLayerWithJournalStore(
+    rootPath,
+    journalLineageId,
+    rawSchemaBytes,
+    rawGrants,
+    makeJournalFileStoreLayerWithIoFaultsForTest(
+      rootPath,
+      journalLineageId,
+      decoded.right.binding.content.sha256,
+      faults,
+      1
+    )
+  )
+}
+
+/** Package-root-private process-race composition seam for durable-runtime tests. */
+export const makeCanonicalAtomV2DurableRuntimeFileLayerWithBeforeSlotLinkForTest = (
+  rootPath: string,
+  journalLineageId: string,
+  rawSchemaBytes: Uint8Array,
+  beforeSlotLink: () => Promise<void>,
+  rawGrants: unknown = []
+) => {
+  const decoded = decodeCanonicalAtomV2SchemaContent(rawSchemaBytes)
+  if (Either.isLeft(decoded)) return Layer.fail(decoded.left)
+  return makeCanonicalAtomV2DurableRuntimeFileLayerWithJournalStore(
+    rootPath,
+    journalLineageId,
+    rawSchemaBytes,
+    rawGrants,
+    makeJournalFileStoreLayerWithBeforeSlotLinkForTest(
+      rootPath,
+      journalLineageId,
+      decoded.right.binding.content.sha256,
+      beforeSlotLink,
+      1
+    )
   )
 }

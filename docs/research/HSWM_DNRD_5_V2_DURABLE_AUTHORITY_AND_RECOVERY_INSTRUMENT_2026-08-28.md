@@ -3,7 +3,8 @@
 - Date: 2026-08-28
 - Scope: local, no-provider-call instrumentation
 - Recovery/authority/consumption predecessors: `d772b71`, `e98d491`, `61d81c3`
-- Latest predecessor CI: passed (`61d81c3`)
+- Initial/resumable ADMIT predecessors: `8cbcea9`, `d71e5d6`
+- Latest predecessor CI: passed (`d71e5d6`)
 - Scientific status: `UNJUDGED / NOT AN OCCURRENCE / NOT EFFICACY`
 
 ## Canonical target role
@@ -145,6 +146,31 @@ respective CAS, leaving S0 or exact receipt-pending R1 unchanged. These tests
 establish behavior of the local instrument; they are not evidence that HSWM
 learned or improved.
 
+The current fault and process extension adds four narrower falsification
+classes. Test-only durable-runtime adapters leave genesis uninstrumented and
+arm interruption, I/O fault, or a process barrier only from revision one; the
+underlying direct journal adapters retain their revision-zero behavior. A
+fault immediately after final journal readback makes the CAS1 or CAS2 return
+unreliable while a newly opened normal runtime treats raw recovery as the
+oracle. Exact R1 is continued once to R2, exact R2 is confirmed without a
+write, and each expected descriptor occurs once.
+
+On Linux, separate child processes are also killed with `SIGKILL` immediately
+after the CAS1 or CAS2 slot hard link becomes visible. A fresh parent runtime
+recovers exact R1 or R2; after the CAS2 kill, confirmation leaves both journal
+and replayed history unchanged. Two independently reconstructed resume
+processes are released at the same CAS2 slot-link boundary and converge on the
+same exact R2 without an R3. These are actual process-loss schedules on the
+running local filesystem, not simulations of power loss or storage-device
+failure.
+
+Finally, generic-schema-valid but DNRD-grammar-invalid competing R1 and R2
+records are placed at the durable tail through the package-internal dispatcher
+commit seam. The tests first prove that each competing descriptor differs from
+the normal expected descriptor, then show that resume fails closed with the
+raw journal and replayed history unchanged and no following record. Test-only
+composition factories remain absent from the package public API.
+
 Exactly one schema-relative responsibility owner per atom does not by itself
 require a different runtime principal for every custodian role. This bounded
 verifier requires the declared authorizer to differ from the actor and each
@@ -185,26 +211,35 @@ resume branch can accidentally issue CAS1.
 ## Explicit nonclaims and next gate
 
 The present instruments do not prove external authorization, trusted time,
-external custody, nonce uniqueness beyond one recovered lineage, OS/process
-kill or power-loss durability, provider execution, Source A, occurrence,
-macroplastic learning, causal improvement, or efficacy. They do establish
-exact local R1/R2 recovery for the initial and recovery-only ADMIT paths,
-including reconstruction through a newly opened file-runtime layer. A
-caller-supplied state cannot by itself prove durable recovery, and an immutable
-`CHECKED_NOT_REVOKED` payload is only a snapshot-local record unless a later
-authenticated revocation/time source is bound.
+external custody, nonce uniqueness beyond one recovered lineage, power-loss
+or storage-device durability, cross-host consensus, provider execution,
+Source A, occurrence, macroplastic learning, causal improvement, or efficacy.
+They do establish exact local R1/R2 recovery for the initial and recovery-only
+ADMIT paths, including reconstruction through a newly opened file-runtime
+layer, injected lost returns, and bounded Linux process-kill and same-record
+CAS2 race schedules. A caller-supplied state cannot by itself prove durable
+recovery, and an immutable `CHECKED_NOT_REVOKED` payload is only a
+snapshot-local record unless a later authenticated revocation/time source is
+bound.
 
-The next implementation gate is therefore narrow and ordered:
+The next implementation gate is therefore scientific rather than open-ended
+harness growth, and remains ordered:
 
-1. inject lost-return and actual process-boundary failures after CAS1 and CAS2,
-   and
-   distinguish exact receipt-pending state from competing or malformed tails;
-2. add stale-head and cross-process concurrent-writer schedules that prove one
-   durable winner and deterministic loser classification;
-3. implement and falsify the symmetric `MAIN_RESTORE` / `RECEIPT_RESTORE`
-   two-CAS path; and
-4. only then connect the provider-free randomized/placebo causal experiment
-   runner that can test outcome→credit→revision→fresh-behavior effects.
+1. implement and falsify the symmetric `MAIN_RESTORE` /
+   `RECEIPT_RESTORE` two-CAS path, including an explicit typed projection that
+   proves the post-restore behavioral root and compiled read set are
+   byte-identical to W0 while append-only audit atoms remain outside that
+   projection;
+2. qualify the frozen, provider-free randomized/placebo runner and its blind
+   evaluator, assignment, leakage, missingness, and manifest controls; and
+3. only after those gates are frozen, execute the preregistered experiment that
+   can test outcome→credit→revision→fresh-behavior effects. A deterministic
+   rule harness may qualify plumbing but cannot substitute for the frozen local
+   LLM transition realization in an efficacy claim.
+
+Different-byte cross-process publication and true power-loss schedules remain
+useful durability adversaries, but they are not allowed to displace the
+RESTORE negative control and causal experiment as the next research work.
 
 Because this work is instrumentation rather than a material research result,
 it creates no content-addressed result receipt and no

@@ -2,16 +2,17 @@
 
 - Date: `2026-08-29`
 - Instrument: `DNRD5-QCASE024-MI-1-CONTENT-V4`
-- Status: `FROZEN / AWAITING_PUBLICATION_CI / UNRUN`
+- Status: `COMPLETE / INDEPENDENTLY_VERIFIED / BOTH_ARMS_VARIATION`
 - Namespace: `DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v4`
 - Scope: post-result-selected finite mechanism diagnostic
 - DNRD-5 causal effect: `NOT_EVALUATED`
 - Source-A disposition remains: `SOURCE_A_REFUSED_EXACTNESS_UNQUALIFIED`
-- v4 is a fresh content/trace-qualification experiment identity.  Its source,
-  verifier, source-CI receipt, freeze, plan, marker, closure, genesis, and
-  single-use registry path are now bound.  Its publication identity and CI
-  receipt, plan burn, and live/verifier run identifiers do not yet exist; no
-  target launch is authorized before those remaining bindings complete.
+- Result:
+  [`HSWM_DNRD5_QCASE024_MECHANISM_ISOLATION_RESULTS_2026-08-29.md`](../../results/HSWM_DNRD5_QCASE024_MECHANISM_ISOLATION_RESULTS_2026-08-29.md)
+- v4 is a completed fresh content/trace-qualification identity. Its source,
+  verifier, CI receipts, freeze, single plan burn, 16-call live evidence, and
+  independent-verifier result are bound. The plan is consumed and cannot be
+  retried, resumed, replaced, or reused.
 
 ## Frozen v4 preregistration
 
@@ -35,7 +36,33 @@ and root-genesis SHA-256
 `70a5a60aebd9ff406c91673c97df4d7d5b3a2b1ae23e39d8dc07e4ffa20dbebd`.
 The plan names only the fresh node-local registry
 `/mnt/hswm/evidence/hswm-dnrd5-qcase024-mi-1-content-v4-consumption-v4`.
-At this stage it is frozen but unconsumed and unrun.
+Publication commit `2ca0fb20833103bbe1331e1dabc2ae02ffee4878`, tree
+`6ce1b9fac404ec5940fb1356c2172361d1fdf77d`, passed first-attempt publication
+CI run [`33269801645`](https://github.com/gj3447/HSWM/actions/runs/33269801645)
+with all eight jobs successful; the strict receipt SHA-256 is
+`ad9e8d1e2d735186821ec3d78a7b94904b58f14bd6499536ad7437ef39805c49`.
+The plan was then burned once at the declared path. Its consumption marker
+SHA-256 is
+`0a87322cdcfd41c18f521e83f433a70c8fa466cd7985e5f9df9fe00fd011fadb`.
+
+## Executed v4 result
+
+Run `dgx-qcase024-mi-1-v4-live-2ca0fb2-002` completed all 16 frozen calls with
+zero retry and terminal `LIVE_COMPLETE_DGX_QCASE024_MECHANISM_DIAGNOSTIC`.
+Every four-call block had byte-exact assistant-content UTF-8 internally, but
+both eight-call arms contained the same two assistant-content values, four
+observations each. The frozen observation pattern is `BOTH_ARMS_VARIATION`.
+
+The exact ledger SHA-256 is
+`838f338946af641f69e0e234eafbe8589be9c783dbc12870e1d110128c8a160b`,
+and its final chain record is
+`1d11b1f451c78f6bc8adbd2c0cc411d3e35420d795909a92446d9e3adcfc24a2`.
+Independent run `dgx-qcase024-mi-1-v4-verify-2ca0fb2-001` reproduced the same
+terminal and reductions; verifier-output SHA-256 is
+`7cd98ce4ec019a25368ba9878c01508fdf30a8842754dd34c9595ee693bbb56e`.
+The result means async-off was not sufficient to keep bytes invariant across
+the two observed fresh disabled blocks. It does not identify a cause or show
+that async scheduling contributes nothing.
 
 ## Historical v3 one-call content-normalization incompatibility
 
@@ -395,11 +422,11 @@ This qualification repairs the instrument boundary only; it is not a v3
 observation, an arm comparison, or a scientific result.
 
 The fresh v4 namespace, source/build and independent-verifier identities,
-source qualification, freeze, cache namespace, and consumption-registry path
-are now new and bound.  The publication qualification, plan burn, evidence
-root, live-run identity, and verifier-run identity must still be new.  The
-offline v3-envelope qualification is complete; no v4 target call is authorized
-until the remaining publication binding is complete.
+source qualification, publication qualification, freeze, cache namespace,
+consumption marker, evidence root, live-run identity, and verifier-run identity
+were all independently new and are now bound. The completed identity is
+immutable; the offline v3-envelope qualification remains only an instrument
+qualification and never becomes a v3 scientific observation.
 
 ## Primary observations
 

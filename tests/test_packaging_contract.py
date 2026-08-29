@@ -412,17 +412,25 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
     assert "_research/root_compat/pyproject.toml" in inner, (
         "H3 동결 실행 스냅샷의 pyproject.toml 이 sdist 에 없다"
     )
-    mi_material_root = (
+    mi1_material_root = (
         "_research/dgx_q1/preregistrations/"
         "hswm-dnrd5-dgx-live-q1-v3-2026-08-29/materials/QCASE-024/"
     )
+    mi2_material_root = (
+        "_research/dgx_mi2/preregistrations/"
+        "hswm-dnrd5-qcase024-mi-2-launch-crossed-v1-2026-08-29/"
+        "materials/QCASE-024/"
+    )
     assert {
-        mi_material_root + "instruction.txt",
-        mi_material_root + "rng.bin",
-    } <= set(inner), "MI-1의 고정 QCASE-024 소스 바이트가 sdist 에 없다"
+        mi1_material_root + "instruction.txt",
+        mi1_material_root + "rng.bin",
+        mi2_material_root + "instruction.txt",
+        mi2_material_root + "rng.bin",
+    } <= set(inner), "MI-1/MI-2의 고정 QCASE-024 소스 바이트가 sdist 에 없다"
     assert {n for n in inner if n.endswith("/rng.bin")} == {
-        mi_material_root + "rng.bin"
-    }, "MI-1과 무관한 binary RNG 바이트가 sdist 에 섞였다"
+        mi1_material_root + "rng.bin",
+        mi2_material_root + "rng.bin",
+    }, "MI-1/MI-2와 무관한 binary RNG 바이트가 sdist 에 섞였다"
     # 루트 *.sh 는 배포하지 않는다. 일부 운영 스크립트가 장비별 호스트명을
     # 포함할 수 있으므로 source distribution의 공용 표면에서 제외한다.
     root_sh = [n for n in inner if "/" not in n and n.endswith(".sh")]

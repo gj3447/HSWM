@@ -50,12 +50,12 @@ def _docker(*args: str) -> bytes:
     return result.stdout
 
 
-def _container_state(name: str) -> tuple[str, bool]:
-    raw = _docker("inspect", "--format", "{{.Id}}\t{{.State.Running}}", name).decode("utf-8", "strict").strip()
+def _container_state(name: str) -> tuple[str, bool, bool]:
+    raw = _docker("inspect", "--format", "{{.Id}}\t{{.State.Running}}\t{{.HostConfig.AutoRemove}}", name).decode("utf-8", "strict").strip()
     fields = raw.split("\t")
-    if len(fields) != 2 or _CONTAINER_ID.fullmatch(fields[0]) is None or fields[1] not in {"true", "false"}:
+    if len(fields) != 3 or _CONTAINER_ID.fullmatch(fields[0]) is None or any(value not in {"true", "false"} for value in fields[1:]):
         raise RuntimeError("MI-2 Docker container state malformed")
-    return fields[0], fields[1] == "true"
+    return fields[0], fields[1] == "true", fields[2] == "true"
 
 
 def _active_shared_containers() -> list[tuple[str, str]]:
@@ -66,8 +66,8 @@ def _active_shared_containers() -> list[tuple[str, str]]:
     snapshot: list[tuple[str, str]] = []
     for name in _SHARED_CONTAINERS:
         if name in names:
-            identifier, running = _container_state(name)
-            if not running:
+            identifier, running, auto_remove = _container_state(name)
+            if not running or auto_remove:
                 raise RuntimeError("MI-2 Docker active-container snapshot drifted")
             snapshot.append((name, identifier))
     return snapshot
@@ -86,8 +86,8 @@ def _stop_services(stopped: list[tuple[str, str]] | None = None) -> list[tuple[s
     try:
         for name, identifier in stopped:
             _docker("stop", "--time", "30", identifier)
-            observed_id, running = _container_state(name)
-            if observed_id != identifier or running:
+            observed_id, running, auto_remove = _container_state(name)
+            if observed_id != identifier or running or auto_remove:
                 raise RuntimeError("MI-2 Docker container did not stop exactly")
     except Exception:
         # A stop command may report failure after taking effect.  Restore the
@@ -104,9 +104,13 @@ def _restore_services(stopped: list[tuple[str, str]]) -> None:
         if name not in expected:
             continue
         try:
-            _docker("start", expected[name])
-            observed_id, running = _container_state(name)
-            if observed_id != expected[name] or not running:
+            observed_id, running, auto_remove = _container_state(name)
+            if observed_id != expected[name] or auto_remove:
+                raise RuntimeError("identity/state mismatch")
+            if not running:
+                _docker("start", expected[name])
+                observed_id, running, auto_remove = _container_state(name)
+            if observed_id != expected[name] or not running or auto_remove:
                 raise RuntimeError("identity/state mismatch")
         except Exception:
             failures.append(name)

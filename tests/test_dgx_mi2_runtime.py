@@ -122,7 +122,7 @@ def test_partial_container_stop_restores_the_full_pre_stop_snapshot(monkeypatch)
             return ("\n".join(name for name in experiment._SHARED_CONTAINERS if running.get(name)) + "\n").encode()
         if args[0] == "inspect":
             name = args[-1]
-            return f"{identifiers[name]}\t{str(running[name]).lower()}\n".encode()
+            return f"{identifiers[name]}\t{str(running[name]).lower()}\tfalse\n".encode()
         if args[0] == "stop":
             name = next(key for key, value in identifiers.items() if value == args[-1])
             running[name] = False
@@ -154,6 +154,35 @@ def test_unknown_active_container_refuses_before_any_stop(monkeypatch) -> None:
     with pytest.raises(RuntimeError, match="unknown or ambiguous"):
         experiment._stop_services([])
     assert calls == [("ps", "--format", "{{.Names}}")]
+
+
+def test_auto_remove_shared_container_refuses_before_any_stop(monkeypatch) -> None:
+    identifier = "a" * 64
+    calls: list[tuple[str, ...]] = []
+    def docker(*args: str) -> bytes:
+        calls.append(args)
+        if args[0] == "ps":
+            return b"vllm\n"
+        if args[0] == "inspect":
+            return f"{identifier}\ttrue\ttrue\n".encode()
+        raise AssertionError(args)
+    monkeypatch.setattr(experiment, "_docker", docker)
+    with pytest.raises(RuntimeError, match="snapshot drifted"):
+        experiment._stop_services([])
+    assert not any(args[0] == "stop" for args in calls)
+
+
+def test_restore_skips_start_for_exact_container_already_running(monkeypatch) -> None:
+    identifier = "a" * 64
+    calls: list[tuple[str, ...]] = []
+    def docker(*args: str) -> bytes:
+        calls.append(args)
+        if args[0] == "inspect":
+            return f"{identifier}\ttrue\tfalse\n".encode()
+        raise AssertionError(args)
+    monkeypatch.setattr(experiment, "_docker", docker)
+    experiment._restore_services([("vllm", identifier)])
+    assert not any(args[0] == "start" for args in calls)
 
 
 def test_postrun_quiescence_failure_keeps_shared_services_stopped(tmp_path: Path, monkeypatch) -> None:
@@ -241,7 +270,7 @@ def test_known_docker_services_are_a_read_only_preflight_snapshot(monkeypatch) -
         if args[0] == "ps":
             return b"vllm\n"
         if args[0] == "inspect":
-            return f"{identifier}\ttrue\n".encode()
+            return f"{identifier}\ttrue\tfalse\n".encode()
         raise AssertionError(args)
     monkeypatch.setattr(experiment, "_docker", docker)
     _preflight_services()

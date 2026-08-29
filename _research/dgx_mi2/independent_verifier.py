@@ -442,3 +442,6 @@ def main(argv:list[str]|None=None)->int:
     return 2 if result["terminal"]==VOID else 0
 
 __all__=["ASSOCIATION","COMPLETE","INCOMPLETE","NO_ASSOCIATION","UNAVAILABLE","VOID","verify"]
+
+if __name__=="__main__":
+    raise SystemExit(main())

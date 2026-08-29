@@ -6,6 +6,8 @@ from hashlib import sha256
 import json
 from pathlib import Path
 import pytest
+import subprocess
+import sys
 
 from _research.dnrd5.canonical_json import canonical_bytes, canonical_sha256, parse_canonical
 from _research.dgx_mi2 import protocol
@@ -130,6 +132,18 @@ def test_cli_passes_the_required_external_burn_registry(tmp_path: Path, monkeypa
     result = parse_canonical(output.read_bytes())
     assert result["terminal"] == COMPLETE
     assert result["family_label"] == NO_ASSOCIATION
+
+
+def test_module_cli_entrypoint_is_executable() -> None:
+    completed = subprocess.run(
+        [sys.executable, "-m", "_research.dgx_mi2.independent_verifier", "--help"],
+        cwd=Path(__file__).parents[1],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.returncode == 0
+    assert "--external-registry-root" in completed.stdout
 
 
 def test_independent_constants_match_the_registered_contract() -> None:

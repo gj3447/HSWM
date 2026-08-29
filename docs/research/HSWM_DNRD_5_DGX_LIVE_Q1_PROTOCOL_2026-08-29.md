@@ -1,8 +1,10 @@
 # HSWM-DNRD-5 DGX live Q1 protocol
 
-**Status:** v2 was refused before dispatch with zero POSTs; v3 is an unrun
-serialized-repeatability instrument. No Q1 repeatability terminal, Source A
-freeze, Permit, or DNRD-5 occurrence has been created.
+**Status:** v2 was refused before dispatch with zero POSTs. The separately
+frozen v3 completed all 96 POSTs and reached
+`LIVE_FALSIFIED_EXACT_ASSISTANT_CONTENT_UTF8_ON_FROZEN_Q1`. Its single-use plan
+is consumed and sealed. No Source A freeze, Permit, or DNRD-5 causal occurrence
+has been created; the causal effect remains `NOT_EVALUATED`.
 
 ## Scope
 
@@ -39,6 +41,47 @@ The initially published freeze at commit `48ee7fb9c7531e61ddb3272fad9ee715243b1c
 The replacement v2 freeze was published at commit `5a058dd284d1272e1d9d4038a53df615fd7ad415`, with plan SHA-256 `fd202af03af44aecea5b8271903e2e4151bee01ca7c27d915959fdb9939091b9`. Run `dgx-q1-v2-live-5a058dd-001` was refused during target startup on 2026-08-29. Its durable run receipt SHA-256 is `5cbb59d4b71024d0590be28608907286a4b1dece6523635f1064d1a733c308bc`; the archived artifact SHA-256 is `f97dcb63098323451cecf47773408ae39fa9b0a2c077ad663fdfbd051293d743`. The fail-closed output records zero durable START rows, zero completed response envelopes, exact provider/model-call upper bound zero, and no scientific claim. The durable plan marker is absent. A separate zero-POST exit diagnostic, receipt SHA-256 `3adc3d39155b036e91e61a0c8a4467c108e0aea2d6a8dfc03448d85793c0c8b6`, observed all 42 model shards load, Docker exit code 1, `OOMKilled:false`, and the exact GDN batch-invariance exception before container removal. Thus v2 is an unconsumed, superseded operational compatibility refusal—not reproduced, falsified, inconclusive evidence, a Qwen quality finding, or a DNRD-5 result.
 
 Because v2 exposed no request to the model and no response was observed, v3 may reuse the same public-synthetic corpus and frozen call-order seed without response-conditioned selection. It must still have a fresh root genesis, changed runtime and isolation identities, new source/verifier and publication receipts, a new plan hash, and a separately checked-in freeze. The reuse improves direct comparability; it does not make the corpus a correctness evaluator or a holdout.
+
+## Sealed v3 result
+
+The v3 freeze was published at commit
+`fddfe6eecdc508b1ad7fada114374fdc2dda265c`, tree
+`6c6d3a2ad26a20e85e2db478d83d2f49c607a057`, after first-attempt CI run
+[`33255350582`](https://github.com/gj3447/HSWM/actions/runs/33255350582)
+completed all eight jobs successfully. The frozen plan SHA-256 is
+`b054396e68620c2bcc97a9da9c429edda3182c93d41a573e6eef6fe30c997c22`;
+its closure-manifest SHA-256 is
+`04f16434ebea65f6a0551313c6686ab6dbe5668e8566cc7a5aa38bef71bae661`.
+
+Run `dgx-q1-v3-live-fddfe6e-001` completed 96 START/response pairs with 96
+successful HTTP responses and zero retries. The sealed ledger has 195 rows and
+SHA-256
+`f3cdfff46e1ee4ff0973531296863970f7bc9fa21eff1ea60ddc4da7a6e13f00`.
+The frozen independent verifier reproduced the terminal
+`LIVE_FALSIFIED_EXACT_ASSISTANT_CONTENT_UTF8_ON_FROZEN_Q1`: 23 of 24 cases had
+four identical assistant-content byte strings, while `QCASE-024` had three
+copies with SHA-256
+`14bc62d62791f445e539a4c4e1f212c0d7e5d818095ae87608fcc8eabf262a31`
+and one semantically different rationale with SHA-256
+`b8dba1c6c5d591e9460923c93bc3b129686ff97e1fef1d33a99f261df02d6d23`.
+The four answer fields all contained `VISTA`, but that field-level observation
+is post-hoc descriptive evidence, not the primary endpoint or a correctness
+result.
+
+The external consumption marker has SHA-256
+`7196b27a29b61087413c756a0823105258063ff06903f48c0e6f8518c9ed655a`.
+This plan and root must never be repaired, resumed, replaced, relabeled, or
+rerun. Under the exactness-policy amendment, the resulting Source-A disposition
+is `SOURCE_A_REFUSED_EXACTNESS_UNQUALIFIED`. It authorizes no Source-A freeze,
+Source B, future randomness, causal occurrence, or effect claim. DNRD-5 causal
+calls remain zero and its causal effect is `NOT_EVALUATED`, not a zero or null
+effect.
+
+The exact result, ledger, execution and independent-verification receipts, and
+the two distinct `QCASE-024` content byte strings are published in
+[`results/HSWM_DNRD5_DGX_LIVE_Q1_RESULTS_2026-08-29.md`](../../results/HSWM_DNRD5_DGX_LIVE_Q1_RESULTS_2026-08-29.md).
+No live-KG update follows because the result neither tests nor changes any FCL
+law, HSWM-of-HSWMs composition claim, or constitutional identity claim.
 
 ## Result-template interpretation
 

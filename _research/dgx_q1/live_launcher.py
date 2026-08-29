@@ -24,7 +24,7 @@ from typing import Any
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 
-from _research.dnrd5.canonical_json import canonical_bytes, parse_canonical
+from _research.dnrd5.canonical_json import canonical_bytes, canonical_sha256, parse_canonical
 from _research.dgx_q1.github_ci_receipt import (
     GitHubCiReceiptRefusal,
     parse_github_actions_ci_receipt,
@@ -32,8 +32,12 @@ from _research.dgx_q1.github_ci_receipt import (
 from _research.dgx_q1.live_protocol import (
     BOUNDARY_SCHEMA,
     NAMESPACE,
+    dynamic_kernel_rpc_tcp_listeners,
+    listener_inventory_sha256,
     strict_json,
     validate_boundary_attestation,
+    validate_declared_isolation_identity,
+    validate_dynamic_kernel_rpc_registrations,
     validate_live_q1_plan,
     validate_live_q1_start_marker,
 )
@@ -256,6 +260,19 @@ def _read_freeze(spec: LiveQ1Spec) -> dict[str, Any]:
     runtime = _validate_runtime_identity(identities["runtime_identity_sha256"])  # type: ignore[arg-type]
     endpoint = parse_canonical(identities["endpoint_sha256"])  # type: ignore[arg-type]
     model = parse_canonical(identities["model_identity_sha256"])  # type: ignore[arg-type]
+    declared_isolation_raw = identities["declared_isolation_contract_sha256"]
+    endpoint_match = re.fullmatch(
+        r"http://127\.0\.0\.1:([1-9][0-9]{0,4})/v1/chat/completions",
+        runtime["endpoint"],
+    )
+    if endpoint_match is None:
+        raise LaunchRefused("runtime endpoint has no loopback listener target")
+    try:
+        declared_isolation = validate_declared_isolation_identity(
+            declared_isolation_raw, target=f"127.0.0.1:{endpoint_match.group(1)}"
+        )
+    except Exception as error:
+        raise LaunchRefused("declared isolation identity drifted") from error
     if (
         type(endpoint) is not dict
         or endpoint.get("endpoint") != runtime["endpoint"]
@@ -273,6 +290,7 @@ def _read_freeze(spec: LiveQ1Spec) -> dict[str, Any]:
         "plan": plan,
         "identities": identities,
         "runtime": runtime,
+        "declared_isolation": declared_isolation,
         "model": model,
         "snapshot_manifest_raw": identities["model_snapshot_manifest_sha256"],
         "freeze_files": {
@@ -290,11 +308,17 @@ def _git_blob_sha1(raw: bytes) -> str:
 class SubprocessCommandReader:
     """Closed-argv executor: no shell, caller environment, or stdin channel."""
 
-    _PROGRAMS = {"git", "docker", "nvidia-smi", "ss", "cat", "readlink", "ps", "test", "find"}
+    _PROGRAMS = {
+        "git", "docker", "nvidia-smi", "cat", "readlink", "ps", "test",
+        "find", "rpcinfo",
+        "sudo",
+    }
 
     def __call__(self, argv: tuple[str, ...]) -> bytes:
         if not argv or argv[0] not in self._PROGRAMS:
             raise LaunchRefused("command program is not allowlisted")
+        if argv[0] == "sudo" and argv != ("sudo", "-n", "ss", "-ltnpH"):
+            raise LaunchRefused("sudo command is not the exact listener observation")
         try:
             result = subprocess.run(
                 argv,
@@ -413,6 +437,8 @@ class LiveQ1Lease:
         self._freeze: dict[str, Any] = {}
         self._server_arguments: tuple[str, ...] = ()
         self._required_environment: tuple[str, ...] = ()
+        self._startup_dynamic_kernel_rpc_registrations: tuple[dict[str, Any], ...] = ()
+        self._startup_dynamic_kernel_rpc_tcp_listeners: tuple[str, ...] = ()
         self.startup_attestation_raw: bytes | None = None
 
     def _cmd(self, argv: tuple[str, ...]) -> str:
@@ -460,9 +486,26 @@ class LiveQ1Lease:
             raise LaunchRefused("preexisting running container detected")
         if self._cmd(("nvidia-smi", "--query-compute-apps=gpu_uuid,pid", "--format=csv,noheader,nounits")):
             raise LaunchRefused("preexisting GPU compute process detected")
-        port = self._port
-        if self._unexpected_inference_listener(self._cmd(("ss", "-ltnpH")), port):
-            raise LaunchRefused("non-allowlisted inference listener is present")
+        baseline = self._frozen_listener_baseline
+        (
+            self._startup_dynamic_kernel_rpc_registrations,
+            self._startup_dynamic_kernel_rpc_tcp_listeners,
+        ) = self._dynamic_kernel_rpc_state()
+        expected_listeners = baseline | frozenset(
+            self._startup_dynamic_kernel_rpc_tcp_listeners
+        )
+        current, rows, _, unexpected = self._listener_inventory(
+            self._cmd(("sudo", "-n", "ss", "-ltnpH")), expected_listeners
+        )
+        self._require_kernel_dynamic_rows(
+            rows, self._startup_dynamic_kernel_rpc_tcp_listeners
+        )
+        if (
+            self._listener_target in current
+            or current != expected_listeners
+            or unexpected != 0
+        ):
+            raise LaunchRefused("frozen static/RPC listener baseline drifted before launch")
         static = self._cmd(("nvidia-smi", "--query-gpu=uuid,name,driver_version,compute_cap", "--format=csv,noheader,nounits"))
         expected_static = ", ".join(
             (
@@ -630,44 +673,112 @@ class LiveQ1Lease:
             raise LaunchRefused("runtime endpoint port drifted")
         return int(match.group(1))
 
-    # Host-owned system listeners observed on the fixed DGX are intentionally
-    # enumerated.  Any new or unclassified listener (notably Ollama :11434)
-    # fails closed; this is not a blanket exemption for arbitrary services.
-    _ALLOWED_NON_INFERENCE_LISTENERS = frozenset({
-        "0.0.0.0:22", "[::]:22", "0.0.0.0:111", "[::]:111",
-        "127.0.0.53%lo:53", "127.0.0.1:631", "[::1]:631",
-        "0.0.0.0:43707", "0.0.0.0:50617", "127.0.0.1:11000", "127.0.0.54:53",
-        "192.168.0.23:18000", "192.168.0.23:19000", "127.0.0.1:38115",
-        "100.64.0.3:34152", "[::]:44489", "[::]:46737", "[fd7a:115c:a1e0::3]:34984",
-    })
+    @property
+    def _listener_target(self) -> str:
+        return f"127.0.0.1:{self._port}"
 
-    @classmethod
-    def _unexpected_inference_listener(cls, raw: str, port: int) -> bool:
-        return any(
-            len(parts := line.split()) >= 5
-            and parts[0] == "LISTEN"
-            and (parts[3] == f"127.0.0.1:{port}" or parts[3] not in cls._ALLOWED_NON_INFERENCE_LISTENERS)
-            for line in raw.splitlines()
-        )
+    @property
+    def _frozen_listener_baseline(self) -> frozenset[str]:
+        declared = self._freeze.get("declared_isolation")
+        allowlist = declared.get("host_listener_allowlist") if type(declared) is dict else None
+        if type(allowlist) is not list or any(type(endpoint) is not str for endpoint in allowlist):
+            raise LaunchRefused("frozen host listener baseline is unavailable")
+        baseline = frozenset(allowlist)
+        if len(baseline) != len(allowlist) or self._listener_target in baseline:
+            raise LaunchRefused("frozen host listener baseline is invalid")
+        return baseline
 
     @staticmethod
     def _listener_present(raw: str, port: int) -> bool:
         return any(len(parts := line.split()) >= 5 and parts[0] == "LISTEN" and parts[3] == f"127.0.0.1:{port}" for line in raw.splitlines())
 
-    @classmethod
-    def _listener_inventory(cls, raw: str, port: int) -> tuple[bool, str, int]:
-        endpoints = []
-        unexpected = 0
-        target = False
+    @staticmethod
+    def _listener_inventory(
+        raw: str, expected: frozenset[str]
+    ) -> tuple[frozenset[str], tuple[str, ...], str, int]:
+        endpoints: set[str] = set()
+        rows: list[str] = []
         for line in raw.splitlines():
-            parts = line.split()
-            if len(parts) < 5 or parts[0] != "LISTEN":
+            normalized = " ".join(line.split())
+            if not normalized:
                 continue
-            endpoint = parts[3]
-            endpoints.append(endpoint)
-            if endpoint == f"127.0.0.1:{port}": target = True
-            elif endpoint not in cls._ALLOWED_NON_INFERENCE_LISTENERS: unexpected += 1
-        return target, sha256("\n".join(sorted(endpoints)).encode()).hexdigest(), unexpected
+            if (
+                len(normalized.encode("utf-8", errors="strict")) > 4096
+                or any(ord(character) < 32 or ord(character) > 126 for character in normalized)
+            ):
+                raise LaunchRefused("privileged listener row is not bounded ASCII")
+            parts = normalized.split(" ")
+            if (
+                not 5 <= len(parts) <= 6
+                or parts[0] != "LISTEN"
+                or not parts[1].isdigit()
+                or not parts[2].isdigit()
+                or not parts[3]
+                or not parts[4]
+                or (len(parts) == 6 and not parts[5].startswith("users:"))
+            ):
+                raise LaunchRefused("privileged listener row is malformed")
+            if parts[3] in endpoints:
+                raise LaunchRefused("privileged listener observation has duplicate local endpoint")
+            endpoints.add(parts[3])
+            rows.append(normalized)
+        observed = frozenset(endpoints)
+        return (
+            observed,
+            tuple(sorted(rows)),
+            listener_inventory_sha256(sorted(observed)),
+            len(observed - expected),
+        )
+
+    @staticmethod
+    def _require_kernel_dynamic_rows(
+        rows: tuple[str, ...], dynamic_listeners: tuple[str, ...]
+    ) -> None:
+        by_endpoint = {row.split(" ")[3]: row for row in rows}
+        for endpoint in dynamic_listeners:
+            row = by_endpoint.get(endpoint)
+            if row is None or "users:" in row or "pid=" in row:
+                raise LaunchRefused("RPC-derived dynamic listener is userspace-owned or absent")
+
+    def _dynamic_kernel_rpc_state(
+        self,
+    ) -> tuple[tuple[dict[str, Any], ...], tuple[str, ...]]:
+        """Observe the narrowly typed nlockmgr exception, never a broad port range."""
+
+        rows: list[dict[str, Any]] = []
+        for line in self._cmd(("rpcinfo", "localhost")).splitlines():
+            fields = line.split()
+            if fields == ["program", "version", "netid", "address", "service", "owner"]:
+                continue
+            if len(fields) != 6:
+                raise LaunchRefused("rpcinfo row is not the closed six-column form")
+            program, version, netid, address, service, owner = fields
+            if not program.isdigit() or not version.isdigit():
+                raise LaunchRefused("rpcinfo program/version is not an integer")
+            if int(program) != 100021:
+                continue
+            rows.append(
+                {
+                    "program": int(program),
+                    "version": int(version),
+                    "netid": netid,
+                    "address": address,
+                    "service": service,
+                    "owner": owner,
+                }
+            )
+        rows.sort(key=canonical_bytes)
+        try:
+            registrations = validate_dynamic_kernel_rpc_registrations(rows)
+            listeners = dynamic_kernel_rpc_tcp_listeners(list(registrations))
+        except Exception as error:
+            raise LaunchRefused("dynamic kernel RPC registration drifted") from error
+        if len(listeners) != 2 or listeners != tuple(sorted(set(listeners))):
+            raise LaunchRefused("dynamic kernel RPC TCP listener pair drifted")
+        for path in ("/proc/sys/fs/nfs/nlm_tcpport", "/proc/sys/fs/nfs/nlm_udpport"):
+            if self._cmd(("cat", path)) != "0":
+                raise LaunchRefused("NFS nlockmgr sysctl is not dynamic-port mode")
+        return registrations, listeners
 
     def _launch(self) -> None:
         runtime = self._freeze["runtime"]
@@ -815,7 +926,27 @@ class LiveQ1Lease:
             raise LaunchRefused("live served-model endpoint drifted")
         metrics_raw = self.http_get(f"http://127.0.0.1:{self._port}/metrics")
         requests_running, request_success_total, prefix_cache_hits, prefix_cache_queries = _metric_counters(metrics_raw)
-        host_listener, listener_inventory_sha256, unexpected_listener_count = self._listener_inventory(self._cmd(("ss", "-ltnpH")), self._port)
+        registrations, dynamic_listeners = self._dynamic_kernel_rpc_state()
+        if (
+            registrations != self._startup_dynamic_kernel_rpc_registrations
+            or dynamic_listeners != self._startup_dynamic_kernel_rpc_tcp_listeners
+        ):
+            raise LaunchRefused("dynamic kernel RPC registration drifted during lease")
+        expected_listeners = (
+            self._frozen_listener_baseline
+            | frozenset(self._startup_dynamic_kernel_rpc_tcp_listeners)
+            | {self._listener_target}
+        )
+        observed_listeners, listener_rows, inventory_hash, unexpected_listener_count = (
+            self._listener_inventory(
+                self._cmd(("sudo", "-n", "ss", "-ltnpH")), expected_listeners
+            )
+        )
+        self._require_kernel_dynamic_rows(listener_rows, dynamic_listeners)
+        expected_listener_inventory_sha256 = listener_inventory_sha256(
+            sorted(expected_listeners)
+        )
+        host_listener = self._listener_target in observed_listeners
         init_pid = item["State"]["Pid"]
         internal = self._cmd(
             ("docker", "exec", self.spec.container_name, "cat", "/proc/net/tcp")
@@ -828,10 +959,16 @@ class LiveQ1Lease:
         if re.fullmatch(r"net:\[[1-9][0-9]*\]", netns) is None:
             raise LaunchRefused("container network namespace identity unavailable")
         internal_port_hex = f":{runtime['container_internal_port']:04X}"
-        if not host_listener or unexpected_listener_count != 0 or not any(
+        if (
+            not host_listener
+            or observed_listeners != expected_listeners
+            or inventory_hash != expected_listener_inventory_sha256
+            or unexpected_listener_count != 0
+            or not any(
             row.split()[1].endswith(internal_port_hex) and row.split()[3] == "0A"
             for row in internal.splitlines()
             if len(row.split()) >= 4
+            )
         ):
             raise LaunchRefused("loopback publication/internal container listener absent")
         compute_raw = self._cmd(("nvidia-smi", "--query-compute-apps=gpu_uuid,pid", "--format=csv,noheader,nounits"))
@@ -876,8 +1013,17 @@ class LiveQ1Lease:
                     internal.encode("utf-8")
                 ).hexdigest(),
                 "internal_listener_port": runtime["container_internal_port"],
-                "host_listener_inventory_sha256": listener_inventory_sha256,
+                "host_listener_inventory_sha256": inventory_hash,
+                "host_tcp_listener_rows": list(listener_rows),
+                "host_tcp_listener_rows_sha256": canonical_sha256(list(listener_rows)),
                 "unexpected_listener_count": unexpected_listener_count,
+                "dynamic_kernel_rpc_registrations": list(registrations),
+                "dynamic_kernel_rpc_registrations_sha256": sha256(
+                    canonical_bytes(list(registrations))
+                ).hexdigest(),
+                "dynamic_kernel_rpc_tcp_listeners": list(dynamic_listeners),
+                "nlm_tcpport": 0,
+                "nlm_udpport": 0,
                 "requests_running": requests_running,
                 "request_success_total": request_success_total,
                 "prefix_cache_hits": prefix_cache_hits,
@@ -894,6 +1040,20 @@ class LiveQ1Lease:
                 phase=phase,
                 attempt_id=attempt_id,
                 completed_attempts=completed,
+                declared_isolation_raw=self._freeze["identities"][
+                    "declared_isolation_contract_sha256"
+                ],
+                target=self._listener_target,
+                startup_dynamic_kernel_rpc_registrations=(
+                    None
+                    if phase == "STARTUP"
+                    else self._startup_dynamic_kernel_rpc_registrations
+                ),
+                startup_dynamic_kernel_rpc_tcp_listeners=(
+                    None
+                    if phase == "STARTUP"
+                    else self._startup_dynamic_kernel_rpc_tcp_listeners
+                ),
             )
         except Exception as error:
             raise LaunchRefused("boundary request counters or context drifted") from error
@@ -950,7 +1110,9 @@ class LiveQ1Lease:
                 deadline = time.monotonic() + 60
                 while True:
                     compute = self._cmd(("nvidia-smi", "--query-compute-apps=gpu_uuid,pid", "--format=csv,noheader,nounits"))
-                    listeners = self._listener_present(self._cmd(("ss", "-ltnpH")), self._port)
+                    listeners = self._listener_present(
+                        self._cmd(("sudo", "-n", "ss", "-ltnpH")), self._port
+                    )
                     if not compute and not listeners:
                         break
                     if time.monotonic() >= deadline:

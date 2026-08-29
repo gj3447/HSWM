@@ -27,7 +27,9 @@ from _research.dgx_q1.live_protocol import (
     CALL_CLASSES, CONSUMPTION_REGISTRY, NAMESPACE, PLAN_SCHEMA, RUNNER_VERSION,
     TERMINALS, NONCLAIMS,
     LiveQ1CaseMaterial, LiveQ1Refusal, bind_case_material, build_live_q1_request, derive_live_q1_order,
-    make_live_q1_start_marker, validate_live_q1_plan, validate_live_q1_start_marker,
+    loopback_q1_target, make_live_q1_start_marker,
+    validate_declared_isolation_contract, validate_live_q1_plan,
+    validate_live_q1_start_marker,
 )
 
 FREEZE_SCHEMA = "hswm-dgx-q1-live-preregistration-freeze/v1"
@@ -234,6 +236,31 @@ def build_live_preregistration(inputs: LiveQ1PreregistrationInputs) -> dict[str,
         identities["model_identity_sha256"],
         identities["model_snapshot_manifest_sha256"],
     )
+    endpoint_identity = _canonical_object(
+        identities["endpoint_sha256"], "endpoint identity"
+    )
+    if (
+        endpoint_identity
+        != {
+            "schema_version": "hswm-dgx-q1-endpoint-identity/v1",
+            "endpoint": endpoint_identity.get("endpoint")
+            if type(endpoint_identity) is dict
+            else None,
+            "method": "POST",
+            "transport": "LOOPBACK_HTTP_NO_TLS",
+        }
+        or type(endpoint_identity["endpoint"]) is not str
+    ):
+        raise LiveQ1FreezeRefusal("endpoint identity semantic binding drifted")
+    try:
+        validate_declared_isolation_contract(
+            identities["declared_isolation_contract_sha256"],
+            target=loopback_q1_target(endpoint_identity["endpoint"]),
+        )
+    except LiveQ1Refusal as error:
+        raise LiveQ1FreezeRefusal(
+            "declared isolation identity semantic binding drifted"
+        ) from error
     q0_manifest, materials = q0_public_materials()
     class_by_id = {row["case_id"]: row["call_class"] for row in q0_manifest["cases"]}
     corpus: list[dict[str, Any]] = []

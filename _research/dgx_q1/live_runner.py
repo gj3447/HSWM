@@ -19,7 +19,6 @@ import re
 import socket
 import tempfile
 from typing import Any
-from urllib.parse import urlsplit
 
 from _research.dnrd5.canonical_json import (
     canonical_bytes,
@@ -32,7 +31,9 @@ from _research.dgx_q1.live_protocol import (
     NAMESPACE,
     RUNNER_VERSION,
     bind_case_material,
+    loopback_q1_target,
     validate_boundary_attestation,
+    validate_declared_isolation_contract,
     validate_live_envelope,
     validate_live_q1_plan,
     validate_live_q1_start_marker,
@@ -134,21 +135,8 @@ def _append(root: Path, core: dict[str, Any]) -> dict[str, Any]:
 
 
 def _loopback_endpoint(endpoint: str) -> tuple[str, int, str]:
-    if type(endpoint) is not str or len(endpoint) > 512:
-        raise LiveQ1Refusal("endpoint is not bounded text")
-    parsed = urlsplit(endpoint)
-    if (
-        parsed.scheme != "http"
-        or parsed.hostname != "127.0.0.1"
-        or parsed.port is None
-        or parsed.username is not None
-        or parsed.password is not None
-        or parsed.path != "/v1/chat/completions"
-        or parsed.query
-        or parsed.fragment
-    ):
-        raise LiveQ1Refusal("live Q1 requires the exact loopback HTTP chat path")
-    return parsed.hostname, parsed.port, parsed.path
+    target = loopback_q1_target(endpoint)
+    return "127.0.0.1", int(target.rsplit(":", 1)[1]), "/v1/chat/completions"
 
 
 def _post_loopback(endpoint: str, request: bytes, maximum: int) -> LiveObservation:
@@ -265,20 +253,10 @@ def _semantic_identities(
         "tls": "NOT_APPLICABLE_LOOPBACK_ONLY",
     }:
         raise LiveQ1Refusal("TLS identity drifted")
-    if declared != {
-        "schema_version": "hswm-dgx-q1-declared-isolation/v1",
-        "batch_invariant": True,
-        "boundary": "FINITE_DECLARED_CONTROL_CONTRACT_NOT_OBSERVED_PROOF",
-        "dedicated_gpu": True,
-        "dedicated_node": True,
-        "dedicated_process": True,
-        "max_num_seqs": 1,
-        "network_scope": "LOOPBACK_INGRESS_ONLY_OUTBOUND_NOT_ATTESTED",
-        "other_inference_processes": 0,
-        "prefix_cache": False,
-        "v1_multiprocessing": False,
-    }:
-        raise LiveQ1Refusal("declared isolation identity drifted")
+    validate_declared_isolation_contract(
+        identity_bytes["declared_isolation_contract_sha256"],
+        target=loopback_q1_target(endpoint),
+    )
     if (
         type(snapshot) is not dict
         or snapshot.get("schema_version")
@@ -428,12 +406,18 @@ class LiveQ1Runner:
             case_id: bind_case_material(cases[case_id], by_id[case_id], model)
             for case_id in cases
         }
-        validate_boundary_attestation(
+        declared_isolation_raw = identity_bytes[
+            "declared_isolation_contract_sha256"
+        ]
+        target = loopback_q1_target(endpoint)
+        startup_attestation = validate_boundary_attestation(
             startup_attestation_raw,
             plan_raw,
             phase="STARTUP",
             attempt_id=None,
             completed_attempts=0,
+            declared_isolation_raw=declared_isolation_raw,
+            target=target,
         )
 
         root.mkdir(mode=0o700)
@@ -503,6 +487,14 @@ class LiveQ1Runner:
         self.endpoint = endpoint
         self.model = model
         self.boundary_attester = boundary_attester
+        self.declared_isolation_raw = declared_isolation_raw
+        self.target = target
+        self.startup_dynamic_kernel_rpc_registrations = tuple(
+            startup_attestation["dynamic_kernel_rpc_registrations"]
+        )
+        self.startup_dynamic_kernel_rpc_tcp_listeners = tuple(
+            startup_attestation["dynamic_kernel_rpc_tcp_listeners"]
+        )
         self.transport = _post_loopback if lease is not None else transport_for_testing
         self._test_transport = transport_for_testing is not None
         self.consumption_root = consumption_root
@@ -570,6 +562,14 @@ class LiveQ1Runner:
             phase=phase,
             attempt_id=attempt_id,
             completed_attempts=completed,
+            declared_isolation_raw=self.declared_isolation_raw,
+            target=self.target,
+            startup_dynamic_kernel_rpc_registrations=(
+                self.startup_dynamic_kernel_rpc_registrations
+            ),
+            startup_dynamic_kernel_rpc_tcp_listeners=(
+                self.startup_dynamic_kernel_rpc_tcp_listeners
+            ),
         )
         return _put(self.root, raw)
 

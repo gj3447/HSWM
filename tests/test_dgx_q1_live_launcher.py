@@ -71,6 +71,22 @@ def _spec(tmp_path: Path) -> tuple[LiveQ1Spec, dict]:
 def _observations(spec: LiveQ1Spec, runtime: dict):
     state = {"running": False, "launch": None, "metric_index": 0}
     calls: list[tuple[str, ...]] = []
+    isolation = parse_canonical(
+        (spec.freeze_root / "identities/declared_isolation_contract_sha256.json").read_bytes()
+    )
+    baseline = isolation["host_listener_allowlist"]
+    rpc_ports = {"tcp": 33965, "udp": 33965, "tcp6": 37197, "udp6": 37197}
+    rpc_address = {
+        "tcp": "0.0.0.0.132.173",
+        "udp": "0.0.0.0.132.173",
+        "tcp6": "::.145.77",
+        "udp6": "::.145.77",
+    }
+    rpc_rows = [
+        f"100021 {version} {netid} {rpc_address[netid]} nlockmgr superuser"
+        for version in (1, 3, 4)
+        for netid in ("tcp", "tcp6", "udp", "udp6")
+    ]
 
     def command(argv: tuple[str, ...]) -> bytes:
         calls.append(argv)
@@ -176,15 +192,29 @@ def _observations(spec: LiveQ1Spec, runtime: dict):
                 if state["running"]
                 else b""
             )
-        if argv[0] == "ss":
+        if argv == ("sudo", "-n", "ss", "-ltnpH"):
+            endpoints = list(baseline)
+            dynamic = (f"0.0.0.0:{rpc_ports['tcp']}", f"[::]:{rpc_ports['tcp6']}")
+            endpoints.extend(dynamic)
+            if state["running"]:
+                endpoints.append("127.0.0.1:18080")
+            return "".join(
+                (
+                    f"LISTEN 0 4096 {endpoint} 0.0.0.0:*\n"
+                    if endpoint in dynamic
+                    else f'LISTEN 0 4096 {endpoint} 0.0.0.0:* users:(("python",pid=123,fd=9))\n'
+                )
+                for endpoint in endpoints
+            ).encode()
+        if argv == ("rpcinfo", "localhost"):
             return (
-                b'LISTEN 0 4096 127.0.0.1:18080 0.0.0.0:* users:(("python",pid=123,fd=9))\n'
-                if state["running"]
-                else b""
-            )
+                "program version netid address service owner\n" + "\n".join(rpc_rows) + "\n"
+            ).encode()
         if argv[0] == "ps":
             return b"10 1\n123 10\n"
         if argv[0] == "readlink": return b"net:[1]\n"
+        if argv[0] == "cat" and argv[1] in {"/proc/sys/fs/nfs/nlm_tcpport", "/proc/sys/fs/nfs/nlm_udpport"}:
+            return b"0\n"
         if argv[0] == "cat" and "/net/tcp" in argv[1]: return b"  0: 00000000:1F40 00000000:0000 0A\n"
         if argv[0] == "cat":
             return b"python\0vllm\0" if argv[1].endswith("cmdline") else b"0::/docker/q1\n"
@@ -294,16 +324,18 @@ def test_nonzero_labeled_request_series_cannot_be_hidden(tmp_path: Path) -> None
             pass
 
 
-def test_ollama_listener_and_nonzero_prefix_metric_refuse(tmp_path: Path) -> None:
+def test_ollama_listener_baseline_drift_and_nonzero_prefix_metric_refuse(
+    tmp_path: Path,
+) -> None:
     spec, runtime = _spec(tmp_path)
     command, http_get, calls, _ = _observations(spec, runtime)
 
     def ollama(argv: tuple[str, ...]) -> bytes:
-        if argv[0] == "ss" and not any(call[:2] == ("docker", "run") for call in calls):
-            return b"LISTEN 0 1 127.0.0.1:11434 0.0.0.0:*\n"
+        if argv == ("sudo", "-n", "ss", "-ltnpH") and not any(call[:2] == ("docker", "run") for call in calls):
+            return command(argv) + b"LISTEN 0 1 127.0.0.1:11434 0.0.0.0:*\n"
         return command(argv)
 
-    with pytest.raises(LaunchRefused, match="non-allowlisted"):
+    with pytest.raises(LaunchRefused, match="frozen static/RPC listener baseline"):
         with LiveQ1Lease(spec, ollama, http_get):
             pass
 
@@ -329,20 +361,106 @@ def test_ollama_listener_and_nonzero_prefix_metric_refuse(tmp_path: Path) -> Non
             pass
 
 
-def test_dgx_listener_allowlist_matches_observed_non_inference_endpoints() -> None:
+def test_listener_inventory_is_exact_frozen_endpoint_set() -> None:
+    baseline = frozenset({"0.0.0.0:22", "127.0.0.54:53"})
     observed = "\n".join(
-        f"LISTEN 0 4096 {endpoint} 0.0.0.0:*"
-        for endpoint in sorted(LiveQ1Lease._ALLOWED_NON_INFERENCE_LISTENERS)
+        f"LISTEN 0 4096 {endpoint} 0.0.0.0:*" for endpoint in sorted(baseline)
     )
-    assert not LiveQ1Lease._unexpected_inference_listener(observed, 18080)
-    assert LiveQ1Lease._unexpected_inference_listener(
-        observed + "\nLISTEN 0 4096 127.0.0.1:11434 0.0.0.0:*",
-        18080,
+    endpoints, rows, inventory, unexpected = LiveQ1Lease._listener_inventory(
+        observed, baseline
     )
-    assert LiveQ1Lease._unexpected_inference_listener(
-        observed + "\nLISTEN 0 4096 0.0.0.0:46135 0.0.0.0:*",
-        18080,
+    assert endpoints == baseline
+    assert rows == tuple(sorted(observed.splitlines()))
+    assert inventory == __import__("hashlib").sha256(
+        "\n".join(sorted(baseline)).encode()
+    ).hexdigest()
+    assert unexpected == 0
+
+    endpoints, _, _, unexpected = LiveQ1Lease._listener_inventory(
+        observed + "\nLISTEN 0 4096 127.0.0.1:11434 0.0.0.0:*", baseline
     )
+    assert endpoints == baseline | {"127.0.0.1:11434"}
+    assert unexpected == 1
+
+
+def test_typed_rpc_bound_dynamic_port_is_accepted_without_freezing_port_number(
+    tmp_path: Path,
+) -> None:
+    spec, runtime = _spec(tmp_path)
+    command, http_get, _, _ = _observations(spec, runtime)
+
+    def different_dynamic_port(argv: tuple[str, ...]) -> bytes:
+        raw = command(argv)
+        if argv == ("rpcinfo", "localhost"):
+            return raw.replace(b".132.173", b".133.0")
+        if argv == ("sudo", "-n", "ss", "-ltnpH"):
+            return raw.replace(b":33965", b":34048")
+        return raw
+
+    with LiveQ1Lease(spec, different_dynamic_port, http_get) as lease:
+        assert lease.is_active
+
+
+def test_dynamic_rpc_family_port_drift_mid_lease_refuses(tmp_path: Path) -> None:
+    spec, runtime = _spec(tmp_path)
+    command, http_get, _, _ = _observations(spec, runtime)
+    rpc_reads = 0
+
+    def changed_registration(argv: tuple[str, ...]) -> bytes:
+        nonlocal rpc_reads
+        raw = command(argv)
+        if argv == ("rpcinfo", "localhost"):
+            rpc_reads += 1
+            if rpc_reads >= 3:
+                return raw.replace(b"::.145.77", b"::.145.78")
+        return raw
+
+    with LiveQ1Lease(spec, changed_registration, http_get) as lease:
+        with pytest.raises(LaunchRefused, match="dynamic kernel RPC registration drifted"):
+            lease.attest("PRE", "DNRD5-Q1L-001-R001", 0)
+
+
+@pytest.mark.parametrize("kind", ("static", "dynamic", "target"))
+def test_duplicate_privileged_listener_endpoint_refuses(
+    tmp_path: Path, kind: str
+) -> None:
+    spec, runtime = _spec(tmp_path)
+    command, http_get, _, state = _observations(spec, runtime)
+    duplicate = {
+        "static": b'LISTEN 0 4096 127.0.0.1:22 0.0.0.0:* users:(("sshd",pid=1,fd=3))\n',
+        "dynamic": b"LISTEN 0 4096 0.0.0.0:33965 0.0.0.0:*\n",
+        "target": b'LISTEN 0 4096 127.0.0.1:18080 0.0.0.0:* users:(("vllm",pid=10,fd=9))\n',
+    }[kind]
+
+    def duplicate_listener(argv: tuple[str, ...]) -> bytes:
+        raw = command(argv)
+        if argv == ("sudo", "-n", "ss", "-ltnpH") and (
+            kind != "target" or state["running"]
+        ):
+            return raw + duplicate
+        return raw
+
+    with pytest.raises(LaunchRefused, match="duplicate local endpoint"):
+        with LiveQ1Lease(spec, duplicate_listener, http_get):
+            pass
+
+
+def test_userspace_owned_rpc_derived_listener_refuses(tmp_path: Path) -> None:
+    spec, runtime = _spec(tmp_path)
+    command, http_get, _, _ = _observations(spec, runtime)
+
+    def userspace_dynamic(argv: tuple[str, ...]) -> bytes:
+        raw = command(argv)
+        if argv == ("sudo", "-n", "ss", "-ltnpH"):
+            return raw.replace(
+                b"LISTEN 0 4096 0.0.0.0:33965 0.0.0.0:*\n",
+                b'LISTEN 0 4096 0.0.0.0:33965 0.0.0.0:* users:(("other",pid=77,fd=5))\n',
+            )
+        return raw
+
+    with pytest.raises(LaunchRefused, match="userspace-owned"):
+        with LiveQ1Lease(spec, userspace_dynamic, http_get):
+            pass
 
 
 def test_missing_container_namespace_listener_refuses(tmp_path: Path) -> None:
@@ -417,7 +535,7 @@ def test_external_freeze_and_listener_appearing_mid_lease_refuse(
     def late_listener(argv: tuple[str, ...]) -> bytes:
         nonlocal listener_reads
         raw = command(argv)
-        if argv[0] == "ss":
+        if argv == ("sudo", "-n", "ss", "-ltnpH"):
             listener_reads += 1
             if listener_reads >= 3:
                 raw += b"LISTEN 0 1 127.0.0.1:11434 0.0.0.0:*\n"

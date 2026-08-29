@@ -11,13 +11,16 @@ from collections import Counter
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from hashlib import sha256
+import ipaddress
 import json
 import re
 from typing import Any
+from urllib.parse import urlsplit
 
 from _research.dnrd5.canonical_json import (
     CanonicalJsonError,
     canonical_bytes,
+    canonical_sha256,
     parse_canonical,
 )
 
@@ -25,8 +28,8 @@ from _research.dnrd5.canonical_json import (
 PLAN_SCHEMA = "hswm-dgx-q1-live-response-exactness/v1"
 MARKER_SCHEMA = "hswm-dgx-q1-live-start-marker/v1"
 NAMESPACE = "DNRD5-Q1-LIVE-QUALIFICATION-ONLY/v1"
-RUNNER_VERSION = "hswm-dgx-q1-live-runner/v1"
-BOUNDARY_SCHEMA = "hswm-dgx-q1-live-boundary-attestation/v1"
+RUNNER_VERSION = "hswm-dgx-q1-live-runner/v2"
+BOUNDARY_SCHEMA = "hswm-dgx-q1-live-boundary-attestation/v2"
 CONSUMPTION_REGISTRY_SCHEMA = "hswm-dgx-q1-plan-consumption-registry/v1"
 CONSUMPTION_REGISTRY_PATH = (
     "/mnt/hswm/evidence/hswm-dnrd5-q1-live-consumption-v1"
@@ -65,10 +68,250 @@ _SHA = re.compile(r"^[0-9a-f]{64}$")
 _GIT = re.compile(r"^[0-9a-f]{40}$")
 _CASE = re.compile(r"^QCASE-[0-9]{3}$")
 _ATTEMPT = re.compile(r"^DNRD5-Q1L-([0-9]{3})-R(00[1-4])$")
+_LISTENER_ENDPOINT = re.compile(
+    r"^(?:(?P<ipv4>[0-9.]+)(?:%(?P<ipv4_zone>[A-Za-z0-9_.-]+))?"
+    r"|\[(?P<ipv6>[0-9A-Fa-f:.]+)(?:%(?P<ipv6_zone>[A-Za-z0-9_.-]+))?\])"
+    r":(?P<port>[0-9]{1,5})$"
+)
+_DECLARED_ISOLATION_STATIC = {
+    "batch_invariant": True,
+    "boundary": "FINITE_DECLARED_CONTROL_CONTRACT_NOT_OBSERVED_PROOF",
+    "dedicated_gpu": True,
+    "dedicated_node": True,
+    "dedicated_process": True,
+    "max_num_seqs": 1,
+    "network_scope": "LOOPBACK_INGRESS_ONLY_OUTBOUND_NOT_ATTESTED",
+    "other_inference_processes": 0,
+    "prefix_cache": False,
+    "v1_multiprocessing": False,
+}
+_DYNAMIC_KERNEL_RPC_POLICY = {
+    "schema_version": "hswm-dgx-q1-dynamic-kernel-rpc-listener-policy/v1",
+    "program": 100021,
+    "service": "nlockmgr",
+    "owner": "superuser",
+    "versions": [1, 3, 4],
+    "netids": ["tcp", "tcp6", "udp", "udp6"],
+    "tcp_wildcard_hosts": ["0.0.0.0", "[::]"],
+    "nlm_tcpport": 0,
+    "nlm_udpport": 0,
+    "required_tcp_listener_count": 2,
+    "observation": "RPCINFO_LOCAL_REGISTRATION_JOINED_TO_PRIVILEGED_HOST_TCP_LISTENER_ROWS",
+}
+_DYNAMIC_REGISTRATION_KEYS = {
+    "program", "version", "netid", "address", "service", "owner"
+}
+_RPC_IPV4_ADDRESS = re.compile(r"^0\.0\.0\.0\.([0-9]{1,3})\.([0-9]{1,3})$")
+_RPC_IPV6_ADDRESS = re.compile(r"^::\.([0-9]{1,3})\.([0-9]{1,3})$")
 
 
 class LiveQ1Refusal(ValueError):
     """The proposed plan, material, response, or marker is outside live Q1."""
+
+
+def loopback_q1_target(endpoint: str) -> str:
+    """Return the exact host listener target for the fixed Q1 HTTP endpoint."""
+
+    if type(endpoint) is not str or len(endpoint) > 512:
+        raise LiveQ1Refusal("endpoint is not bounded text")
+    parsed = urlsplit(endpoint)
+    try:
+        port = parsed.port
+    except ValueError as error:
+        raise LiveQ1Refusal("live Q1 endpoint port drifted") from error
+    if (
+        parsed.scheme != "http"
+        or parsed.hostname != "127.0.0.1"
+        or port is None
+        or not 1 <= port <= 65_535
+        or parsed.username is not None
+        or parsed.password is not None
+        or parsed.path != "/v1/chat/completions"
+        or parsed.query
+        or parsed.fragment
+        or endpoint != f"http://127.0.0.1:{port}/v1/chat/completions"
+    ):
+        raise LiveQ1Refusal("live Q1 requires the exact loopback HTTP chat path")
+    return f"127.0.0.1:{port}"
+
+
+def _listener_endpoint(value: Any) -> str:
+    if type(value) is not str or not value or any(char.isspace() for char in value):
+        raise LiveQ1Refusal("host listener endpoint is not nonempty whitespace-free text")
+    match = _LISTENER_ENDPOINT.fullmatch(value)
+    if match is None:
+        raise LiveQ1Refusal("host listener endpoint grammar drifted")
+    try:
+        if match["ipv4"] is not None:
+            ipaddress.IPv4Address(match["ipv4"])
+        else:
+            ipaddress.IPv6Address(match["ipv6"])
+        port = int(match["port"])
+    except ValueError as error:
+        raise LiveQ1Refusal("host listener endpoint address/port drifted") from error
+    if not 1 <= port <= 65_535:
+        raise LiveQ1Refusal("host listener endpoint port drifted")
+    return value
+
+
+def listener_inventory_sha256(endpoints: Sequence[str]) -> str:
+    """Hash the exact sorted listener inventory representation used by Q1."""
+
+    if type(endpoints) not in {list, tuple}:
+        raise LiveQ1Refusal("listener inventory must be an ordered endpoint sequence")
+    values = tuple(_listener_endpoint(value) for value in endpoints)
+    if not values or len(values) != len(set(values)):
+        raise LiveQ1Refusal("listener inventory is not nonempty unique endpoints")
+    return sha256("\n".join(sorted(values)).encode()).hexdigest()
+
+
+def validate_host_tcp_listener_rows(value: Any) -> tuple[str, ...]:
+    """Validate self-contained normalized ``ss -ltnpH`` TCP listener rows."""
+
+    if type(value) is not list or not value or len(value) > 256:
+        raise LiveQ1Refusal("host TCP listener rows are not bounded nonempty list")
+    rows: list[str] = []
+    endpoints: set[str] = set()
+    for row in value:
+        try:
+            byte_length = len(row.encode("utf-8", errors="strict")) if type(row) is str else 0
+        except UnicodeEncodeError as error:
+            raise LiveQ1Refusal("host TCP listener row is not UTF-8 text") from error
+        if (
+            type(row) is not str
+            or not 1 <= byte_length <= 16_384
+            or any(ord(char) < 32 or ord(char) == 127 for char in row)
+        ):
+            raise LiveQ1Refusal("host TCP listener row text drifted")
+        fields = row.split()
+        if len(fields) < 5 or fields[0] != "LISTEN":
+            raise LiveQ1Refusal("host TCP listener row shape/state drifted")
+        endpoint = _listener_endpoint(fields[3])
+        if endpoint in endpoints:
+            raise LiveQ1Refusal("host TCP listener endpoint multiplicity drifted")
+        endpoints.add(endpoint)
+        rows.append(row)
+    if rows != sorted(set(rows)):
+        raise LiveQ1Refusal("host TCP listener rows are not sorted unique")
+    return tuple(rows)
+
+
+def _rpc_port(address: Any, netid: str) -> int:
+    if type(address) is not str:
+        raise LiveQ1Refusal("dynamic kernel RPC address drifted")
+    match = (
+        _RPC_IPV4_ADDRESS.fullmatch(address)
+        if netid in {"tcp", "udp"}
+        else _RPC_IPV6_ADDRESS.fullmatch(address)
+    )
+    if match is None:
+        raise LiveQ1Refusal("dynamic kernel RPC wildcard address drifted")
+    high, low = (int(value) for value in match.groups())
+    if high > 255 or low > 255:
+        raise LiveQ1Refusal("dynamic kernel RPC address byte drifted")
+    port = high * 256 + low
+    if port < 1024:
+        raise LiveQ1Refusal("dynamic kernel RPC port is not dynamic/unprivileged")
+    return port
+
+
+def validate_dynamic_kernel_rpc_registrations(value: Any) -> tuple[dict[str, Any], ...]:
+    """Validate the complete local rpcinfo registration cross-product for nlockmgr."""
+
+    if type(value) is not list or len(value) != 12:
+        raise LiveQ1Refusal("dynamic kernel RPC registrations must be exactly 12 rows")
+    rows: list[dict[str, Any]] = []
+    addresses: dict[str, str] = {}
+    combinations: set[tuple[int, str]] = set()
+    for row in value:
+        row = _object(row, _DYNAMIC_REGISTRATION_KEYS, "dynamic kernel RPC registration")
+        if (
+            type(row["program"]) is not int
+            or type(row["version"]) is not int
+            or type(row["netid"]) is not str
+            or type(row["service"]) is not str
+            or type(row["owner"]) is not str
+            or row["program"] != _DYNAMIC_KERNEL_RPC_POLICY["program"]
+            or row["version"] not in _DYNAMIC_KERNEL_RPC_POLICY["versions"]
+            or row["netid"] not in _DYNAMIC_KERNEL_RPC_POLICY["netids"]
+            or row["service"] != _DYNAMIC_KERNEL_RPC_POLICY["service"]
+            or row["owner"] != _DYNAMIC_KERNEL_RPC_POLICY["owner"]
+        ):
+            raise LiveQ1Refusal("dynamic kernel RPC registration identity drifted")
+        _rpc_port(row["address"], row["netid"])
+        netid = row["netid"]
+        if netid in addresses and addresses[netid] != row["address"]:
+            raise LiveQ1Refusal("dynamic kernel RPC netid address is not stable")
+        addresses[netid] = row["address"]
+        combinations.add((row["version"], netid))
+        rows.append(row)
+    expected = {
+        (version, netid)
+        for version in _DYNAMIC_KERNEL_RPC_POLICY["versions"]
+        for netid in _DYNAMIC_KERNEL_RPC_POLICY["netids"]
+    }
+    if (
+        combinations != expected
+        or len(combinations) != len(rows)
+        or rows != sorted(rows, key=canonical_bytes)
+    ):
+        raise LiveQ1Refusal("dynamic kernel RPC registration cross-product/order drifted")
+    return tuple(rows)
+
+
+def dynamic_kernel_rpc_tcp_listeners(value: Any) -> tuple[str, ...]:
+    """Derive the one IPv4 and one IPv6 nlockmgr TCP listener from rpcinfo."""
+
+    rows = validate_dynamic_kernel_rpc_registrations(value)
+    addresses = {row["netid"]: row["address"] for row in rows}
+    ipv4_port = _rpc_port(addresses["tcp"], "tcp")
+    ipv6_port = _rpc_port(addresses["tcp6"], "tcp6")
+    listeners = (f"0.0.0.0:{ipv4_port}", f"[::]:{ipv6_port}")
+    return tuple(sorted(listeners))
+
+
+def validate_declared_isolation_contract(raw: bytes, *, target: str) -> dict[str, Any]:
+    """Validate the frozen listener baseline and the non-listener Q1 controls."""
+
+    _listener_endpoint(target)
+    try:
+        declared = parse_canonical(raw)
+    except (CanonicalJsonError, TypeError) as error:
+        raise LiveQ1Refusal("declared isolation identity is not canonical JSON") from error
+    keys = set(_DECLARED_ISOLATION_STATIC) | {
+        "schema_version",
+        "host_listener_allowlist",
+        "host_listener_allowlist_sha256",
+        "host_listener_policy",
+        "dynamic_kernel_rpc_listener_policy",
+    }
+    declared = _object(declared, keys, "declared isolation identity")
+    if (
+        declared["schema_version"] != "hswm-dgx-q1-declared-isolation/v2"
+        or any(declared[name] != value for name, value in _DECLARED_ISOLATION_STATIC.items())
+        or declared["host_listener_policy"]
+        != "EXACT_FROZEN_STATIC_PLUS_RPCBOUND_DYNAMIC_NLOCKMGR_PLUS_ONE_Q1_TARGET"
+        or type(declared["host_listener_allowlist"]) is not list
+        or type(declared["host_listener_allowlist_sha256"]) is not str
+        or declared["dynamic_kernel_rpc_listener_policy"] != _DYNAMIC_KERNEL_RPC_POLICY
+    ):
+        raise LiveQ1Refusal("declared isolation identity drifted")
+    allowlist = declared["host_listener_allowlist"]
+    if (
+        not allowlist
+        or any(_listener_endpoint(value) != value for value in allowlist)
+        or allowlist != sorted(set(allowlist))
+        or target in allowlist
+        or "127.0.0.1:11434" in allowlist
+        or declared["host_listener_allowlist_sha256"] != listener_inventory_sha256(allowlist)
+    ):
+        raise LiveQ1Refusal("declared isolation listener baseline drifted")
+    return declared
+
+
+# Identity is the historical name used by launch-side callers.  Keep one
+# implementation so freezer, runner, and launcher accept identical bytes.
+validate_declared_isolation_identity = validate_declared_isolation_contract
 
 
 @dataclass(frozen=True, slots=True)
@@ -496,10 +739,17 @@ def validate_boundary_attestation(
     phase: str,
     attempt_id: str | None,
     completed_attempts: int,
+    declared_isolation_raw: bytes,
+    target: str,
+    startup_dynamic_kernel_rpc_registrations: Sequence[Mapping[str, Any]] | None = None,
+    startup_dynamic_kernel_rpc_tcp_listeners: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     """Validate a typed, per-boundary observation from the exclusive lease."""
 
     plan = validate_live_q1_plan(plan_raw)
+    declared = validate_declared_isolation_contract(
+        declared_isolation_raw, target=target
+    )
     try:
         receipt = parse_canonical(raw)
     except (CanonicalJsonError, TypeError) as error:
@@ -529,6 +779,13 @@ def validate_boundary_attestation(
         "container_tcp_tables_sha256",
         "internal_listener_port",
         "host_listener_inventory_sha256",
+        "host_tcp_listener_rows",
+        "host_tcp_listener_rows_sha256",
+        "dynamic_kernel_rpc_registrations",
+        "dynamic_kernel_rpc_registrations_sha256",
+        "dynamic_kernel_rpc_tcp_listeners",
+        "nlm_tcpport",
+        "nlm_udpport",
         "unexpected_listener_count",
         "requests_running",
         "request_success_total",
@@ -569,9 +826,61 @@ def validate_boundary_attestation(
         "container_network_namespace_sha256",
         "container_tcp_tables_sha256",
         "host_listener_inventory_sha256",
+        "host_tcp_listener_rows_sha256",
         "raw_metrics_sha256",
     ):
         _digest(receipt[name], name)
+    registrations = validate_dynamic_kernel_rpc_registrations(
+        receipt["dynamic_kernel_rpc_registrations"]
+    )
+    listeners = dynamic_kernel_rpc_tcp_listeners(
+        receipt["dynamic_kernel_rpc_registrations"]
+    )
+    if (
+        receipt["dynamic_kernel_rpc_registrations_sha256"]
+        != canonical_sha256(list(registrations))
+        or type(receipt["dynamic_kernel_rpc_tcp_listeners"]) is not list
+        or tuple(receipt["dynamic_kernel_rpc_tcp_listeners"]) != listeners
+        or type(receipt["nlm_tcpport"]) is not int
+        or type(receipt["nlm_udpport"]) is not int
+        or receipt["nlm_tcpport"] != 0
+        or receipt["nlm_udpport"] != 0
+    ):
+        raise LiveQ1Refusal("dynamic kernel RPC boundary binding drifted")
+    static = declared["host_listener_allowlist"]
+    inventory = tuple(sorted((*static, *listeners, target)))
+    rows = validate_host_tcp_listener_rows(receipt["host_tcp_listener_rows"])
+    row_endpoints = tuple(row.split()[3] for row in rows)
+    if (
+        receipt["host_tcp_listener_rows_sha256"] != canonical_sha256(list(rows))
+        or set(row_endpoints) != set(inventory)
+        or len(row_endpoints) != len(inventory)
+        or len(inventory) != len(set(inventory))
+        or "127.0.0.1:11434" in listeners
+        or target in listeners
+        or any(listener in static for listener in listeners)
+        or any(
+            "users:" in row or "pid=" in row
+            for row, endpoint in zip(rows, row_endpoints, strict=True)
+            if endpoint in listeners
+        )
+        or receipt["host_listener_inventory_sha256"]
+        != listener_inventory_sha256(inventory)
+    ):
+        raise LiveQ1Refusal("host listener inventory binding drifted")
+    if phase == "STARTUP":
+        if (
+            startup_dynamic_kernel_rpc_registrations is not None
+            or startup_dynamic_kernel_rpc_tcp_listeners is not None
+        ):
+            raise LiveQ1Refusal("startup dynamic kernel RPC baseline drifted")
+    elif (
+        startup_dynamic_kernel_rpc_registrations is None
+        or startup_dynamic_kernel_rpc_tcp_listeners is None
+        or tuple(startup_dynamic_kernel_rpc_registrations) != registrations
+        or tuple(startup_dynamic_kernel_rpc_tcp_listeners) != listeners
+    ):
+        raise LiveQ1Refusal("dynamic kernel RPC values changed after startup")
     if (
         phase not in {"STARTUP", "PRE", "POST", "FINAL"}
         or (phase in {"PRE", "POST"}) != (attempt_id is not None)
@@ -704,10 +1013,17 @@ __all__ = [
     "bind_case_material",
     "build_live_q1_request",
     "derive_live_q1_order",
+    "dynamic_kernel_rpc_tcp_listeners",
+    "listener_inventory_sha256",
+    "validate_host_tcp_listener_rows",
     "make_live_q1_start_marker",
+    "loopback_q1_target",
     "strict_json",
     "validate_live_envelope",
     "validate_boundary_attestation",
+    "validate_declared_isolation_contract",
+    "validate_declared_isolation_identity",
+    "validate_dynamic_kernel_rpc_registrations",
     "validate_live_q1_plan",
     "validate_live_q1_start_marker",
     "validate_response_schema",

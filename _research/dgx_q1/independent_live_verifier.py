@@ -6,14 +6,15 @@ from __future__ import annotations
 from collections import Counter
 from hashlib import sha256
 from datetime import datetime, timezone
+from ipaddress import ip_address
 import ast, base64, json, re
 from pathlib import Path
 from typing import Any
 from _research.dnrd5.canonical_json import canonical_bytes, canonical_sha256, parse_canonical
 
 PLAN="hswm-dgx-q1-live-response-exactness/v1"; MARKER="hswm-dgx-q1-live-start-marker/v1"
-LEDGER="hswm-dgx-q1-live-attempt-ledger/v1"; BOUNDARY="hswm-dgx-q1-live-boundary-attestation/v1"
-NS="DNRD5-Q1-LIVE-QUALIFICATION-ONLY/v1"; RUNNER="hswm-dgx-q1-live-runner/v1"
+LEDGER="hswm-dgx-q1-live-attempt-ledger/v1"; BOUNDARY="hswm-dgx-q1-live-boundary-attestation/v2"
+NS="DNRD5-Q1-LIVE-QUALIFICATION-ONLY/v1"; RUNNER="hswm-dgx-q1-live-runner/v2"
 REPRODUCED="LIVE_REPRODUCED_EXACT_ASSISTANT_CONTENT_UTF8_ON_FROZEN_Q1"; FALSIFIED="LIVE_FALSIFIED_EXACT_ASSISTANT_CONTENT_UTF8_ON_FROZEN_Q1"
 INCONCLUSIVE="INCONCLUSIVE_LIVE_Q1_EVIDENCE"; VOID="VOID_LIVE_Q1_PROTOCOL_LEDGER_HASH_ORDER_OR_BOUNDARY_BREACH"
 TEST_REPRODUCED="TEST_ONLY_REPRODUCED_EXACT_ASSISTANT_CONTENT_UTF8_ON_FIXTURE_Q1"; TEST_FALSIFIED="TEST_ONLY_FALSIFIED_EXACT_ASSISTANT_CONTENT_UTF8_ON_FIXTURE_Q1"; TEST_INCONCLUSIVE="TEST_ONLY_INCONCLUSIVE_Q1_FIXTURE_EVIDENCE"
@@ -23,6 +24,8 @@ CLASSES=("PRE_OUTCOME_TRAJECTORY","REVISION_PROPOSAL","FRESH_PROBE")
 SYSTEM="Act only as the bounded DNRD-5 token-native model function. Read the declared public synthetic input, follow its instruction, and return exactly one object satisfying the supplied strict JSON schema."
 REGISTRY={"schema_version":"hswm-dgx-q1-plan-consumption-registry/v1","path":"/mnt/hswm/evidence/hswm-dnrd5-q1-live-consumption-v1","scope":"PINNED_DGX_NODE_LOCAL_DURABLE_PLAN_HASH_REGISTRY","boundary":"NODE_LOCAL_PATH_BINDING_NOT_DISTRIBUTED_GLOBAL_CONSENSUS","terminal":"ONE_DURABLE_BURN_PER_PLAN_HASH_AT_THE_DECLARED_PATH"}
 Z="0"*64; SHA=re.compile(r"^[0-9a-f]{64}$"); GIT=re.compile(r"^[0-9a-f]{40}$"); CASE=re.compile(r"^QCASE-[0-9]{3}$"); ATT=re.compile(r"^DNRD5-Q1L-([0-9]{3})-R(00[1-4])$")
+V4_LISTENER=re.compile(r"^((?:[0-9]{1,3}\.){3}[0-9]{1,3})(?:%([A-Za-z0-9_.-]+))?:([0-9]{1,5})$")
+V6_LISTENER=re.compile(r"^\[([0-9A-Fa-f:.]+)(?:%([A-Za-z0-9_.-]+))?\]:([0-9]{1,5})$")
 def bad(x="breach"): raise ValueError(x)
 def obj(x,k):
  if type(x)is not dict or set(x)!=k: bad("keyset")
@@ -30,6 +33,64 @@ def obj(x,k):
 def digest(x):
  if type(x)is not str or SHA.fullmatch(x)is None or x==Z: bad("digest")
  return x
+def listener_endpoint(x):
+ """Accept exactly the host-local address spellings emitted by `ss -ltnH`."""
+ if type(x)is not str or not x or any(c.isspace() for c in x):bad("listener endpoint")
+ m=V4_LISTENER.fullmatch(x);family=4
+ if m is None:
+  m=V6_LISTENER.fullmatch(x);family=6
+ if m is None:bad("listener endpoint")
+ try:
+  address=ip_address(m.group(1));port=int(m.group(3))
+ except ValueError:bad("listener endpoint")
+ if address.version!=family or not 1<=port<=65535:bad("listener endpoint")
+ return x
+def listener_policy(iso,endpoint):
+ allow=iso["host_listener_allowlist"]
+ if type(allow)is not list or not allow or allow!=sorted(set(allow)) or any(listener_endpoint(q)!=q for q in allow):bad("listener allowlist")
+ if type(iso["host_listener_allowlist_sha256"])is not str or iso["host_listener_allowlist_sha256"]!=sha256("\n".join(allow).encode("utf8")).hexdigest():bad("listener allowlist hash")
+ if iso["host_listener_policy"]!="EXACT_FROZEN_STATIC_PLUS_RPCBOUND_DYNAMIC_NLOCKMGR_PLUS_ONE_Q1_TARGET":bad("listener policy")
+ dynamic=obj(iso["dynamic_kernel_rpc_listener_policy"],{"schema_version","program","service","owner","versions","netids","tcp_wildcard_hosts","nlm_tcpport","nlm_udpport","required_tcp_listener_count","observation"})
+ if dynamic!={"schema_version":"hswm-dgx-q1-dynamic-kernel-rpc-listener-policy/v1","program":100021,"service":"nlockmgr","owner":"superuser","versions":[1,3,4],"netids":["tcp","tcp6","udp","udp6"],"tcp_wildcard_hosts":["0.0.0.0","[::]"],"nlm_tcpport":0,"nlm_udpport":0,"required_tcp_listener_count":2,"observation":"RPCINFO_LOCAL_REGISTRATION_JOINED_TO_PRIVILEGED_HOST_TCP_LISTENER_ROWS"}:bad("dynamic listener policy")
+ m=re.fullmatch(r"http://(127\.0\.0\.1:[1-9][0-9]{0,4})/v1/chat/completions",endpoint)
+ if m is None:bad("listener endpoint identity")
+ target=listener_endpoint(m.group(1))
+ if target in allow or "127.0.0.1:11434" in allow:bad("listener baseline excludes target/ollama")
+ return allow,target,dynamic
+def dynamic_listener_receipt(x,policy):
+ keys={"program","version","netid","address","service","owner"}
+ regs=x["dynamic_kernel_rpc_registrations"]
+ if type(regs)is not list or len(regs)!=12 or regs!=sorted(regs,key=canonical_bytes) or x["dynamic_kernel_rpc_registrations_sha256"]!=canonical_sha256(regs):bad("dynamic rpc registrations")
+ expected={(version,netid)for version in policy["versions"]for netid in policy["netids"]};seen=set();by_netid={}
+ for row in regs:
+  row=obj(row,keys)
+  if row["program"]!=policy["program"]or row["service"]!=policy["service"]or row["owner"]!=policy["owner"]or type(row["version"])is not int or type(row["netid"])is not str or(row["version"],row["netid"])not in expected or type(row["address"])is not str:bad("dynamic rpc row")
+  if (row["version"],row["netid"])in seen:bad("dynamic rpc duplicate")
+  seen.add((row["version"],row["netid"]))
+  netid=row["netid"];m=(re.fullmatch(r"0\.0\.0\.0\.([0-9]{1,3})\.([0-9]{1,3})",row["address"])if netid in {"tcp","udp"}else re.fullmatch(r"::\.([0-9]{1,3})\.([0-9]{1,3})",row["address"]))
+  if m is None:bad("dynamic rpc address")
+  high,low=int(m.group(1)),int(m.group(2));port=high*256+low
+  if high>255 or low>255 or port<1024:bad("dynamic rpc port")
+  if netid in by_netid and by_netid[netid]!=(row["address"],port):bad("dynamic rpc netid continuity")
+  by_netid[netid]=(row["address"],port)
+ if seen!=expected or set(by_netid)!=set(policy["netids"])or type(x["nlm_tcpport"])is not int or type(x["nlm_udpport"])is not int or x["nlm_tcpport"]!=0 or x["nlm_udpport"]!=0:bad("dynamic rpc matrix")
+ pairs=sorted([f"0.0.0.0:{by_netid['tcp'][1]}",f"[::]:{by_netid['tcp6'][1]}"])
+ if x["dynamic_kernel_rpc_tcp_listeners"]!=pairs or len(set(pairs))!=2 or any(listener_endpoint(q)!=q for q in pairs):bad("dynamic tcp listeners")
+ return tuple(pairs),canonical_sha256(regs)
+def host_tcp_listener_rows(x,static,target,dynamic_pairs):
+ rows=x["host_tcp_listener_rows"]
+ if type(rows)is not list or not rows or len(rows)>256 or rows!=sorted(set(rows)) or x["host_tcp_listener_rows_sha256"]!=canonical_sha256(rows):bad("host tcp rows")
+ expected=set([*static,*dynamic_pairs,target]);endpoints={};dynamic=set(dynamic_pairs)
+ for row in rows:
+  if type(row)is not str or not 1<=len(row.encode("utf8","strict"))<=16384 or any(ord(c)<32 or 127<=ord(c)<=159 for c in row):bad("host tcp row")
+  parts=row.split()
+  if len(parts)<5 or parts[0]!="LISTEN":bad("host tcp row")
+  endpoint=listener_endpoint(parts[3])
+  if endpoint in endpoints:bad("host tcp endpoint multiplicity")
+  endpoints[endpoint]=row
+ if set(endpoints)!=expected:bad("host tcp endpoint set")
+ if any("users:" in endpoints[q]or"pid=" in endpoints[q]for q in dynamic):bad("kernel dynamic tcp owner")
+ return sha256("\n".join(sorted(endpoints)).encode("utf8")).hexdigest()
 def can(b):
  try:return parse_canonical(b)
  except Exception as e: raise ValueError("canonical") from e
@@ -159,15 +220,18 @@ def request(model,c,ib,mb,sb,rb):
  if not ins or type(mi)is not dict or set(mi)!=need:bad("material")
  schema(sc)
  return canonical_bytes({"chat_template_kwargs":{"enable_thinking":False},"logprobs":False,"max_tokens":c["max_output_tokens"],"messages":[{"content":SYSTEM,"role":"system"},{"content":canonical_bytes({"contractVersion":"hswm-dgx-q1-live-model-input/v1","callClass":c["call_class"],"instruction":ins,"input":mi}).decode(),"role":"user"}],"model":model,"n":1,"response_format":{"type":"json_schema","json_schema":{"name":"hswm_dgx_q1_live_"+c["call_class"].lower(),"schema":sc,"strict":True}},"seed":int.from_bytes(sha256(rb).digest()[:6],"big"),"stream":False,"temperature":0,"top_p":1})
-def att(r,d,pr,p,phase,aid,n,stable):
- x=obj(can(blob(r,d)),{"schema_version","namespace","q1_sha256","phase","attempt_id","completed_attempts","endpoint_sha256","model_identity_sha256","runtime_identity_sha256","model_snapshot_manifest_sha256","container_id_sha256","image_id","configured_image","container_start_sha256","cgroup_sha256","argv_sha256","gpu_uuid","gpu_compute_pids","host_listener_present","container_init_pid","container_network_namespace_sha256","container_tcp_tables_sha256","internal_listener_port","host_listener_inventory_sha256","unexpected_listener_count","requests_running","request_success_total","prefix_cache_hits","prefix_cache_queries","raw_metrics_sha256","boundary","nonclaim"})
+def att(r,d,pr,p,phase,aid,n,stable,listener_context):
+ x=obj(can(blob(r,d)),{"schema_version","namespace","q1_sha256","phase","attempt_id","completed_attempts","endpoint_sha256","model_identity_sha256","runtime_identity_sha256","model_snapshot_manifest_sha256","container_id_sha256","image_id","configured_image","container_start_sha256","cgroup_sha256","argv_sha256","gpu_uuid","gpu_compute_pids","host_listener_present","container_init_pid","container_network_namespace_sha256","container_tcp_tables_sha256","internal_listener_port","host_listener_inventory_sha256","unexpected_listener_count","host_tcp_listener_rows","host_tcp_listener_rows_sha256","dynamic_kernel_rpc_registrations","dynamic_kernel_rpc_registrations_sha256","dynamic_kernel_rpc_tcp_listeners","nlm_tcpport","nlm_udpport","requests_running","request_success_total","prefix_cache_hits","prefix_cache_queries","raw_metrics_sha256","boundary","nonclaim"})
  if x["schema_version"]!=BOUNDARY or x["namespace"]!=NS or x["q1_sha256"]!=sha256(pr).hexdigest() or (x["phase"],x["attempt_id"],x["completed_attempts"])!=(phase,aid,n) or any(x[k]!=p["identities"][k]for k in ("endpoint_sha256","model_identity_sha256","runtime_identity_sha256","model_snapshot_manifest_sha256")) or x["boundary"]!="FINITE_OBSERVED_CONTROLS_NOT_NO_INTERFERENCE_PROOF" or x["nonclaim"]!="NOT_DISPATCH_AUTHORIZATION_OR_SOURCE_A_PERMIT_OR_NO_INTERFERENCE_PROOF" or x["requests_running"]!=0 or type(x["request_success_total"])is not int or x["request_success_total"]!=n or type(x["prefix_cache_hits"])is not int or type(x["prefix_cache_queries"])is not int or x["prefix_cache_hits"]!=0 or x["prefix_cache_queries"]!=0 or type(x["unexpected_listener_count"])is not int or x["unexpected_listener_count"]!=0:bad("att")
  for k in ("container_id_sha256","container_start_sha256","cgroup_sha256","argv_sha256","container_network_namespace_sha256","container_tcp_tables_sha256","host_listener_inventory_sha256","raw_metrics_sha256"):digest(x[k])
  if type(x["image_id"])is not str or re.fullmatch(r"sha256:[0-9a-f]{64}",x["image_id"])is None or type(x["configured_image"])is not str or not x["configured_image"] or type(x["gpu_uuid"])is not str or re.fullmatch(r"GPU-[0-9a-f-]{8,80}",x["gpu_uuid"])is None:bad("att id")
- if x["host_listener_present"]is not True or type(x["container_init_pid"])is not int or x["container_init_pid"]<=0 or x["internal_listener_port"]!=8000:bad("listener")
+ static,target,policy=listener_context;dynamic_pairs,dynamic_sha=dynamic_listener_receipt(x,policy)
+ if set(static)&set(dynamic_pairs)or target in dynamic_pairs or "127.0.0.1:11434" in dynamic_pairs:bad("dynamic listener overlap")
+ expected_listener_inventory_sha256=host_tcp_listener_rows(x,static,target,dynamic_pairs)
+ if x["host_listener_present"]is not True or type(x["container_init_pid"])is not int or x["container_init_pid"]<=0 or x["internal_listener_port"]!=8000 or x["host_listener_inventory_sha256"]!=expected_listener_inventory_sha256:bad("listener")
  for k in ("gpu_compute_pids",):
   if type(x[k])is not list or not x[k] or x[k]!=sorted(x[k]) or len(set(x[k]))!=len(x[k]) or any(type(q)is not int or q<=0 for q in x[k]):bad("pids")
- now=tuple(x[k]for k in ("container_id_sha256","image_id","configured_image","container_start_sha256","cgroup_sha256","argv_sha256","gpu_uuid","container_init_pid","container_network_namespace_sha256"))
+ now=tuple(x[k]for k in ("container_id_sha256","image_id","configured_image","container_start_sha256","cgroup_sha256","argv_sha256","gpu_uuid","container_init_pid","container_network_namespace_sha256"))+(dynamic_pairs,dynamic_sha)
  if stable is not None and now!=stable:bad("continuity")
  return now
 def _result(mode,terminal,allow):
@@ -229,12 +293,13 @@ def verify(root:Path,*,external_registry_root:Path|None=None,allow_test_fixture:
   files=snap.get("files")if type(snap)is dict else None
   if type(ep)is not dict or set(ep)!={"schema_version","endpoint","method","transport"}or ep.get("schema_version")!="hswm-dgx-q1-endpoint-identity/v1"or ep.get("method")!="POST"or ep.get("transport")!="LOOPBACK_HTTP_NO_TLS"or type(ep.get("endpoint"))is not str or re.fullmatch(r"http://127\.0\.0\.1:[1-9][0-9]{0,4}/v1/chat/completions",ep["endpoint"])is None or type(model)is not dict or set(model)!={"schema_version","model","repository","revision","snapshot_manifest_sha256"}or model.get("schema_version")!="hswm-dgx-q1-model-identity/v1"or not all(type(model.get(k))is str and model[k]for k in ("model","repository","revision"))or GIT.fullmatch(model["revision"])is None or model.get("snapshot_manifest_sha256")!=p["identities"]["model_snapshot_manifest_sha256"]or tls!={"schema_version":"hswm-dgx-q1-tls-identity/v1","endpoint_scheme":"http","tls":"NOT_APPLICABLE_LOOPBACK_ONLY"}or type(snap)is not dict or set(snap)!={"schema_version","repository","revision","file_count","total_byte_length","files","files_sha256"}or snap.get("schema_version")!="hswm-dgx-q1-model-snapshot-manifest/v1"or snap.get("repository")!=model["repository"]or snap.get("revision")!=model["revision"]or type(snap.get("file_count"))is not int or snap["file_count"]<=0 or type(files)is not list or len(files)!=snap["file_count"]or snap.get("files_sha256")!=canonical_sha256(files)or type(snap.get("total_byte_length"))is not int or snap["total_byte_length"]!=sum(x.get("byte_length",-1)for x in files if type(x)is dict)or any(type(x)is not dict or set(x)!={"path","blob","byte_length","sha256"}or type(x["path"])is not str or not x["path"]or type(x["blob"])is not str or not x["blob"]or type(x["byte_length"])is not int or x["byte_length"]<0 or type(x["sha256"])is not str or SHA.fullmatch(x["sha256"])is None for x in files)or type(runtime)is not dict or set(runtime)!=rk or runtime.get("schema_version")!="hswm-dgx-q1-runtime-identity/v1"or runtime.get("served_model")!=model["model"]or runtime.get("endpoint")!=ep["endpoint"]or runtime.get("model_revision")!=model["revision"]or runtime.get("model_snapshot_manifest_sha256")!=p["identities"]["model_snapshot_manifest_sha256"]or type(runtime.get("container_image"))is not str or re.fullmatch(r"[^@\s]+@sha256:[0-9a-f]{64}",runtime["container_image"])is None or type(runtime.get("image_id"))is not str or re.fullmatch(r"sha256:[0-9a-f]{64}",runtime["image_id"])is None or type(runtime.get("gpu_uuid"))is not str or re.fullmatch(r"GPU-[0-9a-f-]{8,80}",runtime["gpu_uuid"])is None or runtime.get("max_num_seqs")!=1 or runtime.get("prefix_cache")is not False or runtime.get("enforce_eager")is not True or runtime.get("batch_invariant")is not True or runtime.get("v1_multiprocessing")is not False or runtime.get("model_loading_offline")is not True or runtime.get("generation_config")!="vllm"or runtime.get("engine_seed")!=0 or runtime.get("language_model_only") is not True:bad("semantic ids")
   if runtime.get("language_model_only")is not True or runtime.get("container_internal_port")!=8000 or runtime.get("container_network_mode")!="bridge"or runtime.get("container_ipc_mode")!="private"or runtime.get("host_publish_ip")!="127.0.0.1":bad("semantic ids")
-  expectediso={"schema_version":"hswm-dgx-q1-declared-isolation/v1","batch_invariant":True,"boundary":"FINITE_DECLARED_CONTROL_CONTRACT_NOT_OBSERVED_PROOF","dedicated_gpu":True,"dedicated_node":True,"dedicated_process":True,"max_num_seqs":1,"network_scope":"LOOPBACK_INGRESS_ONLY_OUTBOUND_NOT_ATTESTED","other_inference_processes":0,"prefix_cache":False,"v1_multiprocessing":False}
+  expectediso={"schema_version":"hswm-dgx-q1-declared-isolation/v2","batch_invariant":True,"boundary":"FINITE_DECLARED_CONTROL_CONTRACT_NOT_OBSERVED_PROOF","dedicated_gpu":True,"dedicated_node":True,"dedicated_process":True,"dynamic_kernel_rpc_listener_policy":iso.get("dynamic_kernel_rpc_listener_policy")if type(iso)is dict else None,"host_listener_allowlist":iso.get("host_listener_allowlist")if type(iso)is dict else None,"host_listener_allowlist_sha256":iso.get("host_listener_allowlist_sha256")if type(iso)is dict else None,"host_listener_policy":"EXACT_FROZEN_STATIC_PLUS_RPCBOUND_DYNAMIC_NLOCKMGR_PLUS_ONE_Q1_TARGET","max_num_seqs":1,"network_scope":"LOOPBACK_INGRESS_ONLY_OUTBOUND_NOT_ATTESTED","other_inference_processes":0,"prefix_cache":False,"v1_multiprocessing":False}
   if iso!=expectediso:bad("isolation")
+  listener_context=listener_policy(iso,ep["endpoint"])
   pv=obj(mk["provenance"],{"source_ci_receipt_sha256","verifier_ci_receipt_sha256","verifier_build_output_sha256"});ex={"source_ci_receipt_sha256":p["source"]["ci_receipt_sha256"],"verifier_ci_receipt_sha256":p["verifier"]["source"]["ci_receipt_sha256"],"verifier_build_output_sha256":p["verifier"]["build_output_sha256"]};pvb={k:blob(root,pv[k])for k in ex}
   if any(sha256(pvb[k]).hexdigest()!=ex[k]for k in ex):bad("provenance")
   ci(pvb["source_ci_receipt_sha256"],p["source"]);ci(pvb["verifier_ci_receipt_sha256"],p["verifier"]["source"]);verifier_build(pvb["verifier_build_output_sha256"])
-  stable=att(root,mk["startup_boundary_attestation"],pr,p,"STARTUP",None,0,None)
+  stable=att(root,mk["startup_boundary_attestation"],pr,p,"STARTUP",None,0,None,listener_context)
   if stable[1]!=runtime["image_id"]or stable[2]!=runtime["container_image"]or stable[6]!=runtime["gpu_uuid"]:bad("att runtime join")
   cases={x["case_id"]:x for x in p["corpus"]};req={};schemas={}
   for cid,c in cases.items():
@@ -245,13 +310,13 @@ def verify(root:Path,*,external_registry_root:Path|None=None,allow_test_fixture:
   while i<len(rows)and rows[i].get("record_type")=="START":
    s=obj(rows[i],{"schema_version","namespace","record_type","attempt_id","case_id","replicate","call_class","request","response_schema","plan_sha256","pre_boundary_attestation","retry","terminal","ordinal","previous_record_sha256","record_sha256"});i+=1;m=ATT.fullmatch(s["attempt_id"])
    if s["schema_version"]!=LEDGER or s["namespace"]!=NS or m is None or s["attempt_id"]!=p["call_order"][started]or s["case_id"]!="QCASE-"+m.group(1)or s["replicate"]!=int(m.group(2))or s["call_class"]!=cases[s["case_id"]]["call_class"]or s["plan_sha256"]!=sha256(pr).hexdigest()or s["retry"]!="NONE"or s["terminal"]!="DURABLY_VISIBLE_BEFORE_SINGLE_LIVE_POST"or blob(root,s["request"])!=req[s["case_id"]]or blob(root,s["response_schema"])!=schemas[s["case_id"]]:bad("start")
-   stable=att(root,s["pre_boundary_attestation"],pr,p,"PRE",s["attempt_id"],started,stable);started+=1
+   stable=att(root,s["pre_boundary_attestation"],pr,p,"PRE",s["attempt_id"],started,stable,listener_context);started+=1
    t=obj(rows[i],{"schema_version","namespace","record_type","attempt_id","case_id","replicate","call_class","start_record_sha256","observation","raw_envelope","post_boundary_attestation","model_content_utf8","structured_content_diagnostic","outcome","failure_code","retry","retry_allowed","terminal","ordinal","previous_record_sha256","record_sha256"});i+=1
    if t["schema_version"]!=LEDGER or t["namespace"]!=NS or any(t[k]!=s[k]for k in ("attempt_id","case_id","replicate","call_class"))or t["start_record_sha256"]!=s["record_sha256"]or t["retry"]!="NONE"or t["retry_allowed"]is not False or t["terminal"]!="LIVE_SLOT_CONSUMED_NO_RETRY_OR_REPLACEMENT"or t["outcome"]not in {"SUCCEEDED","FAILED"}:bad("terminal")
    if t["outcome"]=="SUCCEEDED":
     o=obj(t["observation"],{"status","response_content_type","provider_request_id"})
     if type(o["status"])is not int or (o["response_content_type"]is not None and type(o["response_content_type"])is not str)or(o["provider_request_id"]is not None and type(o["provider_request_id"])is not str)or t["failure_code"]is not None:bad("obs")
-    stable=att(root,t["post_boundary_attestation"],pr,p,"POST",s["attempt_id"],started,stable);e=strict(blob(root,t["raw_envelope"]));content=blob(root,t["model_content_utf8"]);structured=blob(root,t["structured_content_diagnostic"])
+    stable=att(root,t["post_boundary_attestation"],pr,p,"POST",s["attempt_id"],started,stable,listener_context);e=strict(blob(root,t["raw_envelope"]));content=blob(root,t["model_content_utf8"]);structured=blob(root,t["structured_content_diagnostic"])
     if o["status"]!=200 or type(e)is not dict or e.get("model")!=model["model"]or type(e.get("choices"))is not list or len(e["choices"])!=1 or type(e["choices"][0])is not dict or e["choices"][0].get("finish_reason")!="stop"or type(e["choices"][0].get("message"))is not dict or e["choices"][0]["message"].get("content").encode()!=content:bad("envelope")
     u=e.get("usage")
     if type(u)is not dict or any(type(u.get(k))is not int or u[k]<0 for k in ("prompt_tokens","completion_tokens","total_tokens"))or u["prompt_tokens"]+u["completion_tokens"]!=u["total_tokens"]:bad("usage")
@@ -261,12 +326,12 @@ def verify(root:Path,*,external_registry_root:Path|None=None,allow_test_fixture:
    else:
     if type(t["failure_code"])is not str or t["model_content_utf8"]is not None or t["structured_content_diagnostic"]is not None:bad("failed")
     if t["raw_envelope"]is not None:blob(root,t["raw_envelope"])
-    if t["post_boundary_attestation"]is not None:stable=att(root,t["post_boundary_attestation"],pr,p,"POST",s["attempt_id"],started,stable)
+    if t["post_boundary_attestation"]is not None:stable=att(root,t["post_boundary_attestation"],pr,p,"POST",s["attempt_id"],started,stable,listener_context)
   seal=obj(rows[i],{"schema_version","namespace","record_type","status","started_slots","successful_slots","failed_slots","failure_code","final_boundary_attestation","retry","retry_allowed","terminal","ordinal","previous_record_sha256","record_sha256"});i+=1
   if i!=len(rows)or seal["schema_version"]!=LEDGER or seal["namespace"]!=NS or seal["record_type"]!="RUN_SEAL"or(seal["started_slots"],seal["successful_slots"],seal["failed_slots"])!=(started,ok,started-ok)or seal["retry"]!="NONE"or seal["retry_allowed"]is not False or seal["terminal"]!="LIVE_Q1_ROOT_SEALED_NO_RESUME_OR_REPLACEMENT":bad("seal")
   if seal["status"]=="COMPLETE_96_LIVE_POSTS":
    if started!=96 or seal["failure_code"]is not None or seal["final_boundary_attestation"]is None:bad("complete")
-   att(root,seal["final_boundary_attestation"],pr,p,"FINAL",None,96,stable)
+   att(root,seal["final_boundary_attestation"],pr,p,"FINAL",None,96,stable,listener_context)
    if ok!=96 or len(out)!=24 or any(len(v)!=4 for v in out.values()):return _result(mk["evidence_mode"],INCONCLUSIVE,allow_test_fixture)
    terminal=REPRODUCED if all(len(set(v))==1 for v in out.values())else FALSIFIED
    if not registry_witness:terminal=INCONCLUSIVE

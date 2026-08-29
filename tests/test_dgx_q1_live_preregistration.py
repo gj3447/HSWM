@@ -32,6 +32,22 @@ SERVED_MODEL = "qwen-test-q1"
 ENDPOINT = "http://127.0.0.1:18080/v1/chat/completions"
 
 
+def _dynamic_kernel_policy() -> dict:
+    return {
+        "schema_version": "hswm-dgx-q1-dynamic-kernel-rpc-listener-policy/v1",
+        "program": 100021,
+        "service": "nlockmgr",
+        "owner": "superuser",
+        "versions": [1, 3, 4],
+        "netids": ["tcp", "tcp6", "udp", "udp6"],
+        "tcp_wildcard_hosts": ["0.0.0.0", "[::]"],
+        "nlm_tcpport": 0,
+        "nlm_udpport": 0,
+        "required_tcp_listener_count": 2,
+        "observation": "RPCINFO_LOCAL_REGISTRATION_JOINED_TO_PRIVILEGED_HOST_TCP_LISTENER_ROWS",
+    }
+
+
 def ci_receipt(commit: str, tree: str, run_id: int = 1) -> bytes:
     run = {
         "id": run_id,
@@ -158,7 +174,7 @@ def identity_blobs() -> dict[str, bytes]:
         ),
         "declared_isolation_contract_sha256": canonical_bytes(
             {
-                "schema_version": "hswm-dgx-q1-declared-isolation/v1",
+                "schema_version": "hswm-dgx-q1-declared-isolation/v2",
                 "batch_invariant": True,
                 "boundary": "FINITE_DECLARED_CONTROL_CONTRACT_NOT_OBSERVED_PROOF",
                 "dedicated_gpu": True,
@@ -169,6 +185,19 @@ def identity_blobs() -> dict[str, bytes]:
                 "other_inference_processes": 0,
                 "prefix_cache": False,
                 "v1_multiprocessing": False,
+                "host_listener_allowlist": [
+                    "127.0.0.1:22",
+                    "127.0.0.54%lo:53",
+                    "[::1]:22",
+                    "[fd00::1]:443",
+                ],
+                "host_listener_allowlist_sha256": sha256(
+                    b"127.0.0.1:22\n127.0.0.54%lo:53\n[::1]:22\n[fd00::1]:443"
+                ).hexdigest(),
+                "host_listener_policy": (
+                    "EXACT_FROZEN_STATIC_PLUS_RPCBOUND_DYNAMIC_NLOCKMGR_PLUS_ONE_Q1_TARGET"
+                ),
+                "dynamic_kernel_rpc_listener_policy": _dynamic_kernel_policy(),
             }
         ),
         "model_snapshot_manifest_sha256": snapshot,
@@ -212,6 +241,21 @@ def test_builds_bound_q0_public_24_case_live_plan() -> None:
     assert len(parse_canonical(artifacts["closure_manifest.json"])["artifacts"]) == len(
         artifacts
     ) - 1
+
+
+def test_freezer_refuses_dynamic_nlockmgr_policy_or_static_listener_drift() -> None:
+    item = preregistration_inputs()
+    identities = dict(item.identities)
+    declared = parse_canonical(identities["declared_isolation_contract_sha256"])
+    declared["host_listener_allowlist"] = ["127.0.0.1:11434"]
+    declared["host_listener_allowlist_sha256"] = sha256(
+        b"127.0.0.1:11434"
+    ).hexdigest()
+    identities["declared_isolation_contract_sha256"] = canonical_bytes(declared)
+    values = {name: getattr(item, name) for name in item.__dataclass_fields__}
+    values["identities"] = identities
+    with pytest.raises(LiveQ1FreezeRefusal, match="declared isolation"):
+        build_live_preregistration(LiveQ1PreregistrationInputs(**values))
 
 
 @pytest.mark.parametrize("change", ["source", "ci", "seed", "identity", "build"])

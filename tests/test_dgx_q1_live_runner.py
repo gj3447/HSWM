@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from _research.dnrd5.canonical_json import canonical_bytes, parse_canonical
+from _research.dnrd5.canonical_json import canonical_bytes, canonical_sha256, parse_canonical
 from _research.dgx_q1.independent_live_verifier import (
     INCONCLUSIVE,
     TEST_FALSIFIED,
@@ -21,7 +21,14 @@ from _research.dgx_q1.live_preregistration import (
     build_live_preregistration,
     q0_public_materials,
 )
-from _research.dgx_q1.live_protocol import BOUNDARY_SCHEMA, NAMESPACE, LiveQ1Refusal
+from _research.dgx_q1.live_protocol import (
+    BOUNDARY_SCHEMA,
+    NAMESPACE,
+    LiveQ1Refusal,
+    dynamic_kernel_rpc_tcp_listeners,
+    listener_inventory_sha256,
+    validate_boundary_attestation,
+)
 from _research.dgx_q1.live_runner import LiveObservation, LiveQ1Runner
 from tests.test_dgx_q1_live_preregistration import preregistration_inputs
 
@@ -48,6 +55,70 @@ def _provenance(artifacts: dict[str, bytes]) -> dict[str, bytes]:
     }
 
 
+def _dynamic_registrations(
+    ipv4_port: int = 40000, ipv6_port: int = 40000
+) -> list[dict]:
+    ipv4_high, ipv4_low = divmod(ipv4_port, 256)
+    ipv6_high, ipv6_low = divmod(ipv6_port, 256)
+    rows = [
+        {
+            "program": 100021,
+            "version": version,
+            "netid": netid,
+            "address": (
+                f"0.0.0.0.{ipv4_high}.{ipv4_low}"
+                if netid in {"tcp", "udp"}
+                else f"::.{ipv6_high}.{ipv6_low}"
+            ),
+            "service": "nlockmgr",
+            "owner": "superuser",
+        }
+        for version in (1, 3, 4)
+        for netid in ("tcp", "tcp6", "udp", "udp6")
+    ]
+    return sorted(rows, key=canonical_bytes)
+
+
+def test_dynamic_nlockmgr_tcp_family_ports_may_differ() -> None:
+    registrations = _dynamic_registrations(33965, 37197)
+    assert dynamic_kernel_rpc_tcp_listeners(registrations) == (
+        "0.0.0.0:33965",
+        "[::]:37197",
+    )
+
+
+@pytest.mark.parametrize("tamper", ("duplicate_target", "userspace_dynamic"))
+def test_boundary_rejects_auditable_listener_row_tampering(
+    tmp_path: Path, tamper: str
+) -> None:
+    artifacts, _ = _bundle()
+    plan_raw = artifacts["plan.json"]
+    runtime = parse_canonical(_identities(artifacts)["runtime_identity_sha256"])
+    receipt = parse_canonical(_attestation(plan_raw, runtime, "STARTUP", None, 0))
+    rows = list(receipt["host_tcp_listener_rows"])
+    if tamper == "duplicate_target":
+        rows.append("LISTEN 1 1 127.0.0.1:18080 0.0.0.0:*")
+    else:
+        index = next(index for index, row in enumerate(rows) if "0.0.0.0:40000" in row)
+        rows[index] += ' users:(("nlockmgr",pid=1,fd=3))'
+    receipt["host_tcp_listener_rows"] = sorted(rows)
+    receipt["host_tcp_listener_rows_sha256"] = canonical_sha256(
+        receipt["host_tcp_listener_rows"]
+    )
+    with pytest.raises(LiveQ1Refusal):
+        validate_boundary_attestation(
+            canonical_bytes(receipt),
+            plan_raw,
+            phase="STARTUP",
+            attempt_id=None,
+            completed_attempts=0,
+            declared_isolation_raw=_identities(artifacts)[
+                "declared_isolation_contract_sha256"
+            ],
+            target="127.0.0.1:18080",
+        )
+
+
 def _attestation(
     plan_raw: bytes,
     runtime: dict,
@@ -56,6 +127,18 @@ def _attestation(
     completed: int,
 ) -> bytes:
     plan = parse_canonical(plan_raw)
+    registrations = _dynamic_registrations()
+    listeners = dynamic_kernel_rpc_tcp_listeners(registrations)
+    static = [
+        "127.0.0.1:22",
+        "127.0.0.54%lo:53",
+        "[::1]:22",
+        "[fd00::1]:443",
+    ]
+    host_rows = sorted(
+        f"LISTEN 0 4096 {endpoint} 0.0.0.0:*"
+        for endpoint in [*static, *listeners, "127.0.0.1:18080"]
+    )
     return canonical_bytes(
         {
             "schema_version": BOUNDARY_SCHEMA,
@@ -83,7 +166,16 @@ def _attestation(
             "container_network_namespace_sha256": sha256(b"net:[1]").hexdigest(),
             "container_tcp_tables_sha256": sha256(b"tcp tables").hexdigest(),
             "internal_listener_port": 8000,
-            "host_listener_inventory_sha256": sha256(b"listeners").hexdigest(),
+            "host_listener_inventory_sha256": listener_inventory_sha256(
+                sorted([*static, *listeners, "127.0.0.1:18080"])
+            ),
+            "host_tcp_listener_rows": host_rows,
+            "host_tcp_listener_rows_sha256": canonical_sha256(host_rows),
+            "dynamic_kernel_rpc_registrations": registrations,
+            "dynamic_kernel_rpc_registrations_sha256": canonical_sha256(registrations),
+            "dynamic_kernel_rpc_tcp_listeners": list(listeners),
+            "nlm_tcpport": 0,
+            "nlm_udpport": 0,
             "unexpected_listener_count": 0,
             "requests_running": 0,
             "request_success_total": completed,
@@ -248,6 +340,58 @@ def test_post_boundary_failure_keeps_raw_envelope_then_halts(tmp_path: Path) -> 
     assert rows[0]["raw_envelope"] is not None
     assert rows[0]["post_boundary_attestation"] is None
     assert verify(tmp_path / "root", allow_test_fixture=True)["terminal"] == TEST_INCONCLUSIVE
+
+
+def test_runner_halts_before_post_when_dynamic_nlockmgr_pair_changes(tmp_path: Path) -> None:
+    artifacts, materials = _bundle()
+    plan_raw = artifacts["plan.json"]
+    runtime = parse_canonical(_identities(artifacts)["runtime_identity_sha256"])
+    calls = 0
+
+    def attester(phase: str, attempt: str | None, completed: int) -> bytes:
+        raw = _attestation(plan_raw, runtime, phase, attempt, completed)
+        if phase != "PRE":
+            return raw
+        receipt = parse_canonical(raw)
+        registrations = _dynamic_registrations(40000, 40001)
+        listeners = dynamic_kernel_rpc_tcp_listeners(registrations)
+        receipt["dynamic_kernel_rpc_registrations"] = registrations
+        receipt["dynamic_kernel_rpc_registrations_sha256"] = canonical_sha256(registrations)
+        receipt["dynamic_kernel_rpc_tcp_listeners"] = list(listeners)
+        receipt["host_listener_inventory_sha256"] = listener_inventory_sha256(
+            sorted(
+                [
+                    "127.0.0.1:22",
+                    "127.0.0.54%lo:53",
+                    "[::1]:22",
+                    "[fd00::1]:443",
+                    *listeners,
+                    "127.0.0.1:18080",
+                ]
+            )
+        )
+        host_rows = sorted(
+            f"LISTEN 0 4096 {endpoint} 0.0.0.0:*"
+            for endpoint in [
+                "127.0.0.1:22",
+                "127.0.0.54%lo:53",
+                "[::1]:22",
+                "[fd00::1]:443",
+                *listeners,
+                "127.0.0.1:18080",
+            ]
+        )
+        receipt["host_tcp_listener_rows"] = host_rows
+        receipt["host_tcp_listener_rows_sha256"] = canonical_sha256(host_rows)
+        return canonical_bytes(receipt)
+
+    def transport(_: str, request: bytes, __: int) -> LiveObservation:
+        nonlocal calls
+        calls += 1
+        return _response(request)
+
+    assert _runner(tmp_path / "root", artifacts, materials, transport, attester=attester).execute_all() == ()
+    assert calls == 0
 
 
 def test_independent_verifier_refuses_ledger_mutation(tmp_path: Path) -> None:

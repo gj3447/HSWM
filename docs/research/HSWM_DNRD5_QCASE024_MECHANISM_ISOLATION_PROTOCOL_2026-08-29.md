@@ -2,15 +2,40 @@
 
 - Date: `2026-08-29`
 - Instrument: `DNRD5-QCASE024-MI-1-CONTENT-V4`
-- Status: `IMPLEMENTED / PRE-FREEZE / UNRUN`
+- Status: `FROZEN / AWAITING_PUBLICATION_CI / UNRUN`
 - Namespace: `DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v4`
 - Scope: post-result-selected finite mechanism diagnostic
 - DNRD-5 causal effect: `NOT_EVALUATED`
 - Source-A disposition remains: `SOURCE_A_REFUSED_EXACTNESS_UNQUALIFIED`
-- v4 is a fresh content/trace-qualification experiment identity.  Its source
-  and publication identities, CI receipts, freeze, plan hash, marker, closure,
-  genesis, consumption registry, and live-run identifiers do not exist yet and
-  must be bound before any target launch.
+- v4 is a fresh content/trace-qualification experiment identity.  Its source,
+  verifier, source-CI receipt, freeze, plan, marker, closure, genesis, and
+  single-use registry path are now bound.  Its publication identity and CI
+  receipt, plan burn, and live/verifier run identifiers do not yet exist; no
+  target launch is authorized before those remaining bindings complete.
+
+## Frozen v4 preregistration
+
+The source and independent-verifier identity is commit
+`6ff34761bfdba107a8d3c765e42b9aa5b5efd091`, tree
+`ac362fdf1e1321333b5c52b0bb2fbae3951e2080`.  First-attempt source CI run
+[`33269283082`](https://github.com/gj3447/HSWM/actions/runs/33269283082)
+completed all eight jobs successfully.  Its strictly projected source-CI
+receipt SHA-256 is
+`ff1d2610032892a0f9d2648152216acd379df9d9120158b524fb48db51aa7160`.
+
+The fresh checked-in freeze is
+`_research/dgx_mi/preregistrations/hswm-dnrd5-qcase024-mi-1-content-v4-2026-08-29`.
+It contains 25 closure-validated files and binds plan SHA-256
+`c5aea1a4f57129a23c6e1f72b7b328f35295f867eb186ddfc7f8fe4b94647f0f`,
+start-marker SHA-256
+`5c2e9496bbfcacfa9fcd5b67de282548281f5324effc6865f155114760844c8a`,
+closure-manifest SHA-256
+`4dbb80077b2e83c96c6e307df0d0e1816c9285baaceb259f5330f0f58c1c547a`,
+and root-genesis SHA-256
+`70a5a60aebd9ff406c91673c97df4d7d5b3a2b1ae23e39d8dc07e4ffa20dbebd`.
+The plan names only the fresh node-local registry
+`/mnt/hswm/evidence/hswm-dnrd5-qcase024-mi-1-content-v4-consumption-v4`.
+At this stage it is frozen but unconsumed and unrun.
 
 ## Historical v3 one-call content-normalization incompatibility
 
@@ -370,10 +395,11 @@ This qualification repairs the instrument boundary only; it is not a v3
 observation, an arm comparison, or a scientific result.
 
 The fresh v4 namespace, source/build and independent-verifier identities,
-source and publication qualification, freeze, plan burn, cache namespace,
-evidence root, consumption registry, and verifier run must all be new.  The
+source qualification, freeze, cache namespace, and consumption-registry path
+are now new and bound.  The publication qualification, plan burn, evidence
+root, live-run identity, and verifier-run identity must still be new.  The
 offline v3-envelope qualification is complete; no v4 target call is authorized
-until the remaining source/publication and freeze bindings are complete.
+until the remaining publication binding is complete.
 
 ## Primary observations
 

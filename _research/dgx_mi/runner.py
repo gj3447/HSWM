@@ -20,7 +20,7 @@ from _research.dgx_mi.launcher import MiLease, MiLeaseSpec
 from _research.dgx_q1.github_ci_receipt import GitHubCiReceiptRefusal, parse_github_actions_ci_receipt
 from _research.dgx_q1.live_protocol import validate_response_schema
 
-LEDGER_SCHEMA = "hswm-dgx-qcase024-mi-ledger/v2"
+LEDGER_SCHEMA = "hswm-dgx-qcase024-mi-ledger/v3"
 ZERO = "0" * 64
 MAX_BLOB = 16 * 1024 * 1024
 
@@ -87,7 +87,7 @@ def _post(endpoint: str, request: bytes) -> MiObservation:
 
 
 def _strict_provider_json(raw: bytes) -> Any:
-    """Reject duplicate/nonfinite JSON while retaining number lexemes as Decimal."""
+    """Reject duplicate/nonfinite JSON; retain floating lexemes as Decimal."""
     def pairs(items: list[tuple[str, Any]]) -> dict[str, Any]:
         output: dict[str, Any] = {}
         for key, value in items:
@@ -96,10 +96,29 @@ def _strict_provider_json(raw: bytes) -> Any:
         return output
     try:
         return json.loads(raw.decode("utf-8", errors="strict"), object_pairs_hook=pairs,
-                          parse_float=Decimal, parse_int=Decimal,
+                          parse_float=Decimal,
                           parse_constant=lambda _v: (_ for _ in ()).throw(ValueError("nonfinite")))
     except Exception as error:
         raise MiRefusal("MI provider JSON is not strict finite UTF-8 JSON") from error
+
+
+def _normalize_usage_v3(value: Any) -> dict[str, int]:
+    """Validate the closed v3 usage surface while retaining the raw envelope."""
+    core = ("prompt_tokens", "completion_tokens", "total_tokens")
+    required = set(core)
+    allowed = required | {"prompt_tokens_details"}
+    if type(value) is not dict:
+        raise MiRefusal("MI usage key set drifted")
+    keys = frozenset(value)
+    if keys not in {frozenset(required), frozenset(allowed)}:
+        raise MiRefusal("MI usage key set drifted")
+    if "prompt_tokens_details" in value and value["prompt_tokens_details"] is not None:
+        raise MiRefusal("MI prompt token details must be literal null")
+    if any(type(value.get(name)) is not int or value[name] < 0 for name in core):
+        raise MiRefusal("MI usage core must be nonnegative JSON integers")
+    if value["prompt_tokens"] + value["completion_tokens"] != value["total_tokens"]:
+        raise MiRefusal("MI usage token accounting drifted")
+    return {name: value[name] for name in core}
 
 
 class MiRunner:
@@ -160,7 +179,7 @@ class MiRunner:
             cache_paths |= {spec.hf_cache,spec.compile_cache}
 
     def _burn(self) -> dict[str, Any]:
-        digest = sha256(self.plan_raw).hexdigest(); raw = canonical_bytes({"schema_version":"hswm-dgx-qcase024-mi-plan-consumption/v2", "plan_sha256":digest, "closure_manifest_sha256":sha256(self.closure_raw).hexdigest(), "evidence_root":str(self.root), "registry_path":str(self.registry), "terminal":"PLAN_BURNED_BEFORE_ANY_MI_TARGET_LAUNCH_NO_REUSE"})
+        digest = sha256(self.plan_raw).hexdigest(); raw = canonical_bytes({"schema_version":"hswm-dgx-qcase024-mi-plan-consumption/v3", "plan_sha256":digest, "closure_manifest_sha256":sha256(self.closure_raw).hexdigest(), "evidence_root":str(self.root), "registry_path":str(self.registry), "terminal":"PLAN_BURNED_BEFORE_ANY_MI_TARGET_LAUNCH_NO_REUSE"})
         target = self.registry / (digest + ".consumed"); fd, tmp = tempfile.mkstemp(prefix=".mi-burn-", dir=self.registry)
         try:
             with os.fdopen(fd,"wb") as f: f.write(raw); f.flush(); os.fsync(f.fileno())
@@ -216,19 +235,18 @@ class MiRunner:
                         _append(self.root,{"schema_version":LEDGER_SCHEMA,"record_type":"BLOCK_START","arm":arm,"block_id":block,"block_index":index,"server_identity":server_identity,"pre_boundary_attestation":_put(self.root,pre),"retry":"NONE","terminal":"FRESH_SERVER_AND_CACHE_BOUND_BEFORE_BLOCK_POSTS"})
                         block_ok=0
                         for rep in range(1,5):
-                            attempt=f"MI-024-V2-{arm}-{block}-R{rep:03d}"; pre=lease.attest("PRE",rep-1)
+                            attempt=f"MI-024-V3-{arm}-{block}-R{rep:03d}"; pre=lease.attest("PRE",rep-1)
                             start=_append(self.root,{"schema_version":LEDGER_SCHEMA,"record_type":"START","attempt_id":attempt,"arm":arm,"block_id":block,"replicate":rep,"request":_desc(self.request_raw),"response_schema":_desc(self.schema_raw),"plan_sha256":sha256(self.plan_raw).hexdigest(),"pre_boundary_attestation":_put(self.root,pre),"retry":"NONE","terminal":"DURABLY_VISIBLE_BEFORE_SINGLE_MI_POST"}); started+=1
                             obs: MiObservation | None = None; raw = None; post = None
                             try:
                                 obs=self.transport(spec.endpoint,self.request_raw); raw=_put(self.root,obs.body); post=_put(self.root,lease.attest("POST",rep)); value=_strict_provider_json(obs.body)
                                 choice=value.get("choices") if type(value) is dict else None
-                                usage=value.get("usage") if type(value) is dict else None
+                                usage=_normalize_usage_v3(value.get("usage") if type(value) is dict else None)
                                 expected_model=parse_canonical(self.identities[arm]["model_identity_sha256"])["model"]
                                 if (obs.status != 200 or value.get("model") != expected_model or type(choice) is not list or len(choice) != 1
                                         or type(choice[0]) is not dict or choice[0].get("finish_reason") != "stop"
                                         or type(choice[0].get("message")) is not dict or type(choice[0]["message"].get("content")) is not str
-                                        or type(usage) is not dict or set(usage)!={"prompt_tokens","completion_tokens","total_tokens"} or any(not isinstance(usage.get(key), Decimal) or usage[key] < 0 or usage[key] != usage[key].to_integral_value() for key in ("prompt_tokens","completion_tokens","total_tokens"))
-                                        or usage["prompt_tokens"] + usage["completion_tokens"] != usage["total_tokens"]): raise MiRefusal("MI response envelope/content drifted")
+                                        or set(usage)!={"prompt_tokens","completion_tokens","total_tokens"}): raise MiRefusal("MI response envelope/content drifted")
                                 content=choice[0]["message"]["content"].encode("utf-8"); trace=self._trace(obs.body)
                                 instance=parse_canonical(content); validate_response_schema(parse_canonical(self.schema_raw), instance, instance=True)
                                 _append(self.root,{"schema_version":LEDGER_SCHEMA,"record_type":"TERMINAL","attempt_id":attempt,"arm":arm,"block_id":block,"replicate":rep,"start_record_sha256":start["record_sha256"],"observation":{"status":obs.status,"response_content_type":obs.content_type,"provider_request_id":obs.request_id},"raw_envelope":raw,"model_content_utf8":_put(self.root,content),"structured_content_diagnostic":_put(self.root,canonical_bytes(parse_canonical(content))),"token_logprob_trace":_put(self.root,trace),"post_boundary_attestation":post,"outcome":"SUCCEEDED","failure_code":None,"retry":"NONE","retry_allowed":False,"terminal":"MI_SLOT_CONSUMED_NO_RETRY_OR_REPLACEMENT"}); succeeded+=1; block_ok+=1

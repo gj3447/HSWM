@@ -11,7 +11,7 @@ from _research.dgx_mi import launcher
 from _research.dgx_mi.launcher import MiLease, MiLeaseSpec
 from _research.dgx_q1.live_launcher import LaunchRefused
 from _research.dgx_mi.experiment import load_checked_in_freeze
-from _research.dgx_mi.runner import MiObservation, MiRunner
+from _research.dgx_mi.runner import MiObservation, MiRunner, _normalize_usage_v3, _strict_provider_json
 from tests.test_dgx_mi_preregistration import _inputs
 from _research.dgx_mi.preregistration import build_mi_preregistration, freeze_mi_preregistration
 from _research.dgx_mi.protocol import BLOCKS
@@ -126,6 +126,7 @@ def test_runner_burns_once_and_seals_exact_abba_sixteen_slots(tmp_path: Path) ->
     artifacts = build_mi_preregistration(_inputs())
     registry = tmp_path / "registry"; registry.mkdir()
     raw = b'{"model":"qwen3.6-35b-a3b","choices":[{"finish_reason":"stop","message":{"content":"{\\"answer\\":\\"VISTA\\",\\"rationale\\":\\"The public cue begins with V, matching VISTA exactly. The other cue describes WATER and is not the selected label.\\"}"},"logprobs":{"content":[{"token":"{","logprob":-0.1,"top_logprobs":[{"token":"{","logprob":-0.1}]}]}}],"usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2}}'
+    raw = raw.replace(b'"total_tokens":2}}', b'"total_tokens":2,"prompt_tokens_details":null}}')
     def transport(_: str, __: bytes) -> MiObservation: return MiObservation(200, raw, "application/json", "fake")
     identities = {arm:{name: artifacts[f"identities/{arm}/{name}.json"] for name in ("endpoint_sha256","model_identity_sha256","runtime_identity_sha256","tls_identity_sha256","declared_isolation_contract_sha256","model_snapshot_manifest_sha256")} for arm in ("ASYNC_ENABLED","ASYNC_DISABLED")}
     provenance = {"source_ci_receipt_sha256":artifacts["provenance/source_ci_receipt_sha256.json"],"verifier_ci_receipt_sha256":artifacts["provenance/verifier_ci_receipt_sha256.json"],"verifier_build_output_sha256":artifacts["provenance/verifier_build_output_sha256.json"]}
@@ -140,6 +141,34 @@ def test_runner_burns_once_and_seals_exact_abba_sixteen_slots(tmp_path: Path) ->
     assert rows[-1]["record_type"] == "RUN_SEAL" and rows[-1]["successful_slots"] == 16
     assert len(rows[-1]["blocks"]) == 4
     assert (registry / (sha256(artifacts["plan.json"]).hexdigest() + ".consumed")).is_file()
+
+
+@pytest.mark.parametrize("usage", [
+    {"prompt_tokens": 1, "completion_tokens": 2, "total_tokens": 3},
+    {"prompt_tokens": 1, "completion_tokens": 2, "total_tokens": 3, "prompt_tokens_details": None},
+])
+def test_usage_normalization_accepts_only_the_two_declared_provider_shapes(usage: dict[str, object]) -> None:
+    assert _normalize_usage_v3(usage) == {"prompt_tokens": 1, "completion_tokens": 2, "total_tokens": 3}
+
+
+@pytest.mark.parametrize("usage", [
+    {"prompt_tokens": 1, "completion_tokens": 2, "total_tokens": 3, "prompt_tokens_details": {}},
+    {"prompt_tokens": 1, "completion_tokens": 2, "total_tokens": 3, "completion_tokens_details": None},
+    {"prompt_tokens": 1, "completion_tokens": 2},
+    {"prompt_tokens": 1.0, "completion_tokens": 2, "total_tokens": 3},
+    {"prompt_tokens": True, "completion_tokens": 2, "total_tokens": 3},
+    {"prompt_tokens": -1, "completion_tokens": 2, "total_tokens": 1},
+    {"prompt_tokens": 1, "completion_tokens": 2, "total_tokens": 4},
+])
+def test_usage_normalization_refuses_any_nonclosed_or_invalid_shape(usage: dict[str, object]) -> None:
+    with pytest.raises(ValueError):
+        _normalize_usage_v3(usage)
+
+
+def test_usage_normalization_refuses_float_lexeme_from_the_raw_provider_envelope() -> None:
+    value = _strict_provider_json(b'{"usage":{"prompt_tokens":1.0,"completion_tokens":2,"total_tokens":3}}')
+    with pytest.raises(ValueError):
+        _normalize_usage_v3(value["usage"])
 
 
 def test_direct_runner_rejects_request_or_frozen_spec_drift(tmp_path: Path) -> None:

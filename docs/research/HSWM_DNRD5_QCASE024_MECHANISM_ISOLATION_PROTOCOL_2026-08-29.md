@@ -1,30 +1,88 @@
 # HSWM-DNRD-5 QCASE-024 mechanism-isolation diagnostic
 
 - Date: `2026-08-29`
-- Instrument: `DNRD5-QCASE024-MI-1-CLOSURE-V2`
-- Status: `PREREGISTERED / UNRUN / AWAITING_PUBLICATION_CI`
-- Namespace: `DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v2`
+- Instrument: `DNRD5-QCASE024-MI-1-USAGE-V3`
+- Status: `IMPLEMENTED / UNRUN / AWAITING_SOURCE_CI`
+- Namespace: `DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v3`
 - Scope: post-result-selected finite mechanism diagnostic
 - DNRD-5 causal effect: `NOT_EVALUATED`
 - Source-A disposition remains: `SOURCE_A_REFUSED_EXACTNESS_UNQUALIFIED`
-- Qualified v2 source commit/tree:
-  `1f7541357876d1d73f9faeb6ab96247dbecde048` /
-  `fc948b0e872a01a0ab7ca6b5cf1cac0832b03f9b`
-- First-attempt source CI run: `33262943949` (`8/8 SUCCESS`)
-- Qualified source CI receipt SHA-256:
-  `11eb542d57ad5240a4ee7b521ddf45a07393617bf90b920dc16f1f1f0186b8ca`
-- Active freeze:
-  `_research/dgx_mi/preregistrations/hswm-dnrd5-qcase024-mi-1-closure-v2-2026-08-29`
-- Frozen plan SHA-256:
-  `481b203b3393440f63a53fefec44f4bca4d1fa1c06f00c1c9cbb3a6d704c6432`
-- Frozen start-marker SHA-256:
-  `baf4ab53410e24b82d61f208dceca62593dd0543f4c7b80f1d2cc49bc286a8b0`
-- Frozen closure-manifest SHA-256:
-  `63e70d81a398bee04148e27170af35f410dc4cef3dd2060c29b69b27b7126b83`
-- Fresh root-genesis SHA-256:
-  `cf4ab30558c41e05d68c7f076d99d60e05da68e26f647bfc0913ab84fad6b58a`
-- Node-local consumption registry:
-  `/mnt/hswm/evidence/hswm-dnrd5-qcase024-mi-1-closure-v2-consumption-v2`
+- Active v3 freeze: not yet generated; a fresh plan, start marker, closure,
+  root genesis, verifier build, and node-local consumption registry are required
+  only after the v3 source commit and its first-attempt successful CI receipt.
+- Active v3 node-local consumption registry:
+  `/mnt/hswm/evidence/hswm-dnrd5-qcase024-mi-1-usage-v3-consumption-v3`
+
+## Historical v2 one-call envelope incompatibility
+
+The v2 closure-qualified source commit was
+`1f7541357876d1d73f9faeb6ab96247dbecde048` with tree
+`fc948b0e872a01a0ab7ca6b5cf1cac0832b03f9b`. Its first-attempt source CI run
+`33262943949` completed `8/8 SUCCESS`; the source-CI receipt SHA-256 is
+`11eb542d57ad5240a4ee7b521ddf45a07393617bf90b920dc16f1f1f0186b8ca`.
+The separate v2 freeze at
+`_research/dgx_mi/preregistrations/hswm-dnrd5-qcase024-mi-1-closure-v2-2026-08-29`
+bound plan SHA-256
+`481b203b3393440f63a53fefec44f4bca4d1fa1c06f00c1c9cbb3a6d704c6432`,
+start-marker SHA-256
+`baf4ab53410e24b82d61f208dceca62593dd0543f4c7b80f1d2cc49bc286a8b0`,
+closure-manifest SHA-256
+`63e70d81a398bee04148e27170af35f410dc4cef3dd2060c29b69b27b7126b83`, and
+root-genesis SHA-256
+`cf4ab30558c41e05d68c7f076d99d60e05da68e26f647bfc0913ab84fad6b58a`.
+
+The qualified publication commit was
+`d97f6702bcbb055c22cdd8e2a68bc296e3a50fb8` with tree
+`18f848c3f40df57bdc5d40c2a334ca8dcfe5b68d`. Its publication CI run
+`33263553497` completed `8/8 SUCCESS`; the publication-CI receipt SHA-256 is
+`51a761684a836c9e8e1037d3cca2d19935896c3740646b8c59cd3bf7b864bb91`.
+
+That one-time v2 plan was durably consumed in its own declared registry and
+launched once as `dgx-qcase024-mi-1-v2-live-d97f670-001`. The wrapper receipt
+SHA-256 is
+`bc53a5e508521c481eee8a5396f338395c66bc31f1c0d5ede082c7aae49bee2a`.
+The ledger contains one plan-consumption record, one MI marker, one block start,
+one `START`, one failed slot terminal, and one run seal. Its SHA-256 is
+`6593626c0ab48753799b173d94ea3cd5e1825755e74716a8f75e846fc4d450d3`; the
+final-record SHA-256 is
+`5bd092710f12129648f0ed615dfbdff19f9dcfa68e6d19fc5f66e7aeb1a744a9`.
+The root sealed as
+`INCONCLUSIVE_DGX_QCASE024_MI_INCOMPLETE_LIVE_SLOTS`, with one started slot,
+zero successful slots, and no retry, replacement, resume, or transfer.
+
+The sole slot was `MI-024-V2-ASYNC_ENABLED-B01-R001`. Its transport status was
+`200`; its preserved raw OpenAI-compatible envelope is 78,220 bytes with
+SHA-256
+`4d2f2e95ce0e7e59fbac3b45f26a278035b145b025b231bd124e14b3c5a1daa8`.
+The envelope supplied the ordinary three integer usage counts and the additional
+literal-null field `prompt_tokens_details`. v2 had incorrectly required the
+usage object to have exactly the three count keys, so the runner refused the
+response before accepting an observation. The raw envelope is retained; this
+was an evidence-envelope compatibility failure, not a model-content failure or
+an observed mechanism pattern. The response has zero accepted slots, zero
+completed blocks, zero arm reduction, and no one of the four preregistered
+observation-pattern labels.
+
+Independent verification ran once as
+`dgx-qcase024-mi-1-v2-verify-d97f670-001`. Its output SHA-256 is
+`f0a21b785e4afad1824aa49d3df1d08b46c8bffcde822c5c9f42e2980112bebd`, and its
+wrapper receipt SHA-256 is
+`055d2364214b2a70d61b5a16f9469479cbc8e15dd4a6bfc7914f87218e799bae`. It
+independently reported the same v2 plan, ledger, final record, and
+`INCONCLUSIVE_DGX_QCASE024_MI_INCOMPLETE_LIVE_SLOTS` terminal.
+
+v3 is a fresh experiment identity, not a continuation, retry, or repair of v2.
+It preserves the question, Q1-selected material, pinned model/runtime, ABBA
+order, four fresh-server blocks, 16-call budget, zero-retry rule, and causal
+nonclaims. It changes only the closed acceptance rule for the provider `usage`
+object: the three required count fields must be non-Boolean, non-negative JSON
+integers satisfying `prompt_tokens + completion_tokens = total_tokens`; the sole
+optional field is `prompt_tokens_details`, which is accepted only when literally
+`null`; unknown fields, a missing count, a non-null optional value, non-integer
+number, Boolean, negative value, or failed sum invariant refuse the slot. The
+raw provider envelope remains retained without dropping the null detail field.
+A fresh v3 namespace, identifiers, source and publication qualification,
+freeze, plan burn, cache namespace, evidence root, and verifier are mandatory.
 
 ## Historical v1 pre-launch refusal
 
@@ -49,13 +107,12 @@ Therefore the exact target/model-call count and plan-burn count are both zero.
 This is a pre-launch software integration defect, not a scientific observation
 or one of the frozen MI observation patterns.
 
-The active v2 qualification changes only this handoff: after validating every
-declared artifact and the complete filesystem closure, the loader returns the
-already validated closure bytes separately to the runner assembly. It also uses
-v2 typed identifiers, attempt IDs, fresh genesis, cache namespace, and a distinct
-node-local consumption registry so the v1 freeze cannot be launched as v2. The
-question, material, request, model/runtime pins, ABBA order, 16-call budget,
-zero-retry rule, terminal taxonomy, reductions, and nonclaims are unchanged.
+The active v3 qualification changes only the usage-envelope acceptance boundary
+identified by the sealed v2 run. It does not change the research question,
+material, request, model/runtime pins, ABBA order, 16-call budget, zero-retry
+rule, terminal taxonomy, reductions, or nonclaims. The v2 freeze, consumption
+record, raw envelope, ledger, verification output, and historical result remain
+immutable evidence; no v2 identifier or plan may be reused.
 
 ## Question and conceptual delta
 

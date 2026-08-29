@@ -198,7 +198,7 @@ class MiLease:
             raise LaunchRefused("MI vLLM success counter does not match serialized ledger")
         if version.get("version") != "0.25.1" or [row.get("id") for row in models.get("data",[]) if type(row) is dict] != [self.spec.served_model]:
             raise LaunchRefused("MI server readiness identity drifted")
-        return canonical_bytes({"schema_version": "hswm-dgx-qcase024-mi-boundary/v2", "arm": self.spec.arm,
+        return canonical_bytes({"schema_version": "hswm-dgx-qcase024-mi-boundary/v3", "arm": self.spec.arm,
             "block_id": self.spec.block_id, "phase": phase, "completed": completed,
             "async_scheduling": self.spec.async_scheduling, "server_argv": list(self._argv),
             "server_argv_sha256": sha256("\0".join(self._argv).encode()).hexdigest(),

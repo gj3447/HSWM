@@ -8,7 +8,7 @@ from dataclasses import replace
 import pytest
 
 from _research.dnrd5.canonical_json import canonical_bytes, canonical_sha256
-from _research.dgx_mi.independent_verifier import COMPLETE, INCOMPLETE, UNAVAILABLE, VOID, main, verify
+from _research.dgx_mi.independent_verifier import COMPLETE, INCOMPLETE, UNAVAILABLE, VOID, _usage_v3, main, verify
 
 
 def _put(root: Path, raw: bytes) -> dict[str, object]:
@@ -91,7 +91,8 @@ def test_reports_logprob_unavailability_not_integrity_success(tmp_path: Path) ->
     assert verify(root)["terminal"] == VOID
 
 
-def _run_valid(tmp_path: Path, *, variant: bool = False, short_top: bool = False, early_failure: bool = False):
+def _run_valid(tmp_path: Path, *, variant: bool = False, short_top: bool = False, early_failure: bool = False,
+               nullable_usage_detail: bool = False):
     """A real runner-shaped root is required for a positive verifier verdict."""
     from _research.dgx_mi.preregistration import build_mi_preregistration, build_verifier_source_manifest
     from _research.dgx_mi.runner import MiObservation, MiRunner
@@ -106,6 +107,8 @@ def _run_valid(tmp_path: Path, *, variant: bool = False, short_top: bool = False
     model = json.loads(artifacts["identities/ASYNC_ENABLED/model_identity_sha256.json"])["model"]
     def raw_for(text: str) -> bytes:
         body = json.loads(_envelope(text)); body["model"] = model; body["usage"] = {"prompt_tokens":1,"completion_tokens":1,"total_tokens":2}
+        if nullable_usage_detail:
+            body["usage"]["prompt_tokens_details"] = None
         if short_top:
             for token in body["choices"][0]["logprobs"]["content"]: token["top_logprobs"] = token["top_logprobs"][:1]
         return json.dumps(body, separators=(",", ":")).encode()
@@ -131,7 +134,7 @@ def _run_valid(tmp_path: Path, *, variant: bool = False, short_top: bool = False
             argv = ["--model", "/model-repository/snapshots/95a723d08a9490559dae23d0cff1d9466213d989", "--served-model-name", "qwen3.6-35b-a3b", "--host", "0.0.0.0", "--port", "8000", "--max-num-seqs", "1", "--no-enable-prefix-caching", "--max-model-len", "32768", "--gpu-memory-utilization", "0.500", "--generation-config", "vllm", "--seed", "0", "--enforce-eager", "--language-model-only", "--max-logprobs", "20", "--logprobs-mode", "processed_logprobs", "--async-scheduling" if self.spec.async_scheduling else "--no-async-scheduling"]
             tag = sha256((self.spec.arm + self.spec.block_id).encode()).hexdigest()
             identity = {"container_id_sha256": tag, "container_start_sha256": sha256((tag+"s").encode()).hexdigest(), "cgroup_sha256": "1"*64, "network_namespace_sha256": "2"*64, "server_argv_sha256": sha256("\0".join(argv).encode()).hexdigest()}
-            return canonical_bytes({"schema_version":"hswm-dgx-qcase024-mi-boundary/v2","arm":self.spec.arm,"block_id":self.spec.block_id,"phase":phase,"completed":completed,"async_scheduling":self.spec.async_scheduling,"server_argv":argv,"server_argv_sha256":identity["server_argv_sha256"],"server_identity":identity,"request_success_total":completed,"raw_metrics_sha256":"3"*64,"terminal":"FINITE_BLOCK_BOUNDARY_NOT_NO_INTERFERENCE_PROOF"})
+            return canonical_bytes({"schema_version":"hswm-dgx-qcase024-mi-boundary/v3","arm":self.spec.arm,"block_id":self.spec.block_id,"phase":phase,"completed":completed,"async_scheduling":self.spec.async_scheduling,"server_argv":argv,"server_argv_sha256":identity["server_argv_sha256"],"server_identity":identity,"request_success_total":completed,"raw_metrics_sha256":"3"*64,"terminal":"FINITE_BLOCK_BOUNDARY_NOT_NO_INTERFERENCE_PROOF"})
 
     registry = tmp_path / "registry"; registry.mkdir()
     identities = {arm:{name:artifacts[f"identities/{arm}/{name}.json"] for name in ("endpoint_sha256","model_identity_sha256","runtime_identity_sha256","tls_identity_sha256","declared_isolation_contract_sha256","model_snapshot_manifest_sha256")} for arm in ("ASYNC_ENABLED","ASYNC_DISABLED")}
@@ -160,6 +163,33 @@ def test_valid_frozen_runner_root_reduces_to_complete_with_decimal_trace(tmp_pat
     ledger = root / "mi_ledger.jsonl"
     ledger.write_bytes(ledger.read_bytes().replace(b'"record_type":"RUN_SEAL"', b'"record_type":"RUN_XEAL"', 1))
     assert verify(tmp_path / "evidence", external_registry_root=registry)["terminal"] == VOID
+
+
+def test_verifier_accepts_raw_usage_with_the_declared_nullable_detail_field(tmp_path: Path) -> None:
+    root, registry, _ = _run_valid(tmp_path, nullable_usage_detail=True)
+    assert verify(root, external_registry_root=registry)["terminal"] == COMPLETE
+
+
+@pytest.mark.parametrize("usage", [
+    {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
+    {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2, "prompt_tokens_details": None},
+])
+def test_verifier_usage_reducer_accepts_closed_provider_shapes(usage: dict[str, object]) -> None:
+    assert _usage_v3(usage) == {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2}
+
+
+@pytest.mark.parametrize("usage", [
+    {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2, "prompt_tokens_details": []},
+    {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2, "unknown": None},
+    {"prompt_tokens": 1, "completion_tokens": 1},
+    {"prompt_tokens": 1.0, "completion_tokens": 1, "total_tokens": 2},
+    {"prompt_tokens": False, "completion_tokens": 1, "total_tokens": 1},
+    {"prompt_tokens": -1, "completion_tokens": 1, "total_tokens": 0},
+    {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 3},
+])
+def test_verifier_usage_reducer_refuses_any_nonclosed_or_invalid_shape(usage: dict[str, object]) -> None:
+    with pytest.raises(ValueError):
+        _usage_v3(usage)
 
 
 def test_valid_variation_has_finite_arm_pattern_and_decimal_diagnostic(tmp_path: Path) -> None:

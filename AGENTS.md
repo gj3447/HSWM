@@ -53,3 +53,9 @@
   user request.
 - Keep public claims within checked-in evidence, and do not commit private datasets,
   ignored model artifacts, credentials, or unlicensed third-party material.
+- Before publishing or rendering Markdown math, use the portable subset
+  (`\\mathrm{Name}` rather than `\\operatorname{Name}` and fenced `math`
+  blocks rather than `\\[...\\]`) and run
+  `uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology`.
+  Compile a derived projection for legacy or hash-bound sources; do not rewrite
+  their recorded bytes solely for renderer compatibility.

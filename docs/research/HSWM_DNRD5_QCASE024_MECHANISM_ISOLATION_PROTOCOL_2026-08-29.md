@@ -2,12 +2,29 @@
 
 - Date: `2026-08-29`
 - Instrument: `DNRD5-QCASE024-MI-1-CLOSURE-V2`
-- Status: `CLOSURE_LOADER_QUALIFICATION_V2_IMPLEMENTED / UNRUN /
-  AWAITING_SOURCE_CI_AND_FRESH_PREREGISTRATION`
+- Status: `PREREGISTERED / UNRUN / AWAITING_PUBLICATION_CI`
 - Namespace: `DNRD5-QCASE024-MECHANISM-ISOLATION-ONLY/v2`
 - Scope: post-result-selected finite mechanism diagnostic
 - DNRD-5 causal effect: `NOT_EVALUATED`
 - Source-A disposition remains: `SOURCE_A_REFUSED_EXACTNESS_UNQUALIFIED`
+- Qualified v2 source commit/tree:
+  `1f7541357876d1d73f9faeb6ab96247dbecde048` /
+  `fc948b0e872a01a0ab7ca6b5cf1cac0832b03f9b`
+- First-attempt source CI run: `33262943949` (`8/8 SUCCESS`)
+- Qualified source CI receipt SHA-256:
+  `11eb542d57ad5240a4ee7b521ddf45a07393617bf90b920dc16f1f1f0186b8ca`
+- Active freeze:
+  `_research/dgx_mi/preregistrations/hswm-dnrd5-qcase024-mi-1-closure-v2-2026-08-29`
+- Frozen plan SHA-256:
+  `481b203b3393440f63a53fefec44f4bca4d1fa1c06f00c1c9cbb3a6d704c6432`
+- Frozen start-marker SHA-256:
+  `baf4ab53410e24b82d61f208dceca62593dd0543f4c7b80f1d2cc49bc286a8b0`
+- Frozen closure-manifest SHA-256:
+  `63e70d81a398bee04148e27170af35f410dc4cef3dd2060c29b69b27b7126b83`
+- Fresh root-genesis SHA-256:
+  `cf4ab30558c41e05d68c7f076d99d60e05da68e26f647bfc0913ab84fad6b58a`
+- Node-local consumption registry:
+  `/mnt/hswm/evidence/hswm-dnrd5-qcase024-mi-1-closure-v2-consumption-v2`
 
 ## Historical v1 pre-launch refusal
 

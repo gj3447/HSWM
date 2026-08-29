@@ -28,7 +28,7 @@ from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
 from _research.dnrd5.canonical_json import canonical_sha256
-from _research.dnrd5.dgx_q1_frontier_preflight import (
+from _research.dgx_q1.frontier_preflight import (
     DgxQ1FrontierReceipt,
     Q1FrontierExpectation,
     ZERO_SHA256,

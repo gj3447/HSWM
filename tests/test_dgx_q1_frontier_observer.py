@@ -5,10 +5,10 @@ from __future__ import annotations
 from collections.abc import Callable
 from pathlib import Path
 
-from _research.dnrd5 import dgx_q1_frontier_observer as observer_module
+from _research.dgx_q1 import frontier_observer as observer_module
 from _research.dnrd5.canonical_json import canonical_sha256
-from _research.dnrd5.dgx_q1_frontier_observer import observe_frontier
-from _research.dnrd5.dgx_q1_frontier_preflight import (
+from _research.dgx_q1.frontier_observer import observe_frontier
+from _research.dgx_q1.frontier_preflight import (
     DgxQ1FrontierReceipt,
     Q1FrontierExpectation,
     REFUSED,

@@ -9,7 +9,7 @@ from hashlib import sha256
 import pytest
 
 from _research.dnrd5.canonical_json import canonical_sha256, parse_canonical
-from _research.dnrd5.dgx_q1_frontier_preflight import (
+from _research.dgx_q1.frontier_preflight import (
     CONTINUOUS_LEASE,
     DgxQ1PreflightRefusal,
     FULL_PHYSICAL_GPU,

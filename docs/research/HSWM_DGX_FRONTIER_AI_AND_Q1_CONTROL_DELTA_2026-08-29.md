@@ -55,8 +55,8 @@ The observed configuration is therefore refused for Q1.  It must not dispatch
 Q1 or DNRD-5 calls.  This is an eligibility refusal, not a finding that the
 served model is nondeterministic and not a null or positive DNRD-5 result.
 
-The checked-in Q0 forensic result independently records a compatible subset of
-this boundary: prefix caching enabled, `max_num_seqs=6`, another vLLM process
+The checked-in Q0 forensic result independently records an overlapping subset
+of this boundary: prefix caching enabled, `max_num_seqs=6`, another vLLM process
 observed, and cross-process provider state not closed.  Q0 remains
 `ONE_CALL_CONSUMED_NONCLOSEABLE`; it cannot be repaired, resumed, relabelled, or
 used as a Q1 pilot.
@@ -104,7 +104,7 @@ source digest, or CI digest is not an external attestation.  A future Q1 needs
 an independently bound launcher observation before any real dispatch.
 
 The companion read-only instrument in
-`_research/dnrd5/dgx_q1_frontier_observer.py` enumerates Docker image and start
+`_research/dgx_q1/frontier_observer.py` enumerates Docker image and start
 identity, a bounded OEM/OS/kernel platform projection, GPU driver identity,
 vLLM groups, host listeners, target and foreign GPU cgroups, explicit
 revision/cache flags,
@@ -117,6 +117,9 @@ to an allowed worker tree, and an environment declaration is not effective
 batch-invariance qualification. Even a fully matched pure snapshot has the
 terminal
 `Q1_HOST_CONTROL_SNAPSHOT_MATCHED_NONAUTHORIZING`, never dispatch authority.
+Its supported checkout invocation is `python -m
+_research.dgx_q1.frontier_observer` from the repository root; direct file-path
+execution is not the launcher contract.
 
 ## Official technical context
 

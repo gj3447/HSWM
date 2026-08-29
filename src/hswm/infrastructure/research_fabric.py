@@ -150,6 +150,13 @@ def service_specs(
             "PHOENIX_ALLOW_EXTERNAL_RESOURCES": "false",
             "PHOENIX_TELEMETRY_ENABLED": "false",
             "PHOENIX_ALLOWED_PROVIDERS": "NONE",
+            # Keep the MCP projection explicit and non-executable.  Authorization
+            # is still enforced by Phoenix; a dedicated VIEWER principal is
+            # provisioned separately for Codex.
+            "PHOENIX_ENABLE_MCP_SERVER": "true",
+            "PHOENIX_ENABLE_MCP_CODE_MODE": "false",
+            "PHOENIX_ENABLE_OAUTH2_AUTHORIZATION_SERVER": "false",
+            "PHOENIX_OAUTH2_DYNAMIC_CLIENT_REGISTRATION": "disabled",
         },
         ready_host="127.0.0.1",
         ready_port=6006,

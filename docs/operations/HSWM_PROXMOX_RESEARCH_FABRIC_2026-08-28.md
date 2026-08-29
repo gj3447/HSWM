@@ -94,9 +94,15 @@ Phoenix defaults used here:
 - `PHOENIX_TELEMETRY_ENABLED=false`
 - `PHOENIX_ALLOW_EXTERNAL_RESOURCES=false`
 - `PHOENIX_ALLOWED_PROVIDERS=NONE`
+- `PHOENIX_ENABLE_MCP_SERVER=true`
+- `PHOENIX_ENABLE_MCP_CODE_MODE=false`
+- `PHOENIX_ENABLE_OAUTH2_AUTHORIZATION_SERVER=false`
+- `PHOENIX_OAUTH2_DYNAMIC_CLIENT_REGISTRATION=disabled`
 
-The last three settings keep the UI from sending analytics, loading external
-resources, or initiating model-provider calls. Phoenix documents both the
+The privacy settings keep the UI from sending analytics, loading external
+resources, or initiating model-provider calls. The MCP settings expose the
+authenticated Streamable HTTP endpoint without a model-visible code executor
+or an interactive OAuth registration surface. Phoenix documents both the
 telemetry opt-out and air-gapped controls in its
 [privacy guidance](https://arize.com/docs/phoenix/self-hosting/security/privacy).
 
@@ -127,6 +133,111 @@ signals only the tracked process group. Logs and process records live below
 The generated Phoenix JWT/admin secrets live only in
 `~/.local/state/hswm-research-fabric/secrets/phoenix.json` with mode `0600`;
 the process receipt, logs, repository, and smoke output do not contain them.
+
+## AI-native research tools applied on 2026-08-29
+
+### Phoenix VIEWER MCP for Codex
+
+Phoenix has one dedicated local `VIEWER` identity for Codex. Its API key and
+rotation password live only in
+`~/.local/state/hswm-research-fabric/secrets/phoenix-mcp-viewer.json` with mode
+`0600`. The Codex configuration contains no token. Instead, the mode-`0700`
+stdio launcher `~/.local/libexec/hswm-phoenix-viewer-mcp` reads that secret and
+proxies to `http://127.0.0.1:6006/mcp`. The launcher verifies the SHA-256 of a
+reviewed installed module copy before executing it inside Phoenix `20.4.0`'s
+installed environment; that module also fails closed unless the observed
+`fastmcp-slim` version is exactly `3.4.7`.
+
+The trusted project config `.codex/config.toml` registers the optional Codex
+server `hswm_phoenix_ro`. Its client allowlist is:
+
+```text
+describeSqlSchema
+executeSql
+getProjects
+getProject
+```
+
+`executeSql` is Phoenix's analytics-only SQL tool: it admits read-only `SELECT`
+against an allowlisted telemetry/dataset/experiment schema and applies row,
+response-byte, and statement-time bounds. Defense is layered:
+
+1. Phoenix authenticates the dedicated principal as `VIEWER` and rejects REST
+   mutation probes with HTTP 403.
+2. Phoenix MCP code mode is disabled, so there is no general `execute` sandbox.
+3. The stdio server itself registers exactly the four read tools above; project
+   create/update/delete and progressive disclosure tools do not exist on that
+   server surface.
+4. Codex repeats the same four-name allowlist as defense in depth.
+5. The token is absent from argv, repository files, process receipts, and Codex
+   TOML.
+
+Provisioning and non-secret validation are repeatable:
+
+```bash
+uv run python -m hswm.infrastructure.phoenix_mcp_viewer provision
+uv run python -m hswm.infrastructure.phoenix_mcp_viewer validate
+uv run --locked --script \
+  _research/infrastructure_smoke/phoenix_viewer_mcp_smoke.py
+codex mcp get hswm_phoenix_ro
+```
+
+Codex loads MCP inventory at session start, so an already-running session does
+not gain this tool dynamically; start a new Codex session after registration.
+The stdio proxy is intentional: Codex supports both local stdio and Streamable
+HTTP MCP servers, while the proxy keeps bearer material out of client config
+([OpenAI MCP documentation](https://developers.openai.com/codex/mcp/)). Phoenix
+documents the `VIEWER` role as read-only for ordinary API mutation routes and
+supports API-key authentication for integrations
+([Phoenix authentication](https://arize.com/docs/phoenix/self-hosting/security/authentication)).
+
+### Inspect AI as an outer evaluator
+
+`~/.local/bin/hswm-inspect-outer` launches a direct-version-pinned
+`inspect-ai==0.3.260` no-model preflight through `uvx`; it does not expose a
+generic `inspect eval` pass-through or add Inspect's dependency graph to the
+historically bound repository `uv.lock`. The preflight uses a
+credential-minimal environment and records hashes rather than CLI output. The
+host launcher also verifies the SHA-256 of its reviewed installed module copy
+before execution:
+
+```bash
+uv run python -m hswm.evaluation.inspect_outer_runner
+hswm-inspect-outer
+```
+
+An actual Inspect evaluation is intentionally not authorized by this launcher.
+A later protocol may use Inspect only for a frozen task or already closed
+immutable logs under a distinct analysis-run identity; it must explicitly bind
+its credential and model surface and forbid DNRD wrapping, source-run
+retry/resume, HSWM provider dispatch, and score-to-admission conversion.
+Inspect's task, solver, scorer, log, and eval-set concepts are documented in the
+[Inspect AI documentation](https://inspect.aisi.org.uk/).
+
+### Neo4j MCP decision
+
+The canonical database was re-probed as Neo4j Community `2026.02.3`. Community
+does not provide the role/privilege commands needed to give a general Cypher
+MCP a database-enforced reader identity. Consequently, the existing
+`ontology` MCP remains the only Codex canonical-KG interface, with its four
+predeclared and sensitivity-filtered read tools:
+
+```text
+ontology_search
+ontology_get
+ontology_neighbors
+ontology_claim_history
+```
+
+The official Neo4j MCP's read-only classifier was tested separately with an
+exact pin, including rejection of `CREATE`, but it was deliberately not
+registered against canonical data because the underlying credential would
+still retain publisher power. General `read-cypher` remains gated on a
+database-enforced reader, a read replica, or another independently bounded
+projection. This follows the server's own defense-in-depth guidance rather than
+treating a query classifier as a substitute for database authorization
+([Neo4j MCP tools](https://neo4j.com/docs/mcp/current/tools/),
+[Neo4j MCP configuration](https://neo4j.com/docs/mcp/current/configuration/)).
 
 To see the UIs from another machine, use an SSH tunnel rather than opening the
 unauthenticated development ports to the LAN:
@@ -216,3 +327,14 @@ The 2026-08-28 installation closed with these bounded observations:
 
 These are infrastructure checks, not material HSWM research results, so no
 content-addressed research receipt or `F1_R8_RESULTS_LOG.md` entry was created.
+
+The 2026-08-29 AI-native extension additionally closed with:
+
+- dedicated Phoenix `VIEWER`: read probe 200 and mutation probe 403;
+- Phoenix MCP code mode disabled and OAuth authorization server disabled;
+- authenticated Streamable HTTP and secret-free stdio-proxy handshakes passed;
+- analytics `SELECT 1` returned one row through both transports;
+- analytics `CREATE TABLE` was refused as unsupported syntax before execution;
+- Codex reported the exact four-tool Phoenix allowlist;
+- Inspect `0.3.260` no-model preflight and direct-version-pinned launcher passed;
+- canonical Neo4j remained unchanged and no general Cypher MCP was registered.

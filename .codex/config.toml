@@ -15,3 +15,15 @@ startup_timeout_sec = 30.0
 tool_timeout_sec = 60.0
 default_tools_approval_mode = "writes"
 enabled_tools = ["ontology_search", "ontology_get", "ontology_neighbors", "ontology_claim_history"]
+
+# Host-scoped Phoenix observability is optional for contributors.  The stdio
+# server itself exports only these four reads; this matching client allowlist is
+# defense in depth.  Its VIEWER key remains in a 0600 host secret, never here.
+[mcp_servers.hswm_phoenix_ro]
+command = "/home/lagyeongjun/.local/libexec/hswm-phoenix-viewer-mcp"
+enabled = true
+required = false
+startup_timeout_sec = 30.0
+tool_timeout_sec = 60.0
+default_tools_approval_mode = "writes"
+enabled_tools = ["describeSqlSchema", "executeSql", "getProjects", "getProject"]

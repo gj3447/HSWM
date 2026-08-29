@@ -195,6 +195,16 @@ engineering contract이며 현재 효능·과학적 유일성 주장이 아니�
 원문·실측 MCP 상태·보존 경계는
 [`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](docs/canon/USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md)에 있다.
 
+2026-08-29 Proxmox 연구 계측층에는 direct-version-pinned Inspect AI
+no-model outer-evaluation preflight와
+Phoenix 전용 `VIEWER` MCP를 적용했다. Phoenix 연결은 secret-free stdio proxy와
+네 개 read-tool allowlist를 사용하며, canonical Neo4j는 Community edition의
+DB-enforced reader role 부재 때문에 기존 네 개 bounded ontology read tool만 유지한다.
+설치 상태, 권한 경계, 검증 명령과 비주장은
+[`HSWM Proxmox research fabric`](docs/operations/HSWM_PROXMOX_RESEARCH_FABRIC_2026-08-28.md)에
+있다. 이 계측층은 HSWM cognition, canonical admission, causal credit 또는 learning이
+아니다.
+
 2026-08-29에는 이 경계를 직접 연구하는
 [`Ragnarok project`](_research/ragnarok/)와, 역사적 라카토트리의
 `Touch the Sky`에서 복원한 `Pure Intelligence DNA`를 현재 HSWM 인과학습·하이퍼그래프·

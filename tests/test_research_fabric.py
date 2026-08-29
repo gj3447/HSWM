@@ -14,6 +14,20 @@ def test_service_specs_are_loopback_only_and_persistent(tmp_path: Path) -> None:
     assert specs["phoenix"].environment["PHOENIX_ENABLE_AUTH"] == "true"
     assert specs["phoenix"].environment["PHOENIX_TELEMETRY_ENABLED"] == "false"
     assert specs["phoenix"].environment["PHOENIX_ALLOWED_PROVIDERS"] == "NONE"
+    assert specs["phoenix"].environment["PHOENIX_ENABLE_MCP_SERVER"] == "true"
+    assert specs["phoenix"].environment["PHOENIX_ENABLE_MCP_CODE_MODE"] == "false"
+    assert (
+        specs["phoenix"].environment[
+            "PHOENIX_ENABLE_OAUTH2_AUTHORIZATION_SERVER"
+        ]
+        == "false"
+    )
+    assert (
+        specs["phoenix"].environment[
+            "PHOENIX_OAUTH2_DYNAMIC_CLIENT_REGISTRATION"
+        ]
+        == "disabled"
+    )
     assert specs["phoenix"].environment["PHOENIX_WORKING_DIR"] == str(
         tmp_path / "phoenix"
     )

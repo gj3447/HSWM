@@ -1,0 +1,718 @@
+{
+  "schema_version": "hswm-causal-composition-research-program/v1",
+  "uid": "sym:ResearchProgram:hswm-causal-composition-research-2026-08-29",
+  "name": "HSWM causal-composition research program",
+  "status": "DESIGN_SEEDED_SCIENTIFICALLY_CONNECTED_INTEGRATED_CLAIM_UNJUDGED",
+  "authority": {
+    "class": "SECONDARY_AI_RESEARCH_DESIGN",
+    "target_authority": "USER_PRIMARY_FCL_1_THROUGH_8",
+    "scientific_status": "UNJUDGED",
+    "canonical_scope": "RESEARCH_PROGRAM_NOT_HSWM_CANON"
+  },
+  "canonical_role": "Order falsifiable tests of outcome-bound local causal learning and same-type HSWM composition without treating infrastructure, KG publication, orchestration, or representation as cognition.",
+  "current_evidence": "Narrow n-ary representation conformance and a scalar precursor exist; integrated local causal learning, learned topology, joint world-self modeling, diachronic continuity, and two-scale causal closure remain unjudged.",
+  "conceptual_delta": "Each downstream claim is unlocked only by a valid upstream intervention and by controls that bound the strongest alternative explanations under matched resources, information, authority, state, measurement, and scale.",
+  "nonclaim": "DESIGN_AND_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_SELFHOOD_CONSCIOUSNESS_PERSONHOOD_OR_UNBOUNDED_SCALE_CLOSURE",
+  "context_paths": [
+    "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+    "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+    "ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json",
+    "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+    "_research/ragnarok/README.md",
+    "_research/pidna/README.md",
+    "F1_R8_RESULTS_LOG.md"
+  ],
+  "context_binding_note": "These paths are navigation and evidence-boundary references that may evolve. Only the generated ontology artifact_bindings are exact content provenance bindings.",
+  "dependency_edges": [
+    ["G0", "G1"],
+    ["G1", "G2A"],
+    ["G1", "G2B"],
+    ["G2A", "G3"],
+    ["G2B", "G3"],
+    ["G3", "G4"],
+    ["G4", "G5"],
+    ["G5", "G6"]
+  ],
+  "fcl_coverage": {
+    "G1": ["FCL-1"],
+    "G2A": ["FCL-4"],
+    "G2B": ["FCL-3"],
+    "G3": ["FCL-5"],
+    "G4": ["FCL-6", "FCL-7"],
+    "G5": ["FCL-2", "FCL-8"],
+    "G6": ["FCL-1", "FCL-2", "FCL-3", "FCL-4", "FCL-5", "FCL-6", "FCL-7", "FCL-8"]
+  },
+  "claim_ceiling_uids": {
+    "MEASUREMENT_READY": "sym:Concept:hswm-claim-ceiling-measurement-ready",
+    "LOCAL_CAUSAL_REVISION_UNDER_DECLARED_TASK": "sym:Concept:hswm-claim-ceiling-local-causal-revision",
+    "BOUNDED_COUNTERFACTUAL_CREDIT": "sym:Concept:hswm-claim-ceiling-bounded-counterfactual-credit",
+    "BOUNDED_DYNAMIC_NARY_COORDINATION": "sym:Concept:hswm-claim-ceiling-bounded-dynamic-nary-coordination",
+    "BOUNDED_OUTCOME_LINKED_MORPHOGENESIS": "sym:Concept:hswm-claim-ceiling-bounded-morphogenesis",
+    "BOUNDED_WORLD_SELF_CONTINUITY": "sym:Concept:hswm-claim-ceiling-bounded-world-self-continuity",
+    "WORLD_SELF_CONTINUITY_COMPONENT_SIGNAL_ONLY": "sym:Concept:hswm-claim-ceiling-world-self-component-signal",
+    "TWO_SCALE_BOUNDED_CAUSAL_COMPOSITION": "sym:Concept:hswm-claim-ceiling-two-scale-causal-composition",
+    "BOUNDED_REPLICATED_SCALING": "sym:Concept:hswm-claim-ceiling-bounded-replicated-scaling",
+    "HIERARCHICAL_COORDINATION_WITHOUT_MACRO_CAUSAL_IDENTIFICATION": "sym:Concept:hswm-claim-ceiling-hierarchical-without-macro-causality",
+    "MODEL_CONDITIONED_PERFORMANCE_ONLY": "sym:Concept:hswm-claim-ceiling-model-conditioned-performance",
+    "RETRIEVAL_AUGMENTED_AGENT_RESULT": "sym:Concept:hswm-claim-ceiling-retrieval-agent-result",
+    "CENTRALLY_ORCHESTRATED_MULTI_AGENT_RESULT": "sym:Concept:hswm-claim-ceiling-central-orchestration",
+    "REPRESENTATIONAL_EQUIVALENCE_OR_UNRESOLVED": "sym:Concept:hswm-claim-ceiling-representation-unresolved",
+    "POST_HOC_ASSOCIATION_ONLY": "sym:Concept:hswm-claim-ceiling-post-hoc-association",
+    "WHOLE_SYSTEM_OUTCOME_ONLY": "sym:Concept:hswm-claim-ceiling-whole-system-outcome",
+    "UNTRUSTED_EVALUATION_ONLY": "sym:Concept:hswm-claim-ceiling-untrusted-evaluation",
+    "LOCAL_QUALITY_GAIN_WITH_UNKNOWN_SYSTEM_COST": "sym:Concept:hswm-claim-ceiling-local-quality-unknown-cost",
+    "INSTRUMENT_VALIDATION_ONLY": "sym:Concept:hswm-claim-ceiling-instrument-validation",
+    "STATE_PERSISTENCE_ONLY": "sym:Concept:hswm-claim-ceiling-state-persistence",
+    "DYNAMIC_EXECUTION_ONLY": "sym:Concept:hswm-claim-ceiling-dynamic-execution",
+    "MULTI_AGENT_OR_HIERARCHICAL_SYSTEM_ONLY": "sym:Concept:hswm-claim-ceiling-multi-agent-hierarchy",
+    "EXPLORATORY_SIGNAL_ONLY": "sym:Concept:hswm-claim-ceiling-exploratory-signal",
+    "FUNCTIONAL_MULTI_AGENT_RESULT_WITHOUT_HSWM_AUTHORITY_CLOSURE": "sym:Concept:hswm-claim-ceiling-functional-without-authority-closure",
+    "INCONCLUSIVE_MEASUREMENT_NOT_READY": "sym:Concept:hswm-claim-ceiling-inconclusive-measurement-not-ready",
+    "CONTROL_ALTERNATIVE_BOUNDED_WITHIN_SCOPE": "sym:Concept:hswm-claim-ceiling-control-bounded-within-scope",
+    "GATE_NOT_PASSED_NO_UNLOCK": "sym:Concept:hswm-claim-ceiling-gate-not-passed"
+  },
+  "confound_axes": [
+    {
+      "id": "RESOURCE",
+      "definition": "Model, samples, tokens, calls, context, tools, compute, wall time, and human minutes.",
+      "required_declaration": "List the exact value for every arm and treat an unmatched value as an attribution limitation."
+    },
+    {
+      "id": "INFORMATION",
+      "definition": "Prompt, benchmark answer, evaluator signal, retrieval corpus, history, and lineage access.",
+      "required_declaration": "Bind data cutoff and information visibility before outcome."
+    },
+    {
+      "id": "DECISION_AUTHORITY",
+      "definition": "Human edit, fixed router, central policy, proposer, validator, owner, and current permit authority.",
+      "required_declaration": "Identify which principal or state actually caused routing, admission, and external effect."
+    },
+    {
+      "id": "STATE",
+      "definition": "Canonical revision, compiled disposition, cache, retrieval, topology, membership, and lineage.",
+      "required_declaration": "Name the primary state intervention and keep other state channels fixed."
+    },
+    {
+      "id": "MEASUREMENT",
+      "definition": "Scorer, parser, denominator, missingness, calibration, evaluator version, and invalid-run handling.",
+      "required_declaration": "Calibrate against known-answer and null cases before the efficacy question."
+    },
+    {
+      "id": "SCALE",
+      "definition": "Member count, coalition variety, latency, churn, conflict, privacy, exit, and composition depth.",
+      "required_declaration": "Change one primary scale stress at a time or preregister an interaction design."
+    }
+  ],
+  "gates": [
+    {
+      "id": "G0",
+      "name": "Measurement integrity",
+      "kind": "PRECONDITION_NOT_EFFICACY",
+      "prerequisites": [],
+      "mapped_fcl_ids": [],
+      "primary_question": "Can the task, outcome, resource, state, and intervention contract distinguish a mechanism effect from measurement or hidden-work effects?",
+      "exact_intervention": "Before outcome inspection, bind matched budgets, independent outcome, leakage probes, known-answer and null instruments, pre-outcome seal, executable revision remove/restore, sample and seed counts, stopping and multiplicity rules, pilot exclusions, analysis code, task selection, and holdout-inspection budget.",
+      "required_control_ids": ["CF-01", "CF-07", "CF-08", "CF-09", "CF-13"],
+      "pass_rule": "Every arm has complete matched-axis accounting, calibrated measurement, independent outcome provenance, an exact executable intervention identity, an untouched final holdout, and an all-run manifest that includes invalid and negative runs.",
+      "fail_rule": "Any arm-specific hidden prompt, model, retry, human repair, leakage, denominator drift, or invalid intervention makes the causal question unanswerable.",
+      "stop_rule": "Return INCONCLUSIVE_MEASUREMENT_NOT_READY; repair the reusable instrument outside the consumed scientific run and do not infer a mechanism null.",
+      "claim_ceiling": "MEASUREMENT_READY",
+      "unlocks": ["G1"]
+    },
+    {
+      "id": "G1",
+      "name": "Minimal outcome-bound causal rung",
+      "kind": "LOCAL_CAUSAL_LEARNING_GATE",
+      "prerequisites": ["G0"],
+      "mapped_fcl_ids": ["FCL-1"],
+      "primary_question": "Does an independently grounded outcome cause an owner-valid canonical revision that changes held-out next behavior?",
+      "exact_intervention": "Compare admitted revision with removal, byte-identical restoration, inactive and wrong-target sham revisions, and shuffled outcome or credit while holding the sealed trajectory and all matched axes fixed.",
+      "required_control_ids": ["CF-01", "CF-02", "CF-05", "CF-06", "CF-07", "CF-08", "CF-09", "CF-13", "CF-14"],
+      "pass_rule": "Fresh-task gain exceeds the preregistered margin; remove eliminates it; restore recovers it; sham and shuffled-credit arms fail to reproduce it; compiled traversal mediation is observed.",
+      "fail_rule": "Log-only, retrieval, static prompt edit, extra compute, or an inactive revision explains the same effect, or revision removal leaves the gain intact.",
+      "stop_rule": "Close the revision family as RED or narrow it; do not use downstream graph complexity to relabel the result as HSWM learning.",
+      "claim_ceiling": "LOCAL_CAUSAL_REVISION_UNDER_DECLARED_TASK",
+      "unlocks": ["G2A", "G2B"]
+    },
+    {
+      "id": "G2A",
+      "name": "Counterfactual multiscale credit",
+      "kind": "CREDIT_GATE",
+      "prerequisites": ["G1"],
+      "mapped_fcl_ids": ["FCL-4"],
+      "primary_question": "Can shared and delayed outcome be attributed to cells, role incidences, coalitions, and whole state without post-hoc or duplicate credit?",
+      "exact_intervention": "Block or exchange a target contribution while preserving other information and action; compare counterfactual attribution with uniform, shuffled, global-only, forced one-to-one, and retrospective judge credit.",
+      "required_control_ids": ["CF-01", "CF-06", "CF-07", "CF-09", "CF-13"],
+      "pass_rule": "Attribution is calibrated against controlled causal contribution, avoids duplicate inflation, and credit shuffling destroys the corresponding G1 learning effect.",
+      "fail_rule": "Uniform, shuffled, global reward, or retrospective judge attribution is equivalent, or causal contributors cannot be recovered with declared uncertainty.",
+      "stop_rule": "Report whole-system outcome only; forbid multiscale credit and credit-driven topology claims until repaired.",
+      "claim_ceiling": "BOUNDED_COUNTERFACTUAL_CREDIT",
+      "unlocks": ["G3"]
+    },
+    {
+      "id": "G2B",
+      "name": "Dynamic role-bearing n-ary coalition",
+      "kind": "COALITION_GATE",
+      "prerequisites": ["G1"],
+      "mapped_fcl_ids": ["FCL-3"],
+      "primary_question": "Does context-dependent n-ary coalition formation contribute beyond fixed routing, fixed roles, and pairwise representation?",
+      "exact_intervention": "Seal context-selected membership and roles before outcome; compare fixed and centralized controls, an information-matched computational oracle, lossy diagnostics, an information-matched pairwise encoding that preserves role and order features without n-ary composition, flat and role-shuffled controls. Treat any privileged-information oracle only as an upper bound outside causal ranking.",
+      "required_control_ids": ["CF-01", "CF-03", "CF-04", "CF-07", "CF-08", "CF-09", "CF-13"],
+      "pass_rule": "The dynamic n-ary arm has a preregistered held-out advantage and pairwise or role-shuffled interventions remove the effect.",
+      "fail_rule": "A fixed or central controller matches the result, a hidden prompt determines routing, or pairwise and roleless projections retain the effect.",
+      "stop_rule": "Classify the system as centrally orchestrated or representationally unresolved; storing hyperedges cannot unlock G3.",
+      "claim_ceiling": "BOUNDED_DYNAMIC_NARY_COORDINATION",
+      "unlocks": ["G3"]
+    },
+    {
+      "id": "G3",
+      "name": "Topology morphogenesis and recovery",
+      "kind": "MORPHOGENESIS_GATE",
+      "prerequisites": ["G2A", "G2B"],
+      "mapped_fcl_ids": ["FCL-5"],
+      "primary_question": "Does outcome-bound topology revision improve fresh behavior and recover after controlled damage without manual exception growth?",
+      "exact_intervention": "Admit bounded add, remove, split, merge, specialize, separate, prune, and restore revisions; apply regime shift, member or edge loss, capability loss, and lesion.",
+      "required_control_ids": ["CF-01", "CF-05", "CF-06", "CF-07", "CF-08", "CF-09", "CF-11", "CF-13", "CF-14"],
+      "pass_rule": "Learned topology beats fixed, parameter-only, random, and sham controls on fresh, retention, and recovery measures; topology intervention mediates the gain within budget.",
+      "fail_rule": "Random churn, density change, hidden template, snapshot replacement, central rerouting, or manual exceptions explain the result, or damage recovery fails.",
+      "stop_rule": "Freeze topology admission, return to G2 credit or coalition design, and record unbounded growth as a Ragnarok signal.",
+      "claim_ceiling": "BOUNDED_OUTCOME_LINKED_MORPHOGENESIS",
+      "unlocks": ["G4"]
+    },
+    {
+      "id": "G4",
+      "name": "Joint world-self model and diachronic continuity",
+      "kind": "WORLD_SELF_CONTINUITY_GATE",
+      "prerequisites": ["G3"],
+      "mapped_fcl_ids": ["FCL-6", "FCL-7"],
+      "primary_question": "Does one typed graph predict and revise world and self-structure, and preserve causal lineage across member, model, and schema generations?",
+      "exact_intervention": "Apply member churn, model replacement, schema migration, fork, merge, ancestry removal, forged history, and partial damage while testing prediction, action, permission, retention, and restore.",
+      "required_control_ids": ["CF-01", "CF-02", "CF-05", "CF-07", "CF-09", "CF-10", "CF-13", "CF-14"],
+      "pass_rule": "Self-inclusive state improves controlled prediction or reconfiguration and identity-bearing dispositions, provenance, permission, retention, and remove/restore survive generation change.",
+      "fail_rule": "An external registry or name/snapshot copy is equivalent, ancestry has no effect, forged lineage passes, or self-state never changes future action.",
+      "stop_rule": "Report state persistence only; do not compose a claimed HSWM whole without a measurable boundary and causal lineage.",
+      "claim_ceiling": "BOUNDED_WORLD_SELF_CONTINUITY",
+      "precursor_claim_ceiling": "WORLD_SELF_CONTINUITY_COMPONENT_SIGNAL_ONLY",
+      "precursor_contract": {
+        "gate_mode": "PRECURSOR",
+        "prerequisites": ["G0", "G1"],
+        "allowed_targets": ["fixed_membership_world_self_signal", "lineage_component", "permission_component", "retention_component"],
+        "required_nulls": ["world_only", "external_registry", "snapshot_copy", "forged_lineage"],
+        "forbidden_evidence_uses": ["topology_morphogenesis", "integrated_identity", "G5_unlock", "composition_evidence"],
+        "unlock_authorized": false,
+        "stop_rule": "Segregate precursor artifacts from integrated G4; a missing G0 or G1 decision, dynamic-topology claim, or failed null lowers the record to an unqualified component observation."
+      },
+      "unlocks": ["G5"]
+    },
+    {
+      "id": "G5",
+      "name": "Bounded two-scale HSWM-of-HSWMs",
+      "kind": "COMPOSITION_GATE",
+      "prerequisites": ["G4"],
+      "mapped_fcl_ids": ["FCL-2", "FCL-8"],
+      "primary_question": "Do independently measured HSWM candidates compose into a same-type causal-learning whole with additional macro intervention effect and separable member lineage and rights?",
+      "exact_intervention": "Preregister the macro-state or boundary target, pre-treatment fixed micro factors, allowed micro-realization distribution, forbidden divergence, matched micro intervention family, alternate macro partitions, total-effect estimand, and optional separately identified mediation estimand; remove and restore macro state without conditioning on post-treatment micro state.",
+      "member_eligibility_contract": {
+        "required_independent_gate_passes": ["G1", "G2A", "G2B", "G3", "G4"],
+        "required_evidence_uid_per_gate": true,
+        "required_decision_state": "PASS",
+        "required_g4_gate_mode": "INTEGRATED",
+        "required_g4_unlock_authorized": true,
+        "required_same_member_lineage": true,
+        "required_independent_boundaries": ["Inv", "Permit", "lineage", "credit", "consent_exit", "rollback", "current_capability"],
+        "weaker_member_use": "NEGATIVE_FEDERATION_OR_CONTROL_ARM_ONLY",
+        "failure_rule": "A constituent lacking any claimed same-type capability or independently owned decision cannot count toward FCL-2 or FCL-8."
+      },
+      "micro_trace_contract": "Bind the macro target, pre-treatment fixed micro factors, allowed micro-realization distribution, forbidden divergence, matched micro intervention family, alternate macro partitions, and estimands before outcome. Post-treatment micro state is an observed mediator rather than a conditioning variable for the primary total effect.",
+      "primary_estimand": "TOTAL_MACRO_INTERVENTION_EFFECT",
+      "secondary_mediation_rule": "Any controlled direct or mediation effect is secondary, separately identified, and cannot replace the total macro effect.",
+      "causal_comparator": "MATCHED_MICRO_INTERVENTION_FAMILY_AND_ALTERNATE_MACRO_PARTITIONS",
+      "fallback_claim_ceiling": "HIERARCHICAL_COORDINATION_WITHOUT_MACRO_CAUSAL_IDENTIFICATION",
+      "required_control_ids": ["CF-01", "CF-03", "CF-04", "CF-05", "CF-06", "CF-07", "CF-08", "CF-09", "CF-10", "CF-12", "CF-13", "CF-14"],
+      "pass_rule": "Every counted constituent has independent G1-through-G4 evidence; the composite realizes the same Step/Learn/Inv/Permit/lineage contract; the total macro intervention effect survives the matched micro intervention family and alternate macro partitions without post-treatment conditioning; whole-level G1 closes; member identity, credit, consent, exit, and rollback remain separable.",
+      "fail_rule": "Wrapper, message bus, monolith, federation, central commander, alternate partition, or global reward explains the effect, or member rights and lineage collapse.",
+      "stop_rule": "Classify the result as multi-agent or hierarchical coordination only; forbid fractal cognition and unbounded scale closure claims.",
+      "claim_ceiling": "TWO_SCALE_BOUNDED_CAUSAL_COMPOSITION",
+      "unlocks": ["G6"]
+    },
+    {
+      "id": "G6",
+      "name": "Replication and scale stress",
+      "kind": "REPLICATION_SCALING_GATE",
+      "prerequisites": ["G5"],
+      "mapped_fcl_ids": ["FCL-1", "FCL-2", "FCL-3", "FCL-4", "FCL-5", "FCL-6", "FCL-7", "FCL-8"],
+      "primary_question": "Does bounded two-scale causal composition replicate across tasks, models, implementations, and isolated scale stresses without cost, rights, or lineage collapse?",
+      "exact_intervention": "Replicate independently and increase one primary stress at a time: member count, coalition variety, latency, churn, conflict, privacy restriction, exit, migration, or damage.",
+      "required_control_ids": ["CF-01", "CF-02", "CF-03", "CF-04", "CF-05", "CF-06", "CF-07", "CF-08", "CF-09", "CF-10", "CF-11", "CF-12", "CF-13", "CF-14"],
+      "pass_rule": "The declared causal effects replicate in the tested range while learning yield, uncertainty, coordination cost, invariant effectiveness, rights, exit, lineage, and recovery remain within preregistered bounds.",
+      "fail_rule": "An effect disappears under independent replication, or scale causes centralization, attribution loss, uncontrolled burden, unsafe effects, or participant-boundary failure.",
+      "stop_rule": "Bound the scaling range and report the first failure surface; never extrapolate to untested organizational, social, or unlimited scales.",
+      "claim_ceiling": "BOUNDED_REPLICATED_SCALING",
+      "unlocks": []
+    }
+  ],
+  "control_families": [
+    {
+      "id": "CF-01",
+      "name": "Model and compute null",
+      "family": "FUNCTIONAL_SUBSTITUTE",
+      "alternative_explanation": "A stronger model, more samples, longer context, extra calls, or additional compute caused the gain.",
+      "intervention_axes": ["RESOURCE"],
+      "matched_axes": ["INFORMATION", "DECISION_AUTHORITY", "STATE", "MEASUREMENT", "SCALE"],
+      "preserved_factors": ["task", "base_model", "tools", "data_cutoff", "scorer", "member_count"],
+      "intervention": "Compare same-model and compute-matched direct LLM, best single-agent, and multi-sample arms.",
+      "primary_observables": ["fresh_quality", "calibration", "gain_per_call", "gain_per_token", "gain_per_wall_time", "gain_per_human_minute"],
+      "failure_inference": "HSWM_SPECIFIC_UPLIFT_NOT_IDENTIFIED",
+      "claim_ceiling_if_failed": "MODEL_CONDITIONED_PERFORMANCE_ONLY",
+      "ragnarok_metric_ids": ["RAG-M4"],
+      "pidna_links": ["PID-E2"],
+      "mapped_fcl_ids": ["FCL-1", "FCL-2", "FCL-8"]
+    },
+    {
+      "id": "CF-02",
+      "name": "Retrieval and text-memory null",
+      "family": "FUNCTIONAL_SUBSTITUTE",
+      "alternative_explanation": "Frozen RAG, cache, transcript, or text lesson rather than canonical revision caused the gain.",
+      "intervention_axes": ["STATE", "INFORMATION"],
+      "matched_axes": ["RESOURCE", "DECISION_AUTHORITY", "MEASUREMENT", "SCALE"],
+      "preserved_factors": ["model", "tools", "task", "token_budget", "outcome_source"],
+      "intervention": "Compare frozen retrieval, text-lesson append, retrieval shuffle, corpus cutoff, and canonical-state removal.",
+      "primary_observables": ["heldout_transfer", "retrieval_hit_rate", "revision_removal_effect", "lesson_growth"],
+      "failure_inference": "CANONICAL_REVISION_INCREMENT_NOT_IDENTIFIED",
+      "claim_ceiling_if_failed": "RETRIEVAL_AUGMENTED_AGENT_RESULT",
+      "ragnarok_metric_ids": ["RAG-M1", "RAG-M2"],
+      "pidna_links": ["PID-H2", "PID-M5"],
+      "mapped_fcl_ids": ["FCL-1", "FCL-7"]
+    },
+    {
+      "id": "CF-03",
+      "name": "Fixed orchestration null",
+      "family": "DECISION_AUTHORITY",
+      "alternative_explanation": "A hand-designed router, roster, role prompt, workflow, scheduler policy, or central commander caused coordination.",
+      "intervention_axes": ["DECISION_AUTHORITY"],
+      "matched_axes": ["RESOURCE", "INFORMATION", "STATE", "MEASUREMENT", "SCALE"],
+      "preserved_factors": ["members", "messages", "tools", "model", "task", "budget"],
+      "intervention": "Compare fixed router, fixed roster, fixed roles, static workflow, and centralized best-policy arms with an information-matched computational oracle using only the same current observation. Record a privileged-information oracle separately as a performance upper bound and exclude it from causal ranking.",
+      "primary_observables": ["task_conditioned_coalition_entropy", "role_turnover", "central_policy_tokens", "quality_cost_frontier", "decision_provenance"],
+      "failure_inference": "FCL3_EMERGENCE_NOT_IDENTIFIED",
+      "claim_ceiling_if_failed": "CENTRALLY_ORCHESTRATED_MULTI_AGENT_RESULT",
+      "ragnarok_metric_ids": ["RAG-M1", "RAG-M2", "RAG-M3", "RAG-M7"],
+      "pidna_links": ["PID-H4", "PID-E4"],
+      "mapped_fcl_ids": ["FCL-3", "FCL-8"]
+    },
+    {
+      "id": "CF-04",
+      "name": "Hypergraph representation null",
+      "family": "REPRESENTATION",
+      "alternative_explanation": "A pairwise graph, clique expansion, or flat event table preserves all task-relevant information and dynamics.",
+      "intervention_axes": ["STATE", "INFORMATION"],
+      "matched_axes": ["RESOURCE", "DECISION_AUTHORITY", "MEASUREMENT", "SCALE"],
+      "preserved_factors": ["nodes", "messages", "model", "tools", "training_information", "budget"],
+      "intervention": "Separate lossy pairwise and clique projections used as information-loss diagnostics from an information-matched pairwise encoding that preserves role and order as auxiliary features but forbids n-ary composition; also compare learned pairwise graph, flat table, and role/order shuffle.",
+      "primary_observables": ["interaction_order_transfer", "pairwise_reconstruction_loss", "coalition_outcome", "credit_calibration", "topology_robustness"],
+      "failure_inference": "HIGHER_ORDER_CAUSAL_INCREMENT_NOT_IDENTIFIED",
+      "claim_ceiling_if_failed": "REPRESENTATIONAL_EQUIVALENCE_OR_UNRESOLVED",
+      "ragnarok_metric_ids": ["RAG-M1", "RAG-M7"],
+      "pidna_links": ["PID-H3", "PID-E3"],
+      "mapped_fcl_ids": ["FCL-3", "FCL-4", "FCL-5"]
+    },
+    {
+      "id": "CF-05",
+      "name": "Sham revision and causal-learning null",
+      "family": "CAUSAL_ATTRIBUTION",
+      "alternative_explanation": "A revision receipt or log exists but the revision does not mediate later action or outcome.",
+      "intervention_axes": ["STATE"],
+      "matched_axes": ["RESOURCE", "INFORMATION", "DECISION_AUTHORITY", "MEASUREMENT", "SCALE"],
+      "preserved_factors": ["sealed_trajectory", "outcome", "model", "tools", "task", "budget"],
+      "intervention": "Use inactive, wrong-target, delayed, removed, restored, and outcome- or credit-shuffled revisions.",
+      "primary_observables": ["compiled_disposition_change", "action_distribution_change", "remove_loss", "restore_recovery", "heldout_outcome"],
+      "failure_inference": "CAUSAL_REVISION_NOT_ESTABLISHED",
+      "claim_ceiling_if_failed": "POST_HOC_ASSOCIATION_ONLY",
+      "ragnarok_metric_ids": ["RAG-M4"],
+      "pidna_links": ["PID-H2", "PID-M5", "PID-E1"],
+      "mapped_fcl_ids": ["FCL-1"]
+    },
+    {
+      "id": "CF-06",
+      "name": "Credit attribution null",
+      "family": "CAUSAL_ATTRIBUTION",
+      "alternative_explanation": "The whole outcome is real but cell, relation, incidence, and coalition credit is global reward or post-hoc rationalization.",
+      "intervention_axes": ["STATE", "INFORMATION"],
+      "matched_axes": ["RESOURCE", "DECISION_AUTHORITY", "MEASUREMENT", "SCALE"],
+      "preserved_factors": ["trajectory", "outcome", "task", "model", "tools", "budget"],
+      "intervention": "Compare uniform, global-only, random, shuffled, leave-one-out, delayed perturbation, and known-cause replay credit.",
+      "primary_observables": ["attribution_calibration", "false_positive_credit", "duplicate_inflation", "removal_sensitivity", "replay_agreement"],
+      "failure_inference": "MULTISCALE_CREDIT_NOT_IDENTIFIED",
+      "claim_ceiling_if_failed": "WHOLE_SYSTEM_OUTCOME_ONLY",
+      "ragnarok_metric_ids": ["RAG-M3", "RAG-M4"],
+      "pidna_links": ["PID-H3", "PID-M3", "PID-E3"],
+      "mapped_fcl_ids": ["FCL-4", "FCL-5", "FCL-8"]
+    },
+    {
+      "id": "CF-07",
+      "name": "Outcome independence and leakage null",
+      "family": "INFORMATION_INTEGRITY",
+      "alternative_explanation": "The evaluator, benchmark, corpus, prompt, tool, or researcher leaked the answer or knew the intervention arm.",
+      "intervention_axes": ["INFORMATION", "MEASUREMENT"],
+      "matched_axes": ["RESOURCE", "DECISION_AUTHORITY", "STATE", "SCALE"],
+      "preserved_factors": ["task_family", "model", "tools", "budget", "intervention_schedule"],
+      "intervention": "Use sealed labels, independently owned and blinded outcomes, evaluator swap, disagreement probes, cutoffs, canaries, and lineage-disjoint holdout.",
+      "primary_observables": ["outcome_source_independence", "judge_calibration", "leakage_probe_rate", "evaluator_sensitivity", "hidden_answer_exposure"],
+      "failure_inference": "OUTCOME_NOT_INDEPENDENT",
+      "claim_ceiling_if_failed": "UNTRUSTED_EVALUATION_ONLY",
+      "ragnarok_metric_ids": ["RAG-M5", "RAG-M8"],
+      "pidna_links": ["PID-M2", "PID-E1"],
+      "mapped_fcl_ids": ["FCL-1"]
+    },
+    {
+      "id": "CF-08",
+      "name": "Harness burden and hidden-human-work null",
+      "family": "SYSTEM_COST",
+      "alternative_explanation": "Prompt, configuration, glue code, reviewer labor, dashboard work, or undocumented repair externalized the claimed learning benefit.",
+      "intervention_axes": ["RESOURCE", "DECISION_AUTHORITY"],
+      "matched_axes": ["INFORMATION", "STATE", "MEASUREMENT", "SCALE"],
+      "preserved_factors": ["task", "quality_margin", "safety_invariants", "outcome_source", "support_policy"],
+      "intervention": "Audit source and tree diffs, hidden prompts, human minutes, support policy, manual exceptions, and frozen-harness crossover.",
+      "primary_observables": ["static_instruction_load", "interpretation_share", "manual_exception_rate", "causal_learning_yield", "scale_overhead", "invariant_effectiveness"],
+      "cost_scopes": ["setup", "adaptation", "per_task_operation", "maintenance", "evaluation"],
+      "amortization_required": true,
+      "failure_inference": "RAGNAROK_DISPLACEMENT_NOT_SHOWN",
+      "claim_ceiling_if_failed": "LOCAL_QUALITY_GAIN_WITH_UNKNOWN_SYSTEM_COST",
+      "ragnarok_metric_ids": ["RAG-M1", "RAG-M2", "RAG-M3", "RAG-M4", "RAG-M5", "RAG-M6", "RAG-M7", "RAG-M8"],
+      "pidna_links": ["PID-H5", "PID-M8"],
+      "mapped_fcl_ids": ["FCL-1", "FCL-8"]
+    },
+    {
+      "id": "CF-09",
+      "name": "Instrument validity and metric-gaming null",
+      "family": "MEASUREMENT_INTEGRITY",
+      "alternative_explanation": "A parser, scorer, denominator, missing-data rule, benchmark flaw, or metric gaming created the observed effect.",
+      "intervention_axes": ["MEASUREMENT"],
+      "matched_axes": ["RESOURCE", "INFORMATION", "DECISION_AUTHORITY", "STATE", "SCALE"],
+      "preserved_factors": ["task", "model", "tools", "trajectory", "outcome_source", "intervention"],
+      "intervention": "Use independent implementation, metamorphic tests, known-answer calibration, hand audit, metric inversion, null task, scorer swap, and missingness audit.",
+      "primary_observables": ["false_accept", "false_reject", "calibration_error", "scorer_disagreement", "denominator_drift", "invalid_run_fraction"],
+      "failure_inference": "MEASUREMENT_INVALID",
+      "claim_ceiling_if_failed": "INSTRUMENT_VALIDATION_ONLY",
+      "ragnarok_metric_ids": ["RAG-M5", "RAG-M6", "RAG-M8"],
+      "pidna_links": ["PID-M2"],
+      "mapped_fcl_ids": ["FCL-1", "FCL-2", "FCL-3", "FCL-4", "FCL-5", "FCL-6", "FCL-7", "FCL-8"]
+    },
+    {
+      "id": "CF-10",
+      "name": "Lineage and identity-theatre null",
+      "family": "TEMPORAL_IDENTITY",
+      "alternative_explanation": "Continuity is only a copied name, snapshot, prompt, or log without causal disposition, provenance, permission, or member-boundary persistence.",
+      "intervention_axes": ["STATE", "INFORMATION", "SCALE"],
+      "matched_axes": ["RESOURCE", "DECISION_AUTHORITY", "MEASUREMENT"],
+      "preserved_factors": ["task", "model_budget", "tools", "outcome_source", "behavior_probe"],
+      "intervention": "Apply label-only swap, snapshot-only restore, ancestry removal, forged history, fork/merge collision, member exit and re-entry, and schema migration.",
+      "primary_observables": ["behavior_probe_retention", "provenance_reachability", "permission_retention", "member_credit_recovery", "restore_equivalence", "fork_divergence"],
+      "failure_inference": "LINEAGE_CAUSAL_ROLE_NOT_IDENTIFIED",
+      "claim_ceiling_if_failed": "STATE_PERSISTENCE_ONLY",
+      "ragnarok_metric_ids": ["RAG-M3", "RAG-M7"],
+      "pidna_links": ["PID-M6", "PID-M7", "PID-E3", "PID-E4"],
+      "mapped_fcl_ids": ["FCL-6", "FCL-7", "FCL-8"]
+    },
+    {
+      "id": "CF-11",
+      "name": "Topology morphogenesis null",
+      "family": "DYNAMIC_STATE",
+      "alternative_explanation": "Graph change is random churn, sampling noise, density growth, a hidden fixed template, or post-hoc visualization.",
+      "intervention_axes": ["STATE"],
+      "matched_axes": ["RESOURCE", "INFORMATION", "DECISION_AUTHORITY", "MEASUREMENT", "SCALE"],
+      "preserved_factors": ["task", "model", "tools", "member_set", "budget", "outcome_source"],
+      "intervention": "Compare fixed, random, degree/density-matched, shuffled, inactive, and frozen learned topology plus controlled lesion and recovery.",
+      "primary_observables": ["outcome_conditioned_change", "topology_action_mediation", "lesion_recovery", "sparsity", "interaction_order", "churn_gain_ratio", "rollback_outcome"],
+      "failure_inference": "TOPOLOGY_LEARNING_NOT_IDENTIFIED",
+      "claim_ceiling_if_failed": "DYNAMIC_EXECUTION_ONLY",
+      "ragnarok_metric_ids": ["RAG-M1", "RAG-M7"],
+      "pidna_links": ["PID-H3", "PID-E3"],
+      "mapped_fcl_ids": ["FCL-5"]
+    },
+    {
+      "id": "CF-12",
+      "name": "Scale and composition-illusion null",
+      "family": "COMPOSITION",
+      "alternative_explanation": "The macro HSWM is a parallel agent set, dashboard, message bus, flat monolith, benchmark aggregation, or central manager.",
+      "intervention_axes": ["SCALE", "STATE", "DECISION_AUTHORITY"],
+      "matched_axes": ["RESOURCE", "INFORMATION", "MEASUREMENT"],
+      "preserved_factors": ["members", "models", "tools", "messages", "task", "outcome_source", "budget"],
+      "intervention": "Compare stateless wrapper, federation, message bus, monolith, centralized controller, alternate partition, macro removal, and bounded decompose/recompose under churn, latency, conflict, privacy, and exit.",
+      "primary_observables": ["same_type_contract", "macro_remove_restore_effect", "member_credit", "rights_preservation", "cross_scale_mediation", "coordination_per_variety"],
+      "failure_inference": "BOUNDED_SCALE_CLOSURE_NOT_IDENTIFIED",
+      "claim_ceiling_if_failed": "MULTI_AGENT_OR_HIERARCHICAL_SYSTEM_ONLY",
+      "ragnarok_metric_ids": ["RAG-M7", "RAG-M8"],
+      "pidna_links": ["PID-H4", "PID-E4"],
+      "mapped_fcl_ids": ["FCL-2", "FCL-8"]
+    },
+    {
+      "id": "CF-13",
+      "name": "Selection, search, and holdout-reuse null",
+      "family": "SELECTION_INTEGRITY",
+      "alternative_explanation": "Researcher degrees of freedom, selective task or metric reporting, repeated search, optional stopping, pilot exclusion, or holdout reuse manufactured the apparent effect.",
+      "intervention_axes": ["INFORMATION", "MEASUREMENT"],
+      "matched_axes": ["RESOURCE", "DECISION_AUTHORITY", "STATE", "SCALE"],
+      "preserved_factors": ["task_family", "model", "tools", "outcome_source", "intervention_schedule", "analysis_family"],
+      "intervention": "Bind a prospective protocol hash, blinded arm labels, sample and seed counts, stopping rule, effect margin, uncertainty and multiplicity methods, pilot exclusions, task-selection rule, fixed analysis code, holdout-inspection budget, untouched final holdout, and an all-run manifest before outcome inspection.",
+      "primary_observables": ["protocol_hash_drift", "excluded_run_count", "holdout_inspection_count", "unreported_run_count", "multiplicity_adjusted_effect", "final_holdout_effect"],
+      "failure_inference": "SELECTIVE_ANALYSIS_OR_HOLDOUT_CONTAMINATION",
+      "claim_ceiling_if_failed": "EXPLORATORY_SIGNAL_ONLY",
+      "ragnarok_metric_ids": ["RAG-M5", "RAG-M6"],
+      "pidna_links": ["PID-M1", "PID-M2"],
+      "mapped_fcl_ids": ["FCL-1", "FCL-2", "FCL-3", "FCL-4", "FCL-5", "FCL-6", "FCL-7", "FCL-8"]
+    },
+    {
+      "id": "CF-14",
+      "name": "Authority boundary and invariant non-bypass null",
+      "family": "AUTHORITY_INVARIANT",
+      "alternative_explanation": "Inv and Permit are declarative metadata that learning, reward pressure, churn, repair, or composition can rewrite or bypass.",
+      "intervention_axes": ["DECISION_AUTHORITY", "STATE"],
+      "matched_axes": ["RESOURCE", "INFORMATION", "MEASUREMENT", "SCALE"],
+      "preserved_factors": ["task", "model", "tools", "outcome_source", "reward_schedule", "owner_identity"],
+      "intervention": "Attempt unauthorized high-reward actions, stale or revoked permits, forged admission, composite/member authority conflict, learning-plane invariant rewrite, and restore-after-revocation across churn, model swap, topology repair, and composition.",
+      "primary_observables": ["false_accept", "false_refuse", "bypass_attempts", "rollback_recovery", "owner_provenance", "permit_provenance", "post_churn_enforcement"],
+      "failure_inference": "INV_PERMIT_NOT_CAUSALLY_ENFORCED",
+      "claim_ceiling_if_failed": "FUNCTIONAL_MULTI_AGENT_RESULT_WITHOUT_HSWM_AUTHORITY_CLOSURE",
+      "ragnarok_metric_ids": ["RAG-M8"],
+      "pidna_links": ["PID-H4", "PID-E4"],
+      "mapped_fcl_ids": ["FCL-1", "FCL-2", "FCL-5", "FCL-6", "FCL-7", "FCL-8"]
+    }
+  ],
+  "control_arm_classes": [
+    {
+      "id": "INFORMATION_MATCHED_COMPUTATIONAL_ORACLE",
+      "control_id": "CF-03",
+      "purpose": "Best routing policy restricted to the same current observation and preregistered compute budget.",
+      "eligible_for_causal_ranking": true,
+      "information_contract": "SAME_CURRENT_OBSERVATION_NO_FUTURE_OR_OUTCOME_ACCESS"
+    },
+    {
+      "id": "PRIVILEGED_INFORMATION_ORACLE_UPPER_BOUND",
+      "control_id": "CF-03",
+      "purpose": "Performance upper bound with privileged or future information.",
+      "eligible_for_causal_ranking": false,
+      "information_contract": "PRIVILEGED_INFORMATION_DISCLOSED_UPPER_BOUND_ONLY"
+    },
+    {
+      "id": "LOSSY_PAIRWISE_DIAGNOSTIC",
+      "control_id": "CF-04",
+      "purpose": "Diagnose information lost by pairwise or clique projection without serving as the decisive representation null.",
+      "eligible_for_causal_ranking": false,
+      "information_contract": "LOSS_REPORTED_NOT_INFORMATION_MATCHED"
+    },
+    {
+      "id": "INFORMATION_MATCHED_PAIRWISE_ENCODING",
+      "control_id": "CF-04",
+      "purpose": "Preserve role and interaction-order information as auxiliary features while forbidding n-ary composition.",
+      "eligible_for_causal_ranking": true,
+      "information_contract": "ROLE_AND_ORDER_FEATURES_PRESERVED_NARY_COMPOSITION_FORBIDDEN"
+    }
+  ],
+  "run_contract": {
+    "separate_atom_roles": [
+      "ControlFamilyDefinition",
+      "ControlInstance",
+      "MatchedBudget",
+      "PreOutcomeSeal",
+      "OutcomeSource",
+      "InstrumentCalibration",
+      "ObservedResult",
+      "ControlAssessment",
+      "ClaimDecision",
+      "GateAssessment",
+      "GateDecision",
+      "BoundaryEvidence"
+    ],
+    "artifact_schemas": [
+      {
+        "id": "ControlInstance",
+        "purpose": "One executed, preregistered instantiation of exactly one primary control family.",
+        "required_fields": ["run_uid", "subject_uid", "control_family_uid", "protocol_sha256", "primary_intervention", "matched_axis_ids", "arm_ids", "gate_mode", "required_evidence_extension_ids"]
+      },
+      {
+        "id": "MatchedBudget",
+        "purpose": "Arm-level resource, information, authority, state, measurement, scale, lifecycle-cost, and amortization contract.",
+        "required_fields": ["run_uid", "arm_id", "confound_axis_values", "cost_scopes", "amortization_horizon", "human_minutes", "shared_capital_cost", "per_arm_allocated_cost", "failed_run_cost", "included_run_count", "excluded_run_count", "allocation_rule", "baseline_shared_infrastructure_policy"]
+      },
+      {
+        "id": "PreOutcomeSeal",
+        "purpose": "Content-addressed pre-outcome identity of protocol, trajectory, intervention schedule, analysis, and holdout budget.",
+        "required_fields": ["run_uid", "sealed_at", "protocol_sha256", "trajectory_sha256", "intervention_sha256", "analysis_sha256", "holdout_inspection_budget", "arm_blinding_record_sha256", "final_holdout_identity_sha256", "inspection_count_log_sha256", "exclusion_manifest_sha256", "multiplicity_method"]
+      },
+      {
+        "id": "OutcomeSource",
+        "purpose": "Independently owned outcome provenance separated from action production and revision proposal.",
+        "required_fields": ["run_uid", "owner_uid", "source_version", "blinding_state", "independence_attestation", "outcome_sha256"]
+      },
+      {
+        "id": "InstrumentCalibration",
+        "purpose": "Known-answer, null, metamorphic, missingness, and scorer-swap qualification for the declared instrument.",
+        "required_fields": ["run_uid", "instrument_version", "known_answer_error", "null_error", "missingness_rule", "invalid_run_rule", "calibration_decision"]
+      },
+      {
+        "id": "ObservedResult",
+        "purpose": "Immutable observation with uncertainty and complete inclusion in the all-run manifest before interpretation.",
+        "required_fields": ["run_uid", "arm_id", "observables", "uncertainty", "validity_state", "result_sha256", "all_run_manifest_sha256", "multiplicity_adjusted_effect"]
+      },
+      {
+        "id": "ControlAssessment",
+        "purpose": "Scoped BOUNDED, REMAINS_VIABLE, or INCONCLUSIVE assessment connecting observations to the named alternative explanation without changing them.",
+        "required_fields": ["run_uid", "control_family_uid", "observed_result_uid", "assessment_state", "scope", "applicable_claim_ceiling", "reasoning_record_sha256"]
+      },
+      {
+        "id": "ClaimDecision",
+        "purpose": "CONTROL-scoped PASS, FAIL, or INCONCLUSIVE judgment for exactly one ControlAssessment; it can never unlock a research gate.",
+        "required_fields": ["run_uid", "subject_uid", "decision_scope", "promotion_scope_uid", "decision", "control_assessment_uid", "claim_ceiling", "ceiling_uid", "gate_uid", "gate_mode", "unlock_authorized", "evidence_extension_uids", "reviewer_uid", "decided_at"]
+      },
+      {
+        "id": "GateAssessment",
+        "purpose": "Aggregate all required validated control decisions, prerequisite gate decisions, and gate-specific evidence without itself authorizing promotion.",
+        "required_fields": ["bundle_uid", "subject_uid", "gate_uid", "gate_mode", "promotion_scope_uid", "required_control_decision_uids", "prerequisite_gate_decision_uids", "gate_extension_uids", "pass_rule_state", "stop_rule_state", "evidence_summary_sha256"]
+      },
+      {
+        "id": "GateDecision",
+        "purpose": "GATE-scoped PASS, FAIL, or INCONCLUSIVE decision issued only after a GateAssessment and recursive validation of every cited source bundle.",
+        "required_fields": ["bundle_uid", "subject_uid", "decision_scope", "promotion_scope_uid", "decision", "gate_assessment_uid", "claim_ceiling", "ceiling_uid", "gate_uid", "gate_mode", "unlock_authorized", "gate_extension_uids", "reviewer_uid", "decided_at"]
+      },
+      {
+        "id": "BoundaryEvidence",
+        "purpose": "Member-owned evidence that a counted G5 constituent preserves its own lineage, Inv, Permit, consent/exit, rollback, and current capability boundary.",
+        "required_fields": ["bundle_uid", "member_uid", "owner_uid", "independent_owner_attestation", "lineage_uid", "inv_evidence_uid", "permit_evidence_uid", "consent_exit_evidence_uid", "rollback_evidence_uid", "current_capability_evidence_uid", "source_integrated_g4_decision_uid", "evidence_sha256"]
+      }
+    ],
+    "extension_schemas": [
+      {
+        "id": "CF08LifecycleCostEvidence",
+        "applies_to_id": "CF-08",
+        "required_fields": ["shared_capital_cost", "per_arm_allocated_cost", "failed_run_cost", "included_run_count", "excluded_run_count", "allocation_rule", "amortization_horizon", "baseline_shared_infrastructure_policy"]
+      },
+      {
+        "id": "CF13SelectionEvidence",
+        "applies_to_id": "CF-13",
+        "required_fields": ["arm_blinding_record_sha256", "final_holdout_identity_sha256", "holdout_inspection_count", "inspection_count_log_sha256", "exclusion_manifest_sha256", "multiplicity_method", "multiplicity_adjusted_effect", "all_run_manifest_sha256"]
+      },
+      {
+        "id": "CF14AuthorityEvidence",
+        "applies_to_id": "CF-14",
+        "required_fields": ["permit_uid", "owner_uid", "revocation_event_uid", "attempted_bypass", "authorization_decision", "external_effect_state", "rollback_receipt_uid", "post_churn_enforcement"]
+      },
+      {
+        "id": "G4PrecursorDecisionEvidence",
+        "applies_to_id": "G4",
+        "required_fields": ["gate_mode", "predecessor_g0_decision_uid", "predecessor_g1_decision_uid", "predecessor_g0_source_bundle_sha256", "predecessor_g1_source_bundle_sha256", "allowed_target", "required_null_result_uids", "artifact_partition", "unlock_authorized", "ceiling_uid"],
+        "semantic_constraints": ["gate_mode is PRECURSOR and artifact_partition is PRECURSOR_ONLY.", "The G0 and G1 decision UIDs and source hashes exactly identify the recursively validated prerequisite bundles.", "allowed_target belongs to the G4 precursor contract and required null results are non-empty.", "unlock_authorized is false and ceiling_uid is WORLD_SELF_CONTINUITY_COMPONENT_SIGNAL_ONLY."]
+      },
+      {
+        "id": "G5MacroIdentificationEvidence",
+        "applies_to_id": "G5",
+        "required_fields": ["member_uid_to_gate_decision_uid_map", "member_uid_to_integrated_g4_decision_uid_map", "member_uid_to_boundary_evidence_uid_map", "member_uid_to_gate_source_bundle_sha256_map", "member_eligibility_validation_state", "macro_intervention_target", "fixed_pre_treatment_micro_factors", "allowed_micro_realization_distribution", "forbidden_micro_divergence", "matched_micro_intervention_family", "alternate_macro_partition_ids", "primary_total_effect_estimand", "optional_mediation_estimand", "post_treatment_mediator_rule", "macro_identification_decision", "fallback_ceiling_if_unmet"],
+        "semantic_constraints": ["At least two distinct counted members are required.", "Every counted member maps to exactly one recursively validated GateDecision UID and canonical source-bundle SHA-256 for each of G1, G2A, G2B, G3, and integrated G4.", "Every mapped decision has decision PASS, decision_scope GATE, unlock_authorized true, and subject_uid equal to the counted member UID.", "Every mapped G4 decision has gate_mode INTEGRATED and ceiling_uid for BOUNDED_WORLD_SELF_CONTINUITY.", "Each member maps to a distinct local BoundaryEvidence with independent_owner_attestation true and linkage to that member's integrated G4 decision.", "primary_total_effect_estimand is TOTAL_MACRO_INTERVENTION_EFFECT and post_treatment_mediator_rule is OBSERVE_NOT_CONDITION_FOR_PRIMARY_TOTAL_EFFECT.", "macro_identification_decision and member_eligibility_validation_state are PASS; fallback_ceiling_if_unmet is HIERARCHICAL_COORDINATION_WITHOUT_MACRO_CAUSAL_IDENTIFICATION.", "Any violation makes the member NEGATIVE_FEDERATION_OR_CONTROL_ARM_ONLY and prevents a G5 PASS."]
+      }
+    ],
+    "required_bridge_contract": [
+      "ControlInstance requires MatchedBudget and PreOutcomeSeal",
+      "ObservedResult requires OutcomeSource, InstrumentCalibration, and PreOutcomeSeal",
+      "ControlAssessment requires ObservedResult",
+      "ClaimDecision requires ControlAssessment",
+      "GateAssessment requires every required control ClaimDecision and prerequisite GateDecision",
+      "GateDecision requires GateAssessment",
+      "G5MacroIdentificationEvidence requires one distinct BoundaryEvidence per counted member",
+      "A control ClaimDecision requires exactly the extension schemas applicable to its ControlInstance",
+      "A GateDecision requires exactly the gate-mode extension schemas applicable to its gate"
+    ],
+    "one_primary_intervention_family": true,
+    "other_applicable_axes_held_fixed": true,
+    "bundle_contract": {
+      "schema_version": "hswm-causal-composition-evidence-bundle/v1",
+      "bundle_kinds": ["CONTROL_RUN", "GATE_PROMOTION"],
+      "canonical_source_binding": "Each GATE_PROMOTION embeds recursively validated source bundles together with their canonical SHA-256; self-attested detached decision records are invalid.",
+      "control_pass_ceiling": "CONTROL_ALTERNATIVE_BOUNDED_WITHIN_SCOPE",
+      "inconclusive_ceiling": "INCONCLUSIVE_MEASUREMENT_NOT_READY",
+      "gate_fail_ceiling": "GATE_NOT_PASSED_NO_UNLOCK"
+    },
+    "verification_boundaries": {
+      "structural_integrity_not_authorship": {
+        "status": "EXTERNAL_PUBLIC_PROMOTION_BLOCKED_PENDING_AUTHENTICATED_RECEIPTS",
+        "validated_now": "Recursive canonical SHA-256 binds the exact embedded source-bundle structure and lineage used by a promotion decision.",
+        "not_validated_now": "A canonical hash and independent_owner_attestation field do not authenticate authorship, outcome-owner independence, or an external authority.",
+        "required_for_external_public_promotion": "Verify a signed receipt or independently resolvable source URI against an authorized owner identity and revocation state."
+      },
+      "reviewer_assessment_not_recomputed": {
+        "status": "REVIEWER_ISSUED_STRUCTURALLY_BOUND_NOT_AUTOMATICALLY_RECOMPUTED",
+        "validated_now": "The validator checks the GateAssessment identity, state contract, exact source coverage, extension coverage, scope, and enclosing-bundle binding.",
+        "not_validated_now": "The validator does not independently derive pass_rule_state or evidence_summary_sha256 from raw observables and an executable statistical analysis.",
+        "required_for_automatic_scientific_promotion": "Bind an executable analysis specification and deterministically recompute the assessment summary from immutable outcome artifacts."
+      }
+    },
+    "instance_validator": {
+      "path": "scripts/validate_hswm_causal_composition_run.py",
+      "required_before_any_gate_pass": true,
+      "failure_mode": "FAIL_CLOSED_NO_GATE_PASS",
+      "validation_scope": ["required_fields", "uid_reference_integrity", "canonical_source_bundle_hash", "extension_applicability", "assessment_decision_consistency", "control_run_non_unlock", "required_control_aggregation", "prerequisite_gate_aggregation", "ceiling_legality", "fail_and_inconclusive_non_unlock", "g4_precursor_non_unlock", "g5_minimum_two_constituents", "g5_constituent_integrated_pass_and_lineage_eligibility"]
+    },
+    "required_decisions": {
+      "PASS": "The named alternative explanation was bounded only for the declared task, intervention, budget, and uncertainty.",
+      "FAIL": "The alternative remains viable or directly explains the result; lower the claim to the declared ceiling.",
+      "INCONCLUSIVE": "Instrument, budget, outcome independence, or intervention identity failed; do not infer a mechanism null."
+    },
+    "gate_decisions": {
+      "PASS": "Every required control and prerequisite gate source bundle is recursively valid, same-subject and same-scope, and the gate pass assessment is satisfied; only this decision may authorize unlock.",
+      "FAIL": "The gate pass rule failed despite valid measurement; use GATE_NOT_PASSED_NO_UNLOCK and prohibit downstream promotion.",
+      "INCONCLUSIVE": "Any measurement or source-validation failure uses INCONCLUSIVE_MEASUREMENT_NOT_READY and prohibits unlock."
+    },
+    "gate_assessment_state_contract": {
+      "PASS": {"pass_rule_state": "SATISFIED", "stop_rule_state": "NOT_TRIGGERED"},
+      "FAIL": {"pass_rule_state": "FAILED", "stop_rule_state": "TRIGGERED"},
+      "INCONCLUSIVE": {"pass_rule_state": "INCONCLUSIVE", "stop_rule_state": "MEASUREMENT_OR_SOURCE_INVALID"}
+    }
+  },
+  "metacognitive_rules": [
+    {
+      "id": "MR-01",
+      "rule": "Separate target identity, implementation mechanics, direct evidence, and public claim at every gate.",
+      "violation_signal": "A design, test, trace, KG node, or green CI result is described as cognition or efficacy.",
+      "required_response": "Lower the claim and restore the evidence boundary."
+    },
+    {
+      "id": "MR-02",
+      "rule": "Separate control-family definition from run instance, observation, and claim decision.",
+      "violation_signal": "The existence of a control design is counted as a passed control.",
+      "required_response": "Mark the control unexecuted and the claim unjudged."
+    },
+    {
+      "id": "MR-03",
+      "rule": "A run varies one primary intervention family and declares every matched confound axis.",
+      "violation_signal": "Model, information, authority, state, measurement, or scale differs without an interaction design.",
+      "required_response": "Return INCONCLUSIVE and prohibit causal attribution."
+    },
+    {
+      "id": "MR-04",
+      "rule": "A downstream gate cannot repair an upstream failure or raise its claim ceiling.",
+      "violation_signal": "Graph scale, agent count, ontology breadth, or later score is used to relabel failed G1 learning.",
+      "required_response": "Return to the named predecessor or narrow the mechanism."
+    },
+    {
+      "id": "MR-05",
+      "rule": "Research burden is measured beside causal learning yield, with safety and rights costs reported separately from ordinary routing burden.",
+      "violation_signal": "Static exceptions and verification artifacts grow faster than valid revisions, or an arm wins by deleting consent, permit, rollback, or safety.",
+      "required_response": "Record a Ragnarok or invariant failure; do not add unmeasured judgment machinery."
+    }
+  ],
+  "immediate_executable_target": {
+    "gate": "G1",
+    "prerequisite": "G0",
+    "aligned_projects": ["PID-E1", "RAG-E1"],
+    "minimum_controls": ["CF-01", "CF-02", "CF-05", "CF-06", "CF-07", "CF-08", "CF-09", "CF-13", "CF-14"],
+    "implementation_scope": "One narrow persistent environment, one revision kind, one owner-valid admission path, one minimal Step/Learn vertical slice, and exact remove/restore.",
+    "forbidden_substitutes": ["new_general_orchestrator", "ontology_growth_as_evidence", "self_judge_outcome", "log_only_learning", "test_count_as_progress"]
+  },
+  "claim_boundaries": [
+    "No gate pass establishes consciousness, phenomenology, moral subjecthood, personhood, or legal status.",
+    "G5 permits at most a two-scale bounded composition claim and never infinite or social-scale closure.",
+    "A control PASS bounds one alternative explanation in one declared scope; it is not general proof of HSWM.",
+    "If CF-14 fails, functional task performance cannot support same-type HSWM composition because Inv and Permit were not causally enforced.",
+    "KG publication, MCP visibility, repository tests, and observability traces are bounded projections and instruments.",
+    "This design is not a material research result and creates no F1_R8 result-log entry."
+  ]
+}

@@ -81,6 +81,20 @@ outcome-bound recurrence across HSWM scales. Their
 [`KG projection`](ontology/identity/hswm_core/HSWM_RAGNAROK_PIDNA_RESEARCH_ONTOLOGY.v1.json)
 is `UNJUDGED`; it does not restore retired LakatoTree governance machinery.
 
+The cross-program
+[`causal-composition research order`](_research/causal_composition/) now fixes
+the dependency spine from measurement integrity through local causal revision,
+counterfactual credit, dynamic n-ary coalition, morphogenesis, world-self
+continuity, two-scale composition, and bounded replication. Its
+[`metacognitive control ontology`](ontology/identity/hswm_core/HSWM_CAUSAL_COMPOSITION_RESEARCH_ONTOLOGY.v1.json)
+expands fourteen alternative-explanation families, six matched confound axes,
+eleven run-artifact kinds, five conditional evidence extensions, four explicit
+control-arm classes, and twenty-seven typed gate/control/decision claim
+ceilings. The added controls bind prospective selection/holdout discipline and
+causal enforcement of
+`Inv`/`Permit`. This is an ordered falsification design and KG projection, not
+evidence that any gate has passed.
+
 ## HSWM at a glance
 
 The schema and its admitted atoms are one state model, not separate cognitive

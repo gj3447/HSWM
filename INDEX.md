@@ -213,6 +213,17 @@ DB-enforced reader role 부재 때문에 기존 네 개 bounded ontology read to
 [`research KG projection`](ontology/identity/hswm_core/HSWM_RAGNAROK_PIDNA_RESEARCH_ONTOLOGY.v1.json)에
 있다. 모두 `UNJUDGED`이며 삭제된 라카토트리 거버넌스 도구를 복원하지 않는다.
 
+같은 날 HSWM 핵심 주장의 연구 순서를
+[`causal-composition research program`](_research/causal_composition/)으로 고정했다.
+`G0 계측 무결성 → G1 국소 인과학습 → G2A credit / G2B n-ary coalition → G3 형태발생
+→ G4 세계·자기/연속성 → G5 두 규모 합성 → G6 반복·scale stress` 순서이며, 14개
+대조군 family·6개 confound axis·27개 typed claim ceiling·11개 실행 artifact kind·
+5개 조건부 evidence extension·4개 control-arm class를
+[`machine ontology`](ontology/identity/hswm_core/HSWM_CAUSAL_COMPOSITION_RESEARCH_ONTOLOGY.v1.json)에
+분리했다. 선택·holdout 재사용과 `Inv`/`Permit` 우회도 독립 대조군이다. 이 순서·대조군·
+KG publication은 `SECONDARY_AI` 연구 설계이며 어떤 gate의 통과나 HSWM
+cognition·learning·효능을 뜻하지 않는다.
+
 2026-08-20 사용자는 `인류보편체`를 전 인류·모든 LLM·인터넷·인지능력체·센서·static
 정보와 저장 메모리가 오픈소스 HSWM 구조로 하나가 되어 형성하는 하나의 인지능력체로
 정의하고, `HSWM 인류보완계획`을 포켓한 인지능력체에서 그 상태로 나아가는 사회 혁명

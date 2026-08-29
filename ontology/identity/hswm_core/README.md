@@ -1,5 +1,39 @@
 # HSWM core responsibility ontology
 
+## Current causal-composition research order and controls
+
+The cross-program
+[`causal-composition research program`](../../../_research/causal_composition/)
+orders HSWM inquiry from instrument integrity and one local outcome-bound causal
+rung through counterfactual credit, dynamic n-ary coalition, topology
+morphogenesis, joint world-self continuity, bounded two-scale composition, and
+replication/scale stress. Its independent
+[`HSWM_CAUSAL_COMPOSITION_RESEARCH_ONTOLOGY.v1.json`](HSWM_CAUSAL_COMPOSITION_RESEARCH_ONTOLOGY.v1.json)
+contains 99 bundle-owned research nodes and 394 relations: eight ordered gates,
+fourteen alternative-explanation control families, fourteen corresponding rival
+hypotheses, six confound axes, twenty-seven typed claim ceilings, five
+metacognitive stop rules, eleven definition-only run-artifact kinds, five
+conditional evidence extension schemas, and four control-arm classes. All eight
+existing FCL anchors are matched read-only.
+
+Build, validate, and publish only through the dedicated fail-closed paths:
+
+```bash
+uv run python scripts/build_hswm_causal_composition_research_ontology.py --check
+uv run --extra kg python scripts/upsert_hswm_causal_composition_research.py
+uv run python scripts/validate_hswm_causal_composition_run.py <bundle.json>
+uv run --extra kg python scripts/upsert_hswm_causal_composition_research.py \
+  --apply --source-config ~/.config/symposium-ontology/source.yaml
+```
+
+The publisher checks exact bytes only for its declared `artifact_bindings`,
+the deterministic projection digest,
+registered labels and relation types, anchor identity, complete graph ownership,
+and transactional readback. It refuses partial or colliding projections and
+does not mutate HSWM, FCL, Ragnarok, PIDNA, or scientific-synthesis anchors.
+KG presence is publication of an `UNJUDGED` research design, not a passed
+control, material result, HSWM cognition, causal learning, or efficacy.
+
 ## Current Ragnarok/PIDNA research projection
 
 The fixed-role v1 below remains a retired historical artifact. It is not edited

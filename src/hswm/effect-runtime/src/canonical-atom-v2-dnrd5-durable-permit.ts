@@ -3,9 +3,13 @@ import { Data, Effect, Either, Schema } from "effect"
 
 import {
   CommitCanonicalAtomsV2ContentBoundSchema,
+  describeCanonicalAtomV2Envelope,
+  makeCanonicalAtomV2ContentBoundInput,
+  validateCanonicalAtomV2WriteContentBindings,
   type CommitCanonicalAtomsV2ContentBound
 } from "./canonical-atom-v2-content-bound.js"
 import {
+  makeCanonicalAtomV2ContentDescriptor,
   sameCanonicalAtomV2ContentDescriptor,
   type CanonicalAtomV2ContentDescriptor
 } from "./canonical-atom-v2-content.js"
@@ -14,16 +18,19 @@ import {
   commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal,
   recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal,
   type CanonicalAtomV2DurableEvolution,
+  type CanonicalAtomV2DurableRecoveryWitness,
   type CanonicalAtomV2DurableSubmitFailure
 } from "./canonical-atom-v2-durable-runtime.js"
 import {
   HSWM_CANONICAL_JSON_MEDIA_TYPE,
   canonicalJsonBytes,
-  canonicalJsonSha256
+  canonicalJsonSha256,
+  decodeCanonicalJsonBytes
 } from "./canonical-atom-v2-json.js"
-import { canonicalAtomV2StateSha256 } from "./canonical-atom-v2-state-journal.js"
 import {
+  canonicalAtomV2StateSha256,
   canonicalAtomV2StateJournalRecordBytes,
+  decodeCanonicalAtomV2StateJournalRecordBytes,
   describeCanonicalAtomV2StateJournalRecord
 } from "./canonical-atom-v2-state-journal.js"
 import {
@@ -31,6 +38,45 @@ import {
   type CanonicalAtomV2,
   type CommitCanonicalAtomsV2Command
 } from "./canonical-atom-v2-schema.js"
+import {
+  type CanonicalAtomV2StateJournalRecordDescriptor,
+  type CanonicalAtomV2StateJournalCommit
+} from "./canonical-atom-v2-state-journal.js"
+import {
+  DNRD5_V2_CAPABILITY_CONSUMPTION_MEDIA_TYPE,
+  DNRD5_V2_CONSUMPTION_COMMAND_INTENT_MEDIA_TYPE,
+  Dnrd5V2ConsumptionCommandIntentSchema,
+  Dnrd5V2ConsumptionCommandProjectionSchema,
+  Dnrd5V2ConsumptionPayloadSchema,
+  DNRD5_V2_EVIDENCE_SEAL_CONSUMPTION_MEDIA_TYPE,
+  dnrd5V2ConsumptionAtomUid,
+  validateDnrd5V2Consumption,
+  type Dnrd5V2ConsumptionInput,
+  type Dnrd5V2ConsumptionPayload,
+  type Dnrd5V2ConsumptionValidated
+} from "./canonical-atom-v2-dnrd5-v2-consumption.js"
+import {
+  validateDnrd5V2AuthorityDisjointPair,
+  validateDnrd5V2AuthorityPayloadAtState,
+  type Dnrd5V2AuthorityStateInput
+} from "./canonical-atom-v2-dnrd5-v2-authority.js"
+import {
+  validateDnrd5V2EffectCommandCandidate,
+  validateDnrd5V2RecordBoundEffect
+} from "./canonical-atom-v2-dnrd5-v2-record-bound-effect.js"
+import {
+  DNRD5_V2_RECEIPT_PAYLOAD_MEDIA_TYPE,
+  DNRD5_V2_RECEIPT_SEAL_V1,
+  canonicalDnrd5V2ReceiptPayloadBytes,
+  validateDnrd5V2ReceiptSealCandidate,
+  validateDnrd5V2ReceiptSeal,
+  type Dnrd5V2ReceiptPayload
+} from "./canonical-atom-v2-dnrd5-v2-receipt-seal.js"
+import {
+  DNRD5_V2_REFERENCE_TYPE,
+  DNRD5_V2_SCHEMA_VERSION,
+  validateDnrd5V2CanonicalSchema
+} from "./canonical-atom-v2-dnrd5-v2-schema.js"
 import {
   DNRD5_CAPABILITY_CONSUMPTION_KIND,
   DNRD5_CAPABILITY_CONSUMPTION_MEDIA_TYPE,
@@ -990,3 +1036,1112 @@ export const submitDnrd5LocalExperimentalState = (
     }
     return result
   })
+
+/**
+ * DNRD-5 v2's deliberately narrow durable admission boundary.  The supplied
+ * bytes are candidates until the raw journal is recovered twice.  In
+ * particular, this function makes no provider, occurrence, learning, or
+ * efficacy claim.
+ */
+export const DNRD5_V2_TWO_CAS_ADMIT_V1 = "hswm-dnrd5-v2-two-cas-admit/v1" as const
+
+export interface Dnrd5V2TwoCasPhaseInput {
+  readonly authority: Dnrd5V2AuthorityStateInput
+  readonly consumption: Dnrd5V2ConsumptionInput
+  readonly transition: CommitCanonicalAtomsV2ContentBound
+  /** Exact raw payload bytes, one for every command write. */
+  readonly writePayloads: ReadonlyArray<{ readonly atomKeyId: string; readonly bytes: Uint8Array }>
+}
+
+export interface Dnrd5V2TwoCasAdmitInput {
+  readonly _tag: "Dnrd5V2TwoCasAdmitInput"
+  readonly contractVersion: typeof DNRD5_V2_TWO_CAS_ADMIT_V1
+  readonly main: Dnrd5V2TwoCasPhaseInput
+  readonly receipt: Dnrd5V2TwoCasPhaseInput
+}
+
+export interface Dnrd5V2TwoCasAdmitConfirmed {
+  readonly milestone: "CAS2_EXACT_R2_CONFIRMED"
+  readonly mainRecord: CanonicalAtomV2ContentDescriptor
+  readonly receiptRecord: CanonicalAtomV2ContentDescriptor
+  readonly mainConsumptionAtomKeyId: string
+  readonly receiptConsumptionAtomKeyId: string
+  readonly terminal: "NOT_PROVIDER_CALL_NOT_OCCURRENCE_NOT_LEARNING_NOT_EFFICACY"
+}
+
+const v2Failure = (milestone: Exclude<Dnrd5V2TwoCasMilestone, "CAS2_EXACT_R2_CONFIRMED">, detail: string) =>
+  new Dnrd5V2TwoCasRecoveryError({ milestone, detail })
+
+const exactDataObject = (
+  value: unknown,
+  fields: ReadonlyArray<string>
+): value is Record<string, unknown> => {
+  if (
+    typeof value !== "object" ||
+    value === null ||
+    Object.getPrototypeOf(value) !== Object.prototype
+  ) return false
+  const keys = Reflect.ownKeys(value)
+  if (
+    keys.length !== fields.length ||
+    keys.some((key) => typeof key !== "string" || !fields.includes(key))
+  ) return false
+  const descriptors = Object.getOwnPropertyDescriptors(value)
+  return fields.every((field) => {
+    const descriptor = descriptors[field]
+    return descriptor !== undefined && Object.prototype.hasOwnProperty.call(descriptor, "value")
+  })
+}
+
+const cloneBytes = (value: Uint8Array): Uint8Array => Uint8Array.from(value)
+
+const sameDescriptor = (left: CanonicalAtomV2ContentDescriptor, right: CanonicalAtomV2ContentDescriptor): boolean =>
+  sameCanonicalAtomV2ContentDescriptor(left, right)
+
+const sameCanonicalValue = (left: unknown, right: unknown): boolean => {
+  const leftBytes = canonicalJsonBytes(left)
+  const rightBytes = canonicalJsonBytes(right)
+  return Either.isRight(leftBytes) && Either.isRight(rightBytes) &&
+    exactBytes(leftBytes.right, rightBytes.right)
+}
+
+const decodeTwoCasPhase = (
+  value: unknown,
+  label: "main" | "receipt"
+): Either.Either<Dnrd5V2TwoCasPhaseInput, Dnrd5V2TwoCasRecoveryError> => {
+  if (
+    !exactDataObject(value, ["authority", "consumption", "transition", "writePayloads"]) ||
+    !exactDataObject(value["authority"], ["_tag", "contractVersion", "evaluatedAt", "principals", "state", "chain"]) ||
+    !exactDataObject(value["consumption"], [
+      "_tag",
+      "payloadBytes",
+      "commandIntentBytes",
+      "commandProjectionBytes",
+      "atom",
+      "authorizationSnapshot",
+      "state"
+    ]) ||
+    !(value["consumption"]["payloadBytes"] instanceof Uint8Array) ||
+    !(value["consumption"]["commandIntentBytes"] instanceof Uint8Array) ||
+    !(value["consumption"]["commandProjectionBytes"] instanceof Uint8Array) ||
+    !Array.isArray(value["writePayloads"])
+  ) {
+    return Either.left(v2Failure(
+      "RECOVERY_INDETERMINATE",
+      `${label} phase is not the exact two-CAS input contract`
+    ))
+  }
+  const transition = Schema.decodeUnknownEither(
+    CommitCanonicalAtomsV2ContentBoundSchema,
+    { onExcessProperty: "error" }
+  )(value["transition"])
+  if (Either.isLeft(transition)) {
+    return Either.left(v2Failure(
+      "RECOVERY_INDETERMINATE",
+      `${label} transition is not the exact content-bound contract`
+    ))
+  }
+  const writePayloads: Array<{ readonly atomKeyId: string; readonly bytes: Uint8Array }> = []
+  for (const candidate of value["writePayloads"]) {
+    if (
+      !exactDataObject(candidate, ["atomKeyId", "bytes"]) ||
+      typeof candidate["atomKeyId"] !== "string" ||
+      !(candidate["bytes"] instanceof Uint8Array)
+    ) {
+      return Either.left(v2Failure(
+        "RECOVERY_INDETERMINATE",
+        `${label} write payload set is not an exact key/bytes array`
+      ))
+    }
+    writePayloads.push(Object.freeze({
+      atomKeyId: candidate["atomKeyId"],
+      bytes: cloneBytes(candidate["bytes"])
+    }))
+  }
+  try {
+    return Either.right(Object.freeze({
+      authority: snapshot(value["authority"]) as unknown as Dnrd5V2AuthorityStateInput,
+      consumption: snapshot(value["consumption"]) as unknown as Dnrd5V2ConsumptionInput,
+      transition: snapshot(transition.right),
+      writePayloads: Object.freeze(writePayloads)
+    }))
+  } catch {
+    return Either.left(v2Failure(
+      "RECOVERY_INDETERMINATE",
+      `${label} phase could not be defensively snapshotted`
+    ))
+  }
+}
+
+const decodeTwoCasInput = (
+  input: unknown
+): Either.Either<Dnrd5V2TwoCasAdmitInput, Dnrd5V2TwoCasRecoveryError> => {
+  try {
+    if (
+      !exactDataObject(input, ["_tag", "contractVersion", "main", "receipt"]) ||
+      input["_tag"] !== "Dnrd5V2TwoCasAdmitInput" ||
+      input["contractVersion"] !== DNRD5_V2_TWO_CAS_ADMIT_V1
+    ) {
+      return Either.left(v2Failure(
+        "RECOVERY_INDETERMINATE",
+        "two-CAS admission input must have the exact root contract"
+      ))
+    }
+    const main = decodeTwoCasPhase(input["main"], "main")
+    if (Either.isLeft(main)) return Either.left(main.left)
+    const receipt = decodeTwoCasPhase(input["receipt"], "receipt")
+    if (Either.isLeft(receipt)) return Either.left(receipt.left)
+    return Either.right(Object.freeze({
+      _tag: "Dnrd5V2TwoCasAdmitInput" as const,
+      contractVersion: DNRD5_V2_TWO_CAS_ADMIT_V1,
+      main: main.right,
+      receipt: receipt.right
+    }))
+  } catch {
+    return Either.left(v2Failure(
+      "RECOVERY_INDETERMINATE",
+      "two-CAS admission input could not be safely inspected"
+    ))
+  }
+}
+
+const verifyAuthorityBytes = (
+  runtime: CanonicalAtomV2DurableRuntime["Type"],
+  authority: Dnrd5V2AuthorityStateInput
+): Effect.Effect<void, CanonicalAtomV2DurableSubmitFailure | Dnrd5V2TwoCasRecoveryError> =>
+  Effect.gen(function* () {
+    const chain = authority.chain
+    for (const content of [chain.policy, chain.authorization, chain.capability, chain.revocation, chain.grant]) {
+      const durable = yield* runtime.readContent(content.atom.content)
+      if (!exactBytes(durable, cloneBytes(content.bytes))) {
+        return yield* v2Failure("RECOVERY_INDETERMINATE", "authority content bytes differ from their supplied exact durable descriptor")
+      }
+    }
+  })
+
+const decodeV2ConsumptionPayload = (
+  bytes: Uint8Array
+): Either.Either<Dnrd5V2ConsumptionPayload, Dnrd5V2TwoCasRecoveryError> => {
+  const decoded = decodeCanonicalJsonBytes(bytes)
+  if (Either.isLeft(decoded)) {
+    return Either.left(v2Failure(
+      "RECOVERY_INDETERMINATE",
+      "consumption payload bytes are not canonical JSON"
+    ))
+  }
+  const payload = Schema.decodeUnknownEither(
+    Dnrd5V2ConsumptionPayloadSchema,
+    { onExcessProperty: "error" }
+  )(decoded.right)
+  const canonical = Either.isRight(payload)
+    ? canonicalJsonBytes(payload.right)
+    : undefined
+  return Either.isLeft(payload) || canonical === undefined || Either.isLeft(canonical) ||
+    !exactBytes(bytes, canonical.right)
+    ? Either.left(v2Failure(
+        "RECOVERY_INDETERMINATE",
+        "consumption payload is not the exact canonical v2 contract"
+      ))
+    : Either.right(payload.right)
+}
+
+const decodeV2IntentForPayload = (
+  bytes: Uint8Array,
+  payload: Dnrd5V2ConsumptionPayload
+): Either.Either<Schema.Schema.Type<typeof Dnrd5V2ConsumptionCommandIntentSchema>, Dnrd5V2TwoCasRecoveryError> => {
+  const decoded = decodeCanonicalJsonBytes(bytes)
+  if (Either.isLeft(decoded)) {
+    return Either.left(v2Failure(
+      "RECOVERY_INDETERMINATE",
+      "consumption command-intent bytes are not canonical JSON"
+    ))
+  }
+  const intent = Schema.decodeUnknownEither(
+    Dnrd5V2ConsumptionCommandIntentSchema,
+    { onExcessProperty: "error" }
+  )(decoded.right)
+  if (Either.isLeft(intent)) {
+    return Either.left(v2Failure(
+      "RECOVERY_INDETERMINATE",
+      "consumption command intent is not the exact v2 contract"
+    ))
+  }
+  const canonical = canonicalJsonBytes(intent.right)
+  const descriptor = makeCanonicalAtomV2ContentDescriptor(
+    DNRD5_V2_CONSUMPTION_COMMAND_INTENT_MEDIA_TYPE,
+    bytes
+  )
+  if (
+    Either.isLeft(canonical) ||
+    !exactBytes(bytes, canonical.right) ||
+    Either.isLeft(descriptor) ||
+    !sameDescriptor(descriptor.right, payload.commandIntent) ||
+    intent.right.phase !== payload.phase ||
+    intent.right.capabilityNonceSha256 !== payload.capabilityNonceSha256 ||
+    intent.right.purposeAtomKeyId !== payload.purposeAtomKeyId ||
+    !sameCanonicalValue(intent.right.authority, payload.authority) ||
+    !sameCanonicalValue(intent.right.authorizationSnapshot, payload.authorizationSnapshot) ||
+    intent.right.evaluatedAt !== payload.evaluatedAt
+  ) {
+    return Either.left(v2Failure(
+      "RECOVERY_INDETERMINATE",
+      "consumption command intent does not exactly bind its payload"
+    ))
+  }
+  return Either.right(intent.right)
+}
+
+const stageV2ConsumptionSupport = (
+  runtime: CanonicalAtomV2DurableRuntime["Type"],
+  consumption: Dnrd5V2ConsumptionInput,
+  payload: Dnrd5V2ConsumptionPayload
+): Effect.Effect<void, CanonicalAtomV2DurableSubmitFailure | Dnrd5V2TwoCasRecoveryError> =>
+  Effect.gen(function* () {
+    const intent = decodeV2IntentForPayload(consumption.commandIntentBytes, payload)
+    if (Either.isLeft(intent)) return yield* intent.left
+    const staged = yield* runtime.stageContent(
+      DNRD5_V2_CONSUMPTION_COMMAND_INTENT_MEDIA_TYPE,
+      cloneBytes(consumption.commandIntentBytes)
+    )
+    if (!sameDescriptor(staged, payload.commandIntent)) {
+      return yield* v2Failure(
+        "RECOVERY_INDETERMINATE",
+        "staged command-intent bytes differ from their payload descriptor"
+      )
+    }
+  })
+
+const decodeV2ProjectionCommand = (
+  consumption: Dnrd5V2ConsumptionInput
+): Either.Either<CommitCanonicalAtomsV2Command, Dnrd5V2TwoCasRecoveryError> => {
+  const decoded = decodeCanonicalJsonBytes(consumption.commandProjectionBytes)
+  if (Either.isLeft(decoded)) return Either.left(v2Failure("RECOVERY_INDETERMINATE", "consumption projection bytes are not canonical JSON"))
+  const projection = Schema.decodeUnknownEither(Dnrd5V2ConsumptionCommandProjectionSchema, { onExcessProperty: "error" })(decoded.right)
+  if (Either.isLeft(projection)) {
+    return Either.left(v2Failure("RECOVERY_INDETERMINATE", "consumption projection is not the exact v2 command contract"))
+  }
+  const canonical = canonicalJsonBytes(projection.right)
+  if (Either.isLeft(canonical) || !exactBytes(canonical.right, consumption.commandProjectionBytes)) {
+    return Either.left(v2Failure("RECOVERY_INDETERMINATE", "consumption projection bytes are not exact canonical bytes"))
+  }
+  const companion = projection.right.command.writes[0]
+  if (projection.right.command.writes.length !== 1 || companion === undefined) {
+    return Either.left(v2Failure("RECOVERY_INDETERMINATE", "consumption projection must carry exactly one companion write"))
+  }
+  return Either.right(snapshot({
+    ...projection.right.command,
+    writes: [consumption.atom, companion]
+  }))
+}
+
+const stageV2Transition = (
+  runtime: CanonicalAtomV2DurableRuntime["Type"],
+  phase: Dnrd5V2TwoCasPhaseInput,
+  command: CommitCanonicalAtomsV2Command
+): Effect.Effect<CommitCanonicalAtomsV2ContentBound, CanonicalAtomV2DurableSubmitFailure | Dnrd5V2TwoCasRecoveryError> =>
+  Effect.gen(function* () {
+    if (
+      phase.transition.schemaContentSha256 !== runtime.schemaContent.content.sha256 ||
+      !sameCanonicalValue(phase.transition.command, command)
+    ) {
+      return yield* v2Failure("RECOVERY_INDETERMINATE", "content-bound transition does not equal the reconstructed consumption command")
+    }
+    const payloads = phase.writePayloads
+    if (payloads.length !== command.writes.length) {
+      return yield* v2Failure("RECOVERY_INDETERMINATE", "write payload set must bijectively cover the two command writes")
+    }
+    const payloadById = new Map(payloads.map((payload) => [payload.atomKeyId, payload] as const))
+    if (payloadById.size !== payloads.length) {
+      return yield* v2Failure("RECOVERY_INDETERMINATE", "write payload mapping repeats an atom key")
+    }
+    const suppliedBindings = validateCanonicalAtomV2WriteContentBindings(
+      command.writes,
+      phase.transition.writeBindings
+    )
+    if (Either.isLeft(suppliedBindings)) {
+      return yield* v2Failure("RECOVERY_INDETERMINATE", "supplied write bindings are not the exact command bijection")
+    }
+    const atomById = new Map(
+      command.writes.map((atom) => [canonicalAtomV2KeyId(atom.key), atom] as const)
+    )
+    const bindings: Array<CommitCanonicalAtomsV2ContentBound["writeBindings"][number]> = []
+    for (const binding of suppliedBindings.right) {
+      const id = canonicalAtomV2KeyId(binding.key)
+      const atom = atomById.get(id)
+      const payload = payloadById.get(id)
+      if (atom === undefined || payload === undefined) {
+        return yield* v2Failure("RECOVERY_INDETERMINATE", "write payloads are not an exact one-to-one atom-key mapping")
+      }
+      const staged = yield* runtime.stageContent(atom.content.mediaType, cloneBytes(payload.bytes))
+      if (!sameDescriptor(staged, atom.content)) {
+        return yield* v2Failure("RECOVERY_INDETERMINATE", "staged payload descriptor does not equal command atom content")
+      }
+      const envelope = describeCanonicalAtomV2Envelope(atom)
+      if (
+        Either.isLeft(envelope) ||
+        !sameDescriptor(binding.payload, staged) ||
+        !sameDescriptor(binding.envelope, envelope.right)
+      ) {
+        return yield* v2Failure("RECOVERY_INDETERMINATE", "supplied transition bindings differ from freshly derived content bindings")
+      }
+      bindings.push(Object.freeze({
+        key: snapshot(binding.key),
+        payload: snapshot(staged),
+        envelope: snapshot(envelope.right)
+      }))
+    }
+    const consumptionPayload = payloadById.get(canonicalAtomV2KeyId(phase.consumption.atom.key))
+    if (
+      consumptionPayload === undefined ||
+      !exactBytes(consumptionPayload.bytes, phase.consumption.payloadBytes)
+    ) {
+      return yield* v2Failure("RECOVERY_INDETERMINATE", "consumption write bytes differ from the validated candidate bytes")
+    }
+    return makeCanonicalAtomV2ContentBoundInput(
+      runtime.schemaContent.content.sha256,
+      command,
+      bindings
+    )
+  })
+
+interface Dnrd5V2RawCommitEvidence {
+  readonly commit: CanonicalAtomV2StateJournalCommit
+  readonly bytes: Uint8Array
+  readonly descriptor: CanonicalAtomV2StateJournalRecordDescriptor
+}
+
+const rawCommitAt = (
+  witness: CanonicalAtomV2DurableRecoveryWitness,
+  revision: number
+): Either.Either<Dnrd5V2RawCommitEvidence, Dnrd5V2TwoCasRecoveryError> => {
+  const entry = witness.journal.at(revision)
+  if (entry === undefined) return Either.left(v2Failure("RECOVERY_INDETERMINATE", "expected raw journal record is absent"))
+  const decoded = decodeCanonicalAtomV2StateJournalRecordBytes(entry.bytes)
+  if (
+    Either.isLeft(decoded) ||
+    decoded.right._tag !== "CanonicalAtomV2StateJournalCommit" ||
+    decoded.right.stateRevision !== revision
+  ) {
+    return Either.left(v2Failure("RECOVERY_INDETERMINATE", "raw journal record is not the exact expected commit"))
+  }
+  const canonical = canonicalAtomV2StateJournalRecordBytes(decoded.right)
+  const descriptor = describeCanonicalAtomV2StateJournalRecord(decoded.right)
+  if (
+    Either.isLeft(canonical) ||
+    Either.isLeft(descriptor) ||
+    !exactBytes(canonical.right, entry.bytes) ||
+    !sameDescriptor(descriptor.right, entry.descriptor)
+  ) {
+    return Either.left(v2Failure("RECOVERY_INDETERMINATE", "raw journal bytes and descriptor are not canonical"))
+  }
+  return Either.right(Object.freeze({
+    commit: decoded.right,
+    bytes: cloneBytes(entry.bytes),
+    descriptor: descriptor.right
+  }))
+}
+
+const recoveredEnvelopesFor = (
+  runtime: CanonicalAtomV2DurableRuntime["Type"],
+  record: CanonicalAtomV2StateJournalCommit
+): Effect.Effect<ReadonlyArray<Uint8Array>, CanonicalAtomV2DurableSubmitFailure | Dnrd5V2TwoCasRecoveryError> =>
+  Effect.forEach(record.writeBindings, (binding) =>
+    runtime.readContent(binding.envelope).pipe(Effect.flatMap((bytes) => {
+      const described = makeCanonicalAtomV2ContentDescriptor(binding.envelope.mediaType, bytes)
+      return Either.isRight(described) && sameDescriptor(described.right, binding.envelope)
+        ? Effect.succeed(cloneBytes(bytes))
+        : Effect.fail(v2Failure("RECOVERY_INDETERMINATE", "recovered raw envelope bytes do not equal the journal binding descriptor"))
+    }
+    )), { concurrency: 1 })
+
+const consumptionMatchesAuthority = (
+  consumption: { readonly phase: string; readonly purposeAtomKeyId: string; readonly capabilityNonceSha256: string; readonly evaluatedAt: string; readonly authority: { readonly grantAtomKeyId: string; readonly capabilityAtomKeyId: string; readonly revocationAtomKeyId: string } },
+  authority: { readonly chain: { readonly phase: string; readonly purposeAtomKeyId: string; readonly nonceSha256: string; readonly grantAtomKeyId: string; readonly capabilityAtomKeyId: string; readonly revocationAtomKeyId: string }; readonly evaluatedAt: string }
+): boolean => consumption.phase === authority.chain.phase && consumption.purposeAtomKeyId === authority.chain.purposeAtomKeyId && consumption.capabilityNonceSha256 === authority.chain.nonceSha256 && consumption.evaluatedAt === authority.evaluatedAt && consumption.authority.grantAtomKeyId === authority.chain.grantAtomKeyId && consumption.authority.capabilityAtomKeyId === authority.chain.capabilityAtomKeyId && consumption.authority.revocationAtomKeyId === authority.chain.revocationAtomKeyId
+
+const commandMatchesAuthority = (
+  command: CommitCanonicalAtomsV2Command,
+  authority: {
+    readonly evaluatedAt: string
+    readonly chain: {
+      readonly actor: string
+      readonly scope: string
+      readonly capabilityId: string
+    }
+  }
+): boolean =>
+  command.actorClaim === authority.chain.actor &&
+  command.authorizationRef === authority.chain.capabilityId &&
+  command.scope === authority.chain.scope &&
+  command.decidedAt === authority.evaluatedAt
+
+interface RecoveredV2Consumption {
+  readonly atom: CanonicalAtomV2
+  readonly atomKeyId: string
+  readonly phase: Dnrd5V2ConsumptionPayload["phase"]
+  readonly nonceSha256: string
+}
+
+const consumptionPhaseBinding = (phase: Dnrd5V2ConsumptionPayload["phase"]) =>
+  phase === "MAIN_ADMIT"
+    ? Object.freeze({
+        kind: "hswm:dnrd5:v2:capability_consumption",
+        owner: "owner:dnrd5:v2:capability_consumption_custodian",
+        mediaType: DNRD5_V2_CAPABILITY_CONSUMPTION_MEDIA_TYPE,
+        purposeRole: "role:dnrd5:v2:decision",
+        purposeKind: "hswm:dnrd5:v2:revision_admission_decision"
+      })
+    : phase === "MAIN_RESTORE"
+      ? Object.freeze({
+          kind: "hswm:dnrd5:v2:capability_consumption",
+          owner: "owner:dnrd5:v2:capability_consumption_custodian",
+          mediaType: DNRD5_V2_CAPABILITY_CONSUMPTION_MEDIA_TYPE,
+          purposeRole: "role:dnrd5:v2:decision",
+          purposeKind: "hswm:dnrd5:v2:rollback_decision"
+        })
+      : phase === "RECEIPT_ADMIT"
+        ? Object.freeze({
+            kind: "hswm:dnrd5:v2:evidence_seal_consumption",
+            owner: "owner:dnrd5:v2:evidence_seal_consumption_custodian",
+            mediaType: DNRD5_V2_EVIDENCE_SEAL_CONSUMPTION_MEDIA_TYPE,
+            purposeRole: "role:dnrd5:v2:purpose",
+            purposeKind: "hswm:dnrd5:v2:revision_admission_decision"
+          })
+        : Object.freeze({
+            kind: "hswm:dnrd5:v2:evidence_seal_consumption",
+            owner: "owner:dnrd5:v2:evidence_seal_consumption_custodian",
+            mediaType: DNRD5_V2_EVIDENCE_SEAL_CONSUMPTION_MEDIA_TYPE,
+            purposeRole: "role:dnrd5:v2:purpose",
+            purposeKind: "hswm:dnrd5:v2:rollback_decision"
+          })
+
+const recoveredV2Consumptions = (
+  runtime: CanonicalAtomV2DurableRuntime["Type"],
+  atoms: ReadonlyArray<CanonicalAtomV2>
+): Effect.Effect<ReadonlyMap<string, RecoveredV2Consumption>, CanonicalAtomV2DurableSubmitFailure | Dnrd5V2TwoCasRecoveryError> =>
+  Effect.gen(function* () {
+    const byNonce = new Map<string, RecoveredV2Consumption>()
+    const members = new Map(
+      atoms.map((atom) => [canonicalAtomV2KeyId(atom.key), atom] as const)
+    )
+    for (const atom of atoms) {
+      if (atom.kind !== "hswm:dnrd5:v2:capability_consumption" && atom.kind !== "hswm:dnrd5:v2:evidence_seal_consumption") continue
+      const bytes = yield* runtime.readContent(atom.content)
+      const described = makeCanonicalAtomV2ContentDescriptor(atom.content.mediaType, bytes)
+      if (Either.isLeft(described) || !sameDescriptor(described.right, atom.content)) {
+        return yield* v2Failure("RECOVERY_INDETERMINATE", "a recovered v2 consumption descriptor does not bind its durable bytes")
+      }
+      const payload = decodeV2ConsumptionPayload(bytes)
+      if (Either.isLeft(payload)) return yield* payload.left
+      const binding = consumptionPhaseBinding(payload.right.phase)
+      const intentBytes = yield* runtime.readContent(payload.right.commandIntent)
+      const intent = decodeV2IntentForPayload(intentBytes, payload.right)
+      if (Either.isLeft(intent)) return yield* intent.left
+      const uid = dnrd5V2ConsumptionAtomUid(
+        payload.right.phase,
+        payload.right.capabilityNonceSha256,
+        payload.right.purposeAtomKeyId
+      )
+      if (
+        Either.isLeft(uid) ||
+        atom.key.schemaVersion !== DNRD5_V2_SCHEMA_VERSION ||
+        atom.key.revisionId !== 0 ||
+        atom.key.atomUid !== uid.right ||
+        atom.kind !== binding.kind ||
+        atom.responsibilityOwner !== binding.owner ||
+        atom.lifecycle !== "ADMITTED" ||
+        atom.content.mediaType !== binding.mediaType ||
+        atom.provenance.mode !== "DERIVATION" ||
+        atom.provenance.sourceRef === null ||
+        canonicalAtomV2KeyId(atom.provenance.sourceRef) !== payload.right.purposeAtomKeyId ||
+        atom.provenance.evidenceSha256 !== intent.right.commandProjectionSha256
+      ) {
+        return yield* v2Failure("RECOVERY_INDETERMINATE", "a recovered v2 consumption atom is inconsistent with its durable payload")
+      }
+      if (
+        members.get(payload.right.authority.grantAtomKeyId)?.kind !== "hswm:dnrd5:v2:grant_snapshot" ||
+        members.get(payload.right.authority.capabilityAtomKeyId)?.kind !== "hswm:dnrd5:v2:capability_issuance" ||
+        members.get(payload.right.authority.revocationAtomKeyId)?.kind !== "hswm:dnrd5:v2:revocation_status" ||
+        members.get(payload.right.purposeAtomKeyId)?.kind !== binding.purposeKind
+      ) {
+        return yield* v2Failure("RECOVERY_INDETERMINATE", "a recovered v2 consumption references absent or wrong-kind state members")
+      }
+      const expectedReferences = new Map<string, string>([
+        ["role:dnrd5:v2:grant", payload.right.authority.grantAtomKeyId],
+        ["role:dnrd5:v2:capability", payload.right.authority.capabilityAtomKeyId],
+        ["role:dnrd5:v2:revocation", payload.right.authority.revocationAtomKeyId],
+        [binding.purposeRole, payload.right.purposeAtomKeyId]
+      ])
+      if (
+        atom.references.length !== expectedReferences.size ||
+        new Set(atom.references.map((reference) => reference.role)).size !== atom.references.length ||
+        atom.references.some((reference) =>
+          reference.referenceType !== DNRD5_V2_REFERENCE_TYPE ||
+          expectedReferences.get(reference.role) !== canonicalAtomV2KeyId(reference.target)
+        )
+      ) {
+        return yield* v2Failure("RECOVERY_INDETERMINATE", "a recovered v2 consumption has invalid typed-reference closure")
+      }
+      if (byNonce.has(payload.right.capabilityNonceSha256)) {
+        return yield* v2Failure("RECOVERY_INDETERMINATE", "a recovered v2 history contains a cross-phase or duplicate capability nonce")
+      }
+      byNonce.set(payload.right.capabilityNonceSha256, Object.freeze({
+        atom,
+        atomKeyId: canonicalAtomV2KeyId(atom.key),
+        phase: payload.right.phase,
+        nonceSha256: payload.right.capabilityNonceSha256
+      }))
+    }
+    return byNonce
+  })
+
+const exactRecoveredTail = (
+  witness: CanonicalAtomV2DurableRecoveryWitness,
+  revision: number,
+  milestone: "CAS1_PREDECESSOR_LOST" | "CAS2_PREDECESSOR_LOST"
+): Either.Either<Dnrd5V2RawCommitEvidence, Dnrd5V2TwoCasRecoveryError> => {
+  if (
+    witness.state.canonical.revision !== revision ||
+    witness.journal.length !== revision + 1 ||
+    witness.history.length !== revision
+  ) {
+    return Either.left(v2Failure(milestone, "recovered durable journal is not the exact expected successor length"))
+  }
+  const raw = rawCommitAt(witness, revision)
+  if (Either.isLeft(raw)) return Either.left(raw.left)
+  const tail = witness.history.at(-1)
+  if (
+    tail === undefined ||
+    !sameDescriptor(tail.record, raw.right.descriptor) ||
+    !sameDescriptor(witness.state.journalHead, raw.right.descriptor)
+  ) {
+    return Either.left(v2Failure(milestone, "recovered raw record is not the exact semantic and durable tail"))
+  }
+  return raw
+}
+
+const prevalidateRevisionReceipt = (
+  phase: Dnrd5V2TwoCasPhaseInput,
+  command: CommitCanonicalAtomsV2Command,
+  effect: {
+    readonly effectRecordDescriptor: CanonicalAtomV2StateJournalRecordDescriptor
+    readonly deterministicFuturePostcommitReceiptIdentity: string
+  },
+  mainConsumption: Dnrd5V2ConsumptionValidated
+): Either.Either<{
+  readonly bytes: Uint8Array
+  readonly descriptor: CanonicalAtomV2ContentDescriptor
+}, Dnrd5V2TwoCasRecoveryError> => {
+  const receipts = command.writes.filter(
+    (atom) => atom.kind === "hswm:dnrd5:v2:revision_transition_receipt"
+  )
+  if (receipts.length !== 1) {
+    return Either.left(v2Failure("CAS1_EXACT_R1_RECEIPT_PENDING", "receipt command lacks exactly one revision receipt atom"))
+  }
+  const receipt = receipts[0]!
+  const payloads = phase.writePayloads.filter(
+    (candidate) => candidate.atomKeyId === canonicalAtomV2KeyId(receipt.key)
+  )
+  if (payloads.length !== 1) {
+    return Either.left(v2Failure("CAS1_EXACT_R1_RECEIPT_PENDING", "receipt command lacks exactly one raw receipt payload"))
+  }
+  const expected: Dnrd5V2ReceiptPayload = {
+    contractVersion: DNRD5_V2_RECEIPT_SEAL_V1,
+    receiptKind: "REVISION",
+    precedingEffectRecordDescriptorSha256: effect.effectRecordDescriptor.sha256,
+    postcommitReceiptIdentity: effect.deterministicFuturePostcommitReceiptIdentity,
+    decisionAtomKeyId: mainConsumption.purposeAtomKeyId,
+    effectConsumptionAtomKeyId: mainConsumption.atomKeyId,
+    effectAtomKeyId: mainConsumption.companionAtomKeyId
+  }
+  const expectedBytes = canonicalDnrd5V2ReceiptPayloadBytes(expected)
+  if (Either.isLeft(expectedBytes) || !exactBytes(expectedBytes.right, payloads[0]!.bytes)) {
+    return Either.left(v2Failure("CAS1_EXACT_R1_RECEIPT_PENDING", "receipt payload does not exactly bind the recovered R1 effect"))
+  }
+  const descriptor = makeCanonicalAtomV2ContentDescriptor(
+    DNRD5_V2_RECEIPT_PAYLOAD_MEDIA_TYPE,
+    expectedBytes.right
+  )
+  if (
+    Either.isLeft(descriptor) ||
+    receipt.key.atomUid !== `receipt:${effect.deterministicFuturePostcommitReceiptIdentity}` ||
+    !sameDescriptor(receipt.content, descriptor.right)
+  ) {
+    return Either.left(v2Failure("CAS1_EXACT_R1_RECEIPT_PENDING", "receipt UID or content descriptor does not bind the recovered R1 identity"))
+  }
+  return Either.right(Object.freeze({
+    bytes: cloneBytes(expectedBytes.right),
+    descriptor: descriptor.right
+  }))
+}
+
+export const submitDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
+  Dnrd5V2TwoCasAdmitConfirmed,
+  CanonicalAtomV2DurableSubmitFailure | Dnrd5V2TwoCasRecoveryError,
+  CanonicalAtomV2DurableRuntime
+> => Effect.gen(function* () {
+  const decoded = decodeTwoCasInput(input)
+  if (Either.isLeft(decoded)) return yield* decoded.left
+  const supplied = decoded.right
+  const mainPayload = decodeV2ConsumptionPayload(supplied.main.consumption.payloadBytes)
+  const receiptPayload = decodeV2ConsumptionPayload(supplied.receipt.consumption.payloadBytes)
+  if (Either.isLeft(mainPayload)) return yield* mainPayload.left
+  if (Either.isLeft(receiptPayload)) return yield* receiptPayload.left
+  if (
+    mainPayload.right.phase !== "MAIN_ADMIT" ||
+    receiptPayload.right.phase !== "RECEIPT_ADMIT" ||
+    mainPayload.right.capabilityNonceSha256 === receiptPayload.right.capabilityNonceSha256
+  ) {
+    return yield* v2Failure(
+      "RECOVERY_INDETERMINATE",
+      "ADMIT requires distinct MAIN_ADMIT and RECEIPT_ADMIT consumption candidates"
+    )
+  }
+  const mainIntent = decodeV2IntentForPayload(
+    supplied.main.consumption.commandIntentBytes,
+    mainPayload.right
+  )
+  const receiptIntent = decodeV2IntentForPayload(
+    supplied.receipt.consumption.commandIntentBytes,
+    receiptPayload.right
+  )
+  if (Either.isLeft(mainIntent)) return yield* mainIntent.left
+  if (Either.isLeft(receiptIntent)) return yield* receiptIntent.left
+
+  const runtime = yield* CanonicalAtomV2DurableRuntime
+  if (Either.isLeft(validateDnrd5V2CanonicalSchema(runtime.schema))) {
+    return yield* v2Failure(
+      "RECOVERY_INDETERMINATE",
+      "runtime does not carry the exact DNRD-5 v2 schema"
+    )
+  }
+
+  // Initial-only entry: one raw recovery observation defines S0. A stale or
+  // retried candidate is rejected before CAS1; crash-resume is a later,
+  // prefix-identity-bound contract.
+  const s0 = yield* recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal(runtime)
+  const pre = s0.state
+  const s0Sha = canonicalAtomV2StateSha256(pre.canonical)
+  if (Either.isLeft(s0Sha)) {
+    return yield* v2Failure("RECOVERY_INDETERMINATE", "cannot hash recovered S0")
+  }
+  const recoveredS0Snapshot = Object.freeze({
+    stateRevision: pre.canonical.revision,
+    stateSha256: s0Sha.right,
+    journalLineageId: pre.journalLineageId,
+    journalHead: pre.journalHead
+  })
+  if (
+    !sameCanonicalValue(
+      supplied.main.consumption.authorizationSnapshot,
+      recoveredS0Snapshot
+    ) ||
+    !sameCanonicalValue(supplied.main.consumption.state, pre.canonical) ||
+    !sameCanonicalValue(supplied.main.authority.state, pre.canonical)
+  ) {
+    return yield* v2Failure(
+      "CAS1_PREDECESSOR_LOST",
+      "initial-only admission requires supplied main state and snapshot to equal recovered S0"
+    )
+  }
+
+  const mainAuthority = validateDnrd5V2AuthorityPayloadAtState({
+    ...supplied.main.authority,
+    state: pre.canonical
+  })
+  if (
+    Either.isLeft(mainAuthority) ||
+    mainAuthority.right.chain.phase !== "MAIN_ADMIT"
+  ) {
+    return yield* v2Failure(
+      "RECOVERY_INDETERMINATE",
+      "recovered S0 does not validate the exact MAIN_ADMIT authority"
+    )
+  }
+  yield* verifyAuthorityBytes(runtime, supplied.main.authority)
+
+  const s0Consumptions = yield* recoveredV2Consumptions(
+    runtime,
+    pre.canonical.atoms
+  )
+  if (
+    s0Consumptions.has(mainPayload.right.capabilityNonceSha256) ||
+    s0Consumptions.has(receiptPayload.right.capabilityNonceSha256) ||
+    pre.canonical.atoms.some((atom) =>
+      canonicalAtomV2KeyId(atom.key) ===
+        canonicalAtomV2KeyId(supplied.main.consumption.atom.key) ||
+      canonicalAtomV2KeyId(atom.key) ===
+        canonicalAtomV2KeyId(supplied.receipt.consumption.atom.key)
+    )
+  ) {
+    return yield* v2Failure(
+      "CAS1_PREDECESSOR_LOST",
+      "a candidate nonce or consumption identity already exists in recovered S0"
+    )
+  }
+
+  const mainConsumption = validateDnrd5V2Consumption({
+    ...supplied.main.consumption,
+    state: pre.canonical,
+    authorizationSnapshot: recoveredS0Snapshot
+  })
+  if (Either.isLeft(mainConsumption)) {
+    return yield* v2Failure(
+      "RECOVERY_INDETERMINATE",
+      "main consumption candidate is invalid: " + mainConsumption.left.code
+    )
+  }
+  if (!consumptionMatchesAuthority(mainConsumption.right, mainAuthority.right)) {
+    return yield* v2Failure(
+      "RECOVERY_INDETERMINATE",
+      "main consumption does not bind the recovered main authority chain"
+    )
+  }
+  const mainCommand = decodeV2ProjectionCommand(supplied.main.consumption)
+  if (Either.isLeft(mainCommand)) return yield* mainCommand.left
+  if (!commandMatchesAuthority(mainCommand.right, mainAuthority.right)) {
+    return yield* v2Failure(
+      "RECOVERY_INDETERMINATE",
+      "main command header does not bind the validated actor, capability, scope, and time"
+    )
+  }
+  const mainPreflight = validateDnrd5V2EffectCommandCandidate(
+    runtime.schema,
+    pre.canonical,
+    mainCommand.right
+  )
+  if (Either.isLeft(mainPreflight)) {
+    return yield* v2Failure(
+      "RECOVERY_INDETERMINATE",
+      "main effect failed pre-CAS DNRD grammar: " + mainPreflight.left.code
+    )
+  }
+  yield* stageV2ConsumptionSupport(
+    runtime,
+    supplied.main.consumption,
+    mainPayload.right
+  )
+  const mainTransition = yield* stageV2Transition(
+    runtime,
+    supplied.main,
+    mainCommand.right
+  )
+
+  const expectedR1 = pre.canonical.revision + 1
+  const mainAttempt = yield* Effect.either(
+    commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal(
+      runtime,
+      mainTransition
+    )
+  )
+  const r1Witness =
+    yield* recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal(runtime)
+  if (r1Witness.state.canonical.revision === pre.canonical.revision) {
+    if (Either.isLeft(mainAttempt)) return yield* Effect.fail(mainAttempt.left)
+    return yield* v2Failure(
+      "RECOVERY_INDETERMINATE",
+      "CAS1 returned without an exact recovered durable successor"
+    )
+  }
+  if (r1Witness.state.canonical.revision !== expectedR1) {
+    return yield* v2Failure(
+      "CAS1_PREDECESSOR_LOST",
+      "recovered durable tail advanced outside the exact S0 to R1 window"
+    )
+  }
+  const r1 = exactRecoveredTail(
+    r1Witness,
+    expectedR1,
+    "CAS1_PREDECESSOR_LOST"
+  )
+  if (Either.isLeft(r1)) return yield* r1.left
+  const mainRawEnvelopes = yield* recoveredEnvelopesFor(
+    runtime,
+    r1.right.commit
+  )
+  const mainEffectInput = Object.freeze({
+    schema: runtime.schema,
+    preState: pre.canonical,
+    predecessor: Object.freeze({
+      descriptor: pre.journalHead,
+      journalLineageId: pre.journalLineageId,
+      schemaContentSha256: pre.schema.content.sha256
+    }),
+    command: mainCommand.right,
+    record: r1.right.commit,
+    recordBytes: r1.right.bytes,
+    recordDescriptor: r1.right.descriptor,
+    envelopes: mainRawEnvelopes,
+    usedRecordDescriptorSha256s: s0.history.map(
+      (entry) => entry.record.sha256
+    )
+  })
+  const mainEffect = validateDnrd5V2RecordBoundEffect(mainEffectInput)
+  if (Either.isLeft(mainEffect)) {
+    return yield* v2Failure(
+      "CAS1_PREDECESSOR_LOST",
+      "R1 is not the exact reconstructed main effect: " + mainEffect.left.code
+    )
+  }
+  if (!sameCanonicalValue(
+    mainEffect.right.nextState,
+    r1Witness.state.canonical
+  )) {
+    return yield* v2Failure(
+      "CAS1_PREDECESSOR_LOST",
+      "raw R1 replay state differs from the recovered R1 state"
+    )
+  }
+
+  const r1Consumptions = yield* recoveredV2Consumptions(
+    runtime,
+    r1Witness.state.canonical.atoms
+  )
+  const recoveredMainConsumption = r1Consumptions.get(
+    mainConsumption.right.capabilityNonceSha256
+  )
+  if (
+    recoveredMainConsumption === undefined ||
+    recoveredMainConsumption.phase !== "MAIN_ADMIT" ||
+    recoveredMainConsumption.atomKeyId !== mainConsumption.right.atomKeyId ||
+    !sameCanonicalValue(
+      recoveredMainConsumption.atom,
+      supplied.main.consumption.atom
+    ) ||
+    r1Consumptions.has(receiptPayload.right.capabilityNonceSha256)
+  ) {
+    return yield* v2Failure(
+      "CAS1_PREDECESSOR_LOST",
+      "R1 lacks the exact main consumption or already contains the receipt nonce"
+    )
+  }
+
+  const r1Sha = canonicalAtomV2StateSha256(mainEffect.right.nextState)
+  if (Either.isLeft(r1Sha)) {
+    return yield* v2Failure(
+      "CAS1_EXACT_R1_RECEIPT_PENDING",
+      "cannot hash exact recovered R1 for receipt admission"
+    )
+  }
+  const recoveredR1Snapshot = Object.freeze({
+    stateRevision: mainEffect.right.nextState.revision,
+    stateSha256: r1Sha.right,
+    journalLineageId: r1Witness.state.journalLineageId,
+    journalHead: r1.right.descriptor
+  })
+  if (
+    !sameCanonicalValue(
+      supplied.receipt.consumption.authorizationSnapshot,
+      recoveredR1Snapshot
+    ) ||
+    !sameCanonicalValue(
+      supplied.receipt.consumption.state,
+      mainEffect.right.nextState
+    ) ||
+    !sameCanonicalValue(
+      supplied.receipt.authority.state,
+      mainEffect.right.nextState
+    )
+  ) {
+    return yield* v2Failure(
+      "CAS1_EXACT_R1_RECEIPT_PENDING",
+      "receipt state and snapshot do not equal the raw-replayed R1"
+    )
+  }
+
+  const receiptAuthority = validateDnrd5V2AuthorityPayloadAtState({
+    ...supplied.receipt.authority,
+    state: mainEffect.right.nextState
+  })
+  const authorityPair = validateDnrd5V2AuthorityDisjointPair(
+    { ...supplied.main.authority, state: pre.canonical },
+    { ...supplied.receipt.authority, state: mainEffect.right.nextState }
+  )
+  if (
+    Either.isLeft(receiptAuthority) ||
+    receiptAuthority.right.chain.phase !== "RECEIPT_ADMIT" ||
+    Either.isLeft(authorityPair)
+  ) {
+    return yield* v2Failure(
+      "CAS1_EXACT_R1_RECEIPT_PENDING",
+      "R1 does not validate distinct main and evidence authority chains"
+    )
+  }
+  yield* verifyAuthorityBytes(runtime, supplied.receipt.authority)
+
+  const receiptConsumption = validateDnrd5V2Consumption({
+    ...supplied.receipt.consumption,
+    state: mainEffect.right.nextState,
+    authorizationSnapshot: recoveredR1Snapshot
+  })
+  if (Either.isLeft(receiptConsumption)) {
+    return yield* v2Failure(
+      "CAS1_EXACT_R1_RECEIPT_PENDING",
+      "receipt consumption candidate is invalid: " +
+        receiptConsumption.left.code
+    )
+  }
+  if (!consumptionMatchesAuthority(
+    receiptConsumption.right,
+    receiptAuthority.right
+  )) {
+    return yield* v2Failure(
+      "CAS1_EXACT_R1_RECEIPT_PENDING",
+      "receipt consumption does not bind the recovered evidence authority chain"
+    )
+  }
+  const receiptCommand = decodeV2ProjectionCommand(
+    supplied.receipt.consumption
+  )
+  if (Either.isLeft(receiptCommand)) {
+    return yield* v2Failure(
+      "CAS1_EXACT_R1_RECEIPT_PENDING",
+      receiptCommand.left.detail
+    )
+  }
+  if (!commandMatchesAuthority(receiptCommand.right, receiptAuthority.right)) {
+    return yield* v2Failure(
+      "CAS1_EXACT_R1_RECEIPT_PENDING",
+      "receipt command header does not bind the validated actor, capability, scope, and time"
+    )
+  }
+
+  // This check uses the actual raw R1 descriptor and happens before CAS2.
+  const exactReceipt = prevalidateRevisionReceipt(
+    supplied.receipt,
+    receiptCommand.right,
+    mainEffect.right,
+    mainConsumption.right
+  )
+  if (Either.isLeft(exactReceipt)) return yield* exactReceipt.left
+  const receiptPreflight = validateDnrd5V2ReceiptSealCandidate({
+    schema: runtime.schema,
+    preState: mainEffect.right.nextState,
+    predecessor: {
+      descriptor: r1.right.descriptor,
+      journalLineageId: r1Witness.state.journalLineageId,
+      schemaContentSha256: r1Witness.state.schema.content.sha256
+    },
+    precedingEffect: mainEffectInput,
+    command: receiptCommand.right,
+    evidenceAuthority: decoded.right.receipt.authority,
+    receiptPayloadBytes: exactReceipt.right.bytes,
+    receiptPayloadDescriptor: exactReceipt.right.descriptor
+  })
+  if (Either.isLeft(receiptPreflight)) {
+    return yield* v2Failure(
+      "CAS1_EXACT_R1_RECEIPT_PENDING",
+      "receipt failed pre-CAS DNRD grammar: " + receiptPreflight.left.code
+    )
+  }
+  yield* stageV2ConsumptionSupport(
+    runtime,
+    supplied.receipt.consumption,
+    receiptPayload.right
+  )
+  const receiptTransition = yield* stageV2Transition(
+    runtime,
+    supplied.receipt,
+    receiptCommand.right
+  )
+
+  const expectedR2 = expectedR1 + 1
+  const receiptAttempt = yield* Effect.either(
+    commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal(
+      runtime,
+      receiptTransition
+    )
+  )
+  const r2Witness =
+    yield* recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal(runtime)
+  if (r2Witness.state.canonical.revision === expectedR1) {
+    return yield* v2Failure(
+      "CAS1_EXACT_R1_RECEIPT_PENDING",
+      Either.isLeft(receiptAttempt)
+        ? "CAS2 did not append; exact R1 remains durably receipt-pending"
+        : "CAS2 returned without an exact recovered durable successor"
+    )
+  }
+  if (r2Witness.state.canonical.revision !== expectedR2) {
+    return yield* v2Failure(
+      "CAS2_PREDECESSOR_LOST",
+      "recovered durable tail advanced outside the exact R1 to R2 window"
+    )
+  }
+  const r2 = exactRecoveredTail(
+    r2Witness,
+    expectedR2,
+    "CAS2_PREDECESSOR_LOST"
+  )
+  if (Either.isLeft(r2)) return yield* r2.left
+  const receiptRawEnvelopes = yield* recoveredEnvelopesFor(
+    runtime,
+    r2.right.commit
+  )
+  const seal = validateDnrd5V2ReceiptSeal({
+    schema: runtime.schema,
+    preState: mainEffect.right.nextState,
+    predecessor: {
+      descriptor: r1.right.descriptor,
+      journalLineageId: r1Witness.state.journalLineageId,
+      schemaContentSha256: r1Witness.state.schema.content.sha256
+    },
+    precedingEffect: mainEffectInput,
+    command: receiptCommand.right,
+    evidenceAuthority: decoded.right.receipt.authority,
+    record: r2.right.commit,
+    recordBytes: r2.right.bytes,
+    recordDescriptor: r2.right.descriptor,
+    envelopes: receiptRawEnvelopes,
+    receiptPayloadBytes: exactReceipt.right.bytes,
+    receiptPayloadDescriptor: exactReceipt.right.descriptor,
+    usedReceiptRecordDescriptorSha256s: r1Witness.history.map(
+      (entry) => entry.record.sha256
+    )
+  })
+  if (Either.isLeft(seal)) {
+    return yield* v2Failure(
+      "CAS2_PREDECESSOR_LOST",
+      "R2 is not the exact receipt seal: " + seal.left.code
+    )
+  }
+  if (!sameCanonicalValue(seal.right.nextState, r2Witness.state.canonical)) {
+    return yield* v2Failure(
+      "CAS2_PREDECESSOR_LOST",
+      "raw R2 replay state differs from the recovered R2 state"
+    )
+  }
+
+  const r2Consumptions = yield* recoveredV2Consumptions(
+    runtime,
+    r2Witness.state.canonical.atoms
+  )
+  const recoveredReceiptConsumption = r2Consumptions.get(
+    receiptConsumption.right.capabilityNonceSha256
+  )
+  if (
+    recoveredReceiptConsumption === undefined ||
+    recoveredReceiptConsumption.phase !== "RECEIPT_ADMIT" ||
+    recoveredReceiptConsumption.atomKeyId !==
+      receiptConsumption.right.atomKeyId ||
+    !sameCanonicalValue(
+      recoveredReceiptConsumption.atom,
+      supplied.receipt.consumption.atom
+    )
+  ) {
+    return yield* v2Failure(
+      "CAS2_PREDECESSOR_LOST",
+      "R2 lacks the exact evidence-seal consumption"
+    )
+  }
+
+  return snapshot({
+    milestone: "CAS2_EXACT_R2_CONFIRMED" as const,
+    mainRecord: r1.right.descriptor,
+    receiptRecord: r2.right.descriptor,
+    mainConsumptionAtomKeyId: mainConsumption.right.atomKeyId,
+    receiptConsumptionAtomKeyId: receiptConsumption.right.atomKeyId,
+    terminal:
+      "NOT_PROVIDER_CALL_NOT_OCCURRENCE_NOT_LEARNING_NOT_EFFICACY" as const
+  })
+})

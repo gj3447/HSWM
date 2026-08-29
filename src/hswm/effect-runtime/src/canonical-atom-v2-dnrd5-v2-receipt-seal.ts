@@ -18,6 +18,7 @@ import { DNRD5_V2_REFERENCE_TYPE, validateDnrd5V2CanonicalSchema } from "./canon
 import { validateDnrd5V2AtomicBatchChronology, type Dnrd5V2AtomicBatchChronology } from "./canonical-atom-v2-dnrd5-v2-batch-chronology.js"
 import { deriveDnrd5V2PostcommitReceiptIdentity } from "./canonical-atom-v2-dnrd5-v2-receipt-identity.js"
 import { validateDnrd5V2RecordBoundEffect, type Dnrd5V2RecordBoundEffectInput } from "./canonical-atom-v2-dnrd5-v2-record-bound-effect.js"
+import { validateDnrd5V2AuthorityPayloadAtState, type Dnrd5V2AuthorityStateInput } from "./canonical-atom-v2-dnrd5-v2-authority.js"
 
 export const DNRD5_V2_RECEIPT_SEAL_V1 = "hswm-dnrd5-v2-receipt-seal/v1" as const
 export const DNRD5_V2_RECEIPT_PAYLOAD_MEDIA_TYPE = "application/vnd.hswm.dnrd5-v2.transition-receipt+json" as const
@@ -35,19 +36,23 @@ export interface Dnrd5V2ReceiptPayload {
   readonly effectConsumptionAtomKeyId: string
   readonly effectAtomKeyId: string
 }
-export interface Dnrd5V2ReceiptSealInput {
+export interface Dnrd5V2ReceiptSealCandidateInput {
   readonly schema: HSWMCanonicalSchemaV2
   readonly preState: CanonicalAtomV2State
   readonly predecessor: { readonly descriptor: CanonicalAtomV2StateJournalRecordDescriptor; readonly journalLineageId: string; readonly schemaContentSha256: string }
   /** Exact raw main-effect evidence; this verifier revalidates it internally. */
   readonly precedingEffect: Dnrd5V2RecordBoundEffectInput
   readonly command: CommitCanonicalAtomsV2Command
+  /** Full caller-supplied evidence authority; durable recovery remains a dispatcher concern. */
+  readonly evidenceAuthority: Dnrd5V2AuthorityStateInput
+  readonly receiptPayloadBytes: Uint8Array
+  readonly receiptPayloadDescriptor: CanonicalAtomV2ContentDescriptor
+}
+export interface Dnrd5V2ReceiptSealInput extends Dnrd5V2ReceiptSealCandidateInput {
   readonly record: CanonicalAtomV2StateJournalCommit
   readonly recordBytes: Uint8Array
   readonly recordDescriptor: CanonicalAtomV2StateJournalRecordDescriptor
   readonly envelopes: ReadonlyArray<Uint8Array>
-  readonly receiptPayloadBytes: Uint8Array
-  readonly receiptPayloadDescriptor: CanonicalAtomV2ContentDescriptor
   /** Bounded caller-supplied scope only; a global durable registry is excluded. */
   readonly usedReceiptRecordDescriptorSha256s: ReadonlyArray<string>
 }
@@ -58,6 +63,11 @@ export interface Dnrd5V2ReceiptSealValidated {
   readonly topology: Dnrd5V2AtomicBatchChronology
   readonly nextState: CanonicalAtomV2State
   readonly receiptRecordDescriptor: CanonicalAtomV2StateJournalRecordDescriptor
+  readonly postcommitReceiptIdentity: string
+}
+export interface Dnrd5V2ReceiptSealCandidateValidated {
+  readonly status: "RECEIPT_SEAL_CANDIDATE_VALIDATED_NOT_SUBMITTED"
+  readonly topology: Dnrd5V2AtomicBatchChronology
   readonly postcommitReceiptIdentity: string
 }
 const fail = (code: Dnrd5V2ReceiptSealErrorCode, detail: string): Either.Either<never, Dnrd5V2ReceiptSealError> => Either.left(new Dnrd5V2ReceiptSealError(code, detail))
@@ -83,41 +93,326 @@ const payloadFrom = (bytes: Uint8Array): Either.Either<Dnrd5V2ReceiptPayload, Dn
   return Either.isLeft(canonical) || !bytesSame(bytes, canonical.right) ? fail("PAYLOAD_INVALID", "receipt payload bytes are not exact canonical bytes") : Either.right(value as unknown as Dnrd5V2ReceiptPayload)
 }
 
-export const validateDnrd5V2ReceiptSeal = (input: Dnrd5V2ReceiptSealInput): Either.Either<Dnrd5V2ReceiptSealValidated, Dnrd5V2ReceiptSealError> => {
-  if (Either.isLeft(validateDnrd5V2CanonicalSchema(input.schema))) return fail("SCHEMA_INVALID", "requires the exact DNRD-5 v2 schema")
-  const precedingEffect = validateDnrd5V2RecordBoundEffect(input.precedingEffect)
-  if (Either.isLeft(precedingEffect)) return fail("EFFECT_INVALID", `preceding main effect is invalid: ${precedingEffect.left.code}: ${precedingEffect.left.detail}`)
-  const actualPreStateSha = canonicalAtomV2StateSha256(input.preState)
-  const effectNextStateSha = canonicalAtomV2StateSha256(precedingEffect.right.nextState)
-  if (Either.isLeft(actualPreStateSha) || Either.isLeft(effectNextStateSha) || input.record.schema.content.sha256 !== input.predecessor.schemaContentSha256 || input.record.journalLineageId !== input.predecessor.journalLineageId || input.predecessor.journalLineageId !== input.precedingEffect.record.journalLineageId || !descriptorSame(input.record.predecessor, input.predecessor.descriptor) || !descriptorSame(input.predecessor.descriptor, precedingEffect.right.effectRecordDescriptor) || input.preState.revision !== precedingEffect.right.nextState.revision || actualPreStateSha.right !== effectNextStateSha.right || !same(input.preState, precedingEffect.right.nextState) || input.record.stateRevision !== input.preState.revision + 1) return fail("PREDECESSOR_INVALID", "receipt record does not bind the exact preceding revalidated main-effect state")
-  const payload = payloadFrom(input.receiptPayloadBytes); if (Either.isLeft(payload)) return Either.left(payload.left)
-  const payloadDescriptor = makeCanonicalAtomV2ContentDescriptor(DNRD5_V2_RECEIPT_PAYLOAD_MEDIA_TYPE, input.receiptPayloadBytes)
-  if (Either.isLeft(payloadDescriptor) || !sameCanonicalAtomV2ContentDescriptor(payloadDescriptor.right, input.receiptPayloadDescriptor)) return fail("PAYLOAD_INVALID", "receipt payload descriptor is not recomputed from supplied bytes")
-  const topology = validateDnrd5V2AtomicBatchChronology(input.schema, input.preState, input.command)
-  if (Either.isLeft(topology)) return fail("BATCH_INVALID", `${topology.left.code}: ${topology.left.detail}`)
-  if (input.command.writes.length !== 2) return fail("GRAMMAR_INVALID", "receipt seal command has exactly two writes")
-  const evidence = input.command.writes.find((a) => a.kind === "hswm:dnrd5:v2:evidence_seal_consumption")
-  const receipt = input.command.writes.find((a) => a.kind === "hswm:dnrd5:v2:revision_transition_receipt" || a.kind === "hswm:dnrd5:v2:rollback_transition_receipt")
-  if (evidence === undefined || receipt === undefined) return fail("GRAMMAR_INVALID", "receipt seal writes must be evidence consumption plus one receipt")
-  const kind = receipt.kind.endsWith(":revision_transition_receipt") ? "REVISION" : "ROLLBACK"
-  const decision = exactlyOneReference(receipt, "decision"), consumption = exactlyOneReference(receipt, "effect-consumption"), effect = exactlyOneReference(receipt, kind === "REVISION" ? "successor" : "restore"), evidenceRef = exactlyOneReference(receipt, "evidence-consumption")
-  const purpose = exactlyOneReference(evidence, "purpose"), evidenceGrant = exactlyOneReference(evidence, "grant"), evidenceCapability = exactlyOneReference(evidence, "capability"), evidenceRevocation = exactlyOneReference(evidence, "revocation")
-  if ([decision, consumption, effect, evidenceRef, purpose, evidenceGrant, evidenceCapability, evidenceRevocation].some((r) => r === undefined) || canonicalAtomV2KeyId(evidenceRef!.target) !== key(evidence) || canonicalAtomV2KeyId(purpose!.target) !== canonicalAtomV2KeyId(decision!.target)) return fail("GRAMMAR_INVALID", "receipt/evidence references do not form the exact same-decision seal")
-  const decisionAtom = input.preState.atoms.find((atom) => canonicalAtomV2KeyId(atom.key) === canonicalAtomV2KeyId(decision!.target))
-  const decisionGrant = decisionAtom === undefined ? undefined : exactlyOneReference(decisionAtom, "grant")
-  const decisionCapability = decisionAtom === undefined ? undefined : exactlyOneReference(decisionAtom, "capability")
-  const decisionRevocation = decisionAtom === undefined ? undefined : exactlyOneReference(decisionAtom, "revocation")
-  if ([decisionGrant, decisionCapability, decisionRevocation].some((r) => r === undefined) || canonicalAtomV2KeyId(evidenceGrant!.target) !== canonicalAtomV2KeyId(decisionGrant!.target) || canonicalAtomV2KeyId(evidenceCapability!.target) !== canonicalAtomV2KeyId(decisionCapability!.target) || canonicalAtomV2KeyId(evidenceRevocation!.target) !== canonicalAtomV2KeyId(decisionRevocation!.target)) return fail("GRAMMAR_INVALID", "evidence authority triple must equal the chosen decision authority triple")
-  if (!sameCanonicalAtomV2ContentDescriptor(receipt.content, input.receiptPayloadDescriptor)) return fail("PAYLOAD_INVALID", "receipt atom payload descriptor does not bind supplied raw bytes")
-  const recomputedIdentity = deriveDnrd5V2PostcommitReceiptIdentity({ effectRecordDescriptorSha256: precedingEffect.right.effectRecordDescriptor.sha256, journalLineageId: input.predecessor.journalLineageId, transitionId: input.precedingEffect.command.transitionId, decisionAtomKeyId: canonicalAtomV2KeyId(decision!.target), effectConsumptionAtomKeyId: canonicalAtomV2KeyId(consumption!.target), effectAtomKeyId: canonicalAtomV2KeyId(effect!.target) })
-  if (Either.isLeft(recomputedIdentity) || receipt.key.atomUid !== `receipt:${recomputedIdentity.right}` || payload.right.receiptKind !== kind || payload.right.precedingEffectRecordDescriptorSha256 !== precedingEffect.right.effectRecordDescriptor.sha256 || payload.right.postcommitReceiptIdentity !== precedingEffect.right.deterministicFuturePostcommitReceiptIdentity || payload.right.postcommitReceiptIdentity !== recomputedIdentity.right || payload.right.decisionAtomKeyId !== canonicalAtomV2KeyId(decision!.target) || payload.right.effectConsumptionAtomKeyId !== canonicalAtomV2KeyId(consumption!.target) || payload.right.effectAtomKeyId !== canonicalAtomV2KeyId(effect!.target)) return fail("IDENTITY_INVALID", "payload or receipt UID does not bind the preceding revalidated effect identity")
-  const before = canonicalAtomV2StateSha256(input.preState); const expectedReceipt = makeCanonicalAtomV2AcceptedReceipt(input.command, input.preState.revision, topology.right.nextState.revision)
-  if (Either.isLeft(before) || input.record.previousStateSha256 !== before.right || !same(input.record.receipt, expectedReceipt)) return fail("RECORD_INVALID", "record does not match raw command/prestate")
-  if (input.envelopes.length !== 2 || !input.record.writeBindings.every((binding, i) => { const atom = input.command.writes.find((a) => canonicalAtomV2KeyId(a.key) === canonicalAtomV2KeyId(binding.key)); const encoded = atom === undefined ? undefined : canonicalAtomV2EnvelopeBytes(atom); return encoded !== undefined && Either.isRight(encoded) && bytesSame(encoded.right, input.envelopes[i]!) })) return fail("RECORD_INVALID", "receipt journal envelopes are not exact command envelopes")
-  const applied = applyCanonicalAtomV2StateJournalCommit(input.schema, { state: input.preState, descriptor: input.predecessor.descriptor, journalLineageId: input.predecessor.journalLineageId, schema: input.record.schema }, input.record, input.envelopes)
-  if (Either.isLeft(applied) || !same(applied.right.state, topology.right.nextState)) return fail("RECORD_INVALID", "receipt journal replay differs from generic batch replay")
-  const bytes = canonicalAtomV2StateJournalRecordBytes(input.record); const descriptor = describeCanonicalAtomV2StateJournalRecord(input.record)
-  if (Either.isLeft(bytes) || Either.isLeft(descriptor) || !bytesSame(bytes.right, input.recordBytes) || !descriptorSame(descriptor.right, input.recordDescriptor)) return fail("DESCRIPTOR_INVALID", "receipt record bytes or descriptor are not recomputed")
-  if (input.usedReceiptRecordDescriptorSha256s.includes(input.recordDescriptor.sha256)) return fail("REPLAY_INVALID", "receipt record descriptor already used in supplied scope")
-  return Either.right(Object.freeze({ status: "RAW_RECEIPT_SEAL_VALIDATED_NOT_PERMIT_OR_OCCURRENCE" as const, topology: topology.right, nextState: applied.right.state, receiptRecordDescriptor: descriptor.right, postcommitReceiptIdentity: recomputedIdentity.right }))
+export const validateDnrd5V2ReceiptSealCandidate = (
+  input: Dnrd5V2ReceiptSealCandidateInput
+): Either.Either<Dnrd5V2ReceiptSealCandidateValidated, Dnrd5V2ReceiptSealError> => {
+  try {
+    if (Either.isLeft(validateDnrd5V2CanonicalSchema(input.schema))) {
+      return fail("SCHEMA_INVALID", "requires the exact DNRD-5 v2 schema")
+    }
+    const precedingEffect = validateDnrd5V2RecordBoundEffect(
+      input.precedingEffect
+    )
+    if (Either.isLeft(precedingEffect)) {
+      return fail(
+        "EFFECT_INVALID",
+        "preceding main effect is invalid: " +
+          precedingEffect.left.code +
+          ": " +
+          precedingEffect.left.detail
+      )
+    }
+    const actualPreStateSha = canonicalAtomV2StateSha256(input.preState)
+    const effectNextStateSha = canonicalAtomV2StateSha256(
+      precedingEffect.right.nextState
+    )
+    if (
+      Either.isLeft(actualPreStateSha) ||
+      Either.isLeft(effectNextStateSha) ||
+      input.predecessor.schemaContentSha256 !==
+        input.precedingEffect.record.schema.content.sha256 ||
+      input.predecessor.journalLineageId !==
+        input.precedingEffect.record.journalLineageId ||
+      !descriptorSame(
+        input.predecessor.descriptor,
+        precedingEffect.right.effectRecordDescriptor
+      ) ||
+      input.preState.revision !== precedingEffect.right.nextState.revision ||
+      actualPreStateSha.right !== effectNextStateSha.right ||
+      !same(input.preState, precedingEffect.right.nextState)
+    ) {
+      return fail(
+        "PREDECESSOR_INVALID",
+        "receipt candidate does not bind the exact preceding revalidated main-effect state"
+      )
+    }
+
+    const payload = payloadFrom(input.receiptPayloadBytes)
+    if (Either.isLeft(payload)) return Either.left(payload.left)
+    const payloadDescriptor = makeCanonicalAtomV2ContentDescriptor(
+      DNRD5_V2_RECEIPT_PAYLOAD_MEDIA_TYPE,
+      input.receiptPayloadBytes
+    )
+    if (
+      Either.isLeft(payloadDescriptor) ||
+      !sameCanonicalAtomV2ContentDescriptor(
+        payloadDescriptor.right,
+        input.receiptPayloadDescriptor
+      )
+    ) {
+      return fail(
+        "PAYLOAD_INVALID",
+        "receipt payload descriptor is not recomputed from supplied bytes"
+      )
+    }
+
+    const topology = validateDnrd5V2AtomicBatchChronology(
+      input.schema,
+      input.preState,
+      input.command
+    )
+    if (Either.isLeft(topology)) {
+      return fail(
+        "BATCH_INVALID",
+        topology.left.code + ": " + topology.left.detail
+      )
+    }
+    if (input.command.writes.length !== 2) {
+      return fail(
+        "GRAMMAR_INVALID",
+        "receipt seal command has exactly two writes"
+      )
+    }
+    const evidence = input.command.writes.find(
+      (atom) => atom.kind === "hswm:dnrd5:v2:evidence_seal_consumption"
+    )
+    const receipt = input.command.writes.find(
+      (atom) =>
+        atom.kind === "hswm:dnrd5:v2:revision_transition_receipt" ||
+        atom.kind === "hswm:dnrd5:v2:rollback_transition_receipt"
+    )
+    if (evidence === undefined || receipt === undefined) {
+      return fail(
+        "GRAMMAR_INVALID",
+        "receipt seal writes must be evidence consumption plus one receipt"
+      )
+    }
+    const kind = receipt.kind.endsWith(":revision_transition_receipt")
+      ? "REVISION"
+      : "ROLLBACK"
+    const decision = exactlyOneReference(receipt, "decision")
+    const consumption = exactlyOneReference(receipt, "effect-consumption")
+    const effect = exactlyOneReference(
+      receipt,
+      kind === "REVISION" ? "successor" : "restore"
+    )
+    const evidenceRef = exactlyOneReference(receipt, "evidence-consumption")
+    const purpose = exactlyOneReference(evidence, "purpose")
+    const evidenceGrant = exactlyOneReference(evidence, "grant")
+    const evidenceCapability = exactlyOneReference(evidence, "capability")
+    const evidenceRevocation = exactlyOneReference(evidence, "revocation")
+    if (
+      [
+        decision,
+        consumption,
+        effect,
+        evidenceRef,
+        purpose,
+        evidenceGrant,
+        evidenceCapability,
+        evidenceRevocation
+      ].some((reference) => reference === undefined) ||
+      canonicalAtomV2KeyId(evidenceRef!.target) !== key(evidence) ||
+      canonicalAtomV2KeyId(purpose!.target) !==
+        canonicalAtomV2KeyId(decision!.target)
+    ) {
+      return fail(
+        "GRAMMAR_INVALID",
+        "receipt/evidence references do not form the exact same-decision seal"
+      )
+    }
+
+    const evidenceAuthority = validateDnrd5V2AuthorityPayloadAtState(
+      input.evidenceAuthority
+    )
+    if (Either.isLeft(evidenceAuthority)) {
+      return fail(
+        "GRAMMAR_INVALID",
+        "evidence authority payload is invalid: " +
+          evidenceAuthority.left.code +
+          ": " +
+          evidenceAuthority.left.detail
+      )
+    }
+    const expectedEvidencePhase = kind === "REVISION"
+      ? "RECEIPT_ADMIT"
+      : "RECEIPT_RESTORE"
+    if (
+      evidenceAuthority.right.stateRevision !== input.preState.revision ||
+      evidenceAuthority.right.stateSha256 !== actualPreStateSha.right ||
+      evidenceAuthority.right.chain.phase !== expectedEvidencePhase ||
+      evidenceAuthority.right.chain.purposeAtomKeyId !==
+        canonicalAtomV2KeyId(decision!.target) ||
+      evidenceAuthority.right.chain.grantAtomKeyId !==
+        canonicalAtomV2KeyId(evidenceGrant!.target) ||
+      evidenceAuthority.right.chain.capabilityAtomKeyId !==
+        canonicalAtomV2KeyId(evidenceCapability!.target) ||
+      evidenceAuthority.right.chain.revocationAtomKeyId !==
+        canonicalAtomV2KeyId(evidenceRevocation!.target) ||
+      input.command.actorClaim !== evidenceAuthority.right.chain.actor ||
+      input.command.authorizationRef !==
+        evidenceAuthority.right.chain.capabilityId ||
+      input.command.scope !== evidenceAuthority.right.chain.scope ||
+      input.command.decidedAt !== evidenceAuthority.right.evaluatedAt
+    ) {
+      return fail(
+        "GRAMMAR_INVALID",
+        "receipt command and evidence consumption do not bind the fully validated phase authority"
+      )
+    }
+    if (
+      !sameCanonicalAtomV2ContentDescriptor(
+        receipt.content,
+        input.receiptPayloadDescriptor
+      )
+    ) {
+      return fail(
+        "PAYLOAD_INVALID",
+        "receipt atom payload descriptor does not bind supplied raw bytes"
+      )
+    }
+
+    const recomputedIdentity = deriveDnrd5V2PostcommitReceiptIdentity({
+      effectRecordDescriptorSha256:
+        precedingEffect.right.effectRecordDescriptor.sha256,
+      journalLineageId: input.predecessor.journalLineageId,
+      transitionId: input.precedingEffect.command.transitionId,
+      decisionAtomKeyId: canonicalAtomV2KeyId(decision!.target),
+      effectConsumptionAtomKeyId: canonicalAtomV2KeyId(consumption!.target),
+      effectAtomKeyId: canonicalAtomV2KeyId(effect!.target)
+    })
+    if (
+      Either.isLeft(recomputedIdentity) ||
+      receipt.key.atomUid !== "receipt:" + recomputedIdentity.right ||
+      payload.right.receiptKind !== kind ||
+      payload.right.precedingEffectRecordDescriptorSha256 !==
+        precedingEffect.right.effectRecordDescriptor.sha256 ||
+      payload.right.postcommitReceiptIdentity !==
+        precedingEffect.right.deterministicFuturePostcommitReceiptIdentity ||
+      payload.right.postcommitReceiptIdentity !== recomputedIdentity.right ||
+      payload.right.decisionAtomKeyId !==
+        canonicalAtomV2KeyId(decision!.target) ||
+      payload.right.effectConsumptionAtomKeyId !==
+        canonicalAtomV2KeyId(consumption!.target) ||
+      payload.right.effectAtomKeyId !== canonicalAtomV2KeyId(effect!.target)
+    ) {
+      return fail(
+        "IDENTITY_INVALID",
+        "payload or receipt UID does not bind the preceding revalidated effect identity"
+      )
+    }
+    return Either.right(Object.freeze({
+      status: "RECEIPT_SEAL_CANDIDATE_VALIDATED_NOT_SUBMITTED" as const,
+      topology: topology.right,
+      postcommitReceiptIdentity: recomputedIdentity.right
+    }))
+  } catch {
+    return fail(
+      "GRAMMAR_INVALID",
+      "receipt seal candidate could not be safely inspected"
+    )
+  }
+}
+
+export const validateDnrd5V2ReceiptSeal = (
+  input: Dnrd5V2ReceiptSealInput
+): Either.Either<Dnrd5V2ReceiptSealValidated, Dnrd5V2ReceiptSealError> => {
+  const candidate = validateDnrd5V2ReceiptSealCandidate(input)
+  if (Either.isLeft(candidate)) return Either.left(candidate.left)
+  if (
+    input.record.schema.content.sha256 !==
+      input.predecessor.schemaContentSha256 ||
+    input.record.journalLineageId !== input.predecessor.journalLineageId ||
+    !descriptorSame(input.record.predecessor, input.predecessor.descriptor) ||
+    input.record.stateRevision !== input.preState.revision + 1
+  ) {
+    return fail(
+      "PREDECESSOR_INVALID",
+      "receipt record does not bind the exact candidate predecessor"
+    )
+  }
+
+  const before = canonicalAtomV2StateSha256(input.preState)
+  const expectedReceipt = makeCanonicalAtomV2AcceptedReceipt(
+    input.command,
+    input.preState.revision,
+    candidate.right.topology.nextState.revision
+  )
+  if (
+    Either.isLeft(before) ||
+    input.record.previousStateSha256 !== before.right ||
+    !same(input.record.receipt, expectedReceipt)
+  ) {
+    return fail("RECORD_INVALID", "record does not match raw command/prestate")
+  }
+  if (
+    input.envelopes.length !== 2 ||
+    !input.record.writeBindings.every((binding, index) => {
+      const atom = input.command.writes.find(
+        (candidateAtom) =>
+          canonicalAtomV2KeyId(candidateAtom.key) ===
+            canonicalAtomV2KeyId(binding.key)
+      )
+      const encoded =
+        atom === undefined ? undefined : canonicalAtomV2EnvelopeBytes(atom)
+      return encoded !== undefined &&
+        Either.isRight(encoded) &&
+        bytesSame(encoded.right, input.envelopes[index]!)
+    })
+  ) {
+    return fail(
+      "RECORD_INVALID",
+      "receipt journal envelopes are not exact command envelopes"
+    )
+  }
+  const applied = applyCanonicalAtomV2StateJournalCommit(
+    input.schema,
+    {
+      state: input.preState,
+      descriptor: input.predecessor.descriptor,
+      journalLineageId: input.predecessor.journalLineageId,
+      schema: input.record.schema
+    },
+    input.record,
+    input.envelopes
+  )
+  if (
+    Either.isLeft(applied) ||
+    !same(applied.right.state, candidate.right.topology.nextState)
+  ) {
+    return fail(
+      "RECORD_INVALID",
+      "receipt journal replay differs from generic batch replay"
+    )
+  }
+  const bytes = canonicalAtomV2StateJournalRecordBytes(input.record)
+  const descriptor = describeCanonicalAtomV2StateJournalRecord(input.record)
+  if (
+    Either.isLeft(bytes) ||
+    Either.isLeft(descriptor) ||
+    !bytesSame(bytes.right, input.recordBytes) ||
+    !descriptorSame(descriptor.right, input.recordDescriptor)
+  ) {
+    return fail(
+      "DESCRIPTOR_INVALID",
+      "receipt record bytes or descriptor are not recomputed"
+    )
+  }
+  if (
+    input.usedReceiptRecordDescriptorSha256s.includes(
+      input.recordDescriptor.sha256
+    )
+  ) {
+    return fail(
+      "REPLAY_INVALID",
+      "receipt record descriptor already used in supplied scope"
+    )
+  }
+  return Either.right(Object.freeze({
+    status: "RAW_RECEIPT_SEAL_VALIDATED_NOT_PERMIT_OR_OCCURRENCE" as const,
+    topology: candidate.right.topology,
+    nextState: applied.right.state,
+    receiptRecordDescriptor: descriptor.right,
+    postcommitReceiptIdentity: candidate.right.postcommitReceiptIdentity
+  }))
 }

@@ -2,8 +2,8 @@
 
 - Date: 2026-08-28
 - Scope: local, no-provider-call instrumentation
-- Predecessor implementation: `d772b71a43e92269cb55e63884d6a74c20195b7b`
-- Predecessor CI: passed
+- Recovery/authority/consumption predecessors: `d772b71`, `e98d491`, `61d81c3`
+- Latest predecessor CI: passed (`61d81c3`)
 - Scientific status: `UNJUDGED / NOT AN OCCURRENCE / NOT EFFICACY`
 
 ## Canonical target role
@@ -86,6 +86,47 @@ not establish global or cross-purpose nonce consumption; the durable
 dispatcher must make that guarantee from recovered state and compare-and-swap
 outcomes.
 
+The current increment implements the first narrow durable dispatcher path:
+initial-only `ADMIT` from an exact recovered S0 through two separately
+authorized compare-and-swap records. Before CAS1 it strictly decodes and
+defensively snapshots the caller input, reconstructs the two-write command
+from the consumption projection, validates the exact DNRD effect grammar,
+binds actor/capability/scope/time to the validated main authority, and scans
+all recovered `capability_consumption` and `evidence_seal_consumption` atoms
+for a duplicate nonce across phases. Payload and envelope bindings are
+recomputed from the supplied bytes before submission.
+
+CAS1 is followed unconditionally by one raw recovery observation, including
+when the submit call reports failure. Confirmation requires the exact next
+revision, canonical journal bytes and descriptor, immediate predecessor,
+write envelopes reread in journal-binding order, raw record replay, and the
+exact main consumption atom. Receipt bytes and UID are then derived only from
+that recovered R1 identity. Before CAS2, the dispatcher validates a disjoint
+`RECEIPT_ADMIT` authority chain at exact R1, the receipt consumption, and the
+full receipt grammar. CAS2 is likewise followed unconditionally by raw
+recovery and full receipt-seal replay before returning
+`CAS2_EXACT_R2_CONFIRMED`.
+
+The exported module-level receipt candidate verifier no longer accepts an
+unvalidated grant/capability/revocation ID tuple. It revalidates the full
+evidence authority payload against the exact receipt prestate and binds its
+receipt phase, decision purpose, three authority references, actor, capability
+ID, scope, and evaluation time. This resolves a genuine protocol contradiction:
+the old receipt check required the evidence triple to equal the main
+decision's authority triple, while the two-phase protocol requires the main
+and evidence chains to be distinct.
+
+Focused falsification covers the exact S0→R1→R2 success path and immediate
+retry rejection, malformed ingress without journal mutation, a forged receipt
+that leaves exact R1 without CAS2, a main command authority-header mismatch,
+main/evidence authority cross-wiring, and cross-phase nonce reuse. Standalone
+receipt verification additionally rejects authority/header/phase/purpose and
+raw-record cross-wires. Dedicated cases also show that generic-schema-valid
+but DNRD-grammar-invalid main and receipt commands are rejected before their
+respective CAS, leaving S0 or exact receipt-pending R1 unchanged. These tests
+establish behavior of the local instrument; they are not evidence that HSWM
+learned or improved.
+
 Exactly one schema-relative responsibility owner per atom does not by itself
 require a different runtime principal for every custodian role. This bounded
 verifier requires the declared authorizer to differ from the actor and each
@@ -114,34 +155,38 @@ references, and nonces are distinct. They may share a policy only when that
 policy explicitly authorizes both matching phases for the same actor, scope,
 and decision purpose.
 
-After a crash following CAS1, recovery must never resubmit the main command.
-Only an exact R1 match may proceed to deterministic receipt construction and
-CAS2. A missing, competing, or mismatched R1 is incomplete or conflicting,
-never silently relabeled as success. Receipt identity derives from the actual
-recovered CAS1 record descriptor and contains no self-hash of its own future
-record.
+After a crash following CAS1, a future resume entrypoint must never resubmit
+the main command. Only an exact R1 match may proceed to deterministic receipt
+construction and CAS2. A missing, competing, or mismatched R1 is incomplete
+or conflicting, never silently relabeled as success. Receipt identity derives
+from the actual recovered CAS1 record descriptor and contains no self-hash of
+its own future record. The current entrypoint is intentionally initial-only:
+it fails closed when invoked against an already advanced prefix and therefore
+does not yet claim crash-resume.
 
 ## Explicit nonclaims and next gate
 
 The present instruments do not prove external authorization, trusted time,
-custody, nonce uniqueness beyond one recovered lineage, an exact CAS1 result,
-provider execution, Source A, occurrence, macroplastic learning, causal
-improvement, or efficacy. A caller-supplied state cannot by itself prove
-durable recovery, and an immutable `CHECKED_NOT_REVOKED` payload is only a
-snapshot-local record unless a later authenticated revocation/time source is
-bound.
+external custody, nonce uniqueness beyond one recovered lineage, crash
+resumption, provider execution, Source A, occurrence, macroplastic learning,
+causal improvement, or efficacy. They do establish exact local R1/R2 recovery
+for the successful initial-only ADMIT path. A caller-supplied state cannot by
+itself prove durable recovery, and an immutable `CHECKED_NOT_REVOKED` payload
+is only a snapshot-local record unless a later authenticated revocation/time
+source is bound.
 
-The next implementation gate is therefore narrow:
+The next implementation gate is therefore narrow and ordered:
 
-1. bind validated main authority and consumption candidates to an exact
-   recovered S0 and exact ADMIT command;
-2. execute CAS1 once and recover its exact raw record as R1;
-3. revalidate distinct evidence authority at R1, derive the receipt solely
-   from R1, and execute CAS2 once;
-4. recover and verify R2;
-5. reject crash, replay, stale-head, cross-wired purpose/authority, and
-   concurrent-writer counterexamples; and
-6. repeat the same contract for RESTORE before any provider call.
+1. add an idempotent resume contract that identifies an exact S0/R1 prefix
+   without ever resubmitting CAS1;
+2. inject lost-return and process-boundary failures after CAS1 and CAS2, and
+   distinguish exact receipt-pending state from competing or malformed tails;
+3. add stale-head and concurrent-writer schedules that prove one durable
+   winner and deterministic loser classification;
+4. implement and falsify the symmetric `MAIN_RESTORE` / `RECEIPT_RESTORE`
+   two-CAS path; and
+5. only then connect the provider-free randomized/placebo causal experiment
+   runner that can test outcome→credit→revision→fresh-behavior effects.
 
 Because this work is instrumentation rather than a material research result,
 it creates no content-addressed result receipt and no

@@ -163,18 +163,48 @@ const validateGrammar = (preState: CanonicalAtomV2State, command: CommitCanonica
   return Either.right(undefined)
 }
 
+export interface Dnrd5V2EffectCommandCandidateValidated {
+  readonly status: "EFFECT_COMMAND_CANDIDATE_VALIDATED_NOT_SUBMITTED"
+  readonly topology: Dnrd5V2AtomicBatchChronology
+}
+
+/**
+ * Pure pre-CAS effect grammar check. It shares the exact topology and
+ * cross-wire rules used again by the raw-record verifier after publication.
+ */
+export const validateDnrd5V2EffectCommandCandidate = (
+  schema: HSWMCanonicalSchemaV2,
+  preState: CanonicalAtomV2State,
+  command: CommitCanonicalAtomsV2Command
+): Either.Either<Dnrd5V2EffectCommandCandidateValidated, Dnrd5V2RecordBoundEffectError> => {
+  if (Either.isLeft(validateDnrd5V2CanonicalSchema(schema))) {
+    return fail("SCHEMA_INVALID", "requires exact DNRD-5 successor schema")
+  }
+  const topology = validateDnrd5V2AtomicBatchChronology(schema, preState, command)
+  if (Either.isLeft(topology)) {
+    return fail("BATCH_INVALID", `${topology.left.code}: ${topology.left.detail}`)
+  }
+  const grammar = validateGrammar(preState, command)
+  if (Either.isLeft(grammar)) return Either.left(grammar.left)
+  return Either.right(Object.freeze({
+    status: "EFFECT_COMMAND_CANDIDATE_VALIDATED_NOT_SUBMITTED" as const,
+    topology: topology.right
+  }))
+}
+
 /** Recomputes a single effect record from actual command, state and journal bytes. */
 export const validateDnrd5V2RecordBoundEffect = (input: Dnrd5V2RecordBoundEffectInput): Either.Either<Dnrd5V2RecordBoundEffectValidated, Dnrd5V2RecordBoundEffectError> => {
-  if (Either.isLeft(validateDnrd5V2CanonicalSchema(input.schema))) return fail("SCHEMA_INVALID", "requires exact DNRD-5 successor schema")
+  const candidate = validateDnrd5V2EffectCommandCandidate(
+    input.schema,
+    input.preState,
+    input.command
+  )
+  if (Either.isLeft(candidate)) return Either.left(candidate.left)
   if (input.record.schema.schemaVersion !== input.schema.schemaVersion || input.record.schema.content.sha256 !== input.predecessor.schemaContentSha256) return fail("PREDECESSOR_INVALID", "record schema binding differs from the predecessor's exact schema content")
-  const topology = validateDnrd5V2AtomicBatchChronology(input.schema, input.preState, input.command)
-  if (Either.isLeft(topology)) return fail("BATCH_INVALID", `${topology.left.code}: ${topology.left.detail}`)
-  const grammar = validateGrammar(input.preState, input.command)
-  if (Either.isLeft(grammar)) return Either.left(grammar.left)
   if (input.record.journalLineageId !== input.predecessor.journalLineageId || !descriptorSame(input.record.predecessor, input.predecessor.descriptor) || input.record.stateRevision !== input.preState.revision + 1) return fail("PREDECESSOR_INVALID", "record does not bind the exact immediate predecessor")
   const before = canonicalAtomV2StateSha256(input.preState)
   if (Either.isLeft(before) || (Either.isRight(before) && input.record.previousStateSha256 !== before.right)) return fail("STATE_INVALID", "record prior state hash does not equal actual preState")
-  const expectedReceipt = makeCanonicalAtomV2AcceptedReceipt(input.command, input.preState.revision, topology.right.nextState.revision)
+  const expectedReceipt = makeCanonicalAtomV2AcceptedReceipt(input.command, input.preState.revision, candidate.right.topology.nextState.revision)
   if (!same(input.record.receipt, expectedReceipt)) return fail("RECEIPT_INVALID", "record receipt is not the exact generic accepted receipt")
   const ids = input.command.writes.map((a) => keyId(a.key)).sort()
   const bindingIds = input.record.writeBindings.map((b) => keyId(b.key))
@@ -189,7 +219,7 @@ export const validateDnrd5V2RecordBoundEffect = (input: Dnrd5V2RecordBoundEffect
   }
   const applied = applyCanonicalAtomV2StateJournalCommit(input.schema, { state: input.preState, descriptor: input.predecessor.descriptor, journalLineageId: input.predecessor.journalLineageId, schema: input.record.schema }, input.record, input.envelopes)
   if (Either.isLeft(applied)) return fail("RECORD_INVALID", `${applied.left.code}: ${applied.left.detail}`)
-  if (!same(applied.right.state, topology.right.nextState)) return fail("STATE_INVALID", "journal replay next state differs from generic batch replay")
+  if (!same(applied.right.state, candidate.right.topology.nextState)) return fail("STATE_INVALID", "journal replay next state differs from generic batch replay")
   const canonicalBytes = canonicalAtomV2StateJournalRecordBytes(input.record)
   if (Either.isLeft(canonicalBytes) || (Either.isRight(canonicalBytes) && (canonicalBytes.right.byteLength !== input.recordBytes.byteLength || !canonicalBytes.right.every((v, i) => v === input.recordBytes[i])))) return fail("RECORD_INVALID", "supplied record bytes are not exact canonical journal bytes")
   const descriptor = describeCanonicalAtomV2StateJournalRecord(input.record)
@@ -206,5 +236,5 @@ export const validateDnrd5V2RecordBoundEffect = (input: Dnrd5V2RecordBoundEffect
     effectAtomKeyId: keyId(effect.key)
   })
   if (Either.isLeft(identity)) return fail("IDENTITY_INVALID", identity.left.detail)
-  return Either.right(Object.freeze({ status: "RECORD_BOUND_EFFECT_VALIDATED_NOT_PERMIT_OR_OCCURRENCE", topology: topology.right, nextState: applied.right.state, effectRecordDescriptor: descriptor.right, deterministicFuturePostcommitReceiptIdentity: identity.right }))
+  return Either.right(Object.freeze({ status: "RECORD_BOUND_EFFECT_VALIDATED_NOT_PERMIT_OR_OCCURRENCE", topology: candidate.right.topology, nextState: applied.right.state, effectRecordDescriptor: descriptor.right, deterministicFuturePostcommitReceiptIdentity: identity.right }))
 }

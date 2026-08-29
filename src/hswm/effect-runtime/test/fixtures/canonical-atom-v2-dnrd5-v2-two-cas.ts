@@ -53,7 +53,8 @@ import {
 import {
   DNRD5_V2_RECEIPT_PAYLOAD_MEDIA_TYPE,
   DNRD5_V2_RECEIPT_SEAL_V1,
-  canonicalDnrd5V2ReceiptPayloadBytes
+  canonicalDnrd5V2ReceiptPayloadBytes,
+  validateDnrd5V2ReceiptSeal
 } from "../../src/canonical-atom-v2-dnrd5-v2-receipt-seal.js"
 import {
   validateDnrd5V2RecordBoundEffect
@@ -66,8 +67,18 @@ import {
   type Dnrd5V2CanonicalAtomKind
 } from "../../src/canonical-atom-v2-dnrd5-v2-schema.js"
 import {
+  DNRD5_V2_BEHAVIORAL_ROOT_V1,
+  DNRD5_V2_COMPILED_BEHAVIOR_READSET_V1,
+  DNRD5_V2_EXACT_W0_PROJECTION_MEDIA_TYPE,
+  DNRD5_V2_EXACT_W0_RESTORE_PROJECTION_V1,
+  DNRD5_V2_EXACT_W0_TARGET_MEDIA_TYPE,
+  type Dnrd5V2ExactW0RestoreProjectionInput
+} from "../../src/canonical-atom-v2-dnrd5-v2-exact-w0-restore-projection.js"
+import {
   DNRD5_V2_TWO_CAS_ADMIT_V1,
   type Dnrd5V2TwoCasAdmitInput,
+  DNRD5_V2_TWO_CAS_RESTORE_V1,
+  type Dnrd5V2TwoCasRestoreInput,
   type Dnrd5V2TwoCasPhaseInput
 } from "../../src/canonical-atom-v2-dnrd5-durable-permit.js"
 import {
@@ -96,6 +107,8 @@ const BOOTSTRAP_AUTHORIZATION = "authorization:dnrd5:v2:bootstrap"
 const BOOTSTRAP_SCOPE = "scope:dnrd5:v2:bootstrap"
 const MAIN_CAPABILITY_ID = "capability:dnrd5:v2:main"
 const EVIDENCE_CAPABILITY_ID = "capability:dnrd5:v2:evidence"
+const RESTORE_MAIN_CAPABILITY_ID = "capability:dnrd5:v2:restore-main"
+const RESTORE_EVIDENCE_CAPABILITY_ID = "capability:dnrd5:v2:restore-evidence"
 const SCOPE = "scope:dnrd5:v2:experiment"
 const ACTOR = "principal:dnrd5:v2:actor"
 
@@ -147,6 +160,18 @@ const grants: ReadonlyArray<CanonicalAtomV2ContentAuthorizationGrant> = [
   },
   {
     authorizationRef: EVIDENCE_CAPABILITY_ID,
+    schemaVersion: DNRD5_V2_SCHEMA_VERSION,
+    schemaContentSha256: schemaContent.binding.content.sha256,
+    scopes: [SCOPE]
+  },
+  {
+    authorizationRef: RESTORE_MAIN_CAPABILITY_ID,
+    schemaVersion: DNRD5_V2_SCHEMA_VERSION,
+    schemaContentSha256: schemaContent.binding.content.sha256,
+    scopes: [SCOPE]
+  },
+  {
+    authorizationRef: RESTORE_EVIDENCE_CAPABILITY_ID,
     schemaVersion: DNRD5_V2_SCHEMA_VERSION,
     schemaContentSha256: schemaContent.binding.content.sha256,
     scopes: [SCOPE]
@@ -291,14 +316,18 @@ const principals: Dnrd5V2AuthorityPrincipals = {
 }
 
 const authority = (
-  label: "main" | "evidence",
-  phase: "MAIN_ADMIT" | "RECEIPT_ADMIT",
+  label: "main" | "evidence" | "restore-main" | "restore-evidence",
+  phase: Dnrd5V2ConsumptionPhase,
   policy: Content,
   purpose: CanonicalAtomV2
 ): AuthorityFixture => {
   const capabilityId = label === "main"
     ? MAIN_CAPABILITY_ID
-    : EVIDENCE_CAPABILITY_ID
+    : label === "evidence"
+      ? EVIDENCE_CAPABILITY_ID
+      : label === "restore-main"
+        ? RESTORE_MAIN_CAPABILITY_ID
+        : RESTORE_EVIDENCE_CAPABILITY_ID
   const authorizationRef = "authorization-ref:dnrd5:v2:" + label
   const nonceSha256 = hash("nonce:dnrd5:v2:" + label)
   const authorization = content(
@@ -434,7 +463,16 @@ const makeGraph = () => {
     ["block-spec", block.atom],
     ["randomness", randomness.atom]
   ])
-  const w0 = support("w0", "w0_snapshot", [["block-spec", block.atom]])
+  const projectionPolicy = support("projection-policy", "projection_policy")
+  // Fixture-only structural W0 subset: it is typed/provenance-closed and is
+  // not a behavioral execution, occurrence, or learning observation.
+  const w0ReadIds = [policy, randomness, evaluator, block, probe].map((value) => id(value.atom)).sort()
+  const rootBytes = right(canonicalJsonBytes({ _tag: "Dnrd5V2BehavioralRoot", contractVersion: DNRD5_V2_BEHAVIORAL_ROOT_V1, atomKeyIds: w0ReadIds }), "fixture W0 root")
+  const rootDescriptor = right(makeCanonicalAtomV2ContentDescriptor("application/json", rootBytes), "fixture W0 root descriptor")
+  const readsetBytes = right(canonicalJsonBytes({ _tag: "Dnrd5V2CompiledBehaviorReadset", contractVersion: DNRD5_V2_COMPILED_BEHAVIOR_READSET_V1, behavioralRootSha256: rootDescriptor.sha256, atomKeyIds: w0ReadIds }), "fixture W0 readset")
+  const readsetDescriptor = right(makeCanonicalAtomV2ContentDescriptor("application/json", readsetBytes), "fixture W0 readset descriptor")
+  const targetBytes = right(canonicalJsonBytes({ _tag: "Dnrd5V2ExactW0Target", contractVersion: DNRD5_V2_EXACT_W0_RESTORE_PROJECTION_V1, declaredW0StateRevision: 0, declaredW0StateSha256: hash("fixture-only-declared-w0-not-custody"), behavioralRoot: rootDescriptor, compiledReadset: readsetDescriptor }), "fixture W0 target")
+  const w0 = contentFromBytes("w0", "w0_snapshot", DNRD5_V2_EXACT_W0_TARGET_MEDIA_TYPE, targetBytes, [reference("block-spec", block.atom)])
   const forks = [1, 2, 3, 4].map((index) =>
     support("fork-" + index, "fork_incidence", [["w0", w0.atom]])
   )
@@ -536,6 +574,7 @@ const makeGraph = () => {
     evaluator,
     block,
     probe,
+    projectionPolicy,
     placebo,
     w0,
     ...forks,
@@ -569,7 +608,9 @@ const makeGraph = () => {
     alternateProposal,
     decision,
     alternateDecision,
-    restorePolicy
+    restorePolicy,
+    projectionPolicy,
+    w0Projection: { rootBytes, readsetBytes, targetBytes, rootDescriptor, readsetDescriptor }
   }
 }
 
@@ -661,7 +702,7 @@ interface ConsumptionFixture {
 }
 
 const consumptionCandidate = (
-  phase: Extract<Dnrd5V2ConsumptionPhase, "MAIN_ADMIT" | "RECEIPT_ADMIT">,
+  phase: Dnrd5V2ConsumptionPhase,
   state: CanonicalAtomV2DurableState["canonical"],
   authorizationSnapshot: ReturnType<typeof snapshotFor>,
   authorityFixture: AuthorityFixture,
@@ -678,7 +719,8 @@ const consumptionCandidate = (
   )
   const consumptionStub = stub(consumptionUid)
   const companion = companionFor(consumptionStub)
-  const purposeRole = phase === "MAIN_ADMIT" ? "decision" : "purpose"
+  const mainPhase = phase === "MAIN_ADMIT" || phase === "MAIN_RESTORE"
+  const purposeRole = mainPhase ? "decision" : "purpose"
   const consumptionReferences = [
     reference("grant", authorityFixture.chain.grant.atom),
     reference("capability", authorityFixture.chain.capability.atom),
@@ -689,10 +731,10 @@ const consumptionCandidate = (
     ...consumptionStub,
     _tag: "CanonicalAtomV2",
     contractVersion: HSWM_CANONICAL_ATOM_V2_CONTRACT_VERSION,
-    kind: phase === "MAIN_ADMIT"
+    kind: mainPhase
       ? "hswm:dnrd5:v2:capability_consumption"
       : "hswm:dnrd5:v2:evidence_seal_consumption",
-    responsibilityOwner: phase === "MAIN_ADMIT"
+    responsibilityOwner: mainPhase
       ? "owner:dnrd5:v2:capability_consumption_custodian"
       : "owner:dnrd5:v2:evidence_seal_consumption_custodian",
     content: companion.atom.content,
@@ -751,10 +793,10 @@ const consumptionCandidate = (
   }), "consumption payload bytes")
   const consumptionBase = contentFromBytes(
     consumptionUid,
-    phase === "MAIN_ADMIT"
+    mainPhase
       ? "capability_consumption"
       : "evidence_seal_consumption",
-    phase === "MAIN_ADMIT"
+    mainPhase
       ? DNRD5_V2_CAPABILITY_CONSUMPTION_MEDIA_TYPE
       : DNRD5_V2_EVIDENCE_SEAL_CONSUMPTION_MEDIA_TYPE,
     payloadBytes,
@@ -803,6 +845,24 @@ const phaseInput = (
     bytes: Uint8Array.from(value.bytes)
   }))
 })
+
+const stageConsumptionIntent = (
+  runtime: CanonicalAtomV2DurableRuntime["Type"],
+  candidate: ConsumptionFixture
+): Effect.Effect<void, unknown> =>
+  Effect.gen(function* () {
+    const expected = right(makeCanonicalAtomV2ContentDescriptor(
+      DNRD5_V2_CONSUMPTION_COMMAND_INTENT_MEDIA_TYPE,
+      candidate.input.commandIntentBytes
+    ), "fixture command-intent descriptor")
+    const staged = yield* runtime.stageContent(
+      DNRD5_V2_CONSUMPTION_COMMAND_INTENT_MEDIA_TYPE,
+      candidate.input.commandIntentBytes
+    )
+    if (!sameCanonicalAtomV2ContentDescriptor(staged, expected)) {
+      throw new Error("fixture command-intent durable descriptor drifted")
+    }
+  })
 
 const authorityInput = (
   state: CanonicalAtomV2DurableState["canonical"],
@@ -1033,3 +1093,262 @@ export const prepareDnrd5V2TwoCasFixture = (
     expectedR2: expectedReceipt.descriptor
   }
 })
+
+/** Durable-ready symmetric RESTORE path; internal test fixture only. */
+export interface Dnrd5V2RestorePreparedFixture {
+  readonly input: Dnrd5V2TwoCasRestoreInput
+  readonly s0Revision: number
+  readonly expectedR1: CanonicalAtomV2ContentDescriptor
+  readonly expectedR2: CanonicalAtomV2ContentDescriptor
+  /** Fixture-only raw R1/R2/R3 structural witness; not execution evidence. */
+  readonly projectionInput: Dnrd5V2ExactW0RestoreProjectionInput
+  readonly projectionTransition: CommitCanonicalAtomsV2ContentBound
+  readonly expectedR3: CanonicalAtomV2ContentDescriptor
+}
+
+export interface Dnrd5V2RestoreFixtureOptions {
+  readonly receiptGrammarCrosswire?: boolean
+}
+
+export const prepareDnrd5V2RestoreFixture = (
+  options: Dnrd5V2RestoreFixtureOptions = {}
+): Effect.Effect<Dnrd5V2RestorePreparedFixture, unknown, CanonicalAtomV2DurableRuntime> =>
+  Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const graph = makeGraph()
+    const bootstrap = command(
+      "transition:dnrd5:v2:restore-bootstrap", 0,
+      "principal:dnrd5:v2:bootstrap", BOOTSTRAP_AUTHORIZATION, BOOTSTRAP_SCOPE,
+      graph.contents.map((value) => value.atom), []
+    )
+    const bootstrapTransition = yield* bindCommand(runtime, bootstrap, payloadMap(graph.contents))
+    yield* commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal(runtime, bootstrapTransition)
+    // Detached W0 root/readset are durable content addressed blobs, not atoms.
+    if (!sameCanonicalAtomV2ContentDescriptor(yield* runtime.stageContent("application/json", graph.w0Projection.rootBytes), graph.w0Projection.rootDescriptor) || !sameCanonicalAtomV2ContentDescriptor(yield* runtime.stageContent("application/json", graph.w0Projection.readsetBytes), graph.w0Projection.readsetDescriptor)) throw new Error("fixture W0 detached content descriptor drifted")
+    const preAdmit = yield* runtime.snapshot
+    const stagingMain = consumptionCandidate(
+      "MAIN_ADMIT", preAdmit.canonical, snapshotFor(preAdmit), graph.main,
+      graph.decision.atom,
+      (consumptionStub) => support("staging-macro", "macro_disposition", [
+        ["proposal", graph.proposal.atom],
+        ["revision-admission-decision", graph.decision.atom],
+        ["restore-policy", graph.restorePolicy.atom],
+        ["effect-consumption", consumptionStub]
+      ])
+    )
+    const stagingMainTransition = yield* bindCommand(
+      runtime, stagingMain.command, payloadMap([stagingMain.consumption, stagingMain.companion])
+    )
+    yield* stageConsumptionIntent(runtime, stagingMain)
+    yield* commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal(runtime, stagingMainTransition)
+    const afterStagingMain = yield* runtime.snapshot
+    const stagingRecord = recordFor(preAdmit, stagingMain.command, stagingMainTransition)
+    const stagingEffectInput = {
+      schema, preState: preAdmit.canonical,
+      predecessor: { descriptor: preAdmit.journalHead, journalLineageId: preAdmit.journalLineageId, schemaContentSha256: preAdmit.schema.content.sha256 },
+      command: stagingMain.command, record: stagingRecord.record, recordBytes: stagingRecord.bytes,
+      recordDescriptor: stagingRecord.descriptor, envelopes: stagingRecord.envelopes,
+      usedRecordDescriptorSha256s: []
+    } as const
+    const stagingEffect = right(
+      validateDnrd5V2RecordBoundEffect(stagingEffectInput),
+      "staging effect"
+    )
+    const stagingReceiptBytes = right(canonicalDnrd5V2ReceiptPayloadBytes({
+      contractVersion: DNRD5_V2_RECEIPT_SEAL_V1, receiptKind: "REVISION",
+      precedingEffectRecordDescriptorSha256: stagingRecord.descriptor.sha256,
+      postcommitReceiptIdentity: stagingEffect.deterministicFuturePostcommitReceiptIdentity,
+      decisionAtomKeyId: id(graph.decision.atom),
+      effectConsumptionAtomKeyId: id(stagingMain.consumption.atom),
+      effectAtomKeyId: id(stagingMain.companion.atom)
+    }), "staging receipt")
+    const stagingReceipt = consumptionCandidate(
+      "RECEIPT_ADMIT", afterStagingMain.canonical, snapshotFor(afterStagingMain), graph.evidence,
+      graph.decision.atom,
+      (consumptionStub) => contentFromBytes(
+        "receipt:" + stagingEffect.deterministicFuturePostcommitReceiptIdentity,
+        "revision_transition_receipt", DNRD5_V2_RECEIPT_PAYLOAD_MEDIA_TYPE, stagingReceiptBytes,
+        [reference("decision", graph.decision.atom), reference("effect-consumption", stagingMain.consumption.atom),
+          reference("successor", stagingMain.companion.atom), reference("evidence-consumption", consumptionStub)]
+      )
+    )
+    const stagingReceiptTransition = yield* bindCommand(
+      runtime, stagingReceipt.command, payloadMap([stagingReceipt.consumption, stagingReceipt.companion])
+    )
+    yield* stageConsumptionIntent(runtime, stagingReceipt)
+    const stagingReceiptRecord = recordFor(
+      afterStagingMain,
+      stagingReceipt.command,
+      stagingReceiptTransition
+    )
+    right(validateDnrd5V2ReceiptSeal({
+      schema,
+      preState: afterStagingMain.canonical,
+      predecessor: {
+        descriptor: stagingRecord.descriptor,
+        journalLineageId: afterStagingMain.journalLineageId,
+        schemaContentSha256: afterStagingMain.schema.content.sha256
+      },
+      precedingEffect: stagingEffectInput,
+      command: stagingReceipt.command,
+      evidenceAuthority: authorityInput(
+        afterStagingMain.canonical,
+        graph.evidence.chain
+      ),
+      receiptPayloadBytes: stagingReceiptBytes,
+      receiptPayloadDescriptor: stagingReceipt.companion.atom.content,
+      record: stagingReceiptRecord.record,
+      recordBytes: stagingReceiptRecord.bytes,
+      recordDescriptor: stagingReceiptRecord.descriptor,
+      envelopes: stagingReceiptRecord.envelopes,
+      usedReceiptRecordDescriptorSha256s: []
+    }), "staging receipt seal")
+    yield* commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal(runtime, stagingReceiptTransition)
+    const afterStaging = yield* runtime.snapshot
+
+    const restoreAuthorityPolicyBase = content("restore-authority-policy", "permit_policy", DNRD5_V2_PERMIT_POLICY_MEDIA_TYPE, {
+      contractVersion: DNRD5_V2_AUTHORITY_PAYLOAD_V1, scope: SCOPE, allowedActors: [ACTOR],
+      allowedPhases: ["MAIN_RESTORE", "RECEIPT_RESTORE"], allowMainReceiptPairing: true, generation: 1
+    })
+    const restoreAuthorityPolicy: Content = {
+      ...restoreAuthorityPolicyBase,
+      atom: {
+        ...restoreAuthorityPolicyBase.atom,
+        provenance: {
+          mode: "DERIVATION",
+          evidenceSha256: restoreAuthorityPolicyBase.atom.provenance.evidenceSha256,
+          sourceRef: graph.restorePolicy.atom.key
+        }
+      }
+    }
+    // The main RESTORE authority can be made before its purpose exists; its
+    // payload binds only the eventual purpose key.  The rollback decision and
+    // restore transaction then share this exact grant/policy lineage.
+    const restoreMain = authority("restore-main", "MAIN_RESTORE", restoreAuthorityPolicy, stub("rollback-decision"))
+    const restorePolicy = support("restore-policy-restore", "restore_policy", [
+      ["policy", restoreAuthorityPolicy.atom], ["capability", restoreMain.chain.capability.atom]
+    ])
+    const rollback = support("rollback-decision", "rollback_decision", [
+      ["block", graph.contents.find((value) => value.atom.key.atomUid === "block")!.atom],
+      ["assignment", graph.contents.find((value) => value.atom.key.atomUid === "assignment")!.atom],
+      ["fork", graph.contents.find((value) => value.atom.key.atomUid === "fork-1")!.atom],
+      ["w0", graph.contents.find((value) => value.atom.key.atomUid === "w0")!.atom],
+      ["grant", restoreMain.chain.grant.atom], ["policy", restorePolicy.atom],
+      ["authorization", restoreMain.chain.authorization.atom], ["capability", restoreMain.chain.capability.atom],
+      ["revocation", restoreMain.chain.revocation.atom], ["staging-successor", stagingMain.companion.atom],
+      ["staging-receipt", stagingReceipt.companion.atom]
+    ])
+    const alternateRollback = support(
+      "rollback-decision-alternate",
+      "rollback_decision",
+      [
+        ["block", graph.contents.find((value) => value.atom.key.atomUid === "block")!.atom],
+        ["assignment", graph.contents.find((value) => value.atom.key.atomUid === "assignment")!.atom],
+        ["fork", graph.contents.find((value) => value.atom.key.atomUid === "fork-2")!.atom],
+        ["w0", graph.contents.find((value) => value.atom.key.atomUid === "w0")!.atom],
+        ["grant", restoreMain.chain.grant.atom], ["policy", restorePolicy.atom],
+        ["authorization", restoreMain.chain.authorization.atom], ["capability", restoreMain.chain.capability.atom],
+        ["revocation", restoreMain.chain.revocation.atom], ["staging-successor", stagingMain.companion.atom],
+        ["staging-receipt", stagingReceipt.companion.atom]
+      ]
+    )
+    const restoreEvidence = authority("restore-evidence", "RECEIPT_RESTORE", restoreAuthorityPolicy, rollback.atom)
+    const restoreSupport = [restoreAuthorityPolicy, restorePolicy, rollback, alternateRollback,
+      restoreMain.chain.authorization, restoreMain.chain.capability, restoreMain.chain.revocation, restoreMain.chain.grant,
+      restoreEvidence.chain.authorization, restoreEvidence.chain.capability, restoreEvidence.chain.revocation, restoreEvidence.chain.grant]
+    const supportCommand = command("transition:dnrd5:v2:restore-support", afterStaging.canonical.revision, ACTOR, MAIN_CAPABILITY_ID, SCOPE,
+      restoreSupport.map((value) => value.atom), externalReadSet(restoreSupport.map((value) => value.atom)))
+    const supportTransition = yield* bindCommand(runtime, supportCommand, payloadMap(restoreSupport))
+    yield* commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal(runtime, supportTransition)
+    const s0 = yield* runtime.snapshot
+    const main = consumptionCandidate("MAIN_RESTORE", s0.canonical, snapshotFor(s0), restoreMain, rollback.atom,
+      (consumptionStub) => support("restore-transaction", "restore_transaction", [
+        ["w0", graph.contents.find((value) => value.atom.key.atomUid === "w0")!.atom],
+        ["grant", restoreMain.chain.grant.atom], ["policy", restorePolicy.atom], ["decision", rollback.atom],
+        ["consumption", consumptionStub], ["staging-successor", stagingMain.companion.atom]
+      ])
+    )
+    const mainTransition = yield* bindCommand(runtime, main.command, payloadMap([main.consumption, main.companion]))
+    const expectedMain = recordFor(s0, main.command, mainTransition)
+    const restoreEffectInput = {
+      schema, preState: s0.canonical,
+      predecessor: { descriptor: s0.journalHead, journalLineageId: s0.journalLineageId, schemaContentSha256: s0.schema.content.sha256 },
+      command: main.command, record: expectedMain.record, recordBytes: expectedMain.bytes, recordDescriptor: expectedMain.descriptor,
+      envelopes: expectedMain.envelopes, usedRecordDescriptorSha256s: []
+    } as const
+    const effect = right(validateDnrd5V2RecordBoundEffect(restoreEffectInput), "restore effect")
+    const rollbackReceiptBytes = right(canonicalDnrd5V2ReceiptPayloadBytes({
+      contractVersion: DNRD5_V2_RECEIPT_SEAL_V1, receiptKind: "ROLLBACK",
+      precedingEffectRecordDescriptorSha256: expectedMain.descriptor.sha256,
+      postcommitReceiptIdentity: effect.deterministicFuturePostcommitReceiptIdentity,
+      decisionAtomKeyId: id(rollback.atom), effectConsumptionAtomKeyId: id(main.consumption.atom), effectAtomKeyId: id(main.companion.atom)
+    }), "rollback receipt")
+    const receipt = consumptionCandidate("RECEIPT_RESTORE", expectedMain.state.canonical, snapshotFor(expectedMain.state), restoreEvidence, rollback.atom,
+      (consumptionStub) => contentFromBytes("receipt:" + effect.deterministicFuturePostcommitReceiptIdentity,
+        "rollback_transition_receipt", DNRD5_V2_RECEIPT_PAYLOAD_MEDIA_TYPE, rollbackReceiptBytes,
+        [reference("decision", options.receiptGrammarCrosswire ? alternateRollback.atom : rollback.atom),
+          reference("effect-consumption", main.consumption.atom), reference("restore", main.companion.atom), reference("evidence-consumption", consumptionStub)])
+    )
+    const receiptTransition = yield* bindCommand(runtime, receipt.command, payloadMap([receipt.consumption, receipt.companion]))
+    const expectedReceipt = recordFor(expectedMain.state, receipt.command, receiptTransition)
+    const rollbackSealInput = {
+      schema, preState: expectedMain.state.canonical,
+      predecessor: { descriptor: expectedMain.descriptor, journalLineageId: expectedMain.state.journalLineageId, schemaContentSha256: expectedMain.state.schema.content.sha256 },
+      precedingEffect: restoreEffectInput, command: receipt.command,
+      evidenceAuthority: authorityInput(expectedMain.state.canonical, restoreEvidence.chain),
+      receiptPayloadBytes: rollbackReceiptBytes, receiptPayloadDescriptor: receipt.companion.atom.content,
+      record: expectedReceipt.record, recordBytes: expectedReceipt.bytes, recordDescriptor: expectedReceipt.descriptor,
+      envelopes: expectedReceipt.envelopes, usedReceiptRecordDescriptorSha256s: []
+    } as const
+    if (!options.receiptGrammarCrosswire) right(validateDnrd5V2ReceiptSeal(rollbackSealInput), "rollback receipt seal")
+    const projectionId = id(support("post-restore-projection", "behavior_projection", [["source", main.companion.atom], ["policy", graph.projectionPolicy.atom]]).atom)
+    const selected = right(canonicalJsonBytes({ _tag: "Dnrd5V2CompiledBehaviorReadset", contractVersion: DNRD5_V2_COMPILED_BEHAVIOR_READSET_V1, behavioralRootSha256: graph.w0Projection.rootDescriptor.sha256, atomKeyIds: [graph.contents.find((value) => value.atom.key.atomUid === "policy")!, graph.contents.find((value) => value.atom.key.atomUid === "randomness")!, graph.contents.find((value) => value.atom.key.atomUid === "evaluator")!, graph.contents.find((value) => value.atom.key.atomUid === "block")!, graph.contents.find((value) => value.atom.key.atomUid === "probe")!].map((value) => id(value.atom)).sort() }), "fixture selected W0 readset")
+    if (!sameCanonicalAtomV2ContentDescriptor(right(makeCanonicalAtomV2ContentDescriptor("application/json", selected), "selected descriptor"), graph.w0Projection.readsetDescriptor)) throw new Error("fixture W0 readset bytes drifted")
+    const selectedIds = [graph.contents.find((value) => value.atom.key.atomUid === "policy")!, graph.contents.find((value) => value.atom.key.atomUid === "randomness")!, graph.contents.find((value) => value.atom.key.atomUid === "evaluator")!, graph.contents.find((value) => value.atom.key.atomUid === "block")!, graph.contents.find((value) => value.atom.key.atomUid === "probe")!].map((value) => id(value.atom)).sort()
+    const excludedAtomKeyIds = [...expectedReceipt.state.canonical.atoms.map(id), projectionId].filter((atomId) => !selectedIds.includes(atomId)).sort()
+    const projectionBytes = right(canonicalJsonBytes({ _tag: "Dnrd5V2ExactW0BehaviorProjection", contractVersion: DNRD5_V2_EXACT_W0_RESTORE_PROJECTION_V1, w0SnapshotAtomKeyId: id(graph.contents.find((value) => value.atom.key.atomUid === "w0")!.atom), restoreTransactionAtomKeyId: id(main.companion.atom), behavioralRoot: graph.w0Projection.rootDescriptor, compiledReadset: graph.w0Projection.readsetDescriptor, excludedAtomKeyIds }), "fixture R3 projection")
+    const projection = contentFromBytes("post-restore-projection", "behavior_projection", DNRD5_V2_EXACT_W0_PROJECTION_MEDIA_TYPE, projectionBytes, [reference("source", main.companion.atom), reference("policy", graph.projectionPolicy.atom)])
+    const projectionCommand = command("transition:dnrd5:v2:exact-w0-projection-r3", expectedReceipt.state.canonical.revision, ACTOR, MAIN_CAPABILITY_ID, SCOPE, [projection.atom], [main.companion.atom.key, graph.projectionPolicy.atom.key].sort((a, b) => canonicalAtomV2KeyId(a).localeCompare(canonicalAtomV2KeyId(b))))
+    const projectionTransition = yield* bindCommand(runtime, projectionCommand, payloadMap([projection]))
+    const expectedProjection = recordFor(expectedReceipt.state, projectionCommand, projectionTransition)
+    return {
+      input: { _tag: "Dnrd5V2TwoCasRestoreInput", contractVersion: DNRD5_V2_TWO_CAS_RESTORE_V1,
+        main: phaseInput(authorityInput(s0.canonical, restoreMain.chain), main, mainTransition),
+        receipt: phaseInput(authorityInput(expectedMain.state.canonical, restoreEvidence.chain), receipt, receiptTransition) },
+      s0Revision: s0.canonical.revision, expectedR1: expectedMain.descriptor, expectedR2: expectedReceipt.descriptor,
+      expectedR3: expectedProjection.descriptor, projectionTransition,
+      projectionInput: {
+        schema, restoreEffect: restoreEffectInput, rollbackSeal: rollbackSealInput,
+        projectionCommit: { command: projectionCommand, record: expectedProjection.record, recordBytes: expectedProjection.bytes, recordDescriptor: expectedProjection.descriptor, envelope: expectedProjection.envelopes[0]! },
+        postProjectionState: expectedProjection.state.canonical, postProjectionStateRevision: expectedProjection.state.canonical.revision, postProjectionStateSha256: right(canonicalAtomV2StateSha256(expectedProjection.state.canonical), "R3 state hash"),
+        projection: { _tag: "Dnrd5V2ExactW0BehaviorProjection", contractVersion: DNRD5_V2_EXACT_W0_RESTORE_PROJECTION_V1, w0SnapshotAtomKeyId: id(graph.contents.find((value) => value.atom.key.atomUid === "w0")!.atom), restoreTransactionAtomKeyId: id(main.companion.atom), behavioralRoot: graph.w0Projection.rootDescriptor, compiledReadset: graph.w0Projection.readsetDescriptor, excludedAtomKeyIds },
+        contentBySha256: new Map([[graph.contents.find((value) => value.atom.key.atomUid === "w0")!.atom.content.sha256, graph.w0Projection.targetBytes], [graph.w0Projection.rootDescriptor.sha256, graph.w0Projection.rootBytes], [graph.w0Projection.readsetDescriptor.sha256, graph.w0Projection.readsetBytes], [projection.atom.content.sha256, projectionBytes]])
+      }
+    }
+  })
+
+/** Optional fixture-level generic-durable self-check; no dispatcher claim. */
+export const verifyDnrd5V2RestoreFixtureGenericDurability = () =>
+  Effect.gen(function* () {
+    const fixture = yield* prepareDnrd5V2RestoreFixture()
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const first = yield* commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal(
+      runtime,
+      fixture.input.main.transition
+    )
+    if (!sameCanonicalAtomV2ContentDescriptor(first.receipt.record, fixture.expectedR1)) {
+      throw new Error("restore fixture generic R1 descriptor drifted")
+    }
+    const second = yield* commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal(
+      runtime,
+      fixture.input.receipt.transition
+    )
+    if (!sameCanonicalAtomV2ContentDescriptor(second.receipt.record, fixture.expectedR2)) {
+      throw new Error("restore fixture generic R2 descriptor drifted")
+    }
+    const state = yield* runtime.snapshot
+    if (state.canonical.revision !== fixture.s0Revision + 2) {
+      throw new Error("restore fixture generic commits did not advance two revisions")
+    }
+    return fixture
+  })

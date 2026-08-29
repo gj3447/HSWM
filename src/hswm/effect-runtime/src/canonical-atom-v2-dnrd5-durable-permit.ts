@@ -1040,12 +1040,13 @@ export const submitDnrd5LocalExperimentalState = (
   })
 
 /**
- * DNRD-5 v2's deliberately narrow durable admission boundary.  The supplied
- * bytes are candidates until the raw journal is recovered twice.  In
+ * DNRD-5 v2's deliberately narrow durable ADMIT/RESTORE boundary.  Supplied
+ * bytes remain candidates until the raw journal is recovered twice.  In
  * particular, this function makes no provider, occurrence, learning, or
  * efficacy claim.
  */
 export const DNRD5_V2_TWO_CAS_ADMIT_V1 = "hswm-dnrd5-v2-two-cas-admit/v1" as const
+export const DNRD5_V2_TWO_CAS_RESTORE_V1 = "hswm-dnrd5-v2-two-cas-restore/v1" as const
 
 export interface Dnrd5V2TwoCasPhaseInput {
   readonly authority: Dnrd5V2AuthorityStateInput
@@ -1055,11 +1056,19 @@ export interface Dnrd5V2TwoCasPhaseInput {
   readonly writePayloads: ReadonlyArray<{ readonly atomKeyId: string; readonly bytes: Uint8Array }>
 }
 
-export interface Dnrd5V2TwoCasAdmitInput {
-  readonly _tag: "Dnrd5V2TwoCasAdmitInput"
-  readonly contractVersion: typeof DNRD5_V2_TWO_CAS_ADMIT_V1
+interface Dnrd5V2TwoCasInputBase {
   readonly main: Dnrd5V2TwoCasPhaseInput
   readonly receipt: Dnrd5V2TwoCasPhaseInput
+}
+
+export interface Dnrd5V2TwoCasAdmitInput extends Dnrd5V2TwoCasInputBase {
+  readonly _tag: "Dnrd5V2TwoCasAdmitInput"
+  readonly contractVersion: typeof DNRD5_V2_TWO_CAS_ADMIT_V1
+}
+
+export interface Dnrd5V2TwoCasRestoreInput extends Dnrd5V2TwoCasInputBase {
+  readonly _tag: "Dnrd5V2TwoCasRestoreInput"
+  readonly contractVersion: typeof DNRD5_V2_TWO_CAS_RESTORE_V1
 }
 
 export interface Dnrd5V2TwoCasAdmitConfirmed {
@@ -1070,6 +1079,31 @@ export interface Dnrd5V2TwoCasAdmitConfirmed {
   readonly receiptConsumptionAtomKeyId: string
   readonly terminal: "NOT_PROVIDER_CALL_NOT_OCCURRENCE_NOT_LEARNING_NOT_EFFICACY"
 }
+
+/** RESTORE has the same historical confirmation shape as ADMIT. */
+export type Dnrd5V2TwoCasRestoreConfirmed = Dnrd5V2TwoCasAdmitConfirmed
+
+interface Dnrd5V2TwoCasContract {
+  readonly transitionKind: "ADMIT" | "RESTORE"
+  readonly tag: Dnrd5V2TwoCasAdmitInput["_tag"] | Dnrd5V2TwoCasRestoreInput["_tag"]
+  readonly version: typeof DNRD5_V2_TWO_CAS_ADMIT_V1 | typeof DNRD5_V2_TWO_CAS_RESTORE_V1
+  readonly mainPhase: "MAIN_ADMIT" | "MAIN_RESTORE"
+  readonly receiptPhase: "RECEIPT_ADMIT" | "RECEIPT_RESTORE"
+  readonly receiptKind: Dnrd5V2ReceiptPayload["receiptKind"]
+  readonly receiptAtomKind: "hswm:dnrd5:v2:revision_transition_receipt" | "hswm:dnrd5:v2:rollback_transition_receipt"
+}
+
+const ADMIT_TWO_CAS_CONTRACT: Dnrd5V2TwoCasContract = Object.freeze({
+  transitionKind: "ADMIT", tag: "Dnrd5V2TwoCasAdmitInput", version: DNRD5_V2_TWO_CAS_ADMIT_V1,
+  mainPhase: "MAIN_ADMIT", receiptPhase: "RECEIPT_ADMIT", receiptKind: "REVISION",
+  receiptAtomKind: "hswm:dnrd5:v2:revision_transition_receipt"
+})
+
+const RESTORE_TWO_CAS_CONTRACT: Dnrd5V2TwoCasContract = Object.freeze({
+  transitionKind: "RESTORE", tag: "Dnrd5V2TwoCasRestoreInput", version: DNRD5_V2_TWO_CAS_RESTORE_V1,
+  mainPhase: "MAIN_RESTORE", receiptPhase: "RECEIPT_RESTORE", receiptKind: "ROLLBACK",
+  receiptAtomKind: "hswm:dnrd5:v2:rollback_transition_receipt"
+})
 
 const v2Failure = (milestone: Exclude<Dnrd5V2TwoCasMilestone, "CAS2_EXACT_R2_CONFIRMED">, detail: string) =>
   new Dnrd5V2TwoCasRecoveryError({ milestone, detail })
@@ -1176,17 +1210,18 @@ const decodeTwoCasPhase = (
 }
 
 const decodeTwoCasInput = (
-  input: unknown
-): Either.Either<Dnrd5V2TwoCasAdmitInput, Dnrd5V2TwoCasRecoveryError> => {
+  input: unknown,
+  contract: Dnrd5V2TwoCasContract
+): Either.Either<Dnrd5V2TwoCasInputBase, Dnrd5V2TwoCasRecoveryError> => {
   try {
     if (
       !exactDataObject(input, ["_tag", "contractVersion", "main", "receipt"]) ||
-      input["_tag"] !== "Dnrd5V2TwoCasAdmitInput" ||
-      input["contractVersion"] !== DNRD5_V2_TWO_CAS_ADMIT_V1
+      input["_tag"] !== contract.tag ||
+      input["contractVersion"] !== contract.version
     ) {
       return Either.left(v2Failure(
         "RECOVERY_INDETERMINATE",
-        "two-CAS admission input must have the exact root contract"
+        `two-CAS ${contract.transitionKind} input must have the exact root contract`
       ))
     }
     const main = decodeTwoCasPhase(input["main"], "main")
@@ -1194,15 +1229,13 @@ const decodeTwoCasInput = (
     const receipt = decodeTwoCasPhase(input["receipt"], "receipt")
     if (Either.isLeft(receipt)) return Either.left(receipt.left)
     return Either.right(Object.freeze({
-      _tag: "Dnrd5V2TwoCasAdmitInput" as const,
-      contractVersion: DNRD5_V2_TWO_CAS_ADMIT_V1,
       main: main.right,
       receipt: receipt.right
     }))
   } catch {
     return Either.left(v2Failure(
       "RECOVERY_INDETERMINATE",
-      "two-CAS admission input could not be safely inspected"
+      `two-CAS ${contract.transitionKind} input could not be safely inspected`
     ))
   }
 }
@@ -1661,7 +1694,8 @@ const exactRecoveredTail = (
   return raw
 }
 
-const prevalidateRevisionReceipt = (
+const prevalidateTwoCasReceipt = (
+  contract: Dnrd5V2TwoCasContract,
   phase: Dnrd5V2TwoCasPhaseInput,
   command: CommitCanonicalAtomsV2Command,
   effect: {
@@ -1674,10 +1708,10 @@ const prevalidateRevisionReceipt = (
   readonly descriptor: CanonicalAtomV2ContentDescriptor
 }, Dnrd5V2TwoCasRecoveryError> => {
   const receipts = command.writes.filter(
-    (atom) => atom.kind === "hswm:dnrd5:v2:revision_transition_receipt"
+    (atom) => atom.kind === contract.receiptAtomKind
   )
   if (receipts.length !== 1) {
-    return Either.left(v2Failure("CAS1_EXACT_R1_RECEIPT_PENDING", "receipt command lacks exactly one revision receipt atom"))
+    return Either.left(v2Failure("CAS1_EXACT_R1_RECEIPT_PENDING", `receipt command lacks exactly one ${contract.receiptKind} receipt atom`))
   }
   const receipt = receipts[0]!
   const payloads = phase.writePayloads.filter(
@@ -1688,7 +1722,7 @@ const prevalidateRevisionReceipt = (
   }
   const expected: Dnrd5V2ReceiptPayload = {
     contractVersion: DNRD5_V2_RECEIPT_SEAL_V1,
-    receiptKind: "REVISION",
+    receiptKind: contract.receiptKind,
     precedingEffectRecordDescriptorSha256: effect.effectRecordDescriptor.sha256,
     postcommitReceiptIdentity: effect.deterministicFuturePostcommitReceiptIdentity,
     decisionAtomKeyId: mainConsumption.purposeAtomKeyId,
@@ -1768,12 +1802,15 @@ const replayRecoveredPrefixAt = (
     return Object.freeze({ state, head })
   })
 
-export const submitDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
+const submitDnrd5V2TwoCas = (
+  input: unknown,
+  contract: Dnrd5V2TwoCasContract
+): Effect.Effect<
   Dnrd5V2TwoCasAdmitConfirmed,
   CanonicalAtomV2DurableSubmitFailure | Dnrd5V2TwoCasRecoveryError,
   CanonicalAtomV2DurableRuntime
 > => Effect.gen(function* () {
-  const decoded = decodeTwoCasInput(input)
+  const decoded = decodeTwoCasInput(input, contract)
   if (Either.isLeft(decoded)) return yield* decoded.left
   const supplied = decoded.right
   const mainPayload = decodeV2ConsumptionPayload(supplied.main.consumption.payloadBytes)
@@ -1781,13 +1818,13 @@ export const submitDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
   if (Either.isLeft(mainPayload)) return yield* mainPayload.left
   if (Either.isLeft(receiptPayload)) return yield* receiptPayload.left
   if (
-    mainPayload.right.phase !== "MAIN_ADMIT" ||
-    receiptPayload.right.phase !== "RECEIPT_ADMIT" ||
+    mainPayload.right.phase !== contract.mainPhase ||
+    receiptPayload.right.phase !== contract.receiptPhase ||
     mainPayload.right.capabilityNonceSha256 === receiptPayload.right.capabilityNonceSha256
   ) {
     return yield* v2Failure(
       "RECOVERY_INDETERMINATE",
-      "ADMIT requires distinct MAIN_ADMIT and RECEIPT_ADMIT consumption candidates"
+      `${contract.transitionKind} requires distinct ${contract.mainPhase} and ${contract.receiptPhase} consumption candidates`
     )
   }
   const mainIntent = decodeV2IntentForPayload(
@@ -1834,7 +1871,7 @@ export const submitDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
   ) {
     return yield* v2Failure(
       "CAS1_PREDECESSOR_LOST",
-      "initial-only admission requires supplied main state and snapshot to equal recovered S0"
+      `initial-only ${contract.transitionKind} submission requires supplied main state and snapshot to equal recovered S0`
     )
   }
 
@@ -1844,11 +1881,11 @@ export const submitDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
   })
   if (
     Either.isLeft(mainAuthority) ||
-    mainAuthority.right.chain.phase !== "MAIN_ADMIT"
+    mainAuthority.right.chain.phase !== contract.mainPhase
   ) {
     return yield* v2Failure(
       "RECOVERY_INDETERMINATE",
-      "recovered S0 does not validate the exact MAIN_ADMIT authority"
+      `recovered S0 does not validate the exact ${contract.mainPhase} authority`
     )
   }
   yield* verifyAuthorityBytes(runtime, supplied.main.authority)
@@ -1995,7 +2032,7 @@ export const submitDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
   )
   if (
     recoveredMainConsumption === undefined ||
-    recoveredMainConsumption.phase !== "MAIN_ADMIT" ||
+    recoveredMainConsumption.phase !== contract.mainPhase ||
     recoveredMainConsumption.atomKeyId !== mainConsumption.right.atomKeyId ||
     !sameCanonicalValue(
       recoveredMainConsumption.atom,
@@ -2013,7 +2050,7 @@ export const submitDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
   if (Either.isLeft(r1Sha)) {
     return yield* v2Failure(
       "CAS1_EXACT_R1_RECEIPT_PENDING",
-      "cannot hash exact recovered R1 for receipt admission"
+      "cannot hash exact recovered R1 for receipt sealing"
     )
   }
   const recoveredR1Snapshot = Object.freeze({
@@ -2052,7 +2089,7 @@ export const submitDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
   )
   if (
     Either.isLeft(receiptAuthority) ||
-    receiptAuthority.right.chain.phase !== "RECEIPT_ADMIT" ||
+    receiptAuthority.right.chain.phase !== contract.receiptPhase ||
     Either.isLeft(authorityPair)
   ) {
     return yield* v2Failure(
@@ -2100,7 +2137,8 @@ export const submitDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
   }
 
   // This check uses the actual raw R1 descriptor and happens before CAS2.
-  const exactReceipt = prevalidateRevisionReceipt(
+  const exactReceipt = prevalidateTwoCasReceipt(
+    contract,
     supplied.receipt,
     receiptCommand.right,
     mainEffect.right,
@@ -2214,7 +2252,7 @@ export const submitDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
   )
   if (
     recoveredReceiptConsumption === undefined ||
-    recoveredReceiptConsumption.phase !== "RECEIPT_ADMIT" ||
+    recoveredReceiptConsumption.phase !== contract.receiptPhase ||
     recoveredReceiptConsumption.atomKeyId !==
       receiptConsumption.right.atomKeyId ||
     !sameCanonicalValue(
@@ -2239,16 +2277,16 @@ export const submitDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
   })
 })
 
-/**
- * Crash/lost-return continuation for a previously submitted ADMIT candidate.
- * It never invokes CAS1.  Only an exact raw S0→R1 prefix may reach CAS2.
- */
-export const resumeDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
+/** Crash/lost-return continuation; it never invokes CAS1. */
+const resumeDnrd5V2TwoCas = (
+  input: unknown,
+  contract: Dnrd5V2TwoCasContract
+): Effect.Effect<
   Dnrd5V2TwoCasAdmitConfirmed,
   CanonicalAtomV2DurableSubmitFailure | Dnrd5V2TwoCasRecoveryError,
   CanonicalAtomV2DurableRuntime
 > => Effect.gen(function* () {
-  const decoded = decodeTwoCasInput(input)
+  const decoded = decodeTwoCasInput(input, contract)
   if (Either.isLeft(decoded)) return yield* decoded.left
   const supplied = decoded.right
   const mainPayload = decodeV2ConsumptionPayload(supplied.main.consumption.payloadBytes)
@@ -2256,10 +2294,10 @@ export const resumeDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
   if (Either.isLeft(mainPayload)) return yield* mainPayload.left
   if (Either.isLeft(receiptPayload)) return yield* receiptPayload.left
   if (
-    mainPayload.right.phase !== "MAIN_ADMIT" ||
-    receiptPayload.right.phase !== "RECEIPT_ADMIT" ||
+    mainPayload.right.phase !== contract.mainPhase ||
+    receiptPayload.right.phase !== contract.receiptPhase ||
     mainPayload.right.capabilityNonceSha256 === receiptPayload.right.capabilityNonceSha256
-  ) return yield* v2Failure("RECOVERY_INDETERMINATE", "resume requires distinct MAIN_ADMIT and RECEIPT_ADMIT candidates")
+  ) return yield* v2Failure("RECOVERY_INDETERMINATE", `resume requires distinct ${contract.mainPhase} and ${contract.receiptPhase} candidates`)
 
   const runtime = yield* CanonicalAtomV2DurableRuntime
   if (Either.isLeft(validateDnrd5V2CanonicalSchema(runtime.schema))) {
@@ -2292,8 +2330,8 @@ export const resumeDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
   ) return yield* v2Failure("RECOVERY_INDETERMINATE", "resume candidate S0 does not equal the raw-replayed prefix")
 
   const mainAuthority = validateDnrd5V2AuthorityPayloadAtState({ ...supplied.main.authority, state: s0.state })
-  if (Either.isLeft(mainAuthority) || mainAuthority.right.chain.phase !== "MAIN_ADMIT") {
-    return yield* v2Failure("RECOVERY_INDETERMINATE", "raw-replayed S0 does not validate MAIN_ADMIT authority")
+  if (Either.isLeft(mainAuthority) || mainAuthority.right.chain.phase !== contract.mainPhase) {
+    return yield* v2Failure("RECOVERY_INDETERMINATE", `raw-replayed S0 does not validate ${contract.mainPhase} authority`)
   }
   yield* verifyAuthorityBytes(runtime, supplied.main.authority)
   const s0Consumptions = yield* recoveredV2Consumptions(runtime, s0.state.atoms)
@@ -2339,7 +2377,7 @@ export const resumeDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
   const r1Consumptions = yield* recoveredV2Consumptions(runtime, replayedR1.state.atoms)
   const recoveredMain = r1Consumptions.get(mainConsumption.right.capabilityNonceSha256)
   if (
-    recoveredMain === undefined || recoveredMain.phase !== "MAIN_ADMIT" ||
+    recoveredMain === undefined || recoveredMain.phase !== contract.mainPhase ||
     recoveredMain.atomKeyId !== mainConsumption.right.atomKeyId ||
     !sameCanonicalValue(recoveredMain.atom, supplied.main.consumption.atom) ||
     r1Consumptions.has(receiptPayload.right.capabilityNonceSha256)
@@ -2359,7 +2397,7 @@ export const resumeDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
     { ...supplied.main.authority, state: s0.state },
     { ...supplied.receipt.authority, state: replayedR1.state }
   )
-  if (Either.isLeft(receiptAuthority) || receiptAuthority.right.chain.phase !== "RECEIPT_ADMIT" || Either.isLeft(authorityPair)) {
+  if (Either.isLeft(receiptAuthority) || receiptAuthority.right.chain.phase !== contract.receiptPhase || Either.isLeft(authorityPair)) {
     return yield* v2Failure("RECOVERY_INDETERMINATE", "raw R1 does not validate distinct receipt authority")
   }
   yield* verifyAuthorityBytes(runtime, supplied.receipt.authority)
@@ -2377,7 +2415,7 @@ export const resumeDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
     receiptCommand.right
   )
   if (Either.isLeft(receiptTransitionCandidate)) return yield* receiptTransitionCandidate.left
-  const exactReceipt = prevalidateRevisionReceipt(supplied.receipt, receiptCommand.right, mainEffect.right, mainConsumption.right)
+  const exactReceipt = prevalidateTwoCasReceipt(contract, supplied.receipt, receiptCommand.right, mainEffect.right, mainConsumption.right)
   if (Either.isLeft(exactReceipt)) return yield* exactReceipt.left
   const receiptPreflight = validateDnrd5V2ReceiptSealCandidate({
     schema: runtime.schema,
@@ -2409,7 +2447,7 @@ export const resumeDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
     if (Either.isLeft(seal) || !sameCanonicalValue(seal.right.nextState, r2Witness.state.canonical)) return yield* v2Failure("CAS2_PREDECESSOR_LOST", "raw R2 is not the exact receipt seal")
     const r2Consumptions = yield* recoveredV2Consumptions(runtime, r2Witness.state.canonical.atoms)
     const recoveredReceipt = r2Consumptions.get(receiptConsumption.right.capabilityNonceSha256)
-    if (recoveredReceipt === undefined || recoveredReceipt.phase !== "RECEIPT_ADMIT" || recoveredReceipt.atomKeyId !== receiptConsumption.right.atomKeyId || !sameCanonicalValue(recoveredReceipt.atom, supplied.receipt.consumption.atom)) {
+    if (recoveredReceipt === undefined || recoveredReceipt.phase !== contract.receiptPhase || recoveredReceipt.atomKeyId !== receiptConsumption.right.atomKeyId || !sameCanonicalValue(recoveredReceipt.atom, supplied.receipt.consumption.atom)) {
       return yield* v2Failure("CAS2_PREDECESSOR_LOST", "raw R2 lacks the exact receipt consumption")
     }
     return snapshot({ milestone: "CAS2_EXACT_R2_CONFIRMED" as const, mainRecord: r1.right.descriptor, receiptRecord: r2.right.descriptor, mainConsumptionAtomKeyId: mainConsumption.right.atomKeyId, receiptConsumptionAtomKeyId: receiptConsumption.right.atomKeyId, terminal: "NOT_PROVIDER_CALL_NOT_OCCURRENCE_NOT_LEARNING_NOT_EFFICACY" as const })
@@ -2424,3 +2462,31 @@ export const resumeDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
   if (after.state.canonical.revision === expectedR1) return yield* v2Failure("CAS1_EXACT_R1_RECEIPT_PENDING", "CAS2 did not append; exact R1 remains receipt-pending")
   return yield* confirmR2(after)
 })
+
+/** Initial-only ADMIT entry.  RESTORE phases are rejected at this boundary. */
+export const submitDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
+  Dnrd5V2TwoCasAdmitConfirmed,
+  CanonicalAtomV2DurableSubmitFailure | Dnrd5V2TwoCasRecoveryError,
+  CanonicalAtomV2DurableRuntime
+> => submitDnrd5V2TwoCas(input, ADMIT_TWO_CAS_CONTRACT)
+
+/** Initial-only RESTORE entry; exact-W0 projection remains an external companion gate. */
+export const submitDnrd5V2RestoreTwoCas = (input: unknown): Effect.Effect<
+  Dnrd5V2TwoCasRestoreConfirmed,
+  CanonicalAtomV2DurableSubmitFailure | Dnrd5V2TwoCasRecoveryError,
+  CanonicalAtomV2DurableRuntime
+> => submitDnrd5V2TwoCas(input, RESTORE_TWO_CAS_CONTRACT)
+
+/** Resume never invokes CAS1; it only confirms exact R1/R2 for ADMIT. */
+export const resumeDnrd5V2AdmitTwoCas = (input: unknown): Effect.Effect<
+  Dnrd5V2TwoCasAdmitConfirmed,
+  CanonicalAtomV2DurableSubmitFailure | Dnrd5V2TwoCasRecoveryError,
+  CanonicalAtomV2DurableRuntime
+> => resumeDnrd5V2TwoCas(input, ADMIT_TWO_CAS_CONTRACT)
+
+/** Resume never invokes CAS1; exact-W0 projection remains an external companion gate. */
+export const resumeDnrd5V2RestoreTwoCas = (input: unknown): Effect.Effect<
+  Dnrd5V2TwoCasRestoreConfirmed,
+  CanonicalAtomV2DurableSubmitFailure | Dnrd5V2TwoCasRecoveryError,
+  CanonicalAtomV2DurableRuntime
+> => resumeDnrd5V2TwoCas(input, RESTORE_TWO_CAS_CONTRACT)

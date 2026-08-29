@@ -4,7 +4,8 @@
 - Scope: local, no-provider-call instrumentation
 - Recovery/authority/consumption predecessors: `d772b71`, `e98d491`, `61d81c3`
 - Initial/resumable ADMIT predecessors: `8cbcea9`, `d71e5d6`
-- Latest predecessor CI: passed (`d71e5d6`)
+- Lost-return/process/race predecessor: `eb9f0ef`
+- Latest predecessor CI: passed (`eb9f0ef`, GitHub Actions run `33225060144`)
 - Scientific status: `UNJUDGED / NOT AN OCCURRENCE / NOT EFFICACY`
 
 ## Canonical target role
@@ -87,10 +88,17 @@ not establish global or cross-purpose nonce consumption; the durable
 dispatcher must make that guarantee from recovered state and compare-and-swap
 outcomes.
 
-The current dispatcher implements the first narrow durable path: initial
-`ADMIT` from an exact recovered S0 through two separately authorized
-compare-and-swap records, plus a recovery-only continuation for the exact
-S0/R1/R2 prefix. Before CAS1 the initial entrypoint strictly decodes and
+The current dispatcher implements narrow symmetric `ADMIT` and `RESTORE`
+paths from an exact recovered S0 through two separately authorized
+compare-and-swap records, plus recovery-only continuation for each exact
+S0/R1/R2 prefix. Separate public-in-module root tags and versions select one
+private frozen contract: `MAIN_ADMIT`/`RECEIPT_ADMIT` with a `REVISION`
+receipt, or `MAIN_RESTORE`/`RECEIPT_RESTORE` with a `ROLLBACK` receipt. A root,
+phase, or receipt-kind cross-call is refused. The existing ADMIT confirmation
+object retains its historical runtime shape; the shared core adds no generic
+result cast or new enumerable discriminator.
+
+Before CAS1 the initial entrypoint strictly decodes and
 defensively snapshots the caller input, reconstructs the two-write command
 from the consumption projection, validates the exact DNRD effect grammar,
 binds actor/capability/scope/time to the validated main authority, and scans
@@ -171,6 +179,45 @@ the normal expected descriptor, then show that resume fails closed with the
 raw journal and replayed history unchanged and no following record. Test-only
 composition factories remain absent from the package public API.
 
+The symmetric RESTORE fixture first creates a staging ADMIT pair whose
+command-intent bytes are actually present in the durable content store. It
+independently validates that staged raw effect record and raw revision receipt
+before constructing the rollback decision. The decision, restore policy,
+grant, authorization, capability, revocation record, main consumption, and
+restore transaction all bind one exact restore authority chain; the rollback
+receipt uses a separate evidence authority. Focused tests exercise normal
+RESTORE submission, exact-R1 CAS2-only resume, exact-R2 no-write confirmation,
+S0 refusal, ADMIT/RESTORE root cross-calls, a same-kind receipt decision
+cross-wire, phase and receipt-kind mutation, four-way staging/restore nonce
+separation, and staged-nonce substitution.
+
+This fixture evidence does not make the dispatcher a general verifier of the
+historical staging pair already present in an arbitrary recovered S0. The
+RESTORE effect grammar proves that the rollback decision points to a
+schema-valid staging successor and revision receipt, but the dispatcher does
+not yet receive the raw historical staging records and their external
+authority custody as part of its RESTORE input. A production occurrence gate
+must close that larger history rather than inherit the stronger fixture claim.
+
+The exact-W0 companion is a separate pure raw-evidence verifier. It replays the
+RESTORE R1 and rollback-receipt R2, then verifies a deterministic one-write R3
+`behavior_projection` materialization. R3 must immediately follow exact R2
+with the same lineage and schema, exact predecessor and prior-state hash, one
+canonical envelope, record bytes and descriptor, and a read set consisting
+only of the typed restore source and projection policy. The projection payload
+must reuse the W0 target's behavioral-root and compiled-readset descriptors,
+name the exact complete post-R3 complement, and keep every selected typed or
+provenance path inside the selected set and away from staging, transition,
+outcome, audit, and analysis kinds. R3 is a later lifecycle projection commit,
+not a third RESTORE effect/receipt CAS.
+
+The positive integration fixture uses a small typed/provenance-closed
+bootstrap subset and a synthetic declared-W0 identity. It establishes the
+validator's raw R1/R2/R3 chronology and byte-identity behavior only. The
+fields are deliberately named `declaredW0StateRevision` and
+`declaredW0StateSha256`: this boundary neither proves raw W0-creation custody
+nor executes a frozen LLM probe to show behavioral restoration.
+
 Exactly one schema-relative responsibility owner per atom does not by itself
 require a different runtime principal for every custodian role. This bounded
 verifier requires the declared authorizer to differ from the actor and each
@@ -208,6 +255,24 @@ its own future record. The initial entrypoint remains intentionally
 initial-only; continuation is isolated in the recovery-only entrypoint so no
 resume branch can accidentally issue CAS1.
 
+After the exact RESTORE receipt, the declared behavioral view is materialized
+separately:
+
+```text
+exact R2
+  -> R3 {behavior_projection(source=restore_transaction,
+                              policy=projection_policy)}
+  -> independently replay R1/R2/R3
+  -> compare root/readset bytes with declared W0 and reject every traversable
+staging/outcome/audit path
+```
+
+The bounded TypeScript source/build/import closure now names this exact-W0
+verifier as an explicit entrypoint in both the capture-side expectation and
+the independently implemented judge expectation. This closes only local
+source-identity coverage; it does not authorize dispatch or elevate R3 to an
+occurrence.
+
 ## Explicit nonclaims and next gate
 
 The present instruments do not prove external authorization, trusted time,
@@ -217,23 +282,27 @@ Source A, occurrence, macroplastic learning, causal improvement, or efficacy.
 They do establish exact local R1/R2 recovery for the initial and recovery-only
 ADMIT paths, including reconstruction through a newly opened file-runtime
 layer, injected lost returns, and bounded Linux process-kill and same-record
-CAS2 race schedules. A caller-supplied state cannot by itself prove durable
-recovery, and an immutable `CHECKED_NOT_REVOKED` payload is only a
+CAS2 race schedules. The symmetric RESTORE path is presently established for
+normal in-memory submit/resume and adversarial contract crossings; the earlier
+ADMIT-specific lost-return, process-kill, and competing-tail tests are not
+silently relabeled as RESTORE-specific evidence. A caller-supplied state
+cannot by itself prove durable recovery, and an immutable
+`CHECKED_NOT_REVOKED` payload is only a
 snapshot-local record unless a later authenticated revocation/time source is
 bound.
 
-The next implementation gate is therefore scientific rather than open-ended
-harness growth, and remains ordered:
+The next gate is scientific rather than open-ended harness growth, and remains
+ordered:
 
-1. implement and falsify the symmetric `MAIN_RESTORE` /
-   `RECEIPT_RESTORE` two-CAS path, including an explicit typed projection that
-   proves the post-restore behavioral root and compiled read set are
-   byte-identical to W0 while append-only audit atoms remain outside that
-   projection;
+1. bind raw W0 creation and the staged ADMIT history to production occurrence
+   evidence, and connect the exact-W0 projection to the frozen local LLM's
+   actual probe read set rather than the synthetic fixture subset;
 2. qualify the frozen, provider-free randomized/placebo runner and its blind
    evaluator, assignment, leakage, missingness, and manifest controls; and
-3. only after those gates are frozen, execute the preregistered experiment that
-   can test outcome→credit→revision→fresh-behavior effects. A deterministic
+3. only after those gates are frozen, create and byte-freeze the still-missing
+   DNRD-5 preregistration and source/runtime identity; then execute the
+   experiment that can test outcome→credit→revision→fresh-behavior effects.
+   A deterministic
    rule harness may qualify plumbing but cannot substitute for the frozen local
    LLM transition realization in an efficacy claim.
 

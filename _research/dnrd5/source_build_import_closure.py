@@ -62,6 +62,7 @@ TYPESCRIPT_ENTRYPOINTS = tuple(
             "src/canonical-atom-v2-dnrd5-plan-json.ts",
             "src/canonical-atom-v2-dnrd5-randomization.ts",
             "src/canonical-atom-v2-dnrd5-v2-audit-release.ts",
+            "src/canonical-atom-v2-dnrd5-v2-exact-w0-restore-projection.ts",
             "src/canonical-atom-v2-dnrd5-v2-lifecycle-adapter.ts",
             "src/canonical-atom-v2-dnrd5-v2-receipt-seal.ts",
             "src/canonical-atom-v2-dnrd5-v2-record-bound-effect.ts",

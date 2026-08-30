@@ -22,7 +22,7 @@ from typing import Any, Mapping
 from _research.dnrd5.canonical_json import canonical_bytes, parse_canonical
 from .alfworld_text_worker import (
     ACTOR_SCHEMA, LOCAL_BOUNDARY_CLAIM, MAX_ACTION_BYTES, MAX_STEPS,
-    OUTCOME_SCHEMA, WORKER_SCHEMA,
+    OUTCOME_SCHEMA, PREFRAME_FAILURE_EXIT_CODES, WORKER_SCHEMA,
 )
 
 SANDBOX_GAME_PATH = "/run/hswm/game.tw-pddl"
@@ -31,6 +31,27 @@ MAX_PROTOCOL_LINE_BYTES = 131_072
 
 class AlfworldTextRuntimeError(RuntimeError):
     """The local-only sandbox or its strict protocol was invalid."""
+
+
+class AlfworldTextRuntimeClosed(AlfworldTextRuntimeError):
+    """A protocol stream reached EOF before emitting any bytes for its next frame."""
+
+
+def decode_preframe_failure_exit_code(returncode: object) -> str:
+    """Decode only a registered worker pre-first-frame refusal code.
+
+    Generic failures, signals, and successful exits are deliberately rejected:
+    none of them carry an interpretable diagnostic phase.
+    """
+    if type(returncode) is not int:
+        raise AlfworldTextRuntimeError("worker return code must be an integer")
+    matches = [
+        phase for phase, exit_code in PREFRAME_FAILURE_EXIT_CODES.items()
+        if exit_code == returncode
+    ]
+    if len(matches) != 1:
+        raise AlfworldTextRuntimeError("worker return code is not a registered pre-frame refusal")
+    return matches[0]
 
 
 def _sha(value: object, field: str) -> str:
@@ -321,6 +342,10 @@ def read_one_line(stream: Any, *, timeout_seconds: float, label: str) -> bytes:
             raise AlfworldTextRuntimeError(f"{label} timed out")
         part = os.read(fd, min(4096, MAX_PROTOCOL_LINE_BYTES + 1 - size))
         if not part:
+            if not chunks:
+                raise AlfworldTextRuntimeClosed(
+                    f"{label} closed before a complete line"
+                )
             raise AlfworldTextRuntimeError(f"{label} closed before a complete line")
         chunks.append(part)
         size += len(part)

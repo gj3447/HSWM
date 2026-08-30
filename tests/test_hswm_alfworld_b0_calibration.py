@@ -3,6 +3,7 @@ from __future__ import annotations
 from hashlib import sha256
 import io
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -23,7 +24,10 @@ from hswm.experiments.alfworld_b0_calibration import (
     run_b0_calibration,
     verify_protocol,
 )
-from hswm.experiments.alfworld_text_runtime import LocalSandboxSpec
+from hswm.experiments.alfworld_text_runtime import (
+    LocalSandboxSpec,
+    read_one_line,
+)
 from hswm.experiments.alfworld_text_worker import actor_projection, build_outcome
 from hswm.selfmod.contracts import canonical_json_bytes
 
@@ -421,6 +425,86 @@ def test_malicious_factory_binding_is_consumed_once_without_launch(tmp_path: Pat
     assert private["status"] == INCONCLUSIVE_STATUS
     assert len(private["episode_prefix"]) == 1
     assert public["resource_totals"]["issued_http_post_count"] == 0
+
+
+def test_initial_pipe_close_preserves_only_registered_worker_phase(tmp_path: Path) -> None:
+    protocol, selection, pool, locator, asset = _fixture(tmp_path)
+    read_fd, write_fd = os.pipe()
+    os.close(write_fd)
+    closed_stdout = os.fdopen(read_fd, "rb")
+
+    class PreframeProcess(_Process):
+        def __init__(self, *, uid: str, source_sha: str) -> None:
+            super().__init__(uid=uid, source_sha=source_sha)
+            self.stdout = closed_stdout
+            self.poll_count = 0
+
+        def poll(self) -> int | None:
+            self.poll_count += 1
+            return None if self.poll_count == 1 else 44
+
+        def wait(self, timeout: float) -> int:
+            del timeout
+            self.closed = True
+            return 44
+
+    try:
+        private, public = run_b0_calibration(
+            protocol=protocol,
+            private_selection_receipt=selection,
+            pool_manifest=pool,
+            local_locator=locator,
+            asset_root=asset,
+            sandbox_spec_factory=_factory(tmp_path),
+            runtime_launcher=lambda spec: PreframeProcess(
+                uid=spec.episode_uid,
+                source_sha=spec.game_binding.file_sha256,
+            ),
+            actor=_FakeActor(),
+            frame_reader=read_one_line,
+        )
+    finally:
+        closed_stdout.close()
+    failure = private["episode_prefix"][0]
+    assert failure["preframe_failure_phase"] == "ENVIRONMENT_RESET"
+    assert failure["error"] == "runtime refused before initial actor frame"
+    assert "private transport detail" not in json.dumps(private, sort_keys=True)
+    assert public["resource_totals"]["actor_call_count"] == 0
+    assert public["resource_totals"]["issued_http_post_count"] == 0
+
+
+def test_immediate_registered_worker_exit_is_classified_before_frame_read(
+    tmp_path: Path,
+) -> None:
+    protocol, selection, pool, locator, asset = _fixture(tmp_path)
+
+    class ImmediatePreframeProcess(_Process):
+        def poll(self) -> int:
+            return 44
+
+        def wait(self, timeout: float) -> int:
+            del timeout
+            self.closed = True
+            return 44
+
+    private, public = run_b0_calibration(
+        protocol=protocol,
+        private_selection_receipt=selection,
+        pool_manifest=pool,
+        local_locator=locator,
+        asset_root=asset,
+        sandbox_spec_factory=_factory(tmp_path),
+        runtime_launcher=lambda spec: ImmediatePreframeProcess(
+            uid=spec.episode_uid,
+            source_sha=spec.game_binding.file_sha256,
+        ),
+        actor=_FakeActor(),
+        frame_reader=lambda *_args, **_kwargs: pytest.fail("must not read a frame"),
+    )
+    failure = private["episode_prefix"][0]
+    assert failure["preframe_failure_phase"] == "ENVIRONMENT_RESET"
+    assert failure["error"] == "runtime refused before initial actor frame"
+    assert public["resource_totals"]["actor_call_count"] == 0
 
 
 def test_nonterminal_step_20_refuses_action_21(tmp_path: Path) -> None:

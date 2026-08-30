@@ -37,10 +37,12 @@ from .alfworld_b0_selection import OpaqueGameSelection
 from .alfworld_b0_runtime import dgx_sandbox_contract, load_local_game_binding
 from .alfworld_text_runtime import (
     MAX_PROTOCOL_LINE_BYTES,
+    AlfworldTextRuntimeClosed,
     LocalAlfworldTextRuntime,
     LocalGameBinding,
     LocalSandboxSpec,
     action_line,
+    decode_preframe_failure_exit_code,
     read_one_line,
     validate_actor_projection,
     validate_outcome_receipt,
@@ -687,6 +689,17 @@ def _terminate(process: Any) -> None:
         pass
 
 
+def _preframe_failure_phase(process: Any, *, timeout_seconds: float) -> str | None:
+    """Recover only a registered worker phase after the initial actor pipe closes."""
+    try:
+        return_code = process.poll()
+        if return_code is None:
+            return_code = process.wait(timeout=min(1.0, timeout_seconds))
+        return decode_preframe_failure_exit_code(return_code)
+    except Exception:
+        return None
+
+
 def _headroom(train_successes: int, *, complete: bool) -> str:
     if not complete:
         return "INCONCLUSIVE_MEASUREMENT_NOT_READY_WITHOUT_HEADROOM_CLASSIFICATION"
@@ -926,6 +939,7 @@ def run_b0_calibration(
             binding: LocalGameBinding | None = None
             process: Any | None = None
             actor_attempt: dict[str, object] | None = None
+            preframe_failure_phase: str | None = None
             try:
                 observed_pool_sha, observed_locator_sha, binding, game_file = (
                     load_local_game_binding(
@@ -960,15 +974,39 @@ def run_b0_calibration(
                 if any(
                     getattr(process, name, None) is None
                     for name in ("stdin", "stdout", "stderr", "wait", "poll", "terminate")
-                ) or process.poll() is not None:
+                ):
                     raise AlfworldB0CalibrationError(
                         "runtime launcher did not return one fresh live transport"
                     )
-                actor_raw = frame_reader(
-                    process.stdout,
-                    timeout_seconds=remaining_timeout(),
-                    label="actor frame",
-                )
+                launch_return_code = process.poll()
+                if launch_return_code is not None:
+                    try:
+                        preframe_failure_phase = decode_preframe_failure_exit_code(
+                            launch_return_code
+                        )
+                    except Exception:
+                        raise AlfworldB0CalibrationError(
+                            "runtime launcher did not return one fresh live transport"
+                        ) from None
+                    raise AlfworldB0CalibrationError(
+                        "runtime refused before initial actor frame"
+                    )
+                try:
+                    actor_raw = frame_reader(
+                        process.stdout,
+                        timeout_seconds=remaining_timeout(),
+                        label="actor frame",
+                    )
+                except AlfworldTextRuntimeClosed:
+                    preframe_failure_phase = _preframe_failure_phase(
+                        process,
+                        timeout_seconds=remaining_timeout(),
+                    )
+                    if preframe_failure_phase is not None:
+                        raise AlfworldB0CalibrationError(
+                            "runtime refused before initial actor frame"
+                        ) from None
+                    raise
                 actor_frame = validate_actor_projection(
                     actor_raw, episode_uid=spec.episode_uid, previous_step=None
                 )
@@ -1128,22 +1166,23 @@ def run_b0_calibration(
                         "file_sha256": binding.file_sha256,
                         "bytes": binding.bytes,
                     }
-                episodes.append(
-                    {
-                        "ordinal": ordinal,
-                        "split": selection.split,
-                        "selected": {
-                            "task_group_uid": selection.task_group_uid,
-                            "opaque_uid": selection.opaque_uid,
-                        },
-                        "binding": binding_value,
-                        "actor_trace": trace,
-                        "failed_actor_attempt": actor_attempt,
-                        "terminal": "INCONCLUSIVE",
-                        "error_type": type(error).__name__,
-                        "error": str(error),
-                    }
-                )
+                failed_episode: dict[str, object] = {
+                    "ordinal": ordinal,
+                    "split": selection.split,
+                    "selected": {
+                        "task_group_uid": selection.task_group_uid,
+                        "opaque_uid": selection.opaque_uid,
+                    },
+                    "binding": binding_value,
+                    "actor_trace": trace,
+                    "failed_actor_attempt": actor_attempt,
+                    "terminal": "INCONCLUSIVE",
+                    "error_type": type(error).__name__,
+                    "error": str(error),
+                }
+                if preframe_failure_phase is not None:
+                    failed_episode["preframe_failure_phase"] = preframe_failure_phase
+                episodes.append(failed_episode)
                 terminal = {
                     "status": INCONCLUSIVE_STATUS,
                     "reason": "TRANSPORT_SCHEMA_OR_INTEGRITY_ERROR",

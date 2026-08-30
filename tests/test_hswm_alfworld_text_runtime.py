@@ -5,6 +5,8 @@ from hashlib import sha256
 import json
 import os
 from pathlib import Path
+import subprocess
+import sys
 
 import pytest
 
@@ -58,6 +60,85 @@ def test_game_file_requires_regular_non_symlink_and_exact_hash(tmp_path: Path) -
     link = tmp_path / "link.z8"; link.symlink_to(game)
     with pytest.raises(worker.AlfworldTextWorkerRefusal, match="non-symlink"):
         worker.validate_game_file(link, digest)
+
+
+def test_preframe_failure_codes_are_fixed_strict_and_protocol_silent(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    expected = {
+        "GAME_VALIDATION": 40,
+        "RUNTIME_IMPORT": 41,
+        "GAME_REGISTER": 42,
+        "ENVIRONMENT_MAKE": 43,
+        "ENVIRONMENT_RESET": 44,
+        "INITIAL_OBSERVATION_CONTRACT": 45,
+        "INITIAL_INFO_CONTRACT": 46,
+        "INITIAL_ACTOR_WRITE": 47,
+    }
+    assert worker.PREFRAME_FAILURE_EXIT_CODES == expected
+    for phase, exit_code in expected.items():
+        assert worker.preframe_failure_exit_code(phase) == exit_code
+        assert runtime.decode_preframe_failure_exit_code(exit_code) == phase
+        monkeypatch.setattr(
+            worker,
+            "run_episode",
+            lambda **_kwargs: (_ for _ in ()).throw(
+                worker.AlfworldTextWorkerPreFrameRefusal(phase)
+            ),
+        )
+        assert worker.main(["--game-file", "/sealed/game", "--source-game-sha256", GAME_SHA,
+                            "--episode-uid", UID, "--outcome-fd", "2"]) == exit_code
+        captured = capsys.readouterr()
+        assert captured.out == "" and captured.err == ""
+    for invalid in (0, 2, 48, -1, True, "40"):
+        with pytest.raises(runtime.AlfworldTextRuntimeError, match="return code"):
+            runtime.decode_preframe_failure_exit_code(invalid)
+    with pytest.raises(worker.AlfworldTextWorkerRefusal, match="not registered"):
+        worker.preframe_failure_exit_code("RAW_ERROR")
+
+
+def test_unknown_worker_failure_is_generic_and_protocol_silent(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    def _unknown(**_kwargs: object) -> None:
+        raise RuntimeError("must not be emitted")
+
+    monkeypatch.setattr(worker, "run_episode", _unknown)
+    assert worker.main(["--game-file", "/sealed/game", "--source-game-sha256", GAME_SHA,
+                        "--episode-uid", UID, "--outcome-fd", "2"]) == 2
+    captured = capsys.readouterr()
+    assert captured.out == "" and captured.err == ""
+
+
+def test_unexpected_runtime_error_inside_preframe_phase_is_safely_classified(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
+    def _broken_validation(*_args: object, **_kwargs: object) -> Path:
+        raise RuntimeError("private dependency detail must not be emitted")
+
+    monkeypatch.setattr(worker, "validate_game_file", _broken_validation)
+    assert worker.main(["--game-file", "/sealed/game", "--source-game-sha256", GAME_SHA,
+                        "--episode-uid", UID, "--outcome-fd", "2"]) == 40
+    captured = capsys.readouterr()
+    assert captured.out == "" and captured.err == ""
+
+
+def test_preframe_exit_taxonomy_survives_a_real_worker_process(tmp_path: Path) -> None:
+    missing_game = tmp_path / "missing.tw-pddl"
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "hswm.experiments.alfworld_text_worker",
+            "--game-file",
+            str(missing_game),
+            "--source-game-sha256",
+            GAME_SHA,
+            "--episode-uid",
+            UID,
+            "--outcome-fd",
+            "2",
+        ],
+        check=False,
+        capture_output=True,
+        timeout=30,
+    )
+    assert runtime.decode_preframe_failure_exit_code(completed.returncode) == "GAME_VALIDATION"
+    assert completed.stdout == b"" and completed.stderr == b""
 
 
 def _spec(tmp_path: Path) -> runtime.LocalSandboxSpec:

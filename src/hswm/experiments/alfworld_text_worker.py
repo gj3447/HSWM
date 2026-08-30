@@ -27,9 +27,41 @@ LOCAL_BOUNDARY_CLAIM = "LOCAL_OS_PROCESS_BOUNDARY_NOT_INDEPENDENT_OWNER_G0_ONLY"
 MAX_STEPS = 50
 MAX_ACTION_BYTES = 4_096
 
+# These codes are the only pre-first-frame diagnostic exported by the worker.
+# They identify a fixed API phase, never an exception, game identity, path,
+# observation, or terminal outcome.  Keep them disjoint from the generic
+# refusal code (2) and stable for parent-side decoding.
+PREFRAME_FAILURE_EXIT_CODES: dict[str, int] = {
+    "GAME_VALIDATION": 40,
+    "RUNTIME_IMPORT": 41,
+    "GAME_REGISTER": 42,
+    "ENVIRONMENT_MAKE": 43,
+    "ENVIRONMENT_RESET": 44,
+    "INITIAL_OBSERVATION_CONTRACT": 45,
+    "INITIAL_INFO_CONTRACT": 46,
+    "INITIAL_ACTOR_WRITE": 47,
+}
+
 
 class AlfworldTextWorkerRefusal(ValueError):
     """The fixed local game/protocol contract was not met."""
+
+
+class AlfworldTextWorkerPreFrameRefusal(AlfworldTextWorkerRefusal):
+    """A safe fixed phase failed before the first actor frame."""
+
+    def __init__(self, phase: str) -> None:
+        if phase not in PREFRAME_FAILURE_EXIT_CODES:
+            raise ValueError("pre-frame refusal phase is not registered")
+        self.phase = phase
+        super().__init__(phase)
+
+
+def preframe_failure_exit_code(phase: str) -> int:
+    """Return the fixed exit code for one allow-listed pre-frame phase."""
+    if not isinstance(phase, str) or phase not in PREFRAME_FAILURE_EXIT_CODES:
+        raise AlfworldTextWorkerRefusal("pre-frame refusal phase is not registered")
+    return PREFRAME_FAILURE_EXIT_CODES[phase]
 
 
 def _sha256(value: object, field: str) -> str:
@@ -167,7 +199,10 @@ def run_episode(*, game_file: Path, source_game_sha256: str, episode_uid: str, m
     """
     if type(max_steps) is not int or not 1 <= max_steps <= MAX_STEPS:
         raise AlfworldTextWorkerRefusal(f"max_steps must be an integer from 1 through {MAX_STEPS}")
-    game_file = validate_game_file(game_file, source_game_sha256)
+    try:
+        game_file = validate_game_file(game_file, source_game_sha256)
+    except Exception as error:
+        raise AlfworldTextWorkerPreFrameRefusal("GAME_VALIDATION") from error
     if not isinstance(episode_uid, str) or not episode_uid:
         raise AlfworldTextWorkerRefusal("episode UID is invalid")
     try:
@@ -176,28 +211,43 @@ def run_episode(*, game_file: Path, source_game_sha256: str, episode_uid: str, m
             import textworld.gym  # type: ignore[import-not-found]  # noqa: F401
             from alfworld.agents.environment.alfred_tw_env import AlfredDemangler  # type: ignore[import-not-found]
             infos = textworld.EnvInfos(won=True)
-    except ImportError as error:
-        raise AlfworldTextWorkerRefusal("ALFWorld/TextWorld runtime is unavailable") from error
+    except Exception as error:
+        raise AlfworldTextWorkerPreFrameRefusal("RUNTIME_IMPORT") from error
     # register_game is the scalar API: register_games(batch_size=1) returns a
     # batched surface whose list-shaped observations are an avoidable ambiguity.
-    with _suppress_protocol_fds():
-        env_id = textworld.gym.register_game(
-            str(game_file), request_infos=infos, max_episode_steps=max_steps,
-            wrappers=[AlfredDemangler(shuffle=False)],
-        )
-        env = textworld.gym.make(env_id)
+    try:
+        with _suppress_protocol_fds():
+            env_id = textworld.gym.register_game(
+                str(game_file), request_infos=infos, max_episode_steps=max_steps,
+                wrappers=[AlfredDemangler(shuffle=False)],
+            )
+    except Exception as error:
+        raise AlfworldTextWorkerPreFrameRefusal("GAME_REGISTER") from error
+    try:
+        with _suppress_protocol_fds():
+            env = textworld.gym.make(env_id)
+    except Exception as error:
+        raise AlfworldTextWorkerPreFrameRefusal("ENVIRONMENT_MAKE") from error
     actions: list[str] = []
     observations: list[str] = []
     done = False
     won = False
     score = 0
     try:
-        with _suppress_protocol_fds():
-            observation, infos_value = env.reset()
-        if not isinstance(observation, str) or set(infos_value) != {"won"}:
-            raise AlfworldTextWorkerRefusal("reset environment info contract drifted")
+        try:
+            with _suppress_protocol_fds():
+                observation, infos_value = env.reset()
+        except Exception as error:
+            raise AlfworldTextWorkerPreFrameRefusal("ENVIRONMENT_RESET") from error
+        if not isinstance(observation, str):
+            raise AlfworldTextWorkerPreFrameRefusal("INITIAL_OBSERVATION_CONTRACT")
+        if not isinstance(infos_value, Mapping) or set(infos_value) != {"won"}:
+            raise AlfworldTextWorkerPreFrameRefusal("INITIAL_INFO_CONTRACT")
         observations.append(sha256(observation.encode("utf-8")).hexdigest())
-        _write_line(sys.stdout.buffer, actor_projection(episode_uid=episode_uid, observation=observation, step_index=0, done=False))
+        try:
+            _write_line(sys.stdout.buffer, actor_projection(episode_uid=episode_uid, observation=observation, step_index=0, done=False))
+        except Exception as error:
+            raise AlfworldTextWorkerPreFrameRefusal("INITIAL_ACTOR_WRITE") from error
         while not done:
             if len(actions) >= max_steps:
                 raise AlfworldTextWorkerRefusal("action horizon reached before another action request")
@@ -221,7 +271,16 @@ def run_episode(*, game_file: Path, source_game_sha256: str, episode_uid: str, m
         )
         with os.fdopen(outcome_fd, "wb", closefd=False) as outcome_stream:
             _write_line(outcome_stream, outcome)
-    finally:
+    except BaseException:
+        # A cleanup failure must not overwrite a pre-frame diagnostic phase.
+        # It is still suppressed on both protocol descriptors.
+        try:
+            with _suppress_protocol_fds():
+                env.close()
+        except Exception:
+            pass
+        raise
+    else:
         with _suppress_protocol_fds():
             env.close()
 
@@ -236,7 +295,11 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         run_episode(**vars(args))
-    except (OSError, ValueError) as error:
+    except AlfworldTextWorkerPreFrameRefusal as error:
+        # stdout remains actor-only and stderr remains outcome-only.  The
+        # bounded exit status carries an allow-listed pre-frame phase only.
+        return preframe_failure_exit_code(error.phase)
+    except Exception:
         # stderr is the private outcome channel; a refusal must be reflected by
         # exit status only, never mixed into an otherwise canonical receipt.
         return 2

@@ -102,10 +102,39 @@ def test_checked_public_qualification_projection_if_present() -> None:
     assert value["pool_manifest_sha256"] == _sha256(
         repository / "manifests/HSWM_ALFWORLD_TEXT_CLEAN_POOL_2026-08-30.json"
     )
+    introduced = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(repository),
+            "log",
+            "--diff-filter=A",
+            "--format=%H",
+            "--",
+            str(path.relative_to(repository)),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.splitlines()
+    assert len(introduced) == 1
+    execution_commit = introduced[0]
     assert value["source_code_sha256"] == {
-        "qualification_cli": _sha256(repository / "scripts/qualify_hswm_alfworld_text_runtime.py"),
-        "runtime": _sha256(repository / "src/hswm/experiments/alfworld_text_runtime.py"),
-        "worker": _sha256(repository / "src/hswm/experiments/alfworld_text_worker.py"),
+        "qualification_cli": _git_file_sha256(
+            repository,
+            execution_commit,
+            "scripts/qualify_hswm_alfworld_text_runtime.py",
+        ),
+        "runtime": _git_file_sha256(
+            repository,
+            execution_commit,
+            "src/hswm/experiments/alfworld_text_runtime.py",
+        ),
+        "worker": _git_file_sha256(
+            repository,
+            execution_commit,
+            "src/hswm/experiments/alfworld_text_worker.py",
+        ),
     }
     serialized = json.dumps(value, sort_keys=True, separators=(",", ":")).lower()
     for forbidden in ("game_opaque_uid", "game_relative_path", "observation", "outcome_receipt", "private_binding"):
@@ -126,3 +155,14 @@ def _sha256(path: Path) -> str:
     from hashlib import sha256
 
     return sha256(path.read_bytes()).hexdigest()
+
+
+def _git_file_sha256(repository: Path, commit: str, relative_path: str) -> str:
+    from hashlib import sha256
+
+    raw = subprocess.run(
+        ["git", "-C", str(repository), "show", f"{commit}:{relative_path}"],
+        check=True,
+        capture_output=True,
+    ).stdout
+    return sha256(raw).hexdigest()

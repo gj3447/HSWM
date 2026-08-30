@@ -1017,8 +1017,13 @@ end, but activated no candidate and produced zero measured top-10 order or
 membership changes across 456 diagnostic cells; it remains scientific RED.
 
 The committed next component experiment remains the parity-controlled typed
-text-lesson baseline. It is a precursor and comparison arm, not a substitute
-for the empty-memory continual-use protocol above. Separately, one candidate
+text-lesson baseline. Under the
+[`reuse-first research architecture`](docs/research/HSWM_REUSE_FIRST_ARCHITECTURE_2026-08-30.md),
+this must be a pinned Reflexion/ExpeL/ACE-style reproduction or adapter arm
+before HSWM invents another text-memory learner. It is a precursor and comparison
+arm, not a substitute for the empty-memory continual-use protocol above.
+Letta-style durable memory and Hyperon-style candidate rewriting are additional
+strong controls; they are not new canonical stores. Separately, one candidate
 engineering track for the integrated HSWM is to freeze the LLM, tools, cell
 registry, and topology and learn only a small routing policy in a task with
 genuine coordination headroom. It must not reuse the

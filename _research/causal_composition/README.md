@@ -52,6 +52,28 @@ protocol refusals, and inconclusive runs are evidence about an instrument or run
 not a null effect for HSWM, unless the declared mechanism was actually exposed to
 a valid intervention.
 
+## Inheritance-first execution rule
+
+The gate order is implemented under the
+[`HSWM reuse-first research architecture`](../../docs/research/HSWM_REUSE_FIRST_ARCHITECTURE_2026-08-30.md).
+G1 does not reimplement established memory, textual reflection, skill-library,
+metagraph query, or world-environment machinery unless a pinned prior arm cannot
+expose the declared intervention.
+
+- `B0`: base/no-learning and matched-context controls;
+- `B1`: pinned RAG or Letta-style durable-memory baseline;
+- `B2`: pinned Reflexion/ExpeL/ACE-style text-lesson baseline;
+- `B3`: bounded Voyager-style skill or Hyperon-style candidate-rewrite baseline;
+- `H0/H1/H2/H3`: fixed HSWM, outcome-bound revision, sham/shuffled revision, and
+  exact remove/restore arms.
+
+Each external arm must resolve to a paper-code binding, pinned revision, license
+disposition, isolated state, matched-resource receipt, and named control family.
+An external system is a bounded substrate, baseline, or falsifier; calling it is
+not evidence that its mechanism is HSWM cognition. HSWM directly implements only
+the unresolved causal seam: outcome-credit-owner-`Permit` admission, canonical
+revision identity, compiled behavioral mediation, and exact intervention.
+
 ## Dependency graph
 
 The order is a partially ordered research graph rather than a rhetorical roadmap.

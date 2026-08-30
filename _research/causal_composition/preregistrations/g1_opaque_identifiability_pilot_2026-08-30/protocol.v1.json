@@ -1,0 +1,333 @@
+{
+  "analysis": {
+    "branch_correct_denominators": 8,
+    "combined_no_state_denominator": 16,
+    "confirmatory_statistics": "NONE_EXPLORATORY_DESCRIPTIVE_ONLY",
+    "identifiability_observed_rule": {
+      "active_credit_and_admission": 8,
+      "active_correct": 8,
+      "combined_no_update_and_remove_correct_max": 10,
+      "delta_state_min": 0.5833333333333333,
+      "exact_remove_and_restore": 8,
+      "forced_opposite_credit_and_admission": 8,
+      "forced_opposite_correct": 0,
+      "no_update_correct_max": 5,
+      "remove_correct_max": 5,
+      "restore_correct": 8
+    },
+    "primary_estimand": "delta_state=mean_i((ACTIVE_i+RESTORE_i)/2-(FORCED_OPPOSITE_FEEDBACK_i+NO_UPDATE_i+REMOVE_i)/3)",
+    "secondary_estimands": [
+      "five_branch_signature_rate=mean_i[ACTIVE_i=1 and FORCED_OPPOSITE_FEEDBACK_i=0 and NO_UPDATE_i=0 and REMOVE_i=0 and RESTORE_i=1]",
+      "ACTIVE-minus-FORCED_OPPOSITE_FEEDBACK",
+      "ACTIVE-minus-mean(NO_UPDATE,REMOVE)",
+      "RESTORE-minus-REMOVE",
+      "branch_correct_counts_with_Wilson_95_percent_intervals",
+      "active_and_forced_opposite_credit_and_admission_counts",
+      "exact_remove_and_restore_count",
+      "no_state_correct_counts_stratified_by_candidate_position"
+    ],
+    "terminal_order": [
+      "INCONCLUSIVE_MEASUREMENT_NOT_READY",
+      "PILOT_COMPLETE_IDENTIFIABILITY_OBSERVED_NO_EFFICACY_INFERENCE",
+      "PILOT_COMPLETE_NO_BEHAVIORAL_SEPARATION_NO_EFFICACY_INFERENCE"
+    ],
+    "wilson_z": 1.959963984540054
+  },
+  "arms": [
+    "ACTIVE",
+    "FORCED_OPPOSITE_FEEDBACK",
+    "NO_UPDATE",
+    "REMOVE",
+    "RESTORE"
+  ],
+  "canonical_role": "A bounded G0 identifiability pilot asking whether the existing local outcome-credit-admission-fresh-probe-remove-restore instrument can produce a discriminating state-mediated signature when the target action mapping is evaluator-only and value leakage is removed.",
+  "conceptual_delta": "Replace value-revealing arithmetic labels and a potentially equal outcome-independent sham with episode-secret opaque action codes and an explicitly outcome-dependent forced-opposite-feedback control, while reusing the same one-disposition local Step/Learn-shaped mechanics.",
+  "consumption_registry": {
+    "boundary": "DGX_NODE_LOCAL_DURABLE_SINGLE_EXECUTION_NOT_DISTRIBUTED_CONSENSUS",
+    "path": "/mnt/hswm/evidence/hswm-g1-opaque-identifiability-pilot-2026-08-30-consumption-v1"
+  },
+  "control_boundary": "FORCED_OPPOSITE_FEEDBACK is an outcome-dependent counterfactual-feedback control: it is invalid relative to the genuine outcome but locally credited and admitted under its explicit experimental counterfactual policy. It is not an outcome-independent sham. A later complete G1 still requires a separately defined outcome-independent sham and the full required control family.",
+  "current_evidence": "The first live G1-shaped micro occurrence closed the local mechanics but all five branches were correct because arithmetic operators, operand, fresh input, and value-coded labels made the task baseline-saturated; its status was INSTRUMENT_VALIDATION_ONLY with G0 NOT_PASSED and G1 NOT_EVALUATED.",
+  "episode_count": 8,
+  "episodes": [
+    {
+      "action_codes": ["act_62dd7d88", "act_1b69c1ee"],
+      "cue": "cue_8cbf1203",
+      "episode_uid": "episode:opaque-8cbf1203",
+      "evaluator_commitment_sha256": "dc74c5636bb37ebbfe94df052b9d2ac400ede6a314ebae0ebe5589fc28ec7540",
+      "no_update_action_order": ["act_62dd7d88", "act_1b69c1ee"],
+      "ordinal": 1,
+      "remove_action_order": ["act_1b69c1ee", "act_62dd7d88"],
+      "stateful_probe_action_order": ["act_1b69c1ee", "act_62dd7d88"],
+      "trajectory_action_order": ["act_62dd7d88", "act_1b69c1ee"]
+    },
+    {
+      "action_codes": ["act_c32c7c81", "act_28fc221d"],
+      "cue": "cue_992b3ef8",
+      "episode_uid": "episode:opaque-992b3ef8",
+      "evaluator_commitment_sha256": "e443cda2c4b98f54b0485f3b98a62e4c7b6aedce520a1bca15df4c68e8a8b18d",
+      "no_update_action_order": ["act_28fc221d", "act_c32c7c81"],
+      "ordinal": 2,
+      "remove_action_order": ["act_c32c7c81", "act_28fc221d"],
+      "stateful_probe_action_order": ["act_c32c7c81", "act_28fc221d"],
+      "trajectory_action_order": ["act_28fc221d", "act_c32c7c81"]
+    },
+    {
+      "action_codes": ["act_2451bb60", "act_0cc13a79"],
+      "cue": "cue_01e6cb07",
+      "episode_uid": "episode:opaque-01e6cb07",
+      "evaluator_commitment_sha256": "1248afbe5d05ff7c977f9d2aa9af7c0dcbc70f04dbc098b488cdd862de442a22",
+      "no_update_action_order": ["act_2451bb60", "act_0cc13a79"],
+      "ordinal": 3,
+      "remove_action_order": ["act_0cc13a79", "act_2451bb60"],
+      "stateful_probe_action_order": ["act_0cc13a79", "act_2451bb60"],
+      "trajectory_action_order": ["act_2451bb60", "act_0cc13a79"]
+    },
+    {
+      "action_codes": ["act_21363fcd", "act_6ed0226f"],
+      "cue": "cue_35a1acba",
+      "episode_uid": "episode:opaque-35a1acba",
+      "evaluator_commitment_sha256": "972c0114ceac3a23eaecc974b71fd3383f4d84837a0e9ddc1a0e1b4be6812eba",
+      "no_update_action_order": ["act_6ed0226f", "act_21363fcd"],
+      "ordinal": 4,
+      "remove_action_order": ["act_21363fcd", "act_6ed0226f"],
+      "stateful_probe_action_order": ["act_21363fcd", "act_6ed0226f"],
+      "trajectory_action_order": ["act_6ed0226f", "act_21363fcd"]
+    },
+    {
+      "action_codes": ["act_172ea60e", "act_2ca6e300"],
+      "cue": "cue_ea0df6d9",
+      "episode_uid": "episode:opaque-ea0df6d9",
+      "evaluator_commitment_sha256": "fb3e65b07cc9e077f8a9475b13d093ee0a0a18e02cc3caa0b9ef55fc42f0cd75",
+      "no_update_action_order": ["act_172ea60e", "act_2ca6e300"],
+      "ordinal": 5,
+      "remove_action_order": ["act_2ca6e300", "act_172ea60e"],
+      "stateful_probe_action_order": ["act_2ca6e300", "act_172ea60e"],
+      "trajectory_action_order": ["act_172ea60e", "act_2ca6e300"]
+    },
+    {
+      "action_codes": ["act_db3ae49f", "act_203efabe"],
+      "cue": "cue_3eee18e4",
+      "episode_uid": "episode:opaque-3eee18e4",
+      "evaluator_commitment_sha256": "ead748ce4dd0dc8d3f3ccd19b4163be207eb979c08206218bace46f051734099",
+      "no_update_action_order": ["act_203efabe", "act_db3ae49f"],
+      "ordinal": 6,
+      "remove_action_order": ["act_db3ae49f", "act_203efabe"],
+      "stateful_probe_action_order": ["act_db3ae49f", "act_203efabe"],
+      "trajectory_action_order": ["act_203efabe", "act_db3ae49f"]
+    },
+    {
+      "action_codes": ["act_ebff8b6d", "act_dac5de78"],
+      "cue": "cue_336edd16",
+      "episode_uid": "episode:opaque-336edd16",
+      "evaluator_commitment_sha256": "16355f70653f3dce40e394fa5e2d3dd0e7fb5ce185a90a5ad2a3d6be27b390ab",
+      "no_update_action_order": ["act_ebff8b6d", "act_dac5de78"],
+      "ordinal": 7,
+      "remove_action_order": ["act_dac5de78", "act_ebff8b6d"],
+      "stateful_probe_action_order": ["act_dac5de78", "act_ebff8b6d"],
+      "trajectory_action_order": ["act_ebff8b6d", "act_dac5de78"]
+    },
+    {
+      "action_codes": ["act_fcad7a4f", "act_d9bf85dc"],
+      "cue": "cue_f8c3dfb6",
+      "episode_uid": "episode:opaque-f8c3dfb6",
+      "evaluator_commitment_sha256": "26ba543f4ae96513e2c7eea798662cda1e1e2ceb42380a92c88b1f1b072d9538",
+      "no_update_action_order": ["act_d9bf85dc", "act_fcad7a4f"],
+      "ordinal": 8,
+      "remove_action_order": ["act_fcad7a4f", "act_d9bf85dc"],
+      "stateful_probe_action_order": ["act_fcad7a4f", "act_d9bf85dc"],
+      "trajectory_action_order": ["act_d9bf85dc", "act_fcad7a4f"]
+    }
+  ],
+  "evaluator_boundary": "DETERMINISTIC_SAME_PROCESS_LOCAL_INSTRUMENT_NOT_INDEPENDENTLY_OWNED_OR_G0_CF07_SUFFICIENT",
+  "evaluator_reveal_contract": {
+    "entry_commitment_formula": "canonical_sha256({ordinal,episode_uid,correct_action_code,salt,leakage_canary})",
+    "protocol_binding": "Reveal outer object must contain this protocol canonical SHA-256 after protocol freeze; the commitment root excludes that outer binding to avoid a circular digest.",
+    "reveal_commitment_root": "71ac26c3bb586b026747acf9f311e4cb4e89be0fd6389cbdd58828f2b0d36620",
+    "reveal_schema_version": "hswm-g1-opaque-evaluator-reveal/v1",
+    "root_formula": "canonical_sha256({episode_commitments:[ordered eight entry commitments]})",
+    "timing": "Loaded and commitment-validated before registry claim; no salt, canary, or correct-code identity enters any model request; reveal is attached only after every planned behavior call is sealed."
+  },
+  "http_post_accounting": {
+    "completion_posts": 64,
+    "tokenize_preflight_posts": 64,
+    "total_posts": 128
+  },
+  "leakage_contract": {
+    "branch_labels_model_visible": false,
+    "forbidden_legacy_semantics": [
+      "ADD_THREE",
+      "MULTIPLY_THREE",
+      "candidate_operators",
+      "operand",
+      "train_input",
+      "fresh_input",
+      "hidden_operator",
+      "correct_action_code",
+      "leakage_canary",
+      "salt"
+    ],
+    "model_visible_task_fields": ["episode_uid", "cue", "action_codes", "compiled_disposition"],
+    "required_checks": [
+      "Every raw generation and tokenizer request preimage is scanned before result sealing.",
+      "No evaluator salt, canary, target identity, codebook mapping, seed, legacy operator, operand, or value-derived label is present.",
+      "REMOVE compiles the exact genesis state and uses the same candidate order as ACTIVE, FORCED_OPPOSITE_FEEDBACK, and RESTORE; NO_UPDATE is the opposite-order position sentinel.",
+      "For ACTIVE, FORCED_OPPOSITE_FEEDBACK, REMOVE, and RESTORE, raw model requests are byte-identical after deleting only the compiled disposition projection and transport request identifier.",
+      "All branch calls use the same operation schemas without a model-visible arm label."
+    ]
+  },
+  "live_binding": {
+    "async_scheduling": false,
+    "container_image": "vllm/vllm-openai@sha256:e4f88a835143cd22aee2397a26ec6bb80b3a4a6fe0c882bcbc63822904766089",
+    "container_image_id": "sha256:30a38a1d74a17365eca400e83ffd885b250e0c8c0d3c5b508afa8c412d2ddf95",
+    "enforce_eager": true,
+    "endpoint_origin": "http://127.0.0.1:18080",
+    "expected_max_model_len": 32768,
+    "gpu_memory_utilization_milli": 500,
+    "gpu_name": "NVIDIA GB10",
+    "gpu_uuid": "GPU-ffed5bca-3452-8e9e-03fb-b2a4d8f40bc5",
+    "max_num_seqs": 1,
+    "model_repository": "Qwen/Qwen3.6-35B-A3B-FP8",
+    "model_revision": "95a723d08a9490559dae23d0cff1d9466213d989",
+    "model_snapshot_manifest_sha256": "2ece6b46248e818cbf93aa30299300f7dd4c60d9351960ec790cc8b420376e47",
+    "network_boundary": "HOST_INGRESS_LOOPBACK_BOUND;CONTAINER_BRIDGE_EGRESS_NOT_INDEPENDENTLY_BLOCKED",
+    "prefix_cache": false,
+    "served_model": "qwen3.6-35b-a3b",
+    "vllm_version": "0.25.1"
+  },
+  "model_call_sequence_per_episode": [
+    "pre_outcome_trajectory",
+    "active_revision_proposal",
+    "forced_opposite_revision_proposal",
+    "active_fresh_probe",
+    "forced_opposite_fresh_probe",
+    "no_update_fresh_probe",
+    "removed_state_fresh_probe",
+    "restored_state_fresh_probe"
+  ],
+  "nonclaim": "LOCAL_EXPERIMENTAL_AUTHORIZATION_ONLY;NOT_CANONICAL_ATOM_V2_PERMIT;NOT_CANONICAL_HSWM_ADMISSION;NOT_G1_GATE_DECISION_OR_EFFICACY",
+  "permit_policy": {
+    "grant_timing": "AFTER_OUTCOME_CREDIT_AND_EXACT_PROPOSAL_UNDER_PREOUTCOME_POLICY",
+    "max_consumptions_per_grant": 1,
+    "revision_kind": "OPAQUE_ACTION_CODE_DISPOSITION",
+    "write_operation": "UPSERT_ONE_DISPOSITION",
+    "write_target": "local:g1-micro-state:dispositions"
+  },
+  "prior_result_evidence_sha256": "66730545c95cb537340b85400574e27b37cf18e1594e5408bef5db9100712700",
+  "provider_call_cap": 64,
+  "research_order": {
+    "G0": "EXPLORATORY_IDENTIFIABILITY_ONLY_NOT_PASSED",
+    "G1": "NOT_EVALUATED",
+    "G2_THROUGH_G6": "LOCKED"
+  },
+  "runtime_scope": "One fresh pinned vLLM container is shared across all eight precommitted episodes. Calls are stateless at the API contract, but cross-episode service-level independence is not established.",
+  "schema_version": "hswm-g1-opaque-identifiability-pilot/v1",
+  "scientific_status": "EXPLORATORY_G0_IDENTIFIABILITY_ONLY_NOT_G1_EFFICACY_OR_GATE",
+  "state_intervention": "One cue-bound opaque action-code disposition is behavior-readable per episode. REMOVE activates that episode's exact empty genesis state; RESTORE reactivates the exact ACTIVE state bytes. Audit records are outside the model behavior readset.",
+  "stopping_rule": "Exactly eight precommitted episodes in ordinal order. No retry, replacement, refill, resume, adaptive code/task selection, partial-look adaptation, or second occurrence. A schema-valid proposal that does not follow its feedback rule is retained as NO_CREDIT/NO_ADMISSION and the scheduled episode continues. Any call, parse, or structural failure aborts the study, preserves the exact prefix, consumes the registry, and yields INCONCLUSIVE_MEASUREMENT_NOT_READY.",
+  "study_uid": "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-2026-08-30",
+  "tokenizer_binding": {
+    "condition": "PAIRWISE_EQUAL_STANDALONE_ACTION_CODE_TOKEN_COUNTS_BEFORE_REGISTRY_CLAIM",
+    "container_image": "vllm/vllm-openai@sha256:e4f88a835143cd22aee2397a26ec6bb80b3a4a6fe0c882bcbc63822904766089",
+    "container_image_id": "sha256:30a38a1d74a17365eca400e83ffd885b250e0c8c0d3c5b508afa8c412d2ddf95",
+    "encoding": {
+      "add_special_tokens": false,
+      "api": "AutoTokenizer.encode",
+      "local_files_only": true
+    },
+    "episodes": [
+      {
+        "action_codes": ["act_62dd7d88", "act_1b69c1ee"],
+        "episode_uid": "episode:opaque-8cbf1203",
+        "token_counts": [9, 9],
+        "token_ids": [[519, 62, 21, 17, 613, 22, 67, 23, 23], [519, 62, 16, 65, 21, 24, 66, 16, 2059]]
+      },
+      {
+        "action_codes": ["act_c32c7c81", "act_28fc221d"],
+        "episode_uid": "episode:opaque-992b3ef8",
+        "token_counts": [9, 9],
+        "token_ids": [[519, 648, 18, 17, 66, 22, 66, 23, 16], [519, 62, 17, 23, 8058, 17, 17, 16, 67]]
+      },
+      {
+        "action_codes": ["act_2451bb60", "act_0cc13a79"],
+        "episode_uid": "episode:opaque-01e6cb07",
+        "token_counts": [9, 9],
+        "token_ids": [[519, 62, 17, 19, 20, 16, 5876, 21, 15], [519, 62, 15, 620, 16, 18, 64, 22, 24]]
+      },
+      {
+        "action_codes": ["act_21363fcd", "act_6ed0226f"],
+        "episode_uid": "episode:opaque-35a1acba",
+        "token_counts": [9, 9],
+        "token_ids": [[519, 62, 17, 16, 18, 21, 18, 69, 4243], [519, 62, 21, 290, 15, 17, 17, 21, 69]]
+      },
+      {
+        "action_codes": ["act_172ea60e", "act_2ca6e300"],
+        "episode_uid": "episode:opaque-ea0df6d9",
+        "token_counts": [9, 9],
+        "token_ids": [[519, 62, 16, 22, 17, 12150, 21, 15, 68], [519, 62, 17, 895, 21, 68, 18, 15, 15]]
+      },
+      {
+        "action_codes": ["act_db3ae49f", "act_203efabe"],
+        "episode_uid": "episode:opaque-3eee18e4",
+        "token_counts": [7, 7],
+        "token_ids": [[519, 8420, 18, 5734, 19, 24, 69], [519, 62, 17, 15, 18, 797, 7972]]
+      },
+      {
+        "action_codes": ["act_ebff8b6d", "act_dac5de78"],
+        "episode_uid": "episode:opaque-336edd16",
+        "token_counts": [7, 7],
+        "token_ids": [[519, 2135, 88931, 23, 65, 21, 67], [519, 788, 565, 20, 442, 22, 23]]
+      },
+      {
+        "action_codes": ["act_fcad7a4f", "act_d9bf85dc"],
+        "episode_uid": "episode:opaque-f8c3dfb6",
+        "token_counts": [7, 7],
+        "token_ids": [[519, 736, 33311, 22, 64, 19, 69], [519, 788, 24, 12849, 23, 20, 7385]]
+      }
+    ],
+    "interpretation_boundary": "Pairwise equal standalone token counts reduce a length cue; they do not prove semantic opacity or exchangeability. Protection also depends on evaluator-only target mapping, request-preimage leakage checks, candidate-position counterbalancing, and no-state controls.",
+    "model_repository": "Qwen/Qwen3.6-35B-A3B-FP8",
+    "model_revision": "95a723d08a9490559dae23d0cff1d9466213d989",
+    "pre_freeze_dgx_evidence": {
+      "artifact_tar_sha256": "1af185776a08486abc0d9911d0d2fcb65d4bebbc8f7451f212adbb88afa8104d",
+      "console_log_member": "logs/console.log",
+      "console_log_sha256": "9b56b184d260a0d5435e8608800154c8e94be82c4f8e212f855ead4464a16d12",
+      "durable_run_path": "/mnt/hswm/runs/g1-opaque-tokenizer-probe-20260830-v3",
+      "run_id": "g1-opaque-tokenizer-probe-20260830-v3",
+      "wrapper_receipt_sha256": "ac379072ed6bc7b0c10728b2280712cdad7379ec070fc25a716dcf63de9296d8"
+    },
+    "selection_history": {
+      "behavior_model_posts": 0,
+      "rule": "Before protocol freeze, action codes were selected only to satisfy pairwise standalone token-count equality under the pinned tokenizer. No model completion, task outcome, or pilot behavior was observed or used.",
+      "runs": [
+        {
+          "artifact_tar_sha256": "4ea07fd81e9bdfd6cd2e735309abeb246ff48332700a5b5d94f48ad6bf0aa8b3",
+          "console_log_sha256": "f8a25d6b797fdec1e142cbca14ce9a9bea60e7195d08174c9a49fdeb23b23227",
+          "purpose": "FAILED_READ_ONLY_TEMP_DIRECTORY_DIAGNOSTIC_NO_TOKEN_OBSERVATION",
+          "run_id": "g1-opaque-tokenizer-probe-20260830-v1",
+          "status": "FAILED",
+          "wrapper_receipt_sha256": "a37ae3f8a5fff4e3561f3000280aae2daf8e75de5450ab0679efcad3d717b09a"
+        },
+        {
+          "artifact_tar_sha256": "0eb8e6e3812fed8f7151188410d020046f0e3596ed0897710e49d586d9114c55",
+          "console_log_sha256": "819bd208a2703324118825e4c75679b66c2e301ab1283a5c4cac6b106ab1de90",
+          "purpose": "REJECTED_ORIGINAL_UNEQUAL_TOKEN_COUNT_PAIRS",
+          "run_id": "g1-opaque-tokenizer-probe-20260830-v2",
+          "status": "SUCCESS",
+          "wrapper_receipt_sha256": "5b25887162ab3b9718f4f1cb7bc99ef5fd258ef6d2e42ac5e2bbc831e794263d"
+        },
+        {
+          "artifact_tar_sha256": "1af185776a08486abc0d9911d0d2fcb65d4bebbc8f7451f212adbb88afa8104d",
+          "console_log_sha256": "9b56b184d260a0d5435e8608800154c8e94be82c4f8e212f855ead4464a16d12",
+          "purpose": "SELECTED_FINAL_PAIRWISE_EQUAL_TOKEN_COUNT_CODES",
+          "run_id": "g1-opaque-tokenizer-probe-20260830-v3",
+          "status": "SUCCESS",
+          "wrapper_receipt_sha256": "ac379072ed6bc7b0c10728b2280712cdad7379ec070fc25a716dcf63de9296d8"
+        }
+      ]
+    },
+    "snapshot_manifest_sha256": "2ece6b46248e818cbf93aa30299300f7dd4c60d9351960ec790cc8b420376e47",
+    "tokenizers_version": "0.22.2",
+    "transformers_version": "5.13.1"
+  }
+}

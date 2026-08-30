@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from hashlib import sha256
+import json
 from pathlib import Path
 import subprocess
 import sys
@@ -16,6 +17,7 @@ from hswm.experiments.g1_micro_dgx import (
     DGXFreshSpec,
     LaunchRefused,
     make_runtime_binding_record,
+    offline_action_code_tokenizer_receipt,
     verify_dgx_execution_receipt,
 )
 from hswm.selfmod.contracts import canonical_json_bytes
@@ -25,6 +27,11 @@ _PROTOCOL = (
     Path(__file__).parents[1]
     / "_research/causal_composition/preregistrations/"
     "g1_micro_exploratory_2026-08-30/protocol.v1.json"
+)
+_OPAQUE_PROTOCOL = (
+    Path(__file__).parents[1]
+    / "_research/causal_composition/preregistrations/"
+    "g1_opaque_identifiability_pilot_2026-08-30/protocol.v1.json"
 )
 _SNAPSHOT_MANIFEST = (
     Path(__file__).parents[1]
@@ -241,6 +248,114 @@ def test_final_receipt_joins_eight_requests_and_teardown() -> None:
     with pytest.raises(LaunchRefused, match="final service evidence"):
         verify_dgx_execution_receipt(
             receipt=receipt(7), bundle=bundle, protocol=protocol
+        )
+
+
+def test_offline_opaque_tokenizer_receipt_requires_equal_lengths_and_order(
+    tmp_path: Path,
+) -> None:
+    protocol, _ = g1_micro.load_protocol(_OPAQUE_PROTOCOL)
+    binding = protocol["tokenizer_binding"]
+    snapshot = tmp_path / binding["model_revision"]
+    snapshot.mkdir()
+
+    def command(argv: tuple[str, ...]) -> bytes:
+        payload = json.loads(argv[-2])
+        assert payload["episodes"] == [
+            {
+                "action_codes": episode["action_codes"],
+                "episode_uid": episode["episode_uid"],
+            }
+            for episode in binding["episodes"]
+        ]
+        rows = [
+            {
+                "episode_uid": episode["episode_uid"],
+                "token_ids": episode["token_ids"],
+            }
+            for episode in binding["episodes"]
+        ]
+        return canonical_json_bytes(
+            {
+                "transformers_version": binding["transformers_version"],
+                "tokenizers_version": binding["tokenizers_version"],
+                "episodes": rows,
+            }
+        )
+
+    receipt = offline_action_code_tokenizer_receipt(
+        command=command,
+        snapshot=snapshot,
+        tokenizer_binding=binding,
+    )
+    expected = {
+        "schema_version": "hswm-g1-opaque-offline-tokenizer-receipt/v1",
+        "container_image": binding["container_image"],
+        "container_image_id": binding["container_image_id"],
+        "model_repository": binding["model_repository"],
+        "model_revision": binding["model_revision"],
+        "snapshot_manifest_sha256": binding["snapshot_manifest_sha256"],
+        "encoding": binding["encoding"],
+        "transformers_version": binding["transformers_version"],
+        "tokenizers_version": binding["tokenizers_version"],
+        "episodes": [
+            {
+                "episode_uid": episode["episode_uid"],
+                "action_codes": episode["action_codes"],
+                "token_ids": episode["token_ids"],
+                "token_counts": episode["token_counts"],
+            }
+            for episode in binding["episodes"]
+        ],
+    }
+    unsigned = dict(receipt)
+    digest = unsigned.pop("receipt_sha256")
+    assert unsigned == expected
+    assert digest == sha256(canonical_json_bytes(unsigned)).hexdigest()
+
+    def unequal(argv: tuple[str, ...]) -> bytes:
+        payload = json.loads(argv[-2])
+        return canonical_json_bytes(
+            {
+                "transformers_version": binding["transformers_version"],
+                "tokenizers_version": binding["tokenizers_version"],
+                "episodes": [
+                    {
+                        "episode_uid": item["episode_uid"],
+                        "token_ids": [[1], [2, 3]],
+                    }
+                    for item in payload["episodes"]
+                ],
+            }
+        )
+
+    with pytest.raises(LaunchRefused, match="equal offline token counts"):
+        offline_action_code_tokenizer_receipt(
+            command=unequal,
+            snapshot=snapshot,
+            tokenizer_binding=binding,
+        )
+
+    def swapped(argv: tuple[str, ...]) -> bytes:
+        payload = json.loads(argv[-2])
+        rows = [
+            {"episode_uid": item["episode_uid"], "token_ids": [[1], [2]]}
+            for item in payload["episodes"]
+        ]
+        rows[0], rows[1] = rows[1], rows[0]
+        return canonical_json_bytes(
+            {
+                "transformers_version": binding["transformers_version"],
+                "tokenizers_version": binding["tokenizers_version"],
+                "episodes": rows,
+            }
+        )
+
+    with pytest.raises(LaunchRefused, match="opaque action codes"):
+        offline_action_code_tokenizer_receipt(
+            command=swapped,
+            snapshot=snapshot,
+            tokenizer_binding=binding,
         )
 
 

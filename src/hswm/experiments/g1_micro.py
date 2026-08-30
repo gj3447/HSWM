@@ -40,6 +40,7 @@ from hswm.selfmod.contracts import canonical_json_bytes, canonical_sha256
 
 
 PROTOCOL = "hswm-g1-micro-exploratory/v1"
+OPAQUE_PILOT_PROTOCOL = "hswm-g1-opaque-identifiability-pilot/v1"
 STATE_SCHEMA = "hswm-g1-micro-disposition-state/v1"
 RECORD_SCHEMA_PREFIX = "hswm-g1-micro-record/"
 LOCAL_SCOPE_NONCLAIM = (
@@ -57,6 +58,18 @@ DGX_TRACKED_SOURCE_PATHS = (
     "src/hswm/experiments/g1_micro_dgx.py",
     "src/hswm/selfmod/contracts.py",
 )
+DGX_V2_PROTOCOL_PATH = (
+    "_research/causal_composition/preregistrations/"
+    "g1_opaque_identifiability_pilot_2026-08-30/protocol.v1.json"
+)
+DGX_PROTOCOL_PATHS = frozenset((DGX_TRACKED_SOURCE_PATHS[0], DGX_V2_PROTOCOL_PATH))
+
+
+def dgx_tracked_source_paths(protocol: Mapping[str, Any]) -> tuple[str, ...]:
+    """Keep historical v1 binding manifests immutable while binding v2's source."""
+    if protocol.get("schema_version") == OPAQUE_PILOT_PROTOCOL:
+        return (DGX_V2_PROTOCOL_PATH, *DGX_TRACKED_SOURCE_PATHS[1:])
+    return DGX_TRACKED_SOURCE_PATHS
 TERMINALS = frozenset(
     {
         "INCONCLUSIVE_MEASUREMENT_NOT_READY",
@@ -298,6 +311,9 @@ def task_from_protocol(protocol: Mapping[str, Any]) -> MicroTask:
 def _validate_protocol(value: Mapping[str, Any]) -> None:
     """Validate the executable preregistration envelope, including API callers."""
 
+    if value.get("schema_version") == OPAQUE_PILOT_PROTOCOL:
+        _validate_opaque_pilot_protocol(value)
+        return
     if value.get("schema_version") != PROTOCOL:
         raise G1MicroError("protocol schema mismatch")
     if value.get("scientific_status") != "EXPLORATORY_INTEGRATION_READINESS_NOT_G1_GATE":
@@ -430,6 +446,167 @@ def _validate_protocol(value: Mapping[str, Any]) -> None:
     task_from_protocol(value)
 
 
+def _validate_opaque_pilot_protocol(value: Mapping[str, Any]) -> None:
+    """Strict frozen envelope for the eight-episode identifiability pilot.
+
+    This deliberately lives beside, rather than inside, the immutable v1
+    envelope: v1's exact fields and verifier stay byte-for-byte compatible.
+    """
+
+    expected = {
+        "analysis", "arms", "canonical_role", "conceptual_delta", "consumption_registry",
+        "control_boundary", "current_evidence", "episode_count", "episodes", "evaluator_boundary",
+        "evaluator_reveal_contract", "http_post_accounting", "leakage_contract", "live_binding",
+        "model_call_sequence_per_episode", "nonclaim", "permit_policy", "prior_result_evidence_sha256",
+        "provider_call_cap", "research_order", "runtime_scope", "schema_version", "scientific_status",
+        "state_intervention", "stopping_rule", "study_uid", "tokenizer_binding",
+    }
+    if set(value) != expected or value.get("schema_version") != OPAQUE_PILOT_PROTOCOL:
+        raise G1MicroError("opaque pilot protocol field set drifted")
+    if value["episode_count"] != 8 or not isinstance(value["episodes"], list) or len(value["episodes"]) != 8:
+        raise G1MicroError("opaque pilot requires exactly eight preregistered episodes")
+    episode_uids: set[str] = set()
+    for ordinal, episode in enumerate(value["episodes"], start=1):
+        if not isinstance(episode, Mapping) or set(episode) != {"action_codes", "cue", "episode_uid", "evaluator_commitment_sha256", "no_update_action_order", "ordinal", "remove_action_order", "stateful_probe_action_order", "trajectory_action_order"} or episode["ordinal"] != ordinal or not isinstance(episode["cue"], str) or not isinstance(episode["episode_uid"], str) or episode["episode_uid"] in episode_uids or not isinstance(episode["action_codes"], list) or len(episode["action_codes"]) != 2 or len(set(episode["action_codes"])) != 2 or any(not isinstance(code, str) or not re.fullmatch(r"act_[0-9a-f]{8}", code) for code in episode["action_codes"]):
+            raise G1MicroError("opaque pilot public episode contract drifted")
+        episode_uids.add(episode["episode_uid"])
+        _require_sha(episode["evaluator_commitment_sha256"], "opaque pilot evaluator commitment")
+        if any(list(episode[key]) not in (episode["action_codes"], episode["action_codes"][::-1]) for key in ("no_update_action_order", "remove_action_order", "stateful_probe_action_order", "trajectory_action_order")) or episode["no_update_action_order"] == episode["remove_action_order"] or episode["remove_action_order"] != episode["stateful_probe_action_order"]:
+            raise G1MicroError("opaque pilot candidate order counterbalance drifted")
+    if value.get("provider_call_cap") != 64 or value.get("http_post_accounting") != {
+        "completion_posts": 64, "tokenize_preflight_posts": 64, "total_posts": 128,
+    }:
+        raise G1MicroError("opaque pilot fixed call accounting drifted")
+    if value.get("arms") != [
+        "ACTIVE", "FORCED_OPPOSITE_FEEDBACK", "NO_UPDATE", "REMOVE", "RESTORE",
+    ] or value.get("model_call_sequence_per_episode") != [
+        "pre_outcome_trajectory", "active_revision_proposal",
+        "forced_opposite_revision_proposal", "active_fresh_probe",
+        "forced_opposite_fresh_probe", "no_update_fresh_probe",
+        "removed_state_fresh_probe", "restored_state_fresh_probe",
+    ]:
+        raise G1MicroError("opaque pilot arm or per-episode call contract drifted")
+    if value.get("scientific_status") != "EXPLORATORY_G0_IDENTIFIABILITY_ONLY_NOT_G1_EFFICACY_OR_GATE":
+        raise G1MicroError("opaque pilot scientific boundary drifted")
+    if value.get("research_order") != {"G0": "EXPLORATORY_IDENTIFIABILITY_ONLY_NOT_PASSED", "G1": "NOT_EVALUATED", "G2_THROUGH_G6": "LOCKED"}:
+        raise G1MicroError("opaque pilot research order drifted")
+    if value.get("nonclaim") != LOCAL_SCOPE_NONCLAIM:
+        raise G1MicroError("opaque pilot nonclaim drifted")
+    exact_prose = {
+        "canonical_role": "A bounded G0 identifiability pilot asking whether the existing local outcome-credit-admission-fresh-probe-remove-restore instrument can produce a discriminating state-mediated signature when the target action mapping is evaluator-only and value leakage is removed.",
+        "conceptual_delta": "Replace value-revealing arithmetic labels and a potentially equal outcome-independent sham with episode-secret opaque action codes and an explicitly outcome-dependent forced-opposite-feedback control, while reusing the same one-disposition local Step/Learn-shaped mechanics.",
+        "control_boundary": "FORCED_OPPOSITE_FEEDBACK is an outcome-dependent counterfactual-feedback control: it is invalid relative to the genuine outcome but locally credited and admitted under its explicit experimental counterfactual policy. It is not an outcome-independent sham. A later complete G1 still requires a separately defined outcome-independent sham and the full required control family.",
+        "current_evidence": "The first live G1-shaped micro occurrence closed the local mechanics but all five branches were correct because arithmetic operators, operand, fresh input, and value-coded labels made the task baseline-saturated; its status was INSTRUMENT_VALIDATION_ONLY with G0 NOT_PASSED and G1 NOT_EVALUATED.",
+        "evaluator_boundary": "DETERMINISTIC_SAME_PROCESS_LOCAL_INSTRUMENT_NOT_INDEPENDENTLY_OWNED_OR_G0_CF07_SUFFICIENT",
+        "runtime_scope": "One fresh pinned vLLM container is shared across all eight precommitted episodes. Calls are stateless at the API contract, but cross-episode service-level independence is not established.",
+        "state_intervention": "One cue-bound opaque action-code disposition is behavior-readable per episode. REMOVE activates that episode's exact empty genesis state; RESTORE reactivates the exact ACTIVE state bytes. Audit records are outside the model behavior readset.",
+        "stopping_rule": "Exactly eight precommitted episodes in ordinal order. No retry, replacement, refill, resume, adaptive code/task selection, partial-look adaptation, or second occurrence. A schema-valid proposal that does not follow its feedback rule is retained as NO_CREDIT/NO_ADMISSION and the scheduled episode continues. Any call, parse, or structural failure aborts the study, preserves the exact prefix, consumes the registry, and yields INCONCLUSIVE_MEASUREMENT_NOT_READY.",
+    }
+    if any(value.get(key) != expected for key, expected in exact_prose.items()):
+        raise G1MicroError("opaque pilot scientific/procedural prose drifted")
+    if value.get("leakage_contract") != {
+        "branch_labels_model_visible": False,
+        "forbidden_legacy_semantics": ["ADD_THREE", "MULTIPLY_THREE", "candidate_operators", "operand", "train_input", "fresh_input", "hidden_operator", "correct_action_code", "leakage_canary", "salt"],
+        "model_visible_task_fields": ["episode_uid", "cue", "action_codes", "compiled_disposition"],
+        "required_checks": [
+            "Every raw generation and tokenizer request preimage is scanned before result sealing.",
+            "No evaluator salt, canary, target identity, codebook mapping, seed, legacy operator, operand, or value-derived label is present.",
+            "REMOVE compiles the exact genesis state and uses the same candidate order as ACTIVE, FORCED_OPPOSITE_FEEDBACK, and RESTORE; NO_UPDATE is the opposite-order position sentinel.",
+            "For ACTIVE, FORCED_OPPOSITE_FEEDBACK, REMOVE, and RESTORE, raw model requests are byte-identical after deleting only the compiled disposition projection and transport request identifier.",
+            "All branch calls use the same operation schemas without a model-visible arm label.",
+        ],
+    }:
+        raise G1MicroError("opaque pilot leakage contract drifted")
+    analysis = value.get("analysis")
+    expected_analysis = {
+        "branch_correct_denominators": 8, "combined_no_state_denominator": 16,
+        "confirmatory_statistics": "NONE_EXPLORATORY_DESCRIPTIVE_ONLY",
+        "identifiability_observed_rule": {"active_credit_and_admission": 8, "active_correct": 8, "combined_no_update_and_remove_correct_max": 10, "delta_state_min": 0.5833333333333333, "exact_remove_and_restore": 8, "forced_opposite_credit_and_admission": 8, "forced_opposite_correct": 0, "no_update_correct_max": 5, "remove_correct_max": 5, "restore_correct": 8},
+        "primary_estimand": "delta_state=mean_i((ACTIVE_i+RESTORE_i)/2-(FORCED_OPPOSITE_FEEDBACK_i+NO_UPDATE_i+REMOVE_i)/3)",
+        "secondary_estimands": ["five_branch_signature_rate=mean_i[ACTIVE_i=1 and FORCED_OPPOSITE_FEEDBACK_i=0 and NO_UPDATE_i=0 and REMOVE_i=0 and RESTORE_i=1]", "ACTIVE-minus-FORCED_OPPOSITE_FEEDBACK", "ACTIVE-minus-mean(NO_UPDATE,REMOVE)", "RESTORE-minus-REMOVE", "branch_correct_counts_with_Wilson_95_percent_intervals", "active_and_forced_opposite_credit_and_admission_counts", "exact_remove_and_restore_count", "no_state_correct_counts_stratified_by_candidate_position"],
+        "terminal_order": ["INCONCLUSIVE_MEASUREMENT_NOT_READY", "PILOT_COMPLETE_IDENTIFIABILITY_OBSERVED_NO_EFFICACY_INFERENCE", "PILOT_COMPLETE_NO_BEHAVIORAL_SEPARATION_NO_EFFICACY_INFERENCE"], "wilson_z": 1.959963984540054,
+    }
+    if analysis != expected_analysis:
+        raise G1MicroError("opaque pilot analysis contract drifted")
+    if value.get("permit_policy") != {
+        "grant_timing": "AFTER_OUTCOME_CREDIT_AND_EXACT_PROPOSAL_UNDER_PREOUTCOME_POLICY",
+        "max_consumptions_per_grant": 1,
+        "revision_kind": "OPAQUE_ACTION_CODE_DISPOSITION",
+        "write_operation": "UPSERT_ONE_DISPOSITION",
+        "write_target": "local:g1-micro-state:dispositions",
+    }:
+        raise G1MicroError("opaque pilot permit policy drifted")
+    reveal_contract = value.get("evaluator_reveal_contract")
+    if not isinstance(reveal_contract, Mapping) or set(reveal_contract) != {"entry_commitment_formula", "protocol_binding", "reveal_commitment_root", "reveal_schema_version", "root_formula", "timing"} or reveal_contract["reveal_schema_version"] != "hswm-g1-opaque-evaluator-reveal/v1":
+        raise G1MicroError("opaque pilot reveal contract drifted")
+    if {key: reveal_contract[key] for key in ("entry_commitment_formula", "protocol_binding", "root_formula", "timing")} != {
+        "entry_commitment_formula": "canonical_sha256({ordinal,episode_uid,correct_action_code,salt,leakage_canary})",
+        "protocol_binding": "Reveal outer object must contain this protocol canonical SHA-256 after protocol freeze; the commitment root excludes that outer binding to avoid a circular digest.",
+        "root_formula": "canonical_sha256({episode_commitments:[ordered eight entry commitments]})",
+        "timing": "Loaded and commitment-validated before registry claim; no salt, canary, or correct-code identity enters any model request; reveal is attached only after every planned behavior call is sealed.",
+    }:
+        raise G1MicroError("opaque pilot reveal semantics drifted")
+    _require_sha(reveal_contract["reveal_commitment_root"], "opaque pilot reveal root")
+    if reveal_contract["reveal_commitment_root"] != canonical_sha256({
+        "episode_commitments": [episode["evaluator_commitment_sha256"] for episode in value["episodes"]]
+    }):
+        raise G1MicroError("opaque pilot public commitment root drifted")
+    tokenizer = value.get("tokenizer_binding")
+    binding = value.get("live_binding")
+    tokenizer_fields = {"condition", "container_image", "container_image_id", "encoding", "episodes", "interpretation_boundary", "model_repository", "model_revision", "pre_freeze_dgx_evidence", "selection_history", "snapshot_manifest_sha256", "tokenizers_version", "transformers_version"}
+    if not isinstance(tokenizer, Mapping) or set(tokenizer) != tokenizer_fields or not isinstance(binding, Mapping) or any(
+        tokenizer.get(key) != binding.get(key)
+        for key in ("container_image", "container_image_id", "model_repository", "model_revision")
+    ) or tokenizer.get("snapshot_manifest_sha256") != binding.get("model_snapshot_manifest_sha256") or tokenizer.get("transformers_version") != "5.13.1" or tokenizer.get("tokenizers_version") != "0.22.2" or tokenizer.get("encoding") != {"add_special_tokens": False, "api": "AutoTokenizer.encode", "local_files_only": True} or tokenizer.get("condition") != "PAIRWISE_EQUAL_STANDALONE_ACTION_CODE_TOKEN_COUNTS_BEFORE_REGISTRY_CLAIM" or not isinstance(tokenizer.get("episodes"), list) or len(tokenizer["episodes"]) != 8:
+        raise G1MicroError("opaque pilot tokenizer binding drifted")
+    if tokenizer["interpretation_boundary"] != "Pairwise equal standalone token counts reduce a length cue; they do not prove semantic opacity or exchangeability. Protection also depends on evaluator-only target mapping, request-preimage leakage checks, candidate-position counterbalancing, and no-state controls." or tokenizer["pre_freeze_dgx_evidence"] != {
+        "artifact_tar_sha256": "1af185776a08486abc0d9911d0d2fcb65d4bebbc8f7451f212adbb88afa8104d", "console_log_member": "logs/console.log", "console_log_sha256": "9b56b184d260a0d5435e8608800154c8e94be82c4f8e212f855ead4464a16d12", "durable_run_path": "/mnt/hswm/runs/g1-opaque-tokenizer-probe-20260830-v3", "run_id": "g1-opaque-tokenizer-probe-20260830-v3", "wrapper_receipt_sha256": "ac379072ed6bc7b0c10728b2280712cdad7379ec070fc25a716dcf63de9296d8",
+    }:
+        raise G1MicroError("opaque pilot tokenizer provenance drifted")
+    for public, measured in zip(value["episodes"], tokenizer["episodes"], strict=True):
+        ids = measured.get("token_ids") if isinstance(measured, Mapping) else None
+        if (not isinstance(measured, Mapping) or measured.get("episode_uid") != public["episode_uid"] or measured.get("action_codes") != public["action_codes"] or not isinstance(ids, list) or len(ids) != 2 or any(not isinstance(item, list) or not item or any(isinstance(token, bool) or not isinstance(token, int) or token < 0 for token in item) for item in ids) or measured.get("token_counts") != [len(ids[0]), len(ids[1])] or len(ids[0]) != len(ids[1])):
+            raise G1MicroError("opaque pilot tokenizer episode binding drifted")
+    history = tokenizer.get("selection_history")
+    if not isinstance(history, Mapping) or history.get("behavior_model_posts") != 0 or not isinstance(history.get("rule"), str) or not isinstance(history.get("runs"), list) or len(history["runs"]) != 3:
+        raise G1MicroError("opaque pilot tokenizer selection history drifted")
+    for expected_id, row in zip(("g1-opaque-tokenizer-probe-20260830-v1", "g1-opaque-tokenizer-probe-20260830-v2", "g1-opaque-tokenizer-probe-20260830-v3"), history["runs"], strict=True):
+        if not isinstance(row, Mapping) or row.get("run_id") != expected_id or set(row) != {"artifact_tar_sha256", "console_log_sha256", "purpose", "run_id", "status", "wrapper_receipt_sha256"}:
+            raise G1MicroError("opaque pilot tokenizer selection run drifted")
+        for key in ("artifact_tar_sha256", "console_log_sha256", "wrapper_receipt_sha256"):
+            _require_sha(row[key], "tokenizer selection evidence")
+    if history["rule"] != "Before protocol freeze, action codes were selected only to satisfy pairwise standalone token-count equality under the pinned tokenizer. No model completion, task outcome, or pilot behavior was observed or used." or [
+        (row["status"], row["purpose"]) for row in history["runs"]
+    ] != [
+        ("FAILED", "FAILED_READ_ONLY_TEMP_DIRECTORY_DIAGNOSTIC_NO_TOKEN_OBSERVATION"),
+        ("SUCCESS", "REJECTED_ORIGINAL_UNEQUAL_TOKEN_COUNT_PAIRS"),
+        ("SUCCESS", "SELECTED_FINAL_PAIRWISE_EQUAL_TOKEN_COUNT_CODES"),
+    ]:
+        raise G1MicroError("opaque pilot tokenizer selection semantics drifted")
+    if history["runs"] != [
+        {"artifact_tar_sha256": "4ea07fd81e9bdfd6cd2e735309abeb246ff48332700a5b5d94f48ad6bf0aa8b3", "console_log_sha256": "f8a25d6b797fdec1e142cbca14ce9a9bea60e7195d08174c9a49fdeb23b23227", "purpose": "FAILED_READ_ONLY_TEMP_DIRECTORY_DIAGNOSTIC_NO_TOKEN_OBSERVATION", "run_id": "g1-opaque-tokenizer-probe-20260830-v1", "status": "FAILED", "wrapper_receipt_sha256": "a37ae3f8a5fff4e3561f3000280aae2daf8e75de5450ab0679efcad3d717b09a"},
+        {"artifact_tar_sha256": "0eb8e6e3812fed8f7151188410d020046f0e3596ed0897710e49d586d9114c55", "console_log_sha256": "819bd208a2703324118825e4c75679b66c2e301ab1283a5c4cac6b106ab1de90", "purpose": "REJECTED_ORIGINAL_UNEQUAL_TOKEN_COUNT_PAIRS", "run_id": "g1-opaque-tokenizer-probe-20260830-v2", "status": "SUCCESS", "wrapper_receipt_sha256": "5b25887162ab3b9718f4f1cb7bc99ef5fd258ef6d2e42ac5e2bbc831e794263d"},
+        {"artifact_tar_sha256": "1af185776a08486abc0d9911d0d2fcb65d4bebbc8f7451f212adbb88afa8104d", "console_log_sha256": "9b56b184d260a0d5435e8608800154c8e94be82c4f8e212f855ead4464a16d12", "purpose": "SELECTED_FINAL_PAIRWISE_EQUAL_TOKEN_COUNT_CODES", "run_id": "g1-opaque-tokenizer-probe-20260830-v3", "status": "SUCCESS", "wrapper_receipt_sha256": "ac379072ed6bc7b0c10728b2280712cdad7379ec070fc25a716dcf63de9296d8"},
+    ]:
+        raise G1MicroError("opaque pilot tokenizer selection evidence drifted")
+    if not isinstance(value.get("study_uid"), str) or not value["study_uid"]:
+        raise G1MicroError("opaque pilot study uid is missing")
+    if value["study_uid"] != "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-2026-08-30" or value.get("prior_result_evidence_sha256") != "66730545c95cb537340b85400574e27b37cf18e1594e5408bef5db9100712700":
+        raise G1MicroError("opaque pilot study provenance drifted")
+    # Reuse the measured runtime identity contract exactly; it is unrelated to
+    # task semantics and prevents a second DGX launcher configuration.
+    # Validate only the shared live binding without admitting the pilot as v1.
+    binding = value.get("live_binding")
+    expected_live_binding = {
+        "async_scheduling": False, "container_image": "vllm/vllm-openai@sha256:e4f88a835143cd22aee2397a26ec6bb80b3a4a6fe0c882bcbc63822904766089", "container_image_id": "sha256:30a38a1d74a17365eca400e83ffd885b250e0c8c0d3c5b508afa8c412d2ddf95", "enforce_eager": True, "endpoint_origin": "http://127.0.0.1:18080", "expected_max_model_len": 32768, "gpu_memory_utilization_milli": 500, "gpu_name": "NVIDIA GB10", "gpu_uuid": "GPU-ffed5bca-3452-8e9e-03fb-b2a4d8f40bc5", "max_num_seqs": 1, "model_repository": "Qwen/Qwen3.6-35B-A3B-FP8", "model_revision": "95a723d08a9490559dae23d0cff1d9466213d989", "model_snapshot_manifest_sha256": "2ece6b46248e818cbf93aa30299300f7dd4c60d9351960ec790cc8b420376e47", "network_boundary": DGX_NETWORK_BOUNDARY, "prefix_cache": False, "served_model": "qwen3.6-35b-a3b", "vllm_version": "0.25.1",
+    }
+    if binding != expected_live_binding:
+        raise G1MicroError("opaque pilot live binding drifted")
+    registry = value.get("consumption_registry")
+    if not isinstance(registry, Mapping) or set(registry) != {"boundary", "path"} or registry.get("boundary") != "DGX_NODE_LOCAL_DURABLE_SINGLE_EXECUTION_NOT_DISTRIBUTED_CONSENSUS" or not isinstance(registry["path"], str) or not Path(registry["path"]).is_absolute():
+        raise G1MicroError("opaque pilot registry drifted")
+
+
 def expected_dgx_server_argv(protocol: Mapping[str, Any]) -> list[str]:
     _validate_protocol(protocol)
     binding = protocol["live_binding"]
@@ -462,6 +639,12 @@ def expected_dgx_server_argv(protocol: Mapping[str, Any]) -> list[str]:
         "processed_logprobs",
         "--no-async-scheduling",
     ]
+
+
+def expected_completion_posts(protocol: Mapping[str, Any]) -> int:
+    """Return the frozen total for v1 or the eight-episode v2 pilot."""
+    _validate_protocol(protocol)
+    return int(protocol["provider_call_cap"])
 
 
 def parse_vllm_success_total(raw: bytes) -> int:
@@ -630,13 +813,16 @@ def validate_dgx_runtime_binding(
     ):
         _require_sha(payload[field], f"runtime {field}")
     tracked = payload["tracked_source_sha256"]
-    if not isinstance(tracked, Mapping) or set(tracked) != set(DGX_TRACKED_SOURCE_PATHS):
+    tracked_paths = dgx_tracked_source_paths(protocol)
+    if not isinstance(tracked, Mapping) or set(tracked) != set(tracked_paths):
         raise G1MicroError("DGX tracked source manifest drifted")
     for path, digest in tracked.items():
         _require_sha(digest, f"tracked source {path}")
     if any(
         tracked[path] != digest for path, digest in source_manifest.items()
-    ) or tracked[DGX_TRACKED_SOURCE_PATHS[0]] != payload["protocol_file_sha256"]:
+    ) or payload["protocol_file_sha256"] not in {
+        tracked[path] for path in DGX_PROTOCOL_PATHS if path in tracked
+    }:
         raise G1MicroError("DGX tracked source differs from execution sources")
 
     raw_fields = {
@@ -782,6 +968,14 @@ def validate_state(value: Mapping[str, Any]) -> None:
         if disposition["owner_uid"] != DISPOSITION_OWNER:
             raise G1MicroError("disposition owner drifted")
         payload = disposition["payload"]
+        if set(payload) == {"cue", "action_code", "revision_kind"}:
+            if (
+                not isinstance(payload["action_code"], str)
+                or not re.fullmatch(r"act_[0-9a-f]{8}", payload["action_code"])
+                or payload["revision_kind"] != "OPAQUE_ACTION_CODE_DISPOSITION"
+            ):
+                raise G1MicroError("opaque action-code disposition is invalid")
+            continue
         if set(payload) != {"cue", "operand", "operator", "revision_kind"}:
             raise G1MicroError("disposition payload field set drifted")
         if (
@@ -804,10 +998,11 @@ def compile_disposition(state: Mapping[str, Any], *, cue: str) -> dict[str, Any]
     selected = [item for item in state["dispositions"] if item["payload"]["cue"] == cue]
     if len(selected) > 1:
         raise G1MicroError("compiled disposition has multiple owners for one cue")
-    rule = None if not selected else {
-        "operand": selected[0]["payload"]["operand"],
-        "operator": selected[0]["payload"]["operator"],
-    }
+    rule = None if not selected else (
+        {"action_code": selected[0]["payload"]["action_code"]}
+        if selected[0]["payload"]["revision_kind"] == "OPAQUE_ACTION_CODE_DISPOSITION"
+        else {"operand": selected[0]["payload"]["operand"], "operator": selected[0]["payload"]["operator"]}
+    )
     unsigned = {
         "compiler": "hswm-g1-micro-disposition-compiler/v1",
         "cue": cue,
@@ -825,7 +1020,11 @@ def make_permit_policy(task: MicroTask, protocol_sha256: str) -> dict[str, Any]:
         owner_uid=PRINCIPALS["authorizer_uid"],
         payload={
             "allowed_operation": "UPSERT_ONE_DISPOSITION",
-            "allowed_revision_kind": "OPAQUE_CUE_OPERATOR_DISPOSITION",
+            "allowed_revision_kind": (
+                "OPAQUE_ACTION_CODE_DISPOSITION"
+                if isinstance(task, OpaquePilotTask)
+                else "OPAQUE_CUE_OPERATOR_DISPOSITION"
+            ),
             "allowed_target_uid": "local:g1-micro-state:dispositions",
             "base_generation": 0,
             "base_state_sha256": state_sha256(make_genesis_state()),
@@ -865,7 +1064,7 @@ def _validate_permit_policy(
             "task_commitment_sha256",
         }
         or payload["allowed_operation"] != "UPSERT_ONE_DISPOSITION"
-        or payload["allowed_revision_kind"] != "OPAQUE_CUE_OPERATOR_DISPOSITION"
+        or payload["allowed_revision_kind"] not in {"OPAQUE_CUE_OPERATOR_DISPOSITION", "OPAQUE_ACTION_CODE_DISPOSITION"}
         or payload["allowed_target_uid"] != "local:g1-micro-state:dispositions"
         or payload["base_generation"] != 0
         or payload["base_state_sha256"] != state_sha256(make_genesis_state())
@@ -1897,6 +2096,9 @@ def _journal_manifest(path: Path) -> dict[str, Any]:
             token_receipt = tokenize_accepted["token_preflight"]
             parsed_token_receipt = TokenPreflightReceipt.from_mapping(token_receipt)
             completion = done["completion"]
+            parsed_chat_response = json.loads(observed_chat_response.decode("utf-8", "strict"))
+            returned_text = parsed_chat_response["choices"][0]["message"]["content"]
+            returned_model = parsed_chat_response["model"]
             if (
                 _digest(chat_request) != intent["raw_request_sha256"]
                 or _digest(tokenize_request) != tokenize_intent["raw_request_sha256"]
@@ -1922,6 +2124,8 @@ def _journal_manifest(path: Path) -> dict[str, Any]:
                 != observed_chat_response
                 or completion["request_sha256"] != _digest(chat_request)
                 or completion["response_sha256"] != _digest(observed_chat_response)
+                or completion.get("text") != returned_text
+                or completion.get("model") != returned_model
             ):
                 raw_preimages_valid = False
         except (
@@ -2415,6 +2619,637 @@ def _record_tree(value: object) -> list[Mapping[str, Any]]:
     return records
 
 
+# v2 is intentionally a compact sibling of the v1 traversal.  It does not
+# generalize the v1 harness: all cardinalities below are frozen by protocol.
+@dataclass(frozen=True, slots=True)
+class OpaquePilotTask:
+    study_uid: str
+    ordinal: int
+    episode_uid: str
+    cue: str
+    action_codes: tuple[str, str]
+    correct_action_code: str
+    salt: str
+    canary: str
+    orders: Mapping[str, Sequence[str]]
+
+    def public(self, *, order: Sequence[str] | None = None) -> dict[str, Any]:
+        codes = tuple(order) if order is not None else self.action_codes
+        return {"action_codes": list(codes), "cue": self.cue}
+
+    def reveal_entry(self) -> dict[str, Any]:
+        return {
+            "leakage_canary": self.canary,
+            "ordinal": self.ordinal,
+            "correct_action_code": self.correct_action_code,
+            "episode_uid": self.episode_uid,
+            "salt": self.salt,
+        }
+
+    @property
+    def commitment_sha256(self) -> str:
+        return canonical_sha256(self.reveal_entry())
+
+
+def opaque_pilot_tasks(protocol: Mapping[str, Any], reveal: Mapping[str, Any]) -> tuple[OpaquePilotTask, ...]:
+    if protocol.get("schema_version") != OPAQUE_PILOT_PROTOCOL:
+        raise G1MicroError("opaque pilot protocol is required")
+    tasks: list[OpaquePilotTask] = []
+    entries = reveal.get("episodes")
+    if not isinstance(entries, list) or len(entries) != 8:
+        raise G1MicroError("opaque pilot reveal entry set is invalid")
+    for public, secret in zip(protocol["episodes"], entries, strict=True):
+        if not isinstance(secret, Mapping) or set(secret) != {"correct_action_code", "episode_uid", "leakage_canary", "ordinal", "salt"} or secret["ordinal"] != public["ordinal"] or secret["episode_uid"] != public["episode_uid"] or secret["correct_action_code"] not in public["action_codes"]:
+            raise G1MicroError("opaque pilot reveal entry does not join public episode")
+        codes = tuple(public["action_codes"])
+        tasks.append(OpaquePilotTask(
+            study_uid=str(protocol["study_uid"]),
+            ordinal=int(public["ordinal"]),
+            episode_uid=str(public["episode_uid"]), cue=str(public["cue"]),
+            action_codes=codes,
+            correct_action_code=str(secret["correct_action_code"]),
+            salt=str(secret["salt"]), canary=str(secret["leakage_canary"]),
+            orders={key: public[key] for key in ("trajectory_action_order", "stateful_probe_action_order", "no_update_action_order", "remove_action_order")},
+        ))
+    if len({task.episode_uid for task in tasks}) != 8:
+        raise G1MicroError("opaque pilot episode identities collide")
+    observed = [task.commitment_sha256 for task in tasks]
+    if observed != [item["evaluator_commitment_sha256"] for item in protocol["episodes"]]:
+        raise G1MicroError("opaque pilot evaluator reveal commitments do not match seeds")
+    if canonical_sha256({"episode_commitments": observed}) != protocol["evaluator_reveal_contract"]["reveal_commitment_root"]:
+        raise G1MicroError("opaque pilot evaluator reveal root does not match protocol")
+    if sum(task.orders["stateful_probe_action_order"].index(task.correct_action_code) == 0 for task in tasks) != 4:
+        raise G1MicroError("opaque pilot stateful correct-code position is not 4/4 counterbalanced")
+    if sum(task.orders["no_update_action_order"].index(task.correct_action_code) == 0 for task in tasks) != 4:
+        raise G1MicroError("opaque pilot no-update correct-code position is not 4/4 counterbalanced")
+    return tuple(tasks)
+
+
+class OpaquePilotArm(G1MicroArm):
+    """The same no-retry journal, with a deliberately non-semantic payload."""
+
+    @staticmethod
+    def _schema(name: str, codes: Sequence[str], field: str) -> JSONSchemaContract:
+        return JSONSchemaContract.make(name, {
+            "additionalProperties": False,
+            "properties": {field: {"enum": list(codes), "type": "string"}},
+            "required": [field], "type": "object",
+        })
+
+    def trajectory(self, task: OpaquePilotTask) -> tuple[str, dict[str, Any]]:
+        completion = self._call(
+            operation="pre_outcome_trajectory", system="Return one opaque action code as strict JSON.",
+            payload=task.public(order=task.orders["trajectory_action_order"]), max_output_tokens=self.budget.answer_max_output_tokens,
+            response_schema=self._schema("opaque_pilot_trajectory", task.orders["trajectory_action_order"], "action_code"),
+        )
+        return str(json.loads(completion.text)["action_code"]), self._call_evidence()
+
+    def propose(self, task: OpaquePilotTask, *, trajectory_code: str, feedback_correct: bool) -> tuple[str, dict[str, Any]]:
+        payload = {**task.public(order=task.orders["trajectory_action_order"]), "feedback_correct": feedback_correct, "trajectory_action_code": trajectory_code}
+        completion = self._call(
+            operation="propose_revision", system="Use only binary feedback: retain the trajectory code if true, otherwise select the other opaque action code.",
+            payload=payload, max_output_tokens=self.budget.update_max_output_tokens,
+            response_schema=self._schema("opaque_pilot_proposal", task.action_codes, "action_code"),
+        )
+        return str(json.loads(completion.text)["action_code"]), self._call_evidence()
+
+    def probe(self, task: OpaquePilotTask, compiled: Mapping[str, Any], *, order: Sequence[str]) -> tuple[str, dict[str, Any]]:
+        payload = {**task.public(order=order), "compiled_disposition": dict(compiled)}
+        completion = self._call(
+            operation="fresh_behavior_probe", system="Return one opaque action code. Read only compiled_disposition.rule.action_code when it is present.",
+            payload=payload, max_output_tokens=self.budget.answer_max_output_tokens,
+            response_schema=self._schema("opaque_pilot_probe", payload["action_codes"], "action_code"),
+        )
+        return str(json.loads(completion.text)["action_code"]), self._call_evidence()
+
+
+def _other_code(task: OpaquePilotTask, code: str) -> str:
+    if code not in task.action_codes:
+        raise G1MicroError("opaque action code is outside its episode")
+    return next(item for item in task.action_codes if item != code)
+
+
+def _opaque_disposition(task: OpaquePilotTask, code: str, *, trajectory: Mapping[str, Any], feedback: Mapping[str, Any], proposal: Mapping[str, Any], credit: Mapping[str, Any]) -> dict[str, Any]:
+    if code not in task.action_codes:
+        raise G1MicroError("opaque disposition action code is invalid")
+    return make_record("MacroDisposition", owner_uid=DISPOSITION_OWNER, payload={
+        "cue": task.cue, "action_code": code, "revision_kind": "OPAQUE_ACTION_CODE_DISPOSITION",
+    }, refs=(_ref("trajectory", trajectory), _ref("feedback", feedback), _ref("proposal", proposal), _ref("credit", credit)))
+
+
+def _opaque_record(kind: str, task: OpaquePilotTask, payload: Mapping[str, Any], refs: Sequence[Mapping[str, str]] = ()) -> dict[str, Any]:
+    return make_record(kind, owner_uid=PRINCIPALS["outcome_evaluator_uid"], payload={"episode_uid": task.episode_uid, **payload}, refs=refs)
+
+
+def _verify_opaque_request_ledger(path: Path, task: OpaquePilotTask) -> None:
+    """Prove from retained preimages that evaluator secrets never reached model IO."""
+    # The two codes, including the eventual correct one, are intentionally
+    # public.  What remains evaluator-only is their target mapping, semantic
+    # operator, salt, and canary.
+    forbidden = (task.salt, task.canary, "ADD_THREE", "MULTIPLY_THREE", "candidate_operators", "operand", "train_input", "fresh_input", "hidden_operator", "correct_action_code", "leakage_canary")
+    for line in path.read_bytes().splitlines():
+        row = _canonical_object(line, "opaque pilot journal row")
+        raw = row.get("raw_request_json")
+        if isinstance(raw, str):
+            if any(secret in raw for secret in forbidden):
+                raise G1MicroError("evaluator-only secret leaked into a model request")
+        raw64 = row.get("raw_request_base64")
+        if isinstance(raw64, str):
+            try:
+                decoded = base64.b64decode(raw64, validate=True).decode("utf-8", "strict")
+            except (binascii.Error, UnicodeDecodeError) as error:
+                raise G1MicroError("opaque pilot raw request preimage is malformed") from error
+            if any(secret in decoded for secret in forbidden):
+                raise G1MicroError("evaluator-only secret leaked into raw model request")
+
+
+def _opaque_episode(
+    *, backend: ChatBackend, task: OpaquePilotTask, output: Path, protocol_sha256: str
+) -> dict[str, Any]:
+    output.mkdir(parents=True)
+    arm = OpaquePilotArm(backend=backend, journal_path=output / "attempt_ledger.jsonl", isolation_id=task.episode_uid)
+    trajectory, trajectory_evidence = arm.trajectory(task)
+    actual = trajectory == task.correct_action_code
+    forced = not actual
+    active_code, active_evidence = arm.propose(task, trajectory_code=trajectory, feedback_correct=actual)
+    opposite_code, opposite_evidence = arm.propose(task, trajectory_code=trajectory, feedback_correct=forced)
+    expected_active = trajectory if actual else _other_code(task, trajectory)
+    expected_opposite = trajectory if forced else _other_code(task, trajectory)
+    trajectory_record = make_record("SealedTrajectory", owner_uid=PRINCIPALS["executor_uid"], payload={"episode_uid": task.episode_uid, "action_code": trajectory, "call_evidence": trajectory_evidence})
+    outcome = _opaque_record("OpaqueOutcome", task, {"choice_was_correct": actual}, (_ref("trajectory", trajectory_record),))
+    forced_record = _opaque_record("ForcedOppositeFeedback", task, {"choice_was_correct": forced, "derived_from_outcome_sha256": outcome["record_sha256"]}, (_ref("outcome", outcome),))
+    def admission(branch: str, code: str, feedback: Mapping[str, Any], store: G1MicroStore, call_evidence: Mapping[str, Any]) -> dict[str, Any] | None:
+        proposal = make_record("RevisionProposal", owner_uid=PRINCIPALS["proposer_uid"], payload={"action_code": code, "branch": branch, "call_evidence": dict(call_evidence), "revision_kind": "OPAQUE_ACTION_CODE_DISPOSITION"}, refs=(_ref("trajectory", trajectory_record), _ref("feedback", feedback)))
+        expected = expected_active if branch == "ACTIVE" else expected_opposite
+        credit = make_record("CreditDecision", owner_uid=PRINCIPALS["credit_adjudicator_uid"], payload={"decision": "CREDIT" if code == expected else "NO_CREDIT", "expected_action_code": expected, "proposed_action_code": code}, refs=(_ref("trajectory", trajectory_record), _ref("feedback", feedback), _ref("proposal", proposal)))
+        if code != expected:
+            return {"proposal": proposal, "credit": credit, "admission": None}
+        disposition = _opaque_disposition(task, code, trajectory=trajectory_record, feedback=feedback, proposal=proposal, credit=credit)
+        successor = make_state([disposition])
+        policy = make_permit_policy(task, protocol_sha256)
+        permit = make_local_permit(task=task, permit_policy=policy, base_state=store.active().state, base_generation=store.active().generation, trajectory=trajectory_record, feedback=feedback, proposal=proposal, credit=credit, disposition=disposition, successor_state=successor)
+        store.issue_permit(permit, permit_policy=policy)
+        receipts = store.admit(permit=permit, proposal=proposal, feedback=feedback, credit=credit, successor_state=successor)
+        return {"proposal": proposal, "credit": credit, "admission": receipts, "disposition": disposition, "permit_policy": policy, "permit": permit, "successor_state": successor}
+    active_store, opposite_store = G1MicroStore(output / "active.sqlite3"), G1MicroStore(output / "fof.sqlite3")
+    active = admission("ACTIVE", active_code, outcome, active_store, active_evidence)
+    opposite = admission("FORCED_OPPOSITE_FEEDBACK", opposite_code, forced_record, opposite_store, opposite_evidence)
+    probes: dict[str, dict[str, Any]] = {}
+    def observe(branch: str, state: Mapping[str, Any], order: Sequence[str]) -> None:
+        compiled = compile_disposition(state, cue=task.cue)
+        observed, evidence = arm.probe(task, compiled, order=order)
+        probes[branch] = _opaque_record("OpaqueFreshBehaviorObservation", task, {
+            "branch": branch, "call_evidence": evidence, "choice": observed,
+            "candidate_order": list(order),
+            "compiled_disposition": compiled,
+            "correct_action_position": list(order).index(task.correct_action_code) + 1,
+            "correct": observed == task.correct_action_code,
+        })
+    observe("ACTIVE", active_store.active().state, task.orders["stateful_probe_action_order"])
+    observe("FORCED_OPPOSITE_FEEDBACK", opposite_store.active().state, task.orders["stateful_probe_action_order"])
+    observe("NO_UPDATE", make_genesis_state(), task.orders["no_update_action_order"])
+    remove_receipt = restore_receipt = None
+    if active["admission"] is not None:
+        active_pointer = active_store.active(); active_snapshot_sha = active_pointer.state_sha256
+        remove_receipt = active_store.activate_exact(state_sha256(make_genesis_state()), expected_generation=active_pointer.generation, operation="REMOVE_TO_GENESIS", source_admission_sha256=active["admission"]["admission"]["record_sha256"])
+        observe("REMOVE", active_store.active().state, task.orders["stateful_probe_action_order"])
+        restore_receipt = active_store.activate_exact(active_snapshot_sha, expected_generation=active_store.active().generation, operation="RESTORE_ACTIVE_SNAPSHOT", source_admission_sha256=active["admission"]["admission"]["record_sha256"])
+        observe("RESTORE", active_store.active().state, task.orders["stateful_probe_action_order"])
+    else:
+        observe("REMOVE", make_genesis_state(), task.orders["stateful_probe_action_order"])
+        observe("RESTORE", make_genesis_state(), task.orders["stateful_probe_action_order"])
+    journal = _journal_manifest(output / "attempt_ledger.jsonl")
+    if journal["completed_calls"] != 8 or not journal["raw_preimages_valid"] or not journal["operation_order_valid"]:
+        raise G1MicroError("opaque pilot episode call chronology drifted")
+    _verify_opaque_request_ledger(output / "attempt_ledger.jsonl", task)
+    active_store.checkpoint(); opposite_store.checkpoint()
+    return {
+        "episode_uid": task.episode_uid, "task_commitment_sha256": task.commitment_sha256,
+        "trajectory": trajectory_record, "outcome": outcome, "forced_opposite_feedback": forced_record,
+        "dispositions": {"ACTIVE": active, "FORCED_OPPOSITE_FEEDBACK": opposite},
+        "state_interventions": {"REMOVE": remove_receipt, "RESTORE": restore_receipt},
+        "state_store_artifacts": _file_manifest((output / "active.sqlite3", output / "fof.sqlite3")),
+        "store_receipts": {"ACTIVE": active_store.logical_receipts(), "FORCED_OPPOSITE_FEEDBACK": opposite_store.logical_receipts()},
+        "probes": probes, "journal": journal,
+    }
+
+
+def _opaque_metrics(episodes: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    scores = {
+        branch: sum(bool(item["probes"][branch]["payload"]["correct"]) for item in episodes)
+        for branch in ("ACTIVE", "FORCED_OPPOSITE_FEEDBACK", "NO_UPDATE", "REMOVE", "RESTORE")
+    }
+    delta = sum(
+        ((int(item["probes"]["ACTIVE"]["payload"]["correct"]) + int(item["probes"]["RESTORE"]["payload"]["correct"])) / 2)
+        - ((int(item["probes"]["FORCED_OPPOSITE_FEEDBACK"]["payload"]["correct"]) + int(item["probes"]["NO_UPDATE"]["payload"]["correct"]) + int(item["probes"]["REMOVE"]["payload"]["correct"])) / 3)
+        for item in episodes
+    ) / 8
+    signature = sum(
+        item["probes"]["ACTIVE"]["payload"]["correct"] is True
+        and item["probes"]["RESTORE"]["payload"]["correct"] is True
+        and item["probes"]["FORCED_OPPOSITE_FEEDBACK"]["payload"]["correct"] is False
+        and item["probes"]["NO_UPDATE"]["payload"]["correct"] is False
+        and item["probes"]["REMOVE"]["payload"]["correct"] is False
+        for item in episodes
+    )
+    active_admissions = sum(item["dispositions"]["ACTIVE"].get("admission") is not None and item["dispositions"]["ACTIVE"]["credit"]["payload"].get("decision") == "CREDIT" for item in episodes)
+    fof_admissions = sum(item["dispositions"]["FORCED_OPPOSITE_FEEDBACK"].get("admission") is not None and item["dispositions"]["FORCED_OPPOSITE_FEEDBACK"]["credit"]["payload"].get("decision") == "CREDIT" for item in episodes)
+    transitions = sum(item["state_interventions"].get("REMOVE") is not None and item["state_interventions"].get("RESTORE") is not None for item in episodes)
+    def wilson(count: int) -> list[float]:
+        z = 1.959963984540054; n = 8; p = count / n; scale = 1 + z*z/n
+        centre = (p + z*z/(2*n))/scale
+        radius = z*((p*(1-p)/n + z*z/(4*n*n))**.5)/scale
+        return [centre-radius, centre+radius]
+    terminal = (
+        "PILOT_COMPLETE_IDENTIFIABILITY_OBSERVED_NO_EFFICACY_INFERENCE"
+        if scores["ACTIVE"] == 8 and scores["RESTORE"] == 8
+        and scores["FORCED_OPPOSITE_FEEDBACK"] == 0
+        and scores["NO_UPDATE"] <= 5 and scores["REMOVE"] <= 5
+        and scores["NO_UPDATE"] + scores["REMOVE"] <= 10
+        and delta >= 0.5833333333333333
+        and active_admissions == 8 and fof_admissions == 8 and transitions == 8
+        else "PILOT_COMPLETE_NO_BEHAVIORAL_SEPARATION_NO_EFFICACY_INFERENCE"
+    )
+    no_state_by_position: dict[str, dict[str, dict[str, int]]] = {}
+    for branch in ("NO_UPDATE", "REMOVE"):
+        buckets = {
+            "position_1": {"correct": 0, "denominator": 0},
+            "position_2": {"correct": 0, "denominator": 0},
+        }
+        for item in episodes:
+            payload = item["probes"][branch]["payload"]
+            position = payload.get("correct_action_position")
+            if position not in (1, 2):
+                raise G1MicroError("opaque pilot probe is missing correct-code position")
+            bucket = buckets[f"position_{position}"]
+            bucket["denominator"] += 1
+            bucket["correct"] += int(bool(payload["correct"]))
+        no_state_by_position[branch] = buckets
+    rates = {branch: count / 8 for branch, count in scores.items()}
+    return {
+        "branch_correct_counts": scores,
+        "delta_state": delta,
+        "full_five_branch_signature_count": signature,
+        "active_credit_and_admission_count": active_admissions,
+        "forced_opposite_credit_and_admission_count": fof_admissions,
+        "exact_remove_and_restore_count": transitions,
+        "branch_wilson_95": {branch: wilson(count) for branch, count in scores.items()},
+        "contrasts": {"ACTIVE-minus-FORCED_OPPOSITE_FEEDBACK": rates["ACTIVE"]-rates["FORCED_OPPOSITE_FEEDBACK"], "ACTIVE-minus-mean(NO_UPDATE,REMOVE)": rates["ACTIVE"]-(rates["NO_UPDATE"]+rates["REMOVE"])/2, "RESTORE-minus-REMOVE": rates["RESTORE"]-rates["REMOVE"]},
+        "no_state_correct": {"count": scores["NO_UPDATE"]+scores["REMOVE"], "denominator": 16},
+        "no_state_correct_by_candidate_position": no_state_by_position,
+        "terminal": terminal,
+        "wilson_denominator": 8,
+    }
+
+
+def run_opaque_identifiability_pilot_with_backend(
+    *, backend: ChatBackend, protocol: Mapping[str, Any], protocol_sha256: str,
+    output_dir: str | Path, execution_registry_path: str | Path, evaluator_reveal_path: str | Path,
+    tokenizer_receipt: Mapping[str, Any] | None = None,
+    runtime_binding: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """One outer no-refill claim for the frozen eight-episode pilot."""
+    _validate_protocol(protocol)
+    if protocol.get("schema_version") != OPAQUE_PILOT_PROTOCOL or canonical_sha256(protocol) != protocol_sha256:
+        raise G1MicroError("opaque pilot protocol freeze drifted")
+    output, registry = Path(output_dir), Path(execution_registry_path)
+    if output.exists() or registry.exists() or str(registry) != protocol["consumption_registry"]["path"]:
+        raise G1MicroError("opaque pilot output or one-shot registry is unavailable")
+    reveal_raw = Path(evaluator_reveal_path).read_bytes()
+    reveal_source = _canonical_object(reveal_raw, "opaque evaluator reveal source")
+    if reveal_source.get("schema_version") != "hswm-g1-opaque-evaluator-reveal/v1" or reveal_source.get("study_uid") != protocol["study_uid"] or reveal_source.get("protocol_canonical_sha256") != protocol_sha256 or reveal_source.get("reveal_commitment_root") != protocol["evaluator_reveal_contract"]["reveal_commitment_root"]:
+        raise G1MicroError("opaque pilot evaluator reveal source identity drifted")
+    tasks = opaque_pilot_tasks(protocol, reveal_source)
+    if tokenizer_receipt is None or not isinstance(tokenizer_receipt.get("receipt_sha256"), str):
+        raise G1MicroError("opaque pilot requires pre-claim offline tokenizer receipt")
+    receipt_unsigned = dict(tokenizer_receipt)
+    receipt_digest = receipt_unsigned.pop("receipt_sha256")
+    if receipt_digest != canonical_sha256(receipt_unsigned):
+        raise G1MicroError("opaque pilot offline tokenizer receipt digest drifted")
+    expected_tokenizer = protocol["tokenizer_binding"]
+    expected_receipt = {
+        "schema_version": "hswm-g1-opaque-offline-tokenizer-receipt/v1",
+        **{key: expected_tokenizer[key] for key in (
+            "container_image", "container_image_id", "model_repository", "model_revision",
+            "snapshot_manifest_sha256", "encoding", "transformers_version", "tokenizers_version", "episodes",
+        )},
+    }
+    if receipt_unsigned != expected_receipt:
+        raise G1MicroError("opaque pilot offline tokenizer receipt differs from preregistration")
+    if runtime_binding is not None:
+        validate_dgx_runtime_binding(runtime_binding, protocol=protocol, protocol_sha256=protocol_sha256, source_manifest=_source_manifest())
+    start = make_record("OpaquePilotExecutionStart", owner_uid="principal:g1-micro-execution-custodian", payload={
+        "episode_commitment_sha256s": [task.commitment_sha256 for task in tasks],
+        "evaluator_reveal_sha256": _digest(reveal_raw),
+        "offline_tokenizer_receipt": dict(tokenizer_receipt),
+        "runtime_binding_sha256": None if runtime_binding is None else runtime_binding["record_sha256"],
+        "source_manifest": _source_manifest(),
+        "output_directory": str(output.resolve()),
+        "planned_episode_count": 8, "protocol_sha256": protocol_sha256,
+        "retry_or_refill_permitted": False, "status": "STARTED_BEFORE_FIRST_HTTP_POST",
+    })
+    _atomic_write(registry, canonical_json_bytes(start), create_parent=False)
+    try:
+        output.mkdir(parents=True)
+        episodes = [_opaque_episode(backend=backend, task=task, output=output / "episodes" / f"{task.ordinal:02d}", protocol_sha256=protocol_sha256) for task in tasks]
+        metrics = _opaque_metrics(episodes)
+        _atomic_write(output / "evaluator_reveal.json", reveal_raw)
+        unsigned = {
+            "episode_count": 8, "episodes": episodes,
+            "evaluator_reveal": {"path": "evaluator_reveal.json", "sha256": _digest(reveal_raw)},
+            "metrics": metrics, "protocol_canonical_sha256": protocol_sha256,
+            "schema_version": OPAQUE_PILOT_PROTOCOL, "scope_nonclaim": LOCAL_SCOPE_NONCLAIM,
+            "terminal": metrics["terminal"],
+            "total_completion_posts": 64, "total_http_posts": 128, "total_tokenize_posts": 64,
+            "verification_scope": "LOCAL_STRUCTURAL_IDENTIFIABILITY_ONLY_NOT_EFFICACY",
+            "runtime_binding": None if runtime_binding is None else dict(runtime_binding),
+        }
+        bundle = {**unsigned, "bundle_sha256": canonical_sha256(unsigned)}
+        verify_opaque_identifiability_pilot_bundle(bundle, base_dir=output, protocol=protocol)
+        _atomic_write(output / "result.json", canonical_json_bytes(bundle))
+    except BaseException as error:
+        abort = make_record("OpaquePilotExecutionAbort", owner_uid="principal:g1-micro-execution-custodian", payload={
+            "error_type": type(error).__name__, "retry_or_refill_permitted": False,
+            "terminal": "INCONCLUSIVE_MEASUREMENT_NOT_READY",
+        }, refs=(_ref("execution_start", start),))
+        if not output.exists(): output.mkdir(parents=True)
+        _atomic_write(output / "abort.json", canonical_json_bytes(abort))
+        _replace_canonical(registry, canonical_json_bytes(make_record("OpaquePilotExecutionSeal", owner_uid="principal:g1-micro-execution-custodian", payload={"abort_sha256": abort["record_sha256"], "result_sha256": None, "start": start, "status": "ABORTED_NO_RERUN"}, refs=(_ref("execution_start", start),))))
+        raise
+    seal = make_record("OpaquePilotExecutionSeal", owner_uid="principal:g1-micro-execution-custodian", payload={"abort_sha256": None, "result_sha256": bundle["bundle_sha256"], "start": start, "status": "COMPLETED_NO_RERUN"}, refs=(_ref("execution_start", start),))
+    _replace_canonical(registry, canonical_json_bytes(seal))
+    return bundle
+
+
+def verify_opaque_identifiability_pilot_bundle(
+    bundle: Mapping[str, Any], *, base_dir: str | Path,
+    protocol: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    required = {"bundle_sha256", "episode_count", "episodes", "evaluator_reveal", "metrics", "protocol_canonical_sha256", "schema_version", "scope_nonclaim", "terminal", "total_completion_posts", "total_http_posts", "total_tokenize_posts", "verification_scope", "runtime_binding"}
+    if set(bundle) != required or bundle["schema_version"] != OPAQUE_PILOT_PROTOCOL or bundle["episode_count"] != 8 or bundle["total_completion_posts"] != 64 or bundle["total_tokenize_posts"] != 64 or bundle["total_http_posts"] != 128 or bundle["scope_nonclaim"] != LOCAL_SCOPE_NONCLAIM:
+        raise G1MicroError("opaque pilot bundle boundary drifted")
+    unsigned = dict(bundle); digest = unsigned.pop("bundle_sha256")
+    if digest != canonical_sha256(unsigned): raise G1MicroError("opaque pilot bundle digest mismatch")
+    if bundle["runtime_binding"] is not None:
+        validate_record(bundle["runtime_binding"], kind="DGXFreshRuntimeBinding")
+    reveal_ref = bundle["evaluator_reveal"]
+    reveal_path = Path(base_dir) / reveal_ref["path"]
+    if _digest(reveal_path.read_bytes()) != reveal_ref["sha256"]: raise G1MicroError("opaque pilot reveal bytes drifted")
+    reveal = _canonical_object(reveal_path.read_bytes(), "opaque evaluator reveal")
+    if reveal.get("protocol_canonical_sha256") != bundle["protocol_canonical_sha256"] or len(reveal.get("episodes", [])) != 8:
+        raise G1MicroError("opaque pilot reveal does not join bundle")
+    commitments = [canonical_sha256(entry) for entry in reveal["episodes"]]
+    if reveal.get("reveal_commitment_root") != canonical_sha256({"episode_commitments": commitments}):
+        raise G1MicroError("opaque pilot reveal commitment root cannot be reconstructed")
+    tasks_by_uid: dict[str, OpaquePilotTask] = {}
+    public_episodes: dict[str, Mapping[str, Any]] = {}
+    if protocol is not None:
+        _validate_protocol(protocol)
+        if protocol.get("schema_version") != OPAQUE_PILOT_PROTOCOL or canonical_sha256(protocol) != bundle["protocol_canonical_sha256"]:
+            raise G1MicroError("opaque pilot verifier protocol binding drifted")
+        if bundle["runtime_binding"] is not None:
+            validate_dgx_runtime_binding(
+                bundle["runtime_binding"], protocol=protocol,
+                protocol_sha256=bundle["protocol_canonical_sha256"],
+                source_manifest=_source_manifest(),
+            )
+        tasks_by_uid = {task.episode_uid: task for task in opaque_pilot_tasks(protocol, reveal)}
+        public_episodes = {str(item["episode_uid"]): item for item in protocol["episodes"]}
+    if len(bundle["episodes"]) != 8: raise G1MicroError("opaque pilot episode set is incomplete")
+    # Replay retained raw journals against the revealed/public episode join;
+    # this catches semantic leakage even when a bundle digest was recomputed.
+    for episode, reveal_entry in zip(bundle["episodes"], reveal["episodes"], strict=True):
+        for record in _record_tree(episode):
+            validate_record(record)
+        trajectory = episode["trajectory"]
+        task = tasks_by_uid.get(str(episode.get("episode_uid")))
+        if protocol is not None and (
+            task is None or episode.get("episode_uid") != reveal_entry.get("episode_uid")
+            or episode.get("task_commitment_sha256") != task.commitment_sha256
+        ):
+            raise G1MicroError("opaque pilot episode/reveal/protocol identity drifted")
+        if trajectory["schema_version"] != f"{RECORD_SCHEMA_PREFIX}SealedTrajectory/v1":
+            raise G1MicroError("opaque pilot trajectory record drifted")
+        for branch, feedback_key in (("ACTIVE", "outcome"), ("FORCED_OPPOSITE_FEEDBACK", "forced_opposite_feedback")):
+            branch_data = episode["dispositions"][branch]
+            proposal, credit = branch_data["proposal"], branch_data["credit"]
+            if {item["kind"] for item in proposal["refs"]} != {"trajectory", "feedback"} or {item["kind"] for item in credit["refs"]} != {"trajectory", "feedback", "proposal"}:
+                raise G1MicroError("opaque pilot proposal-credit reference closure drifted")
+            admission = branch_data.get("admission")
+            if credit["payload"].get("decision") == "CREDIT" and admission is None:
+                raise G1MicroError("opaque pilot credited proposal lacks CAS admission")
+        if task is not None:
+            actual = trajectory["payload"].get("action_code") == task.correct_action_code
+            expected_trajectory = make_record("SealedTrajectory", owner_uid=PRINCIPALS["executor_uid"], payload={"episode_uid": task.episode_uid, "action_code": trajectory["payload"].get("action_code"), "call_evidence": trajectory["payload"].get("call_evidence")})
+            if trajectory != expected_trajectory:
+                raise G1MicroError("opaque pilot trajectory record does not reconstruct")
+            expected_outcome = _opaque_record("OpaqueOutcome", task, {"choice_was_correct": actual}, (_ref("trajectory", trajectory),))
+            if episode["outcome"] != expected_outcome:
+                raise G1MicroError("opaque pilot outcome does not reconstruct trajectory/reveal")
+            forced = not actual
+            expected_forced = _opaque_record("ForcedOppositeFeedback", task, {"choice_was_correct": forced, "derived_from_outcome_sha256": expected_outcome["record_sha256"]}, (_ref("outcome", expected_outcome),))
+            if episode["forced_opposite_feedback"] != expected_forced:
+                raise G1MicroError("opaque pilot forced feedback does not reconstruct outcome")
+            for branch, feedback in (("ACTIVE", episode["outcome"]), ("FORCED_OPPOSITE_FEEDBACK", episode["forced_opposite_feedback"])):
+                branch_data = episode["dispositions"][branch]
+                proposal, credit = branch_data["proposal"], branch_data["credit"]
+                expected = (trajectory["payload"]["action_code"] if (actual if branch == "ACTIVE" else forced) else _other_code(task, trajectory["payload"]["action_code"]))
+                expected_proposal = make_record("RevisionProposal", owner_uid=PRINCIPALS["proposer_uid"], payload={"action_code": proposal["payload"].get("action_code"), "branch": branch, "call_evidence": proposal["payload"].get("call_evidence"), "revision_kind": "OPAQUE_ACTION_CODE_DISPOSITION"}, refs=(_ref("trajectory", trajectory), _ref("feedback", feedback)))
+                expected_credit = make_record("CreditDecision", owner_uid=PRINCIPALS["credit_adjudicator_uid"], payload={
+                    "decision": "CREDIT" if expected_proposal["payload"]["action_code"] == expected else "NO_CREDIT",
+                    "expected_action_code": expected,
+                    "proposed_action_code": expected_proposal["payload"]["action_code"],
+                }, refs=(_ref("trajectory", trajectory), _ref("feedback", feedback), _ref("proposal", expected_proposal)))
+                if proposal != expected_proposal or credit != expected_credit:
+                    raise G1MicroError("opaque pilot proposal/credit rule does not reconstruct")
+                admission = branch_data.get("admission")
+                if credit["payload"]["decision"] == "NO_CREDIT":
+                    if any(key in branch_data for key in ("disposition", "permit_policy", "permit", "successor_state")) or admission is not None:
+                        raise G1MicroError("opaque pilot nonadherent proposal was admitted")
+                    continue
+                disposition = _opaque_disposition(task, proposal["payload"]["action_code"], trajectory=trajectory, feedback=feedback, proposal=proposal, credit=credit)
+                successor = make_state([disposition])
+                policy = make_permit_policy(task, bundle["protocol_canonical_sha256"])
+                permit = make_local_permit(task=task, permit_policy=policy, base_state=make_genesis_state(), base_generation=0, trajectory=trajectory, feedback=feedback, proposal=proposal, credit=credit, disposition=disposition, successor_state=successor)
+                if branch_data.get("disposition") != disposition or branch_data.get("successor_state") != successor or branch_data.get("permit_policy") != policy or branch_data.get("permit") != permit:
+                    raise G1MicroError("opaque pilot credit-to-permit/state construction drifted")
+                admission = branch_data["admission"]
+                expected_admission = make_record("LocalAdmissionReceipt", owner_uid=STATE_OWNER, payload={
+                    "base_generation": 0, "base_state_sha256": state_sha256(make_genesis_state()),
+                    "exact_write_set": permit["payload"]["write_set"], "resulting_generation": 1,
+                    "resulting_state_sha256": state_sha256(successor), "terminal": "ADMITTED_LOCAL_EXPLORATORY",
+                }, refs=(_ref("permit", permit), _ref("proposal", proposal), _ref("feedback", feedback), _ref("credit", credit)))
+                expected_consumption = G1MicroStore._burn_record(permit, terminal="ADMITTED_LOCAL_EXPLORATORY", admission_sha256=expected_admission["record_sha256"])
+                if admission != {"admission": expected_admission, "consumption": expected_consumption}:
+                    raise G1MicroError("opaque pilot admission/consumption does not reconstruct")
+        episode_dir = Path(base_dir) / "episodes" / f"{int(reveal_entry['ordinal']):02d}"
+        journal_path = episode_dir / "attempt_ledger.jsonl"
+        if not journal_path.is_file() or _journal_manifest(journal_path)["completed_calls"] != 8:
+            raise G1MicroError("opaque pilot retained episode journal is invalid")
+        replayed_journal = _journal_manifest(journal_path)
+        if replayed_journal != episode.get("journal") or not replayed_journal["raw_preimages_valid"] or not replayed_journal["completed_event_sequences_valid"] or not replayed_journal["operation_order_valid"] or replayed_journal["failure_events"] or not replayed_journal["all_rows_accounted"]:
+            raise G1MicroError("opaque pilot retained journal cannot be replayed")
+        evidence = [
+            episode["trajectory"]["payload"]["call_evidence"],
+            episode["dispositions"]["ACTIVE"]["proposal"]["payload"]["call_evidence"],
+            episode["dispositions"]["FORCED_OPPOSITE_FEEDBACK"]["proposal"]["payload"]["call_evidence"],
+            *(episode["probes"][branch]["payload"]["call_evidence"] for branch in ("ACTIVE", "FORCED_OPPOSITE_FEEDBACK", "NO_UPDATE", "REMOVE", "RESTORE")),
+        ]
+        for recorded, call in zip(evidence, replayed_journal["calls"], strict=True):
+            if any(recorded.get(field) != call.get(field) for field in ("completion_request_sha256", "completion_response_sha256", "token_preflight_receipt_sha256")):
+                raise G1MicroError("opaque pilot record call evidence does not join raw journal")
+        rows = [_canonical_object(line, "opaque semantic journal row") for line in journal_path.read_bytes().splitlines()]
+        completed = {row["ordinal"]: row["completion"] for row in rows if row.get("event") == "completed"}
+        if set(completed) != set(range(8)):
+            raise G1MicroError("opaque pilot completed-call semantic coverage drifted")
+        def action_from_completion(ordinal: int) -> str:
+            try:
+                return str(json.loads(completed[ordinal]["text"])["action_code"])
+            except (KeyError, TypeError, json.JSONDecodeError) as error:
+                raise G1MicroError("opaque pilot completion action JSON is invalid") from error
+        if action_from_completion(0) != trajectory["payload"]["action_code"]:
+            raise G1MicroError("opaque pilot trajectory response does not join record")
+        if action_from_completion(1) != episode["dispositions"]["ACTIVE"]["proposal"]["payload"]["action_code"] or action_from_completion(2) != episode["dispositions"]["FORCED_OPPOSITE_FEEDBACK"]["proposal"]["payload"]["action_code"]:
+            raise G1MicroError("opaque pilot proposal response does not join record")
+        for ordinal, branch in enumerate(("ACTIVE", "FORCED_OPPOSITE_FEEDBACK", "NO_UPDATE", "REMOVE", "RESTORE"), start=3):
+            probe = episode["probes"][branch]["payload"]
+            if action_from_completion(ordinal) != probe["choice"] or probe["correct"] is not (probe["choice"] == reveal_entry["correct_action_code"]):
+                raise G1MicroError("opaque pilot probe response or score does not join reveal")
+        def raw_user_payload(ordinal: int) -> dict[str, Any]:
+            try:
+                parsed = json.loads(completed[ordinal]["raw_request_json"])
+                payload = json.loads(parsed["messages"][-1]["content"])
+                if not isinstance(payload, dict):
+                    raise TypeError
+                return payload
+            except (KeyError, TypeError, json.JSONDecodeError) as error:
+                raise G1MicroError("opaque pilot raw user payload is invalid") from error
+        if task is not None:
+            expected_trajectory_request = task.public(order=task.orders["trajectory_action_order"])
+            if raw_user_payload(0) != expected_trajectory_request:
+                raise G1MicroError("opaque pilot trajectory request does not reconstruct")
+            for ordinal, feedback in ((1, actual), (2, not actual)):
+                expected_proposal_request = {
+                    **task.public(order=task.orders["trajectory_action_order"]),
+                    "feedback_correct": feedback,
+                    "trajectory_action_code": trajectory["payload"]["action_code"],
+                }
+                if raw_user_payload(ordinal) != expected_proposal_request:
+                    raise G1MicroError("opaque pilot proposal request does not reconstruct")
+        def normalized_probe_request(ordinal: int) -> dict[str, Any]:
+            try:
+                request = json.loads(completed[ordinal]["raw_request_json"])
+                messages = request["messages"]
+                payload = json.loads(messages[-1]["content"])
+                compiled = payload.pop("compiled_disposition", None)
+                if not isinstance(compiled, Mapping):
+                    raise TypeError
+                request = dict(request)
+                request["messages"] = [*messages[:-1], {**messages[-1], "content": canonical_json_bytes(payload).decode("utf-8")}]
+                for key in ("request_id", "idempotency_key"):
+                    request.pop(key, None)
+                return request
+            except (KeyError, TypeError, json.JSONDecodeError) as error:
+                raise G1MicroError("opaque pilot raw probe request is invalid") from error
+        stateful = [normalized_probe_request(ordinal) for ordinal in (3, 4, 6, 7)]
+        if any(canonical_json_bytes(item) != canonical_json_bytes(stateful[0]) for item in stateful[1:]):
+            raise G1MicroError("opaque pilot stateful raw probe requests differ beyond compiled disposition")
+        try:
+            no_update_payload = json.loads(completed[5]["raw_request_json"])["messages"][-1]["content"]
+            no_update_payload = json.loads(no_update_payload)
+        except (KeyError, TypeError, json.JSONDecodeError) as error:
+            raise G1MicroError("opaque pilot no-update raw request is invalid") from error
+        if protocol is not None:
+            public_episode = public_episodes.get(str(episode["episode_uid"]))
+            if public_episode is None or no_update_payload.get("action_codes") != public_episode["no_update_action_order"]:
+                raise G1MicroError("opaque pilot no-update candidate order differs from preregistration")
+            branch_orders = {
+                "ACTIVE": public_episode["stateful_probe_action_order"],
+                "FORCED_OPPOSITE_FEEDBACK": public_episode["stateful_probe_action_order"],
+                "NO_UPDATE": public_episode["no_update_action_order"],
+                "REMOVE": public_episode["remove_action_order"],
+                "RESTORE": public_episode["stateful_probe_action_order"],
+            }
+            for branch, order in branch_orders.items():
+                probe = episode["probes"][branch]["payload"]
+                if probe.get("candidate_order") != order or probe.get("correct_action_position") != order.index(task.correct_action_code) + 1:
+                    raise G1MicroError("opaque pilot probe candidate-order/position drifted")
+                expected_state = (
+                    episode["dispositions"]["ACTIVE"].get("successor_state", make_genesis_state()) if branch in {"ACTIVE", "RESTORE"}
+                    else episode["dispositions"]["FORCED_OPPOSITE_FEEDBACK"].get("successor_state", make_genesis_state()) if branch == "FORCED_OPPOSITE_FEEDBACK"
+                    else make_genesis_state()
+                )
+                if probe.get("compiled_disposition") != compile_disposition(expected_state, cue=task.cue):
+                    raise G1MicroError("opaque pilot probe does not compile the replayed state")
+                ordinal = {"ACTIVE": 3, "FORCED_OPPOSITE_FEEDBACK": 4, "NO_UPDATE": 5, "REMOVE": 6, "RESTORE": 7}[branch]
+                expected_probe_request = {
+                    **task.public(order=order),
+                    "compiled_disposition": probe["compiled_disposition"],
+                }
+                if raw_user_payload(ordinal) != expected_probe_request:
+                    raise G1MicroError("opaque pilot probe request does not join compiled state")
+        forbidden = (str(reveal_entry["salt"]), str(reveal_entry["leakage_canary"]), "ADD_THREE", "MULTIPLY_THREE", "candidate_operators", "operand", "train_input", "fresh_input", "hidden_operator", "correct_action_code")
+        for line in journal_path.read_bytes().splitlines():
+            row = _canonical_object(line, "opaque retained journal row")
+            for field in ("raw_request_json",):
+                if isinstance(row.get(field), str) and any(item in row[field] for item in forbidden):
+                    raise G1MicroError("opaque pilot retained request leakage detected")
+            if isinstance(row.get("raw_request_base64"), str):
+                try:
+                    decoded = base64.b64decode(row["raw_request_base64"], validate=True).decode("utf-8", "strict")
+                except (binascii.Error, UnicodeDecodeError) as error:
+                    raise G1MicroError("opaque pilot retained request preimage malformed") from error
+                if any(item in decoded for item in forbidden):
+                    raise G1MicroError("opaque pilot retained request leakage detected")
+        expected_artifacts = episode.get("state_store_artifacts")
+        if not isinstance(expected_artifacts, list):
+            raise G1MicroError("opaque pilot state artifact manifest is missing")
+        stores = (episode_dir / "active.sqlite3", episode_dir / "fof.sqlite3")
+        if _file_manifest(stores) != expected_artifacts:
+            raise G1MicroError("opaque pilot retained state artifacts differ from bundle")
+        retained = {
+            "ACTIVE": _logical_receipts_from_database(episode_dir / "active.sqlite3"),
+            "FORCED_OPPOSITE_FEEDBACK": _logical_receipts_from_database(episode_dir / "fof.sqlite3"),
+        }
+        if retained != episode.get("store_receipts"):
+            raise G1MicroError("opaque pilot retained state receipts differ from bundle")
+        if task is not None:
+            active_branch = episode["dispositions"]["ACTIVE"]
+            interventions = episode.get("state_interventions")
+            if active_branch.get("admission") is None:
+                if interventions != {"REMOVE": None, "RESTORE": None}:
+                    raise G1MicroError("opaque pilot intervention occurred without active admission")
+            else:
+                active_state = active_branch["successor_state"]
+                admission_sha = active_branch["admission"]["admission"]["record_sha256"]
+                expected_remove = make_record("EvaluatorStateIntervention", owner_uid=PRINCIPALS["outcome_evaluator_uid"], payload={
+                    "authority_class": "DECLARED_EXPERIMENTAL_INTERVENTION_NOT_LEARNING",
+                    "base_generation": 1, "base_state_sha256": state_sha256(active_state),
+                    "operation": "REMOVE_TO_GENESIS", "resulting_generation": 2,
+                    "resulting_state_sha256": state_sha256(make_genesis_state()),
+                    "source_admission_sha256": admission_sha,
+                })
+                expected_restore = make_record("EvaluatorStateIntervention", owner_uid=PRINCIPALS["outcome_evaluator_uid"], payload={
+                    "authority_class": "DECLARED_EXPERIMENTAL_INTERVENTION_NOT_LEARNING",
+                    "base_generation": 2, "base_state_sha256": state_sha256(make_genesis_state()),
+                    "operation": "RESTORE_ACTIVE_SNAPSHOT", "resulting_generation": 3,
+                    "resulting_state_sha256": state_sha256(active_state),
+                    "source_admission_sha256": admission_sha,
+                })
+                if interventions != {"REMOVE": expected_remove, "RESTORE": expected_restore}:
+                    raise G1MicroError("opaque pilot remove/restore intervention does not reconstruct")
+    metrics = _opaque_metrics(bundle["episodes"])
+    if metrics != bundle["metrics"] or bundle["terminal"] != metrics["terminal"]:
+        raise G1MicroError("opaque pilot descriptive metrics drifted")
+    return {
+        "bundle_sha256": digest, "terminal": bundle["terminal"],
+        "verification": (
+            "VALID_LOCAL_OPAQUE_IDENTIFIABILITY_SEMANTIC_REPLAY"
+            if protocol is not None else "VALID_LOCAL_OPAQUE_IDENTIFIABILITY_STRUCTURE_ONLY"
+        ),
+    }
+
+
 def verify_exploratory_bundle(
     bundle: Mapping[str, Any], *, base_dir: str | Path | None = None
 ) -> dict[str, Any]:
@@ -2714,6 +3549,8 @@ def _replace_canonical(path: Path, raw: bytes) -> None:
 def verify_bundle_file(path: str | Path) -> dict[str, Any]:
     bundle_path = Path(path)
     bundle = _canonical_object(bundle_path.read_bytes(), "result bundle")
+    if bundle.get("schema_version") == OPAQUE_PILOT_PROTOCOL:
+        return verify_opaque_identifiability_pilot_bundle(bundle, base_dir=bundle_path.parent)
     return verify_exploratory_bundle(bundle, base_dir=bundle_path.parent)
 
 
@@ -2735,6 +3572,51 @@ def verify_frozen_execution_files(
     ):
         raise G1MicroError("frozen execution artifacts are absent or linked")
     protocol, protocol_sha256 = load_protocol(protocol_path)
+    if protocol.get("schema_version") == OPAQUE_PILOT_PROTOCOL:
+        if str(registry_path) != protocol["consumption_registry"]["path"]:
+            raise G1MicroError("opaque pilot verification registry differs from preregistration")
+        bundle = _canonical_object(result_path.read_bytes(), "opaque pilot result bundle")
+        local = verify_opaque_identifiability_pilot_bundle(
+            bundle, base_dir=result_path.parent, protocol=protocol
+        )
+        if bundle["protocol_canonical_sha256"] != protocol_sha256:
+            raise G1MicroError("opaque pilot result does not join frozen protocol")
+        reveal = _canonical_object((result_path.parent / bundle["evaluator_reveal"]["path"]).read_bytes(), "opaque evaluator reveal")
+        tasks = opaque_pilot_tasks(protocol, reveal)
+        if [item["episode_uid"] for item in bundle["episodes"]] != [task.episode_uid for task in tasks]:
+            raise G1MicroError("opaque pilot result episode order drifted")
+        seal = _canonical_object(registry_path.read_bytes(), "opaque execution registry seal")
+        validate_record(seal, kind="OpaquePilotExecutionSeal")
+        payload = seal["payload"]
+        if payload.get("status") != "COMPLETED_NO_RERUN" or payload.get("result_sha256") != bundle["bundle_sha256"]:
+            raise G1MicroError("opaque pilot registry is not a completed no-rerun seal")
+        start = payload.get("start")
+        validate_record(start, kind="OpaquePilotExecutionStart")
+        start_payload = start["payload"]
+        if (
+            seal["owner_uid"] != "principal:g1-micro-execution-custodian"
+            or start["owner_uid"] != "principal:g1-micro-execution-custodian"
+            or set(start_payload) != {"episode_commitment_sha256s", "evaluator_reveal_sha256", "offline_tokenizer_receipt", "output_directory", "planned_episode_count", "protocol_sha256", "retry_or_refill_permitted", "runtime_binding_sha256", "source_manifest", "status"}
+            or set(payload) != {"abort_sha256", "result_sha256", "start", "status"}
+            or start_payload.get("protocol_sha256") != protocol_sha256
+            or start_payload.get("planned_episode_count") != 8
+            or start_payload.get("episode_commitment_sha256s") != [task.commitment_sha256 for task in tasks]
+            or start_payload.get("evaluator_reveal_sha256") != bundle["evaluator_reveal"]["sha256"]
+            or start_payload.get("runtime_binding_sha256") != (None if bundle["runtime_binding"] is None else bundle["runtime_binding"]["record_sha256"])
+            or start_payload.get("source_manifest") != _source_manifest()
+            or not isinstance(start_payload.get("output_directory"), str)
+            or not Path(start_payload["output_directory"]).is_absolute()
+            or Path(start_payload["output_directory"]) != result_path.parent.resolve()
+            or payload.get("abort_sha256") is not None
+            or start_payload.get("retry_or_refill_permitted") is not False
+            or start_payload.get("status") != "STARTED_BEFORE_FIRST_HTTP_POST"
+            or seal["refs"] != [_ref("execution_start", start)]
+        ):
+            raise G1MicroError("opaque pilot start does not bind reveal and protocol before calls")
+        runtime = bundle["runtime_binding"]
+        if runtime is not None:
+            validate_dgx_runtime_binding(runtime, protocol=protocol, protocol_sha256=protocol_sha256, source_manifest=_source_manifest())
+        return {**local, "protocol_canonical_sha256": protocol_sha256, "registry_sha256": _digest(registry_path.read_bytes()), "runtime_image_identity_verified": runtime is not None, "verification": "VALID_LOCAL_OPAQUE_PROTOCOL_REVEAL_REGISTRY_BINDING"}
     if str(registry_path) != protocol["consumption_registry"]["path"]:
         raise G1MicroError("verification registry differs from the preregistration")
     bundle = _canonical_object(result_path.read_bytes(), "result bundle")
@@ -2830,6 +3712,13 @@ def _preflight(
     execution_registry_path: Path,
 ) -> dict[str, Any]:
     protocol, protocol_sha = load_protocol(protocol_path)
+    if protocol.get("schema_version") == OPAQUE_PILOT_PROTOCOL:
+        binding = protocol["live_binding"]
+        if endpoint != binding["endpoint_origin"] or model != binding["served_model"] or expected_max_model_len != binding["expected_max_model_len"]:
+            raise G1MicroError("CLI model endpoint differs from frozen opaque pilot binding")
+        if output_dir.exists() or execution_registry_path.exists() or str(execution_registry_path) != protocol["consumption_registry"]["path"]:
+            raise G1MicroError("opaque pilot one-shot artifacts are unavailable")
+        return {"completion_post_cap": 64, "tokenize_post_cap": 64, "total_http_post_cap": 128, "network_calls": 0, "output_created": False, "preflight": "READY_FOR_ONE_FRESH_OPAQUE_IDENTIFIABILITY_PILOT", "protocol_canonical_sha256": protocol_sha, "scope_nonclaim": LOCAL_SCOPE_NONCLAIM}
     task = task_from_protocol(protocol)
     binding = protocol["live_binding"]
     config = OpenAIBackendConfig(
@@ -2889,6 +3778,8 @@ def run_exploratory_slice(
     output_dir: str | Path,
     execution_registry_path: str | Path,
     runtime_binding_path: str | Path,
+    evaluator_reveal_path: str | Path | None = None,
+    tokenizer_receipt: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Official live entrypoint: preflight, consume once, run, and verify joins."""
 
@@ -2916,6 +3807,11 @@ def run_exploratory_slice(
         protocol_sha256=protocol_sha,
         source_manifest=_source_manifest(),
     )
+    if protocol.get("schema_version") == OPAQUE_PILOT_PROTOCOL:
+        if evaluator_reveal_path is None:
+            raise G1MicroError("opaque pilot execution requires an external evaluator reveal")
+        backend = OpenAICompatibleBackend(OpenAIBackendConfig(endpoint=endpoint, model=model, expected_max_model_len=expected_max_model_len))
+        return run_opaque_identifiability_pilot_with_backend(backend=backend, protocol=protocol, protocol_sha256=protocol_sha, output_dir=output, execution_registry_path=registry, evaluator_reveal_path=evaluator_reveal_path, tokenizer_receipt=tokenizer_receipt, runtime_binding=runtime_binding)
     backend = OpenAICompatibleBackend(
         OpenAIBackendConfig(
             endpoint=endpoint,
@@ -2948,6 +3844,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--execution-registry", type=Path, required=True)
     parser.add_argument("--runtime-binding", type=Path)
+    parser.add_argument("--evaluator-reveal", type=Path)
+    parser.add_argument("--tokenizer-receipt", type=Path)
     parser.add_argument("--preflight-only", action="store_true")
     args = parser.parse_args(argv)
     preflight = _preflight(
@@ -2963,6 +3861,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     if args.runtime_binding is None:
         raise G1MicroError("live execution requires --runtime-binding")
+    tokenizer_receipt = None if args.tokenizer_receipt is None else _canonical_object(args.tokenizer_receipt.read_bytes(), "offline tokenizer receipt")
     bundle = run_exploratory_slice(
         protocol_path=args.protocol,
         endpoint=args.endpoint,
@@ -2971,6 +3870,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         output_dir=args.output_dir,
         execution_registry_path=args.execution_registry,
         runtime_binding_path=args.runtime_binding,
+        evaluator_reveal_path=args.evaluator_reveal,
+        tokenizer_receipt=tokenizer_receipt,
     )
     print(canonical_json_bytes({
         "bundle_sha256": bundle["bundle_sha256"],

@@ -8,7 +8,7 @@ uses Docker bridge networking, so outbound egress is not independently blocked.
 from __future__ import annotations
 
 import argparse
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 import fcntl
 from hashlib import sha256
@@ -42,6 +42,75 @@ _NAME = re.compile(r"^[a-z][a-z0-9-]{2,63}$")
 _ENDPOINT = re.compile(r"^http://127\.0\.0\.1:([1-9][0-9]{0,4})$")
 
 
+def offline_action_code_tokenizer_receipt(
+    *, command: Command, snapshot: Path, tokenizer_binding: Mapping[str, Any] | None = None,
+    image: str | None = None, image_id: str | None = None,
+    snapshot_manifest_sha256: str | None = None, episodes: Sequence[Mapping[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Measure public action codes inside the pinned vLLM image, offline.
+
+    The host never imports tokenizer libraries.  The image digest and local
+    snapshot are the same pinned objects used by the subsequent vLLM service.
+    Output is canonical JSON so it can be bound to execution START before any
+    model or tokenizer HTTP request.
+    """
+    if tokenizer_binding is not None:
+        image = tokenizer_binding.get("container_image")
+        image_id = tokenizer_binding.get("container_image_id")
+        snapshot_manifest_sha256 = tokenizer_binding.get("snapshot_manifest_sha256")
+        episodes = tokenizer_binding.get("episodes")
+    if not isinstance(image, str) or not isinstance(image_id, str) or not isinstance(snapshot_manifest_sha256, str) or not isinstance(episodes, Sequence) or not snapshot.is_absolute() or snapshot.is_symlink() or not snapshot.is_dir():
+        raise LaunchRefused("tokenizer snapshot is unavailable")
+    public = []
+    for episode in episodes:
+        if not isinstance(episode, Mapping) or not isinstance(episode.get("episode_uid"), str) or not isinstance(episode.get("action_codes"), list) or len(episode["action_codes"]) != 2:
+            raise LaunchRefused("tokenizer action-code episode contract is invalid")
+        public.append({"action_codes": episode["action_codes"], "episode_uid": episode["episode_uid"]})
+    payload = canonical_json_bytes({"episodes": public}).decode("utf-8")
+    program = (
+        "import json,sys; import transformers,tokenizers; "
+        "from transformers import AutoTokenizer; "
+        "p=json.loads(sys.argv[1]); t=AutoTokenizer.from_pretrained('/model-repository/snapshots/' + sys.argv[2],local_files_only=True); "
+        "r={'transformers_version':transformers.__version__,'tokenizers_version':tokenizers.__version__,"
+        "'episodes':[{'episode_uid':e['episode_uid'],'token_ids':[t.encode(x,add_special_tokens=False) for x in e['action_codes']]} for e in p['episodes']]}; "
+        "print(json.dumps(r,sort_keys=True,separators=(',',':')))"
+    )
+    raw = command((
+        "docker", "run", "--rm", "--network", "none", "--ipc", "none", "--read-only",
+        "--tmpfs", "/tmp:rw,noexec,nosuid,size=64m",
+        "--mount", f"type=bind,src={snapshot.parents[1]},dst=/model-repository,readonly",
+        "--entrypoint", "python", image, "-c", program, payload, snapshot.name,
+    ))
+    try:
+        observed = json.loads(raw.decode("utf-8", "strict"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise LaunchRefused("offline tokenizer measurement is not JSON") from error
+    rows = observed.get("episodes") if isinstance(observed, dict) else None
+    if not isinstance(rows, list) or len(rows) != len(public) or not isinstance(observed.get("transformers_version"), str) or not isinstance(observed.get("tokenizers_version"), str):
+        raise LaunchRefused("offline tokenizer measurement shape drifted")
+    normalized: list[dict[str, Any]] = []
+    for expected, row in zip(public, rows, strict=True):
+        ids = row.get("token_ids") if isinstance(row, Mapping) else None
+        if row.get("episode_uid") != expected["episode_uid"] or not isinstance(ids, list) or len(ids) != 2 or any(not isinstance(part, list) or not part or any(isinstance(token, bool) or not isinstance(token, int) or token < 0 for token in part) for part in ids) or len(ids[0]) != len(ids[1]):
+            raise LaunchRefused("opaque action codes do not have equal offline token counts")
+        normalized.append({"episode_uid": expected["episode_uid"], "token_ids": ids, "token_counts": [len(ids[0]), len(ids[1])]})
+    receipt = {
+        "schema_version": "hswm-g1-opaque-offline-tokenizer-receipt/v1",
+        "container_image": image, "container_image_id": image_id,
+        "model_repository": "Qwen/Qwen3.6-35B-A3B-FP8", "model_revision": snapshot.name,
+        "snapshot_manifest_sha256": snapshot_manifest_sha256,
+        "encoding": {"add_special_tokens": False, "api": "AutoTokenizer.encode", "local_files_only": True},
+        "episodes": [{**entry, "action_codes": item["action_codes"]} for entry, item in zip(normalized, public, strict=True)],
+        "tokenizers_version": observed["tokenizers_version"], "transformers_version": observed["transformers_version"],
+    }
+    if tokenizer_binding is not None:
+        expected = {key: tokenizer_binding.get(key) for key in receipt}
+        expected["schema_version"] = "hswm-g1-opaque-offline-tokenizer-receipt/v1"
+        if receipt != expected:
+            raise LaunchRefused("offline tokenizer receipt differs from preregistered binding")
+    return {**receipt, "receipt_sha256": sha256(canonical_json_bytes(receipt)).hexdigest()}
+
+
 @dataclass(frozen=True, slots=True, kw_only=True)
 class DGXFreshSpec:
     repo_root: Path
@@ -54,6 +123,7 @@ class DGXFreshSpec:
     model_snapshot: Path
     hf_cache: Path
     compile_cache: Path
+    evaluator_reveal: Path | None = None
     endpoint: str = "http://127.0.0.1:18080"
 
 
@@ -223,12 +293,15 @@ class DGXFreshRuntime:
         )
         if re.fullmatch(r"[0-9a-f]{40}", self._source_tree) is None:
             raise LaunchRefused("G1 micro DGX source tree is invalid")
-        if (
-            spec.protocol_path.relative_to(spec.repo_root).as_posix()
-            != g1_micro.DGX_TRACKED_SOURCE_PATHS[0]
-        ):
+        if spec.protocol_path.relative_to(spec.repo_root).as_posix() not in g1_micro.DGX_PROTOCOL_PATHS:
             raise LaunchRefused("G1 micro DGX protocol path is not canonical")
-        for relative in g1_micro.DGX_TRACKED_SOURCE_PATHS:
+        selected_paths = (
+            g1_micro.DGX_TRACKED_SOURCE_PATHS
+            if spec.protocol_path.relative_to(spec.repo_root).as_posix()
+            == g1_micro.DGX_TRACKED_SOURCE_PATHS[0]
+            else (g1_micro.DGX_V2_PROTOCOL_PATH, *g1_micro.DGX_TRACKED_SOURCE_PATHS[1:])
+        )
+        for relative in selected_paths:
             current = (spec.repo_root / relative).read_bytes()
             committed = self.command(
                 ("git", "-C", str(spec.repo_root), "show", f"HEAD:{relative}")
@@ -237,11 +310,34 @@ class DGXFreshRuntime:
                 raise LaunchRefused("G1 micro DGX source differs from its commit")
             self._tracked_source_sha256[relative] = sha256(current).hexdigest()
         self._protocol_file_sha256 = self._tracked_source_sha256[
-            g1_micro.DGX_TRACKED_SOURCE_PATHS[0]
+            spec.protocol_path.relative_to(spec.repo_root).as_posix()
         ]
         self._protocol, self._protocol_sha256 = g1_micro.load_protocol(
             spec.protocol_path
         )
+        if self._protocol.get("schema_version") == g1_micro.OPAQUE_PILOT_PROTOCOL:
+            if (
+                spec.evaluator_reveal is None
+                or not spec.evaluator_reveal.is_absolute()
+                or spec.evaluator_reveal.is_symlink()
+                or not spec.evaluator_reveal.is_file()
+            ):
+                raise LaunchRefused("opaque pilot requires a regular external evaluator reveal")
+            try:
+                reveal = g1_micro._canonical_object(
+                    spec.evaluator_reveal.read_bytes(), "opaque evaluator reveal preflight"
+                )
+                if (
+                    reveal.get("schema_version") != "hswm-g1-opaque-evaluator-reveal/v1"
+                    or reveal.get("study_uid") != self._protocol["study_uid"]
+                    or reveal.get("protocol_canonical_sha256") != self._protocol_sha256
+                    or reveal.get("reveal_commitment_root")
+                    != self._protocol["evaluator_reveal_contract"]["reveal_commitment_root"]
+                ):
+                    raise ValueError
+                g1_micro.opaque_pilot_tasks(self._protocol, reveal)
+            except (ValueError, g1_micro.G1MicroError) as error:
+                raise LaunchRefused("opaque pilot evaluator reveal cannot satisfy preflight") from error
         binding = self._protocol["live_binding"]
         if spec.endpoint != binding["endpoint_origin"]:
             raise LaunchRefused("G1 micro DGX endpoint differs from protocol")
@@ -440,7 +536,7 @@ class DGXFreshRuntime:
             raise LaunchRefused("G1 micro DGX container identity drifted") from error
 
     def attest(self, completed: int) -> dict[str, bytes]:
-        if not self._started or not 0 <= completed <= 8 or self._protocol is None:
+        if not self._started or self._protocol is None or not 0 <= completed <= g1_micro.expected_completion_posts(self._protocol):
             raise LaunchRefused("G1 micro DGX attestation count is invalid")
         binding = self._protocol["live_binding"]
         try:
@@ -605,15 +701,16 @@ def verify_dgx_execution_receipt(
         "terminal",
         "tokenize_posts",
     }
+    expected_posts = g1_micro.expected_completion_posts(protocol)
     if (
         receipt["owner_uid"] != "principal:g1-micro-dgx-runtime-custodian"
         or not isinstance(runtime_binding, Mapping)
         or receipt["refs"] != [g1_micro._ref("runtime_binding", runtime_binding)]
         or set(payload) != expected_fields
         or payload["bundle_sha256"] != bundle.get("bundle_sha256")
-        or payload["completion_posts"] != 8
-        or payload["tokenize_posts"] != 8
-        or payload["successful_generation_requests"] != 8
+        or payload["completion_posts"] != expected_posts
+        or payload["tokenize_posts"] != expected_posts
+        or payload["successful_generation_requests"] != expected_posts
         or payload["terminal"] != bundle.get("terminal")
         or payload["runtime_image_identity_verified"] is not True
         or payload["network_boundary"] != g1_micro.DGX_NETWORK_BOUNDARY
@@ -657,7 +754,7 @@ def verify_dgx_execution_receipt(
         != runtime_payload["container_start_sha256"]
         or container.get("Image") != protocol["live_binding"]["container_image_id"]
         or container.get("Config", {}).get("Cmd") != expected_argv
-        or g1_micro.parse_vllm_success_total(raw["final_metrics_utf8"]) != 8
+        or g1_micro.parse_vllm_success_total(raw["final_metrics_utf8"]) != expected_posts
         or not isinstance(models, dict)
         or [item.get("id") for item in models.get("data", []) if isinstance(item, dict)]
         != [protocol["live_binding"]["served_model"]]
@@ -684,7 +781,7 @@ def verify_dgx_execution_receipt(
     return {
         "bundle_sha256": bundle["bundle_sha256"],
         "receipt_sha256": receipt["record_sha256"],
-        "successful_generation_requests": 8,
+        "successful_generation_requests": expected_posts,
         "terminal": bundle["terminal"],
         "verification": "VALID_LOCAL_DGX_FINAL_ATTESTATION_AND_RESTORATION_JOIN",
     }
@@ -702,6 +799,14 @@ def run_dgx_micro(spec: DGXFreshSpec) -> dict[str, Any]:
         )
         assert runtime._protocol is not None
         binding = runtime._protocol["live_binding"]
+        tokenizer_receipt = None
+        if runtime._protocol.get("schema_version") == g1_micro.OPAQUE_PILOT_PROTOCOL:
+            # This occurs after fresh runtime validation but before the core
+            # registry claim and therefore before the first model POST.
+            tokenizer_receipt = offline_action_code_tokenizer_receipt(
+                command=runtime.command, snapshot=spec.model_snapshot,
+                tokenizer_binding=runtime._protocol["tokenizer_binding"],
+            )
         bundle = g1_micro.run_exploratory_slice(
             protocol_path=spec.protocol_path,
             endpoint=spec.endpoint,
@@ -710,8 +815,11 @@ def run_dgx_micro(spec: DGXFreshSpec) -> dict[str, Any]:
             output_dir=spec.output_dir,
             execution_registry_path=spec.execution_registry,
             runtime_binding_path=spec.runtime_binding_path,
+            evaluator_reveal_path=spec.evaluator_reveal,
+            tokenizer_receipt=tokenizer_receipt,
         )
-        final = runtime.attest(8)
+        expected_posts = g1_micro.expected_completion_posts(runtime._protocol)
+        final = runtime.attest(expected_posts)
         stopped = list(runtime._stopped)
         runtime_binding = runtime.runtime_binding
     if runtime.teardown_observation is None:
@@ -729,7 +837,7 @@ def run_dgx_micro(spec: DGXFreshSpec) -> dict[str, Any]:
         owner_uid="principal:g1-micro-dgx-runtime-custodian",
         payload={
             "bundle_sha256": bundle["bundle_sha256"],
-            "completion_posts": 8,
+            "completion_posts": expected_posts,
             "final_container_inspect_json": final["container_inspect"].decode(
                 "utf-8", "strict"
             ),
@@ -743,9 +851,7 @@ def run_dgx_micro(spec: DGXFreshSpec) -> dict[str, Any]:
             "final_version_json": final["version"].decode("utf-8", "strict"),
             "final_version_sha256": sha256(final["version"]).hexdigest(),
             "network_boundary": g1_micro.DGX_NETWORK_BOUNDARY,
-            "runtime_image_identity_verified": verified[
-                "runtime_image_identity_verified"
-            ],
+            "runtime_image_identity_verified": True,
             "shared_service_snapshot": [
                 {
                     "container_id_sha256": sha256(
@@ -756,10 +862,10 @@ def run_dgx_micro(spec: DGXFreshSpec) -> dict[str, Any]:
                 for name, identifier in stopped
             ],
             "shared_services_restored_after_quiescence": True,
-            "successful_generation_requests": 8,
+            "successful_generation_requests": expected_posts,
             "teardown_observation": dict(runtime.teardown_observation),
             "terminal": bundle["terminal"],
-            "tokenize_posts": 8,
+            "tokenize_posts": expected_posts,
         },
         refs=(g1_micro._ref("runtime_binding", runtime_binding),),
     )
@@ -777,6 +883,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--model-snapshot", type=Path, required=True)
     parser.add_argument("--lock-path", type=Path, required=True)
     parser.add_argument("--execution-registry", type=Path, required=True)
+    parser.add_argument("--evaluator-reveal", type=Path)
     parser.add_argument("--container-name", default="hswm-g1-micro-001")
     parser.add_argument("--preflight-only", action="store_true")
     args = parser.parse_args(argv)
@@ -793,6 +900,7 @@ def main(argv: list[str] | None = None) -> int:
         model_snapshot=args.model_snapshot,
         hf_cache=cache_root / "g1_micro_hf",
         compile_cache=cache_root / "g1_micro_compile",
+        evaluator_reveal=(None if args.evaluator_reveal is None else args.evaluator_reveal.resolve()),
     )
     if args.preflight_only:
         runtime = DGXFreshRuntime(spec)

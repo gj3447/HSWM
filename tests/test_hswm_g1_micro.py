@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import base64
 from copy import deepcopy
 from hashlib import sha256
 import json
@@ -22,6 +23,12 @@ _PROTOCOL = (
     / "_research/causal_composition/preregistrations/g1_micro_exploratory_2026-08-30"
     / "protocol.v1.json"
 )
+_OPAQUE_PROTOCOL = (
+    Path(__file__).parents[1]
+    / "_research/causal_composition/preregistrations/"
+    "g1_opaque_identifiability_pilot_2026-08-30/protocol.v1.json"
+)
+_OPAQUE_REVEAL = Path("/tmp/hswm-g1-opaque-evaluator-reveal-v1.json")
 _SNAPSHOT_MANIFEST = (
     Path(__file__).parents[1]
     / "_research/dgx_mi2/preregistrations/"
@@ -196,6 +203,129 @@ class _FailSecondCompletionBackend(_VaryingMicroBackend):
         return super().complete(**kwargs)
 
 
+class _OpaquePilotBackend(_VaryingMicroBackend):
+    """Semantic double for the opaque pilot: state, not candidate position, wins."""
+
+    def __init__(self, correct_by_cue: Mapping[str, str]) -> None:
+        super().__init__()
+        self.correct_by_cue = dict(correct_by_cue)
+
+    def complete(
+        self,
+        *,
+        raw_request: bytes,
+        request_id: str,
+        response_observer: Callable[[bytes, bytes], None],
+    ) -> live.ModelCompletion:
+        del request_id
+        request = json.loads(raw_request)
+        payload = json.loads(request["messages"][-1]["content"])
+        codes = list(payload["action_codes"])
+        correct = self.correct_by_cue[payload["cue"]]
+        if "feedback_correct" in payload:
+            trajectory = payload["trajectory_action_code"]
+            choice = trajectory if payload["feedback_correct"] else next(
+                code for code in codes if code != trajectory
+            )
+        elif "compiled_disposition" in payload:
+            rule = payload["compiled_disposition"]["rule"]
+            choice = None if rule is None else rule["action_code"]
+            if choice is None:
+                choice = next(code for code in codes if code != correct)
+        else:
+            # The pre-outcome trajectory is deliberately wrong; outcome feedback
+            # is the only route by which ACTIVE can learn the correct code.
+            choice = next(code for code in codes if code != correct)
+        text = json.dumps({"action_code": choice}, separators=(",", ":"))
+        self.complete_calls += 1
+        input_tokens = self._preflight_counts[sha256(raw_request).hexdigest()]
+        raw_response = canonical_json_bytes(
+            {
+                "choices": [{"finish_reason": "stop", "message": {"content": text}}],
+                "id": f"opaque-fixture-{self.complete_calls}",
+                "model": self.model,
+                "usage": {
+                    "completion_tokens": 1,
+                    "prompt_tokens": input_tokens,
+                    "total_tokens": input_tokens + 1,
+                },
+            }
+        )
+        response_observer(raw_request, raw_response)
+        response_sha = sha256(raw_response).hexdigest()
+        self.response_sha256s.append(response_sha)
+        return live.ModelCompletion(
+            text=text,
+            raw_request_json=raw_request.decode("utf-8"),
+            raw_response_json=raw_response.decode("utf-8"),
+            request_sha256=sha256(raw_request).hexdigest(),
+            response_sha256=response_sha,
+            model=self.model,
+            input_tokens=input_tokens,
+            output_tokens=1,
+            latency_ms=0,
+            usage_reported=True,
+        )
+
+
+class _NonadherentOpaquePilotBackend(_OpaquePilotBackend):
+    """Returns schema-valid but credit-rule-invalid proposals; the pilot must finish."""
+
+    def complete(
+        self,
+        *,
+        raw_request: bytes,
+        request_id: str,
+        response_observer: Callable[[bytes, bytes], None],
+    ) -> live.ModelCompletion:
+        request = json.loads(raw_request)
+        payload = json.loads(request["messages"][-1]["content"])
+        if "feedback_correct" not in payload:
+            return super().complete(
+                raw_request=raw_request,
+                request_id=request_id,
+                response_observer=response_observer,
+            )
+        # Deliberately invert the precommitted binary rule for both proposal
+        # calls while keeping the response schema valid.
+        trajectory = payload["trajectory_action_code"]
+        choice = (
+            next(code for code in payload["action_codes"] if code != trajectory)
+            if payload["feedback_correct"]
+            else trajectory
+        )
+        text = json.dumps({"action_code": choice}, separators=(",", ":"))
+        self.complete_calls += 1
+        input_tokens = self._preflight_counts[sha256(raw_request).hexdigest()]
+        raw_response = canonical_json_bytes(
+            {
+                "choices": [{"finish_reason": "stop", "message": {"content": text}}],
+                "id": f"opaque-nonadherent-{self.complete_calls}",
+                "model": self.model,
+                "usage": {
+                    "completion_tokens": 1,
+                    "prompt_tokens": input_tokens,
+                    "total_tokens": input_tokens + 1,
+                },
+            }
+        )
+        response_observer(raw_request, raw_response)
+        response_sha = sha256(raw_response).hexdigest()
+        self.response_sha256s.append(response_sha)
+        return live.ModelCompletion(
+            text=text,
+            raw_request_json=raw_request.decode("utf-8"),
+            raw_response_json=raw_response.decode("utf-8"),
+            request_sha256=sha256(raw_request).hexdigest(),
+            response_sha256=response_sha,
+            model=self.model,
+            input_tokens=input_tokens,
+            output_tokens=1,
+            latency_ms=0,
+            usage_reported=True,
+        )
+
+
 def _protocol(tmp_path: Path) -> tuple[dict[str, Any], str, Path]:
     frozen, _ = g1_micro.load_protocol(_PROTOCOL)
     protocol = deepcopy(frozen)
@@ -203,6 +333,52 @@ def _protocol(tmp_path: Path) -> tuple[dict[str, Any], str, Path]:
     registry.parent.mkdir()
     protocol["consumption_registry"]["path"] = str(registry)
     return protocol, canonical_sha256(protocol), registry
+
+
+def _opaque_protocol(
+    tmp_path: Path,
+) -> tuple[dict[str, Any], str, Path, Path, dict[str, Any]]:
+    protocol, _ = g1_micro.load_protocol(_OPAQUE_PROTOCOL)
+    protocol = deepcopy(protocol)
+    registry = tmp_path / "durable" / "opaque-once"
+    registry.parent.mkdir(parents=True)
+    protocol["consumption_registry"]["path"] = str(registry)
+    protocol_sha = canonical_sha256(protocol)
+    reveal = json.loads(_OPAQUE_REVEAL.read_bytes())
+    reveal["protocol_canonical_sha256"] = protocol_sha
+    reveal["reveal_commitment_root"] = protocol["evaluator_reveal_contract"][
+        "reveal_commitment_root"
+    ]
+    reveal_path = tmp_path / "evaluator-reveal.json"
+    reveal_path.write_bytes(canonical_json_bytes(reveal))
+    return protocol, protocol_sha, registry, reveal_path, reveal
+
+
+def _opaque_tokenizer_receipt(protocol: Mapping[str, Any]) -> dict[str, Any]:
+    """Exact public projection of the pre-freeze tokenizer measurement."""
+    binding = protocol["tokenizer_binding"]
+    receipt: dict[str, Any] = {
+        "schema_version": "hswm-g1-opaque-offline-tokenizer-receipt/v1",
+        "container_image": binding["container_image"],
+        "container_image_id": binding["container_image_id"],
+        "model_repository": binding["model_repository"],
+        "model_revision": binding["model_revision"],
+        "snapshot_manifest_sha256": binding["snapshot_manifest_sha256"],
+        "encoding": deepcopy(binding["encoding"]),
+        "tokenizers_version": binding["tokenizers_version"],
+        "transformers_version": binding["transformers_version"],
+        "episodes": [
+            {
+                "episode_uid": episode["episode_uid"],
+                "action_codes": deepcopy(episode["action_codes"]),
+                "token_ids": deepcopy(episode["token_ids"]),
+                "token_counts": deepcopy(episode["token_counts"]),
+            }
+            for episode in binding["episodes"]
+        ],
+    }
+    receipt["receipt_sha256"] = sha256(canonical_json_bytes(receipt)).hexdigest()
+    return receipt
 
 
 def _runtime_binding(protocol: Mapping[str, Any], protocol_sha: str) -> dict[str, Any]:
@@ -239,10 +415,17 @@ def _runtime_binding(protocol: Mapping[str, Any], protocol_sha: str) -> dict[str
     root = Path(__file__).parents[1]
     tracked = {
         path: sha256((root / path).read_bytes()).hexdigest()
-        for path in g1_micro.DGX_TRACKED_SOURCE_PATHS
+        for path in g1_micro.dgx_tracked_source_paths(protocol)
     }
     protocol_raw = canonical_json_bytes(protocol)
-    tracked[g1_micro.DGX_TRACKED_SOURCE_PATHS[0]] = sha256(protocol_raw).hexdigest()
+    protocol_source_path = (
+        "_research/causal_composition/preregistrations/"
+        "g1_opaque_identifiability_pilot_2026-08-30/protocol.v1.json"
+        if protocol["schema_version"] == g1_micro.OPAQUE_PILOT_PROTOCOL
+        else "_research/causal_composition/preregistrations/"
+        "g1_micro_exploratory_2026-08-30/protocol.v1.json"
+    )
+    tracked[protocol_source_path] = sha256(protocol_raw).hexdigest()
     return make_runtime_binding_record(
         protocol=protocol,
         protocol_sha256=protocol_sha,
@@ -540,6 +723,47 @@ def test_official_entrypoint_binds_protocol_registry_and_loopback_backend(
     assert verified["runtime_image_identity_verified"] is True
 
 
+def test_opaque_official_entrypoint_carries_runtime_binding_to_frozen_verifier(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    protocol, protocol_sha, registry, reveal_path, reveal = _opaque_protocol(tmp_path)
+    protocol_path = _write_opaque_protocol(tmp_path, protocol)
+    output_root = tmp_path / "wrapper-output"
+    output_root.mkdir()
+    output = output_root / "opaque-live-run"
+    runtime = _runtime_binding(protocol, protocol_sha)
+    runtime_path = tmp_path / "runtime-binding.json"
+    runtime_path.write_bytes(canonical_json_bytes(runtime))
+    backend = _OpaquePilotBackend(
+        {
+            episode["cue"]: secret["correct_action_code"]
+            for episode, secret in zip(protocol["episodes"], reveal["episodes"], strict=True)
+        }
+    )
+    monkeypatch.setenv("HSWM_OUTPUT_ROOT", str(output_root))
+    monkeypatch.setattr(g1_micro, "OpenAICompatibleBackend", lambda config: backend)
+
+    bundle = g1_micro.run_exploratory_slice(
+        protocol_path=protocol_path,
+        endpoint="http://127.0.0.1:18080",
+        model="qwen3.6-35b-a3b",
+        expected_max_model_len=32_768,
+        output_dir=output,
+        execution_registry_path=registry,
+        runtime_binding_path=runtime_path,
+        evaluator_reveal_path=reveal_path,
+        tokenizer_receipt=_opaque_tokenizer_receipt(protocol),
+    )
+    verified = g1_micro.verify_frozen_execution_files(
+        bundle_path=output / "result.json",
+        protocol_path=protocol_path,
+        execution_registry_path=registry,
+    )
+
+    assert bundle["runtime_binding"] == runtime
+    assert verified["runtime_image_identity_verified"] is True
+
+
 def test_completed_journal_rejects_an_unattributed_extra_row(tmp_path: Path) -> None:
     protocol, protocol_sha, registry = _protocol(tmp_path)
     output = tmp_path / "g1-micro"
@@ -588,3 +812,419 @@ def test_completed_journal_reconstructs_token_receipt_digest(tmp_path: Path) -> 
     assert tampered["journal"]["raw_preimages_valid"] is False
     with pytest.raises(g1_micro.G1MicroError, match="eight-call chronology"):
         g1_micro.verify_exploratory_bundle(tampered, base_dir=output)
+
+
+def test_opaque_protocol_rejects_threshold_and_public_commitment_drift(
+    tmp_path: Path,
+) -> None:
+    protocol, _, _, _, _ = _opaque_protocol(tmp_path)
+    protocol["analysis"]["identifiability_observed_rule"]["delta_state_min"] = 0.0
+    path = tmp_path / "threshold-drift.json"
+    path.write_bytes(canonical_json_bytes(protocol))
+    with pytest.raises(g1_micro.G1MicroError, match="opaque pilot"):
+        g1_micro.load_protocol(path)
+
+    protocol, _, _, _, _ = _opaque_protocol(tmp_path / "second")
+    protocol["episodes"][0]["evaluator_commitment_sha256"] = "0" * 64
+    path = tmp_path / "commitment-drift.json"
+    path.write_bytes(canonical_json_bytes(protocol))
+    with pytest.raises(g1_micro.G1MicroError, match="opaque pilot"):
+        g1_micro.load_protocol(path)
+
+
+def test_opaque_pilot_closes_sixty_four_calls_and_exact_reveal_start_seal(
+    tmp_path: Path,
+) -> None:
+    protocol, protocol_sha, registry, reveal_path, reveal = _opaque_protocol(tmp_path)
+    backend = _OpaquePilotBackend(
+        {
+            episode["cue"]: secret["correct_action_code"]
+            for episode, secret in zip(protocol["episodes"], reveal["episodes"], strict=True)
+        }
+    )
+    output = tmp_path / "opaque-output"
+    bundle = g1_micro.run_opaque_identifiability_pilot_with_backend(
+        backend=backend,
+        protocol=protocol,
+        protocol_sha256=protocol_sha,
+        output_dir=output,
+        execution_registry_path=registry,
+        evaluator_reveal_path=reveal_path,
+        tokenizer_receipt=_opaque_tokenizer_receipt(protocol),
+    )
+
+    assert backend.complete_calls == 64
+    assert backend.tokenize_calls == 64
+    assert bundle["total_completion_posts"] == 64
+    assert bundle["total_tokenize_posts"] == 64
+    assert bundle["total_http_posts"] == 128
+    assert bundle["metrics"]["branch_correct_counts"] == {
+        "ACTIVE": 8,
+        "FORCED_OPPOSITE_FEEDBACK": 0,
+        "NO_UPDATE": 0,
+        "REMOVE": 0,
+        "RESTORE": 8,
+    }
+    assert all(
+        episode["dispositions"][branch]["credit"]["payload"]["decision"]
+        == "CREDIT"
+        and episode["dispositions"][branch]["admission"] is not None
+        for episode in bundle["episodes"]
+        for branch in ("ACTIVE", "FORCED_OPPOSITE_FEEDBACK")
+    )
+    assert sum(
+        episode["state_interventions"]["REMOVE"] is not None
+        and episode["state_interventions"]["RESTORE"] is not None
+        for episode in bundle["episodes"]
+    ) == 8
+    assert bundle["terminal"] == "PILOT_COMPLETE_IDENTIFIABILITY_OBSERVED_NO_EFFICACY_INFERENCE"
+    first_interventions = bundle["episodes"][0]["state_interventions"]
+    assert first_interventions["REMOVE"]["payload"]["operation"] == "REMOVE_TO_GENESIS"
+    assert first_interventions["RESTORE"]["payload"]["operation"] == "RESTORE_ACTIVE_SNAPSHOT"
+    assert first_interventions["REMOVE"]["payload"]["resulting_state_sha256"] == (
+        first_interventions["RESTORE"]["payload"]["base_state_sha256"]
+    )
+    assert first_interventions["RESTORE"]["payload"]["resulting_state_sha256"] == (
+        first_interventions["REMOVE"]["payload"]["base_state_sha256"]
+    )
+    seal = json.loads(registry.read_bytes())
+    assert seal["payload"]["status"] == "COMPLETED_NO_RERUN"
+    start = seal["payload"]["start"]
+    assert start["payload"]["evaluator_reveal_sha256"] == sha256(
+        reveal_path.read_bytes()
+    ).hexdigest()
+    assert bundle["evaluator_reveal"]["sha256"] == start["payload"][
+        "evaluator_reveal_sha256"
+    ]
+    verified = g1_micro.verify_frozen_execution_files(
+        bundle_path=output / "result.json",
+        protocol_path=_write_opaque_protocol(tmp_path, protocol),
+        execution_registry_path=registry,
+    )
+    assert verified["verification"] == "VALID_LOCAL_OPAQUE_PROTOCOL_REVEAL_REGISTRY_BINDING"
+
+
+def test_opaque_pilot_rejects_tampered_tokenizer_receipt_before_start(
+    tmp_path: Path,
+) -> None:
+    protocol, protocol_sha, registry, reveal_path, reveal = _opaque_protocol(tmp_path)
+    backend = _OpaquePilotBackend(
+        {
+            episode["cue"]: secret["correct_action_code"]
+            for episode, secret in zip(protocol["episodes"], reveal["episodes"], strict=True)
+        }
+    )
+    receipt = _opaque_tokenizer_receipt(protocol)
+    receipt["receipt_sha256"] = "0" * 64
+    with pytest.raises(g1_micro.G1MicroError, match="tokenizer receipt"):
+        g1_micro.run_opaque_identifiability_pilot_with_backend(
+            backend=backend,
+            protocol=protocol,
+            protocol_sha256=protocol_sha,
+            output_dir=tmp_path / "opaque-output",
+            execution_registry_path=registry,
+            evaluator_reveal_path=reveal_path,
+            tokenizer_receipt=receipt,
+        )
+    assert backend.complete_calls == 0
+    assert not registry.exists()
+
+
+def test_opaque_pilot_rejects_tokenizer_pin_or_episode_binding_drift_before_start(
+    tmp_path: Path,
+) -> None:
+    protocol, protocol_sha, registry, reveal_path, reveal = _opaque_protocol(tmp_path)
+    backend = _OpaquePilotBackend(
+        {
+            episode["cue"]: secret["correct_action_code"]
+            for episode, secret in zip(protocol["episodes"], reveal["episodes"], strict=True)
+        }
+    )
+    receipt = _opaque_tokenizer_receipt(protocol)
+    receipt["container_image_id"] = "sha256:" + "0" * 64
+    unsigned = dict(receipt)
+    unsigned.pop("receipt_sha256")
+    receipt["receipt_sha256"] = sha256(canonical_json_bytes(unsigned)).hexdigest()
+    with pytest.raises(g1_micro.G1MicroError, match="tokenizer receipt"):
+        g1_micro.run_opaque_identifiability_pilot_with_backend(
+            backend=backend,
+            protocol=protocol,
+            protocol_sha256=protocol_sha,
+            output_dir=tmp_path / "opaque-output",
+            execution_registry_path=registry,
+            evaluator_reveal_path=reveal_path,
+            tokenizer_receipt=receipt,
+        )
+    assert backend.complete_calls == 0
+    assert not registry.exists()
+
+
+def test_opaque_pilot_records_nonadherent_proposals_without_selective_abort(
+    tmp_path: Path,
+) -> None:
+    protocol, protocol_sha, registry, reveal_path, reveal = _opaque_protocol(tmp_path)
+    backend = _NonadherentOpaquePilotBackend(
+        {
+            episode["cue"]: secret["correct_action_code"]
+            for episode, secret in zip(protocol["episodes"], reveal["episodes"], strict=True)
+        }
+    )
+    bundle = g1_micro.run_opaque_identifiability_pilot_with_backend(
+        backend=backend,
+        protocol=protocol,
+        protocol_sha256=protocol_sha,
+        output_dir=tmp_path / "opaque-output",
+        execution_registry_path=registry,
+        evaluator_reveal_path=reveal_path,
+        tokenizer_receipt=_opaque_tokenizer_receipt(protocol),
+    )
+    assert backend.complete_calls == 64
+    assert bundle["terminal"] == "PILOT_COMPLETE_NO_BEHAVIORAL_SEPARATION_NO_EFFICACY_INFERENCE"
+    assert all(
+        episode["dispositions"][branch]["credit"]["payload"]["decision"] == "NO_CREDIT"
+        and episode["dispositions"][branch]["admission"] is None
+        for episode in bundle["episodes"]
+        for branch in ("ACTIVE", "FORCED_OPPOSITE_FEEDBACK")
+    )
+
+
+def _write_opaque_protocol(tmp_path: Path, protocol: Mapping[str, Any]) -> Path:
+    path = tmp_path / "opaque-protocol.json"
+    path.write_bytes(canonical_json_bytes(protocol))
+    return path
+
+
+def test_opaque_frozen_verifier_rejects_copied_registry_reveal_and_ledger_tamper(
+    tmp_path: Path,
+) -> None:
+    protocol, protocol_sha, registry, reveal_path, reveal = _opaque_protocol(tmp_path)
+    backend = _OpaquePilotBackend(
+        {
+            episode["cue"]: secret["correct_action_code"]
+            for episode, secret in zip(protocol["episodes"], reveal["episodes"], strict=True)
+        }
+    )
+    output = tmp_path / "opaque-output"
+    g1_micro.run_opaque_identifiability_pilot_with_backend(
+        backend=backend,
+        protocol=protocol,
+        protocol_sha256=protocol_sha,
+        output_dir=output,
+        execution_registry_path=registry,
+        evaluator_reveal_path=reveal_path,
+        tokenizer_receipt=_opaque_tokenizer_receipt(protocol),
+    )
+    protocol_path = _write_opaque_protocol(tmp_path, protocol)
+    copied_registry = tmp_path / "copied-registry.json"
+    copied_registry.write_bytes(registry.read_bytes())
+    with pytest.raises(g1_micro.G1MicroError, match="registry"):
+        g1_micro.verify_frozen_execution_files(
+            bundle_path=output / "result.json",
+            protocol_path=protocol_path,
+            execution_registry_path=copied_registry,
+        )
+
+    reveal_file = output / "evaluator_reveal.json"
+    reveal_file.write_bytes(reveal_file.read_bytes().replace(b"canary_", b"canaryX", 1))
+    with pytest.raises(g1_micro.G1MicroError, match="reveal"):
+        g1_micro.verify_bundle_file(output / "result.json")
+
+    # Restore the exact reveal then mutate a raw model request.  A structural
+    # verifier must replay retained preimages, not trust aggregate metrics.
+    reveal_file.write_bytes(reveal_path.read_bytes())
+    ledger = output / "episodes" / "01" / "attempt_ledger.jsonl"
+    rows = [json.loads(line) for line in ledger.read_bytes().splitlines()]
+    intent = next(row for row in rows if row["event"] == "intent")
+    intent["raw_request_json"] = intent["raw_request_json"].replace(
+        "opaque action code", "ADD_THREE"
+    )
+    ledger.write_bytes(b"\n".join(canonical_json_bytes(row) for row in rows) + b"\n")
+    with pytest.raises(g1_micro.G1MicroError, match="(ledger|request|leak|journal)"):
+        g1_micro.verify_bundle_file(output / "result.json")
+
+
+def _run_opaque_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
+    protocol, protocol_sha, registry, reveal_path, reveal = _opaque_protocol(tmp_path)
+    backend = _OpaquePilotBackend(
+        {
+            episode["cue"]: secret["correct_action_code"]
+            for episode, secret in zip(protocol["episodes"], reveal["episodes"], strict=True)
+        }
+    )
+    output = tmp_path / "opaque-output"
+    g1_micro.run_opaque_identifiability_pilot_with_backend(
+        backend=backend,
+        protocol=protocol,
+        protocol_sha256=protocol_sha,
+        output_dir=output,
+        execution_registry_path=registry,
+        evaluator_reveal_path=reveal_path,
+        tokenizer_receipt=_opaque_tokenizer_receipt(protocol),
+    )
+    return output, _write_opaque_protocol(tmp_path, protocol), registry
+
+
+def _rewrite_opaque_bundle(output: Path, mutate: Callable[[dict[str, Any]], None]) -> None:
+    bundle = json.loads((output / "result.json").read_bytes())
+    mutate(bundle)
+    unsigned = dict(bundle)
+    unsigned.pop("bundle_sha256")
+    bundle["bundle_sha256"] = canonical_sha256(unsigned)
+    (output / "result.json").write_bytes(canonical_json_bytes(bundle))
+
+
+def test_opaque_verifier_rejects_rehashed_response_and_evidence_mutations(
+    tmp_path: Path,
+) -> None:
+    output, _, _ = _run_opaque_fixture(tmp_path)
+    ledger = output / "episodes" / "01" / "attempt_ledger.jsonl"
+    rows = [json.loads(line) for line in ledger.read_bytes().splitlines()]
+    # Change ACTIVE's response and consistently rehash every retained response
+    # preimage plus the bundle call evidence.  The remaining mismatch is
+    # semantic: the response no longer agrees with the recorded probe choice.
+    ordinal = 3
+    raw_response = next(
+        row
+        for row in rows
+        if row["event"] == "raw_response_received" and row["ordinal"] == ordinal
+    )
+    raw = json.loads(base64.b64decode(raw_response["raw_response_base64"]))
+    result = json.loads((output / "result.json").read_bytes())
+    probe = result["episodes"][0]["probes"]["ACTIVE"]
+    original_choice = probe["payload"]["choice"]
+    replacement_choice = next(
+        item for item in probe["payload"]["candidate_order"] if item != original_choice
+    )
+    response_text = json.dumps({"action_code": replacement_choice}, separators=(",", ":"))
+    raw["choices"][0]["message"]["content"] = response_text
+    changed = canonical_json_bytes(raw)
+    raw_response["raw_response_base64"] = base64.b64encode(changed).decode()
+    raw_response["raw_response_sha256"] = sha256(changed).hexdigest()
+    raw_response["response_bytes"] = len(changed)
+    for row in rows:
+        if row["ordinal"] == ordinal and row["event"] in {
+            "response_received",
+            "completed",
+        }:
+            completion = row["completion"]
+            completion["raw_response_json"] = changed.decode()
+            completion["response_sha256"] = sha256(changed).hexdigest()
+            completion["text"] = response_text
+    ledger.write_bytes(b"\n".join(canonical_json_bytes(row) for row in rows) + b"\n")
+    probe_payload = dict(probe["payload"])
+    evidence = dict(probe_payload["call_evidence"])
+    evidence["completion_response_sha256"] = sha256(changed).hexdigest()
+    probe_payload["call_evidence"] = evidence
+    result["episodes"][0]["probes"]["ACTIVE"] = g1_micro.make_record(
+        "OpaqueFreshBehaviorObservation",
+        owner_uid=probe["owner_uid"],
+        payload=probe_payload,
+        refs=probe["refs"],
+    )
+    result["episodes"][0]["journal"] = g1_micro._journal_manifest(ledger)
+    result["metrics"] = g1_micro._opaque_metrics(result["episodes"])
+    result["terminal"] = result["metrics"]["terminal"]
+    unsigned = dict(result)
+    unsigned.pop("bundle_sha256")
+    result["bundle_sha256"] = canonical_sha256(unsigned)
+    (output / "result.json").write_bytes(canonical_json_bytes(result))
+    with pytest.raises(g1_micro.G1MicroError, match="(probe response|score|semantic)"):
+        g1_micro.verify_bundle_file(output / "result.json")
+
+    # A freshly content-addressed proposal still must join the raw call.
+    output, _, _ = _run_opaque_fixture(tmp_path / "proposal")
+    result = json.loads((output / "result.json").read_bytes())
+    proposal = result["episodes"][0]["dispositions"]["ACTIVE"]["proposal"]
+    proposal_payload = deepcopy(proposal["payload"])
+    proposal_payload["call_evidence"]["completion_response_sha256"] = "0" * 64
+    result["episodes"][0]["dispositions"]["ACTIVE"]["proposal"] = (
+        g1_micro.make_record(
+            "RevisionProposal",
+            owner_uid=proposal["owner_uid"],
+            payload=proposal_payload,
+            refs=proposal["refs"],
+        )
+    )
+    unsigned = dict(result)
+    unsigned.pop("bundle_sha256")
+    result["bundle_sha256"] = canonical_sha256(unsigned)
+    (output / "result.json").write_bytes(canonical_json_bytes(result))
+    with pytest.raises(g1_micro.G1MicroError, match="(evidence|journal|raw)"):
+        g1_micro.verify_bundle_file(output / "result.json")
+
+
+def test_opaque_verifier_rejects_rehashed_compiled_state_and_store_mutations(
+    tmp_path: Path,
+) -> None:
+    output, protocol_path, registry = _run_opaque_fixture(tmp_path)
+    bundle = json.loads((output / "result.json").read_bytes())
+    probe = bundle["episodes"][0]["probes"]["ACTIVE"]
+    payload = deepcopy(probe["payload"])
+    payload["compiled_disposition"]["state_sha256"] = "0" * 64
+    bundle["episodes"][0]["probes"]["ACTIVE"] = g1_micro.make_record(
+        "OpaqueFreshBehaviorObservation",
+        owner_uid=probe["owner_uid"],
+        payload=payload,
+        refs=probe["refs"],
+    )
+    unsigned = dict(bundle)
+    unsigned.pop("bundle_sha256")
+    bundle["bundle_sha256"] = canonical_sha256(unsigned)
+    (output / "result.json").write_bytes(canonical_json_bytes(bundle))
+    with pytest.raises(g1_micro.G1MicroError, match="(state|probe|compiled)"):
+        g1_micro.verify_frozen_execution_files(
+            bundle_path=output / "result.json",
+            protocol_path=protocol_path,
+            execution_registry_path=registry,
+        )
+
+    output, _, _ = _run_opaque_fixture(tmp_path / "store")
+    store = output / "episodes" / "01" / "active.sqlite3"
+    store.write_bytes(store.read_bytes() + b"adversarial trailing bytes")
+    with pytest.raises(g1_micro.G1MicroError, match="(state|artifact|receipt|database)"):
+        g1_micro.verify_bundle_file(output / "result.json")
+
+
+def test_opaque_frozen_verifier_rejects_start_and_seal_shape_mutations(
+    tmp_path: Path,
+) -> None:
+    output, protocol_path, registry = _run_opaque_fixture(tmp_path)
+    seal = json.loads(registry.read_bytes())
+    start = seal["payload"]["start"]
+    start_payload = dict(start["payload"])
+    start_payload["output_directory"] = "/tmp/adversarial-output"
+    forged_start = g1_micro.make_record(
+        "OpaquePilotExecutionStart",
+        owner_uid=start["owner_uid"],
+        payload=start_payload,
+        refs=start["refs"],
+    )
+    forged_seal = g1_micro.make_record(
+        "OpaquePilotExecutionSeal",
+        owner_uid=seal["owner_uid"],
+        payload={**seal["payload"], "start": forged_start},
+        refs=(g1_micro._ref("execution_start", forged_start),),
+    )
+    registry.write_bytes(canonical_json_bytes(forged_seal))
+    with pytest.raises(g1_micro.G1MicroError, match="start"):
+        g1_micro.verify_frozen_execution_files(
+            bundle_path=output / "result.json",
+            protocol_path=protocol_path,
+            execution_registry_path=registry,
+        )
+
+    output, protocol_path, registry = _run_opaque_fixture(tmp_path / "seal")
+    seal = json.loads(registry.read_bytes())
+    forged_seal = g1_micro.make_record(
+        "OpaquePilotExecutionSeal",
+        owner_uid=seal["owner_uid"],
+        payload={**seal["payload"], "abort_sha256": "0" * 64, "unexpected": True},
+        refs=seal["refs"],
+    )
+    registry.write_bytes(canonical_json_bytes(forged_seal))
+    with pytest.raises(g1_micro.G1MicroError, match="(registry|start|seal)"):
+        g1_micro.verify_frozen_execution_files(
+            bundle_path=output / "result.json",
+            protocol_path=protocol_path,
+            execution_registry_path=registry,
+        )

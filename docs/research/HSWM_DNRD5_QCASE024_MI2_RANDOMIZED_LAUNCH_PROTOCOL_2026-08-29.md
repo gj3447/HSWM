@@ -7,6 +7,8 @@
 - Predecessor result: `DNRD5-QCASE024-MI-1-CONTENT-V4 / BOTH_ARMS_VARIATION`
 - DNRD-5 causal effect: `NOT_EVALUATED`
 - Source-A disposition: `SOURCE_A_REFUSED_EXACTNESS_UNQUALIFIED`
+- Result:
+  [`HSWM_DNRD5_QCASE024_MI2_RANDOMIZED_LAUNCH_RESULTS_2026-08-30.md`](../../results/HSWM_DNRD5_QCASE024_MI2_RANDOMIZED_LAUNCH_RESULTS_2026-08-30.md)
 
 ## Frozen preregistration identity
 
@@ -34,6 +36,39 @@ The freeze contains 24 closure-bound artifacts plus its closure manifest. It
 was created only after the source commit's eight GitHub CI jobs completed
 successfully on attempt one. No MI-2 target call was made while generating or
 validating the freeze.
+
+## Post-execution record
+
+- Post-execution disposition: `COMPLETE / INDEPENDENTLY_VERIFIED /
+  FINITE_RANDOMIZED_NO_ARM_ASSOCIATION_DETECTED`
+
+Publication commit `0bf209e2a37a017684acc638f35d0fdb3e11ae29`, tree
+`8356e50d258891c37bf775d25036e174c896ec7e`, passed first-attempt publication
+CI run [`33280646616`](https://github.com/gj3447/HSWM/actions/runs/33280646616)
+with all eight jobs successful. The strict receipt SHA-256 is
+`cac5b0f8741eda853324fe579e7c437f4da5028cfd057c8a702f7b1d3ffe5faa`.
+
+The plan was burned exactly once before the first target launch. Live run
+`dgx-qcase024-mi-2-live-0bf209e-001` completed 24 fresh launches and 48/48
+serialized POSTs with zero retry. The 172-row ledger SHA-256 is
+`1fbf880b1993290dd65b341478be82c644f35c9beecd295275dbff2e65469256`;
+its final record is
+`4111635b2e1b489582975902593ded02f1371022aaceeaa07659a897150c77ac`.
+
+Independent run `dgx-qcase024-mi-2-verify-0bf209e-001` reconstructed the
+complete terminal and both registered exact tests from the original path-bound
+evidence root and durable external registry. Exact-content TV was `5` with
+`p=120/400`; the fixed branch-margin statistic was `1.1249996423721318` with
+`p=236/400`. Neither rejected at endpoint alpha `0.025`, so the frozen family
+label is `FINITE_RANDOMIZED_NO_ARM_ASSOCIATION_DETECTED`. Verifier-output
+SHA-256 is
+`8a949f79b715602270bd7b960189c53aabcb808373b069f7c982a90b016e97f5`.
+
+This post-execution record does not alter the frozen design or analysis. The
+label is a finite randomized non-detection, not zero effect, equivalence,
+determinism, proof of no interference, or mechanistic attribution. Source A
+remains refused, DNRD-5 causal effect remains unevaluated, and no HSWM/FCL or
+live-KG claim changes.
 
 ## Result sought and conceptual delta
 

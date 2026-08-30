@@ -13,12 +13,11 @@ from hashlib import sha256
 import json
 import os
 from pathlib import Path
-import re
 import select
 import stat
 import subprocess
 import time
-from typing import Any, Iterator, Mapping
+from typing import Any, Mapping
 
 from _research.dnrd5.canonical_json import canonical_bytes, parse_canonical
 from .alfworld_text_worker import (
@@ -63,198 +62,6 @@ def _read_json_object(path: Path, field: str) -> tuple[bytes, Mapping[str, objec
     return raw, value
 
 
-def _read_regular_bytes(path: Path, field: str) -> bytes:
-    if not path.is_absolute() or not path.is_file() or path.is_symlink():
-        raise AlfworldTextRuntimeError(f"{field} must be an absolute non-symlink regular file")
-    try:
-        return path.read_bytes()
-    except OSError as error:
-        raise AlfworldTextRuntimeError(f"{field} is unreadable") from error
-
-
-def _skip_json_whitespace(raw: bytes, index: int) -> int:
-    while index < len(raw) and raw[index] in b" \t\r\n":
-        index += 1
-    return index
-
-
-def _scan_json_string(raw: bytes, index: int) -> int:
-    if index >= len(raw) or raw[index] != ord('"'):
-        raise AlfworldTextRuntimeError("local locator JSON string is malformed")
-    index += 1
-    escaped = False
-    while index < len(raw):
-        char = raw[index]
-        if escaped:
-            escaped = False
-        elif char == ord("\\"):
-            escaped = True
-        elif char == ord('"'):
-            return index + 1
-        elif char < 0x20:
-            raise AlfworldTextRuntimeError("local locator JSON string has a control byte")
-        index += 1
-    raise AlfworldTextRuntimeError("local locator JSON string is unterminated")
-
-
-def _records_bounds(raw: bytes) -> tuple[int, int]:
-    """Find the top-level records array without decoding any record payload."""
-    index = _skip_json_whitespace(raw, 0)
-    if index >= len(raw) or raw[index] != ord("{"):
-        raise AlfworldTextRuntimeError("local locator must be a JSON object")
-    index += 1
-    while index < len(raw):
-        index = _skip_json_whitespace(raw, index)
-        if index < len(raw) and raw[index] == ord("}"):
-            break
-        key_start, key_end = index, _scan_json_string(raw, index)
-        index = _skip_json_whitespace(raw, key_end)
-        if index >= len(raw) or raw[index] != ord(":"):
-            raise AlfworldTextRuntimeError("local locator key lacks a colon")
-        index = _skip_json_whitespace(raw, index + 1)
-        if raw[key_start:key_end] == b'"records"':
-            if index >= len(raw) or raw[index] != ord("["):
-                raise AlfworldTextRuntimeError("local locator records must be an array")
-            start, cursor, quoted, escaped, array_depth = index, index + 1, False, False, 1
-            while cursor < len(raw):
-                char = raw[cursor]
-                if quoted:
-                    if escaped:
-                        escaped = False
-                    elif char == ord("\\"):
-                        escaped = True
-                    elif char == ord('"'):
-                        quoted = False
-                elif char == ord('"'):
-                    quoted = True
-                elif char == ord("["):
-                    array_depth += 1
-                elif char == ord("]"):
-                    array_depth -= 1
-                    if array_depth == 0:
-                        return start, cursor + 1
-                cursor += 1
-            raise AlfworldTextRuntimeError("local locator records array is unterminated")
-        # The records key is top-level in the pinned locator and emitted after
-        # its scalar/object metadata.  Scan one complete JSON value without
-        # materializing it, then continue at the next root member.
-        if index >= len(raw):
-            raise AlfworldTextRuntimeError("local locator value is absent")
-        quoted, escaped, nested = False, False, 0
-        while index < len(raw):
-            char = raw[index]
-            if quoted:
-                if escaped:
-                    escaped = False
-                elif char == ord("\\"):
-                    escaped = True
-                elif char == ord('"'):
-                    quoted = False
-            elif char == ord('"'):
-                quoted = True
-            elif char in (ord("{"), ord("[")):
-                nested += 1
-            elif char in (ord("}"), ord("]")):
-                if nested == 0:
-                    break
-                nested -= 1
-            elif char == ord(",") and nested == 0:
-                index += 1
-                break
-            index += 1
-    raise AlfworldTextRuntimeError("local locator records are absent")
-
-
-def _locator_metadata_and_record_bytes(raw: bytes) -> tuple[Mapping[str, object], bytes, bytes]:
-    """Decode metadata only; record bytes remain opaque until selected."""
-    start, end = _records_bounds(raw)
-    metadata_raw = raw[:start] + b"[]" + raw[end:]
-    try:
-        metadata = json.loads(metadata_raw)
-    except (UnicodeDecodeError, json.JSONDecodeError) as error:
-        raise AlfworldTextRuntimeError("local locator metadata is unreadable JSON") from error
-    if not isinstance(metadata, dict) or not isinstance(metadata.get("records"), list) or metadata["records"]:
-        raise AlfworldTextRuntimeError("local locator metadata contract drifted")
-    return metadata, raw[start + 1:end - 1], metadata_raw
-
-
-def _minified_json_bytes(raw: bytes) -> bytes:
-    """Remove insignificant whitespace without decoding JSON string payloads."""
-    output = bytearray()
-    quoted = escaped = False
-    for char in raw:
-        if quoted:
-            output.append(char)
-            if escaped:
-                escaped = False
-            elif char == ord("\\"):
-                escaped = True
-            elif char == ord('"'):
-                quoted = False
-        elif char == ord('"'):
-            quoted = True
-            output.append(char)
-        elif char not in b" \t\r\n":
-            output.append(char)
-    if quoted or escaped:
-        raise AlfworldTextRuntimeError("local locator JSON string is unterminated")
-    return bytes(output)
-
-
-def _iter_record_slices(raw: bytes) -> Iterator[bytes]:
-    """Yield records as bytes; callers must decode only an explicitly selected row."""
-    index = 0
-    while True:
-        index = _skip_json_whitespace(raw, index)
-        while index < len(raw) and raw[index] == ord(","):
-            index = _skip_json_whitespace(raw, index + 1)
-        if index >= len(raw):
-            return
-        if raw[index] != ord("{"):
-            raise AlfworldTextRuntimeError("local locator record must be an object")
-        start, depth, quoted, escaped = index, 0, False, False
-        while index < len(raw):
-            char = raw[index]
-            if quoted:
-                if escaped:
-                    escaped = False
-                elif char == ord("\\"):
-                    escaped = True
-                elif char == ord('"'):
-                    quoted = False
-            elif char == ord('"'):
-                quoted = True
-            elif char == ord("{"):
-                depth += 1
-            elif char == ord("}"):
-                depth -= 1
-                if depth == 0:
-                    yield raw[start:index + 1]
-                    index += 1
-                    break
-            index += 1
-        else:
-            raise AlfworldTextRuntimeError("local locator record is unterminated")
-
-
-_SPLIT_TOKEN = re.compile(rb'"split"\s*:\s*"([a-z_]+)"')
-
-
-def _record_split(record_raw: bytes) -> str:
-    match = _SPLIT_TOKEN.search(record_raw)
-    if match is None:
-        raise AlfworldTextRuntimeError("local locator record split is absent")
-    try:
-        return match.group(1).decode("ascii")
-    except UnicodeDecodeError as error:
-        raise AlfworldTextRuntimeError("local locator record split is invalid") from error
-
-
-def _matches_opaque_uid(record_raw: bytes, opaque_uid: str) -> bool:
-    encoded = json.dumps(opaque_uid, ensure_ascii=True, separators=(",", ":")).encode("ascii")
-    return re.search(rb'"opaque_uid"\s*:\s*' + re.escape(encoded) + rb"(?=\s*[,}])", record_raw) is not None
-
-
 @dataclass(frozen=True, slots=True)
 class LocalGameBinding:
     """One local, non-repository game record selected by the pool controller."""
@@ -277,10 +84,9 @@ class LocalGameBinding:
 
 def load_local_game_binding(*, pool_manifest: Path, local_locator: Path, asset_root: Path,
                             opaque_uid: str) -> tuple[str, str, LocalGameBinding, Path]:
-    """Verify commitments, then decode only the selected non-unseen record."""
+    """Verify public v2 commitment against an external local locator, then select one UID."""
     manifest_raw, manifest = _read_json_object(pool_manifest, "pool manifest")
-    locator_raw = _read_regular_bytes(local_locator, "local locator")
-    locator, record_bytes, _metadata_raw = _locator_metadata_and_record_bytes(locator_raw)
+    locator_raw, locator = _read_json_object(local_locator, "local locator")
     if manifest.get("schema_version") != "hswm-alfworld-text-clean-pool/v2":
         raise AlfworldTextRuntimeError("pool manifest schema drifted")
     if locator.get("schema_version") != "hswm-alfworld-text-clean-pool-local-locator/v1":
@@ -289,10 +95,7 @@ def load_local_game_binding(*, pool_manifest: Path, local_locator: Path, asset_r
     if not isinstance(aggregate, dict):
         raise AlfworldTextRuntimeError("pool aggregate commitment is absent")
     rendered_digest = sha256(locator_raw).hexdigest()
-    # The checked locator is canonical apart from presentation whitespace.  A
-    # lexical minifier retains every string byte (notably valid_unseen IDs and
-    # paths) without decoding or retaining them.
-    canonical_digest = sha256(_minified_json_bytes(locator_raw)).hexdigest()
+    canonical_digest = sha256(canonical_bytes(locator)).hexdigest()
     if aggregate.get("local_locator_rendered_json_sha256") != rendered_digest or aggregate.get("local_locator_canonical_json_sha256") != canonical_digest:
         raise AlfworldTextRuntimeError("local locator commitment mismatch")
     if locator.get("pool_commitment") != {
@@ -312,31 +115,15 @@ def load_local_game_binding(*, pool_manifest: Path, local_locator: Path, asset_r
         raise AlfworldTextRuntimeError("pool source binding is absent")
     if locator_source.get("repository_commit") != source.get("repository_commit") or locator_source.get("assets") != source.get("official_release_assets"):
         raise AlfworldTextRuntimeError("local locator source binding mismatch")
-    selected_raw: bytes | None = None
-    for record_raw in _iter_record_slices(record_bytes):
-        split = _record_split(record_raw)
-        if split == "valid_unseen":
-            # Do not parse its UID, path, or any other content.  This keeps the
-            # untouched final-holdout rows opaque even during a selected-game
-            # lookup.
-            continue
-        if split not in {"train", "valid_seen"}:
-            raise AlfworldTextRuntimeError("local locator record split is undeclared")
-        if _matches_opaque_uid(record_raw, opaque_uid):
-            if selected_raw is not None:
-                raise AlfworldTextRuntimeError("opaque UID must select exactly one local game")
-            selected_raw = record_raw
-    if selected_raw is None:
+    records = locator.get("records")
+    if not isinstance(records, list):
+        raise AlfworldTextRuntimeError("local locator records are absent")
+    selected = [record for record in records if isinstance(record, dict) and record.get("opaque_uid") == opaque_uid]
+    if len(selected) != 1:
         raise AlfworldTextRuntimeError("opaque UID must select exactly one local game")
-    try:
-        record = json.loads(selected_raw)
-    except (UnicodeDecodeError, json.JSONDecodeError) as error:
-        raise AlfworldTextRuntimeError("selected local locator record is unreadable JSON") from error
+    record = selected[0]
     expected = {"bytes", "file_sha256", "opaque_uid", "relative_path", "relative_path_sha256", "split", "task_group_uid"}
-    if (not isinstance(record, dict) or set(record) != expected or record.get("opaque_uid") != opaque_uid
-            or record.get("split") not in {"train", "valid_seen"}
-            or not isinstance(record["relative_path"], str)
-            or sha256(record["relative_path"].encode("utf-8")).hexdigest() != record["relative_path_sha256"]):
+    if set(record) != expected or not isinstance(record["relative_path"], str) or sha256(record["relative_path"].encode("utf-8")).hexdigest() != record["relative_path_sha256"]:
         raise AlfworldTextRuntimeError("local locator record contract drifted")
     binding = LocalGameBinding(record["opaque_uid"], record["relative_path"], record["file_sha256"], record["bytes"])
     binding.validate()

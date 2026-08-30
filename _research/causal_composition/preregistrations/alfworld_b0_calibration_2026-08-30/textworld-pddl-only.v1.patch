@@ -1,0 +1,14 @@
+diff --git a/setup.py b/setup.py
+index b2807ce..54a2ee4 100644
+--- a/setup.py
++++ b/setup.py
+@@ -23,2 +23,9 @@
++def _pddl_only_install():
++    return os.environ.get("TEXTWORLD_PDDL_ONLY") == "1"
++
++
+ def _pre_install(dir):
++    if _pddl_only_install():
++        # PDDL environments need fast-downward-textworld, not Inform7.
++        return
+     from subprocess import check_call

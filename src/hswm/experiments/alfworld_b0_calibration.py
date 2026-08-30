@@ -34,13 +34,13 @@ from .alfworld_b0_actor import (
     _action_schema,
 )
 from .alfworld_b0_selection import OpaqueGameSelection
+from .alfworld_b0_runtime import load_local_game_binding
 from .alfworld_text_runtime import (
     MAX_PROTOCOL_LINE_BYTES,
     LocalAlfworldTextRuntime,
     LocalGameBinding,
     LocalSandboxSpec,
     action_line,
-    load_local_game_binding,
     read_one_line,
     validate_actor_projection,
     validate_outcome_receipt,
@@ -162,6 +162,16 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
     raw, binding = _read_mapping(value, "protocol")
     if (
         raw.get("schema_version") != PROTOCOL_SCHEMA
+        or raw.get("prospective_amendments")
+        != [
+            {
+                "id": "ARM64_PDDL_ONLY_ENVIRONMENT_ADAPTER_AND_HASH_BOUND_RUNTIME_SPLIT",
+                "superseded_protocol_file_sha256": "6d1f18f3ccc0e70ed8b4ba72a98462114fe647f26e7e19919fc3c1ecb072249d",
+                "trigger": "A DGX package-install engineering attempt established that upstream TextWorld 1.7.0 invokes Inform7 setup and its official archive has no aarch64 compiler payload. The attempt stopped during dependency construction.",
+                "change": "Preserve the historically qualified runtime bytes; move valid_unseen-opaque lookup into a B0-only source; install the exact official TextWorld 1.7.0 revision with an explicit PDDL-only build adapter that skips Inform7 setup and supplies no Inform7 capability.",
+                "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_MODEL_CALL_NO_OUTCOME_OBSERVED",
+            }
+        ]
         or raw.get("registration_status")
         != "PROSPECTIVE_BEFORE_ANY_B0_ENVIRONMENT_MODEL_OR_OUTCOME_CALL"
         or raw.get("scientific_status")
@@ -275,14 +285,41 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
     environment_exact = (
         environment_runtime.get("platform") == "DGX_AARCH64"
         and environment_runtime.get("python_version") == "3.9.25"
+        and environment_runtime.get("upstream_repository")
+        == "https://github.com/alfworld/alfworld"
         and environment_runtime.get("upstream_revision")
         == "aaba6870f86c5be6a08a491f32a50b906227bc3e"
         and environment_runtime.get("upstream_source_archive_sha256")
         == "5592fbb36124b08d24167c5f7612a55a2cc610e0c39170f638a69b628835ee3b"
-        and environment_runtime.get("requirements_path")
+        and environment_runtime.get("installation")
+        == "INSTALL_ARM64_PDDL_ONLY_REQUIREMENTS_THEN_PATCHED_TEXTWORLD_SOURCE_NO_DEPS_THEN_SOURCE_PINNED_ALFWORLD_NO_DEPS"
+        and environment_runtime.get("inherited_requirements_path")
         == "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.requirements.v1.txt"
-        and environment_runtime.get("requirements_sha256")
+        and environment_runtime.get("inherited_requirements_sha256")
         == "2cd843b101554f7935709168be65be5039bcac41f32a2aa7b1b4f54f8ee320c8"
+        and environment_runtime.get("arm64_pddl_only_requirements_path")
+        == "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.arm64_pddl_only.requirements.v1.txt"
+        and environment_runtime.get("arm64_pddl_only_requirements_sha256")
+        == "2835136ea0b72f65374d584ddae3c4951737e8c0eabb7effae7d588a313655e7"
+        and environment_runtime.get("textworld")
+        == {
+            "upstream_repository": "https://github.com/microsoft/TextWorld",
+            "upstream_tag": "1.7.0",
+            "upstream_revision": "9fce9ee107fa042ef2656e41e0b362450a35ecd8",
+            "patch_path": "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/textworld-pddl-only.v1.patch",
+            "patch_sha256": "8b623fe87548694b3990896d69260ae3325c2d686cac62c7daf3963a23772c1d",
+            "install_environment": {"TEXTWORLD_PDDL_ONLY": "1"},
+            "capability": "PDDL_ONLY_NO_INFORM7_SETUP_OR_CAPABILITY",
+        }
+        and environment_runtime.get("install_order")
+        == [
+            "install arm64_pddl_only_requirements exactly",
+            "checkout TextWorld upstream_revision exactly",
+            "verify and apply textworld.patch_path",
+            "install patched TextWorld with TEXTWORLD_PDDL_ONLY=1 and --no-deps",
+            "install source-pinned ALFWorld with --no-deps",
+            "supply HSWM from the clean execution checkout through PYTHONPATH",
+        ]
         and environment_runtime.get("required_key_versions")
         == {
             "alfworld": "0.5.0",

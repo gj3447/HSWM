@@ -3,6 +3,16 @@
   "study_uid": "sym:ExploratoryStudy:hswm-alfworld-b0-calibration-2026-08-30",
   "protocol_version": "v1",
   "recorded_at_utc": "2026-08-30T19:13:37Z",
+  "last_amended_at_utc": "2026-08-30T20:22:58Z",
+  "prospective_amendments": [
+    {
+      "id": "ARM64_PDDL_ONLY_ENVIRONMENT_ADAPTER_AND_HASH_BOUND_RUNTIME_SPLIT",
+      "superseded_protocol_file_sha256": "6d1f18f3ccc0e70ed8b4ba72a98462114fe647f26e7e19919fc3c1ecb072249d",
+      "trigger": "A DGX package-install engineering attempt established that upstream TextWorld 1.7.0 invokes Inform7 setup and its official archive has no aarch64 compiler payload. The attempt stopped during dependency construction.",
+      "change": "Preserve the historically qualified runtime bytes; move valid_unseen-opaque lookup into a B0-only source; install the exact official TextWorld 1.7.0 revision with an explicit PDDL-only build adapter that skips Inform7 setup and supplies no Inform7 capability.",
+      "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_MODEL_CALL_NO_OUTCOME_OBSERVED"
+    }
+  ],
   "registration_status": "PROSPECTIVE_BEFORE_ANY_B0_ENVIRONMENT_MODEL_OR_OUTCOME_CALL",
   "canonical_role": "A bounded no-learning calibration of one locally authorized sealed ALFWorld text task family. It estimates baseline task headroom, execution burden, and official valid_seen sensitivity before any B2, H1, canonical revision, or G1 occurrence.",
   "scientific_status": "EXPLORATORY_G0_CALIBRATION_ONLY_NOT_G0_PASS_NOT_G1_EFFICACY",
@@ -137,9 +147,30 @@
     "upstream_repository": "https://github.com/alfworld/alfworld",
     "upstream_revision": "aaba6870f86c5be6a08a491f32a50b906227bc3e",
     "upstream_source_archive_sha256": "5592fbb36124b08d24167c5f7612a55a2cc610e0c39170f638a69b628835ee3b",
-    "installation": "SOURCE_PINNED_EDITABLE_NO_DEPENDENCY_RESOLUTION_AFTER_EXACT_REQUIREMENT_INSTALL",
-    "requirements_path": "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.requirements.v1.txt",
-    "requirements_sha256": "2cd843b101554f7935709168be65be5039bcac41f32a2aa7b1b4f54f8ee320c8",
+    "installation": "INSTALL_ARM64_PDDL_ONLY_REQUIREMENTS_THEN_PATCHED_TEXTWORLD_SOURCE_NO_DEPS_THEN_SOURCE_PINNED_ALFWORLD_NO_DEPS",
+    "inherited_requirements_path": "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.requirements.v1.txt",
+    "inherited_requirements_sha256": "2cd843b101554f7935709168be65be5039bcac41f32a2aa7b1b4f54f8ee320c8",
+    "arm64_pddl_only_requirements_path": "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.arm64_pddl_only.requirements.v1.txt",
+    "arm64_pddl_only_requirements_sha256": "2835136ea0b72f65374d584ddae3c4951737e8c0eabb7effae7d588a313655e7",
+    "textworld": {
+      "upstream_repository": "https://github.com/microsoft/TextWorld",
+      "upstream_tag": "1.7.0",
+      "upstream_revision": "9fce9ee107fa042ef2656e41e0b362450a35ecd8",
+      "patch_path": "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/textworld-pddl-only.v1.patch",
+      "patch_sha256": "8b623fe87548694b3990896d69260ae3325c2d686cac62c7daf3963a23772c1d",
+      "install_environment": {
+        "TEXTWORLD_PDDL_ONLY": "1"
+      },
+      "capability": "PDDL_ONLY_NO_INFORM7_SETUP_OR_CAPABILITY"
+    },
+    "install_order": [
+      "install arm64_pddl_only_requirements exactly",
+      "checkout TextWorld upstream_revision exactly",
+      "verify and apply textworld.patch_path",
+      "install patched TextWorld with TEXTWORLD_PDDL_ONLY=1 and --no-deps",
+      "install source-pinned ALFWorld with --no-deps",
+      "supply HSWM from the clean execution checkout through PYTHONPATH"
+    ],
     "required_key_versions": {
       "alfworld": "0.5.0",
       "fast-downward-textworld": "20.6.4",
@@ -232,6 +263,8 @@
     "start_marker_must_hash_paths": [
       "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/protocol.v1.json",
       "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.requirements.v1.txt",
+      "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.arm64_pddl_only.requirements.v1.txt",
+      "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/textworld-pddl-only.v1.patch",
       "manifests/HSWM_ALFWORLD_TEXT_CLEAN_POOL_2026-08-30.json",
       "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json",
       "manifests/HSWM_ALFWORLD_B0_SELECTION_2026-08-30.json",
@@ -240,9 +273,11 @@
       "src/hswm/experiments/alfworld_b0_calibration.py",
       "src/hswm/experiments/alfworld_b0_dgx.py",
       "src/hswm/experiments/alfworld_b0_live.py",
+      "src/hswm/experiments/alfworld_b0_runtime.py",
       "src/hswm/experiments/alfworld_text_runtime.py",
       "src/hswm/experiments/alfworld_text_worker.py",
-      "src/hswm/experiments/continual_live.py"
+      "src/hswm/experiments/continual_live.py",
+      "scripts/qualify_hswm_alfworld_b0_runtime.py"
     ],
     "private_selection_receipt_must_precede_first_environment_or_model_call": true,
     "public_selection_projection_must_precede_live_occurrence": true

@@ -6,6 +6,15 @@ whether the pinned task/model surface has usable headroom and whether the
 sealed measurement path fails under realistic interaction. It is not a G0
 pass, G1 occurrence, comparator result, HSWM revision, or efficacy claim.
 
+The initially checked-in protocol SHA-256 was
+`6d1f18f3ccc0e70ed8b4ba72a98462114fe647f26e7e19919fc3c1ecb072249d`.
+Before any B0 selection, ALFWorld episode, model call, or outcome observation,
+a DGX dependency-build attempt showed that TextWorld's normal setup requires
+an Inform7 compiler payload unavailable for `aarch64`. The machine-readable
+`prospective_amendments` record preserves that chronology and binds the
+PDDL-only adapter below. It is an environment amendment, not a result-driven
+change to allocation, estimands, thresholds, or stopping rules.
+
 The sole arm is `B0_STATELESS_NO_LEARNING`. Each model call is a fresh
 one-shot request. It may read the bounded visible transcript from the current
 episode, because ALFWorld is partially observable, but that transcript is
@@ -35,10 +44,24 @@ documents the explicit thinking switch, and the version-matched
 [vLLM engine reference](https://docs.vllm.ai/en/v0.25.1/configuration/engine_args/)
 documents the reused scheduling and cache controls. Greedy decoding reduces a
 known noise source but byte-identical provider output is not a prerequisite.
-The ALFWorld process reuses the already qualified package versions from
-[`alfworld_text_runtime.requirements.v1.txt`](alfworld_text_runtime.requirements.v1.txt);
-the upstream `aaba6870` source is installed separately and HSWM code remains
-bound to the clean execution checkout.
+The inherited cross-platform package reference remains
+[`alfworld_text_runtime.requirements.v1.txt`](alfworld_text_runtime.requirements.v1.txt).
+The ARM64 occurrence instead installs the exact
+[`alfworld_text_runtime.arm64_pddl_only.requirements.v1.txt`](alfworld_text_runtime.arm64_pddl_only.requirements.v1.txt),
+which differs only by omitting `textworld==1.7.0`. It then installs the
+official [TextWorld 1.7.0 tag](https://github.com/microsoft/TextWorld/releases/tag/1.7.0)
+at `9fce9ee107fa042ef2656e41e0b362450a35ecd8`, after checking and applying
+[`textworld-pddl-only.v1.patch`](textworld-pddl-only.v1.patch), with
+`TEXTWORLD_PDDL_ONLY=1` and `--no-deps`. The patch preserves upstream default
+installation and only causes each upstream build/install/develop hook to skip
+its Inform7 setup when that explicit variable is set. This is valid only for
+ALFWorld's PDDL path: upstream lists
+[`fast-downward-textworld`](https://github.com/microsoft/TextWorld/blob/9fce9ee107fa042ef2656e41e0b362450a35ecd8/requirements-pddl.txt)
+for `PddlEnv`, while its
+[`setup.py`](https://github.com/microsoft/TextWorld/blob/9fce9ee107fa042ef2656e41e0b362450a35ecd8/setup.py)
+normally invokes `setup.sh` from all three hooks. This occurrence has no
+Inform7 capability. The upstream `aaba6870` ALFWorld source is installed next
+with `--no-deps`; HSWM code remains bound to the clean execution checkout.
 
 Even a complete run cannot pass G0. The simulator outcome is hidden from the
 actor, but it is still a local, same-stack boundary with no independent owner

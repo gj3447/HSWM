@@ -1134,6 +1134,7 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | Why did the earlier fixed-role uniqueness audit fail? | [`superseded dependent-factorization audit`](docs/research/HSWM_DEPENDENT_FACTORIZATION_GRAPH_ENGINEERING_AUDIT_2026-08-26.md) |
 | What is the Human Universal Body and HSWM Human Complementation Plan? | [`Human Universal Body distinction`](docs/canon/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md) |
 | How directly does Hyperon 2026 overlap, and what is actually implemented? | [`Hyperon 2026 direct-prior deep dive`](docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md) |
+| Is HSWM scientifically viable, where does it sit against prior work, and what result should decide whether to continue? | [`HSWM research viability and positioning`](docs/research/HSWM_RESEARCH_VIABILITY_AND_POSITIONING_2026-08-30.md) |
 | How were fragmented identity, mathematics, runtime, learning, and evidence meanings joined before the 2026-08-26 supersession? | [`historical HSWM unified meaning map`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md) |
 | Why replace static agent glue, and what is token learning? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) |
 | How did the earlier fixed `H/W/A/F` architecture describe LLM functions? | [`historical HSWM LLM-function architecture`](docs/canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) |

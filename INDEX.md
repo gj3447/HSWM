@@ -117,6 +117,12 @@ checkout에서만 수행한다.
 relation/transition-disposition revision을 만들고
 다음 행동을 바꿀 때 학습된다.
 
+현재 연구의 선행연구 위치, reuse-first 원칙, 층별 가망 판단, 실패 위험과 다음 결정
+실험은
+[`HSWM 연구 가망성·과학적 위치·결정 경로`](docs/research/HSWM_RESEARCH_VIABILITY_AND_POSITIONING_2026-08-30.md)에
+정리했다. 이는 새 효능 결과가 아니라 현재 evidence ceiling과 G0→G5 진행·축소·중단
+조건을 함께 읽는 `SECONDARY_AI_RESEARCH_ASSESSMENT`다.
+
 ## 2026-08-15 — 실행 정본과 직접 측정 기록
 
 이 인덱스는 체크인 코드·테스트·측정물의 카탈로그다. 현재 상태는 상시 외부 판정

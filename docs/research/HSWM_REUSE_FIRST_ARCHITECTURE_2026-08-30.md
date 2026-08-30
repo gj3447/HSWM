@@ -53,14 +53,14 @@ At composition scale, the additional unresolved claim is preservation of
 
 ## 3. Prior systems are assigned roles, not absorbed as one giant stack
 
-| prior family | demonstrated or implemented capability to inherit | HSWM disposition | what HSWM must not infer |
+| prior family | reusable capability, proposal, or warning | HSWM disposition | what HSWM must not infer |
 |---|---|---|---|
 | [OpenCog Hyperon](https://arxiv.org/abs/2310.18318), [MeTTa](https://arxiv.org/abs/2112.08272), AtomSpace/MORK | typed persistent metagraph, rewrite/query execution, reflective program representation, versioned graph machinery | `ADAPTER_BACKEND_AND_STRONG_BASELINE`; evaluate read-only query and candidate-rewrite modes behind a pinned adapter | A metagraph runtime is not outcome-bound HSWM learning or recursive causal closure |
 | [MemGPT](https://arxiv.org/abs/2310.08560), Letta-style memory | durable, tiered, model-context-external agent memory | `MEMORY_BASELINE`; compare with equal model, context, tools, token and state budgets | persistence or retrieval is not learning |
 | [Reflexion](https://arxiv.org/abs/2303.11366), [Voyager](https://arxiv.org/abs/2305.16291), ExpeL/ACE-style memory | feedback-derived textual lessons, executable skills, and later-task reuse | `UPDATE_POLICY_BASELINE`; use a pinned reproduction or adapter before inventing a new text-lesson learner | later improvement alone does not identify canonical revision, owner, or credit |
 | [Darwin Gödel Machine](https://arxiv.org/abs/2505.22954) | sandboxed self-edit proposals validated on external coding benchmarks | `SELF_MODIFICATION_BASELINE_AND_PROPOSER`; reuse bounded propose-test-promote patterns | code self-editing is not world/self unification or identity-preserving HSWM learning |
 | [DreamerV3](https://www.nature.com/articles/s41586-025-08744-2), [WALL-E 2.0](https://arxiv.org/abs/2504.15785), ALFWorld-class environments | predictive world models, symbolic environment rules, and executable outcome benchmarks | `WORLD_MODEL_BASELINE_AND_EVALUATION_ENVIRONMENT`; reuse environments and outcome contracts before building a new world | environment prediction alone is not a joint canonical world/self model |
-| [HyperAgent](https://arxiv.org/abs/2510.10611) | task-adaptive hypergraph communication topology | `G2B_BASELINE`; defer until G1 and use as dynamic-coalition comparator | a transient communication hyperedge is not a persistent cognition-bearing relation |
+| [HyperAgent](https://arxiv.org/abs/2510.10611) | proposed task-adaptive hypergraph communication topology; the authors withdrew the submission because a fundamental methodological error affects the validity of its main results | `WITHDRAWN_METHOD_REFERENCE_ONLY`; use only as a failed-study and control-design reference, never as positive efficacy evidence | a withdrawn result or transient communication hyperedge is not evidence for persistent cognition-bearing coalition |
 | [Growing Neural Cellular Automata](https://distill.pub/2020/growing-ca/) and operadic dynamical-system composition | repeated local rules, damage recovery, typed hierarchical composition | `G3_G5_REFERENCE_AND_TOY_BASELINE`; reuse their perturbation and composition tests | structural self-similarity is not HSWM-of-HSWMs cognition or subjecthood |
 
 These assignments are not dependency commitments. A prior is installed only
@@ -173,7 +173,7 @@ Reuse remains gate-specific.
 | gate | inherited foundation | unresolved HSWM test |
 |---|---|---|
 | G2a credit | difference rewards, causal intervention and multi-agent credit methods | calibrated cell/incidence/coalition/whole credit without duplicate inflation |
-| G2b coalition | HyperAgent and fixed/pairwise multi-agent systems | role-bearing n-ary coalition has a held-out causal increment without a semantic commander |
+| G2b coalition | validated fixed, pairwise and centralized multi-agent systems; the withdrawn HyperAgent proposal only as a methodological warning and candidate control shape | role-bearing n-ary coalition has a held-out causal increment without a semantic commander |
 | G3 morphogenesis | NCA damage/recovery and learned-graph baselines | owner-valid topology revision improves adaptation and recovery, and lesion/restore mediates it |
 | G4 world-self continuity | Dreamer/WALL-E world models, durable memory and lineage systems | world and self state in one graph improves prediction/action across model swap, migration, fork, merge, and damage |
 | G5 composition | operadic open-system composition, causal-emergence measures, multiscale competency models | two independently qualified HSWMs form a composite with the same typed learning law and an identifiable macro intervention effect |

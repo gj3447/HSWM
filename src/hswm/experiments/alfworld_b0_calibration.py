@@ -177,10 +177,17 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
                 "trigger": "Pre-B0 fixed-action engineering qualification reached the DGX sandbox launcher but stopped before its first actor frame. No B0 selection, model call, or B0 outcome occurred. Diagnostics established that the host AppArmor policy rejects the required unprivileged user namespace and that the exact privileged no-userns adapter can import ALFWorld, register the sealed game, construct the environment, and reset it.",
                 "change": "Use a B0-only source-bound noninteractive sudo Bubblewrap adapter with explicit pid, ipc, uts, net, and best-effort cgroup namespaces; no user namespace; all capabilities dropped except CAP_DAC_READ_SEARCH; and a read-only /proc/controller-pid/fd/verified-fd game bind held by the controller through worker termination. Preserve the historical runtime implementation unchanged.",
                 "prospective_boundary": "NO_B0_SELECTION_NO_MODEL_CALL_NO_B0_OUTCOME_OBSERVED_ENGINEERING_RESET_DIAGNOSTIC_ONLY",
+            },
+            {
+                "id": "VLLM_METRICS_PUBLIC_PROJECTION_REPAIR_AFTER_NEUTRAL_PROBE",
+                "superseded_protocol_file_sha256": "0519fc2820c3e00438958d51824c465805b22d4faeb01da636e986c83358848c",
+                "trigger": "A pre-selection engineering probe issued exactly one neutral tokenize request and one tiny schema-constrained completion on a fresh service, then refused before writing either qualification receipt because its public leakage guard rejected the expected fixed ALFWorld source-path labels. Artifact packaging also rejected root-owned compile-cache bytes. No counter delta was inspected from the failed occurrence.",
+                "change": "Permit the fixed committed ALFWorld source-path labels in the aggregate source binding while continuing to forbid task identities, episodes, games, selections, observations, outcomes, prompts, messages, content, and raw evidence. Place fresh container caches in the runner cache tree rather than published outputs and repeat under a new occurrence identifier.",
+                "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_TASK_OUTCOME_ONE_NEUTRAL_TOKENIZE_AND_ONE_NEUTRAL_COMPLETION_OCCURRED_NO_METRIC_DELTA_INSPECTED",
             }
         ]
         or raw.get("registration_status")
-        != "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_MODEL_OR_OUTCOME_CALL_AFTER_ENGINEERING_ENVIRONMENT_QUALIFICATION_ATTEMPTS"
+        != "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_ALFWORLD_EPISODE_OR_TASK_OUTCOME_AFTER_ENGINEERING_ENVIRONMENT_AND_NEUTRAL_METRICS_QUALIFICATION_ATTEMPTS"
         or raw.get("scientific_status")
         != "EXPLORATORY_G0_CALIBRATION_ONLY_NOT_G0_PASS_NOT_G1_EFFICACY"
         or raw.get("claim_ceiling") != "ENGINEERING_AND_TASK_CALIBRATION_ONLY"

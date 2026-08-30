@@ -1,7 +1,7 @@
 # ALFWorld B0 prospective calibration
 
 This preregistration freezes one no-learning ALFWorld calibration before any
-B0 environment, model, or outcome call. Its sole purpose is to determine
+B0 task selection, ALFWorld episode, or task outcome. Its sole purpose is to determine
 whether the pinned task/model surface has usable headroom and whether the
 sealed measurement path fails under realistic interaction. It is not a G0
 pass, G1 occurrence, comparator result, HSWM revision, or efficacy claim.
@@ -29,6 +29,16 @@ historical runtime remains unchanged.
 That adapter is trusted-maintainer local engineering containment. It is not a
 hostile-local-user security boundary or an independent evaluator, and its
 reset-only diagnostic is not a B0 episode, G0 evidence, or HSWM efficacy.
+
+A later pre-selection counter-semantics probe issued one neutral tokenize
+request and one tiny schema-constrained completion on a fresh service, but its
+aggregate projection rejected the expected fixed ALFWorld source-path labels
+and wrote no qualification receipt. We did not inspect a counter delta from
+that failed occurrence. The prospective repair permits those committed source
+labels, keeps task identities and raw request/response evidence forbidden, and
+moves root-owned container caches outside published outputs. The repeat uses a
+new occurrence identifier and remains separate from every ALFWorld episode and
+task outcome.
 
 The sole arm is `B0_STATELESS_NO_LEARNING`. Each model call is a fresh
 one-shot request. It may read the bounded visible transcript from the current

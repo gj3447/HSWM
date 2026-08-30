@@ -245,7 +245,9 @@ def public_projection(private: Mapping[str, object]) -> dict[str, object]:
         "counter_deltas": private["counter_deltas"], "cleanup_attestation": private["cleanup_attestation"],
         "private_receipt_file_sha256": private["private_receipt_file_sha256"],
     }
-    forbidden = ("alfworld", "episode", "game", "selection", "observation", "outcome", "content", "prompt", "message", "raw")
+    # ``alfworld`` is intentionally allowed in the fixed, committed source
+    # paths and schema name.  Those labels disclose no selected task identity.
+    forbidden = ("episode", "game", "selection", "observation", "outcome", "content", "prompt", "message", "raw")
     if any(token in " ".join(_all_keys(public)).lower() for token in forbidden):
         raise MetricsQualificationError("public projection leakage guard rejected its own fields")
     return _canonical_receipt(public)

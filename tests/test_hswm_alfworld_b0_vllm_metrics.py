@@ -25,7 +25,7 @@ from hswm.experiments.alfworld_b0_vllm_metrics import (
 
 def _private() -> dict[str, object]:
     return {"schema_version": "hswm-alfworld-b0-vllm-metrics-private/v1", "status": STATUS_QUALIFIED,
-        "claim_ceiling": "counter-only", "prefix_counter_prerequisite": "must-export", "source_binding": {"repository_commit": "a" * 40, "repository_tree": "b" * 40, "protocol_relative_path": PROTOCOL_RELATIVE_PATH, "protocol_file_sha256": "c" * 64, "declared_source_sha256": {}}, "lease_startup_sha256": "a" * 64, "tokenize_request_sha256": "b" * 64,
+        "claim_ceiling": "counter-only", "prefix_counter_prerequisite": "must-export", "source_binding": {"repository_commit": "a" * 40, "repository_tree": "b" * 40, "protocol_relative_path": PROTOCOL_RELATIVE_PATH, "protocol_file_sha256": "c" * 64, "declared_source_sha256": {"src/hswm/experiments/alfworld_b0_vllm_metrics.py": "d" * 64}}, "lease_startup_sha256": "a" * 64, "tokenize_request_sha256": "b" * 64,
         "tokenize_response_sha256": "c" * 64, "completion_request_sha256": "d" * 64, "completion_response_sha256": "e" * 64,
         "metrics": {stage: {"raw_sha256": "0" * 64, "running": 0, "success_total": 0, "prefix_hits": 0, "prefix_queries": 0} for stage in ("startup", "after_tokenize", "after_completion")}, "counter_deltas": {"tokenize": {}, "completion": {}},
         "cleanup_attestation": "passed", "private_receipt_file_sha256": "f" * 64}
@@ -50,6 +50,7 @@ def test_public_projection_is_self_hashed_and_excludes_raw_requests() -> None:
     keys = " ".join(public).lower()
     for token in ("raw", "prompt", "message", "content", "episode"):
         assert token not in keys
+    assert "src/hswm/experiments/alfworld_b0_vllm_metrics.py" in public["source_binding"]["declared_source_sha256"]
 
 
 def test_output_policy_keeps_raw_private_outside_repo(tmp_path: Path) -> None:

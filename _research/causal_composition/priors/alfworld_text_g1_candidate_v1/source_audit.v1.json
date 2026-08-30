@@ -3,12 +3,18 @@
   "record_role": "CANDIDATE_ENVIRONMENT_SOURCE_AND_DATA_AUDIT_NOT_AN_INSTALL_OR_EXECUTION",
   "candidate_uid": "sym:EnvironmentCandidate:alfworld-text-g1-v1",
   "recorded_at_utc": "2026-08-30T17:19:16Z",
-  "status": "CANDIDATE_SELECTED_LICENSE_SCOPE_UNRESOLVED_EXECUTION_BLOCKED",
+  "status": "CANDIDATE_SELECTED_LOCAL_RESEARCH_AUTHORIZED_UPSTREAM_LICENSE_SCOPE_UNRESOLVED_NO_REDISTRIBUTION",
   "selection": {
     "environment_mode": "ALFWORLD_TEXT_ONLY",
     "single_task_family": "pick_clean_then_place_in_recep",
     "conditional_rationale": "A resettable text environment with a simulator terminal state is a candidate for fresh transfer and retention measurement. This is conditional on the blocking license-scope audit and later G0 measurement qualification.",
-    "not_ready_for_execution": "No installation, download, environment launch, task execution, efficacy evaluation, or G0/G1 decision is authorized by this record."
+    "execution_boundary": "The separately bound user authorization permits local fetch, integrity verification, unpacking, and research execution only. It does not authorize redistribution or convert the candidate into a qualified G0/G1 environment."
+  },
+  "local_use_authorization": {
+    "authorization_uid": "sym:LocalAuthorization:alfworld-assets-2026-08-30-v1",
+    "path": "_research/causal_composition/priors/alfworld_text_g1_candidate_v1/local_use_authorization.v1.json",
+    "sha256": "48c1b5c82ff8c6c5b454f5e0a32beb9546fd46db4b891c804397ca036d71f3a8",
+    "effect": "LOCAL_NONREDISTRIBUTIVE_RESEARCH_FETCH_AND_EXECUTION_ONLY"
   },
   "official_code_and_paper": {
     "paper": {
@@ -98,12 +104,13 @@
   "blocking_license_scope": {
     "code_mit_is_not_data_permission": true,
     "unresolved_question": "The checked code license does not itself establish permission for downloaded game data, human annotations, ALFRED-derived trajectories, PDDL files, or release assets.",
-    "required_before_any_execution": [
+    "required_before_redistribution_or_publication": [
       "Locate and source-pin an authoritative license or permission notice covering each selected release asset and its annotation/provenance scope.",
       "Record compatibility of that permission with the planned local storage, derived split manifests, and any publication.",
-      "Bind locally retained asset bytes to the observed source hashes only after permission scope is resolved."
+      "For any later publication or redistribution, bind every publishable derivative to an authoritative permission record; the current private integrity binding is local-only."
     ],
-    "decision": "EXECUTION_BLOCKED"
+    "local_execution_decision": "AUTHORIZED_BY_USER_FOR_LOCAL_NONREDISTRIBUTIVE_RESEARCH",
+    "redistribution_decision": "BLOCKED"
   },
   "future_g0_g1_fairness_contract": {
     "fresh_transfer": "Use a precommitted, unseen validation final holdout that is never supplied to lesson extraction, revision construction, retrieval, prompt authoring, or calibration decisions.",
@@ -119,14 +126,14 @@
     ]
   },
   "no_claim": [
-    "This source/data audit does not establish that the selected assets are licensed for the contemplated use.",
+    "This source/data audit and local user authorization do not establish upstream license scope or redistribution permission.",
     "This source/data audit is not an ALFWorld installation, execution, reproduction, calibration, G0 result, G1 result, or comparator result.",
     "It does not establish HSWM learning efficacy, canonical revision, Permit admission, FCL-1, any other FCL, consciousness, selfhood, or HSWM-of-HSWMs composition."
   ],
   "offline_verifier_contract": {
     "network_access": "FORBIDDEN",
     "checks": [
-      "exact candidate status and execution block",
+      "exact candidate status, bound local authorization, and redistribution block",
       "paper, repository, license, source-file, and release-asset digest syntax",
       "official asset tag-to-commit bindings and observed byte sizes",
       "explicit license-scope blocker",

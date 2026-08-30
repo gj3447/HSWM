@@ -165,10 +165,23 @@ The conditional first environment candidate is text-only ALFWorld restricted
 to `pick_clean_then_place_in_recep`, recorded in its
 [source/data audit](../../_research/causal_composition/priors/alfworld_text_g1_candidate_v1/README.md).
 Its simulator terminal state offers a stronger outcome boundary than a static
-answer label, but execution is currently blocked: the repository's MIT code
-license does not by itself establish permission for the downloaded game data,
-human annotations, ALFRED-derived trajectories, PDDL files, or release assets.
-The observed official asset hashes are provenance pins, not license evidence.
+answer label. Workspace-owner authorization now permits local,
+non-redistributive execution of the pinned public bytes; it does not resolve
+the release assets' upstream license scope, and redistribution remains blocked.
+The aggregate-only clean-task
+[pool commitment](../../manifests/HSWM_ALFWORLD_TEXT_CLEAN_POOL_2026-08-30.json)
+binds 708 archive-matched text games without publishing their paths or
+per-game digests. Its group audit also shows that 25 of 27 `valid_seen` task
+groups overlap `train`, whereas none of the 11 `valid_unseen` groups do.
+Accordingly, `valid_seen` is a contamination-sensitivity probe, not a
+lineage-disjoint final holdout. The
+[runtime qualification](../../manifests/HSWM_ALFWORLD_TEXT_RUNTIME_QUALIFICATION_2026-08-30.json)
+binds one sealed fixed-action run to exact code, assets, dependencies, sandbox,
+and an external private receipt. Its status remains
+`ENGINEERING_INSTRUMENT_QUALIFIED_G0_NOT_PASSED`; neither this engineering
+qualification nor the pool audit establishes agent efficacy or a G0 decision.
+The 11 zero-overlap `valid_unseen` groups remain untouched final-holdout
+candidates unless a prospective protocol explicitly allocates them.
 
 Before a live G1 comparison, the next work is limited to four items: implement
 and directly parity-check the pinned ExpeL reproduction; qualify an independently

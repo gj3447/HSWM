@@ -1,7 +1,8 @@
-"""Offline contract checks for the blocked ALFWorld text G1 candidate."""
+"""Offline checks for the locally authorized ALFWorld candidate boundary."""
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -9,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 AUDIT = ROOT / "_research/causal_composition/priors/alfworld_text_g1_candidate_v1/source_audit.v1.json"
+AUTHORIZATION = ROOT / "_research/causal_composition/priors/alfworld_text_g1_candidate_v1/local_use_authorization.v1.json"
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 GIT_SHA = re.compile(r"^[0-9a-f]{40}$")
 
@@ -17,20 +19,54 @@ def _audit() -> dict[str, object]:
     return json.loads(AUDIT.read_text(encoding="utf-8"))
 
 
-def test_alfworld_candidate_is_explicitly_blocked_on_data_license_scope() -> None:
+def test_alfworld_candidate_has_local_authorization_without_license_overclaim() -> None:
     value = _audit()
 
     assert value["schema_version"] == "hswm-causal-composition-environment-source-audit/v1"
     assert value["candidate_uid"] == "sym:EnvironmentCandidate:alfworld-text-g1-v1"
-    assert value["status"] == "CANDIDATE_SELECTED_LICENSE_SCOPE_UNRESOLVED_EXECUTION_BLOCKED"
+    assert value["status"] == (
+        "CANDIDATE_SELECTED_LOCAL_RESEARCH_AUTHORIZED_"
+        "UPSTREAM_LICENSE_SCOPE_UNRESOLVED_NO_REDISTRIBUTION"
+    )
     assert value["selection"]["environment_mode"] == "ALFWORLD_TEXT_ONLY"
     assert value["selection"]["single_task_family"] == "pick_clean_then_place_in_recep"
 
     blocker = value["blocking_license_scope"]
     assert blocker["code_mit_is_not_data_permission"] is True
-    assert blocker["decision"] == "EXECUTION_BLOCKED"
+    assert blocker["local_execution_decision"] == (
+        "AUTHORIZED_BY_USER_FOR_LOCAL_NONREDISTRIBUTIVE_RESEARCH"
+    )
+    assert blocker["redistribution_decision"] == "BLOCKED"
     assert "annotation" in blocker["unresolved_question"]
+    binding = value["local_use_authorization"]
+    assert binding["authorization_uid"] == (
+        "sym:LocalAuthorization:alfworld-assets-2026-08-30-v1"
+    )
+    assert binding["sha256"] == hashlib.sha256(AUTHORIZATION.read_bytes()).hexdigest()
+    assert ROOT / binding["path"] == AUTHORIZATION
+    authorization = json.loads(AUTHORIZATION.read_text(encoding="utf-8"))
+    assert authorization["authorization_uid"] == binding["authorization_uid"]
     assert value["offline_verifier_contract"]["network_access"] == "FORBIDDEN"
+
+
+def test_local_authorization_is_exactly_scoped_and_not_an_upstream_grant() -> None:
+    value = json.loads(AUTHORIZATION.read_text(encoding="utf-8"))
+
+    assert value["schema_version"] == "hswm-external-asset-local-use-authorization/v1"
+    assert value["exact_user_message_sha256"] == (
+        "ba482edb9b8ba8e8beb4865f7a8df405beedd3eb3f85ae9b125abe33a1116df4"
+    )
+    assert value["exact_user_message_sha256"] == hashlib.sha256(
+        value["exact_user_message_utf8"].encode("utf-8")
+    ).hexdigest()
+    assert value["status"] == (
+        "LOCAL_RESEARCH_FETCH_AND_EXECUTION_AUTHORIZED_"
+        "UPSTREAM_LICENSE_SCOPE_UNRESOLVED_NO_REDISTRIBUTION"
+    )
+    excluded = " ".join(value["scope"]["excluded"])
+    assert "redistributing" in excluded
+    assert "upstream rightsholder" in excluded
+    assert "HSWM canonical Permit" in excluded
 
 
 def test_alfworld_source_and_observed_asset_pins_have_exact_offline_invariants() -> None:

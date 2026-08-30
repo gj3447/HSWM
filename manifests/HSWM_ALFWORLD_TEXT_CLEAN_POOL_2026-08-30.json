@@ -1,0 +1,101 @@
+{
+  "aggregate_commitment": {
+    "local_locator_canonical_json_sha256": "888947c2b696383b56beb7a82908e3a17eab0dcc7af4aecc3e2205a655d10e08",
+    "local_locator_rendered_json_sha256": "cfa8f4bd7357de4be5507e56c3a04d9cac789ff5bfd58786be8c3ec6c4f9e85c",
+    "selected_game_bytes_by_split": {
+      "train": 62761447,
+      "valid_seen": 2618765,
+      "valid_unseen": 2766291
+    },
+    "selected_game_counts": {
+      "train": 650,
+      "valid_seen": 27,
+      "valid_unseen": 31
+    },
+    "selected_game_total": 708,
+    "selected_task_group_counts": {
+      "train": 268,
+      "valid_seen": 27,
+      "valid_unseen": 11
+    },
+    "task_group_overlap_counts": {
+      "train__valid_seen": 25,
+      "train__valid_unseen": 0,
+      "valid_seen__valid_unseen": 0
+    }
+  },
+  "metadata_trial_audit": {
+    "train": {
+      "missing_game_trial_id_count": 208,
+      "missing_game_trial_ids_sha256": "4f6886973f72d620c299763f0aba73286a45e4497569cc2ef3c9210c6b2bcb93",
+      "trial_directories_with_traj_data": 858
+    },
+    "valid_seen": {
+      "missing_game_trial_id_count": 10,
+      "missing_game_trial_ids_sha256": "2b36024d060a02fe0b5728eaf09e33c39a5a07c32ee4cc29062a80f56213b4e3",
+      "trial_directories_with_traj_data": 37
+    },
+    "valid_unseen": {
+      "missing_game_trial_id_count": 5,
+      "missing_game_trial_ids_sha256": "35ea3807529cc702d523ea5205544b034ef16a4634be05fd946f35726c042516",
+      "trial_directories_with_traj_data": 36
+    }
+  },
+  "no_claim": [
+    "This aggregate commitment contains no game locator, semantic task name, trial identifier, per-game digest, game content, PDDL, trajectory, or annotation.",
+    "The detailed local locator is deliberately non-repository and is not authorized for redistribution.",
+    "It assigns no training, calibration, validation, final-holdout, or other experimental split.",
+    "It is not an ALFWorld execution, G0 result, G1 result, comparator result, or HSWM efficacy claim."
+  ],
+  "record_role": "AGGREGATE_OPAQUE_LOCAL_TASK_POOL_COMMITMENT_NOT_A_SPLIT_OR_RESULT",
+  "schema_version": "hswm-alfworld-text-clean-pool/v2",
+  "selection": {
+    "environment_mode": "ALFWORLD_TEXT_ONLY",
+    "included_splits": [
+      "train",
+      "valid_seen",
+      "valid_unseen"
+    ],
+    "selected_game_bytes_crosschecked_against_tw_archive": true,
+    "selected_metadata_crosschecked_against_json_archive": true,
+    "selection_algorithm": "hswm-alfworld-text-clean-pool/v2",
+    "selection_rule_sha256": "7227cf53e8ce81bea66e357e8f22e3cb16941832ccf16746228b68b6c1fada49",
+    "task_group_definition": "SHA256_OF_TASK_DIRECTORY_NAME_WITHOUT_SPLIT_OR_TRIAL"
+  },
+  "source_binding": {
+    "data_root_layout": "json_2.1.1",
+    "local_use_authorization": {
+      "path": "_research/causal_composition/priors/alfworld_text_g1_candidate_v1/local_use_authorization.v1.json",
+      "sha256": "48c1b5c82ff8c6c5b454f5e0a32beb9546fd46db4b891c804397ca036d71f3a8"
+    },
+    "official_release_assets": [
+      {
+        "bytes": 72018818,
+        "name": "json_2.1.1_json.zip",
+        "sha256": "25171f16e20ad7b048c47275c45b0babf3aa1cbab29cec97387922350a9844bc",
+        "use": "REQUIRED_METADATA_PROVENANCE",
+        "verified": true
+      },
+      {
+        "bytes": 34881784,
+        "name": "json_2.1.1_pddl.zip",
+        "sha256": "913942ebed06659ea0da2f8122512d98bc6add30d84961ca803132d8fbcad585",
+        "use": "UNUSED_NOT_REQUIRED_FOR_TEXT_POOL",
+        "verified": false
+      },
+      {
+        "bytes": 36507267,
+        "name": "json_2.1.3_tw-pddl.zip",
+        "sha256": "5df77ea759f2211a4106082839ddbbb790f1ba4e7d097ed732cf453f72aa36cf",
+        "use": "REQUIRED_SELECTED_GAME_PROVENANCE",
+        "verified": true
+      }
+    ],
+    "repository_commit": "aaba6870f86c5be6a08a491f32a50b906227bc3e",
+    "source_audit": {
+      "path": "_research/causal_composition/priors/alfworld_text_g1_candidate_v1/source_audit.v1.json",
+      "sha256": "626daca514906eacefe258fca1694b3186b6d2fde68b88a08554ea7f9318e0c5"
+    }
+  },
+  "status": "LOCAL_RESEARCH_ASSET_INVENTORY_ONLY"
+}

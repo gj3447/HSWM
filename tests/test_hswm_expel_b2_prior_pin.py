@@ -23,6 +23,7 @@ def test_expel_b2_source_pin_is_offline_and_immutably_identified() -> None:
     assert value["schema_version"] == "hswm-causal-composition-prior-source-pin/v1"
     assert value["prior_uid"] == "sym:Prior:expel-b2-text-lesson-v1"
     assert value["scientific_status"] == "PRIOR_MECHANISM_REFERENCE_ONLY_NOT_HSWM_EVIDENCE"
+    assert value["selection"]["arm_id"] == "B2_EXPEL_INSPIRED_TEXT_LESSON"
 
     sources = value["official_sources"]
     assert sources["paper"]["arxiv_id"] == "2308.10144"
@@ -39,7 +40,12 @@ def test_expel_b2_source_pin_is_offline_and_immutably_identified() -> None:
         sources["paper"]["sha256"],
         sources["repository"]["tarball_sha256"],
         sources["license"]["sha256"],
-        *[item["sha256"] for item in value["minimal_reproduction_boundary"]["upstream_minimal_files"]],
+        *[
+            item["sha256"]
+            for item in value["minimal_reproduction_boundary"][
+                "upstream_algorithm_evidence_files_not_executable_closure"
+            ]
+        ],
     ]
     assert all(SHA256.fullmatch(digest) for digest in digests)
     assert re.fullmatch(r"[0-9a-f]{40}", sources["repository"]["tree"])
@@ -51,12 +57,52 @@ def test_expel_b2_prior_requires_isolation_parity_and_no_claim_boundary() -> Non
     boundary = value["minimal_reproduction_boundary"]
     contract = value["future_run_contract"]
 
-    assert {item["path"] for item in boundary["upstream_minimal_files"]} == {
+    assert {
+        item["path"]
+        for item in boundary["upstream_algorithm_evidence_files_not_executable_closure"]
+    } == {
         "agent/expel.py",
         "agent/reflect.py",
+        "agent/react.py",
         "insight_extraction.py",
         "configs/agent/expel.yaml",
+        "configs/benchmark/alfworld.yaml",
+        "memory/episode.py",
+        "memory/__init__.py",
+        "prompts/alfworld.py",
+        "prompts/templates/system.py",
+        "prompts/templates/human.py",
+        "utils.py",
+        "eval.py",
     }
+    files = {
+        item["path"]: item
+        for item in boundary["upstream_algorithm_evidence_files_not_executable_closure"]
+    }
+    assert files["agent/react.py"]["sha256"] == (
+        "a0b8f6c2652bedfaa1442cafd0f22f8f6e050b5daf3355041df532d9a8adb552"
+    )
+    assert files["memory/episode.py"]["sha256"] == (
+        "fd669464df67ec848e6225eb0bcaa7f37ec7335c5e4ffbbc9a966b29d51d78e7"
+    )
+    assert files["prompts/alfworld.py"]["sha256"] == (
+        "130356ae2f6e08b9c90447bbf552ea279b4895762e87fe83be4347aff3f0d043"
+    )
+    assert files["prompts/templates/system.py"]["sha256"] == (
+        "90ff238965728e5f8922c2294be95bc030e1374f22e31bf805a97cb5171b70aa"
+    )
+    assert files["prompts/templates/human.py"]["sha256"] == (
+        "fbfdeeb32ce1299b38a7a61b15ec732a53fce42a5e950be176dad367b05bf216"
+    )
+    assert files["configs/benchmark/alfworld.yaml"]["sha256"] == (
+        "651f3b5551178bc3073985a403fd1d050be25e88412dc399d10d29b609482bde"
+    )
+    assert files["utils.py"]["sha256"] == (
+        "5b7ee915b8f4aa53c6f4162a19834a663030b679178001c86129afb05211a82b"
+    )
+    assert "RULE_TEMPLATE" in files["prompts/templates/human.py"]["role"]
+    assert "get_fewshot_max_tokens" in files["utils.py"]["role"]
+    assert boundary["executable_closure_status"].startswith("NOT_PINNED")
     assert any("not vendored" in item for item in boundary["excluded"])
     assert "arm-private" in contract["b2_only_state"]
     assert "parity check" in contract["direct_vs_wrapper_parity"]
@@ -72,3 +118,21 @@ def test_expel_b2_prior_requires_isolation_parity_and_no_claim_boundary() -> Non
     assert "G1 efficacy" in no_claim
     assert "HSWM learning" in no_claim
     assert "FCL-1" in no_claim
+
+
+def test_expel_inspired_lesson_arm_is_not_the_faithful_direct_two_channel_arm() -> None:
+    value = _manifest()
+    boundary = value["minimal_reproduction_boundary"]
+    contract = value["future_run_contract"]
+
+    assert value["selection"]["arm_id"] == "B2_EXPEL_INSPIRED_TEXT_LESSON"
+    assert "not faithful-direct" in value["selection"]["why_this_prior"]
+    assert "B2_EXPEL_DIRECT" in " ".join(boundary["algorithm"])
+    observations = boundary["faithful_direct_source_observations"]
+    assert "numbered" in observations["global_rule_channel"]
+    assert "successful" in observations["successful_trajectory_fewshot_channel"]
+    assert "10" in observations["rule_cap_ambiguity"]
+    assert "20" in observations["rule_cap_ambiguity"]
+    assert "FAISS" in observations["retrieval_ambiguity"]
+    assert "B2_EXPEL_DIRECT" in contract["direct_vs_wrapper_parity"]
+    assert "global numbered-rule bytes" in contract["direct_vs_wrapper_parity"]

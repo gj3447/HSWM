@@ -5,9 +5,9 @@
   "recorded_at_utc": "2026-08-30T16:56:24Z",
   "scientific_status": "PRIOR_MECHANISM_REFERENCE_ONLY_NOT_HSWM_EVIDENCE",
   "selection": {
-    "arm_id": "B2_EXPEL_TEXT_LESSON",
+    "arm_id": "B2_EXPEL_INSPIRED_TEXT_LESSON",
     "role": "PRIMARY_CANDIDATE_TEXT_LESSON_COMPARATOR_FOR_A_FUTURE_G1",
-    "why_this_prior": "ExpeL separates experience gathering, natural-language insight extraction, and fresh-task evaluation, making its learned-text disposition a proximal alternative explanation for a one-task-family outcome-to-behavior effect.",
+    "why_this_prior": "The official ExpeL implementation keeps a global numbered rule list that is injected into evaluation prompts and also retrieves successful trajectory few-shots by similarity. A lesson-only arm is therefore an ExpeL-inspired, not faithful-direct, alternative explanation for a one-task-family outcome-to-behavior effect.",
     "not_selected_as_hswm_mechanism": "ExpeL lessons, retrieval state, and prompts are external baseline state. They cannot perform HSWM outcome-to-credit binding, owner assignment, Permit authorization, canonical revision, or HSWM lineage mutation."
   },
   "official_sources": {
@@ -40,13 +40,12 @@
   },
   "minimal_reproduction_boundary": {
     "algorithm": [
-      "Collect only sealed B2 training trajectories and independently produced outcomes.",
-      "Use a frozen reflection prompt to extract a bounded natural-language lesson set from the training split.",
-      "Freeze the resulting lesson artifact before final-holdout inspection.",
-      "Use a frozen task-similarity retrieval rule to select lessons for each fresh B2 probe.",
-      "Inject only the selected lesson text into the B2 model context and score fresh outcome with the common independent evaluator."
+      "A future B2_EXPEL_INSPIRED_TEXT_LESSON arm may collect sealed B2 training trajectories and independently produced outcomes, extract a bounded natural-language lesson artifact, and use it only as explicitly preregistered external baseline state.",
+      "This lesson-only arm MUST NOT be described as a faithful ExpeL reproduction because it omits ExpeL's separate successful-trajectory few-shot retrieval channel.",
+      "A future B2_EXPEL_DIRECT arm, if used, MUST freeze the resulting global numbered rules before final-holdout inspection, inject those rule bytes into the evaluation prompt through the pinned RULE_TEMPLATE, and separately retrieve successful trajectory few-shots using the pinned retrieval path.",
+      "Both B2 variants must score fresh outcomes with the common independent evaluator and cannot authorize HSWM mutation."
     ],
-    "upstream_minimal_files": [
+    "upstream_algorithm_evidence_files_not_executable_closure": [
       {
         "path": "agent/expel.py",
         "role": "training/evaluation separation, critique collection, rule state, and retrieval-oriented ExpeL policy",
@@ -70,8 +69,69 @@
         "role": "official ExpeL configuration surface for lesson count and retrieval policy",
         "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/configs/agent/expel.yaml",
         "sha256": "8d0e75d5693d24267d54cf5857a721485c41b8eefbbea2c66353ea528a2781e0"
+      },
+      {
+        "path": "agent/react.py",
+        "role": "base reactive prompt and trajectory policy inherited by ExpelAgent",
+        "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/agent/react.py",
+        "sha256": "a0b8f6c2652bedfaa1442cafd0f22f8f6e050b5daf3355041df532d9a8adb552"
+      },
+      {
+        "path": "memory/episode.py",
+        "role": "trajectory object and keys used to retain successful trial histories",
+        "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/memory/episode.py",
+        "sha256": "fd669464df67ec848e6225eb0bcaa7f37ec7335c5e4ffbbc9a966b29d51d78e7"
+      },
+      {
+        "path": "memory/__init__.py",
+        "role": "KNN/SVM retriever selection exposed by configuration; direct agent/expel.py similarity retrieval instead constructs FAISS, so this is evidence of the unresolved config-versus-runtime discrepancy",
+        "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/memory/__init__.py",
+        "sha256": "4512a7e33e4d0c59505d24fd2c06fdfcc8e575857785b26888fb7365a531cbba"
+      },
+      {
+        "path": "prompts/alfworld.py",
+        "role": "ALFWorld prompt exports, including benchmark-specific few-shot material",
+        "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/prompts/alfworld.py",
+        "sha256": "130356ae2f6e08b9c90447bbf552ea279b4895762e87fe83be4347aff3f0d043"
+      },
+      {
+        "path": "prompts/templates/system.py",
+        "role": "system prompt template used by the evaluation entrypoint",
+        "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/prompts/templates/system.py",
+        "sha256": "90ff238965728e5f8922c2294be95bc030e1374f22e31bf805a97cb5171b70aa"
+      },
+      {
+        "path": "prompts/templates/human.py",
+        "role": "actual RULE_TEMPLATE definition: benchmark-indexed global numbered rules are rendered into the evaluation prompt",
+        "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/prompts/templates/human.py",
+        "sha256": "fbfdeeb32ce1299b38a7a61b15ec732a53fce42a5e950be176dad367b05bf216"
+      },
+      {
+        "path": "configs/benchmark/alfworld.yaml",
+        "role": "effective ALFWorld benchmark, task split, environment, and few-shot count configuration",
+        "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/configs/benchmark/alfworld.yaml",
+        "sha256": "651f3b5551178bc3073985a403fd1d050be25e88412dc399d10d29b609482bde"
+      },
+      {
+        "path": "utils.py",
+        "role": "actual get_fewshot_max_tokens function source used when the effective configuration requests auto",
+        "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/utils.py",
+        "sha256": "5b7ee915b8f4aa53c6f4162a19834a663030b679178001c86129afb05211a82b"
+      },
+      {
+        "path": "eval.py",
+        "role": "evaluation entrypoint that wires RULE_TEMPLATE, retrieval configuration, and get_fewshot_max_tokens into ExpelAgent",
+        "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/eval.py",
+        "sha256": "c6aa51d72d09e011666ea66baf2f5538eb71dda0dabfdc18d6278220cc3c5449"
       }
     ],
+    "faithful_direct_source_observations": {
+      "global_rule_channel": "agent/expel.py creates a numbered global rule string from rule_items; at evaluation insert_before_task_prompt renders it with prompts/templates/human.py RULE_TEMPLATE.",
+      "successful_trajectory_fewshot_channel": "agent/expel.py builds a FAISS vector store over successful histories and retrieves task-similar few-shots; the effective ALFWorld configuration selects task_similarity and num_fewshots: 2.",
+      "rule_cap_ambiguity": "The paper's reported cap of 10 rules and this pinned configs/agent/expel.yaml max_num_rules: 20 disagree. No value is selected here; a B2_EXPEL_DIRECT preregistration must resolve and source-justify it before outcome inspection.",
+      "retrieval_ambiguity": "The pinned configuration says retriever_type: knn, while agent/expel.py also constructs a LangChain FAISS vector store for similarity search. A B2_EXPEL_DIRECT preregistration must specify the exact dependency versions, embeddings, vector-store construction, retriever path, and query/selection semantics; this pin does not infer a single resolved implementation from the source alone."
+    },
+    "executable_closure_status": "NOT_PINNED: these files establish algorithm semantics only; a future direct run must separately pin the complete source, configuration, dependency, model, embedding, and environment closure.",
     "excluded": [
       "The upstream repository, paper PDF, model weights, environments, datasets, and credentials are not vendored into this repository.",
       "The future B2 arm must not reuse upstream FAISS indexes, logs, caches, API state, or environment state across arms.",
@@ -88,6 +148,12 @@
       "retrieval_embedding_model_and_revision",
       "retrieval_similarity_metric_and_top_k",
       "retrieval_query_construction",
+      "direct_arm_rule_cap_and_paper_vs_yaml_resolution",
+      "global_rule_ordering_and_RULE_TEMPLATE_rendering_bytes",
+      "successful_trajectory_fewshot_count_order_ties_and_bytes",
+      "FAISS_embedding_tokenizer_dependency_versions_and_index_build",
+      "episode_horizon_and_official_vs_common_environment_justification",
+      "official_initial_fewshot_material_fairness_policy",
       "training_holdout_and_final_holdout_split",
       "base_model_and_revision",
       "tool_surface",
@@ -95,7 +161,7 @@
       "state_reset_and_cache_network_policy"
     ],
     "resource_parity": "The future B2 arm MUST receive the same task information, base model, tools, token, call, retry, time, and human budget as H1 and the named controls; all differences require a receipt and predeclared attribution limitation.",
-    "direct_vs_wrapper_parity": "Before a B2 comparison is credited, a preregistered parity check MUST show that the adopted minimal reproduction and any wrapper expose the same lesson bytes, retrieval selection, model-visible prompt bytes, state writes, and resource accounting within declared tolerance.",
+    "direct_vs_wrapper_parity": "B2_EXPEL_INSPIRED_TEXT_LESSON is lesson-only and must never be called direct ExpeL. Before a B2_EXPEL_DIRECT comparison is credited, a preregistered direct-versus-wrapper parity check MUST show the same global numbered-rule bytes, successful-trajectory few-shot selection and bytes, model-visible prompt bytes, retrieval/vector-store state writes, and resource accounting within declared tolerance.",
     "network_policy": "A future scientific occurrence MUST use a pinned offline or sealed-equivalent source and dependency closure. This source-pin verifier performs no live-network verification."
   },
   "no_claim": [
@@ -110,7 +176,7 @@
       "schema identifiers and exact official identity fields",
       "SHA-256 syntax for every pinned byte artifact",
       "Apache-2.0 license declaration",
-      "minimal-file set and no-vendor boundary",
+      "algorithm-evidence file set, explicit non-executable-closure status, and no-vendor boundary",
       "B2 state isolation, fixed-field, resource-parity, direct-vs-wrapper-parity, and no-claim obligations"
     ]
   }

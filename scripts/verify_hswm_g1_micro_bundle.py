@@ -4,7 +4,15 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import sys
 from typing import Sequence
+
+# This script is intentionally executable by path.  ``sys.path[0]`` is then
+# ``scripts/``, while the DGX runner imports the checked-in ``_research``
+# namespace from the repository root.
+_REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPOSITORY_ROOT))
 
 from hswm.experiments import g1_micro
 from hswm.experiments.g1_micro_dgx import verify_dgx_execution_receipt

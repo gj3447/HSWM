@@ -5,6 +5,8 @@ from __future__ import annotations
 from copy import deepcopy
 from hashlib import sha256
 from pathlib import Path
+import subprocess
+import sys
 
 import pytest
 
@@ -30,6 +32,20 @@ _SNAPSHOT_MANIFEST = (
     "hswm-dnrd5-qcase024-mi-2-launch-crossed-v1-2026-08-29/"
     "identities/ASYNC_DISABLED/model_snapshot_manifest_sha256.json"
 )
+_BUNDLE_VERIFIER = Path(__file__).parents[1] / "scripts/verify_hswm_g1_micro_bundle.py"
+
+
+def test_standalone_bundle_verifier_bootstraps_repository_imports() -> None:
+    completed = subprocess.run(
+        [sys.executable, str(_BUNDLE_VERIFIER), "--help"],
+        cwd=Path(__file__).parents[1],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    assert "Replay frozen local" in completed.stdout
 
 
 def _spec(tmp_path: Path) -> DGXFreshSpec:

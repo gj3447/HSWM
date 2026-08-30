@@ -5,7 +5,7 @@ is an integration-readiness study, not a G0 pass, G1 occurrence, gate promotion,
 or efficacy claim.
 
 The canonical JSON SHA-256 of `protocol.v1.json` is
-`1506653fdc1eb8026c2e1041a295e1b57a05026f523c175f4ec22ebab3ebea5f`.
+`3f608c2167eb839a17812050302e641445be5f9012a09f25980cca578c4449d4`.
 
 The slice permits one experiment-local, cue-bound operator disposition. A model
 trajectory is sealed before feedback; the true outcome is computed by a local,

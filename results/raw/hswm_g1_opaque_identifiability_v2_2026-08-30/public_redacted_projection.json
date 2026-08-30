@@ -1,0 +1,241 @@
+{
+  "schema_version": "hswm-g1-opaque-identifiability-public-redacted-projection/v1",
+  "record_role": "POST_EXECUTION_AGGREGATE_IDENTIFIABILITY_RESULT_NOT_G0_PROMOTION_OR_G1_EFFICACY",
+  "authority": "CONTENT_ADDRESSED_PUBLIC_PROJECTION_OF_ONE_PRIVATE_SEALED_DGX_OCCURRENCE",
+  "study_uid": "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-v2-2026-08-30",
+  "recorded_at_utc": "2026-08-30T14:52:13Z",
+  "terminal": "PILOT_COMPLETE_IDENTIFIABILITY_OBSERVED_NO_EFFICACY_INFERENCE",
+  "scientific_status": "EXPLORATORY_G0_IDENTIFIABILITY_THRESHOLD_OBSERVED_G0_NOT_PASSED_G1_NOT_EVALUATED",
+  "strongest_result": "ONE_FROZEN_EIGHT_EPISODE_OCCURRENCE_OBSERVED_A_DISCRIMINATING_LOCAL_STATE_MEDIATED_SIGNATURE_WITH_EXACT_REMOVE_RESTORE_AND_NO_EFFICACY_INFERENCE",
+  "preregistration": {
+    "path": "_research/causal_composition/preregistrations/g1_opaque_identifiability_pilot_v2_2026-08-30/protocol.v1.json",
+    "canonical_sha256": "eae768f3f42de345bfcc995a5effb085f39c1732bb956fa37c6eab08870a553d",
+    "raw_file_sha256": "a5981cdfff9fc35447933ca6662f0e92d07a436f49319427e05454926aeb907f",
+    "study_uid": "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-v2-2026-08-30",
+    "reveal_commitment_root": "71ac26c3bb586b026747acf9f311e4cb4e89be0fd6389cbdd58828f2b0d36620",
+    "episode_count": 8,
+    "completion_post_cap": 64,
+    "retry_refill_resume_or_second_occurrence_permitted": false,
+    "confirmatory_statistics": "NONE_EXPLORATORY_DESCRIPTIVE_ONLY"
+  },
+  "frozen_source": {
+    "commit": "31a003564f078e0f9ba419f1d1cabcbecd89c684",
+    "tree": "1dae290caab8bc8e392f686150040f35c5a9c3fb",
+    "ci_run_id": 33316526514,
+    "ci_conclusion": "success",
+    "ci_successful_jobs": 8
+  },
+  "preflight": {
+    "run_id": "g1-opaque-v2-preflight-31a0035-v1",
+    "started_at_utc": "2026-08-30T14:31:22Z",
+    "finished_at_utc": "2026-08-30T14:32:00Z",
+    "status": "READY_FOR_ONE_FRESH_DGX_EXPLORATION",
+    "wrapper_receipt_sha256": "e8b4f2e2ae795d798841daf06493c4617290457b13e7701ca9e3a129a664d91f",
+    "wrapper_receipt_bytes": 632,
+    "wrapper_archive_sha256": "9916e35399e68d604aec612d695a2dfb11b04e0bdb07fd8031663aa1c72f224d",
+    "wrapper_archive_bytes": 10240,
+    "console_sha256": "a3663115c7a493dd9ed1ad750a90bab3354b227e5ea79e4ff213c780813dd367",
+    "console_bytes": 388,
+    "offline_tokenizer_receipt_sha256": "261533a8d7794848ce348f1c6ca2a206fefb3167e6fa007b0725a965f2f1be02",
+    "ephemeral_network_isolated_tokenizer_containers": 1,
+    "behavior_network_calls": 0,
+    "shared_service_mutations": 0
+  },
+  "execution": {
+    "run_id": "g1-opaque-identifiability-v2-31a0035-v1",
+    "started_at_utc": "2026-08-30T14:32:50Z",
+    "finished_at_utc": "2026-08-30T14:41:48Z",
+    "wrapper_status": "success",
+    "wrapper_exit_code": 0,
+    "wrapper_receipt_sha256": "4e4f5f5f58321502b34bdb5a74138edb8490233525d17b5042fc780d7c502bdf",
+    "wrapper_receipt_bytes": 640,
+    "private_wrapper_archive_sha256": "a3d0093e23eccd6a3cce2c751077eaaf5f0288e9021675c7b1b3a695b91cf876",
+    "private_wrapper_archive_bytes": 3184640,
+    "durable_run_logical_id": "g1-opaque-identifiability-v2-31a0035-v1",
+    "consumption_registry_logical_id": "hswm-g1-opaque-identifiability-pilot-v2-2026-08-30-consumption-v1",
+    "consumption_registry_sha256": "408e8606eb01e12db6f7c885099baf07c523f1309c9607ec54ee0b0c6fc2f7e4",
+    "consumption_registry_bytes": 4609,
+    "consumption_registry_record_sha256": "93b7c1143790ff42183403d66bb9f2a86ea3e01344a1e13d2c568a3eed44b176",
+    "consumption_terminal": "COMPLETED_NO_RERUN",
+    "rerun_permitted": false
+  },
+  "model_runtime": {
+    "model_repository": "Qwen/Qwen3.6-35B-A3B-FP8",
+    "served_model_id": "qwen3.6-35b-a3b",
+    "model_revision": "95a723d08a9490559dae23d0cff1d9466213d989",
+    "model_snapshot_manifest_sha256": "2ece6b46248e818cbf93aa30299300f7dd4c60d9351960ec790cc8b420376e47",
+    "vllm_version": "0.25.1",
+    "container_image": "vllm/vllm-openai@sha256:e4f88a835143cd22aee2397a26ec6bb80b3a4a6fe0c882bcbc63822904766089",
+    "container_image_id": "sha256:30a38a1d74a17365eca400e83ffd885b250e0c8c0d3c5b508afa8c412d2ddf95",
+    "gpu_name": "NVIDIA GB10",
+    "gpu_uuid": "GPU-ffed5bca-3452-8e9e-03fb-b2a4d8f40bc5",
+    "max_model_len": 32768,
+    "max_num_seqs": 1,
+    "gpu_memory_utilization": "0.500",
+    "prefix_cache": false,
+    "enforce_eager": true,
+    "async_scheduling": false,
+    "network_boundary": "HOST_INGRESS_LOOPBACK_BOUND_CONTAINER_BRIDGE_EGRESS_NOT_INDEPENDENTLY_BLOCKED"
+  },
+  "measurement": {
+    "episode_count": 8,
+    "completion_posts": 64,
+    "tokenize_preflight_posts": 64,
+    "total_http_posts": 128,
+    "retries_or_refills": 0,
+    "journal_events": 512,
+    "all_planned_calls_completed_in_order": true,
+    "bundle_canonical_sha256": "9df2cb715b526ce87b072ca2898dde49959fc71e282761e0f074c9e38ce19a08",
+    "private_result_file_sha256": "f27c5eb3ef1d5634983ccb78b61f8db1ddb8c87a1015916863ca68a0fb596b2d",
+    "private_result_file_bytes": 465618,
+    "runtime_receipt_record_sha256": "f2f970be3e615ebbedd2f373d1d4d9f8a367e35e2cab0ec58b425f46cb67fa64",
+    "private_runtime_receipt_file_sha256": "19dc5a21431911d135307ecaf3ed87b44a86ff1c8ae821d9753f015d845ea998",
+    "private_runtime_receipt_file_bytes": 93133,
+    "runtime_binding_record_sha256": "4017a2a03775159c25a75493719b20f3e9cf8b1df37e9ed8e6eed8b078870f15",
+    "private_runtime_binding_file_sha256": "3965a78c4d9bb38cc72f8c78eaeebc8d2330d7cd3de6ce767cb04da57cb18fec",
+    "private_runtime_binding_file_bytes": 104970,
+    "private_evaluator_reveal_sha256": "3a7e7afb5b779e114ef9cb7b089300e2cc942c5e2f1852304d946f63835f670d",
+    "private_evaluator_reveal_bytes": 2383,
+    "runtime_image_identity_verified": true,
+    "shared_services_restored_after_quiescence": true,
+    "exact_remove_and_restore_for_all_episodes": true
+  },
+  "aggregate_result": {
+    "branch_correct_counts": {
+      "ACTIVE": 8,
+      "FORCED_OPPOSITE_FEEDBACK": 0,
+      "NO_UPDATE": 4,
+      "REMOVE": 4,
+      "RESTORE": 8
+    },
+    "branch_denominator": 8,
+    "branch_wilson_95": {
+      "ACTIVE": [0.6755924351161198, 1.0],
+      "FORCED_OPPOSITE_FEEDBACK": [0.0, 0.32440756488388023],
+      "NO_UPDATE": [0.21521606221387757, 0.7847839377861224],
+      "REMOVE": [0.21521606221387757, 0.7847839377861224],
+      "RESTORE": [0.6755924351161198, 1.0]
+    },
+    "delta_state": 0.6666666666666667,
+    "contrasts": {
+      "ACTIVE-minus-FORCED_OPPOSITE_FEEDBACK": 1.0,
+      "ACTIVE-minus-mean(NO_UPDATE,REMOVE)": 0.5,
+      "RESTORE-minus-REMOVE": 0.5
+    },
+    "active_credit_and_admission_count": 8,
+    "forced_opposite_credit_and_admission_count": 8,
+    "exact_remove_and_restore_count": 8,
+    "combined_no_state_correct": {
+      "count": 8,
+      "denominator": 16
+    },
+    "full_five_branch_signature_count": 0,
+    "no_state_correct_by_candidate_position": {
+      "NO_UPDATE": {
+        "position_1": {"correct": 4, "denominator": 4},
+        "position_2": {"correct": 0, "denominator": 4}
+      },
+      "REMOVE": {
+        "position_1": {"correct": 4, "denominator": 4},
+        "position_2": {"correct": 0, "denominator": 4}
+      }
+    }
+  },
+  "preregistered_identifiability_rule": {
+    "delta_state_min": 0.5833333333333333,
+    "delta_state_observed": 0.6666666666666667,
+    "active_correct_required": 8,
+    "active_correct_observed": 8,
+    "forced_opposite_correct_required": 0,
+    "forced_opposite_correct_observed": 0,
+    "restore_correct_required": 8,
+    "restore_correct_observed": 8,
+    "no_update_correct_max": 5,
+    "no_update_correct_observed": 4,
+    "remove_correct_max": 5,
+    "remove_correct_observed": 4,
+    "combined_no_state_correct_max": 10,
+    "combined_no_state_correct_observed": 8,
+    "active_credit_and_admission_required": 8,
+    "active_credit_and_admission_observed": 8,
+    "forced_opposite_credit_and_admission_required": 8,
+    "forced_opposite_credit_and_admission_observed": 8,
+    "exact_remove_and_restore_required": 8,
+    "exact_remove_and_restore_observed": 8,
+    "all_descriptive_thresholds_observed": true
+  },
+  "independent_local_verification": {
+    "run_id": "g1-opaque-v2-verify-31a0035-v1",
+    "started_at_utc": "2026-08-30T14:43:19Z",
+    "finished_at_utc": "2026-08-30T14:43:20Z",
+    "source_commit": "31a003564f078e0f9ba419f1d1cabcbecd89c684",
+    "wrapper_status": "success",
+    "wrapper_exit_code": 0,
+    "wrapper_receipt_sha256": "3c43ee432644dd8294e6320752170208bdced98fdc42df368dc1dfb19b6f13d0",
+    "wrapper_receipt_bytes": 629,
+    "wrapper_archive_sha256": "44f158ee43fa48bf8451c4a00c7ffc179278110269cfc4ad9e366461e39c45c9",
+    "wrapper_archive_bytes": 10240,
+    "public_output_path": "results/raw/hswm_g1_opaque_identifiability_v2_2026-08-30/independent_verification.json",
+    "public_output_sha256": "fba4b80c6d54a53e58e4e3c75febaeb054a648c6e884623f7d989584357a588b",
+    "public_output_bytes": 982,
+    "protocol_reveal_registry_binding": "VALID_LOCAL_OPAQUE_PROTOCOL_REVEAL_REGISTRY_BINDING",
+    "final_runtime_and_restoration_join": "VALID_LOCAL_DGX_FINAL_ATTESTATION_AND_RESTORATION_JOIN",
+    "overall": "VALID_LOCAL_FROZEN_DGX_EXPLORATORY_EXECUTION",
+    "verification_scope": "LOCAL_STRUCTURAL_REPLAY_SAME_FROZEN_SOURCE_NOT_INDEPENDENTLY_OWNED_SCIENTIFIC_ADJUDICATION"
+  },
+  "confidentiality_boundary": {
+    "private_closure_is_content_addressed_and_retained_on_private_durable_storage": true,
+    "private_archive_file_count": 63,
+    "public_projection_includes": "AGGREGATE_COUNTS_THRESHOLDS_CONTENT_HASHES_AND_NONSECRET_RUNTIME_IDENTITY",
+    "public_projection_excludes": [
+      "EPISODE_TARGET_MAPPINGS_AND_EVALUATOR_SECRETS",
+      "MODEL_REQUEST_AND_RESPONSE_PREIMAGES",
+      "PER_EPISODE_JOURNALS_AND_STATE_STORES",
+      "HOST_USER_NETWORK_LISTENER_PROCESS_AND_STORAGE_TOPOLOGY"
+    ],
+    "reason": "PREVENT_TASK_KEY_LEAKAGE_AND_PRIVATE_INFRASTRUCTURE_DISCLOSURE_WHILE_PRESERVING_CONTENT_ADDRESSED_AUDITABILITY"
+  },
+  "scientific_interpretation": {
+    "what_was_observed": "THE_LOCAL_COMPILED_DISPOSITION_WAS_BEHAVIORALLY_READ_BY_THE_FRESH_PROBE_AND_REMOVE_RESTORE_INTERVENTIONS_CHANGED_THEN_REINSTATED_THAT_READOUT_IN_THIS_BOUNDED_TASK",
+    "position_sentinel": "NO_UPDATE_AND_REMOVE_WERE_CORRECT_4_OF_4_WHEN_THE_TARGET_WAS_FIRST_AND_0_OF_4_WHEN_SECOND_SHOWING_A_DETERMINISTIC_FIRST_CANDIDATE_BIAS_IN_NO_STATE_BRANCHES",
+    "forced_opposite_control": "OUTCOME_DEPENDENT_COUNTERFACTUAL_FEEDBACK_NOT_OUTCOME_INDEPENDENT_SHAM",
+    "comparative_reuse_first_baselines": "NOT_RUN_IN_THIS_IDENTIFIABILITY_OCCURRENCE",
+    "causal_learning_efficacy": "NOT_EVALUATED",
+    "g0": "IDENTIFIABILITY_THRESHOLD_OBSERVED_BUT_G0_GATE_NOT_PASSED",
+    "g1": "NOT_EVALUATED",
+    "g2_through_g6": "LOCKED"
+  },
+  "limitations": [
+    "EIGHT_EPISODES_IN_ONE_EXPLORATORY_OCCURRENCE_WITH_NO_CONFIRMATORY_INFERENCE",
+    "SAME_PROCESS_LOCAL_EVALUATOR_NOT_INDEPENDENTLY_OWNED_OR_G0_CF07_SUFFICIENT",
+    "FORCED_OPPOSITE_FEEDBACK_IS_NOT_THE_OUTCOME_INDEPENDENT_SHAM_REQUIRED_BY_FULL_G1",
+    "DETERMINISTIC_FIRST_CANDIDATE_BIAS_EXPLAINS_ALL NO_UPDATE_AND_REMOVE CORRECTNESS",
+    "ONE_SHARED_VLLM_RUNTIME_DOES_NOT ESTABLISH CROSS_EPISODE_SERVICE INDEPENDENCE",
+    "LOCAL_EXPERIMENTAL_GRANTS_AND_ADMISSIONS_ARE_NOT_CANONICAL_ATOM_V2_PERMITS_OR_CANONICAL_HSWM_ADMISSION"
+  ],
+  "claim_boundary": {
+    "claim_ceiling": "EXPLORATORY_G0_IDENTIFIABILITY_ONLY",
+    "hswm_learning_or_efficacy_established": false,
+    "g0_gate_passed": false,
+    "g1_gate_evaluated": false,
+    "canonical_hswm_revision_performed": false,
+    "external_baseline_superiority_evaluated": false,
+    "eight_fcl_laws_tested_or_changed": false,
+    "hswm_of_hswms_recursive_composition_evaluated": false,
+    "consciousness_selfhood_or_scale_invariant_causal_closure_evaluated": false,
+    "fractal_research_status_unchanged": "SCIENTIFICALLY_CONNECTED / INTEGRATED_CLAIM_UNJUDGED",
+    "live_kg_mutated": false
+  },
+  "next_research": {
+    "do_not_rerun_this_occurrence": true,
+    "requires_fresh_preregistration": true,
+    "next_gate": "FULL_G0_MEASUREMENT_INTEGRITY_THEN_CONFIRMATORY_MINIMAL_G1",
+    "required_deltas": [
+      "INDEPENDENTLY_OWNED_OUTCOME_AND_EVALUATION_BOUNDARY",
+      "GENUINE_OUTCOME_INDEPENDENT_SHAM",
+      "PRESELECTED_PRIMARY_REUSE_FIRST_COMPARATOR_AND_PAIRED_ESTIMAND",
+      "POWERED_CONFIRMATORY_ANALYSIS_AND_MULTIPLICITY_POLICY",
+      "ONE_TASK_FAMILY_ONE_REVISION_KIND_ONE_ADMISSION_PATH"
+    ]
+  }
+}

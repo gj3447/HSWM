@@ -12,6 +12,7 @@ import sys
 import pytest
 
 from hswm.experiments import g1_micro
+from hswm.experiments import g1_micro_dgx as g1_dgx
 from hswm.experiments.g1_micro_dgx import (
     DGXFreshRuntime,
     DGXFreshSpec,
@@ -357,6 +358,114 @@ def test_offline_opaque_tokenizer_receipt_requires_equal_lengths_and_order(
             snapshot=snapshot,
             tokenizer_binding=binding,
         )
+
+
+def _opaque_tokenizer_receipt_for_test(binding: Mapping[str, Any]) -> dict[str, Any]:
+    receipt = {
+        "schema_version": "hswm-g1-opaque-offline-tokenizer-receipt/v1",
+        **{
+            key: deepcopy(binding[key])
+            for key in (
+                "container_image", "container_image_id", "model_repository",
+                "model_revision", "snapshot_manifest_sha256", "encoding",
+                "transformers_version", "tokenizers_version", "episodes",
+            )
+        },
+    }
+    return {**receipt, "receipt_sha256": sha256(canonical_json_bytes(receipt)).hexdigest()}
+
+
+def test_offline_tokenizer_uses_pinned_python3_entrypoint(tmp_path: Path) -> None:
+    protocol, _ = g1_micro.load_protocol(_OPAQUE_PROTOCOL)
+    binding = protocol["tokenizer_binding"]
+    snapshot = tmp_path / binding["model_revision"]
+    snapshot.mkdir()
+    seen: list[tuple[str, ...]] = []
+
+    def command(argv: tuple[str, ...]) -> bytes:
+        seen.append(argv)
+        return canonical_json_bytes({
+            "transformers_version": binding["transformers_version"],
+            "tokenizers_version": binding["tokenizers_version"],
+            "episodes": [
+                {"episode_uid": item["episode_uid"], "token_ids": item["token_ids"]}
+                for item in binding["episodes"]
+            ],
+        })
+
+    offline_action_code_tokenizer_receipt(
+        command=command, snapshot=snapshot, tokenizer_binding=binding
+    )
+    assert seen[0][seen[0].index("--entrypoint") + 1] == "/usr/bin/python3"
+
+
+def test_opaque_dgx_preflight_emits_validated_tokenizer_receipt(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    protocol, protocol_sha = g1_micro.load_protocol(_OPAQUE_PROTOCOL)
+    binding = protocol["tokenizer_binding"]
+    receipt = _opaque_tokenizer_receipt_for_test(binding)
+    events: list[str] = []
+
+    class FakeRuntime:
+        def __init__(self, spec: DGXFreshSpec) -> None:
+            self.command = lambda argv: b""
+            self._protocol = protocol
+            self._protocol_sha256 = protocol_sha
+            self._source_commit = "a" * 40
+
+        def _validate(self) -> None:
+            events.append("validate")
+
+    output_root = tmp_path / "output"; output_root.mkdir()
+    cache_root = tmp_path / "cache"; cache_root.mkdir()
+    monkeypatch.setenv("HSWM_OUTPUT_ROOT", str(output_root))
+    monkeypatch.setenv("HSWM_CACHE_ROOT", str(cache_root))
+    monkeypatch.setattr(g1_dgx, "DGXFreshRuntime", FakeRuntime)
+    monkeypatch.setattr(g1_dgx, "offline_action_code_tokenizer_receipt", lambda **_: receipt)
+
+    assert g1_dgx.main([
+        "--protocol", str(_OPAQUE_PROTOCOL), "--model-snapshot", str(tmp_path),
+        "--lock-path", str(tmp_path / "lock"), "--execution-registry", str(tmp_path / "registry"),
+        "--evaluator-reveal", str(tmp_path / "reveal"), "--preflight-only",
+    ]) == 0
+    result = json.loads(capsys.readouterr().out)
+    assert events == ["validate"]
+    assert result["offline_tokenizer_receipt_sha256"] == receipt["receipt_sha256"]
+    assert result["ephemeral_offline_tokenizer_containers"] == 1
+    assert result["network_calls"] == result["service_mutations"] == 0
+
+
+def test_opaque_tokenizer_failure_precedes_fresh_runtime_entry(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    protocol, protocol_sha = g1_micro.load_protocol(_OPAQUE_PROTOCOL)
+    events: list[str] = []
+
+    class FakeRuntime:
+        def __init__(self, spec: DGXFreshSpec) -> None:
+            self.command = lambda argv: b""
+            self._protocol = protocol
+            self._protocol_sha256 = protocol_sha
+
+        def _validate(self) -> None:
+            events.append("validate")
+
+        def __enter__(self) -> "FakeRuntime":
+            events.append("enter")
+            return self
+
+        def __exit__(self, *_: object) -> None:
+            events.append("exit")
+
+    monkeypatch.setattr(g1_dgx, "DGXFreshRuntime", FakeRuntime)
+    monkeypatch.setattr(
+        g1_dgx, "offline_action_code_tokenizer_receipt",
+        lambda **_: (_ for _ in ()).throw(LaunchRefused("tokenizer unavailable")),
+    )
+    with pytest.raises(LaunchRefused, match="tokenizer unavailable"):
+        g1_dgx.run_dgx_micro(_spec(tmp_path))
+    assert events == ["validate"]
 
 
 def test_teardown_restores_only_after_mocked_quiescence(tmp_path: Path) -> None:

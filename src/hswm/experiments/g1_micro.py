@@ -41,6 +41,12 @@ from hswm.selfmod.contracts import canonical_json_bytes, canonical_sha256
 
 PROTOCOL = "hswm-g1-micro-exploratory/v1"
 OPAQUE_PILOT_PROTOCOL = "hswm-g1-opaque-identifiability-pilot/v1"
+OPAQUE_PILOT_STUDY_UID = (
+    "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-2026-08-30"
+)
+OPAQUE_PILOT_SUCCESSOR_STUDY_UID = (
+    "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-v2-2026-08-30"
+)
 STATE_SCHEMA = "hswm-g1-micro-disposition-state/v1"
 RECORD_SCHEMA_PREFIX = "hswm-g1-micro-record/"
 LOCAL_SCOPE_NONCLAIM = (
@@ -62,14 +68,41 @@ DGX_V2_PROTOCOL_PATH = (
     "_research/causal_composition/preregistrations/"
     "g1_opaque_identifiability_pilot_2026-08-30/protocol.v1.json"
 )
-DGX_PROTOCOL_PATHS = frozenset((DGX_TRACKED_SOURCE_PATHS[0], DGX_V2_PROTOCOL_PATH))
+DGX_V2_SUCCESSOR_PROTOCOL_PATH = (
+    "_research/causal_composition/preregistrations/"
+    "g1_opaque_identifiability_pilot_v2_2026-08-30/protocol.v1.json"
+)
+DGX_PROTOCOL_PATHS = frozenset(
+    (
+        DGX_TRACKED_SOURCE_PATHS[0],
+        DGX_V2_PROTOCOL_PATH,
+        DGX_V2_SUCCESSOR_PROTOCOL_PATH,
+    )
+)
+
+
+def dgx_tracked_source_paths_for_protocol_path(
+    protocol_path: str,
+) -> tuple[str, ...]:
+    """Select the exact tracked protocol file without aliasing a successor."""
+
+    if protocol_path == DGX_TRACKED_SOURCE_PATHS[0]:
+        return DGX_TRACKED_SOURCE_PATHS
+    if protocol_path in {DGX_V2_PROTOCOL_PATH, DGX_V2_SUCCESSOR_PROTOCOL_PATH}:
+        return (protocol_path, *DGX_TRACKED_SOURCE_PATHS[1:])
+    raise G1MicroError("DGX protocol path is not canonical")
 
 
 def dgx_tracked_source_paths(protocol: Mapping[str, Any]) -> tuple[str, ...]:
     """Keep historical v1 binding manifests immutable while binding v2's source."""
     if protocol.get("schema_version") == OPAQUE_PILOT_PROTOCOL:
-        return (DGX_V2_PROTOCOL_PATH, *DGX_TRACKED_SOURCE_PATHS[1:])
-    return DGX_TRACKED_SOURCE_PATHS
+        protocol_path = (
+            DGX_V2_SUCCESSOR_PROTOCOL_PATH
+            if protocol.get("study_uid") == OPAQUE_PILOT_SUCCESSOR_STUDY_UID
+            else DGX_V2_PROTOCOL_PATH
+        )
+        return dgx_tracked_source_paths_for_protocol_path(protocol_path)
+    return dgx_tracked_source_paths_for_protocol_path(DGX_TRACKED_SOURCE_PATHS[0])
 TERMINALS = frozenset(
     {
         "INCONCLUSIVE_MEASUREMENT_NOT_READY",
@@ -492,13 +525,30 @@ def _validate_opaque_pilot_protocol(value: Mapping[str, Any]) -> None:
         raise G1MicroError("opaque pilot research order drifted")
     if value.get("nonclaim") != LOCAL_SCOPE_NONCLAIM:
         raise G1MicroError("opaque pilot nonclaim drifted")
+    study_uid = value.get("study_uid")
+    if study_uid not in {
+        OPAQUE_PILOT_STUDY_UID,
+        OPAQUE_PILOT_SUCCESSOR_STUDY_UID,
+    }:
+        raise G1MicroError("opaque pilot study uid is missing or unknown")
+    is_successor = study_uid == OPAQUE_PILOT_SUCCESSOR_STUDY_UID
+    current_evidence = (
+        "The first live G1-shaped micro occurrence closed the local mechanics but all five branches were correct because arithmetic operators, operand, fresh input, and value-coded labels made the task baseline-saturated; its status was INSTRUMENT_VALIDATION_ONLY with G0 NOT_PASSED and G1 NOT_EVALUATED. A predecessor opaque-pilot launch, wrapper run g1-opaque-identifiability-9ff36ce-v1 (wrapper receipt SHA-256 c0c211b5973289aaa51e2bec8a946a455fb0eb09eb1293cd91cbe928f43b2b82; 122880-byte archive SHA-256 c3affb6c95cced2f7fb8673f81dedd5ca06b436654eaf9a87cf56f2aa7498ea6; retained runtime-binding file SHA-256 c68114a17d302bc3ba5c4f75bdb6137e995f0e8fc56a8d672a8d8d75257eef4e), failed before registry claim and before any completion or /tokenize POST because the launcher requested a bare python executable absent from the pinned image. Retained startup metrics reported request_success_total_at_start=0; no behavioral data were produced and neither G0 nor G1 was evaluated."
+        if is_successor
+        else "The first live G1-shaped micro occurrence closed the local mechanics but all five branches were correct because arithmetic operators, operand, fresh input, and value-coded labels made the task baseline-saturated; its status was INSTRUMENT_VALIDATION_ONLY with G0 NOT_PASSED and G1 NOT_EVALUATED."
+    )
+    runtime_scope = (
+        "Before any shared-service mutation or fresh model launch, the pinned image must reproduce the preregistered offline tokenizer receipt through /usr/bin/python3 with Docker network none. One fresh pinned vLLM container is then shared across all eight precommitted episodes. Calls are stateless at the API contract, but cross-episode service-level independence is not established."
+        if is_successor
+        else "One fresh pinned vLLM container is shared across all eight precommitted episodes. Calls are stateless at the API contract, but cross-episode service-level independence is not established."
+    )
     exact_prose = {
         "canonical_role": "A bounded G0 identifiability pilot asking whether the existing local outcome-credit-admission-fresh-probe-remove-restore instrument can produce a discriminating state-mediated signature when the target action mapping is evaluator-only and value leakage is removed.",
         "conceptual_delta": "Replace value-revealing arithmetic labels and a potentially equal outcome-independent sham with episode-secret opaque action codes and an explicitly outcome-dependent forced-opposite-feedback control, while reusing the same one-disposition local Step/Learn-shaped mechanics.",
         "control_boundary": "FORCED_OPPOSITE_FEEDBACK is an outcome-dependent counterfactual-feedback control: it is invalid relative to the genuine outcome but locally credited and admitted under its explicit experimental counterfactual policy. It is not an outcome-independent sham. A later complete G1 still requires a separately defined outcome-independent sham and the full required control family.",
-        "current_evidence": "The first live G1-shaped micro occurrence closed the local mechanics but all five branches were correct because arithmetic operators, operand, fresh input, and value-coded labels made the task baseline-saturated; its status was INSTRUMENT_VALIDATION_ONLY with G0 NOT_PASSED and G1 NOT_EVALUATED.",
+        "current_evidence": current_evidence,
         "evaluator_boundary": "DETERMINISTIC_SAME_PROCESS_LOCAL_INSTRUMENT_NOT_INDEPENDENTLY_OWNED_OR_G0_CF07_SUFFICIENT",
-        "runtime_scope": "One fresh pinned vLLM container is shared across all eight precommitted episodes. Calls are stateless at the API contract, but cross-episode service-level independence is not established.",
+        "runtime_scope": runtime_scope,
         "state_intervention": "One cue-bound opaque action-code disposition is behavior-readable per episode. REMOVE activates that episode's exact empty genesis state; RESTORE reactivates the exact ACTIVE state bytes. Audit records are outside the model behavior readset.",
         "stopping_rule": "Exactly eight precommitted episodes in ordinal order. No retry, replacement, refill, resume, adaptive code/task selection, partial-look adaptation, or second occurrence. A schema-valid proposal that does not follow its feedback rule is retained as NO_CREDIT/NO_ADMISSION and the scheduled episode continues. Any call, parse, or structural failure aborts the study, preserves the exact prefix, consumes the registry, and yields INCONCLUSIVE_MEASUREMENT_NOT_READY.",
     }
@@ -589,9 +639,7 @@ def _validate_opaque_pilot_protocol(value: Mapping[str, Any]) -> None:
         {"artifact_tar_sha256": "1af185776a08486abc0d9911d0d2fcb65d4bebbc8f7451f212adbb88afa8104d", "console_log_sha256": "9b56b184d260a0d5435e8608800154c8e94be82c4f8e212f855ead4464a16d12", "purpose": "SELECTED_FINAL_PAIRWISE_EQUAL_TOKEN_COUNT_CODES", "run_id": "g1-opaque-tokenizer-probe-20260830-v3", "status": "SUCCESS", "wrapper_receipt_sha256": "ac379072ed6bc7b0c10728b2280712cdad7379ec070fc25a716dcf63de9296d8"},
     ]:
         raise G1MicroError("opaque pilot tokenizer selection evidence drifted")
-    if not isinstance(value.get("study_uid"), str) or not value["study_uid"]:
-        raise G1MicroError("opaque pilot study uid is missing")
-    if value["study_uid"] != "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-2026-08-30" or value.get("prior_result_evidence_sha256") != "66730545c95cb537340b85400574e27b37cf18e1594e5408bef5db9100712700":
+    if value.get("prior_result_evidence_sha256") != "66730545c95cb537340b85400574e27b37cf18e1594e5408bef5db9100712700":
         raise G1MicroError("opaque pilot study provenance drifted")
     # Reuse the measured runtime identity contract exactly; it is unrelated to
     # task semantics and prevents a second DGX launcher configuration.

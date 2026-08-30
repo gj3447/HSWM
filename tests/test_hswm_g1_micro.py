@@ -28,6 +28,11 @@ _OPAQUE_PROTOCOL = (
     / "_research/causal_composition/preregistrations/"
     "g1_opaque_identifiability_pilot_2026-08-30/protocol.v1.json"
 )
+_OPAQUE_SUCCESSOR_PROTOCOL = (
+    Path(__file__).parents[1]
+    / "_research/causal_composition/preregistrations/"
+    "g1_opaque_identifiability_pilot_v2_2026-08-30/protocol.v1.json"
+)
 _SNAPSHOT_MANIFEST = (
     Path(__file__).parents[1]
     / "_research/dgx_mi2/preregistrations/"
@@ -856,6 +861,30 @@ def test_opaque_protocol_rejects_threshold_and_public_commitment_drift(
     path.write_bytes(canonical_json_bytes(protocol))
     with pytest.raises(g1_micro.G1MicroError, match="opaque pilot"):
         g1_micro.load_protocol(path)
+
+
+def test_opaque_successor_freeze_changes_only_preclaim_launch_provenance() -> None:
+    predecessor, predecessor_sha = g1_micro.load_protocol(_OPAQUE_PROTOCOL)
+    successor, successor_sha = g1_micro.load_protocol(_OPAQUE_SUCCESSOR_PROTOCOL)
+
+    assert predecessor_sha == "b476af32e231afd5693ead80302a9a8326cd8a5652a07133edd4ed341a334007"
+    assert successor_sha == "eae768f3f42de345bfcc995a5effb085f39c1732bb956fa37c6eab08870a553d"
+    assert successor["episodes"] == predecessor["episodes"]
+    assert successor["analysis"] == predecessor["analysis"]
+    assert successor["arms"] == predecessor["arms"]
+    assert successor["evaluator_reveal_contract"] == predecessor["evaluator_reveal_contract"]
+
+    normalized = deepcopy(successor)
+    for key in ("current_evidence", "runtime_scope", "study_uid"):
+        normalized[key] = predecessor[key]
+    normalized["consumption_registry"] = deepcopy(predecessor["consumption_registry"])
+    assert normalized == predecessor
+    assert g1_micro.dgx_tracked_source_paths(successor)[0] == (
+        g1_micro.DGX_V2_SUCCESSOR_PROTOCOL_PATH
+    )
+    assert g1_micro.dgx_tracked_source_paths_for_protocol_path(
+        g1_micro.DGX_V2_SUCCESSOR_PROTOCOL_PATH
+    )[0] == g1_micro.DGX_V2_SUCCESSOR_PROTOCOL_PATH
 
 
 def test_opaque_pilot_closes_sixty_four_calls_and_exact_reveal_start_seal(

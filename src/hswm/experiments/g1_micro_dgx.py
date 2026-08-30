@@ -79,7 +79,7 @@ def offline_action_code_tokenizer_receipt(
         "docker", "run", "--rm", "--network", "none", "--ipc", "none", "--read-only",
         "--tmpfs", "/tmp:rw,noexec,nosuid,size=64m",
         "--mount", f"type=bind,src={snapshot.parents[1]},dst=/model-repository,readonly",
-        "--entrypoint", "python", image, "-c", program, payload, snapshot.name,
+        "--entrypoint", "/usr/bin/python3", image, "-c", program, payload, snapshot.name,
     ))
     try:
         observed = json.loads(raw.decode("utf-8", "strict"))
@@ -103,12 +103,32 @@ def offline_action_code_tokenizer_receipt(
         "episodes": [{**entry, "action_codes": item["action_codes"]} for entry, item in zip(normalized, public, strict=True)],
         "tokenizers_version": observed["tokenizers_version"], "transformers_version": observed["transformers_version"],
     }
+    result = {**receipt, "receipt_sha256": sha256(canonical_json_bytes(receipt)).hexdigest()}
     if tokenizer_binding is not None:
-        expected = {key: tokenizer_binding.get(key) for key in receipt}
-        expected["schema_version"] = "hswm-g1-opaque-offline-tokenizer-receipt/v1"
-        if receipt != expected:
-            raise LaunchRefused("offline tokenizer receipt differs from preregistered binding")
-    return {**receipt, "receipt_sha256": sha256(canonical_json_bytes(receipt)).hexdigest()}
+        _validate_opaque_tokenizer_receipt(result, tokenizer_binding)
+    return result
+
+
+def _validate_opaque_tokenizer_receipt(
+    receipt: Mapping[str, Any], tokenizer_binding: Mapping[str, Any]
+) -> None:
+    """Recheck the pre-mutation measurement against the exact frozen binding."""
+
+    unsigned = dict(receipt)
+    digest = unsigned.pop("receipt_sha256", None)
+    expected = {
+        "schema_version": "hswm-g1-opaque-offline-tokenizer-receipt/v1",
+        **{
+            key: tokenizer_binding.get(key)
+            for key in (
+                "container_image", "container_image_id", "model_repository",
+                "model_revision", "snapshot_manifest_sha256", "encoding",
+                "transformers_version", "tokenizers_version", "episodes",
+            )
+        },
+    }
+    if not isinstance(digest, str) or digest != sha256(canonical_json_bytes(unsigned)).hexdigest() or unsigned != expected:
+        raise LaunchRefused("offline tokenizer receipt differs from preregistered binding")
 
 
 @dataclass(frozen=True, slots=True, kw_only=True)
@@ -293,13 +313,11 @@ class DGXFreshRuntime:
         )
         if re.fullmatch(r"[0-9a-f]{40}", self._source_tree) is None:
             raise LaunchRefused("G1 micro DGX source tree is invalid")
-        if spec.protocol_path.relative_to(spec.repo_root).as_posix() not in g1_micro.DGX_PROTOCOL_PATHS:
+        protocol_relative = spec.protocol_path.relative_to(spec.repo_root).as_posix()
+        if protocol_relative not in g1_micro.DGX_PROTOCOL_PATHS:
             raise LaunchRefused("G1 micro DGX protocol path is not canonical")
-        selected_paths = (
-            g1_micro.DGX_TRACKED_SOURCE_PATHS
-            if spec.protocol_path.relative_to(spec.repo_root).as_posix()
-            == g1_micro.DGX_TRACKED_SOURCE_PATHS[0]
-            else (g1_micro.DGX_V2_PROTOCOL_PATH, *g1_micro.DGX_TRACKED_SOURCE_PATHS[1:])
+        selected_paths = g1_micro.dgx_tracked_source_paths_for_protocol_path(
+            protocol_relative
         )
         for relative in selected_paths:
             current = (spec.repo_root / relative).read_bytes()
@@ -310,7 +328,7 @@ class DGXFreshRuntime:
                 raise LaunchRefused("G1 micro DGX source differs from its commit")
             self._tracked_source_sha256[relative] = sha256(current).hexdigest()
         self._protocol_file_sha256 = self._tracked_source_sha256[
-            spec.protocol_path.relative_to(spec.repo_root).as_posix()
+            protocol_relative
         ]
         self._protocol, self._protocol_sha256 = g1_micro.load_protocol(
             spec.protocol_path
@@ -787,9 +805,31 @@ def verify_dgx_execution_receipt(
     }
 
 
+def _prepare_opaque_tokenizer_before_runtime_mutation(
+    spec: DGXFreshSpec,
+) -> tuple[str, dict[str, Any] | None]:
+    """Validate and measure before stopping services or launching vLLM."""
+
+    preflight = DGXFreshRuntime(spec)
+    preflight._validate()
+    assert preflight._protocol is not None
+    if preflight._protocol.get("schema_version") != g1_micro.OPAQUE_PILOT_PROTOCOL:
+        return preflight._protocol_sha256, None
+    receipt = offline_action_code_tokenizer_receipt(
+        command=preflight.command,
+        snapshot=spec.model_snapshot,
+        tokenizer_binding=preflight._protocol["tokenizer_binding"],
+    )
+    _validate_opaque_tokenizer_receipt(receipt, preflight._protocol["tokenizer_binding"])
+    return preflight._protocol_sha256, receipt
+
+
 def run_dgx_micro(spec: DGXFreshSpec) -> dict[str, Any]:
     """Run the official one-shot slice and retain the runtime lifecycle receipt."""
 
+    prepared_protocol_sha256, tokenizer_receipt = (
+        _prepare_opaque_tokenizer_before_runtime_mutation(spec)
+    )
     with DGXFreshRuntime(spec) as runtime:
         if runtime.runtime_binding is None:
             raise LaunchRefused("G1 micro DGX startup binding is absent")
@@ -798,14 +838,14 @@ def run_dgx_micro(spec: DGXFreshSpec) -> dict[str, Any]:
             canonical_json_bytes(runtime.runtime_binding),
         )
         assert runtime._protocol is not None
+        if runtime._protocol_sha256 != prepared_protocol_sha256:
+            raise LaunchRefused("G1 micro DGX protocol drifted after tokenizer preflight")
         binding = runtime._protocol["live_binding"]
-        tokenizer_receipt = None
         if runtime._protocol.get("schema_version") == g1_micro.OPAQUE_PILOT_PROTOCOL:
-            # This occurs after fresh runtime validation but before the core
-            # registry claim and therefore before the first model POST.
-            tokenizer_receipt = offline_action_code_tokenizer_receipt(
-                command=runtime.command, snapshot=spec.model_snapshot,
-                tokenizer_binding=runtime._protocol["tokenizer_binding"],
+            if tokenizer_receipt is None:
+                raise LaunchRefused("opaque tokenizer preflight receipt is absent")
+            _validate_opaque_tokenizer_receipt(
+                tokenizer_receipt, runtime._protocol["tokenizer_binding"]
             )
         bundle = g1_micro.run_exploratory_slice(
             protocol_path=spec.protocol_path,
@@ -905,10 +945,29 @@ def main(argv: list[str] | None = None) -> int:
     if args.preflight_only:
         runtime = DGXFreshRuntime(spec)
         runtime._validate()
+        tokenizer_receipt = None
+        assert runtime._protocol is not None
+        if runtime._protocol.get("schema_version") == g1_micro.OPAQUE_PILOT_PROTOCOL:
+            tokenizer_receipt = offline_action_code_tokenizer_receipt(
+                command=runtime.command,
+                snapshot=spec.model_snapshot,
+                tokenizer_binding=runtime._protocol["tokenizer_binding"],
+            )
+            _validate_opaque_tokenizer_receipt(
+                tokenizer_receipt, runtime._protocol["tokenizer_binding"]
+            )
         print(
             canonical_json_bytes(
                 {
+                    "ephemeral_offline_tokenizer_containers": (
+                        1 if tokenizer_receipt is not None else 0
+                    ),
                     "network_calls": 0,
+                    "offline_tokenizer_receipt_sha256": (
+                        None
+                        if tokenizer_receipt is None
+                        else tokenizer_receipt["receipt_sha256"]
+                    ),
                     "protocol_canonical_sha256": runtime._protocol_sha256,
                     "service_mutations": 0,
                     "source_commit": runtime._source_commit,

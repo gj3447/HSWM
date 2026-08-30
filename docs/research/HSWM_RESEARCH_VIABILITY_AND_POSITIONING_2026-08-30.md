@@ -6,10 +6,15 @@
 >
 > **기준일:** 2026-08-30
 >
-> **권위 경계:** 이 문서는 USER_PRIMARY HSWM 정체성과 여덟 FCL 법칙을
-> 변경하지 않는다. 현재 문헌과 체크인 증거를 바탕으로 연구를 계속할 가치,
-> 중단 조건과 다음 판별 실험을 정리한 `SECONDARY_AI` 판단이다. 아래의 가망성
+> **권위 경계:** 이 문서는 USER_PRIMARY HSWM 정체성과 사용자가 제시한 여덟 연구
+> 질문의 중요성을 변경하지 않는다. 기존 FCL-1부터 FCL-8까지의 수식·판별 계약과
+> claim ceiling은 `SECONDARY_AI` 형식화로서 그대로 둔다. 현재 문헌과 체크인 증거를 바탕으로 연구를 계속할 가치,
+> mechanism·testbed의 retirement/reroute 조건과 다음 판별 실험을 정리한
+> `SECONDARY_AI` 판단이다. 아래의 가망성
 > 평가는 측정된 확률이나 이미 달성된 효능 주장이 아니다.
+> 최종 target은 유지하고 알고리즘·방법론을 교체한다는 후속 USER_PRIMARY 방향은
+> [`HSWM Adaptive Research Strategy`](../canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)가
+> 이 문서의 `축소·중단` 표현을 target이 아니라 exact empirical path에 한정한다.
 
 ## 1. 결론
 
@@ -28,8 +33,10 @@ independently grounded outcome
 이 핵이 성립하고 강한 대조군 대비 결과가 독립 재현되면 HSWM은 단순 persistent
 memory, RAG, prompt adaptation 또는 static orchestration을 넘어서는 bounded local
 causal revision의 발견 후보가 된다. 성립하지 않으면 HSWM은
-유용한 memory·agent-state·provenance infrastructure로 남을 수 있지만, causal learner라는
-중심 주장은 좁히거나 기각해야 한다.
+유용한 memory·agent-state·provenance infrastructure를 만들었더라도 그 결과를 HSWM causal
+learning으로 승격하지 않는다. 시험한 revision·credit·testbed family는 `RED_WITHIN_SCOPE`로
+종료하거나 명시적 successor로 교체하고, causal-learner target은 지지되지 않은
+`UNJUDGED` 상태로 유지한다.
 
 프랙탈 HSWM-of-HSWMs는 그다음 문제다. 두 개 이상의 독립적으로 검증된 HSWM이
 합성될 때 composite도 동일한 `Step / Learn / Inv / Permit / lineage` 계약을 가져야
@@ -155,17 +162,19 @@ HSWM은 “더 지능적으로 보인다”가 아니라 revision identity를 �
 sham·wrong-target·shuffled credit과 비교할 수 있다. 효과가 없어지지 않으면 HSWM
 state가 원인이 아니었다고 판정할 수 있다.
 
-### 6.3 국소 성공과 거대 비전을 분리할 수 있다
+### 6.3 국소 판정과 최종 target을 분리할 수 있다
 
 G1의 성공은 그 자체로 제한된 local scientific result가 될 수 있다. G5가 실패해도
-G1을 보존할 수 있고, G1이 실패하면 거대 society-scale 구현 전에 멈출 수 있다.
+G1을 보존할 수 있다. G1이 실패하면 거대 society-scale 구현으로 도피하지 않고 그 exact
+mechanism path를 멈춘 뒤 predecessor와 대체 방법으로 돌아갈 수 있다.
 
 ### 6.4 강한 음성 결과도 정보를 준다
 
 simple RAG나 text lesson이 HSWM과 같거나 더 좋다면 복잡한 canonical organization의
 추가 가치가 없다는 중요한 경계가 생긴다. pairwise graph가 hypergraph와 같다면
-n-ary claim을 줄일 수 있다. 이는 결과를 살리기 위한 사후 변경이 아니라 사전 지정된
-연구 축소다.
+그 task와 representation에서 n-ary increment를 주장할 수 없다. 이는 최종 target을
+축소하는 것이 아니라 실패한 realization family의 claim ceiling을 고정하고, 실패 계보를
+보존한 다른 mechanism·task로 우회하기 위한 정보다.
 
 ### 6.5 reuse-first로 비용을 제한할 수 있다
 
@@ -216,8 +225,8 @@ base capability로 풀 수 없지만 bounded experience로 학습 가능한 head
 - 더 강한 base model이 HSWM benefit보다 harness 해석 비용을 더 많이 부담한다;
 - G1이 닫히지 않았는데 topology, world-self, society-scale 구현을 병렬 확장한다.
 
-이 경우 해결책은 새 gate를 더하는 것이 아니라 experiment를 축소하거나 해당 mechanism을
-중단하는 것이다. 권리·permission·rollback처럼 헌법적 안전비용은 일반 orchestration
+이 경우 해결책은 새 gate를 더하는 것이 아니라 experiment의 intervention을 다시 bounded하게
+만들고 해당 mechanism을 retire하거나 새 경로로 교체하는 것이다. 권리·permission·rollback처럼 헌법적 안전비용은 일반 orchestration
 burden과 분리해 유지한다.
 
 ### 7.7 선행연구보다 늦어지는 위험
@@ -292,19 +301,19 @@ G5의 첫 대상은 사회나 무한 recursion이 아니라 독립 G1–G4 PASS�
 intervention으로 설명되지 않는 total macro effect가 있어야 한다. member identity,
 credit, rights, consent, exit, provenance와 rollback도 분리 가능해야 한다.
 
-## 9. 명시적 go, narrow, stop 판정
+## 9. 명시적 go, reroute, retire 판정
 
 | 관측 | 판정 | 다음 행동 |
 |---|---|---|
 | G1에서 `H1`이 strong baselines를 이기고 remove/restore와 credit controls가 mediation을 확인 | `LOCAL_CAUSAL_REVISION_CANDIDATE` | independent replication 뒤 G2a/G2b로 진행 |
-| stateful gain은 있으나 RAG/text lesson/skill과 동률 | `MEMORY_OR_HARNESS_ADAPTATION_ONLY` | 유용한 engineering으로 보존하고 HSWM-specific causal novelty를 주장하지 않음 |
+| stateful gain은 있으나 RAG/text lesson/skill과 동률 | `MEMORY_OR_HARNESS_ADAPTATION_ONLY` | 유용한 engineering과 동률 evidence를 보존하고, 해당 HSWM mechanism을 다른 causal delta로 교체 |
 | gain이 removal 뒤에도 남음 | `REVISION_NOT_IDENTIFIED_AS_CAUSE` | hidden state·prompt·cache confound를 찾고 동일 claim 승격 중단 |
-| valid하고 충분한 G1에서 반복적으로 separation 없음 | `REVISION_FAMILY_RED` | 해당 revision family를 종료하거나 더 좁은 새 가설로 명시적으로 교체 |
-| G1–G4는 통과하지만 G5가 federation·wrapper·central control과 분리되지 않음 | `LOCAL_HSWM_ONLY / FRACTAL_CLAIM_REJECTED_OR_UNJUDGED` | local result 보존, HSWM-of-HSWMs와 society-scale 주장 금지 |
+| valid하고 충분한 G1에서 반복적으로 separation 없음 | `REVISION_FAMILY_RED` | 해당 family를 종료하고, distinct conceptual delta와 같거나 더 강한 판별선을 가진 successor로 교체 |
+| G1–G4는 통과하지만 G5가 federation·wrapper·central control과 분리되지 않음 | `DECLARED_COMPOSITION_PATH_RED / FCL-8 UNJUDGED` | local result와 음성 evidence를 보존하고 alternative macro boundary·composition mechanism으로 우회; 현 HSWM-of-HSWMs와 society-scale 양성 주장 금지 |
 | two-scale macro effect와 same-type contract가 독립 재현됨 | `BOUNDED_FRACTAL_CAUSAL_COMPOSITION_CANDIDATE` | G6 replication·scale stress; 의식이나 무한 closure로 자동 확장하지 않음 |
 
-이 표의 `RED`와 `REJECTED`도 과학적 성과다. 실패를 ontology나 새 이름으로 우회하지
-않는 것이 HSWM 연구의 신뢰성을 만든다.
+이 표의 `RED`도 과학적 성과다. 허용되는 우회는 실패를 ontology나 새 이름으로 숨기는 것이
+아니라, 이전 evidence를 살린 채 다른 algorithm·method를 새 사전등록으로 시험하는 것이다.
 
 ## 10. 발견이라고 부를 수 있는 문턱
 
@@ -359,7 +368,7 @@ world-self continuity와 two-scale same-type composition이 순서대로 통과�
 
 HSWM을 지금 중단할 이유는 없다. 작은 G1의 비용에 비해 얻을 수 있는 정보가 크고,
 인접 연구가 구성 mechanism의 가능성을 충분히 보여주며, 성공과 실패가 모두 명시적인
-연구 축소로 이어질 수 있기 때문이다.
+mechanism disposition과 다음 경로 선택으로 이어질 수 있기 때문이다.
 
 그러나 full HSWM platform을 먼저 건설할 이유도 없다. 현재 가장 합리적인 투자는
 “거대한 HSWM이 가능하다”는 믿음이 아니라 다음 문장을 가장 작은 실험에서 판정하는 데
@@ -372,12 +381,16 @@ HSWM을 지금 중단할 이유는 없다. 작은 G1의 비용에 비해 얻을 
 `LOCAL_CAUSAL_REVISION_UNDER_DECLARED_TASK` 후보 evidence를 얻고, 독립 재현 뒤에만
 bounded local causal learner 결과로 승격할 수 있다. 그다음 credit, coalition,
 topology, world-self와 bounded composition을 한 단계씩 추가할 근거가 생긴다.
-`아니오`가 나오면 HSWM을 유용한 substrate로 축소하거나 해당 mechanism을 폐기한다.
+`아니오`가 나오면 그 결과를 HSWM 성공으로 부르지 않고 해당 mechanism을 폐기한다. 최종
+HSWM target은 그대로 유지하고 기존 SECONDARY_AI FCL 판별선은 약화하지 않되, 실패 evidence·claim ceiling·conceptual delta를
+결속한 successor algorithm과 방법론으로 우회한다.
 이 명확한 양방향 판정 가능성이 HSWM 연구에 현재 가장 큰 가망을 준다.
 
 ## 13. 관련 정본과 상세 문서
 
 - 대상 정체성: [`HSWM_CONSTITUTION_2026-08-20.md`](../canon/HSWM_CONSTITUTION_2026-08-20.md)
+- 목표 지속·경로 교체 정본: [`HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md`](../canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)
+- reroute 상태기계와 방법론: [`HSWM_ADAPTIVE_REALIZATION_METHODOLOGY_2026-08-30.md`](./HSWM_ADAPTIVE_REALIZATION_METHODOLOGY_2026-08-30.md)
 - reuse-first 구현 경계: [`HSWM_REUSE_FIRST_ARCHITECTURE_2026-08-30.md`](./HSWM_REUSE_FIRST_ARCHITECTURE_2026-08-30.md)
 - 여덟 FCL 법칙과 과학 연결: [`HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md`](./HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md)
 - ordered gate와 control 계약: [`causal_composition`](../../_research/causal_composition/)

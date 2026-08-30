@@ -45,6 +45,18 @@ defines concepts and relationships; the filesystem and typed-directory
 conventions remain the source of truth for current paths. A checked-in catalog
 of every repository path is intentionally not part of this navigation layer.
 
+The cross-cutting research rule is defined by the
+[`adaptive research strategy canon`](../docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)
+and its
+[`typed KG projection`](identity/hswm_core/HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json):
+the USER_PRIMARY final fractal target and eight stated research questions stay
+in scope. Existing FCL-1..8 operational contracts and claim ceilings remain
+SECONDARY_AI formalizations and stay unchanged or stronger, while concrete
+algorithms, methods, models, backends, testbeds, and paths remain replaceable.
+RED evidence is preserved and successor routes keep the same or stronger controls. This
+crosses identity, learning, evaluation, and evidence without turning every
+repository file into a KG node.
+
 ## Important boundary
 
 This ontology organizes source and evidence; it is not a hand-written AI

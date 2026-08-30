@@ -54,6 +54,21 @@ depth axes, learning rules, and implementation decomposition below are explicit
 `SECONDARY_AI` formalizations of that direction. Target identity is not present
 capability; the scientific status remains `UNJUDGED`.
 
+The target is also persistent while its realization path is adaptive. The
+[`USER_PRIMARY adaptive research strategy`](docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)
+keeps the final fractal HSWM target and the user's eight stated research
+questions in scope. The FCL-1..8 operational contracts, acceptance criteria,
+and claim ceilings remain explicitly `SECONDARY_AI` and unchanged or stronger,
+while algorithms, methods, models, backends, testbeds, and research paths may
+be replaced. A failed mechanism remains `RED_WITHIN_SCOPE` with its evidence
+lineage preserved; it is not renamed as success and does not reduce or support
+the final target. The operational
+[`methodology`](docs/research/HSWM_ADAPTIVE_REALIZATION_METHODOLOGY_2026-08-30.md)
+and bounded
+[`KG projection`](ontology/identity/hswm_core/HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json)
+encode that separation. This is a research commitment, not a guarantee that
+HSWM is already realizable or will necessarily succeed.
+
 **Why fractal:** an HSWM that binds LLMs and other cognitive entities is meant
 to operate as one scale-relative larger cognitive entity. That whole can then
 participate as an addressable cognitive cell in a still larger HSWM under the
@@ -82,8 +97,8 @@ outcome-bound recurrence across HSWM scales. Their
 is `UNJUDGED`; it does not restore retired LakatoTree governance machinery.
 
 The cross-program
-[`causal-composition research order`](_research/causal_composition/) now fixes
-the dependency spine from measurement integrity through local causal revision,
+[`causal-composition research order`](_research/causal_composition/) currently
+supplies the active dependency spine from measurement integrity through local causal revision,
 counterfactual credit, dynamic n-ary coalition, morphogenesis, world-self
 continuity, two-scale composition, and bounded replication. Its
 [`metacognitive control ontology`](ontology/identity/hswm_core/HSWM_CAUSAL_COMPOSITION_RESEARCH_ONTOLOGY.v1.json)
@@ -1134,7 +1149,9 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | Why did the earlier fixed-role uniqueness audit fail? | [`superseded dependent-factorization audit`](docs/research/HSWM_DEPENDENT_FACTORIZATION_GRAPH_ENGINEERING_AUDIT_2026-08-26.md) |
 | What is the Human Universal Body and HSWM Human Complementation Plan? | [`Human Universal Body distinction`](docs/canon/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md) |
 | How directly does Hyperon 2026 overlap, and what is actually implemented? | [`Hyperon 2026 direct-prior deep dive`](docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md) |
-| Is HSWM scientifically viable, where does it sit against prior work, and what result should decide whether to continue? | [`HSWM research viability and positioning`](docs/research/HSWM_RESEARCH_VIABILITY_AND_POSITIONING_2026-08-30.md) |
+| What stays fixed while failed HSWM algorithms and methods are replaced? | [`USER_PRIMARY adaptive research strategy`](docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md) |
+| How is a RED path retired and a successor route preregistered without moving the goalposts? | [`adaptive realization methodology`](docs/research/HSWM_ADAPTIVE_REALIZATION_METHODOLOGY_2026-08-30.md) |
+| Is HSWM scientifically viable, where does it sit against prior work, and which bounded mechanism should be retained or rerouted? | [`HSWM research viability and positioning`](docs/research/HSWM_RESEARCH_VIABILITY_AND_POSITIONING_2026-08-30.md) |
 | How were fragmented identity, mathematics, runtime, learning, and evidence meanings joined before the 2026-08-26 supersession? | [`historical HSWM unified meaning map`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md) |
 | Why replace static agent glue, and what is token learning? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) |
 | How did the earlier fixed `H/W/A/F` architecture describe LLM functions? | [`historical HSWM LLM-function architecture`](docs/canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) |

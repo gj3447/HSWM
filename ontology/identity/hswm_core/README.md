@@ -1,5 +1,36 @@
 # HSWM core responsibility ontology
 
+## Current adaptive realization strategy
+
+The USER_PRIMARY direction preserves the final fractal HSWM target and the
+importance of the user's eight stated research questions. The FCL-1..8
+operational contracts, acceptance criteria, and claim ceilings remain
+SECONDARY_AI formalizations and stay unchanged or stronger while failed
+algorithms, methods, models, backends, testbeds, and active research paths are
+replaced. The exact source, authority boundary, and
+anti-immunization rule are in the
+[`adaptive research strategy canon`](../../../docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md).
+Its dedicated
+[`HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json`](HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json)
+contains five target invariants, nine replaceable mechanism families, eight
+disposition states, and six reroute guardrails. A RED path keeps its evidence,
+retires the exact mechanism in scope, and reaches a successor only through a
+new preregistered contract with unchanged or stronger controls.
+
+Build, validate, and publish only through the dedicated fail-closed paths:
+
+```bash
+uv run python scripts/build_hswm_adaptive_research_strategy_ontology.py --check
+uv run --extra kg python scripts/upsert_hswm_adaptive_research_strategy.py
+uv run --extra kg python scripts/upsert_hswm_adaptive_research_strategy.py \
+  --apply --source-config ~/.config/symposium-ontology/source.yaml
+```
+
+The projection is a research-direction interface, not HSWM cognition,
+learning, efficacy, consciousness, personhood, or scale closure. Target
+persistence does not protect any empirical mechanism from falsification or
+raise its claim ceiling.
+
 ## Current causal-composition research order and controls
 
 The cross-program

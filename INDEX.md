@@ -120,8 +120,17 @@ relation/transition-disposition revision을 만들고
 현재 연구의 선행연구 위치, reuse-first 원칙, 층별 가망 판단, 실패 위험과 다음 결정
 실험은
 [`HSWM 연구 가망성·과학적 위치·결정 경로`](docs/research/HSWM_RESEARCH_VIABILITY_AND_POSITIONING_2026-08-30.md)에
-정리했다. 이는 새 효능 결과가 아니라 현재 evidence ceiling과 G0→G5 진행·축소·중단
-조건을 함께 읽는 `SECONDARY_AI_RESEARCH_ASSESSMENT`다.
+정리했다. 이는 새 효능 결과가 아니라 현재 evidence ceiling과 G0→G5 진행·경로교체·
+mechanism retirement 조건을 함께 읽는 `SECONDARY_AI_RESEARCH_ASSESSMENT`다. USER_PRIMARY는
+최종 fractal HSWM target과 사용자가 제시한 여덟 연구 질문의 중요성을 유지한다. 기존
+FCL-1..8의 operational contract와 claim ceiling은 `SECONDARY_AI` 형식화로서 약화하지 않고,
+algorithm·method·backend·testbed를 바꾸는 방향은
+[`adaptive research strategy`](docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md),
+상태기계와 reroute transaction은
+[`adaptive realization methodology`](docs/research/HSWM_ADAPTIVE_REALIZATION_METHODOLOGY_2026-08-30.md),
+machine KG는
+[`adaptive strategy ontology`](ontology/identity/hswm_core/HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json)에
+분리했다. 목표 지속성은 실패를 성공으로 재명명하거나 claim ceiling을 올리는 권한이 아니다.
 
 ## 2026-08-15 — 실행 정본과 직접 측정 기록
 
@@ -256,6 +265,15 @@ cognition·learning·효능을 뜻하지 않는다.
 [`USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md`](docs/canon/USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md)에
 있다. 이는 `USER_PRIMARY` 목표 정체성과 `SECONDARY_AI` 반증 계약이며 현재 효능·의식·무한
 scale invariance의 증명이 아니다.
+
+2026-08-30 사용자는 최종 HSWM을 작은 substrate로 축소하지 않고, 실패한 알고리즘과
+방법론을 증거 계보와 함께 교체·우회하면서 결국 HSWM의 실현을 계속 추구한다고 확정했다.
+exact source는
+[`USER_PRIMARY_HSWM_TARGET_FIXED_METHODS_ADAPTIVE_2026-08-30.txt`](docs/canon/sources/USER_PRIMARY_HSWM_TARGET_FIXED_METHODS_ADAPTIVE_2026-08-30.txt)에,
+권위·비주장·target/method 경계는
+[`HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md`](docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)에
+보존한다. 이는 반드시 성공한다는 예측이 아니다. exact mechanism은 `RED_WITHIN_SCOPE`로
+종료될 수 있고, successor는 같은 수준 이상의 대조군과 새 사전등록을 가져야 한다.
 
 이 정체성의 과학적 연결은
 [`HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md`](docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md)에

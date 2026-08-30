@@ -12,6 +12,14 @@ then follow the preserved
 [token-learning direction](../../docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md)
 and [The World Remembers](../../docs/canon/THE_WORLD_REMEMBERS.md).
 
+The final target remains stable while realization paths are replaceable. The
+[`USER_PRIMARY adaptive research strategy`](../../docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)
+and its
+[`machine ontology`](hswm_core/HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json)
+separate target invariants from algorithms, methods, evidence dispositions, and
+lineage-preserving reroute decisions. The commitment is not evidence or a
+guarantee of success; each empirical mechanism remains falsifiable in scope.
+
 The checked-in [`hswm_core/`](hswm_core/) bundle records the superseded fixed
 `H/W/A/F/Π` responsibility v1. It is retained unchanged as a historical,
 hash-bound compatibility and reproducibility artifact; it is not the current

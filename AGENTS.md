@@ -18,6 +18,20 @@
   `SCIENTIFICALLY_CONNECTED / INTEGRATED_CLAIM_UNJUDGED`: the cited theories
   establish typed connections and falsifiable bridges, not evidence that HSWM
   already realizes consciousness, selfhood, or scale-invariant causal closure.
+- For research strategy, failed mechanisms, or route changes, next read
+  `docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md` and its KG
+  projection
+  `ontology/identity/hswm_core/HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json`
+  (bundle UID
+  `sym:AbstractNode:hswm-adaptive-research-strategy-ontology-2026-08-30`).
+  The USER_PRIMARY commitment preserves the final fractal HSWM target and the
+  importance of the user's eight stated research questions. Preserve the
+  existing FCL-1..8 operational contracts and claim ceilings as SECONDARY_AI
+  formalizations while allowing algorithms, methods, backends, testbeds, and
+  the active research path to be replaced. A valid negative result retires or reroutes its exact
+  mechanism family with evidence lineage intact; it neither shrinks the target
+  nor counts as support for it. Never weaken a success criterion, delete a RED
+  path, rename failure, or use downstream scale to rescue an upstream failure.
 - For philosophy, research direction, or architecture work, establish the
   canonical role, separate target identity from current evidence, and state the
   conceptual delta before implementing. Do not default to code or tests.

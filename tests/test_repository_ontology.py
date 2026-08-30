@@ -31,6 +31,29 @@ def test_repository_ontology_graph_is_closed() -> None:
     validate_graph(load_repository_ontology())
 
 
+def test_adaptive_research_strategy_is_a_cross_cutting_bounded_projection() -> None:
+    data = load_repository_ontology()
+    strategy = data["adaptive_research_strategy"]
+
+    assert strategy["status"] == (
+        "TARGET_IDENTITY_FIXED_METHODS_ADAPTIVE_SCIENTIFICALLY_UNJUDGED"
+    )
+    assert strategy["bundle_uid"] == (
+        "sym:AbstractNode:hswm-adaptive-research-strategy-ontology-2026-08-30"
+    )
+    assert strategy["cross_cutting_concepts"] == [
+        "hswm:repo:identity",
+        "hswm:repo:learning",
+        "hswm:repo:evaluation",
+        "hswm:repo:evidence",
+    ]
+    for key in ("canonical_direction", "methodology", "ontology_projection"):
+        path = ROOT / strategy[key]
+        assert path.is_file()
+        assert not path.is_symlink()
+    assert "not a guarantee" in data["nonclaims"][-1]
+
+
 def test_checkout_summary_is_derived_from_the_frozen_baseline() -> None:
     data = load_repository_ontology()
     paths, from_git = repository_paths()

@@ -50,7 +50,7 @@ def test_lease_validates_then_attests_and_restores(tmp_path: Path, monkeypatch: 
     manifest_raw = canonical_json_bytes({"fixture": True})
     monkeypatch.setattr(dgx, "SNAPSHOT_MANIFEST_SHA256", sha256(manifest_raw).hexdigest())
     monkeypatch.setattr(dgx, "build_model_snapshot_manifest", lambda *_args, **_kwargs: {"fixture": True})
-    state = {"started": False}
+    state = {"started": False, "success_total": 0}
     inspect = lambda: json.dumps([{"Id": "a" * 64, "Image": dgx.IMAGE_ID,
         "Config": {"Image": dgx.IMAGE, "Cmd": list(dgx.expected_server_argv()), "Env": list(dgx.CONTAINER_ENVIRONMENT)},
         "HostConfig": {"NetworkMode": "bridge", "IpcMode": "private", "PortBindings": {"8000/tcp": [{"HostIp": "127.0.0.1", "HostPort": "18080"}]}}, "State": {"StartedAt": "now", "Running": True}}]).encode()
@@ -67,21 +67,32 @@ def test_lease_validates_then_attests_and_restores(tmp_path: Path, monkeypatch: 
         if argv[:2] == ("docker", "inspect"): return inspect()
         if argv[:3] == ("docker", "rm", "-f"): state["started"] = False; return b"a\n"
         raise AssertionError(argv)
-    metrics = b"vllm:num_requests_running 0\nvllm:request_success_total 0\nvllm:prefix_cache_hits_total 0\nvllm:prefix_cache_queries_total 0\n"
     def get(url: str) -> bytes:
         if url.endswith("/v1/models"): return b'{"data":[{"id":"qwen3.6-35b-a3b"}]}'
         if url.endswith("/version"): return b'{"version":"0.25.1"}'
-        if url.endswith("/metrics"): return metrics
+        if url.endswith("/metrics"):
+            return (
+                "vllm:num_requests_running 0\n"
+                f"vllm:request_success_total {state['success_total']}\n"
+                "vllm:prefix_cache_hits_total 0\n"
+                "vllm:prefix_cache_queries_total 0\n"
+            ).encode()
         raise AssertionError(url)
     lease = dgx.B0DgxLease(spec, command=command, http_get=get,
                             stop_services=lambda stopped: events.append("stop") or [("vllm", "b" * 64)],
                             restore_services=lambda stopped: events.append("restore"))
     with lease:
         assert lease.startup is not None
-        assert lease.attest(0, 0)["metrics"] == metrics
+        assert lease.attest(0, 0)["metrics"] == get("http://127.0.0.1:18080/metrics")
+        state["success_total"] = 3
+        assert lease.attest(2, 3)["metrics"] == get("http://127.0.0.1:18080/metrics")
+        state["success_total"] = 5
+        with pytest.raises(dgx.LaunchRefused, match="service attestation"):
+            lease.attest(2, 3)
+        state["success_total"] = 3
         with pytest.raises(dgx.LaunchRefused, match="request count"):
             lease.attest(241, 240)
-    assert lease.final is not None and lease.final["metrics"] == metrics
+    assert lease.final is not None and lease.final["metrics"] == get("http://127.0.0.1:18080/metrics")
     assert events == ["stop", "restore"]
 
 

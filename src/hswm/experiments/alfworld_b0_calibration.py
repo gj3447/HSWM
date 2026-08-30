@@ -59,6 +59,22 @@ VALID_SEEN_EPISODES = 4
 SCHEDULED_EPISODES = TRAIN_EPISODES + VALID_SEEN_EPISODES
 COMPLETION_TIMEOUT_SECONDS = 120
 MAX_OCCURRENCE_WALL_SECONDS = 36_000
+DGX_RUNTIME_QUALIFICATION = {
+    "path": "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json",
+    "file_sha256": "a641218babb759159714f02fd539cf508997991f9469731788353941fb98595d",
+    "receipt_sha256": "1723986c3203add3cac0fe121b3cf110830c49e9873cccd737cef95a43b01422",
+    "status": "ENGINEERING_INSTRUMENT_QUALIFIED_DGX_ARM64_G0_NOT_PASSED",
+    "evidence_commit": "dd395b7cbacf7b5204453043ce67ef8b17db52d6",
+}
+VLLM_METRICS_QUALIFICATION = {
+    "path": "manifests/HSWM_ALFWORLD_B0_VLLM_METRICS_QUALIFICATION_2026-08-30.json",
+    "file_sha256": "5a3e2ddfae77d37e1e858ebc42267b76a61805dc3dc4fcce92ec2fd706464b12",
+    "receipt_sha256": "a1d40c17ad3b38f2d84f864821a50b91c0285c04b98af966c4effe4ceb05d4ca",
+    "private_receipt_file_sha256": "94971d57e8f69410a4398f3f5f8cc622c88fabd8df9a6c40b0eb6c46a1f95a60",
+    "status": "ENGINEERING_VLLM_METRICS_SEMANTICS_QUALIFIED_B0_NOT_RUN",
+    "evidence_commit": "a45ef8fcc3be878deab3778f5dde935778276b2e",
+    "probe_predecessor_protocol_sha256": "f754cb5fb6db2b97fa1b1a2055946f7dc63ce7c754909eec894e1848d07bc548",
+}
 _HEX64 = re.compile(r"^[0-9a-f]{64}$")
 _OPAQUE_IDENTIFIER = re.compile(r"^[A-Za-z0-9._:-]{1,256}$")
 _FORBIDDEN_PUBLIC = (
@@ -191,10 +207,17 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
                 "trigger": "The repaired fresh-service metrics occurrence exited during vLLM memory-profile warmup with cudaErrorNotPermitted at the native fused RMSNorm path on DGX GB10 before readiness and before either neutral probe POST. The owned container was removed and shared services were restored.",
                 "change": "Add CUDA_LAUNCH_BLOCKING=1 to the exact pinned container environment, following the upstream vLLM GB10 warmup-race workaround while retaining enforce-eager and every model, image, decoding, cache, and request-budget identity. Detect an exited owned startup container immediately instead of waiting for the full readiness deadline.",
                 "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_TASK_OUTCOME_NO_NEUTRAL_PROBE_POST_STARTUP_ENGINEERING_FAILURE_ONLY",
+            },
+            {
+                "id": "PRE_B0_ENGINEERING_EVIDENCE_AND_COMPLETION_COUNTER_SEMANTICS_BINDING",
+                "superseded_protocol_file_sha256": "f754cb5fb6db2b97fa1b1a2055946f7dc63ce7c754909eec894e1848d07bc548",
+                "trigger": "Before any B0 selection, one sealed fixed-look DGX runtime qualification and one fresh-service neutral vLLM metrics qualification were completed and committed. The neutral probe established that request_success_total increased by zero for one successful tokenize POST and by one for one successful completion POST, with running and prefix-cache counters remaining zero.",
+                "change": "Bind both immutable public qualification manifests, require their committed bytes in the live start closure, and prospectively compare the final service success counter with issued completion POSTs only while continuing to account for tokenize and completion POSTs separately at the client gate.",
+                "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_B0_EPISODE_NO_TASK_OUTCOME_ONE_NEUTRAL_TOKENIZE_AND_ONE_NEUTRAL_COMPLETION_ENGINEERING_PROBE_ONLY_NO_AGENT_OR_HSWM_EFFICACY",
             }
         ]
         or raw.get("registration_status")
-        != "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_ALFWORLD_EPISODE_OR_TASK_OUTCOME_AFTER_ENGINEERING_ENVIRONMENT_NEUTRAL_METRICS_AND_GPU_STARTUP_QUALIFICATION_ATTEMPTS"
+        != "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_ALFWORLD_EPISODE_OR_TASK_OUTCOME_AFTER_COMMITTED_ENGINEERING_RUNTIME_AND_NEUTRAL_METRICS_QUALIFICATIONS"
         or raw.get("scientific_status")
         != "EXPLORATORY_G0_CALIBRATION_ONLY_NOT_G0_PASS_NOT_G1_EFFICACY"
         or raw.get("claim_ceiling") != "ENGINEERING_AND_TASK_CALIBRATION_ONLY"
@@ -204,6 +227,7 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
         raise AlfworldB0CalibrationError("protocol scientific boundary drifted")
 
     uid, version = raw.get("study_uid"), raw.get("protocol_version")
+    evidence = _exact_mapping(raw.get("current_evidence"), "protocol evidence")
     arm = _exact_mapping(raw.get("arm"), "protocol arm")
     task = _exact_mapping(raw.get("task_contract"), "protocol task contract")
     selection = _exact_mapping(
@@ -283,6 +307,13 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
         and runtime.get("top_p") == 1.0
         and runtime.get("enable_thinking") is False
         and runtime.get("fresh_service_for_occurrence") is True
+        and runtime.get("request_success_counter_at_start") == 0
+        and runtime.get("request_success_counter_semantics")
+        == "COMPLETED_GENERATION_REQUESTS_ONLY_TOKENIZE_EXCLUDED"
+        and runtime.get("successful_tokenize_post_counter_delta") == 0
+        and runtime.get("successful_completion_post_counter_delta") == 1
+        and runtime.get("final_service_attestation")
+        == "REQUEST_SUCCESS_TOTAL_EQUALS_ISSUED_COMPLETION_POST_COUNT_TOKENIZE_ACCOUNTED_SEPARATELY"
         and runtime.get("maximum_completion_posts") == B0_MAX_COMPLETION_CALLS
         and runtime.get("maximum_tokenize_posts") == B0_MAX_TOKENIZE_CALLS
         and runtime.get("maximum_total_http_posts")
@@ -351,7 +382,7 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
         }
         and environment_runtime.get("sandbox") == dgx_sandbox_contract()
         and environment_runtime.get("dgx_fixed_action_qualification")
-        == "REQUIRED_BEFORE_PROSPECTIVE_SELECTION_AND_LIVE_B0"
+        == DGX_RUNTIME_QUALIFICATION
     )
     if (
         not isinstance(uid, str)
@@ -361,6 +392,10 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
         or arm.get("id") != "B0_STATELESS_NO_LEARNING"
         or arm.get("count") != 1
         or arm.get("cross_episode_state") != "NONE"
+        or evidence.get("dgx_runtime_qualification")
+        != DGX_RUNTIME_QUALIFICATION
+        or evidence.get("vllm_metrics_qualification")
+        != VLLM_METRICS_QUALIFICATION
         or task.get("environment") != "ALFWORLD_TEXT_ONLY"
         or task.get("task_family") != "pick_clean_then_place_in_recep"
         or task.get("environment_horizon") != B0_ACTION_MAX_HISTORY_STEPS
@@ -379,6 +414,14 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
         )
         is not True
         or "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/runtime_qualification_contract.v1.json"
+        not in execution.get("start_marker_must_hash_paths", [])
+        or DGX_RUNTIME_QUALIFICATION["path"]
+        not in execution.get("start_marker_must_hash_paths", [])
+        or VLLM_METRICS_QUALIFICATION["path"]
+        not in execution.get("start_marker_must_hash_paths", [])
+        or "src/hswm/experiments/alfworld_b0_vllm_metrics.py"
+        not in execution.get("start_marker_must_hash_paths", [])
+        or "scripts/qualify_hswm_alfworld_b0_vllm_metrics.py"
         not in execution.get("start_marker_must_hash_paths", [])
         or raw.get("resource_and_stopping_contract", {}).get("failure_rule")
         != "Any asset, sudo authorization, sandbox identity, controller-held verified-FD bind, model-service, token-preflight, response-schema, action-grammar, outcome-receipt, source-binding, or request-counter failure seals the exact attempted prefix, forbids retry or resume, and terminates the occurrence as INCONCLUSIVE_MEASUREMENT_NOT_READY."

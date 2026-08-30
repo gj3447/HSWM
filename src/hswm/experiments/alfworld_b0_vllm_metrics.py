@@ -321,11 +321,10 @@ def run_probe(paths: ProbePaths, *, lease_factory: LeaseFactory = B0DgxLease,
             after_completion_raw = active.http_get(paths.lease_spec.endpoint + "/metrics")
             after_completion = parse_metric_snapshot(after_completion_raw)
             token_delta, completion_delta = _delta(startup, after_tokenize), _delta(after_tokenize, after_completion)
-            # Feed measured deltas back to the existing lease before close.  If
-            # its sum-of-endpoints assumption is wrong, close still removes the
-            # owned container and restores shared services before it propagates.
-            active._observed_requests = (token_delta["success_total"], completion_delta["success_total"])
-            cleanup_attestation = "MEASURED_COUNTER_DELTAS_PASSED_TO_LEASE_FINAL_ATTEST"
+            # Preserve the two actual endpoint posts for final lease
+            # attestation. The qualified metric semantics are completion-only.
+            active._observed_requests = (1, 1)
+            cleanup_attestation = "ACTUAL_ENDPOINT_POSTS_PASSED_TO_LEASE_FINAL_ATTEST"
     except (LaunchRefused, MetricsQualificationError):
         raise
     if startup is None or after_tokenize is None or after_completion is None:

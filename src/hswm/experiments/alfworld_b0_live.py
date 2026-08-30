@@ -20,7 +20,9 @@ from _research.dnrd5.canonical_json import canonical_bytes
 from .alfworld_b0_actor import ALFWorldB0Actor
 from .alfworld_b0_calibration import (
     COMPLETE_STATUS,
+    DGX_RUNTIME_QUALIFICATION,
     INCONCLUSIVE_STATUS,
+    VLLM_METRICS_QUALIFICATION,
     run_b0_calibration,
     verify_private_selection,
     verify_protocol,
@@ -166,6 +168,118 @@ def _verify_bindings(paths: LivePaths) -> tuple[dict[str, object], dict[str, str
     return value, {"commit": commit, "tree": tree, **digests}
 
 
+def _bound_public_receipt(
+    paths: LivePaths,
+    binding: Mapping[str, str],
+    evidence: Mapping[str, object],
+    label: str,
+) -> dict[str, object]:
+    """Load one exact pre-selection public receipt from its evidence commit."""
+
+    relative = evidence.get("path")
+    file_sha = evidence.get("file_sha256")
+    receipt_sha = evidence.get("receipt_sha256")
+    evidence_commit = evidence.get("evidence_commit")
+    if not all(isinstance(item, str) for item in (relative, file_sha, receipt_sha, evidence_commit)):
+        raise AlfworldB0LiveError(f"{label} evidence binding is invalid")
+    assert isinstance(relative, str)
+    assert isinstance(file_sha, str)
+    assert isinstance(receipt_sha, str)
+    assert isinstance(evidence_commit, str)
+    path = _regular(paths.repo / relative, label)
+    if not _under(path, paths.repo):
+        raise AlfworldB0LiveError(f"{label} escaped repository")
+    raw = path.read_bytes()
+    if (
+        binding.get(relative) != file_sha
+        or _sha(raw) != file_sha
+        or _git(paths.repo, "show", f"{evidence_commit}:{relative}") != raw
+    ):
+        raise AlfworldB0LiveError(f"{label} bytes differ from bound evidence")
+    _git(paths.repo, "merge-base", "--is-ancestor", evidence_commit, "HEAD")
+    try:
+        value = json.loads(raw)
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise AlfworldB0LiveError(f"{label} is unreadable JSON") from error
+    if not isinstance(value, dict) or canonical_bytes(value) + b"\n" != raw:
+        raise AlfworldB0LiveError(f"{label} is not canonical JSON")
+    unsigned = {key: item for key, item in value.items() if key != "receipt_sha256"}
+    if value.get("receipt_sha256") != receipt_sha or receipt_sha != _sha(canonical_bytes(unsigned)):
+        raise AlfworldB0LiveError(f"{label} self receipt drifted")
+    return value
+
+
+def _verify_engineering_prerequisites(
+    paths: LivePaths,
+    protocol_value: Mapping[str, object],
+    binding: Mapping[str, str],
+) -> None:
+    """Require both immutable engineering qualifications before selection use."""
+
+    verify_protocol(paths.protocol)
+    evidence = protocol_value.get("current_evidence")
+    if (
+        not isinstance(evidence, dict)
+        or evidence.get("dgx_runtime_qualification") != DGX_RUNTIME_QUALIFICATION
+        or evidence.get("vllm_metrics_qualification") != VLLM_METRICS_QUALIFICATION
+    ):
+        raise AlfworldB0LiveError("engineering evidence protocol binding drifted")
+    runtime = _bound_public_receipt(
+        paths, binding, DGX_RUNTIME_QUALIFICATION, "DGX runtime qualification"
+    )
+    metrics = _bound_public_receipt(
+        paths, binding, VLLM_METRICS_QUALIFICATION, "vLLM metrics qualification"
+    )
+    environment = protocol_value.get("environment_runtime")
+    model_runtime = protocol_value.get("model_runtime")
+    metric_source = metrics.get("source_binding")
+    if (
+        runtime.get("schema_version")
+        != "hswm-alfworld-b0-runtime-dgx-qualification-public/v1"
+        or runtime.get("status") != DGX_RUNTIME_QUALIFICATION["status"]
+        or runtime.get("claim_ceiling")
+        != "ONE_SEALED_20_ACTION_FIXED_LOOK_RUNTIME_CHECK_ONLY_NOT_MODEL_OR_AGENT_EFFICACY_NOT_LEARNING_NOT_G0_NOT_G1"
+        or runtime.get("fixed_action") != "look"
+        or runtime.get("actor_frame_count") != 21
+        or runtime.get("action_count") != 20
+        or runtime.get("terminal")
+        != {"done": True, "score": 0, "success": False, "won": False}
+        or not isinstance(environment, dict)
+        or runtime.get("sandbox") != environment.get("sandbox")
+        or metrics.get("schema_version")
+        != "hswm-alfworld-b0-vllm-metrics-public/v1"
+        or metrics.get("status") != VLLM_METRICS_QUALIFICATION["status"]
+        or metrics.get("claim_ceiling")
+        != "FRESH_SERVICE_COUNTER_SEMANTICS_ONLY_NOT_ALFWORLD_NOT_AGENT_EFFICACY_NOT_G0_NOT_G1"
+        or metrics.get("private_receipt_file_sha256")
+        != VLLM_METRICS_QUALIFICATION["private_receipt_file_sha256"]
+        or not isinstance(metric_source, dict)
+        or metric_source.get("protocol_file_sha256")
+        != VLLM_METRICS_QUALIFICATION["probe_predecessor_protocol_sha256"]
+        or metrics.get("counter_deltas")
+        != {
+            "tokenize": {
+                "running": 0,
+                "success_total": 0,
+                "prefix_hits": 0,
+                "prefix_queries": 0,
+            },
+            "completion": {
+                "running": 0,
+                "success_total": 1,
+                "prefix_hits": 0,
+                "prefix_queries": 0,
+            },
+        }
+        or not isinstance(model_runtime, dict)
+        or model_runtime.get("request_success_counter_semantics")
+        != "COMPLETED_GENERATION_REQUESTS_ONLY_TOKENIZE_EXCLUDED"
+        or model_runtime.get("successful_tokenize_post_counter_delta") != 0
+        or model_runtime.get("successful_completion_post_counter_delta") != 1
+    ):
+        raise AlfworldB0LiveError("engineering qualification semantics drifted")
+
+
 def _verify_selection(paths: LivePaths, protocol_value: Mapping[str, object]) -> dict[str, object]:
     protocol = verify_protocol(paths.protocol)
     pool_sha = _sha(_regular(paths.pool, "pool").read_bytes())
@@ -295,6 +409,7 @@ def run_live(
     try:
         protocol_value, binding = _verify_bindings(paths)
         binding["_protocol"] = _sha(paths.protocol.read_bytes())
+        _verify_engineering_prerequisites(paths, protocol_value, binding)
         selection = _verify_selection(paths, protocol_value)
         for field in ("pool", "locator", "sudo", "bubblewrap", "python"):
             _regular(getattr(paths, field), field)

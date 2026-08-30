@@ -67,14 +67,52 @@ def test_checked_in_protocol_is_executable_and_hash_binds_existing_evidence() ->
             "trigger": "The repaired fresh-service metrics occurrence exited during vLLM memory-profile warmup with cudaErrorNotPermitted at the native fused RMSNorm path on DGX GB10 before readiness and before either neutral probe POST. The owned container was removed and shared services were restored.",
             "change": "Add CUDA_LAUNCH_BLOCKING=1 to the exact pinned container environment, following the upstream vLLM GB10 warmup-race workaround while retaining enforce-eager and every model, image, decoding, cache, and request-budget identity. Detect an exited owned startup container immediately instead of waiting for the full readiness deadline.",
             "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_TASK_OUTCOME_NO_NEUTRAL_PROBE_POST_STARTUP_ENGINEERING_FAILURE_ONLY",
+        },
+        {
+            "id": "PRE_B0_ENGINEERING_EVIDENCE_AND_COMPLETION_COUNTER_SEMANTICS_BINDING",
+            "superseded_protocol_file_sha256": "f754cb5fb6db2b97fa1b1a2055946f7dc63ce7c754909eec894e1848d07bc548",
+            "trigger": "Before any B0 selection, one sealed fixed-look DGX runtime qualification and one fresh-service neutral vLLM metrics qualification were completed and committed. The neutral probe established that request_success_total increased by zero for one successful tokenize POST and by one for one successful completion POST, with running and prefix-cache counters remaining zero.",
+            "change": "Bind both immutable public qualification manifests, require their committed bytes in the live start closure, and prospectively compare the final service success counter with issued completion POSTs only while continuing to account for tokenize and completion POSTs separately at the client gate.",
+            "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_B0_EPISODE_NO_TASK_OUTCOME_ONE_NEUTRAL_TOKENIZE_AND_ONE_NEUTRAL_COMPLETION_ENGINEERING_PROBE_ONLY_NO_AGENT_OR_HSWM_EFFICACY",
         }
     ]
+    assert protocol["registration_status"] == (
+        "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_ALFWORLD_EPISODE_OR_TASK_OUTCOME_"
+        "AFTER_COMMITTED_ENGINEERING_RUNTIME_AND_NEUTRAL_METRICS_QUALIFICATIONS"
+    )
 
     evidence = protocol["current_evidence"]
     assert isinstance(evidence, dict)
+    # The historical qualification remains a separately bound record.  The DGX
+    # and vLLM records are later, committed engineering evidence; none is a B0
+    # selection, episode, task outcome, or efficacy result.
+    assert evidence["runtime_qualification"] == {
+        "path": "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_QUALIFICATION_2026-08-30.json",
+        "file_sha256": "1e1bb8fb0d6974dec7a17ef3ebfce9131dc2cbb4e4354ddafb5bd74d7bd46d12",
+        "receipt_sha256": "3473dc2bd5e209b421fc7ccb214fa48191d44ec3625a5f037e033a6ea7def051",
+        "status": "ENGINEERING_INSTRUMENT_QUALIFIED_G0_NOT_PASSED",
+    }
+    assert evidence["dgx_runtime_qualification"] == {
+        "path": "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json",
+        "file_sha256": "a641218babb759159714f02fd539cf508997991f9469731788353941fb98595d",
+        "receipt_sha256": "1723986c3203add3cac0fe121b3cf110830c49e9873cccd737cef95a43b01422",
+        "status": "ENGINEERING_INSTRUMENT_QUALIFIED_DGX_ARM64_G0_NOT_PASSED",
+        "evidence_commit": "dd395b7cbacf7b5204453043ce67ef8b17db52d6",
+    }
+    assert evidence["vllm_metrics_qualification"] == {
+        "path": "manifests/HSWM_ALFWORLD_B0_VLLM_METRICS_QUALIFICATION_2026-08-30.json",
+        "file_sha256": "5a3e2ddfae77d37e1e858ebc42267b76a61805dc3dc4fcce92ec2fd706464b12",
+        "receipt_sha256": "a1d40c17ad3b38f2d84f864821a50b91c0285c04b98af966c4effe4ceb05d4ca",
+        "private_receipt_file_sha256": "94971d57e8f69410a4398f3f5f8cc622c88fabd8df9a6c40b0eb6c46a1f95a60",
+        "status": "ENGINEERING_VLLM_METRICS_SEMANTICS_QUALIFIED_B0_NOT_RUN",
+        "evidence_commit": "a45ef8fcc3be878deab3778f5dde935778276b2e",
+        "probe_predecessor_protocol_sha256": "f754cb5fb6db2b97fa1b1a2055946f7dc63ce7c754909eec894e1848d07bc548",
+    }
     bindings = (
         (evidence["pool_manifest"], "rendered_json_sha256"),
         (evidence["runtime_qualification"], "file_sha256"),
+        (evidence["dgx_runtime_qualification"], "file_sha256"),
+        (evidence["vllm_metrics_qualification"], "file_sha256"),
         (evidence["source_audit"], "sha256"),
         (evidence["local_use_authorization"], "sha256"),
     )
@@ -109,11 +147,24 @@ def test_actor_prompt_schema_limits_and_gate_are_exactly_preregistered() -> None
 def test_dgx_runtime_and_arm64_pddl_only_requirements_are_exact() -> None:
     protocol = _protocol()
     assert protocol["model_runtime"] == dgx.MODEL_RUNTIME
+    assert protocol["model_runtime"]["request_success_counter_semantics"] == (
+        "COMPLETED_GENERATION_REQUESTS_ONLY_TOKENIZE_EXCLUDED"
+    )
+    assert protocol["model_runtime"]["successful_tokenize_post_counter_delta"] == 0
+    assert protocol["model_runtime"]["successful_completion_post_counter_delta"] == 1
+    assert protocol["model_runtime"]["final_service_attestation"] == (
+        "REQUEST_SUCCESS_TOTAL_EQUALS_ISSUED_COMPLETION_POST_COUNT_"
+        "TOKENIZE_ACCOUNTED_SEPARATELY"
+    )
 
     environment = protocol["environment_runtime"]
     assert isinstance(environment, dict)
     assert environment["sandbox"] == b0_runtime.dgx_sandbox_contract()
-    assert environment["dgx_fixed_action_qualification"] == "REQUIRED_BEFORE_PROSPECTIVE_SELECTION_AND_LIVE_B0"
+    evidence = protocol["current_evidence"]
+    assert isinstance(evidence, dict)
+    assert environment["dgx_fixed_action_qualification"] == evidence[
+        "dgx_runtime_qualification"
+    ]
     inherited = REPOSITORY_ROOT / str(environment["inherited_requirements_path"])
     assert sha256(inherited.read_bytes()).hexdigest() == environment[
         "inherited_requirements_sha256"
@@ -208,24 +259,26 @@ def test_execution_start_hashes_cover_live_code_and_name_future_receipts() -> No
         "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/textworld-pddl-only.v1.patch",
         "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/runtime_qualification_contract.v1.json",
         "manifests/HSWM_ALFWORLD_TEXT_CLEAN_POOL_2026-08-30.json",
+        "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json",
+        "manifests/HSWM_ALFWORLD_B0_VLLM_METRICS_QUALIFICATION_2026-08-30.json",
         "src/hswm/experiments/alfworld_b0_selection.py",
         "src/hswm/experiments/alfworld_b0_actor.py",
         "src/hswm/experiments/alfworld_b0_calibration.py",
         "src/hswm/experiments/alfworld_b0_dgx.py",
+        "src/hswm/experiments/alfworld_b0_vllm_metrics.py",
         "src/hswm/experiments/alfworld_b0_live.py",
         "src/hswm/experiments/alfworld_b0_runtime.py",
         "src/hswm/experiments/alfworld_text_runtime.py",
         "src/hswm/experiments/alfworld_text_worker.py",
         "src/hswm/experiments/continual_live.py",
         "scripts/qualify_hswm_alfworld_b0_runtime.py",
+        "scripts/qualify_hswm_alfworld_b0_vllm_metrics.py",
     }
     assert required_existing <= paths
     assert all((REPOSITORY_ROOT / path).is_file() for path in required_existing)
     # These are deliberately named in the preregistration before generation;
     # their absence means no qualification/selection receipt can be mistaken
     # for already committed execution input.
-    generated = "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json"
     planned = "manifests/HSWM_ALFWORLD_B0_SELECTION_2026-08-30.json"
-    assert {generated, planned} <= paths
-    assert (REPOSITORY_ROOT / generated).is_file()
+    assert planned in paths
     assert not (REPOSITORY_ROOT / planned).exists()

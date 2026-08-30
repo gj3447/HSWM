@@ -51,6 +51,20 @@ decoding, cache, and request-budget identities. The launcher also detects an
 exited owned container immediately. This is an environment stabilization with
 a throughput cost, not evidence about model or HSWM efficacy.
 
+Before selection, the stabilized fresh-service repeat completed and emitted
+the committed public qualification
+`manifests/HSWM_ALFWORLD_B0_VLLM_METRICS_QUALIFICATION_2026-08-30.json`.
+Its startup success counter was zero; one successful `/tokenize` POST changed
+that counter by zero; one successful completion POST changed it by one; and
+the running and disabled-prefix-cache counters stayed zero. The earlier sealed
+fixed-`look` DGX runtime qualification is likewise bound at
+`manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json`.
+Both public receipts were committed before selection. The live lease therefore
+compares the server success counter with issued completion POSTs only, while
+the occurrence-local gate still records tokenize and completion POSTs
+separately. These are engineering qualifications, not ALFWorld actor results,
+G0/G1 evidence, or HSWM efficacy.
+
 The sole arm is `B0_STATELESS_NO_LEARNING`. Each model call is a fresh
 one-shot request. It may read the bounded visible transcript from the current
 episode, because ALFWorld is partially observable, but that transcript is

@@ -73,6 +73,10 @@ MODEL_RUNTIME = {
     "fresh_service_for_occurrence": True,
     "fresh_compile_and_huggingface_cache_directories": True,
     "request_success_counter_at_start": 0,
+    "request_success_counter_semantics": "COMPLETED_GENERATION_REQUESTS_ONLY_TOKENIZE_EXCLUDED",
+    "successful_tokenize_post_counter_delta": 0,
+    "successful_completion_post_counter_delta": 1,
+    "final_service_attestation": "REQUEST_SUCCESS_TOTAL_EQUALS_ISSUED_COMPLETION_POST_COUNT_TOKENIZE_ACCOUNTED_SEPARATELY",
     "maximum_completion_posts": MAX_COMPLETION_REQUESTS,
     "maximum_tokenize_posts": MAX_TOKENIZE_REQUESTS,
     "maximum_total_http_posts": MAX_REQUESTS,
@@ -354,7 +358,6 @@ class B0DgxLease:
                 or not 0 <= tokenize_completed <= MAX_TOKENIZE_REQUESTS
                 or not 0 <= completion_completed <= MAX_COMPLETION_REQUESTS):
             raise LaunchRefused("B0 DGX request count is invalid")
-        requests_completed = tokenize_completed + completion_completed
         try:
             inspect = self.command(("docker", "inspect", self.spec.container_name))
             row = json.loads(inspect.decode("utf-8", "strict"))[0]
@@ -369,7 +372,11 @@ class B0DgxLease:
             model_ids = [item.get("id") for item in json.loads(models.decode("utf-8", "strict")).get("data", []) if isinstance(item, dict)]
             if (version_repeat != version
                     or json.loads(version.decode("utf-8", "strict")).get("version") != VLLM_VERSION
-                    or model_ids != [SERVED_MODEL] or parse_success_total(metrics) != requests_completed):
+                    # The separately qualified vLLM metric counts successful
+                    # completions, not /tokenize preflights. Both endpoint
+                    # counts remain bound below for client-side accounting.
+                    or model_ids != [SERVED_MODEL]
+                    or parse_success_total(metrics) != completion_completed):
                 raise ValueError
         except LoopbackUnavailable:
             raise

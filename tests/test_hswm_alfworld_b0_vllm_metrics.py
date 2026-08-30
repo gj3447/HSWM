@@ -84,7 +84,7 @@ def test_two_post_probe_records_measured_semantics_and_closes_fake_lease(tmp_pat
     def post(_url: str, _body: bytes, *, timeout_seconds: float) -> bytes:
         assert timeout_seconds == 10; lease.calls += 1; return b"{}"
     private, public = run_probe(ProbePaths(repository=repo, private_receipt=external / "private.json", public_aggregate=external / "public.json", allow_public_outside_manifests=True, lease_spec=Spec(), timeout_seconds=10), lease_factory=lambda _spec: lease, http_post=post)  # type: ignore[arg-type]
-    assert lease.closed and lease._observed_requests == (0, 1)
+    assert lease.closed and lease._observed_requests == (1, 1)
     assert private["status"] == STATUS_QUALIFIED and public["status"] == STATUS_QUALIFIED
     assert (external / "private.json").exists() and (external / "public.json").exists()
 

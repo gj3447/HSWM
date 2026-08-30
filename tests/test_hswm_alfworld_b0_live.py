@@ -14,6 +14,10 @@ from hswm.experiments.alfworld_b0_live import (
     run_live,
 )
 from hswm.experiments.alfworld_b0_dgx import MODEL_REVISION
+from hswm.experiments.alfworld_b0_calibration import (
+    DGX_RUNTIME_QUALIFICATION,
+    VLLM_METRICS_QUALIFICATION,
+)
 
 
 def _paths(tmp_path: Path) -> LivePaths:
@@ -54,6 +58,60 @@ def test_public_projection_excludes_private_identity_and_trace_fields() -> None:
     assert "private-only" not in rendered and "opaque_uid" not in rendered
 
 
+def test_committed_engineering_prerequisites_are_verified_before_selection() -> None:
+    repository = Path(__file__).resolve().parents[1]
+    protocol = (
+        repository
+        / "_research/causal_composition/preregistrations/"
+        "alfworld_b0_calibration_2026-08-30/protocol.v1.json"
+    )
+    paths = LivePaths(repository, protocol, *([protocol] * 15))
+    value = json.loads(protocol.read_bytes())
+    binding = {
+        str(DGX_RUNTIME_QUALIFICATION["path"]): str(
+            DGX_RUNTIME_QUALIFICATION["file_sha256"]
+        ),
+        str(VLLM_METRICS_QUALIFICATION["path"]): str(
+            VLLM_METRICS_QUALIFICATION["file_sha256"]
+        ),
+    }
+    live._verify_engineering_prerequisites(paths, value, binding)
+
+
+def test_prerequisite_failure_seals_void_before_selection_use(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    output, cache = tmp_path / "out", tmp_path / "cache"
+    output.mkdir()
+    cache.mkdir()
+    monkeypatch.setenv("HSWM_OUTPUT_ROOT", str(output))
+    monkeypatch.setenv("HSWM_CACHE_ROOT", str(cache))
+    monkeypatch.setattr(
+        live,
+        "_verify_bindings",
+        lambda _paths: (
+            {},
+            {"commit": "a" * 40, "tree": "b" * 40, "_protocol": "c" * 64},
+        ),
+    )
+    monkeypatch.setattr(
+        live,
+        "_verify_engineering_prerequisites",
+        lambda *_args: (_ for _ in ()).throw(AlfworldB0LiveError("drift")),
+    )
+    selection_used = False
+
+    def selection(*_args: object) -> dict[str, object]:
+        nonlocal selection_used
+        selection_used = True
+        return {}
+
+    monkeypatch.setattr(live, "_verify_selection", selection)
+    private, public = run_live(_paths(tmp_path))
+    assert private["status"] == public["status"] == VOID_STATUS
+    assert selection_used is False
+
+
 def _complete_paths(tmp_path: Path) -> LivePaths:
     repo = tmp_path / "repo"; repo.mkdir()
     files = []
@@ -85,6 +143,11 @@ class _Lease:
 
 def _patch_preflight(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(live, "_verify_bindings", lambda _paths: ({}, {"commit": "a" * 40, "tree": "b" * 40, "_protocol": "c" * 64, "src/x.py": "d" * 64}))
+    monkeypatch.setattr(
+        live,
+        "_verify_engineering_prerequisites",
+        lambda _paths, _protocol, _binding: None,
+    )
     monkeypatch.setattr(live, "_verify_selection", lambda _paths, _protocol: {"private_selection_sha256": "e" * 64, "public_selection_sha256": "f" * 64, "selection_digest_sha256": "1" * 64, "pool_manifest_sha256": "2" * 64, "local_locator_sha256": "3" * 64})
     monkeypatch.setattr(live, "dgx_sandbox_identity", lambda **_kwargs: {"profile": {}})
 

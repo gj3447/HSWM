@@ -34,7 +34,7 @@ from .alfworld_b0_actor import (
     _action_schema,
 )
 from .alfworld_b0_selection import OpaqueGameSelection
-from .alfworld_b0_runtime import load_local_game_binding
+from .alfworld_b0_runtime import dgx_sandbox_contract, load_local_game_binding
 from .alfworld_text_runtime import (
     MAX_PROTOCOL_LINE_BYTES,
     LocalAlfworldTextRuntime,
@@ -170,10 +170,17 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
                 "trigger": "A DGX package-install engineering attempt established that upstream TextWorld 1.7.0 invokes Inform7 setup and its official archive has no aarch64 compiler payload. The attempt stopped during dependency construction.",
                 "change": "Preserve the historically qualified runtime bytes; move valid_unseen-opaque lookup into a B0-only source; install the exact official TextWorld 1.7.0 revision with an explicit PDDL-only build adapter that skips Inform7 setup and supplies no Inform7 capability.",
                 "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_MODEL_CALL_NO_OUTCOME_OBSERVED",
+            },
+            {
+                "id": "DGX_TRUSTED_MAINTAINER_SUDO_BWRAP_NO_USERNS_ADAPTER",
+                "superseded_protocol_file_sha256": "d4448317625a617e0e687bf0bd5bc108d49dc570bad44ed96b05dff5f5d054bc",
+                "trigger": "Pre-B0 fixed-action engineering qualification reached the DGX sandbox launcher but stopped before its first actor frame. No B0 selection, model call, or B0 outcome occurred. Diagnostics established that the host AppArmor policy rejects the required unprivileged user namespace and that the exact privileged no-userns adapter can import ALFWorld, register the sealed game, construct the environment, and reset it.",
+                "change": "Use a B0-only source-bound noninteractive sudo Bubblewrap adapter with explicit pid, ipc, uts, net, and best-effort cgroup namespaces; no user namespace; all capabilities dropped except CAP_DAC_READ_SEARCH; and a read-only /proc/controller-pid/fd/verified-fd game bind held by the controller through worker termination. Preserve the historical runtime implementation unchanged.",
+                "prospective_boundary": "NO_B0_SELECTION_NO_MODEL_CALL_NO_B0_OUTCOME_OBSERVED_ENGINEERING_RESET_DIAGNOSTIC_ONLY",
             }
         ]
         or raw.get("registration_status")
-        != "PROSPECTIVE_BEFORE_ANY_B0_ENVIRONMENT_MODEL_OR_OUTCOME_CALL"
+        != "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_MODEL_OR_OUTCOME_CALL_AFTER_ENGINEERING_ENVIRONMENT_QUALIFICATION_ATTEMPTS"
         or raw.get("scientific_status")
         != "EXPLORATORY_G0_CALIBRATION_ONLY_NOT_G0_PASS_NOT_G1_EFFICACY"
         or raw.get("claim_ceiling") != "ENGINEERING_AND_TASK_CALIBRATION_ONLY"
@@ -328,6 +335,7 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
             "numpy": "2.0.2",
             "textworld": "1.7.0",
         }
+        and environment_runtime.get("sandbox") == dgx_sandbox_contract()
         and environment_runtime.get("dgx_fixed_action_qualification")
         == "REQUIRED_BEFORE_PROSPECTIVE_SELECTION_AND_LIVE_B0"
     )
@@ -356,6 +364,12 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
             "private_selection_receipt_must_precede_first_environment_or_model_call"
         )
         is not True
+        or "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/runtime_qualification_contract.v1.json"
+        not in execution.get("start_marker_must_hash_paths", [])
+        or raw.get("resource_and_stopping_contract", {}).get("failure_rule")
+        != "Any asset, sudo authorization, sandbox identity, controller-held verified-FD bind, model-service, token-preflight, response-schema, action-grammar, outcome-receipt, source-binding, or request-counter failure seals the exact attempted prefix, forbids retry or resume, and terminates the occurrence as INCONCLUSIVE_MEASUREMENT_NOT_READY."
+        or "The privileged DGX adapter is trusted-maintainer local engineering containment only; it is neither hostile-local-user security nor independent evaluation."
+        not in raw.get("no_claim", [])
         or raw.get("allowed_terminals")
         != [COMPLETE_STATUS, INCONCLUSIVE_STATUS, VOID_STATUS]
     ):

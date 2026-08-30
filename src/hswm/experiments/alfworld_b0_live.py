@@ -33,6 +33,7 @@ from .alfworld_b0_selection import (
     TRAIN_GROUP_COUNT,
     VALID_SEEN_GROUP_COUNT,
 )
+from .alfworld_b0_runtime import DgxB0AlfworldTextRuntime, dgx_sandbox_identity
 from .alfworld_text_runtime import LocalSandboxSpec
 from .continual_live import OpenAIBackendConfig
 
@@ -109,6 +110,7 @@ class LivePaths:
     python: Path
     python_runtime_root: Path
     bubblewrap: Path
+    sudo: Path
     model_snapshot: Path
     hf_hub: Path
     lock: Path
@@ -294,7 +296,7 @@ def run_live(
         protocol_value, binding = _verify_bindings(paths)
         binding["_protocol"] = _sha(paths.protocol.read_bytes())
         selection = _verify_selection(paths, protocol_value)
-        for field in ("pool", "locator", "bubblewrap", "python"):
+        for field in ("pool", "locator", "sudo", "bubblewrap", "python"):
             _regular(getattr(paths, field), field)
         for field in ("asset_root", "upstream", "venv", "python_runtime_root", "model_snapshot", "hf_hub"):
             _directory(getattr(paths, field), field)
@@ -302,6 +304,7 @@ def run_live(
             raise AlfworldB0LiveError("model snapshot is not under the declared Hugging Face hub")
         if not paths.lock.is_absolute() or paths.lock.is_symlink() or not paths.lock.parent.is_dir():
             raise AlfworldB0LiveError("lock path is invalid")
+        dgx_sandbox_identity(sudo=paths.sudo, bubblewrap=paths.bubblewrap)
         marker = {
             "schema_version": LIVE_SCHEMA + "-start-marker",
             "terminal": "PRE_LEASE_PRE_ENV_PRE_MODEL_BINDING_SEALED",
@@ -335,7 +338,8 @@ def run_live(
                 return LocalSandboxSpec(paths.bubblewrap, paths.python, paths.python_runtime_root, paths.repo, paths.upstream, paths.venv, paths.asset_root, game_file, pool_sha, locator_sha, game_binding, selection_row.opaque_uid, max_steps=protocol.max_steps)
             inner_private, _ignored = calibration(protocol=paths.protocol, private_selection_receipt=paths.private_selection,
                 pool_manifest=paths.pool, local_locator=paths.locator, asset_root=paths.asset_root,
-                sandbox_spec_factory=factory, actor=actor)
+                sandbox_spec_factory=factory, actor=actor,
+                runtime_launcher=lambda sandbox: DgxB0AlfworldTextRuntime(sandbox, sudo=paths.sudo).launch())
             totals = inner_private.get("resource_totals", {})
             if not isinstance(totals, dict):
                 raise AlfworldB0LiveError("calibration totals are invalid")
@@ -373,11 +377,11 @@ def run_live(
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    for name in ("repo", "protocol", "private-selection", "public-selection", "pool", "locator", "asset-root", "upstream", "venv", "python", "python-runtime-root", "bubblewrap", "model-snapshot", "hf-hub", "lock"):
+    for name in ("repo", "protocol", "private-selection", "public-selection", "pool", "locator", "asset-root", "upstream", "venv", "python", "python-runtime-root", "sudo", "bubblewrap", "model-snapshot", "hf-hub", "lock"):
         parser.add_argument("--" + name, required=True, type=Path)
     parser.add_argument("--container", required=True)
     args = parser.parse_args(argv)
-    paths = LivePaths(args.repo, args.protocol, args.private_selection, args.public_selection, args.pool, args.locator, args.asset_root, args.upstream, args.venv, args.python, args.python_runtime_root, args.bubblewrap, args.model_snapshot, args.hf_hub, args.lock, args.container)
+    paths = LivePaths(args.repo, args.protocol, args.private_selection, args.public_selection, args.pool, args.locator, args.asset_root, args.upstream, args.venv, args.python, args.python_runtime_root, args.sudo, args.bubblewrap, args.model_snapshot, args.hf_hub, args.lock, args.container)
     private, _public_value = run_live(paths)
     return 0 if private["status"] == COMPLETE_STATUS else 2
 

@@ -10,11 +10,39 @@ from __future__ import annotations
 
 from hashlib import sha256
 import json
+import os
 from pathlib import Path
 import re
+import subprocess
 from typing import Iterator, Mapping
 
-from .alfworld_text_runtime import AlfworldTextRuntimeError, LocalGameBinding
+from .alfworld_text_runtime import (
+    SANDBOX_GAME_PATH,
+    AlfworldTextRuntimeError,
+    LocalGameBinding,
+    LocalSandboxSpec,
+    build_bwrap_command,
+    open_verified_game,
+)
+
+
+DGX_SUDO_PATH = "/usr/bin/sudo"
+DGX_SUDO_SHA256 = "ca989d83a5fbfd5765f276ba3e0970927991ab45889b960b557bdbeb6cb0ec1d"
+DGX_SUDO_VERSION = "Sudo version 1.9.15p5"
+DGX_BWRAP_PATH = "/usr/bin/bwrap"
+DGX_BWRAP_SHA256 = "ae27935781511400c65ebcc0b4669775d602f46251b8707c947a1ac1b160c1c8"
+DGX_BWRAP_VERSION = "bubblewrap 0.9.0"
+DGX_SANDBOX_PROFILE: dict[str, object] = {
+    "sudo_noninteractive": True,
+    "user_namespace": False,
+    "namespaces": ["pid", "ipc", "uts", "net", "cgroup-try"],
+    "empty_bwrap_root": True,
+    "capabilities": {"drop": "ALL", "add": "CAP_DAC_READ_SEARCH"},
+    "game_bind": "READ_ONLY_PROC_FD_PATH_PARENT_PREHASH_WORKER_REHASH",
+    "game_fd_handoff": "NOT_INHERITED_BY_SUDO_OR_WORKER",
+    "containment_claim": "TRUSTED_MAINTAINER_LOCAL_ENGINEERING_NOT_HOSTILE_LOCAL_USER_SECURITY_NOT_INDEPENDENT_EVALUATOR",
+    "cgroup_namespace": "BEST_EFFORT_HSWM_RUN_SUPPLIES_CPU_MEMORY_SCOPE",
+}
 
 
 def _read_regular_bytes(path: Path, field: str) -> bytes:
@@ -24,6 +52,214 @@ def _read_regular_bytes(path: Path, field: str) -> bytes:
         return path.read_bytes()
     except OSError as error:
         raise AlfworldTextRuntimeError(f"{field} is unreadable") from error
+
+
+def _identity(
+    path: Path,
+    *,
+    expected_path: str,
+    expected_sha256: str,
+    expected_version: str,
+    label: str,
+) -> dict[str, str]:
+    if str(path) != expected_path:
+        raise AlfworldTextRuntimeError(f"{label} path drifted")
+    raw = _read_regular_bytes(path, label)
+    if sha256(raw).hexdigest() != expected_sha256:
+        raise AlfworldTextRuntimeError(f"{label} SHA-256 drifted")
+    completed = subprocess.run(
+        (expected_path, "--version"),
+        check=False,
+        capture_output=True,
+        timeout=15,
+    )
+    if completed.returncode or completed.stderr:
+        raise AlfworldTextRuntimeError(f"{label} version probe failed")
+    version = completed.stdout.decode("utf-8", "strict").splitlines()[0] if completed.stdout else ""
+    if version != expected_version:
+        raise AlfworldTextRuntimeError(f"{label} version drifted")
+    return {"path": expected_path, "sha256": expected_sha256, "version": expected_version}
+
+
+def dgx_sandbox_identity(*, sudo: Path, bubblewrap: Path) -> dict[str, object]:
+    """Verify the privileged B0-only launcher; historical G0 runtime is untouched."""
+
+    sudo_identity = _identity(
+        sudo,
+        expected_path=DGX_SUDO_PATH,
+        expected_sha256=DGX_SUDO_SHA256,
+        expected_version=DGX_SUDO_VERSION,
+        label="sudo",
+    )
+    allowed = subprocess.run(
+        (DGX_SUDO_PATH, "-n", "true"),
+        check=False,
+        capture_output=True,
+        timeout=15,
+    )
+    if allowed.returncode or allowed.stdout or allowed.stderr:
+        raise AlfworldTextRuntimeError("sudo noninteractive authorization is unavailable")
+    observed = {
+        "sudo": sudo_identity,
+        "bubblewrap": _identity(
+            bubblewrap,
+            expected_path=DGX_BWRAP_PATH,
+            expected_sha256=DGX_BWRAP_SHA256,
+            expected_version=DGX_BWRAP_VERSION,
+            label="bubblewrap",
+        ),
+        "profile": dgx_sandbox_contract()["profile"],
+    }
+    if observed != dgx_sandbox_contract():
+        raise AlfworldTextRuntimeError("DGX sandbox identity drifted")
+    return observed
+
+
+def dgx_sandbox_contract() -> dict[str, object]:
+    """Return a fresh exact public claim for the trusted-maintainer adapter."""
+
+    return {
+        "sudo": {
+            "path": DGX_SUDO_PATH,
+            "sha256": DGX_SUDO_SHA256,
+            "version": DGX_SUDO_VERSION,
+        },
+        "bubblewrap": {
+            "path": DGX_BWRAP_PATH,
+            "sha256": DGX_BWRAP_SHA256,
+            "version": DGX_BWRAP_VERSION,
+        },
+        "profile": {
+            **DGX_SANDBOX_PROFILE,
+            "namespaces": list(DGX_SANDBOX_PROFILE["namespaces"]),
+            "capabilities": dict(DGX_SANDBOX_PROFILE["capabilities"]),
+        },
+    }
+
+
+def build_dgx_b0_bwrap_command(
+    spec: LocalSandboxSpec, *, sudo: Path, verified_game_fd: int
+) -> list[str]:
+    """Transform the historical command into DGX's no-userns privileged profile."""
+
+    spec.validate()
+    if str(spec.bubblewrap) != DGX_BWRAP_PATH or str(sudo) != DGX_SUDO_PATH:
+        raise AlfworldTextRuntimeError("DGX B0 launcher paths drifted")
+    if type(verified_game_fd) is not int or verified_game_fd < 3:
+        raise AlfworldTextRuntimeError("verified game FD must be private")
+    historical = build_bwrap_command(spec, game_fd=3)
+    if historical[:3] != [DGX_BWRAP_PATH, "--die-with-parent", "--new-session"]:
+        raise AlfworldTextRuntimeError("historical bwrap command prefix drifted")
+    body = historical[3:]
+    transformed: list[str] = []
+    seen = {"unshare_all": 0, "unshare_net": 0, "game_bind": 0}
+    index = 0
+    while index < len(body):
+        item = body[index]
+        if item == "--unshare-all":
+            seen["unshare_all"] += 1
+            index += 1
+            continue
+        if item == "--unshare-net":
+            seen["unshare_net"] += 1
+            index += 1
+            continue
+        if item == "--ro-bind-fd":
+            seen["game_bind"] += 1
+            if body[index:index + 3] != ["--ro-bind-fd", "3", SANDBOX_GAME_PATH]:
+                raise AlfworldTextRuntimeError("historical game FD bind drifted")
+            transformed.extend(
+                [
+                    "--ro-bind",
+                    f"/proc/{os.getpid()}/fd/{verified_game_fd}",
+                    SANDBOX_GAME_PATH,
+                ]
+            )
+            index += 3
+            continue
+        transformed.append(item)
+        index += 1
+    if seen != {"unshare_all": 1, "unshare_net": 1, "game_bind": 1}:
+        raise AlfworldTextRuntimeError("historical isolation primitive count drifted")
+    command = [
+        DGX_SUDO_PATH,
+        "-n",
+        "--",
+        DGX_BWRAP_PATH,
+        "--die-with-parent",
+        "--new-session",
+        "--unshare-pid",
+        "--unshare-ipc",
+        "--unshare-uts",
+        "--unshare-net",
+        "--unshare-cgroup-try",
+        "--cap-drop",
+        "ALL",
+        "--cap-add",
+        "CAP_DAC_READ_SEARCH",
+        *transformed,
+    ]
+    forbidden = {"--unshare-user", "--unshare-all", "--ro-bind-fd", "--preserve-fds"}
+    if any(item in forbidden for item in command):
+        raise AlfworldTextRuntimeError("DGX B0 launcher retained a forbidden isolation primitive")
+    return command
+
+
+class DgxB0AlfworldTextRuntime:
+    """B0-only launcher: parent verifies bytes, worker verifies the read-only path again."""
+
+    def __init__(self, spec: LocalSandboxSpec, *, sudo: Path) -> None:
+        self.spec, self.sudo = spec, sudo
+
+    def command(self, *, verified_game_fd: int) -> list[str]:
+        return build_dgx_b0_bwrap_command(
+            self.spec, sudo=self.sudo, verified_game_fd=verified_game_fd
+        )
+
+    def launch(self) -> _PinnedGameProcess:
+        dgx_sandbox_identity(sudo=self.sudo, bubblewrap=self.spec.bubblewrap)
+        game_fd = open_verified_game(self.spec)
+        try:
+            child = subprocess.Popen(
+                self.command(verified_game_fd=game_fd),
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                close_fds=True,
+            )
+            return _PinnedGameProcess(child, game_fd)
+        except Exception:
+            os.close(game_fd)
+            raise
+
+
+class _PinnedGameProcess:
+    """Keep the controller-only verified FD alive until the worker has terminated."""
+
+    def __init__(self, child: subprocess.Popen[bytes], game_fd: int) -> None:
+        self._child, self._game_fd = child, game_fd
+        self.stdin, self.stdout, self.stderr = child.stdin, child.stdout, child.stderr
+
+    def _close_if_terminal(self) -> None:
+        if self._game_fd >= 0 and self._child.poll() is not None:
+            os.close(self._game_fd)
+            self._game_fd = -1
+
+    def poll(self) -> int | None:
+        result = self._child.poll()
+        self._close_if_terminal()
+        return result
+
+    def wait(self, timeout: float | None = None) -> int:
+        result = self._child.wait(timeout=timeout)
+        self._close_if_terminal()
+        return result
+
+    def terminate(self) -> None:
+        self._child.terminate()
+
+    def kill(self) -> None:
+        self._child.kill()
 
 
 def _read_json_object(path: Path, field: str) -> tuple[bytes, Mapping[str, object]]:

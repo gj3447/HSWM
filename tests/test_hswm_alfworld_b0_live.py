@@ -17,7 +17,7 @@ from hswm.experiments.alfworld_b0_dgx import MODEL_REVISION
 
 
 def _paths(tmp_path: Path) -> LivePaths:
-    return LivePaths(*([tmp_path / "missing"] * 16))
+    return LivePaths(*([tmp_path / "missing"] * 17))
 
 
 def test_requires_hswm_run_roots(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
@@ -57,7 +57,7 @@ def test_public_projection_excludes_private_identity_and_trace_fields() -> None:
 def _complete_paths(tmp_path: Path) -> LivePaths:
     repo = tmp_path / "repo"; repo.mkdir()
     files = []
-    for name in ("protocol", "private", "public", "pool", "locator", "python", "bwrap"):
+    for name in ("protocol", "private", "public", "pool", "locator", "python", "sudo", "bwrap"):
         path = tmp_path / name; path.write_bytes(b"{}")
         files.append(path)
     directories = []
@@ -67,7 +67,7 @@ def _complete_paths(tmp_path: Path) -> LivePaths:
     hub = tmp_path / "hub"
     snapshot = hub / "models--Qwen--Qwen3.6-35B-A3B-FP8" / "snapshots" / MODEL_REVISION
     snapshot.mkdir(parents=True)
-    return LivePaths(repo, files[0], files[1], files[2], files[3], files[4], directories[0], directories[1], directories[2], files[5], directories[3], files[6], snapshot, hub, directories[4] / "b0.lock", "hswm-alfworld-b0-fake-01")
+    return LivePaths(repo, files[0], files[1], files[2], files[3], files[4], directories[0], directories[1], directories[2], files[5], directories[3], files[6], files[7], snapshot, hub, directories[4] / "b0.lock", "hswm-alfworld-b0-fake-01")
 
 
 class _Lease:
@@ -86,6 +86,7 @@ class _Lease:
 def _patch_preflight(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(live, "_verify_bindings", lambda _paths: ({}, {"commit": "a" * 40, "tree": "b" * 40, "_protocol": "c" * 64, "src/x.py": "d" * 64}))
     monkeypatch.setattr(live, "_verify_selection", lambda _paths, _protocol: {"private_selection_sha256": "e" * 64, "public_selection_sha256": "f" * 64, "selection_digest_sha256": "1" * 64, "pool_manifest_sha256": "2" * 64, "local_locator_sha256": "3" * 64})
+    monkeypatch.setattr(live, "dgx_sandbox_identity", lambda **_kwargs: {"profile": {}})
 
 
 def test_full_fake_path_reaches_lease_and_seals_serialized_private_hash(
@@ -96,10 +97,24 @@ def test_full_fake_path_reaches_lease_and_seals_serialized_private_hash(
     leases = []
     def lease_factory(spec):
         lease = _Lease(spec); leases.append(lease); return lease
-    def calibration(**_kwargs):
+    launched = []
+
+    class DgxRuntime:
+        def __init__(self, sandbox, *, sudo):
+            launched.append((sandbox, sudo))
+
+        def launch(self):
+            return "dgx-process"
+
+    monkeypatch.setattr(live, "DgxB0AlfworldTextRuntime", DgxRuntime)
+
+    def calibration(**kwargs):
+        assert kwargs["runtime_launcher"]("sandbox") == "dgx-process"
         return {"status": "EXPLORATORY_B0_CALIBRATION_COMPLETE_G0_NOT_PASSED", "resource_totals": {"issued_tokenize_post_count": 2, "issued_completion_post_count": 2, "issued_http_post_count": 4}}, {}
-    private, public = live.run_live(_complete_paths(tmp_path), lease_factory=lease_factory, calibration=calibration)
+    paths = _complete_paths(tmp_path)
+    private, public = live.run_live(paths, lease_factory=lease_factory, calibration=calibration)
     assert len(leases) == 1 and leases[0].calls == [(2, 2)]
+    assert launched == [("sandbox", paths.sudo)]
     assert private["inner_private_receipt"]["resource_totals"]["issued_completion_post_count"] == 2
     assert public["private_receipt_sha256"] == __import__("hashlib").sha256((output / "b0.private.json").read_bytes()).hexdigest()
     assert (output / "content").is_dir()

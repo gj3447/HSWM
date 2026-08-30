@@ -17,7 +17,7 @@ import re
 import subprocess
 import sys
 import tarfile
-from typing import Any, Mapping
+from typing import Mapping
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 for _import_root in (REPOSITORY_ROOT, REPOSITORY_ROOT / "src"):
@@ -25,10 +25,14 @@ for _import_root in (REPOSITORY_ROOT, REPOSITORY_ROOT / "src"):
         sys.path.insert(0, str(_import_root))
 
 from _research.dnrd5.canonical_json import canonical_bytes
-from hswm.experiments.alfworld_b0_runtime import load_local_game_binding
+from hswm.experiments.alfworld_b0_runtime import (
+    DgxB0AlfworldTextRuntime,
+    dgx_sandbox_contract,
+    dgx_sandbox_identity,
+    load_local_game_binding,
+)
 from hswm.experiments.alfworld_text_runtime import (
     AlfworldTextRuntimeError,
-    LocalAlfworldTextRuntime,
     LocalSandboxSpec,
     action_line,
     read_one_line,
@@ -49,7 +53,6 @@ FIXED_ACTION = "look"
 MAX_STEPS = 20
 PYTHON_VERSION = "3.9.25"
 PLATFORM_MACHINE = "aarch64"
-_HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
 
 class QualificationError(RuntimeError):
@@ -76,8 +79,6 @@ def _read_contract(path: Path, repository: Path) -> tuple[dict[str, object], str
         "qualification_contract": "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/runtime_qualification_contract.v1.json",
         "qualification_cli": "scripts/qualify_hswm_alfworld_b0_runtime.py",
         "canonical_json": "_research/dnrd5/canonical_json.py",
-        "b0_calibration": "src/hswm/experiments/alfworld_b0_calibration.py",
-        "b0_actor": "src/hswm/experiments/alfworld_b0_actor.py",
         "b0_runtime": "src/hswm/experiments/alfworld_b0_runtime.py",
         "historical_runtime": "src/hswm/experiments/alfworld_text_runtime.py",
         "worker": "src/hswm/experiments/alfworld_text_worker.py",
@@ -90,7 +91,18 @@ def _read_contract(path: Path, repository: Path) -> tuple[dict[str, object], str
         value.get("schema_version") != CONTRACT_SCHEMA
         or value.get("record_role") != "IMMUTABLE_PRE_B0_RUNTIME_QUALIFICATION_CONTRACT"
         or value.get("registration_status")
-        != "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_ENVIRONMENT_MODEL_OR_OUTCOME_CALL"
+        != "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_MODEL_OR_OUTCOME_CALL_AFTER_ENGINEERING_RESET_DIAGNOSTICS"
+        or value.get("amendment_chronology")
+        != [
+            {
+                "amended_at_utc": "2026-08-30T21:07:02Z",
+                "change": "Bind the exact sudo and Bubblewrap identities, controller-held proc-FD game bind, namespace and capability profile, and narrow trusted-maintainer containment claim.",
+                "id": "DGX_TRUSTED_MAINTAINER_SUDO_BWRAP_NO_USERNS_PROFILE",
+                "prospective_boundary": "NO_B0_SELECTION_NO_MODEL_CALL_NO_B0_OUTCOME_OBSERVED_ENGINEERING_RESET_DIAGNOSTIC_ONLY",
+                "superseded_contract_file_sha256": "a3c3b55a980f97b5be67d0bc9bf0750b1e7e83cfd73f5a057980b641ed537b05",
+                "trigger": "Engineering qualification stopped before its first actor frame, and reset-only diagnostics then established the exact privileged no-userns DGX adapter. No B0 selection, model call, or B0 outcome occurred.",
+            }
+        ]
         or value.get("status") != "RUNTIME_QUALIFICATION_CONTRACT_ONLY_G0_NOT_PASSED"
         or value.get("claim_ceiling") != CLAIM_CEILING
         or value.get("boundary")
@@ -111,6 +123,21 @@ def _read_contract(path: Path, repository: Path) -> tuple[dict[str, object], str
     expected_profile = {
         "platform_machine": PLATFORM_MACHINE,
         "python_version": PYTHON_VERSION,
+        "sandbox": {
+            "sudo": {"path": "/usr/bin/sudo", "sha256": "ca989d83a5fbfd5765f276ba3e0970927991ab45889b960b557bdbeb6cb0ec1d", "version": "Sudo version 1.9.15p5"},
+            "bubblewrap": {"path": "/usr/bin/bwrap", "sha256": "ae27935781511400c65ebcc0b4669775d602f46251b8707c947a1ac1b160c1c8", "version": "bubblewrap 0.9.0"},
+            "profile": {
+                "sudo_noninteractive": True,
+                "user_namespace": False,
+                "namespaces": ["pid", "ipc", "uts", "net", "cgroup-try"],
+                "empty_bwrap_root": True,
+                "capabilities": {"drop": "ALL", "add": "CAP_DAC_READ_SEARCH"},
+                "game_bind": "READ_ONLY_PROC_FD_PATH_PARENT_PREHASH_WORKER_REHASH",
+                "game_fd_handoff": "NOT_INHERITED_BY_SUDO_OR_WORKER",
+                "containment_claim": "TRUSTED_MAINTAINER_LOCAL_ENGINEERING_NOT_HOSTILE_LOCAL_USER_SECURITY_NOT_INDEPENDENT_EVALUATOR",
+                "cgroup_namespace": "BEST_EFFORT_HSWM_RUN_SUPPLIES_CPU_MEMORY_SCOPE",
+            },
+        },
         "alfworld": {
             "upstream_repository": "https://github.com/alfworld/alfworld",
             "upstream_revision": "aaba6870f86c5be6a08a491f32a50b906227bc3e",
@@ -394,22 +421,11 @@ def installed_environment(python: Path, *, required: Mapping[str, str]) -> tuple
     return packages, {name: by_name[name] for name in sorted(expected)}
 
 
-def bwrap_identity(bubblewrap: Path) -> dict[str, str]:
-    digest = _sha256_file(bubblewrap, "bubblewrap")
-    completed = subprocess.run([str(bubblewrap), "--version"], check=False, capture_output=True, timeout=15)
-    if completed.returncode != 0 or completed.stderr:
-        raise QualificationError("bubblewrap version probe failed")
-    version = completed.stdout.decode("utf-8", "strict").strip()
-    if not version or "\n" in version:
-        raise QualificationError("bubblewrap version output is invalid")
-    return {"binary_sha256": digest, "version": version}
-
-
 def public_projection(local: Mapping[str, object]) -> dict[str, object]:
     """Render an aggregate-only projection with exactly one private-file link."""
     expected = {
         "schema_version", "status", "claim_ceiling", "qualification_contract", "execution", "source_code_sha256", "python",
-        "packages", "bubblewrap", "pool_manifest_sha256", "local_locator_sha256", "terminal",
+        "packages", "sandbox", "pool_manifest_sha256", "local_locator_sha256", "terminal",
         "fixed_action", "actor_frame_count", "action_count", "local_receipt_file_sha256",
     }
     if set(local) != expected:
@@ -425,6 +441,7 @@ def public_projection(local: Mapping[str, object]) -> dict[str, object]:
         or local.get("fixed_action") != FIXED_ACTION
         or type(local.get("actor_frame_count")) is not int
         or type(local.get("action_count")) is not int
+        or local.get("sandbox") != dgx_sandbox_contract()
     ):
         raise QualificationError("private receipt cannot safely project an aggregate")
     public = {
@@ -433,13 +450,13 @@ def public_projection(local: Mapping[str, object]) -> dict[str, object]:
         "execution": local["execution"],
         "source_code_sha256": local["source_code_sha256"], "python": local["python"],
         "packages": {"key_versions": local["packages"]["key_versions"], "installed_package_count": local["packages"]["installed_package_count"], "installed_package_list_sha256": local["packages"]["installed_package_list_sha256"]},
-        "bubblewrap": local["bubblewrap"], "pool_manifest_sha256": local["pool_manifest_sha256"],
+        "sandbox": local["sandbox"], "pool_manifest_sha256": local["pool_manifest_sha256"],
         "local_locator_sha256": local["local_locator_sha256"], "fixed_action": local["fixed_action"],
         "actor_frame_count": local["actor_frame_count"], "action_count": local["action_count"],
         "terminal": {key: terminal[key] for key in ("done", "won", "success", "score")},
         "local_receipt_file_sha256": local["local_receipt_file_sha256"],
     }
-    forbidden = ("uid", "path", "observation", "game", "outcome", "digest", "binding")
+    forbidden = ("opaque_uid", "relative_path", "observation", "outcome_receipt", "private_binding", "installed_packages")
     keys = " ".join(_all_keys(public)).lower()
     if any(word in keys for word in forbidden):
         raise QualificationError("public projection leakage guard rejected its own fields")
@@ -463,6 +480,14 @@ def run(args: argparse.Namespace) -> tuple[dict[str, object], dict[str, object]]
     contract, contract_sha = _read_contract(args.qualification_contract, repository)
     profile = contract["runtime_profile"]
     assert isinstance(profile, dict)
+    declared_sources = contract["execution_sources"]
+    assert isinstance(declared_sources, dict)
+    source_paths = {name: repository / relative for name, relative in declared_sources.items()}
+    execution = committed_execution(repository, source_paths)
+    source_code = {
+        name: _sha256_file(path, name.replace("_", " "))
+        for name, path in source_paths.items()
+    }
     requirements_profile = profile.get("requirements")
     alfworld_profile = profile.get("alfworld")
     textworld_profile = profile.get("textworld")
@@ -489,19 +514,12 @@ def run(args: argparse.Namespace) -> tuple[dict[str, object], dict[str, object]]
     _verify_alfworld_archive_tree(args.alfworld_source_archive, args.upstream, alfworld_profile)
     _verify_textworld_patch(args.textworld, textworld_profile, textworld_patch)
     packages, key_versions = installed_environment(args.venv_python, required=_requirements(requirements))
+    sandbox_identity = dgx_sandbox_identity(sudo=args.sudo, bubblewrap=args.bwrap)
     pool_sha, locator_sha, binding, game_file = load_local_game_binding(pool_manifest=args.pool_manifest,
         local_locator=args.local_locator, asset_root=args.asset_root, opaque_uid=args.game_uid)
-    declared_sources = contract["execution_sources"]
-    assert isinstance(declared_sources, dict)
-    source_paths = {name: repository / relative for name, relative in declared_sources.items()}
-    execution = committed_execution(repository, source_paths)
-    source_code = {
-        name: _sha256_file(path, name.replace("_", " "))
-        for name, path in source_paths.items()
-    }
     spec = LocalSandboxSpec(args.bwrap, args.venv_python, args.python_runtime_root, repository, args.upstream,
         args.venv, args.asset_root, game_file, pool_sha, locator_sha, binding, args.episode_uid, max_steps=MAX_STEPS)
-    process = LocalAlfworldTextRuntime(spec).launch()
+    process = DgxB0AlfworldTextRuntime(spec, sudo=args.sudo).launch()
     assert process.stdin is not None and process.stdout is not None and process.stderr is not None
     actor_frames, previous_step = 0, None
     try:
@@ -535,7 +553,7 @@ def run(args: argparse.Namespace) -> tuple[dict[str, object], dict[str, object]]
         "python": {"executable_sha256": _sha256_file(args.venv_python, "venv python", symlink=True), "version": PYTHON_VERSION, "platform_machine": PLATFORM_MACHINE},
         "packages": {"key_versions": key_versions, "installed_package_count": len(packages),
                      "installed_package_list_sha256": sha256(canonical_bytes(packages)).hexdigest(), "installed_packages": packages},
-        "bubblewrap": bwrap_identity(args.bwrap), "pool_manifest_sha256": pool_sha, "local_locator_sha256": locator_sha,
+        "sandbox": sandbox_identity, "pool_manifest_sha256": pool_sha, "local_locator_sha256": locator_sha,
         "fixed_action": FIXED_ACTION, "actor_frame_count": actor_frames, "action_count": actor_frames - 1,
         "terminal": {key: outcome[key] for key in ("done", "won", "success", "score")},
     }
@@ -552,7 +570,7 @@ def run(args: argparse.Namespace) -> tuple[dict[str, object], dict[str, object]]
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    for name in ("pool-manifest", "local-locator", "asset-root", "bwrap", "venv-python", "python-runtime-root", "repository", "upstream", "venv", "qualification-contract", "alfworld-source-archive", "textworld", "local-receipt", "public-aggregate"):
+    for name in ("pool-manifest", "local-locator", "asset-root", "sudo", "bwrap", "venv-python", "python-runtime-root", "repository", "upstream", "venv", "qualification-contract", "alfworld-source-archive", "textworld", "local-receipt", "public-aggregate"):
         parser.add_argument(f"--{name}", type=Path, required=True)
     parser.add_argument("--game-uid", required=True); parser.add_argument("--episode-uid", required=True)
     parser.add_argument("--allow-public-outside-manifests", action="store_true")

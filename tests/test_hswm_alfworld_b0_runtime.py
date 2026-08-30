@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from hashlib import sha256
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -83,3 +84,89 @@ def test_local_locator_lookup_never_json_decodes_or_retains_valid_unseen_rows(
     assert binding.opaque_uid == selected["opaque_uid"]
     assert bound_path == game
     assert all(sentinel.encode() not in payload for payload in decoded_payloads)
+
+
+def test_dgx_b0_launcher_strictly_transforms_historical_command_to_controller_proc_fd(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    game = tmp_path / "game.tw-pddl"
+    game.write_bytes(b"game")
+
+    class Spec:
+        bubblewrap = Path(runtime.DGX_BWRAP_PATH)
+        game_file = game
+
+        def validate(self) -> None:
+            return None
+
+    historical = [
+        runtime.DGX_BWRAP_PATH, "--die-with-parent", "--new-session", "--unshare-all",
+        "--unshare-net", "--proc", "/proc", "--ro-bind-fd", "3", "/run/hswm/game.tw-pddl",
+        "--clearenv", "--", "/python", "-m", "worker",
+    ]
+    monkeypatch.setattr(runtime, "build_bwrap_command", lambda _spec, *, game_fd: historical)
+    command = runtime.build_dgx_b0_bwrap_command(Spec(), sudo=Path(runtime.DGX_SUDO_PATH), verified_game_fd=17)
+    assert command[:15] == [
+        runtime.DGX_SUDO_PATH, "-n", "--", runtime.DGX_BWRAP_PATH,
+        "--die-with-parent", "--new-session", "--unshare-pid", "--unshare-ipc",
+        "--unshare-uts", "--unshare-net", "--unshare-cgroup-try", "--cap-drop", "ALL",
+        "--cap-add", "CAP_DAC_READ_SEARCH",
+    ]
+    assert ["--ro-bind", f"/proc/{os.getpid()}/fd/17", "/run/hswm/game.tw-pddl"] == command[17:20]
+    assert "--unshare-user" not in command and "--unshare-all" not in command
+    assert "--ro-bind-fd" not in command and "--preserve-fds" not in command
+    assert runtime.DGX_SANDBOX_PROFILE["game_fd_handoff"] == "NOT_INHERITED_BY_SUDO_OR_WORKER"
+
+
+@pytest.mark.parametrize("missing", ["--unshare-all", "--unshare-net", "--ro-bind-fd"])
+def test_dgx_b0_launcher_rejects_missing_historical_isolation_primitive(
+    monkeypatch: pytest.MonkeyPatch, missing: str
+) -> None:
+    class Spec:
+        bubblewrap = Path(runtime.DGX_BWRAP_PATH)
+
+        def validate(self) -> None:
+            return None
+
+    historical = [
+        runtime.DGX_BWRAP_PATH, "--die-with-parent", "--new-session", "--unshare-all",
+        "--unshare-net", "--ro-bind-fd", "3", "/run/hswm/game.tw-pddl", "--", "/python",
+    ]
+    index = historical.index(missing)
+    del historical[index:index + (3 if missing == "--ro-bind-fd" else 1)]
+    monkeypatch.setattr(runtime, "build_bwrap_command", lambda _spec, *, game_fd: historical)
+    with pytest.raises(runtime.AlfworldTextRuntimeError, match="primitive count"):
+        runtime.build_dgx_b0_bwrap_command(
+            Spec(), sudo=Path(runtime.DGX_SUDO_PATH), verified_game_fd=17
+        )
+
+
+def test_pinned_game_fd_remains_open_until_child_waits(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    game = tmp_path / "game.tw-pddl"
+    game.write_bytes(b"game")
+    game_fd = os.open(game, os.O_RDONLY)
+
+    class Child:
+        stdin = stdout = stderr = None
+        terminal = False
+
+        def poll(self) -> int | None:
+            return 0 if self.terminal else None
+
+        def wait(self, timeout: float | None = None) -> int:
+            self.terminal = True
+            return 0
+
+        def terminate(self) -> None:
+            self.terminal = True
+
+        def kill(self) -> None:
+            self.terminal = True
+
+    pinned = runtime._PinnedGameProcess(Child(), game_fd)
+    assert os.fstat(game_fd).st_size == 4
+    assert pinned.poll() is None
+    assert os.fstat(game_fd).st_size == 4
+    assert pinned.wait(timeout=1) == 0
+    with pytest.raises(OSError):
+        os.fstat(game_fd)

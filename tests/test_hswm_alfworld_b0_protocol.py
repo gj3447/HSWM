@@ -8,6 +8,7 @@ from pathlib import Path
 
 from hswm.experiments import alfworld_b0_actor as actor
 from hswm.experiments import alfworld_b0_dgx as dgx
+from hswm.experiments import alfworld_b0_runtime as b0_runtime
 from hswm.experiments.alfworld_b0_calibration import (
     COMPLETE_STATUS,
     INCONCLUSIVE_STATUS,
@@ -45,6 +46,13 @@ def test_checked_in_protocol_is_executable_and_hash_binds_existing_evidence() ->
             "trigger": "A DGX package-install engineering attempt established that upstream TextWorld 1.7.0 invokes Inform7 setup and its official archive has no aarch64 compiler payload. The attempt stopped during dependency construction.",
             "change": "Preserve the historically qualified runtime bytes; move valid_unseen-opaque lookup into a B0-only source; install the exact official TextWorld 1.7.0 revision with an explicit PDDL-only build adapter that skips Inform7 setup and supplies no Inform7 capability.",
             "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_MODEL_CALL_NO_OUTCOME_OBSERVED",
+        },
+        {
+            "id": "DGX_TRUSTED_MAINTAINER_SUDO_BWRAP_NO_USERNS_ADAPTER",
+            "superseded_protocol_file_sha256": "d4448317625a617e0e687bf0bd5bc108d49dc570bad44ed96b05dff5f5d054bc",
+            "trigger": "Pre-B0 fixed-action engineering qualification reached the DGX sandbox launcher but stopped before its first actor frame. No B0 selection, model call, or B0 outcome occurred. Diagnostics established that the host AppArmor policy rejects the required unprivileged user namespace and that the exact privileged no-userns adapter can import ALFWorld, register the sealed game, construct the environment, and reset it.",
+            "change": "Use a B0-only source-bound noninteractive sudo Bubblewrap adapter with explicit pid, ipc, uts, net, and best-effort cgroup namespaces; no user namespace; all capabilities dropped except CAP_DAC_READ_SEARCH; and a read-only /proc/controller-pid/fd/verified-fd game bind held by the controller through worker termination. Preserve the historical runtime implementation unchanged.",
+            "prospective_boundary": "NO_B0_SELECTION_NO_MODEL_CALL_NO_B0_OUTCOME_OBSERVED_ENGINEERING_RESET_DIAGNOSTIC_ONLY",
         }
     ]
 
@@ -90,6 +98,8 @@ def test_dgx_runtime_and_arm64_pddl_only_requirements_are_exact() -> None:
 
     environment = protocol["environment_runtime"]
     assert isinstance(environment, dict)
+    assert environment["sandbox"] == b0_runtime.dgx_sandbox_contract()
+    assert environment["dgx_fixed_action_qualification"] == "REQUIRED_BEFORE_PROSPECTIVE_SELECTION_AND_LIVE_B0"
     inherited = REPOSITORY_ROOT / str(environment["inherited_requirements_path"])
     assert sha256(inherited.read_bytes()).hexdigest() == environment[
         "inherited_requirements_sha256"
@@ -182,6 +192,7 @@ def test_execution_start_hashes_cover_live_code_and_name_future_receipts() -> No
         "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.requirements.v1.txt",
         "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.arm64_pddl_only.requirements.v1.txt",
         "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/textworld-pddl-only.v1.patch",
+        "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/runtime_qualification_contract.v1.json",
         "manifests/HSWM_ALFWORLD_TEXT_CLEAN_POOL_2026-08-30.json",
         "src/hswm/experiments/alfworld_b0_selection.py",
         "src/hswm/experiments/alfworld_b0_actor.py",

@@ -15,6 +15,21 @@ an Inform7 compiler payload unavailable for `aarch64`. The machine-readable
 PDDL-only adapter below. It is an environment amendment, not a result-driven
 change to allocation, estimands, thresholds, or stopping rules.
 
+Subsequent fixed-action engineering qualification reached the sandbox launch
+but stopped before its first actor frame because the DGX AppArmor policy
+rejects the required unprivileged user namespace. No B0 selection, model call,
+or B0 outcome had occurred. A reset-only diagnostic then established the exact
+B0-specific adapter: noninteractive `sudo` plus Bubblewrap with explicit
+PID/IPC/UTS/network namespaces, best-effort cgroup namespace isolation, no user
+namespace, and all capabilities dropped except `CAP_DAC_READ_SEARCH`. The
+controller hashes and holds the selected game FD, exposes its `/proc` FD path
+as a read-only bind, and the worker hashes the mounted bytes again. The
+historical runtime remains unchanged.
+
+That adapter is trusted-maintainer local engineering containment. It is not a
+hostile-local-user security boundary or an independent evaluator, and its
+reset-only diagnostic is not a B0 episode, G0 evidence, or HSWM efficacy.
+
 The sole arm is `B0_STATELESS_NO_LEARNING`. Each model call is a fresh
 one-shot request. It may read the bounded visible transcript from the current
 episode, because ALFWorld is partially observable, but that transcript is

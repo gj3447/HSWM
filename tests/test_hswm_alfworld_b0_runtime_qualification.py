@@ -19,6 +19,7 @@ from scripts.qualify_hswm_alfworld_b0_runtime import (
     public_projection,
     validate_output_paths,
 )
+from hswm.experiments.alfworld_b0_runtime import dgx_sandbox_contract
 
 
 def _private_input() -> dict[str, object]:
@@ -28,7 +29,7 @@ def _private_input() -> dict[str, object]:
         "execution": {"commit": "2" * 40, "tree": "3" * 40},
         "source_code_sha256": {"qualification_cli": "c" * 64}, "python": {"version": "3.9.25"},
         "packages": {"key_versions": {"alfworld": "0.5.0"}, "installed_package_count": 1, "installed_package_list_sha256": "d" * 64, "installed_packages": [{"name": "alfworld", "version": "0.5.0"}]},
-        "bubblewrap": {"binary_sha256": "e" * 64, "version": "bubblewrap 0.11.0"}, "pool_manifest_sha256": "f" * 64,
+        "sandbox": dgx_sandbox_contract(), "pool_manifest_sha256": "f" * 64,
         "local_locator_sha256": "0" * 64, "fixed_action": "look", "actor_frame_count": 21, "action_count": 20,
         "terminal": {"done": True, "won": False, "success": False, "score": 0}, "local_receipt_file_sha256": "1" * 64,
     }
@@ -65,6 +66,8 @@ def test_checked_contract_is_canonical_immutable_and_pre_b0() -> None:
         "no_hswm_efficacy_claim": True,
         "valid_unseen_record_access": "SPLIT_TOKEN_ONLY_NO_UID_OR_PATH_DECODE_OR_RETENTION",
     }
+    assert contract["registration_status"] == "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_MODEL_OR_OUTCOME_CALL_AFTER_ENGINEERING_RESET_DIAGNOSTICS"
+    assert contract["amendment_chronology"][0]["superseded_contract_file_sha256"] == "a3c3b55a980f97b5be67d0bc9bf0750b1e7e83cfd73f5a057980b641ed537b05"
     profile = contract["runtime_profile"]
     assert isinstance(profile, dict)
     alfworld = profile["alfworld"]
@@ -154,7 +157,8 @@ def test_cli_is_directly_executable() -> None:
 
 def test_qualification_source_is_fixed_look_local_only_and_uses_b0_streaming_binding() -> None:
     source = (Path(__file__).resolve().parents[1] / "scripts/qualify_hswm_alfworld_b0_runtime.py").read_text(encoding="utf-8")
-    assert "from hswm.experiments.alfworld_b0_runtime import load_local_game_binding" in source
+    assert "from hswm.experiments.alfworld_b0_runtime import (" in source
+    assert "load_local_game_binding," in source
     assert "MAX_STEPS = 20" in source
     assert 'FIXED_ACTION = "look"' in source
     assert "import requests" not in source.lower()

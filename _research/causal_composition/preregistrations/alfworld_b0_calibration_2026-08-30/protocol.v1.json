@@ -3,7 +3,7 @@
   "study_uid": "sym:ExploratoryStudy:hswm-alfworld-b0-calibration-2026-08-30",
   "protocol_version": "v1",
   "recorded_at_utc": "2026-08-30T19:13:37Z",
-  "last_amended_at_utc": "2026-08-30T20:22:58Z",
+  "last_amended_at_utc": "2026-08-30T21:07:02Z",
   "prospective_amendments": [
     {
       "id": "ARM64_PDDL_ONLY_ENVIRONMENT_ADAPTER_AND_HASH_BOUND_RUNTIME_SPLIT",
@@ -11,9 +11,16 @@
       "trigger": "A DGX package-install engineering attempt established that upstream TextWorld 1.7.0 invokes Inform7 setup and its official archive has no aarch64 compiler payload. The attempt stopped during dependency construction.",
       "change": "Preserve the historically qualified runtime bytes; move valid_unseen-opaque lookup into a B0-only source; install the exact official TextWorld 1.7.0 revision with an explicit PDDL-only build adapter that skips Inform7 setup and supplies no Inform7 capability.",
       "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_MODEL_CALL_NO_OUTCOME_OBSERVED"
+    },
+    {
+      "id": "DGX_TRUSTED_MAINTAINER_SUDO_BWRAP_NO_USERNS_ADAPTER",
+      "superseded_protocol_file_sha256": "d4448317625a617e0e687bf0bd5bc108d49dc570bad44ed96b05dff5f5d054bc",
+      "trigger": "Pre-B0 fixed-action engineering qualification reached the DGX sandbox launcher but stopped before its first actor frame. No B0 selection, model call, or B0 outcome occurred. Diagnostics established that the host AppArmor policy rejects the required unprivileged user namespace and that the exact privileged no-userns adapter can import ALFWorld, register the sealed game, construct the environment, and reset it.",
+      "change": "Use a B0-only source-bound noninteractive sudo Bubblewrap adapter with explicit pid, ipc, uts, net, and best-effort cgroup namespaces; no user namespace; all capabilities dropped except CAP_DAC_READ_SEARCH; and a read-only /proc/controller-pid/fd/verified-fd game bind held by the controller through worker termination. Preserve the historical runtime implementation unchanged.",
+      "prospective_boundary": "NO_B0_SELECTION_NO_MODEL_CALL_NO_B0_OUTCOME_OBSERVED_ENGINEERING_RESET_DIAGNOSTIC_ONLY"
     }
   ],
-  "registration_status": "PROSPECTIVE_BEFORE_ANY_B0_ENVIRONMENT_MODEL_OR_OUTCOME_CALL",
+  "registration_status": "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_MODEL_OR_OUTCOME_CALL_AFTER_ENGINEERING_ENVIRONMENT_QUALIFICATION_ATTEMPTS",
   "canonical_role": "A bounded no-learning calibration of one locally authorized sealed ALFWorld text task family. It estimates baseline task headroom, execution burden, and official valid_seen sensitivity before any B2, H1, canonical revision, or G1 occurrence.",
   "scientific_status": "EXPLORATORY_G0_CALIBRATION_ONLY_NOT_G0_PASS_NOT_G1_EFFICACY",
   "claim_ceiling": "ENGINEERING_AND_TASK_CALIBRATION_ONLY",
@@ -178,6 +185,38 @@
       "numpy": "2.0.2",
       "textworld": "1.7.0"
     },
+    "sandbox": {
+      "sudo": {
+        "path": "/usr/bin/sudo",
+        "sha256": "ca989d83a5fbfd5765f276ba3e0970927991ab45889b960b557bdbeb6cb0ec1d",
+        "version": "Sudo version 1.9.15p5"
+      },
+      "bubblewrap": {
+        "path": "/usr/bin/bwrap",
+        "sha256": "ae27935781511400c65ebcc0b4669775d602f46251b8707c947a1ac1b160c1c8",
+        "version": "bubblewrap 0.9.0"
+      },
+      "profile": {
+        "sudo_noninteractive": true,
+        "user_namespace": false,
+        "namespaces": [
+          "pid",
+          "ipc",
+          "uts",
+          "net",
+          "cgroup-try"
+        ],
+        "empty_bwrap_root": true,
+        "capabilities": {
+          "drop": "ALL",
+          "add": "CAP_DAC_READ_SEARCH"
+        },
+        "game_bind": "READ_ONLY_PROC_FD_PATH_PARENT_PREHASH_WORKER_REHASH",
+        "game_fd_handoff": "NOT_INHERITED_BY_SUDO_OR_WORKER",
+        "containment_claim": "TRUSTED_MAINTAINER_LOCAL_ENGINEERING_NOT_HOSTILE_LOCAL_USER_SECURITY_NOT_INDEPENDENT_EVALUATOR",
+        "cgroup_namespace": "BEST_EFFORT_HSWM_RUN_SUPPLIES_CPU_MEMORY_SCOPE"
+      }
+    },
     "dgx_fixed_action_qualification": "REQUIRED_BEFORE_PROSPECTIVE_SELECTION_AND_LIVE_B0"
   },
   "model_runtime": {
@@ -226,7 +265,7 @@
     "resume_allowed": false,
     "early_success_stop": false,
     "ordinary_episode_terminal": "A simulator terminal before or at action 20 consumes the episode and advances to the next committed episode.",
-    "failure_rule": "Any asset, sandbox, model-service, token-preflight, response-schema, action-grammar, outcome-receipt, source-binding, or request-counter failure seals the exact attempted prefix, forbids retry or resume, and terminates the occurrence as INCONCLUSIVE_MEASUREMENT_NOT_READY.",
+    "failure_rule": "Any asset, sudo authorization, sandbox identity, controller-held verified-FD bind, model-service, token-preflight, response-schema, action-grammar, outcome-receipt, source-binding, or request-counter failure seals the exact attempted prefix, forbids retry or resume, and terminates the occurrence as INCONCLUSIVE_MEASUREMENT_NOT_READY.",
     "all_run_manifest": "The private receipt records every attempted selected episode, including negative, timeout, invalid, or incomplete outcomes."
   },
   "estimands_and_decisions": {
@@ -265,6 +304,7 @@
       "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.requirements.v1.txt",
       "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.arm64_pddl_only.requirements.v1.txt",
       "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/textworld-pddl-only.v1.patch",
+      "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/runtime_qualification_contract.v1.json",
       "manifests/HSWM_ALFWORLD_TEXT_CLEAN_POOL_2026-08-30.json",
       "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json",
       "manifests/HSWM_ALFWORLD_B0_SELECTION_2026-08-30.json",
@@ -306,6 +346,7 @@
     "valid_seen is contamination-sensitive because 25 of 27 groups overlap train; it is not a lineage-disjoint holdout.",
     "valid_unseen remains untouched and cannot be inspected or used to tune this calibration.",
     "The local sandbox and simulator outcome are bounded engineering interfaces, not independently owned cognition or proof of outcome independence.",
+    "The privileged DGX adapter is trusted-maintainer local engineering containment only; it is neither hostile-local-user security nor independent evaluation.",
     "This study does not alter HSWM's SCIENTIFICALLY_CONNECTED / INTEGRATED_CLAIM_UNJUDGED status and makes no consciousness, selfhood, HSWM-of-HSWMs, or scale-invariant causal-closure claim."
   ]
 }

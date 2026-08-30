@@ -1009,6 +1009,8 @@ def run_b0_calibration(
                             step_index=step_index,
                             history=history,
                             observation=actor_frame["observation"],
+                            deadline=deadline,
+                            monotonic=monotonic,
                         )
                     finally:
                         after = _actor_counts(actor)

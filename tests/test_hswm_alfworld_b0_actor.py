@@ -12,6 +12,7 @@ from hswm.experiments.alfworld_b0_actor import (
     B0_ACTION_MAX_OUTPUT_TOKENS,
     B0_ACTION_PROTOCOL,
     B0ActionBudget,
+    B0RequestGate,
 )
 from hswm.experiments.continual_live import (
     ModelCompletion,
@@ -160,6 +161,147 @@ def test_sealed_gate_and_pretransport_caps_fail_before_network(
     assert actor.seal() == (1, 1)
     with pytest.raises(ALFWorldB0ActorError, match="sealed"):
         actor.act(episode_uid="episode:three", step_index=0, history=[], observation="room")
+
+
+def test_absolute_deadline_rebounds_each_post_and_forbids_late_completion() -> None:
+    class Clock:
+        def __init__(self) -> None:
+            self.value = 100.0
+
+        def __call__(self) -> float:
+            return self.value
+
+    class AdvancingBackend(ScriptedBackend):
+        def tokenize(self, **kwargs: Any) -> TokenPreflightReceipt:
+            receipt = super().tokenize(**kwargs)
+            clock.value = 110.0
+            return receipt
+
+    clock = Clock()
+    backend = AdvancingBackend()
+    observed_timeouts: list[float] = []
+    actor = ALFWorldB0Actor(
+        backend,
+        timeout_backend_factory=lambda timeout: (
+            observed_timeouts.append(timeout) or backend
+        ),
+    )
+    with pytest.raises(ALFWorldB0ActorError, match="wall-time ceiling reached before POST"):
+        actor.act(
+            episode_uid="episode:one",
+            step_index=0,
+            history=[],
+            observation="room",
+            deadline=110.0,
+            monotonic=clock,
+        )
+    assert observed_timeouts == [10.0]
+    assert [kind for kind, _ in backend.calls] == ["tokenize"]
+    assert actor.request_counts == (1, 0)
+
+
+def test_absolute_deadline_binds_tokenize_and_completion_independently() -> None:
+    class Clock:
+        def __init__(self) -> None:
+            self.value = 100.0
+
+        def __call__(self) -> float:
+            return self.value
+
+    class AdvancingBackend(ScriptedBackend):
+        def tokenize(self, **kwargs: Any) -> TokenPreflightReceipt:
+            receipt = super().tokenize(**kwargs)
+            clock.value = 145.0
+            return receipt
+
+    clock = Clock()
+    backend = AdvancingBackend()
+    observed_timeouts: list[float] = []
+    actor = ALFWorldB0Actor(
+        backend,
+        timeout_backend_factory=lambda timeout: (
+            observed_timeouts.append(timeout) or backend
+        ),
+    )
+    actor.act(
+        episode_uid="episode:one",
+        step_index=0,
+        history=[],
+        observation="room",
+        deadline=150.0,
+        monotonic=clock,
+    )
+    assert observed_timeouts == [50.0, 5.0]
+    assert actor.request_counts == (1, 1)
+
+
+def test_absolute_deadline_rechecks_after_tokenize_reserve_before_transport() -> None:
+    class Clock:
+        value = 100.0
+
+        def __call__(self) -> float:
+            return self.value
+
+    clock = Clock()
+
+    class AdvancingGate(B0RequestGate):
+        def reserve(self, kind: str) -> int:
+            index = super().reserve(kind)
+            clock.value = 110.0
+            return index
+
+    backend = ScriptedBackend()
+    actor = ALFWorldB0Actor(
+        backend,
+        request_gate=AdvancingGate(),
+        timeout_backend_factory=lambda _timeout: backend,
+    )
+    with pytest.raises(ALFWorldB0ActorError, match="wall-time ceiling reached before POST"):
+        actor.act(
+            episode_uid="episode:one",
+            step_index=0,
+            history=[],
+            observation="room",
+            deadline=110.0,
+            monotonic=clock,
+        )
+    assert actor.request_counts == (1, 0)
+    assert backend.calls == []
+
+
+def test_absolute_deadline_rechecks_after_completion_reserve_before_transport() -> None:
+    class Clock:
+        value = 100.0
+
+        def __call__(self) -> float:
+            return self.value
+
+    clock = Clock()
+
+    class AdvancingGate(B0RequestGate):
+        def reserve(self, kind: str) -> int:
+            index = super().reserve(kind)
+            if kind == "completion":
+                clock.value = 110.0
+            return index
+
+    backend = ScriptedBackend()
+    actor = ALFWorldB0Actor(
+        backend,
+        request_gate=AdvancingGate(),
+        timeout_backend_factory=lambda _timeout: backend,
+    )
+    with pytest.raises(ALFWorldB0ActorError, match="wall-time ceiling reached before POST"):
+        actor.act(
+            episode_uid="episode:one",
+            step_index=0,
+            history=[],
+            observation="room",
+            deadline=110.0,
+            monotonic=clock,
+        )
+    assert actor.request_counts == (1, 1)
+    assert [kind for kind, _raw in backend.calls] == ["tokenize"]
 
 
 def test_rejects_completion_model_drift() -> None:

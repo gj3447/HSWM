@@ -8,12 +8,14 @@ receives one strictly validated action together with a compact audit receipt.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from hashlib import sha256
 import json
+import math
 import re
 from threading import Lock
-from typing import Any, Mapping
+import time
+from typing import Any, Callable, Mapping
 
 from hswm.selfmod.contracts import canonical_json_bytes
 
@@ -40,6 +42,7 @@ B0_ACTION_MAX_HISTORY_STEPS = 20
 B0_ACTION_MAX_OBSERVATION_BYTES = 32 * 1024
 B0_MAX_TOKENIZE_CALLS = 240
 B0_MAX_COMPLETION_CALLS = 240
+B0_ACTION_TRANSPORT_TIMEOUT_SECONDS = 120.0
 
 # This instruction is intentionally constant.  The episode-specific material
 # belongs exclusively in the one canonical user object below.
@@ -224,10 +227,12 @@ class ALFWorldB0Actor:
         *,
         budget: B0ActionBudget | None = None,
         request_gate: B0RequestGate | None = None,
+        timeout_backend_factory: Callable[[float], OpenAICompatibleBackend] | None = None,
     ) -> None:
         self._backend = backend
         self._budget = budget or B0ActionBudget()
         self._request_gate = request_gate or B0RequestGate()
+        self._timeout_backend_factory = timeout_backend_factory
         identity = backend.identity
         if (
             identity.get("enable_thinking") is not False
@@ -255,6 +260,14 @@ class ALFWorldB0Actor:
             OpenAICompatibleBackend(config),
             budget=budget,
             request_gate=request_gate,
+            timeout_backend_factory=lambda timeout_seconds: OpenAICompatibleBackend(
+                replace(
+                    config,
+                    timeout_seconds=min(
+                        B0_ACTION_TRANSPORT_TIMEOUT_SECONDS, timeout_seconds
+                    ),
+                )
+            ),
         )
 
     @property
@@ -279,7 +292,36 @@ class ALFWorldB0Actor:
         step_index: int,
         history: tuple[Mapping[str, str], ...] | list[Mapping[str, str]],
         observation: str,
+        deadline: float | None = None,
+        monotonic: Callable[[], float] = time.monotonic,
     ) -> B0ActionReceipt:
+        if deadline is not None and (
+            isinstance(deadline, bool)
+            or not isinstance(deadline, (int, float))
+            or not math.isfinite(deadline)
+        ):
+            raise ALFWorldB0ActorError("action deadline must be finite monotonic time")
+
+        def remaining_before_post() -> float | None:
+            if deadline is None:
+                return None
+            remaining = float(deadline) - monotonic()
+            if remaining <= 0:
+                raise ALFWorldB0ActorError("occurrence wall-time ceiling reached before POST")
+            return remaining
+
+        def backend_for_next_post() -> OpenAICompatibleBackend:
+            remaining = remaining_before_post()
+            if remaining is None:
+                return self._backend
+            if self._timeout_backend_factory is None:
+                raise ALFWorldB0ActorError(
+                    "deadline-bound action requires a timeout-bound transport"
+                )
+            return self._timeout_backend_factory(
+                min(B0_ACTION_TRANSPORT_TIMEOUT_SECONDS, remaining)
+            )
+
         _bounded_identifier("episode_uid", episode_uid)
         if (
             isinstance(step_index, bool)
@@ -346,8 +388,11 @@ class ALFWorldB0Actor:
                 raise ALFWorldB0ActorError("tokenize observer saw a different request")
             del response, status, complete
 
+        tokenize_backend = backend_for_next_post()
+        remaining_before_post()
         tokenize_call_index = self._request_gate.reserve("tokenize")
-        preflight = self._backend.tokenize(
+        remaining_before_post()
+        preflight = tokenize_backend.tokenize(
             raw_request=raw_tokenize,
             source_chat_request_sha256=request_sha256,
             max_output_tokens=B0_ACTION_MAX_OUTPUT_TOKENS,
@@ -375,8 +420,11 @@ class ALFWorldB0Actor:
                 raise ALFWorldB0ActorError("completion observer saw a different request")
             del response
 
+        completion_backend = backend_for_next_post()
+        remaining_before_post()
         completion_call_index = self._request_gate.reserve("completion")
-        completion = self._backend.complete(
+        remaining_before_post()
+        completion = completion_backend.complete(
             raw_request=raw_request,
             request_id=request_id,
             response_observer=observe_completion,

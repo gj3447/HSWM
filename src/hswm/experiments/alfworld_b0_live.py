@@ -17,6 +17,11 @@ import subprocess
 from typing import Any, Callable, Mapping
 
 from _research.dnrd5.canonical_json import canonical_bytes
+from scripts.qualify_hswm_alfworld_b0_runtime import (
+    _requirements,
+    _verify_alfworld_archive_tree,
+    installed_environment,
+)
 from .alfworld_b0_actor import ALFWorldB0Actor
 from .alfworld_b0_calibration import (
     COMPLETE_STATUS,
@@ -35,7 +40,11 @@ from .alfworld_b0_selection import (
     TRAIN_GROUP_COUNT,
     VALID_SEEN_GROUP_COUNT,
 )
-from .alfworld_b0_runtime import DgxB0AlfworldTextRuntime, dgx_sandbox_identity
+from .alfworld_b0_runtime import (
+    DgxB0AlfworldTextRuntime,
+    dgx_sandbox_identity,
+    load_local_game_binding,
+)
 from .alfworld_text_runtime import LocalSandboxSpec
 from .continual_live import OpenAIBackendConfig
 
@@ -115,6 +124,7 @@ class LivePaths:
     sudo: Path
     model_snapshot: Path
     hf_hub: Path
+    alfworld_source_archive: Path
     lock: Path
     container_name: str
 
@@ -213,7 +223,7 @@ def _verify_engineering_prerequisites(
     paths: LivePaths,
     protocol_value: Mapping[str, object],
     binding: Mapping[str, str],
-) -> None:
+) -> dict[str, object]:
     """Require both immutable engineering qualifications before selection use."""
 
     verify_protocol(paths.protocol)
@@ -278,6 +288,165 @@ def _verify_engineering_prerequisites(
         or model_runtime.get("successful_completion_post_counter_delta") != 1
     ):
         raise AlfworldB0LiveError("engineering qualification semantics drifted")
+    return runtime
+
+
+def _verify_runtime_environment(
+    paths: LivePaths,
+    protocol_value: Mapping[str, object],
+    runtime_qualification: Mapping[str, object],
+) -> dict[str, str]:
+    """Reidentify the qualified ARM64 environment before the start marker."""
+
+    for field in ("upstream", "venv", "python_runtime_root"):
+        _directory(getattr(paths, field), field)
+    python = paths.python
+    if not python.is_absolute() or not python.is_file():
+        raise AlfworldB0LiveError("python must be an absolute regular file or venv link")
+    try:
+        python.parent.resolve(strict=True).relative_to(paths.venv.resolve(strict=True))
+        python.resolve(strict=True).relative_to(paths.python_runtime_root.resolve(strict=True))
+    except (OSError, ValueError) as error:
+        raise AlfworldB0LiveError(
+            "python must be a venv entry whose target is inside python_runtime_root"
+        ) from error
+    environment = protocol_value.get("environment_runtime")
+    if not isinstance(environment, dict):
+        raise AlfworldB0LiveError("protocol environment runtime is absent")
+    requirements_relative = environment.get("arm64_pddl_only_requirements_path")
+    if not isinstance(requirements_relative, str):
+        raise AlfworldB0LiveError("ARM64 requirements path is invalid")
+    requirements_path = _regular(
+        paths.repo / requirements_relative, "ARM64 requirements"
+    )
+    if not _under(requirements_path, paths.repo):
+        raise AlfworldB0LiveError("ARM64 requirements escaped repository")
+    requirements_raw = requirements_path.read_bytes()
+    requirements_sha = _sha(requirements_raw)
+    contract_path = (
+        paths.repo
+        / "_research/causal_composition/preregistrations/"
+        "alfworld_b0_calibration_2026-08-30/runtime_qualification_contract.v1.json"
+    )
+    contract_raw = _regular(contract_path, "runtime contract").read_bytes()
+    contract_sha = _sha(contract_raw)
+    try:
+        contract = json.loads(contract_raw)
+        profile = contract["runtime_profile"]["alfworld"]
+        requirements_profile = contract["runtime_profile"]["requirements"]
+        execution_sources = contract["execution_sources"]
+    except (KeyError, TypeError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise AlfworldB0LiveError("runtime qualification contract is invalid") from error
+    qualification_contract = runtime_qualification.get("qualification_contract")
+    qualification_sources = runtime_qualification.get("source_code_sha256")
+    if (
+        not isinstance(profile, dict)
+        or not isinstance(requirements_profile, dict)
+        or not isinstance(execution_sources, dict)
+        or canonical_bytes(contract) + b"\n" != contract_raw
+        or not isinstance(qualification_contract, dict)
+        or not isinstance(qualification_sources, dict)
+        or contract_sha != qualification_contract.get("file_sha256")
+        or contract_sha != qualification_sources.get("qualification_contract")
+        or requirements_relative != requirements_profile.get("arm64_pddl_only_path")
+        or requirements_relative != execution_sources.get("arm64_requirements")
+        or requirements_sha != environment.get("arm64_pddl_only_requirements_sha256")
+        or requirements_sha != qualification_sources.get("arm64_requirements")
+        or requirements_sha != requirements_profile.get("arm64_pddl_only_sha256")
+    ):
+        raise AlfworldB0LiveError(
+            "runtime contract or ARM64 requirements binding drifted"
+        )
+    requirements = _requirements(requirements_path)
+    packages, key_versions = installed_environment(python, required=requirements)
+    package_binding = runtime_qualification.get("packages")
+    python_binding = runtime_qualification.get("python")
+    archive = _regular(paths.alfworld_source_archive, "ALFWorld source archive")
+    archive_sha = _sha(archive.read_bytes())
+    _verify_alfworld_archive_tree(archive, paths.upstream, profile)
+    package_list_sha = _sha(canonical_bytes(packages))
+    executable_sha = _sha(python.read_bytes())
+    if (
+        not isinstance(package_binding, dict)
+        or not isinstance(python_binding, dict)
+        or executable_sha != python_binding.get("executable_sha256")
+        or len(packages) != package_binding.get("installed_package_count")
+        or package_list_sha != package_binding.get("installed_package_list_sha256")
+        or key_versions != package_binding.get("key_versions")
+        or archive_sha != environment.get("upstream_source_archive_sha256")
+        or archive_sha != profile.get("source_archive_sha256")
+    ):
+        raise AlfworldB0LiveError("qualified ARM64 runtime identity drifted")
+    member_manifest = profile.get("extracted_tree_member_manifest_sha256")
+    if not isinstance(member_manifest, str):
+        raise AlfworldB0LiveError("ALFWorld member manifest identity is absent")
+    return {
+        "python_executable_sha256": executable_sha,
+        "installed_package_list_sha256": package_list_sha,
+        "alfworld_source_archive_sha256": archive_sha,
+        "alfworld_extracted_tree_member_manifest_sha256": member_manifest,
+    }
+
+
+def _verify_selected_assets(
+    paths: LivePaths,
+) -> dict[str, int]:
+    """Validate all 12 selected files before any marker, lease, or model start."""
+
+    protocol = verify_protocol(paths.protocol)
+    pool_sha = _sha(_regular(paths.pool, "pool").read_bytes())
+    locator_sha = _sha(_regular(paths.locator, "locator").read_bytes())
+    rows, _private_semantic_sha, _selection_sha = verify_private_selection(
+        paths.private_selection,
+        protocol,
+        pool_manifest_sha256=pool_sha,
+        local_locator_sha256=locator_sha,
+    )
+    expected_count = TRAIN_GROUP_COUNT + VALID_SEEN_GROUP_COUNT
+    split_counts = {
+        "train": sum(row.split == "train" for row in rows),
+        "valid_seen": sum(row.split == "valid_seen" for row in rows),
+    }
+    if (
+        len(rows) != expected_count
+        or split_counts
+        != {"train": TRAIN_GROUP_COUNT, "valid_seen": VALID_SEEN_GROUP_COUNT}
+    ):
+        raise AlfworldB0LiveError("selected asset count drifted")
+    for row in rows:
+        observed_pool_sha, observed_locator_sha, binding, game_file = (
+            load_local_game_binding(
+                pool_manifest=paths.pool,
+                local_locator=paths.locator,
+                asset_root=paths.asset_root,
+                opaque_uid=row.opaque_uid,
+            )
+        )
+        if (
+            observed_pool_sha != pool_sha
+            or observed_locator_sha != locator_sha
+            or binding.opaque_uid != row.opaque_uid
+        ):
+            raise AlfworldB0LiveError("selected asset commitment drifted")
+        LocalSandboxSpec(
+            bubblewrap=paths.bubblewrap,
+            python=paths.python,
+            python_runtime_root=paths.python_runtime_root,
+            repository=paths.repo,
+            upstream=paths.upstream,
+            venv=paths.venv,
+            asset_root=paths.asset_root,
+            game_file=game_file,
+            pool_manifest_sha256=pool_sha,
+            local_locator_sha256=locator_sha,
+            game_binding=binding,
+            episode_uid=row.opaque_uid,
+            max_steps=protocol.max_steps,
+        ).validate()
+    return {
+        "selected_file_count": expected_count,
+        "valid_unseen_selected_file_count": 0,
+    }
 
 
 def _verify_selection(paths: LivePaths, protocol_value: Mapping[str, object]) -> dict[str, object]:
@@ -409,11 +578,17 @@ def run_live(
     try:
         protocol_value, binding = _verify_bindings(paths)
         binding["_protocol"] = _sha(paths.protocol.read_bytes())
-        _verify_engineering_prerequisites(paths, protocol_value, binding)
+        runtime_qualification = _verify_engineering_prerequisites(
+            paths, protocol_value, binding
+        )
+        runtime_environment = _verify_runtime_environment(
+            paths, protocol_value, runtime_qualification
+        )
         selection = _verify_selection(paths, protocol_value)
-        for field in ("pool", "locator", "sudo", "bubblewrap", "python"):
+        selected_assets = _verify_selected_assets(paths)
+        for field in ("pool", "locator", "sudo", "bubblewrap"):
             _regular(getattr(paths, field), field)
-        for field in ("asset_root", "upstream", "venv", "python_runtime_root", "model_snapshot", "hf_hub"):
+        for field in ("asset_root", "model_snapshot", "hf_hub"):
             _directory(getattr(paths, field), field)
         if paths.model_snapshot.parents[2] != paths.hf_hub:
             raise AlfworldB0LiveError("model snapshot is not under the declared Hugging Face hub")
@@ -425,6 +600,8 @@ def run_live(
             "terminal": "PRE_LEASE_PRE_ENV_PRE_MODEL_BINDING_SEALED",
             "execution_source_sha256": binding,
             "selection": selection,
+            "selected_assets": selected_assets,
+            "runtime_environment": runtime_environment,
             "pool_manifest_sha256": _sha(paths.pool.read_bytes()),
             "local_locator_sha256": _sha(paths.locator.read_bytes()),
         }
@@ -492,11 +669,30 @@ def run_live(
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    for name in ("repo", "protocol", "private-selection", "public-selection", "pool", "locator", "asset-root", "upstream", "venv", "python", "python-runtime-root", "sudo", "bubblewrap", "model-snapshot", "hf-hub", "lock"):
+    for name in ("repo", "protocol", "private-selection", "public-selection", "pool", "locator", "asset-root", "upstream", "venv", "python", "python-runtime-root", "sudo", "bubblewrap", "model-snapshot", "hf-hub", "alfworld-source-archive", "lock"):
         parser.add_argument("--" + name, required=True, type=Path)
     parser.add_argument("--container", required=True)
     args = parser.parse_args(argv)
-    paths = LivePaths(args.repo, args.protocol, args.private_selection, args.public_selection, args.pool, args.locator, args.asset_root, args.upstream, args.venv, args.python, args.python_runtime_root, args.sudo, args.bubblewrap, args.model_snapshot, args.hf_hub, args.lock, args.container)
+    paths = LivePaths(
+        repo=args.repo,
+        protocol=args.protocol,
+        private_selection=args.private_selection,
+        public_selection=args.public_selection,
+        pool=args.pool,
+        locator=args.locator,
+        asset_root=args.asset_root,
+        upstream=args.upstream,
+        venv=args.venv,
+        python=args.python,
+        python_runtime_root=args.python_runtime_root,
+        bubblewrap=args.bubblewrap,
+        sudo=args.sudo,
+        model_snapshot=args.model_snapshot,
+        hf_hub=args.hf_hub,
+        alfworld_source_archive=args.alfworld_source_archive,
+        lock=args.lock,
+        container_name=args.container,
+    )
     private, _public_value = run_live(paths)
     return 0 if private["status"] == COMPLETE_STATUS else 2
 

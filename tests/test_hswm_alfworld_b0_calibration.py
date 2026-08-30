@@ -143,6 +143,7 @@ class _FakeActor:
         self._sealed = False
         self.fail_call = fail_call
         self.received: list[dict[str, Any]] = []
+        self.deadline_calls: list[tuple[float | None, Any]] = []
 
     @property
     def request_counts(self) -> tuple[int, int]:
@@ -159,7 +160,10 @@ class _FakeActor:
         step_index: int,
         history: tuple[dict[str, str], ...],
         observation: str,
+        deadline: float | None = None,
+        monotonic: Any = None,
     ) -> B0ActionReceipt:
+        self.deadline_calls.append((deadline, monotonic))
         assert not self._sealed
         self._tokenize += 1
         if self.fail_call == self._tokenize:
@@ -504,6 +508,37 @@ def test_actor_transport_failure_records_issued_prefix(tmp_path: Path) -> None:
     assert public["resource_totals"]["issued_tokenize_post_count"] == 2
     assert public["resource_totals"]["issued_completion_post_count"] == 1
     assert private["episode_prefix"][-1]["failed_actor_attempt"] is not None
+
+
+def test_calibration_forwards_one_absolute_deadline_to_every_actor_call(
+    tmp_path: Path,
+) -> None:
+    protocol, selection, pool, locator, asset = _fixture(tmp_path)
+    actor = _FakeActor()
+
+    class Clock:
+        def __call__(self) -> float:
+            return 50.0
+
+    clock = Clock()
+    private, _ = run_b0_calibration(
+        protocol=protocol,
+        private_selection_receipt=selection,
+        pool_manifest=pool,
+        local_locator=locator,
+        asset_root=asset,
+        sandbox_spec_factory=_factory(tmp_path),
+        runtime_launcher=lambda spec: _Process(
+            uid=spec.episode_uid, source_sha=spec.game_binding.file_sha256
+        ),
+        actor=actor,
+        frame_reader=_reader,
+        monotonic=clock,
+    )
+    assert private["status"] == COMPLETE_STATUS
+    assert actor.deadline_calls
+    assert all(deadline == 36_050.0 for deadline, _ in actor.deadline_calls)
+    assert all(observed_monotonic is clock for _, observed_monotonic in actor.deadline_calls)
 
 
 def test_protocol_runtime_drift_is_rejected() -> None:

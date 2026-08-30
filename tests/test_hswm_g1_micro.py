@@ -28,7 +28,6 @@ _OPAQUE_PROTOCOL = (
     / "_research/causal_composition/preregistrations/"
     "g1_opaque_identifiability_pilot_2026-08-30/protocol.v1.json"
 )
-_OPAQUE_REVEAL = Path("/tmp/hswm-g1-opaque-evaluator-reveal-v1.json")
 _SNAPSHOT_MANIFEST = (
     Path(__file__).parents[1]
     / "_research/dgx_mi2/preregistrations/"
@@ -343,12 +342,39 @@ def _opaque_protocol(
     registry = tmp_path / "durable" / "opaque-once"
     registry.parent.mkdir(parents=True)
     protocol["consumption_registry"]["path"] = str(registry)
+
+    # Tests must not depend on the evaluator-only live reveal.  Build a
+    # deterministic synthetic reveal from the public action codes and bind a
+    # copied protocol to its own commitments.  Selecting the first stateful
+    # position for episodes 1--4 and the second for 5--8 preserves the frozen
+    # 4/4 candidate-position balance (NO_UPDATE uses the opposite order).
+    reveal_entries: list[dict[str, Any]] = []
+    commitments: list[str] = []
+    for episode in protocol["episodes"]:
+        ordinal = int(episode["ordinal"])
+        entry = {
+            "correct_action_code": episode["stateful_probe_action_order"][
+                0 if ordinal <= 4 else 1
+            ],
+            "episode_uid": episode["episode_uid"],
+            "leakage_canary": f"canary_test_{ordinal:02d}",
+            "ordinal": ordinal,
+            "salt": f"salt_test_{ordinal:02d}",
+        }
+        commitment = canonical_sha256(entry)
+        episode["evaluator_commitment_sha256"] = commitment
+        reveal_entries.append(entry)
+        commitments.append(commitment)
+    reveal_root = canonical_sha256({"episode_commitments": commitments})
+    protocol["evaluator_reveal_contract"]["reveal_commitment_root"] = reveal_root
     protocol_sha = canonical_sha256(protocol)
-    reveal = json.loads(_OPAQUE_REVEAL.read_bytes())
-    reveal["protocol_canonical_sha256"] = protocol_sha
-    reveal["reveal_commitment_root"] = protocol["evaluator_reveal_contract"][
-        "reveal_commitment_root"
-    ]
+    reveal = {
+        "episodes": reveal_entries,
+        "protocol_canonical_sha256": protocol_sha,
+        "reveal_commitment_root": reveal_root,
+        "schema_version": "hswm-g1-opaque-evaluator-reveal/v1",
+        "study_uid": protocol["study_uid"],
+    }
     reveal_path = tmp_path / "evaluator-reveal.json"
     reveal_path.write_bytes(canonical_json_bytes(reveal))
     return protocol, protocol_sha, registry, reveal_path, reveal

@@ -18,30 +18,42 @@ ROOT = Path(__file__).resolve().parents[1]
 ONTOLOGY_PATH = ROOT / builder.ONTOLOGY_PATH
 REGISTRY_UID = "sym:KG_INFRA:schema-registry-v1-2026-08-03"
 EXPECTED_COUNTS = {
-    "nodes": 34,
-    "anchors": 12,
-    "relations": 161,
+    "nodes": 35,
+    "anchors": 16,
+    "relations": 170,
     "target_invariants": 5,
     "mechanism_families": 9,
     "disposition_states": 8,
     "guardrails": 6,
-    "source_records": 3,
+    "source_records": 4,
 }
 EXPECTED_PROJECTION_SHA256 = (
-    "ec0eaeb76b195fadc90c84390a3a4d53ae3df92ad1f5770926e8c5713c38e856"
+    "a9e8e313bd848b10d0e73f2c0fef95ffcff68ccc341a209487625e9b78f83317"
 )
 EXPECTED_NODES_SHA256 = (
-    "b2a660f42dc89cf6ddc0656435fc6c60635a5ac12f6dbb3ed72dc37993cd5b5b"
+    "6bb7bd8a83492c929ef41da4fc88cafcf5717cc1df68446bf79caa3365feec91"
 )
 EXPECTED_ANCHORS_SHA256 = (
-    "29adef9f1a05d618b6c48e4198ecd4e290a13f446ef1118b57cd1f091b4356a8"
+    "cf0a52f56dff7ff43c91c24a377981fccb04fbc81fc1da985c65299a44e93c41"
 )
 EXPECTED_RELATIONS_SHA256 = (
-    "5ba663807891dad391e3d8a03b9c2ee511e90ff3cbaf8b433a1ebd268528f16f"
+    "0934b506e0e9017ee8d39e851f3b0c83a9be4d21fcb35edea820df994030cfa1"
 )
 EXPECTED_FILE_SHA256 = (
+    "b44c13a76724f545c492a36b5a32cf02339f6fa89846aae5ec218de14d1e6cbb"
+)
+PREDECESSOR_FILE_SHA256 = (
     "c566d78c4babbac14138ccf17cafd4022bfdf4f39566238ec348a61e5e733627"
 )
+PREDECESSOR_SNAPSHOT = {
+    "nodes": 34,
+    "node_sha256": "9e05f787578cb54a22fca6576fa1218dc89a363c9918bb4b7f0d85ec71f3c3b6",
+    "relations": 161,
+    "relation_sha256": "048afaf36196c4d7baad591a656584a4dc1ad0f7eef06bb0c75202f8f505760e",
+}
+MIGRATION_NEW_NODE_UIDS = {
+    builder.CONSTITUTION_UID,
+}
 SAFE_LABEL = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 SAFE_RELATION = re.compile(r"[A-Z][A-Z0-9_]*")
 TOP_LEVEL_KEYS = {
@@ -248,6 +260,11 @@ def validate_data(data: dict[str, Any], repo_root: Path = ROOT) -> None:
         raise ValueError("auxiliary mechanism scientific state overclaims")
     if any(row["properties"]["epistemic_state"] != "STATE_DEFINITION" for row in dispositions):
         raise ValueError("disposition definition was mistaken for an observation")
+    if {
+        row["properties"].get("source_path")
+        for row in sources
+    } != {path.as_posix() for path in builder.SOURCE_RECORD_PATHS}:
+        raise ValueError("source-record provenance is incomplete")
 
     endpoints = set(node_uids + anchor_uids)
     relation_keys: list[tuple[str, str, str]] = []
@@ -278,6 +295,38 @@ def validate_data(data: dict[str, Any], repo_root: Path = ROOT) -> None:
     }
     if not expected_fcl_preservation <= relation_set:
         raise ValueError("adaptive program does not preserve every FCL target obligation")
+    commitment_preserves = {
+        to_uid
+        for from_uid, relation_type, to_uid in relation_set
+        if from_uid == builder.COMMITMENT_UID and relation_type == "PRESERVES"
+    }
+    if commitment_preserves != {builder.TARGET_INVARIANTS["TI-1"]["uid"]}:
+        raise ValueError("adaptive USER_PRIMARY source was extended beyond TI-1")
+    for invariant in builder.TARGET_INVARIANTS.values():
+        invariant_uid = invariant["uid"]
+        expected_sources = set(invariant["source_uids"])
+        observed_sources = {
+            to_uid
+            for from_uid, relation_type, to_uid in relation_set
+            if from_uid == invariant_uid and relation_type == "HAS_SOURCE"
+        }
+        if observed_sources != expected_sources:
+            raise ValueError("target invariant canonical provenance drifted")
+        if by_uid[invariant_uid]["properties"].get("canonical_source_uids") != invariant["source_uids"]:
+            raise ValueError("target invariant source-property provenance drifted")
+    required_fcl_sources = {
+        builder.FRACTAL_SCIENTIFIC_CONNECTIONS_UID,
+        builder.FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY_UID,
+    }
+    observed_fcl_sources = {
+        to_uid
+        for from_uid, relation_type, to_uid in relation_set
+        if from_uid == builder.PROGRAM_UID
+        and relation_type == "HAS_SOURCE"
+        and to_uid in required_fcl_sources
+    }
+    if observed_fcl_sources != required_fcl_sources:
+        raise ValueError("FCL scientific-connection provenance is incomplete")
     if (
         builder.BUNDLE_UID,
         "DOES_NOT_ENFORCE",
@@ -329,6 +378,76 @@ def _expected_relation_properties(data: Mapping[str, Any], row: Mapping[str, Any
     }
 
 
+def _snapshot_digest(rows: list[dict[str, Any]], *, relation: bool) -> str:
+    if relation:
+        ordered = sorted(
+            rows,
+            key=lambda row: (row["from_uid"], row["type"], row["to_uid"]),
+        )
+    else:
+        ordered = sorted(rows, key=lambda row: row["uid"])
+    return builder.canonical_sha(ordered)
+
+
+def _snapshot_descriptor(
+    nodes: list[dict[str, Any]], relations: list[dict[str, Any]]
+) -> dict[str, int | str]:
+    normalized_nodes = [
+        {
+            "uid": row["uid"],
+            "labels": sorted(row["labels"]),
+            "properties": row["properties"],
+        }
+        for row in nodes
+    ]
+    normalized_relations = [
+        {
+            "from_uid": row["from_uid"],
+            "type": row["type"],
+            "to_uid": row["to_uid"],
+            "properties": row["properties"],
+        }
+        for row in relations
+    ]
+    return {
+        "nodes": len(normalized_nodes),
+        "node_sha256": _snapshot_digest(normalized_nodes, relation=False),
+        "relations": len(normalized_relations),
+        "relation_sha256": _snapshot_digest(normalized_relations, relation=True),
+    }
+
+
+def _expected_snapshot(data: Mapping[str, Any]) -> dict[str, int | str]:
+    nodes = [
+        {
+            "uid": row["uid"],
+            "labels": row["labels"],
+            "properties": _expected_node_properties(data, row),
+        }
+        for row in data["nodes"]
+    ]
+    relations = [
+        {
+            "from_uid": row["from_uid"],
+            "type": row["type"],
+            "to_uid": row["to_uid"],
+            "properties": _expected_relation_properties(data, row),
+        }
+        for row in data["relations"]
+    ]
+    return _snapshot_descriptor(nodes, relations)
+
+
+def classify_owned_snapshot(snapshot: Mapping[str, int | str], data: Mapping[str, Any]) -> str:
+    """Return the only safe owned-bundle state; reject partial or unknown data."""
+
+    if dict(snapshot) == PREDECESSOR_SNAPSHOT:
+        return "EXACT_PREDECESSOR"
+    if dict(snapshot) == _expected_snapshot(data):
+        return "EXACT_CURRENT"
+    raise RuntimeError("adaptive-research bundle is partial, mixed, or unknown")
+
+
 def _find_unique_nodes(tx: Any, uids: list[str]) -> dict[str, dict[str, Any]]:
     rows = tx.run(
         "MATCH (n) WHERE n.uid IN $uids "
@@ -356,6 +475,155 @@ def _relation_rows(tx: Any, row: Mapping[str, Any]) -> list[dict[str, Any]]:
         from_uid=row["from_uid"],
         to_uid=row["to_uid"],
     ).data()
+
+
+def _owned_bundle_rows(tx: Any, bundle_uid: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    nodes = tx.run(
+        "MATCH (n {ontology_bundle_uid:$bundle_uid}) "
+        "RETURN n.uid AS uid, labels(n) AS labels, properties(n) AS properties",
+        bundle_uid=bundle_uid,
+    ).data()
+    relations = tx.run(
+        "MATCH (a)-[r {ontology_bundle_uid:$bundle_uid}]->(b) "
+        "RETURN a.uid AS from_uid, type(r) AS type, b.uid AS to_uid, "
+        "properties(r) AS properties",
+        bundle_uid=bundle_uid,
+    ).data()
+    return nodes, relations
+
+
+def _create_node(tx: Any, properties: Mapping[str, Any], labels: list[str]) -> None:
+    tx.run(
+        f"CREATE (n:{':'.join(labels)}) SET n=$properties",
+        properties=dict(properties),
+    ).consume()
+
+
+def _migrate_exact_predecessor(
+    tx: Any,
+    data: Mapping[str, Any],
+    predecessor_nodes: list[dict[str, Any]],
+    predecessor_relations: list[dict[str, Any]],
+) -> dict[str, int]:
+    """Migrate the sole known predecessor inside the caller's transaction."""
+
+    current_by_uid = {row["uid"]: row for row in data["nodes"]}
+    predecessor_by_uid = {row["uid"]: row for row in predecessor_nodes}
+    predecessor_uids = {row["uid"] for row in predecessor_nodes}
+    retained_uids = set(current_by_uid) - MIGRATION_NEW_NODE_UIDS
+    if predecessor_uids != retained_uids:
+        raise RuntimeError("known predecessor node set is not the declared migration input")
+    if any(set(row["labels"]) != set(current_by_uid[row["uid"]]["labels"]) for row in predecessor_nodes):
+        raise RuntimeError("known predecessor labels are incompatible with current projection")
+    observed_retained = _find_unique_nodes(tx, sorted(retained_uids))
+    if set(observed_retained) != retained_uids:
+        raise RuntimeError("retained predecessor UID set has an external collision")
+    for uid in sorted(retained_uids):
+        _assert_exact_node(
+            uid,
+            {
+                "labels": predecessor_by_uid[uid]["labels"],
+                "properties": predecessor_by_uid[uid]["properties"],
+            },
+            observed_retained[uid],
+        )
+    if _find_unique_nodes(tx, sorted(MIGRATION_NEW_NODE_UIDS)):
+        raise RuntimeError("new adaptive-research source UID already exists externally")
+
+    current_relations = {
+        (row["from_uid"], row["type"], row["to_uid"]): row
+        for row in data["relations"]
+    }
+    predecessor_keys = {
+        (row["from_uid"], row["type"], row["to_uid"])
+        for row in predecessor_relations
+    }
+    predecessor_by_key = {
+        (row["from_uid"], row["type"], row["to_uid"]): row
+        for row in predecessor_relations
+    }
+    removed_keys = predecessor_keys - set(current_relations)
+    expected_removed = {
+        (builder.COMMITMENT_UID, "PRESERVES", builder.TARGET_INVARIANTS[key]["uid"])
+        for key in ("TI-2", "TI-3", "TI-4", "TI-5")
+    }
+    if removed_keys != expected_removed:
+        raise RuntimeError("known predecessor does not have exactly the four retired USER_PRIMARY edges")
+    retained_keys = predecessor_keys & set(current_relations)
+    new_keys = set(current_relations) - predecessor_keys
+    for key in retained_keys:
+        rows = _relation_rows(tx, current_relations[key])
+        if (
+            len(rows) != 1
+            or rows[0]["properties"] != predecessor_by_key[key]["properties"]
+        ):
+            raise RuntimeError(f"retained relation has an external collision: {key}")
+    for key in new_keys:
+        if _relation_rows(tx, current_relations[key]):
+            raise RuntimeError(f"new relation collides with an external relation: {key}")
+
+    old_removed_properties = {
+        "ontology_bundle_uid": data["bundle_uid"],
+        "ontology_projection_sha256": PREDECESSOR_FILE_SHA256,
+        "authority_class": "USER_PRIMARY",
+        "scope": "TARGET_DIRECTION",
+        "status": "USER_RATIFIED",
+    }
+    for key in removed_keys:
+        rows = _relation_rows(tx, predecessor_by_key[key])
+        if len(rows) != 1 or rows[0]["properties"] != old_removed_properties:
+            raise RuntimeError(f"retired relation has an external collision: {key}")
+
+    for from_uid, _relation_type, to_uid in sorted(removed_keys):
+        deleted = tx.run(
+            "MATCH (a {uid:$from_uid})-[r:PRESERVES]->(b {uid:$to_uid}) "
+            "WHERE properties(r) = $properties DELETE r RETURN 1 AS deleted",
+            from_uid=from_uid,
+            to_uid=to_uid,
+            properties=old_removed_properties,
+        ).data()
+        if len(deleted) != 1 or deleted[0].get("deleted") != 1:
+            raise RuntimeError("retired predecessor relation was not exact and unique")
+
+    for uid in sorted(retained_uids):
+        count = tx.run(
+            "MATCH (n {uid:$uid}) SET n=$properties RETURN count(n) AS count",
+            uid=uid,
+            properties=_expected_node_properties(data, current_by_uid[uid]),
+        ).single()["count"]
+        if count != 1:
+            raise RuntimeError(f"retained predecessor node is not unique: {uid}")
+    for uid in sorted(MIGRATION_NEW_NODE_UIDS):
+        row = current_by_uid[uid]
+        _create_node(tx, _expected_node_properties(data, row), row["labels"])
+
+    for key in sorted(retained_keys):
+        row = current_relations[key]
+        count = tx.run(
+            "MATCH (a {uid:$from_uid})-[r]->(b {uid:$to_uid}) "
+            f"WHERE type(r) = '{row['type']}' SET r=$properties RETURN count(r) AS count",
+            from_uid=row["from_uid"],
+            to_uid=row["to_uid"],
+            properties=_expected_relation_properties(data, row),
+        ).single()["count"]
+        if count != 1:
+            raise RuntimeError(f"retained relation is not unique: {key}")
+    for key in sorted(new_keys):
+        row = current_relations[key]
+        tx.run(
+            "MATCH (a {uid:$from_uid}), (b {uid:$to_uid}) "
+            f"CREATE (a)-[r:{row['type']}]->(b) SET r=$properties",
+            from_uid=row["from_uid"],
+            to_uid=row["to_uid"],
+            properties=_expected_relation_properties(data, row),
+        ).consume()
+    return {
+        "migrated_nodes": len(retained_uids),
+        "created_nodes": len(MIGRATION_NEW_NODE_UIDS),
+        "deleted_relations": len(removed_keys),
+        "updated_relations": len(retained_keys),
+        "created_relations": len(new_keys),
+    }
 
 
 def _registry_readback(tx: Any, data: Mapping[str, Any]) -> None:
@@ -437,54 +705,44 @@ def publish(data: dict[str, Any], config: dict[str, str]) -> dict[str, int]:
                     if not set(row["required_labels"]) <= set(observed["labels"]):
                         raise RuntimeError(f"anchor label drifted: {row['uid']}")
 
-                new_uids = [row["uid"] for row in data["nodes"]]
-                existing = _find_unique_nodes(tx, new_uids)
-                if existing and len(existing) != len(new_uids):
-                    raise RuntimeError("refusing a partial pre-existing adaptive-research projection")
-                if existing:
-                    expected_by_uid = {row["uid"]: row for row in data["nodes"]}
-                    for uid, observed in existing.items():
-                        row = expected_by_uid[uid]
-                        _assert_exact_node(
-                            uid,
-                            {"labels": row["labels"], "properties": _expected_node_properties(data, row)},
-                            observed,
-                        )
-                else:
-                    for row in data["nodes"]:
-                        labels = ":".join(row["labels"])
-                        tx.run(
-                            f"CREATE (n:{labels}) SET n=$properties",
-                            properties=_expected_node_properties(data, row),
-                        ).consume()
+                owned_nodes, owned_relations = _owned_bundle_rows(tx, data["bundle_uid"])
+                if owned_nodes or owned_relations:
+                    state = classify_owned_snapshot(
+                        _snapshot_descriptor(owned_nodes, owned_relations), data
+                    )
+                    if state == "EXACT_CURRENT":
+                        return {
+                            "created_nodes": 0,
+                            "created_relations": 0,
+                            "existing_nodes": len(owned_nodes),
+                            "existing_relations": len(owned_relations),
+                            **_exact_readback(tx, data),
+                        }
+                    migration = _migrate_exact_predecessor(
+                        tx, data, owned_nodes, owned_relations
+                    )
+                    return {**migration, **_exact_readback(tx, data)}
 
-                found_relations: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
+                new_uids = [row["uid"] for row in data["nodes"]]
+                if _find_unique_nodes(tx, new_uids):
+                    raise RuntimeError("new adaptive-research projection UID already exists externally")
+                for row in data["nodes"]:
+                    _create_node(tx, _expected_node_properties(data, row), row["labels"])
                 for row in data["relations"]:
-                    key = (row["from_uid"], row["type"], row["to_uid"])
-                    found = _relation_rows(tx, row)
-                    if len(found) > 1:
-                        raise RuntimeError(f"duplicate existing relationship: {key}")
-                    if found and found[0]["properties"] != _expected_relation_properties(data, row):
-                        raise RuntimeError(f"relationship property collision or drift: {key}")
-                    found_relations[key] = found
-                if any(found_relations.values()) and not all(found_relations.values()):
-                    raise RuntimeError("refusing a partial adaptive-research relation set")
-                created_relations = 0
-                if not any(found_relations.values()):
-                    for row in data["relations"]:
-                        tx.run(
-                            "MATCH (a {uid:$from_uid}), (b {uid:$to_uid}) "
-                            f"CREATE (a)-[r:{row['type']}]->(b) SET r=$properties",
-                            from_uid=row["from_uid"],
-                            to_uid=row["to_uid"],
-                            properties=_expected_relation_properties(data, row),
-                        ).consume()
-                        created_relations += 1
+                    if _relation_rows(tx, row):
+                        raise RuntimeError("new adaptive-research relation collides externally")
+                    tx.run(
+                        "MATCH (a {uid:$from_uid}), (b {uid:$to_uid}) "
+                        f"CREATE (a)-[r:{row['type']}]->(b) SET r=$properties",
+                        from_uid=row["from_uid"],
+                        to_uid=row["to_uid"],
+                        properties=_expected_relation_properties(data, row),
+                    ).consume()
                 return {
-                    "created_nodes": 0 if existing else len(new_uids),
-                    "created_relations": created_relations,
-                    "existing_nodes": len(existing),
-                    "existing_relations": len(data["relations"]) - created_relations,
+                    "created_nodes": len(new_uids),
+                    "created_relations": len(data["relations"]),
+                    "existing_nodes": 0,
+                    "existing_relations": 0,
                     **_exact_readback(tx, data),
                 }
 

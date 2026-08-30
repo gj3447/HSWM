@@ -19,16 +19,63 @@ CANON_PATH = Path("docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md")
 METHODOLOGY_PATH = Path(
     "docs/research/HSWM_ADAPTIVE_REALIZATION_METHODOLOGY_2026-08-30.md"
 )
+CONSTITUTION_PATH = Path("docs/canon/HSWM_CONSTITUTION_2026-08-20.md")
+FRACTAL_USER_SOURCE_PATH = Path(
+    "docs/canon/sources/"
+    "USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.txt"
+)
+FRACTAL_CANON_PATH = Path(
+    "docs/canon/USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md"
+)
+FRACTAL_SCIENTIFIC_CONNECTIONS_PATH = Path(
+    "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md"
+)
+FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY_PATH = Path(
+    "ontology/identity/human_universal_body/"
+    "HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json"
+)
 ONTOLOGY_PATH = Path(
     "ontology/identity/hswm_core/"
     "HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json"
 )
-SOURCE_BINDING_PATHS = (SOURCE_PATH, CANON_PATH, METHODOLOGY_PATH)
+SOURCE_BINDING_PATHS = (
+    SOURCE_PATH,
+    CANON_PATH,
+    METHODOLOGY_PATH,
+    CONSTITUTION_PATH,
+    FRACTAL_USER_SOURCE_PATH,
+    FRACTAL_CANON_PATH,
+    FRACTAL_SCIENTIFIC_CONNECTIONS_PATH,
+    FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY_PATH,
+)
+SOURCE_RECORD_PATHS = (SOURCE_PATH, CANON_PATH, METHODOLOGY_PATH, CONSTITUTION_PATH)
 
 SCHEMA_VERSION = "hswm-adaptive-research-strategy-ontology/v1"
 BUNDLE_UID = "sym:AbstractNode:hswm-adaptive-research-strategy-ontology-2026-08-30"
 PROGRAM_UID = "sym:ResearchProgram:hswm-adaptive-realization-program-2026-08-30"
 COMMITMENT_UID = "sym:Concept:hswm-target-persistence-adaptive-method-commitment"
+ADAPTIVE_USER_SOURCE_UID = (
+    "sym:AbstractNode:user-primary-hswm-target-fixed-methods-adaptive-2026-08-30"
+)
+ADAPTIVE_CANON_UID = (
+    "sym:AbstractNode:hswm-adaptive-research-strategy-canon-2026-08-30"
+)
+METHODOLOGY_UID = (
+    "sym:AbstractNode:hswm-adaptive-realization-methodology-2026-08-30"
+)
+CONSTITUTION_UID = "sym:AbstractNode:hswm-constitution-2026-08-20"
+FRACTAL_USER_SOURCE_UID = (
+    "sym:CanonicalSource:user-primary-hswm-fractal-cognitive-composition-2026-08-28"
+)
+FRACTAL_CANON_UID = (
+    "sym:AbstractNode:hswm-fractal-cognitive-composition-canon-2026-08-28"
+)
+FRACTAL_SCIENTIFIC_CONNECTIONS_UID = (
+    "sym:AbstractNode:hswm-fractal-scientific-connections-2026-08-28"
+)
+FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY_UID = (
+    "sym:AbstractNode:hswm-fractal-scientific-connections-ontology-2026-08-28"
+)
 STATUS = "TARGET_IDENTITY_FIXED_METHODS_ADAPTIVE_SCIENTIFICALLY_UNJUDGED"
 NONCLAIM = (
     "TARGET_AND_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_"
@@ -66,6 +113,7 @@ TARGET_INVARIANTS = {
         ),
         "fcl_ids": [],
         "authority": "USER_PRIMARY_TARGET_DIRECTION",
+        "source_uids": [ADAPTIVE_USER_SOURCE_UID, CONSTITUTION_UID],
     },
     "TI-2": {
         "uid": "sym:Concept:hswm-adaptive-ti2-unified-evolving-hypergraph",
@@ -75,7 +123,8 @@ TARGET_INVARIANTS = {
             "living-harness, world/self-model, and continuous-learner roles."
         ),
         "fcl_ids": ["FCL-6", "FCL-7"],
-        "authority": "USER_PRIMARY_TARGET_WITH_SECONDARY_FORMALIZATION",
+        "authority": "CANONICAL_TARGET_WITH_SECONDARY_FORMALIZATION",
+        "source_uids": [CONSTITUTION_UID, FRACTAL_CANON_UID],
     },
     "TI-3": {
         "uid": "sym:Concept:hswm-adaptive-ti3-local-causal-closure",
@@ -85,7 +134,8 @@ TARGET_INVARIANTS = {
             "and owner/Permit-valid canonical revision to changed fresh behavior."
         ),
         "fcl_ids": ["FCL-1", "FCL-4"],
-        "authority": "USER_PRIMARY_FCL_WITH_SECONDARY_FORMALIZATION",
+        "authority": "CANONICAL_FCL_WITH_SECONDARY_FORMALIZATION",
+        "source_uids": [CONSTITUTION_UID, FRACTAL_CANON_UID],
     },
     "TI-4": {
         "uid": "sym:Concept:hswm-adaptive-ti4-same-type-fractal-composition",
@@ -95,7 +145,8 @@ TARGET_INVARIANTS = {
             "again satisfies Step, Learn, Inv, Permit, and identity-learning lineage."
         ),
         "fcl_ids": list(FCL_UIDS),
-        "authority": "USER_PRIMARY_FRACTAL_TARGET_WITH_SECONDARY_FORMALIZATION",
+        "authority": "CANONICAL_FRACTAL_TARGET_WITH_SECONDARY_FORMALIZATION",
+        "source_uids": [FRACTAL_USER_SOURCE_UID, FRACTAL_CANON_UID],
     },
     "TI-5": {
         "uid": "sym:Concept:hswm-adaptive-ti5-difference-rights-lineage",
@@ -105,7 +156,8 @@ TARGET_INVARIANTS = {
             "consent, exit, rollback, and recovery across composition and rerouting."
         ),
         "fcl_ids": ["FCL-2", "FCL-5", "FCL-7", "FCL-8"],
-        "authority": "MIXED_CANONICAL_TARGET_AND_SECONDARY_OPERATIONALIZATION",
+        "authority": "CANONICAL_TARGET_AND_SECONDARY_OPERATIONALIZATION",
+        "source_uids": [CONSTITUTION_UID, FRACTAL_CANON_UID],
     },
 }
 
@@ -210,6 +262,26 @@ ANCHORS = [
         "uid": "sym:ResearchProgram:hswm-pidna-research-2026-08-29",
         "name": "PIDNA — Pure Intelligence DNA research project",
         "required_labels": ["Concept", "ResearchProgram", "ResearchArtifact"],
+    },
+    {
+        "uid": FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY_UID,
+        "name": "HSWM fractal scientific connections ontology 2026-08-28",
+        "required_labels": ["AbstractNode", "ResearchArtifact"],
+    },
+    {
+        "uid": FRACTAL_USER_SOURCE_UID,
+        "name": "USER_PRIMARY HSWM fractal cognitive composition 2026-08-28",
+        "required_labels": ["AbstractNode", "SourceDocument", "CanonicalSource"],
+    },
+    {
+        "uid": FRACTAL_CANON_UID,
+        "name": "HSWM fractal cognitive composition canon 2026-08-28",
+        "required_labels": ["AbstractNode", "ResearchArtifact"],
+    },
+    {
+        "uid": FRACTAL_SCIENTIFIC_CONNECTIONS_UID,
+        "name": "HSWM fractal cognitive-composition scientific connection synthesis",
+        "required_labels": ["AbstractNode", "ResearchArtifact"],
     },
 ]
 
@@ -366,7 +438,7 @@ def build_data() -> dict[str, Any]:
 
     document_specs = (
         (
-            "sym:AbstractNode:user-primary-hswm-target-fixed-methods-adaptive-2026-08-30",
+            ADAPTIVE_USER_SOURCE_UID,
             SOURCE_PATH,
             "Exact USER_PRIMARY HSWM target-persistence source",
             "USER_PRIMARY",
@@ -374,7 +446,7 @@ def build_data() -> dict[str, Any]:
             "EXACT_USER_SOURCE",
         ),
         (
-            "sym:AbstractNode:hswm-adaptive-research-strategy-canon-2026-08-30",
+            ADAPTIVE_CANON_UID,
             CANON_PATH,
             "HSWM adaptive research strategy canon",
             "MIXED_USER_PRIMARY_AND_SECONDARY_AI",
@@ -382,12 +454,20 @@ def build_data() -> dict[str, Any]:
             "CANONICAL_DIRECTION_DOCUMENT",
         ),
         (
-            "sym:AbstractNode:hswm-adaptive-realization-methodology-2026-08-30",
+            METHODOLOGY_UID,
             METHODOLOGY_PATH,
             "HSWM adaptive realization methodology",
             "SECONDARY_AI",
             ["AbstractNode", "SourceDocument", "ResearchArtifact"],
             "RESEARCH_METHODOLOGY_DOCUMENT",
+        ),
+        (
+            CONSTITUTION_UID,
+            CONSTITUTION_PATH,
+            "HSWM Constitution",
+            "CANONICAL_TARGET_IDENTITY_WITH_SECONDARY_AI_FORMALIZATION",
+            ["AbstractNode", "SourceDocument", "ResearchArtifact"],
+            "CONSTITUTIONAL_TARGET_SOURCE",
         ),
     )
     for uid, path, name, authority, labels, role in document_specs:
@@ -440,6 +520,7 @@ def build_data() -> dict[str, Any]:
                     ),
                     "invariant_id": invariant_id,
                     "mapped_fcl_ids": invariant["fcl_ids"],
+                    "canonical_source_uids": invariant["source_uids"],
                     "amendment_policy": "EXPLICIT_SOURCE_BOUND_CANONICAL_SUPERSESSION_ONLY",
                 },
             )
@@ -527,7 +608,7 @@ def build_data() -> dict[str, Any]:
 
     local_uids = {row["uid"] for row in nodes}
     relations: list[dict[str, str]] = []
-    source_uid, canon_uid, method_uid = [row[0] for row in document_specs]
+    source_uid, canon_uid, method_uid = [row[0] for row in document_specs[:3]]
 
     for uid in sorted(local_uids - {BUNDLE_UID}):
         relations.append(
@@ -540,10 +621,11 @@ def build_data() -> dict[str, Any]:
     relations.extend(
         (
             _relation(source_uid, "USER_PRIMARY_SOURCE_FOR", COMMITMENT_UID, "EXACT_USER_DIRECTION", "BOUND", "USER_PRIMARY"),
-            _relation(source_uid, "USER_PRIMARY_SOURCE_FOR", canon_uid, "CANON_AUTHORITY", "BOUND", "USER_PRIMARY"),
+            _relation(source_uid, "USER_PRIMARY_SOURCE_FOR", canon_uid, "ADAPTIVE_METHOD_DIRECTION", "BOUND", "USER_PRIMARY"),
             _relation(canon_uid, "DEFINES_DIRECTION_FOR", PROGRAM_UID, "TARGET_PERSISTENCE", "ACTIVE", "MIXED_USER_PRIMARY_AND_SECONDARY_AI"),
             _relation(method_uid, "HAS_CONCEPT", PROGRAM_UID, "OPERATIONAL_METHOD", "PROPOSED"),
             _relation(COMMITMENT_UID, "DEFINES_DIRECTION_FOR", PROGRAM_UID, "TARGET_PERSISTENCE", "USER_RATIFIED", "USER_PRIMARY"),
+            _relation(COMMITMENT_UID, "PRESERVES", TARGET_INVARIANTS["TI-1"]["uid"], "TARGET_DIRECTION", "USER_RATIFIED", "USER_PRIMARY"),
             _relation(PROGRAM_UID, "PRESERVES", "sym:Concept:hswm", "TARGET_IDENTITY", "TARGET_ONLY"),
             _relation(BUNDLE_UID, "DOES_NOT_ENFORCE", "sym:Concept:hswm", "PROJECTION_NONCLAIM", "NOT_EVIDENCE", "SYSTEM_DERIVED"),
             _relation(PROGRAM_UID, "SPECULATIVE_LINK", "sym:ResearchProgram:hswm-causal-composition-research-2026-08-29", "ACTIVE_RESEARCH_SPINE", "PROPOSED_OPERATIONALIZATION"),
@@ -558,9 +640,35 @@ def build_data() -> dict[str, Any]:
     for invariant in TARGET_INVARIANTS.values():
         invariant_uid = invariant["uid"]
         relations.append(_relation(PROGRAM_UID, "HAS_CONCEPT", invariant_uid, "TARGET_INVARIANT", "REQUIRED"))
-        relations.append(_relation(COMMITMENT_UID, "PRESERVES", invariant_uid, "TARGET_DIRECTION", "USER_RATIFIED", "USER_PRIMARY"))
+        for source_uid in invariant["source_uids"]:
+            authority = "USER_PRIMARY" if source_uid == ADAPTIVE_USER_SOURCE_UID else "CANONICAL_SOURCE"
+            relations.append(
+                _relation(
+                    invariant_uid,
+                    "HAS_SOURCE",
+                    source_uid,
+                    "CANONICAL_TARGET_PROVENANCE",
+                    "BOUND",
+                    authority,
+                )
+            )
         for fcl_id in invariant["fcl_ids"]:
             relations.append(_relation(invariant_uid, "PRESERVES", FCL_UIDS[fcl_id], "FCL_MAPPING", "TARGET_ONLY"))
+
+    for source_uid in (
+        FRACTAL_SCIENTIFIC_CONNECTIONS_UID,
+        FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY_UID,
+    ):
+        relations.append(
+            _relation(
+                PROGRAM_UID,
+                "HAS_SOURCE",
+                source_uid,
+                "FCL_SCIENTIFIC_CONNECTIONS_PROVENANCE",
+                "BOUND",
+                "SECONDARY_AI",
+            )
+        )
 
     mechanism_uids = [
         f"sym:Hypothesis:hswm-adaptive-mechanism-{slug}"

@@ -39,6 +39,12 @@ auxiliary hypothesis, evidence lineage, reroute transaction과 anti-immunization
 이 문서는 기존 HSWM 정체성이나 FCL 법칙을 새로 발명하거나 바꾸지 않는다. 다음 참조를
 연구 경로가 보존해야 할 target invariant로 선언한다.
 
+이 2026-08-30 원문이 직접 확정한 것은 `TI-1`의 목표 지속과 방법 교체 방향뿐이다.
+`TI-2`부터 `TI-5`, 여덟 FCL과 그 claim ceiling은 각각 Constitution, fractal cognitive
+composition canon 및 scientific-connections projection의 기존 bytes에서 온다. 이 문서는
+그 기존 정본을 보존 대상으로 참조할 뿐, 새 원문이 그 상세를 다시 사용자 ratification한
+것처럼 취급하지 않는다.
+
 | ID | 보존 대상 | 지위와 경계 |
 |---|---|---|
 | `TI-1` | 하나의 token-native LLM-function macro-neural HSWM | `USER_PRIMARY` target identity이며 현재 구현 완료 주장이 아니다. |
@@ -143,4 +149,3 @@ reroute decision과 금지되는 면역화를 검색 가능하게 만드는 boun
 KG에 기록하거나 live graph에 publish하는 것은 HSWM의 cognition, 학습, 효능, scale closure
 또는 최종 실현이 아니다. 실제 target 달성 여부는 각 FCL에 결속된 outcome과 intervention
 evidence로만 판정한다.
-

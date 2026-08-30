@@ -121,8 +121,9 @@ relation/transition-disposition revision을 만들고
 실험은
 [`HSWM 연구 가망성·과학적 위치·결정 경로`](docs/research/HSWM_RESEARCH_VIABILITY_AND_POSITIONING_2026-08-30.md)에
 정리했다. 이는 새 효능 결과가 아니라 현재 evidence ceiling과 G0→G5 진행·경로교체·
-mechanism retirement 조건을 함께 읽는 `SECONDARY_AI_RESEARCH_ASSESSMENT`다. USER_PRIMARY는
-최종 fractal HSWM target과 사용자가 제시한 여덟 연구 질문의 중요성을 유지한다. 기존
+mechanism retirement 조건을 함께 읽는 `SECONDARY_AI_RESEARCH_ASSESSMENT`다. USER_PRIMARY
+방향은 최종 HSWM target의 지속과 방법 교체를 유지하며, 기존 fractal/FCL 연구 질문은
+각각의 별도 정본 source binding으로 보존한다. 기존
 FCL-1..8의 operational contract와 claim ceiling은 `SECONDARY_AI` 형식화로서 약화하지 않고,
 algorithm·method·backend·testbed를 바꾸는 방향은
 [`adaptive research strategy`](docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md),

@@ -56,9 +56,10 @@ capability; the scientific status remains `UNJUDGED`.
 
 The target is also persistent while its realization path is adaptive. The
 [`USER_PRIMARY adaptive research strategy`](docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)
-keeps the final fractal HSWM target and the user's eight stated research
-questions in scope. The FCL-1..8 operational contracts, acceptance criteria,
-and claim ceilings remain explicitly `SECONDARY_AI` and unchanged or stronger,
+keeps the final HSWM target in scope while retaining the existing canonical
+fractal/FCL research questions by their separate source bindings. The FCL-1..8
+operational contracts, acceptance criteria, and claim ceilings remain explicitly
+`SECONDARY_AI` and unchanged or stronger,
 while algorithms, methods, models, backends, testbeds, and research paths may
 be replaced. A failed mechanism remains `RED_WITHIN_SCOPE` with its evidence
 lineage preserved; it is not renamed as success and does not reduce or support

@@ -11,22 +11,42 @@
     },
     {
       "path": "docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md",
-      "sha256": "6d0bd46fb69836f54d2f5d05f2eda668495e16f5a1f9f1e7022d02008a244c01"
+      "sha256": "64a9436bd83c306db6aa1ecb3d29e3ba1f3fd054f1d37bd164cb948c9da226af"
     },
     {
       "path": "docs/research/HSWM_ADAPTIVE_REALIZATION_METHODOLOGY_2026-08-30.md",
       "sha256": "a2b50218ef06d6ad2e1fca6363b888a0fce285c62fe60e8950c715004e648c3a"
+    },
+    {
+      "path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+      "sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373"
+    },
+    {
+      "path": "docs/canon/sources/USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.txt",
+      "sha256": "c453034f1d13c2bd7498a2e6b488a3bf07af74a3a7ee0f4d1ba7d4c74b2e685e"
+    },
+    {
+      "path": "docs/canon/USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md",
+      "sha256": "d7dc6d86dc6bbdaf0a3eb6735d634dd9f5b8045563c2b88ffceeabc9343bf7c0"
+    },
+    {
+      "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+      "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81"
+    },
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json",
+      "sha256": "81992abe14029ad78a50b9d3b83cf11658846f6dea9d9f2688e058778cdf3422"
     }
   ],
   "expected_counts": {
-    "nodes": 34,
-    "anchors": 12,
-    "relations": 161,
+    "nodes": 35,
+    "anchors": 16,
+    "relations": 170,
     "target_invariants": 5,
     "mechanism_families": 9,
     "disposition_states": 8,
     "guardrails": 6,
-    "source_records": 3
+    "source_records": 4
   },
   "anchors": [
     {
@@ -124,6 +144,39 @@
       "required_labels": [
         "Concept",
         "ResearchProgram",
+        "ResearchArtifact"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-fractal-scientific-connections-ontology-2026-08-28",
+      "name": "HSWM fractal scientific connections ontology 2026-08-28",
+      "required_labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ]
+    },
+    {
+      "uid": "sym:CanonicalSource:user-primary-hswm-fractal-cognitive-composition-2026-08-28",
+      "name": "USER_PRIMARY HSWM fractal cognitive composition 2026-08-28",
+      "required_labels": [
+        "AbstractNode",
+        "SourceDocument",
+        "CanonicalSource"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-fractal-cognitive-composition-canon-2026-08-28",
+      "name": "HSWM fractal cognitive composition canon 2026-08-28",
+      "required_labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-fractal-scientific-connections-2026-08-28",
+      "name": "HSWM fractal cognitive-composition scientific connection synthesis",
+      "required_labels": [
+        "AbstractNode",
         "ResearchArtifact"
       ]
     }
@@ -304,7 +357,7 @@
           "CANONICAL_DIRECTION_DOCUMENT"
         ],
         "source_path": "docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md",
-        "source_sha256": "6d0bd46fb69836f54d2f5d05f2eda668495e16f5a1f9f1e7022d02008a244c01"
+        "source_sha256": "64a9436bd83c306db6aa1ecb3d29e3ba1f3fd054f1d37bd164cb948c9da226af"
       }
     },
     {
@@ -337,6 +390,35 @@
       }
     },
     {
+      "uid": "sym:AbstractNode:hswm-constitution-2026-08-20",
+      "labels": [
+        "AbstractNode",
+        "SourceDocument",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "HSWM Constitution",
+        "description": "Source-bound document for the adaptive realization strategy.",
+        "authority_class": "CANONICAL_TARGET_IDENTITY_WITH_SECONDARY_AI_FORMALIZATION",
+        "canonical_scope": "SOURCE_BOUND_STRATEGY_RECORD",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "epistemic_state": "SOURCE_BOUND",
+        "responsibility_owner": "adaptive_strategy_source_custodian",
+        "claim_boundary": "Source binding establishes provenance and authority separation, not HSWM implementation or efficacy.",
+        "projection_nonclaim": "TARGET_AND_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_CONSCIOUSNESS_PERSONHOOD_OR_SCALE_CLOSURE",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SOURCE_RECORD",
+          "CONSTITUTIONAL_TARGET_SOURCE"
+        ],
+        "source_path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+        "source_sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373"
+      }
+    },
+    {
       "uid": "sym:Concept:hswm-adaptive-ti1-one-system-target",
       "labels": [
         "Concept",
@@ -362,6 +444,10 @@
         ],
         "invariant_id": "TI-1",
         "mapped_fcl_ids": [],
+        "canonical_source_uids": [
+          "sym:AbstractNode:user-primary-hswm-target-fixed-methods-adaptive-2026-08-30",
+          "sym:AbstractNode:hswm-constitution-2026-08-20"
+        ],
         "amendment_policy": "EXPLICIT_SOURCE_BOUND_CANONICAL_SUPERSESSION_ONLY"
       }
     },
@@ -374,7 +460,7 @@
       "properties": {
         "name": "TI-2 — unified evolving hypergraph roles",
         "description": "Preserve the target in which one evolving canonical hypergraph plays living-harness, world/self-model, and continuous-learner roles.",
-        "authority_class": "USER_PRIMARY_TARGET_WITH_SECONDARY_FORMALIZATION",
+        "authority_class": "CANONICAL_TARGET_WITH_SECONDARY_FORMALIZATION",
         "canonical_scope": "TARGET_IDENTITY_CONDITION_EMPIRICALLY_UNJUDGED",
         "ontology_kind": "TARGET_INVARIANT",
         "ontology_plane": "MODEL",
@@ -394,6 +480,10 @@
           "FCL-6",
           "FCL-7"
         ],
+        "canonical_source_uids": [
+          "sym:AbstractNode:hswm-constitution-2026-08-20",
+          "sym:AbstractNode:hswm-fractal-cognitive-composition-canon-2026-08-28"
+        ],
         "amendment_policy": "EXPLICIT_SOURCE_BOUND_CANONICAL_SUPERSESSION_ONLY"
       }
     },
@@ -406,7 +496,7 @@
       "properties": {
         "name": "TI-3 — outcome-bound local causal closure",
         "description": "Preserve the target recurrence from independent outcome through credit and owner/Permit-valid canonical revision to changed fresh behavior.",
-        "authority_class": "USER_PRIMARY_FCL_WITH_SECONDARY_FORMALIZATION",
+        "authority_class": "CANONICAL_FCL_WITH_SECONDARY_FORMALIZATION",
         "canonical_scope": "TARGET_IDENTITY_CONDITION_EMPIRICALLY_UNJUDGED",
         "ontology_kind": "TARGET_INVARIANT",
         "ontology_plane": "MODEL",
@@ -426,6 +516,10 @@
           "FCL-1",
           "FCL-4"
         ],
+        "canonical_source_uids": [
+          "sym:AbstractNode:hswm-constitution-2026-08-20",
+          "sym:AbstractNode:hswm-fractal-cognitive-composition-canon-2026-08-28"
+        ],
         "amendment_policy": "EXPLICIT_SOURCE_BOUND_CANONICAL_SUPERSESSION_ONLY"
       }
     },
@@ -438,7 +532,7 @@
       "properties": {
         "name": "TI-4 — same-type fractal HSWM composition",
         "description": "Preserve cognition-bearing HSWMs as composable cells whose composite again satisfies Step, Learn, Inv, Permit, and identity-learning lineage.",
-        "authority_class": "USER_PRIMARY_FRACTAL_TARGET_WITH_SECONDARY_FORMALIZATION",
+        "authority_class": "CANONICAL_FRACTAL_TARGET_WITH_SECONDARY_FORMALIZATION",
         "canonical_scope": "TARGET_IDENTITY_CONDITION_EMPIRICALLY_UNJUDGED",
         "ontology_kind": "TARGET_INVARIANT",
         "ontology_plane": "MODEL",
@@ -464,6 +558,10 @@
           "FCL-7",
           "FCL-8"
         ],
+        "canonical_source_uids": [
+          "sym:CanonicalSource:user-primary-hswm-fractal-cognitive-composition-2026-08-28",
+          "sym:AbstractNode:hswm-fractal-cognitive-composition-canon-2026-08-28"
+        ],
         "amendment_policy": "EXPLICIT_SOURCE_BOUND_CANONICAL_SUPERSESSION_ONLY"
       }
     },
@@ -476,7 +574,7 @@
       "properties": {
         "name": "TI-5 — difference, rights, and lineage preservation",
         "description": "Preserve member addressability, provenance, responsibility, permission, consent, exit, rollback, and recovery across composition and rerouting.",
-        "authority_class": "MIXED_CANONICAL_TARGET_AND_SECONDARY_OPERATIONALIZATION",
+        "authority_class": "CANONICAL_TARGET_AND_SECONDARY_OPERATIONALIZATION",
         "canonical_scope": "TARGET_IDENTITY_CONDITION_EMPIRICALLY_UNJUDGED",
         "ontology_kind": "TARGET_INVARIANT",
         "ontology_plane": "MODEL",
@@ -497,6 +595,10 @@
           "FCL-5",
           "FCL-7",
           "FCL-8"
+        ],
+        "canonical_source_uids": [
+          "sym:AbstractNode:hswm-constitution-2026-08-20",
+          "sym:AbstractNode:hswm-fractal-cognitive-composition-canon-2026-08-28"
         ],
         "amendment_policy": "EXPLICIT_SOURCE_BOUND_CANONICAL_SUPERSESSION_ONLY"
       }
@@ -1266,6 +1368,14 @@
     {
       "from_uid": "sym:AbstractNode:hswm-adaptive-research-strategy-ontology-2026-08-30",
       "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-constitution-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "BOUNDED_PROJECTION",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adaptive-research-strategy-ontology-2026-08-30",
+      "type": "HAS_CONCEPT",
       "to_uid": "sym:AbstractNode:user-primary-hswm-target-fixed-methods-adaptive-2026-08-30",
       "authority_class": "SYSTEM_DERIVED",
       "scope": "BOUNDED_PROJECTION",
@@ -1540,7 +1650,7 @@
       "type": "USER_PRIMARY_SOURCE_FOR",
       "to_uid": "sym:AbstractNode:hswm-adaptive-research-strategy-canon-2026-08-30",
       "authority_class": "USER_PRIMARY",
-      "scope": "CANON_AUTHORITY",
+      "scope": "ADAPTIVE_METHOD_DIRECTION",
       "status": "BOUND"
     },
     {
@@ -1920,6 +2030,38 @@
       "status": "REQUIRED"
     },
     {
+      "from_uid": "sym:Concept:hswm-adaptive-ti1-one-system-target",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-constitution-2026-08-20",
+      "authority_class": "CANONICAL_SOURCE",
+      "scope": "CANONICAL_TARGET_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adaptive-ti1-one-system-target",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:user-primary-hswm-target-fixed-methods-adaptive-2026-08-30",
+      "authority_class": "USER_PRIMARY",
+      "scope": "CANONICAL_TARGET_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adaptive-ti2-unified-evolving-hypergraph",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-constitution-2026-08-20",
+      "authority_class": "CANONICAL_SOURCE",
+      "scope": "CANONICAL_TARGET_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adaptive-ti2-unified-evolving-hypergraph",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-fractal-cognitive-composition-canon-2026-08-28",
+      "authority_class": "CANONICAL_SOURCE",
+      "scope": "CANONICAL_TARGET_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
       "from_uid": "sym:Concept:hswm-adaptive-ti2-unified-evolving-hypergraph",
       "type": "PRESERVES",
       "to_uid": "sym:Concept:hswm-fractal-law-diachronic-continuity",
@@ -1937,6 +2079,22 @@
     },
     {
       "from_uid": "sym:Concept:hswm-adaptive-ti3-local-causal-closure",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-constitution-2026-08-20",
+      "authority_class": "CANONICAL_SOURCE",
+      "scope": "CANONICAL_TARGET_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adaptive-ti3-local-causal-closure",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-fractal-cognitive-composition-canon-2026-08-28",
+      "authority_class": "CANONICAL_SOURCE",
+      "scope": "CANONICAL_TARGET_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adaptive-ti3-local-causal-closure",
       "type": "PRESERVES",
       "to_uid": "sym:Concept:hswm-fractal-law-local-causal-learning",
       "authority_class": "SECONDARY_AI",
@@ -1950,6 +2108,22 @@
       "authority_class": "SECONDARY_AI",
       "scope": "FCL_MAPPING",
       "status": "TARGET_ONLY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adaptive-ti4-same-type-fractal-composition",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-fractal-cognitive-composition-canon-2026-08-28",
+      "authority_class": "CANONICAL_SOURCE",
+      "scope": "CANONICAL_TARGET_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adaptive-ti4-same-type-fractal-composition",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:CanonicalSource:user-primary-hswm-fractal-cognitive-composition-2026-08-28",
+      "authority_class": "CANONICAL_SOURCE",
+      "scope": "CANONICAL_TARGET_PROVENANCE",
+      "status": "BOUND"
     },
     {
       "from_uid": "sym:Concept:hswm-adaptive-ti4-same-type-fractal-composition",
@@ -2017,6 +2191,22 @@
     },
     {
       "from_uid": "sym:Concept:hswm-adaptive-ti5-difference-rights-lineage",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-constitution-2026-08-20",
+      "authority_class": "CANONICAL_SOURCE",
+      "scope": "CANONICAL_TARGET_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adaptive-ti5-difference-rights-lineage",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-fractal-cognitive-composition-canon-2026-08-28",
+      "authority_class": "CANONICAL_SOURCE",
+      "scope": "CANONICAL_TARGET_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adaptive-ti5-difference-rights-lineage",
       "type": "PRESERVES",
       "to_uid": "sym:Concept:hswm-fractal-law-composition-preservation",
       "authority_class": "SECONDARY_AI",
@@ -2059,38 +2249,6 @@
       "from_uid": "sym:Concept:hswm-target-persistence-adaptive-method-commitment",
       "type": "PRESERVES",
       "to_uid": "sym:Concept:hswm-adaptive-ti1-one-system-target",
-      "authority_class": "USER_PRIMARY",
-      "scope": "TARGET_DIRECTION",
-      "status": "USER_RATIFIED"
-    },
-    {
-      "from_uid": "sym:Concept:hswm-target-persistence-adaptive-method-commitment",
-      "type": "PRESERVES",
-      "to_uid": "sym:Concept:hswm-adaptive-ti2-unified-evolving-hypergraph",
-      "authority_class": "USER_PRIMARY",
-      "scope": "TARGET_DIRECTION",
-      "status": "USER_RATIFIED"
-    },
-    {
-      "from_uid": "sym:Concept:hswm-target-persistence-adaptive-method-commitment",
-      "type": "PRESERVES",
-      "to_uid": "sym:Concept:hswm-adaptive-ti3-local-causal-closure",
-      "authority_class": "USER_PRIMARY",
-      "scope": "TARGET_DIRECTION",
-      "status": "USER_RATIFIED"
-    },
-    {
-      "from_uid": "sym:Concept:hswm-target-persistence-adaptive-method-commitment",
-      "type": "PRESERVES",
-      "to_uid": "sym:Concept:hswm-adaptive-ti4-same-type-fractal-composition",
-      "authority_class": "USER_PRIMARY",
-      "scope": "TARGET_DIRECTION",
-      "status": "USER_RATIFIED"
-    },
-    {
-      "from_uid": "sym:Concept:hswm-target-persistence-adaptive-method-commitment",
-      "type": "PRESERVES",
-      "to_uid": "sym:Concept:hswm-adaptive-ti5-difference-rights-lineage",
       "authority_class": "USER_PRIMARY",
       "scope": "TARGET_DIRECTION",
       "status": "USER_RATIFIED"
@@ -2405,6 +2563,22 @@
       "to_uid": "sym:AbstractNode:hswm-adaptive-research-strategy-canon-2026-08-30",
       "authority_class": "SECONDARY_AI",
       "scope": "RESEARCH_SOURCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:ResearchProgram:hswm-adaptive-realization-program-2026-08-30",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-fractal-scientific-connections-2026-08-28",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FCL_SCIENTIFIC_CONNECTIONS_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:ResearchProgram:hswm-adaptive-realization-program-2026-08-30",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-fractal-scientific-connections-ontology-2026-08-28",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FCL_SCIENTIFIC_CONNECTIONS_PROVENANCE",
       "status": "BOUND"
     },
     {

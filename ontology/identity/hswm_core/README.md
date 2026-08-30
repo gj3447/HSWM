@@ -2,8 +2,9 @@
 
 ## Current adaptive realization strategy
 
-The USER_PRIMARY direction preserves the final fractal HSWM target and the
-importance of the user's eight stated research questions. The FCL-1..8
+The USER_PRIMARY direction preserves the final HSWM target while its detailed
+fractal/FCL commitments remain separately source-bound to their existing canon.
+The FCL-1..8
 operational contracts, acceptance criteria, and claim ceilings remain
 SECONDARY_AI formalizations and stay unchanged or stronger while failed
 algorithms, methods, models, backends, testbeds, and active research paths are

@@ -115,7 +115,7 @@ def _read_contract(path: Path, repository: Path) -> tuple[dict[str, object], str
             "upstream_revision": "aaba6870f86c5be6a08a491f32a50b906227bc3e",
             "upstream_tree": "339069f91317079df9e378efd4ab253417d79b82",
             "source_archive_sha256": "5592fbb36124b08d24167c5f7612a55a2cc610e0c39170f638a69b628835ee3b",
-            "extracted_tree_member_manifest_sha256": "3ac74ab59fe57917e98e93df03c4313dbe54eacff8a842bdc2709a7298655bf5",
+            "extracted_tree_member_manifest_sha256": "6c956159bbedeb82f9c44a08196d78633a50f1cbd98db8036ad92c45e262048e",
             "clean_checkout_required": True,
         },
         "requirements": {

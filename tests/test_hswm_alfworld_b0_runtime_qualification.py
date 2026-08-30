@@ -69,7 +69,7 @@ def test_checked_contract_is_canonical_immutable_and_pre_b0() -> None:
     assert isinstance(profile, dict)
     alfworld = profile["alfworld"]
     assert isinstance(alfworld, dict)
-    assert alfworld["extracted_tree_member_manifest_sha256"] == "3ac74ab59fe57917e98e93df03c4313dbe54eacff8a842bdc2709a7298655bf5"
+    assert alfworld["extracted_tree_member_manifest_sha256"] == "6c956159bbedeb82f9c44a08196d78633a50f1cbd98db8036ad92c45e262048e"
 
 
 def test_output_placement_refuses_private_repo_and_requires_explicit_external_public(tmp_path: Path) -> None:

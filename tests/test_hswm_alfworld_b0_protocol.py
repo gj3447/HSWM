@@ -210,9 +210,8 @@ def test_execution_start_hashes_cover_live_code_and_name_future_receipts() -> No
     # These are deliberately named in the preregistration before generation;
     # their absence means no qualification/selection receipt can be mistaken
     # for already committed execution input.
-    planned = {
-        "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json",
-        "manifests/HSWM_ALFWORLD_B0_SELECTION_2026-08-30.json",
-    }
-    assert planned <= paths
-    assert all(not (REPOSITORY_ROOT / path).exists() for path in planned)
+    generated = "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json"
+    planned = "manifests/HSWM_ALFWORLD_B0_SELECTION_2026-08-30.json"
+    assert {generated, planned} <= paths
+    assert (REPOSITORY_ROOT / generated).is_file()
+    assert not (REPOSITORY_ROOT / planned).exists()

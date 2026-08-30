@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from hashlib import sha256
+import json
 from pathlib import Path
 import subprocess
 import sys
@@ -13,8 +14,9 @@ from scripts.qualify_hswm_alfworld_b0_runtime import (
     PUBLIC_SCHEMA,
     STATUS,
     QualificationError,
-    _read_contract,
     _canonical_receipt,
+    _read_contract,
+    canonical_bytes,
     installed_environment,
     public_projection,
     validate_output_paths,
@@ -73,6 +75,45 @@ def test_checked_contract_is_canonical_immutable_and_pre_b0() -> None:
     alfworld = profile["alfworld"]
     assert isinstance(alfworld, dict)
     assert alfworld["extracted_tree_member_manifest_sha256"] == "6c956159bbedeb82f9c44a08196d78633a50f1cbd98db8036ad92c45e262048e"
+
+
+def test_checked_dgx_public_qualification_is_q_bound_canonical_and_aggregate_only() -> None:
+    repository = Path(__file__).resolve().parents[1]
+    manifest_path = repository / "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json"
+    contract_path = repository / "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/runtime_qualification_contract.v1.json"
+    raw = manifest_path.read_bytes()
+    value = json.loads(raw)
+    assert raw == canonical_bytes(value) + b"\n"
+    assert sha256(raw).hexdigest() == "a641218babb759159714f02fd539cf508997991f9469731788353941fb98595d"
+    unsigned = {key: item for key, item in value.items() if key != "receipt_sha256"}
+    assert value["receipt_sha256"] == sha256(canonical_bytes(unsigned)).hexdigest()
+    assert value["qualification_contract"] == {
+        "file_sha256": sha256(contract_path.read_bytes()).hexdigest()
+    }
+    assert value["schema_version"] == PUBLIC_SCHEMA
+    assert value["status"] == STATUS
+    assert value["claim_ceiling"] == CLAIM_CEILING
+    assert value["fixed_action"] == "look"
+    assert value["actor_frame_count"] == 21 and value["action_count"] == 20
+    assert value["terminal"] == {"done": True, "score": 0, "success": False, "won": False}
+    assert value["sandbox"] == dgx_sandbox_contract()
+    assert value["execution"] == {
+        "commit": "e666dad4fc15584b158d3ebfc46a5b2977dd8e9f",
+        "tree": "dc7317491d11d37e728edc4b80a85fe126af8277",
+    }
+    contract = json.loads(contract_path.read_bytes())
+    sources = contract["execution_sources"]
+    assert set(value["source_code_sha256"]) == set(sources)
+    for name, relative in sources.items():
+        committed = subprocess.run(
+            ["git", "-C", str(repository), "show", f"{value['execution']['commit']}:{relative}"],
+            check=True,
+            capture_output=True,
+        ).stdout
+        assert value["source_code_sha256"][name] == sha256(committed).hexdigest()
+    rendered = raw.decode("utf-8").lower()
+    for forbidden in ("opaque_uid", "relative_path", "observation", "outcome_receipt", "private_binding", "installed_packages"):
+        assert forbidden not in rendered
 
 
 def test_output_placement_refuses_private_repo_and_requires_explicit_external_public(tmp_path: Path) -> None:

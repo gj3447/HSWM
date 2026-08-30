@@ -60,6 +60,13 @@ def test_checked_in_protocol_is_executable_and_hash_binds_existing_evidence() ->
             "trigger": "A pre-selection engineering probe issued exactly one neutral tokenize request and one tiny schema-constrained completion on a fresh service, then refused before writing either qualification receipt because its public leakage guard rejected the expected fixed ALFWorld source-path labels. Artifact packaging also rejected root-owned compile-cache bytes. No counter delta was inspected from the failed occurrence.",
             "change": "Permit the fixed committed ALFWorld source-path labels in the aggregate source binding while continuing to forbid task identities, episodes, games, selections, observations, outcomes, prompts, messages, content, and raw evidence. Place fresh container caches in the runner cache tree rather than published outputs and repeat under a new occurrence identifier.",
             "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_TASK_OUTCOME_ONE_NEUTRAL_TOKENIZE_AND_ONE_NEUTRAL_COMPLETION_OCCURRED_NO_METRIC_DELTA_INSPECTED",
+        },
+        {
+            "id": "DGX_GB10_CUDA_LAUNCH_BLOCKING_STARTUP_STABILIZATION",
+            "superseded_protocol_file_sha256": "c2cda2508e968072d58256cacc7e9d4c792ce7be73c097ce1136803b873e87dd",
+            "trigger": "The repaired fresh-service metrics occurrence exited during vLLM memory-profile warmup with cudaErrorNotPermitted at the native fused RMSNorm path on DGX GB10 before readiness and before either neutral probe POST. The owned container was removed and shared services were restored.",
+            "change": "Add CUDA_LAUNCH_BLOCKING=1 to the exact pinned container environment, following the upstream vLLM GB10 warmup-race workaround while retaining enforce-eager and every model, image, decoding, cache, and request-budget identity. Detect an exited owned startup container immediately instead of waiting for the full readiness deadline.",
+            "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_TASK_OUTCOME_NO_NEUTRAL_PROBE_POST_STARTUP_ENGINEERING_FAILURE_ONLY",
         }
     ]
 

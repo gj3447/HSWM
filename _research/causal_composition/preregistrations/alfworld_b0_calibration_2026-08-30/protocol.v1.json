@@ -3,7 +3,7 @@
   "study_uid": "sym:ExploratoryStudy:hswm-alfworld-b0-calibration-2026-08-30",
   "protocol_version": "v1",
   "recorded_at_utc": "2026-08-30T19:13:37Z",
-  "last_amended_at_utc": "2026-08-30T21:29:25Z",
+  "last_amended_at_utc": "2026-08-30T21:49:48Z",
   "prospective_amendments": [
     {
       "id": "ARM64_PDDL_ONLY_ENVIRONMENT_ADAPTER_AND_HASH_BOUND_RUNTIME_SPLIT",
@@ -25,9 +25,16 @@
       "trigger": "A pre-selection engineering probe issued exactly one neutral tokenize request and one tiny schema-constrained completion on a fresh service, then refused before writing either qualification receipt because its public leakage guard rejected the expected fixed ALFWorld source-path labels. Artifact packaging also rejected root-owned compile-cache bytes. No counter delta was inspected from the failed occurrence.",
       "change": "Permit the fixed committed ALFWorld source-path labels in the aggregate source binding while continuing to forbid task identities, episodes, games, selections, observations, outcomes, prompts, messages, content, and raw evidence. Place fresh container caches in the runner cache tree rather than published outputs and repeat under a new occurrence identifier.",
       "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_TASK_OUTCOME_ONE_NEUTRAL_TOKENIZE_AND_ONE_NEUTRAL_COMPLETION_OCCURRED_NO_METRIC_DELTA_INSPECTED"
+    },
+    {
+      "id": "DGX_GB10_CUDA_LAUNCH_BLOCKING_STARTUP_STABILIZATION",
+      "superseded_protocol_file_sha256": "c2cda2508e968072d58256cacc7e9d4c792ce7be73c097ce1136803b873e87dd",
+      "trigger": "The repaired fresh-service metrics occurrence exited during vLLM memory-profile warmup with cudaErrorNotPermitted at the native fused RMSNorm path on DGX GB10 before readiness and before either neutral probe POST. The owned container was removed and shared services were restored.",
+      "change": "Add CUDA_LAUNCH_BLOCKING=1 to the exact pinned container environment, following the upstream vLLM GB10 warmup-race workaround while retaining enforce-eager and every model, image, decoding, cache, and request-budget identity. Detect an exited owned startup container immediately instead of waiting for the full readiness deadline.",
+      "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_TASK_OUTCOME_NO_NEUTRAL_PROBE_POST_STARTUP_ENGINEERING_FAILURE_ONLY"
     }
   ],
-  "registration_status": "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_ALFWORLD_EPISODE_OR_TASK_OUTCOME_AFTER_ENGINEERING_ENVIRONMENT_AND_NEUTRAL_METRICS_QUALIFICATION_ATTEMPTS",
+  "registration_status": "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_ALFWORLD_EPISODE_OR_TASK_OUTCOME_AFTER_ENGINEERING_ENVIRONMENT_NEUTRAL_METRICS_AND_GPU_STARTUP_QUALIFICATION_ATTEMPTS",
   "canonical_role": "A bounded no-learning calibration of one locally authorized sealed ALFWorld text task family. It estimates baseline task headroom, execution burden, and official valid_seen sensitivity before any B2, H1, canonical revision, or G1 occurrence.",
   "scientific_status": "EXPLORATORY_G0_CALIBRATION_ONLY_NOT_G0_PASS_NOT_G1_EFFICACY",
   "claim_ceiling": "ENGINEERING_AND_TASK_CALIBRATION_ONLY",
@@ -244,6 +251,7 @@
     "prefix_cache": false,
     "async_scheduling": false,
     "enforce_eager": true,
+    "cuda_launch_blocking": true,
     "language_model_only": true,
     "generation_config": "vllm",
     "engine_seed": 0,

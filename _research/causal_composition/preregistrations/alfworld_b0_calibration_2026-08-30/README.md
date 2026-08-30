@@ -40,6 +40,17 @@ moves root-owned container caches outside published outputs. The repeat uses a
 new occurrence identifier and remains separate from every ALFWorld episode and
 task outcome.
 
+The repaired occurrence then failed before readiness and before either probe
+POST with a CUDA operation-not-permitted error during GB10 warmup. The
+upstream vLLM report
+[#50067](https://github.com/vllm-project/vllm/issues/50067) documents the same
+DGX Spark/GB10 asynchronous warmup class under eager execution and reports
+successful stabilization with `CUDA_LAUNCH_BLOCKING=1`. This protocol now
+binds that environment variable while preserving the pinned image, model,
+decoding, cache, and request-budget identities. The launcher also detects an
+exited owned container immediately. This is an environment stabilization with
+a throughput cost, not evidence about model or HSWM efficacy.
+
 The sole arm is `B0_STATELESS_NO_LEARNING`. Each model call is a fresh
 one-shot request. It may read the bounded visible transcript from the current
 episode, because ALFWorld is partially observable, but that transcript is

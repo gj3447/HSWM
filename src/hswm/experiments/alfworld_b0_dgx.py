@@ -62,6 +62,7 @@ MODEL_RUNTIME = {
     "prefix_cache": False,
     "async_scheduling": False,
     "enforce_eager": True,
+    "cuda_launch_blocking": True,
     "language_model_only": True,
     "generation_config": "vllm",
     "engine_seed": 0,
@@ -78,6 +79,20 @@ MODEL_RUNTIME = {
     "byte_exactness_required": False,
     "sampling_note": "Greedy decoding is retained from the already measured DGX deployment to reduce one source of noise. Provider-byte equality is not a prerequisite or evidence of learning.",
 }
+
+CONTAINER_ENVIRONMENT = (
+    "HF_HOME=/cache/huggingface",
+    "HUGGINGFACE_HUB_CACHE=/cache/huggingface/hub",
+    "VLLM_CACHE_ROOT=/cache/compile/vllm",
+    "TORCHINDUCTOR_CACHE_DIR=/cache/compile/torchinductor",
+    "TRITON_CACHE_DIR=/cache/compile/triton",
+    "HF_HUB_OFFLINE=1",
+    "TRANSFORMERS_OFFLINE=1",
+    "VLLM_ENABLE_V1_MULTIPROCESSING=0",
+    "CUDA_LAUNCH_BLOCKING=1",
+    "PYTHONHASHSEED=0",
+    "CUBLAS_WORKSPACE_CONFIG=:4096:8",
+)
 
 _NAME = re.compile(r"^hswm-alfworld-b0-[a-z0-9-]{3,48}$")
 _ENDPOINT = re.compile(r"^http://127\.0\.0\.1:([1-9][0-9]{0,4})$")
@@ -282,7 +297,7 @@ class B0DgxLease:
         spec = self.spec
         spec.hf_cache.mkdir(parents=True, mode=0o700)
         spec.compile_cache.mkdir(mode=0o700)
-        environment = ("HF_HOME=/cache/huggingface", "HUGGINGFACE_HUB_CACHE=/cache/huggingface/hub", "VLLM_CACHE_ROOT=/cache/compile/vllm", "TORCHINDUCTOR_CACHE_DIR=/cache/compile/torchinductor", "TRITON_CACHE_DIR=/cache/compile/triton", "HF_HUB_OFFLINE=1", "TRANSFORMERS_OFFLINE=1", "VLLM_ENABLE_V1_MULTIPROCESSING=0", "PYTHONHASHSEED=0", "CUBLAS_WORKSPACE_CONFIG=:4096:8")
+        environment = CONTAINER_ENVIRONMENT
         argv = ["docker", "run", "-d", "--pull", "never", "--name", spec.container_name, "--restart", "no", "--network", "bridge", "--ipc", "private", "-p", f"127.0.0.1:{self.port}:8000", "--gpus", f"device={GPU_UUID}", "--mount", f"type=bind,src={spec.model_snapshot.parents[1]},dst=/model-repository,readonly", "--mount", f"type=bind,src={spec.hf_cache},dst=/cache/huggingface", "--mount", f"type=bind,src={spec.compile_cache},dst=/cache/compile"]
         for item in environment:
             argv.extend(("-e", item))
@@ -305,6 +320,32 @@ class B0DgxLease:
         except Exception as error:
             raise LaunchRefused("B0 DGX container identity drifted") from error
 
+    def _assert_startup_container_alive(self) -> None:
+        """Refuse immediately when the owned engine exits before readiness."""
+
+        try:
+            row = json.loads(
+                self.command(("docker", "inspect", self.spec.container_name)).decode(
+                    "utf-8", "strict"
+                )
+            )[0]
+            identity = (
+                sha256(row["Id"].encode()).hexdigest(),
+                sha256(row["State"]["StartedAt"].encode()).hexdigest(),
+            )
+            if (
+                self._identity is None
+                or identity != self._identity
+                or row.get("Image") != IMAGE_ID
+                or row.get("Config", {}).get("Cmd") != list(expected_server_argv())
+                or row.get("State", {}).get("Running") is not True
+            ):
+                raise ValueError
+        except Exception as error:
+            raise LaunchRefused(
+                "B0 DGX owned container exited before readiness"
+            ) from error
+
     def attest(self, tokenize_completed: int, completion_completed: int) -> dict[str, bytes]:
         """Check the service counter against the two declared B0 request caps."""
 
@@ -318,6 +359,8 @@ class B0DgxLease:
             inspect = self.command(("docker", "inspect", self.spec.container_name))
             row = json.loads(inspect.decode("utf-8", "strict"))[0]
             if (sha256(row["Id"].encode()).hexdigest(), sha256(row["State"]["StartedAt"].encode()).hexdigest()) != self._identity or row.get("Image") != IMAGE_ID or row.get("Config", {}).get("Cmd") != list(expected_server_argv()):
+                raise ValueError
+            if row.get("State", {}).get("Running") is not True:
                 raise ValueError
             models = self.http_get(f"{self.spec.endpoint}/v1/models")
             version = self.http_get(f"{self.spec.endpoint}/version")
@@ -349,6 +392,7 @@ class B0DgxLease:
                 try:
                     self.startup = self.attest(0, 0); return self
                 except LoopbackUnavailable:
+                    self._assert_startup_container_alive()
                     if time.monotonic() >= deadline: raise
                     time.sleep(2)
         except BaseException as primary:

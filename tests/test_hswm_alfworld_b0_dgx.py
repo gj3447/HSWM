@@ -17,6 +17,8 @@ def test_frozen_service_configuration_is_b0_specific_and_bounded() -> None:
     assert "--max-num-seqs" in argv and argv[argv.index("--max-num-seqs") + 1] == "1"
     assert "--no-enable-prefix-caching" in argv and "--no-async-scheduling" in argv
     assert "--enforce-eager" in argv and "--language-model-only" in argv
+    assert "CUDA_LAUNCH_BLOCKING=1" in dgx.CONTAINER_ENVIRONMENT
+    assert dgx.MODEL_RUNTIME["cuda_launch_blocking"] is True
     assert dgx.MAX_REQUESTS == dgx.MAX_TOKENIZE_REQUESTS + dgx.MAX_COMPLETION_REQUESTS == 480
     assert "EGRESS_NOT_INDEPENDENTLY_CLAIMED" in dgx.NETWORK_BOUNDARY
 
@@ -50,8 +52,8 @@ def test_lease_validates_then_attests_and_restores(tmp_path: Path, monkeypatch: 
     monkeypatch.setattr(dgx, "build_model_snapshot_manifest", lambda *_args, **_kwargs: {"fixture": True})
     state = {"started": False}
     inspect = lambda: json.dumps([{"Id": "a" * 64, "Image": dgx.IMAGE_ID,
-        "Config": {"Image": dgx.IMAGE, "Cmd": list(dgx.expected_server_argv()), "Env": ["HF_HUB_OFFLINE=1", "TRANSFORMERS_OFFLINE=1", "VLLM_ENABLE_V1_MULTIPROCESSING=0", "HF_HOME=/cache/huggingface", "HUGGINGFACE_HUB_CACHE=/cache/huggingface/hub", "VLLM_CACHE_ROOT=/cache/compile/vllm", "TORCHINDUCTOR_CACHE_DIR=/cache/compile/torchinductor", "TRITON_CACHE_DIR=/cache/compile/triton", "PYTHONHASHSEED=0", "CUBLAS_WORKSPACE_CONFIG=:4096:8"]},
-        "HostConfig": {"NetworkMode": "bridge", "IpcMode": "private", "PortBindings": {"8000/tcp": [{"HostIp": "127.0.0.1", "HostPort": "18080"}]}}, "State": {"StartedAt": "now"}}]).encode()
+        "Config": {"Image": dgx.IMAGE, "Cmd": list(dgx.expected_server_argv()), "Env": list(dgx.CONTAINER_ENVIRONMENT)},
+        "HostConfig": {"NetworkMode": "bridge", "IpcMode": "private", "PortBindings": {"8000/tcp": [{"HostIp": "127.0.0.1", "HostPort": "18080"}]}}, "State": {"StartedAt": "now", "Running": True}}]).encode()
     def command(argv: tuple[str, ...]) -> bytes:
         if argv[:4] == ("git", "-C", str(spec.repo_root), "status"): return b""
         if argv[:4] == ("git", "-C", str(spec.repo_root), "rev-parse"): return b"a" * 40 + b"\n"
@@ -109,6 +111,72 @@ def test_protocol_endpoint_or_runtime_drift_refuses_before_service_stop(
     assert dgx.B0DgxLeaseSpec.__dataclass_fields__["endpoint"].default == "http://127.0.0.1:18080"
 
 
+def test_startup_refuses_immediately_when_owned_container_has_exited(
+    tmp_path: Path,
+) -> None:
+    spec = _spec(tmp_path)
+    row = {
+        "Id": "a" * 64,
+        "Image": dgx.IMAGE_ID,
+        "Config": {"Cmd": list(dgx.expected_server_argv())},
+        "State": {"StartedAt": "now", "Running": False},
+    }
+    lease = dgx.B0DgxLease(
+        spec,
+        command=lambda argv: json.dumps([row]).encode()
+        if argv[:2] == ("docker", "inspect")
+        else pytest.fail(str(argv)),
+    )
+    lease._identity = (
+        sha256(row["Id"].encode()).hexdigest(),
+        sha256(row["State"]["StartedAt"].encode()).hexdigest(),
+    )
+    with pytest.raises(dgx.LaunchRefused, match="exited before readiness"):
+        lease._assert_startup_container_alive()
+
+
+def test_attest_rejects_exited_owned_container_even_if_loopback_answers(
+    tmp_path: Path,
+) -> None:
+    spec = _spec(tmp_path)
+    row = {
+        "Id": "a" * 64,
+        "Image": dgx.IMAGE_ID,
+        "Config": {"Cmd": list(dgx.expected_server_argv())},
+        "State": {"StartedAt": "now", "Running": False},
+    }
+    metrics = (
+        b"vllm:num_requests_running 0\n"
+        b"vllm:request_success_total 0\n"
+        b"vllm:prefix_cache_hits_total 0\n"
+        b"vllm:prefix_cache_queries_total 0\n"
+    )
+
+    def get(url: str) -> bytes:
+        if url.endswith("/v1/models"):
+            return b'{"data":[{"id":"qwen3.6-35b-a3b"}]}'
+        if url.endswith("/version"):
+            return b'{"version":"0.25.1"}'
+        if url.endswith("/metrics"):
+            return metrics
+        raise AssertionError(url)
+
+    lease = dgx.B0DgxLease(
+        spec,
+        command=lambda argv: json.dumps([row]).encode()
+        if argv[:2] == ("docker", "inspect")
+        else pytest.fail(str(argv)),
+        http_get=get,
+    )
+    lease._started = True
+    lease._identity = (
+        sha256(row["Id"].encode()).hexdigest(),
+        sha256(row["State"]["StartedAt"].encode()).hexdigest(),
+    )
+    with pytest.raises(dgx.LaunchRefused, match="service attestation drifted"):
+        lease.attest(0, 0)
+
+
 def test_final_attest_failure_still_removes_and_restores(
         tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     spec = _spec(tmp_path); spec.lock_path.parent.mkdir(); spec.hf_cache.parent.mkdir()
@@ -117,8 +185,8 @@ def test_final_attest_failure_still_removes_and_restores(
     monkeypatch.setattr(dgx, "build_model_snapshot_manifest", lambda *_args, **_kwargs: {"fixture": True})
     events: list[str] = []; state = {"started": False, "final": False}
     inspect = json.dumps([{"Id": "a" * 64, "Image": dgx.IMAGE_ID,
-        "Config": {"Image": dgx.IMAGE, "Cmd": list(dgx.expected_server_argv()), "Env": ["HF_HUB_OFFLINE=1", "TRANSFORMERS_OFFLINE=1", "VLLM_ENABLE_V1_MULTIPROCESSING=0", "HF_HOME=/cache/huggingface", "HUGGINGFACE_HUB_CACHE=/cache/huggingface/hub", "VLLM_CACHE_ROOT=/cache/compile/vllm", "TORCHINDUCTOR_CACHE_DIR=/cache/compile/torchinductor", "TRITON_CACHE_DIR=/cache/compile/triton", "PYTHONHASHSEED=0", "CUBLAS_WORKSPACE_CONFIG=:4096:8"]},
-        "HostConfig": {"NetworkMode": "bridge", "IpcMode": "private", "PortBindings": {"8000/tcp": [{"HostIp": "127.0.0.1", "HostPort": "18080"}]}}, "State": {"StartedAt": "now"}}]).encode()
+        "Config": {"Image": dgx.IMAGE, "Cmd": list(dgx.expected_server_argv()), "Env": list(dgx.CONTAINER_ENVIRONMENT)},
+        "HostConfig": {"NetworkMode": "bridge", "IpcMode": "private", "PortBindings": {"8000/tcp": [{"HostIp": "127.0.0.1", "HostPort": "18080"}]}}, "State": {"StartedAt": "now", "Running": True}}]).encode()
     def command(argv: tuple[str, ...]) -> bytes:
         if argv[:4] == ("git", "-C", str(spec.repo_root), "status"): return b""
         if argv[:4] == ("git", "-C", str(spec.repo_root), "rev-parse"): return b"a" * 40 + b"\n"

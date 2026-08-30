@@ -9,9 +9,11 @@ import pytest
 
 from scripts.qualify_hswm_alfworld_b0_runtime import (
     CLAIM_CEILING,
+    CONTRACT_SCHEMA,
     PUBLIC_SCHEMA,
     STATUS,
     QualificationError,
+    _read_contract,
     _canonical_receipt,
     installed_environment,
     public_projection,
@@ -22,7 +24,7 @@ from scripts.qualify_hswm_alfworld_b0_runtime import (
 def _private_input() -> dict[str, object]:
     return {
         "schema_version": "hswm-alfworld-b0-runtime-dgx-qualification/v1", "status": STATUS,
-        "claim_ceiling": CLAIM_CEILING, "protocol": {"path": "x", "file_sha256": "a" * 64, "verified_binding_sha256": "b" * 64},
+        "claim_ceiling": CLAIM_CEILING, "qualification_contract": {"path": "x", "file_sha256": "a" * 64},
         "execution": {"commit": "2" * 40, "tree": "3" * 40},
         "source_code_sha256": {"qualification_cli": "c" * 64}, "python": {"version": "3.9.25"},
         "packages": {"key_versions": {"alfworld": "0.5.0"}, "installed_package_count": 1, "installed_package_list_sha256": "d" * 64, "installed_packages": [{"name": "alfworld", "version": "0.5.0"}]},
@@ -39,6 +41,35 @@ def test_public_projection_is_self_hashed_and_has_no_private_fields() -> None:
     rendered = repr(public).lower()
     for forbidden in ("opaque_uid", "relative_path", "observation", "outcome_receipt", "private_binding", "installed_packages"):
         assert forbidden not in rendered
+
+
+def test_public_projection_refuses_private_text_smuggled_through_terminal() -> None:
+    private = _private_input()
+    terminal = private["terminal"]
+    assert isinstance(terminal, dict)
+    terminal["score"] = "opaque_uid:private-game"
+    with pytest.raises(QualificationError, match="cannot safely project"):
+        public_projection(private)
+
+
+def test_checked_contract_is_canonical_immutable_and_pre_b0() -> None:
+    repository = Path(__file__).resolve().parents[1]
+    path = repository / "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/runtime_qualification_contract.v1.json"
+    contract, binding = _read_contract(path, repository)
+    assert contract["schema_version"] == CONTRACT_SCHEMA
+    assert binding == sha256(path.read_bytes()).hexdigest()
+    assert contract["boundary"] == {
+        "no_b0_selection": True,
+        "no_model_or_network_request": True,
+        "no_learning_or_revision": True,
+        "no_hswm_efficacy_claim": True,
+        "valid_unseen_record_access": "SPLIT_TOKEN_ONLY_NO_UID_OR_PATH_DECODE_OR_RETENTION",
+    }
+    profile = contract["runtime_profile"]
+    assert isinstance(profile, dict)
+    alfworld = profile["alfworld"]
+    assert isinstance(alfworld, dict)
+    assert alfworld["extracted_tree_member_manifest_sha256"] == "3ac74ab59fe57917e98e93df03c4313dbe54eacff8a842bdc2709a7298655bf5"
 
 
 def test_output_placement_refuses_private_repo_and_requires_explicit_external_public(tmp_path: Path) -> None:
@@ -94,4 +125,7 @@ def test_qualification_source_is_fixed_look_local_only_and_uses_b0_streaming_bin
     assert "from hswm.experiments.alfworld_b0_runtime import load_local_game_binding" in source
     assert "MAX_STEPS = 20" in source
     assert 'FIXED_ACTION = "look"' in source
-    assert "http" not in source.lower() and "requests" not in source.lower()
+    assert "import requests" not in source.lower()
+    assert "urllib.request" not in source.lower()
+    assert "verify_protocol" not in source
+    assert "alfworld-source-archive" in source and "textworld" in source

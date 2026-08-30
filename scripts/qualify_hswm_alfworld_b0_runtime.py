@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 from hashlib import sha256
 import json
+import os
 from pathlib import Path
 import platform
 import re
@@ -351,7 +352,18 @@ def installed_environment(python: Path, *, required: Mapping[str, str]) -> tuple
         "print(json.dumps({'version':'.'.join(map(str,sys.version_info[:3])),'machine':platform.machine(),"
         "'packages':[{'name':n,'version':v} for n,v in rows]},sort_keys=True,separators=(',',':'),ensure_ascii=True))"
     )
-    completed = subprocess.run([str(python), "-c", probe], check=False, capture_output=True, timeout=30)
+    probe_environment = os.environ.copy()
+    probe_environment.pop("PYTHONHOME", None)
+    probe_environment.pop("PYTHONPATH", None)
+    probe_environment["PYTHONNOUSERSITE"] = "1"
+    completed = subprocess.run(
+        [str(python), "-c", probe],
+        check=False,
+        capture_output=True,
+        cwd=python.parent,
+        env=probe_environment,
+        timeout=30,
+    )
     if completed.returncode != 0 or completed.stderr:
         raise QualificationError("venv environment probe failed")
     try:

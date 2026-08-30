@@ -92,6 +92,38 @@ def test_selected_python_probe_rejects_non_dgx_platform_and_version(monkeypatch:
         installed_environment(python.resolve(), required={})
 
 
+def test_selected_python_probe_isolated_from_controller_python_path(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    python = tmp_path / "venv/bin/python"
+    python.parent.mkdir(parents=True)
+    python.write_text("stub")
+    observed: dict[str, object] = {}
+
+    class Result:
+        returncode = 0
+        stderr = b""
+        stdout = (
+            b'{"machine":"aarch64","packages":['
+            b'{"name":"alfworld","version":"0.5.0"},'
+            b'{"name":"textworld","version":"1.7.0"}],"version":"3.9.25"}'
+        )
+
+    def fake_run(*args: object, **kwargs: object) -> Result:
+        observed.update(kwargs)
+        return Result()
+
+    monkeypatch.setenv("PYTHONPATH", "/controller/repository:/controller/repository/src")
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    packages, _versions = installed_environment(python.resolve(), required={})
+    environment = observed["env"]
+    assert isinstance(environment, dict)
+    assert "PYTHONPATH" not in environment and "PYTHONHOME" not in environment
+    assert environment["PYTHONNOUSERSITE"] == "1"
+    assert observed["cwd"] == python.parent
+    assert len(packages) == 2
+
+
 def test_selected_python_probe_rejects_undeclared_packages(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:

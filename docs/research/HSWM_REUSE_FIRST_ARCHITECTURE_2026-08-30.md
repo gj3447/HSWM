@@ -57,7 +57,7 @@ At composition scale, the additional unresolved claim is preservation of
 |---|---|---|---|
 | [OpenCog Hyperon](https://arxiv.org/abs/2310.18318), [MeTTa](https://arxiv.org/abs/2112.08272), AtomSpace/MORK | typed persistent metagraph, rewrite/query execution, reflective program representation, versioned graph machinery | `ADAPTER_BACKEND_AND_STRONG_BASELINE`; evaluate read-only query and candidate-rewrite modes behind a pinned adapter | A metagraph runtime is not outcome-bound HSWM learning or recursive causal closure |
 | [MemGPT](https://arxiv.org/abs/2310.08560), Letta-style memory | durable, tiered, model-context-external agent memory | `MEMORY_BASELINE`; compare with equal model, context, tools, token and state budgets | persistence or retrieval is not learning |
-| [Reflexion](https://arxiv.org/abs/2303.11366), [Voyager](https://arxiv.org/abs/2305.16291), ExpeL/ACE-style memory | feedback-derived textual lessons, executable skills, and later-task reuse | `UPDATE_POLICY_BASELINE`; use a pinned reproduction or adapter before inventing a new text-lesson learner | later improvement alone does not identify canonical revision, owner, or credit |
+| [Reflexion](https://arxiv.org/abs/2303.11366), [Voyager](https://arxiv.org/abs/2305.16291), [ExpeL](https://arxiv.org/abs/2308.10144)/ACE-style memory | feedback-derived textual lessons, executable skills, and later-task reuse | `UPDATE_POLICY_BASELINE`; use a pinned reproduction or adapter before inventing a new text-lesson learner. The first B2 candidate is the [source-pinned ExpeL boundary](../../_research/causal_composition/priors/expel_b2_text_lesson_v1/README.md). | later improvement alone does not identify canonical revision, owner, or credit |
 | [Darwin Gödel Machine](https://arxiv.org/abs/2505.22954) | sandboxed self-edit proposals validated on external coding benchmarks | `SELF_MODIFICATION_BASELINE_AND_PROPOSER`; reuse bounded propose-test-promote patterns | code self-editing is not world/self unification or identity-preserving HSWM learning |
 | [DreamerV3](https://www.nature.com/articles/s41586-025-08744-2), [WALL-E 2.0](https://arxiv.org/abs/2504.15785), ALFWorld-class environments | predictive world models, symbolic environment rules, and executable outcome benchmarks | `WORLD_MODEL_BASELINE_AND_EVALUATION_ENVIRONMENT`; reuse environments and outcome contracts before building a new world | environment prediction alone is not a joint canonical world/self model |
 | [HyperAgent](https://arxiv.org/abs/2510.10611) | proposed task-adaptive hypergraph communication topology; the authors withdrew the submission because a fundamental methodological error affects the validity of its main results | `WITHDRAWN_METHOD_REFERENCE_ONLY`; use only as a failed-study and control-design reference, never as positive efficacy evidence | a withdrawn result or transient communication hyperedge is not evidence for persistent cognition-bearing coalition |
@@ -147,6 +147,35 @@ all arms
     → same information, model, tool, token, call, retry, time, and human budget
     → one sealed result and resource schema
 ```
+
+The checked-in [`pre_g1_screen`](../../src/hswm/experiments/pre_g1_screen.py)
+is deliberately below this G1 comparison. It reuses the DNRD-5
+custody-separated two-hypothesis task material to exercise separate-process
+outcome/sham/score boundaries and a local immutable-store remove/restore
+envelope. It is a source-checkout-only research adapter, not a packaged wheel
+API. That task exposes the same one-bit rule to a structured local revision
+and a text-shaped surrogate. It can test instrumentation and local store
+mechanics, but it cannot establish an ExpeL replication, comparative HSWM
+efficacy, G0 passage, or G1 passage. Backend context/cache isolation is only
+adapter-reported in this local screen, not platform-verified, so H3 behavioral
+scores are not removal evidence. The surrogate must not be reported as the
+source-pinned B2 arm; its emitted arm identifier is `B2_SURROGATE`, not `B2`.
+
+The conditional first environment candidate is text-only ALFWorld restricted
+to `pick_clean_then_place_in_recep`, recorded in its
+[source/data audit](../../_research/causal_composition/priors/alfworld_text_g1_candidate_v1/README.md).
+Its simulator terminal state offers a stronger outcome boundary than a static
+answer label, but execution is currently blocked: the repository's MIT code
+license does not by itself establish permission for the downloaded game data,
+human annotations, ALFRED-derived trajectories, PDDL files, or release assets.
+The observed official asset hashes are provenance pins, not license evidence.
+
+Before a live G1 comparison, the next work is limited to four items: implement
+and directly parity-check the pinned ExpeL reproduction; qualify an independently
+owned outcome/evaluation boundary; freeze a validated task family with fresh
+transfer and retention headroom; and connect exactly one HSWM revision kind to
+one canonical owner/`Permit` admission path. Only then may a new preregistration
+bind a powered B2-versus-H1 estimand and the sham/remove/restore interventions.
 
 The first bounded HSWM revision should be one disposition, such as one route or
 one procedure. G1 must not simultaneously invent learned topology, a native

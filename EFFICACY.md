@@ -1,7 +1,8 @@
 # HSWM efficacy status
 
-Last reconciled: 2026-08-25 (the unregistered P1 L1 causal-lesson design was
-killed before implementation; no historical metric was recomputed).
+Last reconciled: 2026-08-30 (the opaque-action v2 occurrence added an
+exploratory G0 identifiability observation; no historical metric was
+recomputed).
 
 > **Current state lives in checked-in measurements and their explicit provenance
 > boundaries, not a standing external verdict service.**
@@ -48,6 +49,19 @@ six-case L0 policy-actuation gates against no-memory (6/6 and 4/6 typed
 improvements, respectively). The proposed L1 causal-lesson experiment is now
 `KILLED_BEFORE_REGISTRATION`: it remained unauthorized, unimplemented, and
 unmeasured, so this is a design closeout and not a negative efficacy result.
+
+The later opaque-action v2 DGX occurrence is the first bounded observation in
+which local admitted state, its compiled readset, removal, and exact restoration
+separated fresh behavior from no-state controls: ACTIVE and RESTORE were 8/8,
+forced-opposite feedback was 0/8, NO_UPDATE and REMOVE were 4/8, and the
+preregistered descriptive `delta_state` was `2/3`. Its claim ceiling remains
+**`EXPLORATORY_G0_IDENTIFIABILITY_ONLY`**. The grant and state were local rather
+than canonical Atom-v2 admission, the evaluator was same-process rather than
+independently owned, the no-state arms exposed a first-candidate bias, and no
+reuse-first comparator ran. It is therefore neither a G0 gate pass nor G1
+efficacy. See the bounded
+[result](results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V2_RESULTS_2026-08-30.md) and
+[evidence receipt](evidence/EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_V2_2026-08-30.json).
 
 The preregistered SWM-0R finite representation witness is also an engineering
 result, not efficacy evidence. Its constructive native and independent
@@ -127,6 +141,7 @@ The exact claim boundaries are:
 | cognitive uplift over direct LLM reranking | **preregistered cross-dataset claim failed** | two negative MuSiQue runs; one small, non-significant positive 2Wiki run |
 | P1 outcome→credit→slow-weight loop | **engineering complete; scientific RED; HSWM_LOCAL_RECORD unjudged** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations. Historical measurement self-wrote `FAIL`, so no valid server-owned kernel verdict exists |
 | P1v2→P1v4 typed-policy follow-on | **P1v2 `KILL`; P1v3/P1v4 narrow synthetic L0 `PASS`; L1 unjudged** | P1v2: no-memory 6/6, typed actuation 0/6, all arms identical 6/6. P1v3/P1v4: typed improvements over no-memory 6/6 and 4/6. No learned-compiler, transfer, `ΔW`, topology, consolidation, or L1 causal-learning claim; the L1 file is `DRAFT_NOT_REGISTERED` and no module exists |
+| opaque-action local state-readout identifiability | **exploratory G0 observation; G0 not passed; G1 not evaluated** | one frozen eight-episode DGX occurrence: ACTIVE/RESTORE 8/8, forced-opposite 0/8, NO_UPDATE/REMOVE 4/8, `delta_state=2/3`; local noncanonical grant, same-process evaluator, position-sensitive no-state behavior, and no B0–B3 comparison |
 | query-time graph traversal | **real-data certificate OFF; separate synthetic sparse regime narrowly positive** | `mu=0` on both real datasets and all nine registered hop-drop grid settings worse than static; PhantomWiki large+sparse walk−flat `+0.0111`, LCB `+0.00085`, but no real-data answer uplift |
 | graded supersession | **pointwise capability survives; architectural novelty retracted** | stale suppression succeeds, but an external graded revision arm is bit-exact |
 | long-document advantage | **synthetic mechanism only; 4-book PRELUDE did not establish advantage** | no real NoCha/QASPER/NarrativeQA confirmatory result; C1 HSWM−clique `-2.00pp`, HSWM−dense `+3.16pp` with a CI crossing zero |

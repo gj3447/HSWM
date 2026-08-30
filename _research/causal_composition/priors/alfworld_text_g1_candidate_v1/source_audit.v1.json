@@ -1,0 +1,136 @@
+{
+  "schema_version": "hswm-causal-composition-environment-source-audit/v1",
+  "record_role": "CANDIDATE_ENVIRONMENT_SOURCE_AND_DATA_AUDIT_NOT_AN_INSTALL_OR_EXECUTION",
+  "candidate_uid": "sym:EnvironmentCandidate:alfworld-text-g1-v1",
+  "recorded_at_utc": "2026-08-30T17:19:16Z",
+  "status": "CANDIDATE_SELECTED_LICENSE_SCOPE_UNRESOLVED_EXECUTION_BLOCKED",
+  "selection": {
+    "environment_mode": "ALFWORLD_TEXT_ONLY",
+    "single_task_family": "pick_clean_then_place_in_recep",
+    "conditional_rationale": "A resettable text environment with a simulator terminal state is a candidate for fresh transfer and retention measurement. This is conditional on the blocking license-scope audit and later G0 measurement qualification.",
+    "not_ready_for_execution": "No installation, download, environment launch, task execution, efficacy evaluation, or G0/G1 decision is authorized by this record."
+  },
+  "official_code_and_paper": {
+    "paper": {
+      "arxiv_id": "2010.03768v2",
+      "abstract_url": "https://arxiv.org/abs/2010.03768v2",
+      "pdf_url": "https://arxiv.org/pdf/2010.03768v2",
+      "sha256": "4be2e61e875ca34f19befa92e8a117347fc380a2076d6e829e22e2a4c03dc9e1"
+    },
+    "repository": {
+      "official_url": "https://github.com/alfworld/alfworld",
+      "commit": "aaba6870f86c5be6a08a491f32a50b906227bc3e",
+      "tree": "339069f91317079df9e378efd4ab253417d79b82",
+      "tarball_url": "https://codeload.github.com/alfworld/alfworld/tar.gz/aaba6870f86c5be6a08a491f32a50b906227bc3e",
+      "tarball_sha256": "5592fbb36124b08d24167c5f7612a55a2cc610e0c39170f638a69b628835ee3b"
+    },
+    "code_license": {
+      "spdx": "MIT",
+      "upstream_path": "LICENSE",
+      "raw_url": "https://raw.githubusercontent.com/alfworld/alfworld/aaba6870f86c5be6a08a491f32a50b906227bc3e/LICENSE",
+      "sha256": "0bdf8c0558499c192b6ab55818e99e91ef0eb02c6e2d19d907b3f2e14df40590"
+    },
+    "minimal_source_files": [
+      {
+        "path": "README.md",
+        "role": "official text-only installation and environment description",
+        "raw_url": "https://raw.githubusercontent.com/alfworld/alfworld/aaba6870f86c5be6a08a491f32a50b906227bc3e/README.md",
+        "sha256": "57285c6ec91cbd135148a992814c9a2f943d40e781cd9ed7c4169b5f9131224a"
+      },
+      {
+        "path": "alfworld/data/README.md",
+        "role": "official game-data layout and split description",
+        "raw_url": "https://raw.githubusercontent.com/alfworld/alfworld/aaba6870f86c5be6a08a491f32a50b906227bc3e/alfworld/data/README.md",
+        "sha256": "b30aed4bee175cf0a945d74ab2e39e84429b2ed750788f079ee327b4726bed0c"
+      },
+      {
+        "path": "scripts/alfworld-download",
+        "role": "official release-asset downloader and asset locations",
+        "raw_url": "https://raw.githubusercontent.com/alfworld/alfworld/aaba6870f86c5be6a08a491f32a50b906227bc3e/scripts/alfworld-download",
+        "sha256": "754c6418eba7234b1ea1c68abcd47ecdb4bfca016f6c918526c575a9e326b755"
+      },
+      {
+        "path": "configs/base_config.yaml",
+        "role": "official base configuration surface",
+        "raw_url": "https://raw.githubusercontent.com/alfworld/alfworld/aaba6870f86c5be6a08a491f32a50b906227bc3e/configs/base_config.yaml",
+        "sha256": "2fb5f24f344eaaf14d517605a27c248b9bb1bce445ca22f5fc4eb8a6d3156863"
+      },
+      {
+        "path": "alfworld/agents/environment/alfred_tw_env.py",
+        "role": "text-world environment implementation boundary",
+        "raw_url": "https://raw.githubusercontent.com/alfworld/alfworld/aaba6870f86c5be6a08a491f32a50b906227bc3e/alfworld/agents/environment/alfred_tw_env.py",
+        "sha256": "4d9166363e32f0fa70c63530a900785ddb45c79387a02ebcb9a21252869a8924"
+      }
+    ]
+  },
+  "official_downloaded_assets": {
+    "observation": "Hashes and byte sizes were observed by streaming the official GitHub release bytes on 2026-08-30. GitHub API release digest fields were null; these observed SHA-256 values do not establish a dataset or annotation license.",
+    "assets": [
+      {
+        "name": "json_2.1.1_json.zip",
+        "url": "https://github.com/alfworld/alfworld/releases/download/0.2.2/json_2.1.1_json.zip",
+        "release_tag": "0.2.2",
+        "tag_commit": "7afaf0c97d453396b0144da915156583f47521d8",
+        "observed_bytes": 72018818,
+        "observed_sha256": "25171f16e20ad7b048c47275c45b0babf3aa1cbab29cec97387922350a9844bc",
+        "github_api_digest": null
+      },
+      {
+        "name": "json_2.1.1_pddl.zip",
+        "url": "https://github.com/alfworld/alfworld/releases/download/0.2.2/json_2.1.1_pddl.zip",
+        "release_tag": "0.2.2",
+        "tag_commit": "7afaf0c97d453396b0144da915156583f47521d8",
+        "observed_bytes": 34881784,
+        "observed_sha256": "913942ebed06659ea0da2f8122512d98bc6add30d84961ca803132d8fbcad585",
+        "github_api_digest": null
+      },
+      {
+        "name": "json_2.1.3_tw-pddl.zip",
+        "url": "https://github.com/alfworld/alfworld/releases/download/0.4.2/json_2.1.3_tw-pddl.zip",
+        "release_tag": "0.4.2",
+        "tag_commit": "1558ba46d078279ecb4c5d33a6cdffc96714a2d2",
+        "observed_bytes": 36507267,
+        "observed_sha256": "5df77ea759f2211a4106082839ddbbb790f1ba4e7d097ed732cf453f72aa36cf",
+        "github_api_digest": null
+      }
+    ]
+  },
+  "blocking_license_scope": {
+    "code_mit_is_not_data_permission": true,
+    "unresolved_question": "The checked code license does not itself establish permission for downloaded game data, human annotations, ALFRED-derived trajectories, PDDL files, or release assets.",
+    "required_before_any_execution": [
+      "Locate and source-pin an authoritative license or permission notice covering each selected release asset and its annotation/provenance scope.",
+      "Record compatibility of that permission with the planned local storage, derived split manifests, and any publication.",
+      "Bind locally retained asset bytes to the observed source hashes only after permission scope is resolved."
+    ],
+    "decision": "EXECUTION_BLOCKED"
+  },
+  "future_g0_g1_fairness_contract": {
+    "fresh_transfer": "Use a precommitted, unseen validation final holdout that is never supplied to lesson extraction, revision construction, retrieval, prompt authoring, or calibration decisions.",
+    "retention": "Measure the same frozen fresh distribution after a predeclared interference interval; do not select the interval after outcomes are inspected.",
+    "independent_evaluator": "Run terminal-success scoring in a separately identified evaluator boundary that reads only permitted simulator outcome state and is independent of actor, B2 lesson construction, and H1 revision admission.",
+    "information_fairness": "B2 and H1 receive the same sealed training trajectories, independently produced outcomes, base model, tools, action grammar, and matched resource budget. B2 uses only its arm-private lesson/retrieval state; H1 uses only its declared compiled readset.",
+    "forbidden_actor_inputs": [
+      "admissible_commands",
+      "expert plans or traces",
+      "hidden PDDL or simulator state",
+      "final-holdout retrieval",
+      "cross-arm cache, index, lesson, trajectory, or durable state"
+    ]
+  },
+  "no_claim": [
+    "This source/data audit does not establish that the selected assets are licensed for the contemplated use.",
+    "This source/data audit is not an ALFWorld installation, execution, reproduction, calibration, G0 result, G1 result, or comparator result.",
+    "It does not establish HSWM learning efficacy, canonical revision, Permit admission, FCL-1, any other FCL, consciousness, selfhood, or HSWM-of-HSWMs composition."
+  ],
+  "offline_verifier_contract": {
+    "network_access": "FORBIDDEN",
+    "checks": [
+      "exact candidate status and execution block",
+      "paper, repository, license, source-file, and release-asset digest syntax",
+      "official asset tag-to-commit bindings and observed byte sizes",
+      "explicit license-scope blocker",
+      "text-only task selection, fairness requirements, forbidden information, and no-claim boundary"
+    ]
+  }
+}

@@ -130,9 +130,10 @@ outcome-bound causal-learning 계약과 다중규모 composition test 아래 묶
 
 ## 5. 현재 repository evidence
 
-현재 상태는 `DESIGN_SEEDED / SCIENTIFICALLY_CONNECTED /
-INTEGRATED_CLAIM_UNJUDGED`다. 다음 표는 target, 공학 구현, 직접 과학 evidence를
-섞지 않는다.
+현재 상태는 `DESIGN_SEEDED / EXPLORATORY_G0_IDENTIFIABILITY_OBSERVED /
+SCIENTIFICALLY_CONNECTED / INTEGRATED_CLAIM_UNJUDGED`다. 다음 표는 target,
+공학 구현, 직접 과학 evidence를 섞지 않는다. 여기서 exploratory G0 관측은 측정
+도구의 국소 state-readout 식별 가능성만 뜻하며 G0 gate나 G1 efficacy의 통과가 아니다.
 
 | 항목 | 체크인 상태 | 허용되는 해석 |
 |---|---|---|
@@ -142,6 +143,7 @@ INTEGRATED_CLAIM_UNJUDGED`다. 다음 표는 target, 공학 구현, 직접 과�
 | SWM-0W-S2S multi-member core | `IMPLEMENTED / PILOT-ADOPTED / UNJUDGED` | 수치 core와 pilot replay가 있다. confirmatory efficacy verdict는 없다. |
 | P1 slow-weight closed-loop attempt | `scientific RED` | 12개 candidate에서 fresh pass·activation이 없었고 456 replay의 top-10 변화가 없었다. 해당 mechanism·testbed의 실패를 보존한다. |
 | 첫 G1-shaped DGX occurrence | `INSTRUMENT_VALIDATION_ONLY / G0 NOT_PASSED / G1 NOT_EVALUATED` | local trajectory→outcome→credit→local-guard admission→remove→restore mechanics는 관통했지만, local grant는 Atom-v2 `Permit`이나 canonical HSWM admission이 아니었고 모든 arm이 정답인 baseline-saturated task라 behavioral causal contrast가 없었다. |
+| opaque-action identifiability v2 DGX occurrence | `EXPLORATORY_G0_IDENTIFIABILITY_ONLY / G0 NOT_PASSED / G1 NOT_EVALUATED` | ACTIVE·RESTORE 8/8, forced-opposite 0/8, NO_UPDATE·REMOVE 4/8과 `delta_state=2/3`가 국소 revision readout의 판별 가능성을 보였다. 그러나 local grant, same-process evaluator, position-sensitive no-state behavior, 재사용 대조군 부재 때문에 canonical learning 또는 efficacy 증거가 아니다. |
 | FCL-2–FCL-8 integrated evidence | 없음 | learned topology, joint world-self continuity, two-scale causal composition, consciousness와 scale closure를 주장할 수 없다. |
 
 직접 수치와 provenance는 [`EFFICACY.md`](../../EFFICACY.md)와

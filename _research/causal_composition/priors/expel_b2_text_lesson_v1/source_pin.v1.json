@@ -1,0 +1,117 @@
+{
+  "schema_version": "hswm-causal-composition-prior-source-pin/v1",
+  "record_role": "SOURCE_PINNED_REUSABLE_B2_TEXT_LESSON_PRIOR_NOT_AN_EXPERIMENT_OR_RESULT",
+  "prior_uid": "sym:Prior:expel-b2-text-lesson-v1",
+  "recorded_at_utc": "2026-08-30T16:56:24Z",
+  "scientific_status": "PRIOR_MECHANISM_REFERENCE_ONLY_NOT_HSWM_EVIDENCE",
+  "selection": {
+    "arm_id": "B2_EXPEL_TEXT_LESSON",
+    "role": "PRIMARY_CANDIDATE_TEXT_LESSON_COMPARATOR_FOR_A_FUTURE_G1",
+    "why_this_prior": "ExpeL separates experience gathering, natural-language insight extraction, and fresh-task evaluation, making its learned-text disposition a proximal alternative explanation for a one-task-family outcome-to-behavior effect.",
+    "not_selected_as_hswm_mechanism": "ExpeL lessons, retrieval state, and prompts are external baseline state. They cannot perform HSWM outcome-to-credit binding, owner assignment, Permit authorization, canonical revision, or HSWM lineage mutation."
+  },
+  "official_sources": {
+    "paper": {
+      "title": "ExpeL: LLM Agents Are Experiential Learners",
+      "venue": "Proceedings of the AAAI Conference on Artificial Intelligence 38(17), 2024",
+      "doi": "10.1609/aaai.v38i17.29936",
+      "publisher_url": "https://ojs.aaai.org/index.php/AAAI/article/view/29936",
+      "arxiv_id": "2308.10144",
+      "arxiv_version": "v3",
+      "abstract_url": "https://arxiv.org/abs/2308.10144",
+      "versioned_pdf_url": "https://arxiv.org/pdf/2308.10144v3",
+      "sha256": "01e533d81fb4a5f91797c073a9b1929acbaa64da45a592b26563ca7d135024f3"
+    },
+    "repository": {
+      "official_url": "https://github.com/LeapLabTHU/ExpeL",
+      "commit": "e41ec9a24823e7b560c561ab191441b56d9bcefc",
+      "tree": "8ba77f84284693ebbe12ba9a93bd32fd101a6922",
+      "commit_authored_at_utc": "2024-12-20T05:28:00Z",
+      "release_or_tag": null,
+      "commit_tarball_url": "https://codeload.github.com/LeapLabTHU/ExpeL/tar.gz/e41ec9a24823e7b560c561ab191441b56d9bcefc",
+      "tarball_sha256": "b0f46b34fc03d8b7efed742cdf0d38dbba9fe819d9797c919d9422be7ec48f07"
+    },
+    "license": {
+      "spdx": "Apache-2.0",
+      "upstream_path": "LICENSE",
+      "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    }
+  },
+  "minimal_reproduction_boundary": {
+    "algorithm": [
+      "Collect only sealed B2 training trajectories and independently produced outcomes.",
+      "Use a frozen reflection prompt to extract a bounded natural-language lesson set from the training split.",
+      "Freeze the resulting lesson artifact before final-holdout inspection.",
+      "Use a frozen task-similarity retrieval rule to select lessons for each fresh B2 probe.",
+      "Inject only the selected lesson text into the B2 model context and score fresh outcome with the common independent evaluator."
+    ],
+    "upstream_minimal_files": [
+      {
+        "path": "agent/expel.py",
+        "role": "training/evaluation separation, critique collection, rule state, and retrieval-oriented ExpeL policy",
+        "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/agent/expel.py",
+        "sha256": "7db4e1be3c16dfca589eb2e194cfb4604be224dab32a04f7f03c4529b1dfcf74"
+      },
+      {
+        "path": "agent/reflect.py",
+        "role": "failure-conditioned natural-language reflection and insertion into a subsequent task prompt",
+        "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/agent/reflect.py",
+        "sha256": "09fd01d410598d1972ea963679a8c0367958b9741988f4c4fb870a8827d3e6bd"
+      },
+      {
+        "path": "insight_extraction.py",
+        "role": "official insight-extraction entrypoint",
+        "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/insight_extraction.py",
+        "sha256": "3f6851932d6031ac43353e6428412069d6df53c3ecb08fcfb681c0dd8de10f3e"
+      },
+      {
+        "path": "configs/agent/expel.yaml",
+        "role": "official ExpeL configuration surface for lesson count and retrieval policy",
+        "raw_url": "https://raw.githubusercontent.com/LeapLabTHU/ExpeL/e41ec9a24823e7b560c561ab191441b56d9bcefc/configs/agent/expel.yaml",
+        "sha256": "8d0e75d5693d24267d54cf5857a721485c41b8eefbbea2c66353ea528a2781e0"
+      }
+    ],
+    "excluded": [
+      "The upstream repository, paper PDF, model weights, environments, datasets, and credentials are not vendored into this repository.",
+      "The future B2 arm must not reuse upstream FAISS indexes, logs, caches, API state, or environment state across arms.",
+      "No upstream component may directly mutate HSWM canonical state or authorize a HSWM revision."
+    ]
+  },
+  "future_run_contract": {
+    "b2_only_state": "A future run MUST allocate an arm-private, resettable lesson store, trajectory store, retrieval index, cache namespace, and durable-write root. No B2 state may be visible to H0-H3 or another baseline arm.",
+    "fixed_before_outcome_inspection": [
+      "reflection_prompt_bytes_sha256",
+      "lesson_format_and_deduplication_algorithm",
+      "maximum_lesson_count",
+      "lesson_token_cap",
+      "retrieval_embedding_model_and_revision",
+      "retrieval_similarity_metric_and_top_k",
+      "retrieval_query_construction",
+      "training_holdout_and_final_holdout_split",
+      "base_model_and_revision",
+      "tool_surface",
+      "completion_token_call_retry_time_and_human_minutes_budget",
+      "state_reset_and_cache_network_policy"
+    ],
+    "resource_parity": "The future B2 arm MUST receive the same task information, base model, tools, token, call, retry, time, and human budget as H1 and the named controls; all differences require a receipt and predeclared attribution limitation.",
+    "direct_vs_wrapper_parity": "Before a B2 comparison is credited, a preregistered parity check MUST show that the adopted minimal reproduction and any wrapper expose the same lesson bytes, retrieval selection, model-visible prompt bytes, state writes, and resource accounting within declared tolerance.",
+    "network_policy": "A future scientific occurrence MUST use a pinned offline or sealed-equivalent source and dependency closure. This source-pin verifier performs no live-network verification."
+  },
+  "no_claim": [
+    "This record is not an ExpeL efficacy replication.",
+    "This record is not G0 measurement readiness, G1 efficacy, or a GATE_PROMOTION decision.",
+    "ExpeL source availability does not establish HSWM learning, canonical admission, Atom v2 Permit, FCL-1, any other FCL, consciousness, selfhood, or HSWM-of-HSWMs composition.",
+    "No comparator has been selected for a consumed occurrence by this prior pin."
+  ],
+  "offline_verifier_contract": {
+    "network_access": "FORBIDDEN",
+    "checks": [
+      "schema identifiers and exact official identity fields",
+      "SHA-256 syntax for every pinned byte artifact",
+      "Apache-2.0 license declaration",
+      "minimal-file set and no-vendor boundary",
+      "B2 state isolation, fixed-field, resource-parity, direct-vs-wrapper-parity, and no-claim obligations"
+    ]
+  }
+}

@@ -261,6 +261,7 @@ def test_execution_start_hashes_cover_live_code_and_name_future_receipts() -> No
         "manifests/HSWM_ALFWORLD_TEXT_CLEAN_POOL_2026-08-30.json",
         "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json",
         "manifests/HSWM_ALFWORLD_B0_VLLM_METRICS_QUALIFICATION_2026-08-30.json",
+        "manifests/HSWM_ALFWORLD_B0_SELECTION_2026-08-30.json",
         "src/hswm/experiments/alfworld_b0_selection.py",
         "src/hswm/experiments/alfworld_b0_actor.py",
         "src/hswm/experiments/alfworld_b0_calibration.py",
@@ -276,9 +277,3 @@ def test_execution_start_hashes_cover_live_code_and_name_future_receipts() -> No
     }
     assert required_existing <= paths
     assert all((REPOSITORY_ROOT / path).is_file() for path in required_existing)
-    # These are deliberately named in the preregistration before generation;
-    # their absence means no qualification/selection receipt can be mistaken
-    # for already committed execution input.
-    planned = "manifests/HSWM_ALFWORLD_B0_SELECTION_2026-08-30.json"
-    assert planned in paths
-    assert not (REPOSITORY_ROOT / planned).exists()

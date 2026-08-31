@@ -148,6 +148,7 @@ def LocalPermitCommitConditions
     (command : LocalPermitCommitCommand) : Prop :=
   command.record.contractVersion = localPermitCommitContractVersion ∧
   command.record.status = localPermitCommitStatus ∧
+  command.record.committedAt = command.record.verificationTime ∧
   command.permitEnvelopeAccepted = true ∧
   command.verificationTimeAccepted = true ∧
   command.stateBytesAccepted = true ∧
@@ -203,8 +204,9 @@ theorem acceptedLocalCommitRequiresForeignChecks
     command.verificationTimeAccepted = true ∧
     command.stateBytesAccepted = true := by
   have conditions := (localPermitCommitAcceptedIff state command).mp accepted
-  exact ⟨conditions.2.2.1, conditions.2.2.2.1,
-    conditions.2.2.2.2.1⟩
+  rcases conditions with ⟨_, _, _, permitAccepted, timeAccepted,
+    stateAccepted, _, _, _, _⟩
+  exact ⟨permitAccepted, timeAccepted, stateAccepted⟩
 
 /-- Acceptance publishes exactly the declared successor head. -/
 theorem acceptedLocalCommitPublishesExactSuccessor
@@ -251,8 +253,8 @@ theorem acceptedLocalCommitIsLinearSuccessor
   · rename_i acceptedConditions
     have conditions : LocalPermitCommitConditions state command := by
       simpa only [decide_eq_true_eq] using acceptedConditions
-    exact ⟨exactHead, conditions.2.2.2.2.2.2.2.1,
-      conditions.2.2.2.2.2.2.2.2⟩
+    rcases conditions with ⟨_, _, _, _, _, _, _, _, lineage, sequence⟩
+    exact ⟨exactHead, lineage, sequence⟩
   · contradiction
 
 /-- Replaying a command against its deterministic advanced state fails closed. -/

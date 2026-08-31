@@ -44,3 +44,18 @@ occurrence.
 The focused offline test validates this record's local schema and digest
 invariants. It never fetches upstream resources; re-downloading upstream bytes
 is an explicit, separate source-audit action.
+
+The checked-in source-faithful engineering adapter
+[`expel_b2_adapter.py`](../../../../src/hswm/experiments/expel_b2_adapter.py)
+now verifies the pinned upstream file and license bytes before reconstructing
+the two model-visible evaluation channels: numbered global rules and retrieved
+successful-trajectory few-shots. The companion
+[`check_hswm_expel_b2_adapter.py`](../../../../scripts/check_hswm_expel_b2_adapter.py)
+compares exact rule, few-shot, prompt, projected state-write, resource, and
+configuration bytes against a pinned-source semantic reference. This closes
+only the local source-to-wrapper engineering boundary. The semantic reference
+is derived without executing upstream ExpeL, FAISS, a model, or ALFWorld, so it
+does not establish direct-runtime parity, baseline efficacy, G0, or G1. Exact
+transitive dependency and model/vector revision closure plus an independently
+captured `B2_EXPEL_DIRECT` projection remain required before direct-versus-
+wrapper parity can receive scientific credit.

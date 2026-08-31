@@ -9,6 +9,8 @@
 >
 > **Formal artifact:**
 > [`HSWMEndToEndRuntimeRefinement.lean`](../../formal/HSWMEndToEndRuntimeRefinement.lean)
+> and the concrete field-checker boundary
+> [`HSWMCanonicalPermitEnvelope.lean`](../../formal/HSWMCanonicalPermitEnvelope.lean)
 >
 > **Predecessor boundaries:**
 > [`atomic admission`](HSWM_ATOMIC_PERMIT_INVARIANT_ADMISSION_LEAN_2026-08-31.md),
@@ -71,8 +73,11 @@ schema-relative transition, its responsibility owners and its typed evidence.
 
 ## 3. Concrete certificate and state refinement
 
-`RuntimeExecutionTrace` contains one execution identity, a certificate digest,
-Permit-issue occurrences and recovered successful-commit occurrences.
+`RuntimeExecutionTrace` contains one execution identity, a stable pre-execution
+intent digest, a post-execution certificate digest, Permit-issue occurrences
+and recovered successful-commit occurrences. The split prevents a digest
+cycle: a Permit may sign the intent digest while the later certificate may
+contain that Permit signature.
 `ClaimedConcreteExecutionEvidence` requires:
 
 - canonical certificate bytes and recovered post-state checks to have been
@@ -124,8 +129,8 @@ The formal boundary distinguishes four layers:
 | verifier soundness | `SignatureVerifierSound` | verifier acceptance implies the declared signature meaning |
 | key policy | `KeyAuthorization`, `KeyActiveAt` | that key is authorized for the authorizer and active at the issue point |
 
-The domain-separated signing message binds contract version, execution
-identity, certificate digest, key-policy version, revocation epoch, Permit
+The abstract domain-separated signing message binds contract version, execution
+identity, pre-execution intent digest, key-policy version, revocation epoch, Permit
 digest, head, target, revisions, authorization, scope and issue index.
 `soundVerifierAndKeyPolicyYieldPermitAuthentication` proves
 `AuthenticatedPermitAt` only
@@ -134,6 +139,16 @@ Permit decision is both allowed and active. The verifier-soundness premise is
 visible. Lean does not assume a cryptographic algorithm correct, identify a
 human from a public key, establish key custody, query revocation or produce
 trusted time.
+
+The separately checked-in
+[`canonical Permit authentication envelope`](HSWM_CANONICAL_PERMIT_AUTHENTICATION_ENVELOPE_2026-08-31.md)
+now adds concrete TypeScript canonical bytes, an injected detached signer,
+Ed25519 verification, trust-snapshot/key/time checks and exact binding checks.
+Its separate Lean field-binding abstraction proves that fields accepted by the
+modeled checker cannot float to another supplied execution, head, proposal,
+invariant or nonce context. It is not a theorem that the TypeScript checker
+refines Lean. The runtime result is only caller-trust/time-relative signature
+verification, not an authoritative or atomic Permit occurrence.
 
 ## 5. Outcome truth and independent causal credit
 
@@ -205,7 +220,8 @@ false:
 | --- | --- |
 | concrete runtime-state abstraction to Lean pre/post state | absent |
 | canonical Permit issue occurrence | absent |
-| authenticated Permit under an explicit trust/key/time model | absent |
+| authentication mechanism and fixed signed test vector | present, bounded |
+| actual Permit issue under authoritative trust/key/time evidence | absent |
 | one canonical commit occurrence for this same transition | absent |
 | externally true outcome evidence | absent |
 | independently identified causal credit | absent |
@@ -265,13 +281,14 @@ The current proved result is therefore two-sided:
 The next valid route remains proof-first but must eventually cross into real
 execution:
 
-1. define canonical bytes for the concrete execution certificate and implement
+1. define canonical bytes for the complete execution certificate and implement
    an independent checker whose accepted value maps to
    `ClaimedRuntimeAdmissionCertificate`, then prove the checker sound against a
    declared runtime transition semantics;
-2. add a separately scoped Effect service that authenticates an authorized,
-   non-revoked key and issues one candidate/head-bound canonical Permit at the
-   actual linearization point;
+2. extend the implemented canonical Permit envelope into a separately scoped
+   issuer/executor boundary with authoritative workload identity, trusted time,
+   key rotation/revocation evidence and an independently replayed raw-byte
+   verifier;
 3. re-evaluate Permit and `Inv(S,c,S')` inside one genuinely atomic durable
    transaction, consume exact certificate identities and recover the exact
    successor before publishing success;

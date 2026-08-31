@@ -46,7 +46,8 @@ structure PermitSigningMessage where
   domain : String
   contractVersion : String
   executionId : RuntimeExecutionId
-  certificateDigest : EvidenceDigest
+  /-- Pre-execution intent digest; never the digest of the final signed receipt. -/
+  executionIntentDigest : EvidenceDigest
   keyPolicyVersion : String
   revocationEpoch : Nat
   permitDigest : EvidenceDigest
@@ -86,6 +87,9 @@ deriving Repr, DecidableEq
 /-- The bounded event projection carried by one runtime certificate. -/
 structure RuntimeExecutionTrace where
   executionId : RuntimeExecutionId
+  /-- Stable pre-execution input that a Permit may sign without a digest cycle. -/
+  executionIntentDigest : EvidenceDigest
+  /-- Post-execution certificate digest, which may include the Permit signature. -/
   certificateDigest : EvidenceDigest
   permitIssues : List PermitIssueOccurrence
   successfulCommits : List RuntimeCommitOccurrence
@@ -293,7 +297,7 @@ def permitSigningMessage
   { domain := "HSWM_CANONICAL_PERMIT_V1"
     contractVersion := "hswm-canonical-permit-signing-message/v1"
     executionId := trace.executionId
-    certificateDigest := trace.certificateDigest
+    executionIntentDigest := trace.executionIntentDigest
     keyPolicyVersion := policyContext.version
     revocationEpoch := policyContext.revocationEpoch
     permitDigest := permit.contentDigest

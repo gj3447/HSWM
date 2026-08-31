@@ -181,6 +181,21 @@ assumption-carrying witness의 정확한 조합 정리다. TypeScript/Node/Effec
 암호·키 보관, 저장소 linearizability, 외부 세계 진실, 인과 식별과 LLM provider 실행은
 독립 checker·실제 실행·실험 evidence로 남아 있으며 전체 효능은 계속 `UNJUDGED`다.
 
+후속
+[`canonical Permit authentication envelope`](docs/research/HSWM_CANONICAL_PERMIT_AUTHENTICATION_ENVELOPE_2026-08-31.md)는
+첫 런타임 authentication-mechanism engineering 슬라이스로 사전 execution-intent와 사후 certificate digest를 분리해
+서명 digest cycle을 제거하고, exact predecessor/expected-successor head, proposal·invariant,
+nonce, key-policy/revocation epoch를 한 domain-separated canonical signing document에
+결속한다. Effect 런타임은 detached signer와 Node Ed25519 verifier를 사용해 caller-supplied
+expected bindings·canonical trust snapshot·verification time에 상대적으로 고정 test vector를
+검증하고 모든 mutation·head/policy/time/key 불일치를 fail closed한다. 새 Lean 모듈은 TypeScript checker의
+정제가 아니라 선택된 field-binding abstraction이며, acceptance가 supplied expected context를
+투영하고 execution-intent나 nonce 변경과 양립할 수 없음을 증명한다. 서명의 의미도 별도
+verifier-soundness 전제 아래서만 따라온다. 검증 결과 literal은
+`CALLER_RELATIVE_BINDINGS_TRUST_AND_TIME_ENVELOPE_VERIFIED_NOT_AUTHORITATIVE_PERMIT_NOT_ATOMIC_ADMISSION_NOT_LEARNING`이다.
+실제 issuer custody, authoritative clock/trust publication, intent-byte semantics, nonce 원자 소비,
+canonical commit occurrence와 전체 TS-to-Lean 정제는 아직 성립하지 않는다.
+
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,
 폐기 전 `H/F/A/W` 표기를 사용하는 역사적 원자적 credit scaffold를 서로 분리해

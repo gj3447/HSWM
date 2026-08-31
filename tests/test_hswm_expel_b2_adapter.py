@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import replace
 from pathlib import Path
 
@@ -15,8 +16,10 @@ from hswm.experiments.expel_b2_adapter import (
     PinnedExpelSource,
     SuccessfulTrajectory,
     audit_expel_direct_wrapper_parity,
+    bind_expel_runtime_source,
     build_expel_b2_wrapper_projection,
     semantic_reference_from_wrapper,
+    verify_expel_runtime_pin,
     verify_pinned_expel_source,
 )
 from hswm.selfmod.contracts import canonical_sha256
@@ -124,7 +127,7 @@ def test_two_channel_wrapper_preserves_numbered_rules_retrieved_fewshots_and_pro
         "token_counter_calls": 4,
         "logical_vector_documents": 4,
         "selected_fewshots": 2,
-        "ranking_execution": "CALLER_SUPPLIED_PINNED_RETRIEVER_OUTPUT",
+        "ranking_execution": "PINNED_EXPEL_FAISS_TASK_SIMILARITY",
     }
     assert CLAIM_BOUNDARY in projection["claim_boundary"]
 
@@ -159,6 +162,111 @@ def test_parity_refuses_direct_runtime_label_while_dependency_closure_is_open() 
     direct["projection_sha256"] = canonical_sha256(direct)
     with pytest.raises(ExpelB2AdapterError, match="dependency closure remains unpinned"):
         audit_expel_direct_wrapper_parity(direct, wrapper)
+
+
+def test_executed_direct_capture_has_exact_wrapper_projection_parity() -> None:
+    source = bind_expel_runtime_source(_source())
+    wrapper = build_expel_b2_wrapper_projection(
+        source,
+        rules=("inspect before acting", "clean before placing"),
+        successful_trajectories=_trajectories(),
+        ranked_task_ids=(
+            "clean plate___3",
+            "clean apple___1",
+            "clean apple___1",
+            "clean mug___2",
+            "clean bowl___4",
+        ),
+        current_task="clean bowl___9",
+        current_env_name="pick_clean_then_place",
+        config=_config(),
+    )
+    direct = deepcopy(wrapper)
+    direct.pop("projection_sha256")
+    direct["arm_id"] = DIRECT_ARM
+    runtime_pin_sha256 = verify_expel_runtime_pin()["runtime_pin_sha256"]
+    direct["runtime_capture"] = {
+        "schema_version": "hswm-expel-b2-upstream-runtime-capture/v1",
+        "runtime_pin_sha256": runtime_pin_sha256,
+        "fixture_sha256": "f" * 64,
+        "upstream_execution": True,
+        "network_connect_attempts": [],
+        "llm_calls": 0,
+        "simulator_steps": 0,
+        "physical_vector_index_builds": 2,
+        "physical_document_embedding_batches": 2,
+        "physical_query_embedding_calls": 1,
+        "trajectory_token_counts": {"fixture": 1},
+        "embedding_trace_sha256": "a" * 64,
+        "faiss_index_sha256": "b" * 64,
+        "installed_distributions_sha256": "c" * 64,
+    }
+    direct["projection_sha256"] = canonical_sha256(direct)
+    receipt = audit_expel_direct_wrapper_parity(direct, wrapper)
+    assert receipt["exact"] is True
+    assert receipt["direct_runtime_executed"] is True
+    assert receipt["status"] == (
+        "DIRECT_UPSTREAM_EXECUTED_WRAPPER_PROJECTION_EXACT_PARITY"
+    )
+    assert "NOT_INDEPENDENT_WRAPPER_VECTOR_EXECUTION" in receipt["claim_boundary"]
+
+    forged_direct = deepcopy(direct)
+    forged_direct.pop("projection_sha256")
+    forged_binding = forged_direct["source_binding"]
+    forged_binding.pop("source_binding_sha256")
+    forged_binding["executable_dependency_closure"] = (
+        "PINNED_DIRECT_CAPTURE_SLICE:" + "e" * 64
+    )
+    forged_binding["source_binding_sha256"] = canonical_sha256(forged_binding)
+    forged_direct["runtime_capture"]["runtime_pin_sha256"] = "e" * 64
+    forged_direct["projection_sha256"] = canonical_sha256(forged_direct)
+    with pytest.raises(ExpelB2AdapterError, match="runtime capture boundary"):
+        audit_expel_direct_wrapper_parity(forged_direct, wrapper)
+
+    wrapper_with_vector = deepcopy(wrapper)
+    wrapper_with_vector.pop("projection_sha256")
+    wrapper_capture = {
+        "schema_version": "hswm-expel-b2-wrapper-vector-capture/v1",
+        "runtime_pin_sha256": runtime_pin_sha256,
+        "fixture_sha256": "f" * 64,
+        "ranked_task_ids": direct["successful_trajectory_fewshots"][
+            "ranked_task_ids"
+        ],
+        "trajectory_token_counts": {"fixture": 1},
+        "vector_documents_sha256": direct["state_writes"][
+            "task_vector_document_set_sha256"
+        ],
+        "embedding_trace_sha256": "a" * 64,
+        "faiss_index_sha256": "b" * 64,
+        "installed_distributions_sha256": "c" * 64,
+        "physical_vector_index_builds": 2,
+        "physical_document_embedding_batches": 2,
+        "physical_query_embedding_calls": 1,
+        "network_connect_attempts": [],
+        "llm_calls": 0,
+        "simulator_steps": 0,
+        "upstream_agent_imported": False,
+    }
+    wrapper_capture["capture_sha256"] = canonical_sha256(wrapper_capture)
+    wrapper_with_vector["wrapper_runtime_capture"] = wrapper_capture
+    wrapper_with_vector["projection_sha256"] = canonical_sha256(wrapper_with_vector)
+    full_receipt = audit_expel_direct_wrapper_parity(direct, wrapper_with_vector)
+    assert full_receipt["status"] == (
+        "DIRECT_AND_INDEPENDENT_WRAPPER_VECTOR_EXECUTED_EXACT_PARITY"
+    )
+    assert full_receipt["comparisons"]["independent_wrapper_vector_execution"] is True
+
+    drifted_wrapper = deepcopy(wrapper_with_vector)
+    drifted_wrapper.pop("projection_sha256")
+    drifted_capture = drifted_wrapper["wrapper_runtime_capture"]
+    drifted_capture["faiss_index_sha256"] = "d" * 64
+    drifted_capture.pop("capture_sha256")
+    drifted_capture["capture_sha256"] = canonical_sha256(drifted_capture)
+    drifted_wrapper["projection_sha256"] = canonical_sha256(drifted_wrapper)
+    with pytest.raises(
+        ExpelB2AdapterError, match="independent_wrapper_vector_execution"
+    ):
+        audit_expel_direct_wrapper_parity(direct, drifted_wrapper)
 
 
 def test_wrapper_requires_explicit_rule_cap_and_environment_filtered_ranking() -> None:

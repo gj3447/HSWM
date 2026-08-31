@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import ast
 from copy import deepcopy
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from hashlib import sha256
 import json
 from pathlib import Path
@@ -28,6 +28,12 @@ EXPEL_COMMIT = "e41ec9a24823e7b560c561ab191441b56d9bcefc"
 EXPEL_TREE = "8ba77f84284693ebbe12ba9a93bd32fd101a6922"
 EXPEL_LICENSE = "Apache-2.0"
 EXPEL_LICENSE_SHA256 = "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+RUNTIME_PIN_SCHEMA = "hswm-expel-b2-direct-runtime-pin/v1"
+RUNTIME_CAPTURE_SCHEMA = "hswm-expel-b2-upstream-runtime-capture/v1"
+WRAPPER_VECTOR_CAPTURE_SCHEMA = "hswm-expel-b2-wrapper-vector-capture/v1"
+RUNTIME_PIN_FILE_SHA256 = (
+    "2d3baf652c94769b99f54df648b891ee5cceb6d8a78d40f3329e7c1a2e9556b9"
+)
 PINNED_FILE_SHA256 = {
     "agent/expel.py": "7db4e1be3c16dfca589eb2e194cfb4604be224dab32a04f7f03c4529b1dfcf74",
     "agent/react.py": "a0b8f6c2652bedfaa1442cafd0f22f8f6e050b5daf3355041df532d9a8adb552",
@@ -66,6 +72,11 @@ CLAIM_BOUNDARY = (
 _DEFAULT_SOURCE_PIN = (
     Path(__file__).resolve().parents[3]
     / "_research/causal_composition/priors/expel_b2_text_lesson_v1/source_pin.v1.json"
+)
+_DEFAULT_RUNTIME_PIN = (
+    Path(__file__).resolve().parents[3]
+    / "_research/causal_composition/priors/expel_b2_text_lesson_v1/runtime/"
+    "runtime_pin.v1.json"
 )
 
 
@@ -357,6 +368,75 @@ def verify_pinned_expel_source(
     )
 
 
+def verify_expel_runtime_pin(
+    runtime_pin_path: Path = _DEFAULT_RUNTIME_PIN,
+) -> dict[str, Any]:
+    """Verify the checked-in direct-capture dependency/model closure."""
+
+    pin, raw = _read_json(runtime_pin_path, "ExpeL runtime pin")
+    digest = pin.get("runtime_pin_sha256")
+    unsigned = dict(pin)
+    unsigned.pop("runtime_pin_sha256", None)
+    if (
+        sha256(raw).hexdigest() != RUNTIME_PIN_FILE_SHA256
+        or pin.get("schema_version") != RUNTIME_PIN_SCHEMA
+        or not isinstance(digest, str)
+        or digest != canonical_sha256(unsigned)
+    ):
+        raise ExpelB2AdapterError("ExpeL runtime pin identity drifted")
+    try:
+        source = pin["source_binding"]
+        dependency = pin["dependency_closure"]
+        model = pin["embedding_model"]
+        tokenizer = pin["tokenizer"]
+    except (KeyError, TypeError) as error:
+        raise ExpelB2AdapterError("ExpeL runtime pin structure drifted") from error
+    if (
+        source.get("expel_repository_commit") != EXPEL_COMMIT
+        or source.get("expel_repository_tree") != EXPEL_TREE
+        or source.get("source_pin_sha256") != SOURCE_PIN_SHA256
+        or model.get("repository_id") != "sentence-transformers/all-mpnet-base-v2"
+        or model.get("revision") != "e8c3b32edf5434bc2275fc9bab85f82640a19130"
+        or tokenizer.get("implementation") != "tiktoken==0.4.0"
+        or tokenizer.get("observed_alfworld_auto_max_fewshot_tokens") != 953
+    ):
+        raise ExpelB2AdapterError("ExpeL runtime source/model boundary drifted")
+
+    runtime_root = runtime_pin_path.parent.parent
+    for path_field, digest_field in (
+        ("requirements_input_path", "requirements_input_sha256"),
+        ("requirements_lock_path", "requirements_lock_sha256"),
+    ):
+        relative = Path(dependency.get(path_field, ""))
+        if relative.is_absolute() or ".." in relative.parts:
+            raise ExpelB2AdapterError("ExpeL runtime dependency path escaped its root")
+        path = runtime_root / relative
+        try:
+            observed = sha256(path.read_bytes()).hexdigest()
+        except OSError as error:
+            raise ExpelB2AdapterError("ExpeL runtime dependency file is unavailable") from error
+        if observed != dependency.get(digest_field):
+            raise ExpelB2AdapterError("ExpeL runtime dependency file drifted")
+    return pin
+
+
+def bind_expel_runtime_source(
+    source: PinnedExpelSource,
+    runtime_pin_path: Path = _DEFAULT_RUNTIME_PIN,
+) -> PinnedExpelSource:
+    """Bind verified source semantics to the executable direct-capture slice."""
+
+    _validate_source_object(source)
+    runtime_pin = verify_expel_runtime_pin(runtime_pin_path)
+    binding = dict(source.source_binding)
+    binding.pop("source_binding_sha256", None)
+    binding["executable_dependency_closure"] = (
+        "PINNED_DIRECT_CAPTURE_SLICE:" + runtime_pin["runtime_pin_sha256"]
+    )
+    binding["source_binding_sha256"] = canonical_sha256(binding)
+    return replace(source, source_binding=binding)
+
+
 def _remove_alfworld_suffix(task: str) -> str:
     return task.split("___", 1)[0]
 
@@ -374,6 +454,12 @@ def _trajectory_state_rows(
 def _validate_source_object(source: PinnedExpelSource) -> None:
     binding = dict(source.source_binding)
     digest = binding.pop("source_binding_sha256", None)
+    closure = binding.get("executable_dependency_closure")
+    closure_is_valid = closure == "NOT_PINNED" or (
+        isinstance(closure, str)
+        and re.fullmatch(r"PINNED_DIRECT_CAPTURE_SLICE:[0-9a-f]{64}", closure)
+        is not None
+    )
     if (
         binding.get("prior_uid") != EXPEL_PRIOR_UID
         or binding.get("repository_commit") != EXPEL_COMMIT
@@ -382,7 +468,7 @@ def _validate_source_object(source: PinnedExpelSource) -> None:
         or binding.get("license_sha256") != EXPEL_LICENSE_SHA256
         or binding.get("source_pin_sha256") != SOURCE_PIN_SHA256
         or binding.get("pinned_file_sha256") != PINNED_FILE_SHA256
-        or binding.get("executable_dependency_closure") != "NOT_PINNED"
+        or not closure_is_valid
         or not isinstance(digest, str)
         or digest != canonical_sha256(binding)
     ):
@@ -528,7 +614,7 @@ def build_expel_b2_wrapper_projection(
         "token_counter_calls": token_counter_calls,
         "logical_vector_documents": len(vector_rows),
         "selected_fewshots": len(selected),
-        "ranking_execution": "CALLER_SUPPLIED_PINNED_RETRIEVER_OUTPUT",
+        "ranking_execution": "PINNED_EXPEL_FAISS_TASK_SIMILARITY",
     }
     projection: dict[str, Any] = {
         "schema_version": PROJECTION_SCHEMA,
@@ -612,12 +698,37 @@ def audit_expel_direct_wrapper_parity(
 
     direct_value = _validated_projection(direct, "direct")
     wrapper_value = _validated_projection(wrapper, "wrapper")
-    if direct_value.get("arm_id") == DIRECT_ARM:
-        raise ExpelB2AdapterError(
-            "B2_EXPEL_DIRECT is unavailable while the executable dependency "
-            "closure remains unpinned"
-        )
-    if direct_value.get("arm_id") != REFERENCE_ARM:
+    direct_is_runtime = direct_value.get("arm_id") == DIRECT_ARM
+    if direct_is_runtime:
+        binding = direct_value.get("source_binding")
+        capture = direct_value.get("runtime_capture")
+        if not isinstance(binding, Mapping):
+            raise ExpelB2AdapterError("direct runtime source binding is unavailable")
+        closure = binding.get("executable_dependency_closure")
+        if closure == "NOT_PINNED":
+            raise ExpelB2AdapterError(
+                "B2_EXPEL_DIRECT is unavailable while the executable dependency "
+                "closure remains unpinned"
+            )
+        if not isinstance(capture, Mapping):
+            raise ExpelB2AdapterError("direct runtime capture metadata is unavailable")
+        runtime_pin_sha256 = capture.get("runtime_pin_sha256")
+        verified_runtime_pin_sha256 = verify_expel_runtime_pin()["runtime_pin_sha256"]
+        if (
+            capture.get("schema_version") != RUNTIME_CAPTURE_SCHEMA
+            or capture.get("upstream_execution") is not True
+            or capture.get("network_connect_attempts") != []
+            or capture.get("llm_calls") != 0
+            or capture.get("simulator_steps") != 0
+            or capture.get("physical_vector_index_builds") != 2
+            or capture.get("physical_document_embedding_batches") != 2
+            or capture.get("physical_query_embedding_calls") != 1
+            or not isinstance(runtime_pin_sha256, str)
+            or runtime_pin_sha256 != verified_runtime_pin_sha256
+            or closure != "PINNED_DIRECT_CAPTURE_SLICE:" + runtime_pin_sha256
+        ):
+            raise ExpelB2AdapterError("direct runtime capture boundary drifted")
+    elif direct_value.get("arm_id") != REFERENCE_ARM:
         raise ExpelB2AdapterError("direct parity side has an invalid arm identity")
     if wrapper_value.get("arm_id") != WRAPPER_ARM:
         raise ExpelB2AdapterError("wrapper parity side has an invalid arm identity")
@@ -639,6 +750,50 @@ def audit_expel_direct_wrapper_parity(
         == wrapper_value.get("resource_accounting"),
         "config": direct_value.get("config") == wrapper_value.get("config"),
     }
+    wrapper_vector_executed = False
+    if direct_is_runtime and "wrapper_runtime_capture" in wrapper_value:
+        direct_capture = direct_value["runtime_capture"]
+        wrapper_capture = wrapper_value["wrapper_runtime_capture"]
+        if not isinstance(wrapper_capture, Mapping):
+            raise ExpelB2AdapterError("wrapper vector capture metadata is invalid")
+        wrapper_unsigned = dict(wrapper_capture)
+        wrapper_digest = wrapper_unsigned.pop("capture_sha256", None)
+        wrapper_vector_executed = (
+            wrapper_capture.get("schema_version") == WRAPPER_VECTOR_CAPTURE_SCHEMA
+            and isinstance(wrapper_digest, str)
+            and wrapper_digest == canonical_sha256(wrapper_unsigned)
+            and wrapper_capture.get("runtime_pin_sha256")
+            == direct_capture.get("runtime_pin_sha256")
+            and wrapper_capture.get("fixture_sha256")
+            == direct_capture.get("fixture_sha256")
+            and wrapper_capture.get("ranked_task_ids")
+            == direct_value.get("successful_trajectory_fewshots", {}).get(
+                "ranked_task_ids"
+            )
+            and wrapper_capture.get("trajectory_token_counts")
+            == direct_capture.get("trajectory_token_counts")
+            and wrapper_capture.get("vector_documents_sha256")
+            == direct_value.get("state_writes", {}).get(
+                "task_vector_document_set_sha256"
+            )
+            and wrapper_capture.get("embedding_trace_sha256")
+            == direct_capture.get("embedding_trace_sha256")
+            and wrapper_capture.get("faiss_index_sha256")
+            == direct_capture.get("faiss_index_sha256")
+            and wrapper_capture.get("installed_distributions_sha256")
+            == direct_capture.get("installed_distributions_sha256")
+            and wrapper_capture.get("physical_vector_index_builds")
+            == direct_capture.get("physical_vector_index_builds")
+            and wrapper_capture.get("physical_document_embedding_batches")
+            == direct_capture.get("physical_document_embedding_batches")
+            and wrapper_capture.get("physical_query_embedding_calls")
+            == direct_capture.get("physical_query_embedding_calls")
+            and wrapper_capture.get("network_connect_attempts") == []
+            and wrapper_capture.get("llm_calls") == 0
+            and wrapper_capture.get("simulator_steps") == 0
+            and wrapper_capture.get("upstream_agent_imported") is False
+        )
+        comparisons["independent_wrapper_vector_execution"] = wrapper_vector_executed
     exact = all(comparisons.values())
     if not exact:
         failed = ", ".join(name for name, passed in comparisons.items() if not passed)
@@ -646,14 +801,29 @@ def audit_expel_direct_wrapper_parity(
 
     receipt: dict[str, Any] = {
         "schema_version": PARITY_SCHEMA,
-        "status": "PINNED_SOURCE_SEMANTIC_REFERENCE_EXACT_PARITY_ONLY",
+        "status": (
+            "DIRECT_AND_INDEPENDENT_WRAPPER_VECTOR_EXECUTED_EXACT_PARITY"
+            if wrapper_vector_executed
+            else "DIRECT_UPSTREAM_EXECUTED_WRAPPER_PROJECTION_EXACT_PARITY"
+            if direct_is_runtime
+            else "PINNED_SOURCE_SEMANTIC_REFERENCE_EXACT_PARITY_ONLY"
+        ),
         "exact": True,
-        "direct_runtime_executed": False,
+        "direct_runtime_executed": direct_is_runtime,
         "comparisons": comparisons,
         "direct_projection_sha256": direct_value["projection_sha256"],
         "wrapper_projection_sha256": wrapper_value["projection_sha256"],
         "claim_boundary": (
-            CLAIM_BOUNDARY + "_NO_DIRECT_RUNTIME_OR_VECTOR_EXECUTION_PARITY_CLAIM"
+            CLAIM_BOUNDARY
+            + (
+                "_DIRECT_AND_INDEPENDENT_WRAPPER_VECTOR_EXECUTED_ENGINEERING_"
+                "PARITY_ONLY"
+                if wrapper_vector_executed
+                else "_DIRECT_UPSTREAM_EXECUTED_WRAPPER_PROJECTION_ONLY_NOT_"
+                "INDEPENDENT_WRAPPER_VECTOR_EXECUTION"
+                if direct_is_runtime
+                else "_NO_DIRECT_RUNTIME_OR_VECTOR_EXECUTION_PARITY_CLAIM"
+            )
         ),
     }
     receipt["receipt_sha256"] = canonical_sha256(receipt)
@@ -672,10 +842,16 @@ __all__ = [
     "PinnedExpelSource",
     "PROJECTION_SCHEMA",
     "REFERENCE_ARM",
+    "RUNTIME_CAPTURE_SCHEMA",
+    "RUNTIME_PIN_FILE_SHA256",
+    "RUNTIME_PIN_SCHEMA",
     "SuccessfulTrajectory",
     "WRAPPER_ARM",
+    "WRAPPER_VECTOR_CAPTURE_SCHEMA",
     "audit_expel_direct_wrapper_parity",
+    "bind_expel_runtime_source",
     "build_expel_b2_wrapper_projection",
     "semantic_reference_from_wrapper",
     "verify_pinned_expel_source",
+    "verify_expel_runtime_pin",
 ]

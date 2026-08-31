@@ -3,13 +3,18 @@
 from __future__ import annotations
 
 import json
+from hashlib import sha256
 import re
 from pathlib import Path
+
+from hswm.selfmod.contracts import canonical_sha256
 
 
 ROOT = Path(__file__).resolve().parents[1]
 PRIOR = ROOT / "_research/causal_composition/priors/expel_b2_text_lesson_v1"
 MANIFEST = PRIOR / "source_pin.v1.json"
+RUNTIME = PRIOR / "runtime"
+QUALIFICATION = ROOT / "manifests/HSWM_EXPEL_B2_DIRECT_RUNTIME_PARITY_2026-08-31.json"
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 
 
@@ -136,3 +141,49 @@ def test_expel_inspired_lesson_arm_is_not_the_faithful_direct_two_channel_arm() 
     assert "FAISS" in observations["retrieval_ambiguity"]
     assert "B2_EXPEL_DIRECT" in contract["direct_vs_wrapper_parity"]
     assert "global numbered-rule bytes" in contract["direct_vs_wrapper_parity"]
+
+
+def test_expel_direct_runtime_qualification_is_hash_bound_and_claim_bounded() -> None:
+    runtime = json.loads((RUNTIME / "runtime_pin.v1.json").read_text(encoding="utf-8"))
+    fixture = json.loads(
+        (RUNTIME / "direct_capture_fixture.v1.json").read_text(encoding="utf-8")
+    )
+    qualification = json.loads(QUALIFICATION.read_text(encoding="utf-8"))
+
+    runtime_unsigned = dict(runtime)
+    runtime_digest = runtime_unsigned.pop("runtime_pin_sha256")
+    fixture_unsigned = dict(fixture)
+    fixture_digest = fixture_unsigned.pop("fixture_sha256")
+    assert runtime_digest == canonical_sha256(runtime_unsigned)
+    assert fixture_digest == canonical_sha256(fixture_unsigned)
+    assert qualification["status"] == (
+        "DIRECT_AND_INDEPENDENT_WRAPPER_VECTOR_EXECUTED_EXACT_PARITY"
+    )
+    assert qualification["runtime"]["runtime_pin_sha256"] == runtime_digest
+    assert qualification["runtime"]["fixture_sha256"] == fixture_digest
+    assert qualification["runtime"]["runtime_pin_file_sha256"] == sha256(
+        (RUNTIME / "runtime_pin.v1.json").read_bytes()
+    ).hexdigest()
+    assert qualification["runtime"]["fixture_file_sha256"] == sha256(
+        (RUNTIME / "direct_capture_fixture.v1.json").read_bytes()
+    ).hexdigest()
+
+    for field, path in {
+        "adapter": ROOT / "src/hswm/experiments/expel_b2_adapter.py",
+        "upstream_capture": ROOT / "scripts/capture_hswm_expel_b2_upstream.py",
+        "independent_wrapper_vector_capture": (
+            ROOT / "scripts/capture_hswm_expel_b2_wrapper_vector.py"
+        ),
+        "parity_checker": ROOT / "scripts/check_hswm_expel_b2_direct_parity.py",
+    }.items():
+        assert qualification["source_code_sha256"][field] == sha256(
+            path.read_bytes()
+        ).hexdigest()
+
+    assert all(qualification["capture"]["comparisons"].values())
+    assert qualification["capture"]["network_connect_attempts_per_side"] == 0
+    assert qualification["capture"]["llm_calls_per_side"] == 0
+    assert qualification["capture"]["simulator_steps_per_side"] == 0
+    assert qualification["capture"]["independent_wrapper_imported_upstream_agent"] is False
+    assert "NOT_EXPEL_EFFICACY" in qualification["claim_ceiling"]
+    assert "NOT_HSWM_ADMISSION" in qualification["claim_ceiling"]

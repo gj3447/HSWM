@@ -1,0 +1,49 @@
+{
+  "schema_version": "hswm-expel-b2-direct-capture-fixture/v1",
+  "fixture_role": "SYNTHETIC_ENGINEERING_PARITY_FIXTURE_NOT_TASK_EFFICACY_DATA",
+  "rules": [
+    "inspect the environment before acting",
+    "complete prerequisites before placing the object"
+  ],
+  "successful_trajectories": [
+    {
+      "task_id": "clean some mug and put it in shelf___1",
+      "env_name": "pick_clean_then_place",
+      "trajectory": "> think: clean the mug before placing it\n> go to sinkbasin 1\nOn the sinkbasin 1, you see a mug 1.\n> clean mug 1 with sinkbasin 1\nYou clean the mug 1.\n> put mug 1 in/on shelf 1\nYou put the mug 1 in/on shelf 1.",
+      "write_ordinal": 0
+    },
+    {
+      "task_id": "clean some apple and put it in fridge___2",
+      "env_name": "pick_clean_then_place",
+      "trajectory": "> think: clean the apple before placing it\n> go to sinkbasin 1\nOn the sinkbasin 1, you see an apple 1.\n> clean apple 1 with sinkbasin 1\nYou clean the apple 1.\n> put apple 1 in/on fridge 1\nYou put the apple 1 in/on fridge 1.",
+      "write_ordinal": 1
+    },
+    {
+      "task_id": "clean some plate and put it in cabinet___3",
+      "env_name": "pick_clean_then_place",
+      "trajectory": "> think: clean the plate before placing it\n> go to sinkbasin 1\nOn the sinkbasin 1, you see a plate 1.\n> clean plate 1 with sinkbasin 1\nYou clean the plate 1.\n> put plate 1 in/on cabinet 1\nYou put the plate 1 in/on cabinet 1.",
+      "write_ordinal": 2
+    },
+    {
+      "task_id": "clean some bowl and put it in drawer___4",
+      "env_name": "pick_clean_then_place",
+      "trajectory": "> think: clean the bowl before placing it\n> go to sinkbasin 1\nOn the sinkbasin 1, you see a bowl 1.\n> clean bowl 1 with sinkbasin 1\nYou clean the bowl 1.\n> put bowl 1 in/on drawer 1\nYou put the bowl 1 in/on drawer 1.",
+      "write_ordinal": 3
+    }
+  ],
+  "current_task": "clean some bowl and put it in cabinet___9",
+  "current_env_name": "pick_clean_then_place",
+  "ai_name": "alfred",
+  "config": {
+    "rule_cap": 10,
+    "rule_cap_resolution": "PAPER_ALFWORLD_COMMAND_EXPLICIT_10_RULE_CAP",
+    "max_fewshot_tokens": 953,
+    "tokenizer_revision": "tiktoken-0.4.0:cl100k_base:223921b76ee99bde995b7ff738513eef100fb51d18c93597a113bcffe865b2a7",
+    "embedding_model_revision": "sentence-transformers/all-mpnet-base-v2@e8c3b32edf5434bc2275fc9bab85f82640a19130:pytorch_model.bin@a8fd120b1a0032e70ff3d4b8ab8e46a6d01c2cb08ffe7c007a021c1788928146",
+    "retriever_revision": "langchain-0.0.181:faiss-cpu-1.7.4:IndexFlatL2:task_similarity",
+    "num_fewshots": 2,
+    "max_steps": 20,
+    "buffer_retrieve_ratio": 4
+  },
+  "fixture_sha256": "b2ff141963d88f467b10fbe82ef9b42beb53e9f06873948d2cea2ac79554aca5"
+}

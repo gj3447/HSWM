@@ -183,16 +183,17 @@ qualification nor the pool audit establishes agent efficacy or a G0 decision.
 The 11 zero-overlap `valid_unseen` groups remain untouched final-holdout
 candidates unless a prospective protocol explicitly allocates them.
 
-Before a live G1 comparison, the remaining work is limited to four items. The
-first item's source-faithful two-channel adapter and pinned-source semantic
-reference check are implemented, but its executed direct-runtime parity remains
-open pending transitive dependency and model/vector revision closure. The other
-three items are to qualify an independently owned outcome/evaluation boundary;
-freeze a validated task family with fresh transfer and retention headroom; and
-connect exactly one HSWM revision kind to one canonical owner/`Permit` admission
-path. Only after direct-runtime parity and those three items may a new
-preregistration bind a powered B2-versus-H1 estimand and the
-sham/remove/restore interventions.
+Before a live G1 comparison, three items remain. The source-faithful two-channel
+adapter now has a hash-locked dependency/model/tokenizer closure and exact
+executed parity between pinned upstream ExpeL and an independently executed
+wrapper-vector path on a synthetic fixture. That
+[qualification](../../manifests/HSWM_EXPEL_B2_DIRECT_RUNTIME_PARITY_2026-08-31.json)
+is engineering evidence only, not baseline efficacy. The remaining items are to
+qualify an independently owned outcome/evaluation boundary; freeze a validated
+task family with fresh transfer and retention headroom; and connect exactly one
+HSWM revision kind to one canonical owner/`Permit` admission path. Only after
+those three items may a new preregistration bind a powered B2-versus-H1 estimand
+and the sham/remove/restore interventions.
 
 The first bounded HSWM revision should be one disposition, such as one route or
 one procedure. G1 must not simultaneously invent learned topology, a native

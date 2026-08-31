@@ -1,8 +1,10 @@
 # ExpeL B2 text-lesson prior pin
 
-This directory pins an official ExpeL source boundary for a possible future
-`B2_EXPEL_INSPIRED_TEXT_LESSON` baseline arm. It is not an implementation, vendored
-dependency, experiment, G0 qualification, G1 comparison, or HSWM result.
+This directory pins an official ExpeL source boundary for the
+`B2_EXPEL_INSPIRED_TEXT_LESSON` and `B2_EXPEL_DIRECT` baseline paths. It also
+contains a bounded executable two-channel capture closure. It is not a vendored
+dependency, full ExpeL or ALFWorld runtime, efficacy experiment, G0
+qualification, G1 comparison, or HSWM result.
 
 ## What is pinned
 
@@ -22,11 +24,10 @@ The official ExpeL path is not lesson-only: it creates a global numbered list
 of rules, injects that list through `RULE_TEMPLATE` into evaluation prompts,
 and also retrieves successful-trajectory few-shots by similarity. Thus the
 lesson-only comparator remains `B2_EXPEL_INSPIRED_TEXT_LESSON`, not a faithful
-direct reproduction. `B2_EXPEL_DIRECT` is reserved for a future two-channel
-implementation that preserves both global rules and successful-trajectory
-few-shots. Both are external baselines, not HSWM canonical revisions. Their
-state is arm-private and cannot authorize HSWM outcome-credit-owner-`Permit`
-mutation.
+direct reproduction. `B2_EXPEL_DIRECT` preserves both global rules and
+successful-trajectory few-shots. Both paths are external baselines, not HSWM
+canonical revisions. Their state is arm-private and cannot authorize HSWM
+outcome-credit-owner-`Permit` mutation.
 
 ## Required future binding
 
@@ -55,7 +56,19 @@ compares exact rule, few-shot, prompt, projected state-write, resource, and
 configuration bytes against a pinned-source semantic reference. This closes
 only the local source-to-wrapper engineering boundary. The semantic reference
 is derived without executing upstream ExpeL, FAISS, a model, or ALFWorld, so it
-does not establish direct-runtime parity, baseline efficacy, G0, or G1. Exact
-transitive dependency and model/vector revision closure plus an independently
-captured `B2_EXPEL_DIRECT` projection remain required before direct-versus-
-wrapper parity can receive scientific credit.
+does not by itself establish direct-runtime parity, baseline efficacy, G0, or
+G1.
+
+The [`runtime`](runtime/README.md) closure now pins the exact transitive
+dependencies, embedding model revision and files, tokenizer cache, and
+synthetic capture fixture. The direct checker executes the pinned upstream
+`ExpelAgent` prompt/retrieval methods while a separate wrapper-vector process
+that never imports the upstream agent independently executes the embedding,
+FAISS, and token-counting inputs. The checked-in
+[qualification](../../../../manifests/HSWM_EXPEL_B2_DIRECT_RUNTIME_PARITY_2026-08-31.json)
+records exact parity across all eight engineering dimensions. It also captures
+the upstream implementation's two physical FAISS index builds. Both processes
+were offline and made zero LLM calls and simulator steps. This completes the
+two-channel direct-runtime engineering boundary only; an independently owned
+outcome/evaluation boundary and any prospective efficacy occurrence remain
+open.

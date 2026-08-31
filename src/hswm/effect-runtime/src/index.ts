@@ -340,6 +340,17 @@ export {
   type CanonicalAtomV2LearningRefinementProfile
 } from "./canonical-atom-v2-learning-refinement.js"
 export {
+  HSWM_CANONICAL_ATOMIC_ADMISSION_LEAN_BOUNDARY,
+  HSWM_CANONICAL_ATOMIC_ADMISSION_REFINEMENT_V1_CONTRACT_VERSION,
+  CanonicalAtomV2AtomicAdmissionRefinementError,
+  canonicalAtomV2AtomicAdmissionRefinementProfile,
+  canonicalAtomV2AtomicAdmissionRefinementProfileBytes,
+  decodeCanonicalAtomV2AtomicAdmissionRefinementProfileBytes,
+  type CanonicalAtomV2AtomicAdmissionBlockingObligation,
+  type CanonicalAtomV2AtomicAdmissionPresentBoundary,
+  type CanonicalAtomV2AtomicAdmissionRefinementProfile
+} from "./canonical-atom-v2-atomic-admission-refinement.js"
+export {
   HSWM_CANONICAL_OUTCOME_JUDGMENT_BUNDLE_V1_MEDIA_TYPE,
   HSWM_CANONICAL_OUTCOME_OBSERVATION_V1_MEDIA_TYPE,
   HSWM_CANONICAL_OWNER_BOUND_OUTCOME_V1_CONTRACT_VERSION,

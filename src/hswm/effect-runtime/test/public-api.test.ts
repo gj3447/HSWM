@@ -233,6 +233,22 @@ it("exports owner-bound outcome codecs without evaluator, adjudicator, or learni
   expect("learnCanonicalAtomV2OutcomeJudgment" in PublicApi).toBe(false)
 })
 
+it("exports the atomic-admission obstruction without composition or mutation authority", () => {
+  expect(
+    PublicApi.HSWM_CANONICAL_ATOMIC_ADMISSION_REFINEMENT_V1_CONTRACT_VERSION
+  ).toBe("hswm-canonical-atomic-admission-refinement/v1")
+  expect(
+    PublicApi.canonicalAtomV2AtomicAdmissionRefinementProfile().verdict
+  ).toBe("BLOCKED_NOT_REFINED_TO_LEAN_ATOMIC_ADMISSION")
+  expect(
+    typeof PublicApi.decodeCanonicalAtomV2AtomicAdmissionRefinementProfileBytes
+  ).toBe("function")
+  expect("composeCanonicalAtomV2AtomicAdmission" in PublicApi).toBe(false)
+  expect("issueCanonicalAtomV2HeadBoundPermit" in PublicApi).toBe(false)
+  expect("validateCanonicalAtomV2TransitionInvariant" in PublicApi).toBe(false)
+  expect("admitCanonicalAtomV2AtomicLearning" in PublicApi).toBe(false)
+})
+
 it("does not export privileged store or authorizer capabilities", () => {
   expect("CommitStore" in PublicApi).toBe(false)
   expect("CreditAuthorizer" in PublicApi).toBe(false)

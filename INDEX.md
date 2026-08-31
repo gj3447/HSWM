@@ -108,6 +108,19 @@ witness가 없음을 증명한다. TypeScript codec도 동일 구조를 exact ca
 뿐 실제 독립 outcome,
 causal credit이나 positive refinement를 획득한 것은 아니다.
 
+이어지는
+[`head-bound Permit·Inv·atomic-admission Lean boundary`](docs/research/HSWM_ATOMIC_PERMIT_INVARIANT_ADMISSION_LEAN_2026-08-31.md)는
+Permit, schema-relative `Inv(S,c,S')`, commit witness가 동일 current head와 정확한
+proposal/candidate에 결속되어야 한다는 더 강한 관계를 고정한다. Lean의 34개 정리는
+owner-bound outcome learning을 보존하면서 stale head, 후보·인증서·commit 바꿔치기,
+denied/inactive Permit, invariant 실패와 선언된 authorizer 역할 붕괴가 atomic admission을
+만들 수 없음을 증명하고, target owner·non-target frame·history 보존을 다시 잇는다. 현행
+TypeScript에는 owner-bound outcome 구조와 DNRD-5 v2 two-CAS history 경계가 각각 있지만
+같은 전이로 합성되지 않았으므로, read-only canonical profile은 5개 blocker와
+`BLOCKED_NOT_REFINED_TO_LEAN_ATOMIC_ADMISSION`만 공개한다. 이는 runtime linearizability,
+실제 CAS·outcome truth·causal credit·학습 효능의 증명이 아니며 상태 mutation을 추가하지
+않는다.
+
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,
 폐기 전 `H/F/A/W` 표기를 사용하는 역사적 원자적 credit scaffold를 서로 분리해

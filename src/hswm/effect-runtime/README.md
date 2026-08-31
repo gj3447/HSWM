@@ -98,6 +98,12 @@ The current v2 boundary is intentionally small:
   judgment and linear successor shape while retaining explicit
   `NOT_TRUTH_NOT_CAUSAL_CREDIT_NOT_PERMIT_NOT_ADMISSION_NOT_LEARNING` status.
   It exports no evaluator, adjudicator, owner authenticator or mutation port.
+- `canonical-atom-v2-atomic-admission-refinement.ts` projects the separately
+  present owner-bound outcome shape and DNRD-5 two-CAS history boundary onto
+  the stronger Lean head-bound admission obligations. It preserves their exact
+  nonclaim literals and reports five missing composition/Permit/Inv/runtime
+  witnesses as `BLOCKED_NOT_REFINED_TO_LEAN_ATOMIC_ADMISSION`; it exports no
+  composition, mutation, Permit, validator or learning capability.
 - The exact implementation and nonclaims are recorded in the
   [v2 reference-kernel handoff](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md)
   and the

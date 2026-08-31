@@ -124,6 +124,17 @@ TypeScript에는 owner-bound outcome 구조와 DNRD-5 v2 two-CAS history 경계�
 실제 CAS·outcome truth·causal credit·학습 효능의 증명이 아니며 상태 mutation을 추가하지
 않는다.
 
+같은 경계의
+[`efficacy non-entailment countermodel`](docs/research/HSWM_ATOMIC_ADMISSION_EFFICACY_NON_ENTAILMENT_2026-08-31.md)은
+구조적 admission을 과학적 성공으로 승격할 수 없는 이유를 Lean으로 고정한다. exact
+atomic-admission witness가 있어도 state를 무시하는 constant behavior 해석에서는 fresh
+probe 차이가 없고, `SUPPORTS` verdict도 외부 truth·causal support를 강제하지 않으며,
+선언된 role/address 분리는 principal authentication이나 trusted head를 강제하지 않는다.
+따라서 행동 변화·외부 진실·인과 지지·인증·head trust를 모두 요구하는 integrated efficacy
+bridge는 현재 전제로부터 따라오지 않는다. 이 반모델은 HSWM 학습 불가능성이나 실험 실패
+판정이 아니라, 다음 positive bridge가 반드시 별도 intervention/control evidence를 가져야
+한다는 claim ceiling이다.
+
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,
 폐기 전 `H/F/A/W` 표기를 사용하는 역사적 원자적 credit scaffold를 서로 분리해

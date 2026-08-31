@@ -61,17 +61,41 @@ deriving Repr, DecidableEq
 
 /-!
 The typed commit core deliberately has no Permit envelope, signature, intent
-digest or final certificate digest field. Its exact bytes may therefore be
-planned before Permit signing and compared with a recovered core afterward.
-Any journal wrapper carrying a signature must remain outside the head-bearing
-core named here.
+digest, final certificate digest, or successor record digest field.  In
+particular, including `successorHead.recordDigest` here while also requiring
+the digest of these bytes to equal that record digest would create a SHA-256
+fixed-point obligation.  The record-independent successor projection prevents
+that cycle.  The exact core bytes may therefore be planned before Permit
+signing and compared with a recovered core afterward.  Any journal wrapper
+carrying a signature remains outside the core named here.
 -/
+structure RecordIndependentSuccessorHeadWire where
+  lineageId : String
+  sequence : Nat
+  stateDigest : StateDigest
+deriving Repr, DecidableEq
+
+def RecordIndependentSuccessorHeadWire.ofHead
+    (head : HeadSnapshot) : RecordIndependentSuccessorHeadWire :=
+  { lineageId := head.lineageId
+    sequence := head.sequence
+    stateDigest := head.stateDigest }
+
+/-- Changing the eventual record digest cannot change the planned core. -/
+@[simp] theorem successorProjectionIgnoresRecordDigest
+    (head : HeadSnapshot)
+    (recordDigest : RecordDigest) :
+    RecordIndependentSuccessorHeadWire.ofHead
+        { head with recordDigest := recordDigest } =
+      RecordIndependentSuccessorHeadWire.ofHead head := by
+  rfl
+
 structure SignatureIndependentCommitPlanWire where
   contractVersion : String
   status : String
   executionId : RuntimeExecutionId
   predecessorHead : HeadSnapshot
-  successorHead : HeadSnapshot
+  successor : RecordIndependentSuccessorHeadWire
   target : AtomAddress
   expectedRevision : RevisionId
   candidateRevision : RevisionId
@@ -95,6 +119,9 @@ structure ExecutionIntentWire where
   proposalDigest : EvidenceDigest
   expectedSuccessorHead : HeadSnapshot
   authorizer : Principal
+  permitResponsibilityOwner : Principal
+  invariantResponsibilityOwner : Principal
+  invariantValidator : Principal
   permitIssueIndex : Nat
   predecessorHead : HeadSnapshot
   proposal : RevisionProposal
@@ -150,7 +177,8 @@ structure CompleteExecutionCertificateWire where
   recovery : RecoveredExecutionProjection
   intentArtifact : ArtifactRef
   permitArtifact : ArtifactRef
-  invariantArtifact : ArtifactRef
+  /-- Invariant input/content bytes, not self-digesting certificate bytes. -/
+  invariantContentArtifact : ArtifactRef
   commitArtifact : ArtifactRef
   recoveredPreState : ArtifactRef
   recoveredPostState : ArtifactRef
@@ -187,7 +215,7 @@ inductive ArtifactRole where
   | certificateBody
   | executionIntent
   | permitEnvelope
-  | invariantCertificate
+  | invariantContent
   | commitOccurrence
   | recoveredPreState
   | recoveredPostState
@@ -217,7 +245,7 @@ def ExternalArtifactsAccepted
   artifactVerifier .certificateBody certificateArtifact = true ∧
   artifactVerifier .executionIntent wire.intentArtifact = true ∧
   artifactVerifier .permitEnvelope wire.permitArtifact = true ∧
-  artifactVerifier .invariantCertificate wire.invariantArtifact = true ∧
+  artifactVerifier .invariantContent wire.invariantContentArtifact = true ∧
   artifactVerifier .commitOccurrence wire.commitArtifact = true ∧
   artifactVerifier .recoveredPreState wire.recoveredPreState = true ∧
   artifactVerifier .recoveredPostState wire.recoveredPostState = true ∧
@@ -347,6 +375,10 @@ def WirePermitInvariantConditions
   wire.intent.invariantRequest.digest = wire.invariantCertificate.contentDigest ∧
   wire.permit.decision.authorizer = wire.intent.authorizer ∧
   wire.issue.linearizationIndex = wire.intent.permitIssueIndex ∧
+  wire.permit.responsibilityOwner = wire.intent.permitResponsibilityOwner ∧
+  wire.invariantCertificate.responsibilityOwner =
+    wire.intent.invariantResponsibilityOwner ∧
+  wire.invariantCertificate.validator = wire.intent.invariantValidator ∧
   wire.permit.decision.target = wire.intent.proposal.target ∧
   wire.permit.decision.traceId = wire.intent.proposal.traceId ∧
   wire.permit.decision.authorizationRef = wire.intent.proposal.authorizationRef ∧
@@ -367,7 +399,12 @@ def WireCommitPlanConditions (wire : CompleteExecutionCertificateWire) : Prop :=
   wire.intent.commitPlan.status = signatureIndependentCommitPlanStatus ∧
   wire.intent.commitPlan.executionId = wire.intent.executionId ∧
   wire.intent.commitPlan.predecessorHead = wire.intent.predecessorHead ∧
-  wire.intent.commitPlan.successorHead = wire.intent.expectedSuccessorHead ∧
+  wire.intent.commitPlan.successor.lineageId =
+    wire.intent.expectedSuccessorHead.lineageId ∧
+  wire.intent.commitPlan.successor.sequence =
+    wire.intent.expectedSuccessorHead.sequence ∧
+  wire.intent.commitPlan.successor.stateDigest =
+    wire.intent.expectedSuccessorHead.stateDigest ∧
   wire.intent.commitPlan.target = wire.intent.proposal.target ∧
   wire.intent.commitPlan.expectedRevision = wire.intent.proposal.expectedRevision ∧
   wire.intent.commitPlan.candidateRevision = wire.intent.proposal.candidateRevision ∧
@@ -388,7 +425,9 @@ def WireArtifactBindingConditions
   wire.intent.proposalDigest = adapters.proposalDigestOf wire.intent.proposal ∧
   wire.permitArtifact.digest =
     adapters.permitEnvelopeDigestOf wire.permitEnvelope ∧
-  wire.invariantArtifact.digest = wire.invariantCertificate.contentDigest ∧
+  wire.invariantContentArtifact.digest =
+    wire.invariantCertificate.contentDigest ∧
+  wire.invariantContentArtifact = wire.intent.invariantRequest ∧
   wire.commitArtifact.digest = adapters.commitOccurrenceDigestOf wire.commit ∧
   wire.recoveryObservation.digest =
     adapters.recoveryProjectionDigestOf wire.recovery ∧
@@ -585,6 +624,20 @@ theorem acceptedWireProjectsLinearSuccessor
   rcases structural with ⟨_, _, _, headCommit, _, _, _, _⟩
   rcases headCommit with ⟨_, _, _, _, _, _, lineage, sequence, _, _, _, _, _⟩
   exact ⟨lineage, sequence⟩
+
+/-- Owner and validator identities are committed inside the signed intent. -/
+theorem acceptedWireBindsResponsibilityOwners
+    (accepted : completeExecutionCertificateAccepted adapters verify key
+      expectedKeyId envelopeChecks artifactVerifier certificateArtifact wire = true) :
+    wire.permit.responsibilityOwner = wire.intent.permitResponsibilityOwner ∧
+    wire.invariantCertificate.responsibilityOwner =
+      wire.intent.invariantResponsibilityOwner ∧
+    wire.invariantCertificate.validator = wire.intent.invariantValidator := by
+  have structural := (acceptedWireProjectsStructuralConditions accepted).2.2
+  rcases structural with ⟨_, _, _, _, permitInvariant, _, _, _⟩
+  rcases permitInvariant with ⟨_, _, _, _, permitOwner, invariantOwner,
+    invariantValidator, _⟩
+  exact ⟨permitOwner, invariantOwner, invariantValidator⟩
 
 theorem acceptedWireBindsExternalCertificateDigest
     (accepted : completeExecutionCertificateAccepted adapters verify key
@@ -823,7 +876,7 @@ theorem changedRecoveredCommitCoreRejected
   intro accepted
   have structural := (acceptedWireProjectsStructuralConditions accepted).2.2
   rcases structural with ⟨_, _, _, _, _, commitPlan, _, _⟩
-  rcases commitPlan with ⟨_, _, _, _, _, _, _, _, _, _, _, recoveredCore⟩
+  rcases commitPlan with ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, recoveredCore⟩
   exact changed recoveredCore
 
 theorem alteredRecoveredCommitLogRejected

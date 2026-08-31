@@ -1,6 +1,6 @@
 # HSWM structural execution-certificate wire contract
 
-> **Status:** `SECONDARY_AI_FORMAL_BOUNDARY / SYNTACTICALLY_CYCLE_FREE_DECODED_FIELD_CONTRACT_FROZEN / RAW_BYTE_CODEC_AND_RUNTIME_OCCURRENCE_ABSENT / SCIENTIFIC_UNJUDGED`
+> **Status:** `SECONDARY_AI_FORMAL_BOUNDARY / RECORD_DIGEST_CYCLE_REMOVED / TYPESCRIPT_RAW_BYTE_STRUCTURAL_CHECKER_PRESENT / SOURCE_LEVEL_REFINEMENT_AND_RUNTIME_OCCURRENCE_UNPROVED / SCIENTIFIC_UNJUDGED`
 >
 > **Target authority:**
 > [`HSWM Constitution`](../canon/HSWM_CONSTITUTION_2026-08-20.md)
@@ -66,16 +66,22 @@ pre-state + Permit envelope + invariant certificate + commit/recovery evidence
   -> execution-certificate descriptor/digest
 ```
 
-Two exclusions prevent digest cycles:
+Four exclusions prevent digest cycles:
 
 - the execution-intent body contains neither its own digest nor the final
   execution-certificate digest; and
 - the execution-certificate body contains neither its own digest nor a field
-  whose digest recursively includes the certificate.
+  whose digest recursively includes the certificate; and
+- the signature-independent commit plan contains only the successor lineage,
+  sequence and state digest. It does not contain the successor record digest
+  that is computed from the plan bytes; and
+- the invariant-certificate `contentDigest` names external invariant
+  input/content bytes, not bytes of the certificate that contains that digest.
 
-This is a syntactic decoded-field guarantee. It does not yet prove that an
-external serializer or digest adapter has no hidden dependency on the final
-descriptor; that requires the future raw-codec refinement.
+This is a syntactic decoded-field guarantee. The TypeScript raw codec follows
+the same ordering in its successful vector, but Lean still does not prove that
+the external serializer or digest adapter has no hidden dependency on the
+final descriptor for every program execution.
 
 The post-execution `certificateDigest` in `RuntimeExecutionTrace` is supplied
 by `WireDigestAdapters.certificateDigestOf`. An external certificate descriptor
@@ -85,9 +91,10 @@ was computed from raw bytes. The future codec must compute both from the final
 certificate-body bytes. The Permit signs the pre-execution intent digest,
 never the post-execution certificate digest.
 
-The Permit envelope currently carries an `expectedNextHead.recordDigest`.
-`SignatureIndependentCommitPlanWire` is the typed head-bearing core and has no
-Permit envelope, signature, intent-digest or final-certificate-digest field.
+The Permit envelope carries an `expectedNextHead.recordDigest`.
+`SignatureIndependentCommitPlanWire` is the typed record-independent core and
+has no Permit envelope, signature, intent digest, final certificate digest or
+successor record digest field.
 It uses contract version `hswm-signature-independent-commit-plan/v1` and the
 literal
 `SIGNATURE_INDEPENDENT_COMMIT_PLAN_NOT_PERMIT_ENVELOPE_NOT_CERTIFICATE`.
@@ -96,8 +103,10 @@ recovered typed core and descriptor to equal that plan. A future full journal
 wrapper may refer to the Permit envelope out of line, but it is not modeled by
 this Lean boundary and is not the head-bearing core. Before such a wrapper is
 accepted, a later codec boundary must give it its own descriptor and binding.
-Its digest must not replace `expectedNextHead.recordDigest`. A core that embeds
-the Permit signature would be circular and must be rejected.
+Its digest is the value later placed in `expectedNextHead.recordDigest`. A core
+that embeds either that successor record digest or the Permit signature would
+be circular and must be rejected. Lean proves
+`successorProjectionIgnoresRecordDigest`, making the exclusion explicit.
 
 ## 3. Normative wire artifacts
 
@@ -117,8 +126,9 @@ ArtifactRef := {
 raw adapter has been shown sound; a self-asserted descriptor does not establish
 its own binding, provenance or truth.
 
-The exact media type, non-negative safe byte length and lowercase SHA-256 form
-must be enforced by the future raw-byte codec.
+The TypeScript codec now enforces an exact media type, non-negative safe byte
+length and lowercase SHA-256 form. This is executable implementation evidence,
+not a Lean proof of the TypeScript parser or Node SHA-256 implementation.
 
 ### 3.1 Execution-intent body
 
@@ -130,8 +140,10 @@ The canonical intent body is pre-execution and contains at least:
 - predecessor and planned-successor head commitments;
 - target atom address and expected/candidate revisions;
 - reserved Permit identity and digest of the unsigned Permit content;
-- proposal and invariant-certificate digests;
+- proposal and invariant-content digests;
 - authorization reference, authorizer and scope;
+- the Permit responsibility owner, invariant responsibility owner and
+  invariant validator, all transitively signed through the intent digest;
 - nonce digest, key-policy version and revocation epoch;
 - declared Permit-issue index; and
 - descriptors for the schema, pre-state, sealed trajectory, outcome package,
@@ -141,8 +153,8 @@ The canonical intent body is pre-execution and contains at least:
 
 The formal model parameterizes the digest operation as
 `WireDigestAdapters.intentDigestOf`. This states exactly which manifest the
-adapter receives, but it is not yet a Lean implementation or proof of the
-repository JSON encoder or SHA-256.
+adapter receives. The TypeScript checker implements the corresponding
+canonical-JSON/SHA-256 path, but Lean still does not verify that implementation.
 
 ### 3.2 Permit envelope
 
@@ -174,18 +186,23 @@ The canonical certificate body contains:
 - a decoded recovery projection containing execution identity, predecessor and
   successor heads, Permit-issue list, successful-commit list and recovery index;
 - descriptors for the intent bytes, Permit-envelope bytes, invariant
-  certificate, commit occurrence, pre-state, post-state, recovered
+  input/content, commit occurrence, pre-state, post-state, recovered
   signature-independent commit core, recovery observation and trajectory;
 - an external final certificate descriptor passed beside, not inside, the
   body; and
 - no embedded final certificate digest.
 
-The artifact descriptors let a future checker receive raw bytes out of line,
-hash them first and only then decode their typed contents. The current Lean
-file calls an abstract `ArtifactVerifier` on each exact role/descriptor and
-accepts its Boolean results. `WireDigestAdapters` explicitly bind descriptor
-digests to decoded objects or head commitments. Neither abstraction is proved
-sound for bytes, so no raw-byte parser is claimed to exist.
+The artifact descriptors let the TypeScript checker receive raw bytes out of
+line and hash every role before semantic checks. Canonical typed JSON roles are
+then strictly decoded and compared with their certificate projections;
+content-only roles such as state, trajectory, outcome and invariant input stay
+opaque and are bound by exact descriptors. The invariant projection does not
+self-hash: its owner and validator are bound in the signed intent, while its
+head/target/revisions and external content digest are checked separately. The
+current Lean file calls an abstract `ArtifactVerifier` on each exact
+role/descriptor. `WireDigestAdapters` explicitly bind descriptor digests to
+decoded objects or head commitments. Lean does not prove those abstractions
+sound for bytes.
 
 ### 3.4 Semantic supplement
 
@@ -218,6 +235,8 @@ For a certificate body `wire`, acceptance requires all of the following:
 - the commit consumes the exact Permit and invariant-certificate digests;
 - the Permit decision binds the proposal trace/authorization/scope, is declared
   allowed and active, and uses the intent authorizer;
+- the Permit owner, invariant owner and invariant validator equal the identities
+  committed inside the signed execution intent;
 - the successor shares the predecessor lineage and is exactly the next
   sequence;
 - the issue occurrence exactly matches the Permit and execution;
@@ -272,13 +291,23 @@ The formal result is a field-level checker model. It does not:
 - prove external outcome truth or independent causal credit; or
 - prove that any revision improves real LLM behavior.
 
-## 6. Raw-byte implementation obligations
+## 6. Raw-byte implementation status and remaining obligations
 
-The next executable checker must accept a bundle of certificate, intent,
-Permit-envelope, trust-context, pre/post-state, commit-plan/core and recovery
-raw bytes. It must hash and length-check every artifact before semantic
-decoding, derive the Permit expected bindings from the decoded
-intent/certificate, and replay the exact journal predecessor/successor relation.
+`canonical-atom-v2-execution-certificate-wire.ts` now accepts a bundle of
+certificate, intent, Permit envelope, trust context, pre/post state,
+commit-plan/core and recovery raw bytes. It hash/length-checks every role,
+strictly decodes canonical typed artifacts, derives Permit bindings from the
+intent, checks the full decoded-field conditions and rejects structural
+mutations. Its complete vector constructs the plan first, computes its digest,
+and only then constructs the successor head, demonstrating that the corrected
+layout is executable without a hash fixed point.
+
+This does not finish source-level refinement. Lean has no semantics for the
+TypeScript source, Effect evaluation, Node crypto, the canonical JSON parser or
+the filesystem. A universal claim still requires verified extraction or a
+sound formal semantics plus a proof about the compiled program. Differential
+vectors and mutation tests are conformance evidence, not that theorem.
+
 If the storage design adds an outer journal wrapper, that wrapper must first be
 added to the typed contract and mutation matrix rather than silently accepted.
 
@@ -288,7 +317,7 @@ The adversarial matrix must independently reject:
   integer and excess-property encodings;
 - any descriptor media-type, byte-length or SHA mismatch;
 - a different execution, intent, Permit, proposal, invariant, nonce, head,
-  target, revision, policy, epoch or issue index;
+  target, revision, owner, validator, policy, epoch or issue index;
 - a valid Permit envelope paired with a different intent;
 - missing/duplicate issue or commit entries and invalid chronology;
 - a commit consuming another Permit or invariant certificate;
@@ -307,17 +336,17 @@ This formal contract is routine proof/engineering work, not a material
 scientific result. It creates no research receipt and leaves HSWM efficacy
 `UNJUDGED`.
 
-The next step is implementation, in this order:
+The next step is evidence closure, in this order:
 
-1. implement the exact TypeScript/Effect intent and certificate codecs;
-2. derive Permit expected bindings internally instead of accepting them from a
-   public caller;
-3. implement an independent fixed-vector raw-byte replay;
-4. prove the concrete parser/checker refinement against this Lean structural
-   model;
-5. connect one actual durable issuer/executor transaction and recovery trace;
-   and only then
-6. seek independent outcome, causal and real-LLM evidence.
+1. add an independently implemented fixed-vector raw-byte replay;
+2. give the concrete parser/checker a verified semantics or extraction path;
+3. connect the complete certificate producer to the local fsync-backed,
+   process-crash-tested issuer/commit occurrence rather than merely checking a
+   constructed vector;
+4. replace ephemeral private-key custody and caller-owned clocks with an
+   audited authority and crash-recoverable key lifecycle if a production claim
+   is sought; and only then
+5. execute the independently owned outcome/causal/real-LLM protocol.
 
 Until those steps produce real evidence, the checked-in positive
 end-to-end-runtime profile remains false.

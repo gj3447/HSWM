@@ -135,6 +135,19 @@ bridge는 현재 전제로부터 따라오지 않는다. 이 반모델은 HSWM �
 판정이 아니라, 다음 positive bridge가 반드시 별도 intervention/control evidence를 가져야
 한다는 claim ceiling이다.
 
+그 다음
+[`DNRD-5 four-arm efficacy Lean boundary`](docs/research/HSWM_DNRD5_FOUR_ARM_EFFICACY_LEAN_BOUNDARY_2026-08-31.md)는
+이 간극을 메우기 위한 현재의 교체 가능한 기전 전용 판정기를 형식화한다. ACTIVE,
+outcome-independent SHAM, delayed-no-credit, exact-W0 rollback을 네 구별된 arm으로 고정하고,
+300 complete block·integrity·두 통계 layer를 statistics보다 먼저 요구한다. 21개 Lean 정리는
+post-marker integrity 실패가 항상 `VOID_PROTOCOL`, valid missingness가 항상
+`INCONCLUSIVE_OCCURRENCE`이며, 세 contrast 모두 adjusted exact p-value layer와 positive
+asymptotic LCB layer를 통과해야만 `CAUSAL_MACROPLASTICITY_GO`임을 증명한다. primary-only
+패턴은 `PRIMARY_SIGNAL_MECHANISM_INCOMPLETE`, 다른 complete valid 실패는
+`VALID_CAUSAL_NO_GO`다. 현재 profile은 efficacy occurrence·sealed four-arm outcomes·독립
+scientific judgment가 없으므로 terminal 발행 준비가 아님도 증명한다. 이는 DNRD-5를 HSWM
+정체성으로 고정하거나 실제 GO/NO-GO를 발행한 것이 아니다.
+
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,
 폐기 전 `H/F/A/W` 표기를 사용하는 역사적 원자적 credit scaffold를 서로 분리해

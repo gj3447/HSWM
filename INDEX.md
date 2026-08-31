@@ -111,10 +111,13 @@ causal credit이나 positive refinement를 획득한 것은 아니다.
 이어지는
 [`head-bound Permit·Inv·atomic-admission Lean boundary`](docs/research/HSWM_ATOMIC_PERMIT_INVARIANT_ADMISSION_LEAN_2026-08-31.md)는
 Permit, schema-relative `Inv(S,c,S')`, commit witness가 동일 current head와 정확한
-proposal/candidate에 결속되어야 한다는 더 강한 관계를 고정한다. Lean의 34개 정리는
+proposal/candidate에 결속되어야 한다는 더 강한 관계를 고정한다. 경계의 37개 정리는
 owner-bound outcome learning을 보존하면서 stale head, 후보·인증서·commit 바꿔치기,
 denied/inactive Permit, invariant 실패와 선언된 authorizer 역할 붕괴가 atomic admission을
-만들 수 없음을 증명하고, target owner·non-target frame·history 보존을 다시 잇는다. 현행
+만들 수 없음을 증명하고, target owner·non-target frame·history 보존과 고정 입력의
+successor 유일성을 다시 잇는다. 별도 13개 consistency 정리는 11개의 구별된 symbolic
+principal과 exact single-target invariant로 실제 witness 하나를 구성해 관계가 공허하지
+않음을 보인다. 이는 런타임 존재 증명이 아니다. 현행
 TypeScript에는 owner-bound outcome 구조와 DNRD-5 v2 two-CAS history 경계가 각각 있지만
 같은 전이로 합성되지 않았으므로, read-only canonical profile은 5개 blocker와
 `BLOCKED_NOT_REFINED_TO_LEAN_ATOMIC_ADMISSION`만 공개한다. 이는 runtime linearizability,

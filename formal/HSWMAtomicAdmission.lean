@@ -327,6 +327,57 @@ theorem atomicAdmissionArchivesPreviousVersion
     ⟨_judgment, _present, learned⟩
   exact learnArchivesPreviousVersion learned
 
+/-- The underlying single-target `Learn` constructor fixes its whole result. -/
+theorem learnWitnessDeterminesNext
+    (learned : Learn invariant state trajectory outcome proposal permit next) :
+    ∃ currentVersion,
+      state.current proposal.target = some currentVersion ∧
+      next = state.revise currentVersion proposal := by
+  cases learned with
+  | admit conditions =>
+      exact ⟨conditions.currentVersion, conditions.targetCurrent, rfl⟩
+
+/-- Fixed predecessor, proposal and evidence determine one canonical successor. -/
+theorem atomicAdmissionNextStateUnique
+    (left : AtomicLearnAdmission digest transitionInvariant state trajectory
+      package proposal permit certificate commitWitness currentHead
+      leftNext leftHead)
+    (right : AtomicLearnAdmission digest transitionInvariant state trajectory
+      package proposal permit certificate commitWitness currentHead
+      rightNext rightHead) :
+    leftNext = rightNext := by
+  rcases atomicAdmissionRequiresUnderlyingLearn left with
+    ⟨_leftJudgment, _leftPresent, leftLearn⟩
+  rcases atomicAdmissionRequiresUnderlyingLearn right with
+    ⟨_rightJudgment, _rightPresent, rightLearn⟩
+  rcases learnWitnessDeterminesNext leftLearn with
+    ⟨leftVersion, leftPresent, leftResult⟩
+  rcases learnWitnessDeterminesNext rightLearn with
+    ⟨rightVersion, rightPresent, rightResult⟩
+  have sameVersion : leftVersion = rightVersion := by
+    apply Option.some.inj
+    calc
+      some leftVersion = state.current proposal.target := leftPresent.symm
+      _ = some rightVersion := rightPresent
+  calc
+    leftNext = state.revise leftVersion proposal := leftResult
+    _ = state.revise rightVersion proposal := by rw [sameVersion]
+    _ = rightNext := rightResult.symm
+
+/-- The one commit witness also determines one declared successor head. -/
+theorem atomicAdmissionSuccessorHeadUnique
+    (left : AtomicLearnAdmission digest transitionInvariant state trajectory
+      package proposal permit certificate commitWitness currentHead
+      leftNext leftHead)
+    (right : AtomicLearnAdmission digest transitionInvariant state trajectory
+      package proposal permit certificate commitWitness currentHead
+      rightNext rightHead) :
+    leftHead = rightHead := by
+  calc
+    leftHead = commitWitness.successorHead :=
+      (atomicAdmissionRequiresLinearSuccessor left).1.symm
+    _ = rightHead := (atomicAdmissionRequiresLinearSuccessor right).1
+
 theorem stalePermitHeadCannotAdmit
     (stale : permit.head ≠ currentHead) :
     ¬ AtomicLearnAdmission digest transitionInvariant state trajectory package

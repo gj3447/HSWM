@@ -8,8 +8,10 @@
 > and the transition law in the
 > [`DNRD-5 causal macroplasticity design`](HSWM_DNRD_5_CAUSAL_MACROPLASTICITY_DESIGN_2026-08-28.md)
 >
-> **Formal artifact:**
+> **Formal artifacts:**
 > [`HSWMAtomicAdmission.lean`](../../formal/HSWMAtomicAdmission.lean)
+> and its
+> [`finite consistency witness`](../../formal/HSWMAtomicAdmissionConsistency.lean)
 >
 > **TypeScript obstruction projection:**
 > [`canonical-atom-v2-atomic-admission-refinement.ts`](../../src/hswm/effect-runtime/src/canonical-atom-v2-atomic-admission-refinement.ts)
@@ -103,7 +105,8 @@ organizational independence.
 
 ## 4. Machine-checked obligations
 
-The Lean module's 34 theorems prove that every `AtomicLearnAdmission` witness:
+The boundary module's 37 theorems prove that every `AtomicLearnAdmission`
+witness:
 
 - contains the underlying owner-bound outcome-evidence learning witness;
 - binds Permit, invariant certificate and commit to the same current head;
@@ -116,6 +119,8 @@ The Lean module's 34 theorems prove that every `AtomicLearnAdmission` witness:
   witness;
 - preserves the target responsibility owner, all non-target current atoms and
   the superseded version history through the underlying `Learn`; and
+- determines a unique canonical successor state and declared successor head
+  for fixed predecessor, proposal, evidence and commit inputs; and
 - cannot be inhabited under stale-head, mismatched-candidate, denied/inactive
   Permit, invariant failure, certificate-substitution, commit-substitution or
   declared authorizer-role-collapse hypotheses.
@@ -124,7 +129,38 @@ The relation has no default, bypass or error-recovery constructor. Failure to
 provide any field leaves it uninhabited rather than producing a weakened
 success.
 
-## 5. Relation to the TypeScript/Effect runtime
+## 5. Finite consistency witness
+
+Necessary-condition proofs alone could describe an accidentally contradictory
+relation. The separate consistency module therefore constructs a complete
+finite symbolic instance with 11 distinct principal values, one current atom,
+a sealed trajectory, separately owned observation and support judgment, an
+allowed head-bound Permit, a separately owned invariant certificate, and an
+H0-to-H1 commit witness.
+
+Its invariant is not the constant proposition `True`. It requires that the
+candidate state be exactly the result of revising the proposal's one current
+target and retaining its predecessor:
+
+```math
+\mathrm{ExactSingleTargetInv}(S,c,S')
+\;:=\;
+\exists v,\;
+S[c.\mathrm{target}]=v
+\;\land\;
+S'=\mathrm{revise}(S,v,c).
+```
+
+Thirteen checked theorems construct the abstract `Learn`, owner-bound
+outcome-learning and final `AtomicLearnAdmission` witnesses, prove that the
+relation is inhabited, distinguish the predecessor and successor state
+digests, and confirm the exact candidate revision, preserved target owner,
+archived predecessor and unchanged other target.
+
+This is specification non-vacuity, not evidence that an HSWM runtime, authority
+service, evaluator, validator or external world supplied any of those values.
+
+## 6. Relation to the TypeScript/Effect runtime
 
 The generic current-state Permit checker still reports local eligibility as
 `NOT_CANONICAL_PERMIT` and exports no commit capability. It cannot refine this
@@ -150,14 +186,16 @@ later refinement must prove an explicit mapping from exact runtime bytes and
 durable events to every field of `AtomicLearnAdmission`; field-name similarity
 is insufficient.
 
-## 6. Exact claim ceiling
+## 7. Exact claim ceiling
 
 Lean checks consequences of the declared relation without `sorry` or added
 axioms. It does not authenticate principals or heads, prove digest collision
 resistance, execute a validator, establish that a CAS occurred, prove an
 external outcome true, assign valid causal credit, or prove that changed state
 causes changed behavior. It is not a distributed-linearizability proof and not
-a TypeScript semantics proof.
+a TypeScript semantics proof. The finite witness establishes only that this
+bounded relation is jointly satisfiable in Lean; it is not a consistency proof
+for all HSWM philosophy, ontology or runtime code.
 
 No scientific result, G0/G1 gate, FCL law, cognition, consciousness, efficacy
 or complete HSWM realization follows. This is a protective specification that

@@ -153,9 +153,11 @@ scientific judgment가 없으므로 terminal 발행 준비가 아님도 증명�
 terminal classifier의 exact-p Bool을 자연수 count 산술로 정제한다. ACTIVE wins `w`,
 control wins `l`, discordance `m=w+l`에 대해 inclusive binomial tail을 Pascal recursion으로
 계산하고, 3-way Bonferroni `adjusted p <= .05`를 부동소수점 없이
-`60 * tail <= 2^m`으로 판정한다. 10개 Lean 정리는 tie count가 exact gate를 바꾸지 않음,
+`60 * tail <= 2^m`으로 판정한다. 16개 Lean 정리는 tie count가 exact gate를 바꾸지 않음,
 zero-discordance 실패, all-win `m=5` 실패와 `m=6` 통과, exact arithmetic 실패가 downstream
-scientific GO를 막음을 증명한다. asymptotic LCB는 계속 별도 입력이며, 실제 300-block
+scientific GO를 막음을 증명한다. 또한 frozen `analysis_v1.json`의 small-tail, all-tie,
+300-all-win, 220-win primary, `(300,180)` nontrivial tail과 LCB/exact split count projection을
+Lean native 계산으로 대조한다. asymptotic LCB는 계속 별도 입력이며, 실제 300-block
 counts나 randomization/exchangeability를 증명하거나 terminal을 발행하지 않는다.
 
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형

@@ -11,11 +11,27 @@ namespace HSWM.DNRD5.ExactSignGate
 
 open EfficacyBoundary
 
-/-- Pascal recursion for the natural binomial coefficient. -/
-def natChoose : Nat → Nat → Nat
-  | _, 0 => 1
-  | 0, _ + 1 => 0
-  | n + 1, k + 1 => natChoose n k + natChoose n (k + 1)
+/-- Adjacent sums used to construct the next finite Pascal row. -/
+def adjacentSums : List Nat → List Nat
+  | first :: second :: rest =>
+      (first + second) :: adjacentSums (second :: rest)
+  | _ => []
+
+def nextPascalRow (row : List Nat) : List Nat :=
+  1 :: (adjacentSums row ++ [1])
+
+/-- Dynamic Pascal rows avoid the exponential naive recursive evaluator. -/
+def pascalRow : Nat → List Nat
+  | 0 => [1]
+  | n + 1 => nextPascalRow (pascalRow n)
+
+def listAtOrZero : List Nat → Nat → Nat
+  | [], _ => 0
+  | value :: _, 0 => value
+  | _ :: rest, index + 1 => listAtOrZero rest index
+
+def natChoose (n k : Nat) : Nat :=
+  listAtOrZero (pascalRow n) k
 
 /-- Sum `choose m k` from `start` through `start + remaining`. -/
 def binomialTailFrom (m start : Nat) : Nat → Nat
@@ -123,6 +139,59 @@ theorem fiveAllActiveWinsFailBonferroniThreshold :
 
 theorem sixAllActiveWinsPassBonferroniThreshold :
     exactBonferroniPass sixAllActiveWins = true := by
+  native_decide
+
+/-! Frozen `analysis_v1.json` count projections. -/
+
+def knownSmallTail : ContrastCounts :=
+  { activeWins := 2
+    controlWins := 1
+    ties := 0 }
+
+theorem knownSmallTailNumeratorAndDenominator :
+    binomialTailNumerator knownSmallTail.discordant
+        knownSmallTail.activeWins = 4 ∧
+    2 ^ knownSmallTail.discordant = 8 := by
+  native_decide
+
+theorem knownSmallTailDoesNotPassBonferroni :
+    exactBonferroniPass knownSmallTail = false := by
+  native_decide
+
+def frozenGoCounts : ContrastCounts :=
+  { activeWins := 300
+    controlWins := 0
+    ties := 0 }
+
+theorem frozenGoExactLayerPasses :
+    exactBonferroniPass frozenGoCounts = true := by
+  native_decide
+
+def frozenMechanismIncompletePrimaryCounts : ContrastCounts :=
+  { activeWins := 220
+    controlWins := 0
+    ties := 80 }
+
+theorem frozenMechanismIncompletePrimaryExactLayerPasses :
+    exactBonferroniPass frozenMechanismIncompletePrimaryCounts = true := by
+  native_decide
+
+def frozenNontrivialLargeTail : ContrastCounts :=
+  { activeWins := 180
+    controlWins := 120
+    ties := 0 }
+
+theorem frozenNontrivialLargeTailExactLayerPasses :
+    exactBonferroniPass frozenNontrivialLargeTail = true := by
+  native_decide
+
+def frozenLcbPositiveExactFails : ContrastCounts :=
+  { activeWins := 5
+    controlWins := 0
+    ties := 295 }
+
+theorem frozenLcbPositiveExactLayerStillFails :
+    exactBonferroniPass frozenLcbPositiveExactFails = false := by
   native_decide
 
 /-- Preserve the exact arithmetic decision; accept LCB only as another layer. -/

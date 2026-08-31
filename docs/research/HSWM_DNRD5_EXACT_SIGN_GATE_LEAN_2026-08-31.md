@@ -65,7 +65,7 @@ or fraction reduction.
 
 ## 4. Machine-checked properties
 
-The Lean module's 10 theorems prove:
+The Lean module's 16 theorems prove:
 
 - its boolean exact gate is true exactly when `w <= m` and the integer
   Bonferroni inequality holds;
@@ -81,7 +81,7 @@ The Lean module's 10 theorems prove:
 
 These are arithmetic and refinement facts, not experimental outcomes.
 
-## 5. Relation to the Python implementation
+## 5. Frozen cross-language arithmetic witnesses
 
 The Python implementation uses `Fraction`, `math.comb`, an inclusive
 `range(active_wins, discordance + 1)`, denominator `1 << discordance`, and
@@ -89,9 +89,25 @@ three-way Bonferroni adjustment. The Lean definitions independently encode the
 same mathematical contract using an in-module Pascal recursion for natural
 binomial coefficients, a finite inclusive tail and natural-number comparison.
 
+The count projections of checked-in `analysis_v1.json` are reified as Lean
+constants. Kernel-checked native evaluation establishes:
+
+| Frozen case projection | Lean exact-layer result |
+| --- | --- |
+| all 300 ties | fail |
+| known small tail `w=2`, `l=1` | numerator `4`, denominator `8`, fail after Bonferroni |
+| GO arithmetic vector `w=300`, `l=0` | pass |
+| mechanism-incomplete primary `w=220`, `l=0`, `t=80` | primary exact layer passes |
+| nontrivial large tail `w=180`, `l=120` | pass |
+| positive-LCB/exact-p split `w=5`, `l=0`, `t=295` | exact layer fails |
+
+The Python frozen-vector suite remains the source-language check and is run
+separately. These Lean witnesses bind mathematical count values, not JSON
+bytes, block IDs, Python control flow or the Decimal LCB implementation.
+
 This is not a verified compiler or whole-program semantics proof for Python.
-Cross-language test vectors remain necessary before a production judge may
-rely on the correspondence.
+The checked vector agreement narrows but does not eliminate that gap; a
+production judge still needs independently bound source and occurrence bytes.
 
 ## 6. Exact claim ceiling
 

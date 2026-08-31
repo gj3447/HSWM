@@ -75,6 +75,16 @@ policy가 승인한 일반 write kind만 후보가 쓸 수 있고 v1에서 permi
 이 결과는 commit capability가 아니므로 reducer
 admission, external effect, outcome causal credit 및 learning은 여전히 미구현이다.
 
+2026-08-31
+[`canonical outcome-learning Lean boundary`](docs/research/HSWM_CANONICAL_OUTCOME_LEARNING_LEAN_2026-08-31.md)는
+런타임을 더 만들기 전에 schema-relative canonical revision의 필요조건을 고정한다.
+새 Lean 모듈의 31개 정리는 pre-outcome seal, exact trace/revision 결속, actor·proposer와
+분리된 evaluator/outcome owner, supported outcome, current Permit, `Inv`, 단일 target
+frame, owner 보존과 history 보존을 증명한다. 조건 하나라도 빠지면 `Learn` 관계가
+inhabited될 수 없다는 보호 정리이며, 실제 outcome의 참, evaluator의 현실 독립성,
+TypeScript/Effect refinement, 인과학습 효능, G0/G1 또는 FCL 통과를 증명하지 않는다.
+따라서 outcome-bound learning의 구현·효능 상태는 여전히 미구현·`UNJUDGED`다.
+
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,
 폐기 전 `H/F/A/W` 표기를 사용하는 역사적 원자적 credit scaffold를 서로 분리해

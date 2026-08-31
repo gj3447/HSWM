@@ -2,7 +2,7 @@
 
 > **Date:** `2026-08-31`
 >
-> **Status:** `PARTIAL_ENGINEERING_CLOSURE / LOCAL_OCCURRENCE_EVIDENCE / SOURCE_LEVEL_REFINEMENT_UNPROVED / OUTCOME_CAUSAL_AND_LLM_CONFIRMATION_ABSENT`
+> **Status:** `PARTIAL_ENGINEERING_CLOSURE / LIVE_LEAN_ADMISSION_GATE_LOCAL_ONLY / SOURCE_LEVEL_REFINEMENT_UNPROVED / OUTCOME_CAUSAL_AND_LLM_CONFIRMATION_ABSENT`
 >
 > **Scientific status:** `UNJUDGED`
 
@@ -15,6 +15,7 @@ new externally operated occurrence.
 | Claim | Checked-in evidence | Current decision | Confidence |
 |---|---|---|---|
 | TypeScript raw certificate fields conform to the Lean wire contract | complete strict codec/checker, one satisfiable raw vector, adversarial mutations, Lean decoded-field theorems | `CONFORMANCE_EVIDENCE_PRESENT / UNIVERSAL_SOURCE_REFINEMENT_UNPROVED` | high for tested vectors, unavailable for all TS executions |
+| a protected local journal write follows a live Lean admission decision | executable pure `VerifiedAdmissionKernel`, canonical projected request/decision wire, bounded native stdin/stdout CLI, real TS preflight and exact-response check, private one-use approval and protected namespace tests | `LIVE_LOCAL_GATE / PROCESS_LOCAL_API_BOUNDARY_ONLY / UNIVERSAL_SOURCE_REFINEMENT_UNPROVED` | high for the checked bounded path; unavailable for arbitrary processes or filesystem writers |
 | key, time and nonce participate in real Permit issuance | Node generates an Ed25519 keypair, a caller-relative system/injected clock fixes validity, `randomBytes(32)` mints a collision-checked one-use nonce digest, canonical envelope is signed and verified | `REAL_LOCAL_CRYPTO_OCCURRENCE / NOT_AUTHORITATIVE_PRODUCTION_ISSUANCE_OR_TRUSTED_TIME` | high for the local test process |
 | Permit consumption and successor publication use an atomic no-replace local publication | verified envelope, nonce, intent, pre/post state bytes and heads are bound in one prepared-and-`fsync`ed file, then hard-linked into one successor slot; independent-process `SIGKILL` recovery and concurrent-winner tests pass | `LOCAL_POSIX_PROCESS_CRASH_EVIDENCE / NOT_POWER_LOSS_OR_DISTRIBUTED_LINEARIZABILITY_PROOF` | moderate |
 | outcome is externally true and causal credit independently identified | no new outcome corpus, private-answer opening, independent evaluator receipt or independent judge result exists | `NOT_ESTABLISHED` | high confidence in the negative audit |
@@ -36,10 +37,13 @@ sealed trajectory -> independently attributable outcome -> causal credit
 
 The implementation does not introduce a separate authorization or certificate
 subsystem. Permit, commit and certificate records are bounded projections of
-one prospective state transition. The present delta is narrower: it removes
-arbitrary caller binding at the wire boundary, makes local nonce consumption
-and successor publication executable, and leaves truth/credit/efficacy outside
-the result until real evidence exists.
+one prospective state transition. The present delta is narrower: TypeScript
+now performs its real local Permit/state/recovery preflight before asking a
+bounded Lean native CLI for a canonical admission decision; only an exact
+accepted response mints the private one-use approval that reaches the separate
+protected journal namespace. This proves neither the adapters nor TypeScript
+as a whole. Truth, credit and efficacy remain outside the result until real
+evidence exists.
 
 ## Formal and executable engineering result
 
@@ -77,6 +81,38 @@ record, publishes the exact linear successor, rejects replay and rejects stale,
 cross-lineage or nonlinear commands. Its foreign crypto, clock and actual
 SHA-256 state-byte checks remain explicit Boolean premises, by design.
 
+[`HSWMVerifiedAdmissionKernel.lean`](../../formal/HSWMVerifiedAdmissionKernel.lean)
+adds an executable, pure admission boundary over that model. It proves both
+soundness and completeness: an accepted kernel decision is exactly a
+`localPermitCommit` transition, and every such model transition is accepted.
+It also proves that acceptance requires all three supplied adapter facts,
+consumes the exact nonce, publishes the declared successor and refines the
+bounded linear journal. The kernel's input is deliberately explicit about its
+trusted adapters; the proofs do not turn their Boolean outputs into proofs of
+Ed25519, time, state bytes or storage.
+
+[`HSWMVerifiedAdmissionWire.lean`](../../formal/HSWMVerifiedAdmissionWire.lean)
+fixes a compact canonical JSON request/decision boundary for the recovered
+head and consumed-nonce view, record and adapter facts. Its canonical parser
+rejects noncanonical input and bounds request bytes, response bytes, identifier
+bytes and the recovered nonce list (at 128). Lean proves that an accepted wire
+response carries an exact kernel successor and, for every full local state
+with the same recovered head/nonce view, simulates that full model transition.
+[`HSWMAdmissionKernelCli.lean`](../../formal/HSWMAdmissionKernelCli.lean) is a
+bounded native stdin/stdout adapter for this wire; it owns no key, clock,
+nonce issuer or storage capability.
+
+[`canonical-atom-v2-verified-admission-gateway.ts`](../../src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts)
+is the live local integration. It runs the real Permit/state/recovery
+preflight, serializes the exact canonical request to the configured Lean CLI,
+requires an exact canonical accepted successor response, and only then mints a
+private `WeakMap`-authenticated one-use approval for no-replace publication.
+The gateway requires an existing root, resolves symlink aliases to one physical
+protected-root identity for process-local submission serialization, and uses a
+distinct protected journal namespace. Chained-admission and different-lineage
+tests, including two aliases of one physical root, demonstrate the intended
+local boundary.
+
 ## Actual local key, time, nonce, commit and recovery
 
 [`canonical-atom-v2-local-permit-commit.ts`](../../src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit.ts)
@@ -113,7 +149,12 @@ key is ephemeral and cannot resume issuance after process death; only its
 public trust snapshot can be retained for record verification. Therefore the
 precise claim is bounded local POSIX evidence, not a production authority,
 trusted time, durable key custody, distributed transaction or power-loss
-proof.
+proof. The new protected gateway does not persist the Lean decision in
+recovery, cannot exceed the 128 recovered-nonce wire ceiling without a new
+contract/checkpoint, and leaves the legacy raw namespace available for public
+compatibility. Its CLI path is caller-configured and unpinned. The private
+approval is an in-process API boundary, not cross-process or same-UID
+`node:fs` unbypassability.
 
 ## Outcome and LLM evidence validation
 
@@ -154,16 +195,19 @@ launching a smaller convenient run here would not answer the requested claim.
 
 ## What remains before the whole chain is solved
 
-1. Connect the complete certificate producer to the local commit occurrence,
-   rather than validating only a constructed full vector.
-2. Add persistent audited private-key custody, a trustworthy clock source and
+1. Connect the complete certificate producer to this gated local commit
+   occurrence, rather than validating only a constructed full vector.
+2. Replace the caller-configured/unpinned CLI and process-local protected-root
+   boundary with an independently deployable authority if cross-process or
+   same-UID filesystem non-bypassability is required.
+3. Add persistent audited private-key custody, a trustworthy clock source and
    qualified power-loss/filesystem validation if the claim is to exceed the
    local process-crash boundary.
-3. Supply a verified TS/Effect semantics or extraction path for a universal
+4. Supply a verified TS/Effect semantics or extraction path for a universal
    Lean refinement theorem.
-4. Freeze and execute the external 300-block occurrence with an independently
+5. Freeze and execute the external 300-block occurrence with an independently
    operated evaluator and judge.
-5. Promote only if the active revision beats all frozen controls, removal
+6. Promote only if the active revision beats all frozen controls, removal
    eliminates the gain, restoration returns it, shuffled/delayed credit does
    not, and independent replay reproduces the result.
 

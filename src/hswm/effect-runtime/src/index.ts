@@ -420,6 +420,16 @@ export {
   type LocalPermitVerifierContext
 } from "./canonical-atom-v2-local-permit-commit.js"
 export {
+  HSWM_VERIFIED_ADMISSION_GATEWAY_STATUS,
+  HSWM_VERIFIED_ADMISSION_GATEWAY_V1,
+  HSWM_VERIFIED_ADMISSION_WIRE_V1,
+  VerifiedAdmissionGatewayError,
+  makeVerifiedAdmissionGateway,
+  type VerifiedAdmissionGateway,
+  type VerifiedAdmissionGatewayConfig,
+  type VerifiedAdmissionGatewayReceipt
+} from "./canonical-atom-v2-verified-admission-gateway.js"
+export {
   HSWM_CANONICAL_PERMIT_CANONICALIZATION,
   HSWM_CANONICAL_PERMIT_ENVELOPE_STATUS,
   HSWM_CANONICAL_PERMIT_ENVELOPE_V1_CONTRACT_VERSION,

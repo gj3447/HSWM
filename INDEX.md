@@ -172,10 +172,19 @@ score correspondence와 별도 revision-attribution witness가 모두 주어질 
 admission이 소비한 exact judgment와 같고 strict aggregate score gain이면 suite 안 적어도 한
 modeled runtime response가 달라짐도 증명한다.
 
-이것은 현재 TypeScript의 양성 정제 증명이 아니다. Lean에 선언한 end-to-end audit profile은 fail-closed
-obstruction publication만 `true`이고 나머지 7개 실제 증거 의무는 모두 `false`이므로 Lean은
-`checkedInTypeScriptNotReadyForEndToEndRefinement`를 증명한다. 더 나아가 all-true Boolean metadata도
-denied Permit의 atomic admission을 만들지 못한다는 반례를 제공한다. 양성 정리 자체는
+이것은 현재 TypeScript의 양성 정제 증명이 아니다. 후속으로 executable
+[`VerifiedAdmissionKernel`](formal/HSWMVerifiedAdmissionKernel.lean), canonical
+[`admission wire`](formal/HSWMVerifiedAdmissionWire.lean)와 bounded native CLI, 그리고
+TypeScript protected gateway가 추가되어 실제 preflight 뒤 Lean의 exact accepted decision만
+별도 protected local namespace에 publish하도록 결속한다. Lean은 pure kernel의 soundness와
+completeness 및 same head/nonce view의 full-state simulation을 증명한다. 그러나 CLI는
+caller-configured/unpinned이고 approval은 private `WeakMap`의 process-local one-use capability일
+뿐이며 recovery는 decision을 persist하지 않는다. legacy raw namespace/public compatibility,
+same-UID `node:fs` writer와 cross-process bypass를 막지 못한다. 따라서 이는 full
+TypeScript/Effect source-level refinement, crypto/clock/POSIX semantics, full certificate
+connection, outcome truth, causal credit 또는 LLM efficacy의 증명이 아니다. 기존
+end-to-end audit profile의 full-positive obstruction과 all-true Boolean metadata가 denied
+Permit의 atomic admission을 만들지 못한다는 반례는 그대로다. 양성 정리 자체는
 atomic conditions·runtime-step occurrence·truth·causality·behavior correspondence를 담은
 assumption-carrying witness의 정확한 조합 정리다. TypeScript/Node/Effect,
 암호·키 보관, 저장소 linearizability, 외부 세계 진실, 인과 식별과 LLM provider 실행은

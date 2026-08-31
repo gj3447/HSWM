@@ -353,6 +353,32 @@ export interface LocalPermitCommitStore {
   readonly recover: () => Effect.Effect<LocalPermitRecovery, LocalPermitCommitError>
 }
 
+/**
+ * Deliberately not exported from the package root.  This is the small seam
+ * used by the verified-admission gateway: checks are performed once, then an
+ * opaque prepared identity is published only after that gateway accepts an
+ * exact Lean decision.  It is a package/module boundary, not an OS boundary.
+ */
+export interface VerifiedAdmissionCommitBackend {
+  readonly submit: (request: LocalPermitCommitRequest) => Effect.Effect<{ readonly receipt: LocalPermitCommitReceipt; readonly admission: object }, LocalPermitCommitError>
+  readonly recover: () => Effect.Effect<LocalPermitRecovery, LocalPermitCommitError>
+}
+
+export interface VerifiedAdmissionPreflight {
+  readonly view: { readonly head: CanonicalPermitHeadBinding | null; readonly consumedNonces: ReadonlyArray<string> }
+  readonly record: {
+    readonly committedAt: string; readonly verificationTime: string; readonly envelopeDigest: string
+    readonly executionIntentDigest: string; readonly nonceDigest: string
+    readonly priorHead: CanonicalPermitHeadBinding; readonly expectedNextHead: CanonicalPermitHeadBinding
+  }
+}
+
+type VerifiedAdmissionHook = (preflight: VerifiedAdmissionPreflight, mintApproval: () => object) => Effect.Effect<object, LocalPermitCommitError>
+
+const VERIFIED_ADMISSION_APPROVAL_BRAND: unique symbol = Symbol(
+  "hswm/verified-admission-publication-approval"
+)
+
 export type LocalPermitCommitPublicationCheckpointForTest =
   | "prepared-file-fsync:after"
   | "slot-link:after"
@@ -412,10 +438,14 @@ const makeLocalPermitCommitStoreInternal = (
   rootPath: string,
   verifier: LocalPermitVerifierContext,
   clock: () => Date,
-  checkpoint: LocalPermitCommitCheckpoint
+  checkpoint: LocalPermitCommitCheckpoint,
+  namespace = "local-permit-commits-v1",
+  verifiedAdmission: VerifiedAdmissionHook | undefined = undefined,
+  published: ((receipt: LocalPermitCommitReceipt, admission: object | undefined) => void) | undefined = undefined
 ): LocalPermitCommitStore => {
-  const root = join(rootPath, "local-permit-commits-v1")
+  const root = join(rootPath, namespace)
   const commitsRoot = join(root, "commits")
+  const approvals = new WeakMap<object, true>()
   const recover = (): Effect.Effect<LocalPermitRecovery, LocalPermitCommitError> => Effect.tryPromise({
     try: async () => {
       try { await initializeCommitDirectories(rootPath, root, commitsRoot) } catch { throw failure("IO_FAILED", "cannot initialize and fsync local commit root") }
@@ -533,6 +563,33 @@ const makeLocalPermitCommitStoreInternal = (
         executionIntentDigest: claims.executionIntentDigest, nonceDigest: claims.nonceDigest,
         priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead })
       })
+      let admission: object | undefined
+      if (verifiedAdmission !== undefined) {
+        const preflight = Object.freeze({
+          view: Object.freeze({
+            head: recovered.head === null ? null : Object.freeze({ ...recovered.head }),
+            // Lean's state transition prepends each consumed nonce.  Recovery
+            // is chronological, so expose its exact reverse to the wire.
+            consumedNonces: Object.freeze(recovered.commits.map((entry) => entry.nonceDigest).reverse())
+          }),
+          record: Object.freeze({
+            committedAt: record.committedAt, verificationTime: record.verificationTime,
+            envelopeDigest: record.envelopeSha256, executionIntentDigest: record.executionIntentDigest,
+            nonceDigest: record.nonceDigest, priorHead: Object.freeze({ ...record.priorHead }),
+            expectedNextHead: Object.freeze({ ...record.expectedNextHead })
+          })
+        })
+        const minted = () => {
+          // The symbol is a non-public brand; the private WeakMap identity is
+          // the actual authenticity check and prevents structural copies.
+          const token = Object.freeze({ [VERIFIED_ADMISSION_APPROVAL_BRAND]: true })
+          approvals.set(token, true)
+          return token
+        }
+        admission = yield* verifiedAdmission(preflight, minted)
+        if (!approvals.has(admission)) return yield* Effect.fail(failure("PERMIT_VERIFICATION_FAILED", "verified-admission gate did not present a private approval"))
+        approvals.delete(admission)
+      }
       const encoded = canonicalJsonBytes(record)
       if (Either.isLeft(encoded)) return yield* Effect.fail(failure("INPUT_INVALID", "local commit record cannot be canonically encoded"))
       yield* Effect.tryPromise({
@@ -586,7 +643,9 @@ const makeLocalPermitCommitStoreInternal = (
           return failure(code, code === "SLOT_ALREADY_COMMITTED" ? "local journal slot was already committed by another writer" : "write outcome is unknown; recover before retrying")
         }
       })
-      return Object.freeze({ recordSha256: digest(encoded.right), slotPath: path, nonceDigest: claims.nonceDigest, executionIntentDigest: claims.executionIntentDigest, priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead }), verificationTime: verifiedAt, postStateBytes: Uint8Array.from(postState.right), status: HSWM_LOCAL_PERMIT_COMMIT_STATUS })
+      const receipt = Object.freeze({ recordSha256: digest(encoded.right), slotPath: path, nonceDigest: claims.nonceDigest, executionIntentDigest: claims.executionIntentDigest, priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead }), verificationTime: verifiedAt, postStateBytes: Uint8Array.from(postState.right), status: HSWM_LOCAL_PERMIT_COMMIT_STATUS })
+      published?.(receipt, admission)
+      return receipt
     })
   })
 }
@@ -610,3 +669,26 @@ export const makeLocalPermitCommitStoreWithCheckpointForTest = (
   clock,
   (checkpoint) => { if (checkpoint === selected) onCheckpoint() }
 )
+
+/** Non-root export for the verified gateway; its namespace is intentionally distinct from v1. */
+export const makeVerifiedAdmissionCommitBackend = (
+  rootPath: string,
+  verifier: LocalPermitVerifierContext,
+  admission: VerifiedAdmissionHook,
+  clock: () => Date = () => new Date()
+): VerifiedAdmissionCommitBackend => {
+  const publishedAdmissions = new WeakMap<LocalPermitCommitReceipt, object>()
+  const store = makeLocalPermitCommitStoreInternal(
+    rootPath, verifier, clock, () => undefined, "verified-admission-commits-v1", admission,
+    (receipt, token) => { if (token !== undefined) publishedAdmissions.set(receipt, token) }
+  )
+  return Object.freeze({
+    submit: (request: LocalPermitCommitRequest) => Effect.map(store.commit(request), (receipt) => {
+      const admission = publishedAdmissions.get(receipt)
+      if (admission === undefined) throw failure("PERMIT_VERIFICATION_FAILED", "verified-admission publication lost its private approval correlation")
+      publishedAdmissions.delete(receipt)
+      return Object.freeze({ receipt, admission })
+    }),
+    recover: store.recover
+  })
+}

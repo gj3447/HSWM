@@ -1,6 +1,6 @@
 # HSWM structural execution-certificate wire contract
 
-> **Status:** `SECONDARY_AI_FORMAL_BOUNDARY / RECORD_DIGEST_CYCLE_REMOVED / TYPESCRIPT_RAW_BYTE_STRUCTURAL_CHECKER_PRESENT / SOURCE_LEVEL_REFINEMENT_AND_RUNTIME_OCCURRENCE_UNPROVED / SCIENTIFIC_UNJUDGED`
+> **Status:** `SECONDARY_AI_FORMAL_BOUNDARY / RECORD_DIGEST_CYCLE_REMOVED / STRUCTURAL_CODEC_AND_SEPARATE_LIVE_ADMISSION_WIRE_PRESENT / SOURCE_LEVEL_REFINEMENT_UNPROVED / SCIENTIFIC_UNJUDGED`
 >
 > **Target authority:**
 > [`HSWM Constitution`](../canon/HSWM_CONSTITUTION_2026-08-20.md)
@@ -47,6 +47,14 @@ This boundary makes the following conceptual change:
 The fourth separation is essential. Raw fields cannot manufacture a runtime
 occurrence, a state abstraction, `Inv`, outcome truth, causal identification or
 LLM behavior.
+
+The subsequent admission-gateway delta is intentionally smaller than a full
+certificate refinement. It uses only the recovered head/nonce projection and
+one local Permit-commit record to ask Lean whether the bounded transition is
+admissible. It does not assert that this projected wire contains, authenticates
+or semantically connects the full execution-certificate body. The exact
+separation prevents a live local gate from being renamed as certificate
+occurrence, outcome truth, causal credit or learning.
 
 ## 2. Cycle-free evidence graph
 
@@ -340,9 +348,9 @@ The next step is evidence closure, in this order:
 
 1. add an independently implemented fixed-vector raw-byte replay;
 2. give the concrete parser/checker a verified semantics or extraction path;
-3. connect the complete certificate producer to the local fsync-backed,
-   process-crash-tested issuer/commit occurrence rather than merely checking a
-   constructed vector;
+3. connect the complete certificate producer to the separate Lean-gated local
+   fsync-backed, process-crash-tested issuer/commit occurrence rather than
+   merely checking a constructed vector;
 4. replace ephemeral private-key custody and caller-owned clocks with an
    audited authority and crash-recoverable key lifecycle if a production claim
    is sought; and only then

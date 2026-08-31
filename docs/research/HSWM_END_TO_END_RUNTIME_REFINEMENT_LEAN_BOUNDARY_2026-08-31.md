@@ -1,6 +1,6 @@
 # HSWM end-to-end runtime refinement Lean boundary
 
-> **Status:** `SECONDARY_AI_FORMAL_CONDITIONAL_REFINEMENT / CHECKED_IN_TYPESCRIPT_NOT_REFINED / EMPIRICAL_EVIDENCE_ABSENT / SCIENTIFIC_UNJUDGED`
+> **Status:** `SECONDARY_AI_FORMAL_CONDITIONAL_REFINEMENT / LIVE_LOCAL_LEAN_ADMISSION_GATE / CHECKED_IN_TYPESCRIPT_NOT_UNIVERSALLY_REFINED / EMPIRICAL_EVIDENCE_ABSENT / SCIENTIFIC_UNJUDGED`
 >
 > **Target authority:**
 > [`HSWM Constitution`](../canon/HSWM_CONSTITUTION_2026-08-20.md)
@@ -45,14 +45,19 @@ loop by itself.
 
 The target is a real TypeScript/Effect execution that simulates the Lean
 `AtomicLearnAdmission` relation and whose exact admitted revision improves an
-LLM's behavior under a declared measurement contract. The checked-in runtime
-does not yet perform that execution. It publishes fail-closed obstruction
-profiles, generic read-only local eligibility and one separately bounded
-DNRD-5 local two-CAS history whose success terminal explicitly denies provider
-occurrence, learning and efficacy.
+LLM's behavior under a declared measurement contract. The present conceptual
+delta is a narrower live local gate: real Permit/state/recovery preflight is
+followed by an exact canonical request to an executable Lean admission kernel;
+only its accepted successor response permits protected local publication. This
+is a proved refinement of the bounded local Permit-commit model at the Lean
+kernel/wire boundary, not a universal TypeScript/Effect refinement of
+`AtomicLearnAdmission`.
 
-This phase therefore does not mutate or relabel the TypeScript runtime. It adds
-the positive theorem shape that a future execution must inhabit:
+The checked-in runtime still publishes fail-closed obstruction profiles, generic
+read-only local eligibility and one separately bounded DNRD-5 local two-CAS
+history whose success terminal explicitly denies provider occurrence, learning
+and efficacy. The conditional theorem shape that a future full execution must
+inhabit remains:
 
 ```text
 accepted concrete execution certificate
@@ -226,7 +231,8 @@ false:
 | actual Permit issue under authoritative trust/key/time evidence | absent |
 | syntactically cycle-free execution-certificate contract and Lean structural projection | present, decoded-field abstraction only |
 | TypeScript/raw-byte execution-certificate checker refinement | absent |
-| one canonical commit occurrence for this same transition | absent |
+| a protected local commit following an exact wire decision from the configured CLI, with the checked-in Lean executable exercised by integration tests | present, bounded local gate only; executable identity unpinned |
+| one full canonical certificate-connected commit occurrence for this same transition | absent |
 | externally true outcome evidence | absent |
 | independently identified causal credit | absent |
 | revision-bound LLM behavior improvement evidence | absent |
@@ -254,9 +260,11 @@ promoted status record.
 Lean can verify a model, a checker and consequences of supplied evidence. It
 cannot create historical execution, cryptographic custody, world truth,
 evaluator independence, causal identification or LLM responses that did not
-occur. In this checkout there is additionally no canonical Permit issuer, no
-positive TS-to-Lean state simulation and no actual provider/evaluation path
-coupled to canonical revision. Claiming an unconditional theorem now would
+occur. In this checkout there is additionally no universal TypeScript-to-Lean
+state simulation, no full certificate-to-commit connection and no actual
+provider/evaluation path coupled to canonical revision. The local issuer and
+gated commit path remain caller-relative and bounded, rather than a canonical
+authority. Claiming an unconditional theorem now would
 contradict both the implementation's exact status literals and the existing
 non-entailment countermodels.
 
@@ -277,19 +285,21 @@ The current proved result is therefore two-sided:
 
 1. the positive end-to-end implication is formally closed for any future exact
    evidence bundle that satisfies every premise; and
-2. the present TypeScript/Effect path is formally proved not ready to instantiate
-   that implication.
+2. the present TypeScript/Effect path is not shown to instantiate that
+   implication: it has a live bounded local admission gate, but lacks the
+   full-state/source-level bridge and the remaining evidence obligations.
 
 ## 9. Required implementation and evidence sequence
 
 The next valid route remains proof-first but must eventually cross into real
 execution:
 
-1. implement the frozen execution-intent/certificate wire contract as exact
-   TypeScript canonical bytes and an independent raw-byte checker, then prove
-   that concrete checker refines the checked-in Lean structural model;
-2. extend the implemented canonical Permit envelope into a separately scoped
-   issuer/executor boundary with authoritative workload identity, trusted time,
+1. connect the frozen execution-intent/certificate wire contract to the live
+   Lean-gated local commit path, then prove that its concrete checker refines
+   the checked-in Lean structural model;
+2. extend the implemented canonical Permit envelope and caller-configured
+   Lean CLI into a separately scoped, pinned issuer/executor boundary with
+   authoritative workload identity, trusted time,
    key rotation/revocation evidence and an independently replayed raw-byte
    verifier;
 3. re-evaluate Permit and `Inv(S,c,S')` inside one genuinely atomic durable

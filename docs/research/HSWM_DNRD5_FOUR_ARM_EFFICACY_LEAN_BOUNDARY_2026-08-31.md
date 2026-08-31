@@ -84,6 +84,11 @@ The formal terminal classifier consumes only these already judged booleans; it
 does not recompute p-values or pretend that the asymptotic bound is exact. A
 contrast passes only when both layers pass.
 
+The subsequent
+[`exact paired sign gate`](HSWM_DNRD5_EXACT_SIGN_GATE_LEAN_2026-08-31.md)
+refines the exact-p boolean from natural-number counts without changing the
+separate asymptotic-LCB input.
+
 ```math
 \mathrm{ContrastPass}_j
 =

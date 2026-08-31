@@ -148,6 +148,16 @@ asymptotic LCB layer를 통과해야만 `CAUSAL_MACROPLASTICITY_GO`임을 증명
 scientific judgment가 없으므로 terminal 발행 준비가 아님도 증명한다. 이는 DNRD-5를 HSWM
 정체성으로 고정하거나 실제 GO/NO-GO를 발행한 것이 아니다.
 
+후속
+[`DNRD-5 exact paired sign gate`](docs/research/HSWM_DNRD5_EXACT_SIGN_GATE_LEAN_2026-08-31.md)는
+terminal classifier의 exact-p Bool을 자연수 count 산술로 정제한다. ACTIVE wins `w`,
+control wins `l`, discordance `m=w+l`에 대해 inclusive binomial tail을 Pascal recursion으로
+계산하고, 3-way Bonferroni `adjusted p <= .05`를 부동소수점 없이
+`60 * tail <= 2^m`으로 판정한다. 10개 Lean 정리는 tie count가 exact gate를 바꾸지 않음,
+zero-discordance 실패, all-win `m=5` 실패와 `m=6` 통과, exact arithmetic 실패가 downstream
+scientific GO를 막음을 증명한다. asymptotic LCB는 계속 별도 입력이며, 실제 300-block
+counts나 randomization/exchangeability를 증명하거나 terminal을 발행하지 않는다.
+
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,
 폐기 전 `H/F/A/W` 표기를 사용하는 역사적 원자적 credit scaffold를 서로 분리해

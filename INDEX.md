@@ -160,6 +160,27 @@ scientific GO를 막음을 증명한다. 또한 frozen `analysis_v1.json`의 sma
 Lean native 계산으로 대조한다. asymptotic LCB는 계속 별도 입력이며, 실제 300-block
 counts나 randomization/exchangeability를 증명하거나 terminal을 발행하지 않는다.
 
+같은 날
+[`end-to-end runtime refinement Lean boundary`](docs/research/HSWM_END_TO_END_RUNTIME_REFINEMENT_LEAN_BOUNDARY_2026-08-31.md)는
+사용자가 요구한 실제 TypeScript/Effect 정제, Permit 발행·인증·원자 실행, outcome truth와
+독립 causal credit, revision-bound LLM 행동 개선 주장을 성립시키는 데 필요한 조건부 증거
+bundle schema와 필요조건을 형식화했다. 새 Lean 모듈은 claimed concrete pre/post state abstraction, exact Permit issue
+occurrence, sound signature verifier와 active authorized key, 단 하나의 declared recovered
+commit, 외부 truth와 운영 독립성·causal-support witness, 봉인된 전체 probe suite의 aggregate
+score correspondence와 별도 revision-attribution witness가 모두 주어질 때만
+`AtomicLearnAdmission`과 bounded behavior claim을 함께 조합한다. 그 causal judgment가
+admission이 소비한 exact judgment와 같고 strict aggregate score gain이면 suite 안 적어도 한
+modeled runtime response가 달라짐도 증명한다.
+
+이것은 현재 TypeScript의 양성 정제 증명이 아니다. Lean에 선언한 end-to-end audit profile은 fail-closed
+obstruction publication만 `true`이고 나머지 7개 실제 증거 의무는 모두 `false`이므로 Lean은
+`checkedInTypeScriptNotReadyForEndToEndRefinement`를 증명한다. 더 나아가 all-true Boolean metadata도
+denied Permit의 atomic admission을 만들지 못한다는 반례를 제공한다. 양성 정리 자체는
+atomic conditions·runtime-step occurrence·truth·causality·behavior correspondence를 담은
+assumption-carrying witness의 정확한 조합 정리다. TypeScript/Node/Effect,
+암호·키 보관, 저장소 linearizability, 외부 세계 진실, 인과 식별과 LLM provider 실행은
+독립 checker·실제 실행·실험 evidence로 남아 있으며 전체 효능은 계속 `UNJUDGED`다.
+
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,
 폐기 전 `H/F/A/W` 표기를 사용하는 역사적 원자적 credit scaffold를 서로 분리해

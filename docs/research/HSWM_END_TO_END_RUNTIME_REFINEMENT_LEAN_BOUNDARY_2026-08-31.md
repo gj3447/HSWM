@@ -11,6 +11,8 @@
 > [`HSWMEndToEndRuntimeRefinement.lean`](../../formal/HSWMEndToEndRuntimeRefinement.lean)
 > and the concrete field-checker boundary
 > [`HSWMCanonicalPermitEnvelope.lean`](../../formal/HSWMCanonicalPermitEnvelope.lean)
+> and the derived structural certificate projection
+> [`HSWMExecutionCertificateWire.lean`](../../formal/HSWMExecutionCertificateWire.lean)
 >
 > **Predecessor boundaries:**
 > [`atomic admission`](HSWM_ATOMIC_PERMIT_INVARIANT_ADMISSION_LEAN_2026-08-31.md),
@@ -222,6 +224,8 @@ false:
 | canonical Permit issue occurrence | absent |
 | authentication mechanism and fixed signed test vector | present, bounded |
 | actual Permit issue under authoritative trust/key/time evidence | absent |
+| syntactically cycle-free execution-certificate contract and Lean structural projection | present, decoded-field abstraction only |
+| TypeScript/raw-byte execution-certificate checker refinement | absent |
 | one canonical commit occurrence for this same transition | absent |
 | externally true outcome evidence | absent |
 | independently identified causal credit | absent |
@@ -281,10 +285,9 @@ The current proved result is therefore two-sided:
 The next valid route remains proof-first but must eventually cross into real
 execution:
 
-1. define canonical bytes for the complete execution certificate and implement
-   an independent checker whose accepted value maps to
-   `ClaimedRuntimeAdmissionCertificate`, then prove the checker sound against a
-   declared runtime transition semantics;
+1. implement the frozen execution-intent/certificate wire contract as exact
+   TypeScript canonical bytes and an independent raw-byte checker, then prove
+   that concrete checker refines the checked-in Lean structural model;
 2. extend the implemented canonical Permit envelope into a separately scoped
    issuer/executor boundary with authoritative workload identity, trusted time,
    key rotation/revocation evidence and an independently replayed raw-byte

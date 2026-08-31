@@ -200,12 +200,17 @@ production occurrence is not.
 
 ## 7. Next evidence transaction
 
-The next proof-first slice is to freeze canonical bytes for the complete
-execution certificate, implement an independent raw-byte checker and define
-the Lean projection from its accepted value to the existing claimed runtime
-certificate. That projection must also derive the expected envelope bindings
-from the exact intent/admission context instead of accepting a free-standing
-expected record.
+The proof-first
+[`structural execution-certificate wire contract`](HSWM_EXECUTION_CERTIFICATE_WIRE_CONTRACT_LEAN_2026-08-31.md)
+now fixes the syntactically cycle-free decoded intent/certificate dependency
+graph, derives the expected envelope bindings from one certificate context and
+proves the Lean structural projection into claimed concrete execution evidence. It still
+models decoded fields and explicit adapter results; it is not a raw-byte
+parser or TypeScript refinement.
+
+The next executable slice is to implement the exact TypeScript/Effect intent
+and certificate codecs, an independent raw-byte checker and a pinned
+cross-consumer vector against that formal contract.
 
 Only after that checker boundary is fixed should this verifier sit behind a
 separately identified issuer/executor and one durable admission transaction.

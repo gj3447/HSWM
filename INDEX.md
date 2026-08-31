@@ -196,6 +196,16 @@ verifier-soundness 전제 아래서만 따라온다. 검증 결과 literal은
 실제 issuer custody, authoritative clock/trust publication, intent-byte semantics, nonce 원자 소비,
 canonical commit occurrence와 전체 TS-to-Lean 정제는 아직 성립하지 않는다.
 
+그 다음 proof-first
+[`structural execution-certificate wire contract`](docs/research/HSWM_EXECUTION_CERTIFICATE_WIRE_CONTRACT_LEAN_2026-08-31.md)는
+pre-execution intent, Permit envelope, invariant certificate, declared commit와 recovery가 동일한
+execution/head/target/revision/digest chronology를 가리키는 decoded-field 계약을 고정한다. Permit
+expected bindings는 더 이상 별도 자유 입력이 아니라 certificate intent에서 결정적으로 유도되고,
+Lean structural checker acceptance는 기존 `ClaimedConcreteExecutionEvidence`를 구성한다. 단,
+`ClaimedRuntimeAdmissionCertificate`는 runtime occurrence·state abstraction·`Inv`·outcome semantics를
+가진 별도 supplement가 있을 때만 구성된다. raw JSON/TypeScript codec, SHA/Ed25519 refinement,
+actual atomic storage occurrence, outcome truth, causal credit와 LLM 개선은 계속 미증명이다.
+
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,
 폐기 전 `H/F/A/W` 표기를 사용하는 역사적 원자적 credit scaffold를 서로 분리해

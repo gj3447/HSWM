@@ -329,6 +329,17 @@ export {
   type CanonicalAtomV2TrajectoryContractRecord
 } from "./canonical-atom-v2-current-state-permit.js"
 export {
+  HSWM_CANONICAL_LEARNING_REFINEMENT_LEAN_BOUNDARY,
+  HSWM_CANONICAL_LEARNING_REFINEMENT_V1_CONTRACT_VERSION,
+  CanonicalAtomV2LearningRefinementError,
+  canonicalAtomV2LearningRefinementProfile,
+  canonicalAtomV2LearningRefinementProfileBytes,
+  decodeCanonicalAtomV2LearningRefinementProfileBytes,
+  type CanonicalAtomV2LearningBlockingObligation,
+  type CanonicalAtomV2LearningMappedObligation,
+  type CanonicalAtomV2LearningRefinementProfile
+} from "./canonical-atom-v2-learning-refinement.js"
+export {
   HSWM_CORE_RESPONSIBILITY_ONTOLOGY_SCHEMA_VERSION,
   type HSWMCoreResponsibilityOntology
 } from "./hswm-core-ontology-schema.js"

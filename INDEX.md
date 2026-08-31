@@ -85,6 +85,16 @@ inhabited될 수 없다는 보호 정리이며, 실제 outcome의 참, evaluator
 TypeScript/Effect refinement, 인과학습 효능, G0/G1 또는 FCL 통과를 증명하지 않는다.
 따라서 outcome-bound learning의 구현·효능 상태는 여전히 미구현·`UNJUDGED`다.
 
+같은 날
+[`TypeScript-to-Lean refinement obstruction`](docs/research/HSWM_TYPESCRIPT_LEAN_REFINEMENT_OBSTRUCTION_2026-08-31.md)은
+현행 v1 바이트 계약을 이 Lean 경계에 대조했다. schema-relative 주소, canonical JSON,
+pre-outcome trace와 exact local snapshot 결속은 투사할 수 있지만, trusted current head,
+단일 target revision, outcome owner와 revision-support verdict, canonical Permit, `Inv`,
+atomic admission은 없다. Lean은 이 정확한 profile이 `Learn` refinement witness를 만들 수
+없음을 증명하고 TypeScript는 동일한 8개 blocker를
+`BLOCKED_NOT_REFINED_TO_LEAN_LEARN` canonical bytes로만 공개한다. 이는 실패 은폐가 아니라
+positive refinement 전에 닫아야 할 의미 차이의 기계 판독 가능한 기록이다.
+
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,
 폐기 전 `H/F/A/W` 표기를 사용하는 역사적 원자적 credit scaffold를 서로 분리해

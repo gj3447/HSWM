@@ -198,6 +198,24 @@ it("exports exact local-head Permit eligibility without a canonical Permit or co
   expect("learnCanonicalAtomV2PermitResolution" in PublicApi).toBe(false)
 })
 
+it("exports the fail-closed Lean refinement obstruction without a learning capability", () => {
+  expect(
+    PublicApi.HSWM_CANONICAL_LEARNING_REFINEMENT_V1_CONTRACT_VERSION
+  ).toBe("hswm-canonical-learning-refinement/v1")
+  expect(
+    PublicApi.canonicalAtomV2LearningRefinementProfile().verdict
+  ).toBe("BLOCKED_NOT_REFINED_TO_LEAN_LEARN")
+  expect(
+    typeof PublicApi.canonicalAtomV2LearningRefinementProfileBytes
+  ).toBe("function")
+  expect(
+    typeof PublicApi.decodeCanonicalAtomV2LearningRefinementProfileBytes
+  ).toBe("function")
+  expect("refineCanonicalAtomV2ToLeanLearn" in PublicApi).toBe(false)
+  expect("admitCanonicalAtomV2Learning" in PublicApi).toBe(false)
+  expect("issueCanonicalAtomV2CanonicalPermit" in PublicApi).toBe(false)
+})
+
 it("does not export privileged store or authorizer capabilities", () => {
   expect("CommitStore" in PublicApi).toBe(false)
   expect("CreditAuthorizer" in PublicApi).toBe(false)

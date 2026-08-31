@@ -7,7 +7,9 @@
 > schema-relative responsibility owner per admitted canonical atom. The generic
 > v2 reference kernel, content-bound facade, predecessor-bound durable journal
 > facade, pure typed transition-evidence contract, and local-head-relative
-> current-state eligibility checker are now implemented. The
+> current-state eligibility checker are now implemented. A separate
+> TypeScript-to-Lean boundary now proves in Lean and reports in TypeScript why
+> those v1 artifacts cannot yet refine the canonical `Learn` relation. The
 > content-bound facade alone still has
 > process-local state; the newer file-backed durable runtime can reconstruct one
 > local linear state-and-receipt lineage from exact immutable records. This is
@@ -82,6 +84,11 @@ The current v2 boundary is intentionally small:
   to write any permission-bearing kind, and no admitted permission-bearing
   logical lineage can be self-revised; only ordinary policy-approved write kinds
   are eligible.
+- `canonical-atom-v2-learning-refinement.ts` projects the exact existing
+  non-Permit, non-admission and non-causal-credit literals into one immutable
+  canonical-JSON obstruction profile. Its verdict is
+  `BLOCKED_NOT_REFINED_TO_LEAN_LEARN`; it exports no positive refinement,
+  Permit, admission or learning capability.
 - The exact implementation and nonclaims are recorded in the
   [v2 reference-kernel handoff](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md)
   and the
@@ -90,8 +97,10 @@ The current v2 boundary is intentionally small:
   [durable-journal continuation](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_DURABLE_JOURNAL_RUNTIME_2026-08-26.md)
   and the
   [typed transition-evidence continuation](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_TRANSITION_EVIDENCE_CONTRACT_2026-08-27.md).
-  The next bounded continuation is the
-  [current-state Permit eligibility boundary](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_CURRENT_STATE_PERMIT_ELIGIBILITY_2026-08-27.md).
+  The current-state boundary is the
+  [Permit eligibility contract](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_CURRENT_STATE_PERMIT_ELIGIBILITY_2026-08-27.md),
+  followed by the
+  [TypeScript-to-Lean refinement obstruction](../../../docs/research/HSWM_TYPESCRIPT_LEAN_REFINEMENT_OBSTRUCTION_2026-08-31.md).
 
 The retained historical boundary is also intentionally small:
 

@@ -9,7 +9,10 @@
 > facade, pure typed transition-evidence contract, and local-head-relative
 > current-state eligibility checker are now implemented. A separate
 > TypeScript-to-Lean boundary now proves in Lean and reports in TypeScript why
-> those v1 artifacts cannot yet refine the canonical `Learn` relation. The
+> those v1 artifacts cannot yet refine the canonical `Learn` relation. An
+> owner-bound outcome contract now separates observation responsibility from
+> revision-support judgment responsibility without claiming truth or causal
+> credit. The
 > content-bound facade alone still has
 > process-local state; the newer file-backed durable runtime can reconstruct one
 > local linear state-and-receipt lineage from exact immutable records. This is
@@ -89,6 +92,12 @@ The current v2 boundary is intentionally small:
   canonical-JSON obstruction profile. Its verdict is
   `BLOCKED_NOT_REFINED_TO_LEAN_LEARN`; it exports no positive refinement,
   Permit, admission or learning capability.
+- `canonical-atom-v2-outcome-judgment.ts` represents outcome observation and
+  revision-support judgment as separately owned records. Its bundle binds one
+  exact schema, proposal, sealed trajectory, observation, criterion, support
+  judgment and linear successor shape while retaining explicit
+  `NOT_TRUTH_NOT_CAUSAL_CREDIT_NOT_PERMIT_NOT_ADMISSION_NOT_LEARNING` status.
+  It exports no evaluator, adjudicator, owner authenticator or mutation port.
 - The exact implementation and nonclaims are recorded in the
   [v2 reference-kernel handoff](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md)
   and the
@@ -100,7 +109,9 @@ The current v2 boundary is intentionally small:
   The current-state boundary is the
   [Permit eligibility contract](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_CURRENT_STATE_PERMIT_ELIGIBILITY_2026-08-27.md),
   followed by the
-  [TypeScript-to-Lean refinement obstruction](../../../docs/research/HSWM_TYPESCRIPT_LEAN_REFINEMENT_OBSTRUCTION_2026-08-31.md).
+  [TypeScript-to-Lean refinement obstruction](../../../docs/research/HSWM_TYPESCRIPT_LEAN_REFINEMENT_OBSTRUCTION_2026-08-31.md)
+  and the
+  [owner-bound outcome judgment boundary](../../../docs/research/HSWM_OWNER_BOUND_OUTCOME_JUDGMENT_BOUNDARY_2026-08-31.md).
 
 The retained historical boundary is also intentionally small:
 

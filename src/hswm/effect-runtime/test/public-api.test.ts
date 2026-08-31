@@ -216,6 +216,23 @@ it("exports the fail-closed Lean refinement obstruction without a learning capab
   expect("issueCanonicalAtomV2CanonicalPermit" in PublicApi).toBe(false)
 })
 
+it("exports owner-bound outcome codecs without evaluator, adjudicator, or learning authority", () => {
+  expect(
+    PublicApi.HSWM_CANONICAL_OWNER_BOUND_OUTCOME_V1_CONTRACT_VERSION
+  ).toBe("hswm-canonical-owner-bound-outcome/v1")
+  expect(
+    typeof PublicApi.validateCanonicalAtomV2OwnerBoundOutcomeRecord
+  ).toBe("function")
+  expect(
+    typeof PublicApi.decodeCanonicalAtomV2OwnerBoundOutcomeJudgmentBundleBytes
+  ).toBe("function")
+  expect("issueCanonicalAtomV2OutcomeObservation" in PublicApi).toBe(false)
+  expect("issueCanonicalAtomV2RevisionSupport" in PublicApi).toBe(false)
+  expect("makeCanonicalAtomV2OutcomeEvaluator" in PublicApi).toBe(false)
+  expect("makeCanonicalAtomV2CreditAdjudicator" in PublicApi).toBe(false)
+  expect("learnCanonicalAtomV2OutcomeJudgment" in PublicApi).toBe(false)
+})
+
 it("does not export privileged store or authorizer capabilities", () => {
   expect("CommitStore" in PublicApi).toBe(false)
   expect("CreditAuthorizer" in PublicApi).toBe(false)

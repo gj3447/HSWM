@@ -95,6 +95,19 @@ atomic admission은 없다. Lean은 이 정확한 profile이 `Learn` refinement 
 `BLOCKED_NOT_REFINED_TO_LEAN_LEARN` canonical bytes로만 공개한다. 이는 실패 은폐가 아니라
 positive refinement 전에 닫아야 할 의미 차이의 기계 판독 가능한 기록이다.
 
+그 다음
+[`owner-bound outcome judgment boundary`](docs/research/HSWM_OWNER_BOUND_OUTCOME_JUDGMENT_BOUNDARY_2026-08-31.md)는
+압축된 outcome을 서로 다른 lifecycle의 `outcome observation`과
+`revision-support judgment`로 분리했다. 각 record는 정확히 한 responsibility owner를
+가지며, bundle은 exact schema·proposal·sealed trace·observation·precommitted criterion·
+linear successor revision과 구조적 role separation을 결속한다. Lean은 observation만 있거나
+judgment가 reject/indeterminate이거나 binding·role이 무너지면 outcome-evidence learning
+witness가 없음을 증명한다. TypeScript codec도 동일 구조를 exact canonical bytes로
+검증하지만 status는 계속 `NOT_TRUTH`, `NOT_CAUSAL_CREDIT`, `NOT_PERMIT`,
+`NOT_ADMISSION`, `NOT_LEARNING`이다. 따라서 representation blocker 일부를 타입화했을
+뿐 실제 독립 outcome,
+causal credit이나 positive refinement를 획득한 것은 아니다.
+
 2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
 구조로 개발하라고 확정했다. 현재 Effect v3 패키지는 위의 v2 reference kernel과,
 폐기 전 `H/F/A/W` 표기를 사용하는 역사적 원자적 credit scaffold를 서로 분리해

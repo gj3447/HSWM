@@ -138,3 +138,10 @@ specified and evidenced:
 
 No scientific result, FCL law, G0/G1 gate, causal learning, cognition or
 complete HSWM realization follows from this obstruction proof.
+
+The subsequent
+[`owner-bound outcome judgment boundary`](HSWM_OWNER_BOUND_OUTCOME_JUDGMENT_BOUNDARY_2026-08-31.md)
+adds the missing observation-owner and revision-support-judgment shapes as a
+new separately scoped contract. It does not retroactively change this exact v1
+source profile and does not remove the truth, causal-credit, Permit, invariant,
+current-head or admission blockers.

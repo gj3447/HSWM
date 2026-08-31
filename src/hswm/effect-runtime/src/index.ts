@@ -340,6 +340,28 @@ export {
   type CanonicalAtomV2LearningRefinementProfile
 } from "./canonical-atom-v2-learning-refinement.js"
 export {
+  HSWM_CANONICAL_OUTCOME_JUDGMENT_BUNDLE_V1_MEDIA_TYPE,
+  HSWM_CANONICAL_OUTCOME_OBSERVATION_V1_MEDIA_TYPE,
+  HSWM_CANONICAL_OWNER_BOUND_OUTCOME_V1_CONTRACT_VERSION,
+  HSWM_CANONICAL_REVISION_SUPPORT_JUDGMENT_V1_MEDIA_TYPE,
+  CanonicalAtomV2OutcomeJudgmentError,
+  CanonicalAtomV2OwnerBoundOutcomeObservationSchema,
+  CanonicalAtomV2RevisionSupportJudgmentSchema,
+  canonicalAtomV2OwnerBoundOutcomeJudgmentBundleBytes,
+  canonicalAtomV2OwnerBoundOutcomeRecordBytes,
+  decodeCanonicalAtomV2OwnerBoundOutcomeJudgmentBundleBytes,
+  decodeCanonicalAtomV2OwnerBoundOutcomeRecordBytes,
+  describeCanonicalAtomV2OwnerBoundOutcomeJudgmentBundle,
+  describeCanonicalAtomV2OwnerBoundOutcomeRecord,
+  validateCanonicalAtomV2OwnerBoundOutcomeJudgmentBundle,
+  validateCanonicalAtomV2OwnerBoundOutcomeRecord,
+  type CanonicalAtomV2LogicalAddress,
+  type CanonicalAtomV2OwnerBoundOutcomeJudgmentBundle,
+  type CanonicalAtomV2OwnerBoundOutcomeObservation,
+  type CanonicalAtomV2OwnerBoundOutcomeRecord,
+  type CanonicalAtomV2RevisionSupportJudgment
+} from "./canonical-atom-v2-outcome-judgment.js"
+export {
   HSWM_CORE_RESPONSIBILITY_ONTOLOGY_SCHEMA_VERSION,
   type HSWMCoreResponsibilityOntology
 } from "./hswm-core-ontology-schema.js"

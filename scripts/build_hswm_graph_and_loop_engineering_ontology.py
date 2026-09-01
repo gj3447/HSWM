@@ -39,6 +39,39 @@ RDF_PROJECTION_PATH = Path(
 RDF_PROJECTION_TEST_PATH = Path(
     "src/hswm/effect-runtime/test/canonical-atom-v2-rdf-projection.test.ts"
 )
+DURABLE_RDF_PROJECTION_PATH = Path(
+    "src/hswm/effect-runtime/src/canonical-atom-v2-durable-rdf-projection.ts"
+)
+DURABLE_RDF_PROJECTION_TEST_PATH = Path(
+    "src/hswm/effect-runtime/test/canonical-atom-v2-durable-rdf-projection.test.ts"
+)
+DURABLE_RUNTIME_PATH = Path(
+    "src/hswm/effect-runtime/src/canonical-atom-v2-durable-runtime.ts"
+)
+STATE_JOURNAL_PATH = Path(
+    "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts"
+)
+STATE_JOURNAL_STORE_PATH = Path(
+    "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal-store.ts"
+)
+STATE_JOURNAL_STORE_TEST_PATH = Path(
+    "src/hswm/effect-runtime/test/canonical-atom-v2-state-journal-store.test.ts"
+)
+STATE_JOURNAL_FILE_PATH = Path(
+    "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal-file.ts"
+)
+STATE_JOURNAL_FILE_TEST_PATH = Path(
+    "src/hswm/effect-runtime/test/canonical-atom-v2-state-journal-file.test.ts"
+)
+PUBLIC_API_TEST_PATH = Path(
+    "src/hswm/effect-runtime/test/public-api.test.ts"
+)
+DNRD5_SOURCE_CLOSURE_TEST_PATH = Path(
+    "src/hswm/effect-runtime/test/dnrd5-source-closure.test.ts"
+)
+CROSS_PROJECT_ADOPTION_PATH = Path(
+    "docs/research/HSWM_CROSS_PROJECT_GRAPH_HARNESS_ADOPTION_2026-09-01.md"
+)
 SOURCE_BINDING_PATHS = (
     SYNTHESIS_PATH,
     CONSTITUTION_PATH,
@@ -51,6 +84,17 @@ SOURCE_BINDING_PATHS = (
     ADMISSION_PATH,
     RDF_PROJECTION_PATH,
     RDF_PROJECTION_TEST_PATH,
+    DURABLE_RDF_PROJECTION_PATH,
+    DURABLE_RDF_PROJECTION_TEST_PATH,
+    DURABLE_RUNTIME_PATH,
+    STATE_JOURNAL_PATH,
+    STATE_JOURNAL_STORE_PATH,
+    STATE_JOURNAL_STORE_TEST_PATH,
+    STATE_JOURNAL_FILE_PATH,
+    STATE_JOURNAL_FILE_TEST_PATH,
+    PUBLIC_API_TEST_PATH,
+    DNRD5_SOURCE_CLOSURE_TEST_PATH,
+    CROSS_PROJECT_ADOPTION_PATH,
 )
 
 SCHEMA_VERSION = "hswm-graph-and-loop-engineering-ontology/v2"
@@ -86,12 +130,28 @@ EXTERNAL_SOURCES = (
         "Canonical byte identity, signatures, truth, or write authority by itself.",
     ),
     (
+        "n-quads-11-tests",
+        "W3C RDF 1.1 N-Quads test suite",
+        "https://w3c.github.io/rdf-tests/rdf/rdf11/rdf-n-quads/",
+        "OFFICIAL_TEST_SUITE",
+        "Approved positive and negative syntax fixtures for a pinned parser configuration.",
+        "Universal parser correctness or HSWM emitter correctness beyond the tested corpus and profile.",
+    ),
+    (
         "rdfc-10",
         "W3C RDF Dataset Canonicalization 1.0",
         "https://www.w3.org/TR/rdf-canon/",
         "STANDARD",
         "Canonical N-Quads for graph-isomorphism-independent hashing, comparison, and downstream signing.",
         "A graph-signature scheme, denial-of-service immunity, or HSWM native-state identity.",
+    ),
+    (
+        "rdfc-10-tests",
+        "W3C RDFC-1.0 test suite",
+        "https://w3c.github.io/rdf-canon/tests/",
+        "OFFICIAL_TEST_SUITE",
+        "Manifest-based canonicalization and canonical-map vectors for qualifying one pinned implementation.",
+        "More than the tested RDFC aspects, executable-artifact identity, or application-level truth.",
     ),
     (
         "json-ld-11",
@@ -229,6 +289,14 @@ EXTERNAL_SOURCES = (
         "Feedback-conditioned future behavior baseline.",
         "Canonical revision, causal credit, topology learning, or HSWM identity.",
     ),
+    (
+        "flrh-graph-harness-profile",
+        "Experimental FLRH graph and harness profile",
+        "https://github.com/gj3447/agent-coding-paradigm/tree/000d5fd0d40518a700713e55e9167ca07a514189",
+        "PROJECT_LOCAL_EXPERIMENTAL_PROFILE",
+        "Project-neutral graph envelopes, deltas, receipts, reconciliation, and bounded harness lifecycle as an adapter target.",
+        "An industry standard, cross-project runtime qualification, HSWM identity, or development-efficiency result.",
+    ),
 )
 
 CAPABILITIES = (
@@ -273,6 +341,13 @@ CURRENT_SURFACES = (
         "READ_ONLY_LOCAL_DETERMINISTIC_PROFILE_NOT_RDFC_SHACL_PROV_CAUSAL_OR_COGNITIVE_CONFORMANCE",
     ),
     (
+        "durable-rdf-projection",
+        "Durable canonical atom v2 RDF projection envelope",
+        DURABLE_RDF_PROJECTION_PATH,
+        "One registered local durable-runtime recovery observation supplies the complete contiguous ordered journal prefix returned by that observation and semantic replay when bounded raw-journal recovery succeeds within its declared record and byte limits; an exact descriptor predecessor commitment binds the inner RDF projection and refuses stale or tampered artifacts after fresh recovery. Concurrent or deleted later tails and total referenced-content replay I/O, memory, and CPU are not attested.",
+        "LOCAL_OBSERVED_PREFIX_RECOVERY_ATTESTATION_NOT_GLOBAL_TAIL_ANTIROLLBACK_RDFC_SHACL_PROV_CAUSAL_OR_COGNITIVE_CONFORMANCE",
+    ),
+    (
         "hypergraph-prototype",
         "Reified hypergraph prototype",
         HYPERGRAPH_PATH,
@@ -313,8 +388,8 @@ GAPS = (
     (
         "projection-manifest",
         "Canonical-to-compiled projection portability gap",
-        "The local v1 RDF compiler now binds a validated caller-supplied schema/state/tail bundle, reified typed references, declared loss, no-writeback policy, and exact recompilation. Live durable-recovery composition, full-chain attestation, independent N-Quads/RDFC/SHACL qualification, and sparse/query adapters remain open.",
-        "PARTIALLY_CLOSED_LOCAL_GE1_PROFILE_EXTERNAL_AND_LIVE_COMPOSITION_OPEN",
+        "The local v1 compiler binds a validated schema/state/tail bundle, and the durable envelope now recompiles it from the complete contiguous prefix returned by one replay-verified recovery observation, accepted within declared raw-journal record and byte limits, with an ordered exact-descriptor commitment. Total content-replay I/O/CPU, concurrent or deleted later tails, global anti-rollback, executable compiler identity, independent N-Quads/RDFC/SHACL qualification, and sparse/query adapters remain open.",
+        "PARTIALLY_CLOSED_LOCAL_DURABLE_PREFIX_GE1_EXTERNAL_ANTIROLLBACK_AND_STANDARDS_OPEN",
     ),
     (
         "nary-delta-transaction",

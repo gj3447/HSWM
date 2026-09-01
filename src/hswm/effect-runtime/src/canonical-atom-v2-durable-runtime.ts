@@ -63,7 +63,8 @@ import {
   CanonicalAtomV2StateJournalStoreError,
   makeCanonicalAtomV2StateJournalStoreMemoryLayer,
   snapshotCanonicalAtomV2StateJournalRecovery,
-  type CanonicalAtomV2StateJournalEntry
+  type CanonicalAtomV2StateJournalEntry,
+  type CanonicalAtomV2StateJournalRecoveryLimits
 } from "./canonical-atom-v2-state-journal-store.js"
 import {
   canonicalAtomV2KeyId,
@@ -197,7 +198,16 @@ type CanonicalAtomV2DurableRecoveryWitnessEffect = Effect.Effect<
 
 const internalRecoveryWitnessByRuntime = new WeakMap<
   CanonicalAtomV2DurableRuntime["Type"],
-  () => CanonicalAtomV2DurableRecoveryWitnessEffect
+  (limits?: CanonicalAtomV2StateJournalRecoveryLimits) => CanonicalAtomV2DurableRecoveryWitnessEffect
+>()
+
+type CanonicalAtomV2DurableStorageAttestation =
+  | "UNATTESTED_RUNTIME_COMPOSITION"
+  | "LOCAL_POSIX_FILE_STORES"
+
+const internalStorageAttestationByRuntime = new WeakMap<
+  CanonicalAtomV2DurableRuntime["Type"],
+  CanonicalAtomV2DurableStorageAttestation
 >()
 
 export const commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal = (
@@ -235,6 +245,28 @@ export const recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal = (
         )
       )
     : recoverWitness()
+}
+
+/**
+ * Module-held read-only capability for a derived projection compiler. It
+ * returns the same defensive, single-observation recovery witness as the
+ * dispatcher seam, but confers no commit, publication, or write-back port.
+ * This symbol is intentionally absent from the package root export.
+ */
+export const recoverCanonicalAtomV2DurableForReadOnlyProjectionInternal = (
+  runtime: CanonicalAtomV2DurableRuntime["Type"],
+  limits: CanonicalAtomV2StateJournalRecoveryLimits
+): CanonicalAtomV2DurableRecoveryWitnessEffect => {
+  const recoverWitness = internalRecoveryWitnessByRuntime.get(runtime)
+  const storageAttestation = internalStorageAttestationByRuntime.get(runtime)
+  return recoverWitness === undefined || storageAttestation !== "LOCAL_POSIX_FILE_STORES"
+    ? Effect.fail(
+        runtimeError(
+          "CONFIGURATION_INVALID",
+          "read-only durable projection requires the module-constructed local POSIX file runtime"
+        )
+      )
+    : recoverWitness(limits)
 }
 
 interface RecoveredJournal {
@@ -474,10 +506,11 @@ const recoverCanonicalAtomV2Journal = (
  * Internal composition seam. The supplied journal is the recovery truth; no
  * process-local Ref or snapshot is accepted as canonical state.
  */
-export const makeCanonicalAtomV2DurableRuntimeLayer = (
+const makeCanonicalAtomV2DurableRuntimeLayerWithStorageAttestation = (
   journalLineageId: string,
   rawSchemaBytes: Uint8Array,
-  rawGrants: unknown = []
+  rawGrants: unknown,
+  storageAttestation: CanonicalAtomV2DurableStorageAttestation
 ) => {
   const retainedSchemaBytes =
     rawSchemaBytes instanceof Uint8Array
@@ -578,9 +611,13 @@ export const makeCanonicalAtomV2DurableRuntimeLayer = (
           schemaContent
         )
 
-      const recoverWitness = (): CanonicalAtomV2DurableRecoveryWitnessEffect =>
+      const recoverWitness = (
+        limits?: CanonicalAtomV2StateJournalRecoveryLimits
+      ): CanonicalAtomV2DurableRecoveryWitnessEffect =>
         Effect.gen(function* () {
-          const journal = yield* journalStore.recover
+          const journal = limits === undefined
+            ? yield* journalStore.recover
+            : yield* journalStore.recoverWithin(limits)
           const recovered = yield* recoverCanonicalAtomV2Journal(
             contentStore,
             journalStore,
@@ -739,10 +776,27 @@ export const makeCanonicalAtomV2DurableRuntimeLayer = (
       })
       internalCommitByRuntime.set(runtime, commit)
       internalRecoveryWitnessByRuntime.set(runtime, recoverWitness)
+      internalStorageAttestationByRuntime.set(runtime, storageAttestation)
       return runtime
     })
   )
 }
+
+/**
+ * Internal composition seam with no storage provenance claim. The supplied
+ * journal remains the recovery truth, but callers cannot use this generic
+ * composition to issue a local-file durable projection attestation.
+ */
+export const makeCanonicalAtomV2DurableRuntimeLayer = (
+  journalLineageId: string,
+  rawSchemaBytes: Uint8Array,
+  rawGrants: unknown = []
+) => makeCanonicalAtomV2DurableRuntimeLayerWithStorageAttestation(
+  journalLineageId,
+  rawSchemaBytes,
+  rawGrants,
+  "UNATTESTED_RUNTIME_COMPOSITION"
+)
 
 /** Process-local journal witness for deterministic tests; not restart durable. */
 export const makeCanonicalAtomV2DurableRuntimeMemoryLayerForTest = (
@@ -780,10 +834,11 @@ const makeCanonicalAtomV2DurableRuntimeFileLayerWithJournalStore = (
 ) => {
   const decoded = decodeCanonicalAtomV2SchemaContent(rawSchemaBytes)
   if (Either.isLeft(decoded)) return Layer.fail(decoded.left)
-  return makeCanonicalAtomV2DurableRuntimeLayer(
+  return makeCanonicalAtomV2DurableRuntimeLayerWithStorageAttestation(
     journalLineageId,
     rawSchemaBytes,
-    rawGrants
+    rawGrants,
+    "LOCAL_POSIX_FILE_STORES"
   ).pipe(
     Layer.provide([
       makeCanonicalAtomV2ContentFileStoreLayer(rootPath),

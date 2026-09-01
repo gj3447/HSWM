@@ -93,6 +93,47 @@ it.effect("recovers exact create-only journal entries after a fresh Layer", () =
   return program.pipe(Effect.ensuring(cleanup(root)))
 })
 
+it.effect("bounds file recovery before returning journal entries", () => {
+  const root = mkdtempSync(join(tmpdir(), "hswm-canonical-v2-journal-bounded-"))
+  const program = Effect.gen(function* () {
+    const outcomes = yield* Effect.gen(function* () {
+      const store = yield* CanonicalAtomV2StateJournalStore
+      const first = yield* store.publish({
+        stateRevision: 0,
+        expectedPredecessor: null,
+        bytes: bytes("one")
+      })
+      yield* store.publish({
+        stateRevision: 1,
+        expectedPredecessor: first.recovery[0]?.descriptor ?? null,
+        bytes: bytes("two")
+      })
+      const exact = yield* store.recoverWithin({
+        maximumRecords: 2,
+        maximumRecoveredJournalBytes: 6
+      })
+      const recordLimit = yield* store.recoverWithin({
+        maximumRecords: 1,
+        maximumRecoveredJournalBytes: 6
+      }).pipe(Effect.either)
+      const byteLimit = yield* store.recoverWithin({
+        maximumRecords: 2,
+        maximumRecoveredJournalBytes: 5
+      }).pipe(Effect.either)
+      return { byteLimit, exact, recordLimit }
+    }).pipe(Effect.provide(layer(root)))
+
+    expect(outcomes.exact).toHaveLength(2)
+    for (const result of [outcomes.recordLimit, outcomes.byteLimit]) {
+      expect(Either.isLeft(result)).toBe(true)
+      if (Either.isLeft(result)) {
+        expect(result.left.reason).toBe("RECOVERY_LIMIT_EXCEEDED")
+      }
+    }
+  })
+  return program.pipe(Effect.ensuring(cleanup(root)))
+})
+
 it.effect("has exactly one concurrent winner and exact retry is idempotent", () => {
   const root = mkdtempSync(join(tmpdir(), "hswm-canonical-v2-journal-race-"))
   const program = Effect.gen(function* () {

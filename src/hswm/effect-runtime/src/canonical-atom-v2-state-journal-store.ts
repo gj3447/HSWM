@@ -15,6 +15,11 @@ export interface CanonicalAtomV2StateJournalEntry {
   readonly bytes: Uint8Array
 }
 
+export interface CanonicalAtomV2StateJournalRecoveryLimits {
+  readonly maximumRecords: number
+  readonly maximumRecoveredJournalBytes: number
+}
+
 export interface CanonicalAtomV2StateJournalPublish {
   readonly stateRevision: number
   readonly expectedPredecessor: CanonicalAtomV2StateJournalRecordDescriptor | null
@@ -39,6 +44,7 @@ export class CanonicalAtomV2StateJournalStoreError extends Data.TaggedError(
     | "IO_FAILED"
     | "PREDECESSOR_MISMATCH"
     | "PUBLICATION_OUTCOME_UNKNOWN"
+    | "RECOVERY_LIMIT_EXCEEDED"
     | "REVISION_CONFLICT"
     | "ROOT_UNSAFE"
     | "SLOT_LAYOUT_INVALID"
@@ -56,6 +62,12 @@ export class CanonicalAtomV2StateJournalStore extends Context.Tag(
     readonly journalLineageId: string
     readonly schemaContentSha256: string
     readonly recover: Effect.Effect<
+      ReadonlyArray<CanonicalAtomV2StateJournalEntry>,
+      CanonicalAtomV2StateJournalStoreFailure
+    >
+    readonly recoverWithin: (
+      limits: CanonicalAtomV2StateJournalRecoveryLimits
+    ) => Effect.Effect<
       ReadonlyArray<CanonicalAtomV2StateJournalEntry>,
       CanonicalAtomV2StateJournalStoreFailure
     >
@@ -88,6 +100,57 @@ export const snapshotCanonicalAtomV2StateJournalRecovery = (
 const validConfig = (lineage: string, schema: string): boolean =>
   /^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$/.test(lineage) &&
   /^[0-9a-f]{64}$/.test(schema)
+
+export const snapshotCanonicalAtomV2StateJournalRecoveryLimits = (
+  limits: CanonicalAtomV2StateJournalRecoveryLimits
+): Either.Either<CanonicalAtomV2StateJournalRecoveryLimits, CanonicalAtomV2StateJournalStoreError> => {
+  if (
+    typeof limits !== "object" ||
+    limits === null ||
+    !Number.isSafeInteger(limits.maximumRecords) ||
+    limits.maximumRecords < 1 ||
+    !Number.isSafeInteger(limits.maximumRecoveredJournalBytes) ||
+    limits.maximumRecoveredJournalBytes < 1
+  ) {
+    return Either.left(makeCanonicalAtomV2StateJournalStoreError(
+      "RECOVER",
+      "RECOVERY_LIMIT_EXCEEDED",
+      "journal recovery limits must be positive safe integers"
+    ))
+  }
+  return Either.right(Object.freeze({
+    maximumRecords: limits.maximumRecords,
+    maximumRecoveredJournalBytes: limits.maximumRecoveredJournalBytes
+  }))
+}
+
+const enforceRecoveryLimits = (
+  entries: ReadonlyArray<CanonicalAtomV2StateJournalEntry>,
+  limits: CanonicalAtomV2StateJournalRecoveryLimits
+): Either.Either<void, CanonicalAtomV2StateJournalStoreError> => {
+  if (entries.length > limits.maximumRecords) {
+    return Either.left(makeCanonicalAtomV2StateJournalStoreError(
+      "RECOVER",
+      "RECOVERY_LIMIT_EXCEEDED",
+      "journal recovery exceeds the record limit"
+    ))
+  }
+  let totalBytes = 0
+  for (const entry of entries) {
+    totalBytes += entry.bytes.byteLength
+    if (
+      !Number.isSafeInteger(totalBytes) ||
+      totalBytes > limits.maximumRecoveredJournalBytes
+    ) {
+      return Either.left(makeCanonicalAtomV2StateJournalStoreError(
+        "RECOVER",
+        "RECOVERY_LIMIT_EXCEEDED",
+        "journal recovery exceeds the byte limit"
+      ))
+    }
+  }
+  return Either.right(undefined)
+}
 
 const descriptorFor = (
   bytes: Uint8Array
@@ -166,6 +229,18 @@ export const makeCanonicalAtomV2StateJournalStoreMemoryLayer = (
       journalLineageId,
       schemaContentSha256,
       recover: Ref.get(entries).pipe(Effect.map(snapshotCanonicalAtomV2StateJournalRecovery)),
+      recoverWithin: (rawLimits) => {
+        const limits = snapshotCanonicalAtomV2StateJournalRecoveryLimits(rawLimits)
+        if (Either.isLeft(limits)) return Effect.fail(limits.left)
+        return Ref.get(entries).pipe(
+          Effect.flatMap((current) => {
+            const enforced = enforceRecoveryLimits(current, limits.right)
+            return Either.isLeft(enforced)
+              ? Effect.fail(enforced.left)
+              : Effect.succeed(snapshotCanonicalAtomV2StateJournalRecovery(current))
+          })
+        )
+      },
       publish: (input) => {
         const prepared = validateInput(input)
         if (Either.isLeft(prepared)) return Effect.fail(prepared.left)

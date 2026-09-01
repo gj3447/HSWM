@@ -234,6 +234,20 @@ export {
   type CanonicalAtomV2RdfProjectionSource
 } from "./canonical-atom-v2-rdf-projection.js"
 export {
+  HSWM_CANONICAL_ATOM_V2_DURABLE_RDF_MAX_JOURNAL_BYTES,
+  HSWM_CANONICAL_ATOM_V2_DURABLE_RDF_MAX_RECORDS,
+  HSWM_CANONICAL_ATOM_V2_DURABLE_RDF_PREFIX_COMMITMENT_V1,
+  HSWM_CANONICAL_ATOM_V2_DURABLE_RDF_PROJECTION_V1_CONTRACT_VERSION,
+  HSWM_CANONICAL_ATOM_V2_DURABLE_RDF_PROJECTION_V1_MEDIA_TYPE,
+  CanonicalAtomV2DurableRdfProjectionError,
+  canonicalAtomV2DurableRdfProjectionBytes,
+  compileCanonicalAtomV2DurableRdfProjection,
+  decodeCanonicalAtomV2DurableRdfProjectionBytes,
+  verifyCanonicalAtomV2DurableRdfProjection,
+  type CanonicalAtomV2DurableRdfProjection,
+  type CanonicalAtomV2DurableRdfProjectionManifest
+} from "./canonical-atom-v2-durable-rdf-projection.js"
+export {
   HSWM_CANONICAL_ATOM_V2_LOCAL_DURABLE_STATE,
   CanonicalAtomV2DurableRuntime,
   CanonicalAtomV2DurableRuntimeError,

@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto"
 import { constants } from "node:fs"
-import { link, lstat, mkdir, open, readdir, realpath, unlink } from "node:fs/promises"
+import { link, lstat, mkdir, open, opendir, readdir, realpath, unlink } from "node:fs/promises"
 import { dirname, isAbsolute, join, resolve } from "node:path"
 
 import { Effect, Either, Layer } from "effect"
@@ -12,9 +12,11 @@ import {
   CanonicalAtomV2StateJournalStoreError,
   makeCanonicalAtomV2StateJournalStoreError,
   snapshotCanonicalAtomV2StateJournalRecovery,
+  snapshotCanonicalAtomV2StateJournalRecoveryLimits,
   type CanonicalAtomV2StateJournalEntry,
   type CanonicalAtomV2StateJournalPublish,
   type CanonicalAtomV2StateJournalPublication,
+  type CanonicalAtomV2StateJournalRecoveryLimits,
   type CanonicalAtomV2StateJournalStoreFailure
 } from "./canonical-atom-v2-state-journal-store.js"
 import { makeCanonicalAtomV2ContentDescriptor } from "./canonical-atom-v2-content.js"
@@ -387,17 +389,64 @@ const publishObject = async (
   } finally { if (made) { try { await unlink(temporary) } catch { /* orphan temporary has no journal meaning */ } } }
 }
 
-const recover = async (identity: Identity, lineage: string, schema: string): Promise<ReadonlyArray<CanonicalAtomV2StateJournalEntry>> => {
+const recover = async (
+  identity: Identity,
+  lineage: string,
+  schema: string,
+  rawLimits: CanonicalAtomV2StateJournalRecoveryLimits | null = null
+): Promise<ReadonlyArray<CanonicalAtomV2StateJournalEntry>> => {
   await assertDirectory(identity.root, "RECOVER"); await assertDirectory(identity.objects, "RECOVER"); await assertDirectory(identity.slots, "RECOVER")
-  const entries: ReadonlyArray<import("node:fs").Dirent> = await readdir(identity.slots.path, { withFileTypes: true })
+  const limits = rawLimits === null
+    ? null
+    : snapshotCanonicalAtomV2StateJournalRecoveryLimits(rawLimits)
+  if (limits !== null && Either.isLeft(limits)) throw limits.left
+  let entries: ReadonlyArray<import("node:fs").Dirent>
+  if (limits === null) {
+    entries = await readdir(identity.slots.path, { withFileTypes: true })
+  } else {
+    const boundedEntries: Array<import("node:fs").Dirent> = []
+    const directory = await opendir(identity.slots.path)
+    try {
+      for await (const entry of directory) {
+        boundedEntries.push(entry)
+        if (boundedEntries.length > limits.right.maximumRecords) {
+          throw error("RECOVER", "RECOVERY_LIMIT_EXCEEDED", "journal recovery exceeds the record limit")
+        }
+      }
+    } finally {
+      try { await directory.close() } catch { /* async iteration may already close it */ }
+    }
+    entries = boundedEntries
+  }
   if (entries.some((entry) => !entry.isFile() || !DIGEST.test(entry.name))) throw error("RECOVER", "SLOT_LAYOUT_INVALID", "journal slots contain malformed or nonregular entry")
   const finalNames = entries.map((entry) => entry.name)
   const expected = new Set(Array.from({ length: finalNames.length }, (_, revision) => canonicalAtomV2StateJournalSlotName(lineage, schema, revision)))
   if (finalNames.length !== expected.size || finalNames.some((name) => !expected.has(name))) throw error("RECOVER", "SLOT_LAYOUT_INVALID", "journal slots must be exactly the contiguous revision prefix")
   const recovered: Array<CanonicalAtomV2StateJournalEntry> = []
+  let recoveredBytes = 0
   for (let revision = 0; revision < finalNames.length; revision += 1) {
     const slot = canonicalAtomV2StateJournalSlotName(lineage, schema, revision)
+    if (limits !== null) {
+      const stat = await lstat(join(identity.slots.path, slot))
+      if (!stat.isFile()) {
+        throw error("RECOVER", "SLOT_LAYOUT_INVALID", "journal slot changed to a nonregular entry during recovery")
+      }
+      if (
+        !Number.isSafeInteger(recoveredBytes + stat.size) ||
+        recoveredBytes + stat.size > limits.right.maximumRecoveredJournalBytes
+      ) {
+        throw error("RECOVER", "RECOVERY_LIMIT_EXCEEDED", "journal recovery exceeds the byte limit")
+      }
+    }
     const slotEntry = await readRegular(identity.slots, slot, "RECOVER")
+    recoveredBytes += slotEntry.bytes.byteLength
+    if (
+      limits !== null &&
+      (!Number.isSafeInteger(recoveredBytes) ||
+        recoveredBytes > limits.right.maximumRecoveredJournalBytes)
+    ) {
+      throw error("RECOVER", "RECOVERY_LIMIT_EXCEEDED", "journal recovery exceeds the byte limit")
+    }
     const descriptor = recordDescriptor(slotEntry.bytes, "RECOVER")
     let objectEntry
     try {
@@ -449,6 +498,7 @@ const makeLayer = (
     return CanonicalAtomV2StateJournalStore.of({
       journalLineageId, schemaContentSha256,
       recover: Effect.tryPromise({ try: () => recover(identity, journalLineageId, schemaContentSha256), catch: (cause) => cause instanceof Error && "_tag" in cause ? cause as CanonicalAtomV2StateJournalStoreFailure : error("RECOVER", "IO_FAILED", "journal recovery failed") }),
+      recoverWithin: (limits) => Effect.tryPromise({ try: () => recover(identity, journalLineageId, schemaContentSha256, limits), catch: (cause) => cause instanceof Error && "_tag" in cause ? cause as CanonicalAtomV2StateJournalStoreFailure : error("RECOVER", "IO_FAILED", "bounded journal recovery failed") }),
       publish: (input: CanonicalAtomV2StateJournalPublish) => Effect.tryPromise({ try: async (): Promise<CanonicalAtomV2StateJournalPublication> => {
         if (!Number.isSafeInteger(input.stateRevision) || input.stateRevision < 0 || !(input.bytes instanceof Uint8Array) || input.bytes.byteLength < 1 || input.bytes.byteLength > CANONICAL_ATOM_V2_STATE_JOURNAL_MAX_BYTES) throw error("PUBLISH", "BYTE_LENGTH_INVALID", "journal publication input is invalid")
         const expectedPredecessor = snapshotExpectedPredecessor(input.expectedPredecessor)

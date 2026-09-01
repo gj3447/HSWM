@@ -73,6 +73,24 @@ The current v2 boundary is intentionally small:
   deterministic profile, not a live durable-recovery attestation, executable
   compiler-artifact binding, RDFC-1.0 result, SHACL or PROV-O conformance,
   canonical write path, cognition, causal learning, or efficacy.
+- `canonical-atom-v2-durable-rdf-projection.ts` adds a public read-only
+  compiler over a registered durable runtime without exposing its raw journal
+  store or recovery witness. One bounded raw-journal recovery observation
+  supplies both the complete contiguous ordered journal prefix returned by
+  that observation and semantic replay when its declared record and journal-
+  byte limits succeed. Every exact record descriptor in the observed prefix is
+  folded into a predecessor hash-chain commitment, and
+  the existing RDF v1 artifact is recompiled from that same state and tail.
+  The raw journal enumeration and bytes are bounded before replay; total
+  referenced-content replay I/O, memory, and CPU are not. Fresh recovery,
+  prefix advance, visible-tail removal,
+  tampering and noncanonical bytes are tested. The public byte encoder issues
+  evidence only for module-compiled artifacts; external bytes and objects must
+  still pass fresh recovery verification. The outer claim is local observed-
+  prefix integrity only: concurrent or deleted later tails, global anti-rollback,
+  distributed durability, executable compiler binding, RDFC/SHACL/PROV,
+  cognition, causal learning and efficacy remain unproved; write-back is
+  forbidden.
 - `canonical-atom-v2-transition-evidence.ts` gives authorization-decision,
   provenance, pre-outcome trajectory, reference-effect, outcome-observation and
   rejection/quarantine evidence separate strict record codecs plus one exact

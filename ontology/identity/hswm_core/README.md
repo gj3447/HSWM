@@ -94,9 +94,25 @@ The first local `GE-1` checkpoint is now implemented in
 It emits a manifest-bound, role-preserving RDF 1.1 N-Quads view from a strictly
 self-consistent caller-supplied canonical schema/state/journal-tail bundle and
 refuses stale or tampered recompilation. Its compiler profile explicitly says
-`NOT_RDFC` and `writeBack = FORBIDDEN`; live durable-recovery composition,
-full-chain attestation, independent standards qualification, and the rest of
-`GE-1` remain open.
+`NOT_RDFC` and `writeBack = FORBIDDEN`.
+
+The next local slice is implemented in
+[`canonical-atom-v2-durable-rdf-projection.ts`](../../../src/hswm/effect-runtime/src/canonical-atom-v2-durable-rdf-projection.ts).
+It derives the state, tail, and complete contiguous ordered journal prefix
+returned by one replay-verified durable-runtime recovery observation when
+bounded raw-journal recovery succeeds within its declared record and byte
+limits, folds every exact record descriptor in that observed prefix into a
+predecessor hash-chain commitment, and
+exact-verifies the outer artifact after fresh file-Layer recovery. The raw
+journal enumeration and bytes are bounded before replay; total referenced-
+content replay I/O, memory, and CPU are not. It deliberately
+records `antiRollback = NOT_ATTESTED`: concurrent or deleted later tails and
+global anti-rollback,
+executable compiler identity, official N-Quads/RDFC qualification, SHACL,
+PROV-O, and the rest of `GE-1` remain open. Cross-project reuse boundaries are
+documented in
+[`HSWM_CROSS_PROJECT_GRAPH_HARNESS_ADOPTION_2026-09-01.md`](../../../docs/research/HSWM_CROSS_PROJECT_GRAPH_HARNESS_ADOPTION_2026-09-01.md);
+no sibling repository is made subordinate to this ontology.
 
 The same-day [`v1` projection](HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v1.json)
 is retained as the already-published source-digest snapshot before a Markdown

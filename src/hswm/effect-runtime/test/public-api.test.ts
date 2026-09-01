@@ -131,6 +131,21 @@ it("exports durable v2 replay without raw journal publication or receipt constru
   expect("snapshotCanonicalAtomV2StateJournalRecord" in PublicApi).toBe(
     false
   )
+  expect(
+    typeof PublicApi.compileCanonicalAtomV2DurableRdfProjection
+  ).toBe("function")
+  expect(
+    typeof PublicApi.verifyCanonicalAtomV2DurableRdfProjection
+  ).toBe("function")
+  expect(
+    typeof PublicApi.decodeCanonicalAtomV2DurableRdfProjectionBytes
+  ).toBe("function")
+  expect(
+    "recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal" in PublicApi
+  ).toBe(false)
+  expect(
+    "recoverCanonicalAtomV2DurableForReadOnlyProjectionInternal" in PublicApi
+  ).toBe(false)
 })
 
 it("exports read-safe typed transition evidence without an issuer or admission bypass", () => {

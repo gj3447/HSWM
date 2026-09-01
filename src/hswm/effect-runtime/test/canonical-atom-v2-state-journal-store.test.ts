@@ -54,3 +54,42 @@ it.effect("compares the complete predecessor descriptor rather than only its dig
   })
   return program.pipe(Effect.provide(makeCanonicalAtomV2StateJournalStoreMemoryLayer(lineage, schema)))
 })
+
+it.effect("fails closed when bounded recovery record, byte, or limit inputs are exceeded", () => {
+  const program = Effect.gen(function* () {
+    const store = yield* CanonicalAtomV2StateJournalStore
+    const first = yield* store.publish({
+      stateRevision: 0,
+      expectedPredecessor: null,
+      bytes: bytes("one")
+    })
+    yield* store.publish({
+      stateRevision: 1,
+      expectedPredecessor: first.recovery[0]?.descriptor ?? null,
+      bytes: bytes("two")
+    })
+
+    const exact = yield* store.recoverWithin({
+      maximumRecords: 2,
+      maximumRecoveredJournalBytes: 6
+    })
+    const failures = yield* Effect.forEach([
+      { maximumRecords: 1, maximumRecoveredJournalBytes: 6 },
+      { maximumRecords: 2, maximumRecoveredJournalBytes: 5 },
+      { maximumRecords: 0, maximumRecoveredJournalBytes: 6 },
+      {
+        maximumRecords: 2,
+        maximumRecoveredJournalBytes: Number.MAX_SAFE_INTEGER + 1
+      }
+    ], (limits) => store.recoverWithin(limits).pipe(Effect.either))
+
+    expect(exact).toHaveLength(2)
+    expect(failures.every((result) => Either.isLeft(result))).toBe(true)
+    for (const result of failures) {
+      if (Either.isLeft(result)) {
+        expect(result.left.reason).toBe("RECOVERY_LIMIT_EXCEEDED")
+      }
+    }
+  })
+  return program.pipe(Effect.provide(makeCanonicalAtomV2StateJournalStoreMemoryLayer(lineage, schema)))
+})

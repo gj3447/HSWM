@@ -1,6 +1,7 @@
 import { expect, it } from "@effect/vitest"
 import { execFileSync, spawnSync } from "node:child_process"
-import { readdirSync } from "node:fs"
+import { readFileSync, readdirSync } from "node:fs"
+import { join } from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url))
@@ -70,6 +71,19 @@ it("emits a canonical local-only source/build/import closure", () => {
     "src/canonical-atom-v2-dnrd5-durable-permit.ts"
   ])
 }, 120_000)
+
+it("keeps the read-only durable recovery projection seam source-local", () => {
+  const symbol = "recoverCanonicalAtomV2DurableForReadOnlyProjectionInternal"
+  const sourceRoot = join(packageRoot, "src")
+  const users = readdirSync(sourceRoot)
+    .filter((name) => name.endsWith(".ts"))
+    .filter((name) => readFileSync(join(sourceRoot, name), "utf8").includes(symbol))
+    .sort()
+  expect(users).toEqual([
+    "canonical-atom-v2-durable-rdf-projection.ts",
+    "canonical-atom-v2-durable-runtime.ts"
+  ])
+})
 
 it("refuses dynamically composed and constructor-chain loader properties while allowing ordinary indexing", () => {
   for (const [source, detail] of [

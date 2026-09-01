@@ -7,7 +7,7 @@
   "artifact_bindings": [
     {
       "path": "docs/research/HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md",
-      "sha256": "48a83333b8eed6e885770fccf61246a84217dd89823d1881057ca0d5c9f4fe80"
+      "sha256": "886f6cb222d983b060a4f0366ec6ab007004e325178d393f41e63c5ce208e8a0"
     },
     {
       "path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
@@ -40,16 +40,24 @@
     {
       "path": "docs/research/HSWM_PERSISTED_VERIFIED_ADMISSION_DECISION_2026-09-01.md",
       "sha256": "f6f41dc77e31157172efbf904cc31c78d6af7b504425e8242304be003b0c33e6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-rdf-projection.ts",
+      "sha256": "6bba63be02c36fd245c89a0739afc8def0336015133563be9e89f576007bee41"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/canonical-atom-v2-rdf-projection.test.ts",
+      "sha256": "6ce7130d961fd519d0ab6518076f2a8d466b40adba9629a041378c876fc438c1"
     }
   ],
   "expected_counts": {
-    "nodes": 46,
+    "nodes": 54,
     "anchors": 5,
-    "relations": 124,
-    "local_source_records": 9,
-    "external_source_records": 15,
+    "relations": 146,
+    "local_source_records": 11,
+    "external_source_records": 20,
     "capabilities": 5,
-    "current_surfaces": 5,
+    "current_surfaces": 6,
     "gaps": 4,
     "gates": 6
   },
@@ -177,7 +185,7 @@
           "LOCAL_SOURCE_RECORD"
         ],
         "source_path": "docs/research/HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md",
-        "source_sha256": "48a83333b8eed6e885770fccf61246a84217dd89823d1881057ca0d5c9f4fe80"
+        "source_sha256": "886f6cb222d983b060a4f0366ec6ab007004e325178d393f41e63c5ce208e8a0"
       }
     },
     {
@@ -405,6 +413,190 @@
       }
     },
     {
+      "uid": "sym:AbstractNode:hswm-graph-loop-source-local-src-hswm-effect-runtime-src-canonical-atom-v2-rdf-projection-2026-09-01-v2",
+      "labels": [
+        "AbstractNode",
+        "SourceDocument",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "canonical-atom-v2-rdf-projection.ts [2026-09-01-v2]",
+        "description": "Source-bound local artifact for this research projection.",
+        "authority_class": "MIXED_EXISTING_SOURCE",
+        "canonical_scope": "LOCAL_SOURCE_BINDING",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "epistemic_state": "SOURCE_BOUND",
+        "responsibility_owner": "graph_loop_source_custodian",
+        "claim_boundary": "A source binding proves only the bytes used by this projection, not the scientific content of the source.",
+        "projection_nonclaim": "SECONDARY_AI_RESEARCH_SYNTHESIS_AND_BOUNDED_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_CONSCIOUSNESS_PERSONHOOD_OR_SCALE_CLOSURE",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "LOCAL_SOURCE_RECORD"
+        ],
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-rdf-projection.ts",
+        "source_sha256": "6bba63be02c36fd245c89a0739afc8def0336015133563be9e89f576007bee41"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-graph-loop-source-local-src-hswm-effect-runtime-test-canonical-atom-v2-rdf-projection.test-2026-09-01-v2",
+      "labels": [
+        "AbstractNode",
+        "SourceDocument",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "canonical-atom-v2-rdf-projection.test.ts [2026-09-01-v2]",
+        "description": "Source-bound local artifact for this research projection.",
+        "authority_class": "MIXED_EXISTING_SOURCE",
+        "canonical_scope": "LOCAL_SOURCE_BINDING",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "epistemic_state": "SOURCE_BOUND",
+        "responsibility_owner": "graph_loop_source_custodian",
+        "claim_boundary": "A source binding proves only the bytes used by this projection, not the scientific content of the source.",
+        "projection_nonclaim": "SECONDARY_AI_RESEARCH_SYNTHESIS_AND_BOUNDED_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_CONSCIOUSNESS_PERSONHOOD_OR_SCALE_CLOSURE",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "LOCAL_SOURCE_RECORD"
+        ],
+        "source_path": "src/hswm/effect-runtime/test/canonical-atom-v2-rdf-projection.test.ts",
+        "source_sha256": "6ce7130d961fd519d0ab6518076f2a8d466b40adba9629a041378c876fc438c1"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-graph-loop-source-rdf-11-concepts-2026-09-01-v2",
+      "labels": [
+        "AbstractNode",
+        "SourceDocument",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "W3C RDF 1.1 Concepts and Abstract Syntax [2026-09-01-v2]",
+        "description": "External source recorded as a bounded engineering input.",
+        "authority_class": "EXTERNAL_SOURCE",
+        "canonical_scope": "EXTERNAL_SOURCE_METADATA",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "epistemic_state": "EXTERNAL_SOURCE_CHECKED",
+        "responsibility_owner": "graph_loop_external_source_custodian",
+        "claim_boundary": "External source relevance does not establish HSWM identity, implementation, or efficacy.",
+        "projection_nonclaim": "SECONDARY_AI_RESEARCH_SYNTHESIS_AND_BOUNDED_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_CONSCIOUSNESS_PERSONHOOD_OR_SCALE_CLOSURE",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "EXTERNAL_SOURCE_RECORD",
+          "STANDARD"
+        ],
+        "source_url": "https://www.w3.org/TR/rdf11-concepts/",
+        "source_type": "STANDARD",
+        "accessed_on": "2026-09-01",
+        "engineering_import": "A standard RDF dataset model with one default graph and zero or more named graphs.",
+        "does_not_establish": "That an RDF dataset is canonical HSWM state or cognition."
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-graph-loop-source-n-quads-11-2026-09-01-v2",
+      "labels": [
+        "AbstractNode",
+        "SourceDocument",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "W3C N-Quads 1.1 [2026-09-01-v2]",
+        "description": "External source recorded as a bounded engineering input.",
+        "authority_class": "EXTERNAL_SOURCE",
+        "canonical_scope": "EXTERNAL_SOURCE_METADATA",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "epistemic_state": "EXTERNAL_SOURCE_CHECKED",
+        "responsibility_owner": "graph_loop_external_source_custodian",
+        "claim_boundary": "External source relevance does not establish HSWM identity, implementation, or efficacy.",
+        "projection_nonclaim": "SECONDARY_AI_RESEARCH_SYNTHESIS_AND_BOUNDED_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_CONSCIOUSNESS_PERSONHOOD_OR_SCALE_CLOSURE",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "EXTERNAL_SOURCE_RECORD",
+          "STANDARD"
+        ],
+        "source_url": "https://www.w3.org/TR/n-quads/",
+        "source_type": "STANDARD",
+        "accessed_on": "2026-09-01",
+        "engineering_import": "A line-oriented standard exchange syntax for RDF datasets.",
+        "does_not_establish": "Canonical byte identity, signatures, truth, or write authority by itself."
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-graph-loop-source-rdfc-10-2026-09-01-v2",
+      "labels": [
+        "AbstractNode",
+        "SourceDocument",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "W3C RDF Dataset Canonicalization 1.0 [2026-09-01-v2]",
+        "description": "External source recorded as a bounded engineering input.",
+        "authority_class": "EXTERNAL_SOURCE",
+        "canonical_scope": "EXTERNAL_SOURCE_METADATA",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "epistemic_state": "EXTERNAL_SOURCE_CHECKED",
+        "responsibility_owner": "graph_loop_external_source_custodian",
+        "claim_boundary": "External source relevance does not establish HSWM identity, implementation, or efficacy.",
+        "projection_nonclaim": "SECONDARY_AI_RESEARCH_SYNTHESIS_AND_BOUNDED_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_CONSCIOUSNESS_PERSONHOOD_OR_SCALE_CLOSURE",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "EXTERNAL_SOURCE_RECORD",
+          "STANDARD"
+        ],
+        "source_url": "https://www.w3.org/TR/rdf-canon/",
+        "source_type": "STANDARD",
+        "accessed_on": "2026-09-01",
+        "engineering_import": "Canonical N-Quads for graph-isomorphism-independent hashing, comparison, and downstream signing.",
+        "does_not_establish": "A graph-signature scheme, denial-of-service immunity, or HSWM native-state identity."
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-graph-loop-source-json-ld-11-2026-09-01-v2",
+      "labels": [
+        "AbstractNode",
+        "SourceDocument",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "W3C JSON-LD 1.1 [2026-09-01-v2]",
+        "description": "External source recorded as a bounded engineering input.",
+        "authority_class": "EXTERNAL_SOURCE",
+        "canonical_scope": "EXTERNAL_SOURCE_METADATA",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "epistemic_state": "EXTERNAL_SOURCE_CHECKED",
+        "responsibility_owner": "graph_loop_external_source_custodian",
+        "claim_boundary": "External source relevance does not establish HSWM identity, implementation, or efficacy.",
+        "projection_nonclaim": "SECONDARY_AI_RESEARCH_SYNTHESIS_AND_BOUNDED_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_CONSCIOUSNESS_PERSONHOOD_OR_SCALE_CLOSURE",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "EXTERNAL_SOURCE_RECORD",
+          "STANDARD"
+        ],
+        "source_url": "https://www.w3.org/TR/json-ld/",
+        "source_type": "STANDARD",
+        "accessed_on": "2026-09-01",
+        "engineering_import": "Human- and API-oriented JSON serialization of RDF datasets.",
+        "does_not_establish": "Stable bytes without a separate canonicalization contract or authority over the native journal."
+      }
+    },
+    {
       "uid": "sym:AbstractNode:hswm-graph-loop-source-prov-o-2026-09-01-v2",
       "labels": [
         "AbstractNode",
@@ -466,6 +658,38 @@
         "accessed_on": "2026-09-01",
         "engineering_import": "Explicit shape-based validation for a data graph.",
         "does_not_establish": "That RDF is HSWM's required storage model or that validation produces cognition."
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-graph-loop-source-iso-gql-2024-2026-09-01-v2",
+      "labels": [
+        "AbstractNode",
+        "SourceDocument",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "ISO/IEC 39075:2024 GQL [2026-09-01-v2]",
+        "description": "External source recorded as a bounded engineering input.",
+        "authority_class": "EXTERNAL_SOURCE",
+        "canonical_scope": "EXTERNAL_SOURCE_METADATA",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "epistemic_state": "EXTERNAL_SOURCE_CHECKED",
+        "responsibility_owner": "graph_loop_external_source_custodian",
+        "claim_boundary": "External source relevance does not establish HSWM identity, implementation, or efficacy.",
+        "projection_nonclaim": "SECONDARY_AI_RESEARCH_SYNTHESIS_AND_BOUNDED_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_CONSCIOUSNESS_PERSONHOOD_OR_SCALE_CLOSURE",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "EXTERNAL_SOURCE_RECORD",
+          "STANDARD"
+        ],
+        "source_url": "https://www.iso.org/standard/76120.html",
+        "source_type": "STANDARD",
+        "accessed_on": "2026-09-01",
+        "engineering_import": "A portable language and data model for property-graph query implementations.",
+        "does_not_establish": "Lossless HSWM n-ary semantics, causal meaning, or permission to replace the native plane."
       }
     },
     {
@@ -1020,6 +1244,33 @@
       }
     },
     {
+      "uid": "sym:AbstractNode:hswm-graph-loop-current-canonical-rdf-projection-2026-09-01-v2",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "Canonical atom v2 RDF projection [2026-09-01-v2]",
+        "description": "A self-consistent caller-bundle-bound manifest compiles validated canonical atom state into a deterministic blank-node-free RDF 1.1 N-Quads profile with reified typed references and fail-closed recompilation.",
+        "authority_class": "SOURCE_INVENTORY",
+        "canonical_scope": "CURRENT_SOURCE_INVENTORY",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "epistemic_state": "ENGINEERING_SURFACE_ONLY",
+        "responsibility_owner": "graph_loop_current_surface_custodian",
+        "claim_boundary": "READ_ONLY_LOCAL_DETERMINISTIC_PROFILE_NOT_RDFC_SHACL_PROV_CAUSAL_OR_COGNITIVE_CONFORMANCE",
+        "projection_nonclaim": "SECONDARY_AI_RESEARCH_SYNTHESIS_AND_BOUNDED_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_CONSCIOUSNESS_PERSONHOOD_OR_SCALE_CLOSURE",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "CURRENT_IMPLEMENTATION_SURFACE"
+        ],
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-rdf-projection.ts",
+        "source_sha256": "6bba63be02c36fd245c89a0739afc8def0336015133563be9e89f576007bee41"
+      }
+    },
+    {
       "uid": "sym:AbstractNode:hswm-graph-loop-current-hypergraph-prototype-2026-09-01-v2",
       "labels": [
         "AbstractNode",
@@ -1161,13 +1412,13 @@
         "Hypothesis"
       ],
       "properties": {
-        "name": "Canonical-to-compiled projection manifest gap [2026-09-01-v2]",
-        "description": "No active generic contract proves every compiled edge/index entry derives from exact canonical atom/incidence versions with declared loss, write-back policy, and invalidation.",
+        "name": "Canonical-to-compiled projection portability gap [2026-09-01-v2]",
+        "description": "The local v1 RDF compiler now binds a validated caller-supplied schema/state/tail bundle, reified typed references, declared loss, no-writeback policy, and exact recompilation. Live durable-recovery composition, full-chain attestation, independent N-Quads/RDFC/SHACL qualification, and sparse/query adapters remain open.",
         "authority_class": "SECONDARY_AI",
         "canonical_scope": "CURRENT_GAP_OR_PROPOSED_CLOSURE",
         "ontology_kind": "GAP",
         "ontology_plane": "INQUIRY",
-        "epistemic_state": "SOURCE_INVENTORY_AND_PROPOSED_CONTRACT_INFERENCE",
+        "epistemic_state": "PARTIALLY_CLOSED_LOCAL_GE1_PROFILE_EXTERNAL_AND_LIVE_COMPOSITION_OPEN",
         "responsibility_owner": "graph_loop_gap_projection_manifest_custodian",
         "claim_boundary": "A recorded gap is neither failure of the HSWM target nor evidence for a mechanism; it names a bounded work item.",
         "projection_nonclaim": "SECONDARY_AI_RESEARCH_SYNTHESIS_AND_BOUNDED_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_CONSCIOUSNESS_PERSONHOOD_OR_SCALE_CLOSURE",
@@ -1447,6 +1698,14 @@
     {
       "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
       "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-current-canonical-rdf-projection-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "BOUNDED_PROJECTION_MEMBERSHIP",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_CONCEPT",
       "to_uid": "sym:AbstractNode:hswm-graph-loop-current-causal-program-2026-09-01-v2",
       "authority_class": "SYSTEM_DERIVED",
       "scope": "BOUNDED_PROJECTION_MEMBERSHIP",
@@ -1527,6 +1786,22 @@
     {
       "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
       "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-iso-gql-2024-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "BOUNDED_PROJECTION_MEMBERSHIP",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-json-ld-11-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "BOUNDED_PROJECTION_MEMBERSHIP",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_CONCEPT",
       "to_uid": "sym:AbstractNode:hswm-graph-loop-source-kubernetes-controllers-2026-09-01-v2",
       "authority_class": "SYSTEM_DERIVED",
       "scope": "BOUNDED_PROJECTION_MEMBERSHIP",
@@ -1591,6 +1866,22 @@
     {
       "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
       "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-local-src-hswm-effect-runtime-src-canonical-atom-v2-rdf-projection-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "BOUNDED_PROJECTION_MEMBERSHIP",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-local-src-hswm-effect-runtime-test-canonical-atom-v2-rdf-projection.test-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "BOUNDED_PROJECTION_MEMBERSHIP",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_CONCEPT",
       "to_uid": "sym:AbstractNode:hswm-graph-loop-source-local-src-hswm-selfmod-runtime-2026-09-01-v2",
       "authority_class": "SYSTEM_DERIVED",
       "scope": "BOUNDED_PROJECTION_MEMBERSHIP",
@@ -1608,6 +1899,14 @@
       "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
       "type": "HAS_CONCEPT",
       "to_uid": "sym:AbstractNode:hswm-graph-loop-source-loop-engineering-study-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "BOUNDED_PROJECTION_MEMBERSHIP",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-n-quads-11-2026-09-01-v2",
       "authority_class": "SYSTEM_DERIVED",
       "scope": "BOUNDED_PROJECTION_MEMBERSHIP",
       "status": "ACTIVE"
@@ -1648,6 +1947,22 @@
       "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
       "type": "HAS_CONCEPT",
       "to_uid": "sym:AbstractNode:hswm-graph-loop-source-prov-o-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "BOUNDED_PROJECTION_MEMBERSHIP",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-rdf-11-concepts-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "BOUNDED_PROJECTION_MEMBERSHIP",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-rdfc-10-2026-09-01-v2",
       "authority_class": "SYSTEM_DERIVED",
       "scope": "BOUNDED_PROJECTION_MEMBERSHIP",
       "status": "ACTIVE"
@@ -1951,6 +2266,102 @@
     {
       "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
       "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-local-src-hswm-effect-runtime-src-canonical-atom-v2-rdf-projection-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "SOURCE_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v2",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-local-src-hswm-effect-runtime-src-canonical-atom-v2-rdf-projection-2026-09-01-v2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "RESEARCH_INPUT",
+      "status": "CHECKED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-local-src-hswm-effect-runtime-test-canonical-atom-v2-rdf-projection.test-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "SOURCE_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v2",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-local-src-hswm-effect-runtime-test-canonical-atom-v2-rdf-projection.test-2026-09-01-v2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "RESEARCH_INPUT",
+      "status": "CHECKED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-rdf-11-concepts-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "SOURCE_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v2",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-rdf-11-concepts-2026-09-01-v2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "RESEARCH_INPUT",
+      "status": "CHECKED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-n-quads-11-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "SOURCE_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v2",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-n-quads-11-2026-09-01-v2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "RESEARCH_INPUT",
+      "status": "CHECKED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-rdfc-10-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "SOURCE_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v2",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-rdfc-10-2026-09-01-v2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "RESEARCH_INPUT",
+      "status": "CHECKED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-json-ld-11-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "SOURCE_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v2",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-json-ld-11-2026-09-01-v2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "RESEARCH_INPUT",
+      "status": "CHECKED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_SOURCE",
       "to_uid": "sym:AbstractNode:hswm-graph-loop-source-prov-o-2026-09-01-v2",
       "authority_class": "SYSTEM_DERIVED",
       "scope": "SOURCE_PROVENANCE",
@@ -1976,6 +2387,22 @@
       "from_uid": "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v2",
       "type": "HAS_SOURCE",
       "to_uid": "sym:AbstractNode:hswm-graph-loop-source-shacl-2026-09-01-v2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "RESEARCH_INPUT",
+      "status": "CHECKED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-iso-gql-2024-2026-09-01-v2",
+      "authority_class": "SYSTEM_DERIVED",
+      "scope": "SOURCE_PROVENANCE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v2",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-graph-loop-source-iso-gql-2024-2026-09-01-v2",
       "authority_class": "SECONDARY_AI",
       "scope": "RESEARCH_INPUT",
       "status": "CHECKED"

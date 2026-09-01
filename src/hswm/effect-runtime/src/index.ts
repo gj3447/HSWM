@@ -220,6 +220,20 @@ export {
   type CanonicalAtomV2StateJournalRecordDescriptor
 } from "./canonical-atom-v2-state-journal.js"
 export {
+  HSWM_CANONICAL_ATOM_V2_RDF_NQUADS_MEDIA_TYPE,
+  HSWM_CANONICAL_ATOM_V2_RDF_PROFILE,
+  HSWM_CANONICAL_ATOM_V2_RDF_PROJECTION_V1_CONTRACT_VERSION,
+  HSWM_CANONICAL_ATOM_V2_RDF_PROJECTION_V1_MEDIA_TYPE,
+  CanonicalAtomV2RdfProjectionError,
+  canonicalAtomV2RdfProjectionBytes,
+  compileCanonicalAtomV2RdfProjection,
+  decodeCanonicalAtomV2RdfProjectionBytes,
+  verifyCanonicalAtomV2RdfProjection,
+  type CanonicalAtomV2RdfProjection,
+  type CanonicalAtomV2RdfProjectionManifest,
+  type CanonicalAtomV2RdfProjectionSource
+} from "./canonical-atom-v2-rdf-projection.js"
+export {
   HSWM_CANONICAL_ATOM_V2_LOCAL_DURABLE_STATE,
   CanonicalAtomV2DurableRuntime,
   CanonicalAtomV2DurableRuntimeError,

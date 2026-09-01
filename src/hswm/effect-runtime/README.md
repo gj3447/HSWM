@@ -66,6 +66,13 @@ The current v2 boundary is intentionally small:
   cache—as the recovery truth. Every snapshot, history read and submit replays
   the chain, verifies schema/payload/envelope content and recomputes each pure
   transition and receipt before exposing state.
+- `canonical-atom-v2-rdf-projection.ts` compiles one strictly self-consistent,
+  caller-supplied canonical schema/state/journal-tail bundle into a read-only
+  manifest and a role-preserving, blank-node-free RDF 1.1 N-Quads dataset.
+  Exact recompilation rejects source drift and tampering. This is a local
+  deterministic profile, not a live durable-recovery attestation, executable
+  compiler-artifact binding, RDFC-1.0 result, SHACL or PROV-O conformance,
+  canonical write path, cognition, causal learning, or efficacy.
 - `canonical-atom-v2-transition-evidence.ts` gives authorization-decision,
   provenance, pre-outcome trajectory, reference-effect, outcome-observation and
   rejection/quarantine evidence separate strict record codecs plus one exact
@@ -127,6 +134,9 @@ The current v2 boundary is intentionally small:
   [TypeScript-to-Lean refinement obstruction](../../../docs/research/HSWM_TYPESCRIPT_LEAN_REFINEMENT_OBSTRUCTION_2026-08-31.md)
   and the
   [owner-bound outcome judgment boundary](../../../docs/research/HSWM_OWNER_BOUND_OUTCOME_JUDGMENT_BOUNDARY_2026-08-31.md).
+  The bounded standard-graph profile and its remaining qualification work are
+  recorded in the
+  [graph and loop engineering synthesis](../../../docs/research/HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md).
 
 The retained historical boundary is also intentionally small:
 

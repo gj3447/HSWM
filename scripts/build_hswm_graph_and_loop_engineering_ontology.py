@@ -33,6 +33,12 @@ SELFMOD_RUNTIME_PATH = Path("src/hswm/selfmod/runtime.py")
 ADMISSION_PATH = Path(
     "docs/research/HSWM_PERSISTED_VERIFIED_ADMISSION_DECISION_2026-09-01.md"
 )
+RDF_PROJECTION_PATH = Path(
+    "src/hswm/effect-runtime/src/canonical-atom-v2-rdf-projection.ts"
+)
+RDF_PROJECTION_TEST_PATH = Path(
+    "src/hswm/effect-runtime/test/canonical-atom-v2-rdf-projection.test.ts"
+)
 SOURCE_BINDING_PATHS = (
     SYNTHESIS_PATH,
     CONSTITUTION_PATH,
@@ -43,6 +49,8 @@ SOURCE_BINDING_PATHS = (
     CELLS_RUNTIME_PATH,
     SELFMOD_RUNTIME_PATH,
     ADMISSION_PATH,
+    RDF_PROJECTION_PATH,
+    RDF_PROJECTION_TEST_PATH,
 )
 
 SCHEMA_VERSION = "hswm-graph-and-loop-engineering-ontology/v2"
@@ -62,6 +70,38 @@ SAFE_RELATION = re.compile(r"[A-Z_][A-Z0-9_]*\Z")
 
 EXTERNAL_SOURCES = (
     (
+        "rdf-11-concepts",
+        "W3C RDF 1.1 Concepts and Abstract Syntax",
+        "https://www.w3.org/TR/rdf11-concepts/",
+        "STANDARD",
+        "A standard RDF dataset model with one default graph and zero or more named graphs.",
+        "That an RDF dataset is canonical HSWM state or cognition.",
+    ),
+    (
+        "n-quads-11",
+        "W3C N-Quads 1.1",
+        "https://www.w3.org/TR/n-quads/",
+        "STANDARD",
+        "A line-oriented standard exchange syntax for RDF datasets.",
+        "Canonical byte identity, signatures, truth, or write authority by itself.",
+    ),
+    (
+        "rdfc-10",
+        "W3C RDF Dataset Canonicalization 1.0",
+        "https://www.w3.org/TR/rdf-canon/",
+        "STANDARD",
+        "Canonical N-Quads for graph-isomorphism-independent hashing, comparison, and downstream signing.",
+        "A graph-signature scheme, denial-of-service immunity, or HSWM native-state identity.",
+    ),
+    (
+        "json-ld-11",
+        "W3C JSON-LD 1.1",
+        "https://www.w3.org/TR/json-ld/",
+        "STANDARD",
+        "Human- and API-oriented JSON serialization of RDF datasets.",
+        "Stable bytes without a separate canonicalization contract or authority over the native journal.",
+    ),
+    (
         "prov-o",
         "W3C PROV-O",
         "https://www.w3.org/TR/prov-o/",
@@ -76,6 +116,14 @@ EXTERNAL_SOURCES = (
         "STANDARD",
         "Explicit shape-based validation for a data graph.",
         "That RDF is HSWM's required storage model or that validation produces cognition.",
+    ),
+    (
+        "iso-gql-2024",
+        "ISO/IEC 39075:2024 GQL",
+        "https://www.iso.org/standard/76120.html",
+        "STANDARD",
+        "A portable language and data model for property-graph query implementations.",
+        "Lossless HSWM n-ary semantics, causal meaning, or permission to replace the native plane.",
     ),
     (
         "graphblas",
@@ -218,6 +266,13 @@ CAPABILITIES = (
 
 CURRENT_SURFACES = (
     (
+        "canonical-rdf-projection",
+        "Canonical atom v2 RDF projection",
+        RDF_PROJECTION_PATH,
+        "A self-consistent caller-bundle-bound manifest compiles validated canonical atom state into a deterministic blank-node-free RDF 1.1 N-Quads profile with reified typed references and fail-closed recompilation.",
+        "READ_ONLY_LOCAL_DETERMINISTIC_PROFILE_NOT_RDFC_SHACL_PROV_CAUSAL_OR_COGNITIVE_CONFORMANCE",
+    ),
+    (
         "hypergraph-prototype",
         "Reified hypergraph prototype",
         HYPERGRAPH_PATH,
@@ -257,9 +312,9 @@ CURRENT_SURFACES = (
 GAPS = (
     (
         "projection-manifest",
-        "Canonical-to-compiled projection manifest gap",
-        "No active generic contract proves every compiled edge/index entry derives from exact canonical atom/incidence versions with declared loss, write-back policy, and invalidation.",
-        "SOURCE_INVENTORY_AND_PROPOSED_CONTRACT_INFERENCE",
+        "Canonical-to-compiled projection portability gap",
+        "The local v1 RDF compiler now binds a validated caller-supplied schema/state/tail bundle, reified typed references, declared loss, no-writeback policy, and exact recompilation. Live durable-recovery composition, full-chain attestation, independent N-Quads/RDFC/SHACL qualification, and sparse/query adapters remain open.",
+        "PARTIALLY_CLOSED_LOCAL_GE1_PROFILE_EXTERNAL_AND_LIVE_COMPOSITION_OPEN",
     ),
     (
         "nary-delta-transaction",

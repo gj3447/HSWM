@@ -89,6 +89,15 @@ This new projection is `SECONDARY_AI` research infrastructure only. It does not
 write or become canonical HSWM state, run an agent loop, grant authority, or
 turn engineering qualification into causal-learning evidence.
 
+The first local `GE-1` checkpoint is now implemented in
+[`canonical-atom-v2-rdf-projection.ts`](../../../src/hswm/effect-runtime/src/canonical-atom-v2-rdf-projection.ts).
+It emits a manifest-bound, role-preserving RDF 1.1 N-Quads view from a strictly
+self-consistent caller-supplied canonical schema/state/journal-tail bundle and
+refuses stale or tampered recompilation. Its compiler profile explicitly says
+`NOT_RDFC` and `writeBack = FORBIDDEN`; live durable-recovery composition,
+full-chain attestation, independent standards qualification, and the rest of
+`GE-1` remain open.
+
 The same-day [`v1` projection](HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v1.json)
 is retained as the already-published source-digest snapshot before a Markdown
 rendering correction. `v2` is its non-overwriting source-correction follow-up;

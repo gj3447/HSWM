@@ -32,8 +32,13 @@ All sources below were checked on 2026-09-01. Each supports a limited engineerin
 
 | source | justified import | does not establish |
 |---|---|---|
+| [W3C RDF 1.1 Concepts and Abstract Syntax](https://www.w3.org/TR/rdf11-concepts/) | A standard RDF dataset model with one default graph and zero or more named graphs. | That an RDF dataset is canonical HSWM state or cognition. |
+| [W3C N-Quads 1.1](https://www.w3.org/TR/n-quads/) | A line-oriented standard exchange syntax for RDF datasets. | Canonical byte identity, signatures, truth, or write authority by itself. |
+| [W3C RDF Dataset Canonicalization 1.0](https://www.w3.org/TR/rdf-canon/) | Canonical N-Quads for graph-isomorphism-independent hashing, comparison, and downstream signing. | A graph-signature scheme, denial-of-service immunity, or HSWM native-state identity. |
+| [W3C JSON-LD 1.1](https://www.w3.org/TR/json-ld/) | Human- and API-oriented JSON serialization of RDF datasets. | Stable bytes without a separate canonicalization contract or authority over the native journal. |
 | [W3C PROV-O](https://www.w3.org/TR/prov-o/) | Entity, Activity, Agent, derivation, and delegation vocabulary for provenance. | Truth, causal credit, permission, or HSWM learning. |
 | [W3C SHACL](https://www.w3.org/TR/shacl/) | Explicit shape-based graph validation. | That RDF is HSWM's required storage model or that validation produces cognition. |
+| [ISO/IEC 39075:2024 GQL](https://www.iso.org/standard/76120.html) | A portable language and data model for property-graph query implementations. | Lossless HSWM n-ary semantics, causal meaning, or permission to replace the native plane. |
 | [GraphBLAS C API v2.1](https://graphblas.org/docs/GraphBLAS_API_C_v2.1.0.pdf) | Sparse matrix/vector and semiring compiled-plane option. | That a sparse matrix is a lossless n-ary canonical state or a learning rule. |
 | [Open Graphs and Monoidal Theories](https://arxiv.org/abs/1011.4114) | Typed open graphs and type-safe DPO rewriting reference. | Confluence, authorization, recovery, or topology learning. |
 | [Differential dataflow](https://www.cidrdb.org/cidr2013/Papers/CIDR13_Paper111.pdf) | Versioned incremental, nested iterative materialization reference. | Causal credit, semantic correctness, or outcome value. |
@@ -44,11 +49,19 @@ All sources below were checked on 2026-09-01. Each supports a limited engineerin
 | [Kubernetes controllers](https://kubernetes.io/docs/concepts/architecture/controller/) | Desired/actual reconciliation analogy for recovery and drift detection. | That target state may replace outcome-bound learning. |
 | [ReAct](https://arxiv.org/abs/2210.03629) and [Reflexion](https://arxiv.org/abs/2303.11366) | Interleaved action/observation and feedback-conditioned behavior baseline families. | Canonical revision, causal credit, topology learning, or HSWM identity. |
 
+The conservative interoperability baseline is therefore **RDF 1.1 Dataset +
+N-Quads 1.1 + RDFC-1.0**, with **JSON-LD 1.1**, **SHACL 2017 Core**, and a
+constrained **PROV-O** profile as auxiliary exchange and validation layers. RDF
+1.2 and its triple-term family remain an experimental adapter while the
+serialization stack is not fully at Recommendation status. GQL is a later
+compiled query-backend candidate, not the native representation.
+
 ## 4. Repository inventory
 
 | surface | already present | status boundary |
 |---|---|---|
 | native structural representation | [`src/hswm/substrate/hypergraph.py`](../../src/hswm/substrate/hypergraph.py) has a reified member-set representation and incidence matrix. | Prototype substrate, not the canonical atom schema or a production graph service. |
+| standard graph projection | [`canonical-atom-v2-rdf-projection.ts`](../../src/hswm/effect-runtime/src/canonical-atom-v2-rdf-projection.ts) compiles a strictly self-consistent caller-supplied schema/state/journal-tail bundle into a manifest-bound, reified, blank-node-free RDF 1.1 N-Quads profile. | Read-only local deterministic profile; not live durable recovery, full-chain attestation, RDFC-1.0, SHACL, PROV-O, cognition, or efficacy. |
 | self-authored structural state | [`src/hswm/selfmod/`](../../src/hswm/selfmod/) records memories, cells, routes, snapshots, budgets, and compare-and-swap commits. | Mutation is not outcome-gated causal learning by itself. |
 | event/effect loop | [`src/hswm/cells/runtime.py`](../../src/hswm/cells/runtime.py) separates admission, replay, budget, and post-commit effects. | Local execution engineering, not a living-harness proof. |
 | research loop | [`_research/causal_composition/`](../../_research/causal_composition/) requires sealed trajectories, independent outcomes, credit, revision, held-out behavior, and remove/restore controls. | The G0–G6 spine is a protocol; later gates remain unpassed. |
@@ -66,9 +79,61 @@ The following are views and contracts of one HSWM state, not new cognitive subsy
 | graph readout | Query intent, graph cut, serialization budget, omitted information, traceable use in an action. | Native-vs-compiled and lossy-projection controls. |
 | graph intervention | Identified add/remove/split/merge/specialize/restore delta and compiled mediation path. | Pre-registered held-out effect, removal loss, restoration, and matched alternatives. |
 
-First implement a **canonical-to-compiled projection manifest**. Every execution edge or sparse entry must identify its source atom/incidence version, declared loss, write-back permission, and invalidation condition. No clique, embedding, graph-database view, or LLM serialization can silently become canonical state.
+The first implementation checkpoint is a **canonical-to-compiled projection manifest**. Every emitted typed-reference node identifies its source atom version and source-array ordinal; the manifest binds the caller-supplied schema, state and journal-tail bytes, compiler profile, declared loss, write-back prohibition, and invalidation conditions. No clique, embedding, graph-database view, or LLM serialization can silently become canonical state.
 
 Second implement a **typed graph-delta transaction**. It must fail closed if source state, schema, owner, permit, match, dangling context, critical-pair policy, compiler mapping, or restore receipt is missing. A database transaction is useful but does not replace these semantic conditions.
+
+### 5.1 Standard graph interoperability profile
+
+The native and standard planes have different authority:
+
+| concern | required treatment |
+|---|---|
+| source of truth | Exact canonical JSON schema, atom envelopes, recovered state, and predecessor-bound journal records remain authoritative. |
+| RDF dataset | A derived, read-only RDF 1.1 Dataset uses fixed named graphs for state, schema, provenance, and projection evidence. Relation atoms remain nodes and their ordered, role-bearing references remain reified incidences; no clique expansion is lossless. |
+| exchange bytes | N-Quads 1.1 is the baseline exchange syntax. The manifest records media type, byte length, SHA-256, source digest, compiler identity, mapping, declared omissions, invalidation, and `writeBack = FORBIDDEN`. |
+| canonicalization | RDFC-1.0 is the target external canonicalization profile. Until an independent conforming processor and official test vectors are run, a locally sorted blank-node-free N-Quads export is described only by that narrower implemented profile. |
+| shape validation | Versioned SHACL 2017 Core shapes may qualify an exported graph. Conformance is structural evidence only, never semantic truth, Permit, outcome truth, causal credit, or efficacy. |
+| provenance | PROV-O terms may exchange asserted provenance. Native evidence hashes, owner contracts, and independent causal protocols remain authoritative. |
+| human/API view | JSON-LD 1.1 may be generated from the verified RDF dataset; its compacted spelling and remote context are not signed or canonical inputs. |
+| query backends | GQL/property-graph, GraphBLAS, Neo4j, and other adapters must declare mapping and loss and remain source-invalidated, read-only compiled views by default. |
+
+This split makes graph experiments portable without turning a storage standard
+into an ontology of mind. It also makes a negative backend or mapping result
+replaceable without changing the HSWM target.
+
+### 5.2 Implemented checkpoint and remaining qualification
+
+The TypeScript/Effect v1 compiler and its adversarial tests now establish a
+narrow local result:
+
+- a semantically validated canonical-atom-v2 state and exact schema/tail bytes
+  produce byte-deterministic, role-preserving reified N-Quads;
+- the source bundle, compiler profile, output bytes, mapping, losses,
+  no-writeback rule, counts, and claim ceiling travel in one canonical-JSON
+  manifest;
+- exact recompilation rejects stale source bindings, source changes,
+  noncanonical encodings, and projection tampering;
+- relation arity is not converted to a clique, and the same target in distinct
+  roles remains two distinct typed-reference resources;
+- an independent N3 parser accepts the golden N-Quads bytes and observes four
+  source-and-compiler-scoped named graphs with no blank-node terms.
+
+This is not yet the whole `GE-1` gate. The pure compiler checks a
+caller-supplied bundle for strict structure and self-consistency; it does not
+attest that the bundle came from one live durable recovery or replay the full
+journal chain. The executable compiler artifact is profile-bound rather than
+binary/source-hash-bound. Official W3C syntax vectors and cross-implementation
+qualification, RDFC test vectors, SHACL shapes, PROV-O mapping, and JSON-LD
+export also remain open.
+
+Run the implemented qualification slice with:
+
+```bash
+cd src/hswm/effect-runtime
+npm run check
+npx vitest run test/canonical-atom-v2-rdf-projection.test.ts
+```
 
 ## 6. Reinforced loop contract
 
@@ -101,6 +166,12 @@ The execution verdict, state-transition verdict, and research verdict are separa
 | `GL-3` | Later G3 topology morphogenesis and recovery experiment. | Fixed topology, matched random rewiring, or manual central repair explains result. | Existing G3 ceiling only if prerequisites pass. |
 
 `GE-*` and `LE-0` are engineering qualification only. `GL-*` remains subject to the existing G0–G6 order; downstream scale cannot rescue a failed local causal rung.
+
+Current disposition: `GE-0` has an active canonical-atom-v2 kernel but no new
+scientific claim; `GE-1` has the local deterministic projection checkpoint
+above and remains open for live-recovery and independent standards
+qualification. `GE-2`, `LE-0`, and every `GL-*` result remain unimplemented or
+unpassed as described in the table.
 
 ## 8. KG boundary
 

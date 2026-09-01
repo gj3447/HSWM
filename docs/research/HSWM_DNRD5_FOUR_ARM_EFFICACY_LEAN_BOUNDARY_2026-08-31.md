@@ -13,6 +13,9 @@
 >
 > **Formal artifact:**
 > [`HSWMDnrd5EfficacyBoundary.lean`](../../formal/HSWMDnrd5EfficacyBoundary.lean)
+>
+> **Subsequent structural refinement:**
+> [`causal-efficacy occurrence Lean bridge`](HSWM_CAUSAL_EFFICACY_OCCURRENCE_LEAN_BRIDGE_2026-09-01.md)
 
 ## 1. Canonical role and mechanism scope
 
@@ -141,3 +144,9 @@ This boundary emits no actual terminal, changes no current DNRD-5 status and
 creates no research receipt. DNRD-5 causal efficacy remains `NOT_EVALUATED`;
 HSWM efficacy, G0/G1, FCL laws, cognition and complete realization remain
 `UNJUDGED`.
+
+The subsequent occurrence bridge now derives the exact-sign Boolean layers
+from 300 typed four-arm rows and binds the classifier to certificate-backed
+admissions, typed calls and W0 snapshots. It deliberately leaves the real
+integrity, LCB, adapter and causal-identification meanings as explicit
+premises, so this document's no-result ceiling is unchanged.

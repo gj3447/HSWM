@@ -12,7 +12,9 @@
 > and the concrete field-checker boundary
 > [`HSWMCanonicalPermitEnvelope.lean`](../../formal/HSWMCanonicalPermitEnvelope.lean)
 > and the derived structural certificate projection
-> [`HSWMExecutionCertificateWire.lean`](../../formal/HSWMExecutionCertificateWire.lean)
+> [`HSWMExecutionCertificateWire.lean`](../../formal/HSWMExecutionCertificateWire.lean),
+> followed by the typed four-arm occurrence bridge
+> [`HSWMCausalEfficacyBridge.lean`](../../formal/HSWMCausalEfficacyBridge.lean)
 >
 > **Predecessor boundaries:**
 > [`atomic admission`](HSWM_ATOMIC_PERMIT_INVARIANT_ADMISSION_LEAN_2026-08-31.md),
@@ -217,6 +219,16 @@ states or be attached to another proposal. The attribution predicate remains
 an external identification premise, not something Lean derives from the score
 increase.
 
+The subsequent
+[`causal-efficacy occurrence bridge`](HSWM_CAUSAL_EFFICACY_OCCURRENCE_LEAN_BRIDGE_2026-09-01.md)
+replaces a free-standing one-suite attribution interface with a typed DNRD-5
+occurrence. It binds three accepted execution-certificate-backed admissions,
+the exact active successor and W0 control snapshots, typed proposal/probe
+calls, sealed four-arm rows and row-derived exact-sign decisions. Outcome
+truth, independent credit, real feedback inputs, state mediation, isolation,
+actual rollback, LCB computation and causal identification remain separate
+premises; no real occurrence is inferred from the new structure.
+
 ## 7. Machine-checked obstruction for the current TypeScript path
 
 The declared end-to-end audit profile records one present fact: the runtime
@@ -236,6 +248,7 @@ false:
 | externally true outcome evidence | absent |
 | independently identified causal credit | absent |
 | revision-bound LLM behavior improvement evidence | absent |
+| typed 300-block four-arm occurrence contract and exact row-to-sign-gate derivation | present, conditional schema only; no inhabited real occurrence |
 
 Lean proves:
 

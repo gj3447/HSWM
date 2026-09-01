@@ -150,6 +150,23 @@ future protocol이며 현재 GO 조건으로 소급되지 않는다.
 occurrence를 세 층으로 분리하며, 실제 양성 occurrence·Lean 신정리·runtime mutation은 만들지
 않는다. 전체 효능은 계속 `UNJUDGED`다.
 
+후속
+[`causal-efficacy occurrence Lean bridge`](docs/research/HSWM_CAUSAL_EFFICACY_OCCURRENCE_LEAN_BRIDGE_2026-09-01.md)는
+철학적 기전을 exact execution-certificate admission과 DNRD-5 occurrence 사이의 종속 타입
+계약으로 구체화한다. accepted execution wire와 같은 acceptance에 종속된 runtime semantic
+supplement가 세 admitted arm의 proposal·Permit·invariant·commit·runtime before/after를 결정하며,
+Lean은 그로부터 atomic admission과 conditional runtime refinement를 투영한다. 네 opaque fork,
+declared future-random order, typed `1 trajectory + 4 proposal + 4 probe`, 25-event chronology,
+genuine/placebo/escrow feedback source, delayed quarantine와 W0, rollback staging과 probe 시점의
+exact W0 root·compiled-readset·policy/compiler snapshot을 한 block에 결속한다. 300 block의 exact
+measurement rows에서 세 sign/Bonferroni count gate를 직접 계산하고 총 2,700 call ID의 전역
+유일성도 증명한다. 다만 실제 TypeScript/Effect adapter, canonical bytes/hash/signature, trusted
+key/time/nonce와 storage, provider call completeness, future randomness·blindness·isolation,
+outcome truth, independent causal credit, 실제 restore, score/LCB·독립 judge와 causal
+identification은 각각 명시 semantic premise다. 따라서 새 positive theorem은 그 모든 premise와
+derived `GO`를 함께 받을 때의 assumption-relative bounded claim일 뿐이며, 실제 occurrence나
+scientific terminal을 발행하지 않는다. 전체 효능은 계속 `UNJUDGED`다.
+
 그 다음
 [`DNRD-5 four-arm efficacy Lean boundary`](docs/research/HSWM_DNRD5_FOUR_ARM_EFFICACY_LEAN_BOUNDARY_2026-08-31.md)는
 이 간극을 메우기 위한 현재의 교체 가능한 기전 전용 판정기를 형식화한다. ACTIVE,

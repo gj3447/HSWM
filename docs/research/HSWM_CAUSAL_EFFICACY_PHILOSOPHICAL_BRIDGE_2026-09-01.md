@@ -17,6 +17,9 @@
 >
 > **Current replaceable experimental route:**
 > [`DNRD-5 four-arm efficacy boundary`](HSWM_DNRD5_FOUR_ARM_EFFICACY_LEAN_BOUNDARY_2026-08-31.md)
+>
+> **Subsequent formalization:**
+> [`causal-efficacy occurrence Lean bridge`](HSWM_CAUSAL_EFFICACY_OCCURRENCE_LEAN_BRIDGE_2026-09-01.md)
 
 ## 1. Answer first
 
@@ -289,28 +292,28 @@ layers:
    causal conclusions remain bounded to the frozen population, model,
    mechanism and assumptions.
 
-Current Lean proves exact local-kernel successor properties, selected claimed
-certificate bindings and chronology, and a fail-closed DNRD-5 terminal from
-supplied integrity/statistical flags. It does **not** yet prove a total evidence
-graph or derive the real rollback-root equality behind the supplied
-`exactW0BehavioralRestore` flag. A future typed occurrence checker should prove
-the complete reference closure, exact revision/runtime/arm bindings and
-rollback byte equalities while retaining crypto, execution, assignment,
-isolation, external-truth and causal-analysis semantics as named premises. Lean
-cannot manufacture historical execution, secret custody, organizational
-independence, external truth, provider isolation or finite-sample
-generalization.
+The subsequent typed occurrence bridge now proves the certificate-dependent
+revision/runtime/arm bindings, the exact `1 + 4 + 4` modeled call projection,
+the 300 exact analysis rows, and delayed/rollback equality to the complete W0
+behavioral snapshot including its compiled readset. It derives the three exact
+sign decisions from those rows rather than accepting free-standing exact-p
+flags. It still does **not** prove a total real evidence graph: crypto,
+execution, assignment, provider completeness, isolation, external truth,
+causal credit, actual restore, LCB computation and independent analysis remain
+separate named premises. Lean cannot manufacture historical execution, secret
+custody, organizational independence, external truth, provider isolation or
+finite-sample generalization.
 
 The existing theorem
 [`conditionalEvidenceBundleYieldsBoundedClaim`](../../formal/HSWMEndToEndRuntimeRefinement.lean)
 already composes an exact claimed
 runtime admission, Permit authentication, external truth/independent causal
 credit, sealed behavior measurement and explicit revision attribution into a
-bounded improvement claim. Its assumptions are correctly visible. The next
-formal delta is not to hide them, but to refine the free-standing attribution
-premise into a typed four-arm occurrence witness binding the exact candidate
-revision, runtime configuration, behavior projection and independent analysis
-receipt while preserving the external identification assumptions.
+bounded improvement claim. Its assumptions are correctly visible. The
+subsequent occurrence bridge refines that free-standing attribution interface
+into a typed four-arm witness while preserving the external identification
+assumptions; the remaining delta is deployment and occurrence evidence, not an
+unconditional theorem manufactured from status fields.
 
 ## 8. Falsification conditions
 
@@ -364,14 +367,15 @@ consciousness, FCL completion or full HSWM realization.
 
 ## 10. Proof-first implementation sequence
 
-The next work should proceed in this order:
+The work proceeds in this order:
 
-1. define one typed efficacy-occurrence binding from the exact admitted
-   candidate revision and runtime behavior projection to all four intervention
-   arms and the independent analysis receipt;
-2. prove in Lean that a complete integrity-valid occurrence, the frozen three-
-   contrast `GO` conditions and explicit instrument/assignment/analysis
-   semantic premises yield an assumption-relative bounded causal-efficacy claim
+1. **Completed formally:** define one typed efficacy-occurrence binding from
+   the exact admitted candidate revision and runtime behavior projection to all
+   four intervention arms and the independent analysis receipt;
+2. **Completed conditionally:** prove in Lean that a complete integrity-valid
+   occurrence, the frozen three-contrast `GO` conditions and explicit
+   instrument/assignment/analysis semantic premises yield an
+   assumption-relative bounded causal-efficacy claim
    and terminal classification; every missing structural binding must fail
    closed, and no absent external premise may be synthesized from a status flag;
 3. connect the complete execution-certificate producer and persistent Lean
@@ -384,12 +388,12 @@ The next work should proceed in this order:
 6. run the preregistered real occurrence without changing thresholds, controls,
    retries or stopping rules.
 
-Steps 1 and 2 refine proof order because the efficacy mechanism is being fixed
-before more adapter code. They do not supersede the existing execution-
+Steps 1 and 2 fixed the efficacy mechanism before more adapter code. They do
+not supersede the existing execution-
 certificate, trusted-adapter or occurrence gates; steps 3 through 6 resume and
 strengthen that same end-to-end sequence.
 
-This document completes only the philosophical mechanism specification needed
-for the next formal step. It adds no runtime mutation, Lean theorem, experiment,
-research receipt or positive scientific evidence. HSWM efficacy remains
-`UNJUDGED`.
+This document itself completed only the philosophical mechanism specification.
+The linked subsequent Lean bridge adds conditional structural theorems but no
+runtime mutation, inhabited experiment, research receipt or positive
+scientific evidence. HSWM efficacy remains `UNJUDGED`.

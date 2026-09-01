@@ -6,7 +6,7 @@
 >
 > **Target authority:** [HSWM Constitution](../canon/HSWM_CONSTITUTION_2026-08-20.md) and [HSWM Adaptive Research Strategy](../canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)
 >
-> **Machine projection:** [`HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v2.json`](../../ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v2.json)
+> **Machine projection:** [`HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v4.json`](../../ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v4.json)
 
 ## 1. Answer first
 
@@ -207,8 +207,18 @@ Current disposition: `GE-0` has an active canonical-atom-v2 kernel but no new
 scientific claim; `GE-1` now has the local deterministic projection and
 single-observation durable observed-prefix checkpoints above, and remains open
 for anti-rollback/executable binding and independent standards qualification.
-`GE-2`, `LE-0`, and every `GL-*` result remain unimplemented or unpassed as
-described in the table.
+`GE-2` and `LE-0` now have the bounded local engineering implementation in
+[`canonical-atom-v2-graph-loop-engineering.ts`](../../src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-engineering.ts): a source-bound delta is first recorded as intent in a private append-only control journal, may mutate only through the existing durable canonical CAS runtime, and is then recorded as committed, rejected, quarantined, restored, stopped, or escalated. The controller captures only the existing local-POSIX durable RDF projection, requires separate actor/verifier identifiers, enforces action/attempt bounds, rejects a stale source snapshot before mutation, and requires an explicit retry before a fresh attempt. Its implementation-level checks are covered by the sibling test. This is `GRAPH_TRANSACTION_ENGINEERING_ONLY` and `LOOP_CONTROL_ENGINEERING_ONLY`, not a passed causal-learning gate.
+
+The control journal is a local research-harness record, not a second canonical
+HSWM state or a cognitive rulebook. Its content descriptors establish local
+artifact presence and byte binding only. In particular, its reference
+authorization status is explicitly **not** canonical Permit; actor/verifier
+address separation does not prove outcome independence; the current generic v2
+runtime still refuses a non-null `traceRef`; the controller does not establish
+`Inv`, canonical Permit, causal credit, efficacy, global anti-rollback,
+distributed consensus, external outcome truth, or a self-running agent. Those
+remain prerequisites or falsifiable work for `GL-*`.
 
 ## 8. KG boundary
 

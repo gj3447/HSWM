@@ -14,7 +14,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 ONTOLOGY_PATH = Path(
-    "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v2.json"
+    "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v4.json"
 )
 SYNTHESIS_PATH = Path(
     "docs/research/HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md"
@@ -72,6 +72,15 @@ DNRD5_SOURCE_CLOSURE_TEST_PATH = Path(
 CROSS_PROJECT_ADOPTION_PATH = Path(
     "docs/research/HSWM_CROSS_PROJECT_GRAPH_HARNESS_ADOPTION_2026-09-01.md"
 )
+IMPLEMENTATION_PATH = Path(
+    "docs/research/HSWM_GRAPH_LOOP_ENGINEERING_IMPLEMENTATION_2026-09-01.md"
+)
+GRAPH_LOOP_ENGINEERING_PATH = Path(
+    "src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-engineering.ts"
+)
+GRAPH_LOOP_ENGINEERING_TEST_PATH = Path(
+    "src/hswm/effect-runtime/test/canonical-atom-v2-graph-loop-engineering.test.ts"
+)
 SOURCE_BINDING_PATHS = (
     SYNTHESIS_PATH,
     CONSTITUTION_PATH,
@@ -95,15 +104,18 @@ SOURCE_BINDING_PATHS = (
     PUBLIC_API_TEST_PATH,
     DNRD5_SOURCE_CLOSURE_TEST_PATH,
     CROSS_PROJECT_ADOPTION_PATH,
+    IMPLEMENTATION_PATH,
+    GRAPH_LOOP_ENGINEERING_PATH,
+    GRAPH_LOOP_ENGINEERING_TEST_PATH,
 )
 
-SCHEMA_VERSION = "hswm-graph-and-loop-engineering-ontology/v2"
-UID_RELEASE = "2026-09-01-v2"
+SCHEMA_VERSION = "hswm-graph-and-loop-engineering-ontology/v4"
+UID_RELEASE = "2026-09-01-v4"
 BUNDLE_UID = (
-    "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v2"
+    "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v4"
 )
-PROGRAM_UID = "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v2"
-PREVIOUS_PROGRAM_UID = "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01"
+PROGRAM_UID = "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v4"
+PREVIOUS_PROGRAM_UID = "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v3"
 NONCLAIM = (
     "SECONDARY_AI_RESEARCH_SYNTHESIS_AND_BOUNDED_KG_PROJECTION_ONLY_NOT_HSWM_"
     "COGNITION_LEARNING_EFFICACY_CONSCIOUSNESS_PERSONHOOD_OR_SCALE_CLOSURE"
@@ -382,6 +394,13 @@ CURRENT_SURFACES = (
         "One local Permit-bound decision is persisted with a local transition and revalidated on recovery.",
         "SOURCE_LEVEL_REFINEMENT_UNPROVED_AND_NOT_END_TO_END_HSWM",
     ),
+    (
+        "graph-loop-controller",
+        "GE-2 and LE-0 graph-loop engineering controller",
+        GRAPH_LOOP_ENGINEERING_PATH,
+        "A local create-only control journal records trigger, source-bound durable RDF snapshot, action, separately identified verifier outcome, delta intent, commit/reject/quarantine, retry, restore, stop, and escalation. Canonical mutation remains only in the predecessor-bound durable runtime.",
+        "LOCAL_RESEARCH_CONTROL_HARNESS_NOT_CANONICAL_HSWM_STATE_NOT_PERMIT_NOT_CAUSAL_CREDIT_OR_EFFICACY",
+    ),
 )
 
 GAPS = (
@@ -394,14 +413,14 @@ GAPS = (
     (
         "nary-delta-transaction",
         "Typed n-ary graph-delta transaction gap",
-        "The proposed rewrite transaction, conflict/critical-pair policy, quarantine, and semantic restore requirements are not an active generic n-ary graph runtime.",
-        "PROPOSED_ENGINEERING_PATH_NOT_IMPLEMENTED_CLOSURE",
+        "A local source-bound graph-delta controller now requires snapshot/read-set binding, separate verifier outcome, content-readable evidence descriptors, an explicit serializable CAS policy, durable intent, quarantine on stale/conflicting state, and exact-payload restore. Canonical Permit/Inv composition, semantic critical-pair analysis, distributed recovery, and behavioral restore remain open.",
+        "PARTIALLY_CLOSED_LOCAL_GE2_ENGINEERING_NOT_CANONICAL_PERMIT_OR_CAUSAL_EFFICACY",
     ),
     (
         "integrated-loop-controller",
         "Integrated graph-and-loop controller gap",
-        "Execution loops, mutation mechanics, and research gates exist in separate bounded surfaces; no one controller binds graph compilation, outcome credit, transition verdict, and research disposition.",
-        "SOURCE_INVENTORY_INFERENCE_NOT_EFFICACY_RESULT",
+        "A bounded local controller now persists trigger, graph snapshot, action, verifier verdict, delta disposition, retry, stop, escalation, and restore in one append-only research-control journal. It does not execute agents autonomously, prove outcome independence, issue Permit, or turn a committed delta into a scientific disposition.",
+        "PARTIALLY_CLOSED_LOCAL_LE0_ENGINEERING_NOT_AUTONOMOUS_LOOP_OR_CAUSAL_EFFICACY",
     ),
     (
         "causal-graph-efficacy",
@@ -475,7 +494,7 @@ ANCHORS = [
     },
     {
         "uid": PREVIOUS_PROGRAM_UID,
-        "name": "HSWM graph and loop engineering reinforcement program",
+        "name": "HSWM graph and loop engineering reinforcement program [2026-09-01-v3]",
         "required_labels": ["Concept", "ResearchProgram", "ResearchArtifact"],
     },
 ]
@@ -576,13 +595,13 @@ def build_data() -> dict[str, Any]:
                 name="HSWM graph and loop engineering ontology",
                 description=(
                     "Bounded KG projection of source-checked graph engineering, "
-                    "loop engineering, current repository surfaces, gaps, and "
-                    "proposed research gates."
+                    "loop engineering, current repository surfaces, partial local "
+                    "engineering closures, gaps, and research gates."
                 ),
                 scope="BOUNDED_RESEARCH_PROJECTION",
                 kind="ARTIFACT",
                 plane="INQUIRY",
-                state="PROPOSED_ENGINEERING_PATH_SCIENTIFICALLY_UNJUDGED",
+                state="LOCAL_ENGINEERING_IMPLEMENTATION_SCIENTIFICALLY_UNJUDGED",
                 owner="graph_loop_ontology_projection_custodian",
                 roles=["RESEARCH_BUNDLE", "GRAPH_ENGINEERING", "LOOP_ENGINEERING"],
                 boundary=(
@@ -599,12 +618,13 @@ def build_data() -> dict[str, Any]:
                 name="HSWM graph and loop engineering reinforcement program",
                 description=(
                     "Strengthen the replaceable graph and loop realization path "
-                    "without changing HSWM target identity or claim ceilings."
+                    "without changing HSWM target identity or claim ceilings; local "
+                    "GE-2/LE-0 engineering is present but remains unqualified as efficacy."
                 ),
                 scope="SECONDARY_AI_RESEARCH_PATH",
                 kind="PLAN",
                 plane="INQUIRY",
-                state="PROPOSED_ENGINEERING_PATH",
+                state="LOCAL_ENGINEERING_IMPLEMENTATION_WITH_OPEN_RESEARCH_GATES",
                 owner="graph_loop_research_program_custodian",
                 roles=[
                     "RESEARCH_PROGRAM",
@@ -891,6 +911,24 @@ def build_data() -> dict[str, Any]:
             ),
         )
     )
+    relations.extend(
+        (
+            _relation(
+                _current_surface_uid("graph-loop-controller"),
+                "REALIZES",
+                _gate_uid("ge-2"),
+                "LOCAL_ENGINEERING_IMPLEMENTATION",
+                "IMPLEMENTED_LOCAL_NOT_INDEPENDENTLY_QUALIFIED",
+            ),
+            _relation(
+                _current_surface_uid("graph-loop-controller"),
+                "REALIZES",
+                _gate_uid("le-0"),
+                "LOCAL_ENGINEERING_IMPLEMENTATION",
+                "IMPLEMENTED_LOCAL_NOT_INDEPENDENTLY_QUALIFIED",
+            ),
+        )
+    )
 
     category_counts = {
         "local_source_records": len(local_source_uids),
@@ -903,7 +941,7 @@ def build_data() -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
         "bundle_uid": BUNDLE_UID,
-        "status": "PROPOSED_ENGINEERING_PATH_SCIENTIFICALLY_UNJUDGED",
+        "status": "LOCAL_ENGINEERING_IMPLEMENTATION_SCIENTIFICALLY_UNJUDGED",
         "nonclaim": NONCLAIM,
         "source_accessed_on": SOURCE_ACCESS_DATE,
         "artifact_bindings": bindings,

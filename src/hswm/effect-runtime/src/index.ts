@@ -259,6 +259,27 @@ export {
   type CanonicalAtomV2DurableSubmitFailure
 } from "./canonical-atom-v2-durable-runtime.js"
 export {
+  HSWM_GRAPH_LOOP_CONTROL_JOURNAL_V1_MEDIA_TYPE,
+  HSWM_GRAPH_LOOP_CONTROL_MAX_EVENTS,
+  HSWM_GRAPH_LOOP_CONTROL_MAX_EVENT_BYTES,
+  HSWM_GRAPH_LOOP_ENGINEERING_V1_CONTRACT_VERSION,
+  GraphLoopControlError,
+  GraphLoopControlJournal,
+  GraphLoopControlJournalError,
+  GraphLoopEngineeringController,
+  makeGraphLoopControlJournalFileLayer,
+  makeGraphLoopEngineeringControllerLayer,
+  type GraphDeltaEvidence,
+  type GraphDeltaRequest,
+  type GraphDeltaResult,
+  type GraphLoopContract,
+  type GraphLoopControlEvent,
+  type GraphLoopControlJournalEntry,
+  type GraphLoopRestoreRequest,
+  type GraphLoopRunState,
+  type GraphLoopSnapshot
+} from "./canonical-atom-v2-graph-loop-engineering.js"
+export {
   HSWM_CANONICAL_TRANSITION_EVIDENCE_BUNDLE_V1_MEDIA_TYPE,
   HSWM_CANONICAL_TRANSITION_EVIDENCE_RECORD_V1_MEDIA_TYPE,
   HSWM_CANONICAL_TRANSITION_EVIDENCE_V1_CONTRACT_VERSION,

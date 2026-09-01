@@ -68,13 +68,15 @@ control, material result, HSWM cognition, causal learning, or efficacy.
 
 ## Graph and loop engineering reinforcement projection
 
-[`HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v2.json`](HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v2.json)
+[`HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v4.json`](HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v4.json)
 is a bounded, source-checked map of graph-engineering and loop-engineering
-inputs, current repository surfaces, explicit gaps, and prospective `GE-*`,
-`LE-0`, and `GL-*` gates. It keeps the canonical n-ary graph, its compiled
-projection, graph-delta transactions, and the outcome-bound research loop
-distinct while preserving the existing G0–G6 claim order. Its research synthesis
-is [`HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md`](../../../docs/research/HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md).
+inputs, current repository surfaces, partial local engineering closures,
+explicit gaps, and `GE-*`, `LE-0`, and `GL-*` gates. It keeps the canonical
+n-ary graph, its compiled projection, graph-delta transactions, and the
+outcome-bound research loop distinct while preserving the existing G0–G6 claim
+order. Its research synthesis is
+[`HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md`](../../../docs/research/HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md), and the local `GE-2`/`LE-0` implementation boundary is
+[`HSWM_GRAPH_LOOP_ENGINEERING_IMPLEMENTATION_2026-09-01.md`](../../../docs/research/HSWM_GRAPH_LOOP_ENGINEERING_IMPLEMENTATION_2026-09-01.md).
 
 Build and validate it locally with:
 
@@ -85,7 +87,7 @@ uv run --extra kg python scripts/upsert_hswm_graph_and_loop_engineering.py \
   --apply --source-config ~/.config/symposium-ontology/source.yaml
 ```
 
-This new projection is `SECONDARY_AI` research infrastructure only. It does not
+This current projection is `SECONDARY_AI` research infrastructure only. It does not
 write or become canonical HSWM state, run an agent loop, grant authority, or
 turn engineering qualification into causal-learning evidence.
 
@@ -116,8 +118,9 @@ no sibling repository is made subordinate to this ontology.
 
 The same-day [`v1` projection](HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v1.json)
 is retained as the already-published source-digest snapshot before a Markdown
-rendering correction. `v2` is its non-overwriting source-correction follow-up;
-neither version is a scientific result.
+rendering correction. `v2` is its non-overwriting source-correction follow-up.
+`v3` is the first local `GE-2`/`LE-0` engineering follow-up. `v4` is its
+non-overwriting runtime-correction follow-up. None is a scientific result.
 
 ## Current Ragnarok/PIDNA research projection
 

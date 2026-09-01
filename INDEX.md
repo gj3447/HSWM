@@ -135,6 +135,21 @@ bridge는 현재 전제로부터 따라오지 않는다. 이 반모델은 HSWM �
 판정이 아니라, 다음 positive bridge가 반드시 별도 intervention/control evidence를 가져야
 한다는 claim ceiling이다.
 
+2026-09-01
+[`causal-efficacy philosophical bridge`](docs/research/HSWM_CAUSAL_EFFICACY_PHILOSOPHICAL_BRIDGE_2026-09-01.md)는
+그 positive bridge가 왜 가능할 수 있는지를 코드 전에 고정한다. 제안된 교체 가능한 기전은
+outcome-bound state-mediated macroplasticity다. exact canonical revision이 다음 호출의 실제
+behavior readset·typed relation·tool affordance·억제/중단 disposition을 바꿀 때, 고정된
+foundation model도 다른 조건부 행동을 낼 수 있다. 그러나 state change, behavior change,
+score improvement, revision attribution과 normative admissibility는 서로 다른 주장이다.
+따라서 현 DNRD-5 route의 bounded efficacy는 complete integrity-valid occurrence에서 ACTIVE가
+outcome-independent sham, delayed-no-credit와 exact-W0 rollback의 frozen statistical gate를
+모두 통과할 때에만 assumption-relative하게 지지된다. stronger remove/re-admit와 추가 guardrail은
+future protocol이며 현재 GO 조건으로 소급되지 않는다.
+문서는 formal conformance, deployment-scoped adapter qualification과 preregistered causal
+occurrence를 세 층으로 분리하며, 실제 양성 occurrence·Lean 신정리·runtime mutation은 만들지
+않는다. 전체 효능은 계속 `UNJUDGED`다.
+
 그 다음
 [`DNRD-5 four-arm efficacy Lean boundary`](docs/research/HSWM_DNRD5_FOUR_ARM_EFFICACY_LEAN_BOUNDARY_2026-08-31.md)는
 이 간극을 메우기 위한 현재의 교체 가능한 기전 전용 판정기를 형식화한다. ACTIVE,

@@ -66,6 +66,34 @@ does not mutate HSWM, FCL, Ragnarok, PIDNA, or scientific-synthesis anchors.
 KG presence is publication of an `UNJUDGED` research design, not a passed
 control, material result, HSWM cognition, causal learning, or efficacy.
 
+## Graph and loop engineering reinforcement projection
+
+[`HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v2.json`](HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v2.json)
+is a bounded, source-checked map of graph-engineering and loop-engineering
+inputs, current repository surfaces, explicit gaps, and prospective `GE-*`,
+`LE-0`, and `GL-*` gates. It keeps the canonical n-ary graph, its compiled
+projection, graph-delta transactions, and the outcome-bound research loop
+distinct while preserving the existing G0–G6 claim order. Its research synthesis
+is [`HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md`](../../../docs/research/HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md).
+
+Build and validate it locally with:
+
+```bash
+uv run python scripts/build_hswm_graph_and_loop_engineering_ontology.py --check
+uv run --extra kg python scripts/upsert_hswm_graph_and_loop_engineering.py
+uv run --extra kg python scripts/upsert_hswm_graph_and_loop_engineering.py \
+  --apply --source-config ~/.config/symposium-ontology/source.yaml
+```
+
+This new projection is `SECONDARY_AI` research infrastructure only. It does not
+write or become canonical HSWM state, run an agent loop, grant authority, or
+turn engineering qualification into causal-learning evidence.
+
+The same-day [`v1` projection](HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v1.json)
+is retained as the already-published source-digest snapshot before a Markdown
+rendering correction. `v2` is its non-overwriting source-correction follow-up;
+neither version is a scientific result.
+
 ## Current Ragnarok/PIDNA research projection
 
 The fixed-role v1 below remains a retired historical artifact. It is not edited

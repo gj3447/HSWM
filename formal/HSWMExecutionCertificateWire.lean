@@ -580,7 +580,7 @@ theorem acceptedWireProjectsEnvelopeContext
     wire.permitEnvelope.document.claims.nonceDigest = wire.intent.nonceDigest := by
   have envelopeAccepted := (acceptedWireProjectsStructuralConditions accepted).2.1
   have bindings :=
-    (acceptedEnvelopeProjectsEveryCheckedBinding envelopeAccepted).2.2.1
+    (acceptedEnvelopeProjectsEveryCheckedBinding envelopeAccepted).2.2.2.1
   change wire.permitEnvelope.document.claims.expectedBindings =
     wire.expectedEnvelopeBindings adapters at bindings
   have executionId := congrArg PermitExpectedBindings.executionId bindings

@@ -104,6 +104,15 @@ The current v2 boundary is intentionally small:
   nonclaim literals and reports five missing composition/Permit/Inv/runtime
   witnesses as `BLOCKED_NOT_REFINED_TO_LEAN_ATOMIC_ADMISSION`; it exports no
   composition, mutation, Permit, validator or learning capability.
+- `canonical-atom-v2-verified-admission-gateway.ts` exposes a compatibility v1
+  live Lean gate and a separate v2 path. V2 publishes the exact canonical Lean
+  request and accepted response, their hashes, Permit envelope and pre/post
+  state in one immutable no-replace journal slot; fresh recovery reconstructs
+  the predecessor view and revalidates the stored decision without re-running
+  the executable. The CLI remains caller-configured and unpinned, nonce/head
+  uniqueness is local to the v2 namespace, v2-specific process-crash testing
+  is absent, and this is not a complete execution certificate or TS-to-Lean
+  source refinement.
 - The exact implementation and nonclaims are recorded in the
   [v2 reference-kernel handoff](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md)
   and the

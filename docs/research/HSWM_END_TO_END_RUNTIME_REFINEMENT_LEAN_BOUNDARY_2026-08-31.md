@@ -1,6 +1,6 @@
 # HSWM end-to-end runtime refinement Lean boundary
 
-> **Status:** `SECONDARY_AI_FORMAL_CONDITIONAL_REFINEMENT / LIVE_LOCAL_LEAN_ADMISSION_GATE / CHECKED_IN_TYPESCRIPT_NOT_UNIVERSALLY_REFINED / EMPIRICAL_EVIDENCE_ABSENT / SCIENTIFIC_UNJUDGED`
+> **Status:** `SECONDARY_AI_FORMAL_CONDITIONAL_REFINEMENT / PERSISTED_LOCAL_LEAN_DECISION_V2 / CHECKED_IN_TYPESCRIPT_NOT_UNIVERSALLY_REFINED / EMPIRICAL_EVIDENCE_ABSENT / SCIENTIFIC_UNJUDGED`
 >
 > **Target authority:**
 > [`HSWM Constitution`](../canon/HSWM_CONSTITUTION_2026-08-20.md)
@@ -50,16 +50,20 @@ The target is a real TypeScript/Effect execution that simulates the Lean
 LLM's behavior under a declared measurement contract. The present conceptual
 delta is a narrower live local gate: real Permit/state/recovery preflight is
 followed by an exact canonical request to an executable Lean admission kernel;
-only its accepted successor response permits protected local publication. This
-is a proved refinement of the bounded local Permit-commit model at the Lean
-kernel/wire boundary, not a universal TypeScript/Effect refinement of
-`AtomicLearnAdmission`.
+only its accepted successor response permits protected local publication. V2
+stores that request and response in the same immutable record and revalidates
+them from the recovered prefix. The corresponding decoded-entry implication is
+proved at the Lean model boundary; the runtime connection is tested rather than
+universally source-refined. This is not a universal TypeScript/Effect
+refinement of `AtomicLearnAdmission`.
 
 The checked-in runtime still publishes fail-closed obstruction profiles, generic
 read-only local eligibility and one separately bounded DNRD-5 local two-CAS
 history whose success terminal explicitly denies provider occurrence, learning
-and efficacy. The conditional theorem shape that a future full execution must
-inhabit remains:
+and efficacy. A v2 local path now persists the exact Lean request/accepted
+response in the same immutable slot and revalidates it on recovery; it still
+does not produce the later full execution certificate. The conditional theorem
+shape that a future full execution must inhabit remains:
 
 ```text
 accepted concrete execution certificate
@@ -243,7 +247,7 @@ false:
 | actual Permit issue under authoritative trust/key/time evidence | absent |
 | syntactically cycle-free execution-certificate contract and Lean structural projection | present, decoded-field abstraction only |
 | TypeScript/raw-byte execution-certificate checker refinement | absent |
-| a protected local commit following an exact wire decision from the configured CLI, with the checked-in Lean executable exercised by integration tests | present, bounded local gate only; executable identity unpinned |
+| a protected local commit containing the exact wire request/accepted decision from the configured CLI, revalidated from the recovered prefix | present in the separate v2 namespace; executable identity unpinned, v2-specific crash checkpoints absent |
 | one full canonical certificate-connected commit occurrence for this same transition | absent |
 | externally true outcome evidence | absent |
 | independently identified causal credit | absent |
@@ -307,9 +311,10 @@ The current proved result is therefore two-sided:
 The next valid route remains proof-first but must eventually cross into real
 execution:
 
-1. connect the frozen execution-intent/certificate wire contract to the live
-   Lean-gated local commit path, then prove that its concrete checker refines
-   the checked-in Lean structural model;
+1. add a post-commit full-certificate Lean audit wire/CLI and fixed
+   cross-language vectors, then produce its certificate from the actual v2
+   commit/recovery path and prove the concrete checker refines the checked-in
+   Lean structural model;
 2. extend the implemented canonical Permit envelope and caller-configured
    Lean CLI into a separately scoped, pinned issuer/executor boundary with
    authoritative workload identity, trusted time,

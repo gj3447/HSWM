@@ -2,7 +2,7 @@
 
 > **Date:** `2026-08-31`
 >
-> **Status:** `PARTIAL_ENGINEERING_CLOSURE / LIVE_LEAN_ADMISSION_GATE_LOCAL_ONLY / SOURCE_LEVEL_REFINEMENT_UNPROVED / OUTCOME_CAUSAL_AND_LLM_CONFIRMATION_ABSENT`
+> **Status:** `PARTIAL_ENGINEERING_CLOSURE / PERSISTED_LEAN_ADMISSION_DECISION_V2_LOCAL_ONLY / SOURCE_LEVEL_REFINEMENT_UNPROVED / OUTCOME_CAUSAL_AND_LLM_CONFIRMATION_ABSENT`
 >
 > **Scientific status:** `UNJUDGED`
 
@@ -15,7 +15,7 @@ new externally operated occurrence.
 | Claim | Checked-in evidence | Current decision | Confidence |
 |---|---|---|---|
 | TypeScript raw certificate fields conform to the Lean wire contract | complete strict codec/checker, one satisfiable raw vector, adversarial mutations, Lean decoded-field theorems | `CONFORMANCE_EVIDENCE_PRESENT / UNIVERSAL_SOURCE_REFINEMENT_UNPROVED` | high for tested vectors, unavailable for all TS executions |
-| a protected local journal write follows a live Lean admission decision | executable pure `VerifiedAdmissionKernel`, canonical projected request/decision wire, bounded native stdin/stdout CLI, real TS preflight and exact-response check, private one-use approval and protected namespace tests | `LIVE_LOCAL_GATE / PROCESS_LOCAL_API_BOUNDARY_ONLY / UNIVERSAL_SOURCE_REFINEMENT_UNPROVED` | high for the checked bounded path; unavailable for arbitrary processes or filesystem writers |
+| a protected local journal write follows and retains a live Lean admission decision | executable pure `VerifiedAdmissionKernel`, canonical projected request/decision wire, bounded native stdin/stdout CLI, real TS preflight and exact-response check; v2 stores the exact request/response bytes and hashes in the same immutable slot and revalidates them on restart | `PERSISTED_LOCAL_V2_GATE / NAMESPACE_AND_PROCESS_LOCAL_BOUNDARY / UNIVERSAL_SOURCE_REFINEMENT_UNPROVED` | high for the tested bounded path; unavailable for arbitrary processes or filesystem writers |
 | key, time and nonce participate in real Permit issuance | Node generates an Ed25519 keypair, a caller-relative system/injected clock fixes validity, `randomBytes(32)` mints a collision-checked one-use nonce digest, canonical envelope is signed and verified | `REAL_LOCAL_CRYPTO_OCCURRENCE / NOT_AUTHORITATIVE_PRODUCTION_ISSUANCE_OR_TRUSTED_TIME` | high for the local test process |
 | Permit consumption and successor publication use an atomic no-replace local publication | verified envelope, nonce, intent, pre/post state bytes and heads are bound in one prepared-and-`fsync`ed file, then hard-linked into one successor slot; independent-process `SIGKILL` recovery and concurrent-winner tests pass | `LOCAL_POSIX_PROCESS_CRASH_EVIDENCE / NOT_POWER_LOSS_OR_DISTRIBUTED_LINEARIZABILITY_PROOF` | moderate |
 | outcome is externally true and causal credit independently identified | no new outcome corpus, private-answer opening, independent evaluator receipt or independent judge result exists | `NOT_ESTABLISHED` | high confidence in the negative audit |
@@ -41,9 +41,11 @@ one prospective state transition. The present delta is narrower: TypeScript
 now performs its real local Permit/state/recovery preflight before asking a
 bounded Lean native CLI for a canonical admission decision; only an exact
 accepted response mints the private one-use approval that reaches the separate
-protected journal namespace. This proves neither the adapters nor TypeScript
-as a whole. Truth, credit and efficacy remain outside the result until real
-evidence exists.
+protected journal namespace. The v2 route additionally stores that exact
+request and response inside the same immutable commit bytes and rechecks them
+from the reconstructed predecessor view after restart. This proves neither the
+adapters nor TypeScript as a whole. Truth, credit and efficacy remain outside
+the result until real evidence exists.
 
 ## Formal and executable engineering result
 
@@ -113,6 +115,16 @@ distinct protected journal namespace. Chained-admission and different-lineage
 tests, including two aliases of one physical root, demonstrate the intended
 local boundary.
 
+The subsequent
+[`persisted verified-admission decision boundary`](HSWM_PERSISTED_VERIFIED_ADMISSION_DECISION_2026-09-01.md)
+keeps v1 intact and adds a v2 namespace. Its immutable record contains the
+exact canonical request, accepted response and their hashes together with the
+Permit/state transition. Recovery reconstructs each predecessor view and
+revalidates those exact bytes without re-running a potentially changed CLI.
+Lean separately proves the corresponding decoded-entry request, local-record,
+successor, nonce and head projections and fail-closed substitutions. This is
+not a source-level theorem joining TypeScript/POSIX to Lean.
+
 ## Actual local key, time, nonce, commit and recovery
 
 [`canonical-atom-v2-local-permit-commit.ts`](../../src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit.ts)
@@ -149,12 +161,15 @@ key is ephemeral and cannot resume issuance after process death; only its
 public trust snapshot can be retained for record verification. Therefore the
 precise claim is bounded local POSIX evidence, not a production authority,
 trusted time, durable key custody, distributed transaction or power-loss
-proof. The new protected gateway does not persist the Lean decision in
-recovery, cannot exceed the 128 recovered-nonce wire ceiling without a new
-contract/checkpoint, and leaves the legacy raw namespace available for public
-compatibility. Its CLI path is caller-configured and unpinned. The private
-approval is an in-process API boundary, not cross-process or same-UID
-`node:fs` unbypassability.
+proof. The v1 protected gateway does not persist its Lean decision; the v2
+gateway does, but cannot exceed the 128 recovered-nonce wire ceiling without a
+new contract/checkpoint and leaves both older namespaces available for public
+compatibility. Nonce/head consumption is v2-namespace-local rather than global
+across those stores. Its CLI path is caller-configured and unpinned. The
+private approval is an in-process API boundary, not cross-process or same-UID
+`node:fs` unbypassability. V2-specific `SIGKILL` checkpoint tests remain absent,
+so the earlier v1 process-crash evidence is not silently promoted to a v2 crash
+result.
 
 ## Outcome and LLM evidence validation
 
@@ -195,8 +210,9 @@ launching a smaller convenient run here would not answer the requested claim.
 
 ## What remains before the whole chain is solved
 
-1. Connect the complete certificate producer to this gated local commit
-   occurrence, rather than validating only a constructed full vector.
+1. Add a post-commit Lean full-certificate audit CLI and cross-language fixed
+   vectors, then derive a complete certificate from an actual v2 receipt and
+   fresh recovery rather than only from a constructed vector.
 2. Replace the caller-configured/unpinned CLI and process-local protected-root
    boundary with an independently deployable authority if cross-process or
    same-UID filesystem non-bypassability is required.

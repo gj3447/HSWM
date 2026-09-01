@@ -406,6 +406,8 @@ export {
 export {
   HSWM_LOCAL_PERMIT_COMMIT_STATUS,
   HSWM_LOCAL_PERMIT_COMMIT_V1,
+  HSWM_VERIFIED_ADMISSION_COMMIT_V2,
+  HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS,
   LocalPermitCommitError,
   makeEphemeralLocalPermitIssuer,
   makeLocalPermitCommitStore,
@@ -417,17 +419,26 @@ export {
   type LocalPermitIssuer,
   type LocalPermitIssuerConfig,
   type LocalPermitRecovery,
-  type LocalPermitVerifierContext
+  type LocalPermitVerifierContext,
+  type VerifiedAdmissionCommitV2Receipt,
+  type VerifiedAdmissionDecisionArtifact,
+  type VerifiedAdmissionLocalCommitV2Receipt,
+  type VerifiedAdmissionRecoveryV2
 } from "./canonical-atom-v2-local-permit-commit.js"
 export {
   HSWM_VERIFIED_ADMISSION_GATEWAY_STATUS,
   HSWM_VERIFIED_ADMISSION_GATEWAY_V1,
+  HSWM_VERIFIED_ADMISSION_GATEWAY_V2,
+  HSWM_VERIFIED_ADMISSION_GATEWAY_V2_STATUS,
   HSWM_VERIFIED_ADMISSION_WIRE_V1,
   VerifiedAdmissionGatewayError,
   makeVerifiedAdmissionGateway,
+  makeVerifiedAdmissionGatewayV2,
   type VerifiedAdmissionGateway,
   type VerifiedAdmissionGatewayConfig,
-  type VerifiedAdmissionGatewayReceipt
+  type VerifiedAdmissionGatewayReceipt,
+  type VerifiedAdmissionGatewayV2,
+  type VerifiedAdmissionGatewayV2Receipt
 } from "./canonical-atom-v2-verified-admission-gateway.js"
 export {
   HSWM_CANONICAL_PERMIT_CANONICALIZATION,

@@ -152,7 +152,8 @@ const syncDirectory = async (path: string): Promise<void> => {
 
 const readStableCommitFile = async (
   path: string,
-  errorCode: "RECOVERY_INVALID" | "COMMIT_OUTCOME_UNKNOWN"
+  errorCode: "RECOVERY_INVALID" | "COMMIT_OUTCOME_UNKNOWN",
+  maximumBytes = MAX_LOCAL_RECORD_BYTES
 ): Promise<Uint8Array> => {
   let handle
   try {
@@ -162,7 +163,7 @@ const readStableCommitFile = async (
   }
   try {
     const before = await handle.stat()
-    if (!before.isFile() || (before.mode & 0o777) !== 0o400 || before.size < 1 || before.size > MAX_LOCAL_RECORD_BYTES) {
+    if (!before.isFile() || (before.mode & 0o777) !== 0o400 || before.size < 1 || before.size > maximumBytes) {
       throw failure(errorCode, "local commit slot must be an immutable bounded 0400 regular file")
     }
     const buffer = Buffer.alloc(before.size + 1)
@@ -690,5 +691,328 @@ export const makeVerifiedAdmissionCommitBackend = (
       return Object.freeze({ receipt, admission })
     }),
     recover: store.recover
+  })
+}
+
+/*
+ * V2 deliberately does not alter the v1 protected namespace above.  Unlike
+ * v1's private approval identity, it makes the exact canonical wire exchange
+ * part of the immutable journal record so a fresh process can re-check the
+ * decision-to-publication binding during recovery.
+ */
+export const HSWM_VERIFIED_ADMISSION_COMMIT_V2 = "hswm-verified-admission-commit/v2" as const
+export const HSWM_VERIFIED_ADMISSION_WIRE_V1 = "hswm-verified-admission-wire/v1" as const
+export const HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS =
+  "LOCAL_POSIX_ATOMIC_NO_REPLACE_EXACT_PERSISTED_VERIFIED_ADMISSION_WIRE_DECISION_RECOVERY_REVALIDATED_V2_PROCESS_CRASH_NOT_TESTED_CALLER_RELATIVE_PUBLIC_TRUST_AND_TIME_NAMESPACE_LOCAL_NONCE_AND_HEAD_NOT_GLOBAL_NOT_AUTHORITATIVE_NOT_DISTRIBUTED_NOT_TRUSTED_TIME_NOT_PRIVATE_ISSUER_RECOVERY_NOT_POWER_LOSS_NOT_LEAN_REFINEMENT" as const
+const MAX_VERIFIED_ADMISSION_REQUEST_BYTES = 65_536
+const MAX_VERIFIED_ADMISSION_RESPONSE_BYTES = 131_072
+const MAX_VERIFIED_ADMISSION_RECORD_BYTES = MAX_LOCAL_RECORD_BYTES +
+  Math.ceil((MAX_VERIFIED_ADMISSION_REQUEST_BYTES + MAX_VERIFIED_ADMISSION_RESPONSE_BYTES) * 4 / 3) + 4_096
+
+export interface VerifiedAdmissionDecisionArtifact {
+  readonly wireContractVersion: typeof HSWM_VERIFIED_ADMISSION_WIRE_V1
+  readonly canonicalRequestBytes: Uint8Array
+  readonly canonicalResponseBytes: Uint8Array
+  readonly requestSha256: string
+  readonly decisionSha256: string
+}
+
+interface PersistedVerifiedAdmissionDecisionArtifact {
+  readonly wireContractVersion: typeof HSWM_VERIFIED_ADMISSION_WIRE_V1
+  readonly canonicalRequestBytesBase64Url: string
+  readonly canonicalResponseBytesBase64Url: string
+  readonly requestSha256: string
+  readonly decisionSha256: string
+}
+
+interface VerifiedAdmissionCommitRecordV2 extends Omit<LocalPermitCommitRecord, "contractVersion" | "status" | "_tag"> {
+  readonly _tag: "VerifiedAdmissionCommitRecord"
+  readonly contractVersion: typeof HSWM_VERIFIED_ADMISSION_COMMIT_V2
+  readonly status: typeof HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS
+  readonly verifiedAdmission: PersistedVerifiedAdmissionDecisionArtifact
+}
+
+const PersistedVerifiedAdmissionDecisionArtifactSchema: Schema.Schema<PersistedVerifiedAdmissionDecisionArtifact> = Schema.Struct({
+  wireContractVersion: Schema.Literal(HSWM_VERIFIED_ADMISSION_WIRE_V1),
+  canonicalRequestBytesBase64Url: Base64Url,
+  canonicalResponseBytesBase64Url: Base64Url,
+  requestSha256: Digest,
+  decisionSha256: Digest
+})
+
+const VerifiedAdmissionCommitRecordV2Schema: Schema.Schema<VerifiedAdmissionCommitRecordV2> = Schema.Struct({
+  _tag: Schema.Literal("VerifiedAdmissionCommitRecord"),
+  contractVersion: Schema.Literal(HSWM_VERIFIED_ADMISSION_COMMIT_V2),
+  status: Schema.Literal(HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS),
+  committedAt: Instant,
+  verificationTime: Instant,
+  envelopeBytesBase64Url: Base64Url,
+  envelopeSha256: Digest,
+  preStateBytesBase64Url: Base64Url,
+  postStateBytesBase64Url: Base64Url,
+  executionIntentDigest: Digest,
+  nonceDigest: Digest,
+  priorHead: HeadSchema,
+  expectedNextHead: HeadSchema,
+  verifiedAdmission: PersistedVerifiedAdmissionDecisionArtifactSchema
+})
+
+export interface VerifiedAdmissionLocalCommitV2Receipt extends Omit<LocalPermitCommitReceipt, "status"> {
+  readonly status: typeof HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS
+}
+
+export interface VerifiedAdmissionCommitV2Receipt {
+  readonly commit: VerifiedAdmissionLocalCommitV2Receipt
+  readonly decision: VerifiedAdmissionDecisionArtifact
+}
+
+export interface VerifiedAdmissionRecoveryV2 {
+  readonly commits: ReadonlyArray<VerifiedAdmissionCommitV2Receipt>
+  readonly head: CanonicalPermitHeadBinding | null
+  readonly status: typeof HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS
+}
+
+export interface VerifiedAdmissionCommitBackendV2 {
+  readonly submit: (request: LocalPermitCommitRequest) => Effect.Effect<VerifiedAdmissionCommitV2Receipt, LocalPermitCommitError>
+  readonly recover: () => Effect.Effect<VerifiedAdmissionRecoveryV2, LocalPermitCommitError>
+}
+
+/**
+ * This validator supplies the non-storage meaning of the persisted wire
+ * bytes.  It receives the predecessor view reconstructed from immutable
+ * records; a false/Left result invalidates recovery rather than trusting a
+ * historical status string or re-running a potentially changed CLI.
+ */
+export type VerifiedAdmissionRecoveryValidator = (
+  preflight: VerifiedAdmissionPreflight,
+  artifact: VerifiedAdmissionDecisionArtifact
+) => Either.Either<void, LocalPermitCommitError>
+
+type VerifiedAdmissionHookV2 = (
+  preflight: VerifiedAdmissionPreflight,
+  mintApproval: (artifact: VerifiedAdmissionDecisionArtifact) => object
+) => Effect.Effect<object, LocalPermitCommitError>
+
+const exactBase64UrlBytes = (
+  value: string,
+  maximum: number,
+  errorCode: "RECOVERY_INVALID" | "PERMIT_VERIFICATION_FAILED"
+): Either.Either<Uint8Array, LocalPermitCommitError> => {
+  try {
+    const bytes = Uint8Array.from(Buffer.from(value, "base64url"))
+    return bytes.byteLength > 0 && bytes.byteLength <= maximum &&
+      Buffer.from(bytes).toString("base64url") === value
+      ? Either.right(bytes)
+      : Either.left(failure(errorCode, "verified-admission artifact bytes are empty, oversized, or noncanonical base64url"))
+  } catch {
+    return Either.left(failure(errorCode, "verified-admission artifact bytes cannot be decoded"))
+  }
+}
+
+const copyVerifiedAdmissionArtifact = (
+  artifact: VerifiedAdmissionDecisionArtifact,
+  errorCode: "RECOVERY_INVALID" | "PERMIT_VERIFICATION_FAILED"
+): Either.Either<VerifiedAdmissionDecisionArtifact, LocalPermitCommitError> => {
+  if (artifact.wireContractVersion !== HSWM_VERIFIED_ADMISSION_WIRE_V1 ||
+      !(artifact.canonicalRequestBytes instanceof Uint8Array) || !(artifact.canonicalResponseBytes instanceof Uint8Array) ||
+      !/^[0-9a-f]{64}$/.test(artifact.requestSha256) || !/^[0-9a-f]{64}$/.test(artifact.decisionSha256) ||
+      artifact.canonicalRequestBytes.byteLength < 1 || artifact.canonicalRequestBytes.byteLength > MAX_VERIFIED_ADMISSION_REQUEST_BYTES ||
+      artifact.canonicalResponseBytes.byteLength < 1 || artifact.canonicalResponseBytes.byteLength > MAX_VERIFIED_ADMISSION_RESPONSE_BYTES ||
+      digest(artifact.canonicalRequestBytes) !== artifact.requestSha256 ||
+      digest(artifact.canonicalResponseBytes) !== artifact.decisionSha256) {
+    return Either.left(failure(errorCode, "verified-admission artifact does not have exact bounded wire bytes and hashes"))
+  }
+  return Either.right(Object.freeze({
+    wireContractVersion: HSWM_VERIFIED_ADMISSION_WIRE_V1,
+    canonicalRequestBytes: Uint8Array.from(artifact.canonicalRequestBytes),
+    canonicalResponseBytes: Uint8Array.from(artifact.canonicalResponseBytes),
+    requestSha256: artifact.requestSha256,
+    decisionSha256: artifact.decisionSha256
+  }))
+}
+
+const persistedArtifact = (artifact: VerifiedAdmissionDecisionArtifact): PersistedVerifiedAdmissionDecisionArtifact => Object.freeze({
+  wireContractVersion: artifact.wireContractVersion,
+  canonicalRequestBytesBase64Url: Buffer.from(artifact.canonicalRequestBytes).toString("base64url"),
+  canonicalResponseBytesBase64Url: Buffer.from(artifact.canonicalResponseBytes).toString("base64url"),
+  requestSha256: artifact.requestSha256,
+  decisionSha256: artifact.decisionSha256
+})
+
+const restorePersistedArtifact = (
+  persisted: PersistedVerifiedAdmissionDecisionArtifact
+): Either.Either<VerifiedAdmissionDecisionArtifact, LocalPermitCommitError> => {
+  const request = exactBase64UrlBytes(persisted.canonicalRequestBytesBase64Url, MAX_VERIFIED_ADMISSION_REQUEST_BYTES, "RECOVERY_INVALID")
+  const response = exactBase64UrlBytes(persisted.canonicalResponseBytesBase64Url, MAX_VERIFIED_ADMISSION_RESPONSE_BYTES, "RECOVERY_INVALID")
+  if (Either.isLeft(request)) return Either.left(request.left)
+  if (Either.isLeft(response)) return Either.left(response.left)
+  return copyVerifiedAdmissionArtifact({
+    wireContractVersion: persisted.wireContractVersion,
+    canonicalRequestBytes: request.right,
+    canonicalResponseBytes: response.right,
+    requestSha256: persisted.requestSha256,
+    decisionSha256: persisted.decisionSha256
+  }, "RECOVERY_INVALID")
+}
+
+const decodeVerifiedAdmissionRecordV2 = (bytes: Uint8Array): Either.Either<VerifiedAdmissionCommitRecordV2, LocalPermitCommitError> => {
+  const parsed = decodeCanonicalJsonBytes(bytes)
+  if (Either.isLeft(parsed)) return Either.left(failure("RECOVERY_INVALID", "verified-admission v2 record is not canonical JSON"))
+  const decoded = Schema.decodeUnknownEither(VerifiedAdmissionCommitRecordV2Schema, { onExcessProperty: "error" })(parsed.right)
+  if (Either.isLeft(decoded)) return Either.left(failure("RECOVERY_INVALID", "verified-admission v2 record violates the exact schema"))
+  const canonical = canonicalJsonBytes(decoded.right)
+  if (Either.isLeft(canonical) || !identicalBytes(canonical.right, bytes)) return Either.left(failure("RECOVERY_INVALID", "verified-admission v2 record bytes are not exact canonical JSON"))
+  return Either.right(Object.freeze({ ...decoded.right,
+    priorHead: Object.freeze({ ...decoded.right.priorHead }),
+    expectedNextHead: Object.freeze({ ...decoded.right.expectedNextHead }),
+    verifiedAdmission: Object.freeze({ ...decoded.right.verifiedAdmission })
+  }))
+}
+
+/**
+ * V2 protected backend.  Its namespace and contract intentionally differ from
+ * v1: every successful slot contains the exact accepted wire request/response
+ * bytes and recovery refuses the slot unless the supplied semantic validator
+ * accepts that artifact against the reconstructed predecessor view.
+ */
+export const makeVerifiedAdmissionCommitBackendV2 = (
+  rootPath: string,
+  verifier: LocalPermitVerifierContext,
+  admission: VerifiedAdmissionHookV2,
+  validateRecoveredAdmission: VerifiedAdmissionRecoveryValidator,
+  clock: () => Date = () => new Date()
+): VerifiedAdmissionCommitBackendV2 => {
+  const root = join(rootPath, "verified-admission-commits-v2")
+  const commitsRoot = join(root, "commits")
+  const approvals = new WeakMap<object, VerifiedAdmissionDecisionArtifact>()
+  const recover = (): Effect.Effect<VerifiedAdmissionRecoveryV2, LocalPermitCommitError> => Effect.tryPromise({
+    try: async () => {
+      try { await initializeCommitDirectories(rootPath, root, commitsRoot) } catch { throw failure("IO_FAILED", "cannot initialize and fsync verified-admission v2 commit root") }
+      const directories = await readdir(commitsRoot, { withFileTypes: true })
+      if (directories.some((entry) => !entry.isDirectory() || !/^[0-9a-f]{64}$/.test(entry.name))) throw failure("RECOVERY_INVALID", "verified-admission v2 commit root contains an unexpected entry")
+      const lineageDirectories = directories.filter((entry) => entry.isDirectory())
+      if (lineageDirectories.length > 1) throw failure("RECOVERY_INVALID", "one verified-admission v2 store may recover exactly one connected lineage")
+      const receipts: VerifiedAdmissionCommitV2Receipt[] = []
+      for (const directory of lineageDirectories) {
+        const base = join(commitsRoot, directory.name)
+        const entries = await readdir(base, { withFileTypes: true })
+        if (entries.some((entry) => !entry.isFile() || (!FINAL_SLOT.test(entry.name) && !PRIVATE_STAGING_SLOT.test(entry.name)))) throw failure("RECOVERY_INVALID", "verified-admission v2 lineage contains an unexpected entry")
+        const slots = entries.filter((entry) => FINAL_SLOT.test(entry.name)).sort((a, b) => a.name.localeCompare(b.name))
+        let previous: VerifiedAdmissionCommitRecordV2 | null = null
+        let previousPostState: Uint8Array | null = null
+        const nonces = new Set<string>()
+        for (const slot of slots) {
+          const bytes = await readStableCommitFile(join(base, slot.name), "RECOVERY_INVALID", MAX_VERIFIED_ADMISSION_RECORD_BYTES)
+          if (bytes.byteLength > MAX_VERIFIED_ADMISSION_RECORD_BYTES) throw failure("RECOVERY_INVALID", "verified-admission v2 record exceeds its bounded size")
+          const record = decodeVerifiedAdmissionRecordV2(bytes)
+          if (Either.isLeft(record)) throw record.left
+          const envelopeBytes = exactBase64UrlBytes(record.right.envelopeBytesBase64Url, MAX_LOCAL_RECORD_BYTES, "RECOVERY_INVALID")
+          if (Either.isLeft(envelopeBytes)) throw failure("RECOVERY_INVALID", "verified-admission v2 envelope bytes are invalid or noncanonical")
+          const envelope = decodeCanonicalPermitEnvelopeBytes(envelopeBytes.right)
+          if (Either.isLeft(envelope) || digest(envelopeBytes.right) !== record.right.envelopeSha256) throw failure("RECOVERY_INVALID", "verified-admission v2 envelope bytes are invalid or digest-mismatched")
+          const verification = verifyCanonicalPermitEnvelopeAgainstCallerSuppliedContext(envelopeBytes.right, expectedFromClaims(envelope.right.claims), verifier.trustSnapshotBytes, record.right.verificationTime)
+          if (Either.isLeft(verification)) throw failure("RECOVERY_INVALID", "verified-admission v2 record signature or local trust binding does not verify")
+          const preState = strictStateBytes(record.right.preStateBytesBase64Url)
+          const postState = strictStateBytes(record.right.postStateBytesBase64Url)
+          const artifact = restorePersistedArtifact(record.right.verifiedAdmission)
+          if (Either.isLeft(preState) || Either.isLeft(postState) || Either.isLeft(artifact)) throw failure("RECOVERY_INVALID", "verified-admission v2 record has invalid state or decision artifact bytes")
+          const claims = envelope.right.claims
+          if (record.right.committedAt !== record.right.verificationTime || claims.executionIntentDigest !== record.right.executionIntentDigest || claims.nonceDigest !== record.right.nonceDigest ||
+              !identicalHead(claims.priorHead, record.right.priorHead) || !identicalHead(claims.expectedNextHead, record.right.expectedNextHead) ||
+              digest(preState.right) !== claims.priorHead.stateDigest || digest(postState.right) !== claims.expectedNextHead.stateDigest || !validHeadTransition(claims.priorHead, claims.expectedNextHead) ||
+              directory.name !== lineageDirectory(claims.expectedNextHead.lineageId) || Number(slot.name.slice(0, 16)) !== claims.expectedNextHead.sequence ||
+              (previous === null ? claims.priorHead.sequence !== 0 : (!identicalHead(previous.expectedNextHead, claims.priorHead) || previousPostState === null || !identicalBytes(previousPostState, preState.right))) || nonces.has(claims.nonceDigest)) {
+            throw failure("RECOVERY_INVALID", "verified-admission v2 record does not form a one-shot contiguous local journal")
+          }
+          const priorReceipts = receipts.map((entry) => entry.commit)
+          const preflight: VerifiedAdmissionPreflight = Object.freeze({
+            view: Object.freeze({ head: previous === null ? null : Object.freeze({ ...previous.expectedNextHead }), consumedNonces: Object.freeze(priorReceipts.map((entry) => entry.nonceDigest).reverse()) }),
+            record: Object.freeze({ committedAt: record.right.committedAt, verificationTime: record.right.verificationTime, envelopeDigest: record.right.envelopeSha256, executionIntentDigest: record.right.executionIntentDigest, nonceDigest: record.right.nonceDigest, priorHead: Object.freeze({ ...record.right.priorHead }), expectedNextHead: Object.freeze({ ...record.right.expectedNextHead }) })
+          })
+          let semantic: Either.Either<void, LocalPermitCommitError>
+          try {
+            semantic = validateRecoveredAdmission(preflight, artifact.right)
+          } catch {
+            throw failure("RECOVERY_INVALID", "verified-admission v2 semantic validator threw during recovery")
+          }
+          if (Either.isLeft(semantic)) throw failure("RECOVERY_INVALID", `verified-admission v2 semantic validation rejected record: ${semantic.left.detail}`)
+          nonces.add(claims.nonceDigest)
+          previous = record.right
+          previousPostState = postState.right
+          const commit = Object.freeze({ recordSha256: digest(bytes), slotPath: join(base, slot.name), nonceDigest: claims.nonceDigest, executionIntentDigest: claims.executionIntentDigest, priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead }), verificationTime: record.right.verificationTime, postStateBytes: Uint8Array.from(postState.right), status: HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS })
+          receipts.push(Object.freeze({ commit, decision: artifact.right }))
+        }
+      }
+      const heads = receipts.map((entry) => entry.commit.expectedNextHead)
+      return Object.freeze({ commits: Object.freeze(receipts), head: heads.length === 0 ? null : Object.freeze({ ...heads[heads.length - 1]! }), status: HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS })
+    },
+    catch: (cause) => cause instanceof LocalPermitCommitError ? cause : failure("IO_FAILED", "verified-admission v2 recovery I/O failed")
+  })
+  return Object.freeze({
+    recover,
+    submit: (request: LocalPermitCommitRequest) => Effect.gen(function* () {
+      let verifiedAt: string
+      try { verifiedAt = nowIso(clock) } catch { return yield* Effect.fail(failure("PERMIT_VERIFICATION_FAILED", "local verifier clock is invalid")) }
+      const verification = verifyCanonicalPermitEnvelopeAgainstCallerSuppliedContext(request.envelopeBytes, request.expectedBindings, verifier.trustSnapshotBytes, verifiedAt)
+      if (Either.isLeft(verification)) return yield* Effect.fail(failure("PERMIT_VERIFICATION_FAILED", verification.left.detail))
+      const claims = verification.right.envelope.claims
+      const preState = boundedStateBytes(request.preStateBytes)
+      const postState = boundedStateBytes(request.postStateBytes)
+      if (Either.isLeft(preState)) return yield* Effect.fail(preState.left)
+      if (Either.isLeft(postState)) return yield* Effect.fail(postState.left)
+      if (digest(preState.right) !== claims.priorHead.stateDigest || digest(postState.right) !== claims.expectedNextHead.stateDigest || !validHeadTransition(claims.priorHead, claims.expectedNextHead)) return yield* Effect.fail(failure("PREDECESSOR_MISMATCH", "local pre/post state bytes or Permit heads do not form the exact successor"))
+      const recovered = yield* recover()
+      if (recovered.commits.some((entry) => entry.commit.nonceDigest === claims.nonceDigest)) return yield* Effect.fail(failure("NONCE_ALREADY_CONSUMED", "Permit nonce already occurs in the recovered verified-admission v2 journal"))
+      const lineageHead = [...recovered.commits].reverse().find((entry) => entry.commit.expectedNextHead.lineageId === claims.priorHead.lineageId)
+      if (recovered.commits.length === 0 && claims.priorHead.sequence !== 0) return yield* Effect.fail(failure("PREDECESSOR_MISMATCH", "the first local Permit must extend the signed sequence-zero genesis head"))
+      if (recovered.commits.length > 0 && (lineageHead === undefined || !identicalHead(lineageHead.commit.expectedNextHead, claims.priorHead))) return yield* Effect.fail(failure("PREDECESSOR_MISMATCH", "Permit prior head is not the recovered v2 journal head"))
+      const directory = join(commitsRoot, lineageDirectory(claims.expectedNextHead.lineageId))
+      const path = join(directory, safeSlotName(claims.expectedNextHead.sequence))
+      const temporaryPath = join(directory, `.local-permit-commit-${randomUUID()}.tmp`)
+      const baseRecord = Object.freeze({ _tag: "VerifiedAdmissionCommitRecord" as const, contractVersion: HSWM_VERIFIED_ADMISSION_COMMIT_V2, status: HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS, committedAt: verifiedAt, verificationTime: verifiedAt, envelopeBytesBase64Url: Buffer.from(request.envelopeBytes).toString("base64url"), envelopeSha256: digest(request.envelopeBytes), preStateBytesBase64Url: Buffer.from(preState.right).toString("base64url"), postStateBytesBase64Url: Buffer.from(postState.right).toString("base64url"), executionIntentDigest: claims.executionIntentDigest, nonceDigest: claims.nonceDigest, priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead }) })
+      const preflight: VerifiedAdmissionPreflight = Object.freeze({ view: Object.freeze({ head: recovered.head === null ? null : Object.freeze({ ...recovered.head }), consumedNonces: Object.freeze(recovered.commits.map((entry) => entry.commit.nonceDigest).reverse()) }), record: Object.freeze({ committedAt: baseRecord.committedAt, verificationTime: baseRecord.verificationTime, envelopeDigest: baseRecord.envelopeSha256, executionIntentDigest: baseRecord.executionIntentDigest, nonceDigest: baseRecord.nonceDigest, priorHead: Object.freeze({ ...baseRecord.priorHead }), expectedNextHead: Object.freeze({ ...baseRecord.expectedNextHead }) }) })
+      const minted = (candidate: VerifiedAdmissionDecisionArtifact): object => {
+        const artifact = copyVerifiedAdmissionArtifact(candidate, "PERMIT_VERIFICATION_FAILED")
+        const token = Object.freeze({ [VERIFIED_ADMISSION_APPROVAL_BRAND]: true })
+        if (Either.isRight(artifact)) approvals.set(token, artifact.right)
+        return token
+      }
+      const approval = yield* admission(preflight, minted)
+      const artifact = approvals.get(approval)
+      if (artifact === undefined) return yield* Effect.fail(failure("PERMIT_VERIFICATION_FAILED", "verified-admission v2 gate did not present a private approval with an exact artifact"))
+      approvals.delete(approval)
+      let semantic: Either.Either<void, LocalPermitCommitError>
+      try {
+        semantic = validateRecoveredAdmission(preflight, artifact)
+      } catch {
+        return yield* Effect.fail(failure("PERMIT_VERIFICATION_FAILED", "verified-admission v2 semantic validator threw before publication"))
+      }
+      if (Either.isLeft(semantic)) return yield* Effect.fail(failure("PERMIT_VERIFICATION_FAILED", `verified-admission v2 semantic validation rejected artifact: ${semantic.left.detail}`))
+      const record: VerifiedAdmissionCommitRecordV2 = Object.freeze({ ...baseRecord, verifiedAdmission: persistedArtifact(artifact) })
+      const encoded = canonicalJsonBytes(record)
+      if (Either.isLeft(encoded) || encoded.right.byteLength > MAX_VERIFIED_ADMISSION_RECORD_BYTES) return yield* Effect.fail(failure("INPUT_INVALID", "verified-admission v2 commit record cannot be canonically bounded"))
+      yield* Effect.tryPromise({
+        try: async () => {
+          await initializeCommitDirectories(rootPath, root, commitsRoot); await mkdir(directory, { recursive: true, mode: 0o700 }); await syncDirectory(commitsRoot); await syncDirectory(directory)
+          let staged = false
+          try {
+            const handle = await open(temporaryPath, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600); staged = true
+            try { await handle.writeFile(encoded.right); await handle.chmod(0o400); await handle.sync() } finally { await handle.close() }
+            try { await link(temporaryPath, path) } catch (cause) {
+              const code = typeof cause === "object" && cause !== null && "code" in cause ? String(cause.code) : ""
+              if (code === "EEXIST") throw failure("SLOT_ALREADY_COMMITTED", "verified-admission v2 journal slot was already committed by another writer")
+              if (["ENOSYS", "ENOTSUP", "EOPNOTSUPP", "EXDEV"].includes(code)) throw failure("ATOMIC_PUBLICATION_UNSUPPORTED", `local filesystem cannot provide no-replace hard-link publication: ${code}`)
+              throw failure("COMMIT_OUTCOME_UNKNOWN", "verified-admission v2 local journal hard-link outcome is unknown; recover before retrying")
+            }
+            await syncDirectory(directory)
+            const exact = await readStableCommitFile(path, "COMMIT_OUTCOME_UNKNOWN", MAX_VERIFIED_ADMISSION_RECORD_BYTES)
+            if (!identicalBytes(exact, encoded.right)) throw failure("COMMIT_OUTCOME_UNKNOWN", "published verified-admission v2 slot differs on exact readback")
+          } finally { if (staged) { try { await unlink(temporaryPath) } catch { /* private staging has no committed meaning */ } } }
+        },
+        catch: (cause) => cause instanceof LocalPermitCommitError ? cause : failure("COMMIT_OUTCOME_UNKNOWN", "verified-admission v2 write outcome is unknown; recover before retrying")
+      })
+      const commit = Object.freeze({ recordSha256: digest(encoded.right), slotPath: path, nonceDigest: claims.nonceDigest, executionIntentDigest: claims.executionIntentDigest, priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead }), verificationTime: verifiedAt, postStateBytes: Uint8Array.from(postState.right), status: HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS })
+      return Object.freeze({ commit, decision: artifact })
+    })
   })
 }

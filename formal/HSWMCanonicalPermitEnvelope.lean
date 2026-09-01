@@ -136,7 +136,13 @@ def PermitTransitionWellFormed (claims : PermitEnvelopeClaims) : Prop :=
   claims.priorHead.lineageId = claims.expectedNextHead.lineageId ∧
   claims.expectedNextHead.sequence = claims.priorHead.sequence + 1
 
+/-- Exact discriminant required by the TypeScript canonical signing document. -/
+def canonicalPermitSigningDocumentTag : String :=
+  "CanonicalPermitSigningDocument"
+
 structure PermitSigningDocument where
+  /-- Mirrors the raw JSON `_tag` field; this is still not byte parsing. -/
+  tag : String
   header : PermitEnvelopeHeader
   claims : PermitEnvelopeClaims
   status : String
@@ -179,10 +185,10 @@ def EnvelopeSignatureVerifierSound
 /--
 An abstract field-binding checker, not the TypeScript checker itself.
 
-It omits byte parsing/canonicalization, the TypeScript `_tag`, identifier and
-SHA schemas, instant chronology, trust-snapshot lookup, and the key-ID to
-public-key relation.  Those operations are represented only by the supplied
-values and adapter booleans below.
+It checks the decoded TypeScript `_tag` literal, but still omits byte
+parsing/canonicalization, identifier and SHA schemas, instant chronology,
+trust-snapshot lookup, and the key-ID to public-key relation. Those operations
+are represented only by the supplied values and adapter booleans below.
 -/
 def canonicalPermitEnvelopeAccepted
     (verify : EnvelopeSignatureVerifier)
@@ -193,6 +199,7 @@ def canonicalPermitEnvelopeAccepted
     (envelope : CanonicalPermitEnvelope) : Bool :=
   decide (envelope.document.header =
     expectedPermitEnvelopeHeader expectedKeyId) &&
+  (decide (envelope.document.tag = canonicalPermitSigningDocumentTag) &&
   (decide (envelope.document.status =
     "SIGNED_AUTHORIZATION_ENVELOPE_NOT_ATOMIC_ADMISSION_NOT_LEARNING") &&
   (decide (envelope.document.claims.expectedBindings = expected) &&
@@ -209,7 +216,7 @@ def canonicalPermitEnvelopeAccepted
   (checks.keyAuthorizedForAuthorizer &&
   (checks.keyActiveAtVerification &&
   (checks.permitTimeActive &&
-    verify key envelope.document envelope.signature)))))))))
+    verify key envelope.document envelope.signature))))))))))
 
 /--
 Acceptance cannot float to a different supplied execution, head, revision or
@@ -220,6 +227,7 @@ theorem acceptedEnvelopeProjectsEveryCheckedBinding
     (accepted : canonicalPermitEnvelopeAccepted verify key expectedKeyId
       expected checks envelope = true) :
     envelope.document.header = expectedPermitEnvelopeHeader expectedKeyId ∧
+    envelope.document.tag = canonicalPermitSigningDocumentTag ∧
     envelope.document.status =
       "SIGNED_AUTHORIZATION_ENVELOPE_NOT_ATOMIC_ADMISSION_NOT_LEARNING" ∧
     ExactPermitBindings envelope.document.claims expected ∧
@@ -247,7 +255,7 @@ theorem acceptedEnvelopeProjectsSuppliedExecutionContext
       expected.transitionInvariantDigest ∧
     envelope.document.claims.nonceDigest = expected.nonceDigest := by
   have bindings :=
-    (acceptedEnvelopeProjectsEveryCheckedBinding accepted).2.2.1
+    (acceptedEnvelopeProjectsEveryCheckedBinding accepted).2.2.2.1
   have exact : envelope.document.claims.expectedBindings = expected := bindings
   cases exact
   exact ⟨rfl, rfl, rfl, rfl, rfl, rfl, rfl⟩
@@ -272,16 +280,16 @@ theorem acceptedEnvelopeAndSoundVerifierYieldAuthenticatedDocument
     checks.keyActiveAtVerification = true ∧
     checks.permitTimeActive = true := by
   have projected := acceptedEnvelopeProjectsEveryCheckedBinding accepted
-  exact ⟨projected.2.2.1,
-    projected.2.2.2.1,
-    sound key envelope.document envelope.signature
-      projected.2.2.2.2.2.2.2.2.2.2,
+  exact ⟨projected.2.2.2.1,
     projected.2.2.2.2.1,
+    sound key envelope.document envelope.signature
+      projected.2.2.2.2.2.2.2.2.2.2.2,
     projected.2.2.2.2.2.1,
     projected.2.2.2.2.2.2.1,
     projected.2.2.2.2.2.2.2.1,
     projected.2.2.2.2.2.2.2.2.1,
-    projected.2.2.2.2.2.2.2.2.2.1⟩
+    projected.2.2.2.2.2.2.2.2.2.1,
+    projected.2.2.2.2.2.2.2.2.2.2.1⟩
 
 /-- A field change cannot be hidden behind checker acceptance. -/
 theorem changedExecutionIntentDigestCannotBeAccepted
@@ -292,6 +300,14 @@ theorem changedExecutionIntentDigestCannotBeAccepted
   intro accepted
   exact changed
     (acceptedEnvelopeProjectsSuppliedExecutionContext accepted).2.1
+
+/-- A non-canonical signing-document discriminant fails closed. -/
+theorem wrongSigningDocumentTagCannotBeAccepted
+    (wrong : envelope.document.tag ≠ canonicalPermitSigningDocumentTag) :
+    canonicalPermitEnvelopeAccepted verify key expectedKeyId expected checks
+      envelope ≠ true := by
+  intro accepted
+  exact wrong (acceptedEnvelopeProjectsEveryCheckedBinding accepted).2.1
 
 theorem changedNonceCannotBeAccepted
     (changed : envelope.document.claims.nonceDigest ≠ expected.nonceDigest) :

@@ -65,18 +65,25 @@ it("exports the content-bound v2 facade without raw store mutation ports", () =>
   expect("prepareCanonicalAtomV2WriteContent" in PublicApi).toBe(false)
 })
 
-it("exports durable v2 replay without raw journal publication or receipt construction", () => {
+it("exports a read-only durable graph view and GE-2 composition without a raw mutation port", () => {
   expect(typeof PublicApi.decodeCanonicalAtomV2StateJournalRecordBytes).toBe(
     "function"
   )
-  expect(typeof PublicApi.CanonicalAtomV2DurableRuntime).toBe("function")
+  expect(typeof PublicApi.CanonicalAtomV2DurableGraphView).toBe("function")
   expect(
-    typeof PublicApi.makeCanonicalAtomV2DurableRuntimeFileLayer
+    typeof PublicApi.makeGraphLoopEngineeringFileLayer
   ).toBe("function")
   expect(PublicApi.HSWM_CANONICAL_ATOM_V2_LOCAL_DURABLE_STATE).toBe(
     "LOCAL_PREDECESSOR_BOUND_STATE_AND_RECEIPT_JOURNAL_V1"
   )
   expect("CanonicalAtomV2StateJournalStore" in PublicApi).toBe(false)
+  expect("CanonicalAtomV2DurableRuntime" in PublicApi).toBe(false)
+  expect("CanonicalAtomV2DurableRuntimeError" in PublicApi).toBe(false)
+  expect("makeCanonicalAtomV2DurableRuntimeFileLayer" in PublicApi).toBe(
+    false
+  )
+  expect("makeGraphLoopControlJournalFileLayer" in PublicApi).toBe(false)
+  expect("makeGraphLoopEngineeringControllerLayer" in PublicApi).toBe(false)
   expect(
     "makeCanonicalAtomV2StateJournalFileStoreLayer" in PublicApi
   ).toBe(false)

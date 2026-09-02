@@ -171,6 +171,43 @@ export class CanonicalAtomV2DurableRuntime extends Context.Tag(
   }
 >() {}
 
+/**
+ * Read-only/public durable graph surface.
+ *
+ * This deliberately omits `submit`.  Package consumers can observe a
+ * schema-bound graph, stage immutable evidence, and read bound content, but
+ * canonical mutation must enter through a schema-specific protected path
+ * (currently GE-2/LE-0 or the separately-qualified DNRD-5 dispatcher).
+ * It is an API capability boundary, not a same-process security boundary or
+ * a claim of distributed authorization.
+ */
+export class CanonicalAtomV2DurableGraphView extends Context.Tag(
+  "hswm/CanonicalAtomV2DurableGraphView"
+)<
+  CanonicalAtomV2DurableGraphView,
+  {
+    readonly schema: HSWMCanonicalSchemaV2
+    readonly schemaContent: CanonicalAtomV2SchemaContentBinding
+    readonly journalLineageId: string
+    readonly stateDurability: typeof HSWM_CANONICAL_ATOM_V2_LOCAL_DURABLE_STATE
+    readonly stageContent: (
+      mediaType: string,
+      bytes: Uint8Array
+    ) => Effect.Effect<CanonicalAtomV2ContentDescriptor, CanonicalAtomV2ContentStoreError>
+    readonly readContent: (
+      descriptor: CanonicalAtomV2ContentDescriptor
+    ) => Effect.Effect<Uint8Array, CanonicalAtomV2ContentStoreError>
+    readonly snapshot: Effect.Effect<
+      CanonicalAtomV2DurableState,
+      CanonicalAtomV2DurableRecoveryFailure
+    >
+    readonly history: Effect.Effect<
+      ReadonlyArray<CanonicalAtomV2DurableReceipt>,
+      CanonicalAtomV2DurableRecoveryFailure
+    >
+  }
+>() {}
+
 type CanonicalAtomV2DurableCommit = (
   input: unknown
 ) => Effect.Effect<
@@ -223,6 +260,60 @@ export const commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal = (
         runtimeError(
           "CONFIGURATION_INVALID",
           "durable runtime is not registered for internal dispatcher commit"
+        )
+      )
+    : commit(input)
+}
+
+/**
+ * Module-internal GE-2 mutation port.
+ *
+ * It is intentionally absent from the package root.  The graph-loop
+ * controller is the sole production importer; external callers receive only
+ * `CanonicalAtomV2DurableGraphView` plus the controller API.  This prevents a
+ * public raw durable `submit` route from silently bypassing the GE-2
+ * snapshot/verifier/quarantine contract.
+ */
+export const commitCanonicalAtomV2DurableFromGraphLoopInternal = (
+  runtime: CanonicalAtomV2DurableRuntime["Type"],
+  input: unknown
+): Effect.Effect<
+  CanonicalAtomV2DurableEvolution,
+  CanonicalAtomV2DurableSubmitFailure
+> => {
+  const commit = internalCommitByRuntime.get(runtime)
+  return commit === undefined
+    ? Effect.fail(
+        runtimeError(
+          "CONFIGURATION_INVALID",
+          "durable runtime is not registered for graph-loop commit"
+        )
+      )
+    : commit(input)
+}
+
+/**
+ * Internal-only legacy diagnostic port.
+ *
+ * The local DNRD routing diagnostic is explicitly structural-only and does
+ * not claim independent outcome verification.  It therefore cannot be
+ * mislabeled as a GE-2 admission.  Keeping this narrow source-private seam
+ * removes its former raw `runtime.submit` bypass while preserving its
+ * historical diagnostic fixture behavior.
+ */
+export const commitCanonicalAtomV2DurableFromLocalDiagnosticInternal = (
+  runtime: CanonicalAtomV2DurableRuntime["Type"],
+  input: unknown
+): Effect.Effect<
+  CanonicalAtomV2DurableEvolution,
+  CanonicalAtomV2DurableSubmitFailure
+> => {
+  const commit = internalCommitByRuntime.get(runtime)
+  return commit === undefined
+    ? Effect.fail(
+        runtimeError(
+          "CONFIGURATION_INVALID",
+          "durable runtime is not registered for local diagnostic commit"
         )
       )
     : commit(input)
@@ -781,6 +872,27 @@ const makeCanonicalAtomV2DurableRuntimeLayerWithStorageAttestation = (
     })
   )
 }
+
+/**
+ * Derive the public read/stage/snapshot view from a private durable runtime.
+ * Mutation deliberately has no representation in this view.
+ */
+export const makeCanonicalAtomV2DurableGraphViewLayer = Layer.effect(
+  CanonicalAtomV2DurableGraphView,
+  Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    return CanonicalAtomV2DurableGraphView.of({
+      schema: runtime.schema,
+      schemaContent: runtime.schemaContent,
+      journalLineageId: runtime.journalLineageId,
+      stateDurability: runtime.stateDurability,
+      stageContent: runtime.stageContent,
+      readContent: runtime.readContent,
+      snapshot: runtime.snapshot,
+      history: runtime.history
+    })
+  })
+)
 
 /**
  * Internal composition seam with no storage provenance claim. The supplied

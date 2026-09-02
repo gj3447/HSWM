@@ -1,0 +1,248 @@
+{
+  "_tag": "HSWMStandardResearchJobProfiles",
+  "contractVersion": "hswm-standard-research-job-profiles/v1",
+  "profiles": [
+    {
+      "action": {
+        "argv": [
+          "${PYTHON_EXECUTABLE}",
+          "-m",
+          "_research.dgx_q1.live_experiment",
+          "--repo-root",
+          "${REPO_ROOT}",
+          "--expected-commit",
+          "${EXPECTED_COMMIT}",
+          "--expected-tree",
+          "${EXPECTED_TREE}",
+          "--publication-ci-receipt",
+          "${PUBLICATION_CI_RECEIPT}",
+          "--publication-ci-receipt-sha256",
+          "${PUBLICATION_CI_RECEIPT_SHA256}",
+          "--freeze-root",
+          "${FREEZE_ROOT}",
+          "--plan-sha256",
+          "${PLAN_SHA256}",
+          "--lock-path",
+          "${LOCK_PATH}",
+          "--container-name",
+          "${CONTAINER_NAME}",
+          "--model-snapshot",
+          "${MODEL_SNAPSHOT}"
+        ],
+        "cwd": "${REPO_ROOT}",
+        "environment": {
+          "HSWM_CACHE_ROOT": "${CACHE_ROOT}",
+          "HSWM_OUTPUT_ROOT": "${OUTPUT_ROOT}"
+        },
+        "timeoutMs": 86400000
+      },
+      "frozenInputs": [
+        {"binding": "FREEZE_CLOSURE_MANIFEST", "mediaType": "application/json"},
+        {"binding": "FREEZE_PLAN", "mediaType": "application/json"},
+        {"binding": "ACTION_SOURCE", "mediaType": "text/x-python"},
+        {"binding": "VERIFIER_SOURCE", "mediaType": "text/x-python"},
+        {"binding": "PUBLICATION_CI_RECEIPT", "mediaType": "application/json"}
+      ],
+      "maximumActions": 1,
+      "maximumAttempts": 1,
+      "profileId": "dgx-q1-live",
+      "requiredBindings": [
+        "ACTION_SOURCE",
+        "CACHE_ROOT",
+        "CONSUMPTION_REGISTRY_ROOT",
+        "CONTAINER_NAME",
+        "EVIDENCE_ROOT",
+        "EXPECTED_COMMIT",
+        "EXPECTED_TREE",
+        "FREEZE_CLOSURE_MANIFEST",
+        "FREEZE_PLAN",
+        "FREEZE_ROOT",
+        "LOCK_PATH",
+        "MODEL_SNAPSHOT",
+        "OUTPUT_ROOT",
+        "PLAN_SHA256",
+        "PUBLICATION_CI_RECEIPT",
+        "PUBLICATION_CI_RECEIPT_SHA256",
+        "PYTHON_EXECUTABLE",
+        "REPO_ROOT",
+        "VERIFIER_SOURCE"
+      ],
+      "verifier": {
+        "acceptExitCodes": [0],
+        "command": {
+          "argv": [
+            "${PYTHON_EXECUTABLE}",
+            "-m",
+            "hswm.experiments.dgx_q1_le0_verifier",
+            "--root",
+            "${EVIDENCE_ROOT}",
+            "--external-registry-root",
+            "${CONSUMPTION_REGISTRY_ROOT}"
+          ],
+          "cwd": "${REPO_ROOT}",
+          "environment": {},
+          "timeoutMs": 3600000
+        },
+        "retryExitCodes": []
+      }
+    },
+    {
+      "action": {
+        "argv": [
+          "${PYTHON_EXECUTABLE}",
+          "-m",
+          "_research.dgx_mi.experiment",
+          "--freeze-root",
+          "${FREEZE_ROOT}",
+          "--repo-root",
+          "${REPO_ROOT}",
+          "--publication-commit",
+          "${PUBLICATION_COMMIT}",
+          "--publication-tree",
+          "${PUBLICATION_TREE}",
+          "--publication-ci-receipt",
+          "${PUBLICATION_CI_RECEIPT}",
+          "--publication-ci-receipt-sha256",
+          "${PUBLICATION_CI_RECEIPT_SHA256}",
+          "--model-snapshot",
+          "${MODEL_SNAPSHOT}",
+          "--lock-path",
+          "${LOCK_PATH}"
+        ],
+        "cwd": "${REPO_ROOT}",
+        "environment": {
+          "HSWM_CACHE_ROOT": "${CACHE_ROOT}",
+          "HSWM_OUTPUT_ROOT": "${OUTPUT_ROOT}"
+        },
+        "timeoutMs": 86400000
+      },
+      "frozenInputs": [
+        {"binding": "FREEZE_CLOSURE_MANIFEST", "mediaType": "application/json"},
+        {"binding": "FREEZE_PLAN", "mediaType": "application/json"},
+        {"binding": "ACTION_SOURCE", "mediaType": "text/x-python"},
+        {"binding": "VERIFIER_SOURCE", "mediaType": "text/x-python"},
+        {"binding": "PUBLICATION_CI_RECEIPT", "mediaType": "application/json"}
+      ],
+      "maximumActions": 1,
+      "maximumAttempts": 1,
+      "profileId": "dgx-mi",
+      "requiredBindings": [
+        "ACTION_SOURCE",
+        "CACHE_ROOT",
+        "CONSUMPTION_REGISTRY_ROOT",
+        "EVIDENCE_ROOT",
+        "FREEZE_CLOSURE_MANIFEST",
+        "FREEZE_PLAN",
+        "FREEZE_ROOT",
+        "LOCK_PATH",
+        "MODEL_SNAPSHOT",
+        "OUTPUT_ROOT",
+        "PUBLICATION_CI_RECEIPT",
+        "PUBLICATION_CI_RECEIPT_SHA256",
+        "PUBLICATION_COMMIT",
+        "PUBLICATION_TREE",
+        "PYTHON_EXECUTABLE",
+        "REPO_ROOT",
+        "VERIFIER_SOURCE"
+      ],
+      "verifier": {
+        "acceptExitCodes": [0],
+        "command": {
+          "argv": [
+            "${PYTHON_EXECUTABLE}",
+            "-m",
+            "_research.dgx_mi.independent_verifier",
+            "--root",
+            "${EVIDENCE_ROOT}",
+            "--external-registry-root",
+            "${CONSUMPTION_REGISTRY_ROOT}"
+          ],
+          "cwd": "${REPO_ROOT}",
+          "environment": {},
+          "timeoutMs": 3600000
+        },
+        "retryExitCodes": []
+      }
+    },
+    {
+      "action": {
+        "argv": [
+          "${PYTHON_EXECUTABLE}",
+          "-m",
+          "_research.dgx_mi2.experiment",
+          "--freeze-dir",
+          "${FREEZE_ROOT}",
+          "--evidence-root",
+          "${EVIDENCE_ROOT}",
+          "--cache-root",
+          "${CACHE_RUN_ROOT}",
+          "--registry",
+          "${CONSUMPTION_REGISTRY_ROOT}",
+          "--publication-commit",
+          "${PUBLICATION_COMMIT}",
+          "--publication-tree",
+          "${PUBLICATION_TREE}",
+          "--publication-ci-receipt",
+          "${PUBLICATION_CI_RECEIPT}",
+          "--model-snapshot",
+          "${MODEL_SNAPSHOT}",
+          "--lock-path",
+          "${LOCK_PATH}"
+        ],
+        "cwd": "${REPO_ROOT}",
+        "environment": {
+          "HSWM_CACHE_ROOT": "${CACHE_ROOT}",
+          "HSWM_OUTPUT_ROOT": "${OUTPUT_ROOT}"
+        },
+        "timeoutMs": 86400000
+      },
+      "frozenInputs": [
+        {"binding": "FREEZE_CLOSURE_MANIFEST", "mediaType": "application/json"},
+        {"binding": "FREEZE_PLAN", "mediaType": "application/json"},
+        {"binding": "ACTION_SOURCE", "mediaType": "text/x-python"},
+        {"binding": "VERIFIER_SOURCE", "mediaType": "text/x-python"},
+        {"binding": "PUBLICATION_CI_RECEIPT", "mediaType": "application/json"}
+      ],
+      "maximumActions": 1,
+      "maximumAttempts": 1,
+      "profileId": "dgx-mi2",
+      "requiredBindings": [
+        "ACTION_SOURCE",
+        "CACHE_ROOT",
+        "CACHE_RUN_ROOT",
+        "CONSUMPTION_REGISTRY_ROOT",
+        "EVIDENCE_ROOT",
+        "FREEZE_CLOSURE_MANIFEST",
+        "FREEZE_PLAN",
+        "FREEZE_ROOT",
+        "LOCK_PATH",
+        "MODEL_SNAPSHOT",
+        "OUTPUT_ROOT",
+        "PUBLICATION_CI_RECEIPT",
+        "PUBLICATION_COMMIT",
+        "PUBLICATION_TREE",
+        "PYTHON_EXECUTABLE",
+        "REPO_ROOT",
+        "VERIFIER_SOURCE"
+      ],
+      "verifier": {
+        "acceptExitCodes": [0],
+        "command": {
+          "argv": [
+            "${PYTHON_EXECUTABLE}",
+            "-m",
+            "_research.dgx_mi2.independent_verifier",
+            "--root",
+            "${EVIDENCE_ROOT}",
+            "--external-registry-root",
+            "${CONSUMPTION_REGISTRY_ROOT}"
+          ],
+          "cwd": "${REPO_ROOT}",
+          "environment": {},
+          "timeoutMs": 3600000
+        },
+        "retryExitCodes": []
+      }
+    }
+  ]
+}

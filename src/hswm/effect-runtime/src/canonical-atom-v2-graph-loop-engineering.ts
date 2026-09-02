@@ -30,6 +30,9 @@ import {
 } from "./canonical-atom-v2-content.js"
 import {
   CanonicalAtomV2DurableRuntime,
+  commitCanonicalAtomV2DurableFromGraphLoopInternal,
+  makeCanonicalAtomV2DurableGraphViewLayer,
+  makeCanonicalAtomV2DurableRuntimeFileLayer,
   type CanonicalAtomV2DurableEvolution,
   type CanonicalAtomV2DurableState
 } from "./canonical-atom-v2-durable-runtime.js"
@@ -276,7 +279,8 @@ export class GraphLoopEngineeringController extends Context.Tag(
     >
     readonly escalate: (
       runId: string,
-      reason: string
+      reason: string,
+      outcome?: CanonicalAtomV2ContentDescriptor
     ) => Effect.Effect<
       GraphLoopControlJournalEntry,
       GraphLoopControlJournalError | GraphLoopControlError
@@ -722,7 +726,7 @@ const stateFor = (
         states.set(event.runId, next("RESTORED"))
         break
       case "STOPPED":
-        if (existing === undefined || !["VERIFIED_REJECT", "COMMITTED", "REJECTED", "RESTORED"].includes(existing.phase)) return Either.left(controlError("PHASE_INVALID", "stop requires an explicit reject, disposition, or restore"))
+        if (existing === undefined || !["VERIFIED_ACCEPT", "VERIFIED_REJECT", "COMMITTED", "REJECTED", "RESTORED"].includes(existing.phase)) return Either.left(controlError("PHASE_INVALID", "stop requires an explicit verifier verdict, disposition, or restore"))
         states.set(event.runId, next("STOPPED", true))
         break
       case "ESCALATED":
@@ -972,7 +976,7 @@ export const makeGraphLoopEngineeringControllerLayer =
           transitionId: decoded.command.transitionId,
           keyIds: affected.right
         }))
-        const submitted = yield* runtime.submit(decoded).pipe(
+        const submitted = yield* commitCanonicalAtomV2DurableFromGraphLoopInternal(runtime, decoded).pipe(
           Effect.map((evolution) => ({ _tag: "Committed" as const, evolution })),
           Effect.catchAll((error) => Effect.succeed({ _tag: isConflict(error) ? "Quarantined" as const : "Rejected" as const, error }))
         )
@@ -1003,7 +1007,7 @@ export const makeGraphLoopEngineeringControllerLayer =
           return yield* controlError("RESTORE_INVALID", "restore must read each original source and write an exact original payload")
         }
         yield* journal.append(eventDraft({ ...state, snapshot: captured }, "RESTORE_INTENT", { transactionId: request.transactionId, transitionId: decoded.command.transitionId, keyIds: sources.right, verification: "ACCEPT" }))
-        const submitted = yield* runtime.submit(decoded).pipe(
+        const submitted = yield* commitCanonicalAtomV2DurableFromGraphLoopInternal(runtime, decoded).pipe(
           Effect.map((evolution) => ({ _tag: "Committed" as const, evolution })),
           Effect.catchAll((error) => Effect.succeed({ _tag: isConflict(error) ? "Quarantined" as const : "Rejected" as const, error }))
         )
@@ -1018,13 +1022,51 @@ export const makeGraphLoopEngineeringControllerLayer =
       }),
       stop: (runId, reason) => Effect.gen(function* () {
         const state = yield* currentRun(journal, runId)
-        if (!Identifier.test(reason) || !["VERIFIED_REJECT", "COMMITTED", "REJECTED", "RESTORED"].includes(state.phase)) return yield* controlError("PHASE_INVALID", "stop requires a declared terminal disposition")
+        if (!Identifier.test(reason) || !["VERIFIED_ACCEPT", "VERIFIED_REJECT", "COMMITTED", "REJECTED", "RESTORED"].includes(state.phase)) return yield* controlError("PHASE_INVALID", "stop requires a declared verifier verdict or terminal disposition")
         return yield* journal.append(eventDraft(state, "STOPPED", { reason }))
       }),
-      escalate: (runId, reason) => Effect.gen(function* () {
+      escalate: (runId, reason, outcome) => Effect.gen(function* () {
         const state = yield* currentRun(journal, runId)
         if (!Identifier.test(reason) || state.terminal) return yield* controlError("PHASE_INVALID", "escalation requires one active nonterminal run")
-        return yield* journal.append(eventDraft(state, "ESCALATED", { reason, verification: "ESCALATE" }))
+        if (outcome !== undefined) {
+          yield* runtime.readContent(outcome).pipe(Effect.asVoid, Effect.mapError(() => controlError("DELTA_INVALID", "escalation outcome content is absent")))
+        }
+        return yield* journal.append(
+          outcome === undefined
+            ? eventDraft(state, "ESCALATED", { reason, verification: "ESCALATE" })
+            : eventDraft(state, "ESCALATED", { reason, outcome, verification: "ESCALATE" })
+        )
       })
     })
   }))
+
+/**
+ * Standard externally composable GE-2/LE-0 runtime.
+ *
+ * It deliberately exports only the controller and read/stage/snapshot graph
+ * view. The mutable durable runtime and its raw `submit` method stay behind
+ * the package-private composition boundary; only `submitDelta` and `restore`
+ * can reach the internal graph-loop mutation port.
+ */
+export const makeGraphLoopEngineeringFileLayer = (
+  durableRoot: string,
+  controlJournalRoot: string,
+  journalLineageId: string,
+  rawSchemaBytes: Uint8Array,
+  rawGrants: unknown = []
+) =>
+  Layer.provide(
+    Layer.merge(
+      makeGraphLoopEngineeringControllerLayer,
+      makeCanonicalAtomV2DurableGraphViewLayer
+    ),
+    Layer.merge(
+      makeCanonicalAtomV2DurableRuntimeFileLayer(
+        durableRoot,
+        journalLineageId,
+        rawSchemaBytes,
+        rawGrants
+      ),
+      makeGraphLoopControlJournalFileLayer(controlJournalRoot)
+    )
+  )

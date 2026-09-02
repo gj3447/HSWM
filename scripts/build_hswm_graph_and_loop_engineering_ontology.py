@@ -14,7 +14,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 ONTOLOGY_PATH = Path(
-    "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json"
+    "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json"
 )
 SYNTHESIS_PATH = Path(
     "docs/research/HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md"
@@ -81,6 +81,35 @@ GRAPH_LOOP_ENGINEERING_PATH = Path(
 GRAPH_LOOP_ENGINEERING_TEST_PATH = Path(
     "src/hswm/effect-runtime/test/canonical-atom-v2-graph-loop-engineering.test.ts"
 )
+GRAPH_LOOP_STANDARD_ENFORCEMENT_PATH = Path(
+    "docs/research/HSWM_GRAPH_LOOP_STANDARD_ENFORCEMENT_2026-09-02.md"
+)
+GRAPH_LOOP_RESEARCH_JOB_PATH = Path(
+    "src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-research-job.ts"
+)
+GRAPH_LOOP_RESEARCH_JOB_PROCESS_PATH = Path(
+    "src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-job-process.ts"
+)
+GRAPH_LOOP_ENFORCEMENT_TEST_PATH = Path(
+    "src/hswm/effect-runtime/test/canonical-atom-v2-graph-loop-enforcement-boundary.test.ts"
+)
+GRAPH_LOOP_RESEARCH_JOB_TEST_PATH = Path(
+    "src/hswm/effect-runtime/test/canonical-atom-v2-graph-loop-research-job.test.ts"
+)
+ROUTING_DIAGNOSTIC_FILE_PATH = Path(
+    "src/hswm/effect-runtime/src/canonical-atom-v2-routing-diagnostic-file.ts"
+)
+LOOP_JOB_PROFILES_PATH = Path(
+    "_research/loop_jobs/HSWM_STANDARD_RESEARCH_JOB_PROFILES.v1.json"
+)
+LOOP_JOB_PROFILES_README_PATH = Path("_research/loop_jobs/README.md")
+LOOP_JOB_PROFILE_MATERIALIZER_PATH = Path(
+    "src/hswm/experiments/graph_loop_job_profiles.py"
+)
+DGX_Q1_LE0_VERIFIER_PATH = Path(
+    "src/hswm/experiments/dgx_q1_le0_verifier.py"
+)
+LOOP_JOB_PROFILE_TEST_PATH = Path("tests/test_hswm_graph_loop_job_profiles.py")
 PROOF_STATUS_PATH = Path(
     "docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md"
 )
@@ -153,6 +182,17 @@ SOURCE_BINDING_PATHS = (
     IMPLEMENTATION_PATH,
     GRAPH_LOOP_ENGINEERING_PATH,
     GRAPH_LOOP_ENGINEERING_TEST_PATH,
+    GRAPH_LOOP_STANDARD_ENFORCEMENT_PATH,
+    GRAPH_LOOP_RESEARCH_JOB_PATH,
+    GRAPH_LOOP_RESEARCH_JOB_PROCESS_PATH,
+    GRAPH_LOOP_ENFORCEMENT_TEST_PATH,
+    GRAPH_LOOP_RESEARCH_JOB_TEST_PATH,
+    ROUTING_DIAGNOSTIC_FILE_PATH,
+    LOOP_JOB_PROFILES_PATH,
+    LOOP_JOB_PROFILES_README_PATH,
+    LOOP_JOB_PROFILE_MATERIALIZER_PATH,
+    DGX_Q1_LE0_VERIFIER_PATH,
+    LOOP_JOB_PROFILE_TEST_PATH,
     PROOF_STATUS_PATH,
     TYPESCRIPT_LEAN_STATUS_PATH,
     END_TO_END_REFINEMENT_PATH,
@@ -175,18 +215,18 @@ SOURCE_BINDING_PATHS = (
     PORTABLE_MATH_COMPILER_PATH,
 )
 
-SCHEMA_VERSION = "hswm-graph-and-loop-engineering-ontology/v5"
-UID_RELEASE = "2026-09-02-v5"
+SCHEMA_VERSION = "hswm-graph-and-loop-engineering-ontology/v6"
+UID_RELEASE = "2026-09-02-v6"
 BUNDLE_UID = (
-    "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-02-v5"
+    "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-02-v6"
 )
-PROGRAM_UID = "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-02-v5"
-PREVIOUS_PROGRAM_UID = "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v4"
+PROGRAM_UID = "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-02-v6"
+PREVIOUS_PROGRAM_UID = "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-02-v5"
 NONCLAIM = (
     "SECONDARY_AI_RESEARCH_SYNTHESIS_AND_BOUNDED_KG_PROJECTION_ONLY_NOT_HSWM_"
     "COGNITION_LEARNING_EFFICACY_CONSCIOUSNESS_PERSONHOOD_OR_SCALE_CLOSURE"
 )
-SOURCE_ACCESS_DATE = "2026-09-01"
+SOURCE_ACCESS_DATE = "2026-09-02"
 SAFE_LABEL = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\Z")
 SAFE_RELATION = re.compile(r"[A-Z_][A-Z0-9_]*\Z")
 
@@ -408,6 +448,18 @@ CAPABILITIES = (
         "Exact snapshot, bounded action, sealed trajectory, independent outcome, declared credit, transition decision, replay, and stop/retry/escalation disposition.",
         "OUTCOME_BOUND_LOOP_CONTRACT",
     ),
+    (
+        "controlled-mutation-entrypoint",
+        "GE-2-controlled graph mutation entrypoint",
+        "A public read/stage/snapshot graph view omits raw mutation; the standard GE-2 controller owns the externally composable graph-delta and restore entrypoints.",
+        "MUTATION_BOUNDARY_CONTRACT",
+    ),
+    (
+        "research-job-control",
+        "LE-0 research subprocess job control",
+        "A declared action command and separately identified verifier command produce content-addressed observations, bounded retry, stop, or escalation records without a shell.",
+        "RESEARCH_JOB_LOOP_CONTRACT",
+    ),
 )
 
 CURRENT_SURFACES = (
@@ -471,8 +523,36 @@ CURRENT_SURFACES = (
         "graph-loop-controller",
         "GE-2 and LE-0 graph-loop engineering controller",
         GRAPH_LOOP_ENGINEERING_PATH,
-        "A local create-only control journal records trigger, source-bound durable RDF snapshot, action, separately identified verifier outcome, delta intent, commit/reject/quarantine, retry, restore, stop, and escalation. Canonical mutation remains only in the predecessor-bound durable runtime.",
+        "A local create-only control journal records trigger, source-bound durable RDF snapshot, action, separately identified verifier outcome, delta intent, commit/reject/quarantine, retry, restore, stop, and escalation. The public standard layer exposes no raw durable submit and the controller alone reaches the internal GE-2 commit seam.",
         "LOCAL_RESEARCH_CONTROL_HARNESS_NOT_CANONICAL_HSWM_STATE_NOT_PERMIT_NOT_CAUSAL_CREDIT_OR_EFFICACY",
+    ),
+    (
+        "graph-loop-public-boundary",
+        "Public GE-2 mutation boundary",
+        DURABLE_RUNTIME_PATH,
+        "The published durable graph surface provides schema, stage/read, snapshot, and history without raw submit; the standard file-layer composition provides the graph-loop controller and graph view together.",
+        "API_MODULE_BOUNDARY_NOT_HOSTILE_SAME_PROCESS_ISOLATION_CANONICAL_PERMIT_OR_DISTRIBUTED_AUTHORITY",
+    ),
+    (
+        "research-job-runner",
+        "LE-0 action and verifier subprocess runner",
+        GRAPH_LOOP_RESEARCH_JOB_PATH,
+        "A real bounded subprocess runner executes a no-shell action and separately identified verifier, content-addresses both observations, and records accept/retry/reject/escalate through LE-0. The companion process entrypoint constructs the protected file layer from canonical request input.",
+        "LOCAL_ENGINEERING_COMMAND_CONTROL_NOT_PROOF_OF_FROZEN_INPUT_OUTCOME_TRUTH_VERIFIER_INDEPENDENCE_CAUSAL_CREDIT_OR_EFFICACY",
+    ),
+    (
+        "frozen-dgx-job-profiles",
+        "Future DGX Q1/MI/MI-2 LE-0 job profiles",
+        LOOP_JOB_PROFILES_PATH,
+        "A strict profile materializer binds Q1, MI, and MI-2 action/verifier module pairs, one-shot budgets, schema/grants, and declared frozen files into the standard no-shell job-process request without changing their hash-bound sources. The Q1 bridge invokes its independent reader in a distinct process.",
+        "FUTURE_LAUNCH_LOCAL_PROFILE_INTEGRATION_NOT_A_RERUN_HISTORICAL_QUALIFICATION_UNIVERSAL_RUNNER_ADOPTION_OUTCOME_INDEPENDENCE_OR_CAUSAL_EFFICACY",
+    ),
+    (
+        "diagnostic-mutation-internalization",
+        "Local diagnostic mutation internalization",
+        ROUTING_DIAGNOSTIC_FILE_PATH,
+        "The local DNRD routing diagnostic no longer invokes raw runtime submit directly; it uses a named internal structural-only seam and is not promoted to GE-2 independent-outcome admission.",
+        "LEGACY_LOCAL_DIAGNOSTIC_ONLY_NOT_STANDARD_RESEARCH_ADMISSION_OR_CAUSAL_EFFICACY",
     ),
 )
 
@@ -486,14 +566,20 @@ GAPS = (
     (
         "nary-delta-transaction",
         "Typed n-ary graph-delta transaction gap",
-        "A local source-bound graph-delta controller now requires snapshot/read-set binding, separate verifier outcome, content-readable evidence descriptors, an explicit serializable CAS policy, durable intent, quarantine on stale/conflicting state, and exact-payload restore. Canonical Permit/Inv composition, semantic critical-pair analysis, distributed recovery, and behavioral restore remain open.",
-        "PARTIALLY_CLOSED_LOCAL_GE2_ENGINEERING_NOT_CANONICAL_PERMIT_OR_CAUSAL_EFFICACY",
+        "A local source-bound graph-delta controller now requires snapshot/read-set binding, separate verifier outcome, content-readable evidence descriptors, an explicit serializable CAS policy, durable intent, quarantine on stale/conflicting state, exact-payload restore, and a package-root boundary that withholds raw durable submit. Canonical Permit/Inv composition, hostile same-process isolation, semantic critical-pair analysis, distributed recovery, and behavioral restore remain open.",
+        "PARTIALLY_CLOSED_LOCAL_GE2_MUTATION_BOUNDARY_NOT_CANONICAL_PERMIT_OR_CAUSAL_EFFICACY",
     ),
     (
         "integrated-loop-controller",
         "Integrated graph-and-loop controller gap",
-        "A bounded local controller now persists trigger, graph snapshot, action, verifier verdict, delta disposition, retry, stop, escalation, and restore in one append-only research-control journal. It does not execute agents autonomously, prove outcome independence, issue Permit, or turn a committed delta into a scientific disposition.",
-        "PARTIALLY_CLOSED_LOCAL_LE0_ENGINEERING_NOT_AUTONOMOUS_LOOP_OR_CAUSAL_EFFICACY",
+        "A bounded local controller now persists trigger, graph snapshot, action, verifier verdict, delta disposition, retry, stop, escalation, and restore in one append-only research-control journal; the standard job runner executes declared action and verifier subprocesses without a shell. It does not prove outcome independence, issue Permit, generate a graph delta automatically, or turn a committed delta into a scientific disposition.",
+        "PARTIALLY_CLOSED_LOCAL_LE0_JOB_ENGINEERING_NOT_INDEPENDENT_OUTCOME_OR_CAUSAL_EFFICACY",
+    ),
+    (
+        "research-job-adoption",
+        "Universal active-runner LE-0 adoption gap",
+        "The standard job entrypoint now registers future Q1, MI, and MI-2 launches with exact role-separated module pairs, one-shot budgets, and frozen-input manifests. DNRD and other active research launchers still lack their own registered action/verifier wrapper, recovery procedure, and independent qualification. Hash-bound historical sources are intentionally preserved rather than rewritten.",
+        "PARTIALLY_CLOSED_FROZEN_DGX_PROFILE_ADOPTION_FULL_ACTIVE_RUNNER_ADOPTION_UNQUALIFIED",
     ),
     (
         "causal-graph-efficacy",
@@ -533,16 +619,23 @@ GATES = (
     (
         "ge-2",
         "GE-2 graph-delta transaction qualification",
-        "Typed delta transaction with conflict, quarantine, restore, and concurrent-edit tests.",
+        "Typed delta transaction with conflict, quarantine, restore, concurrent-edit tests, and no public raw durable mutation export.",
         "A rejected or competing delta changes canonical state or recovery loses lineage.",
         "GRAPH_TRANSACTION_ENGINEERING_ONLY",
     ),
     (
         "le-0",
         "LE-0 loop-control qualification",
-        "Record trigger, snapshot, budget, verifier, stop/retry/escalation, and all verdicts.",
+        "Record trigger, snapshot, budget, action, separately identified verifier, stop/retry/escalation, and all verdicts; declared commands may execute through the standard no-shell job runner.",
         "The loop can run unbounded, self-approve, erase a failed attempt, or silently change contract.",
         "LOOP_CONTROL_ENGINEERING_ONLY",
+    ),
+    (
+        "le-1",
+        "LE-1 active research-job adoption qualification",
+        "Register each active launcher with exact action and verifier command identities, frozen-input binding, bounded budget, control-journal root, stop/retry/escalation policy, and recovery test before a new scientific occurrence. Q1, MI, and MI-2 profile materialization is present; remaining families remain required.",
+        "An active job bypasses the standard entrypoint, has no separately identified verifier record, silently retries, or cannot recover its control-journal lineage.",
+        "RESEARCH_RUNNER_ADOPTION_ENGINEERING_ONLY",
     ),
     (
         "gl-1",
@@ -869,7 +962,7 @@ QUALIFICATION_RUNS = (
         "slug": "proof-status-projection",
         "run_id": "QR-3",
         "name": "Proof-status projection reproducibility qualification",
-        "scope": "V5_DETERMINISTIC_BUILD_GRAPH_SHAPE_AND_PORTABLE_MARKDOWN",
+        "scope": "V6_DETERMINISTIC_BUILD_GRAPH_SHAPE_AND_PORTABLE_MARKDOWN",
         "commands": [
             "uv run python scripts/build_hswm_graph_and_loop_engineering_ontology.py --check",
             "uv run pytest -q tests/test_hswm_graph_and_loop_engineering_ontology.py",
@@ -882,10 +975,10 @@ QUALIFICATION_RUNS = (
         "environment": "Python 3.12.13; pytest 9.1.1; linux-x86_64",
         "result": "REPORTED_PASS",
         "result_summary": (
-            "deterministic v5 matched; ontology test passed; portable Markdown compiled; "
+            "deterministic v6 matched; ontology test passed; portable Markdown compiled; "
             "Git whitespace check passed"
         ),
-        "input_closure": "DETERMINISTIC_BUILDER_CHECKS_ALL_DECLARED_V5_SOURCE_BINDINGS",
+        "input_closure": "DETERMINISTIC_BUILDER_CHECKS_ALL_DECLARED_V6_SOURCE_BINDINGS",
         "qualified_claims": (),
         "sources": (
             ONTOLOGY_BUILDER_PATH,
@@ -920,7 +1013,7 @@ ANCHORS = [
     },
     {
         "uid": PREVIOUS_PROGRAM_UID,
-        "name": "HSWM graph and loop engineering reinforcement program [2026-09-01-v4]",
+        "name": "HSWM graph and loop engineering reinforcement program [2026-09-02-v5]",
         "required_labels": ["Concept", "ResearchProgram", "ResearchArtifact"],
     },
 ]
@@ -1360,7 +1453,7 @@ def build_data() -> dict[str, Any]:
                     "attestation_level": "SELF_ATTESTED_LOCAL_ONLY",
                     "qualification_status": "NOT_INDEPENDENTLY_QUALIFIED",
                     "evidence_ceiling": "LOCAL_REPRODUCIBILITY_STATUS_ONLY",
-                    "source_snapshot": "V5_CONTENT_HASH_BINDINGS",
+                    "source_snapshot": "V6_CONTENT_HASH_BINDINGS",
                     "qualified_claim_uids": [
                         _proof_claim_uid(slug)
                         for slug in item["qualified_claims"]
@@ -1590,6 +1683,34 @@ def build_data() -> dict[str, Any]:
                 "REALIZES",
                 _gate_uid("le-0"),
                 "LOCAL_ENGINEERING_IMPLEMENTATION",
+                "IMPLEMENTED_LOCAL_NOT_INDEPENDENTLY_QUALIFIED",
+            ),
+            _relation(
+                _current_surface_uid("graph-loop-public-boundary"),
+                "REALIZES",
+                _gate_uid("ge-2"),
+                "PUBLIC_MUTATION_ENTRYPOINT_ENFORCEMENT",
+                "IMPLEMENTED_LOCAL_NOT_INDEPENDENTLY_QUALIFIED",
+            ),
+            _relation(
+                _current_surface_uid("research-job-runner"),
+                "REALIZES",
+                _gate_uid("le-0"),
+                "DECLARED_SUBPROCESS_LOOP_CONTROL",
+                "IMPLEMENTED_LOCAL_NOT_INDEPENDENTLY_QUALIFIED",
+            ),
+            _relation(
+                _current_surface_uid("research-job-runner"),
+                "TARGETS",
+                _gate_uid("le-1"),
+                "ACTIVE_RUNNER_ADOPTION_PATH",
+                "PROPOSED",
+            ),
+            _relation(
+                _current_surface_uid("frozen-dgx-job-profiles"),
+                "TARGETS",
+                _gate_uid("le-1"),
+                "PARTIAL_ACTIVE_RUNNER_REGISTRATION",
                 "IMPLEMENTED_LOCAL_NOT_INDEPENDENTLY_QUALIFIED",
             ),
         )

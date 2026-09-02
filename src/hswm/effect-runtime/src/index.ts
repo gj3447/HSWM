@@ -249,9 +249,7 @@ export {
 } from "./canonical-atom-v2-durable-rdf-projection.js"
 export {
   HSWM_CANONICAL_ATOM_V2_LOCAL_DURABLE_STATE,
-  CanonicalAtomV2DurableRuntime,
-  CanonicalAtomV2DurableRuntimeError,
-  makeCanonicalAtomV2DurableRuntimeFileLayer,
+  CanonicalAtomV2DurableGraphView,
   type CanonicalAtomV2DurableEvolution,
   type CanonicalAtomV2DurableReceipt,
   type CanonicalAtomV2DurableRecoveryFailure,
@@ -264,11 +262,9 @@ export {
   HSWM_GRAPH_LOOP_CONTROL_MAX_EVENT_BYTES,
   HSWM_GRAPH_LOOP_ENGINEERING_V1_CONTRACT_VERSION,
   GraphLoopControlError,
-  GraphLoopControlJournal,
   GraphLoopControlJournalError,
   GraphLoopEngineeringController,
-  makeGraphLoopControlJournalFileLayer,
-  makeGraphLoopEngineeringControllerLayer,
+  makeGraphLoopEngineeringFileLayer,
   type GraphDeltaEvidence,
   type GraphDeltaRequest,
   type GraphDeltaResult,
@@ -279,6 +275,23 @@ export {
   type GraphLoopRunState,
   type GraphLoopSnapshot
 } from "./canonical-atom-v2-graph-loop-engineering.js"
+export {
+  HSWM_GRAPH_LOOP_RESEARCH_ACTION_V1_MEDIA_TYPE,
+  HSWM_GRAPH_LOOP_RESEARCH_FROZEN_INPUTS_V1_MEDIA_TYPE,
+  HSWM_GRAPH_LOOP_RESEARCH_JOB_V1_CONTRACT_VERSION,
+  HSWM_GRAPH_LOOP_RESEARCH_MAX_OUTPUT_BYTES,
+  HSWM_GRAPH_LOOP_RESEARCH_MAX_TIMEOUT_MS,
+  HSWM_GRAPH_LOOP_RESEARCH_STDERR_V1_MEDIA_TYPE,
+  HSWM_GRAPH_LOOP_RESEARCH_STDOUT_V1_MEDIA_TYPE,
+  HSWM_GRAPH_LOOP_RESEARCH_VERIFIER_V1_MEDIA_TYPE,
+  GraphLoopResearchJobError,
+  GraphLoopResearchProcessRunner,
+  makeGraphLoopResearchProcessRunnerLayer,
+  type GraphLoopResearchCommand,
+  type GraphLoopResearchJobRequest,
+  type GraphLoopResearchJobResult,
+  type GraphLoopResearchVerifier
+} from "./canonical-atom-v2-graph-loop-research-job.js"
 export {
   HSWM_CANONICAL_TRANSITION_EVIDENCE_BUNDLE_V1_MEDIA_TYPE,
   HSWM_CANONICAL_TRANSITION_EVIDENCE_RECORD_V1_MEDIA_TYPE,

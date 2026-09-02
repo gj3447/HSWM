@@ -4,7 +4,11 @@ import { createHash } from "node:crypto"
 import { Effect, Either, Layer, Context, Data } from "effect"
 
 import { canonicalJsonBytes, decodeCanonicalJsonBytes } from "./canonical-atom-v2-json.js"
-import { makeCanonicalAtomV2DurableRuntimeFileLayer, CanonicalAtomV2DurableRuntime } from "./canonical-atom-v2-durable-runtime.js"
+import {
+  CanonicalAtomV2DurableRuntime,
+  commitCanonicalAtomV2DurableFromLocalDiagnosticInternal,
+  makeCanonicalAtomV2DurableRuntimeFileLayer
+} from "./canonical-atom-v2-durable-runtime.js"
 import { decodeCanonicalAtomV2SchemaContent, describeCanonicalAtomV2Envelope, makeCanonicalAtomV2ContentBoundInput } from "./canonical-atom-v2-content-bound.js"
 import { type CanonicalAtomV2, type CanonicalAtomV2Key, type CommitCanonicalAtomsV2Command } from "./canonical-atom-v2-schema.js"
 import {
@@ -158,7 +162,14 @@ export const makeDnrdRoutingDiagnosticFileLayer = (rootPath: string) => {
           expectedStateRevision: stateRevision, schemaVersion: "hswm:dnrd:v1", actorClaim: DNRD_FILE_ACTOR, authorizationRef: DNRD_FILE_AUTHORIZATION, scope: DNRD_FILE_SCOPE,
           decidedAt, traceRef, readSet: [...reads], writes: [...writes], provenanceSha256: stagedProvenance.sha256
         }
-        return yield* runtime.submit(makeCanonicalAtomV2ContentBoundInput(runtime.schemaContent.content.sha256, command, bindings))
+        return yield* commitCanonicalAtomV2DurableFromLocalDiagnosticInternal(
+          runtime,
+          makeCanonicalAtomV2ContentBoundInput(
+            runtime.schemaContent.content.sha256,
+            command,
+            bindings
+          )
+        )
       })
       const makeAtom = (atomKey: CanonicalAtomV2Key, kind: string, owner: string, payload: unknown, provenance: CanonicalAtomV2["provenance"], references: CanonicalAtomV2["references"]): Effect.Effect<CanonicalAtomV2, unknown> => Effect.gen(function* () {
         const bytes = utf8(payload)

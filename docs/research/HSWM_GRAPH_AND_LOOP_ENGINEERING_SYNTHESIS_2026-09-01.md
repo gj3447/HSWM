@@ -6,9 +6,11 @@
 >
 > **Target authority:** [HSWM Constitution](../canon/HSWM_CONSTITUTION_2026-08-20.md) and [HSWM Adaptive Research Strategy](../canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)
 >
-> **Machine projection:** [`HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json`](../../ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json)
+> **Machine projection:** [`HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json`](../../ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json)
 >
 > **Current proof-status assessment:** [`HSWM_PROOF_STATUS_GRAPH_2026-09-02.md`](HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)
+>
+> **Current standard-entrypoint enforcement:** [`HSWM_GRAPH_LOOP_STANDARD_ENFORCEMENT_2026-09-02.md`](HSWM_GRAPH_LOOP_STANDARD_ENFORCEMENT_2026-09-02.md)
 
 ## 1. Answer first
 
@@ -224,4 +226,4 @@ remain prerequisites or falsifiable work for `GL-*`.
 
 ## 8. KG boundary
 
-The accompanying KG projection records sources, concepts, current capabilities, gaps, and proposed gates. The non-overwriting v5 follow-up also separates six fixed proof Claims, their source-bound EvidenceArtifacts, current three-axis Decisions, open Gaps, and three bounded local QualificationRun records. Its answer-first audit is the proof-status assessment linked above. Because raw command logs are not persisted, the runs are explicitly `SELF_ATTESTED_LOCAL_REPORTED_PASS / NOT_INDEPENDENTLY_QUALIFIED`; they record formal-build, targeted local-engineering, and projection-reproducibility status only. This remains searchable research infrastructure; it does not become the canonical HSWM graph, execute a learning loop, grant authority, or raise the scientific status above `INTEGRATED_CLAIM_UNJUDGED`.
+The accompanying KG projection records sources, concepts, current capabilities, gaps, and proposed gates. The non-overwriting v5 follow-up separates six fixed proof Claims, their source-bound EvidenceArtifacts, current three-axis Decisions, open Gaps, and three bounded local QualificationRun records. The v6 follow-up adds the public GE-2 mutation boundary, the LE-0 declared-subprocess entrypoint, and future-launch Q1/MI/MI-2 action/verifier profiles with frozen-input binding; it retains the remaining active-runner adoption gap. Its answer-first audit is the proof-status assessment linked above. Because raw command logs are not persisted, the runs are explicitly `SELF_ATTESTED_LOCAL_REPORTED_PASS / NOT_INDEPENDENTLY_QUALIFIED`; they record formal-build, targeted local-engineering, and projection-reproducibility status only. This remains searchable research infrastructure; it does not become the canonical HSWM graph, execute a learning loop, grant authority, or raise the scientific status above `INTEGRATED_CLAIM_UNJUDGED`.

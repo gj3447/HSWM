@@ -19,6 +19,12 @@ refinement, 현실 outcome·독립 causal credit, revision-caused real-LLM effic
 미증명이다. 기계 투영은 비파괴
 [`graph-and-loop ontology v5`](ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json)이며
 HSWM cognition이나 scientific terminal이 아니다.
+HSWM의 정확한 목표 정체성과 Lean에서 실제로 증명된 theorem family, 각 정리의
+비주장 경계는 독자용
+[`HSWM target and proved-theorem atlas`](docs/research/HSWM_TARGET_AND_PROVED_THEOREM_ATLAS_2026-09-02.md)에
+분리했다. 핵심은 model-level safety·binding·non-entailment·conditional composition은
+상당히 증명됐지만, real TypeScript/Effect refinement, outcome truth·independent causal
+credit, real-LLM efficacy와 fractal HSWM realization은 아직 증명되지 않았다는 것이다.
 
 2026-08-26 USER_PRIMARY는 fixed `H/W/A/F`를 폐기하고, **schema가 승인한 정본 원자마다
 책임 owner가 정확히 하나**라는 schema-relative 유일성만 남겼다. 이는 자연의 유일한

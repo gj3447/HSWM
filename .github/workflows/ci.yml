@@ -18,7 +18,7 @@ jobs:
         include:
           - name: core-tests
             python-version: "3.11"
-            command: uv run --locked --extra dev pytest -q tests --ignore=tests/test_hswm_swm0r_ontology.py --ignore=tests/test_hswm_swm0w_ontology.py
+            command: uv run --locked --extra dev --extra graph pytest -q tests --ignore=tests/test_hswm_swm0r_ontology.py --ignore=tests/test_hswm_swm0w_ontology.py
           # SWM-0R's historical byte receipt used CPython 3.12 and OpenBLAS's
           # SkylakeX kernel.  The portable job checks every non-BLAS-derived
           # field; an AVX-512 runner additionally checks the original bytes.
@@ -86,7 +86,9 @@ jobs:
           python-version: "3.11"
       - run: uv build --sdist --out-dir dist
       - run: mkdir sdist && tar -xzf dist/*.tar.gz -C sdist --strip-components=1
-      - run: uv run --locked --extra dev pytest -q
+      - run: uv run --locked hswm-graph-standards verify
+        working-directory: sdist
+      - run: uv run --locked --extra dev --extra graph pytest -q
         working-directory: sdist
       - run: uv run --locked hswm-verify-efficacy --pretty
         working-directory: sdist
@@ -307,4 +309,5 @@ jobs:
           "$wheel_python" -I -m traversal_cert teeth
           "$wheel_python" -I -m hswm_cellular_live_probe --mode fixture > "${{ runner.temp }}/wheel-cellular-probe.json"
           "${{ runner.temp }}/wheel-venv/bin/hswm-p1-gate-diagnostic" --help
+          "${{ runner.temp }}/wheel-venv/bin/hswm-graph-standards" --repository-root "${GITHUB_WORKSPACE}" verify
           "${{ runner.temp }}/wheel-venv/bin/hswm-verify-efficacy" --root "${{ github.workspace }}" --pretty > "${{ runner.temp }}/wheel-efficacy.json"

@@ -32,14 +32,16 @@
     "verify": "npm run check && npm run test && npm run build && npm run build:dnrd && npm pack --dry-run"
   },
   "dependencies": {
-    "effect": "3.22.1"
+    "effect": "3.22.1",
+    "jsonld": "9.0.0"
   },
   "devDependencies": {
     "@effect/language-service": "0.23.3",
     "@effect/vitest": "0.30.0",
+    "@types/jsonld": "1.5.15",
     "@types/n3": "1.26.3",
     "@types/node": "24.13.3",
-    "n3": "2.7.0",
+    "n3": "2.7.2",
     "rdf-canonize": "5.0.0",
     "typescript": "5.9.3",
     "vitest": "3.2.7"

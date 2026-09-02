@@ -100,10 +100,14 @@ family만 퇴역·우회시키며 HSWM 목표를 축소하지 않는다. `NOT_EV
 덮어쓰지 않고 새 version으로 이어갈 수 있다.
 
 v5 JSON은 저장소 schema registry에 맞춘 bounded property-graph projection이지 RDF
-표준 적합성 인증서가 아니다. 기존 local RDF view도 선언된 blank-node-free N-Quads
-profile의 deterministic engineering evidence일 뿐이다. Official N-Quads suite와 RDFC
-1.0 qualification은 열려 있고, SHACL은 suite·engine·version을 고정한 validation,
-PROV-O는 constrained mapping/profile validation이 별도로 필요하다.
+표준 적합성 인증서가 아니다. 이후 별도 운영 경계에서 official N-Quads/RDFC suite,
+HSWM-used SHACL profile, JSON-LD FromRDF profile, narrowed read-only SPARQL profile이
+exact source/package/runtime/receipt로 qualification되었고 constrained PROV-O view도
+구현됐다. 그 최신 범위는
+[`HSWM full-stack graph engineering boundary`](../operations/HSWM_FULL_STACK_GRAPH_ENGINEERING_2026-09-02.md)가
+관리한다. 이 추가 공학 근거는 이 문서의 여섯 end-to-end proof obligation 판정 수를
+바꾸지 않으며 cognition, causal learning, efficacy 또는 universal standards
+conformance 증명으로 승격되지 않는다.
 
 ## 4. Six fixed proof obligations
 

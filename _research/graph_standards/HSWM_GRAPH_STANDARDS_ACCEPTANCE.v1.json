@@ -78,6 +78,16 @@
       "hswm_role": "ASSERTED_PROVENANCE_EXCHANGE_ONLY"
     },
     {
+      "id": "sparql-1.1-query",
+      "authority": "W3C",
+      "title": "SPARQL 1.1 Query Language",
+      "version": "Recommendation 2013-03-21",
+      "status": "PUBLISHED_STANDARD",
+      "lane": "stable",
+      "official_url": "https://www.w3.org/TR/sparql11-query/",
+      "hswm_role": "READ_ONLY_LOCAL_SELECT_ASK_VIEW"
+    },
+    {
       "id": "rdf-1.2-n-quads",
       "authority": "W3C",
       "title": "RDF 1.2 N-Quads",
@@ -188,6 +198,20 @@
       "license": "W3C Software and Document License; suite manifests also declare W3C Test Suite License / W3C 3-clause BSD"
     },
     {
+      "id": "w3c-rdf-tests-sparql10-basic",
+      "authority": "W3C",
+      "repository": "https://github.com/w3c/rdf-tests.git",
+      "commit": "369a90d1a60c021b746df2e411da0ff36258a758",
+      "selected_path": "sparql/sparql10",
+      "git_tree_sha1": "75efaaca95522a3cc56394d01c9135320da8d6e1",
+      "git_archive_sha256": "d492baa48ffcd1fb47f6cd1015043ccd905022a6c167c4ee653e65f9d246b3a9",
+      "manifest_path": "sparql/sparql10/manifest-evaluation.ttl",
+      "manifest_sha256": "55b615a336f3c50790aa82c3da93858103f7a709814bd513c3fbf2a77b002fba",
+      "license_path": "LICENSE.md",
+      "license_sha256": "7fa36904d5d6d32848307af7b22d416b708aaa0b98f5c719b26adb5ed3594b2a",
+      "license": "W3C Software and Document License; SPARQL manifests also declare W3C Test Suite License / W3C 3-clause BSD"
+    },
+    {
       "id": "w3c-rdf-canon-tests",
       "authority": "W3C",
       "repository": "https://github.com/w3c/rdf-canon.git",
@@ -234,12 +258,13 @@
     {
       "id": "n3-nquads-parser",
       "authority_class": "INDEPENDENT_COMMUNITY_IMPLEMENTATION_NOT_W3C",
+      "ecosystem": "npm",
       "package": "n3",
-      "version": "2.7.0",
+      "version": "2.7.2",
       "source_repository": "https://github.com/rdfjs/N3.js.git",
-      "source_tag": "v2.7.0",
-      "source_commit": "210a1f84fea97058cfa4e94c91421acd4ae61bee",
-      "npm_integrity": "sha512-lq51RWnvGFW6+Yp9+NBx4r8EkWZEo55ilXsDQoJ1TJgiCzOQ0pQ5UbMU5tgp57yj0JTDvQssBwdaJOEOB39TqA==",
+      "source_tag": "v2.7.2",
+      "source_commit": "ffb71f9f7ddbdcb4ac831f019ce030b361cc860d",
+      "npm_integrity": "sha512-8Y/GU78BFSecvIv7OiJacY28l/zHiLo5/apxM+kyyUNCTWmqWyzzNjLlja4/vbLogoCHDPwCChLuDEZcpOKeDw==",
       "license": "MIT",
       "lockfile": "src/hswm/effect-runtime/package-lock.json",
       "capability": "READ_ONLY_NQUADS_PARSE_FOR_QUALIFICATION"
@@ -247,6 +272,7 @@
     {
       "id": "rdf-canonize-rdfc10",
       "authority_class": "INDEPENDENT_COMMUNITY_IMPLEMENTATION_NOT_W3C",
+      "ecosystem": "npm",
       "package": "rdf-canonize",
       "version": "5.0.0",
       "source_repository": "https://github.com/digitalbazaar/rdf-canonize.git",
@@ -256,15 +282,72 @@
       "license": "BSD-3-Clause",
       "lockfile": "src/hswm/effect-runtime/package-lock.json",
       "capability": "READ_ONLY_RDFC10_CROSS_IMPLEMENTATION_QUALIFICATION"
+    },
+    {
+      "id": "jsonld-jsonld11",
+      "authority_class": "INDEPENDENT_COMMUNITY_IMPLEMENTATION_NOT_W3C",
+      "ecosystem": "npm",
+      "package": "jsonld",
+      "version": "9.0.0",
+      "source_repository": "https://github.com/digitalbazaar/jsonld.js.git",
+      "source_tag": "v9.0.0",
+      "source_commit": "27a2b812267fef702c0ac5260a7555d35c3af005",
+      "npm_integrity": "sha512-pjMIdkXfC1T2wrX9B9i2uXhGdyCmgec3qgMht+TDj+S0qX3bjWMQUfL7NeqEhuRTi8G5ESzmL9uGlST7nzSEWg==",
+      "license": "BSD-3-Clause",
+      "lockfile": "src/hswm/effect-runtime/package-lock.json",
+      "capability": "SOURCE_BOUND_JSONLD11_FROM_RDF_AND_LOCAL_COMPACTION_VIEW"
+    },
+    {
+      "id": "pyshacl-shacl10",
+      "authority_class": "INDEPENDENT_COMMUNITY_IMPLEMENTATION_NOT_W3C",
+      "ecosystem": "pypi",
+      "package": "pyshacl",
+      "version": "0.40.1",
+      "source_repository": "https://github.com/RDFLib/pySHACL.git",
+      "source_tag": "v0.40.1",
+      "source_commit": "469cca7a22a078b36c167c1e8dadecf5e5ec6c75",
+      "sdist_sha256": "011e3cf1a68b31747cb762ba3d755ae1bdcc464c8fad0dc212a9adc550719552",
+      "wheel_sha256": "27dd58c8ddfa103303b4a8c40b2c666332ffc912dbcd3137f7adc7b7bc5e6bda",
+      "license": "Apache-2.0",
+      "lockfile": "uv.lock",
+      "project_manifest": "pyproject.toml",
+      "project_extra": "graph",
+      "capability": "SHACL10_STRUCTURAL_VALIDATION_OF_SOURCE_BOUND_RDF_VIEW"
+    },
+    {
+      "id": "rdflib-sparql11",
+      "authority_class": "INDEPENDENT_COMMUNITY_IMPLEMENTATION_NOT_W3C",
+      "ecosystem": "pypi",
+      "package": "rdflib",
+      "version": "7.6.0",
+      "source_repository": "https://github.com/RDFLib/rdflib.git",
+      "source_tag": "7.6.0",
+      "source_commit": "8b32146a0f9cb748c2068662e50d02b42fc86dfd",
+      "sdist_sha256": "6c831288d5e4a5a7ece85d0ccde9877d512a3d0f02d7c06455d00d6d0ea379df",
+      "wheel_sha256": "30c0a3ebf4c0e09215f066be7246794b6492e054e782d7ac2a34c9f70a15e0dd",
+      "license": "BSD-3-Clause",
+      "lockfile": "uv.lock",
+      "project_manifest": "pyproject.toml",
+      "project_extra": "graph",
+      "capability": "RDF11_DATASET_AND_LOCAL_READ_ONLY_SPARQL_SELECT_ASK"
     }
   ],
   "runtime_lock": {
     "node": "24.13.0",
     "npm": "11.6.2",
     "package_manifest": "src/hswm/effect-runtime/package.json",
-    "package_manifest_sha256": "ca299573fcfb213fdc1476559c18618b53c34a7aae1b05e86b023a6d30451fc7",
+    "package_manifest_sha256": "cf6e3cfa244bef2ad029b06e8a0e96c8f84861b9a4fe6a883f03acf215d9a2ba",
     "package_lock": "src/hswm/effect-runtime/package-lock.json",
-    "package_lock_sha256": "fdbc28cc2dd830243f011a18fec613a3db2412b986b4158d46d3b31a7320e1b4"
+    "package_lock_sha256": "be5432a1726a867c1850eb7359e6c9ef89e68d247423a55f055b930187e948e8"
+  },
+  "python_runtime_lock": {
+    "python": "3.12.13",
+    "uv": "0.12.3",
+    "extra": "graph",
+    "project_manifest": "pyproject.toml",
+    "project_manifest_sha256": "54d6195b583c4ae1f5d1a76d3134db7c23e1e18aa3c2d2914bd77b4596f46239",
+    "uv_lock": "uv.lock",
+    "uv_lock_sha256": "ca65dda2891ba71ff999ce6e37963cabee2bd23b2ee644ba841d508e9092c2f6"
   },
   "qualification_profiles": [
     {
@@ -310,27 +393,82 @@
       "claim_ceiling": "PINNED_RDF_CANONIZE_MATCHES_86_APPROVED_W3C_RDFC10_VECTORS_ONLY_NOT_UNIVERSAL_CONFORMANCE_SIGNATURE_TRUTH_OR_HSWM_NATIVE_IDENTITY"
     },
     {
-      "id": "shacl10-hswm-profile",
+      "id": "shacl10-pyshacl-hswm-core",
       "lane": "stable",
-      "status": "PENDING_ENGINE_AND_HSWM_SHAPES",
+      "status": "RUNNABLE_REQUIRES_PINNED_SUITE",
       "standard_ids": ["shacl-1.0"],
       "suite_source_id": "w3c-shacl10-tests",
-      "claim_ceiling": "NOT_QUALIFIED"
+      "adapter_id": "pyshacl-shacl10",
+      "runner": "_research/graph_standards/qualify_python_graph_standards.py",
+      "runner_sha256": "4a39aa2ed56c1dc240747c66049c6fad0b136ccb4726ba192456eee3ff9aa759",
+      "runner_runtime": "python",
+      "runner_suite_scope": "checkout_root",
+      "runner_suite_argument": "--suite-root",
+      "qualification_manifest_path": "data-shapes-test-suite/tests/core/manifest.ttl",
+      "qualification_manifest_sha256": "cf87ce03d0991bbdbd1d7227a72eba73bdcfcae6226a277fe82b6e2343c2948b",
+      "implementation_artifacts": [
+        {"path": "schemas/HSWM_CANONICAL_ATOM_V2_RDF_PROJECTION_SHACL_1_0.ttl", "sha256": "a67f1c0f2da1b297395a9aaf528e5a601d7c84ab56de4a5aa2ee0a63453554e8"},
+        {"path": "src/hswm/infrastructure/standard_graph_view.py", "sha256": "c284c3460cb89ef739092d4b9835d1531c85bbd15d0664e090907beade0a69d6"}
+      ],
+      "expected": {"candidate_validate": 98, "total_approved": 98, "selected_approved_validate": 98, "attempted": 97, "excluded": 1, "passed": 97, "failed": 0, "total_loaded_files": 106},
+      "pass_count_field": "attempted",
+      "explicit_exclusion": "Exactly property/uniqueLang-002: sh:uniqueLang is absent from the HSWM stable projection shape; the exclusion is one unsupported component, not a pass.",
+      "claim_ceiling": "PINNED_PYSHACL_ENGINE_MATCHES_97_OF_97_ATTEMPTED_APPROVED_W3C_SHACL10_CORE_FIXTURES_FOR_THE_HSWM_USED_COMPONENT_PROFILE_ONE_UNIQUE_LANG_FIXTURE_EXCLUDED_HSWM_ARTIFACTS_HASH_BOUND_NOT_EXECUTED_BY_SUITE_RUNNER_NOT_CANONICAL_ADMISSION_OR_UNIVERSAL_CONFORMANCE"
     },
     {
-      "id": "jsonld11-hswm-export",
+      "id": "jsonld11-jsonldjs-hswm-fromrdf",
       "lane": "stable",
-      "status": "PENDING_EXPORT_ADAPTER",
+      "status": "RUNNABLE_REQUIRES_PINNED_SUITE",
       "standard_ids": ["json-ld-1.1"],
       "suite_source_id": "w3c-jsonld11-tests",
-      "claim_ceiling": "NOT_QUALIFIED"
+      "adapter_id": "jsonld-jsonld11",
+      "runner": "_research/graph_standards/qualify_jsonld11.mjs",
+      "runner_sha256": "592b8319b4de503cfc040dcc4fbaebc942322e6eb481259cc3daf3168bdeb8d1",
+      "runner_runtime": "node",
+      "runner_suite_scope": "selected_path",
+      "runner_suite_argument": "--suite-root",
+      "qualification_manifest_path": "tests/fromRdf-manifest.jsonld",
+      "qualification_manifest_sha256": "c0bcca085187a15c0b869c3902ea130922f837634486724cec38f16bab26b283",
+      "implementation_artifacts": [
+        {"path": "src/hswm/effect-runtime/src/canonical-atom-v2-jsonld-view.ts", "sha256": "c7f106cf0c60cb7fa3c78e24987d5517f819a1a609564d2bc07348a11ccbb551"}
+      ],
+      "expected": {"approved": 54, "discovered": 54, "attempted": 21, "excluded": 33, "passed": 21, "failed": 0},
+      "pass_count_field": "attempted",
+      "explicit_exclusions": "Thirty-three vectors require blank nodes, non-1.1 processing, rdfDirection, native types, or rdf:type conversion outside the exact blank-node-free HSWM FromRDF options; overlaps are retained by the runner.",
+      "claim_ceiling": "PINNED_JSONLDJS_ENGINE_MATCHES_21_OF_21_ATTEMPTED_APPROVED_W3C_JSONLD11_FROMRDF_FIXTURES_WITH_EXACT_HSWM_OPTIONS_33_OUT_OF_PROFILE_FIXTURES_EXCLUDED_HSWM_ADAPTER_HASH_BOUND_NOT_EXECUTED_BY_SUITE_RUNNER_NOT_UNIVERSAL_JSONLD_CONFORMANCE"
+    },
+    {
+      "id": "sparql11-rdflib-hswm-basic",
+      "lane": "stable",
+      "status": "RUNNABLE_REQUIRES_PINNED_SUITE",
+      "standard_ids": ["sparql-1.1-query"],
+      "suite_source_id": "w3c-rdf-tests-sparql10-basic",
+      "adapter_id": "rdflib-sparql11",
+      "runner": "_research/graph_standards/qualify_sparql11_readonly.py",
+      "runner_sha256": "67d1e4747fa53bd2dca6242e7082add2b9b0f3380b17eba8476b07c262abe269",
+      "runner_runtime": "python",
+      "runner_suite_scope": "checkout_root",
+      "runner_suite_argument": "--suite-checkout",
+      "qualification_manifest_path": "sparql/sparql10/manifest-evaluation.ttl",
+      "qualification_manifest_sha256": "55b615a336f3c50790aa82c3da93858103f7a709814bd513c3fbf2a77b002fba",
+      "implementation_artifacts": [
+        {"path": "src/hswm/infrastructure/standard_graph_view.py", "sha256": "c284c3460cb89ef739092d4b9835d1531c85bbd15d0664e090907beade0a69d6"}
+      ],
+      "expected": {"manifests": 5, "discovered": 52, "attempted": 40, "excluded": 243, "passed": 40, "failed": 0},
+      "pass_count_field": "attempted",
+      "explicit_exclusions": "Only the official SPARQL 1.0 basic, triple-match, graph, and ask manifests that exercise the backward-compatible HSWM SELECT/ASK subset are attempted; all other root-manifest entries remain exclusions.",
+      "claim_ceiling": "PINNED_RDFLIB_ENGINE_MATCHES_40_OF_40_ATTEMPTED_W3C_BASIC_BACKWARD_COMPATIBLE_SELECT_ASK_FIXTURES_ONLY_HSWM_ADAPTER_HASH_BOUND_NOT_EXECUTED_BY_SUITE_RUNNER_NOT_FULL_SPARQL11_PROTOCOL_UPDATE_FEDERATION_ENTAILMENT_OR_UNIVERSAL_CONFORMANCE"
     },
     {
       "id": "prov-o-hswm-profile",
       "lane": "stable",
-      "status": "PENDING_CONSTRAINED_MAPPING",
+      "status": "IMPLEMENTED_CONSTRAINED_MAPPING_NO_OFFICIAL_EXECUTABLE_SUITE",
       "standard_ids": ["prov-o"],
-      "claim_ceiling": "NOT_QUALIFIED"
+      "implementation_artifacts": [
+        {"path": "src/hswm/infrastructure/standard_graph_view.py", "sha256": "c284c3460cb89ef739092d4b9835d1531c85bbd15d0664e090907beade0a69d6"}
+      ],
+      "official_vocabulary": {"url": "https://www.w3.org/ns/prov-o.ttl", "observed_sha256": "7d203989f67b38bca572253942acc5a1bf24ce3ccfece16f072dcb4be2b79a96"},
+      "claim_ceiling": "CONSTRAINED_ENTITY_ACTIVITY_DERIVATION_ENVELOPE_ONLY_NOT_PROVENANCE_TRUTH_CAUSAL_CREDIT_OR_CANONICAL_AUTHORITY"
     },
     {
       "id": "property-graph-query-adapters",
@@ -349,26 +487,64 @@
     {
       "id": "trace-context-carrier",
       "lane": "stable",
-      "status": "PENDING_REMOTE_RUNTIME_BOUNDARY",
-      "standard_ids": ["w3c-trace-context-1", "opentelemetry-specification"],
-      "claim_ceiling": "NOT_IMPLEMENTED_NOT_PROVENANCE_OR_CAUSAL_CREDIT"
+      "status": "IMPLEMENTED_CARRIER_REMOTE_INTEGRATION_PENDING",
+      "standard_ids": ["w3c-trace-context-1"],
+      "implementation_artifacts": [
+        {"path": "src/hswm/infrastructure/trace_context.py", "sha256": "be827c7acfd2f92757e210140094320e58785fc27caed1365c0b61903a6c139b"}
+      ],
+      "claim_ceiling": "STRICT_CORRELATION_ONLY_CARRIER_NOT_YET_WIRED_TO_A_REMOTE_RUNTIME_AND_NOT_PROVENANCE_CAUSAL_CREDIT_CANONICAL_STATE_OR_LEARNING"
+    },
+    {
+      "id": "opentelemetry-observability",
+      "lane": "metadata_only",
+      "status": "PENDING_REMOTE_RUNTIME_AND_SDK_SELECTION",
+      "standard_ids": ["opentelemetry-specification"],
+      "claim_ceiling": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "diagnostic-broad-suite-results",
+      "lane": "stable",
+      "status": "DIAGNOSTIC_FAILURES_RETAINED_NON_PROMOTING",
+      "standard_ids": ["shacl-1.0", "json-ld-1.1", "sparql-1.1-query"],
+      "observed": {
+        "shacl10_pyshacl_all_core": {"attempted": 98, "passed": 97, "failed": 1},
+        "jsonld11_jsonldjs_expand_compact": {"attempted": 631, "passed": 618, "failed": 13},
+        "jsonld11_jsonldjs_fromrdf": {"attempted": 54, "passed": 47, "failed": 7},
+        "sparql11_rdflib_broad": {"attempted": 241, "passed": 196, "failed": 45}
+      },
+      "claim_ceiling": "BROAD_DIAGNOSTIC_FAILURES_ARE_PRESERVED_AND_CANNOT_BE_RELABELED_AS_PRODUCTION_PASSES"
     }
   ],
   "qualification_receipts": [
     {
       "profile_id": "rdf11-nquads-n3",
-      "path": "_research/graph_standards/results/RDF11_NQUADS_N3_2_7_0.v1.json",
-      "receipt_sha256": "8327435db4476340b45cfbc38b32c43ebad57d62534bfc01a5c8c3be4f499659"
+      "path": "_research/graph_standards/results/RDF11_NQUADS_N3_2_7_2.v1.json",
+      "receipt_sha256": "e2c719582998bc17780eb31386acd220cb2270def2e4cee161d1643f8f3db322"
     },
     {
       "profile_id": "rdf12-nquads-n3-experimental",
-      "path": "_research/graph_standards/results/RDF12_NQUADS_N3_2_7_0_EXPERIMENTAL.v1.json",
-      "receipt_sha256": "c3913f5a0a930128c81ffc3044ca0fe37bae10d3886d87f4b332b676a0f2969f"
+      "path": "_research/graph_standards/results/RDF12_NQUADS_N3_2_7_2_EXPERIMENTAL.v1.json",
+      "receipt_sha256": "659c86a046f3bb35e5e8413d0b11c6988cd03064e4f428b8174cccb4896b910d"
     },
     {
       "profile_id": "rdfc10-rdf-canonize",
       "path": "_research/graph_standards/results/RDFC10_RDF_CANONIZE_5_0_0.v1.json",
-      "receipt_sha256": "461666be581af8283713333b166acdd3ec8e2009320b7831aa6411c28ce8f793"
+      "receipt_sha256": "00eab5378c40cafec7e16ffeb35884928e87616ba382ce231caf3009ffce0890"
+    },
+    {
+      "profile_id": "shacl10-pyshacl-hswm-core",
+      "path": "_research/graph_standards/results/SHACL10_PYSHACL_HSWM_CORE.v1.json",
+      "receipt_sha256": "f3989123aa1196b4b26fdfb110abdbb88599b3e3d89600ac39503763bc2d1b90"
+    },
+    {
+      "profile_id": "jsonld11-jsonldjs-hswm-fromrdf",
+      "path": "_research/graph_standards/results/JSONLD11_JSONLDJS_HSWM_FROMRDF.v1.json",
+      "receipt_sha256": "515c03e561158b7fadb86423c3966eb0c003295384befba792e4f4e8e0707400"
+    },
+    {
+      "profile_id": "sparql11-rdflib-hswm-basic",
+      "path": "_research/graph_standards/results/SPARQL11_RDFLIB_HSWM_BASIC.v1.json",
+      "receipt_sha256": "e7e00ee1aac17e695167fc96d4a388b52424581a5288f39474412082794f736b"
     }
   ],
   "mcp": {

@@ -1,0 +1,70 @@
+name: Graph standards requalification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  requalify:
+    name: replay pinned official suites
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Install the acceptance-locked Node runtime
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "24.13.0"
+      - name: Install the acceptance-locked Python and uv runtimes
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.12.3"
+          python-version: "3.12.13"
+      - name: Refuse runtime drift
+        run: |
+          test "$(node --version)" = "v24.13.0"
+          test "$(npm --version)" = "11.6.2"
+          test "$(uv --version)" = "uv 0.12.3"
+          printf '%s  %s\n' \
+            '53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc' \
+            "$(command -v node)" | sha256sum --check --strict
+          uv python install 3.12.13
+          python_path="$(uv python find --managed-python --no-project --resolve-links 3.12.13)"
+          test "$("${python_path}" -c 'import platform; print(platform.python_version())')" = "3.12.13"
+          printf '%s  %s\n' \
+            '021044895e95be79dc2f110367607e684119afbc8ce75f6f0eec94844e0acec7' \
+            "${python_path}" | sha256sum --check --strict
+      - name: Verify the graph acceptance lock
+        run: uv run --locked --no-python-downloads --python 3.12.13 hswm-graph-standards verify
+      - name: Fetch exact official-suite revisions
+        run: |
+          suite_root="$(mktemp -d "${RUNNER_TEMP}/hswm-graph-suites.XXXXXX")"
+          echo "HSWM_GRAPH_SUITE_ROOT=${suite_root}" >> "${GITHUB_ENV}"
+          uv run --locked --no-python-downloads --python 3.12.13 hswm-graph-standards fetch --source-id w3c-rdf-tests-rdf11-nquads --destination "${suite_root}/rdf11"
+          uv run --locked --no-python-downloads --python 3.12.13 hswm-graph-standards fetch --source-id w3c-rdf-tests-rdf12-nquads --destination "${suite_root}/rdf12"
+          uv run --locked --no-python-downloads --python 3.12.13 hswm-graph-standards fetch --source-id w3c-rdf-canon-tests --destination "${suite_root}/rdfc10"
+          uv run --locked --no-python-downloads --python 3.12.13 hswm-graph-standards fetch --source-id w3c-shacl10-tests --destination "${suite_root}/shacl10"
+          uv run --locked --no-python-downloads --python 3.12.13 hswm-graph-standards fetch --source-id w3c-jsonld11-tests --destination "${suite_root}/jsonld11"
+          uv run --locked --no-python-downloads --python 3.12.13 hswm-graph-standards fetch --source-id w3c-rdf-tests-sparql10-basic --destination "${suite_root}/sparql11"
+      - name: Replay every bounded qualification profile
+        run: |
+          result_root="$(mktemp -d "${RUNNER_TEMP}/hswm-graph-results.XXXXXX")"
+          echo "HSWM_GRAPH_RESULT_ROOT=${result_root}" >> "${GITHUB_ENV}"
+          uv run --locked --no-python-downloads --python 3.12.13 hswm-graph-standards qualify --profile rdf11-nquads-n3 --source-root "${HSWM_GRAPH_SUITE_ROOT}/rdf11" --output "${result_root}/RDF11_NQUADS_N3_2_7_2.v1.json"
+          uv run --locked --no-python-downloads --python 3.12.13 hswm-graph-standards qualify --profile rdf12-nquads-n3-experimental --source-root "${HSWM_GRAPH_SUITE_ROOT}/rdf12" --output "${result_root}/RDF12_NQUADS_N3_2_7_2_EXPERIMENTAL.v1.json"
+          uv run --locked --no-python-downloads --python 3.12.13 hswm-graph-standards qualify --profile rdfc10-rdf-canonize --source-root "${HSWM_GRAPH_SUITE_ROOT}/rdfc10" --output "${result_root}/RDFC10_RDF_CANONIZE_5_0_0.v1.json"
+          uv run --locked --no-python-downloads --python 3.12.13 hswm-graph-standards qualify --profile shacl10-pyshacl-hswm-core --source-root "${HSWM_GRAPH_SUITE_ROOT}/shacl10" --output "${result_root}/SHACL10_PYSHACL_HSWM_CORE.v1.json"
+          uv run --locked --no-python-downloads --python 3.12.13 hswm-graph-standards qualify --profile jsonld11-jsonldjs-hswm-fromrdf --source-root "${HSWM_GRAPH_SUITE_ROOT}/jsonld11" --output "${result_root}/JSONLD11_JSONLDJS_HSWM_FROMRDF.v1.json"
+          uv run --locked --no-python-downloads --python 3.12.13 hswm-graph-standards qualify --profile sparql11-rdflib-hswm-basic --source-root "${HSWM_GRAPH_SUITE_ROOT}/sparql11" --output "${result_root}/SPARQL11_RDFLIB_HSWM_BASIC.v1.json"
+      - name: Require byte-identical checked-in receipts
+        run: |
+          cmp "${HSWM_GRAPH_RESULT_ROOT}/RDF11_NQUADS_N3_2_7_2.v1.json" _research/graph_standards/results/RDF11_NQUADS_N3_2_7_2.v1.json
+          cmp "${HSWM_GRAPH_RESULT_ROOT}/RDF12_NQUADS_N3_2_7_2_EXPERIMENTAL.v1.json" _research/graph_standards/results/RDF12_NQUADS_N3_2_7_2_EXPERIMENTAL.v1.json
+          cmp "${HSWM_GRAPH_RESULT_ROOT}/RDFC10_RDF_CANONIZE_5_0_0.v1.json" _research/graph_standards/results/RDFC10_RDF_CANONIZE_5_0_0.v1.json
+          cmp "${HSWM_GRAPH_RESULT_ROOT}/SHACL10_PYSHACL_HSWM_CORE.v1.json" _research/graph_standards/results/SHACL10_PYSHACL_HSWM_CORE.v1.json
+          cmp "${HSWM_GRAPH_RESULT_ROOT}/JSONLD11_JSONLDJS_HSWM_FROMRDF.v1.json" _research/graph_standards/results/JSONLD11_JSONLDJS_HSWM_FROMRDF.v1.json
+          cmp "${HSWM_GRAPH_RESULT_ROOT}/SPARQL11_RDFLIB_HSWM_BASIC.v1.json" _research/graph_standards/results/SPARQL11_RDFLIB_HSWM_BASIC.v1.json

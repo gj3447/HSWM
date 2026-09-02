@@ -11,6 +11,8 @@
 > **Current proof-status assessment:** [`HSWM_PROOF_STATUS_GRAPH_2026-09-02.md`](HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)
 >
 > **Current standard-entrypoint enforcement:** [`HSWM_GRAPH_LOOP_STANDARD_ENFORCEMENT_2026-09-02.md`](HSWM_GRAPH_LOOP_STANDARD_ENFORCEMENT_2026-09-02.md)
+>
+> **Applied interoperability status:** [`HSWM_FULL_STACK_GRAPH_ENGINEERING_2026-09-02.md`](../operations/HSWM_FULL_STACK_GRAPH_ENGINEERING_2026-09-02.md)
 
 ## 1. Answer first
 
@@ -99,11 +101,11 @@ The native and standard planes have different authority:
 | source of truth | Exact canonical JSON schema, atom envelopes, recovered state, and predecessor-bound journal records remain authoritative. |
 | RDF dataset | A derived, read-only RDF 1.1 Dataset uses fixed named graphs for state, schema, provenance, and projection evidence. Relation atoms remain nodes and their ordered, role-bearing references remain reified incidences; no clique expansion is lossless. |
 | exchange bytes | N-Quads 1.1 is the baseline exchange syntax. The manifest records media type, byte length, SHA-256, source digest, compiler identity, mapping, declared omissions, invalidation, and `writeBack = FORBIDDEN`. |
-| canonicalization | RDFC-1.0 is the target external canonicalization profile. Until an independent conforming processor and official test vectors are run, a locally sorted blank-node-free N-Quads export is described only by that narrower implemented profile. |
-| shape validation | Versioned SHACL 2017 Core shapes may qualify an exported graph. Conformance is structural evidence only, never semantic truth, Permit, outcome truth, causal credit, or efficacy. |
-| provenance | PROV-O terms may exchange asserted provenance. Native evidence hashes, owner contracts, and independent causal protocols remain authoritative. |
-| human/API view | JSON-LD 1.1 may be generated from the verified RDF dataset; its compacted spelling and remote context are not signed or canonical inputs. |
-| query backends | GQL/property-graph, GraphBLAS, Neo4j, and other adapters must declare mapping and loss and remain source-invalidated, read-only compiled views by default. |
+| canonicalization | The independent `rdf-canonize@5.0.0` processor now passes all 86 attempted approved official RDFC-1.0 vectors, and the current blank-node-free HSWM fixture is a fixed point. This remains profile evidence, not universal conformance or native identity. |
+| shape validation | The checked-in SHACL 1.0 projection shape and `pyshacl==0.40.1` used-component profile are source/artifact locked. Conformance is structural evidence only, never semantic truth, Permit, outcome truth, causal credit, or efficacy. |
+| provenance | A constrained PROV-O source-entity/activity/derived-view envelope is implemented. Native evidence hashes, owner contracts, and independent causal protocols remain authoritative. |
+| human/API view | An actual `jsonld@9.0.0` FromRDF + JSON-LD 1.1 local-compaction adapter is implemented; the output is source-bound and remote document loading is forbidden, but its spelling is not a native signed input. |
+| query backends | Local SPARQL `SELECT`/`ASK` is implemented as a no-write/no-remote view. GQL/property-graph, GraphBLAS, Neo4j, and other adapters still require declared mapping/loss and remain source-invalidated compiled views. |
 
 This split makes graph experiments portable without turning a storage standard
 into an ontology of mind. It also makes a negative backend or mapping result
@@ -144,11 +146,16 @@ This is not yet the whole `GE-1` gate. The durable envelope now closes the local
 single-observation recovered-prefix composition slice, but a concurrent or
 deleted later slot is outside that observation and the file store supplies no
 global or distributed anti-rollback witness. The executable compiler artifact is
-profile-bound rather than binary/source-hash-bound. Official W3C N-Quads and
-RDFC vectors, cross-implementation qualification, SHACL shapes, PROV-O mapping,
-and JSON-LD export also remain open. The inner generic compiler deliberately
-retains its caller-supplied claim label; only the exact outer durable artifact
-adds the narrower local recovery attestation.
+profile-bound rather than binary/source-hash-bound. Official W3C N-Quads,
+RDFC, HSWM-used SHACL, JSON-LD FromRDF, and narrowed read-only SPARQL profiles
+are now source-pinned with exact executable receipts; a constrained PROV-O view
+is implemented without claiming an official executable suite. Broader
+diagnostics retain their failures, and Trace Context is implemented but not
+connected to a real remote runtime. These additions do not close the remaining
+anti-rollback, distributed recovery, causal-learning, or efficacy obligations.
+The inner generic compiler deliberately retains its caller-supplied claim
+label; only the exact outer durable artifact adds the narrower local recovery
+attestation.
 
 Run the implemented qualification slice with:
 

@@ -11,6 +11,10 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "hypothesis>=6.0"]
 kg = ["neo4j>=5.20"]
+graph = [
+    "pyshacl==0.40.1",
+    "rdflib==7.6.0",
+]
 
 [project.scripts]
 hswm-p1-gate-diagnostic = "hswm.diagnostics.p1_gate:main"

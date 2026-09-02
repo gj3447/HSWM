@@ -17,6 +17,14 @@ recursive-exclude tests test_hswm_swm0w_s2s_effect_handoff_v*.py
 # the checked-in Effect sources, Git chronology, and hosted-CI workflow, all of
 # which are intentionally outside the Python source distribution below.
 recursive-exclude tests test_hswm_dnrd_*.py
+# Graph qualification's complete repository test also binds a project-local
+# Skill and Git checkout behavior that are not Python-package surfaces.  The
+# graph-and-loop ontology replay binds the separately published Effect runtime
+# source closure.  The minimal, hash-bound npm qualification inputs are
+# transported separately below, but these repository-only tests must not
+# travel in the Python source distribution.
+exclude tests/test_graph_standard_tooling.py
+exclude tests/test_hswm_graph_and_loop_engineering_ontology.py
 # The narrowly named test_dnrd5_* suites below are synthetic Python contract
 # tests; they neither import the pruned Effect runtime nor require Git history.
 # Keep them in the sdist with their _research/dnrd5 Python implementations.
@@ -38,9 +46,16 @@ recursive-include src *.py *.md
 # The TypeScript/Effect runtime is a separate locked npm artifact. Never let a
 # maintainer's local node_modules or its source maps leak into the Python sdist.
 prune src/hswm/effect-runtime
+# The repository-bound graph qualification CLI hashes and, for Node profiles,
+# installs from exactly these two npm lock inputs.  Its JSON-LD profile also
+# binds one adapter source artifact.  Re-add only this explicit three-file
+# evidence bundle after pruning the independent Effect runtime package.
+include src/hswm/effect-runtime/package.json
+include src/hswm/effect-runtime/package-lock.json
+include src/hswm/effect-runtime/src/canonical-atom-v2-jsonld-view.ts
 recursive-include research *.json
 recursive-include ontology *.json *.md
-recursive-include schemas *.json
+recursive-include schemas *.json *.ttl
 recursive-include docs *.md *.txt
 recursive-include docs/assets *.png
 recursive-include prereg *.json *.md
@@ -59,6 +74,20 @@ recursive-exclude prom_search_hswm/data *
 include prom_search_hswm/data/README.md
 include prom_search_hswm/data/gold_badiou24.json
 recursive-include _research *.py *.json *.md *.sh *.tsv
+# ExpeL's transported runtime pin verifies these two dependency-closure files
+# byte-for-byte; keep the inclusion exact rather than widening research globs.
+include _research/causal_composition/priors/expel_b2_text_lesson_v1/runtime/requirements.in
+include _research/causal_composition/priors/expel_b2_text_lesson_v1/runtime/requirements.lock
+# ALFWorld's transported protocol tests bind these three public preregistration
+# inputs.  They are safe source-distribution evidence; private run data remains
+# outside the repository and outside this manifest.
+include _research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.requirements.v1.txt
+include _research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.arm64_pddl_only.requirements.v1.txt
+include _research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/textworld-pddl-only.v1.patch
+# JavaScript qualification runners are executable evidence inputs, not a broad
+# license to ship arbitrary research-side JavaScript.
+include _research/graph_standards/qualify_graph_standards.mjs
+include _research/graph_standards/qualify_jsonld11.mjs
 # MI-1's transported tests and freezer bind these exact public Q1-v3 source
 # bytes. Keep both paths literal so unrelated or private text/binary artifacts
 # cannot be swept into the Python source distribution by broad glob rules.

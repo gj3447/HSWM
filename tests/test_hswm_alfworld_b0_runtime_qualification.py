@@ -79,6 +79,8 @@ def test_checked_contract_is_canonical_immutable_and_pre_b0() -> None:
 
 def test_checked_dgx_public_qualification_is_q_bound_canonical_and_aggregate_only() -> None:
     repository = Path(__file__).resolve().parents[1]
+    if not (repository / ".git").exists():
+        pytest.skip("requires source-checkout Git history")
     manifest_path = repository / "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json"
     contract_path = repository / "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/runtime_qualification_contract.v1.json"
     raw = manifest_path.read_bytes()

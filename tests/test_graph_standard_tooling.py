@@ -20,7 +20,14 @@ def _copy_lock_bound_files(lock: dict[str, object], destination: Path) -> None:
     relative_paths = {
         lock["runtime_lock"]["package_manifest"],
         lock["runtime_lock"]["package_lock"],
+        lock["python_runtime_lock"]["project_manifest"],
+        lock["python_runtime_lock"]["uv_lock"],
         *(profile["runner"] for profile in lock["qualification_profiles"] if "runner" in profile),
+        *(
+            artifact["path"]
+            for profile in lock["qualification_profiles"]
+            for artifact in profile.get("implementation_artifacts", [])
+        ),
         *(record["path"] for record in lock["qualification_receipts"]),
     }
     for relative in relative_paths:
@@ -36,6 +43,9 @@ def test_checked_in_acceptance_lock_and_package_integrities_are_exact() -> None:
     assert set(indexes["adapters"]) == {
         "n3-nquads-parser",
         "rdf-canonize-rdfc10",
+        "jsonld-jsonld11",
+        "pyshacl-shacl10",
+        "rdflib-sparql11",
     }
     assert {
         identifier
@@ -45,7 +55,33 @@ def test_checked_in_acceptance_lock_and_package_integrities_are_exact() -> None:
         "rdf11-nquads-n3",
         "rdf12-nquads-n3-experimental",
         "rdfc10-rdf-canonize",
+        "shacl10-pyshacl-hswm-core",
+        "jsonld11-jsonldjs-hswm-fromrdf",
+        "sparql11-rdflib-hswm-basic",
     }
+
+
+def test_cli_can_verify_an_explicit_source_root_outside_its_install_location(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    lock = _lock()
+    _copy_lock_bound_files(lock, tmp_path)
+    manifest = tmp_path / "_research/graph_standards/HSWM_GRAPH_STANDARDS_ACCEPTANCE.v1.json"
+    manifest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(tooling.DEFAULT_LOCK, manifest)
+
+    exit_code = tooling.main(
+        [
+            "--repository-root",
+            str(tmp_path),
+            "--manifest",
+            str(manifest),
+            "verify",
+        ]
+    )
+
+    assert exit_code == 0
+    assert json.loads(capsys.readouterr().out)["status"] == "PASS"
 
 
 def test_draft_standard_cannot_enter_the_stable_lane() -> None:
@@ -113,6 +149,30 @@ def test_adapter_package_integrity_drift_is_refused() -> None:
     lock["tool_adapters"][0]["npm_integrity"] = "sha512-not-the-lock-value"
 
     with pytest.raises(tooling.GraphStandardToolingError, match="package lock drift"):
+        tooling.verify_acceptance_lock(lock)
+
+
+def test_python_adapter_artifact_integrity_drift_is_refused() -> None:
+    lock = deepcopy(_lock())
+    adapter = next(
+        item for item in lock["tool_adapters"] if item["id"] == "pyshacl-shacl10"
+    )
+    adapter["wheel_sha256"] = "0" * 64
+
+    with pytest.raises(tooling.GraphStandardToolingError, match="Python integrity"):
+        tooling.verify_acceptance_lock(lock)
+
+
+def test_implementation_artifact_digest_drift_is_refused() -> None:
+    lock = deepcopy(_lock())
+    profile = next(
+        item
+        for item in lock["qualification_profiles"]
+        if item["id"] == "jsonld11-jsonldjs-hswm-fromrdf"
+    )
+    profile["implementation_artifacts"][0]["sha256"] = "0" * 64
+
+    with pytest.raises(tooling.GraphStandardToolingError, match="artifact drift"):
         tooling.verify_acceptance_lock(lock)
 
 

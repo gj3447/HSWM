@@ -1,0 +1,57 @@
+@prefix hswm: <https://hswm.invalid/canonical-atom-v2/rdf/v1/vocab/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Stable SHACL 1.0 structural profile for the derived RDF projection only.
+# It does not validate canonical admission, Permit, causal credit, learning,
+# efficacy, payload availability, or the omitted journal history.
+
+hswm:DatasetShape
+    a sh:NodeShape ;
+    sh:targetClass hswm:Dataset ;
+    sh:property [ sh:path hswm:stateSha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] ;
+    sh:property [ sh:path hswm:stateRevision ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ; sh:maxInclusive 9007199254740991 ] ;
+    sh:property [ sh:path hswm:schemaVersion ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$" ] ;
+    sh:property [ sh:path hswm:schemaContentSha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] ;
+    sh:property [ sh:path hswm:journalLineageId ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$" ] ;
+    sh:property [ sh:path hswm:tailSha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] ;
+    sh:property [ sh:path hswm:rdfProfile ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue "RDF_1_1_N_QUADS_BLANK_NODE_FREE_DETERMINISTIC_PROFILE" ] ;
+    sh:property [ sh:path hswm:mapping ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue "ROLE_PRESERVING_REIFIED_TYPED_REFERENCE" ] ;
+    sh:property [ sh:path hswm:writeBack ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue "FORBIDDEN" ] ;
+    sh:property [ sh:path hswm:nonclaim ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue "RDF_PROJECTION_ONLY_NOT_CANONICAL_HSWM_STATE_COGNITION_LEARNING_PERMISSION_OR_EFFICACY" ] ;
+    sh:property [ sh:path hswm:compilerContractVersion ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue "hswm-canonical-atom-v2-rdf-projection/v1" ] ;
+    sh:property [ sh:path hswm:compilerContractSha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] .
+
+hswm:AtomVersionShape
+    a sh:NodeShape ;
+    sh:targetClass hswm:CanonicalAtomVersion ;
+    sh:targetClass hswm:ReifiedRelationAtomVersion ;
+    sh:property [ sh:path hswm:canonicalKey ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ] ;
+    sh:property [ sh:path hswm:kind ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$" ] ;
+    sh:property [ sh:path hswm:kindForm ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ( "ENTITY" "RELATION" ) ] ;
+    sh:property [ sh:path hswm:responsibilityOwner ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$" ] ;
+    sh:property [ sh:path hswm:contentMediaType ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:maxLength 255 ; sh:pattern "^[A-Za-z0-9][A-Za-z0-9!#$&^_.+-]*/[A-Za-z0-9][A-Za-z0-9!#$&^_.+-]*$" ] ;
+    sh:property [ sh:path hswm:contentByteLength ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ; sh:maxInclusive 16777216 ] ;
+    sh:property [ sh:path hswm:contentSha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] ;
+    sh:property [ sh:path hswm:provenanceMode ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ( "BOOTSTRAP" "OBSERVATION" "DERIVATION" ) ] ;
+    sh:property [ sh:path hswm:provenanceSource ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
+    sh:property [ sh:path hswm:evidenceSha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] ;
+    sh:or (
+        [ sh:property [ sh:path rdf:type ; sh:hasValue hswm:CanonicalAtomVersion ] ; sh:property [ sh:path hswm:kindForm ; sh:hasValue "ENTITY" ] ]
+        [ sh:property [ sh:path rdf:type ; sh:hasValue hswm:ReifiedRelationAtomVersion ] ; sh:property [ sh:path hswm:kindForm ; sh:hasValue "RELATION" ] ]
+    ) ;
+    sh:or (
+        [ sh:property [ sh:path hswm:provenanceMode ; sh:hasValue "BOOTSTRAP" ] ; sh:property [ sh:path hswm:provenanceSource ; sh:maxCount 0 ] ]
+        [ sh:property [ sh:path hswm:provenanceMode ; sh:hasValue "OBSERVATION" ] ]
+        [ sh:property [ sh:path hswm:provenanceMode ; sh:hasValue "DERIVATION" ] ; sh:property [ sh:path hswm:provenanceSource ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ]
+    ) .
+
+hswm:TypedReferenceShape
+    a sh:NodeShape ;
+    sh:targetClass hswm:TypedReference ;
+    sh:property [ sh:path hswm:sourceAtom ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
+    sh:property [ sh:path hswm:targetAtom ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
+    sh:property [ sh:path hswm:referenceType ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$" ] ;
+    sh:property [ sh:path hswm:role ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,255}$" ] ;
+    sh:property [ sh:path hswm:ordinal ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ; sh:maxInclusive 255 ] .

@@ -234,6 +234,17 @@ export {
   type CanonicalAtomV2RdfProjectionSource
 } from "./canonical-atom-v2-rdf-projection.js"
 export {
+  HSWM_CANONICAL_ATOM_V2_JSONLD_MEDIA_TYPE,
+  HSWM_CANONICAL_ATOM_V2_JSONLD_VIEW_V1_CONTRACT_VERSION,
+  HSWM_JSONLD_CLAIM_CEILING,
+  HSWM_JSONLD_IMPLEMENTATION,
+  CanonicalAtomV2JsonLdViewError,
+  compileCanonicalAtomV2JsonLdView,
+  type CanonicalAtomV2JsonLdView,
+  type CanonicalAtomV2JsonLdViewManifest,
+  type CanonicalAtomV2RdfViewInput
+} from "./canonical-atom-v2-jsonld-view.js"
+export {
   HSWM_CANONICAL_ATOM_V2_DURABLE_RDF_MAX_JOURNAL_BYTES,
   HSWM_CANONICAL_ATOM_V2_DURABLE_RDF_MAX_RECORDS,
   HSWM_CANONICAL_ATOM_V2_DURABLE_RDF_PREFIX_COMMITMENT_V1,

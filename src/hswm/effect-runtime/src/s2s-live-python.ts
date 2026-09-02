@@ -126,7 +126,7 @@ const NUMERIC_MODULE_PATHS = Object.freeze({
 export const S2S_NUMERIC_LOCAL_SOURCE_CLOSURE = Object.freeze([
   Object.freeze({
     path: "pyproject.toml",
-    sha256: "24c89decb62b272a05626b411346ffc6d38dd0bb3fc5d17feb5bfaaf03abe5bd"
+    sha256: "54d6195b583c4ae1f5d1a76d3134db7c23e1e18aa3c2d2914bd77b4596f46239"
   }),
   Object.freeze({
     path: "src/hswm/__init__.py",
@@ -162,7 +162,7 @@ export const S2S_NUMERIC_LOCAL_SOURCE_CLOSURE = Object.freeze([
   }),
   Object.freeze({
     path: "uv.lock",
-    sha256: "6b05d72b97246fd19c99adeb36120dc030bdb52c869fb49e6be210d3b2783bfd"
+    sha256: "ca65dda2891ba71ff999ce6e37963cabee2bd23b2ee644ba841d508e9092c2f6"
   })
 ] as const)
 

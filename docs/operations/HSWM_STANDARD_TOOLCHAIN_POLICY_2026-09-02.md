@@ -8,6 +8,8 @@
 >
 > **Machine lock:** [HSWM graph standards acceptance v1](../../_research/graph_standards/HSWM_GRAPH_STANDARDS_ACCEPTANCE.v1.json)
 >
+> **Applied stack:** [HSWM full-stack graph engineering boundary](HSWM_FULL_STACK_GRAPH_ENGINEERING_2026-09-02.md)
+>
 > **Scope:** External graph standards, SDKs, conformance suites, MCPs, Skills, package provenance, and thin adapters
 
 ## 1. Answer first
@@ -48,8 +50,8 @@ success result; their status must be rechecked at the next adoption decision.
 | Dataset canonicalization | [RDFC-1.0](https://www.w3.org/TR/rdf-canon/), W3C Recommendation 2024-05-21 | No HSWM-local replacement algorithm | External canonicalization only; it does not define signatures or HSWM native identity. |
 | Shapes | [SHACL 1.0](https://www.w3.org/TR/shacl/), W3C Recommendation 2017-07-20 | [SHACL 1.2 Core](https://www.w3.org/TR/shacl12-core/) remains a 2026 draft | Exported-graph structure only, never semantic truth or Permit. |
 | JSON exchange | [JSON-LD 1.1](https://www.w3.org/TR/json-ld11/), W3C Recommendation 2020-07-16 | No compacted JSON spelling becomes a signed native input | Human/API projection only. |
-| Provenance | [PROV-O](https://www.w3.org/TR/prov-o/), W3C Recommendation 2013-04-30 | HSWM constrained profile is still pending | Asserted provenance exchange, not causal identification. |
-| Query | SPARQL 1.1 remains the published RDF query family | SPARQL 1.2 documents are drafts; [ISO GQL](https://www.iso.org/standard/76120.html) and [SQL/PGQ](https://www.iso.org/standard/79473.html) are recorded by published edition and corrigendum but their copyrighted text is not vendored | A future source-invalidated, loss-declared compiled view only. |
+| Provenance | [PROV-O](https://www.w3.org/TR/prov-o/), W3C Recommendation 2013-04-30 | The checked-in HSWM mapping is deliberately limited to source entity → derivation activity → derived view entity | Asserted exchange lineage only, not provenance truth or causal identification. |
+| Query | [SPARQL 1.1 Query](https://www.w3.org/TR/sparql11-query/) is the stable local RDF query baseline | SPARQL 1.2 documents are drafts; [ISO GQL](https://www.iso.org/standard/76120.html) and [SQL/PGQ](https://www.iso.org/standard/79473.html) are recorded by published edition and corrigendum but their copyrighted text is not vendored | Local read-only `SELECT`/`ASK`; updates, remote datasets, `SERVICE`, and write-back are refused. |
 | Sparse graph compute | No W3C or ISO native-HSWM standard | [GraphBLAS C API 2.1.0](https://graphblas.org/docs/GraphBLAS_API_C_v2.1.0.pdf) is a stable project specification | A future sparse compiled view, not a lossless n-ary state or learning rule. |
 | Distributed correlation | [W3C Trace Context](https://www.w3.org/TR/trace-context/), Recommendation 2021-11-23 | [OpenTelemetry specification 1.60.0](https://opentelemetry.io/docs/specs/otel/) is the observed project baseline | Correlation and observability only, not canonical provenance or causal credit. |
 
@@ -76,27 +78,48 @@ materialized outside the repository and its recorded license bytes are checked.
 ## 5. Executed qualification cut
 
 The suite commits, clean selected trees, archive digests, manifests, licenses,
-npm integrities, complete package-lock digest, qualification-runner digest,
-runtime, exact counts, nonclaims, and content-addressed receipt digests are
-checked by the machine lock. Each qualification installs the locked dependency
-graph into a fresh temporary directory with `npm ci --ignore-scripts`; it does
-not trust the repository's existing `node_modules` bytes.
+npm/PyPI artifact integrities, complete package-lock and uv-lock digests,
+qualification-runner and implementation-artifact digests, runtimes, exact
+counts, exclusions, nonclaims, and content-addressed receipt digests are checked
+by the machine lock. The official-suite runners call the selected independent
+engines directly; implementation digests bind HSWM adapter bytes but do not
+claim those adapter modules were imported by the suite runner. Their behavior
+is covered separately by local integration tests. Node qualifications use a fresh temporary
+`npm ci --ignore-scripts` installation with isolated config and cache. Python
+qualifications use `uv run --isolated --locked`, an exact CPython 3.12.13 and uv
+0.12.3, the exact `graph` extra, and disabled implicit Python downloads. Neither
+path trusts the repository's existing installed packages.
+
+The manual
+[`graph-standards-requalification.yml`](../../.github/workflows/graph-standards-requalification.yml)
+workflow repeats that full source fetch and six-profile replay under the exact
+locked runtimes, then compares every result byte-for-byte with the checked-in
+receipt. Ordinary CI verifies the lock and adapters without silently performing
+a networked standards requalification.
 
 | Profile | Observed result | Exact ceiling |
 |---|---|---|
-| RDF 1.1 N-Quads syntax with `n3@2.7.0` | `PASS`: 53 positive + 32 negative = 85 `rdft:Approved` vectors. Two manifest entries without `rdft:Approved` are excluded from the stable count. [Receipt](../../_research/graph_standards/results/RDF11_NQUADS_N3_2_7_0.v1.json) | The pinned parser matches those approved syntax fixtures; this is not universal parser or HSWM emitter conformance. |
-| RDF 1.2 N-Quads delta syntax with `n3@2.7.0` | `PASS`: 7 positive + 20 negative = 27 current delta fixtures. [Receipt](../../_research/graph_standards/results/RDF12_NQUADS_N3_2_7_0_EXPERIMENTAL.v1.json) | Draft-only diagnostic; it cannot promote the stable baseline. |
+| RDF 1.1 N-Quads syntax with `n3@2.7.2` | `PASS`: 53 positive + 32 negative = 85 `rdft:Approved` vectors. Two manifest entries without `rdft:Approved` are excluded from the stable count. [Receipt](../../_research/graph_standards/results/RDF11_NQUADS_N3_2_7_2.v1.json) | The pinned parser matches those approved syntax fixtures; this is not universal parser or HSWM emitter conformance. |
+| RDF 1.2 N-Quads delta syntax with `n3@2.7.2` | `PASS`: 7 positive + 20 negative = 27 current delta fixtures. [Receipt](../../_research/graph_standards/results/RDF12_NQUADS_N3_2_7_2_EXPERIMENTAL.v1.json) | Draft-only diagnostic; it cannot promote the stable baseline. |
 | RDFC-1.0 with `rdf-canonize@5.0.0` | `PASS`: 64 canonical-output + 21 identifier-map + 1 complexity rejection = 86 approved vectors. [Receipt](../../_research/graph_standards/results/RDFC10_RDF_CANONIZE_5_0_0.v1.json) | The pinned independent processor matches the tested RDFC aspects; it is not W3C itself and does not prove signatures, truth, or HSWM identity. |
 | HSWM RDF projection through the qualified processor | The actual TypeScript fixture is a byte-identical fixed point of external `RDFC-1.0`. [Test](../../src/hswm/effect-runtime/test/canonical-atom-v2-rdf-projection.test.ts) | One current blank-node-free HSWM fixture and profile only; the local sorter is still not called an RDFC implementation. |
+| SHACL 1.0 with `pyshacl==0.40.1` | `PASS`: 97/97 attempted approved Core fixtures; the one `sh:uniqueLang` fixture is explicitly excluded because that component is absent from the HSWM shape. [Receipt](../../_research/graph_standards/results/SHACL10_PYSHACL_HSWM_CORE.v1.json) | Used-component profile only. The checked-in shape validates structural projection constraints, not canonical admission or truth. |
+| JSON-LD 1.1 with `jsonld@9.0.0` | `PASS`: 21/21 attempted official FromRDF fixtures under the exact HSWM options; 33 blank-node, direction, native-type, RDF-type, or processing-mode fixtures stay excluded. [Receipt](../../_research/graph_standards/results/JSONLD11_JSONLDJS_HSWM_FROMRDF.v1.json) | Source-bound blank-node-free FromRDF + local compaction view only, not universal JSON-LD conformance. |
+| SPARQL read-only view with `rdflib==7.6.0` | `PASS`: 40/40 attempted official basic/triple-match/graph/ASK fixtures; all other suite entries remain exclusions. [Receipt](../../_research/graph_standards/results/SPARQL11_RDFLIB_HSWM_BASIC.v1.json) | Backward-compatible local `SELECT`/`ASK` subset only; no protocol, update, federation, entailment, `CONSTRUCT`, or `DESCRIBE`. |
 
 The RDFC Recommendation itself warns that passing every suite case checks only
 the aspects represented by those cases, not complete universal conformance.
 The receipts preserve the same ceiling.
 
-The official SHACL 1.0 and JSON-LD 1.1 source suites are locked, but no engine
-or HSWM profile has been selected. PROV-O, GQL/SQL-PGQ, GraphBLAS, and Trace
-Context adapters remain explicitly pending rather than being represented by
-placeholder success tests.
+Broader diagnostic runs remain visible and failed: PySHACL Core `97/98`,
+JSON-LD expand/compact `618/631`, JSON-LD FromRDF `47/54`, and broad SPARQL
+`196/241`. These failures are not relabelled as production passes. The narrower
+production profiles correspond to the independent-engine surface used by the
+HSWM adapters and retain every exclusion in the machine lock; they are not
+end-to-end official-suite executions through the HSWM wrapper. PROV-O has a constrained mapping without
+an executable official suite. Trace Context has a strict carrier but is not yet
+wired to a real remote runtime. GQL/SQL-PGQ, GraphBLAS, and OpenTelemetry remain
+metadata or future adapter work.
 
 ## 6. MCP and Skill boundary
 
@@ -145,8 +168,14 @@ Static lock, package, receipt, policy, and provenance validation:
 
 ```bash
 uv run hswm-graph-standards verify
-uv run pytest -q tests/test_graph_standard_tooling.py
+uv run --extra graph pytest -q tests/test_graph_standard_tooling.py \
+  tests/test_standard_graph_view.py tests/test_trace_context.py
 ```
+
+The CLI verifies a complete source closure. An installed wheel must supply
+`--repository-root` for a full checkout or extracted sdist (and may supply
+`--manifest` explicitly); the wheel alone is not reclassified as the separate
+npm or research artifact.
 
 Materialize a suite outside the repository, at only its locked commit:
 
@@ -173,13 +202,13 @@ repository.
 
 ## 8. Next bounded order
 
-1. Define HSWM RDF export shapes, select one exact SHACL 1.0 engine, qualify it
-   against the locked official suite, then run the HSWM shapes.
-2. Define a constrained PROV-O mapping whose terms cannot override native
-   evidence, responsibility owner, Permit, or causal records.
-3. Add Trace Context only when a real remote process boundary requires it.
-4. Add JSON-LD, GQL/SQL-PGQ, or GraphBLAS adapters only after a concrete query or
-   compiled-view use case supplies a mapping, loss, invalidation, and parity test.
+1. Wire the Trace Context carrier only at an actual remote HTTP boundary and
+   qualify propagation end to end; do not store it as canonical provenance.
+2. Select and qualify an OpenTelemetry SDK only for that concrete runtime.
+3. Add GQL/SQL-PGQ or GraphBLAS only after a backend supplies an explicit
+   mapping-loss, invalidation, no-write-back, and parity contract.
+4. Re-evaluate RDF 1.2, SHACL 1.2, and SPARQL 1.2 after publication as stable
+   Recommendations; current draft results cannot promote the stable lane.
 
 These steps improve interoperability and falsifiability. They do not close the
 separate TypeScript-to-Lean refinement, real storage recovery, independent

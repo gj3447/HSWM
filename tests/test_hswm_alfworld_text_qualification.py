@@ -90,6 +90,8 @@ def test_qualification_cli_is_directly_executable_by_path() -> None:
 
 def test_checked_public_qualification_projection_if_present() -> None:
     repository = Path(__file__).resolve().parents[1]
+    if not (repository / ".git").exists():
+        pytest.skip("requires source-checkout Git history")
     path = repository / "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_QUALIFICATION_2026-08-30.json"
     if not path.exists():
         pytest.skip("qualification projection is generated only after the real sealed smoke")

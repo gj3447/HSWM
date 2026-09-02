@@ -435,12 +435,18 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
     # 포함할 수 있으므로 source distribution의 공용 표면에서 제외한다.
     root_sh = [n for n in inner if "/" not in n and n.endswith(".sh")]
     assert not root_sh, f"루트 셸 스크립트가 배포물에 실렸다(호스트명 유출): {root_sh}"
-    effect_runtime = [
+    effect_runtime = {
         n for n in inner if n.startswith("src/hswm/effect-runtime/")
-    ]
-    assert not effect_runtime, (
-        "별도 npm artifact인 Effect runtime이 Python sdist에 섞였다: "
-        f"{effect_runtime[:10]}"
+    }
+    graph_qualification_effect_inputs = {
+        "src/hswm/effect-runtime/package.json",
+        "src/hswm/effect-runtime/package-lock.json",
+        "src/hswm/effect-runtime/src",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-jsonld-view.ts",
+    }
+    assert effect_runtime == graph_qualification_effect_inputs, (
+        "Python sdist의 Effect 경계는 해시 결박 graph qualification 최소 번들이어야 "
+        f"한다: {sorted(effect_runtime)}"
     )
     assert "tests/test_hswm_swm0w_s2s_effect_handoff.py" in inner, (
         "sdist용 Effect handoff fallback test가 배포물에서 누락됐다"
@@ -455,3 +461,50 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
         "Python sdist가 제외한 Effect/workflow bytes를 요구하는 repository-only "
         f"handoff tests를 운송한다: {repository_only_handoffs[:10]}"
     )
+    # The DNRD execution/judgment suites bind the separately published npm
+    # runtime, its lockfile, and hosted-CI provenance.  They cannot validate a
+    # Python-only source distribution after that runtime is deliberately
+    # pruned.  Keep their exact names out of the tarball; the similarly named
+    # DNRD-5 synthetic Python contract tests are intentionally not included in
+    # this list because they construct their own fixture trees.
+    repository_only_dnrd = {
+        "tests/test_hswm_dnrd_execute.py",
+        "tests/test_hswm_dnrd_integration.py",
+        "tests/test_hswm_dnrd_judge.py",
+    }
+    shipped_repository_only_dnrd = sorted(repository_only_dnrd & set(inner))
+    assert not shipped_repository_only_dnrd, (
+        "Python sdist가 Effect/npm runtime을 요구하는 DNRD 실행 테스트를 운송한다: "
+        f"{shipped_repository_only_dnrd}"
+    )
+    assert "schemas/HSWM_CANONICAL_ATOM_V2_RDF_PROJECTION_SHACL_1_0.ttl" in inner, (
+        "Python graph view test가 요구하는 SHACL 1.0 shape가 sdist에서 누락됐다"
+    )
+    assert {
+        "_research/graph_standards/qualify_graph_standards.mjs",
+        "_research/graph_standards/qualify_jsonld11.mjs",
+    } <= set(inner), "Node graph qualification runner가 sdist에서 누락됐다"
+    assert "tests/test_graph_standard_tooling.py" not in inner, (
+        "Python sdist가 제외한 Effect/npm graph qualification artifact를 요구하는 "
+        "repository-only verifier test를 운송한다"
+    )
+    assert "tests/test_hswm_graph_and_loop_engineering_ontology.py" not in inner, (
+        "Python sdist가 별도 npm runtime 전체를 요구하는 graph ontology "
+        "repository-only replay test를 운송한다"
+    )
+    assert {
+        "_research/causal_composition/priors/expel_b2_text_lesson_v1/"
+        "runtime/requirements.in",
+        "_research/causal_composition/priors/expel_b2_text_lesson_v1/"
+        "runtime/requirements.lock",
+    } <= set(inner), "ExpeL runtime pin이 검증하는 dependency closure가 sdist에서 누락됐다"
+    alfworld_protocol_root = (
+        "_research/causal_composition/preregistrations/"
+        "alfworld_b0_calibration_2026-08-30/"
+    )
+    assert {
+        alfworld_protocol_root + "alfworld_text_runtime.requirements.v1.txt",
+        alfworld_protocol_root
+        + "alfworld_text_runtime.arm64_pddl_only.requirements.v1.txt",
+        alfworld_protocol_root + "textworld-pddl-only.v1.patch",
+    } <= set(inner), "ALFWorld public preregistration source closure가 sdist에서 누락됐다"

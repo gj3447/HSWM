@@ -63,6 +63,8 @@ def test_public_projection_excludes_private_identity_and_trace_fields() -> None:
 
 def test_committed_engineering_prerequisites_are_verified_before_selection() -> None:
     repository = Path(__file__).resolve().parents[1]
+    if not (repository / ".git").exists():
+        pytest.skip("requires source-checkout Git history")
     protocol = (
         repository
         / "_research/causal_composition/preregistrations/"

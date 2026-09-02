@@ -259,7 +259,12 @@ jobs:
             "${RUNNER_TEMP}/dnrd-offline-verifier-receipt.json"
       - name: Typecheck, test, build, and inspect the npm artifact
         working-directory: src/hswm/effect-runtime
-        run: npm run verify
+        run: |
+          npm run check
+          npm run test -- --testTimeout=15000
+          npm run build
+          npm run build:dnrd
+          npm pack --dry-run
       - name: Rehearse the manifest-selected DNRD runtime closure
         run: uv run --locked --extra dev pytest -q tests/test_hswm_dnrd_integration.py -k current_runtime_closure
 

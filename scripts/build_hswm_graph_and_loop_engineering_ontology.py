@@ -14,7 +14,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 ONTOLOGY_PATH = Path(
-    "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v4.json"
+    "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json"
 )
 SYNTHESIS_PATH = Path(
     "docs/research/HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md"
@@ -81,6 +81,52 @@ GRAPH_LOOP_ENGINEERING_PATH = Path(
 GRAPH_LOOP_ENGINEERING_TEST_PATH = Path(
     "src/hswm/effect-runtime/test/canonical-atom-v2-graph-loop-engineering.test.ts"
 )
+PROOF_STATUS_PATH = Path(
+    "docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md"
+)
+TYPESCRIPT_LEAN_STATUS_PATH = Path(
+    "docs/research/HSWM_TYPESCRIPT_EFFECT_LEAN_AND_CAUSAL_EVIDENCE_STATUS_2026-08-31.md"
+)
+END_TO_END_REFINEMENT_PATH = Path(
+    "docs/research/HSWM_END_TO_END_RUNTIME_REFINEMENT_LEAN_BOUNDARY_2026-08-31.md"
+)
+CAUSAL_EFFICACY_BRIDGE_PATH = Path(
+    "docs/research/HSWM_CAUSAL_EFFICACY_OCCURRENCE_LEAN_BRIDGE_2026-09-01.md"
+)
+CANONICAL_LEARNING_LEAN_PATH = Path("formal/HSWMCanonicalLearning.lean")
+VERIFIED_ADMISSION_KERNEL_LEAN_PATH = Path(
+    "formal/HSWMVerifiedAdmissionKernel.lean"
+)
+END_TO_END_REFINEMENT_LEAN_PATH = Path(
+    "formal/HSWMEndToEndRuntimeRefinement.lean"
+)
+CAUSAL_EFFICACY_BRIDGE_LEAN_PATH = Path("formal/HSWMCausalEfficacyBridge.lean")
+VERIFIED_ADMISSION_GATEWAY_PATH = Path(
+    "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts"
+)
+VERIFIED_ADMISSION_GATEWAY_TEST_PATH = Path(
+    "src/hswm/effect-runtime/test/canonical-atom-v2-verified-admission-gateway-v2.test.ts"
+)
+LOCAL_PERMIT_COMMIT_PATH = Path(
+    "src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit.ts"
+)
+LOCAL_PERMIT_COMMIT_TEST_PATH = Path(
+    "src/hswm/effect-runtime/test/canonical-atom-v2-local-permit-commit.test.ts"
+)
+LOCAL_PERMIT_COMMIT_CRASH_TEST_PATH = Path(
+    "src/hswm/effect-runtime/test/canonical-atom-v2-local-permit-commit-process-crash.test.ts"
+)
+FORMAL_LAKEFILE_PATH = Path("formal/lakefile.toml")
+LEAN_TOOLCHAIN_PATH = Path("formal/lean-toolchain")
+EFFECT_PACKAGE_PATH = Path("src/hswm/effect-runtime/package.json")
+EFFECT_PACKAGE_LOCK_PATH = Path("src/hswm/effect-runtime/package-lock.json")
+ONTOLOGY_BUILDER_PATH = Path(
+    "scripts/build_hswm_graph_and_loop_engineering_ontology.py"
+)
+ONTOLOGY_TEST_PATH = Path(
+    "tests/test_hswm_graph_and_loop_engineering_ontology.py"
+)
+PORTABLE_MATH_COMPILER_PATH = Path("scripts/compile_portable_markdown_math.py")
 SOURCE_BINDING_PATHS = (
     SYNTHESIS_PATH,
     CONSTITUTION_PATH,
@@ -107,15 +153,35 @@ SOURCE_BINDING_PATHS = (
     IMPLEMENTATION_PATH,
     GRAPH_LOOP_ENGINEERING_PATH,
     GRAPH_LOOP_ENGINEERING_TEST_PATH,
+    PROOF_STATUS_PATH,
+    TYPESCRIPT_LEAN_STATUS_PATH,
+    END_TO_END_REFINEMENT_PATH,
+    CAUSAL_EFFICACY_BRIDGE_PATH,
+    CANONICAL_LEARNING_LEAN_PATH,
+    VERIFIED_ADMISSION_KERNEL_LEAN_PATH,
+    END_TO_END_REFINEMENT_LEAN_PATH,
+    CAUSAL_EFFICACY_BRIDGE_LEAN_PATH,
+    VERIFIED_ADMISSION_GATEWAY_PATH,
+    VERIFIED_ADMISSION_GATEWAY_TEST_PATH,
+    LOCAL_PERMIT_COMMIT_PATH,
+    LOCAL_PERMIT_COMMIT_TEST_PATH,
+    LOCAL_PERMIT_COMMIT_CRASH_TEST_PATH,
+    FORMAL_LAKEFILE_PATH,
+    LEAN_TOOLCHAIN_PATH,
+    EFFECT_PACKAGE_PATH,
+    EFFECT_PACKAGE_LOCK_PATH,
+    ONTOLOGY_BUILDER_PATH,
+    ONTOLOGY_TEST_PATH,
+    PORTABLE_MATH_COMPILER_PATH,
 )
 
-SCHEMA_VERSION = "hswm-graph-and-loop-engineering-ontology/v4"
-UID_RELEASE = "2026-09-01-v4"
+SCHEMA_VERSION = "hswm-graph-and-loop-engineering-ontology/v5"
+UID_RELEASE = "2026-09-02-v5"
 BUNDLE_UID = (
-    "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-01-v4"
+    "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-02-v5"
 )
-PROGRAM_UID = "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v4"
-PREVIOUS_PROGRAM_UID = "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v3"
+PROGRAM_UID = "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-02-v5"
+PREVIOUS_PROGRAM_UID = "sym:ResearchProgram:hswm-graph-and-loop-engineering-2026-09-01-v4"
 NONCLAIM = (
     "SECONDARY_AI_RESEARCH_SYNTHESIS_AND_BOUNDED_KG_PROJECTION_ONLY_NOT_HSWM_"
     "COGNITION_LEARNING_EFFICACY_CONSCIOUSNESS_PERSONHOOD_OR_SCALE_CLOSURE"
@@ -395,6 +461,13 @@ CURRENT_SURFACES = (
         "SOURCE_LEVEL_REFINEMENT_UNPROVED_AND_NOT_END_TO_END_HSWM",
     ),
     (
+        "local-permit-commit",
+        "Local Permit issuance and POSIX commit occurrence",
+        LOCAL_PERMIT_COMMIT_PATH,
+        "One bounded v1 Node path generates an ephemeral Ed25519 key, mints a random one-use nonce, checks caller-relative time, signs and verifies one Permit envelope, and publishes one no-replace local POSIX successor with process-crash recovery tests.",
+        "BOUNDED_V1_LOCAL_OCCURRENCE_NOT_V2_CRASH_QUALIFICATION_PRODUCTION_AUTHORITY_TRUSTED_TIME_GLOBAL_NONCE_POWER_LOSS_OR_DISTRIBUTED_STORAGE_PROOF",
+    ),
+    (
         "graph-loop-controller",
         "GE-2 and LE-0 graph-loop engineering controller",
         GRAPH_LOOP_ENGINEERING_PATH,
@@ -427,6 +500,18 @@ GAPS = (
         "Outcome-bound graph efficacy gap",
         "No current result establishes that a canonical graph delta, rather than matched retrieval, lesson, static workflow, sham, or shuffled credit, mediates fresh behavior.",
         "SCIENTIFICALLY_UNJUDGED",
+    ),
+    (
+        "universal-source-refinement",
+        "Universal TypeScript/Effect-to-Lean source refinement gap",
+        "No verified TypeScript, Effect, Node crypto, canonical-byte, or POSIX semantics, proof-producing extraction, or full-program simulation theorem establishes that every in-scope runtime execution refines the Lean transition model.",
+        "UNPROVED_CURRENT_PROFILE_OBSTRUCTED",
+    ),
+    (
+        "authoritative-permit-storage",
+        "Authoritative Permit and storage qualification gap",
+        "The bounded local occurrence does not supply production key custody, authoritative monotonic time, globally atomic nonce consumption, power-loss qualification, anti-rollback, or distributed linearizability.",
+        "LOCAL_OCCURRENCE_SUPPORTED_BROADER_AUTHORITY_AND_STORAGE_UNPROVED",
     ),
 )
 
@@ -475,6 +560,347 @@ GATES = (
     ),
 )
 
+PROOF_STATUSES = (
+    {
+        "slug": "lean-model-theorems",
+        "status_id": "PS-1",
+        "name": "Lean model safety and conditional-composition theorems",
+        "claim": (
+            "The cited declared Lean models machine-check their internal safety, binding, "
+            "non-entailment, and conditional-composition statements under their explicit premises."
+        ),
+        "assessment": (
+            "Supported inside the declared formal models; this does not interpret TypeScript, "
+            "cryptography, storage, external truth, causal identification, or a real LLM provider."
+        ),
+        "scope": "LEAN_DECLARED_MODEL",
+        "implementation_status": "QUALIFIED",
+        "implementation_boundary": "CITED_LEAN_MODELS_AND_DECLARED_PREMISES_ONLY",
+        "evidence_disposition": "SUPPORTED_IN_SCOPE",
+        "claim_ceiling": "FORMAL_MODEL_ONLY",
+        "formal_status": "PROVED_UNDER_DECLARED_PREMISES",
+        "summary_bucket": "FORMAL_MODEL_PROVED",
+        "route_disposition": "ACTIVE_FORMAL_BOUNDARY",
+        "falsifier": (
+            "The checked-in Lean modules fail their declared build, acquire an undeclared "
+            "axiom or placeholder, or no longer prove the recorded theorem boundary."
+        ),
+        "next_evidence": (
+            "Preserve the formal build; runtime and scientific claims must close their "
+            "separate proof-status obligations."
+        ),
+        "sources": (
+            CANONICAL_LEARNING_LEAN_PATH,
+            VERIFIED_ADMISSION_KERNEL_LEAN_PATH,
+            END_TO_END_REFINEMENT_LEAN_PATH,
+            CAUSAL_EFFICACY_BRIDGE_LEAN_PATH,
+        ),
+        "source_status": "SUPPORTS_DECLARED_FORMAL_SCOPE",
+        "gap": None,
+    },
+    {
+        "slug": "typescript-lean-local-boundary",
+        "status_id": "PS-2",
+        "name": "Tested TypeScript-to-Lean local wire and persisted-decision boundary",
+        "claim": (
+            "Strict wire vectors and one protected local v2 gateway path agree with the "
+            "configured Lean admission decision and retain the exact request and response for recovery."
+        ),
+        "assessment": (
+            "Bounded engineering evidence is present for the tested path; it is not a "
+            "source-level theorem over all TypeScript or Effect executions."
+        ),
+        "scope": "TESTED_LOCAL_GATEWAY_PATH",
+        "implementation_status": "IMPLEMENTED",
+        "implementation_boundary": "TESTED_LOCAL_V2_GATEWAY_PATH_ONLY",
+        "evidence_disposition": "SUPPORTED_IN_SCOPE",
+        "claim_ceiling": "LOCAL_RUNTIME_ONLY",
+        "formal_status": "ENGINEERING_EVIDENCE_NOT_UNIVERSAL_PROOF",
+        "summary_bucket": "LOCAL_ENGINEERING_SUPPORTED",
+        "route_disposition": "CONTINUE_WITH_STRONGER_ADAPTER_QUALIFICATION",
+        "falsifier": (
+            "A canonical fixed or adversarial vector disagrees across the boundary, or fresh "
+            "recovery accepts a persisted decision whose exact request or response no longer validates."
+        ),
+        "next_evidence": (
+            "Pin executable identity, audit an actual recovered v2 receipt into a complete "
+            "certificate, and independently qualify the cross-language boundary."
+        ),
+        "sources": (
+            TYPESCRIPT_LEAN_STATUS_PATH,
+            ADMISSION_PATH,
+            VERIFIED_ADMISSION_GATEWAY_PATH,
+            VERIFIED_ADMISSION_GATEWAY_TEST_PATH,
+            VERIFIED_ADMISSION_KERNEL_LEAN_PATH,
+        ),
+        "source_status": "SUPPORTS_BOUNDED_ENGINEERING_SCOPE",
+        "gap": "universal-source-refinement",
+    },
+    {
+        "slug": "universal-typescript-lean-refinement",
+        "status_id": "PS-3",
+        "name": "Universal TypeScript/Effect-to-Lean refinement",
+        "claim": (
+            "Every in-scope TypeScript/Effect runtime execution simulates the declared Lean "
+            "transition and atomic-learning relations."
+        ),
+        "assessment": (
+            "Unproved. Conditional Lean bridges and tested vectors do not supply a semantics "
+            "or extraction theorem, and the recorded current profile has explicit blockers."
+        ),
+        "scope": "FULL_SOURCE_AND_RUNTIME_SEMANTICS",
+        "implementation_status": "PARTIAL",
+        "evidence_disposition": "UNDERDETERMINED",
+        "claim_ceiling": "NO_UNIVERSAL_REFINEMENT_CLAIM",
+        "implementation_boundary": "BOUNDARY_AND_OBSTRUCTION_ARTIFACTS_ONLY",
+        "formal_status": "UNPROVED_CURRENT_PROFILE_OBSTRUCTED",
+        "summary_bucket": "CORE_UNPROVED",
+        "route_disposition": "CURRENT_PROFILE_BLOCKED_TARGET_RETAINED",
+        "falsifier": (
+            "One admitted in-scope runtime trace cannot be simulated by the Lean relation, "
+            "or a supposedly protected path bypasses an obligation required by that relation."
+        ),
+        "next_evidence": (
+            "Choose a verified source semantics, proof-producing extraction, or auditable "
+            "simulation route and prove it for an explicitly bounded runtime surface."
+        ),
+        "sources": (
+            TYPESCRIPT_LEAN_STATUS_PATH,
+            END_TO_END_REFINEMENT_PATH,
+            END_TO_END_REFINEMENT_LEAN_PATH,
+        ),
+        "source_status": "DOCUMENTS_UNPROVED_AND_OBSTRUCTED_BOUNDARY",
+        "gap": "universal-source-refinement",
+    },
+    {
+        "slug": "local-permit-posix-occurrence",
+        "status_id": "PS-4",
+        "name": "Local key, time, nonce, Permit, atomic publication, and recovery occurrence",
+        "claim": (
+            "One bounded v1 local Node/POSIX path actually issues and verifies a Permit with an "
+            "ephemeral key, caller-relative time and a one-use nonce, then publishes and recovers one successor."
+        ),
+        "assessment": (
+            "Supported in the tested v1 local process-crash scope. This is not v2 persisted-"
+            "decision crash qualification; production authority, power-loss, global nonce, "
+            "anti-rollback, and distributed-storage claims remain unproved."
+        ),
+        "scope": "LOCAL_NODE_POSIX_PROCESS_CRASH",
+        "implementation_status": "IMPLEMENTED",
+        "implementation_boundary": "V1_LOCAL_PERMIT_COMMIT_NAMESPACE_ONLY",
+        "evidence_disposition": "SUPPORTED_IN_SCOPE",
+        "claim_ceiling": "LOCAL_RUNTIME_ONLY",
+        "formal_status": "BOUNDED_LOCAL_OCCURRENCE_NOT_PRODUCTION_PROOF",
+        "summary_bucket": "LOCAL_ENGINEERING_SUPPORTED",
+        "route_disposition": "RETAIN_LOCAL_SLICE_QUALIFY_BEFORE_EXPANSION",
+        "falsifier": (
+            "Replay, stale head, forged or expired Permit, duplicate nonce, interrupted publish, "
+            "or competing writer yields an accepted invalid or non-linear recovered successor."
+        ),
+        "next_evidence": (
+            "Add v2-specific SIGKILL checkpoints, then qualify durable key custody, trusted time, "
+            "cross-store nonce atomicity, power loss, anti-rollback, and the intended deployment "
+            "filesystem or distributed backend."
+        ),
+        "sources": (
+            TYPESCRIPT_LEAN_STATUS_PATH,
+            LOCAL_PERMIT_COMMIT_PATH,
+            LOCAL_PERMIT_COMMIT_TEST_PATH,
+            LOCAL_PERMIT_COMMIT_CRASH_TEST_PATH,
+        ),
+        "source_status": "SUPPORTS_BOUNDED_LOCAL_OCCURRENCE",
+        "gap": "authoritative-permit-storage",
+    },
+    {
+        "slug": "outcome-truth-causal-credit",
+        "status_id": "PS-5",
+        "name": "External outcome truth and independent causal credit",
+        "claim": (
+            "The outcome consumed by an admitted revision is externally true and the exact "
+            "revision receives independently identified causal credit."
+        ),
+        "assessment": (
+            "Not established. Lean states conditional premises and non-entailment boundaries, "
+            "but no qualifying external truth, evaluator-independence, or causal-identification occurrence inhabits them."
+        ),
+        "scope": "REAL_WORLD_OUTCOME_AND_CAUSAL_IDENTIFICATION",
+        "implementation_status": "PARTIAL",
+        "implementation_boundary": "PROTOCOL_AND_CONDITIONAL_BRIDGE_ONLY",
+        "evidence_disposition": "NOT_EVALUATED",
+        "claim_ceiling": "CAUSAL_CLAIM_PENDING",
+        "formal_status": "REAL_WORLD_PREMISES_UNINHABITED",
+        "summary_bucket": "CORE_UNPROVED",
+        "route_disposition": "G0_NOT_PASSED_G1_NOT_EVALUATED",
+        "falsifier": (
+            "Outcome provenance, evaluator independence, sham, delayed-credit, shuffled-credit, "
+            "remove or restore control, or independent replay fails the frozen identification contract."
+        ),
+        "next_evidence": (
+            "Run a pre-registered externally operated occurrence with sealed outcomes, separate "
+            "evaluator and judge, frozen controls, complete custody, and independent replay."
+        ),
+        "sources": (
+            TYPESCRIPT_LEAN_STATUS_PATH,
+            END_TO_END_REFINEMENT_PATH,
+            CAUSAL_EFFICACY_BRIDGE_PATH,
+            CAUSAL_EFFICACY_BRIDGE_LEAN_PATH,
+            CAUSAL_PROGRAM_PATH,
+        ),
+        "source_status": "DOCUMENTS_CONDITIONAL_PREMISES_AND_MISSING_OCCURRENCE",
+        "gap": "causal-graph-efficacy",
+    },
+    {
+        "slug": "revision-real-llm-efficacy",
+        "status_id": "PS-6",
+        "name": "Revision-caused improvement in real LLM behavior",
+        "claim": (
+            "The exact admitted HSWM revision causes a reproducible improvement in fresh real-LLM "
+            "behavior under a frozen evaluation and loses and recovers that effect under controls."
+        ),
+        "assessment": (
+            "Not established. Exploratory provider calls are baseline-saturated or confounded; "
+            "there is no passed G0/G1 confirmatory occurrence or independent causal terminal."
+        ),
+        "scope": "CONFIRMATORY_REAL_LLM_CAUSAL_EFFICACY",
+        "implementation_status": "PARTIAL",
+        "implementation_boundary": "PROTOCOL_BRIDGE_AND_EXPLORATORY_RUNS_ONLY",
+        "evidence_disposition": "NOT_EVALUATED",
+        "claim_ceiling": "INTEGRATED_CLAIM_UNJUDGED",
+        "formal_status": "NO_CONFIRMATORY_OCCURRENCE",
+        "summary_bucket": "CORE_UNPROVED",
+        "route_disposition": "G0_NOT_PASSED_G1_NOT_EVALUATED",
+        "falsifier": (
+            "Matched retrieval, static lesson, sham, position bias, shuffled or delayed credit, "
+            "fixed graph, evaluator leakage, or failure of remove/restore explains the gain."
+        ),
+        "next_evidence": (
+            "Close G0, then execute G1 or the frozen DNRD-5 route with fresh held-out probes, "
+            "remove/restore controls, independent evaluation, uncertainty, and reproducibility."
+        ),
+        "sources": (
+            TYPESCRIPT_LEAN_STATUS_PATH,
+            CAUSAL_EFFICACY_BRIDGE_PATH,
+            CAUSAL_EFFICACY_BRIDGE_LEAN_PATH,
+            CAUSAL_PROGRAM_PATH,
+        ),
+        "source_status": "DOCUMENTS_EXPLORATORY_ONLY_AND_MISSING_CONFIRMATION",
+        "gap": "causal-graph-efficacy",
+    },
+)
+
+QUALIFICATION_RUNS = (
+    {
+        "slug": "lean-formal-build",
+        "run_id": "QR-1",
+        "name": "Lean formal boundary build qualification",
+        "scope": "CITED_LEAN_BOUNDARIES_AND_FORMAL_PROJECT_BUILD",
+        "commands": [
+            "cd formal && lake build",
+            "cd formal && lake env lean HSWMCanonicalLearning.lean",
+            "cd formal && lake env lean HSWMVerifiedAdmissionKernel.lean",
+            "cd formal && lake env lean HSWMEndToEndRuntimeRefinement.lean",
+            "cd formal && lake env lean HSWMCausalEfficacyBridge.lean",
+        ],
+        "environment": (
+            "Lean 4.32.1 f054605aea4b840552cca2e725580bffd1e1b704; "
+            "Lake 5.0.0-src+f054605; linux-x86_64"
+        ),
+        "result": "REPORTED_PASS",
+        "result_summary": (
+            "lake build completed 35 jobs; all four cited modules also compiled directly "
+            "with no diagnostics"
+        ),
+        "input_closure": "SELECTED_DIRECT_SOURCES_AND_PROJECT_CONFIG_NOT_FULL_TRANSITIVE_CLOSURE",
+        "qualified_claims": ("lean-model-theorems",),
+        "sources": (
+            FORMAL_LAKEFILE_PATH,
+            LEAN_TOOLCHAIN_PATH,
+            CANONICAL_LEARNING_LEAN_PATH,
+            VERIFIED_ADMISSION_KERNEL_LEAN_PATH,
+            END_TO_END_REFINEMENT_LEAN_PATH,
+            CAUSAL_EFFICACY_BRIDGE_LEAN_PATH,
+        ),
+        "limitation": (
+            "Local reproducibility run over the recorded worktree; no independent attestation "
+            "and no interpretation of foreign runtime or real-world premises."
+        ),
+    },
+    {
+        "slug": "typescript-local-boundaries",
+        "run_id": "QR-2",
+        "name": "TypeScript local gateway and Permit occurrence qualification",
+        "scope": "TARGETED_LOCAL_V1_AND_V2_TESTS_PLUS_PACKAGE_TYPECHECK",
+        "commands": [
+            "cd src/hswm/effect-runtime && npm run check",
+            (
+                "cd src/hswm/effect-runtime && npm test -- "
+                "canonical-atom-v2-verified-admission-gateway-v2.test.ts "
+                "canonical-atom-v2-local-permit-commit.test.ts "
+                "canonical-atom-v2-local-permit-commit-process-crash.test.ts"
+            ),
+        ],
+        "environment": (
+            "Node 24.13.0; npm 11.6.2; TypeScript 5.9.3; Vitest 3.2.7; "
+            "linux-x64"
+        ),
+        "result": "REPORTED_PASS",
+        "result_summary": "tsc --noEmit passed; 3 test files and 12 tests passed",
+        "input_closure": "SELECTED_DIRECT_SOURCES_AND_PACKAGE_LOCK_NOT_FULL_TRANSITIVE_CLOSURE",
+        "qualified_claims": (
+            "typescript-lean-local-boundary",
+            "local-permit-posix-occurrence",
+        ),
+        "sources": (
+            EFFECT_PACKAGE_PATH,
+            EFFECT_PACKAGE_LOCK_PATH,
+            VERIFIED_ADMISSION_GATEWAY_PATH,
+            VERIFIED_ADMISSION_GATEWAY_TEST_PATH,
+            LOCAL_PERMIT_COMMIT_PATH,
+            LOCAL_PERMIT_COMMIT_TEST_PATH,
+            LOCAL_PERMIT_COMMIT_CRASH_TEST_PATH,
+        ),
+        "limitation": (
+            "The v2 gateway tests persist and revalidate the Lean decision; the SIGKILL tests "
+            "qualify only the separate v1 local Permit-commit namespace. This run is not v2 "
+            "crash, power-loss, production-authority, or universal-refinement evidence."
+        ),
+    },
+    {
+        "slug": "proof-status-projection",
+        "run_id": "QR-3",
+        "name": "Proof-status projection reproducibility qualification",
+        "scope": "V5_DETERMINISTIC_BUILD_GRAPH_SHAPE_AND_PORTABLE_MARKDOWN",
+        "commands": [
+            "uv run python scripts/build_hswm_graph_and_loop_engineering_ontology.py --check",
+            "uv run pytest -q tests/test_hswm_graph_and_loop_engineering_ontology.py",
+            (
+                "uv run python scripts/compile_portable_markdown_math.py README.md "
+                "INDEX.md docs/canon docs/research ontology"
+            ),
+            "git diff --check",
+        ],
+        "environment": "Python 3.12.13; pytest 9.1.1; linux-x86_64",
+        "result": "REPORTED_PASS",
+        "result_summary": (
+            "deterministic v5 matched; ontology test passed; portable Markdown compiled; "
+            "Git whitespace check passed"
+        ),
+        "input_closure": "DETERMINISTIC_BUILDER_CHECKS_ALL_DECLARED_V5_SOURCE_BINDINGS",
+        "qualified_claims": (),
+        "sources": (
+            ONTOLOGY_BUILDER_PATH,
+            ONTOLOGY_TEST_PATH,
+            PORTABLE_MATH_COMPILER_PATH,
+            PROOF_STATUS_PATH,
+            SYNTHESIS_PATH,
+        ),
+        "limitation": (
+            "This qualifies projection reproducibility and shape only; it is not evidence that "
+            "HSWM cognition, causal learning, or scientific efficacy occurred."
+        ),
+    },
+)
+
 ANCHORS = [
     {"uid": "sym:Concept:hswm", "name": "HSWM", "required_labels": ["Concept"]},
     {
@@ -494,7 +920,7 @@ ANCHORS = [
     },
     {
         "uid": PREVIOUS_PROGRAM_UID,
-        "name": "HSWM graph and loop engineering reinforcement program [2026-09-01-v3]",
+        "name": "HSWM graph and loop engineering reinforcement program [2026-09-01-v4]",
         "required_labels": ["Concept", "ResearchProgram", "ResearchArtifact"],
     },
 ]
@@ -582,6 +1008,18 @@ def _gate_uid(slug: str) -> str:
     return f"sym:Hypothesis:hswm-graph-loop-gate-{slug}-{UID_RELEASE}"
 
 
+def _proof_claim_uid(slug: str) -> str:
+    return f"sym:Concept:hswm-proof-status-claim-{slug}-{UID_RELEASE}"
+
+
+def _proof_decision_uid(slug: str) -> str:
+    return f"sym:Concept:hswm-proof-status-decision-{slug}-{UID_RELEASE}"
+
+
+def _qualification_run_uid(slug: str) -> str:
+    return f"sym:AbstractNode:hswm-qualification-run-{slug}-{UID_RELEASE}"
+
+
 def build_data() -> dict[str, Any]:
     bindings = [
         {"path": path.as_posix(), "sha256": _file_sha(path)}
@@ -596,14 +1034,20 @@ def build_data() -> dict[str, Any]:
                 description=(
                     "Bounded KG projection of source-checked graph engineering, "
                     "loop engineering, current repository surfaces, partial local "
-                    "engineering closures, gaps, and research gates."
+                    "engineering closures, proof-status claims, decisions, gaps, and "
+                    "research gates."
                 ),
                 scope="BOUNDED_RESEARCH_PROJECTION",
                 kind="ARTIFACT",
                 plane="INQUIRY",
                 state="LOCAL_ENGINEERING_IMPLEMENTATION_SCIENTIFICALLY_UNJUDGED",
                 owner="graph_loop_ontology_projection_custodian",
-                roles=["RESEARCH_BUNDLE", "GRAPH_ENGINEERING", "LOOP_ENGINEERING"],
+                roles=[
+                    "RESEARCH_BUNDLE",
+                    "GRAPH_ENGINEERING",
+                    "LOOP_ENGINEERING",
+                    "CLAIM_EVIDENCE_GAP_STATUS",
+                ],
                 boundary=(
                     "This projection is research infrastructure; it is not canonical "
                     "HSWM state, cognition, learning, permission, or efficacy."
@@ -639,6 +1083,14 @@ def build_data() -> dict[str, Any]:
         ),
     ]
 
+    proof_evidence_paths = {
+        path for item in PROOF_STATUSES for path in item["sources"]
+    }
+    qualification_source_paths = {
+        path for item in QUALIFICATION_RUNS for path in item["sources"]
+    }
+    evidence_artifact_paths = proof_evidence_paths | qualification_source_paths
+
     for path in SOURCE_BINDING_PATHS:
         nodes.append(
             _node(
@@ -662,6 +1114,16 @@ def build_data() -> dict[str, Any]:
                     ),
                     "source_path": path.as_posix(),
                     "source_sha256": _file_sha(path),
+                    "standard_graph_role": (
+                        "EVIDENCE_ARTIFACT"
+                        if path in evidence_artifact_paths
+                        else "SOURCE_RECORD"
+                    ),
+                    "evidence_boundary": (
+                        "SOURCE_BYTES_AND_PROVENANCE_ONLY_UNLESS_A_QUALIFICATION_RUN_CITES_THIS_ARTIFACT"
+                        if path in evidence_artifact_paths
+                        else "SOURCE_BYTES_AND_PROVENANCE_ONLY"
+                    ),
                 },
             )
         )
@@ -797,6 +1259,120 @@ def build_data() -> dict[str, Any]:
             )
         )
 
+    for item in PROOF_STATUSES:
+        slug = item["slug"]
+        status_id = item["status_id"]
+        nodes.append(
+            _node(
+                _proof_claim_uid(slug),
+                ["Concept"],
+                {
+                    **_common(
+                        name=item["name"],
+                        description=item["claim"],
+                        scope=item["scope"],
+                        kind="CLAIM",
+                        plane="INQUIRY",
+                        state="TRACKED_WITH_SEPARATE_CURRENT_DECISION",
+                        owner=f"proof_status_claim_{slug.replace('-', '_')}_custodian",
+                        roles=["PROOF_OBLIGATION", "CLAIM"],
+                        boundary=(
+                            "This node names one fixed cross-cutting obligation. Its "
+                            "separate status decision and cited sources do not expand the claim."
+                        ),
+                    ),
+                    "proof_status_id": status_id,
+                    "claim_text": item["claim"],
+                    "falsifier": item["falsifier"],
+                    "next_evidence": item["next_evidence"],
+                    "current_decision_uid": _proof_decision_uid(slug),
+                    "open_gap_uid": (
+                        "" if item["gap"] is None else _gap_uid(item["gap"])
+                    ),
+                    "evidence_source_uids": [
+                        _local_source_uid(path) for path in item["sources"]
+                    ],
+                    "standard_graph_role": "CLAIM",
+                },
+            )
+        )
+        nodes.append(
+            _node(
+                _proof_decision_uid(slug),
+                ["Concept", "Guardrail"],
+                {
+                    **_common(
+                        name=f"{item['name']} current decision",
+                        description=item["assessment"],
+                        scope="STATUS_AS_OF_2026_09_02",
+                        kind="DECISION",
+                        plane="EVIDENCE",
+                        state=item["summary_bucket"],
+                        owner="proof_status_assessment_custodian",
+                        roles=["STATUS_DECISION", "CLAIM_CEILING_GUARDRAIL"],
+                        boundary=(
+                            "The decision is valid only for the named scope and cited "
+                            "source snapshot; it is not a broader scientific terminal."
+                        ),
+                    ),
+                    "proof_status_id": status_id,
+                    "assessed_on": "2026-09-02",
+                    "implementation_status": item["implementation_status"],
+                    "implementation_boundary": item["implementation_boundary"],
+                    "evidence_disposition": item["evidence_disposition"],
+                    "claim_ceiling": item["claim_ceiling"],
+                    "formal_status": item["formal_status"],
+                    "summary_bucket": item["summary_bucket"],
+                    "route_disposition": item["route_disposition"],
+                    "assesses_claim_uid": _proof_claim_uid(slug),
+                    "decision_relation_semantics": "CURRENT_STATUS_DECISION",
+                    "standard_graph_role": "DECISION",
+                },
+            )
+        )
+
+    for item in QUALIFICATION_RUNS:
+        nodes.append(
+            _node(
+                _qualification_run_uid(item["slug"]),
+                ["AbstractNode", "ResearchArtifact"],
+                {
+                    **_common(
+                        name=item["name"],
+                        description=item["result_summary"],
+                        scope=item["scope"],
+                        kind="QUALIFICATION_RUN",
+                        plane="EVIDENCE",
+                        state="LOCAL_RUN_REPORTED_PASS_NOT_INDEPENDENTLY_QUALIFIED",
+                        owner="proof_status_qualification_run_custodian",
+                        roles=["QUALIFICATION_RUN", "SELF_ATTESTED_LOCAL_RUN_RECORD"],
+                        boundary=item["limitation"],
+                        authority="SECONDARY_AI_SELF_ATTESTED_LOCAL_RUN",
+                    ),
+                    "qualification_run_id": item["run_id"],
+                    "executed_on": "2026-09-02",
+                    "commands": item["commands"],
+                    "environment": item["environment"],
+                    "result": item["result"],
+                    "result_summary": item["result_summary"],
+                    "input_closure": item["input_closure"],
+                    "raw_log_status": "NOT_PERSISTED",
+                    "attestation_level": "SELF_ATTESTED_LOCAL_ONLY",
+                    "qualification_status": "NOT_INDEPENDENTLY_QUALIFIED",
+                    "evidence_ceiling": "LOCAL_REPRODUCIBILITY_STATUS_ONLY",
+                    "source_snapshot": "V5_CONTENT_HASH_BINDINGS",
+                    "qualified_claim_uids": [
+                        _proof_claim_uid(slug)
+                        for slug in item["qualified_claims"]
+                    ],
+                    "evidence_source_uids": [
+                        _local_source_uid(path) for path in item["sources"]
+                    ],
+                    "standard_graph_role": "QUALIFICATION_RUN",
+                },
+            )
+        )
+
     local_uids = {node["uid"] for node in nodes}
     relations: list[dict[str, str]] = []
     for uid in sorted(local_uids - {BUNDLE_UID}):
@@ -871,6 +1447,95 @@ def build_data() -> dict[str, Any]:
         relations.append(
             _relation(gate_uid, "CONSTRAINS", "sym:Concept:hswm", "CLAIM_BOUNDARY", "ACTIVE")
         )
+    for item in PROOF_STATUSES:
+        claim_uid = _proof_claim_uid(item["slug"])
+        decision_uid = _proof_decision_uid(item["slug"])
+        relations.extend(
+            (
+                _relation(
+                    PROGRAM_UID,
+                    "HAS_CONCEPT",
+                    claim_uid,
+                    "PROOF_STATUS_CLAIM",
+                    "ACTIVE",
+                ),
+                _relation(
+                    claim_uid,
+                    "HAS_CONCEPT",
+                    decision_uid,
+                    "CURRENT_STATUS_DECISION",
+                    "ASSESSED_2026_09_02",
+                ),
+                _relation(
+                    decision_uid,
+                    "CONSTRAINS",
+                    claim_uid,
+                    "CLAIM_CEILING_AND_SCOPE",
+                    item["evidence_disposition"],
+                ),
+                _relation(
+                    claim_uid,
+                    "CONSTRAINS",
+                    "sym:Concept:hswm",
+                    "TARGET_CLAIM_BOUNDARY",
+                    "ACTIVE",
+                ),
+            )
+        )
+        for source_path in item["sources"]:
+            relations.append(
+                _relation(
+                    claim_uid,
+                    "HAS_SOURCE",
+                    _local_source_uid(source_path),
+                    "CLAIM_EVIDENCE_SOURCE",
+                    item["source_status"],
+                )
+            )
+        if item["gap"] is not None:
+            relations.append(
+                _relation(
+                    claim_uid,
+                    "TARGETS",
+                    _gap_uid(item["gap"]),
+                    "OPEN_CLAIM_GAP",
+                    "OPEN",
+                )
+            )
+    for item in QUALIFICATION_RUNS:
+        run_uid = _qualification_run_uid(item["slug"])
+        relations.append(
+            _relation(
+                PROGRAM_UID,
+                "HAS_CONCEPT",
+                run_uid,
+                "QUALIFICATION_RUN",
+                "REPORTED_PASS_NOT_ATTESTED",
+            )
+        )
+        for source_path in item["sources"]:
+            relations.append(
+                _relation(
+                    run_uid,
+                    "HAS_SOURCE",
+                    _local_source_uid(source_path),
+                    "QUALIFICATION_INPUT_SNAPSHOT",
+                    "BOUND",
+                )
+            )
+        tested_uids = [
+            _proof_claim_uid(slug) for slug in item["qualified_claims"]
+        ] or [BUNDLE_UID]
+        for tested_uid in tested_uids:
+            relations.append(
+                _relation(
+                    run_uid,
+                    "TESTS",
+                    tested_uid,
+                    "LOCAL_REPRODUCIBILITY_QUALIFICATION",
+                    "REPORTED_PASS_NOT_ATTESTED",
+                )
+            )
     relations.extend(
         (
             _relation(
@@ -906,7 +1571,7 @@ def build_data() -> dict[str, Any]:
                 PROGRAM_UID,
                 "SUPERSEDES_AS_FOLLOWUP",
                 PREVIOUS_PROGRAM_UID,
-                "SOURCE_CORRECTION_WITHOUT_SCIENTIFIC_STATUS_CHANGE",
+                "NON_OVERWRITING_STATUS_FOLLOWUP_WITHOUT_SCIENTIFIC_PROMOTION",
                 "ACTIVE",
             ),
         )
@@ -937,6 +1602,9 @@ def build_data() -> dict[str, Any]:
         "current_surfaces": len(CURRENT_SURFACES),
         "gaps": len(GAPS),
         "gates": len(GATES),
+        "proof_claims": len(PROOF_STATUSES),
+        "proof_decisions": len(PROOF_STATUSES),
+        "qualification_runs": len(QUALIFICATION_RUNS),
     }
     return {
         "schema_version": SCHEMA_VERSION,
@@ -984,6 +1652,54 @@ def validate_data(data: dict[str, Any]) -> None:
         raise ValueError("graph-loop ontology boundary drifted")
     if data != build_data():
         raise ValueError("graph-loop ontology is not the deterministic build")
+
+    status_ids = [item["status_id"] for item in PROOF_STATUSES]
+    status_slugs = [item["slug"] for item in PROOF_STATUSES]
+    if status_ids != [f"PS-{index}" for index in range(1, 7)]:
+        raise ValueError("proof-status obligation identity drifted")
+    if len(status_slugs) != len(set(status_slugs)):
+        raise ValueError("duplicate proof-status obligation slug")
+    if Counter(item["summary_bucket"] for item in PROOF_STATUSES) != Counter(
+        {
+            "FORMAL_MODEL_PROVED": 1,
+            "LOCAL_ENGINEERING_SUPPORTED": 2,
+            "CORE_UNPROVED": 3,
+        }
+    ):
+        raise ValueError("proof-status summary buckets drifted")
+    allowed_implementation = {"NOT_STARTED", "PARTIAL", "IMPLEMENTED", "QUALIFIED"}
+    allowed_disposition = {
+        "NOT_EVALUATED",
+        "SUPPORTED_IN_SCOPE",
+        "RED",
+        "UNDERDETERMINED",
+    }
+    for item in PROOF_STATUSES:
+        if item["implementation_status"] not in allowed_implementation:
+            raise ValueError(f"invalid implementation status: {item['status_id']}")
+        if item["evidence_disposition"] not in allowed_disposition:
+            raise ValueError(f"invalid evidence disposition: {item['status_id']}")
+        if any(path not in SOURCE_BINDING_PATHS for path in item["sources"]):
+            raise ValueError(f"unbound proof-status source: {item['status_id']}")
+        if item["gap"] is not None and item["gap"] not in {
+            gap[0] for gap in GAPS
+        }:
+            raise ValueError(f"unknown proof-status gap: {item['status_id']}")
+
+    run_ids = [item["run_id"] for item in QUALIFICATION_RUNS]
+    run_slugs = [item["slug"] for item in QUALIFICATION_RUNS]
+    if run_ids != [f"QR-{index}" for index in range(1, 4)]:
+        raise ValueError("qualification-run identity drifted")
+    if len(run_slugs) != len(set(run_slugs)):
+        raise ValueError("duplicate qualification-run slug")
+    proof_slugs = set(status_slugs)
+    for item in QUALIFICATION_RUNS:
+        if item["result"] != "REPORTED_PASS" or not item["commands"]:
+            raise ValueError(f"invalid qualification run: {item['run_id']}")
+        if set(item["qualified_claims"]) - proof_slugs:
+            raise ValueError(f"unknown qualified claim: {item['run_id']}")
+        if any(path not in SOURCE_BINDING_PATHS for path in item["sources"]):
+            raise ValueError(f"unbound qualification source: {item['run_id']}")
 
     bindings = data["artifact_bindings"]
     expected_paths = [path.as_posix() for path in SOURCE_BINDING_PATHS]

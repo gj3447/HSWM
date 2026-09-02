@@ -9,6 +9,17 @@ HSWM의 최상위 목표 정체성은
 continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 얼굴이다. 이 정전은
 철학적 정의를 닫지만 현재 효능을 승격하지 않는다.
 
+2026-09-02 현재 증명·근거·간극의 answer-first 상태는
+[`HSWM proof-status graph`](docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)에
+고정했다. 임의의 theorem/test 개수가 아니라 여섯 end-to-end 횡단 의무를 같은
+Claim–Evidence–Decision–Gap 구조로 판정한 결과는 `FORMAL_MODEL_PROVED 1 /
+LOCAL_ENGINEERING_SUPPORTED 2 / CORE_UNPROVED 3`이다. 따라서 Lean 내부 조건부
+안전 정리는 상당히 닫혔지만, 전체 HSWM 기준으로는 universal TypeScript/Effect
+refinement, 현실 outcome·독립 causal credit, revision-caused real-LLM efficacy가 계속
+미증명이다. 기계 투영은 비파괴
+[`graph-and-loop ontology v5`](ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json)이며
+HSWM cognition이나 scientific terminal이 아니다.
+
 2026-08-26 USER_PRIMARY는 fixed `H/W/A/F`를 폐기하고, **schema가 승인한 정본 원자마다
 책임 owner가 정확히 하나**라는 schema-relative 유일성만 남겼다. 이는 자연의 유일한
 원자화나 유일 ontology 주장이 아니라 correctness·revision lineage·validation·recovery를

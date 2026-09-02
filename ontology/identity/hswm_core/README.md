@@ -68,15 +68,20 @@ control, material result, HSWM cognition, causal learning, or efficacy.
 
 ## Graph and loop engineering reinforcement projection
 
-[`HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v4.json`](HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v4.json)
+[`HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json`](HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json)
 is a bounded, source-checked map of graph-engineering and loop-engineering
 inputs, current repository surfaces, partial local engineering closures,
-explicit gaps, and `GE-*`, `LE-0`, and `GL-*` gates. It keeps the canonical
+explicit gaps, six fixed proof-status Claims and Decisions, and `GE-*`, `LE-0`,
+and `GL-*` gates. Three self-attested local QualificationRun records separately
+report formal-build, targeted TypeScript, and projection-reproducibility checks
+with explicit limits and `NOT_INDEPENDENTLY_QUALIFIED` status. It keeps the canonical
 n-ary graph, its compiled projection, graph-delta transactions, and the
 outcome-bound research loop distinct while preserving the existing G0–G6 claim
 order. Its research synthesis is
 [`HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md`](../../../docs/research/HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md), and the local `GE-2`/`LE-0` implementation boundary is
 [`HSWM_GRAPH_LOOP_ENGINEERING_IMPLEMENTATION_2026-09-01.md`](../../../docs/research/HSWM_GRAPH_LOOP_ENGINEERING_IMPLEMENTATION_2026-09-01.md).
+The answer-first proof/evidence/gap assessment is
+[`HSWM_PROOF_STATUS_GRAPH_2026-09-02.md`](../../../docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md).
 
 Build and validate it locally with:
 
@@ -120,7 +125,10 @@ The same-day [`v1` projection](HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v1.json)
 is retained as the already-published source-digest snapshot before a Markdown
 rendering correction. `v2` is its non-overwriting source-correction follow-up.
 `v3` is the first local `GE-2`/`LE-0` engineering follow-up. `v4` is its
-non-overwriting runtime-correction follow-up. None is a scientific result.
+non-overwriting runtime-correction follow-up. `v5` adds the source-bound
+Claim–Evidence–Decision–Gap proof-status snapshot and bounded local
+QualificationRuns without changing scientific status. None is a scientific
+result.
 
 ## Current Ragnarok/PIDNA research projection
 

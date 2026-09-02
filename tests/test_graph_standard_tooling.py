@@ -38,7 +38,8 @@ def _copy_lock_bound_files(lock: dict[str, object], destination: Path) -> None:
 
 
 def test_checked_in_acceptance_lock_and_package_integrities_are_exact() -> None:
-    indexes = tooling.verify_acceptance_lock(_lock())
+    lock = _lock()
+    indexes = tooling.verify_acceptance_lock(lock)
 
     assert set(indexes["adapters"]) == {
         "n3-nquads-parser",
@@ -59,6 +60,17 @@ def test_checked_in_acceptance_lock_and_package_integrities_are_exact() -> None:
         "jsonld11-jsonldjs-hswm-fromrdf",
         "sparql11-rdflib-hswm-basic",
     }
+    runtime = lock["python_runtime_lock"]
+    assert runtime["project_manifest"] == (
+        "_research/graph_standards/runtime/pyproject.toml"
+    )
+    assert runtime["uv_lock"] == "_research/graph_standards/runtime/uv.lock"
+    assert all(
+        adapter["project_manifest"] == runtime["project_manifest"]
+        and adapter["lockfile"] == runtime["uv_lock"]
+        for adapter in lock["tool_adapters"]
+        if adapter["ecosystem"] == "pypi"
+    )
 
 
 def test_cli_can_verify_an_explicit_source_root_outside_its_install_location(
@@ -127,6 +139,15 @@ def test_every_runnable_qualification_requires_one_receipt() -> None:
         tooling.verify_acceptance_lock(lock)
 
 
+def test_qualification_static_validation_can_precede_a_new_receipt() -> None:
+    lock = deepcopy(_lock())
+    lock["qualification_receipts"] = []
+
+    indexes = tooling._verify_acceptance_lock(lock, verify_receipts=False)
+
+    assert "shacl10-pyshacl-hswm-core" in indexes["profiles"]
+
+
 def test_malformed_receipt_result_is_refused_as_boundary_drift(tmp_path: Path) -> None:
     lock = deepcopy(_lock())
     _copy_lock_bound_files(lock, tmp_path)
@@ -160,6 +181,17 @@ def test_python_adapter_artifact_integrity_drift_is_refused() -> None:
     adapter["wheel_sha256"] = "0" * 64
 
     with pytest.raises(tooling.GraphStandardToolingError, match="Python integrity"):
+        tooling.verify_acceptance_lock(lock)
+
+
+def test_python_adapter_cannot_escape_the_qualification_runtime_lock() -> None:
+    lock = deepcopy(_lock())
+    adapter = next(
+        item for item in lock["tool_adapters"] if item["id"] == "rdflib-sparql11"
+    )
+    adapter["project_manifest"] = "pyproject.toml"
+
+    with pytest.raises(tooling.GraphStandardToolingError, match="escapes"):
         tooling.verify_acceptance_lock(lock)
 
 

@@ -484,6 +484,10 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
         "_research/graph_standards/qualify_graph_standards.mjs",
         "_research/graph_standards/qualify_jsonld11.mjs",
     } <= set(inner), "Node graph qualification runner가 sdist에서 누락됐다"
+    assert {
+        "_research/graph_standards/runtime/pyproject.toml",
+        "_research/graph_standards/runtime/uv.lock",
+    } <= set(inner), "독립 Python graph qualification runtime lock이 sdist에서 누락됐다"
     assert "tests/test_graph_standard_tooling.py" not in inner, (
         "Python sdist가 제외한 Effect/npm graph qualification artifact를 요구하는 "
         "repository-only verifier test를 운송한다"

@@ -195,8 +195,11 @@ def load_acceptance_lock(path: Path = DEFAULT_LOCK) -> dict[str, Any]:
     return lock
 
 
-def verify_acceptance_lock(
-    lock: Mapping[str, Any], *, repository_root: Path = REPOSITORY_ROOT
+def _verify_acceptance_lock(
+    lock: Mapping[str, Any],
+    *,
+    repository_root: Path = REPOSITORY_ROOT,
+    verify_receipts: bool = True,
 ) -> dict[str, Any]:
     policy = _object(lock.get("policy"), "policy")
     required_policy = {
@@ -304,6 +307,18 @@ def verify_acceptance_lock(
             if package_entry.get("license") != adapter.get("license"):
                 raise GraphStandardToolingError(f"adapter {identifier} license drift")
         else:
+            python_runtime = _object(
+                lock.get("python_runtime_lock"), "python_runtime_lock"
+            )
+            if (
+                adapter.get("project_manifest")
+                != python_runtime.get("project_manifest")
+                or adapter.get("lockfile") != python_runtime.get("uv_lock")
+                or adapter.get("project_extra") != python_runtime.get("extra")
+            ):
+                raise GraphStandardToolingError(
+                    f"adapter {identifier} escapes the Python runtime lock"
+                )
             sdist_sha256 = _digest(
                 adapter.get("sdist_sha256"), f"adapter {identifier} sdist"
             )
@@ -527,7 +542,7 @@ def verify_acceptance_lock(
     receipt_records = _array(
         lock.get("qualification_receipts"), "qualification_receipts"
     )
-    for index, raw in enumerate(receipt_records):
+    for index, raw in enumerate(receipt_records if verify_receipts else []):
         receipt_record = _object(raw, f"qualification_receipts[{index}]")
         profile_id = _string(
             receipt_record.get("profile_id"), f"qualification_receipts[{index}].profile_id"
@@ -617,7 +632,7 @@ def verify_acceptance_lock(
         for identifier, profile in profiles.items()
         if profile.get("status") in _RUNNABLE
     }
-    if seen_receipts != runnable_profiles:
+    if verify_receipts and seen_receipts != runnable_profiles:
         missing = sorted(runnable_profiles - seen_receipts)
         extra = sorted(seen_receipts - runnable_profiles)
         raise GraphStandardToolingError(
@@ -672,6 +687,18 @@ def verify_acceptance_lock(
         "sources": sources,
         "standards": standards,
     }
+
+
+def verify_acceptance_lock(
+    lock: Mapping[str, Any], *, repository_root: Path = REPOSITORY_ROOT
+) -> dict[str, Any]:
+    """Verify the complete checked-in acceptance and receipt boundary."""
+
+    return _verify_acceptance_lock(
+        lock,
+        repository_root=repository_root,
+        verify_receipts=True,
+    )
 
 
 def _run_git(arguments: Sequence[str], *, capture_bytes: bool = False) -> bytes:
@@ -820,7 +847,15 @@ def qualify_profile(
     output: Path | None = None,
     repository_root: Path = REPOSITORY_ROOT,
 ) -> dict[str, Any]:
-    indexes = verify_acceptance_lock(lock, repository_root=repository_root)
+    # Qualification produces the receipt it is about to supersede. Requiring
+    # every previous receipt to match here creates a bootstrap cycle whenever
+    # an otherwise locked runtime changes. Public verification still checks
+    # the complete checked-in receipt set fail-closed.
+    indexes = _verify_acceptance_lock(
+        lock,
+        repository_root=repository_root,
+        verify_receipts=False,
+    )
     try:
         profile = indexes["profiles"][profile_id]
     except KeyError as error:
@@ -974,18 +1009,30 @@ def qualify_profile(
             raise GraphStandardToolingError(
                 f"uv version drift: expected {expected_runtime['uv']}, observed {observed_uv}"
             )
+        python_runtime = _object(lock.get("python_runtime_lock"), "python_runtime_lock")
+        project_manifest = _repository_file(
+            repository_root,
+            _relative_path(
+                python_runtime.get("project_manifest"),
+                "Python runtime project manifest",
+            ),
+            "Python runtime project manifest",
+        )
+        project_root = project_manifest.parent.resolve(strict=True)
         environment = _external_environment()
         environment.update(
             {
                 "UV_DEFAULT_INDEX": "https://pypi.org/simple",
                 "UV_NO_CONFIG": "1",
                 "UV_NO_PYTHON_DOWNLOADS": "1",
-                "UV_PROJECT": str(repository_root.resolve(strict=True)),
+                "UV_PROJECT": str(project_root),
             }
         )
         command = [
             uv,
             "run",
+            "--project",
+            str(project_root),
             "--isolated",
             "--locked",
             "--no-python-downloads",
@@ -1131,7 +1178,15 @@ def main(argv: Sequence[str] | None = None) -> int:
             / "_research/graph_standards/HSWM_GRAPH_STANDARDS_ACCEPTANCE.v1.json"
         )
         lock = load_acceptance_lock(manifest)
-        indexes = verify_acceptance_lock(lock, repository_root=repository_root)
+        indexes = (
+            _verify_acceptance_lock(
+                lock,
+                repository_root=repository_root,
+                verify_receipts=False,
+            )
+            if arguments.command == "qualify"
+            else verify_acceptance_lock(lock, repository_root=repository_root)
+        )
         if arguments.command == "verify":
             result: Any = {
                 "schema_version": LOCK_SCHEMA,

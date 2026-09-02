@@ -88,6 +88,10 @@ include _research/causal_composition/preregistrations/alfworld_b0_calibration_20
 # license to ship arbitrary research-side JavaScript.
 include _research/graph_standards/qualify_graph_standards.mjs
 include _research/graph_standards/qualify_jsonld11.mjs
+# Python graph qualification has its own immutable dependency closure so the
+# historical root lock remains byte-identical to the evidence that binds it.
+include _research/graph_standards/runtime/pyproject.toml
+include _research/graph_standards/runtime/uv.lock
 # MI-1's transported tests and freezer bind these exact public Q1-v3 source
 # bytes. Keep both paths literal so unrelated or private text/binary artifacts
 # cannot be swept into the Python source distribution by broad glob rules.

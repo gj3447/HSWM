@@ -103,12 +103,16 @@ runner imported the HSWM adapter.
 Node profiles use Node 24.13.0 and npm 11.6.2 with a clean temporary
 `npm ci --ignore-scripts` install. Python profiles use CPython 3.12.13 and uv
 0.12.3 with `--isolated --locked --no-python-downloads` and the exact `graph`
-extra. Receipt verification fails on package, source, artifact, runtime, count,
-claim-ceiling, or receipt drift.
+extra from the dedicated
+[`graph_standards/runtime`](../../_research/graph_standards/runtime/) project.
+That separate dependency closure preserves the historical root `uv.lock`
+byte-for-byte. Receipt verification fails on package, source, artifact,
+runtime, count, claim-ceiling, or receipt drift.
 
 ```bash
 uv run hswm-graph-standards verify
-uv run --extra graph pytest -q \
+uv run --project _research/graph_standards/runtime --locked --extra graph \
+  pytest -q \
   tests/test_graph_standard_tooling.py \
   tests/test_standard_graph_view.py \
   tests/test_trace_context.py

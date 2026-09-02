@@ -87,8 +87,11 @@ claim those adapter modules were imported by the suite runner. Their behavior
 is covered separately by local integration tests. Node qualifications use a fresh temporary
 `npm ci --ignore-scripts` installation with isolated config and cache. Python
 qualifications use `uv run --isolated --locked`, an exact CPython 3.12.13 and uv
-0.12.3, the exact `graph` extra, and disabled implicit Python downloads. Neither
-path trusts the repository's existing installed packages.
+0.12.3, the exact `graph` extra from the dedicated
+[`graph_standards/runtime`](../../_research/graph_standards/runtime/) project,
+and disabled implicit Python downloads. This independent lock preserves the
+historical root dependency lock byte-for-byte. Neither path trusts the
+repository's existing installed packages.
 
 The manual
 [`graph-standards-requalification.yml`](../../.github/workflows/graph-standards-requalification.yml)
@@ -168,7 +171,8 @@ Static lock, package, receipt, policy, and provenance validation:
 
 ```bash
 uv run hswm-graph-standards verify
-uv run --extra graph pytest -q tests/test_graph_standard_tooling.py \
+uv run --project _research/graph_standards/runtime --locked --extra graph \
+  pytest -q tests/test_graph_standard_tooling.py \
   tests/test_standard_graph_view.py tests/test_trace_context.py
 ```
 

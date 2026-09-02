@@ -1,0 +1,19 @@
+[project]
+name = "hswm-graph-standards-runtime"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+  "hswm[dev]",
+]
+
+[project.optional-dependencies]
+graph = [
+  "pyshacl==0.40.1",
+  "rdflib==7.6.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+hswm = { path = "../../..", editable = true }

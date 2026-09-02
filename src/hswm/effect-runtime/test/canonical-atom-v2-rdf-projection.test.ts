@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto"
+import { createRequire } from "node:module"
 
 import { expect, it } from "@effect/vitest"
 import { Either } from "effect"
@@ -43,6 +44,17 @@ import {
 } from "../src/canonical-atom-v2-state-journal.js"
 
 const VERSION = "hswm:test:rdf-projection:v2"
+const rdfCanonize = createRequire(import.meta.url)("rdf-canonize") as {
+  readonly canonize: (
+    input: string,
+    options: {
+      readonly algorithm: "RDFC-1.0"
+      readonly inputFormat: "application/n-quads"
+      readonly maxWorkFactor: number
+      readonly rejectURDNA2015: true
+    }
+  ) => Promise<string>
+}
 const sha = (value: string): string => createHash("sha256").update(value).digest("hex")
 const utf8 = (value: string): Uint8Array => new TextEncoder().encode(value)
 const right = <A, E>(value: Either.Either<A, E>): A => {
@@ -128,6 +140,21 @@ it("deterministically compiles and exact-decodes a self-consistent bundle-bound 
   expect(first.manifest.rdfDatasetOmits).toContain("SCHEMA_CONSTRAINTS")
   const bytes = right(canonicalAtomV2RdfProjectionBytes(first))
   expect(right(decodeCanonicalAtomV2RdfProjectionBytes(schema, source, bytes))).toEqual(first)
+})
+
+it("is a fixed point of the independently qualified external RDFC-1.0 processor", async () => {
+  const { source } = fixture()
+  const projection = right(compileCanonicalAtomV2RdfProjection(schema, source))
+  const nquads = new TextDecoder().decode(projection.nquads)
+  const canonical = await rdfCanonize.canonize(nquads, {
+    algorithm: "RDFC-1.0",
+    inputFormat: "application/n-quads",
+    maxWorkFactor: 1,
+    rejectURDNA2015: true
+  })
+
+  expect(projection.manifest.rdfProfile).toBe("RDF_1_1_N_QUADS_BLANK_NODE_FREE_DETERMINISTIC_PROFILE")
+  expect(canonical).toBe(nquads)
 })
 
 it("preserves a reified relation and duplicate target references with distinct roles and ordinals", async () => {

@@ -49,7 +49,9 @@ Lead with one bounded verdict. Then report only the useful parts:
 - canonical target role;
 - current direct evidence and its observation cut;
 - conceptual delta;
-- mapping to `H/W/A/F/Π`;
+- mapping to schema-approved canonical atom kinds, exactly one schema-relative
+  responsibility owner per atom, typed references, provenance-bound
+  transitions, and the outcome-bound causal-learning loop;
 - present and missing links in the outcome-bound learning loop;
 - the next decisive falsifier, gate, or implementation step;
 - explicit non-claims.
@@ -66,7 +68,8 @@ Do not claim durable learning without this complete causal chain:
 
 ```text
 external attributable outcome → eligibility and causal credit
-→ versioned candidate ΔW/ΔH → fresh/retention/canary/removal validation
+→ versioned canonical atom/relation/transition-disposition candidate delta
+→ fresh/retention/canary/removal validation
 → accepted state that changes a later activation
 ```
 

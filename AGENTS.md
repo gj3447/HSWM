@@ -43,6 +43,33 @@
 - Treat repository ontology and MCPs as bounded projections and interfaces, not
   as HSWM cognition, routing, or learning.
 
+## Standard-first external tooling
+
+- For graph interoperability, MCP, Skills, observability, and other external
+  tooling, search the current official source before selecting an artifact.
+  Prefer published standards, official SDKs, and official conformance suites.
+  Keep candidate and draft standards in an explicitly non-promoting
+  experimental lane.
+- Prefer OpenAI system or curated Skills when one matches the task. Install a
+  curated Skill only for a concrete use, at an immutable source revision. Do
+  not install a community Skill merely because it appears in a catalog.
+- Pin every downloaded package, repository, binary, or image by the applicable
+  exact version, source commit, package integrity or artifact digest, and
+  lockfile. Record its license and authority class. If an official SDK does not
+  exist, label the selected independent implementation and qualify it against
+  the official suite; do not present it as the standard authority.
+- Use MCP for bounded live data, action, and authentication surfaces. Use
+  Skills for reusable workflow instructions and supporting resources. An HSWM
+  MCP must expose an exact capability allowlist and must not become a generic
+  canonical-write, Permit, causal-admission, or learning path.
+- Keep HSWM-owned adapters thin, typed, provenance-bound, and explicit about
+  mapping loss and claim ceiling. Add one only where a suitable standard or
+  vendor surface does not meet the required boundary.
+- Treat the official MCP Registry as discovery metadata only. Never auto-trust,
+  auto-install, or auto-run an entry; independently verify publisher, source
+  revision, package or image digest, license, authentication, capabilities, and
+  an isolated smoke test first.
+
 - Put new implementation in `src/hswm/`, tests in `tests/`, research programs in
   `_research/`, and documents or artifacts in their typed directories. Do not add
   new implementation or generated artifacts to the repository root. Move ordinary

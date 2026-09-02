@@ -9,6 +9,13 @@ HSWM의 최상위 목표 정체성은
 continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 얼굴이다. 이 정전은
 철학적 정의를 닫지만 현재 효능을 승격하지 않는다.
 
+외부 그래프 표준·SDK·공식 test suite, MCP와 Skill의 역할 분리, source pin과
+registry 비신뢰 경계는
+[`standard-first graph toolchain policy`](docs/operations/HSWM_STANDARD_TOOLCHAIN_POLICY_2026-09-02.md)에
+둔다. 기계 잠금과 실행 가능한 qualification profile은
+[`HSWM_GRAPH_STANDARDS_ACCEPTANCE.v1.json`](_research/graph_standards/HSWM_GRAPH_STANDARDS_ACCEPTANCE.v1.json)이
+고정하며, 이 도구층은 HSWM cognition·Permit·causal credit·learning의 증거가 아니다.
+
 2026-09-02 현재 증명·근거·간극의 answer-first 상태는
 [`HSWM proof-status graph`](docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)에
 고정했다. 임의의 theorem/test 개수가 아니라 여섯 end-to-end 횡단 의무를 같은

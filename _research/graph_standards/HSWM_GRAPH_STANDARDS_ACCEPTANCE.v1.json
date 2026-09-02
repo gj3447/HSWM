@@ -1,0 +1,415 @@
+{
+  "schema_version": "hswm-graph-standards-acceptance/v1",
+  "as_of_utc": "2026-09-02",
+  "authority_boundary": "External standards, SDKs, test suites, MCPs, and Skills are pinned engineering inputs or bounded interfaces. They are not HSWM cognition, canonical admission, Permit, outcome truth, causal credit, continuous learning, or efficacy evidence.",
+  "policy": {
+    "official_standard_sdk_suite_first": true,
+    "openai_system_or_curated_skill_first": true,
+    "exact_version_commit_digest_and_lock_required": true,
+    "mcp_role": "LIVE_DATA_ACTION_AUTH_BOUNDARY",
+    "skill_role": "REUSABLE_WORKFLOW_INSTRUCTIONS_RESOURCES",
+    "hswm_adapter_rule": "ONLY_WHERE_NO_SUITABLE_STANDARD_SURFACE_AND_THEN_THIN_BOUNDED_AND_CLAIM_LIMITED",
+    "mcp_registry_role": "DISCOVERY_ONLY_NO_AUTO_TRUST_NO_AUTO_INSTALL"
+  },
+  "lanes": {
+    "stable": "Only published W3C Recommendations, published ISO standards and corrigenda, or stable project specifications may define a production interoperability success criterion.",
+    "experimental": "Draft and candidate standards may be exercised, but their result cannot promote a stable or scientific HSWM claim.",
+    "metadata_only": "The source is tracked for architecture and future adapter selection, not executable qualification."
+  },
+  "standards": [
+    {
+      "id": "rdf-1.1-dataset",
+      "authority": "W3C",
+      "title": "RDF 1.1 Concepts and Abstract Syntax",
+      "version": "Recommendation 2014-02-25",
+      "status": "PUBLISHED_STANDARD",
+      "lane": "stable",
+      "official_url": "https://www.w3.org/TR/rdf11-concepts/",
+      "hswm_role": "READ_ONLY_DERIVED_DATASET_MODEL"
+    },
+    {
+      "id": "n-quads-1.1",
+      "authority": "W3C",
+      "title": "RDF 1.1 N-Quads",
+      "version": "Recommendation 2014-02-25",
+      "status": "PUBLISHED_STANDARD",
+      "lane": "stable",
+      "official_url": "https://www.w3.org/TR/n-quads/",
+      "hswm_role": "READ_ONLY_EXCHANGE_SYNTAX"
+    },
+    {
+      "id": "rdfc-1.0",
+      "authority": "W3C",
+      "title": "RDF Dataset Canonicalization 1.0",
+      "version": "Recommendation 2024-05-21",
+      "status": "PUBLISHED_STANDARD",
+      "lane": "stable",
+      "official_url": "https://www.w3.org/TR/rdf-canon/",
+      "hswm_role": "EXTERNAL_RDF_DATASET_CANONICALIZATION"
+    },
+    {
+      "id": "shacl-1.0",
+      "authority": "W3C",
+      "title": "Shapes Constraint Language",
+      "version": "Recommendation 2017-07-20",
+      "status": "PUBLISHED_STANDARD",
+      "lane": "stable",
+      "official_url": "https://www.w3.org/TR/shacl/",
+      "hswm_role": "EXPORTED_GRAPH_STRUCTURAL_VALIDATION_ONLY"
+    },
+    {
+      "id": "json-ld-1.1",
+      "authority": "W3C",
+      "title": "JSON-LD 1.1",
+      "version": "Recommendation 2020-07-16",
+      "status": "PUBLISHED_STANDARD",
+      "lane": "stable",
+      "official_url": "https://www.w3.org/TR/json-ld11/",
+      "hswm_role": "HUMAN_AND_API_EXCHANGE_VIEW"
+    },
+    {
+      "id": "prov-o",
+      "authority": "W3C",
+      "title": "PROV-O",
+      "version": "Recommendation 2013-04-30",
+      "status": "PUBLISHED_STANDARD",
+      "lane": "stable",
+      "official_url": "https://www.w3.org/TR/prov-o/",
+      "hswm_role": "ASSERTED_PROVENANCE_EXCHANGE_ONLY"
+    },
+    {
+      "id": "rdf-1.2-n-quads",
+      "authority": "W3C",
+      "title": "RDF 1.2 N-Quads",
+      "version": "Working Draft 2026-07-23",
+      "status": "DRAFT_STANDARD",
+      "lane": "experimental",
+      "official_url": "https://www.w3.org/TR/2026/WD-rdf12-n-quads-20260723/",
+      "hswm_role": "EXPERIMENTAL_READ_ONLY_ADAPTER"
+    },
+    {
+      "id": "shacl-1.2-core",
+      "authority": "W3C",
+      "title": "SHACL 1.2 Core",
+      "version": "Working Draft 2026-08",
+      "status": "DRAFT_STANDARD",
+      "lane": "experimental",
+      "official_url": "https://www.w3.org/TR/shacl12-core/",
+      "hswm_role": "EXPERIMENTAL_STRUCTURAL_VALIDATION"
+    },
+    {
+      "id": "sparql-1.2",
+      "authority": "W3C",
+      "title": "SPARQL 1.2 family",
+      "version": "Working Draft family 2026-08",
+      "status": "DRAFT_STANDARD",
+      "lane": "experimental",
+      "official_url": "https://www.w3.org/TR/sparql12-query/",
+      "hswm_role": "EXPERIMENTAL_COMPILED_QUERY_ADAPTER"
+    },
+    {
+      "id": "iso-gql",
+      "authority": "ISO/IEC",
+      "title": "Database language GQL",
+      "version": "ISO/IEC 39075:2024 with Cor 1:2026",
+      "status": "PUBLISHED_STANDARD_COPYRIGHTED_TEXT_NOT_VENDORED",
+      "lane": "metadata_only",
+      "official_url": "https://www.iso.org/standard/76120.html",
+      "hswm_role": "FUTURE_LOSS_DECLARED_PROPERTY_GRAPH_QUERY_VIEW"
+    },
+    {
+      "id": "iso-sql-pgq",
+      "authority": "ISO/IEC",
+      "title": "SQL Property Graph Queries",
+      "version": "ISO/IEC 9075-16:2023 with Cor 1:2026",
+      "status": "PUBLISHED_STANDARD_COPYRIGHTED_TEXT_NOT_VENDORED",
+      "lane": "metadata_only",
+      "official_url": "https://www.iso.org/standard/79473.html",
+      "hswm_role": "FUTURE_LOSS_DECLARED_SQL_GRAPH_QUERY_VIEW"
+    },
+    {
+      "id": "graphblas-c-2.1",
+      "authority": "GraphBLAS Forum",
+      "title": "GraphBLAS C API",
+      "version": "2.1.0",
+      "status": "STABLE_PROJECT_SPECIFICATION",
+      "lane": "metadata_only",
+      "official_url": "https://graphblas.org/docs/GraphBLAS_API_C_v2.1.0.pdf",
+      "hswm_role": "FUTURE_LOSS_DECLARED_SPARSE_COMPILED_VIEW"
+    },
+    {
+      "id": "w3c-trace-context-1",
+      "authority": "W3C",
+      "title": "Trace Context",
+      "version": "Recommendation 2021-11-23",
+      "status": "PUBLISHED_STANDARD",
+      "lane": "stable",
+      "official_url": "https://www.w3.org/TR/trace-context/",
+      "hswm_role": "NON_AUTHORITATIVE_CROSS_PROCESS_CORRELATION"
+    },
+    {
+      "id": "opentelemetry-specification",
+      "authority": "OpenTelemetry",
+      "title": "OpenTelemetry Specification",
+      "version": "1.60.0",
+      "status": "STABLE_PROJECT_SPECIFICATION",
+      "lane": "metadata_only",
+      "official_url": "https://opentelemetry.io/docs/specs/otel/",
+      "hswm_role": "NON_AUTHORITATIVE_OBSERVABILITY"
+    }
+  ],
+  "suite_sources": [
+    {
+      "id": "w3c-rdf-tests-rdf11-nquads",
+      "authority": "W3C",
+      "repository": "https://github.com/w3c/rdf-tests.git",
+      "commit": "369a90d1a60c021b746df2e411da0ff36258a758",
+      "selected_path": "rdf/rdf11/rdf-n-quads",
+      "git_tree_sha1": "15ea3f8713598aecc2cdf16d44487e43eeacb146",
+      "git_archive_sha256": "192534988e00895f5d4be9fe0dc3e5b72d1b11fcabf1858060fcf833a701b784",
+      "manifest_path": "rdf/rdf11/rdf-n-quads/manifest.ttl",
+      "manifest_sha256": "4c658a4e111adff512e89ff2c39acf9195109592f54711ce06823dac544c62ca",
+      "license_path": "LICENSE.md",
+      "license_sha256": "7fa36904d5d6d32848307af7b22d416b708aaa0b98f5c719b26adb5ed3594b2a",
+      "license": "W3C Software and Document License; suite manifests also declare W3C Test Suite License / W3C 3-clause BSD"
+    },
+    {
+      "id": "w3c-rdf-tests-rdf12-nquads",
+      "authority": "W3C",
+      "repository": "https://github.com/w3c/rdf-tests.git",
+      "commit": "369a90d1a60c021b746df2e411da0ff36258a758",
+      "selected_path": "rdf/rdf12/rdf-n-quads",
+      "git_tree_sha1": "4217914892b6db616300a6c2788df2da9132009c",
+      "git_archive_sha256": "f425e5fb6dd1c1e5f2a39f09c5428112638339159f373a0c8a83081fe5739611",
+      "manifest_path": "rdf/rdf12/rdf-n-quads/manifest.ttl",
+      "manifest_sha256": "3b3205318f170abdf654160d7789a52635a37d4f55240273788b8f6cab32695b",
+      "license_path": "LICENSE.md",
+      "license_sha256": "7fa36904d5d6d32848307af7b22d416b708aaa0b98f5c719b26adb5ed3594b2a",
+      "license": "W3C Software and Document License; suite manifests also declare W3C Test Suite License / W3C 3-clause BSD"
+    },
+    {
+      "id": "w3c-rdf-canon-tests",
+      "authority": "W3C",
+      "repository": "https://github.com/w3c/rdf-canon.git",
+      "commit": "15619df2fda7a4ca88308733789b6774517f9638",
+      "selected_path": "tests",
+      "git_tree_sha1": "f86e60d5db0c5d3f57f7983a5bb58f8a7b12b4c3",
+      "git_archive_sha256": "ad38052cc80791cf4d93881626ed033eb3fb70bb58908ea6a1726ae3eb10f08c",
+      "manifest_path": "tests/manifest.jsonld",
+      "manifest_sha256": "e9a2fe7bfc793225b848fce2bfe23dc0a4233a1910535d8ccce69633d41b3c8c",
+      "license_path": "LICENSE.md",
+      "license_sha256": "232da9c6c2b9f7e19e5d85cc7cf43760d80b7c4174406ac6404fa2c1b51d531b",
+      "license": "W3C Software and Document License; tests/README.md offers W3C Test Suite License / W3C 3-clause BSD"
+    },
+    {
+      "id": "w3c-shacl10-tests",
+      "authority": "W3C",
+      "repository": "https://github.com/w3c/data-shapes.git",
+      "commit": "b7844c776844b4927e1e79393ed05ed8bb80ee11",
+      "selected_path": "data-shapes-test-suite",
+      "git_tree_sha1": "04c1b65bd3e338546ba2d99174f3c5a305da04d3",
+      "git_archive_sha256": "e29ccd2390aa054636ea3089d388bf590566cc43d496610ac422db41f1341287",
+      "manifest_path": "data-shapes-test-suite/tests/manifest.ttl",
+      "manifest_sha256": "1deb6bbf595e1762ac408f856342907232a701d70ea6e815eb998cc4ebec15c4",
+      "license_path": "LICENSE.md",
+      "license_sha256": "6e57fea82f0488b42c47fee06e66b98849b64cc721714ad5fb520d3e84b4d4b9",
+      "license": "W3C Software and Document License"
+    },
+    {
+      "id": "w3c-jsonld11-tests",
+      "authority": "W3C",
+      "repository": "https://github.com/w3c/json-ld-api.git",
+      "commit": "ffdb326121ea89b7b8280e76a5caea923834bcef",
+      "selected_path": "tests",
+      "git_tree_sha1": "d3ba82bf8131ca4e4244ed16e4dede413835fcd1",
+      "git_archive_sha256": "b55bd9a9595537c3c6bf54035d841b17015b16b835c93ad0106910c7912f1345",
+      "manifest_path": "tests/manifest.jsonld",
+      "manifest_sha256": "cffeedd8a03967b6a489f4f36fb0d6c65ed4e27a93269bbb3915404095e66989",
+      "license_path": "tests/LICENSE.md",
+      "license_sha256": "a13d29acf165699ae8c57ef9eac2f489560d2753dd84a684c735a4c7c7a15d64",
+      "license": "W3C Test Suite License / W3C 3-clause BSD"
+    }
+  ],
+  "tool_adapters": [
+    {
+      "id": "n3-nquads-parser",
+      "authority_class": "INDEPENDENT_COMMUNITY_IMPLEMENTATION_NOT_W3C",
+      "package": "n3",
+      "version": "2.7.0",
+      "source_repository": "https://github.com/rdfjs/N3.js.git",
+      "source_tag": "v2.7.0",
+      "source_commit": "210a1f84fea97058cfa4e94c91421acd4ae61bee",
+      "npm_integrity": "sha512-lq51RWnvGFW6+Yp9+NBx4r8EkWZEo55ilXsDQoJ1TJgiCzOQ0pQ5UbMU5tgp57yj0JTDvQssBwdaJOEOB39TqA==",
+      "license": "MIT",
+      "lockfile": "src/hswm/effect-runtime/package-lock.json",
+      "capability": "READ_ONLY_NQUADS_PARSE_FOR_QUALIFICATION"
+    },
+    {
+      "id": "rdf-canonize-rdfc10",
+      "authority_class": "INDEPENDENT_COMMUNITY_IMPLEMENTATION_NOT_W3C",
+      "package": "rdf-canonize",
+      "version": "5.0.0",
+      "source_repository": "https://github.com/digitalbazaar/rdf-canonize.git",
+      "source_tag": "v5.0.0",
+      "source_commit": "9502eee92d87e8685d96b9d325477d767c86fb83",
+      "npm_integrity": "sha512-g8OUrgMXAR9ys/ZuJVfBr05sPPoMA7nHIVs8VEvg9QwM5W4GR2qSFEEHjsyHF1eWlBaf8Ev40WNjQFQ+nJTO3w==",
+      "license": "BSD-3-Clause",
+      "lockfile": "src/hswm/effect-runtime/package-lock.json",
+      "capability": "READ_ONLY_RDFC10_CROSS_IMPLEMENTATION_QUALIFICATION"
+    }
+  ],
+  "runtime_lock": {
+    "node": "24.13.0",
+    "npm": "11.6.2",
+    "package_manifest": "src/hswm/effect-runtime/package.json",
+    "package_manifest_sha256": "ca299573fcfb213fdc1476559c18618b53c34a7aae1b05e86b023a6d30451fc7",
+    "package_lock": "src/hswm/effect-runtime/package-lock.json",
+    "package_lock_sha256": "fdbc28cc2dd830243f011a18fec613a3db2412b986b4158d46d3b31a7320e1b4"
+  },
+  "qualification_profiles": [
+    {
+      "id": "rdf11-nquads-n3",
+      "lane": "stable",
+      "status": "RUNNABLE_REQUIRES_PINNED_SUITE",
+      "standard_ids": ["rdf-1.1-dataset", "n-quads-1.1"],
+      "suite_source_id": "w3c-rdf-tests-rdf11-nquads",
+      "adapter_id": "n3-nquads-parser",
+      "runner": "_research/graph_standards/qualify_graph_standards.mjs",
+      "runner_sha256": "e4897e97c1afd908d9934361b7ed6c605920e98a9262cfa90ecb9fa64b7b97a0",
+      "qualification_manifest_path": "rdf/rdf11/rdf-n-quads/manifest.ttl",
+      "qualification_manifest_sha256": "4c658a4e111adff512e89ff2c39acf9195109592f54711ce06823dac544c62ca",
+      "expected": {"positive": 53, "negative": 32, "total": 85},
+      "claim_ceiling": "PINNED_N3_ACCEPTS_AND_REJECTS_THE_85_RDFT_APPROVED_W3C_RDF11_NQUADS_SYNTAX_FIXTURES_ONLY_TWO_UNAPPROVED_MANIFEST_ENTRIES_EXCLUDED_NOT_HSWM_EMITTER_OR_UNIVERSAL_CONFORMANCE"
+    },
+    {
+      "id": "rdf12-nquads-n3-experimental",
+      "lane": "experimental",
+      "status": "RUNNABLE_NON_PROMOTING_DRAFT_DIAGNOSTIC",
+      "standard_ids": ["rdf-1.2-n-quads"],
+      "suite_source_id": "w3c-rdf-tests-rdf12-nquads",
+      "adapter_id": "n3-nquads-parser",
+      "runner": "_research/graph_standards/qualify_graph_standards.mjs",
+      "runner_sha256": "e4897e97c1afd908d9934361b7ed6c605920e98a9262cfa90ecb9fa64b7b97a0",
+      "qualification_manifest_path": "rdf/rdf12/rdf-n-quads/syntax/manifest.ttl",
+      "qualification_manifest_sha256": "90d06079b66e5f2d0df598cf451eeaa7b896c11f8869bec6219a40ac6b504768",
+      "expected": {"positive": 7, "negative": 20, "total": 27},
+      "claim_ceiling": "PINNED_N3_MATCHES_THE_27_CURRENT_W3C_RDF12_NQUADS_DELTA_SYNTAX_FIXTURES_EXPERIMENTAL_ONLY_NOT_A_STABLE_BASELINE"
+    },
+    {
+      "id": "rdfc10-rdf-canonize",
+      "lane": "stable",
+      "status": "RUNNABLE_REQUIRES_PINNED_SUITE",
+      "standard_ids": ["rdfc-1.0"],
+      "suite_source_id": "w3c-rdf-canon-tests",
+      "adapter_id": "rdf-canonize-rdfc10",
+      "runner": "_research/graph_standards/qualify_graph_standards.mjs",
+      "runner_sha256": "e4897e97c1afd908d9934361b7ed6c605920e98a9262cfa90ecb9fa64b7b97a0",
+      "qualification_manifest_path": "tests/manifest.jsonld",
+      "qualification_manifest_sha256": "e9a2fe7bfc793225b848fce2bfe23dc0a4233a1910535d8ccce69633d41b3c8c",
+      "expected": {"evaluation": 64, "identifier_map": 21, "negative": 1, "total": 86},
+      "claim_ceiling": "PINNED_RDF_CANONIZE_MATCHES_86_APPROVED_W3C_RDFC10_VECTORS_ONLY_NOT_UNIVERSAL_CONFORMANCE_SIGNATURE_TRUTH_OR_HSWM_NATIVE_IDENTITY"
+    },
+    {
+      "id": "shacl10-hswm-profile",
+      "lane": "stable",
+      "status": "PENDING_ENGINE_AND_HSWM_SHAPES",
+      "standard_ids": ["shacl-1.0"],
+      "suite_source_id": "w3c-shacl10-tests",
+      "claim_ceiling": "NOT_QUALIFIED"
+    },
+    {
+      "id": "jsonld11-hswm-export",
+      "lane": "stable",
+      "status": "PENDING_EXPORT_ADAPTER",
+      "standard_ids": ["json-ld-1.1"],
+      "suite_source_id": "w3c-jsonld11-tests",
+      "claim_ceiling": "NOT_QUALIFIED"
+    },
+    {
+      "id": "prov-o-hswm-profile",
+      "lane": "stable",
+      "status": "PENDING_CONSTRAINED_MAPPING",
+      "standard_ids": ["prov-o"],
+      "claim_ceiling": "NOT_QUALIFIED"
+    },
+    {
+      "id": "property-graph-query-adapters",
+      "lane": "metadata_only",
+      "status": "PENDING_BACKEND_AND_LOSS_CONTRACT",
+      "standard_ids": ["iso-gql", "iso-sql-pgq"],
+      "claim_ceiling": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "graphblas-compiled-view",
+      "lane": "metadata_only",
+      "status": "PENDING_MAPPING_AND_IMPLEMENTATION",
+      "standard_ids": ["graphblas-c-2.1"],
+      "claim_ceiling": "NOT_IMPLEMENTED"
+    },
+    {
+      "id": "trace-context-carrier",
+      "lane": "stable",
+      "status": "PENDING_REMOTE_RUNTIME_BOUNDARY",
+      "standard_ids": ["w3c-trace-context-1", "opentelemetry-specification"],
+      "claim_ceiling": "NOT_IMPLEMENTED_NOT_PROVENANCE_OR_CAUSAL_CREDIT"
+    }
+  ],
+  "qualification_receipts": [
+    {
+      "profile_id": "rdf11-nquads-n3",
+      "path": "_research/graph_standards/results/RDF11_NQUADS_N3_2_7_0.v1.json",
+      "receipt_sha256": "8327435db4476340b45cfbc38b32c43ebad57d62534bfc01a5c8c3be4f499659"
+    },
+    {
+      "profile_id": "rdf12-nquads-n3-experimental",
+      "path": "_research/graph_standards/results/RDF12_NQUADS_N3_2_7_0_EXPERIMENTAL.v1.json",
+      "receipt_sha256": "c3913f5a0a930128c81ffc3044ca0fe37bae10d3886d87f4b332b676a0f2969f"
+    },
+    {
+      "profile_id": "rdfc10-rdf-canonize",
+      "path": "_research/graph_standards/results/RDFC10_RDF_CANONIZE_5_0_0.v1.json",
+      "receipt_sha256": "461666be581af8283713333b166acdd3ec8e2009320b7831aa6411c28ce8f793"
+    }
+  ],
+  "mcp": {
+    "specification": "https://modelcontextprotocol.io/specification/2026-07-28",
+    "specification_revision": "2026-07-28",
+    "new_typescript_sdk": {
+      "packages": ["@modelcontextprotocol/core", "@modelcontextprotocol/client", "@modelcontextprotocol/server"],
+      "version": "2.0.0",
+      "source_tags": {
+        "@modelcontextprotocol/core": "@modelcontextprotocol/core@2.0.0",
+        "@modelcontextprotocol/client": "@modelcontextprotocol/client@2.0.0",
+        "@modelcontextprotocol/server": "@modelcontextprotocol/server@2.0.0"
+      },
+      "source_repository": "https://github.com/modelcontextprotocol/typescript-sdk.git",
+      "source_commit": "cc4b41617ce3601b1290d67216ea0b194a3cd9ac",
+      "npm_integrities": {
+        "@modelcontextprotocol/core": "sha512-pJCEwGG7Lfr/+PQp9ZTwKXNeO5wzbfKL7H3MYpCorM4oFBoQrdjnBgEoqG+RjhsvS1FKrDbKux+M1HhlnGWqcA==",
+        "@modelcontextprotocol/client": "sha512-8f1OghQ2rjzIOfqgUCP+8GiUWqRs89njoWLNqAe8kWmDePv3s1fZXseej+QXemssEuuOvLLmLO/kqM3IQHtISw==",
+        "@modelcontextprotocol/server": "sha512-YhHWdHfpFMQfd0prsEnxKeS3Qz3ytIGmsS0sth4KDjnacIT7hxk6hXHkJ9KysxlkvTM+WZAtQbbcUhdoP4Hvtw=="
+      },
+      "license": "MIT",
+      "lockfile_status": "NOT_APPLICABLE_UNTIL_ADOPTION",
+      "install_status": "NOT_INSTALLED_NO_CURRENT_TYPESCRIPT_MCP_IMPLEMENTATION"
+    },
+    "registry": {
+      "url": "https://registry.modelcontextprotocol.io/",
+      "maturity": "PREVIEW",
+      "use": "DISCOVERY_ONLY",
+      "auto_trust": false,
+      "auto_install": false,
+      "required_before_use": ["PUBLISHER_AND_NAMESPACE", "SOURCE_REVISION", "PACKAGE_OR_IMAGE_DIGEST", "LOCKFILE_INTEGRITY", "LICENSE", "AUTH_AND_CAPABILITY_MANIFEST", "ISOLATED_SMOKE"]
+    },
+    "hswm_boundary": "READ_ONLY_OR_EXPLICITLY_AUTHORIZED_LIVE_INTERFACE_ONLY_NO_CANONICAL_WRITE_PERMIT_CAUSAL_ADMISSION_OR_LEARNING_AUTHORITY"
+  },
+  "skills": {
+    "system_skills": "OPENAI_HOST_MANAGED_PREFERRED_WHEN_TRIGGERED",
+    "curated_repository": "https://github.com/openai/skills.git",
+    "observed_main_commit": "49f948faa9258a0c61caceaf225e179651397431",
+    "required_new_installations": [],
+    "reason": "No OpenAI curated Lean, RDF, SHACL, or graph-engineering Skill exists at this observation cut.",
+    "curated_install_rule": "EXPLICIT_TASK_FIT_AND_IMMUTABLE_COMMIT_REQUIRED",
+    "community_install_rule": "NO_AUTOMATIC_INSTALL"
+  }
+}

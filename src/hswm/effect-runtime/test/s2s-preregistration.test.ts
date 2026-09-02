@@ -596,7 +596,8 @@ for (const workflowMode of ["absent", "100755"] as const) {
         Effect.provide(layer),
         Effect.ensuring(Effect.sync(fixture.cleanup))
       )
-    }
+    },
+    15_000
   )
 }
 

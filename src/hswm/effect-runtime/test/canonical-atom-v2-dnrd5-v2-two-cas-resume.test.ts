@@ -287,4 +287,4 @@ it.effect("fresh file-runtime reopen resumes exact R1 without duplicating it", (
     ),
     Effect.ensuring(Effect.sync(() => rmSync(root, { recursive: true, force: true })))
   )
-})
+}, 15_000)

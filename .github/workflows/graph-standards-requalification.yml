@@ -28,7 +28,7 @@ jobs:
         run: |
           test "$(node --version)" = "v24.13.0"
           test "$(npm --version)" = "11.6.2"
-          test "$(uv --version)" = "uv 0.12.3"
+          test "$(uv --version)" = "uv 0.12.3 (x86_64-unknown-linux-gnu)"
           printf '%s  %s\n' \
             '53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc' \
             "$(command -v node)" | sha256sum --check --strict

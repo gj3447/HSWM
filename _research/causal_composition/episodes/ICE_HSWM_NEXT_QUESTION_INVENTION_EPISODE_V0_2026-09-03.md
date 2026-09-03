@@ -718,5 +718,11 @@ DESIGN_REVISE_WITH_NAMED_TYPE_OR_COVER_DEFECT
 DESIGN_REJECTED_AS_NONDISCRIMINATING
 ```
 
-That decision is not supplied by this document. Until then, the episode stops
-at `DESIGN_DRAFT`.
+The separate
+[`ICE G1 source-to-fold mathematical review packet`](ICE_G1_SOURCE_TO_FOLD_MATH_REVIEW_PACKET_V0_2026-09-03.md)
+defines the common type, cover/overlap, source/limit, orientation, good-end,
+divisor, gauge/BFV, candidate-completeness, and verdict obligations. Its current
+`SECONDARY_AI` recommendation is
+`DESIGN_REVISE_WITH_NAMED_TYPE_OR_COVER_DEFECT`; it does not substitute for the
+independent mathematical owner's decision. Until that owner returns
+`DESIGN_ADMISSIBLE_TO_PREREGISTER`, this episode stops at `DESIGN_DRAFT`.

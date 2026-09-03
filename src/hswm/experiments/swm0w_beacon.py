@@ -1,8 +1,8 @@
 """Fail-closed future-public-randomness binding for future SWM-0W tasks.
 
-This repository-checkout module is a narrow experimental provenance boundary
-outside canonical HSWM state.  It binds a proposed experiment to one exact
-future Quicknet round and derives
+This repository-checkout module is a narrow experimental provenance boundary,
+primarily in ``Pi``:
+it binds a proposed experiment to one exact future Quicknet round and derives
 twenty domain-separated task seeds only after a pinned Node verifier has made
 the official ``drand-client`` cryptographically accept that pulse.
 

@@ -55,6 +55,7 @@ from the task-specific table below or establish a powered HSWM efficacy result.
 | Current HSWM evidence | G0 measurement integrity is not passed and G1 local causal revision is locked. Existing graph, receipt, and future-pulse engineering does not establish independent outcome custody or HSWM learning. |
 | Current ICE evidence | Gate 1 is `OPEN_PARTIAL_PROGRESS`, global promotion is `PROHIBITED`, and the physical original cycle and global intersection vector remain null. ICE is the external scientific workbench supplying the bounded question, not HSWM canonical state or HSWM evidence. |
 | Conceptual delta | Replace static exact-target retrieval with a disposable proposal state in which a sealed unexpected outcome can retire a mechanism family and causally change the next selected discriminator. Only independently judged outcomes may support that change. |
+| Graph-engineering delta | Replace the generic graph/export wrapper with one loss-aware, read-only standards profile: stable W3C semantic/provenance projections, optional ISO property-graph query views, content-addressed sealed phases, and bounded attestation/package/telemetry exports. The internal HSWM hypergraph and claim ceiling do not change. |
 
 The HSWM recurrence remains:
 
@@ -376,6 +377,187 @@ reveal events. The mathematical cover/type reviewer decides design
 admissibility and may not substitute for either custodian or evaluator. Leakage
 or identity overlap between the chains makes the occurrence `VOID`.
 
+### 8.5 Standards-first full-stack graph-engineering profile
+
+#### Architectural boundary
+
+The HSWM canonical hypergraph remains the schema-approved atom and typed
+incidence state defined by HSWM. No external graph standard in this section
+defines an HSWM atom, owner, Permit, causal credit, admission, learning, or
+scientific truth. Each standard is restricted to a read-only semantic,
+validation, query, integrity, provenance, packaging, or telemetry projection.
+
+There is one living HSWM state, not an RDF brain plus a property-graph brain.
+Every external RDF, GQL/PGQ, query, and telemetry projection store is a
+delete-and-rebuild cache. By contrast, independently held source, custodian,
+signed projection snapshot, WORM, DSSE/in-toto, RFC 3161, and Rekor evidence
+bytes are immutable external evidence and must not be regenerated or replaced.
+An exporter, query service, RO-Crate, OpenLineage event, or MCP response may
+never write canonical state or trigger learning. A projection may report an
+owner, authorization, or Permit decision reference and digest; it may not
+issue, evaluate, or alter that decision.
+
+#### Stable adoption lane at the 2026-09-03 cutoff
+
+| Layer | Frozen authority baseline | Episode role and hard ceiling |
+|---|---|---|
+| Semantic dataset | W3C RDF 1.1 Recommendation; JSON-LD 1.1 Recommendation for boundary serialization | Project the bounded episode as an RDF dataset. JSON-LD is an interchange form, not canonical bytes, authenticity, or truth. Remote or mutable `@context` resolution is forbidden in a seal; the exact context must be local and hash-pinned. |
+| Structural validation | W3C SHACL Recommendation, 2017 | Validate declared graph shape and cardinality only. Conformance does not establish hypothesis quality, discriminator validity, outcome independence, or permission. |
+| Read-only audit | W3C SPARQL 1.1 Query Recommendation | Local `SELECT` and `ASK` audits only. `UPDATE`, remote datasets, and `SERVICE` are outside the episode capability allowlist and cannot become an admission path. |
+| Dataset identity | W3C RDF Dataset Canonicalization 1.0 Recommendation | Produce canonical N-Quads before graph hashing and signing. Canonical-byte equality establishes the declared RDFC-1.0 dataset-isomorphism identity; a digest is only a cryptographic content identifier under the declared collision-resistant algorithm, digest length, and retained canonical bytes. Neither establishes time order, signer identity, source truth, or custody. Poison/complexity limits must fail closed. |
+| Provenance exchange | W3C PROV-DM and PROV-O Recommendations | Represent entities, activities, agents, use, generation, derivation, and association. PROV derivation is not causal credit, authorship authentication, authorization, or scientific support. |
+| Property-graph query view | ISO/IEC 39075:2024 GQL plus Cor 1:2026; ISO/IEC 9075-16:2023 SQL/PGQ plus Cor 1:2026 | Optional read-only property-graph projection/query surface. These standards cover property-graph data and query operations, not native HSWM hyperedges, provenance validity, causal learning, distributed consensus, or MCP authority. |
+| Research package | RO-Crate 1.3, community Recommendation, 2026-06-22 | Post-terminal portable package with raw and derived artifacts, licenses, source pins, hashes, signatures, timestamp tokens, verifier reports, and redaction manifest. The pinned RO-Crate context and metadata cannot back-write HSWM. |
+| Operational attestation | in-toto stable 1.0 and DSSE envelope 1.0.2 | Bind byte payload types, authorized operational steps, materials, products, and signatures. They do not decide a mechanism, owner, Permit, causal credit, or outcome truth. |
+| Time and transparency | RFC 3161 as updated by RFC 5816; separately verified Rekor inclusion | Timestamp the exact signed envelope digest and retain request, response, chain, nonce, policy, and verification receipt. Rekor supplies signature transparency, not occurrence uniqueness or scientific authority. Rekor v1 `integratedTime` is not a substitute for independently verifiable RFC 3161 time. |
+| Execution telemetry | Version-pinned OpenLineage Job/Run/Dataset schema; optional CloudEvents 1.0.2 delivery envelope | Emit derived run and dataset references after the authority-bearing artifact exists. Neither producer time, run ID, event ID, nor delivery proves chronology, exactly-once execution, custody, or a causal edge. |
+
+No package, binary, SDK, image, or backend is selected by this table. A future
+executable freeze must record the exact release, source commit, package
+integrity or image digest, license, authority class, capability allowlist, and
+official-suite or independently qualified conformance evidence for every
+adopted implementation.
+
+OSF registration, the separate-account WORM singleton registry, Temporal,
+drand, and the independent custodians are operational trust boundaries rather
+than graph standards. Their actual account, service, retention, one-shot,
+future-round, key, and independence evidence must be verified separately; an
+RDF, GQL, PROV, or OpenLineage assertion that they exist is not that evidence.
+
+#### Candidate and draft lane
+
+The following remain isolated, non-promoting compatibility experiments:
+
+- RDF 1.2 Concepts and Semantics Candidate Recommendation Snapshots of
+  2026-04-07;
+- SPARQL 1.2 Query Working Draft of 2026-06-25;
+- SHACL 1.2 Core Working Draft of 2026-08-03;
+- the unpublished-at-cutoff JSON-LD 1.2 work item; and
+- ISO GQL Edition 2 and SQL/PGQ Edition 2 Committee Draft work.
+
+No canonical schema, seal, signature, acceptance query, or promotion decision
+may depend on these lanes before a stable publication and an independently
+qualified pinned implementation exist.
+
+#### Loss-aware hyperedge projection
+
+An internal n-ary hyperedge has one UID, and each role-bearing participant
+incidence has its own UID, version, owner reference, role, position,
+multiplicity, qualifiers, provenance, and temporal/outcome scope. The bounded
+projections preserve those identities as follows:
+
+```text
+HSWM internal:
+  Hyperedge(e_uid,
+    participants[(incidence_uid, atom_uid, role, position, multiplicity), ...])
+
+RDF 1.1 view:
+  one IRI resource for e_uid
+  + one role-qualified incidence resource per participant
+  + one named graph per sealed projection phase
+
+GQL / SQL-PGQ view:
+  (:Hyperedge {uid, version, snapshot_digest})
+    -[:PARTICIPANT {
+        incidence_uid, hyperedge_uid, version, role, position, multiplicity
+      }]->(:Atom {uid})
+```
+
+Pairwise clique expansion is prohibited as the authoritative projection because
+it invents pairwise relations and loses the all-participants-together
+constraint, role, order, multiplicity, and invertibility. A convenience
+pairwise view must be marked `DERIVED_NON_INVERTIBLE`, retain
+`source_hyperedge_uids[]` and the complete source-incidence list, bind its
+derivation rule and snapshot digest, publish a loss profile, and remain
+ineligible for re-ingestion. Multiple origins may not be silently coalesced.
+
+Every projection manifest must bind:
+
+```text
+projection_id
+canonical_snapshot_digest
+schema_version and episode_uid
+source revision and projection time
+standard versions and corrigenda
+mapping_spec_version
+exact read/query capability allowlist
+mapping_loss flags
+inverse_mapping = false by default
+exporter version, commit, digest and license
+```
+
+At minimum, `mapping_loss` states whether n-ary atomicity is reified, and
+whether hyperedge and incidence identity, role, position, multiplicity,
+qualifiers, temporal/outcome scope, provenance, owner/authorization references,
+and reverse reconstruction are preserved. `inverse_mapping = true` is allowed
+only when every projected participant retains immutable incidence and source
+hyperedge UIDs, version, all declared qualifiers and scopes, the mapping is
+injective within the frozen schema, position/cardinality uniqueness rules are
+declared, and an exact reconstruction test passes.
+
+#### Sealed phase datasets
+
+The external RDF dataset uses separate immutable phase graphs whose names and
+meaning are bound by the HSWM projection policy, not inferred from RDF alone:
+
+```text
+SOURCE_FROZEN
+PROPOSALS_PRESEAL
+OUTCOME_REVEAL
+EVALUATOR_JUDGMENT
+CREDIT_AND_REVISION
+NEXT_SELECTION
+TERMINAL
+```
+
+Each later phase cites the prior canonical dataset digest. Corrections create a
+new derived/invalidation record and preserve the old bytes; they do not mutate
+a sealed named graph. Each phase is materialized deterministically, validated,
+canonicalized with RDFC-1.0, hashed, and only then passed to the signing and
+time/transparency adapters.
+
+#### Minimum graph invariants
+
+These are future projection checks, not new canonical atom kinds:
+
+| ID | Required graph property | Enforcement boundary |
+|---|---|---|
+| `GE-01_TEMPORAL_CUT` | `PROPOSALS_PRESEAL` contains no outcome, reveal, judgment, or post-cutoff derivation path. | SHACL structure plus SPARQL audit; external seal/custody establishes chronology. |
+| `GE-02_COMPETING_MECHANISMS` | At least two live declared `family_uid` values each bind a risky prediction, kill condition, scope, provenance, and exclusivity/alias disposition. | SHACL/SPARQL checks declared distinctness only; reviewer judges conceptual non-duplication and scientific adequacy. |
+| `GE-03_DISCRIMINATOR` | The selected probe binds at least two rivals and a predeclared outcome partition that separates them. | Graph validation plus mathematical reviewer. |
+| `GE-04_OUTCOME_CREDIT` | A revision references one sealed outcome, independent judgments, scoped credit, owner, a read-only authorization/Permit decision digest, readset, writeset, and exact pre/post digests. | The canonical HSWM transition boundary, if Lock A is closed, evaluates and enforces current admission; the projection only reports its result and creates no new governance or write path. |
+| `GE-05_CHANGED_SELECTION` | The post-outcome question changes a risky prediction, live-rival separation, or executable discriminator relative to `INV_C0_NO_UPDATE` and matches the sealed oracle branch. | Compiled behavioral comparison; graph query locates the bound records. |
+| `GE-06_REMOVE_RESTORE` | Removal eliminates the attributed selection delta and restoration recovers exact revision bytes and compiled behavior. | HSWM intervention plus digest comparison. |
+| `GE-07_SINGLE_TERMINAL` | Exactly one declared terminal exists, disagreement maps to `VOID`, and no automatic retry edge exists. | Application invariant plus read-only audit. |
+| `GE-08_NON_AUTHORITY` | No projection, SPARQL endpoint, GQL/PGQ store, MCP, RO-Crate, OpenLineage, or CloudEvents surface has a canonical-write or Permit capability. | Capability configuration and isolation test. |
+
+Passing these checks means the exported graph satisfies the declared profile.
+It does not mean the scientific mechanism, HSWM learning claim, or ICE result is
+true.
+
+#### Graph-delta invention classifier
+
+For a proposed change `delta_G`, reviewers compare the before/after graph
+projection and the authority-bearing source records:
+
+```text
+INVENTION_CARRYING_CANDIDATE iff delta_G changes at least one of:
+  P = a mechanism's risky prediction or kill condition
+  M = the identity or scope of a live competing mechanism family
+  Q(y) = the next executable discriminator selected because of sealed outcome y
+
+SUPPORTING_INFRASTRUCTURE iff delta_G only makes an already selected
+  discriminator measurable, attributable, reproducible, or portable
+
+MAINTENANCE otherwise
+```
+
+Changing an edge label, graph layout, embedding, rank, backend, serialization,
+shape, signature, package, or dashboard is not invention unless the exact
+`P`, `M`, or outcome-bound `Q(y)` delta is also identified. Even then the label
+is `INVENTION_CARRYING_CANDIDATE`, not a scientific result, until the relevant
+sealed outcome and independent judgment exist.
+
 ## 9. Chronology and custody boundary
 
 A future executable occurrence must keep the following order:
@@ -396,8 +578,13 @@ freeze source snapshot, task, mechanisms, predictions, arms, budget and analysis
 The previously proposed OSF, DSSE/in-toto, Rekor, RFC 3161, WORM occurrence
 identifier, Temporal one-shot, drand, independent custodian, dual evaluator,
 RO-Crate, and OpenLineage stack belongs only to a later prospective occurrence
-after an executable protocol is frozen. It protects chronology and provenance;
-it does not generate hypotheses or make this draft a preregistration.
+after an executable protocol is frozen. Section 8.5 fixes their graph boundary:
+each authority-bearing phase is projected, validated, RDFC-canonicalized,
+hashed, signed, and time/transparency-bound; only the completed terminal bundle
+is packaged as RO-Crate 1.3 and exported as derived OpenLineage or CloudEvents
+telemetry. This stack protects content identity, chronology, provenance, and
+distribution within each component's ceiling. It does not generate hypotheses,
+prove exactly-once execution by itself, or make this draft a preregistration.
 
 The ICE calculation itself retains ICE's lean workflow. The HSWM evaluation
 wrapper may not impose a physics promotion or mutate ICE canonical evidence.
@@ -475,6 +662,24 @@ machinery.
 These sources constrain the design. They do not establish an ICE mechanism,
 HSWM learning, or the correctness of the proposed finite atlas. No external
 code, dataset, model, binary, or image was downloaded or imported.
+
+### Graph-engineering authority sources
+
+| Source and exact status at cutoff | Authority class | Adopted boundary |
+|---|---|---|
+| [RDF 1.1 Concepts, 2014](https://www.w3.org/TR/2014/REC-rdf11-concepts-20140225/) and [JSON-LD 1.1, 2020](https://www.w3.org/TR/2020/REC-json-ld11-20200716/) | W3C Recommendations | Stable semantic dataset and boundary serialization only. |
+| [SHACL, 2017](https://www.w3.org/TR/2017/REC-shacl-20170720/) and [SPARQL 1.1 Query, 2013](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/) | W3C Recommendations | Exported-graph validation and local read-only audit only. |
+| [RDF Dataset Canonicalization 1.0, 2024](https://www.w3.org/TR/2024/REC-rdf-canon-20240521/) | W3C Recommendation with official tests and implementation report | Canonical N-Quads identity before hashing/signing; not custody or truth. |
+| [PROV-DM](https://www.w3.org/TR/2013/REC-prov-dm-20130430/) and [PROV-O](https://www.w3.org/TR/2013/REC-prov-o-20130430/), 2013 | W3C Recommendations | Interchange of asserted provenance only. |
+| [RDF 1.2 Concepts CR Snapshot, 2026-04-07](https://www.w3.org/TR/2026/CR-rdf12-concepts-20260407/), [SPARQL 1.2 Query WD, 2026-06-25](https://www.w3.org/TR/2026/WD-sparql12-query-20260625/), and [SHACL 1.2 Core WD, 2026-08-03](https://www.w3.org/TR/2026/WD-shacl12-core-20260803/) | W3C Recommendation-track candidates/drafts | Experimental compatibility lane; no promotion dependency. |
+| [ISO/IEC 39075:2024 GQL](https://www.iso.org/standard/76120.html) plus [Cor 1:2026](https://www.iso.org/standard/93701.html) | ISO/IEC International Standard and corrigendum | Optional read-only property-graph projection/query. Edition 2 remains a Committee Draft. |
+| [ISO/IEC 9075-16:2023 SQL/PGQ](https://www.iso.org/standard/79473.html) plus [Cor 1:2026](https://www.iso.org/standard/93698.html) | ISO/IEC International Standard and corrigendum | Optional SQL-integrated property-graph query projection. Edition 2 remains a Committee Draft. |
+| [RO-Crate 1.3, 2026-06-22](https://www.researchobject.org/ro-crate/specification/1.3/index.html) | ResearchObject.org community Recommendation, Apache-2.0 | Current long-term research-package release; bounded post-terminal export. |
+| [in-toto stable 1.0](https://github.com/in-toto/docs/blob/v1.0/in-toto-spec.md) and [DSSE envelope 1.0.2 at source commit `d3beff7`](https://github.com/secure-systems-lab/dsse/blob/d3beff7f8616e32cbbb1ec40b20a669c0e85eae6/envelope.md) | Independent open specifications | Operational material/product attestation and typed byte signatures only. |
+| [RFC 3161](https://www.rfc-editor.org/info/rfc3161/) as [updated by RFC 5816](https://www.rfc-editor.org/info/rfc5816/) | IETF Standards Track RFCs | Signed time-stamp token for the exact digest, subject to TSA trust and policy. |
+| [Sigstore Rekor transparency-log model](https://docs.sigstore.dev/logging/overview/) and [timestamp limitations](https://docs.sigstore.dev/cosign/verifying/timestamps/) | Sigstore project specification/service | Separate inclusion and consistency evidence; not a replacement for independent signed time or occurrence control. |
+| [OpenLineage 1.53.0 documentation](https://openlineage.io/docs/spec/facets/) with current core schema `$id` `2-0-2` | LF AI & Data community specification under active development | Derived Job/Run/Dataset telemetry; freeze exact schema URL, release, and commit on adoption. |
+| [CloudEvents 1.0.2](https://github.com/cloudevents/spec/tree/ce%40v1.0.2) | CNCF graduated-project specification, Apache-2.0 | Optional delivery envelope around a signed digest/reference only. |
 
 ### Discovery-loop sources
 

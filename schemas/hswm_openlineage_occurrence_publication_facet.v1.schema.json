@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hswm:schema:openlineage:occurrence-publication-facet:v1",
+  "title": "HSWM occurrence publication OpenLineage run facet v1",
+  "description": "A non-canonical, non-promoting projection of an already-terminal occurrence receipt.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "_producer",
+    "_schemaURL",
+    "claimBoundary",
+    "externalAuditVerificationSha256",
+    "receiptSha256",
+    "terminalStatus"
+  ],
+  "properties": {
+    "_producer": {"type": "string", "format": "uri"},
+    "_schemaURL": {"type": "string", "format": "uri"},
+    "claimBoundary": {"type": "string", "minLength": 1},
+    "externalAuditVerificationSha256": {
+      "anyOf": [
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        {"type": "null"}
+      ]
+    },
+    "receiptSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "terminalStatus": {"enum": ["SEALED", "VOID"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"terminalStatus": {"const": "SEALED"}}},
+      "then": {
+        "properties": {
+          "externalAuditVerificationSha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      },
+      "else": {
+        "properties": {"externalAuditVerificationSha256": {"type": "null"}}
+      }
+    }
+  ]
+}

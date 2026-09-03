@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hswm:schema:openlineage:artifact-facet:v1",
+  "title": "HSWM occurrence artifact OpenLineage dataset facet v1",
+  "description": "A byte descriptor projection only; it does not establish custody, chronology, truth, or canonical authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_producer", "_schemaURL", "bytes", "path", "sha256"],
+  "properties": {
+    "_producer": {"type": "string", "format": "uri"},
+    "_schemaURL": {"type": "string", "format": "uri"},
+    "bytes": {"type": "integer", "minimum": 0},
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!\\.\\.?($|/))(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

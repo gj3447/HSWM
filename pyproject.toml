@@ -18,6 +18,7 @@ hswm-verify-efficacy = "scripts.verify_efficacy_claims:main"
 hswm-legacy-replay = "hswm.infrastructure.legacy_replay:main"
 hswm-research-fabric = "hswm.infrastructure.research_fabric:main"
 hswm-graph-standards = "hswm.infrastructure.graph_standard_tooling:main"
+hswm-g0-occurrence = "hswm.infrastructure.occurrence_cli:main"
 
 [project.urls]
 Homepage = "https://github.com/gj3447/HSWM"
@@ -152,6 +153,12 @@ py-modules = [
 
 [tool.setuptools.package-data]
 prom_search_hswm = ["data/README.md", "data/gold_badiou24.json"]
+
+[tool.setuptools.data-files]
+"share/hswm/g0_occurrence" = [
+  "_research/g0_occurrence/HSWM_G0_EXTERNAL_AUDIT_QUALIFICATION.v1.json",
+  "_research/g0_occurrence/HSWM_G0_OCCURRENCE_TOOLCHAIN_CANDIDATES.v1.json",
+]
 
 [tool.setuptools.package-dir]
 "" = "_research/root_compat"

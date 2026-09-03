@@ -1,0 +1,214 @@
+{
+  "schema_version": "hswm-g0-occurrence-toolchain-candidates/v1",
+  "as_of_utc": "2026-09-03",
+  "status": "DISCOVERY_LOCK_ONLY_NOT_DOWNLOADED_NOT_QUALIFIED_NOT_EXECUTABLE_AUTHORITY",
+  "claim_boundary": "These are exact source candidates and published specifications for an external occurrence-integrity boundary. They are not installed artifact pins, external receipts, outcome truth, CF-07, G0, G1, Permit, canonical admission, causal credit, or learning evidence.",
+  "selection_policy": {
+    "published_standard_first": true,
+    "official_implementation_first": true,
+    "artifact_digest_required_before_execution": true,
+    "license_bytes_required_before_execution": true,
+    "external_credentials_and_control_domains_required": true,
+    "drafts_cannot_promote": true
+  },
+  "published_specifications": [
+    {
+      "id": "osf-api-v2",
+      "authority": "Center for Open Science",
+      "status": "OFFICIAL_SERVICE_API",
+      "official_url": "https://developer.osf.io/",
+      "hswm_role": "PREREGISTRATION_AND_IMMUTABLE_PACKAGE_READBACK_CARRIER"
+    },
+    {
+      "id": "in-toto-attestation-statement-v1",
+      "authority": "in-toto",
+      "status": "STABLE_PROJECT_SPECIFICATION",
+      "official_url": "https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md",
+      "hswm_role": "DIGEST_BOUND_TYPED_OCCURRENCE_STATEMENT"
+    },
+    {
+      "id": "dsse-v1",
+      "authority": "Secure Systems Lab",
+      "status": "STABLE_PROJECT_SPECIFICATION",
+      "official_url": "https://github.com/secure-systems-lab/dsse/blob/master/envelope.md",
+      "hswm_role": "SIGNED_ENVELOPE_FORMAT_NOT_ROLE_OR_TIME_PROOF"
+    },
+    {
+      "id": "rfc3161",
+      "authority": "IETF",
+      "status": "PROPOSED_STANDARD",
+      "official_url": "https://www.rfc-editor.org/rfc/rfc3161",
+      "hswm_role": "INDEPENDENT_SIGNED_EXISTENCE_TIME"
+    },
+    {
+      "id": "amazon-s3-object-lock",
+      "authority": "Amazon Web Services",
+      "status": "OFFICIAL_VENDOR_API",
+      "official_url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html",
+      "hswm_role": "SINGLETON_CANDIDATE_ONLY_AFTER_SEPARATE_ACCOUNT_VERSIONING_COMPLIANCE_POLICY_AND_NO_DELETE_AUDIT"
+    },
+    {
+      "id": "temporal-workflow-id",
+      "authority": "Temporal Technologies",
+      "status": "OFFICIAL_VENDOR_INTERFACE",
+      "official_url": "https://docs.temporal.io/workflow-execution/workflowid-runid",
+      "hswm_role": "REJECT_DUPLICATE_ONE_SHOT_ORCHESTRATION_NOT_SINGLETON_AUTHORITY"
+    },
+    {
+      "id": "ro-crate-1.3",
+      "authority": "RO-Crate Community",
+      "version": "1.3.0",
+      "status": "RECOMMENDATION",
+      "official_url": "https://w3id.org/ro/crate/1.3",
+      "license": "Apache-2.0; JSON-LD context and examples CC0-1.0",
+      "hswm_role": "POST_TERMINAL_RESEARCH_PACKAGE_PROJECTION"
+    },
+    {
+      "id": "openlineage-run-event-2-0-2",
+      "authority": "OpenLineage",
+      "status": "STABLE_PROJECT_SPECIFICATION",
+      "official_url": "https://openlineage.io/spec/2-0-2/OpenLineage.json",
+      "license": "Apache-2.0",
+      "hswm_role": "NON_AUTHORITATIVE_OPERATIONAL_LINEAGE_PROJECTION"
+    }
+  ],
+  "official_source_candidates": [
+    {
+      "id": "sigstore-cosign",
+      "version": "v3.1.3",
+      "repository": "https://github.com/sigstore/cosign.git",
+      "source_commit": "11926fa5bbbbde47e88fc006b625a17769b743b2",
+      "release_url": "https://github.com/sigstore/cosign/releases/tag/v3.1.3",
+      "license": "Apache-2.0",
+      "artifact_integrity": null,
+      "adoption_state": "CANDIDATE_REQUIRES_PLATFORM_ARTIFACT_DIGEST_AND_ISOLATED_QUALIFICATION"
+    },
+    {
+      "id": "sigstore-rekor",
+      "version": "v1.5.4",
+      "repository": "https://github.com/sigstore/rekor.git",
+      "source_commit": "a36bd716fd0d81c314092718f37b53dc26b2af38",
+      "release_url": "https://github.com/sigstore/rekor/releases/tag/v1.5.4",
+      "license": "Apache-2.0",
+      "artifact_integrity": null,
+      "adoption_state": "CANDIDATE_REQUIRES_PLATFORM_ARTIFACT_DIGEST_AND_ISOLATED_QUALIFICATION"
+    },
+    {
+      "id": "sigstore-timestamp-authority",
+      "version": "v2.1.3",
+      "repository": "https://github.com/sigstore/timestamp-authority.git",
+      "source_commit": "811e94a148b97b90c638f58224d70d59da0c8b55",
+      "release_url": "https://github.com/sigstore/timestamp-authority/releases/tag/v2.1.3",
+      "license": "Apache-2.0",
+      "artifact_integrity": null,
+      "adoption_state": "CANDIDATE_REQUIRES_DEPLOYMENT_DIGEST_TRUST_ROOT_AND_ISOLATED_QUALIFICATION"
+    },
+    {
+      "id": "in-toto-golang",
+      "version": "v0.11.0",
+      "repository": "https://github.com/in-toto/in-toto-golang.git",
+      "source_commit": "36d782ffb2ca3adbffcdce1fd971c23319dd4469",
+      "release_url": "https://github.com/in-toto/in-toto-golang/releases/tag/v0.11.0",
+      "license": "Apache-2.0",
+      "artifact_integrity": null,
+      "adoption_state": "SECOND_CONTROL_DOMAIN_CANDIDATE_REQUIRES_BINARY_DIGEST_AND_QUALIFICATION"
+    },
+    {
+      "id": "openlineage",
+      "version": "1.53.0",
+      "repository": "https://github.com/OpenLineage/OpenLineage.git",
+      "source_commit": "8ad5c14c63fbab63fedd8ff42f9a208d86ad07fe",
+      "release_url": "https://github.com/OpenLineage/OpenLineage/releases/tag/1.53.0",
+      "license": "Apache-2.0",
+      "artifact_integrity": null,
+      "adoption_state": "FORMAT_ONLY_NO_RUNTIME_SELECTED"
+    },
+    {
+      "id": "ro-crate",
+      "version": "1.3.0",
+      "repository": "https://github.com/ResearchObject/ro-crate.git",
+      "source_commit": "22fbd7e098ccd2839c80967e363a2201528a2efe",
+      "release_url": "https://github.com/ResearchObject/ro-crate/releases/tag/1.3.0",
+      "license": "Apache-2.0; JSON-LD context and examples CC0-1.0",
+      "artifact_integrity": null,
+      "adoption_state": "FORMAT_ONLY_NO_RUNTIME_SELECTED"
+    },
+    {
+      "id": "temporal-cli",
+      "version": "v1.8.3",
+      "repository": "https://github.com/temporalio/cli.git",
+      "source_commit": "1ff10b1012b44ba8bc953fcaa8ce5d296bf169d0",
+      "release_url": "https://github.com/temporalio/cli/releases/tag/v1.8.3",
+      "license": "MIT",
+      "artifact_integrity": null,
+      "adoption_state": "CANDIDATE_REQUIRES_PLATFORM_ARTIFACT_DIGEST_PRODUCTION_NAMESPACE_AND_QUALIFICATION"
+    },
+    {
+      "id": "aws-cli",
+      "version": "2.36.36",
+      "repository": "https://github.com/aws/aws-cli.git",
+      "source_commit": "7f6739b0c29553c6524059b9ab0eadaf35939030",
+      "release_url": "https://github.com/aws/aws-cli/releases/tag/2.36.36",
+      "license": "Apache-2.0",
+      "artifact_integrity": null,
+      "adoption_state": "CANDIDATE_REQUIRES_PLATFORM_ARTIFACT_DIGEST_SEPARATE_ACCOUNT_POLICY_AND_ISOLATED_QUALIFICATION"
+    },
+    {
+      "id": "openssl",
+      "version": "3.5.6",
+      "repository": "https://github.com/openssl/openssl.git",
+      "source_commit": "286ddeaac037533bbdce65b3c689e3f7ffebf0f6",
+      "release_url": "https://github.com/openssl/openssl/releases/tag/openssl-3.5.6",
+      "license": "Apache-2.0",
+      "artifact_integrity": null,
+      "adoption_state": "CANDIDATE_REQUIRES_PLATFORM_ARTIFACT_DIGEST_TSA_TRUST_ROOT_AND_ISOLATED_QUALIFICATION"
+    }
+  ],
+  "isolated_locked_adapters": [
+    {
+      "id": "temporal-python-sdk",
+      "version": "1.32.0",
+      "authority_class": "OFFICIAL_VENDOR_SDK_ENGINEERING_ADAPTER_NOT_SINGLETON_AUTHORITY",
+      "repository": "https://github.com/temporalio/sdk-python.git",
+      "source_commit": "fc6f97a487ed61df9ca5802adb66d8adfcb6df0f",
+      "license": "MIT",
+      "lock_path": "_research/g0_occurrence/occurrence_temporal_worker.py.lock",
+      "lock_sha256": "9d0ec5d9cca2a5a99358bbc0b3349bd3f057d23a757bc5b9620353a47d6ab229",
+      "sdist_sha256": "2cfa50ec7ebdab66902b80c3a09da3258883d68540811ebfbf44f7f293a4d7d0",
+      "linux_x86_64_wheel_sha256": "4dd44a60ba54901560011a32f085353c0f5e7dac6b8d7a7e0c7c4ba508c6bf5d",
+      "adoption_state": "LOCKED_ISOLATED_ENGINEERING_ADAPTER_NOT_PRODUCTION_ENDPOINT_QUALIFIED_NOT_EXECUTED"
+    }
+  ],
+  "existing_exact_reuse": [
+    {
+      "id": "hswm-drand-quicknet-js-verifier",
+      "version": "drand-client@1.4.2",
+      "source_commit": "ef8c9260294f8699b5e8c27a6b764f8f0d768bea",
+      "role": "PRIMARY_PINNED_BLS_VERIFIER_AND_SEED_BINDING"
+    },
+    {
+      "id": "inspect-ai-outer-evaluator",
+      "version": "0.3.260",
+      "role": "EVALUATOR_A_FRAMEWORK_PREFLIGHT_ONLY_UNTIL_FIXED_TASK_AND_SCORER_EXIST"
+    },
+    {
+      "id": "qwen-actor-model",
+      "version": "95a723d08a9490559dae23d0cff1d9466213d989",
+      "repository": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B-FP8",
+      "license": "Apache-2.0",
+      "role": "ACTOR_MODEL_SOURCE_IDENTITY_ONLY_NOT_RUNTIME_OR_EFFICACY_EVIDENCE"
+    }
+  ],
+  "external_blockers_at_observation_cut": [
+    "OSF_REGISTRATION_ACCOUNT_AND_IMMUTABLE_READBACK",
+    "COSIGN_BINARY_ARTIFACT_PIN_AND_ROLE_SPECIFIC_OIDC_OR_KMS_IDENTITIES",
+    "REKOR_INCLUSION_AND_SIGNED_ENTRY_VERIFICATION",
+    "RFC3161_TSA_TRUST_ROOT_NONCE_AND_VERIFIED_TOKEN",
+    "SEPARATE_ACCOUNT_WORM_COMPLIANCE_BUCKET_WITH_CONDITIONAL_CREATE_POLICY",
+    "PRODUCTION_TEMPORAL_NAMESPACE_SERVER_SIGNAL_AUTHORIZATION_AND_COMPLETE_HISTORY_EXPORT",
+    "INDEPENDENT_OUTCOME_CUSTODIAN_ACCOUNT_KEY_AND_ENDPOINT",
+    "INDEPENDENT_EVALUATOR_B_CONTROL_DOMAIN_AND_SECOND_VERIFIER",
+    "INDEPENDENT_COMPLETION_AUDITOR_IDENTITY_AND_QUALIFIED_COSIGN_TRUST_ROOT",
+    "DGX_AND_PRIVATE_LINEAGE_DISJOINT_HOLDOUT_ASSETS"
+  ]
+}

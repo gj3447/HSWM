@@ -72,6 +72,20 @@ def test_checked_in_acceptance_lock_and_package_integrities_are_exact() -> None:
         if adapter["ecosystem"] == "pypi"
     )
 
+    evidence_view = indexes["profiles"]["research-evidence-rdf-view"]
+    assert evidence_view["status"] == (
+        "IMPLEMENTED_SOURCE_BOUND_LOCAL_INTEGRATION_NO_OFFICIAL_SUITE_PROMOTION"
+    )
+    assert set(evidence_view["standard_ids"]) == {
+        "rdf-1.1-dataset",
+        "n-quads-1.1",
+        "shacl-1.0",
+        "prov-o",
+        "sparql-1.1-query",
+    }
+    assert "NOT_PROVENANCE_TRUTH" in evidence_view["claim_ceiling"]
+    assert "NOT_CAUSAL_CREDIT" in evidence_view["claim_ceiling"]
+
 
 def test_cli_can_verify_an_explicit_source_root_outside_its_install_location(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]

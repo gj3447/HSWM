@@ -74,6 +74,9 @@ recursive-exclude prom_search_hswm/data *
 include prom_search_hswm/data/README.md
 include prom_search_hswm/data/gold_badiou24.json
 recursive-include _research *.py *.json *.md *.sh *.tsv
+# A maintainer's local graph-runtime environment is neither source nor a locked
+# artifact.  Prune it even when an sdist is built from a dirty working tree.
+prune _research/graph_standards/runtime/.venv
 # ExpeL's transported runtime pin verifies these two dependency-closure files
 # byte-for-byte; keep the inclusion exact rather than widening research globs.
 include _research/causal_composition/priors/expel_b2_text_lesson_v1/runtime/requirements.in

@@ -1,6 +1,6 @@
 {
   "schema_version": "hswm-graph-standards-acceptance/v1",
-  "as_of_utc": "2026-09-02",
+  "as_of_utc": "2026-09-03",
   "authority_boundary": "External standards, SDKs, test suites, MCPs, and Skills are pinned engineering inputs or bounded interfaces. They are not HSWM cognition, canonical admission, Permit, outcome truth, causal credit, continuous learning, or efficacy evidence.",
   "policy": {
     "official_standard_sdk_suite_first": true,
@@ -469,6 +469,17 @@
       ],
       "official_vocabulary": {"url": "https://www.w3.org/ns/prov-o.ttl", "observed_sha256": "7d203989f67b38bca572253942acc5a1bf24ce3ccfece16f072dcb4be2b79a96"},
       "claim_ceiling": "CONSTRAINED_ENTITY_ACTIVITY_DERIVATION_ENVELOPE_ONLY_NOT_PROVENANCE_TRUTH_CAUSAL_CREDIT_OR_CANONICAL_AUTHORITY"
+    },
+    {
+      "id": "research-evidence-rdf-view",
+      "lane": "stable",
+      "status": "IMPLEMENTED_SOURCE_BOUND_LOCAL_INTEGRATION_NO_OFFICIAL_SUITE_PROMOTION",
+      "standard_ids": ["rdf-1.1-dataset", "n-quads-1.1", "shacl-1.0", "prov-o", "sparql-1.1-query"],
+      "implementation_artifacts": [
+        {"path": "schemas/HSWM_RESEARCH_EVIDENCE_RDF_PROJECTION_SHACL_1_0.ttl", "sha256": "4ee9d991c60153004c636e40d6099f4ea5cca133bdc1a41d2ce25726c6c02ded"},
+        {"path": "src/hswm/infrastructure/research_evidence_graph_view.py", "sha256": "109d288949e518bb8b5089eb4fb6ac447d841db537a1cfcbb2ea436afd5bc23f"}
+      ],
+      "claim_ceiling": "PUBLIC_RECEIPT_METADATA_AND_BYTE_BINDING_ONLY_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY"
     },
     {
       "id": "property-graph-query-adapters",

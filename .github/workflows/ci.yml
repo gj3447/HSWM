@@ -23,10 +23,12 @@ jobs:
                 --ignore=tests/test_hswm_swm0r_ontology.py \
                 --ignore=tests/test_hswm_swm0w_ontology.py \
                 --ignore=tests/test_graph_standard_tooling.py \
+                --ignore=tests/test_research_evidence_graph_view.py \
                 --ignore=tests/test_standard_graph_view.py \
                 --ignore=tests/test_trace_context.py
               uv run --project _research/graph_standards/runtime --locked --extra graph \
                 pytest -q tests/test_graph_standard_tooling.py \
+                tests/test_research_evidence_graph_view.py \
                 tests/test_standard_graph_view.py tests/test_trace_context.py
           # SWM-0R's historical byte receipt used CPython 3.12 and OpenBLAS's
           # SkylakeX kernel.  The portable job checks every non-BLAS-derived
@@ -97,11 +99,15 @@ jobs:
       - run: mkdir sdist && tar -xzf dist/*.tar.gz -C sdist --strip-components=1
       - run: uv run --locked hswm-graph-standards verify
         working-directory: sdist
-      - run: uv run --locked --extra dev pytest -q --ignore=tests/test_standard_graph_view.py
+      - run: >-
+          uv run --locked --extra dev pytest -q
+          --ignore=tests/test_research_evidence_graph_view.py
+          --ignore=tests/test_standard_graph_view.py
         working-directory: sdist
       - run: >-
           uv run --project _research/graph_standards/runtime --locked --extra graph
-          pytest -q tests/test_standard_graph_view.py
+          pytest -q tests/test_research_evidence_graph_view.py
+          tests/test_standard_graph_view.py
         working-directory: sdist
       - run: uv run --locked hswm-verify-efficacy --pretty
         working-directory: sdist

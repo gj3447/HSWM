@@ -2,7 +2,7 @@
 
 > **Status:** `OPERATIONAL_POLICY / SOURCE_LOCKED / ENGINEERING_QUALIFICATION_ONLY / SCIENTIFIC_NONCLAIM`
 >
-> **Date:** 2026-09-02
+> **Date:** 2026-09-03
 >
 > **Target authority:** [HSWM Constitution](../canon/HSWM_CONSTITUTION_2026-08-20.md)
 >
@@ -40,7 +40,7 @@ external projections. A standard test pass is not HSWM progress by itself.
 
 ## 3. Current official baseline
 
-At the 2026-09-02 observation cut, the production lane uses stable, published
+At the 2026-09-03 observation cut, the production lane uses stable, published
 specifications. Newer drafts are tracked without letting them redefine a
 success result; their status must be rechecked at the next adoption decision.
 
@@ -109,6 +109,7 @@ a networked standards requalification.
 | SHACL 1.0 with `pyshacl==0.40.1` | `PASS`: 97/97 attempted approved Core fixtures; the one `sh:uniqueLang` fixture is explicitly excluded because that component is absent from the HSWM shape. [Receipt](../../_research/graph_standards/results/SHACL10_PYSHACL_HSWM_CORE.v1.json) | Used-component profile only. The checked-in shape validates structural projection constraints, not canonical admission or truth. |
 | JSON-LD 1.1 with `jsonld@9.0.0` | `PASS`: 21/21 attempted official FromRDF fixtures under the exact HSWM options; 33 blank-node, direction, native-type, RDF-type, or processing-mode fixtures stay excluded. [Receipt](../../_research/graph_standards/results/JSONLD11_JSONLDJS_HSWM_FROMRDF.v1.json) | Source-bound blank-node-free FromRDF + local compaction view only, not universal JSON-LD conformance. |
 | SPARQL read-only view with `rdflib==7.6.0` | `PASS`: 40/40 attempted official basic/triple-match/graph/ASK fixtures; all other suite entries remain exclusions. [Receipt](../../_research/graph_standards/results/SPARQL11_RDFLIB_HSWM_BASIC.v1.json) | Backward-compatible local `SELECT`/`ASK` subset only; no protocol, update, federation, entailment, `CONSTRUCT`, or `DESCRIBE`. |
+| HSWM public research-receipt view | The checked-in opaque-action v2 public receipt is exact-byte-bound and locally exercised through RDF 1.1 N-Quads, SHACL 1.0, read-only SPARQL, and constrained PROV-O. [Test](../../tests/test_research_evidence_graph_view.py) | Local integration only. It inherits no additional official-suite claim and is not canonical state, provenance truth, Permit, outcome truth, causal credit, learning, or efficacy evidence. |
 
 The RDFC Recommendation itself warns that passing every suite case checks only
 the aspects represented by those cases, not complete universal conformance.
@@ -173,6 +174,7 @@ Static lock, package, receipt, policy, and provenance validation:
 uv run hswm-graph-standards verify
 uv run --project _research/graph_standards/runtime --locked --extra graph \
   pytest -q tests/test_graph_standard_tooling.py \
+  tests/test_research_evidence_graph_view.py \
   tests/test_standard_graph_view.py tests/test_trace_context.py
 ```
 
@@ -206,12 +208,15 @@ repository.
 
 ## 8. Next bounded order
 
-1. Wire the Trace Context carrier only at an actual remote HTTP boundary and
+1. Use the separate public research-evidence view for inspectable G0 artifacts,
+   while keeping independent outcome custody, evaluator separation, and
+   pre-outcome chronology as distinct research gates.
+2. Wire the Trace Context carrier only at an actual remote HTTP boundary and
    qualify propagation end to end; do not store it as canonical provenance.
-2. Select and qualify an OpenTelemetry SDK only for that concrete runtime.
-3. Add GQL/SQL-PGQ or GraphBLAS only after a backend supplies an explicit
+3. Select and qualify an OpenTelemetry SDK only for that concrete runtime.
+4. Add GQL/SQL-PGQ or GraphBLAS only after a backend supplies an explicit
    mapping-loss, invalidation, no-write-back, and parity contract.
-4. Re-evaluate RDF 1.2, SHACL 1.2, and SPARQL 1.2 after publication as stable
+5. Re-evaluate RDF 1.2, SHACL 1.2, and SPARQL 1.2 after publication as stable
    Recommendations; current draft results cannot promote the stable lane.
 
 These steps improve interoperability and falsifiability. They do not close the

@@ -1,0 +1,35 @@
+@prefix re: <https://hswm.invalid/research-evidence-rdf/v1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+re:EvidenceProjectionShape a sh:NodeShape ;
+  sh:targetClass re:EvidenceProjection ;
+  sh:property [ sh:path re:contractVersion ; sh:hasValue "hswm-research-evidence-rdf-projection/v1" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:compilerId ; sh:hasValue "hswm-research-evidence-rdf-compiler/v1" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:rdfProfile ; sh:hasValue "RDF_1_1_N_QUADS_BLANK_NODE_FREE_DETERMINISTIC_PROFILE" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:writeBack ; sh:hasValue "FORBIDDEN" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:nonclaim ; sh:hasValue "DERIVED_READ_ONLY_ASSERTED_EVIDENCE_EXCHANGE_NOT_CANONICAL_STATE_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:claimCeiling ; sh:hasValue "PUBLIC_RECEIPT_METADATA_AND_BYTE_BINDING_ONLY_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:sourceSetSha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prov:wasDerivedFrom ; sh:class re:PublicReceipt ; sh:minCount 1 ] ;
+  sh:property [ sh:path prov:wasGeneratedBy ; sh:class prov:Activity ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+re:DerivationActivityShape a sh:NodeShape ;
+  sh:targetClass prov:Activity ;
+  sh:property [ sh:path prov:used ; sh:class re:PublicReceipt ; sh:minCount 1 ] .
+
+re:PublicReceiptShape a sh:NodeShape ;
+  sh:targetClass re:PublicReceipt ;
+  sh:property [ sh:path re:sourceId ; sh:datatype xsd:string ; sh:pattern "^[A-Za-z][A-Za-z0-9._:-]{0,127}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:sourceSha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:sourceByteLength ; sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:mediaType ; sh:hasValue "application/json" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:schemaVersion ; sh:hasValue "hswm-g1-opaque-identifiability-public-redacted-projection/v1" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:recordRole ; sh:hasValue "POST_EXECUTION_AGGREGATE_IDENTIFIABILITY_RESULT_NOT_G0_PROMOTION_OR_G1_EFFICACY" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:studyUid ; sh:datatype xsd:string ; sh:pattern "^sym:[A-Za-z][A-Za-z0-9._:-]{0,239}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:terminal ; sh:hasValue "PILOT_COMPLETE_IDENTIFIABILITY_OBSERVED_NO_EFFICACY_INFERENCE" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:scientificStatus ; sh:hasValue "EXPLORATORY_G0_IDENTIFIABILITY_THRESHOLD_OBSERVED_G0_NOT_PASSED_G1_NOT_EVALUATED" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:assertedReceiptClaimCeiling ; sh:hasValue "EXPLORATORY_G0_IDENTIFIABILITY_ONLY" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:g0GatePassed ; sh:datatype xsd:boolean ; sh:hasValue false ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path re:g1GateEvaluated ; sh:datatype xsd:boolean ; sh:hasValue false ; sh:minCount 1 ; sh:maxCount 1 ] .

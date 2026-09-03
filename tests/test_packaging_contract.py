@@ -477,9 +477,15 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
         "Python sdist가 Effect/npm runtime을 요구하는 DNRD 실행 테스트를 운송한다: "
         f"{shipped_repository_only_dnrd}"
     )
-    assert "schemas/HSWM_CANONICAL_ATOM_V2_RDF_PROJECTION_SHACL_1_0.ttl" in inner, (
-        "Python graph view test가 요구하는 SHACL 1.0 shape가 sdist에서 누락됐다"
-    )
+    shipped_shacl_shapes = {
+        name
+        for name in inner
+        if name.startswith("schemas/") and name.endswith(".ttl")
+    }
+    assert shipped_shacl_shapes == {
+        "schemas/HSWM_CANONICAL_ATOM_V2_RDF_PROJECTION_SHACL_1_0.ttl",
+        "schemas/HSWM_RESEARCH_EVIDENCE_RDF_PROJECTION_SHACL_1_0.ttl",
+    }, "Python sdist는 두 read-only graph view의 정확한 SHACL 1.0 shape만 운송해야 한다"
     assert {
         "_research/graph_standards/qualify_graph_standards.mjs",
         "_research/graph_standards/qualify_jsonld11.mjs",
@@ -488,6 +494,10 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
         "_research/graph_standards/runtime/pyproject.toml",
         "_research/graph_standards/runtime/uv.lock",
     } <= set(inner), "독립 Python graph qualification runtime lock이 sdist에서 누락됐다"
+    assert not any(
+        name.startswith("_research/graph_standards/runtime/.venv/")
+        for name in inner
+    ), "maintainer-local graph runtime .venv가 Python sdist에 유출됐다"
     assert "tests/test_graph_standard_tooling.py" not in inner, (
         "Python sdist가 제외한 Effect/npm graph qualification artifact를 요구하는 "
         "repository-only verifier test를 운송한다"

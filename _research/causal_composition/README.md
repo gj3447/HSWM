@@ -52,6 +52,14 @@ protocol refusals, and inconclusive runs are evidence about an instrument or run
 not a null effect for HSWM, unless the declared mechanism was actually exposed to
 a valid intervention.
 
+The active post-pilot successor boundary is the
+[`G0 future-outcome and research-evidence graph design`](../../docs/research/HSWM_G0_FUTURE_OUTCOME_GRAPH_SUCCESSOR_2026-09-03.md).
+It separates the public research-receipt RDF view from canonical Atom state and
+uses a verified future public pulse only to reduce pre-action mapping leakage.
+It is not a new preregistration or occurrence: independent outcome custody,
+evaluator swap, externally witnessed pre-pulse action chronology, calibration,
+and final holdout remain required before G0 can pass.
+
 ## Inheritance-first execution rule
 
 The gate order is implemented under the

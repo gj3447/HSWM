@@ -16,6 +16,14 @@ registry 비신뢰 경계는
 [`HSWM_GRAPH_STANDARDS_ACCEPTANCE.v1.json`](_research/graph_standards/HSWM_GRAPH_STANDARDS_ACCEPTANCE.v1.json)이
 고정하며, 이 도구층은 HSWM cognition·Permit·causal credit·learning의 증거가 아니다.
 
+2026-09-03의 다음 G0 연구 경계는
+[`future-outcome + research-evidence graph successor`](docs/research/HSWM_G0_FUTURE_OUTCOME_GRAPH_SUCCESSOR_2026-09-03.md)에
+고정한다. 기존 opaque-action public receipt는 canonical state와 분리된 source-bound
+RDF/SHACL/PROV/SPARQL read-only view로만 투영하고, drand 미래 pulse는 pre-action
+mapping leakage를 줄이는 synthetic instrument로만 사용한다. 독립 outcome owner,
+evaluator swap, externally witnessed chronology가 없으므로 G0는 계속 미통과이고
+G1은 잠겨 있다.
+
 2026-09-02 현재 증명·근거·간극의 answer-first 상태는
 [`HSWM proof-status graph`](docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)에
 고정했다. 임의의 theorem/test 개수가 아니라 여섯 end-to-end 횡단 의무를 같은

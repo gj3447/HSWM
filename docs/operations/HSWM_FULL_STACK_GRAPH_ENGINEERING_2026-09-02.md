@@ -1,8 +1,8 @@
 # HSWM full-stack graph engineering boundary
 
-> **Status:** `IMPLEMENTED_BOUNDED_GRAPH_INTEROPERABILITY / SIX_LOCKED_EXECUTABLE_PROFILES / PARTIAL_REMOTE_INTEGRATION`
+> **Status:** `IMPLEMENTED_BOUNDED_GRAPH_INTEROPERABILITY / SIX_LOCKED_EXECUTABLE_PROFILES / SOURCE_BOUND_RESEARCH_EVIDENCE_VIEW / PARTIAL_REMOTE_INTEGRATION`
 >
-> **Date:** 2026-09-02
+> **Date:** 2026-09-03
 >
 > **Target identity:** [HSWM Constitution](../canon/HSWM_CONSTITUTION_2026-08-20.md)
 >
@@ -10,8 +10,9 @@
 
 ## 1. Outcome and exact scope
 
-The current canonical Atom v2 state now has a bounded, standard-first graph
-interoperability stack. It covers deterministic RDF 1.1 N-Quads exchange,
+The current canonical Atom v2 state and the exact public research-receipt
+boundary now have separate, bounded, standard-first graph interoperability
+views. The stack covers deterministic RDF 1.1 N-Quads exchange,
 RDFC-1.0 canonicalization evidence, SHACL 1.0 structural validation, JSON-LD
 1.1 exchange, a constrained PROV-O envelope, and local read-only SPARQL
 `SELECT`/`ASK`. W3C Trace Context parsing and injection is implemented as a
@@ -28,6 +29,7 @@ explicit route or an explicit exclusion:
 | Content payload bytes | Deliberately omitted; media type, byte length, and SHA-256 descriptor are projected. |
 | Full journal history | Deliberately omitted; current state digest and exact tail descriptor bind the projection. |
 | Native evidence and provenance assertions | Preserved as projection fields; the PROV-O view describes only derivation of the external view and cannot overwrite native records. |
+| Supported public research-receipt bytes | Bound by expected SHA-256 and byte length, strictly parsed, then projected through a separate scalar allowlist; aggregate or private payloads are never generically flattened into the canonical-state graph. |
 | Live external data and actions | Remain behind explicit MCP allowlists and authentication. They do not become canonical writes through this stack. |
 | Trace headers | Correlation-only at a future real remote boundary; never canonical provenance or causal credit. |
 | Property-graph and sparse-compute forms | Not implemented until a concrete backend has a loss and parity contract. |
@@ -39,10 +41,11 @@ LLM-function macro-neural network. The target remains one evolving hypergraph
 acting as living harness, world model, and continuous learner under the same
 typed, outcome-bound dynamics.
 
-The engineering delta is narrower: the existing canonical atom projection can
-now be consumed by published graph standards through source-bound read-only
-views. There is no reverse edge from an RDF, JSON-LD, SHACL, SPARQL, PROV, MCP,
-or trace representation into canonical admission.
+The engineering delta is narrower: the existing canonical atom projection and
+one supported public research-receipt schema can now be consumed through two
+non-collapsing source-bound read-only views. There is no reverse edge from an
+RDF, JSON-LD, SHACL, SPARQL, PROV, MCP, trace, or research-evidence
+representation into canonical admission.
 
 ```text
 canonical Atom v2 schema + state + journal tail  (native authority)
@@ -62,6 +65,15 @@ canonical Atom v2 schema + state + journal tail  (native authority)
                    constrained PROV-O view envelope
 
 Every branch: write-back forbidden; source change invalidates the view.
+
+public research receipt bytes (evidence input, not native authority)
+                    |
+          exact SHA-256 + byte length
+                    |
+                    v
+  separate allowlisted RDF 1.1 / SHACL / SPARQL / PROV view
+                    |
+     no canonical-state edge and no generic payload flattening
 ```
 
 This does not change FCL-1..8, create cognition, establish consciousness or
@@ -78,6 +90,7 @@ credit, or demonstrate continuous-learning or LLM efficacy.
 | JSON exchange | JSON-LD 1.1; `jsonld@9.0.0` | Actual FromRDF then JSON-LD 1.1 compaction, local context only, remote loader blocked, source/output descriptors | 21/21 attempted exact-profile FromRDF vectors pass; 33 out-of-profile vectors remain exclusions. |
 | Query | SPARQL 1.1 local read-only subset; `rdflib==7.6.0` | Only `SELECT` and `ASK`; no update, remote dataset, `SERVICE`, construction, description, protocol, or entailment | 40/40 attempted official backward-compatible basic fixtures pass; all others remain exclusions. |
 | Provenance exchange | PROV-O | Source entity → derivation activity → derived view entity; native evidence remains authoritative | Constrained mapping and local tests; no executable official conformance suite is claimed. |
+| Public research-evidence exchange | RDF 1.1 + N-Quads 1.1 + SHACL 1.0 + local SPARQL 1.1 + constrained PROV-O | Exact receipt-byte binding, strict JSON, schema/value allowlist, blank-node-free output, explicit mapping loss, no canonical state or write-back | Local integration against the checked-in opaque-action v2 public receipt; the previously qualified independent engines remain bounded by their existing suite receipts, and no new official-suite pass is claimed. |
 | Distributed correlation | W3C Trace Context | Strict v00 carrier, safe future-version downgrade, validated `tracestate`, all-zero rejection | Local adapter tests pass; real remote propagation is not yet integrated. |
 
 The implementation entry points are:
@@ -85,7 +98,9 @@ The implementation entry points are:
 - [`canonical-atom-v2-rdf-projection.ts`](../../src/hswm/effect-runtime/src/canonical-atom-v2-rdf-projection.ts) for the native-to-RDF projection;
 - [`canonical-atom-v2-jsonld-view.ts`](../../src/hswm/effect-runtime/src/canonical-atom-v2-jsonld-view.ts) for actual JSON-LD algorithms;
 - [`standard_graph_view.py`](../../src/hswm/infrastructure/standard_graph_view.py) for source-bound RDFLib, SHACL, SPARQL, local alias, and PROV-O views;
+- [`research_evidence_graph_view.py`](../../src/hswm/infrastructure/research_evidence_graph_view.py) for the separate exact-byte-bound public research-receipt view;
 - [`HSWM_CANONICAL_ATOM_V2_RDF_PROJECTION_SHACL_1_0.ttl`](../../schemas/HSWM_CANONICAL_ATOM_V2_RDF_PROJECTION_SHACL_1_0.ttl) for the stable projection shape;
+- [`HSWM_RESEARCH_EVIDENCE_RDF_PROJECTION_SHACL_1_0.ttl`](../../schemas/HSWM_RESEARCH_EVIDENCE_RDF_PROJECTION_SHACL_1_0.ttl) for the public-receipt projection shape;
 - [`trace_context.py`](../../src/hswm/infrastructure/trace_context.py) for the correlation-only HTTP carrier.
 
 ## 4. Reproducibility and authority
@@ -114,6 +129,7 @@ uv run hswm-graph-standards verify
 uv run --project _research/graph_standards/runtime --locked --extra graph \
   pytest -q \
   tests/test_graph_standard_tooling.py \
+  tests/test_research_evidence_graph_view.py \
   tests/test_standard_graph_view.py \
   tests/test_trace_context.py
 
@@ -164,8 +180,12 @@ surface; downstream scale cannot convert it into a success.
 - ISO GQL, SQL/PGQ, and GraphBLAS stay metadata-only. No lossless mapping from
   HSWM's typed n-ary atoms has been established.
 - RDF 1.2, SHACL 1.2, and SPARQL 1.2 remain non-promoting draft lanes.
+- The public-receipt view establishes byte-bound engineering lineage only. It
+  does not establish independent outcome custody, evaluator independence,
+  action chronology, CF-07, G0, or causal learning.
 
 Accordingly, the precise answer is: the stable graph interoperability stack is
-implemented and executable for the bounded canonical projection, but universal
-whole-repository graph conversion and every remote/backend integration are not
-claimed complete.
+implemented and executable for the bounded canonical projection and the
+supported public research-receipt projection. Universal whole-repository graph
+conversion, scientific outcome independence, and every remote/backend
+integration are not claimed complete.

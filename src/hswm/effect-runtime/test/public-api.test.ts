@@ -155,6 +155,22 @@ it("exports a read-only durable graph view and GE-2 composition without a raw mu
   ).toBe(false)
 })
 
+it("exports the blocked G0 phase kernel without test or live-execution authority", () => {
+  expect(PublicApi.HSWM_G0_OCCURRENCE_PHASE_KERNEL_V1_CONTRACT_VERSION).toBe(
+    "hswm-g0-occurrence-phase-kernel/v1"
+  )
+  expect(typeof PublicApi.G0OccurrencePhaseKernel).toBe("function")
+  expect(typeof PublicApi.G0OccurrencePhaseKernelLayer).toBe("object")
+  expect("makeG0OccurrencePhaseKernelLayer" in PublicApi).toBe(false)
+  expect(typeof PublicApi.g0OneShotWorkflowPolicy).toBe("function")
+  expect("registeredG0Occurrence" in PublicApi).toBe(false)
+  expect("advanceG0Occurrence" in PublicApi).toBe(false)
+  expect("makeG0TestOnlyMemoryPortsLayer" in PublicApi).toBe(false)
+  expect("executeG0Occurrence" in PublicApi).toBe(false)
+  expect("signalG0Occurrence" in PublicApi).toBe(false)
+  expect("publishG0Occurrence" in PublicApi).toBe(false)
+})
+
 it("exports read-safe typed transition evidence without an issuer or admission bypass", () => {
   expect(
     PublicApi.HSWM_CANONICAL_TRANSITION_EVIDENCE_V1_CONTRACT_VERSION

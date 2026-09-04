@@ -134,3 +134,46 @@ def test_out_of_order_or_reused_evidence_is_terminal_void() -> None:
         timing=PulseTiming.PRE_PULSE,
     )
     assert unchanged is out_of_order
+
+
+def test_terminal_state_precedes_validation_and_first_void_is_always_immutable() -> None:
+    state = registered_occurrence(
+        occurrence_uid=UID,
+        registration_evidence_sha256=digest(1),
+    )
+    for index, (phase, timing) in enumerate(
+        (
+            (OccurrencePhase.CLAIMED, PulseTiming.PRE_PULSE),
+            (OccurrencePhase.SCHEDULED, PulseTiming.PRE_PULSE),
+            (OccurrencePhase.PRE_PULSE_SEALED, PulseTiming.PRE_PULSE),
+            (OccurrencePhase.PULSE_VERIFIED, PulseTiming.POST_PULSE),
+            (OccurrencePhase.REVEALED, PulseTiming.POST_PULSE),
+            (OccurrencePhase.DUAL_EVALUATED, PulseTiming.POST_PULSE),
+            (OccurrencePhase.SEALED, PulseTiming.POST_PULSE),
+        ),
+        start=2,
+    ):
+        state = advance_occurrence(
+            state,
+            next_phase=phase,
+            evidence_sha256=digest(index),
+            timing=timing,
+        )
+
+    reentered = advance_occurrence(
+        state,
+        next_phase="NOT_A_PHASE",  # type: ignore[arg-type]
+        evidence_sha256="not-a-sha256",
+        timing="NOT_A_TIMING",  # type: ignore[arg-type]
+    )
+    assert reentered.phase is OccurrencePhase.VOID
+    assert reentered.void_reason is VoidReason.TERMINAL_REENTRY
+    assert reentered.rejected_evidence_sha256 is None
+
+    unchanged = advance_occurrence(
+        reentered,
+        next_phase="NOT_A_PHASE",  # type: ignore[arg-type]
+        evidence_sha256=digest(99),
+        timing="NOT_A_TIMING",  # type: ignore[arg-type]
+    )
+    assert unchanged is reentered

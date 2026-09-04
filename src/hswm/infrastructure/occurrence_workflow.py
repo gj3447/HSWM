@@ -186,12 +186,12 @@ def advance_occurrence(
 
     if not isinstance(state, OccurrenceWorkflowStateV1):
         raise TypeError("state must be OccurrenceWorkflowStateV1")
-    if not isinstance(next_phase, OccurrencePhase) or not isinstance(timing, PulseTiming):
-        return _void(state, VoidReason.ORDER, evidence_sha256)
     if state.terminal:
         if state.phase is OccurrencePhase.VOID:
             return state
         return _void(state, VoidReason.TERMINAL_REENTRY, evidence_sha256)
+    if not isinstance(next_phase, OccurrencePhase) or not isinstance(timing, PulseTiming):
+        return _void(state, VoidReason.ORDER, evidence_sha256)
     if _SHA256.fullmatch(evidence_sha256) is None:
         return _void(state, VoidReason.INVALID_EVIDENCE_DESCRIPTOR)
     if evidence_sha256 in state.evidence_sha256s:

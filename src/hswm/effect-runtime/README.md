@@ -138,6 +138,16 @@ The current v2 boundary is intentionally small:
   uniqueness is local to the v2 namespace, v2-specific process-crash testing
   is absent, and this is not a complete execution certificate or TS-to-Lean
   source refinement.
+- `g0-occurrence-phase-kernel.ts` adds a strict TypeScript/Effect candidate
+  phase kernel for the prospective G0 occurrence. It issues only process-local
+  immutable state, preserves the frozen one-shot timeout and retry policy,
+  matches 11 checked-in Python transition-result vectors, and exposes only
+  blocked descriptor-readback ports for the external workflow and
+  integrity/completion boundaries. The test-only memory ports and pure parity
+  helpers are absent from the package-root export. This is not Python wire
+  parity, a Temporal runner, timeout/signal-queue execution, the completion
+  handshake, durable state, G0, or learning. See the
+  [Effect phase-kernel boundary](../../../docs/operations/HSWM_G0_EFFECT_PHASE_KERNEL_BOUNDARY_2026-09-04.md).
 - The exact implementation and nonclaims are recorded in the
   [v2 reference-kernel handoff](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md)
   and the

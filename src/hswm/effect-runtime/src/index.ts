@@ -304,6 +304,34 @@ export {
   type GraphLoopResearchVerifier
 } from "./canonical-atom-v2-graph-loop-research-job.js"
 export {
+  HSWM_G0_OCCURRENCE_CLAIM_CEILING,
+  HSWM_G0_OCCURRENCE_DESCRIPTOR_V1_MEDIA_TYPE,
+  HSWM_G0_MAX_PENDING_SIGNALS,
+  HSWM_G0_OCCURRENCE_PHASE_KERNEL_V1_CONTRACT_VERSION,
+  HSWM_G0_RECEIPT_FINALIZATION_GRACE_SECONDS,
+  G0ContentDescriptorSchema,
+  G0DefaultBlockedExternalPortsLayer,
+  G0IntegrityCompletionReceiptPort,
+  G0OccurrencePhaseKernel,
+  G0OccurrencePhaseKernelLayer,
+  G0OccurrenceInputSchema,
+  G0OccurrencePhaseKernelError,
+  G0OccurrencePhaseSchema,
+  G0OccurrenceTransitionSchema,
+  G0PulseTimingSchema,
+  G0OneShotWorkflowReceiptPort,
+  G0VoidReasonSchema,
+  g0OneShotWorkflowPolicy,
+  type G0ContentDescriptor,
+  type G0OccurrenceInput,
+  type G0OccurrencePhase,
+  type G0OccurrenceState,
+  type G0OccurrenceTransition,
+  type G0PulseTiming,
+  type G0OneShotWorkflowPolicy,
+  type G0VoidReason
+} from "./g0-occurrence-phase-kernel.js"
+export {
   HSWM_CANONICAL_TRANSITION_EVIDENCE_BUNDLE_V1_MEDIA_TYPE,
   HSWM_CANONICAL_TRANSITION_EVIDENCE_RECORD_V1_MEDIA_TYPE,
   HSWM_CANONICAL_TRANSITION_EVIDENCE_V1_CONTRACT_VERSION,

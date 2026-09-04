@@ -176,7 +176,8 @@ or promotion path.
 | Component | Local module | Exact responsibility | Explicit non-responsibility |
 |---|---|---|---|
 | Integrity contract | `src/hswm/infrastructure/occurrence_integrity.py` | Typed descriptors, chronology, role-separation, and dual-evaluator consistency checks | External verification, outcome judgment, canonical write, Permit, learning |
-| One-shot state machine | `src/hswm/infrastructure/occurrence_workflow.py` | Ordered fail-closed phases and Temporal launch options | Running Temporal or preventing a remote duplicate by itself |
+| One-shot state machine | `src/hswm/infrastructure/occurrence_workflow.py` | Ordered fail-closed phases, terminal-first immutable `VOID`/`SEALED` handling, and one-shot launch options | Running Temporal or preventing a remote duplicate by itself |
+| TypeScript/Effect phase-kernel candidate | `src/hswm/effect-runtime/src/g0-occurrence-phase-kernel.ts` | Strict internal ingress, module-issued immutable phase projection, one-shot policy binding, 11-case Python transition-result parity, and blocked typed terminal-receipt ports | Python wire parity, deadline/queue execution, live Temporal, completion handshake, durability, G0, or learning |
 | Temporal SDK adapter | `_research/g0_occurrence/occurrence_temporal_worker.py` | Official `temporalio==1.32.0` signal-driven worker, WORM-bound start, reject-duplicate ID, one-attempt policies, and mandatory content-addressed external signal-policy binding | Enforcing that external policy, claiming the UID, supplying evidence, or proving that a production workflow ran |
 | Preregistration readback | `src/hswm/infrastructure/occurrence_registration.py` | Strict, read-only OSF API v2 readback parsing and registration/package binding | Creating an OSF registration or authenticating to OSF |
 | DSSE and timestamp commands | `src/hswm/infrastructure/occurrence_attestation.py` | in-toto Statement v1, DSSE shape parsing, pinned-binary command construction | Signing, network submission, or treating parsed DSSE as cryptographically verified |
@@ -193,6 +194,13 @@ future-outcome commitment/action-seal contract and
 `src/hswm/experiments/swm0w_beacon.py` for the exact Quicknet verifier.  It
 does not replace their claim ceilings.  `inspect-ai==0.3.260` remains only the
 Evaluator A framework preflight until a fixed task and scorer are supplied.
+
+The Effect phase kernel is a migration candidate, not a second authoritative
+execution contract. Python remains authoritative for a live occurrence until
+strict raw-wire mapping, deadline and signal-queue behavior, completion-audit
+equivalence, durable recovery, external qualification, and independent review
+close the cutover gates recorded in
+[`HSWM_G0_EFFECT_PHASE_KERNEL_BOUNDARY_2026-09-04.md`](../operations/HSWM_G0_EFFECT_PHASE_KERNEL_BOUNDARY_2026-09-04.md).
 
 ## 4. Standard and toolchain candidates
 
@@ -278,6 +286,7 @@ uv run --locked --extra dev pytest -q \
   tests/test_occurrence_dual_evaluator.py \
   tests/test_occurrence_completion.py \
   tests/test_occurrence_integrity.py \
+  tests/test_occurrence_workflow_parity_vectors.py \
   tests/test_occurrence_workflow.py \
   tests/test_occurrence_registration.py \
   tests/test_occurrence_attestation.py \
@@ -290,6 +299,9 @@ uv run --locked --extra dev pytest -q \
 uv run --script _research/g0_occurrence/occurrence_temporal_worker.py \
   --locked --help
 uv run --locked hswm-g0-occurrence preflight
+cd src/hswm/effect-runtime
+npm run check
+npx vitest run test/g0-occurrence-phase-kernel.test.ts
 ```
 
 ## 7. Claim ceiling and stop rule

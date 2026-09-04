@@ -19,6 +19,22 @@
 >
 > **Automatic next work:** `null`
 
+## 0. 2026-09-04 discrete-gauge successor addendum
+
+The next same-model mechanism was tested once after this episode. The scoped
+result retires only `NAIVE_MIDPOINT_TWO_LOCAL_LAPSE_UNFIXING` near one strict
+Arb/Krawczyk-certified positive-real Starobinsky `m=2` saddle. It does not
+exclude exact gauge-preserving first-order, perfect/improved, continuum-first,
+or constraint-adapted sources.
+
+The selected next question is therefore refined to
+`open:gate1-starobinsky-exact-gauge-preserving-element-source`. `N=0`, cover
+descent, orientation, end completeness, and the three lateral terminals remain
+blocked or unevaluated. See
+[`ICE_G1_DISCRETE_GAUGE_REROUTE_EPISODE_V0_2026-09-04.md`](ICE_G1_DISCRETE_GAUGE_REROUTE_EPISODE_V0_2026-09-04.md)
+for the exact result, hashes, scope, and review boundary. No original result,
+hash, or verdict in this episode is replaced.
+
 ## 1. Outcome first
 
 One bounded ICE calculation was executed after its input and runner were

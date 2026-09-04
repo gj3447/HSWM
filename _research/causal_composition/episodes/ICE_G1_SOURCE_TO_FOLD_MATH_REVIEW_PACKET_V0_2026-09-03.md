@@ -43,6 +43,13 @@ the gate after that source exists. See
 for the executed result, hashes, independent-review scope and changed research
 selection. Preregistration remains prohibited.
 
+A second bounded successor has since retired only the natural midpoint
+two-local-lapse unfixing at one strict certified saddle. The source route is
+now refined to an exactly gauge-preserving element-source construction or
+obstruction before this packet's source-to-fold contract can run. See
+[`ICE_G1_DISCRETE_GAUGE_REROUTE_EPISODE_V0_2026-09-04.md`](ICE_G1_DISCRETE_GAUGE_REROUTE_EPISODE_V0_2026-09-04.md).
+The full contract below and the preregistration prohibition remain unchanged.
+
 ## 1. Review answer first
 
 The requested source-to-fold discriminator is scientifically well targeted, but

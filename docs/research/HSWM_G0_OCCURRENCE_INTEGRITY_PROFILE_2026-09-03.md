@@ -68,6 +68,44 @@ The DSSE statement binds that package descriptor; the Rekor and RFC 3161
 receipts each bind the DSSE receipt descriptor.  A timestamp alone is not role
 proof, outcome proof, or independence proof.
 
+### 2.1 Descriptor-only external handoff
+
+Before credentials, endpoints, private assets, or external receipts are
+exchanged, the local operator emits a canonical descriptor-only handoff
+candidate for the planned occurrence UID:
+
+```bash
+uv run --locked hswm-g0-occurrence \
+  external-handoff-template <occurrence-uid>
+```
+
+The handoff candidate binds the exact toolchain-candidate record and exposes
+null slots for the protocol package, nine role bindings, every required
+external binding, the DGX execution surface, the private lineage-disjoint
+holdout, and the full operator-return chain from OSF readback through the final
+terminal receipt.
+The underlying identities, endpoints, credentials, private data, and receipts
+remain outside the repository; only their content descriptors may populate the
+handoff.
+
+An external operator may return populated canonical bytes for structural
+checking:
+
+```bash
+uv run --locked hswm-g0-occurrence \
+  external-handoff-validate <handoff.json>
+```
+
+Both the empty template and every structurally valid populated handoff remain
+`BLOCKED_EXTERNAL`.  Validation checks canonical bytes, the exact candidate
+record digest, frozen slot coverage, descriptor shape, and declared role-
+descriptor distinctness only.  It always reports external independence, live
+execution readiness, and G0 passage as false.  A handoff therefore cannot
+replace the external qualification record, signed receipts, service readbacks,
+or the later gate decision.  The authoritative integrity and completion gates,
+not this inventory, must subsequently verify every returned descriptor's exact
+occurrence, protocol, chronology, and predecessor bindings.
+
 The WORM singleton candidate uses the exact object key
 `occurrences/<occurrence_uid>/claim.json`, `If-None-Match: *`, Compliance
 retention, an immutable bucket policy descriptor, and separate claimant and
@@ -144,6 +182,7 @@ or promotion path.
 | DSSE and timestamp commands | `src/hswm/infrastructure/occurrence_attestation.py` | in-toto Statement v1, DSSE shape parsing, pinned-binary command construction | Signing, network submission, or treating parsed DSSE as cryptographically verified |
 | WORM claim contract | `src/hswm/infrastructure/occurrence_worm.py` | Conditional S3 claim command construction and fail-closed response classification | Provisioning a bucket, validating a live policy, or guaranteeing remote retention |
 | Presence-only preflight | `src/hswm/infrastructure/occurrence_preflight.py` | No-secret readiness report for required bindings and candidate binaries | Credentials, artifact integrity, authorization, or proof of independence |
+| External handoff | `src/hswm/infrastructure/occurrence_handoff.py` | Canonical descriptor slots connecting one planned occurrence to the exact external inputs and return-artifact checklist | Moving secrets or private data, verifying external facts, proving independence, authorizing execution, or passing G0 |
 | Dual evaluation | `src/hswm/evaluation/occurrence_dual_evaluator.py` | Bind Inspect A and a distinct blinded evaluator B to exact input and decision/score descriptors | Running either evaluator or trusting caller-declared signature status as final audit |
 | Completion boundary | `src/hswm/infrastructure/occurrence_completion.py` | Recompute integrity and A/B bindings, bind the exact seven-step workflow history, issue a non-publishable candidate, validate the typed terminal receipt/complete Temporal history, and verify the signed terminal audit with the fixed qualified Cosign/root before final admission | Running Temporal, operating or qualifying the auditor, judging outcome truth, or promoting G0 |
 | Publication projections | `src/hswm/infrastructure/occurrence_publication.py` | Replay completion and qualified audit verification, then deterministically project RO-Crate and OpenLineage terminal views | Running external services, scientific interpretation, or promotion |
@@ -244,6 +283,7 @@ uv run --locked --extra dev pytest -q \
   tests/test_occurrence_attestation.py \
   tests/test_occurrence_worm.py \
   tests/test_occurrence_preflight.py \
+  tests/test_occurrence_handoff.py \
   tests/test_occurrence_publication.py \
   tests/test_occurrence_temporal_worker.py \
   tests/test_occurrence_toolchain_candidates.py

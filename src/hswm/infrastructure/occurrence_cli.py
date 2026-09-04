@@ -23,6 +23,11 @@ from hswm.infrastructure.occurrence_attestation import (
     rfc3161_query_argv,
     rfc3161_verify_query_argv,
 )
+from hswm.infrastructure.occurrence_handoff import (
+    external_handoff_template,
+    load_external_handoff,
+    validate_external_handoff,
+)
 from hswm.infrastructure.occurrence_integrity import ContentDescriptorV1
 from hswm.infrastructure.occurrence_preflight import (
     READY_STATUS,
@@ -221,6 +226,17 @@ def _build_parser() -> argparse.ArgumentParser:
     timestamp_verify.add_argument("--untrusted", type=Path)
     timestamp_verify.add_argument("--openssl", default="openssl")
 
+    handoff_template = subparsers.add_parser(
+        "external-handoff-template",
+        help="emit a descriptor-only, non-promoting external-operator handoff",
+    )
+    handoff_template.add_argument("occurrence_uid")
+    handoff_validate = subparsers.add_parser(
+        "external-handoff-validate",
+        help="structurally validate an external handoff without external checks",
+    )
+    handoff_validate.add_argument("path", type=Path)
+
     return parser
 
 
@@ -232,6 +248,20 @@ def main(argv: Sequence[str] | None = None) -> int:
             report = run_occurrence_preflight()
             _emit(asdict(report))
             return 0 if report.status == READY_STATUS else 3
+
+        if args.command == "external-handoff-template":
+            # The handoff parser requires exact canonical bytes; unlike normal
+            # human-facing CLI JSON, do not add a terminal newline here.
+            sys.stdout.write(
+                external_handoff_template(
+                    occurrence_uid=args.occurrence_uid
+                ).bytes().decode("utf-8")
+            )
+            return 0
+
+        if args.command == "external-handoff-validate":
+            _emit(validate_external_handoff(load_external_handoff(args.path)))
+            return 0
 
         if args.command == "describe":
             _emit(_descriptor(args.path, args.media_type).canonical())

@@ -9,6 +9,27 @@
 >
 > **Automatic next work:** `null`
 
+## 0. 2026-09-04 outcome update
+
+This design has now produced one scoped external workbench transition, but not
+an HSWM learning result. The exact ICE verdict
+`KILL_DIRECT_V0_BFV_TO_STAROBINSKY_M2_SOURCE_IDENTIFICATION` found that the
+kept local `V=0` BFV source is the wrong type for the frozen Starobinsky
+finite-`m=2` action. It preserves both scoped objects while retiring the
+direct-transplant mechanism.
+
+That unexpected outcome changes the next discriminator: derive or falsify one
+same-model Starobinsky replacement FP/BFV source before `N=0`,
+`U_1/U'_1`, the end census or the source-to-fold trichotomy. The
+Pham--Witten relative singular-chain lane is named only as
+`SELECTED_TYPE_HYPOTHESES_OPEN`.
+
+The complete result and rerouted six-stage programme are recorded in
+[`ICE_G1_SOURCE_TYPE_REROUTE_EPISODE_V0_2026-09-04.md`](ICE_G1_SOURCE_TYPE_REROUTE_EPISODE_V0_2026-09-04.md).
+This retrospective changed selection is an ICE
+`INVENTION_CARRYING_CANDIDATE`; it has no HSWM owner/Permit/outcome-credit
+admission and leaves HSWM G0 not passed and G1 locked.
+
 ## 1. Answer first
 
 This document specifies one small research episode that can turn an already

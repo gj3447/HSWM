@@ -15,6 +15,34 @@
 >
 > **Automatic next work:** `null`
 
+## 0. 2026-09-04 outcome addendum
+
+The source-type prerequisite has now been tested once in the ICE workbench.
+The clean bounded result
+`KILL_DIRECT_V0_BFV_TO_STAROBINSKY_M2_SOURCE_IDENTIFICATION` retires only the
+direct reuse of the local `V=0`, `U_+` improved-static BFV zero-mode source
+for the frozen Starobinsky finite-`m=2` action. The exact bosonic action is
+kept, and a newly derived same-model source remains open.
+
+The named working chain type is now the Pham--Witten relative singular-chain
+lane
+
+```math
+H_3(X_2,X_{\mathrm{good},M};\mathbb Z\otimes\mathcal L_{G1}),
+```
+
+with status `SELECTED_TYPE_HYPOTHESES_OPEN`, not a constructed production
+chain. The source, coefficient/orientation line, end model, `N=0` order,
+cover descent and candidate-completeness proof remain missing.
+
+Accordingly, the immediate next discriminator is no longer the full
+source-to-fold atlas. It is the construction or obstruction of one same-model
+Starobinsky finite-`m=2` FP/BFV source. The full review contract below remains
+the gate after that source exists. See
+[`ICE_G1_SOURCE_TYPE_REROUTE_EPISODE_V0_2026-09-04.md`](ICE_G1_SOURCE_TYPE_REROUTE_EPISODE_V0_2026-09-04.md)
+for the executed result, hashes, independent-review scope and changed research
+selection. Preregistration remains prohibited.
+
 ## 1. Review answer first
 
 The requested source-to-fold discriminator is scientifically well targeted, but

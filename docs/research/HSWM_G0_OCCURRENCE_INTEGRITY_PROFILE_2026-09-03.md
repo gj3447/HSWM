@@ -176,9 +176,11 @@ or promotion path.
 | Component | Local module | Exact responsibility | Explicit non-responsibility |
 |---|---|---|---|
 | Integrity contract | `src/hswm/infrastructure/occurrence_integrity.py` | Typed descriptors, chronology, role-separation, and dual-evaluator consistency checks | External verification, outcome judgment, canonical write, Permit, learning |
-| One-shot state machine | `src/hswm/infrastructure/occurrence_workflow.py` | Ordered fail-closed phases, terminal-first immutable `VOID`/`SEALED` handling, and one-shot launch options | Running Temporal or preventing a remote duplicate by itself |
-| TypeScript/Effect phase-kernel candidate | `src/hswm/effect-runtime/src/g0-occurrence-phase-kernel.ts` | Strict internal ingress, module-issued immutable phase projection, one-shot policy binding, 11-case Python transition-result parity, and blocked typed terminal-receipt ports | Python wire parity, deadline/queue execution, live Temporal, completion handshake, durability, G0, or learning |
-| Temporal SDK adapter | `_research/g0_occurrence/occurrence_temporal_worker.py` | Official `temporalio==1.32.0` signal-driven worker, WORM-bound start, reject-duplicate ID, one-attempt policies, and mandatory content-addressed external signal-policy binding | Enforcing that external policy, claiming the UID, supplying evidence, or proving that a production workflow ran |
+| Python one-shot reference oracle | `src/hswm/infrastructure/occurrence_workflow.py` | Ordered fail-closed phases, terminal-first immutable `VOID`/`SEALED` handling, and cross-language parity oracle | Live orchestration authority or preventing a remote duplicate by itself |
+| TypeScript/Effect phase kernel | `src/hswm/effect-runtime/src/g0-occurrence-phase-kernel.ts` | Strict internal ingress, module-issued immutable phase projection, one-shot policy binding, 11-case Python transition-result parity, and blocked typed terminal-receipt ports | Temporal workflow determinism, external completion, G0, or learning |
+| Selected TypeScript Temporal execution implementation | `src/hswm/effect-runtime/src/g0-occurrence-temporal-{domain,workflow,runtime}.ts` | Dependency-free deterministic workflow state, strict snake-case mapping, deadline, eight-signal FIFO bound, one-attempt activity, duplicate/conflict rejection, durable history/replay, and Effect Client/Worker boundary | Live external admission (fail-closed), authenticated signal sender, evidence truth, independent completion audit, G0, or learning |
+| TypeScript history/audit candidate exporter | `src/hswm/effect-runtime/src/g0-occurrence-temporal-audit.ts` | Bind a complete source-normalized history's decoded start and terminal result and emit canonical history plus unsigned audit-candidate bytes | Raw-protobuf normalization, qualified auditor receipt, signature verification, completion authority, or G0 |
+| Retired Python Temporal adapter | `_research/g0_occurrence/occurrence_temporal_worker.py` | Historical `temporalio==1.32.0` parity/reference surface and redacted dry-run | Live serve or start; both entrypoints now refuse in favor of the TypeScript authority |
 | Preregistration readback | `src/hswm/infrastructure/occurrence_registration.py` | Strict, read-only OSF API v2 readback parsing and registration/package binding | Creating an OSF registration or authenticating to OSF |
 | DSSE and timestamp commands | `src/hswm/infrastructure/occurrence_attestation.py` | in-toto Statement v1, DSSE shape parsing, pinned-binary command construction | Signing, network submission, or treating parsed DSSE as cryptographically verified |
 | WORM claim contract | `src/hswm/infrastructure/occurrence_worm.py` | Conditional S3 claim command construction and fail-closed response classification | Provisioning a bucket, validating a live policy, or guaranteeing remote retention |
@@ -195,20 +197,29 @@ future-outcome commitment/action-seal contract and
 does not replace their claim ceilings.  `inspect-ai==0.3.260` remains only the
 Evaluator A framework preflight until a fixed task and scorer are supplied.
 
-The Effect phase kernel is a migration candidate, not a second authoritative
-execution contract. Python remains authoritative for a live occurrence until
-strict raw-wire mapping, deadline and signal-queue behavior, completion-audit
-equivalence, durable recovery, external qualification, and independent review
-close the cutover gates recorded in
-[`HSWM_G0_EFFECT_PHASE_KERNEL_BOUNDARY_2026-09-04.md`](../operations/HSWM_G0_EFFECT_PHASE_KERNEL_BOUNDARY_2026-09-04.md).
+The TypeScript Temporal path is the sole selected future execution
+implementation; Python is retained only as a reference oracle. The executable
+TS build accepts only `SIMULATED_OPERATOR_REHEARSAL`: both its client adapter
+and replayed workflow reject `LIVE_EXTERNAL_OPERATOR` until authenticated
+external admission is independently qualified. Python
+`occurrence_completion.py` remains the completion authority.
+The authority selection, pinned disposable-server rehearsal, exact scope, and
+remaining external admission gates are recorded in
+[`HSWM_G0_TYPESCRIPT_TEMPORAL_AUTHORITY_2026-09-04.md`](../operations/HSWM_G0_TYPESCRIPT_TEMPORAL_AUTHORITY_2026-09-04.md).
+Selecting implementation authority does not authorize a scientific run.
 
 ## 4. Standard and toolchain candidates
 
-The source-pinned discovery record is
+The hash-bound 2026-09-03 pre-cutover discovery record is
 [`HSWM_G0_OCCURRENCE_TOOLCHAIN_CANDIDATES.v1.json`](../../_research/g0_occurrence/HSWM_G0_OCCURRENCE_TOOLCHAIN_CANDIDATES.v1.json).
-It records authority class, source commit, version, license, and adoption
-state.  Every listed executable has `artifact_integrity: null`: none has been
-downloaded, artifact-digest pinned, isolated-qualified, or adopted here.
+It records its observation-cut authority class, source commit, version,
+license, and adoption state and is not rewritten for this migration. The
+separate current local Temporal engineering manifest is
+[`g0-temporal-test-toolchain.json`](../../src/hswm/effect-runtime/assets/g0-temporal-test-toolchain.json).
+Except for that separately scoped local Temporal engineering toolchain,
+every listed external scientific-service executable still has
+`artifact_integrity: null`: none has been downloaded, artifact-digest pinned,
+isolated-qualified, or adopted for a scientific occurrence here.
 
 | Boundary | Published authority | Candidate selected for later qualification |
 |---|---|---|
@@ -216,7 +227,7 @@ downloaded, artifact-digest pinned, isolated-qualified, or adopted here.
 | Attestation | [in-toto Statement v1](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md), [DSSE v1](https://github.com/secure-systems-lab/dsse/blob/master/envelope.md) | Strict HSWM statement/envelope subset; Cosign `v3.1.3`, source `11926fa5bbbbde47e88fc006b625a17769b743b2`, explicit trusted-root verification, Apache-2.0 |
 | Transparency and time | [RFC 3161](https://www.rfc-editor.org/rfc/rfc3161) | Rekor `v1.5.4`, source `a36bd716fd0d81c314092718f37b53dc26b2af38`; Sigstore timestamp authority `v2.1.3`, source `811e94a148b97b90c638f58224d70d59da0c8b55`; OpenSSL `3.5.6`, source `286ddeaac037533bbdce65b3c689e3f7ffebf0f6`; all Apache-2.0 |
 | Singleton claim | [Amazon S3 Object Lock](https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html) | AWS CLI `2.36.36`, source `7f6739b0c29553c6524059b9ab0eadaf35939030`, Apache-2.0 |
-| One-shot orchestration | Temporal vendor interface | Temporal CLI `v1.8.3`, source `1ff10b1012b44ba8bc953fcaa8ce5d296bf169d0`; official Python SDK `1.32.0`, source `fc6f97a487ed61df9ca5802adb66d8adfcb6df0f`, isolated lock `9d0ec5d9cca2a5a99358bbc0b3349bd3f057d23a757bc5b9620353a47d6ab229`; MIT |
+| One-shot orchestration | Temporal vendor interface | Selected local rehearsal: official TypeScript SDK `1.23.0`, exact npm integrities, and Temporal CLI `1.8.3` Linux binary SHA-256 `76aea8d71fafe2d39c1104bef3ce86c1600d9adbff79953d102f60e535ae1413`; MIT. The hash-bound discovery record retains the retired Python SDK candidate and the same CLI source tag as observation-cut metadata, not execution qualification. |
 | Publication | [RO-Crate 1.3](https://w3id.org/ro/crate/1.3), [OpenLineage RunEvent 2.0.2](https://openlineage.io/spec/2-0-2/OpenLineage.json) | Format projections only; custom facet schemas are frozen at repository commit `6108410a90f5caf8b367bb1fce5282c96744d24e`; no runtime is selected |
 
 These candidates are not standards authorities merely because an HSWM adapter
@@ -301,13 +312,24 @@ uv run --script _research/g0_occurrence/occurrence_temporal_worker.py \
 uv run --locked hswm-g0-occurrence preflight
 cd src/hswm/effect-runtime
 npm run check
-npx vitest run test/g0-occurrence-phase-kernel.test.ts
+npx vitest run test/g0-occurrence-phase-kernel.test.ts \
+  test/g0-occurrence-temporal-domain.test.ts \
+  test/g0-occurrence-temporal-wire.test.ts \
+  test/g0-occurrence-temporal-runtime.test.ts \
+  test/g0-occurrence-temporal-audit.test.ts \
+  test/g0-occurrence-temporal-worker-process.test.ts \
+  test/g0-test-only-operator-simulation.test.ts \
+  test/g0-temporal-toolchain.test.ts \
+  test/public-api.test.ts
+HSWM_G0_TEMPORAL_CLI_PATH=/pinned/local/path/to/temporal \
+  npm run test:g0-temporal:integration
 ```
 
 ## 7. Claim ceiling and stop rule
 
-The only current result is `ENGINEERING_COMPONENTS_IMPLEMENTED`.  The required
-status remains exactly:
+The current engineering result is
+`TYPESCRIPT_TEMPORAL_EXECUTION_IMPLEMENTATION_SELECTED / LIVE_EXTERNAL_ADMISSION_FAIL_CLOSED / SIMULATED_OPERATOR_REHEARSAL_PASSED / COMPLETION_AUTHORITY_UNCHANGED`.
+The required scientific status remains exactly:
 
 ```text
 NOT_PREREGISTERED

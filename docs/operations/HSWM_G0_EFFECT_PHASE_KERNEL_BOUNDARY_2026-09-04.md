@@ -2,7 +2,7 @@
 
 > **Date:** 2026-09-04
 >
-> **Status:** `ENGINEERING_PARITY_SLICE / BLOCKED_EXTERNAL / NOT_CUT_OVER`
+> **Status:** `SUPERSEDED_PHASE_SLICE / TYPESCRIPT_EXECUTION_IMPLEMENTATION_SELECTED / LIVE_EXTERNAL_ADMISSION_FAIL_CLOSED`
 >
 > **Scientific status:** `NOT_PREREGISTERED / NOT_EXECUTED / G0_NOT_PASSED / G1_LOCKED`
 >
@@ -10,6 +10,10 @@
 > control boundary only; not wire compatibility, timeout or signal-queue
 > execution, completion-audit equivalence, outcome truth, G0, Permit, canonical
 > admission, causal credit, learning, or an HSWM efficacy result.
+
+> **Superseded by:**
+> [`HSWM_G0_TYPESCRIPT_TEMPORAL_AUTHORITY_2026-09-04.md`](./HSWM_G0_TYPESCRIPT_TEMPORAL_AUTHORITY_2026-09-04.md).
+> This document remains the boundary record for the earlier phase-kernel slice.
 
 ## 1. Target role and conceptual delta
 
@@ -25,8 +29,8 @@ boundary:
 - TypeScript/Effect now owns strict ingress, an immutable process-local phase
   projection, fail-closed transition results, and the frozen one-shot policy
   projection.
-- The current Python workflow remains the authoritative execution-side
-  contract while migration parity is incomplete.
+- At this slice, the Python workflow remained the authoritative execution-side
+  contract while migration parity was incomplete.
 - The Python reducer now checks an existing terminal state before validating a
   later payload, so every post-`SEALED` ingress is `TERMINAL_REENTRY` and no
   malformed later ingress can rewrite the first `VOID` reason.
@@ -36,10 +40,10 @@ boundary:
 - No canonical atom kind, ontology, owner registry, Permit path, or learning
   transition is added or changed.
 
-This is therefore a candidate route change, not two authoritative workflow
-owners. A live scientific occurrence must continue to use the checked-in
-Python boundary until every cutover gate in section 7 is closed and independently
-reviewed.
+This was therefore a candidate route change, not two authoritative workflow
+owners. The later TypeScript Temporal implementation closes the execution slice,
+retires the Python live entrypoints, and keeps live scientific admission
+blocked on external qualification and completion audit.
 
 ## 2. Implemented Effect boundary
 
@@ -77,6 +81,7 @@ canonical-write, Permit, admission, or publication method.
 | Effect phase kernel | Strict internal TypeScript ingress, issued immutable state, transition-result parity, one-shot policy values, blocked typed receipt ports | Temporal start, deadlines, queue processing, sender authorization, completion judgment, durability |
 | Python `occurrence_workflow.py` | Current authoritative pure phase contract and parity oracle | External execution or outcome truth |
 | Python Temporal worker | Exact snake-case wire parsing, deadline-to-`VOID`, bounded pending-signal queue, overflow handling, activity validation with no retry, final queued-signal handling | Singleton authority, external policy enforcement, completion audit |
+| Selected TypeScript Temporal implementation | Dependency-free deterministic workflow domain, official TS Worker/Client, durable replay, bounded signal queue, one-shot rehearsal start and Effect operations boundary | Live external admission, external qualification, evidence truth, completion audit, G0 |
 | Python integrity/completion boundary | Exact evidence bindings, `PENDING_EXTERNAL_AUDIT` candidate, exact candidate digest at `SEALED`, full history replay, qualified Cosign audit, final terminal receipt | Outcome truth, G0 promotion by itself, learning |
 | External operator and independent auditor | Credentials, endpoints, separate control domains, private holdout, live service qualification, execution and signed evidence | Repository or handoff storage of secrets/private material |
 
@@ -138,13 +143,10 @@ Effect 3.22.1 is the stable v3 line selected for this repository. The official
 [Effect installation guidance](https://effect.website/docs/v3/getting-started/installation/)
 requires strict TypeScript and supports Node, Deno, and Bun.
 
-No TypeScript Temporal SDK is added. Temporal's official
-[TypeScript SDK guide](https://docs.temporal.io/develop/typescript/) is a vendor
-interface, not a graph interoperability standard, and a worker installation
-would introduce a materially larger runtime dependency and build surface. The
-existing isolated `temporalio==1.32.0` Python worker remains pinned until the
-external operator qualification and the migration cutover gates justify a
-replacement.
+This phase slice added no TypeScript Temporal SDK. The superseding implementation
+record qualifies and pins the official TypeScript SDK `1.23.0`; the Python
+`temporalio==1.32.0` script now remains only as a parity oracle and refuses its
+live serve/start paths.
 
 ## 6. Local verification
 
@@ -174,7 +176,7 @@ the currently committed `pyproject.toml` bytes as
 `LOCAL_SOURCE_CLOSURE_DRIFT`. This G0 change does not alter either file or
 rewrite that hash-bound historical record.
 
-## 7. Cutover gates
+## 7. Historical cutover gates
 
 TypeScript/Effect may become the authoritative live G0 orchestration boundary
 only after all of the following are implemented and independently reviewed:
@@ -195,6 +197,9 @@ only after all of the following are implemented and independently reviewed:
    decision that removes Python from authoritative orchestration rather than
    silently operating two sources of truth.
 
-Until then, this phase kernel is an engineering migration instrument. It is
-not a live occurrence runner and creates no material research result, research
-receipt, or `F1_R8_RESULTS_LOG.md` entry.
+The superseding TypeScript implementation closes the implementation-side workflow,
+wire, deadline, queue, replay, dependency-pin, and single-writer decisions.
+External deployment qualification, the exact completion audit, and the real
+scientific occurrence remain blocked. Neither this historical slice nor its
+successor creates a material research result, research receipt, or
+`F1_R8_RESULTS_LOG.md` entry.

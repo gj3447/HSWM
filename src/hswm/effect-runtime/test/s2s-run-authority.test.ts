@@ -1458,7 +1458,9 @@ it("keeps every current-run authority surface out of the package root", async ()
   ) {
     throw new Error("package export fixture is malformed")
   }
-  expect(Reflect.ownKeys(packageManifest.exports)).toEqual(["."])
+  const exportKeys = Reflect.ownKeys(packageManifest.exports)
+  expect(exportKeys).toEqual([".", "./g0-temporal"])
+  expect(exportKeys.some((key) => String(key).includes("s2s"))).toBe(false)
 })
 
 it("defines an observer-shaped decoy without creating a production override seam", () => {

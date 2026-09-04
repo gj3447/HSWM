@@ -169,6 +169,10 @@ it("exports the blocked G0 phase kernel without test or live-execution authority
   expect("executeG0Occurrence" in PublicApi).toBe(false)
   expect("signalG0Occurrence" in PublicApi).toBe(false)
   expect("publishG0Occurrence" in PublicApi).toBe(false)
+  expect("startG0TemporalOneShot" in PublicApi).toBe(false)
+  expect("runG0TemporalWorker" in PublicApi).toBe(false)
+  expect("runG0TemporalLocalRehearsalWorker" in PublicApi).toBe(false)
+  expect("simulateG0TestOnlyOperator" in PublicApi).toBe(false)
 })
 
 it("exports read-safe typed transition evidence without an issuer or admission bypass", () => {

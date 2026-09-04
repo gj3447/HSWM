@@ -24,6 +24,16 @@ mapping leakage를 줄이는 synthetic instrument로만 사용한다. 독립 out
 evaluator swap, externally witnessed chronology가 없으므로 G0는 계속 미통과이고
 G1은 잠겨 있다.
 
+2026-09-04의 G0 orchestration 실행 구현 선택은
+[`TypeScript/Effect Temporal authority`](docs/operations/HSWM_G0_TYPESCRIPT_TEMPORAL_AUTHORITY_2026-09-04.md)에
+고정한다. 공식 Temporal TypeScript SDK를 exact-version/integrity로 잠그고 실제
+disposable server에서 one-shot, signal bound, duplicate refusal, deadline, history replay를
+검증했으며 Python Temporal 어댑터의 공식 live 실행 진입점은 reference-only로
+닫았다. TS client와 workflow는 현재
+`LIVE_EXTERNAL_OPERATOR`를 fail-closed로 거부하고 simulation만 실행한다. 이는 미래 live
+경로의 구현 선택이지 외부 운영자 qualification, Python completion authority의 전환,
+과학적 G0 통과가 아니다.
+
 2026-09-02 현재 증명·근거·간극의 answer-first 상태는
 [`HSWM proof-status graph`](docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)에
 고정했다. 임의의 theorem/test 개수가 아니라 여섯 end-to-end 횡단 의무를 같은

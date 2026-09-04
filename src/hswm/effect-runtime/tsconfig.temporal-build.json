@@ -5,11 +5,10 @@
     "declarationMap": true,
     "outDir": "dist",
     "rootDir": "src",
-    "sourceMap": true
+    "sourceMap": true,
+    "skipLibCheck": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": [
-    "test/**/*.ts",
+  "include": [
     "src/g0-occurrence-temporal-audit.ts",
     "src/g0-occurrence-temporal-activities.ts",
     "src/g0-occurrence-temporal-contract.ts",
@@ -17,5 +16,6 @@
     "src/g0-occurrence-temporal-runtime.ts",
     "src/g0-occurrence-temporal-worker-process.ts",
     "src/g0-occurrence-temporal-workflow.ts"
-  ]
+  ],
+  "exclude": ["test/**/*.ts"]
 }

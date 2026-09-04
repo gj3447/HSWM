@@ -6,12 +6,17 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "hswm-graph-loop-job": "./dist/canonical-atom-v2-graph-loop-job-process.js"
+    "hswm-graph-loop-job": "./dist/canonical-atom-v2-graph-loop-job-process.js",
+    "hswm-g0-temporal-rehearsal-worker": "./dist/g0-occurrence-temporal-worker-process.js"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./g0-temporal": {
+      "types": "./dist/g0-occurrence-temporal-public.d.ts",
+      "default": "./dist/g0-occurrence-temporal-public.js"
     }
   },
   "files": [
@@ -25,19 +30,26 @@
     "node": "24.13.0"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && tsc -p tsconfig.temporal-build.json",
     "build:dnrd": "tsc -p tsconfig.dnrd.json",
-    "check": "tsc --noEmit",
+    "check": "tsc --noEmit && tsc -p tsconfig.temporal.json",
     "test": "vitest run",
+    "test:g0-temporal:integration": "HSWM_RUN_G0_TEMPORAL_INTEGRATION=1 vitest run test/g0-occurrence-temporal.integration.test.ts --maxWorkers=1",
     "verify": "npm run check && npm run test && npm run build && npm run build:dnrd && npm pack --dry-run"
   },
   "dependencies": {
+    "@temporalio/activity": "1.23.0",
+    "@temporalio/client": "1.23.0",
+    "@temporalio/common": "1.23.0",
+    "@temporalio/worker": "1.23.0",
+    "@temporalio/workflow": "1.23.0",
     "effect": "3.22.1",
     "jsonld": "9.0.0"
   },
   "devDependencies": {
     "@effect/language-service": "0.23.3",
     "@effect/vitest": "0.30.0",
+    "@temporalio/testing": "1.23.0",
     "@types/jsonld": "1.5.15",
     "@types/n3": "1.26.3",
     "@types/node": "24.13.3",

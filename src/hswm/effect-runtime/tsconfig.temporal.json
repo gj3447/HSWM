@@ -1,21 +1,21 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
-    "declarationMap": true,
-    "outDir": "dist",
-    "rootDir": "src",
-    "sourceMap": true
+    "noEmit": true,
+    "skipLibCheck": true
   },
-  "include": ["src/**/*.ts"],
-  "exclude": [
-    "test/**/*.ts",
+  "include": [
     "src/g0-occurrence-temporal-audit.ts",
     "src/g0-occurrence-temporal-activities.ts",
     "src/g0-occurrence-temporal-contract.ts",
     "src/g0-occurrence-temporal-public.ts",
     "src/g0-occurrence-temporal-runtime.ts",
     "src/g0-occurrence-temporal-worker-process.ts",
-    "src/g0-occurrence-temporal-workflow.ts"
-  ]
+    "src/g0-occurrence-temporal-workflow.ts",
+    "test/g0-occurrence-temporal-runtime.test.ts",
+    "test/g0-occurrence-temporal-audit.test.ts",
+    "test/g0-occurrence-temporal-worker-process.test.ts",
+    "test/g0-occurrence-temporal.integration.test.ts"
+  ],
+  "exclude": []
 }

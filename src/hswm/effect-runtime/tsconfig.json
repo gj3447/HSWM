@@ -24,5 +24,18 @@
       }
     ]
   },
-  "include": ["src/**/*.ts", "test/**/*.ts"]
+  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "exclude": [
+    "src/g0-occurrence-temporal-audit.ts",
+    "src/g0-occurrence-temporal-activities.ts",
+    "src/g0-occurrence-temporal-contract.ts",
+    "src/g0-occurrence-temporal-public.ts",
+    "src/g0-occurrence-temporal-runtime.ts",
+    "src/g0-occurrence-temporal-worker-process.ts",
+    "src/g0-occurrence-temporal-workflow.ts",
+    "test/g0-occurrence-temporal-runtime.test.ts",
+    "test/g0-occurrence-temporal-audit.test.ts",
+    "test/g0-occurrence-temporal-worker-process.test.ts",
+    "test/g0-occurrence-temporal.integration.test.ts"
+  ]
 }

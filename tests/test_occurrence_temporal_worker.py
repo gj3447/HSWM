@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import importlib.util
 from pathlib import Path
 import sys
@@ -52,6 +53,11 @@ def test_dry_run_is_redacted_and_never_contacts_temporal() -> None:
     plan = worker.dry_run_plan(input_value(), config)
 
     assert plan["execution"] == "DRY_RUN_NO_TEMPORAL_CONNECTION"
+    assert plan["python_worker_status"] == (
+        "RETIRED_REFERENCE_ONLY_TYPESCRIPT_EXECUTION_SELECTED"
+    )
+    assert plan["orchestration_authority"] == "TYPESCRIPT_TEMPORAL"
+    assert plan["live_external_admission"] is False
     assert plan["workflow_id_reuse_policy"] == "REJECT_DUPLICATE"
     assert plan["workflow_maximum_attempts"] == 1
     assert plan["activity_maximum_attempts"] == 1
@@ -67,6 +73,19 @@ def test_dry_run_is_redacted_and_never_contacts_temporal() -> None:
     )
     assert "does not authenticate" in plan["signal_authorization_claim_boundary"]
     assert plan["g0_status"] == "NOT_EXECUTED"
+
+
+def test_retired_python_worker_refuses_serve_and_start() -> None:
+    config = worker.OccurrenceWorkerConfigV1(
+        address="temporal.internal:7233",
+        namespace="g0",
+        task_queue="g0-queue",
+        signal_authorization_binding_sha256="d" * 64,
+    )
+    with pytest.raises(RuntimeError, match="TypeScript Temporal implementation"):
+        asyncio.run(worker.serve(config))
+    with pytest.raises(RuntimeError, match="TypeScript Temporal implementation"):
+        asyncio.run(worker.start_one_shot(object(), config, input_value()))
 
 
 def test_missing_worm_receipt_refuses_before_any_temporal_operation() -> None:

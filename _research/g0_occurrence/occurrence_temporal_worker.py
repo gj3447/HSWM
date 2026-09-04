@@ -4,7 +4,7 @@
 #   "temporalio==1.32.0",
 # ]
 # ///
-"""One-shot Temporal adapter for a candidate G0 occurrence.
+"""Retired Python reference adapter for a candidate G0 occurrence.
 
 This module is an orchestration boundary, not a singleton authority.  An
 externally verified WORM conditional-create receipt must exist before a
@@ -12,10 +12,12 @@ workflow can be started; Temporal's duplicate policy is only a second line of
 defence.  It does not create a WORM claim, contact OSF/Sigstore/drand, reveal
 materials, evaluate an outcome, or establish any G0 result.
 
-Running this file without ``--serve`` only emits a redacted dry-run plan.  The
-``--serve`` path is deliberately explicit and requires an address, namespace,
-and task queue supplied by arguments or environment variables.  It never logs
-credentials (and this adapter accepts none).
+Running this file without ``--serve`` only emits a redacted historical dry-run
+plan.  Live ``serve`` and ``start_one_shot`` entrypoints now refuse: the
+TypeScript/Effect package subpath ``@hswm/effect-runtime/g0-temporal`` is the
+single selected future execution implementation.  Its live external admission
+is still fail-closed.  The Python code remains checked
+in as a parity oracle and historical reference; it never logs credentials.
 """
 from __future__ import annotations
 
@@ -63,6 +65,7 @@ _DESCRIPTOR_MEDIA_TYPE = "application/vnd.hswm.content-descriptor+json"
 RECEIPT_FINALIZATION_GRACE_SECONDS = 60
 MAX_PENDING_SIGNALS = 8
 MAX_INPUT_JSON_BYTES = 65_536
+PYTHON_WORKER_STATUS = "RETIRED_REFERENCE_ONLY_TYPESCRIPT_EXECUTION_SELECTED"
 _DESCRIPTOR_NAME = re.compile(r"[a-z][a-z0-9_]{0,63}\Z")
 SIGNAL_AUTHORIZATION_CLAIM_BOUNDARY = (
     "Temporal signal sender authorization is an external namespace, transport, "
@@ -401,6 +404,9 @@ def dry_run_plan(input_value: OccurrenceWorkflowInputV1, config: OccurrenceWorke
     options = build_start_options(input_value)
     return {
         "schema_version": WORKER_SCHEMA,
+        "python_worker_status": PYTHON_WORKER_STATUS,
+        "orchestration_authority": "TYPESCRIPT_TEMPORAL",
+        "live_external_admission": False,
         "claim_boundary": CLAIM_BOUNDARY,
         "execution": "DRY_RUN_NO_TEMPORAL_CONNECTION",
         "workflow_name": WORKFLOW_NAME,
@@ -425,15 +431,12 @@ def dry_run_plan(input_value: OccurrenceWorkflowInputV1, config: OccurrenceWorke
 
 
 async def serve(config: OccurrenceWorkerConfigV1) -> None:
-    """Run a worker only after an operator explicitly selected ``--serve``.
+    """Refuse the retired Python worker before any Temporal connection."""
 
-    The validated configuration requires a content-addressed authorization
-    policy binding, but enforcement remains the external namespace/transport
-    boundary described by :data:`SIGNAL_AUTHORIZATION_CLAIM_BOUNDARY`.
-    Starting a worker does not schedule an occurrence.  Callers must still use
-    :func:`start_one_shot` with an externally verified candidate WORM receipt.
-    """
-
+    if PYTHON_WORKER_STATUS.startswith("RETIRED_REFERENCE_ONLY"):
+        raise RuntimeError(
+            "Python Temporal worker is retired; use the TypeScript Temporal implementation"
+        )
     client = await Client.connect(config.address, namespace=config.namespace)
     worker = Worker(
         client,
@@ -449,8 +452,12 @@ async def start_one_shot(
     config: OccurrenceWorkerConfigV1,
     input_value: OccurrenceWorkflowInputV1,
 ) -> Any:
-    """Start one workflow with explicit duplicate rejection and zero retries."""
+    """Refuse the retired Python start path before inspecting a client."""
 
+    if PYTHON_WORKER_STATUS.startswith("RETIRED_REFERENCE_ONLY"):
+        raise RuntimeError(
+            "Python Temporal start is retired; use the TypeScript Temporal implementation"
+        )
     if not isinstance(client, Client):
         raise TypeError("client must be a Temporal Client")
     options = build_start_options(input_value)
@@ -561,7 +568,7 @@ def _parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
-        "--serve", action="store_true", help="explicitly connect and run worker"
+        "--serve", action="store_true", help="retired Python live path; always refuses"
     )
     return parser
 
@@ -582,7 +589,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(json.dumps(dry_run_plan(input_value, config), sort_keys=True, indent=2))
             return 0
         asyncio.run(serve(config))
-    except (OSError, ValueError, json.JSONDecodeError) as exc:
+    except (OSError, RuntimeError, ValueError, json.JSONDecodeError) as exc:
         print(f"refused: {exc}", file=sys.stderr)
         return 2
     return 0
@@ -596,7 +603,7 @@ __all__ = [
     "ACTIVITY_NAME", "ContentDescriptorV1", "DEFAULT_TASK_QUEUE",
     "G0OccurrenceOneShotWorkflow", "OccurrenceWorkerConfigV1",
     "OccurrenceWorkflowInputV1", "PhaseTransitionV1", "WORKER_SCHEMA",
-    "WORKFLOW_NAME", "SIGNAL_AUTHORIZATION_CLAIM_BOUNDARY", "apply_transition",
+    "WORKFLOW_NAME", "PYTHON_WORKER_STATUS", "SIGNAL_AUTHORIZATION_CLAIM_BOUNDARY", "apply_transition",
     "build_start_options", "dry_run_plan", "input_from_json_path",
     "serve", "start_one_shot", "validate_transition_activity",
 ]

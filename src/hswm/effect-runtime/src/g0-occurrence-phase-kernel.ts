@@ -350,6 +350,26 @@ const issuedStateFromUnknown = (
     ? Either.right(state as G0OccurrenceState)
     : Either.left(error("STATE_INVALID", "occurrence state is not a module-issued immutable value"))
 
+/** @internal Records a deterministic orchestration failure without fabricating evidence. */
+export const voidG0Occurrence = (
+  state: unknown,
+  reason: unknown,
+  rejectedEvidenceSha256: unknown = null
+): Either.Either<G0OccurrenceState, G0OccurrencePhaseKernelError> => {
+  const issued = issuedStateFromUnknown(state)
+  if (Either.isLeft(issued)) return issued
+  const decodedReason = Schema.decodeUnknownEither(G0VoidReasonSchema)(reason)
+  if (Either.isLeft(decodedReason)) {
+    return Either.left(error("INPUT_INVALID", "explicit VOID requires a supported reason"))
+  }
+  const decodedRejected = Schema.decodeUnknownEither(Sha256Schema)(rejectedEvidenceSha256)
+  return Either.right(voidState(
+    issued.right,
+    decodedReason.right,
+    Either.isRight(decodedRejected) ? decodedRejected.right : null
+  ))
+}
+
 /** @internal Pure reducer used by the service and cross-language parity tests. */
 export const advanceG0Occurrence = (
   state: unknown,

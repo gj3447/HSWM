@@ -138,16 +138,26 @@ The current v2 boundary is intentionally small:
   uniqueness is local to the v2 namespace, v2-specific process-crash testing
   is absent, and this is not a complete execution certificate or TS-to-Lean
   source refinement.
-- `g0-occurrence-phase-kernel.ts` adds a strict TypeScript/Effect candidate
-  phase kernel for the prospective G0 occurrence. It issues only process-local
-  immutable state, preserves the frozen one-shot timeout and retry policy,
-  matches 11 checked-in Python transition-result vectors, and exposes only
-  blocked descriptor-readback ports for the external workflow and
-  integrity/completion boundaries. The test-only memory ports and pure parity
-  helpers are absent from the package-root export. This is not Python wire
-  parity, a Temporal runner, timeout/signal-queue execution, the completion
-  handshake, durable state, G0, or learning. See the
-  [Effect phase-kernel boundary](../../../docs/operations/HSWM_G0_EFFECT_PHASE_KERNEL_BOUNDARY_2026-09-04.md).
+- `g0-occurrence-phase-kernel.ts` supplies the strict TypeScript/Effect ingress
+  and descriptor-readback boundary. The dependency-free
+  `g0-occurrence-temporal-domain.ts` now preserves its 11-case Python parity
+  inside Temporal's deterministic sandbox; Effect remains at the Client,
+  Worker, wire, and audit edges where it cannot break workflow replay.
+- The explicit Node-only `@hswm/effect-runtime/g0-temporal` subpath provides
+  the selected official Temporal TypeScript `1.23.0` one-shot execution
+  adapter. It
+  enforces duplicate/conflict rejection, one workflow/activity attempt,
+  deterministic deadline, an eight-item FIFO signal bound, policy-digest
+  envelopes, terminal history replay, and false G0/publication claims. Both
+  client and workflow reject `LIVE_EXTERNAL_OPERATOR`; only the pinned local
+  simulated-operator lane is executable until authenticated external admission
+  is qualified. Its audit export is an unsigned candidate, never the qualified
+  external receipt. The
+  Python live worker entrypoints are retired; its pure logic remains a parity
+  oracle, while Python completion verification remains authoritative. The
+  package root exports neither live execution nor the test-only
+  operator simulator. See the
+  [TypeScript Temporal authority record](../../../docs/operations/HSWM_G0_TYPESCRIPT_TEMPORAL_AUTHORITY_2026-09-04.md).
 - The exact implementation and nonclaims are recorded in the
   [v2 reference-kernel handoff](../../../docs/operations/HSWM_CANONICAL_ATOM_V2_REFERENCE_KERNEL_2026-08-26.md)
   and the

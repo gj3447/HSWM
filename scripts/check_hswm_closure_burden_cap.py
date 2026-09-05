@@ -17,7 +17,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_BUNDLE = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json"
+DEFAULT_BUNDLE = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json"
 
 
 def load_cap(bundle_path: Path) -> dict[str, Any]:

@@ -3,6 +3,16 @@
 > 체크인 코드와 직접 측정으로 재현 가능한 현재 결과만 요약한다.
 > 삭제된 개인 판정·감사·오케스트레이션 계층의 기록은 현재 권위가 없으며 복원하지 않는다.
 
+> **운영 규칙 (2026-09-05, USER_PRIMARY D-4):** closure burden cap. audited commit
+> `4dcba752…` 이후 100 커밋 중 50% 이상이 core path
+> (`src/hswm/experiments/g1_micro*`, `src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit*`,
+> `_research/causal_composition/preregistrations/`, `results/`, `evidence/`, 이 파일)를 건드려야 하고
+> opaque v3 run-by는 2026-09-15다. 검사는 `uv run python scripts/check_hswm_closure_burden_cap.py`이며
+> 보고만 하고 CI gate가 아니다. 위반 시 이 표에 `INSTRUMENT_RED` 행을 추가하고 범위를 확대하지
+> 않는다. 정의의 유일한 원본은
+> [`HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json)의
+> burden-cap 노드다. 이 규칙은 연구 결과가 아니다.
+
 | 날짜 | 결과 | 경계 |
 |---|---|---|
 | 2026-08-30 | episode-secret opaque action을 쓰는 사전등록 G0 identifiability v2를 frozen `Qwen/Qwen3.6-35B-A3B-FP8` revision `95a723…3d989`, vLLM `0.25.1`, NVIDIA GB10에서 8 episode × 8 call로 한 번 실행했다. 64 completion·64 tokenizer POST가 retry/refill 없이 완료됐고, ACTIVE 8/8·FORCED_OPPOSITE_FEEDBACK 0/8·NO_UPDATE 4/8·REMOVE 4/8·RESTORE 8/8, `delta_state=2/3 >= 7/12`로 등록된 탐색 identifiability 임계값을 모두 관측했다. ACTIVE/반대피드백 credit·admission은 각각 8회, exact remove/restore는 8/8이었다. 별도 frozen verifier가 protocol/reveal/registry/runtime join을 공개 digest로 재검증했고, 비공개 read-only byte audit도 512 journal event·private archive 63파일에서 불일치 0을 확인했으나 후자는 별도 공개 receipt가 없는 보조 검토다. | [`result`](results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V2_RESULTS_2026-08-30.md) · [`public redacted projection`](results/raw/hswm_g1_opaque_identifiability_v2_2026-08-30/public_redacted_projection.json) · [`verification`](results/raw/hswm_g1_opaque_identifiability_v2_2026-08-30/independent_verification.json) · [`evidence`](evidence/EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_V2_2026-08-30.json) SHA-256 `039081ad…3b3297` · **탐색적 local state-readout 식별성 관측일 뿐 G0 `NOT_PASSED`, G1 `NOT_EVALUATED`, 효능 추론 금지**. NO_UPDATE/REMOVE는 정답 위치가 첫째일 때 4/4, 둘째일 때 0/4인 position bias를 보였고 strict five-branch signature는 0이다. same-process evaluator는 독립 G0/CF-07이 아니며 forced-opposite는 outcome-independent sham이 아니다. reuse-first baseline 비교·canonical Atom v2 Permit/HSWM admission·8 FCL·HSWM-of-HSWMs·의식·selfhood·scale-invariant causal closure는 미평가, live KG는 바꾸지 않았다. |

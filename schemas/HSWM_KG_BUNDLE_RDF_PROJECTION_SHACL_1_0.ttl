@@ -1,0 +1,137 @@
+@prefix kb: <https://hswm.invalid/kg-bundle-rdf/v1/> .
+@prefix kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix kbrole: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Structural SHACL 1.0 Core shapes for the read-only HSWM KG bundle RDF view.
+# They check exported structure only; conformance is not evidence of HSWM
+# cognition, learning, canonical admission, a Permit, a gate pass, or a user
+# ratification.
+
+kb:ProjectionShape a sh:NodeShape ;
+  sh:targetClass kb:Projection ;
+  sh:property [ sh:path kb:contractVersion ; sh:hasValue "hswm-kg-bundle-rdf-projection/v1" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:compilerId ; sh:hasValue "hswm-kg-bundle-rdf-compiler/v1" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:rdfProfile ; sh:hasValue "RDF_1_1_N_QUADS_BLANK_NODE_FREE_DETERMINISTIC_PROFILE" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:writeBack ; sh:hasValue "FORBIDDEN" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:nonclaim ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:claimCeiling ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:sourceSetSha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prov:wasDerivedFrom ; sh:class kb:Bundle ; sh:minCount 1 ] ;
+  sh:property [ sh:path prov:wasGeneratedBy ; sh:class prov:Activity ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+kb:DerivationActivityShape a sh:NodeShape ;
+  sh:targetClass prov:Activity ;
+  sh:property [ sh:path prov:used ; sh:class kb:Bundle ; sh:minCount 1 ] .
+
+kb:BundleShape a sh:NodeShape ;
+  sh:targetClass kb:Bundle ;
+  sh:property [ sh:path kb:sourceId ; sh:datatype xsd:string ; sh:pattern "^[A-Za-z][A-Za-z0-9._:-]{0,127}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:sourceSha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:sourceByteLength ; sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:mediaType ; sh:hasValue "application/json" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:bundleUid ; sh:datatype xsd:string ; sh:pattern "^sym:AbstractNode:[A-Za-z0-9][A-Za-z0-9._-]*$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:schemaVersion ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:status ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:nonclaim ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:nodeCount ; sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:relationCount ; sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:anchorCount ; sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:hasArtifactBinding ; sh:class kb:ArtifactBinding ; sh:minCount 1 ] ;
+  sh:property [ sh:path kb:ownsNode ; sh:class kb:Node ; sh:minCount 1 ] .
+
+kb:ArtifactBindingShape a sh:NodeShape ;
+  sh:targetClass kb:ArtifactBinding ;
+  sh:property [ sh:path kb:bindingPath ; sh:datatype xsd:string ; sh:pattern "^[A-Za-z0-9_][A-Za-z0-9_./:+-]{0,255}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:bindingSha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+kb:NodeShape a sh:NodeShape ;
+  sh:targetClass kb:Node ;
+  sh:property [ sh:path kb:uid ; sh:datatype xsd:string ; sh:pattern "^sym:[A-Za-z][A-Za-z0-9_]*:[A-Za-z0-9][A-Za-z0-9._-]*$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:label ; sh:datatype xsd:string ; sh:pattern "^[A-Za-z_][A-Za-z0-9_]*$" ; sh:minCount 1 ] ;
+  sh:property [ sh:path kb:ownedBy ; sh:class kb:Bundle ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:name ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:description ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:authority_class ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:claim_boundary ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:projection_nonclaim ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:not [ a sh:NodeShape ; sh:class kb:Anchor ] .
+
+kb:AnchorShape a sh:NodeShape ;
+  sh:targetClass kb:Anchor ;
+  sh:property [ sh:path kb:uid ; sh:datatype xsd:string ; sh:pattern "^sym:[A-Za-z][A-Za-z0-9_]*:[A-Za-z0-9][A-Za-z0-9._-]*$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:anchorName ; sh:datatype xsd:string ; sh:minCount 1 ] ;
+  sh:property [ sh:path kb:requiredLabel ; sh:datatype xsd:string ; sh:minCount 1 ] ;
+  sh:not [ a sh:NodeShape ; sh:class kb:Node ] .
+
+kb:RelationShape a sh:NodeShape ;
+  sh:targetClass kb:Relation ;
+  sh:property [ sh:path kb:from ; sh:class kb:Node ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:to ; sh:or ( [ sh:class kb:Node ] [ sh:class kb:Anchor ] ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:relationType ; sh:datatype xsd:string ; sh:pattern "^[A-Z][A-Z0-9_]*$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:authorityClass ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:scope ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:status ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:ownedBy ; sh:class kb:Bundle ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+# Status-graph role invariants (Claim, Evidence, Decision, Gap, QualificationRun)
+# shared by every HSWM research bundle that declares standard_graph_role.
+
+kb:ClaimRoleShape a sh:NodeShape ;
+  sh:targetClass kbrole:CLAIM ;
+  sh:property [ sh:path kbr:HAS_SOURCE ; sh:minCount 1 ] ;
+  sh:property [ sh:path kbp:current_decision_uid ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbr:HAS_CONCEPT ; sh:class kbrole:DECISION ; sh:minCount 1 ] .
+
+kb:DecisionRoleShape a sh:NodeShape ;
+  sh:targetClass kbrole:DECISION ;
+  sh:property [ sh:path kbp:assesses_claim_uid ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:evidence_disposition ; sh:in ( "NOT_EVALUATED" "SUPPORTED_IN_SCOPE" "RED" "UNDERDETERMINED" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:claim_ceiling ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbr:CONSTRAINS ; sh:class kbrole:CLAIM ; sh:minCount 1 ] .
+
+kb:EvidenceArtifactRoleShape a sh:NodeShape ;
+  sh:targetClass kbrole:EVIDENCE_ARTIFACT ;
+  sh:property [ sh:path kbp:source_path ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:source_sha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+kb:QualificationRunRoleShape a sh:NodeShape ;
+  sh:targetClass kbrole:QUALIFICATION_RUN ;
+  sh:property [ sh:path kbp:attestation_level ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:qualification_status ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+# Closure-plan role invariants.
+
+kb:ClosureStepRoleShape a sh:NodeShape ;
+  sh:targetClass kbrole:CLOSURE_STEP ;
+  sh:property [ sh:path kbp:step_order ; sh:datatype xsd:integer ; sh:minInclusive 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:step_kind ; sh:in ( "RULE_RELAXATION" "TECHNICAL_WORK" "RESOURCE" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:run_by ; sh:datatype xsd:string ; sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:stop_rule ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:verification_commands ; sh:datatype xsd:string ; sh:minCount 1 ] ;
+  sh:property [ sh:path kbp:completion_evidence_path_pattern ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:needs_user ; sh:datatype xsd:boolean ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:needs_dgx ; sh:datatype xsd:boolean ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+kb:UserPrimaryDecisionRoleShape a sh:NodeShape ;
+  sh:targetClass kbrole:USER_PRIMARY_DECISION ;
+  sh:property [ sh:path kbp:decision_id ; sh:datatype xsd:string ; sh:pattern "^D-[0-9]+$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:proposed_text ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:ratification_status ; sh:in ( "PROPOSED" "RATIFIED" "MODIFIED" "REJECTED" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:ratification_source_sha256 ; sh:datatype xsd:string ; sh:pattern "^([0-9a-f]{64})?$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+kb:BurdenCapRoleShape a sh:NodeShape ;
+  sh:targetClass kbrole:BURDEN_CAP ;
+  sh:property [ sh:path kbp:window_start_commit ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:window_commits ; sh:datatype xsd:integer ; sh:minInclusive 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:min_core_share ; sh:datatype xsd:double ; sh:minInclusive 0.0 ; sh:maxInclusive 1.0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:core_path_prefixes ; sh:datatype xsd:string ; sh:minCount 1 ] ;
+  sh:property [ sh:path kbp:check_command ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+kb:ProspectiveSubgateRoleShape a sh:NodeShape ;
+  sh:targetClass kbrole:PROSPECTIVE_SUBGATE ;
+  sh:property [ sh:path kbp:claim_ceiling ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:pass_criteria ; sh:datatype xsd:string ; sh:minCount 1 ] .

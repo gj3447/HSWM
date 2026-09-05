@@ -54,6 +54,9 @@ include src/hswm/effect-runtime/package.json
 include src/hswm/effect-runtime/package-lock.json
 include src/hswm/effect-runtime/src/canonical-atom-v2-jsonld-view.ts
 recursive-include research *.json
+# The closure-plan ontology builder reads the frozen adversarial-audit findings
+# record by path; the source distribution must carry it with the ontology.
+recursive-include _research/causal_composition/audits *.json
 recursive-include ontology *.json *.md
 recursive-include schemas *.json *.ttl
 recursive-include docs *.md *.txt

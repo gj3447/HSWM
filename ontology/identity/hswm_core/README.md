@@ -66,6 +66,55 @@ does not mutate HSWM, FCL, Ragnarok, PIDNA, or scientific-synthesis anchors.
 KG presence is publication of an `UNJUDGED` research design, not a passed
 control, material result, HSWM cognition, causal learning, or efficacy.
 
+## Current closure-plan projection
+
+[`HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json`](HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json)
+(bundle UID `sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05`) is the
+bounded projection of the 2026-09-05 adversarial programme audit and its
+closure plan. It carries 14 verified audit findings as Claim nodes with one
+current verification Decision each, 7 open Gaps, 4 USER_PRIMARY decision
+requests that stay `PROPOSED` until the user's own words are hash-bound as a
+canon source, 2 proposed G0 sub-gates, 1 finite v1 done-state, 6 ordered
+closure steps with run-by dates and stop rules, 5 stop rules, and 1 numeric
+burden cap. It anchors read-only to the existing G0/G1 gates, the PS-5/PS-6
+proof-status claims, the RG-4/RG-6 guardrails, and the causal-composition,
+adaptive-strategy, and graph-and-loop programs. Its human record is
+[`HSWM_ADVERSARIAL_AUDIT_AND_CLOSURE_PLAN_2026-09-05.md`](../../../docs/research/HSWM_ADVERSARIAL_AUDIT_AND_CLOSURE_PLAN_2026-09-05.md)
+and its bound evidence is
+[`HSWM_ADVERSARIAL_AUDIT_FINDINGS_2026-09-05.json`](../../../_research/causal_composition/audits/HSWM_ADVERSARIAL_AUDIT_FINDINGS_2026-09-05.json).
+
+Build, validate, and publish only through the dedicated fail-closed paths:
+
+```bash
+uv run python scripts/build_hswm_closure_plan_ontology.py --check
+uv run --extra kg python scripts/upsert_hswm_closure_plan.py
+uv run --extra kg python scripts/upsert_hswm_closure_plan.py \
+  --apply --source-config ~/.config/symposium-ontology/source.yaml
+uv run python scripts/check_hswm_closure_burden_cap.py
+```
+
+Every checked-in `hswm_core` bundle, including this one, also has a shared
+standard read-only view:
+[`kg_bundle_graph_view.py`](../../../src/hswm/infrastructure/kg_bundle_graph_view.py)
+projects exact bundle bytes to blank-node-free RDF 1.1 N-Quads with reified
+relations and a PROV-O derivation, and
+[`HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0.ttl`](../../../schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0.ttl)
+checks the Claim, Decision, Gap, closure-step, USER_PRIMARY-decision, and
+burden-cap structure with SHACL 1.0; local SPARQL 1.1 `SELECT`/`ASK` is the
+only query form. Write-back is forbidden and the view says nothing about live
+KG state.
+
+```bash
+uv run --project _research/graph_standards/runtime --locked --extra graph \
+  pytest -q tests/test_kg_bundle_graph_view.py
+```
+
+A new version of this bundle is produced only at USER_PRIMARY ratification and
+at the v3 result receipt, never for routine status edits; it replaces further
+G0 boundary documents until then. KG presence is publication of a `PROPOSED`
+governance plan, not a user ratification, gate pass, HSWM cognition, causal
+learning, or efficacy result.
+
 ## Graph and loop engineering reinforcement projection
 
 [`HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json`](HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json)

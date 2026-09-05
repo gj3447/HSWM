@@ -484,8 +484,9 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
     }
     assert shipped_shacl_shapes == {
         "schemas/HSWM_CANONICAL_ATOM_V2_RDF_PROJECTION_SHACL_1_0.ttl",
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0.ttl",
         "schemas/HSWM_RESEARCH_EVIDENCE_RDF_PROJECTION_SHACL_1_0.ttl",
-    }, "Python sdist는 두 read-only graph view의 정확한 SHACL 1.0 shape만 운송해야 한다"
+    }, "Python sdist는 세 read-only graph view의 정확한 SHACL 1.0 shape만 운송해야 한다"
     assert {
         "_research/graph_standards/qualify_graph_standards.mjs",
         "_research/graph_standards/qualify_jsonld11.mjs",

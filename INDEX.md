@@ -34,6 +34,18 @@ disposable server에서 one-shot, signal bound, duplicate refusal, deadline, his
 경로의 구현 선택이지 외부 운영자 qualification, Python completion authority의 전환,
 과학적 G0 통과가 아니다.
 
+2026-09-05의 적대적 감사와 폐쇄 계획은
+[`HSWM adversarial audit and closure plan`](docs/research/HSWM_ADVERSARIAL_AUDIT_AND_CLOSURE_PLAN_2026-09-05.md)에
+고정한다. 8개 finder lens와 발견마다 반박자 2명이 검증한 14개 발견(확정 11, 쟁점 2, 반박 1)은
+HSWM이 완성되지 않는 이유를 기술 블로커가 아니라 자기부과 조건 세 개, 즉 한 사람이 채울 수
+없는 G0 외부 공증 체인, 강화만 되는 규칙집과 집행되지 않는 정지 규칙, 2026-08-30 이후 멈춘
+1비트 학습 루프의 결합으로 판정했다. 문서는 열린 간극 7개, 순서 있는 폐쇄 단계 6개, 정지 규칙
+5개, 숫자 있는 burden cap과 사용자 결정 요청 4개(D-1 G0 분할, D-2 never-weaken 한정, D-3 G1
+estimand 결속, D-4 유한 완료 상태)를 담는다. 기계 투영은
+[`closure plan ontology v1`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json)이며
+결정 노드는 사용자 원문이 결속되기 전까지 `PROPOSED`다. 이 문서와 번들은 v3 결과 전까지 G0
+상태를 다시 진술하는 새 boundary 문서를 대체한다. G0는 계속 `NOT_PASSED`, G1은 `LOCKED`다.
+
 2026-09-02 현재 증명·근거·간극의 answer-first 상태는
 [`HSWM proof-status graph`](docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)에
 고정했다. 임의의 theorem/test 개수가 아니라 여섯 end-to-end 횡단 의무를 같은

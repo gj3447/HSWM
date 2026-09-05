@@ -2181,7 +2181,7 @@ def _admit_branch(
     return result
 
 
-def _journal_manifest(path: Path) -> dict[str, Any]:
+def _journal_manifest(path: Path, *, expected_operations: Sequence[str] | None = None) -> dict[str, Any]:
     raw = path.read_bytes()
     rows: list[dict[str, Any]] = []
     events: list[str] = []
@@ -2207,7 +2207,7 @@ def _journal_manifest(path: Path) -> dict[str, Any]:
             if ordinal in preflights:
                 raise G1MicroError("journal has duplicate tokenize ordinal")
             preflights[ordinal] = value
-    expected_operations = [
+    expected_operations = list(expected_operations) if expected_operations is not None else [
         "pre_outcome_trajectory",
         "propose_revision",
         "propose_revision",
@@ -3775,6 +3775,10 @@ def verify_bundle_file(path: str | Path) -> dict[str, Any]:
     bundle = _canonical_object(bundle_path.read_bytes(), "result bundle")
     if bundle.get("schema_version") == OPAQUE_PILOT_PROTOCOL:
         return verify_opaque_identifiability_pilot_bundle(bundle, base_dir=bundle_path.parent)
+    if bundle.get("schema_version") == "hswm-g1-opaque-identifiability-v3/v1":
+        from hswm.experiments import g1_opaque_v3
+
+        return g1_opaque_v3.verify_v3_bundle(bundle, base_dir=bundle_path.parent)
     return verify_exploratory_bundle(bundle, base_dir=bundle_path.parent)
 
 

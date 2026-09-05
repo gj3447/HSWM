@@ -15,6 +15,7 @@ import { canonicalAtomV2RdfProjectionBytes } from "./canonical-atom-v2-rdf-proje
 import { publishNeo4jHypergraphProjection, rebuildNeo4jHypergraphProjection } from "./canonical-atom-v2-neo4j-projection.js"
 import { makeHypergraphProjectionRehearsal } from "./hypergraph-projection-rehearsal.js"
 import { buildHypergraphProjectionPackage } from "./hypergraph-projection-receipt.js"
+import { makeOpenConnectivityRehearsal } from "./open-connectivity-rehearsal.js"
 
 const right = <A, E>(result: Either.Either<A, E>): A => {
   if (Either.isLeft(result)) throw new Error("projection contract verification failed")
@@ -28,7 +29,7 @@ const main = async (): Promise<void> => {
   const flags = new Set<string>()
   for (let index = 0; index < args.length; index++) {
     const arg = args[index]!
-    if (["--rehearsal", "--apply", "--rebuild", "--help"].includes(arg)) {
+    if (["--rehearsal", "--connectivity-rehearsal", "--apply", "--rebuild", "--help"].includes(arg)) {
       if (flags.has(arg)) throw new Error("duplicate CLI flag")
       flags.add(arg)
     } else if (["--input", "--out", "--repository-root", "--source-config"].includes(arg)) {
@@ -38,16 +39,18 @@ const main = async (): Promise<void> => {
     } else throw new Error("unknown CLI argument")
   }
   if (flags.has("--help")) {
-    process.stdout.write("Usage: hswm-hypergraph-projection (--rehearsal | --input canonical-projection.json) --out NEW_DIRECTORY [--repository-root CHECKOUT] [--apply --source-config FILE [--rebuild]]\nDefault: local compilation, real SHACL validation and receipt; no database connection. --rebuild replaces only the exact verified projection namespace.\n")
+    process.stdout.write("Usage: hswm-hypergraph-projection (--rehearsal | --connectivity-rehearsal | --input canonical-projection.json) --out NEW_DIRECTORY [--repository-root CHECKOUT] [--apply --source-config FILE [--rebuild]]\nDefault: local compilation, real SHACL validation and receipt; no database connection. --connectivity-rehearsal is a synthetic recursive/peer/external metadata example, not a live connection or learning result. Both rehearsals publish only synthetic metadata with --apply, not live connectivity. --rebuild replaces only the exact verified projection namespace.\n")
     return
   }
-  if (flags.has("--rehearsal") === values.has("--input") || !values.has("--out")) throw new Error("supply exactly one source and a new output directory")
+  const sourceCount = Number(flags.has("--rehearsal")) + Number(flags.has("--connectivity-rehearsal")) + Number(values.has("--input"))
+  if (sourceCount !== 1 || !values.has("--out")) throw new Error("supply exactly one source and a new output directory")
   if (flags.has("--rebuild") && !flags.has("--apply")) throw new Error("--rebuild requires --apply")
   if (flags.has("--apply") && !values.has("--source-config")) throw new Error("--apply requires --source-config")
   const root = resolve(values.get("--repository-root") ?? join(dirname(fileURLToPath(import.meta.url)), "../../../.."))
   const output = resolve(values.get("--out")!)
   const startedAt = new Date().toISOString()
-  const fixture = flags.has("--rehearsal") ? makeHypergraphProjectionRehearsal() : undefined
+  const fixture = flags.has("--rehearsal") ? makeHypergraphProjectionRehearsal()
+    : flags.has("--connectivity-rehearsal") ? makeOpenConnectivityRehearsal() : undefined
   const projection = fixture === undefined
     ? right(decodeHypergraphProjectionBytes(await readFile(resolve(values.get("--input")!))))
     : right(compileHypergraphProjection(fixture.schema, fixture.source))

@@ -113,6 +113,10 @@ npm run projection:rehearsal -- --out /tmp/hswm-projection-rebuilt \
 An application can pass its existing schema and source to `compileHypergraphProjection`.
 The CLI also accepts `--input hypergraph-projection.json` instead of `--rehearsal`
 and verifies the serialized source and outputs by recompilation before use.
+The separate [`--connectivity-rehearsal` example](HSWM_OPEN_CONNECTIVITY_CONTRACT_2026-09-05.md)
+represents recursive composition, peer links and heterogeneous external endpoints
+under its own synthetic schema. It is not a live connection or learning result.
+Choose exactly one of these three source options; the original rehearsal is unchanged.
 The package requires a full repository for its existing Python/SHACL workflow;
 `--repository-root` selects that checkout when invoked elsewhere.
 

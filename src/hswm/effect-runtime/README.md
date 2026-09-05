@@ -500,3 +500,25 @@ exact readback and explicit losses. After `npm run build`, run
 `npm run projection:rehearsal -- --out /tmp/hswm-projection-local` for a local
 SHACL-validated package. Database publication requires explicit `--apply` and a
 private `--source-config`. This is an engineering projection, not G0 or learning.
+
+# Local Permit commit process bridge
+
+`canonical-atom-v2-local-permit-commit-process.ts` (installed as
+`hswm-local-permit-commit` after `npm run build`) is a one-request stdin/stdout
+bridge to the v1 local Permit commit. A caller such as the Python G1 instrument
+(`src/hswm/experiments/atom_v2_permit_bridge.py`, used by
+`g1_micro._admit_branch`) hands over one exact state transition: pre-state
+bytes, post-state bytes, and the Permit claims that bind their digests. The
+process mints one ephemeral Ed25519 issuer, issues one signed Permit envelope,
+writes the public trust snapshot beside the journal with `O_EXCL`, and commits
+through the fsync'd no-replace journal slot. `recover` re-verifies every
+committed record from the trust snapshot in a fresh process.
+
+The bridge commits exactly the sequence-zero to sequence-one transition of one
+fresh root; a second commit into the same root is refused. The G1 verifiers
+re-derive the claims from the retained records and require the committed
+post-state digest to equal the admitted successor state that the fresh probe
+compiled. This is the real local owner/Permit admission path for one
+transition. It is not an authoritative, distributed, or trusted-time Permit,
+not canonical HSWM admission, and not outcome truth, causal credit, learning,
+or efficacy evidence.

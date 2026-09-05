@@ -527,6 +527,10 @@ export {
   type VerifiedAdmissionRecoveryV2
 } from "./canonical-atom-v2-local-permit-commit.js"
 export {
+  HSWM_LOCAL_PERMIT_COMMIT_PROCESS_CLAIM_BOUNDARY,
+  HSWM_LOCAL_PERMIT_COMMIT_PROCESS_V1_CONTRACT_VERSION
+} from "./canonical-atom-v2-local-permit-commit-process.js"
+export {
   HSWM_VERIFIED_ADMISSION_GATEWAY_STATUS,
   HSWM_VERIFIED_ADMISSION_GATEWAY_V1,
   HSWM_VERIFIED_ADMISSION_GATEWAY_V2,

@@ -277,6 +277,8 @@ jobs:
           npm pack --dry-run
       - name: Rehearse the manifest-selected DNRD runtime closure
         run: uv run --locked --extra dev pytest -q tests/test_hswm_dnrd_integration.py -k current_runtime_closure
+      - name: Admit the G1 instrument through the built Atom v2 local Permit commit process
+        run: uv run --locked --extra dev pytest -q tests/test_hswm_atom_v2_permit_bridge.py
 
   swm0w-beacon-crypto:
     name: swm0w-beacon-crypto

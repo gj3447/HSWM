@@ -36,6 +36,7 @@ from hswm.experiments.continual_live import (
     TokenPreflightReceipt,
     _ModelArm,
 )
+from hswm.experiments import atom_v2_permit_bridge
 from hswm.selfmod.contracts import canonical_json_bytes, canonical_sha256
 
 
@@ -2001,6 +2002,116 @@ def _probe_record(
     )
 
 
+def atom_v2_transition_claims(
+    *,
+    episode_uid: str,
+    branch: str,
+    base_state: Mapping[str, Any],
+    successor_state: Mapping[str, Any],
+    permit: Mapping[str, Any],
+    permit_policy: Mapping[str, Any],
+    proposal: Mapping[str, Any],
+    disposition: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Deterministic Atom v2 Permit claims for one local base-to-successor transition."""
+
+    lineage = f"lineage:g1:{_digest(episode_uid.encode('utf-8'))[:16]}:{branch.lower()}"
+    return atom_v2_permit_bridge.transition_claims(
+        lineage_id=lineage,
+        permit_id=f"permit:{permit['record_sha256']}",
+        execution_id=f"execution:{proposal['record_sha256']}",
+        execution_intent_sha256=str(permit["record_sha256"]),
+        permit_sha256=str(permit_policy["record_sha256"]),
+        proposal_sha256=str(proposal["record_sha256"]),
+        transition_invariant_sha256=canonical_sha256(permit["payload"]["write_set"]),
+        prior_record_sha256=state_sha256(base_state),
+        successor_record_sha256=str(disposition["record_sha256"]),
+        pre_state_bytes=canonical_json_bytes(base_state),
+        post_state_bytes=canonical_json_bytes(successor_state),
+        target_schema_version=STATE_SCHEMA,
+        target_atom_uid=f"atom:{disposition['record_sha256']}",
+        authorization_ref=f"authorization:{permit_policy['record_sha256']}",
+        scope=f"scope:g1-micro:{branch.lower()}",
+    )
+
+
+def _atom_v2_commit_transition(
+    permit_commit: atom_v2_permit_bridge.LocalPermitCommitProcess,
+    *,
+    commit_root: Path,
+    episode_uid: str,
+    branch: str,
+    base_state: Mapping[str, Any],
+    successor_state: Mapping[str, Any],
+    permit: Mapping[str, Any],
+    permit_policy: Mapping[str, Any],
+    proposal: Mapping[str, Any],
+    disposition: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Commit the exact local transition through the real Atom v2 local Permit path."""
+
+    claims = atom_v2_transition_claims(
+        episode_uid=episode_uid, branch=branch, base_state=base_state,
+        successor_state=successor_state, permit=permit, permit_policy=permit_policy,
+        proposal=proposal, disposition=disposition,
+    )
+    root = Path(commit_root).resolve()
+    root.mkdir(parents=True, exist_ok=False)
+    commit = permit_commit.commit(
+        root_path=root,
+        trust_snapshot_path=root / "trust-snapshot.json",
+        issuer={
+            "keyId": f"key:g1-micro:{_digest(episode_uid.encode('utf-8'))[:16]}:{branch.lower()}",
+            "authorizer": STATE_OWNER,
+            "policyVersion": "policy:g1-micro-local-permit-v1",
+            "revocationEpoch": 0,
+        },
+        claims=claims,
+        pre_state_bytes=canonical_json_bytes(base_state),
+        post_state_bytes=canonical_json_bytes(successor_state),
+    )
+    return {"branch": branch, "episode_uid": episode_uid, "claims": claims, "commit": commit}
+
+
+def verify_atom_v2_commit_binding(
+    binding: Mapping[str, Any],
+    *,
+    episode_uid: str,
+    branch: str,
+    base_state: Mapping[str, Any],
+    successor_state: Mapping[str, Any],
+    permit: Mapping[str, Any],
+    permit_policy: Mapping[str, Any],
+    proposal: Mapping[str, Any],
+    disposition: Mapping[str, Any],
+    resulting_state_sha256: str,
+) -> None:
+    """Re-derive the claims and check the commit digest chain closes on the admitted state."""
+
+    if not isinstance(binding, Mapping) or set(binding) != {"branch", "episode_uid", "claims", "commit"}:
+        raise G1MicroError("atom v2 permit commit binding shape is invalid")
+    if binding["branch"] != branch or binding["episode_uid"] != episode_uid:
+        raise G1MicroError("atom v2 permit commit binding names another branch or episode")
+    expected_claims = atom_v2_transition_claims(
+        episode_uid=episode_uid, branch=branch, base_state=base_state,
+        successor_state=successor_state, permit=permit, permit_policy=permit_policy,
+        proposal=proposal, disposition=disposition,
+    )
+    if binding["claims"] != expected_claims:
+        raise G1MicroError("atom v2 permit commit claims do not reconstruct from the records")
+    commit = binding["commit"]
+    atom_v2_permit_bridge.verify_commit_summary(commit)
+    if (
+        commit["prior_head"] != expected_claims["priorHead"]
+        or commit["expected_next_head"] != expected_claims["expectedNextHead"]
+        or commit["pre_state_sha256"] != state_sha256(base_state)
+        or commit["post_state_sha256"] != state_sha256(successor_state)
+        or commit["post_state_sha256"] != resulting_state_sha256
+        or commit["execution_intent_sha256"] != permit["record_sha256"]
+    ):
+        raise G1MicroError("atom v2 permit commit does not close on the admitted successor state")
+
+
 def _admit_branch(
     *,
     store: G1MicroStore,
@@ -2010,6 +2121,9 @@ def _admit_branch(
     feedback: Mapping[str, Any],
     proposal: Mapping[str, Any],
     credit: Mapping[str, Any],
+    permit_commit: atom_v2_permit_bridge.LocalPermitCommitProcess | None = None,
+    commit_root: Path | None = None,
+    branch: str = "ACTIVE",
 ) -> dict[str, Any] | None:
     if credit["payload"]["decision"] != "CREDIT":
         return None
@@ -2036,6 +2150,18 @@ def _admit_branch(
         successor_state=successor,
     )
     store.issue_permit(permit, permit_policy=permit_policy)
+    atom_v2_commit = None
+    if permit_commit is not None:
+        if commit_root is None:
+            raise G1MicroError("atom v2 permit commit requires a commit root")
+        # The real local owner/Permit path commits the exact transition before
+        # the compiled state is activated; the local grant above is its policy.
+        atom_v2_commit = _atom_v2_commit_transition(
+            permit_commit, commit_root=Path(commit_root) / branch.lower(),
+            episode_uid=task.episode_uid, branch=branch, base_state=base.state,
+            successor_state=successor, permit=permit, permit_policy=permit_policy,
+            proposal=proposal, disposition=disposition,
+        )
     receipts = store.admit(
         permit=permit,
         proposal=proposal,
@@ -2043,13 +2169,16 @@ def _admit_branch(
         credit=credit,
         successor_state=successor,
     )
-    return {
+    result = {
         "admission": receipts["admission"],
         "consumption": receipts["consumption"],
         "disposition": disposition,
         "permit": permit,
         "successor_state": successor,
     }
+    if atom_v2_commit is not None:
+        result["atom_v2_permit_commit"] = atom_v2_commit
+    return result
 
 
 def _journal_manifest(path: Path) -> dict[str, Any]:
@@ -2254,6 +2383,7 @@ def _execute_exploratory_slice(
     output_dir: str | Path,
     runtime_binding: Mapping[str, Any] | None,
     source_manifest: Mapping[str, str],
+    permit_commit: atom_v2_permit_bridge.LocalPermitCommitProcess | None = None,
 ) -> dict[str, Any]:
     """Execute the already-claimed eight-call slice with no provider retry."""
 
@@ -2363,6 +2493,9 @@ def _execute_exploratory_slice(
         feedback=outcome,
         proposal=active_proposal,
         credit=active_credit,
+        permit_commit=permit_commit,
+        commit_root=output / "atom-v2-permit-commit",
+        branch="ACTIVE",
     )
     sham_admission = _admit_branch(
         store=sham_store,
@@ -2372,6 +2505,9 @@ def _execute_exploratory_slice(
         feedback=sham_feedback,
         proposal=sham_proposal,
         credit=sham_credit,
+        permit_commit=permit_commit,
+        commit_root=output / "atom-v2-permit-commit",
+        branch="OUTCOME_INDEPENDENT_SHAM",
     )
     if active_admission is None or sham_admission is None:
         raise G1MicroError("proposal failed the precommitted credit rule; no probe calls made")
@@ -2499,6 +2635,14 @@ def _execute_exploratory_slice(
         "trajectory": trajectory,
         "verification_scope": "LOCAL_STRUCTURAL_CONSISTENCY_ONLY",
     }
+    if permit_commit is not None:
+        unsigned["atom_v2_permit_commit"] = {
+            branch: admission.pop("atom_v2_permit_commit")
+            for branch, admission in (
+                ("ACTIVE", active_admission),
+                ("OUTCOME_INDEPENDENT_SHAM", sham_admission),
+            )
+        }
     bundle = {**unsigned, "bundle_sha256": canonical_sha256(unsigned)}
     verify_exploratory_bundle(bundle, base_dir=output)
     _atomic_write(output / "result.json", canonical_json_bytes(bundle))
@@ -2576,6 +2720,7 @@ def _run_exploratory_slice_with_backend(
     output_dir: str | Path,
     execution_registry_path: str | Path,
     runtime_binding: Mapping[str, Any] | None = None,
+    permit_commit: atom_v2_permit_bridge.LocalPermitCommitProcess | None = None,
 ) -> dict[str, Any]:
     """Backend-injected producer primitive used only by tests and the live entrypoint."""
 
@@ -2616,6 +2761,7 @@ def _run_exploratory_slice_with_backend(
             output_dir=output,
             runtime_binding=runtime_binding,
             source_manifest=source_manifest,
+            permit_commit=permit_commit,
         )
     except BaseException as error:
         output.mkdir(parents=True, exist_ok=True)
@@ -2812,7 +2958,8 @@ def _verify_opaque_request_ledger(path: Path, task: OpaquePilotTask) -> None:
 
 
 def _opaque_episode(
-    *, backend: ChatBackend, task: OpaquePilotTask, output: Path, protocol_sha256: str
+    *, backend: ChatBackend, task: OpaquePilotTask, output: Path, protocol_sha256: str,
+    permit_commit: atom_v2_permit_bridge.LocalPermitCommitProcess | None = None,
 ) -> dict[str, Any]:
     output.mkdir(parents=True)
     arm = OpaquePilotArm(backend=backend, journal_path=output / "attempt_ledger.jsonl", isolation_id=task.episode_uid)
@@ -2837,8 +2984,19 @@ def _opaque_episode(
         policy = make_permit_policy(task, protocol_sha256)
         permit = make_local_permit(task=task, permit_policy=policy, base_state=store.active().state, base_generation=store.active().generation, trajectory=trajectory_record, feedback=feedback, proposal=proposal, credit=credit, disposition=disposition, successor_state=successor)
         store.issue_permit(permit, permit_policy=policy)
+        atom_v2_commit = None
+        if permit_commit is not None:
+            atom_v2_commit = _atom_v2_commit_transition(
+                permit_commit, commit_root=output / "atom-v2-permit-commit" / branch.lower(),
+                episode_uid=task.episode_uid, branch=branch, base_state=store.active().state,
+                successor_state=successor, permit=permit, permit_policy=policy,
+                proposal=proposal, disposition=disposition,
+            )
         receipts = store.admit(permit=permit, proposal=proposal, feedback=feedback, credit=credit, successor_state=successor)
-        return {"proposal": proposal, "credit": credit, "admission": receipts, "disposition": disposition, "permit_policy": policy, "permit": permit, "successor_state": successor}
+        result = {"proposal": proposal, "credit": credit, "admission": receipts, "disposition": disposition, "permit_policy": policy, "permit": permit, "successor_state": successor}
+        if atom_v2_commit is not None:
+            result["atom_v2_permit_commit"] = atom_v2_commit
+        return result
     active_store, opposite_store = G1MicroStore(output / "active.sqlite3"), G1MicroStore(output / "fof.sqlite3")
     active = admission("ACTIVE", active_code, outcome, active_store, active_evidence)
     opposite = admission("FORCED_OPPOSITE_FEEDBACK", opposite_code, forced_record, opposite_store, opposite_evidence)
@@ -2955,6 +3113,7 @@ def run_opaque_identifiability_pilot_with_backend(
     output_dir: str | Path, execution_registry_path: str | Path, evaluator_reveal_path: str | Path,
     tokenizer_receipt: Mapping[str, Any] | None = None,
     runtime_binding: Mapping[str, Any] | None = None,
+    permit_commit: atom_v2_permit_bridge.LocalPermitCommitProcess | None = None,
 ) -> dict[str, Any]:
     """One outer no-refill claim for the frozen eight-episode pilot."""
     _validate_protocol(protocol)
@@ -2999,7 +3158,7 @@ def run_opaque_identifiability_pilot_with_backend(
     _atomic_write(registry, canonical_json_bytes(start), create_parent=False)
     try:
         output.mkdir(parents=True)
-        episodes = [_opaque_episode(backend=backend, task=task, output=output / "episodes" / f"{task.ordinal:02d}", protocol_sha256=protocol_sha256) for task in tasks]
+        episodes = [_opaque_episode(backend=backend, task=task, output=output / "episodes" / f"{task.ordinal:02d}", protocol_sha256=protocol_sha256, permit_commit=permit_commit) for task in tasks]
         metrics = _opaque_metrics(episodes)
         _atomic_write(output / "evaluator_reveal.json", reveal_raw)
         unsigned = {
@@ -3112,7 +3271,7 @@ def verify_opaque_identifiability_pilot_bundle(
                     raise G1MicroError("opaque pilot proposal/credit rule does not reconstruct")
                 admission = branch_data.get("admission")
                 if credit["payload"]["decision"] == "NO_CREDIT":
-                    if any(key in branch_data for key in ("disposition", "permit_policy", "permit", "successor_state")) or admission is not None:
+                    if any(key in branch_data for key in ("disposition", "permit_policy", "permit", "successor_state", "atom_v2_permit_commit")) or admission is not None:
                         raise G1MicroError("opaque pilot nonadherent proposal was admitted")
                     continue
                 disposition = _opaque_disposition(task, proposal["payload"]["action_code"], trajectory=trajectory, feedback=feedback, proposal=proposal, credit=credit)
@@ -3130,6 +3289,13 @@ def verify_opaque_identifiability_pilot_bundle(
                 expected_consumption = G1MicroStore._burn_record(permit, terminal="ADMITTED_LOCAL_EXPLORATORY", admission_sha256=expected_admission["record_sha256"])
                 if admission != {"admission": expected_admission, "consumption": expected_consumption}:
                     raise G1MicroError("opaque pilot admission/consumption does not reconstruct")
+                if "atom_v2_permit_commit" in branch_data:
+                    verify_atom_v2_commit_binding(
+                        branch_data["atom_v2_permit_commit"], episode_uid=task.episode_uid, branch=branch,
+                        base_state=make_genesis_state(), successor_state=successor, permit=permit,
+                        permit_policy=policy, proposal=proposal, disposition=disposition,
+                        resulting_state_sha256=expected_admission["payload"]["resulting_state_sha256"],
+                    )
         episode_dir = Path(base_dir) / "episodes" / f"{int(reveal_entry['ordinal']):02d}"
         journal_path = episode_dir / "attempt_ledger.jsonl"
         if not journal_path.is_file() or _journal_manifest(journal_path)["completed_calls"] != 8:
@@ -3337,7 +3503,7 @@ def verify_exploratory_bundle(
         "trajectory",
         "verification_scope",
     }
-    if not isinstance(bundle, Mapping) or set(bundle) != expected_fields:
+    if not isinstance(bundle, Mapping) or set(bundle) - {"atom_v2_permit_commit"} != expected_fields:
         raise G1MicroError("exploratory bundle field set is invalid")
     unsigned = dict(bundle)
     digest = unsigned.pop("bundle_sha256")
@@ -3447,6 +3613,16 @@ def verify_exploratory_bundle(
             != admission["admission"]["record_sha256"]
         ):
             raise G1MicroError("local permit, consumption, and admission do not close")
+        if "atom_v2_permit_commit" in bundle:
+            bindings = bundle["atom_v2_permit_commit"]
+            if not isinstance(bindings, Mapping) or set(bindings) != {"ACTIVE", "OUTCOME_INDEPENDENT_SHAM"}:
+                raise G1MicroError("atom v2 permit commit branch set is invalid")
+            verify_atom_v2_commit_binding(
+                bindings[branch], episode_uid=task.episode_uid, branch=branch,
+                base_state=make_genesis_state(), successor_state=successor, permit=permit,
+                permit_policy=bundle["permit_policy"], proposal=proposal, disposition=disposition,
+                resulting_state_sha256=admission["admission"]["payload"]["resulting_state_sha256"],
+            )
     probes = bundle["probes"]
     if set(probes) != {
         "ACTIVE",

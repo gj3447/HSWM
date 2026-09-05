@@ -1,0 +1,93 @@
+name: Hypergraph projection disposable Neo4j parity
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  disposable-neo4j-readback-rebuild:
+    name: disposable-neo4j-readback-rebuild
+    runs-on: ubuntu-latest
+    services:
+      neo4j:
+        image: neo4j:2026.02.3-community@sha256:09c2b7ce2f7a9b7c230669d7a50c0c8fcd548d1891e701cf11685e7afdebbaf4
+        env:
+          NEO4J_AUTH: neo4j/hswm-ci-projection-2026
+        ports:
+          - 7474:7474
+          - 7687:7687
+        options: >-
+          --health-cmd "cypher-shell -a bolt://localhost:7687 -u neo4j -p hswm-ci-projection-2026 'RETURN 1'"
+          --health-interval 5s --health-timeout 10s --health-retries 24 --health-start-period 20s
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Install the Effect-runtime Node version
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "24.13.0"
+          cache: npm
+          cache-dependency-path: src/hswm/effect-runtime/package-lock.json
+      - name: Install the graph validation Python version
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          python-version: "3.12.13"
+      - name: Wait for the authenticated disposable Neo4j service
+        env:
+          NEO4J_CONTAINER: ${{ job.services.neo4j.id }}
+          NEO4J_PASSWORD: hswm-ci-projection-2026
+        run: |
+          for attempt in $(seq 1 30); do
+            if docker exec "$NEO4J_CONTAINER" cypher-shell -a bolt://localhost:7687 -u neo4j -p "$NEO4J_PASSWORD" 'RETURN 1' >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker logs "$NEO4J_CONTAINER"
+          exit 1
+      - name: Install locked Effect runtime dependencies
+        working-directory: src/hswm/effect-runtime
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Build and check the bounded projection compiler
+        working-directory: src/hswm/effect-runtime
+        run: |
+          npm run check
+          npm run build
+      - name: Run the opt-in live Neo4j integration test
+        working-directory: src/hswm/effect-runtime
+        env:
+          HSWM_NEO4J_INTEGRATION_URI: bolt://localhost:7687
+          HSWM_NEO4J_INTEGRATION_USERNAME: neo4j
+          HSWM_NEO4J_INTEGRATION_PASSWORD: hswm-ci-projection-2026
+          HSWM_NEO4J_INTEGRATION_DATABASE: neo4j
+        run: npx vitest run ../../../tests/effect-runtime/canonical-atom-v2-neo4j-projection.integration.test.ts --maxWorkers=1 --testTimeout=60000
+      - name: Compile, SHACL-validate, apply, read back, and rebuild a bounded rehearsal
+        id: projection
+        working-directory: src/hswm/effect-runtime
+        env:
+          HSWM_NEO4J_PASSWORD: hswm-ci-projection-2026
+        run: |
+          run_root="$(mktemp -d "${RUNNER_TEMP}/hswm-hypergraph-projection.XXXXXX")"
+          config_path="${run_root}/neo4j-source-config.yml"
+          output_path="${run_root}/receipt"
+          cat > "$config_path" <<EOF
+          uri: bolt://localhost:7687
+          user: neo4j
+          password: ${HSWM_NEO4J_PASSWORD}
+          database: neo4j
+          EOF
+          npm run projection:rehearsal -- --out "$output_path" --apply --rebuild --source-config "$config_path"
+          test -s "$output_path/hypergraph-projection.json"
+          test -s "$output_path/projection-receipt.json"
+          echo "receipt=$output_path" >> "$GITHUB_OUTPUT"
+      - name: Retain the synthetic projection receipt and exact graph artifacts
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: hypergraph-projection-receipt
+          path: ${{ steps.projection.outputs.receipt }}
+          if-no-files-found: error

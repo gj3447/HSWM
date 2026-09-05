@@ -6,6 +6,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
+    "hswm-hypergraph-projection": "./dist/hypergraph-projection-process.js",
     "hswm-graph-loop-job": "./dist/canonical-atom-v2-graph-loop-job-process.js",
     "hswm-g0-temporal-rehearsal-worker": "./dist/g0-occurrence-temporal-worker-process.js"
   },
@@ -30,6 +31,7 @@
     "node": "24.13.0"
   },
   "scripts": {
+    "projection:rehearsal": "node dist/hypergraph-projection-process.js --rehearsal",
     "build": "tsc -p tsconfig.build.json && tsc -p tsconfig.temporal-build.json",
     "build:dnrd": "tsc -p tsconfig.dnrd.json",
     "check": "tsc --noEmit && tsc -p tsconfig.temporal.json",
@@ -44,7 +46,8 @@
     "@temporalio/worker": "1.23.0",
     "@temporalio/workflow": "1.23.0",
     "effect": "3.22.1",
-    "jsonld": "9.0.0"
+    "jsonld": "9.0.0",
+    "neo4j-driver": "6.2.0"
   },
   "devDependencies": {
     "@effect/language-service": "0.23.3",

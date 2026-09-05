@@ -1,0 +1,19 @@
+{
+  "schema_version": "hswm-qualified-runtime-source-copy/v1",
+  "source_commit": "9445bc9da30d6dc629860cdea896cd1cc61dd5dd",
+  "purpose": "Preserve exact runtime bytes used by the existing external-suite receipts while the application adds Neo4j; no receipt bytes, results or claim ceilings change.",
+  "files": [
+    {
+      "source": "src/hswm/effect-runtime/package.json",
+      "copy": "package.json",
+      "sha256": "cf6e3cfa244bef2ad029b06e8a0e96c8f84861b9a4fe6a883f03acf215d9a2ba"
+    },
+    {
+      "source": "src/hswm/effect-runtime/package-lock.json",
+      "copy": "package-lock.json",
+      "sha256": "be5432a1726a867c1850eb7359e6c9ef89e68d247423a55f055b930187e948e8"
+    }
+  ],
+  "authority": "EXACT_SOURCE_COPY_NOT_NEW_RUNTIME_QUALIFICATION",
+  "license": "Original package license metadata retained in package-lock.json"
+}

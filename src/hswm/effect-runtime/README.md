@@ -492,3 +492,11 @@ Run the exact local verification surface with:
 npm ci --ignore-scripts --no-audit --no-fund
 npm run verify
 ```
+# Hypergraph projection
+
+The bounded [Hypergraph Projection Contract v1](../../../docs/operations/HSWM_HYPERGRAPH_PROJECTION_CONTRACT_2026-09-05.md)
+connects Atom v2/RDF to a scoped Neo4j read model with role-preserving participation,
+exact readback and explicit losses. After `npm run build`, run
+`npm run projection:rehearsal -- --out /tmp/hswm-projection-local` for a local
+SHACL-validated package. Database publication requires explicit `--apply` and a
+private `--source-config`. This is an engineering projection, not G0 or learning.

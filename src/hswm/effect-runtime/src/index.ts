@@ -633,3 +633,6 @@ export {
   makeInMemoryRuntimeLayer,
   type CommitRecord
 } from "./runtime.js"
+export * from "./canonical-atom-v2-hypergraph-projection.js"
+export * from "./canonical-atom-v2-neo4j-projection.js"
+export * from "./hypergraph-projection-receipt.js"

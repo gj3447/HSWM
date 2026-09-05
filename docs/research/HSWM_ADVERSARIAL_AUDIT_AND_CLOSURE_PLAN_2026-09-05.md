@@ -2,7 +2,7 @@
 
 > **Date:** `2026-09-05`
 >
-> **Status:** `ADVERSARIAL_AUDIT_VERIFIED / CLOSURE_PLAN_PROPOSED / USER_PRIMARY_PENDING / G0_NOT_PASSED / G1_LOCKED`
+> **Status:** `ADVERSARIAL_AUDIT_VERIFIED / CLOSURE_PLAN / D1_D4_USER_RATIFIED / D2_D3_PROPOSED / G0_NOT_PASSED / G1_LOCKED`
 >
 > **Scientific status:** `UNJUDGED / INTEGRATED_CLAIM_UNJUDGED`
 >
@@ -12,8 +12,15 @@
 > [`adaptive research strategy`](../canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)
 >
 > **Machine projection:**
-> [`HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json`](../../ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json)
-> (bundle UID `sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05`)
+> [`HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json`](../../ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json)
+> (bundle UID `sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v2`; the
+> pre-ratification snapshot
+> [`v1`](../../ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json)
+> was published to the live KG first and is retained unchanged)
+>
+> **USER_PRIMARY source:**
+> [`USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt`](../canon/sources/USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt)
+> (SHA-256 `10eabb6b4b1c7d05ac2376572c635b98c71269cf76c4e1c0e1c663bb6fd32246`)
 >
 > **Bound evidence:**
 > [`HSWM_ADVERSARIAL_AUDIT_FINDINGS_2026-09-05.json`](../../_research/causal_composition/audits/HSWM_ADVERSARIAL_AUDIT_FINDINGS_2026-09-05.json)
@@ -169,6 +176,15 @@ uv run python scripts/check_hswm_closure_burden_cap.py
 
 제2자 recruiting은 D-4와 함께 답해야 한다. 날짜를 적거나 "G0-external은 recruit 전까지
 미개시"를 한 줄로 적는다.
+
+### 7.1 2026-09-05 ratification record
+
+사용자는 2026-09-05에 "그 D1 D4 확정할게"라고 답했고, 그 원문은 위 USER_PRIMARY source에
+그대로 보존됐다. 따라서 **D-1과 D-4는 RATIFIED**이며, 문장은 제안문 그대로다. **D-2와 D-3는
+이름이 불리지 않아 PROPOSED로 남는다.** "D1 D4"가 D-1부터 D-4까지의 범위였는지는 사용자에게
+확인해야 하며, 확인 전에는 확정으로 기록하지 않는다. 제2자 recruiting 날짜는 답해지지 않아
+GAP-1은 열려 있고 G0-external은 미개시다. 같은 발화의 운영 지시(라이브 KG 게시, 작업마다 커밋)는
+과학적 판정이 아니다. D-2가 확정되지 않았으므로 `AGENTS.md` 33-34행은 수정하지 않았다.
 
 ## 8. Build, validate, and publish
 

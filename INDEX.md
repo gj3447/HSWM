@@ -42,8 +42,11 @@ HSWM이 완성되지 않는 이유를 기술 블로커가 아니라 자기부과
 1비트 학습 루프의 결합으로 판정했다. 문서는 열린 간극 7개, 순서 있는 폐쇄 단계 6개, 정지 규칙
 5개, 숫자 있는 burden cap과 사용자 결정 요청 4개(D-1 G0 분할, D-2 never-weaken 한정, D-3 G1
 estimand 결속, D-4 유한 완료 상태)를 담는다. 기계 투영은
-[`closure plan ontology v1`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json)이며
-결정 노드는 사용자 원문이 결속되기 전까지 `PROPOSED`다. 이 문서와 번들은 v3 결과 전까지 G0
+[`closure plan ontology v2`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json)이며,
+같은 날 사용자 원문
+[`USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt`](docs/canon/sources/USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt)로
+D-1과 D-4는 `RATIFIED`, D-2와 D-3는 `PROPOSED`다. 확정 전 스냅샷 v1은 라이브 KG에 먼저 게시됐고
+바이트 그대로 보존된다. 이 문서와 번들은 v3 결과 전까지 G0
 상태를 다시 진술하는 새 boundary 문서를 대체한다. G0는 계속 `NOT_PASSED`, G1은 `LOCKED`다.
 
 2026-09-02 현재 증명·근거·간극의 answer-first 상태는

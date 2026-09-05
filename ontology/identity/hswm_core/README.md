@@ -68,15 +68,18 @@ control, material result, HSWM cognition, causal learning, or efficacy.
 
 ## Current closure-plan projection
 
-[`HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json`](HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json)
-(bundle UID `sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05`) is the
+[`HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json`](HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json)
+(bundle UID `sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v2`) is the
 bounded projection of the 2026-09-05 adversarial programme audit and its
 closure plan. It carries 14 verified audit findings as Claim nodes with one
-current verification Decision each, 7 open Gaps, 4 USER_PRIMARY decision
-requests that stay `PROPOSED` until the user's own words are hash-bound as a
-canon source, 2 proposed G0 sub-gates, 1 finite v1 done-state, 6 ordered
-closure steps with run-by dates and stop rules, 5 stop rules, and 1 numeric
-burden cap. It anchors read-only to the existing G0/G1 gates, the PS-5/PS-6
+current verification Decision each, 7 open Gaps, 4 USER_PRIMARY decisions of
+which D-1 and D-4 are `RATIFIED` by the hash-bound user source
+[`USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt`](../../../docs/canon/sources/USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt)
+while D-2 and D-3 stay `PROPOSED`, 2 G0 sub-gates, 1 finite v1 done-state,
+6 ordered closure steps with run-by dates and stop rules, 5 stop rules, and
+1 numeric burden cap. The pre-ratification snapshot
+[`v1`](HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json) was published to the live KG first
+and is retained unchanged; `v2` supersedes it as a non-overwriting follow-up. It anchors read-only to the existing G0/G1 gates, the PS-5/PS-6
 proof-status claims, the RG-4/RG-6 guardrails, and the causal-composition,
 adaptive-strategy, and graph-and-loop programs. Its human record is
 [`HSWM_ADVERSARIAL_AUDIT_AND_CLOSURE_PLAN_2026-09-05.md`](../../../docs/research/HSWM_ADVERSARIAL_AUDIT_AND_CLOSURE_PLAN_2026-09-05.md)
@@ -109,9 +112,9 @@ uv run --project _research/graph_standards/runtime --locked --extra graph \
   pytest -q tests/test_kg_bundle_graph_view.py
 ```
 
-A new version of this bundle is produced only at USER_PRIMARY ratification and
-at the v3 result receipt, never for routine status edits; it replaces further
-G0 boundary documents until then. KG presence is publication of a `PROPOSED`
+A new version of this bundle is produced only at a USER_PRIMARY ratification
+event and at the v3 result receipt, never for routine status edits; it replaces
+further G0 boundary documents until then. KG presence is publication of a `PROPOSED`
 governance plan, not a user ratification, gate pass, HSWM cognition, causal
 learning, or efficacy result.
 

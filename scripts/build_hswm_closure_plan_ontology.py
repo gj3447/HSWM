@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the bounded HSWM closure-plan KG projection.
+"""Build the bounded HSWM closure-plan KG projection (event version v2).
 
 The projection records one adversarial programme audit (14 verified findings),
 the open closure gaps, four USER_PRIMARY decisions that are only PROPOSED until
@@ -22,24 +22,30 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ONTOLOGY_PATH = Path("ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json")
+ONTOLOGY_PATH = Path("ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json")
 CLOSURE_DOC_PATH = Path(
     "docs/research/HSWM_ADVERSARIAL_AUDIT_AND_CLOSURE_PLAN_2026-09-05.md"
 )
 FINDINGS_PATH = Path(
     "_research/causal_composition/audits/HSWM_ADVERSARIAL_AUDIT_FINDINGS_2026-09-05.json"
 )
-# Set at USER_PRIMARY ratification (event version v2); never before.
-RATIFICATION_SOURCE_PATH: Path | None = None
+# Event version v2: the user's verbatim ratification of D-1 and D-4.
+RATIFICATION_SOURCE_PATH: Path | None = Path(
+    "docs/canon/sources/USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt"
+)
+RATIFIED_DECISIONS: tuple[str, ...] = ("D-1", "D-4")
+RATIFIED_ON = "2026-09-05"
 SOURCE_BINDING_PATHS: tuple[Path, ...] = tuple(
     path for path in (CLOSURE_DOC_PATH, FINDINGS_PATH, RATIFICATION_SOURCE_PATH) if path
 )
 
-SCHEMA_VERSION = "hswm-closure-plan-ontology/v1"
+SCHEMA_VERSION = "hswm-closure-plan-ontology/v2"
 RELEASE = "2026-09-05"
+TAG = "2026-09-05-v2"
+PREDECESSOR_TAG = "2026-09-05"
 AUDITED_COMMIT = "4dcba752a661de23066b3b33381bfdfc34879a57"
 STATUS = (
-    "ADVERSARIAL_AUDIT_VERIFIED_CLOSURE_PLAN_PROPOSED_USER_PRIMARY_PENDING_"
+    "ADVERSARIAL_AUDIT_VERIFIED_CLOSURE_PLAN_D1_D4_USER_RATIFIED_D2_D3_PROPOSED_"
     "G0_NOT_PASSED_G1_LOCKED"
 )
 NONCLAIM = (
@@ -49,13 +55,16 @@ NONCLAIM = (
 PROPOSED = "PROPOSED_AWAITING_USER_PRIMARY"
 AUDIT_CEILING = "SELF_ATTESTED_AI_ADVERSARIAL_AUDIT_NOT_INDEPENDENTLY_QUALIFIED"
 
-BUNDLE_UID = f"sym:AbstractNode:hswm-closure-plan-ontology-{RELEASE}"
-PROGRAM_UID = f"sym:ResearchProgram:hswm-closure-plan-{RELEASE}"
-AUDIT_RUN_UID = f"sym:AbstractNode:hswm-closure-audit-run-{RELEASE}"
-CLOSURE_DOC_UID = f"sym:AbstractNode:hswm-closure-source-audit-and-closure-plan-doc-{RELEASE}"
-FINDINGS_UID = f"sym:AbstractNode:hswm-closure-source-audit-findings-json-{RELEASE}"
-DONE_STATE_UID = f"sym:Concept:hswm-closure-v1-done-state-{RELEASE}"
-BURDEN_CAP_UID = f"sym:Concept:hswm-closure-burden-cap-{RELEASE}"
+BUNDLE_UID = f"sym:AbstractNode:hswm-closure-plan-ontology-{TAG}"
+PROGRAM_UID = f"sym:ResearchProgram:hswm-closure-plan-{TAG}"
+AUDIT_RUN_UID = f"sym:AbstractNode:hswm-closure-audit-run-{TAG}"
+CLOSURE_DOC_UID = f"sym:AbstractNode:hswm-closure-source-audit-and-closure-plan-doc-{TAG}"
+FINDINGS_UID = f"sym:AbstractNode:hswm-closure-source-audit-findings-json-{TAG}"
+DONE_STATE_UID = f"sym:Concept:hswm-closure-v1-done-state-{TAG}"
+BURDEN_CAP_UID = f"sym:Concept:hswm-closure-burden-cap-{TAG}"
+RATIFICATION_SOURCE_UID = f"sym:AbstractNode:hswm-closure-source-user-primary-closure-decisions-{TAG}"
+PREDECESSOR_BUNDLE_UID = f"sym:AbstractNode:hswm-closure-plan-ontology-{PREDECESSOR_TAG}"
+PREDECESSOR_PROGRAM_UID = f"sym:ResearchProgram:hswm-closure-plan-{PREDECESSOR_TAG}"
 
 # Anchors: MATCH-only nodes that already exist in the live KG.  Names are
 # copied from the live readback of 2026-09-05 and are asserted at publish time.
@@ -109,6 +118,16 @@ ANCHORS: list[dict[str, Any]] = [
     {
         "uid": GRAPH_LOOP_PROGRAM_UID,
         "name": "HSWM graph and loop engineering reinforcement program [2026-09-02-v6]",
+        "required_labels": ["Concept", "ResearchProgram", "ResearchArtifact"],
+    },
+    {
+        "uid": PREDECESSOR_BUNDLE_UID,
+        "name": f"HSWM closure plan ontology [{PREDECESSOR_TAG}]",
+        "required_labels": ["AbstractNode", "ResearchArtifact"],
+    },
+    {
+        "uid": PREDECESSOR_PROGRAM_UID,
+        "name": f"HSWM closure plan [{PREDECESSOR_TAG}]",
         "required_labels": ["Concept", "ResearchProgram", "ResearchArtifact"],
     },
 ]
@@ -565,31 +584,31 @@ def _relation(
 
 
 def finding_uid(key: str) -> str:
-    return f"sym:Concept:hswm-closure-finding-{key}-{RELEASE}"
+    return f"sym:Concept:hswm-closure-finding-{key}-{TAG}"
 
 
 def decision_uid(key: str) -> str:
-    return f"sym:Concept:hswm-closure-finding-decision-{key}-{RELEASE}"
+    return f"sym:Concept:hswm-closure-finding-decision-{key}-{TAG}"
 
 
 def gap_uid(gap_id: str) -> str:
-    return f"sym:Hypothesis:hswm-closure-gap-{gap_id.lower()}-{RELEASE}"
+    return f"sym:Hypothesis:hswm-closure-gap-{gap_id.lower()}-{TAG}"
 
 
 def user_decision_uid(decision_id: str) -> str:
-    return f"sym:Concept:hswm-closure-user-decision-{decision_id.lower()}-{RELEASE}"
+    return f"sym:Concept:hswm-closure-user-decision-{decision_id.lower()}-{TAG}"
 
 
 def subgate_uid(gate_id: str) -> str:
-    return f"sym:Hypothesis:hswm-closure-subgate-{gate_id.lower()}-{RELEASE}"
+    return f"sym:Hypothesis:hswm-closure-subgate-{gate_id.lower()}-{TAG}"
 
 
 def step_uid(step_id: str) -> str:
-    return f"sym:Concept:hswm-closure-step-{step_id.lower()}-{RELEASE}"
+    return f"sym:Concept:hswm-closure-step-{step_id.lower()}-{TAG}"
 
 
 def stop_rule_uid(rule_id: str) -> str:
-    return f"sym:Concept:hswm-closure-stop-rule-{rule_id.lower()}-{RELEASE}"
+    return f"sym:Concept:hswm-closure-stop-rule-{rule_id.lower()}-{TAG}"
 
 
 def load_findings() -> list[dict[str, Any]]:
@@ -621,9 +640,26 @@ def build_data() -> dict[str, Any]:
     ]
     doc_sha = _file_sha(CLOSURE_DOC_PATH)
     findings_sha = _file_sha(FINDINGS_PATH)
-    ratified = RATIFICATION_SOURCE_PATH is not None
-    ratification_path = RATIFICATION_SOURCE_PATH.as_posix() if ratified else ""
-    ratification_sha = _file_sha(RATIFICATION_SOURCE_PATH) if ratified else ""
+    if RATIFICATION_SOURCE_PATH is None:
+        raise ValueError("event version v2 requires the bound ratification source")
+    ratification_path = RATIFICATION_SOURCE_PATH.as_posix()
+    ratification_sha = _file_sha(RATIFICATION_SOURCE_PATH)
+
+    def is_ratified(decision_id: str) -> bool:
+        return decision_id in RATIFIED_DECISIONS
+
+    def decision_status(decision_id: str) -> str:
+        return "USER_RATIFIED" if is_ratified(decision_id) else PROPOSED
+
+    def dependency_status(decision_id: str) -> str:
+        return "SATISFIED" if is_ratified(decision_id) else "PENDING"
+
+    def prospective_state(decision_id: str) -> str:
+        return (
+            "USER_RATIFIED_PROSPECTIVE_SCIENTIFICALLY_UNJUDGED"
+            if is_ratified(decision_id)
+            else PROPOSED
+        )
 
     nodes: list[dict[str, Any]] = []
     relations: list[dict[str, str]] = []
@@ -639,7 +675,7 @@ def build_data() -> dict[str, Any]:
             ["AbstractNode", "ResearchArtifact"],
             {
                 **_common(
-                    name=f"HSWM closure plan ontology [{RELEASE}]",
+                    name=f"HSWM closure plan ontology [{TAG}]",
                     description=(
                         "Bounded KG projection of one adversarial programme audit, its "
                         "open closure gaps, four proposed USER_PRIMARY decisions, two "
@@ -666,6 +702,8 @@ def build_data() -> dict[str, Any]:
                 ),
                 "ratification_source_path": ratification_path,
                 "ratification_source_sha256": ratification_sha,
+                "ratified_decision_ids": list(RATIFIED_DECISIONS),
+                "predecessor_bundle_uid": PREDECESSOR_BUNDLE_UID,
             },
         )
     )
@@ -675,7 +713,7 @@ def build_data() -> dict[str, Any]:
             ["Concept", "ResearchProgram", "ResearchArtifact"],
             {
                 **_common(
-                    name=f"HSWM closure plan [{RELEASE}]",
+                    name=f"HSWM closure plan [{TAG}]",
                     description=(
                         "Ordered six-step programme whose only goal is one checked-in "
                         "run of outcome to credit to durable canonical revision to "
@@ -706,7 +744,7 @@ def build_data() -> dict[str, Any]:
             ["AbstractNode", "ResearchArtifact"],
             {
                 **_common(
-                    name=f"Adversarial programme audit run [{RELEASE}]",
+                    name=f"Adversarial programme audit run [{TAG}]",
                     description=(
                         "Eight adversarial finder lenses, one merge, two independent "
                         "refuters per finding, one synthesis; 38 AI agents; 24 raw "
@@ -738,6 +776,37 @@ def build_data() -> dict[str, Any]:
                 "qualification_status": "NOT_INDEPENDENTLY_QUALIFIED",
                 "raw_log_status": "FINDINGS_AND_VOTES_PERSISTED_IN_BOUND_JSON",
                 "standard_graph_role": "QUALIFICATION_RUN",
+            },
+        )
+    )
+    own(
+        _node(
+            RATIFICATION_SOURCE_UID,
+            ["AbstractNode", "SourceDocument", "UserCanonicalUtterance"],
+            {
+                **_common(
+                    name=f"Exact USER_PRIMARY closure-decision source [{TAG}]",
+                    description=(
+                        "Verbatim user utterance of 2026-09-05 naming D-1 and D-4 as "
+                        "ratified, ordering live KG publication and per-step commits; "
+                        "D-2 and D-3 are not named and remain PROPOSED."
+                    ),
+                    authority="USER_PRIMARY",
+                    scope="EXACT_USER_SOURCE",
+                    kind="ARTIFACT",
+                    plane="EVIDENCE",
+                    state="SOURCE_BOUND",
+                    owner="closure_plan_source_custodian",
+                    roles=["EXACT_USER_SOURCE", "LOCAL_SOURCE_RECORD"],
+                    boundary=(
+                        "The user's words ratify governance decisions; they are not "
+                        "scientific evidence, a gate pass, or HSWM efficacy."
+                    ),
+                ),
+                "source_path": ratification_path,
+                "source_sha256": ratification_sha,
+                "ratified_decision_ids": list(RATIFIED_DECISIONS),
+                "standard_graph_role": "EVIDENCE_ARTIFACT",
             },
         )
     )
@@ -796,7 +865,7 @@ def build_data() -> dict[str, Any]:
                 ["Concept", "Hypothesis"],
                 {
                     **_common(
-                        name=f"{finding['title']} [{RELEASE}]",
+                        name=f"{finding['title']} [{TAG}]",
                         description=_clip(finding["claim"]),
                         authority="SECONDARY_AI_AUDIT_CLAIM",
                         scope=f"PROGRAMME_STATE_AT_{AUDITED_COMMIT[:7]}",
@@ -836,7 +905,7 @@ def build_data() -> dict[str, Any]:
                 ["Concept", "Guardrail"],
                 {
                     **_common(
-                        name=f"Verification decision for {key} [{RELEASE}]",
+                        name=f"Verification decision for {key} [{TAG}]",
                         description=_clip(
                             "; ".join(
                                 f"{vote['refuter']}: refuted={str(vote['refuted']).lower()} "
@@ -895,7 +964,7 @@ def build_data() -> dict[str, Any]:
                 ["Concept", "Hypothesis"],
                 {
                     **_common(
-                        name=f"{gap_id} — {name} [{RELEASE}]",
+                        name=f"{gap_id} — {name} [{TAG}]",
                         description=description,
                         authority="SECONDARY_AI",
                         scope="OPEN_CLOSURE_GAP",
@@ -920,13 +989,13 @@ def build_data() -> dict[str, Any]:
                 ["Concept", "Guardrail"],
                 {
                     **_common(
-                        name=f"{spec['name']} [{RELEASE}]",
+                        name=f"{spec['name']} [{TAG}]",
                         description=spec["proposed_text"],
-                        authority="SECONDARY_AI_PROPOSAL_FOR_USER_PRIMARY",
-                        scope="USER_PRIMARY_DECISION_REQUEST",
+                        authority="USER_PRIMARY" if is_ratified(decision_id) else "SECONDARY_AI_PROPOSAL_FOR_USER_PRIMARY",
+                        scope="USER_PRIMARY_DECISION" if is_ratified(decision_id) else "USER_PRIMARY_DECISION_REQUEST",
                         kind="DECISION",
                         plane="MODEL",
-                        state="RATIFIED" if ratified else PROPOSED,
+                        state="USER_RATIFIED_DIRECTION_SCIENTIFICALLY_UNJUDGED" if is_ratified(decision_id) else PROPOSED,
                         owner="hswm_target_direction_custodian",
                         roles=["USER_PRIMARY_DECISION", "CLOSURE_PLAN"],
                         boundary=(
@@ -938,13 +1007,16 @@ def build_data() -> dict[str, Any]:
                     "proposed_text": spec["proposed_text"],
                     "affects": spec["affects"],
                     "options": ["RATIFY", "MODIFY", "REJECT"],
-                    "ratification_status": "RATIFIED" if ratified else "PROPOSED",
-                    "ratification_source_path": ratification_path,
-                    "ratification_source_sha256": ratification_sha,
+                    "ratification_status": "RATIFIED" if is_ratified(decision_id) else "PROPOSED",
+                    "ratification_source_path": ratification_path if is_ratified(decision_id) else "",
+                    "ratification_source_sha256": ratification_sha if is_ratified(decision_id) else "",
+                    "ratified_on": RATIFIED_ON if is_ratified(decision_id) else "",
                     "plan_graph_role": "USER_PRIMARY_DECISION",
                 },
             )
         )
+        if is_ratified(decision_id):
+            relations.append(_relation(user_decision_uid(decision_id), "HAS_SOURCE", RATIFICATION_SOURCE_UID, "USER_RATIFICATION", "BOUND", "USER_PRIMARY"))
 
     for gate_id, spec in SUBGATES.items():
         relation_type, relation_scope = spec["relation"]
@@ -954,13 +1026,13 @@ def build_data() -> dict[str, Any]:
                 ["Concept", "Hypothesis", "Guardrail"],
                 {
                     **_common(
-                        name=f"{spec['name']} [{RELEASE}]",
+                        name=f"{spec['name']} [{TAG}]",
                         description=spec["description"],
                         authority="SECONDARY_AI_PROPOSAL_FOR_USER_PRIMARY",
                         scope="PROSPECTIVE_G0_SUBGATE",
                         kind="GATE",
                         plane="INQUIRY",
-                        state=PROPOSED,
+                        state=prospective_state("D-1"),
                         owner="closure_subgate_custodian",
                         roles=["PROSPECTIVE_GATE", "G0_SPLIT"],
                         boundary="A sub-gate is a measurement-validity prerequisite, not an efficacy result.",
@@ -972,10 +1044,10 @@ def build_data() -> dict[str, Any]:
                 },
             )
         )
-        relations.append(_relation(subgate_uid(gate_id), relation_type, G0_UID, relation_scope, PROPOSED))
-        relations.append(_relation(subgate_uid(gate_id), "DEPENDS_ON", user_decision_uid("D-1"), "RATIFICATION_PREREQUISITE", "PENDING"))
-        relations.append(_relation(user_decision_uid("D-1"), "PROPOSES", subgate_uid(gate_id), "G0_SPLIT_PROPOSAL", PROPOSED))
-        relations.append(_relation(PROGRAM_UID, "TESTS", subgate_uid(gate_id), "PROSPECTIVE_SUBGATE", PROPOSED))
+        relations.append(_relation(subgate_uid(gate_id), relation_type, G0_UID, relation_scope, decision_status("D-1")))
+        relations.append(_relation(subgate_uid(gate_id), "DEPENDS_ON", user_decision_uid("D-1"), "RATIFICATION_PREREQUISITE", dependency_status("D-1")))
+        relations.append(_relation(user_decision_uid("D-1"), "PROPOSES", subgate_uid(gate_id), "G0_SPLIT", decision_status("D-1")))
+        relations.append(_relation(PROGRAM_UID, "TESTS", subgate_uid(gate_id), "PROSPECTIVE_SUBGATE", decision_status("D-1")))
 
     own(
         _node(
@@ -983,13 +1055,13 @@ def build_data() -> dict[str, Any]:
             ["Concept", "Guardrail"],
             {
                 **_common(
-                    name=f"HSWM v1 done-state [{RELEASE}]",
+                    name=f"HSWM v1 done-state [{TAG}]",
                     description=DONE_STATE["statement"],
                     authority="SECONDARY_AI_PROPOSAL_FOR_USER_PRIMARY",
                     scope="FINITE_V1_TERMINAL_STATE",
                     kind="MILESTONE",
                     plane="INQUIRY",
-                    state=PROPOSED,
+                    state=prospective_state("D-4"),
                     owner="closure_done_state_custodian",
                     roles=["DONE_STATE", "CLOSURE_PLAN"],
                     boundary="Reaching the done-state yields a candidate claim under one declared task; it is not integrated HSWM or fractal evidence.",
@@ -1001,8 +1073,8 @@ def build_data() -> dict[str, Any]:
             },
         )
     )
-    relations.append(_relation(user_decision_uid("D-4"), "PROPOSES", DONE_STATE_UID, "DONE_STATE_PROPOSAL", PROPOSED))
-    relations.append(_relation(PROGRAM_UID, "TARGETS", DONE_STATE_UID, "V1_DONE_STATE", PROPOSED))
+    relations.append(_relation(user_decision_uid("D-4"), "PROPOSES", DONE_STATE_UID, "DONE_STATE", decision_status("D-4")))
+    relations.append(_relation(PROGRAM_UID, "TARGETS", DONE_STATE_UID, "V1_DONE_STATE", decision_status("D-4")))
 
     for index, step_id in enumerate(STEP_ORDER, start=1):
         spec = STEPS[step_id]
@@ -1013,7 +1085,7 @@ def build_data() -> dict[str, Any]:
                 ["Concept"],
                 {
                     **_common(
-                        name=f"{spec['name']} [{RELEASE}]",
+                        name=f"{spec['name']} [{TAG}]",
                         description=_clip("; ".join(spec["deliverables"])),
                         authority="SECONDARY_AI_PROPOSAL_FOR_USER_PRIMARY",
                         scope="ORDERED_CLOSURE_STEP",
@@ -1034,7 +1106,7 @@ def build_data() -> dict[str, Any]:
                     "verification_commands": list(spec["verification"]),
                     "stop_rule": spec["stop_rule"],
                     "completion_evidence_path_pattern": spec["completion_evidence"],
-                    "closure_status": "PLANNED",
+                    "closure_status": "IN_PROGRESS" if step_id in {"S-1", "S-6"} else "PLANNED",
                     "plan_graph_role": "CLOSURE_STEP",
                 },
             )
@@ -1044,7 +1116,7 @@ def build_data() -> dict[str, Any]:
         for key in spec["findings"]:
             relations.append(_relation(s_uid, "ADDRESSES", finding_uid(key), "FINDING_RESPONSE", "PLANNED"))
         for decision_id in spec["decisions"]:
-            relations.append(_relation(s_uid, "DEPENDS_ON", user_decision_uid(decision_id), "RATIFICATION_PREREQUISITE", "PENDING"))
+            relations.append(_relation(s_uid, "DEPENDS_ON", user_decision_uid(decision_id), "RATIFICATION_PREREQUISITE", dependency_status(decision_id)))
     for before, after in STEP_PRECEDENCE:
         relations.append(_relation(step_uid(before), "PRECEDES", step_uid(after), "CLOSURE_ORDER", "PLANNED"))
     relations.append(_relation(step_uid("S-3"), "TARGETS", DONE_STATE_UID, "DONE_STATE_ATTEMPT", "PLANNED"))
@@ -1058,7 +1130,7 @@ def build_data() -> dict[str, Any]:
                 ["Concept", "Guardrail"],
                 {
                     **_common(
-                        name=f"{spec['name']} [{RELEASE}]",
+                        name=f"{spec['name']} [{TAG}]",
                         description=spec["description"],
                         authority="SECONDARY_AI_PROPOSAL_FOR_USER_PRIMARY",
                         scope="CLOSURE_DISCIPLINE",
@@ -1090,7 +1162,7 @@ def build_data() -> dict[str, Any]:
             ["Concept", "Guardrail"],
             {
                 **_common(
-                    name=f"HSWM closure burden cap [{RELEASE}]",
+                    name=f"HSWM closure burden cap [{TAG}]",
                     description=(
                         "At least half of the next one hundred commits after the audited "
                         "commit must touch a core closure path; the v3 occurrence must run "
@@ -1101,7 +1173,7 @@ def build_data() -> dict[str, Any]:
                     scope="NUMERIC_BURDEN_DISCIPLINE",
                     kind="GUARDRAIL",
                     plane="MODEL",
-                    state=PROPOSED,
+                    state=prospective_state("D-4"),
                     owner="closure_burden_cap_custodian",
                     roles=["BURDEN_CAP", "CLOSURE_PLAN"],
                     boundary="The cap bounds effort allocation; it is not a research result and does not lower any success criterion.",
@@ -1111,17 +1183,19 @@ def build_data() -> dict[str, Any]:
             },
         )
     )
-    relations.append(_relation(BURDEN_CAP_UID, "CONSTRAINS", PROGRAM_UID, "BURDEN_DISCIPLINE", PROPOSED))
-    relations.append(_relation(BURDEN_CAP_UID, "DEPENDS_ON", user_decision_uid("D-4"), "RATIFICATION_PREREQUISITE", "PENDING"))
-    relations.append(_relation(user_decision_uid("D-4"), "PROPOSES", BURDEN_CAP_UID, "BURDEN_CAP_PROPOSAL", PROPOSED))
-    relations.append(_relation(user_decision_uid("D-4"), "NARROWS", RG6_UID, "BURDEN_DISCIPLINE_NUMBERS_PROPOSAL", PROPOSED))
-    relations.append(_relation(user_decision_uid("D-2"), "NARROWS", RG4_UID, "NEVER_WEAKEN_NARROWING_PROPOSAL", PROPOSED))
-    relations.append(_relation(user_decision_uid("D-3"), "CONSTRAINS", G1_UID, "ESTIMAND_BINDING_PROPOSAL", PROPOSED))
+    relations.append(_relation(BURDEN_CAP_UID, "CONSTRAINS", PROGRAM_UID, "BURDEN_DISCIPLINE", decision_status("D-4")))
+    relations.append(_relation(BURDEN_CAP_UID, "DEPENDS_ON", user_decision_uid("D-4"), "RATIFICATION_PREREQUISITE", dependency_status("D-4")))
+    relations.append(_relation(user_decision_uid("D-4"), "PROPOSES", BURDEN_CAP_UID, "BURDEN_CAP", decision_status("D-4")))
+    relations.append(_relation(user_decision_uid("D-4"), "NARROWS", RG6_UID, "BURDEN_DISCIPLINE_NUMBERS", decision_status("D-4")))
+    relations.append(_relation(user_decision_uid("D-2"), "NARROWS", RG4_UID, "NEVER_WEAKEN_NARROWING_PROPOSAL", decision_status("D-2")))
+    relations.append(_relation(user_decision_uid("D-3"), "CONSTRAINS", G1_UID, "ESTIMAND_BINDING_PROPOSAL", decision_status("D-3")))
+    relations.append(_relation(BUNDLE_UID, "SUPERSEDES_AS_FOLLOWUP", PREDECESSOR_BUNDLE_UID, "NON_OVERWRITING_STATUS_FOLLOWUP_WITHOUT_SCIENTIFIC_PROMOTION", "ACTIVE", "SYSTEM_DERIVED"))
+    relations.append(_relation(PROGRAM_UID, "SUPERSEDES_AS_FOLLOWUP", PREDECESSOR_PROGRAM_UID, "NON_OVERWRITING_STATUS_FOLLOWUP_WITHOUT_SCIENTIFIC_PROMOTION", "ACTIVE"))
 
     for uid in owned_uids:
         if uid == BUNDLE_UID:
             continue
-        if uid in {CLOSURE_DOC_UID, FINDINGS_UID}:
+        if uid in {CLOSURE_DOC_UID, FINDINGS_UID, RATIFICATION_SOURCE_UID}:
             relations.append(_relation(BUNDLE_UID, "HAS_SOURCE", uid, "SOURCE_PROVENANCE", "BOUND", "SYSTEM_DERIVED"))
         else:
             relations.append(_relation(BUNDLE_UID, "HAS_CONCEPT", uid, "BOUNDED_PROJECTION_MEMBERSHIP", "ACTIVE", "SYSTEM_DERIVED"))
@@ -1139,9 +1213,9 @@ def build_data() -> dict[str, Any]:
         "nonclaim": NONCLAIM,
         "authority_boundary": (
             "The audit findings, gaps, plan, stop rules, and burden cap are SECONDARY_AI "
-            "proposals. The four decision nodes become USER_PRIMARY only when the user's "
-            "own words are hash-bound as a canon source; until then every decision is "
-            "PROPOSED. Nothing here passes G0 or G1 or promotes any scientific claim."
+            "formalizations. D-1 and D-4 are USER_PRIMARY because the user's own words are "
+            "hash-bound as a canon source; D-2 and D-3 remain PROPOSED until named. Nothing "
+            "here passes G0 or G1 or promotes any scientific claim."
         ),
         "source_accessed_on": RELEASE,
         "artifact_bindings": bindings,
@@ -1160,6 +1234,7 @@ def build_data() -> dict[str, Any]:
             "done_states": 1,
             "audit_runs": 1,
             "source_records": len(bindings),
+            "ratified_decisions": len(RATIFIED_DECISIONS),
         },
         "anchors": ANCHORS,
         "nodes": nodes,
@@ -1254,6 +1329,13 @@ def validate_data(data: dict[str, Any]) -> None:
         raise ValueError("user decision counts drifted")
     if plan_roles["STOP_RULE"] != counts["stop_rules"] or plan_roles["PROSPECTIVE_SUBGATE"] != counts["g0_subgates"]:
         raise ValueError("stop rule or subgate counts drifted")
+    ratified = [
+        row for row in nodes
+        if row["properties"].get("plan_graph_role") == "USER_PRIMARY_DECISION"
+        and row["properties"]["ratification_status"] == "RATIFIED"
+    ]
+    if len(ratified) != counts["ratified_decisions"]:
+        raise ValueError("ratified decision counts drifted")
 
 
 def encoded_data(data: dict[str, Any]) -> bytes:

@@ -23,23 +23,24 @@ from scripts.upsert_hswm_graph_and_loop_engineering import publish, read_flat_ya
 ROOT = Path(__file__).resolve().parents[1]
 ONTOLOGY_PATH = ROOT / builder.ONTOLOGY_PATH
 EXPECTED_COUNTS = {
-    "nodes": 59,
-    "anchors": 10,
-    "relations": 240,
-    "findings": 14,
-    "finding_decisions": 14,
-    "gaps": 7,
-    "user_primary_decisions": 4,
-    "g0_subgates": 2,
-    "closure_steps": 6,
-    "stop_rules": 5,
-    "burden_caps": 1,
-    "done_states": 1,
+    "anchors": 12,
     "audit_runs": 1,
-    "source_records": 2,
+    "burden_caps": 1,
+    "closure_steps": 6,
+    "done_states": 1,
+    "finding_decisions": 14,
+    "findings": 14,
+    "g0_subgates": 2,
+    "gaps": 7,
+    "nodes": 60,
+    "ratified_decisions": 2,
+    "relations": 245,
+    "source_records": 3,
+    "stop_rules": 5,
+    "user_primary_decisions": 4
 }
-EXPECTED_PROJECTION_SHA256 = "18931adce7c6c3d4ab0e51bed6a84186b9305edb17f6cf7c9e0c9dcc81816cfb"
-EXPECTED_FILE_SHA256 = "23def6168a277aa9f1758cbc6fefc4e713388044507e47dd98d4189e987f9e13"
+EXPECTED_PROJECTION_SHA256 = "e778b1ca81cd5e4636a44f9f32e1b47ba8692da3f4d499fc267bc6d3fdb68563"
+EXPECTED_FILE_SHA256 = "0aa237bdea8d71ca7b89a6e66a93f7ba6e97951128ab9b8c7f8947340e95f357"
 
 
 def _file_sha(path: Path) -> str:

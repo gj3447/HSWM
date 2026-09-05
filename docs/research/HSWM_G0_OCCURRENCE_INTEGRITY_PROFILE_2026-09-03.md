@@ -1,9 +1,18 @@
 # HSWM G0 external occurrence-integrity profile
 
 > **Status:** `DRAFT_SUCCESSOR / ENGINEERING_COMPONENTS_IMPLEMENTED /`
-> `NOT_PREREGISTERED / NOT_EXECUTED / G0_NOT_PASSED / G1_LOCKED`
+> `NOT_PREREGISTERED / NOT_EXECUTED / G0_NOT_PASSED / G1_LOCKED /`
+> `DEFERRED_PUBLICATION_GATE`
 >
 > **Date:** 2026-09-03
+>
+> **2026-09-05 disposition:** Under the USER_PRIMARY decision D-1 recorded in
+> [`HSWM_ADVERSARIAL_AUDIT_AND_CLOSURE_PLAN_2026-09-05.md`](HSWM_ADVERSARIAL_AUDIT_AND_CLOSURE_PLAN_2026-09-05.md),
+> this nine-role external chain is the `G0-external` publication gate
+> (KG node `sym:Hypothesis:hswm-closure-subgate-g0-external-2026-09-05-v2`)
+> and does not start until a second party is named with a date. The
+> single-owner `G0-local` sub-gate governs the next occurrence. Nothing in
+> this profile is weakened; its start is deferred.
 >
 > **Target authority:** [HSWM Constitution](../canon/HSWM_CONSTITUTION_2026-08-20.md)
 >

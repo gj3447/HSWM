@@ -112,14 +112,25 @@ def test_plan_nodes_carry_dates_stop_rules_and_pending_ratification() -> None:
             )
     for before, after in builder.STEP_PRECEDENCE:
         assert (builder.step_uid(before), "PRECEDES", builder.step_uid(after)) in relation_keys
-    decisions = _nodes_by_role(data, "decision_id")
-    assert set(node["properties"]["decision_id"] for node in decisions.values()) == {
-        "D-1", "D-2", "D-3", "D-4"
+    decisions = {
+        node["properties"]["decision_id"]: node for node in _nodes_by_role(data, "decision_id").values()
     }
-    for node in decisions.values():
-        assert node["properties"]["ratification_status"] == "PROPOSED"
-        assert node["properties"]["ratification_source_sha256"] == ""
-        assert node["properties"]["authority_class"] == "SECONDARY_AI_PROPOSAL_FOR_USER_PRIMARY"
+    assert set(decisions) == {"D-1", "D-2", "D-3", "D-4"}
+    source_sha = sha256((ROOT / builder.RATIFICATION_SOURCE_PATH).read_bytes()).hexdigest()
+    for decision_id, node in decisions.items():
+        props = node["properties"]
+        if decision_id in builder.RATIFIED_DECISIONS:
+            assert props["ratification_status"] == "RATIFIED"
+            assert props["ratification_source_sha256"] == source_sha
+            assert props["authority_class"] == "USER_PRIMARY"
+            assert (node["uid"], "HAS_SOURCE", builder.RATIFICATION_SOURCE_UID) in relation_keys
+        else:
+            assert props["ratification_status"] == "PROPOSED"
+            assert props["ratification_source_sha256"] == ""
+            assert props["authority_class"] == "SECONDARY_AI_PROPOSAL_FOR_USER_PRIMARY"
+    assert builder.RATIFIED_DECISIONS == ("D-1", "D-4")
+    assert (builder.BUNDLE_UID, "SUPERSEDES_AS_FOLLOWUP", builder.PREDECESSOR_BUNDLE_UID) in relation_keys
+    assert (builder.PROGRAM_UID, "SUPERSEDES_AS_FOLLOWUP", builder.PREDECESSOR_PROGRAM_UID) in relation_keys
     cap = [node for node in data["nodes"] if node["properties"].get("plan_graph_role") == "BURDEN_CAP"]
     assert len(cap) == 1
     assert cap[0]["properties"]["window_commits"] == 100
@@ -150,12 +161,27 @@ def test_anchors_are_match_only_and_registered_shapes_hold() -> None:
         "HAS_CONCEPT", "HAS_SOURCE", "CONSTRAINS", "TARGETS", "TESTS", "PRESERVES",
         "DOES_NOT_ENFORCE", "ASSESSES", "ADDRESSES", "PRECEDES", "BLOCKS", "DEPENDS_ON",
         "MITIGATES", "PROPOSES", "NARROWS", "DEFERS", "AUDITS", "CLOSES",
+        "SUPERSEDES_AS_FOLLOWUP",
     }
     labels = {label for node in data["nodes"] for label in node["labels"]}
     assert labels <= {
         "Concept", "Hypothesis", "Guardrail", "AbstractNode", "ResearchArtifact",
-        "SourceDocument", "ResearchProgram",
+        "SourceDocument", "ResearchProgram", "UserCanonicalUtterance",
     }
+
+
+def test_pre_ratification_v1_snapshot_is_retained_unchanged() -> None:
+    v1 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json"
+    assert sha256(v1.read_bytes()).hexdigest() == (
+        "23def6168a277aa9f1758cbc6fefc4e713388044507e47dd98d4189e987f9e13"
+    )
+    data = json.loads(v1.read_text(encoding="utf-8"))
+    assert data["bundle_uid"] == builder.PREDECESSOR_BUNDLE_UID
+    assert all(
+        node["properties"]["ratification_status"] == "PROPOSED"
+        for node in data["nodes"]
+        if node["properties"].get("plan_graph_role") == "USER_PRIMARY_DECISION"
+    )
 
 
 def test_drift_is_rejected() -> None:

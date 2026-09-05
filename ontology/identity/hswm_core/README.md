@@ -178,6 +178,10 @@ documented in
 [`HSWM_CROSS_PROJECT_GRAPH_HARNESS_ADOPTION_2026-09-01.md`](../../../docs/research/HSWM_CROSS_PROJECT_GRAPH_HARNESS_ADOPTION_2026-09-01.md);
 no sibling repository is made subordinate to this ontology.
 
+`v6` is retained byte-exactly as the 2026-09-02 published snapshot. Engineering
+commits after that date changed three of the Effect-runtime sources it bound;
+under closure stop rule SR-4 they do not re-version this bundle, and its test
+names that post-publication drift instead of re-deriving the projection.
 The same-day [`v1` projection](HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v1.json)
 is retained as the already-published source-digest snapshot before a Markdown
 rendering correction. `v2` is its non-overwriting source-correction follow-up.

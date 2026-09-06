@@ -98,14 +98,6 @@ const orderedGraph = (graph: ProjectionGraph): ProjectionGraph => ({
 export const projectionGraphDigest = (graph: ProjectionGraph): Either.Either<string, HypergraphProjectionError> =>
   digestOf(orderedGraph(graph))
 
-/**
- * String-returning form of `projectionGraphDigest` kept for the Neo4j publisher
- * and receipt builder; a graph outside bounded canonical JSON raises the same
- * typed `HypergraphProjectionError` that the Either form returns.
- */
-export const projectionGraphSha256 = (graph: ProjectionGraph): string =>
-  Either.getOrThrowWith(projectionGraphDigest(graph), (error) => error)
-
 const schemaKinds = (value: unknown): HSWMCanonicalSchemaV2["kinds"] | null => {
   const kinds = isRecord(value) ? value["kinds"] : undefined
   return Array.isArray(kinds) ? (kinds as unknown as HSWMCanonicalSchemaV2["kinds"]) : null

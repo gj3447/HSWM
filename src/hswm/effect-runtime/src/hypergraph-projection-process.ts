@@ -17,7 +17,6 @@ import { dirname, join, resolve } from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
 
 import { Data, Effect, Either } from "effect"
-import neo4j from "neo4j-driver"
 
 import {
   compileHypergraphProjection,
@@ -27,7 +26,7 @@ import {
 } from "./canonical-atom-v2-hypergraph-projection.js"
 import { HSWM_CANONICAL_JSON_V1_MAX_BYTES } from "./canonical-atom-v2-json.js"
 import { canonicalAtomV2RdfProjectionBytes } from "./canonical-atom-v2-rdf-projection.js"
-import { publishNeo4jHypergraphProjection, rebuildNeo4jHypergraphProjection } from "./canonical-atom-v2-neo4j-projection.js"
+import { publishNeo4jHypergraphProjection, rebuildNeo4jHypergraphProjection, withNeo4jDriver } from "./canonical-atom-v2-neo4j-projection.js"
 import { makeHypergraphProjectionRehearsal } from "./hypergraph-projection-rehearsal.js"
 import { buildHypergraphProjectionPackage, type HypergraphProjectionPackageInput } from "./hypergraph-projection-receipt.js"
 import { makeOpenConnectivityRehearsal } from "./open-connectivity-rehearsal.js"
@@ -320,21 +319,13 @@ const publishToNeo4j = (
   projection: HypergraphProjection,
   rebuild: boolean
 ): Effect.Effect<ProjectionGraph, HypergraphProjectionProcessError> =>
-  Effect.acquireUseRelease(
-    Effect.try({
-      try: () => neo4j.driver(config.uri, neo4j.auth.basic(config.user, config.password), {
-        connectionTimeout: NEO4J_TIMEOUT_MS,
-        maxTransactionRetryTime: NEO4J_TIMEOUT_MS
-      }),
-      catch: () => processError("NEO4J_PUBLISH_FAILED", "Neo4j driver could not be constructed")
-    }),
+  withNeo4jDriver(
+    { uri: config.uri, user: config.user, password: config.password, timeoutMs: NEO4J_TIMEOUT_MS },
     (driver) =>
       (rebuild ? rebuildNeo4jHypergraphProjection : publishNeo4jHypergraphProjection)(driver, projection, { database: config.database, apply: true }).pipe(
-        Effect.map((final): ProjectionGraph => ({ nodes: final.readback.nodes, relationships: final.readback.relationships })),
-        Effect.mapError((cause) => processError("NEO4J_PUBLISH_FAILED", cause.code))
-      ),
-    (driver) => Effect.tryPromise({ try: () => driver.close(), catch: () => undefined }).pipe(Effect.ignore)
-  )
+        Effect.map((final): ProjectionGraph => ({ nodes: final.readback.nodes, relationships: final.readback.relationships }))
+      )
+  ).pipe(Effect.mapError((cause) => processError("NEO4J_PUBLISH_FAILED", cause.code)))
 
 // ---------------------------------------------------------------------------
 // Receipt package

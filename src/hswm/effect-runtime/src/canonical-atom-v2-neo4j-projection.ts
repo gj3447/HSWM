@@ -4,10 +4,12 @@
  * already verified projection into its own projectionId namespace.
  */
 import { Data, Effect, Either } from "effect"
+import neo4j from "neo4j-driver"
 import type { Driver, ManagedTransaction, Node, Relationship } from "neo4j-driver"
 
 import {
-  projectionGraphSha256,
+  projectionGraphDigest,
+  type ProjectionGraph,
   verifyHypergraphProjection,
   type HypergraphProjection,
   type ProjectionNode,
@@ -160,12 +162,23 @@ const validated = (projection: HypergraphProjection): Either.Either<HypergraphPr
   return Either.right(checked.right)
 }
 
-const expectedReadback = (projection: HypergraphProjection): Neo4jHypergraphProjectionReadback => ({
-  projectionId: projection.manifest.projectionId,
-  nodes: expectedNodes(projection),
-  relationships: expectedRelationships(projection),
-  graphSha256: projectionGraphSha256({ nodes: projection.nodes, relationships: projection.relationships })
-})
+const expectedReadback = (projection: HypergraphProjection): Either.Either<Neo4jHypergraphProjectionReadback, Neo4jHypergraphProjectionError> =>
+  Either.map(
+    projectionGraphDigest({ nodes: projection.nodes, relationships: projection.relationships }),
+    (graphSha256): Neo4jHypergraphProjectionReadback => ({
+      projectionId: projection.manifest.projectionId,
+      nodes: expectedNodes(projection),
+      relationships: expectedRelationships(projection),
+      graphSha256
+    })
+  ).pipe(Either.mapLeft((cause) => error("PROJECTION_INVALID", cause.detail)))
+
+/** Adapter lane only: inside a driver transaction the only abort channel is a throw. */
+const graphDigestOrThrow = (graph: ProjectionGraph): string => {
+  const digest = projectionGraphDigest(graph)
+  if (Either.isLeft(digest)) throw error("READBACK_MISMATCH", "Neo4j readback graph is not a bounded projection graph")
+  return digest.right
+}
 
 const readbackIn = async (tx: ManagedTransaction, projectionId: string): Promise<Neo4jHypergraphProjectionReadback> => {
   const attachment = await tx.run(
@@ -216,7 +229,7 @@ const readbackIn = async (tx: ManagedTransaction, projectionId: string): Promise
     projectionId,
     nodes: normaliseNodes(nodes),
     relationships: normaliseRelationships(relationships),
-    graphSha256: projectionGraphSha256({ nodes, relationships })
+    graphSha256: graphDigestOrThrow({ nodes, relationships })
   }
 }
 
@@ -252,7 +265,9 @@ export const publishNeo4jHypergraphProjection = (
     if (options.database.length === 0) return Effect.fail(error("PROJECTION_INVALID", "database must be a nonempty explicit name"))
     const verified = validated(projection)
     if (Either.isLeft(verified)) return Effect.fail(verified.left)
-    const expected = expectedReadback(verified.right)
+    const expectation = expectedReadback(verified.right)
+    if (Either.isLeft(expectation)) return Effect.fail(expectation.left)
+    const expected = expectation.right
     const read = () => readNeo4jHypergraphProjection(driver, expected.projectionId, options)
     if (options.apply !== true) return read().pipe(Effect.map((readback): Neo4jHypergraphProjectionPublishResult => ({ applied: false, idempotent: equalGraph(readback, expected), readback })))
     return Effect.tryPromise({
@@ -290,7 +305,9 @@ export const rebuildNeo4jHypergraphProjection = (
     const verified = validated(projection)
     if (Either.isLeft(verified)) return Effect.fail(verified.left)
     if (options.apply !== true) return publishNeo4jHypergraphProjection(driver, verified.right, options)
-    const expected = expectedReadback(verified.right)
+    const expectation = expectedReadback(verified.right)
+    if (Either.isLeft(expectation)) return Effect.fail(expectation.left)
+    const expected = expectation.right
     return Effect.tryPromise({
       try: () => withSession(driver, options.database, async (session) => session.executeWrite(async (tx) => {
         await readbackIn(tx, expected.projectionId)
@@ -313,3 +330,31 @@ export const rebuildNeo4jHypergraphProjection = (
       catch: (cause) => cause instanceof Neo4jHypergraphProjectionError ? cause : error("DATABASE_FAILURE", safeError(cause))
     })
   })
+
+export interface Neo4jDriverConfig {
+  readonly uri: string
+  readonly user: string
+  readonly password: string
+  readonly timeoutMs: number
+}
+
+/**
+ * Brackets one neo4j-driver instance around an Effect.  Construction and the
+ * Promise-returning close() stay inside this adapter lane so callers never
+ * touch the driver's Promise surface.
+ */
+export const withNeo4jDriver = <A, E>(
+  config: Neo4jDriverConfig,
+  use: (driver: Driver) => Effect.Effect<A, E>
+): Effect.Effect<A, E | Neo4jHypergraphProjectionError> =>
+  Effect.acquireUseRelease(
+    Effect.try({
+      try: () => neo4j.driver(config.uri, neo4j.auth.basic(config.user, config.password), {
+        connectionTimeout: config.timeoutMs,
+        maxTransactionRetryTime: config.timeoutMs
+      }),
+      catch: () => error("DATABASE_FAILURE", "Neo4j driver could not be constructed")
+    }),
+    use,
+    (driver) => Effect.promise(() => driver.close()).pipe(Effect.ignore)
+  )

@@ -1,0 +1,45 @@
+{
+  "schema_version": "hswm-evidence-receipt/v1",
+  "receipt_sha256": "1e3d504e046b5f2b48be6330b368d7fffded71365e2b891c4edf38f1a5d405e5",
+  "published_on": "2026-09-06",
+  "status": "VOID_PROTOCOL_OR_EVIDENCE_BINDING_BREACH",
+  "occurrence": {
+    "protocol_sha256": "98c6c46ba3d65dc98f5b148fbda1d9b151972b25c143a19fca6d20609970e1de",
+    "source_commit": "c926769206b9d10f5c8461e8fdedf9c5ce1faf74",
+    "terminal_before_start_marker": true,
+    "sequence_present": false,
+    "measured_model_call_count": null,
+    "reason": "selected assets did not exist under the supplied asset root; a later read-only audit at the source-pinned correct root verified all 12 bindings before any v2 freeze"
+  },
+  "artifacts": [
+    {"path": "results/HSWM_EXPEL_B2_TEXT_LESSON_V1_RESULTS_2026-09-06.md", "sha256": "e53697f674abecd0ee91078227c6eaafa7ea5c7a1c35e76afd82188097632207"},
+    {"path": "results/raw/hswm_expel_b2_text_lesson_v1_2026-09-06/selection.public.json", "sha256": "b0ae66f0c9aed53355670083993b236fa0180473e7bbdadec636fc3e96a5ec78"},
+    {"path": "results/raw/hswm_expel_b2_text_lesson_v1_2026-09-06/b2.public.json", "sha256": "e584a1f39643458025deb075b5fad7c45e02f4eb7c4b131d00e07566c2dac79f"},
+    {"path": "results/raw/hswm_expel_b2_text_lesson_v1_2026-09-06/correct-root-audit-wrapper-receipt.json", "sha256": "3291292dfddd2527074a950995fe89c81422d80e05fa1cef005af33504c83a76"}
+    ,{"path": "results/raw/hswm_expel_b2_text_lesson_v1_2026-09-06/selection-wrapper-receipt.json", "sha256": "9917c219d5402c240ad766bd8a200f3597f0d2d0c3a2378f6f11ca4459408b9f"}
+    ,{"path": "results/raw/hswm_expel_b2_text_lesson_v1_2026-09-06/launcher-noop-wrapper-receipt.json", "sha256": "89c48b658eb9ee0fcb71a8f8b0d7670cecbba805a2f85c60133bc8a89c56c36c"}
+    ,{"path": "results/raw/hswm_expel_b2_text_lesson_v1_2026-09-06/live-wrapper-receipt.json", "sha256": "9b52f1d7154a53e6a0b8ae9e85920409b2810ab42548c2d998702581ba0a25c6"}
+    ,{"path": "results/raw/hswm_expel_b2_text_lesson_v1_2026-09-06/prelease-audit-wrapper-receipt.json", "sha256": "e16eb18b820c0a5987066af03dd01a49563c25474d207ea0194786de4e49817d"}
+  ],
+  "private_archive_verification": {
+    "checked_outside_repository": true,
+    "launcher_noop_archive_sha256": "dadead9c8c40f1bda74d4d045bc4bb0337a16606792e34b9ffdf8eb14c482e66",
+    "live_archive_sha256": "121c754448fc41728d5ea657bc27fb45c2e1fff59f0cb8889e4ab36276c81b75",
+    "private_b2_json_serialized_sha256": "3219343bb408730920e2c9382dfb48b84d92e8eef897ce8a79fcc11357df7955",
+    "public_receipt_matches_private_serialized_sha256": true
+  },
+  "correct_root_read_only_audit": {
+    "status": "success",
+    "selected_binding_summary_sha256": "a4e85be1e19edf0a5c768e7c4e646baf99f3e845dfd72728bf57511292614665",
+    "meaning": "diagnoses filesystem mapping only; it creates no v1 retry or result"
+  },
+  "claim_boundary": {
+    "b2_success_rate": null,
+    "numeric_b0_b2_comparison": null,
+    "g0": "NOT_PASSED",
+    "g1": "NOT_EVALUATED",
+    "lesson_algorithm_tested": false,
+    "canonical_hswm_admission_performed": false,
+    "efficacy_established": false
+  }
+}

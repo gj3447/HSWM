@@ -6,7 +6,7 @@
     "DNRD5_PROTOCOL": "DNRD-5 protocol source read by the source-closure judge (test/dnrd5-source-closure.test.ts) and pinned by the DNRD-4/DNRD-5 worktrees; converted only under a DNRD amendment, never silently.",
     "TEMPORAL_SDK_LANE": "Temporal workflow/worker/activities lane compiled under tsconfig.temporal.json; the workflow sandbox forbids Effect and non-deterministic imports and the selected TS G0 Temporal execution (75cc879) keeps this lane SDK-native.",
     "GRAPH_STANDARDS_PINNED": "Byte-bound by the graph-standards acceptance lock (hswm-graph-standards verify pins its digest); any edit invalidates the lock.",
-    "FOUNDATION_ADAPTER": "The single Node POSIX/subprocess adapter: async/await and throw exist only inside Effect.tryPromise / acquireUseRelease callbacks that are mapped to PosixIoError at the same call site.",
+    "FOUNDATION_ADAPTER": "The two Node adapters (POSIX filesystem, bounded subprocess): async/await and throw exist only inside Effect.tryPromise / Effect.async / acquireUseRelease callbacks that are mapped to typed errors at the same call site.",
     "NEO4J_DRIVER_ADAPTER": "neo4j-driver transaction functions are Promise-based and roll back only by throwing inside executeWrite/executeRead; every call is wrapped in Effect.tryPromise and mapped to a typed projection error at the call site."
   },
   "files": {
@@ -54,13 +54,13 @@
       "lane": "NEO4J_DRIVER_ADAPTER",
       "reason": "neo4j-driver transaction functions are Promise-based and roll back only by throwing inside executeWrite/executeRead; every call is wrapped in Effect.tryPromise and mapped to a typed projection error at the call site."
     },
-    "effect-posix-services.ts": {
+    "effect-posix-filesystem.ts": {
       "rules": [
         "R3",
         "R5"
       ],
       "lane": "FOUNDATION_ADAPTER",
-      "reason": "The single Node POSIX/subprocess adapter: async/await and throw exist only inside Effect.tryPromise / acquireUseRelease callbacks that are mapped to PosixIoError at the same call site."
+      "reason": "The single Node POSIX filesystem adapter: async/await and throw exist only inside Effect.tryPromise / acquireUseRelease callbacks that are mapped to PosixIoError at the same call site."
     },
     "g0-occurrence-temporal-activities.ts": {
       "rules": [

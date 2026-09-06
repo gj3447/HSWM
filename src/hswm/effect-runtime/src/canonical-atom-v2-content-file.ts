@@ -23,7 +23,7 @@ import {
   PosixFileSystem,
   type PosixFileSystemShape,
   type PosixIoError
-} from "./effect-posix-services.js"
+} from "./effect-posix-filesystem.js"
 
 const OBJECTS = "objects"
 const BINDINGS = "schema-bindings"

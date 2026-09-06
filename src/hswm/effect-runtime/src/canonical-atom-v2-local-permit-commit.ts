@@ -30,7 +30,7 @@ import {
   PosixFileSystem,
   type PosixFileSystemShape,
   type PosixIoError
-} from "./effect-posix-services.js"
+} from "./effect-posix-filesystem.js"
 
 /**
  * A deliberately narrow local occurrence adapter.  A successful receipt says

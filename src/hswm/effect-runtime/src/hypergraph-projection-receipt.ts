@@ -4,7 +4,7 @@ import { Data, Either } from "effect"
 import { canonicalJsonBytes } from "./canonical-atom-v2-json.js"
 import {
   hypergraphProjectionBytes,
-  projectionGraphSha256,
+  projectionGraphDigest,
   verifyHypergraphProjection,
   type HypergraphProjection,
   type ProjectionGraph
@@ -126,8 +126,10 @@ const buildHypergraphProjectionPackageInternal = (
   if (Either.isLeft(sourceBytes)) return Either.left(sourceBytes.left)
   if (Either.isLeft(graphBytes)) return Either.left(graphBytes.left)
   if (Either.isLeft(projectionBytes)) return fail("PROJECTION_INVALID", projectionBytes.left.detail)
+  const graphDigest = projectionGraphDigest(projection)
+  if (Either.isLeft(graphDigest)) return fail("PROJECTION_INVALID", graphDigest.left.detail)
   if (sha(sourceBytes.right) !== projection.manifest.sourceSha256 ||
-    projectionGraphSha256(projection) !== projection.manifest.graphSha256) {
+    graphDigest.right !== projection.manifest.graphSha256) {
     return fail("PROJECTION_INVALID", "verified projection source or graph digest mismatch")
   }
   const parity = input.parity
@@ -141,7 +143,9 @@ const buildHypergraphProjectionPackageInternal = (
   const shacl = artifact("shacl-evidence.json", shaclBytes, parity.shaclEvidence.mediaType)
   if (parity.mode === "CALLER_REPORTED_LIVE_NEO4J_PARITY") {
     if (!parity.readbackGraph) return fail("PARITY_INVALID", "caller-reported live parity requires normalized readback")
-    const readbackGraphSha256 = projectionGraphSha256(parity.readbackGraph)
+    const readbackDigest = projectionGraphDigest(parity.readbackGraph)
+    if (Either.isLeft(readbackDigest)) return fail("PARITY_INVALID", "caller readback graph is not a bounded projection graph")
+    const readbackGraphSha256 = readbackDigest.right
     if (readbackGraphSha256 !== projection.manifest.graphSha256) return fail("PARITY_INVALID", "caller readback graph differs from compiled graph")
     parityReceipt = {
       mode: "CALLER_REPORTED_LIVE_NEO4J_PARITY",

@@ -22,6 +22,18 @@ POST_PUBLICATION_SOURCE_DRIFT = {
     # v6 bound this test file itself; changing the test to a snapshot check
     # necessarily drifts that self-referential pin.
     "tests/test_hswm_graph_and_loop_engineering_ontology.py",
+    # 2026-09-06 Effect functional-boundary refactor (commits d9e5c1a..cf7595a):
+    # the same contracts, tests and receipts on PosixFileSystem / Effect
+    # services; recorded in HSWM_EFFECT_RUNTIME_FP_BOUNDARY_ONTOLOGY.v1.json.
+    "src/hswm/effect-runtime/src/canonical-atom-v2-durable-rdf-projection.ts",
+    "src/hswm/effect-runtime/src/canonical-atom-v2-durable-runtime.ts",
+    "src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-engineering.ts",
+    "src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-job-process.ts",
+    "src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-research-job.ts",
+    "src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit.ts",
+    "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal-file.ts",
+    "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+    "src/hswm/effect-runtime/test/canonical-atom-v2-graph-loop-research-job.test.ts",
 }
 
 

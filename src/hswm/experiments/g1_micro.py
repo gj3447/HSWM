@@ -84,7 +84,7 @@ DGX_PROTOCOL_PATHS = frozenset(
 # seed, so its directory carries the study date instead of a fixed constant.
 DGX_V3_PROTOCOL_PATH = re.compile(
     r"_research/causal_composition/preregistrations/"
-    r"g1_opaque_identifiability_v[34]_(\d{4}-\d{2}-\d{2})(-r[1-9][0-9]?)?/protocol\.v1\.json"
+    r"g1_opaque_identifiability_v[345]_(\d{4}-\d{2}-\d{2})(-r[1-9][0-9]?)?/protocol\.v1\.json"
 )
 V3_PROTOCOL_SCHEMA = "hswm-g1-opaque-identifiability-v3/v1"
 
@@ -113,7 +113,7 @@ def dgx_v3_protocol_path(protocol: Mapping[str, Any]) -> str:
     """Derive the dated v3 preregistration path from the protocol's study uid."""
 
     study_uid = str(protocol.get("study_uid", ""))
-    match = re.fullmatch(r".*-(v[34])-(\d{4}-\d{2}-\d{2})(-r[1-9][0-9]?)?", study_uid)
+    match = re.fullmatch(r".*-(v[345])-(\d{4}-\d{2}-\d{2})(-r[1-9][0-9]?)?", study_uid)
     if match is None:
         raise G1MicroError("v3 study uid does not end with its study date")
     return (

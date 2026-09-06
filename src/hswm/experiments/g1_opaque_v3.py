@@ -73,7 +73,14 @@ V3_STUDY_UID_PREFIX = "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-v3-"
 # occurrence of 2026-09-06 showed that coupling them (NO_UPDATE reversed,
 # REMOVE identical) lets a positional default fill a whole stratum.
 V4_STUDY_UID_PREFIX = "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-v4-"
-DESIGN_REVISIONS = ("v3", "v4")
+# Design revision v5: v4's independent orders plus a corrected control clause.
+# v3 and v4 showed that a strict first-candidate default in a no-state arm is
+# correct in every episode of its own position-1 stratum, so a per-own-position
+# ceiling on the controls is unsatisfiable for a control behaving as a control.
+# v5 gates the stateful arms per stateful stratum instead and keeps pooled
+# chance ceilings on the controls; the own-position pattern is reported only.
+V5_STUDY_UID_PREFIX = "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-v5-"
+DESIGN_REVISIONS = ("v3", "v4", "v5")
 EPISODE_COUNT = 32
 ARMS = (
     "ACTIVE", "FORCED_OPPOSITE_FEEDBACK", "OUTCOME_INDEPENDENT_SHAM",
@@ -130,6 +137,26 @@ IDENTIFIABILITY_RULE = {
     "sham_bit_balance": [16, 16],
     "evaluator_feedback_verified": EPISODE_COUNT,
 }
+IDENTIFIABILITY_RULE_V5 = {
+    "active_correct_min": 30,
+    "restore_correct_min": 30,
+    "forced_opposite_correct_max": 2,
+    "outcome_independent_sham_correct_max": 21,
+    "no_update_correct_max": 21,
+    "remove_correct_max": 21,
+    "stateful_arm_per_stateful_stratum_correct_min": 15,
+    "forced_opposite_per_stateful_stratum_correct_max": 1,
+    "no_state_arm_own_position_pattern": "REPORTED_NOT_GATED",
+    "delta_state_min": 0.5,
+    "exact_remove_and_restore": EPISODE_COUNT,
+    "active_credit_and_admission": EPISODE_COUNT,
+    "forced_opposite_credit_and_admission": EPISODE_COUNT,
+    "sham_credit_and_admission": EPISODE_COUNT,
+    "atom_v2_permit_commits": 3 * EPISODE_COUNT,
+    "correct_position_balance": [16, 16],
+    "sham_bit_balance": [16, 16],
+    "evaluator_feedback_verified": EPISODE_COUNT,
+}
 ANALYSIS = {
     "branch_correct_denominators": EPISODE_COUNT,
     "confirmatory_statistics": "NONE_PREREGISTERED_DESCRIPTIVE_RULE_ONLY",
@@ -153,6 +180,16 @@ ANALYSIS = {
     "terminal_order": list(TERMINALS),
     "wilson_z": WILSON_Z,
 }
+ANALYSIS_V5 = {**json.loads(json.dumps(ANALYSIS)), "g0_local_identifiability_rule": IDENTIFIABILITY_RULE_V5,
+               "stateful_stratification": "ACTIVE and RESTORE must each be correct in at least 15 of the 16 episodes of each stateful position stratum; FORCED_OPPOSITE at most 1 per stratum; no-state arms are bounded pooled at chance-plus-margin and their own-position pattern is reported, not gated."}
+
+
+def analysis_for_design(design: str) -> dict[str, Any]:
+    return json.loads(json.dumps(ANALYSIS_V5 if design == "v5" else ANALYSIS))
+
+
+def rule_for_study_uid(study_uid: str) -> dict[str, Any]:
+    return dict(IDENTIFIABILITY_RULE_V5 if str(study_uid).startswith(V5_STUDY_UID_PREFIX) else IDENTIFIABILITY_RULE)
 PERMIT_POLICY = {
     "grant_timing": "AFTER_OUTCOME_CREDIT_AND_EXACT_PROPOSAL_UNDER_PREOUTCOME_POLICY",
     "max_consumptions_per_grant": 1,
@@ -314,7 +351,7 @@ def generate_v3(
         raise G1MicroError("v3 run suffix must look like r2 (a repaired rerun under SR-3)")
     if design not in DESIGN_REVISIONS:
         raise G1MicroError("unknown design revision")
-    prefix = V4_STUDY_UID_PREFIX if design == "v4" else V3_STUDY_UID_PREFIX
+    prefix = {"v3": V3_STUDY_UID_PREFIX, "v4": V4_STUDY_UID_PREFIX, "v5": V5_STUDY_UID_PREFIX}[design]
     study_uid = f"{prefix}{study_date}" + ("" if run_suffix is None else f"-{run_suffix}")
     pool = v3_code_pool(seed)
     # v4: independent no-state orders, balanced within each stateful position stratum.
@@ -339,7 +376,7 @@ def generate_v3(
         correct, other = (code_a, code_b) if int(_hex(seed, "correct", label)[0], 16) < 8 else (code_b, code_a)
         stateful = [correct, other] if positions[ordinal - 1] else [other, correct]
         trajectory_order = [code_a, code_b] if int(_hex(seed, "trajectory-order", label)[0], 16) < 8 else [code_b, code_a]
-        if design == "v4":
+        if design in {"v4", "v5"}:
             no_update_order = [correct, other] if no_state_first["no-update-order"][ordinal - 1] else [other, correct]
             remove_order = [correct, other] if no_state_first["remove-order"][ordinal - 1] else [other, correct]
         else:
@@ -375,7 +412,7 @@ def generate_v3(
         "model_call_sequence_per_episode": list(CALL_SEQUENCE),
         "provider_call_cap": PROVIDER_CALL_CAP,
         "http_post_accounting": dict(HTTP_POST_ACCOUNTING),
-        "analysis": json.loads(json.dumps(ANALYSIS)),
+        "analysis": analysis_for_design(design),
         "permit_policy": dict(PERMIT_POLICY),
         "atom_v2_permit_commit": {
             "required": True,
@@ -418,13 +455,13 @@ def generate_v3(
             "seed_custody": "The seed and the derived reveal are held only by the evaluator OS user; the public protocol carries the seed commitment and the reveal commitment root.",
             "design_revision": design,
             "no_state_order_policy": (
-                "INDEPENDENT_SEED_DERIVED_BALANCED_WITHIN_EACH_STATEFUL_POSITION_STRATUM" if design == "v4"
+                "INDEPENDENT_SEED_DERIVED_BALANCED_WITHIN_EACH_STATEFUL_POSITION_STRATUM" if design in {"v4", "v5"}
                 else "COUPLED_TO_STATEFUL_ORDER_NO_UPDATE_REVERSED_REMOVE_IDENTICAL"
             ),
             "no_state_correct_first_balance_by_stratum": {
                 arm: {str(stratum): sum(1 for i in idx if no_state_first[label][i]) for stratum, idx in stratum_indexes.items()}
                 for arm, label in (("NO_UPDATE", "no-update-order"), ("REMOVE", "remove-order"))
-            } if design == "v4" else {},
+            } if design in {"v4", "v5"} else {},
             "code_selection": {
                 "candidates_per_episode": CANDIDATE_PAIRS_PER_EPISODE,
                 "pool_sha256": canonical_sha256(pool),
@@ -458,7 +495,7 @@ def generate_v3(
 def validate_v3_protocol(value: Mapping[str, Any]) -> None:
     if not isinstance(value, Mapping) or set(value) != PROTOCOL_FIELDS or value["schema_version"] != V3_PROTOCOL:
         raise G1MicroError("v3 protocol field set or schema drifted")
-    if not isinstance(value["study_uid"], str) or not value["study_uid"].startswith((V3_STUDY_UID_PREFIX, V4_STUDY_UID_PREFIX)):
+    if not isinstance(value["study_uid"], str) or not value["study_uid"].startswith((V3_STUDY_UID_PREFIX, V4_STUDY_UID_PREFIX, V5_STUDY_UID_PREFIX)):
         raise G1MicroError("v3 study uid drifted")
     episodes = value["episodes"]
     if value["episode_count"] != EPISODE_COUNT or not isinstance(episodes, list) or len(episodes) != EPISODE_COUNT:
@@ -501,7 +538,7 @@ def validate_v3_protocol(value: Mapping[str, Any]) -> None:
     if (
         value["arms"] != list(ARMS) or value["model_call_sequence_per_episode"] != list(CALL_SEQUENCE)
         or value["provider_call_cap"] != PROVIDER_CALL_CAP or value["http_post_accounting"] != HTTP_POST_ACCOUNTING
-        or value["analysis"] != json.loads(json.dumps(ANALYSIS)) or value["permit_policy"] != PERMIT_POLICY
+        or value["analysis"] != analysis_for_design(str(value.get("generation", {}).get("design_revision", "v3")) if isinstance(value.get("generation"), Mapping) else "v3") or value["permit_policy"] != PERMIT_POLICY
         or value["leakage_contract"] != json.loads(json.dumps(LEAKAGE_CONTRACT))
         or value["scientific_status"] != SCIENTIFIC_STATUS or value["research_order"] != RESEARCH_ORDER
         or value["claim_ceiling_if_observed"] != CLAIM_CEILING_IF_OBSERVED or value["nonclaim"] != LOCAL_SCOPE_NONCLAIM
@@ -533,7 +570,8 @@ def validate_v3_protocol(value: Mapping[str, Any]) -> None:
     design = generation.get("design_revision", "v3")
     if design not in DESIGN_REVISIONS:
         raise G1MicroError("v3 design revision drifted")
-    if (design == "v4") != value["study_uid"].startswith(V4_STUDY_UID_PREFIX):
+    expected_prefix = {"v3": V3_STUDY_UID_PREFIX, "v4": V4_STUDY_UID_PREFIX, "v5": V5_STUDY_UID_PREFIX}[design]
+    if not value["study_uid"].startswith(expected_prefix):
         raise G1MicroError("v3 design revision does not match the study family")
 
 
@@ -791,8 +829,15 @@ def score_episodes(episodes: Sequence[Mapping[str, Any]], *, protocol: Mapping[s
     return scores
 
 
-def v3_metrics(episodes: Sequence[Mapping[str, Any]], scores: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+def v3_metrics(
+    episodes: Sequence[Mapping[str, Any]], scores: Sequence[Mapping[str, Any]], *, rule: Mapping[str, Any] | None = None
+) -> dict[str, Any]:
     n = len(episodes)
+    rule = dict(IDENTIFIABILITY_RULE if rule is None else rule)
+    stateful_by_stratum = {
+        arm: {str(position): sum(int(s["probes"][arm]["correct"]) for s in scores if s["correct_position_stateful"] == position) for position in (1, 2)}
+        for arm in ("ACTIVE", "RESTORE", "FORCED_OPPOSITE_FEEDBACK")
+    }
     counts = {arm: sum(int(score["probes"][arm]["correct"]) for score in scores) for arm in ARMS}
     admissions = {
         arm: sum(int(episode["dispositions"][arm]["admission"] is not None) for episode in episodes) for arm in STATEFUL_ARMS
@@ -832,14 +877,20 @@ def v3_metrics(episodes: Sequence[Mapping[str, Any]], scores: Sequence[Mapping[s
     positions = [sum(1 for s in scores if s["correct_position_stateful"] == 1), sum(1 for s in scores if s["correct_position_stateful"] == 2)]
     feedback_verified = sum(int(s["evaluator_feedback_verified"]) for s in scores)
     separated = sum(int(s["evaluator_separation"] == "SEPARATE_OS_USER") for s in scores)
-    rule = IDENTIFIABILITY_RULE
+    if "no_state_arm_per_position_stratum_correct_max" in rule:
+        control_clause = all(by_position[arm][pos] <= rule["no_state_arm_per_position_stratum_correct_max"] for arm in NO_STATE_ARMS for pos in ("1", "2"))
+    else:
+        control_clause = (
+            all(stateful_by_stratum[arm][pos] >= rule["stateful_arm_per_stateful_stratum_correct_min"] for arm in ("ACTIVE", "RESTORE") for pos in ("1", "2"))
+            and all(stateful_by_stratum["FORCED_OPPOSITE_FEEDBACK"][pos] <= rule["forced_opposite_per_stateful_stratum_correct_max"] for pos in ("1", "2"))
+        )
     observed = (
         n == EPISODE_COUNT
         and counts["ACTIVE"] >= rule["active_correct_min"] and counts["RESTORE"] >= rule["restore_correct_min"]
         and counts["FORCED_OPPOSITE_FEEDBACK"] <= rule["forced_opposite_correct_max"]
         and counts["OUTCOME_INDEPENDENT_SHAM"] <= rule["outcome_independent_sham_correct_max"]
         and counts["NO_UPDATE"] <= rule["no_update_correct_max"] and counts["REMOVE"] <= rule["remove_correct_max"]
-        and all(by_position[arm][pos] <= rule["no_state_arm_per_position_stratum_correct_max"] for arm in NO_STATE_ARMS for pos in ("1", "2"))
+        and control_clause
         and delta >= rule["delta_state_min"] and transitions == rule["exact_remove_and_restore"]
         and admissions["ACTIVE"] == rule["active_credit_and_admission"]
         and admissions["FORCED_OPPOSITE_FEEDBACK"] == rule["forced_opposite_credit_and_admission"]
@@ -865,6 +916,7 @@ def v3_metrics(episodes: Sequence[Mapping[str, Any]], scores: Sequence[Mapping[s
         },
         "no_state_correct_by_position": by_position,
         "no_state_position_stratum_sizes": stratum_sizes,
+        "stateful_correct_by_stateful_position": stateful_by_stratum,
         "correct_position_balance_stateful": positions,
         "evaluator_feedback_verified": feedback_verified,
         "evaluator_separate_os_user_episodes": separated,
@@ -957,7 +1009,7 @@ def run_v3_with_backend(
             entry = next(item for item in reveal["episodes"] if item["episode_uid"] == task.episode_uid)
             _scan_requests(output / "episodes" / f"{task.ordinal:02d}" / "attempt_ledger.jsonl", (entry["salt"], entry["leakage_canary"]))
         scores = score_episodes(episodes, protocol=protocol, reveal=reveal)
-        metrics = v3_metrics(episodes, scores)
+        metrics = v3_metrics(episodes, scores, rule=protocol["analysis"]["g0_local_identifiability_rule"])
         g1_micro._atomic_write(output / "evaluator_reveal.json", reveal_raw)
         ledger_path = Path(evaluator.ledger_path)
         # The ledger is the evaluator user's private record; under separate
@@ -1178,7 +1230,7 @@ def verify_v3_bundle(bundle: Mapping[str, Any], *, base_dir: str | Path, protoco
         scores = score_episodes(episodes, protocol=protocol, reveal=reveal)
         if scores != bundle["scores"]:
             raise G1MicroError("v3 scores do not reconstruct from the reveal")
-    metrics = v3_metrics(episodes, bundle["scores"])
+    metrics = v3_metrics(episodes, bundle["scores"], rule=rule_for_study_uid(bundle["study_uid"]))
     if metrics != bundle["metrics"] or bundle["terminal"] != metrics["terminal"]:
         raise G1MicroError("v3 metrics or terminal do not reconstruct")
     expected_ceiling = CLAIM_CEILING_IF_OBSERVED if metrics["g0_local_identifiability_observed"] else "INSTRUMENT_VALIDATION_ONLY"

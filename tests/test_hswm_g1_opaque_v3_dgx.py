@@ -48,7 +48,8 @@ def _write_protocol(tmp_path: Path, protocol: dict[str, Any]) -> Path:
 def test_dated_v3_path_is_canonical_and_tracks_the_runtime_sources() -> None:
     assert g1_micro.is_dgx_protocol_path(V3_PATH)
     assert g1_micro.is_dgx_protocol_path(V3_PATH.replace("v3_", "v4_"))
-    assert not g1_micro.is_dgx_protocol_path(V3_PATH.replace("v3_", "v5_"))
+    assert g1_micro.is_dgx_protocol_path(V3_PATH.replace("v3_", "v5_"))
+    assert not g1_micro.is_dgx_protocol_path(V3_PATH.replace("v3_", "v6_"))
     assert not g1_micro.is_dgx_protocol_path("_research/causal_composition/preregistrations/g1_opaque_identifiability_v3_DRAFT/protocol.v1.json")
     tracked = g1_micro.dgx_tracked_source_paths_for_protocol_path(V3_PATH)
     assert tracked[0] == V3_PATH and tracked[1:] == g1_micro.DGX_TRACKED_SOURCE_PATHS[1:]
@@ -365,3 +366,58 @@ def test_v4_design_balances_no_state_orders_within_each_stateful_stratum(tmp_pat
     g1_opaque_v3.validate_v3_protocol(protocol)
     written = _write_protocol(tmp_path / "v4", protocol) if False else None
     assert written is None
+
+
+def test_v5_rule_gates_the_stateful_arms_per_stratum_and_reports_the_controls(tmp_path: Path) -> None:
+    from tests.test_hswm_g1_opaque_v3 import SEED, _OPAQUE_SUCCESSOR_PROTOCOL
+
+    source = json.loads(_OPAQUE_SUCCESSOR_PROTOCOL.read_text(encoding="utf-8"))
+    tokenizer_model = {key: source["tokenizer_binding"][key] for key in ("container_image", "container_image_id", "model_repository", "model_revision", "snapshot_manifest_sha256")}
+    protocol, _ = g1_opaque_v3.generate_v3(
+        seed=SEED, study_date="2026-09-07", live_binding=source["live_binding"], tokenizer_model=tokenizer_model,
+        consumption_registry_path=str(tmp_path / "once-v5"), design="v5",
+    )
+    assert protocol["study_uid"].startswith(g1_opaque_v3.V5_STUDY_UID_PREFIX)
+    assert protocol["analysis"]["g0_local_identifiability_rule"] == g1_opaque_v3.IDENTIFIABILITY_RULE_V5
+    assert "no_state_arm_per_position_stratum_correct_max" not in g1_opaque_v3.IDENTIFIABILITY_RULE_V5
+    g1_opaque_v3.validate_v3_protocol(protocol)
+    assert g1_micro.dgx_v3_protocol_path(protocol).endswith("g1_opaque_identifiability_v5_2026-09-07/protocol.v1.json")
+    # A v5 protocol carrying the v3 analysis (or vice versa) is refused.
+    wrong = json.loads(json.dumps(protocol)); wrong["analysis"] = json.loads(json.dumps(g1_opaque_v3.ANALYSIS))
+    with pytest.raises(g1_micro.G1MicroError):
+        g1_opaque_v3.validate_v3_protocol(wrong)
+    # Synthetic scores: the v3/v4 pattern (stateful 32/32 in both stateful strata, no-state strict first-candidate default).
+    def score(index: int, correct_stateful_position: int, no_update_first: bool, remove_first: bool) -> dict:
+        return {
+            "correct_position_stateful": correct_stateful_position,
+            "sham_disposition_correct": index % 2 == 0,
+            "evaluator_feedback_verified": True,
+            "evaluator_separation": "SEPARATE_OS_USER",
+            "probes": {
+                "ACTIVE": {"correct": True, "correct_position": correct_stateful_position},
+                "RESTORE": {"correct": True, "correct_position": correct_stateful_position},
+                "FORCED_OPPOSITE_FEEDBACK": {"correct": False, "correct_position": correct_stateful_position},
+                "OUTCOME_INDEPENDENT_SHAM": {"correct": index % 2 == 0, "correct_position": correct_stateful_position},
+                "NO_UPDATE": {"correct": no_update_first, "correct_position": 1 if no_update_first else 2},
+                "REMOVE": {"correct": remove_first, "correct_position": 1 if remove_first else 2},
+            },
+        }
+    scores = [score(i, 1 if i < 16 else 2, (i % 4) < 2, (i % 4) in (0, 3)) for i in range(32)]
+    episodes = [{
+        "dispositions": {arm: {"admission": "ok", "atom_v2_permit_commit": {}} for arm in ("ACTIVE", "FORCED_OPPOSITE_FEEDBACK", "OUTCOME_INDEPENDENT_SHAM")},
+        "state_interventions": {"REMOVE": {}, "RESTORE": {}},
+    } for _ in range(32)]
+    under_v3 = g1_opaque_v3.v3_metrics(episodes, scores)
+    under_v5 = g1_opaque_v3.v3_metrics(episodes, scores, rule=g1_opaque_v3.IDENTIFIABILITY_RULE_V5)
+    assert under_v3["no_state_correct_by_position"]["NO_UPDATE"] == {"1": 16, "2": 0}
+    assert under_v3["g0_local_identifiability_observed"] is False
+    assert under_v5["g0_local_identifiability_observed"] is True
+    assert under_v5["stateful_correct_by_stateful_position"]["ACTIVE"] == {"1": 16, "2": 16}
+    assert under_v5["terminal"] == "V3_COMPLETE_G0_LOCAL_IDENTIFIABILITY_OBSERVED_NO_EFFICACY_INFERENCE"
+    # v5 still fails when the stateful arm is itself positional (correct only in one stateful stratum).
+    positional = [dict(s, probes={**s["probes"], "ACTIVE": {"correct": s["correct_position_stateful"] == 1, "correct_position": s["correct_position_stateful"]}}) for s in scores]
+    assert g1_opaque_v3.v3_metrics(episodes, positional, rule=g1_opaque_v3.IDENTIFIABILITY_RULE_V5)["g0_local_identifiability_observed"] is False
+    # and when a control exceeds the pooled chance ceiling.
+    leaky = [dict(s, probes={**s["probes"], "NO_UPDATE": {"correct": True, "correct_position": 1}}) for s in scores]
+    assert g1_opaque_v3.v3_metrics(episodes, leaky, rule=g1_opaque_v3.IDENTIFIABILITY_RULE_V5)["g0_local_identifiability_observed"] is False
+    assert g1_opaque_v3.rule_for_study_uid(protocol["study_uid"]) == g1_opaque_v3.IDENTIFIABILITY_RULE_V5

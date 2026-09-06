@@ -265,3 +265,44 @@ def test_measure_pool_and_publish_after_seal(tmp_path: Path, capsys: pytest.Capt
     assert evaluator_process.load_reveal(target)["protocol_canonical_sha256"] == frozen_sha
     with pytest.raises(SystemExit, match="already exists"):
         freeze_tool.main(["publish-after-seal", "--marker", str(marker_path), "--reveal", str(reveal_path), "--protocol", str(protocol_path), "--to", str(target), "--timeout-seconds", "1"])
+
+
+def test_v3_runtime_binding_record_validates_with_the_dated_protocol_path(tmp_path: Path) -> None:
+    from copy import deepcopy
+    from hashlib import sha256
+    from tests.test_hswm_g1_micro_dgx import _SNAPSHOT_MANIFEST
+
+    protocol, protocol_sha, _, _, _ = _generate(tmp_path)
+    path = _write_protocol(tmp_path, protocol)
+    binding = protocol["live_binding"]
+    source = g1_micro._source_manifest()
+    server_argv = g1_micro.expected_dgx_server_argv(protocol)
+    root = Path(__file__).parents[1]
+    tracked = {V3_PATH: sha256(path.read_bytes()).hexdigest()}
+    tracked.update({rel: sha256((root / rel).read_bytes()).hexdigest() for rel in g1_micro.DGX_TRACKED_SOURCE_PATHS[1:]})
+    container_id, started_at = "b" * 64, "2026-09-06T00:00:00Z"
+    record = g1_dgx.make_runtime_binding_record(
+        protocol=protocol, protocol_sha256=protocol_sha, source_commit="a" * 40, source_tree="f" * 40,
+        source_manifest=source, tracked_source_sha256=tracked, protocol_file_sha256=tracked[V3_PATH],
+        container_id_sha256=sha256(container_id.encode()).hexdigest(), container_start_sha256=sha256(started_at.encode()).hexdigest(),
+        container_inspect_raw=canonical_json_bytes([{
+            "Config": {"Cmd": server_argv, "Image": binding["container_image"]},
+            "HostConfig": {"IpcMode": "private", "NetworkMode": "bridge", "PortBindings": {"8000/tcp": [{"HostIp": "127.0.0.1", "HostPort": "18080"}]}},
+            "Id": container_id, "Image": binding["container_image_id"], "State": {"StartedAt": started_at},
+        }]),
+        image_inspect_raw=canonical_json_bytes([{"Id": binding["container_image_id"], "RepoDigests": [binding["container_image"]]}]),
+        gpu_observation_raw=f"{binding['gpu_uuid']}, {binding['gpu_name']}\n".encode(),
+        snapshot_manifest_raw=_SNAPSHOT_MANIFEST.read_bytes(),
+        startup_metrics_raw=b"vllm:num_requests_running 0\nvllm:request_success_total 0\nvllm:prefix_cache_hits_total 0\nvllm:prefix_cache_queries_total 0\n",
+        startup_models_raw=canonical_json_bytes({"data": [{"id": binding["served_model"]}]}),
+        startup_version_raw=canonical_json_bytes({"version": binding["vllm_version"]}),
+    )
+    g1_micro.validate_dgx_runtime_binding(record, protocol=protocol, protocol_sha256=protocol_sha, source_manifest=source)
+    assert set(record["payload"]["tracked_source_sha256"]) == {V3_PATH, *g1_micro.DGX_TRACKED_SOURCE_PATHS[1:]}
+    # A protocol file digest that is not the tracked v3 file is refused.
+    drifted = deepcopy(record)
+    drifted["payload"]["protocol_file_sha256"] = "0" * 64
+    unsigned = dict(drifted); unsigned.pop("record_sha256")
+    drifted["record_sha256"] = g1_micro.canonical_sha256(unsigned)
+    with pytest.raises(g1_micro.G1MicroError, match="differs from execution sources"):
+        g1_micro.validate_dgx_runtime_binding(drifted, protocol=protocol, protocol_sha256=protocol_sha, source_manifest=source)

@@ -906,7 +906,7 @@ def validate_dgx_runtime_binding(
     if any(
         tracked[path] != digest for path, digest in source_manifest.items()
     ) or payload["protocol_file_sha256"] not in {
-        tracked[path] for path in DGX_PROTOCOL_PATHS if path in tracked
+        digest for path, digest in tracked.items() if is_dgx_protocol_path(path)
     }:
         raise G1MicroError("DGX tracked source differs from execution sources")
 

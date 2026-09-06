@@ -9,6 +9,8 @@ sibling directories, never here):
 |---|---|---|---|
 | [`v3_2026-09-06`](../g1_opaque_identifiability_v3_2026-09-06/protocol.v1.json) | `hswm-g1-opaque-v3-2026-09-06-consumption-v1` | `INCONCLUSIVE_MEASUREMENT_NOT_READY` (all 320 calls sealed, reveal published, then an actor-side stat of the evaluator-private ledger aborted bundle assembly) | recorded in the r2 projection as the aborted attempt |
 | [`v3_2026-09-06-r2`](../g1_opaque_identifiability_v3_2026-09-06-r2/protocol.v1.json) | `hswm-g1-opaque-v3-2026-09-06-r2-consumption-v1` | `V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE` | [`results`](../../../../results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V3_RESULTS_2026-09-06.md) |
+| [`v4_2026-09-06`](../g1_opaque_identifiability_v4_2026-09-06/protocol.v1.json) | `hswm-g1-opaque-v4-2026-09-06-consumption-v1` | `V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE` (same rule, independent orders; control clause shown unsatisfiable) | [`results`](../../../../results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V4_RESULTS_2026-09-06.md) |
+| [`v5_2026-09-06`](../g1_opaque_identifiability_v5_2026-09-06/protocol.v1.json) | `hswm-g1-opaque-v5-2026-09-06-consumption-v1` | `V3_COMPLETE_G0_LOCAL_IDENTIFIABILITY_OBSERVED_NO_EFFICACY_INFERENCE` (v5 rule) | [`results`](../../../../results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_RESULTS_2026-09-06.md) |
 Closure step: S-3 of the
 [closure plan](../../../../docs/research/HSWM_ADVERSARIAL_AUDIT_AND_CLOSURE_PLAN_2026-09-05.md)
 under the ratified decision D-1 (G0-local / G0-external split).

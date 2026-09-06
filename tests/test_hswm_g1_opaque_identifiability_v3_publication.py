@@ -1,4 +1,4 @@
-"""Content addressing and rule reproduction for the opaque v3 and v4 (G0-local) 2026-09-06 publications.
+"""Content addressing and rule reproduction for the opaque v3, v4 and v5 (G0-local) 2026-09-06 publications.
 
 The public artifacts are retained records; their digests are pinned here.  The
 aggregate decision is recomputed from the projection with the frozen rule so a
@@ -112,3 +112,45 @@ def test_v4_public_artifacts_are_content_addressed_and_the_control_clause_is_the
     assert result["delta_state"] >= 0.5 and result["g0_local_identifiability_observed"] is False
     assert projection["terminal"] == "V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE"
     assert projection["execution"]["aborted_attempts_same_family"] == []
+
+
+RAW_V5 = ROOT / "results/raw/hswm_g1_opaque_identifiability_v5_2026-09-06"
+NARRATIVE_V5 = ROOT / "results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_RESULTS_2026-09-06.md"
+EVIDENCE_V5 = ROOT / "evidence/EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_2026-09-06.json"
+PINS_V5 = {
+    "narrative": ("9783db58c3fee1a1d92bda0014413a2d5742fbcc1043daf97b21b4fdeeb2a61a", 7058),
+    "projection": ("eaeec67bb17401f549247db6beadb328600ecbffd466df9c78a5a150c7628863", 9287),
+    "verification": ("7f2779552c252f7c3671ded33f7f1d6dec60fa745a790910a615d01d1974c225", 1941),
+    "evidence": ("bcac0f4b03a8e6a0aa7f3fd25286bccca0fd611a7f00aa999ead8110bab14f9b", 8620),
+}
+
+
+def test_v5_public_artifacts_are_content_addressed_and_every_v5_clause_holds() -> None:
+    for name, path in (("narrative", NARRATIVE_V5), ("projection", RAW_V5 / "public_redacted_projection.json"), ("verification", RAW_V5 / "independent_verification.json"), ("evidence", EVIDENCE_V5)):
+        digest, size = PINS_V5[name]
+        assert _sha(path) == digest and path.stat().st_size == size, name
+    projection = json.loads((RAW_V5 / "public_redacted_projection.json").read_bytes())
+    rule = projection["preregistered_identifiability_rule"]
+    assert rule == g1_opaque_v3.IDENTIFIABILITY_RULE_V5
+    result = projection["aggregate_result"]
+    counts = result["branch_correct"]
+    assert counts == {"ACTIVE": 32, "FORCED_OPPOSITE_FEEDBACK": 0, "NO_UPDATE": 16, "OUTCOME_INDEPENDENT_SHAM": 16, "REMOVE": 16, "RESTORE": 32}
+    stateful = result["stateful_correct_by_stateful_position"]
+    clauses = {
+        "active": counts["ACTIVE"] >= rule["active_correct_min"],
+        "restore": counts["RESTORE"] >= rule["restore_correct_min"],
+        "forced_opposite": counts["FORCED_OPPOSITE_FEEDBACK"] <= rule["forced_opposite_correct_max"],
+        "controls_pooled": all(counts[arm] <= rule[key] for arm, key in (("OUTCOME_INDEPENDENT_SHAM", "outcome_independent_sham_correct_max"), ("NO_UPDATE", "no_update_correct_max"), ("REMOVE", "remove_correct_max"))),
+        "stateful_per_stratum": all(stateful[arm][pos] >= rule["stateful_arm_per_stateful_stratum_correct_min"] for arm in ("ACTIVE", "RESTORE") for pos in ("1", "2")),
+        "forced_per_stratum": all(stateful["FORCED_OPPOSITE_FEEDBACK"][pos] <= rule["forced_opposite_per_stateful_stratum_correct_max"] for pos in ("1", "2")),
+        "delta_state": result["delta_state"] >= rule["delta_state_min"],
+        "structural": result["exact_remove_and_restore_count"] == 32 and result["atom_v2_permit_commits"] == 96 and result["correct_position_balance_stateful"] == [16, 16],
+    }
+    assert all(clauses.values()), clauses
+    assert result["g0_local_identifiability_observed"] is True
+    assert projection["terminal"] == "V3_COMPLETE_G0_LOCAL_IDENTIFIABILITY_OBSERVED_NO_EFFICACY_INFERENCE"
+    assert projection["claim_ceiling"] == "MEASUREMENT_READY_SINGLE_OWNER_UNDER_DECLARED_OPAQUE_TASK"
+    assert projection["claim_boundary"]["g0_external"].startswith("DEFERRED") and projection["claim_boundary"]["g1"] == "NOT_EVALUATED"
+    assert projection["claim_boundary"]["hswm_learning_or_efficacy_established"] is False
+    # The no-state own-position pattern is reported, not gated.
+    assert result["no_state_correct_by_position"]["NO_UPDATE"] == {"1": 16, "2": 0}

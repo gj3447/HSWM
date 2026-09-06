@@ -1,6 +1,8 @@
 # HSWM opaque-action identifiability v4 (G0-local) — family template
 
-Status: `FAMILY_TEMPLATE / DESIGN_REVISION_OF_V3 / G0_LOCAL_CANDIDATE / G0_EXTERNAL_DEFERRED / G1_LOCKED`.
+Status: `FAMILY_TEMPLATE / DESIGN_REVISION_OF_V3 / EXECUTED_ONCE_ON_2026-09-06_RULE_NOT_MET / G0_EXTERNAL_DEFERRED / G1_LOCKED`.
+
+Executed: [`v4_2026-09-06`](../g1_opaque_identifiability_v4_2026-09-06/protocol.v1.json) → `V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE` ([results](../../../../results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V4_RESULTS_2026-09-06.md)); the control clause was shown unsatisfiable and v5 followed.
 Closure step: a further S-3 occurrence under the ratified decision D-1, chosen
 under the user's delegated 2026-09-06 decision
 ([source](../../../../docs/canon/sources/USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-06.txt)).

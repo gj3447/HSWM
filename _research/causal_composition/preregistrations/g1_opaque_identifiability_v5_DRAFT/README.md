@@ -1,6 +1,8 @@
 # HSWM opaque-action identifiability v5 (G0-local) — family template
 
-Status: `FAMILY_TEMPLATE / RULE_REVISION_OF_V4 / G0_LOCAL_CANDIDATE / G0_EXTERNAL_DEFERRED / G1_LOCKED`.
+Status: `FAMILY_TEMPLATE / RULE_REVISION_OF_V4 / EXECUTED_ONCE_ON_2026-09-06_RULE_MET / G0_EXTERNAL_DEFERRED / G1_LOCKED`.
+
+Executed: [`v5_2026-09-06`](../g1_opaque_identifiability_v5_2026-09-06/protocol.v1.json) → `V3_COMPLETE_G0_LOCAL_IDENTIFIABILITY_OBSERVED_NO_EFFICACY_INFERENCE`, claim ceiling `MEASUREMENT_READY_SINGLE_OWNER_UNDER_DECLARED_OPAQUE_TASK` ([results](../../../../results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_RESULTS_2026-09-06.md)).
 Closure step: a further S-3 occurrence under D-1, chosen under the user's
 delegated 2026-09-06 decision
 ([source](../../../../docs/canon/sources/USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-06.txt)).

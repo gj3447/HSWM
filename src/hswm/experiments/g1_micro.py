@@ -80,6 +80,19 @@ DGX_PROTOCOL_PATHS = frozenset(
         DGX_V2_SUCCESSOR_PROTOCOL_PATH,
     )
 )
+# The v3 (G0-local) protocol is generated on the run host from the evaluator's
+# seed, so its directory carries the study date instead of a fixed constant.
+DGX_V3_PROTOCOL_PATH = re.compile(
+    r"_research/causal_composition/preregistrations/"
+    r"g1_opaque_identifiability_v3_(\d{4}-\d{2}-\d{2})/protocol\.v1\.json"
+)
+V3_PROTOCOL_SCHEMA = "hswm-g1-opaque-identifiability-v3/v1"
+
+
+def is_dgx_protocol_path(protocol_path: str) -> bool:
+    """True for the frozen v1/v2 paths and any dated v3 preregistration path."""
+
+    return protocol_path in DGX_PROTOCOL_PATHS or DGX_V3_PROTOCOL_PATH.fullmatch(protocol_path) is not None
 
 
 def dgx_tracked_source_paths_for_protocol_path(
@@ -91,11 +104,28 @@ def dgx_tracked_source_paths_for_protocol_path(
         return DGX_TRACKED_SOURCE_PATHS
     if protocol_path in {DGX_V2_PROTOCOL_PATH, DGX_V2_SUCCESSOR_PROTOCOL_PATH}:
         return (protocol_path, *DGX_TRACKED_SOURCE_PATHS[1:])
+    if DGX_V3_PROTOCOL_PATH.fullmatch(protocol_path) is not None:
+        return (protocol_path, *DGX_TRACKED_SOURCE_PATHS[1:])
     raise G1MicroError("DGX protocol path is not canonical")
+
+
+def dgx_v3_protocol_path(protocol: Mapping[str, Any]) -> str:
+    """Derive the dated v3 preregistration path from the protocol's study uid."""
+
+    study_uid = str(protocol.get("study_uid", ""))
+    match = re.fullmatch(r".*-v3-(\d{4}-\d{2}-\d{2})", study_uid)
+    if match is None:
+        raise G1MicroError("v3 study uid does not end with its study date")
+    return (
+        "_research/causal_composition/preregistrations/"
+        f"g1_opaque_identifiability_v3_{match.group(1)}/protocol.v1.json"
+    )
 
 
 def dgx_tracked_source_paths(protocol: Mapping[str, Any]) -> tuple[str, ...]:
     """Keep historical v1 binding manifests immutable while binding v2's source."""
+    if protocol.get("schema_version") == V3_PROTOCOL_SCHEMA:
+        return dgx_tracked_source_paths_for_protocol_path(dgx_v3_protocol_path(protocol))
     if protocol.get("schema_version") == OPAQUE_PILOT_PROTOCOL:
         protocol_path = (
             DGX_V2_SUCCESSOR_PROTOCOL_PATH
@@ -347,6 +377,12 @@ def _validate_protocol(value: Mapping[str, Any]) -> None:
 
     if value.get("schema_version") == OPAQUE_PILOT_PROTOCOL:
         _validate_opaque_pilot_protocol(value)
+        return
+    if value.get("schema_version") == V3_PROTOCOL_SCHEMA:
+        # Imported lazily: g1_opaque_v3 imports this module.
+        from hswm.experiments import g1_opaque_v3
+
+        g1_opaque_v3.validate_v3_protocol(value)
         return
     if value.get("schema_version") != PROTOCOL:
         raise G1MicroError("protocol schema mismatch")
@@ -3800,6 +3836,31 @@ def verify_frozen_execution_files(
     ):
         raise G1MicroError("frozen execution artifacts are absent or linked")
     protocol, protocol_sha256 = load_protocol(protocol_path)
+    if protocol.get("schema_version") == V3_PROTOCOL_SCHEMA:
+        from hswm.experiments import g1_opaque_v3
+
+        if str(registry_path) != protocol["consumption_registry"]["path"]:
+            raise G1MicroError("v3 verification registry differs from preregistration")
+        bundle = _canonical_object(result_path.read_bytes(), "v3 result bundle")
+        local = g1_opaque_v3.verify_v3_bundle(bundle, base_dir=result_path.parent, protocol=protocol)
+        if bundle["protocol_canonical_sha256"] != protocol_sha256:
+            raise G1MicroError("v3 result does not join the frozen protocol")
+        seal = _canonical_object(registry_path.read_bytes(), "v3 execution registry seal")
+        validate_record(seal, kind="OpaqueV3ExecutionSeal")
+        payload = seal["payload"]
+        if payload.get("status") != "COMPLETED_NO_RERUN" or payload.get("result_sha256") != bundle["bundle_sha256"]:
+            raise G1MicroError("v3 registry is not a completed no-rerun seal")
+        validate_record(payload.get("start"), kind="OpaqueV3ExecutionStart")
+        if seal["owner_uid"] != "principal:g1-micro-execution-custodian" or payload["start"]["payload"].get("protocol_canonical_sha256") not in {None, protocol_sha256}:
+            raise G1MicroError("v3 registry seal does not join the frozen protocol")
+        return {
+            "bundle_sha256": bundle["bundle_sha256"],
+            "local_verification": local,
+            "protocol_canonical_sha256": protocol_sha256,
+            "registry_status": payload["status"],
+            "terminal": bundle["terminal"],
+            "verification": "VALID_V3_FROZEN_EXECUTION_FILES_AND_ONE_SHOT_SEAL",
+        }
     if protocol.get("schema_version") == OPAQUE_PILOT_PROTOCOL:
         if str(registry_path) != protocol["consumption_registry"]["path"]:
             raise G1MicroError("opaque pilot verification registry differs from preregistration")

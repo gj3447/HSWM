@@ -27,49 +27,96 @@ actor has seen would defeat the evaluator custody boundary.
 Thirty-two episodes, ten calls each: 320 completions, 320 tokenizer
 preflights, 640 loopback POSTs, 96 local Permit commits.
 
-## Freeze procedure on the run host
+## Freeze and run procedure on the run host (2026-09-06 tooling)
 
-1. As the evaluator user, create a private 64-byte seed and generate:
+The run host is the DGX (`edgexpert-e229`, NVIDIA GB10
+`GPU-ffed5bca-3452-8e9e-03fb-b2a4d8f40bc5`, the same GPU, image and model
+snapshot the v2 occurrence bound).  The actor is the interactive DGX user; the
+evaluator is the dedicated OS user `hswm-evaluator`.  Every step below is
+zero-POST until step 6.
+
+1. **Generate (evaluator user).**  The seed and the reveal never leave the
+   evaluator's private directory; the public draft protocol is written into
+   the checkout under the dated path.
 
    ```sh
-   head -c 64 /dev/urandom > /home/hswm-evaluator/private/v3-seed.bin
-   uv run --locked python scripts/generate_hswm_g1_opaque_v3.py \
+   sudo -n -u hswm-evaluator sh -c 'umask 077; head -c 64 /dev/urandom > /home/hswm-evaluator/private/v3-seed.bin'
+   sudo -n -u hswm-evaluator /opt/hswm/.venv/bin/python scripts/generate_hswm_g1_opaque_v3.py \
      --seed-file /home/hswm-evaluator/private/v3-seed.bin \
-     --study-date 2026-09-15 \
+     --study-date <YYYY-MM-DD> \
      --live-binding-from _research/causal_composition/preregistrations/g1_opaque_identifiability_pilot_v2_2026-08-30/protocol.v1.json \
-     --registry-path /mnt/hswm/evidence/hswm-g1-opaque-v3-2026-09-15-consumption-v1 \
-     --protocol-out _research/causal_composition/preregistrations/g1_opaque_identifiability_v3_2026-09-15/protocol.v1.json \
+     --registry-path /mnt/hswm/evidence/hswm-g1-opaque-v3-<YYYY-MM-DD>-consumption-v1 \
+     --protocol-out _research/causal_composition/preregistrations/g1_opaque_identifiability_v3_<YYYY-MM-DD>/protocol.v1.json \
      --reveal-out /home/hswm-evaluator/private/v3-reveal.json
    ```
 
-   The reveal and seed stay mode 0600 under the evaluator user. The actor
-   user must not be able to read them; the v3 preflight refuses otherwise.
-2. Measure the offline tokenizer receipt for the thirty-two code pairs in the
-   pinned image with Docker network `none` (the v2 procedure) and write it
-   into `tokenizer_binding` with `status: MEASURED`.
-3. Set `freeze.status` to `FROZEN`, commit the protocol and this README with
-   the canonical and file SHA-256 of the protocol, and bind the reveal outer
-   object to the frozen protocol digest.
-4. Run the zero-POST preflight, then the occurrence once:
+2. **Measure and freeze (actor user).**  `scripts/freeze_hswm_g1_opaque_v3.py
+   measure` runs the offline tokenizer measurement for the thirty-two code
+   pairs inside the pinned image with Docker network `none`, writes it into
+   `tokenizer_binding` as `MEASURED`, sets `freeze.status` to `FROZEN`, and
+   prints the draft and frozen canonical digests.  Unequal token counts or a
+   non-draft protocol are refused before any write.
 
    ```sh
-   uv run --locked python -m hswm.experiments.g1_opaque_v3 \
-     --protocol <frozen protocol> --output-dir <fresh dir> \
-     --execution-registry /mnt/hswm/evidence/hswm-g1-opaque-v3-2026-09-15-consumption-v1 \
-     --runtime-binding <DGX runtime binding record> \
-     --evaluator-argv-prefix 'sudo -n -u hswm-evaluator /opt/hswm/.venv/bin/python -m hswm.experiments.g1_opaque_evaluator_process' \
-     --evaluator-reveal /home/hswm-evaluator/private/v3-reveal.json \
-     --evaluator-ledger /home/hswm-evaluator/private/v3-ledger.jsonl \
-     --reveal-after-seal /mnt/hswm/evidence/v3-reveal-after-seal.json \
-     --preflight-only
+   uv run --locked python scripts/freeze_hswm_g1_opaque_v3.py measure \
+     --protocol _research/causal_composition/preregistrations/g1_opaque_identifiability_v3_<YYYY-MM-DD>/protocol.v1.json \
+     --model-snapshot <hf-cache>/hub/models--Qwen--Qwen3.6-35B-A3B-FP8/snapshots/95a723d08a9490559dae23d0cff1d9466213d989 \
+     --frozen-on <YYYY-MM-DD>
    ```
 
-   After the run the evaluator user copies the reveal to the
-   `--reveal-after-seal` path; the instrument reads it only after all 320
-   calls are sealed and then verifies every feedback bit with the salt.
-5. Check in `results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V3_RESULTS_<date>.md`,
+3. **Rebind the reveal (evaluator user).**  The freeze changed the protocol's
+   canonical digest; the reveal's outer `protocol_canonical_sha256` must name
+   the frozen digest.  The commitment root excludes that field, so the
+   thirty-two episode commitments in the public protocol are unchanged.
+
+   ```sh
+   sudo -n -u hswm-evaluator /opt/hswm/.venv/bin/python scripts/freeze_hswm_g1_opaque_v3.py rebind-reveal \
+     --reveal /home/hswm-evaluator/private/v3-reveal.json \
+     --protocol _research/causal_composition/preregistrations/g1_opaque_identifiability_v3_<YYYY-MM-DD>/protocol.v1.json
+   ```
+
+4. **Commit the frozen protocol** (and this README with the digests) so the
+   DGX checkout is clean at a commit that contains it.  The launcher refuses a
+   dirty checkout and re-hashes the protocol against `HEAD`.
+
+5. **Zero-POST preflight (actor user, fresh lease not yet taken).**  The same
+   launcher as v2 recognises the dated v3 path, re-measures the tokenizer
+   receipt against the frozen binding, and runs the v3 custody/registry
+   preflight.
+
+   ```sh
+   ~/bin/hswm-run exec HSWM_G1_OPAQUE_V3_PREFLIGHT_<YYYYMMDD> --profile hswm --cwd . -- \
+     uv run --locked python -m hswm.experiments.g1_micro_dgx \
+       --protocol _research/causal_composition/preregistrations/g1_opaque_identifiability_v3_<YYYY-MM-DD>/protocol.v1.json \
+       --model-snapshot <hf-cache>/hub/models--Qwen--Qwen3.6-35B-A3B-FP8/snapshots/95a723d08a9490559dae23d0cff1d9466213d989 \
+       --lock-path /mnt/hswm/evidence/hswm-g1-micro-dgx.lock \
+       --execution-registry /mnt/hswm/evidence/hswm-g1-opaque-v3-<YYYY-MM-DD>-consumption-v1 \
+       --evaluator-argv-prefix 'sudo -n -u hswm-evaluator /opt/hswm/.venv/bin/python -m hswm.experiments.g1_opaque_evaluator_process' \
+       --evaluator-reveal-path /home/hswm-evaluator/private/v3-reveal.json \
+       --evaluator-ledger /home/hswm-evaluator/private/v3-ledger.jsonl \
+       --reveal-after-seal /mnt/hswm/evidence/hswm-g1-opaque-v3-<YYYY-MM-DD>-reveal-after-seal.json \
+       --node "$HOME/.local/bin/node" \
+       --preflight-only
+   ```
+
+6. **The occurrence, once.**  The same command without `--preflight-only`
+   under a new wrapper run id.  The lease stops the shared containers,
+   launches the digest-pinned loopback vLLM container with fresh caches,
+   writes the runtime binding, runs the thirty-two episodes through the
+   separate evaluator process and the built Atom v2 local Permit commit
+   process, attests the final counters, tears down, and restores the shared
+   services.  After the last call is sealed the evaluator user copies the
+   reveal to the `--reveal-after-seal` path; the instrument verifies every
+   feedback bit with the salts only then.
+
+7. Check in `results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V3_RESULTS_<date>.md`,
    `evidence/EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_V3_<date>.json`, and one
-   `F1_R8_RESULTS_LOG.md` row. That row is the S-3 completion evidence.
+   `F1_R8_RESULTS_LOG.md` row.  That row is the S-3 completion evidence.
+
+Custody note: the actor account on the DGX holds passwordless sudo, so the
+evaluator boundary is OS-user separation with the preflight's readability
+check, not privilege separation.  That is the declared G0-local ceiling
+(`MEASUREMENT_READY_SINGLE_OWNER`); G0-external stays deferred.
 
 ## Preregistered rule
 

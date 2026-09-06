@@ -32,7 +32,8 @@ from _research.dgx_q1.live_launcher import (
     _get,
 )
 from _research.dgx_q1.model_snapshot_manifest import build_model_snapshot_manifest
-from hswm.experiments import g1_micro
+from hswm.experiments import atom_v2_permit_bridge, g1_micro, g1_opaque_v3
+from hswm.experiments import g1_opaque_evaluator_process as evaluator_process
 from hswm.selfmod.contracts import canonical_json_bytes
 
 
@@ -314,7 +315,7 @@ class DGXFreshRuntime:
         if re.fullmatch(r"[0-9a-f]{40}", self._source_tree) is None:
             raise LaunchRefused("G1 micro DGX source tree is invalid")
         protocol_relative = spec.protocol_path.relative_to(spec.repo_root).as_posix()
-        if protocol_relative not in g1_micro.DGX_PROTOCOL_PATHS:
+        if not g1_micro.is_dgx_protocol_path(protocol_relative):
             raise LaunchRefused("G1 micro DGX protocol path is not canonical")
         selected_paths = g1_micro.dgx_tracked_source_paths_for_protocol_path(
             protocol_relative
@@ -813,6 +814,15 @@ def _prepare_opaque_tokenizer_before_runtime_mutation(
     preflight = DGXFreshRuntime(spec)
     preflight._validate()
     assert preflight._protocol is not None
+    if preflight._protocol.get("schema_version") == g1_micro.V3_PROTOCOL_SCHEMA:
+        binding = preflight._protocol["tokenizer_binding"]
+        if binding.get("status") != "MEASURED":
+            raise LaunchRefused("v3 tokenizer binding is not measured; freeze the protocol first")
+        receipt = offline_action_code_tokenizer_receipt(
+            command=preflight.command, snapshot=spec.model_snapshot, tokenizer_binding=binding,
+        )
+        _validate_opaque_tokenizer_receipt(receipt, binding)
+        return preflight._protocol_sha256, receipt
     if preflight._protocol.get("schema_version") != g1_micro.OPAQUE_PILOT_PROTOCOL:
         return preflight._protocol_sha256, None
     receipt = offline_action_code_tokenizer_receipt(
@@ -917,6 +927,116 @@ def run_dgx_micro(spec: DGXFreshSpec) -> dict[str, Any]:
     return receipt
 
 
+@dataclass(frozen=True, slots=True, kw_only=True)
+class DGXOpaqueV3Options:
+    """Actor-side v3 options; the reveal path is the evaluator user's view and is never read here."""
+
+    evaluator: evaluator_process.EvaluatorEndpoint
+    permit_commit: atom_v2_permit_bridge.LocalPermitCommitProcess | None
+    reveal_after_seal: Path
+    allow_same_user: bool = False
+
+
+def run_dgx_v3(spec: DGXFreshSpec, options: DGXOpaqueV3Options) -> dict[str, Any]:
+    """Run the frozen opaque v3 (G0-local) occurrence inside one fresh DGX lease.
+
+    The lease, runtime binding, final attestation, teardown, and shared-service
+    restoration are the same fail-closed lifecycle as the v2 pilot; only the
+    instrument differs.  Nothing here reads the evaluator reveal.
+    """
+
+    prepared_protocol_sha256, tokenizer_receipt = (
+        _prepare_opaque_tokenizer_before_runtime_mutation(spec)
+    )
+    if tokenizer_receipt is None:
+        raise LaunchRefused("opaque v3 tokenizer preflight receipt is absent")
+    if options.permit_commit is None:
+        raise LaunchRefused("opaque v3 requires the built Atom v2 local Permit commit process")
+    with DGXFreshRuntime(spec) as runtime:
+        if runtime.runtime_binding is None:
+            raise LaunchRefused("G1 micro DGX startup binding is absent")
+        g1_micro._atomic_write(
+            spec.runtime_binding_path,
+            canonical_json_bytes(runtime.runtime_binding),
+        )
+        assert runtime._protocol is not None
+        if runtime._protocol_sha256 != prepared_protocol_sha256:
+            raise LaunchRefused("G1 micro DGX protocol drifted after tokenizer preflight")
+        if runtime._protocol.get("schema_version") != g1_micro.V3_PROTOCOL_SCHEMA:
+            raise LaunchRefused("run_dgx_v3 requires the opaque v3 protocol")
+        _validate_opaque_tokenizer_receipt(tokenizer_receipt, runtime._protocol["tokenizer_binding"])
+        binding = runtime._protocol["live_binding"]
+        bundle = g1_opaque_v3.run_v3_live(
+            protocol_path=spec.protocol_path,
+            endpoint=spec.endpoint,
+            model=binding["served_model"],
+            expected_max_model_len=binding["expected_max_model_len"],
+            output_dir=spec.output_dir,
+            execution_registry_path=spec.execution_registry,
+            runtime_binding_path=spec.runtime_binding_path,
+            evaluator=options.evaluator,
+            permit_commit=options.permit_commit,
+            reveal_path_after_seal=options.reveal_after_seal,
+            allow_same_user=options.allow_same_user,
+        )
+        expected_posts = g1_micro.expected_completion_posts(runtime._protocol)
+        final = runtime.attest(expected_posts)
+        stopped = list(runtime._stopped)
+        runtime_binding = runtime.runtime_binding
+    if runtime.teardown_observation is None:
+        raise LaunchRefused("G1 micro DGX teardown observation is absent")
+    restored = _active_shared_containers()
+    if restored != stopped:
+        raise LaunchRefused("G1 micro DGX shared-service restoration identity drifted")
+    g1_micro.verify_frozen_execution_files(
+        bundle_path=spec.output_dir / "result.json",
+        protocol_path=spec.protocol_path,
+        execution_registry_path=spec.execution_registry,
+    )
+    receipt = g1_micro.make_record(
+        "DGXRuntimeExecutionReceipt",
+        owner_uid="principal:g1-micro-dgx-runtime-custodian",
+        payload={
+            "bundle_sha256": bundle["bundle_sha256"],
+            "completion_posts": expected_posts,
+            "final_container_inspect_json": final["container_inspect"].decode("utf-8", "strict"),
+            "final_container_inspect_sha256": sha256(final["container_inspect"]).hexdigest(),
+            "final_metrics_sha256": sha256(final["metrics"]).hexdigest(),
+            "final_metrics_utf8": final["metrics"].decode("utf-8", "strict"),
+            "final_models_json": final["models"].decode("utf-8", "strict"),
+            "final_models_sha256": sha256(final["models"]).hexdigest(),
+            "final_version_json": final["version"].decode("utf-8", "strict"),
+            "final_version_sha256": sha256(final["version"]).hexdigest(),
+            "network_boundary": g1_micro.DGX_NETWORK_BOUNDARY,
+            "runtime_image_identity_verified": True,
+            "shared_service_snapshot": [
+                {"container_id_sha256": sha256(identifier.encode("utf-8")).hexdigest(), "name": name}
+                for name, identifier in stopped
+            ],
+            "shared_services_restored_after_quiescence": True,
+            "successful_generation_requests": expected_posts,
+            "teardown_observation": dict(runtime.teardown_observation),
+            "terminal": bundle["terminal"],
+            "tokenize_posts": expected_posts,
+        },
+        refs=(g1_micro._ref("runtime_binding", runtime_binding),),
+    )
+    protocol, _ = g1_micro.load_protocol(spec.protocol_path)
+    verify_dgx_execution_receipt(receipt=receipt, bundle=bundle, protocol=protocol)
+    g1_micro._atomic_write(
+        spec.output_dir / "dgx_runtime_receipt.json", canonical_json_bytes(receipt)
+    )
+    return receipt
+
+
+def _protocol_schema_version(path: Path) -> str:
+    try:
+        value = json.loads(path.read_bytes())
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise LaunchRefused("protocol is not readable JSON") from error
+    return str(value.get("schema_version", "")) if isinstance(value, dict) else ""
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--protocol", type=Path, required=True)
@@ -926,14 +1046,24 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--evaluator-reveal", type=Path)
     parser.add_argument("--container-name", default="hswm-g1-micro-001")
     parser.add_argument("--preflight-only", action="store_true")
+    v3 = parser.add_argument_group("opaque v3 (G0-local) options")
+    v3.add_argument("--evaluator-argv-prefix", help="shell-quoted argv launching the evaluator process as its own OS user")
+    v3.add_argument("--evaluator-reveal-path", help="reveal path as seen by the evaluator user; never read by the actor")
+    v3.add_argument("--evaluator-ledger", help="evaluator append-only ledger path as seen by the evaluator user")
+    v3.add_argument("--reveal-after-seal", type=Path, help="actor-readable path that receives the reveal only after every call is sealed")
+    v3.add_argument("--permit-process-script", type=Path, help="built canonical-atom-v2-local-permit-commit-process.js; defaults to the repository dist")
+    v3.add_argument("--node", help="absolute node executable; defaults to PATH lookup")
+    v3.add_argument("--allow-same-user", action="store_true", help="tests only: do not require evaluator custody separation")
     args = parser.parse_args(argv)
     output_root = Path(os.environ["HSWM_OUTPUT_ROOT"])
     cache_root = Path(os.environ["HSWM_CACHE_ROOT"])
+    is_v3 = _protocol_schema_version(args.protocol) == g1_micro.V3_PROTOCOL_SCHEMA
+    bundle_name = "g1_opaque_v3" if is_v3 else "g1_micro"
     spec = DGXFreshSpec(
         repo_root=Path.cwd(),
         protocol_path=args.protocol.resolve(),
-        output_dir=output_root / "g1_micro",
-        runtime_binding_path=output_root / "g1_micro_runtime_binding.json",
+        output_dir=output_root / bundle_name,
+        runtime_binding_path=output_root / f"{bundle_name}_runtime_binding.json",
         execution_registry=args.execution_registry,
         lock_path=args.lock_path,
         container_name=args.container_name,
@@ -942,12 +1072,33 @@ def main(argv: list[str] | None = None) -> int:
         compile_cache=cache_root / "g1_micro_compile",
         evaluator_reveal=(None if args.evaluator_reveal is None else args.evaluator_reveal.resolve()),
     )
+    options: DGXOpaqueV3Options | None = None
+    if is_v3:
+        if not (args.evaluator_argv_prefix and args.evaluator_reveal_path and args.evaluator_ledger and args.reveal_after_seal):
+            raise LaunchRefused("opaque v3 requires --evaluator-argv-prefix, --evaluator-reveal-path, --evaluator-ledger and --reveal-after-seal")
+        import shlex
+
+        evaluator = evaluator_process.EvaluatorEndpoint(
+            argv_prefix=tuple(shlex.split(args.evaluator_argv_prefix)),
+            reveal_path=args.evaluator_reveal_path, ledger_path=args.evaluator_ledger,
+        )
+        if args.permit_process_script is not None:
+            node = args.node or __import__("shutil").which("node")
+            permit_commit = None if node is None else atom_v2_permit_bridge.LocalPermitCommitProcess(
+                runtime=str(Path(node).resolve()), script=str(args.permit_process_script.resolve()),
+            )
+        else:
+            permit_commit = atom_v2_permit_bridge.default_process(spec.repo_root, runtime=args.node)
+        options = DGXOpaqueV3Options(
+            evaluator=evaluator, permit_commit=permit_commit,
+            reveal_after_seal=args.reveal_after_seal.resolve(), allow_same_user=args.allow_same_user,
+        )
     if args.preflight_only:
         runtime = DGXFreshRuntime(spec)
         runtime._validate()
         tokenizer_receipt = None
         assert runtime._protocol is not None
-        if runtime._protocol.get("schema_version") == g1_micro.OPAQUE_PILOT_PROTOCOL:
+        if runtime._protocol.get("schema_version") in {g1_micro.OPAQUE_PILOT_PROTOCOL, g1_micro.V3_PROTOCOL_SCHEMA}:
             tokenizer_receipt = offline_action_code_tokenizer_receipt(
                 command=runtime.command,
                 snapshot=spec.model_snapshot,
@@ -956,6 +1107,24 @@ def main(argv: list[str] | None = None) -> int:
             _validate_opaque_tokenizer_receipt(
                 tokenizer_receipt, runtime._protocol["tokenizer_binding"]
             )
+        if options is not None:
+            v3_preflight = g1_opaque_v3.preflight_v3(
+                protocol_path=spec.protocol_path, output_dir=spec.output_dir,
+                execution_registry_path=spec.execution_registry, evaluator=options.evaluator,
+                permit_commit=options.permit_commit, reveal_path_after_seal=options.reveal_after_seal,
+                allow_same_user=options.allow_same_user,
+            )
+            print(canonical_json_bytes({
+                "ephemeral_offline_tokenizer_containers": 1 if tokenizer_receipt is not None else 0,
+                "network_calls": 0,
+                "offline_tokenizer_receipt_sha256": None if tokenizer_receipt is None else tokenizer_receipt["receipt_sha256"],
+                "protocol_canonical_sha256": runtime._protocol_sha256,
+                "service_mutations": 0,
+                "source_commit": runtime._source_commit,
+                "status": "READY_FOR_ONE_FRESH_DGX_V3_OCCURRENCE" if not v3_preflight["problems"] else "V3_PREFLIGHT_BLOCKED",
+                "v3_preflight": v3_preflight,
+            }).decode("utf-8"))
+            return 0 if not v3_preflight["problems"] else 2
         print(
             canonical_json_bytes(
                 {
@@ -976,7 +1145,7 @@ def main(argv: list[str] | None = None) -> int:
             ).decode("utf-8")
         )
         return 0
-    receipt = run_dgx_micro(spec)
+    receipt = run_dgx_micro(spec) if options is None else run_dgx_v3(spec, options)
     print(canonical_json_bytes(receipt).decode("utf-8"))
     return 0
 

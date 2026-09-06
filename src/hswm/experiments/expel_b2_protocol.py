@@ -26,14 +26,15 @@ from .expel_b2_transport import REFLECTION_MAX_OUTPUT_TOKENS, _reflection_schema
 
 
 PROTOCOL_UID = "sym:ExploratoryStudy:hswm-expel-b2-text-lesson-comparator-2026-09-06"
-OCCURRENCE_UID = "hswm-expel-b2-text-lesson-20260906-v1"
-PROTOCOL_VERSION = "v1"
+OCCURRENCE_UID = "hswm-expel-b2-text-lesson-20260906-v2"
+PROTOCOL_VERSION = "v2"
 FROZEN = "FROZEN_BEFORE_B2_SELECTION_EPISODE_MODEL_CALL_OR_OUTCOME"
 DRAFT = "DRAFT_NOT_PREREGISTERED_NOT_FROZEN_NOT_RUN"
 RELATIVE_PATH = (
     "_research/causal_composition/preregistrations/"
-    "expel_b2_text_lesson_comparator_2026-09-06/protocol.v1.json"
+    "expel_b2_text_lesson_comparator_2026-09-06/protocol.v2.json"
 )
+V1_PROTOCOL_PATH = RELATIVE_PATH.replace("protocol.v2.json", "protocol.v1.json")
 B0_PROTOCOL_PATH = (
     "_research/causal_composition/preregistrations/"
     "alfworld_b0_calibration_2026-08-30/protocol.v1.json"
@@ -65,6 +66,7 @@ EXECUTION_SOURCES = (
     "_research/dgx_mi2/experiment.py",
     "_research/dnrd5/canonical_json.py",
     B0_PROTOCOL_PATH,
+    V1_PROTOCOL_PATH,
     "manifests/HSWM_ALFWORLD_TEXT_CLEAN_POOL_2026-08-30.json",
     DGX_RUNTIME_QUALIFICATION["path"],
     VLLM_METRICS_QUALIFICATION["path"],
@@ -100,6 +102,16 @@ def build_protocol(repo: Path, *, frozen: bool = False) -> dict[str, Any]:
         "claim_boundary": CLAIM_BOUNDARY,
         "canonical_role": "External text-state secondary comparator; no canonical atom, owner, credit, Permit, or revision.",
         "predecessor": {
+            "b2_v1": {
+                "protocol_path": V1_PROTOCOL_PATH,
+                "protocol_sha256": "98c6c46ba3d65dc98f5b148fbda1d9b151972b25c143a19fca6d20609970e1de",
+                "source_commit": "c926769206b9d10f5c8461e8fdedf9c5ce1faf74",
+                "terminal": "VOID_PROTOCOL_OR_EVIDENCE_BINDING_BREACH_PRELEASE",
+                "failure": "WRONG_CALLER_ASSET_ROOT_NO_START_MARKER_NO_LEASE_NO_GAME_NO_MODEL",
+                "successor_delta": "CORRECT_LOCATOR_RELATIVE_ASSET_ROOT_FULL_SELECTED_FILE_VALIDATION_AND_EXECUTABLE_MODULE_ENTRYPOINT",
+                "preservation": "V1_PROTOCOL_SELECTION_WRAPPER_AND_VOID_RECEIPTS_RETAINED_NO_RETRY_OR_RESUME",
+                "criteria": "IDENTICAL_ALGORITHM_COUNTS_CAPS_FREEZE_AND_CLAIM_CEILING_NEW_OCCURRENCE_AND_SELECTION",
+            },
             "b0_evidence": "evidence/EVIDENCE_HSWM_ALFWORLD_B0_CALIBRATION_2026-08-30.json",
             "b0_status": "CONSUMED_INCONCLUSIVE_MEASUREMENT_NOT_READY_NO_RATE_NO_RETRY",
             "b0_numerical_comparison": "UNAVAILABLE_REQUIRES_SEPARATELY_PREREGISTERED_SUCCESSOR",

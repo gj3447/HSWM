@@ -1,10 +1,15 @@
 from __future__ import annotations
 
+from dataclasses import replace
+from hashlib import sha256
 from pathlib import Path
+import subprocess
+import sys
 
 import pytest
 
 from hswm.experiments import expel_b2_live as live
+from hswm.experiments import alfworld_text_runtime as runtime
 
 
 def _paths(tmp_path: Path) -> live.LivePaths:
@@ -22,6 +27,29 @@ def test_public_retains_nested_sequence_splits() -> None:
     public = live._public(private, status=live.INCONCLUSIVE_STATUS, binding={}, selection={})
     assert set(public["sequence"]["splits"]) == {"train", "valid_seen"}
     assert public["sequence"]["splits"]["train"]["success_rate"] is None
+
+
+def test_module_entrypoint_exposes_real_subprocess_help() -> None:
+    result = subprocess.run([sys.executable, "-m", "hswm.experiments.expel_b2_live", "--help"], capture_output=True, text=True, check=False)
+    assert result.returncode == 0
+    assert "--private-selection" in result.stdout and "--container" in result.stdout
+
+
+def test_selected_assets_rejects_game_file_hash_mismatch(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    paths = _paths(tmp_path)
+    runtime_root = tmp_path / "runtime-root"; (runtime_root / "bin").mkdir(parents=True)
+    python = runtime_root / "bin" / "python"; python.write_text("x")
+    for name in ("upstream", "venv"):
+        path = getattr(paths, name); path.unlink(); path.mkdir()
+    paths = replace(paths, python=python, python_runtime_root=runtime_root)
+    game = paths.asset_root / "train" / "game.tw-pddl"; game.parent.mkdir(); game.write_bytes(b"actual game")
+    binding = runtime.LocalGameBinding("opaque", "train/game.tw-pddl", sha256(b"different bytes").hexdigest(), game.stat().st_size)
+    paths.pool.write_bytes(b"pool"); paths.locator.write_bytes(b"locator")
+    monkeypatch.setattr(live, "load_local_game_binding", lambda **_: (sha256(paths.pool.read_bytes()).hexdigest(), sha256(paths.locator.read_bytes()).hexdigest(), binding, game))
+    row = type("Row", (), {"opaque_uid": "opaque"})()
+    selection = type("Selection", (), {"train": (row,), "valid_seen": ()})()
+    with pytest.raises(runtime.AlfworldTextRuntimeError, match="SHA-256 mismatch"):
+        live._verify_selected_assets(paths, selection)
 
 
 class _Lease:

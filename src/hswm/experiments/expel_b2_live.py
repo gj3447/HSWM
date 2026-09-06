@@ -146,6 +146,14 @@ def _verify_selected_assets(paths: LivePaths, selection: B2Selection) -> dict[st
             pool_manifest=paths.pool, local_locator=paths.locator, asset_root=paths.asset_root, opaque_uid=row.opaque_uid)
         if observed_pool != pool_sha or observed_locator != locator_sha or binding.opaque_uid != row.opaque_uid or not game_file.is_file():
             raise ExpelB2LiveError("B2 selected game source binding drifted")
+        LocalSandboxSpec(
+            bubblewrap=paths.bubblewrap, python=paths.python,
+            python_runtime_root=paths.python_runtime_root, repository=paths.repo,
+            upstream=paths.upstream, venv=paths.venv, asset_root=paths.asset_root,
+            game_file=game_file, pool_manifest_sha256=pool_sha,
+            local_locator_sha256=locator_sha, game_binding=binding,
+            episode_uid=row.opaque_uid, max_steps=20,
+        ).validate()
         source_bindings.append({"opaque_uid": binding.opaque_uid, "file_sha256": binding.file_sha256})
     return {"selected_file_count": len(rows), "valid_unseen_selected_file_count": 0,
             "selected_source_bindings_sha256": _sha(canonical_json_bytes(source_bindings))}
@@ -179,6 +187,11 @@ def _issued_from_counts(counts: Mapping[str, object]) -> dict[str, int]:
     completion = int(counts["action_completion"]) + int(counts["reflection_completion"])
     return {"issued_tokenize_post_count": tokenize, "issued_completion_post_count": completion,
             "issued_http_post_count": tokenize + completion}
+
+
+def _private_error_text(error: Exception) -> str:
+    """Keep a bounded local diagnostic without promoting it to the public receipt."""
+    return str(error).replace("\x00", " ")[:512]
 
 
 def _persist_teardown(output: Path, lease: Any | None, known: dict[str, str]) -> dict[str, str]:
@@ -241,23 +254,31 @@ def run_live(paths: LivePaths, *, lease_factory: Callable[[ExpelB2DgxLeaseSpec],
     private_path, public_path, marker_path = output / "b2.private.json", output / "b2.public.json", output / "b2.start.json"
     binding: dict[str, str] = {}
     selection_commitments: dict[str, str] = {}
+    prelease_stage = "BINDINGS"
     try:
         protocol, binding = _verify_bindings(paths); binding["_protocol"] = _sha(paths.protocol.read_bytes())
+        prelease_stage = "PROTOCOL"
         _verify_protocol(paths, protocol)
+        prelease_stage = "B0_EVIDENCE"
         runtime_qualification = _verify_b0_evidence(paths, binding, protocol)
+        prelease_stage = "RUNTIME_ENVIRONMENT"
         runtime_environment = _verify_runtime_environment(paths, protocol, runtime_qualification)
+        prelease_stage = "SELECTION"
         selection, selection_commitments = _verify_selection(paths, protocol, binding["_protocol"])
+        prelease_stage = "SELECTED_ASSETS"
         selected_assets = _verify_selected_assets(paths, selection)
+        prelease_stage = "HOST_PATHS"
         for field in ("pool", "locator", "sudo", "bubblewrap"):
             _regular(getattr(paths, field), field)
         for field in ("asset_root", "model_snapshot", "hf_hub"):
             _directory(getattr(paths, field), field)
         dgx_sandbox_identity(sudo=paths.sudo, bubblewrap=paths.bubblewrap)
+        prelease_stage = "START_MARKER"
         _exclusive(marker_path, {"schema_version": LIVE_SCHEMA + "-start-marker", "terminal": "PRE_LEASE_PRE_ENV_PRE_MODEL_BINDING_SEALED",
             "execution_source_sha256": binding, "selection": selection_commitments, "selected_assets": selected_assets,
             "runtime_environment": runtime_environment, "pool_manifest_sha256": _sha(paths.pool.read_bytes()), "local_locator_sha256": _sha(paths.locator.read_bytes())})
     except Exception as error:
-        private = {"schema_version": LIVE_SCHEMA, "status": VOID_STATUS, "error_type": type(error).__name__, "terminal": "PRELEASE_BINDING_FAILURE"}
+        private = {"schema_version": LIVE_SCHEMA, "status": VOID_STATUS, "error_type": type(error).__name__, "error": _private_error_text(error), "failing_stage": prelease_stage, "terminal": "PRELEASE_BINDING_FAILURE"}
         public = _public(private, status=VOID_STATUS, binding=binding, selection=selection_commitments)
         _sealed(private_path, private); _sealed(public_path, public)
         return private, public
@@ -317,3 +338,7 @@ def main(argv: list[str] | None = None) -> int:
     paths = LivePaths(**{name.replace("-", "_"): getattr(args, name.replace("-", "_")) for name in ("repo", "protocol", "private-selection", "public-selection", "pool", "locator", "asset-root", "upstream", "venv", "python", "python-runtime-root", "sudo", "bubblewrap", "model-snapshot", "hf-hub", "alfworld-source-archive", "lock")}, container_name=args.container)
     private, _ = run_live(paths)
     return 0 if private["status"] == COMPLETE_STATUS else 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

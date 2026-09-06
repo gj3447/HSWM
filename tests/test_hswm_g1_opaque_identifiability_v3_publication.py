@@ -1,4 +1,4 @@
-"""Content addressing and rule reproduction for the opaque v3 (G0-local) 2026-09-06 publication.
+"""Content addressing and rule reproduction for the opaque v3 and v4 (G0-local) 2026-09-06 publications.
 
 The public artifacts are retained records; their digests are pinned here.  The
 aggregate decision is recomputed from the projection with the frozen rule so a
@@ -86,3 +86,29 @@ def test_publication_is_redacted_and_records_the_void_attempt() -> None:
     assert projection["custody"]["evaluator_separate_os_user_episodes"] == 32
     assert projection["custody"]["evaluator_ledger_readable_by_actor"] is False
     assert projection["custody"]["actor_holds_passwordless_sudo"] is True
+
+
+RAW_V4 = ROOT / "results/raw/hswm_g1_opaque_identifiability_v4_2026-09-06"
+NARRATIVE_V4 = ROOT / "results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V4_RESULTS_2026-09-06.md"
+EVIDENCE_V4 = ROOT / "evidence/EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_V4_2026-09-06.json"
+PINS_V4 = {
+    "narrative": ("05b6fc9073a4d0280557ca4562402133810367caf41d0f7ad37cd818aa47b4f3", 4717),
+    "projection": ("b1264019383ed67fc2f97ce1bff721cee1ca6be8d7c42e0a88753bccf4e910cc", 8782),
+    "verification": ("77889993315bb924f5b21c33c9214191d06cec617580135c6da8314517979fb6", 1850),
+    "evidence": ("2b73a944a8419206ab5656fce5bd75080125cd7f310e16db82da704b091928ce", 8252),
+}
+
+
+def test_v4_public_artifacts_are_content_addressed_and_the_control_clause_is_the_only_failure() -> None:
+    for name, path in (("narrative", NARRATIVE_V4), ("projection", RAW_V4 / "public_redacted_projection.json"), ("verification", RAW_V4 / "independent_verification.json"), ("evidence", EVIDENCE_V4)):
+        digest, size = PINS_V4[name]
+        assert _sha(path) == digest and path.stat().st_size == size, name
+    projection = json.loads((RAW_V4 / "public_redacted_projection.json").read_bytes())
+    assert projection["preregistration"]["path"].endswith("g1_opaque_identifiability_v4_2026-09-06/protocol.v1.json")
+    result = projection["aggregate_result"]
+    assert result["branch_correct"] == {"ACTIVE": 32, "FORCED_OPPOSITE_FEEDBACK": 0, "NO_UPDATE": 16, "OUTCOME_INDEPENDENT_SHAM": 14, "REMOVE": 16, "RESTORE": 32}
+    assert result["no_state_correct_by_position"]["NO_UPDATE"] == {"1": 16, "2": 0}
+    assert result["no_state_correct_by_position"]["REMOVE"] == {"1": 16, "2": 0}
+    assert result["delta_state"] >= 0.5 and result["g0_local_identifiability_observed"] is False
+    assert projection["terminal"] == "V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE"
+    assert projection["execution"]["aborted_attempts_same_family"] == []

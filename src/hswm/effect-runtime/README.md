@@ -32,6 +32,11 @@
 > [`HSWM_EFFECT_RUNTIME_FUNCTIONAL_BOUNDARY_2026-09-06.md`](../../../docs/operations/HSWM_EFFECT_RUNTIME_FUNCTIONAL_BOUNDARY_2026-09-06.md).
 > This is code shape only: the six migration gates keep their audit
 > dispositions and the decisive loop is still Python.
+> Follow-up on the same day (not part of the bound v1 record): the three
+> residues that document names were closed — `projectionGraphSha256` is gone
+> (Neo4j readback digests go through `projectionGraphDigest`), the state
+> journal's `beforeSlotLink` test seam is an `Effect`, and the Neo4j driver
+> bracket lives in `canonical-atom-v2-neo4j-projection.ts` as `withNeo4jDriver`.
 
 This private package is the TypeScript/Effect production-runtime seed for
 HSWM. It contains two distinct bounded engineering slices: the existing scalar

@@ -123,11 +123,14 @@ const NUMERIC_MODULE_PATHS = Object.freeze({
     "hswm.experiments.swm0w_s2s_worlds"
 } as const)
 
+/*
+ * The closure pins the Python sources the golden boundary imports and the
+ * resolved environment (uv.lock).  pyproject.toml was dropped on 2026-09-06:
+ * it is a live project file whose unrelated edits (extras, tool config) kept
+ * breaking the pin without changing the numeric runtime (closure plan SR-5);
+ * uv.lock still identifies the exact resolved dependency set.
+ */
 export const S2S_NUMERIC_LOCAL_SOURCE_CLOSURE = Object.freeze([
-  Object.freeze({
-    path: "pyproject.toml",
-    sha256: "24c89decb62b272a05626b411346ffc6d38dd0bb3fc5d17feb5bfaaf03abe5bd"
-  }),
   Object.freeze({
     path: "src/hswm/__init__.py",
     sha256: "09d5be5cf85a6574c76c8a741f1bcc931159f4cec0ef1c885309a545431e3303"

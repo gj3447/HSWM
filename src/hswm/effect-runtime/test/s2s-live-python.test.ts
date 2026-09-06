@@ -700,7 +700,7 @@ it.effect.skipIf(!existsSync(PINNED_VENV_PYTHON))(
         identity.receiptSha256
       )
       expect("canonicalUtf8WithLf" in receipt).toBe(false)
-      expect(identity.sourceClosure).toHaveLength(10)
+      expect(identity.sourceClosure).toHaveLength(9)
       expect(
         identity.sourceClosure.map((entry) => ({
           path: entry.path,

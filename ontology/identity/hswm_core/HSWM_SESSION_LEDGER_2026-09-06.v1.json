@@ -1,0 +1,3604 @@
+{
+  "schema_version": "hswm-session-ledger/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+  "status": "SESSION_LEDGER_2026-09-06_48_COMMITS_23_CORE_BELOW_SHARE_S2_S3_S4_COMPLETE_S1_S5_S6_OPEN_G0_NOT_PASSED_G1_LOCKED",
+  "nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+  "authority_boundary": "Commits, streams, readings and open items are SECONDARY_AI records of effort.  Open items marked USER_PRIMARY wait on the user's own words and are not decided here.  Nothing in this ledger passes G0 or G1, reaches the D-4 done-state, or promotes any scientific claim.",
+  "source_accessed_on": "2026-09-06",
+  "artifact_bindings": [
+    {
+      "path": "results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V3_RESULTS_2026-09-06.md",
+      "sha256": "1c47b38daa48ad82cba8161babc1317829576a1bebc82ff2b6ea03b7c1a11519"
+    },
+    {
+      "path": "results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V4_RESULTS_2026-09-06.md",
+      "sha256": "05b6fc9073a4d0280557ca4562402133810367caf41d0f7ad37cd818aa47b4f3"
+    },
+    {
+      "path": "results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_RESULTS_2026-09-06.md",
+      "sha256": "9783db58c3fee1a1d92bda0014413a2d5742fbcc1043daf97b21b4fdeeb2a61a"
+    },
+    {
+      "path": "evidence/EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_V3_2026-09-06.json",
+      "sha256": "91607907093c7621d7b2a4191cfe9df25cd5ad6866f1cdc057c73022855a0a9a"
+    },
+    {
+      "path": "evidence/EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_V4_2026-09-06.json",
+      "sha256": "2b73a944a8419206ab5656fce5bd75080125cd7f310e16db82da704b091928ce"
+    },
+    {
+      "path": "evidence/EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_2026-09-06.json",
+      "sha256": "bcac0f4b03a8e6a0aa7f3fd25286bccca0fd611a7f00aa999ead8110bab14f9b"
+    },
+    {
+      "path": "docs/canon/sources/USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-06.txt",
+      "sha256": "82b6c671300459618e5a7b4e8fdd033e5510de9720c419ec59495800b67505f6"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json",
+      "sha256": "08f45acbfee42750ac2a463db95bd2faa2dd0bbe5b4cf2da262acdcf27757222"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_EFFECT_RUNTIME_FP_BOUNDARY_ONTOLOGY.v1.json",
+      "sha256": "f6dd1236c1f763bc5d79db64784ca43a5f68b93fc942fe0b746c74d5d51481f2"
+    },
+    {
+      "path": "docs/operations/HSWM_EFFECT_RUNTIME_FUNCTIONAL_BOUNDARY_2026-09-06.md",
+      "sha256": "b9a472b25a43a33adf7f8c28d6d08d32056df733a2f6f39116849760c4113c86"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 70,
+    "anchors": 17,
+    "relations": 145,
+    "commits": 48,
+    "core_commits": 23,
+    "streams": 10,
+    "open_items": 8,
+    "readings": 3
+  },
+  "anchors": [
+    {
+      "uid": "sym:Concept:hswm",
+      "name": "HSWM",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v5",
+      "name": "HSWM closure plan ontology [2026-09-05-v5]",
+      "required_labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ]
+    },
+    {
+      "uid": "sym:ResearchProgram:hswm-closure-plan-2026-09-05-v5",
+      "name": "HSWM closure plan [2026-09-05-v5]",
+      "required_labels": [
+        "ResearchProgram"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-effect-fp-boundary-ontology-2026-09-06",
+      "name": "HSWM Effect runtime functional boundary ontology [2026-09-06]",
+      "required_labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-closure-step-s-1-2026-09-05-v5",
+      "name": "S-1 — Ratify D-1, D-2, D-4 and record them as USER_PRIMARY [2026-09-05-v5]",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-closure-step-s-2-2026-09-05-v5",
+      "name": "S-2 — Bridge g1_micro admission to the real local Permit commit [2026-09-05-v5]",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-closure-step-s-3-2026-09-05-v5",
+      "name": "S-3 — Preregister and run opaque v3 under G0-local [2026-09-05-v5]",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-closure-step-s-4-2026-09-05-v5",
+      "name": "S-4 — Ratify D-3 and fix the G1 estimand [2026-09-05-v5]",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-closure-step-s-5-2026-09-05-v5",
+      "name": "S-5 — Produce the first B0 and B2 comparator result files [2026-09-05-v5]",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-closure-step-s-6-2026-09-05-v5",
+      "name": "S-6 — Enforce the burden cap and settle the second-party question [2026-09-05-v5]",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-closure-v3-receipt-2026-09-05-v5",
+      "name": "Opaque v3 (G0-local) occurrence receipt 2026-09-06 [2026-09-05-v5]",
+      "required_labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-closure-v4-receipt-2026-09-05-v5",
+      "name": "Opaque v4 (G0-local, independent no-state orders) occurrence receipt 2026-09-06 [2026-09-05-v5]",
+      "required_labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-closure-v5-receipt-2026-09-05-v5",
+      "name": "Opaque v5 (G0-local, corrected control clause) occurrence receipt 2026-09-06 [2026-09-05-v5]",
+      "required_labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-closure-user-decision-d-2-2026-09-05-v5",
+      "name": "D-2 — Narrow the never-weaken rule to post-outcome contract modification [2026-09-05-v5]",
+      "required_labels": [
+        "Concept",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-closure-user-decision-d-3-2026-09-05-v5",
+      "name": "D-3 — Bind the G1 estimand [2026-09-05-v5]",
+      "required_labels": [
+        "Concept",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-closure-v1-done-state-2026-09-05-v5",
+      "name": "HSWM v1 done-state [2026-09-05-v5]",
+      "required_labels": [
+        "Concept",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-closure-burden-cap-2026-09-05-v5",
+      "name": "HSWM closure burden cap [2026-09-05-v5]",
+      "required_labels": [
+        "Concept",
+        "Guardrail"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-01dce38-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "01dce38 fix: stop pinning live files byte-exactly in the S2S numeric closure and the FP boundary test [2026-09-06-v1]",
+        "description": "fix: stop pinning live files byte-exactly in the S2S numeric closure and the FP boundary test",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "01dce38ab7fdf3e5a829d4bde1bf7dcbbc638e53",
+        "commit_short": "01dce38",
+        "authored_at": "2026-09-06T07:11:51Z",
+        "files_changed": 3,
+        "core_path_commit": false,
+        "window_position": 21,
+        "stream_id": "test_hygiene"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-0272c5b-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "0272c5b refactor(effect): retire the throwing digest wrapper and keep the Neo4j driver bracket in the adapter lane [2026-09-06-v1]",
+        "description": "refactor(effect): retire the throwing digest wrapper and keep the Neo4j driver bracket in the adapter lane",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "0272c5ba62bff087f1f3cb6fb9fdbd806331957b",
+        "commit_short": "0272c5b",
+        "authored_at": "2026-09-06T07:14:27Z",
+        "files_changed": 26,
+        "core_path_commit": false,
+        "window_position": 22,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-0463f6c-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "0463f6c research: enforce the ratified closure burden cap [2026-09-06-v1]",
+        "description": "research: enforce the ratified closure burden cap",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "0463f6c058ed2bae37efd0f22f6a9f569fa7fac3",
+        "commit_short": "0463f6c",
+        "authored_at": "2026-09-05T15:24:25Z",
+        "files_changed": 2,
+        "core_path_commit": true,
+        "window_position": 3,
+        "stream_id": "audit_and_plan"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-0ddf2e0-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "0ddf2e0 research: prepare the D-3 G1 estimand binding decision (S-4) [2026-09-06-v1]",
+        "description": "research: prepare the D-3 G1 estimand binding decision (S-4)",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "0ddf2e0719fc6964e8e5269278180a9167dae757",
+        "commit_short": "0ddf2e0",
+        "authored_at": "2026-09-06T07:14:39Z",
+        "files_changed": 1,
+        "core_path_commit": true,
+        "window_position": 25,
+        "stream_id": "s4_estimand_binding"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-13780ff-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "13780ff feat: add the opaque v3 G0-local instrument and its draft preregistration [2026-09-06-v1]",
+        "description": "feat: add the opaque v3 G0-local instrument and its draft preregistration",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "13780ff9a14dfd737566146f8664b38811902c72",
+        "commit_short": "13780ff",
+        "authored_at": "2026-09-05T15:57:51Z",
+        "files_changed": 6,
+        "core_path_commit": true,
+        "window_position": 6,
+        "stream_id": "s3_instrument_and_dgx_tooling"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-13b18ba-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "13b18ba fix: the DGX runtime-binding validator accepts the dated v3 protocol file [2026-09-06-v1]",
+        "description": "fix: the DGX runtime-binding validator accepts the dated v3 protocol file",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "13b18bad548fbba166b1ecc8789bb55e0f159110",
+        "commit_short": "13b18ba",
+        "authored_at": "2026-09-06T08:32:53Z",
+        "files_changed": 2,
+        "core_path_commit": true,
+        "window_position": 31,
+        "stream_id": "s3_instrument_and_dgx_tooling"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-1b20e3c-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "1b20e3c test: retain graph-and-loop v6 as the published 2026-09-02 snapshot [2026-09-06-v1]",
+        "description": "test: retain graph-and-loop v6 as the published 2026-09-02 snapshot",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "1b20e3c8b8139beb07c29a9cc630e1816b8d8a14",
+        "commit_short": "1b20e3c",
+        "authored_at": "2026-09-05T16:12:54Z",
+        "files_changed": 2,
+        "core_path_commit": false,
+        "window_position": 7,
+        "stream_id": "test_hygiene"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-1d44bc6-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "1d44bc6 refactor(effect): projection receipt verifies graph digests through the Either core [2026-09-06-v1]",
+        "description": "refactor(effect): projection receipt verifies graph digests through the Either core",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "1d44bc69f7e932d23a72ed5c3332b835353b6ea2",
+        "commit_short": "1d44bc6",
+        "authored_at": "2026-09-06T03:32:09Z",
+        "files_changed": 1,
+        "core_path_commit": false,
+        "window_position": 14,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-1feb30c-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "1feb30c chore(effect): enforce the Effect boundary lint in npm run check [2026-09-06-v1]",
+        "description": "chore(effect): enforce the Effect boundary lint in npm run check",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "1feb30ce64b281b63ec86734599a02bcc70e124a",
+        "commit_short": "1feb30c",
+        "authored_at": "2026-09-06T03:47:06Z",
+        "files_changed": 3,
+        "core_path_commit": false,
+        "window_position": 19,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-231ee05-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "231ee05 research: freeze the opaque v4 (G0-local, independent no-state orders) protocol for the 2026-09-06 occurrence [2026-09-06-v1]",
+        "description": "research: freeze the opaque v4 (G0-local, independent no-state orders) protocol for the 2026-09-06 occurrence",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "231ee05681a46d1637d1a80f65554600abfc7ee7",
+        "commit_short": "231ee05",
+        "authored_at": "2026-09-06T18:30:29+09:00",
+        "files_changed": 1,
+        "core_path_commit": true,
+        "window_position": 39,
+        "stream_id": "protocol_freezes"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-244bf4f-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "244bf4f canon: closure plan event version v5 — D-4 done-state judged SEGMENT_OBSERVED_NOT_REACHED, S-1/S-5/S-6 progress readings, published to the live KG [2026-09-06-v1]",
+        "description": "canon: closure plan event version v5 — D-4 done-state judged SEGMENT_OBSERVED_NOT_REACHED, S-1/S-5/S-6 progress readings, published to the live KG",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "244bf4f9a05fc9d8bbdf4ed20c409f714fa7b1cb",
+        "commit_short": "244bf4f",
+        "authored_at": "2026-09-06T12:46:28Z",
+        "files_changed": 7,
+        "core_path_commit": false,
+        "window_position": 48,
+        "stream_id": "closure_events"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-2edf60e-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "2edf60e research: record the Effect functional boundary and publish its KG projection [2026-09-06-v1]",
+        "description": "research: record the Effect functional boundary and publish its KG projection",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "2edf60e044c2b7e417538eeba522d0289ef50c36",
+        "commit_short": "2edf60e",
+        "authored_at": "2026-09-06T03:51:00Z",
+        "files_changed": 9,
+        "core_path_commit": false,
+        "window_position": 20,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-388f40d-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "388f40d refactor(effect): the state journal's process-race seam is an Effect, not a Promise thunk [2026-09-06-v1]",
+        "description": "refactor(effect): the state journal's process-race seam is an Effect, not a Promise thunk",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "388f40d95b6871fe952d82ec653127fa93a18d1a",
+        "commit_short": "388f40d",
+        "authored_at": "2026-09-06T07:14:27Z",
+        "files_changed": 6,
+        "core_path_commit": false,
+        "window_position": 23,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-3a751dd-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "3a751dd canon: closure plan event version v3 at the opaque v3 receipt, published to the live KG [2026-09-06-v1]",
+        "description": "canon: closure plan event version v3 at the opaque v3 receipt, published to the live KG",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "3a751ddcba5cf50eadfa0bd0f19314c7f024dfb1",
+        "commit_short": "3a751dd",
+        "authored_at": "2026-09-06T09:16:12Z",
+        "files_changed": 7,
+        "core_path_commit": false,
+        "window_position": 37,
+        "stream_id": "closure_events"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-45b81d7-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "45b81d7 research: publish the opaque v4 (G0-local, independent no-state orders) 2026-09-06 occurrence projection, verification join, and evidence record [2026-09-06-v1]",
+        "description": "research: publish the opaque v4 (G0-local, independent no-state orders) 2026-09-06 occurrence projection, verification join, and evidence record",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "45b81d753e666a1f66810ca54bb821b587a94667",
+        "commit_short": "45b81d7",
+        "authored_at": "2026-09-06T18:43:47+09:00",
+        "files_changed": 3,
+        "core_path_commit": true,
+        "window_position": 40,
+        "stream_id": "occurrence_publications"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-4b4411c-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "4b4411c research: v5 rule revision — stateful per-stratum floors, pooled control ceilings, own-position pattern reported [2026-09-06-v1]",
+        "description": "research: v5 rule revision — stateful per-stratum floors, pooled control ceilings, own-position pattern reported",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "4b4411cd2d6bf6ae5671ce4fdfd56e1c082d03a9",
+        "commit_short": "4b4411c",
+        "authored_at": "2026-09-06T09:48:30Z",
+        "files_changed": 4,
+        "core_path_commit": true,
+        "window_position": 42,
+        "stream_id": "design_revisions_and_delegated_decision"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-4c924d2-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "4c924d2 results: opaque v4 (G0-local, independent no-state orders) 2026-09-06 occurrence — rule not met, control clause shown unsatisfiable [2026-09-06-v1]",
+        "description": "results: opaque v4 (G0-local, independent no-state orders) 2026-09-06 occurrence — rule not met, control clause shown unsatisfiable",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "4c924d2e075ce7065e3698dfbb08ba209f0a2ed3",
+        "commit_short": "4c924d2",
+        "authored_at": "2026-09-06T09:46:07Z",
+        "files_changed": 4,
+        "core_path_commit": true,
+        "window_position": 41,
+        "stream_id": "occurrence_publications"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-51f631b-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "51f631b feat: admit the G1 instrument through the Atom v2 local Permit commit [2026-09-06-v1]",
+        "description": "feat: admit the G1 instrument through the Atom v2 local Permit commit",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "51f631b4e15bdd3ca48219c8df66bd3fa165ccb8",
+        "commit_short": "51f631b",
+        "authored_at": "2026-09-05T15:38:53Z",
+        "files_changed": 10,
+        "core_path_commit": true,
+        "window_position": 4,
+        "stream_id": "s2_permit_bridge_and_evaluator"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-547b02f-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "547b02f refactor(effect): rewrite DNRD routing-diagnostic process as one Effect program [2026-09-06-v1]",
+        "description": "refactor(effect): rewrite DNRD routing-diagnostic process as one Effect program",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "547b02fa58b3b0befbd110b48b7dfa1c695503d7",
+        "commit_short": "547b02f",
+        "authored_at": "2026-09-06T03:43:15Z",
+        "files_changed": 3,
+        "core_path_commit": false,
+        "window_position": 18,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-62e2d7e-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "62e2d7e research: the public projection carries the per-stateful-stratum counts and the protocol's own rule [2026-09-06-v1]",
+        "description": "research: the public projection carries the per-stateful-stratum counts and the protocol's own rule",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "62e2d7eef03cb87738a6174bc0a3b3c779232037",
+        "commit_short": "62e2d7e",
+        "authored_at": "2026-09-06T10:04:12Z",
+        "files_changed": 1,
+        "core_path_commit": false,
+        "window_position": 44,
+        "stream_id": "s3_instrument_and_dgx_tooling"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-647fcde-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "647fcde research: freeze the opaque v3 repaired rerun protocol (2026-09-06-r2, SR-3) [2026-09-06-v1]",
+        "description": "research: freeze the opaque v3 repaired rerun protocol (2026-09-06-r2, SR-3)",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "647fcdec53997e863a8907f40644d13b1370ab47",
+        "commit_short": "647fcde",
+        "authored_at": "2026-09-06T17:49:27+09:00",
+        "files_changed": 1,
+        "core_path_commit": true,
+        "window_position": 33,
+        "stream_id": "protocol_freezes"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-68513d9-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "68513d9 refactor(effect): replace module-level brands and lock table with private-field handles and a ProtectedRootLocks service [2026-09-06-v1]",
+        "description": "refactor(effect): replace module-level brands and lock table with private-field handles and a ProtectedRootLocks service",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "68513d95c0c4753430fb467d8aad5f3d3a2bc59f",
+        "commit_short": "68513d9",
+        "authored_at": "2026-09-06T03:24:47Z",
+        "files_changed": 6,
+        "core_path_commit": false,
+        "window_position": 12,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-6ebc181-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "6ebc181 test: retire the 23 dead per-version S2S handoff tests for one retained-snapshot test [2026-09-06-v1]",
+        "description": "test: retire the 23 dead per-version S2S handoff tests for one retained-snapshot test",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "6ebc181d0dc31716a536b98a2824db8e9fa6cd18",
+        "commit_short": "6ebc181",
+        "authored_at": "2026-09-06T07:14:39Z",
+        "files_changed": 2,
+        "core_path_commit": false,
+        "window_position": 24,
+        "stream_id": "test_hygiene"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-75fdf15-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "75fdf15 chore(effect): add the Effect boundary lint with lane allowlist (report-only baseline) [2026-09-06-v1]",
+        "description": "chore(effect): add the Effect boundary lint with lane allowlist (report-only baseline)",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "75fdf15b4692f690ca4b1699f6e208854e580c56",
+        "commit_short": "75fdf15",
+        "authored_at": "2026-09-06T03:17:11Z",
+        "files_changed": 4,
+        "core_path_commit": true,
+        "window_position": 9,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-7ff7766-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "7ff7766 research: publish the opaque v5 (G0-local, corrected control clause) 2026-09-06 occurrence projection, verification join, and evidence record [2026-09-06-v1]",
+        "description": "research: publish the opaque v5 (G0-local, corrected control clause) 2026-09-06 occurrence projection, verification join, and evidence record",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "7ff7766dab26ce5f13b27cede0e39dc7fdd7eac3",
+        "commit_short": "7ff7766",
+        "authored_at": "2026-09-06T19:04:14+09:00",
+        "files_changed": 3,
+        "core_path_commit": true,
+        "window_position": 45,
+        "stream_id": "occurrence_publications"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-8c3f56d-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "8c3f56d feat: add the separate-process salt-keyed opaque G1 evaluator [2026-09-06-v1]",
+        "description": "feat: add the separate-process salt-keyed opaque G1 evaluator",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "8c3f56d3b5de471761e17ef84dc92206bb00763a",
+        "commit_short": "8c3f56d",
+        "authored_at": "2026-09-05T15:42:03Z",
+        "files_changed": 2,
+        "core_path_commit": false,
+        "window_position": 5,
+        "stream_id": "s2_permit_bridge_and_evaluator"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-8ee390b-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "8ee390b refactor: rebuild graph-loop journal on PosixFileSystem and remove throws from content, hypergraph projection [2026-09-06-v1]",
+        "description": "refactor: rebuild graph-loop journal on PosixFileSystem and remove throws from content, hypergraph projection",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "8ee390b12dae6ce01d171ab9fc86e8e4244225a3",
+        "commit_short": "8ee390b",
+        "authored_at": "2026-09-06T03:29:16Z",
+        "files_changed": 4,
+        "core_path_commit": false,
+        "window_position": 13,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-95eca6f-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "95eca6f research: record adversarial audit and closure plan KG projection [2026-09-06-v1]",
+        "description": "research: record adversarial audit and closure plan KG projection",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "95eca6fed10ec5b847a88b92e98fd2781d933189",
+        "commit_short": "95eca6f",
+        "authored_at": "2026-09-05T14:07:01Z",
+        "files_changed": 15,
+        "core_path_commit": false,
+        "window_position": 1,
+        "stream_id": "audit_and_plan"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-98aa571-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "98aa571 research: publish the opaque v3 (G0-local) 2026-09-06-r2 occurrence projection, verification join, and evidence record [2026-09-06-v1]",
+        "description": "research: publish the opaque v3 (G0-local) 2026-09-06-r2 occurrence projection, verification join, and evidence record",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "98aa5713d55ef3412c2676cfe2bc39182aac5dcf",
+        "commit_short": "98aa571",
+        "authored_at": "2026-09-06T18:05:30+09:00",
+        "files_changed": 3,
+        "core_path_commit": true,
+        "window_position": 35,
+        "stream_id": "occurrence_publications"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-a9e9099-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "a9e9099 research: freeze the opaque v3 (G0-local) protocol for the 2026-09-06 occurrence [2026-09-06-v1]",
+        "description": "research: freeze the opaque v3 (G0-local) protocol for the 2026-09-06 occurrence",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "a9e9099838924a22efb2d62c135567554a0924e4",
+        "commit_short": "a9e9099",
+        "authored_at": "2026-09-06T17:12:32+09:00",
+        "files_changed": 1,
+        "core_path_commit": true,
+        "window_position": 30,
+        "stream_id": "protocol_freezes"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-ab211af-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "ab211af refactor(effect): rebuild Atom v2 content file store on PosixFileSystem [2026-09-06-v1]",
+        "description": "refactor(effect): rebuild Atom v2 content file store on PosixFileSystem",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "ab211af9c61ce64a6da3037a09dc6ac9bd706f1d",
+        "commit_short": "ab211af",
+        "authored_at": "2026-09-06T03:21:02Z",
+        "files_changed": 1,
+        "core_path_commit": false,
+        "window_position": 10,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-b6b945e-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "b6b945e test: follow the runtime closure growth and declare the v6 drift of the boundary refactor [2026-09-06-v1]",
+        "description": "test: follow the runtime closure growth and declare the v6 drift of the boundary refactor",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "b6b945edfdee298f4eb62507ebc515d0a3bb4bd8",
+        "commit_short": "b6b945e",
+        "authored_at": "2026-09-06T07:24:49Z",
+        "files_changed": 2,
+        "core_path_commit": false,
+        "window_position": 27,
+        "stream_id": "test_hygiene"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-b7aee99-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "b7aee99 research: public projection, verification join, and evidence record for a completed v3 occurrence [2026-09-06-v1]",
+        "description": "research: public projection, verification join, and evidence record for a completed v3 occurrence",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "b7aee996d4cf3c791363ce39185b1b9fd70618c7",
+        "commit_short": "b7aee99",
+        "authored_at": "2026-09-06T09:05:02Z",
+        "files_changed": 1,
+        "core_path_commit": false,
+        "window_position": 34,
+        "stream_id": "s3_instrument_and_dgx_tooling"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-ce34364-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "ce34364 research: v4 design revision (independent, stratum-balanced no-state orders) and the delegated 2026-09-06 decision source [2026-09-06-v1]",
+        "description": "research: v4 design revision (independent, stratum-balanced no-state orders) and the delegated 2026-09-06 decision source",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "ce34364d168b9dfd1e095629062fdf77c19b7a3a",
+        "commit_short": "ce34364",
+        "authored_at": "2026-09-06T09:30:17Z",
+        "files_changed": 7,
+        "core_path_commit": true,
+        "window_position": 38,
+        "stream_id": "design_revisions_and_delegated_decision"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-cf7595a-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "cf7595a docs(effect): note the closed boundary residues in the runtime README [2026-09-06-v1]",
+        "description": "docs(effect): note the closed boundary residues in the runtime README",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "cf7595ad53b2684be1e1ec992efdda59abfff422",
+        "commit_short": "cf7595a",
+        "authored_at": "2026-09-06T07:15:04Z",
+        "files_changed": 1,
+        "core_path_commit": false,
+        "window_position": 26,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-d3af76a-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "d3af76a results: opaque v5 (G0-local, corrected control clause) 2026-09-06 occurrence — every frozen clause held [2026-09-06-v1]",
+        "description": "results: opaque v5 (G0-local, corrected control clause) 2026-09-06 occurrence — every frozen clause held",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "d3af76a0a7c5741e5dbff53b00c294f1075abf2d",
+        "commit_short": "d3af76a",
+        "authored_at": "2026-09-06T10:07:39Z",
+        "files_changed": 7,
+        "core_path_commit": true,
+        "window_position": 46,
+        "stream_id": "occurrence_publications"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-d3c2a9b-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "d3c2a9b research: freeze the opaque v5 (G0-local, corrected control clause) protocol for the 2026-09-06 occurrence [2026-09-06-v1]",
+        "description": "research: freeze the opaque v5 (G0-local, corrected control clause) protocol for the 2026-09-06 occurrence",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "d3c2a9bd4b444c866f037c7386cacc6c12751b98",
+        "commit_short": "d3c2a9b",
+        "authored_at": "2026-09-06T18:48:42+09:00",
+        "files_changed": 1,
+        "core_path_commit": true,
+        "window_position": 43,
+        "stream_id": "protocol_freezes"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-d689def-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "d689def research: v3 code pool with equal-token-count selection, seal marker, and after-seal reveal publication [2026-09-06-v1]",
+        "description": "research: v3 code pool with equal-token-count selection, seal marker, and after-seal reveal publication",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "d689defaec5d128a355c24f086309f0c5c3618b2",
+        "commit_short": "d689def",
+        "authored_at": "2026-09-06T08:11:30Z",
+        "files_changed": 5,
+        "core_path_commit": true,
+        "window_position": 29,
+        "stream_id": "s3_instrument_and_dgx_tooling"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-d71f977-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "d71f977 canon: closure plan event version v4 — D-3 ratified by delegated choice, S-4 complete, v3/v4/v5 receipts, published to the live KG [2026-09-06-v1]",
+        "description": "canon: closure plan event version v4 — D-3 ratified by delegated choice, S-4 complete, v3/v4/v5 receipts, published to the live KG",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "d71f97780c2709fad993f71a9c593ee72ec73d0b",
+        "commit_short": "d71f977",
+        "authored_at": "2026-09-06T10:12:10Z",
+        "files_changed": 7,
+        "core_path_commit": false,
+        "window_position": 47,
+        "stream_id": "closure_events"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-d9e5c1a-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "d9e5c1a refactor(effect): Effect-native POSIX services and local Permit commit [2026-09-06-v1]",
+        "description": "refactor(effect): Effect-native POSIX services and local Permit commit",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "d9e5c1a11d20181f7dcf9a8e0d23f687e8ecabbd",
+        "commit_short": "d9e5c1a",
+        "authored_at": "2026-09-06T03:05:34Z",
+        "files_changed": 6,
+        "core_path_commit": true,
+        "window_position": 8,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-dad5d21-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "dad5d21 refactor(effect): graph-loop job and hypergraph projection as Effect programs [2026-09-06-v1]",
+        "description": "refactor(effect): graph-loop job and hypergraph projection as Effect programs",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "dad5d2139918e2dff3f16b76a13ae4fe7352e845",
+        "commit_short": "dad5d21",
+        "authored_at": "2026-09-06T03:31:28Z",
+        "files_changed": 5,
+        "core_path_commit": false,
+        "window_position": 15,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-ddf68c2-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "ddf68c2 research: run the opaque v3 (G0-local) occurrence through the fresh-DGX lease (S-3 tooling) [2026-09-06-v1]",
+        "description": "research: run the opaque v3 (G0-local) occurrence through the fresh-DGX lease (S-3 tooling)",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "ddf68c23e2eadf0d91ddc40f56bdd008bc8e63b7",
+        "commit_short": "ddf68c2",
+        "authored_at": "2026-09-06T07:50:31Z",
+        "files_changed": 5,
+        "core_path_commit": true,
+        "window_position": 28,
+        "stream_id": "s3_instrument_and_dgx_tooling"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-e00bd0f-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "e00bd0f refactor(effect): rebuild Atom v2 state journal file store on PosixFileSystem [2026-09-06-v1]",
+        "description": "refactor(effect): rebuild Atom v2 state journal file store on PosixFileSystem",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "e00bd0f3c97c8cc0fddadc91ff90d8e963f59b79",
+        "commit_short": "e00bd0f",
+        "authored_at": "2026-09-06T03:36:08Z",
+        "files_changed": 1,
+        "core_path_commit": false,
+        "window_position": 17,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-e677cb2-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "e677cb2 canon: ratify D-1 and D-4 and publish closure plan v2 [2026-09-06-v1]",
+        "description": "canon: ratify D-1 and D-4 and publish closure plan v2",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "e677cb25ab6c45a48a00cb94d8b37ef830f63647",
+        "commit_short": "e677cb2",
+        "authored_at": "2026-09-05T14:13:11Z",
+        "files_changed": 10,
+        "core_path_commit": false,
+        "window_position": 2,
+        "stream_id": "audit_and_plan"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-e926e1f-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "e926e1f results: opaque v3 (G0-local) 2026-09-06 occurrence — S-3 run complete, rule not met [2026-09-06-v1]",
+        "description": "results: opaque v3 (G0-local) 2026-09-06 occurrence — S-3 run complete, rule not met",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "e926e1fcbdef3c6da41a92995346df934289180b",
+        "commit_short": "e926e1f",
+        "authored_at": "2026-09-06T09:09:06Z",
+        "files_changed": 5,
+        "core_path_commit": true,
+        "window_position": 36,
+        "stream_id": "occurrence_publications"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-edee9d3-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "edee9d3 refactor(effect): split the POSIX adapter so the DNRD-5 closure excludes child_process [2026-09-06-v1]",
+        "description": "refactor(effect): split the POSIX adapter so the DNRD-5 closure excludes child_process",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "edee9d3becfbd9d1c4be65ad2ad80eba789ba270",
+        "commit_short": "edee9d3",
+        "authored_at": "2026-09-06T03:29:05Z",
+        "files_changed": 6,
+        "core_path_commit": true,
+        "window_position": 11,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-fd41b5d-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "fd41b5d fix: the v3 actor never stats the evaluator's private ledger; SR-3 rerun suffix [2026-09-06-v1]",
+        "description": "fix: the v3 actor never stats the evaluator's private ledger; SR-3 rerun suffix",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "CORE_PATH_COMMIT"
+        ],
+        "commit_sha": "fd41b5d0739bee5942409968236eede37d7b03a8",
+        "commit_short": "fd41b5d",
+        "authored_at": "2026-09-06T08:49:16Z",
+        "files_changed": 4,
+        "core_path_commit": true,
+        "window_position": 32,
+        "stream_id": "s3_instrument_and_dgx_tooling"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-commit-fdc4c9d-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "fdc4c9d refactor(effect): rehearsal fixtures return Either instead of throwing [2026-09-06-v1]",
+        "description": "refactor(effect): rehearsal fixtures return Either instead of throwing",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_COMMIT",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "COMMITTED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A commit is a unit of checked-in work; its subject line is not a claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_COMMIT",
+          "NON_CORE_COMMIT"
+        ],
+        "commit_sha": "fdc4c9d9a92e6e10dcfa3681ebbaedfd72534ac4",
+        "commit_short": "fdc4c9d",
+        "authored_at": "2026-09-06T03:36:49Z",
+        "files_changed": 8,
+        "core_path_commit": false,
+        "window_position": 16,
+        "stream_id": "effect_fp_boundary"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "HSWM session ledger [2026-09-06-v1]",
+        "description": "Bounded KG projection of the 2026-09-05/06 working session: 48 commits in the closure burden window after 4dcba75 up to 244bf4f, 23 on core paths, grouped into 10 work streams, joined to the closure-plan steps, receipts, decisions and cap they touched, with 8 open items and 3 readings.",
+        "authority_class": "SYSTEM_DERIVED",
+        "canonical_scope": "BOUNDED_SESSION_EFFORT_LEDGER",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "EFFORT_LEDGER_RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "An effort ledger orders what was done and what stays open; it passes no gate, ratifies nothing, and promotes no claim.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_LEDGER",
+          "PROJECTION_ROOT"
+        ],
+        "session_date": "2026-09-06",
+        "window_start_commit": "4dcba752a661de23066b3b33381bfdfc34879a57",
+        "ledger_head_commit": "244bf4f",
+        "commit_count": 48,
+        "core_commit_count": 23,
+        "core_share": 0.4792,
+        "core_path_prefixes": [
+          "src/hswm/experiments/g1_micro",
+          "src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit",
+          "_research/causal_composition/preregistrations/",
+          "results/",
+          "evidence/",
+          "F1_R8_RESULTS_LOG.md"
+        ],
+        "closure_bundle_uid": "sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v5",
+        "effect_fp_bundle_uid": "sym:AbstractNode:hswm-effect-fp-boundary-ontology-2026-09-06",
+        "stream_ids": [
+          "audit_and_plan",
+          "s2_permit_bridge_and_evaluator",
+          "s3_instrument_and_dgx_tooling",
+          "effect_fp_boundary",
+          "test_hygiene",
+          "s4_estimand_binding",
+          "design_revisions_and_delegated_decision",
+          "protocol_freezes",
+          "occurrence_publications",
+          "closure_events"
+        ]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-open-item-oi-1-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "OI-1 — D-2 needs the user's words [2026-09-06-v1]",
+        "description": "D-2 (narrow the never-weaken rule to post-outcome contract modification) was neither named nor asked in the 2026-09-06 delegation and remains PROPOSED; S-1 cannot close without it.",
+        "authority_class": "SECONDARY_AI_PROPOSAL_FOR_USER_PRIMARY",
+        "canonical_scope": "SESSION_OPEN_ITEM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "BLOCKED_ON_USER_WORDS",
+        "responsibility_owner": "user",
+        "claim_boundary": "An open item names what is missing and who owns it; recording it does not start or authorize any run.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_OPEN_ITEM"
+        ],
+        "open_item_id": "OI-1",
+        "open_item_owner": "USER_PRIMARY",
+        "open_item_status": "BLOCKED_ON_USER_WORDS"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-open-item-oi-2-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "OI-2 — Second-party line for S-6 [2026-09-06-v1]",
+        "description": "S-6 deliverable (b), one line naming a second-party recruiting date or an explicit non-start, requires the user's own words.  The zero-network G0-occurrence preflight reads BLOCKED_EXTERNAL on the workstation and on the DGX with all 22 external bindings missing; G0-external is not executable by one person (SR-2).",
+        "authority_class": "SECONDARY_AI_PROPOSAL_FOR_USER_PRIMARY",
+        "canonical_scope": "SESSION_OPEN_ITEM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "BLOCKED_ON_USER_WORDS",
+        "responsibility_owner": "user",
+        "claim_boundary": "An open item names what is missing and who owns it; recording it does not start or authorize any run.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_OPEN_ITEM"
+        ],
+        "open_item_id": "OI-2",
+        "open_item_owner": "USER_PRIMARY",
+        "open_item_status": "BLOCKED_ON_USER_WORDS"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-open-item-oi-3-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "OI-3 — B0 comparator successor occurrence [2026-09-06-v1]",
+        "description": "The only B0 consumption occurrence (2026-08-30) failed before any model call: ModuleNotFoundError for alfworld inside the bwrap sandbox (DGX host diagnostics 2026-09-06 -006 reproduced it, -007 imported after a PYTHONPATH change).  The fix is an uncommitted edit to the protocol-bound alfworld_text_runtime.py, so a valid B0 needs a sixth prospective amendment or a v2 protocol, a new dated selection manifest (the sealed selection binds the protocol digest), code and test pin updates, a fresh zero-POST DGX qualification, then one 36000 s-ceiling occurrence: about 540 minutes of one-person work, not feasible on 2026-09-06.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_OPEN_ITEM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "NOT_FEASIBLE_TODAY_ROOT_CAUSE_KNOWN",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "An open item names what is missing and who owns it; recording it does not start or authorize any run.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_OPEN_ITEM"
+        ],
+        "open_item_id": "OI-3",
+        "open_item_owner": "SECONDARY_AI",
+        "open_item_status": "NOT_FEASIBLE_TODAY_ROOT_CAUSE_KNOWN"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-open-item-oi-4-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "OI-4 — B2 text-lesson comparator preregistration [2026-09-06-v1]",
+        "description": "Only a DRAFT_NOT_PREREGISTERED_NOT_FROZEN_NOT_RUN design and a lesson-state core exist; nine of eighteen bindings are pending and the selector, transport, ALFWorld execution, scorer, sealed runner and projector are missing.  Multi-day effort; depends on the repaired B0 sandbox.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_OPEN_ITEM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "NOT_FEASIBLE_TODAY_DRAFT_ONLY",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "An open item names what is missing and who owns it; recording it does not start or authorize any run.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_OPEN_ITEM"
+        ],
+        "open_item_id": "OI-4",
+        "open_item_owner": "SECONDARY_AI",
+        "open_item_status": "NOT_FEASIBLE_TODAY_DRAFT_ONLY"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-open-item-oi-5-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "OI-5 — D-4 canonical-revision and held-out successor [2026-09-06-v1]",
+        "description": "The v5 receipt supplies the credit-to-Permit-to-state-readout segment only; a done-state run needs a study-local canonical revision plane (owner-bound OutcomeRecord, CreditRecord, RevisionProposal, DispositionRevision, PermitCommitReceipt, CanonicalStateHead, InterventionReceipt) and a precommitted train/held-out partition on a non-numeric persistent task.  A prospective contract exists as the uncommitted d4_v1_canonical_heldout_DRAFT README prepared by a parallel agent session.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_OPEN_ITEM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "SUCCESSOR_CONTRACT_DRAFTED_NOT_PREREGISTERED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "An open item names what is missing and who owns it; recording it does not start or authorize any run.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_OPEN_ITEM"
+        ],
+        "open_item_id": "OI-5",
+        "open_item_owner": "SECONDARY_AI",
+        "open_item_status": "SUCCESSOR_CONTRACT_DRAFTED_NOT_PREREGISTERED"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-open-item-oi-6-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "OI-6 — Burden cap trajectory [2026-09-06-v1]",
+        "description": "At the ledger head 48 commits sit in the 100-commit window after 4dcba75, 23 on core paths (0.4792 < 0.5, WINDOW_OPEN_BELOW_SHARE).  The cap can only be violated when the window is full, so at least 28 of the remaining 52 commits must touch a core path; the ledger commit itself is not a core-path commit.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_OPEN_ITEM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "WINDOW_OPEN_BELOW_SHARE",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "An open item names what is missing and who owns it; recording it does not start or authorize any run.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_OPEN_ITEM"
+        ],
+        "open_item_id": "OI-6",
+        "open_item_owner": "SECONDARY_AI",
+        "open_item_status": "WINDOW_OPEN_BELOW_SHARE"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-open-item-oi-7-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "OI-7 — DGX checkout lag [2026-09-06-v1]",
+        "description": "The DGX checkout ~/hswm-source was at 7ff7766 when the ledger was taken, behind the workstation head; code ships by git bundle (no GitHub push).  Every occurrence lease refuses a dirty or divergent tree, so the bundle must be shipped before any further DGX run.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_OPEN_ITEM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "SHIP_BUNDLE_BEFORE_NEXT_RUN",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "An open item names what is missing and who owns it; recording it does not start or authorize any run.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_OPEN_ITEM"
+        ],
+        "open_item_id": "OI-7",
+        "open_item_owner": "SECONDARY_AI",
+        "open_item_status": "SHIP_BUNDLE_BEFORE_NEXT_RUN"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-open-item-oi-8-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "OI-8 — Parallel agent session sharing the working tree [2026-09-06-v1]",
+        "description": "An OpenAI Codex CLI session with the same working directory wrote, uncommitted and unreviewed by this session: the recovered B0 2026-08-30 result, evidence and raw receipts; expel_b2_text_lesson.py and its test; test_hswm_alfworld_b0_publication.py; the B2 and D-4 successor DRAFT READMEs; the alfworld_text_runtime.py PYTHONPATH fix and its test; one F1_R8_RESULTS_LOG.md row.  Their 31 tests pass locally.  This session committed only its own paths and left those files untracked; nothing here is cited as committed work.",
+        "authority_class": "SECONDARY_AI_PROPOSAL_FOR_USER_PRIMARY",
+        "canonical_scope": "SESSION_OPEN_ITEM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "OBSERVED_UNCOMMITTED_THIRD_WRITER",
+        "responsibility_owner": "user",
+        "claim_boundary": "An open item names what is missing and who owns it; recording it does not start or authorize any run.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_OPEN_ITEM"
+        ],
+        "open_item_id": "OI-8",
+        "open_item_owner": "USER_PRIMARY",
+        "open_item_status": "OBSERVED_UNCOMMITTED_THIRD_WRITER"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-reading-r-burden-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Burden reading at the ledger head [2026-09-06-v1]",
+        "description": "scripts/check_hswm_closure_burden_cap.py: commits_observed 48, core_commits 23, core_share 0.4792, min_core_share 0.5, window 100 from 4dcba75, status WINDOW_OPEN_BELOW_SHARE, disposition INSTRUMENT_RED_ROW_IN_F1_R8_NO_SCOPE_EXPANSION on violation.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_READING",
+        "ontology_kind": "OBSERVATION",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A reading reports an observed number or state on the ledger date; it is not a result and expires with the next commit.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "BURDEN_READING"
+        ],
+        "reading_id": "R-BURDEN",
+        "read_on": "2026-09-06"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-reading-r-day-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "What the day established and what it did not [2026-09-06-v1]",
+        "description": "Established: the whole G0-local instrument chain runs end-to-end on the DGX under a fresh digest-pinned lease with OS-user custody, and under a satisfiable control clause the compiled local disposition mediates the model's opaque-action choice (stateful 96/96 vs forced-opposite 0/96 vs no-state 48/96 across v3, v4, v5).  Not established: canonical HSWM admission, held-out generalization, reuse-first comparators, G0-external, G1, efficacy; the D-4 v1 done-state is not reached.  Decisions ratified today: D-3 (delegated, option A).  Still PROPOSED: D-2.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_READING",
+        "ontology_kind": "OBSERVATION",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A reading reports an observed number or state on the ledger date; it is not a result and expires with the next commit.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_OUTCOME_READING"
+        ],
+        "reading_id": "R-DAY",
+        "read_on": "2026-09-06"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-reading-r-verify-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Verification readings on 2026-09-06 [2026-09-06-v1]",
+        "description": "Effect runtime at 244bf4f: npm run check clean (tsc, temporal tsc, boundary lint over 130 files with 0 violations and 0 stale allowlist entries); vitest 870 passed, 7 skipped, and 2 filesystem-heavy tests (two-CAS resume, S2S preregistration snapshot) timed out at 5000 ms while the Python suite ran concurrently and passed in isolation (29/29).  Closure-plan tests 11 passed and graph-view SHACL/SPARQL 14 passed at 244bf4f; the parallel session's 31 untracked tests pass.  Python suite at 244bf4f with the parallel session's untracked tests present: 3649 passed, 3 skipped (17 min 15 s).  DGX: every occurrence lease restored the shared vllm, vllm-receiver and comfyui-10eros containers; 30 leftover /tmp/hswm-v* files were removed after the last run.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_READING",
+        "ontology_kind": "OBSERVATION",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A reading reports an observed number or state on the ledger date; it is not a result and expires with the next commit.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "VERIFICATION_READING"
+        ],
+        "reading_id": "R-VERIFY",
+        "read_on": "2026-09-06"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-stream-audit-and-plan-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Adversarial audit and closure plan record [2026-09-06-v1]",
+        "description": "The 2026-09-05 adversarial programme audit, its closure plan, the first KG projection, the D-1/D-4 ratification event (v2) and the numeric burden-cap checker were recorded.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_WORK_STREAM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A work stream groups commits by purpose; its outcome sentence is descriptive, not a result.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_WORK_STREAM"
+        ],
+        "stream_id": "audit_and_plan",
+        "commit_count": 3,
+        "core_commit_count": 1,
+        "first_commit": "95eca6f",
+        "last_commit": "0463f6c",
+        "closure_step_ids": [
+          "S-1"
+        ]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-stream-closure-events-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Closure plan event versions v3, v4, v5 [2026-09-06-v1]",
+        "description": "v3 at the first v3 receipt; v4 with D-3 ratified by delegated choice, S-4 complete and three receipts; v5 with the D-4 done-state judged SEGMENT_OBSERVED_BY_V5_RECEIPT_NOT_REACHED and zero-POST progress readings for S-1, S-5, S-6.  Each was published to the live KG and read back exactly; predecessors retained unchanged.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_WORK_STREAM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A work stream groups commits by purpose; its outcome sentence is descriptive, not a result.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_WORK_STREAM"
+        ],
+        "stream_id": "closure_events",
+        "commit_count": 3,
+        "core_commit_count": 0,
+        "first_commit": "3a751dd",
+        "last_commit": "244bf4f",
+        "closure_step_ids": [
+          "S-4",
+          "S-6"
+        ]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-stream-design-revisions-and-delegated-decision-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "v4/v5 design and rule revisions under the delegated decision [2026-09-06-v1]",
+        "description": "The user's verbatim delegation was hash-bound (D-3 RATIFIED option A, DELEGATED_CHOICE_RECORDED_VERBATIM); v4 made the no-state orders seed-independent and stratum-balanced; v5 replaced the unsatisfiable own-position control clause with stateful per-stratum floors and pooled control ceilings.  Each is a new preregistration (RG-4); sealed terminals were not rescored.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_WORK_STREAM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A work stream groups commits by purpose; its outcome sentence is descriptive, not a result.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_WORK_STREAM"
+        ],
+        "stream_id": "design_revisions_and_delegated_decision",
+        "commit_count": 2,
+        "core_commit_count": 2,
+        "first_commit": "ce34364",
+        "last_commit": "4b4411c",
+        "closure_step_ids": [
+          "S-3",
+          "S-4"
+        ]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Effect runtime functional boundary refactor [2026-09-06-v1]",
+        "description": "PosixFileSystem and BoundedSubprocess adapters, runProcessMain, Either-returning cores, the R1-R5 boundary lint with a seven-lane allowlist wired into npm run check, and the published functional-boundary KG bundle (84 nodes / 279 relations); no throwing digest wrapper, no Promise seams in the state journal.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_WORK_STREAM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A work stream groups commits by purpose; its outcome sentence is descriptive, not a result.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_WORK_STREAM"
+        ],
+        "stream_id": "effect_fp_boundary",
+        "commit_count": 16,
+        "core_commit_count": 3,
+        "first_commit": "d9e5c1a",
+        "last_commit": "cf7595a",
+        "closure_step_ids": []
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-stream-occurrence-publications-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Occurrence projections, verification joins, evidence and result files [2026-09-06-v1]",
+        "description": "Three sealed occurrences published: v3-r2 NO_SEPARATION (ACTIVE 32/32, RESTORE 32/32, FORCED 0/32, SHAM 20/32, NO_UPDATE 16/32, REMOVE 16/32, delta 0.594), v4 NO_SEPARATION (32/32/0/14/16/16, delta 0.641, control clause shown unsatisfiable), v5 G0_LOCAL_IDENTIFIABILITY_OBSERVED (32/32/0/16/16/16, delta 0.625, claim ceiling MEASUREMENT_READY_SINGLE_OWNER_UNDER_DECLARED_OPAQUE_TASK).  G0 NOT_PASSED, G1 NOT_EVALUATED, no efficacy inference.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_WORK_STREAM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A work stream groups commits by purpose; its outcome sentence is descriptive, not a result.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_WORK_STREAM"
+        ],
+        "stream_id": "occurrence_publications",
+        "commit_count": 6,
+        "core_commit_count": 6,
+        "first_commit": "98aa571",
+        "last_commit": "d3af76a",
+        "closure_step_ids": [
+          "S-3"
+        ]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-stream-protocol-freezes-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Frozen protocols [2026-09-06-v1]",
+        "description": "Four protocols frozen with offline tokenizer receipts: v3 2026-09-06 (VOID attempt, canonical 4d049c7b…), v3 2026-09-06-r2 (2363815e…), v4 2026-09-06 (052f5198…), v5 2026-09-06 (180f7e5f…).",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_WORK_STREAM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A work stream groups commits by purpose; its outcome sentence is descriptive, not a result.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_WORK_STREAM"
+        ],
+        "stream_id": "protocol_freezes",
+        "commit_count": 4,
+        "core_commit_count": 4,
+        "first_commit": "a9e9099",
+        "last_commit": "d3c2a9b",
+        "closure_step_ids": [
+          "S-3"
+        ]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-stream-s2-permit-bridge-and-evaluator-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "S-2: Atom v2 local Permit bridge and separate-process evaluator [2026-09-06-v1]",
+        "description": "g1_micro admissions go through the real Atom v2 local Permit commit (node process) and outcomes are scored by a separate-process, salt-keyed evaluator; S-2 completed at 51f631b.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_WORK_STREAM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A work stream groups commits by purpose; its outcome sentence is descriptive, not a result.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_WORK_STREAM"
+        ],
+        "stream_id": "s2_permit_bridge_and_evaluator",
+        "commit_count": 2,
+        "core_commit_count": 1,
+        "first_commit": "51f631b",
+        "last_commit": "8c3f56d",
+        "closure_step_ids": [
+          "S-2"
+        ]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-stream-s3-instrument-and-dgx-tooling-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "S-3: opaque v3 instrument and fresh-DGX lease tooling [2026-09-06-v1]",
+        "description": "The 32-episode opaque v3 (G0-local) instrument, the digest-pinned loopback vLLM lease with runtime binding and final attestation, code pool with equal-token-count selection, seal marker with bounded reveal wait, after-seal reveal publication by the evaluator OS user, and the two defect fixes found by the VOID first attempt (validator path acceptance; actor never stats the evaluator ledger, SR-3 rerun suffix).",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_WORK_STREAM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A work stream groups commits by purpose; its outcome sentence is descriptive, not a result.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_WORK_STREAM"
+        ],
+        "stream_id": "s3_instrument_and_dgx_tooling",
+        "commit_count": 7,
+        "core_commit_count": 5,
+        "first_commit": "13780ff",
+        "last_commit": "62e2d7e",
+        "closure_step_ids": [
+          "S-3"
+        ]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-stream-s4-estimand-binding-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "S-4: D-3 G1 estimand binding proposal [2026-09-06-v1]",
+        "description": "The D-3 proposal (option A recommended: the project.v1.json pass_rule as binding G1 estimand; B0/B2 as secondary ceilings) was prepared for the user's decision.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_WORK_STREAM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A work stream groups commits by purpose; its outcome sentence is descriptive, not a result.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_WORK_STREAM"
+        ],
+        "stream_id": "s4_estimand_binding",
+        "commit_count": 1,
+        "core_commit_count": 1,
+        "first_commit": "0ddf2e0",
+        "last_commit": "0ddf2e0",
+        "closure_step_ids": [
+          "S-4"
+        ]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-session-stream-test-hygiene-2026-09-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Test hygiene and lint residues [2026-09-06-v1]",
+        "description": "Retired 23 dead per-version handoff tests for one retained-snapshot test, stopped byte-pinning live files in the S2S numeric closure and the FP-boundary test, followed the runtime closure growth (76 files) and declared the v6 drift of the boundary refactor.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "SESSION_WORK_STREAM",
+        "ontology_kind": "TASK",
+        "ontology_plane": "INQUIRY",
+        "epistemic_state": "RECORDED",
+        "responsibility_owner": "session_ledger_custodian",
+        "claim_boundary": "A work stream groups commits by purpose; its outcome sentence is descriptive, not a result.",
+        "projection_nonclaim": "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT",
+        "ontology_domain": "AI",
+        "record_lifecycle": "ACTIVE",
+        "review_required": true,
+        "semantic_roles": [
+          "SESSION_WORK_STREAM"
+        ],
+        "stream_id": "test_hygiene",
+        "commit_count": 4,
+        "core_commit_count": 0,
+        "first_commit": "1b20e3c",
+        "last_commit": "b6b945e",
+        "closure_step_ids": []
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-01dce38-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-0272c5b-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-0272c5b-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-388f40d-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-0463f6c-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-51f631b-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-0ddf2e0-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-cf7595a-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-13780ff-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-1b20e3c-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-13b18ba-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-fd41b5d-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-1b20e3c-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-d9e5c1a-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-1d44bc6-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-dad5d21-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-1feb30c-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-2edf60e-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-231ee05-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-45b81d7-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-2edf60e-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-01dce38-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-388f40d-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-6ebc181-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-3a751dd-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-ce34364-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-45b81d7-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-4c924d2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-4b4411c-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-d3c2a9b-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-4c924d2-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-4b4411c-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-4c924d2-2026-09-06-v1",
+      "type": "TARGETS",
+      "to_uid": "sym:AbstractNode:hswm-closure-v4-receipt-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "RESULT_FILE_FOR_RECEIPT",
+      "status": "SEALED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-51f631b-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-8c3f56d-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-547b02f-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-1feb30c-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-62e2d7e-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-7ff7766-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-647fcde-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-b7aee99-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-68513d9-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-8ee390b-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-6ebc181-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-0ddf2e0-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-75fdf15-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-ab211af-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-7ff7766-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-d3af76a-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-8c3f56d-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-13780ff-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-8ee390b-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-1d44bc6-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-95eca6f-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-e677cb2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-98aa571-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-e926e1f-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-a9e9099-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-13b18ba-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-ab211af-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-edee9d3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-b6b945e-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-ddf68c2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-b7aee99-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-98aa571-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-ce34364-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-231ee05-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-cf7595a-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-b6b945e-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-d3af76a-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-d71f977-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-d3af76a-2026-09-06-v1",
+      "type": "TARGETS",
+      "to_uid": "sym:AbstractNode:hswm-closure-v5-receipt-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "RESULT_FILE_FOR_RECEIPT",
+      "status": "SEALED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-d3c2a9b-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-62e2d7e-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-d689def-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-a9e9099-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-d71f977-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-244bf4f-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-d9e5c1a-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-75fdf15-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-dad5d21-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-fdc4c9d-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-ddf68c2-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-d689def-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-e00bd0f-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-547b02f-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-e677cb2-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-0463f6c-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-e926e1f-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-3a751dd-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-e926e1f-2026-09-06-v1",
+      "type": "TARGETS",
+      "to_uid": "sym:AbstractNode:hswm-closure-v3-receipt-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "RESULT_FILE_FOR_RECEIPT",
+      "status": "SEALED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-edee9d3-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-68513d9-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-fd41b5d-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-647fcde-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-commit-fdc4c9d-2026-09-06-v1",
+      "type": "PRECEDES",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-e00bd0f-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WINDOW_ORDER",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LEDGER_JOINS_CLOSURE_EVENT_V5",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:AbstractNode:hswm-effect-fp-boundary-ontology-2026-09-06",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LEDGER_JOINS_EFFECT_FP_BUNDLE",
+      "status": "BOUND"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SUBJECT",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-open-item-oi-1-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM",
+      "status": "BLOCKED_ON_USER_WORDS"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-open-item-oi-2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM",
+      "status": "BLOCKED_ON_USER_WORDS"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-open-item-oi-3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM",
+      "status": "NOT_FEASIBLE_TODAY_ROOT_CAUSE_KNOWN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-open-item-oi-4-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM",
+      "status": "NOT_FEASIBLE_TODAY_DRAFT_ONLY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-open-item-oi-5-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM",
+      "status": "SUCCESSOR_CONTRACT_DRAFTED_NOT_PREREGISTERED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-open-item-oi-6-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM",
+      "status": "WINDOW_OPEN_BELOW_SHARE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-open-item-oi-7-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM",
+      "status": "SHIP_BUNDLE_BEFORE_NEXT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-open-item-oi-8-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM",
+      "status": "OBSERVED_UNCOMMITTED_THIRD_WRITER"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-reading-r-burden-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "READING",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-reading-r-day-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "READING",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-reading-r-verify-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "READING",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-stream-audit-and-plan-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-stream-closure-events-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-stream-design-revisions-and-delegated-decision-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-stream-occurrence-publications-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-stream-protocol-freezes-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-stream-s2-permit-bridge-and-evaluator-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-stream-s3-instrument-and-dgx-tooling-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-stream-s4-estimand-binding-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-session-stream-test-hygiene-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-session-ledger-2026-09-06-v1",
+      "type": "TARGETS",
+      "to_uid": "sym:ResearchProgram:hswm-closure-plan-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SESSION_EFFORT_UNDER_PROGRAM",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-open-item-oi-1-2026-09-06-v1",
+      "type": "BLOCKS",
+      "to_uid": "sym:Concept:hswm-closure-step-s-1-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM_BLOCKS",
+      "status": "BLOCKED_ON_USER_WORDS"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-open-item-oi-2-2026-09-06-v1",
+      "type": "BLOCKS",
+      "to_uid": "sym:Concept:hswm-closure-step-s-6-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM_BLOCKS",
+      "status": "BLOCKED_ON_USER_WORDS"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-open-item-oi-3-2026-09-06-v1",
+      "type": "BLOCKS",
+      "to_uid": "sym:Concept:hswm-closure-step-s-5-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM_BLOCKS",
+      "status": "NOT_FEASIBLE_TODAY_ROOT_CAUSE_KNOWN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-open-item-oi-4-2026-09-06-v1",
+      "type": "BLOCKS",
+      "to_uid": "sym:Concept:hswm-closure-step-s-5-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM_BLOCKS",
+      "status": "NOT_FEASIBLE_TODAY_DRAFT_ONLY"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-open-item-oi-5-2026-09-06-v1",
+      "type": "BLOCKS",
+      "to_uid": "sym:Concept:hswm-closure-v1-done-state-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM_BLOCKS",
+      "status": "SUCCESSOR_CONTRACT_DRAFTED_NOT_PREREGISTERED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-open-item-oi-6-2026-09-06-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:Concept:hswm-closure-step-s-6-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM_CONSTRAINS",
+      "status": "WINDOW_OPEN_BELOW_SHARE"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-open-item-oi-7-2026-09-06-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:Concept:hswm-closure-step-s-5-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM_CONSTRAINS",
+      "status": "SHIP_BUNDLE_BEFORE_NEXT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-open-item-oi-8-2026-09-06-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:Concept:hswm-closure-step-s-5-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPEN_ITEM_CONSTRAINS",
+      "status": "OBSERVED_UNCOMMITTED_THIRD_WRITER"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-reading-r-burden-2026-09-06-v1",
+      "type": "ASSESSES",
+      "to_uid": "sym:Concept:hswm-closure-burden-cap-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "READING_ASSESSES",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-audit-and-plan-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:Concept:hswm-closure-step-s-1-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM_ADVANCES_STEP",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-audit-and-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-0463f6c-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-audit-and-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-95eca6f-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-audit-and-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-e677cb2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-closure-events-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:Concept:hswm-closure-step-s-4-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM_ADVANCES_STEP",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-closure-events-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:Concept:hswm-closure-step-s-6-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM_ADVANCES_STEP",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-closure-events-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-244bf4f-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-closure-events-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-3a751dd-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-closure-events-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-d71f977-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-closure-events-2026-09-06-v1",
+      "type": "TARGETS",
+      "to_uid": "sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "LATEST_EVENT_VERSION",
+      "status": "PUBLISHED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-design-revisions-and-delegated-decision-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:Concept:hswm-closure-step-s-3-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM_ADVANCES_STEP",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-design-revisions-and-delegated-decision-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:Concept:hswm-closure-step-s-4-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM_ADVANCES_STEP",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-design-revisions-and-delegated-decision-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-4b4411c-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-design-revisions-and-delegated-decision-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-ce34364-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-design-revisions-and-delegated-decision-2026-09-06-v1",
+      "type": "TARGETS",
+      "to_uid": "sym:Concept:hswm-closure-user-decision-d-3-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DELEGATED_RATIFICATION_SOURCE",
+      "status": "RATIFIED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-0272c5b-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-1d44bc6-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-1feb30c-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-2edf60e-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-388f40d-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-547b02f-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-68513d9-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-75fdf15-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-8ee390b-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-ab211af-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-cf7595a-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-d9e5c1a-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-dad5d21-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-e00bd0f-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-edee9d3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-fdc4c9d-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-effect-fp-boundary-2026-09-06-v1",
+      "type": "TARGETS",
+      "to_uid": "sym:AbstractNode:hswm-effect-fp-boundary-ontology-2026-09-06",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PROJECTED_AS",
+      "status": "PUBLISHED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-occurrence-publications-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:Concept:hswm-closure-step-s-3-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM_ADVANCES_STEP",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-occurrence-publications-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-45b81d7-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-occurrence-publications-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-4c924d2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-occurrence-publications-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-7ff7766-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-occurrence-publications-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-98aa571-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-occurrence-publications-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-d3af76a-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-occurrence-publications-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-e926e1f-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-protocol-freezes-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:Concept:hswm-closure-step-s-3-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM_ADVANCES_STEP",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-protocol-freezes-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-231ee05-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-protocol-freezes-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-647fcde-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-protocol-freezes-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-a9e9099-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-protocol-freezes-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-d3c2a9b-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-s2-permit-bridge-and-evaluator-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:Concept:hswm-closure-step-s-2-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM_ADVANCES_STEP",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-s2-permit-bridge-and-evaluator-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-51f631b-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-s2-permit-bridge-and-evaluator-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-8c3f56d-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-s3-instrument-and-dgx-tooling-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:Concept:hswm-closure-step-s-3-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM_ADVANCES_STEP",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-s3-instrument-and-dgx-tooling-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-13780ff-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-s3-instrument-and-dgx-tooling-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-13b18ba-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-s3-instrument-and-dgx-tooling-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-62e2d7e-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-s3-instrument-and-dgx-tooling-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-b7aee99-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-s3-instrument-and-dgx-tooling-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-d689def-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-s3-instrument-and-dgx-tooling-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-ddf68c2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-s3-instrument-and-dgx-tooling-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-fd41b5d-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-s4-estimand-binding-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:Concept:hswm-closure-step-s-4-2026-09-05-v5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "WORK_STREAM_ADVANCES_STEP",
+      "status": "RECORDED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-s4-estimand-binding-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-0ddf2e0-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-test-hygiene-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-01dce38-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-test-hygiene-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-1b20e3c-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-test-hygiene-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-6ebc181-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-session-stream-test-hygiene-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-session-commit-b6b945e-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "STREAM_COMMIT",
+      "status": "COMMITTED"
+    }
+  ]
+}

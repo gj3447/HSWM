@@ -42,7 +42,7 @@ HSWM이 완성되지 않는 이유를 기술 블로커가 아니라 자기부과
 1비트 학습 루프의 결합으로 판정했다. 문서는 열린 간극 7개, 순서 있는 폐쇄 단계 6개, 정지 규칙
 5개, 숫자 있는 burden cap과 사용자 결정 요청 4개(D-1 G0 분할, D-2 never-weaken 한정, D-3 G1
 estimand 결속, D-4 유한 완료 상태)를 담는다. 기계 투영은
-[`closure plan ontology v5`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json)이며(v5는 2026-09-06 D-4 완료상태 판정 `SEGMENT_OBSERVED_BY_V5_RECEIPT_NOT_REACHED`와 S-1/S-5/S-6 진행 판독 이벤트 버전; v4는 D-3 위임 확정과 v3/v4/v5 receipt; v2·v3·v4는 유지),
+[`closure plan ontology v5`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json)이며(v5는 2026-09-06 D-4 완료상태 판정 `SEGMENT_OBSERVED_BY_V5_RECEIPT_NOT_REACHED`와 S-1/S-5/S-6 진행 판독 이벤트 버전; v4는 D-3 위임 확정과 v3/v4/v5 receipt; v2·v3·v4는 유지), 같은 날의 작업 원장은 [`session ledger 2026-09-06`](ontology/identity/hswm_core/HSWM_SESSION_LEDGER_2026-09-06.v1.json)(burden window의 48 commit·10 work stream·8 open item·3 reading; 결과가 아닌 노력 기록),
 같은 날 사용자 원문
 [`USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt`](docs/canon/sources/USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt)로
 D-1과 D-4는 `RATIFIED`, D-2와 D-3는 `PROPOSED`다. 확정 전 스냅샷 v1은 라이브 KG에 먼저 게시됐고

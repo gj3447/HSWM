@@ -66,6 +66,28 @@ does not mutate HSWM, FCL, Ragnarok, PIDNA, or scientific-synthesis anchors.
 KG presence is publication of an `UNJUDGED` research design, not a passed
 control, material result, HSWM cognition, causal learning, or efficacy.
 
+## Session ledger projection (2026-09-06)
+
+[`HSWM_SESSION_LEDGER_2026-09-06.v1.json`](HSWM_SESSION_LEDGER_2026-09-06.v1.json)
+(bundle UID `sym:AbstractNode:hswm-session-ledger-2026-09-06-v1`, built by
+`scripts/build_hswm_session_ledger_2026_09_06.py`, published by
+`scripts/upsert_hswm_session_ledger_2026_09_06.py`) is the effort ledger of
+the 2026-09-05/06 working session: the 48 commits in the closure burden
+window after `4dcba75` up to the closure v5 event commit, 23 of them on core
+paths, grouped into ten work streams (audit and plan, S-2 Permit bridge and
+evaluator, S-3 instrument and DGX tooling, Effect functional boundary, test
+hygiene, S-4 estimand binding, v4/v5 revisions under the delegated decision,
+protocol freezes, occurrence publications, closure events), each stream joined
+to the closure-plan steps it advanced and each result commit to its receipt;
+eight open items with owners (D-2 and the second-party line wait on the user's
+words; the B0 successor, the B2 preregistration and the D-4 canonical/held-out
+successor are not feasible in one day; the burden cap is below share with the
+window open; the DGX checkout lags; a parallel Codex session holds uncommitted
+files); and three readings (burden, verification, what the day established).
+The ledger anchors only into the closure v5 bundle, the Effect
+functional-boundary bundle and the HSWM concept.  It is an effort record, not
+a result: G0 `NOT_PASSED`, G1 `NOT_EVALUATED`, the D-4 done-state not reached.
+
 ## Current closure-plan projection
 
 [`HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json`](HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json)

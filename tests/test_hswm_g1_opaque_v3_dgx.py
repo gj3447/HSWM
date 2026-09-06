@@ -306,3 +306,24 @@ def test_v3_runtime_binding_record_validates_with_the_dated_protocol_path(tmp_pa
     drifted["record_sha256"] = g1_micro.canonical_sha256(unsigned)
     with pytest.raises(g1_micro.G1MicroError, match="differs from execution sources"):
         g1_micro.validate_dgx_runtime_binding(drifted, protocol=protocol, protocol_sha256=protocol_sha, source_manifest=source)
+
+
+def test_repaired_rerun_suffix_maps_to_a_dated_sibling_path(tmp_path: Path) -> None:
+    from tests.test_hswm_g1_opaque_v3 import SEED, _OPAQUE_SUCCESSOR_PROTOCOL
+
+    source = json.loads(_OPAQUE_SUCCESSOR_PROTOCOL.read_text(encoding="utf-8"))
+    tokenizer_model = {key: source["tokenizer_binding"][key] for key in ("container_image", "container_image_id", "model_repository", "model_revision", "snapshot_manifest_sha256")}
+    protocol, _ = g1_opaque_v3.generate_v3(
+        seed=SEED, study_date="2026-09-06", live_binding=source["live_binding"], tokenizer_model=tokenizer_model,
+        consumption_registry_path=str(tmp_path / "once-r2"), run_suffix="r2",
+    )
+    assert protocol["study_uid"].endswith("-v3-2026-09-06-r2")
+    path = "_research/causal_composition/preregistrations/g1_opaque_identifiability_v3_2026-09-06-r2/protocol.v1.json"
+    assert g1_micro.dgx_v3_protocol_path(protocol) == path
+    assert g1_micro.is_dgx_protocol_path(path) and g1_micro.dgx_tracked_source_paths(protocol)[0] == path
+    assert not g1_micro.is_dgx_protocol_path(path.replace("-r2", "-rerun"))
+    with pytest.raises(g1_micro.G1MicroError, match="run suffix"):
+        g1_opaque_v3.generate_v3(
+            seed=SEED, study_date="2026-09-06", live_binding=source["live_binding"], tokenizer_model=tokenizer_model,
+            consumption_registry_path=str(tmp_path / "once"), run_suffix="rerun",
+        )

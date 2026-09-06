@@ -284,6 +284,7 @@ def generate_v3(
     tokenizer_model: Mapping[str, str],
     consumption_registry_path: str,
     token_counts: Mapping[str, int] | None = None,
+    run_suffix: str | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Return (public protocol, secret evaluator reveal) for one seed.
 
@@ -301,7 +302,9 @@ def generate_v3(
         raise G1MicroError("v3 live binding field set drifted")
     positions = _balanced_bits(seed, "correct-position", EPISODE_COUNT)
     sham_bits = _balanced_bits(seed, "sham-bit", EPISODE_COUNT)
-    study_uid = f"{V3_STUDY_UID_PREFIX}{study_date}"
+    if run_suffix is not None and not re.fullmatch(r"r[1-9][0-9]?", run_suffix):
+        raise G1MicroError("v3 run suffix must look like r2 (a repaired rerun under SR-3)")
+    study_uid = f"{V3_STUDY_UID_PREFIX}{study_date}" + ("" if run_suffix is None else f"-{run_suffix}")
     pool = v3_code_pool(seed)
     episodes: list[dict[str, Any]] = []
     entries: list[dict[str, Any]] = []
@@ -913,7 +916,12 @@ def run_v3_with_backend(
         metrics = v3_metrics(episodes, scores)
         g1_micro._atomic_write(output / "evaluator_reveal.json", reveal_raw)
         ledger_path = Path(evaluator.ledger_path)
-        ledger_sha = _digest(ledger_path.read_bytes()) if ledger_path.is_file() else None
+        # The ledger is the evaluator user's private record; under separate
+        # custody the actor cannot even stat it, and that is the expected case.
+        try:
+            ledger_sha = _digest(ledger_path.read_bytes()) if ledger_path.is_file() else None
+        except OSError:
+            ledger_sha = None
         unsigned = {
             "schema_version": V3_PROTOCOL,
             "study_uid": protocol["study_uid"],
@@ -927,7 +935,7 @@ def run_v3_with_backend(
             "scientific_status": SCIENTIFIC_STATUS,
             "evaluator_boundary": evaluator_process.EVALUATOR_BOUNDARY,
             "evaluator_reveal": {"path": "evaluator_reveal.json", "sha256": _digest(reveal_raw)},
-            "evaluator_ledger": {"path": str(ledger_path), "sha256": ledger_sha},
+            "evaluator_ledger": {"path": str(ledger_path), "sha256": ledger_sha, "readable_by_actor": ledger_sha is not None},
             "reveal_attached_after_seal": {"sealed_journals_sha256": seal_digest, "behavior_calls_sealed_before_reveal_read": PROVIDER_CALL_CAP},
             "atom_v2_permit_commit_process": permit_commit.describe(),
             "tokenizer_binding_status": protocol["tokenizer_binding"]["status"],

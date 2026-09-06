@@ -318,7 +318,7 @@ it.effect("durable before-slot-link factory bypasses genesis and arms revision o
   withTemporaryRoot((root) =>
     Effect.gen(function* () {
       let calls = 0
-      const barrier = () => { calls += 1; return Promise.resolve() }
+      const barrier = Effect.sync(() => { calls += 1 })
       const layer = makeCanonicalAtomV2DurableRuntimeFileLayerWithBeforeSlotLinkForTest(
         root, JOURNAL_LINEAGE, rawSchemaBytes(), barrier, grants()
       )

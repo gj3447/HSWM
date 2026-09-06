@@ -208,7 +208,7 @@ export const makeDnrd5V2TwoCasIoFaultFileLayer = (
 
 export const makeDnrd5V2TwoCasBeforeSlotLinkFileLayer = (
   rootPath: string,
-  beforeSlotLink: () => Promise<void>
+  beforeSlotLink: Effect.Effect<void, unknown>
 ): Layer.Layer<CanonicalAtomV2DurableRuntime, unknown, never> =>
   makeCanonicalAtomV2DurableRuntimeFileLayerWithBeforeSlotLinkForTest(
     rootPath,

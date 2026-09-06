@@ -38,7 +38,7 @@ const main = async (): Promise<void> => {
   const fixture = await input()
   const run = role === "race"
     ? resumeDnrd5V2AdmitTwoCas(fixture.input).pipe(Effect.provide(
-        makeDnrd5V2TwoCasBeforeSlotLinkFileLayer(root, () => wait(ready ?? "", release ?? ""))
+        makeDnrd5V2TwoCasBeforeSlotLinkFileLayer(root, Effect.promise(() => wait(ready ?? "", release ?? "")))
       ))
     : (role === "kill-cas1" ? submitDnrd5V2AdmitTwoCas(fixture.input) : resumeDnrd5V2AdmitTwoCas(fixture.input)).pipe(Effect.provide(
         makeDnrd5V2TwoCasIoFaultFileLayer(root, [{ point: "slot-link", phase: "after", code: "EIO", onInjected: () => process.kill(process.pid, "SIGKILL") }])

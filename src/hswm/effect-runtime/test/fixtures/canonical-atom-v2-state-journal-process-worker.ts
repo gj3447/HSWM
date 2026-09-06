@@ -63,7 +63,7 @@ const publish = async (arguments_: ReadonlyArray<string>): Promise<void> => {
       root,
       lineage,
       schema,
-      () => waitForRelease(readyPath, releasePath)
+      Effect.promise(() => waitForRelease(readyPath, releasePath))
     )
   const outcome = await Effect.runPromise(
     Effect.gen(function* () {

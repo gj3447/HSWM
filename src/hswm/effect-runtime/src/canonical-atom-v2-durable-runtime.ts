@@ -1095,7 +1095,7 @@ export const makeCanonicalAtomV2DurableRuntimeFileLayerWithBeforeSlotLinkForTest
   rootPath: string,
   journalLineageId: string,
   rawSchemaBytes: Uint8Array,
-  beforeSlotLink: () => Promise<void>,
+  beforeSlotLink: Effect.Effect<void, unknown>,
   rawGrants: unknown = []
 ) => {
   const decoded = decodeCanonicalAtomV2SchemaContent(rawSchemaBytes)

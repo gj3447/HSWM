@@ -103,7 +103,7 @@ type IoFaultInjectorForTest = (
   point: CanonicalAtomV2StateJournalFileIoFaultPointForTest,
   phase: CanonicalAtomV2StateJournalFileIoFaultForTest["phase"]
 ) => Effect.Effect<void, PosixIoError>
-type BeforeSlotLinkForTest = (() => Promise<void>) | null
+type BeforeSlotLinkForTest = Effect.Effect<void, unknown> | null
 
 interface DirectoryIdentity { readonly path: string; readonly device: number; readonly inode: number }
 interface Identity { readonly root: DirectoryIdentity; readonly objects: DirectoryIdentity; readonly slots: DirectoryIdentity }
@@ -593,15 +593,18 @@ const publish = (
     yield* assertDirectory(fs, identity.slots, "PUBLISH")
     yield* interrupt("slot-link:before")
     if (beforeSlotLink !== null) {
-      // The process-race seam is a caller-supplied Promise barrier; it is
-      // consumed here exactly once and never re-exposed as Promise state.
-      yield* Effect.tryPromise({
-        try: beforeSlotLink,
-        catch: (cause) =>
-          cause instanceof CanonicalAtomV2StateJournalStoreError
-            ? cause
-            : error("PUBLISH", "IO_FAILED", "journal publication failed")
-      })
+      // The process-race seam is a caller-supplied Effect barrier consumed
+      // here exactly once.  A store error passes through; any other failure
+      // is the same IO_FAILED publication refusal as a real I/O error.
+      yield* beforeSlotLink.pipe(
+        Effect.catchAll((cause) =>
+          Effect.fail(
+            cause instanceof CanonicalAtomV2StateJournalStoreError
+              ? cause
+              : error("PUBLISH", "IO_FAILED", "journal publication failed")
+          )
+        )
+      )
     }
     const linked = yield* injectIoFault("slot-link", "before").pipe(
       Effect.zipRight(fs.linkNoReplace(
@@ -753,7 +756,7 @@ export const makeCanonicalAtomV2StateJournalFileStoreLayerWithBeforeSlotLinkForT
   rootPath: string,
   journalLineageId: string,
   schemaContentSha256: string,
-  beforeSlotLink: () => Promise<void>,
+  beforeSlotLink: Effect.Effect<void, unknown>,
   minimumInjectedRevisionForTest = 0
 ): Layer.Layer<CanonicalAtomV2StateJournalStore, CanonicalAtomV2StateJournalStoreError> =>
   makeLayer(

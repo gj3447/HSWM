@@ -110,6 +110,44 @@ def offline_action_code_tokenizer_receipt(
     return result
 
 
+def offline_code_token_counts(
+    *, command: Command, snapshot: Path, image: str, codes: Sequence[str]
+) -> dict[str, int]:
+    """Standalone offline token counts for public candidate codes, inside the pinned image.
+
+    Same sandbox as the receipt measurement (network none, read-only, pinned
+    snapshot); the host never imports tokenizer libraries.  Codes only, no
+    secrets, no episode structure.
+    """
+
+    if not isinstance(image, str) or not snapshot.is_absolute() or snapshot.is_symlink() or not snapshot.is_dir():
+        raise LaunchRefused("tokenizer snapshot is unavailable")
+    unique = sorted({code for code in codes if isinstance(code, str) and code})
+    if not unique or len(unique) > 8192:
+        raise LaunchRefused("candidate code set is empty or unbounded")
+    payload = canonical_json_bytes({"codes": unique}).decode("utf-8")
+    program = (
+        "import json,sys; from transformers import AutoTokenizer; "
+        "p=json.loads(sys.argv[1]); t=AutoTokenizer.from_pretrained('/model-repository/snapshots/' + sys.argv[2],local_files_only=True); "
+        "print(json.dumps({c:len(t.encode(c,add_special_tokens=False)) for c in p['codes']},sort_keys=True,separators=(',',':')))"
+    )
+    raw = command((
+        "docker", "run", "--rm", "--network", "none", "--ipc", "none", "--read-only",
+        "--tmpfs", "/tmp:rw,noexec,nosuid,size=64m",
+        "--mount", f"type=bind,src={snapshot.parents[1]},dst=/model-repository,readonly",
+        "--entrypoint", "/usr/bin/python3", image, "-c", program, payload, snapshot.name,
+    ))
+    try:
+        observed = json.loads(raw.decode("utf-8", "strict").strip().splitlines()[-1])
+    except (UnicodeDecodeError, json.JSONDecodeError, IndexError) as error:
+        raise LaunchRefused("offline code token count measurement is not JSON") from error
+    if not isinstance(observed, dict) or set(observed) != set(unique) or any(
+        isinstance(value, bool) or not isinstance(value, int) or value <= 0 for value in observed.values()
+    ):
+        raise LaunchRefused("offline code token count measurement shape drifted")
+    return {code: int(observed[code]) for code in unique}
+
+
 def _validate_opaque_tokenizer_receipt(
     receipt: Mapping[str, Any], tokenizer_binding: Mapping[str, Any]
 ) -> None:
@@ -935,6 +973,8 @@ class DGXOpaqueV3Options:
     permit_commit: atom_v2_permit_bridge.LocalPermitCommitProcess | None
     reveal_after_seal: Path
     allow_same_user: bool = False
+    seal_marker_out: Path | None = None
+    reveal_wait_seconds: float = 1800.0
 
 
 def run_dgx_v3(spec: DGXFreshSpec, options: DGXOpaqueV3Options) -> dict[str, Any]:
@@ -978,6 +1018,8 @@ def run_dgx_v3(spec: DGXFreshSpec, options: DGXOpaqueV3Options) -> dict[str, Any
             permit_commit=options.permit_commit,
             reveal_path_after_seal=options.reveal_after_seal,
             allow_same_user=options.allow_same_user,
+            seal_marker_out=options.seal_marker_out,
+            reveal_wait_seconds=options.reveal_wait_seconds,
         )
         expected_posts = g1_micro.expected_completion_posts(runtime._protocol)
         final = runtime.attest(expected_posts)
@@ -1054,6 +1096,8 @@ def main(argv: list[str] | None = None) -> int:
     v3.add_argument("--permit-process-script", type=Path, help="built canonical-atom-v2-local-permit-commit-process.js; defaults to the repository dist")
     v3.add_argument("--node", help="absolute node executable; defaults to PATH lookup")
     v3.add_argument("--allow-same-user", action="store_true", help="tests only: do not require evaluator custody separation")
+    v3.add_argument("--seal-marker-out", type=Path, help="extra copy of the seal marker at a path the evaluator user can watch")
+    v3.add_argument("--reveal-wait-seconds", type=float, default=1800.0)
     args = parser.parse_args(argv)
     output_root = Path(os.environ["HSWM_OUTPUT_ROOT"])
     cache_root = Path(os.environ["HSWM_CACHE_ROOT"])
@@ -1092,6 +1136,8 @@ def main(argv: list[str] | None = None) -> int:
         options = DGXOpaqueV3Options(
             evaluator=evaluator, permit_commit=permit_commit,
             reveal_after_seal=args.reveal_after_seal.resolve(), allow_same_user=args.allow_same_user,
+            seal_marker_out=None if args.seal_marker_out is None else args.seal_marker_out.resolve(),
+            reveal_wait_seconds=args.reveal_wait_seconds,
         )
     if args.preflight_only:
         runtime = DGXFreshRuntime(spec)

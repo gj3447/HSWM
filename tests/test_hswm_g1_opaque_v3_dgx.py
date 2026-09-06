@@ -183,3 +183,85 @@ def test_v3_lease_writes_the_binding_before_the_instrument_and_refuses_unmeasure
     assert seen["endpoint"] == "http://127.0.0.1:18080" and seen["model"] == protocol["live_binding"]["served_model"]
     assert seen["expected_max_model_len"] == protocol["live_binding"]["expected_max_model_len"]
     assert seen["execution_registry_path"] == spec.execution_registry and seen["reveal_path_after_seal"] == options.reveal_after_seal
+
+
+def test_code_pool_selection_takes_the_first_pair_with_equal_public_counts(tmp_path: Path) -> None:
+    from tests.test_hswm_g1_opaque_v3 import SEED, _OPAQUE_SUCCESSOR_PROTOCOL
+
+    pool = g1_opaque_v3.v3_code_pool(SEED)
+    assert pool == g1_opaque_v3.v3_code_pool(SEED) and len(pool) == 32 and all(len(pairs) == 32 for pairs in pool.values())
+    source = json.loads(_OPAQUE_SUCCESSOR_PROTOCOL.read_text(encoding="utf-8"))
+    tokenizer_model = {key: source["tokenizer_binding"][key] for key in ("container_image", "container_image_id", "model_repository", "model_revision", "snapshot_manifest_sha256")}
+    # Public counts: every pair unequal except candidate index 3 of every episode.
+    counts: dict[str, int] = {}
+    for pairs in pool.values():
+        for index, (code_a, code_b) in enumerate(pairs):
+            counts[code_a] = 8
+            counts[code_b] = 8 if index == 3 else 9
+    protocol, reveal = g1_opaque_v3.generate_v3(
+        seed=SEED, study_date="2026-09-15", live_binding=source["live_binding"], tokenizer_model=tokenizer_model,
+        consumption_registry_path=str(tmp_path / "once"), token_counts=counts,
+    )
+    selection = protocol["generation"]["code_selection"]
+    assert selection["selected_candidate_index"] == [3] * 32
+    assert selection["rule"] == "FIRST_SEED_ORDERED_CANDIDATE_PAIR_WITH_EQUAL_OFFLINE_TOKEN_COUNTS"
+    assert selection["pool_sha256"] == canonical_sha256(pool)
+    assert all(counts[a] == counts[b] for a, b in (episode["action_codes"] for episode in protocol["episodes"]))
+    assert all(episode["action_codes"] == pool[str(episode["ordinal"])][3] for episode in protocol["episodes"])
+    assert reveal["reveal_commitment_root"] == protocol["evaluator_reveal_contract"]["reveal_commitment_root"]
+    # Without counts the historical index-0 derivation is used, so existing fixtures are unchanged.
+    unmeasured, _ = g1_opaque_v3.generate_v3(
+        seed=SEED, study_date="2026-09-15", live_binding=source["live_binding"], tokenizer_model=tokenizer_model,
+        consumption_registry_path=str(tmp_path / "once"),
+    )
+    assert unmeasured["generation"]["code_selection"]["selected_candidate_index"] == [0] * 32
+    assert all(episode["action_codes"] == pool[str(episode["ordinal"])][0] for episode in unmeasured["episodes"])
+    # No equal pair anywhere: refused with the episode named.
+    unequal_everywhere = {}
+    for pairs in pool.values():
+        for code_a, code_b in pairs:
+            unequal_everywhere[code_a], unequal_everywhere[code_b] = 7, 8
+    with pytest.raises(g1_micro.G1MicroError, match="episode 1 has no candidate pair"):
+        g1_opaque_v3.generate_v3(
+            seed=SEED, study_date="2026-09-15", live_binding=source["live_binding"], tokenizer_model=tokenizer_model,
+            consumption_registry_path=str(tmp_path / "once"), token_counts=unequal_everywhere,
+        )
+
+
+def test_measure_pool_and_publish_after_seal(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    import threading
+    from tests.test_hswm_g1_opaque_v3 import SEED, _OPAQUE_SUCCESSOR_PROTOCOL
+
+    pool = g1_opaque_v3.v3_code_pool(SEED)
+    pool_path = tmp_path / "pool.json"
+    pool_path.write_bytes(canonical_json_bytes({"schema_version": "hswm-g1-opaque-v3-code-pool/v1", "candidates_per_episode": 32, "pool": pool}))
+    snapshot = tmp_path / "hub/models--Qwen--Qwen3.6-35B-A3B-FP8/snapshots/95a723d08a9490559dae23d0cff1d9466213d989"
+    snapshot.mkdir(parents=True)
+
+    def count_command(argv: tuple[str, ...]) -> bytes:
+        assert "--network" in argv and argv[argv.index("--network") + 1] == "none"
+        codes = json.loads(argv[-2])["codes"]
+        return json.dumps({code: 7 + (int(code[-1], 16) % 2) for code in codes}).encode()
+
+    out = tmp_path / "counts.json"
+    assert freeze_tool.main(["measure-pool", "--pool", str(pool_path), "--model-snapshot", str(snapshot), "--live-binding-from", str(_OPAQUE_SUCCESSOR_PROTOCOL), "--out", str(out)], command=count_command) == 0
+    report = json.loads(capsys.readouterr().out)
+    counts = json.loads(out.read_bytes())
+    assert counts["pool_sha256"] == canonical_sha256(pool) and report["codes"] == len(counts["token_counts"]) == 2048
+    assert report["pairs_with_equal_counts"] > 0
+    # Publisher: waits for a valid seal marker, then copies the reveal atomically.
+    protocol, frozen_sha, reveal, reveal_path, _ = _generate(tmp_path)
+    protocol_path = _write_protocol(tmp_path, protocol)
+    marker_path = tmp_path / "marker.json"
+    target = tmp_path / "after-seal.json"
+    sealed = {f"episode:{index}": "0" * 64 for index in range(32)}
+
+    def write_marker() -> None:
+        marker_path.write_bytes(canonical_json_bytes({"schema_version": "hswm-g1-opaque-v3-seal-marker/v1", "study_uid": protocol["study_uid"], "protocol_canonical_sha256": frozen_sha, "sealed_journals": sealed, "sealed_journals_sha256": canonical_sha256({"sealed_journals": sealed}), "behavior_calls_sealed": 320, "claim_boundary": "test"}))
+
+    threading.Timer(0.3, write_marker).start()
+    assert freeze_tool.main(["publish-after-seal", "--marker", str(marker_path), "--reveal", str(reveal_path), "--protocol", str(protocol_path), "--to", str(target), "--timeout-seconds", "10", "--poll-seconds", "0.05"]) == 0
+    assert target.read_bytes() == reveal_path.read_bytes()
+    assert evaluator_process.load_reveal(target)["protocol_canonical_sha256"] == frozen_sha
+    with pytest.raises(SystemExit, match="already exists"):
+        freeze_tool.main(["publish-after-seal", "--marker", str(marker_path), "--reveal", str(reveal_path), "--protocol", str(protocol_path), "--to", str(target), "--timeout-seconds", "1"])

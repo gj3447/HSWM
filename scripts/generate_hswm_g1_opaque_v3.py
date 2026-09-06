@@ -33,14 +33,28 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--registry-path", required=True, help="durable one-shot consumption registry path on the run host")
     parser.add_argument("--protocol-out", type=Path, required=True)
     parser.add_argument("--reveal-out", type=Path, required=True, help="private reveal path; must not be inside the repository")
+    parser.add_argument("--emit-code-pool", type=Path, help="write the public seed-derived candidate code pool here and stop (no protocol, no reveal)")
+    parser.add_argument("--token-counts", type=Path, help="public offline token counts of the candidate pool (scripts/freeze_hswm_g1_opaque_v3.py measure-pool)")
     args = parser.parse_args(argv)
 
     seed = args.seed_file.read_bytes()
+    if args.emit_code_pool is not None:
+        pool = g1_opaque_v3.v3_code_pool(seed)
+        if args.emit_code_pool.exists():
+            raise SystemExit("refusing to overwrite an existing code pool")
+        args.emit_code_pool.write_bytes(canonical_json_bytes({"schema_version": "hswm-g1-opaque-v3-code-pool/v1", "candidates_per_episode": g1_opaque_v3.CANDIDATE_PAIRS_PER_EPISODE, "pool": pool}))
+        print(json.dumps({"code_pool_path": str(args.emit_code_pool), "pool_sha256": canonical_sha256(pool), "codes": sum(2 * len(pairs) for pairs in pool.values())}, sort_keys=True))
+        return 0
+    token_counts = None
+    if args.token_counts is not None:
+        counts = json.loads(args.token_counts.read_text(encoding="utf-8"))
+        token_counts = counts["token_counts"] if isinstance(counts, dict) and "token_counts" in counts else counts
     source = json.loads(args.live_binding_from.read_text(encoding="utf-8"))
     tokenizer_model = {key: source["tokenizer_binding"][key] for key in TOKENIZER_MODEL_FIELDS}
     protocol, reveal = g1_opaque_v3.generate_v3(
         seed=seed, study_date=args.study_date, live_binding=source["live_binding"],
         tokenizer_model=tokenizer_model, consumption_registry_path=args.registry_path,
+        token_counts=token_counts,
     )
     if args.protocol_out.exists() or args.reveal_out.exists():
         raise SystemExit("refusing to overwrite an existing protocol or reveal")

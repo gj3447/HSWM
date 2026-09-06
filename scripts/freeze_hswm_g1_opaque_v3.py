@@ -27,9 +27,13 @@ from pathlib import Path
 import subprocess
 import sys
 
-from hswm.experiments import g1_micro_dgx, g1_opaque_v3
-from hswm.experiments import g1_opaque_evaluator_process as evaluator_process
-from hswm.selfmod.contracts import canonical_json_bytes, canonical_sha256
+# The DGX launcher imports repository-local packages (_research.*); running
+# this script by path must see the checkout root exactly like `python -m`.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from hswm.experiments import g1_micro_dgx, g1_opaque_v3  # noqa: E402
+from hswm.experiments import g1_opaque_evaluator_process as evaluator_process  # noqa: E402
+from hswm.selfmod.contracts import canonical_json_bytes, canonical_sha256  # noqa: E402
 
 
 def _docker(argv: tuple[str, ...]) -> bytes:
@@ -37,6 +41,29 @@ def _docker(argv: tuple[str, ...]) -> bytes:
     if result.returncode:
         raise SystemExit(f"offline tokenizer measurement failed: {result.stderr.decode('utf-8', 'replace')[-400:]}")
     return result.stdout
+
+
+def measure_pool(args: argparse.Namespace) -> int:
+    """Actor: standalone offline token counts of the public candidate pool (no protocol yet)."""
+
+    pool_document = json.loads(args.pool.read_text(encoding="utf-8"))
+    pool = pool_document["pool"]
+    codes = [code for pairs in pool.values() for pair in pairs for code in pair]
+    source = json.loads(args.live_binding_from.read_text(encoding="utf-8"))
+    image = source["tokenizer_binding"]["container_image"]
+    counts = g1_micro_dgx.offline_code_token_counts(
+        command=args.command, snapshot=args.model_snapshot.resolve(), image=image, codes=codes,
+    )
+    if args.out.exists():
+        raise SystemExit("refusing to overwrite existing token counts")
+    args.out.write_bytes(canonical_json_bytes({
+        "schema_version": "hswm-g1-opaque-v3-code-token-counts/v1",
+        "container_image": image, "model_revision": args.model_snapshot.resolve().name,
+        "pool_sha256": canonical_sha256(pool), "token_counts": counts,
+    }))
+    equal = sum(1 for pairs in pool.values() for a, b in pairs if counts[a] == counts[b])
+    print(json.dumps({"codes": len(counts), "pairs": sum(len(p) for p in pool.values()), "pairs_with_equal_counts": equal, "token_counts_path": str(args.out)}, sort_keys=True))
+    return 0
 
 
 def measure(args: argparse.Namespace) -> int:
@@ -111,9 +138,61 @@ def rebind_reveal(args: argparse.Namespace) -> int:
     return 0
 
 
+def publish_after_seal(args: argparse.Namespace) -> int:
+    """Evaluator user: wait for the actor's seal marker, then publish the reveal for the actor."""
+
+    import time
+
+    _, frozen_sha = g1_opaque_v3.load_v3_protocol(args.protocol)
+    reveal = evaluator_process.load_reveal(args.reveal)
+    if reveal["protocol_canonical_sha256"] != frozen_sha:
+        raise SystemExit("reveal is not bound to the frozen protocol; run rebind-reveal first")
+    if args.to.exists():
+        raise SystemExit("refusing: the after-seal path already exists")
+    deadline = time.monotonic() + float(args.timeout_seconds)
+    while True:
+        if args.marker.is_file():
+            try:
+                marker = json.loads(args.marker.read_bytes())
+            except (OSError, ValueError):
+                marker = None
+            if (
+                isinstance(marker, dict)
+                and marker.get("schema_version") == "hswm-g1-opaque-v3-seal-marker/v1"
+                and marker.get("protocol_canonical_sha256") == frozen_sha
+                and marker.get("study_uid") == reveal["study_uid"]
+                and marker.get("behavior_calls_sealed") == g1_opaque_v3.PROVIDER_CALL_CAP
+                and isinstance(marker.get("sealed_journals"), dict)
+                and len(marker["sealed_journals"]) == g1_opaque_v3.EPISODE_COUNT
+                and marker.get("sealed_journals_sha256") == canonical_sha256({"sealed_journals": marker["sealed_journals"]})
+            ):
+                break
+        if time.monotonic() >= deadline:
+            raise SystemExit("seal marker did not appear within the wait bound; reveal not published")
+        time.sleep(float(args.poll_seconds))
+    temporary = args.to.with_name(args.to.name + ".publish.tmp")
+    descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+    with os.fdopen(descriptor, "wb") as handle:
+        handle.write(args.reveal.read_bytes())
+    os.replace(temporary, args.to)
+    print(json.dumps({
+        "protocol_canonical_sha256": frozen_sha,
+        "published_to": str(args.to),
+        "sealed_journals_sha256": marker["sealed_journals_sha256"],
+        "status": "REVEAL_PUBLISHED_AFTER_SEAL_MARKER",
+    }, sort_keys=True))
+    return 0
+
+
 def main(argv: list[str] | None = None, *, command=_docker) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
+    pool = commands.add_parser("measure-pool", help="actor: offline token counts of the public candidate code pool")
+    pool.add_argument("--pool", type=Path, required=True)
+    pool.add_argument("--model-snapshot", type=Path, required=True)
+    pool.add_argument("--live-binding-from", type=Path, required=True, help="protocol whose tokenizer_binding names the pinned image")
+    pool.add_argument("--out", type=Path, required=True)
+    pool.set_defaults(handler=measure_pool)
     freeze = commands.add_parser("measure", help="actor: measure the tokenizer binding offline and freeze the protocol")
     freeze.add_argument("--protocol", type=Path, required=True)
     freeze.add_argument("--model-snapshot", type=Path, required=True, help="…/models--Qwen--Qwen3.6-35B-A3B-FP8/snapshots/<revision>")
@@ -123,6 +202,14 @@ def main(argv: list[str] | None = None, *, command=_docker) -> int:
     rebind.add_argument("--reveal", type=Path, required=True)
     rebind.add_argument("--protocol", type=Path, required=True)
     rebind.set_defaults(handler=rebind_reveal)
+    publish = commands.add_parser("publish-after-seal", help="evaluator user: publish the reveal to the actor-readable path once the seal marker exists")
+    publish.add_argument("--marker", type=Path, required=True, help="seal marker path written by the actor instrument (--seal-marker-out)")
+    publish.add_argument("--reveal", type=Path, required=True)
+    publish.add_argument("--protocol", type=Path, required=True)
+    publish.add_argument("--to", type=Path, required=True, help="the actor's --reveal-after-seal path")
+    publish.add_argument("--timeout-seconds", type=float, default=6 * 3600)
+    publish.add_argument("--poll-seconds", type=float, default=2.0)
+    publish.set_defaults(handler=publish_after_seal)
     args = parser.parse_args(argv)
     args.command = command
     return int(args.handler(args))

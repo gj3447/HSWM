@@ -30,6 +30,7 @@ import binascii
 from dataclasses import dataclass
 from hashlib import sha256
 import json
+import time
 from pathlib import Path
 import re
 from typing import Any, Mapping, Sequence
@@ -233,6 +234,48 @@ def _balanced_bits(seed: bytes, label: str, count: int) -> list[bool]:
     return [bits[index] for index in _permutation(seed, label, count)]
 
 
+CANDIDATE_PAIRS_PER_EPISODE = 32
+
+
+def v3_code_pool(seed: bytes) -> dict[str, list[list[str]]]:
+    """Public, seed-derived candidate action-code pairs per episode ordinal.
+
+    Candidate index 0 is the historical single derivation; later indexes extend
+    it so the freeze can select the first pair whose two codes have equal
+    standalone offline token counts.  The pool carries no secret: which pair
+    is selected depends only on the public measurement, and which code is
+    correct is derived separately from the seed.
+    """
+
+    if not isinstance(seed, bytes) or len(seed) < 32:
+        raise G1MicroError("v3 seed must be at least 32 bytes")
+    pool: dict[str, list[list[str]]] = {}
+    for ordinal in range(1, EPISODE_COUNT + 1):
+        label = str(ordinal)
+        pairs: list[list[str]] = []
+        for index in range(CANDIDATE_PAIRS_PER_EPISODE):
+            tag = label if index == 0 else f"{label}:{index}"
+            pairs.append(["act_" + _hex(seed, "code-a", tag)[:8], "act_" + _hex(seed, "code-b", tag)[:8]])
+        pool[label] = pairs
+    return pool
+
+
+def _select_pair(
+    pairs: list[list[str]], *, ordinal: int, used: set[str], token_counts: Mapping[str, int] | None
+) -> tuple[list[str], int]:
+    for index, (code_a, code_b) in enumerate(pairs):
+        if code_a == code_b or code_a in used or code_b in used:
+            continue
+        if token_counts is None:
+            return [code_a, code_b], index
+        count_a, count_b = token_counts.get(code_a), token_counts.get(code_b)
+        if isinstance(count_a, int) and isinstance(count_b, int) and count_a > 0 and count_a == count_b:
+            return [code_a, code_b], index
+    if token_counts is None:
+        raise G1MicroError("v3 seed produced colliding action codes; choose another seed")
+    raise G1MicroError(f"v3 episode {ordinal} has no candidate pair with equal offline token counts; choose another seed")
+
+
 def generate_v3(
     *,
     seed: bytes,
@@ -240,8 +283,15 @@ def generate_v3(
     live_binding: Mapping[str, Any],
     tokenizer_model: Mapping[str, str],
     consumption_registry_path: str,
+    token_counts: Mapping[str, int] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
-    """Return (public protocol, secret evaluator reveal) for one seed."""
+    """Return (public protocol, secret evaluator reveal) for one seed.
+
+    With ``token_counts`` (public standalone offline token counts of the
+    seed-derived candidate pool) each episode takes the first candidate pair
+    whose codes tokenize to equal counts, so the freeze precondition holds by
+    construction.  Without it the first candidate is used (tests only).
+    """
 
     if not isinstance(seed, bytes) or len(seed) < 32:
         raise G1MicroError("v3 seed must be at least 32 bytes")
@@ -252,16 +302,16 @@ def generate_v3(
     positions = _balanced_bits(seed, "correct-position", EPISODE_COUNT)
     sham_bits = _balanced_bits(seed, "sham-bit", EPISODE_COUNT)
     study_uid = f"{V3_STUDY_UID_PREFIX}{study_date}"
+    pool = v3_code_pool(seed)
     episodes: list[dict[str, Any]] = []
     entries: list[dict[str, Any]] = []
     used: set[str] = set()
+    selected_indexes: list[int] = []
     for ordinal in range(1, EPISODE_COUNT + 1):
         label = str(ordinal)
         uid8 = _hex(seed, "episode", label)[:8]
-        code_a = "act_" + _hex(seed, "code-a", label)[:8]
-        code_b = "act_" + _hex(seed, "code-b", label)[:8]
-        if code_a == code_b or code_a in used or code_b in used:
-            raise G1MicroError("v3 seed produced colliding action codes; choose another seed")
+        (code_a, code_b), selected = _select_pair(pool[label], ordinal=ordinal, used=used, token_counts=token_counts)
+        selected_indexes.append(selected)
         used.update((code_a, code_b))
         correct, other = (code_a, code_b) if int(_hex(seed, "correct", label)[0], 16) < 8 else (code_b, code_a)
         stateful = [correct, other] if positions[ordinal - 1] else [other, correct]
@@ -337,6 +387,16 @@ def generate_v3(
             "correct_position_balance": [sum(positions), EPISODE_COUNT - sum(positions)],
             "sham_bit_balance": [sum(sham_bits), EPISODE_COUNT - sum(sham_bits)],
             "seed_custody": "The seed and the derived reveal are held only by the evaluator OS user; the public protocol carries the seed commitment and the reveal commitment root.",
+            "code_selection": {
+                "candidates_per_episode": CANDIDATE_PAIRS_PER_EPISODE,
+                "pool_sha256": canonical_sha256(pool),
+                "rule": (
+                    "FIRST_SEED_ORDERED_CANDIDATE_PAIR_WITH_EQUAL_OFFLINE_TOKEN_COUNTS"
+                    if token_counts is not None else "FIRST_SEED_ORDERED_CANDIDATE_PAIR_UNMEASURED"
+                ),
+                "selected_candidate_index": selected_indexes,
+                "token_counts_sha256": None if token_counts is None else canonical_sha256(dict(token_counts)),
+            },
         },
         "freeze": {"status": "DRAFT_NOT_FROZEN"},
         **PROSE,
@@ -784,6 +844,8 @@ def run_v3_with_backend(
     reveal_path_after_seal: str | Path,
     runtime_binding: Mapping[str, Any] | None = None,
     allow_pending_tokenizer_binding: bool = False,
+    seal_marker_out: str | Path | None = None,
+    reveal_wait_seconds: float = 1800.0,
 ) -> dict[str, Any]:
     """One outer no-refill claim for the thirty-two-episode G0-local occurrence."""
 
@@ -822,8 +884,26 @@ def run_v3_with_backend(
         ]
         sealed_journals = {episode["episode_uid"]: _digest((output / "episodes" / f"{task.ordinal:02d}" / "attempt_ledger.jsonl").read_bytes()) for task, episode in zip(tasks, episodes, strict=True)}
         seal_digest = canonical_sha256({"sealed_journals": sealed_journals})
-        reveal_raw = Path(reveal_path_after_seal).read_bytes()
-        reveal = evaluator_process.load_reveal(Path(reveal_path_after_seal))
+        # The seal marker is the actor's public signal that every behavior call
+        # is sealed.  The evaluator user publishes the reveal only after seeing
+        # it; the actor waits, bounded, and never asks for the reveal earlier.
+        marker = canonical_json_bytes({
+            "schema_version": "hswm-g1-opaque-v3-seal-marker/v1", "study_uid": protocol["study_uid"],
+            "protocol_canonical_sha256": protocol_sha256, "sealed_journals": sealed_journals,
+            "sealed_journals_sha256": seal_digest, "behavior_calls_sealed": PROVIDER_CALL_CAP,
+            "claim_boundary": "seal marker only; it authorizes the evaluator to publish the reveal and proves nothing else",
+        })
+        g1_micro._atomic_write(output / "sealed_before_reveal.json", marker)
+        if seal_marker_out is not None:
+            g1_micro._atomic_write(Path(seal_marker_out), marker)
+        reveal_file = Path(reveal_path_after_seal)
+        reveal_deadline = time.monotonic() + float(reveal_wait_seconds)
+        while not reveal_file.is_file():
+            if time.monotonic() >= reveal_deadline:
+                raise G1MicroError("v3 reveal was not published after the seal within the wait bound")
+            time.sleep(1)
+        reveal_raw = reveal_file.read_bytes()
+        reveal = evaluator_process.load_reveal(reveal_file)
         if reveal["protocol_canonical_sha256"] != protocol_sha256:
             raise G1MicroError("v3 reveal is bound to another protocol freeze")
         for task in tasks:
@@ -1129,6 +1209,8 @@ def run_v3_live(
     permit_commit: atom_v2_permit_bridge.LocalPermitCommitProcess,
     reveal_path_after_seal: str | Path,
     allow_same_user: bool = False,
+    seal_marker_out: str | Path | None = None,
+    reveal_wait_seconds: float = 1800.0,
 ) -> dict[str, Any]:
     """Official live entrypoint for one frozen v3 occurrence against the pinned server."""
 
@@ -1151,6 +1233,7 @@ def run_v3_live(
         backend=backend, protocol=protocol, protocol_sha256=protocol_sha, output_dir=output_dir,
         execution_registry_path=execution_registry_path, evaluator=evaluator, permit_commit=permit_commit,
         reveal_path_after_seal=reveal_path_after_seal, runtime_binding=runtime_binding,
+        seal_marker_out=seal_marker_out, reveal_wait_seconds=reveal_wait_seconds,
     )
 
 
@@ -1174,6 +1257,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--permit-process-script", type=Path, help="built canonical-atom-v2-local-permit-commit-process.js; defaults to the repository dist")
     parser.add_argument("--node", help="absolute node executable; defaults to PATH lookup")
     parser.add_argument("--allow-same-user", action="store_true", help="tests only: do not require evaluator custody separation")
+    parser.add_argument("--seal-marker-out", type=Path, help="extra copy of the seal marker at a path the evaluator user can watch")
+    parser.add_argument("--reveal-wait-seconds", type=float, default=1800.0)
     parser.add_argument("--preflight-only", action="store_true")
     args = parser.parse_args(argv)
 
@@ -1206,7 +1291,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         expected_max_model_len=args.expected_max_model_len, output_dir=args.output_dir,
         execution_registry_path=args.execution_registry, runtime_binding_path=args.runtime_binding,
         evaluator=evaluator, permit_commit=permit_commit, reveal_path_after_seal=args.reveal_after_seal,
-        allow_same_user=args.allow_same_user,
+        allow_same_user=args.allow_same_user, seal_marker_out=args.seal_marker_out, reveal_wait_seconds=args.reveal_wait_seconds,
     )
     print(canonical_json_bytes({
         "bundle_sha256": bundle["bundle_sha256"], "result_path": str(args.output_dir / "result.json"),

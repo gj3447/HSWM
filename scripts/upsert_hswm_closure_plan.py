@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and explicitly publish the HSWM closure-plan KG projection (event version v4).
+"""Validate and explicitly publish the HSWM closure-plan KG projection (event version v5).
 
 Dry run validates and prints VALIDATED_ONLY_NOT_PUBLISHED.  ``--apply`` asserts
 the live schema registry and every anchor by exact name, creates the owned
@@ -35,14 +35,14 @@ EXPECTED_COUNTS = {
     "gaps": 7,
     "nodes": 71,
     "ratified_decisions": 3,
-    "relations": 285,
+    "relations": 286,
     "source_records": 11,
     "stop_rules": 5,
     "user_primary_decisions": 4,
     "v3_receipts": 3
 }
-EXPECTED_PROJECTION_SHA256 = "d52aade101906f4c49071867fb2742ace617d3b1cd1523c0781bc1905a3e23e5"
-EXPECTED_FILE_SHA256 = "d0e4ade085a9d8b0da6a691320220e9793b968ddb6811c52908d52f64200351e"
+EXPECTED_PROJECTION_SHA256 = "17ed66f92c7fd2b7d313f9aab63c2089eff6561028860c52a845e1a0352d7d9f"
+EXPECTED_FILE_SHA256 = "08f45acbfee42750ac2a463db95bd2faa2dd0bbe5b4cf2da262acdcf27757222"
 
 
 def _file_sha(path: Path) -> str:

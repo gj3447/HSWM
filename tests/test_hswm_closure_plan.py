@@ -190,7 +190,41 @@ def test_v3_event_snapshot_is_retained_unchanged() -> None:
     v3 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json"
     assert sha256(v3.read_bytes()).hexdigest() == "546b9e429e02992a952f6e8535d65c7f832f925b7bf8ace26b490b70f9dab7c2"
     data = json.loads(v3.read_text(encoding="utf-8"))
+    assert data["bundle_uid"] == "sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v3"
+
+
+def test_v4_event_snapshot_is_retained_unchanged() -> None:
+    v4 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v4.json"
+    assert sha256(v4.read_bytes()).hexdigest() == "d0e4ade085a9d8b0da6a691320220e9793b968ddb6811c52908d52f64200351e"
+    data = json.loads(v4.read_text(encoding="utf-8"))
     assert data["bundle_uid"] == builder.PREDECESSOR_BUNDLE_UID
+    assert "V1_DONE_STATE_REACHED" not in data["status"]
+
+
+def test_v5_event_records_the_done_state_as_a_segment_not_reached() -> None:
+    data = _data()
+    assert builder.DONE_STATE_JUDGMENT["done_state_status"] == "SEGMENT_OBSERVED_BY_V5_RECEIPT_NOT_REACHED"
+    assert "V1_DONE_STATE_SEGMENT_OBSERVED_BY_V5_NOT_REACHED" in data["status"]
+    done = [node for node in data["nodes"] if node["uid"] == builder.DONE_STATE_UID]
+    assert len(done) == 1
+    props = done[0]["properties"]
+    assert props["done_state_status"] == "SEGMENT_OBSERVED_BY_V5_RECEIPT_NOT_REACHED"
+    assert props["ceiling_observed"] != props["ceiling_required"]
+    assert any("canonical revision" in item for item in props["criteria_not_satisfied"])
+    assert any("held-out" in item for item in props["criteria_not_satisfied"])
+    towards_done = [rel for rel in data["relations"] if rel["to_uid"] == builder.DONE_STATE_UID]
+    assert towards_done, "the done-state must stay connected"
+    for rel in towards_done:
+        assert "REACHED_AS" not in json.dumps(rel) and "REACHED_AT" not in json.dumps(rel), rel
+    narrowing = [rel for rel in towards_done if rel["from_uid"] == builder.V5_RECEIPT_UID]
+    assert len(narrowing) == 1 and narrowing[0]["type"] == "NARROWS"
+    steps = {node["properties"]["step_id"]: node["properties"] for node in _nodes_by_role(data, "step_id").values()}
+    assert steps["S-5"]["progress_status"] == "PARTIAL_B0_RECOVERED_INCONCLUSIVE_B2_DRAFT_ONLY"
+    assert steps["S-5"]["closure_status"] == "PLANNED"
+    assert steps["S-6"]["progress_status"] == "DELIVERABLE_A_DONE_DELIVERABLE_B_BLOCKED_ON_USER_WORDS"
+    assert steps["S-6"]["progress_blocker"] == "USER_WORDS_ON_SECOND_PARTY"
+    assert steps["S-1"]["progress_blocker"] == "USER_WORDS_ON_D2"
+    assert "progress_status" not in steps["S-3"]
 
 
 def test_receipts_mark_s2_s3_s4_complete_without_promotion() -> None:
@@ -214,7 +248,7 @@ def test_receipts_mark_s2_s3_s4_complete_without_promotion() -> None:
         assert (uid, "PRESERVES", builder.G0_UID) in keys
         assert (uid, "DEPENDS_ON", builder.EFFECT_FP_BUNDLE_UID) in keys
     assert (builder.V5_RECEIPT_UID, "SUPERSEDES_AS_FOLLOWUP", builder.V4_RECEIPT_UID) in keys
-    assert "G0_NOT_PASSED_G1_LOCKED" in data["status"] and "V5_RECEIPT" in data["status"] and "D1_D3_D4_USER_RATIFIED" in data["status"]
+    assert "G0_NOT_PASSED_G1_LOCKED" in data["status"] and "SEGMENT_OBSERVED_BY_V5_NOT_REACHED" in data["status"] and "D1_D3_D4_USER_RATIFIED" in data["status"]
     cap = [node for node in data["nodes"] if node["properties"].get("plan_graph_role") == "BURDEN_CAP"][0]
     assert cap["properties"]["reading_core_share"] < cap["properties"]["min_core_share"]
 

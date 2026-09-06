@@ -22,7 +22,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ONTOLOGY_PATH = Path("ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v4.json")
+ONTOLOGY_PATH = Path("ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json")
 CLOSURE_DOC_PATH = Path(
     "docs/research/HSWM_ADVERSARIAL_AUDIT_AND_CLOSURE_PLAN_2026-09-05.md"
 )
@@ -68,15 +68,38 @@ SOURCE_BINDING_PATHS: tuple[Path, ...] = tuple(
     if path
 )
 
-SCHEMA_VERSION = "hswm-closure-plan-ontology/v4"
+SCHEMA_VERSION = "hswm-closure-plan-ontology/v5"
 RELEASE = "2026-09-06"
-TAG = "2026-09-05-v4"
-PREDECESSOR_TAG = "2026-09-05-v3"
+TAG = "2026-09-05-v5"
+PREDECESSOR_TAG = "2026-09-05-v4"
 AUDITED_COMMIT = "4dcba752a661de23066b3b33381bfdfc34879a57"
 STATUS = (
     "ADVERSARIAL_AUDIT_VERIFIED_CLOSURE_PLAN_D1_D3_D4_USER_RATIFIED_D2_PROPOSED_"
-    "S2_S3_S4_COMPLETE_V3_V4_RULE_NOT_MET_V5_RECEIPT_G0_NOT_PASSED_G1_LOCKED"
+    "S2_S3_S4_COMPLETE_V1_DONE_STATE_SEGMENT_OBSERVED_BY_V5_NOT_REACHED_"
+    "S5_S6_OPEN_G0_NOT_PASSED_G1_LOCKED"
 )
+# Event version v5: the programme's own v1 done-state judged against the v5
+# receipt; S-5/S-6 status after the 2026-09-06 scouting; burden reading.
+DONE_STATE_JUDGMENT = {
+    "done_state_status": "SEGMENT_OBSERVED_BY_V5_RECEIPT_NOT_REACHED",
+    "segment_receipt_uid": f"sym:AbstractNode:hswm-closure-v5-receipt-{TAG}",
+    "judged_on": "2026-09-06",
+    "criteria_satisfied_by_v5": [
+        "run under G0-local: v5 met its frozen rule (MEASUREMENT_READY_SINGLE_OWNER_UNDER_DECLARED_OPAQUE_TASK)",
+        "independently produced outcome yields credit: separate-OS-user salt-keyed evaluator feedback, 32/32 verified, credited admission 32/32",
+        "credit is admitted through the real Atom v2 local Permit commit path: 96 local Permit commits",
+        "removal eliminates and byte-identical restoration recovers: REMOVE 16/32, RESTORE 32/32, 32 exact remove/restore transitions",
+        "sham arm fails to reproduce it: OUTCOME_INDEPENDENT_SHAM 16/32 with sham-bit balance 16/16",
+    ],
+    "criteria_not_satisfied": [
+        "durable canonical revision: the admitted disposition lives in the g1_micro experiment-local state store and the Permit bridge carries the ceiling NOT_CANONICAL_HSWM_ADMISSION; no schema-relative owner, atom uid, revision id, lineage id or durable revision/head receipt in a declared canonical store",
+        "changed fresh held-out behavior: the ACTIVE fresh probe re-asks the same cue whose disposition was just admitted; no precommitted train/held-out task partition with a defined application rule exists",
+    ],
+    "successor_draft": "_research/causal_composition/preregistrations/d4_v1_canonical_heldout_DRAFT/README.md (prospective implementation contract, not a preregistration)",
+    "ceiling_observed": "LOCAL_STATE_READOUT_UNDER_DECLARED_OPAQUE_TASK_SINGLE_OWNER",
+    "ceiling_required": "LOCAL_CAUSAL_REVISION_UNDER_DECLARED_TASK_CANDIDATE_SINGLE_OWNER",
+    "not_reached": "canonical revision store, precommitted held-out partition, G0-external notarization, independent replication, any G1 estimand, reuse-first comparators (S-5), efficacy",
+}
 V3_STUDY_UID = "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-v3-2026-09-06-r2"
 V3_TERMINAL = "V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE"
 V3_PROTOCOL_CANONICAL_SHA256 = "2363815ecfc575857f812931566d6f8f8132bfa6ab480d35655827f68cd96fc6"
@@ -101,11 +124,12 @@ COMPLETED_STEPS: dict[str, dict[str, Any]] = {
 }
 # Burden-cap reading at the S-3 results commit (scripts/check_hswm_closure_burden_cap.py).
 BURDEN_READING = {
-    "reading_commit": "e926e1fcbdef3c6da41a92995346df934289180b",
-    "reading_commits_observed": 36,
-    "reading_core_commits": 15,
-    "reading_core_share": 0.4167,
+    "reading_commit": "d71f97780c2709fad993f71a9c593ee72ec73d0b",
+    "reading_commits_observed": 47,
+    "reading_core_commits": 23,
+    "reading_core_share": 0.4894,
     "reading_status": "WINDOW_OPEN_BELOW_SHARE",
+    "reading_history": ["e926e1f:36/15/0.4167", "3a751dd:37/15/0.4054", "d71f977:47/23/0.4894"],
 }
 NONCLAIM = (
     "AUDIT_AND_CLOSURE_PLAN_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_"
@@ -524,6 +548,42 @@ STEPS: dict[str, dict[str, Any]] = {
             "proof-burst-formalizes-unrun-dnrd5-off-critical-path",
         ],
         "decisions": ["D-4"],
+    },
+}
+# Progress readings for the still-open steps, taken on the event date by zero-POST
+# checks.  They are readings of the plan's own deliverables, not results.
+STEP_PROGRESS: dict[str, dict[str, Any]] = {
+    "S-1": {
+        "progress_status": "OPEN_D2_PROPOSED",
+        "progress_reading": "D-2 (never-weaken qualification) was neither named nor asked in the 2026-09-06 delegation; it remains PROPOSED and S-1 stays open.",
+        "progress_blocker": "USER_WORDS_ON_D2",
+    },
+    "S-5": {
+        "progress_status": "PARTIAL_B0_RECOVERED_INCONCLUSIVE_B2_DRAFT_ONLY",
+        "progress_reading": (
+            "The only B0 consumption occurrence (2026-08-30, protocol 5beea2a1…3132, sealed selection consumed) failed on its first "
+            "train episode with AlfworldTextRuntimeError: attempted 1, completed 0, zero model calls, zero HTTP POSTs, outer exit code 2; "
+            "its terminal is INCONCLUSIVE_MEASUREMENT_NOT_READY and its frozen protocol forbids retry or resume.  On 2026-09-06 a "
+            "result file, evidence record and raw receipts for that occurrence were prepared by a parallel agent session sharing this working tree (OpenAI Codex CLI, not this session; hswm-run "
+            "hswm-b0-recovery-verify-20260906 on the DGX checkout 7ff7766, exit 0: a same-owner revalidation of the sealed archive "
+            "31299aa5…9fdf, not a rerun) together with an ExpeL-inspired B2 text-lesson comparator draft (DRAFT_NOT_PREREGISTERED_NOT_FROZEN_NOT_RUN); "
+            "at this event they were uncommitted and unreviewed by this event's author, and are cited here as observed working-tree state only.  No usable B0 ceiling and no B2 result exist."
+        ),
+        "progress_blocker": "B0_SUCCESSOR_PROTOCOL_AND_B2_PREREGISTRATION_NOT_FROZEN",
+    },
+    "S-6": {
+        "progress_status": "DELIVERABLE_A_DONE_DELIVERABLE_B_BLOCKED_ON_USER_WORDS",
+        "progress_reading": (
+            "Deliverable (a), the F1_R8 rule paragraph naming the cap and the check command, exists (F1_R8_RESULTS_LOG.md lines 6-14) and "
+            "scripts/check_hswm_closure_burden_cap.py reads WINDOW_OPEN_BELOW_SHARE at 23 core of 47 (0.4894 < 0.5, window 100 from 4dcba75); "
+            "CAP_VIOLATED can fire only when the window is full, so at least 27 of the remaining 53 commits must touch a core path.  "
+            "Deliverable (b), one line naming a second-party recruiting date or an explicit non-start, requires the user's own words and "
+            "does not exist.  The zero-network G0-occurrence preflight (hswm-g0-occurrence preflight) reads BLOCKED_EXTERNAL on both the "
+            "workstation and the DGX: all 22 external bindings missing (custodian, evaluator A/B, WORM administrator, external auditor, OSF, "
+            "Sigstore/Rekor, RFC3161 TSA, production Temporal, drand verifier, role identities), cosign and aws absent, "
+            "external_independence_proven hard-coded False.  G0-external is not executable by one person (SR-2)."
+        ),
+        "progress_blocker": "USER_WORDS_ON_SECOND_PARTY",
     },
 }
 STEP_ORDER = ("S-1", "S-2", "S-3", "S-4", "S-5", "S-6")
@@ -1291,12 +1351,13 @@ def build_data() -> dict[str, Any]:
                 "claim_ceiling": DONE_STATE["claim_ceiling"],
                 "required_artifacts": list(DONE_STATE["required_artifacts"]),
                 "not_included": DONE_STATE["not_included"],
+                **DONE_STATE_JUDGMENT,
                 "plan_graph_role": "DONE_STATE",
             },
         )
     )
     relations.append(_relation(user_decision_uid("D-4"), "PROPOSES", DONE_STATE_UID, "DONE_STATE", decision_status("D-4")))
-    relations.append(_relation(PROGRAM_UID, "TARGETS", DONE_STATE_UID, "V1_DONE_STATE", decision_status("D-4")))
+    relations.append(_relation(PROGRAM_UID, "TARGETS", DONE_STATE_UID, "V1_DONE_STATE", "SEGMENT_OBSERVED_NOT_REACHED"))
 
     for index, step_id in enumerate(STEP_ORDER, start=1):
         spec = STEPS[step_id]
@@ -1332,6 +1393,7 @@ def build_data() -> dict[str, Any]:
                         "COMPLETED" if step_id in COMPLETED_STEPS
                         else "IN_PROGRESS" if step_id in {"S-1", "S-6"} else "PLANNED"
                     ),
+                    **STEP_PROGRESS.get(step_id, {}),
                     **({
                         "completed_on": COMPLETED_STEPS[step_id]["completed_on"],
                         "completion_commit": COMPLETED_STEPS[step_id]["commit"],
@@ -1349,7 +1411,7 @@ def build_data() -> dict[str, Any]:
             relations.append(_relation(s_uid, "DEPENDS_ON", user_decision_uid(decision_id), "RATIFICATION_PREREQUISITE", dependency_status(decision_id)))
     for before, after in STEP_PRECEDENCE:
         relations.append(_relation(step_uid(before), "PRECEDES", step_uid(after), "CLOSURE_ORDER", "SATISFIED" if before in COMPLETED_STEPS else "PLANNED"))
-    relations.append(_relation(step_uid("S-3"), "TARGETS", DONE_STATE_UID, "DONE_STATE_ATTEMPT", "ATTEMPTED_NOT_REACHED"))
+    relations.append(_relation(step_uid("S-3"), "TARGETS", DONE_STATE_UID, "DONE_STATE_ATTEMPT", "SEGMENT_OBSERVED_BY_THIRD_OCCURRENCE"))
     relations.append(_relation(step_uid("S-3"), "TESTS", subgate_uid("G0-LOCAL"), "PROSPECTIVE_SUBGATE", "TESTED_RULE_NOT_MET"))
 
     # Event versions v3 and v4: the opaque receipts and their bound sources.
@@ -1425,6 +1487,8 @@ def build_data() -> dict[str, Any]:
             relations.append(_relation(receipt["uid"], "ADDRESSES", finding_uid(finding_key), scope, "ADDRESSED"))
         if receipt.get("supersedes_uid"):
             relations.append(_relation(receipt["uid"], "SUPERSEDES_AS_FOLLOWUP", receipt["supersedes_uid"], "SAME_INSTRUMENT_NEW_PREREGISTRATION_NO_RESCORING", "ACTIVE"))
+        if receipt["uid"] == DONE_STATE_JUDGMENT["segment_receipt_uid"]:
+            relations.append(_relation(receipt["uid"], "NARROWS", DONE_STATE_UID, "CREDIT_TO_PERMIT_TO_STATE_READOUT_SEGMENT_ONLY", "SEGMENT_OBSERVED_NOT_REACHED"))
 
     for rule_id, spec in STOP_RULES.items():
         r_uid = stop_rule_uid(rule_id)
@@ -1522,7 +1586,10 @@ def build_data() -> dict[str, Any]:
             "hash-bound as a canon source; D-3 is USER_PRIMARY by the user's delegated choice of 2026-09-06, "
             "recorded verbatim; D-2 remains PROPOSED. S-2, S-3 and S-4 are COMPLETED: the v3 and v4 receipts are "
             "sealed NO_SEPARATION under their frozen rule and the v5 receipt is sealed G0_LOCAL_IDENTIFIABILITY_OBSERVED "
-            "under the corrected rule, a single-owner candidate only. Nothing here passes G0 or G1 or promotes any scientific claim."
+            "under the corrected rule. Against the programme's own D-4 definition that receipt supplies the "
+            "credit-to-Permit-to-state-readout segment only: the admitted state is experiment-local, not a canonical "
+            "revision store, and the fresh probe is not a precommitted held-out partition, so the v1 done-state is NOT "
+            "reached. S-5 and S-6 remain open. Nothing here passes G0 or G1 or promotes any scientific claim."
         ),
         "source_accessed_on": RELEASE,
         "artifact_bindings": bindings,

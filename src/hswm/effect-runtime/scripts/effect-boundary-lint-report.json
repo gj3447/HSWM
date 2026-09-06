@@ -1,16 +1,286 @@
 {
-  "schema_version": "hswm-effect-boundary-allowlist/v1",
-  "claim_boundary": "Each entry names a file that still contains a construct the Effect boundary lint forbids, the rules it is exempt from, the lane that owns it and why. The list may only shrink; a stale entry fails the lint; a new entry needs a reason and a lane.",
-  "lanes": {
-    "HISTORICAL_S2S": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5).",
-    "DNRD5_PROTOCOL": "DNRD-5 protocol source read by the source-closure judge (test/dnrd5-source-closure.test.ts) and pinned by the DNRD-4/DNRD-5 worktrees; converted only under a DNRD amendment, never silently.",
-    "TEMPORAL_SDK_LANE": "Temporal workflow/worker/activities lane compiled under tsconfig.temporal.json; the workflow sandbox forbids Effect and non-deterministic imports and the selected TS G0 Temporal execution (75cc879) keeps this lane SDK-native.",
-    "GRAPH_STANDARDS_PINNED": "Byte-bound by the graph-standards acceptance lock (hswm-graph-standards verify pins its digest); any edit invalidates the lock.",
-    "FOUNDATION_ADAPTER": "The two Node adapters (POSIX filesystem, bounded subprocess): async/await and throw exist only inside Effect.tryPromise / Effect.async / acquireUseRelease callbacks that are mapped to typed errors at the same call site.",
-    "NEO4J_DRIVER_ADAPTER": "neo4j-driver transaction functions are Promise-based and roll back only by throwing inside executeWrite/executeRead; every call is wrapped in Effect.tryPromise and mapped to a typed projection error at the call site.",
-    "PURE_KERNEL_INVARIANT_GUARD": "Two internal index guards in the pure T16 numeric kernel raise on an impossible out-of-range index under noUncheckedIndexedAccess; they are invariant defects, not control flow, and the pinned T16 hashes in test/swm0-role-aware-core.test.ts would expose any drift."
+  "schema_version": "hswm-effect-boundary-lint/v1",
+  "files": 130,
+  "clean_files": 92,
+  "counts": {
+    "R1": 3,
+    "R2": 2,
+    "R3": 314,
+    "R4": 33,
+    "R5": 91
   },
-  "files": {
+  "allowlisted_files": 38,
+  "violations": 0,
+  "stale_allowlist_entries": 0,
+  "per_file": {
+    "canonical-atom-v2-dnrd5-durable-permit.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 3,
+      "R4": 0,
+      "R5": 0
+    },
+    "canonical-atom-v2-dnrd5-lifecycle.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 0,
+      "R4": 2,
+      "R5": 0
+    },
+    "canonical-atom-v2-dnrd5-v2-exact-w0-restore-projection.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 0,
+      "R4": 1,
+      "R5": 0
+    },
+    "canonical-atom-v2-dnrd5-v2-lifecycle-adapter.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 0,
+      "R4": 1,
+      "R5": 0
+    },
+    "canonical-atom-v2-jsonld-view.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 1,
+      "R4": 0,
+      "R5": 2
+    },
+    "canonical-atom-v2-neo4j-projection.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 10,
+      "R4": 0,
+      "R5": 4
+    },
+    "effect-posix-filesystem.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 4,
+      "R4": 0,
+      "R5": 6
+    },
+    "g0-occurrence-temporal-activities.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 0,
+      "R4": 0,
+      "R5": 1
+    },
+    "g0-occurrence-temporal-runtime.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 1,
+      "R4": 0,
+      "R5": 1
+    },
+    "g0-occurrence-temporal-worker-process.ts": {
+      "R1": 0,
+      "R2": 1,
+      "R3": 0,
+      "R4": 0,
+      "R5": 1
+    },
+    "g0-occurrence-temporal-workflow.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 4,
+      "R4": 0,
+      "R5": 1
+    },
+    "s2s-durable-file.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 21,
+      "R4": 0,
+      "R5": 8
+    },
+    "s2s-evidence-envelope.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 0,
+      "R4": 1,
+      "R5": 0
+    },
+    "s2s-evidence-file.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 29,
+      "R4": 1,
+      "R5": 12
+    },
+    "s2s-evidence-profile.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 1,
+      "R4": 0,
+      "R5": 0
+    },
+    "s2s-hosted-process-continuity-contract.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 1,
+      "R4": 0,
+      "R5": 0
+    },
+    "s2s-invocation.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 6,
+      "R4": 1,
+      "R5": 1
+    },
+    "s2s-json.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 24,
+      "R4": 0,
+      "R5": 0
+    },
+    "s2s-live-artifact.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 4,
+      "R4": 2,
+      "R5": 0
+    },
+    "s2s-live-drand-http.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 24,
+      "R4": 0,
+      "R5": 7
+    },
+    "s2s-live-drand.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 14,
+      "R4": 0,
+      "R5": 4
+    },
+    "s2s-live-github.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 43,
+      "R4": 0,
+      "R5": 6
+    },
+    "s2s-live-python.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 18,
+      "R4": 1,
+      "R5": 5
+    },
+    "s2s-prepared-stage-carrier.ts": {
+      "R1": 1,
+      "R2": 0,
+      "R3": 0,
+      "R4": 3,
+      "R5": 0
+    },
+    "s2s-preregistration.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 0,
+      "R4": 4,
+      "R5": 0
+    },
+    "s2s-protocol-config-asset.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 2,
+      "R4": 0,
+      "R5": 1
+    },
+    "s2s-run-authority.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 0,
+      "R4": 2,
+      "R5": 0
+    },
+    "s2s-stage-artifact-permits.ts": {
+      "R1": 1,
+      "R2": 0,
+      "R3": 0,
+      "R4": 2,
+      "R5": 0
+    },
+    "s2s-stage-artifact-read-replay-contract.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 1,
+      "R4": 0,
+      "R5": 0
+    },
+    "s2s-stage-artifact-read-replay.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 16,
+      "R4": 1,
+      "R5": 0
+    },
+    "s2s-stage-upload-assertion.ts": {
+      "R1": 1,
+      "R2": 0,
+      "R3": 1,
+      "R4": 9,
+      "R5": 0
+    },
+    "s2s-stage-upload-postcondition-contract.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 1,
+      "R4": 0,
+      "R5": 0
+    },
+    "s2s-stage-upload-postcondition.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 3,
+      "R4": 0,
+      "R5": 0
+    },
+    "s2s-test-only-golden-artifact-store.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 19,
+      "R4": 1,
+      "R5": 6
+    },
+    "s2s-test-only-hosted-process-cli.ts": {
+      "R1": 0,
+      "R2": 1,
+      "R3": 12,
+      "R4": 0,
+      "R5": 1
+    },
+    "s2s-test-only-hosted-process-root.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 47,
+      "R4": 1,
+      "R5": 24
+    },
+    "s2s-zip.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 2,
+      "R4": 0,
+      "R5": 0
+    },
+    "swm0-role-aware-core.ts": {
+      "R1": 0,
+      "R2": 0,
+      "R3": 2,
+      "R4": 0,
+      "R5": 0
+    }
+  },
+  "allowlist": {
     "canonical-atom-v2-dnrd5-durable-permit.ts": {
       "rules": [
         "R3"
@@ -306,5 +576,59 @@
       "lane": "PURE_KERNEL_INVARIANT_GUARD",
       "reason": "numberAt/itemAt index guards (2 sites) in the pure T16 kernel; converting them would thread Either through the numeric loops without changing any reachable behaviour."
     }
+  },
+  "lanes": {
+    "DNRD5_PROTOCOL": [
+      "canonical-atom-v2-dnrd5-durable-permit.ts",
+      "canonical-atom-v2-dnrd5-lifecycle.ts",
+      "canonical-atom-v2-dnrd5-v2-exact-w0-restore-projection.ts",
+      "canonical-atom-v2-dnrd5-v2-lifecycle-adapter.ts"
+    ],
+    "GRAPH_STANDARDS_PINNED": [
+      "canonical-atom-v2-jsonld-view.ts"
+    ],
+    "NEO4J_DRIVER_ADAPTER": [
+      "canonical-atom-v2-neo4j-projection.ts"
+    ],
+    "FOUNDATION_ADAPTER": [
+      "effect-posix-filesystem.ts"
+    ],
+    "TEMPORAL_SDK_LANE": [
+      "g0-occurrence-temporal-activities.ts",
+      "g0-occurrence-temporal-runtime.ts",
+      "g0-occurrence-temporal-worker-process.ts",
+      "g0-occurrence-temporal-workflow.ts"
+    ],
+    "HISTORICAL_S2S": [
+      "s2s-durable-file.ts",
+      "s2s-evidence-envelope.ts",
+      "s2s-evidence-file.ts",
+      "s2s-evidence-profile.ts",
+      "s2s-hosted-process-continuity-contract.ts",
+      "s2s-invocation.ts",
+      "s2s-json.ts",
+      "s2s-live-artifact.ts",
+      "s2s-live-drand-http.ts",
+      "s2s-live-drand.ts",
+      "s2s-live-github.ts",
+      "s2s-live-python.ts",
+      "s2s-prepared-stage-carrier.ts",
+      "s2s-preregistration.ts",
+      "s2s-protocol-config-asset.ts",
+      "s2s-run-authority.ts",
+      "s2s-stage-artifact-permits.ts",
+      "s2s-stage-artifact-read-replay-contract.ts",
+      "s2s-stage-artifact-read-replay.ts",
+      "s2s-stage-upload-assertion.ts",
+      "s2s-stage-upload-postcondition-contract.ts",
+      "s2s-stage-upload-postcondition.ts",
+      "s2s-test-only-golden-artifact-store.ts",
+      "s2s-test-only-hosted-process-cli.ts",
+      "s2s-test-only-hosted-process-root.ts",
+      "s2s-zip.ts"
+    ],
+    "PURE_KERNEL_INVARIANT_GUARD": [
+      "swm0-role-aware-core.ts"
+    ]
   }
 }

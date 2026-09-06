@@ -35,7 +35,7 @@
     "projection:rehearsal": "node dist/hypergraph-projection-process.js --rehearsal",
     "build": "tsc -p tsconfig.build.json && tsc -p tsconfig.temporal-build.json",
     "build:dnrd": "tsc -p tsconfig.dnrd.json",
-    "check": "tsc --noEmit && tsc -p tsconfig.temporal.json",
+    "check": "tsc --noEmit && tsc -p tsconfig.temporal.json && node scripts/lint-effect-boundary.mjs",
     "lint:boundary": "node scripts/lint-effect-boundary.mjs",
     "test": "vitest run",
     "test:g0-temporal:integration": "HSWM_RUN_G0_TEMPORAL_INTEGRATION=1 vitest run test/g0-occurrence-temporal.integration.test.ts --maxWorkers=1",

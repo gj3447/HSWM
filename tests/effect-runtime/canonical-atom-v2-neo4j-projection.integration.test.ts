@@ -18,7 +18,7 @@ const database = process.env["HSWM_NEO4J_INTEGRATION_DATABASE"]
 const configured = uri !== undefined && username !== undefined && password !== undefined && database !== undefined
 
 const compiled = () => {
-  const rehearsal = makeHypergraphProjectionRehearsal(`journal:neo4j-integration:${crypto.randomUUID()}`)
+  const rehearsal = Either.getOrThrow(makeHypergraphProjectionRehearsal(`journal:neo4j-integration:${crypto.randomUUID()}`))
   const result = compileHypergraphProjection(rehearsal.schema, rehearsal.source)
   if (Either.isLeft(result)) throw new Error("rehearsal projection did not compile")
   return result.right

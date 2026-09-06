@@ -12,7 +12,7 @@ const right = <A, E>(value: Either.Either<A, E>): A => {
 }
 
 it("deterministically projects recursive composition, lateral peers, external n-ary roles, and ports", () => {
-  const rehearsal = makeOpenConnectivityRehearsal()
+  const rehearsal = Either.getOrThrow(makeOpenConnectivityRehearsal())
   const first = right(compileHypergraphProjection(rehearsal.schema, rehearsal.source))
   const second = right(compileHypergraphProjection(rehearsal.schema, rehearsal.source))
   expect(first).toEqual(second)
@@ -34,7 +34,7 @@ it("deterministically projects recursive composition, lateral peers, external n-
 })
 
 it("retains the actual nested, peer, and internal/external exchange paths in projected metadata", () => {
-  const rehearsal = makeOpenConnectivityRehearsal()
+  const rehearsal = Either.getOrThrow(makeOpenConnectivityRehearsal())
   const projection = right(compileHypergraphProjection(rehearsal.schema, rehearsal.source))
   const atomId = (uid: string) => projection.nodes.find((node) => node.properties["uid"] === uid)!.id
   const targets = (uid: string, role: string) => projection.nodes
@@ -64,7 +64,7 @@ it("retains the actual nested, peer, and internal/external exchange paths in pro
 })
 
 it("keeps temporary activation separate from durable disposition and does not project raw packet payload bytes", () => {
-  const rehearsal = makeOpenConnectivityRehearsal()
+  const rehearsal = Either.getOrThrow(makeOpenConnectivityRehearsal())
   const projection = right(compileHypergraphProjection(rehearsal.schema, rehearsal.source))
   const sourceAtoms = rehearsal.source.state.atoms
   const observation = sourceAtoms.find((atom) => atom.key.atomUid === "atom:packet-observation")!
@@ -80,8 +80,8 @@ it("keeps temporary activation separate from durable disposition and does not pr
 })
 
 it("gives a journal-lineage fork a distinct source-bound projection identity and rejects malformed roles", () => {
-  const main = makeOpenConnectivityRehearsal("journal:open-connectivity-main")
-  const fork = makeOpenConnectivityRehearsal("journal:open-connectivity-fork")
+  const main = Either.getOrThrow(makeOpenConnectivityRehearsal("journal:open-connectivity-main"))
+  const fork = Either.getOrThrow(makeOpenConnectivityRehearsal("journal:open-connectivity-fork"))
   const mainProjection = right(compileHypergraphProjection(main.schema, main.source))
   const forkProjection = right(compileHypergraphProjection(fork.schema, fork.source))
   expect(mainProjection.manifest.projectionId).not.toBe(forkProjection.manifest.projectionId)
@@ -95,7 +95,7 @@ it("gives a journal-lineage fork a distinct source-bound projection identity and
 })
 
 it("rejects dangling references, external role target-kind mismatches, and invalid owner declarations", () => {
-  const rehearsal = makeOpenConnectivityRehearsal()
+  const rehearsal = Either.getOrThrow(makeOpenConnectivityRehearsal())
   const replace = (atomUid: string, change: (atom: typeof rehearsal.source.state.atoms[number]) => typeof rehearsal.source.state.atoms[number]) => ({
     ...rehearsal.source.state,
     atoms: rehearsal.source.state.atoms.map((atom) => atom.key.atomUid === atomUid ? change(atom) : atom)
@@ -125,7 +125,7 @@ it("rejects dangling references, external role target-kind mismatches, and inval
 })
 
 it("does not change the existing bounded hypergraph rehearsal projection identity", () => {
-  const existing = makeHypergraphProjectionRehearsal()
+  const existing = Either.getOrThrow(makeHypergraphProjectionRehearsal())
   const projection = right(compileHypergraphProjection(existing.schema, existing.source))
   expect(projection.manifest.projectionId).toBe(
     "hswm-projection-v1:80924c9fdfe89d88cfb8ddce80eea04f62db1e6a7d253346675a72202527d87e"

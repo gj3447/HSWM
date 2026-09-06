@@ -11,7 +11,7 @@ const right = <A, E>(value: Either.Either<A, E>): A => {
   return value.right
 }
 const projection = () => {
-  const rehearsal = makeHypergraphProjectionRehearsal()
+  const rehearsal = Either.getOrThrow(makeHypergraphProjectionRehearsal())
   return right(compileHypergraphProjection(rehearsal.schema, rehearsal.source))
 }
 const evidence = (value = projection()) => ({

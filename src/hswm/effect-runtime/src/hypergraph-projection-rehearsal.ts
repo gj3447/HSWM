@@ -6,7 +6,7 @@
  */
 import { createHash } from "node:crypto"
 
-import { Either } from "effect"
+import { Data, Either } from "effect"
 
 import {
   canonicalAtomV2EnvelopeBytes,
@@ -40,10 +40,15 @@ const VERSION = "hswm:hypergraph-projection-rehearsal:v1"
 const DEFAULT_JOURNAL_LINEAGE = "journal:hypergraph-projection-rehearsal"
 const sha256 = (value: string): string => createHash("sha256").update(value).digest("hex")
 const utf8 = (value: string): Uint8Array => new TextEncoder().encode(value)
-const right = <A, E>(value: Either.Either<A, E>): A => {
-  if (Either.isLeft(value)) throw new Error("bounded hypergraph rehearsal construction failed")
-  return value.right
+export class HypergraphProjectionRehearsalError extends Data.TaggedError("HypergraphProjectionRehearsalError")<{ readonly detail: string }> {}
+
+export interface HypergraphProjectionRehearsal {
+  readonly schema: HSWMCanonicalSchemaV2
+  readonly source: CanonicalAtomV2RdfProjectionSource
 }
+
+const step = <A, E>(value: Either.Either<A, E>): Either.Either<A, HypergraphProjectionRehearsalError> =>
+  Either.mapLeft(value, () => new HypergraphProjectionRehearsalError({ detail: "bounded hypergraph rehearsal construction failed" }))
 
 const schema = (): HSWMCanonicalSchemaV2 => ({
   _tag: "HSWMCanonicalSchemaV2",
@@ -80,12 +85,12 @@ const atom = (atomUid: string, kind: string, references: CanonicalAtomV2["refere
   provenance: { mode: sourceRef === null ? "BOOTSTRAP" : "DERIVATION", evidenceSha256: sha256(`evidence:${atomUid}`), sourceRef },
   lifecycle: "ADMITTED", references
 })
-const binding = (value: CanonicalAtomV2): CanonicalAtomV2WriteContentBinding => ({ key: value.key, payload: value.content, envelope: right(describeCanonicalAtomV2Envelope(value)) })
+const binding = (value: CanonicalAtomV2): Either.Either<CanonicalAtomV2WriteContentBinding, unknown> =>
+  Either.map(describeCanonicalAtomV2Envelope(value), (envelope) => ({ key: value.key, payload: value.content, envelope }))
 
-export const makeHypergraphProjectionRehearsal = (journalLineageId = DEFAULT_JOURNAL_LINEAGE): {
-  readonly schema: HSWMCanonicalSchemaV2
-  readonly source: CanonicalAtomV2RdfProjectionSource
-} => {
+export const makeHypergraphProjectionRehearsal = (
+  journalLineageId = DEFAULT_JOURNAL_LINEAGE
+): Either.Either<HypergraphProjectionRehearsal, HypergraphProjectionRehearsalError> => Either.gen(function* () {
   const activeSchema = schema()
   const trajectory = atom("atom:trajectory", "kind:trajectory")
   const outcome = atom("atom:outcome", "kind:outcome", [], trajectory.key)
@@ -96,9 +101,9 @@ export const makeHypergraphProjectionRehearsal = (journalLineageId = DEFAULT_JOU
     { referenceType: "reference:rehearsal-member", role: "role:outcome", target: outcome.key }
   ], trajectory.key)
   const atoms = [disposition, outcome, relation, trajectory]
-  const genesis = right(makeCanonicalAtomV2StateJournalGenesis(journalLineageId, activeSchema))
-  const prior = right(applyCanonicalAtomV2StateJournalGenesis(activeSchema, genesis))
-  const descriptor = right(describeCanonicalAtomV2StateJournalRecord(genesis))
+  const genesis = yield* step(makeCanonicalAtomV2StateJournalGenesis(journalLineageId, activeSchema))
+  const prior = yield* step(applyCanonicalAtomV2StateJournalGenesis(activeSchema, genesis))
+  const descriptor = yield* step(describeCanonicalAtomV2StateJournalRecord(genesis))
   const command: CommitCanonicalAtomsV2Command = {
     _tag: "CommitCanonicalAtomsV2", contractVersion: HSWM_CANONICAL_TRANSITION_V2_CONTRACT_VERSION,
     transitionId: "transition:hypergraph-projection-rehearsal", expectedStateRevision: 0, schemaVersion: VERSION,
@@ -106,11 +111,13 @@ export const makeHypergraphProjectionRehearsal = (journalLineageId = DEFAULT_JOU
     decidedAt: "2026-09-05T00:00:00.000Z", traceRef: null, readSet: [], writes: atoms, provenanceSha256: sha256("transition:hypergraph-projection-rehearsal")
   }
   const receipt = makeCanonicalAtomV2AcceptedReceipt(command, 0, 1)
-  const envelopes = atoms.map((value) => right(canonicalAtomV2EnvelopeBytes(value)))
-  const tail = right(makeCanonicalAtomV2StateJournalCommit(activeSchema, { state: prior, descriptor, journalLineageId, schema: genesis.schema }, receipt, atoms.map(binding), envelopes))
-  const applied = right(applyCanonicalAtomV2StateJournalCommit(activeSchema, { state: prior, descriptor, journalLineageId, schema: genesis.schema }, tail, envelopes))
-  const schemaBytes = right(canonicalAtomV2SchemaContentBytes(activeSchema))
-  const schemaDescriptor = right(makeCanonicalAtomV2ContentDescriptor("application/vnd.hswm.canonical-schema-v2+json", schemaBytes))
+  const envelopes = yield* step(Either.all(atoms.map((value) => canonicalAtomV2EnvelopeBytes(value))))
+  const bindings = yield* step(Either.all(atoms.map(binding)))
+  const tail = yield* step(makeCanonicalAtomV2StateJournalCommit(activeSchema, { state: prior, descriptor, journalLineageId, schema: genesis.schema }, receipt, bindings, envelopes))
+  const applied = yield* step(applyCanonicalAtomV2StateJournalCommit(activeSchema, { state: prior, descriptor, journalLineageId, schema: genesis.schema }, tail, envelopes))
+  const schemaBytes = yield* step(canonicalAtomV2SchemaContentBytes(activeSchema))
+  const schemaDescriptor = yield* step(makeCanonicalAtomV2ContentDescriptor("application/vnd.hswm.canonical-schema-v2+json", schemaBytes))
+  const tailRecordBytes = yield* step(canonicalAtomV2StateJournalRecordBytes(tail))
   return {
     schema: activeSchema,
     source: {
@@ -118,7 +125,7 @@ export const makeHypergraphProjectionRehearsal = (journalLineageId = DEFAULT_JOU
       schemaBinding: { schemaVersion: VERSION, content: schemaDescriptor },
       state: applied.state,
       tailDescriptor: applied.descriptor,
-      tailRecordBytes: right(canonicalAtomV2StateJournalRecordBytes(tail))
+      tailRecordBytes
     }
   }
-}
+})

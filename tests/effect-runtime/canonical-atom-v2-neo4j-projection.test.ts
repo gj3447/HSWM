@@ -20,7 +20,7 @@ const right = <A, E>(value: Either.Either<A, E>): A => {
   return value.right
 }
 const projection = () => {
-  const rehearsal = makeHypergraphProjectionRehearsal(`journal:neo4j-unit:${crypto.randomUUID()}`)
+  const rehearsal = Either.getOrThrow(makeHypergraphProjectionRehearsal(`journal:neo4j-unit:${crypto.randomUUID()}`))
   return right(compileHypergraphProjection(rehearsal.schema, rehearsal.source))
 }
 

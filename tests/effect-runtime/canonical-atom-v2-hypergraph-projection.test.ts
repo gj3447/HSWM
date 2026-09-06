@@ -14,7 +14,7 @@ const right = <A, E>(value: Either.Either<A, E>): A => {
 }
 
 it("deterministically preserves ternary role-bearing repeated-target participation", () => {
-  const rehearsal = makeHypergraphProjectionRehearsal()
+  const rehearsal = Either.getOrThrow(makeHypergraphProjectionRehearsal())
   const first = right(compileHypergraphProjection(rehearsal.schema, rehearsal.source))
   const second = right(compileHypergraphProjection(rehearsal.schema, rehearsal.source))
   expect(first).toEqual(second)
@@ -28,8 +28,8 @@ it("deterministically preserves ternary role-bearing repeated-target participati
 })
 
 it("gives a journal-lineage fork a distinct source-bound projection identity", () => {
-  const main = makeHypergraphProjectionRehearsal("journal:projection-main")
-  const fork = makeHypergraphProjectionRehearsal("journal:projection-fork")
+  const main = Either.getOrThrow(makeHypergraphProjectionRehearsal("journal:projection-main"))
+  const fork = Either.getOrThrow(makeHypergraphProjectionRehearsal("journal:projection-fork"))
   const mainProjection = right(compileHypergraphProjection(main.schema, main.source))
   const forkProjection = right(compileHypergraphProjection(fork.schema, fork.source))
   expect(mainProjection.manifest.sourceSha256).not.toBe(forkProjection.manifest.sourceSha256)
@@ -37,7 +37,7 @@ it("gives a journal-lineage fork a distinct source-bound projection identity", (
 })
 
 it("rejects stale source material and detects graph, manifest, and relationship tampering", () => {
-  const rehearsal = makeHypergraphProjectionRehearsal()
+  const rehearsal = Either.getOrThrow(makeHypergraphProjectionRehearsal())
   const stale = { ...rehearsal.source, schemaBinding: { ...rehearsal.source.schemaBinding, schemaVersion: "hswm:stale" } }
   expect(Either.isLeft(compileHypergraphProjection(rehearsal.schema, stale))).toBe(true)
   const projection = right(compileHypergraphProjection(rehearsal.schema, rehearsal.source))

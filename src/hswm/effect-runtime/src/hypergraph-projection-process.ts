@@ -176,14 +176,18 @@ const loadProjection = (
 ): Effect.Effect<HypergraphProjection, HypergraphProjectionProcessError> => {
   const detail = "projection contract verification failed"
   switch (source.kind) {
-    case "REHEARSAL": {
-      const fixture = makeHypergraphProjectionRehearsal()
-      return right(compileHypergraphProjection(fixture.schema, fixture.source), "SOURCE_INVALID", detail)
-    }
-    case "CONNECTIVITY_REHEARSAL": {
-      const fixture = makeOpenConnectivityRehearsal()
-      return right(compileHypergraphProjection(fixture.schema, fixture.source), "SOURCE_INVALID", detail)
-    }
+    case "REHEARSAL":
+      return right(
+        Either.flatMap(makeHypergraphProjectionRehearsal(), (fixture) => compileHypergraphProjection(fixture.schema, fixture.source)),
+        "SOURCE_INVALID",
+        detail
+      )
+    case "CONNECTIVITY_REHEARSAL":
+      return right(
+        Either.flatMap(makeOpenConnectivityRehearsal(), (fixture) => compileHypergraphProjection(fixture.schema, fixture.source)),
+        "SOURCE_INVALID",
+        detail
+      )
     case "INPUT":
       return readCallerFile(fs, source.path, HSWM_CANONICAL_JSON_V1_MAX_BYTES, "projection-input", "SOURCE_INVALID").pipe(
         Effect.flatMap((bytes) => right(decodeHypergraphProjectionBytes(bytes), "SOURCE_INVALID", detail))

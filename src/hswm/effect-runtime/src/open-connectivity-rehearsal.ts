@@ -8,7 +8,7 @@
  */
 import { createHash } from "node:crypto"
 
-import { Either } from "effect"
+import { Data, Either } from "effect"
 
 import {
   canonicalAtomV2EnvelopeBytes,
@@ -42,10 +42,15 @@ const VERSION = "hswm:open-connectivity-rehearsal:v1"
 const DEFAULT_JOURNAL_LINEAGE = "journal:open-connectivity-rehearsal"
 const sha256 = (value: string): string => createHash("sha256").update(value).digest("hex")
 const utf8 = (value: string): Uint8Array => new TextEncoder().encode(value)
-const right = <A, E>(value: Either.Either<A, E>): A => {
-  if (Either.isLeft(value)) throw new Error("open connectivity rehearsal construction failed")
-  return value.right
+export class OpenConnectivityRehearsalError extends Data.TaggedError("OpenConnectivityRehearsalError")<{ readonly detail: string }> {}
+
+export interface OpenConnectivityRehearsal {
+  readonly schema: HSWMCanonicalSchemaV2
+  readonly source: CanonicalAtomV2RdfProjectionSource
 }
+
+const step = <A, E>(value: Either.Either<A, E>): Either.Either<A, OpenConnectivityRehearsalError> =>
+  Either.mapLeft(value, () => new OpenConnectivityRehearsalError({ detail: "open connectivity rehearsal construction failed" }))
 
 const owners = [
   ["owner:cell-steward", "Own candidate HSWM-cell identity and composition accountability."],
@@ -136,7 +141,8 @@ const atom = (
   provenance: { mode: "BOOTSTRAP", evidenceSha256: sha256(`fixture-evidence:${atomUid}`), sourceRef: null },
   lifecycle: "ADMITTED", references
 })
-const binding = (value: CanonicalAtomV2): CanonicalAtomV2WriteContentBinding => ({ key: value.key, payload: value.content, envelope: right(describeCanonicalAtomV2Envelope(value)) })
+const binding = (value: CanonicalAtomV2): Either.Either<CanonicalAtomV2WriteContentBinding, unknown> =>
+  Either.map(describeCanonicalAtomV2Envelope(value), (envelope) => ({ key: value.key, payload: value.content, envelope }))
 const ref = (referenceType: string, roleName: string, target: CanonicalAtomV2): CanonicalAtomV2["references"][number] => ({ referenceType, role: roleName, target: target.key })
 
 /**
@@ -145,10 +151,9 @@ const ref = (referenceType: string, roleName: string, target: CanonicalAtomV2): 
  * RDF/property-graph projection retains descriptors, hashes, roles, and
  * provenance but deliberately omits the raw payload bytes.
  */
-export const makeOpenConnectivityRehearsal = (journalLineageId = DEFAULT_JOURNAL_LINEAGE): {
-  readonly schema: HSWMCanonicalSchemaV2
-  readonly source: CanonicalAtomV2RdfProjectionSource
-} => {
+export const makeOpenConnectivityRehearsal = (
+  journalLineageId = DEFAULT_JOURNAL_LINEAGE
+): Either.Either<OpenConnectivityRehearsal, OpenConnectivityRehearsalError> => Either.gen(function* () {
   const activeSchema = schema()
   const alpha = atom("atom:cell-alpha", "kind:candidate-hswm-cell", "owner:cell-steward", '{"candidate":"alpha","claim":"synthetic-cell"}')
   const beta = atom("atom:cell-beta", "kind:candidate-hswm-cell", "owner:cell-steward", '{"candidate":"beta","claim":"synthetic-cell"}')
@@ -173,9 +178,9 @@ export const makeOpenConnectivityRehearsal = (journalLineageId = DEFAULT_JOURNAL
   const lateral = atom("atom:lateral-alpha-beta", "kind:lateral-peer-connection", "owner:cell-steward", '{"connection":"lateral-peer","fixedLayer":false}', [ref("reference:member", "role:left-peer", alpha), ref("reference:member", "role:right-peer", beta)])
   const externalBinding = atom("atom:binding-external-nary", "kind:external-nary-binding", "owner:endpoint-custodian", '{"binding":"synthetic external n-ary descriptor","permit":"NOT_PRESENT"}', [ref("reference:member", "role:hswm", collective), ref("reference:member", "role:human", human), ref("reference:member", "role:tool", tool), ref("reference:member", "role:sensor", sensor), ref("reference:member", "role:knowledge", knowledge)])
   const atoms = [activation, alpha, alphaObservationOut, beta, collective, collectiveContextIn, contextProposal, disposition, egress, externalBinding, externalContextProposal, externalObservation, human, ingress, knowledge, lateral, localComposition, macro, nestedComposition, observation, sensor, tool].sort((left, right) => Buffer.from(left.key.atomUid).compare(Buffer.from(right.key.atomUid)))
-  const genesis = right(makeCanonicalAtomV2StateJournalGenesis(journalLineageId, activeSchema))
-  const prior = right(applyCanonicalAtomV2StateJournalGenesis(activeSchema, genesis))
-  const descriptor = right(describeCanonicalAtomV2StateJournalRecord(genesis))
+  const genesis = yield* step(makeCanonicalAtomV2StateJournalGenesis(journalLineageId, activeSchema))
+  const prior = yield* step(applyCanonicalAtomV2StateJournalGenesis(activeSchema, genesis))
+  const descriptor = yield* step(describeCanonicalAtomV2StateJournalRecord(genesis))
   const command: CommitCanonicalAtomsV2Command = {
     _tag: "CommitCanonicalAtomsV2", contractVersion: HSWM_CANONICAL_TRANSITION_V2_CONTRACT_VERSION,
     transitionId: "transition:open-connectivity-rehearsal", expectedStateRevision: 0, schemaVersion: VERSION,
@@ -183,10 +188,12 @@ export const makeOpenConnectivityRehearsal = (journalLineageId = DEFAULT_JOURNAL
     decidedAt: "2026-09-05T00:00:00.000Z", traceRef: null, readSet: [], writes: atoms, provenanceSha256: sha256("transition:open-connectivity-rehearsal")
   }
   const receipt = makeCanonicalAtomV2AcceptedReceipt(command, 0, 1)
-  const envelopes = atoms.map((value) => right(canonicalAtomV2EnvelopeBytes(value)))
-  const tail = right(makeCanonicalAtomV2StateJournalCommit(activeSchema, { state: prior, descriptor, journalLineageId, schema: genesis.schema }, receipt, atoms.map(binding), envelopes))
-  const applied = right(applyCanonicalAtomV2StateJournalCommit(activeSchema, { state: prior, descriptor, journalLineageId, schema: genesis.schema }, tail, envelopes))
-  const schemaBytes = right(canonicalAtomV2SchemaContentBytes(activeSchema))
-  const schemaDescriptor = right(makeCanonicalAtomV2ContentDescriptor("application/vnd.hswm.canonical-schema-v2+json", schemaBytes))
-  return { schema: activeSchema, source: { journalLineageId, schemaBinding: { schemaVersion: VERSION, content: schemaDescriptor }, state: applied.state, tailDescriptor: applied.descriptor, tailRecordBytes: right(canonicalAtomV2StateJournalRecordBytes(tail)) } }
-}
+  const envelopes = yield* step(Either.all(atoms.map((value) => canonicalAtomV2EnvelopeBytes(value))))
+  const bindings = yield* step(Either.all(atoms.map(binding)))
+  const tail = yield* step(makeCanonicalAtomV2StateJournalCommit(activeSchema, { state: prior, descriptor, journalLineageId, schema: genesis.schema }, receipt, bindings, envelopes))
+  const applied = yield* step(applyCanonicalAtomV2StateJournalCommit(activeSchema, { state: prior, descriptor, journalLineageId, schema: genesis.schema }, tail, envelopes))
+  const schemaBytes = yield* step(canonicalAtomV2SchemaContentBytes(activeSchema))
+  const schemaDescriptor = yield* step(makeCanonicalAtomV2ContentDescriptor("application/vnd.hswm.canonical-schema-v2+json", schemaBytes))
+  const tailRecordBytes = yield* step(canonicalAtomV2StateJournalRecordBytes(tail))
+  return { schema: activeSchema, source: { journalLineageId, schemaBinding: { schemaVersion: VERSION, content: schemaDescriptor }, state: applied.state, tailDescriptor: applied.descriptor, tailRecordBytes } }
+})

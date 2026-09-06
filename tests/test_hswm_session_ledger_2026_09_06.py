@@ -41,7 +41,7 @@ def test_every_window_commit_is_ledgered_once_with_the_right_core_flag() -> None
     assert ledgered == observed
     positions = [row["position"] for row in builder.COMMITS]
     assert positions == list(range(1, len(builder.COMMITS) + 1))
-    assert sum(1 for row in builder.COMMITS if row["core"]) == 23
+    assert sum(1 for row in builder.COMMITS if row["core"]) == 27
 
 
 def test_streams_cover_all_commits_and_join_the_closure_graph() -> None:
@@ -93,3 +93,16 @@ def test_ledger_is_claim_free_and_anchor_names_match_the_bound_closure_bundle() 
     bound = {row["path"] for row in data["artifact_bindings"]}
     assert "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json" in bound
     assert "F1_R8_RESULTS_LOG.md" not in bound
+
+
+def test_v1_ledger_snapshot_is_retained_unchanged_and_superseded() -> None:
+    v1 = ROOT / "ontology/identity/hswm_core/HSWM_SESSION_LEDGER_2026-09-06.v1.json"
+    assert sha256(v1.read_bytes()).hexdigest() == "2c663f9e82122badeea72dbec7e1aef74e541aece9c551491aa6812cfcbf6bd7"
+    old = json.loads(v1.read_text(encoding="utf-8"))
+    assert old["bundle_uid"] == builder.PREDECESSOR_BUNDLE_UID
+    assert old["expected_counts"]["commits"] == 48
+    data = _data()
+    follow = [row for row in data["relations"] if row["type"] == "SUPERSEDES_AS_FOLLOWUP"]
+    assert [(row["from_uid"], row["to_uid"]) for row in follow] == [(builder.BUNDLE_UID, builder.PREDECESSOR_BUNDLE_UID)]
+    parallel = [row for row in data["nodes"] if row["properties"].get("stream_id") == "parallel_session_s5_recovery" and "commit_sha" in row["properties"]]
+    assert len(parallel) == 5 and sum(1 for row in parallel if row["properties"]["core_path_commit"]) == 4

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and explicitly publish the HSWM session ledger KG projection (2026-09-06, v1).
+"""Validate and explicitly publish the HSWM session ledger KG projection (2026-09-06, event version v2).
 
 Dry run validates and prints VALIDATED_ONLY_NOT_PUBLISHED.  ``--apply`` asserts
 the live schema registry and every anchor by exact name, creates the owned
@@ -23,17 +23,17 @@ from scripts.upsert_hswm_graph_and_loop_engineering import publish, read_flat_ya
 ROOT = Path(__file__).resolve().parents[1]
 ONTOLOGY_PATH = ROOT / builder.ONTOLOGY_PATH
 EXPECTED_COUNTS: dict[str, int] = {
-    "anchors": 17,
-    "commits": 48,
-    "core_commits": 23,
-    "nodes": 70,
+    "anchors": 18,
+    "commits": 54,
+    "core_commits": 27,
+    "nodes": 77,
     "open_items": 8,
     "readings": 3,
-    "relations": 145,
-    "streams": 10,
+    "relations": 160,
+    "streams": 11
 }
-EXPECTED_PROJECTION_SHA256 = "94ec773a81571f0d9c6e7a1ebab434e0606e87068656b5f17534ac4161d3dc63"
-EXPECTED_FILE_SHA256 = "2c663f9e82122badeea72dbec7e1aef74e541aece9c551491aa6812cfcbf6bd7"
+EXPECTED_PROJECTION_SHA256 = "687e85aa1fb8e42d34fd92e761a0bf51c7585623d21be67b1889635a334ce492"
+EXPECTED_FILE_SHA256 = "e2792aa649d97ec9798def3d9aaf1a81d7eb6f85aa9866fe1bbb0a51c5e82e10"
 
 
 def _file_sha(path: Path) -> str:

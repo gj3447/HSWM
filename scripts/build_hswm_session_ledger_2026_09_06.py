@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the HSWM session ledger KG projection for 2026-09-06 (event version v1).
+"""Build the HSWM session ledger KG projection for 2026-09-06 (event version v2).
 
 The ledger is a bounded, deterministic record of one working session: every
 commit in the closure burden window as of the ledger head, grouped into work
@@ -8,6 +8,10 @@ touched, together with the open items, the burden reading, the verification
 readings and the working-tree observations taken at the ledger head.  It is an
 effort ledger and an orientation aid.  It is not a research result, not a gate
 pass, not a user ratification, and it promotes no scientific claim.
+
+Event version v2 supersedes v1, which was taken at 244bf4f before the parallel
+Codex session's five commits were fast-forwarded onto main; v1 is retained
+unchanged.
 """
 
 from __future__ import annotations
@@ -21,17 +25,19 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 RELEASE = "2026-09-06"
-TAG = "2026-09-06-v1"
+TAG = "2026-09-06-v2"
+PREDECESSOR_TAG = "2026-09-06-v1"
 SCHEMA_VERSION = "hswm-session-ledger/v1"
 BUNDLE_UID = f"sym:AbstractNode:hswm-session-ledger-{TAG}"
-ONTOLOGY_PATH = "ontology/identity/hswm_core/HSWM_SESSION_LEDGER_2026-09-06.v1.json"
+PREDECESSOR_BUNDLE_UID = f"sym:AbstractNode:hswm-session-ledger-{PREDECESSOR_TAG}"
+ONTOLOGY_PATH = "ontology/identity/hswm_core/HSWM_SESSION_LEDGER_2026-09-06.v2.json"
 CLOSURE_TAG = "2026-09-05-v5"
 CLOSURE_BUNDLE_UID = f"sym:AbstractNode:hswm-closure-plan-ontology-{CLOSURE_TAG}"
 CLOSURE_PROGRAM_UID = f"sym:ResearchProgram:hswm-closure-plan-{CLOSURE_TAG}"
 EFFECT_FP_BUNDLE_UID = "sym:AbstractNode:hswm-effect-fp-boundary-ontology-2026-09-06"
 WINDOW_START_COMMIT = "4dcba752a661de23066b3b33381bfdfc34879a57"
-LEDGER_HEAD_COMMIT = "244bf4f"
-STATUS = "SESSION_LEDGER_2026-09-06_48_COMMITS_23_CORE_BELOW_SHARE_S2_S3_S4_COMPLETE_S1_S5_S6_OPEN_G0_NOT_PASSED_G1_LOCKED"
+LEDGER_HEAD_COMMIT = "d0b1c38"
+STATUS = "SESSION_LEDGER_2026-09-06_V2_54_COMMITS_27_CORE_AT_SHARE_WINDOW_OPEN_S2_S3_S4_COMPLETE_S1_S5_S6_OPEN_G0_NOT_PASSED_G1_LOCKED"
 NONCLAIM = (
     "SESSION_EFFORT_LEDGER_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_EFFICACY_GATE_PASS_"
     "USER_RATIFICATION_OR_SCIENTIFIC_RESULT"
@@ -109,6 +115,12 @@ COMMITS: tuple[dict[str, Any], ...] = (
     {"position": 46, "short": "d3af76a", "sha": "d3af76a0a7c5741e5dbff53b00c294f1075abf2d", "authored_at": "2026-09-06T10:07:39Z", "subject": "results: opaque v5 (G0-local, corrected control clause) 2026-09-06 occurrence — every frozen clause held", "files_changed": 7, "core": True, "stream": "occurrence_publications"},
     {"position": 47, "short": "d71f977", "sha": "d71f97780c2709fad993f71a9c593ee72ec73d0b", "authored_at": "2026-09-06T10:12:10Z", "subject": "canon: closure plan event version v4 — D-3 ratified by delegated choice, S-4 complete, v3/v4/v5 receipts, published to the live KG", "files_changed": 7, "core": False, "stream": "closure_events"},
     {"position": 48, "short": "244bf4f", "sha": "244bf4f9a05fc9d8bbdf4ed20c409f714fa7b1cb", "authored_at": "2026-09-06T12:46:28Z", "subject": "canon: closure plan event version v5 — D-4 done-state judged SEGMENT_OBSERVED_NOT_REACHED, S-1/S-5/S-6 progress readings, published to the live KG", "files_changed": 7, "core": False, "stream": "closure_events"},
+    {"position": 49, "short": "5b93a22", "sha": "5b93a22e03328acaae024bbc297131121e3dd8d1", "authored_at": "2026-09-06T12:42:21Z", "subject": "results: recover the consumed ALFWorld B0 failure from durable evidence", "files_changed": 10, "core": True, "stream": "parallel_session_s5_recovery"},
+    {"position": 50, "short": "d1c0242", "sha": "d1c02423d358815a86e326cd75a66c737bb89c21", "authored_at": "2026-09-06T12:42:49Z", "subject": "fix: expose the pinned ALFWorld source in the sandbox import path", "files_changed": 2, "core": False, "stream": "parallel_session_s5_recovery"},
+    {"position": 51, "short": "7e17578", "sha": "7e175788aa54f65d27aff1b5351a8266140191ff", "authored_at": "2026-09-06T12:42:49Z", "subject": "research: implement bounded B2 lesson state and prospective contract", "files_changed": 3, "core": True, "stream": "parallel_session_s5_recovery"},
+    {"position": 52, "short": "f1a283c", "sha": "f1a283c7f5ae2a431775f6c041f629b079f06359", "authored_at": "2026-09-06T12:42:49Z", "subject": "research: specify unresolved D4 canonical and heldout boundaries", "files_changed": 1, "core": True, "stream": "parallel_session_s5_recovery"},
+    {"position": 53, "short": "b370933", "sha": "b3709338e6b5666133b885b519d433b0290bdedd", "authored_at": "2026-09-06T12:53:52Z", "subject": "fix: preserve the public results log location boundary", "files_changed": 1, "core": True, "stream": "parallel_session_s5_recovery"},
+    {"position": 54, "short": "d0b1c38", "sha": "d0b1c38f21b5d773f7bc7891f9822171583c28de", "authored_at": "2026-09-06T13:06:25Z", "subject": "canon: session ledger 2026-09-06 — 48 window commits in 10 work streams, 8 open items, 3 readings, published to the live KG", "files_changed": 6, "core": False, "stream": "closure_events"},
 )
 
 STREAMS: dict[str, dict[str, Any]] = {
@@ -158,9 +170,14 @@ STREAMS: dict[str, dict[str, Any]] = {
         "steps": ["S-3"],
     },
     "closure_events": {
-        "name": "Closure plan event versions v3, v4, v5",
-        "outcome": "v3 at the first v3 receipt; v4 with D-3 ratified by delegated choice, S-4 complete and three receipts; v5 with the D-4 done-state judged SEGMENT_OBSERVED_BY_V5_RECEIPT_NOT_REACHED and zero-POST progress readings for S-1, S-5, S-6.  Each was published to the live KG and read back exactly; predecessors retained unchanged.",
+        "name": "Closure plan event versions v3, v4, v5 and the session ledger",
+        "outcome": "v3 at the first v3 receipt; v4 with D-3 ratified by delegated choice, S-4 complete and three receipts; v5 with the D-4 done-state judged SEGMENT_OBSERVED_BY_V5_RECEIPT_NOT_REACHED and zero-POST progress readings for S-1, S-5, S-6; then the session ledger v1 at 244bf4f.  Each was published to the live KG and read back exactly; predecessors retained unchanged.",
         "steps": ["S-4", "S-6"],
+    },
+    "parallel_session_s5_recovery": {
+        "name": "Parallel Codex session: B0 recovery, sandbox import fix, B2 lesson core, D-4 successor boundaries",
+        "outcome": "Five commits authored in a parallel OpenAI Codex CLI session on the same working tree, rebased onto 244bf4f and fast-forwarded onto main at 12:55:34 UTC: the recovered INCONCLUSIVE 2026-08-30 B0 occurrence result, evidence and raw receipts; the bwrap sandbox import-path fix for the pinned ALFWorld source; the bounded B2 text-lesson state core with its prospective DRAFT contract; the D-4 canonical/held-out successor boundaries DRAFT; and an F1_R8 location-boundary fix.  Their 31 tests pass.  This session did not author or review them beyond reading the B0 result and the two DRAFT READMEs; they are ledgered as landed work, not as reviewed work.",
+        "steps": ["S-5"],
     },
 }
 
@@ -192,7 +209,7 @@ OPEN_ITEMS: tuple[dict[str, Any], ...] = (
     {
         "id": "OI-3",
         "name": "B0 comparator successor occurrence",
-        "reading": "The only B0 consumption occurrence (2026-08-30) failed before any model call: ModuleNotFoundError for alfworld inside the bwrap sandbox (DGX host diagnostics 2026-09-06 -006 reproduced it, -007 imported after a PYTHONPATH change).  The fix is an uncommitted edit to the protocol-bound alfworld_text_runtime.py, so a valid B0 needs a sixth prospective amendment or a v2 protocol, a new dated selection manifest (the sealed selection binds the protocol digest), code and test pin updates, a fresh zero-POST DGX qualification, then one 36000 s-ceiling occurrence: about 540 minutes of one-person work, not feasible on 2026-09-06.",
+        "reading": "The only B0 consumption occurrence (2026-08-30) failed before any model call: ModuleNotFoundError for alfworld inside the bwrap sandbox (DGX host diagnostics 2026-09-06 -006 reproduced it, -007 imported after a PYTHONPATH change).  The fix landed at d1c0242 (parallel session) on the protocol-bound alfworld_text_runtime.py, so a valid B0 needs a sixth prospective amendment or a v2 protocol, a new dated selection manifest (the sealed selection binds the protocol digest), code and test pin updates, a fresh zero-POST DGX qualification, then one 36000 s-ceiling occurrence: about 540 minutes of one-person work, not feasible on 2026-09-06.",
         "owner": "SECONDARY_AI",
         "blocks": [f"sym:Concept:hswm-closure-step-s-5-{CLOSURE_TAG}"],
         "constrains": [],
@@ -210,7 +227,7 @@ OPEN_ITEMS: tuple[dict[str, Any], ...] = (
     {
         "id": "OI-5",
         "name": "D-4 canonical-revision and held-out successor",
-        "reading": "The v5 receipt supplies the credit-to-Permit-to-state-readout segment only; a done-state run needs a study-local canonical revision plane (owner-bound OutcomeRecord, CreditRecord, RevisionProposal, DispositionRevision, PermitCommitReceipt, CanonicalStateHead, InterventionReceipt) and a precommitted train/held-out partition on a non-numeric persistent task.  A prospective contract exists as the uncommitted d4_v1_canonical_heldout_DRAFT README prepared by a parallel agent session.",
+        "reading": "The v5 receipt supplies the credit-to-Permit-to-state-readout segment only; a done-state run needs a study-local canonical revision plane (owner-bound OutcomeRecord, CreditRecord, RevisionProposal, DispositionRevision, PermitCommitReceipt, CanonicalStateHead, InterventionReceipt) and a precommitted train/held-out partition on a non-numeric persistent task.  A prospective contract exists as the d4_v1_canonical_heldout_DRAFT README committed at f1a283c by the parallel session.",
         "owner": "SECONDARY_AI",
         "blocks": [f"sym:Concept:hswm-closure-v1-done-state-{CLOSURE_TAG}"],
         "constrains": [],
@@ -219,29 +236,29 @@ OPEN_ITEMS: tuple[dict[str, Any], ...] = (
     {
         "id": "OI-6",
         "name": "Burden cap trajectory",
-        "reading": "At the ledger head 48 commits sit in the 100-commit window after 4dcba75, 23 on core paths (0.4792 < 0.5, WINDOW_OPEN_BELOW_SHARE).  The cap can only be violated when the window is full, so at least 28 of the remaining 52 commits must touch a core path; the ledger commit itself is not a core-path commit.",
+        "reading": "At the ledger head 54 commits sit in the 100-commit window after 4dcba75, 27 on core paths (0.5000, exactly the minimum share, WINDOW_OPEN).  Four of the parallel session's five commits were core-path commits.  The cap can only be violated when the window is full, so at least 23 of the remaining 46 commits must touch a core path; ledger and closure-event commits are not core-path commits.",
         "owner": "SECONDARY_AI",
         "blocks": [],
         "constrains": [f"sym:Concept:hswm-closure-step-s-6-{CLOSURE_TAG}"],
-        "status": "WINDOW_OPEN_BELOW_SHARE",
+        "status": "WINDOW_OPEN_AT_MINIMUM_SHARE",
     },
     {
         "id": "OI-7",
         "name": "DGX checkout lag",
-        "reading": "The DGX checkout ~/hswm-source was at 7ff7766 when the ledger was taken, behind the workstation head; code ships by git bundle (no GitHub push).  Every occurrence lease refuses a dirty or divergent tree, so the bundle must be shipped before any further DGX run.",
+        "reading": "Code ships to the DGX checkout ~/hswm-source by git bundle (no GitHub push); it lagged at 7ff7766 during the day and was fast-forwarded to d0b1c38 (which includes the parallel session's five commits) at 13:07 UTC.  Every occurrence lease refuses a dirty or divergent tree, so each later session commit must be shipped before any further DGX run.",
         "owner": "SECONDARY_AI",
         "blocks": [],
         "constrains": [f"sym:Concept:hswm-closure-step-s-5-{CLOSURE_TAG}"],
-        "status": "SHIP_BUNDLE_BEFORE_NEXT_RUN",
+        "status": "FAST_FORWARDED_TO_D0B1C38_SHIP_AGAIN_BEFORE_NEXT_RUN",
     },
     {
         "id": "OI-8",
         "name": "Parallel agent session sharing the working tree",
-        "reading": "An OpenAI Codex CLI session with the same working directory wrote, uncommitted and unreviewed by this session: the recovered B0 2026-08-30 result, evidence and raw receipts; expel_b2_text_lesson.py and its test; test_hswm_alfworld_b0_publication.py; the B2 and D-4 successor DRAFT READMEs; the alfworld_text_runtime.py PYTHONPATH fix and its test; one F1_R8_RESULTS_LOG.md row.  Their 31 tests pass locally.  This session committed only its own paths and left those files untracked; nothing here is cited as committed work.",
+        "reading": "An OpenAI Codex CLI session with the same working directory wrote the recovered B0 2026-08-30 result, evidence and raw receipts, expel_b2_text_lesson.py and its test, test_hswm_alfworld_b0_publication.py, the B2 and D-4 successor DRAFT READMEs, the alfworld_text_runtime.py sandbox import fix and its test, and one F1_R8_RESULTS_LOG.md row.  While ledger v1 was being built those files were uncommitted; at 12:55:34 UTC that session rebased them as five commits (5b93a22, d1c0242, 7e17578, f1a283c, b370933) onto 244bf4f and fast-forwarded main, so ledger v1's uncommitted statements are superseded by this event.  Their 31 tests pass; this session neither authored nor reviewed their content beyond reading the B0 result and the two DRAFT READMEs.  Two agents sharing one working tree without a lock remains a process risk.",
         "owner": "USER_PRIMARY",
         "blocks": [],
         "constrains": [f"sym:Concept:hswm-closure-step-s-5-{CLOSURE_TAG}"],
-        "status": "OBSERVED_UNCOMMITTED_THIRD_WRITER",
+        "status": "LANDED_ON_MAIN_UNREVIEWED_BY_THIS_SESSION",
     },
 )
 
@@ -250,14 +267,14 @@ READINGS: tuple[dict[str, Any], ...] = (
         "id": "R-BURDEN",
         "roles": ["BURDEN_READING"],
         "name": "Burden reading at the ledger head",
-        "reading": "scripts/check_hswm_closure_burden_cap.py: commits_observed 48, core_commits 23, core_share 0.4792, min_core_share 0.5, window 100 from 4dcba75, status WINDOW_OPEN_BELOW_SHARE, disposition INSTRUMENT_RED_ROW_IN_F1_R8_NO_SCOPE_EXPANSION on violation.",
+        "reading": "scripts/check_hswm_closure_burden_cap.py at d0b1c38: commits_observed 54, core_commits 27, core_share 0.5, min_core_share 0.5, window 100 from 4dcba75, status WINDOW_OPEN, disposition INSTRUMENT_RED_ROW_IN_F1_R8_NO_SCOPE_EXPANSION on violation.  At ledger v1 (244bf4f) the reading was 48 / 23 / 0.4792.",
         "assesses": [f"sym:Concept:hswm-closure-burden-cap-{CLOSURE_TAG}"],
     },
     {
         "id": "R-VERIFY",
         "roles": ["VERIFICATION_READING"],
         "name": "Verification readings on 2026-09-06",
-        "reading": "Effect runtime at 244bf4f: npm run check clean (tsc, temporal tsc, boundary lint over 130 files with 0 violations and 0 stale allowlist entries); vitest 870 passed, 7 skipped, and 2 filesystem-heavy tests (two-CAS resume, S2S preregistration snapshot) timed out at 5000 ms while the Python suite ran concurrently and passed in isolation (29/29).  Closure-plan tests 11 passed and graph-view SHACL/SPARQL 14 passed at 244bf4f; the parallel session's 31 untracked tests pass.  Python suite at 244bf4f with the parallel session's untracked tests present: 3649 passed, 3 skipped (17 min 15 s).  DGX: every occurrence lease restored the shared vllm, vllm-receiver and comfyui-10eros containers; 30 leftover /tmp/hswm-v* files were removed after the last run.",
+        "reading": "Effect runtime at 244bf4f: npm run check clean (tsc, temporal tsc, boundary lint over 130 files with 0 violations and 0 stale allowlist entries); vitest 870 passed, 7 skipped, and 2 filesystem-heavy tests (two-CAS resume, S2S preregistration snapshot) timed out at 5000 ms while the Python suite ran concurrently and passed in isolation (29/29).  Closure-plan tests 11 passed and graph-view SHACL/SPARQL 14 passed at 244bf4f; the parallel session's 31 untracked tests pass.  Python suite at 244bf4f with the parallel session's then-untracked tests present: 3649 passed, 3 skipped (17 min 15 s); ledger v1 tests 5 passed.  DGX: every occurrence lease restored the shared vllm, vllm-receiver and comfyui-10eros containers; 30 leftover /tmp/hswm-v* files were removed after the last run.",
         "assesses": [],
     },
     {
@@ -272,6 +289,7 @@ READINGS: tuple[dict[str, Any], ...] = (
 ANCHORS: tuple[dict[str, Any], ...] = (
     {"uid": "sym:Concept:hswm", "name": "HSWM", "required_labels": ["Concept"]},
     {"uid": CLOSURE_BUNDLE_UID, "name": f"HSWM closure plan ontology [{CLOSURE_TAG}]", "required_labels": ["AbstractNode", "ResearchArtifact"]},
+    {"uid": PREDECESSOR_BUNDLE_UID, "name": f"HSWM session ledger [{PREDECESSOR_TAG}]", "required_labels": ["AbstractNode", "ResearchArtifact"]},
     {"uid": CLOSURE_PROGRAM_UID, "name": f"HSWM closure plan [{CLOSURE_TAG}]", "required_labels": ["ResearchProgram"]},
     {"uid": EFFECT_FP_BUNDLE_UID, "name": "HSWM Effect runtime functional boundary ontology [2026-09-06]", "required_labels": ["AbstractNode", "ResearchArtifact"]},
     {"uid": f"sym:Concept:hswm-closure-step-s-1-{CLOSURE_TAG}", "name": f"S-1 — Ratify D-1, D-2, D-4 and record them as USER_PRIMARY [{CLOSURE_TAG}]", "required_labels": ["Concept"]},
@@ -405,7 +423,10 @@ def build_data() -> dict[str, Any]:
         "closure_bundle_uid": CLOSURE_BUNDLE_UID,
         "effect_fp_bundle_uid": EFFECT_FP_BUNDLE_UID,
         "stream_ids": list(STREAMS),
+        "predecessor_bundle_uid": PREDECESSOR_BUNDLE_UID,
+        "event_version_rule": "A ledger event version is a new hash-bound record; predecessors are retained unchanged and never rewritten.",
     }))
+    relations.append(_relation(BUNDLE_UID, "SUPERSEDES_AS_FOLLOWUP", PREDECESSOR_BUNDLE_UID, "LEDGER_EVENT_VERSION", "SUPERSEDED_V1_TAKEN_BEFORE_PARALLEL_COMMITS_LANDED"))
     relations.append(_relation(BUNDLE_UID, "DEPENDS_ON", CLOSURE_BUNDLE_UID, "LEDGER_JOINS_CLOSURE_EVENT_V5", "BOUND"))
     relations.append(_relation(BUNDLE_UID, "DEPENDS_ON", EFFECT_FP_BUNDLE_UID, "LEDGER_JOINS_EFFECT_FP_BUNDLE", "BOUND"))
     relations.append(_relation(BUNDLE_UID, "TARGETS", CLOSURE_PROGRAM_UID, "SESSION_EFFORT_UNDER_PROGRAM", "RECORDED"))

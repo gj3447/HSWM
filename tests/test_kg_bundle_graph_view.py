@@ -22,6 +22,7 @@ CLOSURE_V4 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v4.j
 CLOSURE_V3 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json"
 CLOSURE_V2 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json"
 CLOSURE_V1 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json"
+SESSION_LEDGER = ROOT / "ontology/identity/hswm_core/HSWM_SESSION_LEDGER_2026-09-06.v2.json"
 ADAPTIVE = ROOT / "ontology/identity/hswm_core/HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json"
 GRAPH_LOOP = ROOT / "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json"
 CAUSAL = ROOT / "ontology/identity/hswm_core/HSWM_CAUSAL_COMPOSITION_RESEARCH_ONTOLOGY.v1.json"
@@ -127,7 +128,7 @@ def test_closure_bundle_view_is_deterministic_blank_node_free_and_bound() -> Non
         left.claim_ceiling = "x"  # type: ignore[misc]
 
 
-@pytest.mark.parametrize("path", (CLOSURE, CLOSURE_V4, CLOSURE_V3, CLOSURE_V2, CLOSURE_V1, ADAPTIVE, CAUSAL, GRAPH_LOOP, EFFECT_FP))
+@pytest.mark.parametrize("path", (CLOSURE, CLOSURE_V4, CLOSURE_V3, CLOSURE_V2, CLOSURE_V1, SESSION_LEDGER, ADAPTIVE, CAUSAL, GRAPH_LOOP, EFFECT_FP))
 def test_checked_in_bundles_conform_to_the_shared_shacl_shape(path: Path) -> None:
     view = KgBundleGraphView.from_bundles(sources=(_source(path, path.stem.lower()),))
     report = view.validate_shacl(shapes=SHAPES.read_bytes())

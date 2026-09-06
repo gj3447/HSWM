@@ -47,7 +47,8 @@ def _write_protocol(tmp_path: Path, protocol: dict[str, Any]) -> Path:
 
 def test_dated_v3_path_is_canonical_and_tracks_the_runtime_sources() -> None:
     assert g1_micro.is_dgx_protocol_path(V3_PATH)
-    assert not g1_micro.is_dgx_protocol_path(V3_PATH.replace("v3_", "v4_"))
+    assert g1_micro.is_dgx_protocol_path(V3_PATH.replace("v3_", "v4_"))
+    assert not g1_micro.is_dgx_protocol_path(V3_PATH.replace("v3_", "v5_"))
     assert not g1_micro.is_dgx_protocol_path("_research/causal_composition/preregistrations/g1_opaque_identifiability_v3_DRAFT/protocol.v1.json")
     tracked = g1_micro.dgx_tracked_source_paths_for_protocol_path(V3_PATH)
     assert tracked[0] == V3_PATH and tracked[1:] == g1_micro.DGX_TRACKED_SOURCE_PATHS[1:]
@@ -327,3 +328,40 @@ def test_repaired_rerun_suffix_maps_to_a_dated_sibling_path(tmp_path: Path) -> N
             seed=SEED, study_date="2026-09-06", live_binding=source["live_binding"], tokenizer_model=tokenizer_model,
             consumption_registry_path=str(tmp_path / "once"), run_suffix="rerun",
         )
+
+
+def test_v4_design_balances_no_state_orders_within_each_stateful_stratum(tmp_path: Path) -> None:
+    from tests.test_hswm_g1_opaque_v3 import SEED, _OPAQUE_SUCCESSOR_PROTOCOL
+
+    source = json.loads(_OPAQUE_SUCCESSOR_PROTOCOL.read_text(encoding="utf-8"))
+    tokenizer_model = {key: source["tokenizer_binding"][key] for key in ("container_image", "container_image_id", "model_repository", "model_revision", "snapshot_manifest_sha256")}
+    protocol, reveal = g1_opaque_v3.generate_v3(
+        seed=SEED, study_date="2026-09-07", live_binding=source["live_binding"], tokenizer_model=tokenizer_model,
+        consumption_registry_path=str(tmp_path / "once-v4"), design="v4",
+    )
+    assert protocol["study_uid"] == "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-v4-2026-09-07"
+    assert protocol["generation"]["design_revision"] == "v4"
+    assert protocol["generation"]["no_state_order_policy"].startswith("INDEPENDENT")
+    correct = {entry["episode_uid"]: entry["correct_action_code"] for entry in reveal["episodes"]}
+    counts = {"NO_UPDATE": {1: [0, 0], 2: [0, 0]}, "REMOVE": {1: [0, 0], 2: [0, 0]}}
+    for episode in protocol["episodes"]:
+        code = correct[episode["episode_uid"]]
+        stratum = episode["stateful_probe_action_order"].index(code) + 1
+        for arm, key in (("NO_UPDATE", "no_update_action_order"), ("REMOVE", "remove_action_order")):
+            counts[arm][stratum][episode[key].index(code)] += 1
+    # Within each stateful stratum of 16, each no-state arm has the correct code first in exactly 8.
+    assert counts == {"NO_UPDATE": {1: [8, 8], 2: [8, 8]}, "REMOVE": {1: [8, 8], 2: [8, 8]}}
+    assert protocol["generation"]["no_state_correct_first_balance_by_stratum"] == {"NO_UPDATE": {"1": 8, "2": 8}, "REMOVE": {"1": 8, "2": 8}}
+    # The v3 design is unchanged: coupled orders, empty balance record.
+    v3, _ = g1_opaque_v3.generate_v3(
+        seed=SEED, study_date="2026-09-07", live_binding=source["live_binding"], tokenizer_model=tokenizer_model,
+        consumption_registry_path=str(tmp_path / "once-v3"),
+    )
+    assert v3["generation"]["design_revision"] == "v3" and v3["generation"]["no_state_correct_first_balance_by_stratum"] == {}
+    assert all(e["no_update_action_order"] == list(reversed(e["stateful_probe_action_order"])) for e in v3["episodes"])
+    # Paths and validation accept the v4 family.
+    path = "_research/causal_composition/preregistrations/g1_opaque_identifiability_v4_2026-09-07/protocol.v1.json"
+    assert g1_micro.dgx_v3_protocol_path(protocol) == path and g1_micro.is_dgx_protocol_path(path)
+    g1_opaque_v3.validate_v3_protocol(protocol)
+    written = _write_protocol(tmp_path / "v4", protocol) if False else None
+    assert written is None

@@ -50,6 +50,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--aborted-run-dir", type=Path, action="append", default=[], help="earlier VOID attempt(s) of the same family, recorded not hidden")
     parser.add_argument("--slug", required=True, help="results/raw/<slug>")
     parser.add_argument("--study-date", required=True)
+    parser.add_argument("--family", default="V3", help="evidence file label: V3 or V4 (design revision)")
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[1])
     args = parser.parse_args(argv)
 
@@ -213,7 +214,7 @@ def main(argv: list[str] | None = None) -> int:
         "claim_boundary": projection["claim_boundary"],
         "closure_plan": {"step": "S-3", "decision": "D-1 (G0-local / G0-external split, RATIFIED)", "stop_rule_applied": "SR-3 repaired rerun within 24 hours" if aborted else None},
     }
-    evidence_path = args.repo_root / "evidence" / f"EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_V3_{args.study_date}.json"
+    evidence_path = args.repo_root / "evidence" / f"EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_{args.family}_{args.study_date}.json"
     if evidence_path.exists():
         raise SystemExit(f"refusing to overwrite {evidence_path}")
     evidence_path.write_bytes(json.dumps(evidence, ensure_ascii=False, indent=2, sort_keys=True).encode("utf-8") + b"\n")

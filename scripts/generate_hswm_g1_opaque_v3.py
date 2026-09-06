@@ -36,6 +36,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--emit-code-pool", type=Path, help="write the public seed-derived candidate code pool here and stop (no protocol, no reveal)")
     parser.add_argument("--token-counts", type=Path, help="public offline token counts of the candidate pool (scripts/freeze_hswm_g1_opaque_v3.py measure-pool)")
     parser.add_argument("--run-suffix", help="repaired rerun under SR-3 within the same protocol family, e.g. r2")
+    parser.add_argument("--design", default="v3", choices=list(g1_opaque_v3.DESIGN_REVISIONS), help="v4: independent, stratum-balanced no-state orders")
     args = parser.parse_args(argv)
 
     seed = args.seed_file.read_bytes()
@@ -55,7 +56,7 @@ def main(argv: list[str] | None = None) -> int:
     protocol, reveal = g1_opaque_v3.generate_v3(
         seed=seed, study_date=args.study_date, live_binding=source["live_binding"],
         tokenizer_model=tokenizer_model, consumption_registry_path=args.registry_path,
-        token_counts=token_counts, run_suffix=args.run_suffix,
+        token_counts=token_counts, run_suffix=args.run_suffix, design=args.design,
     )
     if args.protocol_out.exists() or args.reveal_out.exists():
         raise SystemExit("refusing to overwrite an existing protocol or reveal")

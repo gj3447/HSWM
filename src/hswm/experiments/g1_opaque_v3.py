@@ -67,6 +67,13 @@ from hswm.selfmod.contracts import canonical_json_bytes, canonical_sha256
 
 V3_PROTOCOL = "hswm-g1-opaque-identifiability-v3/v1"
 V3_STUDY_UID_PREFIX = "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-v3-"
+# Design revision v4: the same v3 instrument, schema, rule and terminals, but the
+# no-state arms' candidate orders are drawn from the seed independently of the
+# stateful order and balanced within each stateful position stratum.  The v3
+# occurrence of 2026-09-06 showed that coupling them (NO_UPDATE reversed,
+# REMOVE identical) lets a positional default fill a whole stratum.
+V4_STUDY_UID_PREFIX = "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-v4-"
+DESIGN_REVISIONS = ("v3", "v4")
 EPISODE_COUNT = 32
 ARMS = (
     "ACTIVE", "FORCED_OPPOSITE_FEEDBACK", "OUTCOME_INDEPENDENT_SHAM",
@@ -285,6 +292,7 @@ def generate_v3(
     consumption_registry_path: str,
     token_counts: Mapping[str, int] | None = None,
     run_suffix: str | None = None,
+    design: str = "v3",
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Return (public protocol, secret evaluator reveal) for one seed.
 
@@ -304,8 +312,20 @@ def generate_v3(
     sham_bits = _balanced_bits(seed, "sham-bit", EPISODE_COUNT)
     if run_suffix is not None and not re.fullmatch(r"r[1-9][0-9]?", run_suffix):
         raise G1MicroError("v3 run suffix must look like r2 (a repaired rerun under SR-3)")
-    study_uid = f"{V3_STUDY_UID_PREFIX}{study_date}" + ("" if run_suffix is None else f"-{run_suffix}")
+    if design not in DESIGN_REVISIONS:
+        raise G1MicroError("unknown design revision")
+    prefix = V4_STUDY_UID_PREFIX if design == "v4" else V3_STUDY_UID_PREFIX
+    study_uid = f"{prefix}{study_date}" + ("" if run_suffix is None else f"-{run_suffix}")
     pool = v3_code_pool(seed)
+    # v4: independent no-state orders, balanced within each stateful position stratum.
+    stratum_indexes = {1: [i for i, bit in enumerate(positions) if bit], 2: [i for i, bit in enumerate(positions) if not bit]}
+    no_state_first: dict[str, list[bool]] = {}
+    for arm_label in ("no-update-order", "remove-order"):
+        bits = [False] * EPISODE_COUNT
+        for stratum, indexes in stratum_indexes.items():
+            for index, bit in zip(indexes, _balanced_bits(seed, f"{arm_label}:stratum-{stratum}", len(indexes)), strict=True):
+                bits[index] = bit
+        no_state_first[arm_label] = bits
     episodes: list[dict[str, Any]] = []
     entries: list[dict[str, Any]] = []
     used: set[str] = set()
@@ -319,6 +339,12 @@ def generate_v3(
         correct, other = (code_a, code_b) if int(_hex(seed, "correct", label)[0], 16) < 8 else (code_b, code_a)
         stateful = [correct, other] if positions[ordinal - 1] else [other, correct]
         trajectory_order = [code_a, code_b] if int(_hex(seed, "trajectory-order", label)[0], 16) < 8 else [code_b, code_a]
+        if design == "v4":
+            no_update_order = [correct, other] if no_state_first["no-update-order"][ordinal - 1] else [other, correct]
+            remove_order = [correct, other] if no_state_first["remove-order"][ordinal - 1] else [other, correct]
+        else:
+            no_update_order = list(reversed(stateful))
+            remove_order = list(stateful)
         entry = {
             "correct_action_code": correct,
             "episode_uid": f"episode:opaque-v3-{uid8}",
@@ -332,9 +358,9 @@ def generate_v3(
             "cue": f"cue_{uid8}",
             "episode_uid": entry["episode_uid"],
             "evaluator_commitment_sha256": canonical_sha256(entry),
-            "no_update_action_order": list(reversed(stateful)),
+            "no_update_action_order": no_update_order,
             "ordinal": ordinal,
-            "remove_action_order": list(stateful),
+            "remove_action_order": remove_order,
             "sham_feedback_correct": sham_bits[ordinal - 1],
             "stateful_probe_action_order": list(stateful),
             "trajectory_action_order": trajectory_order,
@@ -390,6 +416,15 @@ def generate_v3(
             "correct_position_balance": [sum(positions), EPISODE_COUNT - sum(positions)],
             "sham_bit_balance": [sum(sham_bits), EPISODE_COUNT - sum(sham_bits)],
             "seed_custody": "The seed and the derived reveal are held only by the evaluator OS user; the public protocol carries the seed commitment and the reveal commitment root.",
+            "design_revision": design,
+            "no_state_order_policy": (
+                "INDEPENDENT_SEED_DERIVED_BALANCED_WITHIN_EACH_STATEFUL_POSITION_STRATUM" if design == "v4"
+                else "COUPLED_TO_STATEFUL_ORDER_NO_UPDATE_REVERSED_REMOVE_IDENTICAL"
+            ),
+            "no_state_correct_first_balance_by_stratum": {
+                arm: {str(stratum): sum(1 for i in idx if no_state_first[label][i]) for stratum, idx in stratum_indexes.items()}
+                for arm, label in (("NO_UPDATE", "no-update-order"), ("REMOVE", "remove-order"))
+            } if design == "v4" else {},
             "code_selection": {
                 "candidates_per_episode": CANDIDATE_PAIRS_PER_EPISODE,
                 "pool_sha256": canonical_sha256(pool),
@@ -423,7 +458,7 @@ def generate_v3(
 def validate_v3_protocol(value: Mapping[str, Any]) -> None:
     if not isinstance(value, Mapping) or set(value) != PROTOCOL_FIELDS or value["schema_version"] != V3_PROTOCOL:
         raise G1MicroError("v3 protocol field set or schema drifted")
-    if not isinstance(value["study_uid"], str) or not value["study_uid"].startswith(V3_STUDY_UID_PREFIX):
+    if not isinstance(value["study_uid"], str) or not value["study_uid"].startswith((V3_STUDY_UID_PREFIX, V4_STUDY_UID_PREFIX)):
         raise G1MicroError("v3 study uid drifted")
     episodes = value["episodes"]
     if value["episode_count"] != EPISODE_COUNT or not isinstance(episodes, list) or len(episodes) != EPISODE_COUNT:
@@ -452,7 +487,11 @@ def validate_v3_protocol(value: Mapping[str, Any]) -> None:
         for key in ("no_update_action_order", "remove_action_order", "stateful_probe_action_order", "trajectory_action_order"):
             if list(episode[key]) not in (episode["action_codes"], episode["action_codes"][::-1]):
                 raise G1MicroError("v3 candidate orders must permute the episode codes")
-        if episode["no_update_action_order"] != episode["stateful_probe_action_order"][::-1] or episode["remove_action_order"] != episode["stateful_probe_action_order"]:
+        design = value.get("generation", {}).get("design_revision", "v3") if isinstance(value.get("generation"), Mapping) else "v3"
+        if design == "v3" and (
+            episode["no_update_action_order"] != episode["stateful_probe_action_order"][::-1]
+            or episode["remove_action_order"] != episode["stateful_probe_action_order"]
+        ):
             raise G1MicroError("v3 candidate order counterbalance drifted")
         sham_true += int(episode["sham_feedback_correct"])
     if sham_true != EPISODE_COUNT // 2:
@@ -491,6 +530,11 @@ def validate_v3_protocol(value: Mapping[str, Any]) -> None:
         raise G1MicroError("v3 generation record drifted")
     if value["freeze"].get("status") not in {"DRAFT_NOT_FROZEN", "FROZEN"}:
         raise G1MicroError("v3 freeze status drifted")
+    design = generation.get("design_revision", "v3")
+    if design not in DESIGN_REVISIONS:
+        raise G1MicroError("v3 design revision drifted")
+    if (design == "v4") != value["study_uid"].startswith(V4_STUDY_UID_PREFIX):
+        raise G1MicroError("v3 design revision does not match the study family")
 
 
 def v3_tasks(protocol: Mapping[str, Any]) -> tuple[OpaqueV3Task, ...]:

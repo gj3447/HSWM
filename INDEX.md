@@ -42,7 +42,7 @@ HSWM이 완성되지 않는 이유를 기술 블로커가 아니라 자기부과
 1비트 학습 루프의 결합으로 판정했다. 문서는 열린 간극 7개, 순서 있는 폐쇄 단계 6개, 정지 규칙
 5개, 숫자 있는 burden cap과 사용자 결정 요청 4개(D-1 G0 분할, D-2 never-weaken 한정, D-3 G1
 estimand 결속, D-4 유한 완료 상태)를 담는다. 기계 투영은
-[`closure plan ontology v3`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json)이며(v3는 2026-09-06 opaque v3 receipt 이벤트 버전; v2는 유지),
+[`closure plan ontology v4`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v4.json)이며(v4는 2026-09-06 D-3 위임 확정과 v3/v4/v5 receipt 이벤트 버전; v2·v3는 유지),
 같은 날 사용자 원문
 [`USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt`](docs/canon/sources/USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt)로
 D-1과 D-4는 `RATIFIED`, D-2와 D-3는 `PROPOSED`다. 확정 전 스냅샷 v1은 라이브 KG에 먼저 게시됐고
@@ -72,6 +72,19 @@ terminal은 `V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE`, claim ceiling은
 [`evidence`](evidence/EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_V3_2026-09-06.json), F1_R8 행이며,
 같은 날 첫 시도는 봉인 뒤 계측기 결함으로 `INCONCLUSIVE_MEASUREMENT_NOT_READY`로 봉인되고
 SR-3에 따라 24시간 안에 재실행됐다. G0는 미통과, G1은 잠겨 있으며 효능 추론은 금지된다.
+
+같은 날 두 번 더 실행했다. v4(no-state arm 순서를 seed에서 독립·stratum별 균형)는 같은 규칙에서
+다시 `NO_SEPARATION`이었고, no-state arm이 자기 순서 기준 첫 후보일 때 16/16·둘째일 때 0/16인
+패턴이 순서와 무관하게 재현돼 통제 조항(자기 위치 stratum별 ≤12/16)이 엄격한 첫 후보 기본값에
+대해 구성상 만족 불가능함을 드러냈다. 사용자의 위임 결정(원문
+[`USER_PRIMARY 2026-09-06`](docs/canon/sources/USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-06.txt))에
+따라 D-3는 option A로 확정됐고, v5(stateful arm을 stateful stratum별 ≥15/16로 게이트, 통제는
+pooled ≤21/32, 자기 위치 패턴은 보고만)는 새 preregistration으로 freeze된 뒤 한 번 실행돼 모든
+조항을 충족했다: terminal `V3_COMPLETE_G0_LOCAL_IDENTIFIABILITY_OBSERVED_NO_EFFICACY_INFERENCE`,
+claim ceiling `MEASUREMENT_READY_SINGLE_OWNER_UNDER_DECLARED_OPAQUE_TASK`
+([`results`](results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_RESULTS_2026-09-06.md)). 세 occurrence 합계
+stateful arm 96/96 대 forced-opposite 0/96, no-state 48/96. G0-local 단일 소유자 후보일 뿐 G0는
+미통과(G0-external 유예), G1은 미평가, 효능 추론은 금지된다.
 
 2026-09-02 현재 증명·근거·간극의 answer-first 상태는
 [`HSWM proof-status graph`](docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)에

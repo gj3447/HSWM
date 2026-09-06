@@ -116,19 +116,23 @@ def test_plan_nodes_carry_dates_stop_rules_and_pending_ratification() -> None:
         node["properties"]["decision_id"]: node for node in _nodes_by_role(data, "decision_id").values()
     }
     assert set(decisions) == {"D-1", "D-2", "D-3", "D-4"}
-    source_sha = sha256((ROOT / builder.RATIFICATION_SOURCE_PATH).read_bytes()).hexdigest()
     for decision_id, node in decisions.items():
         props = node["properties"]
         if decision_id in builder.RATIFIED_DECISIONS:
+            source_path = builder.RATIFICATION_SOURCE_BY_DECISION[decision_id]
+            source_uid = builder.DELEGATED_SOURCE_UID if source_path == builder.DELEGATED_RATIFICATION_SOURCE_PATH else builder.RATIFICATION_SOURCE_UID
             assert props["ratification_status"] == "RATIFIED"
-            assert props["ratification_source_sha256"] == source_sha
+            assert props["ratification_source_sha256"] == sha256((ROOT / source_path).read_bytes()).hexdigest()
+            assert props["ratification_mode"] == builder.RATIFICATION_MODE_BY_DECISION[decision_id]
             assert props["authority_class"] == "USER_PRIMARY"
-            assert (node["uid"], "HAS_SOURCE", builder.RATIFICATION_SOURCE_UID) in relation_keys
+            assert (node["uid"], "HAS_SOURCE", source_uid) in relation_keys
         else:
             assert props["ratification_status"] == "PROPOSED"
             assert props["ratification_source_sha256"] == ""
             assert props["authority_class"] == "SECONDARY_AI_PROPOSAL_FOR_USER_PRIMARY"
-    assert builder.RATIFIED_DECISIONS == ("D-1", "D-4")
+    assert builder.RATIFIED_DECISIONS == ("D-1", "D-3", "D-4")
+    assert decisions["D-3"]["properties"]["ratification_mode"].startswith("DELEGATED_CHOICE")
+    assert decisions["D-2"]["properties"]["ratification_status"] == "PROPOSED"
     assert (builder.BUNDLE_UID, "SUPERSEDES_AS_FOLLOWUP", builder.PREDECESSOR_BUNDLE_UID) in relation_keys
     assert (builder.PROGRAM_UID, "SUPERSEDES_AS_FOLLOWUP", builder.PREDECESSOR_PROGRAM_UID) in relation_keys
     cap = [node for node in data["nodes"] if node["properties"].get("plan_graph_role") == "BURDEN_CAP"]
@@ -174,7 +178,7 @@ def test_ratification_v2_snapshot_is_retained_unchanged() -> None:
     v2 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json"
     assert sha256(v2.read_bytes()).hexdigest() == "0aa237bdea8d71ca7b89a6e66a93f7ba6e97951128ab9b8c7f8947340e95f357"
     data = json.loads(v2.read_text(encoding="utf-8"))
-    assert data["bundle_uid"] == builder.PREDECESSOR_BUNDLE_UID
+    assert data["bundle_uid"] == "sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v2"
     assert all(
         node["properties"]["closure_status"] != "COMPLETED"
         for node in data["nodes"]
@@ -182,24 +186,35 @@ def test_ratification_v2_snapshot_is_retained_unchanged() -> None:
     )
 
 
-def test_v3_receipt_marks_s2_s3_complete_without_promotion() -> None:
+def test_v3_event_snapshot_is_retained_unchanged() -> None:
+    v3 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json"
+    assert sha256(v3.read_bytes()).hexdigest() == "546b9e429e02992a952f6e8535d65c7f832f925b7bf8ace26b490b70f9dab7c2"
+    data = json.loads(v3.read_text(encoding="utf-8"))
+    assert data["bundle_uid"] == builder.PREDECESSOR_BUNDLE_UID
+
+
+def test_receipts_mark_s2_s3_s4_complete_without_promotion() -> None:
     data = _data()
     steps = {node["properties"]["step_id"]: node for node in _nodes_by_role(data, "step_id").values()}
-    assert steps["S-2"]["properties"]["closure_status"] == "COMPLETED"
-    assert steps["S-3"]["properties"]["closure_status"] == "COMPLETED"
+    for step_id in ("S-2", "S-3", "S-4"):
+        assert steps[step_id]["properties"]["closure_status"] == "COMPLETED", step_id
     assert steps["S-3"]["properties"]["completion_outcome"] == "RUN_COMPLETE_PREREGISTERED_RULE_NOT_MET"
-    assert all(steps[s]["properties"]["closure_status"] != "COMPLETED" for s in ("S-4", "S-5"))
-    receipts = [node for node in data["nodes"] if node["uid"] == builder.V3_RECEIPT_UID]
-    assert len(receipts) == 1
-    props = receipts[0]["properties"]
-    assert props["qualification_status"] == "V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE"
-    assert props["claim_ceiling"] == "INSTRUMENT_VALIDATION_ONLY"
-    assert props["failing_rule_clause"].startswith("no_state_arm_per_position_stratum")
+    assert steps["S-4"]["properties"]["completion_outcome"].startswith("D3_RATIFIED_OPTION_A")
+    assert all(steps[s]["properties"]["closure_status"] != "COMPLETED" for s in ("S-5",))
+    receipts = {node["uid"]: node["properties"] for node in data["nodes"] if node["properties"].get("standard_graph_role") == "QUALIFICATION_RUN" and "closure_step_id" in node["properties"]}
+    assert set(receipts) == {builder.V3_RECEIPT_UID, builder.V4_RECEIPT_UID, builder.V5_RECEIPT_UID}
+    assert receipts[builder.V3_RECEIPT_UID]["qualification_status"] == "V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE"
+    assert receipts[builder.V4_RECEIPT_UID]["qualification_status"] == "V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE"
+    assert receipts[builder.V5_RECEIPT_UID]["qualification_status"] == "V3_COMPLETE_G0_LOCAL_IDENTIFIABILITY_OBSERVED_NO_EFFICACY_INFERENCE"
+    assert receipts[builder.V5_RECEIPT_UID]["claim_ceiling"] == "MEASUREMENT_READY_SINGLE_OWNER_UNDER_DECLARED_OPAQUE_TASK"
+    assert receipts[builder.V5_RECEIPT_UID]["failing_rule_clause"] == "NONE"
     keys = _relation_keys(data)
-    assert (builder.V3_RECEIPT_UID, "TESTS", builder.subgate_uid("G0-LOCAL")) in keys
-    assert (builder.V3_RECEIPT_UID, "PRESERVES", builder.G0_UID) in keys
-    assert (builder.V3_RECEIPT_UID, "DEPENDS_ON", builder.EFFECT_FP_BUNDLE_UID) in keys
-    assert "G0_NOT_PASSED_G1_LOCKED" in data["status"] and "V3_RULE_NOT_MET" in data["status"]
+    for uid in receipts:
+        assert (uid, "TESTS", builder.subgate_uid("G0-LOCAL")) in keys
+        assert (uid, "PRESERVES", builder.G0_UID) in keys
+        assert (uid, "DEPENDS_ON", builder.EFFECT_FP_BUNDLE_UID) in keys
+    assert (builder.V5_RECEIPT_UID, "SUPERSEDES_AS_FOLLOWUP", builder.V4_RECEIPT_UID) in keys
+    assert "G0_NOT_PASSED_G1_LOCKED" in data["status"] and "V5_RECEIPT" in data["status"] and "D1_D3_D4_USER_RATIFIED" in data["status"]
     cap = [node for node in data["nodes"] if node["properties"].get("plan_graph_role") == "BURDEN_CAP"][0]
     assert cap["properties"]["reading_core_share"] < cap["properties"]["min_core_share"]
 

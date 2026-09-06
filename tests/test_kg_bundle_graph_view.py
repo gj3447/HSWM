@@ -17,7 +17,8 @@ from hswm.infrastructure.kg_bundle_graph_view import (
 
 ROOT = Path(__file__).parents[1]
 SHAPES = ROOT / "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0.ttl"
-CLOSURE = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json"
+CLOSURE = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v4.json"
+CLOSURE_V3 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json"
 CLOSURE_V2 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json"
 CLOSURE_V1 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json"
 ADAPTIVE = ROOT / "ontology/identity/hswm_core/HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json"
@@ -120,12 +121,12 @@ def test_closure_bundle_view_is_deterministic_blank_node_free_and_bound() -> Non
     assert left.descriptor["relationCount"] == len(bundle["relations"])
     assert left.descriptor["nonclaim"] == NONCLAIM
     assert left.claim_ceiling == CLAIM_CEILING
-    assert b"sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v3" in left.nquads
+    assert b"sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v4" in left.nquads
     with pytest.raises(KgBundleGraphViewError, match="immutable"):
         left.claim_ceiling = "x"  # type: ignore[misc]
 
 
-@pytest.mark.parametrize("path", (CLOSURE, CLOSURE_V2, CLOSURE_V1, ADAPTIVE, CAUSAL, GRAPH_LOOP, EFFECT_FP))
+@pytest.mark.parametrize("path", (CLOSURE, CLOSURE_V3, CLOSURE_V2, CLOSURE_V1, ADAPTIVE, CAUSAL, GRAPH_LOOP, EFFECT_FP))
 def test_checked_in_bundles_conform_to_the_shared_shacl_shape(path: Path) -> None:
     view = KgBundleGraphView.from_bundles(sources=(_source(path, path.stem.lower()),))
     report = view.validate_shacl(shapes=SHAPES.read_bytes())
@@ -161,7 +162,7 @@ def test_closure_plan_sparql_invariants_hold() -> None:
     ratified = view.query(PREFIXES + """
     SELECT ?id WHERE { ?d a kbrole:USER_PRIMARY_DECISION ; kbp:ratification_status "RATIFIED" ; kbp:decision_id ?id . }
     """)
-    assert sorted(row["id"]["value"] for row in ratified) == ["D-1", "D-4"]
+    assert sorted(row["id"]["value"] for row in ratified) == ["D-1", "D-3", "D-4"]
     proposed_has_no_source = PREFIXES + """
     ASK { FILTER NOT EXISTS { ?d a kbrole:USER_PRIMARY_DECISION ; kbp:ratification_status "PROPOSED" ; kbr:HAS_SOURCE ?s . } }
     """

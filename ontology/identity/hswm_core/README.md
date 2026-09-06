@@ -68,17 +68,23 @@ control, material result, HSWM cognition, causal learning, or efficacy.
 
 ## Current closure-plan projection
 
-[`HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json`](HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json)
-(bundle UID `sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v3`) is the
+[`HSWM_CLOSURE_PLAN_ONTOLOGY.v4.json`](HSWM_CLOSURE_PLAN_ONTOLOGY.v4.json)
+(bundle UID `sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v4`) is the
 bounded projection of the 2026-09-05 adversarial programme audit and its
-closure plan, at its second event version: the opaque v3 (G0-local) receipt
-of 2026-09-06 (S-3 run complete, frozen rule not met, sealed
-`V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE`) and the S-2 Permit bridge it
-exercised are recorded as COMPLETED steps with three more hash-bound sources
-(result document, evidence record, frozen protocol), a receipt node that tests
-the G0-local sub-gate with status `TESTED_RULE_NOT_MET`, and the burden-cap
-reading at the results commit.  The ratification event version
-[`v2`](HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json) is retained unchanged. It carries 14 verified audit findings as Claim nodes with one
+closure plan, at its third event version.  It records D-3 as `RATIFIED` by the
+user's delegated choice of 2026-09-06 (verbatim source bound; option A, the
+`project.v1.json` pass_rule as the binding G1 estimand), S-2, S-3 and S-4 as
+COMPLETED steps, and three opaque G0-local occurrence receipts of 2026-09-06:
+v3 and v4 sealed `NO_SEPARATION` under their frozen rule (the v4 receipt shows
+the control clause unsatisfiable for a first-candidate default) and v5 sealed
+`G0_LOCAL_IDENTIFIABILITY_OBSERVED` under the corrected rule with claim
+ceiling `MEASUREMENT_READY_SINGLE_OWNER_UNDER_DECLARED_OPAQUE_TASK`.  Each
+receipt tests the G0-local sub-gate with its own status, binds its result
+document and evidence record as sources, depends on the S-2 Permit bridge and
+the Effect functional-boundary bundle, and preserves G0 `NOT_PASSED`.  The
+earlier event versions [`v3`](HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json) (first v3
+receipt) and [`v2`](HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json) (D-1/D-4 ratification)
+are retained unchanged. It carries 14 verified audit findings as Claim nodes with one
 current verification Decision each, 7 open Gaps, 4 USER_PRIMARY decisions of
 which D-1 and D-4 are `RATIFIED` by the hash-bound user source
 [`USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt`](../../../docs/canon/sources/USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt)

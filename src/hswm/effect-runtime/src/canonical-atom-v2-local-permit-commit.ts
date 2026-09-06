@@ -723,11 +723,13 @@ export const makeVerifiedAdmissionCommitBackend = (
     (receipt, token) => { if (token !== undefined) publishedAdmissions.set(receipt, token) }
   )
   return Object.freeze({
-    submit: (request: LocalPermitCommitRequest) => Effect.map(store.commit(request), (receipt) => {
+    submit: (request: LocalPermitCommitRequest) => Effect.flatMap(store.commit(request), (receipt) => {
       const admission = publishedAdmissions.get(receipt)
-      if (admission === undefined) throw failure("PERMIT_VERIFICATION_FAILED", "verified-admission publication lost its private approval correlation")
+      if (admission === undefined) {
+        return Effect.fail(failure("PERMIT_VERIFICATION_FAILED", "verified-admission publication lost its private approval correlation"))
+      }
       publishedAdmissions.delete(receipt)
-      return Object.freeze({ receipt, admission })
+      return Effect.succeed(Object.freeze({ receipt, admission }))
     }),
     recover: store.recover
   })

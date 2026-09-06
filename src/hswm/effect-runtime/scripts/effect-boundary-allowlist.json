@@ -1,0 +1,302 @@
+{
+  "schema_version": "hswm-effect-boundary-allowlist/v1",
+  "claim_boundary": "Each entry names a file that still contains a construct the Effect boundary lint forbids, the rules it is exempt from, the lane that owns it and why. The list may only shrink; a stale entry fails the lint; a new entry needs a reason and a lane.",
+  "lanes": {
+    "HISTORICAL_S2S": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5).",
+    "DNRD5_PROTOCOL": "DNRD-5 protocol source read by the source-closure judge (test/dnrd5-source-closure.test.ts) and pinned by the DNRD-4/DNRD-5 worktrees; converted only under a DNRD amendment, never silently.",
+    "TEMPORAL_SDK_LANE": "Temporal workflow/worker/activities lane compiled under tsconfig.temporal.json; the workflow sandbox forbids Effect and non-deterministic imports and the selected TS G0 Temporal execution (75cc879) keeps this lane SDK-native.",
+    "GRAPH_STANDARDS_PINNED": "Byte-bound by the graph-standards acceptance lock (hswm-graph-standards verify pins its digest); any edit invalidates the lock.",
+    "FOUNDATION_ADAPTER": "The single Node POSIX/subprocess adapter: async/await and throw exist only inside Effect.tryPromise / acquireUseRelease callbacks that are mapped to PosixIoError at the same call site.",
+    "NEO4J_DRIVER_ADAPTER": "neo4j-driver transaction functions are Promise-based and roll back only by throwing inside executeWrite/executeRead; every call is wrapped in Effect.tryPromise and mapped to a typed projection error at the call site."
+  },
+  "files": {
+    "canonical-atom-v2-dnrd5-durable-permit.ts": {
+      "rules": [
+        "R3"
+      ],
+      "lane": "DNRD5_PROTOCOL",
+      "reason": "DNRD-5 protocol source read by the source-closure judge (test/dnrd5-source-closure.test.ts) and pinned by the DNRD-4/DNRD-5 worktrees; converted only under a DNRD amendment, never silently."
+    },
+    "canonical-atom-v2-dnrd5-lifecycle.ts": {
+      "rules": [
+        "R4"
+      ],
+      "lane": "DNRD5_PROTOCOL",
+      "reason": "DNRD-5 protocol source read by the source-closure judge (test/dnrd5-source-closure.test.ts) and pinned by the DNRD-4/DNRD-5 worktrees; converted only under a DNRD amendment, never silently."
+    },
+    "canonical-atom-v2-dnrd5-v2-exact-w0-restore-projection.ts": {
+      "rules": [
+        "R4"
+      ],
+      "lane": "DNRD5_PROTOCOL",
+      "reason": "DNRD-5 protocol source read by the source-closure judge (test/dnrd5-source-closure.test.ts) and pinned by the DNRD-4/DNRD-5 worktrees; converted only under a DNRD amendment, never silently."
+    },
+    "canonical-atom-v2-dnrd5-v2-lifecycle-adapter.ts": {
+      "rules": [
+        "R4"
+      ],
+      "lane": "DNRD5_PROTOCOL",
+      "reason": "DNRD-5 protocol source read by the source-closure judge (test/dnrd5-source-closure.test.ts) and pinned by the DNRD-4/DNRD-5 worktrees; converted only under a DNRD amendment, never silently."
+    },
+    "canonical-atom-v2-jsonld-view.ts": {
+      "rules": [
+        "R3",
+        "R5"
+      ],
+      "lane": "GRAPH_STANDARDS_PINNED",
+      "reason": "Byte-bound by the graph-standards acceptance lock (hswm-graph-standards verify pins its digest); any edit invalidates the lock."
+    },
+    "canonical-atom-v2-neo4j-projection.ts": {
+      "rules": [
+        "R3",
+        "R5"
+      ],
+      "lane": "NEO4J_DRIVER_ADAPTER",
+      "reason": "neo4j-driver transaction functions are Promise-based and roll back only by throwing inside executeWrite/executeRead; every call is wrapped in Effect.tryPromise and mapped to a typed projection error at the call site."
+    },
+    "effect-posix-services.ts": {
+      "rules": [
+        "R3",
+        "R5"
+      ],
+      "lane": "FOUNDATION_ADAPTER",
+      "reason": "The single Node POSIX/subprocess adapter: async/await and throw exist only inside Effect.tryPromise / acquireUseRelease callbacks that are mapped to PosixIoError at the same call site."
+    },
+    "g0-occurrence-temporal-activities.ts": {
+      "rules": [
+        "R5"
+      ],
+      "lane": "TEMPORAL_SDK_LANE",
+      "reason": "Temporal workflow/worker/activities lane compiled under tsconfig.temporal.json; the workflow sandbox forbids Effect and non-deterministic imports and the selected TS G0 Temporal execution (75cc879) keeps this lane SDK-native."
+    },
+    "g0-occurrence-temporal-runtime.ts": {
+      "rules": [
+        "R3",
+        "R5"
+      ],
+      "lane": "TEMPORAL_SDK_LANE",
+      "reason": "Temporal workflow/worker/activities lane compiled under tsconfig.temporal.json; the workflow sandbox forbids Effect and non-deterministic imports and the selected TS G0 Temporal execution (75cc879) keeps this lane SDK-native."
+    },
+    "g0-occurrence-temporal-worker-process.ts": {
+      "rules": [
+        "R2",
+        "R5"
+      ],
+      "lane": "TEMPORAL_SDK_LANE",
+      "reason": "Temporal workflow/worker/activities lane compiled under tsconfig.temporal.json; the workflow sandbox forbids Effect and non-deterministic imports and the selected TS G0 Temporal execution (75cc879) keeps this lane SDK-native."
+    },
+    "g0-occurrence-temporal-workflow.ts": {
+      "rules": [
+        "R3",
+        "R5"
+      ],
+      "lane": "TEMPORAL_SDK_LANE",
+      "reason": "Temporal workflow/worker/activities lane compiled under tsconfig.temporal.json; the workflow sandbox forbids Effect and non-deterministic imports and the selected TS G0 Temporal execution (75cc879) keeps this lane SDK-native."
+    },
+    "s2s-durable-file.ts": {
+      "rules": [
+        "R3",
+        "R5"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-evidence-envelope.ts": {
+      "rules": [
+        "R4"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-evidence-file.ts": {
+      "rules": [
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-evidence-profile.ts": {
+      "rules": [
+        "R3"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-hosted-process-continuity-contract.ts": {
+      "rules": [
+        "R3"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-invocation.ts": {
+      "rules": [
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-json.ts": {
+      "rules": [
+        "R3"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-live-artifact.ts": {
+      "rules": [
+        "R3",
+        "R4"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-live-drand-http.ts": {
+      "rules": [
+        "R3",
+        "R5"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-live-drand.ts": {
+      "rules": [
+        "R3",
+        "R5"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-live-github.ts": {
+      "rules": [
+        "R3",
+        "R5"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-live-python.ts": {
+      "rules": [
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-prepared-stage-carrier.ts": {
+      "rules": [
+        "R1",
+        "R4"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-preregistration.ts": {
+      "rules": [
+        "R4"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-protocol-config-asset.ts": {
+      "rules": [
+        "R3",
+        "R5"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-run-authority.ts": {
+      "rules": [
+        "R4"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-stage-artifact-permits.ts": {
+      "rules": [
+        "R1",
+        "R4"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-stage-artifact-read-replay-contract.ts": {
+      "rules": [
+        "R3"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-stage-artifact-read-replay.ts": {
+      "rules": [
+        "R3",
+        "R4"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-stage-upload-assertion.ts": {
+      "rules": [
+        "R1",
+        "R3",
+        "R4"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-stage-upload-postcondition-contract.ts": {
+      "rules": [
+        "R3"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-stage-upload-postcondition.ts": {
+      "rules": [
+        "R3"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-test-only-golden-artifact-store.ts": {
+      "rules": [
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-test-only-hosted-process-cli.ts": {
+      "rules": [
+        "R2",
+        "R3",
+        "R5"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-test-only-hosted-process-root.ts": {
+      "rules": [
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    },
+    "s2s-zip.ts": {
+      "rules": [
+        "R3"
+      ],
+      "lane": "HISTORICAL_S2S",
+      "reason": "SWM-0W S2S historical lane: retained byte-stable for the ignored handoff tests and the sealed hosted-process receipts; not migrated before the G1 verdict (closure plan SR-4/SR-5)."
+    }
+  }
+}

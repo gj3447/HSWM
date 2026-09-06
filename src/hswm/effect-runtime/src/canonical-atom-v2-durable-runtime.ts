@@ -215,37 +215,92 @@ type CanonicalAtomV2DurableCommit = (
   CanonicalAtomV2DurableSubmitFailure
 >
 
+type CanonicalAtomV2DurableRecoveryWitnessEffect = Effect.Effect<
+  CanonicalAtomV2DurableRecoveryWitness,
+  CanonicalAtomV2DurableRecoveryFailure
+>
+
+type CanonicalAtomV2DurableRecoverWitness = (
+  limits?: CanonicalAtomV2StateJournalRecoveryLimits
+) => CanonicalAtomV2DurableRecoveryWitnessEffect
+
+type CanonicalAtomV2DurableStorageAttestation =
+  | "UNATTESTED_RUNTIME_COMPOSITION"
+  | "LOCAL_POSIX_FILE_STORES"
+
+type CanonicalAtomV2DurableRuntimeShape = CanonicalAtomV2DurableRuntime["Type"]
+
+interface CanonicalAtomV2DurableRuntimeInternals {
+  readonly commit: CanonicalAtomV2DurableCommit
+  readonly recoverWitness: CanonicalAtomV2DurableRecoverWitness
+  readonly storageAttestation: CanonicalAtomV2DurableStorageAttestation
+}
+
 /**
- * Module-held capability registry for schema-specific dispatchers.
+ * Runtime-held capability registry for schema-specific dispatchers.
+ *
+ * The service value the Layer yields is an instance of this class. Its own
+ * enumerable properties are exactly the public service shape; the dispatcher
+ * commit, the recovery witness, and the storage attestation live in private
+ * fields that no structural copy of the public shape can carry, so the seams
+ * below fail closed for any value the Layer did not construct.
  *
  * This seam is intentionally absent from the package root export.  It is not
  * an authority by itself: the DNRD-5 dispatcher must validate and atomically
  * consume the durable Permit before invoking it.  Source qualification must
  * also reject any other repository-internal importer of this seam.
  */
-const internalCommitByRuntime = new WeakMap<
-  CanonicalAtomV2DurableRuntime["Type"],
-  CanonicalAtomV2DurableCommit
->()
+class CanonicalAtomV2DurableRuntimeInstance implements CanonicalAtomV2DurableRuntimeShape {
+  readonly #commit: CanonicalAtomV2DurableCommit
+  readonly #recoverWitness: CanonicalAtomV2DurableRecoverWitness
+  readonly #storageAttestation: CanonicalAtomV2DurableStorageAttestation
+  readonly schema: CanonicalAtomV2DurableRuntimeShape["schema"]
+  readonly schemaContent: CanonicalAtomV2DurableRuntimeShape["schemaContent"]
+  readonly journalLineageId: CanonicalAtomV2DurableRuntimeShape["journalLineageId"]
+  readonly stateDurability: CanonicalAtomV2DurableRuntimeShape["stateDurability"]
+  readonly stageContent: CanonicalAtomV2DurableRuntimeShape["stageContent"]
+  readonly readContent: CanonicalAtomV2DurableRuntimeShape["readContent"]
+  readonly snapshot: CanonicalAtomV2DurableRuntimeShape["snapshot"]
+  readonly history: CanonicalAtomV2DurableRuntimeShape["history"]
+  readonly submit: CanonicalAtomV2DurableRuntimeShape["submit"]
 
-type CanonicalAtomV2DurableRecoveryWitnessEffect = Effect.Effect<
-  CanonicalAtomV2DurableRecoveryWitness,
-  CanonicalAtomV2DurableRecoveryFailure
->
+  constructor(
+    surface: CanonicalAtomV2DurableRuntimeShape,
+    internals: CanonicalAtomV2DurableRuntimeInternals
+  ) {
+    this.#commit = internals.commit
+    this.#recoverWitness = internals.recoverWitness
+    this.#storageAttestation = internals.storageAttestation
+    this.schema = surface.schema
+    this.schemaContent = surface.schemaContent
+    this.journalLineageId = surface.journalLineageId
+    this.stateDurability = surface.stateDurability
+    this.stageContent = surface.stageContent
+    this.readContent = surface.readContent
+    this.snapshot = surface.snapshot
+    this.history = surface.history
+    this.submit = surface.submit
+    Object.freeze(this)
+  }
 
-const internalRecoveryWitnessByRuntime = new WeakMap<
-  CanonicalAtomV2DurableRuntime["Type"],
-  (limits?: CanonicalAtomV2StateJournalRecoveryLimits) => CanonicalAtomV2DurableRecoveryWitnessEffect
->()
+  static commitOf(runtime: unknown): CanonicalAtomV2DurableCommit | undefined {
+    return typeof runtime === "object" && runtime !== null && #commit in runtime
+      ? runtime.#commit
+      : undefined
+  }
 
-type CanonicalAtomV2DurableStorageAttestation =
-  | "UNATTESTED_RUNTIME_COMPOSITION"
-  | "LOCAL_POSIX_FILE_STORES"
+  static recoverWitnessOf(runtime: unknown): CanonicalAtomV2DurableRecoverWitness | undefined {
+    return typeof runtime === "object" && runtime !== null && #recoverWitness in runtime
+      ? runtime.#recoverWitness
+      : undefined
+  }
 
-const internalStorageAttestationByRuntime = new WeakMap<
-  CanonicalAtomV2DurableRuntime["Type"],
-  CanonicalAtomV2DurableStorageAttestation
->()
+  static storageAttestationOf(runtime: unknown): CanonicalAtomV2DurableStorageAttestation | undefined {
+    return typeof runtime === "object" && runtime !== null && #storageAttestation in runtime
+      ? runtime.#storageAttestation
+      : undefined
+  }
+}
 
 export const commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal = (
   runtime: CanonicalAtomV2DurableRuntime["Type"],
@@ -254,7 +309,7 @@ export const commitCanonicalAtomV2DurableFromDnrd5DispatcherInternal = (
   CanonicalAtomV2DurableEvolution,
   CanonicalAtomV2DurableSubmitFailure
 > => {
-  const commit = internalCommitByRuntime.get(runtime)
+  const commit = CanonicalAtomV2DurableRuntimeInstance.commitOf(runtime)
   return commit === undefined
     ? Effect.fail(
         runtimeError(
@@ -281,7 +336,7 @@ export const commitCanonicalAtomV2DurableFromGraphLoopInternal = (
   CanonicalAtomV2DurableEvolution,
   CanonicalAtomV2DurableSubmitFailure
 > => {
-  const commit = internalCommitByRuntime.get(runtime)
+  const commit = CanonicalAtomV2DurableRuntimeInstance.commitOf(runtime)
   return commit === undefined
     ? Effect.fail(
         runtimeError(
@@ -308,7 +363,7 @@ export const commitCanonicalAtomV2DurableFromLocalDiagnosticInternal = (
   CanonicalAtomV2DurableEvolution,
   CanonicalAtomV2DurableSubmitFailure
 > => {
-  const commit = internalCommitByRuntime.get(runtime)
+  const commit = CanonicalAtomV2DurableRuntimeInstance.commitOf(runtime)
   return commit === undefined
     ? Effect.fail(
         runtimeError(
@@ -327,7 +382,7 @@ export const commitCanonicalAtomV2DurableFromLocalDiagnosticInternal = (
 export const recoverCanonicalAtomV2DurableFromDnrd5DispatcherInternal = (
   runtime: CanonicalAtomV2DurableRuntime["Type"]
 ): CanonicalAtomV2DurableRecoveryWitnessEffect => {
-  const recoverWitness = internalRecoveryWitnessByRuntime.get(runtime)
+  const recoverWitness = CanonicalAtomV2DurableRuntimeInstance.recoverWitnessOf(runtime)
   return recoverWitness === undefined
     ? Effect.fail(
         runtimeError(
@@ -348,8 +403,8 @@ export const recoverCanonicalAtomV2DurableForReadOnlyProjectionInternal = (
   runtime: CanonicalAtomV2DurableRuntime["Type"],
   limits: CanonicalAtomV2StateJournalRecoveryLimits
 ): CanonicalAtomV2DurableRecoveryWitnessEffect => {
-  const recoverWitness = internalRecoveryWitnessByRuntime.get(runtime)
-  const storageAttestation = internalStorageAttestationByRuntime.get(runtime)
+  const recoverWitness = CanonicalAtomV2DurableRuntimeInstance.recoverWitnessOf(runtime)
+  const storageAttestation = CanonicalAtomV2DurableRuntimeInstance.storageAttestationOf(runtime)
   return recoverWitness === undefined || storageAttestation !== "LOCAL_POSIX_FILE_STORES"
     ? Effect.fail(
         runtimeError(
@@ -702,7 +757,7 @@ const makeCanonicalAtomV2DurableRuntimeLayerWithStorageAttestation = (
           schemaContent
         )
 
-      const recoverWitness = (
+      const recoverWitness: CanonicalAtomV2DurableRecoverWitness = (
         limits?: CanonicalAtomV2StateJournalRecoveryLimits
       ): CanonicalAtomV2DurableRecoveryWitnessEffect =>
         Effect.gen(function* () {
@@ -829,7 +884,7 @@ const makeCanonicalAtomV2DurableRuntimeLayerWithStorageAttestation = (
           })
         })
 
-      const runtime = CanonicalAtomV2DurableRuntime.of({
+      const surface = CanonicalAtomV2DurableRuntime.of({
         schema: schemaContent.schema,
         schemaContent: snapshotCanonicalAtomV2SchemaContentBinding(
           schemaContent.binding
@@ -865,10 +920,11 @@ const makeCanonicalAtomV2DurableRuntimeLayerWithStorageAttestation = (
               )
             : commit(input)
       })
-      internalCommitByRuntime.set(runtime, commit)
-      internalRecoveryWitnessByRuntime.set(runtime, recoverWitness)
-      internalStorageAttestationByRuntime.set(runtime, storageAttestation)
-      return runtime
+      return new CanonicalAtomV2DurableRuntimeInstance(surface, {
+        commit,
+        recoverWitness,
+        storageAttestation
+      })
     })
   )
 }

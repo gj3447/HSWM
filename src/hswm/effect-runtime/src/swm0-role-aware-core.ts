@@ -231,8 +231,129 @@ interface ResultSnapshot {
   readonly roleCycle: readonly [number, number, number] | null
 }
 
-const OPERATORS = new WeakMap<SWM0RoleAwareT16Operator, OperatorSnapshot>()
-const RESULTS = new WeakMap<SWM0RoleAwareT16Result, ResultSnapshot>()
+/**
+ * A module-issued operator handle. Its own enumerable properties are exactly
+ * the public `SWM0RoleAwareT16Operator` fields; the decoded parameter
+ * snapshot lives in a private field that a spread, `structuredClone`, or
+ * hand-written structural copy cannot carry, so only handles this module
+ * constructed are accepted by the evaluators below.
+ */
+class IssuedSWM0RoleAwareT16Operator implements SWM0RoleAwareT16Operator {
+  readonly #snapshot: OperatorSnapshot
+  readonly schemaVersion: SWM0RoleAwareT16Operator["schemaVersion"]
+  readonly classification: SWM0RoleAwareT16Operator["classification"]
+  readonly claimBoundary: SWM0RoleAwareT16Operator["claimBoundary"]
+  readonly arm: SWM0RoleAwareT16Operator["arm"]
+  readonly roles: SWM0RoleAwareT16Operator["roles"]
+  readonly parameterCount: SWM0RoleAwareT16Operator["parameterCount"]
+  readonly intervention: SWM0RoleAwareT16Operator["intervention"]
+  readonly parametersSha256: string
+  readonly numericCoreStateSha256: string
+  readonly operatorBindingSha256: string
+  readonly archiveReceiptSha256: string
+  readonly sourceArchiveReceiptSha256: string
+  readonly sourceLearnedStateSha256: string
+  readonly structuralTaskSha256: string
+  readonly sourceProjectionFittedClaim: SWM0RoleAwareT16Operator["sourceProjectionFittedClaim"]
+  readonly sourceProjectionLearnedClaim: SWM0RoleAwareT16Operator["sourceProjectionLearnedClaim"]
+  readonly numericCoreLearned: SWM0RoleAwareT16Operator["numericCoreLearned"]
+
+  constructor(surface: SWM0RoleAwareT16Operator, snapshot: OperatorSnapshot) {
+    this.#snapshot = snapshot
+    this.schemaVersion = surface.schemaVersion
+    this.classification = surface.classification
+    this.claimBoundary = surface.claimBoundary
+    this.arm = surface.arm
+    this.roles = surface.roles
+    this.parameterCount = surface.parameterCount
+    this.intervention = surface.intervention
+    this.parametersSha256 = surface.parametersSha256
+    this.numericCoreStateSha256 = surface.numericCoreStateSha256
+    this.operatorBindingSha256 = surface.operatorBindingSha256
+    this.archiveReceiptSha256 = surface.archiveReceiptSha256
+    this.sourceArchiveReceiptSha256 = surface.sourceArchiveReceiptSha256
+    this.sourceLearnedStateSha256 = surface.sourceLearnedStateSha256
+    this.structuralTaskSha256 = surface.structuralTaskSha256
+    this.sourceProjectionFittedClaim = surface.sourceProjectionFittedClaim
+    this.sourceProjectionLearnedClaim = surface.sourceProjectionLearnedClaim
+    this.numericCoreLearned = surface.numericCoreLearned
+    Object.freeze(this)
+  }
+
+  static snapshotOf(value: unknown): OperatorSnapshot | undefined {
+    return typeof value === "object" && value !== null && #snapshot in value
+      ? value.#snapshot
+      : undefined
+  }
+}
+
+/** A module-issued result handle; see `IssuedSWM0RoleAwareT16Operator`. */
+class IssuedSWM0RoleAwareT16Result implements SWM0RoleAwareT16Result {
+  readonly #snapshot: ResultSnapshot
+  readonly schemaVersion: SWM0RoleAwareT16Result["schemaVersion"]
+  readonly classification: SWM0RoleAwareT16Result["classification"]
+  readonly claimBoundary: SWM0RoleAwareT16Result["claimBoundary"]
+  readonly hyperedgeId: string
+  readonly variant: SWM0ResultVariant
+  readonly intervention: SWM0Intervention
+  readonly roleCycle: readonly [number, number, number] | null
+  readonly operatorSweepsExecuted: 0 | 1
+  readonly sourceRecipientOutputSha256: string | null
+  readonly recipientCount: SWM0RoleAwareT16Result["recipientCount"]
+  readonly channelCount: SWM0RoleAwareT16Result["channelCount"]
+  readonly inputSha256: string
+  readonly parametersSha256: string
+  readonly numericCoreStateSha256: string
+  readonly operatorBindingSha256: string
+  readonly archiveReceiptSha256: string
+  readonly sourceArchiveReceiptSha256: string
+  readonly sourceLearnedStateSha256: string
+  readonly structuralTaskSha256: string
+  readonly recipientOutputSha256: string
+  readonly recipients: ReadonlyArray<SWM0RoleAwareT16RecipientActivation>
+  readonly authorizationClaimed: SWM0RoleAwareT16Result["authorizationClaimed"]
+  readonly scientificPassClaimed: SWM0RoleAwareT16Result["scientificPassClaimed"]
+  readonly typescriptTrainingClaimed: SWM0RoleAwareT16Result["typescriptTrainingClaimed"]
+  readonly causalUpdateClaimed: SWM0RoleAwareT16Result["causalUpdateClaimed"]
+  readonly receiptSha256: string
+
+  constructor(surface: SWM0RoleAwareT16Result, snapshot: ResultSnapshot) {
+    this.#snapshot = snapshot
+    this.schemaVersion = surface.schemaVersion
+    this.classification = surface.classification
+    this.claimBoundary = surface.claimBoundary
+    this.hyperedgeId = surface.hyperedgeId
+    this.variant = surface.variant
+    this.intervention = surface.intervention
+    this.roleCycle = surface.roleCycle
+    this.operatorSweepsExecuted = surface.operatorSweepsExecuted
+    this.sourceRecipientOutputSha256 = surface.sourceRecipientOutputSha256
+    this.recipientCount = surface.recipientCount
+    this.channelCount = surface.channelCount
+    this.inputSha256 = surface.inputSha256
+    this.parametersSha256 = surface.parametersSha256
+    this.numericCoreStateSha256 = surface.numericCoreStateSha256
+    this.operatorBindingSha256 = surface.operatorBindingSha256
+    this.archiveReceiptSha256 = surface.archiveReceiptSha256
+    this.sourceArchiveReceiptSha256 = surface.sourceArchiveReceiptSha256
+    this.sourceLearnedStateSha256 = surface.sourceLearnedStateSha256
+    this.structuralTaskSha256 = surface.structuralTaskSha256
+    this.recipientOutputSha256 = surface.recipientOutputSha256
+    this.recipients = surface.recipients
+    this.authorizationClaimed = surface.authorizationClaimed
+    this.scientificPassClaimed = surface.scientificPassClaimed
+    this.typescriptTrainingClaimed = surface.typescriptTrainingClaimed
+    this.causalUpdateClaimed = surface.causalUpdateClaimed
+    this.receiptSha256 = surface.receiptSha256
+    Object.freeze(this)
+  }
+
+  static snapshotOf(value: unknown): ResultSnapshot | undefined {
+    return typeof value === "object" && value !== null && #snapshot in value
+      ? value.#snapshot
+      : undefined
+  }
+}
 
 const failure = (
   reason: SWM0RoleAwareT16Error["reason"],
@@ -580,7 +701,7 @@ const makeOperator = (
     intervention
   })
   if (Either.isLeft(binding)) return Either.left(binding.left)
-  const operator: SWM0RoleAwareT16Operator = Object.freeze({
+  const surface: SWM0RoleAwareT16Operator = Object.freeze({
     schemaVersion: SWM0_ROLE_AWARE_T16_OPERATOR_BINDING_SCHEMA_VERSION,
     classification: SWM0_ROLE_AWARE_T16_ARCHIVE_CLASSIFICATION,
     claimBoundary: SWM0_ROLE_AWARE_T16_CLAIM_BOUNDARY,
@@ -599,16 +720,17 @@ const makeOperator = (
     sourceProjectionLearnedClaim: true,
     numericCoreLearned: false
   })
-  OPERATORS.set(
-    operator,
-    Object.freeze({
-      parameters,
-      source,
-      archiveReceiptSha256,
-      qRestoration
-    })
+  return Either.right(
+    new IssuedSWM0RoleAwareT16Operator(
+      surface,
+      Object.freeze({
+        parameters,
+        source,
+        archiveReceiptSha256,
+        qRestoration
+      })
+    )
   )
-  return Either.right(operator)
 }
 
 /**
@@ -1113,7 +1235,7 @@ const makeResult = (
   }
   const receipt = canonicalHash(unsigned, "EVALUATE")
   if (Either.isLeft(receipt)) return Either.left(receipt.left)
-  const result: SWM0RoleAwareT16Result = Object.freeze({
+  const surface: SWM0RoleAwareT16Result = Object.freeze({
     schemaVersion: SWM0_ROLE_AWARE_T16_RESULT_SCHEMA_VERSION,
     classification: "ENGINEERING_ONE_SWEEP_RESULT_NON_AUTHORIZING",
     claimBoundary: SWM0_ROLE_AWARE_T16_CLAIM_BOUNDARY,
@@ -1141,18 +1263,19 @@ const makeResult = (
     causalUpdateClaimed: false,
     receiptSha256: receipt.right
   })
-  RESULTS.set(
-    result,
-    Object.freeze({ operator, input, output, variant, roleCycle })
+  return Either.right(
+    new IssuedSWM0RoleAwareT16Result(
+      surface,
+      Object.freeze({ operator, input, output, variant, roleCycle })
+    )
   )
-  return Either.right(result)
 }
 
 export const evaluateSWM0RoleAwareT16 = (
   operator: SWM0RoleAwareT16Operator,
   input: unknown
 ): Either.Either<SWM0RoleAwareT16Result, SWM0RoleAwareT16Error> => {
-  const snapshot = OPERATORS.get(operator)
+  const snapshot = IssuedSWM0RoleAwareT16Operator.snapshotOf(operator)
   if (snapshot === undefined) {
     return Either.left(
       failure(
@@ -1214,7 +1337,7 @@ const qTensorFromBytes = (
 export const removeSWM0RoleAwareT16Q = (
   operator: SWM0RoleAwareT16Operator
 ): Either.Either<SWM0RoleAwareT16QRemoval, SWM0RoleAwareT16Error> => {
-  const snapshot = OPERATORS.get(operator)
+  const snapshot = IssuedSWM0RoleAwareT16Operator.snapshotOf(operator)
   if (snapshot === undefined) {
     return Either.left(
       failure(
@@ -1285,7 +1408,7 @@ export const restoreSWM0RoleAwareT16Q = (
   operator: SWM0RoleAwareT16Operator,
   receiptInput: unknown
 ): Either.Either<SWM0RoleAwareT16Operator, SWM0RoleAwareT16Error> => {
-  const snapshot = OPERATORS.get(operator)
+  const snapshot = IssuedSWM0RoleAwareT16Operator.snapshotOf(operator)
   if (snapshot === undefined) {
     return Either.left(
       failure(
@@ -1411,7 +1534,7 @@ export const restoreSWM0RoleAwareT16Q = (
 export const broadcastSWM0RoleAwareT16Result = (
   result: SWM0RoleAwareT16Result
 ): Either.Either<SWM0RoleAwareT16Result, SWM0RoleAwareT16Error> => {
-  const snapshot = RESULTS.get(result)
+  const snapshot = IssuedSWM0RoleAwareT16Result.snapshotOf(result)
   if (snapshot === undefined) {
     return Either.left(
       failure(
@@ -1505,7 +1628,7 @@ export const evaluateSWM0RoleAwareT16RoleCycles = (
   ReadonlyArray<SWM0RoleAwareT16RoleCycleResult>,
   SWM0RoleAwareT16Error
 > => {
-  const snapshot = OPERATORS.get(operator)
+  const snapshot = IssuedSWM0RoleAwareT16Operator.snapshotOf(operator)
   if (snapshot === undefined) {
     return Either.left(
       failure(

@@ -120,10 +120,34 @@ export interface CanonicalAtomV2DurableRdfProjection {
   readonly projection: CanonicalAtomV2RdfProjection
 }
 
-const compiledCanonicalBytesByArtifact = new WeakMap<
-  CanonicalAtomV2DurableRdfProjection,
-  Uint8Array
->()
+/**
+ * An artifact compiled by this module. Its own keys are exactly `manifest`
+ * and `projection`; the canonical bytes recorded at compile time live in a
+ * private field that no spread or structural copy carries, so `bytes` below
+ * can only be issued for an unchanged module-compiled artifact.
+ */
+class CompiledCanonicalAtomV2DurableRdfProjection implements CanonicalAtomV2DurableRdfProjection {
+  readonly #compiledBytes: Uint8Array
+  readonly manifest: CanonicalAtomV2DurableRdfProjectionManifest
+  readonly projection: CanonicalAtomV2RdfProjection
+
+  constructor(
+    manifest: CanonicalAtomV2DurableRdfProjectionManifest,
+    projection: CanonicalAtomV2RdfProjection,
+    compiledBytes: Uint8Array
+  ) {
+    this.#compiledBytes = Uint8Array.from(compiledBytes)
+    this.manifest = manifest
+    this.projection = projection
+    Object.freeze(this)
+  }
+
+  static compiledBytesOf(value: unknown): Uint8Array | undefined {
+    return typeof value === "object" && value !== null && #compiledBytes in value
+      ? value.#compiledBytes
+      : undefined
+  }
+}
 
 export class CanonicalAtomV2DurableRdfProjectionError extends Data.TaggedError(
   "CanonicalAtomV2DurableRdfProjectionError"
@@ -542,11 +566,15 @@ const compileFromWitness = (
     invalidatedBy: DURABLE_RDF_INVALIDATED_BY,
     nonclaims: DURABLE_RDF_NONCLAIMS
   })
-  const artifact = Object.freeze({ manifest, projection: inner.right })
-  const encoded = canonicalAtomV2DurableRdfProjectionBytesUnsafe(artifact)
+  const candidate: CanonicalAtomV2DurableRdfProjection = Object.freeze({
+    manifest,
+    projection: inner.right
+  })
+  const encoded = canonicalAtomV2DurableRdfProjectionBytesUnsafe(candidate)
   if (Either.isLeft(encoded)) return Either.left(encoded.left)
-  compiledCanonicalBytesByArtifact.set(artifact, Uint8Array.from(encoded.right))
-  return Either.right(artifact)
+  return Either.right(
+    new CompiledCanonicalAtomV2DurableRdfProjection(manifest, inner.right, encoded.right)
+  )
 }
 
 const canonicalAtomV2DurableRdfProjectionBytesUnsafe = (
@@ -594,7 +622,7 @@ export const canonicalAtomV2DurableRdfProjectionBytes = (
   artifact: CanonicalAtomV2DurableRdfProjection
 ): Either.Either<Uint8Array, CanonicalAtomV2DurableRdfProjectionError> =>
   total(() => {
-    const compiledBytes = compiledCanonicalBytesByArtifact.get(artifact)
+    const compiledBytes = CompiledCanonicalAtomV2DurableRdfProjection.compiledBytesOf(artifact)
     if (compiledBytes === undefined) {
       return fail(
         "ARTIFACT_INVALID",

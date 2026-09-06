@@ -2,7 +2,7 @@ import { createHash } from "node:crypto"
 import { realpathSync, statSync } from "node:fs"
 import { isAbsolute } from "node:path"
 
-import { Data, Effect, Either } from "effect"
+import { Context, Data, Effect, Either, HashMap, Layer, Option, SynchronizedRef } from "effect"
 
 import {
   HSWM_LOCAL_PERMIT_COMMIT_STATUS,
@@ -49,8 +49,14 @@ export interface VerifiedAdmissionGatewayReceipt {
   readonly status: typeof HSWM_VERIFIED_ADMISSION_GATEWAY_STATUS
 }
 
-export interface VerifiedAdmissionGateway {
-  readonly submit: (request: LocalPermitCommitRequest) => Effect.Effect<VerifiedAdmissionGatewayReceipt, LocalPermitCommitError | VerifiedAdmissionGatewayError>
+/**
+ * `R` is the environment `submit` still needs.  The signature-preserving
+ * factories return `VerifiedAdmissionGateway` (no requirement); the
+ * `*WithProtectedRootLocks` variants return one that requires the
+ * `ProtectedRootLocks` service.
+ */
+export interface VerifiedAdmissionGateway<R = never> {
+  readonly submit: (request: LocalPermitCommitRequest) => Effect.Effect<VerifiedAdmissionGatewayReceipt, LocalPermitCommitError | VerifiedAdmissionGatewayError, R>
   readonly recover: () => Effect.Effect<LocalPermitRecovery, LocalPermitCommitError>
 }
 
@@ -60,20 +66,64 @@ export interface VerifiedAdmissionGatewayV2Receipt {
   readonly status: typeof HSWM_VERIFIED_ADMISSION_GATEWAY_V2_STATUS
 }
 
-export interface VerifiedAdmissionGatewayV2 {
-  readonly submit: (request: LocalPermitCommitRequest) => Effect.Effect<VerifiedAdmissionGatewayV2Receipt, LocalPermitCommitError | VerifiedAdmissionGatewayError>
+export interface VerifiedAdmissionGatewayV2<R = never> {
+  readonly submit: (request: LocalPermitCommitRequest) => Effect.Effect<VerifiedAdmissionGatewayV2Receipt, LocalPermitCommitError | VerifiedAdmissionGatewayError, R>
   readonly recover: () => Effect.Effect<VerifiedAdmissionRecoveryV2, LocalPermitCommitError>
 }
 
-const sha256 = (bytes: Uint8Array): string => createHash("sha256").update(bytes).digest("hex")
-const protectedRootSemaphores = new Map<string, ReturnType<typeof Effect.unsafeMakeSemaphore>>()
-const semaphoreForRoot = (root: string): ReturnType<typeof Effect.unsafeMakeSemaphore> => {
-  const current = protectedRootSemaphores.get(root)
-  if (current !== undefined) return current
-  const created = Effect.unsafeMakeSemaphore(1)
-  protectedRootSemaphores.set(root, created)
-  return created
+/**
+ * Process-local serialization of protected-root publication.  One
+ * `Effect.Semaphore(1)` per realpath-normalized root is created on first
+ * request and retained in a `SynchronizedRef`-held `HashMap`, so gateway
+ * instances that share one physical root share one lock.  This is the same
+ * process-local, Linux-only guarantee the gateway status string names; it is
+ * not a cross-process or OS-level lock.
+ */
+export interface ProtectedRootLocksShape {
+  readonly semaphoreFor: (normalizedRoot: string) => Effect.Effect<Effect.Semaphore>
 }
+
+export class ProtectedRootLocks extends Context.Tag("hswm/ProtectedRootLocks")<
+  ProtectedRootLocks,
+  ProtectedRootLocksShape
+>() {}
+
+type ProtectedRootSemaphores = HashMap.HashMap<string, Effect.Semaphore>
+
+const makeProtectedRootLocks = (
+  locks: SynchronizedRef.SynchronizedRef<ProtectedRootSemaphores>
+): ProtectedRootLocksShape => Object.freeze({
+  semaphoreFor: (normalizedRoot: string) => SynchronizedRef.modifyEffect(locks, (current) =>
+    Option.match(HashMap.get(current, normalizedRoot), {
+      onNone: () => Effect.map(
+        Effect.makeSemaphore(1),
+        (created) => [created, HashMap.set(current, normalizedRoot, created)] as const
+      ),
+      onSome: (existing) => Effect.succeed([existing, current] as const)
+    }))
+})
+
+export const ProtectedRootLocksLive: Layer.Layer<ProtectedRootLocks> = Layer.effect(
+  ProtectedRootLocks,
+  Effect.map(SynchronizedRef.make(HashMap.empty<string, Effect.Semaphore>()), makeProtectedRootLocks)
+)
+
+/**
+ * Module-private default used only by the signature-preserving factories
+ * below, where the previous code created the per-root semaphore itself.  It
+ * is one immutable service value over one Effect-managed cell, so factory
+ * instances that share a normalized root keep sharing one lock.  The
+ * `*WithProtectedRootLocks` variants carry no default.
+ */
+const defaultProtectedRootLocks: ProtectedRootLocksShape = makeProtectedRootLocks(
+  SynchronizedRef.unsafeMake(HashMap.empty<string, Effect.Semaphore>())
+)
+
+const withDefaultProtectedRootLocks = <A, E>(
+  effect: Effect.Effect<A, E, ProtectedRootLocks>
+): Effect.Effect<A, E> => Effect.provideService(effect, ProtectedRootLocks, defaultProtectedRootLocks)
+
+const sha256 = (bytes: Uint8Array): string => createHash("sha256").update(bytes).digest("hex")
 const sameBytes = (left: Uint8Array, right: Uint8Array): boolean => left.byteLength === right.byteLength && left.every((v, i) => v === right[i])
 const plainObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && (Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null)
@@ -122,16 +172,17 @@ const acceptedResponseIsExact = (bytes: Uint8Array, request: Record<string, unkn
 }
 
 /**
- * The only package-root API for the protected namespace.  The underlying
+ * The protected-namespace gateway whose `submit` takes its per-root lock from
+ * the `ProtectedRootLocks` service in the environment.  The underlying
  * prepared state and approval never cross this API: Permit/state/recovery
  * checks, exact Lean decision, then no-replace publication occur in one call.
  */
-export const makeVerifiedAdmissionGateway = (
+export const makeVerifiedAdmissionGatewayWithProtectedRootLocks = (
   rootPath: string,
   verifier: LocalPermitVerifierContext,
   config: VerifiedAdmissionGatewayConfig,
   clock: () => Date = () => new Date()
-): Either.Either<VerifiedAdmissionGateway, VerifiedAdmissionGatewayError> => {
+): Either.Either<VerifiedAdmissionGateway<ProtectedRootLocks>, VerifiedAdmissionGatewayError> => {
   if (!isAbsolute(rootPath) || !isAbsolute(config.leanExecutable) || !Number.isSafeInteger(config.timeoutMillis ?? 10_000) || (config.timeoutMillis ?? 10_000) < 1 || (config.timeoutMillis ?? 10_000) > 60_000) {
     return Either.left(new VerifiedAdmissionGatewayError({ code: "CONFIG_INVALID", detail: "gateway requires absolute root and Lean executable plus a 1..60000ms timeout" }))
   }
@@ -150,7 +201,6 @@ export const makeVerifiedAdmissionGateway = (
   if (Either.isLeft(verifierSnapshot)) {
     return Either.left(new VerifiedAdmissionGatewayError({ code: "CONFIG_INVALID", detail: "gateway verifier snapshot must be exact canonical public trust bytes" }))
   }
-  const rootSemaphore = semaphoreForRoot(normalizedRoot)
   const decisions = new WeakMap<object, { readonly requestSha256: string; readonly decisionSha256: string }>()
   const backend = makeVerifiedAdmissionCommitBackend(normalizedRoot, verifierSnapshot.right, (preflight, mintApproval) => Effect.gen(function* () {
     if (preflight.view.consumedNonces.length >= 128) {
@@ -176,37 +226,63 @@ export const makeVerifiedAdmissionGateway = (
     decisions.set(approval, Object.freeze({ requestSha256: sha256(encoded.right), decisionSha256: sha256(result.stdout) }))
     return approval
   }), clock)
+  const publish = (request: LocalPermitCommitRequest) => Effect.gen(function* () {
+    // Snapshot all caller-owned byte arrays before the first asynchronous
+    // recovery/Lean boundary; publication uses precisely these bytes.
+    const frozenRequest: LocalPermitCommitRequest = Object.freeze({
+      envelopeBytes: Uint8Array.from(request.envelopeBytes),
+      expectedBindings: Object.freeze({ ...request.expectedBindings, priorHead: Object.freeze({ ...request.expectedBindings.priorHead }), expectedNextHead: Object.freeze({ ...request.expectedBindings.expectedNextHead }), target: Object.freeze({ ...request.expectedBindings.target }) }),
+      preStateBytes: Uint8Array.from(request.preStateBytes), postStateBytes: Uint8Array.from(request.postStateBytes)
+    })
+    const published = yield* backend.submit(frozenRequest)
+    const decision = decisions.get(published.admission)
+    if (decision === undefined) return yield* Effect.fail(new VerifiedAdmissionGatewayError({ code: "LEAN_RESPONSE_REJECTED", detail: "accepted decision receipt was unavailable after publication" }))
+    decisions.delete(published.admission)
+    return Object.freeze({ commit: published.receipt, ...decision, status: HSWM_VERIFIED_ADMISSION_GATEWAY_STATUS })
+  })
   return Either.right(Object.freeze({
     recover: backend.recover,
-    submit: (request: LocalPermitCommitRequest) => rootSemaphore.withPermits(1)(Effect.gen(function* () {
-      // Snapshot all caller-owned byte arrays before the first asynchronous
-      // recovery/Lean boundary; publication uses precisely these bytes.
-      const frozenRequest: LocalPermitCommitRequest = Object.freeze({
-        envelopeBytes: Uint8Array.from(request.envelopeBytes),
-        expectedBindings: Object.freeze({ ...request.expectedBindings, priorHead: Object.freeze({ ...request.expectedBindings.priorHead }), expectedNextHead: Object.freeze({ ...request.expectedBindings.expectedNextHead }), target: Object.freeze({ ...request.expectedBindings.target }) }),
-        preStateBytes: Uint8Array.from(request.preStateBytes), postStateBytes: Uint8Array.from(request.postStateBytes)
-      })
-      const published = yield* backend.submit(frozenRequest)
-      const decision = decisions.get(published.admission)
-      if (decision === undefined) return yield* Effect.fail(new VerifiedAdmissionGatewayError({ code: "LEAN_RESPONSE_REJECTED", detail: "accepted decision receipt was unavailable after publication" }))
-      decisions.delete(published.admission)
-      return Object.freeze({ commit: published.receipt, ...decision, status: HSWM_VERIFIED_ADMISSION_GATEWAY_STATUS })
-    }))
+    submit: (request: LocalPermitCommitRequest) => Effect.gen(function* () {
+      const locks = yield* ProtectedRootLocks
+      const rootSemaphore = yield* locks.semaphoreFor(normalizedRoot)
+      return yield* rootSemaphore.withPermits(1)(publish(request))
+    })
   }))
 }
+
+/**
+ * The only package-root API for the protected namespace.  It is the
+ * `ProtectedRootLocks`-requiring gateway above with the module-private
+ * process-local lock table supplied, which preserves the signature and the
+ * shared-root serialization of earlier releases.
+ */
+export const makeVerifiedAdmissionGateway = (
+  rootPath: string,
+  verifier: LocalPermitVerifierContext,
+  config: VerifiedAdmissionGatewayConfig,
+  clock: () => Date = () => new Date()
+): Either.Either<VerifiedAdmissionGateway, VerifiedAdmissionGatewayError> =>
+  Either.map(
+    makeVerifiedAdmissionGatewayWithProtectedRootLocks(rootPath, verifier, config, clock),
+    (gateway) => Object.freeze({
+      recover: gateway.recover,
+      submit: (request: LocalPermitCommitRequest) => withDefaultProtectedRootLocks(gateway.submit(request))
+    })
+  )
 
 /**
  * V2 keeps v1's bounded Lean gate but publishes the exact canonical request
  * and accepted response in the same immutable slot as the state transition.
  * Recovery validates those stored bytes against the journal-reconstructed
  * predecessor view; it never re-runs a potentially changed executable.
+ * `submit` takes its per-root lock from the `ProtectedRootLocks` service.
  */
-export const makeVerifiedAdmissionGatewayV2 = (
+export const makeVerifiedAdmissionGatewayV2WithProtectedRootLocks = (
   rootPath: string,
   verifier: LocalPermitVerifierContext,
   config: VerifiedAdmissionGatewayConfig,
   clock: () => Date = () => new Date()
-): Either.Either<VerifiedAdmissionGatewayV2, VerifiedAdmissionGatewayError> => {
+): Either.Either<VerifiedAdmissionGatewayV2<ProtectedRootLocks>, VerifiedAdmissionGatewayError> => {
   if (!isAbsolute(rootPath) || !isAbsolute(config.leanExecutable) || !Number.isSafeInteger(config.timeoutMillis ?? 10_000) || (config.timeoutMillis ?? 10_000) < 1 || (config.timeoutMillis ?? 10_000) > 60_000) {
     return Either.left(new VerifiedAdmissionGatewayError({ code: "CONFIG_INVALID", detail: "gateway requires absolute root and Lean executable plus a 1..60000ms timeout" }))
   }
@@ -276,17 +352,36 @@ export const makeVerifiedAdmissionGatewayV2 = (
     validatePersistedDecision,
     clock
   )
-  const rootSemaphore = semaphoreForRoot(normalizedRoot)
+  const publish = (request: LocalPermitCommitRequest) => Effect.gen(function* () {
+    const frozenRequest: LocalPermitCommitRequest = Object.freeze({
+      envelopeBytes: Uint8Array.from(request.envelopeBytes),
+      expectedBindings: Object.freeze({ ...request.expectedBindings, priorHead: Object.freeze({ ...request.expectedBindings.priorHead }), expectedNextHead: Object.freeze({ ...request.expectedBindings.expectedNextHead }), target: Object.freeze({ ...request.expectedBindings.target }) }),
+      preStateBytes: Uint8Array.from(request.preStateBytes), postStateBytes: Uint8Array.from(request.postStateBytes)
+    })
+    const published = yield* backend.submit(frozenRequest)
+    return Object.freeze({ ...published, status: HSWM_VERIFIED_ADMISSION_GATEWAY_V2_STATUS })
+  })
   return Either.right(Object.freeze({
     recover: backend.recover,
-    submit: (request: LocalPermitCommitRequest) => rootSemaphore.withPermits(1)(Effect.gen(function* () {
-      const frozenRequest: LocalPermitCommitRequest = Object.freeze({
-        envelopeBytes: Uint8Array.from(request.envelopeBytes),
-        expectedBindings: Object.freeze({ ...request.expectedBindings, priorHead: Object.freeze({ ...request.expectedBindings.priorHead }), expectedNextHead: Object.freeze({ ...request.expectedBindings.expectedNextHead }), target: Object.freeze({ ...request.expectedBindings.target }) }),
-        preStateBytes: Uint8Array.from(request.preStateBytes), postStateBytes: Uint8Array.from(request.postStateBytes)
-      })
-      const published = yield* backend.submit(frozenRequest)
-      return Object.freeze({ ...published, status: HSWM_VERIFIED_ADMISSION_GATEWAY_V2_STATUS })
-    }))
+    submit: (request: LocalPermitCommitRequest) => Effect.gen(function* () {
+      const locks = yield* ProtectedRootLocks
+      const rootSemaphore = yield* locks.semaphoreFor(normalizedRoot)
+      return yield* rootSemaphore.withPermits(1)(publish(request))
+    })
   }))
 }
+
+/** V2 with the module-private process-local lock table supplied; signature unchanged. */
+export const makeVerifiedAdmissionGatewayV2 = (
+  rootPath: string,
+  verifier: LocalPermitVerifierContext,
+  config: VerifiedAdmissionGatewayConfig,
+  clock: () => Date = () => new Date()
+): Either.Either<VerifiedAdmissionGatewayV2, VerifiedAdmissionGatewayError> =>
+  Either.map(
+    makeVerifiedAdmissionGatewayV2WithProtectedRootLocks(rootPath, verifier, config, clock),
+    (gateway) => Object.freeze({
+      recover: gateway.recover,
+      submit: (request: LocalPermitCommitRequest) => withDefaultProtectedRootLocks(gateway.submit(request))
+    })
+  )

@@ -189,20 +189,52 @@ const transitionExpected: Readonly<Record<Exclude<G0OccurrencePhase, "SEALED" | 
   DUAL_EVALUATED: "SEALED"
 }
 
-const issuedStates = new WeakSet<G0OccurrenceState>()
+/**
+ * A state this module issued. The private brand is not an own property, so a
+ * spread, `structuredClone`, or hand-written structural copy carries the same
+ * public fields and the same JSON form but is not recognized by `is`.
+ */
+class IssuedG0OccurrenceState implements G0OccurrenceState {
+  readonly #issued = true
+  readonly schemaVersion: typeof HSWM_G0_OCCURRENCE_PHASE_KERNEL_V1_CONTRACT_VERSION
+  readonly occurrenceUid: string
+  readonly occurrenceTimeoutSeconds: number
+  readonly phase: G0OccurrencePhase
+  readonly evidenceSha256s: ReadonlyArray<string>
+  readonly voidReason: G0VoidReason | null
+  readonly rejectedEvidenceSha256: string | null
+  readonly claimCeiling: typeof HSWM_G0_OCCURRENCE_CLAIM_CEILING
+  readonly g0Passed: false
+  readonly publicationEligible: false
+  readonly g0Status: "NOT_EVIDENCE_BY_ITSELF"
+  readonly terminal: boolean
+
+  constructor(state: Omit<G0OccurrenceState, "terminal">) {
+    this.schemaVersion = state.schemaVersion
+    this.occurrenceUid = state.occurrenceUid
+    this.occurrenceTimeoutSeconds = state.occurrenceTimeoutSeconds
+    this.phase = state.phase
+    this.evidenceSha256s = Object.freeze([...state.evidenceSha256s])
+    this.voidReason = state.voidReason
+    this.rejectedEvidenceSha256 = state.rejectedEvidenceSha256
+    this.claimCeiling = state.claimCeiling
+    this.g0Passed = state.g0Passed
+    this.publicationEligible = state.publicationEligible
+    this.g0Status = state.g0Status
+    this.terminal = state.phase === "SEALED" || state.phase === "VOID"
+    Object.freeze(this)
+  }
+
+  static is(value: unknown): value is IssuedG0OccurrenceState {
+    return typeof value === "object" && value !== null && #issued in value
+  }
+}
 
 const freezeDescriptor = (descriptor: G0ContentDescriptor): G0ContentDescriptor =>
   Object.freeze({ ...descriptor })
 
-const freezeState = (state: Omit<G0OccurrenceState, "terminal">): G0OccurrenceState => {
-  const issued = Object.freeze({
-    ...state,
-    evidenceSha256s: Object.freeze([...state.evidenceSha256s]),
-    terminal: state.phase === "SEALED" || state.phase === "VOID"
-  })
-  issuedStates.add(issued)
-  return issued
-}
+const freezeState = (state: Omit<G0OccurrenceState, "terminal">): G0OccurrenceState =>
+  new IssuedG0OccurrenceState(state)
 
 const voidState = (
   state: G0OccurrenceState,
@@ -344,10 +376,8 @@ export const g0OneShotWorkflowPolicy = (
 const issuedStateFromUnknown = (
   state: unknown
 ): Either.Either<G0OccurrenceState, G0OccurrencePhaseKernelError> =>
-  typeof state === "object" &&
-  state !== null &&
-  issuedStates.has(state as G0OccurrenceState)
-    ? Either.right(state as G0OccurrenceState)
+  IssuedG0OccurrenceState.is(state)
+    ? Either.right(state)
     : Either.left(error("STATE_INVALID", "occurrence state is not a module-issued immutable value"))
 
 /** @internal Records a deterministic orchestration failure without fabricating evidence. */

@@ -62,7 +62,37 @@ export type G0TemporalDomainResult<A> =
 const uidPattern = /^[A-Za-z][A-Za-z0-9._:-]{0,127}(?![\s\S])/u
 const digestPattern = /^[0-9a-f]{64}(?![\s\S])/u
 const descriptorNamePattern = /^[a-z][a-z0-9_]{0,63}(?![\s\S])/u
-const issuedStates = new WeakSet<G0TemporalDomainState>()
+
+/**
+ * A state this module issued. The private brand is not an own property, so a
+ * spread, `structuredClone`, or hand-written structural copy carries the same
+ * public fields and the same JSON form but is not recognized by `is`.
+ */
+class IssuedG0TemporalDomainState implements G0TemporalDomainState {
+  readonly #issued = true
+  readonly occurrenceUid: string
+  readonly occurrenceTimeoutSeconds: number
+  readonly phase: G0TemporalDomainPhase
+  readonly evidenceSha256s: ReadonlyArray<string>
+  readonly voidReason: G0TemporalDomainVoidReason | null
+  readonly rejectedEvidenceSha256: string | null
+  readonly terminal: boolean
+
+  constructor(state: Omit<G0TemporalDomainState, "terminal">) {
+    this.occurrenceUid = state.occurrenceUid
+    this.occurrenceTimeoutSeconds = state.occurrenceTimeoutSeconds
+    this.phase = state.phase
+    this.evidenceSha256s = Object.freeze([...state.evidenceSha256s])
+    this.voidReason = state.voidReason
+    this.rejectedEvidenceSha256 = state.rejectedEvidenceSha256
+    this.terminal = state.phase === "SEALED" || state.phase === "VOID"
+    Object.freeze(this)
+  }
+
+  static is(value: unknown): value is IssuedG0TemporalDomainState {
+    return typeof value === "object" && value !== null && #issued in value
+  }
+}
 
 const right = <A>(value: A): G0TemporalDomainResult<A> => Object.freeze({ ok: true, value })
 const left = <A = never>(detail: string): G0TemporalDomainResult<A> => Object.freeze({ ok: false, detail })
@@ -151,15 +181,7 @@ export const decodeG0TemporalDomainTransition = (
 
 const freezeState = (
   state: Omit<G0TemporalDomainState, "terminal">
-): G0TemporalDomainState => {
-  const issued = Object.freeze({
-    ...state,
-    evidenceSha256s: Object.freeze([...state.evidenceSha256s]),
-    terminal: state.phase === "SEALED" || state.phase === "VOID"
-  })
-  issuedStates.add(issued)
-  return issued
-}
+): G0TemporalDomainState => new IssuedG0TemporalDomainState(state)
 
 const validPhase = (value: string): value is G0TemporalDomainPhase => [
   "REGISTERED",
@@ -215,7 +237,7 @@ export const voidG0TemporalDomain = (
   reason: G0TemporalDomainVoidReason,
   rejectedEvidenceSha256: string | null = null
 ): G0TemporalDomainResult<G0TemporalDomainState> => {
-  if (!issuedStates.has(state)) return left("state was not issued by the Temporal domain")
+  if (!IssuedG0TemporalDomainState.is(state)) return left("state was not issued by the Temporal domain")
   if (state.phase === "VOID") return right(state)
   return right(freezeState({
     occurrenceUid: state.occurrenceUid,
@@ -234,7 +256,7 @@ export const advanceG0TemporalDomain = (
   state: G0TemporalDomainState,
   transition: G0TemporalDomainTransition
 ): G0TemporalDomainResult<G0TemporalDomainState> => {
-  if (!issuedStates.has(state)) return left("state was not issued by the Temporal domain")
+  if (!IssuedG0TemporalDomainState.is(state)) return left("state was not issued by the Temporal domain")
   if (state.phase === "VOID") return right(state)
   if (state.phase === "SEALED") {
     return voidG0TemporalDomain(state, "TERMINAL_REENTRY", transition.evidence.sha256)

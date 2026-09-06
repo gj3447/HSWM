@@ -42,7 +42,7 @@ HSWM이 완성되지 않는 이유를 기술 블로커가 아니라 자기부과
 1비트 학습 루프의 결합으로 판정했다. 문서는 열린 간극 7개, 순서 있는 폐쇄 단계 6개, 정지 규칙
 5개, 숫자 있는 burden cap과 사용자 결정 요청 4개(D-1 G0 분할, D-2 never-weaken 한정, D-3 G1
 estimand 결속, D-4 유한 완료 상태)를 담는다. 기계 투영은
-[`closure plan ontology v2`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json)이며,
+[`closure plan ontology v3`](ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json)이며(v3는 2026-09-06 opaque v3 receipt 이벤트 버전; v2는 유지),
 같은 날 사용자 원문
 [`USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt`](docs/canon/sources/USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt)로
 D-1과 D-4는 `RATIFIED`, D-2와 D-3는 `PROPOSED`다. 확정 전 스냅샷 v1은 라이브 KG에 먼저 게시됐고
@@ -60,6 +60,18 @@ throw 기반 거부, 라이브러리 내부 `Effect.runPromise`, 모듈 수준 �
 [`effect fp boundary ontology v1`](ontology/identity/hswm_core/HSWM_EFFECT_RUNTIME_FP_BOUNDARY_ONTOLOGY.v1.json)이다.
 이는 코드 형태의 정리이지 마이그레이션 게이트 통과가 아니다: 여섯 게이트의 판정은
 그대로이고, 결정적 루프의 판단 단계는 여전히 Python에 있으며 G0는 미통과, G1은 잠겨 있다.
+
+2026-09-06의 opaque v3(G0-local) occurrence는 closure plan S-3의 실행이다. DGX에서
+별도 OS 사용자 평가자, 균형 잡힌 후보 위치, outcome-independent sham arm, Atom v2 local
+Permit commit 96회로 32 episode × 10 call을 한 번 돌렸고 ACTIVE 32/32·RESTORE 32/32·
+FORCED_OPPOSITE 0/32·SHAM 20/32·NO_UPDATE 16/32·REMOVE 16/32, `delta_state` 0.594를 얻었으나
+no-state arm의 stratum별 상한(16 중 12)을 position-1 stratum에서 16/16으로 넘겨 frozen 규칙상
+terminal은 `V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE`, claim ceiling은
+`INSTRUMENT_VALIDATION_ONLY`다. 기록은
+[`results`](results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V3_RESULTS_2026-09-06.md)와
+[`evidence`](evidence/EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_V3_2026-09-06.json), F1_R8 행이며,
+같은 날 첫 시도는 봉인 뒤 계측기 결함으로 `INCONCLUSIVE_MEASUREMENT_NOT_READY`로 봉인되고
+SR-3에 따라 24시간 안에 재실행됐다. G0는 미통과, G1은 잠겨 있으며 효능 추론은 금지된다.
 
 2026-09-02 현재 증명·근거·간극의 answer-first 상태는
 [`HSWM proof-status graph`](docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)에

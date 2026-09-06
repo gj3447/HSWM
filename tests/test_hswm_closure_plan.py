@@ -170,13 +170,47 @@ def test_anchors_are_match_only_and_registered_shapes_hold() -> None:
     }
 
 
+def test_ratification_v2_snapshot_is_retained_unchanged() -> None:
+    v2 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json"
+    assert sha256(v2.read_bytes()).hexdigest() == "0aa237bdea8d71ca7b89a6e66a93f7ba6e97951128ab9b8c7f8947340e95f357"
+    data = json.loads(v2.read_text(encoding="utf-8"))
+    assert data["bundle_uid"] == builder.PREDECESSOR_BUNDLE_UID
+    assert all(
+        node["properties"]["closure_status"] != "COMPLETED"
+        for node in data["nodes"]
+        if node["properties"].get("plan_graph_role") == "CLOSURE_STEP"
+    )
+
+
+def test_v3_receipt_marks_s2_s3_complete_without_promotion() -> None:
+    data = _data()
+    steps = {node["properties"]["step_id"]: node for node in _nodes_by_role(data, "step_id").values()}
+    assert steps["S-2"]["properties"]["closure_status"] == "COMPLETED"
+    assert steps["S-3"]["properties"]["closure_status"] == "COMPLETED"
+    assert steps["S-3"]["properties"]["completion_outcome"] == "RUN_COMPLETE_PREREGISTERED_RULE_NOT_MET"
+    assert all(steps[s]["properties"]["closure_status"] != "COMPLETED" for s in ("S-4", "S-5"))
+    receipts = [node for node in data["nodes"] if node["uid"] == builder.V3_RECEIPT_UID]
+    assert len(receipts) == 1
+    props = receipts[0]["properties"]
+    assert props["qualification_status"] == "V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE"
+    assert props["claim_ceiling"] == "INSTRUMENT_VALIDATION_ONLY"
+    assert props["failing_rule_clause"].startswith("no_state_arm_per_position_stratum")
+    keys = _relation_keys(data)
+    assert (builder.V3_RECEIPT_UID, "TESTS", builder.subgate_uid("G0-LOCAL")) in keys
+    assert (builder.V3_RECEIPT_UID, "PRESERVES", builder.G0_UID) in keys
+    assert (builder.V3_RECEIPT_UID, "DEPENDS_ON", builder.EFFECT_FP_BUNDLE_UID) in keys
+    assert "G0_NOT_PASSED_G1_LOCKED" in data["status"] and "V3_RULE_NOT_MET" in data["status"]
+    cap = [node for node in data["nodes"] if node["properties"].get("plan_graph_role") == "BURDEN_CAP"][0]
+    assert cap["properties"]["reading_core_share"] < cap["properties"]["min_core_share"]
+
+
 def test_pre_ratification_v1_snapshot_is_retained_unchanged() -> None:
     v1 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v1.json"
     assert sha256(v1.read_bytes()).hexdigest() == (
         "23def6168a277aa9f1758cbc6fefc4e713388044507e47dd98d4189e987f9e13"
     )
     data = json.loads(v1.read_text(encoding="utf-8"))
-    assert data["bundle_uid"] == builder.PREDECESSOR_BUNDLE_UID
+    assert data["bundle_uid"] == "sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05"
     assert all(
         node["properties"]["ratification_status"] == "PROPOSED"
         for node in data["nodes"]

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and explicitly publish the HSWM closure-plan KG projection.
+"""Validate and explicitly publish the HSWM closure-plan KG projection (event version v3).
 
 Dry run validates and prints VALIDATED_ONLY_NOT_PUBLISHED.  ``--apply`` asserts
 the live schema registry and every anchor by exact name, creates the owned
@@ -23,24 +23,26 @@ from scripts.upsert_hswm_graph_and_loop_engineering import publish, read_flat_ya
 ROOT = Path(__file__).resolve().parents[1]
 ONTOLOGY_PATH = ROOT / builder.ONTOLOGY_PATH
 EXPECTED_COUNTS = {
-    "anchors": 12,
+    "anchors": 13,
     "audit_runs": 1,
     "burden_caps": 1,
     "closure_steps": 6,
+    "completed_steps": 2,
     "done_states": 1,
     "finding_decisions": 14,
     "findings": 14,
     "g0_subgates": 2,
     "gaps": 7,
-    "nodes": 60,
+    "nodes": 64,
     "ratified_decisions": 2,
-    "relations": 245,
-    "source_records": 3,
+    "relations": 259,
+    "source_records": 6,
     "stop_rules": 5,
-    "user_primary_decisions": 4
+    "user_primary_decisions": 4,
+    "v3_receipts": 1
 }
-EXPECTED_PROJECTION_SHA256 = "e778b1ca81cd5e4636a44f9f32e1b47ba8692da3f4d499fc267bc6d3fdb68563"
-EXPECTED_FILE_SHA256 = "0aa237bdea8d71ca7b89a6e66a93f7ba6e97951128ab9b8c7f8947340e95f357"
+EXPECTED_PROJECTION_SHA256 = "65718cd104355d3ffacc8244e3b6f8da6feb89f51a1615d3839b00792c2817f7"
+EXPECTED_FILE_SHA256 = "546b9e429e02992a952f6e8535d65c7f832f925b7bf8ace26b490b70f9dab7c2"
 
 
 def _file_sha(path: Path) -> str:

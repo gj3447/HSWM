@@ -22,7 +22,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ONTOLOGY_PATH = Path("ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json")
+ONTOLOGY_PATH = Path("ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json")
 CLOSURE_DOC_PATH = Path(
     "docs/research/HSWM_ADVERSARIAL_AUDIT_AND_CLOSURE_PLAN_2026-09-05.md"
 )
@@ -35,19 +35,53 @@ RATIFICATION_SOURCE_PATH: Path | None = Path(
 )
 RATIFIED_DECISIONS: tuple[str, ...] = ("D-1", "D-4")
 RATIFIED_ON = "2026-09-05"
+# Event version v3: the opaque v3 (G0-local) receipt of 2026-09-06 (S-3 run
+# complete, preregistered rule not met) and the S-2 Permit bridge it used.
+V3_RESULTS_PATH = Path("results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V3_RESULTS_2026-09-06.md")
+V3_EVIDENCE_PATH = Path("evidence/EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_V3_2026-09-06.json")
+V3_PROTOCOL_PATH = Path(
+    "_research/causal_composition/preregistrations/g1_opaque_identifiability_v3_2026-09-06-r2/protocol.v1.json"
+)
 SOURCE_BINDING_PATHS: tuple[Path, ...] = tuple(
-    path for path in (CLOSURE_DOC_PATH, FINDINGS_PATH, RATIFICATION_SOURCE_PATH) if path
+    path
+    for path in (CLOSURE_DOC_PATH, FINDINGS_PATH, RATIFICATION_SOURCE_PATH, V3_RESULTS_PATH, V3_EVIDENCE_PATH, V3_PROTOCOL_PATH)
+    if path
 )
 
-SCHEMA_VERSION = "hswm-closure-plan-ontology/v2"
-RELEASE = "2026-09-05"
-TAG = "2026-09-05-v2"
-PREDECESSOR_TAG = "2026-09-05"
+SCHEMA_VERSION = "hswm-closure-plan-ontology/v3"
+RELEASE = "2026-09-06"
+TAG = "2026-09-05-v3"
+PREDECESSOR_TAG = "2026-09-05-v2"
 AUDITED_COMMIT = "4dcba752a661de23066b3b33381bfdfc34879a57"
 STATUS = (
     "ADVERSARIAL_AUDIT_VERIFIED_CLOSURE_PLAN_D1_D4_USER_RATIFIED_D2_D3_PROPOSED_"
-    "G0_NOT_PASSED_G1_LOCKED"
+    "S2_S3_COMPLETE_V3_RULE_NOT_MET_G0_NOT_PASSED_G1_LOCKED"
 )
+V3_STUDY_UID = "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-v3-2026-09-06-r2"
+V3_TERMINAL = "V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE"
+V3_PROTOCOL_CANONICAL_SHA256 = "2363815ecfc575857f812931566d6f8f8132bfa6ab480d35655827f68cd96fc6"
+V3_BUNDLE_SHA256 = "69d8d7846035eb3060caade0002ee58327200848ccc05589598b134790e44584"
+V3_ABORTED_PROTOCOL_CANONICAL_SHA256 = "4d049c7bfeabbbbb969cec8e9c77a7c06e4a193e880d70dd3a28551cdd534e6d"
+COMPLETED_STEPS: dict[str, dict[str, Any]] = {
+    "S-2": {
+        "completed_on": "2026-09-05",
+        "commit": "51f631b4e15bdd3ca48219c8df66bd3fa165ccb8",
+        "outcome": "PERMIT_BRIDGE_IMPLEMENTED_AND_EXERCISED_BY_96_V3_COMMITS",
+    },
+    "S-3": {
+        "completed_on": "2026-09-06",
+        "commit": "e926e1fcbdef3c6da41a92995346df934289180b",
+        "outcome": "RUN_COMPLETE_PREREGISTERED_RULE_NOT_MET",
+    },
+}
+# Burden-cap reading at the S-3 results commit (scripts/check_hswm_closure_burden_cap.py).
+BURDEN_READING = {
+    "reading_commit": "e926e1fcbdef3c6da41a92995346df934289180b",
+    "reading_commits_observed": 36,
+    "reading_core_commits": 15,
+    "reading_core_share": 0.4167,
+    "reading_status": "WINDOW_OPEN_BELOW_SHARE",
+}
 NONCLAIM = (
     "AUDIT_AND_CLOSURE_PLAN_KG_PROJECTION_ONLY_NOT_HSWM_COGNITION_LEARNING_"
     "EFFICACY_GATE_PASS_USER_RATIFICATION_OR_SCIENTIFIC_RESULT"
@@ -63,6 +97,11 @@ FINDINGS_UID = f"sym:AbstractNode:hswm-closure-source-audit-findings-json-{TAG}"
 DONE_STATE_UID = f"sym:Concept:hswm-closure-v1-done-state-{TAG}"
 BURDEN_CAP_UID = f"sym:Concept:hswm-closure-burden-cap-{TAG}"
 RATIFICATION_SOURCE_UID = f"sym:AbstractNode:hswm-closure-source-user-primary-closure-decisions-{TAG}"
+V3_RECEIPT_UID = f"sym:AbstractNode:hswm-closure-v3-receipt-{TAG}"
+V3_RESULTS_UID = f"sym:AbstractNode:hswm-closure-source-v3-results-doc-{TAG}"
+V3_EVIDENCE_UID = f"sym:AbstractNode:hswm-closure-source-v3-evidence-json-{TAG}"
+V3_PROTOCOL_UID = f"sym:AbstractNode:hswm-closure-source-v3-frozen-protocol-{TAG}"
+EFFECT_FP_BUNDLE_UID = "sym:AbstractNode:hswm-effect-fp-boundary-ontology-2026-09-06"
 PREDECESSOR_BUNDLE_UID = f"sym:AbstractNode:hswm-closure-plan-ontology-{PREDECESSOR_TAG}"
 PREDECESSOR_PROGRAM_UID = f"sym:ResearchProgram:hswm-closure-plan-{PREDECESSOR_TAG}"
 
@@ -129,6 +168,11 @@ ANCHORS: list[dict[str, Any]] = [
         "uid": PREDECESSOR_PROGRAM_UID,
         "name": f"HSWM closure plan [{PREDECESSOR_TAG}]",
         "required_labels": ["Concept", "ResearchProgram", "ResearchArtifact"],
+    },
+    {
+        "uid": EFFECT_FP_BUNDLE_UID,
+        "name": "HSWM Effect runtime functional boundary ontology [2026-09-06]",
+        "required_labels": ["AbstractNode", "ResearchArtifact"],
     },
 ]
 
@@ -704,6 +748,8 @@ def build_data() -> dict[str, Any]:
                 "ratification_source_sha256": ratification_sha,
                 "ratified_decision_ids": list(RATIFIED_DECISIONS),
                 "predecessor_bundle_uid": PREDECESSOR_BUNDLE_UID,
+                "v3_receipt_uid": V3_RECEIPT_UID,
+                "sr_4_exception": "event version at the v3 result receipt, as the rule itself allows",
             },
         )
     )
@@ -1091,7 +1137,7 @@ def build_data() -> dict[str, Any]:
                         scope="ORDERED_CLOSURE_STEP",
                         kind="TASK",
                         plane="INQUIRY",
-                        state="PLANNED",
+                        state="COMPLETED" if step_id in COMPLETED_STEPS else "PLANNED",
                         owner="closure_step_custodian",
                         roles=["CLOSURE_STEP", spec["kind"]],
                         boundary="A step orders work; completing it is evidenced only by the named checked-in artifact.",
@@ -1106,21 +1152,117 @@ def build_data() -> dict[str, Any]:
                     "verification_commands": list(spec["verification"]),
                     "stop_rule": spec["stop_rule"],
                     "completion_evidence_path_pattern": spec["completion_evidence"],
-                    "closure_status": "IN_PROGRESS" if step_id in {"S-1", "S-6"} else "PLANNED",
+                    "closure_status": (
+                        "COMPLETED" if step_id in COMPLETED_STEPS
+                        else "IN_PROGRESS" if step_id in {"S-1", "S-6"} else "PLANNED"
+                    ),
+                    **({
+                        "completed_on": COMPLETED_STEPS[step_id]["completed_on"],
+                        "completion_commit": COMPLETED_STEPS[step_id]["commit"],
+                        "completion_outcome": COMPLETED_STEPS[step_id]["outcome"],
+                    } if step_id in COMPLETED_STEPS else {}),
                     "plan_graph_role": "CLOSURE_STEP",
                 },
             )
         )
         for gap_id in spec["gaps"]:
-            relations.append(_relation(s_uid, "CLOSES", gap_uid(gap_id), "GAP_CLOSURE", "PLANNED"))
+            relations.append(_relation(s_uid, "CLOSES", gap_uid(gap_id), "GAP_CLOSURE", "CLOSED" if step_id in COMPLETED_STEPS else "PLANNED"))
         for key in spec["findings"]:
             relations.append(_relation(s_uid, "ADDRESSES", finding_uid(key), "FINDING_RESPONSE", "PLANNED"))
         for decision_id in spec["decisions"]:
             relations.append(_relation(s_uid, "DEPENDS_ON", user_decision_uid(decision_id), "RATIFICATION_PREREQUISITE", dependency_status(decision_id)))
     for before, after in STEP_PRECEDENCE:
-        relations.append(_relation(step_uid(before), "PRECEDES", step_uid(after), "CLOSURE_ORDER", "PLANNED"))
-    relations.append(_relation(step_uid("S-3"), "TARGETS", DONE_STATE_UID, "DONE_STATE_ATTEMPT", "PLANNED"))
-    relations.append(_relation(step_uid("S-3"), "TESTS", subgate_uid("G0-LOCAL"), "PROSPECTIVE_SUBGATE", "PLANNED"))
+        relations.append(_relation(step_uid(before), "PRECEDES", step_uid(after), "CLOSURE_ORDER", "SATISFIED" if before in COMPLETED_STEPS else "PLANNED"))
+    relations.append(_relation(step_uid("S-3"), "TARGETS", DONE_STATE_UID, "DONE_STATE_ATTEMPT", "ATTEMPTED_NOT_REACHED"))
+    relations.append(_relation(step_uid("S-3"), "TESTS", subgate_uid("G0-LOCAL"), "PROSPECTIVE_SUBGATE", "TESTED_RULE_NOT_MET"))
+
+    # Event version v3: the opaque v3 receipt and its three bound sources.
+    for uid, path, name, description in (
+        (V3_RESULTS_UID, V3_RESULTS_PATH, "HSWM opaque v3 (G0-local) result document", "Human record of the 2026-09-06 occurrence: sealed terminal, per-arm counts by position stratum, the failing rule clause, the VOID attempt, and the custody ceiling."),
+        (V3_EVIDENCE_UID, V3_EVIDENCE_PATH, "HSWM opaque v3 evidence record", "Content-addressed evidence projection binding the frozen protocol, one-shot registry, DGX runtime receipts, and the public artifacts."),
+        (V3_PROTOCOL_UID, V3_PROTOCOL_PATH, "HSWM opaque v3 frozen protocol (2026-09-06-r2)", "Frozen preregistration generated on the run host from the evaluator's seed with equal-token-count code selection and a measured tokenizer binding."),
+    ):
+        own(
+            _node(
+                uid,
+                ["AbstractNode", "SourceDocument", "ResearchArtifact"],
+                {
+                    **_common(
+                        name=f"{name} [{TAG}]",
+                        description=description,
+                        authority="SYSTEM_DERIVED",
+                        scope="BOUND_SOURCE_RECORD",
+                        kind="ARTIFACT",
+                        plane="EVIDENCE",
+                        state="SOURCE_BOUND",
+                        owner="closure_plan_source_custodian",
+                        roles=["EVIDENCE_ARTIFACT", "LOCAL_SOURCE_RECORD"],
+                        boundary="A bound source proves what bytes existed at the bound digest; it is not a gate pass or efficacy evidence.",
+                    ),
+                    "source_path": path.as_posix(),
+                    "source_sha256": _file_sha(path),
+                    "standard_graph_role": "EVIDENCE_ARTIFACT",
+                },
+            )
+        )
+    own(
+        _node(
+            V3_RECEIPT_UID,
+            ["AbstractNode", "ResearchArtifact"],
+            {
+                **_common(
+                    name=f"Opaque v3 (G0-local) occurrence receipt 2026-09-06 [{TAG}]",
+                    description=(
+                        "One frozen 32-episode occurrence on the DGX with a separate-OS-user evaluator, balanced positions, an "
+                        "outcome-independent sham arm, and 96 Atom v2 local Permit commits: ACTIVE 32/32, RESTORE 32/32, "
+                        "FORCED_OPPOSITE 0/32, SHAM 20/32, NO_UPDATE 16/32, REMOVE 16/32, delta_state 0.594.  The no-state arms "
+                        "were 16/16 in the position-1 stratum against a frozen ceiling of 12, so the sealed terminal is "
+                        "NO_SEPARATION.  The first attempt of the day aborted after the seal on an instrument defect and was "
+                        "rerun within 24 hours under SR-3."
+                    ),
+                    authority="SECONDARY_AI_SELF_ATTESTED_LOCAL_OCCURRENCE",
+                    scope="ONE_SEALED_DGX_OCCURRENCE_WITH_CHECKED_IN_REPLAY",
+                    kind="QUALIFICATION_RUN",
+                    plane="EVIDENCE",
+                    state="SEALED_RULE_NOT_MET_INSTRUMENT_VALIDATION_ONLY",
+                    owner="closure_v3_receipt_custodian",
+                    roles=["QUALIFICATION_RUN", "CLOSURE_STEP_RECEIPT"],
+                    boundary=(
+                        "The receipt records a run and its sealed terminal; it is not a G0-local pass, not G0-external, not a G1 "
+                        "result, not canonical HSWM admission, and not efficacy evidence."
+                    ),
+                ),
+                "standard_graph_role": "QUALIFICATION_RUN",
+                "attestation_level": "SELF_ATTESTED_LOCAL_DGX_OCCURRENCE_WITH_CHECKED_IN_REPLAY",
+                "qualification_status": V3_TERMINAL,
+                "study_uid": V3_STUDY_UID,
+                "protocol_canonical_sha256": V3_PROTOCOL_CANONICAL_SHA256,
+                "bundle_sha256": V3_BUNDLE_SHA256,
+                "branch_correct": ["ACTIVE=32", "RESTORE=32", "FORCED_OPPOSITE_FEEDBACK=0", "OUTCOME_INDEPENDENT_SHAM=20", "NO_UPDATE=16", "REMOVE=16"],
+                "no_state_correct_by_position": ["NO_UPDATE=16/16,0/16", "REMOVE=16/16,0/16", "OUTCOME_INDEPENDENT_SHAM=11/16,9/16"],
+                "delta_state": 0.59375,
+                "failing_rule_clause": "no_state_arm_per_position_stratum_correct_max=12",
+                "atom_v2_permit_commits": 96,
+                "exact_remove_and_restore": 32,
+                "evaluator_feedback_verified": 32,
+                "evaluator_separate_os_user_episodes": 32,
+                "claim_ceiling": "INSTRUMENT_VALIDATION_ONLY",
+                "aborted_attempt_protocol_canonical_sha256": V3_ABORTED_PROTOCOL_CANONICAL_SHA256,
+                "aborted_attempt_terminal": "INCONCLUSIVE_MEASUREMENT_NOT_READY",
+                "custody_ceiling": "OS_USER_SEPARATION_NOT_PRIVILEGE_SEPARATION",
+                "closure_step_id": "S-3",
+            },
+        )
+    )
+    for source_uid in (V3_RESULTS_UID, V3_EVIDENCE_UID, V3_PROTOCOL_UID):
+        relations.append(_relation(V3_RECEIPT_UID, "HAS_SOURCE", source_uid, "SOURCE_PROVENANCE", "BOUND", "SYSTEM_DERIVED"))
+    relations.append(_relation(V3_RECEIPT_UID, "TESTS", subgate_uid("G0-LOCAL"), "G0_LOCAL_CRITERIA_MECHANICALLY_PRESENT", "TESTED_RULE_NOT_MET"))
+    relations.append(_relation(V3_RECEIPT_UID, "TARGETS", step_uid("S-3"), "STEP_COMPLETION_EVIDENCE", "COMPLETED"))
+    relations.append(_relation(V3_RECEIPT_UID, "DEPENDS_ON", step_uid("S-2"), "PERMIT_BRIDGE_USED", "SATISFIED"))
+    relations.append(_relation(V3_RECEIPT_UID, "DEPENDS_ON", EFFECT_FP_BUNDLE_UID, "PERMIT_PROCESS_FROM_REFACTORED_RUNTIME", "ACTIVE"))
+    relations.append(_relation(V3_RECEIPT_UID, "ADDRESSES", finding_uid("no-bridge-between-llm-instrument-and-atom-v2-permit"), "BRIDGE_EXERCISED_96_COMMITS", "ADDRESSED"))
+    relations.append(_relation(V3_RECEIPT_UID, "ADDRESSES", finding_uid("void-driven-instrument-fanout-without-closure"), "VOID_REPAIRED_AND_RERUN_SAME_FAMILY_SR3", "ADDRESSED"))
+    relations.append(_relation(V3_RECEIPT_UID, "PRESERVES", G0_UID, "G0_NOT_PASSED", "ACTIVE"))
 
     for rule_id, spec in STOP_RULES.items():
         r_uid = stop_rule_uid(rule_id)
@@ -1179,6 +1321,7 @@ def build_data() -> dict[str, Any]:
                     boundary="The cap bounds effort allocation; it is not a research result and does not lower any success criterion.",
                 ),
                 **BURDEN_CAP,
+                **BURDEN_READING,
                 "plan_graph_role": "BURDEN_CAP",
             },
         )
@@ -1195,7 +1338,7 @@ def build_data() -> dict[str, Any]:
     for uid in owned_uids:
         if uid == BUNDLE_UID:
             continue
-        if uid in {CLOSURE_DOC_UID, FINDINGS_UID, RATIFICATION_SOURCE_UID}:
+        if uid in {CLOSURE_DOC_UID, FINDINGS_UID, RATIFICATION_SOURCE_UID, V3_RESULTS_UID, V3_EVIDENCE_UID, V3_PROTOCOL_UID}:
             relations.append(_relation(BUNDLE_UID, "HAS_SOURCE", uid, "SOURCE_PROVENANCE", "BOUND", "SYSTEM_DERIVED"))
         else:
             relations.append(_relation(BUNDLE_UID, "HAS_CONCEPT", uid, "BOUNDED_PROJECTION_MEMBERSHIP", "ACTIVE", "SYSTEM_DERIVED"))
@@ -1214,8 +1357,9 @@ def build_data() -> dict[str, Any]:
         "authority_boundary": (
             "The audit findings, gaps, plan, stop rules, and burden cap are SECONDARY_AI "
             "formalizations. D-1 and D-4 are USER_PRIMARY because the user's own words are "
-            "hash-bound as a canon source; D-2 and D-3 remain PROPOSED until named. Nothing "
-            "here passes G0 or G1 or promotes any scientific claim."
+            "hash-bound as a canon source; D-2 and D-3 remain PROPOSED until named. S-2 and S-3 "
+            "are COMPLETED as runs: the opaque v3 receipt of 2026-09-06 is sealed NO_SEPARATION "
+            "under its frozen rule. Nothing here passes G0 or G1 or promotes any scientific claim."
         ),
         "source_accessed_on": RELEASE,
         "artifact_bindings": bindings,
@@ -1235,6 +1379,8 @@ def build_data() -> dict[str, Any]:
             "audit_runs": 1,
             "source_records": len(bindings),
             "ratified_decisions": len(RATIFIED_DECISIONS),
+            "completed_steps": len(COMPLETED_STEPS),
+            "v3_receipts": 1,
         },
         "anchors": ANCHORS,
         "nodes": nodes,

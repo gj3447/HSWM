@@ -68,10 +68,17 @@ control, material result, HSWM cognition, causal learning, or efficacy.
 
 ## Current closure-plan projection
 
-[`HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json`](HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json)
-(bundle UID `sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v2`) is the
+[`HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json`](HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json)
+(bundle UID `sym:AbstractNode:hswm-closure-plan-ontology-2026-09-05-v3`) is the
 bounded projection of the 2026-09-05 adversarial programme audit and its
-closure plan. It carries 14 verified audit findings as Claim nodes with one
+closure plan, at its second event version: the opaque v3 (G0-local) receipt
+of 2026-09-06 (S-3 run complete, frozen rule not met, sealed
+`V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE`) and the S-2 Permit bridge it
+exercised are recorded as COMPLETED steps with three more hash-bound sources
+(result document, evidence record, frozen protocol), a receipt node that tests
+the G0-local sub-gate with status `TESTED_RULE_NOT_MET`, and the burden-cap
+reading at the results commit.  The ratification event version
+[`v2`](HSWM_CLOSURE_PLAN_ONTOLOGY.v2.json) is retained unchanged. It carries 14 verified audit findings as Claim nodes with one
 current verification Decision each, 7 open Gaps, 4 USER_PRIMARY decisions of
 which D-1 and D-4 are `RATIFIED` by the hash-bound user source
 [`USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt`](../../../docs/canon/sources/USER_PRIMARY_HSWM_CLOSURE_DECISIONS_2026-09-05.txt)

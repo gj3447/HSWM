@@ -118,6 +118,36 @@ further G0 boundary documents until then. KG presence is publication of a `PROPO
 governance plan, not a user ratification, gate pass, HSWM cognition, causal
 learning, or efficacy result.
 
+## Current Effect functional-boundary projection
+
+[`HSWM_EFFECT_RUNTIME_FP_BOUNDARY_ONTOLOGY.v1.json`](HSWM_EFFECT_RUNTIME_FP_BOUNDARY_ONTOLOGY.v1.json)
+(bundle UID `sym:AbstractNode:hswm-effect-fp-boundary-ontology-2026-09-06`) is
+the bounded engineering-status projection of the 2026-09-05 TypeScript/Effect
+completeness audit and the 2026-09-06 functional-boundary refactor. It carries
+the six migration gates and the loop-authority question as Claim nodes with one
+current Decision each (three `UNDERDETERMINED`, four `RED`; none softened by the
+refactor), six functional-programming shortfall Gaps, the refactor packages
+that closed or narrowed them (one commit each), the Effect services they
+introduced, the five lint rules, and the seven exemption lanes with their
+per-rule hit counts read from the hash-bound lint report. It anchors read-only
+to the graph-and-loop v6 program and its runtime artifacts, the closure plan
+v2 program, its burden cap, D-4, SR-4/SR-5, S-2, and two closure findings that
+the loop-authority decision preserves. It also records its own SR-4 deviation
+(a new ontology version before the G1 verdict, on explicit user instruction).
+Its human record is
+[`HSWM_EFFECT_RUNTIME_FUNCTIONAL_BOUNDARY_2026-09-06.md`](../../../docs/operations/HSWM_EFFECT_RUNTIME_FUNCTIONAL_BOUNDARY_2026-09-06.md).
+
+Build, validate, and publish only through the dedicated fail-closed paths:
+
+```bash
+uv run --locked --extra dev python scripts/build_hswm_effect_fp_boundary_ontology.py --check
+uv run --locked --extra dev python scripts/upsert_hswm_effect_fp_boundary.py
+uv run --locked --extra kg python scripts/upsert_hswm_effect_fp_boundary.py --apply --source-config ~/.config/symposium-ontology/source.yaml
+```
+
+KG presence is publication of an engineering-status record, not a migration-gate
+pass, HSWM cognition, learning, or efficacy.
+
 ## Graph and loop engineering reinforcement projection
 
 [`HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json`](HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json)

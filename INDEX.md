@@ -49,6 +49,18 @@ D-1과 D-4는 `RATIFIED`, D-2와 D-3는 `PROPOSED`다. 확정 전 스냅샷 v1�
 바이트 그대로 보존된다. 이 문서와 번들은 v3 결과 전까지 G0
 상태를 다시 진술하는 새 boundary 문서를 대체한다. G0는 계속 `NOT_PASSED`, G1은 `LOCKED`다.
 
+2026-09-06의 TypeScript/Effect 런타임 함수형 경계 정리는
+[`HSWM Effect runtime functional boundary`](docs/operations/HSWM_EFFECT_RUNTIME_FUNCTIONAL_BOUNDARY_2026-09-06.md)에
+고정한다. 2026-09-05 완결성 감사가 지목한 여섯 가지 함수형 미달(명령형 I/O 어댑터,
+throw 기반 거부, 라이브러리 내부 `Effect.runPromise`, 모듈 수준 가변 상태, 서비스가
+아닌 plain factory, lint 부재)을 `PosixFileSystem`/`BoundedSubprocess` 서비스, 단일
+`runProcessMain` 경계, `Data.TaggedError`/`Either` 실패값, private field 브랜드와
+`ProtectedRootLocks` 서비스, `LocalPermitCommitStoreService`, 그리고 `npm run check`에
+들어간 Effect boundary lint(R1–R5, 7개 명시 예외 lane)로 닫았다. KG 투영은
+[`effect fp boundary ontology v1`](ontology/identity/hswm_core/HSWM_EFFECT_RUNTIME_FP_BOUNDARY_ONTOLOGY.v1.json)이다.
+이는 코드 형태의 정리이지 마이그레이션 게이트 통과가 아니다: 여섯 게이트의 판정은
+그대로이고, 결정적 루프의 판단 단계는 여전히 Python에 있으며 G0는 미통과, G1은 잠겨 있다.
+
 2026-09-02 현재 증명·근거·간극의 answer-first 상태는
 [`HSWM proof-status graph`](docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)에
 고정했다. 임의의 theorem/test 개수가 아니라 여섯 end-to-end 횡단 의무를 같은

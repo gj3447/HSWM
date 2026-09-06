@@ -21,6 +21,18 @@
 > See the
 > [single-owner canon](../../../docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md).
 
+> **Functional boundary (2026-09-06):** the runtime has exactly two Node
+> adapters (`effect-posix-filesystem.ts`, `effect-bounded-subprocess.ts`), one
+> process boundary (`effect-process-main.ts`), typed failures instead of
+> `throw`, and no module-level mutable state outside seven named exemption
+> lanes. `npm run check` runs `scripts/lint-effect-boundary.mjs` (R1–R5) against
+> `scripts/effect-boundary-allowlist.json`, which may only shrink. Library files
+> inside the DNRD-5 source closure must import `effect-posix-filesystem.ts`
+> directly, never the `effect-posix-services.ts` umbrella. See
+> [`HSWM_EFFECT_RUNTIME_FUNCTIONAL_BOUNDARY_2026-09-06.md`](../../../docs/operations/HSWM_EFFECT_RUNTIME_FUNCTIONAL_BOUNDARY_2026-09-06.md).
+> This is code shape only: the six migration gates keep their audit
+> dispositions and the decisive loop is still Python.
+
 This private package is the TypeScript/Effect production-runtime seed for
 HSWM. It contains two distinct bounded engineering slices: the existing scalar
 outcome-credit transaction for an already eligible trajectory, and a

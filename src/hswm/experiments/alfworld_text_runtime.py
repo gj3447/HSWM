@@ -264,7 +264,10 @@ def build_bwrap_command(spec: LocalSandboxSpec, *, game_fd: int) -> list[str]:
         "--setenv", "XDG_CACHE_HOME", "/tmp/xdg-cache",
         "--setenv", "ALFWORLD_DATA", "/tmp/alfworld-data",
         "--setenv", "TERM", "dumb",
-        "--setenv", "PYTHONPATH", f"{spec.repository}:{spec.repository / 'src'}",
+        # ``alfworld`` is installed from the source-pinned upstream checkout;
+        # binding that checkout alone does not make its package importable in
+        # the cleared sandbox environment.
+        "--setenv", "PYTHONPATH", f"{spec.repository}:{spec.repository / 'src'}:{spec.upstream}",
         "--chdir", str(spec.repository), "--",
         str(spec.python), "-m", "hswm.experiments.alfworld_text_worker",
         "--game-file", SANDBOX_GAME_PATH, "--source-game-sha256", spec.game_binding.file_sha256,

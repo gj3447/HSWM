@@ -163,8 +163,38 @@ def test_bwrap_command_is_011_compatible_isolated_and_fd_bound(tmp_path: Path) -
     assert "--unshare-all" in command and "--clearenv" in command
     assert str(spec.asset_root) not in command and str(spec.game_file) not in command
     assert str(spec.python_runtime_root) in command
-    assert "--chdir" in command and f"{spec.repository}:{spec.repository / 'src'}" in command
+    assert "--chdir" in command
+    assert f"{spec.repository}:{spec.repository / 'src'}:{spec.upstream}" in command
     assert command[command.index("--max-steps") + 1] == "50"
+
+
+def test_bwrap_pythonpath_makes_the_read_only_upstream_package_importable(tmp_path: Path) -> None:
+    spec = _spec(tmp_path)
+    package = spec.upstream / "alfworld"
+    package.mkdir()
+    (package / "__init__.py").write_text("SOURCE_PINNED = True\n", encoding="utf-8")
+    command = runtime.build_bwrap_command(spec, game_fd=7)
+    pythonpath = command[command.index("PYTHONPATH") + 1]
+    environment = {"PYTHONPATH": pythonpath}
+
+    missing = subprocess.run(
+        [sys.executable, "-c", "import alfworld"],
+        cwd=tmp_path,
+        env={"PYTHONPATH": f"{spec.repository}:{spec.repository / 'src'}"},
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert missing.returncode != 0 and "ModuleNotFoundError" in missing.stderr
+    available = subprocess.run(
+        [sys.executable, "-c", "import alfworld; assert alfworld.SOURCE_PINNED"],
+        cwd=tmp_path,
+        env=environment,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert available.returncode == 0, available.stderr
 
 
 def test_sealed_horizon_is_explicit_and_bounded(tmp_path: Path) -> None:

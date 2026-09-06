@@ -86,6 +86,15 @@ claim ceiling `MEASUREMENT_READY_SINGLE_OWNER_UNDER_DECLARED_OPAQUE_TASK`
 stateful arm 96/96 대 forced-opposite 0/96, no-state 48/96. G0-local 단일 소유자 후보일 뿐 G0는
 미통과(G0-external 유예), G1은 미평가, 효능 추론은 금지된다.
 
+같은 날 후속 작업까지 포함한
+[`현재 증거·통찰과 다음 판별 실험`](docs/research/HSWM_RESEARCH_INSIGHTS_AND_NEXT_EVIDENCE_2026-09-06.md)은
+관측→해석→경쟁 가설→규칙 후보→반증 실험으로 탐색하는
+[`research insight ontology v1`](ontology/identity/hswm_core/HSWM_RESEARCH_INSIGHTS_2026-09-06.v1.json)과
+[`읽기 전용 질의`](ontology/queries/HSWM_RESEARCH_INSIGHTS_2026-09-06.cypher)를 제공한다.
+S-5는 B0/B2 첫 결과 파일 deliverable로 완료됐고, D4는 초기 Atom V2 admission/recovery의
+engineering fixture까지만 있으며 held-out occurrence는 없다. S-6는 여전히 열려 있다.
+새 규칙 8개는 미검증 `SECONDARY_AI` 휴리스틱이며 기존 FCL·판정·P1 RED를 변경하지 않는다.
+
 2026-09-02 현재 증명·근거·간극의 answer-first 상태는
 [`HSWM proof-status graph`](docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)에
 고정했다. 임의의 theorem/test 개수가 아니라 여섯 end-to-end 횡단 의무를 같은

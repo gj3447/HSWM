@@ -173,23 +173,21 @@ export const makeCanonicalAtomV2ContentStoreMemoryLayer = () =>
         descriptor: CanonicalAtomV2ContentDescriptor,
         operation: "GET" | "VERIFY"
       ): Effect.Effect<Uint8Array, CanonicalAtomV2ContentStoreError> =>
-        Effect.try({
-          try: () => {
-            const descriptorError = validateDescriptor(descriptor, operation)
-            if (descriptorError !== null) throw descriptorError
-            const bytes = state.content.get(descriptor.sha256)
-            if (bytes === undefined) {
-              throw storeError(operation, "CONTENT_NOT_FOUND", "content digest is absent")
-            }
-            if (bytes.byteLength !== descriptor.byteLength || sha256(bytes) !== descriptor.sha256) {
-              throw storeError(operation, "CONTENT_CORRUPT", "content does not match descriptor")
-            }
-            return Uint8Array.from(bytes)
-          },
-          catch: (error) =>
-            error instanceof CanonicalAtomV2ContentStoreError
-              ? error
-              : storeError(operation, "CONTENT_CORRUPT", "memory content lookup failed")
+        Effect.gen(function* () {
+          const descriptorError = validateDescriptor(descriptor, operation)
+          if (descriptorError !== null) return yield* Effect.fail(descriptorError)
+          const bytes = state.content.get(descriptor.sha256)
+          if (bytes === undefined) {
+            return yield* Effect.fail(
+              storeError(operation, "CONTENT_NOT_FOUND", "content digest is absent")
+            )
+          }
+          if (bytes.byteLength !== descriptor.byteLength || sha256(bytes) !== descriptor.sha256) {
+            return yield* Effect.fail(
+              storeError(operation, "CONTENT_CORRUPT", "content does not match descriptor")
+            )
+          }
+          return Uint8Array.from(bytes)
         })
 
       return CanonicalAtomV2ContentStore.of({
@@ -199,25 +197,21 @@ export const makeCanonicalAtomV2ContentStoreMemoryLayer = () =>
             mediaType,
             copied
           )
-          return Effect.try({
-            try: () => {
-              if (made._tag === "Left") throw made.left
-              const descriptor = made.right
-              const previous = state.content.get(descriptor.sha256)
-              if (
-                previous !== undefined &&
-                (previous.byteLength !== copied.byteLength ||
-                  !previous.every((byte, index) => byte === copied[index]))
-              ) {
-                throw storeError("PUT", "CONTENT_CORRUPT", "digest collision has different bytes")
-              }
-              if (previous === undefined) state.content.set(descriptor.sha256, copied)
-              return descriptor
-            },
-            catch: (error) =>
-              error instanceof CanonicalAtomV2ContentStoreError
-                ? error
-                : storeError("PUT", "DESCRIPTOR_INVALID", "content put failed")
+          return Effect.gen(function* () {
+            if (Either.isLeft(made)) return yield* Effect.fail(made.left)
+            const descriptor = made.right
+            const previous = state.content.get(descriptor.sha256)
+            if (
+              previous !== undefined &&
+              (previous.byteLength !== copied.byteLength ||
+                !previous.every((byte, index) => byte === copied[index]))
+            ) {
+              return yield* Effect.fail(
+                storeError("PUT", "CONTENT_CORRUPT", "digest collision has different bytes")
+              )
+            }
+            if (previous === undefined) state.content.set(descriptor.sha256, copied)
+            return descriptor
           })
         },
         get: (descriptor) => get(descriptor, "GET"),
@@ -250,22 +244,20 @@ export const makeCanonicalAtomV2ContentStoreMemoryLayer = () =>
             }
           }),
         resolveSchema: (schemaVersion) =>
-          Effect.try({
-            try: () => {
-              const decoded = Schema.decodeUnknownEither(Identifier)(schemaVersion)
-              if (decoded._tag === "Left") {
-                throw storeError("RESOLVE_SCHEMA", "DESCRIPTOR_INVALID", "schema version is invalid")
-              }
-              const descriptor = state.bindings.get(schemaVersion)
-              if (descriptor === undefined) {
-                throw storeError("RESOLVE_SCHEMA", "SCHEMA_NOT_BOUND", "schema version has no content binding")
-              }
-              return snapshotDescriptor(descriptor)
-            },
-            catch: (error) =>
-              error instanceof CanonicalAtomV2ContentStoreError
-                ? error
-                : storeError("RESOLVE_SCHEMA", "DESCRIPTOR_INVALID", "schema binding lookup failed")
+          Effect.gen(function* () {
+            const decoded = Schema.decodeUnknownEither(Identifier)(schemaVersion)
+            if (decoded._tag === "Left") {
+              return yield* Effect.fail(
+                storeError("RESOLVE_SCHEMA", "DESCRIPTOR_INVALID", "schema version is invalid")
+              )
+            }
+            const descriptor = state.bindings.get(schemaVersion)
+            if (descriptor === undefined) {
+              return yield* Effect.fail(
+                storeError("RESOLVE_SCHEMA", "SCHEMA_NOT_BOUND", "schema version has no content binding")
+              )
+            }
+            return snapshotDescriptor(descriptor)
           })
       })
     })

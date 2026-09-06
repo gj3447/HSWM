@@ -1,15 +1,4 @@
 import { createHash, randomUUID } from "node:crypto"
-import { constants } from "node:fs"
-import {
-  link,
-  lstat,
-  mkdir,
-  open,
-  readdir,
-  readFile,
-  realpath,
-  unlink
-} from "node:fs/promises"
 import { isAbsolute, join, resolve } from "node:path"
 
 import { Context, Data, Effect, Either, Layer } from "effect"
@@ -39,6 +28,13 @@ import {
 import { canonicalAtomV2StateSha256 } from "./canonical-atom-v2-state-journal.js"
 import { canonicalJsonBytes, decodeCanonicalJsonBytes, type CanonicalJson } from "./canonical-atom-v2-json.js"
 import { canonicalAtomV2KeyId, type CanonicalAtomV2Key } from "./canonical-atom-v2-schema.js"
+import {
+  NodePosixFileSystem,
+  PosixFileSystem,
+  type PosixFileSystemShape,
+  type PosixIoError,
+  type PosixPathIdentity
+} from "./effect-posix-filesystem.js"
 
 /**
  * GE-2 / LE-0 engineering profile.
@@ -497,124 +493,159 @@ const decodeEventBytes = (bytes: Uint8Array): Either.Either<GraphLoopControlEven
 const fileName = (ordinal: number): string =>
   `graph-loop-event-${String(ordinal).padStart(4, "0")}.json`
 
-const initializeDirectory = async (input: string): Promise<DirectoryIdentity> => {
-  if (!isAbsolute(input)) throw journalError("INITIALIZE", "ROOT_UNSAFE", "control-journal root must be absolute")
-  const root = resolve(input)
-  await mkdir(root, { recursive: true, mode: 0o700 })
-  const requested = await lstat(root)
-  if (requested.isSymbolicLink() || !requested.isDirectory() || (requested.mode & 0o077) !== 0) {
-    throw journalError("INITIALIZE", "ROOT_UNSAFE", "control-journal root must be a private plain directory")
-  }
-  const canonical = await realpath(root)
-  const current = await lstat(canonical)
-  if (current.isSymbolicLink() || !current.isDirectory() || (current.mode & 0o077) !== 0) {
-    throw journalError("INITIALIZE", "ROOT_UNSAFE", "control-journal canonical root is unsafe")
-  }
-  return Object.freeze({ root: canonical, device: current.dev, inode: current.ino })
-}
+const FS_OPERATION = "graph-loop-control-journal"
 
-const assertDirectory = async (identity: DirectoryIdentity, operation: GraphLoopControlJournalError["operation"]): Promise<void> => {
-  const current = await lstat(identity.root)
-  if (current.isSymbolicLink() || !current.isDirectory() || current.dev !== identity.device || current.ino !== identity.inode || (current.mode & 0o077) !== 0) {
-    throw journalError(operation, "ROOT_UNSAFE", "control-journal root changed identity or permissions")
-  }
-}
+const ioFailure = (
+  operation: GraphLoopControlJournalError["operation"],
+  detail: string
+) => (_cause: PosixIoError): GraphLoopControlJournalError => journalError(operation, "IO_FAILED", detail)
 
-const recoverFromDisk = (identity: DirectoryIdentity): Effect.Effect<ReadonlyArray<GraphLoopControlJournalEntry>, GraphLoopControlJournalError> =>
-  Effect.tryPromise({
-    try: async () => {
-      await assertDirectory(identity, "RECOVER")
-      const entries = await readdir(identity.root, { withFileTypes: true })
-      const ordinals: number[] = []
-      for (const entry of entries) {
-        if (!entry.name.startsWith("graph-loop-event-")) continue
-        const match = EVENT_PATTERN.exec(entry.name)
-        if (match === null || !entry.isFile()) throw journalError("RECOVER", "FILE_TYPE_INVALID", "invalid control-journal slot")
-        const ordinal = Number(match[1])
-        if (!Number.isSafeInteger(ordinal) || ordinal < 1 || ordinal > HSWM_GRAPH_LOOP_CONTROL_MAX_EVENTS) {
-          throw journalError("RECOVER", "SLOT_GAP", "control-journal slot is outside the fixed bound")
-        }
-        ordinals.push(ordinal)
-      }
-      ordinals.sort((left, right) => left - right)
-      if (ordinals.some((ordinal, index) => ordinal !== index + 1)) {
-        throw journalError("RECOVER", "SLOT_GAP", "control-journal slots must form a contiguous prefix")
-      }
-      const recovered: GraphLoopControlJournalEntry[] = []
-      let predecessor: string | null = null
-      for (const ordinal of ordinals) {
-        const path = join(identity.root, fileName(ordinal))
-        const stat = await lstat(path)
-        if (stat.isSymbolicLink() || !stat.isFile()) throw journalError("RECOVER", "FILE_TYPE_INVALID", "control-journal slot is not a regular file")
-        if (stat.size < 1 || stat.size > HSWM_GRAPH_LOOP_CONTROL_MAX_EVENT_BYTES) throw journalError("RECOVER", "FILE_TOO_LARGE", "control-journal event exceeds its byte bound")
-        const bytes = Uint8Array.from(await readFile(path))
-        if (bytes.byteLength !== stat.size) throw journalError("RECOVER", "IO_FAILED", "control-journal event changed while being read")
-        const event = decodeEventBytes(bytes)
-        if (Either.isLeft(event) || event.right.ordinal !== ordinal || event.right.predecessorSha256 !== predecessor) {
-          throw Either.isLeft(event) ? event.left : journalError("RECOVER", "EVENT_INVALID", "control-journal hash chain is invalid")
-        }
-        const digest = sha256(bytes)
-        recovered.push(Object.freeze({ event: event.right, bytes, sha256: digest }))
-        predecessor = digest
-      }
-      await assertDirectory(identity, "RECOVER")
-      return Object.freeze(recovered)
-    },
-    catch: (error) => error instanceof GraphLoopControlJournalError
-      ? error
-      : journalError("RECOVER", "IO_FAILED", "control-journal recovery failed")
+/** The root must be a plain directory that no group or other principal can read, write, or traverse. */
+const privateDirectory = (identity: PosixPathIdentity): boolean =>
+  identity.kind === "DIRECTORY" && (identity.mode & 0o077) === 0
+
+const initializeDirectory = (
+  fs: PosixFileSystemShape,
+  input: string
+): Effect.Effect<DirectoryIdentity, GraphLoopControlJournalError> =>
+  Effect.gen(function* () {
+    if (!isAbsolute(input)) return yield* journalError("INITIALIZE", "ROOT_UNSAFE", "control-journal root must be absolute")
+    const root = resolve(input)
+    const io = ioFailure("INITIALIZE", "control-journal initialization failed")
+    yield* fs.makeDirectory(root, { mode: 0o700, recursive: true, operation: FS_OPERATION }).pipe(Effect.mapError(io))
+    const requested = yield* fs.identity(root, FS_OPERATION).pipe(Effect.mapError(io))
+    if (!privateDirectory(requested)) {
+      return yield* journalError("INITIALIZE", "ROOT_UNSAFE", "control-journal root must be a private plain directory")
+    }
+    const canonical = yield* fs.realpath(root, FS_OPERATION).pipe(Effect.mapError(io))
+    const current = yield* fs.identity(canonical, FS_OPERATION).pipe(Effect.mapError(io))
+    if (!privateDirectory(current)) {
+      return yield* journalError("INITIALIZE", "ROOT_UNSAFE", "control-journal canonical root is unsafe")
+    }
+    return Object.freeze({ root: canonical, device: current.device, inode: current.inode })
   })
 
-const publishCreateOnly = async (identity: DirectoryIdentity, ordinal: number, bytes: Uint8Array): Promise<void> => {
-  await assertDirectory(identity, "APPEND")
-  const finalPath = join(identity.root, fileName(ordinal))
-  const temporaryPath = join(identity.root, `.graph-loop-${randomUUID()}.tmp`)
-  let temporary = false
-  try {
-    const handle = await open(temporaryPath, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600)
-    temporary = true
-    try {
-      await handle.writeFile(bytes)
-      await handle.chmod(0o400)
-      await handle.sync()
-    } finally {
-      await handle.close()
+const assertDirectory = (
+  fs: PosixFileSystemShape,
+  identity: DirectoryIdentity,
+  operation: GraphLoopControlJournalError["operation"]
+): Effect.Effect<void, GraphLoopControlJournalError | PosixIoError> =>
+  Effect.gen(function* () {
+    const current = yield* fs.identity(identity.root, FS_OPERATION)
+    if (!privateDirectory(current) || current.device !== identity.device || current.inode !== identity.inode) {
+      return yield* journalError(operation, "ROOT_UNSAFE", "control-journal root changed identity or permissions")
     }
-    try {
-      await link(temporaryPath, finalPath)
-    } catch (error) {
-      const code = typeof error === "object" && error !== null && "code" in error ? (error as { code?: string }).code : undefined
-      if (code === "EEXIST") throw journalError("APPEND", "CONCURRENT_APPEND", "another writer occupied the next control-journal slot")
-      if (code === "EPERM" || code === "EOPNOTSUPP") throw journalError("APPEND", "ATOMIC_PUBLICATION_UNSUPPORTED", "create-only link publication is unavailable")
-      throw error
+  })
+
+/** Bounded no-follow slot read; the service re-checks the file identity after reading. */
+const readEventSlot = (
+  fs: PosixFileSystemShape,
+  path: string
+): Effect.Effect<Uint8Array, GraphLoopControlJournalError | PosixIoError> =>
+  fs.readRegularBounded(path, { maximumBytes: HSWM_GRAPH_LOOP_CONTROL_MAX_EVENT_BYTES, minimumBytes: 1, operation: FS_OPERATION }).pipe(
+    Effect.map((result) => result.bytes),
+    Effect.mapError((cause) =>
+      cause.code === "NOT_REGULAR_FILE"
+        ? journalError("RECOVER", "FILE_TYPE_INVALID", "control-journal slot is not a regular file")
+        : cause.code === "BYTE_BOUND_EXCEEDED"
+          ? journalError("RECOVER", "FILE_TOO_LARGE", "control-journal event exceeds its byte bound")
+          : cause.code === "IDENTITY_CHANGED"
+            ? journalError("RECOVER", "IO_FAILED", "control-journal event changed while being read")
+            : cause
+    )
+  )
+
+const recoverFromDisk = (
+  fs: PosixFileSystemShape,
+  identity: DirectoryIdentity
+): Effect.Effect<ReadonlyArray<GraphLoopControlJournalEntry>, GraphLoopControlJournalError> =>
+  Effect.gen(function* () {
+    yield* assertDirectory(fs, identity, "RECOVER")
+    const entries = yield* fs.listDirectory(identity.root, FS_OPERATION)
+    const ordinals: number[] = []
+    for (const entry of entries) {
+      if (!entry.name.startsWith("graph-loop-event-")) continue
+      const match = EVENT_PATTERN.exec(entry.name)
+      if (match === null || entry.kind !== "FILE") return yield* journalError("RECOVER", "FILE_TYPE_INVALID", "invalid control-journal slot")
+      const ordinal = Number(match[1])
+      if (!Number.isSafeInteger(ordinal) || ordinal < 1 || ordinal > HSWM_GRAPH_LOOP_CONTROL_MAX_EVENTS) {
+        return yield* journalError("RECOVER", "SLOT_GAP", "control-journal slot is outside the fixed bound")
+      }
+      ordinals.push(ordinal)
     }
-    const directory = await open(identity.root, constants.O_RDONLY | constants.O_DIRECTORY)
-    try {
-      await directory.sync()
-    } finally {
-      await directory.close()
+    ordinals.sort((left, right) => left - right)
+    if (ordinals.some((ordinal, index) => ordinal !== index + 1)) {
+      return yield* journalError("RECOVER", "SLOT_GAP", "control-journal slots must form a contiguous prefix")
     }
-  } finally {
-    if (temporary) await unlink(temporaryPath).catch(() => undefined)
-  }
-}
+    const recovered: GraphLoopControlJournalEntry[] = []
+    let predecessor: string | null = null
+    for (const ordinal of ordinals) {
+      const path = join(identity.root, fileName(ordinal))
+      const slot = yield* fs.identity(path, FS_OPERATION)
+      if (slot.kind !== "FILE") return yield* journalError("RECOVER", "FILE_TYPE_INVALID", "control-journal slot is not a regular file")
+      if (slot.size < 1 || slot.size > HSWM_GRAPH_LOOP_CONTROL_MAX_EVENT_BYTES) {
+        return yield* journalError("RECOVER", "FILE_TOO_LARGE", "control-journal event exceeds its byte bound")
+      }
+      const bytes = yield* readEventSlot(fs, path)
+      if (bytes.byteLength !== slot.size) return yield* journalError("RECOVER", "IO_FAILED", "control-journal event changed while being read")
+      const event = decodeEventBytes(bytes)
+      if (Either.isLeft(event)) return yield* event.left
+      if (event.right.ordinal !== ordinal || event.right.predecessorSha256 !== predecessor) {
+        return yield* journalError("RECOVER", "EVENT_INVALID", "control-journal hash chain is invalid")
+      }
+      const digest = sha256(bytes)
+      recovered.push(Object.freeze({ event: event.right, bytes, sha256: digest }))
+      predecessor = digest
+    }
+    yield* assertDirectory(fs, identity, "RECOVER")
+    return Object.freeze(recovered)
+  }).pipe(
+    Effect.catchTag("PosixIoError", () => Effect.fail(journalError("RECOVER", "IO_FAILED", "control-journal recovery failed")))
+  )
 
 /**
- * Local POSIX-only, append-only research-control ledger. It is intentionally
- * not a canonical HSWM store, an external notary, or distributed consensus.
+ * One create-only slot publication: exclusive private staging file, fsync,
+ * no-replace hard link into the final slot, directory fsync, and unconditional
+ * staging cleanup.  Every failure is a typed value.
  */
-export const makeGraphLoopControlJournalFileLayer = (root: string) =>
-  Layer.effect(GraphLoopControlJournal, Effect.gen(function* () {
-    const identity = yield* Effect.tryPromise({
-      try: () => initializeDirectory(root),
-      catch: (error) => error instanceof GraphLoopControlJournalError
-        ? error
-        : journalError("INITIALIZE", "IO_FAILED", "control-journal initialization failed")
+const publishCreateOnly = (
+  fs: PosixFileSystemShape,
+  identity: DirectoryIdentity,
+  ordinal: number,
+  bytes: Uint8Array
+): Effect.Effect<void, GraphLoopControlJournalError> =>
+  Effect.gen(function* () {
+    yield* assertDirectory(fs, identity, "APPEND")
+    const finalPath = join(identity.root, fileName(ordinal))
+    const temporaryPath = join(identity.root, `.graph-loop-${randomUUID()}.tmp`)
+    const staged = Effect.gen(function* () {
+      yield* fs.writeExclusive(temporaryPath, bytes, { mode: 0o600, finalMode: 0o400, sync: true, operation: FS_OPERATION })
+      yield* fs.linkNoReplace(temporaryPath, finalPath, FS_OPERATION).pipe(
+        Effect.mapError((cause) =>
+          cause.code === "EEXIST"
+            ? journalError("APPEND", "CONCURRENT_APPEND", "another writer occupied the next control-journal slot")
+            : cause.code === "EPERM" || cause.code === "EOPNOTSUPP"
+              ? journalError("APPEND", "ATOMIC_PUBLICATION_UNSUPPORTED", "create-only link publication is unavailable")
+              : cause
+        )
+      )
+      yield* fs.syncDirectory(identity.root, FS_OPERATION)
     })
-    return GraphLoopControlJournal.of({
-      recover: recoverFromDisk(identity),
+    // An orphan private staging file is not committed; its removal never changes the outcome.
+    yield* staged.pipe(Effect.ensuring(fs.unlinkIfPresent(temporaryPath, FS_OPERATION).pipe(Effect.ignore)))
+  }).pipe(
+    Effect.catchTag("PosixIoError", () => Effect.fail(journalError("APPEND", "IO_FAILED", "control-journal publication failed")))
+  )
+
+const makeGraphLoopControlJournal = (
+  fs: PosixFileSystemShape,
+  root: string
+): Effect.Effect<GraphLoopControlJournal["Type"], GraphLoopControlJournalError> =>
+  Effect.map(initializeDirectory(fs, root), (identity) =>
+    GraphLoopControlJournal.of({
+      recover: recoverFromDisk(fs, identity),
       append: (draft) => Effect.gen(function* () {
-        const current = yield* recoverFromDisk(identity)
+        const current = yield* recoverFromDisk(fs, identity)
         if (current.length >= HSWM_GRAPH_LOOP_CONTROL_MAX_EVENTS) {
           return yield* journalError("APPEND", "CHAIN_FULL", "control-journal reached its fixed event limit")
         }
@@ -630,13 +661,8 @@ export const makeGraphLoopControlJournalFileLayer = (root: string) =>
         if (Either.isLeft(bytes) || bytes.right.byteLength > HSWM_GRAPH_LOOP_CONTROL_MAX_EVENT_BYTES) {
           return yield* journalError("APPEND", "EVENT_INVALID", "control event violates canonical byte limits")
         }
-        yield* Effect.tryPromise({
-          try: () => publishCreateOnly(identity, event.ordinal, bytes.right),
-          catch: (error) => error instanceof GraphLoopControlJournalError
-            ? error
-            : journalError("APPEND", "IO_FAILED", "control-journal publication failed")
-        })
-        const recovered = yield* recoverFromDisk(identity)
+        yield* publishCreateOnly(fs, identity, event.ordinal, bytes.right)
+        const recovered = yield* recoverFromDisk(fs, identity)
         const stored = recovered.at(-1)
         if (stored === undefined || !sameBytes(stored.bytes, bytes.right)) {
           return yield* journalError("APPEND", "IO_FAILED", "published control event did not round-trip exactly")
@@ -644,7 +670,23 @@ export const makeGraphLoopControlJournalFileLayer = (root: string) =>
         return stored
       })
     })
-  }))
+  )
+
+/**
+ * Local POSIX-only, append-only research-control ledger. It is intentionally
+ * not a canonical HSWM store, an external notary, or distributed consensus.
+ */
+export const makeGraphLoopControlJournalFileLayer = (
+  root: string
+): Layer.Layer<GraphLoopControlJournal, GraphLoopControlJournalError> =>
+  Layer.effect(GraphLoopControlJournal, makeGraphLoopControlJournal(NodePosixFileSystem, root))
+
+/** The same ledger with its filesystem supplied as the `PosixFileSystem` service. */
+export const makeGraphLoopControlJournalFileLayerFromService = (
+  root: string
+): Layer.Layer<GraphLoopControlJournal, GraphLoopControlJournalError, PosixFileSystem> =>
+  Layer.effect(GraphLoopControlJournal, Effect.flatMap(PosixFileSystem, (fs) => makeGraphLoopControlJournal(fs, root)))
+
 
 const stateFor = (
   entries: ReadonlyArray<GraphLoopControlJournalEntry>

@@ -513,6 +513,8 @@ export {
   makeEphemeralLocalPermitIssuer,
   makeLocalPermitCommitStore,
   makeLocalPermitVerifierContext,
+  LocalPermitCommitStoreService,
+  makeLocalPermitCommitStoreLayer,
   type LocalPermitCommitErrorCode,
   type LocalPermitCommitReceipt,
   type LocalPermitCommitRequest,
@@ -528,8 +530,43 @@ export {
 } from "./canonical-atom-v2-local-permit-commit.js"
 export {
   HSWM_LOCAL_PERMIT_COMMIT_PROCESS_CLAIM_BOUNDARY,
-  HSWM_LOCAL_PERMIT_COMMIT_PROCESS_V1_CONTRACT_VERSION
+  HSWM_LOCAL_PERMIT_COMMIT_PROCESS_V1_CONTRACT_VERSION,
+  describeLocalPermitCommitProcessFailure,
+  executeLocalPermitCommitProcess,
+  type LocalPermitCommitProcessError
 } from "./canonical-atom-v2-local-permit-commit-process.js"
+export {
+  BoundedSubprocess,
+  HSWM_EFFECT_POSIX_SERVICES_V1,
+  NodeBoundedSubprocessLive,
+  NodePosixFileSystem,
+  NodePosixFileSystemLive,
+  NodePosixServicesLive,
+  PosixFileSystem,
+  PosixIoError,
+  SubprocessError,
+  type BoundedReadOptions,
+  type BoundedReadResult,
+  type BoundedSubprocessShape,
+  type DirectoryEntry,
+  type PosixFileSystemShape,
+  type PosixIoErrorCode,
+  type PosixPathIdentity,
+  type SubprocessCommand,
+  type SubprocessObservation
+} from "./effect-posix-services.js"
+export {
+  DEFAULT_MAX_STDIN_BYTES,
+  HSWM_PROCESS_MAIN_V1,
+  ProcessRefusal,
+  decodeStdinRequest,
+  encodeReply,
+  nodeProcessIo,
+  refuse,
+  runProcessMain,
+  type ProcessIo,
+  type ProcessMainSpec
+} from "./effect-process-main.js"
 export {
   HSWM_VERIFIED_ADMISSION_GATEWAY_STATUS,
   HSWM_VERIFIED_ADMISSION_GATEWAY_V1,

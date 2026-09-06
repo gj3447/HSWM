@@ -6,11 +6,9 @@ import {
   sign as signMessage,
   type KeyObject
 } from "node:crypto"
-import { constants } from "node:fs"
-import { link, mkdir, open, readdir, unlink } from "node:fs/promises"
 import { dirname, join } from "node:path"
 
-import { Data, Effect, Either, Schema } from "effect"
+import { Context, Data, Effect, Either, Layer, Schema } from "effect"
 
 import {
   assembleCanonicalPermitEnvelope,
@@ -27,6 +25,12 @@ import {
   type CanonicalPermitTrustSnapshot
 } from "./canonical-atom-v2-permit-envelope.js"
 import { canonicalJsonBytes, decodeCanonicalJsonBytes } from "./canonical-atom-v2-json.js"
+import {
+  NodePosixFileSystem,
+  PosixFileSystem,
+  type PosixFileSystemShape,
+  type PosixIoError
+} from "./effect-posix-services.js"
 
 /**
  * A deliberately narrow local occurrence adapter.  A successful receipt says
@@ -145,52 +149,133 @@ const validHeadTransition = (prior: CanonicalPermitHeadBinding, next: CanonicalP
   prior.lineageId === next.lineageId && prior.sequence < Number.MAX_SAFE_INTEGER &&
   next.sequence === prior.sequence + 1
 
-const syncDirectory = async (path: string): Promise<void> => {
-  const handle = await open(path, constants.O_RDONLY | constants.O_DIRECTORY | constants.O_NOFOLLOW)
-  try { await handle.sync() } finally { await handle.close() }
-}
+const FS_OPERATION = "local-permit-commit"
 
-const readStableCommitFile = async (
+const syncDirectory = (fs: PosixFileSystemShape, path: string): Effect.Effect<void, PosixIoError> =>
+  fs.syncDirectory(path, FS_OPERATION)
+
+/** Bounded 0400 slot read whose file identity is re-checked after the read. */
+const readStableCommitFile = (
+  fs: PosixFileSystemShape,
   path: string,
   errorCode: "RECOVERY_INVALID" | "COMMIT_OUTCOME_UNKNOWN",
   maximumBytes = MAX_LOCAL_RECORD_BYTES
-): Promise<Uint8Array> => {
-  let handle
-  try {
-    handle = await open(path, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK)
-  } catch {
-    throw failure(errorCode, "local commit slot cannot be opened as a regular file")
-  }
-  try {
-    const before = await handle.stat()
-    if (!before.isFile() || (before.mode & 0o777) !== 0o400 || before.size < 1 || before.size > maximumBytes) {
-      throw failure(errorCode, "local commit slot must be an immutable bounded 0400 regular file")
-    }
-    const buffer = Buffer.alloc(before.size + 1)
-    let total = 0
-    while (total < buffer.byteLength) {
-      const result = await handle.read(buffer, total, buffer.byteLength - total, total)
-      if (result.bytesRead === 0) break
-      total += result.bytesRead
-    }
-    const after = await handle.stat()
-    if (total !== before.size || after.dev !== before.dev || after.ino !== before.ino ||
-        after.size !== before.size || (after.mode & 0o777) !== 0o400) {
-      throw failure(errorCode, "local commit slot changed during its bounded read")
-    }
-    return Uint8Array.from(buffer.subarray(0, total))
-  } finally {
-    await handle.close()
-  }
-}
+): Effect.Effect<Uint8Array, LocalPermitCommitError> =>
+  fs.readRegularBounded(path, { maximumBytes, minimumBytes: 1, requiredMode: 0o400, operation: FS_OPERATION }).pipe(
+    Effect.map((result) => result.bytes),
+    Effect.mapError((cause) =>
+      cause.code === "IDENTITY_CHANGED"
+        ? failure(errorCode, "local commit slot changed during its bounded read")
+        : cause.code === "NOT_REGULAR_FILE" || cause.code === "MODE_INVALID" || cause.code === "BYTE_BOUND_EXCEEDED"
+          ? failure(errorCode, "local commit slot must be an immutable bounded 0400 regular file")
+          : failure(errorCode, "local commit slot cannot be opened as a regular file")
+    )
+  )
 
 /** fsync the immediate namespace parents involved in a first local publication. */
-const initializeCommitDirectories = async (rootPath: string, root: string, commitsRoot: string): Promise<void> => {
-  await mkdir(commitsRoot, { recursive: true, mode: 0o700 })
-  await syncDirectory(dirname(rootPath))
-  await syncDirectory(rootPath)
-  await syncDirectory(root)
-  await syncDirectory(commitsRoot)
+const initializeCommitDirectories = (
+  fs: PosixFileSystemShape,
+  rootPath: string,
+  root: string,
+  commitsRoot: string,
+  label: string
+): Effect.Effect<void, LocalPermitCommitError> =>
+  Effect.gen(function* () {
+    yield* fs.makeDirectory(commitsRoot, { mode: 0o700, recursive: true, operation: FS_OPERATION })
+    yield* syncDirectory(fs, dirname(rootPath))
+    yield* syncDirectory(fs, rootPath)
+    yield* syncDirectory(fs, root)
+    yield* syncDirectory(fs, commitsRoot)
+  }).pipe(Effect.mapError(() => failure("IO_FAILED", `cannot initialize and fsync ${label}`)))
+
+const listLineageDirectories = (
+  fs: PosixFileSystemShape,
+  commitsRoot: string,
+  label: string
+): Effect.Effect<ReadonlyArray<string>, LocalPermitCommitError> =>
+  Effect.gen(function* () {
+    const entries = yield* fs.listDirectory(commitsRoot, FS_OPERATION).pipe(
+      Effect.mapError(() => failure("IO_FAILED", `${label} recovery I/O failed`))
+    )
+    if (entries.some((entry) => entry.kind !== "DIRECTORY" || !/^[0-9a-f]{64}$/.test(entry.name))) {
+      return yield* Effect.fail(failure("RECOVERY_INVALID", `${label} contains an unexpected or non-directory entry`))
+    }
+    if (entries.length > 1) {
+      return yield* Effect.fail(failure("RECOVERY_INVALID", `one ${label} may recover exactly one connected lineage`))
+    }
+    return entries.map((entry) => entry.name)
+  })
+
+const listFinalSlots = (
+  fs: PosixFileSystemShape,
+  base: string,
+  label: string
+): Effect.Effect<ReadonlyArray<string>, LocalPermitCommitError> =>
+  Effect.gen(function* () {
+    const entries = yield* fs.listDirectory(base, FS_OPERATION).pipe(
+      Effect.mapError(() => failure("IO_FAILED", `${label} recovery I/O failed`))
+    )
+    // A recognized private staging file has no committed meaning.  It can
+    // remain after process death before or after the no-replace hard link.
+    if (entries.some((entry) => entry.kind !== "FILE" || (!FINAL_SLOT.test(entry.name) && !PRIVATE_STAGING_SLOT.test(entry.name)))) {
+      return yield* Effect.fail(failure("RECOVERY_INVALID", `${label} lineage directory contains an unexpected entry`))
+    }
+    return entries.filter((entry) => FINAL_SLOT.test(entry.name)).map((entry) => entry.name)
+  })
+
+interface SlotPublication {
+  readonly rootPath: string
+  readonly root: string
+  readonly commitsRoot: string
+  readonly directory: string
+  readonly path: string
+  readonly temporaryPath: string
+  readonly bytes: Uint8Array
+  readonly maximumBytes: number
+  readonly checkpoint: LocalPermitCommitCheckpoint
+  readonly label: string
+}
+
+/**
+ * One no-replace slot publication: exclusive private staging file, fsync,
+ * hard link into the final slot, directory fsync, exact readback, and
+ * unconditional staging cleanup.  Every failure is a typed value.
+ */
+const publishSlot = (fs: PosixFileSystemShape, publication: SlotPublication): Effect.Effect<void, LocalPermitCommitError> => {
+  const unknown = (detail: string) => () => failure("COMMIT_OUTCOME_UNKNOWN", detail)
+  const staged = Effect.gen(function* () {
+    yield* fs.writeExclusive(publication.temporaryPath, publication.bytes, { mode: 0o600, finalMode: 0o400, sync: true, operation: FS_OPERATION }).pipe(
+      Effect.mapError(unknown(`${publication.label} write outcome is unknown; recover before retrying`))
+    )
+    publication.checkpoint("prepared-file-fsync:after")
+    yield* fs.linkNoReplace(publication.temporaryPath, publication.path, FS_OPERATION).pipe(
+      Effect.mapError((cause) =>
+        cause.code === "EEXIST"
+          ? failure("SLOT_ALREADY_COMMITTED", `${publication.label} journal slot was already committed by another writer`)
+          : cause.code === "ENOSYS" || cause.code === "ENOTSUP" || cause.code === "EOPNOTSUPP" || cause.code === "EXDEV"
+            ? failure("ATOMIC_PUBLICATION_UNSUPPORTED", `local filesystem cannot provide no-replace hard-link publication: ${cause.code}`)
+            : failure("COMMIT_OUTCOME_UNKNOWN", `${publication.label} journal hard-link outcome is unknown; recover before retrying`)
+      )
+    )
+    publication.checkpoint("slot-link:after")
+    yield* syncDirectory(fs, publication.directory).pipe(Effect.mapError(unknown(`${publication.label} slot directory sync outcome is unknown; recover before retrying`)))
+    const exact = yield* readStableCommitFile(fs, publication.path, "COMMIT_OUTCOME_UNKNOWN", publication.maximumBytes)
+    if (!identicalBytes(exact, publication.bytes)) {
+      return yield* Effect.fail(failure("COMMIT_OUTCOME_UNKNOWN", `published ${publication.label} slot differs on exact readback`))
+    }
+  })
+  return Effect.gen(function* () {
+    yield* initializeCommitDirectories(fs, publication.rootPath, publication.root, publication.commitsRoot, `${publication.label} commit root`).pipe(
+      Effect.mapError(unknown(`${publication.label} write outcome is unknown; recover before retrying`))
+    )
+    yield* fs.makeDirectory(publication.directory, { mode: 0o700, recursive: true, operation: FS_OPERATION }).pipe(
+      Effect.mapError(unknown(`${publication.label} write outcome is unknown; recover before retrying`))
+    )
+    yield* syncDirectory(fs, publication.commitsRoot).pipe(Effect.mapError(unknown(`${publication.label} write outcome is unknown; recover before retrying`)))
+    yield* syncDirectory(fs, publication.directory).pipe(Effect.mapError(unknown(`${publication.label} write outcome is unknown; recover before retrying`)))
+    // An orphan private staging file is not committed; its removal never changes the outcome.
+    yield* staged.pipe(Effect.ensuring(fs.unlinkIfPresent(publication.temporaryPath, FS_OPERATION).pipe(Effect.ignore)))
+  })
 }
 
 export interface LocalPermitIssuerConfig {
@@ -436,6 +521,7 @@ const boundedStateBytes = (bytes: Uint8Array): Either.Either<Uint8Array, LocalPe
     : Either.left(failure("INPUT_INVALID", "local state bytes must be nonempty and bounded"))
 
 const makeLocalPermitCommitStoreInternal = (
+  fs: PosixFileSystemShape,
   rootPath: string,
   verifier: LocalPermitVerifierContext,
   clock: () => Date,
@@ -447,73 +533,55 @@ const makeLocalPermitCommitStoreInternal = (
   const root = join(rootPath, namespace)
   const commitsRoot = join(root, "commits")
   const approvals = new WeakMap<object, true>()
-  const recover = (): Effect.Effect<LocalPermitRecovery, LocalPermitCommitError> => Effect.tryPromise({
-    try: async () => {
-      try { await initializeCommitDirectories(rootPath, root, commitsRoot) } catch { throw failure("IO_FAILED", "cannot initialize and fsync local commit root") }
-      const directories = await readdir(commitsRoot, { withFileTypes: true })
-      if (directories.some((entry) => !entry.isDirectory() || !/^[0-9a-f]{64}$/.test(entry.name))) {
-        throw failure("RECOVERY_INVALID", "local commit root contains an unexpected or non-directory entry")
-      }
-      const lineageDirectories = directories.filter((entry) => entry.isDirectory())
-      if (lineageDirectories.length > 1) {
-        throw failure("RECOVERY_INVALID", "one local commit store may recover exactly one connected lineage")
-      }
-      const receipts: LocalPermitCommitReceipt[] = []
-      for (const directory of lineageDirectories) {
-        const base = join(commitsRoot, directory.name)
-        const entries = await readdir(base, { withFileTypes: true })
-        if (entries.some((entry) => !entry.isFile() || (!FINAL_SLOT.test(entry.name) && !PRIVATE_STAGING_SLOT.test(entry.name)))) {
-          throw failure("RECOVERY_INVALID", "local lineage directory contains an unexpected entry")
+  const recover = (): Effect.Effect<LocalPermitRecovery, LocalPermitCommitError> => Effect.gen(function* () {
+    yield* initializeCommitDirectories(fs, rootPath, root, commitsRoot, "local commit root")
+    const lineageDirectories = yield* listLineageDirectories(fs, commitsRoot, "local commit root")
+    const receipts: LocalPermitCommitReceipt[] = []
+    for (const directoryName of lineageDirectories) {
+      const base = join(commitsRoot, directoryName)
+      const slots = yield* listFinalSlots(fs, base, "local commit root")
+      let previous: LocalPermitCommitRecord | null = null
+      let previousPostState: Uint8Array | null = null
+      const nonces = new Set<string>()
+      for (const slotName of slots) {
+        const bytes = yield* readStableCommitFile(fs, join(base, slotName), "RECOVERY_INVALID")
+        const record = decodeRecord(bytes)
+        if (Either.isLeft(record)) return yield* Effect.fail(record.left)
+        const envelope = decodeCanonicalPermitEnvelopeBytes(Buffer.from(record.right.envelopeBytesBase64Url, "base64url"))
+        if (Either.isLeft(envelope) || digest(Buffer.from(record.right.envelopeBytesBase64Url, "base64url")) !== record.right.envelopeSha256) {
+          return yield* Effect.fail(failure("RECOVERY_INVALID", "commit record envelope bytes are invalid or digest-mismatched"))
         }
-        // A recognized private staging file has no committed meaning.  It can
-        // remain after process death before or after the no-replace hard link.
-        const slots = entries
-          .filter((entry) => FINAL_SLOT.test(entry.name))
-          .sort((a, b) => a.name.localeCompare(b.name))
-        let previous: LocalPermitCommitRecord | null = null
-        let previousPostState: Uint8Array | null = null
-        const nonces = new Set<string>()
-        for (const slot of slots) {
-          const bytes = await readStableCommitFile(join(base, slot.name), "RECOVERY_INVALID")
-          const record = decodeRecord(bytes)
-          if (Either.isLeft(record)) throw record.left
-          const envelope = decodeCanonicalPermitEnvelopeBytes(Buffer.from(record.right.envelopeBytesBase64Url, "base64url"))
-          if (Either.isLeft(envelope) || digest(Buffer.from(record.right.envelopeBytesBase64Url, "base64url")) !== record.right.envelopeSha256) {
-            throw failure("RECOVERY_INVALID", "commit record envelope bytes are invalid or digest-mismatched")
-          }
-          const verification = verifyCanonicalPermitEnvelopeAgainstCallerSuppliedContext(
-            Buffer.from(record.right.envelopeBytesBase64Url, "base64url"), expectedFromClaims(envelope.right.claims), verifier.trustSnapshotBytes, record.right.verificationTime
-          )
-          if (Either.isLeft(verification)) throw failure("RECOVERY_INVALID", "commit record signature or local trust binding does not verify")
-          const claims = envelope.right.claims
-          const preState = strictStateBytes(record.right.preStateBytesBase64Url)
-          const postState = strictStateBytes(record.right.postStateBytesBase64Url)
-          if (Either.isLeft(preState) || Either.isLeft(postState)) {
-            throw failure("RECOVERY_INVALID", "commit record has invalid local state bytes")
-          }
-          if (record.right.committedAt !== record.right.verificationTime ||
-              claims.executionIntentDigest !== record.right.executionIntentDigest || claims.nonceDigest !== record.right.nonceDigest ||
-              !identicalHead(claims.priorHead, record.right.priorHead) || !identicalHead(claims.expectedNextHead, record.right.expectedNextHead) ||
-              digest(preState.right) !== claims.priorHead.stateDigest || digest(postState.right) !== claims.expectedNextHead.stateDigest ||
-              !validHeadTransition(claims.priorHead, claims.expectedNextHead) ||
-              directory.name !== lineageDirectory(claims.expectedNextHead.lineageId) ||
-              Number(slot.name.slice(0, 16)) !== claims.expectedNextHead.sequence ||
-              (previous === null
-                ? claims.priorHead.sequence !== 0
-                : (!identicalHead(previous.expectedNextHead, claims.priorHead) || previousPostState === null || !identicalBytes(previousPostState, preState.right))) ||
-              nonces.has(claims.nonceDigest)) {
-            throw failure("RECOVERY_INVALID", "commit record does not form a one-shot contiguous local journal")
-          }
-          nonces.add(claims.nonceDigest)
-          previous = record.right
-          previousPostState = postState.right
-          receipts.push(Object.freeze({ recordSha256: digest(bytes), slotPath: join(base, slot.name), nonceDigest: claims.nonceDigest, executionIntentDigest: claims.executionIntentDigest, priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead }), verificationTime: record.right.verificationTime, postStateBytes: Uint8Array.from(postState.right), status: HSWM_LOCAL_PERMIT_COMMIT_STATUS }))
+        const verification = verifyCanonicalPermitEnvelopeAgainstCallerSuppliedContext(
+          Buffer.from(record.right.envelopeBytesBase64Url, "base64url"), expectedFromClaims(envelope.right.claims), verifier.trustSnapshotBytes, record.right.verificationTime
+        )
+        if (Either.isLeft(verification)) return yield* Effect.fail(failure("RECOVERY_INVALID", "commit record signature or local trust binding does not verify"))
+        const claims = envelope.right.claims
+        const preState = strictStateBytes(record.right.preStateBytesBase64Url)
+        const postState = strictStateBytes(record.right.postStateBytesBase64Url)
+        if (Either.isLeft(preState) || Either.isLeft(postState)) {
+          return yield* Effect.fail(failure("RECOVERY_INVALID", "commit record has invalid local state bytes"))
         }
+        if (record.right.committedAt !== record.right.verificationTime ||
+            claims.executionIntentDigest !== record.right.executionIntentDigest || claims.nonceDigest !== record.right.nonceDigest ||
+            !identicalHead(claims.priorHead, record.right.priorHead) || !identicalHead(claims.expectedNextHead, record.right.expectedNextHead) ||
+            digest(preState.right) !== claims.priorHead.stateDigest || digest(postState.right) !== claims.expectedNextHead.stateDigest ||
+            !validHeadTransition(claims.priorHead, claims.expectedNextHead) ||
+            directoryName !== lineageDirectory(claims.expectedNextHead.lineageId) ||
+            Number(slotName.slice(0, 16)) !== claims.expectedNextHead.sequence ||
+            (previous === null
+              ? claims.priorHead.sequence !== 0
+              : (!identicalHead(previous.expectedNextHead, claims.priorHead) || previousPostState === null || !identicalBytes(previousPostState, preState.right))) ||
+            nonces.has(claims.nonceDigest)) {
+          return yield* Effect.fail(failure("RECOVERY_INVALID", "commit record does not form a one-shot contiguous local journal"))
+        }
+        nonces.add(claims.nonceDigest)
+        previous = record.right
+        previousPostState = postState.right
+        receipts.push(Object.freeze({ recordSha256: digest(bytes), slotPath: join(base, slotName), nonceDigest: claims.nonceDigest, executionIntentDigest: claims.executionIntentDigest, priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead }), verificationTime: record.right.verificationTime, postStateBytes: Uint8Array.from(postState.right), status: HSWM_LOCAL_PERMIT_COMMIT_STATUS }))
       }
-      const heads = receipts.map((receipt) => receipt.expectedNextHead)
-      return Object.freeze({ commits: Object.freeze(receipts), head: heads.length === 0 ? null : Object.freeze({ ...heads[heads.length - 1]! }), status: HSWM_LOCAL_PERMIT_COMMIT_STATUS })
-    },
-    catch: (cause) => cause instanceof LocalPermitCommitError ? cause : failure("IO_FAILED", "local commit recovery I/O failed")
+    }
+    const heads = receipts.map((receipt) => receipt.expectedNextHead)
+    return Object.freeze({ commits: Object.freeze(receipts), head: heads.length === 0 ? null : Object.freeze({ ...heads[heads.length - 1]! }), status: HSWM_LOCAL_PERMIT_COMMIT_STATUS })
   })
 
   return Object.freeze({
@@ -593,56 +661,9 @@ const makeLocalPermitCommitStoreInternal = (
       }
       const encoded = canonicalJsonBytes(record)
       if (Either.isLeft(encoded)) return yield* Effect.fail(failure("INPUT_INVALID", "local commit record cannot be canonically encoded"))
-      yield* Effect.tryPromise({
-        try: async () => {
-          await initializeCommitDirectories(rootPath, root, commitsRoot)
-          await mkdir(directory, { recursive: true, mode: 0o700 })
-          await syncDirectory(commitsRoot)
-          await syncDirectory(directory)
-          let staged = false
-          try {
-            const handle = await open(
-              temporaryPath,
-              constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW,
-              0o600
-            )
-            staged = true
-            try {
-              await handle.writeFile(encoded.right)
-              await handle.chmod(0o400)
-              await handle.sync()
-            } finally {
-              await handle.close()
-            }
-            checkpoint("prepared-file-fsync:after")
-            try {
-              await link(temporaryPath, path)
-            } catch (cause) {
-              const code = typeof cause === "object" && cause !== null && "code" in cause ? String(cause.code) : ""
-              if (code === "EEXIST") throw failure("SLOT_ALREADY_COMMITTED", "local journal slot was already committed by another writer")
-              if (["ENOSYS", "ENOTSUP", "EOPNOTSUPP", "EXDEV"].includes(code)) {
-                throw failure("ATOMIC_PUBLICATION_UNSUPPORTED", `local filesystem cannot provide no-replace hard-link publication: ${code}`)
-              }
-              throw failure("COMMIT_OUTCOME_UNKNOWN", "local journal hard-link outcome is unknown; recover before retrying")
-            }
-            checkpoint("slot-link:after")
-            await syncDirectory(directory)
-            const exact = await readStableCommitFile(path, "COMMIT_OUTCOME_UNKNOWN")
-            if (!identicalBytes(exact, encoded.right)) {
-              throw failure("COMMIT_OUTCOME_UNKNOWN", "published local journal slot differs on exact readback")
-            }
-          } finally {
-            if (staged) {
-              try { await unlink(temporaryPath) } catch { /* an orphan private staging file is not committed */ }
-            }
-          }
-        },
-        catch: (cause) => {
-          if (cause instanceof LocalPermitCommitError) return cause
-          const code = typeof cause === "object" && cause !== null && "code" in cause && cause.code === "EEXIST"
-            ? "SLOT_ALREADY_COMMITTED" : "COMMIT_OUTCOME_UNKNOWN"
-          return failure(code, code === "SLOT_ALREADY_COMMITTED" ? "local journal slot was already committed by another writer" : "write outcome is unknown; recover before retrying")
-        }
+      yield* publishSlot(fs, {
+        rootPath, root, commitsRoot, directory, path, temporaryPath, bytes: encoded.right,
+        maximumBytes: MAX_LOCAL_RECORD_BYTES, checkpoint, label: "local"
       })
       const receipt = Object.freeze({ recordSha256: digest(encoded.right), slotPath: path, nonceDigest: claims.nonceDigest, executionIntentDigest: claims.executionIntentDigest, priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead }), verificationTime: verifiedAt, postStateBytes: Uint8Array.from(postState.right), status: HSWM_LOCAL_PERMIT_COMMIT_STATUS })
       published?.(receipt, admission)
@@ -651,11 +672,28 @@ const makeLocalPermitCommitStoreInternal = (
   })
 }
 
+
 export const makeLocalPermitCommitStore = (
   rootPath: string,
   verifier: LocalPermitVerifierContext,
   clock: () => Date = () => new Date()
-): LocalPermitCommitStore => makeLocalPermitCommitStoreInternal(rootPath, verifier, clock, () => undefined)
+): LocalPermitCommitStore => makeLocalPermitCommitStoreInternal(NodePosixFileSystem, rootPath, verifier, clock, () => undefined)
+
+/** Effect-native service form of the v1 store; the Layer requires the POSIX filesystem service. */
+export class LocalPermitCommitStoreService extends Context.Tag("hswm/LocalPermitCommitStore")<
+  LocalPermitCommitStoreService,
+  LocalPermitCommitStore
+>() {}
+
+export const makeLocalPermitCommitStoreLayer = (
+  rootPath: string,
+  verifier: LocalPermitVerifierContext,
+  clock: () => Date = () => new Date()
+): Layer.Layer<LocalPermitCommitStoreService, never, PosixFileSystem> =>
+  Layer.effect(
+    LocalPermitCommitStoreService,
+    Effect.map(PosixFileSystem, (fs) => makeLocalPermitCommitStoreInternal(fs, rootPath, verifier, clock, () => undefined))
+  )
 
 /** Package-root-private seam used only by independent-process crash tests. */
 export const makeLocalPermitCommitStoreWithCheckpointForTest = (
@@ -665,6 +703,7 @@ export const makeLocalPermitCommitStoreWithCheckpointForTest = (
   selected: LocalPermitCommitPublicationCheckpointForTest,
   onCheckpoint: () => void
 ): LocalPermitCommitStore => makeLocalPermitCommitStoreInternal(
+  NodePosixFileSystem,
   rootPath,
   verifier,
   clock,
@@ -680,7 +719,7 @@ export const makeVerifiedAdmissionCommitBackend = (
 ): VerifiedAdmissionCommitBackend => {
   const publishedAdmissions = new WeakMap<LocalPermitCommitReceipt, object>()
   const store = makeLocalPermitCommitStoreInternal(
-    rootPath, verifier, clock, () => undefined, "verified-admission-commits-v1", admission,
+    NodePosixFileSystem, rootPath, verifier, clock, () => undefined, "verified-admission-commits-v1", admission,
     (receipt, token) => { if (token !== undefined) publishedAdmissions.set(receipt, token) }
   )
   return Object.freeze({
@@ -693,6 +732,7 @@ export const makeVerifiedAdmissionCommitBackend = (
     recover: store.recover
   })
 }
+
 
 /*
  * V2 deliberately does not alter the v1 protected namespace above.  Unlike
@@ -880,73 +920,70 @@ export const makeVerifiedAdmissionCommitBackendV2 = (
   verifier: LocalPermitVerifierContext,
   admission: VerifiedAdmissionHookV2,
   validateRecoveredAdmission: VerifiedAdmissionRecoveryValidator,
-  clock: () => Date = () => new Date()
+  clock: () => Date = () => new Date(),
+  fs: PosixFileSystemShape = NodePosixFileSystem
 ): VerifiedAdmissionCommitBackendV2 => {
   const root = join(rootPath, "verified-admission-commits-v2")
   const commitsRoot = join(root, "commits")
   const approvals = new WeakMap<object, VerifiedAdmissionDecisionArtifact>()
-  const recover = (): Effect.Effect<VerifiedAdmissionRecoveryV2, LocalPermitCommitError> => Effect.tryPromise({
-    try: async () => {
-      try { await initializeCommitDirectories(rootPath, root, commitsRoot) } catch { throw failure("IO_FAILED", "cannot initialize and fsync verified-admission v2 commit root") }
-      const directories = await readdir(commitsRoot, { withFileTypes: true })
-      if (directories.some((entry) => !entry.isDirectory() || !/^[0-9a-f]{64}$/.test(entry.name))) throw failure("RECOVERY_INVALID", "verified-admission v2 commit root contains an unexpected entry")
-      const lineageDirectories = directories.filter((entry) => entry.isDirectory())
-      if (lineageDirectories.length > 1) throw failure("RECOVERY_INVALID", "one verified-admission v2 store may recover exactly one connected lineage")
-      const receipts: VerifiedAdmissionCommitV2Receipt[] = []
-      for (const directory of lineageDirectories) {
-        const base = join(commitsRoot, directory.name)
-        const entries = await readdir(base, { withFileTypes: true })
-        if (entries.some((entry) => !entry.isFile() || (!FINAL_SLOT.test(entry.name) && !PRIVATE_STAGING_SLOT.test(entry.name)))) throw failure("RECOVERY_INVALID", "verified-admission v2 lineage contains an unexpected entry")
-        const slots = entries.filter((entry) => FINAL_SLOT.test(entry.name)).sort((a, b) => a.name.localeCompare(b.name))
-        let previous: VerifiedAdmissionCommitRecordV2 | null = null
-        let previousPostState: Uint8Array | null = null
-        const nonces = new Set<string>()
-        for (const slot of slots) {
-          const bytes = await readStableCommitFile(join(base, slot.name), "RECOVERY_INVALID", MAX_VERIFIED_ADMISSION_RECORD_BYTES)
-          if (bytes.byteLength > MAX_VERIFIED_ADMISSION_RECORD_BYTES) throw failure("RECOVERY_INVALID", "verified-admission v2 record exceeds its bounded size")
-          const record = decodeVerifiedAdmissionRecordV2(bytes)
-          if (Either.isLeft(record)) throw record.left
-          const envelopeBytes = exactBase64UrlBytes(record.right.envelopeBytesBase64Url, MAX_LOCAL_RECORD_BYTES, "RECOVERY_INVALID")
-          if (Either.isLeft(envelopeBytes)) throw failure("RECOVERY_INVALID", "verified-admission v2 envelope bytes are invalid or noncanonical")
-          const envelope = decodeCanonicalPermitEnvelopeBytes(envelopeBytes.right)
-          if (Either.isLeft(envelope) || digest(envelopeBytes.right) !== record.right.envelopeSha256) throw failure("RECOVERY_INVALID", "verified-admission v2 envelope bytes are invalid or digest-mismatched")
-          const verification = verifyCanonicalPermitEnvelopeAgainstCallerSuppliedContext(envelopeBytes.right, expectedFromClaims(envelope.right.claims), verifier.trustSnapshotBytes, record.right.verificationTime)
-          if (Either.isLeft(verification)) throw failure("RECOVERY_INVALID", "verified-admission v2 record signature or local trust binding does not verify")
-          const preState = strictStateBytes(record.right.preStateBytesBase64Url)
-          const postState = strictStateBytes(record.right.postStateBytesBase64Url)
-          const artifact = restorePersistedArtifact(record.right.verifiedAdmission)
-          if (Either.isLeft(preState) || Either.isLeft(postState) || Either.isLeft(artifact)) throw failure("RECOVERY_INVALID", "verified-admission v2 record has invalid state or decision artifact bytes")
-          const claims = envelope.right.claims
-          if (record.right.committedAt !== record.right.verificationTime || claims.executionIntentDigest !== record.right.executionIntentDigest || claims.nonceDigest !== record.right.nonceDigest ||
-              !identicalHead(claims.priorHead, record.right.priorHead) || !identicalHead(claims.expectedNextHead, record.right.expectedNextHead) ||
-              digest(preState.right) !== claims.priorHead.stateDigest || digest(postState.right) !== claims.expectedNextHead.stateDigest || !validHeadTransition(claims.priorHead, claims.expectedNextHead) ||
-              directory.name !== lineageDirectory(claims.expectedNextHead.lineageId) || Number(slot.name.slice(0, 16)) !== claims.expectedNextHead.sequence ||
-              (previous === null ? claims.priorHead.sequence !== 0 : (!identicalHead(previous.expectedNextHead, claims.priorHead) || previousPostState === null || !identicalBytes(previousPostState, preState.right))) || nonces.has(claims.nonceDigest)) {
-            throw failure("RECOVERY_INVALID", "verified-admission v2 record does not form a one-shot contiguous local journal")
-          }
-          const priorReceipts = receipts.map((entry) => entry.commit)
-          const preflight: VerifiedAdmissionPreflight = Object.freeze({
-            view: Object.freeze({ head: previous === null ? null : Object.freeze({ ...previous.expectedNextHead }), consumedNonces: Object.freeze(priorReceipts.map((entry) => entry.nonceDigest).reverse()) }),
-            record: Object.freeze({ committedAt: record.right.committedAt, verificationTime: record.right.verificationTime, envelopeDigest: record.right.envelopeSha256, executionIntentDigest: record.right.executionIntentDigest, nonceDigest: record.right.nonceDigest, priorHead: Object.freeze({ ...record.right.priorHead }), expectedNextHead: Object.freeze({ ...record.right.expectedNextHead }) })
-          })
-          let semantic: Either.Either<void, LocalPermitCommitError>
-          try {
-            semantic = validateRecoveredAdmission(preflight, artifact.right)
-          } catch {
-            throw failure("RECOVERY_INVALID", "verified-admission v2 semantic validator threw during recovery")
-          }
-          if (Either.isLeft(semantic)) throw failure("RECOVERY_INVALID", `verified-admission v2 semantic validation rejected record: ${semantic.left.detail}`)
-          nonces.add(claims.nonceDigest)
-          previous = record.right
-          previousPostState = postState.right
-          const commit = Object.freeze({ recordSha256: digest(bytes), slotPath: join(base, slot.name), nonceDigest: claims.nonceDigest, executionIntentDigest: claims.executionIntentDigest, priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead }), verificationTime: record.right.verificationTime, postStateBytes: Uint8Array.from(postState.right), status: HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS })
-          receipts.push(Object.freeze({ commit, decision: artifact.right }))
+  const recover = (): Effect.Effect<VerifiedAdmissionRecoveryV2, LocalPermitCommitError> => Effect.gen(function* () {
+    yield* initializeCommitDirectories(fs, rootPath, root, commitsRoot, "verified-admission v2 commit root")
+    const lineageDirectories = yield* listLineageDirectories(fs, commitsRoot, "verified-admission v2 commit root")
+    const receipts: VerifiedAdmissionCommitV2Receipt[] = []
+    for (const directoryName of lineageDirectories) {
+      const base = join(commitsRoot, directoryName)
+      const slots = yield* listFinalSlots(fs, base, "verified-admission v2")
+      let previous: VerifiedAdmissionCommitRecordV2 | null = null
+      let previousPostState: Uint8Array | null = null
+      const nonces = new Set<string>()
+      for (const slotName of slots) {
+        const bytes = yield* readStableCommitFile(fs, join(base, slotName), "RECOVERY_INVALID", MAX_VERIFIED_ADMISSION_RECORD_BYTES)
+        if (bytes.byteLength > MAX_VERIFIED_ADMISSION_RECORD_BYTES) return yield* Effect.fail(failure("RECOVERY_INVALID", "verified-admission v2 record exceeds its bounded size"))
+        const record = decodeVerifiedAdmissionRecordV2(bytes)
+        if (Either.isLeft(record)) return yield* Effect.fail(record.left)
+        const envelopeBytes = exactBase64UrlBytes(record.right.envelopeBytesBase64Url, MAX_LOCAL_RECORD_BYTES, "RECOVERY_INVALID")
+        if (Either.isLeft(envelopeBytes)) return yield* Effect.fail(failure("RECOVERY_INVALID", "verified-admission v2 envelope bytes are invalid or noncanonical"))
+        const envelope = decodeCanonicalPermitEnvelopeBytes(envelopeBytes.right)
+        if (Either.isLeft(envelope) || digest(envelopeBytes.right) !== record.right.envelopeSha256) return yield* Effect.fail(failure("RECOVERY_INVALID", "verified-admission v2 envelope bytes are invalid or digest-mismatched"))
+        const verification = verifyCanonicalPermitEnvelopeAgainstCallerSuppliedContext(envelopeBytes.right, expectedFromClaims(envelope.right.claims), verifier.trustSnapshotBytes, record.right.verificationTime)
+        if (Either.isLeft(verification)) return yield* Effect.fail(failure("RECOVERY_INVALID", "verified-admission v2 record signature or local trust binding does not verify"))
+        const preState = strictStateBytes(record.right.preStateBytesBase64Url)
+        const postState = strictStateBytes(record.right.postStateBytesBase64Url)
+        const artifact = restorePersistedArtifact(record.right.verifiedAdmission)
+        if (Either.isLeft(preState) || Either.isLeft(postState) || Either.isLeft(artifact)) return yield* Effect.fail(failure("RECOVERY_INVALID", "verified-admission v2 record has invalid state or decision artifact bytes"))
+        const claims = envelope.right.claims
+        if (record.right.committedAt !== record.right.verificationTime || claims.executionIntentDigest !== record.right.executionIntentDigest || claims.nonceDigest !== record.right.nonceDigest ||
+            !identicalHead(claims.priorHead, record.right.priorHead) || !identicalHead(claims.expectedNextHead, record.right.expectedNextHead) ||
+            digest(preState.right) !== claims.priorHead.stateDigest || digest(postState.right) !== claims.expectedNextHead.stateDigest || !validHeadTransition(claims.priorHead, claims.expectedNextHead) ||
+            directoryName !== lineageDirectory(claims.expectedNextHead.lineageId) || Number(slotName.slice(0, 16)) !== claims.expectedNextHead.sequence ||
+            (previous === null ? claims.priorHead.sequence !== 0 : (!identicalHead(previous.expectedNextHead, claims.priorHead) || previousPostState === null || !identicalBytes(previousPostState, preState.right))) || nonces.has(claims.nonceDigest)) {
+          return yield* Effect.fail(failure("RECOVERY_INVALID", "verified-admission v2 record does not form a one-shot contiguous local journal"))
         }
+        const priorReceipts = receipts.map((entry) => entry.commit)
+        const preflight: VerifiedAdmissionPreflight = Object.freeze({
+          view: Object.freeze({ head: previous === null ? null : Object.freeze({ ...previous.expectedNextHead }), consumedNonces: Object.freeze(priorReceipts.map((entry) => entry.nonceDigest).reverse()) }),
+          record: Object.freeze({ committedAt: record.right.committedAt, verificationTime: record.right.verificationTime, envelopeDigest: record.right.envelopeSha256, executionIntentDigest: record.right.executionIntentDigest, nonceDigest: record.right.nonceDigest, priorHead: Object.freeze({ ...record.right.priorHead }), expectedNextHead: Object.freeze({ ...record.right.expectedNextHead }) })
+        })
+        const semantic = Either.try({
+          try: () => validateRecoveredAdmission(preflight, artifact.right),
+          catch: () => failure("RECOVERY_INVALID", "verified-admission v2 semantic validator threw during recovery")
+        }).pipe(Either.flatMap((inner) => inner))
+        if (Either.isLeft(semantic)) {
+          return yield* Effect.fail(
+            semantic.left.detail.startsWith("verified-admission v2 semantic validator threw")
+              ? semantic.left
+              : failure("RECOVERY_INVALID", `verified-admission v2 semantic validation rejected record: ${semantic.left.detail}`)
+          )
+        }
+        nonces.add(claims.nonceDigest)
+        previous = record.right
+        previousPostState = postState.right
+        const commit = Object.freeze({ recordSha256: digest(bytes), slotPath: join(base, slotName), nonceDigest: claims.nonceDigest, executionIntentDigest: claims.executionIntentDigest, priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead }), verificationTime: record.right.verificationTime, postStateBytes: Uint8Array.from(postState.right), status: HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS })
+        receipts.push(Object.freeze({ commit, decision: artifact.right }))
       }
-      const heads = receipts.map((entry) => entry.commit.expectedNextHead)
-      return Object.freeze({ commits: Object.freeze(receipts), head: heads.length === 0 ? null : Object.freeze({ ...heads[heads.length - 1]! }), status: HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS })
-    },
-    catch: (cause) => cause instanceof LocalPermitCommitError ? cause : failure("IO_FAILED", "verified-admission v2 recovery I/O failed")
+    }
+    const heads = receipts.map((entry) => entry.commit.expectedNextHead)
+    return Object.freeze({ commits: Object.freeze(receipts), head: heads.length === 0 ? null : Object.freeze({ ...heads[heads.length - 1]! }), status: HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS })
   })
   return Object.freeze({
     recover,
@@ -981,35 +1018,23 @@ export const makeVerifiedAdmissionCommitBackendV2 = (
       const artifact = approvals.get(approval)
       if (artifact === undefined) return yield* Effect.fail(failure("PERMIT_VERIFICATION_FAILED", "verified-admission v2 gate did not present a private approval with an exact artifact"))
       approvals.delete(approval)
-      let semantic: Either.Either<void, LocalPermitCommitError>
-      try {
-        semantic = validateRecoveredAdmission(preflight, artifact)
-      } catch {
-        return yield* Effect.fail(failure("PERMIT_VERIFICATION_FAILED", "verified-admission v2 semantic validator threw before publication"))
+      const semantic = Either.try({
+        try: () => validateRecoveredAdmission(preflight, artifact),
+        catch: () => failure("PERMIT_VERIFICATION_FAILED", "verified-admission v2 semantic validator threw before publication")
+      }).pipe(Either.flatMap((inner) => inner))
+      if (Either.isLeft(semantic)) {
+        return yield* Effect.fail(
+          semantic.left.detail.startsWith("verified-admission v2 semantic validator threw")
+            ? semantic.left
+            : failure("PERMIT_VERIFICATION_FAILED", `verified-admission v2 semantic validation rejected artifact: ${semantic.left.detail}`)
+        )
       }
-      if (Either.isLeft(semantic)) return yield* Effect.fail(failure("PERMIT_VERIFICATION_FAILED", `verified-admission v2 semantic validation rejected artifact: ${semantic.left.detail}`))
       const record: VerifiedAdmissionCommitRecordV2 = Object.freeze({ ...baseRecord, verifiedAdmission: persistedArtifact(artifact) })
       const encoded = canonicalJsonBytes(record)
       if (Either.isLeft(encoded) || encoded.right.byteLength > MAX_VERIFIED_ADMISSION_RECORD_BYTES) return yield* Effect.fail(failure("INPUT_INVALID", "verified-admission v2 commit record cannot be canonically bounded"))
-      yield* Effect.tryPromise({
-        try: async () => {
-          await initializeCommitDirectories(rootPath, root, commitsRoot); await mkdir(directory, { recursive: true, mode: 0o700 }); await syncDirectory(commitsRoot); await syncDirectory(directory)
-          let staged = false
-          try {
-            const handle = await open(temporaryPath, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600); staged = true
-            try { await handle.writeFile(encoded.right); await handle.chmod(0o400); await handle.sync() } finally { await handle.close() }
-            try { await link(temporaryPath, path) } catch (cause) {
-              const code = typeof cause === "object" && cause !== null && "code" in cause ? String(cause.code) : ""
-              if (code === "EEXIST") throw failure("SLOT_ALREADY_COMMITTED", "verified-admission v2 journal slot was already committed by another writer")
-              if (["ENOSYS", "ENOTSUP", "EOPNOTSUPP", "EXDEV"].includes(code)) throw failure("ATOMIC_PUBLICATION_UNSUPPORTED", `local filesystem cannot provide no-replace hard-link publication: ${code}`)
-              throw failure("COMMIT_OUTCOME_UNKNOWN", "verified-admission v2 local journal hard-link outcome is unknown; recover before retrying")
-            }
-            await syncDirectory(directory)
-            const exact = await readStableCommitFile(path, "COMMIT_OUTCOME_UNKNOWN", MAX_VERIFIED_ADMISSION_RECORD_BYTES)
-            if (!identicalBytes(exact, encoded.right)) throw failure("COMMIT_OUTCOME_UNKNOWN", "published verified-admission v2 slot differs on exact readback")
-          } finally { if (staged) { try { await unlink(temporaryPath) } catch { /* private staging has no committed meaning */ } } }
-        },
-        catch: (cause) => cause instanceof LocalPermitCommitError ? cause : failure("COMMIT_OUTCOME_UNKNOWN", "verified-admission v2 write outcome is unknown; recover before retrying")
+      yield* publishSlot(fs, {
+        rootPath, root, commitsRoot, directory, path, temporaryPath, bytes: encoded.right,
+        maximumBytes: MAX_VERIFIED_ADMISSION_RECORD_BYTES, checkpoint: () => undefined, label: "verified-admission v2"
       })
       const commit = Object.freeze({ recordSha256: digest(encoded.right), slotPath: path, nonceDigest: claims.nonceDigest, executionIntentDigest: claims.executionIntentDigest, priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead }), verificationTime: verifiedAt, postStateBytes: Uint8Array.from(postState.right), status: HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS })
       return Object.freeze({ commit, decision: artifact })

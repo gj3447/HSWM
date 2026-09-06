@@ -101,6 +101,11 @@ engineering fixture까지만 있으며 held-out occurrence는 없다. S-6는 여
 rewrite·사건 계보를 형식적 토대로 연결하며, 실제 환경에 맞는 규칙을 학습하는 문제는
 별도 연구 의무로 둔다. 사용자 계획 요청을 따른 `SECONDARY_AI` 설계이며 실행 결과가 아니다.
 
+[하이퍼그래프 학습·재귀 참여 계획의 표준 그래프 명세](docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md)는
+국소 학습·상위 결합 관계 학습·판별 관찰·전체의 재참여를 역할이 있는 n-ary assertion으로
+구체화한다. [ontology v1](ontology/identity/hswm_core/HSWM_HYPERGRAPH_LEARNING_PLAN_ONTOLOGY.v1.json),
+RDF 1.1 N-Quads·SHACL 1.0·PROV-O와 SPARQL/Cypher 질의를 제공하며, 계획을 효능 증거로 승격하지 않는다.
+
 2026-09-02 현재 증명·근거·간극의 answer-first 상태는
 [`HSWM proof-status graph`](docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)에
 고정했다. 임의의 theorem/test 개수가 아니라 여섯 end-to-end 횡단 의무를 같은

@@ -1,0 +1,45 @@
+# Run each Q block independently against the source-bound bundle graph view.
+# These return proposed design relations, never observed outcomes or efficacy.
+# The existing local wrapper queries the union graph and canonicalizes result row
+# order; use ordinal/step for presentation ordering. A normal SPARQL engine applies
+# the ORDER BY clauses directly. No ordering of rows is evidence of event time.
+
+# Q1: Role-bearing n-ary assertions, including repeated targets in distinct roles.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX kbrole: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?assertion ?scale ?ordinal ?role ?target ?revisionScope WHERE {
+  ?a a kbrole:LEARNING_ASSERTION ; kbp:name ?assertion ;
+     kbp:learning_scale ?scale ; kbr:HAS_PARTICIPATION ?p .
+  ?p kbp:ordinal ?ordinal ; kbp:role_name ?role ;
+     kbp:revision_scope ?revisionScope ; kbr:TARGET ?t .
+  ?t kbp:name ?target .
+} ORDER BY ?assertion ?ordinal
+
+# Q2: Local and interaction credit remain distinct and depend on discriminating observations.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?scale ?credit ?observation ?explanations ?revision WHERE {
+  ?r kbr:DEPENDS_ON ?c ; kbp:name ?revision .
+  ?c kbp:learning_scale ?scale ; kbp:name ?credit ; kbr:DEPENDS_ON ?p .
+  ?p kbp:name ?observation ; kbr:ADDRESSES ?h .
+  ?h kbp:name ?explanations .
+} ORDER BY ?scale
+
+# Q3: One whole in learner/member roles, with ports, boundary, exit and accountability obligations.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?ordinal ?role ?target ?obligation WHERE {
+  <urn:hswm:kg:node:sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1>
+    kbr:HAS_PARTICIPATION ?p .
+  ?p kbp:ordinal ?ordinal ; kbp:role_name ?role ; kbr:TARGET ?t .
+  ?t kbp:name ?target ; kbp:description ?obligation .
+} ORDER BY ?ordinal
+
+# Q4: Planned conceptual artifacts, not new scientific gates or completed mechanisms.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbrole: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?step ?nextArtifact ?openChoice ?status WHERE {
+  ?s a kbrole:LEARNING_PLAN_STEP ; kbp:plan_id ?step ;
+     kbp:next_artifact ?nextArtifact ; kbp:open_choice ?openChoice ; kbp:status ?status .
+} ORDER BY ?step

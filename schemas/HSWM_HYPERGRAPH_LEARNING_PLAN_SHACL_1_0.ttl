@@ -1,0 +1,38 @@
+@prefix hplan: <https://hswm.invalid/hypergraph-learning-plan/v1/> .
+@prefix kb: <https://hswm.invalid/kg-bundle-rdf/v1/> .
+@prefix kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix kbrole: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# HSWM-defined domain constraints in W3C SHACL 1.0 Core syntax.
+# No assertion here is a canonical admission or observed causal transition.
+hplan:AssertionShape a sh:NodeShape ;
+  sh:targetClass kbrole:LEARNING_ASSERTION ;
+  sh:property [ sh:path kbp:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:assertion_status ; sh:hasValue "DESIGN_EXAMPLE_NOT_OCCURRED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:learning_scale ; sh:in ( "LOCAL" "INTERACTION" "CROSS_SCALE" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:temporal_order_semantics ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbr:HAS_PARTICIPATION ; sh:class kbrole:ROLE_PARTICIPATION ; sh:minCount 3 ] .
+
+hplan:ParticipationShape a sh:NodeShape ;
+  sh:targetClass kbrole:ROLE_PARTICIPATION ;
+  sh:property [ sh:path [ sh:inversePath kbr:HAS_PARTICIPATION ] ; sh:class kbrole:LEARNING_ASSERTION ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbr:TARGET ; sh:or ( [ sh:class kb:Node ] [ sh:class kb:Anchor ] ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:role_name ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:ordinal ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:revision_scope ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:membership_status ; sh:hasValue "PROPOSED" ; sh:maxCount 1 ] .
+
+hplan:StepShape a sh:NodeShape ;
+  sh:targetClass kbrole:LEARNING_PLAN_STEP ;
+  sh:property [ sh:path kbp:plan_id ; sh:datatype xsd:string ; sh:pattern "^C-[1-6]$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:next_artifact ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:status ; sh:hasValue "PLANNED_NOT_COMPLETED" ; sh:maxCount 1 ] .
+
+hplan:DirectRequestShape a sh:NodeShape ;
+  sh:targetClass kbrole:USER_DIRECT_REQUEST ;
+  sh:property [ sh:path kbp:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kbp:source_paths ; sh:datatype xsd:string ; sh:minCount 1 ] ;
+  sh:property [ sh:path kbp:claim_boundary ; sh:hasValue "USER_DIRECTION_AND_PUBLICATION_REQUEST_ONLY" ; sh:maxCount 1 ] .

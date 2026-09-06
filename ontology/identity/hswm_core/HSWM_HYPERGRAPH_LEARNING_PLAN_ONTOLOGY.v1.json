@@ -1,0 +1,4308 @@
+{
+  "schema_version": "hswm-hypergraph-learning-plan/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+  "status": "HYPERGRAPH_LEARNING_PLAN_MECHANISMS_UNTESTED",
+  "nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+  "authority_boundary": "USER_PRIMARY direct request only; all mechanism details are SECONDARY_AI proposals; FCL and previous evidence preserved.",
+  "source_accessed_on": "2026-09-06",
+  "artifact_bindings": [
+    {
+      "path": "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+      "sha256": "42d4442f3eeb44ab4e73f4e206b2d0067b2bc109d1b7292937908c498e21705c"
+    },
+    {
+      "path": "docs/canon/sources/USER_PRIMARY_HSWM_HYPERGRAPH_LEARNING_PLAN_2026-09-06.txt",
+      "sha256": "059b657e51add5f4eb7f4dd8298955ea38cc59f1fec8612d8069dbfb28f01fb6"
+    },
+    {
+      "path": "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md",
+      "sha256": "7497fa0382e7993201fbe9547adedeee501ee02133767b46ce0b908a22800fba"
+    },
+    {
+      "path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+      "sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373"
+    },
+    {
+      "path": "docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md",
+      "sha256": "64a9436bd83c306db6aa1ecb3d29e3ba1f3fd054f1d37bd164cb948c9da226af"
+    },
+    {
+      "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+      "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json",
+      "sha256": "b44c13a76724f545c492a36b5a32cf02339f6fa89846aae5ec218de14d1e6cbb"
+    },
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json",
+      "sha256": "81992abe14029ad78a50b9d3b83cf11658846f6dea9d9f2688e058778cdf3422"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_RESEARCH_INSIGHTS_2026-09-06.v1.json",
+      "sha256": "b295e2dd367d3510d3016bf06e2197a3675eaf105bbf38372cb676bdd4dc8193"
+    },
+    {
+      "path": "_research/graph_standards/HSWM_GRAPH_STANDARDS_ACCEPTANCE.v1.json",
+      "sha256": "af60457032201567590fe83b2df96743126330242ba60a33b58a56c3f57cd5c3"
+    },
+    {
+      "path": "_research/graph_standards/runtime/uv.lock",
+      "sha256": "e689c46043f2af18df5ea1b40cf070158afa999a09fb4807cc879eab7e6cc69d"
+    },
+    {
+      "path": "schemas/HSWM_HYPERGRAPH_LEARNING_PLAN_SHACL_1_0.ttl",
+      "sha256": "a13acdcb7cef41bbd21d5abd328fb344f3779ab597ef97a7e66d4cd23a7bdcc4"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 63,
+    "anchors": 12,
+    "relations": 247,
+    "hyperedges": 4,
+    "participations": 25,
+    "plan_steps": 6
+  },
+  "anchors": [
+    {
+      "uid": "sym:Concept:hswm",
+      "name": "HSWM",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-adaptive-research-strategy-ontology-2026-08-30",
+      "name": "HSWM adaptive research strategy ontology",
+      "required_labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-fractal-scientific-connections-ontology-2026-08-28",
+      "name": "HSWM fractal scientific connections ontology 2026-08-28",
+      "required_labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-research-insights-2026-09-06-v1",
+      "name": "HSWM 연구 통찰과 다음 증거 2026-09-06",
+      "required_labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-local-causal-learning",
+      "name": "FCL-1 local causal learning law",
+      "required_labels": [
+        "Concept",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-composition-preservation",
+      "name": "FCL-2 composition preservation law",
+      "required_labels": [
+        "Concept",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-emergent-coalition",
+      "name": "FCL-3 emergent coalition law",
+      "required_labels": [
+        "Concept",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-multiscale-credit",
+      "name": "FCL-4 multiscale credit law",
+      "required_labels": [
+        "Concept",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-topology-morphogenesis",
+      "name": "FCL-5 topology morphogenesis law",
+      "required_labels": [
+        "Concept",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-world-self-co-model",
+      "name": "FCL-6 world-self co-model law",
+      "required_labels": [
+        "Concept",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-diachronic-continuity",
+      "name": "FCL-7 diachronic continuity law",
+      "required_labels": [
+        "Concept",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-hswm-of-hswms",
+      "name": "FCL-8 HSWM-of-HSWMs law",
+      "required_labels": [
+        "Concept",
+        "Guardrail"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "HSWM 하이퍼그래프 학습과 재귀 참여 계획 2026-09-06",
+        "description": "경험에서 구분을 배우고 계산을 바꾸며 전체가 다음 규모 cell로 다시 참여하는 계획의 표준 그래프 projection.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_PLAN_BUNDLE",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_PLAN_BUNDLE"
+        ],
+        "source_commit": "a65323def4c0914a4c4d07c5525f2de1bcdb8c78",
+        "scientific_status": "SCIENTIFICALLY_CONNECTED / INTEGRATED_CLAIM_UNJUDGED",
+        "status": "PLAN_RECORDED_MECHANISMS_UNTESTED",
+        "fcl_relation_semantics": "DESIGN_COVERAGE_ONLY_NOT_LAW_SATISFACTION_OR_TEST_RESULT"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-request-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Source"
+      ],
+      "properties": {
+        "name": "USER 요청 — 하이퍼그래프 성장 계획을 repo와 KG에 기록",
+        "description": "직접 요청의 하이퍼그래프 기반 실현 방향과 표준 그래프 기록 권한. 앞선 assistant 인용문·구체 알고리즘 전체를 USER_PRIMARY로 승격하지 않는다.",
+        "authority_class": "USER_PRIMARY",
+        "standard_graph_role": "USER_DIRECT_REQUEST",
+        "claim_boundary": "USER_DIRECTION_AND_PUBLICATION_REQUEST_ONLY",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/canon/sources/USER_PRIMARY_HSWM_HYPERGRAPH_LEARNING_PLAN_2026-09-06.txt"
+        ],
+        "epistemic_state": "NOT_APPLICABLE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "USER_PRIMARY",
+        "ontology_epistemic_state_v1": "NOT_APPLICABLE",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "USER_PRIMARY_REQUEST_ONLY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "ARTIFACT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "USER_DIRECT_REQUEST"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Source"
+      ],
+      "properties": {
+        "name": "출처 — 하이퍼그래프 학습 계획 명세",
+        "description": "설계 가설과 n-ary 표현의 출처. 과학적 outcome record가 아니다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "PLAN_SOURCE",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "ARTIFACT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "PLAN_SOURCE"
+        ],
+        "source_path": "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+        "source_sha256": "42d4442f3eeb44ab4e73f4e206b2d0067b2bc109d1b7292937908c498e21705c"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-world-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "반복 관계와 새 조합을 경험하는 세계",
+        "description": "공방은 미채택 사고실험 후보다. 관측 가능한 조건, hidden rule, 반례와 누수 경계를 C-1에서 정한다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-join-cell-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "국소 접합 HSWM cell 후보",
+        "description": "관찰·계획·실패 해석·자기 관계 수정 능력을 갖추도록 연구할 cell. 실제 cognition-bearing 구현 완료를 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-cut-cell-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "절단 HSWM cell 후보",
+        "description": "상위 작업에 역할과 조건을 가진 참여자로 들어갈 하위 능력의 설계 개념.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-assembly-cell-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "조립 HSWM cell 후보",
+        "description": "다른 cell의 결과를 조건부로 사용하는 하위 능력의 설계 개념.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-whole-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "학습하는 상위 HSWM 전체 후보",
+        "description": "하위 내부를 매번 재현하지 않고 능력의 결합 조건을 배우며, 전체도 다음 규모의 참여자가 될 목표.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-outcome-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "독립 outcome 역할의 설계 개념",
+        "description": "개별/공동 결과의 독립 출처와 불확실성을 결속해야 한다. 이 노드는 실제 관측 결과가 아니다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-local-credit-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "국소 credit 가설",
+        "description": "cell 내부의 설명·조건·연산 중 무엇을 수정할지 식별하는 근거. estimator와 식별 가정은 미정.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ],
+        "learning_scale": "LOCAL"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-interaction-credit-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "결합 관계 credit 가설",
+        "description": "역할·순서·전달 조건 중 무엇을 수정할지 식별하는 근거. 전체 실패의 전역 감점과 규모별 credit 중복을 금지한다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ],
+        "learning_scale": "INTERACTION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-explanations-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "경쟁하는 세계·자기 설명 집합",
+        "description": "도구·표면·재료·순서 및 구성원 오류·전달 누락 등 서로 구별되지 않은 설명을 동시 유지한다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-probe-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "경쟁 설명을 구별할 다음 관찰",
+        "description": "예상 판별력과 비용을 바탕으로 관찰을 선택할 기전 후보. 가장 좋은 관찰이 계산되었다는 뜻이 아니다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-local-revision-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "국소 relation/disposition 수정 제안",
+        "description": "결과와 credit에 결속된 적용·억제·관찰 조건의 수정. 실제 canonical revision은 아직 없다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ],
+        "learning_scale": "LOCAL"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-interaction-revision-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "상위 결합 relation 수정 제안",
+        "description": "공동 결과에 결속된 역할·순서·정보 전달 관계 수정. 하위 state의 임의 재작성과 다르다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ],
+        "learning_scale": "INTERACTION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-computation-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "revision 이후 달라질 실제 계산",
+        "description": "동일한 새 문제에서 read-set·관찰 순서·분해·관계 선택·도구 사용 중 무엇이 달라질지 추적한다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-ports-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "schema-versioned typed port 계약",
+        "description": "입력 조건·출력 의미·불확실성·실패·거절 조건을 선언하고 schema migration 때 손실과 복원 범위를 남긴다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-boundary-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "구성원 경계와 책임 계약",
+        "description": "구성원·소유·실행·평가·권한을 구별한다. 상위 참여는 하위의 경계와 독립 학습을 소거하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-exit-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "이탈·fork·복구 계약",
+        "description": "참여 중단, 별도 학습과 descendant 계보, 이탈 뒤 결과·권한·책임 범위를 보존할 의무.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-grammar-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "같은 Step/Learn/Inv/Permit/lineage 문법",
+        "description": "하위와 상위가 같은 typed outcome-bound dynamics로 학습·전이하도록 연구한다. 단순 wrapper는 그 실현을 보장하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-owner-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "atom별 schema-relative single owner 의무",
+        "description": "각 canonical atom version의 accountability 주소는 하나다. member/proposer/evaluator/executor/custodian/authorizer와 분리한다. 이 projection은 실제 owner 주소를 생성하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-limits-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "성능·비용·적용 한계와 자기모델",
+        "description": "재사용 절감에서 선택·통신·검증·유지·오일반화 비용을 뺀 순이익을 추정한다. 계약 위반 시 내부를 다시 살피거나 참여를 거절한다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-comparators-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "의미를 보존한 표현과 손실 대안의 구별",
+        "description": "역할 incidence를 보존하는 binary encoding은 hypergraph 표현일 수 있다. lossy pairwise flattening·fixed routing·global credit·wrapper와의 비교는 정확한 기전 범위로 선언한다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_CONCEPT",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_CONCEPT"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-status-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "현재 증거의 상한 보존",
+        "description": "P1 RED, v3/v4 실패·v5 declared opaque same-cue local-state mediation only; no fresh-task generalization/efficacy, G0 NOT_PASSED, G1 NOT_EVALUATED, D-4 미완료, S-5 파일 완료·S-6 second party 미지명. 새 계획으로 승격하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "EVIDENCE_BOUNDARY",
+        "claim_boundary": "MEASUREMENT_READY_SINGLE_OWNER_UNDER_DECLARED_OPAQUE_TASK_NOT_EFFICACY",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "ontology/identity/hswm_core/HSWM_RESEARCH_INSIGHTS_2026-09-06.v1.json"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "EVIDENCE_BOUNDARY"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-observation-ability-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Hypothesis"
+      ],
+      "properties": {
+        "name": "I-1 관찰 선택 자체가 능력",
+        "description": "무엇이 틀렸는지 가르는 다음 경험을 선택할 때 세계 설명과 자기 계산 수정이 연결될 수 있다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "DESIGN_INTUITION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "DESIGN_INTUITION"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-conditional-compression-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Hypothesis"
+      ],
+      "properties": {
+        "name": "I-2 재사용은 조건을 가진 압축",
+        "description": "적용 범위·불확실성·실패·재개방 조건을 보존해야 상위의 계산을 절약할 수 있다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "DESIGN_INTUITION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "DESIGN_INTUITION"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-upper-learning-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Hypothesis"
+      ],
+      "properties": {
+        "name": "I-3 상위는 함께 성립하는 조건을 학습",
+        "description": "각 하위가 성공해도 전체는 실패할 수 있으므로 결합 관계에 독자적 수정 문제가 남는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "DESIGN_INTUITION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "DESIGN_INTUITION"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-useful-distinction-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Hypothesis"
+      ],
+      "properties": {
+        "name": "I-4 유용한 구분은 실행에 차이를 만든다",
+        "description": "관계 증가 대신 다음 과제의 read-set·관찰·분해·도구 선택 변화를 설명해야 한다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "DESIGN_INTUITION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "DESIGN_INTUITION"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-c-1-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Plan"
+      ],
+      "properties": {
+        "name": "C-1 세계와 관측의 의미론",
+        "description": "개념 작업이며 구현/실험 완료나 새 scientific gate가 아니다. 미정: task family와 atom granularity.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_PLAN_STEP",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_PLAN_STEP"
+        ],
+        "plan_id": "C-1",
+        "next_artifact": "관계 문법·관측 가능한 차이·경쟁 설명 사례; hidden rule과 정답 주입 경계를 명시",
+        "open_choice": "task family와 atom granularity",
+        "status": "PLANNED_NOT_COMPLETED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-c-2-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Plan"
+      ],
+      "properties": {
+        "name": "C-2 학습과 credit",
+        "description": "개념 작업이며 구현/실험 완료나 새 scientific gate가 아니다. 미정: credit estimator·update algorithm·불확실성 표현.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_PLAN_STEP",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_PLAN_STEP"
+        ],
+        "plan_id": "C-2",
+        "next_artifact": "한 경험의 수정/보류 이야기·식별 가정·미식별 반례",
+        "open_choice": "credit estimator·update algorithm·불확실성 표현",
+        "status": "PLANNED_NOT_COMPLETED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-c-3-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Plan"
+      ],
+      "properties": {
+        "name": "C-3 관계 revision과 계산",
+        "description": "개념 작업이며 구현/실험 완료나 새 scientific gate가 아니다. 미정: canonical-to-compiled interpreter/compiler.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_PLAN_STEP",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_PLAN_STEP"
+        ],
+        "plan_id": "C-3",
+        "next_artifact": "같은 새 문제의 pre/post 읽기·관찰·분해·도구 선택 경로",
+        "open_choice": "canonical-to-compiled interpreter/compiler",
+        "status": "PLANNED_NOT_COMPLETED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-c-4-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Plan"
+      ],
+      "properties": {
+        "name": "C-4 분화·압축·유지",
+        "description": "개념 작업이며 구현/실험 완료나 새 scientific gate가 아니다. 미정: structure search·retention·schema migration.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_PLAN_STEP",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_PLAN_STEP"
+        ],
+        "plan_id": "C-4",
+        "next_artifact": "조건 분화·연산 추상화·반례와 lineage 보존 사례",
+        "open_choice": "structure search·retention·schema migration",
+        "status": "PLANNED_NOT_COMPLETED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-c-5-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Plan"
+      ],
+      "properties": {
+        "name": "C-5 세계·자기 공동모델",
+        "description": "개념 작업이며 구현/실험 완료나 새 scientific gate가 아니다. 미정: 관측 선택 정책과 비용·오류 보정.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_PLAN_STEP",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_PLAN_STEP"
+        ],
+        "plan_id": "C-5",
+        "next_artifact": "world prediction과 self prediction이 다른 수정을 유발하는 사례",
+        "open_choice": "관측 선택 정책과 비용·오류 보정",
+        "status": "PLANNED_NOT_COMPLETED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-c-6-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Plan"
+      ],
+      "properties": {
+        "name": "C-6 인지적 합성과 재귀 참여",
+        "description": "개념 작업이며 구현/실험 완료나 새 scientific gate가 아니다. 미정: coalition 선택·다중규모 credit·재귀 합성.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_PLAN_STEP",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_PLAN_STEP"
+        ],
+        "plan_id": "C-6",
+        "next_artifact": "cell 계약과 공동 실패에 따른 상위 관계 수정·다음 규모 참여 사례",
+        "open_choice": "coalition 선택·다중규모 credit·재귀 합성",
+        "status": "PLANNED_NOT_COMPLETED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-local-learning-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Hyperedge"
+      ],
+      "properties": {
+        "name": "국소 cell의 outcome-bound 학습",
+        "description": "역할 incidence를 갖는 n-ary 설계 assertion. 발생한 사건이나 canonical admission이 아니다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_ASSERTION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_ASSERTION"
+        ],
+        "assertion_status": "DESIGN_EXAMPLE_NOT_OCCURRED",
+        "learning_scale": "LOCAL",
+        "temporal_order_semantics": "ORDINAL_IS_ROLE_ENUMERATION_NOT_TEMPORAL_ORDER",
+        "fcl_relation_semantics": "DESIGN_COVERAGE_ONLY_NOT_LAW_SATISFACTION_OR_TEST_RESULT"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-local-learning-p0-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "국소 cell의 outcome-bound 학습 / learner",
+        "description": "국소 cell의 outcome-bound 학습의 learner 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "learner",
+        "ordinal": 0,
+        "revision_scope": "DESIGN_V1:LOCAL:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-local-learning-p1-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "국소 cell의 outcome-bound 학습 / context",
+        "description": "국소 cell의 outcome-bound 학습의 context 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "context",
+        "ordinal": 1,
+        "revision_scope": "DESIGN_V1:LOCAL:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-local-learning-p2-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "국소 cell의 outcome-bound 학습 / outcome_role",
+        "description": "국소 cell의 outcome-bound 학습의 outcome_role 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "outcome_role",
+        "ordinal": 2,
+        "revision_scope": "DESIGN_V1:LOCAL:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-local-learning-p3-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "국소 cell의 outcome-bound 학습 / credit_hypothesis",
+        "description": "국소 cell의 outcome-bound 학습의 credit_hypothesis 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "credit_hypothesis",
+        "ordinal": 3,
+        "revision_scope": "DESIGN_V1:LOCAL:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-local-learning-p4-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "국소 cell의 outcome-bound 학습 / revision_proposal",
+        "description": "국소 cell의 outcome-bound 학습의 revision_proposal 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "revision_proposal",
+        "ordinal": 4,
+        "revision_scope": "DESIGN_V1:LOCAL:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-local-learning-p5-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "국소 cell의 outcome-bound 학습 / next_computation",
+        "description": "국소 cell의 outcome-bound 학습의 next_computation 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "next_computation",
+        "ordinal": 5,
+        "revision_scope": "DESIGN_V1:LOCAL:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-joint-learning-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Hyperedge"
+      ],
+      "properties": {
+        "name": "공동 작업과 결합 관계 학습",
+        "description": "역할 incidence를 갖는 n-ary 설계 assertion. 발생한 사건이나 canonical admission이 아니다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_ASSERTION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_ASSERTION"
+        ],
+        "assertion_status": "DESIGN_EXAMPLE_NOT_OCCURRED",
+        "learning_scale": "INTERACTION",
+        "temporal_order_semantics": "ORDINAL_IS_ROLE_ENUMERATION_NOT_OBSERVED_TIME; cut-join-assembly is a revisable candidate order",
+        "fcl_relation_semantics": "DESIGN_COVERAGE_ONLY_NOT_LAW_SATISFACTION_OR_TEST_RESULT"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p0-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "공동 작업과 결합 관계 학습 / whole_learner",
+        "description": "공동 작업과 결합 관계 학습의 whole_learner 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "whole_learner",
+        "ordinal": 0,
+        "revision_scope": "DESIGN_V1:INTERACTION:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p1-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "공동 작업과 결합 관계 학습 / cut_role",
+        "description": "공동 작업과 결합 관계 학습의 cut_role 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "cut_role",
+        "ordinal": 1,
+        "revision_scope": "DESIGN_V1:INTERACTION:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p2-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "공동 작업과 결합 관계 학습 / join_role",
+        "description": "공동 작업과 결합 관계 학습의 join_role 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "join_role",
+        "ordinal": 2,
+        "revision_scope": "DESIGN_V1:INTERACTION:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p3-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "공동 작업과 결합 관계 학습 / assembly_role",
+        "description": "공동 작업과 결합 관계 학습의 assembly_role 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "assembly_role",
+        "ordinal": 3,
+        "revision_scope": "DESIGN_V1:INTERACTION:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p4-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "공동 작업과 결합 관계 학습 / joint_outcome_role",
+        "description": "공동 작업과 결합 관계 학습의 joint_outcome_role 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "joint_outcome_role",
+        "ordinal": 4,
+        "revision_scope": "DESIGN_V1:INTERACTION:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p5-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "공동 작업과 결합 관계 학습 / interaction_credit_hypothesis",
+        "description": "공동 작업과 결합 관계 학습의 interaction_credit_hypothesis 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "interaction_credit_hypothesis",
+        "ordinal": 5,
+        "revision_scope": "DESIGN_V1:INTERACTION:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p6-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "공동 작업과 결합 관계 학습 / interaction_revision_proposal",
+        "description": "공동 작업과 결합 관계 학습의 interaction_revision_proposal 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "interaction_revision_proposal",
+        "ordinal": 6,
+        "revision_scope": "DESIGN_V1:INTERACTION:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Hyperedge"
+      ],
+      "properties": {
+        "name": "설명을 구별하는 관찰 선택",
+        "description": "역할 incidence를 갖는 n-ary 설계 assertion. 발생한 사건이나 canonical admission이 아니다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_ASSERTION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_ASSERTION"
+        ],
+        "assertion_status": "DESIGN_EXAMPLE_NOT_OCCURRED",
+        "learning_scale": "CROSS_SCALE",
+        "temporal_order_semantics": "ORDINAL_IS_ROLE_ENUMERATION_NOT_TEMPORAL_ORDER",
+        "fcl_relation_semantics": "DESIGN_COVERAGE_ONLY_NOT_LAW_SATISFACTION_OR_TEST_RESULT"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p0-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "설명을 구별하는 관찰 선택 / competing_explanations",
+        "description": "설명을 구별하는 관찰 선택의 competing_explanations 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "competing_explanations",
+        "ordinal": 0,
+        "revision_scope": "DESIGN_V1:CROSS_SCALE:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p1-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "설명을 구별하는 관찰 선택 / candidate_observation",
+        "description": "설명을 구별하는 관찰 선택의 candidate_observation 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "candidate_observation",
+        "ordinal": 1,
+        "revision_scope": "DESIGN_V1:CROSS_SCALE:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p2-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "설명을 구별하는 관찰 선택 / local_credit_hypothesis",
+        "description": "설명을 구별하는 관찰 선택의 local_credit_hypothesis 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "local_credit_hypothesis",
+        "ordinal": 2,
+        "revision_scope": "DESIGN_V1:CROSS_SCALE:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p3-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "설명을 구별하는 관찰 선택 / interaction_credit_hypothesis",
+        "description": "설명을 구별하는 관찰 선택의 interaction_credit_hypothesis 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "interaction_credit_hypothesis",
+        "ordinal": 3,
+        "revision_scope": "DESIGN_V1:CROSS_SCALE:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p4-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "설명을 구별하는 관찰 선택 / cost_and_uncertainty",
+        "description": "설명을 구별하는 관찰 선택의 cost_and_uncertainty 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "cost_and_uncertainty",
+        "ordinal": 4,
+        "revision_scope": "DESIGN_V1:CROSS_SCALE:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Hyperedge"
+      ],
+      "properties": {
+        "name": "학습하는 전체의 다음 규모 참여",
+        "description": "역할 incidence를 갖는 n-ary 설계 assertion. 발생한 사건이나 canonical admission이 아니다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "LEARNING_ASSERTION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "LEARNING_ASSERTION"
+        ],
+        "assertion_status": "DESIGN_EXAMPLE_NOT_OCCURRED",
+        "learning_scale": "CROSS_SCALE",
+        "temporal_order_semantics": "ORDINAL_IS_ROLE_ENUMERATION_NOT_TEMPORAL_ORDER",
+        "fcl_relation_semantics": "DESIGN_COVERAGE_ONLY_NOT_LAW_SATISFACTION_OR_TEST_RESULT",
+        "repeated_target_semantics": "SAME_CONCEPTUAL_WHOLE_DISTINCT_ROLE_INCIDENCES_NOT_TWO_MEMBER_INSTANCES",
+        "credit_multiplicity": "NOT_APPLICABLE_NO_DUPLICATE_ATTRIBUTION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p0-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "학습하는 전체의 다음 규모 참여 / continuing_learner",
+        "description": "학습하는 전체의 다음 규모 참여의 continuing_learner 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "continuing_learner",
+        "ordinal": 0,
+        "revision_scope": "DESIGN_V1:CROSS_SCALE:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p1-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "학습하는 전체의 다음 규모 참여 / next_scale_member",
+        "description": "학습하는 전체의 다음 규모 참여의 next_scale_member 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "next_scale_member",
+        "ordinal": 1,
+        "revision_scope": "DESIGN_V1:CROSS_SCALE:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p2-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "학습하는 전체의 다음 규모 참여 / typed_ports",
+        "description": "학습하는 전체의 다음 규모 참여의 typed_ports 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "typed_ports",
+        "ordinal": 2,
+        "revision_scope": "DESIGN_V1:CROSS_SCALE:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p3-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "학습하는 전체의 다음 규모 참여 / member_boundary",
+        "description": "학습하는 전체의 다음 규모 참여의 member_boundary 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "member_boundary",
+        "ordinal": 3,
+        "revision_scope": "DESIGN_V1:CROSS_SCALE:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p4-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "학습하는 전체의 다음 규모 참여 / exit_fork_recovery",
+        "description": "학습하는 전체의 다음 규모 참여의 exit_fork_recovery 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "exit_fork_recovery",
+        "ordinal": 4,
+        "revision_scope": "DESIGN_V1:CROSS_SCALE:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p5-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "학습하는 전체의 다음 규모 참여 / same_transition_learning_grammar",
+        "description": "학습하는 전체의 다음 규모 참여의 same_transition_learning_grammar 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "same_transition_learning_grammar",
+        "ordinal": 5,
+        "revision_scope": "DESIGN_V1:CROSS_SCALE:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p6-2026-09-06-v1",
+      "labels": [
+        "AbstractNode",
+        "Participation"
+      ],
+      "properties": {
+        "name": "학습하는 전체의 다음 규모 참여 / atom_accountability_contract",
+        "description": "학습하는 전체의 다음 규모 참여의 atom_accountability_contract 역할. membership은 ownership이나 Permit을 뜻하지 않는다.",
+        "authority_class": "SECONDARY_AI",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "claim_boundary": "DESIGN_PROPOSAL_UNTESTED_NOT_CANONICAL_ADMISSION",
+        "projection_nonclaim": "DESCRIPTIVE_PLAN_PROJECTION_NOT_CANONICAL_STATE_LEARNING_EFFICACY_OR_GATE_ADMISSION",
+        "source_paths": [
+          "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md"
+        ],
+        "epistemic_state": "PENDING",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_semantic_roles_v1": [
+          "ROLE_PARTICIPATION"
+        ],
+        "role_name": "atom_accountability_contract",
+        "ordinal": 6,
+        "revision_scope": "DESIGN_V1:CROSS_SCALE:NO_CANONICAL_REVISION_ASSIGNED",
+        "membership_status": "PROPOSED"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-observation-ability-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-probe-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-observation-ability-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-explanations-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-observation-ability-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-computation-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-conditional-compression-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-ports-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-conditional-compression-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-limits-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-conditional-compression-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-boundary-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-upper-learning-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-interaction-credit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-upper-learning-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-interaction-revision-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-upper-learning-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-whole-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-useful-distinction-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-revision-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-useful-distinction-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-computation-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-1-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-world-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-1-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-explanations-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-2-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-credit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-2-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-interaction-credit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-2-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-probe-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-3-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-computation-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-3-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-revision-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-3-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-interaction-revision-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-4-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-conditional-compression-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-4-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-limits-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-5-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-probe-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-5-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-limits-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-6-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-whole-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-6-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-grammar-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-6-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-ports-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-6-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-boundary-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-6-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-exit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-6-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-owner-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-2-2026-09-06-v1",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-1-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-3-2026-09-06-v1",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-4-2026-09-06-v1",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-5-2026-09-06-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-1-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-6-2026-09-06-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-1-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-5-2026-09-06-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-6-2026-09-06-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-5-2026-09-06-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-6-2026-09-06-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p0-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p0-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-join-cell-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p1-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p1-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-world-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p2-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-outcome-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p3-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-credit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p4-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p4-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-revision-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p5-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p5-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-computation-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p0-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p0-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-whole-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p1-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p1-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-cut-cell-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p2-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-join-cell-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p3-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-assembly-cell-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p4-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p4-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-outcome-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p5-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p5-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-interaction-credit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p6-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p6-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-interaction-revision-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p0-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p0-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-explanations-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p1-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p1-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-probe-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p2-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-credit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p3-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-interaction-credit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p4-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p4-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-limits-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p0-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p0-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-whole-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p1-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p1-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-whole-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p2-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-ports-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p3-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-boundary-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p4-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p4-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-exit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p5-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p5-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-grammar-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1",
+      "type": "HAS_PARTICIPATION",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p6-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p6-2026-09-06-v1",
+      "type": "TARGET",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-owner-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-credit-2026-09-06-v1",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-outcome-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-interaction-credit-2026-09-06-v1",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-outcome-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-credit-2026-09-06-v1",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-probe-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-interaction-credit-2026-09-06-v1",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-probe-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-probe-2026-09-06-v1",
+      "type": "ADDRESSES",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-explanations-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-probe-2026-09-06-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-revision-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-probe-2026-09-06-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-interaction-revision-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-revision-2026-09-06-v1",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-credit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-interaction-revision-2026-09-06-v1",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-interaction-credit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-computation-2026-09-06-v1",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-revision-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-computation-2026-09-06-v1",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-interaction-revision-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-comparators-2026-09-06-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-useful-distinction-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:AbstractNode:hswm-adaptive-research-strategy-ontology-2026-08-30",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:AbstractNode:hswm-fractal-scientific-connections-ontology-2026-08-28",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:AbstractNode:hswm-research-insights-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-status-2026-09-06-v1",
+      "type": "DERIVED_FROM",
+      "to_uid": "sym:AbstractNode:hswm-research-insights-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-local-causal-learning",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-composition-preservation",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-emergent-coalition",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-multiscale-credit",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-topology-morphogenesis",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-world-self-co-model",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-diachronic-continuity",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-hswm-of-hswms",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-local-causal-learning",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-emergent-coalition",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-multiscale-credit",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-topology-morphogenesis",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-local-causal-learning",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-multiscale-credit",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-world-self-co-model",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-composition-preservation",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-diachronic-continuity",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1",
+      "type": "PRESERVES",
+      "to_uid": "sym:Concept:hswm-fractal-law-hswm-of-hswms",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "REFINES",
+      "to_uid": "sym:Concept:hswm",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-request-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-world-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-world-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-join-cell-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-join-cell-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-cut-cell-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-cut-cell-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-assembly-cell-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-assembly-cell-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-whole-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-whole-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-outcome-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-outcome-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-credit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-credit-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-interaction-credit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-interaction-credit-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-explanations-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-explanations-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-probe-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-probe-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-revision-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-revision-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-interaction-revision-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-interaction-revision-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-computation-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-computation-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-ports-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-ports-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-boundary-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-boundary-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-exit-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-exit-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-grammar-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-grammar-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-owner-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-owner-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-limits-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-limits-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-comparators-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-comparators-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-status-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-status-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-observation-ability-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-observation-ability-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-conditional-compression-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-conditional-compression-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-upper-learning-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-upper-learning-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-useful-distinction-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-useful-distinction-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-1-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-1-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-2-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-3-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-4-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-4-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-5-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-5-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-c-6-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-c-6-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-learning-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p0-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p0-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p1-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p1-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p2-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p3-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p4-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p4-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p5-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-local-learning-p5-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p0-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p0-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p1-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p1-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p2-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p3-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p4-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p4-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p5-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p5-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p6-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-joint-learning-p6-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p0-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p0-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p1-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p1-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p2-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p3-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p4-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-discriminating-observation-p4-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p0-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p0-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p1-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p1-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p2-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p2-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p3-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p3-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p4-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p4-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p5-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p5-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p6-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hgplan-recursive-participation-p6-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-request-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-hgplan-plan-source-2026-09-06-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HYPERGRAPH_LEARNING_DESIGN_NOT_EXECUTION",
+      "status": "PROPOSED"
+    }
+  ]
+}

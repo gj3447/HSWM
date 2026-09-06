@@ -1,0 +1,77 @@
+{
+  "kind": "ENGINEERING_VERIFICATION_NOT_SCIENTIFIC_EVIDENCE",
+  "bundle_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+  "artifact_sha256": "c59ef55784059b111b1c73f140d6530144aec4d75220dd1cffd4295ff3e34356",
+  "query_file": "ontology/queries/HSWM_HYPERGRAPH_LEARNING_PLAN_2026-09-06.sparql",
+  "query_file_sha256": "bef47f150065eb96994d23b1df37b4aea0aa3d0a6ac4ef1a4adf250fd9ae7d81",
+  "queries": [
+    {
+      "query": "Q1",
+      "rows": 25,
+      "expected_rows": 25,
+      "status": "PASS"
+    },
+    {
+      "query": "Q2",
+      "rows": 2,
+      "expected_rows": 2,
+      "status": "PASS"
+    },
+    {
+      "query": "Q3",
+      "rows": 7,
+      "expected_rows": 7,
+      "status": "PASS"
+    },
+    {
+      "query": "Q4",
+      "rows": 6,
+      "expected_rows": 6,
+      "status": "PASS"
+    }
+  ],
+  "checked_scope": "SOURCE_BINDINGS_AND_SHACL_AND_DECLARED_DESIGN_QUERY_RESULTS_ONLY",
+  "focused_tests": {
+    "passed": 35,
+    "failed": 0,
+    "command": "uv run --project _research/graph_standards/runtime --locked --extra graph pytest -q tests/test_fractal_learning_plan_projection.py tests/test_kg_bundle_graph_view.py tests/test_research_insight_projection.py"
+  },
+  "live_kg": {
+    "verified_at": "2026-09-06T17:38:47.827948+00:00",
+    "status": "APPLIED_OR_VERIFIED_EXACT_PROJECTION",
+    "created_nodes": 63,
+    "created_relations": 247,
+    "readback_nodes": 63,
+    "readback_relations": 247,
+    "projection_sha256": "c59ef55784059b111b1c73f140d6530144aec4d75220dd1cffd4295ff3e34356",
+    "query_file": "ontology/queries/HSWM_HYPERGRAPH_LEARNING_PLAN_2026-09-06.cypher",
+    "query_file_sha256": "efd0ca7d685f0bedbb739144b0216289afa6f5f87395db34b9b0e9f009e7ac40",
+    "queries": [
+      {
+        "query": "Q1",
+        "rows": 25,
+        "expected_rows": 25,
+        "status": "PASS"
+      },
+      {
+        "query": "Q2",
+        "rows": 2,
+        "expected_rows": 2,
+        "status": "PASS"
+      },
+      {
+        "query": "Q3",
+        "rows": 7,
+        "expected_rows": 7,
+        "status": "PASS"
+      },
+      {
+        "query": "Q4",
+        "rows": 6,
+        "expected_rows": 6,
+        "status": "PASS"
+      }
+    ],
+    "claim_boundary": "BOUNDED_PLAN_PUBLICATION_ONLY_NOT_CANONICAL_HSWM_ADMISSION"
+  }
+}

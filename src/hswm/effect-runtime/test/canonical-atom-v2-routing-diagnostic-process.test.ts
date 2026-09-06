@@ -5,9 +5,14 @@ import { tmpdir } from "node:os"
 import { join, resolve } from "node:path"
 import { promisify } from "node:util"
 
+import { Effect } from "effect"
 import { afterEach, expect, it } from "vitest"
 
-import { executeDnrdRoutingDiagnosticProcess } from "../src/canonical-atom-v2-routing-diagnostic-process.js"
+import {
+  describeDnrdRoutingDiagnosticProcessFailure,
+  executeDnrdRoutingDiagnosticProcess
+} from "../src/canonical-atom-v2-routing-diagnostic-process.js"
+import { NodePosixServicesLive } from "../src/effect-posix-services.js"
 
 const roots: string[] = []
 const hash = (value: string | Uint8Array): string => createHash("sha256").update(value).digest("hex")
@@ -70,14 +75,17 @@ const configFor = (root: string, frozenScorerSourceSha256 = scorerSha) => ({ fro
 const request = async (root: string, operation: string, payload: Wire, frozenScorerSourceSha256 = scorerSha): Promise<Wire> => {
   const config = configFor(root, frozenScorerSourceSha256)
   const implementationSha = hash(await readFile(implementationPath))
-  return executeDnrdRoutingDiagnosticProcess({
+  return Effect.runPromise(executeDnrdRoutingDiagnosticProcess({
     operation,
     implementation_path: implementationPath,
     implementation_sha256: implementationSha,
     config,
     config_sha256: hash(JSON.stringify(config)),
     payload
-  })
+  }).pipe(
+    Effect.mapError((error) => new Error(describeDnrdRoutingDiagnosticProcessFailure(error))),
+    Effect.provide(NodePosixServicesLive)
+  ))
 }
 
 const childRequest = async (childPath: string, config: Wire, operation: string, payload: Wire): Promise<Wire> => {

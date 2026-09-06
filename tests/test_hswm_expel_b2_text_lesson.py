@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from hswm.experiments.expel_b2_text_lesson import (
-    ARM_ID, CLAIM_BOUNDARY, LESSON_WRAPPER_PREFIX_UTF8, LessonStore,
+    ARM_ID, B2_ACTION_SYSTEM_MESSAGE, CLAIM_BOUNDARY, LESSON_WRAPPER_PREFIX_UTF8, LessonStore,
     ResourceLedger, ExpelB2TextLessonError, build_action_messages, render_lesson,
 )
 
@@ -31,6 +31,8 @@ def test_successful_sealed_terminal_creates_immutable_arm_private_revision(tmp_p
     assert lesson == LESSON_WRAPPER_PREFIX_UTF8 + "1. Clean an object before placing it.\nEND B2 LESSONS\n"
     messages = build_action_messages(lesson_utf8=lesson, episode_uid="heldout:001", step_index=0, history=[], observation="room")
     assert [item["role"] for item in messages] == ["system", "system", "user"]
+    assert messages[0]["content"] == B2_ACTION_SYSTEM_MESSAGE
+    assert "frozen before held-out evaluation" in messages[0]["content"]
     assert ARM_ID not in messages[2]["content"]
 
 
@@ -84,6 +86,12 @@ def test_rejects_unwrapped_lesson_and_keeps_noncanonical_claim_boundary(tmp_path
     with pytest.raises(ExpelB2TextLessonError, match="wrapper"):
         build_action_messages(lesson_utf8="rules", episode_uid="heldout:001", step_index=0, history=[], observation="room")
     assert "NOT_HSWM_CANONICAL" in CLAIM_BOUNDARY
+
+
+def test_rejects_oversized_lesson_before_constructing_an_action_message() -> None:
+    with pytest.raises(ExpelB2TextLessonError, match="byte cap"):
+        build_action_messages(lesson_utf8="x" * 5_121, episode_uid="heldout:001",
+                              step_index=0, history=[], observation="room")
 
 
 def test_refuses_a_nonfresh_root_to_keep_arm_private_state_nonresumable(tmp_path: Path) -> None:

@@ -18,7 +18,7 @@ from typing import Any, Mapping, Sequence
 
 from hswm.selfmod.contracts import canonical_json_bytes, canonical_sha256
 
-from .alfworld_b0_actor import B0_ACTION_PROTOCOL, B0_ACTION_SYSTEM_MESSAGE
+from .alfworld_b0_actor import B0_ACTION_PROTOCOL
 
 
 ARM_ID = "B2_EXPEL_INSPIRED_TEXT_LESSON"
@@ -32,12 +32,21 @@ CLAIM_BOUNDARY = (
     "LESSON_ONLY_EXTERNAL_BASELINE_STATE_NOT_DIRECT_EXPEL_NOT_HSWM_CANONICAL_"
     "REVISION_NOT_PERMIT_NOT_G0_NOT_G1_NOT_EFFICACY"
 )
+B2_ACTION_SYSTEM_MESSAGE = (
+    "You control one ALFWorld text game. A separate delimited B2 lessons message "
+    "contains external baseline state derived only from earlier sealed training "
+    "successes and frozen before held-out evaluation; follow a lesson only when "
+    "relevant. Using the current episode transcript and current observation, return "
+    "exactly one JSON object whose action value is the next literal environment "
+    "command. Do not output reasoning, commentary, multiple commands, tools, "
+    "outcomes, admissible-command lists, or state changes."
+)
 REFLECTION_PROMPT_UTF8 = (
-    "You are writing one reusable ALFWorld action lesson from a successful "
-    "training episode. Use only the supplied visible trajectory and the "
-    "terminal success label. Return exactly one imperative rule in plain ASCII "
-    "text, with no numbering, explanation, task identifiers, quoted transcript, "
-    "or outcome label."
+    "You are writing one reusable ALFWorld action lesson from a successful training "
+    "episode. Use only the supplied visible trajectory and terminal success label. "
+    "Return exactly one JSON object with exactly one key, rule. Its value must be one "
+    "imperative printable-ASCII rule, with no numbering, explanation, task "
+    "identifiers, quoted transcript, or outcome label."
 )
 LESSON_WRAPPER_PREFIX_UTF8 = "B2 LESSONS (external baseline state; follow only when relevant):\n"
 LESSON_WRAPPER_SUFFIX_UTF8 = "\nEND B2 LESSONS\n"
@@ -49,6 +58,16 @@ class ExpelB2TextLessonError(ValueError):
 
 def _sha(raw: bytes) -> str:
     return sha256(raw).hexdigest()
+
+
+def _fsync_directory(path: Path) -> None:
+    """Make a just-created immutable lesson file durable in its parent directory."""
+    flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
+    descriptor = os.open(path, flags)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
 
 
 def _opaque(label: str, value: str) -> None:
@@ -215,6 +234,7 @@ class LessonStore:
             stream.write(canonical_json_bytes(genesis))
             stream.flush()
             os.fsync(stream.fileno())
+        _fsync_directory(root)
 
     @property
     def frozen(self) -> bool:
@@ -267,6 +287,7 @@ class LessonStore:
             stream.write(canonical_json_bytes(revision.canonical()))
             stream.flush()
             os.fsync(stream.fileno())
+        _fsync_directory(self._root)
         self._revisions.append(revision)
         self._terminal_episode_uids.add(episode_uid)
         self._terminal_seals.add(terminal_seal_sha256)
@@ -290,6 +311,7 @@ class LessonStore:
             stream.write(canonical_json_bytes(state))
             stream.flush()
             os.fsync(stream.fileno())
+        _fsync_directory(self._root)
         self._frozen_sha256 = state["state_sha256"]
         self._frozen_lesson = lesson
         return self._frozen_sha256
@@ -310,6 +332,8 @@ def build_action_messages(*, lesson_utf8: str, episode_uid: str, step_index: int
     """Construct deterministic model-visible B2 action messages without retrieval."""
 
     _opaque("episode_uid", episode_uid)
+    if not isinstance(lesson_utf8, str) or len(lesson_utf8.encode("utf-8")) > MAX_LESSON_UTF8_BYTES:
+        raise ExpelB2TextLessonError("lesson exceeds the fixed byte cap")
     if not isinstance(step_index, int) or not 0 <= step_index < 20:
         raise ExpelB2TextLessonError("step_index must be within the 20-action horizon")
     if lesson_utf8 != render_lesson(tuple()):
@@ -319,7 +343,7 @@ def build_action_messages(*, lesson_utf8: str, episode_uid: str, step_index: int
     payload = {"protocol": B0_ACTION_PROTOCOL, "episode_uid": episode_uid,
                "step_index": step_index, "history": list(history), "observation": observation}
     return [
-        {"role": "system", "content": B0_ACTION_SYSTEM_MESSAGE},
+        {"role": "system", "content": B2_ACTION_SYSTEM_MESSAGE},
         {"role": "system", "content": lesson_utf8},
         {"role": "user", "content": canonical_json_bytes(payload).decode("utf-8")},
     ]

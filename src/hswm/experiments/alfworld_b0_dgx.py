@@ -9,7 +9,7 @@ not an independent egress-isolation claim.
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 import fcntl
 from hashlib import sha256
@@ -104,6 +104,35 @@ _HEX40 = re.compile(r"^[0-9a-f]{40}$")
 _HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
 
+@dataclass(frozen=True, slots=True)
+class DgxLeaseProfile:
+    """One prospective lease identity, separate from mutable run locations."""
+
+    arm_label: str
+    protocol_schema: str
+    model_runtime: Mapping[str, object]
+    container_name_pattern: re.Pattern[str]
+    maximum_tokenize_posts: int
+    maximum_completion_posts: int
+
+
+def _b0_profile() -> DgxLeaseProfile:
+    """Build B0's historical default from its public constants.
+
+    Keeping this dynamic preserves the existing snapshot-identity test seam;
+    a successor can instead override the profile without changing B0 globals.
+    """
+
+    return DgxLeaseProfile(
+        arm_label="B0",
+        protocol_schema=PROTOCOL_SCHEMA,
+        model_runtime=MODEL_RUNTIME,
+        container_name_pattern=_NAME,
+        maximum_tokenize_posts=MAX_TOKENIZE_REQUESTS,
+        maximum_completion_posts=MAX_COMPLETION_REQUESTS,
+    )
+
+
 @dataclass(frozen=True, slots=True, kw_only=True)
 class B0DgxLeaseSpec:
     """All mutable locations and source bindings for one calibration lease."""
@@ -134,15 +163,15 @@ def expected_server_argv() -> tuple[str, ...]:
     )
 
 
-def parse_success_total(raw: bytes) -> int:
+def parse_success_total(raw: bytes, *, arm_label: str = "B0") -> int:
     """Accept only an idle, cache-free metrics snapshot and total successes."""
 
     if not isinstance(raw, bytes) or not raw or len(raw) > 4_000_000:
-        raise LaunchRefused("B0 DGX metrics are unavailable or unbounded")
+        raise LaunchRefused(f"{arm_label} DGX metrics are unavailable or unbounded")
     try:
         text = raw.decode("utf-8", "strict")
     except UnicodeDecodeError as error:
-        raise LaunchRefused("B0 DGX metrics are not UTF-8") from error
+        raise LaunchRefused(f"{arm_label} DGX metrics are not UTF-8") from error
     values: dict[str, list[float]] = {"running": [], "success": [], "hits": [], "queries": []}
     for line in text.splitlines():
         if not line or line.startswith("#"):
@@ -154,18 +183,18 @@ def parse_success_total(raw: bytes) -> int:
         try:
             value = float(fields[1])
         except ValueError as error:
-            raise LaunchRefused("B0 DGX metric value is invalid") from error
+            raise LaunchRefused(f"{arm_label} DGX metric value is invalid") from error
         if value < 0 or value != value or value == float("inf"):
-            raise LaunchRefused("B0 DGX metric value is non-finite")
+            raise LaunchRefused(f"{arm_label} DGX metric value is non-finite")
         if name == "vllm:num_requests_running": values["running"].append(value)
         elif name == "vllm:request_success_total": values["success"].append(value)
         elif name in {"vllm:prefix_cache_hits", "vllm:prefix_cache_hits_total", "vllm_prefix_cache_hits", "vllm_prefix_cache_hits_total"}: values["hits"].append(value)
         elif name in {"vllm:prefix_cache_queries", "vllm:prefix_cache_queries_total", "vllm_prefix_cache_queries", "vllm_prefix_cache_queries_total"}: values["queries"].append(value)
     if any(not values[key] for key in values) or any(item != 0 for key in ("running", "hits", "queries") for item in values[key]):
-        raise LaunchRefused("B0 DGX required counters are absent, active, or nonzero")
+        raise LaunchRefused(f"{arm_label} DGX required counters are absent, active, or nonzero")
     total = sum(values["success"])
     if total != int(total):
-        raise LaunchRefused("B0 DGX success counter is not integral")
+        raise LaunchRefused(f"{arm_label} DGX success counter is not integral")
     return int(total)
 
 
@@ -187,11 +216,13 @@ class B0DgxLease:
         self._observed_requests = (0, 0)
         self.teardown: dict[str, str] | None = None
 
-    @staticmethod
-    def _subprocess(argv: tuple[str, ...]) -> bytes:
+    def _profile(self) -> DgxLeaseProfile:
+        return _b0_profile()
+
+    def _subprocess(self, argv: tuple[str, ...]) -> bytes:
         result = subprocess.run(argv, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
         if result.returncode:
-            raise LaunchRefused("B0 DGX command failed: " + argv[0])
+            raise LaunchRefused(f"{self._profile().arm_label} DGX command failed: " + argv[0])
         return result.stdout
 
     def _text(self, argv: tuple[str, ...]) -> str:
@@ -201,50 +232,51 @@ class B0DgxLease:
     def port(self) -> int:
         match = _ENDPOINT.fullmatch(self.spec.endpoint)
         if match is None or not 1 <= int(match.group(1)) <= 65535:
-            raise LaunchRefused("B0 DGX endpoint must be exact loopback")
+            raise LaunchRefused(f"{self._profile().arm_label} DGX endpoint must be exact loopback")
         return int(match.group(1))
 
     def _validate_protocol_runtime(self) -> None:
         """Bind every launch identity to the exact checked-in B0 protocol."""
 
+        profile = self._profile()
         try:
             protocol = json.loads(self.spec.protocol_path.read_text(encoding="utf-8"))
         except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
-            raise LaunchRefused("B0 DGX protocol is not readable JSON") from error
-        if (not isinstance(protocol, dict) or protocol.get("schema_version") != PROTOCOL_SCHEMA
-                or protocol.get("model_runtime") != MODEL_RUNTIME
-                or self.spec.endpoint != MODEL_RUNTIME["endpoint_origin"]):
-            raise LaunchRefused("B0 DGX protocol runtime identity drifted")
+            raise LaunchRefused(f"{profile.arm_label} DGX protocol is not readable JSON") from error
+        if (not isinstance(protocol, dict) or protocol.get("schema_version") != profile.protocol_schema
+                or protocol.get("model_runtime") != profile.model_runtime
+                or self.spec.endpoint != profile.model_runtime["endpoint_origin"]):
+            raise LaunchRefused(f"{profile.arm_label} DGX protocol runtime identity drifted")
 
     def _validate(self) -> None:
-        spec = self.spec
-        if _NAME.fullmatch(spec.container_name) is None or _HEX64.fullmatch(spec.protocol_sha256) is None:
-            raise LaunchRefused("B0 DGX name or protocol hash is invalid")
+        spec, profile = self.spec, self._profile()
+        if profile.container_name_pattern.fullmatch(spec.container_name) is None or _HEX64.fullmatch(spec.protocol_sha256) is None:
+            raise LaunchRefused(f"{profile.arm_label} DGX name or protocol hash is invalid")
         if (not spec.repo_root.is_absolute() or spec.repo_root.is_symlink() or not spec.repo_root.is_dir()
                 or not spec.protocol_path.is_absolute() or spec.protocol_path.is_symlink()
                 or not spec.protocol_path.is_file() or not spec.protocol_path.is_relative_to(spec.repo_root)):
-            raise LaunchRefused("B0 DGX source boundary is invalid")
+            raise LaunchRefused(f"{profile.arm_label} DGX source boundary is invalid")
         if self._text(("git", "-C", str(spec.repo_root), "status", "--porcelain")):
-            raise LaunchRefused("B0 DGX source checkout is dirty")
+            raise LaunchRefused(f"{profile.arm_label} DGX source checkout is dirty")
         if _HEX40.fullmatch(self._text(("git", "-C", str(spec.repo_root), "rev-parse", "HEAD"))) is None:
-            raise LaunchRefused("B0 DGX source commit is invalid")
+            raise LaunchRefused(f"{profile.arm_label} DGX source commit is invalid")
         declared = tuple(dict.fromkeys(spec.declared_source_paths))
         if not declared or spec.protocol_path not in declared:
-            raise LaunchRefused("B0 DGX declared source paths omit protocol")
+            raise LaunchRefused(f"{profile.arm_label} DGX declared source paths omit protocol")
         for path in declared:
             if (not path.is_absolute() or path.is_symlink() or not path.is_file() or not path.is_relative_to(spec.repo_root)):
-                raise LaunchRefused("B0 DGX declared source path is invalid")
+                raise LaunchRefused(f"{profile.arm_label} DGX declared source path is invalid")
             relative = path.relative_to(spec.repo_root).as_posix()
             if path.read_bytes() != self.command(("git", "-C", str(spec.repo_root), "show", f"HEAD:{relative}")):
-                raise LaunchRefused("B0 DGX declared source differs from commit")
+                raise LaunchRefused(f"{profile.arm_label} DGX declared source differs from commit")
         if sha256(spec.protocol_path.read_bytes()).hexdigest() != spec.protocol_sha256:
-            raise LaunchRefused("B0 DGX protocol hash drifted")
+            raise LaunchRefused(f"{profile.arm_label} DGX protocol hash drifted")
         self._validate_protocol_runtime()
         for path in (spec.lock_path, spec.model_snapshot, spec.hf_cache, spec.compile_cache):
             if not path.is_absolute() or path.is_symlink():
-                raise LaunchRefused("B0 DGX path is linked or relative")
+                raise LaunchRefused(f"{profile.arm_label} DGX path is linked or relative")
         if any(path.exists() for path in (spec.hf_cache, spec.compile_cache)) or any(not path.parent.is_dir() or path.parent.is_symlink() for path in (spec.hf_cache, spec.compile_cache)):
-            raise LaunchRefused("B0 DGX caches are not fresh")
+            raise LaunchRefused(f"{profile.arm_label} DGX caches are not fresh")
         image_raw = self.command(("docker", "image", "inspect", IMAGE))
         try:
             image = json.loads(image_raw.decode("utf-8", "strict"))
@@ -252,10 +284,10 @@ class B0DgxLease:
         except (UnicodeDecodeError, json.JSONDecodeError):
             valid_image = False
         if not valid_image:
-            raise LaunchRefused("B0 DGX image identity drifted")
+            raise LaunchRefused(f"{profile.arm_label} DGX image identity drifted")
         gpu = [field.strip() for field in self.command(("nvidia-smi", "--query-gpu=uuid,name", "--format=csv,noheader,nounits")).decode("utf-8", "strict").split(",")]
         if gpu != [GPU_UUID, GPU_NAME]:
-            raise LaunchRefused("B0 DGX GPU identity drifted")
+            raise LaunchRefused(f"{profile.arm_label} DGX GPU identity drifted")
         hub_root = spec.model_snapshot.parents[2]
         expected_snapshot = hub_root / "models--Qwen--Qwen3.6-35B-A3B-FP8" / "snapshots" / MODEL_REVISION
         try:
@@ -263,19 +295,19 @@ class B0DgxLease:
                 hub_root, repository=MODEL_REPOSITORY, revision=MODEL_REVISION
             ))
         except Exception as error:
-            raise LaunchRefused("B0 DGX model snapshot is unavailable") from error
+            raise LaunchRefused(f"{profile.arm_label} DGX model snapshot is unavailable") from error
         if (spec.model_snapshot != expected_snapshot or not spec.model_snapshot.is_dir() or spec.model_snapshot.is_symlink()
                 or sha256(manifest).hexdigest() != SNAPSHOT_MANIFEST_SHA256):
-            raise LaunchRefused("B0 DGX model snapshot drifted")
+            raise LaunchRefused(f"{profile.arm_label} DGX model snapshot drifted")
 
     def _acquire_lock(self) -> None:
         path = self.spec.lock_path
         if not path.parent.is_dir() or path.parent.is_symlink():
-            raise LaunchRefused("B0 DGX lock parent unavailable")
+            raise LaunchRefused(f"{self._profile().arm_label} DGX lock parent unavailable")
         descriptor = os.open(path, os.O_CREAT | os.O_RDWR | getattr(os, "O_NOFOLLOW", 0), 0o600)
         try:
             if not stat.S_ISREG(os.fstat(descriptor).st_mode):
-                raise LaunchRefused("B0 DGX lock is not regular")
+                raise LaunchRefused(f"{self._profile().arm_label} DGX lock is not regular")
             fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except Exception:
             os.close(descriptor)
@@ -295,7 +327,7 @@ class B0DgxLease:
         """Refuse a stopped name before shared services are changed."""
 
         if self._text(("docker", "ps", "-aq", "--filter", f"name=^/{self.spec.container_name}$")):
-            raise LaunchRefused("B0 DGX container name is not fresh")
+            raise LaunchRefused(f"{self._profile().arm_label} DGX container name is not fresh")
 
     def _launch(self) -> None:
         spec = self.spec
@@ -310,7 +342,7 @@ class B0DgxLease:
         # container.  From this point close() owns removal by exact name.
         self._started = True
         if re.fullmatch(rb"[0-9a-f]{64}", raw_id) is None:
-            raise LaunchRefused("B0 DGX launch did not return a container ID")
+            raise LaunchRefused(f"{self._profile().arm_label} DGX launch did not return a container ID")
         try:
             row = json.loads(self.command(("docker", "inspect", spec.container_name)).decode("utf-8", "strict"))[0]
             ports = row["HostConfig"].get("PortBindings", {}).get("8000/tcp")
@@ -322,7 +354,7 @@ class B0DgxLease:
                 raise ValueError
             self._identity = (sha256(raw_id).hexdigest(), sha256(row["State"]["StartedAt"].encode()).hexdigest())
         except Exception as error:
-            raise LaunchRefused("B0 DGX container identity drifted") from error
+            raise LaunchRefused(f"{self._profile().arm_label} DGX container identity drifted") from error
 
     def _assert_startup_container_alive(self) -> None:
         """Refuse immediately when the owned engine exits before readiness."""
@@ -347,17 +379,18 @@ class B0DgxLease:
                 raise ValueError
         except Exception as error:
             raise LaunchRefused(
-                "B0 DGX owned container exited before readiness"
+                f"{self._profile().arm_label} DGX owned container exited before readiness"
             ) from error
 
     def attest(self, tokenize_completed: int, completion_completed: int) -> dict[str, bytes]:
         """Check the service counter against the two declared B0 request caps."""
 
+        profile = self._profile()
         if (not self._started or self._identity is None
                 or not isinstance(tokenize_completed, int) or not isinstance(completion_completed, int)
-                or not 0 <= tokenize_completed <= MAX_TOKENIZE_REQUESTS
-                or not 0 <= completion_completed <= MAX_COMPLETION_REQUESTS):
-            raise LaunchRefused("B0 DGX request count is invalid")
+                or not 0 <= tokenize_completed <= profile.maximum_tokenize_posts
+                or not 0 <= completion_completed <= profile.maximum_completion_posts):
+            raise LaunchRefused(f"{profile.arm_label} DGX request count is invalid")
         try:
             inspect = self.command(("docker", "inspect", self.spec.container_name))
             row = json.loads(inspect.decode("utf-8", "strict"))[0]
@@ -376,12 +409,12 @@ class B0DgxLease:
                     # completions, not /tokenize preflights. Both endpoint
                     # counts remain bound below for client-side accounting.
                     or model_ids != [SERVED_MODEL]
-                    or parse_success_total(metrics) != completion_completed):
+                    or parse_success_total(metrics, arm_label=profile.arm_label) != completion_completed):
                 raise ValueError
         except LoopbackUnavailable:
             raise
         except Exception as error:
-            raise LaunchRefused("B0 DGX service attestation drifted") from error
+            raise LaunchRefused(f"{profile.arm_label} DGX service attestation drifted") from error
         self._observed_requests = (tokenize_completed, completion_completed)
         return {"container_inspect": inspect, "models": models, "version": version,
                 "version_repeat": version_repeat, "metrics": metrics}
@@ -392,7 +425,7 @@ class B0DgxLease:
             self._assert_fresh_container_name()
             self._stopped = self.stop_services([])
             if not self._quiescent():
-                raise LaunchRefused("B0 DGX prelaunch boundary is not quiescent")
+                raise LaunchRefused(f"{self._profile().arm_label} DGX prelaunch boundary is not quiescent")
             self._launch()
             deadline = time.monotonic() + 900
             while True:
@@ -406,7 +439,7 @@ class B0DgxLease:
             try:
                 self.close()
             except BaseException as cleanup:
-                primary.add_note("B0 DGX startup cleanup failure: " + type(cleanup).__name__)
+                primary.add_note(self._profile().arm_label + " DGX startup cleanup failure: " + type(cleanup).__name__)
             raise primary
 
     def close(self) -> None:
@@ -456,13 +489,13 @@ class B0DgxLease:
                 except BaseException as error:
                     cleanup_failures.append(error)
         if unsafe:
-            cleanup_failures.append(LaunchRefused("B0 DGX teardown was not quiescent"))
+            cleanup_failures.append(LaunchRefused(f"{self._profile().arm_label} DGX teardown was not quiescent"))
         if primary is not None:
             for error in cleanup_failures:
-                primary.add_note("B0 DGX cleanup failure: " + type(error).__name__)
+                primary.add_note(self._profile().arm_label + " DGX cleanup failure: " + type(error).__name__)
             raise primary
         if cleanup_failures:
-            raise LaunchRefused("B0 DGX teardown failed") from cleanup_failures[0]
+            raise LaunchRefused(f"{self._profile().arm_label} DGX teardown failed") from cleanup_failures[0]
 
     def __exit__(self, *_: object) -> None:
         self.close()

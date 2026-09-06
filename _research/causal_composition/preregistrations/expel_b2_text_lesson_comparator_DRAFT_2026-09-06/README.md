@@ -1,5 +1,9 @@
 # B2 text-lesson comparator — prospective draft
 
+> Preparation record. Superseded for one occurrence by the
+> [source-bound frozen v1](../expel_b2_text_lesson_comparator_2026-09-06/README.md).
+> The draft text below records its earlier pending state; it is not a result.
+
 > **Status:** `DRAFT_NOT_PREREGISTERED_NOT_FROZEN_NOT_RUN`
 >
 > **Authority:** `SECONDARY_AI_RESEARCH_DESIGN`

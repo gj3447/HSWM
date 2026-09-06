@@ -158,10 +158,11 @@ def main(argv: list[str] | None = None) -> int:
                 "episode_count", "branch_correct", "branch_wilson_95", "credit_and_admission", "atom_v2_permit_commits",
                 "exact_remove_and_restore_count", "delta_state", "six_branch_signature_rate", "contrasts",
                 "no_state_correct_by_position", "no_state_position_stratum_sizes", "correct_position_balance_stateful",
+                "stateful_correct_by_stateful_position",
                 "g0_local_identifiability_observed", "terminal",
-            )
+            ) if key in metrics
         },
-        "preregistered_identifiability_rule": dict(g1_opaque_v3.IDENTIFIABILITY_RULE),
+        "preregistered_identifiability_rule": dict(protocol["analysis"]["g0_local_identifiability_rule"]),
         "confidentiality_boundary": {
             "private_raw_closure_checked_in": False,
             "private_raw_closure_content_addressed_on_durable_storage": True,

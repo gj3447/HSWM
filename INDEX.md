@@ -95,6 +95,12 @@ S-5는 B0/B2 첫 결과 파일 deliverable로 완료됐고, D4는 초기 Atom V2
 engineering fixture까지만 있으며 held-out occurrence는 없다. S-6는 여전히 열려 있다.
 새 규칙 8개는 미검증 `SECONDARY_AI` 휴리스틱이며 기존 FCL·판정·P1 RED를 변경하지 않는다.
 
+이어지는 [Wolfram형 관계 동역학과 능력 연구 계획](docs/research/HSWM_WOLFRAM_RELATIONAL_CAPABILITY_RESEARCH_PLAN_2026-09-06.md)은
+세계·관측의 의미론, outcome과 credit, 관계 revision이 계산에 미치는 변화, 분화·압축,
+세계·자기 공동모델, 인지적 합성의 여섯 개념 작업을 정한다. Wolfram의 관계 상태·국소
+rewrite·사건 계보를 형식적 토대로 연결하며, 실제 환경에 맞는 규칙을 학습하는 문제는
+별도 연구 의무로 둔다. 사용자 계획 요청을 따른 `SECONDARY_AI` 설계이며 실행 결과가 아니다.
+
 2026-09-02 현재 증명·근거·간극의 answer-first 상태는
 [`HSWM proof-status graph`](docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)에
 고정했다. 임의의 theorem/test 개수가 아니라 여섯 end-to-end 횡단 의무를 같은

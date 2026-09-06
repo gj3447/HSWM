@@ -27,6 +27,7 @@ from .alfworld_b0_calibration import (
     COMPLETE_STATUS,
     DGX_RUNTIME_QUALIFICATION,
     INCONCLUSIVE_STATUS,
+    SUCCESSOR_LINEAGE,
     VLLM_METRICS_QUALIFICATION,
     run_b0_calibration,
     verify_private_selection,
@@ -227,6 +228,18 @@ def _verify_engineering_prerequisites(
     """Require both immutable engineering qualifications before selection use."""
 
     verify_protocol(paths.protocol)
+    lineage = protocol_value.get("historical_consumed_b0_lineage")
+    if lineage is not None:
+        predecessor = SUCCESSOR_LINEAGE["predecessor"]
+        if lineage != SUCCESSOR_LINEAGE or any(
+            binding.get(str(predecessor[path_key])) != predecessor[sha_key]
+            for path_key, sha_key in (
+                ("protocol_path", "protocol_file_sha256"),
+                ("results_path", "results_file_sha256"),
+                ("evidence_path", "evidence_file_sha256"),
+            )
+        ):
+            raise AlfworldB0LiveError("historical consumed B0 lineage is not source-bound")
     evidence = protocol_value.get("current_evidence")
     if (
         not isinstance(evidence, dict)
@@ -457,7 +470,7 @@ def _verify_selection(paths: LivePaths, protocol_value: Mapping[str, object]) ->
         paths.private_selection, protocol, pool_manifest_sha256=pool_sha,
         local_locator_sha256=locator_sha,
     )
-    expected_public = paths.repo / "manifests" / "HSWM_ALFWORLD_B0_SELECTION_2026-08-30.json"
+    expected_public = _expected_public_selection_path(paths.repo, protocol)
     if paths.public_selection != expected_public:
         raise AlfworldB0LiveError("public selection must use the exact committed manifest path")
     public_path = _regular(paths.public_selection, "public selection")
@@ -521,6 +534,14 @@ def _verify_selection(paths: LivePaths, protocol_value: Mapping[str, object]) ->
     if any(token in canonical_bytes(public).decode("utf-8").lower() for token in _FORBIDDEN_PUBLIC):
         raise AlfworldB0LiveError("public selection leaks private material")
     return {"private_selection_sha256": private_bytes_sha, "public_selection_sha256": _sha(public_raw), "selection_digest_sha256": selection_sha, "pool_manifest_sha256": pool_sha, "local_locator_sha256": locator_sha}
+
+
+def _expected_public_selection_path(repo: Path, protocol: Any) -> Path:
+    """Use only the verifier-selected manifest path for the B0 protocol profile."""
+    relative = getattr(protocol, "public_selection_path", None)
+    if not isinstance(relative, str) or not relative:
+        raise AlfworldB0LiveError("verified protocol has no public selection path")
+    return repo / relative
 
 
 def _persist_lease_evidence(output: Path, lease: Any | None, known: dict[str, str]) -> dict[str, str]:

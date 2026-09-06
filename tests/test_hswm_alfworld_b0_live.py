@@ -18,9 +18,20 @@ from hswm.experiments.alfworld_b0_live import (
 )
 from hswm.experiments.alfworld_b0_dgx import MODEL_REVISION
 from hswm.experiments.alfworld_b0_calibration import (
+    B0_SUCCESSOR_PUBLIC_SELECTION_PATH,
     DGX_RUNTIME_QUALIFICATION,
+    LEGACY_PUBLIC_SELECTION_PATH,
     VLLM_METRICS_QUALIFICATION,
 )
+
+
+def test_verified_protocol_profile_selects_its_own_public_selection_manifest(tmp_path: Path) -> None:
+    assert live._expected_public_selection_path(
+        tmp_path, SimpleNamespace(public_selection_path=LEGACY_PUBLIC_SELECTION_PATH)
+    ) == tmp_path / LEGACY_PUBLIC_SELECTION_PATH
+    assert live._expected_public_selection_path(
+        tmp_path, SimpleNamespace(public_selection_path=B0_SUCCESSOR_PUBLIC_SELECTION_PATH)
+    ) == tmp_path / B0_SUCCESSOR_PUBLIC_SELECTION_PATH
 
 
 def _paths(tmp_path: Path) -> LivePaths:

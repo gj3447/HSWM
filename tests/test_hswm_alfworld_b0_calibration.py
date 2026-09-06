@@ -18,8 +18,14 @@ from hswm.experiments.alfworld_b0_actor import (
     _action_schema,
 )
 from hswm.experiments.alfworld_b0_calibration import (
+    B0_SUCCESSOR_PUBLIC_SELECTION_PATH,
+    B0_SUCCESSOR_UID,
+    B0_SUCCESSOR_VERSION,
     COMPLETE_STATUS,
     INCONCLUSIVE_STATUS,
+    SUCCESSOR_LINEAGE,
+    SUCCESSOR_LINEAGE_PATHS,
+    SUCCESSOR_REGISTRATION_STATUS,
     AlfworldB0CalibrationError,
     run_b0_calibration,
     verify_protocol,
@@ -629,4 +635,41 @@ def test_protocol_runtime_drift_is_rejected() -> None:
     protocol = json.loads(PROTOCOL.read_bytes())
     protocol["model_runtime"]["byte_exactness_required"] = True
     with pytest.raises(AlfworldB0CalibrationError, match="executable contract"):
+        verify_protocol(protocol)
+
+
+def test_successor_protocol_keeps_the_fixed_b0_engine_and_binds_its_own_selection_path() -> None:
+    protocol = json.loads(PROTOCOL.read_bytes())
+    protocol["study_uid"] = B0_SUCCESSOR_UID
+    protocol["protocol_version"] = B0_SUCCESSOR_VERSION
+    protocol["registration_status"] = SUCCESSOR_REGISTRATION_STATUS
+    protocol["historical_consumed_b0_lineage"] = SUCCESSOR_LINEAGE
+    selection = protocol["prospective_selection"]
+    assert isinstance(selection, dict)
+    selection["public_selection_projection_path"] = B0_SUCCESSOR_PUBLIC_SELECTION_PATH
+    selection["fresh_draw_policy"] = (
+        "DETERMINISTIC_WITHOUT_REPLACEMENT_WITHIN_SUCCESSOR_COHORT_"
+        "NO_OUTCOME_OR_LABEL_BASED_SELECTION"
+    )
+    estimands = protocol["estimands_and_decisions"]
+    assert isinstance(estimands, dict)
+    estimands["successor_comparison"] = (
+        "DESCRIPTIVE_UNPAIRED_WITH_B2_OR_HISTORICAL_B0_NO_MATCHED_ESTIMATE_NO_EFFICACY"
+    )
+    execution = protocol["execution_source_binding"]
+    assert isinstance(execution, dict)
+    paths = execution["start_marker_must_hash_paths"]
+    assert isinstance(paths, list)
+    paths.remove("manifests/HSWM_ALFWORLD_B0_SELECTION_2026-08-30.json")
+    paths.append(B0_SUCCESSOR_PUBLIC_SELECTION_PATH)
+    paths.extend(SUCCESSOR_LINEAGE_PATHS)
+
+    verified = verify_protocol(protocol)
+    assert verified.uid == B0_SUCCESSOR_UID
+    assert verified.version == B0_SUCCESSOR_VERSION
+    assert verified.public_selection_path == B0_SUCCESSOR_PUBLIC_SELECTION_PATH
+    assert verified.max_completions == verified.max_tokenizations == 240
+
+    protocol["historical_consumed_b0_lineage"] = {**SUCCESSOR_LINEAGE, "completed_episode_count": 1}
+    with pytest.raises(AlfworldB0CalibrationError, match="scientific boundary"):
         verify_protocol(protocol)

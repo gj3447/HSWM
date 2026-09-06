@@ -20,21 +20,23 @@ from .expel_b2_selection import GROUP_DOMAIN, GAME_DOMAIN, SELECTION_SCHEMA
 from .expel_b2_text_lesson import (
     ARM_ID, CLAIM_BOUNDARY, B2_ACTION_SYSTEM_MESSAGE, REFLECTION_PROMPT_UTF8,
     LESSON_WRAPPER_PREFIX_UTF8, LESSON_WRAPPER_SUFFIX_UTF8,
+    ACTION_LESSON_SEPARATOR_UTF8,
     MAX_RULES, MAX_RULE_UTF8_BYTES, MAX_LESSON_UTF8_BYTES,
 )
 from .expel_b2_transport import REFLECTION_MAX_OUTPUT_TOKENS, _reflection_schema
 
 
 PROTOCOL_UID = "sym:ExploratoryStudy:hswm-expel-b2-text-lesson-comparator-2026-09-06"
-OCCURRENCE_UID = "hswm-expel-b2-text-lesson-20260906-v2"
-PROTOCOL_VERSION = "v2"
+OCCURRENCE_UID = "hswm-expel-b2-text-lesson-20260906-v3"
+PROTOCOL_VERSION = "v3"
 FROZEN = "FROZEN_BEFORE_B2_SELECTION_EPISODE_MODEL_CALL_OR_OUTCOME"
 DRAFT = "DRAFT_NOT_PREREGISTERED_NOT_FROZEN_NOT_RUN"
 RELATIVE_PATH = (
     "_research/causal_composition/preregistrations/"
-    "expel_b2_text_lesson_comparator_2026-09-06/protocol.v2.json"
+    "expel_b2_text_lesson_comparator_2026-09-06/protocol.v3.json"
 )
-V1_PROTOCOL_PATH = RELATIVE_PATH.replace("protocol.v2.json", "protocol.v1.json")
+V1_PROTOCOL_PATH = RELATIVE_PATH.replace("protocol.v3.json", "protocol.v1.json")
+V2_PROTOCOL_PATH = RELATIVE_PATH.replace("protocol.v3.json", "protocol.v2.json")
 B0_PROTOCOL_PATH = (
     "_research/causal_composition/preregistrations/"
     "alfworld_b0_calibration_2026-08-30/protocol.v1.json"
@@ -67,6 +69,7 @@ EXECUTION_SOURCES = (
     "_research/dnrd5/canonical_json.py",
     B0_PROTOCOL_PATH,
     V1_PROTOCOL_PATH,
+    V2_PROTOCOL_PATH,
     "manifests/HSWM_ALFWORLD_TEXT_CLEAN_POOL_2026-08-30.json",
     DGX_RUNTIME_QUALIFICATION["path"],
     VLLM_METRICS_QUALIFICATION["path"],
@@ -102,6 +105,17 @@ def build_protocol(repo: Path, *, frozen: bool = False) -> dict[str, Any]:
         "claim_boundary": CLAIM_BOUNDARY,
         "canonical_role": "External text-state secondary comparator; no canonical atom, owner, credit, Permit, or revision.",
         "predecessor": {
+            "b2_v2": {
+                "protocol_path": V2_PROTOCOL_PATH,
+                "protocol_sha256": "5ef3784f54c7fed7bb5bc682b982ef9220513782764d9afed19104c7a1722680",
+                "source_commit": "efffab201fc3b6ed4a6c3b680afa4c05ed54573d",
+                "terminal": "INCONCLUSIVE_MEASUREMENT_NOT_READY",
+                "observed_tokenize_posts": 1, "observed_completion_posts": 0,
+                "failure": "PINNED_MODEL_CHAT_TEMPLATE_REJECTED_TWO_SYSTEM_MESSAGES_HTTP_400",
+                "successor_delta": "JOIN_IDENTICAL_ACTION_INSTRUCTIONS_AND_LESSON_IN_ONE_LEADING_SYSTEM_MESSAGE",
+                "criteria": "IDENTICAL_ALGORITHM_COUNTS_CAPS_FREEZE_AND_CLAIM_CEILING_NEW_OCCURRENCE_AND_SELECTION",
+                "preservation": "V2_PROTOCOL_SELECTION_PREFIX_AND_WRAPPER_RETAINED_NO_RETRY_OR_RESUME",
+            },
             "b2_v1": {
                 "protocol_path": V1_PROTOCOL_PATH,
                 "protocol_sha256": "98c6c46ba3d65dc98f5b148fbda1d9b151972b25c143a19fca6d20609970e1de",
@@ -144,6 +158,9 @@ def build_protocol(repo: Path, *, frozen: bool = False) -> dict[str, Any]:
             "reflection_prompt_bytes_sha256": _sha(REFLECTION_PROMPT_UTF8.encode()),
             "action_system_message_utf8": B2_ACTION_SYSTEM_MESSAGE,
             "action_system_message_sha256": _sha(B2_ACTION_SYSTEM_MESSAGE.encode()),
+            "action_message_roles": ["system", "user"],
+            "action_system_lesson_separator_utf8": ACTION_LESSON_SEPARATOR_UTF8,
+            "model_chat_template_sha256": "e84f32a23fdda27689f868aa4a1a5621f41133e51a48d7f3efcbea2839574259",
             "action_response_schema_sha256": _action_schema().schema_sha256,
             "reflection_response_schema_sha256": _reflection_schema().schema_sha256,
             "lesson_wrapper_prefix_utf8": LESSON_WRAPPER_PREFIX_UTF8,

@@ -1,0 +1,435 @@
+{
+  "schema_version": "hswm-alfworld-b0-calibration-protocol/v1",
+  "study_uid": "sym:ExploratoryStudy:hswm-alfworld-b0-successor-2026-09-06",
+  "protocol_version": "v2",
+  "recorded_at_utc": "2026-09-06T13:54:19Z",
+  "last_amended_at_utc": "2026-09-06T13:54:19Z",
+  "prospective_amendments": [
+    {
+      "id": "ARM64_PDDL_ONLY_ENVIRONMENT_ADAPTER_AND_HASH_BOUND_RUNTIME_SPLIT",
+      "superseded_protocol_file_sha256": "6d1f18f3ccc0e70ed8b4ba72a98462114fe647f26e7e19919fc3c1ecb072249d",
+      "trigger": "A DGX package-install engineering attempt established that upstream TextWorld 1.7.0 invokes Inform7 setup and its official archive has no aarch64 compiler payload. The attempt stopped during dependency construction.",
+      "change": "Preserve the historically qualified runtime bytes; move valid_unseen-opaque lookup into a B0-only source; install the exact official TextWorld 1.7.0 revision with an explicit PDDL-only build adapter that skips Inform7 setup and supplies no Inform7 capability.",
+      "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_MODEL_CALL_NO_OUTCOME_OBSERVED"
+    },
+    {
+      "id": "DGX_TRUSTED_MAINTAINER_SUDO_BWRAP_NO_USERNS_ADAPTER",
+      "superseded_protocol_file_sha256": "d4448317625a617e0e687bf0bd5bc108d49dc570bad44ed96b05dff5f5d054bc",
+      "trigger": "Pre-B0 fixed-action engineering qualification reached the DGX sandbox launcher but stopped before its first actor frame. No B0 selection, model call, or B0 outcome occurred. Diagnostics established that the host AppArmor policy rejects the required unprivileged user namespace and that the exact privileged no-userns adapter can import ALFWorld, register the sealed game, construct the environment, and reset it.",
+      "change": "Use a B0-only source-bound noninteractive sudo Bubblewrap adapter with explicit pid, ipc, uts, net, and best-effort cgroup namespaces; no user namespace; all capabilities dropped except CAP_DAC_READ_SEARCH; and a read-only /proc/controller-pid/fd/verified-fd game bind held by the controller through worker termination. Preserve the historical runtime implementation unchanged.",
+      "prospective_boundary": "NO_B0_SELECTION_NO_MODEL_CALL_NO_B0_OUTCOME_OBSERVED_ENGINEERING_RESET_DIAGNOSTIC_ONLY"
+    },
+    {
+      "id": "VLLM_METRICS_PUBLIC_PROJECTION_REPAIR_AFTER_NEUTRAL_PROBE",
+      "superseded_protocol_file_sha256": "0519fc2820c3e00438958d51824c465805b22d4faeb01da636e986c83358848c",
+      "trigger": "A pre-selection engineering probe issued exactly one neutral tokenize request and one tiny schema-constrained completion on a fresh service, then refused before writing either qualification receipt because its public leakage guard rejected the expected fixed ALFWorld source-path labels. Artifact packaging also rejected root-owned compile-cache bytes. No counter delta was inspected from the failed occurrence.",
+      "change": "Permit the fixed committed ALFWorld source-path labels in the aggregate source binding while continuing to forbid task identities, episodes, games, selections, observations, outcomes, prompts, messages, content, and raw evidence. Place fresh container caches in the runner cache tree rather than published outputs and repeat under a new occurrence identifier.",
+      "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_TASK_OUTCOME_ONE_NEUTRAL_TOKENIZE_AND_ONE_NEUTRAL_COMPLETION_OCCURRED_NO_METRIC_DELTA_INSPECTED"
+    },
+    {
+      "id": "DGX_GB10_CUDA_LAUNCH_BLOCKING_STARTUP_STABILIZATION",
+      "superseded_protocol_file_sha256": "c2cda2508e968072d58256cacc7e9d4c792ce7be73c097ce1136803b873e87dd",
+      "trigger": "The repaired fresh-service metrics occurrence exited during vLLM memory-profile warmup with cudaErrorNotPermitted at the native fused RMSNorm path on DGX GB10 before readiness and before either neutral probe POST. The owned container was removed and shared services were restored.",
+      "change": "Add CUDA_LAUNCH_BLOCKING=1 to the exact pinned container environment, following the upstream vLLM GB10 warmup-race workaround while retaining enforce-eager and every model, image, decoding, cache, and request-budget identity. Detect an exited owned startup container immediately instead of waiting for the full readiness deadline.",
+      "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_EPISODE_NO_TASK_OUTCOME_NO_NEUTRAL_PROBE_POST_STARTUP_ENGINEERING_FAILURE_ONLY"
+    },
+    {
+      "id": "PRE_B0_ENGINEERING_EVIDENCE_AND_COMPLETION_COUNTER_SEMANTICS_BINDING",
+      "superseded_protocol_file_sha256": "f754cb5fb6db2b97fa1b1a2055946f7dc63ce7c754909eec894e1848d07bc548",
+      "trigger": "Before any B0 selection, one sealed fixed-look DGX runtime qualification and one fresh-service neutral vLLM metrics qualification were completed and committed. The neutral probe established that request_success_total increased by zero for one successful tokenize POST and by one for one successful completion POST, with running and prefix-cache counters remaining zero.",
+      "change": "Bind both immutable public qualification manifests, require their committed bytes in the live start closure, and prospectively compare the final service success counter with issued completion POSTs only while continuing to account for tokenize and completion POSTs separately at the client gate.",
+      "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_B0_EPISODE_NO_TASK_OUTCOME_ONE_NEUTRAL_TOKENIZE_AND_ONE_NEUTRAL_COMPLETION_ENGINEERING_PROBE_ONLY_NO_AGENT_OR_HSWM_EFFICACY"
+    }
+  ],
+  "registration_status": "PROSPECTIVE_SUCCESSOR_BEFORE_ITS_OWN_B0_SELECTION_ALFWORLD_EPISODE_OR_TASK_OUTCOME_WITH_HISTORICAL_B0_CALIBRATION_CONSUMED",
+  "canonical_role": "Fresh no-learning secondary calibration after the consumed historical B0 measurement failure; descriptive unpaired comparison only, not HSWM learning or G0 passage.",
+  "scientific_status": "EXPLORATORY_G0_CALIBRATION_ONLY_NOT_G0_PASS_NOT_G1_EFFICACY",
+  "claim_ceiling": "ENGINEERING_AND_TASK_CALIBRATION_ONLY",
+  "research_order": {
+    "G0": "NOT_PASSED",
+    "G1_THROUGH_G6": "LOCKED_BY_THIS_STUDY"
+  },
+  "current_evidence": {
+    "foundation_commit": "1627774ac7fe706ffd486dcabf873c4b377c4638",
+    "pool_manifest": {
+      "path": "manifests/HSWM_ALFWORLD_TEXT_CLEAN_POOL_2026-08-30.json",
+      "rendered_json_sha256": "68a7772f78091e6b4c0eddfde016e319be2222ce7ccb5cc1e0fd085ca0936815"
+    },
+    "local_locator_rendered_json_sha256": "cfa8f4bd7357de4be5507e56c3a04d9cac789ff5bfd58786be8c3ec6c4f9e85c",
+    "runtime_qualification": {
+      "path": "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_QUALIFICATION_2026-08-30.json",
+      "file_sha256": "1e1bb8fb0d6974dec7a17ef3ebfce9131dc2cbb4e4354ddafb5bd74d7bd46d12",
+      "receipt_sha256": "3473dc2bd5e209b421fc7ccb214fa48191d44ec3625a5f037e033a6ea7def051",
+      "status": "ENGINEERING_INSTRUMENT_QUALIFIED_G0_NOT_PASSED"
+    },
+    "dgx_runtime_qualification": {
+      "path": "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json",
+      "file_sha256": "a641218babb759159714f02fd539cf508997991f9469731788353941fb98595d",
+      "receipt_sha256": "1723986c3203add3cac0fe121b3cf110830c49e9873cccd737cef95a43b01422",
+      "status": "ENGINEERING_INSTRUMENT_QUALIFIED_DGX_ARM64_G0_NOT_PASSED",
+      "evidence_commit": "dd395b7cbacf7b5204453043ce67ef8b17db52d6"
+    },
+    "vllm_metrics_qualification": {
+      "path": "manifests/HSWM_ALFWORLD_B0_VLLM_METRICS_QUALIFICATION_2026-08-30.json",
+      "file_sha256": "5a3e2ddfae77d37e1e858ebc42267b76a61805dc3dc4fcce92ec2fd706464b12",
+      "receipt_sha256": "a1d40c17ad3b38f2d84f864821a50b91c0285c04b98af966c4effe4ceb05d4ca",
+      "private_receipt_file_sha256": "94971d57e8f69410a4398f3f5f8cc622c88fabd8df9a6c40b0eb6c46a1f95a60",
+      "status": "ENGINEERING_VLLM_METRICS_SEMANTICS_QUALIFIED_B0_NOT_RUN",
+      "evidence_commit": "a45ef8fcc3be878deab3778f5dde935778276b2e",
+      "probe_predecessor_protocol_sha256": "f754cb5fb6db2b97fa1b1a2055946f7dc63ce7c754909eec894e1848d07bc548"
+    },
+    "source_audit": {
+      "path": "_research/causal_composition/priors/alfworld_text_g1_candidate_v1/source_audit.v1.json",
+      "sha256": "626daca514906eacefe258fca1694b3186b6d2fde68b88a08554ea7f9318e0c5"
+    },
+    "local_use_authorization": {
+      "path": "_research/causal_composition/priors/alfworld_text_g1_candidate_v1/local_use_authorization.v1.json",
+      "sha256": "48c1b5c82ff8c6c5b454f5e0a32beb9546fd46db4b891c804397ca036d71f3a8",
+      "scope": "LOCAL_NONREDISTRIBUTIVE_RESEARCH_ONLY"
+    }
+  },
+  "research_question": "Can a frozen frontier-model, no-learning actor achieve non-floor and non-saturated success on a clean text-only ALFWorld family under a sealed 20-action environment horizon, while the instrument records every scheduled episode without hidden repair?",
+  "arm": {
+    "id": "B0_STATELESS_NO_LEARNING",
+    "count": 1,
+    "within_episode_context": "The current request may contain only the ordered visible observation/action transcript from the same episode plus the current visible observation.",
+    "cross_episode_state": "NONE",
+    "forbidden": [
+      "lesson extraction or injection",
+      "retrieval or successful-trajectory few-shots",
+      "cross-episode transcript persistence",
+      "expert plans, hidden PDDL, admissible-command lists, or outcome fields",
+      "credit, revision proposal, canonical state mutation, owner decision, Permit, admission, remove, or restore",
+      "human repair, manual action substitution, retry, replacement, or refill"
+    ]
+  },
+  "task_contract": {
+    "environment": "ALFWORLD_TEXT_ONLY",
+    "task_family": "pick_clean_then_place_in_recep",
+    "pool_schema": "hswm-alfworld-text-clean-pool/v2",
+    "pool_counts": {
+      "train_games": 650,
+      "train_groups": 268,
+      "valid_seen_games": 27,
+      "valid_seen_groups": 27,
+      "valid_unseen_games": 31,
+      "valid_unseen_groups": 11
+    },
+    "known_overlap": {
+      "train__valid_seen_task_groups": 25,
+      "train__valid_unseen_task_groups": 0,
+      "valid_seen__valid_unseen_task_groups": 0
+    },
+    "environment_horizon": 20,
+    "fresh_environment_per_episode": true,
+    "simulator_terminal_outcome_hidden_from_actor": true
+  },
+  "prospective_selection": {
+    "implementation_path": "src/hswm/experiments/alfworld_b0_selection.py",
+    "algorithm": "hswm-alfworld-b0-selection/v1",
+    "protocol_file_sha256_enters_every_rank": true,
+    "rank_task_groups_before_games": true,
+    "one_game_per_group": true,
+    "without_replacement": true,
+    "allocation": {
+      "train": {
+        "groups": 8,
+        "games_per_group": 1,
+        "role": "HEADROOM_CLASSIFICATION"
+      },
+      "valid_seen": {
+        "groups": 4,
+        "games_per_group": 1,
+        "role": "DESCRIPTIVE_OFFICIAL_SPLIT_AND_CONTAMINATION_SENSITIVITY_ONLY"
+      },
+      "valid_unseen": {
+        "groups_selected": 0,
+        "games_selected": 0,
+        "role": "UNTOUCHED_LINEAGE_DISJOINT_FINAL_HOLDOUT_CANDIDATE"
+      }
+    },
+    "valid_unseen_zero_touch": [
+      "no individual UID or path decoding by the selector",
+      "no prompt authoring, dry run, model call, outcome inspection, threshold tuning, transcript review, or error taxonomy",
+      "no adaptive allocation after train or valid_seen outcomes"
+    ],
+    "public_projection": "Aggregate counts and commitments only; individual game and task-group identities remain in a non-repository private receipt.",
+    "execution_order": "All eight selected train games in committed rank order, then all four selected valid_seen games in committed rank order. No outcome-dependent reordering.",
+    "public_selection_projection_path": "manifests/HSWM_ALFWORLD_B0_SUCCESSOR_SELECTION_2026-09-06.json",
+    "fresh_draw_policy": "DETERMINISTIC_WITHOUT_REPLACEMENT_WITHIN_SUCCESSOR_COHORT_NO_OUTCOME_OR_LABEL_BASED_SELECTION"
+  },
+  "actor_contract": {
+    "implementation_path": "src/hswm/experiments/alfworld_b0_actor.py",
+    "transport": "ONE_SHOT_OPENAI_COMPATIBLE_REQUEST_PER_ACTION_NO_RETRY",
+    "system_prompt_utf8": "You control one ALFWorld text game. Using only the current episode transcript and current observation, return exactly one JSON object whose action value is the next literal environment command. Do not output reasoning, commentary, multiple commands, tools, memories, lessons, outcomes, admissible-command lists, or state changes.",
+    "system_prompt_sha256": "c67fda09a0cba49fb8b123d9aa6cd4432704902b8babac046a1a8aac6216fa95",
+    "user_payload_fields": [
+      "protocol",
+      "episode_uid",
+      "step_index",
+      "history",
+      "observation"
+    ],
+    "history_item_fields": [
+      "observation",
+      "action"
+    ],
+    "history_length_equals_step_index": true,
+    "response_schema_canonical_json": "{\"additionalProperties\":false,\"properties\":{\"action\":{\"maxLength\":512,\"minLength\":1,\"type\":\"string\"}},\"required\":[\"action\"],\"type\":\"object\"}",
+    "response_schema_sha256": "7a2cdc348620215b44d8c2025ac6a6f4d6369c416e9ebca9490c67453a5fe6d0",
+    "action_post_schema": "Printable ASCII bytes 0x20 through 0x7e only; 1 through 512 bytes; no CR, LF, explanation, or multiple-command repair.",
+    "response_json_whitespace_policy": "Parse one strict JSON object with duplicate keys forbidden; insignificant JSON whitespace is accepted and is not treated as provider-byte exactness.",
+    "max_output_tokens_per_action": 64,
+    "max_observation_utf8_bytes": 32768,
+    "max_canonical_user_payload_bytes": 131072,
+    "max_prepared_chat_request_bytes": 262144,
+    "token_preflight": "Required before every completion; prompt tokens plus 64 must not exceed 32768.",
+    "issued_post_gate": "A fresh occurrence-local gate consumes one tokenize or completion allowance immediately before each transport attempt, including failed attempts; it refuses the 241st request of either kind before network dispatch.",
+    "episode_context_disposal": "Erase the in-memory transcript after each terminal or invalid episode; never supply it to another episode."
+  },
+  "environment_runtime": {
+    "platform": "DGX_AARCH64",
+    "python_version": "3.9.25",
+    "upstream_repository": "https://github.com/alfworld/alfworld",
+    "upstream_revision": "aaba6870f86c5be6a08a491f32a50b906227bc3e",
+    "upstream_source_archive_sha256": "5592fbb36124b08d24167c5f7612a55a2cc610e0c39170f638a69b628835ee3b",
+    "installation": "INSTALL_ARM64_PDDL_ONLY_REQUIREMENTS_THEN_PATCHED_TEXTWORLD_SOURCE_NO_DEPS_THEN_SOURCE_PINNED_ALFWORLD_NO_DEPS",
+    "inherited_requirements_path": "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.requirements.v1.txt",
+    "inherited_requirements_sha256": "2cd843b101554f7935709168be65be5039bcac41f32a2aa7b1b4f54f8ee320c8",
+    "arm64_pddl_only_requirements_path": "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.arm64_pddl_only.requirements.v1.txt",
+    "arm64_pddl_only_requirements_sha256": "2835136ea0b72f65374d584ddae3c4951737e8c0eabb7effae7d588a313655e7",
+    "textworld": {
+      "upstream_repository": "https://github.com/microsoft/TextWorld",
+      "upstream_tag": "1.7.0",
+      "upstream_revision": "9fce9ee107fa042ef2656e41e0b362450a35ecd8",
+      "patch_path": "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/textworld-pddl-only.v1.patch",
+      "patch_sha256": "8b623fe87548694b3990896d69260ae3325c2d686cac62c7daf3963a23772c1d",
+      "install_environment": {
+        "TEXTWORLD_PDDL_ONLY": "1"
+      },
+      "capability": "PDDL_ONLY_NO_INFORM7_SETUP_OR_CAPABILITY"
+    },
+    "install_order": [
+      "install arm64_pddl_only_requirements exactly",
+      "checkout TextWorld upstream_revision exactly",
+      "verify and apply textworld.patch_path",
+      "install patched TextWorld with TEXTWORLD_PDDL_ONLY=1 and --no-deps",
+      "install source-pinned ALFWorld with --no-deps",
+      "supply HSWM from the clean execution checkout through PYTHONPATH"
+    ],
+    "required_key_versions": {
+      "alfworld": "0.5.0",
+      "fast-downward-textworld": "20.6.4",
+      "jericho": "3.3.1",
+      "numpy": "2.0.2",
+      "textworld": "1.7.0"
+    },
+    "sandbox": {
+      "sudo": {
+        "path": "/usr/bin/sudo",
+        "sha256": "ca989d83a5fbfd5765f276ba3e0970927991ab45889b960b557bdbeb6cb0ec1d",
+        "version": "Sudo version 1.9.15p5"
+      },
+      "bubblewrap": {
+        "path": "/usr/bin/bwrap",
+        "sha256": "ae27935781511400c65ebcc0b4669775d602f46251b8707c947a1ac1b160c1c8",
+        "version": "bubblewrap 0.9.0"
+      },
+      "profile": {
+        "sudo_noninteractive": true,
+        "user_namespace": false,
+        "namespaces": [
+          "pid",
+          "ipc",
+          "uts",
+          "net",
+          "cgroup-try"
+        ],
+        "empty_bwrap_root": true,
+        "capabilities": {
+          "drop": "ALL",
+          "add": "CAP_DAC_READ_SEARCH"
+        },
+        "game_bind": "READ_ONLY_PROC_FD_PATH_PARENT_PREHASH_WORKER_REHASH",
+        "game_fd_handoff": "NOT_INHERITED_BY_SUDO_OR_WORKER",
+        "containment_claim": "TRUSTED_MAINTAINER_LOCAL_ENGINEERING_NOT_HOSTILE_LOCAL_USER_SECURITY_NOT_INDEPENDENT_EVALUATOR",
+        "cgroup_namespace": "BEST_EFFORT_HSWM_RUN_SUPPLIES_CPU_MEMORY_SCOPE"
+      }
+    },
+    "dgx_fixed_action_qualification": {
+      "path": "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json",
+      "file_sha256": "a641218babb759159714f02fd539cf508997991f9469731788353941fb98595d",
+      "receipt_sha256": "1723986c3203add3cac0fe121b3cf110830c49e9873cccd737cef95a43b01422",
+      "status": "ENGINEERING_INSTRUMENT_QUALIFIED_DGX_ARM64_G0_NOT_PASSED",
+      "evidence_commit": "dd395b7cbacf7b5204453043ce67ef8b17db52d6"
+    }
+  },
+  "model_runtime": {
+    "model_repository": "Qwen/Qwen3.6-35B-A3B-FP8",
+    "model_revision": "95a723d08a9490559dae23d0cff1d9466213d989",
+    "served_model": "qwen3.6-35b-a3b",
+    "snapshot_manifest_sha256": "2ece6b46248e818cbf93aa30299300f7dd4c60d9351960ec790cc8b420376e47",
+    "container_image": "vllm/vllm-openai@sha256:e4f88a835143cd22aee2397a26ec6bb80b3a4a6fe0c882bcbc63822904766089",
+    "container_image_id": "sha256:30a38a1d74a17365eca400e83ffd885b250e0c8c0d3c5b508afa8c412d2ddf95",
+    "vllm_version": "0.25.1",
+    "gpu_name": "NVIDIA GB10",
+    "gpu_uuid": "GPU-ffed5bca-3452-8e9e-03fb-b2a4d8f40bc5",
+    "endpoint_origin": "http://127.0.0.1:18080",
+    "host_ingress": "LOOPBACK_ONLY",
+    "container_egress": "BRIDGE_EGRESS_NOT_INDEPENDENTLY_BLOCKED",
+    "max_model_len": 32768,
+    "max_num_seqs": 1,
+    "prefix_cache": false,
+    "async_scheduling": false,
+    "enforce_eager": true,
+    "cuda_launch_blocking": true,
+    "language_model_only": true,
+    "generation_config": "vllm",
+    "engine_seed": 0,
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "enable_thinking": false,
+    "v1_multiprocessing": false,
+    "fresh_service_for_occurrence": true,
+    "fresh_compile_and_huggingface_cache_directories": true,
+    "request_success_counter_at_start": 0,
+    "request_success_counter_semantics": "COMPLETED_GENERATION_REQUESTS_ONLY_TOKENIZE_EXCLUDED",
+    "successful_tokenize_post_counter_delta": 0,
+    "successful_completion_post_counter_delta": 1,
+    "final_service_attestation": "REQUEST_SUCCESS_TOTAL_EQUALS_ISSUED_COMPLETION_POST_COUNT_TOKENIZE_ACCOUNTED_SEPARATELY",
+    "maximum_completion_posts": 240,
+    "maximum_tokenize_posts": 240,
+    "maximum_total_http_posts": 480,
+    "byte_exactness_required": false,
+    "sampling_note": "Greedy decoding is retained from the already measured DGX deployment to reduce one source of noise. Provider-byte equality is not a prerequisite or evidence of learning."
+  },
+  "resource_and_stopping_contract": {
+    "scheduled_episodes": 12,
+    "maximum_model_actions_per_episode": 20,
+    "maximum_model_completions": 240,
+    "maximum_tokenize_calls": 240,
+    "completion_timeout_seconds": 120,
+    "maximum_occurrence_wall_seconds": 36000,
+    "retry_count": 0,
+    "replacement_count": 0,
+    "resume_allowed": false,
+    "early_success_stop": false,
+    "ordinary_episode_terminal": "A simulator terminal before or at action 20 consumes the episode and advances to the next committed episode.",
+    "failure_rule": "Any asset, sudo authorization, sandbox identity, controller-held verified-FD bind, model-service, token-preflight, response-schema, action-grammar, outcome-receipt, source-binding, or request-counter failure seals the exact attempted prefix, forbids retry or resume, and terminates the occurrence as INCONCLUSIVE_MEASUREMENT_NOT_READY.",
+    "all_run_manifest": "The private receipt records every attempted selected episode, including negative, timeout, invalid, or incomplete outcomes."
+  },
+  "estimands_and_decisions": {
+    "primary_train_estimand": "Simulator success count out of exactly eight selected train task groups.",
+    "valid_seen_estimand": "Simulator success count out of exactly four selected valid_seen groups, descriptive only.",
+    "secondary": [
+      "simulator terminal and success counts",
+      "actions, tokenize calls, completion calls, prompt tokens, completion tokens, and wall time",
+      "invalid episode fraction and exact failure class",
+      "per-episode action horizon exhaustion"
+    ],
+    "uncertainty": "Report two-sided 95 percent Clopper-Pearson intervals for complete split counts; no hypothesis test or multiplicity claim.",
+    "train_headroom_rule": {
+      "0_OR_1_OF_8": "FLOOR_OR_INSTRUMENT_REPAIR",
+      "2_THROUGH_6_OF_8": "CANDIDATE_HEADROOM",
+      "7_OR_8_OF_8": "SATURATION_OR_INSUFFICIENT_HEADROOM"
+    },
+    "valid_seen_interpretation": "Descriptive contamination and official-split sensitivity only. Similarity to train is not lineage-independence evidence; a difference cannot be attributed uniquely to contamination.",
+    "incomplete_denominator": "INCONCLUSIVE_MEASUREMENT_NOT_READY_WITHOUT_HEADROOM_CLASSIFICATION",
+    "possible_complete_terminal": "EXPLORATORY_B0_CALIBRATION_COMPLETE_G0_NOT_PASSED",
+    "effect_or_gate_decision": "NONE",
+    "successor_comparison": "DESCRIPTIVE_UNPAIRED_WITH_B2_OR_HISTORICAL_B0_NO_MATCHED_ESTIMATE_NO_EFFICACY"
+  },
+  "measurement_integrity_boundary": {
+    "known_null": "The exact fixed-look sealed runtime qualification terminated with won=false and score=0.",
+    "known_answer": "NOT_YET_PRESENT_AS_AN_INDEPENDENT_LIVE_CALIBRATION",
+    "outcome_provenance": "Simulator terminal outcome on a local OS process boundary, hidden from the actor but not independently owned or externally authenticated.",
+    "independent_evaluator_swap": "NOT_PRESENT",
+    "pretraining_exposure": "Unknown and uncontrolled; ALFWorld may be represented in model pretraining.",
+    "consequence": "This occurrence cannot pass G0 even if complete and cannot unlock G1. It only decides whether this task/model surface has usable exploratory headroom and exposes instrument faults."
+  },
+  "execution_source_binding": {
+    "required_clean_committed_checkout": true,
+    "start_marker_must_bind_execution_commit_and_tree": true,
+    "start_marker_must_hash_paths": [
+      "_research/causal_composition/preregistrations/alfworld_b0_successor_2026-09-06/protocol.v2.json",
+      "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.requirements.v1.txt",
+      "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/alfworld_text_runtime.arm64_pddl_only.requirements.v1.txt",
+      "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/textworld-pddl-only.v1.patch",
+      "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/runtime_qualification_contract.v1.json",
+      "manifests/HSWM_ALFWORLD_TEXT_CLEAN_POOL_2026-08-30.json",
+      "manifests/HSWM_ALFWORLD_TEXT_RUNTIME_DGX_QUALIFICATION_2026-08-30.json",
+      "manifests/HSWM_ALFWORLD_B0_VLLM_METRICS_QUALIFICATION_2026-08-30.json",
+      "manifests/HSWM_ALFWORLD_B0_SUCCESSOR_SELECTION_2026-09-06.json",
+      "src/hswm/experiments/alfworld_b0_selection.py",
+      "src/hswm/experiments/alfworld_b0_actor.py",
+      "src/hswm/experiments/alfworld_b0_calibration.py",
+      "src/hswm/experiments/alfworld_b0_dgx.py",
+      "src/hswm/experiments/alfworld_b0_vllm_metrics.py",
+      "src/hswm/experiments/alfworld_b0_live.py",
+      "src/hswm/experiments/alfworld_b0_runtime.py",
+      "src/hswm/experiments/alfworld_text_runtime.py",
+      "src/hswm/experiments/alfworld_text_worker.py",
+      "src/hswm/experiments/continual_live.py",
+      "scripts/qualify_hswm_alfworld_b0_runtime.py",
+      "scripts/qualify_hswm_alfworld_b0_vllm_metrics.py",
+      "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/protocol.v1.json",
+      "results/HSWM_ALFWORLD_B0_CALIBRATION_RESULTS_2026-08-30.md",
+      "evidence/EVIDENCE_HSWM_ALFWORLD_B0_CALIBRATION_2026-08-30.json"
+    ],
+    "private_selection_receipt_must_precede_first_environment_or_model_call": true,
+    "public_selection_projection_must_precede_live_occurrence": true
+  },
+  "control_mapping": {
+    "CF-01": "Model, runtime, prompt, action, context, call, token, environment, and wall-time budgets are fixed for the sole B0 arm and ready for later matched-arm inheritance.",
+    "CF-07": "NOT_SATISFIED: the simulator outcome is actor-hidden but locally co-owned; no independent evaluator or evaluator swap exists.",
+    "CF-08": "Static prompt and all request/token/time/action counts are recorded; retries, human repair, and per-task adaptation are forbidden.",
+    "CF-09": "Strict actor/outcome schemas and the fixed-action null are present; an independent known-answer live calibration is still absent.",
+    "CF-13": "Prospective task-group selection, no replacement, zero valid_unseen use, exact-prefix sealing, and aggregate/private projection separation are fixed."
+  },
+  "official_reuse_sources": {
+    "alfworld": "https://github.com/alfworld/alfworld/tree/aaba6870f86c5be6a08a491f32a50b906227bc3e",
+    "qwen_model_card": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B-FP8/blob/95a723d08a9490559dae23d0cff1d9466213d989/README.md",
+    "vllm_engine_arguments": "https://docs.vllm.ai/en/v0.25.1/configuration/engine_args/",
+    "vllm_chat_protocol": "https://docs.vllm.ai/en/v0.25.1/api/vllm/entrypoints/openai/chat_completion/protocol/"
+  },
+  "allowed_terminals": [
+    "EXPLORATORY_B0_CALIBRATION_COMPLETE_G0_NOT_PASSED",
+    "INCONCLUSIVE_MEASUREMENT_NOT_READY",
+    "VOID_PROTOCOL_OR_EVIDENCE_BINDING_BREACH"
+  ],
+  "no_claim": [
+    "B0 has no learning, lesson, retrieval update, canonical revision, causal credit, owner-valid Permit admission, or HSWM causal variable.",
+    "A B0 score is not an ALFWorld reproduction, ExpeL replication, model ranking, G0 passage, G1 occurrence, FCL-1 evidence, or HSWM efficacy result.",
+    "valid_seen is contamination-sensitive because 25 of 27 groups overlap train; it is not a lineage-disjoint holdout.",
+    "valid_unseen remains untouched and cannot be inspected or used to tune this calibration.",
+    "The local sandbox and simulator outcome are bounded engineering interfaces, not independently owned cognition or proof of outcome independence.",
+    "The privileged DGX adapter is trusted-maintainer local engineering containment only; it is neither hostile-local-user security nor independent evaluation.",
+    "This study does not alter HSWM's SCIENTIFICALLY_CONNECTED / INTEGRATED_CLAIM_UNJUDGED status and makes no consciousness, selfhood, HSWM-of-HSWMs, or scale-invariant causal-closure claim."
+  ],
+  "historical_consumed_b0_lineage": {
+    "predecessor": {
+      "study_uid": "sym:ExploratoryStudy:hswm-alfworld-b0-calibration-2026-08-30",
+      "protocol_version": "v1",
+      "protocol_path": "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/protocol.v1.json",
+      "protocol_file_sha256": "5beea2a1ff11fa33f71f3b9c4caa02b46315cef68593c6dbcd096d67cb183132",
+      "results_path": "results/HSWM_ALFWORLD_B0_CALIBRATION_RESULTS_2026-08-30.md",
+      "results_file_sha256": "f28141b5fbf01cdf047104431cb6d63425af52147a07649b1241d8bff778f581",
+      "evidence_path": "evidence/EVIDENCE_HSWM_ALFWORLD_B0_CALIBRATION_2026-08-30.json",
+      "evidence_file_sha256": "47e1a8bf081ad5e7811062dfb3ece6aeb3c32129f77c5350e832fb956a7791d2"
+    },
+    "terminal": "INCONCLUSIVE_MEASUREMENT_NOT_READY",
+    "completed_episode_count": 0,
+    "issued_tokenize_post_count": 0,
+    "issued_completion_post_count": 0,
+    "retry_or_resume": "FORBIDDEN_CONSUMED_OCCURRENCE",
+    "successor_draw": "FRESH_DETERMINISTIC_WITHOUT_REPLACEMENT_WITHIN_SUCCESSOR_COHORT_POSSIBLE_OLD_B0_OR_B2_OVERLAP_REPORTED_DESCRIPTIVE_UNPAIRED"
+  },
+  "inherited_amendments_role": "HISTORICAL_ENGINEERING_CHAIN_OF_CONSUMED_B0_NOT_NEW_SUCCESSOR_OCCURRENCES",
+  "comparison_context": {
+    "b2_protocol_path": "_research/causal_composition/preregistrations/expel_b2_text_lesson_comparator_2026-09-06/protocol.v3.json",
+    "b2_protocol_sha256": "49c73264dfce59c3db56f4013ad91dacc66988d4bfdcdeb2ec37af7d278027ee",
+    "group_overlap_policy": "POSSIBLE_OVERLAP_WITH_OLD_B0_OR_B2_REPORTED_AS_DESCRIPTIVE_UNPAIRED_NOT_A_MATCHED_EFFECT",
+    "label_access_before_this_selection": "NONE",
+    "runtime_invocation_asset_root_role": "LOCATOR_RELATIVE_ROOT_DATA_JSON_2_1_1_VERIFIED_FROM_ORIGINAL_B0_RECEIPT"
+  }
+}

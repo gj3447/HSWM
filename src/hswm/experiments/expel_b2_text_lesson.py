@@ -41,6 +41,10 @@ B2_ACTION_SYSTEM_MESSAGE = (
     "command. Do not output reasoning, commentary, multiple commands, tools, "
     "outcomes, admissible-command lists, or state changes."
 )
+# Qwen's pinned template accepts a system message only in position zero.  The
+# fixed separator preserves the instruction/lesson boundary inside that one
+# leading message without adding a second system role.
+ACTION_LESSON_SEPARATOR_UTF8 = "\n\n"
 REFLECTION_PROMPT_UTF8 = (
     "You are writing one reusable ALFWorld action lesson from a successful training "
     "episode. Use only the supplied visible trajectory and terminal success label. "
@@ -343,8 +347,7 @@ def build_action_messages(*, lesson_utf8: str, episode_uid: str, step_index: int
     payload = {"protocol": B0_ACTION_PROTOCOL, "episode_uid": episode_uid,
                "step_index": step_index, "history": list(history), "observation": observation}
     return [
-        {"role": "system", "content": B2_ACTION_SYSTEM_MESSAGE},
-        {"role": "system", "content": lesson_utf8},
+        {"role": "system", "content": B2_ACTION_SYSTEM_MESSAGE + ACTION_LESSON_SEPARATOR_UTF8 + lesson_utf8},
         {"role": "user", "content": canonical_json_bytes(payload).decode("utf-8")},
     ]
 

@@ -31,6 +31,7 @@ class ScriptedBackend:
         self.fail_tokenize = False
         self.fail_complete = False
         self.usage_reported = True
+        self.reject_multiple_system_messages = False
 
     @property
     def identity(self) -> Mapping[str, Any]:
@@ -43,6 +44,9 @@ class ScriptedBackend:
 
     def tokenize(self, *, raw_request: bytes, source_chat_request_sha256: str, max_output_tokens: int, request_id: str, response_observer: Callable[[bytes, bytes, int | None, bool], None]) -> TokenPreflightReceipt:
         self.calls.append(("tokenize", raw_request))
+        messages = json.loads(raw_request)["messages"]
+        if self.reject_multiple_system_messages and sum(item["role"] == "system" for item in messages) > 1:
+            raise RuntimeError("System message must be at the beginning.")
         if self.fail_tokenize:
             raise RuntimeError("tokenize transport failed")
         response = canonical_json_bytes({"count": 11, "max_model_len": 4096, "token_strs": None, "tokens": list(range(11))})
@@ -84,8 +88,16 @@ def test_action_uses_frozen_lesson_and_returns_hashed_usage_receipt() -> None:
     assert receipt.completion.input_tokens == 11 and receipt.completion.output_tokens == 3
     assert receipt.receipt_sha256 == canonical_sha256(receipt.unsigned())
     chat = json.loads(backend.calls[1][1])
-    assert [item["role"] for item in chat["messages"]] == ["system", "system", "user"]
-    assert chat["messages"][1]["content"] == render_lesson(())
+    assert [item["role"] for item in chat["messages"]] == ["system", "user"]
+    assert chat["messages"][0]["content"].endswith("\n\n" + render_lesson(()))
+
+
+def test_action_template_accepts_exactly_one_leading_system_message_without_losing_posts() -> None:
+    backend = ScriptedBackend(); backend.reject_multiple_system_messages = True
+    transport = ExpelB2Transport(backend)
+    receipt = transport.act(lesson_utf8=render_lesson(()), episode_uid="heldout:001", step_index=0, history=[], observation="room")
+    assert receipt.action == "look"
+    assert transport.request_counts == {"action_tokenize": 1, "action_completion": 1, "reflection_tokenize": 0, "reflection_completion": 0}
 
 
 def test_reflection_uses_only_supplied_sealed_success_payload_and_strict_rule_schema() -> None:

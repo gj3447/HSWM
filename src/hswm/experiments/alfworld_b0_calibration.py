@@ -77,6 +77,36 @@ VLLM_METRICS_QUALIFICATION = {
     "evidence_commit": "a45ef8fcc3be878deab3778f5dde935778276b2e",
     "probe_predecessor_protocol_sha256": "f754cb5fb6db2b97fa1b1a2055946f7dc63ce7c754909eec894e1848d07bc548",
 }
+LEGACY_B0_UID = "sym:ExploratoryStudy:hswm-alfworld-b0-calibration-2026-08-30"
+LEGACY_B0_VERSION = "v1"
+LEGACY_PUBLIC_SELECTION_PATH = "manifests/HSWM_ALFWORLD_B0_SELECTION_2026-08-30.json"
+B0_SUCCESSOR_UID = "sym:ExploratoryStudy:hswm-alfworld-b0-successor-2026-09-06"
+B0_SUCCESSOR_VERSION = "v2"
+B0_SUCCESSOR_PUBLIC_SELECTION_PATH = "manifests/HSWM_ALFWORLD_B0_SUCCESSOR_SELECTION_2026-09-06.json"
+LEGACY_REGISTRATION_STATUS = "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_ALFWORLD_EPISODE_OR_TASK_OUTCOME_AFTER_COMMITTED_ENGINEERING_RUNTIME_AND_NEUTRAL_METRICS_QUALIFICATIONS"
+SUCCESSOR_REGISTRATION_STATUS = "PROSPECTIVE_SUCCESSOR_BEFORE_ITS_OWN_B0_SELECTION_ALFWORLD_EPISODE_OR_TASK_OUTCOME_WITH_HISTORICAL_B0_CALIBRATION_CONSUMED"
+SUCCESSOR_LINEAGE = {
+    "predecessor": {
+        "study_uid": LEGACY_B0_UID,
+        "protocol_version": LEGACY_B0_VERSION,
+        "protocol_path": "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/protocol.v1.json",
+        "protocol_file_sha256": "5beea2a1ff11fa33f71f3b9c4caa02b46315cef68593c6dbcd096d67cb183132",
+        "results_path": "results/HSWM_ALFWORLD_B0_CALIBRATION_RESULTS_2026-08-30.md",
+        "results_file_sha256": "f28141b5fbf01cdf047104431cb6d63425af52147a07649b1241d8bff778f581",
+        "evidence_path": "evidence/EVIDENCE_HSWM_ALFWORLD_B0_CALIBRATION_2026-08-30.json",
+        "evidence_file_sha256": "47e1a8bf081ad5e7811062dfb3ece6aeb3c32129f77c5350e832fb956a7791d2",
+    },
+    "terminal": INCONCLUSIVE_STATUS,
+    "completed_episode_count": 0,
+    "issued_tokenize_post_count": 0,
+    "issued_completion_post_count": 0,
+    "retry_or_resume": "FORBIDDEN_CONSUMED_OCCURRENCE",
+    "successor_draw": "FRESH_DETERMINISTIC_WITHOUT_REPLACEMENT_WITHIN_SUCCESSOR_COHORT_POSSIBLE_OLD_B0_OR_B2_OVERLAP_REPORTED_DESCRIPTIVE_UNPAIRED",
+}
+SUCCESSOR_LINEAGE_PATHS = tuple(
+    SUCCESSOR_LINEAGE["predecessor"][key]
+    for key in ("protocol_path", "results_path", "evidence_path")
+)
 _HEX64 = re.compile(r"^[0-9a-f]{64}$")
 _OPAQUE_IDENTIFIER = re.compile(r"^[A-Za-z0-9._:-]{1,256}$")
 _FORBIDDEN_PUBLIC = (
@@ -106,6 +136,7 @@ class VerifiedB0Protocol:
     max_wall_seconds: int
     served_model: str
     binding_sha256: str
+    public_selection_path: str
 
 
 class FrameReader(Protocol):
@@ -178,6 +209,19 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
     """Fail closed unless every runtime-relevant preregistered field is exact."""
 
     raw, binding = _read_mapping(value, "protocol")
+    uid, version = raw.get("study_uid"), raw.get("protocol_version")
+    successor = uid == B0_SUCCESSOR_UID and version == B0_SUCCESSOR_VERSION
+    legacy = uid == LEGACY_B0_UID and version == LEGACY_B0_VERSION
+    if successor:
+        registration_exact = (
+            raw.get("registration_status") == SUCCESSOR_REGISTRATION_STATUS
+            and raw.get("historical_consumed_b0_lineage") == SUCCESSOR_LINEAGE
+        )
+    else:
+        registration_exact = (
+            legacy and raw.get("registration_status") == LEGACY_REGISTRATION_STATUS
+            and "historical_consumed_b0_lineage" not in raw
+        )
     if (
         raw.get("schema_version") != PROTOCOL_SCHEMA
         or raw.get("prospective_amendments")
@@ -218,8 +262,7 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
                 "prospective_boundary": "NO_B0_SELECTION_NO_ALFWORLD_B0_EPISODE_NO_TASK_OUTCOME_ONE_NEUTRAL_TOKENIZE_AND_ONE_NEUTRAL_COMPLETION_ENGINEERING_PROBE_ONLY_NO_AGENT_OR_HSWM_EFFICACY",
             }
         ]
-        or raw.get("registration_status")
-        != "PROSPECTIVE_BEFORE_ANY_B0_SELECTION_ALFWORLD_EPISODE_OR_TASK_OUTCOME_AFTER_COMMITTED_ENGINEERING_RUNTIME_AND_NEUTRAL_METRICS_QUALIFICATIONS"
+        or not registration_exact
         or raw.get("scientific_status")
         != "EXPLORATORY_G0_CALIBRATION_ONLY_NOT_G0_PASS_NOT_G1_EFFICACY"
         or raw.get("claim_ceiling") != "ENGINEERING_AND_TASK_CALIBRATION_ONLY"
@@ -228,7 +271,6 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
     ):
         raise AlfworldB0CalibrationError("protocol scientific boundary drifted")
 
-    uid, version = raw.get("study_uid"), raw.get("protocol_version")
     evidence = _exact_mapping(raw.get("current_evidence"), "protocol evidence")
     arm = _exact_mapping(raw.get("arm"), "protocol arm")
     task = _exact_mapping(raw.get("task_contract"), "protocol task contract")
@@ -294,6 +336,22 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
         and selection.get("without_replacement") is True
         and selection.get("execution_order")
         == "All eight selected train games in committed rank order, then all four selected valid_seen games in committed rank order. No outcome-dependent reordering."
+    )
+    successor_selection_exact = (
+        selection.get("public_selection_projection_path") == B0_SUCCESSOR_PUBLIC_SELECTION_PATH
+        and selection.get("fresh_draw_policy")
+        == "DETERMINISTIC_WITHOUT_REPLACEMENT_WITHIN_SUCCESSOR_COHORT_NO_OUTCOME_OR_LABEL_BASED_SELECTION"
+        and estimands.get("successor_comparison")
+        == "DESCRIPTIVE_UNPAIRED_WITH_B2_OR_HISTORICAL_B0_NO_MATCHED_ESTIMATE_NO_EFFICACY"
+        and B0_SUCCESSOR_PUBLIC_SELECTION_PATH
+        in execution.get("start_marker_must_hash_paths", [])
+        and LEGACY_PUBLIC_SELECTION_PATH
+        not in execution.get("start_marker_must_hash_paths", [])
+        and all(path in execution.get("start_marker_must_hash_paths", []) for path in SUCCESSOR_LINEAGE_PATHS)
+    ) if successor else (
+        "public_selection_projection_path" not in selection
+        and "fresh_draw_policy" not in selection
+        and "successor_comparison" not in estimands
     )
     runtime_exact = (
         runtime.get("endpoint_origin") == "http://127.0.0.1:18080"
@@ -404,6 +462,7 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
         or task.get("fresh_environment_per_episode") is not True
         or task.get("simulator_terminal_outcome_hidden_from_actor") is not True
         or not schedule_exact
+        or not successor_selection_exact
         or not actor_exact
         or not environment_exact
         or not runtime_exact
@@ -443,6 +502,7 @@ def verify_protocol(value: Mapping[str, object] | Path) -> VerifiedB0Protocol:
         max_wall_seconds=MAX_OCCURRENCE_WALL_SECONDS,
         served_model=str(runtime["served_model"]),
         binding_sha256=binding,
+        public_selection_path=(B0_SUCCESSOR_PUBLIC_SELECTION_PATH if successor else LEGACY_PUBLIC_SELECTION_PATH),
     )
 
 

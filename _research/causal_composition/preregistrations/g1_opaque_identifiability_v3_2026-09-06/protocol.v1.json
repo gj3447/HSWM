@@ -1,0 +1,2241 @@
+{
+  "analysis": {
+    "branch_correct_denominators": 32,
+    "confirmatory_statistics": "NONE_PREREGISTERED_DESCRIPTIVE_RULE_ONLY",
+    "g0_local_identifiability_rule": {
+      "active_correct_min": 30,
+      "active_credit_and_admission": 32,
+      "atom_v2_permit_commits": 96,
+      "correct_position_balance": [
+        16,
+        16
+      ],
+      "delta_state_min": 0.5,
+      "evaluator_feedback_verified": 32,
+      "exact_remove_and_restore": 32,
+      "forced_opposite_correct_max": 2,
+      "forced_opposite_credit_and_admission": 32,
+      "no_state_arm_per_position_stratum_correct_max": 12,
+      "no_update_correct_max": 21,
+      "outcome_independent_sham_correct_max": 21,
+      "remove_correct_max": 21,
+      "restore_correct_min": 30,
+      "sham_bit_balance": [
+        16,
+        16
+      ],
+      "sham_credit_and_admission": 32
+    },
+    "primary_estimand": "delta_state=mean_i((ACTIVE_i+RESTORE_i)/2-(FORCED_OPPOSITE_FEEDBACK_i+OUTCOME_INDEPENDENT_SHAM_i+NO_UPDATE_i+REMOVE_i)/4)",
+    "secondary_estimands": [
+      "six_branch_signature_rate=mean_i[ACTIVE_i=1 and RESTORE_i=1 and FORCED_OPPOSITE_FEEDBACK_i=0 and OUTCOME_INDEPENDENT_SHAM_i=sham_disposition_correct_i and NO_UPDATE_i=0 and REMOVE_i=0]",
+      "ACTIVE-minus-FORCED_OPPOSITE_FEEDBACK",
+      "ACTIVE-minus-OUTCOME_INDEPENDENT_SHAM",
+      "ACTIVE-minus-mean(NO_UPDATE,REMOVE)",
+      "RESTORE-minus-REMOVE",
+      "branch_correct_counts_with_Wilson_95_percent_intervals",
+      "no_state_correct_counts_stratified_by_correct_candidate_position",
+      "credit_and_admission_counts_per_stateful_arm",
+      "atom_v2_permit_commit_count",
+      "exact_remove_and_restore_count"
+    ],
+    "terminal_order": [
+      "INCONCLUSIVE_MEASUREMENT_NOT_READY",
+      "V3_COMPLETE_G0_LOCAL_IDENTIFIABILITY_OBSERVED_NO_EFFICACY_INFERENCE",
+      "V3_COMPLETE_NO_SEPARATION_NO_EFFICACY_INFERENCE"
+    ],
+    "wilson_z": 1.959963984540054
+  },
+  "arms": [
+    "ACTIVE",
+    "FORCED_OPPOSITE_FEEDBACK",
+    "OUTCOME_INDEPENDENT_SHAM",
+    "NO_UPDATE",
+    "REMOVE",
+    "RESTORE"
+  ],
+  "atom_v2_permit_commit": {
+    "claim_boundary": "ONE_SHOT_LOCAL_EPHEMERAL_KEY_PERMIT_COMMIT_OF_ONE_EXACT_STATE_TRANSITION_NOT_AUTHORITATIVE_NOT_DISTRIBUTED_NOT_TRUSTED_TIME_NOT_CANONICAL_HSWM_ADMISSION_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+    "contract_version": "hswm-local-permit-commit-process/v1",
+    "required": true
+  },
+  "canonical_role": "A single-owner G0-local occurrence asking whether the local outcome-credit-Permit-admission-fresh-probe-remove-restore instrument produces a state-mediated signature when the outcome is produced by a separate salt-keyed evaluator process, candidate position is randomized and balanced, an outcome-independent sham disposition is admitted alongside the outcome-bound one, and every admission crosses the real Atom v2 local Permit path.",
+  "claim_ceiling_if_observed": "MEASUREMENT_READY_SINGLE_OWNER_UNDER_DECLARED_OPAQUE_TASK",
+  "conceptual_delta": "Replace the same-process evaluator, fixed candidate positions, and experiment-local grant of v2 with a separate-process keyed evaluator, seeded position balance, an outcome-independent sham arm, and a real local Permit commit per admission, while keeping the opaque task and the eight-call mechanics otherwise unchanged.",
+  "consumption_registry": {
+    "path": "/mnt/hswm/evidence/hswm-g1-opaque-v3-2026-09-06-consumption-v1"
+  },
+  "control_boundary": "FORCED_OPPOSITE_FEEDBACK is an outcome-dependent counterfactual control. OUTCOME_INDEPENDENT_SHAM is the outcome-independent sham: its feedback bit is precommitted in the protocol and its admitted disposition is correct only by chance. NO_UPDATE and REMOVE are no-state controls. None of these is a reuse-first comparator; a later G1 still requires the full control family and comparators under D-3.",
+  "current_evidence": "The 2026-08-30 opaque v2 occurrence observed ACTIVE and RESTORE at 8/8, FORCED_OPPOSITE_FEEDBACK at 0/8, and NO_UPDATE and REMOVE at 4/8 with a first-candidate position bias, using a same-process evaluator and an experiment-local grant. G0 is NOT_PASSED and G1 is LOCKED.",
+  "episode_count": 32,
+  "episodes": [
+    {
+      "action_codes": [
+        "act_48aa56e6",
+        "act_750694bf"
+      ],
+      "cue": "cue_d51fe063",
+      "episode_uid": "episode:opaque-v3-d51fe063",
+      "evaluator_commitment_sha256": "a593e31fa31db278092f5577f8f0a03b5764eeda846aa8335edd79e58c8659f4",
+      "no_update_action_order": [
+        "act_48aa56e6",
+        "act_750694bf"
+      ],
+      "ordinal": 1,
+      "remove_action_order": [
+        "act_750694bf",
+        "act_48aa56e6"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_750694bf",
+        "act_48aa56e6"
+      ],
+      "trajectory_action_order": [
+        "act_750694bf",
+        "act_48aa56e6"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_fe0b1405",
+        "act_f028b3ce"
+      ],
+      "cue": "cue_14515823",
+      "episode_uid": "episode:opaque-v3-14515823",
+      "evaluator_commitment_sha256": "ef5d3b326b17554dd32cf98090e757d0d0317adb20325bf5d3e8c6cc1b92a7b4",
+      "no_update_action_order": [
+        "act_fe0b1405",
+        "act_f028b3ce"
+      ],
+      "ordinal": 2,
+      "remove_action_order": [
+        "act_f028b3ce",
+        "act_fe0b1405"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_f028b3ce",
+        "act_fe0b1405"
+      ],
+      "trajectory_action_order": [
+        "act_fe0b1405",
+        "act_f028b3ce"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_b583c910",
+        "act_c098d6d3"
+      ],
+      "cue": "cue_84321022",
+      "episode_uid": "episode:opaque-v3-84321022",
+      "evaluator_commitment_sha256": "3cc931dba228dd0c11ca218a5b6afd0772ab563d4e69f80694e270c04c40a93d",
+      "no_update_action_order": [
+        "act_c098d6d3",
+        "act_b583c910"
+      ],
+      "ordinal": 3,
+      "remove_action_order": [
+        "act_b583c910",
+        "act_c098d6d3"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_b583c910",
+        "act_c098d6d3"
+      ],
+      "trajectory_action_order": [
+        "act_b583c910",
+        "act_c098d6d3"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_83bf40d6",
+        "act_d24d6628"
+      ],
+      "cue": "cue_3d792b34",
+      "episode_uid": "episode:opaque-v3-3d792b34",
+      "evaluator_commitment_sha256": "dbc868f29e83e58c282f2edadbcf996a610eca7c79b368c7fad9ce39aae3f6eb",
+      "no_update_action_order": [
+        "act_d24d6628",
+        "act_83bf40d6"
+      ],
+      "ordinal": 4,
+      "remove_action_order": [
+        "act_83bf40d6",
+        "act_d24d6628"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_83bf40d6",
+        "act_d24d6628"
+      ],
+      "trajectory_action_order": [
+        "act_d24d6628",
+        "act_83bf40d6"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_7f8b0302",
+        "act_589051f9"
+      ],
+      "cue": "cue_d8a97d1d",
+      "episode_uid": "episode:opaque-v3-d8a97d1d",
+      "evaluator_commitment_sha256": "0e19b8a3e1e83a412206811a41857d5963bde665db1c2029ca29196cc0a409a7",
+      "no_update_action_order": [
+        "act_7f8b0302",
+        "act_589051f9"
+      ],
+      "ordinal": 5,
+      "remove_action_order": [
+        "act_589051f9",
+        "act_7f8b0302"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_589051f9",
+        "act_7f8b0302"
+      ],
+      "trajectory_action_order": [
+        "act_7f8b0302",
+        "act_589051f9"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_110dfce2",
+        "act_1e4eb5db"
+      ],
+      "cue": "cue_5a2b9134",
+      "episode_uid": "episode:opaque-v3-5a2b9134",
+      "evaluator_commitment_sha256": "21875549afc2cd6f7a917d21fdbdc8198c71a498503a3ec1a1cdc1900cb5190e",
+      "no_update_action_order": [
+        "act_1e4eb5db",
+        "act_110dfce2"
+      ],
+      "ordinal": 6,
+      "remove_action_order": [
+        "act_110dfce2",
+        "act_1e4eb5db"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_110dfce2",
+        "act_1e4eb5db"
+      ],
+      "trajectory_action_order": [
+        "act_110dfce2",
+        "act_1e4eb5db"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_01c4ede3",
+        "act_eee6c06a"
+      ],
+      "cue": "cue_aaa9e1b0",
+      "episode_uid": "episode:opaque-v3-aaa9e1b0",
+      "evaluator_commitment_sha256": "33af214f2bb8ec9ee6e9e4c5e1396dc014265f39a65aeec2f514e14920843a1d",
+      "no_update_action_order": [
+        "act_01c4ede3",
+        "act_eee6c06a"
+      ],
+      "ordinal": 7,
+      "remove_action_order": [
+        "act_eee6c06a",
+        "act_01c4ede3"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_eee6c06a",
+        "act_01c4ede3"
+      ],
+      "trajectory_action_order": [
+        "act_eee6c06a",
+        "act_01c4ede3"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_839a28f5",
+        "act_1474d1b1"
+      ],
+      "cue": "cue_48929e9f",
+      "episode_uid": "episode:opaque-v3-48929e9f",
+      "evaluator_commitment_sha256": "a8c91ef9f9bf0d4f80ce1d7e3545cc0db36fc7ea6eed79c3df8da33f0844984a",
+      "no_update_action_order": [
+        "act_839a28f5",
+        "act_1474d1b1"
+      ],
+      "ordinal": 8,
+      "remove_action_order": [
+        "act_1474d1b1",
+        "act_839a28f5"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_1474d1b1",
+        "act_839a28f5"
+      ],
+      "trajectory_action_order": [
+        "act_1474d1b1",
+        "act_839a28f5"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_43e0b32c",
+        "act_7c1a752a"
+      ],
+      "cue": "cue_c217098b",
+      "episode_uid": "episode:opaque-v3-c217098b",
+      "evaluator_commitment_sha256": "981fe7bf9aa21b26d17f45220ac7b15c0b02954f106ecc047ca8617c827c432e",
+      "no_update_action_order": [
+        "act_43e0b32c",
+        "act_7c1a752a"
+      ],
+      "ordinal": 9,
+      "remove_action_order": [
+        "act_7c1a752a",
+        "act_43e0b32c"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_7c1a752a",
+        "act_43e0b32c"
+      ],
+      "trajectory_action_order": [
+        "act_43e0b32c",
+        "act_7c1a752a"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_34f5a350",
+        "act_00f34373"
+      ],
+      "cue": "cue_a37f4688",
+      "episode_uid": "episode:opaque-v3-a37f4688",
+      "evaluator_commitment_sha256": "324f39ef59b24317336850b61e82a81287bbe247ff05a929baa3f99863a5dd6f",
+      "no_update_action_order": [
+        "act_00f34373",
+        "act_34f5a350"
+      ],
+      "ordinal": 10,
+      "remove_action_order": [
+        "act_34f5a350",
+        "act_00f34373"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_34f5a350",
+        "act_00f34373"
+      ],
+      "trajectory_action_order": [
+        "act_34f5a350",
+        "act_00f34373"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_204ca5b2",
+        "act_85e73dbf"
+      ],
+      "cue": "cue_9d9de6db",
+      "episode_uid": "episode:opaque-v3-9d9de6db",
+      "evaluator_commitment_sha256": "5fc541a871e8d6ea31aa7adde515d5ed6b0b51eab2490980e1823d127a037f1d",
+      "no_update_action_order": [
+        "act_85e73dbf",
+        "act_204ca5b2"
+      ],
+      "ordinal": 11,
+      "remove_action_order": [
+        "act_204ca5b2",
+        "act_85e73dbf"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_204ca5b2",
+        "act_85e73dbf"
+      ],
+      "trajectory_action_order": [
+        "act_85e73dbf",
+        "act_204ca5b2"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_7164fbe0",
+        "act_0db272fd"
+      ],
+      "cue": "cue_481e7eeb",
+      "episode_uid": "episode:opaque-v3-481e7eeb",
+      "evaluator_commitment_sha256": "b8c55fbc2903c1dc89f70c1ae66cbc162c300f0d8efb0ddf0ff4e7f5c3cfb029",
+      "no_update_action_order": [
+        "act_0db272fd",
+        "act_7164fbe0"
+      ],
+      "ordinal": 12,
+      "remove_action_order": [
+        "act_7164fbe0",
+        "act_0db272fd"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_7164fbe0",
+        "act_0db272fd"
+      ],
+      "trajectory_action_order": [
+        "act_7164fbe0",
+        "act_0db272fd"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_73f9b716",
+        "act_2b65281b"
+      ],
+      "cue": "cue_44b41d4a",
+      "episode_uid": "episode:opaque-v3-44b41d4a",
+      "evaluator_commitment_sha256": "ef32ce5885a5fe03488a7b554f904807bc0db162724162701a03ec2126485eb1",
+      "no_update_action_order": [
+        "act_2b65281b",
+        "act_73f9b716"
+      ],
+      "ordinal": 13,
+      "remove_action_order": [
+        "act_73f9b716",
+        "act_2b65281b"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_73f9b716",
+        "act_2b65281b"
+      ],
+      "trajectory_action_order": [
+        "act_2b65281b",
+        "act_73f9b716"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_98e84d57",
+        "act_8223b249"
+      ],
+      "cue": "cue_cc90fe25",
+      "episode_uid": "episode:opaque-v3-cc90fe25",
+      "evaluator_commitment_sha256": "535b63fb10399d0ac5c4de52b595efc82016c1ff0789d702679e8bb9e77c03f1",
+      "no_update_action_order": [
+        "act_98e84d57",
+        "act_8223b249"
+      ],
+      "ordinal": 14,
+      "remove_action_order": [
+        "act_8223b249",
+        "act_98e84d57"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_8223b249",
+        "act_98e84d57"
+      ],
+      "trajectory_action_order": [
+        "act_98e84d57",
+        "act_8223b249"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_95dc2532",
+        "act_f9c41102"
+      ],
+      "cue": "cue_d59fe025",
+      "episode_uid": "episode:opaque-v3-d59fe025",
+      "evaluator_commitment_sha256": "56de602b4647a9d6da6983faf30439ac36735a12ec57971c23a80e659cba7fa3",
+      "no_update_action_order": [
+        "act_f9c41102",
+        "act_95dc2532"
+      ],
+      "ordinal": 15,
+      "remove_action_order": [
+        "act_95dc2532",
+        "act_f9c41102"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_95dc2532",
+        "act_f9c41102"
+      ],
+      "trajectory_action_order": [
+        "act_95dc2532",
+        "act_f9c41102"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_7a5db840",
+        "act_88bd02d9"
+      ],
+      "cue": "cue_65e8b1b7",
+      "episode_uid": "episode:opaque-v3-65e8b1b7",
+      "evaluator_commitment_sha256": "2a1b7147661653efc8a5554a9801abe076975275581226ddad907e5864d17ba0",
+      "no_update_action_order": [
+        "act_88bd02d9",
+        "act_7a5db840"
+      ],
+      "ordinal": 16,
+      "remove_action_order": [
+        "act_7a5db840",
+        "act_88bd02d9"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_7a5db840",
+        "act_88bd02d9"
+      ],
+      "trajectory_action_order": [
+        "act_88bd02d9",
+        "act_7a5db840"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_65e0df72",
+        "act_21cb0126"
+      ],
+      "cue": "cue_72d70c82",
+      "episode_uid": "episode:opaque-v3-72d70c82",
+      "evaluator_commitment_sha256": "e52ddfca340d65161540a48e7317193230756caa83d6c71d2dd2681f09f1e4d9",
+      "no_update_action_order": [
+        "act_65e0df72",
+        "act_21cb0126"
+      ],
+      "ordinal": 17,
+      "remove_action_order": [
+        "act_21cb0126",
+        "act_65e0df72"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_21cb0126",
+        "act_65e0df72"
+      ],
+      "trajectory_action_order": [
+        "act_21cb0126",
+        "act_65e0df72"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_76f747f8",
+        "act_6e8a6a6d"
+      ],
+      "cue": "cue_2825d35f",
+      "episode_uid": "episode:opaque-v3-2825d35f",
+      "evaluator_commitment_sha256": "55cd839afb319c0ff994bb024ee114018a450ae9de249d29550f1d7b0ccecbc7",
+      "no_update_action_order": [
+        "act_6e8a6a6d",
+        "act_76f747f8"
+      ],
+      "ordinal": 18,
+      "remove_action_order": [
+        "act_76f747f8",
+        "act_6e8a6a6d"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_76f747f8",
+        "act_6e8a6a6d"
+      ],
+      "trajectory_action_order": [
+        "act_6e8a6a6d",
+        "act_76f747f8"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_0af9bbf4",
+        "act_c083e9fe"
+      ],
+      "cue": "cue_8e7ca18b",
+      "episode_uid": "episode:opaque-v3-8e7ca18b",
+      "evaluator_commitment_sha256": "259de6f662ea7109f042ead864dba775336fd5d1fa83dc0516e8318b479dbd51",
+      "no_update_action_order": [
+        "act_c083e9fe",
+        "act_0af9bbf4"
+      ],
+      "ordinal": 19,
+      "remove_action_order": [
+        "act_0af9bbf4",
+        "act_c083e9fe"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_0af9bbf4",
+        "act_c083e9fe"
+      ],
+      "trajectory_action_order": [
+        "act_c083e9fe",
+        "act_0af9bbf4"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_16a3826b",
+        "act_9a4b197c"
+      ],
+      "cue": "cue_14583885",
+      "episode_uid": "episode:opaque-v3-14583885",
+      "evaluator_commitment_sha256": "d37bb83b14f4e8fab5cea7185589f875ba27e9b4d293f6342279b1ee4ed8956a",
+      "no_update_action_order": [
+        "act_9a4b197c",
+        "act_16a3826b"
+      ],
+      "ordinal": 20,
+      "remove_action_order": [
+        "act_16a3826b",
+        "act_9a4b197c"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_16a3826b",
+        "act_9a4b197c"
+      ],
+      "trajectory_action_order": [
+        "act_16a3826b",
+        "act_9a4b197c"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_2e35a7a7",
+        "act_588f7a25"
+      ],
+      "cue": "cue_a86f1e72",
+      "episode_uid": "episode:opaque-v3-a86f1e72",
+      "evaluator_commitment_sha256": "b32eeea3ba2b6ef0a84e4bd1ec8b90431ba3885e6a94e23d271d3ff546ee2814",
+      "no_update_action_order": [
+        "act_2e35a7a7",
+        "act_588f7a25"
+      ],
+      "ordinal": 21,
+      "remove_action_order": [
+        "act_588f7a25",
+        "act_2e35a7a7"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_588f7a25",
+        "act_2e35a7a7"
+      ],
+      "trajectory_action_order": [
+        "act_588f7a25",
+        "act_2e35a7a7"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_7f85647a",
+        "act_820f4a04"
+      ],
+      "cue": "cue_bc1da7f8",
+      "episode_uid": "episode:opaque-v3-bc1da7f8",
+      "evaluator_commitment_sha256": "d9b5c9f81df274e5ae23fe7a9b7e91f2dea3c5650fc52c99428cdc8879be9a44",
+      "no_update_action_order": [
+        "act_820f4a04",
+        "act_7f85647a"
+      ],
+      "ordinal": 22,
+      "remove_action_order": [
+        "act_7f85647a",
+        "act_820f4a04"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_7f85647a",
+        "act_820f4a04"
+      ],
+      "trajectory_action_order": [
+        "act_7f85647a",
+        "act_820f4a04"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_43dae8db",
+        "act_f59ffe3b"
+      ],
+      "cue": "cue_d35ce1cd",
+      "episode_uid": "episode:opaque-v3-d35ce1cd",
+      "evaluator_commitment_sha256": "cb900082de9bde6dc9900ffd2bceaadee328ff21cdeae3b355626dd66cb4b335",
+      "no_update_action_order": [
+        "act_43dae8db",
+        "act_f59ffe3b"
+      ],
+      "ordinal": 23,
+      "remove_action_order": [
+        "act_f59ffe3b",
+        "act_43dae8db"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_f59ffe3b",
+        "act_43dae8db"
+      ],
+      "trajectory_action_order": [
+        "act_43dae8db",
+        "act_f59ffe3b"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_2c6888fa",
+        "act_9be740c4"
+      ],
+      "cue": "cue_de2f77cf",
+      "episode_uid": "episode:opaque-v3-de2f77cf",
+      "evaluator_commitment_sha256": "c16bb87356d526d8eef722951061de1ea5f7930813010be1f3132365b0400ec2",
+      "no_update_action_order": [
+        "act_9be740c4",
+        "act_2c6888fa"
+      ],
+      "ordinal": 24,
+      "remove_action_order": [
+        "act_2c6888fa",
+        "act_9be740c4"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_2c6888fa",
+        "act_9be740c4"
+      ],
+      "trajectory_action_order": [
+        "act_2c6888fa",
+        "act_9be740c4"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_4ca25045",
+        "act_638946ae"
+      ],
+      "cue": "cue_1debce8b",
+      "episode_uid": "episode:opaque-v3-1debce8b",
+      "evaluator_commitment_sha256": "e042c646f5b38b7ac9ed8c7b6c034843f3892fc5912798b20e0ab7287789a965",
+      "no_update_action_order": [
+        "act_4ca25045",
+        "act_638946ae"
+      ],
+      "ordinal": 25,
+      "remove_action_order": [
+        "act_638946ae",
+        "act_4ca25045"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_638946ae",
+        "act_4ca25045"
+      ],
+      "trajectory_action_order": [
+        "act_4ca25045",
+        "act_638946ae"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_d85b5d66",
+        "act_1a5ae0c2"
+      ],
+      "cue": "cue_1c1e1f21",
+      "episode_uid": "episode:opaque-v3-1c1e1f21",
+      "evaluator_commitment_sha256": "d45c26c0b92b02aff07acf875a93a0560648162d528db824bdaca0b4ee909706",
+      "no_update_action_order": [
+        "act_1a5ae0c2",
+        "act_d85b5d66"
+      ],
+      "ordinal": 26,
+      "remove_action_order": [
+        "act_d85b5d66",
+        "act_1a5ae0c2"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_d85b5d66",
+        "act_1a5ae0c2"
+      ],
+      "trajectory_action_order": [
+        "act_1a5ae0c2",
+        "act_d85b5d66"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_3a54ab40",
+        "act_e77a01a2"
+      ],
+      "cue": "cue_9adf97a9",
+      "episode_uid": "episode:opaque-v3-9adf97a9",
+      "evaluator_commitment_sha256": "0e8a592233370b98831381c86687949ff496875855f3701b3d5a2695c8e34f9b",
+      "no_update_action_order": [
+        "act_e77a01a2",
+        "act_3a54ab40"
+      ],
+      "ordinal": 27,
+      "remove_action_order": [
+        "act_3a54ab40",
+        "act_e77a01a2"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_3a54ab40",
+        "act_e77a01a2"
+      ],
+      "trajectory_action_order": [
+        "act_3a54ab40",
+        "act_e77a01a2"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_1e7531d9",
+        "act_7b651f42"
+      ],
+      "cue": "cue_85ec1330",
+      "episode_uid": "episode:opaque-v3-85ec1330",
+      "evaluator_commitment_sha256": "a8523edbc4d36b722d09b6fbef2d2044e8d8908ec56a8cdf39392ccd06c96a3c",
+      "no_update_action_order": [
+        "act_7b651f42",
+        "act_1e7531d9"
+      ],
+      "ordinal": 28,
+      "remove_action_order": [
+        "act_1e7531d9",
+        "act_7b651f42"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_1e7531d9",
+        "act_7b651f42"
+      ],
+      "trajectory_action_order": [
+        "act_1e7531d9",
+        "act_7b651f42"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_9fa4755a",
+        "act_d91a8d00"
+      ],
+      "cue": "cue_ebb32636",
+      "episode_uid": "episode:opaque-v3-ebb32636",
+      "evaluator_commitment_sha256": "3d175a961968b0a43cc39d259c9123e281222c9a9cbcbb7b64ea3c18973b886f",
+      "no_update_action_order": [
+        "act_d91a8d00",
+        "act_9fa4755a"
+      ],
+      "ordinal": 29,
+      "remove_action_order": [
+        "act_9fa4755a",
+        "act_d91a8d00"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_9fa4755a",
+        "act_d91a8d00"
+      ],
+      "trajectory_action_order": [
+        "act_d91a8d00",
+        "act_9fa4755a"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_3408de9c",
+        "act_f650a845"
+      ],
+      "cue": "cue_cfe43e4f",
+      "episode_uid": "episode:opaque-v3-cfe43e4f",
+      "evaluator_commitment_sha256": "9529afd9c89d5031d2f0d73cd87f9916d2fabfc37ab30effb72db0958f84e874",
+      "no_update_action_order": [
+        "act_f650a845",
+        "act_3408de9c"
+      ],
+      "ordinal": 30,
+      "remove_action_order": [
+        "act_3408de9c",
+        "act_f650a845"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_3408de9c",
+        "act_f650a845"
+      ],
+      "trajectory_action_order": [
+        "act_3408de9c",
+        "act_f650a845"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_27f26073",
+        "act_1601623a"
+      ],
+      "cue": "cue_0f0966ba",
+      "episode_uid": "episode:opaque-v3-0f0966ba",
+      "evaluator_commitment_sha256": "aaed75cd35be440c44a17840f8b42fe68ddf0e728e5f1a9b9efc93396904e0b4",
+      "no_update_action_order": [
+        "act_1601623a",
+        "act_27f26073"
+      ],
+      "ordinal": 31,
+      "remove_action_order": [
+        "act_27f26073",
+        "act_1601623a"
+      ],
+      "sham_feedback_correct": false,
+      "stateful_probe_action_order": [
+        "act_27f26073",
+        "act_1601623a"
+      ],
+      "trajectory_action_order": [
+        "act_1601623a",
+        "act_27f26073"
+      ]
+    },
+    {
+      "action_codes": [
+        "act_68a1b524",
+        "act_7f01584d"
+      ],
+      "cue": "cue_aa1b68e2",
+      "episode_uid": "episode:opaque-v3-aa1b68e2",
+      "evaluator_commitment_sha256": "1bbf988659c712931262a6dfeef6f173959b447837d7e7a6ff275088f5fe75e8",
+      "no_update_action_order": [
+        "act_7f01584d",
+        "act_68a1b524"
+      ],
+      "ordinal": 32,
+      "remove_action_order": [
+        "act_68a1b524",
+        "act_7f01584d"
+      ],
+      "sham_feedback_correct": true,
+      "stateful_probe_action_order": [
+        "act_68a1b524",
+        "act_7f01584d"
+      ],
+      "trajectory_action_order": [
+        "act_7f01584d",
+        "act_68a1b524"
+      ]
+    }
+  ],
+  "evaluator_boundary": "SEPARATE_PROCESS_SALT_KEYED_ONE_SHOT_EVALUATOR_G0_LOCAL_ONLY_NOT_INDEPENDENTLY_OWNED_NOT_G0_EXTERNAL_NOT_CF07",
+  "evaluator_custody": "The evaluator reveal is generated with the protocol from a secret seed whose SHA-256 commitment is public. It is held only by the evaluator OS user, unreadable by the actor process, and loaded by the evaluator process before the registry claim. The actor instrument reads the reveal only after every behavior call is sealed; the runtime binding records SEPARATE_OS_USER or SAME_OS_USER from the evaluator's reported uid.",
+  "evaluator_reveal_contract": {
+    "custody": "SEPARATE_PROCESS_SEPARATE_OS_USER_REQUIRED_FOR_LIVE_OCCURRENCE",
+    "entry_commitment_formula": "canonical_sha256({ordinal,episode_uid,correct_action_code,salt,leakage_canary})",
+    "protocol_binding": "Reveal outer object must contain this protocol canonical SHA-256 after protocol freeze; the commitment root excludes that outer binding to avoid a circular digest.",
+    "reveal_commitment_root": "47d52170ee8d51b7aee49433553d44a90c852f6ee1e4f08fec0aeea98f765c37",
+    "reveal_schema_version": "hswm-g1-opaque-evaluator-reveal/v1",
+    "root_formula": "canonical_sha256({episode_commitments:[ordered 32 entry commitments]})",
+    "timing": "Loaded by the evaluator process before the registry claim; read by the actor instrument only after every behavior call of every episode is sealed."
+  },
+  "freeze": {
+    "draft_canonical_sha256": "8c8198ff57c4ca0ac4d8b2e6c8678b0fa03acd58021f7e46ba006e3a16212023",
+    "frozen_on": "2026-09-06",
+    "rule": "The frozen protocol bytes are committed before the one-shot registry claim; any later edit is a new protocol family, never an amendment.",
+    "status": "FROZEN"
+  },
+  "generation": {
+    "code_selection": {
+      "candidates_per_episode": 32,
+      "pool_sha256": "4d27ab38feb34801cce22837b0753226135521ef0a52a912e85f4b4948892f57",
+      "rule": "FIRST_SEED_ORDERED_CANDIDATE_PAIR_WITH_EQUAL_OFFLINE_TOKEN_COUNTS",
+      "selected_candidate_index": [
+        4,
+        0,
+        5,
+        0,
+        1,
+        0,
+        0,
+        7,
+        0,
+        4,
+        4,
+        0,
+        0,
+        9,
+        0,
+        1,
+        1,
+        2,
+        5,
+        1,
+        2,
+        2,
+        2,
+        4,
+        4,
+        1,
+        3,
+        3,
+        2,
+        1,
+        3,
+        3
+      ],
+      "token_counts_sha256": "a16d1a605ec7f7404344031895e67e14b8b913a3322a63a2d43d26f01e89c2b8"
+    },
+    "correct_position_balance": [
+      16,
+      16
+    ],
+    "generator": "scripts/generate_hswm_g1_opaque_v3.py",
+    "seed_commitment_sha256": "b0d5f941df53eff010f21f83f934dc45e94b80385d2e7c6d93b82c7a6f5560e6",
+    "seed_custody": "The seed and the derived reveal are held only by the evaluator OS user; the public protocol carries the seed commitment and the reveal commitment root.",
+    "sham_bit_balance": [
+      16,
+      16
+    ]
+  },
+  "http_post_accounting": {
+    "completion_posts": 320,
+    "tokenize_preflight_posts": 320,
+    "total_posts": 640
+  },
+  "leakage_contract": {
+    "branch_labels_model_visible": false,
+    "forbidden_request_substrings": [
+      "correct_action_code",
+      "leakage_canary",
+      "salt",
+      "evaluator_feedback",
+      "feedback_mac",
+      "sham_feedback_correct",
+      "reveal_commitment",
+      "seed_commitment"
+    ],
+    "model_visible_task_fields": [
+      "cue",
+      "action_codes",
+      "compiled_disposition",
+      "trajectory_action_code",
+      "feedback_correct"
+    ],
+    "required_checks": [
+      "Every raw generation and tokenizer request preimage is scanned before result sealing and again with the reveal salts and canaries after the reveal is attached.",
+      "The actor process never reads the evaluator reveal before every behavior call of every episode is sealed.",
+      "REMOVE compiles the exact genesis state and uses the same candidate order as ACTIVE, FORCED_OPPOSITE_FEEDBACK, OUTCOME_INDEPENDENT_SHAM, and RESTORE; NO_UPDATE is the opposite-order position sentinel.",
+      "All branch calls use the same operation schemas without a model-visible arm label."
+    ]
+  },
+  "live_binding": {
+    "async_scheduling": false,
+    "container_image": "vllm/vllm-openai@sha256:e4f88a835143cd22aee2397a26ec6bb80b3a4a6fe0c882bcbc63822904766089",
+    "container_image_id": "sha256:30a38a1d74a17365eca400e83ffd885b250e0c8c0d3c5b508afa8c412d2ddf95",
+    "endpoint_origin": "http://127.0.0.1:18080",
+    "enforce_eager": true,
+    "expected_max_model_len": 32768,
+    "gpu_memory_utilization_milli": 500,
+    "gpu_name": "NVIDIA GB10",
+    "gpu_uuid": "GPU-ffed5bca-3452-8e9e-03fb-b2a4d8f40bc5",
+    "max_num_seqs": 1,
+    "model_repository": "Qwen/Qwen3.6-35B-A3B-FP8",
+    "model_revision": "95a723d08a9490559dae23d0cff1d9466213d989",
+    "model_snapshot_manifest_sha256": "2ece6b46248e818cbf93aa30299300f7dd4c60d9351960ec790cc8b420376e47",
+    "network_boundary": "HOST_INGRESS_LOOPBACK_BOUND;CONTAINER_BRIDGE_EGRESS_NOT_INDEPENDENTLY_BLOCKED",
+    "prefix_cache": false,
+    "served_model": "qwen3.6-35b-a3b",
+    "vllm_version": "0.25.1"
+  },
+  "model_call_sequence_per_episode": [
+    "pre_outcome_trajectory",
+    "active_revision_proposal",
+    "forced_opposite_revision_proposal",
+    "outcome_independent_sham_revision_proposal",
+    "active_fresh_probe",
+    "forced_opposite_fresh_probe",
+    "outcome_independent_sham_fresh_probe",
+    "no_update_fresh_probe",
+    "removed_state_fresh_probe",
+    "restored_state_fresh_probe"
+  ],
+  "nonclaim": "LOCAL_EXPERIMENTAL_AUTHORIZATION_ONLY;NOT_CANONICAL_ATOM_V2_PERMIT;NOT_CANONICAL_HSWM_ADMISSION;NOT_G1_GATE_DECISION_OR_EFFICACY",
+  "permit_policy": {
+    "grant_timing": "AFTER_OUTCOME_CREDIT_AND_EXACT_PROPOSAL_UNDER_PREOUTCOME_POLICY",
+    "max_consumptions_per_grant": 1,
+    "revision_kind": "OPAQUE_ACTION_CODE_DISPOSITION",
+    "write_operation": "UPSERT_ONE_DISPOSITION",
+    "write_target": "local:g1-micro-state:dispositions"
+  },
+  "provider_call_cap": 320,
+  "research_order": {
+    "G0_EXTERNAL": "DEFERRED_PUBLICATION_GATE_UNTIL_SECOND_PARTY",
+    "G0_LOCAL": "CANDIDATE_NOT_PASSED_UNTIL_OCCURRENCE",
+    "G1": "NOT_EVALUATED",
+    "G2_THROUGH_G6": "LOCKED"
+  },
+  "schema_version": "hswm-g1-opaque-identifiability-v3/v1",
+  "scientific_status": "G0_LOCAL_SINGLE_OWNER_CANDIDATE_NOT_G0_EXTERNAL_NOT_G1_EFFICACY_OR_GATE",
+  "state_intervention": "One cue-bound opaque action-code disposition is behavior-readable per stateful arm and episode. REMOVE activates the ACTIVE store's exact empty genesis state; RESTORE reactivates the exact ACTIVE state bytes. Audit records, evaluator feedback, and Permit receipts are outside the model behavior readset.",
+  "stopping_rule": "Exactly thirty-two precommitted episodes in ordinal order with ten calls each. No retry, replacement, refill, resume, adaptive selection, partial-look adaptation, or second occurrence. A schema-valid proposal that does not follow its feedback rule is retained as NO_CREDIT/NO_ADMISSION and the episode continues. Any call, parse, evaluator, Permit, or structural failure aborts the study, preserves the exact prefix, consumes the registry, and yields INCONCLUSIVE_MEASUREMENT_NOT_READY. A VOID is repaired and rerun within 24 hours under this protocol family, never as a new instrument family.",
+  "study_uid": "sym:ExploratoryStudy:hswm-g1-opaque-identifiability-v3-2026-09-06",
+  "tokenizer_binding": {
+    "condition": "PAIRWISE_EQUAL_STANDALONE_ACTION_CODE_TOKEN_COUNTS_BEFORE_REGISTRY_CLAIM",
+    "container_image": "vllm/vllm-openai@sha256:e4f88a835143cd22aee2397a26ec6bb80b3a4a6fe0c882bcbc63822904766089",
+    "container_image_id": "sha256:30a38a1d74a17365eca400e83ffd885b250e0c8c0d3c5b508afa8c412d2ddf95",
+    "encoding": {
+      "add_special_tokens": false,
+      "api": "AutoTokenizer.encode",
+      "local_files_only": true
+    },
+    "episodes": [
+      {
+        "action_codes": [
+          "act_48aa56e6",
+          "act_750694bf"
+        ],
+        "episode_uid": "episode:opaque-v3-d51fe063",
+        "token_counts": [
+          9,
+          9
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            19,
+            23,
+            5137,
+            20,
+            21,
+            68,
+            21
+          ],
+          [
+            519,
+            62,
+            22,
+            20,
+            15,
+            21,
+            24,
+            19,
+            12849
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_fe0b1405",
+          "act_f028b3ce"
+        ],
+        "episode_uid": "episode:opaque-v3-14515823",
+        "token_counts": [
+          8,
+          8
+        ],
+        "token_ids": [
+          [
+            519,
+            7399,
+            15,
+            65,
+            16,
+            19,
+            15,
+            20
+          ],
+          [
+            519,
+            736,
+            15,
+            17,
+            23,
+            65,
+            18,
+            341
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_b583c910",
+          "act_c098d6d3"
+        ],
+        "episode_uid": "episode:opaque-v3-84321022",
+        "token_counts": [
+          9,
+          9
+        ],
+        "token_ids": [
+          [
+            519,
+            853,
+            20,
+            23,
+            18,
+            66,
+            24,
+            16,
+            15
+          ],
+          [
+            519,
+            648,
+            15,
+            24,
+            23,
+            67,
+            21,
+            67,
+            18
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_83bf40d6",
+          "act_d24d6628"
+        ],
+        "episode_uid": "episode:opaque-v3-3d792b34",
+        "token_counts": [
+          9,
+          9
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            23,
+            18,
+            12849,
+            19,
+            15,
+            67,
+            21
+          ],
+          [
+            519,
+            788,
+            17,
+            19,
+            67,
+            21,
+            21,
+            17,
+            23
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_7f8b0302",
+          "act_589051f9"
+        ],
+        "episode_uid": "episode:opaque-v3-d8a97d1d",
+        "token_counts": [
+          10,
+          10
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            22,
+            69,
+            23,
+            65,
+            15,
+            18,
+            15,
+            17
+          ],
+          [
+            519,
+            62,
+            20,
+            23,
+            24,
+            15,
+            20,
+            16,
+            69,
+            24
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_110dfce2",
+          "act_1e4eb5db"
+        ],
+        "episode_uid": "episode:opaque-v3-5a2b9134",
+        "token_counts": [
+          8,
+          8
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            16,
+            16,
+            15,
+            2846,
+            341,
+            17
+          ],
+          [
+            519,
+            62,
+            16,
+            68,
+            19,
+            2967,
+            20,
+            1932
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_01c4ede3",
+          "act_eee6c06a"
+        ],
+        "episode_uid": "episode:opaque-v3-aaa9e1b0",
+        "token_counts": [
+          8,
+          8
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            15,
+            16,
+            66,
+            19,
+            14880,
+            18
+          ],
+          [
+            519,
+            62,
+            32935,
+            21,
+            66,
+            15,
+            21,
+            64
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_839a28f5",
+          "act_1474d1b1"
+        ],
+        "episode_uid": "episode:opaque-v3-48929e9f",
+        "token_counts": [
+          10,
+          10
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            23,
+            18,
+            24,
+            64,
+            17,
+            23,
+            69,
+            20
+          ],
+          [
+            519,
+            62,
+            16,
+            19,
+            22,
+            19,
+            67,
+            16,
+            65,
+            16
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_43e0b32c",
+          "act_7c1a752a"
+        ],
+        "episode_uid": "episode:opaque-v3-c217098b",
+        "token_counts": [
+          10,
+          10
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            19,
+            18,
+            68,
+            15,
+            65,
+            18,
+            17,
+            66
+          ],
+          [
+            519,
+            62,
+            22,
+            66,
+            16,
+            64,
+            22,
+            20,
+            17,
+            64
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_34f5a350",
+          "act_00f34373"
+        ],
+        "episode_uid": "episode:opaque-v3-a37f4688",
+        "token_counts": [
+          10,
+          10
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            18,
+            19,
+            69,
+            20,
+            64,
+            18,
+            20,
+            15
+          ],
+          [
+            519,
+            62,
+            15,
+            15,
+            69,
+            18,
+            19,
+            18,
+            22,
+            18
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_204ca5b2",
+          "act_85e73dbf"
+        ],
+        "episode_uid": "episode:opaque-v3-9d9de6db",
+        "token_counts": [
+          9,
+          9
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            17,
+            15,
+            19,
+            895,
+            20,
+            65,
+            17
+          ],
+          [
+            519,
+            62,
+            23,
+            20,
+            68,
+            22,
+            18,
+            1932,
+            69
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_7164fbe0",
+          "act_0db272fd"
+        ],
+        "episode_uid": "episode:opaque-v3-481e7eeb",
+        "token_counts": [
+          8,
+          8
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            22,
+            16,
+            21,
+            19,
+            90051,
+            15
+          ],
+          [
+            519,
+            62,
+            15,
+            1932,
+            17,
+            22,
+            17,
+            6687
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_73f9b716",
+          "act_2b65281b"
+        ],
+        "episode_uid": "episode:opaque-v3-44b41d4a",
+        "token_counts": [
+          10,
+          10
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            22,
+            18,
+            69,
+            24,
+            65,
+            22,
+            16,
+            21
+          ],
+          [
+            519,
+            62,
+            17,
+            65,
+            21,
+            20,
+            17,
+            23,
+            16,
+            65
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_98e84d57",
+          "act_8223b249"
+        ],
+        "episode_uid": "episode:opaque-v3-cc90fe25",
+        "token_counts": [
+          10,
+          10
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            24,
+            23,
+            68,
+            23,
+            19,
+            67,
+            20,
+            22
+          ],
+          [
+            519,
+            62,
+            23,
+            17,
+            17,
+            18,
+            65,
+            17,
+            19,
+            24
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_95dc2532",
+          "act_f9c41102"
+        ],
+        "episode_uid": "episode:opaque-v3-d59fe025",
+        "token_counts": [
+          9,
+          9
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            24,
+            20,
+            7385,
+            17,
+            20,
+            18,
+            17
+          ],
+          [
+            519,
+            736,
+            24,
+            66,
+            19,
+            16,
+            16,
+            15,
+            17
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_7a5db840",
+          "act_88bd02d9"
+        ],
+        "episode_uid": "episode:opaque-v3-65e8b1b7",
+        "token_counts": [
+          9,
+          9
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            22,
+            64,
+            20,
+            1932,
+            23,
+            19,
+            15
+          ],
+          [
+            519,
+            62,
+            23,
+            23,
+            8670,
+            15,
+            17,
+            67,
+            24
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_65e0df72",
+          "act_21cb0126"
+        ],
+        "episode_uid": "episode:opaque-v3-72d70c82",
+        "token_counts": [
+          9,
+          9
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            21,
+            20,
+            68,
+            15,
+            2846,
+            22,
+            17
+          ],
+          [
+            519,
+            62,
+            17,
+            16,
+            6995,
+            15,
+            16,
+            17,
+            21
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_76f747f8",
+          "act_6e8a6a6d"
+        ],
+        "episode_uid": "episode:opaque-v3-2825d35f",
+        "token_counts": [
+          10,
+          10
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            22,
+            21,
+            69,
+            22,
+            19,
+            22,
+            69,
+            23
+          ],
+          [
+            519,
+            62,
+            21,
+            68,
+            23,
+            64,
+            21,
+            64,
+            21,
+            67
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_0af9bbf4",
+          "act_c083e9fe"
+        ],
+        "episode_uid": "episode:opaque-v3-8e7ca18b",
+        "token_counts": [
+          8,
+          8
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            15,
+            2492,
+            24,
+            5876,
+            69,
+            19
+          ],
+          [
+            519,
+            648,
+            15,
+            23,
+            18,
+            68,
+            24,
+            1795
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_16a3826b",
+          "act_9a4b197c"
+        ],
+        "episode_uid": "episode:opaque-v3-14583885",
+        "token_counts": [
+          10,
+          10
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            16,
+            21,
+            64,
+            18,
+            23,
+            17,
+            21,
+            65
+          ],
+          [
+            519,
+            62,
+            24,
+            64,
+            19,
+            65,
+            16,
+            24,
+            22,
+            66
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_2e35a7a7",
+          "act_588f7a25"
+        ],
+        "episode_uid": "episode:opaque-v3-a86f1e72",
+        "token_counts": [
+          10,
+          10
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            17,
+            68,
+            18,
+            20,
+            64,
+            22,
+            64,
+            22
+          ],
+          [
+            519,
+            62,
+            20,
+            23,
+            23,
+            69,
+            22,
+            64,
+            17,
+            20
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_7f85647a",
+          "act_820f4a04"
+        ],
+        "episode_uid": "episode:opaque-v3-bc1da7f8",
+        "token_counts": [
+          10,
+          10
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            22,
+            69,
+            23,
+            20,
+            21,
+            19,
+            22,
+            64
+          ],
+          [
+            519,
+            62,
+            23,
+            17,
+            15,
+            69,
+            19,
+            64,
+            15,
+            19
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_43dae8db",
+          "act_f59ffe3b"
+        ],
+        "episode_uid": "episode:opaque-v3-d35ce1cd",
+        "token_counts": [
+          7,
+          7
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            19,
+            18,
+            86115,
+            23,
+            1932
+          ],
+          [
+            519,
+            736,
+            20,
+            24,
+            27063,
+            18,
+            65
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_2c6888fa",
+          "act_9be740c4"
+        ],
+        "episode_uid": "episode:opaque-v3-de2f77cf",
+        "token_counts": [
+          9,
+          9
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            17,
+            66,
+            21,
+            23,
+            23,
+            23,
+            3510
+          ],
+          [
+            519,
+            62,
+            24,
+            1323,
+            22,
+            19,
+            15,
+            66,
+            19
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_4ca25045",
+          "act_638946ae"
+        ],
+        "episode_uid": "episode:opaque-v3-1debce8b",
+        "token_counts": [
+          9,
+          9
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            19,
+            895,
+            17,
+            20,
+            15,
+            19,
+            20
+          ],
+          [
+            519,
+            62,
+            21,
+            18,
+            23,
+            24,
+            19,
+            21,
+            5734
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_d85b5d66",
+          "act_1a5ae0c2"
+        ],
+        "episode_uid": "episode:opaque-v3-1c1e1f21",
+        "token_counts": [
+          9,
+          9
+        ],
+        "token_ids": [
+          [
+            519,
+            788,
+            23,
+            20,
+            65,
+            20,
+            67,
+            21,
+            21
+          ],
+          [
+            519,
+            62,
+            16,
+            64,
+            20,
+            5734,
+            15,
+            66,
+            17
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_3a54ab40",
+          "act_e77a01a2"
+        ],
+        "episode_uid": "episode:opaque-v3-9adf97a9",
+        "token_counts": [
+          9,
+          9
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            18,
+            64,
+            20,
+            19,
+            365,
+            19,
+            15
+          ],
+          [
+            519,
+            2135,
+            22,
+            22,
+            64,
+            15,
+            16,
+            64,
+            17
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_1e7531d9",
+          "act_7b651f42"
+        ],
+        "episode_uid": "episode:opaque-v3-85ec1330",
+        "token_counts": [
+          10,
+          10
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            16,
+            68,
+            22,
+            20,
+            18,
+            16,
+            67,
+            24
+          ],
+          [
+            519,
+            62,
+            22,
+            65,
+            21,
+            20,
+            16,
+            69,
+            19,
+            17
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_9fa4755a",
+          "act_d91a8d00"
+        ],
+        "episode_uid": "episode:opaque-v3-ebb32636",
+        "token_counts": [
+          9,
+          9
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            24,
+            3510,
+            19,
+            22,
+            20,
+            20,
+            64
+          ],
+          [
+            519,
+            788,
+            24,
+            16,
+            64,
+            23,
+            67,
+            15,
+            15
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_3408de9c",
+          "act_f650a845"
+        ],
+        "episode_uid": "episode:opaque-v3-cfe43e4f",
+        "token_counts": [
+          9,
+          9
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            18,
+            19,
+            15,
+            23,
+            442,
+            24,
+            66
+          ],
+          [
+            519,
+            736,
+            21,
+            20,
+            15,
+            64,
+            23,
+            19,
+            20
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_27f26073",
+          "act_1601623a"
+        ],
+        "episode_uid": "episode:opaque-v3-0f0966ba",
+        "token_counts": [
+          10,
+          10
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            17,
+            22,
+            69,
+            17,
+            21,
+            15,
+            22,
+            18
+          ],
+          [
+            519,
+            62,
+            16,
+            21,
+            15,
+            16,
+            21,
+            17,
+            18,
+            64
+          ]
+        ]
+      },
+      {
+        "action_codes": [
+          "act_68a1b524",
+          "act_7f01584d"
+        ],
+        "episode_uid": "episode:opaque-v3-aa1b68e2",
+        "token_counts": [
+          10,
+          10
+        ],
+        "token_ids": [
+          [
+            519,
+            62,
+            21,
+            23,
+            64,
+            16,
+            65,
+            20,
+            17,
+            19
+          ],
+          [
+            519,
+            62,
+            22,
+            69,
+            15,
+            16,
+            20,
+            23,
+            19,
+            67
+          ]
+        ]
+      }
+    ],
+    "interpretation_boundary": "Pairwise equal standalone token counts reduce a length cue; they do not prove semantic opacity or exchangeability.",
+    "measurement_receipt_sha256": "589225bbfc32ecbe6b4791f7d4838b3107e0e9338dd8ea1535cd57b4ce6dfd7c",
+    "model_repository": "Qwen/Qwen3.6-35B-A3B-FP8",
+    "model_revision": "95a723d08a9490559dae23d0cff1d9466213d989",
+    "snapshot_manifest_sha256": "2ece6b46248e818cbf93aa30299300f7dd4c60d9351960ec790cc8b420376e47",
+    "status": "MEASURED",
+    "tokenizers_version": "0.22.2",
+    "transformers_version": "5.13.1"
+  }
+}

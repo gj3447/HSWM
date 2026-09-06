@@ -6,8 +6,12 @@
  * observations through GraphLoopEngineeringController.  It neither treats an
  * exit code as external truth nor automatically admits a graph delta: callers
  * must provide the later GE-2 evidence and candidate explicitly.
+ *
+ * Child processes run through the `BoundedSubprocess` service: no shell, a
+ * bounded output byte budget, and a wall-clock timeout that terminates with
+ * SIGTERM and then SIGKILL.  The Node adapter is composed only at an
+ * executable's root or by the compatibility layer below.
  */
-import { spawn } from "node:child_process"
 import { createHash } from "node:crypto"
 import { isAbsolute } from "node:path"
 
@@ -24,6 +28,11 @@ import {
   GraphLoopEngineeringController,
   type GraphLoopContract
 } from "./canonical-atom-v2-graph-loop-engineering.js"
+import {
+  BoundedSubprocess,
+  NodeBoundedSubprocessLive,
+  type BoundedSubprocessShape
+} from "./effect-posix-services.js"
 
 export const HSWM_GRAPH_LOOP_RESEARCH_JOB_V1_CONTRACT_VERSION =
   "hswm-graph-loop-research-job/v1" as const
@@ -218,11 +227,15 @@ const validateCommand = (
   return Either.right(undefined)
 }
 
+/**
+ * The child sees a bounded inherited environment, then the command's own
+ * declared variables, then the LE-0 role additions; later entries win.
+ */
 const childEnvironment = (
   command: GraphLoopResearchCommand,
   additions: Readonly<Record<string, string>>
-): NodeJS.ProcessEnv => {
-  const result: NodeJS.ProcessEnv = Object.create(null) as NodeJS.ProcessEnv
+): Readonly<Record<string, string>> => {
+  const result: Record<string, string> = Object.create(null) as Record<string, string>
   for (const name of SAFE_INHERITED_ENVIRONMENT) {
     const value = process.env[name]
     if (value !== undefined) result[name] = value
@@ -231,94 +244,29 @@ const childEnvironment = (
     result[name] = value
   }
   for (const [name, value] of Object.entries(additions)) result[name] = value
-  return result
+  return Object.freeze(result)
 }
 
-const observeCommand = async (
+/**
+ * One bounded observation: no shell, at most
+ * HSWM_GRAPH_LOOP_RESEARCH_MAX_OUTPUT_BYTES of combined output, and the
+ * command's own timeout; a launch failure is an observation, not a failure.
+ */
+const observeCommand = (
+  subprocess: BoundedSubprocessShape,
+  role: "action" | "verifier",
   command: GraphLoopResearchCommand,
   additions: Readonly<Record<string, string>>
-): Promise<CommandObservation> =>
-  new Promise((resolve) => {
-    const stdout: Buffer[] = []
-    const stderr: Buffer[] = []
-    let outputBytes = 0
-    let timedOut = false
-    let outputTruncated = false
-    let launchError: string | null = null
-    let completed = false
-    let terminating = false
-    let timeout: NodeJS.Timeout | undefined
-    let forceKill: NodeJS.Timeout | undefined
-    const finish = (exitCode: number | null, signal: string | null): void => {
-      if (completed) return
-      completed = true
-      if (timeout !== undefined) clearTimeout(timeout)
-      if (forceKill !== undefined) clearTimeout(forceKill)
-      resolve(
-        Object.freeze({
-          exitCode,
-          signal,
-          timedOut,
-          outputTruncated,
-          launchError,
-          stdout: Uint8Array.from(Buffer.concat(stdout)),
-          stderr: Uint8Array.from(Buffer.concat(stderr))
-        })
-      )
-    }
-    let child
-    try {
-      child = spawn(command.argv[0]!, command.argv.slice(1), {
-        cwd: command.cwd,
-        env: childEnvironment(command, additions),
-        shell: false,
-        stdio: ["ignore", "pipe", "pipe"]
-      })
-    } catch (error) {
-      launchError = error instanceof Error ? error.name : "SPAWN_FAILED"
-      finish(null, null)
-      return
-    }
-    const terminate = (): void => {
-      if (terminating) return
-      terminating = true
-      child.kill("SIGTERM")
-      forceKill = setTimeout(() => child.kill("SIGKILL"), 1_000)
-      forceKill.unref()
-    }
-    const append = (chunks: Buffer[], chunk: Buffer): void => {
-      const available = HSWM_GRAPH_LOOP_RESEARCH_MAX_OUTPUT_BYTES - outputBytes
-      if (available <= 0) {
-        outputTruncated = true
-        terminate()
-        return
-      }
-      if (chunk.byteLength > available) {
-        chunks.push(chunk.subarray(0, available))
-        outputBytes += available
-        outputTruncated = true
-        terminate()
-        return
-      }
-      chunks.push(chunk)
-      outputBytes += chunk.byteLength
-    }
-    child.stdout?.on("data", (chunk: Buffer) => {
-      append(stdout, chunk)
-    })
-    child.stderr?.on("data", (chunk: Buffer) => {
-      append(stderr, chunk)
-    })
-    child.once("error", (error) => {
-      launchError = error instanceof Error ? error.name : "SPAWN_FAILED"
-      finish(null, null)
-    })
-    child.once("close", (exitCode, signal) => finish(exitCode, signal))
-    timeout = setTimeout(() => {
-      timedOut = true
-      terminate()
-    }, command.timeoutMs)
-  })
+): Effect.Effect<CommandObservation, GraphLoopResearchJobError> =>
+  subprocess.observe({
+    argv: command.argv,
+    cwd: command.cwd,
+    environment: childEnvironment(command, additions),
+    timeoutMs: command.timeoutMs,
+    maximumOutputBytes: HSWM_GRAPH_LOOP_RESEARCH_MAX_OUTPUT_BYTES
+  }).pipe(
+    Effect.mapError(() => jobError("COMMAND_OBSERVATION_FAILED", `research ${role} observation failed`))
+  )
 
 const stageRecord = (
   view: CanonicalAtomV2DurableGraphView["Type"],
@@ -450,12 +398,16 @@ const validateRequest = (
  * Executes declared action/verifier subprocesses under LE-0.  A verifier ID
  * distinct from the actor ID is enforced by `trigger`; its exit-code mapping
  * is a bounded engineering verdict, not a proof of evaluator independence.
+ *
+ * This variant requires the `BoundedSubprocess` service, so an executable
+ * composes the Node adapter once at its root and tests may substitute one.
  */
-export const makeGraphLoopResearchProcessRunnerLayer = Layer.effect(
+export const makeGraphLoopResearchProcessRunnerLayerWithBoundedSubprocess = Layer.effect(
   GraphLoopResearchProcessRunner,
   Effect.gen(function* () {
     const controller = yield* GraphLoopEngineeringController
     const view = yield* CanonicalAtomV2DurableGraphView
+    const subprocess = yield* BoundedSubprocess
     return GraphLoopResearchProcessRunner.of({
       run: (request) => Effect.gen(function* () {
         const valid = validateRequest(request)
@@ -471,15 +423,12 @@ export const makeGraphLoopResearchProcessRunnerLayer = Layer.effect(
         for (;;) {
           yield* controller.trigger(request.contract)
           attempts += 1
-          const actionObservation = yield* Effect.tryPromise({
-            try: () => observeCommand(request.action, Object.freeze({
-              HSWM_LE0_RUN_ID: request.contract.runId,
-              HSWM_LE0_ATTEMPT: String(attempts),
-              HSWM_LE0_ROLE: "ACTOR",
-              ...descriptorEnvironment("HSWM_LE0_FROZEN_INPUTS", frozenInputs)
-            })),
-            catch: () => jobError("COMMAND_OBSERVATION_FAILED", "research action observation failed")
-          })
+          const actionObservation = yield* observeCommand(subprocess, "action", request.action, Object.freeze({
+            HSWM_LE0_RUN_ID: request.contract.runId,
+            HSWM_LE0_ATTEMPT: String(attempts),
+            HSWM_LE0_ROLE: "ACTOR",
+            ...descriptorEnvironment("HSWM_LE0_FROZEN_INPUTS", frozenInputs)
+          }))
           const action = yield* stageObservation(
             view,
             request.contract.runId,
@@ -499,18 +448,15 @@ export const makeGraphLoopResearchProcessRunnerLayer = Layer.effect(
             return Object.freeze({ terminal: "ESCALATED" as const, attempts, frozenInputs, action, verifier: null })
           }
 
-          const verifierObservation = yield* Effect.tryPromise({
-            try: () => observeCommand(request.verifier.command, Object.freeze({
-              HSWM_LE0_RUN_ID: request.contract.runId,
-              HSWM_LE0_ATTEMPT: String(attempts),
-              HSWM_LE0_ROLE: "VERIFIER",
-              HSWM_LE0_ACTION_MEDIA_TYPE: action.mediaType,
-              HSWM_LE0_ACTION_BYTE_LENGTH: String(action.byteLength),
-              HSWM_LE0_ACTION_SHA256: action.sha256,
-              ...descriptorEnvironment("HSWM_LE0_FROZEN_INPUTS", frozenInputs)
-            })),
-            catch: () => jobError("COMMAND_OBSERVATION_FAILED", "research verifier observation failed")
-          })
+          const verifierObservation = yield* observeCommand(subprocess, "verifier", request.verifier.command, Object.freeze({
+            HSWM_LE0_RUN_ID: request.contract.runId,
+            HSWM_LE0_ATTEMPT: String(attempts),
+            HSWM_LE0_ROLE: "VERIFIER",
+            HSWM_LE0_ACTION_MEDIA_TYPE: action.mediaType,
+            HSWM_LE0_ACTION_BYTE_LENGTH: String(action.byteLength),
+            HSWM_LE0_ACTION_SHA256: action.sha256,
+            ...descriptorEnvironment("HSWM_LE0_FROZEN_INPUTS", frozenInputs)
+          }))
           const verifier = yield* stageObservation(
             view,
             request.contract.runId,
@@ -554,4 +500,14 @@ export const makeGraphLoopResearchProcessRunnerLayer = Layer.effect(
       })
     })
   })
+)
+
+/**
+ * The same runner with the Node subprocess adapter composed in, so existing
+ * callers keep the requirement type `GraphLoopEngineeringController |
+ * CanonicalAtomV2DurableGraphView`.
+ */
+export const makeGraphLoopResearchProcessRunnerLayer = Layer.provide(
+  makeGraphLoopResearchProcessRunnerLayerWithBoundedSubprocess,
+  NodeBoundedSubprocessLive
 )

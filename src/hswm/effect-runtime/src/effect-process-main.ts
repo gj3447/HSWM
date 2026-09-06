@@ -7,6 +7,11 @@
  * values mapped to a stable stderr line and exit code 2; defects exit 3.
  * Library and domain modules never call `Effect.run*`; only this helper does,
  * exactly once per executable.
+ *
+ * `runArgvProcessMain` is the same boundary for executables driven by argv
+ * flags instead of a stdin request: the program renders its own stdout text,
+ * and the spec may choose the exit codes and drop the stderr prefix, while the
+ * failure and defect mapping itself is shared.
  */
 import { Cause, Data, Effect, Either, Exit, Layer } from "effect"
 
@@ -88,6 +93,42 @@ export const encodeReply = (value: CanonicalJson): Effect.Effect<string, Process
 }
 
 /**
+ * The stderr and exit mapping shared by every process shape.  An expected
+ * failure is one described line and the failure exit code; a defect is its
+ * first pretty-printed line and the defect exit code; a `ProcessRefusal`
+ * always renders as its own detail.  A prefix, when present, is written as
+ * `PREFIX: line`.
+ */
+interface ProcessExitMapping<E> {
+  readonly refusalPrefix: string | undefined
+  readonly describeFailure: (error: E) => string
+  readonly describeDefect: (summary: string) => string
+  readonly failureExitCode: number
+  readonly defectExitCode: number
+}
+
+const describeDefectByDefault = (summary: string): string => `defect: ${summary}`
+
+const settleExit = <E>(
+  io: ProcessIo,
+  mapping: ProcessExitMapping<E>,
+  exit: Exit.Exit<number, E | ProcessRefusal>
+): number | Promise<number> =>
+  Exit.match(exit, {
+    onSuccess: (code) => code,
+    onFailure: (cause) => {
+      const failure = Cause.failureOption(cause)
+      const line = failure._tag === "Some"
+        ? (failure.value instanceof ProcessRefusal ? failure.value.detail : mapping.describeFailure(failure.value))
+        : mapping.describeDefect(Cause.pretty(cause).split("\n")[0] ?? "unknown")
+      const text = mapping.refusalPrefix === undefined ? line : `${mapping.refusalPrefix}: ${line}`
+      return Effect.runPromise(io.writeStderr(`${text}\n`)).then(() =>
+        failure._tag === "Some" ? mapping.failureExitCode : mapping.defectExitCode
+      )
+    }
+  })
+
+/**
  * Run one request end to end and return the exit code.  This is the only
  * `Effect.run*` call an executable should contain.  It is exported so tests can
  * drive it with an in-memory `ProcessIo` and a stubbed layer.
@@ -106,15 +147,53 @@ export const runProcessMain = <A extends CanonicalJson, E>(
     return 0
   }).pipe(Effect.provide(services))
   return Effect.runPromiseExit(program).then((exit) =>
-    Exit.match(exit, {
-      onSuccess: (code) => code,
-      onFailure: (cause) => {
-        const failure = Cause.failureOption(cause)
-        const line = failure._tag === "Some"
-          ? (failure.value instanceof ProcessRefusal ? failure.value.detail : spec.describeFailure(failure.value as E))
-          : `defect: ${Cause.pretty(cause).split("\n")[0] ?? "unknown"}`
-        return Effect.runPromise(io.writeStderr(`${spec.refusalPrefix}: ${line}\n`)).then(() => (failure._tag === "Some" ? 2 : 3))
-      }
-    })
+    settleExit(io, {
+      refusalPrefix: spec.refusalPrefix,
+      describeFailure: spec.describeFailure,
+      describeDefect: describeDefectByDefault,
+      failureExitCode: 2,
+      defectExitCode: 3
+    }, exit)
+  )
+}
+
+export interface ArgvProcessMainSpec<E> {
+  /** Stable stderr prefix; omit to write each described failure line alone. */
+  readonly refusalPrefix?: string
+  /** The program: argv after the node and script entries -> the exact stdout text. */
+  readonly program: (argv: ReadonlyArray<string>) => Effect.Effect<string, E, PosixFileSystem | BoundedSubprocess>
+  /** Render an expected failure as one stderr line (without the prefix). */
+  readonly describeFailure: (error: E) => string
+  /** Render a defect from its first pretty-printed line; defaults to `defect: <line>`. */
+  readonly describeDefect?: (summary: string) => string
+  /** Exit codes for expected failures and defects; default 2 and 3 as for stdin processes. */
+  readonly failureExitCode?: number
+  readonly defectExitCode?: number
+}
+
+/**
+ * Run one argv-driven invocation end to end and return the exit code, with
+ * the same stderr and exit mapping as `runProcessMain`.  Exported so tests can
+ * drive it with an in-memory `ProcessIo` and a stubbed layer.
+ */
+export const runArgvProcessMain = <E>(
+  spec: ArgvProcessMainSpec<E>,
+  argv: ReadonlyArray<string>,
+  io: ProcessIo = nodeProcessIo,
+  services: Layer.Layer<PosixFileSystem | BoundedSubprocess> = NodePosixServicesLive
+): Promise<number> => {
+  const program = Effect.gen(function* () {
+    const text = yield* spec.program(argv)
+    yield* io.writeStdout(text)
+    return 0
+  }).pipe(Effect.provide(services))
+  return Effect.runPromiseExit(program).then((exit) =>
+    settleExit(io, {
+      refusalPrefix: spec.refusalPrefix,
+      describeFailure: spec.describeFailure,
+      describeDefect: spec.describeDefect ?? describeDefectByDefault,
+      failureExitCode: spec.failureExitCode ?? 2,
+      defectExitCode: spec.defectExitCode ?? 3
+    }, exit)
   )
 }

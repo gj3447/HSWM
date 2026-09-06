@@ -18,8 +18,11 @@ import {
 } from "../src/canonical-atom-v2-graph-loop-research-job.js"
 import {
   HSWM_GRAPH_LOOP_RESEARCH_JOB_PROCESS_V1_CONTRACT_VERSION,
+  describeGraphLoopResearchJobProcessFailure,
   executeGraphLoopResearchJobProcess
 } from "../src/canonical-atom-v2-graph-loop-job-process.js"
+import { NodePosixServicesLive } from "../src/effect-posix-services.js"
+import { runProcessMain, type ProcessIo } from "../src/effect-process-main.js"
 import {
   decodeCanonicalAtomV2SchemaContent,
   type CanonicalAtomV2ContentAuthorizationGrant
@@ -251,58 +254,101 @@ it.effect("a verifier timeout is content-addressed and escalated without a hidde
   }))
 )
 
+type Reply = Record<string, unknown>
+
+/** Writes the schema, grants, and one declared frozen input under `root` and returns the process request. */
+const processRequest = (root: string): Reply => {
+  const schemaPath = join(root, "schema.json")
+  const grantsPath = join(root, "grants.json")
+  const frozenInputPath = join(root, "frozen-input.json")
+  writeFileSync(schemaPath, rawSchema())
+  const grantBytes = canonicalJsonBytes(grants() as never)
+  if (Either.isLeft(grantBytes)) throw new Error("fixture grants cannot form canonical JSON")
+  writeFileSync(grantsPath, grantBytes.right)
+  writeFileSync(frozenInputPath, "{\"fixture\":true}\n")
+  return {
+    _tag: "GraphLoopResearchJobProcessRequest",
+    contractVersion: HSWM_GRAPH_LOOP_RESEARCH_JOB_PROCESS_V1_CONTRACT_VERSION,
+    durableRoot: join(root, "state"),
+    controlJournalRoot: join(root, "loop"),
+    journalLineageId: "journal:job-process:main",
+    schemaPath,
+    grantsPath,
+    frozenInputs: [{
+      path: frozenInputPath,
+      mediaType: "application/json"
+    }],
+    job: {
+      contract: {
+        runId: "run:job-process",
+        triggerId: "trigger:job-process",
+        actorId: "actor:job-process",
+        verifierId: "verifier:job-process",
+        maximumAttempts: 1,
+        maximumActions: 1
+      },
+      action: {
+        argv: [process.execPath, "-e", "process.stdout.write('process-action')"],
+        cwd: root,
+        timeoutMs: 10_000
+      },
+      verifier: {
+        command: {
+          argv: [process.execPath, "-e", "process.exit(0)"],
+          cwd: root,
+          timeoutMs: 10_000
+        },
+        acceptExitCodes: [0],
+        retryExitCodes: []
+      }
+    }
+  }
+}
+
 it.effect("the real job-process entrypoint constructs the protected runtime and runs action plus verifier commands", () =>
-  withRoot((root) => Effect.tryPromise({
-    try: async () => {
-      const schemaPath = join(root, "schema.json")
-      const grantsPath = join(root, "grants.json")
-      const frozenInputPath = join(root, "frozen-input.json")
-      writeFileSync(schemaPath, rawSchema())
-      const grantBytes = canonicalJsonBytes(grants() as never)
-      if (Either.isLeft(grantBytes)) throw new Error("fixture grants cannot form canonical JSON")
-      writeFileSync(grantsPath, grantBytes.right)
-      writeFileSync(frozenInputPath, "{\"fixture\":true}\n")
-      const result = await executeGraphLoopResearchJobProcess({
-        _tag: "GraphLoopResearchJobProcessRequest",
-        contractVersion: HSWM_GRAPH_LOOP_RESEARCH_JOB_PROCESS_V1_CONTRACT_VERSION,
-        durableRoot: join(root, "state"),
-        controlJournalRoot: join(root, "loop"),
-        journalLineageId: "journal:job-process:main",
-        schemaPath,
-        grantsPath,
-        frozenInputs: [{
-          path: frozenInputPath,
-          mediaType: "application/json"
-        }],
-        job: {
-          contract: {
-            runId: "run:job-process",
-            triggerId: "trigger:job-process",
-            actorId: "actor:job-process",
-            verifierId: "verifier:job-process",
-            maximumAttempts: 1,
-            maximumActions: 1
-          },
-          action: {
-            argv: [process.execPath, "-e", "process.stdout.write('process-action')"],
-            cwd: root,
-            timeoutMs: 10_000
-          },
-          verifier: {
-            command: {
-              argv: [process.execPath, "-e", "process.exit(0)"],
-              cwd: root,
-              timeoutMs: 10_000
-            },
-            acceptExitCodes: [0],
-            retryExitCodes: []
-          }
-        }
-      })
-      expect(result["terminal"]).toBe("STOPPED_ACCEPTED_NO_GRAPH_DELTA")
-      expect(result["attempts"]).toBe(1)
-      expect(result["frozenInputs"]).toBeDefined()
-    },
-    catch: (error) => error
+  withRoot((root) => Effect.gen(function* () {
+    const result = (yield* executeGraphLoopResearchJobProcess(processRequest(root) as never)) as Reply
+    expect(result["terminal"]).toBe("STOPPED_ACCEPTED_NO_GRAPH_DELTA")
+    expect(result["attempts"]).toBe(1)
+    expect(result["frozenInputs"]).toBeDefined()
+  }).pipe(Effect.provide(NodePosixServicesLive)))
+)
+
+it.effect("the job process refuses shape drift and missing inputs as typed failures", () =>
+  withRoot((root) => Effect.gen(function* () {
+    const refusal = (request: Reply) =>
+      executeGraphLoopResearchJobProcess(request as never).pipe(Effect.flip, Effect.map(describeGraphLoopResearchJobProcessFailure))
+    const valid = processRequest(root)
+    expect(yield* refusal({ ...valid, extra: 1 })).toMatch(/not a valid research job request/)
+    expect(yield* refusal({ ...valid, _tag: "Other" })).toMatch(/request tag or contract version is invalid/)
+    expect(yield* refusal({ ...valid, schemaPath: "relative/schema.json" })).toMatch(/not a valid research job request/)
+    expect(yield* refusal({ ...valid, frozenInputs: [{ path: join(root, "absent.json"), mediaType: "application/json" }] })).toMatch(
+      /frozen input is not a regular non-symlink file/
+    )
+  }).pipe(Effect.provide(NodePosixServicesLive)))
+)
+
+it.effect("the whole request runs through the single process boundary with in-memory io", () =>
+  withRoot((root) => Effect.promise(async () => {
+    const stdout: Array<string> = []
+    const stderr: Array<string> = []
+    const io = (input: string): ProcessIo => ({
+      readStdin: () => Effect.succeed(input),
+      writeStdout: (text) => Effect.sync(() => { stdout.push(text) }),
+      writeStderr: (text) => Effect.sync(() => { stderr.push(text) })
+    })
+    const spec = {
+      refusalPrefix: "HSWM_GRAPH_LOOP_RESEARCH_JOB_REFUSED",
+      program: executeGraphLoopResearchJobProcess,
+      describeFailure: describeGraphLoopResearchJobProcessFailure
+    }
+    const canonical = new TextDecoder().decode(Either.getOrThrow(canonicalJsonBytes(processRequest(root) as never)))
+    expect(await runProcessMain(spec, io(canonical))).toBe(0)
+    expect(stdout).toHaveLength(1)
+    const reply = JSON.parse(stdout[0]!) as Reply
+    expect(reply["_tag"]).toBe("GraphLoopResearchJobProcessResult")
+    expect(reply["terminal"]).toBe("STOPPED_ACCEPTED_NO_GRAPH_DELTA")
+    expect(await runProcessMain(spec, io("not json"))).toBe(2)
+    expect(stderr[0]).toMatch(/^HSWM_GRAPH_LOOP_RESEARCH_JOB_REFUSED: stdin must be canonical JSON/)
   }))
 )

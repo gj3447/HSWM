@@ -1,0 +1,135 @@
+{
+  "artifacts": [
+    {
+      "path": "results/HSWM_ALFWORLD_B0_CALIBRATION_RESULTS_2026-08-30.md",
+      "sha256": "f28141b5fbf01cdf047104431cb6d63425af52147a07649b1241d8bff778f581"
+    },
+    {
+      "path": "results/raw/hswm_alfworld_b0_calibration_2026-08-30/live-wrapper-receipt.json",
+      "sha256": "5b13fb5179c00a88ce690f6ed69e79831d432c4e06c746ba578c2c7fe638e61d"
+    },
+    {
+      "path": "results/raw/hswm_alfworld_b0_calibration_2026-08-30/live.public.json",
+      "sha256": "d23c50bd2dc4ebcc79d6453cf8cbe477ebba33ea383413de069f57afba5dc4f5"
+    },
+    {
+      "path": "results/raw/hswm_alfworld_b0_calibration_2026-08-30/posthoc.public.json",
+      "sha256": "a6edc208bc2ed69a1ae8f4477a760a5a8cf003165925cb0f3bb41c6d177e805f"
+    },
+    {
+      "path": "results/raw/hswm_alfworld_b0_calibration_2026-08-30/projection-wrapper-receipt.json",
+      "sha256": "cdc232bca5f80033ecb9ed1ea35d40f00475631dcdb237b42516e6de3861fa38"
+    },
+    {
+      "path": "results/raw/hswm_alfworld_b0_calibration_2026-08-30/reverified.public.json",
+      "sha256": "caaafbdd29c4837f84f00f87eea19b6611d31f7b795b074ce7daed05f5f853b1"
+    },
+    {
+      "path": "results/raw/hswm_alfworld_b0_calibration_2026-08-30/verification-wrapper-receipt.json",
+      "sha256": "af598bd54c6d04e1e0f922aa85b01629b4cbba479c918804c14bf5d129ff581c"
+    }
+  ],
+  "claim_boundary": {
+    "canonical_hswm_admission_performed": false,
+    "d4_heldout_behavior_evaluated": false,
+    "g0": "NOT_PASSED",
+    "g1": "NOT_EVALUATED",
+    "hswm_learning_or_efficacy_established": false,
+    "s5_complete": false,
+    "usable_b0_comparator_ceiling_available": false
+  },
+  "claim_ceiling": "NO_RERUN_NO_NEW_OUTCOME_NO_LEARNING_NO_REVISION_NO_G0_PASS_NO_G1_NO_HSWM_EFFICACY_CLAIM",
+  "confidentiality": {
+    "excluded": [
+      "game identities",
+      "task contents",
+      "private traces",
+      "private receipt payloads"
+    ],
+    "private_archive_checked_in": false,
+    "public_content": "AGGREGATE_PROJECTIONS_AND_WRAPPER_RECEIPTS_ONLY"
+  },
+  "interpretation": {
+    "completed_episode_denominator": 0,
+    "confidence_intervals": null,
+    "headroom_estimable": false,
+    "success_rate": null,
+    "zero_success_counters_are_not_zero_percent_success": true
+  },
+  "measurement": {
+    "confidence_intervals": null,
+    "failure_class": "AlfworldTextRuntimeError",
+    "headroom_classification": "INCONCLUSIVE_MEASUREMENT_NOT_READY_WITHOUT_HEADROOM_CLASSIFICATION",
+    "invalid_counts": {
+      "train": 1,
+      "valid_seen": 0
+    },
+    "resource_totals": {
+      "actor_call_count": 0,
+      "completed_episode_count": 0,
+      "environment_step_count": 0,
+      "input_token_count": 0,
+      "issued_completion_post_count": 0,
+      "issued_http_post_count": 0,
+      "issued_tokenize_post_count": 0,
+      "output_token_count": 0,
+      "token_preflight_token_count": 0,
+      "validated_model_response_count": 0,
+      "wall_microseconds": 130115
+    },
+    "split_counts": {
+      "train": 1,
+      "valid_seen": 0
+    },
+    "status": "INCONCLUSIVE_MEASUREMENT_NOT_READY",
+    "success_counts": {
+      "train": 0,
+      "valid_seen": 0
+    }
+  },
+  "occurred_on": "2026-08-30",
+  "occurrence": {
+    "finished_at": "2026-08-30T22:55:47Z",
+    "private_archive": {
+      "bytes": 153600,
+      "sha256": "31299aa5061c1cf9e8f2a3ab517c41c9f40ad28426b80c0a46546f1f9740dd9f"
+    },
+    "retry_or_resume_permitted": false,
+    "run_id": "hswm-alfworld-b0-live-p1-20260830-v1",
+    "selection_commitments": {
+      "local_locator_sha256": "cfa8f4bd7357de4be5507e56c3a04d9cac789ff5bfd58786be8c3ec6c4f9e85c",
+      "pool_manifest_sha256": "68a7772f78091e6b4c0eddfde016e319be2222ce7ccb5cc1e0fd085ca0936815",
+      "private_selection_sha256": "fbfa41028af96bd6d77ca3d7f19b3fb438ccee10f70f13ede9a6257b61062f94",
+      "public_selection_sha256": "20bd5b3991871a45505983c2d2cca8cb97b5a1f4a1b9994c55f8808de1603b9e",
+      "selection_digest_sha256": "4da3f7d09eb62dce4b4b61ca2e5f119de8d50a22e82756c6e75389b18c9267e8"
+    },
+    "source_commit": "aa75984a19e65eb8de7c3b6cd3d3b404fdf09e39",
+    "started_at": "2026-08-30T22:49:08Z",
+    "wrapper_exit_code": 2
+  },
+  "protocol": {
+    "path": "_research/causal_composition/preregistrations/alfworld_b0_calibration_2026-08-30/protocol.v1.json",
+    "selection_file_sha256": "20bd5b3991871a45505983c2d2cca8cb97b5a1f4a1b9994c55f8808de1603b9e",
+    "selection_path": "manifests/HSWM_ALFWORLD_B0_SELECTION_2026-08-30.json",
+    "sha256": "5beea2a1ff11fa33f71f3b9c4caa02b46315cef68593c6dbcd096d67cb183132"
+  },
+  "published_on": "2026-09-06",
+  "receipt_sha256": "d99b7d49094bd33a1f85480f8ff5fb6f61512dbca14efa416bcc2619f0a34a9a",
+  "record_role": "RECOVERED_SEALED_OCCURRENCE_AGGREGATE_NOT_A_NEW_RUN",
+  "schema_version": "hswm-alfworld-b0-calibration-evidence/v1",
+  "status": "INCONCLUSIVE_MEASUREMENT_NOT_READY",
+  "verification": {
+    "allowed_projection_differences": [
+      "projection_execution",
+      "derived_public_projection_sha256"
+    ],
+    "date": "2026-09-06",
+    "independently_owned": false,
+    "new_environment_actions": 0,
+    "new_model_calls": 0,
+    "original_projection_semantic_sha256": "5dc05eb4c0d07b78690745ca546278e1796f7de9c97a413b420380203cffb3d3",
+    "reverified_projection_semantic_sha256": "e6e736fd97f8aadf8d76710bb31314129f9d8ff149fedd9c511913d3acb17c73",
+    "run_id": "hswm-b0-recovery-verify-20260906",
+    "status": "SEALED_ARCHIVE_REPROJECTED_ALL_OBSERVATIONS_AND_COMMITMENTS_MATCH"
+  }
+}

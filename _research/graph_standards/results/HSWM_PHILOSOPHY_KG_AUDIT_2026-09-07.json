@@ -1,0 +1,826 @@
+{
+  "schema_version": "hswm-philosophy-kg-standard-audit/v1",
+  "status": "SEMANTIC_COVERAGE_PRESENT_INTEGRATION_PARTIAL",
+  "authority_class": "SECONDARY_AI",
+  "audit_kind": "READ_ONLY_ENGINEERING_AUDIT_NOT_SCIENTIFIC_RESULT",
+  "source_commit": "ef80df672814e7bc505140ea3e22042ad70d9af1",
+  "checked_at": "2026-09-07T00:45:37.165375+00:00",
+  "report": {
+    "path": "docs/research/HSWM_PHILOSOPHY_KG_STANDARD_AUDIT_2026-09-07.md",
+    "sha256": "bd05b6da52a805afe96ab0d697a0a85db37e50405692eb4231f1386122b44da4"
+  },
+  "scope": {
+    "live_bundles": 8,
+    "selected_rdf_artifacts": 7,
+    "whole_repository_coverage_claim": false,
+    "live_graph_mutations": 0,
+    "scientific_gate_changes": 0
+  },
+  "live_bundle_checks": [
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_ONTOLOGY.v1.json",
+      "artifact_sha256": "4b7bd2574491c0c6f17f00226db53811311e993e6f995b6e3e076e8f1d457238",
+      "bundle_uid": "sym:AbstractNode:hswm-human-universal-body-ontology-2026-08-20",
+      "expected_nodes": 92,
+      "live_owned_nodes": 105,
+      "expected_relations": 214,
+      "live_owned_relations": 261,
+      "missing_owned_nodes": [],
+      "extra_owned_nodes": [
+        "sym:AbstractNode:hswm-fractal-cognitive-composition-canon-2026-08-28",
+        "sym:AbstractNode:hswm-fractal-cognitive-composition-prior-theory-map-2026-08-28",
+        "sym:CanonicalSource:user-primary-hswm-fractal-cognitive-composition-2026-08-28",
+        "sym:Concept:hswm-fractal-cognitive-composition",
+        "sym:Concept:hswm-fractal-law-composition-preservation",
+        "sym:Concept:hswm-fractal-law-diachronic-continuity",
+        "sym:Concept:hswm-fractal-law-emergent-coalition",
+        "sym:Concept:hswm-fractal-law-hswm-of-hswms",
+        "sym:Concept:hswm-fractal-law-local-causal-learning",
+        "sym:Concept:hswm-fractal-law-multiscale-credit",
+        "sym:Concept:hswm-fractal-law-topology-morphogenesis",
+        "sym:Concept:hswm-fractal-law-world-self-co-model",
+        "sym:Concept:hswm-same-ignition-composition-contract"
+      ],
+      "duplicate_node_uids": 0,
+      "duplicate_relation_keys": 0,
+      "explicit_normal_nodes": 0,
+      "mapped_authority_nodes": 105,
+      "binding_check": "DEDICATED_BINDING_FORMAT",
+      "comparison_scope": "LEGACY_SOURCE_FIELDS_SUBSET_DYNAMIC_METADATA_EXCLUDED",
+      "node_mismatch_count": 1,
+      "node_mismatch_fields": {
+        "source_sha256": 1
+      },
+      "node_mismatch_examples": [
+        {
+          "uid": "sym:AbstractNode:hswm-occam-core-research-2026-08-20",
+          "fields": [
+            "source_sha256"
+          ]
+        }
+      ],
+      "relation_mismatch_count": 0,
+      "relation_mismatch_fields": {},
+      "missing_owned_relation_count": 0,
+      "extra_owned_relation_count": 47,
+      "expected_uids_elsewhere_count": 0,
+      "current_binding_drift_paths": []
+    },
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "artifact_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb",
+      "bundle_uid": "sym:AbstractNode:hswm-human-universal-body-fractal-projection-2026-08-28",
+      "expected_nodes": 14,
+      "live_owned_nodes": 0,
+      "expected_relations": 47,
+      "live_owned_relations": 0,
+      "missing_owned_nodes": [
+        "sym:AbstractNode:hswm-fractal-cognitive-composition-canon-2026-08-28",
+        "sym:AbstractNode:hswm-fractal-cognitive-composition-prior-theory-map-2026-08-28",
+        "sym:AbstractNode:hswm-human-universal-body-fractal-projection-2026-08-28",
+        "sym:CanonicalSource:user-primary-hswm-fractal-cognitive-composition-2026-08-28",
+        "sym:Concept:hswm-fractal-cognitive-composition",
+        "sym:Concept:hswm-fractal-law-composition-preservation",
+        "sym:Concept:hswm-fractal-law-diachronic-continuity",
+        "sym:Concept:hswm-fractal-law-emergent-coalition",
+        "sym:Concept:hswm-fractal-law-hswm-of-hswms",
+        "sym:Concept:hswm-fractal-law-local-causal-learning",
+        "sym:Concept:hswm-fractal-law-multiscale-credit",
+        "sym:Concept:hswm-fractal-law-topology-morphogenesis",
+        "sym:Concept:hswm-fractal-law-world-self-co-model",
+        "sym:Concept:hswm-same-ignition-composition-contract"
+      ],
+      "extra_owned_nodes": [],
+      "duplicate_node_uids": 0,
+      "duplicate_relation_keys": 0,
+      "explicit_normal_nodes": 0,
+      "mapped_authority_nodes": 0,
+      "binding_check": "DEDICATED_BINDING_FORMAT",
+      "comparison_scope": "EXACT_PUBLISHER_FIELDS",
+      "node_mismatch_count": 0,
+      "node_mismatch_fields": {},
+      "node_mismatch_examples": [],
+      "relation_mismatch_count": 0,
+      "relation_mismatch_fields": {},
+      "missing_owned_relation_count": 47,
+      "extra_owned_relation_count": 0,
+      "expected_uids_elsewhere_count": 13,
+      "current_binding_drift_paths": []
+    },
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json",
+      "artifact_sha256": "81992abe14029ad78a50b9d3b83cf11658846f6dea9d9f2688e058778cdf3422",
+      "bundle_uid": "sym:AbstractNode:hswm-fractal-scientific-connections-ontology-2026-08-28",
+      "expected_nodes": 54,
+      "live_owned_nodes": 54,
+      "expected_relations": 150,
+      "live_owned_relations": 150,
+      "missing_owned_nodes": [],
+      "extra_owned_nodes": [],
+      "duplicate_node_uids": 0,
+      "duplicate_relation_keys": 0,
+      "explicit_normal_nodes": 0,
+      "mapped_authority_nodes": 0,
+      "binding_check": "DEDICATED_BINDING_FORMAT",
+      "comparison_scope": "EXACT_PUBLISHER_FIELDS",
+      "node_mismatch_count": 0,
+      "node_mismatch_fields": {},
+      "node_mismatch_examples": [],
+      "relation_mismatch_count": 0,
+      "relation_mismatch_fields": {},
+      "missing_owned_relation_count": 0,
+      "extra_owned_relation_count": 0,
+      "expected_uids_elsewhere_count": 0,
+      "current_binding_drift_paths": []
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json",
+      "artifact_sha256": "b44c13a76724f545c492a36b5a32cf02339f6fa89846aae5ec218de14d1e6cbb",
+      "bundle_uid": "sym:AbstractNode:hswm-adaptive-research-strategy-ontology-2026-08-30",
+      "expected_nodes": 35,
+      "live_owned_nodes": 34,
+      "expected_relations": 170,
+      "live_owned_relations": 161,
+      "missing_owned_nodes": [
+        "sym:AbstractNode:hswm-constitution-2026-08-20"
+      ],
+      "extra_owned_nodes": [],
+      "duplicate_node_uids": 0,
+      "duplicate_relation_keys": 0,
+      "explicit_normal_nodes": 0,
+      "mapped_authority_nodes": 0,
+      "binding_check": "PASS",
+      "comparison_scope": "EXACT_PUBLISHER_FIELDS",
+      "node_mismatch_count": 34,
+      "node_mismatch_fields": {
+        "ontology_projection_sha256": 34,
+        "authority_class": 4,
+        "canonical_source_uids": 5,
+        "unexpected_property_keys": 5,
+        "source_sha256": 1
+      },
+      "node_mismatch_examples": [
+        {
+          "uid": "sym:Concept:hswm-adaptive-disposition-underdetermined",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        },
+        {
+          "uid": "sym:Concept:hswm-adaptive-disposition-reroute-proposed",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        },
+        {
+          "uid": "sym:Hypothesis:hswm-adaptive-mechanism-runtime-model-backend",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        },
+        {
+          "uid": "sym:Concept:hswm-adaptive-disposition-draft",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        },
+        {
+          "uid": "sym:Concept:hswm-adaptive-disposition-retired-with-evidence-preserved",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        }
+      ],
+      "relation_mismatch_count": 157,
+      "relation_mismatch_fields": {
+        "ontology_projection_sha256": 157,
+        "scope": 1
+      },
+      "missing_owned_relation_count": 13,
+      "extra_owned_relation_count": 4,
+      "expected_uids_elsewhere_count": 0,
+      "current_binding_drift_paths": []
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_CAUSAL_COMPOSITION_RESEARCH_ONTOLOGY.v1.json",
+      "artifact_sha256": "499aaa7535181d711fb340dce4085877e9389e9960c59950e1f0e99b8144f171",
+      "bundle_uid": "sym:AbstractNode:hswm-causal-composition-research-ontology-2026-08-29",
+      "expected_nodes": 99,
+      "live_owned_nodes": 99,
+      "expected_relations": 394,
+      "live_owned_relations": 394,
+      "missing_owned_nodes": [],
+      "extra_owned_nodes": [],
+      "duplicate_node_uids": 0,
+      "duplicate_relation_keys": 0,
+      "explicit_normal_nodes": 0,
+      "mapped_authority_nodes": 0,
+      "binding_check": "PASS",
+      "comparison_scope": "EXACT_PUBLISHER_FIELDS",
+      "node_mismatch_count": 99,
+      "node_mismatch_fields": {
+        "ontology_projection_sha256": 99,
+        "source_sha256": 1
+      },
+      "node_mismatch_examples": [
+        {
+          "uid": "sym:Concept:hswm-claim-ceiling-exploratory-signal",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        },
+        {
+          "uid": "sym:Concept:hswm-alternative-cf-04",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        },
+        {
+          "uid": "sym:Concept:hswm-claim-ceiling-representation-unresolved",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        },
+        {
+          "uid": "sym:Hypothesis:hswm-meta-g2a-counterfactual-credit",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        },
+        {
+          "uid": "sym:Concept:hswm-claim-ceiling-inconclusive-measurement-not-ready",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        }
+      ],
+      "relation_mismatch_count": 394,
+      "relation_mismatch_fields": {
+        "ontology_projection_sha256": 394
+      },
+      "missing_owned_relation_count": 0,
+      "extra_owned_relation_count": 0,
+      "expected_uids_elsewhere_count": 0,
+      "current_binding_drift_paths": []
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json",
+      "artifact_sha256": "cd510a10ae4f7d534dfd202dce2f7b49fbdc47c207ce5f46244512d96d48c545",
+      "bundle_uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-02-v6",
+      "expected_nodes": 130,
+      "live_owned_nodes": 130,
+      "expected_relations": 412,
+      "live_owned_relations": 412,
+      "missing_owned_nodes": [],
+      "extra_owned_nodes": [],
+      "duplicate_node_uids": 0,
+      "duplicate_relation_keys": 0,
+      "explicit_normal_nodes": 0,
+      "mapped_authority_nodes": 0,
+      "binding_check": "artifact binding hash drift",
+      "comparison_scope": "EXACT_PUBLISHER_FIELDS",
+      "node_mismatch_count": 130,
+      "node_mismatch_fields": {
+        "ontology_projection_sha256": 130,
+        "source_sha256": 7
+      },
+      "node_mismatch_examples": [
+        {
+          "uid": "sym:AbstractNode:hswm-graph-loop-current-research-job-runner-2026-09-02-v6",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        },
+        {
+          "uid": "sym:Concept:hswm-proof-status-claim-outcome-truth-causal-credit-2026-09-02-v6",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-graph-loop-source-local-src-hswm-effect-runtime-src-canonical-atom-v2-durable-rdf-projection-2026-09-02-v6",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-graph-loop-source-local-scripts-compile-portable-markdown-math-2026-09-02-v6",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        },
+        {
+          "uid": "sym:AbstractNode:hswm-graph-loop-source-local--research-loop-jobs-hswm-standard-research-job-profiles.v1-2026-09-02-v6",
+          "fields": [
+            "ontology_projection_sha256"
+          ]
+        }
+      ],
+      "relation_mismatch_count": 412,
+      "relation_mismatch_fields": {
+        "ontology_projection_sha256": 412
+      },
+      "missing_owned_relation_count": 0,
+      "extra_owned_relation_count": 0,
+      "expected_uids_elsewhere_count": 0,
+      "current_binding_drift_paths": [
+        "src/hswm/effect-runtime/src/canonical-atom-v2-durable-rdf-projection.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-durable-runtime.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal-file.ts",
+        "src/hswm/effect-runtime/test/public-api.test.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-engineering.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-research-job.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-job-process.ts",
+        "src/hswm/effect-runtime/test/canonical-atom-v2-graph-loop-research-job.test.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit.ts",
+        "src/hswm/effect-runtime/package.json",
+        "src/hswm/effect-runtime/package-lock.json",
+        "tests/test_hswm_graph_and_loop_engineering_ontology.py"
+      ]
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_HYPERGRAPH_LEARNING_PLAN_ONTOLOGY.v1.json",
+      "artifact_sha256": "c59ef55784059b111b1c73f140d6530144aec4d75220dd1cffd4295ff3e34356",
+      "bundle_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+      "expected_nodes": 63,
+      "live_owned_nodes": 63,
+      "expected_relations": 247,
+      "live_owned_relations": 247,
+      "missing_owned_nodes": [],
+      "extra_owned_nodes": [],
+      "duplicate_node_uids": 0,
+      "duplicate_relation_keys": 0,
+      "explicit_normal_nodes": 63,
+      "mapped_authority_nodes": 63,
+      "binding_check": "PASS",
+      "comparison_scope": "EXACT_PUBLISHER_FIELDS",
+      "node_mismatch_count": 0,
+      "node_mismatch_fields": {},
+      "node_mismatch_examples": [],
+      "relation_mismatch_count": 0,
+      "relation_mismatch_fields": {},
+      "missing_owned_relation_count": 0,
+      "extra_owned_relation_count": 0,
+      "expected_uids_elsewhere_count": 0,
+      "current_binding_drift_paths": []
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_WORKSHOP_C1_C3_ONTOLOGY.v1.json",
+      "artifact_sha256": "e9b4454f404463a157bdaa2cf0db5e6af3ac01d912f8a790a682c70bcae9d0b4",
+      "bundle_uid": "sym:AbstractNode:hswm-workshop-c1-c3-2026-09-07-v1",
+      "expected_nodes": 29,
+      "live_owned_nodes": 29,
+      "expected_relations": 107,
+      "live_owned_relations": 107,
+      "missing_owned_nodes": [],
+      "extra_owned_nodes": [],
+      "duplicate_node_uids": 0,
+      "duplicate_relation_keys": 0,
+      "explicit_normal_nodes": 29,
+      "mapped_authority_nodes": 29,
+      "binding_check": "PASS",
+      "comparison_scope": "EXACT_PUBLISHER_FIELDS",
+      "node_mismatch_count": 0,
+      "node_mismatch_fields": {},
+      "node_mismatch_examples": [],
+      "relation_mismatch_count": 0,
+      "relation_mismatch_fields": {},
+      "missing_owned_relation_count": 0,
+      "extra_owned_relation_count": 0,
+      "expected_uids_elsewhere_count": 0,
+      "current_binding_drift_paths": []
+    }
+  ],
+  "live_semantic_presence": {
+    "philosophy_p1_p10": [
+      {
+        "uid": "sym:Concept:hswm-relational-ontology",
+        "name": "P1 HSWM 관계적 존재론",
+        "authority": "SECONDARY_AI",
+        "claim_boundary": null,
+        "sensitivity": null,
+        "degree": 2
+      },
+      {
+        "uid": "sym:Concept:hswm-genealogical-temporality",
+        "name": "P2 HSWM 계보적 시간론",
+        "authority": "SECONDARY_AI",
+        "claim_boundary": null,
+        "sensitivity": null,
+        "degree": 4
+      },
+      {
+        "uid": "sym:Concept:hswm-memory-truth-distinction",
+        "name": "P3 HSWM 기억–진리 분리",
+        "authority": "SECONDARY_AI",
+        "claim_boundary": null,
+        "sensitivity": null,
+        "degree": 3
+      },
+      {
+        "uid": "sym:Concept:hswm-productive-fallibility",
+        "name": "P4 HSWM 오류 가능성과 모순의 생산성",
+        "authority": "SECONDARY_AI",
+        "claim_boundary": null,
+        "sensitivity": null,
+        "degree": 2
+      },
+      {
+        "uid": "sym:Concept:hswm-difference-preserving-unity",
+        "name": "P5 HSWM 차이 보존적 통일",
+        "authority": "SECONDARY_AI",
+        "claim_boundary": null,
+        "sensitivity": null,
+        "degree": 5
+      },
+      {
+        "uid": "sym:Concept:hswm-causal-agency",
+        "name": "P6 HSWM 인과적 행위성",
+        "authority": "SECONDARY_AI",
+        "claim_boundary": null,
+        "sensitivity": null,
+        "degree": 5
+      },
+      {
+        "uid": "sym:Concept:hswm-participation-and-dignity",
+        "name": "P7 HSWM 참여와 존엄",
+        "authority": "SECONDARY_AI",
+        "claim_boundary": null,
+        "sensitivity": null,
+        "degree": 5
+      },
+      {
+        "uid": "sym:Concept:hswm-open-exterior-protected-interior",
+        "name": "P8 HSWM 공개된 외부와 보호된 내부",
+        "authority": "SECONDARY_AI",
+        "claim_boundary": null,
+        "sensitivity": null,
+        "degree": 4
+      },
+      {
+        "uid": "sym:Concept:hswm-cognitive-sovereignty-subsidiarity",
+        "name": "P9 HSWM 인지주권과 보충성",
+        "authority": "SECONDARY_AI",
+        "claim_boundary": null,
+        "sensitivity": null,
+        "degree": 5
+      },
+      {
+        "uid": "sym:Concept:hswm-open-ended-teleology",
+        "name": "P10 HSWM 열린 목적론",
+        "authority": "SECONDARY_AI",
+        "claim_boundary": null,
+        "sensitivity": null,
+        "degree": 3
+      }
+    ],
+    "fcl_1_8": [
+      {
+        "uid": "sym:Concept:hswm-fractal-law-local-causal-learning",
+        "name": "FCL-1 local causal learning law",
+        "authority": "MIXED_EXPLICIT",
+        "claim_boundary": "Transcript persistence or prompt reuse alone does not satisfy causal learning.",
+        "sensitivity": null,
+        "degree": 25
+      },
+      {
+        "uid": "sym:Concept:hswm-fractal-law-composition-preservation",
+        "name": "FCL-2 composition preservation law",
+        "authority": "MIXED_EXPLICIT",
+        "claim_boundary": "A central wrapper or federation that erases member provenance is not preserved HSWM composition.",
+        "sensitivity": null,
+        "degree": 23
+      },
+      {
+        "uid": "sym:Concept:hswm-fractal-law-emergent-coalition",
+        "name": "FCL-3 emergent coalition law",
+        "authority": "MIXED_EXPLICIT",
+        "claim_boundary": "No fixed orchestration does not remove invariants, permission, accountable coordination, budgets, or safe stopping.",
+        "sensitivity": null,
+        "degree": 20
+      },
+      {
+        "uid": "sym:Concept:hswm-fractal-law-multiscale-credit",
+        "name": "FCL-4 multiscale credit law",
+        "authority": "MIXED_EXPLICIT",
+        "claim_boundary": "Global reward alone and post-hoc narrative attribution do not establish causal multiscale credit.",
+        "sensitivity": null,
+        "degree": 22
+      },
+      {
+        "uid": "sym:Concept:hswm-fractal-law-topology-morphogenesis",
+        "name": "FCL-5 topology morphogenesis law",
+        "authority": "MIXED_EXPLICIT",
+        "claim_boundary": "Unbounded node growth, fixed topology, or lineage-breaking rewrites fail morphogenesis.",
+        "sensitivity": null,
+        "degree": 23
+      },
+      {
+        "uid": "sym:Concept:hswm-fractal-law-world-self-co-model",
+        "name": "FCL-6 world-self co-model law",
+        "authority": "MIXED_EXPLICIT",
+        "claim_boundary": "A static inventory or detached dashboard is a projection, not a causally active world-self model.",
+        "sensitivity": null,
+        "degree": 18
+      },
+      {
+        "uid": "sym:Concept:hswm-fractal-law-diachronic-continuity",
+        "name": "FCL-7 diachronic continuity law",
+        "authority": "MIXED_EXPLICIT",
+        "claim_boundary": "UID persistence or weight preservation alone does not establish continuing HSWM subjectivity.",
+        "sensitivity": null,
+        "degree": 22
+      },
+      {
+        "uid": "sym:Concept:hswm-fractal-law-hswm-of-hswms",
+        "name": "FCL-8 HSWM-of-HSWMs law",
+        "authority": "MIXED_EXPLICIT",
+        "claim_boundary": "Federation, dashboard, message bus, KG publication, central aggregation, or social connectivity alone does not satisfy HSWM-of-HSWMs.",
+        "sensitivity": null,
+        "degree": 29
+      }
+    ],
+    "wolfram_named_nodes": [],
+    "fractal_expected_relations_located_count": 43
+  },
+  "strategy_and_revision_details": {
+    "strategy_snapshot": {
+      "nodes": 34,
+      "node_sha256": "9e05f787578cb54a22fca6576fa1218dc89a363c9918bb4b7f0d85ec71f3c3b6",
+      "relations": 161,
+      "relation_sha256": "048afaf36196c4d7baad591a656584a4dc1ad0f7eef06bb0c75202f8f505760e"
+    },
+    "strategy_classification": "EXACT_PREDECESSOR",
+    "authority_differences": [
+      {
+        "uid": "sym:Concept:hswm-adaptive-ti2-unified-evolving-hypergraph",
+        "name": "TI-2 — unified evolving hypergraph roles",
+        "live_authority": "USER_PRIMARY_TARGET_WITH_SECONDARY_FORMALIZATION",
+        "repo_authority": "CANONICAL_TARGET_WITH_SECONDARY_FORMALIZATION"
+      },
+      {
+        "uid": "sym:Concept:hswm-adaptive-ti3-local-causal-closure",
+        "name": "TI-3 — outcome-bound local causal closure",
+        "live_authority": "USER_PRIMARY_FCL_WITH_SECONDARY_FORMALIZATION",
+        "repo_authority": "CANONICAL_FCL_WITH_SECONDARY_FORMALIZATION"
+      },
+      {
+        "uid": "sym:Concept:hswm-adaptive-ti4-same-type-fractal-composition",
+        "name": "TI-4 — same-type fractal HSWM composition",
+        "live_authority": "USER_PRIMARY_FRACTAL_TARGET_WITH_SECONDARY_FORMALIZATION",
+        "repo_authority": "CANONICAL_FRACTAL_TARGET_WITH_SECONDARY_FORMALIZATION"
+      },
+      {
+        "uid": "sym:Concept:hswm-adaptive-ti5-difference-rights-lineage",
+        "name": "TI-5 — difference, rights, and lineage preservation",
+        "live_authority": "MIXED_CANONICAL_TARGET_AND_SECONDARY_OPERATIONALIZATION",
+        "repo_authority": "CANONICAL_TARGET_AND_SECONDARY_OPERATIONALIZATION"
+      }
+    ],
+    "retired_local_uid_presence": [],
+    "stored_projection_hashes": [
+      {
+        "uid": "sym:AbstractNode:hswm-human-universal-body-ontology-2026-08-20",
+        "hashes": []
+      },
+      {
+        "uid": "sym:AbstractNode:hswm-fractal-scientific-connections-ontology-2026-08-28",
+        "hashes": []
+      },
+      {
+        "uid": "sym:AbstractNode:hswm-causal-composition-research-ontology-2026-08-29",
+        "hashes": [
+          "cf02915a1a99fee99260404dcbc84462c43c57632bef5084f9222ab0a279a187"
+        ]
+      },
+      {
+        "uid": "sym:AbstractNode:hswm-adaptive-research-strategy-ontology-2026-08-30",
+        "hashes": [
+          "c566d78c4babbac14138ccf17cafd4022bfdf4f39566238ec348a61e5e733627"
+        ]
+      },
+      {
+        "uid": "sym:AbstractNode:hswm-graph-and-loop-engineering-ontology-2026-09-02-v6",
+        "hashes": [
+          "7f28c40a3c36f6dfe838c2b3d08ea091c5ddeaa9019d17b4a1e24a00ff02d752"
+        ]
+      },
+      {
+        "uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+        "hashes": [
+          "c59ef55784059b111b1c73f140d6530144aec4d75220dd1cffd4295ff3e34356"
+        ]
+      },
+      {
+        "uid": "sym:AbstractNode:hswm-workshop-c1-c3-2026-09-07-v1",
+        "hashes": [
+          "e9b4454f404463a157bdaa2cf0db5e6af3ac01d912f8a790a682c70bcae9d0b4"
+        ]
+      }
+    ]
+  },
+  "rdf_compatibility": [
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_ONTOLOGY.v1.json",
+      "sha256": "4b7bd2574491c0c6f17f00226db53811311e993e6f995b6e3e076e8f1d457238",
+      "raw_bundle_compatible": false,
+      "reason": "bundle top-level shape is outside the HSWM KG bundle contract",
+      "classification": "DIFFERENT_DECLARED_SCHEMA_NOT_A_SCIENTIFIC_FAILURE"
+    },
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb",
+      "raw_bundle_compatible": false,
+      "reason": "bundle top-level shape is outside the HSWM KG bundle contract",
+      "classification": "DIFFERENT_DECLARED_SCHEMA_NOT_A_SCIENTIFIC_FAILURE"
+    },
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json",
+      "sha256": "81992abe14029ad78a50b9d3b83cf11658846f6dea9d9f2688e058778cdf3422",
+      "raw_bundle_compatible": false,
+      "reason": "bundle top-level shape is outside the HSWM KG bundle contract",
+      "classification": "DIFFERENT_DECLARED_SCHEMA_NOT_A_SCIENTIFIC_FAILURE"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_CORE_RESPONSIBILITY_ONTOLOGY.v1.json",
+      "sha256": "4cba162f4b392ce3ede45365b45ccbf22640fdaa4a101184c4a206f12cc657b2",
+      "raw_bundle_compatible": false,
+      "reason": "bundle top-level shape is outside the HSWM KG bundle contract",
+      "classification": "DIFFERENT_DECLARED_SCHEMA_NOT_A_SCIENTIFIC_FAILURE"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json",
+      "sha256": "b44c13a76724f545c492a36b5a32cf02339f6fa89846aae5ec218de14d1e6cbb",
+      "raw_bundle_compatible": true,
+      "generic_shacl_conforms": true
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_HYPERGRAPH_LEARNING_PLAN_ONTOLOGY.v1.json",
+      "sha256": "c59ef55784059b111b1c73f140d6530144aec4d75220dd1cffd4295ff3e34356",
+      "raw_bundle_compatible": true,
+      "generic_shacl_conforms": true
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_WORKSHOP_C1_C3_ONTOLOGY.v1.json",
+      "sha256": "e9b4454f404463a157bdaa2cf0db5e6af3ac01d912f8a790a682c70bcae9d0b4",
+      "raw_bundle_compatible": true,
+      "generic_shacl_conforms": true
+    }
+  ],
+  "legacy_bindings": [
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_ONTOLOGY.v1.json",
+      "checks": [
+        {
+          "field": "source_path",
+          "path": "docs/canon/sources/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.txt",
+          "declared": "13bff525f9b629fa01cdea4d6d882095866f8fd34fbff2cb49a35cf7f82f36bc",
+          "current": "13bff525f9b629fa01cdea4d6d882095866f8fd34fbff2cb49a35cf7f82f36bc",
+          "matches": true
+        },
+        {
+          "field": "philosophy_source_path",
+          "path": "docs/canon/sources/USER_PRIMARY_HSWM_PHILOSOPHICAL_PRECEDENCE_2026-08-20.txt",
+          "declared": "888428000431731ba805f067e5753e667baa314243ead9d03d508504507d69a8",
+          "current": "888428000431731ba805f067e5753e667baa314243ead9d03d508504507d69a8",
+          "matches": true
+        },
+        {
+          "field": "token_hypergraph_source_path",
+          "path": "docs/canon/sources/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.txt",
+          "declared": "03ddd83fae4b98f8e1ee7cfa5e139d3bc98a7614cae7e33e0e55899651506c8c",
+          "current": "03ddd83fae4b98f8e1ee7cfa5e139d3bc98a7614cae7e33e0e55899651506c8c",
+          "matches": true
+        },
+        {
+          "field": "deep_set_hypergraph_source_path",
+          "path": "docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt",
+          "declared": "c793b5aa486d11452ff12f18565200dd752cb4db6a38c2d0c08e20d0f45a7544",
+          "current": "c793b5aa486d11452ff12f18565200dd752cb4db6a38c2d0c08e20d0f45a7544",
+          "matches": true
+        },
+        {
+          "field": "occam_direction_source_path",
+          "path": "docs/canon/sources/USER_PRIMARY_HSWM_OCCAM_CORE_DIRECTION_2026-08-20.txt",
+          "declared": "22178ef4d0528fa59e17c4d4b5cffb82e3beb0a0949aba91b077e700a4de71b3",
+          "current": "22178ef4d0528fa59e17c4d4b5cffb82e3beb0a0949aba91b077e700a4de71b3",
+          "matches": true
+        },
+        {
+          "field": "occam_research_path",
+          "path": "docs/research/HSWM_OCCAM_CORE_2026-08-20.md",
+          "declared": "de1ad800897431f68b3b21718c5765aabd85bd2dd84b51bd7763887e7ba23100",
+          "current": "f22ee06c22a0423d538664761547b27124cf1299d671af9eafbeafab514c6cf2",
+          "matches": false
+        }
+      ]
+    },
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "checks": [
+        {
+          "field": "historical_base_path",
+          "path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_ONTOLOGY.v1.json",
+          "declared": "4b7bd2574491c0c6f17f00226db53811311e993e6f995b6e3e076e8f1d457238",
+          "current": "4b7bd2574491c0c6f17f00226db53811311e993e6f995b6e3e076e8f1d457238",
+          "matches": true
+        },
+        {
+          "field": "source_path",
+          "path": "docs/canon/sources/USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.txt",
+          "declared": "c453034f1d13c2bd7498a2e6b488a3bf07af74a3a7ee0f4d1ba7d4c74b2e685e",
+          "current": "c453034f1d13c2bd7498a2e6b488a3bf07af74a3a7ee0f4d1ba7d4c74b2e685e",
+          "matches": true
+        },
+        {
+          "field": "canon_path",
+          "path": "docs/canon/USER_PRIMARY_HSWM_FRACTAL_COGNITIVE_COMPOSITION_2026-08-28.md",
+          "declared": "d7dc6d86dc6bbdaf0a3eb6735d634dd9f5b8045563c2b88ffceeabc9343bf7c0",
+          "current": "d7dc6d86dc6bbdaf0a3eb6735d634dd9f5b8045563c2b88ffceeabc9343bf7c0",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json",
+      "checks": [
+        {
+          "field": "research_path",
+          "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+          "declared": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81",
+          "current": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81",
+          "matches": true
+        },
+        {
+          "field": "anchor_projection_path",
+          "path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+          "declared": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb",
+          "current": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb",
+          "matches": true
+        }
+      ]
+    }
+  ],
+  "mcp_search_checks": [
+    {
+      "query": "P1 HSWM 관계적 존재론",
+      "include_preliminary": true,
+      "returned": null
+    },
+    {
+      "query": "P3 HSWM 기억",
+      "include_preliminary": true,
+      "returned": null
+    },
+    {
+      "query": "FCL-8",
+      "include_preliminary": true,
+      "returned": null
+    },
+    {
+      "query": "HSWM fractal scientific connections",
+      "include_preliminary": true,
+      "returned": null
+    },
+    {
+      "query": "HSWM 하이퍼그래프 학습과 재귀 참여 계획",
+      "include_preliminary": true,
+      "returned": [
+        {
+          "authority_class": "SECONDARY_AI",
+          "canonical_name": null,
+          "canonical_scope": "AI_ANALYSIS_NOT_USER_RATIFIED",
+          "canonical_title": null,
+          "full_name": null,
+          "legacy_labels": [
+            "AbstractNode",
+            "ResearchArtifact"
+          ],
+          "match_quality": "PARTIAL",
+          "name": "HSWM 하이퍼그래프 학습과 재귀 참여 계획 2026-09-06",
+          "ontology_domain": "AI",
+          "ontology_kind": "CONCEPT",
+          "ontology_plane": "RESEARCH_PROJECTION",
+          "record_lifecycle": "ACTIVE",
+          "review_required": true,
+          "title": null,
+          "uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1"
+        }
+      ]
+    }
+  ],
+  "interpretation_boundaries": [
+    "Presence and connectedness do not establish philosophical truth or HSWM learning/efficacy.",
+    "Legacy schema incompatibility is not a scientific failure.",
+    "The MCP metadata explanation is an inference supported by observed fields and documented tool filtering, not a full server implementation audit.",
+    "Post-publication source drift and live/current bundle drift are recorded separately.",
+    "Source bindings do not expand all referenced ontology content into the RDF graph."
+  ],
+  "official_standards_consulted": [
+    "https://www.w3.org/TR/rdf11-concepts/",
+    "https://www.w3.org/TR/shacl/",
+    "https://www.w3.org/TR/swbp-n-aryRelations/",
+    "https://www.w3.org/TR/prov-o/"
+  ]
+}

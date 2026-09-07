@@ -3,6 +3,9 @@
 개발 체크를 선택·실행하고 작업별 피드백을 다음 선택에 반영하는 로컬 실사용 경로다.
 가벼운 검사부터 사용하며 프로젝트의 필수 검증이나 제품 판단은 그대로 따른다.
 현재 수풀림 코드는 `SYMPOSIUM`의 연구 기록에서 분리된 형제 저장소 `SUPULLIM`에 있다.
+사용자가 활발히 개발 중이라고 지정한 **메이플리니지와 버엑시**를 GAME 쪽 우선 대상으로 둔다.
+버엑시는 `GAMES/the-excel-tycoon`이며 기존 `game` profile의 이력을 이어 쓴다.
+메이플리니지는 `GAMES/maplelineage` 전용 profile과 별도 상태 파일을 사용한다.
 
 ## 시작
 
@@ -13,9 +16,12 @@ HSWM, GAME, SUPULLIM이 같은 상위 디렉터리에 있는 checkout 기준이�
 GAME 루트:
 
 ```bash
-uv run --locked --project ../HSWM hswm-dev game run \
+uv run --locked --project ../HSWM hswm-dev maplelineage run \
+  --focus combat --task '메이플리니지 전투 변경사항의 가벼운 개발 검사'
+uv run --locked --project ../HSWM hswm-dev maplelineage status
+uv run --locked --project ../HSWM hswm-dev 버엑시 run \
   --focus session --task '방송 세션 변경사항의 가벼운 개발 검사'
-uv run --locked --project ../HSWM hswm-dev game status
+uv run --locked --project ../HSWM hswm-dev 버엑시 status
 ```
 
 SUPULLIM 루트:
@@ -28,12 +34,16 @@ uv run --locked --project ../HSWM hswm-dev supullim status
 
 다른 디렉터리에서는 `--project`를 HSWM checkout 경로로 지정하고 action 뒤에
 `--workspace /실제/프로젝트/루트`를 추가한다. CLI는 이 HSWM checkout의 profile을 사용한다.
-GAME 전체가 아닌 The Excel Tycoon의 방송 세션·수풀림 연결 작업으로 첫 적용을 제한한다.
+`game`, `the-excel-tycoon`, `버엑시`는 같은 profile·DB를 사용하는 이름이다.
+`maplelineage`와 `메이플리니지`도 같은 이름으로 처리하며 버엑시와 이력을 섞지 않는다.
+GAME의 동시 개발 worktree를 쓰는 경우 해당 GAME worktree 루트를 `--workspace`로 지정한다.
 
 | 프로젝트·focus | 기본 실행 | 확인 범위 |
 | --- | --- | --- |
-| GAME `session` | `pnpm --dir GAMES/the-excel-tycoon run test:session` | 방송 세션 상태 전이·이벤트·replay 등의 로컬 fixture |
-| GAME `bridge` | `python3 GAMES/the-excel-tycoon/engineering/verify_soopoolim_creator_bridge_v1.py` | 수풀림 연결 자료의 경로·고정 hash·참조 완전성 |
+| 메이플리니지 `combat` | server에 설치된 `tsx --test`로 `server/test/combat.test.ts` 실행 | 전투 명령·tick·stamina·방어·replay·경계값 |
+| 메이플리니지 `encounter` | 같은 runner로 `server/test/encounter-mailbox-v2.test.ts` 실행 | 메모리 내 encounter 입력 대기열과 scheduler frame |
+| 버엑시 `session` | `pnpm --dir GAMES/the-excel-tycoon run test:session` | 방송 세션 상태 전이·이벤트·replay 등의 로컬 fixture |
+| 버엑시 `bridge` | `python3 GAMES/the-excel-tycoon/engineering/verify_soopoolim_creator_bridge_v1.py` | 수풀림 연결 자료의 경로·고정 hash·참조 완전성 |
 | SUPULLIM `soop` | `npm run test:soop` | fake fetch·임시 SQLite를 이용한 SOOP 연동·검토자 처리 |
 | SUPULLIM `creator` | `npm run check:creator-research` | 공유 조사 자료의 고정 hash·등록·참조 완전성 |
 
@@ -45,7 +55,7 @@ GAME 전체가 아닌 The Excel Tycoon의 방송 세션·수풀림 연결 작업
 
 ## 피드백을 남기는 방법
 
-이 두 profile은 명령의 exit code·출력을 기록하되, 검사 통과를 개발 유용성 보상으로
+이 개발 profile들은 명령의 exit code·출력을 기록하되, 검사 통과를 개발 유용성 보상으로
 자동 변환하지 않는다. 그래서 실행 직후 `status`의 `pending_feedback`에 episode가 나타난다.
 버그를 찾은 실패한 검사도 유용했을 수 있다. 사용자가 실제 결과를 보고 판단한다.
 
@@ -55,7 +65,8 @@ uv run --locked --project ../HSWM hswm-dev game feedback \
   --source 'user: 회귀 원인을 바로 확인하는 데 도움이 됨'
 ```
 
-수풀림은 `game`을 `supullim`으로 바꾼다. 도움이 안 됐다면 `false`와 짧은 이유를 사용한다.
+메이플리니지는 `game`을 `maplelineage`, 수풀림은 `supullim`으로 바꾼다.
+도움이 안 됐다면 `false`와 짧은 이유를 사용한다.
 현재 source 길이 한도는 256자다. 이 대화에서 episode와 함께 **도움됨/도움 안 됨 + 이유**를
 알려줘도 해당 작업의 명시 피드백으로 기록할 수 있다. 아직 받지 않은 의견을 만들어 기록하지 않는다.
 
@@ -72,13 +83,14 @@ Git에서 제외한다. GAME 제품 상태, SUPULLIM 공개 KG·회원·vault나
 
 ## 운영 범위
 
-이 연결은 기존 HSWM 실행기를 사용하는 얇은 CLI와 두 개의 manifest다.
+이 연결은 기존 HSWM 실행기를 사용하는 얇은 CLI와 세 개의 manifest다.
 GAME과 SUPULLIM의 소스·package script·사용자 변경에는 새 수정이 필요하지 않다.
 개발 데이터는 개선 방향을 찾는 데 사용하고, 별도의 미관측 과제 성능 증명으로 사용하지 않는다.
 HSWM 전체 이론이나 게임 재미·실서비스 품질의 판정 범위도 아니다.
 
 - CLI: `src/hswm/infrastructure/development_cli.py`
-- GAME profile: `_research/causal_composition/examples/adaptive_game_development.v1.json`
+- 버엑시 profile: `_research/causal_composition/examples/adaptive_game_development.v1.json`
+- 메이플리니지 profile: `_research/causal_composition/examples/adaptive_maplelineage_development.v1.json`
 - 수풀림 profile: `_research/causal_composition/examples/adaptive_supullim_development.v1.json`
 - 실행·학습 의미: [적응 하이퍼그래프 런타임](../research/HSWM_ADAPTIVE_HYPERGRAPH_RUNTIME_2026-09-07.md)
 
@@ -87,3 +99,8 @@ episode는 각각 `game-session-smoke-20260907-1`, `supullim-soop-smoke-20260907
 HSWM 실행·CLI 기본 검사 9개와 새 wrapper 검사 3개도 통과했다.
 두 프로젝트 실행은 별도 프로세스의 `status`에서 재조회되며 사용자 피드백 대기 상태다.
 실제 사용자 유용성 의견은 아직 받지 않았으므로 이 두 profile의 학습 관측 수는 0이다.
+
+같은 날 메이플리니지 전투 검사 19개를 HSWM으로 실행해 통과했다.
+episode는 `maplelineage-combat-smoke-20260907-1`이며 사용자 피드백 대기 상태다.
+CLI 회귀 4개와 실제 `버엑시 status`로 이전 GAME episode가 보존되는 것도 확인했다.
+게임 소스에 새 수정 없이 HSWM의 실행 대상만 확장했다.

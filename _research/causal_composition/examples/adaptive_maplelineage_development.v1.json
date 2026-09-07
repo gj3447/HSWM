@@ -1,0 +1,132 @@
+{
+  "schema_version": "hswm-adaptive-program/v1",
+  "graph_id": "hswm-maplelineage-development-feedback-v1",
+  "root": "developer",
+  "context_domain": {
+    "focus": [
+      "combat",
+      "encounter"
+    ],
+    "stage": [
+      "development",
+      "regression"
+    ]
+  },
+  "cells": [
+    {
+      "cell_id": "developer",
+      "kind": "router",
+      "owner": "local:development:maplelineage",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1"
+    },
+    {
+      "cell_id": "combat",
+      "kind": "command",
+      "owner": "local:development:maplelineage",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1",
+      "argv": [
+        "GAMES/maplelineage/server/node_modules/.bin/tsx",
+        "--test",
+        "GAMES/maplelineage/server/test/combat.test.ts"
+      ]
+    },
+    {
+      "cell_id": "encounter",
+      "kind": "command",
+      "owner": "local:development:maplelineage",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1",
+      "argv": [
+        "GAMES/maplelineage/server/node_modules/.bin/tsx",
+        "--test",
+        "GAMES/maplelineage/server/test/encounter-mailbox-v2.test.ts"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "uid": "combat-focused",
+      "source": "developer",
+      "members": [
+        "combat"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 1,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "combat"
+      }
+    },
+    {
+      "uid": "combat-extended",
+      "source": "developer",
+      "members": [
+        "combat",
+        "encounter"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 2,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "combat"
+      }
+    },
+    {
+      "uid": "encounter-focused",
+      "source": "developer",
+      "members": [
+        "encounter"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 1,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "encounter"
+      }
+    },
+    {
+      "uid": "encounter-extended",
+      "source": "developer",
+      "members": [
+        "encounter",
+        "combat"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 2,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "encounter"
+      }
+    }
+  ]
+}

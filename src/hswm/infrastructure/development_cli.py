@@ -13,14 +13,18 @@ from uuid import uuid4
 from hswm.cells.adaptive_runtime import AdaptiveRuntime
 from hswm.cells.adaptive_store import AdaptiveStoreError
 from hswm.cells.conditional import Reject
-from hswm.infrastructure.adaptive_cli import RUN_EXIT_CODES, _bool, _json_object, _program
+from hswm.infrastructure.adaptive_cli import RUN_EXIT_CODES, _bool, _program
 
 
 ROOT = Path(__file__).resolve().parents[3]
 PROFILES = {
     "game": ROOT / "_research/causal_composition/examples/adaptive_game_development.v1.json",
+    "maplelineage": ROOT / "_research/causal_composition/examples/adaptive_maplelineage_development.v1.json",
     "supullim": ROOT / "_research/causal_composition/examples/adaptive_supullim_development.v1.json",
 }
+ALIASES = {"the-excel-tycoon": "game", "버엑시": "game", "메이플리니지": "maplelineage"}
+FOCI = {"game": ["session", "bridge"], "maplelineage": ["combat", "encounter"],
+        "supullim": ["soop", "creator"]}
 
 
 class _Parser(argparse.ArgumentParser):
@@ -30,6 +34,7 @@ class _Parser(argparse.ArgumentParser):
 
 
 def state_path(project: str, workspace: Path, explicit: Path | None) -> Path:
+    project = ALIASES.get(project, project)
     if explicit is not None:
         return explicit if explicit.is_absolute() else workspace.resolve() / explicit
     suffix = sha256(str(workspace.resolve()).encode()).hexdigest()[:16]
@@ -39,17 +44,17 @@ def state_path(project: str, workspace: Path, explicit: Path | None) -> Path:
 def _common(command: argparse.ArgumentParser, project: str) -> None:
     command.add_argument("--workspace", type=Path, default=Path.cwd())
     command.add_argument("--state", type=Path)
-    choices, default = ((["session", "bridge"], "session") if project == "game"
-                        else (["soop", "creator"], "soop"))
-    command.add_argument("--focus", choices=choices, default=default)
+    choices = FOCI[project]
+    command.add_argument("--focus", choices=choices, default=choices[0])
     command.add_argument("--stage", choices=["development", "regression"], default="development")
 
 
 def parser() -> argparse.ArgumentParser:
     result = _Parser(description="Run bounded local HSWM development profiles for a checkout.")
     projects = result.add_subparsers(dest="project", required=True)
-    for project in ("game", "supullim"):
-        project_parser = projects.add_parser(project, help=f"{project} checkout profile")
+    for project in PROFILES:
+        project_parser = projects.add_parser(project, aliases=[key for key, value in ALIASES.items() if value == project],
+                                             help=f"{project} checkout profile")
         actions = project_parser.add_subparsers(dest="action", required=True)
         plan = actions.add_parser("plan", help="select a local profile route")
         _common(plan, project)
@@ -74,7 +79,8 @@ def parser() -> argparse.ArgumentParser:
 
 def _runtime(args: argparse.Namespace) -> AdaptiveRuntime:
     workspace = args.workspace.resolve()
-    return AdaptiveRuntime(_program(PROFILES[args.project]), state_path(args.project, workspace, args.state), workspace)
+    project = ALIASES.get(args.project, args.project)
+    return AdaptiveRuntime(_program(PROFILES[project]), state_path(project, workspace, args.state), workspace)
 
 
 def _status(runtime: AdaptiveRuntime) -> dict:

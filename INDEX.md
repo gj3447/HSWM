@@ -14,7 +14,7 @@ continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 �
 시작한다. `hswm-live`는 허용된 cell을 재귀 실행하고, 명시한 검사 결과나 사용자 feedback으로
 관계의 문맥 가중치를 지속 갱신한다. 혼합 결과에서 조건·read-set의 국소 분화도 실행한다.
 이 로컬 prototype은 개발 데이터를 쌓는 경로이며 기존 과학적 판정을 승계하지 않는다.
-실제 GAME 방송 세션과 수풀림 개발에서는
+실제 메이플리니지·버엑시와 수풀림 개발에서는
 [`hswm-dev 실사용 안내`](docs/operations/HSWM_GAME_SUPULLIM_DOGFOOD_2026-09-07.md)의
 프로젝트별 검사·명시적 피드백 경로를 사용한다.
 

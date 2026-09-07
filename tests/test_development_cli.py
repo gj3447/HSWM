@@ -55,3 +55,16 @@ def test_plan_accepts_common_options_after_action(tmp_path, monkeypatch, capsys)
     monkeypatch.setitem(development_cli.PROFILES, "supullim", profile_path)
     assert development_cli.main(["supullim", "plan", "--workspace", str(tmp_path), "--focus", "soop", "--budget", "5"]) == 0
     assert json.loads(capsys.readouterr().out)["status"] == "PLANNED"
+
+
+def test_game_alias_reuses_existing_state_while_maplelineage_is_separate(tmp_path, monkeypatch, capsys) -> None:
+    profile_path = tmp_path / "profile.json"
+    profile_path.write_text(json.dumps(profile()))
+    monkeypatch.setattr(development_cli, "ROOT", tmp_path)
+    monkeypatch.setitem(development_cli.PROFILES, "game", profile_path)
+    assert development_cli.main(["game", "run", "--workspace", str(tmp_path), "--task", "retain pending", "--episode", "existing", "--frozen"]) == 0
+    capsys.readouterr()
+    assert development_cli.main(["the-excel-tycoon", "status", "--workspace", str(tmp_path)]) == 0
+    assert json.loads(capsys.readouterr().out)["pending_feedback"][0]["episode"] == "existing"
+    assert development_cli.state_path("game", tmp_path, None) == development_cli.state_path("버엑시", tmp_path, None)
+    assert development_cli.state_path("game", tmp_path, None) != development_cli.state_path("maplelineage", tmp_path, None)

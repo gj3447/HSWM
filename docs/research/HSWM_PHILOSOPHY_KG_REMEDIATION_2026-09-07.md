@@ -52,3 +52,6 @@ focused root run은 10 test files에서 **87 passed, disposable-only 3 skipped**
 이 수리는 SHACL target이 실제로 존재해야 constraint가 적용된다는 [W3C SHACL 1.0](https://www.w3.org/TR/shacl/#targets), source·derivation와 주장 진실을 구분하는 [PROV-O](https://www.w3.org/TR/prov-o/), 관계 occurrence를 보존하는 [RDF n-ary relations Note](https://www.w3.org/TR/swbp-n-aryRelations/), 그리고 label/type 범위 constraint의 [Neo4j 공식 문서](https://neo4j.com/docs/cypher-manual/current/schema/constraints/create-constraints/)에 맞춘다. 이 표준들은 위 공학적 표현·검증 범위를 설명할 뿐 HSWM 기전을 승인하지 않는다.
 
 저장소와 접근 가능한 live KG의 문자열·문자열 배열 속성을 읽어 검색했을 때, USL의 유의미한 일치는 PROM-16 병렬 처리 관련 Gunther의 **Universal Scalability Law** 기록(`sym:AbstractNode:finding-prom16-parallelism-a2-7a3f9c2d`)이었다. 이 결과는 **read-only**이며 개발 프로젝트를 식별한 결과가 아니다. 개발 중인 project의 정식 이름과 repository path가 아직 식별되지 않았으므로, 이 문서는 USL을 HSWM 설계·성능·효능의 근거로 연결하지 않는다. 식별 정보와 source binding이 생긴 뒤에만 별도 기록에서 검토한다.
+
+
+후속 확인: USL은 SYMPOSIUM의 **유니버셜 시멘틱 링크**이며 정전 UID는 `sym:Concept:usl`이다. 새로 확인한 게시 영수증 시각은 2026-09-07 04:42:30 UTC로, 앞선 04:24 재조회 이후다. 앞선 raw fallback의 별칭 배열 타입 판별 오류도 확인했으나, 이를 게시 전 USL 미식별의 원인으로 단정하지 않는다. [HSWM 연결 설계와 온톨로지](HSWM_USL_SEMANTIC_ENGINEERING_BRIDGE_2026-09-07.md)에 출처·시각·제안 범위를 구별해 후속 정리했다.

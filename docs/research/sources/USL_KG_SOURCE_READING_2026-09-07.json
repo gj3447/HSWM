@@ -1,0 +1,426 @@
+{
+  "schema_version": "hswm-external-source-reading/v1",
+  "status": "SECONDARY_AI_SOURCE_READING_NOT_AUTHORITY_TRANSFER",
+  "source_repository": "gj3447/symposium",
+  "source_worktree_state": "UNTRACKED_AT_READING_NO_COMMIT_CLAIM",
+  "captured_at": "2026-09-07T05:12:25.269978+00:00",
+  "artifacts": [
+    {
+      "path": "kg/bundles/usl-universal-semantic-link.v1.json",
+      "sha256": "3883a474d6620355ae1ee2396a4c3d36cb86d16f8d7ca6fa26a21b2532af434e"
+    },
+    {
+      "path": "FINDINGS/kg-bundle-receipt-usl-universal-semantic-link-2026-09-07.json",
+      "sha256": "446f9c2a572d85cb961dc4303d717a54f3472691f3050267c90c5d1987b7b72a"
+    },
+    {
+      "path": "THEORY/LONGINUS/USL_UNIVERSAL_SEMANTIC_LINK_2026-09-07.md",
+      "sha256": "8aaad4557e855bab80f386af084b3a0bb915b87260ec65ede5bd7fdf0ec21960"
+    }
+  ],
+  "source_bundle_uid": "bundle:usl-universal-semantic-link:2026-09-07:v1",
+  "receipt": {
+    "bundle_uid": "bundle:usl-universal-semantic-link:2026-09-07:v1",
+    "source_sha256": "3883a474d6620355ae1ee2396a4c3d36cb86d16f8d7ca6fa26a21b2532af434e",
+    "created_nodes": 9,
+    "updated_nodes": 0,
+    "relations": 30,
+    "nodes_before": 122689,
+    "nodes_after": 122698,
+    "rels_before": 657135,
+    "rels_after": 657165,
+    "registry_frozen_at": "2026-08-03T03:29:04.706000000+00:00",
+    "applied_at": "2026-09-07T04:42:30.362910+00:00",
+    "receipt_uid": "sym:KG_INFRA:bundle-usl-universal-semantic-link-2026-09-07-v1-run"
+  },
+  "source_records": [
+    {
+      "uid": "sym:UserVerdict:usl-develop-longinus-minimal-unit-2026-09-07",
+      "labels": [
+        "UserVerdict",
+        "UserCanonicalUtterance"
+      ],
+      "name": "usl-develop-longinus-minimal-unit-2026-09-07",
+      "authority_class": "USER_PRIMARY",
+      "canonical_scope": "USER_RATIFIED_CANON",
+      "source_node_sha256": "1963e28390e835c575feec9f3b3b08f3476cf05246f1a642cef50d704a0557ed",
+      "title": "USL을 개발한다(개발 예정). KG에 온톨로지로 등재한다. USL은 롱기누스의 최소단위다",
+      "user_utterance": "나 USL 이란걸 개발할꺼야 kg 에 온톨로지로 박아줘봐 ㅇㅇ 이건 롱기누스의 최소단위야",
+      "aliases": [
+        "USL 개발 선언 2026-09-07",
+        "USL 최소단위 판결",
+        "USL Longinus minimal unit verdict",
+        "롱기누스 최소단위 발화"
+      ]
+    },
+    {
+      "uid": "sym:UserVerdict:usl-universal-semantic-link-definition-2026-09-07",
+      "labels": [
+        "UserVerdict",
+        "UserCanonicalUtterance"
+      ],
+      "name": "usl-universal-semantic-link-definition-2026-09-07",
+      "authority_class": "USER_PRIMARY",
+      "canonical_scope": "USER_RATIFIED_CANON",
+      "source_node_sha256": "84bb1a4de17673abd519cd34a2167158d38e9b4c7eba39607c7c402520bb0657",
+      "title": "USL은 사용자가 열거한 8쌍(kg·kg, url·kg, git repo·kg, 파일시스템·kg, kg·파일시스템, url·파일시스템, 파일 시스템·url, git repo·파일시스템)을 싹다 연결할 수 있는 마법의 접착제라고 보면 되며, 시멘틱한 의미를 담아서 연결을 담아서 HSWM 확장개념으로 모든게 HSWM으로 치환될 수 있게 하는 유니버셜 시멘틱 링크다",
+      "user_utterance": "그 USL 은 kg 와 kg 간의, 그 url 과 kg 간의, 그 git repo 와 kg 간의 파일시스템과 kg 간의 kg 와 파일시스템 간의, url 과 파일시스템 간의, 파일 시스템과 url 간의 git repo 와 파일시스템 간의 싹다 연결할수 있는 마법의 접착제라고 보면됨 시멘틱한 의미를 담아서 연결을 담아서 HSWM 확장개념으로 모든게 HSWM 으로 치환될수있게하는 유니버셜 시멘틱 링크임 ㅇㅇ",
+      "aliases": [
+        "USL 정의 발화 2026-09-07",
+        "유니버셜 시멘틱 링크 정의",
+        "USL magic glue definition",
+        "마법의 접착제 발화",
+        "USL HSWM 확장개념 판결"
+      ]
+    },
+    {
+      "uid": "sym:Concept:usl",
+      "labels": [
+        "Concept"
+      ],
+      "name": "USL",
+      "authority_class": "USER_PRIMARY",
+      "canonical_scope": "USER_RATIFIED_CANON",
+      "source_node_sha256": "e629a409da14c25ff669a1d48439625164460c5d3722215193592ee7907745d0",
+      "title": "USL — 유니버셜 시멘틱 링크: 롱기누스의 최소단위 · 사용자가 열거한 kg·url·git repo·파일시스템 간 8쌍을 싹다 연결할 수 있는 '마법의 접착제'(사용자 비유) · HSWM 확장개념 (개발 예정)",
+      "user_utterance": "나 USL 이란걸 개발할꺼야 kg 에 온톨로지로 박아줘봐 ㅇㅇ 이건 롱기누스의 최소단위야\n그 USL 은 kg 와 kg 간의, 그 url 과 kg 간의, 그 git repo 와 kg 간의 파일시스템과 kg 간의 kg 와 파일시스템 간의, url 과 파일시스템 간의, 파일 시스템과 url 간의 git repo 와 파일시스템 간의 싹다 연결할수 있는 마법의 접착제라고 보면됨 시멘틱한 의미를 담아서 연결을 담아서 HSWM 확장개념으로 모든게 HSWM 으로 치환될수있게하는 유니버셜 시멘틱 링크임 ㅇㅇ",
+      "aliases": [
+        "USL",
+        "유니버셜 시멘틱 링크",
+        "유니버설 시맨틱 링크",
+        "Universal Semantic Link",
+        "universal-semantic-link",
+        "시멘틱 링크",
+        "시맨틱 링크",
+        "마법의 접착제",
+        "magic glue",
+        "롱기누스 최소단위",
+        "롱기누스의 최소단위",
+        "Longinus minimal unit",
+        "minimal unit of Longinus",
+        "kg url git repo 파일시스템 연결"
+      ],
+      "english_expansion_source": "back-transliteration of user's 유니버셜 시멘틱 링크 — 사용자가 영문 확장을 직접 말한 바 없음 (alias로만 기록)",
+      "alias_translation_note": "영문 alias(magic glue, Longinus minimal unit, minimal unit of Longinus, Universal Semantic Link)는 검색용 AI 번역/역음차 — 사용자 발화 아님. 사용자 표기는 '유니버셜 시멘틱 링크'"
+    },
+    {
+      "uid": "sym:Concept:usl-endpoint-universe",
+      "labels": [
+        "Concept"
+      ],
+      "name": "usl-endpoint-universe",
+      "authority_class": "SYSTEM_DERIVED",
+      "canonical_scope": "CANONICAL",
+      "source_node_sha256": "4962a1194b0dc07b1b10788950579d94d31166586d7df72981cf37871dd01df5",
+      "title": "USL 엔드포인트 우주 — 사용자가 열거한 4종 {kg, url, git repo, 파일시스템} · 8쌍 · '싹다'",
+      "aliases": [
+        "USL endpoint",
+        "USL 엔드포인트",
+        "USL endpoint kinds",
+        "USL 연결 대상",
+        "USL endpoint universe",
+        "USL kg url git repo 파일시스템"
+      ]
+    },
+    {
+      "uid": "sym:Hypothesis:usl-ai-reading-2026-09-07",
+      "labels": [
+        "Hypothesis"
+      ],
+      "name": "usl-ai-reading-2026-09-07",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "source_node_sha256": "e7f4581b8e0bb2f7a366a1cf6ac3a9e94b88a8ab097c0bd45dbf7bac35df2c2b",
+      "title": "[AI 해석·미검증] USL = 롱기누스 ReferenceSite(KG↔코드)의 엔드포인트 우주를 url·kg↔kg로 넓히는 타입드 참조 원시체; ReferenceSite는 USL의 KG↔코드 특수화; HSWM 어휘로는 typed reference/incidence 후보",
+      "aliases": [
+        "USL AI reading",
+        "USL 해석 가설",
+        "USL ReferenceSite 가설",
+        "USL HSWM 대응 독해",
+        "usl candidate schema"
+      ],
+      "ratification_status": "UNRATIFIED"
+    },
+    {
+      "uid": "sym:OpenQuestion:usl-vs-referencesite-record-shape-and-implementation-2026-09-07",
+      "labels": [
+        "OpenQuestion"
+      ],
+      "name": "usl-vs-referencesite-record-shape-and-implementation-2026-09-07",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "source_node_sha256": "843b778a973311194750f12b390862f794bc5e36e2587bce6627f578bfd84ae7",
+      "title": "USL과 ReferenceSite(v3.4 8-tuple)의 관계는? USL 레코드 필드·구현 위치·정식 명칭은?",
+      "aliases": [
+        "USL ReferenceSite 관계 질문",
+        "USL 레코드 스키마 질문",
+        "USL 구현 위치 질문",
+        "usl vs referencesite open question"
+      ],
+      "questions": [
+        "USL은 기존 롱기누스 ReferenceSite(v3 7-tuple → v3.4 8-tuple + guarantee_level; sym:AbstractNode:rfc-longinus-v3.4-guarantee-level-2026-05-21; 계약 sym:AbstractNode:referencesiteschema_v2)를 대체(supersede)하나, ReferenceSite가 USL의 KG↔코드 특수화인가, 둘이 형제로 공존하나?",
+        "KG 실측 ReferenceSite 레코드들은 USL로 재표기되나, 그대로 남나?",
+        "USL 레코드의 필드/튜플 형태는 무엇인가? confidence 3-tier(EXTRACTED/INFERRED/AMBIGUOUS)와 guarantee_level(pure/sandboxed/trust_host)을 승계하나? (후보 shape는 sym:Hypothesis:usl-ai-reading-2026-09-07 candidate_record_fields_ai — SECONDARY_AI, 정전 아님)",
+        "'시멘틱한 의미를 담아서'의 시멘틱 정보는 어떤 형태인가 — 자유 텍스트, KG uid, 타입, 임베딩?",
+        "구현 언어·코드 위치(SKILLS/longinus? CD/HSWM? 새 repo?)·버전 규칙은? Longinus skill(sym:Skill:longinus v4.0.0, forward/reverse/drift/artifact audit)이 USL의 생산자·감사자가 되나, USL은 별도 런타임인가?",
+        "'Universal Semantic Link' 영문 확장(역음차)을 공식 이름으로 인정하나?"
+      ],
+      "user_answered": false
+    },
+    {
+      "uid": "sym:OpenQuestion:usl-endpoint-closure-and-directionality-2026-09-07",
+      "labels": [
+        "OpenQuestion"
+      ],
+      "name": "usl-endpoint-closure-and-directionality-2026-09-07",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "source_node_sha256": "f65e36f8f7b4dbc90322018c18c6bd20897c13a8cf5b60ddc40c0bcc9c3900c1",
+      "title": "USL 엔드포인트는 {kg, url, git repo, 파일시스템} 넷으로 닫히나? '싹다'는 전체 곱인가? 링크는 방향이 있나?",
+      "aliases": [
+        "USL 엔드포인트 폐포 질문",
+        "USL 방향성 질문",
+        "usl endpoint closure open question"
+      ],
+      "questions": [
+        "엔드포인트 종류는 정확히 {kg, url, git repo, 파일시스템} 넷으로 닫히나, 열려 있나(예: DB, MinIO object, MCP 서버, 문서, 사람, 중첩 HSWM)?",
+        "'싹다'는 열거한 8쌍 외에 url↔url, git repo↔git repo, 파일시스템↔파일시스템, url↔git repo(전체 폐포)도 포함하나? HSWM↔HSWM(중첩 HSWM 간 port)도 포함하나?",
+        "USL 링크는 방향이 있나? '파일시스템과 kg 간의'/'kg 와 파일시스템 간의', 'url 과 파일시스템 간의'/'파일 시스템과 url 간의'를 따로 말한 것은 방향(source→target, BX get/put) 구분인가, 반복 강조인가?",
+        "'kg' 엔드포인트 종류를 SYMPOSIUM 정본 Neo4j 같은 특정 KG 인스턴스와 연결해도 되나(INSTANCE_OF), 아니면 종류만 두나?"
+      ],
+      "user_answered": false
+    },
+    {
+      "uid": "sym:OpenQuestion:usl-minimal-unit-semantics-and-longinus-anchor-2026-09-07",
+      "labels": [
+        "OpenQuestion"
+      ],
+      "name": "usl-minimal-unit-semantics-and-longinus-anchor-2026-09-07",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "source_node_sha256": "e119b3f8f785a3857aae476764223806700ecba940aed8455adf09ea47a28e7c",
+      "title": "'롱기누스의 최소단위'의 최소단위는 원자인가 최소-완전인가? 어느 롱기누스 노드인가? 7-Layer 중 어디에 위치하나?",
+      "aliases": [
+        "USL 최소단위 의미 질문",
+        "USL 롱기누스 앵커 질문",
+        "USL 7-Layer 질문",
+        "usl minimal unit open question"
+      ],
+      "questions": [
+        "'최소단위'는 원자(더 나눌 수 없음; 롱기누스 바인딩 = USL 집합)를 뜻하나, 최소-완전(7 layer를 다 갖춘 가장 작은 참조)을 뜻하나?",
+        "'롱기누스'로 지칭된 KG 노드는 7-Layer Reference Model 허브(sym:Canonical:hub-longinus-reference — 이 번들의 PART_OF 대상, 구조 투영)인가, 5-weapon 노드(sym:AbstractNode:longinus#fad39793)인가, Skill(sym:Skill:longinus)인가, 한국어 SemanticAnchor(sym:AbstractNode:롱기누스)인가?",
+        "USL 하나가 롱기누스 7-Layer(L1 Address Indirection · L2 Lifetime/Scope · L3 Type Permission · L4 Semiotic Binding · L5 Distributed Identity · L6 Information Compression · L7 Aesthetic/Intentional)를 전부 운반하나, 일부만 운반하나, 계층 밖의 새 원시체인가? 코드 특유 결합인 L3(refinement type ValidSourceRef)·L6(`# KG: xxx` 소스 내 한 줄)은 url·파일시스템·kg 엔드포인트에서 어떻게 재결합되나?",
+        "5 drift type(Missing/Orphan/SigMismatch/PatternDiv/LabelRot)과 BX lens laws(GetPut/PutGet/PutPut)는 USL 단위로 그대로 적용되나?",
+        "최소단위 주장은 공학 측(THEORY/LONGINUS)에만 적용되나, 신화 측(METAHUMOTONIC/BHGMAN Holy Lance 위상)에도 적용되나?"
+      ],
+      "user_answered": false
+    },
+    {
+      "uid": "sym:OpenQuestion:usl-hswm-status-and-substitution-2026-09-07",
+      "labels": [
+        "OpenQuestion"
+      ],
+      "name": "usl-hswm-status-and-substitution-2026-09-07",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "source_node_sha256": "2ac7d6c1b12b9e6a487fe3822aa097253cec7222ed501cd0d996893f031feb03",
+      "title": "HSWM에서 USL은 atom kind인가, typed reference/port인가, projection인가? '모든게 HSWM 으로 치환'의 치환은 무엇인가?",
+      "aliases": [
+        "USL HSWM 지위 질문",
+        "USL 치환 질문",
+        "usl hswm open question"
+      ],
+      "questions": [
+        "USL은 HSWM schema σ_t가 admit하는 canonical atom kind(자체 owner를 가진 relation/incidence atom)인가, typed reference(Ref_σ)·role-bearing n-ary incidence인가, capability-bounded port인가, bounded projection 항목인가?",
+        "'모든게 HSWM 으로 치환될수있게'의 치환은 (a) 각 기질(kg·url·git repo·파일시스템)이 원형을 유지한 채 HSWM의 bounded projection으로 편입됨, (b) HSWM이 원 기질을 대체함, (c) HSWM canon의 동등성 계약 아래 상호 대체 가능함 — 중 무엇인가? 치환의 단위는 엔드포인트인가 USL 자체인가?",
+        "USL 레코드에 HSWM의 schema-relative single-owner 원리와 Inv/Permit 조건이 적용되나? USL 생성·수정·rollback은 HSWM transition인가, 롱기누스 도구의 외부 쓰기인가?",
+        "'HSWM 확장개념'의 확장은 개념적 확장(이 번들의 EXTENDS 투영)인가, 하위 타입/상속인가, 다른 관계인가?",
+        "기존 정전 sym:AbstractNode:user-canon-hswm-is-e2e-neural-replacement-of-multiagent-glue-2026-08-03(HSWM = multiagent glue의 e2e 신경 대체)와 '마법의 접착제' USL은 어떻게 양립하나 — USL은 HSWM이 대체하는 glue와 다른 것인가, 기질을 HSWM으로 편입시키는 접착제인가?"
+      ],
+      "user_answered": false
+    }
+  ],
+  "selected_original_relations": [
+    {
+      "from_uid": "sym:UserVerdict:usl-develop-longinus-minimal-unit-2026-09-07",
+      "to_uid": "sym:Concept:usl",
+      "type": "ASSERTS_ABOUT",
+      "authority_class": "USER_PRIMARY",
+      "status": "RATIFIED",
+      "properties": {
+        "role": "subject",
+        "user_basis": "U1 2026-09-07"
+      }
+    },
+    {
+      "from_uid": "sym:UserVerdict:usl-develop-longinus-minimal-unit-2026-09-07",
+      "to_uid": "sym:Canonical:hub-longinus-reference",
+      "type": "ASSERTS_ABOUT",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE",
+      "properties": {
+        "role": "subject_anchor_projection",
+        "user_term": "롱기누스",
+        "note": "사용자 어휘 '롱기누스'를 Longinus의 유일한 CONCEPT-kind 정전 노드(7-Layer Reference Model 허브)에 대응시킨 구조 투영 — 사용자가 노드를 특정하지 않았으므로 USER_PRIMARY/RATIFIED 아님. 재지정은 sym:OpenQuestion:usl-minimal-unit-semantics-and-longinus-anchor-2026-09-07"
+      }
+    },
+    {
+      "from_uid": "sym:UserVerdict:usl-universal-semantic-link-definition-2026-09-07",
+      "to_uid": "sym:Concept:usl",
+      "type": "ASSERTS_ABOUT",
+      "authority_class": "USER_PRIMARY",
+      "status": "RATIFIED",
+      "properties": {
+        "role": "subject",
+        "user_basis": "U2 2026-09-07"
+      }
+    },
+    {
+      "from_uid": "sym:UserVerdict:usl-universal-semantic-link-definition-2026-09-07",
+      "to_uid": "sym:Concept:hswm",
+      "type": "ASSERTS_ABOUT",
+      "authority_class": "USER_PRIMARY",
+      "status": "RATIFIED",
+      "properties": {
+        "role": "subject",
+        "note": "U2는 HSWM의 정의가 아니라 USL의 정의이므로 hswm에는 canon-definition이 아닌 ASSERTS_ABOUT로 붙인다",
+        "user_terms": [
+          "HSWM 확장개념",
+          "모든게 HSWM 으로 치환될수있게하는"
+        ]
+      }
+    },
+    {
+      "from_uid": "sym:Concept:usl",
+      "to_uid": "sym:Canonical:hub-longinus-reference",
+      "type": "PART_OF",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE",
+      "properties": {
+        "role": "minimal_unit",
+        "user_phrase": "롱기누스의 최소단위",
+        "user_basis": "U1 2026-09-07",
+        "note": "MINIMAL_UNIT_OF 미등록 → PART_OF + role. 허브 = Longinus의 유일한 CONCEPT-kind 정전 노드(구조 투영; 다른 노드를 뜻했다면 사용자 verdict로 재지정). '최소단위'의 의미(원자 vs 최소-완전)는 OpenQuestion"
+      }
+    },
+    {
+      "from_uid": "sym:Concept:usl",
+      "to_uid": "sym:Concept:hswm",
+      "type": "EXTENDS",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE",
+      "properties": {
+        "role": "extension_concept",
+        "user_phrase": "HSWM 확장개념",
+        "user_phrase_substitution": "모든게 HSWM 으로 치환될수있게하는",
+        "user_basis": "U2 2026-09-07",
+        "note": "사용자 구절의 구조 투영. IS_A로는 그리지 않았다(확장의 종류는 sym:OpenQuestion:usl-hswm-status-and-substitution-2026-09-07 미결). HSWM 효능·구현 주장 아님(UNJUDGED 유지). '치환'의 뜻은 sym:OpenQuestion:usl-hswm-status-and-substitution-2026-09-07. 등록 유형 중 EXTENDS 선택 (ENABLES/GENERALIZES/REFINES 기각)"
+      }
+    },
+    {
+      "from_uid": "sym:Concept:usl",
+      "to_uid": "sym:OpenQuestion:usl-vs-referencesite-record-shape-and-implementation-2026-09-07",
+      "type": "HAS_OPEN_QUESTION",
+      "authority_class": "SECONDARY_AI",
+      "status": "OPEN",
+      "properties": {
+        "role": "open_question",
+        "note": "질문 식별은 AI; 답은 사용자만"
+      }
+    },
+    {
+      "from_uid": "sym:Concept:usl",
+      "to_uid": "sym:OpenQuestion:usl-endpoint-closure-and-directionality-2026-09-07",
+      "type": "HAS_OPEN_QUESTION",
+      "authority_class": "SECONDARY_AI",
+      "status": "OPEN",
+      "properties": {
+        "role": "open_question",
+        "note": "질문 식별은 AI; 답은 사용자만"
+      }
+    },
+    {
+      "from_uid": "sym:Concept:usl",
+      "to_uid": "sym:OpenQuestion:usl-minimal-unit-semantics-and-longinus-anchor-2026-09-07",
+      "type": "HAS_OPEN_QUESTION",
+      "authority_class": "SECONDARY_AI",
+      "status": "OPEN",
+      "properties": {
+        "role": "open_question",
+        "note": "질문 식별은 AI; 답은 사용자만"
+      }
+    },
+    {
+      "from_uid": "sym:Concept:usl",
+      "to_uid": "sym:OpenQuestion:usl-hswm-status-and-substitution-2026-09-07",
+      "type": "HAS_OPEN_QUESTION",
+      "authority_class": "SECONDARY_AI",
+      "status": "OPEN",
+      "properties": {
+        "role": "open_question",
+        "note": "질문 식별은 AI; 답은 사용자만"
+      }
+    },
+    {
+      "from_uid": "sym:Hypothesis:usl-ai-reading-2026-09-07",
+      "to_uid": "sym:Concept:usl",
+      "type": "ASSERTS_ABOUT",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED",
+      "properties": {
+        "role": "ai_reading",
+        "scope": "INTERPRETATION_NOT_CANON"
+      }
+    },
+    {
+      "from_uid": "sym:Hypothesis:usl-ai-reading-2026-09-07",
+      "to_uid": "sym:AbstractNode:rfc-longinus-v3.4-guarantee-level-2026-05-21",
+      "type": "ASSERTS_ABOUT",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED",
+      "properties": {
+        "role": "compared_existing_minimal_record",
+        "note": "ReferenceSite 8-tuple = USL의 KG↔코드 특수화라는 읽기. SUPERSEDES/GENERALIZES 엣지는 그리지 않는다 — 관계는 OpenQuestion"
+      }
+    },
+    {
+      "from_uid": "sym:Hypothesis:usl-ai-reading-2026-09-07",
+      "to_uid": "sym:Concept:hswm",
+      "type": "ASSERTS_ABOUT",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROPOSED",
+      "properties": {
+        "role": "hswm_vocabulary_mapping_only",
+        "nonclaim": "no efficacy or implementation claim; HSWM scientific status UNJUDGED"
+      }
+    },
+    {
+      "from_uid": "sym:Hypothesis:usl-ai-reading-2026-09-07",
+      "to_uid": "sym:OpenQuestion:usl-vs-referencesite-record-shape-and-implementation-2026-09-07",
+      "type": "HAS_OPEN_QUESTION",
+      "authority_class": "SECONDARY_AI",
+      "status": "OPEN",
+      "properties": {
+        "note": "가설이 닫지 않고 남기는 질문"
+      }
+    },
+    {
+      "from_uid": "sym:Hypothesis:usl-ai-reading-2026-09-07",
+      "to_uid": "sym:OpenQuestion:usl-hswm-status-and-substitution-2026-09-07",
+      "type": "HAS_OPEN_QUESTION",
+      "authority_class": "SECONDARY_AI",
+      "status": "OPEN",
+      "properties": {
+        "note": "가설이 닫지 않고 남기는 질문"
+      }
+    }
+  ],
+  "document_section_boundary": {
+    "1": "USER_PRIMARY_QUOTATION",
+    "2": "SYSTEM_DERIVED_STRUCTURE_PROJECTION",
+    "3": "SECONDARY_AI_OPEN_QUESTIONS",
+    "4-6": "SECONDARY_AI_DRAFT_PENDING"
+  },
+  "current_live_readback": "UNAVAILABLE_MCP_TRANSPORT_AND_BOLT_CONNECTION_FAILURE",
+  "nonclaim": "Source capture preserves external authority declarations; it neither recreates UserVerdicts nor admits USL as an HSWM canonical atom."
+}

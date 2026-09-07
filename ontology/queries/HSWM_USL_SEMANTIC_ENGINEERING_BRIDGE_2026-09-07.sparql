@@ -1,0 +1,37 @@
+# Read-only conceptual questions over the HSWM generic v2 RDF projection.
+# No query answers a USL OpenQuestion or demonstrates HSWM learning.
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+# Q1: Five source-bound premise -> contract <- counterexample chains.
+SELECT ?chain ?premise ?contract ?counterexample WHERE {
+  ?p a role:PHILOSOPHICAL_PREMISE ; kbp:chain_id ?chain ;
+     kbp:description ?premise ; kbr:MOTIVATES ?c ; kbr:HAS_SOURCE ?source .
+  ?c a role:OPERATIONAL_CONTRACT ; kbp:chain_id ?chain ; kbp:description ?contract .
+  ?f a role:ILLUSTRATIVE_COUNTEREXAMPLE ; kbr:CHALLENGES ?c ;
+     kbp:chain_id ?chain ; kbp:description ?counterexample ;
+     kbp:illustration_status "AUTHORED_NOT_EXECUTED" .
+  ?source a role:DESIGN_SOURCE ; kbp:source_sha256 ?sourceSha .
+} ORDER BY ?chain
+
+# Q2: The external canonical IDs are references, not newly owned UserVerdicts.
+SELECT ?externalUid ?bundleSha ?receiptUid WHERE {
+  ?s a role:EXTERNAL_SOURCE_READING ; kbp:external_bundle_sha256 ?bundleSha ;
+     kbp:external_receipt_uid ?receiptUid ; kbr:HAS_SOURCE ?external .
+  ?external a kb:Anchor ; kb:uid ?externalUid .
+} ORDER BY ?externalUid
+
+# Q3: Find any accidental authority promotion among the new owned records.
+SELECT ?uid ?authority ?status WHERE {
+  ?n a kb:Node ; kb:uid ?uid ; kbp:authority_class ?authority ; kbp:status ?status .
+  FILTER (?authority != "SECONDARY_AI" || ?status != "PROPOSED_UNTESTED")
+}
+
+# Q4: Preserve all four external, unanswered USL questions as references.
+SELECT DISTINCT ?questionUid ?questionName WHERE {
+  ?reference a kb:AnchorReference ; kb:anchorTarget ?question ; kb:anchorName ?questionName .
+  ?question kb:uid ?questionUid .
+  FILTER (STRSTARTS(STR(?questionUid), "sym:OpenQuestion:usl-"))
+} ORDER BY ?questionUid

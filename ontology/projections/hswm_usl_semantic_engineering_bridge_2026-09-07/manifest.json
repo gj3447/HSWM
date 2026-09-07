@@ -1,0 +1,226 @@
+{
+  "schema_version": "hswm-usl-projection-validation/v1",
+  "validated_at": "2026-09-07T05:19:51.635019+00:00",
+  "source_path": "ontology/identity/hswm_core/HSWM_USL_SEMANTIC_ENGINEERING_BRIDGE.v1.json",
+  "source_sha256": "c9d45cfcb16c72caf310ee4d55e972b5c7bda3648a1daedcbc9d439fbb92ceb1",
+  "shape_path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+  "shape_sha256": "6eb4d0be63fccd71e02e25d86baa1ae81c0ddf31a9eb4d05fc4f0cf655225371",
+  "graph_sha256": "eed27fdb12552e1d07eb1a490458d90ab20bc966586005db6438c3eb0b28f281",
+  "query_path": "ontology/queries/HSWM_USL_SEMANTIC_ENGINEERING_BRIDGE_2026-09-07.sparql",
+  "query_sha256": "be89c642c3da10224454d6fe838f89740b841101105eb556557765da9c82f94f",
+  "counts": {
+    "nodes": 18,
+    "anchors": 18,
+    "relations": 69
+  },
+  "role_counts": {
+    "CONCEPTUAL_BRIDGE_BUNDLE": 1,
+    "DESIGN_SOURCE": 1,
+    "EXTERNAL_SOURCE_READING": 1,
+    "PHILOSOPHICAL_PREMISE": 5,
+    "OPERATIONAL_CONTRACT": 5,
+    "ILLUSTRATIVE_COUNTEREXAMPLE": 5
+  },
+  "artifact_bindings_rehashed": 8,
+  "shacl_conforms": true,
+  "competency_query_results": [
+    {
+      "question": "Q1",
+      "rows": [
+        {
+          "chain": {
+            "kind": "literal",
+            "value": "C1"
+          },
+          "premise": {
+            "kind": "literal",
+            "value": "HSWM에서 의미 주장은 문맥에 따른 예측·행동의 구별로 조사할 수 있다는 제안."
+          },
+          "contract": {
+            "kind": "literal",
+            "value": "문맥·역할·허용 행동·관찰 결과·horizon·허용 오차를 선언한 뒤 치환 전후를 비교한다."
+          },
+          "counterexample": {
+            "kind": "literal",
+            "value": "서로 다른 적용 범위인데 URI·hash·이름이 같다는 이유로 같은 행동을 허용하면 이 계약은 실패한다."
+          }
+        },
+        {
+          "chain": {
+            "kind": "literal",
+            "value": "C2"
+          },
+          "premise": {
+            "kind": "literal",
+            "value": "같은 evolving hypergraph의 관계가 예측과 다음 계산을 함께 조건화해야 한다."
+          },
+          "contract": {
+            "kind": "literal",
+            "value": "관련 조건에 대한 선언된 대조에서 relation/disposition revision이 읽는 대상·관찰 순서·도구 사용에 주는 차이를 추적한다."
+          },
+          "counterexample": {
+            "kind": "literal",
+            "value": "revision의 인과 효과를 주장한 대조에서 compiled state를 제거·복원해도 고정 router만이 선택을 결정하면 해당 기전 주장은 실패한다."
+          }
+        },
+        {
+          "chain": {
+            "kind": "literal",
+            "value": "C3"
+          },
+          "premise": {
+            "kind": "literal",
+            "value": "미식별 실패는 경쟁 설명을 남기고 다음 경험을 고를 이유가 된다."
+          },
+          "contract": {
+            "kind": "literal",
+            "value": "resolver·링크 해석·국소 기전·공동 조건·환경 가설의 예측, 개입 가능성, 비용을 비교하고 식별되지 않은 credit은 보류한다."
+          },
+          "counterexample": {
+            "kind": "literal",
+            "value": "port revision drift를 구별할 관찰 없이 하위 cell의 능력만 반복 감점하면 이 수정 절차는 실패한다."
+          }
+        },
+        {
+          "chain": {
+            "kind": "literal",
+            "value": "C4"
+          },
+          "premise": {
+            "kind": "literal",
+            "value": "능력 재사용은 적용 조건을 가진 압축이며 반례에 따라 경계를 다시 열 수 있어야 한다."
+          },
+          "contract": {
+            "kind": "literal",
+            "value": "typed port와 입력·결과 분포·시간·비용·오차·scope·re-open 조건을 versioned 계약으로 드러낸다."
+          },
+          "counterexample": {
+            "kind": "literal",
+            "value": "숨긴 내부 상태 때문에 결과가 달라졌는데 상위가 이를 감지·재관찰·보류할 경로가 없으면 압축 계약은 실패한다."
+          }
+        },
+        {
+          "chain": {
+            "kind": "literal",
+            "value": "C5"
+          },
+          "premise": {
+            "kind": "literal",
+            "value": "하위와 전체가 같은 참여 문법을 쓰면서도 경계·책임·이탈을 보존해야 한다."
+          },
+          "contract": {
+            "kind": "literal",
+            "value": "상위는 전달·순서·공동 조건을 별도 공동 결과로 수정하고 Step/Learn/Inv/Permit/lineage 및 member exit 의무를 유지한다."
+          },
+          "counterexample": {
+            "kind": "literal",
+            "value": "중첩 wrapper만 늘거나 상위 revision이 하위 consent·exit·lineage를 지우면 선언한 재귀 합성 계약은 실패한다."
+          }
+        }
+      ],
+      "count": 5
+    },
+    {
+      "question": "Q2",
+      "rows": [
+        {
+          "externalUid": {
+            "kind": "literal",
+            "value": "sym:Concept:usl"
+          },
+          "bundleSha": {
+            "kind": "literal",
+            "value": "3883a474d6620355ae1ee2396a4c3d36cb86d16f8d7ca6fa26a21b2532af434e"
+          },
+          "receiptUid": {
+            "kind": "literal",
+            "value": "sym:KG_INFRA:bundle-usl-universal-semantic-link-2026-09-07-v1-run"
+          }
+        },
+        {
+          "externalUid": {
+            "kind": "literal",
+            "value": "sym:UserVerdict:usl-develop-longinus-minimal-unit-2026-09-07"
+          },
+          "bundleSha": {
+            "kind": "literal",
+            "value": "3883a474d6620355ae1ee2396a4c3d36cb86d16f8d7ca6fa26a21b2532af434e"
+          },
+          "receiptUid": {
+            "kind": "literal",
+            "value": "sym:KG_INFRA:bundle-usl-universal-semantic-link-2026-09-07-v1-run"
+          }
+        },
+        {
+          "externalUid": {
+            "kind": "literal",
+            "value": "sym:UserVerdict:usl-universal-semantic-link-definition-2026-09-07"
+          },
+          "bundleSha": {
+            "kind": "literal",
+            "value": "3883a474d6620355ae1ee2396a4c3d36cb86d16f8d7ca6fa26a21b2532af434e"
+          },
+          "receiptUid": {
+            "kind": "literal",
+            "value": "sym:KG_INFRA:bundle-usl-universal-semantic-link-2026-09-07-v1-run"
+          }
+        }
+      ],
+      "count": 3
+    },
+    {
+      "question": "Q3",
+      "rows": [],
+      "count": 0
+    },
+    {
+      "question": "Q4",
+      "rows": [
+        {
+          "questionUid": {
+            "kind": "literal",
+            "value": "sym:OpenQuestion:usl-endpoint-closure-and-directionality-2026-09-07"
+          },
+          "questionName": {
+            "kind": "literal",
+            "value": "usl-endpoint-closure-and-directionality-2026-09-07"
+          }
+        },
+        {
+          "questionUid": {
+            "kind": "literal",
+            "value": "sym:OpenQuestion:usl-hswm-status-and-substitution-2026-09-07"
+          },
+          "questionName": {
+            "kind": "literal",
+            "value": "usl-hswm-status-and-substitution-2026-09-07"
+          }
+        },
+        {
+          "questionUid": {
+            "kind": "literal",
+            "value": "sym:OpenQuestion:usl-minimal-unit-semantics-and-longinus-anchor-2026-09-07"
+          },
+          "questionName": {
+            "kind": "literal",
+            "value": "usl-minimal-unit-semantics-and-longinus-anchor-2026-09-07"
+          }
+        },
+        {
+          "questionUid": {
+            "kind": "literal",
+            "value": "sym:OpenQuestion:usl-vs-referencesite-record-shape-and-implementation-2026-09-07"
+          },
+          "questionName": {
+            "kind": "literal",
+            "value": "usl-vs-referencesite-record-shape-and-implementation-2026-09-07"
+          }
+        }
+      ],
+      "count": 4
+    }
+  ],
+  "live_publication_status": "NOT_PUBLISHED_CONNECTION_UNAVAILABLE",
+  "live_constraints_and_anchors": "NOT_REVALIDATED_THIS_TURN",
+  "claim_ceiling": "CONCEPTUAL_PROPOSAL_NOT_USL_RATIFICATION_NOT_HSWM_ADMISSION_NOT_OBSERVED_LEARNING_OR_EFFICACY"
+}

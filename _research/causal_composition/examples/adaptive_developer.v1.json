@@ -1,0 +1,51 @@
+{
+  "schema_version": "hswm-adaptive-program/v1",
+  "graph_id": "hswm-local-developer-v1",
+  "root": "developer",
+  "context_domain": {
+    "area": ["cells", "cli"],
+    "stage": ["development", "regression"]
+  },
+  "cells": [
+    {
+      "cell_id": "developer", "kind": "router", "owner": "local:developer",
+      "input_type": "developer-work/v1", "output_type": "developer-work/v1"
+    },
+    {
+      "cell_id": "checks", "kind": "router", "owner": "local:checks",
+      "input_type": "developer-work/v1", "output_type": "developer-work/v1"
+    },
+    {
+      "cell_id": "syntax", "kind": "command", "owner": "local:syntax",
+      "input_type": "developer-work/v1", "output_type": "developer-work/v1",
+      "argv": ["uv", "run", "--locked", "python", "-m", "compileall", "-q", "src/hswm/cells", "src/hswm/infrastructure/adaptive_cli.py"],
+      "outcome": "exit_code"
+    },
+    {
+      "cell_id": "focused-checks", "kind": "command", "owner": "local:focused-checks",
+      "input_type": "developer-work/v1", "output_type": "developer-work/v1",
+      "argv": ["uv", "run", "--locked", "pytest", "-q", "tests/test_adaptive_store.py", "tests/test_adaptive_learning.py", "tests/test_adaptive_executor.py", "tests/test_adaptive_runtime.py", "tests/test_adaptive_cli.py", "tests/test_adaptive_lifecycle.py"],
+      "outcome": "exit_code"
+    },
+    {
+      "cell_id": "compatibility-checks", "kind": "command", "owner": "local:compatibility-checks",
+      "input_type": "developer-work/v1", "output_type": "developer-work/v1",
+      "argv": ["uv", "run", "--locked", "pytest", "-q", "tests/test_adaptive_store.py", "tests/test_adaptive_learning.py", "tests/test_adaptive_executor.py", "tests/test_adaptive_runtime.py", "tests/test_adaptive_cli.py", "tests/test_adaptive_lifecycle.py", "tests/test_conditional_capability.py", "tests/test_conditional_probe.py", "tests/test_conditional_task_cli.py"],
+      "outcome": "exit_code"
+    }
+  ],
+  "relations": [
+    {
+      "uid": "development-cycle", "source": "developer",
+      "members": ["syntax", "checks"], "reads": ["area", "stage"], "cost_hint": 0.2
+    },
+    {
+      "uid": "focused", "source": "checks",
+      "members": ["focused-checks"], "reads": ["area"], "cost_hint": 0.1
+    },
+    {
+      "uid": "compatibility", "source": "checks",
+      "members": ["compatibility-checks"], "reads": ["area"], "cost_hint": 0.2
+    }
+  ]
+}

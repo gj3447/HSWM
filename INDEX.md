@@ -9,6 +9,12 @@ HSWM의 최상위 목표 정체성은
 continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 얼굴이다. 이 정전은
 철학적 정의를 닫지만 현재 효능을 승격하지 않는다.
 
+2026-09-07의 실사용 구현은
+[`적응 하이퍼그래프 런타임`](docs/research/HSWM_ADAPTIVE_HYPERGRAPH_RUNTIME_2026-09-07.md)에서
+시작한다. `hswm-live`는 허용된 cell을 재귀 실행하고, 명시한 검사 결과나 사용자 feedback으로
+관계의 문맥 가중치를 지속 갱신한다. 혼합 결과에서 조건·read-set의 국소 분화도 실행한다.
+이 로컬 prototype은 개발 데이터를 쌓는 경로이며 기존 과학적 판정을 승계하지 않는다.
+
 외부 그래프 표준·SDK·공식 test suite, MCP와 Skill의 역할 분리, source pin과
 registry 비신뢰 경계는
 [`standard-first graph toolchain policy`](docs/operations/HSWM_STANDARD_TOOLCHAIN_POLICY_2026-09-02.md)에

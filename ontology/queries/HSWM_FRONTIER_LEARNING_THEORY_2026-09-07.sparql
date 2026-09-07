@@ -1,0 +1,34 @@
+# Q1: Papers and their complete mechanism -> bridge -> falsifier chain (35 rows).
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?paper ?url ?family ?mechanism ?bridge ?falsifier WHERE {
+ ?s a role:LITERATURE_SOURCE ; kbp:name ?paper ; kbp:url ?url ; kbp:family ?family ; kbr:HAS_CONCEPT ?m .
+ ?m kbp:description ?mechanism ; kbr:SPECULATIVE_LINK ?b .
+ ?b kbp:description ?bridge ; kbr:REQUIRES ?t .
+ ?t kbp:description ?falsifier .
+} ORDER BY ?family ?paper
+
+# Q2: Near-term review candidates, with implementation ceiling.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?candidate ?limitation ?implementation ?efficacy WHERE {
+ ?b a role:HSWM_BRIDGE_CANDIDATE ; kbp:priority "near" ; kbp:name ?candidate ;
+ kbp:limitation ?limitation ; kbp:implementation_status ?implementation ; kbp:efficacy_status ?efficacy .
+} ORDER BY ?candidate
+
+# Q3: 2026 first-submission sources, with publication and inspection scope.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?paper ?date ?url ?publication ?inspection WHERE {
+ ?s a role:LITERATURE_SOURCE ; kbp:year 2026 ; kbp:name ?paper ; kbp:source_date ?date ;
+ kbp:url ?url ; kbp:source_status ?publication ; kbp:inspected_scope ?inspection .
+} ORDER BY ?date ?paper
+
+# Q4: Implementation snapshot is separately typed; no paper bridge is promoted.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?implementation ?status ?efficacy ?description WHERE {
+ ?s a role:IMPLEMENTATION_SNAPSHOT ; kbp:name ?implementation ;
+ kbp:implementation_status ?status ; kbp:efficacy_status ?efficacy ; kbp:description ?description .
+}

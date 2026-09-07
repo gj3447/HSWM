@@ -1,0 +1,79 @@
+{
+  "as_of": "2026-09-07",
+  "coverage_limit": "Targeted primary-source survey of causal discovery, structured exploration, hypergraph representation and abstraction learning; recent 2025-2026 work plus explicitly historical foundations. Not exhaustive; abstract-level verification does not validate proofs or reproduce results.",
+  "search_queries": ["site.arxiv.org 2026 causal representation learning interventions foundation models", "site.arxiv.org 2025 hypergraph neural network higher order foundation model", "site.arxiv.org 2026 active causal discovery language models interventions", "site.arxiv.org 2026 program synthesis abstraction learning library", "site.arxiv.org GFlowNet Foundations", "site.arxiv.org DreamCoder", "site.arxiv.org Counterfactual Multi-Agent Policy Gradients"],
+  "entries": [
+    {
+      "id": "theorycoder2", "title": "Learning Abstractions for Hierarchical Planning in Program-Synthesis Agents", "authors": "Zergham Ahmed et al.", "year": 2026, "date": "2026-01-31", "url": "https://arxiv.org/abs/2602.00929v1", "source_status": "preprint", "inspected_scope": "abstract and submission metadata",
+      "mechanism": "TheoryCoder-2 synthesizes reusable abstractions from experience using LLM in-context learning and incorporates them into hierarchical planning. Authors evaluate in BabyAI, Minihack and VGDL games.",
+      "hswm_bridge": "Propose reusable conditional AST fragments from permitted trajectories, then compile exact relation revisions into later observation and action proposals.",
+      "limitation": "Published agent tasks do not establish HSWM canonical admission or recursive cognition. The provided observation and program grammar remain scaffold.",
+      "falsifier": "At equal public history and full search cost, learned fragments fail to improve held-out planning relative to fresh synthesis, or removed fragments leave unchanged reads without charged rederivation.",
+      "family": "program_abstraction", "priority": "near", "verification_note": "Primary arXiv v1 abstract opened; first submission 2026-01-31, not inferred from the February identifier. No peer-review claim."
+    },
+    {
+      "id": "narcissus", "title": "Narcissus: Program Synthesis Using Context-Aware LLM Approximations", "authors": "Tilman Hinnerichs, Sebastijan Dumancic, Neil Yorke-Smith", "year": 2026, "date": "2026-08-26", "url": "https://arxiv.org/abs/2608.25657v1", "source_status": "preprint", "inspected_scope": "abstract and submission metadata",
+      "mechanism": "Uses the syntax-tree context of LLM proposals to guide enumerative synthesis. Regularization keeps grammar rules reachable even when absent from the proposals; search itself requires no further LLM calls.",
+      "hswm_bridge": "Replace unguided finite conjunction enumeration with proposal-guided typed AST search while retaining access checks and a route to rules omitted by the LLM.",
+      "limitation": "Guided program search is neither new-observable discovery nor independent evidence that a proposed relation is true.",
+      "falsifier": "Malformed or misleading proposals hide the valid AST, or guidance loses to enumeration under the same total proposal-plus-search budget on unseen cases.",
+      "family": "program_abstraction", "priority": "near", "verification_note": "Primary arXiv v1 opened; no reported benchmark percentages imported as HSWM expectations."
+    },
+    {
+      "id": "causal_aba_llm", "title": "Leveraging Large Language Models for Causal Discovery: a Constraint-based, Argumentation-driven Approach", "authors": "Zihao Li, Fabrizio Russo", "year": 2026, "date": "2026-02-18", "url": "https://arxiv.org/abs/2602.16481v2", "source_status": "peer-reviewed (UAI 2026 acceptance stated on arXiv)", "inspected_scope": "abstract, comments and submission metadata",
+      "mechanism": "Treats LLMs as imperfect sources of semantic structural priors and combines those priors with conditional-independence evidence through Causal Assumption-based Argumentation. Includes an evaluation protocol addressing memorisation bias.",
+      "hswm_bridge": "Keep LLM-proposed relation priors explicitly fallible and reconcile them with observed constraints before proposing a revision.",
+      "limitation": "Conditional independence, expert priors and causal identification have distinct assumptions; language plausibility cannot authorize a causal update.",
+      "falsifier": "Renaming variables or injecting false prior descriptions drives accepted relations despite contradictory observations; compare against data-only and shuffled-prior controls.",
+      "family": "causal_identification", "priority": "near", "verification_note": "Primary page states UAI 2026 acceptance and latest v2 dated 2026-08-11; date field preserves original submission."
+    },
+    {
+      "id": "intervention_only", "title": "Relaxing Faithfulness with Intervention-Only Causal Discovery", "authors": "Bijan Mazaheri, Jiaqi Zhang, Caroline Uhler", "year": 2026, "date": "2026-07-13", "url": "https://arxiv.org/abs/2607.11816v1", "source_status": "peer-reviewed (UAI 2026 acceptance stated on arXiv)", "inspected_scope": "abstract, comments and submission metadata",
+      "mechanism": "Studies identification from hard interventions under intervention-immediacy faithfulness, allowing some path cancellations that violate ordinary observational faithfulness. Describes equivalence classes when available interventions are insufficient.",
+      "hswm_bridge": "Declare the intervention target and remaining equivalence class when choosing probes; keep credit unidentified when permitted interventions cannot distinguish explanations.",
+      "limitation": "The theorem assumptions and intervention access must be checked for each HSWM task; observing a graph is not a hard intervention.",
+      "falsifier": "The assumed interventions are unavailable or non-surgical, or candidate models remain intervention-equivalent while the learner assigns unique causal credit.",
+      "family": "causal_identification", "priority": "near", "verification_note": "Primary abstract and acceptance comment inspected; theorem proof not audited."
+    },
+    {
+      "id": "causal_foundation_models", "title": "Causal Foundation Models", "authors": "Christopher Stith, Hossein Rahmani, Jesse C. Cresswell", "year": 2026, "date": "2026-09-02", "url": "https://arxiv.org/abs/2609.03003v1", "source_status": "preprint tutorial", "inspected_scope": "abstract and submission metadata",
+      "mechanism": "Introduces pretrained models that estimate causal quantities on new datasets through in-context learning, alongside a practical overview and example notebooks.",
+      "hswm_bridge": "Consider a bounded estimator interface for outcome comparisons, with explicit estimand and assumptions, as one alternative to hand-authored credit arithmetic.",
+      "limitation": "This is a tutorial entry point, not evidence that a specific estimator identifies HSWM credit or works under arbitrary confounding.",
+      "falsifier": "Calibration and effect estimates fail under task shifts or known-confounder synthetic controls; an estimator must not substitute for identification assumptions.",
+      "family": "causal_identification", "priority": "medium", "verification_note": "Primary v1 dated 2026-09-02 verified; newest item in this shard. Tutorial status explicit."
+    },
+    {
+      "id": "hyperfm", "title": "Hypergraph Foundation Model", "authors": "Yue Gao et al.", "year": 2025, "date": "2025-03-03", "url": "https://arxiv.org/abs/2503.01203v2", "source_status": "preprint", "inspected_scope": "abstract and submission metadata",
+      "mechanism": "Hyper-FM learns vertex and structural representations using hierarchical higher-order neighbors and multiple hypergraphs. Authors study 11 text-attributed hypergraph datasets and the role of domain diversity.",
+      "hswm_bridge": "Use as a representation and retrieval comparator for role-bearing relation selection; test diversity of task domains rather than graph size alone.",
+      "limitation": "Representation prediction does not implement token-native canonical revisions. Lossless binary incidence is a valid comparator, so hypergraph storage alone is not a novelty claim.",
+      "falsifier": "Matched binary incidence or ordinary retrieval achieves the same held-out selection at equal cost; claimed benefits disappear outside the pretraining domains.",
+      "family": "higher_order_relations", "priority": "medium", "verification_note": "Primary latest v2 dated 2025-12-05 inspected; original submission retained."
+    },
+    {
+      "id": "gflownet", "title": "GFlowNet Foundations", "authors": "Yoshua Bengio et al.", "year": 2021, "date": "2021-11-17", "url": "https://arxiv.org/abs/2111.09266v5", "source_status": "historical foundation; arXiv revision", "inspected_scope": "abstract and submission metadata",
+      "mechanism": "Learns sequential construction policies that sample structured objects approximately in proportion to a specified reward. The framework covers sets and graphs and amortizes repeated sampling work.",
+      "hswm_bridge": "Explore diverse relation ASTs or bounded coalitions instead of retaining only the first consistent candidate; maintain OTHER outside the modeled reward distribution.",
+      "limitation": "A reward is supplied or estimated; reward-proportional sampling does not establish causal correctness or define a posterior for unspecified explanations.",
+      "falsifier": "Candidate diversity or useful held-out distinctions do not improve against uniform or enumerative search after training cost is included; reward hacking dominates.",
+      "family": "structured_exploration", "priority": "medium", "verification_note": "Historical 2021 work; latest v5 dated 2026-01-24, not misclassified as newly introduced in 2026."
+    },
+    {
+      "id": "dreamcoder", "title": "DreamCoder: Growing generalizable, interpretable knowledge with wake-sleep Bayesian program learning", "authors": "Kevin Ellis et al.", "year": 2020, "date": "2020-06-15", "url": "https://arxiv.org/abs/2006.08381v1", "source_status": "historical foundation; arXiv version", "inspected_scope": "abstract and submission metadata",
+      "mechanism": "Alternates program solving and library abstraction with training a neural search guide on imagined and replayed tasks. Learned symbolic abstractions can be reused compositionally.",
+      "hswm_bridge": "Factor repeated validated relation ASTs into scoped reusable candidates with exact provenance; distinguish grammar extension from choosing among supplied hypotheses.",
+      "limitation": "Program-library learning assumes a task language and objective; compression does not confer truth, authority or cognition-bearing composition.",
+      "falsifier": "Learned abstractions increase total solve cost or fail held-out transfer versus an unchanged grammar and equal replay opportunities.",
+      "family": "program_abstraction", "priority": "near", "verification_note": "Historical predecessor explicitly dated 2020; no full proof or implementation reproduction."
+    },
+    {
+      "id": "coma", "title": "Counterfactual Multi-Agent Policy Gradients", "authors": "Jakob Foerster et al.", "year": 2017, "date": "2017-05-24", "url": "https://arxiv.org/abs/1705.08926v3", "source_status": "historical foundation; arXiv version", "inspected_scope": "abstract and submission metadata",
+      "mechanism": "Uses a centralized critic and decentralized policies. Its counterfactual baseline marginalizes one agent's action while holding other agents' actions fixed to address cooperative credit assignment.",
+      "hswm_bridge": "Compare role-specific contribution estimates with uniform and shuffled credit for joint transitions, preserving local versus handoff responsibility.",
+      "limitation": "A critic-estimated counterfactual is not an independently observed intervention; centralized training information may be unavailable at HSWM boundaries.",
+      "falsifier": "Credit gives no advantage over uniform or shuffled attribution, or member-local estimates incorrectly claim a separately untested handoff effect.",
+      "family": "collective_credit", "priority": "medium", "verification_note": "Original 2017 submission and v3 2024-12-11 distinguished; not labeled a 2024 discovery."
+    }
+  ]
+}

@@ -106,6 +106,11 @@ rewrite·사건 계보를 형식적 토대로 연결하며, 실제 환경에 맞
 구체화한다. [ontology v1](ontology/identity/hswm_core/HSWM_HYPERGRAPH_LEARNING_PLAN_ONTOLOGY.v1.json),
 RDF 1.1 N-Quads·SHACL 1.0·PROV-O와 SPARQL/Cypher 질의를 제공하며, 계획을 효능 증거로 승격하지 않는다.
 
+[C-1~C-3 공방 연결 명세](docs/research/HSWM_WORKSHOP_C1_C3_WORKED_SPEC_2026-09-07.md)는
+한 실패와 양립하는 세 설명, 판별 관찰, 수정 보류, 공동 조건 relation의 수정과
+동일한 새 입력의 pre/post 계산을 작성된 사례로 구체화한다. 상위에는 handoff 중 조건의
+유효성을 배우는 문제가 남는다. 가설·관찰 후보를 사람이 준 scaffold임을 명시하며 실행 결과는 아니다.
+
 2026-09-02 현재 증명·근거·간극의 answer-first 상태는
 [`HSWM proof-status graph`](docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)에
 고정했다. 임의의 theorem/test 개수가 아니라 여섯 end-to-end 횡단 의무를 같은

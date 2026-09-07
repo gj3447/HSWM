@@ -1,0 +1,76 @@
+{
+  "kind": "DOCUMENT_AND_GRAPH_ENGINEERING_VERIFICATION_NOT_SCIENTIFIC_RESULT",
+  "artifact_sha256": "e9b4454f404463a157bdaa2cf0db5e6af3ac01d912f8a790a682c70bcae9d0b4",
+  "bundle_uid": "sym:AbstractNode:hswm-workshop-c1-c3-2026-09-07-v1",
+  "source_bindings": "PASS",
+  "shacl": true,
+  "query_file": "ontology/queries/HSWM_WORKSHOP_C1_C3_2026-09-07.sparql",
+  "query_file_sha256": "f8a1739dfbeb6cbe0923de38410cbce326a19f529b2126a065d4d266ce11170c",
+  "local_queries": [
+    {
+      "query": "Q1",
+      "rows": 3,
+      "expected": 3,
+      "status": "PASS"
+    },
+    {
+      "query": "Q2",
+      "rows": 12,
+      "expected": 12,
+      "status": "PASS"
+    },
+    {
+      "query": "Q3",
+      "rows": 3,
+      "expected": 3,
+      "status": "PASS"
+    },
+    {
+      "query": "Q4",
+      "rows": 4,
+      "expected": 4,
+      "status": "PASS"
+    }
+  ],
+  "authored_case_consistency": "PASS_TABLE_PREDICTIONS_PARTITIONS_AND_TRACES_AGREE_UNDER_STATED_ASSUMPTIONS",
+  "scientific_tests_run": 0,
+  "live_kg": {
+    "status": "APPLIED_OR_VERIFIED_EXACT_PROJECTION",
+    "verified_at": "2026-09-07T00:22:01.058479+00:00",
+    "projection_sha256": "e9b4454f404463a157bdaa2cf0db5e6af3ac01d912f8a790a682c70bcae9d0b4",
+    "created_nodes": 29,
+    "created_relations": 107,
+    "existing_nodes": 0,
+    "existing_relations": 0,
+    "readback_nodes": 29,
+    "readback_relations": 107,
+    "query_file": "ontology/queries/HSWM_WORKSHOP_C1_C3_2026-09-07.cypher",
+    "query_file_sha256": "2c2a2957cb4e9bec9f9be0e2f78748762f90694ee4ab8143f7d8525cc24b8a0a",
+    "queries": [
+      {
+        "query": "Q1",
+        "rows": 3,
+        "expected": 3,
+        "status": "PASS"
+      },
+      {
+        "query": "Q2",
+        "rows": 12,
+        "expected": 12,
+        "status": "PASS"
+      },
+      {
+        "query": "Q3",
+        "rows": 3,
+        "expected": 3,
+        "status": "PASS"
+      },
+      {
+        "query": "Q4",
+        "rows": 4,
+        "expected": 4,
+        "status": "PASS"
+      }
+    ]
+  }
+}

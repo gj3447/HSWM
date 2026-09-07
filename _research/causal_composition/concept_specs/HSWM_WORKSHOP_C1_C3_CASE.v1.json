@@ -1,0 +1,495 @@
+{
+  "schema_version": "hswm-workshop-c1-c3-concept-case/v1",
+  "status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+  "authority_class": "SECONDARY_AI",
+  "source_document": "docs/research/HSWM_WORKSHOP_C1_C3_WORKED_SPEC_2026-09-07.md",
+  "claim_boundary": "CONCEPTUAL_TRACE_ONLY_NOT_EXECUTED_NOT_LEARNED_POLICY_NOT_HELDOUT_OR_EFFICACY",
+  "assumptions": [
+    "K0 deterministic",
+    "stationary environment and specimen conditions",
+    "exchangeable specimens under same declared role types and port grammar",
+    "no reset of an already consumed specimen",
+    "OTHER remains outside the enumerated hypothesis class"
+  ],
+  "researcher_supplied": [
+    "observable role/port grammar",
+    "tool modes A/B and preparation p0/p1",
+    "candidate hypotheses H-T/H-P/H-J",
+    "probe menu and illustrative relative costs",
+    "candidate elimination under deterministic K0",
+    "cost-based discriminating-probe heuristic",
+    "simple r0 disposition and proposed r1 interpretation"
+  ],
+  "learner_generated_in_this_artifact": [],
+  "visibility": {
+    "public_contract": [
+      "task goal",
+      "current specimen and port IDs/types/revisions",
+      "chosen mode and preparation",
+      "observed outcome",
+      "allowed action and cost/Permit metadata"
+    ],
+    "query_conditions_returns_only": [
+      "current port revision",
+      "observed port state",
+      "declared action cost",
+      "Permit metadata"
+    ],
+    "author_only": [
+      "author_world_table",
+      "future_illustrative_trace_outcomes"
+    ],
+    "not_available": [
+      "hidden success rule",
+      "causal label oracle",
+      "unexecuted counterfactual outcomes"
+    ],
+    "port_state_values": [
+      "p0",
+      "p1",
+      "UNKNOWN"
+    ],
+    "port_state_meaning": "current recorded/observed preparation only; never required preparation, compatible mode or predicted success"
+  },
+  "author_world_table": [
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "mode": "A",
+      "preparation": "p0",
+      "outcome": "FAIL"
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "mode": "B",
+      "preparation": "p0",
+      "outcome": "FAIL"
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "mode": "A",
+      "preparation": "p1",
+      "outcome": "FAIL"
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "mode": "B",
+      "preparation": "p1",
+      "outcome": "SUCCESS"
+    }
+  ],
+  "hypotheses": [
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "H-T",
+      "rule": "mode B alone suffices",
+      "predictions": {
+        "A,p0": "FAIL",
+        "B,p0": "SUCCESS",
+        "A,p1": "FAIL",
+        "B,p1": "SUCCESS"
+      }
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "H-P",
+      "rule": "preparation p1 alone suffices",
+      "predictions": {
+        "A,p0": "FAIL",
+        "B,p0": "FAIL",
+        "A,p1": "SUCCESS",
+        "B,p1": "SUCCESS"
+      }
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "H-J",
+      "rule": "mode B and preparation p1 jointly required",
+      "predictions": {
+        "A,p0": "FAIL",
+        "B,p0": "FAIL",
+        "A,p1": "FAIL",
+        "B,p1": "SUCCESS"
+      }
+    }
+  ],
+  "open_world_remainder": {
+    "id": "OTHER",
+    "status": "UNMODELED_POSSIBILITY_NOT_NUMERIC_POSTERIOR",
+    "examples": [
+      "unobserved factor",
+      "drift",
+      "noise",
+      "measurement error"
+    ]
+  },
+  "probes": [
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "Q-T",
+      "mode": "B",
+      "preparation": "p0",
+      "relative_cost": 1,
+      "initial_partition": [
+        [
+          "H-T"
+        ],
+        [
+          "H-P",
+          "H-J"
+        ]
+      ]
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "Q-P",
+      "mode": "A",
+      "preparation": "p1",
+      "relative_cost": 2,
+      "initial_partition": [
+        [
+          "H-P"
+        ],
+        [
+          "H-T",
+          "H-J"
+        ]
+      ]
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "Q-J",
+      "mode": "B",
+      "preparation": "p1",
+      "relative_cost": 3,
+      "initial_partition": [
+        [
+          "H-T",
+          "H-P",
+          "H-J"
+        ]
+      ]
+    }
+  ],
+  "trace": [
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "O0",
+      "mode": "A",
+      "preparation": "p0",
+      "outcome": "FAIL",
+      "remaining_enumerated": [
+        "H-T",
+        "H-P",
+        "H-J"
+      ],
+      "other_retained": true,
+      "revision_disposition": "WITHHOLD_CAUSAL_REVISION"
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "O1",
+      "probe": "Q-T",
+      "mode": "B",
+      "preparation": "p0",
+      "outcome": "FAIL",
+      "remaining_enumerated": [
+        "H-P",
+        "H-J"
+      ],
+      "other_retained": true,
+      "revision_disposition": "RESTRICT_H_T_UNDER_K0_ASSUMPTIONS"
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "O2",
+      "probe": "Q-P",
+      "mode": "A",
+      "preparation": "p1",
+      "outcome": "FAIL",
+      "remaining_enumerated": [
+        "H-J"
+      ],
+      "other_retained": true,
+      "revision_disposition": "RESTRICT_H_P_UNDER_K0_ASSUMPTIONS"
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "O3",
+      "probe": "Q-J",
+      "mode": "B",
+      "preparation": "p1",
+      "outcome": "SUCCESS",
+      "remaining_enumerated": [
+        "H-J"
+      ],
+      "other_retained": true,
+      "revision_disposition": "PROPOSE_JOINT_CONDITION_AND_DISPOSITION_NOT_ADMITTED"
+    }
+  ],
+  "revision_candidates": [
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "joint-condition",
+      "before_revision": "r0",
+      "after_revision": "r1_PROPOSED",
+      "scope": "K0_same_role_types_and_port_grammar",
+      "semantic_delta": "require mode B and preparation p1 jointly, retain OTHER and counterexamples",
+      "support": [
+        "O0",
+        "O1",
+        "O2",
+        "O3"
+      ],
+      "owner_semantics": "single schema-relative accountability address of this relation in joining cell; not a real assigned owner"
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "join-disposition",
+      "before_revision": "r0",
+      "after_revision": "r1_PROPOSED",
+      "scope": "K0_same_role_types_and_port_grammar",
+      "semantic_delta": "read condition revision and current port state; prepare then confirm state then mode B, or withhold outside scope",
+      "depends_on": [
+        "joint-condition"
+      ],
+      "owner_semantics": "single schema-relative accountability address of this disposition in joining cell; not a real assigned owner"
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "handoff-condition",
+      "before_revision": "r0",
+      "after_revision": "r1_CONDITIONAL_PROPOSAL_ONLY",
+      "scope": "upper interaction",
+      "semantic_delta": "ask whether input conditions remain valid at consumption time; candidate state confirmation/repreparation handoff",
+      "support": [],
+      "required_support": "separate joint-outcome and handoff intervention lineage",
+      "owner_semantics": "single schema-relative accountability address of this interaction relation in composite; does not own member state"
+    }
+  ],
+  "nary_candidate": {
+    "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+    "uid": "illustration:joint-condition:r1",
+    "schema_scope": "DESIGN_ONLY_NO_CANONICAL_REVISION_ASSIGNED",
+    "status": "PROPOSED_NOT_ADMITTED",
+    "participations": [
+      {
+        "uid": "illustration:joint-condition:r1:p0",
+        "role": "goal",
+        "target": "successful_join",
+        "ordinal": 0,
+        "revision_scope": "K0_DESIGN_ONLY"
+      },
+      {
+        "uid": "illustration:joint-condition:r1:p1",
+        "role": "left_specimen",
+        "target": "left_variable",
+        "ordinal": 1,
+        "revision_scope": "K0_DESIGN_ONLY"
+      },
+      {
+        "uid": "illustration:joint-condition:r1:p2",
+        "role": "right_specimen",
+        "target": "right_variable",
+        "ordinal": 2,
+        "revision_scope": "K0_DESIGN_ONLY"
+      },
+      {
+        "uid": "illustration:joint-condition:r1:p3",
+        "role": "tool_mode",
+        "target": "B",
+        "ordinal": 3,
+        "revision_scope": "K0_DESIGN_ONLY"
+      },
+      {
+        "uid": "illustration:joint-condition:r1:p4",
+        "role": "preparation",
+        "target": "p1",
+        "ordinal": 4,
+        "revision_scope": "K0_DESIGN_ONLY"
+      },
+      {
+        "uid": "illustration:joint-condition:r1:p5",
+        "role": "context",
+        "target": "K0",
+        "ordinal": 5,
+        "revision_scope": "K0_DESIGN_ONLY"
+      },
+      {
+        "uid": "illustration:joint-condition:r1:p6",
+        "role": "predicted_outcome",
+        "target": "SUCCESS",
+        "ordinal": 6,
+        "revision_scope": "K0_DESIGN_ONLY"
+      }
+    ]
+  },
+  "new_task_computation": {
+    "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+    "task": "N0_AUTHORED_NOT_HELDOUT",
+    "input": "new specimen IDs in same declared role types and port grammar; K0; p0",
+    "fixed_comparison_context": [
+      "task",
+      "tool family",
+      "budget",
+      "allowed observation surface"
+    ],
+    "r0": {
+      "reads": [
+        "goal",
+        "roles",
+        "default disposition",
+        "Permit"
+      ],
+      "actions": [
+        "try A,p0"
+      ]
+    },
+    "r1_if_admitted": {
+      "reads": [
+        "goal",
+        "roles",
+        "condition r1",
+        "support scope",
+        "OTHER/counterexamples",
+        "current port state",
+        "disposition r1",
+        "Permit"
+      ],
+      "actions": [
+        "verify scope",
+        "prepare p1 if permitted",
+        "confirm resulting port state",
+        "join in mode B"
+      ],
+      "admission_and_action_status": "NOT_ESTABLISHED_BY_O0_O3; provisional use requires separately specified support/action criteria and valid admission; OTHER not eliminated",
+      "withhold_when": [
+        "unobserved condition",
+        "conflicting outcome",
+        "UNKNOWN port state",
+        "support/action criteria unmet"
+      ]
+    },
+    "possible_saved_work": [
+      "repeated search over A,p0 B,p0 A,p1"
+    ],
+    "added_costs": [
+      "scope lookup",
+      "condition reads",
+      "preparation",
+      "port state confirmation",
+      "provenance/Permit checks"
+    ],
+    "strong_baseline_limitation": "A planner given the same three hypotheses can already choose B,p1; no performance advantage demonstrated"
+  },
+  "withhold_cases": [
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "W-NOISE",
+      "trigger": "same K0 action has inconsistent outcomes",
+      "response": "withdraw deterministic elimination, model noise/drift and withhold rule revision"
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "W-CONFOUND",
+      "trigger": "specimens not exchangeable or multiple uncontrolled factors change",
+      "response": "withhold credit; identify additional observations/comparators"
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "W-SCOPE",
+      "trigger": "K1 or new role/port semantics",
+      "response": "inquire through bounded metadata, observe or withhold; no automatic scope extension"
+    },
+    {
+      "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+      "id": "W-BUDGET",
+      "trigger": "discriminating observation unavailable under budget/Permit",
+      "response": "retain ambiguity and explicit unresolved result; do not erase from denominator"
+    }
+  ],
+  "upper_interaction": {
+    "record_status": "AUTHORED_ILLUSTRATION_NOT_OBSERVATION",
+    "member_local_evidence_is_not_joint_credit": true,
+    "competing_explanations": [
+      "joining local error",
+      "state changed during handoff",
+      "order/message mismatch",
+      "joint measurement error"
+    ],
+    "next_observation": "compare same specimen/port revisions and states at production versus consumption; vary handoff with cells/other conditions held within declared scope",
+    "revision_condition": "only separately identified handoff effect supports interaction revision; none observed here",
+    "member_boundary": [
+      "local learning lineage remains local",
+      "owner differs from membership/authorization",
+      "exit/fork and port version changes reopen validity"
+    ],
+    "recursive_contract": "same Step/Learn/Inv/Permit/lineage at the next scale; NOT_DEMONSTRATED",
+    "matched_comparison_conditions": [
+      "same upstream output at handoff origin",
+      "fixed member learning revisions, goal, port semantics and downstream policy",
+      "assign handoff change within declared scope",
+      "record handoff-induced consumption state as mediator",
+      "no unrelated downstream input changes; otherwise withhold credit"
+    ]
+  },
+  "next_design_gap": "learner generation and revision of candidate distinctions, probes and conditional operators beyond the explicitly supplied scaffold",
+  "stage_status": {
+    "C-1": "FIRST_CONNECTED_CONCEPT_DRAFT_WRITTEN_NOT_STAGE_COMPLETE",
+    "C-2": "FIRST_CONNECTED_CONCEPT_DRAFT_WRITTEN_NOT_STAGE_COMPLETE",
+    "C-3": "FIRST_CONNECTED_CONCEPT_DRAFT_WRITTEN_NOT_STAGE_COMPLETE",
+    "runtime": "NOT_IMPLEMENTED_BY_THIS_WORK",
+    "evaluation": "NOT_RUN"
+  },
+  "provenance_contract": [
+    {
+      "kind": "outcome evidence",
+      "must_reference": [
+        "specimen/port/environment revision",
+        "chosen intervention",
+        "external outcome source"
+      ],
+      "accountability_scope": "observation provenance, not causal interpretation",
+      "status": "DESIGN_CONTRACT_NOT_ACTUAL_RECORD"
+    },
+    {
+      "kind": "hypothesis prediction",
+      "must_reference": [
+        "hypothesis revision",
+        "role binding",
+        "unobserved outcome question"
+      ],
+      "accountability_scope": "prediction semantics and scope",
+      "status": "DESIGN_CONTRACT_NOT_ACTUAL_RECORD"
+    },
+    {
+      "kind": "probe proposal",
+      "must_reference": [
+        "contrasting predictions",
+        "cost",
+        "allowed intervention surface"
+      ],
+      "accountability_scope": "probe choice rationale",
+      "status": "DESIGN_CONTRACT_NOT_ACTUAL_RECORD"
+    },
+    {
+      "kind": "withhold decision",
+      "must_reference": [
+        "unresolved alternatives",
+        "missing observation",
+        "release condition"
+      ],
+      "accountability_scope": "withhold disposition",
+      "status": "DESIGN_CONTRACT_NOT_ACTUAL_RECORD"
+    },
+    {
+      "kind": "revision proposal",
+      "must_reference": [
+        "outcome/prediction/probe/withhold lineage",
+        "parent revision",
+        "scope and counterexamples"
+      ],
+      "accountability_scope": "exact target atom, distinct from proposer/authorizer",
+      "status": "DESIGN_CONTRACT_NOT_ACTUAL_RECORD"
+    }
+  ]
+}

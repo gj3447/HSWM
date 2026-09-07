@@ -1,0 +1,38 @@
+# Run each Q block independently on the source-bound union view.
+# All rows are authored concepts. The local wrapper canonicalizes row order.
+
+# Q1: First connected C drafts, not completed research stages (3 rows).
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX kbrole: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+SELECT ?step ?status ?content ?predecessor WHERE {
+ ?s a kbrole:WORKED_SPEC_SECTION ; kbp:plan_id ?step ;
+    kbp:draft_status ?status ; kbp:description ?content ; kbr:REFINES ?p .
+ ?p kb:uid ?predecessor .
+} ORDER BY ?step
+
+# Q2: Explicitly supplied hypotheses and their predictions (12 rows).
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbrole: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?hypothesis ?prediction ?origin WHERE {
+ ?h a kbrole:ILLUSTRATIVE_HYPOTHESIS ; kbp:hypothesis_id ?hypothesis ;
+    kbp:predictions ?prediction ; kbp:origin ?origin .
+} ORDER BY ?hypothesis ?prediction
+
+# Q3: What would change, at which scope, with what unfulfilled support (3 rows).
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbrole: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?revision ?scope ?change ?support ?state WHERE {
+ ?r a kbrole:WORKED_REVISION_CANDIDATE ; kbp:revision_id ?revision ;
+    kbp:revision_scope ?scope ; kbp:description ?change ;
+    kbp:support_status ?support ; kbp:revision_state ?state .
+} ORDER BY ?revision
+
+# Q4: Four new design intuitions, with explicit non-observation status (4 rows).
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbrole: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?insight ?name ?description ?status WHERE {
+ ?i a kbrole:WORKED_DESIGN_INSIGHT ; kbp:insight_id ?insight ; kbp:name ?name ;
+    kbp:description ?description ; kbp:status ?status .
+} ORDER BY ?insight

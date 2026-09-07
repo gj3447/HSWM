@@ -1,0 +1,23 @@
+{
+  "audit_kind": "READ_ONLY_LIVE_SCHEMA_QUERY",
+  "query": "SHOW CONSTRAINTS",
+  "reported_fields": [
+    "type",
+    "entity_type",
+    "labels_or_types",
+    "properties"
+  ],
+  "filter": "constraints containing uid or ontology_bundle_uid",
+  "uid_or_bundle_constraints": [],
+  "finding": "No live constraint with uid or ontology_bundle_uid in its declared property list was returned. This does not enumerate or evaluate constraints on other properties.",
+  "schema_version": "hswm-kg-uid-constraint-audit/v1",
+  "authority_class": "SECONDARY_AI",
+  "source_commit": "fdb88fafefa091d60a1826e2e970c7d1caadcc12",
+  "recorded_at": "2026-09-07T01:38:02.719924+00:00",
+  "live_graph_writes": 0,
+  "concurrent_publish_run": false,
+  "publisher_source": {
+    "path": "scripts/upsert_hswm_graph_and_loop_engineering.py",
+    "sha256": "f3ec064a115a889e9c6449d5c25afb7201288ba28f41736c992ee4d3826a5109"
+  }
+}

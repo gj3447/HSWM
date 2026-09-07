@@ -115,6 +115,11 @@ RDF 1.1 N-Quads·SHACL 1.0·PROV-O와 SPARQL/Cypher 질의를 제공하며, 계�
 철학 P1~P10과 FCL-1~8의 live 존재를 확인하고, 최근 bundle 정합성과 별도로
 adaptive predecessor, legacy FCL 게시 계보, MCP 검색 metadata, 표준 파생 표현의 적용 범위를 구분한다.
 
+[철학 KG 적대적 검증과 보완안](docs/research/HSWM_PHILOSOPHY_KG_ADVERSARIAL_REVIEW_2026-09-07.md)은
+메모리상의 변형본으로 shape 적용 누락·권위 충돌·anchor 요구 소실·binding 충돌을 재현하고,
+live UID 제약 부재와 revision 참조의 한계를 확인한다. W3C·Neo4j 공식 자료에 따른 수리 제안이며,
+기존 publication SHA pin을 우회하거나 KG·과학 판정을 변경한 결과가 아니다.
+
 2026-09-02 현재 증명·근거·간극의 answer-first 상태는
 [`HSWM proof-status graph`](docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md)에
 고정했다. 임의의 theorem/test 개수가 아니라 여섯 end-to-end 횡단 의무를 같은

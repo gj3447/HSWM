@@ -1,0 +1,303 @@
+{
+  "schema_version": "hswm-philosophy-projection-adversarial-audit/v1",
+  "authority_class": "SECONDARY_AI",
+  "audit_kind": "ENGINEERING_COUNTEREXAMPLES_NOT_SCIENTIFIC_RESULT",
+  "checked_at": "2026-09-07T01:34:48.886862+00:00",
+  "source_commit": "fdb88fafefa091d60a1826e2e970c7d1caadcc12",
+  "scope": {
+    "live_graph_writes": 0,
+    "runtime_implementation_changes": 0,
+    "scientific_gate_changes": 0,
+    "publication_attempts": 0
+  },
+  "runtime": {
+    "rdflib": "7.6.0",
+    "pyshacl": "0.40.1"
+  },
+  "sources": [
+    {
+      "path": "ontology/identity/hswm_core/HSWM_HYPERGRAPH_LEARNING_PLAN_ONTOLOGY.v1.json",
+      "sha256": "c59ef55784059b111b1c73f140d6530144aec4d75220dd1cffd4295ff3e34356"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_WORKSHOP_C1_C3_ONTOLOGY.v1.json",
+      "sha256": "e9b4454f404463a157bdaa2cf0db5e6af3ac01d912f8a790a682c70bcae9d0b4"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json",
+      "sha256": "08f45acbfee42750ac2a463db95bd2faa2dd0bbe5b4cf2da262acdcf27757222"
+    },
+    {
+      "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0.ttl",
+      "sha256": "60c791901fc6053d8a8dd6e5193d343e55bfd25880b541436f3cc12293268586"
+    },
+    {
+      "path": "schemas/HSWM_HYPERGRAPH_LEARNING_PLAN_SHACL_1_0.ttl",
+      "sha256": "a13acdcb7cef41bbd21d5abd328fb344f3779ab597ef97a7e66d4cd23a7bdcc4"
+    },
+    {
+      "path": "src/hswm/infrastructure/kg_bundle_graph_view.py",
+      "sha256": "61931601289fb6e3a87287c8ef73be529204d807c1a8a7e4f5eced7977a13e23"
+    },
+    {
+      "path": "src/hswm/infrastructure/fractal_learning_plan_projection.py",
+      "sha256": "4d74b6d15802c02290f1e74f8e8a96badad7fa44dc53bfd9e65077991fa9478c"
+    },
+    {
+      "path": "_research/graph_standards/runtime/uv.lock",
+      "sha256": "e689c46043f2af18df5ea1b40cf070158afa999a09fb4807cc879eab7e6cc69d"
+    },
+    {
+      "path": "_research/graph_standards/audit_philosophy_projection_adversarial.py",
+      "sha256": "8b4ecc1ced609f7012f4a402040a654cbe1e158a7d66edfd082d0b4f19beb668"
+    }
+  ],
+  "original_plan_publication_pin_matches": true,
+  "interpretation": [
+    "All mutants are in-memory copies and are never published.",
+    "Shape conformance concerns declared targets and constraints, not empirical truth.",
+    "Reserialized baseline also differs from the raw-byte publication pin; byte inequality alone is not a semantic classifier.",
+    "Ordinal is role enumeration, not time. Duplicate ordinals demonstrate missing discrimination, not observed causal-order corruption.",
+    "The actual plan CLI rejects changed bytes on --apply via its reviewed SHA pin.",
+    "Generic declared artifact provenance is not file verification; the plan adapter independently rehashes bindings."
+  ],
+  "cases": [
+    {
+      "case_id": "plan_baseline",
+      "role_counts": {
+        "DESIGN_INTUITION": 4,
+        "EVIDENCE_BOUNDARY": 1,
+        "LEARNING_ASSERTION": 4,
+        "LEARNING_CONCEPT": 20,
+        "LEARNING_PLAN_BUNDLE": 1,
+        "LEARNING_PLAN_STEP": 6,
+        "PLAN_SOURCE": 1,
+        "ROLE_PARTICIPATION": 25,
+        "USER_DIRECT_REQUEST": 1
+      },
+      "mutant_bundle_sha256": "a629e4d1e32a2623af8ee4ab21d30a541324094a82a97a5316a4f36adc00c22a",
+      "generic_shacl_conforms": true,
+      "generic_plus_domain_shacl_conforms": true,
+      "plan_adapter_validation": {
+        "accepted": true
+      },
+      "exact_publication_pin_matches": false
+    },
+    {
+      "case_id": "workshop_baseline",
+      "role_counts": {
+        "AUTHORED_SCENE": 4,
+        "ILLUSTRATIVE_HYPOTHESIS": 3,
+        "ILLUSTRATIVE_PROBE": 3,
+        "OPEN_MECHANISM_PROBLEM": 2,
+        "WORKED_COMPOSITION_QUESTION": 1,
+        "WORKED_DESIGN_INSIGHT": 4,
+        "WORKED_REVISION_CANDIDATE": 3,
+        "WORKED_SCOPE_GUARD": 4,
+        "WORKED_SPEC_BUNDLE": 1,
+        "WORKED_SPEC_SECTION": 3,
+        "WORKED_SPEC_SOURCE": 1
+      },
+      "mutant_bundle_sha256": "1bbe571d0e6357e25b65a7588b4c539aa39235bfeec63f82b05b60333d3b19c5",
+      "generic_shacl_conforms": true
+    },
+    {
+      "case_id": "control_missing_participation_target",
+      "role_counts": {
+        "DESIGN_INTUITION": 4,
+        "EVIDENCE_BOUNDARY": 1,
+        "LEARNING_ASSERTION": 4,
+        "LEARNING_CONCEPT": 20,
+        "LEARNING_PLAN_BUNDLE": 1,
+        "LEARNING_PLAN_STEP": 6,
+        "PLAN_SOURCE": 1,
+        "ROLE_PARTICIPATION": 25,
+        "USER_DIRECT_REQUEST": 1
+      },
+      "mutant_bundle_sha256": "3f18b96d30ad4cc5eea2090bebcf62e00923ba1b897a3bb74a26b016e03a0054",
+      "generic_shacl_conforms": true,
+      "generic_plus_domain_shacl_conforms": false,
+      "plan_adapter_validation": {
+        "accepted": true
+      },
+      "exact_publication_pin_matches": false
+    },
+    {
+      "case_id": "domain_target_evasion",
+      "role_counts": {
+        "DESIGN_INTUITION": 4,
+        "EVIDENCE_BOUNDARY": 1,
+        "LEARNING_CONCEPT": 20,
+        "LEARNING_PLAN_BUNDLE": 1,
+        "LEARNING_PLAN_STEP": 6,
+        "PLAN_SOURCE": 1,
+        "UNCLASSIFIED": 29,
+        "USER_DIRECT_REQUEST": 1
+      },
+      "mutant_bundle_sha256": "468d30660d60e88e91b00f7bb8847ccde9bef9fe0514dd6ea914aec5ba21243f",
+      "generic_shacl_conforms": true,
+      "generic_plus_domain_shacl_conforms": true,
+      "plan_adapter_validation": {
+        "accepted": true
+      },
+      "exact_publication_pin_matches": false
+    },
+    {
+      "case_id": "duplicate_role_ordinal",
+      "role_counts": {
+        "DESIGN_INTUITION": 4,
+        "EVIDENCE_BOUNDARY": 1,
+        "LEARNING_ASSERTION": 4,
+        "LEARNING_CONCEPT": 20,
+        "LEARNING_PLAN_BUNDLE": 1,
+        "LEARNING_PLAN_STEP": 6,
+        "PLAN_SOURCE": 1,
+        "ROLE_PARTICIPATION": 25,
+        "USER_DIRECT_REQUEST": 1
+      },
+      "mutant_bundle_sha256": "c2609a9d281808164a80f972596ce60cae9d91e2dd85dbc4587c08e83631a679",
+      "generic_shacl_conforms": true,
+      "generic_plus_domain_shacl_conforms": true,
+      "plan_adapter_validation": {
+        "accepted": true
+      },
+      "exact_publication_pin_matches": false,
+      "semantic_queries": {
+        "no_duplicate_ordinal_per_assertion": false
+      }
+    },
+    {
+      "case_id": "conflicting_discovery_authority",
+      "role_counts": {
+        "DESIGN_INTUITION": 4,
+        "EVIDENCE_BOUNDARY": 1,
+        "LEARNING_ASSERTION": 4,
+        "LEARNING_CONCEPT": 20,
+        "LEARNING_PLAN_BUNDLE": 1,
+        "LEARNING_PLAN_STEP": 6,
+        "PLAN_SOURCE": 1,
+        "ROLE_PARTICIPATION": 25,
+        "USER_DIRECT_REQUEST": 1
+      },
+      "mutant_bundle_sha256": "7599db652a6777120a53f09eec2ccb3e0767aeaa1d867d1b148e587bb44431f8",
+      "generic_shacl_conforms": true,
+      "generic_plus_domain_shacl_conforms": true,
+      "plan_adapter_validation": {
+        "accepted": true
+      },
+      "exact_publication_pin_matches": false,
+      "semantic_queries": {
+        "raw_and_mapped_authority_agree": false
+      }
+    },
+    {
+      "case_id": "control_declared_binding_without_matching_bytes",
+      "role_counts": {
+        "DESIGN_INTUITION": 4,
+        "EVIDENCE_BOUNDARY": 1,
+        "LEARNING_ASSERTION": 4,
+        "LEARNING_CONCEPT": 20,
+        "LEARNING_PLAN_BUNDLE": 1,
+        "LEARNING_PLAN_STEP": 6,
+        "PLAN_SOURCE": 1,
+        "ROLE_PARTICIPATION": 25,
+        "USER_DIRECT_REQUEST": 1
+      },
+      "mutant_bundle_sha256": "3a684400404f6130257213b30bfab807211ac1cdf0d4aae23518bfa17ed4a25d",
+      "generic_shacl_conforms": true,
+      "generic_plus_domain_shacl_conforms": true,
+      "plan_adapter_validation": {
+        "accepted": false,
+        "error": "artifact binding hash drift"
+      },
+      "exact_publication_pin_matches": false
+    },
+    {
+      "case_id": "two_paths_for_one_content_digest",
+      "role_counts": {
+        "DESIGN_INTUITION": 4,
+        "EVIDENCE_BOUNDARY": 1,
+        "LEARNING_ASSERTION": 4,
+        "LEARNING_CONCEPT": 20,
+        "LEARNING_PLAN_BUNDLE": 1,
+        "LEARNING_PLAN_STEP": 6,
+        "PLAN_SOURCE": 1,
+        "ROLE_PARTICIPATION": 25,
+        "USER_DIRECT_REQUEST": 1
+      },
+      "mutant_bundle_sha256": "3b866703de4154e32181a2707e329ffa940739ffe32cc28f542c4c36e339c33f",
+      "generic_shacl_conforms": false,
+      "generic_validation_report": "Validation Report\nConforms: False\nResults (1):\nConstraint Violation in MaxCountConstraintComponent (http://www.w3.org/ns/shacl#MaxCountConstraintComponent):\n\tSeverity: sh:Violation\n\tSource Shape: [ sh:datatype xsd:string ; sh:maxCount Literal(\"1\", datatype=xsd:integer) ; sh:minCount Literal(\"1\", datatype=xsd:integer) ; sh:path kb:bindingPath ; sh:pattern Literal(\"^[A-Za-z0-9_][A-Za-z0-9_./:+-]{0,255}$\") ]\n\tFocus Node: <urn:sha256:42d4442f3eeb44ab4e73f4e206b2d0067b2bc109d1b7292937908c498e21705c>\n\tResult Path: kb:bindingPath\n\tMessage: More than 1 values on <urn:sha256:42d4442f3eeb44ab4e73f4e206b2d0067b2bc109d1b7292937908c498e21705c>->kb:bindingPath\n",
+      "generic_plus_domain_shacl_conforms": false,
+      "plan_adapter_validation": {
+        "accepted": false,
+        "error": "artifact binding path is not a regular repository file"
+      },
+      "exact_publication_pin_matches": false
+    },
+    {
+      "case_id": "authored_scene_claims_observation",
+      "role_counts": {
+        "AUTHORED_SCENE": 4,
+        "ILLUSTRATIVE_HYPOTHESIS": 3,
+        "ILLUSTRATIVE_PROBE": 3,
+        "OPEN_MECHANISM_PROBLEM": 2,
+        "WORKED_COMPOSITION_QUESTION": 1,
+        "WORKED_DESIGN_INSIGHT": 4,
+        "WORKED_REVISION_CANDIDATE": 3,
+        "WORKED_SCOPE_GUARD": 4,
+        "WORKED_SPEC_BUNDLE": 1,
+        "WORKED_SPEC_SECTION": 3,
+        "WORKED_SPEC_SOURCE": 1
+      },
+      "mutant_bundle_sha256": "11e924ace7cfc4362b527742eaec13d2b7847063ad98cf464ec86244944d56f9",
+      "generic_shacl_conforms": true,
+      "semantic_queries": {
+        "authored_scene_is_not_observed_success": false
+      }
+    },
+    {
+      "case_id": "closure_baseline",
+      "role_counts": {
+        "ABSENT": 21,
+        "CLAIM": 14,
+        "DECISION": 14,
+        "EVIDENCE_ARTIFACT": 11,
+        "GAP": 7,
+        "QUALIFICATION_RUN": 4
+      },
+      "mutant_bundle_sha256": "17ed66f92c7fd2b7d313f9aab63c2089eff6561028860c52a845e1a0352d7d9f",
+      "generic_shacl_conforms": true
+    },
+    {
+      "case_id": "claim_points_to_missing_current_decision",
+      "role_counts": {
+        "ABSENT": 21,
+        "CLAIM": 14,
+        "DECISION": 14,
+        "EVIDENCE_ARTIFACT": 11,
+        "GAP": 7,
+        "QUALIFICATION_RUN": 4
+      },
+      "mutant_bundle_sha256": "36aa3c52818f4b185a32ce645c9f077f3656d9f78000aae3d75078d352f4a307",
+      "generic_shacl_conforms": true,
+      "semantic_queries": {
+        "current_decision_pointer_matches_linked_decision": false
+      }
+    },
+    {
+      "case_id": "cross_bundle_anchor_requirement_lost",
+      "owner_labels": [
+        "Concept"
+      ],
+      "dependent_required_labels": [
+        "Concept",
+        "Guardrail"
+      ],
+      "construction_accepted": true,
+      "generic_shacl_conforms": true,
+      "required_guardrail_retained": false,
+      "owner_has_guardrail": false
+    }
+  ]
+}

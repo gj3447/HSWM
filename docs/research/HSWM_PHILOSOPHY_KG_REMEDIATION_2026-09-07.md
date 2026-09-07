@@ -55,3 +55,13 @@ focused root run은 10 test files에서 **87 passed, disposable-only 3 skipped**
 
 
 후속 확인: USL은 SYMPOSIUM의 **유니버셜 시멘틱 링크**이며 정전 UID는 `sym:Concept:usl`이다. 새로 확인한 게시 영수증 시각은 2026-09-07 04:42:30 UTC로, 앞선 04:24 재조회 이후다. 앞선 raw fallback의 별칭 배열 타입 판별 오류도 확인했으나, 이를 게시 전 USL 미식별의 원인으로 단정하지 않는다. [HSWM 연결 설계와 온톨로지](HSWM_USL_SEMANTIC_ENGINEERING_BRIDGE_2026-09-07.md)에 출처·시각·제안 범위를 구별해 후속 정리했다.
+
+## 연결 복구 후 USL bridge 게시 확인
+
+2026-09-07 05:55 UTC 재확인에서 canonical Neo4j의 인증된 조회와 data-01의 `/srv/dgx4tb` 마운트·Docker 기동이 복구되어 있었다. 기존 ontology MCP만 이전 실패 상태로 남아 있어 해당 서비스를 재기동했고, 05:56:15 UTC 이후 MCP에서도 `sym:Concept:usl` 조회가 성공했다. 이 HSWM 작업에서 디스크 복구나 DB 재생성은 수행하지 않았다.
+
+이후 준비되어 있던 HSWM USL bridge를 공통 `publish` API의 검증·단일 transaction 경로로 게시했다. **18 nodes / 69 relations**가 생성되었고 commit 이후 별도 read transaction에서도 속성·label·소유 관계 수가 정본과 정확히 일치했다. [운영 확인 JSON](../../ontology/projections/hswm_usl_semantic_engineering_bridge_2026-09-07/live_publication.json)의 SHA-256은 `9cee8c5fc0d2f13aa24ed92fe5142806e30ee448c4a0c7f2753214fee75fa3f3`이다. 이는 routine engineering 게시 기록이며 새로운 과학 결과가 아니다.
+
+게시 전 artifact binding 8개를 다시 해시했고, SHACL v2와 기존 RDF graph digest가 일치하며 SPARQL 질문 결과 수는 5/3/0/4였다. Live anchor descriptor 18개와 UID 제약·registry token을 확인했다. Generic revision helper는 5개 anchor의 modern digest를 확인하고 13개는 unpinned로 명시한다. 별도 USL 출처 검사에서는 원본 9개 record의 source digest·bundle UID·권위·사용자 원문·질문을 대조했다. `authority_class`와 `canonical_scope`는 SYMPOSIUM publisher의 실제 저장 필드인 `ontology_authority_class_v1`와 `ontology_canonical_scope_v1`에 대응한다. 게시 뒤에도 같은 검사를 통과했고, live Cypher 질문 결과 수는 5/3/4였다.
+
+앞서 작성한 hash-bound 설계 문서와 offline manifest의 연결 장애 기록은 그 시점의 기록으로 보존한다. 현재 게시 상태는 위 운영 확인 JSON이 후속한다. SECONDARY_AI 제안이라는 지위와 미해결 USL 질문은 유지되며, 이 확인은 전체 디스크·KG 무결성, HSWM 학습·효능 또는 사용자 비준을 증명하지 않는다.

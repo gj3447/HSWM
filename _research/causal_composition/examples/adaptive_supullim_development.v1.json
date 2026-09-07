@@ -1,0 +1,132 @@
+{
+  "schema_version": "hswm-adaptive-program/v1",
+  "graph_id": "hswm-supullim-development-feedback-v1",
+  "root": "developer",
+  "context_domain": {
+    "focus": [
+      "soop",
+      "creator"
+    ],
+    "stage": [
+      "development",
+      "regression"
+    ]
+  },
+  "cells": [
+    {
+      "cell_id": "developer",
+      "kind": "router",
+      "owner": "local:development:supullim",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1"
+    },
+    {
+      "cell_id": "soop",
+      "kind": "command",
+      "owner": "local:development:supullim",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1",
+      "argv": [
+        "npm",
+        "run",
+        "test:soop"
+      ]
+    },
+    {
+      "cell_id": "creator",
+      "kind": "command",
+      "owner": "local:development:supullim",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1",
+      "argv": [
+        "npm",
+        "run",
+        "check:creator-research"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "uid": "soop-focused",
+      "source": "developer",
+      "members": [
+        "soop"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 1,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "soop"
+      }
+    },
+    {
+      "uid": "soop-extended",
+      "source": "developer",
+      "members": [
+        "soop",
+        "creator"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 2,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "soop"
+      }
+    },
+    {
+      "uid": "creator-focused",
+      "source": "developer",
+      "members": [
+        "creator"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 1,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "creator"
+      }
+    },
+    {
+      "uid": "creator-extended",
+      "source": "developer",
+      "members": [
+        "creator",
+        "soop"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 2,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "creator"
+      }
+    }
+  ]
+}

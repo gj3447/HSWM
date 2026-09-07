@@ -1,0 +1,133 @@
+{
+  "schema_version": "hswm-adaptive-program/v1",
+  "graph_id": "hswm-game-development-feedback-v1",
+  "root": "developer",
+  "context_domain": {
+    "focus": [
+      "session",
+      "bridge"
+    ],
+    "stage": [
+      "development",
+      "regression"
+    ]
+  },
+  "cells": [
+    {
+      "cell_id": "developer",
+      "kind": "router",
+      "owner": "local:development:game",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1"
+    },
+    {
+      "cell_id": "session",
+      "kind": "command",
+      "owner": "local:development:game",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1",
+      "argv": [
+        "pnpm",
+        "--dir",
+        "GAMES/the-excel-tycoon",
+        "run",
+        "test:session"
+      ]
+    },
+    {
+      "cell_id": "bridge",
+      "kind": "command",
+      "owner": "local:development:game",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1",
+      "argv": [
+        "python3",
+        "GAMES/the-excel-tycoon/engineering/verify_soopoolim_creator_bridge_v1.py"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "uid": "session-focused",
+      "source": "developer",
+      "members": [
+        "session"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 1,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "session"
+      }
+    },
+    {
+      "uid": "session-extended",
+      "source": "developer",
+      "members": [
+        "session",
+        "bridge"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 2,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "session"
+      }
+    },
+    {
+      "uid": "bridge-focused",
+      "source": "developer",
+      "members": [
+        "bridge"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 1,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "bridge"
+      }
+    },
+    {
+      "uid": "bridge-extended",
+      "source": "developer",
+      "members": [
+        "bridge",
+        "session"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 2,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "bridge"
+      }
+    }
+  ]
+}

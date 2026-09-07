@@ -117,6 +117,11 @@ RDF 1.1 N-Quads·SHACL 1.0·PROV-O와 SPARQL/Cypher 질의를 제공하며, 계�
 구현·효능 상태를 구분한다. MCP 검색은 `include_preliminary=true`로 조회한다.
 문헌 수록이나 KG 게시를 HSWM 학습·성능 향상으로 계산하지 않는다.
 
+[조건부 학습 적대적 검토와 이론 채택안](docs/research/HSWM_ADVERSARIAL_REVIEW_AND_THEORY_ADOPTION_2026-09-07.md)은
+네 실행 사례로 후보 탐색·관측 기록·오류 처리와 단순 중복 제거안의 한계를 확인한다.
+원문 방법·실패 조건을 검토해 탐색 유도, 판별 관찰, 추상화 재사용의 적용 순서를 제안하며,
+알고리즘 적용이나 새 과제의 성능 개선으로 계산하지 않는다.
+
 [철학 ontology·표준 그래프 연결 감사](docs/research/HSWM_PHILOSOPHY_KG_STANDARD_AUDIT_2026-09-07.md)는
 철학 P1~P10과 FCL-1~8의 live 존재를 확인하고, 최근 bundle 정합성과 별도로
 adaptive predecessor, legacy FCL 게시 계보, MCP 검색 metadata, 표준 파생 표현의 적용 범위를 구분한다.

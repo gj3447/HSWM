@@ -1,0 +1,46 @@
+{
+  "status": "REPRODUCED_SOFTWARE_AUDIT_NOT_EFFICACY",
+  "audited_commit": "6e2e49f",
+  "source_path": "src/hswm/cells/conditional.py",
+  "source_sha256": "0a56063a8cd68f6475f9ac9654f82e980d82026a4923912d67c485ffe318ddc5",
+  "cases": {
+    "semantic_redundancy": {
+      "candidates": 8,
+      "distinct_complete_domain_truth_tables": 1,
+      "all_false_when_complete": true,
+      "distinct_partial_observation_truth_tables": 8,
+      "classification": "COMPLETE_OBSERVATION_REDUNDANCY_ONLY_NAIVE_DEDUP_UNSOUND"
+    },
+    "candidate_cap": {
+      "retained_fields": [
+        "a0",
+        "a1",
+        "a2",
+        "a3",
+        "a4",
+        "a5",
+        "a6",
+        "a7"
+      ],
+      "unretained_consistent_field": "z",
+      "examined": 16,
+      "reported_status": "PROPOSED_NOT_ADMITTED",
+      "classification": "DOCUMENTED_BOUNDED_SEARCH_WITH_MISSING_STOP_REASON"
+    },
+    "trace_underidentification": {
+      "same_static_preview_uid": true,
+      "same_read_trace": true,
+      "next_steps": [
+        "WITHHOLD",
+        "ACTION_PROPOSAL"
+      ],
+      "classification": "DOCUMENTED_STATIC_PREVIEW_NOT_SUFFICIENT_AS_STEP_RECEIPT"
+    },
+    "malformed_input": {
+      "exception": "JSONDecodeError",
+      "is_reject": false,
+      "classification": "ERROR_TYPE_INCONSISTENCY_NO_EFFECT_OR_AUTHORIZATION_BYPASS"
+    }
+  },
+  "claim_boundary": "Authored counterexamples expose software/interface limits only; no independent world outcomes, causal credit, generalization or gate verdict."
+}

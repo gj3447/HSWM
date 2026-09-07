@@ -1,0 +1,552 @@
+{
+  "schema_version": "hswm-conditional-capability-contract/v1",
+  "status": "SECONDARY_AI_DESIGN_CONTRACT_NOT_IMPLEMENTED",
+  "authority_class": "SECONDARY_AI",
+  "claim_boundary": "NOT_EXECUTED_NOT_LEARNED_NOT_ADMITTED_NOT_EFFICACY_NOT_G0_PROMOTION",
+  "purpose": "Specify the smallest candidate contract by which a scoped relation revision could alter a later computation and be exported as a condition-bearing cell capability, without making USL records, a KG, a cache, or this contract into HSWM learning.",
+  "references": {
+    "constitution": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+    "adaptive_strategy": "docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md",
+    "worked_case": "docs/research/HSWM_WORKSHOP_C1_C3_WORKED_SPEC_2026-09-07.md",
+    "usl_bridge": "docs/research/HSWM_USL_SEMANTIC_ENGINEERING_BRIDGE_2026-09-07.md",
+    "usl_anchor": "sym:Concept:usl",
+    "future_admission_boundary": "external outcome-credit-owner-Inv-Permit admission contract; not defined or satisfied here",
+    "preserved_open_boundaries": [
+      "S-6 second party unassigned",
+      "G0 NOT_PASSED",
+      "G1 NOT_EVALUATED",
+      "D-4 not completed"
+    ]
+  },
+  "design_world": {
+    "status": "AUTHORED_DESIGN_NOT_OBSERVATION",
+    "fixed_researcher_scaffold": [
+      "declared role grammar, observable surface, allowed actions, costs, finite budgets, port schemas, and external outcome-seal interface",
+      "provided H-T/H-P/H-J-style hypothesis selection remains a separately authored scaffold and is never represented as learner generation",
+      "fixtures below are authored semantic cases, not learner, evaluator, environment, or admission outputs"
+    ],
+    "learner_may_propose": [
+      "new role-bearing relation ASTs using equality, conjunction, disjunction, and negation over declared observables",
+      "scoped predictions with explicit applicability, counterexamples, and OTHER remainder",
+      "discriminating permitted action sequences with declared costs",
+      "separate conditional execution dispositions"
+    ],
+    "learner_may_not_read_or_create": [
+      "hidden success rules, causal labels, unexecuted counterfactual outcomes, self-issued Permit, admission decisions, or a posterior for OTHER",
+      "new observable kinds, action authorities, role types, budgets, or evaluator truth through proposal text"
+    ],
+    "actual_compiler_visibility": "Only declared role aliases, declared observables, admitted R/D revisions, their bound public context contract, and current authorized checks are supplied to an actual compiler. Author-only world tables, future outcomes, evaluator internals, proposal previews, and arbitrary source/KG search are absent.",
+    "replaceable_resource_parameters": {
+      "max_ast_depth": 4,
+      "max_ast_nodes": 31,
+      "max_distinction_candidates": 8,
+      "max_probe_sequence_length": 4,
+      "meaning": "fixed design-scaffold bounds, not success gates or claims about an eventual learner.",
+      "max_disposition_rules": 8
+    }
+  },
+  "ast_grammar": {
+    "encoding": "JSON object with one op discriminator and exactly the fields declared for that op; duplicate/extra keys, implicit coercion, and undeclared field access are rejected.",
+    "nodes": {
+      "eq": {
+        "fields": [
+          "op=eq",
+          "left={role,field}",
+          "right=literal"
+        ],
+        "rule": "role and field must be declared by the public context contract; literal must be in that field's declared enum."
+      },
+      "all": {
+        "fields": [
+          "op=all",
+          "children"
+        ],
+        "rule": "children is a nonempty array of AST nodes."
+      },
+      "any": {
+        "fields": [
+          "op=any",
+          "children"
+        ],
+        "rule": "children is a nonempty array of AST nodes."
+      },
+      "not": {
+        "fields": [
+          "op=not",
+          "child"
+        ],
+        "rule": "child is exactly one AST node."
+      }
+    },
+    "evaluation": "A missing or expired declared observation evaluates the affected eq as UNKNOWN. Invalid type, non-enum literal, undeclared role/field, malformed AST, or unauthorized read is a reject, not UNKNOWN.",
+    "novelty": "A distinct AST is syntactic novelty only. It becomes a distinct semantic distinction within a finite declared domain only after a counterexample valuation shows differing behavior; unresolved equivalence remains UNJUDGED."
+  },
+  "semantic_primitives": {
+    "condition_logic": {
+      "logic": "strong-Kleene three-valued",
+      "values": [
+        "TRUE",
+        "FALSE",
+        "UNKNOWN"
+      ],
+      "rules": {
+        "not": {
+          "TRUE": "FALSE",
+          "FALSE": "TRUE",
+          "UNKNOWN": "UNKNOWN"
+        },
+        "and": [
+          "FALSE_AND_any=FALSE",
+          "TRUE_AND_TRUE=TRUE",
+          "otherwise=UNKNOWN"
+        ],
+        "or": [
+          "TRUE_OR_any=TRUE",
+          "FALSE_OR_FALSE=FALSE",
+          "otherwise=UNKNOWN"
+        ]
+      },
+      "unknown_effect": "UNKNOWN in a declared action prerequisite never licenses that condition-dependent action; an admitted disposition selects observe, withhold, or reopen. UNKNOWN in an unused observable does not itself block an unrelated action."
+    },
+    "other_remainder": "OTHER is an open model-misspecification remainder, not a numeric posterior, fourth complete hypothesis, or default negative evidence.",
+    "relation_vs_disposition": {
+      "relation_model": "A scoped prediction-bearing role/incidence relation states what a declared observation/action context would predict.",
+      "disposition_policy": "A separately revisioned policy maps an admitted relation result plus current authority, cost, and freshness checks to one next step.",
+      "non_implication": "A relation revision grants neither authority nor execution by itself. An already admitted disposition may consume a newly admitted relation through a rebound validated view without changing its policy algorithm; a disposition revision alone does not establish a relation true."
+    },
+    "representation": "Role incidence UID, role, target, ordinal, scope, and alias semantics are preserved. Ordinal enumerates an incidence and is not causal time. Legal aliases remain explicit; a lossless binary reification is valid when it preserves the same incidence semantics.",
+    "scope_and_alias_contract": "Each scope declares legal role aliases, observable fields/enums, revision applicability, expiry/reopen conditions, and public action/authority/cost grammar. The compiler receives only these declared role/observable bindings; aliases never silently merge roles or expand access."
+  },
+  "boundary_layers": {
+    "source_resolution": {
+      "purpose": "Resolve a USL locator or other source reference to a versioned, time-stamped read result.",
+      "requires": [
+        "resolver authority",
+        "source-specific authorization",
+        "declared cost",
+        "revision or digest when available"
+      ],
+      "does_not_establish": [
+        "semantic correctness",
+        "world observation",
+        "execution authority",
+        "causal credit"
+      ]
+    },
+    "observation": {
+      "purpose": "Seal an allowed observation or external outcome after a declared action.",
+      "requires": [
+        "observation authority",
+        "environment/specimen/port revision",
+        "action lineage",
+        "outcome source",
+        "observation time"
+      ],
+      "order": "seal read-set, contrasting predictions, chosen action or observation, costs, and current authorization before action; then bind an independently supplied external result as outcome evidence. A proposal cannot pre-seal an outcome."
+    },
+    "execution": {
+      "purpose": "Take exactly one next step using an admitted compiled view and current checks.",
+      "requires": [
+        "current Permit referenced by its declared typed authorization role",
+        "capability availability",
+        "fresh observation/revision checks",
+        "remaining budget"
+      ],
+      "does_not_establish": [
+        "admission",
+        "truth",
+        "credit",
+        "general transfer"
+      ]
+    }
+  },
+  "record_contracts": {
+    "DistinctionProposal": {
+      "required": [
+        "proposal_uid",
+        "origin_classification",
+        "parent_scope",
+        "relation_ast",
+        "role_incidence",
+        "observable_read_set",
+        "input_provenance_digest",
+        "prediction_cases",
+        "other_remainder",
+        "counterexample_or_reopen_condition",
+        "motivating_observations_or_supplied_prior",
+        "proposer_lineage",
+        "status"
+      ],
+      "origin_classification": [
+        "LEARNER_PROPOSED",
+        "RESEARCHER_SUPPLIED_SCAFFOLD",
+        "DERIVED_FROM_ADMITTED_HISTORY"
+      ],
+      "relation_ast": "AST exactly as ast_grammar; every leaf names a declared role and field under the public context contract",
+      "status": "PROPOSED_DESIGN_ONLY",
+      "proposal_evidence_rule": "A proposal may be motivated by sealed observations or by an explicitly labeled supplied prior; actual causal support is not required merely to propose it.",
+      "forbidden": [
+        "hidden-rule reference",
+        "unobserved outcome reference",
+        "admission claim",
+        "Permit claim"
+      ]
+    },
+    "ProbeProposal": {
+      "required": [
+        "proposal_uid",
+        "contrasting_prediction_refs",
+        "action_sequence",
+        "required_observations",
+        "cost_vector",
+        "budget_scope",
+        "authority_requirements",
+        "discriminates_what",
+        "proposer_lineage",
+        "status"
+      ],
+      "rule": "A diagnostic probe and a goal-directed action may coincide, but prediction agreement alone does not make that action diagnostic."
+    },
+    "RevisionProposal": {
+      "required": [
+        "proposal_uid",
+        "target_kind",
+        "parent_revision",
+        "semantic_delta",
+        "support_lineage",
+        "scope",
+        "other_remainder",
+        "conflict_policy",
+        "withhold_conditions",
+        "owner_role_ref",
+        "proposer_role_ref",
+        "required_external_admission_ref",
+        "status"
+      ],
+      "target_kind": [
+        "RELATION_MODEL",
+        "DISPOSITION_POLICY",
+        "UPPER_HANDOFF_RELATION"
+      ],
+      "status": "PROPOSED_NOT_ADMITTED",
+      "rule": "Owner, proposer, outcome source, credit adjudicator, and authorizer are distinct typed role references and may resolve to the same principal. Current authorization is never inferred from owner, proposal, or record text."
+    },
+    "CompiledExecutionView": {
+      "required": [
+        "view_uid",
+        "schema_version",
+        "lineage_id",
+        "disposition_revision",
+        "disposition_digest",
+        "scope",
+        "scope_digest",
+        "public_context_contract_digest",
+        "input_provenance_digest",
+        "public_information_lineage",
+        "admission_ref",
+        "admission_digest",
+        "compiler_version",
+        "port_schema_version",
+        "read_set",
+        "allowed_next_step_kinds",
+        "mandatory_fresh_checks",
+        "withhold_conditions",
+        "cache_key",
+        "status",
+        "relation_dependency_manifest",
+        "relation_dependency_digest"
+      ],
+      "public_context_contract": "Binds declared action grammar, cost model, authority schema, role aliases, observable fields/enums, scope, and outcome-seal interface.",
+      "compiler_input": "only explicitly admitted relation/disposition source revisions, their admission reference/digest, declared scope, and public context contract; it never reads proposals, hidden outcomes, evaluator internals, author-only tables, or generic KG search results",
+      "provenance_rule": "public_information_lineage identifies only information legally exposed before the step. Compiler fails closed when input provenance is missing, inadmissible, mismatched to scope/context, not digest-bound, or not contained in that public lineage. The static view binds compilation/source-derivation provenance only; current observation records and actual per-step read provenance are separately emitted in the step trace, never reused as cached observations.",
+      "status": "FUTURE_ADMITTED_EXECUTION_VIEW_NOT_CREATED_HERE",
+      "preview_rule": "This record requires valid nonempty admission_ref and admission_digest. A DesignExecutionPreview is a separate non-executable record and cannot be converted by relabeling."
+    },
+    "CellCapabilityPort": {
+      "required": [
+        "port_uid",
+        "input_type",
+        "output_type",
+        "scope",
+        "valid_from",
+        "expiry_or_reopen_trigger",
+        "uncertainty",
+        "cost_vector",
+        "required_fresh_checks",
+        "refusal_modes",
+        "lineage_ref",
+        "exit_semantics"
+      ],
+      "output_contract": "One conditional capability result, not a hidden whole workflow: applicability, predicted result if any, uncertainty, cost, and one permitted next-step proposal or refusal.",
+      "refusal_modes": [
+        "WITHHOLD",
+        "OBSERVE",
+        "REOPEN"
+      ],
+      "member_boundary": "A composite may consume the port result but cannot write member state, erase member lineage, or convert membership into authorization."
+    },
+    "UpperHandoffRelation": {
+      "required": [
+        "relation_uid",
+        "producer_port_revision",
+        "consumer_port_revision",
+        "handoff_protocol_revision",
+        "production_state_observation",
+        "consumption_state_observation",
+        "joint_outcome_lineage",
+        "interaction_owner_role_ref",
+        "reopen_conditions",
+        "status"
+      ],
+      "credit_rule": "Local member evidence is not interaction credit. Credit requires named intervention target, matching control/nuisance context, pre-outcome contrasting predictions and sealed trajectory, then an independently supplied outcome comparison. A single surviving model is not sufficient; this does not require exactly two hypotheses for every valid verification. Otherwise attribution remains UNIDENTIFIED."
+    },
+    "DesignExecutionPreview": {
+      "required": [
+        "preview_uid",
+        "proposal_refs_and_digests",
+        "schema_version",
+        "scope_digest",
+        "public_context_contract_digest",
+        "input_provenance_digest",
+        "compiler_version",
+        "hypothetical_read_set",
+        "hypothetical_next_step",
+        "withhold_conditions",
+        "status"
+      ],
+      "status": "DESIGN_ONLY_NO_EXECUTION",
+      "admission": "NONE; no admission_ref, admission_digest or Permit fabricated",
+      "visibility": "Only explicitly permitted design inputs. Authored input stays labeled authored; no hidden evaluator or future-outcome data may be used.",
+      "rule": "May inspect typed proposal ASTs and show a hypothetical delta or rejection; cannot invoke a tool, reserve budget, record a world outcome, or act as CompiledExecutionView."
+    },
+    "DispositionProposal": {
+      "required": [
+        "proposal_uid",
+        "parent_disposition_ref_or_declared_initial",
+        "relation_refs_and_digests",
+        "scope_digest",
+        "public_context_contract_digest",
+        "rules",
+        "fallback",
+        "input_provenance_digest",
+        "proposer_role_ref",
+        "status"
+      ],
+      "status": "PROPOSED_DESIGN_ONLY",
+      "rules": "Nonempty list, at most 8 rules, each with rule_uid, unique nonnegative integer priority, guard, declared_read_set, next_step, on_unknown. Priority is explicit policy semantics, never incidence ordinal or JSON array order.",
+      "guard": "Exactly one of {condition_ast: AST} or {relation_ref: exact revision/digest, expected_truth: TRUE|FALSE}. AST follows ast_grammar. A missing/unknown relation value stays UNKNOWN even when expected_truth is FALSE.",
+      "declared_read_set": "Covers the exact role/field/version references in guard, next_step parameter bindings, and referenced relation dependencies. A missing declaration, extra unauthorized read, or digest mismatch rejects the proposal.",
+      "next_step": "Exactly one tagged record: ACTION_PROPOSAL(capability_ref, action_name, parameters), OBSERVE(observation_refs), WITHHOLD(reason), or REOPEN(reason). Parameter bindings are declared literals or typed read-set field references, never executable text.",
+      "on_unknown": "OBSERVE of the declared missing observations if currently allowed and affordable; otherwise WITHHOLD(reason=missing_prerequisite). No condition-dependent ACTION_PROPOSAL on UNKNOWN.",
+      "fallback": "Required WITHHOLD(reason=no_applicable_rule) or REOPEN(reason=no_applicable_rule); no implicit action default.",
+      "preview": "May reference typed unadmitted relation proposals only inside DesignExecutionPreview. Such refs are forbidden in execution compilation."
+    },
+    "DispositionPolicy": {
+      "required": [
+        "schema_version",
+        "lineage_id",
+        "atom_uid",
+        "revision_id",
+        "owner_role_ref",
+        "source_proposal_ref_and_digest",
+        "relation_refs_and_digests",
+        "scope_digest",
+        "public_context_contract_digest",
+        "rules",
+        "fallback",
+        "input_provenance_digest",
+        "admission_ref",
+        "admission_digest"
+      ],
+      "rule_semantics": "Same structural rule grammar as DispositionProposal. All relation refs resolve admitted immutable versions. Admission binds exact policy content and relation dependencies; source proposal and admission metadata never replace current Permit.",
+      "status": "FUTURE_ADMITTED_POLICY_NOT_CREATED_HERE"
+    }
+  },
+  "compile_and_cache_contract": {
+    "future_admission_precondition": "Compilation for execution requires an external admission record/digest that binds outcome/credit support, exact owner-valid revision, and current authorization through the declared role. This contract supplies neither a dummy true Permit nor inferred authorization.",
+    "static_cache_key": [
+      "schema_version",
+      "lineage_id",
+      "disposition_revision",
+      "disposition_digest",
+      "scope_digest",
+      "public_context_contract_digest",
+      "admission_ref",
+      "admission_digest",
+      "compiler_version",
+      "port_schema_version",
+      "relation_dependency_manifest",
+      "relation_dependency_digest",
+      "input_provenance_digest"
+    ],
+    "outside_cache_every_step": [
+      "current observation freshness",
+      "source/port revision",
+      "current Permit",
+      "capability availability",
+      "remaining cost budget",
+      "exit and reopen conditions"
+    ],
+    "remove_restore": {
+      "remove": "Exact REMOVE clears the compiled view and every dependent derived artifact for the targeted relation/disposition revision while preserving matched unrelated history.",
+      "restore": "RESTORE reintroduces only the exact bound revision and its declared derivations after current checks.",
+      "residual_rule": "A matching rule may be honestly rederived from shared retained history; that is not automatically leakage. Provenance, derivation route, and charged recomputation cost must be inspected."
+    },
+    "cost_accounting": [
+      "proposal generation",
+      "source resolution",
+      "observation",
+      "compilation",
+      "cache maintenance",
+      "communication",
+      "validation",
+      "action",
+      "reopen or rederivation"
+    ],
+    "relation_dependency_manifest": {
+      "entries": "Exact nonempty relation_refs_and_digests from the policy, each containing schema_version, lineage_id, atom_uid, revision_id, sha256. No omitted or extra relation dependencies; duplicates or conflicting digests for one version reject.",
+      "ordering": "Sort lexicographically by (schema_version,lineage_id,atom_uid,revision_id); this orders the dependency manifest, not role incidence or action precedence.",
+      "digest": "SHA-256 of the ordered entry list encoded with the existing hswm.cells.runtime.canonical_json_bytes convention. This is a repository-local deterministic JSON convention, not RDF canonicalization or a new standard claim.",
+      "rule": "Every relation guard and its complete declared dependency read-set must resolve through this manifest. If any relation dependency changes, the manifest digest and execution view/cache identity change."
+    }
+  },
+  "step_contract": {
+    "allowed_outputs": [
+      "ACTION_PROPOSAL",
+      "OBSERVE",
+      "WITHHOLD",
+      "REOPEN"
+    ],
+    "one_step_rule": "A disposition emits one next-step result only; sequence construction requires separately permitted successive steps and fresh checks.",
+    "withhold_triggers": [
+      "UNKNOWN action prerequisite",
+      "scope mismatch",
+      "stale source or port revision",
+      "conflicting evidence or unmet declared support/action criterion",
+      "budget exhaustion",
+      "capability absence",
+      "missing or revoked Permit",
+      "cell exit"
+    ],
+    "credit_identifiability": "Name the intervention target and estimand, match control and nuisance context, seal predictions/read-set/action before outcome, and require an independently supplied outcome comparison supporting that target. A surviving hypothesis or trace alone is insufficient. Otherwise causal credit remains UNIDENTIFIED; ordinary hypothesis proposal may continue. Handoff attribution additionally requires separately changed handoff and joint outcome; no uniform member blame.",
+    "rule_selection": [
+      "Validate scope, current source/port revision, legal role bindings, declared access and active port before reading policy dependencies. A failure gives WITHHOLD or REOPEN with a typed reason.",
+      "Visit rules by ascending explicit priority. Evaluate only declared permitted guard dependencies under three-valued semantics; FALSE proceeds to the next rule, UNKNOWN takes on_unknown without falling through to a lower rule, TRUE chooses that rule.",
+      "For a selected TRUE rule, ensure every required parameter/prerequisite has a fresh typed binding; missing required data takes on_unknown. Check the chosen observation/action capability, current Permit and cost/budget. Failure gives WITHHOLD with a reason.",
+      "Return exactly one declared next-step proposal and actual read-set/provenance/cost trace, or the explicit fallback if all guards are FALSE. Preview emits hypothetical records only; no execution, outcomes or admission.",
+      "A cell exit is a port lifecycle event represented to a caller as WITHHOLD(reason=cell_exit); it is never silently reinterpreted as a new action or loss of member lineage."
+    ]
+  },
+  "baseline_and_comparison_contract": {
+    "matched_baseline": [
+      "same training history",
+      "same model",
+      "same tools",
+      "same compute",
+      "same information access",
+      "same budget and cost opportunities"
+    ],
+    "comparison_rule": "Any future benefit claim charges the full proposal, compile, maintenance, validation, observation, and rederivation costs. A strong planner with the same information may reproduce a result without the compiled relation; this contract assumes no advantage."
+  },
+  "authored_expected_semantic_cases": [
+    {
+      "id": "C01_known_joint_condition",
+      "given": "admitted scoped relation evaluates TRUE and all current checks pass",
+      "expected": "compiled disposition may emit one ACTION_PROPOSAL",
+      "status": "AUTHORED_NOT_EXECUTED"
+    },
+    {
+      "id": "C02_unknown_condition",
+      "given": "a declared action prerequisite is UNKNOWN",
+      "expected": "no condition-dependent action; emit OBSERVE, WITHHOLD, or REOPEN. An unused UNKNOWN observable does not itself block another action.",
+      "status": "AUTHORED_NOT_EXECUTED"
+    },
+    {
+      "id": "C03_stale_revision",
+      "given": "source or port revision differs from compiled view",
+      "expected": "REOPEN or WITHHOLD; static cache cannot override freshness",
+      "status": "AUTHORED_NOT_EXECUTED"
+    },
+    {
+      "id": "C04_conflicting_evidence",
+      "given": "same deterministic scope yields inconsistent sealed outcomes",
+      "expected": "revoke deterministic elimination assumption and WITHHOLD revision use",
+      "status": "AUTHORED_NOT_EXECUTED"
+    },
+    {
+      "id": "C05_budget_or_capability_exhaustion",
+      "given": "probe/action is permitted in principle but budget is spent or capability unavailable",
+      "expected": "WITHHOLD with unresolved alternatives retained",
+      "status": "AUTHORED_NOT_EXECUTED"
+    },
+    {
+      "id": "C06_new_ast_not_provided_rule",
+      "given": "learner proposes a new role-bearing conjunction AST",
+      "expected": "record as DistinctionProposal; it is distinct from selecting authored H-T/H-P/H-J and remains design-only",
+      "status": "AUTHORED_NOT_EXECUTED"
+    },
+    {
+      "id": "C07_unresolved_joint_attribution",
+      "given": "member-local success and composite failure without handoff intervention",
+      "expected": "UpperHandoffRelation attribution is UNIDENTIFIED; no equal blame allocation",
+      "status": "AUTHORED_NOT_EXECUTED"
+    },
+    {
+      "id": "C08_agreeing_predictions_goal_vs_diagnostic",
+      "given": "candidate explanations agree that an action succeeds",
+      "expected": "it can be goal-directed but is not a discriminating diagnostic probe",
+      "status": "AUTHORED_NOT_EXECUTED"
+    },
+    {
+      "id": "C09_relation_only",
+      "given": "relation model changes while no eligible admitted disposition/view consumes it",
+      "expected": "no compiled policy/action effect; an existing admitted disposition may instead rebind only through a validated admitted view",
+      "status": "AUTHORED_NOT_EXECUTED"
+    },
+    {
+      "id": "C10_remove_honest_rederivation",
+      "given": "REMOVE cleared targeted derivatives but shared history remains",
+      "expected": "same hypothesis may reappear only with new provenance and charged recomputation; inspect rather than presume leak",
+      "status": "AUTHORED_NOT_EXECUTED"
+    },
+    {
+      "id": "C11_scope_or_cell_exit",
+      "given": "role grammar changes, port expires, or member exits",
+      "expected": "port lifecycle closes; caller emits WITHHOLD or REOPEN. EXIT is a separate lifecycle transition, not a step output.",
+      "status": "AUTHORED_NOT_EXECUTED"
+    },
+    {
+      "id": "C12_resolver_success_not_semantic_truth",
+      "given": "a USL locator resolves read-only bytes",
+      "expected": "resolution records source evidence only; it cannot authorize execution or prove semantic relation",
+      "status": "AUTHORED_NOT_EXECUTED"
+    }
+  ],
+  "nonclaims": [
+    "No learner has generated an AST, probe, disposition, or revision here.",
+    "No relation, disposition, port, cache, Permit, outcome, credit, or handoff revision is canonical or admitted.",
+    "No USL implementation schema, resolver, external action, held-out evaluation, efficacy result, G0/G1 result, or D-4 result is created by this contract.",
+    "This contract does not establish HSWM cognition, continuous learning, transfer, causal mediation, recursive closure, or performance advantage."
+  ],
+  "next_narrow_implementation": {
+    "first": "Implement a pure reference interpreter and design-only preview for these records with meaningful semantic counterexamples for the authored cases.",
+    "then": "Specify a separate evaluator and access boundary before any learner generation, admission, external outcome, or learning run.",
+    "not_next": [
+      "DGX run",
+      "new numeric gate",
+      "automatic admission",
+      "generic USL resolver rollout",
+      "claim-ceiling promotion"
+    ]
+  },
+  "versioned_record_boundary": {
+    "canonical_candidate_key": [
+      "schema_version",
+      "lineage_id",
+      "atom_uid",
+      "revision_id"
+    ],
+    "single_owner": "Each proposed canonical atom version, including persistent relations/incidences and dispositions, has exactly one schema-relative responsibility owner reference; delegated roles and current authorization remain separate.",
+    "references": "Persistent references resolve exact target version/digest within declared schema and lineage. These design records are not admitted canonical atoms."
+  }
+}

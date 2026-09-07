@@ -1,0 +1,25 @@
+# Run each query read-only against the generic v2 RDF projection.
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+
+# Q1. Which proposed node refines the workshop generation gap?
+SELECT ?node ?name ?gap ?status WHERE {
+  ?node kbr:REFINES ?gap ; kbp:name ?name ; kbp:status ?status .
+  VALUES ?gap { <urn:hswm:kg:node:sym:AbstractNode:hswm-workshop-generation-gap-2026-09-07-v1> }
+} ORDER BY ?name
+
+# Q2. Which relation/disposition and cell candidates motivate the next interpreter?
+SELECT ?candidate ?name ?role ?interpreter WHERE {
+  ?candidate kbr:MOTIVATES ?interpreter ; kbp:name ?name ;
+    kbp:standard_graph_role ?role .
+  VALUES ?interpreter { <urn:hswm:kg:node:sym:AbstractNode:hswm-conditional-capability-next-interpreter-2026-09-07-v1> }
+} ORDER BY ?role
+
+# Q3. Return actual source-linked node authority/status without hiding unexpected values.
+SELECT ?anchor ?anchorName ?owned ?authority ?status WHERE {
+  { ?owned kbr:HAS_SOURCE ?anchor . }
+  UNION { ?owned kbr:REFINES ?anchor . }
+  ?reference a kb:AnchorReference ; kb:anchorTarget ?anchor ; kb:anchorName ?anchorName .
+  ?owned kbp:authority_class ?authority ; kbp:status ?status .
+} ORDER BY ?anchorName ?owned

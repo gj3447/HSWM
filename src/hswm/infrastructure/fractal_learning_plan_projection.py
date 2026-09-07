@@ -15,6 +15,10 @@ import re
 from typing import Any, Mapping
 
 from hswm.infrastructure.kg_bundle_graph_view import KgBundleGraphView, KgBundleSource
+from hswm.infrastructure.kg_bundle_semantics import (
+    HYPERGRAPH_LEARNING_PLAN_INVENTORY,
+    validate_bundle_semantics,
+)
 from hswm.infrastructure.research_insight_projection import _safe_path
 from scripts import upsert_hswm_graph_and_loop_engineering as gateway
 
@@ -33,7 +37,7 @@ REQUIRED_TOP = frozenset(
     }
 )
 OPTIONAL_TOP = frozenset({"authority_boundary", "source_accessed_on"})
-GENERIC_SHAPES = ROOT / "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0.ttl"
+GENERIC_SHAPES = ROOT / "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
 COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 
 
@@ -89,9 +93,17 @@ def _validate_authority(data: Mapping[str, Any], bound_paths: set[str]) -> None:
         if not isinstance(properties, dict):
             _fail("node properties must be an object")
         authority = properties.get("authority_class")
+        role = properties.get("standard_graph_role")
+        if role == "USER_DIRECT_REQUEST":
+            if authority != "USER_PRIMARY":
+                _fail("USER_DIRECT_REQUEST must have USER_PRIMARY authority")
+            sources = properties.get("source_paths")
+            if not isinstance(sources, list) or not sources or not set(sources) <= bound_paths:
+                _fail("USER_PRIMARY direct-request record must bind its source")
+            continue
         if authority == "SECONDARY_AI":
             continue
-        if authority != "USER_PRIMARY" or properties.get("standard_graph_role") != "USER_DIRECT_REQUEST":
+        if authority != "USER_PRIMARY" or role != "USER_DIRECT_REQUEST":
             _fail("only explicit USER_PRIMARY direct-request records are allowed")
         sources = properties.get("source_paths")
         if not isinstance(sources, list) or not sources or not set(sources) <= bound_paths:
@@ -108,6 +120,7 @@ def validate_data(data: dict[str, Any], repo_root: Path = ROOT) -> None:
         _fail("ontology status and nonclaim must be text")
     bound_paths = _validate_bindings(data.get("artifact_bindings"), repo_root)
     _validate_authority(data, bound_paths)
+    validate_bundle_semantics(data, inventory=HYPERGRAPH_LEARNING_PLAN_INVENTORY)
     raw = json.dumps(data, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
     KgBundleGraphView.from_bundles(
         sources=(KgBundleSource("hypergraph-learning-plan", raw, sha256(raw).hexdigest(), len(raw)),)

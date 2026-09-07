@@ -11,6 +11,7 @@ from pathlib import Path
 import re
 from typing import Any, Mapping
 
+from hswm.infrastructure import kg_publication_integrity
 from scripts import build_hswm_adaptive_research_strategy_ontology as builder
 
 
@@ -683,6 +684,8 @@ def _exact_readback(tx: Any, data: Mapping[str, Any]) -> dict[str, int]:
 def publish(data: dict[str, Any], config: dict[str, str]) -> dict[str, int]:
     """Create the projection transactionally; external anchors are MATCH-only."""
 
+    kg_publication_integrity.validate_bundle_for_publication(data)
+
     try:
         from neo4j import GraphDatabase
     except ImportError as error:  # pragma: no cover
@@ -692,6 +695,8 @@ def publish(data: dict[str, Any], config: dict[str, str]) -> dict[str, int]:
         with driver.session(database=config["database"]) as session:
 
             def transaction(tx: Any) -> dict[str, int]:
+                kg_publication_integrity.assert_uid_kind_constraints(tx, data)
+                kg_publication_integrity.serialize_on_schema_registry(tx)
                 _registry_readback(tx, data)
                 anchor_uids = [row["uid"] for row in data["anchors"]]
                 present = _find_unique_nodes(tx, anchor_uids)

@@ -51,6 +51,14 @@ jobs:
           done
           docker logs "$NEO4J_CONTAINER"
           exit 1
+      - name: Run the opt-in common KG publication-integrity checks
+        env:
+          HSWM_NEO4J_INTEGRATION_URI: bolt://localhost:7687
+          HSWM_NEO4J_INTEGRATION_USERNAME: neo4j
+          HSWM_NEO4J_INTEGRATION_PASSWORD: hswm-ci-projection-2026
+          HSWM_NEO4J_INTEGRATION_DATABASE: neo4j
+          HSWM_NEO4J_DISPOSABLE_TEST: "1"
+        run: uv run --locked --extra dev --extra kg pytest -q tests/test_kg_publication_integrity.py tests/test_kg_publication_integrity_integration.py
       - name: Install locked Effect runtime dependencies
         working-directory: src/hswm/effect-runtime
         run: npm ci --ignore-scripts --no-audit --no-fund

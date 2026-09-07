@@ -11,6 +11,8 @@ from pathlib import Path
 import re
 from typing import Any, Mapping
 
+from hswm.infrastructure import kg_anchor_revisions
+from hswm.infrastructure import kg_publication_integrity
 from scripts import build_hswm_graph_and_loop_engineering_ontology as builder
 
 
@@ -102,8 +104,8 @@ def _node_properties(
     data: Mapping[str, Any], row: Mapping[str, Any], projection_sha256: str
 ) -> dict[str, Any]:
     return {
-        "uid": row["uid"],
         **row["properties"],
+        "uid": row["uid"],
         "ontology_bundle_uid": data["bundle_uid"],
         "ontology_projection_sha256": projection_sha256,
     }
@@ -238,8 +240,13 @@ def _readback(
 
 def publish(
     data: dict[str, Any], config: dict[str, str], projection_sha256: str
-) -> dict[str, int]:
+) -> dict[str, Any]:
     """Create all bundle-owned nodes and relations in one fail-closed transaction."""
+
+    # ``publish`` is also imported by narrower projection CLIs.  Keep these
+    # checks here rather than relying on every caller to route through
+    # ``validate_data`` first.
+    kg_publication_integrity.validate_bundle_for_publication(data)
 
     try:
         from neo4j import GraphDatabase
@@ -252,9 +259,14 @@ def publish(
     try:
         with driver.session(database=config["database"]) as session:
 
-            def transaction(tx: Any) -> dict[str, int]:
+            def transaction(tx: Any) -> dict[str, Any]:
+                kg_publication_integrity.assert_uid_kind_constraints(tx, data)
+                kg_publication_integrity.serialize_on_schema_registry(tx)
                 _assert_registry(tx, data)
                 _assert_anchors(tx, data)
+                anchor_revision_report = kg_anchor_revisions.validate_bound_anchor_revisions(
+                    tx, data, ROOT
+                )
 
                 existing_nodes = _find_unique_nodes(
                     tx, [row["uid"] for row in data["nodes"]]
@@ -307,6 +319,7 @@ def publish(
                     "existing_relations": len(data["relations"])
                     if any(existing_relations)
                     else 0,
+                    "anchor_revision_report": anchor_revision_report,
                     **readback,
                 }
 

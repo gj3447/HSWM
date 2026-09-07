@@ -22,6 +22,7 @@ import re
 from types import MappingProxyType
 from typing import Any
 
+from .kg_bundle_semantics import inventory_for, validate_bundle_semantics
 from .standard_graph_view import (
     StandardGraphViewError,
     _QUERY_HEAD,
@@ -34,8 +35,13 @@ from .standard_graph_view import (
 
 NQUADS_MEDIA_TYPE = "application/n-quads"
 RDF_PROFILE = "RDF_1_1_N_QUADS_BLANK_NODE_FREE_DETERMINISTIC_PROFILE"
-CONTRACT_VERSION = "hswm-kg-bundle-rdf-projection/v1"
-COMPILER_ID = "hswm-kg-bundle-rdf-compiler/v1"
+CONTRACT_VERSION = "hswm-kg-bundle-rdf-projection/v2"
+COMPILER_ID = "hswm-kg-bundle-rdf-compiler/v2"
+LEGACY_CONTRACT_VERSION = "hswm-kg-bundle-rdf-projection/v1"
+LEGACY_COMPILER_ID = "hswm-kg-bundle-rdf-compiler/v1"
+PROFILE_V1 = "v1"
+PROFILE_V2 = "v2"
+DEFAULT_PROFILE = PROFILE_V2
 MAX_BUNDLE_BYTES = 16 * 1024 * 1024
 MAX_JSON_DEPTH = 32
 WRITE_BACK = "FORBIDDEN"
@@ -339,9 +345,15 @@ class KgBundleGraphView:
         raise KgBundleGraphViewError("KgBundleGraphView is immutable")
 
     @classmethod
-    def from_bundles(cls, *, sources: tuple[KgBundleSource, ...]) -> "KgBundleGraphView":
+    def from_bundles(
+        cls, *, sources: tuple[KgBundleSource, ...], profile: str = DEFAULT_PROFILE
+    ) -> "KgBundleGraphView":
         if not isinstance(sources, tuple) or not sources:
             raise KgBundleGraphViewError("supply one or more bundle sources as a tuple")
+        if profile not in (PROFILE_V1, PROFILE_V2):
+            raise KgBundleGraphViewError("profile must be v1 or v2")
+        contract_version = LEGACY_CONTRACT_VERSION if profile == PROFILE_V1 else CONTRACT_VERSION
+        compiler_id = LEGACY_COMPILER_ID if profile == PROFILE_V1 else COMPILER_ID
         if any(not isinstance(source, KgBundleSource) for source in sources):
             raise KgBundleGraphViewError("sources must contain only KgBundleSource values")
         if len({source.source_id for source in sources}) != len(sources):
@@ -350,6 +362,9 @@ class KgBundleGraphView:
             raise KgBundleGraphViewError("bundle source SHA-256 values must be unique")
         ordered = tuple(sorted(sources, key=lambda source: source.source_id))
         bundles = [source.bundle() for source in ordered]
+        if profile == PROFILE_V2:
+            for bundle in bundles:
+                validate_bundle_semantics(bundle, inventory=inventory_for(bundle))
         if len({bundle["bundle_uid"] for bundle in bundles}) != len(bundles):
             raise KgBundleGraphViewError("bundle UIDs must be unique across sources")
         owned: dict[str, str] = {}
@@ -358,12 +373,23 @@ class KgBundleGraphView:
                 if row["uid"] in owned:
                     raise KgBundleGraphViewError(f"node owned by two bundles: {row['uid']}")
                 owned[row["uid"]] = bundle["bundle_uid"]
+        owned_labels = {
+            row["uid"]: frozenset(row["labels"])
+            for bundle in bundles
+            for row in bundle["nodes"]
+        }
         for bundle in bundles:
             for row in bundle["anchors"]:
                 if owned.get(row["uid"]) == bundle["bundle_uid"]:
                     raise KgBundleGraphViewError(
                         f"anchor collides with a node owned by the same bundle: {row['uid']}"
                     )
+                if profile == PROFILE_V2 and row["uid"] in owned:
+                    missing = set(row["required_labels"]) - owned_labels[row["uid"]]
+                    if missing:
+                        raise KgBundleGraphViewError(
+                            f"anchor required_labels disagree with owner labels: {row['uid']}"
+                        )
 
         source_set = [
             {
@@ -379,8 +405,8 @@ class KgBundleGraphView:
         projection_identity_sha256 = sha256(
             _canonical_json(
                 {
-                    "compilerId": COMPILER_ID,
-                    "contractVersion": CONTRACT_VERSION,
+                    "compilerId": compiler_id,
+                    "contractVersion": contract_version,
                     "rdfProfile": RDF_PROFILE,
                     "sourceSetSha256": source_set_sha256,
                 }
@@ -393,8 +419,8 @@ class KgBundleGraphView:
         lines: list[tuple[str, str, str, str]] = [
             (projection_iri, RDF_TYPE, VOCAB + "Projection", meta_graph),
             (projection_iri, RDF_TYPE, PROV + "Entity", provenance_graph),
-            (projection_iri, VOCAB + "contractVersion", _literal(CONTRACT_VERSION), meta_graph),
-            (projection_iri, VOCAB + "compilerId", _literal(COMPILER_ID), meta_graph),
+            (projection_iri, VOCAB + "contractVersion", _literal(contract_version), meta_graph),
+            (projection_iri, VOCAB + "compilerId", _literal(compiler_id), meta_graph),
             (projection_iri, VOCAB + "rdfProfile", _literal(RDF_PROFILE), meta_graph),
             (projection_iri, VOCAB + "writeBack", _literal(WRITE_BACK), meta_graph),
             (projection_iri, VOCAB + "nonclaim", _literal(NONCLAIM), meta_graph),
@@ -434,7 +460,21 @@ class KgBundleGraphView:
             for key, item in sorted(bundle["expected_counts"].items()):
                 lines.append((bundle_iri, VOCAB + "expectedCount/" + key, _typed(str(item), XSD_NON_NEGATIVE_INTEGER), meta_graph))
             for row in bundle["artifact_bindings"]:
-                binding_iri = f"urn:sha256:{row['sha256']}"
+                content_iri = f"urn:sha256:{row['sha256']}"
+                if profile == PROFILE_V1:
+                    binding_iri = content_iri
+                else:
+                    binding_iri = (
+                        "urn:hswm:kg:artifact-binding:"
+                        + sha256(_canonical_json({"bundleSha256": source.sha256, **dict(row)})).hexdigest()
+                    )
+                    lines.extend(
+                        [
+                            (content_iri, RDF_TYPE, VOCAB + "ArtifactContent", meta_graph),
+                            (content_iri, RDF_TYPE, PROV + "Entity", provenance_graph),
+                            (binding_iri, VOCAB + "bindsArtifact", content_iri, meta_graph),
+                        ]
+                    )
                 lines.extend(
                     [
                         (binding_iri, RDF_TYPE, VOCAB + "ArtifactBinding", meta_graph),
@@ -448,19 +488,42 @@ class KgBundleGraphView:
             for row in bundle["anchors"]:
                 anchor_iri = _node_iri(row["uid"])
                 lines.append((bundle_iri, VOCAB + "anchorsTo", anchor_iri, data_graph))
-                if row["uid"] in owned:
-                    # The anchor is an owned node of another bundle in this same
-                    # projection; it is typed once as kb:Node by its owner.
+                if profile == PROFILE_V1:
+                    if row["uid"] in owned:
+                        # v1 compatibility: an owned cross-bundle anchor had no
+                        # per-reference descriptor in the RDF output.
+                        continue
+                    lines.extend(
+                        [
+                            (anchor_iri, RDF_TYPE, VOCAB + "Anchor", data_graph),
+                            (anchor_iri, VOCAB + "uid", _literal(row["uid"]), data_graph),
+                            (anchor_iri, VOCAB + "anchorName", _literal(row["name"]), data_graph),
+                        ]
+                    )
+                    for label in row["required_labels"]:
+                        lines.append((anchor_iri, VOCAB + "requiredLabel", _literal(label), data_graph))
                     continue
+                reference_iri = (
+                    "urn:hswm:kg:anchor-reference:"
+                    + sha256(_canonical_json({"bundleSha256": source.sha256, **dict(row)})).hexdigest()
+                )
                 lines.extend(
                     [
-                        (anchor_iri, RDF_TYPE, VOCAB + "Anchor", data_graph),
-                        (anchor_iri, VOCAB + "uid", _literal(row["uid"]), data_graph),
-                        (anchor_iri, VOCAB + "anchorName", _literal(row["name"]), data_graph),
+                        (reference_iri, RDF_TYPE, VOCAB + "AnchorReference", data_graph),
+                        (reference_iri, VOCAB + "declaredBy", bundle_iri, data_graph),
+                        (reference_iri, VOCAB + "anchorTarget", anchor_iri, data_graph),
+                        (reference_iri, VOCAB + "anchorName", _literal(row["name"]), data_graph),
                     ]
                 )
                 for label in row["required_labels"]:
-                    lines.append((anchor_iri, VOCAB + "requiredLabel", _literal(label), data_graph))
+                    lines.append((reference_iri, VOCAB + "requiredLabel", _literal(label), data_graph))
+                if row["uid"] not in owned:
+                    lines.extend(
+                        [
+                            (anchor_iri, RDF_TYPE, VOCAB + "Anchor", data_graph),
+                            (anchor_iri, VOCAB + "uid", _literal(row["uid"]), data_graph),
+                        ]
+                    )
             for row in bundle["nodes"]:
                 node_count += 1
                 node_iri = _node_iri(row["uid"])
@@ -516,8 +579,8 @@ class KgBundleGraphView:
         dataset_sha256 = sha256(nquads).hexdigest()
         descriptor = {
             "_tag": "HSWMKgBundleRdfProjectionManifest",
-            "contractVersion": CONTRACT_VERSION,
-            "compilerId": COMPILER_ID,
+            "contractVersion": contract_version,
+            "compilerId": compiler_id,
             "rdfProfile": RDF_PROFILE,
             "mapping": "ROLE_PRESERVING_REIFIED_RELATIONS_WITH_DIRECT_TYPED_EDGES",
             "dataset": {"mediaType": NQUADS_MEDIA_TYPE, "sha256": dataset_sha256, "byteLength": len(nquads)},

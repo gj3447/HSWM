@@ -16,7 +16,8 @@ from hswm.infrastructure.kg_bundle_graph_view import (
 
 
 ROOT = Path(__file__).parents[1]
-SHAPES = ROOT / "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0.ttl"
+SHAPES = ROOT / "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+LEGACY_SHAPES = ROOT / "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0.ttl"
 CLOSURE = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json"
 CLOSURE_V4 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v4.json"
 CLOSURE_V3 = ROOT / "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v3.json"
@@ -219,10 +220,8 @@ def test_synthetic_bundle_round_trip_and_shacl_violation_detection() -> None:
     def drop_decision_link(bundle: dict) -> None:
         del bundle["nodes"][1]["properties"]["assesses_claim_uid"]
 
-    broken = KgBundleGraphView.from_bundles(sources=(_synthetic_source("broken", drop_decision_link),))
-    report = broken.validate_shacl(shapes=SHAPES.read_bytes())
-    assert not report["conforms"]
-    assert "assesses_claim_uid" in report["report_text"]
+    with pytest.raises(ValueError, match="does not assess"):
+        KgBundleGraphView.from_bundles(sources=(_synthetic_source("broken", drop_decision_link),))
 
 
 def test_source_and_query_boundaries_fail_closed() -> None:
@@ -265,3 +264,135 @@ def test_source_and_query_boundaries_fail_closed() -> None:
         view.query("SELECT * WHERE { SERVICE <http://example.invalid/sparql> { ?s ?p ?o } }")
     with pytest.raises(KgBundleGraphViewError, match="unique"):
         KgBundleGraphView.from_bundles(sources=(good, good))
+
+
+def _cross_bundle_source(
+    source_id: str,
+    bundle_uid: str,
+    node_uid: str,
+    labels: list[str],
+    *,
+    anchors: list[dict] | None = None,
+    bindings: list[dict] | None = None,
+) -> KgBundleSource:
+    bundle = {
+        "schema_version": "hswm-test-cross-bundle/v1",
+        "bundle_uid": bundle_uid,
+        "status": "TEST",
+        "nonclaim": "TEST_ONLY",
+        "artifact_bindings": bindings or [{"path": f"docs/{source_id}.md", "sha256": "a" * 64}],
+        "expected_counts": {"nodes": 1, "anchors": len(anchors or []), "relations": 0},
+        "anchors": anchors or [],
+        "nodes": [
+            {
+                "uid": node_uid,
+                "labels": labels,
+                "properties": {
+                    "name": source_id,
+                    "description": "test node",
+                    "authority_class": "SECONDARY_AI",
+                    "claim_boundary": "TEST_ONLY",
+                    "projection_nonclaim": "TEST_ONLY",
+                },
+            }
+        ],
+        "relations": [],
+    }
+    raw = json.dumps(bundle, sort_keys=True, separators=(",", ":")).encode()
+    return KgBundleSource(source_id, raw, sha256(raw).hexdigest(), len(raw))
+
+
+def test_v2_rejects_cross_bundle_anchor_label_mismatch_and_v1_remains_explicit_legacy() -> None:
+    shared_uid = "sym:Concept:shared-owner"
+    owner = _cross_bundle_source(
+        "owner",
+        "sym:AbstractNode:owner-bundle",
+        shared_uid,
+        ["Concept"],
+    )
+    dependent = _cross_bundle_source(
+        "dependent",
+        "sym:AbstractNode:dependent-bundle",
+        "sym:Concept:dependent-node",
+        ["Concept"],
+        anchors=[{"uid": shared_uid, "name": "shared", "required_labels": ["Concept", "Guardrail"]}],
+    )
+    with pytest.raises(KgBundleGraphViewError, match="required_labels disagree"):
+        KgBundleGraphView.from_bundles(sources=(owner, dependent))
+
+    legacy = KgBundleGraphView.from_bundles(sources=(owner, dependent), profile="v1")
+    assert legacy.descriptor["contractVersion"] == "hswm-kg-bundle-rdf-projection/v1"
+    assert b"AnchorReference" not in legacy.nquads
+    legacy_single = KgBundleGraphView.from_bundles(
+        sources=(_synthetic_source(),), profile="v1"
+    )
+    assert legacy_single.validate_shacl(shapes=LEGACY_SHAPES.read_bytes())["conforms"]
+
+
+def test_v2_preserves_cross_bundle_anchor_descriptor_and_distinct_binding_occurrences() -> None:
+    shared_uid = "sym:Concept:shared-owner"
+    owner = _cross_bundle_source(
+        "owner",
+        "sym:AbstractNode:owner-bundle",
+        shared_uid,
+        ["Concept", "Guardrail"],
+    )
+    dependent = _cross_bundle_source(
+        "dependent",
+        "sym:AbstractNode:dependent-bundle",
+        "sym:Concept:dependent-node",
+        ["Concept"],
+        anchors=[{"uid": shared_uid, "name": "shared", "required_labels": ["Concept", "Guardrail"]}],
+        bindings=[
+            {"path": "docs/first.md", "sha256": "b" * 64},
+            {"path": "docs/second.md", "sha256": "b" * 64},
+        ],
+    )
+    view = KgBundleGraphView.from_bundles(sources=(owner, dependent))
+    assert view.validate_shacl(shapes=SHAPES.read_bytes())["conforms"]
+    lines = view.nquads.decode().splitlines()
+    binding_subjects = {
+        line.split()[0]
+        for line in lines
+        if line.split()[1].endswith("#type>") and line.split()[2].endswith("ArtifactBinding>")
+    }
+    assert len(binding_subjects) == 3
+    assert sum("ArtifactContent>" in line for line in lines) == 2
+    repeated_content = f"<urn:sha256:{'b' * 64}>"
+    assert sum(
+        line.startswith(repeated_content + " ") and "ArtifactContent>" in line for line in lines
+    ) == 1
+    assert sum("bindsArtifact>" in line for line in lines) == 3
+    references = [line for line in lines if "AnchorReference>" in line]
+    assert len(references) == 1
+    reference = references[0].split()[0]
+    descriptor_lines = [line for line in lines if line.startswith(reference + " ")]
+    assert any('"Concept"' in line for line in descriptor_lines)
+    assert any('"Guardrail"' in line for line in descriptor_lines)
+
+
+def test_v2_rejects_closure_current_decision_pointer_mutation() -> None:
+    data = json.loads(CLOSURE.read_text(encoding="utf-8"))
+    claim = next(row for row in data["nodes"] if "current_decision_uid" in row["properties"])
+    claim["properties"]["current_decision_uid"] = "sym:Concept:not-an-owned-decision"
+    raw = json.dumps(data, sort_keys=True, separators=(",", ":")).encode()
+    source = KgBundleSource("closure-mutant", raw, sha256(raw).hexdigest(), len(raw))
+    with pytest.raises(ValueError, match="current_decision_uid does not identify"):
+        KgBundleGraphView.from_bundles(sources=(source,))
+
+
+def test_explicit_v1_profile_matches_pinned_pre_v2_compiler_bytes() -> None:
+    # Frozen using compiler revision 3aff4b38a2611da84688e451da438a6bb6c0c79d.
+    # Keep this oracle independent of the current implementation and usable in
+    # an extracted sdist without Git metadata or repository history.
+    raw = CLOSURE.read_bytes()
+    assert sha256(raw).hexdigest() == (
+        "08f45acbfee42750ac2a463db95bd2faa2dd0bbe5b4cf2da262acdcf27757222"
+    )
+    current = KgBundleGraphView.from_bundles(
+        sources=(KgBundleSource("closure", raw, sha256(raw).hexdigest(), len(raw)),),
+        profile="v1",
+    )
+    assert sha256(current.nquads).hexdigest() == (
+        "d51484b1674363fcd2c0d50e2d9d1920e60fb899585c057f603ed02c256374de"
+    )

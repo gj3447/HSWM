@@ -1,0 +1,38 @@
+{
+  "schema_version": "hswm-conditional-demo/v1",
+  "outcome_projection": {"kind": "BOOLEAN_SUCCESS_IS_RELATION_TRUTH", "source": "authored:workshop-success-predicate-contract"},
+  "domain": [
+    {"role": "part", "field": "ready", "values": [0, 1]},
+    {"role": "part", "field": "clean", "values": [0, 1]}
+  ],
+  "examples": [
+    {"values": [{"role": "part", "field": "ready", "value": 0}, {"role": "part", "field": "clean", "value": 0}], "outcome": false, "source": "authored:episode:00"},
+    {"values": [{"role": "part", "field": "ready", "value": 0}, {"role": "part", "field": "clean", "value": 1}], "outcome": false, "source": "authored:episode:01"},
+    {"values": [{"role": "part", "field": "ready", "value": 1}, {"role": "part", "field": "clean", "value": 1}], "outcome": true, "source": "authored:episode:11"}
+  ],
+  "initial_relation": {
+    "uid": "authored:join-condition", "revision": "r1", "source": "authored:initial-proposal",
+    "ast": {"op": "eq", "left": {"role": "part", "field": "ready"}, "right": 1}
+  },
+  "query": [
+    {"role": "part", "field": "ready", "value": 1, "revision": "p1", "expires_at": 10, "source": "authored:query:ready"},
+    {"role": "part", "field": "clean", "value": 0, "revision": "p1", "expires_at": 10, "source": "authored:query:clean"}
+  ],
+  "action": "join",
+  "checks": {
+    "scope": "authored:workshop", "expected_scope": "authored:workshop",
+    "revision": "p1", "expected_revision": "p1", "now": 1,
+    "allowed_reads": [["part", "ready"], ["part", "clean"]],
+    "permitted": ["join", "OBSERVE"], "available": ["join", "OBSERVE"],
+    "costs": {"join": 2, "OBSERVE": 1}, "budget": 3, "source": "authored:caller-checks"
+  },
+  "contexts": [
+    {"id": "ready-dirty", "values": [{"role": "part", "field": "ready", "value": 1}, {"role": "part", "field": "clean", "value": 0}], "source": "authored:available-context:10", "cost": 1},
+    {"id": "ready-clean", "values": [{"role": "part", "field": "ready", "value": 1}, {"role": "part", "field": "clean", "value": 1}], "source": "authored:available-context:11", "cost": 1}
+  ],
+  "allowed_probe_ids": ["ready-dirty", "ready-clean"],
+  "probe_budget": 1,
+  "subsequent_outcomes": [
+    {"probe_id": "ready-dirty", "outcome": false, "source": "authored:subsequent-public-feedback:10"}
+  ]
+}

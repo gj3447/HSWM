@@ -122,6 +122,10 @@ RDF 1.1 N-Quads·SHACL 1.0·PROV-O와 SPARQL/Cypher 질의를 제공하며, 계�
 원문 방법·실패 조건을 검토해 탐색 유도, 판별 관찰, 추상화 재사용의 적용 순서를 제안하며,
 알고리즘 적용이나 새 과제의 성능 개선으로 계산하지 않는다.
 
+[조건부 과제 CLI와 실행 배치](docs/research/HSWM_CONDITIONAL_TASK_CLI_2026-09-07.md)는
+감사 A2~A4 보완, 후보 예측을 구별할 과제 제안, 공개 경험에 따른 후보 수정 재생을 제공한다.
+`uv run hswm-task`로 실행하며 MCP·연구 KG·SQLite runtime·선택적 서버의 역할을 설명한다.
+
 [철학 ontology·표준 그래프 연결 감사](docs/research/HSWM_PHILOSOPHY_KG_STANDARD_AUDIT_2026-09-07.md)는
 철학 P1~P10과 FCL-1~8의 live 존재를 확인하고, 최근 bundle 정합성과 별도로
 adaptive predecessor, legacy FCL 게시 계보, MCP 검색 metadata, 표준 파생 표현의 적용 범위를 구분한다.

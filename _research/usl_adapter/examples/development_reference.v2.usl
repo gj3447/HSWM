@@ -1,0 +1,18 @@
+// Authored HSWM adapter fixture. Resolution is not semantic truth or execution.
+usl "0.1";
+namespace "hswm.usl.development.example";
+
+resource implementation = "git://example.invalid/hswm@54550a331667b6e9779a30fb20c6de9eb97d1677:src/hswm/cells/adaptive_runtime.py";
+resource concept = "kg://fixture/sym:Concept:hswm";
+resource context = "https://example.invalid/development-context";
+resource unrelated_note = "https://example.invalid/release-note";
+resource unrelated_catalog = "https://example.invalid/component-catalog";
+
+meaning documents(code: git_repo, target: kg, context: url) = "개발 참조의 구현·대상·적용 문맥을 함께 지정한다"
+  grounded "kg://fixture/sym:Concept:hswm-development-reference-contract"
+  applies "HSWM 개발 참조의 구현·대상·문맥 및 선언된 계약 근거"
+  check development_reference(code, target, context) = "구현·대상·문맥의 선언된 참조가 함께 관측 가능한지 확인한다";
+meaning catalogs_release(note: url, catalog: url) = "릴리스 메모와 구성요소 목록의 독립적인 문서 관계를 지정한다";
+
+link development = documents(context: context, target: concept, code: implementation);
+link unrelated_release = catalogs_release(catalog: unrelated_catalog, note: unrelated_note);

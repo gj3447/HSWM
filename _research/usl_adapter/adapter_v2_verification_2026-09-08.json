@@ -1,0 +1,85 @@
+{
+  "schema_version": "hswm-usl-v2-adapter-verification/v1",
+  "verified_at": "2026-09-08T02:14:43.415663+00:00",
+  "usl_source_status": "LOCAL_DIRECTORY_NO_GIT",
+  "usl_source_license": "UNLICENSED_LOCAL_SOURCE_NOT_VENDORED",
+  "usl_source_sha256_before": {
+    "package.json": "d6cb15235dd327354857c5f7a88c1e5aae5430162c646c75955c48e3028eda3f",
+    "package-lock.json": "f6c808b1c5cc6edda2af8af0a30f80a0d9d6ee6f1c24365ee934ddf46423cc51",
+    "src/language/compiler.ts": "96f064997157f28ed2f230a0222e51095d1aaf6e1adf98317c8952fdfdfefec4",
+    "src/language/runtime.ts": "e984c27f8e42b36a2c4ab84e56de3d930f3085e5ed4a5a376ef58b5e685b6730",
+    "src/language/digest.ts": "381eb5c94c6af000a52d26888054ada6f8850007cae4cf71e76a80cee6419da1",
+    "src/locator.ts": "05a5e335655b24f4f2ac23fdbd9de9d2a156c2e51b9a498c0b9ad6bf0eff3fd3",
+    "src/resolve.ts": "87174ba05285f4d30ac9463f3e14988b2c8d5a4b3279866bb85939dcff2cd109"
+  },
+  "usl_source_sha256_after": {
+    "package.json": "d6cb15235dd327354857c5f7a88c1e5aae5430162c646c75955c48e3028eda3f",
+    "package-lock.json": "f6c808b1c5cc6edda2af8af0a30f80a0d9d6ee6f1c24365ee934ddf46423cc51",
+    "src/language/compiler.ts": "96f064997157f28ed2f230a0222e51095d1aaf6e1adf98317c8952fdfdfefec4",
+    "src/language/runtime.ts": "e984c27f8e42b36a2c4ab84e56de3d930f3085e5ed4a5a376ef58b5e685b6730",
+    "src/language/digest.ts": "381eb5c94c6af000a52d26888054ada6f8850007cae4cf71e76a80cee6419da1",
+    "src/locator.ts": "05a5e335655b24f4f2ac23fdbd9de9d2a156c2e51b9a498c0b9ad6bf0eff3fd3",
+    "src/resolve.ts": "87174ba05285f4d30ac9463f3e14988b2c8d5a4b3279866bb85939dcff2cd109"
+  },
+  "source_stable": true,
+  "hswm_files_sha256": {
+    "src/hswm/infrastructure/usl_adapter.py": "8bf642de500545ff8a3fc80102789f6efbf7fef40f0ffaa475333f9998d1f809",
+    "src/hswm/infrastructure/usl_observation_v2.py": "55b2af74d37cb7160d293f324d64b7f9893cd27b9ceb1890a8c17d3d00aa2534",
+    "src/hswm/infrastructure/usl_cli.py": "7b5bae36899b7ee7a40fe9e074fcee4217412115c039dfc0f7156782c08a60aa",
+    "tests/test_usl_adapter_v2.py": "265f19d209d0709fac531ce070faf131bc04870c343fb5ca00ebbd16434f554f",
+    "tests/test_usl_cli.py": "b699399499a2bfd1ce6bbc95cf18efe51eb33533fc9e7a93cb2fe807a3dc0fd6",
+    "_research/usl_adapter/regenerate_preview_v2_2026_09_08.ts": "341bbbcc7d7960ed617e8c8bbd447d347f76af354da8dc7c05f6adcaa964d7a6",
+    "_research/usl_adapter/examples/preview.v2.json": "e00d52a15db95a8f3582711a07257f4a2e7361f9ce9be73511e8dbfcc3e1d8ea",
+    "_research/usl_adapter/examples/development_reference.v2.usl": "1165418567d68f1ebbe6c6ac400f006a81e41d01666af835c6b68c36eb68e270"
+  },
+  "pytest": {
+    "command": "uv run --locked pytest -q tests/test_usl_adapter.py tests/test_usl_adapter_v2.py tests/test_usl_cli.py tests/test_conditional_capability.py tests/test_conditional_probe.py tests/test_conditional_task_cli.py tests/test_hswm_canon_doc_honesty.py",
+    "passed": 75,
+    "failed": 0,
+    "exit_code": 0
+  },
+  "actual_usl_compiler_runtime_checks": [
+    {
+      "case": "original",
+      "report_schema": "usl-program-observation/v2",
+      "plan_digest": "sha256:351eeec78bafec123620fef13c20cbbe4298f4a1d95c1cfe8bba1c15fb962b0d",
+      "source_digest": "sha256:1165418567d68f1ebbe6c6ac400f006a81e41d01666af835c6b68c36eb68e270",
+      "fresh_next_step": "ACTION_PROPOSAL",
+      "expired_next_step": "OBSERVE",
+      "selected_links": [
+        "development"
+      ],
+      "resolver_calls": 4,
+      "declared_check_status": "NOT_EXECUTED"
+    },
+    {
+      "case": "normalized_http",
+      "report_schema": "usl-program-observation/v2",
+      "plan_digest": "sha256:2684379cd642b6aa6e94c8812c202b5e55f97c914e5697fa9cb0a261525a413b",
+      "source_digest": "sha256:6f4fb961b1b700c96cf6e58615e8eb2548b371b3a8359a82799f9236f78f988c",
+      "fresh_next_step": "ACTION_PROPOSAL",
+      "expired_next_step": "OBSERVE",
+      "selected_links": [
+        "development"
+      ],
+      "resolver_calls": 4,
+      "declared_check_status": "NOT_EXECUTED"
+    },
+    {
+      "case": "utf16_kg_allowlist",
+      "report_schema": "usl-program-observation/v2",
+      "plan_digest": "sha256:664a93e7253833c6c68b5d1fdcd42fd4e24c957b1e2428a935d43ea48af41496",
+      "source_digest": "sha256:96826a3a6ac694cda25af1e7f77e38043b8b604016b59c5f89cd7419863f2721",
+      "fresh_next_step": "ACTION_PROPOSAL",
+      "expired_next_step": "OBSERVE",
+      "selected_links": [
+        "development"
+      ],
+      "resolver_calls": 4,
+      "declared_check_status": "NOT_EXECUTED"
+    }
+  ],
+  "fixture_regeneration_byte_equal": true,
+  "external_endpoint_requests": 0,
+  "claim": "ENGINEERING_COMPATIBILITY_AND_REJECTION_CHECKS_NOT_HSWM_LEARNING_OR_EFFICACY"
+}

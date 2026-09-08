@@ -7,6 +7,7 @@ locator nor executes, stores, admits, credits, or learns from a USL program.
 from __future__ import annotations
 
 from datetime import datetime, timezone
+from copy import deepcopy
 import re
 from typing import Any
 
@@ -15,7 +16,9 @@ from hswm.cells.conditional import Reject, digest, finite_number, same
 
 PLAN_SCHEMA = "usl-semantic-plan/v1"
 REPORT_SCHEMA = "usl-program-observation/v1"
+REPORT_SCHEMA_V2 = "usl-program-observation/v2"
 POLICY_SCHEMA = "hswm-usl-observation-policy/v1"
+POLICY_SCHEMA_V2 = "hswm-usl-observation-policy/v2"
 PROJECTION_SCHEMA = "hswm-usl-observation-projection/v1"
 _NAME = re.compile(r"[A-Za-z_][A-Za-z0-9_]*\Z")
 _HASH = re.compile(r"[0-9a-f]{64}\Z")
@@ -107,7 +110,7 @@ def _participants(value: object, roles: list[dict[str, Any]]) -> list[dict[str, 
     return result
 
 
-def _validate_plan(plan: object) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
+def _validate_plan(plan: object, *, v2: bool = False) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
     root = _exact(plan, {"schema", "languageVersion", "namespace", "resources", "meanings", "links", "declarationStatus"}, "plan shape")
     if root["schema"] != PLAN_SCHEMA or root["languageVersion"] != "0.1" or root["declarationStatus"] != "DECLARED":
         _reject("plan version")
@@ -121,7 +124,8 @@ def _validate_plan(plan: object) -> tuple[dict[str, Any], dict[str, Any], dict[s
         _exact(row, {"name", "locator"}, "resource shape")
         _locator(row["locator"])
     for name, row in meanings.items():
-        if set(row) not in ({"name", "roles", "description"}, {"name", "roles", "description", "grounded"}):
+        shape = set(row) - ({"contract"} if v2 else set())
+        if shape not in ({"name", "roles", "description"}, {"name", "roles", "description", "grounded"}):
             _reject("meaning shape")
         roles = _list(row["roles"], "meaning roles", _MAX_ROLES)
         if not 2 <= len(roles) <= _MAX_ROLES:
@@ -239,9 +243,10 @@ def _allowed(value: object) -> set[tuple[str, str]]:
     return set(value)
 
 
-def _validate_policy(policy: object, plan: dict[str, Any], resources: dict[str, Any], meanings: dict[str, Any], links: dict[str, Any], allowed_reads: set[tuple[str, str]]) -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, dict[str, Any]]]:
-    root = _exact(policy, {"schema_version", "namespace", "plan_digest", "max_age_seconds", "bindings", "resources"}, "policy shape")
-    if root["schema_version"] != POLICY_SCHEMA or root["namespace"] != plan["namespace"] or root["plan_digest"] != digest(plan):
+def _validate_policy(policy: object, plan: dict[str, Any], resources: dict[str, Any], meanings: dict[str, Any], links: dict[str, Any], allowed_reads: set[tuple[str, str]], *, v2: bool = False) -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, dict[str, Any]]]:
+    extra = {"usl_plan_digest", "source_digest"} if v2 else set()
+    root = _exact(policy, {"schema_version", "namespace", "plan_digest", "max_age_seconds", "bindings", "resources"} | extra, "policy shape")
+    if root["schema_version"] != (POLICY_SCHEMA_V2 if v2 else POLICY_SCHEMA) or root["namespace"] != plan["namespace"] or root["plan_digest"] != digest(plan):
         _reject("policy identity or plan digest")
     age = root["max_age_seconds"]
     if not finite_number(age) or not 0 < age <= 86400:
@@ -310,9 +315,14 @@ def _adapt_usl(plan: dict, report: dict, policy: dict, *, allowed_reads: set[tup
     if not finite_number(now) or not isinstance(revision, str) or not revision or len(revision) > _MAX_TEXT:
         _reject("observation context")
     permitted = _allowed(allowed_reads)
-    plan_root, resources, meanings, links = _validate_plan(plan)
-    policy_root, bindings, pins = _validate_policy(policy, plan_root, resources, meanings, links, permitted)
-    observations, groundings, report_links = _validate_report(report, plan_root, resources, meanings, links)
+    v2 = isinstance(report, dict) and report.get("schema") == REPORT_SCHEMA_V2
+    plan_root, resources, meanings, links = _validate_plan(plan, v2=v2)
+    policy_root, bindings, pins = _validate_policy(policy, plan_root, resources, meanings, links, permitted, v2=v2)
+    if v2:
+        from hswm.infrastructure.usl_observation_v2 import validate_report
+        observations, groundings, report_links = validate_report(report, plan_root, policy_root, bindings)
+    else:
+        observations, groundings, report_links = _validate_report(report, plan_root, resources, meanings, links)
     plan_digest, report_digest, policy_digest = digest(plan), digest(report), digest(policy)
     source = digest({"plan_digest": plan_digest, "report_digest": report_digest, "policy_digest": policy_digest})
     emitted: list[dict[str, Any]] = []
@@ -322,6 +332,8 @@ def _adapt_usl(plan: dict, report: dict, policy: dict, *, allowed_reads: set[tup
         reasons: list[str] = []
         expires: list[float] = []
         binding = by_link.get(name)
+        if v2 and binding is None:
+            continue
         if binding is None:
             reasons.append("NOT_SELECTED_BY_POLICY")
         else:
@@ -358,8 +370,8 @@ def _adapt_usl(plan: dict, report: dict, policy: dict, *, allowed_reads: set[tup
         link_rows.append({"name": name, "meaning": link["meaning"], "participants": [dict(p) for p in link["participants"]], "status": status, "reasons": reasons})
         if status == "READY":
             emitted.append({"role": binding["role"], "field": binding["field"], "value": True, "revision": revision, "expires_at": min(expires), "source": source})
-    return {
-        "schema_version": PROJECTION_SCHEMA,
+    result = {
+        "schema_version": "hswm-usl-observation-projection/v2" if v2 else PROJECTION_SCHEMA,
         "status": "READY" if len(emitted) == len(bindings) else "UNRESOLVED",
         "plan_digest": plan_digest,
         "report_digest": report_digest,
@@ -369,6 +381,26 @@ def _adapt_usl(plan: dict, report: dict, policy: dict, *, allowed_reads: set[tup
         "links": link_rows,
         "mapping_loss": list(_LOSS),
     }
+    if v2:
+        result["meanings"] = deepcopy(report["meanings"])
+        result["usl"] = {
+            "report_schema": report["schema"], "plan_digest": report["planDigest"],
+            "meanings_digest": report["meaningsDigest"], "source_digest": report["sourceDigest"],
+            "observation_digest": report["observationDigest"], "digest_format": report["digestFormat"],
+            "source_binding": "ABSENT" if report["sourceDigest"] is None else "CALLER_PINNED_NOT_RECOMPILED",
+        }
+        result["read_scope"] = deepcopy(report["readScope"])
+        result["metrics"] = deepcopy(report["metrics"])
+        for link in result["links"]:
+            if link["name"] in report_links:
+                observed = report_links[link["name"]]
+                for key in ("meaningDigest", "contractDigest", "verification"):
+                    link[key] = deepcopy(observed[key])
+        result["mapping_loss"].extend([
+            "declared checks preserved but not executed", "source digest caller-pinned, source not recompiled",
+            "KG_METADATA is not full graph semantics", "noncanonical HTTP URL forms outside the supported subset reject",
+        ])
+    return result
 
 
 def adapt_usl(plan: dict, report: dict, policy: dict, *, allowed_reads: set[tuple[str, str]], now: float, revision: str) -> dict:

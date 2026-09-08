@@ -1,0 +1,436 @@
+{
+  "plan": {
+    "schema": "usl-semantic-plan/v1",
+    "languageVersion": "0.1",
+    "namespace": "hswm.usl.development.example",
+    "resources": [
+      {
+        "name": "implementation",
+        "locator": {
+          "kind": "git_repo",
+          "repo": "example.invalid/hswm",
+          "commit": "54550a331667b6e9779a30fb20c6de9eb97d1677",
+          "path": "src/hswm/cells/adaptive_runtime.py"
+        }
+      },
+      {
+        "name": "concept",
+        "locator": {
+          "kind": "kg",
+          "source": "fixture",
+          "uid": "sym:Concept:hswm"
+        }
+      },
+      {
+        "name": "context",
+        "locator": {
+          "kind": "url",
+          "href": "https://example.invalid/development-context"
+        }
+      },
+      {
+        "name": "unrelated_note",
+        "locator": {
+          "kind": "url",
+          "href": "https://example.invalid/release-note"
+        }
+      },
+      {
+        "name": "unrelated_catalog",
+        "locator": {
+          "kind": "url",
+          "href": "https://example.invalid/component-catalog"
+        }
+      }
+    ],
+    "meanings": [
+      {
+        "name": "documents",
+        "roles": [
+          {
+            "name": "code",
+            "kind": "git_repo"
+          },
+          {
+            "name": "target",
+            "kind": "kg"
+          },
+          {
+            "name": "context",
+            "kind": "url"
+          }
+        ],
+        "description": "개발 참조의 구현·대상·적용 문맥을 함께 지정한다",
+        "grounded": {
+          "kind": "kg",
+          "source": "fixture",
+          "uid": "sym:Concept:hswm-development-reference-contract"
+        },
+        "contract": {
+          "scope": "HSWM 개발 참조의 구현·대상·문맥 및 선언된 계약 근거",
+          "checks": [
+            {
+              "name": "development_reference",
+              "evidenceRoles": [
+                "code",
+                "target",
+                "context"
+              ],
+              "description": "구현·대상·문맥의 선언된 참조가 함께 관측 가능한지 확인한다"
+            }
+          ]
+        }
+      },
+      {
+        "name": "catalogs_release",
+        "roles": [
+          {
+            "name": "note",
+            "kind": "url"
+          },
+          {
+            "name": "catalog",
+            "kind": "url"
+          }
+        ],
+        "description": "릴리스 메모와 구성요소 목록의 독립적인 문서 관계를 지정한다"
+      }
+    ],
+    "links": [
+      {
+        "name": "development",
+        "meaning": "documents",
+        "participants": [
+          {
+            "role": "code",
+            "resource": "implementation"
+          },
+          {
+            "role": "target",
+            "resource": "concept"
+          },
+          {
+            "role": "context",
+            "resource": "context"
+          }
+        ]
+      },
+      {
+        "name": "unrelated_release",
+        "meaning": "catalogs_release",
+        "participants": [
+          {
+            "role": "note",
+            "resource": "unrelated_note"
+          },
+          {
+            "role": "catalog",
+            "resource": "unrelated_catalog"
+          }
+        ]
+      }
+    ],
+    "declarationStatus": "DECLARED"
+  },
+  "report": {
+    "schema": "usl-program-observation/v2",
+    "namespace": "hswm.usl.development.example",
+    "planDigest": "sha256:351eeec78bafec123620fef13c20cbbe4298f4a1d95c1cfe8bba1c15fb962b0d",
+    "meaningsDigest": "sha256:38c1581d91f8c4101e3e61e338de618dcb9a7ca2f294c255d86e6c7b0680bcc0",
+    "sourceDigest": "sha256:1165418567d68f1ebbe6c6ac400f006a81e41d01666af835c6b68c36eb68e270",
+    "digestFormat": "sha256:utf8:JSON.stringify/v1",
+    "status": "RESOLVES",
+    "readScope": {
+      "links": [
+        "development"
+      ],
+      "allowedLocators": [
+        "git://example.invalid/hswm@54550a331667b6e9779a30fb20c6de9eb97d1677:src/hswm/cells/adaptive_runtime.py",
+        "https://example.invalid/development-context",
+        "kg://fixture/sym:Concept:hswm",
+        "kg://fixture/sym:Concept:hswm-development-reference-contract"
+      ],
+      "requestedLocators": [
+        "git://example.invalid/hswm@54550a331667b6e9779a30fb20c6de9eb97d1677:src/hswm/cells/adaptive_runtime.py",
+        "kg://fixture/sym:Concept:hswm",
+        "https://example.invalid/development-context",
+        "kg://fixture/sym:Concept:hswm-development-reference-contract"
+      ],
+      "resourceBudget": 4
+    },
+    "metrics": {
+      "declaredResources": 5,
+      "selectedResources": 3,
+      "uniqueLocators": 4,
+      "resolverCalls": 4,
+      "deniedLocators": 0
+    },
+    "resources": [
+      {
+        "name": "implementation",
+        "locator": "git://example.invalid/hswm@54550a331667b6e9779a30fb20c6de9eb97d1677:src/hswm/cells/adaptive_runtime.py",
+        "fingerprintScope": "RESOLVER_REPRESENTATION",
+        "status": "RESOLVES",
+        "resolution": {
+          "locator": {
+            "kind": "git_repo",
+            "repo": "example.invalid/hswm",
+            "commit": "54550a331667b6e9779a30fb20c6de9eb97d1677",
+            "path": "src/hswm/cells/adaptive_runtime.py"
+          },
+          "resolvedLocator": "git://example.invalid/hswm@54550a331667b6e9779a30fb20c6de9eb97d1677:src/hswm/cells/adaptive_runtime.py",
+          "contentHash": "b20edc140c20a675dee9cd13b9dceb48745725e7afd825a709fba92a8abf6fb8",
+          "resolvedAt": "2026-09-08T12:00:00.000Z",
+          "guaranteeLevel": "pure",
+          "matchCount": 1
+        },
+        "issue": null
+      },
+      {
+        "name": "concept",
+        "locator": "kg://fixture/sym:Concept:hswm",
+        "fingerprintScope": "KG_METADATA",
+        "status": "RESOLVES",
+        "resolution": {
+          "locator": {
+            "kind": "kg",
+            "source": "fixture",
+            "uid": "sym:Concept:hswm"
+          },
+          "resolvedLocator": "kg://fixture/sym:Concept:hswm",
+          "contentHash": "5217e85602c44d787aeca6bb51eec5bad12d7efbee287b929a1ab4d0756a63f4",
+          "resolvedAt": "2026-09-08T12:00:00.000Z",
+          "guaranteeLevel": "pure",
+          "matchCount": 1
+        },
+        "issue": null
+      },
+      {
+        "name": "context",
+        "locator": "https://example.invalid/development-context",
+        "fingerprintScope": "RESOLVER_REPRESENTATION",
+        "status": "RESOLVES",
+        "resolution": {
+          "locator": {
+            "kind": "url",
+            "href": "https://example.invalid/development-context"
+          },
+          "resolvedLocator": "https://example.invalid/development-context",
+          "contentHash": "76493c5b2cc661464a1799f59c802c3be9227afa25a25e99099d706eb1c1ae22",
+          "resolvedAt": "2026-09-08T12:00:00.000Z",
+          "guaranteeLevel": "pure",
+          "matchCount": 1
+        },
+        "issue": null
+      }
+    ],
+    "groundings": [
+      {
+        "name": "documents",
+        "locator": "kg://fixture/sym:Concept:hswm-development-reference-contract",
+        "fingerprintScope": "KG_METADATA",
+        "status": "RESOLVES",
+        "resolution": {
+          "locator": {
+            "kind": "kg",
+            "source": "fixture",
+            "uid": "sym:Concept:hswm-development-reference-contract"
+          },
+          "resolvedLocator": "kg://fixture/sym:Concept:hswm-development-reference-contract",
+          "contentHash": "5123ba14a6bca135c633b52db208ef8d330e542d49bc121ae7eb1b39998ce6bf",
+          "resolvedAt": "2026-09-08T12:00:00.000Z",
+          "guaranteeLevel": "pure",
+          "matchCount": 1
+        },
+        "issue": null
+      }
+    ],
+    "meanings": [
+      {
+        "name": "documents",
+        "digest": "sha256:1a8a76bf206b540c0bcbc9da78f5f2fe3ec8421a174cf038bc64715f45867b15",
+        "definition": {
+          "name": "documents",
+          "roles": [
+            {
+              "name": "code",
+              "kind": "git_repo"
+            },
+            {
+              "name": "target",
+              "kind": "kg"
+            },
+            {
+              "name": "context",
+              "kind": "url"
+            }
+          ],
+          "description": "개발 참조의 구현·대상·적용 문맥을 함께 지정한다",
+          "grounded": {
+            "kind": "kg",
+            "source": "fixture",
+            "uid": "sym:Concept:hswm-development-reference-contract"
+          },
+          "contract": {
+            "scope": "HSWM 개발 참조의 구현·대상·문맥 및 선언된 계약 근거",
+            "checks": [
+              {
+                "name": "development_reference",
+                "evidenceRoles": [
+                  "code",
+                  "target",
+                  "context"
+                ],
+                "description": "구현·대상·문맥의 선언된 참조가 함께 관측 가능한지 확인한다"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "links": [
+      {
+        "name": "development",
+        "meaning": "documents",
+        "participants": [
+          {
+            "role": "code",
+            "resource": "implementation"
+          },
+          {
+            "role": "target",
+            "resource": "concept"
+          },
+          {
+            "role": "context",
+            "resource": "context"
+          }
+        ],
+        "meaningDigest": "sha256:1a8a76bf206b540c0bcbc9da78f5f2fe3ec8421a174cf038bc64715f45867b15",
+        "contractDigest": "sha256:c1f463e8992be4a0269df15f86d6ba7168b4df239c2d23204d9eca3a5b3b99a1",
+        "resourcesResolve": true,
+        "semanticTruth": "NOT_EVALUATED",
+        "verification": [
+          {
+            "name": "development_reference",
+            "evidenceRoles": [
+              "code",
+              "target",
+              "context"
+            ],
+            "description": "구현·대상·문맥의 선언된 참조가 함께 관측 가능한지 확인한다",
+            "scope": "HSWM 개발 참조의 구현·대상·문맥 및 선언된 계약 근거",
+            "evidence": [
+              {
+                "role": "code",
+                "resource": "implementation"
+              },
+              {
+                "role": "target",
+                "resource": "concept"
+              },
+              {
+                "role": "context",
+                "resource": "context"
+              }
+            ],
+            "evidenceAvailable": true,
+            "status": "NOT_EXECUTED"
+          }
+        ]
+      }
+    ],
+    "semanticTruth": "NOT_EVALUATED",
+    "observationDigest": "sha256:16e4641096d1c3f075ecbc56f069a134625d4b47227b21dd8ea6d16d4fcf9ff0"
+  },
+  "policy": {
+    "schema_version": "hswm-usl-observation-policy/v2",
+    "namespace": "hswm.usl.development.example",
+    "plan_digest": "e372f1a87a75f600aa761ae6fe83040ff86db57c731bca5f369100e600e642ba",
+    "usl_plan_digest": "sha256:351eeec78bafec123620fef13c20cbbe4298f4a1d95c1cfe8bba1c15fb962b0d",
+    "source_digest": "sha256:1165418567d68f1ebbe6c6ac400f006a81e41d01666af835c6b68c36eb68e270",
+    "max_age_seconds": 120,
+    "bindings": [
+      {
+        "link": "development",
+        "role": "usl",
+        "field": "references_resolve"
+      }
+    ],
+    "resources": [
+      {
+        "name": "implementation",
+        "content_hash": "b20edc140c20a675dee9cd13b9dceb48745725e7afd825a709fba92a8abf6fb8",
+        "resolved_locator": "git://example.invalid/hswm@54550a331667b6e9779a30fb20c6de9eb97d1677:src/hswm/cells/adaptive_runtime.py"
+      },
+      {
+        "name": "concept",
+        "content_hash": "5217e85602c44d787aeca6bb51eec5bad12d7efbee287b929a1ab4d0756a63f4",
+        "resolved_locator": "kg://fixture/sym:Concept:hswm"
+      },
+      {
+        "name": "context",
+        "content_hash": "76493c5b2cc661464a1799f59c802c3be9227afa25a25e99099d706eb1c1ae22",
+        "resolved_locator": "https://example.invalid/development-context"
+      },
+      {
+        "name": "meaning:documents",
+        "content_hash": "5123ba14a6bca135c633b52db208ef8d330e542d49bc121ae7eb1b39998ce6bf",
+        "resolved_locator": "kg://fixture/sym:Concept:hswm-development-reference-contract"
+      }
+    ]
+  },
+  "preview": {
+    "domain": [
+      {
+        "role": "usl",
+        "field": "references_resolve",
+        "values": [
+          false,
+          true
+        ]
+      }
+    ],
+    "relation": {
+      "uid": "hswm-usl-development-reference",
+      "revision": "r1",
+      "ast": {
+        "op": "eq",
+        "left": {
+          "role": "usl",
+          "field": "references_resolve"
+        },
+        "right": true
+      },
+      "source": "authored:development-reference-policy"
+    },
+    "action": "inspect-development-references",
+    "checks": {
+      "scope": "hswm.usl.development.example",
+      "expected_scope": "hswm.usl.development.example",
+      "revision": "authored-observation-r1",
+      "expected_revision": "authored-observation-r1",
+      "now": 1788868860,
+      "allowed_reads": [
+        [
+          "usl",
+          "references_resolve"
+        ]
+      ],
+      "permitted": [
+        "inspect-development-references",
+        "OBSERVE"
+      ],
+      "available": [
+        "inspect-development-references",
+        "OBSERVE"
+      ],
+      "costs": {
+        "inspect-development-references": 1,
+        "OBSERVE": 1
+      },
+      "budget": 2,
+      "source": "authored:usl-adapter-fixture"
+    }
+  }
+}

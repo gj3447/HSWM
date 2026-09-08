@@ -161,7 +161,7 @@ export interface ArgvProcessMainSpec<E> {
   /** Stable stderr prefix; omit to write each described failure line alone. */
   readonly refusalPrefix?: string
   /** The program: argv after the node and script entries -> the exact stdout text. */
-  readonly program: (argv: ReadonlyArray<string>) => Effect.Effect<string, E, PosixFileSystem | BoundedSubprocess>
+  readonly program: (argv: ReadonlyArray<string>) => Effect.Effect<string | ProcessReply, E, PosixFileSystem | BoundedSubprocess>
   /** Render an expected failure as one stderr line (without the prefix). */
   readonly describeFailure: (error: E) => string
   /** Render a defect from its first pretty-printed line; defaults to `defect: <line>`. */
@@ -169,6 +169,12 @@ export interface ArgvProcessMainSpec<E> {
   /** Exit codes for expected failures and defects; default 2 and 3 as for stdin processes. */
   readonly failureExitCode?: number
   readonly defectExitCode?: number
+}
+
+/** A completed command can report a nonzero task status without inventing a process failure. */
+export interface ProcessReply {
+  readonly stdout: string
+  readonly exitCode: number
 }
 
 /**
@@ -183,9 +189,9 @@ export const runArgvProcessMain = <E>(
   services: Layer.Layer<PosixFileSystem | BoundedSubprocess> = NodePosixServicesLive
 ): Promise<number> => {
   const program = Effect.gen(function* () {
-    const text = yield* spec.program(argv)
-    yield* io.writeStdout(text)
-    return 0
+    const reply = yield* spec.program(argv)
+    yield* io.writeStdout(typeof reply === "string" ? reply : reply.stdout)
+    return typeof reply === "string" ? 0 : reply.exitCode
   }).pipe(Effect.provide(services))
   return Effect.runPromiseExit(program).then((exit) =>
     settleExit(io, {

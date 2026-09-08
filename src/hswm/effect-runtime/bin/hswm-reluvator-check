@@ -1,0 +1,3 @@
+#!/bin/sh
+hswm_script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+exec node "$hswm_script_dir/../dist/reluvator-check-process.js" "$@"

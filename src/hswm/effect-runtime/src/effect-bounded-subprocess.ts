@@ -20,6 +20,8 @@ export interface SubprocessCommand {
   readonly timeoutMs: number
   readonly maximumOutputBytes: number
   readonly stdin?: Uint8Array
+  /** Isolate and terminate the whole POSIX process group for effectful tool cells. */
+  readonly killProcessGroup?: boolean
 }
 
 export interface SubprocessObservation {
@@ -51,11 +53,16 @@ const observeWithNode = (command: SubprocessCommand): Effect.Effect<SubprocessOb
     const progress = { outputBytes: 0, timedOut: false, outputTruncated: false, completed: false, terminating: false }
     let timeout: NodeJS.Timeout | undefined
     let forceKill: NodeJS.Timeout | undefined
-    const finish = (exitCode: number | null, signal: string | null, launchError: string | null): void => {
+    let groupProbe: NodeJS.Timeout | undefined
+    let pendingFinish: readonly [number | null, string | null, string | null] | undefined
+    const terminationWaiters: Array<() => void> = []
+    const complete = (exitCode: number | null, signal: string | null, launchError: string | null): void => {
       if (progress.completed) return
       progress.completed = true
       if (timeout !== undefined) clearTimeout(timeout)
       if (forceKill !== undefined) clearTimeout(forceKill)
+      if (groupProbe !== undefined) clearTimeout(groupProbe)
+      for (const waiter of terminationWaiters) waiter()
       resume(Effect.succeed(Object.freeze({
         exitCode, signal, timedOut: progress.timedOut, outputTruncated: progress.outputTruncated, launchError,
         stdout: Uint8Array.from(Buffer.concat(stdout)), stderr: Uint8Array.from(Buffer.concat(stderr))
@@ -70,18 +77,45 @@ const observeWithNode = (command: SubprocessCommand): Effect.Effect<SubprocessOb
     try {
       child = spawn(executable, rest, {
         cwd: command.cwd, env: command.environment, shell: false,
-        stdio: [command.stdin === undefined ? "ignore" : "pipe", "pipe", "pipe"]
+        stdio: [command.stdin === undefined ? "ignore" : "pipe", "pipe", "pipe"],
+        detached: command.killProcessGroup === true
       })
     } catch (cause) {
-      finish(null, null, cause instanceof Error ? cause.name : "SPAWN_FAILED")
+      complete(null, null, cause instanceof Error ? cause.name : "SPAWN_FAILED")
       return
+    }
+    const groupIsLive = (): boolean => {
+      if (child.pid === undefined) return false
+      try { process.kill(-child.pid, 0); return true } catch { return false }
+    }
+    const probeForGroupExit = (): void => {
+      if (progress.completed || command.killProcessGroup !== true) return
+      if (pendingFinish === undefined || groupIsLive()) {
+        groupProbe = setTimeout(probeForGroupExit, 10)
+        return
+      }
+      complete(...pendingFinish)
+    }
+    const finish = (exitCode: number | null, signal: string | null, launchError: string | null): void => {
+      if (progress.completed) return
+      if (command.killProcessGroup === true && progress.terminating) {
+        pendingFinish = [exitCode, signal, launchError]
+        return
+      }
+      complete(exitCode, signal, launchError)
     }
     const terminate = (): void => {
       if (progress.terminating) return
       progress.terminating = true
-      child.kill("SIGTERM")
-      forceKill = setTimeout(() => child.kill("SIGKILL"), 1_000)
-      forceKill.unref()
+      const kill = (signal: NodeJS.Signals): void => {
+        if (command.killProcessGroup === true && child.pid !== undefined) {
+          try { process.kill(-child.pid, signal) } catch { /* An exited group needs no further signal. */ }
+        } else {
+          child.kill(signal)
+        }
+      }
+      kill("SIGTERM")
+      forceKill = setTimeout(() => { kill("SIGKILL"); forceKill = undefined; probeForGroupExit() }, 1_000)
     }
     const append = (chunks: Array<Buffer>, chunk: Buffer): void => {
       const available = command.maximumOutputBytes - progress.outputBytes
@@ -101,7 +135,12 @@ const observeWithNode = (command: SubprocessCommand): Effect.Effect<SubprocessOb
       child.stdin.on("error", () => undefined)
       child.stdin.end(Buffer.from(command.stdin))
     }
-    return Effect.sync(() => { if (!progress.completed) terminate() })
+    return Effect.async<void>((done) => {
+      if (progress.completed) { done(Effect.void); return Effect.void }
+      terminationWaiters.push(() => done(Effect.void))
+      terminate()
+      return Effect.void
+    })
   })
 
 const nodeBoundedSubprocess: BoundedSubprocessShape = {

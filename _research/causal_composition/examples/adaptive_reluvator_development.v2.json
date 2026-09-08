@@ -1,0 +1,130 @@
+{
+  "schema_version": "hswm-adaptive-program/v1",
+  "graph_id": "hswm-reluvator-delltower-development-feedback-v2",
+  "root": "developer",
+  "context_domain": {
+    "focus": [
+      "contracts",
+      "mesh"
+    ],
+    "stage": [
+      "development",
+      "regression"
+    ]
+  },
+  "cells": [
+    {
+      "cell_id": "developer",
+      "kind": "router",
+      "owner": "delltower:development:reluvator",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1"
+    },
+    {
+      "cell_id": "contracts",
+      "kind": "command",
+      "owner": "delltower:development:reluvator",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1",
+      "argv": [
+        "hswm-reluvator-check",
+        "contracts"
+      ]
+    },
+    {
+      "cell_id": "mesh",
+      "kind": "command",
+      "owner": "delltower:development:reluvator",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1",
+      "argv": [
+        "hswm-reluvator-check",
+        "mesh"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "uid": "contracts-focused",
+      "source": "developer",
+      "members": [
+        "contracts"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 40,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "contracts"
+      }
+    },
+    {
+      "uid": "contracts-extended",
+      "source": "developer",
+      "members": [
+        "contracts",
+        "mesh"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 80,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "contracts"
+      }
+    },
+    {
+      "uid": "mesh-focused",
+      "source": "developer",
+      "members": [
+        "mesh"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 40,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "mesh"
+      }
+    },
+    {
+      "uid": "mesh-extended",
+      "source": "developer",
+      "members": [
+        "mesh",
+        "contracts"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 80,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "mesh"
+      }
+    }
+  ]
+}

@@ -14,6 +14,9 @@ continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 �
 시작한다. `hswm-live`는 허용된 cell을 재귀 실행하고, 명시한 검사 결과나 사용자 feedback으로
 관계의 문맥 가중치를 지속 갱신한다. 혼합 결과에서 조건·read-set의 국소 분화도 실행한다.
 이 로컬 prototype은 개발 데이터를 쌓는 경로이며 기존 과학적 판정을 승계하지 않는다.
+2026-09-08의 [함수형 TypeScript/Effect 실행 경로](docs/operations/HSWM_NATIVE_EFFECT_ADAPTIVE_RUNTIME_2026-09-08.md)는
+LLM 호출·관측 평가·명시적 피드백·관계 갱신·다음 선택을 네이티브 CLI와 SQLite로 연결한다.
+활성 `hswm-live`·`hswm-dev`는 이 경로를 사용하고 Python 실험·과거 증거는 보존한다.
 실제 메이플리니지·버엑시와 수풀림 개발에서는
 [`hswm-dev 실사용 안내`](docs/operations/HSWM_GAME_SUPULLIM_DOGFOOD_2026-09-07.md)의
 프로젝트별 검사·명시적 피드백 경로를 사용한다.

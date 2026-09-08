@@ -63,11 +63,11 @@ flowchart LR
 
 | 그래프의 책임 | 실제 표현·동작 | 구현 |
 | --- | --- | --- |
-| cell·역할·관계 | `cell`, `relation`, source/member/input 참조, typed port 합성 | [adaptive_runtime.py](src/hswm/cells/adaptive_runtime.py) |
-| 문맥·조건 | 선언한 field의 유한 domain, guard AST의 검증·평가 | [conditional.py](src/hswm/cells/conditional.py) |
-| 관계의 학습 상태 | 문맥 feature·pair interaction, logistic 계수, 관측 비용 | [adaptive_learning.py](src/hswm/cells/adaptive_learning.py) |
-| 사건·변경 계보 | immutable atom revision, digest, consumed/produced 기록, CAS | [adaptive_store.py](src/hswm/cells/adaptive_store.py) |
-| 외부 실행 | literal argv 또는 typed model port, 제한된 출력·시간 | [adaptive_executor.py](src/hswm/cells/adaptive_executor.py) |
+| cell·역할·관계 | `cell`, `relation`, source/member/input 참조, typed port 합성 | [adaptive-runtime.ts](src/hswm/effect-runtime/src/adaptive-runtime.ts) |
+| 문맥·조건 | 선언한 field의 유한 domain, guard AST의 검증·평가 | [adaptive-domain.ts](src/hswm/effect-runtime/src/adaptive-domain.ts) |
+| 관계의 학습 상태 | 순수 함수의 문맥 feature·pair interaction, logistic 계수, 관측 비용 | [adaptive-domain.ts](src/hswm/effect-runtime/src/adaptive-domain.ts) |
+| 사건·변경 계보 | immutable atom revision, digest, consumed/produced 기록, CAS | [adaptive-store.ts](src/hswm/effect-runtime/src/adaptive-store.ts) |
+| 외부 실행 | Effect 서비스의 literal argv 또는 HTTP LLM 호출, 제한된 출력·시간 | [adaptive-executor.ts](src/hswm/effect-runtime/src/adaptive-executor.ts) |
 | `owner_{σ,t}` | schema가 정한 atom별 책임 주소 하나; 다른 역할은 typed reference로 표현 | [single-owner 기준](docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md) |
 
 The canonical state is **not partitioned a priori into `H/W/A/F/Π`**;
@@ -94,24 +94,28 @@ LLM의 정상 응답 자체에는 보상을 주지 않습니다. 서로 다른 �
 
 ## 빠른 실행
 
-Python 3.11+와 `uv`가 준비된 일반 Linux checkout 기준입니다.
-기본 예제는 로컬 개발 명령을 실행합니다. LLM cell은 endpoint를 별도로 설정해 사용합니다.
+Node.js **24.13.0**, npm **11.6.2** 기준입니다. 활성 `hswm-live`·`hswm-dev`는
+TypeScript/Effect로 실행되며 Python 인터프리터를 필요로 하지 않습니다.
+Python 연구·비교 구현과 과거 증거는 보존합니다. 프로젝트가 선택한 외부 검사 명령 자체가
+Python이면 그 검사에는 Python·`uv`가 필요합니다.
 
 ```bash
 git clone https://github.com/gj3447/HSWM.git
 cd HSWM
-uv sync --locked --extra dev
-
-hswm_program=_research/causal_composition/examples/adaptive_developer.v1.json
-uv run --locked hswm-live --program "$hswm_program" run \
-  --context '{"area":"cells","stage":"development"}' \
-  --task '적응 런타임의 문법과 핵심 회귀 검사'
-uv run --locked hswm-live --program "$hswm_program" status
+npm --prefix src/hswm/effect-runtime ci --ignore-scripts
+npm --prefix src/hswm/effect-runtime run build
+export PATH="$PWD/src/hswm/effect-runtime/bin:$PATH"
+hswm-dev hswm plan --focus runtime
+hswm-dev hswm run --focus runtime --task '네이티브 TS 런타임 회귀 검사'
+hswm-dev hswm status
 ```
 
-이 예제는 `developer → [syntax, checks]`와 하위 검사 관계를 실행합니다.
-선택·결과·계수는 `.hswm-local/runtime.sqlite3`에 저장되고 다음 호출에서 이어집니다.
+이 예제는 네이티브 TS 런타임 검사를 실행합니다. 결과를 검토한 뒤 출력된 episode ID로
+`hswm-dev hswm feedback --episode <ID> --success true --source 'agent(codex): 구체적인 유용성 판단'`을
+기록합니다. 선택·결과·계수는 `.hswm-local/projects/`의 SQLite에 저장되고 다음 호출에서 이어집니다.
 로컬 상태와 출력은 Git에서 제외합니다. 서버나 별도 그래프 DB 설치는 기본 실행에 필요하지 않습니다.
+LLM manifest, 기존 Python 이력 호환 범위와 함수형 경계는
+[네이티브 런타임 안내](docs/operations/HSWM_NATIVE_EFFECT_ADAPTIVE_RUNTIME_2026-09-08.md)를 참조합니다.
 
 | CLI | 용도 |
 | --- | --- |
@@ -133,7 +137,7 @@ HSWM 자체 개발도 같은 CLI를 사용합니다. 변경 분야별 검사를 
 
 ```bash
 # HSWM 루트
-uv run --locked hswm-dev hswm run --focus ontology --task 'KG 변경사항 확인'
+src/hswm/effect-runtime/bin/hswm-dev hswm run --focus ontology --task 'KG 변경사항 확인'
 ```
 
 활발히 개발 중인 두 게임을 GAME 쪽 우선 대상으로 둡니다.
@@ -141,15 +145,15 @@ uv run --locked hswm-dev hswm run --focus ontology --task 'KG 변경사항 확�
 
 ```bash
 # GAME 루트
-uv run --locked --project ../HSWM hswm-dev maplelineage run \
+../HSWM/src/hswm/effect-runtime/bin/hswm-dev maplelineage run \
   --focus combat --task '메이플리니지 전투 변경사항 확인'
 
 # 버엑시 독립 레포 루트 (~/CD/virtual-excel-simulator)
-uv run --locked --project ../HSWM hswm-dev 버엑시 run \
+../HSWM/src/hswm/effect-runtime/bin/hswm-dev 버엑시 run \
   --focus career --task '버엑시 Studio/장면 변경사항 확인'
 
 # SUPULLIM 루트
-uv run --locked --project ../HSWM hswm-dev supullim run \
+../HSWM/src/hswm/effect-runtime/bin/hswm-dev supullim run \
   --focus soop --task '수풀림 SOOP 연동 변경사항 확인'
 ```
 

@@ -49,6 +49,11 @@
   from the HSWM checkout to select and record the relevant `runtime`, `usl`,
   `ontology`, or `docs` checks. Keep the task, selected relation, result, and
   explicit usefulness feedback in the workspace's local state.
+  The active CLI is native TypeScript/Effect: build with
+  `npm --prefix src/hswm/effect-runtime run build` and invoke
+  `src/hswm/effect-runtime/bin/hswm-dev`; Python adaptive modules remain
+  historical comparison tools. New runtime work uses pure immutable domain
+  functions and typed Effect services for I/O.
 - Record agent usefulness judgments with an `agent(<tool>):...` source and
   distinguish them from user feedback. A passing check is not automatically
   useful, and self-checking does not establish HSWM efficacy or causal credit.

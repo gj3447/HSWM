@@ -1,5 +1,14 @@
 # HSWM Effect runtime
 
+The active local adaptive CLI now lives here: `npm run build`, then
+`bin/hswm-dev hswm plan --focus runtime` or `bin/hswm-live --help`.
+`adaptive-domain.ts` holds pure selection, prediction, immutable model updates,
+and finite guard proposals; Effect services own HTTP, SQLite and bounded process
+execution. These native entries do not start a Python interpreter.
+See [native runtime scope and migration](../../../docs/operations/HSWM_NATIVE_EFFECT_ADAPTIVE_RUNTIME_2026-09-08.md).
+This addition does not promote the scientific or canonical migration gates in
+the historical 2026-09-06 record below.
+
 > **Ontology boundary (2026-08-26):** `hswm-core-ontology*.ts` and the fixed
 > `H/W/A/F/Pi` responsibility bundle are retained v1 compatibility artifacts.
 > They are not the current HSWM ontology and must not be used as a fixed owner

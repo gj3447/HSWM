@@ -1,0 +1,528 @@
+{
+  "oracle": {
+    "context": {
+      "market_open": true,
+      "stock": "ALPHA"
+    },
+    "episode_id": "legacy-episode",
+    "exploration": 0,
+    "force_route": "stock-open",
+    "result_status": "SUCCEEDED",
+    "result_success": true,
+    "task": "legacy task"
+  },
+  "program": {
+    "cells": [
+      {
+        "cell_id": "root",
+        "input_type": "task",
+        "kind": "router",
+        "output_type": "result",
+        "owner": "oracle"
+      },
+      {
+        "argv": [
+          "/usr/bin/true"
+        ],
+        "cell_id": "true",
+        "input_type": "task",
+        "kind": "command",
+        "outcome": "exit_code",
+        "output_type": "result",
+        "owner": "oracle"
+      }
+    ],
+    "context_domain": {
+      "market_open": [
+        false,
+        true
+      ],
+      "stock": [
+        "ALPHA",
+        "BETA"
+      ]
+    },
+    "graph_id": "native-migration-stock-v1",
+    "relations": [
+      {
+        "cost_hint": 1,
+        "guard": {
+          "left": {
+            "field": "market_open",
+            "role": "context"
+          },
+          "op": "eq",
+          "right": true
+        },
+        "members": [
+          "true"
+        ],
+        "reads": [
+          "stock",
+          "market_open"
+        ],
+        "source": "root",
+        "uid": "stock-open"
+      }
+    ],
+    "root": "root",
+    "schema_version": "hswm-adaptive-program/v1"
+  },
+  "tables": {
+    "adaptive_atoms": {
+      "columns": [
+        "graph_id",
+        "uid",
+        "revision",
+        "kind",
+        "owner",
+        "refs_json",
+        "payload_json",
+        "atom_digest",
+        "event_id"
+      ],
+      "rows": [
+        [
+          "native-migration-stock-v1",
+          "cell:root",
+          1,
+          "cell",
+          "oracle",
+          {
+            "base64": "W10="
+          },
+          {
+            "base64": "eyJjZWxsX2lkIjoicm9vdCIsImlucHV0X3R5cGUiOiJ0YXNrIiwia2luZCI6InJvdXRlciIsIm91dHB1dF90eXBlIjoicmVzdWx0Iiwib3duZXIiOiJvcmFjbGUifQ=="
+          },
+          "fb57130c676f88616575e8e7f6642fe504dc5075a58de217e80f02684bac2d13",
+          null
+        ],
+        [
+          "native-migration-stock-v1",
+          "cell:true",
+          1,
+          "cell",
+          "oracle",
+          {
+            "base64": "W10="
+          },
+          {
+            "base64": "eyJhcmd2IjpbIi91c3IvYmluL3RydWUiXSwiY2VsbF9pZCI6InRydWUiLCJpbnB1dF90eXBlIjoidGFzayIsImtpbmQiOiJjb21tYW5kIiwib3V0Y29tZSI6ImV4aXRfY29kZSIsIm91dHB1dF90eXBlIjoicmVzdWx0Iiwib3duZXIiOiJvcmFjbGUifQ=="
+          },
+          "b3c53001dcc9e0e79fd869ad86d68d0df7f1e18ff2f1522bc7138f1ae227d202",
+          null
+        ],
+        [
+          "native-migration-stock-v1",
+          "field:stock",
+          1,
+          "context_field",
+          "oracle",
+          {
+            "base64": "W10="
+          },
+          {
+            "base64": "eyJuYW1lIjoic3RvY2siLCJ2YWx1ZXMiOlsiQUxQSEEiLCJCRVRBIl19"
+          },
+          "f346b48515524d0d6dd70dc34603f45d871ad8fd5b23e0eeb1b346d5e609934b",
+          null
+        ],
+        [
+          "native-migration-stock-v1",
+          "field:market_open",
+          1,
+          "context_field",
+          "oracle",
+          {
+            "base64": "W10="
+          },
+          {
+            "base64": "eyJuYW1lIjoibWFya2V0X29wZW4iLCJ2YWx1ZXMiOltmYWxzZSx0cnVlXX0="
+          },
+          "ed3ede1bbf6abf66570de184f5d6c197d108026a230133bc4f553df84576283b",
+          null
+        ],
+        [
+          "native-migration-stock-v1",
+          "relation:stock-open",
+          1,
+          "relation",
+          "oracle",
+          {
+            "base64": "W3sicm9sZSI6InNvdXJjZSIsInVpZCI6ImNlbGw6cm9vdCJ9LHsicm9sZSI6Im1lbWJlcjowIiwidWlkIjoiY2VsbDp0cnVlIn0seyJyb2xlIjoiaW5wdXQ6c3RvY2siLCJ1aWQiOiJmaWVsZDpzdG9jayJ9LHsicm9sZSI6ImlucHV0Om1hcmtldF9vcGVuIiwidWlkIjoiZmllbGQ6bWFya2V0X29wZW4ifV0="
+          },
+          {
+            "base64": "eyJhY3RpdmUiOnRydWUsImNvc3RfaGludCI6MSwiZXhhbXBsZXMiOltdLCJndWFyZCI6eyJsZWZ0Ijp7ImZpZWxkIjoibWFya2V0X29wZW4iLCJyb2xlIjoiY29udGV4dCJ9LCJvcCI6ImVxIiwicmlnaHQiOnRydWV9LCJtZW1iZXJzIjpbInRydWUiXSwibW9kZWwiOnsiY29udGV4dF9hdHRlbXB0cyI6e30sImNvc3RfbWVhbiI6MC4wLCJmZWF0dXJlcyI6eyJiaWFzIjowLjB9LCJuIjowLCJzY2hlbWFfdmVyc2lvbiI6Imhzd20tYWRhcHRpdmUtbG9jYWwvdjEiLCJzY29wZSI6Ik9CU0VSVkFUSU9OQUxfTE9DQUxfQURBUFRBVElPTiJ9LCJwYXJlbnRfcmVsYXRpb24iOm51bGwsInJlYWRzIjpbInN0b2NrIiwibWFya2V0X29wZW4iXSwic291cmNlIjoicm9vdCIsInVpZCI6InN0b2NrLW9wZW4ifQ=="
+          },
+          "0cd4bd1bd26d65abb19932768adf6ee5aabe370815fe501c237b24f32d36667c",
+          null
+        ],
+        [
+          "native-migration-stock-v1",
+          "runtime:lease",
+          1,
+          "lease",
+          "oracle",
+          {
+            "base64": "W10="
+          },
+          {
+            "base64": "eyJlcGlzb2RlIjpudWxsfQ=="
+          },
+          "c88b37633ad8cb81c262c1e074bdec31ebe505fe1b8aa775916b8818f83c694d",
+          null
+        ],
+        [
+          "native-migration-stock-v1",
+          "runtime:lease",
+          2,
+          "lease",
+          "oracle",
+          {
+            "base64": "W10="
+          },
+          {
+            "base64": "eyJlcGlzb2RlIjoibGVnYWN5LWVwaXNvZGUifQ=="
+          },
+          "1b01d634668e75d7631143d9051bf8bf8b02a6db6e7888b808da90539d455075",
+          "legacy-episode:begin"
+        ],
+        [
+          "native-migration-stock-v1",
+          "episode:legacy-episode",
+          1,
+          "episode",
+          "oracle",
+          {
+            "base64": "W3sicm9sZSI6InJvb3QiLCJ1aWQiOiJjZWxsOnJvb3QifV0="
+          },
+          {
+            "base64": "eyJlcGlzb2RlX2lkIjoibGVnYWN5LWVwaXNvZGUiLCJpbml0aWFsX3BsYW4iOnsiY2hvaWNlcyI6W3siZGlnZXN0IjoiMGNkNGJkMWJkMjZkNjVhYmIxOTkzMjc2OGFkZjZlZTVhYWJlMzcwODE1ZmU1MDFjMjM3YjI0ZjMyZDM2NjY3YyIsIm1lbWJlcnMiOlsidHJ1ZSJdLCJvYnNlcnZhdGlvbnMiOjAsInByZWRpY3RlZF9zdWNjZXNzIjowLjUsInJlYWRzIjpbInN0b2NrIiwibWFya2V0X29wZW4iXSwicmV2aXNpb24iOjEsInNjb3JlIjowLjQ4MzMzMzMzMzMzMzMzMzM0LCJ1aWQiOiJyZWxhdGlvbjpzdG9jay1vcGVuIn1dLCJjbGFpbSI6IkxPQ0FMX0FEQVBUQVRJT05fTk9UX0NBVVNBTF9JREVOVElGSUNBVElPTiIsInNlbGVjdGVkIjp7ImRpZ2VzdCI6IjBjZDRiZDFiZDI2ZDY1YWJiMTk5MzI3NjhhZGY2ZWU1YWFiZTM3MDgxNWZlNTAxYzIzN2IyNGYzMmQzNjY2N2MiLCJtZW1iZXJzIjpbInRydWUiXSwib2JzZXJ2YXRpb25zIjowLCJwcmVkaWN0ZWRfc3VjY2VzcyI6MC41LCJyZWFkcyI6WyJzdG9jayIsIm1hcmtldF9vcGVuIl0sInJldmlzaW9uIjoxLCJzY29yZSI6MC40ODMzMzMzMzMzMzMzMzMzNCwidWlkIjoicmVsYXRpb246c3RvY2stb3BlbiJ9LCJzZWxlY3Rpb24iOiJFWFBMSUNJVF9ST1VURSIsInN0YXR1cyI6IlBMQU5ORUQifSwiaW50ZW50Ijp7ImFsbG93ZWQiOlsicm9vdCIsInRydWUiXSwiYnVkZ2V0Ijo2MCwiY29udGV4dCI6eyJtYXJrZXRfb3BlbiI6dHJ1ZSwic3RvY2siOiJBTFBIQSJ9LCJleHBsb3JhdGlvbiI6MCwiZm9yY2Vfcm91dGUiOiJzdG9jay1vcGVuIiwibGVhcm4iOnRydWUsIm1hbmlmZXN0IjoiZDNiNDIyMTMyYjVkZWJlYjYzYTU2MDVmNmNhOWIzOTM1MTc0NjQzOTIzMzMzMGY4MzMzZmJkNzViNDBjNWYxYiIsIm1heF9jYWxscyI6MTYsInRhc2siOiJsZWdhY3kgdGFzayIsIndvcmtzcGFjZSI6Ii90bXAifSwiaW50ZW50X2RpZ2VzdCI6IjRhMmVkNWYyN2Q4MDI0MmE2NDg4MWFkODBmNzc0MjJkNDc1MDJhMGYyMGEzMDY1NjQ2ZTEwNTc3ZWFjMGJhN2MiLCJzdGFydGVkX2F0IjoxNzg4ODQ1ODkzLjc1MjE2MjIsInN0YXR1cyI6IlJVTk5JTkcifQ=="
+          },
+          "3ace4941d1374228e314882e81e45611dae3042ada515f5239cda04d3cac98d9",
+          "legacy-episode:begin"
+        ],
+        [
+          "native-migration-stock-v1",
+          "trajectory:legacy-episode:0",
+          1,
+          "trajectory",
+          "oracle",
+          {
+            "base64": "W3sicm9sZSI6ImVwaXNvZGUiLCJ1aWQiOiJlcGlzb2RlOmxlZ2FjeS1lcGlzb2RlIn0seyJyb2xlIjoiY2VsbCIsInVpZCI6ImNlbGw6cm9vdCJ9LHsicm9sZSI6InNlbGVjdGVkX3JlbGF0aW9uIiwidWlkIjoicmVsYXRpb246c3RvY2stb3BlbiJ9XQ=="
+          },
+          {
+            "base64": "eyJjb250ZXh0Ijp7Im1hcmtldF9vcGVuIjp0cnVlLCJzdG9jayI6IkFMUEhBIn0sImVwaXNvZGVfaWQiOiJsZWdhY3ktZXBpc29kZSIsImlucHV0X2RpZ2VzdCI6ImY1OWI4ZmU0ODRhNjE4NWIyMTJiMmYyMTJhNTZlZWE1NmNiOWJjNjg5YzZhZGU5MGZiNTg3YjljZjg2MmUwNDkiLCJwbGFuIjp7ImNob2ljZXMiOlt7ImRpZ2VzdCI6IjBjZDRiZDFiZDI2ZDY1YWJiMTk5MzI3NjhhZGY2ZWU1YWFiZTM3MDgxNWZlNTAxYzIzN2IyNGYzMmQzNjY2N2MiLCJtZW1iZXJzIjpbInRydWUiXSwib2JzZXJ2YXRpb25zIjowLCJwcmVkaWN0ZWRfc3VjY2VzcyI6MC41LCJyZWFkcyI6WyJzdG9jayIsIm1hcmtldF9vcGVuIl0sInJldmlzaW9uIjoxLCJzY29yZSI6MC40ODMzMzMzMzI0NzM5Mjk1LCJ1aWQiOiJyZWxhdGlvbjpzdG9jay1vcGVuIn1dLCJjbGFpbSI6IkxPQ0FMX0FEQVBUQVRJT05fTk9UX0NBVVNBTF9JREVOVElGSUNBVElPTiIsInNlbGVjdGVkIjp7ImRpZ2VzdCI6IjBjZDRiZDFiZDI2ZDY1YWJiMTk5MzI3NjhhZGY2ZWU1YWFiZTM3MDgxNWZlNTAxYzIzN2IyNGYzMmQzNjY2N2MiLCJtZW1iZXJzIjpbInRydWUiXSwib2JzZXJ2YXRpb25zIjowLCJwcmVkaWN0ZWRfc3VjY2VzcyI6MC41LCJyZWFkcyI6WyJzdG9jayIsIm1hcmtldF9vcGVuIl0sInJldmlzaW9uIjoxLCJzY29yZSI6MC40ODMzMzMzMzI0NzM5Mjk1LCJ1aWQiOiJyZWxhdGlvbjpzdG9jay1vcGVuIn0sInNlbGVjdGlvbiI6IkVYUExJQ0lUX1JPVVRFIiwic3RhdHVzIjoiUExBTk5FRCJ9LCJzdGF0dXMiOiJSVU5OSU5HIn0="
+          },
+          "ec323e75e3ffec5d56d631d3fa811b0b22850a990f3f87e10bf89ebc804d7d8e",
+          "trajectory:legacy-episode:0:begin"
+        ],
+        [
+          "native-migration-stock-v1",
+          "trajectory:legacy-episode:1",
+          1,
+          "trajectory",
+          "oracle",
+          {
+            "base64": "W3sicm9sZSI6ImVwaXNvZGUiLCJ1aWQiOiJlcGlzb2RlOmxlZ2FjeS1lcGlzb2RlIn0seyJyb2xlIjoiY2VsbCIsInVpZCI6ImNlbGw6dHJ1ZSJ9LHsicm9sZSI6InBhcmVudCIsInVpZCI6InRyYWplY3Rvcnk6bGVnYWN5LWVwaXNvZGU6MCJ9XQ=="
+          },
+          {
+            "base64": "eyJjb250ZXh0Ijp7Im1hcmtldF9vcGVuIjp0cnVlLCJzdG9jayI6IkFMUEhBIn0sImVwaXNvZGVfaWQiOiJsZWdhY3ktZXBpc29kZSIsImlucHV0X2RpZ2VzdCI6ImY1OWI4ZmU0ODRhNjE4NWIyMTJiMmYyMTJhNTZlZWE1NmNiOWJjNjg5YzZhZGU5MGZiNTg3YjljZjg2MmUwNDkiLCJwbGFuIjpudWxsLCJzdGF0dXMiOiJSVU5OSU5HIn0="
+          },
+          "b164001aed73cdfd4819e75a2d1c6b48f4c58890334766538621edccfd8ecc86",
+          "trajectory:legacy-episode:1:begin"
+        ],
+        [
+          "native-migration-stock-v1",
+          "trajectory:legacy-episode:1",
+          2,
+          "trajectory",
+          "oracle",
+          {
+            "base64": "W3sicm9sZSI6ImVwaXNvZGUiLCJ1aWQiOiJlcGlzb2RlOmxlZ2FjeS1lcGlzb2RlIn0seyJyb2xlIjoiY2VsbCIsInVpZCI6ImNlbGw6dHJ1ZSJ9LHsicm9sZSI6InBhcmVudCIsInVpZCI6InRyYWplY3Rvcnk6bGVnYWN5LWVwaXNvZGU6MCJ9XQ=="
+          },
+          {
+            "base64": "eyJjb250ZXh0Ijp7Im1hcmtldF9vcGVuIjp0cnVlLCJzdG9jayI6IkFMUEhBIn0sImVwaXNvZGVfaWQiOiJsZWdhY3ktZXBpc29kZSIsImlucHV0X2RpZ2VzdCI6ImY1OWI4ZmU0ODRhNjE4NWIyMTJiMmYyMTJhNTZlZWE1NmNiOWJjNjg5YzZhZGU5MGZiNTg3YjljZjg2MmUwNDkiLCJwbGFuIjpudWxsLCJyZXN1bHQiOnsiZHVyYXRpb25fc2Vjb25kcyI6MC4wMDEwNjg5MjMxNTY3MDg0NzksIm1ldGFkYXRhIjp7ImtpbmQiOiJjb21tYW5kIiwib3V0cHV0X2J5dGVzX3NlZW4iOjAsIm91dHB1dF90cnVuY2F0ZWQiOmZhbHNlLCJyZXR1cm5jb2RlIjowfSwib3V0cHV0IjoiIiwib3V0cHV0X2RpZ2VzdCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJzdGF0dXMiOiJTVUNDRUVERUQiLCJzdWNjZXNzIjp0cnVlfSwic3RhdHVzIjoiU1VDQ0VFREVEIn0="
+          },
+          "2bdbd272cd5d9304e0d4efde57e450c3b7f3ef5f8636b01e6b1e9033ea0a4962",
+          "trajectory:legacy-episode:1:complete"
+        ],
+        [
+          "native-migration-stock-v1",
+          "trajectory:legacy-episode:0",
+          2,
+          "trajectory",
+          "oracle",
+          {
+            "base64": "W3sicm9sZSI6ImVwaXNvZGUiLCJ1aWQiOiJlcGlzb2RlOmxlZ2FjeS1lcGlzb2RlIn0seyJyb2xlIjoiY2VsbCIsInVpZCI6ImNlbGw6cm9vdCJ9LHsicm9sZSI6InNlbGVjdGVkX3JlbGF0aW9uIiwidWlkIjoicmVsYXRpb246c3RvY2stb3BlbiJ9XQ=="
+          },
+          {
+            "base64": "eyJjb250ZXh0Ijp7Im1hcmtldF9vcGVuIjp0cnVlLCJzdG9jayI6IkFMUEhBIn0sImVwaXNvZGVfaWQiOiJsZWdhY3ktZXBpc29kZSIsImlucHV0X2RpZ2VzdCI6ImY1OWI4ZmU0ODRhNjE4NWIyMTJiMmYyMTJhNTZlZWE1NmNiOWJjNjg5YzZhZGU5MGZiNTg3YjljZjg2MmUwNDkiLCJsZWFybmluZ19zdGF0dXMiOiJXRUlHSFRTX1VQREFURUQiLCJwbGFuIjp7ImNob2ljZXMiOlt7ImRpZ2VzdCI6IjBjZDRiZDFiZDI2ZDY1YWJiMTk5MzI3NjhhZGY2ZWU1YWFiZTM3MDgxNWZlNTAxYzIzN2IyNGYzMmQzNjY2N2MiLCJtZW1iZXJzIjpbInRydWUiXSwib2JzZXJ2YXRpb25zIjowLCJwcmVkaWN0ZWRfc3VjY2VzcyI6MC41LCJyZWFkcyI6WyJzdG9jayIsIm1hcmtldF9vcGVuIl0sInJldmlzaW9uIjoxLCJzY29yZSI6MC40ODMzMzMzMzI0NzM5Mjk1LCJ1aWQiOiJyZWxhdGlvbjpzdG9jay1vcGVuIn1dLCJjbGFpbSI6IkxPQ0FMX0FEQVBUQVRJT05fTk9UX0NBVVNBTF9JREVOVElGSUNBVElPTiIsInNlbGVjdGVkIjp7ImRpZ2VzdCI6IjBjZDRiZDFiZDI2ZDY1YWJiMTk5MzI3NjhhZGY2ZWU1YWFiZTM3MDgxNWZlNTAxYzIzN2IyNGYzMmQzNjY2N2MiLCJtZW1iZXJzIjpbInRydWUiXSwib2JzZXJ2YXRpb25zIjowLCJwcmVkaWN0ZWRfc3VjY2VzcyI6MC41LCJyZWFkcyI6WyJzdG9jayIsIm1hcmtldF9vcGVuIl0sInJldmlzaW9uIjoxLCJzY29yZSI6MC40ODMzMzMzMzI0NzM5Mjk1LCJ1aWQiOiJyZWxhdGlvbjpzdG9jay1vcGVuIn0sInNlbGVjdGlvbiI6IkVYUExJQ0lUX1JPVVRFIiwic3RhdHVzIjoiUExBTk5FRCJ9LCJyZXN1bHQiOnsiZHVyYXRpb25fc2Vjb25kcyI6MC4wMDIzNDk3MDIxNzU3MDY2MjUsIm1ldGFkYXRhIjp7ImtpbmQiOiJjb21tYW5kIiwib3V0cHV0X2J5dGVzX3NlZW4iOjAsIm91dHB1dF90cnVuY2F0ZWQiOmZhbHNlLCJyZXR1cm5jb2RlIjowfSwib3V0cHV0IjoiIiwib3V0cHV0X2RpZ2VzdCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJzdGF0dXMiOiJTVUNDRUVERUQiLCJzdWNjZXNzIjp0cnVlfSwic3RhdHVzIjoiU1VDQ0VFREVEIn0="
+          },
+          "42ff5ff45d1611c8a57a2bd81d208de4a13663a539e9b1707b55baaaf04542a3",
+          "trajectory:legacy-episode:0:complete"
+        ],
+        [
+          "native-migration-stock-v1",
+          "trajectory:legacy-episode:0:outcome",
+          1,
+          "outcome",
+          "oracle",
+          {
+            "base64": "W3sicm9sZSI6InRyYWplY3RvcnkiLCJ1aWQiOiJ0cmFqZWN0b3J5OmxlZ2FjeS1lcGlzb2RlOjAifV0="
+          },
+          {
+            "base64": "eyJjcmVkaXQiOiJVTklERU5USUZJRURfQ0FVU0FMX0NSRURJVCIsImR1cmF0aW9uX3NlY29uZHMiOjAuMDAyMzQ5NzAyMTc1NzA2NjI1LCJvdXRwdXRfZGlnZXN0IjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsInNvdXJjZSI6IkxPQ0FMX0VYRUNVVE9SX0NPTVBPU0lURV9SRVRVUk4iLCJzdWNjZXNzIjp0cnVlfQ=="
+          },
+          "9bdaafa15febcfc783b74b67729610321a33c3c2c63b3797e60a37fc443de27c",
+          "trajectory:legacy-episode:0:complete"
+        ],
+        [
+          "native-migration-stock-v1",
+          "relation:stock-open",
+          2,
+          "relation",
+          "oracle",
+          {
+            "base64": "W3sicm9sZSI6InNvdXJjZSIsInVpZCI6ImNlbGw6cm9vdCJ9LHsicm9sZSI6Im1lbWJlcjowIiwidWlkIjoiY2VsbDp0cnVlIn0seyJyb2xlIjoiaW5wdXQ6c3RvY2siLCJ1aWQiOiJmaWVsZDpzdG9jayJ9LHsicm9sZSI6ImlucHV0Om1hcmtldF9vcGVuIiwidWlkIjoiZmllbGQ6bWFya2V0X29wZW4ifSx7InJvbGUiOiJsYXN0X291dGNvbWUiLCJ1aWQiOiJ0cmFqZWN0b3J5OmxlZ2FjeS1lcGlzb2RlOjA6b3V0Y29tZSJ9XQ=="
+          },
+          {
+            "base64": "eyJhY3RpdmUiOnRydWUsImNvc3RfaGludCI6MSwiZXhhbXBsZXMiOlt7ImNvbnRleHQiOnsibWFya2V0X29wZW4iOnRydWUsInN0b2NrIjoiQUxQSEEifSwic291cmNlIjoidHJhamVjdG9yeTpsZWdhY3ktZXBpc29kZTowOm91dGNvbWUiLCJzdWNjZXNzIjp0cnVlfV0sImd1YXJkIjp7ImxlZnQiOnsiZmllbGQiOiJtYXJrZXRfb3BlbiIsInJvbGUiOiJjb250ZXh0In0sIm9wIjoiZXEiLCJyaWdodCI6dHJ1ZX0sImxhc3Rfb3V0Y29tZSI6InRyYWplY3Rvcnk6bGVnYWN5LWVwaXNvZGU6MDpvdXRjb21lIiwibWVtYmVycyI6WyJ0cnVlIl0sIm1vZGVsIjp7ImNvbnRleHRfYXR0ZW1wdHMiOnsiY29udGV4dDp2YWx1ZTptYXJrZXRfb3Blbjpib29sOnRydWV8dmFsdWU6c3RvY2s6c3RyOlwiQUxQSEFcInxwYWlyOnZhbHVlOm1hcmtldF9vcGVuOmJvb2w6dHJ1ZSZ2YWx1ZTpzdG9jazpzdHI6XCJBTFBIQVwiIjoxfSwiY29zdF9tZWFuIjowLjAwMjM0OTcwMjE3NTcwNjYyNSwiZmVhdHVyZXMiOnsiYmlhcyI6MC4yLCJwYWlyOnZhbHVlOm1hcmtldF9vcGVuOmJvb2w6dHJ1ZSZ2YWx1ZTpzdG9jazpzdHI6XCJBTFBIQVwiIjowLjIsInZhbHVlOm1hcmtldF9vcGVuOmJvb2w6dHJ1ZSI6MC4yLCJ2YWx1ZTpzdG9jazpzdHI6XCJBTFBIQVwiIjowLjJ9LCJuIjoxLCJzY2hlbWFfdmVyc2lvbiI6Imhzd20tYWRhcHRpdmUtbG9jYWwvdjEiLCJzY29wZSI6Ik9CU0VSVkFUSU9OQUxfTE9DQUxfQURBUFRBVElPTiJ9LCJwYXJlbnRfcmVsYXRpb24iOm51bGwsInJlYWRzIjpbInN0b2NrIiwibWFya2V0X29wZW4iXSwic291cmNlIjoicm9vdCIsInVpZCI6InN0b2NrLW9wZW4ifQ=="
+          },
+          "3cf16ec1ef10eee81cecd42f69e245af68dec20bbf1453cfe47d77964436b976",
+          "trajectory:legacy-episode:0:complete"
+        ],
+        [
+          "native-migration-stock-v1",
+          "episode:legacy-episode",
+          2,
+          "episode",
+          "oracle",
+          {
+            "base64": "W3sicm9sZSI6InJvb3QiLCJ1aWQiOiJjZWxsOnJvb3QifV0="
+          },
+          {
+            "base64": "eyJjbGFpbSI6IkVYUEVSSU1FTlRBTF9VU0VfTk9UX0VGRklDQUNZX1BST09GIiwiZXBpc29kZV9pZCI6ImxlZ2FjeS1lcGlzb2RlIiwiaW5pdGlhbF9wbGFuIjp7ImNob2ljZXMiOlt7ImRpZ2VzdCI6IjBjZDRiZDFiZDI2ZDY1YWJiMTk5MzI3NjhhZGY2ZWU1YWFiZTM3MDgxNWZlNTAxYzIzN2IyNGYzMmQzNjY2N2MiLCJtZW1iZXJzIjpbInRydWUiXSwib2JzZXJ2YXRpb25zIjowLCJwcmVkaWN0ZWRfc3VjY2VzcyI6MC41LCJyZWFkcyI6WyJzdG9jayIsIm1hcmtldF9vcGVuIl0sInJldmlzaW9uIjoxLCJzY29yZSI6MC40ODMzMzMzMzMzMzMzMzMzNCwidWlkIjoicmVsYXRpb246c3RvY2stb3BlbiJ9XSwiY2xhaW0iOiJMT0NBTF9BREFQVEFUSU9OX05PVF9DQVVTQUxfSURFTlRJRklDQVRJT04iLCJzZWxlY3RlZCI6eyJkaWdlc3QiOiIwY2Q0YmQxYmQyNmQ2NWFiYjE5OTMyNzY4YWRmNmVlNWFhYmUzNzA4MTVmZTUwMWMyMzdiMjRmMzJkMzY2NjdjIiwibWVtYmVycyI6WyJ0cnVlIl0sIm9ic2VydmF0aW9ucyI6MCwicHJlZGljdGVkX3N1Y2Nlc3MiOjAuNSwicmVhZHMiOlsic3RvY2siLCJtYXJrZXRfb3BlbiJdLCJyZXZpc2lvbiI6MSwic2NvcmUiOjAuNDgzMzMzMzMzMzMzMzMzMzQsInVpZCI6InJlbGF0aW9uOnN0b2NrLW9wZW4ifSwic2VsZWN0aW9uIjoiRVhQTElDSVRfUk9VVEUiLCJzdGF0dXMiOiJQTEFOTkVEIn0sImludGVudCI6eyJhbGxvd2VkIjpbInJvb3QiLCJ0cnVlIl0sImJ1ZGdldCI6NjAsImNvbnRleHQiOnsibWFya2V0X29wZW4iOnRydWUsInN0b2NrIjoiQUxQSEEifSwiZXhwbG9yYXRpb24iOjAsImZvcmNlX3JvdXRlIjoic3RvY2stb3BlbiIsImxlYXJuIjp0cnVlLCJtYW5pZmVzdCI6ImQzYjQyMjEzMmI1ZGViZWI2M2E1NjA1ZjZjYTliMzkzNTE3NDY0MzkyMzMzMzBmODMzM2ZiZDc1YjQwYzVmMWIiLCJtYXhfY2FsbHMiOjE2LCJ0YXNrIjoibGVnYWN5IHRhc2siLCJ3b3Jrc3BhY2UiOiIvdG1wIn0sImludGVudF9kaWdlc3QiOiI0YTJlZDVmMjdkODAyNDJhNjQ4ODFhZDgwZjc3NDIyZDQ3NTAyYTBmMjBhMzA2NTY0NmUxMDU3N2VhYzBiYTdjIiwibGVhZl9jYWxscyI6MSwibGVhcm5pbmciOiJPQlNFUlZBVElPTkFMX0xPQ0FMX0FEQVBUQVRJT04iLCJyZXN1bHQiOnsiZHVyYXRpb25fc2Vjb25kcyI6MC4wMDIzNDk3MDIxNzU3MDY2MjUsIm1ldGFkYXRhIjp7ImtpbmQiOiJjb21tYW5kIiwib3V0cHV0X2J5dGVzX3NlZW4iOjAsIm91dHB1dF90cnVuY2F0ZWQiOmZhbHNlLCJyZXR1cm5jb2RlIjowfSwib3V0cHV0IjoiIiwib3V0cHV0X2RpZ2VzdCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJzdGF0dXMiOiJTVUNDRUVERUQiLCJzdWNjZXNzIjp0cnVlfSwic3RhcnRlZF9hdCI6MTc4ODg0NTg5My43NTIxNjIyLCJzdGF0dXMiOiJTVUNDRUVERUQiLCJ2aXNpdHMiOlt7ImNlbGwiOiJ0cnVlIiwicmVsYXRpb24iOm51bGwsInN0YXR1cyI6IlNVQ0NFRURFRCIsInN1Y2Nlc3MiOnRydWUsInRyYWplY3RvcnkiOiJ0cmFqZWN0b3J5OmxlZ2FjeS1lcGlzb2RlOjEifSx7ImNlbGwiOiJyb290IiwicmVsYXRpb24iOiJyZWxhdGlvbjpzdG9jay1vcGVuIiwic3RhdHVzIjoiU1VDQ0VFREVEIiwic3VjY2VzcyI6dHJ1ZSwidHJhamVjdG9yeSI6InRyYWplY3Rvcnk6bGVnYWN5LWVwaXNvZGU6MCJ9XX0="
+          },
+          "9f3f13dbec7f4ee9bafd3465d831915b8d582d2faf88c6bce649622c22041948",
+          "legacy-episode:complete"
+        ],
+        [
+          "native-migration-stock-v1",
+          "runtime:lease",
+          3,
+          "lease",
+          "oracle",
+          {
+            "base64": "W10="
+          },
+          {
+            "base64": "eyJlcGlzb2RlIjpudWxsfQ=="
+          },
+          "c88b37633ad8cb81c262c1e074bdec31ebe505fe1b8aa775916b8818f83c694d",
+          "legacy-episode:complete"
+        ]
+      ]
+    },
+    "adaptive_events": {
+      "columns": [
+        "graph_id",
+        "event_id",
+        "intent_digest",
+        "source_json",
+        "consumed_json",
+        "produced_json"
+      ],
+      "rows": [
+        [
+          "native-migration-stock-v1",
+          "legacy-episode:begin",
+          "662975e7d92012befcd1f2bb0d46c6dd8bcacbbefe64887f9798d3ae881bd726",
+          {
+            "base64": "eyJpbnRlbnRfZGlnZXN0IjoiNGEyZWQ1ZjI3ZDgwMjQyYTY0ODgxYWQ4MGY3NzQyMmQ0NzUwMmEwZjIwYTMwNjU2NDZlMTA1NzdlYWMwYmE3YyIsImtpbmQiOiJSVU5fUkVRVUVTVCJ9"
+          },
+          {
+            "base64": "W3siZGlnZXN0IjoiYzg4YjM3NjMzYWQ4Y2I4MWMyNjJjMWUwNzRiZGVjMzFlYmU1MDVmZTFiOGFhNzc1OTE2Yjg4MThmODNjNjk0ZCIsImtpbmQiOiJsZWFzZSIsIm93bmVyIjoib3JhY2xlIiwicmV2aXNpb24iOjEsInVpZCI6InJ1bnRpbWU6bGVhc2UifV0="
+          },
+          {
+            "base64": "W3siZGlnZXN0IjoiMWIwMWQ2MzQ2NjhlNzVkNzYzMTE0M2Q5MDUxYmY4YmY4YjAyYTZkYjZlNzg4OGI4MDhkYTkwNTM5ZDQ1NTA3NSIsImtpbmQiOiJsZWFzZSIsIm93bmVyIjoib3JhY2xlIiwicmV2aXNpb24iOjIsInVpZCI6InJ1bnRpbWU6bGVhc2UifSx7ImRpZ2VzdCI6IjNhY2U0OTQxZDEzNzQyMjhlMzE0ODgyZTgxZTQ1NjExZGFlMzA0MmFkYTUxNWY1MjM5Y2RhMDRkM2NhYzk4ZDkiLCJraW5kIjoiZXBpc29kZSIsIm93bmVyIjoib3JhY2xlIiwicmV2aXNpb24iOjEsInVpZCI6ImVwaXNvZGU6bGVnYWN5LWVwaXNvZGUifV0="
+          }
+        ],
+        [
+          "native-migration-stock-v1",
+          "trajectory:legacy-episode:0:begin",
+          "2ec138407429676855351968bee911a532f6ca7a818d159f5a1f52c5694e1650",
+          {
+            "base64": "eyJlcGlzb2RlIjoibGVnYWN5LWVwaXNvZGUiLCJraW5kIjoiUFJFX0VGRkVDVF9UUkFDRSJ9"
+          },
+          {
+            "base64": "W10="
+          },
+          {
+            "base64": "W3siZGlnZXN0IjoiZWMzMjNlNzVlM2ZmZWM1ZDU2ZDYzMWQzZmE4MTFiMGIyMjg1MGE5OTBmM2Y4N2UxMGJmODllYmM4MDRkN2Q4ZSIsImtpbmQiOiJ0cmFqZWN0b3J5Iiwib3duZXIiOiJvcmFjbGUiLCJyZXZpc2lvbiI6MSwidWlkIjoidHJhamVjdG9yeTpsZWdhY3ktZXBpc29kZTowIn1d"
+          }
+        ],
+        [
+          "native-migration-stock-v1",
+          "trajectory:legacy-episode:1:begin",
+          "1c1e9167f7920a98935a25ebb0109d722c9bf86551a650a4fbe24493a3d58fa6",
+          {
+            "base64": "eyJlcGlzb2RlIjoibGVnYWN5LWVwaXNvZGUiLCJraW5kIjoiUFJFX0VGRkVDVF9UUkFDRSJ9"
+          },
+          {
+            "base64": "W10="
+          },
+          {
+            "base64": "W3siZGlnZXN0IjoiYjE2NDAwMWFlZDczY2RmZDQ4MTllNzVhMmQxYzZiNDhmNGM1ODg5MDMzNDc2NjUzODYyMWVkY2NmZDhlY2M4NiIsImtpbmQiOiJ0cmFqZWN0b3J5Iiwib3duZXIiOiJvcmFjbGUiLCJyZXZpc2lvbiI6MSwidWlkIjoidHJhamVjdG9yeTpsZWdhY3ktZXBpc29kZToxIn1d"
+          }
+        ],
+        [
+          "native-migration-stock-v1",
+          "trajectory:legacy-episode:1:complete",
+          "da77e59923e97768418e86e3ad17be267cf31141920afa71ffbc3588a190be79",
+          {
+            "base64": "eyJlcGlzb2RlIjoibGVnYWN5LWVwaXNvZGUiLCJraW5kIjoiT0JTRVJWRURfRVhFQ1VUSU9OX1JFU1VMVCJ9"
+          },
+          {
+            "base64": "W3siZGlnZXN0IjoiYjE2NDAwMWFlZDczY2RmZDQ4MTllNzVhMmQxYzZiNDhmNGM1ODg5MDMzNDc2NjUzODYyMWVkY2NmZDhlY2M4NiIsImtpbmQiOiJ0cmFqZWN0b3J5Iiwib3duZXIiOiJvcmFjbGUiLCJyZXZpc2lvbiI6MSwidWlkIjoidHJhamVjdG9yeTpsZWdhY3ktZXBpc29kZToxIn1d"
+          },
+          {
+            "base64": "W3siZGlnZXN0IjoiMmJkYmQyNzJjZDVkOTMwNGUwZDRlZmRlNTdlNDUwYzNiN2YzZWY1Zjg2MzZiMDFlNmIxZTkwMzNlYTBhNDk2MiIsImtpbmQiOiJ0cmFqZWN0b3J5Iiwib3duZXIiOiJvcmFjbGUiLCJyZXZpc2lvbiI6MiwidWlkIjoidHJhamVjdG9yeTpsZWdhY3ktZXBpc29kZToxIn1d"
+          }
+        ],
+        [
+          "native-migration-stock-v1",
+          "trajectory:legacy-episode:0:complete",
+          "19c4e5e6557451c795c542e32b82b46e589f8c58db8b13dcf14ab69a9340c1cb",
+          {
+            "base64": "eyJlcGlzb2RlIjoibGVnYWN5LWVwaXNvZGUiLCJraW5kIjoiT0JTRVJWRURfRVhFQ1VUSU9OX1JFU1VMVCJ9"
+          },
+          {
+            "base64": "W3siZGlnZXN0IjoiMGNkNGJkMWJkMjZkNjVhYmIxOTkzMjc2OGFkZjZlZTVhYWJlMzcwODE1ZmU1MDFjMjM3YjI0ZjMyZDM2NjY3YyIsImtpbmQiOiJyZWxhdGlvbiIsIm93bmVyIjoib3JhY2xlIiwicmV2aXNpb24iOjEsInVpZCI6InJlbGF0aW9uOnN0b2NrLW9wZW4ifSx7ImRpZ2VzdCI6ImVjMzIzZTc1ZTNmZmVjNWQ1NmQ2MzFkM2ZhODExYjBiMjI4NTBhOTkwZjNmODdlMTBiZjg5ZWJjODA0ZDdkOGUiLCJraW5kIjoidHJhamVjdG9yeSIsIm93bmVyIjoib3JhY2xlIiwicmV2aXNpb24iOjEsInVpZCI6InRyYWplY3Rvcnk6bGVnYWN5LWVwaXNvZGU6MCJ9XQ=="
+          },
+          {
+            "base64": "W3siZGlnZXN0IjoiNDJmZjVmZjQ1ZDE2MTFjOGE1N2EyYmQ4MWQyMDhkZTRhMTM2NjNhNTM5ZTliMTcwN2I1NWJhYWFmMDQ1NDJhMyIsImtpbmQiOiJ0cmFqZWN0b3J5Iiwib3duZXIiOiJvcmFjbGUiLCJyZXZpc2lvbiI6MiwidWlkIjoidHJhamVjdG9yeTpsZWdhY3ktZXBpc29kZTowIn0seyJkaWdlc3QiOiI5YmRhYWZhMTVmZWJjZmM3ODNiNzRiNjc3Mjk2MTAzMjFhMzNjM2MyYzYzYjM3OTdlNjBhMzdmYzQ0M2RlMjdjIiwia2luZCI6Im91dGNvbWUiLCJvd25lciI6Im9yYWNsZSIsInJldmlzaW9uIjoxLCJ1aWQiOiJ0cmFqZWN0b3J5OmxlZ2FjeS1lcGlzb2RlOjA6b3V0Y29tZSJ9LHsiZGlnZXN0IjoiM2NmMTZlYzFlZjEwZWVlODFjZWNkNDJmNjllMjQ1YWY2OGRlYzIwYmJmMTQ1M2NmZTQ3ZDc3OTY0NDM2Yjk3NiIsImtpbmQiOiJyZWxhdGlvbiIsIm93bmVyIjoib3JhY2xlIiwicmV2aXNpb24iOjIsInVpZCI6InJlbGF0aW9uOnN0b2NrLW9wZW4ifV0="
+          }
+        ],
+        [
+          "native-migration-stock-v1",
+          "legacy-episode:complete",
+          "6647840108484071d3f71d1ecf8d0ae4c29f8c8255cf5e96f6b078d7bdb0f50f",
+          {
+            "base64": "eyJlcGlzb2RlIjoibGVnYWN5LWVwaXNvZGUiLCJraW5kIjoiRVBJU09ERV9DT01QTEVUSU9OIn0="
+          },
+          {
+            "base64": "W3siZGlnZXN0IjoiM2FjZTQ5NDFkMTM3NDIyOGUzMTQ4ODJlODFlNDU2MTFkYWUzMDQyYWRhNTE1ZjUyMzljZGEwNGQzY2FjOThkOSIsImtpbmQiOiJlcGlzb2RlIiwib3duZXIiOiJvcmFjbGUiLCJyZXZpc2lvbiI6MSwidWlkIjoiZXBpc29kZTpsZWdhY3ktZXBpc29kZSJ9LHsiZGlnZXN0IjoiMWIwMWQ2MzQ2NjhlNzVkNzYzMTE0M2Q5MDUxYmY4YmY4YjAyYTZkYjZlNzg4OGI4MDhkYTkwNTM5ZDQ1NTA3NSIsImtpbmQiOiJsZWFzZSIsIm93bmVyIjoib3JhY2xlIiwicmV2aXNpb24iOjIsInVpZCI6InJ1bnRpbWU6bGVhc2UifV0="
+          },
+          {
+            "base64": "W3siZGlnZXN0IjoiOWYzZjEzZGJlYzdmNGVlOWJhZmQzNDY1ZDgzMTkxNWI4ZDU4MmQyZmFmODhjNmJjZTY0OTYyMmMyMjA0MTk0OCIsImtpbmQiOiJlcGlzb2RlIiwib3duZXIiOiJvcmFjbGUiLCJyZXZpc2lvbiI6MiwidWlkIjoiZXBpc29kZTpsZWdhY3ktZXBpc29kZSJ9LHsiZGlnZXN0IjoiYzg4YjM3NjMzYWQ4Y2I4MWMyNjJjMWUwNzRiZGVjMzFlYmU1MDVmZTFiOGFhNzc1OTE2Yjg4MThmODNjNjk0ZCIsImtpbmQiOiJsZWFzZSIsIm93bmVyIjoib3JhY2xlIiwicmV2aXNpb24iOjMsInVpZCI6InJ1bnRpbWU6bGVhc2UifV0="
+          }
+        ]
+      ]
+    },
+    "adaptive_graphs": {
+      "columns": [
+        "graph_id",
+        "manifest_digest"
+      ],
+      "rows": [
+        [
+          "native-migration-stock-v1",
+          "d3b422132b5debeb63a5605f6ca9b39351746439233330f8333fbd75b40c5f1b"
+        ]
+      ]
+    },
+    "adaptive_heads": {
+      "columns": [
+        "graph_id",
+        "uid",
+        "revision",
+        "kind",
+        "owner",
+        "atom_digest"
+      ],
+      "rows": [
+        [
+          "native-migration-stock-v1",
+          "cell:root",
+          1,
+          "cell",
+          "oracle",
+          "fb57130c676f88616575e8e7f6642fe504dc5075a58de217e80f02684bac2d13"
+        ],
+        [
+          "native-migration-stock-v1",
+          "cell:true",
+          1,
+          "cell",
+          "oracle",
+          "b3c53001dcc9e0e79fd869ad86d68d0df7f1e18ff2f1522bc7138f1ae227d202"
+        ],
+        [
+          "native-migration-stock-v1",
+          "field:stock",
+          1,
+          "context_field",
+          "oracle",
+          "f346b48515524d0d6dd70dc34603f45d871ad8fd5b23e0eeb1b346d5e609934b"
+        ],
+        [
+          "native-migration-stock-v1",
+          "field:market_open",
+          1,
+          "context_field",
+          "oracle",
+          "ed3ede1bbf6abf66570de184f5d6c197d108026a230133bc4f553df84576283b"
+        ],
+        [
+          "native-migration-stock-v1",
+          "relation:stock-open",
+          2,
+          "relation",
+          "oracle",
+          "3cf16ec1ef10eee81cecd42f69e245af68dec20bbf1453cfe47d77964436b976"
+        ],
+        [
+          "native-migration-stock-v1",
+          "runtime:lease",
+          3,
+          "lease",
+          "oracle",
+          "c88b37633ad8cb81c262c1e074bdec31ebe505fe1b8aa775916b8818f83c694d"
+        ],
+        [
+          "native-migration-stock-v1",
+          "episode:legacy-episode",
+          2,
+          "episode",
+          "oracle",
+          "9f3f13dbec7f4ee9bafd3465d831915b8d582d2faf88c6bce649622c22041948"
+        ],
+        [
+          "native-migration-stock-v1",
+          "trajectory:legacy-episode:0",
+          2,
+          "trajectory",
+          "oracle",
+          "42ff5ff45d1611c8a57a2bd81d208de4a13663a539e9b1707b55baaaf04542a3"
+        ],
+        [
+          "native-migration-stock-v1",
+          "trajectory:legacy-episode:1",
+          2,
+          "trajectory",
+          "oracle",
+          "2bdbd272cd5d9304e0d4efde57e450c3b7f3ef5f8636b01e6b1e9033ea0a4962"
+        ],
+        [
+          "native-migration-stock-v1",
+          "trajectory:legacy-episode:0:outcome",
+          1,
+          "outcome",
+          "oracle",
+          "9bdaafa15febcfc783b74b67729610321a33c3c2c63b3797e60a37fc443de27c"
+        ]
+      ]
+    }
+  }
+}

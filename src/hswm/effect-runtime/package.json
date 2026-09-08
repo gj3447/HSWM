@@ -9,7 +9,10 @@
     "hswm-hypergraph-projection": "./dist/hypergraph-projection-process.js",
     "hswm-graph-loop-job": "./dist/canonical-atom-v2-graph-loop-job-process.js",
     "hswm-local-permit-commit": "./dist/canonical-atom-v2-local-permit-commit-process.js",
-    "hswm-g0-temporal-rehearsal-worker": "./dist/g0-occurrence-temporal-worker-process.js"
+    "hswm-g0-temporal-rehearsal-worker": "./dist/g0-occurrence-temporal-worker-process.js",
+    "hswm-live": "./dist/hswm-live-process.js",
+    "hswm-dev": "./dist/hswm-dev-process.js",
+    "hswm-reluvator-check": "./dist/reluvator-check-process.js"
   },
   "exports": {
     ".": {
@@ -35,11 +38,13 @@
     "projection:rehearsal": "node dist/hypergraph-projection-process.js --rehearsal",
     "build": "tsc -p tsconfig.build.json && tsc -p tsconfig.temporal-build.json",
     "build:dnrd": "tsc -p tsconfig.dnrd.json",
-    "check": "tsc --noEmit && tsc -p tsconfig.temporal.json && node scripts/lint-effect-boundary.mjs",
+    "check": "tsc --noEmit && tsc -p tsconfig.temporal.json && node scripts/lint-effect-boundary.mjs && npm run check:adaptive-functional",
     "lint:boundary": "node scripts/lint-effect-boundary.mjs",
     "test": "vitest run",
     "test:g0-temporal:integration": "HSWM_RUN_G0_TEMPORAL_INTEGRATION=1 vitest run test/g0-occurrence-temporal.integration.test.ts --maxWorkers=1",
-    "verify": "npm run check && npm run test && npm run build && npm run build:dnrd && npm pack --dry-run"
+    "verify": "npm run check && npm run test && npm run build && npm run build:dnrd && npm pack --dry-run",
+    "test:adaptive": "vitest run ../../../tests/effect-runtime/adaptive-",
+    "check:adaptive-functional": "node scripts/lint-adaptive-functional.mjs"
   },
   "dependencies": {
     "@temporalio/activity": "1.23.0",

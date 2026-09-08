@@ -129,6 +129,19 @@ def build_bundle(repo_root: Path = ROOT) -> dict:
            '이 스냅샷의 소스 commit. 사용자 원문, 자체 개발 profile, 실행 요약과 오늘 작업 목록을 고정한다.',
            'COMMITTED_SOURCE_LINEAGE_NOT_EFFICACY', [SELF_DOC, SELF_PROFILE, SELF_REPORT, 'AGENTS.md'],
            change_commit=commit, change_url='https://github.com/gj3447/HSWM/commit/'+commit)
+    record('self-implementation-commit', '3c8ed05 · HSWM 자체 개발 workflow 구현',
+           'IMPLEMENTATION_COMMIT', 'changes',
+           '자체 개발 profile, 사용자 원문, AGENTS 지침과 최초 관측을 추가한 선행 commit이다.',
+           'COMMITTED_SOURCE_LINEAGE_NOT_EFFICACY', [SELF_DOC, SELF_PROFILE, 'AGENTS.md'],
+           change_commit='3c8ed059e57b266be1b2aad8954766f1cb7ede70')
+    record('publication-preflight-fix', '오늘 작업 KG · 일반 산출물과 온톨로지 본체 구분',
+           'DATED_INTEGRATION_FINDING', 'reviews',
+           '첫 게시 시도는 일반 records JSON을 온톨로지 소유 bundle로 해석하는 preflight에서 '
+           '중단됐다. 파일을 docs/operations/artifacts로 옮기고 같은 owner preflight를 로컬 '
+           'validation에도 적용했다. 첫 시도는 bundle 노드를 생성하기 전에 종료됐다.',
+           'LOCAL_PATH_CLASSIFICATION_FIXED_BEFORE_PUBLICATION',
+           [RECORDS, SELF_REPORT, 'src/hswm/infrastructure/development_day_projection.py',
+            'src/hswm/infrastructure/kg_anchor_revisions.py'])
     record('self-profile', 'HSWM 자체 개발 profile · hswm-dev hswm', 'DEVELOPMENT_PROFILE', 'integration',
            'runtime/usl/ontology/docs의 집중·확장 검사를 기존 적응 런타임으로 실행한다. '
            'workspace 표식을 확인하며 테스트 exit code를 자동 유용성 보상으로 바꾸지 않는다.',

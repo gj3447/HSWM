@@ -24,8 +24,8 @@ ONTOLOGY_PATH = Path("ontology/identity/hswm_core/HSWM_DEVELOPMENT_DAY_2026-09-0
 BUNDLE_UID = "sym:AbstractNode:hswm-development-day-2026-09-08-v1"
 SCHEMA_VERSION = "hswm-development-day-ontology-v1"
 # Installed only after the reviewed source/document snapshot is committed.
-SOURCE_COMMIT = "3c8ed059e57b266be1b2aad8954766f1cb7ede70"
-REVIEWED_ARTIFACT_SHA256 = "ac9bc63f77671266db2e77e00033d86fb4772360bef4b674c8efbfcf8520df83"
+SOURCE_COMMIT = "d4fed000369f1b6545c505dd9505e7c9b3c41cf7"
+REVIEWED_ARTIFACT_SHA256 = "931f6a7bfe9fa60fc8c543c08d6b293d8e0d3c313f0820dc6effea66481acfd7"
 PRIMARY_SOURCE_PATH = "docs/canon/sources/USER_PRIMARY_HSWM_SELF_DEVELOPMENT_AND_DAILY_KG_2026-09-08.txt"
 USER_UID = "sym:AbstractNode:hswm-development-day-2026-09-08-user-request"
 OWNER = "hswm:development-day:2026-09-08"

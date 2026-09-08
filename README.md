@@ -186,6 +186,9 @@ uv run --locked --project ../HSWM hswm-dev supullim run \
 표의 링크는 설명에서 실제 계약·코드·결과로 내려가는 탐색 경로입니다.
 최근 구현·실사용 보고·README 개편의 출처와 남은 작업은
 [개발 작업 KG](docs/operations/HSWM_ADAPTIVE_DEVELOPMENT_WORK_KG_2026-09-08.md)에서 함께 조회합니다.
+USL 후속 검토·Reluvator 연결·HSWM 자체 개발은
+[오늘 작업 온톨로지](docs/operations/HSWM_DEVELOPMENT_DAY_KG_2026-09-08.md)에 별도 스냅샷으로 기록합니다.
+사용자 원문, 과거 결함의 수정 상태, 실제 실행 보고와 미완료 항목을 출처로 연결합니다.
 
 ```mermaid
 flowchart LR

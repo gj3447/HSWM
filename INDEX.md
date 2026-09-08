@@ -28,6 +28,9 @@ delltower의 등록 구성원 17개를 확인하고 `hswm-dev reluvator`로 중�
 [`적응 개발 작업 KG 2026-09-08`](docs/operations/HSWM_ADAPTIVE_DEVELOPMENT_WORK_KG_2026-09-08.md)에
 묶었다. 고정 Git commit의 코드·문서와 기존 조건부 계약·학습 계획·문헌 KG를 연결하며,
 최초 실행 보고를 현재 DB 상태나 HSWM 성능 우위로 승격하지 않는다.
+후속 [오늘 작업·자체 개발 KG](docs/operations/HSWM_DEVELOPMENT_DAY_KG_2026-09-08.md)는
+USL v1/v2·적대적 재검증·버엑시 v2·Reluvator·HSWM 자체 개발과 사용자 원문을 기록한다.
+기존 bundle은 보존하고 새 파일 출처·날짜 고정 보고로 연결한다.
 
 [`USL 어댑터와 적대적 검토 2026-09-08`](docs/research/HSWM_USL_ADAPTER_ADVERSARIAL_REVIEW_2026-09-08.md)는
 현재 USL language 0.1의 역할 있는 plan·관측을 HSWM의 Boolean 참조 관측과 조건 preview로

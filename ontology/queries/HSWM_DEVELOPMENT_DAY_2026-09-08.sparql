@@ -1,0 +1,41 @@
+# Q1: All 44 immutable source bindings in this dated snapshot.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?path ?commit ?sha256 WHERE {
+ ?n a role:SOURCE_ARTIFACT ; kbp:source_path ?path ; kbp:source_commit ?commit ; kbp:source_sha256 ?sha256 .
+} ORDER BY ?path
+
+# Q2: User instruction and its exact source; does not ratify implementation.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?name ?authority ?quote ?path ?sha256 WHERE {
+ ?n a role:USER_DIRECT_REQUEST ; kbp:name ?name ; kbp:authority_class ?authority ;
+ kbp:verbatim_text ?quote ; kbr:HAS_SOURCE ?s .
+ ?s kbp:source_path ?path ; kbp:source_sha256 ?sha256 .
+}
+
+# Q3: Two retested historical P2 findings and the still-open direct-projection P2.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?name ?status ?scope WHERE {
+ ?n kbp:severity "P2" ; kbp:name ?name ; kbp:status ?status ; kbp:description ?scope .
+} ORDER BY ?name
+
+# Q4: The 17 documented stack members; projected roles are not new ownership.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?component ?role ?scope WHERE {
+ ?n kbp:status "DOCUMENTED_PROJECTED_ROLE" ; kbp:component ?component ; kbp:role ?role ; kbp:description ?scope .
+} ORDER BY ?component
+
+# Q5: Four self-development runs; keep test scopes separate.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?name ?episode ?passed ?sha256 WHERE {
+ ?n kbp:name ?name ; kbp:reported_episode ?episode ; kbp:reported_test_pass_count ?passed ; kbp:output_sha256 ?sha256 .
+} ORDER BY ?name
+
+# Q6: Agent feedback changed an internal score, not a measured efficacy result.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?source ?before_revision ?after_revision ?before_score ?after_score ?pending_at_snapshot WHERE {
+ ?n kbp:feedback_source ?source ; kbp:before_revision ?before_revision ; kbp:after_revision ?after_revision ;
+ kbp:before_score ?before_score ; kbp:after_score ?after_score ; kbp:reported_pending_feedback ?pending_at_snapshot .
+}

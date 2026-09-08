@@ -1,0 +1,108 @@
+{
+  "schema_version": "hswm-usl-relation-instrument-receipt/v1",
+  "observed_on": "2026-09-08",
+  "source_commit": "7450aa1",
+  "authority": "SECONDARY_AI_LOCAL_INSTRUMENT_RESULT",
+  "status": "COMPLETED_INSTRUMENT_TRIAL",
+  "claim_ceiling": "AUTHORED_SYNTHETIC_TRANSPORT_AND_FINITE_DSL_QUALIFICATION_ONLY",
+  "all_attempts": [
+    {
+      "path": "results/raw/hswm_usl_relation_synthesis_2026-09-08/attempt-01.json",
+      "status": "COMPLETED_INSTRUMENT_TRIAL"
+    }
+  ],
+  "artifact_bindings": [
+    {
+      "path": "results/raw/hswm_usl_relation_synthesis_2026-09-08/attempt-01.json",
+      "sha256": "d1bfdd5846012c2f9b4649b2fd2b485e4f34f74f2f436e08d446679e1af7e6a0"
+    },
+    {
+      "path": "results/raw/hswm_usl_relation_synthesis_2026-09-08/attempt-01.json.candidate.json",
+      "sha256": "3a08b1862077124bb2459355ed70c4ce168afd81a93af1fd63ed4236d41d089d"
+    },
+    {
+      "path": "_research/causal_composition/relation_synthesis_usl_v1/protocol.v1.json",
+      "sha256": "3b160e38b57811dfcf1a8a36454da048145c49c42a72afc3de7598462426c095"
+    },
+    {
+      "path": "_research/causal_composition/relation_synthesis_usl_v1/source-pins.v1.json",
+      "sha256": "0f6856288ee24228a3b6aeaf1ffb5d86382b5606e24e2e0fa502ab4f215cdaea"
+    },
+    {
+      "path": "_research/causal_composition/relation_synthesis_usl_v1/run.mts",
+      "sha256": "d8de2529f520aec6884245cc0fef3a5d583e2899a2eab6fb2a912c33275fbd6f"
+    },
+    {
+      "path": "_research/causal_composition/relation_synthesis_usl_v1/fixtures.mts",
+      "sha256": "626cabaae217b1135ce4bd2cc07af3f20811efaa66439bb55080baaccd193ed5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/relation-program-research.ts",
+      "sha256": "afffed9362189183fe301b983b6b4c4bb27392deb53e4c99645184265355e916"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/usl-native-snapshot.ts",
+      "sha256": "2a2bb723b411387c6be5a80e1a334bde926d80d2b907feb04d30d11b5a14d5f7"
+    }
+  ],
+  "observations": {
+    "native_usl_equivalent": true,
+    "learned_program_depth": 3,
+    "candidate_count": 391,
+    "B": [
+      {
+        "arm": "USL_INDUCED_PROGRAM",
+        "correct": 12,
+        "total": 12
+      },
+      {
+        "arm": "NATIVE_INFORMATION_MATCHED_PROGRAM_INDUCTION",
+        "correct": 12,
+        "total": 12
+      },
+      {
+        "arm": "FIXED_ONE_HOP_LIBRARY",
+        "correct": 0,
+        "total": 12
+      },
+      {
+        "arm": "RAW_HISTORY_EXACT_UID_RECALL",
+        "correct": 0,
+        "total": 12
+      },
+      {
+        "arm": "REMOVE_TO_HERE",
+        "correct": 0,
+        "total": 12
+      },
+      {
+        "arm": "BYTE_EXACT_RESTORE",
+        "correct": 12,
+        "total": 12
+      },
+      {
+        "arm": "WRONG_TARGET_ROLE_SHAM",
+        "correct": 0,
+        "total": 12
+      }
+    ],
+    "same_regime_reuse": "8/8_NOT_SECOND_LEARNING_RETENTION",
+    "owner_reads": 35,
+    "task_snapshots": 32
+  },
+  "scientific_status": {
+    "G0": "NOT_PASSED",
+    "G1": "NOT_EVALUATED",
+    "FCL": "UNCHANGED_UNJUDGED",
+    "P1": "PRIOR_RED_UNCHANGED"
+  },
+  "nonclaims": [
+    "NO_INDEPENDENT_OUTCOME_CUSTODY",
+    "NO_CANONICAL_ADMISSION_OR_CAUSAL_CREDIT",
+    "NO_NEW_PRIMITIVE_OR_SCHEMA_INVENTION",
+    "NO_FCL_PROMOTION",
+    "NATIVE_BASELINE_USES_SAME_INDUCTION_NOT_PUBLISHED_AGENT_BASELINE",
+    "REUSE_IS_NOT_POST_SECOND_LEARNING_RETENTION"
+  ],
+  "external_reproduction_limit": "USL dirty working tree is file-hash pinned, not a published immutable source release; public third-party source is not copied into this receipt."
+}

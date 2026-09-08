@@ -1,0 +1,25 @@
+ㅇㅇ 그렇게 연구해주고 usl 도 이렇게 바꿧음 기존 kg 나 하이퍼그래프 db 를 이용하는  ㅇㅇ, USL이 기존 시스템들을 연결해 주는 어댑터가 되도록 구현했어. 데이터는 원래 시스템에 두고,
+  USL은 필요한 응답을 받아 연결·해석·관측하는 역할이야.
+
+  - KG/Cypher 조회 결과를 .usl 파일로 다시 작성하지 않고 사용해.
+  - 원래 UID·참여 역할·의미와 원본 digest를 보존해.
+  - 같은 관측 스냅샷을 HSWM 전달까지 이어서 사용해.
+  - 다음 요청은 원래 시스템을 다시 조회해. 별도 USL DB나 수동 컴파일은 필요 없어.
+
+  코드에서는 이렇게 연결해:
+
+  const usl = connectUsl({ read, adapt, policy });
+
+  yield* usl.context(request, { focus: "game:dash" });
+  yield* usl.hswm(request, observeOptions, authority);
+
+  177개 테스트·타입 검사·빌드 통과, 로컬 파일 관측을 기존 HSWM 소비자에 전달하는 것까지 확인했어.
+  운영 KG 설정을 변경한 상태는 아니야.
+
+  사용법과 연결 예제 (docs/ADAPTER_INTEGRATION.md) · 실행: npm run example:adapter
+
+─ Worked for 25m 04s ─────────────────────────────────────────────────────────────────────────────
+
+─ Conversation recap ─────────────────────────────────────────────────────────────────────────────
+
+  USL이 KG·HSWM을 따로 다루기보다 기존 시스템 전반의 통합 어댑터가 되도록 구현했다고 보고된 상태

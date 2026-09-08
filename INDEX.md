@@ -20,6 +20,9 @@ LLM 호출·관측 평가·명시적 피드백·관계 갱신·다음 선택을 
 [ICE 소비자 평가와 반영](docs/operations/HSWM_ICE_CONSUMER_FEEDBACK_2026-09-08.md)은
 실사용에서 발견한 context-key 재사용 결함 수정과, 배타적 경로·root 피드백의 평가 한계를 기록한다.
 학습의 추가 효과를 보는 3군 비교와 다른 프레임워크 대비 비교는 별도 미실행 과제다.
+[Astra·K3 이후 연구 방향](docs/research/HSWM_ASTRA_K3_RESEARCH_DIRECTION_2026-09-08.md)은
+최신 native agent 능력과 HSWM의 지속 관계 학습을 구분하고, 모델 교체·같은 이력·총비용을
+포함한 실사용 개발 방향을 제안한다. 공식 자료 검토이며 새 효능 실험은 아니다.
 실제 메이플리니지·버엑시와 수풀림 개발에서는
 [`hswm-dev 실사용 안내`](docs/operations/HSWM_GAME_SUPULLIM_DOGFOOD_2026-09-07.md)의
 프로젝트별 검사·명시적 피드백 경로를 사용한다.

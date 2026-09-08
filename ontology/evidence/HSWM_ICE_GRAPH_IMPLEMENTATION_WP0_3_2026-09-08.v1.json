@@ -1,0 +1,1972 @@
+{
+  "schema_version": "hswm-ice-graph-implementation-wp0-3-ontology/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+  "status": "IMPLEMENTED_LOCAL_ENGINEERING_EFFICACY_UNJUDGED",
+  "nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+  "authority_boundary": "All claims are SECONDARY_AI. WP0–3 records local engineering and bounded verification only; E1/E2 efficacy, learner v2, stage feedback, question revision and real-use evaluation remain unimplemented or unidentified.",
+  "source_accessed_on": "2026-09-08",
+  "artifact_bindings": [
+    {
+      "path": "docs/operations/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.md",
+      "sha256": "fb9afca2a9b3f36c31564e82aaf286b667e074f66113cd1903d2df161da9c93e"
+    },
+    {
+      "path": "docs/operations/artifacts/ice_graph_wp0_3_2026-09-08/verification.json",
+      "sha256": "189d031d03d1f08f5db83b2893d6d0e3c9945fd01702b1fd0c74339453023a38"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+      "sha256": "0a47ff72b566c6e6f05dc0e62beab21ab5169c19f788d512c01530877d055fb6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-observation.ts",
+      "sha256": "696a44e00365d576503c7c14adb2348b48a780d2d59487042e88f4fcd9ed7009"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+      "sha256": "0f593032ec69c4f075ffac6d91fdec48ec41ac6204dbe94e46060d0923be4f52"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-executor.ts",
+      "sha256": "f8570f2634949e9705e9f38fa98969d0e4ff8b6aa147ecae1df6caac3345858d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-store.ts",
+      "sha256": "866348c5773364e0558965cb2345976cb4750992652070c80b974055987dd581"
+    },
+    {
+      "path": "tests/effect-runtime/adaptive-domain.test.ts",
+      "sha256": "b790c77aa3147401d9ec88d2f4f7086a8a51247f9dc3d260f3298954fa5e5acd"
+    },
+    {
+      "path": "tests/effect-runtime/adaptive-runtime.test.ts",
+      "sha256": "bbf4d3c056b5be2e6e6fc57b9b6eca5a17ad25bb1848fd157593e22b43c40c44"
+    },
+    {
+      "path": "tests/effect-runtime/adaptive-executor.test.ts",
+      "sha256": "c399c4a49fd0790fb1c88bc3a2c578530971ca60e5decfef7d452abe343f4b51"
+    },
+    {
+      "path": "tests/test_ice_learning_remediation_semantic_contract.py",
+      "sha256": "f42776f9285c8b1b46c6a349d99a4de463d99d6058d109292664c627fbed5a72"
+    },
+    {
+      "path": "_research/causal_composition/ice_learning_choice_v1/README.md",
+      "sha256": "a5433fc9131f2090b2f8810f11e66a1c5ca3da7b6a89a124b25f00914e92f7ec"
+    },
+    {
+      "path": "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.v1.json",
+      "sha256": "619946e4c4ca27f2ceae0597a8c447e57ed1e69052508cc536f9cc9f7ce254b3"
+    },
+    {
+      "path": "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.mjs",
+      "sha256": "bb5782e4dbe3ad93b4281866bc723f68e8713ada8738a11b11c5a3c6ed939b19"
+    },
+    {
+      "path": "tests/effect-runtime/ice-learning-choice.test.ts",
+      "sha256": "b641fe950cbf33141a20475b5c95c65699130c95d53b05772991f43e045b5d68"
+    },
+    {
+      "path": "tests/effect-runtime/adaptive-observation.test.ts",
+      "sha256": "08774f36ad84b37fc7361e3ff31eb548bf722a6ecf417f09611a3af8f5e2f594"
+    },
+    {
+      "path": "docs/operations/HSWM_ICE_STANDARD_GRAPH_WORK_PLAN_2026-09-08.md",
+      "sha256": "2e3524d9de5012c3dee73c0b021bb6621415a9e9da99280ca57712b183f6e95a"
+    },
+    {
+      "path": "ontology/evidence/HSWM_ICE_LEARNING_REMEDIATION_2026-09-08.v2.json",
+      "sha256": "02ca18a8d83d79fcdf85ec90ba47911ea333b4a2b8f8587a935ed6bab51ef28a"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 37,
+    "anchors": 1,
+    "relations": 86
+  },
+  "anchors": [
+    {
+      "uid": "sym:AbstractNode:hswm-ice-learning-remediation-2026-09-08-v2",
+      "name": "HSWM ICE learning remediation design — corrected v2",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "HSWM ICE graph implementation WP0–3",
+        "description": "Source-bound local engineering snapshot for scope-preserving specialization and execution observations; it does not establish efficacy.",
+        "standard_graph_role": "ENGINEERING_IMPLEMENTATION_BUNDLE",
+        "role": "ENGINEERING_IMPLEMENTATION_BUNDLE",
+        "status": "IMPLEMENTED_LOCAL_ENGINEERING_EFFICACY_UNJUDGED",
+        "source_paths": [
+          "docs/operations/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.md",
+          "docs/operations/artifacts/ice_graph_wp0_3_2026-09-08/verification.json",
+          "src/hswm/effect-runtime/src/adaptive-domain.ts",
+          "src/hswm/effect-runtime/src/adaptive-observation.ts",
+          "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+          "src/hswm/effect-runtime/src/adaptive-executor.ts",
+          "src/hswm/effect-runtime/src/adaptive-store.ts",
+          "tests/effect-runtime/adaptive-domain.test.ts",
+          "tests/effect-runtime/adaptive-runtime.test.ts",
+          "tests/effect-runtime/adaptive-executor.test.ts",
+          "tests/test_ice_learning_remediation_semantic_contract.py",
+          "_research/causal_composition/ice_learning_choice_v1/README.md",
+          "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.v1.json",
+          "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.mjs",
+          "tests/effect-runtime/ice-learning-choice.test.ts",
+          "tests/effect-runtime/adaptive-observation.test.ts",
+          "docs/operations/HSWM_ICE_STANDARD_GRAPH_WORK_PLAN_2026-09-08.md",
+          "ontology/evidence/HSWM_ICE_LEARNING_REMEDIATION_2026-09-08.v2.json"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp0",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "WP0 versioned payload and Q1–Q6 contracts",
+        "description": "Versioned local payload and semantic fixtures provide bounded inspectability.",
+        "standard_graph_role": "WORK_PACKAGE",
+        "role": "WORK_PACKAGE",
+        "status": "IMPLEMENTED_LOCAL_ENGINEERING"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "WP1 parent eligibility and selector composition",
+        "description": "Bound child effective guard preserves mandatory parent guard plus selector.",
+        "standard_graph_role": "WORK_PACKAGE",
+        "role": "WORK_PACKAGE",
+        "status": "IMPLEMENTED_LOCAL_ENGINEERING"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "WP2 planning and leaf execution observation",
+        "description": "Candidate/selection/occurrence/output/cost slots and strict provider usage observation.",
+        "standard_graph_role": "WORK_PACKAGE",
+        "role": "WORK_PACKAGE",
+        "status": "IMPLEMENTED_LOCAL_ENGINEERING"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp3",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "WP3 co-eligible local alternatives fixture",
+        "description": "Two-route fixture and forced eligible route surface for feasibility/trace coverage.",
+        "standard_graph_role": "WORK_PACKAGE",
+        "role": "WORK_PACKAGE",
+        "status": "IMPLEMENTED_LOCAL_ENGINEERING"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-scope",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "Bound parent scope contract",
+        "description": "Parent uid/revision/digest, mandatory guard, selector and effective guard are recomputed before child eligibility.",
+        "standard_graph_role": "IMPLEMENTATION_CONTRACT",
+        "role": "IMPLEMENTATION_CONTRACT",
+        "status": "IMPLEMENTED_LOCAL_ENGINEERING"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-legacy",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "Legacy unbound specialization withholding",
+        "description": "Legacy child history is preserved but withheld; it does not block a valid bound successor.",
+        "standard_graph_role": "COMPATIBILITY_CONTRACT",
+        "role": "COMPATIBILITY_CONTRACT",
+        "status": "IMPLEMENTED_LOCAL_ENGINEERING"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-feedback",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "Stale feedback meaning and scope withholding",
+        "description": "Outcome is retained but model update is withheld when selected meaning changes or parent scope becomes invalid.",
+        "standard_graph_role": "FEEDBACK_CONTRACT",
+        "role": "FEEDBACK_CONTRACT",
+        "status": "IMPLEMENTED_LOCAL_ENGINEERING"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-occurrence",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "Exact occurrence and delivered-context observation boundary",
+        "description": "Occurrence records delivered context and pins selected/cell revisions plus input/output digests; actual source reads remain unknown or not instrumented.",
+        "standard_graph_role": "OBSERVATION_CONTRACT",
+        "role": "OBSERVATION_CONTRACT",
+        "status": "IMPLEMENTED_LOCAL_ENGINEERING"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-cost",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "Leaf-only cost observation",
+        "description": "Leaf duration is summed once; router inclusive time is not added, missing human/money/retry cost remains null.",
+        "standard_graph_role": "COST_CONTRACT",
+        "role": "COST_CONTRACT",
+        "status": "IMPLEMENTED_LOCAL_ENGINEERING"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-usage",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "Strict provider usage observation",
+        "description": "Only provider-reported nonnegative integer token totals with exact sum are recorded; missing or invalid usage is null/status.",
+        "standard_graph_role": "OBSERVATION_CONTRACT",
+        "role": "OBSERVATION_CONTRACT",
+        "status": "IMPLEMENTED_LOCAL_ENGINEERING"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-e1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "E1 local selection effect remains unidentified",
+        "description": "Fixture demonstrates co-eligibility and route forcing, not superior learned selection.",
+        "standard_graph_role": "EVALUATION_STATUS",
+        "role": "EVALUATION_STATUS",
+        "status": "NOT_IDENTIFIED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-e2",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "E2 goal-level effect remains unidentified",
+        "description": "Question/read/action generation is not implemented in WP0–3; stage feedback and two outer routes are not prerequisites for this independent evaluation design.",
+        "standard_graph_role": "EVALUATION_STATUS",
+        "role": "EVALUATION_STATUS",
+        "status": "NOT_IMPLEMENTED_NOT_IDENTIFIED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-v1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "v1 learner semantics preserved",
+        "description": "Feature update and learner identity remain v1; WP4 versioned learner comparison is pending.",
+        "standard_graph_role": "VERSION_CONTRACT",
+        "role": "VERSION_CONTRACT",
+        "status": "PRESERVED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp4",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "WP4 learner v2 comparison",
+        "description": "Feature-count mitigation and version-aware learner comparison are not implemented.",
+        "standard_graph_role": "FUTURE_WORK_PACKAGE",
+        "role": "FUTURE_WORK_PACKAGE",
+        "status": "NOT_IMPLEMENTED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp5",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "WP5 stage-feedback API",
+        "description": "Output-bound idempotent stage review API is not implemented.",
+        "standard_graph_role": "FUTURE_WORK_PACKAGE",
+        "role": "FUTURE_WORK_PACKAGE",
+        "status": "NOT_IMPLEMENTED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp6",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "WP6 question/read/action revision",
+        "description": "Evidence-grounded question and resolver/action revision is not implemented.",
+        "standard_graph_role": "FUTURE_WORK_PACKAGE",
+        "role": "FUTURE_WORK_PACKAGE",
+        "status": "NOT_IMPLEMENTED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp7",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "WP7 real-use efficacy evaluation",
+        "description": "Real-use quality, total cost and efficacy evaluation is not implemented.",
+        "standard_graph_role": "FUTURE_WORK_PACKAGE",
+        "role": "FUTURE_WORK_PACKAGE",
+        "status": "NOT_IMPLEMENTED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-verification",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "Bounded implementation verification",
+        "description": "Sanitized verification artifact records checks; it is not efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_VERIFICATION",
+        "role": "ENGINEERING_VERIFICATION",
+        "status": "LOCAL_WORKFLOW_VERIFIED_NOT_EFFICACY"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-0",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "docs/operations/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.md",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "docs/operations/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.md",
+        "source_sha256": "fb9afca2a9b3f36c31564e82aaf286b667e074f66113cd1903d2df161da9c93e",
+        "source_paths": [
+          "docs/operations/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.md"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "docs/operations/artifacts/ice_graph_wp0_3_2026-09-08/verification.json",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "docs/operations/artifacts/ice_graph_wp0_3_2026-09-08/verification.json",
+        "source_sha256": "189d031d03d1f08f5db83b2893d6d0e3c9945fd01702b1fd0c74339453023a38",
+        "source_paths": [
+          "docs/operations/artifacts/ice_graph_wp0_3_2026-09-08/verification.json"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-2",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+        "source_sha256": "0a47ff72b566c6e6f05dc0e62beab21ab5169c19f788d512c01530877d055fb6",
+        "source_paths": [
+          "src/hswm/effect-runtime/src/adaptive-domain.ts"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-3",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "src/hswm/effect-runtime/src/adaptive-observation.ts",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "src/hswm/effect-runtime/src/adaptive-observation.ts",
+        "source_sha256": "696a44e00365d576503c7c14adb2348b48a780d2d59487042e88f4fcd9ed7009",
+        "source_paths": [
+          "src/hswm/effect-runtime/src/adaptive-observation.ts"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-4",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+        "source_sha256": "0f593032ec69c4f075ffac6d91fdec48ec41ac6204dbe94e46060d0923be4f52",
+        "source_paths": [
+          "src/hswm/effect-runtime/src/adaptive-runtime.ts"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-5",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "src/hswm/effect-runtime/src/adaptive-executor.ts",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "src/hswm/effect-runtime/src/adaptive-executor.ts",
+        "source_sha256": "f8570f2634949e9705e9f38fa98969d0e4ff8b6aa147ecae1df6caac3345858d",
+        "source_paths": [
+          "src/hswm/effect-runtime/src/adaptive-executor.ts"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-6",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "src/hswm/effect-runtime/src/adaptive-store.ts",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "src/hswm/effect-runtime/src/adaptive-store.ts",
+        "source_sha256": "866348c5773364e0558965cb2345976cb4750992652070c80b974055987dd581",
+        "source_paths": [
+          "src/hswm/effect-runtime/src/adaptive-store.ts"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-7",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "tests/effect-runtime/adaptive-domain.test.ts",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "tests/effect-runtime/adaptive-domain.test.ts",
+        "source_sha256": "b790c77aa3147401d9ec88d2f4f7086a8a51247f9dc3d260f3298954fa5e5acd",
+        "source_paths": [
+          "tests/effect-runtime/adaptive-domain.test.ts"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-8",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "tests/effect-runtime/adaptive-runtime.test.ts",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "tests/effect-runtime/adaptive-runtime.test.ts",
+        "source_sha256": "bbf4d3c056b5be2e6e6fc57b9b6eca5a17ad25bb1848fd157593e22b43c40c44",
+        "source_paths": [
+          "tests/effect-runtime/adaptive-runtime.test.ts"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-9",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "tests/effect-runtime/adaptive-executor.test.ts",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "tests/effect-runtime/adaptive-executor.test.ts",
+        "source_sha256": "c399c4a49fd0790fb1c88bc3a2c578530971ca60e5decfef7d452abe343f4b51",
+        "source_paths": [
+          "tests/effect-runtime/adaptive-executor.test.ts"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-10",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "tests/test_ice_learning_remediation_semantic_contract.py",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "tests/test_ice_learning_remediation_semantic_contract.py",
+        "source_sha256": "f42776f9285c8b1b46c6a349d99a4de463d99d6058d109292664c627fbed5a72",
+        "source_paths": [
+          "tests/test_ice_learning_remediation_semantic_contract.py"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-11",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "_research/causal_composition/ice_learning_choice_v1/README.md",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "_research/causal_composition/ice_learning_choice_v1/README.md",
+        "source_sha256": "a5433fc9131f2090b2f8810f11e66a1c5ca3da7b6a89a124b25f00914e92f7ec",
+        "source_paths": [
+          "_research/causal_composition/ice_learning_choice_v1/README.md"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-12",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.v1.json",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.v1.json",
+        "source_sha256": "619946e4c4ca27f2ceae0597a8c447e57ed1e69052508cc536f9cc9f7ce254b3",
+        "source_paths": [
+          "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.v1.json"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-13",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.mjs",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.mjs",
+        "source_sha256": "bb5782e4dbe3ad93b4281866bc723f68e8713ada8738a11b11c5a3c6ed939b19",
+        "source_paths": [
+          "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.mjs"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-14",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "tests/effect-runtime/ice-learning-choice.test.ts",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "tests/effect-runtime/ice-learning-choice.test.ts",
+        "source_sha256": "b641fe950cbf33141a20475b5c95c65699130c95d53b05772991f43e045b5d68",
+        "source_paths": [
+          "tests/effect-runtime/ice-learning-choice.test.ts"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-15",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "tests/effect-runtime/adaptive-observation.test.ts",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "tests/effect-runtime/adaptive-observation.test.ts",
+        "source_sha256": "08774f36ad84b37fc7361e3ff31eb548bf722a6ecf417f09611a3af8f5e2f594",
+        "source_paths": [
+          "tests/effect-runtime/adaptive-observation.test.ts"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-16",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "docs/operations/HSWM_ICE_STANDARD_GRAPH_WORK_PLAN_2026-09-08.md",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "docs/operations/HSWM_ICE_STANDARD_GRAPH_WORK_PLAN_2026-09-08.md",
+        "source_sha256": "2e3524d9de5012c3dee73c0b021bb6621415a9e9da99280ca57712b183f6e95a",
+        "source_paths": [
+          "docs/operations/HSWM_ICE_STANDARD_GRAPH_WORK_PLAN_2026-09-08.md"
+        ]
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-17",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "ENGINEERING_IMPLEMENTATION_NOT_EFFICACY",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "responsibility_owner": "hswm:ice-graph-wp0-3:2026-09-08",
+        "projection_nonclaim": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CANONICAL_ADMISSION_NOT_CAUSAL_CREDIT_NOT_EFFICACY",
+        "claim_boundary": "SOURCE_BOUND_WP0_3_ENGINEERING_ONLY_NOT_LEARNING_EFFICACY",
+        "source_base_commit": "391e89b21a0244aaf3d2ed082aa5b72c94587f61",
+        "name": "ontology/evidence/HSWM_ICE_LEARNING_REMEDIATION_2026-09-08.v2.json",
+        "description": "Bound source bytes for WP0–3 snapshot.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "source_path": "ontology/evidence/HSWM_ICE_LEARNING_REMEDIATION_2026-09-08.v2.json",
+        "source_sha256": "02ca18a8d83d79fcdf85ec90ba47911ea333b4a2b8f8587a935ed6bab51ef28a",
+        "source_paths": [
+          "ontology/evidence/HSWM_ICE_LEARNING_REMEDIATION_2026-09-08.v2.json"
+        ]
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp0",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp3",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-scope",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-legacy",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-feedback",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-occurrence",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-cost",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-usage",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-e1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-e2",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp4",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp5",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp6",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp7",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-verification",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-0",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-2",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-3",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-4",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-5",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-6",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-7",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-8",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-9",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-10",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-11",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-12",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-13",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-14",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-15",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-16",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-17",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp0",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-scope",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-legacy",
+      "type": "PRESERVES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp0",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-occurrence",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-cost",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-usage",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-feedback",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp3",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp3",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp0",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-scope",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp0",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-occurrence",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-v1",
+      "type": "PRESERVES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp4",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp0",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp4",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp5",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp0",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp5",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp6",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp0",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp6",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp7",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp7",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-e1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp7",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-e2",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-e1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp3",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-verification",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp0",
+      "type": "TESTS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-verification",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "type": "TESTS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-verification",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "type": "TESTS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-verification",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp3",
+      "type": "TESTS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-verification",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-v1",
+      "type": "TESTS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp0",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-10",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp0",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-17",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp0",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-16",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-2",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-3",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-4",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-7",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-8",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-16",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp1",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-15",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-4",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-5",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-6",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-8",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-9",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp2",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-15",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp3",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-11",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp3",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-12",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp3",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-13",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-wp3",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-14",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-verification",
+      "to_uid": "sym:AbstractNode:hswm-ice-graph-wp0-3-2026-09-08-source-1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_REFERENCE_NOT_EFFICACY"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-graph-implementation-wp0-3-2026-09-08-v1",
+      "to_uid": "sym:AbstractNode:hswm-ice-learning-remediation-2026-09-08-v2",
+      "type": "REFINES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_GRAPH_IMPLEMENTATION_WP0_3_2026_09_08",
+      "status": "ENGINEERING_ONLY_REFINEMENT_NOT_EFFICACY"
+    }
+  ]
+}

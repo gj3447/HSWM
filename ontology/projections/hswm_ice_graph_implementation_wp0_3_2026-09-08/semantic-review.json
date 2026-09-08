@@ -1,0 +1,82 @@
+{
+  "schema_version": "hswm-ice-graph-wp0-3-semantic-review/v1",
+  "reviewer": "agent(codex):root",
+  "status": "SOURCE_AND_SEMANTIC_REVIEW_PASSED_BEFORE_PUBLICATION",
+  "bundle_sha256": "76a2410fe1acc54821532574da61f29e87964e54ea251319ca57fc11e31a1215",
+  "nodes": 37,
+  "relations": 86,
+  "anchors": 1,
+  "source_bindings": 18,
+  "sparql_rows": 18,
+  "sparql_dataset_mode": "EXPORTED_NAMED_GRAPHS_DEFAULT_UNION",
+  "projection_sha256": "69ba5ede8b4c2be186e3f45a0a6d688b1eec9c3154d0af581bafd15d038fc67a",
+  "required_work_dependencies": [
+    [
+      "wp1",
+      "wp0"
+    ],
+    [
+      "wp2",
+      "wp0"
+    ],
+    [
+      "wp3",
+      "wp1"
+    ],
+    [
+      "wp3",
+      "wp2"
+    ],
+    [
+      "wp4",
+      "wp0"
+    ],
+    [
+      "wp4",
+      "wp2"
+    ],
+    [
+      "wp5",
+      "wp0"
+    ],
+    [
+      "wp5",
+      "wp2"
+    ],
+    [
+      "wp6",
+      "wp0"
+    ],
+    [
+      "wp6",
+      "wp2"
+    ],
+    [
+      "wp7",
+      "wp2"
+    ],
+    [
+      "e1",
+      "wp3"
+    ]
+  ],
+  "checked": [
+    "closed and unique node/edge identities",
+    "SECONDARY_AI and exact implementation source commit",
+    "all current source hashes",
+    "work dependencies separate from TESTS",
+    "E1 and E2 independent; no stage-feedback prerequisite for E2",
+    "WP4–7 pending",
+    "direct path-based source mappings including scope and fixture tests",
+    "source-bound corrected-v2 refinement",
+    "SHACL and projected dataset SHA",
+    "SPARQL exact expected concept answers"
+  ],
+  "prepublication_corrections": [
+    "work dependency vs TESTS direction",
+    "old source_base_commit",
+    "E1/E2 mistakenly joint prerequisites",
+    "numeric source index drift replaced with explicit path→UID mapping"
+  ],
+  "claim": "BOUNDED_ENGINEERING_PROJECTION_NOT_EFFICACY"
+}

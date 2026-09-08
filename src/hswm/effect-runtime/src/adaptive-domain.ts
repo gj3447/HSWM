@@ -344,6 +344,14 @@ export const updateModel = (model: AdaptiveModel, context: Context, outcome: {
 } const attempts = Object.fromEntries(Object.entries(valid.right.context_attempts)) as Record<string, number>; const key = contextKey(valueFeatures.right); if (!Object.hasOwn(attempts, key) && Object.keys(attempts).length >= MAX_TRACKED_CONTEXTS)
     return fail("CONTEXT_BOUND", "adaptive context bound"); attempts[key] = (attempts[key] ?? 0) + 1; const n = valid.right.n + 1; return Either.right({ schema_version: ADAPTIVE_SCHEMA_VERSION, scope: ADAPTIVE_SCOPE, n, cost_mean: valid.right.cost_mean + (outcome.cost - valid.right.cost_mean) / n, features: weights, context_attempts: attempts }); };
 export const evaluateGuard = (guard: Guard, context: Context): Truth => { const evaluate = (node: Guard): Truth => node.op === "eq" ? (Object.hasOwn(context, node.left.field) ? (sameScalar(context[node.left.field] as Scalar, node.right) ? "TRUE" : "FALSE") : "UNKNOWN") : node.op === "not" ? ({ TRUE: "FALSE", FALSE: "TRUE", UNKNOWN: "UNKNOWN" } as const)[evaluate(node.child)] : (() => { const values = node.children.map(evaluate); const decisive = node.op === "all" ? "FALSE" : "TRUE"; const neutral = node.op === "all" ? "TRUE" : "FALSE"; return values.includes(decisive) ? decisive : values.every((value) => value === neutral) ? neutral : "UNKNOWN"; })(); return evaluate(guard); };
+/**
+ * A learned selector may only narrow a parent's mandatory eligibility guard.
+ * Parent revision/digest binding and route member preservation are runtime
+ * responsibilities; this pure helper preserves the guard semantics.
+ */
+export const specializeGuard = (parent: Guard | undefined, selector: Guard): Guard => parent === undefined
+    ? selector
+    : { op: "all", children: [parent, selector] };
 export interface RouteModel {
     readonly route: Route;
     readonly model: AdaptiveModel;
@@ -353,15 +361,30 @@ export interface Plan {
     readonly status: "PLANNED" | "WITHHOLD";
     readonly selected: PlanChoice | null;
     readonly choices: ReadonlyArray<PlanChoice>;
+    readonly rejected: ReadonlyArray<PlanRejection>;
+    readonly selection: PlanSelection;
     readonly claim: "LOCAL_ADAPTATION_NOT_CAUSAL_IDENTIFICATION";
 }
 export interface PlanChoice {
     readonly uid: string;
     readonly score: number;
+    /** Local model output; it is not a calibrated success probability. */
     readonly predicted_success: number;
     readonly reads: ReadonlyArray<string>;
     readonly members: ReadonlyArray<string>;
     readonly observations: number;
+}
+export interface PlanRejection {
+    readonly uid: string;
+    /** First applicable reason in this stable precedence: active, source, budget, permission, guard. */
+    readonly reason: "INACTIVE" | "SOURCE" | "BUDGET" | "PERMISSION" | "GUARD_FALSE" | "GUARD_UNKNOWN";
+}
+export interface PlanSelection {
+    readonly rule: "SCORE_DESC_THEN_UID_ASC" | "FORCE_ELIGIBLE_ROUTE";
+    /** Eligible UIDs tied with the selected route's score. */
+    readonly tie_uids: ReadonlyArray<string>;
+    /** Top-ranked eligible UIDs tied before an eligible forced route is applied. */
+    readonly highest_score_tie_uids: ReadonlyArray<string>;
 }
 export const plan = (program: Program, routes: ReadonlyArray<RouteModel>, context: Context, input: {
     readonly budget: number;
@@ -370,10 +393,31 @@ export const plan = (program: Program, routes: ReadonlyArray<RouteModel>, contex
     readonly force_route?: string;
 }): Either.Either<Plan, AdaptiveDomainError> => { const parsed = parseProgram(program); if (Either.isLeft(parsed))
     return retypeError(parsed.left); if (!finiteNonnegative(input.budget) || input.budget <= 0 || input.budget > 3600)
-    return fail("SELECTION_INVALID", "budget"); const allowed = input.allowed ?? new Set(parsed.right.cells.map((cell) => cell.cell_id)); const total = routes.reduce((sum, item) => sum + item.model.n, 0); const choices: PlanChoice[] = []; for (const item of routes) {
+    return fail("SELECTION_INVALID", "budget"); const allowed = input.allowed ?? new Set(parsed.right.cells.map((cell) => cell.cell_id)); const total = routes.reduce((sum, item) => sum + item.model.n, 0); const choices: PlanChoice[] = []; const rejected: PlanRejection[] = []; for (const item of routes) {
     const route = item.route;
-    if (!item.active || route.source !== parsed.right.root || route.cost_hint > input.budget || route.members.some((member) => !allowed.has(member)) || (route.guard !== undefined && evaluateGuard(route.guard, context) !== "TRUE"))
+    if (!item.active) {
+        rejected.push({ uid: route.uid, reason: "INACTIVE" });
         continue;
+    }
+    if (route.source !== parsed.right.root) {
+        rejected.push({ uid: route.uid, reason: "SOURCE" });
+        continue;
+    }
+    if (route.cost_hint > input.budget) {
+        rejected.push({ uid: route.uid, reason: "BUDGET" });
+        continue;
+    }
+    if (route.members.some((member) => !allowed.has(member))) {
+        rejected.push({ uid: route.uid, reason: "PERMISSION" });
+        continue;
+    }
+    if (route.guard !== undefined) {
+        const guard = evaluateGuard(route.guard, context);
+        if (guard !== "TRUE") {
+            rejected.push({ uid: route.uid, reason: guard === "FALSE" ? "GUARD_FALSE" : "GUARD_UNKNOWN" });
+            continue;
+        }
+    }
     const read = Object.fromEntries(route.reads.map((field) => [field, context[field] as Scalar]));
     const score = selectionScore(item.model, read, { cost_hint: route.cost_hint, budget: input.budget, ...(input.exploration === undefined ? {} : { exploration: input.exploration }), total_attempts: total });
     const predicted = predict(item.model, read);
@@ -382,8 +426,8 @@ export const plan = (program: Program, routes: ReadonlyArray<RouteModel>, contex
     if (Either.isLeft(predicted))
         return retypeError(predicted.left);
     choices.push({ uid: route.uid, score: score.right, predicted_success: predicted.right, reads: route.reads, members: route.members, observations: item.model.n });
-} choices.sort((left, right) => right.score - left.score || left.uid.localeCompare(right.uid)); const selected = input.force_route === undefined ? (choices[0] ?? null) : (choices.find((choice) => choice.uid === input.force_route || choice.uid === `relation:${input.force_route}`) ?? null); if (input.force_route !== undefined && selected === null)
-    return fail("SELECTION_INVALID", "forced route is not eligible"); return Either.right({ status: selected === null ? "WITHHOLD" : "PLANNED", selected, choices, claim: "LOCAL_ADAPTATION_NOT_CAUSAL_IDENTIFICATION" }); };
+} choices.sort((left, right) => right.score - left.score || left.uid.localeCompare(right.uid)); rejected.sort((left, right) => left.uid.localeCompare(right.uid)); const ranked = choices[0] ?? null; const selected = input.force_route === undefined ? ranked : (choices.find((choice) => choice.uid === input.force_route || choice.uid === `relation:${input.force_route}`) ?? null); if (input.force_route !== undefined && selected === null)
+    return fail("SELECTION_INVALID", "forced route is not eligible"); const tied = (choice: PlanChoice | null): ReadonlyArray<string> => choice === null ? [] : choices.filter((candidate) => candidate.score === choice.score).map((candidate) => candidate.uid); return Either.right({ status: selected === null ? "WITHHOLD" : "PLANNED", selected, choices, rejected, selection: { rule: input.force_route === undefined ? "SCORE_DESC_THEN_UID_ASC" : "FORCE_ELIGIBLE_ROUTE", tie_uids: tied(selected), highest_score_tie_uids: tied(ranked) }, claim: "LOCAL_ADAPTATION_NOT_CAUSAL_IDENTIFICATION" }); };
 export interface GuardExample {
     readonly values: Context;
     readonly outcome: boolean;

@@ -6,9 +6,11 @@ import {
   initialModel,
   parseJson,
   parseProgram,
+  plan,
   predict,
   proposeSpecialization,
   selectionScore,
+  specializeGuard,
   updateModel
 } from "../../src/hswm/effect-runtime/src/adaptive-domain.js"
 
@@ -63,6 +65,66 @@ it("evaluates finite guards with three-valued missing-context semantics", () => 
   expect(evaluateGuard(guard, { ready: true, clean: true })).toBe("TRUE")
   expect(evaluateGuard(guard, { ready: true, clean: false })).toBe("FALSE")
   expect(evaluateGuard(guard, { ready: true })).toBe("UNKNOWN")
+})
+
+it("specialization preserves mandatory parent guards while leaving the selector proposal compatible", () => {
+  const parent = { op: "eq" as const, left: { role: "context" as const, field: "mode" }, right: "investigate" }
+  const selector = { op: "eq" as const, left: { role: "context" as const, field: "domain" }, right: "declared" }
+  const effective = specializeGuard(parent, selector)
+  expect(evaluateGuard(effective, { mode: "compute", domain: "declared" })).toBe("FALSE")
+  expect(evaluateGuard(effective, { mode: "investigate", domain: "declared" })).toBe("TRUE")
+  expect(evaluateGuard(effective, { mode: "investigate" })).toBe("UNKNOWN")
+  expect(parent).toEqual({ op: "eq", left: { role: "context", field: "mode" }, right: "investigate" })
+  expect(specializeGuard(undefined, selector)).toBe(selector)
+})
+
+it("records stable eligibility diagnostics and forced-route tie behavior without changing scores", () => {
+  const program = {
+    schema_version: "hswm-adaptive-program/v1",
+    graph_id: "plan-diagnostics",
+    root: "root",
+    context_domain: { ready: [false, true], mode: ["investigate", "compute"] },
+    cells: [
+      { cell_id: "root", kind: "router", owner: "o", input_type: "text", output_type: "text" },
+      { cell_id: "other", kind: "router", owner: "o", input_type: "text", output_type: "text" },
+      { cell_id: "allowed", kind: "command", owner: "o", input_type: "text", output_type: "text", argv: ["true"] },
+      { cell_id: "blocked", kind: "command", owner: "o", input_type: "text", output_type: "text", argv: ["true"] }
+    ],
+    relations: [
+      { uid: "a", source: "root", members: ["allowed"], reads: ["ready"], cost_hint: 1 },
+      { uid: "b", source: "root", members: ["allowed"], reads: ["ready"], cost_hint: 1 },
+      { uid: "inactive", source: "root", members: ["allowed"], reads: ["ready"], cost_hint: 1 },
+      { uid: "budget", source: "root", members: ["allowed"], reads: ["ready"], cost_hint: 9 },
+      { uid: "permission", source: "root", members: ["blocked"], reads: ["ready"], cost_hint: 1 },
+      { uid: "wrong-source", source: "other", members: ["allowed"], reads: ["ready"], cost_hint: 1 },
+      { uid: "guard", source: "root", members: ["allowed"], reads: ["ready", "mode"], cost_hint: 1, guard: { op: "eq", left: { role: "context", field: "mode" }, right: "investigate" } }
+    ]
+  } as const
+  const routes = program.relations.map((route) => ({ route, model: initialModel(), active: route.uid !== "inactive" }))
+  const normal = plan(program, routes, { ready: true, mode: "compute" }, { budget: 1, allowed: new Set(["root", "other", "allowed"]) })
+  expect(Either.isRight(normal)).toBe(true)
+  if (Either.isLeft(normal)) return
+  expect(normal.right.selected?.uid).toBe("a")
+  expect(normal.right.choices.map((choice) => choice.uid)).toEqual(["a", "b"])
+  expect(normal.right.choices[0]?.members).toEqual(["allowed"])
+  expect(normal.right.choices[0]?.reads).toEqual(["ready"])
+  expect(normal.right.selection).toEqual({ rule: "SCORE_DESC_THEN_UID_ASC", tie_uids: ["a", "b"], highest_score_tie_uids: ["a", "b"] })
+  expect(normal.right.rejected).toEqual([
+    { uid: "budget", reason: "BUDGET" },
+    { uid: "guard", reason: "GUARD_FALSE" },
+    { uid: "inactive", reason: "INACTIVE" },
+    { uid: "permission", reason: "PERMISSION" },
+    { uid: "wrong-source", reason: "SOURCE" }
+  ])
+  const forced = plan(program, routes, { ready: true, mode: "compute" }, { budget: 1, allowed: new Set(["root", "other", "allowed"]), force_route: "b" })
+  expect(Either.isRight(forced)).toBe(true)
+  if (Either.isLeft(forced)) return
+  expect(forced.right.selected?.uid).toBe("b")
+  expect(forced.right.selection).toEqual({ rule: "FORCE_ELIGIBLE_ROUTE", tie_uids: ["a", "b"], highest_score_tie_uids: ["a", "b"] })
+  const unknown = plan(program, routes, { ready: true }, { budget: 1, allowed: new Set(["root", "other", "allowed"]) })
+  expect(Either.isRight(unknown)).toBe(true)
+  if (Either.isRight(unknown))
+    expect(unknown.right.rejected).toContainEqual({ uid: "guard", reason: "GUARD_UNKNOWN" })
 })
 
 it("proposes a public guard but never admits it", () => {

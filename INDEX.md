@@ -29,6 +29,8 @@ LLM 호출·관측 평가·명시적 피드백·관계 갱신·다음 선택을 
 연결한다. 후속 설계이며 구현·효능 완료 주장이 아니다.
 [표준 그래프 엔지니어링 작업 계획](docs/operations/HSWM_ICE_STANDARD_GRAPH_WORK_PLAN_2026-09-08.md)은
 이를 조회·입출력 계약, 작업 의존성, 작은 구현 묶음과 실사용 평가 순서로 구체화한다.
+[첫 구현 WP0–3](docs/operations/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.md)은
+부모 조건 보존, 선택·산출물·비용 관측과 격리된 대안 실행을 연결한다. 실사용 효능은 미평가다.
 실제 메이플리니지·버엑시와 수풀림 개발에서는
 [`hswm-dev 실사용 안내`](docs/operations/HSWM_GAME_SUPULLIM_DOGFOOD_2026-09-07.md)의
 프로젝트별 검사·명시적 피드백 경로를 사용한다.

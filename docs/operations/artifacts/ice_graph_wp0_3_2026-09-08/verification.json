@@ -1,0 +1,152 @@
+{
+  "schema_version": "hswm-ice-graph-wp0-3-verification/v1",
+  "recorded_on": "2026-09-08",
+  "authority_class": "SECONDARY_AI",
+  "status": "ENGINEERING_CHECKS_PASSED_EFFICACY_UNJUDGED",
+  "work_scope": [
+    "ICE-WP0 small semantic contracts",
+    "ICE-WP1 parent scope preservation",
+    "ICE-WP2 minimum observations",
+    "ICE-WP3 synthetic co-eligible alternatives"
+  ],
+  "source_base_commit": "dca9d643c1fe96a5f139023a8538f8f228e9e272",
+  "source_identification": "Exact working-tree source SHA256 below; base commit includes concurrent unrelated USL work, not evidence for this change.",
+  "artifact_bindings": [
+    {
+      "path": "docs/operations/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.md",
+      "sha256": "fb9afca2a9b3f36c31564e82aaf286b667e074f66113cd1903d2df161da9c93e"
+    },
+    {
+      "path": "docs/operations/HSWM_ICE_STANDARD_GRAPH_WORK_PLAN_2026-09-08.md",
+      "sha256": "2e3524d9de5012c3dee73c0b021bb6621415a9e9da99280ca57712b183f6e95a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+      "sha256": "0a47ff72b566c6e6f05dc0e62beab21ab5169c19f788d512c01530877d055fb6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+      "sha256": "0f593032ec69c4f075ffac6d91fdec48ec41ac6204dbe94e46060d0923be4f52"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-executor.ts",
+      "sha256": "f8570f2634949e9705e9f38fa98969d0e4ff8b6aa147ecae1df6caac3345858d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-observation.ts",
+      "sha256": "696a44e00365d576503c7c14adb2348b48a780d2d59487042e88f4fcd9ed7009"
+    },
+    {
+      "path": "tests/effect-runtime/adaptive-domain.test.ts",
+      "sha256": "b790c77aa3147401d9ec88d2f4f7086a8a51247f9dc3d260f3298954fa5e5acd"
+    },
+    {
+      "path": "tests/effect-runtime/adaptive-executor.test.ts",
+      "sha256": "c399c4a49fd0790fb1c88bc3a2c578530971ca60e5decfef7d452abe343f4b51"
+    },
+    {
+      "path": "tests/effect-runtime/adaptive-observation.test.ts",
+      "sha256": "08774f36ad84b37fc7361e3ff31eb548bf722a6ecf417f09611a3af8f5e2f594"
+    },
+    {
+      "path": "tests/effect-runtime/ice-learning-choice.test.ts",
+      "sha256": "b641fe950cbf33141a20475b5c95c65699130c95d53b05772991f43e045b5d68"
+    },
+    {
+      "path": "tests/test_ice_learning_remediation_semantic_contract.py",
+      "sha256": "f42776f9285c8b1b46c6a349d99a4de463d99d6058d109292664c627fbed5a72"
+    },
+    {
+      "path": "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.v1.json",
+      "sha256": "619946e4c4ca27f2ceae0597a8c447e57ed1e69052508cc536f9cc9f7ce254b3"
+    },
+    {
+      "path": "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.mjs",
+      "sha256": "bb5782e4dbe3ad93b4281866bc723f68e8713ada8738a11b11c5a3c6ed939b19"
+    },
+    {
+      "path": "_research/causal_composition/ice_learning_choice_v1/README.md",
+      "sha256": "a5433fc9131f2090b2f8810f11e66a1c5ca3da7b6a89a124b25f00914e92f7ec"
+    }
+  ],
+  "checks": [
+    {
+      "name": "native adaptive regression via hswm-dev",
+      "passed": 47,
+      "files": 9
+    },
+    {
+      "name": "isolated counterexample choice fixture",
+      "passed": 1,
+      "files": 1
+    },
+    {
+      "name": "KG semantics and bounded graph projection",
+      "passed": 31,
+      "command": "uv run --locked pytest -q tests/test_ice_learning_remediation_semantic_contract.py tests/test_kg_bundle_semantics.py tests/test_kg_bundle_graph_view.py",
+      "warnings": "69 upstream rdflib deprecation warnings"
+    },
+    {
+      "name": "Markdown contracts and math compiler tests",
+      "passed": 331
+    },
+    {
+      "name": "TypeScript and Effect boundaries",
+      "status": "PASSED",
+      "effect_allowlisted_files": 38,
+      "effect_violations": 0,
+      "adaptive_functional_violations": 0
+    },
+    {
+      "name": "native build",
+      "status": "PASSED"
+    },
+    {
+      "name": "portable math compile",
+      "status": "PASSED"
+    },
+    {
+      "name": "local Markdown link targets",
+      "checked": 11,
+      "status": "PASSED"
+    },
+    {
+      "name": "git diff --check",
+      "status": "PASSED"
+    }
+  ],
+  "development_episode": {
+    "episode_id": "hswm-ice-graph-wp0-3-20260908",
+    "selected_relation": "relation:runtime-focused",
+    "selected_relation_pin": {
+      "uid": "relation:runtime-focused",
+      "revision": 3,
+      "digest": "069778fbda26a85faf188480d149bad455eedc329fa37d66159722376c3fd62f"
+    },
+    "execution_status": "SUCCEEDED",
+    "measured_success": null,
+    "agent_feedback": {
+      "success": true,
+      "source": "agent(codex): 부모 조건 보존과 선택 관측 변경의 회귀 확인에 유용했음; 독립 효능 또는 인과 credit 판정 아님"
+    },
+    "feedback_learning_status": "WEIGHTS_UPDATED",
+    "claim": "USEFUL_REGRESSION_CHECK_NOT_INDEPENDENT_EFFICACY_OR_CAUSAL_CREDIT"
+  },
+  "adversarial_corrections": [
+    "Legacy child previously blocked bound successor; now only valid active bound child limits generation.",
+    "Late feedback to child now checks current parent scope as well as child meaning.",
+    "Synthetic fixture now verifies and searches for a counterexample and requires both results; digest test uses wire output_digest, not undefined camelCase fields."
+  ],
+  "remaining": [
+    "WP4 learner v2 and replay not implemented; v1 model formula preserved.",
+    "WP5 stage/artifact/review-contract feedback and cross-ID deduplication not implemented; current API remains episode/root feedback.",
+    "WP6 failure-grounded next question/resolver policy not implemented.",
+    "WP7 real-use E1/E2/total-cost evaluation not run.",
+    "Actual resolver reads, executable binary versions, human costs and full token/money costs are not measured."
+  ],
+  "nonclaim": [
+    "No canonical admission or scientific gate promotion.",
+    "Synthetic choice change does not identify an E1 advantage or E2 whole-goal effect.",
+    "External KG projection and MCP are bounded interfaces, not cognition or learning."
+  ]
+}

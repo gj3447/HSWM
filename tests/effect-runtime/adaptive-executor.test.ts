@@ -61,3 +61,37 @@ it("rejects oversized streams and malformed HTTP 200 model payloads", async () =
     expect(result.status).toBe("FAILED")
   } finally { await close(server) }
 })
+
+it("records only strictly validated provider usage and never promotes it to success", async () => {
+  const subprocess = Layer.succeed(BoundedSubprocess, BoundedSubprocess.of({ observe: () => Effect.die("must not launch") }))
+  const response = new TextEncoder().encode(JSON.stringify({ model: "provider-model-2026", usage: { prompt_tokens: 7, completion_tokens: 3, total_tokens: 10 }, choices: [{ message: { content: "answer" } }] }))
+  const http = Layer.succeed(AdaptiveHttpClient, AdaptiveHttpClient.of({ postJson: () => Effect.succeed(response) }))
+  const result = await Effect.runPromise(executeAdaptiveCell(
+    { kind: "llm", cell_id: "leaf", base_url: "https://provider.example/v1", model: "configured-model", api_key_env: "ADAPTIVE_TEST_SECRET" }, { prompt: "x" }, process.cwd(), 1_000
+  ).pipe(Effect.provide(Layer.merge(subprocess, http))))
+  expect(result.status).toBe("SUCCEEDED")
+  expect(result.success).toBeNull()
+  const observation = result.metadata["execution_observation_v1"] as Record<string, unknown>
+  expect(observation["schema_version"]).toBe("hswm-adaptive-execution-observation/v1")
+  expect(observation["configured_model"]).toBe("configured-model")
+  expect(observation["output_digest"]).toBe(result.outputDigest)
+  expect(observation["provider_usage"]).toEqual({ status: "REPORTED", prompt_tokens: 7, completion_tokens: 3, total_tokens: 10, reported_model: "provider-model-2026" })
+  expect(JSON.stringify(observation)).not.toContain("ADAPTIVE_TEST_SECRET")
+  expect(JSON.stringify(observation)).not.toContain("Bearer ")
+})
+
+it("marks missing or malformed provider usage as null rather than zero", async () => {
+  const subprocess = Layer.succeed(BoundedSubprocess, BoundedSubprocess.of({ observe: () => Effect.die("must not launch") }))
+  for (const [raw, status] of [
+    [{ choices: [{ message: { content: "answer" } }] }, "UNAVAILABLE"],
+    [{ usage: { prompt_tokens: 2, completion_tokens: 1, total_tokens: 99 }, choices: [{ message: { content: "answer" } }] }, "INVALID"]
+  ] as const) {
+    const http = Layer.succeed(AdaptiveHttpClient, AdaptiveHttpClient.of({ postJson: () => Effect.succeed(new TextEncoder().encode(JSON.stringify(raw))) }))
+    const result = await Effect.runPromise(executeAdaptiveCell({ kind: "llm", base_url: "https://provider.example", model: "configured" }, { prompt: "x" }, process.cwd(), 1_000).pipe(Effect.provide(Layer.merge(subprocess, http))))
+    const usage = (result.metadata["execution_observation_v1"] as { provider_usage: Record<string, unknown> }).provider_usage
+    expect(usage["status"]).toBe(status)
+    expect(usage["prompt_tokens"]).toBeNull()
+    expect(usage["completion_tokens"]).toBeNull()
+    expect(usage["total_tokens"]).toBeNull()
+  }
+})

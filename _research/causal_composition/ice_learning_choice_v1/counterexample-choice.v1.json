@@ -1,0 +1,64 @@
+{
+  "schema_version": "hswm-adaptive-program/v1",
+  "graph_id": "ice-learning-choice-synthetic-v1",
+  "root": "investigate",
+  "context_domain": {
+    "evidence": ["available", "unavailable"],
+    "goal": ["counterexample"],
+    "candidate_n": [0]
+  },
+  "cells": [
+    {
+      "cell_id": "investigate",
+      "kind": "router",
+      "owner": "research:ice-learning-choice",
+      "input_type": "synthetic-investigation/v1",
+      "output_type": "synthetic-investigation/v1"
+    },
+    {
+      "cell_id": "check-existing",
+      "kind": "command",
+      "owner": "research:ice-learning-choice",
+      "input_type": "synthetic-investigation/v1",
+      "output_type": "synthetic-investigation/v1",
+      "argv": ["node", "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.mjs", "check-existing"],
+      "outcome": "exit_code"
+    },
+    {
+      "cell_id": "construct-new",
+      "kind": "command",
+      "owner": "research:ice-learning-choice",
+      "input_type": "synthetic-investigation/v1",
+      "output_type": "synthetic-investigation/v1",
+      "argv": ["node", "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.mjs", "construct-new"],
+      "outcome": "exit_code"
+    },
+    {
+      "cell_id": "complete-investigation",
+      "kind": "command",
+      "owner": "research:ice-learning-choice",
+      "input_type": "synthetic-investigation/v1",
+      "output_type": "synthetic-investigation/v1",
+      "argv": ["node", "_research/causal_composition/ice_learning_choice_v1/counterexample-choice.mjs", "complete"],
+      "outcome": "exit_code"
+    }
+  ],
+  "relations": [
+    {
+      "uid": "check-first",
+      "source": "investigate",
+      "members": ["check-existing", "construct-new", "complete-investigation"],
+      "reads": ["candidate_n", "evidence", "goal"],
+      "cost_hint": 1,
+      "guard": {"op": "eq", "left": {"role": "context", "field": "evidence"}, "right": "available"}
+    },
+    {
+      "uid": "construct-first",
+      "source": "investigate",
+      "members": ["construct-new", "check-existing", "complete-investigation"],
+      "reads": ["candidate_n", "evidence", "goal"],
+      "cost_hint": 1,
+      "guard": {"op": "eq", "left": {"role": "context", "field": "evidence"}, "right": "available"}
+    }
+  ]
+}

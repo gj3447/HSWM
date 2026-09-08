@@ -5,6 +5,7 @@ import { type AdaptiveAtom, type AdaptiveAtomRevision, AdaptiveStore, AdaptiveSt
 import { type AdaptiveExecution, AdaptiveHttpClient, type AdaptiveHttpClientShape, executeAdaptiveCell, NativeAdaptiveHttpClient } from "./adaptive-executor.js";
 import { type AdaptiveModel, type Cell, type Context, type GuardExample, type Plan, type Program, type Route, initialModel, plan as decidePlan, proposeSpecialization, updateModel, parseProgram } from "./adaptive-domain.js";
 import { BoundedSubprocess } from "./effect-bounded-subprocess.js";
+import { OBSERVATION_SCHEMA, SCOPE_SCHEMA, boundSpecialization, episodeCosts, observationDigest, revisionPin, routeMeaning } from "./adaptive-observation.js";
 export const ADAPTIVE_RUNTIME_BACKEND = "typescript-effect" as const;
 export class AdaptiveRuntimeError extends Data.TaggedError("AdaptiveRuntimeError")<{
     readonly code: "PROGRAM_INVALID" | "CONTEXT_INVALID" | "REQUEST_INVALID" | "STORE" | "CONFLICT" | "UNRESOLVED";
@@ -59,7 +60,7 @@ const routePayload = (value: AdaptiveAtomRevision): {
 };
 const resultUnknown = (reason: string): AdaptiveExecution => Object.freeze({ status: "UNKNOWN", success: null, durationSeconds: 0, output: "", outputDigest: sha(""), metadata: Object.freeze({ reason }) });
 const wireExecution = (value: AdaptiveExecution): Record<string, unknown> => Object.freeze({ status: value.status, success: value.success, duration_seconds: value.durationSeconds, output: value.output, output_digest: value.outputDigest, metadata: value.metadata });
-const collectGuardReads = (guard: NonNullable<Route["guard"]>): ReadonlyArray<string> => guard.op === "eq" ? [guard.left.field] : guard.op === "not" ? collectGuardReads(guard.child) : guard.children.flatMap(collectGuardReads);
+type RuntimePlan = Plan & { readonly backend: typeof ADAPTIVE_RUNTIME_BACKEND; readonly observation: Readonly<Record<string, unknown>> };
 export interface AdaptiveRuntime {
     readonly plan: (context: Context, options?: {
         readonly cellId?: string;
@@ -67,9 +68,7 @@ export interface AdaptiveRuntime {
         readonly allowed?: ReadonlyArray<string>;
         readonly exploration?: number;
         readonly forceRoute?: string;
-    }) => Effect.Effect<Plan & {
-        readonly backend: typeof ADAPTIVE_RUNTIME_BACKEND;
-    }, AdaptiveRuntimeError>;
+    }) => Effect.Effect<RuntimePlan, AdaptiveRuntimeError>;
     readonly run: (task: string, context: Context, options: {
         readonly episodeId: string;
         readonly budget?: number;
@@ -122,30 +121,103 @@ export const makeAdaptiveRuntime = (rawProgram: unknown, workspace: string, opti
                 return yield* Effect.fail(failure("STORE", `malformed relation payload: ${value.uid}`));
         return values.filter((value) => routePayload(value)!.route.source === source);
     });
-    const choose = (context: Context, source: string, budget: number, allowed: ReadonlySet<string>, exploration: number, forceRoute?: string): Effect.Effect<Plan & {
-        readonly backend: typeof ADAPTIVE_RUNTIME_BACKEND;
-    }, AdaptiveRuntimeError> => Effect.gen(function* () {
+    const scopeStatus = (value: AdaptiveAtomRevision): Effect.Effect<string, AdaptiveRuntimeError> => Effect.gen(function* () {
+        const data = routePayload(value)!;
+        if (Either.isLeft(parseProgram({ ...program, root: data.route.source, relations: [data.route] })))
+            return "MALFORMED_ROUTE";
+        if (data.parent_relation === null)
+            return "BASE_RELATION";
+        const scope = asPayload(value)["scope_binding"];
+        if (!record(scope) || scope["schema_version"] !== SCOPE_SCHEMA || !record(scope["parent"]))
+            return "LEGACY_UNBOUND_SPECIALIZATION";
+        const pin = scope["parent"];
+        if (pin["uid"] !== data.parent_relation || !Number.isSafeInteger(pin["revision"]) || (pin["revision"] as number) < 1 || typeof pin["digest"] !== "string")
+            return "INVALID_PARENT_PIN";
+        const parent = yield* storeError(store.getRevision(program.graph_id, data.parent_relation, pin["revision"] as number));
+        const parentData = routePayload(parent);
+        if (parent.digest !== pin["digest"] || parentData === null || parentData.parent_relation !== null || !record(scope["selector"]))
+            return "INVALID_PARENT_PIN";
+        // Validate selector shape before calling the recursive pure guard helper.
+        const selector = parseProgram({ ...program, root: parentData.route.source, relations: [{ ...parentData.route, reads: Object.keys(program.context_domain), guard: scope["selector"] }] });
+        if (Either.isLeft(selector))
+            return "INVALID_SELECTOR";
+        const expected = boundSpecialization(parent, parentData.route, selector.right.relations[0]!.guard!);
+        if (value.uid !== expected.uid || data.route.uid !== expected.route.uid || value.owner !== parent.owner || observationDigest(scope) !== observationDigest(expected.scope) || observationDigest(routeMeaning(data.route)) !== observationDigest(routeMeaning(expected.route)))
+            return "SCOPE_BINDING_MISMATCH";
+        const currentParent = yield* get(data.parent_relation);
+        const currentData = routePayload(currentParent);
+        if (currentData === null || !currentData.active || observationDigest(routeMeaning(currentData.route)) !== scope["parent_meaning_digest"])
+            return "PARENT_MEANING_CHANGED_OR_INACTIVE";
+        return "BOUND_PARENT_AND_SELECTOR";
+    });
+    const choose = (context: Context, source: string, budget: number, allowed: ReadonlySet<string>, exploration: number, forceRoute?: string): Effect.Effect<RuntimePlan, AdaptiveRuntimeError> => Effect.gen(function* () {
         if (!contextValid(program, context))
             return yield* Effect.fail(failure("CONTEXT_INVALID", "complete declared context required"));
         const values = yield* routesFor(source);
-        const models = values.flatMap((value) => {
+        const scopes = yield* Effect.forEach(values, scopeStatus);
+        const models = values.flatMap((value, index) => {
             const payload = routePayload(value);
-            return payload === null ? [] : [{ route: { ...payload.route, uid: value.uid }, model: payload.model, active: payload.active }];
+            return payload === null ? [] : [{ route: { ...payload.route, uid: value.uid }, model: payload.model, active: payload.active && ["BASE_RELATION", "BOUND_PARENT_AND_SELECTOR"].includes(scopes[index]!) }];
         });
         // Domain's public planner is root-oriented; preserve its bounded score for nested routers by a root substitution.
         const local = { ...program, root: source };
         const decided = decidePlan(local, models, context, { budget, allowed, exploration, ...(forceRoute === undefined ? {} : { force_route: forceRoute }) });
         if (Either.isLeft(decided))
             return yield* Effect.fail(failure("REQUEST_INVALID", decided.left.detail));
-        return Object.freeze({ ...decided.right, backend: ADAPTIVE_RUNTIME_BACKEND });
+        const observation = {
+            schema_version: OBSERVATION_SCHEMA, manifest_digest: manifestDigest,
+            router: revisionPin(yield* get(`cell:${source}`)), context: structuredClone(context),
+            allowed: [...allowed].sort(), budget_seconds: budget, exploration,
+            candidates: values.map((value, index) => ({
+                relation: revisionPin(value), scope_status: scopes[index],
+                learner_schema: routePayload(value)!.model.schema_version,
+                learner_digest: observationDigest(routePayload(value)!.model),
+                scope_binding: asPayload(value)["scope_binding"] ?? null
+            })),
+            propensity: null, propensity_status: "DETERMINISTIC_NO_RANDOM_ASSIGNMENT",
+            predicted_success_semantics: "LOCAL_MODEL_SCORE_NOT_CALIBRATED_PROBABILITY",
+            source_evidence: { status: "NOT_INSTRUMENTED", references: null }
+        };
+        return Object.freeze({ ...decided.right, observation, backend: ADAPTIVE_RUNTIME_BACKEND });
     });
     const hasSpecialization = (parentUid: string): Effect.Effect<boolean, AdaptiveRuntimeError> => Effect.gen(function* () {
         const heads = yield* storeError(store.heads(program.graph_id, "relation"));
         const relations = yield* Effect.forEach(heads, (head) => get(head.uid));
-        return relations.some((relation) => routePayload(relation)?.parent_relation === parentUid);
+        for (const relation of relations)
+            if (routePayload(relation)?.parent_relation === parentUid && routePayload(relation)?.active && (yield* scopeStatus(relation)) === "BOUND_PARENT_AND_SELECTOR")
+                return true;
+        return false;
+    });
+    const proposeChild = (parent: AdaptiveAtomRevision, examples: ReadonlyArray<GuardExample>): Effect.Effect<{ readonly atoms: ReadonlyArray<AdaptiveAtom>; readonly status: string }, AdaptiveRuntimeError> => Effect.gen(function* () {
+        const data = routePayload(parent)!;
+        if (data.parent_relation !== null || (yield* hasSpecialization(parent.uid)))
+            return { atoms: [], status: "EXISTING_OR_NESTED_SPECIALIZATION" };
+        const proposal = proposeSpecialization(program.context_domain, examples, parent.digest);
+        if (Either.isLeft(proposal))
+            return { atoms: [], status: proposal.left.code };
+        if (proposal.right.status !== "PROPOSED_NOT_ADMITTED")
+            return { atoms: [], status: proposal.right.reason };
+        const child = boundSpecialization(parent, data.route, proposal.right.relation_ast);
+        // Composition can exceed a bounded parser's depth/identifier limits. Do not activate it then.
+        if (Either.isLeft(parseProgram({ ...program, root: child.route.source, relations: [child.route] })))
+            return { atoms: [], status: "COMPOSED_SCOPE_OUTSIDE_PROGRAM_BOUNDS" };
+        if ((yield* optional(child.uid)) !== null)
+            return { atoms: [], status: "EXISTING_SPECIALIZATION" };
+        return {
+            status: "BOUND_LOCAL_SPECIALIZATION_NOT_ADMISSION",
+            atoms: [
+                atom(child.conditionUid, "condition", parent.owner, { ...proposal.right, scope_binding: child.scope }, [{ role: "parent", uid: parent.uid }]),
+                atom(child.uid, "relation", parent.owner, { ...child.route, active: true, model: initialModel(), examples: [], parent_relation: parent.uid, scope_binding: child.scope }, [
+                    { role: "source", uid: `cell:${child.route.source}` }, { role: "condition", uid: child.conditionUid }, { role: "parent", uid: parent.uid },
+                    ...child.route.members.map((member, index) => ({ role: `member:${index}`, uid: `cell:${member}` })),
+                    ...child.route.reads.map((field) => ({ role: `input:${field}`, uid: `field:${field}` }))
+                ])
+            ]
+        };
     });
     const runtime: AdaptiveRuntime = {
-        plan: (context, input = {}) => Effect.gen(function* () {
+        plan: (rawContext, rawInput = {}) => Effect.gen(function* () {
+            const context = structuredClone(rawContext), input = structuredClone(rawInput);
             const budget = input.budget ?? 60, exploration = input.exploration ?? .1, source = input.cellId ?? program.root;
             if (!Number.isFinite(budget) || budget <= 0 || budget > 3600 || !Number.isFinite(exploration) || exploration < 0 || exploration > 1 || cells.get(source)?.kind !== "router")
                 return yield* Effect.fail(failure("REQUEST_INVALID", "plan bounds or router"));
@@ -188,6 +260,7 @@ export const makeAdaptiveRuntime = (rawProgram: unknown, workspace: string, opti
             const deadline = startedAt + budget * 1000;
             let counter = 0, leaves = 0;
             const visits: Record<string, unknown>[] = [];
+            const leafCosts: { trajectory: string; durationSeconds: number }[] = [];
             const call = (cellId: string, payload: Record<string, unknown>, stack: ReadonlyArray<string>, parent?: string): Effect.Effect<AdaptiveExecution, AdaptiveRuntimeError, BoundedSubprocess> => Effect.gen(function* () {
                 const currentTime = yield* now;
                 const remaining = deadline - currentTime;
@@ -198,15 +271,26 @@ export const makeAdaptiveRuntime = (rawProgram: unknown, workspace: string, opti
                     return resultUnknown("unknown cell");
                 const traceUid = `trajectory:${input.episodeId}:${counter++}`;
                 let selected: AdaptiveAtomRevision | undefined;
-                let planned: Plan & {
-                    readonly backend: typeof ADAPTIVE_RUNTIME_BACKEND;
-                } | null = null;
+                let planned: RuntimePlan | null = null;
                 if (cell.kind === "router") {
                     planned = stack.length === 0 ? first : yield* choose(context, cellId, remaining / 1000, allowed, exploration);
                     if (planned.selected !== null)
                         selected = yield* get(planned.selected.uid.startsWith("relation:") ? planned.selected.uid : `relation:${planned.selected.uid}`);
                 }
-                const trace = atom(traceUid, "trajectory", cell.owner, { status: "RUNNING", episode_id: input.episodeId, input_digest: sha(payload), plan: planned, context }, [{ role: "episode", uid: episodeUid }, { role: "cell", uid: `cell:${cellId}` }, ...(parent === undefined ? [] : [{ role: "parent", uid: parent }]), ...(selected === undefined ? [] : [{ role: "selected_relation", uid: selected.uid }])]);
+                const executionInput = { ...payload, episode_id: input.episodeId, call_id: traceUid };
+                const occurrence = {
+                    schema_version: OBSERVATION_SCHEMA, occurrence: traceUid,
+                    cell: revisionPin(yield* get(`cell:${cellId}`)),
+                    selected_relation: selected === undefined ? null : revisionPin(selected),
+                    selected_learner_digest: selected === undefined ? null : observationDigest(routePayload(selected)!.model),
+                    input_digest: observationDigest(cell.kind === "router" ? payload : executionInput),
+                    input_context: record(payload["context"]) ? structuredClone(payload["context"]) : null,
+                    input_context_semantics: "DELIVERED_VALUES_NOT_PROOF_OF_READS",
+                    budget_remaining_seconds: remaining / 1000,
+                    participants: selected === undefined ? [] : yield* Effect.forEach(routePayload(selected)!.route.members, (member, ordinal) => get(`cell:${member}`).pipe(Effect.map((value) => ({ role: "member", ordinal, ...revisionPin(value) })))),
+                    source_evidence: { status: "NOT_INSTRUMENTED", references: null }
+                };
+                const trace = atom(traceUid, "trajectory", cell.owner, { status: "RUNNING", episode_id: input.episodeId, input_digest: sha(payload), plan: planned, context, observation: occurrence }, [{ role: "episode", uid: episodeUid }, { role: "cell", uid: `cell:${cellId}` }, ...(parent === undefined ? [] : [{ role: "parent", uid: parent }]), ...(selected === undefined ? [] : [{ role: "selected_relation", uid: selected.uid }])]);
                 yield* storeError(store.rewrite({ graphId: program.graph_id, eventId: `${traceUid}:begin`, expected: { [traceUid]: 0 }, atoms: [trace], source: { kind: "PRE_EFFECT_TRAJECTORY", backend: ADAPTIVE_RUNTIME_BACKEND } }));
                 let result: AdaptiveExecution;
                 if (cell.kind === "router") {
@@ -229,13 +313,14 @@ export const makeAdaptiveRuntime = (rawProgram: unknown, workspace: string, opti
                             return next;
                         });
                         const routerEnded = yield* now;
-                        result = Object.freeze({ ...nested, durationSeconds: Math.max(0, (routerEnded - routerStarted) / 1000) });
+                        result = Object.freeze({ ...nested, durationSeconds: Math.max(0, (routerEnded - routerStarted) / 1000), metadata: { kind: "router", output_semantics: "LAST_MEMBER_OUTPUT", cost_semantics: "INCLUSIVE_WALL_TIME_DO_NOT_SUM_WITH_CHILDREN" } });
                     }
                 }
                 else {
                     leaves += 1;
                     const beforeEffect = yield* now;
-                    result = yield* executeAdaptiveCell(cell as unknown as Readonly<Record<string, unknown>>, { ...payload, episode_id: input.episodeId, call_id: traceUid }, workspace, Math.max(1, deadline - beforeEffect)).pipe(Effect.provideService(AdaptiveHttpClient, options?.httpClient ?? NativeAdaptiveHttpClient));
+                    result = yield* executeAdaptiveCell(cell as unknown as Readonly<Record<string, unknown>>, executionInput, workspace, Math.max(1, deadline - beforeEffect)).pipe(Effect.provideService(AdaptiveHttpClient, options?.httpClient ?? NativeAdaptiveHttpClient));
+                    leafCosts.push({ trajectory: traceUid, durationSeconds: result.durationSeconds });
                 }
                 const done = draft((yield* get(traceUid)));
                 const donePayload = asPayload(done as AdaptiveAtomRevision);
@@ -247,7 +332,7 @@ export const makeAdaptiveRuntime = (rawProgram: unknown, workspace: string, opti
                     const route = routePayload(selected);
                     if (route !== null) {
                         const outcomeUid = `${traceUid}:outcome`;
-                        const fact = { success: result.success, duration_seconds: result.durationSeconds, output_digest: result.outputDigest, source: "LOCAL_EXECUTOR_COMPOSITE_RETURN", credit: "UNIDENTIFIED_CAUSAL_CREDIT" };
+                        const fact = { schema_version: OBSERVATION_SCHEMA, success: result.success, duration_seconds: result.durationSeconds, output_digest: result.outputDigest, selected_relation: revisionPin(selected), occurrence: traceUid, source: "LOCAL_EXECUTOR_COMPOSITE_RETURN", credit: "UNIDENTIFIED_CAUSAL_CREDIT" };
                         mutations.push(atom(outcomeUid, "outcome", cell.owner, fact, [{ role: "trajectory", uid: traceUid }]));
                         expected[outcomeUid] = 0;
                         if (learn) {
@@ -259,33 +344,23 @@ export const makeAdaptiveRuntime = (rawProgram: unknown, workspace: string, opti
                                 const examples = [...data!.examples, { values: context, outcome: result.success, source: outcomeUid }].slice(-64);
                                 mutations.push(atom(revised.uid, revised.kind, revised.owner, { ...asPayload(revised as AdaptiveAtomRevision), model: updated.right, examples, last_outcome: outcomeUid }, [...revised.refs.filter((ref) => ref.role !== "last_outcome"), { role: "last_outcome", uid: outcomeUid }]));
                                 expected[revised.uid] = selected.revision;
-                                // A bounded proposal is persisted atomically with its evidence and model update.
-                                if (data!.parent_relation === null) {
-                                    const proposal = proposeSpecialization(program.context_domain, examples, selected.digest);
-                                    if (Either.isRight(proposal) && proposal.right.status === "PROPOSED_NOT_ADMITTED" && !(yield* hasSpecialization(selected.uid))) {
-                                        const suffix = sha(proposal.right.relation_ast).slice(0, 20);
-                                        const specializedUid = `${selected.uid}:specialized:${suffix}`;
-                                        const exists = yield* optional(specializedUid);
-                                        if (exists === null) {
-                                            const conditionUid = `condition:${suffix}:${selected.uid}`;
-                                            const guarded: Route = { ...data!.route, uid: specializedUid.replace(/^relation:/, ""), reads: [...new Set([...data!.route.reads, ...collectGuardReads(proposal.right.relation_ast)])].sort(), guard: proposal.right.relation_ast };
-                                            mutations.push(atom(conditionUid, "condition", selected.owner, proposal.right, [{ role: "parent", uid: selected.uid }]), atom(specializedUid, "relation", selected.owner, { ...guarded, active: true, model: initialModel(), examples: [], parent_relation: selected.uid }, [{ role: "source", uid: `cell:${guarded.source}` }, { role: "condition", uid: conditionUid }, { role: "parent", uid: selected.uid }, ...guarded.members.map((member, index) => ({ role: `member:${index}`, uid: `cell:${member}` })), ...guarded.reads.map((field) => ({ role: `input:${field}`, uid: `field:${field}` }))]));
-                                            expected[conditionUid] = 0;
-                                            expected[specializedUid] = 0;
-                                        }
-                                    }
+                                const child = yield* proposeChild(selected, examples);
+                                donePayload["specialization_observation"] = child.status;
+                                for (const candidate of child.atoms) {
+                                    mutations.push(candidate);
+                                    expected[candidate.uid] = 0;
                                 }
                             }
                         }
                     }
                 }
                 yield* storeError(store.rewrite({ graphId: program.graph_id, eventId: `${traceUid}:complete`, expected, atoms: mutations, source: { kind: "OBSERVED_EXECUTION_RESULT", backend: ADAPTIVE_RUNTIME_BACKEND } }));
-                visits.push({ trajectory: traceUid, cell: cellId, relation: selected?.uid ?? null, status: result.status, success: result.success });
+                visits.push({ trajectory: traceUid, cell: cellId, relation: selected?.uid ?? null, selected_relation: selected === undefined ? null : revisionPin(selected), output_digest: result.outputDigest, status: result.status, success: result.success });
                 return result;
             });
             const result = yield* call(program.root, { task, prompt: task, context }, [], undefined).pipe(Effect.catchAll(() => Effect.succeed(resultUnknown("runtime exception"))));
             const current = yield* get(episodeUid);
-            const payload = { ...asPayload(current), status: result.status, result: wireExecution(result), visits, leaf_calls: leaves, learning: learn ? "OBSERVATIONAL_LOCAL_ADAPTATION" : "FROZEN", claim: "EXPERIMENTAL_USE_NOT_EFFICACY_PROOF", backend: ADAPTIVE_RUNTIME_BACKEND };
+            const payload = { ...asPayload(current), status: result.status, result: wireExecution(result), visits, leaf_calls: leaves, cost_observation: episodeCosts(leafCosts, Math.max(0, ((yield* now) - startedAt) / 1000)), learning: learn ? "OBSERVATIONAL_LOCAL_ADAPTATION" : "FROZEN", claim: "EXPERIMENTAL_USE_NOT_EFFICACY_PROOF", backend: ADAPTIVE_RUNTIME_BACKEND };
             const endAtoms: AdaptiveAtom[] = [atom(episodeUid, current.kind, current.owner, payload, current.refs)];
             const endExpected: Record<string, number> = { [episodeUid]: current.revision };
             if (result.status !== "UNKNOWN") {
@@ -328,10 +403,22 @@ export const makeAdaptiveRuntime = (rawProgram: unknown, workspace: string, opti
                     if (data !== null) {
                         const outcomeUid = `feedback:${episodeId}`;
                         const duration = typeof priorResult["duration_seconds"] === "number" ? priorResult["duration_seconds"] : 0;
-                        atoms.push(atom(outcomeUid, "outcome", route.owner, { success, source, duration_seconds: duration, credit: "CALLER_FEEDBACK_NOT_INDEPENDENT_CAUSAL_CREDIT" }, [{ role: "episode", uid: episode.uid }]));
+                        const occurrence = record(tracePayload["observation"]) ? tracePayload["observation"] : {};
+                        const pin = record(occurrence["selected_relation"]) ? occurrence["selected_relation"] : null;
+                        let feedbackScope = "LEGACY_UNBOUND_OCCURRENCE";
+                        if (pin !== null && pin["uid"] === route.uid && Number.isSafeInteger(pin["revision"]) && (pin["revision"] as number) > 0) {
+                            const original = yield* storeError(store.getRevision(program.graph_id, route.uid, pin["revision"] as number));
+                            const originalData = routePayload(original);
+                            const currentScope = yield* scopeStatus(route);
+                            feedbackScope = !["BASE_RELATION", "BOUND_PARENT_AND_SELECTOR"].includes(currentScope) ? "SELECTION_SCOPE_INVALID"
+                                : original.digest === pin["digest"] && originalData !== null && data.active && observationDigest(routeMeaning(originalData.route)) === observationDigest(routeMeaning(data.route))
+                                    ? "MATCHING_SELECTION_MEANING" : "SELECTION_MEANING_CHANGED";
+                        }
+                        atoms.push(atom(outcomeUid, "outcome", route.owner, { schema_version: OBSERVATION_SCHEMA, success, source, duration_seconds: duration, output_digest: priorResult["output_digest"] ?? null, occurrence: rootTrace.uid, selected_relation: pin, feedback_scope: feedbackScope, credit: "CALLER_FEEDBACK_NOT_INDEPENDENT_CAUSAL_CREDIT" }, [{ role: "episode", uid: episode.uid }, { role: "trajectory", uid: rootTrace.uid }, { role: "selected_relation", uid: route.uid }]));
                         expected[outcomeUid] = 0;
                         const intent = record(payload["intent"]) ? payload["intent"] : {};
-                        if (intent["learn"] === true) {
+                        updated["learning_status"] = intent["learn"] !== true ? "FROZEN" : feedbackScope !== "MATCHING_SELECTION_MEANING" ? feedbackScope : "UPDATE_WITHHELD";
+                        if (intent["learn"] === true && feedbackScope === "MATCHING_SELECTION_MEANING") {
                             const read = Object.fromEntries(data.route.reads.map((field) => [field, (intent["context"] as Context)[field]])) as Context;
                             const revised = updateModel(data.model, read, { success, cost: duration });
                             if (Either.isRight(revised)) {
@@ -339,19 +426,11 @@ export const makeAdaptiveRuntime = (rawProgram: unknown, workspace: string, opti
                                 atoms.push(atom(route.uid, route.kind, route.owner, { ...asPayload(route), model: revised.right, examples, last_outcome: outcomeUid }, [...route.refs.filter((ref) => ref.role !== "last_outcome"), { role: "last_outcome", uid: outcomeUid }]));
                                 expected[route.uid] = route.revision;
                                 updated["learning_status"] = "WEIGHTS_UPDATED";
-                                if (data.parent_relation === null) {
-                                    const proposal = proposeSpecialization(program.context_domain, examples, route.digest);
-                                    if (Either.isRight(proposal) && proposal.right.status === "PROPOSED_NOT_ADMITTED") {
-                                        const suffix = sha(proposal.right.relation_ast).slice(0, 20);
-                                        const specializedUid = `${route.uid}:specialized:${suffix}`;
-                                        if (!(yield* hasSpecialization(route.uid)) && (yield* optional(specializedUid)) === null) {
-                                            const conditionUid = `condition:${suffix}:${route.uid}`;
-                                            const guarded: Route = { ...data.route, uid: specializedUid.replace(/^relation:/, ""), reads: [...new Set([...data.route.reads, ...collectGuardReads(proposal.right.relation_ast)])].sort(), guard: proposal.right.relation_ast };
-                                            atoms.push(atom(conditionUid, "condition", route.owner, proposal.right, [{ role: "parent", uid: route.uid }]), atom(specializedUid, "relation", route.owner, { ...guarded, active: true, model: initialModel(), examples: [], parent_relation: route.uid }, [{ role: "source", uid: `cell:${guarded.source}` }, { role: "condition", uid: conditionUid }, { role: "parent", uid: route.uid }, ...guarded.members.map((member, index) => ({ role: `member:${index}`, uid: `cell:${member}` })), ...guarded.reads.map((field) => ({ role: `input:${field}`, uid: `field:${field}` }))]));
-                                            expected[conditionUid] = 0;
-                                            expected[specializedUid] = 0;
-                                        }
-                                    }
+                                const child = yield* proposeChild(route, examples);
+                                updated["specialization_observation"] = child.status;
+                                for (const candidate of child.atoms) {
+                                    atoms.push(candidate);
+                                    expected[candidate.uid] = 0;
                                 }
                             }
                         }

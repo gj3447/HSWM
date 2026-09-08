@@ -37,12 +37,51 @@ export class AdaptiveHttpClient extends Context.Tag("hswm/AdaptiveHttpClient")<A
 }
 const digest = (value: string): string => createHash("sha256").update(value, "utf8").digest("hex");
 const text = (value: unknown): value is string => typeof value === "string" && value.trim().length > 0 && value.length <= 64000;
+const modelText = (value: unknown): value is string => typeof value === "string" && value.trim().length > 0 && value.length <= 256;
+const nonnegativeInteger = (value: unknown): value is number => typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+type ProviderUsageObservation = Readonly<{ readonly status: "REPORTED" | "UNAVAILABLE" | "INVALID" | "NOT_APPLICABLE"; readonly prompt_tokens: number | null; readonly completion_tokens: number | null; readonly total_tokens: number | null; readonly reported_model: string | null }>;
+const providerUsage = (decoded: unknown): ProviderUsageObservation => {
+    if (!decoded || typeof decoded !== "object" || Array.isArray(decoded)) return Object.freeze({ status: "INVALID", prompt_tokens: null, completion_tokens: null, total_tokens: null, reported_model: null });
+    const response = decoded as Record<string, unknown>;
+    const reportedModel = modelText(response["model"]) ? response["model"] : null;
+    const usage = response["usage"];
+    if (usage === undefined) return Object.freeze({ status: "UNAVAILABLE", prompt_tokens: null, completion_tokens: null, total_tokens: null, reported_model: reportedModel });
+    if (!usage || typeof usage !== "object" || Array.isArray(usage)) return Object.freeze({ status: "INVALID", prompt_tokens: null, completion_tokens: null, total_tokens: null, reported_model: reportedModel });
+    const row = usage as Record<string, unknown>;
+    const prompt = row["prompt_tokens"], completion = row["completion_tokens"], total = row["total_tokens"];
+    if (!nonnegativeInteger(prompt) || !nonnegativeInteger(completion) || !nonnegativeInteger(total) || total !== prompt + completion)
+        return Object.freeze({ status: "INVALID", prompt_tokens: null, completion_tokens: null, total_tokens: null, reported_model: reportedModel });
+    return Object.freeze({ status: "REPORTED", prompt_tokens: prompt, completion_tokens: completion, total_tokens: total, reported_model: reportedModel });
+};
+const observation = (kind: "command" | "llm", cell: AdaptiveLeafCell, usage: ProviderUsageObservation): Readonly<Record<string, unknown>> => Object.freeze({
+    schema_version: "hswm-adaptive-execution-observation/v1",
+    executor_schema: ADAPTIVE_EXECUTOR_V1,
+    kind,
+    cell_id: modelText(cell["cell_id"]) ? cell["cell_id"] : null,
+    cell_identity_sha256: digest(JSON.stringify({ kind, cell_id: modelText(cell["cell_id"]) ? cell["cell_id"] : null })),
+    configured_model: kind === "llm" && modelText(cell["model"]) ? cell["model"] : null,
+    tool_identity_sha256: digest(JSON.stringify(kind === "command" ? command(cell) : typeof cell["base_url"] === "string" ? cell["base_url"] : null)),
+    tool_identity_semantics: "CONFIGURATION_NOT_EXECUTABLE_CONTENT_OR_VERSION",
+    executable_version: null,
+    configuration_sha256: digest(JSON.stringify(kind === "command" ? { argv: command(cell), outcome: cell["outcome"] === "exit_code" } : { base_url_sha256: typeof cell["base_url"] === "string" ? digest(cell["base_url"]) : null, model: modelText(cell["model"]) ? cell["model"] : null, max_tokens: typeof cell["max_tokens"] === "number" ? cell["max_tokens"] : null })),
+    provider_usage: usage,
+    retrieval_observation: "UNKNOWN_AT_EXECUTOR_BOUNDARY"
+});
+const noUsage = (): ProviderUsageObservation => Object.freeze({ status: "NOT_APPLICABLE", prompt_tokens: null, completion_tokens: null, total_tokens: null, reported_model: null });
 const now = Effect.clockWith((clock) => clock.currentTimeMillis);
 const jsonInput = (value: unknown) => Effect.try({
     try: () => JSON.stringify(value),
     catch: () => new AdaptiveExecutorError({ code: "INPUT_INVALID", detail: "input is not JSON serializable" })
 });
-const finish = (status: AdaptiveExecution["status"], success: boolean | null, started: number, ended: number, output: string, metadata: Readonly<Record<string, unknown>>): AdaptiveExecution => Object.freeze({ status, success, durationSeconds: Math.max(0, (ended - started) / 1000), output, outputDigest: digest(output), metadata: Object.freeze(metadata) });
+const finish = (status: AdaptiveExecution["status"], success: boolean | null, started: number, ended: number, output: string, metadata: Readonly<Record<string, unknown>>): AdaptiveExecution => {
+    const durationSeconds = Math.max(0, (ended - started) / 1000);
+    const outputDigest = digest(output);
+    const existing = metadata["execution_observation_v1"];
+    const executionObservation = existing && typeof existing === "object" && !Array.isArray(existing)
+        ? Object.freeze({ ...(existing as Record<string, unknown>), output_digest: outputDigest, wall_duration_seconds: durationSeconds })
+        : undefined;
+    return Object.freeze({ status, success, durationSeconds, output, outputDigest, metadata: Object.freeze({ ...metadata, ...(executionObservation === undefined ? {} : { execution_observation_v1: executionObservation }) }) });
+};
 const completed = (status: AdaptiveExecution["status"], success: boolean | null, started: number, output: string, metadata: Readonly<Record<string, unknown>>): Effect.Effect<AdaptiveExecution> => now.pipe(Effect.map((ended) => finish(status, success, started, ended, output, metadata)));
 const httpFailure = (cause: unknown) => new AdaptiveExecutorError({ code: "HTTP_FAILED", detail: cause instanceof Error ? cause.message : "unknown HTTP failure" });
 const readChunk = (reader: ReadableStreamDefaultReader<Uint8Array>) => Effect.tryPromise({ try: () => reader.read(), catch: httpFailure });
@@ -84,27 +123,29 @@ const command = (cell: AdaptiveLeafCell): readonly string[] | null => {
 const runCommand = (cell: AdaptiveLeafCell, payload: unknown, workspace: string, timeoutMs: number): Effect.Effect<AdaptiveExecution, never, BoundedSubprocess> => Effect.gen(function* () {
     const started = yield* now;
     const argv = command(cell);
+    const commandObservation = observation("command", cell, noUsage());
     if (argv === null)
-        return yield* completed("FAILED", null, started, "", { kind: "command", error: "literal argv required" });
+        return yield* completed("FAILED", null, started, "", { kind: "command", error: "literal argv required", execution_observation_v1: commandObservation });
     const encoded = yield* jsonInput(payload).pipe(Effect.either);
     if (encoded._tag === "Left")
-        return yield* completed("FAILED", null, started, "", { kind: "command", error: encoded.left.code });
+        return yield* completed("FAILED", null, started, "", { kind: "command", error: encoded.left.code, execution_observation_v1: commandObservation });
     const input = encoded.right;
     if (Buffer.byteLength(input, "utf8") > MAX_INPUT_BYTES)
-        return yield* completed("FAILED", null, started, "", { kind: "command", error: "input too large" });
+        return yield* completed("FAILED", null, started, "", { kind: "command", error: "input too large", execution_observation_v1: commandObservation });
     const subprocess = yield* BoundedSubprocess;
     const observed = yield* subprocess.observe({ argv, cwd: workspace, environment: process.env as Record<string, string>, timeoutMs, maximumOutputBytes: MAX_OUTPUT_BYTES, stdin: Buffer.from(input), killProcessGroup: true }).pipe(Effect.catchAll((error) => Effect.succeed({ exitCode: null, signal: null, timedOut: false, outputTruncated: false, launchError: error.code, stdout: new Uint8Array(), stderr: new Uint8Array() })));
     const output = Buffer.concat([Buffer.from(observed.stdout), Buffer.from(observed.stderr)]).toString("utf8");
     if (observed.timedOut || observed.signal !== null || observed.launchError !== null || observed.outputTruncated)
-        return yield* completed("UNKNOWN", null, started, output, { kind: "command", timedOut: observed.timedOut, signal: observed.signal, launchError: observed.launchError, outputTruncated: observed.outputTruncated });
+        return yield* completed("UNKNOWN", null, started, output, { kind: "command", timedOut: observed.timedOut, signal: observed.signal, launchError: observed.launchError, outputTruncated: observed.outputTruncated, execution_observation_v1: commandObservation });
     const checker = cell["outcome"] === "exit_code";
-    return yield* completed(observed.exitCode === 0 ? "SUCCEEDED" : "FAILED", checker ? observed.exitCode === 0 : null, started, output, { kind: "command", exitCode: observed.exitCode, outputTruncated: observed.outputTruncated });
+    return yield* completed(observed.exitCode === 0 ? "SUCCEEDED" : "FAILED", checker ? observed.exitCode === 0 : null, started, output, { kind: "command", exitCode: observed.exitCode, outputTruncated: observed.outputTruncated, execution_observation_v1: commandObservation });
 });
 const runLlm = (cell: AdaptiveLeafCell, payload: unknown, timeoutMs: number): Effect.Effect<AdaptiveExecution, never, AdaptiveHttpClient> => Effect.gen(function* () {
     const started = yield* now;
     const baseUrl = cell["base_url"], model = cell["model"];
     if (!text(baseUrl) || !text(model))
         return yield* completed("FAILED", null, started, "", { kind: "llm", error: "base_url and model required" });
+    const llmObservation = observation("llm", cell, Object.freeze({ status: "UNAVAILABLE", prompt_tokens: null, completion_tokens: null, total_tokens: null, reported_model: null }));
     const keyName = cell["api_key_env"];
     const apiKey = typeof keyName === "string" ? process.env[keyName] : undefined;
     const prompt = typeof payload === "object" && payload !== null && typeof (payload as Record<string, unknown>)["prompt"] === "string"
@@ -112,19 +153,19 @@ const runLlm = (cell: AdaptiveLeafCell, payload: unknown, timeoutMs: number): Ef
         : jsonInput(payload);
     const encodedPrompt = yield* prompt.pipe(Effect.either);
     if (encodedPrompt._tag === "Left")
-        return yield* completed("FAILED", null, started, "", { kind: "llm", error: encodedPrompt.left.code });
+        return yield* completed("FAILED", null, started, "", { kind: "llm", error: encodedPrompt.left.code, execution_observation_v1: llmObservation });
     const requestBody = yield* jsonInput({ model, messages: [{ role: "user", content: encodedPrompt.right }], max_tokens: typeof cell["max_tokens"] === "number" ? cell["max_tokens"] : undefined }).pipe(Effect.either);
     if (requestBody._tag === "Left")
-        return yield* completed("FAILED", null, started, "", { kind: "llm", error: requestBody.left.code });
+        return yield* completed("FAILED", null, started, "", { kind: "llm", error: requestBody.left.code, execution_observation_v1: llmObservation });
     const body = Buffer.from(requestBody.right, "utf8");
     if (body.byteLength > MAX_INPUT_BYTES)
-        return yield* completed("FAILED", null, started, "", { kind: "llm", error: "input too large" });
+        return yield* completed("FAILED", null, started, "", { kind: "llm", error: "input too large", execution_observation_v1: llmObservation });
     const client = yield* AdaptiveHttpClient;
     const normalizedBaseUrl = baseUrl.replace(/\/$/, "");
     const endpoint = normalizedBaseUrl.endsWith("/v1") ? `${normalizedBaseUrl}/chat/completions` : `${normalizedBaseUrl}/v1/chat/completions`;
     const raw = yield* client.postJson({ url: endpoint, headers: Object.freeze({ "content-type": "application/json", ...(apiKey === undefined ? {} : { authorization: `Bearer ${apiKey}` }) }), body, timeoutMs, maximumResponseBytes: MAX_OUTPUT_BYTES }).pipe(Effect.either);
     if (raw._tag === "Left")
-        return yield* completed("UNKNOWN", null, started, "", { kind: "llm", error: raw.left.code });
+        return yield* completed("UNKNOWN", null, started, "", { kind: "llm", error: raw.left.code, execution_observation_v1: llmObservation });
     const output = Buffer.from(raw.right).toString("utf8");
     try {
         const decoded: unknown = JSON.parse(output);
@@ -135,12 +176,14 @@ const runLlm = (cell: AdaptiveLeafCell, payload: unknown, timeoutMs: number): Ef
                 };
             }>;
         }).choices?.[0]?.message?.content;
+        const observedUsage = providerUsage(decoded);
+        const responseObservation = observation("llm", cell, observedUsage);
         if (typeof content !== "string")
-            return yield* completed("FAILED", null, started, output, { kind: "llm", error: "OpenAI compatible response lacks choices[0].message.content" });
-        return yield* completed("SUCCEEDED", null, started, content, { kind: "llm", response: "OBSERVED_NOT_OUTCOME" });
+            return yield* completed("FAILED", null, started, output, { kind: "llm", error: "OpenAI compatible response lacks choices[0].message.content", execution_observation_v1: responseObservation });
+        return yield* completed("SUCCEEDED", null, started, content, { kind: "llm", response: "OBSERVED_NOT_OUTCOME", execution_observation_v1: responseObservation });
     }
     catch {
-        return yield* completed("FAILED", null, started, output, { kind: "llm", error: "invalid JSON" });
+        return yield* completed("FAILED", null, started, output, { kind: "llm", error: "invalid JSON", execution_observation_v1: llmObservation });
     }
 });
 /** Executes only already-admitted cells; all unknown effect outcomes fail closed. */

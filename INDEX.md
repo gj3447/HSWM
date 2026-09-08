@@ -23,6 +23,11 @@ continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 �
 묶었다. 고정 Git commit의 코드·문서와 기존 조건부 계약·학습 계획·문헌 KG를 연결하며,
 최초 실행 보고를 현재 DB 상태나 HSWM 성능 우위로 승격하지 않는다.
 
+[`USL 어댑터와 적대적 검토 2026-09-08`](docs/research/HSWM_USL_ADAPTER_ADVERSARIAL_REVIEW_2026-09-08.md)는
+현재 USL language 0.1의 역할 있는 plan·관측을 HSWM의 Boolean 참조 관측과 조건 preview로
+연결한다. `hswm-usl`로 실행하며 의미 revision 결속·grounding·KG 지문·resolver 권한의
+한계를 구분한다. USL 조회 성공은 HSWM 학습 보상이나 canonical admission이 아니다.
+
 외부 그래프 표준·SDK·공식 test suite, MCP와 Skill의 역할 분리, source pin과
 registry 비신뢰 경계는
 [`standard-first graph toolchain policy`](docs/operations/HSWM_STANDARD_TOOLCHAIN_POLICY_2026-09-02.md)에

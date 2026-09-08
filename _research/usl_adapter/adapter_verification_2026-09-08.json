@@ -1,0 +1,74 @@
+{
+  "schema_version": "hswm-usl-adapter-engineering-verification/v1",
+  "verified_on": "2026-09-08",
+  "status": "BOUNDED_ADAPTER_AND_PREVIEW_VERIFIED_NOT_EFFICACY",
+  "source_bindings": [
+    {
+      "path": "src/hswm/infrastructure/usl_adapter.py",
+      "sha256": "b6757e12758879af9ff28896df33733700b96449b3e81caf9593328318c26d7e"
+    },
+    {
+      "path": "src/hswm/infrastructure/usl_cli.py",
+      "sha256": "2f9d57075198b4796ddd7715adcbbc9221b951b7704603cbe4422cdf5f72cee8"
+    },
+    {
+      "path": "_research/usl_adapter/examples/development_reference.usl",
+      "sha256": "a89f92a6d9fd260cc8882d05e5a546b5c74adeb5ed6a47e2b10520d253067868"
+    },
+    {
+      "path": "_research/usl_adapter/examples/development_reference.plan.v1.json",
+      "sha256": "175110f3de20ecd03c090e075ece8741a77aef3d91dd74e7ddf9f6e53013fea4"
+    },
+    {
+      "path": "_research/usl_adapter/examples/preview.v1.json",
+      "sha256": "0fb0d294caac2f35f396f3eb3e68a91bb1875ac553c397721fef49c446dc71b6"
+    },
+    {
+      "path": "_research/usl_adapter/source_audit_2026-09-08.json",
+      "sha256": "23e198b473eb415f9bf0ddcd0521be4148a3564b36ca338677a9245b0530a648"
+    },
+    {
+      "path": "tests/test_usl_adapter.py",
+      "sha256": "ee9688bb85dc8ba99f98497618eb448c21a98fb00d20772e821e160551c14151"
+    },
+    {
+      "path": "tests/test_usl_cli.py",
+      "sha256": "99f05ab398de9c9f932f8e93c876a3901a5aba02fc64e352c578a58225b7ecc5"
+    },
+    {
+      "path": "tests/test_conditional_capability.py",
+      "sha256": "0f419efda1d79edee70221fe51f60cdde833f9d215eb437124f390ca1db2a8ba"
+    },
+    {
+      "path": "tests/test_conditional_probe.py",
+      "sha256": "38e8eb75d89e5bb432d71a6a14f49373af2645c3c46caf79b25e1c9b985b80fd"
+    },
+    {
+      "path": "tests/test_conditional_task_cli.py",
+      "sha256": "bb6ed9c7fdbf19b283ce0c45d735284615f6d28fc8108ef6272314459c1b217b"
+    },
+    {
+      "path": "tests/test_hswm_canon_doc_honesty.py",
+      "sha256": "a7cbd2f5f5ac0da8f6191adb504921fb15127a14b38dd38cae0d2207012ef2a9"
+    }
+  ],
+  "tests": {
+    "command": "uv run --locked pytest -q tests/test_usl_adapter.py tests/test_usl_cli.py tests/test_conditional_capability.py tests/test_conditional_probe.py tests/test_conditional_task_cli.py tests/test_hswm_canon_doc_honesty.py",
+    "exit_code": 0,
+    "output": "............................................................             [100%]\n60 passed in 0.63s"
+  },
+  "authored_example": {
+    "fresh_adapter": "READY",
+    "fresh_proposal": "ACTION_PROPOSAL",
+    "stale_adapter": "UNRESOLVED",
+    "stale_proposal": "OBSERVE",
+    "preserved_roles": [
+      "code",
+      "target",
+      "context"
+    ],
+    "executed_effects": false,
+    "learning_performed": false,
+    "observation_source": "AUTHORED_FIXTURE_NOT_LIVE_PROJECT_REPORT"
+  }
+}

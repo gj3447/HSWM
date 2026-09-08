@@ -1,0 +1,72 @@
+{
+  "schema": "usl-semantic-plan/v1",
+  "languageVersion": "0.1",
+  "namespace": "hswm.usl.development.example",
+  "resources": [
+    {
+      "name": "implementation",
+      "locator": {
+        "kind": "git_repo",
+        "repo": "example.invalid/hswm",
+        "commit": "54550a331667b6e9779a30fb20c6de9eb97d1677",
+        "path": "src/hswm/cells/adaptive_runtime.py"
+      }
+    },
+    {
+      "name": "concept",
+      "locator": {
+        "kind": "kg",
+        "source": "fixture",
+        "uid": "sym:Concept:hswm"
+      }
+    },
+    {
+      "name": "context",
+      "locator": {
+        "kind": "url",
+        "href": "https://example.invalid/development-context"
+      }
+    }
+  ],
+  "meanings": [
+    {
+      "name": "documents",
+      "roles": [
+        {
+          "name": "code",
+          "kind": "git_repo"
+        },
+        {
+          "name": "target",
+          "kind": "kg"
+        },
+        {
+          "name": "context",
+          "kind": "url"
+        }
+      ],
+      "description": "개발 참조의 구현·대상·적용 문맥을 함께 지정한다"
+    }
+  ],
+  "links": [
+    {
+      "name": "development",
+      "meaning": "documents",
+      "participants": [
+        {
+          "role": "code",
+          "resource": "implementation"
+        },
+        {
+          "role": "target",
+          "resource": "concept"
+        },
+        {
+          "role": "context",
+          "resource": "context"
+        }
+      ]
+    }
+  ],
+  "declarationStatus": "DECLARED"
+}

@@ -118,6 +118,10 @@ uv run --locked hswm-live --program "$hswm_program" status
 | `hswm-task` | 조건 해석·후보 생성·관측 제안 preview |
 | `hswm-live` | manifest 기반 실행, 학습, 상태 조회, 피드백, 관계 복원 |
 | `hswm-dev` | 메이플리니지·버엑시·수풀림 개발 profile과 피드백 이력 |
+| `hswm-usl` | USL의 역할 있는 참조·관측을 HSWM 조건 preview로 연결 |
+
+USL 연결의 구현 범위와 부족한 점은
+[어댑터·적대적 검토](docs/research/HSWM_USL_ADAPTER_ADVERSARIAL_REVIEW_2026-09-08.md)에 정리했습니다.
 
 <a id="development"></a>
 

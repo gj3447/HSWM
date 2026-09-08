@@ -1,0 +1,239 @@
+{
+  "plan": {
+    "schema": "usl-semantic-plan/v1",
+    "languageVersion": "0.1",
+    "namespace": "hswm.usl.development.example",
+    "resources": [
+      {
+        "name": "implementation",
+        "locator": {
+          "kind": "git_repo",
+          "repo": "example.invalid/hswm",
+          "commit": "54550a331667b6e9779a30fb20c6de9eb97d1677",
+          "path": "src/hswm/cells/adaptive_runtime.py"
+        }
+      },
+      {
+        "name": "concept",
+        "locator": {
+          "kind": "kg",
+          "source": "fixture",
+          "uid": "sym:Concept:hswm"
+        }
+      },
+      {
+        "name": "context",
+        "locator": {
+          "kind": "url",
+          "href": "https://example.invalid/development-context"
+        }
+      }
+    ],
+    "meanings": [
+      {
+        "name": "documents",
+        "roles": [
+          {
+            "name": "code",
+            "kind": "git_repo"
+          },
+          {
+            "name": "target",
+            "kind": "kg"
+          },
+          {
+            "name": "context",
+            "kind": "url"
+          }
+        ],
+        "description": "개발 참조의 구현·대상·적용 문맥을 함께 지정한다"
+      }
+    ],
+    "links": [
+      {
+        "name": "development",
+        "meaning": "documents",
+        "participants": [
+          {
+            "role": "code",
+            "resource": "implementation"
+          },
+          {
+            "role": "target",
+            "resource": "concept"
+          },
+          {
+            "role": "context",
+            "resource": "context"
+          }
+        ]
+      }
+    ],
+    "declarationStatus": "DECLARED"
+  },
+  "report": {
+    "schema": "usl-program-observation/v1",
+    "namespace": "hswm.usl.development.example",
+    "status": "RESOLVES",
+    "resources": [
+      {
+        "name": "implementation",
+        "status": "RESOLVES",
+        "resolution": {
+          "locator": {
+            "kind": "git_repo",
+            "repo": "example.invalid/hswm",
+            "commit": "54550a331667b6e9779a30fb20c6de9eb97d1677",
+            "path": "src/hswm/cells/adaptive_runtime.py"
+          },
+          "resolvedLocator": "git://example.invalid/hswm@54550a331667b6e9779a30fb20c6de9eb97d1677:src/hswm/cells/adaptive_runtime.py",
+          "contentHash": "947c365e4bb9e68f29e38eb94aeed5dc733b0036add7b628a97fbe2f2f265441",
+          "resolvedAt": "2026-09-08T12:00:00.000Z",
+          "guaranteeLevel": "trust_host",
+          "matchCount": 1
+        },
+        "issue": null
+      },
+      {
+        "name": "concept",
+        "status": "RESOLVES",
+        "resolution": {
+          "locator": {
+            "kind": "kg",
+            "source": "fixture",
+            "uid": "sym:Concept:hswm"
+          },
+          "resolvedLocator": "kg://fixture/sym:Concept:hswm",
+          "contentHash": "8986386e9f77a9adec31bce4c18f0730da2b94c24e4c2fab87e2accf61c8462a",
+          "resolvedAt": "2026-09-08T12:00:00.000Z",
+          "guaranteeLevel": "trust_host",
+          "matchCount": 1
+        },
+        "issue": null
+      },
+      {
+        "name": "context",
+        "status": "RESOLVES",
+        "resolution": {
+          "locator": {
+            "kind": "url",
+            "href": "https://example.invalid/development-context"
+          },
+          "resolvedLocator": "https://example.invalid/development-context",
+          "contentHash": "b19421beac1208c706e9a2270db2a2a20015713ee7e4606825644ecc0ea89549",
+          "resolvedAt": "2026-09-08T12:00:00.000Z",
+          "guaranteeLevel": "trust_host",
+          "matchCount": 1
+        },
+        "issue": null
+      }
+    ],
+    "groundings": [],
+    "links": [
+      {
+        "name": "development",
+        "meaning": "documents",
+        "participants": [
+          {
+            "role": "code",
+            "resource": "implementation"
+          },
+          {
+            "role": "target",
+            "resource": "concept"
+          },
+          {
+            "role": "context",
+            "resource": "context"
+          }
+        ],
+        "resourcesResolve": true,
+        "semanticTruth": "NOT_EVALUATED"
+      }
+    ],
+    "semanticTruth": "NOT_EVALUATED"
+  },
+  "policy": {
+    "schema_version": "hswm-usl-observation-policy/v1",
+    "namespace": "hswm.usl.development.example",
+    "plan_digest": "c7c316cb2b7294a4d5e715dece29ca61af15b2efb622e87764adaa4c3257eb18",
+    "max_age_seconds": 120,
+    "bindings": [
+      {
+        "link": "development",
+        "role": "usl",
+        "field": "references_resolve"
+      }
+    ],
+    "resources": [
+      {
+        "name": "implementation",
+        "content_hash": "947c365e4bb9e68f29e38eb94aeed5dc733b0036add7b628a97fbe2f2f265441",
+        "resolved_locator": "git://example.invalid/hswm@54550a331667b6e9779a30fb20c6de9eb97d1677:src/hswm/cells/adaptive_runtime.py"
+      },
+      {
+        "name": "concept",
+        "content_hash": "8986386e9f77a9adec31bce4c18f0730da2b94c24e4c2fab87e2accf61c8462a",
+        "resolved_locator": "kg://fixture/sym:Concept:hswm"
+      },
+      {
+        "name": "context",
+        "content_hash": "b19421beac1208c706e9a2270db2a2a20015713ee7e4606825644ecc0ea89549",
+        "resolved_locator": "https://example.invalid/development-context"
+      }
+    ]
+  },
+  "preview": {
+    "domain": [
+      {
+        "role": "usl",
+        "field": "references_resolve",
+        "values": [
+          false,
+          true
+        ]
+      }
+    ],
+    "relation": {
+      "uid": "hswm-usl-development-reference",
+      "revision": "r1",
+      "ast": {
+        "op": "eq",
+        "left": {
+          "role": "usl",
+          "field": "references_resolve"
+        },
+        "right": true
+      },
+      "source": "authored:development-reference-policy"
+    },
+    "action": "inspect-development-references",
+    "checks": {
+      "scope": "hswm.usl.development.example",
+      "expected_scope": "hswm.usl.development.example",
+      "revision": "authored-observation-r1",
+      "expected_revision": "authored-observation-r1",
+      "now": 1788868860.0,
+      "allowed_reads": [
+        [
+          "usl",
+          "references_resolve"
+        ]
+      ],
+      "permitted": [
+        "inspect-development-references",
+        "OBSERVE"
+      ],
+      "available": [
+        "inspect-development-references",
+        "OBSERVE"
+      ],
+      "costs": {
+        "inspect-development-references": 1,
+        "OBSERVE": 1
+      },
+      "budget": 2,
+      "source": "authored:usl-adapter-fixture"
+    }
+  }
+}

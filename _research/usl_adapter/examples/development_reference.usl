@@ -1,0 +1,10 @@
+// Authored HSWM adapter example. Resource resolution is not semantic truth.
+usl "0.1";
+namespace "hswm.usl.development.example";
+
+resource implementation = "git://example.invalid/hswm@54550a331667b6e9779a30fb20c6de9eb97d1677:src/hswm/cells/adaptive_runtime.py";
+resource concept = "kg://fixture/sym:Concept:hswm";
+resource context = "https://example.invalid/development-context";
+
+meaning documents(code: git_repo, target: kg, context: url) = "개발 참조의 구현·대상·적용 문맥을 함께 지정한다";
+link development = documents(context: context, target: concept, code: implementation);

@@ -1,0 +1,38 @@
+{
+  "status": "LOCAL_QUERIES_AND_SHACL_VERIFIED",
+  "source_commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+  "query_results": [
+    {
+      "query": "Q1",
+      "rows": 22,
+      "expected": 22
+    },
+    {
+      "query": "Q2",
+      "rows": 3,
+      "expected": 3
+    },
+    {
+      "query": "Q3",
+      "rows": 7,
+      "expected": 7
+    },
+    {
+      "query": "Q4",
+      "rows": 3,
+      "expected": 3
+    }
+  ],
+  "claim": "STRUCTURE_AND_DATED_DOCUMENT_REPORTS_ONLY_NOT_LIVE_RUNTIME_STATE",
+  "verified_on": "2026-09-08",
+  "projection_sha256": "737324f0a9b64d061d7155c207a62877a122c1818b2a56460b54fe6e7050ca64",
+  "source_bindings_verified": 35,
+  "shacl_conforms": true,
+  "focused_pytest": {
+    "command": "uv run --locked pytest -q tests/test_development_work_projection.py tests/test_hswm_canon_doc_honesty.py",
+    "passed": 9
+  },
+  "local_markdown_targets_checked": 236,
+  "portable_markdown_math": "COMPILED",
+  "review": "Independent AI source and claim-boundary review; graph-reference relation wording corrected before publication. No scientific adjudication."
+}

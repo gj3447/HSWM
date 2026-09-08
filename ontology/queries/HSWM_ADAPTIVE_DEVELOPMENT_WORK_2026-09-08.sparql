@@ -1,0 +1,34 @@
+# Q1: Implemented capability -> immutable source binding.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?capability ?status ?path ?commit ?sha256 WHERE {
+ ?n a role:IMPLEMENTED_CAPABILITY ; kbp:name ?capability ; kbp:status ?status ; kbr:HAS_SOURCE ?s .
+ ?s kbp:source_path ?path ; kbp:source_commit ?commit ; kbp:source_sha256 ?sha256 .
+} ORDER BY ?capability ?path
+
+# Q2: Three dated first-run reports; feedback status is historical.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?project ?date ?passed ?feedbackThen ?status WHERE {
+ ?r a role:DATED_ENGINEERING_REPORT ; kbr:TESTS ?p ; kbp:observed_on ?date ;
+ kbp:reported_test_pass_count ?passed ; kbp:feedback_at_report ?feedbackThen ; kbp:status ?status .
+ ?p a role:DEVELOPMENT_PROFILE ; kbp:name ?project .
+} ORDER BY ?project
+
+# Q3: Seven remaining work items and their current context.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?context ?remainingWork ?status ?scope WHERE {
+ ?n kbr:REQUIRES ?g ; kbp:name ?context .
+ ?g a role:OPEN_WORK_ITEM ; kbp:name ?remainingWork ; kbp:status ?status ; kbp:description ?scope .
+} ORDER BY ?remainingWork
+
+# Q4: Anchors are references: this local projection does not copy their current live properties.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?implementation ?status ?historicalAnchor WHERE {
+ ?n kbr:REFINES ?historicalAnchor ; kbp:name ?implementation ; kbp:status ?status .
+} ORDER BY ?implementation

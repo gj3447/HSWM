@@ -1,0 +1,291 @@
+{
+  "status": "LIVE_READ_ONLY_QUERIES_VERIFIED",
+  "observed_on": "2026-09-08",
+  "projection_sha256": "737324f0a9b64d061d7155c207a62877a122c1818b2a56460b54fe6e7050ca64",
+  "queries": [
+    {
+      "query": "Q1",
+      "rows": [
+        {
+          "capability": "HSWM episode replay·frozen·관계 복원",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "같은 episode·입력은 비재실행·비중복 학습한다. frozen은 기록하되 가중치를 고정하고 restore는 과거 관계를 새 revision으로 복원한다. 외부 파일 변경과 파생 자식 관계를 되돌리는 기능은 아니며 불명확한 결과는 자동 재시도하지 않는다.",
+          "path": "docs/research/HSWM_ADAPTIVE_HYPERGRAPH_RUNTIME_2026-09-07.md",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "2e47476706b584078dde7a20625c7974577bfe8b7fdef006f28e75e76a7715d4"
+        },
+        {
+          "capability": "HSWM episode replay·frozen·관계 복원",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "같은 episode·입력은 비재실행·비중복 학습한다. frozen은 기록하되 가중치를 고정하고 restore는 과거 관계를 새 revision으로 복원한다. 외부 파일 변경과 파생 자식 관계를 되돌리는 기능은 아니며 불명확한 결과는 자동 재시도하지 않는다.",
+          "path": "src/hswm/cells/adaptive_runtime.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "6e807ee1f559ef82ea47ac73d2b65c8ccb20048115979569290af34c3bc1d089"
+        },
+        {
+          "capability": "HSWM episode replay·frozen·관계 복원",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "같은 episode·입력은 비재실행·비중복 학습한다. frozen은 기록하되 가중치를 고정하고 restore는 과거 관계를 새 revision으로 복원한다. 외부 파일 변경과 파생 자식 관계를 되돌리는 기능은 아니며 불명확한 결과는 자동 재시도하지 않는다.",
+          "path": "src/hswm/infrastructure/adaptive_cli.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "7eccd08a82f13e8cb5f3eb78d1d1f34807b7548a26c1c685995d54f54b58a5dd"
+        },
+        {
+          "capability": "HSWM immutable revision·CAS·사건 계보",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "SQLite에 atom revision·digest·consumed/produced 참조를 저장하고 owner·kind를 보존한다. 로컬 writer lock과 CAS로 결과·관계 갱신을 결속한다. 분산 저장이나 canonical Atom-v2 admission qualification은 아니다.",
+          "path": "docs/research/HSWM_ADAPTIVE_HYPERGRAPH_RUNTIME_2026-09-07.md",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "2e47476706b584078dde7a20625c7974577bfe8b7fdef006f28e75e76a7715d4"
+        },
+        {
+          "capability": "HSWM immutable revision·CAS·사건 계보",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "SQLite에 atom revision·digest·consumed/produced 참조를 저장하고 owner·kind를 보존한다. 로컬 writer lock과 CAS로 결과·관계 갱신을 결속한다. 분산 저장이나 canonical Atom-v2 admission qualification은 아니다.",
+          "path": "src/hswm/cells/adaptive_runtime.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "6e807ee1f559ef82ea47ac73d2b65c8ccb20048115979569290af34c3bc1d089"
+        },
+        {
+          "capability": "HSWM immutable revision·CAS·사건 계보",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "SQLite에 atom revision·digest·consumed/produced 참조를 저장하고 owner·kind를 보존한다. 로컬 writer lock과 CAS로 결과·관계 갱신을 결속한다. 분산 저장이나 canonical Atom-v2 admission qualification은 아니다.",
+          "path": "src/hswm/cells/adaptive_store.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "7eb4d73fef267da2ee51ed5fb99f276a5e595c9d791f9a2b427f04a9ebc0dce6"
+        },
+        {
+          "capability": "HSWM 검사 결과·사용자 feedback 경계",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "command는 명시한 outcome=exit_code checker일 때만 exit를 성공 label로 쓴다. LLM 정상 응답은 무보상이며 hswm-dev는 모든 project profile에서 유용성 feedback을 기다린다. root feedback은 하위 member 성공을 만들어내지 않는다.",
+          "path": "docs/research/HSWM_ADAPTIVE_HYPERGRAPH_RUNTIME_2026-09-07.md",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "2e47476706b584078dde7a20625c7974577bfe8b7fdef006f28e75e76a7715d4"
+        },
+        {
+          "capability": "HSWM 검사 결과·사용자 feedback 경계",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "command는 명시한 outcome=exit_code checker일 때만 exit를 성공 label로 쓴다. LLM 정상 응답은 무보상이며 hswm-dev는 모든 project profile에서 유용성 feedback을 기다린다. root feedback은 하위 member 성공을 만들어내지 않는다.",
+          "path": "src/hswm/cells/adaptive_executor.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "e684fc267cb6c13b52be7091877a6b3f9d2c970b9771003e47a94761304eb6be"
+        },
+        {
+          "capability": "HSWM 검사 결과·사용자 feedback 경계",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "command는 명시한 outcome=exit_code checker일 때만 exit를 성공 label로 쓴다. LLM 정상 응답은 무보상이며 hswm-dev는 모든 project profile에서 유용성 feedback을 기다린다. root feedback은 하위 member 성공을 만들어내지 않는다.",
+          "path": "src/hswm/cells/adaptive_runtime.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "6e807ee1f559ef82ea47ac73d2b65c8ccb20048115979569290af34c3bc1d089"
+        },
+        {
+          "capability": "HSWM 문맥 가중치 기반 관계 선택",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "관계별 logistic SGD의 scalar·pair feature, 관측 평균 비용과 작은 탐색 보너스로 guard가 허용한 관계를 선택한다. 초기 계수는 0이며 사전 비용·UID tie-break도 사용한다. 고정 우선순위만의 선택은 아니지만 전체 set-to-set 의미 연산자나 인과적 credit은 아니다.",
+          "path": "docs/research/HSWM_ADAPTIVE_HYPERGRAPH_RUNTIME_2026-09-07.md",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "2e47476706b584078dde7a20625c7974577bfe8b7fdef006f28e75e76a7715d4"
+        },
+        {
+          "capability": "HSWM 문맥 가중치 기반 관계 선택",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "관계별 logistic SGD의 scalar·pair feature, 관측 평균 비용과 작은 탐색 보너스로 guard가 허용한 관계를 선택한다. 초기 계수는 0이며 사전 비용·UID tie-break도 사용한다. 고정 우선순위만의 선택은 아니지만 전체 set-to-set 의미 연산자나 인과적 credit은 아니다.",
+          "path": "src/hswm/cells/adaptive_learning.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "fe7e64167ed1a0205f118c0e422d30243c5cf14de7d227b7ef6e612443eaf2e0"
+        },
+        {
+          "capability": "HSWM 문맥 가중치 기반 관계 선택",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "관계별 logistic SGD의 scalar·pair feature, 관측 평균 비용과 작은 탐색 보너스로 guard가 허용한 관계를 선택한다. 초기 계수는 0이며 사전 비용·UID tie-break도 사용한다. 고정 우선순위만의 선택은 아니지만 전체 set-to-set 의미 연산자나 인과적 credit은 아니다.",
+          "path": "src/hswm/cells/adaptive_runtime.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "6e807ee1f559ef82ea47ac73d2b65c8ccb20048115979569290af34c3bc1d089"
+        },
+        {
+          "capability": "HSWM 실제 cell 실행·재귀 관계",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "허용된 command·typed LLM cell, 순서 있는 복수 member와 router 재귀를 같은 로컬 schema로 실행한다. 기본 leaf 호출 16회·깊이 8·60초의 유한 실행이며 인지 합성 검증은 아니다.",
+          "path": "docs/research/HSWM_ADAPTIVE_HYPERGRAPH_RUNTIME_2026-09-07.md",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "2e47476706b584078dde7a20625c7974577bfe8b7fdef006f28e75e76a7715d4"
+        },
+        {
+          "capability": "HSWM 실제 cell 실행·재귀 관계",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "허용된 command·typed LLM cell, 순서 있는 복수 member와 router 재귀를 같은 로컬 schema로 실행한다. 기본 leaf 호출 16회·깊이 8·60초의 유한 실행이며 인지 합성 검증은 아니다.",
+          "path": "src/hswm/cells/adaptive_runtime.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "6e807ee1f559ef82ea47ac73d2b65c8ccb20048115979569290af34c3bc1d089"
+        },
+        {
+          "capability": "HSWM 조건 해석·후보 생성·판별 관찰 preview",
+          "status": "IMPLEMENTED_BOUNDED_PREVIEW",
+          "scope": "공개 예시에서 조건 후보와 판별할 관찰을 제안하고 read/permission/cost/prediction digest를 명시한다. hswm-task 자체는 실행·outcome·credit·admission 경로가 없는 preview다.",
+          "path": "docs/research/HSWM_CONDITIONAL_TASK_CLI_2026-09-07.md",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "261815512d06f52ebd726fccba37ea039845defb77240d3f73469fb9406be93f"
+        },
+        {
+          "capability": "HSWM 조건 해석·후보 생성·판별 관찰 preview",
+          "status": "IMPLEMENTED_BOUNDED_PREVIEW",
+          "scope": "공개 예시에서 조건 후보와 판별할 관찰을 제안하고 read/permission/cost/prediction digest를 명시한다. hswm-task 자체는 실행·outcome·credit·admission 경로가 없는 preview다.",
+          "path": "src/hswm/cells/conditional.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "b8063a1876c996a5540fe0c6736f29e31e23c7c737db216a325879170630cc5d"
+        },
+        {
+          "capability": "HSWM 조건 해석·후보 생성·판별 관찰 preview",
+          "status": "IMPLEMENTED_BOUNDED_PREVIEW",
+          "scope": "공개 예시에서 조건 후보와 판별할 관찰을 제안하고 read/permission/cost/prediction digest를 명시한다. hswm-task 자체는 실행·outcome·credit·admission 경로가 없는 preview다.",
+          "path": "src/hswm/cells/probe.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "2ef9776702db350c4cc55742d7a3b1bc56b279c49fe51655c44ffaf488b68a09"
+        },
+        {
+          "capability": "HSWM 조건 해석·후보 생성·판별 관찰 preview",
+          "status": "IMPLEMENTED_BOUNDED_PREVIEW",
+          "scope": "공개 예시에서 조건 후보와 판별할 관찰을 제안하고 read/permission/cost/prediction digest를 명시한다. hswm-task 자체는 실행·outcome·credit·admission 경로가 없는 preview다.",
+          "path": "src/hswm/infrastructure/conditional_task_cli.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "a4d53f71ef01ac7e6013631a64df25dbe0b0de1433565d0730e5516ce31ae76a"
+        },
+        {
+          "capability": "HSWM 조건부 관계 생성·read-set 변화",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "서로 다른 공개 문맥 최소 4개와 혼합 결과에서 유한 AST의 비상수 guard를 합성한다. base당 최대 한 관계가 같은 member·초기 계수로 분화하고 추가 field를 읽을 수 있다. PROPOSED_NOT_ADMITTED의 실험적 국소 사용이며 새 실행 권한을 만들지 않는다.",
+          "path": "docs/research/HSWM_ADAPTIVE_HYPERGRAPH_RUNTIME_2026-09-07.md",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "2e47476706b584078dde7a20625c7974577bfe8b7fdef006f28e75e76a7715d4"
+        },
+        {
+          "capability": "HSWM 조건부 관계 생성·read-set 변화",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "서로 다른 공개 문맥 최소 4개와 혼합 결과에서 유한 AST의 비상수 guard를 합성한다. base당 최대 한 관계가 같은 member·초기 계수로 분화하고 추가 field를 읽을 수 있다. PROPOSED_NOT_ADMITTED의 실험적 국소 사용이며 새 실행 권한을 만들지 않는다.",
+          "path": "src/hswm/cells/adaptive_learning.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "fe7e64167ed1a0205f118c0e422d30243c5cf14de7d227b7ef6e612443eaf2e0"
+        },
+        {
+          "capability": "HSWM 조건부 관계 생성·read-set 변화",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "서로 다른 공개 문맥 최소 4개와 혼합 결과에서 유한 AST의 비상수 guard를 합성한다. base당 최대 한 관계가 같은 member·초기 계수로 분화하고 추가 field를 읽을 수 있다. PROPOSED_NOT_ADMITTED의 실험적 국소 사용이며 새 실행 권한을 만들지 않는다.",
+          "path": "src/hswm/cells/adaptive_runtime.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "6e807ee1f559ef82ea47ac73d2b65c8ccb20048115979569290af34c3bc1d089"
+        },
+        {
+          "capability": "HSWM 조건부 관계 생성·read-set 변화",
+          "status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "scope": "서로 다른 공개 문맥 최소 4개와 혼합 결과에서 유한 AST의 비상수 guard를 합성한다. base당 최대 한 관계가 같은 member·초기 계수로 분화하고 추가 field를 읽을 수 있다. PROPOSED_NOT_ADMITTED의 실험적 국소 사용이며 새 실행 권한을 만들지 않는다.",
+          "path": "src/hswm/cells/conditional.py",
+          "commit": "c59aa4584c4729caf98b0d5bb899602c3718e3c4",
+          "sha256": "b8063a1876c996a5540fe0c6736f29e31e23c7c737db216a325879170630cc5d"
+        }
+      ],
+      "row_count": 22
+    },
+    {
+      "query": "Q2",
+      "rows": [
+        {
+          "project": "메이플리니지 HSWM 개발 profile",
+          "reported_date": "2026-09-07",
+          "passed": 19,
+          "feedback_then": "PENDING_USER_FEEDBACK",
+          "evidence_status": "DOCUMENT_REPORTED_FIRST_RUN_NOT_CURRENT_STATE"
+        },
+        {
+          "project": "버엑시 / The Excel Tycoon HSWM 개발 profile",
+          "reported_date": "2026-09-07",
+          "passed": 40,
+          "feedback_then": "PENDING_USER_FEEDBACK",
+          "evidence_status": "DOCUMENT_REPORTED_FIRST_RUN_NOT_CURRENT_STATE"
+        },
+        {
+          "project": "수풀림 / SUPULLIM HSWM 개발 profile",
+          "reported_date": "2026-09-07",
+          "passed": 23,
+          "feedback_then": "PENDING_USER_FEEDBACK",
+          "evidence_status": "DOCUMENT_REPORTED_FIRST_RUN_NOT_CURRENT_STATE"
+        }
+      ],
+      "row_count": 3
+    },
+    {
+      "query": "Q3",
+      "rows": [
+        {
+          "context": "HSWM MCP · 조회 설정 / 개발 실행 연결 미완료",
+          "remaining_work": "HSWM 남은 작업 · 개발 실행·feedback MCP 연결",
+          "status": "OPEN_NOT_COMPLETED_BY_THIS_SNAPSHOT",
+          "scope": "현재 CLI의 bounded capability를 MCP로 연결하는 후속 구현. 표준·정확한 allowlist·권한 경계를 확인해야 하며 범용 canonical-write나 causal-admission 표면을 만들지 않는다."
+        },
+        {
+          "context": "HSWM Skills · 연구 판독 / 개발 feedback 미배치",
+          "remaining_work": "HSWM 남은 작업 · 대상 레포 개발 Skill·AGENTS 연결",
+          "status": "OPEN_NOT_COMPLETED_BY_THIS_SNAPSHOT",
+          "scope": "프로젝트 개발 흐름에 hswm-dev 호출과 명시 feedback 절차를 배치하는 후속 작업. 현재 자동 연결된 것으로 표시하지 않는다."
+        },
+        {
+          "context": "HSWM 과학 판정 · G0 미통과 / G1 미평가 / P1 RED",
+          "remaining_work": "HSWM 남은 작업 · 독립 G0 재실행·S-6·D-4",
+          "status": "OPEN_NOT_COMPLETED_BY_THIS_SNAPSHOT",
+          "scope": "독립 second party 지정과 외부 재실행, D-4 완료 조건의 남은 판별 작업을 기존 계보로 유지한다. 실사용 개발 진행은 이 과학 판정을 자동 종료하지 않는다."
+        },
+        {
+          "context": "HSWM 문맥 가중치 기반 관계 선택",
+          "remaining_work": "HSWM 남은 작업 · 새 과제의 고정 baseline·held-out 비교",
+          "status": "OPEN_NOT_COMPLETED_BY_THIS_SNAPSHOT",
+          "scope": "동일 과제 분포·동일 budget의 고정 baseline과 미관측 과제를 사용해야 성능 효과를 판별할 수 있다. 기존 smoke 숫자나 unpaired S-5 결과로 개선을 계산하지 않는다."
+        },
+        {
+          "context": "HSWM 검사 결과·사용자 feedback 경계",
+          "remaining_work": "HSWM 남은 작업 · 실사용 유용성 feedback 축적",
+          "status": "OPEN_NOT_COMPLETED_BY_THIS_SNAPSHOT",
+          "scope": "실제 도움됨/안 됨 판단을 episode에 명시 결속하고 다음 선택 변화를 관찰한다. 아직 받지 않은 판단을 만들거나 검사 통과를 유용성으로 자동 치환하지 않는다."
+        },
+        {
+          "context": "HSWM 문맥 가중치 기반 관계 선택",
+          "remaining_work": "HSWM 남은 작업 · 인과적 credit·outcome 독립성",
+          "status": "OPEN_NOT_COMPLETED_BY_THIS_SNAPSHOT",
+          "scope": "관측 label과 개별 참여자의 인과 기여를 구분하고 intervention·독립 outcome 경계를 설계한다. 현재 logistic 업데이트는 관측 기반이다."
+        },
+        {
+          "context": "HSWM 조건부 관계 생성·read-set 변화",
+          "remaining_work": "HSWM 남은 작업 · 장기 유지·구조 재조직·인지 합성",
+          "status": "OPEN_NOT_COMPLETED_BY_THIS_SNAPSHOT",
+          "scope": "64 feature·64 문맥·최근 64 사례와 유한 국소 분화의 한계를 넘어서는 알고리즘, 분산 상태 및 상위 cell 재참여의 인지적 효능은 후속 연구다. downstream 규모로 upstream 실패를 구제하지 않는다."
+        }
+      ],
+      "row_count": 7
+    },
+    {
+      "query": "Q4",
+      "rows": [
+        {
+          "implementation": "HSWM 실제 cell 실행·재귀 관계",
+          "local_status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "historical_uid": "sym:AbstractNode:hswm-hypergraph-learning-plan-2026-09-06-v1",
+          "historical_design": "HSWM 하이퍼그래프 학습과 재귀 참여 계획 2026-09-06",
+          "preserved_historical_status": "PLAN_RECORDED_MECHANISMS_UNTESTED"
+        },
+        {
+          "implementation": "HSWM 조건 해석·후보 생성·판별 관찰 preview",
+          "local_status": "IMPLEMENTED_BOUNDED_PREVIEW",
+          "historical_uid": "sym:AbstractNode:hswm-conditional-capability-contract-2026-09-07-v1",
+          "historical_design": "HSWM 조건부 capability 계약 — 설계 projection",
+          "preserved_historical_status": "PROPOSED_DESIGN_NOT_IMPLEMENTED"
+        },
+        {
+          "implementation": "HSWM 조건부 관계 생성·read-set 변화",
+          "local_status": "IMPLEMENTED_EXPERIMENTAL_LOCAL_ADAPTATION",
+          "historical_uid": "sym:AbstractNode:hswm-conditional-capability-contract-2026-09-07-v1",
+          "historical_design": "HSWM 조건부 capability 계약 — 설계 projection",
+          "preserved_historical_status": "PROPOSED_DESIGN_NOT_IMPLEMENTED"
+        }
+      ],
+      "row_count": 3
+    }
+  ]
+}

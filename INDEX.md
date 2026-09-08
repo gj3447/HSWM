@@ -18,6 +18,11 @@ continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 �
 [`hswm-dev 실사용 안내`](docs/operations/HSWM_GAME_SUPULLIM_DOGFOOD_2026-09-07.md)의
 프로젝트별 검사·명시적 피드백 경로를 사용한다.
 
+이 구현부터 README 개편까지의 출처·실사용 보고·미연결 항목은
+[`적응 개발 작업 KG 2026-09-08`](docs/operations/HSWM_ADAPTIVE_DEVELOPMENT_WORK_KG_2026-09-08.md)에
+묶었다. 고정 Git commit의 코드·문서와 기존 조건부 계약·학습 계획·문헌 KG를 연결하며,
+최초 실행 보고를 현재 DB 상태나 HSWM 성능 우위로 승격하지 않는다.
+
 외부 그래프 표준·SDK·공식 test suite, MCP와 Skill의 역할 분리, source pin과
 registry 비신뢰 경계는
 [`standard-first graph toolchain policy`](docs/operations/HSWM_STANDARD_TOOLCHAIN_POLICY_2026-09-02.md)에

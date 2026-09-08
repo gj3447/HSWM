@@ -21,10 +21,11 @@ PROFILES = {
     "game": ROOT / "_research/causal_composition/examples/adaptive_game_development.v2.json",
     "maplelineage": ROOT / "_research/causal_composition/examples/adaptive_maplelineage_development.v1.json",
     "supullim": ROOT / "_research/causal_composition/examples/adaptive_supullim_development.v1.json",
+    "reluvator": ROOT / "_research/causal_composition/examples/adaptive_reluvator_development.v1.json",
 }
 ALIASES = {"the-excel-tycoon": "game", "버엑시": "game", "메이플리니지": "maplelineage"}
 FOCI = {"game": ["session", "bridge", "career", "graph", "check"], "maplelineage": ["combat", "encounter"],
-        "supullim": ["soop", "creator"]}
+        "supullim": ["soop", "creator"], "reluvator": ["contracts", "mesh"]}
 
 
 class _Parser(argparse.ArgumentParser):
@@ -42,7 +43,8 @@ def state_path(project: str, workspace: Path, explicit: Path | None) -> Path:
 
 
 def _common(command: argparse.ArgumentParser, project: str) -> None:
-    command.add_argument("--workspace", type=Path, default=Path.cwd())
+    command.add_argument("--workspace", type=Path, default=Path.cwd(),
+                         help="local workspace used to isolate HSWM state, including remote-check profiles")
     command.add_argument("--state", type=Path)
     choices = FOCI[project]
     command.add_argument("--focus", choices=choices, default=choices[0])
@@ -104,7 +106,9 @@ def _status(runtime: AdaptiveRuntime) -> dict:
             "relations": [{"uid": atom["uid"], "revision": atom["revision"],
                            "observations": atom["payload"].get("model", {}).get("n")}
                           for atom in relations],
-            "claim": "LOCAL_DEVELOPMENT_FEEDBACK_NOT_GAME_OR_PLATFORM_AUTHORITY"}
+            "claim": ("LOCAL_DEVELOPMENT_FEEDBACK_NOT_FIELD_OR_INFERENCE_AUTHORITY"
+                      if runtime.graph_id == "hswm-reluvator-delltower-development-feedback-v1"
+                      else "LOCAL_DEVELOPMENT_FEEDBACK_NOT_GAME_OR_PLATFORM_AUTHORITY")}
 
 
 def run(args: argparse.Namespace) -> dict:

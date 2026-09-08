@@ -125,7 +125,7 @@ USL 연결의 구현 범위와 부족한 점은
 
 <a id="development"></a>
 
-## 메이플리니지 · 버엑시 · 수풀림에서 사용하기
+## 게임 · 수풀림 · Reluvator에서 사용하기
 
 활발히 개발 중인 두 게임을 GAME 쪽 우선 대상으로 둡니다.
 각 GAME checkout 루트에서 실행하며, 프로젝트별 상태와 피드백은 별도로 보존합니다.
@@ -149,9 +149,10 @@ uv run --locked --project ../HSWM hswm-dev supullim run \
 | 메이플리니지 | 전투 규칙 검사 **19개 통과** | 전투·encounter 개발 피드백 |
 | 버엑시 / `the-excel-tycoon` | 방송 세션 검사 **40개 통과**; 2026-09-08 독립 레포에서 profile v2로 `career`·`graph`·`check` focus 추가 | 세션·커리어·그래프·수풀림 bridge 개발 피드백 |
 | 수풀림 / `SUPULLIM` | SOOP 연동 검사 **23개 통과** | SOOP·공유 조사 자료 개발 피드백 |
-| [Reluvator 3D 추론 풀스택](docs/operations/HSWM_RELUVATOR_DOGFOOD_2026-09-08.md) | 사용자 지정 표본에 추가 선정. 저장소·실행 프로필은 연결 대기 | 저장소 URL 또는 로컬 경로, 실제 개발 검사 명령 |
+| [Reluvator 3D 추론 풀스택](docs/operations/HSWM_RELUVATOR_DOGFOOD_2026-09-08.md) | delltower의 17개 구성원 확인. 중앙 계약·스택 연결 검사 CLI 연결 | 계약 변경·스택 연결 검사에 대한 개발 피드백 |
 
-위 숫자는 2026-09-07의 구현 검사 결과입니다. 게임 재미나 HSWM의 성능 우위 측정은 아닙니다.
+게임·수풀림의 테스트 수는 2026-09-07의 구현 검사 결과입니다. Reluvator는 2026-09-08에 연결했습니다.
+게임 재미, 3D 추론 정확도나 HSWM의 성능 우위 측정은 아닙니다.
 작업 ID, `status`, `feedback` 명령, worktree 지정과 기존 `game` 이름의 호환 범위는
 [실사용 안내](docs/operations/HSWM_GAME_SUPULLIM_DOGFOOD_2026-09-07.md)에 있습니다.
 
@@ -159,7 +160,7 @@ uv run --locked --project ../HSWM hswm-dev supullim run \
 
 | 표면 | 현재 연결 상태 |
 | --- | --- |
-| CLI | 세 프로젝트에서 HSWM을 통한 실행·저장 확인 |
+| CLI | 게임·수풀림의 로컬 검사와 Reluvator의 원격 계약 검사에서 실행·저장 확인 |
 | MCP | HSWM의 온톨로지·Phoenix 조회용 설정이 있음. 개발 실행·피드백 CLI의 MCP 연결은 미완료 |
 | Skills | HSWM 연구 판독용 Skill이 있음. 버엑시 독립 레포에 `hswm-dev` Skill 배치(2026-09-08); 메이플리니지·수풀림은 미배치 |
 | 에이전트 지침 | 버엑시 독립 레포 `AGENTS.md`에 `hswm-dev` 사용·피드백 지침 있음(2026-09-08). 다른 대상 레포는 아직 없음 |

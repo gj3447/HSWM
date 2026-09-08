@@ -85,3 +85,39 @@ def test_game_profile_v2_keeps_v1_routes_and_adds_bounded_repository_checks() ->
     assert v1["relations"] == v2["relations"][:len(v1["relations"])]
     assert {cell["cell_id"] for cell in v2["cells"]} == {"developer", "session", "bridge", "career", "graph", "check"}
     assert all(route["cost_hint"] <= 60 for route in v2["relations"] if route["guard"]["right"] != "check")
+
+
+def test_reluvator_profile_uses_only_the_allowlisted_transport_module() -> None:
+    program = json.loads(development_cli.PROFILES["reluvator"].read_text(encoding="utf-8"))
+    assert program["graph_id"] == "hswm-reluvator-delltower-development-feedback-v1"
+    assert program["context_domain"]["focus"] == ["contracts", "mesh"]
+    cells = {cell["cell_id"]: cell for cell in program["cells"]}
+    assert cells["contracts"]["argv"] == ["python3", "-m", "hswm.infrastructure.reluvator_remote_cli", "contracts"]
+    assert cells["mesh"]["argv"] == ["python3", "-m", "hswm.infrastructure.reluvator_remote_cli", "mesh"]
+    assert all("outcome" not in cell for cell in cells.values() if cell["kind"] == "command")
+    routes = {route["uid"]: route for route in program["relations"]}
+    assert routes["contracts-focused"]["members"] == ["contracts"]
+    assert routes["contracts-extended"]["members"] == ["contracts", "mesh"]
+    assert routes["mesh-focused"]["members"] == ["mesh"]
+    assert routes["mesh-extended"]["members"] == ["mesh", "contracts"]
+    assert [routes[key]["cost_hint"] for key in sorted(routes)] == [80, 40, 80, 40]
+
+
+def test_reluvator_plan_rejects_other_focus_route_and_uses_local_state(tmp_path, capsys) -> None:
+    state = tmp_path / "reluvator.sqlite3"
+    assert development_cli.main([
+        "reluvator", "plan", "--workspace", str(tmp_path), "--state", str(state),
+        "--focus", "contracts", "--budget", "60",
+    ]) == 0
+    planned = json.loads(capsys.readouterr().out)
+    assert planned["selected"]["uid"] == "relation:contracts-focused"
+    assert development_cli.main([
+        "reluvator", "plan", "--workspace", str(tmp_path), "--state", str(state),
+        "--focus", "contracts", "--route", "mesh-focused",
+    ]) == 2
+    assert json.loads(capsys.readouterr().err)["status"] == "ERROR"
+    assert development_cli.main([
+        "reluvator", "status", "--workspace", str(tmp_path), "--state", str(state),
+    ]) == 0
+    assert json.loads(capsys.readouterr().out)["claim"] == (
+        "LOCAL_DEVELOPMENT_FEEDBACK_NOT_FIELD_OR_INFERENCE_AUTHORITY")

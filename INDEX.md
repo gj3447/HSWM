@@ -17,8 +17,9 @@ continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 �
 실제 메이플리니지·버엑시와 수풀림 개발에서는
 [`hswm-dev 실사용 안내`](docs/operations/HSWM_GAME_SUPULLIM_DOGFOOD_2026-09-07.md)의
 프로젝트별 검사·명시적 피드백 경로를 사용한다.
-회사 3D 추론 풀스택 [Reluvator도 개발 표본으로 선정](docs/operations/HSWM_RELUVATOR_DOGFOOD_2026-09-08.md)했으며,
-저장소 위치가 확인되면 실제 프로필과 검사 명령을 연결한다. 현재 실행은 미연결이다.
+회사 3D 추론 풀스택 [Reluvator도 개발 표본으로 연결](docs/operations/HSWM_RELUVATOR_DOGFOOD_2026-09-08.md)했다.
+delltower의 등록 구성원 17개를 확인하고 `hswm-dev reluvator`로 중앙 계약·스택 연결 검사를 실행한다.
+실제 추론·현장 동작 검증과 개발자 유용성 피드백은 별도다.
 
 이 구현부터 README 개편까지의 출처·실사용 보고·미연결 항목은
 [`적응 개발 작업 KG 2026-09-08`](docs/operations/HSWM_ADAPTIVE_DEVELOPMENT_WORK_KG_2026-09-08.md)에

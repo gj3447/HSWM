@@ -1,0 +1,62 @@
+{
+  "schema_version": "hswm-usl-relation-instrument-protocol/v1",
+  "protocol_id": "usl-native-relation-synthesis-instrument-2026-09-08-v1",
+  "authority": "SECONDARY_AI_RESEARCH_PROTOCOL",
+  "purpose": "Qualify native USL snapshot preservation and bounded relational program induction before an independently controlled G0/G1 study.",
+  "claim_ceiling": "LOCAL_SYNTHETIC_INSTRUMENT_QUALIFICATION_ONLY",
+  "predecessors": [
+    "docs/research/HSWM_AI_LEARNING_LITERATURE_REVIEW_2026-09-08.md",
+    "docs/research/HSWM_ASTRA_K3_RESEARCH_DIRECTION_2026-09-08.md",
+    "_research/causal_composition/project.v1.json"
+  ],
+  "conceptual_delta": "A source-owned native graph is read once per USL request; exact native identity and observation bindings reach a pure TS learner which induces compositions of declared role traversals rather than only adjusting a fixed guard score.",
+  "external_system": "Existing local USL connectUsl with injected owner read and resolver fixture; no live KG configuration, query or write.",
+  "task": "From a changed component, select native check UIDs whose requirements concern affected artifacts in an authored maintenance catalog.",
+  "primitive_roles": [
+    {"meaning": "Declared KG relation: INVALIDATES", "fromRole": "change", "toRole": "artifact"},
+    {"meaning": "Declared KG relation: REQUIRES", "fromRole": "artifact", "toRole": "requirement"},
+    {"meaning": "Declared KG relation: CHECKS", "fromRole": "requirement", "toRole": "check"}
+  ],
+  "search": {"maxDepth": 3, "maxNodes": 7, "maxCandidates": 2048, "executionBudget": 4096, "selection": "A label error then AST node count; V selects among exact A ties with the same objective; stable canonical tie order is disclosed."},
+  "splits": {
+    "A": {"seeds": [11,12,13,14,15,16,17,18], "affected_artifacts": 1, "role_arity": 2, "use": "induction"},
+    "V": {"seeds": [101,102,103,104], "affected_artifacts": 2, "role_arity": 2, "use": "candidate selection only"},
+    "B": {"seeds": [201,202,203,204,205,206,207,208,209,210,211,212], "affected_artifacts": 3, "role_arity": 3, "use": "post-selection evaluation; branching, distractors, order and unused context-role shift within the same authored rule"},
+    "A_retain": {"seeds": [301,302,303,304,305,306,307,308], "affected_artifacts": 1, "role_arity": 2, "use": "fresh instances of the original regime; no subsequent second-rule learning"}
+  },
+  "arms": [
+    "USL_INDUCED_PROGRAM",
+    "NATIVE_INFORMATION_MATCHED_PROGRAM_INDUCTION",
+    "FIXED_ONE_HOP_LIBRARY",
+    "RAW_HISTORY_EXACT_UID_RECALL",
+    "REMOVE_TO_HERE",
+    "BYTE_EXACT_RESTORE",
+    "WRONG_TARGET_ROLE_SHAM"
+  ],
+  "outcome": "Exact native UID set comparison against direct owner catalog table joins, not USL resourcesResolve, semanticTruth or a model-generated success label.",
+  "control_definitions": {
+    "RAW_HISTORY_EXACT_UID_RECALL": "Return the A label only for an exactly repeated focus UID, otherwise empty. Disjoint split UIDs make this an intentionally weak negative control, not raw-history reasoning, retrieval or a published agent baseline.",
+    "FIXED_ONE_HOP_LIBRARY": "Best A/V-fitted program from Here and single declared hops; a restricted negative control.",
+    "NATIVE_INFORMATION_MATCHED_PROGRAM_INDUCTION": "Same learner and complete semantic information. Equality is expected transport equivalence; inequality indicates an instrument/mapping issue. It is not an independent method comparison."
+  },
+  "metrics": ["exact_set_success", "symmetric_difference_errors", "candidate_count", "program_executions", "node_steps", "owner_reads", "resolver_calls", "wall_seconds", "snapshot_bytes", "native_vs_usl_semantic_view_equality", "candidate_byte_identity"],
+  "qualifications": [
+    "An in-flight request retains the first native source, identities, meanings and report despite an owner change.",
+    "A later request reads the owner again; old independently supplied plan pins reject a changed plan; independently refreshed fixture pins accept it.",
+    "The induced AST uses a composition absent from the initial Here and one-hop library.",
+    "Native and USL views have equal information and use identical induction/selection and execution budgets.",
+    "Remove, restore and wrong-target arms are fixed before evaluation. No failed qualification is omitted."
+  ],
+  "unmet_confirmatory_requirements": [
+    "Authored synthetic task and labels share an author/process; there is no independent outcome custodian or external chronology witness.",
+    "The test rule and primitive alphabet are supplied by the study author; this is composition inside a finite DSL, not new primitive or schema invention.",
+    "AST complexity above the seed library is syntactic novelty only; it is not a general semantic-equivalence proof.",
+    "B is mechanically excluded from fit/selection but not independently sealed or secret from the researcher.",
+    "No pinned frontier LLM proposer, native-agent baseline, published text-skill baseline, or independently implemented program-library baseline is run.",
+    "The candidate is a research record; it has no canonical Atom admission, independent causal credit or Permit effect.",
+    "A_retain measures same-regime reuse only, not catastrophic forgetting after a second learning phase.",
+    "Program executions and node steps are accounting instruments; they do not equal model tokens, FLOPs, or independent repeated runs."
+  ],
+  "stopping": "One frozen protocol run after instrument tests. Instrument errors are retained as failed attempts; repair changes require a new source-bound attempt. No efficacy threshold tuning or statistical significance claim.",
+  "scientific_status": {"G0": "NOT_PASSED", "G1": "NOT_EVALUATED", "FCL": "UNCHANGED_UNJUDGED", "P1": "PRIOR_RED_UNCHANGED"}
+}

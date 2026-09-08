@@ -1,0 +1,55 @@
+{
+  "schema": "hswm-usl-game-workflow-review/v1",
+  "date": "2026-09-08",
+  "status": "REPRODUCED_SYNTHETIC_FIXTURE_NOT_HSWM_OR_GAME_EFFICACY",
+  "source_identity": {
+    "usl_source_commit": null,
+    "usl_source_state": "UNCOMMITTED_LOCAL_DIRECTORY_NO_GIT_METADATA",
+    "files_sha256": {
+      "examples/game-workflow.ts": "69f9caf3a43bd0747e8e7809a7c3975157d2a65da3b32d8de898378c6f907c31",
+      "docs/GAME_WORKFLOW.md": "8cb585eb459a5ed0bef3e34c09d39b005953f872611c086a06ee6d28dbbb82c4",
+      "test/game-workflow.test.ts": "b1502b1b4086467df95b6d05731a05c8266d8aa3e7fa35cfffa17604f4e83ede",
+      "src/language/runtime.ts": "071f370a1f61bfbfbe78f6c614595a941563e2c7fd974b96a15726bd7f8fff22",
+      "src/language/comparison.ts": "289d7e392447586be925793dc49348fccf9463c1cd79c1deb7df2520a1fd04cb",
+      "src/language/navigation.ts": "26b815df829887a4cdbc5dbb8f1bf7d302aba219b04c342f4ebde048fa24951e",
+      "examples/fixtures/game-workflow/game-workflow.usl": "9dd5ca3f5f74e18e3bab553b9101a3ddb9ba3c9472adc052fbb8203f13eb1aba"
+    }
+  },
+  "reproduction": {
+    "command": "/home/lagyeongjun/CD/USL/node_modules/.bin/tsx /home/lagyeongjun/CD/USL/examples/game-workflow.ts",
+    "output_capture": "stdout captured outside the source tree, then reviewed and recorded here; the example has no --out option",
+    "fixture_scope": "private temporary copy of examples/fixtures/game-workflow; no GAME or production repository read"
+  },
+  "measured_once": {
+    "repository_scan": {
+      "resolver_calls": 5,
+      "locators": ["dash-spec.md", "dash-controller.ts", "dash-controller.test.ts", "audio-mix.md", "music-license.txt"],
+      "observation_elapsed_ms": 19.596767999999997
+    },
+    "targeted_link_lookup": {
+      "resolver_calls": 3,
+      "locators": ["dash-spec.md", "dash-controller.ts", "dash-controller.test.ts"],
+      "navigation_elapsed_ms": 1.0766330000000153,
+      "observation_elapsed_ms": 3.2832369999999855
+    }
+  },
+  "derived_fixture_counters": {
+    "reference_lookup_reads": 5,
+    "targeted_lookup_reads": 3,
+    "unnecessary_rechecks_avoided": 2,
+    "calculation": "max(0, 5 - 3)",
+    "stale_evidence_caught": 1,
+    "stale_evidence_basis": "content edit changes dash_behavior implementation and comparison emits RECHECK_EVIDENCE"
+  },
+  "change_observations": {
+    "content_edit": "implementation content change; action RECHECK_EVIDENCE",
+    "semantic_reversal": "semantic contract digest changes; action REVIEW_SEMANTIC_CONTRACT; semantic truth remains NOT_EVALUATED",
+    "address_move": "implementation address changes; action REVIEW_ADDRESS_BINDING"
+  },
+  "claim_ceiling": [
+    "The 5-to-3 count is an instrumented resolver-call difference over exactly five declared fixture files and one selected three-participant link.",
+    "The two avoided reads are derived fixture counters, not measured developer time, repository-wide savings, or a production read-rate estimate.",
+    "Elapsed milliseconds are one local process run with navigation and observation separately measured; they do not establish a repeatable or production end-to-end speedup.",
+    "The content-edit response detects stale declared evidence; it does not execute the test, establish the authored semantic relation as true, or measure game/HSWM performance."
+  ]
+}

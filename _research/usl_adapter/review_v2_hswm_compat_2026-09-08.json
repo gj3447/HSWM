@@ -1,0 +1,75 @@
+{
+  "schema": "hswm-usl-v2-compatibility-review/v1",
+  "observed_on": "2026-09-08",
+  "injected_resolvers_only": true,
+  "external_network_requests": 0,
+  "legacy_v1_preview": {
+    "status": "DESIGN_ONLY_NO_EXECUTION",
+    "preview_uid": "5c479c7ceb81f77600eaa7c1035b80ed8fc0c2d29243021513520af4ac71e849",
+    "step_input_digest": "2bf286bf6b83102b2f6d574981b7253457613903c8d94aa43615416661fc0ea9",
+    "hypothetical_read_set": [
+      {
+        "field": [
+          "usl",
+          "references_resolve"
+        ],
+        "source": "eef9335aab3777410a26b29b52529fa1bcb80e19d8ef6df8b9195f1b84c72752",
+        "revision": "authored-observation-r1",
+        "observation_digest": "fed0b18cbada728b880e1fbfde676af0f763fa4f8115af662deaf273cd610995",
+        "fresh": true
+      }
+    ],
+    "hypothetical_next_step": {
+      "kind": "ACTION_PROPOSAL",
+      "reason": null,
+      "action_name": "inspect-development-references",
+      "cost": 1
+    },
+    "input_provenance": "authored:usl-adapter-fixture",
+    "credit": "UNIDENTIFIED_CREDIT",
+    "evaluated_rule_provenance": [
+      {
+        "priority": 0,
+        "relation_ref": [
+          "hswm-usl-development-reference",
+          "r1",
+          "181f0166fbfc50ee85292da1b5ee32523234ae5b02a52b3c369bc9b18c527fa9"
+        ],
+        "truth": "TRUE"
+      }
+    ],
+    "selected_rule_provenance": {
+      "priority": 0,
+      "relation_ref": [
+        "hswm-usl-development-reference",
+        "r1",
+        "181f0166fbfc50ee85292da1b5ee32523234ae5b02a52b3c369bc9b18c527fa9"
+      ],
+      "truth": "TRUE"
+    }
+  },
+  "current_usl_results": [
+    {
+      "meaning_has_contract": false,
+      "report_schema": "usl-program-observation/v2",
+      "resolver_calls": 3,
+      "status": "REJECTED",
+      "error": "report shape"
+    },
+    {
+      "meaning_has_contract": true,
+      "report_schema": "usl-program-observation/v2",
+      "resolver_calls": 3,
+      "status": "REJECTED",
+      "error": "meaning shape"
+    }
+  ],
+  "source_sha256": {
+    "_research/usl_adapter/review_v2_hswm_compat_2026_09_08.py": "224f23d2fa8b2b22d973931757932a820af60295abb65c3731ae12c12104f3e2",
+    "_research/usl_adapter/examples/preview.v1.json": "0fb0d294caac2f35f396f3eb3e68a91bb1875ac553c397721fef49c446dc71b6",
+    "_research/usl_adapter/examples/development_reference.usl": "a89f92a6d9fd260cc8882d05e5a546b5c74adeb5ed6a47e2b10520d253067868",
+    "src/hswm/infrastructure/usl_adapter.py": "b6757e12758879af9ff28896df33733700b96449b3e81caf9593328318c26d7e",
+    "src/hswm/infrastructure/usl_cli.py": "2f9d57075198b4796ddd7715adcbbc9221b951b7704603cbe4422cdf5f72cee8"
+  },
+  "interpretation": "The existing HSWM v1 path works and fails closed on current USL v2; explicit contract-aware version migration is required."
+}

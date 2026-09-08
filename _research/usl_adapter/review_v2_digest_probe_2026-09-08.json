@@ -1,0 +1,74 @@
+{
+  "schema": "hswm-usl-v2-observation-review/v1",
+  "date": "2026-09-08",
+  "status": "REPRODUCED_SOURCE_BOUND_REVIEW",
+  "reproduce": {
+    "command": "<USL_ROOT>/node_modules/.bin/tsx _research/usl_adapter/review_v2_digest_probe_2026_09_08.ts --usl-root <USL_ROOT>",
+    "injected_resolvers_only": true,
+    "network_requests": 0,
+    "host_resource_reads": 0
+  },
+  "source": {
+    "package_version": "0.3.0",
+    "git_metadata_present": false,
+    "hashes_before": {
+      "src/language/runtime.ts": "071f370a1f61bfbfbe78f6c614595a941563e2c7fd974b96a15726bd7f8fff22",
+      "src/language/comparison.ts": "289d7e392447586be925793dc49348fccf9463c1cd79c1deb7df2520a1fd04cb",
+      "src/language/digest.ts": "381eb5c94c6af000a52d26888054ada6f8850007cae4cf71e76a80cee6419da1",
+      "src/language/model.ts": "6707b3efb96f5aefca14b120994914fda9841d03f2f6719c871f437792884493",
+      "src/language/compiler.ts": "96f064997157f28ed2f230a0222e51095d1aaf6e1adf98317c8952fdfdfefec4",
+      "docs/OBSERVATION_CONTRACTS.md": "ca24a01a519e83d32e355f9bc9d5c90ee4cb12f3ff59d6398894ae1262d2d310",
+      "examples/game-workflow-result.json": "8fb92ee16304db1bec2a90503ac88cf4c411193a80b4abe8f71929c0f5c023a4"
+    },
+    "hashes_after": {
+      "src/language/runtime.ts": "071f370a1f61bfbfbe78f6c614595a941563e2c7fd974b96a15726bd7f8fff22",
+      "src/language/comparison.ts": "289d7e392447586be925793dc49348fccf9463c1cd79c1deb7df2520a1fd04cb",
+      "src/language/digest.ts": "381eb5c94c6af000a52d26888054ada6f8850007cae4cf71e76a80cee6419da1",
+      "src/language/model.ts": "6707b3efb96f5aefca14b120994914fda9841d03f2f6719c871f437792884493",
+      "src/language/compiler.ts": "96f064997157f28ed2f230a0222e51095d1aaf6e1adf98317c8952fdfdfefec4",
+      "docs/OBSERVATION_CONTRACTS.md": "ca24a01a519e83d32e355f9bc9d5c90ee4cb12f3ff59d6398894ae1262d2d310",
+      "examples/game-workflow-result.json": "8fb92ee16304db1bec2a90503ac88cf4c411193a80b4abe8f71929c0f5c023a4"
+    },
+    "hashes_stable": true,
+    "program_sha256": "8bb18e6c695f9485e18adb7c73e9bdfe9254d86d1a0b6bb89f8b9e544ef39bb6"
+  },
+  "probes": {
+    "semantic_identity": {
+      "plan_digest_changed": true,
+      "meaning_digest_changed": true,
+      "contract_digest_changed": true,
+      "comparison_semantic_contract_changed": true,
+      "semantic_truth": "NOT_EVALUATED"
+    },
+    "selected_read_scope": {
+      "resolver_calls": [
+        "https://left.audit/item",
+        "https://right.audit/item"
+      ],
+      "unused_resource_read": false,
+      "selected_resource_count": 2,
+      "declared_resource_count": 3
+    },
+    "mutable_source_text_during_io": {
+      "resolver_calls_before_return": 2,
+      "report_plan_digest_is_original": true,
+      "report_source_digest_is_opposite": true,
+      "report_source_digest_is_original": false,
+      "interpretation": "sourceText is compiled before resolver IO but read again when sourceDigest is constructed. A caller-held mutable options object can therefore bind an original plan digest to a different source digest in one otherwise genuine report."
+    },
+    "self_consistent_forged_metadata": {
+      "validate_observation_accepts": true,
+      "comparison_accepts": true,
+      "comparison_current_plan_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "forged_aggregate_status": "UNRESOLVED",
+      "forged_read_scope_shape": "string",
+      "forged_verification_status": "EXECUTED_AND_PASSED",
+      "interpretation": "The outer digest catches accidental corruption only. validateObservation recompiles selected declarations and checks link/meaning digests, but does not recompute or shape-check aggregate status, readScope, metrics, planDigest, meaningsDigest, sourceDigest, resourcesResolve, or verification fields."
+    }
+  },
+  "assessment": [
+    "v2 closes the prior description/provenance omission for reports emitted by observeProgram: selected meaning definitions and plan/source/observation digests are present, selected unused resources are excluded, and cloned input prevents a caller plan mutation during resolver IO from mixing report versions.",
+    "The mutable sourceText probe is an exception to that snapshot statement: options.sourceText is not snapshotted and is reread after resolver IO.",
+    "The forged-metadata result is a report-validation/provenance limitation for untrusted JSON, not evidence that a genuine observeProgram call misclassifies semantic truth. Documentation already says digests are not authorship, but its stated malformed/inconsistent-report rejection is narrower than a consumer may infer."
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": "hswm-usl-v2-permission-review/v1",
+  "reviewed_on": "2026-09-08",
+  "scope": "read-only source audit plus injected/local-temporary resolver probes; no external network, private path, USL source, or persistent USL record was touched",
+  "source_root": "/home/lagyeongjun/CD/USL",
+  "source_revision": "UNAVAILABLE_SOURCE_ROOT_IS_NOT_A_GIT_WORKTREE",
+  "source_artifacts": [
+    {"path": "src/resolve.ts", "sha256": "87174ba05285f4d30ac9463f3e14988b2c8d5a4b3279866bb85939dcff2cd109", "lines": "39-42,54-90,120-148,230-276"},
+    {"path": "src/language/runtime.ts", "sha256": "071f370a1f61bfbfbe78f6c614595a941563e2c7fd974b96a15726bd7f8fff22", "lines": "21-93"},
+    {"path": "src/cli.ts", "sha256": "8d1bffb000a6d0746a57fbeaee04b59008ac2af3c078aeb840396ef33977fd5e", "lines": "44-72,107-113,120-157"},
+    {"path": "src/storage.ts", "sha256": "9fb37a04d83101c6b22b66d3e44c4bb9276971b0d12818ed1598e286d837fad1", "lines": "17-45"},
+    {"path": "test/permissions.test.ts", "sha256": "404494dbfe83212a50900eb72c45514d722b0d364eb3ae8206b1295d89fef3db", "lines": "19-91"}
+  ],
+  "probe": {
+    "path": "_research/usl_adapter/review_v2_permissions_probe_2026_09_08.ts",
+    "sha256": "e2c809cf37e6f22bddd5e9b790b4f21fd830ddb766000076834ed005e1c60e81",
+    "command": "/home/lagyeongjun/CD/USL/node_modules/.bin/tsx _research/usl_adapter/review_v2_permissions_probe_2026_09_08.ts",
+    "result": {
+      "redirect_target_denied_before_second_fetch": true,
+      "request_policy_cannot_broaden_config": true,
+      "symlink_needs_canonical_allowlist": true,
+      "selected_link_avoids_unused_resolver_call": true,
+      "observation_schema": "usl-program-observation/v2"
+    }
+  },
+  "confirmed_behavior": [
+    "ResolversLive normalizes both configured and per-request allowlists before their intersection, so a request cannot broaden configured permission.",
+    "The URL resolver uses manual redirects and checks each target before the next fetch.",
+    "Filesystem resolution checks the requested locator first and its realpath before stat/read; an authorized symlink target needs a separate canonical locator entry.",
+    "observeProgram restricts targets to selected link participants and selected meaning groundings, applies maxResources before resolver calls, and reports selected read scope and resolver call count.",
+    "CLI observe passes selected links, explicit allowlist or deny-all, and max-resources into observeProgram; record mutations remain limited to explicit pierce/audit --write/rebind paths."
+  ],
+  "real_findings": [
+    {
+      "id": "FS_REALPATH_STAT_READ_TOCTOU_LIMIT",
+      "classification": "HOSTILE_LOCAL_FILESYSTEM_LIMIT_NOT_DEMONSTRATED_EXPLOIT",
+      "evidence": "resolveFs realpaths and authorizes a pathname, then performs stat and readFile by that pathname (src/resolve.ts:72-90). A concurrent local actor can replace the object after realpath/authorization and before readFile, so the content hash can describe a different object than the authorized realpath.",
+      "effect": "The exact-locator/symlink policy is enforced for a stable filesystem but is not an adversarial TOCTOU boundary.",
+      "separation": "Every filesystem result is explicitly guaranteeLevel=trust_host. That makes hostile-host protection outside the stated guarantee; the ordering remains relevant if documentation describes the allowlist as a race-safe enforcement boundary."
+    }
+  ],
+  "documented_or_intentional_limits": [
+    "URL, filesystem, Git, and KG resolvers return trust_host in the reviewed implementation; resolution is not sandboxed attestation.",
+    "Semantic truth and declared contract checks remain NOT_EVALUATED/NOT_EXECUTED in the v2 observation report; resolution does not prove meaning.",
+    "storage.ts documents compare-and-swap as cooperative concurrent-writer protection, not a hostile-filesystem transaction protocol.",
+    "The v2 report is selected-link scoped. It intentionally omits unused resources and meanings rather than claiming global plan resolution."
+  ],
+  "integration_note": "Current USL runtime emits usl-program-observation/v2 with plan/meaning/source digests, readScope, metrics, and selected-only records (src/language/runtime.ts:85-93). An adapter limited to the earlier exact v1 report shape is not compatible until it explicitly validates this v2 contract."
+}

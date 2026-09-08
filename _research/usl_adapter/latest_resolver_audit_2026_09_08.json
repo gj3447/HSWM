@@ -1,0 +1,58 @@
+{
+  "schema_version": "hswm-usl-latest-resolver-audit/v1",
+  "audited_on": "2026-09-08",
+  "scope": "local temporary filesystem/Git fixtures and injected fetch only; no external network, private file, persistent USL record, or USL source modification",
+  "source_root": "/home/lagyeongjun/CD/USL",
+  "source_artifacts_before_after_sha256": {
+    "src/resolve.ts": "87174ba05285f4d30ac9463f3e14988b2c8d5a4b3279866bb85939dcff2cd109",
+    "src/storage.ts": "9fb37a04d83101c6b22b66d3e44c4bb9276971b0d12818ed1598e286d837fad1",
+    "src/cli.ts": "744e34674dcfc2bb310267a3146378b5ff16aa86a25a586922cf71e8bd767b71"
+  },
+  "probe": {
+    "path": "_research/usl_adapter/latest_resolver_audit_2026_09_08.ts",
+    "sha256": "50ef2b24c9caa0ba8726c173137b3066f0b980dfa8daa984c764ef44045b65dd",
+    "command": "/home/lagyeongjun/CD/USL/node_modules/.bin/tsx _research/usl_adapter/latest_resolver_audit_2026_09_08.ts",
+    "results": {
+      "filesystem_line_range": true,
+      "git_commit_and_line_range": true,
+      "redirect_byte_limit": true,
+      "timeout_is_bounded": true,
+      "cas_preserves_stale_baseline": true,
+      "source_unchanged": true
+    }
+  },
+  "evidence": [
+    {
+      "check": "filesystem line-range representation and hash",
+      "source_lines": "src/resolve.ts:21-31,73-90",
+      "fixture": "temporary three-line file, file:// host locator #L2-L3",
+      "observed": "resolvedLocator retained #L2-L3 and contentHash was SHA-256 of 'two\\nthree'"
+    },
+    {
+      "check": "Git commit pin and line range",
+      "source_lines": "src/resolve.ts:160-172",
+      "fixture": "temporary initialized Git repository and committed three-line blob",
+      "observed": "resolvedLocator retained full pinned commit and #L2-L3; hash was SHA-256 of the selected line slice"
+    },
+    {
+      "check": "redirect allowlist plus streaming response ceiling",
+      "source_lines": "src/resolve.ts:93-150",
+      "fixture": "injected start->allowed-final redirect; final body 3 bytes with maxResponseBytes=2",
+      "observed": "both permitted requests occurred and resolver returned IO at byte ceiling"
+    },
+    {
+      "check": "timeout",
+      "source_lines": "src/resolve.ts:221-238",
+      "fixture": "injected fetch waiting for abort signal with timeoutMs=1",
+      "observed": "resolver returned IO rather than hanging"
+    },
+    {
+      "check": "stale baseline CAS preservation",
+      "source_lines": "src/storage.ts:23-45; src/cli.ts:52-72,120-157",
+      "fixture": "temporary records text with wrong expected baseline",
+      "observed": "write rejected and original bytes remained 'old\\n'"
+    }
+  ],
+  "findings": [],
+  "conclusion": "No new reproducible resolver permission, hash, line-range, redirect/timeout/byte-budget, Git pin, or cooperative CAS preservation defect was found in this bounded audit. The previously recorded trust_host filesystem TOCTOU limitation was intentionally outside this pass."
+}

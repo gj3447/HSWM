@@ -1,0 +1,72 @@
+{
+  "schema": "hswm-usl-latest-compact-audit/v1",
+  "date": "2026-09-08",
+  "status": "REPRODUCED_SOURCE_BOUND_AUDIT",
+  "reproduce": {
+    "command": "<USL_ROOT>/node_modules/.bin/tsx _research/usl_adapter/latest_compact_audit_2026_09_08.ts --usl-root <USL_ROOT>",
+    "network_requests": 0,
+    "host_resource_reads": 0
+  },
+  "source": {
+    "version": "0.3.0",
+    "license": "UNLICENSED",
+    "git_metadata_present": false,
+    "hashes_before": {
+      "src/language/compact.ts": "8b423bfdb950114c50546e0c947e25b6748cf154e331b896b0ec77630293b416",
+      "src/language/navigation.ts": "26b815df829887a4cdbc5dbb8f1bf7d302aba219b04c342f4ebde048fa24951e",
+      "src/language/model.ts": "6707b3efb96f5aefca14b120994914fda9841d03f2f6719c871f437792884493",
+      "src/language/digest.ts": "381eb5c94c6af000a52d26888054ada6f8850007cae4cf71e76a80cee6419da1",
+      "docs/COMPACT_CONTEXT.md": "7189ba498f16a0b2ef802bbfcd38312bc385721e9a00b8cc3472a28977947632",
+      "package.json": "d6cb15235dd327354857c5f7a88c1e5aae5430162c646c75955c48e3028eda3f",
+      "package-lock.json": "f6c808b1c5cc6edda2af8af0a30f80a0d9d6ee6f1c24365ee934ddf46423cc51"
+    },
+    "hashes_after": {
+      "src/language/compact.ts": "8b423bfdb950114c50546e0c947e25b6748cf154e331b896b0ec77630293b416",
+      "src/language/navigation.ts": "26b815df829887a4cdbc5dbb8f1bf7d302aba219b04c342f4ebde048fa24951e",
+      "src/language/model.ts": "6707b3efb96f5aefca14b120994914fda9841d03f2f6719c871f437792884493",
+      "src/language/digest.ts": "381eb5c94c6af000a52d26888054ada6f8850007cae4cf71e76a80cee6419da1",
+      "docs/COMPACT_CONTEXT.md": "7189ba498f16a0b2ef802bbfcd38312bc385721e9a00b8cc3472a28977947632",
+      "package.json": "d6cb15235dd327354857c5f7a88c1e5aae5430162c646c75955c48e3028eda3f",
+      "package-lock.json": "f6c808b1c5cc6edda2af8af0a30f80a0d9d6ee6f1c24365ee934ddf46423cc51"
+    },
+    "hashes_stable": true,
+    "audit_program_sha256": "ed8a2e06bf2e21e7ff1ba5270527a804fb36de74ca1394c3bc1f24b605d767d8"
+  },
+  "probes": {
+    "complete_nary_context": {
+      "mode": "FULL",
+      "complete": true,
+      "all_meanings_retained": true,
+      "participant_roles": [
+        "subject",
+        "evidence",
+        "context"
+      ],
+      "paths_tuple_width": 3,
+      "interpretation": {
+        "traversal": "ROLE_INCIDENCE",
+        "declarationStatus": "DECLARED",
+        "semanticTruth": "NOT_EVALUATED",
+        "reachability": "NOT_OBSERVED",
+        "execution": "NOT_PLANNED"
+      }
+    },
+    "unchanged_requires_exact_full_digest": {
+      "unchanged_mode": "UNCHANGED",
+      "changed_meaning_returns": "FULL",
+      "full_context_digest": "sha256:3c7b5d3f9036b863c75632479a0e8fd1ac1a384cbc8faf8a764a078b7f38dd5a"
+    },
+    "callback_option_mutation": {
+      "result_is_right": true,
+      "captured_budget_remains_effective": true
+    },
+    "malformed_direct_plan_literal": {
+      "outcome": "LEFT:INVALID_PLAN",
+      "interpretation": "Direct JavaScript malformed input with a BigInt locator is normalized by navigation into LEFT:INVALID_PLAN before compact delivery; no uncaught serialization exception reproduced."
+    }
+  },
+  "boundaries": [
+    "No resolver, semantic check, source observation, execution, or HSWM learning was invoked.",
+    "The malformed direct-plan result concerns runtime input hardening outside TypeScript's compiler-produced SemanticPlan contract; it does not affect ordinary compileSource output."
+  ]
+}

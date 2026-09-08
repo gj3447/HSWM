@@ -1,0 +1,63 @@
+{
+  "schema": "hswm-usl-latest-observation-audit/v1",
+  "scope": "local injected fixture; no resolver, check execution, or external attestation",
+  "source": {
+    "usl_package": "0.3.0",
+    "comparison_ts_sha256": "566cc98814c7cb7cb43b77479972d0d008d43f274ded948bafe9b1f42d2847f8",
+    "observation_schema_ts_sha256": "0b34719ed7d11214b219fbbbe3a08b8329087f49e56b359d5a18081a64fe27d1",
+    "runtime_ts_sha256": "e984c27f8e42b36a2c4ab84e56de3d930f3085e5ed4a5a376ef58b5e685b6730",
+    "fixture_sha256": "e00d52a15db95a8f3582711a07257f4a2e7361f9ce9be73511e8dbfcc3e1d8ea"
+  },
+  "cases": [
+    {
+      "id": "baseline",
+      "usl_validator_accepts": true,
+      "hswm_adapter": {
+        "accepted": true,
+        "status": "READY"
+      },
+      "interpretation": "expected valid injected fixture"
+    },
+    {
+      "id": "forged_execution_after_resign",
+      "usl_validator_accepts": false,
+      "hswm_adapter": {
+        "accepted": false,
+        "reason": "USL v2 verification contract/status"
+      },
+      "interpretation": "must reject; a digest recomputation cannot promote a declared check"
+    },
+    {
+      "id": "forged_resolver_call_count_after_resign",
+      "usl_validator_accepts": false,
+      "hswm_adapter": {
+        "accepted": false,
+        "reason": "USL v2 metrics consistency"
+      },
+      "interpretation": "must reject; report metrics are recomputed from selected scope"
+    },
+    {
+      "id": "usl_valid_symbolic_content_hash",
+      "usl_validator_accepts": true,
+      "hswm_adapter": {
+        "accepted": false,
+        "reason": "policy content hash"
+      },
+      "interpretation": "USL v2 schema permits nonempty text contentHash; current HSWM adapter intentionally rejects it as a raw SHA-256 pin, a cross-language false-reject until USL narrows its contract or HSWM documents/translates the requirement"
+    },
+    {
+      "id": "valid_future_timestamp",
+      "usl_validator_accepts": true,
+      "hswm_adapter": {
+        "accepted": true,
+        "status": "UNRESOLVED"
+      },
+      "interpretation": "USL validates timestamp syntax and report consistency; HSWM applies its separate now/max-age freshness policy and must withhold readiness"
+    }
+  ],
+  "limits": [
+    "A self-consistent report digest is not resolver provenance or authorship authentication.",
+    "sourceDigest cannot authenticate source bytes without supplied source bytes or an independently pinned source artifact.",
+    "The standalone USL validator cannot reconstruct full-plan declarations outside a selected report."
+  ]
+}

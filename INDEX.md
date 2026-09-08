@@ -17,6 +17,8 @@ continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 �
 실제 메이플리니지·버엑시와 수풀림 개발에서는
 [`hswm-dev 실사용 안내`](docs/operations/HSWM_GAME_SUPULLIM_DOGFOOD_2026-09-07.md)의
 프로젝트별 검사·명시적 피드백 경로를 사용한다.
+회사 3D 추론 풀스택 [Reluvator도 개발 표본으로 선정](docs/operations/HSWM_RELUVATOR_DOGFOOD_2026-09-08.md)했으며,
+저장소 위치가 확인되면 실제 프로필과 검사 명령을 연결한다. 현재 실행은 미연결이다.
 
 이 구현부터 README 개편까지의 출처·실사용 보고·미연결 항목은
 [`적응 개발 작업 KG 2026-09-08`](docs/operations/HSWM_ADAPTIVE_DEVELOPMENT_WORK_KG_2026-09-08.md)에
@@ -27,6 +29,8 @@ continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 �
 현재 USL language 0.1의 역할 있는 plan·관측을 HSWM의 Boolean 참조 관측과 조건 preview로
 연결한다. `hswm-usl`로 실행하며 의미 revision 결속·grounding·KG 지문·resolver 권한의
 한계를 구분한다. USL 조회 성공은 HSWM 학습 보상이나 canonical admission이 아니다.
+후속 상태는 [USL v2 사용법](docs/operations/HSWM_USL_ADAPTER_V2_2026-09-08.md)과
+[수정 이후 최신 적대적 검증](docs/research/HSWM_USL_LATEST_ADVERSARIAL_REVIEW_2026-09-08.md)에 있다.
 
 외부 그래프 표준·SDK·공식 test suite, MCP와 Skill의 역할 분리, source pin과
 registry 비신뢰 경계는

@@ -1,0 +1,30 @@
+{
+  "schema": "hswm-usl-latest-projection-audit/v1",
+  "scope": "local compile/project/control only; no resolver, KG publish, or check execution",
+  "source": {
+    "usl_package": "0.3.0",
+    "project_ts_sha256": "e609a918b4fb41cbd929d2d9823b3000c39a03557129b2d0515feea4c64dd616",
+    "cli_ts_sha256": "744e34674dcfc2bb310267a3146378b5ff16aa86a25a586922cf71e8bd767b71",
+    "original_source_sha256": "daa80fe7c99abaebd9e4961b7fef7b78c01a4550e0dfe9063868bf1cf463cafb",
+    "opposite_source_sha256": "65031d1f6eab7f0dc9cf4af4a898ca88a094be1150b514ec5eb038abd7777bc1"
+  },
+  "projection": {
+    "api_accepts_mismatched_source": true,
+    "projected_meaning_description": "code implements the target",
+    "projected_source_sha256": "65031d1f6eab7f0dc9cf4af4a898ca88a094be1150b514ec5eb038abd7777bc1",
+    "expected_description_from_plan": "code implements the target",
+    "expected_source_sha256_from_supplied_option": "65031d1f6eab7f0dc9cf4af4a898ca88a094be1150b514ec5eb038abd7777bc1"
+  },
+  "observation_control": {
+    "rejected_mismatched_source": true,
+    "detail": "sourceText does not compile to the supplied plan"
+  },
+  "cli_path_assessment": "CLI project reads sourceText, compiles that same sourceText, then passes the same sourceText as options.source; this specific mismatch is not reachable through the source-file CLI path.",
+  "finding": "P2 provenance binding defect: direct toSemanticBundle accepts a plan and options.source.text that describe different declarations, combining plan-derived node descriptions with the supplied source hash.",
+  "acceptance_criteria": [
+    "When options.source is supplied, compile options.source.text and require its plan digest to equal the supplied plan before creating a bundle.",
+    "Snapshot plan and options.source.text before projection so caller mutation cannot mix identities during processing.",
+    "Add a direct API regression: original plan plus opposite source must return LanguageError; matching source must preserve description and source_sha256.",
+    "Keep the CLI's same-text compile/project path as a control, but do not rely on it to make the public API provenance-safe."
+  ]
+}

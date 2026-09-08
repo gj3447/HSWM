@@ -149,6 +149,7 @@ uv run --locked --project ../HSWM hswm-dev supullim run \
 | 메이플리니지 | 전투 규칙 검사 **19개 통과** | 전투·encounter 개발 피드백 |
 | 버엑시 / `the-excel-tycoon` | 방송 세션 검사 **40개 통과**; 2026-09-08 독립 레포에서 profile v2로 `career`·`graph`·`check` focus 추가 | 세션·커리어·그래프·수풀림 bridge 개발 피드백 |
 | 수풀림 / `SUPULLIM` | SOOP 연동 검사 **23개 통과** | SOOP·공유 조사 자료 개발 피드백 |
+| [Reluvator 3D 추론 풀스택](docs/operations/HSWM_RELUVATOR_DOGFOOD_2026-09-08.md) | 사용자 지정 표본에 추가 선정. 저장소·실행 프로필은 연결 대기 | 저장소 URL 또는 로컬 경로, 실제 개발 검사 명령 |
 
 위 숫자는 2026-09-07의 구현 검사 결과입니다. 게임 재미나 HSWM의 성능 우위 측정은 아닙니다.
 작업 ID, `status`, `feedback` 명령, worktree 지정과 기존 `game` 이름의 호환 범위는

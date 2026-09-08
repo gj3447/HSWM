@@ -26,7 +26,7 @@ TypeScript + Effect 런타임과 기존 실험 코드는 각각의 [구현 범�
 | 학습 | 관측 결과로 관계별 logistic 문맥 계수·평균 비용 갱신 | 인과적 credit 식별, 일반화·장기 유지 검증 |
 | 관계 변화 | 유한 조건식 합성, guard·read-set의 국소 분화 | 자유로운 구조 재조직과 무제한 지속 학습 |
 | 지속 상태 | SQLite revision, CAS 갱신, replay, 관계 복원 | 분산 상태·전역 admission·상위 인지 합성 검증 |
-| 개발 적용 | 메이플리니지·버엑시·수풀림 검사 실행과 피드백 기록 | 개발 에이전트의 MCP·Skills 자동 사용 연결 |
+| 개발 적용 | 메이플리니지·버엑시·수풀림 검사 실행과 피드백 기록. 버엑시 독립 레포는 AGENTS·Skill로 에이전트가 CLI를 쓰도록 연결 | 메이플리니지·수풀림 에이전트 지침, MCP 자동 연결, 사용자 피드백 축적 |
 
 목표 정체성과 현재 증거는 [헌법](docs/canon/HSWM_CONSTITUTION_2026-08-20.md),
 [프랙탈 합성 계약](docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md),
@@ -134,8 +134,10 @@ USL 연결의 구현 범위와 부족한 점은
 # GAME 루트
 uv run --locked --project ../HSWM hswm-dev maplelineage run \
   --focus combat --task '메이플리니지 전투 변경사항 확인'
+
+# 버엑시 독립 레포 루트 (~/CD/virtual-excel-simulator)
 uv run --locked --project ../HSWM hswm-dev 버엑시 run \
-  --focus session --task '버엑시 방송 세션 변경사항 확인'
+  --focus career --task '버엑시 Studio/장면 변경사항 확인'
 
 # SUPULLIM 루트
 uv run --locked --project ../HSWM hswm-dev supullim run \
@@ -145,7 +147,7 @@ uv run --locked --project ../HSWM hswm-dev supullim run \
 | 실사용 대상 | 첫 로컬 실행에서 확인한 것 | 다음 입력 |
 | --- | --- | --- |
 | 메이플리니지 | 전투 규칙 검사 **19개 통과** | 전투·encounter 개발 피드백 |
-| 버엑시 / `the-excel-tycoon` | 방송 세션 검사 **40개 통과** | 세션·수풀림 bridge 개발 피드백 |
+| 버엑시 / `the-excel-tycoon` | 방송 세션 검사 **40개 통과**; 2026-09-08 독립 레포에서 profile v2로 `career`·`graph`·`check` focus 추가 | 세션·커리어·그래프·수풀림 bridge 개발 피드백 |
 | 수풀림 / `SUPULLIM` | SOOP 연동 검사 **23개 통과** | SOOP·공유 조사 자료 개발 피드백 |
 
 위 숫자는 2026-09-07의 구현 검사 결과입니다. 게임 재미나 HSWM의 성능 우위 측정은 아닙니다.
@@ -158,10 +160,11 @@ uv run --locked --project ../HSWM hswm-dev supullim run \
 | --- | --- |
 | CLI | 세 프로젝트에서 HSWM을 통한 실행·저장 확인 |
 | MCP | HSWM의 온톨로지·Phoenix 조회용 설정이 있음. 개발 실행·피드백 CLI의 MCP 연결은 미완료 |
-| Skills | HSWM 연구 판독용 Skill이 있음. 대상 레포의 개발 피드백용 Skill은 미배치 |
-| 에이전트 지침 | 대상 레포의 `AGENTS.md`에 `hswm-dev` 자동 사용 지침은 아직 없음 |
+| Skills | HSWM 연구 판독용 Skill이 있음. 버엑시 독립 레포에 `hswm-dev` Skill 배치(2026-09-08); 메이플리니지·수풀림은 미배치 |
+| 에이전트 지침 | 버엑시 독립 레포 `AGENTS.md`에 `hswm-dev` 사용·피드백 지침 있음(2026-09-08). 다른 대상 레포는 아직 없음 |
 
 현재 데이터 수집 범위는 **HSWM CLI로 실행한 작업과 명시적으로 제공한 피드백**입니다.
+피드백 `source`는 사용자 판정과 `agent(<도구>):`로 표시한 에이전트 판정을 구분합니다.
 
 <a id="evidence"></a>
 

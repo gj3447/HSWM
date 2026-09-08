@@ -68,3 +68,20 @@ def test_game_alias_reuses_existing_state_while_maplelineage_is_separate(tmp_pat
     assert json.loads(capsys.readouterr().out)["pending_feedback"][0]["episode"] == "existing"
     assert development_cli.state_path("game", tmp_path, None) == development_cli.state_path("버엑시", tmp_path, None)
     assert development_cli.state_path("game", tmp_path, None) != development_cli.state_path("maplelineage", tmp_path, None)
+
+
+def test_checked_in_profiles_declare_exactly_the_cli_foci() -> None:
+    for project, path in development_cli.PROFILES.items():
+        program = json.loads(path.read_text(encoding="utf-8"))
+        assert program["context_domain"]["focus"] == development_cli.FOCI[project], project
+        guarded = {route["guard"]["right"] for route in program["relations"] if route.get("guard")}
+        assert guarded == set(development_cli.FOCI[project]), project
+
+
+def test_game_profile_v2_keeps_v1_routes_and_adds_bounded_repository_checks() -> None:
+    v1 = json.loads((development_cli.ROOT / "_research/causal_composition/examples/adaptive_game_development.v1.json").read_text())
+    v2 = json.loads(development_cli.PROFILES["game"].read_text())
+    assert v2["graph_id"] == "hswm-game-development-feedback-v2" != v1["graph_id"]
+    assert v1["relations"] == v2["relations"][:len(v1["relations"])]
+    assert {cell["cell_id"] for cell in v2["cells"]} == {"developer", "session", "bridge", "career", "graph", "check"}
+    assert all(route["cost_hint"] <= 60 for route in v2["relations"] if route["guard"]["right"] != "check")

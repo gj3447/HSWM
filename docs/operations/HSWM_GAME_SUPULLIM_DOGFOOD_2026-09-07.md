@@ -4,7 +4,8 @@
 가벼운 검사부터 사용하며 프로젝트의 필수 검증이나 제품 판단은 그대로 따른다.
 현재 수풀림 코드는 `SYMPOSIUM`의 연구 기록에서 분리된 형제 저장소 `SUPULLIM`에 있다.
 사용자가 활발히 개발 중이라고 지정한 **메이플리니지와 버엑시**를 GAME 쪽 우선 대상으로 둔다.
-버엑시는 `GAMES/the-excel-tycoon`이며 기존 `game` profile의 이력을 이어 쓴다.
+버엑시는 `GAMES/the-excel-tycoon`이며 기존 `game` profile 이름을 이어 쓴다. 2026-09-08부터 버엑시의
+개발 루트는 독립 레포 `~/CD/virtual-excel-simulator`이고 profile은 v2다(아래 ‘2026-09-08 갱신’).
 메이플리니지는 `GAMES/maplelineage` 전용 profile과 별도 상태 파일을 사용한다.
 
 ## 시작
@@ -44,6 +45,9 @@ GAME의 동시 개발 worktree를 쓰는 경우 해당 GAME worktree 루트를 `
 | 메이플리니지 `encounter` | 같은 runner로 `server/test/encounter-mailbox-v2.test.ts` 실행 | 메모리 내 encounter 입력 대기열과 scheduler frame |
 | 버엑시 `session` | `pnpm --dir GAMES/the-excel-tycoon run test:session` | 방송 세션 상태 전이·이벤트·replay 등의 로컬 fixture |
 | 버엑시 `bridge` | `python3 GAMES/the-excel-tycoon/engineering/verify_soopoolim_creator_bridge_v1.py` | 수풀림 연결 자료의 경로·고정 hash·참조 완전성 |
+| 버엑시 `career` | `pnpm --dir GAMES/the-excel-tycoon run test:career` | Studio 커리어·저장·HTTP·리허설·장면·v3/v4 저널 재생 |
+| 버엑시 `graph` | `python3 -B scripts/verify_repository_graph.py` | 독립 레포 그래프·잠금·독립성 검증 |
+| 버엑시 `check` | `corepack pnpm run check` (`--budget 900` 필요) | 루트 전체 게이트. 커밋 전 검사 |
 | SUPULLIM `soop` | `npm run test:soop` | fake fetch·임시 SQLite를 이용한 SOOP 연동·검토자 처리 |
 | SUPULLIM `creator` | `npm run check:creator-research` | 공유 조사 자료의 고정 hash·등록·참조 완전성 |
 
@@ -104,3 +108,22 @@ HSWM 실행·CLI 기본 검사 9개와 새 wrapper 검사 3개도 통과했다.
 episode는 `maplelineage-combat-smoke-20260907-1`이며 사용자 피드백 대기 상태다.
 CLI 회귀 4개와 실제 `버엑시 status`로 이전 GAME episode가 보존되는 것도 확인했다.
 게임 소스에 새 수정 없이 HSWM의 실행 대상만 확장했다.
+
+## 2026-09-08 갱신: 버엑시 독립 레포 연결
+
+버엑시 개발이 `GAME` 스냅샷에서 독립 레포 `~/CD/virtual-excel-simulator`로 옮겨졌다.
+그 루트에서 `--project ../HSWM`으로 실행하면 workspace hash가 달라 새 상태 파일을 쓴다.
+같은 날 그 workspace의 v1 profile 상태에 세션 검사 episode 2개와 에이전트 라벨 피드백 2개를
+남겼다. 이후 `career`·`graph`·`check` focus를 더한 **profile v2**
+(`adaptive_game_development.v2.json`, graph id `hswm-game-development-feedback-v2`)로 바꿨다.
+저장소는 manifest digest를 graph id별로 고정하므로 v1을 제자리에서 바꾸지 않았다.
+v1 episode·피드백은 같은 SQLite 파일의 v1 graph에 남고 `status`는 v2 graph만 보여 준다.
+v1 relation 4개는 v2에서도 같은 순서·정의로 유지된다. `check`는 cost 240이므로 기본
+budget 60에서는 선택되지 않으며 `--budget 900`을 명시한다.
+
+에이전트 연결은 대상 레포 쪽에 있다. `virtual-excel-simulator/AGENTS.md`의 HSWM 절과
+`.claude/skills/hswm-dev/SKILL.md`가 focus 선택, 실행, 피드백 기록 규칙을 정한다.
+피드백 `--source`는 사용자 판정과 `agent(claude-code): ...`처럼 표시한 에이전트 판정을 구분한다.
+에이전트 판정은 사용자 판정으로 승격하지 않는다. HSWM 실행은 대상 프로젝트의 필수 검증을
+대체하지 않고, 통과가 완료 판정도 아니다. 이 연결로 얻는 데이터는 여전히 명시적 CLI 실행과
+피드백뿐이며 대화·편집 전체의 자동 수집이 아니다. 메이플리니지·수풀림 레포의 지침은 아직 없다.

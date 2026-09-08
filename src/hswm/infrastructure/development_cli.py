@@ -18,12 +18,12 @@ from hswm.infrastructure.adaptive_cli import RUN_EXIT_CODES, _bool, _program
 
 ROOT = Path(__file__).resolve().parents[3]
 PROFILES = {
-    "game": ROOT / "_research/causal_composition/examples/adaptive_game_development.v1.json",
+    "game": ROOT / "_research/causal_composition/examples/adaptive_game_development.v2.json",
     "maplelineage": ROOT / "_research/causal_composition/examples/adaptive_maplelineage_development.v1.json",
     "supullim": ROOT / "_research/causal_composition/examples/adaptive_supullim_development.v1.json",
 }
 ALIASES = {"the-excel-tycoon": "game", "버엑시": "game", "메이플리니지": "maplelineage"}
-FOCI = {"game": ["session", "bridge"], "maplelineage": ["combat", "encounter"],
+FOCI = {"game": ["session", "bridge", "career", "graph", "check"], "maplelineage": ["combat", "encounter"],
         "supullim": ["soop", "creator"]}
 
 

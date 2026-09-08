@@ -92,6 +92,15 @@ it("keeps null authored-source binding distinct from a non-null native response 
   expect(snapshot.native.sourceDigest).toBe(nativeDigest)
 })
 
+it.each([42, "not-a-sha256-source-digest"])("rejects a re-signed non-USL source digest (%j)", (forgedSourceDigest) => {
+  const input = result()
+  ;(input.result.report as any).sourceDigest = forgedSourceDigest
+  ;(input.result.policy as any).source_digest = forgedSourceDigest
+  input.receipt.resultDigest = sha(input.result)
+  input.receipt.digest = sha({ source: input.source, identities: input.identities, sourceDigest: input.receipt.sourceDigest, planDigest: input.receipt.planDigest, resultDigest: input.receipt.resultDigest })
+  expect(Either.isLeft(captureUslNativeSnapshot(input, expected()))).toBe(true)
+})
+
 it("does not misrepresent a recomputed receipt as authentication of unseen host bytes", () => {
   const input = result()
   const resources = input.identities.resources

@@ -191,14 +191,15 @@ export const captureUslNativeSnapshot = (input: unknown, expected: UslNativeSnap
   const receipt = outer["receipt"]
   if (!text(receipt["sourceDigest"]) || !text(receipt["planDigest"]) || !text(receipt["resultDigest"]) || !text(receipt["digest"]) || receipt["sourceDigest"] !== source["digest"] || receipt["planDigest"] !== uslDigest(plan) || receipt["resultDigest"] !== uslDigest(outer["result"]!) || receipt["digest"] !== uslDigest({ source, identities, sourceDigest: receipt["sourceDigest"], planDigest: receipt["planDigest"], resultDigest: receipt["resultDigest"] })) return fail("RECEIPT_INVALID", "adapter receipt digest binding")
   if (!isRecord(policy) || policy["schema_version"] !== "hswm-usl-observation-policy/v2" || policy["plan_digest"] !== expected.hswmPlanDigest || hswmDigest(plan) !== expected.hswmPlanDigest || policy["usl_plan_digest"] !== uslDigest(plan)) return fail("PLAN_BINDING_INVALID", "HSWM and USL plan digest binding")
-  if (!isRecord(report) || report["schema"] !== "usl-program-observation/v2" || report["planDigest"] !== uslDigest(plan) || report["sourceDigest"] !== policy["source_digest"] || report["semanticTruth"] !== "NOT_EVALUATED") return fail("OBSERVATION_INVALID", "report plan, source, or semantic truth binding")
+  const reportedSourceDigest = isRecord(report) ? report["sourceDigest"] : undefined
+  if (!isRecord(report) || report["schema"] !== "usl-program-observation/v2" || report["planDigest"] !== uslDigest(plan) || (reportedSourceDigest !== null && (!text(reportedSourceDigest) || !prefixedSha.test(reportedSourceDigest))) || reportedSourceDigest !== policy["source_digest"] || report["semanticTruth"] !== "NOT_EVALUATED") return fail("OBSERVATION_INVALID", "report plan, source, or semantic truth binding")
   const view = relations(plan, resourceMap.right, linkMap.right)
   if (Either.isLeft(view)) return retype(view)
   return Either.right(frozen({
     schema: USL_NATIVE_SNAPSHOT_SCHEMA,
     native: { adapter: source["adapter"] as string, sourceDigest: source["digest"] as string, identities: { resources: resourceMap.right, links: linkMap.right }, receipt: receipt as UslNativeSnapshot["native"]["receipt"] },
     prepared: prepared.right,
-    usl: { planDigest: report["planDigest"] as string, sourceDigest: report["sourceDigest"] as string | null, semanticTruth: "NOT_EVALUATED" },
+    usl: { planDigest: report["planDigest"] as string, sourceDigest: reportedSourceDigest as string | null, semanticTruth: "NOT_EVALUATED" },
     relations: view.right,
     integrity: "TRUSTED_ADAPTER_OUTPUT_INTEGRITY_NOT_NATIVE_SOURCE_ATTESTATION",
     claim: "NATIVE_REFERENCE_SNAPSHOT_NOT_SEMANTIC_TRUTH_EXECUTION_ADMISSION_OR_LEARNING",

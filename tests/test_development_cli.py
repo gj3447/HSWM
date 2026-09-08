@@ -121,3 +121,58 @@ def test_reluvator_plan_rejects_other_focus_route_and_uses_local_state(tmp_path,
     ]) == 0
     assert json.loads(capsys.readouterr().out)["claim"] == (
         "LOCAL_DEVELOPMENT_FEEDBACK_NOT_FIELD_OR_INFERENCE_AUTHORITY")
+
+
+def test_hswm_profile_uses_bounded_local_pytest_routes_without_auto_reward() -> None:
+    program = json.loads(development_cli.PROFILES["hswm"].read_text(encoding="utf-8"))
+    assert program["graph_id"] == "hswm-self-development-feedback-v1"
+    assert program["context_domain"]["focus"] == ["runtime", "usl", "ontology", "docs"]
+    cells = {cell["cell_id"]: cell for cell in program["cells"]}
+    assert set(cells) == {"developer", "runtime", "usl", "ontology", "docs"}
+    assert all(cell["argv"][:4] == ["uv", "run", "--no-sync", "pytest"]
+               for cell in cells.values() if cell["kind"] == "command")
+    assert all("outcome" not in cell for cell in cells.values() if cell["kind"] == "command")
+    routes = {route["uid"]: route for route in program["relations"]}
+    for focus in program["context_domain"]["focus"]:
+        assert routes[f"{focus}-focused"]["members"] == [focus]
+        assert routes[f"{focus}-focused"]["cost_hint"] == 20
+        assert routes[f"{focus}-extended"]["cost_hint"] == 40
+    assert max(route["cost_hint"] for route in routes.values()) <= 45
+
+
+def test_hswm_plan_requires_hswm_checkout_and_rejects_wrong_focus_route(tmp_path, capsys) -> None:
+    state = tmp_path / "hswm.sqlite3"
+    assert development_cli.main([
+        "hswm", "plan", "--workspace", str(development_cli.ROOT), "--state", str(state),
+        "--focus", "runtime", "--budget", "60",
+    ]) == 0
+    assert json.loads(capsys.readouterr().out)["selected"]["uid"] == "relation:runtime-focused"
+    assert development_cli.main([
+        "hswm", "plan", "--workspace", str(development_cli.ROOT), "--state", str(state),
+        "--focus", "runtime", "--route", "docs-focused",
+    ]) == 2
+    assert json.loads(capsys.readouterr().err)["status"] == "ERROR"
+    assert development_cli.main([
+        "hswm", "status", "--workspace", str(development_cli.ROOT), "--state", str(state),
+    ]) == 0
+    assert json.loads(capsys.readouterr().out)["claim"] == (
+        "LOCAL_DEVELOPMENT_FEEDBACK_NOT_SELF_VALIDATION_OR_EFFICACY")
+
+    other = tmp_path / "not-hswm"
+    other.mkdir()
+    assert development_cli.main([
+        "hswm", "plan", "--workspace", str(other), "--state", str(tmp_path / "other.sqlite3"),
+    ]) == 2
+    assert "hswm workspace" in json.loads(capsys.readouterr().err)["error"]
+
+
+def test_hswm_workspace_marker_rejects_non_table_project_metadata(tmp_path, capsys) -> None:
+    workspace = tmp_path / "malformed-hswm"
+    (workspace / "src" / "hswm").mkdir(parents=True)
+    (workspace / "tests").mkdir()
+    (workspace / "scripts").mkdir()
+    (workspace / "pyproject.toml").write_text('project = "hswm"\n', encoding="utf-8")
+    assert development_cli.main([
+        "hswm", "plan", "--workspace", str(workspace), "--state", str(tmp_path / "state.sqlite3"),
+    ]) == 2
+    assert json.loads(capsys.readouterr().err)["error"] == "hswm workspace marker mismatch"

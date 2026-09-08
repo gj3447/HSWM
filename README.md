@@ -125,7 +125,16 @@ USL 연결의 구현 범위와 부족한 점은
 
 <a id="development"></a>
 
-## 게임 · 수풀림 · Reluvator에서 사용하기
+## HSWM 자체 · 게임 · 수풀림 · Reluvator에서 사용하기
+
+HSWM 자체 개발도 같은 CLI를 사용합니다. 변경 분야별 검사를 선택·실행하고 명시적 피드백을
+지속 상태에 기록합니다. [자체 개발 지침](docs/operations/HSWM_SELF_DEVELOPMENT_2026-09-08.md)은
+`runtime`, `usl`, `ontology`, `docs` focus와 사용자·에이전트 피드백 구분을 설명합니다.
+
+```bash
+# HSWM 루트
+uv run --locked hswm-dev hswm run --focus ontology --task 'KG 변경사항 확인'
+```
 
 활발히 개발 중인 두 게임을 GAME 쪽 우선 대상으로 둡니다.
 각 GAME checkout 루트에서 실행하며, 프로젝트별 상태와 피드백은 별도로 보존합니다.
@@ -146,6 +155,7 @@ uv run --locked --project ../HSWM hswm-dev supullim run \
 
 | 실사용 대상 | 첫 로컬 실행에서 확인한 것 | 다음 입력 |
 | --- | --- | --- |
+| [HSWM 자체](docs/operations/HSWM_SELF_DEVELOPMENT_2026-09-08.md) | 네 focus 실행·저장, 에이전트 피드백 뒤 관계 revision·다음 plan 점수 변화 확인 | 지속 개발 피드백·별도 효능 비교 |
 | 메이플리니지 | 전투 규칙 검사 **19개 통과** | 전투·encounter 개발 피드백 |
 | 버엑시 / `the-excel-tycoon` | 방송 세션 검사 **40개 통과**; 2026-09-08 독립 레포에서 profile v2로 `career`·`graph`·`check` focus 추가 | 세션·커리어·그래프·수풀림 bridge 개발 피드백 |
 | 수풀림 / `SUPULLIM` | SOOP 연동 검사 **23개 통과** | SOOP·공유 조사 자료 개발 피드백 |

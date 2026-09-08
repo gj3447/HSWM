@@ -43,6 +43,23 @@
 - Treat repository ontology and MCPs as bounded projections and interfaces, not
   as HSWM cognition, routing, or learning.
 
+## Develop HSWM through HSWM
+
+- For HSWM's own development, use `hswm-dev hswm plan/run/status/feedback`
+  from the HSWM checkout to select and record the relevant `runtime`, `usl`,
+  `ontology`, or `docs` checks. Keep the task, selected relation, result, and
+  explicit usefulness feedback in the workspace's local state.
+- Record agent usefulness judgments with an `agent(<tool>):...` source and
+  distinguish them from user feedback. A passing check is not automatically
+  useful, and self-checking does not establish HSWM efficacy or causal credit.
+- This is a development workflow, not a new approval gate. Use a direct,
+  focused check to bootstrap or repair the wrapper when necessary, and record
+  that limitation. Run required checks outside the selected profile when the
+  change needs them; do not weaken coverage to fit a learned route.
+- Record material development changes and dated results in source-bound KG
+  snapshots. Preserve prior snapshots, failed findings, user instructions, and
+  their distinct authority; keep private runtime outputs out of public KG.
+
 ## Standard-first external tooling
 
 - For graph interoperability, MCP, Skills, observability, and other external

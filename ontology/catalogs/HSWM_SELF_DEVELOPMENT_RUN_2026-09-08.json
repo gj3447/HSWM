@@ -1,0 +1,156 @@
+{
+  "schema_version": "hswm-self-development-report/v1",
+  "observed_at": "2026-09-08T04:12:49.085748+00:00",
+  "graph_id": "hswm-self-development-feedback-v1",
+  "profile_path": "_research/causal_composition/examples/adaptive_hswm_development.v1.json",
+  "profile_sha256": "cb77ff4f606463b0e265bbe6d92a112228721ac3f9dc2495b95890b879c77c27",
+  "runs": [
+    {
+      "focus": "runtime",
+      "episode": "hswm-self-runtime-20260908-02",
+      "status": "SUCCEEDED",
+      "success_label": null,
+      "selected_relation": "relation:runtime-focused",
+      "passed_tests": 20,
+      "duration_seconds": 2.3804959231056273,
+      "command_exit_code": 0,
+      "output_bytes": 99,
+      "output_sha256": "1b4955e32559e297b0dcd20ba58b55178c5239c76fa6d0c794b532a40336cfed",
+      "output_truncated": false
+    },
+    {
+      "focus": "ontology",
+      "episode": "hswm-self-ontology-20260908-02",
+      "status": "SUCCEEDED",
+      "success_label": null,
+      "selected_relation": "relation:ontology-focused",
+      "passed_tests": 9,
+      "duration_seconds": 1.2499814671464264,
+      "command_exit_code": 0,
+      "output_bytes": 1323,
+      "output_sha256": "6239854889b0e4f386af30150f753c5f4fc7b8b99f123927f858ad1fa34f2f1a",
+      "output_truncated": false
+    },
+    {
+      "focus": "docs",
+      "episode": "hswm-self-docs-20260908-02",
+      "status": "SUCCEEDED",
+      "success_label": null,
+      "selected_relation": "relation:docs-focused",
+      "passed_tests": 325,
+      "duration_seconds": 0.9591122940182686,
+      "command_exit_code": 0,
+      "output_bytes": 420,
+      "output_sha256": "882691de53ab83f7713f96e9bf1c582053e540cfeb86f61d71a53c35eefe4f67",
+      "output_truncated": false
+    },
+    {
+      "focus": "usl",
+      "episode": "hswm-self-usl-20260908-02",
+      "status": "SUCCEEDED",
+      "success_label": null,
+      "selected_relation": "relation:usl-focused",
+      "passed_tests": 19,
+      "duration_seconds": 0.57933529606089,
+      "command_exit_code": 0,
+      "output_bytes": 99,
+      "output_sha256": "b327f075efdbb6fed4625a31d0794723851a13d0ff55c440c94fe2d97de93c18",
+      "output_truncated": false
+    }
+  ],
+  "feedback": {
+    "source": "agent(codex): KG source and user-quote rejection checks were relevant to today's new publisher; useful engineering check, not independent efficacy evidence",
+    "success": true
+  },
+  "feedback_episode": "hswm-self-ontology-20260908-02",
+  "before_feedback_plan": {
+    "digest": "4b1e4fbf9aed54aea74daa70ccf801d40eace823e74bdb7ae21a625a38fb568c",
+    "members": [
+      "ontology"
+    ],
+    "observations": 0,
+    "predicted_success": 0.5,
+    "reads": [
+      "focus",
+      "stage"
+    ],
+    "revision": 1,
+    "score": 0.2666666666666667,
+    "uid": "relation:ontology-focused"
+  },
+  "after_feedback_plan": {
+    "digest": "e601c24c7e7c09be1d17a22e16fc60f67842aa524ad74967cc9f3dd2cf828e81",
+    "members": [
+      "ontology"
+    ],
+    "observations": 1,
+    "predicted_success": 0.6899744811276125,
+    "reads": [
+      "focus",
+      "stage"
+    ],
+    "revision": 2,
+    "score": 0.7268764835941347,
+    "uid": "relation:ontology-focused"
+  },
+  "pending_feedback_count": 3,
+  "atom_kinds": {
+    "cell": 5,
+    "context_field": 2,
+    "episode": 4,
+    "lease": 1,
+    "outcome": 1,
+    "relation": 8,
+    "trajectory": 8
+  },
+  "event_count": 25,
+  "relations": [
+    {
+      "observations": 0,
+      "revision": 1,
+      "uid": "relation:docs-extended"
+    },
+    {
+      "observations": 0,
+      "revision": 1,
+      "uid": "relation:docs-focused"
+    },
+    {
+      "observations": 0,
+      "revision": 1,
+      "uid": "relation:ontology-extended"
+    },
+    {
+      "observations": 1,
+      "revision": 2,
+      "uid": "relation:ontology-focused"
+    },
+    {
+      "observations": 0,
+      "revision": 1,
+      "uid": "relation:runtime-extended"
+    },
+    {
+      "observations": 0,
+      "revision": 1,
+      "uid": "relation:runtime-focused"
+    },
+    {
+      "observations": 0,
+      "revision": 1,
+      "uid": "relation:usl-extended"
+    },
+    {
+      "observations": 0,
+      "revision": 1,
+      "uid": "relation:usl-focused"
+    }
+  ],
+  "scope": "AGENT_RECORDED_LOCAL_DEVELOPMENT_OBSERVATION_NOT_INDEPENDENT_EFFICACY",
+  "limitations": [
+    "Different test scopes are not summed.",
+    "Passing checks did not automatically produce success labels.",
+    "Feedback is an agent judgment, not user feedback.",
+    "A changed score does not prove a better next action or causal credit."
+  ]
+}

@@ -8,6 +8,7 @@ from hashlib import sha256
 import json
 from pathlib import Path
 import sys
+import tomllib
 from uuid import uuid4
 
 from hswm.cells.adaptive_runtime import AdaptiveRuntime
@@ -22,10 +23,12 @@ PROFILES = {
     "maplelineage": ROOT / "_research/causal_composition/examples/adaptive_maplelineage_development.v1.json",
     "supullim": ROOT / "_research/causal_composition/examples/adaptive_supullim_development.v1.json",
     "reluvator": ROOT / "_research/causal_composition/examples/adaptive_reluvator_development.v1.json",
+    "hswm": ROOT / "_research/causal_composition/examples/adaptive_hswm_development.v1.json",
 }
 ALIASES = {"the-excel-tycoon": "game", "버엑시": "game", "메이플리니지": "maplelineage"}
 FOCI = {"game": ["session", "bridge", "career", "graph", "check"], "maplelineage": ["combat", "encounter"],
-        "supullim": ["soop", "creator"], "reluvator": ["contracts", "mesh"]}
+        "supullim": ["soop", "creator"], "reluvator": ["contracts", "mesh"],
+        "hswm": ["runtime", "usl", "ontology", "docs"]}
 
 
 class _Parser(argparse.ArgumentParser):
@@ -79,9 +82,23 @@ def parser() -> argparse.ArgumentParser:
     return result
 
 
+def _validate_hswm_workspace(workspace: Path) -> None:
+    manifest = workspace / "pyproject.toml"
+    try:
+        project = tomllib.loads(manifest.read_text(encoding="utf-8")).get("project", {})
+    except (OSError, tomllib.TOMLDecodeError) as error:
+        raise Reject("hswm workspace must contain a readable HSWM pyproject.toml") from error
+    if (not isinstance(project, dict) or project.get("name") != "hswm" or
+            not (workspace / "src" / "hswm").is_dir() or not (workspace / "tests").is_dir() or
+            not (workspace / "scripts").is_dir()):
+        raise Reject("hswm workspace marker mismatch")
+
+
 def _runtime(args: argparse.Namespace) -> AdaptiveRuntime:
     workspace = args.workspace.resolve()
     project = ALIASES.get(args.project, args.project)
+    if project == "hswm":
+        _validate_hswm_workspace(workspace)
     return AdaptiveRuntime(_program(PROFILES[project]), state_path(project, workspace, args.state), workspace)
 
 
@@ -108,6 +125,8 @@ def _status(runtime: AdaptiveRuntime) -> dict:
                           for atom in relations],
             "claim": ("LOCAL_DEVELOPMENT_FEEDBACK_NOT_FIELD_OR_INFERENCE_AUTHORITY"
                       if runtime.graph_id == "hswm-reluvator-delltower-development-feedback-v1"
+                      else "LOCAL_DEVELOPMENT_FEEDBACK_NOT_SELF_VALIDATION_OR_EFFICACY"
+                      if runtime.graph_id == "hswm-self-development-feedback-v1"
                       else "LOCAL_DEVELOPMENT_FEEDBACK_NOT_GAME_OR_PLATFORM_AUTHORITY")}
 
 

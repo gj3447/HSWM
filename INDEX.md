@@ -23,6 +23,10 @@ LLM 호출·관측 평가·명시적 피드백·관계 갱신·다음 선택을 
 [Astra·K3 이후 연구 방향](docs/research/HSWM_ASTRA_K3_RESEARCH_DIRECTION_2026-09-08.md)은
 최신 native agent 능력과 HSWM의 지속 관계 학습을 구분하고, 모델 교체·같은 이력·총비용을
 포함한 실사용 개발 방향을 제안한다. 공식 자료 검토이며 새 효능 실험은 아니다.
+[ICE 학습 한계의 해결 설계](docs/research/HSWM_ICE_LEARNING_REMEDIATION_2026-09-08.md)는
+실제 대안 선택·작은 표본의 갱신·산출물별 피드백·다음 질문 생성·순효용을 구분하고,
+각 후보의 적용 경계와 반박 조건을 [교정 KG v2](ontology/evidence/HSWM_ICE_LEARNING_REMEDIATION_2026-09-08.v2.json)에
+연결한다. 후속 설계이며 구현·효능 완료 주장이 아니다.
 실제 메이플리니지·버엑시와 수풀림 개발에서는
 [`hswm-dev 실사용 안내`](docs/operations/HSWM_GAME_SUPULLIM_DOGFOOD_2026-09-07.md)의
 프로젝트별 검사·명시적 피드백 경로를 사용한다.

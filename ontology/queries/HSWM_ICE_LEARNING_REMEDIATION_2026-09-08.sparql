@@ -1,0 +1,10 @@
+# Read-only default retrieval over v2 projection; v1 is available only as its correction neighbor.
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?item ?role ?status ?relation ?target WHERE {
+  <urn:hswm:kg:node:sym:AbstractNode:hswm-ice-learning-remediation-2026-09-08-v2> kbr:HAS_CONCEPT ?item .
+  ?item kbp:role ?role ; kbp:status ?status .
+  FILTER(?status != "V1_INVALID_SEMANTIC_MAPPING_SUPERSEDED_BY_V2")
+  OPTIONAL { ?item ?relation ?target . FILTER(?relation IN (kbr:REQUIRES,kbr:TESTS,kbr:PRESERVES,kbr:SPECULATIVE_LINK,kbr:HAS_SOURCE)) }
+}
+ORDER BY ?role ?item ?relation ?target

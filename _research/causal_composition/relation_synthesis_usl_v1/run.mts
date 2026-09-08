@@ -23,10 +23,24 @@ const ensure = (condition: boolean, detail: string) => condition ? Effect.void :
 const checked = <A, E>(value: import("effect").Either.Either<A, E>) => Either.isRight(value) ? Effect.succeed(value.right) : Effect.fail(new Error(json(value.left)))
 const sameSet = (a: ReadonlyArray<string>, b: ReadonlyArray<string>) => json([...a].sort()) === json([...b].sort())
 const semanticView = (graph: RelationGraph) => [...graph.relations].sort((a,b) => a.uid.localeCompare(b.uid)).map(r => ({ ...r, participants: [...r.participants] }))
-const graphOf = (snapshot: UslNativeSnapshot): RelationGraph => ({ relations: snapshot.relations.map(r => ({
-  uid: r.nativeRelationUid, meaning: String(r.meaning.definition["description"]),
-  participants: r.participants.map(p => ({ role: p.role, uid: p.nativeUid }))
-})) })
+const graphOf = (snapshot: UslNativeSnapshot): import("effect").Either.Either<RelationGraph, Error> => Either.try({
+  try: () => ({ relations: snapshot.relations.map(r => {
+    const description = r.meaning.definition["description"]
+    if (typeof description !== "string") throw new Error("missing meaning description")
+    const meaning = snapshot.native.adapter === "property-graph/v1" ? description : (() => {
+      if (snapshot.native.adapter !== "property-graph/v2") throw new Error("unqualified native adapter profile")
+      const parsed = JSON.parse(description)
+      if (parsed?.schema !== "property-graph-meaning/v2" || typeof parsed.type !== "string" || !parsed.type ||
+        typeof parsed.direction?.from_uid !== "string" || typeof parsed.direction?.to_uid !== "string" ||
+        !r.participants.some(p => p.nativeUid === parsed.direction.from_uid) || !r.participants.some(p => p.nativeUid === parsed.direction.to_uid)) {
+        throw new Error("invalid native directed-meaning profile")
+      }
+      return `Declared KG relation: ${parsed.type}`
+    })()
+    return { uid:r.nativeRelationUid,meaning,participants:r.participants.map(p=>({role:p.role,uid:p.nativeUid})) }
+  }) }),
+  catch: e => e instanceof Error ? e : new Error(String(e))
+})
 
 interface Protocol {
   readonly protocol_id: string
@@ -97,7 +111,7 @@ const run = Effect.gen(function* () {
     const usl = connection(task, () => Effect.succeed(task.raw))
     const input = yield* usl.hswm({ task: task.id }, { links: task.graph.relations.map(r => r.uid) }, expected.input)
     const snapshot = yield* checked(captureUslNativeSnapshot(input, expected.expected))
-    const graph = graphOf(snapshot)
+    const graph = yield* checked(graphOf(snapshot))
     yield* ensure(json(semanticView(graph)) === json(semanticView(task.graph)), `native role/meaning mapping lost:${task.id}`)
     return { task, snapshot, graph, snapshotBytes: Buffer.byteLength(json(snapshot)) }
   })

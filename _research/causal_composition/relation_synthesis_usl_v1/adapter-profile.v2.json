@@ -1,0 +1,12 @@
+{
+  "schema_version": "hswm-relation-study-usl-feature-profile/v2",
+  "authority": "SECONDARY_AI_LOCAL_TASK_PROJECTION",
+  "predecessor": "Attempt 01 used property-graph/v1 textual meanings. Attempt 02 refused the concurrently updated property-graph/v2 meaning encoding before induction.",
+  "supported_adapters": ["property-graph/v1", "property-graph/v2"],
+  "v1": "Use the legacy declared-relation description as the task feature.",
+  "v2": "Parse property-graph-meaning/v2; validate explicit type, direction.from_uid, direction.to_uid and participant membership. Map type to the protocol's Declared KG relation: TYPE feature.",
+  "preserved_full_snapshot": ["native source digest", "native UID identity maps", "all ordered participant roles", "full meaning definition including native direction and description", "plan", "report", "policy", "receipt"],
+  "task_feature_mapping_loss": "The finite DSL uses only type and role incidence; direction and free description remain in the full snapshot but are not DSL input features. The native comparator uses the same selected feature projection.",
+  "nonclaim": "Selected-feature equality is not full graph semantic equivalence or proof that ignored direction/description never matter. No canonical rewrite or USL DB is introduced.",
+  "protocol_unchanged": "A/V/B splits, primitive roles, candidate search, controls, costs and G0/G1 claim ceilings remain those of protocol.v1.json."
+}

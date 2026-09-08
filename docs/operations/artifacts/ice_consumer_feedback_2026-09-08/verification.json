@@ -1,0 +1,156 @@
+{
+  "schema_version": "hswm-ice-consumer-feedback-review/v1",
+  "date": "2026-09-08",
+  "source_base_commit": "b3e66a9943d60eb6967d921cfe1a1aaf7289f260",
+  "authority_class": "SECONDARY_AI",
+  "claim": "ENGINEERING_REPAIR_AND_CONSUMER_ASSESSMENT_NOT_COMPARATIVE_EFFICACY",
+  "external_sources": [
+    {
+      "repository": "ICE_ORCA_DRAGON",
+      "commit": "cbe6f7b09a02efb5ac484385b3e1105171d91c4c",
+      "path": "docs/decisions/ICE_HSWM_DOGFOOD_FEEDBACK_2026-09-08.md",
+      "sha256": "dce432512db44b4cc6cffa00b7fe2d4c1b61107bda2a387f0e6b7d6a6ca84fb3"
+    },
+    {
+      "repository": "ICE_ORCA_DRAGON",
+      "commit": "cbe6f7b09a02efb5ac484385b3e1105171d91c4c",
+      "path": "config/hswm-research.v2.json",
+      "sha256": "03657c8c0b5cb748047ad52bf2a940803b770b33c546059306cbd5de0802b10a"
+    },
+    {
+      "repository": "ICE_ORCA_DRAGON",
+      "commit": "cbe6f7b09a02efb5ac484385b3e1105171d91c4c",
+      "path": "research/hswm/upstream/README.md",
+      "sha256": "e39bcbb3af7cd11df2b5660b63da0fe8f7c04f4f64de7f67d940cfc114159746"
+    },
+    {
+      "repository": "ICE_ORCA_DRAGON",
+      "commit": "cbe6f7b09a02efb5ac484385b3e1105171d91c4c",
+      "path": "research/hswm/upstream/context-attempt-key-bound.patch",
+      "sha256": "20b1eecf24b954afb46330baf251975fc77e28e9d6ef7e0f1ae83cb0d266fa51"
+    }
+  ],
+  "synthetic_before": {
+    "schema_version": "hswm-ice-context-key-regression/v1",
+    "fixture": "synthetic-six-fields-not-research-feedback",
+    "compiled_sha256": "b3ece0e434ea0b1b23d6803be68d84a6cde5029acafd9454e84f3ff5ea3f473b",
+    "first_update": "Right",
+    "key_length": 1090,
+    "next_predict": "Left",
+    "error": "MODEL_INVALID"
+  },
+  "synthetic_after": {
+    "schema_version": "hswm-ice-context-key-regression/v1",
+    "fixture": "synthetic-six-fields-not-research-feedback",
+    "compiled_sha256": "953fb0fc3b1ec67806635aa99a5a202c75cd2990fbed1b92e02addef0aeb0c8f",
+    "key_length": 1090,
+    "results": [
+      {
+        "observations": 1,
+        "prediction": 0.9878715650157257
+      },
+      {
+        "observations": 2,
+        "prediction": 0.14841713705733317
+      },
+      {
+        "observations": 3,
+        "prediction": 0.9295339325021504
+      },
+      {
+        "observations": 4,
+        "prediction": 0.18087992489764065
+      }
+    ]
+  },
+  "self_development_runs": [
+    {
+      "episode": "hswm-ice-context-key-20260908",
+      "status": "FAILED",
+      "success_before_feedback": null,
+      "selected": "relation:runtime-focused",
+      "tests_passed": 35,
+      "tests_failed": 2,
+      "duration_seconds": 21.361,
+      "output_sha256": "74397dab92ebb410b37e5d31121ce69caee8bd643f4b51f5974059daec9899e0"
+    },
+    {
+      "episode": "hswm-ice-context-key-20260908-r2",
+      "status": "SUCCEEDED",
+      "success_before_feedback": null,
+      "selected": "relation:runtime-focused",
+      "tests_passed": 37,
+      "tests_failed": 0,
+      "duration_seconds": 19.546,
+      "output_sha256": "1a4a31b4e4f847acbd6125cb7415448e997f85976942b889edab73efac678005"
+    }
+  ],
+  "verification": {
+    "native_build": "PASSED",
+    "typescript_effect_check": "PASSED",
+    "targeted_domain_tests": 7,
+    "isolated_subprocess_tests": 3,
+    "first_failure_disposition": "EXISTING_FIXED_STARTUP_DEADLINE_RACE_SUSPECTED_NOT_FIXED",
+    "markdown_math": "COMPLETED"
+  },
+  "agent_check_feedback": {
+    "episode": "hswm-ice-context-key-20260908-r2",
+    "feedback": {
+      "success": true,
+      "source": "agent(codex): ICE가 발견한 긴 문맥 key 재사용 수정과 저장·실행 회귀를 확인하는 데 유용했음; 연구 효능이나 소비자 평가의 대리 label은 아님"
+    },
+    "learning_status": "WEIGHTS_UPDATED"
+  },
+  "next_plan": {
+    "status": "PLANNED",
+    "selected": {
+      "uid": "relation:runtime-focused",
+      "score": 0.40503264350733215,
+      "predicted_success": 0.6899744811276125,
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "members": [
+        "runtime"
+      ],
+      "observations": 1
+    },
+    "choices": [
+      {
+        "uid": "relation:runtime-focused",
+        "score": 0.40503264350733215,
+        "predicted_success": 0.6899744811276125,
+        "reads": [
+          "focus",
+          "stage"
+        ],
+        "members": [
+          "runtime"
+        ],
+        "observations": 1
+      },
+      {
+        "uid": "relation:runtime-extended",
+        "score": 0.056899310173998865,
+        "predicted_success": 0.6899744811276125,
+        "reads": [
+          "focus",
+          "stage"
+        ],
+        "members": [
+          "runtime",
+          "effect-check"
+        ],
+        "observations": 1
+      }
+    ],
+    "claim": "LOCAL_ADAPTATION_NOT_CAUSAL_IDENTIFICATION",
+    "backend": "typescript-effect"
+  },
+  "consumer_research_rerun": "NOT_EXECUTED",
+  "nested_feedback": "NOT_IMPLEMENTED",
+  "three_arm_comparison": "PROPOSED_NOT_EXECUTED",
+  "framework_comparison": "PROPOSED_NOT_EXECUTED",
+  "assessment_injected_as_learning_feedback": false
+}

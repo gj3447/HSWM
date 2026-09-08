@@ -1,0 +1,906 @@
+{
+  "schema_version": "hswm-ice-consumer-feedback-ontology/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+  "status": "ENGINEERING_REVIEW_NOT_COMPARATIVE_EFFICACY",
+  "nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+  "authority_boundary": "All claims are SECONDARY_AI. User relayed an ICE agent assessment; this does not ratify its contents as USER_PRIMARY or supply a runtime reward.",
+  "source_accessed_on": "2026-09-08",
+  "artifact_bindings": [
+    {
+      "path": "docs/operations/HSWM_ICE_CONSUMER_FEEDBACK_2026-09-08.md",
+      "sha256": "93b3d98ed48ec1dc47cf84d4d6121f674fb951621bd62663765260c52741ee3c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+      "sha256": "29a67f97601586235f7d09e19ba11636a47295bfa55962ad9692d8c833e3d94e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+      "sha256": "efa4f00150c3467567f6b89198866af5d6af388b3fb0df0778b1cee439fd13e3"
+    },
+    {
+      "path": "tests/effect-runtime/adaptive-domain.test.ts",
+      "sha256": "8155fc08d327f9539d693dc4908b95325944eb966e3383ad33727f48b2a8c809"
+    },
+    {
+      "path": "docs/operations/artifacts/ice_consumer_feedback_2026-09-08/verification.json",
+      "sha256": "3f55252167cfc477adb08b72f33985dcbbbcec7498b665adaa8361faa4acf8bd"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_DEVELOPMENT_DAY_2026-09-08_ONTOLOGY.v1.json",
+      "sha256": "931f6a7bfe9fa60fc8c543c08d6b293d8e0d3c313f0820dc6effea66481acfd7"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 20,
+    "relations": 35,
+    "anchors": 1
+  },
+  "anchors": [
+    {
+      "uid": "sym:AbstractNode:hswm-development-day-2026-09-08-v1",
+      "name": "HSWM 오늘 작업·USL·Reluvator·자체 개발 KG 2026-09-08",
+      "required_labels": [
+        "AbstractNode",
+        "Concept"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "ICE ORCA DRAGON consumer feedback and HSWM repair",
+        "description": "User-relayed agent assessment, source audit, local bug repair, remaining comparison work.",
+        "standard_graph_role": "CONSUMER_FEEDBACK_BUNDLE",
+        "role": "CONSUMER_FEEDBACK_BUNDLE",
+        "status": "ENGINEERING_REVIEW_RECORDED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "source_base_commit": "b3e66a9943d60eb6967d921cfe1a1aaf7289f260",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-assessment",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "ICE 소비자 효용 평가",
+        "description": "Long-running research continuity was useful to the consumer; learning benefit and framework superiority remain unmeasured.",
+        "standard_graph_role": "REPORTED_AGENT_ASSESSMENT",
+        "role": "REPORTED_AGENT_ASSESSMENT",
+        "status": "REPORTED_NOT_COMPARATIVELY_VERIFIED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-choice",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "배타적 root guard의 판별 한계",
+        "description": "The reviewed ICE routes are disjoint by mode; score updates alone cannot demonstrate a better choice between them.",
+        "standard_graph_role": "IDENTIFICATION_LIMIT",
+        "role": "IDENTIFICATION_LIMIT",
+        "status": "UNDERDETERMINED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-nested",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "내부 단계별 사후 피드백",
+        "description": "Episode feedback updates only the selected root relation. ICE stage reviews were NOT_SUBMITTED; explicit output-bound nested feedback remains proposed.",
+        "standard_graph_role": "IMPLEMENTATION_GAP",
+        "role": "IMPLEMENTATION_GAP",
+        "status": "NOT_IMPLEMENTED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-repair",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "긴 context-attempt key 재사용 복구",
+        "description": "Preserve existing key bytes; use an index-specific feature-derived length bound instead of the generic 256-character identifier limit.",
+        "standard_graph_role": "ENGINEERING_REPAIR",
+        "role": "ENGINEERING_REPAIR",
+        "status": "LOCALLY_VERIFIED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-checks",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "독립 합성 회귀와 HSWM 자체 검사",
+        "description": "Original compiled model rejects its first learned six-field state. Rebuilt model supports repeated prediction/update. Final 37 tests, type/Effect checks and build pass. First 35/2 run retained.",
+        "standard_graph_role": "ENGINEERING_VERIFICATION",
+        "role": "ENGINEERING_VERIFICATION",
+        "status": "PASSED_WITH_FIRST_FAILURE_PRESERVED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-timing",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "기존 subprocess 검사 타이밍",
+        "description": "Two fixed 50/80ms startup marker checks failed during concurrent checks, then passed isolated and on full rerun. No stability guarantee.",
+        "standard_graph_role": "VERIFICATION_LIMIT",
+        "role": "VERIFICATION_LIMIT",
+        "status": "SUSPECTED_STARTUP_RACE_NOT_FIXED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-arms",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "고정·frozen·learning 비교",
+        "description": "Require co-eligible alternatives, identical initial snapshots, separate state, held-out tasks, blinded outcome review and complete training/repair/operation costs.",
+        "standard_graph_role": "COMPARISON_PROPOSAL",
+        "role": "COMPARISON_PROPOSAL",
+        "status": "PROPOSED_NOT_EXECUTED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-frameworks",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "다른 프레임워크 대비 평가",
+        "description": "Three HSWM arms isolate adaptation benefit; superiority to LangGraph/CrewAI requires a separately matched implementation comparison.",
+        "standard_graph_role": "COMPARISON_LIMIT",
+        "role": "COMPARISON_LIMIT",
+        "status": "NOT_MEASURED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-0",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "docs/operations/HSWM_ICE_CONSUMER_FEEDBACK_2026-09-08.md",
+        "description": "HSWM engineering source bytes bound by SHA-256.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "source_path": "docs/operations/HSWM_ICE_CONSUMER_FEEDBACK_2026-09-08.md",
+        "source_sha256": "93b3d98ed48ec1dc47cf84d4d6121f674fb951621bd62663765260c52741ee3c",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+        "description": "HSWM engineering source bytes bound by SHA-256.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "source_path": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+        "source_sha256": "29a67f97601586235f7d09e19ba11636a47295bfa55962ad9692d8c833e3d94e",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-2",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+        "description": "HSWM engineering source bytes bound by SHA-256.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "source_path": "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+        "source_sha256": "efa4f00150c3467567f6b89198866af5d6af388b3fb0df0778b1cee439fd13e3",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-3",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "tests/effect-runtime/adaptive-domain.test.ts",
+        "description": "HSWM engineering source bytes bound by SHA-256.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "source_path": "tests/effect-runtime/adaptive-domain.test.ts",
+        "source_sha256": "8155fc08d327f9539d693dc4908b95325944eb966e3383ad33727f48b2a8c809",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-4",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "docs/operations/artifacts/ice_consumer_feedback_2026-09-08/verification.json",
+        "description": "HSWM engineering source bytes bound by SHA-256.",
+        "standard_graph_role": "SOURCE_ARTIFACT",
+        "role": "SOURCE_ARTIFACT",
+        "status": "CONTENT_PINNED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "source_path": "docs/operations/artifacts/ice_consumer_feedback_2026-09-08/verification.json",
+        "source_sha256": "3f55252167cfc477adb08b72f33985dcbbbcec7498b665adaa8361faa4acf8bd",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-ice-source-0",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "docs/decisions/ICE_HSWM_DOGFOOD_FEEDBACK_2026-09-08.md",
+        "description": "Consumer repository file checked against the pinned commit; private runtime payloads are not copied.",
+        "standard_graph_role": "EXTERNAL_SOURCE_ARTIFACT",
+        "role": "EXTERNAL_SOURCE_ARTIFACT",
+        "status": "EXTERNAL_GIT_BLOB_VERIFIED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "source_repository": "ICE_ORCA_DRAGON",
+        "source_commit": "cbe6f7b09a02efb5ac484385b3e1105171d91c4c",
+        "source_path": "docs/decisions/ICE_HSWM_DOGFOOD_FEEDBACK_2026-09-08.md",
+        "source_sha256": "dce432512db44b4cc6cffa00b7fe2d4c1b61107bda2a387f0e6b7d6a6ca84fb3",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-ice-source-1",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "config/hswm-research.v2.json",
+        "description": "Consumer repository file checked against the pinned commit; private runtime payloads are not copied.",
+        "standard_graph_role": "EXTERNAL_SOURCE_ARTIFACT",
+        "role": "EXTERNAL_SOURCE_ARTIFACT",
+        "status": "EXTERNAL_GIT_BLOB_VERIFIED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "source_repository": "ICE_ORCA_DRAGON",
+        "source_commit": "cbe6f7b09a02efb5ac484385b3e1105171d91c4c",
+        "source_path": "config/hswm-research.v2.json",
+        "source_sha256": "03657c8c0b5cb748047ad52bf2a940803b770b33c546059306cbd5de0802b10a",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-ice-source-2",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "research/hswm/upstream/README.md",
+        "description": "Consumer repository file checked against the pinned commit; private runtime payloads are not copied.",
+        "standard_graph_role": "EXTERNAL_SOURCE_ARTIFACT",
+        "role": "EXTERNAL_SOURCE_ARTIFACT",
+        "status": "EXTERNAL_GIT_BLOB_VERIFIED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "source_repository": "ICE_ORCA_DRAGON",
+        "source_commit": "cbe6f7b09a02efb5ac484385b3e1105171d91c4c",
+        "source_path": "research/hswm/upstream/README.md",
+        "source_sha256": "e39bcbb3af7cd11df2b5660b63da0fe8f7c04f4f64de7f67d940cfc114159746",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-ice-source-3",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "research/hswm/upstream/context-attempt-key-bound.patch",
+        "description": "Consumer repository file checked against the pinned commit; private runtime payloads are not copied.",
+        "standard_graph_role": "EXTERNAL_SOURCE_ARTIFACT",
+        "role": "EXTERNAL_SOURCE_ARTIFACT",
+        "status": "EXTERNAL_GIT_BLOB_VERIFIED",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "source_repository": "ICE_ORCA_DRAGON",
+        "source_commit": "cbe6f7b09a02efb5ac484385b3e1105171d91c4c",
+        "source_path": "research/hswm/upstream/context-attempt-key-bound.patch",
+        "source_sha256": "20b1eecf24b954afb46330baf251975fc77e28e9d6ef7e0f1ae83cb0d266fa51",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-langgraph",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "LangGraph official overview",
+        "description": "Documents persistence, human intervention and short/long-term memory.",
+        "standard_graph_role": "OFFICIAL_DOCUMENTATION_REFERENCE",
+        "role": "OFFICIAL_DOCUMENTATION_REFERENCE",
+        "status": "ACCESSED_2026_09_08",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "source_url": "https://docs.langchain.com/oss/python/langgraph/overview",
+        "source_accessed_on": "2026-09-08",
+        "source_authority": "OFFICIAL_VENDOR_DOCUMENTATION_NOT_BENCHMARK",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-crewai",
+      "labels": [
+        "AbstractNode",
+        "Concept"
+      ],
+      "properties": {
+        "name": "CrewAI official Flows",
+        "description": "Documents state management and conditional control flow.",
+        "standard_graph_role": "OFFICIAL_DOCUMENTATION_REFERENCE",
+        "role": "OFFICIAL_DOCUMENTATION_REFERENCE",
+        "status": "ACCESSED_2026_09_08",
+        "authority_class": "SECONDARY_AI",
+        "responsibility_owner": "hswm:ice-consumer-feedback:2026-09-08",
+        "projection_nonclaim": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "source_url": "https://docs.crewai.com/v1.15.20/en/concepts/flows",
+        "source_accessed_on": "2026-09-08",
+        "source_authority": "OFFICIAL_VENDOR_DOCUMENTATION_NOT_BENCHMARK",
+        "claim_boundary": "SOURCE_BOUND_ENGINEERING_AND_AGENT_ASSESSMENT_NOT_USER_RATIFICATION_NOT_CAUSAL_CREDIT_NOT_EFFICACY_OR_GATE_PASS"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-assessment",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-choice",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-nested",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-repair",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-checks",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-timing",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-arms",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-frameworks",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-0",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-3",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-4",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-ice-source-0",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-ice-source-1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-ice-source-2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-ice-source-3",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-frameworks",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-langgraph",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-frameworks",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-crewai",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-assessment",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-ice-source-0",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-choice",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-ice-source-1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-choice",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-nested",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-ice-source-2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-nested",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-repair",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-ice-source-2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-repair",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-ice-source-3",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-repair",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-checks",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-3",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-checks",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-4",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-checks",
+      "type": "TESTS",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-repair",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-timing",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-4",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-arms",
+      "type": "REQUIRES",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-choice",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-arms",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-0",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-frameworks",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08-local-source-0",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-ice-consumer-feedback-2026-09-08",
+      "type": "REFINES",
+      "to_uid": "sym:AbstractNode:hswm-development-day-2026-09-08-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ICE_CONSUMER_FEEDBACK_2026_09_08",
+      "status": "REFERENCE_LINK_NOT_LEARNING_OR_PERMISSION"
+    }
+  ]
+}

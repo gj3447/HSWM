@@ -91,3 +91,36 @@ it("synthesizes representative bounded AND, OR, and NOT guards", () => {
   expect(Either.isRight(or) && or.right.status === "PROPOSED_NOT_ADMITTED" && or.right.relation_ast.op).toBe("any")
   expect(Either.isRight(not) && not.right.status === "PROPOSED_NOT_ADMITTED" && not.right.relation_ast.op).toBe("not")
 })
+
+it("keeps bounded long context-attempt indexes reusable without loosening identifiers", () => {
+  const context = Object.fromEntries(Array.from({ length: 6 }, (_, index) => [`field_${index}`, `value_${index}`]))
+  let model = initialModel()
+  const first = updateModel(model, context, { success: true, cost: 1 })
+  expect(Either.isRight(first)).toBe(true)
+  if (Either.isLeft(first)) return
+  const attemptKey = Object.keys(first.right.context_attempts)[0] as string
+  expect(attemptKey.length).toBeGreaterThan(256)
+  expect(Either.isRight(predict(first.right, context))).toBe(true)
+  model = first.right
+  for (let index = 0; index < 3; index += 1) {
+    const updated = updateModel(model, context, { success: index % 2 === 0, cost: index + 1 })
+    expect(Either.isRight(updated)).toBe(true)
+    if (Either.isLeft(updated)) return
+    model = updated.right
+    expect(Either.isRight(predict(model, context))).toBe(true)
+  }
+  const eightFields = Object.fromEntries(Array.from({ length: 8 }, (_, index) => [`eight_${index}`, index]))
+  for (let index = 0; index < 2; index += 1) {
+    const eightUpdate = updateModel(model, eightFields, { success: true, cost: 1 })
+    expect(Either.isRight(eightUpdate)).toBe(true)
+    if (Either.isLeft(eightUpdate)) return
+    model = eightUpdate.right
+    expect(Either.isRight(predict(model, eightFields))).toBe(true)
+  }
+
+  const oversized = {
+    ...initialModel(),
+    context_attempts: { ["x".repeat("context:".length + 63 * (2048 + "|".length) + 1)]: 0 }
+  }
+  expect(Either.isLeft(predict(oversized, fast))).toBe(true)
+})

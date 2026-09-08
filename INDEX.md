@@ -17,6 +17,9 @@ continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 �
 2026-09-08의 [함수형 TypeScript/Effect 실행 경로](docs/operations/HSWM_NATIVE_EFFECT_ADAPTIVE_RUNTIME_2026-09-08.md)는
 LLM 호출·관측 평가·명시적 피드백·관계 갱신·다음 선택을 네이티브 CLI와 SQLite로 연결한다.
 활성 `hswm-live`·`hswm-dev`는 이 경로를 사용하고 Python 실험·과거 증거는 보존한다.
+[ICE 소비자 평가와 반영](docs/operations/HSWM_ICE_CONSUMER_FEEDBACK_2026-09-08.md)은
+실사용에서 발견한 context-key 재사용 결함 수정과, 배타적 경로·root 피드백의 평가 한계를 기록한다.
+학습의 추가 효과를 보는 3군 비교와 다른 프레임워크 대비 비교는 별도 미실행 과제다.
 실제 메이플리니지·버엑시와 수풀림 개발에서는
 [`hswm-dev 실사용 안내`](docs/operations/HSWM_GAME_SUPULLIM_DOGFOOD_2026-09-07.md)의
 프로젝트별 검사·명시적 피드백 경로를 사용한다.

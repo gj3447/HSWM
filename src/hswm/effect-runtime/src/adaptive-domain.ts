@@ -79,6 +79,10 @@ const record = (value: unknown): value is Record<string, unknown> => typeof valu
 const own = (value: Record<string, unknown>, keys: ReadonlyArray<string>): boolean => Object.keys(value).length === keys.length && keys.every((key) => Object.hasOwn(value, key));
 const text = (value: unknown): value is string => typeof value === "string" && value.trim().length > 0 && value.length <= 256;
 const featureText = (value: unknown): value is string => typeof value === "string" && value.trim().length > 0 && value.length <= 2048;
+// `context:` plus at most MAX_FEATURES - 1 validated feature keys, separated
+// by `|`; this is an index bound, not a public identifier bound.
+const MAX_CONTEXT_ATTEMPT_KEY_CHARS = "context:".length + (MAX_FEATURES - 1) * (2048 + "|".length);
+const contextAttemptKeyText = (value: unknown): value is string => typeof value === "string" && value.trim().length > 0 && value.length <= MAX_CONTEXT_ATTEMPT_KEY_CHARS;
 const scalar = (value: unknown): value is Scalar => value === null || typeof value === "boolean" || typeof value === "string" || (typeof value === "number" && Number.isFinite(value));
 const sameScalar = (left: Scalar, right: Scalar): boolean => typeof left === typeof right && Object.is(left, right);
 const finiteNonnegative = (value: unknown): value is number => typeof value === "number" && Number.isFinite(value) && value >= 0;
@@ -309,7 +313,7 @@ const validateModel = (model: AdaptiveModel): Either.Either<AdaptiveModel, Adapt
         return fail("MODEL_INVALID", "adaptive model");
     const features = model["features"];
     const attempts = model["context_attempts"];
-    if (model["schema_version"] !== ADAPTIVE_SCHEMA_VERSION || model["scope"] !== ADAPTIVE_SCOPE || !Number.isSafeInteger(model["n"]) || model["n"] < 0 || !finiteNonnegative(model["cost_mean"]) || !Object.hasOwn(features, "bias") || Object.keys(features).length > MAX_FEATURES || Object.keys(attempts).length > MAX_TRACKED_CONTEXTS || !Object.entries(features).every(([key, value]) => featureText(key) && number(value) && Math.abs(value) <= MAX_COEFFICIENT) || !Object.entries(attempts).every(([key, value]) => text(key) && Number.isSafeInteger(value) && value >= 0))
+    if (model["schema_version"] !== ADAPTIVE_SCHEMA_VERSION || model["scope"] !== ADAPTIVE_SCOPE || !Number.isSafeInteger(model["n"]) || model["n"] < 0 || !finiteNonnegative(model["cost_mean"]) || !Object.hasOwn(features, "bias") || Object.keys(features).length > MAX_FEATURES || Object.keys(attempts).length > MAX_TRACKED_CONTEXTS || !Object.entries(features).every(([key, value]) => featureText(key) && number(value) && Math.abs(value) <= MAX_COEFFICIENT) || !Object.entries(attempts).every(([key, value]) => contextAttemptKeyText(key) && Number.isSafeInteger(value) && value >= 0))
         return fail("MODEL_INVALID", "adaptive model");
     return Either.right(model);
 };

@@ -11,8 +11,8 @@ import subprocess
 from hswm.infrastructure import development_day_projection as projection
 
 ROOT = Path(__file__).resolve().parents[3]
-RECORDS = 'ontology/catalogs/HSWM_DEVELOPMENT_DAY_2026-09-08.records.json'
-SELF_REPORT = 'ontology/catalogs/HSWM_SELF_DEVELOPMENT_RUN_2026-09-08.json'
+RECORDS = 'docs/operations/artifacts/development_day_2026-09-08/records.json'
+SELF_REPORT = 'docs/operations/artifacts/development_day_2026-09-08/self_development_run.json'
 SELF_DOC = 'docs/operations/HSWM_SELF_DEVELOPMENT_2026-09-08.md'
 SELF_PROFILE = '_research/causal_composition/examples/adaptive_hswm_development.v1.json'
 PREFIX = 'sym:AbstractNode:hswm-development-day-2026-09-08-'

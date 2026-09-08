@@ -65,7 +65,7 @@ uv run --locked hswm-dev hswm status
 예측값은 0.5→약 0.690, 선택 점수는 약 0.267→0.727로 바뀌었다. 선택한 관계는 동일하다.
 이 값은 학습 모델의 내부 점수이며 실제 성공 확률의 보정이나 더 나은 행동을 입증하지 않는다.
 
-[기계 보고서](../../ontology/catalogs/HSWM_SELF_DEVELOPMENT_RUN_2026-09-08.json)는
+[기계 보고서](../../docs/operations/artifacts/development_day_2026-09-08/self_development_run.json)는
 profile SHA-256, episode ID, 검사 범위별 출력 digest, 피드백 출처, 전후 plan과 상태 요약을
 담는다. 작성 중 초기 프로필의 bootstrap 실행은 ignored 로컬 보관본으로 남겼다. 공개 보고는
 최종 프로필의 4건과 피드백 1건을 기록하며 이후 실행의 현재 상태를 대신하지 않는다.

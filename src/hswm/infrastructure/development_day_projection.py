@@ -16,6 +16,7 @@ from typing import Any, Mapping
 
 from hswm.infrastructure.kg_bundle_graph_view import KgBundleGraphView, KgBundleSource
 from hswm.infrastructure.kg_bundle_semantics import validate_bundle_semantics
+from hswm.infrastructure.kg_anchor_revisions import build_bound_anchor_revisions
 from scripts import upsert_hswm_graph_and_loop_engineering as gateway
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -23,8 +24,8 @@ ONTOLOGY_PATH = Path("ontology/identity/hswm_core/HSWM_DEVELOPMENT_DAY_2026-09-0
 BUNDLE_UID = "sym:AbstractNode:hswm-development-day-2026-09-08-v1"
 SCHEMA_VERSION = "hswm-development-day-ontology-v1"
 # Installed only after the reviewed source/document snapshot is committed.
-SOURCE_COMMIT = ""
-REVIEWED_ARTIFACT_SHA256 = ""
+SOURCE_COMMIT = "3c8ed059e57b266be1b2aad8954766f1cb7ede70"
+REVIEWED_ARTIFACT_SHA256 = "ac9bc63f77671266db2e77e00033d86fb4772360bef4b674c8efbfcf8520df83"
 PRIMARY_SOURCE_PATH = "docs/canon/sources/USER_PRIMARY_HSWM_SELF_DEVELOPMENT_AND_DAILY_KG_2026-09-08.txt"
 USER_UID = "sym:AbstractNode:hswm-development-day-2026-09-08-user-request"
 OWNER = "hswm:development-day:2026-09-08"
@@ -175,6 +176,8 @@ def validate_data(data: dict[str, Any], repo_root: Path = ROOT) -> None:
              or row["properties"].get("standard_graph_role") == "SOURCE_ARTIFACT")
     }
     _relations(data.get("relations"), nodes | anchor_uids, source_nodes)
+    # Run the owner's file-classification preflight before opening a live transaction.
+    build_bound_anchor_revisions(data, repo_root)
     if data.get("expected_counts") != {"nodes": len(nodes), "anchors": len(anchors), "relations": len(data["relations"])}:
         _fail("expected graph counts drift")
     validate_bundle_semantics(data)

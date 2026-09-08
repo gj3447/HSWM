@@ -27,6 +27,8 @@ LLM 호출·관측 평가·명시적 피드백·관계 갱신·다음 선택을 
 실제 대안 선택·작은 표본의 갱신·산출물별 피드백·다음 질문 생성·순효용을 구분하고,
 각 후보의 적용 경계와 반박 조건을 [교정 KG v2](ontology/evidence/HSWM_ICE_LEARNING_REMEDIATION_2026-09-08.v2.json)에
 연결한다. 후속 설계이며 구현·효능 완료 주장이 아니다.
+[표준 그래프 엔지니어링 작업 계획](docs/operations/HSWM_ICE_STANDARD_GRAPH_WORK_PLAN_2026-09-08.md)은
+이를 조회·입출력 계약, 작업 의존성, 작은 구현 묶음과 실사용 평가 순서로 구체화한다.
 실제 메이플리니지·버엑시와 수풀림 개발에서는
 [`hswm-dev 실사용 안내`](docs/operations/HSWM_GAME_SUPULLIM_DOGFOOD_2026-09-07.md)의
 프로젝트별 검사·명시적 피드백 경로를 사용한다.

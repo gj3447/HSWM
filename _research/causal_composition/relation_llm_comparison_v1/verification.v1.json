@@ -1,0 +1,110 @@
+{
+  "schema_version": "hswm-relation-llm-readiness-verification/v1",
+  "observed_on": "2026-09-08",
+  "authority": "SECONDARY_AI_AGENT_ENGINEERING_OBSERVATION",
+  "status": "IMPLEMENTED_AWAITING_MODEL_CONFIGURATION",
+  "actual_llm_calls": 0,
+  "source_bindings": [
+    {
+      "path": "_research/causal_composition/relation_llm_comparison_v1/run.mts",
+      "sha256": "5dd00b3702194721de2aeac92e550946d89bf1551dc717754f722d5366d8f6e1"
+    },
+    {
+      "path": "_research/causal_composition/relation_llm_comparison_v1/usl-fixtures.mts",
+      "sha256": "4ea0cfccb864915a5aa11fb23dfd3b247334c5a4647224a324356b0841c93dd1"
+    },
+    {
+      "path": "_research/causal_composition/relation_llm_comparison_v1/protocol.v1.json",
+      "sha256": "a3a8842fae63d87a70fb0b45300b44aa3c42eb64709eb61a5bfae28838055918"
+    },
+    {
+      "path": "_research/causal_composition/relation_llm_comparison_v1/tsconfig.json",
+      "sha256": "7b9953c8703576635d84ca5871bea46cd6f05e15d5245c139041b726f037fa2d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-pinned-chat.ts",
+      "sha256": "0ba40851bb3c5b772db1e73728e917e6bcb481667186779a8e75792cb5a7f058"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-relation-comparison.ts",
+      "sha256": "81eae2a5cb3529a3f5da16402e12729849987f5550fa033ea5728842213eb93b"
+    },
+    {
+      "path": "tests/effect-runtime/research-pinned-chat.test.ts",
+      "sha256": "fec395a5e5862027fc3d94595698d9fc02a60b3a2d8c5c86c8d4f056e71c856c"
+    },
+    {
+      "path": "tests/effect-runtime/research-relation-comparison.test.ts",
+      "sha256": "3e8e5c7b0f6817e9addcf07fb256c0f96187eacbe8e16018aef552863a702d2e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package.json",
+      "sha256": "1d914cbde1ea84d52ed75a5f5500ab490c43ce2e5f0fdaa7c250020033a5b255"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "782b4f38aae5a6ed7d82065488e7bc55579c8c3dd3f5f3317ec731a34c3c6bef"
+    }
+  ],
+  "checks": {
+    "focused_tests": 13,
+    "adaptive_regressions": 47,
+    "research_strict_typescript": "PASS",
+    "runtime_check_and_effect_boundary": "PASS",
+    "build": "PASS",
+    "new_code_uses_python": false
+  },
+  "preparation": {
+    "status": "PREPARED_NO_MODEL_CALLS",
+    "training_tasks": 8,
+    "calibration_tasks": 6,
+    "observations": {
+      "ownerReads": 14,
+      "resolverCalls": 291
+    },
+    "preview_bytes": 33619,
+    "result_sha256": "29772d3c1d71988485f940d568e818505214a1ed6470f5090cd8506d5a0e9faf"
+  },
+  "transport_fixtures": [
+    {
+      "fixture": true,
+      "actualLlmCalls": 0,
+      "scenario": "successful_transport",
+      "exitCode": 0,
+      "httpRequests": 20,
+      "status": "COMPLETED_TRANSPORT_FIXTURE_NO_LLM",
+      "sourceIntegrity": "ALL_BOUND_HSWM_SOURCES_MATCH",
+      "unknownUsageIssuedCalls": 0,
+      "hashChainVerified": true,
+      "result_sha256": "2725db2370df3e6a435651dedae82730790857d6632352b9e993b5e4d81ce6e2",
+      "journal_sha256": "9d48bacdec724d6d6eea158f417f4cc5415d79c0c2dbff2abe4e1ef4981cee0e"
+    },
+    {
+      "fixture": true,
+      "actualLlmCalls": 0,
+      "scenario": "model_mismatch",
+      "exitCode": 1,
+      "httpRequests": 1,
+      "status": "INSTRUMENT_ERROR",
+      "sourceIntegrity": "ALL_BOUND_HSWM_SOURCES_MATCH",
+      "unknownUsageIssuedCalls": 1,
+      "hashChainVerified": true,
+      "result_sha256": "acb535cdf8463f058387b9599804d46c294e1b20fc58268529e133ce81f36cdb",
+      "journal_sha256": "684861e151a2420c01e32009b69f1116d2a3f98e88e1794e8a4fb10bd41c51c4"
+    }
+  ],
+  "evidence_limit": "Temporary local fake-provider/raw files are agent-observed engineering evidence and are not redistributed. Their hashes identify the observations but do not make them independently accessible or reproducible. Unit tests are checked in. No published model score or research gate result.",
+  "source_custody": "USL 34 source hashes reuse predecessor v4 and local authorized byte-pinned copy; no third-party source redistributed.",
+  "workflow": {
+    "episode": "relation-llm-calibration-runtime-20260908-01",
+    "selected_relation": "relation:runtime-focused",
+    "feedback_source": "agent(functions.exec)",
+    "usefulness": "Compatibility/measurement checks only; not user feedback, efficacy or causal credit."
+  },
+  "scientific_status": {
+    "G0": "NOT_PASSED",
+    "G1": "NOT_EVALUATED",
+    "FCL": "UNCHANGED_UNJUDGED",
+    "P1": "PRIOR_RED_UNCHANGED"
+  }
+}

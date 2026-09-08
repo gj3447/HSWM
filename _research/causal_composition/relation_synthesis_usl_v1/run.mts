@@ -23,8 +23,13 @@ const ensure = (condition: boolean, detail: string) => condition ? Effect.void :
 const checked = <A, E>(value: import("effect").Either.Either<A, E>) => Either.isRight(value) ? Effect.succeed(value.right) : Effect.fail(new Error(json(value.left)))
 const sameSet = (a: ReadonlyArray<string>, b: ReadonlyArray<string>) => json([...a].sort()) === json([...b].sort())
 const semanticView = (graph: RelationGraph) => [...graph.relations].sort((a,b) => a.uid.localeCompare(b.uid)).map(r => ({ ...r, participants: [...r.participants] }))
-const graphOf = (snapshot: UslNativeSnapshot): import("effect").Either.Either<RelationGraph, Error> => Either.try({
-  try: () => ({ relations: snapshot.relations.map(r => {
+const graphOf = (snapshot: UslNativeSnapshot, owner: CatalogTask): import("effect").Either.Either<RelationGraph, Error> => Either.try({
+  try: () => {
+    // The read callback returned these exact bytes in this invocation. Preserve
+    // owner serialization order explicitly; v2 USL canonicalizes named roles.
+    // Only UID/role ordering is read here, never the task's outcome labels.
+    if (snapshot.native.sourceDigest !== `sha256:${sha(owner.raw)}`) throw new Error("owner order metadata source mismatch")
+    return { relations: snapshot.relations.map(r => {
     const description = r.meaning.definition["description"]
     if (typeof description !== "string") throw new Error("missing meaning description")
     const meaning = snapshot.native.adapter === "property-graph/v1" ? description : (() => {
@@ -37,8 +42,12 @@ const graphOf = (snapshot: UslNativeSnapshot): import("effect").Either.Either<Re
       }
       return `Declared KG relation: ${parsed.type}`
     })()
-    return { uid:r.nativeRelationUid,meaning,participants:r.participants.map(p=>({role:p.role,uid:p.nativeUid})) }
-  }) }),
+    const order = owner.graph.relations.find(native => native.uid === r.nativeRelationUid)?.participants
+    if (!order || order.length !== r.participants.length || order.some(p => !r.participants.some(q => q.role === p.role && q.nativeUid === p.uid))) {
+      throw new Error("owner order metadata cannot restore a lost or changed role binding")
+    }
+    return { uid:r.nativeRelationUid,meaning,participants:order.map(p=>({role:p.role,uid:p.uid})) }
+  }) } },
   catch: e => e instanceof Error ? e : new Error(String(e))
 })
 
@@ -111,7 +120,7 @@ const run = Effect.gen(function* () {
     const usl = connection(task, () => Effect.succeed(task.raw))
     const input = yield* usl.hswm({ task: task.id }, { links: task.graph.relations.map(r => r.uid) }, expected.input)
     const snapshot = yield* checked(captureUslNativeSnapshot(input, expected.expected))
-    const graph = yield* checked(graphOf(snapshot))
+    const graph = yield* checked(graphOf(snapshot,task))
     yield* ensure(json(semanticView(graph)) === json(semanticView(task.graph)), `native role/meaning mapping lost:${task.id}`)
     return { task, snapshot, graph, snapshotBytes: Buffer.byteLength(json(snapshot)) }
   })

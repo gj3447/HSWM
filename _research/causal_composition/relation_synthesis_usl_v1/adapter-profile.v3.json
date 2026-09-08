@@ -1,0 +1,11 @@
+{
+  "schema_version": "hswm-relation-study-usl-feature-profile/v3",
+  "authority": "SECONDARY_AI_LOCAL_TASK_PROJECTION",
+  "predecessor": "adapter-profile.v2.json; attempt 03 retained as INSTRUMENT_ERROR because property-graph/v2 canonicalizes named participant roles instead of preserving raw array order.",
+  "meaning_profile": "Retain the full USL prepared plan/report and property-graph-meaning/v2 type, native direction and free description. The DSL feature projection still selects type plus role incidence as declared in v2.",
+  "order_recovery": "The host retains the role-order metadata from the exact raw bytes returned by its one read callback. Require that raw SHA-256 equals the snapshot native source digest; verify every role/native UID pair and cardinality against the USL snapshot before restoring owner array order for the research feature view.",
+  "boundary": "USL v2 alone does not reproduce original participant serialization order. Its named bindings remain intact. Order recovery requires caller-owned same-read metadata; no owner re-read, invented participant, cached USL DB or outcome label is used.",
+  "strict_criterion_preserved": "The original ordered feature-view equality remains required. It is not replaced by a weaker role-set equality; missing or changed role bindings still reject. Attempts 02 and 03 remain failed instruments.",
+  "nonclaim": "The complete snapshot retains native direction/description, but the finite DSL does not use them. Selected-feature equality is not universal graph semantic equivalence. No new semantic primitive, HSWM causal credit or G0/G1 pass.",
+  "protocol_unchanged": "A/V/B, primitive roles, search budget, selection, controls and outcomes are unchanged from protocol.v1.json."
+}

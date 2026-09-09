@@ -2,6 +2,10 @@
 
 Thanks for your interest in contributing!
 
+For the current native TypeScript/Effect CLI, locked Python and graph tooling,
+and local verification commands, see the
+[development environment guide](docs/operations/HSWM_DEVELOPMENT_ENVIRONMENT_2026-09-09.md).
+
 ## Contributor License Agreement (required)
 
 This project is **dual-licensed** — AGPL-3.0-or-later **and** a separate commercial

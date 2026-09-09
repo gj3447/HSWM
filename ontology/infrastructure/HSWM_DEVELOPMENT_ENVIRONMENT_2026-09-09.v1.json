@@ -1,0 +1,249 @@
+{
+  "schema_version": "hswm-development-environment-snapshot/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-development-environment-2026-09-09",
+  "observed_on": "2026-09-09",
+  "authority": "SECONDARY_AI",
+  "status": "LOCAL_DEVELOPMENT_ENVIRONMENT_VERIFIED",
+  "scope": "Existing ordinary Linux checkout; native TypeScript/Effect development, scoped Python and graph checks, and local development feedback.",
+  "conceptual_delta": "Make the existing native CLI persistently reachable and preserve installed research tools during locked environment synchronization. No canonical schema, responsibility owner, typed reference, transition, or learning law changes.",
+  "claim_ceiling": "Engineering environment and bounded development observations only; not HSWM cognition, canonical admission, causal credit, efficacy, FCL passage, or full CI equivalence.",
+  "worktree_base_commit": "653b4bfe775aeb3e1ed1056b6f660dfb83dc3e93",
+  "worktree_scope": "Checks ran on the local worktree with pre-existing user research edits retained. Artifact bindings below identify selected environment/configuration sources, not the entire runtime source closure.",
+  "artifact_bindings": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "b67a175bc7f2d8c701d9a9cf6ddd157565599f4960039f4d045e0ab4c53c08af"
+    },
+    {
+      "path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+      "sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373"
+    },
+    {
+      "path": "docs/operations/HSWM_DEVELOPMENT_ENVIRONMENT_2026-09-09.md",
+      "sha256": "c2a6e389fcb3834f798d02a6166a0f208520b67b29cff603c5e9c1053f899b64"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "54ea4cda80b6f3768195eddcee7d6da9d3e7751bfaf7934c52725033fb3217f1"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "d1a67c9af3a27b9de8f174d7948e3793b95335a231f5d2d3a7fe76d4f0b00e34"
+    },
+    {
+      "path": "uv.lock",
+      "sha256": "6b05d72b97246fd19c99adeb36120dc030bdb52c869fb49e6be210d3b2783bfd"
+    },
+    {
+      "path": "_research/graph_standards/runtime/pyproject.toml",
+      "sha256": "87eed7e58e461f56e58b3d2c2634d3aa50cade9e4c1f3c217d7065642d828a72"
+    },
+    {
+      "path": "_research/graph_standards/runtime/uv.lock",
+      "sha256": "e689c46043f2af18df5ea1b40cf070158afa999a09fb4807cc879eab7e6cc69d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package.json",
+      "sha256": "1d914cbde1ea84d52ed75a5f5500ab490c43ce2e5f0fdaa7c250020033a5b255"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "782b4f38aae5a6ed7d82065488e7bc55579c8c3dd3f5f3317ec731a34c3c6bef"
+    },
+    {
+      "path": "src/hswm/effect-runtime/tsconfig.json",
+      "sha256": "deac743025b18f1c6dd08f3d84f03d914a5ab19d9c313a2efc53ae9ca56a1334"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-dev",
+      "sha256": "96373335a506e83ae4f477204ec40e6d692e2645b754f4fdc1169987c886d697"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-live",
+      "sha256": "48c0e3bb5be05ee6fdaa508403e3c31661f45c4bc4067bce18537a53389436c1"
+    },
+    {
+      "path": "_research/causal_composition/examples/adaptive_hswm_development.v2.json",
+      "sha256": "c70d125a94c0ec402b0fdfd69f7494e67e08e2784b0bc66421e8cf678569eb2e"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "fa70bbb809c431310780d48bc1fe3228385b801b9c10082d4ac187dc848814e3"
+    },
+    {
+      "path": ".github/workflows/graph-standards-requalification.yml",
+      "sha256": "66596a401242967b4b92a5fb1d6f60fe1130c908d7f38080e1dadf545ac83977"
+    }
+  ],
+  "official_sources": [
+    {
+      "url": "https://docs.astral.sh/uv/concepts/projects/sync/",
+      "authority_class": "OFFICIAL_VENDOR_DOCUMENTATION",
+      "use": "locked sync, inexact retention, and no-sync execution"
+    },
+    {
+      "url": "https://docs.npmjs.com/cli/v11/commands/npm-ci/",
+      "authority_class": "OFFICIAL_VENDOR_DOCUMENTATION",
+      "use": "locked dependency installation and ignore-scripts"
+    },
+    {
+      "url": "https://nodejs.org/download/release/v24.13.0/docs/api/sqlite.html",
+      "authority_class": "OFFICIAL_VENDOR_DOCUMENTATION",
+      "use": "version-specific experimental SQLite boundary"
+    },
+    {
+      "url": "https://effect.website/docs/v3/resource-management/introduction",
+      "authority_class": "OFFICIAL_PROJECT_DOCUMENTATION",
+      "use": "scoped resource management for the existing Effect runtime"
+    }
+  ],
+  "installed_toolchain": [
+    {
+      "name": "Node.js",
+      "version": "24.13.0",
+      "authority_class": "OFFICIAL_RUNTIME",
+      "license": "MIT plus bundled third-party notices",
+      "executable_sha256": "53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc",
+      "ci_pin_matches": true
+    },
+    {
+      "name": "npm",
+      "version": "11.6.2",
+      "authority_class": "OFFICIAL_CLI",
+      "license": "Artistic-2.0",
+      "pin": "src/hswm/effect-runtime/package.json packageManager and CI version check"
+    },
+    {
+      "name": "uv",
+      "version": "0.12.3",
+      "authority_class": "OFFICIAL_CLI",
+      "license": "MIT OR Apache-2.0",
+      "pin": "existing installed version matches graph requalification CI; no new binary download"
+    },
+    {
+      "name": "CPython",
+      "version": "3.12.13",
+      "authority_class": "CPYTHON_VIA_UV_MANAGED_BUILD",
+      "license": "PSF License and distribution notices",
+      "executable_sha256": "021044895e95be79dc2f110367607e684119afbc8ce75f6f0eec94844e0acec7",
+      "ci_pin_matches": true
+    },
+    {
+      "name": "Effect",
+      "version": "3.22.1",
+      "authority_class": "OFFICIAL_PROJECT_LIBRARY",
+      "license": "MIT",
+      "pin": "src/hswm/effect-runtime/package-lock.json integrity"
+    }
+  ],
+  "changes": [
+    "Installed user-local hswm-dev and hswm-live wrappers that exec the existing checkout launchers; verified both from a fresh login shell.",
+    "Ran root locked dev sync with --inexact, preserving 33 extra packages that exact-sync dry-run would remove.",
+    "Synchronized the separate graph runtime with its checked-in lock and graph extra; both Python environments pass uv pip check.",
+    "Rebuilt the native runtime and DNRD build from existing locked dependencies; added current setup/verification guidance and a contributor entrypoint."
+  ],
+  "new_external_artifacts_downloaded": false,
+  "validation": [
+    {
+      "command": "npm --prefix src/hswm/effect-runtime run check",
+      "result": "PASS",
+      "effect_boundary_violations": 0,
+      "adaptive_functional_violations": 0
+    },
+    {
+      "command": "npm --prefix src/hswm/effect-runtime run build",
+      "result": "PASS"
+    },
+    {
+      "command": "npm --prefix src/hswm/effect-runtime run build:dnrd",
+      "result": "PASS"
+    },
+    {
+      "command": "npm test -- --maxWorkers=2",
+      "cwd": "src/hswm/effect-runtime",
+      "result": "PASS",
+      "test_files_passed": 128,
+      "test_files_skipped": 1,
+      "passed": 951,
+      "skipped": 7,
+      "skip_reason": "Existing external Temporal/Neo4j integration opt-ins were not enabled."
+    },
+    {
+      "command": "npm pack --dry-run --json",
+      "cwd": "src/hswm/effect-runtime",
+      "result": "PASS",
+      "note": "Invocation must use package working directory; an initial root --prefix attempt returned ENOENT and was corrected."
+    },
+    {
+      "command": "uv run --project _research/graph_standards/runtime --locked --extra graph pytest -q tests/test_graph_standard_tooling.py tests/test_research_evidence_graph_view.py tests/test_kg_bundle_graph_view.py tests/test_hypergraph_projection_validation.py tests/test_fractal_learning_plan_projection.py tests/test_standard_graph_view.py tests/test_trace_context.py",
+      "result": "PASS",
+      "passed": 88,
+      "warnings": "336 existing RDFLib deprecation warnings"
+    },
+    {
+      "command": "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology",
+      "result": "PORTABLE_MATH_COMPILED",
+      "documents": 155,
+      "historical_source_bytes_rewritten": false
+    },
+    {
+      "command": "uv run --no-sync python scripts/compile_portable_markdown_math.py docs/operations/HSWM_DEVELOPMENT_ENVIRONMENT_2026-09-09.md CONTRIBUTING.md",
+      "result": "PORTABLE_MATH_COMPILED",
+      "documents": 2
+    }
+  ],
+  "hswm_development_workflow": {
+    "profile": "_research/causal_composition/examples/adaptive_hswm_development.v2.json",
+    "backend": "typescript-effect",
+    "checks": [
+      {
+        "focus": "runtime",
+        "selected_relation": "relation:runtime-focused",
+        "passed": 47,
+        "explicit_agent_usefulness_feedback": true
+      },
+      {
+        "focus": "usl",
+        "selected_relation": "relation:usl-focused",
+        "passed": 19,
+        "explicit_agent_usefulness_feedback": true
+      },
+      {
+        "focus": "docs",
+        "selected_relation": "relation:docs-focused",
+        "passed": 333,
+        "explicit_agent_usefulness_feedback": true
+      },
+      {
+        "focus": "ontology",
+        "selected_relation": "relation:ontology-focused",
+        "passed": 9,
+        "explicit_agent_usefulness_feedback": true
+      }
+    ],
+    "feedback_authority": "agent(codex): explicit usefulness judgments, not user feedback or automatic rewards from exit code",
+    "privacy": "Task, selected relation, raw output, episode IDs, results and feedback remain in ignored local workspace state; no SQLite or private run transcript is embedded here.",
+    "coverage_note": "Profile counts overlap broader checks and must not be summed. The ontology profile checks existing development KG tools; this new snapshot separately receives JSON and source-digest validation."
+  },
+  "limitations": [
+    "External LLM calls, remote database publication, GPU workloads and full GitHub CI matrix were not exercised.",
+    "Node 24.13.0 node:sqlite remains an explicitly experimental local API.",
+    "Existing unrelated user changes and prior feedback-pending episodes were preserved.",
+    "No dependency upgrades, new external services, plugins, or scientific research mechanisms were introduced."
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-development-environment-2026-09-09",
+      "kind": "DevelopmentEnvironmentObservation",
+      "authority": "SECONDARY_AI",
+      "canonical_write": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "sym:AbstractNode:hswm-development-environment-2026-09-09",
+      "relation": "DOCUMENTED_BY",
+      "target": "docs/operations/HSWM_DEVELOPMENT_ENVIRONMENT_2026-09-09.md"
+    }
+  ]
+}

@@ -12,7 +12,8 @@
     "hswm-g0-temporal-rehearsal-worker": "./dist/g0-occurrence-temporal-worker-process.js",
     "hswm-live": "./dist/hswm-live-process.js",
     "hswm-dev": "./dist/hswm-dev-process.js",
-    "hswm-reluvator-check": "./dist/reluvator-check-process.js"
+    "hswm-reluvator-check": "./dist/reluvator-check-process.js",
+    "hswm-backup": "./dist/development-backup-process.js"
   },
   "exports": {
     ".": {
@@ -44,9 +45,22 @@
     "test:g0-temporal:integration": "HSWM_RUN_G0_TEMPORAL_INTEGRATION=1 vitest run test/g0-occurrence-temporal.integration.test.ts --maxWorkers=1",
     "verify": "npm run check && npm run test && npm run build && npm run build:dnrd && npm pack --dry-run",
     "test:adaptive": "vitest run ../../../tests/effect-runtime/adaptive-",
-    "check:adaptive-functional": "node scripts/lint-adaptive-functional.mjs"
+    "check:adaptive-functional": "node scripts/lint-adaptive-functional.mjs",
+    "test:watch": "vitest --maxWorkers=2",
+    "test:changed": "vitest run --changed --maxWorkers=2"
   },
   "dependencies": {
+    "@effect/opentelemetry": "0.64.0",
+    "@effect/platform": "0.97.0",
+    "@opentelemetry/api": "1.9.0",
+    "@opentelemetry/exporter-trace-otlp-proto": "0.208.0",
+    "@opentelemetry/resources": "2.2.0",
+    "@opentelemetry/sdk-logs": "0.208.0",
+    "@opentelemetry/sdk-metrics": "2.2.0",
+    "@opentelemetry/sdk-trace-base": "2.2.0",
+    "@opentelemetry/sdk-trace-node": "2.2.0",
+    "@opentelemetry/sdk-trace-web": "2.2.0",
+    "@opentelemetry/semantic-conventions": "1.34.0",
     "@temporalio/activity": "1.23.0",
     "@temporalio/client": "1.23.0",
     "@temporalio/common": "1.23.0",

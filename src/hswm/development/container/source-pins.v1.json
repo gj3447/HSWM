@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "scope": "Linux amd64 HSWM Dev Container build inputs. The image contains no credentials, model caches, or .hswm-local state; the checked-out workspace is nevertheless a bind mount, with .hswm-local masked by a private volume.",
+  "sources": [
+    {
+      "name": "Python Docker Official Image",
+      "version": "3.12.13-bookworm, linux/amd64",
+      "source": "docker.io/library/python",
+      "digest": "sha256:59a32f2866470624edbdde0e3e504bbbf46222fed2d4c2392bef3894e1b6334d",
+      "manifest_list_digest": "sha256:3cd9086bdb30f7c9bc08a3fa621d9842e0d3f6f9291aeb4677e0547817c10b12",
+      "authority_class": "DOCKER_OFFICIAL_IMAGE",
+      "license": "CPython PSF License plus Debian and bundled-component notices"
+    },
+    {
+      "name": "Node.js",
+      "version": "24.13.0 linux-x64",
+      "source": "https://nodejs.org/download/release/v24.13.0/",
+      "artifact": "node-v24.13.0-linux-x64.tar.gz",
+      "sha256": "6223aad1a81f9d1e7b682c59d12e2de233f7b4c37475cd40d1c89c42b737ffa8",
+      "executable_sha256": "53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc",
+      "authority_class": "OFFICIAL_RUNTIME_RELEASE",
+      "license": "MIT plus bundled third-party notices"
+    },
+    {
+      "name": "npm",
+      "version": "11.6.2",
+      "source": "bundled with the pinned Node.js 24.13.0 release",
+      "lock": "src/hswm/effect-runtime/package.json#packageManager",
+      "authority_class": "OFFICIAL_CLI",
+      "license": "Artistic-2.0"
+    },
+    {
+      "name": "uv",
+      "version": "0.12.3 linux-x86_64",
+      "source": "https://github.com/astral-sh/uv/releases/tag/0.12.3",
+      "source_commit": "507230998c9541d67814b57463ac00e454ff6991",
+      "artifact": "uv-x86_64-unknown-linux-gnu.tar.gz",
+      "sha256": "600cf9a742aca00d292673b16b5acffaa7b8c269a364ad0c2e79498dcb1fe101",
+      "authority_class": "OFFICIAL_CLI_RELEASE",
+      "license": "MIT OR Apache-2.0"
+    },
+    {
+      "name": "Dev Container Specification",
+      "source": "https://containers.dev/implementors/json_reference/",
+      "authority_class": "PUBLISHED_STANDARD",
+      "license": "CC-BY-4.0"
+    }
+  ]
+}

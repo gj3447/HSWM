@@ -43,6 +43,7 @@ recursive-include tools/swm0w_drand/fixtures *.json
 # research/ and schemas/ contain the corresponding data contracts.
 recursive-include scripts *.py *.sh
 recursive-include src *.py *.md
+include src/hswm/development/bin/hswm-python
 # The TypeScript/Effect runtime is a separate locked npm artifact. Never let a
 # maintainer's local node_modules or its source maps leak into the Python sdist.
 prune src/hswm/effect-runtime

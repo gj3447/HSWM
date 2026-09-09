@@ -119,6 +119,7 @@ export interface PosixFileSystemShape {
   ) => Effect.Effect<void, PosixIoError>
   /** Open the directory O_RDONLY|O_DIRECTORY|O_NOFOLLOW and fsync it. */
   readonly syncDirectory: (path: string, operation: string) => Effect.Effect<void, PosixIoError>
+  readonly syncRegular: (path: string, operation: string) => Effect.Effect<void, PosixIoError>
   /** Open O_RDONLY|O_NOFOLLOW|O_NONBLOCK, bound the size, read fully, re-check identity. */
   readonly readRegularBounded: (path: string, options: BoundedReadOptions) => Effect.Effect<BoundedReadResult, PosixIoError>
   /** Create O_WRONLY|O_CREAT|O_EXCL|O_NOFOLLOW with the given mode, write, optionally chmod and fsync. */
@@ -183,6 +184,15 @@ const nodePosixFileSystem: PosixFileSystemShape = {
     withHandle(operation, path,
       () => open(path, constants.O_RDONLY | constants.O_DIRECTORY | constants.O_NOFOLLOW),
       async (handle) => { await handle.sync() }
+    ),
+  syncRegular: (path, operation) =>
+    withHandle(operation, path,
+      () => open(path, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK),
+      async (handle) => {
+        const stat = await handle.stat()
+        if (!stat.isFile()) throw new PosixIoError({ operation, path, code: "NOT_REGULAR_FILE", detail: "path is not a regular file" })
+        await handle.sync()
+      }
     ),
   readRegularBounded: (path, options) =>
     withHandle(options.operation, path,

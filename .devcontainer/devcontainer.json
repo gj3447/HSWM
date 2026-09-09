@@ -1,0 +1,28 @@
+{
+  "name": "HSWM (pinned Linux amd64)",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "remoteUser": "hswm",
+  "updateRemoteUserUID": true,
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/HSWM,type=bind",
+  "workspaceFolder": "/workspaces/HSWM",
+  "mounts": [
+    "source=hswm-local-state-${devcontainerId},target=/workspaces/HSWM/.hswm-local,type=volume,volume-nocopy",
+    "source=hswm-root-venv-${devcontainerId},target=/workspaces/HSWM/.venv,type=volume,volume-nocopy",
+    "source=hswm-graph-venv-${devcontainerId},target=/workspaces/HSWM/_research/graph_standards/runtime/.venv,type=volume,volume-nocopy",
+    "source=hswm-effect-runtime-node-modules-${devcontainerId},target=/workspaces/HSWM/src/hswm/effect-runtime/node_modules,type=volume,volume-nocopy",
+    "source=hswm-effect-runtime-dist-${devcontainerId},target=/workspaces/HSWM/src/hswm/effect-runtime/dist,type=volume,volume-nocopy"
+  ],
+  "containerEnv": {
+    "UV_CACHE_DIR": "/home/hswm/.cache/uv",
+    "npm_config_cache": "/home/hswm/.cache/npm",
+    "npm_config_audit": "false",
+    "npm_config_fund": "false",
+    "npm_config_update_notifier": "false"
+  },
+  "postCreateCommand": "bash src/hswm/development/container/bootstrap.sh",
+  "customizations": {},
+  "privileged": false
+}

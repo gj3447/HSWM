@@ -1,0 +1,4 @@
+#!/bin/sh
+# Checkout launcher for private local development SQLite snapshots.
+hswm_script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+PATH="$hswm_script_dir:$PATH" exec node "$hswm_script_dir/../dist/development-backup-process.js" "$@"

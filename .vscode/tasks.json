@@ -1,0 +1,36 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "HSWM: prepare Python environments",
+      "type": "process",
+      "command": "${workspaceFolder}/src/hswm/development/bin/hswm-python",
+      "args": ["sync"],
+      "problemMatcher": []
+    },
+    {
+      "label": "HSWM: TypeScript and Effect checks",
+      "type": "process",
+      "command": "npm",
+      "args": ["--prefix", "${workspaceFolder}/src/hswm/effect-runtime", "run", "check"],
+      "group": "build",
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "HSWM: changed tests",
+      "type": "process",
+      "command": "npm",
+      "args": ["--prefix", "${workspaceFolder}/src/hswm/effect-runtime", "run", "test:changed"],
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "HSWM: watch tests",
+      "type": "process",
+      "command": "npm",
+      "args": ["--prefix", "${workspaceFolder}/src/hswm/effect-runtime", "run", "test:watch"],
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

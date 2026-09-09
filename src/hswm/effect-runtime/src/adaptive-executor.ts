@@ -5,6 +5,7 @@
 import { createHash } from "node:crypto";
 import { Context, Data, Effect } from "effect";
 import { BoundedSubprocess } from "./effect-bounded-subprocess.js";
+import { AdaptiveTelemetry, type AdaptiveLeafTelemetryInput } from "./adaptive-telemetry.js";
 export const ADAPTIVE_EXECUTOR_V1 = "hswm-adaptive-executor/v1" as const;
 const MAX_INPUT_BYTES = 1000000;
 const MAX_OUTPUT_BYTES = 64000;
@@ -120,6 +121,22 @@ const command = (cell: AdaptiveLeafCell): readonly string[] | null => {
     const argv = cell["argv"];
     return Array.isArray(argv) && argv.length > 0 && argv.every((part) => typeof part === "string" && part.length > 0 && !part.includes("\0") && part !== "{input}") ? argv : null;
 };
+const telemetryInput = (cell: AdaptiveLeafCell): AdaptiveLeafTelemetryInput => {
+    const kind = cell["kind"] === "command" || cell["kind"] === "llm" ? cell["kind"] : "unknown";
+    const cellId = modelText(cell["cell_id"]) ? cell["cell_id"] : null;
+    const commandConfig = kind === "command" ? { argv: command(cell), outcome: cell["outcome"] === "exit_code" } : null;
+    const llmConfig = kind === "llm" ? {
+        base_url_sha256: typeof cell["base_url"] === "string" ? digest(cell["base_url"]) : null,
+        model: modelText(cell["model"]) ? cell["model"] : null,
+        max_tokens: typeof cell["max_tokens"] === "number" ? cell["max_tokens"] : null
+    } : null;
+    return Object.freeze({
+        kind,
+        cellIdentitySha256: digest(JSON.stringify({ kind, cell_id: cellId })),
+        configurationSha256: digest(JSON.stringify(commandConfig ?? llmConfig)),
+        toolIdentitySha256: digest(JSON.stringify(kind === "command" ? command(cell) : typeof cell["base_url"] === "string" ? cell["base_url"] : null))
+    });
+};
 const runCommand = (cell: AdaptiveLeafCell, payload: unknown, workspace: string, timeoutMs: number): Effect.Effect<AdaptiveExecution, never, BoundedSubprocess> => Effect.gen(function* () {
     const started = yield* now;
     const argv = command(cell);
@@ -190,5 +207,6 @@ const runLlm = (cell: AdaptiveLeafCell, payload: unknown, timeoutMs: number): Ef
 export const executeAdaptiveCell = (cell: AdaptiveLeafCell, payload: unknown, workspace: string, timeoutMs: number): Effect.Effect<AdaptiveExecution, never, BoundedSubprocess | AdaptiveHttpClient> => {
     if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1)
         return now.pipe(Effect.flatMap((started) => completed("UNKNOWN", null, started, "", { error: "invalid timeout" })));
-    return cell["kind"] === "command" ? runCommand(cell, payload, workspace, timeoutMs) : cell["kind"] === "llm" ? runLlm(cell, payload, timeoutMs) : now.pipe(Effect.flatMap((started) => completed("FAILED", null, started, "", { error: "not a leaf cell" })));
+    const execution: Effect.Effect<AdaptiveExecution, never, BoundedSubprocess | AdaptiveHttpClient> = cell["kind"] === "command" ? runCommand(cell, payload, workspace, timeoutMs) : cell["kind"] === "llm" ? runLlm(cell, payload, timeoutMs) : now.pipe(Effect.flatMap((started) => completed("FAILED", null, started, "", { error: "not a leaf cell" })));
+    return AdaptiveTelemetry.pipe(Effect.flatMap((telemetry) => telemetry.leaf(telemetryInput(cell), execution)));
 };

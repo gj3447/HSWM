@@ -1,0 +1,266 @@
+{
+  "schema_version": "hswm-adaptive-program/v1",
+  "graph_id": "hswm-self-development-feedback-v3",
+  "root": "developer",
+  "context_domain": {
+    "focus": [
+      "runtime",
+      "usl",
+      "ontology",
+      "docs"
+    ],
+    "stage": [
+      "development",
+      "regression"
+    ]
+  },
+  "cells": [
+    {
+      "cell_id": "developer",
+      "kind": "router",
+      "owner": "local:development:hswm",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1"
+    },
+    {
+      "cell_id": "runtime",
+      "kind": "command",
+      "owner": "local:development:hswm",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1",
+      "argv": [
+        "npm",
+        "--prefix",
+        "src/hswm/effect-runtime",
+        "run",
+        "test:adaptive"
+      ]
+    },
+    {
+      "cell_id": "usl",
+      "kind": "command",
+      "owner": "local:development:hswm",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1",
+      "argv": [
+        "src/hswm/development/bin/hswm-python",
+        "core",
+        "pytest",
+        "-q",
+        "tests/test_usl_adapter.py",
+        "tests/test_usl_adapter_v2.py"
+      ]
+    },
+    {
+      "cell_id": "ontology",
+      "kind": "command",
+      "owner": "local:development:hswm",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1",
+      "argv": [
+        "src/hswm/development/bin/hswm-python",
+        "graph",
+        "pytest",
+        "-q",
+        "tests/test_development_work_projection.py",
+        "tests/test_frontier_learning_projection.py",
+        "tests/test_development_day_projection.py"
+      ]
+    },
+    {
+      "cell_id": "docs",
+      "kind": "command",
+      "owner": "local:development:hswm",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1",
+      "argv": [
+        "src/hswm/development/bin/hswm-python",
+        "core",
+        "pytest",
+        "-q",
+        "tests/test_markdown_rendering_contract.py",
+        "tests/test_markdown_math_compiler.py"
+      ]
+    },
+    {
+      "cell_id": "effect-check",
+      "kind": "command",
+      "owner": "local:development:hswm",
+      "input_type": "development-check/v1",
+      "output_type": "development-check/v1",
+      "argv": [
+        "npm",
+        "--prefix",
+        "src/hswm/effect-runtime",
+        "run",
+        "check"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "uid": "runtime-focused",
+      "source": "developer",
+      "members": [
+        "runtime"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 20,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "runtime"
+      }
+    },
+    {
+      "uid": "runtime-extended",
+      "source": "developer",
+      "members": [
+        "runtime",
+        "effect-check"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 40,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "runtime"
+      }
+    },
+    {
+      "uid": "usl-focused",
+      "source": "developer",
+      "members": [
+        "usl"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 20,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "usl"
+      }
+    },
+    {
+      "uid": "usl-extended",
+      "source": "developer",
+      "members": [
+        "usl",
+        "runtime"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 40,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "usl"
+      }
+    },
+    {
+      "uid": "ontology-focused",
+      "source": "developer",
+      "members": [
+        "ontology"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 20,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "ontology"
+      }
+    },
+    {
+      "uid": "ontology-extended",
+      "source": "developer",
+      "members": [
+        "ontology",
+        "docs"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 40,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "ontology"
+      }
+    },
+    {
+      "uid": "docs-focused",
+      "source": "developer",
+      "members": [
+        "docs"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 20,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "docs"
+      }
+    },
+    {
+      "uid": "docs-extended",
+      "source": "developer",
+      "members": [
+        "docs",
+        "ontology"
+      ],
+      "reads": [
+        "focus",
+        "stage"
+      ],
+      "cost_hint": 40,
+      "guard": {
+        "op": "eq",
+        "left": {
+          "role": "context",
+          "field": "focus"
+        },
+        "right": "docs"
+      }
+    }
+  ]
+}

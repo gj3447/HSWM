@@ -3,7 +3,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { dirname, isAbsolute, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
-import { Data, Effect, Layer } from "effect";
+import { Data, Effect, Either, Layer } from "effect";
 import { parseJson, type Context } from "./adaptive-domain.js";
 import { AdaptiveHttpClient, NativeAdaptiveHttpClient } from "./adaptive-executor.js";
 import { makeAdaptiveRuntime } from "./adaptive-runtime.js";
@@ -11,13 +11,14 @@ import { makeAdaptiveStoreSqliteLayer } from "./adaptive-store.js";
 import { PosixFileSystem } from "./effect-posix-filesystem.js";
 import type { BoundedSubprocess } from "./effect-bounded-subprocess.js";
 import type { ProcessReply } from "./effect-process-main.js";
+import { makeAdaptiveOtlpTelemetryLayer, parseAdaptiveOtlpConfiguration } from "./adaptive-telemetry-otlp.js";
 export const ADAPTIVE_CHECKOUT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../../..");
 export const DEVELOPMENT_PROFILES: Readonly<Record<string, string>> = Object.freeze({
     game: "adaptive_game_development.v2.json",
     maplelineage: "adaptive_maplelineage_development.v1.json",
     supullim: "adaptive_supullim_development.v1.json",
     reluvator: "adaptive_reluvator_development.v2.json",
-    hswm: "adaptive_hswm_development.v2.json"
+    hswm: "adaptive_hswm_development.v3.json"
 });
 const ALIASES: Readonly<Record<string, string>> = Object.freeze({
     "the-excel-tycoon": "game", "버엑시": "game", "메이플리니지": "maplelineage"
@@ -88,7 +89,8 @@ const OPTIONS = {
     cell: { type: "string" }, route: { type: "string" }, allow: { type: "string", multiple: true },
     "max-calls": { type: "string" }, frozen: { type: "boolean" },
     success: { type: "string" }, source: { type: "string" }, relation: { type: "string" },
-    revision: { type: "string" }, event: { type: "string" }, help: { type: "boolean", short: "h" }
+    revision: { type: "string" }, event: { type: "string" },
+    "otel-endpoint": { type: "string" }, "otel-token-env": { type: "string" }, help: { type: "boolean", short: "h" }
 } as const;
 export const runAdaptiveCli = (mode: "live" | "development", argv: ReadonlyArray<string>, checkoutRoot = ADAPTIVE_CHECKOUT_ROOT): Effect.Effect<ProcessReply, AdaptiveCliError, PosixFileSystem | BoundedSubprocess> => Effect.gen(function* () {
     const parsed = yield* Effect.try({
@@ -145,6 +147,13 @@ export const runAdaptiveCli = (mode: "live" | "development", argv: ReadonlyArray
         return yield* Effect.fail(failure("context must be a JSON object"));
     const state = development ? developmentStatePath(project, workspace, values.state, checkoutRoot)
         : resolve(workspace, values.state ?? ".hswm-local/runtime.sqlite3");
+    const tokenEnvironment = values["otel-token-env"] ?? "HSWM_OTLP_BEARER_TOKEN";
+    if (!/^[A-Z][A-Z0-9_]{0,127}$/.test(tokenEnvironment))
+        return yield* Effect.fail(failure("OTLP token environment name"));
+    const parsedTelemetry = parseAdaptiveOtlpConfiguration(values["otel-endpoint"] ?? process.env["HSWM_OTLP_TRACES_ENDPOINT"], process.env[tokenEnvironment]);
+    if (Either.isLeft(parsedTelemetry))
+        return yield* Effect.fail(failure(`OTLP ${parsedTelemetry.left}`));
+    const telemetry = parsedTelemetry.right;
     const execute = Effect.gen(function* () {
         const runtime = yield* makeAdaptiveRuntime(program, workspace);
         const budget = Number(values.budget ?? "60");
@@ -175,7 +184,11 @@ export const runAdaptiveCli = (mode: "live" | "development", argv: ReadonlyArray
         }
         const graph = yield* runtime.graph();
         return action === "graph" ? graph : adaptiveStatus(graph, development);
-    }).pipe(Effect.provide(Layer.merge(makeAdaptiveStoreSqliteLayer(state), Layer.succeed(AdaptiveHttpClient, NativeAdaptiveHttpClient))));
+    }).pipe(Effect.provide(Layer.mergeAll(
+        makeAdaptiveStoreSqliteLayer(state),
+        Layer.succeed(AdaptiveHttpClient, NativeAdaptiveHttpClient),
+        telemetry === null ? Layer.empty : makeAdaptiveOtlpTelemetryLayer(telemetry)
+    )));
     const result = yield* Effect.scoped(execute);
     return { stdout: `${JSON.stringify(result)}\n`, exitCode: action === "run" ? RUN_EXIT_CODES[text(result["status"])] ?? 2 : 0 };
 }).pipe(Effect.mapError((error) => failure(describe(error))));

@@ -1,0 +1,63 @@
+#!/bin/sh
+# Checkout-only Python tooling. Runtime execution remains native TypeScript/Effect.
+set -eu
+hswm_python_root=$(CDPATH= cd -- "$(dirname -- "$0")/../../../.." && pwd)
+hswm_python_core="$hswm_python_root/.hswm-local/envs/core"
+hswm_python_graph="$hswm_python_root/_research/graph_standards/runtime"
+hswm_python_action=${1:-help}
+if [ "$#" -gt 0 ]; then shift; fi
+
+case "$hswm_python_action" in
+  help|--help|-h)
+    echo 'hswm-python sync | core COMMAND... | graph COMMAND... | infra <fabric|phoenix> [ARGS...]'
+    echo 'sync prepares locked CPython 3.12.13 environments; core/graph never install packages.'
+    exit 0
+    ;;
+  sync|core|graph|infra) ;;
+  *) echo "Unknown environment: $hswm_python_action" >&2; exit 2 ;;
+esac
+
+case "$(uv --version)" in
+  'uv 0.12.3'|'uv 0.12.3 '*) ;;
+  *) echo 'This development toolchain requires the pinned uv 0.12.3.' >&2; exit 2 ;;
+esac
+
+# Deliberately override inherited environment selection for every named lane.
+cd -- "$hswm_python_root"
+case "$hswm_python_action" in
+  sync)
+    if [ "$#" -ne 0 ]; then echo 'sync accepts no extra arguments.' >&2; exit 2; fi
+    UV_PROJECT_ENVIRONMENT="$hswm_python_core" uv sync --project "$hswm_python_root" \
+      --locked --extra dev --python 3.12.13 --no-python-downloads
+    UV_PROJECT_ENVIRONMENT="$hswm_python_graph/.venv" uv sync --project "$hswm_python_graph" \
+      --locked --extra graph --python 3.12.13 --no-python-downloads
+    ;;
+  core|graph)
+    if [ "$#" -eq 0 ]; then echo 'A command is required.' >&2; exit 2; fi
+    if [ "$hswm_python_action" = core ]; then
+      hswm_python_project="$hswm_python_root"
+      UV_PROJECT_ENVIRONMENT="$hswm_python_core"
+    else
+      hswm_python_project="$hswm_python_graph"
+      UV_PROJECT_ENVIRONMENT="$hswm_python_graph/.venv"
+    fi
+    export UV_PROJECT_ENVIRONMENT
+    if [ ! -x "$UV_PROJECT_ENVIRONMENT/bin/python" ]; then
+      echo 'Environment is not prepared. Run hswm-python sync first.' >&2
+      exit 2
+    fi
+    exec uv run --project "$hswm_python_project" --no-sync --no-python-downloads -- "$@"
+    ;;
+  infra)
+    hswm_python_probe=${1:-}
+    if [ "$#" -gt 0 ]; then shift; fi
+    case "$hswm_python_probe" in
+      fabric) hswm_python_script='_research/infrastructure_smoke/research_fabric_smoke.py' ;;
+      phoenix) hswm_python_script='_research/infrastructure_smoke/phoenix_viewer_mcp_smoke.py' ;;
+      *) echo 'infra requires fabric or phoenix; these contact the configured local services.' >&2; exit 2 ;;
+    esac
+    # PEP 723 script locks are independent of both project environments.
+    unset UV_PROJECT_ENVIRONMENT VIRTUAL_ENV
+    exec uv run --locked --python 3.12.13 --no-python-downloads --script "$hswm_python_script" "$@"
+    ;;
+esac

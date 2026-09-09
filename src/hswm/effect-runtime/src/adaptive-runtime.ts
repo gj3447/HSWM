@@ -6,6 +6,7 @@ import { type AdaptiveExecution, AdaptiveHttpClient, type AdaptiveHttpClientShap
 import { type AdaptiveModel, type Cell, type Context, type GuardExample, type Plan, type Program, type Route, initialModel, plan as decidePlan, proposeSpecialization, updateModel, parseProgram } from "./adaptive-domain.js";
 import { BoundedSubprocess } from "./effect-bounded-subprocess.js";
 import { OBSERVATION_SCHEMA, SCOPE_SCHEMA, boundSpecialization, episodeCosts, observationDigest, revisionPin, routeMeaning } from "./adaptive-observation.js";
+import { AdaptiveTelemetry } from "./adaptive-telemetry.js";
 export const ADAPTIVE_RUNTIME_BACKEND = "typescript-effect" as const;
 export class AdaptiveRuntimeError extends Data.TaggedError("AdaptiveRuntimeError")<{
     readonly code: "PROGRAM_INVALID" | "CONTEXT_INVALID" | "REQUEST_INVALID" | "STORE" | "CONFLICT" | "UNRESOLVED";
@@ -226,7 +227,9 @@ export const makeAdaptiveRuntime = (rawProgram: unknown, workspace: string, opti
                 return yield* Effect.fail(failure("REQUEST_INVALID", "allowed cell"));
             return yield* choose(context, source, budget, allowed, exploration, input.forceRoute);
         }),
-        run: (task, rawContext, rawInput) => withRuntimeLock(Effect.gen(function* () {
+        run: (task, rawContext, rawInput) => AdaptiveTelemetry.pipe(Effect.flatMap((telemetry) => telemetry.episode(
+            { episodeIdentitySha256: sha(rawInput.episodeId) },
+            withRuntimeLock(Effect.gen(function* () {
             const context = structuredClone(rawContext);
             const input = structuredClone(rawInput);
             const budget = input.budget ?? 60, maxCalls = input.maxCalls ?? 16, learn = input.learn ?? true, exploration = input.exploration ?? .1;
@@ -370,7 +373,8 @@ export const makeAdaptiveRuntime = (rawProgram: unknown, workspace: string, opti
             }
             yield* storeError(store.rewrite({ graphId: program.graph_id, eventId: `${input.episodeId}:complete`, expected: endExpected, atoms: endAtoms, source: { kind: "EPISODE_COMPLETION", backend: ADAPTIVE_RUNTIME_BACKEND } }));
             return Object.freeze(payload);
-        })),
+        }))
+        ))),
         feedback: (episodeId, success, source) => withRuntimeLock(Effect.gen(function* () {
             if (!episodeId.trim() || episodeId.length > 256 || !source.trim() || source.length > 256 || typeof success !== "boolean")
                 return yield* Effect.fail(failure("REQUEST_INVALID", "feedback"));

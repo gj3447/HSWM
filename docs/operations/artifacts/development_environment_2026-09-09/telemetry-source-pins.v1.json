@@ -1,0 +1,202 @@
+{
+  "schema_version": "hswm-tool-source-pins/v1",
+  "observed_on": "2026-09-09",
+  "scope": "Optional native Effect tracing; not canonical state or causal evidence",
+  "lockfile": "src/hswm/effect-runtime/package-lock.json",
+  "packages": [
+    {
+      "name": "@effect/opentelemetry",
+      "version": "0.64.0",
+      "metadata_url": "https://registry.npmjs.org/@effect/opentelemetry/0.64.0",
+      "repository": {
+        "url": "git+https://github.com/Effect-TS/effect.git",
+        "type": "git",
+        "directory": "packages/opentelemetry"
+      },
+      "source_commit": null,
+      "integrity": "sha512-fLdsyh/u5ImTyvWUfDQy53PVgHEWO0fOjwKzpmhQzW6CYs8wFBU6pP/VpuRYvCGgpZxk8KW4ySr+fvQ0o74rrA==",
+      "tarball": "https://registry.npmjs.org/@effect/opentelemetry/-/opentelemetry-0.64.0.tgz",
+      "license": "MIT",
+      "authority_class": "OFFICIAL_PROJECT_PACKAGE",
+      "peer_dependencies": {
+        "effect": "^3.22.0",
+        "@effect/platform": "^0.97.0",
+        "@opentelemetry/api": "^1.9",
+        "@opentelemetry/sdk-logs": ">=0.203.0 <0.300.0",
+        "@opentelemetry/resources": "^2.0.0",
+        "@opentelemetry/sdk-metrics": "^2.0.0",
+        "@opentelemetry/sdk-trace-web": "^2.0.0",
+        "@opentelemetry/sdk-trace-base": "^2.0.0",
+        "@opentelemetry/sdk-trace-node": "^2.0.0",
+        "@opentelemetry/semantic-conventions": "^1.33.0"
+      }
+    },
+    {
+      "name": "@effect/platform",
+      "version": "0.97.0",
+      "metadata_url": "https://registry.npmjs.org/@effect/platform/0.97.0",
+      "repository": {
+        "url": "git+https://github.com/Effect-TS/effect.git",
+        "type": "git",
+        "directory": "packages/platform"
+      },
+      "source_commit": null,
+      "integrity": "sha512-PPSKkQ+QlIbKcf74FZKi3pi2h8hqYjsrUYaFuWXsuHpr8gjUoNNxJBptYzkzy4X9f7EeHhHqDMcj9YxaMygiHg==",
+      "tarball": "https://registry.npmjs.org/@effect/platform/-/platform-0.97.0.tgz",
+      "license": "MIT",
+      "authority_class": "OFFICIAL_PROJECT_PACKAGE",
+      "peer_dependencies": {
+        "effect": "^3.22.0"
+      }
+    },
+    {
+      "name": "@opentelemetry/api",
+      "version": "1.9.0",
+      "metadata_url": "https://registry.npmjs.org/@opentelemetry/api/1.9.0",
+      "repository": {
+        "url": "git+https://github.com/open-telemetry/opentelemetry-js.git",
+        "type": "git"
+      },
+      "source_commit": "c4d3351b6b3f5593c8d7cbfec97b45cea9fe1511",
+      "integrity": "sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg==",
+      "tarball": "https://registry.npmjs.org/@opentelemetry/api/-/api-1.9.0.tgz",
+      "license": "Apache-2.0",
+      "authority_class": "OFFICIAL_PROJECT_PACKAGE",
+      "peer_dependencies": {}
+    },
+    {
+      "name": "@opentelemetry/exporter-trace-otlp-proto",
+      "version": "0.208.0",
+      "metadata_url": "https://registry.npmjs.org/@opentelemetry/exporter-trace-otlp-proto/0.208.0",
+      "repository": {
+        "url": "git+https://github.com/open-telemetry/opentelemetry-js.git",
+        "type": "git"
+      },
+      "source_commit": "5eaa869bf08e6a16eec37eac44084257e8e21209",
+      "integrity": "sha512-q844Jc3ApkZVdWYd5OAl+an3n1XXf3RWHa3Zgmnhw3HpsM3VluEKHckUUEqHPzbwDUx2lhPRVkqK7LsJ/CbDzA==",
+      "tarball": "https://registry.npmjs.org/@opentelemetry/exporter-trace-otlp-proto/-/exporter-trace-otlp-proto-0.208.0.tgz",
+      "license": "Apache-2.0",
+      "authority_class": "OFFICIAL_PROJECT_PACKAGE",
+      "peer_dependencies": {
+        "@opentelemetry/api": "^1.3.0"
+      }
+    },
+    {
+      "name": "@opentelemetry/resources",
+      "version": "2.2.0",
+      "metadata_url": "https://registry.npmjs.org/@opentelemetry/resources/2.2.0",
+      "repository": {
+        "url": "git+https://github.com/open-telemetry/opentelemetry-js.git",
+        "type": "git"
+      },
+      "source_commit": "fb6476d8243ac8dcaaea74130b9c50c43938275c",
+      "integrity": "sha512-1pNQf/JazQTMA0BiO5NINUzH0cbLbbl7mntLa4aJNmCCXSj0q03T5ZXXL0zw4G55TjdL9Tz32cznGClf+8zr5A==",
+      "tarball": "https://registry.npmjs.org/@opentelemetry/resources/-/resources-2.2.0.tgz",
+      "license": "Apache-2.0",
+      "authority_class": "OFFICIAL_PROJECT_PACKAGE",
+      "peer_dependencies": {
+        "@opentelemetry/api": ">=1.3.0 <1.10.0"
+      }
+    },
+    {
+      "name": "@opentelemetry/sdk-logs",
+      "version": "0.208.0",
+      "metadata_url": "https://registry.npmjs.org/@opentelemetry/sdk-logs/0.208.0",
+      "repository": {
+        "url": "git+https://github.com/open-telemetry/opentelemetry-js.git",
+        "type": "git"
+      },
+      "source_commit": "5eaa869bf08e6a16eec37eac44084257e8e21209",
+      "integrity": "sha512-QlAyL1jRpOeaqx7/leG1vJMp84g0xKP6gJmfELBpnI4O/9xPX+Hu5m1POk9Kl+veNkyth5t19hRlN6tNY1sjbA==",
+      "tarball": "https://registry.npmjs.org/@opentelemetry/sdk-logs/-/sdk-logs-0.208.0.tgz",
+      "license": "Apache-2.0",
+      "authority_class": "OFFICIAL_PROJECT_PACKAGE",
+      "peer_dependencies": {
+        "@opentelemetry/api": ">=1.4.0 <1.10.0"
+      }
+    },
+    {
+      "name": "@opentelemetry/sdk-metrics",
+      "version": "2.2.0",
+      "metadata_url": "https://registry.npmjs.org/@opentelemetry/sdk-metrics/2.2.0",
+      "repository": {
+        "url": "git+https://github.com/open-telemetry/opentelemetry-js.git",
+        "type": "git"
+      },
+      "source_commit": "fb6476d8243ac8dcaaea74130b9c50c43938275c",
+      "integrity": "sha512-G5KYP6+VJMZzpGipQw7Giif48h6SGQ2PFKEYCybeXJsOCB4fp8azqMAAzE5lnnHK3ZVwYQrgmFbsUJO/zOnwGw==",
+      "tarball": "https://registry.npmjs.org/@opentelemetry/sdk-metrics/-/sdk-metrics-2.2.0.tgz",
+      "license": "Apache-2.0",
+      "authority_class": "OFFICIAL_PROJECT_PACKAGE",
+      "peer_dependencies": {
+        "@opentelemetry/api": ">=1.9.0 <1.10.0"
+      }
+    },
+    {
+      "name": "@opentelemetry/sdk-trace-base",
+      "version": "2.2.0",
+      "metadata_url": "https://registry.npmjs.org/@opentelemetry/sdk-trace-base/2.2.0",
+      "repository": {
+        "url": "git+https://github.com/open-telemetry/opentelemetry-js.git",
+        "type": "git"
+      },
+      "source_commit": "fb6476d8243ac8dcaaea74130b9c50c43938275c",
+      "integrity": "sha512-xWQgL0Bmctsalg6PaXExmzdedSp3gyKV8mQBwK/j9VGdCDu2fmXIb2gAehBKbkXCpJ4HPkgv3QfoJWRT4dHWbw==",
+      "tarball": "https://registry.npmjs.org/@opentelemetry/sdk-trace-base/-/sdk-trace-base-2.2.0.tgz",
+      "license": "Apache-2.0",
+      "authority_class": "OFFICIAL_PROJECT_PACKAGE",
+      "peer_dependencies": {
+        "@opentelemetry/api": ">=1.3.0 <1.10.0"
+      }
+    },
+    {
+      "name": "@opentelemetry/sdk-trace-node",
+      "version": "2.2.0",
+      "metadata_url": "https://registry.npmjs.org/@opentelemetry/sdk-trace-node/2.2.0",
+      "repository": {
+        "url": "git+https://github.com/open-telemetry/opentelemetry-js.git",
+        "type": "git"
+      },
+      "source_commit": "fb6476d8243ac8dcaaea74130b9c50c43938275c",
+      "integrity": "sha512-+OaRja3f0IqGG2kptVeYsrZQK9nKRSpfFrKtRBq4uh6nIB8bTBgaGvYQrQoRrQWQMA5dK5yLhDMDc0dvYvCOIQ==",
+      "tarball": "https://registry.npmjs.org/@opentelemetry/sdk-trace-node/-/sdk-trace-node-2.2.0.tgz",
+      "license": "Apache-2.0",
+      "authority_class": "OFFICIAL_PROJECT_PACKAGE",
+      "peer_dependencies": {
+        "@opentelemetry/api": ">=1.0.0 <1.10.0"
+      }
+    },
+    {
+      "name": "@opentelemetry/sdk-trace-web",
+      "version": "2.2.0",
+      "metadata_url": "https://registry.npmjs.org/@opentelemetry/sdk-trace-web/2.2.0",
+      "repository": {
+        "url": "git+https://github.com/open-telemetry/opentelemetry-js.git",
+        "type": "git"
+      },
+      "source_commit": "fb6476d8243ac8dcaaea74130b9c50c43938275c",
+      "integrity": "sha512-x/LHsDBO3kfqaFx5qSzBljJ5QHsRXrvS4MybBDy1k7Svidb8ZyIPudWVzj3s5LpPkYZIgi9e+7tdsNCnptoelw==",
+      "tarball": "https://registry.npmjs.org/@opentelemetry/sdk-trace-web/-/sdk-trace-web-2.2.0.tgz",
+      "license": "Apache-2.0",
+      "authority_class": "OFFICIAL_PROJECT_PACKAGE",
+      "peer_dependencies": {
+        "@opentelemetry/api": ">=1.0.0 <1.10.0"
+      }
+    },
+    {
+      "name": "@opentelemetry/semantic-conventions",
+      "version": "1.34.0",
+      "metadata_url": "https://registry.npmjs.org/@opentelemetry/semantic-conventions/1.34.0",
+      "repository": {
+        "url": "git+https://github.com/open-telemetry/opentelemetry-js.git",
+        "type": "git"
+      },
+      "source_commit": "a2e0f2c6acc1a03bc1e03cc5d59c17398c31818f",
+      "integrity": "sha512-aKcOkyrorBGlajjRdVoJWHTxfxO1vCNHLJVlSDaRHDIdjU+pX8IYQPvPDkYiujKLbRnWU+1TBwEt0QRgSm4SGA==",
+      "tarball": "https://registry.npmjs.org/@opentelemetry/semantic-conventions/-/semantic-conventions-1.34.0.tgz",
+      "license": "Apache-2.0",
+      "authority_class": "OFFICIAL_PROJECT_PACKAGE",
+      "peer_dependencies": {}
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "manifest": {
+    "schema": "hswm-research-graph/v1",
+    "id": "hswm-relation-contribution-2026-09-09",
+    "goal": "Develop the full fractal token-native HSWM by identifying the next testable contribution of outcome-bound relation revision.",
+    "targetRef": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+    "maxParallelism": 4,
+    "sources": [
+      {
+        "id": "constitution",
+        "title": "HSWM target identity",
+        "locator": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+        "sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373",
+        "authority": "MIXED_EXPLICIT"
+      },
+      {
+        "id": "strategy",
+        "title": "Target fixed; mechanisms replaceable",
+        "locator": "docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md",
+        "sha256": "64a9436bd83c306db6aa1ecb3d29e3ba1f3fd054f1d37bd164cb948c9da226af",
+        "authority": "MIXED_EXPLICIT"
+      },
+      {
+        "id": "current-direction",
+        "title": "Astra/K3 research direction",
+        "locator": "docs/research/HSWM_ASTRA_K3_RESEARCH_DIRECTION_2026-09-08.md",
+        "sha256": "4f2771a0c37068d8599c22b084e70d4486b10fa2d4ddac940c40c06debed7e6d",
+        "authority": "SECONDARY_AI"
+      },
+      {
+        "id": "instrument",
+        "title": "Actual USL relation instrument result and limitations",
+        "locator": "results/HSWM_USL_RELATION_INSTRUMENT_RESULTS_2026-09-08.md",
+        "sha256": "87778b65f74d4d032dce518e44ef13517f4e3705e717e61193612c385f383a99",
+        "authority": "LOCAL_ENGINEERING_EVIDENCE"
+      },
+      {
+        "id": "calibration",
+        "title": "Actual LLM baseline calibration protocol",
+        "locator": "docs/research/HSWM_RELATION_LLM_CALIBRATION_PROTOCOL_2026-09-08.md",
+        "sha256": "6a613a97e75ea3294280812f03ba28fad397da8f4dde9a28339466b0cb25d672",
+        "authority": "SECONDARY_AI"
+      },
+      {
+        "id": "openai-method",
+        "title": "OpenAI reported research method; stronger internal discovery model, Astra formalization",
+        "locator": "https://openai.com/index/navier-stokes-solution/",
+        "sha256": null,
+        "authority": "EXTERNAL_PRIMARY_SOURCE_REPORTED"
+      }
+    ],
+    "hypotheses": [
+      {
+        "id": "relation-contribution",
+        "claim": "An outcome-bound relation revision can improve a later unseen task beyond the same model with the same available history and budget.",
+        "scope": "Candidate research question only; current instrument does not establish independent outcome custody, G0/G1, or FCL passage.",
+        "falsifier": "A capable matched-history native agent explains the gain, or removing the exact revision does not remove the gain and restoring it does not restore the gain.",
+        "sourceIds": [
+          "constitution",
+          "strategy",
+          "current-direction",
+          "instrument",
+          "calibration"
+        ],
+        "predecessorIds": []
+      },
+      {
+        "id": "baseline-explanation",
+        "claim": "The apparent benefit can be explained by ordinary history, a text lesson, or a reusable program without the proposed relation mechanism.",
+        "scope": "Competing null explanation for the same declared task family and model/tool budget.",
+        "falsifier": "A prospectively measured contribution survives strong matched baselines and specific remove/restore interventions on held-out tasks.",
+        "sourceIds": [
+          "current-direction",
+          "instrument",
+          "calibration"
+        ],
+        "predecessorIds": []
+      }
+    ],
+    "tasks": [
+      {
+        "id": "explore-relation",
+        "hypothesisId": "relation-contribution",
+        "role": "EXPLORE",
+        "question": "Propose one narrow outcome-bound relation mechanism and a reproducible task where its contribution can be identified. Read the existing negative and instrument findings first.",
+        "acceptance": "Return mechanism, task boundary, required observations, matched controls, falsifier, unknowns, and source IDs. Preserve final HSWM target and existing claim ceilings.",
+        "dependsOn": [],
+        "budgetTokens": 8000
+      },
+      {
+        "id": "explore-baseline",
+        "hypothesisId": "baseline-explanation",
+        "role": "EXPLORE",
+        "question": "Independently design the strongest same-model, same-information history/text/program baseline and identify task saturation or missing native-agent capability.",
+        "acceptance": "Return baseline and cost matching, expected simpler explanations, disconfirming observations, unknowns, and source IDs; do not use an intentionally weak comparator.",
+        "dependsOn": [],
+        "budgetTokens": 8000
+      },
+      {
+        "id": "critique",
+        "hypothesisId": "relation-contribution",
+        "role": "CRITIQUE",
+        "question": "Compare both exploration results and seek leakage, task saturation, metric changes, hidden extra budget, and failed remove/restore identification.",
+        "acceptance": "List concrete counterexamples or unresolved objections with source/result references. Agreement between agents is not independent outcome evidence.",
+        "dependsOn": [
+          "explore-relation",
+          "explore-baseline"
+        ],
+        "budgetTokens": 5000
+      },
+      {
+        "id": "integrate",
+        "hypothesisId": "relation-contribution",
+        "role": "INTEGRATE",
+        "question": "Consolidate transferable findings and the critic objections into a bounded next experiment; retain rejected approaches and their conditions.",
+        "acceptance": "Provide a precise revised hypothesis and experiment with unchanged success criteria, prospective evaluation, distinct outcome custody, and an explicit stop/reroute condition.",
+        "dependsOn": [
+          "critique"
+        ],
+        "budgetTokens": 5000
+      },
+      {
+        "id": "verify",
+        "hypothesisId": "relation-contribution",
+        "role": "VERIFY",
+        "question": "Independently check that the proposed experiment measures the declared mechanism, and identify which requirements remain unexecuted.",
+        "acceptance": "Return a scoped engineering assessment with source references. A valid design is ENGINEERING_ONLY; no experiment means no efficacy disposition.",
+        "dependsOn": [
+          "integrate"
+        ],
+        "budgetTokens": 5000
+      }
+    ]
+  },
+  "events": []
+}

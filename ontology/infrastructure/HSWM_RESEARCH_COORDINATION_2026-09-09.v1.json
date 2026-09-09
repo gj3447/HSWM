@@ -1,0 +1,256 @@
+{
+  "schema_version": "hswm-development-environment-snapshot/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-research-coordination-2026-09-09",
+  "observed_on": "2026-09-09",
+  "authority": "SECONDARY_AI",
+  "status": "LOCAL_RESEARCH_COORDINATION_ENGINEERING_VERIFIED",
+  "request": {
+    "authority": "USER_PRIMARY",
+    "kind": "PARAPHRASE",
+    "instruction": "Build standard graph engineering to support HSWM research, incorporating parallel exploration, shared findings, critique and separate verification from the previously discussed research method."
+  },
+  "conceptual_delta": "Represent bounded research coordination as immutable typed manifests and additive events with an executable CLI and standard read-only exchange. It is a development instrument outside HSWM cognition, canonical admission and causal learning. Target identity, FCL-1..8, failures and success criteria remain unchanged.",
+  "claim_ceiling": "LOCAL_ENGINEERING_ONLY. Declared sources, actor roles and scoped assessments are not independently established provenance, scientific truth, independent outcome custody, causal credit, learning or HSWM efficacy.",
+  "worktree_base_commit": "8f7528b7b06390bd64ab6f2b3a167c326fc6f24d",
+  "worktree_scope": "Our development changes only. Unrelated pre-existing relation_synthesis_usl_v1 edits and its new runner test are preserved and excluded.",
+  "prior_snapshot": "ontology/infrastructure/HSWM_DEVELOPMENT_WORKFLOW_2026-09-09.v1.json",
+  "artifact_bindings": [
+    {
+      "path": "INDEX.md",
+      "sha256": "d728e55a98d6b64d6150a63cbf4539e5f754dc186466cefbcbaa81949479006c"
+    },
+    {
+      "path": "_research/research_coordination/README.md",
+      "sha256": "09cde769a00b2f2a5302b303a7722ea41093f435528dbfe7df1111f942a96076"
+    },
+    {
+      "path": "_research/research_coordination/hswm_relation_learning.v1.json",
+      "sha256": "28899249feaac21639352cdb0e4023c13f3a8b4f5dd0fe2edae61a12b7aafb2d"
+    },
+    {
+      "path": "docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md",
+      "sha256": "64a9436bd83c306db6aa1ecb3d29e3ba1f3fd054f1d37bd164cb948c9da226af"
+    },
+    {
+      "path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+      "sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373"
+    },
+    {
+      "path": "docs/operations/HSWM_RESEARCH_COORDINATION_2026-09-09.md",
+      "sha256": "8ff773763de25ac3cdc5f1a5d7946afca298788bda4848b77593972ff56f2256"
+    },
+    {
+      "path": "docs/operations/artifacts/research_coordination_2026-09-09/source-pins.v1.json",
+      "sha256": "7bebdc2f9410aac628f5112593538f66e13f7290d0e35ab80edc33ac37136d76"
+    },
+    {
+      "path": "schemas/HSWM_RESEARCH_COORDINATION_SHACL_1_0.ttl",
+      "sha256": "de5e0e2be4fce4b04f46dd22eb4365fd79b671878a6f1cfaffa6fb3108f10b0e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-research-graph",
+      "sha256": "ead074a90ec890071dcc20cfa992d5b86980dfc9b7ae5c515e0dc53d03729bb1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "924887b157634d7c32bea4b0c4080d8c7cfab0e07c12eb58062853ebbdbe2906"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package.json",
+      "sha256": "f3e2f77ebd8c90531f273f46f4f4125983d75c309500fb2a9a27f0b71fa38094"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-graph-cli.ts",
+      "sha256": "10a334a3b778db3c20cf5a005212ca02c05048daa83cb979522531bf29cbfeec"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-graph-domain.ts",
+      "sha256": "079138074799cd89ac6a3c0aa06258fcf233120d328d5b2a8fcea1c4733d2605"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-graph-process.ts",
+      "sha256": "ed89216b0875f5144c1d95cbd757a61467ae403149cce7d9d4b981ec8bc4200b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-graph-projection.ts",
+      "sha256": "d8446ace1ff25500a11a09fc59db695640685959c0c45f1701aa2987a9649cee"
+    },
+    {
+      "path": "tests/effect-runtime/research-graph-cli.test.ts",
+      "sha256": "ae150a9dbfcc46a227a4ca4fa3258fb9675a27eb4558fa0300a47e8df000f231"
+    },
+    {
+      "path": "tests/effect-runtime/research-graph-domain.test.ts",
+      "sha256": "5ba22bcdea6b7ccdc7b7f31e532b9ad910bf7c5e8b8b61c2d76fc9668c012759"
+    },
+    {
+      "path": "tests/effect-runtime/research-graph-projection.test.ts",
+      "sha256": "ee4cad94f4c152d61ab2cdf0f0fb7f16c7207904da9f7453122d507a7d5c0cc8"
+    },
+    {
+      "path": "tests/test_research_coordination_standards.py",
+      "sha256": "e8f4a6ce11a6ba3cfbd1a141fd65882c50a28530d40a2e31898f1e2234550c7c"
+    }
+  ],
+  "standard_and_implementation_pins": "docs/operations/artifacts/research_coordination_2026-09-09/source-pins.v1.json",
+  "implementation": {
+    "backend": "NATIVE_TYPESCRIPT_EFFECT",
+    "cli": "hswm-research-graph",
+    "operations": [
+      "init",
+      "validate",
+      "plan",
+      "context",
+      "append",
+      "export",
+      "property-view"
+    ],
+    "history": "Existing events retained; START/FINISH/EXTEND, new output files only, 0400 mode and no-replace publication. Single caller selects successor; no global branch merging.",
+    "context": "Selected hypothesis/task plus its declared sources and completed ancestor results with handoff source descriptors; negative and inconclusive results retained.",
+    "boundedness": {
+      "max_parallelism": 4,
+      "max_sources": 128,
+      "max_hypotheses": 128,
+      "max_tasks": 128,
+      "max_events": 1024,
+      "json_byte_limit": 1048576
+    },
+    "exchange": [
+      "JSON-LD 1.1",
+      "RDF 1.1 N-Quads",
+      "PROV-O declared entities/plans/activities/agents",
+      "SHACL 1.0 Core application shape",
+      "USL property-graph/v2 document-local view"
+    ],
+    "runtime_dependencies_added": 0,
+    "dependency_entries_changed": 0,
+    "new_mcp_capabilities": 0
+  },
+  "validation": [
+    {
+      "scope": "Final full runtime on pinned Node 24.13.0",
+      "result": "PASS",
+      "passed": 971,
+      "skipped": 7,
+      "files_passed": 133,
+      "files_skipped": 1,
+      "skip_reason": "Existing opt-in external Temporal/Neo4j integration tests."
+    },
+    {
+      "scope": "New domain/CLI/projection focused tests after USL locator correction",
+      "result": "PASS",
+      "passed": 14
+    },
+    {
+      "scope": "Actual CLI output: SHACL, SPARQL, scoped refutation, typed activity times, root corruption refusal",
+      "result": "PASS",
+      "passed": 3,
+      "warnings": 312,
+      "warning_scope": "RDFLib N-Quads/deprecated default-context APIs, not failed constraints."
+    },
+    {
+      "scope": "TypeScript, temporal typecheck, Effect boundary and adaptive functional lint",
+      "result": "PASS",
+      "allowlist_increased": false
+    },
+    {
+      "scope": "Native/temporal/DNRD builds and npm package dry-run",
+      "result": "PASS",
+      "packaged_research_process": true
+    },
+    {
+      "scope": "Portable Markdown compiler and local guide links",
+      "result": "PASS",
+      "historical_bytes_rewritten": false
+    }
+  ],
+  "actual_local_smoke": {
+    "graph_nodes": 13,
+    "graph_relations": 17,
+    "initial_ready_tasks": 2,
+    "initial_waiting_tasks": 3,
+    "recorded_research_events": 0,
+    "cli_init_plan_context_validate_export": "PASS",
+    "user_local_wrapper": "Checkout-backed wrapper with existing pinned Node 24.13.0 binary",
+    "usl_context": "PASS with actual existing dirty local USL source closure; see pins",
+    "usl_deny_all": {
+      "status": "UNRESOLVED",
+      "exit_code": 2,
+      "resolver_calls": 0,
+      "denied_locators": 2
+    },
+    "scientific_research_executed": false
+  },
+  "hswm_development_workflow": {
+    "profile": "_research/causal_composition/examples/adaptive_hswm_development.v3.json",
+    "checks": [
+      {
+        "focus": "runtime",
+        "selected_relation": "relation:runtime-focused",
+        "checks_passed": 52,
+        "explicit_agent_usefulness_feedback": true
+      },
+      {
+        "focus": "usl",
+        "selected_relation": "relation:usl-focused",
+        "checks_passed": 19,
+        "explicit_agent_usefulness_feedback": true
+      },
+      {
+        "focus": "ontology",
+        "selected_relation": "relation:ontology-focused",
+        "checks_passed": 9,
+        "explicit_agent_usefulness_feedback": true
+      },
+      {
+        "focus": "docs",
+        "selected_relation": "relation:docs-focused",
+        "checks_passed": 333,
+        "explicit_agent_usefulness_feedback": true
+      }
+    ],
+    "pending_feedback": 0,
+    "feedback_authority": "agent(codex): explicit engineering usefulness, not user judgment or exit-code-derived reward.",
+    "coverage_limitation": "Selected existing profiles do not cover the new research graph. Focused runtime and SHACL/USL integration checks were run explicitly outside them.",
+    "private_records": ".hswm-local/research-coordination-2026-09-09/"
+  },
+  "corrected_findings": [
+    "Review corrected cumulative extension/event bounds, frozen domain objects and dropped handoff source descriptors.",
+    "Projection review corrected cross-snapshot and source-graph resource collisions, paired PROV activities and typed times, retained negative-result navigation, canonical versus raw-file hashes, and false blank-node detection inside literals.",
+    "Actual USL smoke rejected plain paths in its reserved locator property. Declared source paths now use declaredLocator, and caller-provided digest-scoped kg-source identifies the local projected resources. A subsequent context run passed; deny-all observed zero resolver calls.",
+    "Initial full tests ran on ambient Node 24.20.0 and the existing drand executable hash check rejected that runtime (962 passed, 16 skipped, one failed suite). The existing pinned 24.13.0 binary matched its checked-in SHA-256; the complete rerun passed without changing historical pins or global Node configuration."
+  ],
+  "limitations": [
+    "No automatic agent/model execution, outcome measurement, consensus judgment, live KG write-back, global concurrency control across snapshot forks, or history merge.",
+    "Actor independence, token counts, dispositions and source hashes are caller declarations. Source locators are not automatically fetched or matched to bytes.",
+    "Projection identifiers bind canonical graph content; CLI sourceFileSha256 separately binds actual input bytes. Hashes are not signatures.",
+    "RDF and USL views omit parts of raw event history; preserve the original research graph for replay. USL UIDs are document-local and need a snapshot-specific namespace and kg-source.",
+    "The optional USL worktree is dirty and UNLICENSED; only its current local source closure was observed, no source copied, downloaded or redistributed.",
+    "The planned HSWM relation contribution experiment is unexecuted. Model identity and workflow similarity do not reproduce OpenAI results or demonstrate HSWM efficacy."
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-research-coordination-2026-09-09",
+      "kind": "DevelopmentWorkflowObservation",
+      "authority": "SECONDARY_AI",
+      "canonical_write": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "sym:AbstractNode:hswm-research-coordination-2026-09-09",
+      "relation": "DOCUMENTED_BY",
+      "target": "docs/operations/HSWM_RESEARCH_COORDINATION_2026-09-09.md"
+    },
+    {
+      "source": "sym:AbstractNode:hswm-research-coordination-2026-09-09",
+      "relation": "USES_RESEARCH_TEMPLATE",
+      "target": "_research/research_coordination/hswm_relation_learning.v1.json"
+    },
+    {
+      "source": "sym:AbstractNode:hswm-research-coordination-2026-09-09",
+      "relation": "FOLLOWS_DEVELOPMENT_OBSERVATION",
+      "target": "sym:AbstractNode:hswm-development-workflow-2026-09-09"
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "schema_version": "hswm-research-coordination-source-pins/v1",
+  "observed_on": "2026-09-09",
+  "scope": "Read-only local research-coordination graph exchange and validation. These pins do not grant canonical authority, causal credit, learning admission, or evidence of HSWM efficacy.",
+  "source_documents": [
+    {
+      "path": "docs/operations/HSWM_RESEARCH_COORDINATION_2026-09-09.md",
+      "role": "Operational boundary, exchange formats, and limitations."
+    },
+    {
+      "path": "_research/research_coordination/hswm_relation_learning.v1.json",
+      "role": "Initial bounded coordination graph template; it records a research plan, not a result."
+    },
+    {
+      "path": "schemas/HSWM_RESEARCH_COORDINATION_SHACL_1_0.ttl",
+      "role": "Repository-local SHACL validation shape; not a W3C publication."
+    }
+  ],
+  "standards": [
+    {
+      "name": "JSON-LD 1.1",
+      "role": "JSON-LD exchange document processing mode.",
+      "authority_class": "W3C_RECOMMENDATION",
+      "immutable_url": "https://www.w3.org/TR/2020/REC-json-ld11-20200716/"
+    },
+    {
+      "name": "RDF 1.1 N-Quads",
+      "role": "Line-oriented RDF exchange syntax for the blank-node-free projection.",
+      "authority_class": "W3C_RECOMMENDATION",
+      "immutable_url": "https://www.w3.org/TR/2014/REC-n-quads-20140225/"
+    },
+    {
+      "name": "PROV-O",
+      "role": "Vocabulary for declared Entity, Plan, Activity, and Agent relationships.",
+      "authority_class": "W3C_RECOMMENDATION",
+      "immutable_url": "https://www.w3.org/TR/2013/REC-prov-o-20130430/"
+    },
+    {
+      "name": "SHACL 1.0",
+      "role": "Constraint-language basis for the repository-local validation shape.",
+      "authority_class": "W3C_RECOMMENDATION",
+      "immutable_url": "https://www.w3.org/TR/2017/REC-shacl-20170720/"
+    },
+    {
+      "name": "RDF Dataset Canonicalization 1.0",
+      "role": "Comparison target for deterministic RDF dataset handling; it does not promote a library implementation to standards authority.",
+      "authority_class": "W3C_RECOMMENDATION",
+      "immutable_url": "https://www.w3.org/TR/2024/REC-rdf-canon-20240521/"
+    }
+  ],
+  "node_packages": {
+    "lockfile": "src/hswm/effect-runtime/package-lock.json",
+    "lockfile_sha256": "924887b157634d7c32bea4b0c4080d8c7cfab0e07c12eb58062853ebbdbe2906",
+    "packages": [
+      {
+        "name": "jsonld",
+        "version": "9.0.0",
+        "integrity": "sha512-pjMIdkXfC1T2wrX9B9i2uXhGdyCmgec3qgMht+TDj+S0qX3bjWMQUfL7NeqEhuRTi8G5ESzmL9uGlST7nzSEWg==",
+        "tarball": "https://registry.npmjs.org/jsonld/-/jsonld-9.0.0.tgz",
+        "license": "BSD-3-Clause",
+        "authority_class": "INDEPENDENT_IMPLEMENTATION_OF_W3C_JSON_LD"
+      },
+      {
+        "name": "rdf-canonize",
+        "version": "5.0.0",
+        "integrity": "sha512-g8OUrgMXAR9ys/ZuJVfBr05sPPoMA7nHIVs8VEvg9QwM5W4GR2qSFEEHjsyHF1eWlBaf8Ev40WNjQFQ+nJTO3w==",
+        "tarball": "https://registry.npmjs.org/rdf-canonize/-/rdf-canonize-5.0.0.tgz",
+        "license": "BSD-3-Clause",
+        "authority_class": "INDEPENDENT_IMPLEMENTATION_OF_W3C_RDFC_1_0"
+      },
+      {
+        "name": "n3",
+        "version": "2.7.2",
+        "integrity": "sha512-8Y/GU78BFSecvIv7OiJacY28l/zHiLo5/apxM+kyyUNCTWmqWyzzNjLlja4/vbLogoCHDPwCChLuDEZcpOKeDw==",
+        "tarball": "https://registry.npmjs.org/n3/-/n3-2.7.2.tgz",
+        "license": "MIT",
+        "authority_class": "INDEPENDENT_RDF_IMPLEMENTATION"
+      },
+      {
+        "name": "effect",
+        "version": "3.22.1",
+        "integrity": "sha512-TNoXushmPOBAjJlthF5d2QwnX2xBPEtcNJr5XKNKbRLbDvBcOYkXlYDfvGfSA0zriwLFuCll5MDtNMAdZL17PQ==",
+        "tarball": "https://registry.npmjs.org/effect/-/effect-3.22.1.tgz",
+        "license": "MIT",
+        "authority_class": "OFFICIAL_EFFECT_PROJECT_PACKAGE"
+      }
+    ]
+  },
+  "python_packages": {
+    "lockfile": "_research/graph_standards/runtime/uv.lock",
+    "lockfile_sha256": "e689c46043f2af18df5ea1b40cf070158afa999a09fb4807cc879eab7e6cc69d",
+    "installed_metadata": [
+      {
+        "path": "_research/graph_standards/runtime/.venv/lib/python3.12/site-packages/pyshacl-0.40.1.dist-info/METADATA",
+        "sha256": "90197fa5b9eeaad4cb0efca3e68a4bda939013c42bfcb60271d3bc008893d981"
+      },
+      {
+        "path": "_research/graph_standards/runtime/.venv/lib/python3.12/site-packages/rdflib-7.6.0.dist-info/METADATA",
+        "sha256": "29c569443738a45bfd85dd37865a038d7e19e5cb282dd3bd5f80f149d8d1f552"
+      }
+    ],
+    "packages": [
+      {
+        "name": "pyshacl",
+        "version": "0.40.1",
+        "sdist_sha256": "011e3cf1a68b31747cb762ba3d755ae1bdcc464c8fad0dc212a9adc550719552",
+        "wheel_sha256": "27dd58c8ddfa103303b4a8c40b2c666332ffc912dbcd3137f7adc7b7bc5e6bda",
+        "license": "Apache-2.0",
+        "authority_class": "INDEPENDENT_IMPLEMENTATION_OF_W3C_SHACL"
+      },
+      {
+        "name": "rdflib",
+        "version": "7.6.0",
+        "sdist_sha256": "6c831288d5e4a5a7ece85d0ccde9877d512a3d0f02d7c06455d00d6d0ea379df",
+        "wheel_sha256": "30c0a3ebf4c0e09215f066be7246794b6492e054e782d7ac2a34c9f70a15e0dd",
+        "license": "BSD-3-Clause",
+        "authority_class": "INDEPENDENT_RDF_IMPLEMENTATION"
+      }
+    ]
+  },
+  "optional_local_usl": {
+    "path": "/home/lagyeongjun/CD/USL",
+    "role": "Optional local read-only property-graph smoke surface; it is not a W3C standard, HSWM cognition, or a canonical-write path.",
+    "package_version": "0.3.0",
+    "base_commit": "1b2ab8bf94b9054df5aed34e8fa22756b974fea5",
+    "license": "UNLICENSED",
+    "authority_class": "LOCAL_INDEPENDENT_IMPLEMENTATION",
+    "working_tree": "DIRTY; this is a content observation rather than a commit-only reproducibility pin.",
+    "tracked_modified_file_count": 24,
+    "untracked_file_count": 49,
+    "source_closure": {
+      "algorithm": "sha256 of sorted sha256sum lines for src/**/*.ts plus package.json, package-lock.json, tsconfig.json, and tsconfig.build.json",
+      "file_count": 36,
+      "sha256": "2b4d7f33264ac90b7c0db06475a492822c569881dcab0a0862761e28ff0deced"
+    },
+    "dirty_state_observation": {
+      "tracked_name_list_sha256": "6e870a3ad6c8534d302c557ffff55698f4543f0abdcbe7a1bf4ca8000ac0e9c8",
+      "untracked_name_list_sha256": "2376ad92b5440044dc773d1c601a91d8398ab8ffa596ac12f911791da22ffbc7"
+    }
+  },
+  "validation_runtime": {
+    "node_version": "24.13.0",
+    "node_executable_sha256": "53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc",
+    "license": "MIT with upstream distribution notices",
+    "authority_class": "OFFICIAL_NODE_DISTRIBUTION_REUSED",
+    "official_source": "https://nodejs.org/download/release/v24.13.0/",
+    "ambient_node_observed": "24.20.0",
+    "selection": "Per-process PATH for pinned checks; checkout-backed research command uses the existing pinned binary. No global Node change."
+  }
+}

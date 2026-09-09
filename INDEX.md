@@ -1,5 +1,9 @@
 # HSWM — public repository index
 
+2026-09-09 [연구 조정 그래프 CLI](docs/operations/HSWM_RESEARCH_COORDINATION_2026-09-09.md)는
+가설 병렬 탐색·반례 검토·통합·별도 검증을 연결하고 JSON-LD/PROV-O/RDF로 교환한다.
+연구 실행을 돕는 도구이며 HSWM의 효능 판정은 아니다.
+
 > HSWM = Hypergraph Semantic Weight Map. 지향 정체성은 함수 단위가 LLM으로 실행되는 하이퍼그래프 시멘틱 신경망이다. 현재 측정으로 방어 가능한 범위는 **evidence-preserving memory substrate + SWM-0R finite representation engineering witness + SWM-0W fixed-three-singleton scalar precursor `SUPPORTED_NARROW` + 좁은 L0 typed-policy actuation 재현**까지다. SWM-0W의 candidate-only 결과는 별도 GitHub/BLS/task/reducer adjudication 뒤에만 `PASS`로 승격됐다. Multi-member set-to-set `W`는 유한 world, V2 task generator와 deterministic optimizer까지 구현됐지만 효능은 `UNJUDGED`이며, durable weight/topology learning도 아직 미폐쇄다. 이 인덱스는 공개 저장소의 코드·설계·실험
 > 영수증만 가리킨다.
 

@@ -1,0 +1,44 @@
+@prefix rc: <https://hswm.invalid/research-coordination/v1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# SHACL 1.0 Core constraints for the derived, read-only research-coordination
+# exchange view.  They validate structure and declared dispositions only; they
+# do not adjudicate provenance, a scientific claim, causal credit, learning, or
+# efficacy.
+
+rc:ResearchGraphProjectionShape a sh:NodeShape ;
+  sh:targetClass rc:ResearchGraphProjection ;
+  sh:property [ sh:path rc:contractVersion ; sh:hasValue "hswm-research-graph-projection/v1" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path rc:rdfProfile ; sh:hasValue "RDF_1_1_N_QUADS_BLANK_NODE_FREE_LEXICALLY_SORTED_PROFILE" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path rc:sourceGraphSha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path rc:writeBack ; sh:hasValue "FORBIDDEN" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path rc:claimCeiling ; sh:hasValue "LOCAL_RESEARCH_COORDINATION_DECLARATION_ONLY_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prov:wasDerivedFrom ; sh:class rc:SourceGraph ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+rc:SourceGraphShape a sh:NodeShape ;
+  sh:targetClass rc:SourceGraph ;
+  sh:property [ sh:path rc:sourceLocator ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path rc:sourceGraphSha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+rc:HypothesisShape a sh:NodeShape ;
+  sh:targetClass rc:Hypothesis ;
+  sh:property [ sh:path rc:scope ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path rc:disposition ; sh:datatype xsd:string ; sh:in ( "CANDIDATE" "SUPPORTED" "REFUTED" "INCONCLUSIVE" "RETIRED" ) ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+rc:TaskPlanShape a sh:NodeShape ;
+  sh:targetClass prov:Plan ;
+  sh:property [ sh:path rc:scope ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path rc:disposition ; sh:datatype xsd:string ; sh:in ( "PLANNED" "ACTIVE" "COMPLETED" "FAILED" "CANCELED" "BLOCKED" "OVER_BUDGET" ) ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+rc:RecordedActivityShape a sh:NodeShape ;
+  sh:targetClass prov:Activity ;
+  sh:property [ sh:path prov:wasAssociatedWith ; sh:class prov:Agent ; sh:minCount 1 ] ;
+  sh:property [ sh:path rc:scope ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path rc:disposition ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+rc:ResultShape a sh:NodeShape ;
+  sh:targetClass rc:Result ;
+  sh:property [ sh:path rc:scope ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path rc:disposition ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] .

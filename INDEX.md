@@ -20,6 +20,9 @@ LLM 호출·관측 평가·명시적 피드백·관계 갱신·다음 선택을 
 [ICE 소비자 평가와 반영](docs/operations/HSWM_ICE_CONSUMER_FEEDBACK_2026-09-08.md)은
 실사용에서 발견한 context-key 재사용 결함 수정과, 배타적 경로·root 피드백의 평가 한계를 기록한다.
 학습의 추가 효과를 보는 3군 비교와 다른 프레임워크 대비 비교는 별도 미실행 과제다.
+[버엑시 feedback 장애 보고](docs/operations/HSWM_VIRTUAL_EXCEL_FEEDBACK_FAILURE_2026-09-09.md)는
+검사 성공 뒤 TS feedback 오류·Python fallback의 `KeyError: context`와 피드백 대기를 기록한다.
+사용자 지시로 버엑시의 HSWM 사용은 보류됐으며, 원인 조사·수정은 아직 미완료다.
 [Astra·K3 이후 연구 방향](docs/research/HSWM_ASTRA_K3_RESEARCH_DIRECTION_2026-09-08.md)은
 최신 native agent 능력과 HSWM의 지속 관계 학습을 구분하고, 모델 교체·같은 이력·총비용을
 포함한 실사용 개발 방향을 제안한다. 공식 자료 검토이며 새 효능 실험은 아니다.

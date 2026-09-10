@@ -1,0 +1,118 @@
+{
+  "schema_version": "hswm-bounded-formal-verification/v1",
+  "observed_on": "2026-09-10",
+  "status": "THREE_STANDALONE_MODULES_KERNEL_CHECKED",
+  "authority": "LOCAL_ENGINEERING_EVIDENCE",
+  "claim_ceiling": "FINITE_FORMAL_MODELS_ONLY_NOT_HSWM_REALIZABILITY_PROBABILITY_OR_EFFICACY",
+  "base_commit": "36e0e905aeca8da4f6e61345255d68c6e52a1b5b",
+  "toolchain": {
+    "name": "leanprover/lean4:v4.32.1",
+    "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+    "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+    "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "pin_path": "formal/lean-toolchain",
+    "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+    "authority": "OFFICIAL_EXISTING_PIN_REUSED",
+    "main_license": "Apache-2.0",
+    "license_file_sha256": "8b28515ffffc5c0fe2807d8ae3735b00b324d9b7ce807dd63ff6ac8922fbce7e",
+    "bundled_notices_sha256": "00cce2ac071f63d470a287438a7c6bbc4334706be244384e9af4fc9ead11cdce",
+    "license_scope": "Compiler main license with bundled third-party notices retained in installed distribution.",
+    "new_dependencies_installed": false,
+    "dependency_scope": "Std shipped with this toolchain; this report is not a full binary-distribution supply-chain attestation."
+  },
+  "proof_sources": [
+    {
+      "path": "formal/HSWMFiniteSelection.lean",
+      "sha256": "6f6faeebb4827e309111002bfea3fefa0501294fe27de53ef8206a8967a8adda",
+      "named_theorems": [
+        "HSWMFiniteSelection.select_argmax",
+        "HSWMFiniteSelection.select_member",
+        "HSWMFiniteSelection.select_exists",
+        "HSWMFiniteSelection.accepted_has_true_gain",
+        "HSWMFiniteSelection.selected_near_any_candidate",
+        "HSWMFiniteSelection.gap_forces_acceptance",
+        "HSWMFiniteSelection.gap_forces_improving_update",
+        "HSWMFiniteSelection.available_gap_improves_computed_update",
+        "HSWMFiniteSelection.ordinary_same_rule_equivalence",
+        "HSWMFiniteSelection.witness_update_improves",
+        "HSWMFiniteSelection.equal_score_no_gain_counterexample"
+      ],
+      "observed_axioms": [
+        "Quot.sound",
+        "propext"
+      ],
+      "exit_code": 0,
+      "audit_command": "lake env lean --trust=0 --stdin (exact source plus named #check/#print axioms queries)",
+      "private_log_sha256": "90bd98f2c7f247b0b5d28dd1553012ef7b3db4b63888351f9c7f5648ec2c573a"
+    },
+    {
+      "path": "formal/HSWMFiniteRandomizedIdentification.lean",
+      "sha256": "3456f7d010351350356ad8e394b9c3a03b78fd1bdfeaf961f7e0466393b14a0a",
+      "named_theorems": [
+        "HSWM.FiniteRandomizedIdentification.consistencyFirstTreated",
+        "HSWM.FiniteRandomizedIdentification.consistencyFirstControl",
+        "HSWM.FiniteRandomizedIdentification.consistencySecondTreated",
+        "HSWM.FiniteRandomizedIdentification.consistencySecondControl",
+        "HSWM.FiniteRandomizedIdentification.fairPairedRandomizationIdentifiesPairEffect",
+        "HSWM.FiniteRandomizedIdentification.fairPairedRandomizationIdentifiesTotalEffect",
+        "HSWM.FiniteRandomizedIdentification.signConfoundedPairHasPositiveEffect",
+        "HSWM.FiniteRandomizedIdentification.biasedAssignmentHasNegativeObservedContrast",
+        "HSWM.FiniteRandomizedIdentification.biasedAssignmentReversesSign",
+        "HSWM.FiniteRandomizedIdentification.nullEffectHasNoPositiveEffect",
+        "HSWM.FiniteRandomizedIdentification.nullEffectFairExpectationIsZero",
+        "HSWM.FiniteRandomizedIdentification.nullEffectAssignmentsCanDiffer"
+      ],
+      "observed_axioms": [
+        "propext"
+      ],
+      "exit_code": 0,
+      "audit_command": "lake env lean --trust=0 --stdin (exact source plus named #check/#print axioms queries)",
+      "private_log_sha256": "5d3a6b1418b9e2a826ac15d1a5bcfa82fdd96b7bf94d0cea5645961d947b111a"
+    },
+    {
+      "path": "formal/HSWMCompositionInterference.lean",
+      "sha256": "ea61064e08f46a36b98c0e30e103ffc1e130b92a157ed3989e29888416ca87bc",
+      "named_theorems": [
+        "HSWMCompositionInterference.allFalse_is_fixed",
+        "HSWMCompositionInterference.allFalse_is_not_macro_optimal",
+        "HSWMCompositionInterference.update_misses_available_improvement",
+        "HSWMCompositionInterference.stale_unilateral_improvements",
+        "HSWMCompositionInterference.commuting_writes_have_negative_semantic_interaction",
+        "HSWMCompositionInterference.serial_reevaluation_accepts_then_rejects",
+        "HSWMCompositionInterference.joint_gain_decomposition",
+        "HSWMCompositionInterference.additive_strict_gains_imply_joint_gain",
+        "HSWMCompositionInterference.countertable_has_negative_interaction"
+      ],
+      "observed_axioms": [
+        "Quot.sound",
+        "propext"
+      ],
+      "exit_code": 0,
+      "audit_command": "lake env lean --trust=0 --stdin (exact source plus named #check/#print axioms queries)",
+      "private_log_sha256": "3c2eafa937cfd2662ab0fcab58606a3c92420233f0cbb98687a6c5cd1e8560ca"
+    }
+  ],
+  "named_theorem_count": 32,
+  "count_semantics": "Axiom-audit coverage only; not a measure of HSWM progress or efficacy.",
+  "forbidden_dependencies_observed": [],
+  "forbidden_dependencies_checked": [
+    "sorryAx",
+    "Lean.ofReduceBool",
+    "any axiom outside propext/Classical.choice/Quot.sound"
+  ],
+  "verification_scope": "Pinned Lean --trust=0 checked exact source plus named #check/#print axioms commands. Same Lean implementation, not a distinct proof-checker implementation.",
+  "default_lake_build": {
+    "result": "PASS",
+    "new_modules_in_default_targets": false,
+    "scope": "Existing project regression only; standalone modules checked explicitly."
+  },
+  "model_boundaries": {
+    "selection": "Exact Int-grid conditional lemma from uniform error and available positive gap; truth absent executable inputs; no formalized probability or actual sampling guarantee.",
+    "identification": "Two fixed potential outcomes per unit, one common fair allocation coin; denominator-cleared exact algebra. No actual allocation/custody and no independent-block vector theorem.",
+    "composition": "Two-coordinate utility countermatrix, exact tabulated evaluator for serial repair, zero-interaction sufficient condition. No general HSWM impossibility or full FCL witness."
+  },
+  "runtime_llm_evaluation_calls": 0,
+  "runtime_llm_evaluation_scope": "Separate scientific efficacy evaluations only; collaborating-agent generations are real LLM activity with unreported token usage.",
+  "full_hswm_status": "INTEGRATED_CLAIM_UNJUDGED",
+  "raw_logs": "Retained in ignored local workspace; not published as external outcome evidence."
+}

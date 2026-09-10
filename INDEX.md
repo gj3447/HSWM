@@ -1,5 +1,9 @@
 # HSWM — public repository index
 
+2026-09-10 [구성적 증명 첫 형식검증 라운드](docs/research/HSWM_CONSTRUCTIVE_PROOF_ROUND_1_2026-09-10.md)는
+유한 선택의 조건부 개선·유한 배정 식별식·합성 간섭 반례와 제한된 보완을 Lean으로 검사한다.
+전체 HSWM 존재·실제 LLM 효능·FCL 통과는 여전히 미증명이다.
+
 2026-09-10 [구성적 실현가능성 증명 프로그램](docs/research/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.md)은
 기존 조건부 정리의 전제와 실제 결과를 만드는 구성법을 구분한다. 유한 선택 학습의 분석적
 유도와 전체 FCL 증명 의무를 연결하며, HSWM 실현가능성·새 Lean 정리·효능 완료 주장은 아니다.

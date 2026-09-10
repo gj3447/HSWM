@@ -1,5 +1,9 @@
 # HSWM — public repository index
 
+2026-09-10 [구성적 실현가능성 증명 프로그램](docs/research/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.md)은
+기존 조건부 정리의 전제와 실제 결과를 만드는 구성법을 구분한다. 유한 선택 학습의 분석적
+유도와 전체 FCL 증명 의무를 연결하며, HSWM 실현가능성·새 Lean 정리·효능 완료 주장은 아니다.
+
 2026-09-10 [관계 학습 첫 연구 라운드](docs/research/HSWM_RELATION_RESEARCH_ROUND_1_2026-09-10.md)는
 병렬 탐색·별도 비평과 고정 프로그램 구조 점검을 기록한다. 정적 관계 포장 후보의 식별 문제를
 보존하고 outcome-conditioned update의 다음 설계를 남겼다. 실제 모델 효능 평가는 미실행이다.

@@ -73,6 +73,7 @@ const context: JsonObject = Object.freeze({
   acceptance: "rc:acceptance",
   budgetTokens: "rc:budgetTokens",
   usedTokens: "rc:usedTokens",
+  usageStatus: "rc:usageStatus",
   overBudget: "rc:overBudget",
   dependsOn: { "@id": "rc:dependsOn", "@type": "@id" },
   refutes: { "@id": "rc:refutes", "@type": "@id" },
@@ -132,7 +133,8 @@ const projectionDocument = (graph: ResearchGraph, sourceGraphSha256: string): Js
       "rc:nativeId": literal(task.id), "prov:wasDerivedFrom": idRef(resource(sourceGraphSha256, "hypothesis", task.hypothesisId)),
       "rc:role": literal(task.role), "rc:question": literal(task.question), "rc:acceptance": literal(task.acceptance),
       "rc:scope": literal(`Declared task ${task.id}`), "rc:disposition": literal(taskDisposition),
-      "rc:taskStatus": literal(entry.status), "rc:budgetTokens": literal(task.budgetTokens), "rc:overBudget": literal(entry.overBudget),
+      "rc:taskStatus": literal(entry.status), "rc:budgetTokens": literal(task.budgetTokens),
+      ...(entry.overBudget === null ? {} : { "rc:overBudget": literal(entry.overBudget) }),
       ...(task.dependsOn.length === 0 ? {} : { "rc:dependsOn": task.dependsOn.map((id) => ({ "@id": resource(sourceGraphSha256, "task", id) })) })
     }))
   }
@@ -144,7 +146,8 @@ const projectionDocument = (graph: ResearchGraph, sourceGraphSha256: string): Js
       const hypothesisId = task === undefined ? null : task.hypothesisId
       items.push(node(resource(sourceGraphSha256, "result", event.id), ["prov:Entity", "rc:Result"], {
         "rc:nativeId": literal(event.id), "rc:scope": literal(`Recorded result for task ${event.taskId}`), "rc:disposition": literal(event.disposition),
-        "rc:summary": literal(event.summary), "rc:usedTokens": literal(event.usedTokens),
+        "rc:summary": literal(event.summary), "rc:usageStatus": literal(event.usedTokens === null ? "UNKNOWN" : "REPORTED"),
+        ...(event.usedTokens === null ? {} : { "rc:usedTokens": literal(event.usedTokens) }),
         "prov:wasDerivedFrom": event.sourceIds.map((id) => ({ "@id": resource(sourceGraphSha256, "source", id) })),
         "prov:wasGeneratedBy": idRef(resource(sourceGraphSha256, "activity", event.taskId)),
         ...(event.disposition === "REFUTED_IN_SCOPE" && hypothesisId !== null ? { "rc:refutes": idRef(resource(sourceGraphSha256, "hypothesis", hypothesisId)) } : {})
@@ -229,8 +232,8 @@ export const researchGraphPropertyView = (graph: ResearchGraph): JsonObject => {
   const nodes: Json[] = [
     ...state.manifest.sources.map((source) => Object.freeze({ uid: `source:${source.id}`, labels: ["Source"], properties: Object.freeze({ title: source.title, declaredLocator: source.locator, authority: source.authority, sha256: source.sha256 }) })),
     ...state.manifest.hypotheses.map((hypothesis) => Object.freeze({ uid: `hypothesis:${hypothesis.id}`, labels: ["Hypothesis"], properties: Object.freeze({ claim: hypothesis.claim, scope: hypothesis.scope, falsifier: hypothesis.falsifier, disposition: "CANDIDATE" }) })),
-    ...state.tasks.map((entry) => Object.freeze({ uid: `task:${entry.task.id}`, labels: ["TaskPlan"], properties: Object.freeze({ role: entry.task.role, question: entry.task.question, acceptance: entry.task.acceptance, status: entry.status, budgetTokens: entry.task.budgetTokens, overBudget: entry.overBudget }) })),
-    ...graph.events.filter((event): event is Extract<ResearchEvent, { readonly type: "FINISH" }> => event.type === "FINISH").map((event) => Object.freeze({ uid: `result:${event.id}`, labels: ["Result"], properties: Object.freeze({ disposition: event.disposition, summary: event.summary, usedTokens: event.usedTokens }) }))
+    ...state.tasks.map((entry) => Object.freeze({ uid: `task:${entry.task.id}`, labels: ["TaskPlan"], properties: Object.freeze({ role: entry.task.role, question: entry.task.question, acceptance: entry.task.acceptance, status: entry.status, budgetTokens: entry.task.budgetTokens, usageStatus: entry.usageStatus, overBudget: entry.overBudget }) })),
+    ...graph.events.filter((event): event is Extract<ResearchEvent, { readonly type: "FINISH" }> => event.type === "FINISH").map((event) => Object.freeze({ uid: `result:${event.id}`, labels: ["Result"], properties: Object.freeze({ disposition: event.disposition, summary: event.summary, usageStatus: event.usedTokens === null ? "UNKNOWN" : "REPORTED", usedTokens: event.usedTokens }) }))
   ]
   const relationships: Json[] = [
     ...state.manifest.hypotheses.flatMap((hypothesis) => hypothesis.sourceIds.map((sourceId) => Object.freeze({ uid: `hypothesis-source:${part(hypothesis.id)}:${part(sourceId)}`, from_uid: `hypothesis:${hypothesis.id}`, to_uid: `source:${sourceId}`, type: "HAS_DECLARED_SOURCE", properties: Object.freeze({ description: "Declared source reference; no authority grant.", participants: [{ role: "hypothesis", uid: `hypothesis:${hypothesis.id}` }, { role: "source", uid: `source:${sourceId}` }] }) }))),

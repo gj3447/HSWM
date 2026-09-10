@@ -27,7 +27,7 @@ export interface ResearchManifest {
 }
 export type ResearchEvent =
   | { readonly type: "START"; readonly id: string; readonly taskId: string; readonly actor: string; readonly model: string; readonly at: string }
-  | { readonly type: "FINISH"; readonly id: string; readonly taskId: string; readonly actor: string; readonly at: string; readonly disposition: "SUPPORTED_IN_SCOPE" | "REFUTED_IN_SCOPE" | "INCONCLUSIVE" | "ENGINEERING_ONLY"; readonly summary: string; readonly sourceIds: readonly string[]; readonly usedTokens: number }
+  | { readonly type: "FINISH"; readonly id: string; readonly taskId: string; readonly actor: string; readonly at: string; readonly disposition: "SUPPORTED_IN_SCOPE" | "REFUTED_IN_SCOPE" | "INCONCLUSIVE" | "ENGINEERING_ONLY"; readonly summary: string; readonly sourceIds: readonly string[]; readonly usedTokens: number | null }
   | { readonly type: "EXTEND"; readonly id: string; readonly at: string; readonly sources: readonly ResearchSource[]; readonly hypotheses: readonly ResearchHypothesis[]; readonly tasks: readonly ResearchTask[] };
 export interface ResearchGraph { readonly manifest: ResearchManifest; readonly events: readonly ResearchEvent[]; }
 export class ResearchGraphError extends Data.TaggedError("ResearchGraphError")<{ readonly code: "INVALID" | "REFERENCE" | "CYCLE" | "EVENT" | "CAPACITY"; readonly detail: string; }> {}
@@ -108,7 +108,7 @@ const validateManifest = (m: ResearchManifest): Either.Either<void, ResearchGrap
 const event = (v: unknown): Either.Either<ResearchEvent, ResearchGraphError> => {
   if (!object(v) || !text(v["type"])) return fail("INVALID", "invalid research event");
   if (v["type"] === "START") { if (!exact(v, ["type", "id", "taskId", "actor", "model", "at"]) || !id(v["id"]) || !id(v["taskId"]) || !text(v["actor"]) || !text(v["model"]) || !iso(v["at"])) return fail("INVALID", "invalid START event"); return Either.right(Object.freeze({ type: "START", id: v["id"], taskId: v["taskId"], actor: v["actor"], model: v["model"], at: v["at"] })); }
-  if (v["type"] === "FINISH") { if (!exact(v, ["type", "id", "taskId", "actor", "at", "disposition", "summary", "sourceIds", "usedTokens"]) || !id(v["id"]) || !id(v["taskId"]) || !text(v["actor"]) || !iso(v["at"]) || !oneOf(v["disposition"], dispositions) || !text(v["summary"]) || !ids(v["sourceIds"]) || !safe(v["usedTokens"])) return fail("INVALID", "invalid FINISH event"); return Either.right(Object.freeze({ type: "FINISH", id: v["id"], taskId: v["taskId"], actor: v["actor"], at: v["at"], disposition: v["disposition"], summary: v["summary"], sourceIds: Object.freeze([...v["sourceIds"]]), usedTokens: v["usedTokens"] })); }
+  if (v["type"] === "FINISH") { if (!exact(v, ["type", "id", "taskId", "actor", "at", "disposition", "summary", "sourceIds", "usedTokens"]) || !id(v["id"]) || !id(v["taskId"]) || !text(v["actor"]) || !iso(v["at"]) || !oneOf(v["disposition"], dispositions) || !text(v["summary"]) || !ids(v["sourceIds"]) || !(v["usedTokens"] === null || safe(v["usedTokens"]))) return fail("INVALID", "invalid FINISH event"); return Either.right(Object.freeze({ type: "FINISH", id: v["id"], taskId: v["taskId"], actor: v["actor"], at: v["at"], disposition: v["disposition"], summary: v["summary"], sourceIds: Object.freeze([...v["sourceIds"]]), usedTokens: v["usedTokens"] })); }
   if (v["type"] === "EXTEND") { if (!exact(v, ["type", "id", "at", "sources", "hypotheses", "tasks"]) || !id(v["id"]) || !iso(v["at"])) return fail("INVALID", "invalid EXTEND event"); const ss = decodeList(v["sources"], source, "extension sources"), hs = decodeList(v["hypotheses"], hypothesis, "extension hypotheses"), ts = decodeList(v["tasks"], task, "extension tasks"); if (Either.isLeft(ss)) return retype(ss); if (Either.isLeft(hs)) return retype(hs); if (Either.isLeft(ts)) return retype(ts); return Either.right(Object.freeze({ type: "EXTEND", id: v["id"], at: v["at"], sources: ss.right, hypotheses: hs.right, tasks: ts.right })); }
   return fail("INVALID", "unknown event type");
 };
@@ -169,7 +169,9 @@ export const researchGraphState = (graph: ResearchGraph) => {
     const start = startBy.get(task.id) ?? null;
     const finish = finishBy.get(task.id) ?? null;
     const status = finish ? "COMPLETE" : start ? "RUNNING" : task.dependsOn.some((dependency) => !finishBy.has(dependency)) ? "WAITING" : "READY";
-    return Object.freeze({ task, status, start, finish, overBudget: finish !== null && finish.usedTokens > task.budgetTokens });
+    const usageStatus = finish === null ? null : finish.usedTokens === null ? "UNKNOWN" : "REPORTED";
+    const overBudget = finish === null ? false : finish.usedTokens === null ? null : finish.usedTokens > task.budgetTokens;
+    return Object.freeze({ task, status, start, finish, usageStatus, overBudget });
   });
   const active = tasks.filter((entry) => entry.status === "RUNNING").length;
   return Object.freeze({ manifest: m, tasks: Object.freeze(tasks), active, remainingSlots: m.maxParallelism - active });
@@ -185,7 +187,7 @@ export const researchTaskContext = (graph: ResearchGraph, taskId: string): Eithe
   const ancestorIds = new Set(ancestors(taskId, state.manifest));
   const dependencyResults = state.tasks
     .filter((item) => ancestorIds.has(item.task.id) && item.finish !== null)
-    .map((item) => Object.freeze({ taskId: item.task.id, disposition: item.finish!.disposition, summary: item.finish!.summary, sourceIds: item.finish!.sourceIds, negative: item.finish!.disposition === "REFUTED_IN_SCOPE" }));
+    .map((item) => Object.freeze({ taskId: item.task.id, actor: item.finish!.actor, model: item.start!.model, disposition: item.finish!.disposition, summary: item.finish!.summary, sourceIds: item.finish!.sourceIds, usedTokens: item.finish!.usedTokens, usageStatus: item.usageStatus, overBudget: item.overBudget, negative: item.finish!.disposition === "REFUTED_IN_SCOPE" }));
   const handoffSourceIds = new Set(dependencyResults.flatMap((result) => result.sourceIds));
   const handoffSources = state.manifest.sources.filter((source) => handoffSourceIds.has(source.id));
   return Either.right(Object.freeze({

@@ -73,3 +73,20 @@ it("does not mistake a caller-authored literal containing blank-node syntax for 
   const projection = await Effect.runPromise(makeResearchGraphProjection(checked.right))
   expect(projection.nquads).toContain("_:marker")
 })
+
+it("preserves unknown usage in the property view and omits unavailable RDF values", async () => {
+  const unknownUsage = {
+    ...graphInput,
+    events: [graphInput.events[0], { ...graphInput.events[1], usedTokens: null }]
+  }
+  const checked = parseResearchGraph(unknownUsage)
+  if (Either.isLeft(checked)) throw checked.left
+  const projection = await Effect.runPromise(makeResearchGraphProjection(checked.right))
+  expect(projection.nquads).toContain("UNKNOWN")
+  expect(projection.nquads).not.toContain("usedTokens")
+  expect(projection.nquads).not.toMatch(/task\/explore> <[^>]+\/overBudget>/u)
+  const view = researchGraphPropertyView(checked.right)
+  const nodes = view["nodes"] as readonly { readonly uid: string; readonly properties: Record<string, unknown> }[]
+  expect(nodes.find((node) => node.uid === "result:finish-explore")?.properties).toMatchObject({ usageStatus: "UNKNOWN", usedTokens: null })
+  expect(nodes.find((node) => node.uid === "task:explore")?.properties).toMatchObject({ usageStatus: "UNKNOWN", overBudget: null })
+})

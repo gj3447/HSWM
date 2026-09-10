@@ -53,6 +53,18 @@ it("coordinates two explorations through independent critique, integration, and 
   expect(state.tasks.find((item) => item.task.id === "explore-a")?.overBudget).toBe(true);
   const context = right(researchTaskContext(graph, "verify"));
   expect(context["dependencyResults"]).toEqual(expect.arrayContaining([expect.objectContaining({ taskId: "explore-a", negative: true })]));
+  expect(context["dependencyResults"]).toEqual(expect.arrayContaining([expect.objectContaining({ taskId: "explore-a", actor: "astra-a", model: "astra", usedTokens: 12, overBudget: true, usageStatus: "REPORTED" })]));
+});
+
+it("records unavailable FINISH usage without declaring a budget outcome", () => {
+  let graph = right(parsed());
+  graph = event(graph, { type: "START", id: "unknown-start", taskId: "explore-a", actor: "telemetryless", model: "astra", at: at(1) });
+  graph = event(graph, { type: "FINISH", id: "unknown-finish", taskId: "explore-a", actor: "telemetryless", at: at(2), disposition: "INCONCLUSIVE", summary: "No token telemetry was supplied.", sourceIds: [source.id], usedTokens: null });
+  const entry = researchGraphState(graph).tasks.find((item) => item.task.id === "explore-a");
+  expect(entry?.usageStatus).toBe("UNKNOWN");
+  expect(entry?.overBudget).toBeNull();
+  const context = right(researchTaskContext(graph, "critic"));
+  expect(context["dependencyResults"]).toEqual(expect.arrayContaining([expect.objectContaining({ taskId: "explore-a", usedTokens: null, overBudget: null, usageStatus: "UNKNOWN", actor: "telemetryless", model: "astra" })]));
 });
 
 it("rejects premature, cyclic, same-actor verification, and hostile input", () => {

@@ -1,0 +1,343 @@
+{
+  "schema_version": "hswm-calibration-structure-observation/v1",
+  "authority": "SECONDARY_AI_ENGINEERING_OBSERVATION",
+  "status": "AUTHORED_FIXED_PROGRAM_STRUCTURAL_CHECK",
+  "claim_ceiling": "NO_MODEL_SCORE_NO_LEARNING_RESULT_NO_NEW_INDEPENDENT_HOLDOUT_NO_HSWM_EFFICACY",
+  "selection": "Hand-written ordered composition of existing public primitives after source inspection; no outcome-dependent search.",
+  "protocol": "_research/causal_composition/relation_llm_comparison_v1/protocol.v1.json",
+  "program": {
+    "tag": "Traverse",
+    "input": {
+      "tag": "Traverse",
+      "input": {
+        "tag": "Traverse",
+        "input": {
+          "tag": "Here"
+        },
+        "meaning": "Declared KG relation: INVALIDATES",
+        "fromRole": "change",
+        "toRole": "artifact"
+      },
+      "meaning": "Declared KG relation: REQUIRES",
+      "fromRole": "artifact",
+      "toRole": "requirement"
+    },
+    "meaning": "Declared KG relation: CHECKS",
+    "fromRole": "requirement",
+    "toRole": "check"
+  },
+  "bindings": [
+    {
+      "path": "_research/causal_composition/relation_calibration_structure_v1/run.mts",
+      "sha256": "0cf08f47544b67a25542ea1528c3e45ddfb3b3410b1d4394eedc155e441c9681"
+    },
+    {
+      "path": "_research/causal_composition/relation_llm_comparison_v1/protocol.v1.json",
+      "sha256": "a3a8842fae63d87a70fb0b45300b44aa3c42eb64709eb61a5bfae28838055918"
+    },
+    {
+      "path": "_research/causal_composition/relation_synthesis_usl_v1/fixtures.mts",
+      "sha256": "626cabaae217b1135ce4bd2cc07af3f20811efaa66439bb55080baaccd193ed5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-relation-comparison.ts",
+      "sha256": "81eae2a5cb3529a3f5da16402e12729849987f5550fa033ea5728842213eb93b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/relation-program-research.ts",
+      "sha256": "afffed9362189183fe301b983b6b4c4bb27392deb53e4c99645184265355e916"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "924887b157634d7c32bea4b0c4080d8c7cfab0e07c12eb58062853ebbdbe2906"
+    }
+  ],
+  "runtime": {
+    "version": "v24.13.0",
+    "binarySha256": "53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc"
+  },
+  "totals": {
+    "training": 8,
+    "calibration": 6,
+    "cases": 14,
+    "modelCalls": 0,
+    "learningUpdates": 0
+  },
+  "rows": [
+    {
+      "split": "training",
+      "seed": 11,
+      "taskId": "catalog-11",
+      "expected": [
+        "fixture:0b6eb2631d5b75f690fb",
+        "fixture:86e548f0ef2c5e7e6ad4",
+        "fixture:ba71b8894463be2bc27b"
+      ],
+      "actual": [
+        "fixture:0b6eb2631d5b75f690fb",
+        "fixture:86e548f0ef2c5e7e6ad4",
+        "fixture:ba71b8894463be2bc27b"
+      ],
+      "exact": true,
+      "nodeSteps": 52
+    },
+    {
+      "split": "training",
+      "seed": 12,
+      "taskId": "catalog-12",
+      "expected": [
+        "fixture:2436873fb88830cb7293"
+      ],
+      "actual": [
+        "fixture:2436873fb88830cb7293"
+      ],
+      "exact": true,
+      "nodeSteps": 43
+    },
+    {
+      "split": "training",
+      "seed": 13,
+      "taskId": "catalog-13",
+      "expected": [
+        "fixture:806183c414fd09a79076",
+        "fixture:bd10450f57a139d9d450",
+        "fixture:c9c1a625f5bace1833e2"
+      ],
+      "actual": [
+        "fixture:806183c414fd09a79076",
+        "fixture:bd10450f57a139d9d450",
+        "fixture:c9c1a625f5bace1833e2"
+      ],
+      "exact": true,
+      "nodeSteps": 52
+    },
+    {
+      "split": "training",
+      "seed": 14,
+      "taskId": "catalog-14",
+      "expected": [
+        "fixture:f1ec697f68b4bf1e6d29"
+      ],
+      "actual": [
+        "fixture:f1ec697f68b4bf1e6d29"
+      ],
+      "exact": true,
+      "nodeSteps": 43
+    },
+    {
+      "split": "training",
+      "seed": 15,
+      "taskId": "catalog-15",
+      "expected": [
+        "fixture:18da772b1183916e3839",
+        "fixture:8ff4eedf3b07cb566249",
+        "fixture:913d61e4a4cad7c9f866"
+      ],
+      "actual": [
+        "fixture:18da772b1183916e3839",
+        "fixture:8ff4eedf3b07cb566249",
+        "fixture:913d61e4a4cad7c9f866"
+      ],
+      "exact": true,
+      "nodeSteps": 52
+    },
+    {
+      "split": "training",
+      "seed": 16,
+      "taskId": "catalog-16",
+      "expected": [
+        "fixture:54e110e4eb490a3dea0b"
+      ],
+      "actual": [
+        "fixture:54e110e4eb490a3dea0b"
+      ],
+      "exact": true,
+      "nodeSteps": 43
+    },
+    {
+      "split": "training",
+      "seed": 17,
+      "taskId": "catalog-17",
+      "expected": [
+        "fixture:164dfc130cfad59b23a3",
+        "fixture:c41f692d8a395f8bfd00",
+        "fixture:d5a25607c2afc5b90fa7"
+      ],
+      "actual": [
+        "fixture:164dfc130cfad59b23a3",
+        "fixture:c41f692d8a395f8bfd00",
+        "fixture:d5a25607c2afc5b90fa7"
+      ],
+      "exact": true,
+      "nodeSteps": 52
+    },
+    {
+      "split": "training",
+      "seed": 18,
+      "taskId": "catalog-18",
+      "expected": [
+        "fixture:48b47695afe4d4bcb207"
+      ],
+      "actual": [
+        "fixture:48b47695afe4d4bcb207"
+      ],
+      "exact": true,
+      "nodeSteps": 43
+    },
+    {
+      "split": "calibration",
+      "seed": 401,
+      "taskId": "catalog-401",
+      "expected": [
+        "fixture:1e35b99a8f0bcba0beb1",
+        "fixture:22baf277407c56985905",
+        "fixture:61ed5514345ffec5e6c7",
+        "fixture:73a813d3cd6f18e59982",
+        "fixture:78a4dc67f2437c265bf4",
+        "fixture:e2f8b53a8c0426c97b98",
+        "fixture:ebbf7d00ebee3c229843",
+        "fixture:f7343b7fb3128d146e50"
+      ],
+      "actual": [
+        "fixture:1e35b99a8f0bcba0beb1",
+        "fixture:22baf277407c56985905",
+        "fixture:61ed5514345ffec5e6c7",
+        "fixture:73a813d3cd6f18e59982",
+        "fixture:78a4dc67f2437c265bf4",
+        "fixture:e2f8b53a8c0426c97b98",
+        "fixture:ebbf7d00ebee3c229843",
+        "fixture:f7343b7fb3128d146e50"
+      ],
+      "exact": true,
+      "nodeSteps": 79
+    },
+    {
+      "split": "calibration",
+      "seed": 402,
+      "taskId": "catalog-402",
+      "expected": [
+        "fixture:00d701560423f4b51c7f",
+        "fixture:5dc15140407e79596e81",
+        "fixture:6c0fabb21af3bb4bc672",
+        "fixture:d0d31215a46e42dc0be6",
+        "fixture:d5719ac63d80552f52a0",
+        "fixture:f3b45efe00f5de0d0838"
+      ],
+      "actual": [
+        "fixture:00d701560423f4b51c7f",
+        "fixture:5dc15140407e79596e81",
+        "fixture:6c0fabb21af3bb4bc672",
+        "fixture:d0d31215a46e42dc0be6",
+        "fixture:d5719ac63d80552f52a0",
+        "fixture:f3b45efe00f5de0d0838"
+      ],
+      "exact": true,
+      "nodeSteps": 70
+    },
+    {
+      "split": "calibration",
+      "seed": 403,
+      "taskId": "catalog-403",
+      "expected": [
+        "fixture:0d1171496a7c1da2363d",
+        "fixture:15973ffae3293fbf4f83",
+        "fixture:1e99f3b60487b1d0bfd9",
+        "fixture:5a049d7b5259dcc41630",
+        "fixture:830963fe342c3c2d8fbd",
+        "fixture:a56f465bc61a30e3bbc2",
+        "fixture:db6878d5eb7bb88bf6b2",
+        "fixture:f16de9a32e31e40115ac"
+      ],
+      "actual": [
+        "fixture:0d1171496a7c1da2363d",
+        "fixture:15973ffae3293fbf4f83",
+        "fixture:1e99f3b60487b1d0bfd9",
+        "fixture:5a049d7b5259dcc41630",
+        "fixture:830963fe342c3c2d8fbd",
+        "fixture:a56f465bc61a30e3bbc2",
+        "fixture:db6878d5eb7bb88bf6b2",
+        "fixture:f16de9a32e31e40115ac"
+      ],
+      "exact": true,
+      "nodeSteps": 79
+    },
+    {
+      "split": "calibration",
+      "seed": 404,
+      "taskId": "catalog-404",
+      "expected": [
+        "fixture:2b396fb0f549766a9414",
+        "fixture:3997f881a7e214e4a4ce",
+        "fixture:3ed675884ac505732b93",
+        "fixture:73ad419a43a427b28803",
+        "fixture:ebb6e356f0e3e3ce928e",
+        "fixture:efdeb5baeeedaed5853f"
+      ],
+      "actual": [
+        "fixture:2b396fb0f549766a9414",
+        "fixture:3997f881a7e214e4a4ce",
+        "fixture:3ed675884ac505732b93",
+        "fixture:73ad419a43a427b28803",
+        "fixture:ebb6e356f0e3e3ce928e",
+        "fixture:efdeb5baeeedaed5853f"
+      ],
+      "exact": true,
+      "nodeSteps": 70
+    },
+    {
+      "split": "calibration",
+      "seed": 405,
+      "taskId": "catalog-405",
+      "expected": [
+        "fixture:0620e40135ca4d547969",
+        "fixture:569c3a2f2914e77de879",
+        "fixture:750946b087276829f788",
+        "fixture:752b3fb68844eecac83b",
+        "fixture:7806ef26f6d1ed7e5401",
+        "fixture:8b9e298e7e79ebb3f42c",
+        "fixture:c6cb19d8f337ecb50d37",
+        "fixture:f47cc32525adec3e889f"
+      ],
+      "actual": [
+        "fixture:0620e40135ca4d547969",
+        "fixture:569c3a2f2914e77de879",
+        "fixture:750946b087276829f788",
+        "fixture:752b3fb68844eecac83b",
+        "fixture:7806ef26f6d1ed7e5401",
+        "fixture:8b9e298e7e79ebb3f42c",
+        "fixture:c6cb19d8f337ecb50d37",
+        "fixture:f47cc32525adec3e889f"
+      ],
+      "exact": true,
+      "nodeSteps": 79
+    },
+    {
+      "split": "calibration",
+      "seed": 406,
+      "taskId": "catalog-406",
+      "expected": [
+        "fixture:31d6189023d524498463",
+        "fixture:549565207cc86138b464",
+        "fixture:857e1fe6ec4c5b3e45c0",
+        "fixture:a3662eacca204807301b",
+        "fixture:c0a4118b51e74fe49f54",
+        "fixture:f294cdd068973c3c3c75"
+      ],
+      "actual": [
+        "fixture:31d6189023d524498463",
+        "fixture:549565207cc86138b464",
+        "fixture:857e1fe6ec4c5b3e45c0",
+        "fixture:a3662eacca204807301b",
+        "fixture:c0a4118b51e74fe49f54",
+        "fixture:f294cdd068973c3c3c75"
+      ],
+      "exact": true,
+      "nodeSteps": 70
+    }
+  ],
+  "limitations": [
+    "Known authored schema and generator; task answers share that construction.",
+    "Does not measure whether any model discovers this program or saturates the calibration.",
+    "Does not meet matched model-cost comparison or independent outcome custody."
+  ]
+}

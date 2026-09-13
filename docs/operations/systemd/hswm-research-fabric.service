@@ -9,9 +9,10 @@ Type=oneshot
 RemainAfterExit=yes
 WorkingDirectory=/home/lagyeongjun/CD/HSWM
 Environment=HSWM_RESEARCH_FABRIC_STATE_DIR=/home/lagyeongjun/.local/state/hswm-research-fabric
-ExecStart=/home/lagyeongjun/.local/bin/uv run --locked hswm-research-fabric start --timeout 120
-ExecStartPost=/home/lagyeongjun/.local/bin/uv run --locked hswm-research-fabric doctor
-ExecStop=/home/lagyeongjun/.local/bin/uv run --locked hswm-research-fabric stop
+Environment=PATH=/home/lagyeongjun/.local/opt/node-v24.13.0-linux-x64/bin:/home/lagyeongjun/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/home/lagyeongjun/.local/opt/node-v24.13.0-linux-x64/bin/node /home/lagyeongjun/CD/HSWM/src/hswm/effect-runtime/dist/native-research-fabric-process.js start --timeout 120
+ExecStartPost=/home/lagyeongjun/.local/opt/node-v24.13.0-linux-x64/bin/node /home/lagyeongjun/CD/HSWM/src/hswm/effect-runtime/dist/native-research-fabric-process.js doctor
+ExecStop=/home/lagyeongjun/.local/opt/node-v24.13.0-linux-x64/bin/node /home/lagyeongjun/CD/HSWM/src/hswm/effect-runtime/dist/native-research-fabric-process.js stop
 TimeoutStartSec=180
 TimeoutStopSec=60
 KillMode=control-group

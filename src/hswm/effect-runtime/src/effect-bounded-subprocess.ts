@@ -22,6 +22,12 @@ export interface SubprocessCommand {
   readonly stdin?: Uint8Array
   /** Isolate and terminate the whole POSIX process group for effectful tool cells. */
   readonly killProcessGroup?: boolean
+  /**
+   * Parent descriptors deliberately inherited at fixed child descriptor
+   * numbers.  This is for descriptor-addressed executables and inputs such as
+   * `/proc/self/fd/3`; callers retain ownership of the parent descriptors.
+   */
+  readonly inheritedDescriptors?: ReadonlyArray<Readonly<{ parentFd: number; childFd: number }>>
 }
 
 export interface SubprocessObservation {
@@ -75,9 +81,14 @@ const observeWithNode = (command: SubprocessCommand): Effect.Effect<SubprocessOb
     }
     let child: ReturnType<typeof spawn>
     try {
+      const inherited = command.inheritedDescriptors ?? []
+      const maximumChildFd = inherited.reduce((maximum, descriptor) => Math.max(maximum, descriptor.childFd), 2)
+      const stdio: Array<"ignore" | "pipe" | number> = [command.stdin === undefined ? "ignore" : "pipe", "pipe", "pipe"]
+      while (stdio.length <= maximumChildFd) stdio.push("ignore")
+      for (const descriptor of inherited) stdio[descriptor.childFd] = descriptor.parentFd
       child = spawn(executable, rest, {
         cwd: command.cwd, env: command.environment, shell: false,
-        stdio: [command.stdin === undefined ? "ignore" : "pipe", "pipe", "pipe"],
+        stdio,
         detached: command.killProcessGroup === true
       })
     } catch (cause) {
@@ -148,7 +159,12 @@ const nodeBoundedSubprocess: BoundedSubprocessShape = {
       if (
         !Number.isSafeInteger(command.timeoutMs) || command.timeoutMs < 1 ||
         !Number.isSafeInteger(command.maximumOutputBytes) || command.maximumOutputBytes < 1 ||
-        command.argv.length < 1
+        command.argv.length < 1 ||
+        (command.inheritedDescriptors ?? []).some((descriptor) =>
+          !Number.isSafeInteger(descriptor.parentFd) || descriptor.parentFd < 0 ||
+          !Number.isSafeInteger(descriptor.childFd) || descriptor.childFd < 3
+        ) ||
+        new Set((command.inheritedDescriptors ?? []).map((descriptor) => descriptor.childFd)).size !== (command.inheritedDescriptors ?? []).length
       ) {
         return Effect.fail(new SubprocessError({ code: "COMMAND_INVALID", detail: "subprocess command bounds are invalid" }))
       }

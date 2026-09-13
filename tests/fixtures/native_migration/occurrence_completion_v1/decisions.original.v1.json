@@ -1,0 +1,490 @@
+{
+  "authority": "ORIGINAL_PYTHON_ENGINEERING_CONTRACT_NOT_EXTERNAL_EVIDENCE",
+  "source_pins": [
+    {
+      "path": "src/hswm/infrastructure/occurrence_completion.py",
+      "sha256": "d6404fba984c65eaffbd7017e0ff16a52e156dd78c5caea55fdc470ab3247c29"
+    },
+    {
+      "path": "tests/test_occurrence_completion.py",
+      "sha256": "6cdf4114c0f20df3908fe3497aad7941f7e0f4bcec2499311e03a42e27131603"
+    }
+  ],
+  "cases": [
+    {
+      "name": "candidate",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "candidate evidence is pending external audit verification and Temporal finalization",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "PENDING_EXTERNAL_AUDIT",
+        "workflow_evidence_sha256s": [
+          "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17",
+          "0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc",
+          "72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b",
+          "e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0",
+          "5555555555555555555555555555555555555555555555555555555555555555",
+          "ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3",
+          "65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be"
+        ],
+        "workflow_sha256": "d0e06118117b6136044257b11f94761d869ab7c6f5ebfeb6a204d5dd90e99e71",
+        "receipt_sha256": "c944bfabfae8ee3f4ecb7db434ea64c2b7fff5500cbd90126720f1c861aa86bb"
+      }
+    },
+    {
+      "name": "dual-absent",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": null,
+        "dual_evaluation_evidence_sha256": null,
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "A/B agreement candidate is absent, unverified, or not reproducible",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "BLOCKED",
+        "workflow_evidence_sha256s": [
+          "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17",
+          "0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc",
+          "72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b",
+          "e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0",
+          "5555555555555555555555555555555555555555555555555555555555555555",
+          "ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3",
+          "65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be"
+        ],
+        "workflow_sha256": "d0e06118117b6136044257b11f94761d869ab7c6f5ebfeb6a204d5dd90e99e71",
+        "receipt_sha256": "2a341434b23e61a7687aa02b4bf6593c4af50b4b50e9c633ec07b906af30c215"
+      }
+    },
+    {
+      "name": "judgments-absent",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "A/B agreement candidate is absent, unverified, or not reproducible",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "BLOCKED",
+        "workflow_evidence_sha256s": [
+          "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17",
+          "0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc",
+          "72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b",
+          "e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0",
+          "5555555555555555555555555555555555555555555555555555555555555555",
+          "ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3",
+          "65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be"
+        ],
+        "workflow_sha256": "d0e06118117b6136044257b11f94761d869ab7c6f5ebfeb6a204d5dd90e99e71",
+        "receipt_sha256": "88d010f560edeb00472146567ce93b12477e42d86b8cbdd9f2f8e020289c987c"
+      }
+    },
+    {
+      "name": "judgment-a-absent",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "A/B agreement candidate is absent, unverified, or not reproducible",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "BLOCKED",
+        "workflow_evidence_sha256s": [
+          "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17",
+          "0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc",
+          "72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b",
+          "e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0",
+          "5555555555555555555555555555555555555555555555555555555555555555",
+          "ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3",
+          "65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be"
+        ],
+        "workflow_sha256": "d0e06118117b6136044257b11f94761d869ab7c6f5ebfeb6a204d5dd90e99e71",
+        "receipt_sha256": "88d010f560edeb00472146567ce93b12477e42d86b8cbdd9f2f8e020289c987c"
+      }
+    },
+    {
+      "name": "dual-blocked",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "256bf6ee664d61e7d8e6f076dc7ca363e6d805be5a1c760fd77b6f24871fef3e",
+        "dual_evaluation_evidence_sha256": "28f2ae771d7269cc36cc5ea5904353635766b1d2cade9c30bf4cdf2be8773e2b",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "A/B agreement candidate is absent, unverified, or not reproducible",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "BLOCKED",
+        "workflow_evidence_sha256s": [
+          "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17",
+          "0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc",
+          "72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b",
+          "e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0",
+          "5555555555555555555555555555555555555555555555555555555555555555",
+          "ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3",
+          "65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be"
+        ],
+        "workflow_sha256": "d0e06118117b6136044257b11f94761d869ab7c6f5ebfeb6a204d5dd90e99e71",
+        "receipt_sha256": "ffd8f5112c478d4a160a29b01a85a5f2918024622cef02350db87ea1bc99d448"
+      }
+    },
+    {
+      "name": "registered",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "workflow is not at an exact completion phase",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "BLOCKED",
+        "workflow_evidence_sha256s": [
+          "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17"
+        ],
+        "workflow_sha256": "0e3c2c92a82a718dd39561065d2f5c7f0830a099f19146e52a10aee5ff3ec488",
+        "receipt_sha256": "70ca424183d5a3d45f7013a13033af09517106366efd9d981acf1c16c1730ab8"
+      }
+    },
+    {
+      "name": "wrong-history",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "workflow history does not match the central integrity chain",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "BLOCKED",
+        "workflow_evidence_sha256s": [
+          "0000000000000000000000000000000000000000000000000000000000000001",
+          "0000000000000000000000000000000000000000000000000000000000000002",
+          "0000000000000000000000000000000000000000000000000000000000000003",
+          "0000000000000000000000000000000000000000000000000000000000000004",
+          "0000000000000000000000000000000000000000000000000000000000000005",
+          "0000000000000000000000000000000000000000000000000000000000000006",
+          "0000000000000000000000000000000000000000000000000000000000000007"
+        ],
+        "workflow_sha256": "5b018ec5442925f04783e9937f9b9fe069a005af6507f21852fd03912d54137b",
+        "receipt_sha256": "f1c5af884cb4dde5b72756b7d3900734999256e41ea518cba61f54a741ba7fcc"
+      }
+    },
+    {
+      "name": "workflow-void",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "one-shot workflow became VOID",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "VOID",
+        "workflow_evidence_sha256s": [
+          "0000000000000000000000000000000000000000000000000000000000000001"
+        ],
+        "workflow_sha256": "c8eb52da240fc8cb749705f5406777eb2873edccf948859d710026655b83fb75",
+        "receipt_sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+      }
+    },
+    {
+      "name": "central-blocked",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "6af28934e25b6cbf3c039fcbd5eb7734c9ee1160a6e85a3efd49e0090758ed6b",
+        "integrity_chain_sha256": "be176f3286a02994980c3fa72958e86a624dd3ccb3521dc86042e12a8a3c6aa9",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "central integrity lacks an external-audit candidate",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "BLOCKED",
+        "workflow_evidence_sha256s": [
+          "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17",
+          "0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc",
+          "72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b",
+          "e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0",
+          "5555555555555555555555555555555555555555555555555555555555555555",
+          "ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3",
+          "65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be"
+        ],
+        "workflow_sha256": "d0e06118117b6136044257b11f94761d869ab7c6f5ebfeb6a204d5dd90e99e71",
+        "receipt_sha256": "f736277a5b41926711dd2521a45c896204e6823ad3c5ae4f7a52ee7df7aac053"
+      }
+    },
+    {
+      "name": "early-finalization",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "finalization input was supplied before candidate issuance",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "BLOCKED",
+        "workflow_evidence_sha256s": [
+          "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17",
+          "0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc",
+          "72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b",
+          "e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0",
+          "5555555555555555555555555555555555555555555555555555555555555555",
+          "ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3",
+          "65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be"
+        ],
+        "workflow_sha256": "d0e06118117b6136044257b11f94761d869ab7c6f5ebfeb6a204d5dd90e99e71",
+        "receipt_sha256": "7a4aa6067797c66c056b4a1f03d8d93a73ddbd4e093a80e5314fda9c29a4ff57"
+      }
+    },
+    {
+      "name": "terminal-no-candidate",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "Temporal SEALED lacks the pending audit candidate receipt",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "BLOCKED",
+        "workflow_evidence_sha256s": [
+          "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17",
+          "0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc",
+          "72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b",
+          "e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0",
+          "5555555555555555555555555555555555555555555555555555555555555555",
+          "ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3",
+          "65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be",
+          "c944bfabfae8ee3f4ecb7db434ea64c2b7fff5500cbd90126720f1c861aa86bb"
+        ],
+        "workflow_sha256": "e8762d0ae33c3354076fb39c1f48eaa5663f68f773b656f151be5af433552df5",
+        "receipt_sha256": "f48513f5f12f6780e0a9e9b5d7cb15baa03175f4b9436ff78cdf81c9095d93ab"
+      }
+    },
+    {
+      "name": "terminal-wrong-candidate-extension",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "Temporal SEALED does not exactly extend the pending audit candidate",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "BLOCKED",
+        "workflow_evidence_sha256s": [
+          "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17",
+          "0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc",
+          "72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b",
+          "e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0",
+          "5555555555555555555555555555555555555555555555555555555555555555",
+          "ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3",
+          "65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be",
+          "8888888888888888888888888888888888888888888888888888888888888888"
+        ],
+        "workflow_sha256": "b8f003d46bd8e6169b44863b2cd6f0ead9a7f7365a81c5832f6f23c6bbc4f427",
+        "receipt_sha256": "e120559d071d1ef2fc4573c79344305e273e64655046c1fd9d3562b523d85cbc"
+      }
+    },
+    {
+      "name": "terminal-no-audit",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "qualified external audit material is absent",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "BLOCKED",
+        "workflow_evidence_sha256s": [
+          "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17",
+          "0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc",
+          "72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b",
+          "e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0",
+          "5555555555555555555555555555555555555555555555555555555555555555",
+          "ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3",
+          "65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be",
+          "c944bfabfae8ee3f4ecb7db434ea64c2b7fff5500cbd90126720f1c861aa86bb"
+        ],
+        "workflow_sha256": "e8762d0ae33c3354076fb39c1f48eaa5663f68f773b656f151be5af433552df5",
+        "receipt_sha256": "a0f306bde2d2648a2dcc87ca1c1c202fa62637b92be9b3216c57faf74fe4afa3"
+      }
+    },
+    {
+      "name": "terminal-before-candidate",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "Temporal finalization predates the pending audit candidate",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:00:59.999999Z",
+        "terminal_status": "BLOCKED",
+        "workflow_evidence_sha256s": [
+          "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17",
+          "0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc",
+          "72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b",
+          "e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0",
+          "5555555555555555555555555555555555555555555555555555555555555555",
+          "ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3",
+          "65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be",
+          "c944bfabfae8ee3f4ecb7db434ea64c2b7fff5500cbd90126720f1c861aa86bb"
+        ],
+        "workflow_sha256": "e8762d0ae33c3354076fb39c1f48eaa5663f68f773b656f151be5af433552df5",
+        "receipt_sha256": "40d7ce7d36e94d6602059099b5dd653da43342dc211add9729f93eac0a08e81a"
+      }
+    },
+    {
+      "name": "pending-as-previous",
+      "outcome": "ERROR",
+      "message": "only final SEALED or VOID receipts are immutable prior receipts"
+    },
+    {
+      "name": "invalid-calendar",
+      "outcome": "ERROR",
+      "message": "terminal_at must be RFC 3339"
+    },
+    {
+      "name": "invalid-no-offset",
+      "outcome": "ERROR",
+      "message": "terminal_at must include a UTC offset"
+    },
+    {
+      "name": "micro-before-start",
+      "outcome": "ERROR",
+      "message": "terminal_at precedes started_at"
+    },
+    {
+      "name": "iso-week-offset",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "candidate evidence is pending external audit verification and Temporal finalization",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-W36-4T02:00:00+02:00",
+        "terminal_status": "PENDING_EXTERNAL_AUDIT",
+        "workflow_evidence_sha256s": [
+          "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17",
+          "0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc",
+          "72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b",
+          "e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0",
+          "5555555555555555555555555555555555555555555555555555555555555555",
+          "ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3",
+          "65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be"
+        ],
+        "workflow_sha256": "d0e06118117b6136044257b11f94761d869ab7c6f5ebfeb6a204d5dd90e99e71",
+        "receipt_sha256": "79600a668d44cb950e287ee2bbb6478c43ae1596ec456ffbac6a7c0aba7e1b24"
+      }
+    },
+    {
+      "name": "void-idempotent",
+      "outcome": "RETURN",
+      "receipt": {
+        "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+        "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+        "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+        "external_audit_verification_sha256": null,
+        "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+        "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+        "occurrence_uid": "g0-occurrence-1",
+        "reason": "one-shot workflow became VOID",
+        "schema_version": "hswm-occurrence-completion/v1",
+        "started_at": "2026-09-03T00:00:00Z",
+        "terminal_at": "2026-09-03T00:01:00Z",
+        "terminal_status": "VOID",
+        "workflow_evidence_sha256s": [
+          "0000000000000000000000000000000000000000000000000000000000000001"
+        ],
+        "workflow_sha256": "c8eb52da240fc8cb749705f5406777eb2873edccf948859d710026655b83fb75",
+        "receipt_sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+      }
+    },
+    {
+      "name": "void-stale-time",
+      "outcome": "ERROR",
+      "message": "previous receipt does not match fresh completion inputs"
+    }
+  ]
+}

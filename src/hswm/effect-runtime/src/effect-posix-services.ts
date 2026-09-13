@@ -8,12 +8,14 @@
  */
 export * from "./effect-posix-filesystem.js"
 export * from "./effect-bounded-subprocess.js"
+export * from "./native-pinned-verifier-runtime.js"
 
 import { Layer } from "effect"
 
 import { NodeBoundedSubprocessLive, type BoundedSubprocess } from "./effect-bounded-subprocess.js"
 import { NodePosixFileSystemLive, type PosixFileSystem } from "./effect-posix-filesystem.js"
+import { NodePinnedVerifierLive, type NativePinnedVerifier } from "./native-pinned-verifier-runtime.js"
 
 /** Both Node adapters; the only layer an executable's composition root needs for POSIX effects. */
-export const NodePosixServicesLive: Layer.Layer<PosixFileSystem | BoundedSubprocess> =
-  Layer.merge(NodePosixFileSystemLive, NodeBoundedSubprocessLive)
+export const NodePosixServicesLive: Layer.Layer<PosixFileSystem | BoundedSubprocess | NativePinnedVerifier> =
+  Layer.merge(Layer.merge(NodePosixFileSystemLive, NodeBoundedSubprocessLive), NodePinnedVerifierLive)

@@ -45,9 +45,6 @@ jobs:
           - name: prom-and-research-tests
             python-version: "3.11"
             command: uv run --locked --extra dev pytest -q prom_search_hswm _research/shared_field_hypothesis
-          - name: selected-efficacy-claim-snapshot
-            python-version: "3.11"
-            command: uv run --locked hswm-verify-efficacy --pretty
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -121,7 +118,8 @@ jobs:
           tests/test_fractal_learning_plan_projection.py
           tests/test_standard_graph_view.py
         working-directory: sdist
-      - run: uv run --locked hswm-verify-efficacy --pretty
+      - name: Verify the Python source-distribution compatibility entrypoint
+        run: uv run --locked hswm-verify-efficacy --pretty
         working-directory: sdist
 
   effect-runtime:
@@ -283,6 +281,8 @@ jobs:
           npm run build
           npm run build:dnrd
           npm pack --dry-run
+      - name: Verify the selected efficacy claim snapshot with the native CLI
+        run: src/hswm/effect-runtime/bin/hswm-verify-efficacy --pretty
       - name: Rehearse the manifest-selected DNRD runtime closure
         run: uv run --locked --extra dev pytest -q tests/test_hswm_dnrd_integration.py -k current_runtime_closure
       - name: Admit the G1 instrument through the built Atom v2 local Permit commit process

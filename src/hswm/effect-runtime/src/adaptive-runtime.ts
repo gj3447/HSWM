@@ -1,7 +1,7 @@
 /** Local TypeScript/Effect adaptive lifecycle; this is not a canonical admission or efficacy claim. */
 import { createHash } from "node:crypto";
 import { Data, Effect, Either } from "effect";
-import { type AdaptiveAtom, type AdaptiveAtomRevision, AdaptiveStore, AdaptiveStoreError } from "./adaptive-store.js";
+import { type AdaptiveAtom, type AdaptiveAtomRevision, type AdaptiveManifestMigration, AdaptiveStore, AdaptiveStoreError } from "./adaptive-store.js";
 import { type AdaptiveExecution, AdaptiveHttpClient, type AdaptiveHttpClientShape, executeAdaptiveCell, NativeAdaptiveHttpClient } from "./adaptive-executor.js";
 import { type AdaptiveModel, type Cell, type Context, type GuardExample, type Plan, type Program, type Route, initialModel, plan as decidePlan, proposeSpecialization, updateModel, parseProgram } from "./adaptive-domain.js";
 import { BoundedSubprocess } from "./effect-bounded-subprocess.js";
@@ -28,6 +28,20 @@ const stableJson = (value: unknown): string => {
     return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${stableJson(value[key])}`).join(",")}}`;
 };
 const sha = (value: unknown): string => createHash("sha256").update(stableJson(value), "utf8").digest("hex");
+const HSWM_V3_MANIFEST_DIGEST = "cea027bec4234503202f00ab8cbee2ba1fdbd88374e7a6f07bf0428fcc602841";
+const HSWM_V4_MANIFEST_DIGEST = "84d7c0eb6a686ca8a02534835cab924efee384b9646d9b9c34e14c7fa2c58b66";
+const hswmV4Migration = (program: Program, manifestDigest: string): AdaptiveManifestMigration | undefined => {
+    const commands = new Map(program.cells.filter((cell) => cell.kind === "command").map((cell) => [cell.cell_id, cell.argv]));
+    const exact = (cellId: string, argv: readonly string[]): boolean => JSON.stringify(commands.get(cellId)) === JSON.stringify(argv);
+    return program.graph_id === "hswm-self-development-feedback-v3" && manifestDigest === HSWM_V4_MANIFEST_DIGEST &&
+        exact("runtime", ["npm", "--prefix", "src/hswm/effect-runtime", "run", "test:adaptive"]) &&
+        exact("usl", ["npm", "--prefix", "src/hswm/effect-runtime", "run", "test:usl"]) &&
+        exact("ontology", ["npm", "--prefix", "src/hswm/effect-runtime", "run", "test:ontology"]) &&
+        exact("docs", ["npm", "--prefix", "src/hswm/effect-runtime", "run", "test:docs"]) &&
+        exact("effect-check", ["npm", "--prefix", "src/hswm/effect-runtime", "run", "check"])
+        ? { kind: "HSWM_NATIVE_DEVELOPMENT_PROFILE_V3_TO_V4", graphId: program.graph_id, fromManifestDigest: HSWM_V3_MANIFEST_DIGEST, toManifestDigest: manifestDigest }
+        : undefined;
+};
 const atom = (uid: string, kind: string, owner: string, payload: unknown, refs: ReadonlyArray<{
     readonly role: string;
     readonly uid: string;
@@ -104,7 +118,7 @@ export const makeAdaptiveRuntime = (rawProgram: unknown, workspace: string, opti
         ...program.relations.map((route) => atom(`relation:${route.uid}`, "relation", (cells.get(route.source) as Cell).owner, { ...route, active: true, model: initialModel(), examples: [], parent_relation: null }, [{ role: "source", uid: `cell:${route.source}` }, ...route.members.map((member, index) => ({ role: `member:${index}`, uid: `cell:${member}` })), ...route.reads.map((field) => ({ role: `input:${field}`, uid: `field:${field}` }))])),
         atom("runtime:lease", "lease", root.owner, { episode: null })
     ];
-    yield* storeError(store.initialize(program.graph_id, manifestDigest, initial));
+    yield* storeError(store.initialize(program.graph_id, manifestDigest, initial, hswmV4Migration(program, manifestDigest)));
     const withRuntimeLock = <A, R>(use: Effect.Effect<A, AdaptiveRuntimeError, R>): Effect.Effect<A, AdaptiveRuntimeError, R> => Effect.acquireUseRelease(storeError(store.acquireRuntimeLock(program.graph_id)), (_token) => use, (token) => storeError(store.releaseRuntimeLock(program.graph_id, token)).pipe(Effect.orDie));
     const get = (uid: string): Effect.Effect<AdaptiveAtomRevision, AdaptiveRuntimeError> => Effect.gen(function* () {
         const current = yield* storeError(store.head(program.graph_id, uid));

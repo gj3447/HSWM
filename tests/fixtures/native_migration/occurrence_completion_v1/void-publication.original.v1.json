@@ -1,0 +1,705 @@
+{
+  "source_pins": [
+    {
+      "path": "src/hswm/infrastructure/occurrence_publication.py",
+      "sha256": "e6a6eb739eff01f204b399448ff762c4ef323d0855fbccaf75ec709f896b81fd"
+    },
+    {
+      "path": "tests/test_occurrence_completion.py",
+      "sha256": "6cdf4114c0f20df3908fe3497aad7941f7e0f4bcec2499311e03a42e27131603"
+    }
+  ],
+  "receipt": {
+    "claim_ceiling": "COMPLETION_HANDSHAKE_AND_QUALIFIED_EXTERNAL_AUDIT_BINDING_ONLY_NOT_OUTCOME_TRUTH_NOT_G0_NOT_G1_NOT_CANONICAL_LEARNING",
+    "dual_evaluation_assessment_sha256": "840c10427b23861f53eef728599f1b123097e0f0a8b303273938f1634f07a155",
+    "dual_evaluation_evidence_sha256": "0033e05a2cf5ab695a2756b2a5301f35bab3f9a97f42d31e890b8698780ecd65",
+    "external_audit_verification_sha256": null,
+    "integrity_assessment_sha256": "34f1c4ae0eb1e6f21c16b0f0ad4b70242d8a8c84290a38045dd81898899f9679",
+    "integrity_chain_sha256": "ecd486fa6a67a725c9911e8c17479a37458516b5cd9c4ce9eba73b6ee090868e",
+    "occurrence_uid": "g0-occurrence-1",
+    "reason": "one-shot workflow became VOID",
+    "schema_version": "hswm-occurrence-completion/v1",
+    "started_at": "2026-09-03T00:00:00Z",
+    "terminal_at": "2026-09-03T00:01:00Z",
+    "terminal_status": "VOID",
+    "workflow_evidence_sha256s": [
+      "0000000000000000000000000000000000000000000000000000000000000001"
+    ],
+    "workflow_sha256": "c8eb52da240fc8cb749705f5406777eb2873edccf948859d710026655b83fb75",
+    "receipt_sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+  },
+  "cases": [
+    {
+      "name": "basic",
+      "artifacts": [
+        {
+          "bytes": 977,
+          "media_type": "application/json",
+          "path": "occurrence-terminal-receipt.payload.json",
+          "role": "terminal-receipt-payload",
+          "sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+        }
+      ],
+      "producer": "https://github.com/gj3447/HSWM",
+      "ro_crate": {
+        "@context": "https://w3id.org/ro/crate/1.3/context",
+        "@graph": [
+          {
+            "@id": "./",
+            "@type": "Dataset",
+            "conformsTo": {
+              "@id": "https://w3id.org/ro/crate/1.3"
+            },
+            "hasPart": [
+              {
+                "@id": "occurrence-terminal-receipt.payload.json"
+              }
+            ],
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#claimBoundary": "publication projection only; non-canonical, non-promoting, not an HSWM atom, Permit, outcome owner, evaluator, causal-credit path, or G0 evidence",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#occurrenceUid": "g0-occurrence-1",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#receiptSha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#externalAuditVerificationSha256": null,
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#scopeSha256": "4067f945bd16dd19ae719a1a2909c7e5cda44381eb4e9b7b5de3fe4f69f62078",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#terminalStatus": "VOID",
+            "datePublished": "2026-09-03T00:01:00Z",
+            "description": "Terminal HSWM occurrence publication projection; its explicit receipt and artifact scope is identified by scopeSha256.",
+            "license": "No license is granted by this projection; the distributor must verify and declare the governing license for every artifact before public release.",
+            "name": "HSWM occurrence publication: g0-occurrence-1"
+          },
+          {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+              "@id": "./"
+            },
+            "conformsTo": {
+              "@id": "https://w3id.org/ro/crate/1.3"
+            }
+          },
+          {
+            "@id": "occurrence-terminal-receipt.payload.json",
+            "@type": "File",
+            "contentSize": "977",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json#sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+            "encodingFormat": "application/json",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json#artifactRole": "terminal-receipt-payload"
+          }
+        ]
+      },
+      "openlineage": [
+        {
+          "eventType": "START",
+          "eventTime": "2026-09-03T00:00:00Z",
+          "schemaURL": "https://openlineage.io/spec/2-0-2/OpenLineage.json#/$defs/RunEvent",
+          "producer": "https://github.com/gj3447/HSWM",
+          "job": {
+            "namespace": "hswm.occurrence.publication",
+            "name": "g0-occurrence-1"
+          },
+          "inputs": [
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://github.com/gj3447/HSWM",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 977,
+                  "path": "occurrence-terminal-receipt.payload.json",
+                  "sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+                }
+              }
+            }
+          ],
+          "outputs": [],
+          "run": {
+            "runId": "6a58827f-1621-51e4-b67e-14bd2f47c86b",
+            "facets": {
+              "hswmPublication": {
+                "_producer": "https://github.com/gj3447/HSWM",
+                "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json",
+                "claimBoundary": "publication projection only; non-canonical, non-promoting, not an HSWM atom, Permit, outcome owner, evaluator, causal-credit path, or G0 evidence",
+                "externalAuditVerificationSha256": null,
+                "receiptSha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+                "terminalStatus": "VOID"
+              }
+            }
+          }
+        },
+        {
+          "eventType": "FAIL",
+          "eventTime": "2026-09-03T00:01:00Z",
+          "schemaURL": "https://openlineage.io/spec/2-0-2/OpenLineage.json#/$defs/RunEvent",
+          "producer": "https://github.com/gj3447/HSWM",
+          "job": {
+            "namespace": "hswm.occurrence.publication",
+            "name": "g0-occurrence-1"
+          },
+          "inputs": [
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://github.com/gj3447/HSWM",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 977,
+                  "path": "occurrence-terminal-receipt.payload.json",
+                  "sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+                }
+              }
+            }
+          ],
+          "outputs": [],
+          "run": {
+            "runId": "6a58827f-1621-51e4-b67e-14bd2f47c86b",
+            "facets": {
+              "hswmPublication": {
+                "_producer": "https://github.com/gj3447/HSWM",
+                "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json",
+                "claimBoundary": "publication projection only; non-canonical, non-promoting, not an HSWM atom, Permit, outcome owner, evaluator, causal-credit path, or G0 evidence",
+                "externalAuditVerificationSha256": null,
+                "receiptSha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+                "terminalStatus": "VOID"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "alternate-path",
+      "artifacts": [
+        {
+          "bytes": 977,
+          "media_type": "application/json",
+          "path": "alternate.json",
+          "role": "terminal-receipt-payload",
+          "sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+        }
+      ],
+      "producer": "https://example.org/research",
+      "ro_crate": {
+        "@context": "https://w3id.org/ro/crate/1.3/context",
+        "@graph": [
+          {
+            "@id": "./",
+            "@type": "Dataset",
+            "conformsTo": {
+              "@id": "https://w3id.org/ro/crate/1.3"
+            },
+            "hasPart": [
+              {
+                "@id": "alternate.json"
+              }
+            ],
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#claimBoundary": "publication projection only; non-canonical, non-promoting, not an HSWM atom, Permit, outcome owner, evaluator, causal-credit path, or G0 evidence",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#occurrenceUid": "g0-occurrence-1",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#receiptSha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#externalAuditVerificationSha256": null,
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#scopeSha256": "7feadff8c5cf7393660bbb4369feb1dcfe1ee3cfd6527bcbc8c2c4d8ebd5cb50",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#terminalStatus": "VOID",
+            "datePublished": "2026-09-03T00:01:00Z",
+            "description": "Terminal HSWM occurrence publication projection; its explicit receipt and artifact scope is identified by scopeSha256.",
+            "license": "No license is granted by this projection; the distributor must verify and declare the governing license for every artifact before public release.",
+            "name": "HSWM occurrence publication: g0-occurrence-1"
+          },
+          {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+              "@id": "./"
+            },
+            "conformsTo": {
+              "@id": "https://w3id.org/ro/crate/1.3"
+            }
+          },
+          {
+            "@id": "alternate.json",
+            "@type": "File",
+            "contentSize": "977",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json#sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+            "encodingFormat": "application/json",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json#artifactRole": "terminal-receipt-payload"
+          }
+        ]
+      },
+      "openlineage": [
+        {
+          "eventType": "START",
+          "eventTime": "2026-09-03T00:00:00Z",
+          "schemaURL": "https://openlineage.io/spec/2-0-2/OpenLineage.json#/$defs/RunEvent",
+          "producer": "https://example.org/research",
+          "job": {
+            "namespace": "hswm.occurrence.publication",
+            "name": "g0-occurrence-1"
+          },
+          "inputs": [
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://example.org/research",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 977,
+                  "path": "alternate.json",
+                  "sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+                }
+              }
+            }
+          ],
+          "outputs": [],
+          "run": {
+            "runId": "6a58827f-1621-51e4-b67e-14bd2f47c86b",
+            "facets": {
+              "hswmPublication": {
+                "_producer": "https://example.org/research",
+                "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json",
+                "claimBoundary": "publication projection only; non-canonical, non-promoting, not an HSWM atom, Permit, outcome owner, evaluator, causal-credit path, or G0 evidence",
+                "externalAuditVerificationSha256": null,
+                "receiptSha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+                "terminalStatus": "VOID"
+              }
+            }
+          }
+        },
+        {
+          "eventType": "FAIL",
+          "eventTime": "2026-09-03T00:01:00Z",
+          "schemaURL": "https://openlineage.io/spec/2-0-2/OpenLineage.json#/$defs/RunEvent",
+          "producer": "https://example.org/research",
+          "job": {
+            "namespace": "hswm.occurrence.publication",
+            "name": "g0-occurrence-1"
+          },
+          "inputs": [
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://example.org/research",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 977,
+                  "path": "alternate.json",
+                  "sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+                }
+              }
+            }
+          ],
+          "outputs": [],
+          "run": {
+            "runId": "6a58827f-1621-51e4-b67e-14bd2f47c86b",
+            "facets": {
+              "hswmPublication": {
+                "_producer": "https://example.org/research",
+                "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json",
+                "claimBoundary": "publication projection only; non-canonical, non-promoting, not an HSWM atom, Permit, outcome owner, evaluator, causal-credit path, or G0 evidence",
+                "externalAuditVerificationSha256": null,
+                "receiptSha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+                "terminalStatus": "VOID"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "optional-metadata",
+      "artifacts": [
+        {
+          "bytes": 977,
+          "media_type": "application/json",
+          "path": "occurrence-terminal-receipt.payload.json",
+          "role": "terminal-receipt-payload",
+          "sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+        },
+        {
+          "path": "notes.txt",
+          "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "bytes": 0
+        }
+      ],
+      "producer": "https://example.org/research",
+      "ro_crate": {
+        "@context": "https://w3id.org/ro/crate/1.3/context",
+        "@graph": [
+          {
+            "@id": "./",
+            "@type": "Dataset",
+            "conformsTo": {
+              "@id": "https://w3id.org/ro/crate/1.3"
+            },
+            "hasPart": [
+              {
+                "@id": "notes.txt"
+              },
+              {
+                "@id": "occurrence-terminal-receipt.payload.json"
+              }
+            ],
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#claimBoundary": "publication projection only; non-canonical, non-promoting, not an HSWM atom, Permit, outcome owner, evaluator, causal-credit path, or G0 evidence",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#occurrenceUid": "g0-occurrence-1",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#receiptSha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#externalAuditVerificationSha256": null,
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#scopeSha256": "a67948562953013b039ab394bd9282babc8c2673276df8c07d81cae7921f8107",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#terminalStatus": "VOID",
+            "datePublished": "2026-09-03T00:01:00Z",
+            "description": "Terminal HSWM occurrence publication projection; its explicit receipt and artifact scope is identified by scopeSha256.",
+            "license": "No license is granted by this projection; the distributor must verify and declare the governing license for every artifact before public release.",
+            "name": "HSWM occurrence publication: g0-occurrence-1"
+          },
+          {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+              "@id": "./"
+            },
+            "conformsTo": {
+              "@id": "https://w3id.org/ro/crate/1.3"
+            }
+          },
+          {
+            "@id": "notes.txt",
+            "@type": "File",
+            "contentSize": "0",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json#sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+          },
+          {
+            "@id": "occurrence-terminal-receipt.payload.json",
+            "@type": "File",
+            "contentSize": "977",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json#sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+            "encodingFormat": "application/json",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json#artifactRole": "terminal-receipt-payload"
+          }
+        ]
+      },
+      "openlineage": [
+        {
+          "eventType": "START",
+          "eventTime": "2026-09-03T00:00:00Z",
+          "schemaURL": "https://openlineage.io/spec/2-0-2/OpenLineage.json#/$defs/RunEvent",
+          "producer": "https://example.org/research",
+          "job": {
+            "namespace": "hswm.occurrence.publication",
+            "name": "g0-occurrence-1"
+          },
+          "inputs": [
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://example.org/research",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 0,
+                  "path": "notes.txt",
+                  "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+                }
+              }
+            },
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://example.org/research",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 977,
+                  "path": "occurrence-terminal-receipt.payload.json",
+                  "sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+                }
+              }
+            }
+          ],
+          "outputs": [],
+          "run": {
+            "runId": "6a58827f-1621-51e4-b67e-14bd2f47c86b",
+            "facets": {
+              "hswmPublication": {
+                "_producer": "https://example.org/research",
+                "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json",
+                "claimBoundary": "publication projection only; non-canonical, non-promoting, not an HSWM atom, Permit, outcome owner, evaluator, causal-credit path, or G0 evidence",
+                "externalAuditVerificationSha256": null,
+                "receiptSha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+                "terminalStatus": "VOID"
+              }
+            }
+          }
+        },
+        {
+          "eventType": "FAIL",
+          "eventTime": "2026-09-03T00:01:00Z",
+          "schemaURL": "https://openlineage.io/spec/2-0-2/OpenLineage.json#/$defs/RunEvent",
+          "producer": "https://example.org/research",
+          "job": {
+            "namespace": "hswm.occurrence.publication",
+            "name": "g0-occurrence-1"
+          },
+          "inputs": [
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://example.org/research",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 0,
+                  "path": "notes.txt",
+                  "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+                }
+              }
+            },
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://example.org/research",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 977,
+                  "path": "occurrence-terminal-receipt.payload.json",
+                  "sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+                }
+              }
+            }
+          ],
+          "outputs": [],
+          "run": {
+            "runId": "6a58827f-1621-51e4-b67e-14bd2f47c86b",
+            "facets": {
+              "hswmPublication": {
+                "_producer": "https://example.org/research",
+                "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json",
+                "claimBoundary": "publication projection only; non-canonical, non-promoting, not an HSWM atom, Permit, outcome owner, evaluator, causal-credit path, or G0 evidence",
+                "externalAuditVerificationSha256": null,
+                "receiptSha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+                "terminalStatus": "VOID"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "unicode-order",
+      "artifacts": [
+        {
+          "bytes": 977,
+          "media_type": "application/json",
+          "path": "occurrence-terminal-receipt.payload.json",
+          "role": "terminal-receipt-payload",
+          "sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+        },
+        {
+          "path": ".txt",
+          "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+          "bytes": 1
+        },
+        {
+          "path": "𐀀.txt",
+          "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+          "bytes": 2
+        }
+      ],
+      "producer": "https://example.org/research",
+      "ro_crate": {
+        "@context": "https://w3id.org/ro/crate/1.3/context",
+        "@graph": [
+          {
+            "@id": "./",
+            "@type": "Dataset",
+            "conformsTo": {
+              "@id": "https://w3id.org/ro/crate/1.3"
+            },
+            "hasPart": [
+              {
+                "@id": "occurrence-terminal-receipt.payload.json"
+              },
+              {
+                "@id": ".txt"
+              },
+              {
+                "@id": "𐀀.txt"
+              }
+            ],
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#claimBoundary": "publication projection only; non-canonical, non-promoting, not an HSWM atom, Permit, outcome owner, evaluator, causal-credit path, or G0 evidence",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#occurrenceUid": "g0-occurrence-1",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#receiptSha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#externalAuditVerificationSha256": null,
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#scopeSha256": "c3630d7037a28388e18758a39eff13ad634c1079726806b26e9f4e00e18799ca",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json#terminalStatus": "VOID",
+            "datePublished": "2026-09-03T00:01:00Z",
+            "description": "Terminal HSWM occurrence publication projection; its explicit receipt and artifact scope is identified by scopeSha256.",
+            "license": "No license is granted by this projection; the distributor must verify and declare the governing license for every artifact before public release.",
+            "name": "HSWM occurrence publication: g0-occurrence-1"
+          },
+          {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+              "@id": "./"
+            },
+            "conformsTo": {
+              "@id": "https://w3id.org/ro/crate/1.3"
+            }
+          },
+          {
+            "@id": "occurrence-terminal-receipt.payload.json",
+            "@type": "File",
+            "contentSize": "977",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json#sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+            "encodingFormat": "application/json",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json#artifactRole": "terminal-receipt-payload"
+          },
+          {
+            "@id": ".txt",
+            "@type": "File",
+            "contentSize": "1",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json#sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+          },
+          {
+            "@id": "𐀀.txt",
+            "@type": "File",
+            "contentSize": "2",
+            "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json#sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+          }
+        ]
+      },
+      "openlineage": [
+        {
+          "eventType": "START",
+          "eventTime": "2026-09-03T00:00:00Z",
+          "schemaURL": "https://openlineage.io/spec/2-0-2/OpenLineage.json#/$defs/RunEvent",
+          "producer": "https://example.org/research",
+          "job": {
+            "namespace": "hswm.occurrence.publication",
+            "name": "g0-occurrence-1"
+          },
+          "inputs": [
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://example.org/research",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 977,
+                  "path": "occurrence-terminal-receipt.payload.json",
+                  "sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+                }
+              }
+            },
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "1111111111111111111111111111111111111111111111111111111111111111",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://example.org/research",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 1,
+                  "path": ".txt",
+                  "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+                }
+              }
+            },
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "2222222222222222222222222222222222222222222222222222222222222222",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://example.org/research",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 2,
+                  "path": "𐀀.txt",
+                  "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+                }
+              }
+            }
+          ],
+          "outputs": [],
+          "run": {
+            "runId": "6a58827f-1621-51e4-b67e-14bd2f47c86b",
+            "facets": {
+              "hswmPublication": {
+                "_producer": "https://example.org/research",
+                "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json",
+                "claimBoundary": "publication projection only; non-canonical, non-promoting, not an HSWM atom, Permit, outcome owner, evaluator, causal-credit path, or G0 evidence",
+                "externalAuditVerificationSha256": null,
+                "receiptSha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+                "terminalStatus": "VOID"
+              }
+            }
+          }
+        },
+        {
+          "eventType": "FAIL",
+          "eventTime": "2026-09-03T00:01:00Z",
+          "schemaURL": "https://openlineage.io/spec/2-0-2/OpenLineage.json#/$defs/RunEvent",
+          "producer": "https://example.org/research",
+          "job": {
+            "namespace": "hswm.occurrence.publication",
+            "name": "g0-occurrence-1"
+          },
+          "inputs": [
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://example.org/research",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 977,
+                  "path": "occurrence-terminal-receipt.payload.json",
+                  "sha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b"
+                }
+              }
+            },
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "1111111111111111111111111111111111111111111111111111111111111111",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://example.org/research",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 1,
+                  "path": ".txt",
+                  "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+                }
+              }
+            },
+            {
+              "namespace": "hswm.artifact.sha256",
+              "name": "2222222222222222222222222222222222222222222222222222222222222222",
+              "facets": {
+                "hswmArtifact": {
+                  "_producer": "https://example.org/research",
+                  "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_artifact_facet.v1.schema.json",
+                  "bytes": 2,
+                  "path": "𐀀.txt",
+                  "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+                }
+              }
+            }
+          ],
+          "outputs": [],
+          "run": {
+            "runId": "6a58827f-1621-51e4-b67e-14bd2f47c86b",
+            "facets": {
+              "hswmPublication": {
+                "_producer": "https://example.org/research",
+                "_schemaURL": "https://raw.githubusercontent.com/gj3447/HSWM/6108410a90f5caf8b367bb1fce5282c96744d24e/schemas/hswm_openlineage_occurrence_publication_facet.v1.schema.json",
+                "claimBoundary": "publication projection only; non-canonical, non-promoting, not an HSWM atom, Permit, outcome owner, evaluator, causal-credit path, or G0 evidence",
+                "externalAuditVerificationSha256": null,
+                "receiptSha256": "08d98eca7fd2a7c71d17352af0257f363289ed658b440c0bd33395f1e5695f2b",
+                "terminalStatus": "VOID"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

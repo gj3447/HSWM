@@ -1,5 +1,5 @@
 /** Python JSON number kinds survive the native proposal boundary and its digests. */
-import { decodeGeneralJsonThroughNumberLexemes, type GeneralJson } from "./general-json-domain.js"
+import { decodeGeneralJsonThroughNumberLexemes, type GeneralJson, type GeneralJsonOptions } from "./general-json-domain.js"
 
 class TaskFloat {
   private constructor(readonly value: number) { Object.freeze(this) }
@@ -22,7 +22,7 @@ export const validNativeTaskJson = (value: unknown, depth = 0): value is TaskJso
 export const taskTextCompare = (a: string, b: string): number => Buffer.compare(Buffer.from(a), Buffer.from(b))
 const pointer = (path: string, key: string | number): string => `${path}/${String(key).replaceAll("~", "~0").replaceAll("/", "~1")}`
 const sourceKeyOrder = Symbol("task-json-source-key-order")
-export const decodeNativeTaskJson = (bytes: Uint8Array) => decodeGeneralJsonThroughNumberLexemes(bytes, decoded => {
+export const decodeNativeTaskJson = (bytes: Uint8Array, options: GeneralJsonOptions = {}) => decodeGeneralJsonThroughNumberLexemes(bytes, decoded => {
   const restore = (value: GeneralJson, path: string): TaskJson => {
     if (typeof value === "number") {
       const token = decoded.numberLexemes[path]!
@@ -33,7 +33,7 @@ export const decodeNativeTaskJson = (bytes: Uint8Array) => decodeGeneralJsonThro
     return value as null | boolean | string
   }
   return restore(decoded.value, "")
-})
+}, options)
 export const taskFloatText = (value: number): string => {
   if (Object.is(value, -0)) return "-0.0"
   const expanded = value !== 0 && (Math.abs(value) >= 1e16 || Math.abs(value) < 1e-4) ? value.toExponential() : String(value)

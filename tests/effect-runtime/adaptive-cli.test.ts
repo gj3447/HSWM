@@ -4,6 +4,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { afterAll, beforeAll, expect, it } from "vitest"
+import { DEVELOPMENT_PROFILES } from "../../src/hswm/effect-runtime/src/adaptive-cli.js"
 
 const checkout = fileURLToPath(new URL("../../", import.meta.url))
 const packageRoot = join(checkout, "src/hswm/effect-runtime")
@@ -32,6 +33,8 @@ beforeAll(() => {
   execFileSync(process.execPath, [join(packageRoot, "node_modules/typescript/bin/tsc"), "-p", "tsconfig.build.json"], { cwd: packageRoot, timeout: 60_000 })
   mkdirSync(nodeOnly)
   symlinkSync(process.execPath, join(nodeOnly, "node"))
+  symlinkSync(execFileSync("which", ["npm"], { encoding: "utf8" }).trim(), join(nodeOnly, "npm"))
+  symlinkSync(execFileSync("which", ["git"], { encoding: "utf8" }).trim(), join(nodeOnly, "git"))
 }, 65_000)
 afterAll(() => rmSync(fixture, { recursive: true, force: true }))
 
@@ -84,3 +87,7 @@ it("executes symlinked npm entries and resolves every built-in profile natively"
   }
   expect(readFileSync(join(packageRoot, "bin/hswm-live"), "utf8")).not.toMatch(/python|\buv\b/)
 }, 30_000)
+
+it("selects the state-compatible native HSWM development profile v4", () => {
+  expect(DEVELOPMENT_PROFILES["hswm"]).toBe("adaptive_hswm_development.v4.json")
+})

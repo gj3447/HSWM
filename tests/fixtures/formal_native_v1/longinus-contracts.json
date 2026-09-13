@@ -1,0 +1,729 @@
+[
+  {
+    "kind": "cellular-longinus",
+    "name": "valid",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"CONFOUNDED_EVIDENCE\"}, {\"sourceId\": \"4\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"UNPROVEN_CONDITION\"}]}"
+    },
+    "decision": "ACCEPT",
+    "expected": {
+      "binding_id": "fixture-binding",
+      "checked": 5,
+      "kg_write_state": "NOT_AUTHORIZED_NOT_WRITTEN",
+      "layers": 7,
+      "schema": "hswm-cellular-longinus-verification/v1",
+      "states": {
+        "CONFOUNDED_EVIDENCE": 1,
+        "EXACT": 1,
+        "PARTIAL_MATERIALIZATION": 1,
+        "STRUCTURAL_EXACT": 1,
+        "UNPROVEN_CONDITION": 1
+      },
+      "status": "PASS"
+    },
+    "stdout": "{\"binding_id\": \"fixture-binding\", \"checked\": 5, \"kg_write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\", \"layers\": 7, \"schema\": \"hswm-cellular-longinus-verification/v1\", \"states\": {\"CONFOUNDED_EVIDENCE\": 1, \"EXACT\": 1, \"PARTIAL_MATERIALIZATION\": 1, \"STRUCTURAL_EXACT\": 1, \"UNPROVEN_CONDITION\": 1}, \"status\": \"PASS\"}\n"
+  },
+  {
+    "kind": "cellular-longinus",
+    "name": "duplicate-layer",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\", \"CODE_SYMBOL\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"CONFOUNDED_EVIDENCE\"}, {\"sourceId\": \"4\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"UNPROVEN_CONDITION\"}]}"
+    },
+    "decision": "ACCEPT",
+    "expected": {
+      "binding_id": "fixture-binding",
+      "checked": 5,
+      "kg_write_state": "NOT_AUTHORIZED_NOT_WRITTEN",
+      "layers": 8,
+      "schema": "hswm-cellular-longinus-verification/v1",
+      "states": {
+        "CONFOUNDED_EVIDENCE": 1,
+        "EXACT": 1,
+        "PARTIAL_MATERIALIZATION": 1,
+        "STRUCTURAL_EXACT": 1,
+        "UNPROVEN_CONDITION": 1
+      },
+      "status": "PASS"
+    },
+    "stdout": "{\"binding_id\": \"fixture-binding\", \"checked\": 5, \"kg_write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\", \"layers\": 8, \"schema\": \"hswm-cellular-longinus-verification/v1\", \"states\": {\"CONFOUNDED_EVIDENCE\": 1, \"EXACT\": 1, \"PARTIAL_MATERIALIZATION\": 1, \"STRUCTURAL_EXACT\": 1, \"UNPROVEN_CONDITION\": 1}, \"status\": \"PASS\"}\n"
+  },
+  {
+    "kind": "cellular-longinus",
+    "name": "missing-layer",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"CONFOUNDED_EVIDENCE\"}, {\"sourceId\": \"4\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"UNPROVEN_CONDITION\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-longinus",
+    "name": "write-claim",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"CONFOUNDED_EVIDENCE\"}, {\"sourceId\": \"4\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"UNPROVEN_CONDITION\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-longinus",
+    "name": "duplicate-source",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"CONFOUNDED_EVIDENCE\"}, {\"sourceId\": \"4\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"UNPROVEN_CONDITION\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-longinus",
+    "name": "byte-drift",
+    "files": {
+      "source.txt": "changed\n",
+      "LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"CONFOUNDED_EVIDENCE\"}, {\"sourceId\": \"4\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"UNPROVEN_CONDITION\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-longinus",
+    "name": "line-past-eof",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-3\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"CONFOUNDED_EVIDENCE\"}, {\"sourceId\": \"4\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"UNPROVEN_CONDITION\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-longinus",
+    "name": "symbol-missing",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"ABSENT\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"CONFOUNDED_EVIDENCE\"}, {\"sourceId\": \"4\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"UNPROVEN_CONDITION\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-longinus",
+    "name": "missing-state",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"CONFOUNDED_EVIDENCE\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-runtime-longinus",
+    "name": "valid",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMRuntime.lean": "requestCellStep\nrecordCellOutput\ncellStepRequested\ncellStepCompleted\ninvokeCell\nstaleVersion\nbudgetExhausted\nduplicateActivation\nunknownCell\ninputTypeMismatch\nunknownActivation\noutputTypeMismatch\ndef decide\ndef evolve\ndef effects\ndef replay",
+      "hswm_cellular_runtime.py": "class RequestCellStep\nclass RecordCellOutput\nclass CellStepRequested\nclass CellStepCompleted\nclass InvokeCellEffect\nSTALE_VERSION\nBUDGET_EXHAUSTED\nDUPLICATE_ACTIVATION\nUNKNOWN_CELL\nINPUT_TYPE_MISMATCH\nUNKNOWN_ACTIVATION\nOUTPUT_TYPE_MISMATCH\ndef decide(\ndef evolve(\ndef effects(\ndef replay(",
+      "LONGINUS_HSWM_CELLULAR_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "ACCEPT",
+    "expected": {
+      "binding_id": "fixture-binding",
+      "bindings_checked": 4,
+      "claim_boundary": "Local hashes, ranges, symbols, and layer declarations only; not a KG write or scientific verdict.",
+      "files_checked": 1,
+      "kg_write_state": "NOT_AUTHORIZED_NOT_WRITTEN",
+      "layers": 7,
+      "schema": "hswm-cellular-runtime-longinus-verification/v1",
+      "states": {
+        "ENGINEERING_ONLY": 1,
+        "EXACT": 1,
+        "PARTIAL_MATERIALIZATION": 1,
+        "STRUCTURAL_EXACT": 1
+      },
+      "status": "PASS",
+      "symbol_pairs_checked": 16
+    },
+    "stdout": "{\"binding_id\": \"fixture-binding\", \"bindings_checked\": 4, \"claim_boundary\": \"Local hashes, ranges, symbols, and layer declarations only; not a KG write or scientific verdict.\", \"files_checked\": 1, \"kg_write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\", \"layers\": 7, \"schema\": \"hswm-cellular-runtime-longinus-verification/v1\", \"states\": {\"ENGINEERING_ONLY\": 1, \"EXACT\": 1, \"PARTIAL_MATERIALIZATION\": 1, \"STRUCTURAL_EXACT\": 1}, \"status\": \"PASS\", \"symbol_pairs_checked\": 16}\n"
+  },
+  {
+    "kind": "cellular-runtime-longinus",
+    "name": "duplicate-layer",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMRuntime.lean": "requestCellStep\nrecordCellOutput\ncellStepRequested\ncellStepCompleted\ninvokeCell\nstaleVersion\nbudgetExhausted\nduplicateActivation\nunknownCell\ninputTypeMismatch\nunknownActivation\noutputTypeMismatch\ndef decide\ndef evolve\ndef effects\ndef replay",
+      "hswm_cellular_runtime.py": "class RequestCellStep\nclass RecordCellOutput\nclass CellStepRequested\nclass CellStepCompleted\nclass InvokeCellEffect\nSTALE_VERSION\nBUDGET_EXHAUSTED\nDUPLICATE_ACTIVATION\nUNKNOWN_CELL\nINPUT_TYPE_MISMATCH\nUNKNOWN_ACTIVATION\nOUTPUT_TYPE_MISMATCH\ndef decide(\ndef evolve(\ndef effects(\ndef replay(",
+      "LONGINUS_HSWM_CELLULAR_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\", \"CODE_SYMBOL\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "ACCEPT",
+    "expected": {
+      "binding_id": "fixture-binding",
+      "bindings_checked": 4,
+      "claim_boundary": "Local hashes, ranges, symbols, and layer declarations only; not a KG write or scientific verdict.",
+      "files_checked": 1,
+      "kg_write_state": "NOT_AUTHORIZED_NOT_WRITTEN",
+      "layers": 8,
+      "schema": "hswm-cellular-runtime-longinus-verification/v1",
+      "states": {
+        "ENGINEERING_ONLY": 1,
+        "EXACT": 1,
+        "PARTIAL_MATERIALIZATION": 1,
+        "STRUCTURAL_EXACT": 1
+      },
+      "status": "PASS",
+      "symbol_pairs_checked": 16
+    },
+    "stdout": "{\"binding_id\": \"fixture-binding\", \"bindings_checked\": 4, \"claim_boundary\": \"Local hashes, ranges, symbols, and layer declarations only; not a KG write or scientific verdict.\", \"files_checked\": 1, \"kg_write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\", \"layers\": 8, \"schema\": \"hswm-cellular-runtime-longinus-verification/v1\", \"states\": {\"ENGINEERING_ONLY\": 1, \"EXACT\": 1, \"PARTIAL_MATERIALIZATION\": 1, \"STRUCTURAL_EXACT\": 1}, \"status\": \"PASS\", \"symbol_pairs_checked\": 16}\n"
+  },
+  {
+    "kind": "cellular-runtime-longinus",
+    "name": "missing-layer",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMRuntime.lean": "requestCellStep\nrecordCellOutput\ncellStepRequested\ncellStepCompleted\ninvokeCell\nstaleVersion\nbudgetExhausted\nduplicateActivation\nunknownCell\ninputTypeMismatch\nunknownActivation\noutputTypeMismatch\ndef decide\ndef evolve\ndef effects\ndef replay",
+      "hswm_cellular_runtime.py": "class RequestCellStep\nclass RecordCellOutput\nclass CellStepRequested\nclass CellStepCompleted\nclass InvokeCellEffect\nSTALE_VERSION\nBUDGET_EXHAUSTED\nDUPLICATE_ACTIVATION\nUNKNOWN_CELL\nINPUT_TYPE_MISMATCH\nUNKNOWN_ACTIVATION\nOUTPUT_TYPE_MISMATCH\ndef decide(\ndef evolve(\ndef effects(\ndef replay(",
+      "LONGINUS_HSWM_CELLULAR_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-runtime-longinus",
+    "name": "write-claim",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMRuntime.lean": "requestCellStep\nrecordCellOutput\ncellStepRequested\ncellStepCompleted\ninvokeCell\nstaleVersion\nbudgetExhausted\nduplicateActivation\nunknownCell\ninputTypeMismatch\nunknownActivation\noutputTypeMismatch\ndef decide\ndef evolve\ndef effects\ndef replay",
+      "hswm_cellular_runtime.py": "class RequestCellStep\nclass RecordCellOutput\nclass CellStepRequested\nclass CellStepCompleted\nclass InvokeCellEffect\nSTALE_VERSION\nBUDGET_EXHAUSTED\nDUPLICATE_ACTIVATION\nUNKNOWN_CELL\nINPUT_TYPE_MISMATCH\nUNKNOWN_ACTIVATION\nOUTPUT_TYPE_MISMATCH\ndef decide(\ndef evolve(\ndef effects(\ndef replay(",
+      "LONGINUS_HSWM_CELLULAR_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-runtime-longinus",
+    "name": "duplicate-source",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMRuntime.lean": "requestCellStep\nrecordCellOutput\ncellStepRequested\ncellStepCompleted\ninvokeCell\nstaleVersion\nbudgetExhausted\nduplicateActivation\nunknownCell\ninputTypeMismatch\nunknownActivation\noutputTypeMismatch\ndef decide\ndef evolve\ndef effects\ndef replay",
+      "hswm_cellular_runtime.py": "class RequestCellStep\nclass RecordCellOutput\nclass CellStepRequested\nclass CellStepCompleted\nclass InvokeCellEffect\nSTALE_VERSION\nBUDGET_EXHAUSTED\nDUPLICATE_ACTIVATION\nUNKNOWN_CELL\nINPUT_TYPE_MISMATCH\nUNKNOWN_ACTIVATION\nOUTPUT_TYPE_MISMATCH\ndef decide(\ndef evolve(\ndef effects(\ndef replay(",
+      "LONGINUS_HSWM_CELLULAR_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-runtime-longinus",
+    "name": "byte-drift",
+    "files": {
+      "source.txt": "changed\n",
+      "formal/HSWMRuntime.lean": "requestCellStep\nrecordCellOutput\ncellStepRequested\ncellStepCompleted\ninvokeCell\nstaleVersion\nbudgetExhausted\nduplicateActivation\nunknownCell\ninputTypeMismatch\nunknownActivation\noutputTypeMismatch\ndef decide\ndef evolve\ndef effects\ndef replay",
+      "hswm_cellular_runtime.py": "class RequestCellStep\nclass RecordCellOutput\nclass CellStepRequested\nclass CellStepCompleted\nclass InvokeCellEffect\nSTALE_VERSION\nBUDGET_EXHAUSTED\nDUPLICATE_ACTIVATION\nUNKNOWN_CELL\nINPUT_TYPE_MISMATCH\nUNKNOWN_ACTIVATION\nOUTPUT_TYPE_MISMATCH\ndef decide(\ndef evolve(\ndef effects(\ndef replay(",
+      "LONGINUS_HSWM_CELLULAR_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-runtime-longinus",
+    "name": "line-past-eof",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMRuntime.lean": "requestCellStep\nrecordCellOutput\ncellStepRequested\ncellStepCompleted\ninvokeCell\nstaleVersion\nbudgetExhausted\nduplicateActivation\nunknownCell\ninputTypeMismatch\nunknownActivation\noutputTypeMismatch\ndef decide\ndef evolve\ndef effects\ndef replay",
+      "hswm_cellular_runtime.py": "class RequestCellStep\nclass RecordCellOutput\nclass CellStepRequested\nclass CellStepCompleted\nclass InvokeCellEffect\nSTALE_VERSION\nBUDGET_EXHAUSTED\nDUPLICATE_ACTIVATION\nUNKNOWN_CELL\nINPUT_TYPE_MISMATCH\nUNKNOWN_ACTIVATION\nOUTPUT_TYPE_MISMATCH\ndef decide(\ndef evolve(\ndef effects(\ndef replay(",
+      "LONGINUS_HSWM_CELLULAR_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-3\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-runtime-longinus",
+    "name": "symbol-missing",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMRuntime.lean": "requestCellStep\nrecordCellOutput\ncellStepRequested\ncellStepCompleted\ninvokeCell\nstaleVersion\nbudgetExhausted\nduplicateActivation\nunknownCell\ninputTypeMismatch\nunknownActivation\noutputTypeMismatch\ndef decide\ndef evolve\ndef effects\ndef replay",
+      "hswm_cellular_runtime.py": "class RequestCellStep\nclass RecordCellOutput\nclass CellStepRequested\nclass CellStepCompleted\nclass InvokeCellEffect\nSTALE_VERSION\nBUDGET_EXHAUSTED\nDUPLICATE_ACTIVATION\nUNKNOWN_CELL\nINPUT_TYPE_MISMATCH\nUNKNOWN_ACTIVATION\nOUTPUT_TYPE_MISMATCH\ndef decide(\ndef evolve(\ndef effects(\ndef replay(",
+      "LONGINUS_HSWM_CELLULAR_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"ABSENT\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-runtime-longinus",
+    "name": "missing-state",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMRuntime.lean": "requestCellStep\nrecordCellOutput\ncellStepRequested\ncellStepCompleted\ninvokeCell\nstaleVersion\nbudgetExhausted\nduplicateActivation\nunknownCell\ninputTypeMismatch\nunknownActivation\noutputTypeMismatch\ndef decide\ndef evolve\ndef effects\ndef replay",
+      "hswm_cellular_runtime.py": "class RequestCellStep\nclass RecordCellOutput\nclass CellStepRequested\nclass CellStepCompleted\nclass InvokeCellEffect\nSTALE_VERSION\nBUDGET_EXHAUSTED\nDUPLICATE_ACTIVATION\nUNKNOWN_CELL\nINPUT_TYPE_MISMATCH\nUNKNOWN_ACTIVATION\nOUTPUT_TYPE_MISMATCH\ndef decide(\ndef evolve(\ndef effects(\ndef replay(",
+      "LONGINUS_HSWM_CELLULAR_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-runtime-longinus",
+    "name": "lean-token-missing",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMRuntime.lean": "missing",
+      "hswm_cellular_runtime.py": "class RequestCellStep\nclass RecordCellOutput\nclass CellStepRequested\nclass CellStepCompleted\nclass InvokeCellEffect\nSTALE_VERSION\nBUDGET_EXHAUSTED\nDUPLICATE_ACTIVATION\nUNKNOWN_CELL\nINPUT_TYPE_MISMATCH\nUNKNOWN_ACTIVATION\nOUTPUT_TYPE_MISMATCH\ndef decide(\ndef evolve(\ndef effects(\ndef replay(",
+      "LONGINUS_HSWM_CELLULAR_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "cellular-runtime-longinus",
+    "name": "python-token-missing",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMRuntime.lean": "requestCellStep\nrecordCellOutput\ncellStepRequested\ncellStepCompleted\ninvokeCell\nstaleVersion\nbudgetExhausted\nduplicateActivation\nunknownCell\ninputTypeMismatch\nunknownActivation\noutputTypeMismatch\ndef decide\ndef evolve\ndef effects\ndef replay",
+      "hswm_cellular_runtime.py": "missing",
+      "LONGINUS_HSWM_CELLULAR_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "valid",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "ACCEPT",
+    "expected": {
+      "binding_id": "fixture-binding",
+      "bindings_checked": 4,
+      "claim_boundary": "Local hashes, ranges, contracts, symbols, preregistration, and receipt only; not a KG write or HSWM scientific verdict.",
+      "fault_gates_checked": 9,
+      "files_checked": 1,
+      "kg_write_state": "NOT_AUTHORIZED_NOT_WRITTEN",
+      "layers": 7,
+      "outbox_symbol_pairs_checked": 5,
+      "schema": "hswm-cellular-durable-runtime-longinus-verification/v1",
+      "scientific_status": "UNJUDGED",
+      "states": {
+        "ENGINEERING_ONLY": 1,
+        "EXACT": 1,
+        "PARTIAL_MATERIALIZATION": 1,
+        "STRUCTURAL_EXACT": 1
+      },
+      "status": "PASS"
+    },
+    "stdout": "{\"binding_id\": \"fixture-binding\", \"bindings_checked\": 4, \"claim_boundary\": \"Local hashes, ranges, contracts, symbols, preregistration, and receipt only; not a KG write or HSWM scientific verdict.\", \"fault_gates_checked\": 9, \"files_checked\": 1, \"kg_write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\", \"layers\": 7, \"outbox_symbol_pairs_checked\": 5, \"schema\": \"hswm-cellular-durable-runtime-longinus-verification/v1\", \"scientific_status\": \"UNJUDGED\", \"states\": {\"ENGINEERING_ONLY\": 1, \"EXACT\": 1, \"PARTIAL_MATERIALIZATION\": 1, \"STRUCTURAL_EXACT\": 1}, \"status\": \"PASS\"}\n"
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "duplicate-layer",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\", \"CODE_SYMBOL\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "ACCEPT",
+    "expected": {
+      "binding_id": "fixture-binding",
+      "bindings_checked": 4,
+      "claim_boundary": "Local hashes, ranges, contracts, symbols, preregistration, and receipt only; not a KG write or HSWM scientific verdict.",
+      "fault_gates_checked": 9,
+      "files_checked": 1,
+      "kg_write_state": "NOT_AUTHORIZED_NOT_WRITTEN",
+      "layers": 8,
+      "outbox_symbol_pairs_checked": 5,
+      "schema": "hswm-cellular-durable-runtime-longinus-verification/v1",
+      "scientific_status": "UNJUDGED",
+      "states": {
+        "ENGINEERING_ONLY": 1,
+        "EXACT": 1,
+        "PARTIAL_MATERIALIZATION": 1,
+        "STRUCTURAL_EXACT": 1
+      },
+      "status": "PASS"
+    },
+    "stdout": "{\"binding_id\": \"fixture-binding\", \"bindings_checked\": 4, \"claim_boundary\": \"Local hashes, ranges, contracts, symbols, preregistration, and receipt only; not a KG write or HSWM scientific verdict.\", \"fault_gates_checked\": 9, \"files_checked\": 1, \"kg_write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\", \"layers\": 8, \"outbox_symbol_pairs_checked\": 5, \"schema\": \"hswm-cellular-durable-runtime-longinus-verification/v1\", \"scientific_status\": \"UNJUDGED\", \"states\": {\"ENGINEERING_ONLY\": 1, \"EXACT\": 1, \"PARTIAL_MATERIALIZATION\": 1, \"STRUCTURAL_EXACT\": 1}, \"status\": \"PASS\"}\n"
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "missing-layer",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "write-claim",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "duplicate-source",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "byte-drift",
+    "files": {
+      "source.txt": "changed\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "line-past-eof",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-3\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "symbol-missing",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"ABSENT\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "missing-state",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "lean-token-missing",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "missing",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "python-token-missing",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "missing",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "fsm-token-missing",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "prereg-order",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": false, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "judge-drift",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# drift\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "receipt-schema",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"wrong\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "missing-fault",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "failed-fault",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": false, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "unregistered-probe",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"unregistered\", \"scientific_status\": \"UNJUDGED\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  },
+  {
+    "kind": "durable-runtime-longinus",
+    "name": "scientific-promotion",
+    "files": {
+      "source.txt": "TOKEN\nsecond\n",
+      "formal/HSWMDurableRuntime.lean": "pending\ninFlight\nunknownOutcome\nsucceeded\nfailedPermanent",
+      "hswm_cellular_store.py": "PENDING\nIN_FLIGHT\nUNKNOWN_OUTCOME\nSUCCEEDED\nFAILED_PERMANENT",
+      "_research/hswm_cellular_runtime/outbox_fsm.v1.json": "[\"pending\", \"in_flight\", \"unknown_outcome\", \"succeeded\", \"failed_permanent\"]",
+      "judge.py": "# locked judge\n",
+      "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json": "{\"registered_before_implementation\": true, \"locked_judge\": {\"path\": \"judge.py\", \"sha256\": \"4668fcbd446a47c3778ac7da448acd1aada038cce29df2f39218561cb9cf9864\", \"receipt_schema\": \"fixture/v1\"}, \"allowed_model_probe\": [\"fixture\"]}",
+      "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json": "{\"schema\": \"fixture/v1\", \"fault_gates\": {\"completion_event_and_outbox_success_are_atomic\": true, \"same_history_has_stable_digest\": true, \"exact_command_retry_adds_no_event\": true, \"single_claim_under_competition\": true, \"unknown_outcome_is_not_auto_retried\": true, \"same_key_different_intent_is_rejected\": true, \"pending_outbox_recovers_after_reopen\": true, \"typed_cell_port_completes\": true, \"atomic_request_event_and_outbox\": true}, \"model_probe\": \"fixture\", \"scientific_status\": \"PROVEN\"}",
+      "LONGINUS_HSWM_DURABLE_RUNTIME_BINDING_2026-07-26.json": "{\"binding_id\": \"fixture-binding\", \"layers\": [\"CODE_SYMBOL\", \"CONTRACT_BINDING\", \"CRATE_SCRIPT\", \"FILE_LINE\", \"KG_NODE\", \"LINE_RANGE\", \"SHA256\"], \"kg\": {\"write_state\": \"NOT_AUTHORIZED_NOT_WRITTEN\"}, \"bindings\": [{\"sourceId\": \"0\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"EXACT\"}, {\"sourceId\": \"1\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"STRUCTURAL_EXACT\"}, {\"sourceId\": \"2\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"PARTIAL_MATERIALIZATION\"}, {\"sourceId\": \"3\", \"source_path\": \"source.txt\", \"sha256\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"sha256_baseline\": \"fcf02c4d3e776b04b615cd121b4d582f76f430158a5060510a8a7f454d01ba5a\", \"line_range\": \"1-1\", \"symbol_token\": \"TOKEN\", \"binding_state\": \"ENGINEERING_ONLY\"}]}"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "type": "AssertionError"
+    },
+    "stdout": null
+  }
+]

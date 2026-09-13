@@ -1,0 +1,326 @@
+[
+  {
+    "name": "valid",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "ACCEPT",
+    "expected": {
+      "paths": 9,
+      "legacy_root_paths": 0,
+      "concepts": 1,
+      "python_root_migrations": 1,
+      "asset_root_migrations": 1,
+      "from_git": false
+    }
+  },
+  {
+    "name": "missing-readme",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "REJECT",
+    "expected": {
+      "error_type": "OntologyError"
+    }
+  },
+  {
+    "name": "unknown-endpoint",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [{\"from\": \"missing\", \"to\": \"hswm:repo:identity\", \"type\": \"X\"}], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "REJECT",
+    "expected": {
+      "error_type": "OntologyError"
+    }
+  },
+  {
+    "name": "duplicate-concept",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}, {\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "REJECT",
+    "expected": {
+      "error_type": "OntologyError"
+    }
+  },
+  {
+    "name": "mount-no-pattern",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": []}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "REJECT",
+    "expected": {
+      "error_type": "OntologyError"
+    }
+  },
+  {
+    "name": "unbound-mount",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"missing\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "REJECT",
+    "expected": {
+      "error_type": "OntologyError"
+    }
+  },
+  {
+    "name": "baseline-commit-drift",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"dddddddddddddddddddddddddddddddddddddddd\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "REJECT",
+    "expected": {
+      "error_type": "OntologyError"
+    }
+  },
+  {
+    "name": "extra-root",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "EXTRA.md": "extra\n",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "REJECT",
+    "expected": {
+      "error_type": "OntologyError"
+    }
+  },
+  {
+    "name": "missing-root",
+    "files": {
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "ACCEPT",
+    "expected": {
+      "paths": 8,
+      "legacy_root_paths": 0,
+      "concepts": 1,
+      "python_root_migrations": 1,
+      "asset_root_migrations": 1,
+      "from_git": false
+    }
+  },
+  {
+    "name": "migrated-old-remains",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "old.py": "old\n",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "REJECT",
+    "expected": {
+      "error_type": "OntologyError"
+    }
+  },
+  {
+    "name": "canonical-missing",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "REJECT",
+    "expected": {
+      "error_type": "OntologyError"
+    }
+  },
+  {
+    "name": "manifest-duplicate-key",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"schema_version\":\"wrong\",\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "REJECT",
+    "expected": {
+      "error_type": "OntologyError"
+    }
+  },
+  {
+    "name": "baseline-escape",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"../outside.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "REJECT",
+    "expected": {
+      "error_type": "OntologyError"
+    }
+  },
+  {
+    "name": "git-metadata-broken",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      ".git": "gitdir: missing\n",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "REJECT",
+    "expected": {
+      "error_type": "OntologyError"
+    }
+  },
+  {
+    "name": "root-symlink",
+    "files": {
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {
+      "README.md": "docs/archive/old.md"
+    },
+    "decision": "REJECT",
+    "expected": {
+      "error_type": "OntologyError"
+    }
+  },
+  {
+    "name": "ignored-fallback-files",
+    "files": {
+      "README.md": "fixture\n",
+      "pyproject.toml": "[project]\nname = \"hswm\"\n",
+      "ontology/identity/README.md": "identity\n",
+      "src/hswm/old.py": "# canonical\n",
+      "docs/archive/old.md": "archive\n",
+      "ontology/history/baseline.json": "{\"$schema\": \"../../schemas/hswm_root_compatibility_baseline.v1.schema.json\", \"schema_version\": \"hswm-root-compatibility-baseline/v1\", \"status\": \"FROZEN_BASELINE\", \"source_commit\": \"33556a55530bdc0912154abc8c19897f89b0dcda\", \"source_public_paths\": [\"README.md\", \"pyproject.toml\"], \"paths\": [\"old.py\", \"old.md\"]}",
+      "ontology/history/python.json": "{\"$schema\": \"../../schemas/hswm_python_root_migrations.v2.schema.json\", \"schema_version\": \"hswm-python-root-migrations/v2\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.py\", \"canonical_path\": \"src/hswm/old.py\", \"source_sha256\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"destination_kind\": \"canonical-package\"}]}",
+      "ontology/history/assets.json": "{\"$schema\": \"../../schemas/hswm_root_asset_migrations.v1.schema.json\", \"schema_version\": \"hswm-root-asset-migrations/v1\", \"status\": \"SOURCE_PINNED_PATH_MIGRATION\", \"source_commit\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"migrations\": [{\"old_path\": \"old.md\", \"canonical_path\": \"docs/archive/old.md\", \"source_sha256\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"destination_kind\": \"archive-document\"}]}",
+      ".venv/ignored": "x",
+      "dist/ignored": "x",
+      "setup.cfg": "x",
+      "PKG-INFO": "x",
+      "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json": "{\"schema_version\": \"hswm-repository-ontology/v1\", \"root_uid\": \"hswm:repository\", \"concepts\": [{\"uid\": \"hswm:repo:identity\", \"directory\": \"ontology/identity\"}], \"relations\": [], \"mounts\": [{\"id\": \"identity\", \"concepts\": [\"hswm:repo:identity\"], \"patterns\": [\"ontology/identity/*\"]}], \"public_root_surface\": [\"README.md\", \"pyproject.toml\"], \"root_compatibility_baseline\": \"ontology/history/baseline.json\", \"python_root_migrations\": \"ontology/history/python.json\", \"asset_root_migrations\": \"ontology/history/assets.json\"}"
+    },
+    "symlinks": {},
+    "decision": "ACCEPT",
+    "expected": {
+      "paths": 9,
+      "legacy_root_paths": 0,
+      "concepts": 1,
+      "python_root_migrations": 1,
+      "asset_root_migrations": 1,
+      "from_git": false
+    }
+  }
+]

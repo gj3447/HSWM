@@ -45,13 +45,19 @@ export interface AdaptiveRewrite {
     readonly atoms: ReadonlyArray<AdaptiveAtom>;
     readonly source: Readonly<Record<string, unknown>>;
 }
+export interface AdaptiveManifestMigration {
+    readonly kind: "HSWM_NATIVE_DEVELOPMENT_PROFILE_V3_TO_V4"
+    readonly graphId: string
+    readonly fromManifestDigest: string
+    readonly toManifestDigest: string
+}
 export class AdaptiveStoreError extends Data.TaggedError("AdaptiveStoreError")<{
     readonly operation: "INITIALIZE" | "HEAD" | "HEADS" | "GET_REVISION" | "REWRITE" | "GET_EVENT" | "EVENTS" | "ACQUIRE_RUNTIME_LOCK" | "RELEASE_RUNTIME_LOCK" | "CLOSE";
     readonly detail: string;
 }> {
 }
 export class AdaptiveStore extends Context.Tag("hswm/AdaptiveStore")<AdaptiveStore, {
-    readonly initialize: (graphId: string, manifestDigest: string, atoms: ReadonlyArray<AdaptiveAtom>) => Effect.Effect<ReadonlyArray<AdaptiveAtomHead>, AdaptiveStoreError>;
+    readonly initialize: (graphId: string, manifestDigest: string, atoms: ReadonlyArray<AdaptiveAtom>, migration?: AdaptiveManifestMigration) => Effect.Effect<ReadonlyArray<AdaptiveAtomHead>, AdaptiveStoreError>;
     readonly head: (graphId: string, uid: string) => Effect.Effect<AdaptiveAtomHead, AdaptiveStoreError>;
     readonly heads: (graphId: string, kind?: string) => Effect.Effect<ReadonlyArray<AdaptiveAtomHead>, AdaptiveStoreError>;
     readonly getRevision: (graphId: string, uid: string, revision: number) => Effect.Effect<AdaptiveAtomRevision, AdaptiveStoreError>;
@@ -71,6 +77,11 @@ const db = <A>(operation: Op, action: () => A): Result<A> => Either.try({ try: a
 const toEffect = <A>(result: Result<A>): Effect.Effect<A, AdaptiveStoreError> => Either.match(result, { onLeft: Effect.fail, onRight: Effect.succeed });
 const record = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 const hash = (value: string) => createHash("sha256").update(value, "utf8").digest("hex");
+const HSWM_V3_MANIFEST_DIGEST = "cea027bec4234503202f00ab8cbee2ba1fdbd88374e7a6f07bf0428fcc602841";
+const HSWM_V4_MANIFEST_DIGEST = "84d7c0eb6a686ca8a02534835cab924efee384b9646d9b9c34e14c7fa2c58b66";
+const HSWM_DEVELOPMENT_GRAPH_ID = "hswm-self-development-feedback-v3";
+const HSWM_V4_MIGRATION_EVENT = "native-profile-migration:hswm-development-v3-to-v4";
+const acceptsHswmV4Migration = (migration: AdaptiveManifestMigration | undefined, graphId: string, oldDigest: string, newDigest: string): boolean => migration?.kind === "HSWM_NATIVE_DEVELOPMENT_PROFILE_V3_TO_V4" && migration.graphId === HSWM_DEVELOPMENT_GRAPH_ID && graphId === HSWM_DEVELOPMENT_GRAPH_ID && oldDigest === HSWM_V3_MANIFEST_DIGEST && newDigest === HSWM_V4_MANIFEST_DIGEST && migration.fromManifestDigest === oldDigest && migration.toManifestDigest === newDigest;
 const row = (value: unknown) => value as Row | undefined;
 const rows = (value: unknown) => value as ReadonlyArray<Row>;
 const string = (value: unknown) => String(value);
@@ -162,7 +173,7 @@ const service = (database: DatabaseSync) => {
         return !(record(cause) && cause["code"] === "ESRCH");
     } };
     return {
-        initialize: (graphId: string, manifestDigest: string, input: ReadonlyArray<AdaptiveAtom>) => effect(() => Either.gen(function* () {
+        initialize: (graphId: string, manifestDigest: string, input: ReadonlyArray<AdaptiveAtom>, migration?: AdaptiveManifestMigration) => effect(() => Either.gen(function* () {
             if (!graphId || !manifestDigest)
                 return yield* fail("INITIALIZE", "graph identity is invalid");
             const atoms = yield* Either.all(input.map((item) => atom(item, "INITIALIZE")));
@@ -173,8 +184,51 @@ const service = (database: DatabaseSync) => {
                 return yield* fail("INITIALIZE", "initial reference is unresolved");
             return yield* transaction("INITIALIZE", () => Either.gen(function* () {
                 const old = yield* native("INITIALIZE", () => row(database.prepare("SELECT manifest_digest FROM adaptive_graphs WHERE graph_id=?").get(graphId)));
-                if (old)
-                    return string(old["manifest_digest"]) === manifestDigest ? yield* allHeads("INITIALIZE", graphId) : yield* fail("INITIALIZE", "graph manifest digest conflict");
+                if (old) {
+                    const oldDigest = string(old["manifest_digest"]);
+                    if (oldDigest === manifestDigest)
+                        return yield* allHeads("INITIALIZE", graphId);
+                    if (migration === undefined || !acceptsHswmV4Migration(migration, graphId, oldDigest, manifestDigest))
+                        return yield* fail("INITIALIZE", "graph manifest digest conflict");
+                    const holder = yield* native("INITIALIZE", () => row(database.prepare("SELECT pid FROM adaptive_runtime_locks WHERE graph_id=?").get(graphId)));
+                    if (holder && live(numeric(holder["pid"])))
+                        return yield* fail("INITIALIZE", "native profile migration is blocked by a live adaptive runtime lease");
+                    const migrationCells = ["cell:usl", "cell:ontology", "cell:docs"];
+                    const replacements = atoms.filter((item) => migrationCells.includes(item["uid"]));
+                    if (replacements.length !== migrationCells.length || replacements.some((item) => item["kind"] !== "cell"))
+                        return yield* fail("INITIALIZE", "native profile migration replacement cells are invalid");
+                    const currentRows = yield* native("INITIALIZE", () => rows(database.prepare("SELECT * FROM adaptive_heads WHERE graph_id=?").all(graphId)));
+                    const current = new Map(currentRows.map((item) => [string(item["uid"]), item]));
+                    const consumed = replacements.map((item) => current.get(item["uid"])).filter((item): item is Row => item !== undefined).map(head);
+                    if (consumed.length !== replacements.length || consumed.some((item) => item.kind !== "cell"))
+                        return yield* fail("INITIALIZE", "native profile migration prior cells are invalid");
+                    const migrationSource = { kind: migration.kind, graph_id: graphId, from_manifest_digest: oldDigest, to_manifest_digest: manifestDigest };
+                    const source = yield* json(migrationSource, "INITIALIZE");
+                    const intent = hash(yield* json(migrationSource, "INITIALIZE"));
+                    const prior = yield* native("INITIALIZE", () => row(database.prepare("SELECT intent_digest FROM adaptive_events WHERE graph_id=? AND event_id=?").get(graphId, HSWM_V4_MIGRATION_EVENT)));
+                    if (prior && string(prior["intent_digest"]) !== intent)
+                        return yield* fail("INITIALIZE", "native profile migration event conflict");
+                    if (!prior) {
+                        const putAtom = yield* native("INITIALIZE", () => database.prepare("INSERT INTO adaptive_atoms VALUES(?,?,?,?,?,?,?,?,?)"));
+                        const updateHead = yield* native("INITIALIZE", () => database.prepare("UPDATE adaptive_heads SET revision=?,kind=?,owner=?,atom_digest=? WHERE graph_id=? AND uid=?"));
+                        const produced: AdaptiveAtomHead[] = [];
+                        for (const replacement of replacements) {
+                            const priorHead = current.get(replacement["uid"])!;
+                            const revision = numeric(priorHead["revision"]) + 1;
+                            const refs = yield* json(replacement.refs, "INITIALIZE");
+                            const payload = yield* json(replacement.payload, "INITIALIZE");
+                            const itemDigest = yield* digest(replacement, "INITIALIZE");
+                            yield* native("INITIALIZE", () => putAtom.run(graphId, replacement["uid"], revision, replacement["kind"], replacement["owner"], Buffer.from(refs), Buffer.from(payload), itemDigest, HSWM_V4_MIGRATION_EVENT));
+                            yield* native("INITIALIZE", () => updateHead.run(revision, replacement["kind"], replacement["owner"], itemDigest, graphId, replacement["uid"]));
+                            produced.push(Object.freeze({ uid: replacement["uid"], revision, kind: replacement["kind"], owner: replacement["owner"], digest: itemDigest }));
+                        }
+                        const consumedJson = yield* json(consumed, "INITIALIZE");
+                        const producedJson = yield* json(produced, "INITIALIZE");
+                        yield* native("INITIALIZE", () => database.prepare("INSERT INTO adaptive_events VALUES(?,?,?,?,?,?)").run(graphId, HSWM_V4_MIGRATION_EVENT, intent, Buffer.from(source), Buffer.from(consumedJson), Buffer.from(producedJson)));
+                    }
+                    yield* native("INITIALIZE", () => database.prepare("UPDATE adaptive_graphs SET manifest_digest=? WHERE graph_id=?").run(manifestDigest, graphId));
+                    return yield* allHeads("INITIALIZE", graphId);
+                }
                 yield* native("INITIALIZE", () => database.prepare("INSERT INTO adaptive_graphs VALUES(?,?)").run(graphId, manifestDigest));
                 const putAtom = yield* native("INITIALIZE", () => database.prepare("INSERT INTO adaptive_atoms VALUES(?,?,?,?,?,?,?,?,?)"));
                 const putHead = yield* native("INITIALIZE", () => database.prepare("INSERT INTO adaptive_heads VALUES(?,?,?,?,?,?)"));

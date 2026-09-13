@@ -1,0 +1,28 @@
+{
+  "schema_version": "hswm-native-temporal-material-oracle/v1",
+  "scope": "HISTORICAL_LOCAL_FIXTURE_WITH_MOCK_COSIGN_NOT_EXTERNAL_QUALIFICATION",
+  "receipt_json": "{\"activity_maximum_attempts\":1,\"candidate_receipt_sha256\":\"c944bfabfae8ee3f4ecb7db434ea64c2b7fff5500cbd90126720f1c861aa86bb\",\"claim_boundary\":\"qualified-auditor assertion over a complete Temporal history export; not a Temporal-native signature, outcome truth, G0, Permit, canonical admission, or learning evidence\",\"completed_at\":\"2026-09-03T00:02:00Z\",\"exporter_identity\":\"independent-temporal-exporter.example.test\",\"history_event_count\":2,\"history_export_sha256\":\"7c3b7b0f94288061fe5bb05131766c5752dc62856c9ac394ff0ff0e119a780da\",\"history_first_event_id\":1,\"history_last_event_id\":2,\"namespace\":\"g0-test\",\"occurrence_uid\":\"g0-occurrence-1\",\"replacement_round_allowed\":false,\"run_id\":\"12345678-1234-5678-9234-567812345678\",\"schema_version\":\"hswm-temporal-terminal-execution-audit-receipt/v1\",\"server_identity_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"signal_authorization_binding_sha256\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"terminal_phase\":\"SEALED\",\"workflow_evidence_sha256s\":[\"a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17\",\"0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc\",\"72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b\",\"e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0\",\"5555555555555555555555555555555555555555555555555555555555555555\",\"ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3\",\"65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be\",\"c944bfabfae8ee3f4ecb7db434ea64c2b7fff5500cbd90126720f1c861aa86bb\"],\"workflow_id\":\"g0-occurrence/g0-occurrence-1\",\"workflow_id_reuse_policy\":\"REJECT_DUPLICATE\",\"workflow_maximum_attempts\":1,\"workflow_sha256\":\"e8762d0ae33c3354076fb39c1f48eaa5663f68f773b656f151be5af433552df5\",\"workflow_type\":\"hswm_g0_occurrence_one_shot_workflow\"}",
+  "history_json": "{\"events\":[{\"eventId\":\"1\",\"eventTime\":\"2026-09-03T00:00:00Z\",\"eventType\":\"EVENT_TYPE_WORKFLOW_EXECUTION_STARTED\",\"workflowExecutionStartedEventAttributes\":{\"workflowType\":{\"name\":\"hswm_g0_occurrence_one_shot_workflow\"}}},{\"eventId\":\"2\",\"eventTime\":\"2026-09-03T00:02:00Z\",\"eventType\":\"EVENT_TYPE_WORKFLOW_EXECUTION_COMPLETED\",\"workflowExecutionCompletedEventAttributes\":{}}],\"namespace\":\"g0-test\",\"next_page_token\":\"\",\"retrieved_at\":\"2026-09-03T00:02:00Z\",\"run_id\":\"12345678-1234-5678-9234-567812345678\",\"schema_version\":\"hswm-temporal-history-export/v1\",\"server_identity_sha256\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"signal_authorization_binding_sha256\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"source_api\":\"temporal.api.workflowservice.v1.WorkflowService/GetWorkflowExecutionHistory\",\"workflow_id\":\"g0-occurrence/g0-occurrence-1\"}",
+  "input": {
+    "occurrenceUid": "g0-occurrence-1",
+    "candidateReceiptSha256": "c944bfabfae8ee3f4ecb7db434ea64c2b7fff5500cbd90126720f1c861aa86bb",
+    "workflowSha256": "e8762d0ae33c3354076fb39c1f48eaa5663f68f773b656f151be5af433552df5",
+    "workflowEvidenceSha256s": [
+      "a0abe24b23874684d1d8510987fb0911283d2b7a6b2715d0386faa9b7a993e17",
+      "0036ce9622eabbc6cd41e16341864df317f09cfc50f3fdb1b4c45654d49a27dc",
+      "72adb4a3fd312f8b2f11b230765587aa33a4e07f9e97a04927c63ebe89a2332b",
+      "e7155dcc07e7b3cb3f40d99a0e20fb77430a1e18598c60595f921ff354a0b4e0",
+      "5555555555555555555555555555555555555555555555555555555555555555",
+      "ed32a623950fec9464e94177e7a863bc663d0cb71bce489bdfc2c6cc1f9c70d3",
+      "65d9cc09f75310cb075db5f0bc3f7abb0a418078c7858390c713432be68697be",
+      "c944bfabfae8ee3f4ecb7db434ea64c2b7fff5500cbd90126720f1c861aa86bb"
+    ],
+    "completionStartedAt": "2026-09-03T00:00:00Z",
+    "candidateTerminalAt": "2026-09-03T00:01:00Z",
+    "completionTerminalAt": "2026-09-03T00:02:00Z"
+  },
+  "expected": {
+    "receiptSha256": "9b704cdf547db72d995c4151f0b2da32ec8c0ac5c11f4496bab57247e0c840e6",
+    "historySha256": "7c3b7b0f94288061fe5bb05131766c5752dc62856c9ac394ff0ff0e119a780da"
+  }
+}

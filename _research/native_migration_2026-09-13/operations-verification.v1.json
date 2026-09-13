@@ -1,0 +1,1176 @@
+{
+  "schema_version": "hswm-native-engineering-verification/v1",
+  "date": "2026-09-13",
+  "authority_class": "SECONDARY_AI",
+  "source_base_commit": "4a4fef90f155a17a150c90f9cabb5ecc4a8f057a",
+  "source_observation": "EXACT_TESTED_ISOLATED_CHECKOUT_BYTES_NOT_AT_BASE_COMMIT",
+  "scope": "100 exact files: native operational profiles, publishers, graph-tooling CLI, formal/ontology verification, occurrence integrity/audit/completion/publication, P1 frozen-cache replay. Later standards-suite and S2S ports excluded.",
+  "migration_complete": false,
+  "claim_ceiling": "BOUNDED_ENGINEERING_VERIFICATION_NOT_HSWM_EFFICACY",
+  "toolchain": {
+    "node": "24.13.0",
+    "npm": "11.6.2"
+  },
+  "source_pins": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0",
+      "byte_length": 20916,
+      "git_blob": "f6c24b5094d87719ff6370b8bd5b4b547e528456"
+    },
+    {
+      "path": "_research/causal_composition/examples/adaptive_hswm_development.v4.json",
+      "sha256": "f7865a38fc57fe70361fa5ca34a0380bb8c9a8ba74972fde36486b7c33389696",
+      "byte_length": 5076,
+      "git_blob": "23573ac6ab120d76443b417307f28c596412a283"
+    },
+    {
+      "path": "_research/native_migration_2026-09-13/generate_occurrence_integrity_differential_fixture.py",
+      "sha256": "939016f1c0d5c03b556cca88a13de88c12ba5d9d08fd1eae769b411e9708fc82",
+      "byte_length": 2897,
+      "git_blob": "0f396dba71ce3acb0194531cc1ba21c4e3c9c8d5"
+    },
+    {
+      "path": "docs/operations/systemd/hswm-research-fabric.service",
+      "sha256": "add5386c0734314e86f4ffc21f9d5fb93f9272e60ec46c89ee88cbd7e35028ea",
+      "byte_length": 1195,
+      "git_blob": "a2483201b470dd815fc419854401591536bf6af2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-development-day-projection",
+      "sha256": "ca0c19328b7ad64ce851efc87876c9636b685dbcd4f59cdce157af52f15c229b",
+      "byte_length": 166,
+      "git_blob": "1be0ac85fb4f25c3f57c4e6536a44efeaa91dccb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-development-work-projection",
+      "sha256": "ee09b458d0962ac39855e95c16b76e75b1bf594b5c7e71daf531b975c46dbedf",
+      "byte_length": 167,
+      "git_blob": "45417bfba87e9fb916b97665345007e017596c05"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-formal-verify",
+      "sha256": "725dd7181544b8c1ff3bb26e28c705a17541d602583a8022b9490c5f24d19077",
+      "byte_length": 153,
+      "git_blob": "e210064b159808944beec6a727e28dec3312c192"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-frontier-learning-projection",
+      "sha256": "768fedf86a97c3781f1d4c6bab445ae4731af7dcc74f4c2996d36852e9c71753",
+      "byte_length": 171,
+      "git_blob": "2f89b087d4d3a0f758a074fd16690676cb9a58c4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-graph-standards",
+      "sha256": "b7e547a37f726ea75b9877aa5af1223fe3e535b2ffe798766024a3997c75b10c",
+      "byte_length": 93,
+      "git_blob": "290f0d174572935c15123b518e8b254f1f4c4f55"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-p1-gate-diagnostic",
+      "sha256": "cb779cea13ace1853060150c87816e337f0dc61cda26bfdc6fa75c6fccd09700",
+      "byte_length": 147,
+      "git_blob": "ad017a7de3789cf1ac2eef54d02c18d594758b4c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-repository-ontology",
+      "sha256": "f8f50c3f76a324051a20db8b336553e8accb3c811fbfcb71739fc13b887236ba",
+      "byte_length": 97,
+      "git_blob": "e371720a381fb4b65044cb459cf2f094f91d67df"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "7edaf605e429d20f9e0c8734a7e1a55a6a78773e757ad7fdb4728554404f91cd",
+      "byte_length": 477977,
+      "git_blob": "14eacb33e829f9aeb9708579747f0ede23bf9778"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package.json",
+      "sha256": "b7db5cb4c6e0b538290efa7a3b0df4dbdf527f921f3d04fe326987637dd97ae5",
+      "byte_length": 4909,
+      "git_blob": "ff903bf531223251503e116e4b098e0775393d24"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-cli.ts",
+      "sha256": "ed805201d11be3511fd5f38df39ba47eac1766ca21385ae6c36e3a25399393eb",
+      "byte_length": 13086,
+      "git_blob": "f4f76758775ba381b635e9a7a9813f287d62111f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+      "sha256": "f1a85ca17c00177e1b9c9293b19b9a383802af61a6636e9ce13eaf8b6b815fa0",
+      "byte_length": 42858,
+      "git_blob": "8b430fd8270c81304f59c82d6901b3992b6a676a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-store.ts",
+      "sha256": "138a7ba30d377239fc55b78c2e19556c84d438b205c8322d84bfc56788b1aa5a",
+      "byte_length": 30373,
+      "git_blob": "75d6c6c39976dfedb9eeeb61dee154550c7dacd7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/effect-bounded-subprocess.ts",
+      "sha256": "a9d7c6ccc7b8c81d61215f17a5e46a2c531165eb5aaa7b1b8a4731b7a8034a0e",
+      "byte_length": 8192,
+      "git_blob": "1f1f8a59f34d96925423416a689cbc3a5dcdfc87"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/effect-posix-services.ts",
+      "sha256": "9cb275c41480d0d968462b044cea9246f4708a0b93a39a4e102f50d902219f6b",
+      "byte_length": 1164,
+      "git_blob": "c108e3249af2d7ba8e1f041d174e0064c16a466b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-day-projection.ts",
+      "sha256": "e9b268d2df32d17ec22677da835e4dd7cbc6126c1e051ee82c4c836290858940",
+      "byte_length": 2947,
+      "git_blob": "287ed7a7275dcb379841b6ce3de41abb959a6878"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-projection-cli.ts",
+      "sha256": "3d5d9e69cb72e1f64560b337fdf5e349b6a2a55580cc269808750c7de751b21a",
+      "byte_length": 8181,
+      "git_blob": "ac140a60b7a0bc06ea983d184f4e500c398292f2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-projection-domain.ts",
+      "sha256": "0af74d37f95a7e720bd664bdf144bdd63be17ce1bafab558e75858918c0e6085",
+      "byte_length": 15191,
+      "git_blob": "20fc8562ba8779a5adb796534012424d9771b206"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-projection-io.ts",
+      "sha256": "3ea3ce992c974eaa81c5747f07730acb304d026c5afff5ab1b9a73a0c7651b4a",
+      "byte_length": 2085,
+      "git_blob": "2846f0d120b88ca13ac91facbfc01eaeaf857211"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-projection-process.ts",
+      "sha256": "45577c01882ac0827e04683b033dd54c066bf70900b91515e8522a5d7628b1bb",
+      "byte_length": 364,
+      "git_blob": "e6f746cfaedee9aed2a1f597a6cd22db29b9f43a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-projection-publisher.ts",
+      "sha256": "d201eff7005f512ab69d1380a0fc749b96711c465d32bfa0856d19ef81cdb325",
+      "byte_length": 13651,
+      "git_blob": "5728a14770b1af0ef4314c453e4236e485a13608"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-work-projection.ts",
+      "sha256": "ff4561aca9203794d359e960d43ab49d7c99b2a373189942ec162567b69b7311",
+      "byte_length": 2749,
+      "git_blob": "04646d093d5875a176781f1baf46e68fe445f19c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-formal-crypto-runtime.ts",
+      "sha256": "34d5db2b2fc2e9b1821f44dae0011fcb4ed38e9a275aaa81ca01c4002e0cbfd2",
+      "byte_length": 4228,
+      "git_blob": "b8c392105ae3748c3897d8a9c8ba33db24dd7179"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-formal-verifier-domain.ts",
+      "sha256": "82b10a04445a1aae4e78d91b2b456437c65aa8d1e9e5663ea92adc5d14af5e5a",
+      "byte_length": 15297,
+      "git_blob": "cf9c33fe5b6fd31a60df7b34317540a860815b73"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-formal-verify-cli.ts",
+      "sha256": "a47edbc31be0ae785cd6b38a48792099b3529cb293db969b12ecb155c5bdf6fc",
+      "byte_length": 6409,
+      "git_blob": "6332ce8b73a901c86c503daa48b126c8eacf7159"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-formal-verify-process.ts",
+      "sha256": "8f3a53a9044b141f0a4942cf9a00f94e25c9ed140ceea1029b81f9d390e967c4",
+      "byte_length": 311,
+      "git_blob": "5a36e0ec00879e4427f08b5d097c306e4ba6b960"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-frontier-learning-projection.ts",
+      "sha256": "29581d1e8296ff0ddde2aee95591f84aff65ba1b0163c3757aabba4f9ec62002",
+      "byte_length": 8743,
+      "git_blob": "e424111f5a3b2e7f4fcb94c19e4b330abe083609"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-cli.ts",
+      "sha256": "0be5c9b2a8fd5e3d2b548258720cfde78b21b4c5a16f17812c04d737c3a31266",
+      "byte_length": 4206,
+      "git_blob": "e71daf1cd0d5e426dcdb572e2c7f8b30a0b2b921"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-domain.ts",
+      "sha256": "7d44d2b640d4e82258378d65ba3a41e577f85d0c4b34076a73e67e0a4343ef7b",
+      "byte_length": 17484,
+      "git_blob": "905269a20e9a28ea0c54d0efe11618daae45528d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-process.ts",
+      "sha256": "2376bd630a748a202755e825dbf354324e1637b69e6c86ab23bc9783c8c2de3e",
+      "byte_length": 333,
+      "git_blob": "2cbbd2cacc0cf0446df7c8ed44b338babe91c0ed"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-runtime.ts",
+      "sha256": "7b97776a1b06caf83cb64e46f2839c7b6f59799a0ecd1270b09a9fae48fc6cea",
+      "byte_length": 18882,
+      "git_blob": "0df85c456d39c3b7c92470028861dbb12ef43918"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-instant-domain.ts",
+      "sha256": "d3aee348465dc0a680674dcb46dbc28237ca1f9ba09320d38ccbf6834a08151a",
+      "byte_length": 1371,
+      "git_blob": "8bc9fd68e144f4e84bf367d3f9c55a8888413ab4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-issued-record-domain.ts",
+      "sha256": "e87c29fb926cbefa5790915307b97f33a6579aa99632863787086bbed8fd3b9c",
+      "byte_length": 704,
+      "git_blob": "bbabbe1887404c8953598080239d102a1f938523"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-audit-runtime.ts",
+      "sha256": "79b220957db36b97c06f7f1bedc343b40cdb87c6e12a395f15bb774c51cc04eb",
+      "byte_length": 25163,
+      "git_blob": "26394268da954ecfd6726068799839f0d5c8c2ec"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-completion-domain.ts",
+      "sha256": "43c03c6bcfbd58c325b432b1a0d900f705e4827b79083d570339619074f5d9fd",
+      "byte_length": 16549,
+      "git_blob": "cae80216566e8639391208f0203f9afda1f34ce8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-completion-runtime.ts",
+      "sha256": "cddcebace66bdb033b3942cf93ed3152cf5b9dc0d706b8b6dea594293e734395",
+      "byte_length": 7328,
+      "git_blob": "fbc71f25f9b19ddbb4415b997e5bccb3d2da593e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-dual-evaluator-domain.ts",
+      "sha256": "2d00e0f0760452f20ec4687bb4f400714b12741834425c593657ce8c918c6985",
+      "byte_length": 15358,
+      "git_blob": "1396bb777462a90d6aecab22e40598411a8863e3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-integrity-domain.ts",
+      "sha256": "cb0dd8a38f4002ab8b9af3695d616c68b68b6639b7953fd50b490a707a09d8d3",
+      "byte_length": 30611,
+      "git_blob": "b1426d4e6bc104a6ca0481c3f0c5315f0b22cd1b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-publication-runtime.ts",
+      "sha256": "c8e707390fdebf6f017d47e8ee429b1aa0ce152dd6b6cf4667398a297172fc8c",
+      "byte_length": 3051,
+      "git_blob": "43a3d4702bab576f778f611262a4f30916ab148e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-publication.ts",
+      "sha256": "40fdd0c0843c84692526fb0598c2c86e422c151c7e9b103d3bd83fe2437901ed",
+      "byte_length": 11449,
+      "git_blob": "604965ead5af2e2cc03f141d4ca589d04bfdfdde"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-workflow-domain.ts",
+      "sha256": "65e8f38dd1e5849b5adafb30cfb4b1964884c4bd20abdeae282febf9f7866cf9",
+      "byte_length": 6398,
+      "git_blob": "49a379fafb1680c0e94065244a8003d85e8e9949"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-gate-cli.ts",
+      "sha256": "0291078ba772d6ac8835fd42d6dfa9f0985253a6fdc5f3ae1b09932398f37828",
+      "byte_length": 3906,
+      "git_blob": "2d19d7f9a56559d4517801d4f7d79ce54100bf4e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-gate-domain.ts",
+      "sha256": "914ae7b5b379f99b494e9f0e889d71379511849a99c23342d008cd689b170d77",
+      "byte_length": 5140,
+      "git_blob": "01f89b061ca7031ea2e43f695b4034ff4a92fb61"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-gate-process.ts",
+      "sha256": "3e8ccc5af6074525812906b77735adc0e42f316943bf30f47e70e659744a6bcf",
+      "byte_length": 311,
+      "git_blob": "bd914c461ea9416f01e1b8e80ed01559e2a0a33b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-gate-runtime.ts",
+      "sha256": "b22c2f6975e537a164719a0445a9d9b194945f9f645b9805b51b14792388c728",
+      "byte_length": 15275,
+      "git_blob": "793be1ca893317e5ead6d5aa6510ee21fe048dfd"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-npy-domain.ts",
+      "sha256": "6d8a2c4c7ba900bb87f27e5f4866626b60e5678e1d58422125e09ff487b943e2",
+      "byte_length": 9745,
+      "git_blob": "e97391b552dca16f4744d3b3d1d094240c6a1728"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-output-runtime.ts",
+      "sha256": "b7db9ab0245fe0e0f993713d9458de2757c8efd061f64dc4454e1998b2066312",
+      "byte_length": 1821,
+      "git_blob": "b5b10a40fc47c39ddbc42a4e8a28972855c4baea"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-retrieval-domain.ts",
+      "sha256": "ae358b4efac2a4fda931d05352820789d33aaf7b6f4490bd3390551245bbf7a0",
+      "byte_length": 14980,
+      "git_blob": "a97c49847faedfb470fddb0a5e4d8e8b0dec627b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-snapshot-domain.ts",
+      "sha256": "b744b0dc5509ab07d9b4f0e10ecfc4b5f7b7e40ac5cec0c28eb1910caf735f77",
+      "byte_length": 5813,
+      "git_blob": "380efcf6058d2bf2870ba4d5f342b04ef3cbc779"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-pinned-verifier-runtime.ts",
+      "sha256": "5195a6a575c00090510338a2d155cd7db46145bcf2fcaa25dfcf60ebe22e5023",
+      "byte_length": 8141,
+      "git_blob": "8f7491d5986a19cb6ff7869d66680b6a8517330d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-repository-ontology-domain.ts",
+      "sha256": "5294c9689b6c40d1de5f32b6b0b5f095f5fe8d92c1c112a925d435b4e4335c29",
+      "byte_length": 6896,
+      "git_blob": "94237d1134fce82871234fe15cc294bdedbb9021"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-repository-ontology-process.ts",
+      "sha256": "12e7cbe2e6505c92158bc7144155846c94b254239b1cd0917249884012e08e63",
+      "byte_length": 1466,
+      "git_blob": "6fdd35da77515a9ea16faf570cdf172cf73531d0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-repository-ontology-runtime.ts",
+      "sha256": "3c73ae35e89e81dcf7bcd6343189482f603ceba81ba98025219bb333101ebe6e",
+      "byte_length": 8628,
+      "git_blob": "660047de5fc6d5dbdbdea7d866b1f1a6b11aafe7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-task-json-domain.ts",
+      "sha256": "8c4938479a4979bd867fa980d5c0d36ff582a7ef10aacd166e7de63399c58690",
+      "byte_length": 5752,
+      "git_blob": "7111b1151b6175d26201fd4dea835321ec45ed55"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/fixtures/native-occurrence-audit.ts",
+      "sha256": "3cbf3835c2c35e8854ed6f6a6a42213d47d7d4b9b0680b9821bbe1a3b64ac3cb",
+      "byte_length": 9474,
+      "git_blob": "e8aa3275b8823fe2cc6228ee94e088001329b62e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-development-profile.test.ts",
+      "sha256": "39af5fe5ebfe81aeb3a800fea10b68557a9b73aad977dca1e2fcf12912067258",
+      "byte_length": 9920,
+      "git_blob": "4c67345b3aa21512349ee0e56abbbf5c10c7b2af"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-development-projections.test.ts",
+      "sha256": "618a1f4459d67d2db0ad7028a3497422ecce429a707fe58ceb16d84ea4a04260",
+      "byte_length": 31996,
+      "git_blob": "c86b899ecf6f39a95ec6859b3deb76a6942b6178"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-formal-verifier-domain.test.ts",
+      "sha256": "78d99b0105b1b2f7d15eaa34ba919777668e4495c782a726889706acddab893e",
+      "byte_length": 3187,
+      "git_blob": "fa06f5e92680866453cb89450392413be91d4338"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-formal-verify-cli.test.ts",
+      "sha256": "3db3d169f6307b0727e30e342767b2f026cb2b00b82d7c47703a94235a100cec",
+      "byte_length": 1939,
+      "git_blob": "06b661ccb7f35f1f51aaf47dba0480f6e1adbeaf"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-graph-standards-domain.test.ts",
+      "sha256": "cc39d1cf00b9d99603d349c08c6e1ecfc15b0a22a984e4ef196e353b85942f6e",
+      "byte_length": 3982,
+      "git_blob": "93054022729cdcd348b4c4bdfbed3287ce30bbf6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-graph-standards-runtime.test.ts",
+      "sha256": "7f2513497913456ec0c5de6e38172495bcddeed5d5dc9d4c2e29e820724884f2",
+      "byte_length": 12401,
+      "git_blob": "99e96199fb02760a729568834319fbd3c47c12c9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-issued-record.test.ts",
+      "sha256": "060bd6b8287192b573a5bb64699b59f37ead7c6c632f83e70aff443d819a129b",
+      "byte_length": 1094,
+      "git_blob": "1ece19a5d9fa91fbaefd549e077f261c62af1540"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-occurrence-audit-runtime.test.ts",
+      "sha256": "ca1073e36710b89aad556b83fede77cdfcb848167a8e9722b1c9bf5fb11aa0fd",
+      "byte_length": 14809,
+      "git_blob": "72d7e9fe527a36ae0373f80ea8b4271bba86815d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-occurrence-completion-domain.test.ts",
+      "sha256": "4a78e923fd486c7cb5c3bb7fd9d1eb9e01378e5b6bd562535a46468891fc0f57",
+      "byte_length": 6623,
+      "git_blob": "1718ab8b6ea8f27e6f1fed932adc9c90d2bfa40b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-occurrence-completion-runtime.test.ts",
+      "sha256": "b049d871f88d8df1d99b2a4213c200261037ca9239037f933fea5d1d8da8d0bd",
+      "byte_length": 4612,
+      "git_blob": "229cec17ea3ffa59cdad0145b5bf5a0014a71266"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-occurrence-dual-evaluator-domain.test.ts",
+      "sha256": "cb3f80a5c0c19669bd591455ac5c41a509364e2229561bd2c5b9ca62a8dc01a0",
+      "byte_length": 7394,
+      "git_blob": "c376b79e2353c6d465671ed55643bfffc82b02f1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-occurrence-integrity-domain.test.ts",
+      "sha256": "1f56528e223dc5d12a28cd005cc30b7924de93baeb02f7cc18f0e6adb0f00719",
+      "byte_length": 5603,
+      "git_blob": "26e1c174417c7e5c675ba5e624ec092e22cce3b0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-occurrence-publication-runtime.test.ts",
+      "sha256": "3dc10dea8b6f14fe473a108d4c337c4e7449f38aaf238acd1c7e35ce53e3181f",
+      "byte_length": 2691,
+      "git_blob": "bd0e1c3959afbb5350e8e66a054e8ff0721dc54d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-occurrence-publication.test.ts",
+      "sha256": "b49e1bbcf8c00392bf076c17be47db8d2e86d466276df4928c4dd67a2d1906e2",
+      "byte_length": 4073,
+      "git_blob": "31ffb5bdf6557d6aad1d9e98a5d674843dedf641"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-occurrence-workflow-domain.test.ts",
+      "sha256": "0904ce25ab145d422117954db34c75d31e6c4214b1a74a5d92b5b79d27b5c749",
+      "byte_length": 6375,
+      "git_blob": "ef3fff6c3a1c2d9969d30ad2b43fb77006931a81"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-p1-bootstrap-original.test.ts",
+      "sha256": "51f830f4459ae9523ba5af57e9ce946d9a08c32f22f894ef21231cefc9cb9b7e",
+      "byte_length": 985,
+      "git_blob": "a1a6b72768b6761fe13cf88dc92e11bb18ff7ca0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-p1-gate-domain.test.ts",
+      "sha256": "3c9a21bc790308d827fd06f87fb46a558db7c6c6d9f9669d55650888f6c384e4",
+      "byte_length": 10599,
+      "git_blob": "5b2401bac2f17ba4bd9d8425551b88369998da6f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-p1-npz-original.test.ts",
+      "sha256": "40fc130c7eaecbdd96f947903ccb026e812138f126f4616610c55add7a990bb0",
+      "byte_length": 1450,
+      "git_blob": "390d6c3beff7fd3c7919097816ef761c54ebfbbe"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-pinned-verifier-runtime.test.ts",
+      "sha256": "c483a6aac659f12fff383d3153575fa52b41784bc385d29a764fac8b1b363ef7",
+      "byte_length": 3011,
+      "git_blob": "20c3798524bc32126bcd41d931221d8bedaf46d8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-repository-ontology.test.ts",
+      "sha256": "72a26acdb46718e226f8ef6966b82148c2d5fc008ba042b1e0c51b8acd3b7727",
+      "byte_length": 4812,
+      "git_blob": "7848f29391804309b9ae82c939eb2d0dcef498e5"
+    },
+    {
+      "path": "tests/effect-runtime/adaptive-cli.test.ts",
+      "sha256": "ab5f05b929d7f1a957f6c86cba0e6822f3eeb08f228bb19cb8d6ba3379350b61",
+      "byte_length": 5691,
+      "git_blob": "2cca955d6be0d5ffef868c0f31da5488d9f80f62"
+    },
+    {
+      "path": "tests/fixtures/formal_native_v1/longinus-contracts.json",
+      "sha256": "8974e0db5c2f6097fc30bec7ab8def801431ac06d17816efda2e36e8b346c0a9",
+      "byte_length": 111194,
+      "git_blob": "77a11e1a57bdcf34fcc31f9eead1bf326a1494ee"
+    },
+    {
+      "path": "tests/fixtures/formal_native_v1/longinus-source-pins.json",
+      "sha256": "9ab08ac149e94c1d122ad0f8e0e00f438a6afcd7544826c2afd30ffc65a99449",
+      "byte_length": 564,
+      "git_blob": "49a9ecc2f7c1b317734967ae6949c3e6458eeb87"
+    },
+    {
+      "path": "tests/fixtures/formal_native_v1/original_python.json",
+      "sha256": "e963831cb1cf79647b862b055435a7db517cb7d259853f7199bb97dcb487d5fb",
+      "byte_length": 1258,
+      "git_blob": "1bca30d4b206d6dd36281f2e18440211df11552c"
+    },
+    {
+      "path": "tests/fixtures/native_migration/occurrence_completion_v1/decisions.original.v1.json",
+      "sha256": "4b87fe8a9b6efbf5a550f22484a3f71ce417052b584afcb94449de3a201c5fd3",
+      "byte_length": 29216,
+      "git_blob": "5806965e245bf95a144cde4e9ca1a40b21bc7b77"
+    },
+    {
+      "path": "tests/fixtures/native_migration/occurrence_completion_v1/original_python_candidate.json",
+      "sha256": "43ad89915e0aed5c38432259da5d686bfcf79d5c3e17ccc58560ba5c199ae621",
+      "byte_length": 6372,
+      "git_blob": "079310d6e4c6c6bea5fb2b81690cd8d065328845"
+    },
+    {
+      "path": "tests/fixtures/native_migration/occurrence_completion_v1/qualified-audit-original.v2.json",
+      "sha256": "614c0e57859329ccf0993e9472aaae01a15a367dfb2c17debc942bb392edf557",
+      "byte_length": 24151,
+      "git_blob": "f1e76ed74428d4133532f3865c1a8d06bd08503d"
+    },
+    {
+      "path": "tests/fixtures/native_migration/occurrence_completion_v1/source-pins.json",
+      "sha256": "fce31b728c1bd28fa54106141de7f4f369cac6cb1a8bf762d5fbb90b18ae99b1",
+      "byte_length": 993,
+      "git_blob": "b04e475e0474d0666e3be41b7ccdac065e3ef56c"
+    },
+    {
+      "path": "tests/fixtures/native_migration/occurrence_completion_v1/temporal-material.json",
+      "sha256": "639046d11adea5c5f108a188000fb27b7d3438ffbecc69e066b9192a29a1e3f6",
+      "byte_length": 4320,
+      "git_blob": "22a7fbe80c442e38aee087ac65e61466b51db255"
+    },
+    {
+      "path": "tests/fixtures/native_migration/occurrence_completion_v1/void-publication.original.v1.json",
+      "sha256": "47f67e950a733764a771fb50076d138ce34f59b905c99f2a14e0b1cc1543bbea",
+      "byte_length": 37316,
+      "git_blob": "d3b6cb25da2b79e7c8653088fe2e90044a5b6e81"
+    },
+    {
+      "path": "tests/fixtures/native_migration/occurrence_integrity_v1/differential.original.v1.json",
+      "sha256": "54c7c7e242300260d50c32909bd94da5661a49f751543432fcdbe5c81204a25a",
+      "byte_length": 1583,
+      "git_blob": "550e2f8d5b2f8cc6bab1c14e17aa9d3f6d2bdd65"
+    },
+    {
+      "path": "tests/fixtures/native_migration/occurrence_integrity_v1/original_python.json",
+      "sha256": "d376afda475756312a2d8c2eca26f9ec51d561b51c481ca95d1e5dcd5ce235ef",
+      "byte_length": 34314,
+      "git_blob": "98332f3d93342959df9060ecd76943d632d632b4"
+    },
+    {
+      "path": "tests/fixtures/native_migration/occurrence_workflow_v1/contracts.json",
+      "sha256": "47a69b8a3c03c53a28058bee378d92d93053436f1ef3d948a23e1394c1aa47d0",
+      "byte_length": 63811,
+      "git_blob": "ef5c33a63f9dfc8af9612ca1ca26a63c878d41b5"
+    },
+    {
+      "path": "tests/fixtures/native_migration/p1_gate_v1/README.md",
+      "sha256": "c62e98a8f67a8a985c9360a74014db217bd2e16f0d08f8e37062f10d332ac45f",
+      "byte_length": 1194,
+      "git_blob": "ea8446f8a82933347edc271b38c0399390e68149"
+    },
+    {
+      "path": "tests/fixtures/native_migration/p1_gate_v1/bootstrap.original.v1.json",
+      "sha256": "019cb12538e5fd5e429a63e7d715be2820629f0d57fffb3bc5ce9751e4df9e3c",
+      "byte_length": 32397,
+      "git_blob": "e3a53d3279f431eda24759419fdf2b646ccf3426"
+    },
+    {
+      "path": "tests/fixtures/native_migration/p1_gate_v1/embedding-cache.npz.base64",
+      "sha256": "315172d7da391f27c5af7c2fee9c0c772c72aec2adf8a90da6925e93dbf86095",
+      "byte_length": 2609,
+      "git_blob": "37ca2812c9381bff607aa043f0746b230c9eac3d"
+    },
+    {
+      "path": "tests/fixtures/native_migration/p1_gate_v1/expected.json",
+      "sha256": "343b9e3edf252b9c7c0d7ab5a404713ed55c7ca6afa45a429249cf987dc9f136",
+      "byte_length": 791,
+      "git_blob": "8392b0cf15e40687863b21f2970260d891bc25fb"
+    },
+    {
+      "path": "tests/fixtures/native_migration/p1_gate_v1/nonzero-negative.original.v1.json",
+      "sha256": "2168f71ee4e84f6fe031ae58c6a66334ca419e605f79a37350fdf7d8f689a686",
+      "byte_length": 113414,
+      "git_blob": "d14d4429d10f578bd905cd40088c6171dbf667d8"
+    },
+    {
+      "path": "tests/fixtures/native_migration/p1_gate_v1/nonzero-positive.original.v1.json",
+      "sha256": "7df24dc721f3b33d2fe381395c1d54607dc1fb2e547fe3a773c6f4837e45f264",
+      "byte_length": 113411,
+      "git_blob": "0d4bfd5323b85d5e5bdb4558ed27d57edf798d6e"
+    },
+    {
+      "path": "tests/fixtures/native_migration/p1_gate_v1/replay-files.original.v1.json",
+      "sha256": "716c86f28be58d813ea5fdca7ca582ca7684767fa1b953828a095b558734e64d",
+      "byte_length": 105156,
+      "git_blob": "36923d2138d51712fd911e2a1f9eeb02d780337f"
+    },
+    {
+      "path": "tests/fixtures/native_migration/repository_ontology_v1/contracts.json",
+      "sha256": "feaae94854237b39566aef0d5ca9c96a0b4950ff0f0024c67de5cc786f004d11",
+      "byte_length": 39109,
+      "git_blob": "365b9b514e9420ab86c6bc8adbbbc0e610d7f612"
+    },
+    {
+      "path": "tests/fixtures/native_migration/repository_ontology_v1/source-pins.json",
+      "sha256": "f023eae278d83509d99387defb31da7dfce9b147ed1f58e2bc3d15b019feedc2",
+      "byte_length": 395,
+      "git_blob": "5bbb039b729e97267f734fdb1600d60453bb5d33"
+    }
+  ],
+  "aggregate_validation": {
+    "method": "FULL_SUITE_THEN_FAILED_SETUP_SUITE_RERUN_NO_SOURCE_OR_TEST_CRITERIA_CHANGES",
+    "passed_files": 181,
+    "skipped_files": 1,
+    "tests_passed": 1258,
+    "tests_skipped": 10,
+    "initial_full_suite": {
+      "passed_files": 180,
+      "failed_files": 1,
+      "skipped_files": 1,
+      "tests_passed": 1249,
+      "tests_skipped": 19,
+      "exit_code": 1
+    },
+    "retry": {
+      "suite": "test/s2s-live-drand.test.ts",
+      "passed_files": 1,
+      "tests_passed": 9,
+      "exit_code": 0
+    },
+    "setup_repair": "Copied the already locked tools/swm0w_drand/node_modules cache into the isolated checkout; provenance validation then passed. No source/test changes, exclusions or criterion changes."
+  },
+  "checks": [
+    {
+      "command": "npm test -- --maxWorkers=1",
+      "exit_code": 1,
+      "local_log_sha256": "b19df38cadc0e5b77e2a50fb778f140796f46111f76afb5127a0f5050be49257",
+      "local_log_byte_length": 38508,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED",
+      "passed_files": 180,
+      "failed_files": 1,
+      "skipped_files": 1,
+      "tests_passed": 1249,
+      "tests_skipped": 19,
+      "status": "FAILED_SETUP_PRESERVED"
+    },
+    {
+      "command": "npm test -- test/s2s-live-drand.test.ts --maxWorkers=1",
+      "exit_code": 0,
+      "local_log_sha256": "348867511efe3804fcb0e315069937c90876f363b0dba843da58d81369d2f2ea",
+      "local_log_byte_length": 596,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED",
+      "suite": "test/s2s-live-drand.test.ts",
+      "passed_files": 1,
+      "tests_passed": 9,
+      "status": "FAILED_SETUP_SUITE_RECHECK_PASSED"
+    },
+    {
+      "command": "npm run check",
+      "exit_code": 0,
+      "local_log_sha256": "b675219bc0a689d4c460db6327d030968681b83edf2ca2383f3f9ee6336c86ad",
+      "local_log_byte_length": 3464,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "local_log_sha256": "51a25d8d4c57a1ea08bb66e4ddd0416369a3279c3984f50d06572439b5862db5",
+      "local_log_byte_length": 105,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "npm run build:dnrd",
+      "exit_code": 0,
+      "local_log_sha256": "6945bc5a754a1883a538f4e388a1748a91b35e4688df1147fa0ee68a86f43975",
+      "local_log_byte_length": 70,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "npm pack --dry-run",
+      "exit_code": 0,
+      "local_log_sha256": "856f5a68ef2c6797e9e029532517fd73da7ca0a6e61e9577dcd1111236406141",
+      "local_log_byte_length": 66207,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology",
+      "exit_code": 0,
+      "local_log_sha256": "4b17f7bf4fd60b53103509f0f6b3590b5cecadac1bbd8fc54cc4bc1a145076ff",
+      "local_log_byte_length": 175,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    }
+  ],
+  "python_free_emitted_cli_smokes": {
+    "status": "PASS",
+    "cases": [
+      {
+        "name": "p1-zero",
+        "emitted_process": "native-p1-gate-process.js",
+        "exit_code": 0,
+        "stdout_sha256": "59e116d9ddd0f046506ac50f58a676a16d6641257e068569323e9154a372ed2c",
+        "python_unavailable_on_path": true,
+        "allowed_path_tools": [
+          "node"
+        ],
+        "foreign_working_directory": true
+      },
+      {
+        "name": "p1-positive",
+        "emitted_process": "native-p1-gate-process.js",
+        "exit_code": 0,
+        "stdout_sha256": "691b406a84d9b1c536b0d74a16811e5dfade81f77eb0e487114cef470f12574a",
+        "python_unavailable_on_path": true,
+        "allowed_path_tools": [
+          "node"
+        ],
+        "foreign_working_directory": true
+      },
+      {
+        "name": "p1-negative",
+        "emitted_process": "native-p1-gate-process.js",
+        "exit_code": 0,
+        "stdout_sha256": "45b7d5b210b821c68ef6ce2d37249c82c80f5b34f10497bdc59fff25c037483d",
+        "python_unavailable_on_path": true,
+        "allowed_path_tools": [
+          "node"
+        ],
+        "foreign_working_directory": true
+      },
+      {
+        "name": "canonical-permit",
+        "emitted_process": "native-formal-verify-process.js",
+        "exit_code": 0,
+        "stdout_sha256": "17aa840c0515921e5da7210219814c7b6e94136d76803bf66ca1b9e73ca18eb7",
+        "python_unavailable_on_path": true,
+        "allowed_path_tools": [
+          "node",
+          "openssl",
+          "git"
+        ],
+        "foreign_working_directory": true
+      },
+      {
+        "name": "repository-ontology",
+        "emitted_process": "native-repository-ontology-process.js",
+        "exit_code": 0,
+        "stdout_sha256": "0bc94584030326bf750ae51992156e160e62d481d883c09e12d8b083af9a330c",
+        "python_unavailable_on_path": true,
+        "allowed_path_tools": [
+          "node",
+          "git",
+          "openssl"
+        ],
+        "foreign_working_directory": true
+      },
+      {
+        "name": "graph-standards-verify",
+        "emitted_process": "native-graph-standards-process.js",
+        "exit_code": 0,
+        "stdout_sha256": "3dd7abdda89a958cbc05c6cc724b069461ff1f0d59a442ce0cd301f5b7d9d340",
+        "python_unavailable_on_path": true,
+        "allowed_path_tools": [
+          "node",
+          "git",
+          "openssl"
+        ],
+        "foreign_working_directory": true
+      },
+      {
+        "name": "projection-work",
+        "emitted_process": "native-development-projection-process.js",
+        "exit_code": 0,
+        "stdout_sha256": "11a36c1d41821c41e244e794347b868183888a748f865dea3612bebfaad9325d",
+        "python_unavailable_on_path": true,
+        "allowed_path_tools": [
+          "node",
+          "git",
+          "openssl"
+        ],
+        "foreign_working_directory": true
+      },
+      {
+        "name": "projection-day",
+        "emitted_process": "native-development-projection-process.js",
+        "exit_code": 0,
+        "stdout_sha256": "c8a44399d2bc98531f64b6589da4c1ec3632b3cd5ac4720f8971350af967387f",
+        "python_unavailable_on_path": true,
+        "allowed_path_tools": [
+          "node",
+          "git",
+          "openssl"
+        ],
+        "foreign_working_directory": true
+      },
+      {
+        "name": "projection-frontier",
+        "emitted_process": "native-development-projection-process.js",
+        "exit_code": 0,
+        "stdout_sha256": "c4b4b2f1193f89704b43676a6ee95e073da3888d017a1cb0d29977b706227dd2",
+        "python_unavailable_on_path": true,
+        "allowed_path_tools": [
+          "node",
+          "git",
+          "openssl"
+        ],
+        "foreign_working_directory": true
+      }
+    ]
+  },
+  "formal_emitted_original_contracts": {
+    "status": "PASS",
+    "node_only_path": true,
+    "foreign_working_directory": true,
+    "cases": [
+      {
+        "kind": "cellular-longinus",
+        "name": "valid",
+        "original_decision": "ACCEPT",
+        "native_exit_code": 0,
+        "entire_positive_result_equal": true,
+        "stdout_sha256": "2768c08e66a923e63513b343809bf2ecd51fe7b5c844ab735159cd6ab9f5fcb2"
+      },
+      {
+        "kind": "cellular-longinus",
+        "name": "duplicate-layer",
+        "original_decision": "ACCEPT",
+        "native_exit_code": 0,
+        "entire_positive_result_equal": true,
+        "stdout_sha256": "40a1caa72532ce5ce1f605396dd44e9c802a86ba6918b51b967a3831d8f23fbd"
+      },
+      {
+        "kind": "cellular-longinus",
+        "name": "missing-layer",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-longinus",
+        "name": "write-claim",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-longinus",
+        "name": "duplicate-source",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-longinus",
+        "name": "byte-drift",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-longinus",
+        "name": "line-past-eof",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-longinus",
+        "name": "symbol-missing",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-longinus",
+        "name": "missing-state",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-runtime-longinus",
+        "name": "valid",
+        "original_decision": "ACCEPT",
+        "native_exit_code": 0,
+        "entire_positive_result_equal": true,
+        "stdout_sha256": "9dee9b6a025c46aeb9458fb182f4a3a93271e07cf864236abf8f527ce4a33640"
+      },
+      {
+        "kind": "cellular-runtime-longinus",
+        "name": "duplicate-layer",
+        "original_decision": "ACCEPT",
+        "native_exit_code": 0,
+        "entire_positive_result_equal": true,
+        "stdout_sha256": "889ffae88393561906e59dc4dd0fb858aa77717022696bd033dcd8740cb0a2d6"
+      },
+      {
+        "kind": "cellular-runtime-longinus",
+        "name": "missing-layer",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-runtime-longinus",
+        "name": "write-claim",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-runtime-longinus",
+        "name": "duplicate-source",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-runtime-longinus",
+        "name": "byte-drift",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-runtime-longinus",
+        "name": "line-past-eof",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-runtime-longinus",
+        "name": "symbol-missing",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-runtime-longinus",
+        "name": "missing-state",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-runtime-longinus",
+        "name": "lean-token-missing",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "cellular-runtime-longinus",
+        "name": "python-token-missing",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "valid",
+        "original_decision": "ACCEPT",
+        "native_exit_code": 0,
+        "entire_positive_result_equal": true,
+        "stdout_sha256": "2593a9ca0bdb7ed8f7eb9e693e633cf74c9ed9575c1ff72f7280239d646f94f3"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "duplicate-layer",
+        "original_decision": "ACCEPT",
+        "native_exit_code": 0,
+        "entire_positive_result_equal": true,
+        "stdout_sha256": "7e8b2accb40b6f0abbc2e74210f06fc8261a6778d836f868d2ab98bb4405dee4"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "missing-layer",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "write-claim",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "duplicate-source",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "byte-drift",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "line-past-eof",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "symbol-missing",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "missing-state",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "lean-token-missing",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "python-token-missing",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "fsm-token-missing",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "prereg-order",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "judge-drift",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "receipt-schema",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "missing-fault",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "failed-fault",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "unregistered-probe",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "kind": "durable-runtime-longinus",
+        "name": "scientific-promotion",
+        "original_decision": "REJECT",
+        "native_exit_code": 2,
+        "entire_positive_result_equal": null,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  "original_contracts": {
+    "occurrence_workflow": 720,
+    "completion_decisions": 21,
+    "void_publication_full_projections": 4,
+    "sealed_audit_and_publication": "FULL_ORIGINAL_MOCKED_FIXTURE_ONLY",
+    "formal": "39 original success/refusal cases checked through both native domain and freshly emitted CLI, plus canonical Permit vectors; native OpenSSL subprocess verifies original Ed25519 bytes",
+    "repository_ontology": "16 original acceptance/refusal cases; all 296 compatibility manifests retained",
+    "p1": "3 whole-diagnostic byte comparisons with zero, +1 and -1 deltas; 72 bootstrap cases; source-pinned float64 NPZ and SQLite inputs",
+    "interpretation": "Static exact-original fixtures run in normal native tests without Python. Finite cases do not establish universal equivalence."
+  },
+  "adversarial_repairs": [
+    "Reject evaluator role rebindings before candidate promotion; original Python rejects invalid role construction, so this is a fail-closed boundary result, not whole-output parity for malformed constructors.",
+    "Completion requires issued cross-bound candidate, assessment, dual evaluation, immutable workflow state and a fresh qualified external audit. Publication recomputes completion and audits again. Copied objects cannot issue receipts.",
+    "Hold executable and each verifier argument input by file descriptor across version and execution, with typed errors, timeout/output bounds and interruption-safe cleanup.",
+    "Neo4j projection transaction has a server deadline and bounded finalizers. A late timed-out query cannot commit.",
+    "v3 to v4 development-profile migration preserves learning state, refuses live runtime locks and rolls back the whole migration on SQL failure.",
+    "P1 NPZ ZIP64/CRC/UTF-32 decoding, original MT19937 rejection sampling, accurate summation, retrieval metadata, manifest bytes and float-valued snapshot hashes repaired through original-source comparisons."
+  ],
+  "development_workflow": {
+    "commands": [
+      "hswm-dev hswm plan",
+      "hswm-dev hswm run",
+      "hswm-dev hswm feedback",
+      "hswm-dev hswm status"
+    ],
+    "episode": "native-operations-migration-20260913",
+    "relation": "relation:runtime-focused",
+    "result": "SUCCEEDED",
+    "feedback_status": "FEEDBACK_RECORDED",
+    "usefulness": {
+      "success": true,
+      "source": "agent(codex):useful for v4 native development-route regression only; passing checks do not establish causal learning or efficacy; full isolated suite, resolved drand setup retry and original-source static contract tests recorded separately"
+    },
+    "state_storage": "PRIVATE_LOCAL_STATE_NOT_PUBLIC_KG"
+  },
+  "limits": [
+    "Official-suite successor work and active S2S numeric dependency closure are outside this exact checkpoint.",
+    "P1 missing-cache model embedding generation remains unported; frozen cached replay is bounded engineering parity only.",
+    "Real G0 toolchain qualification remains BLOCKED. Original successful audit fixture explicitly mocks verification; no real qualified Cosign/Temporal/OSF result is claimed.",
+    "Python source-distribution and wheel compatibility lanes remain. No historical record or success/RED criterion was deleted.",
+    "CI and systemd source routing changed; no live graph write, service deployment/restart, external publication, new research outcome or causal-learning efficacy claim."
+  ]
+}

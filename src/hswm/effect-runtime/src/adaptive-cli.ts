@@ -18,7 +18,7 @@ export const DEVELOPMENT_PROFILES: Readonly<Record<string, string>> = Object.fre
     maplelineage: "adaptive_maplelineage_development.v1.json",
     supullim: "adaptive_supullim_development.v1.json",
     reluvator: "adaptive_reluvator_development.v2.json",
-    hswm: "adaptive_hswm_development.v3.json"
+    hswm: "adaptive_hswm_development.v4.json"
 });
 const ALIASES: Readonly<Record<string, string>> = Object.freeze({
     "the-excel-tycoon": "game", "버엑시": "game", "메이플리니지": "maplelineage"

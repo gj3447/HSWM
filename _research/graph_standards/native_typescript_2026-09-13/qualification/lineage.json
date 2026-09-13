@@ -1,0 +1,64 @@
+{
+  "schema_version": "hswm-native-graph-qualification-lineage/v1",
+  "date": "2026-09-13",
+  "source_base_commit": "974c64418c9f29248eb538ffa78912bfa12eb0ea",
+  "source_observation": "WORKING_TREE_BYTES_NOT_PRESENT_AT_BASE_COMMIT",
+  "authority": "SECONDARY_AI_ENGINEERING_QUALIFICATION",
+  "comparison_authority": {
+    "url": "https://w3c.github.io/data-shapes/data-shapes-test-suite/",
+    "commit": "b7844c776844b4927e1e79393ed05ed8bb80ee11",
+    "path": "data-shapes-test-suite/index.html",
+    "lines": "158-203"
+  },
+  "attempts": [
+    {
+      "file": "harness-attempt-1.json",
+      "passed": 93,
+      "failed": 5,
+      "interpretation": "HARNESS_REPORT_COMPARISON_FAILURES: optional nested details were compared and path graphs were incorrectly merged. Original report retained. Earlier harness source bytes were not captured; no code-source reconstruction is claimed."
+    },
+    {
+      "file": "harness-attempt-2.json",
+      "passed": 97,
+      "failed": 1,
+      "interpretation": "REPORT_CANONICALIZATION_RESOURCE_LIMIT: default maxWorkFactor=1 exhausted 36 deep iterations on nodeKind-001. No test excluded or expected result changed."
+    },
+    {
+      "file": "shacl-core.json",
+      "passed": 98,
+      "failed": 0,
+      "interpretation": "Official report normalization; RDFC10 graph isomorphism with explicit bounded maxWorkFactor=4 and 30-second timeout. All approved Core tests selected."
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-qualification.ts",
+      "sha256": "df6f1894887041df24147e9db37062b27b64bfa4b9626968dfc7acb03ddfce4b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-qualification-process.ts",
+      "sha256": "30a4f1ec5ef8100e72ebc3c8dcdb6d483fe471331dd5d3e345cf1814a9acde54"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-vendor.ts",
+      "sha256": "b3ac276d1abaebfb030006977d6ea1fe6335c8e62a5edfc2ea9e97badce938b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "d4a20cb4f26ac1ee73bc6c0daec6a0561a9ec7202125ffc5d1709679cbb8617e"
+    },
+    {
+      "path": "_research/graph_standards/native_typescript_2026-09-13/qualification/harness-attempt-1.json",
+      "sha256": "3a44c61037006193a90814b257fced056530bd6184cab7fbbd81892177341db6"
+    },
+    {
+      "path": "_research/graph_standards/native_typescript_2026-09-13/qualification/harness-attempt-2.json",
+      "sha256": "f344c0f67dc54eaed0876d552f4f8c0a63ae75d3bbd30142e1b4631d52100b7b"
+    },
+    {
+      "path": "_research/graph_standards/native_typescript_2026-09-13/qualification/shacl-core.json",
+      "sha256": "596a7e3ebe52047dc266c84a825967882edd96e9d9072ea57b220eabb4783c5b"
+    }
+  ],
+  "claim_ceiling": "LOCAL_ENGINEERING_QUALIFICATION_NOT_HSWM_PROGRESS_EFFICACY_OR_OFFICIAL_SDK_AUTHORITY"
+}

@@ -1,0 +1,4735 @@
+[
+  {
+    "name": "preview complete",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "8d1ee5872f92a2e0787130ad48e81acadbc06c3dbe0669dacf3292b6e8b6343a",
+        "step_input_digest": "34e5dee7b490755bfe6ee90094c7233cc478a5bba9d4019ab1a0b90686609939",
+        "hypothetical_read_set": [
+          {
+            "field": [
+              "part",
+              "ready"
+            ],
+            "source": "authored:query:ready",
+            "revision": "p1",
+            "observation_digest": "e4c5e17efb066fe1e9a12b26ef13aa50f22d1b30c7618f27e6d2b229f8078fd3",
+            "fresh": true
+          }
+        ],
+        "hypothetical_next_step": {
+          "kind": "ACTION_PROPOSAL",
+          "reason": null,
+          "action_name": "join",
+          "cost": 2
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [
+          {
+            "priority": 0,
+            "relation_ref": [
+              "authored:join-condition",
+              "r1",
+              "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+            ],
+            "truth": "TRUE"
+          }
+        ],
+        "selected_rule_provenance": {
+          "priority": 0,
+          "relation_ref": [
+            "authored:join-condition",
+            "r1",
+            "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+          ],
+          "truth": "TRUE"
+        }
+      }
+    }
+  },
+  {
+    "name": "exited withheld",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks",
+        "exited": true
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "8d1ee5872f92a2e0787130ad48e81acadbc06c3dbe0669dacf3292b6e8b6343a",
+        "step_input_digest": "4209f93ebe7edec657992cfd9b0f37d55cacb1457f27fc050700acb79e01c966",
+        "hypothetical_read_set": [],
+        "hypothetical_next_step": {
+          "kind": "WITHHOLD",
+          "reason": "cell_exit"
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [],
+        "selected_rule_provenance": null
+      }
+    }
+  },
+  {
+    "name": "conflict withheld",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks",
+        "conflict": true
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "8d1ee5872f92a2e0787130ad48e81acadbc06c3dbe0669dacf3292b6e8b6343a",
+        "step_input_digest": "219584afd45d406c534bd06813f4ea58a951c2f73c2178a77f874c4d9979e867",
+        "hypothetical_read_set": [],
+        "hypothetical_next_step": {
+          "kind": "WITHHOLD",
+          "reason": "conflicting_evidence"
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [],
+        "selected_rule_provenance": null
+      }
+    }
+  },
+  {
+    "name": "scope withheld",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "other",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "8d1ee5872f92a2e0787130ad48e81acadbc06c3dbe0669dacf3292b6e8b6343a",
+        "step_input_digest": "bfa8eb4975e5c28128b4397b6cbee4986e4407da949b4b0c0fca942c303c423d",
+        "hypothetical_read_set": [],
+        "hypothetical_next_step": {
+          "kind": "WITHHOLD",
+          "reason": "scope_mismatch"
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [],
+        "selected_rule_provenance": null
+      }
+    }
+  },
+  {
+    "name": "revision withheld",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "other",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "8d1ee5872f92a2e0787130ad48e81acadbc06c3dbe0669dacf3292b6e8b6343a",
+        "step_input_digest": "3876f6c991784dd30604c6919ca2c7f266e7a8fba761208ca3401f079100d371",
+        "hypothetical_read_set": [],
+        "hypothetical_next_step": {
+          "kind": "WITHHOLD",
+          "reason": "stale_revision"
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [],
+        "selected_rule_provenance": null
+      }
+    }
+  },
+  {
+    "name": "now withheld",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1000000,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "8d1ee5872f92a2e0787130ad48e81acadbc06c3dbe0669dacf3292b6e8b6343a",
+        "step_input_digest": "1a284bc672fd7ada050940bb77e6b559642a224a677392c983c99568d2ae1af8",
+        "hypothetical_read_set": [
+          {
+            "field": [
+              "part",
+              "ready"
+            ],
+            "source": "authored:query:ready",
+            "revision": "p1",
+            "observation_digest": "e4c5e17efb066fe1e9a12b26ef13aa50f22d1b30c7618f27e6d2b229f8078fd3",
+            "fresh": false
+          }
+        ],
+        "hypothetical_next_step": {
+          "kind": "OBSERVE",
+          "reason": null,
+          "observation_refs": [
+            [
+              "part",
+              "ready"
+            ]
+          ],
+          "cost": 1
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [
+          {
+            "priority": 0,
+            "relation_ref": [
+              "authored:join-condition",
+              "r1",
+              "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+            ],
+            "truth": "UNKNOWN"
+          }
+        ],
+        "selected_rule_provenance": {
+          "priority": 0,
+          "relation_ref": [
+            "authored:join-condition",
+            "r1",
+            "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+          ],
+          "truth": "UNKNOWN"
+        }
+      }
+    }
+  },
+  {
+    "name": "budget withheld",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 0,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "8d1ee5872f92a2e0787130ad48e81acadbc06c3dbe0669dacf3292b6e8b6343a",
+        "step_input_digest": "7ca25ed4b1a425315c278ba7ff86e28972d6f7283b0feff24e5d54998a3299e0",
+        "hypothetical_read_set": [
+          {
+            "field": [
+              "part",
+              "ready"
+            ],
+            "source": "authored:query:ready",
+            "revision": "p1",
+            "observation_digest": "e4c5e17efb066fe1e9a12b26ef13aa50f22d1b30c7618f27e6d2b229f8078fd3",
+            "fresh": true
+          }
+        ],
+        "hypothetical_next_step": {
+          "kind": "WITHHOLD",
+          "reason": "permission_capability_or_budget"
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [
+          {
+            "priority": 0,
+            "relation_ref": [
+              "authored:join-condition",
+              "r1",
+              "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+            ],
+            "truth": "TRUE"
+          }
+        ],
+        "selected_rule_provenance": {
+          "priority": 0,
+          "relation_ref": [
+            "authored:join-condition",
+            "r1",
+            "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+          ],
+          "truth": "TRUE"
+        }
+      }
+    }
+  },
+  {
+    "name": "permitted withheld",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "8d1ee5872f92a2e0787130ad48e81acadbc06c3dbe0669dacf3292b6e8b6343a",
+        "step_input_digest": "0a5ead64cc0ac5e37a0ac58986b93dc1d711a9413a4cdec4d720c509e75260a1",
+        "hypothetical_read_set": [
+          {
+            "field": [
+              "part",
+              "ready"
+            ],
+            "source": "authored:query:ready",
+            "revision": "p1",
+            "observation_digest": "e4c5e17efb066fe1e9a12b26ef13aa50f22d1b30c7618f27e6d2b229f8078fd3",
+            "fresh": true
+          }
+        ],
+        "hypothetical_next_step": {
+          "kind": "WITHHOLD",
+          "reason": "permission_capability_or_budget"
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [
+          {
+            "priority": 0,
+            "relation_ref": [
+              "authored:join-condition",
+              "r1",
+              "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+            ],
+            "truth": "TRUE"
+          }
+        ],
+        "selected_rule_provenance": {
+          "priority": 0,
+          "relation_ref": [
+            "authored:join-condition",
+            "r1",
+            "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+          ],
+          "truth": "TRUE"
+        }
+      }
+    }
+  },
+  {
+    "name": "available withheld",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "8d1ee5872f92a2e0787130ad48e81acadbc06c3dbe0669dacf3292b6e8b6343a",
+        "step_input_digest": "2ea7cf4f7c52300beb57d22e4121838f93cbd26c21ae1c4514099508cdec11ea",
+        "hypothetical_read_set": [
+          {
+            "field": [
+              "part",
+              "ready"
+            ],
+            "source": "authored:query:ready",
+            "revision": "p1",
+            "observation_digest": "e4c5e17efb066fe1e9a12b26ef13aa50f22d1b30c7618f27e6d2b229f8078fd3",
+            "fresh": true
+          }
+        ],
+        "hypothetical_next_step": {
+          "kind": "WITHHOLD",
+          "reason": "permission_capability_or_budget"
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [
+          {
+            "priority": 0,
+            "relation_ref": [
+              "authored:join-condition",
+              "r1",
+              "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+            ],
+            "truth": "TRUE"
+          }
+        ],
+        "selected_rule_provenance": {
+          "priority": 0,
+          "relation_ref": [
+            "authored:join-condition",
+            "r1",
+            "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+          ],
+          "truth": "TRUE"
+        }
+      }
+    }
+  },
+  {
+    "name": "budget rejects -1",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": -1,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": false,
+      "reason": "invalid budget or cost"
+    }
+  },
+  {
+    "name": "budget rejects True",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": true,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": false,
+      "reason": "invalid budget or cost"
+    }
+  },
+  {
+    "name": "exited rejects None",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks",
+        "exited": null
+      }
+    },
+    "expected": {
+      "ok": false,
+      "reason": "current observation context"
+    }
+  },
+  {
+    "name": "conflict rejects 0",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks",
+        "conflict": 0
+      }
+    },
+    "expected": {
+      "ok": false,
+      "reason": "current observation context"
+    }
+  },
+  {
+    "name": "permitted rejects [1]",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          1
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": false,
+      "reason": "expected nonempty text"
+    }
+  },
+  {
+    "name": "available rejects [None]",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          null
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": false,
+      "reason": "expected nonempty text"
+    }
+  },
+  {
+    "name": "source rejects ",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": ""
+      }
+    },
+    "expected": {
+      "ok": false,
+      "reason": "missing input provenance"
+    }
+  },
+  {
+    "name": "negative cost rejects",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": -1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": false,
+      "reason": "invalid budget or cost"
+    }
+  },
+  {
+    "name": "missing action cost rejects",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": false,
+      "reason": "undeclared action cost"
+    }
+  },
+  {
+    "name": "extra checks rejects",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks",
+        "extra": true
+      }
+    },
+    "expected": {
+      "ok": false,
+      "reason": "invalid JSON object fields"
+    }
+  },
+  {
+    "name": "missing check rejects",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3
+      }
+    },
+    "expected": {
+      "ok": false,
+      "reason": "invalid JSON object fields"
+    }
+  },
+  {
+    "name": "empty observations unknown",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "observations": [],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "8d1ee5872f92a2e0787130ad48e81acadbc06c3dbe0669dacf3292b6e8b6343a",
+        "step_input_digest": "4d14ef8621097abf8025b9da4ae6451451808e8e6b23565dcf45f3f28c59d233",
+        "hypothetical_read_set": [
+          {
+            "field": [
+              "part",
+              "ready"
+            ],
+            "source": null,
+            "revision": null,
+            "observation_digest": null,
+            "fresh": false
+          }
+        ],
+        "hypothetical_next_step": {
+          "kind": "OBSERVE",
+          "reason": null,
+          "observation_refs": [
+            [
+              "part",
+              "ready"
+            ]
+          ],
+          "cost": 1
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [
+          {
+            "priority": 0,
+            "relation_ref": [
+              "authored:join-condition",
+              "r1",
+              "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+            ],
+            "truth": "UNKNOWN"
+          }
+        ],
+        "selected_rule_provenance": {
+          "priority": 0,
+          "relation_ref": [
+            "authored:join-condition",
+            "r1",
+            "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+          ],
+          "truth": "UNKNOWN"
+        }
+      }
+    }
+  },
+  {
+    "name": "not observed",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "not",
+          "child": {
+            "op": "eq",
+            "left": {
+              "role": "part",
+              "field": "ready"
+            },
+            "right": 1
+          }
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "e06b3cb820df4b7817f3706cb05225091d89efd5395ebf6ad3503e028fa4301d",
+        "step_input_digest": "5b107f68d55cc50cd04ae9e52856c7bc88a0ab520ab7055a786b4f55547ff4df",
+        "hypothetical_read_set": [
+          {
+            "field": [
+              "part",
+              "ready"
+            ],
+            "source": "authored:query:ready",
+            "revision": "p1",
+            "observation_digest": "e4c5e17efb066fe1e9a12b26ef13aa50f22d1b30c7618f27e6d2b229f8078fd3",
+            "fresh": true
+          }
+        ],
+        "hypothetical_next_step": {
+          "kind": "WITHHOLD",
+          "reason": "no_applicable_rule"
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [
+          {
+            "priority": 0,
+            "relation_ref": [
+              "authored:join-condition",
+              "r1",
+              "47dd37a35544bc79f3cec5cfc1e19504201f4a1efbfb4d06b5a06e03370925ea"
+            ],
+            "truth": "FALSE"
+          }
+        ],
+        "selected_rule_provenance": null
+      }
+    }
+  },
+  {
+    "name": "not unknown",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "not",
+          "child": {
+            "op": "eq",
+            "left": {
+              "role": "part",
+              "field": "ready"
+            },
+            "right": 1
+          }
+        }
+      },
+      "observations": [],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "e06b3cb820df4b7817f3706cb05225091d89efd5395ebf6ad3503e028fa4301d",
+        "step_input_digest": "4578b059159332c4cdd425028c40598eab056b095d200901e77b97325769648e",
+        "hypothetical_read_set": [
+          {
+            "field": [
+              "part",
+              "ready"
+            ],
+            "source": null,
+            "revision": null,
+            "observation_digest": null,
+            "fresh": false
+          }
+        ],
+        "hypothetical_next_step": {
+          "kind": "OBSERVE",
+          "reason": null,
+          "observation_refs": [
+            [
+              "part",
+              "ready"
+            ]
+          ],
+          "cost": 1
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [
+          {
+            "priority": 0,
+            "relation_ref": [
+              "authored:join-condition",
+              "r1",
+              "47dd37a35544bc79f3cec5cfc1e19504201f4a1efbfb4d06b5a06e03370925ea"
+            ],
+            "truth": "UNKNOWN"
+          }
+        ],
+        "selected_rule_provenance": {
+          "priority": 0,
+          "relation_ref": [
+            "authored:join-condition",
+            "r1",
+            "47dd37a35544bc79f3cec5cfc1e19504201f4a1efbfb4d06b5a06e03370925ea"
+          ],
+          "truth": "UNKNOWN"
+        }
+      }
+    }
+  },
+  {
+    "name": "any observed",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "any",
+          "children": [
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "not",
+              "child": {
+                "op": "eq",
+                "left": {
+                  "role": "part",
+                  "field": "ready"
+                },
+                "right": 1
+              }
+            }
+          ]
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "63be57adf7c4e4dbf6af7d81a47f1120cd2050fa1c517172ee6d2b8fcf0521db",
+        "step_input_digest": "120060a9666f8bbe688093dcb71e1e779565c65e5d7022358c0a2af70b23c4e3",
+        "hypothetical_read_set": [
+          {
+            "field": [
+              "part",
+              "ready"
+            ],
+            "source": "authored:query:ready",
+            "revision": "p1",
+            "observation_digest": "e4c5e17efb066fe1e9a12b26ef13aa50f22d1b30c7618f27e6d2b229f8078fd3",
+            "fresh": true
+          }
+        ],
+        "hypothetical_next_step": {
+          "kind": "ACTION_PROPOSAL",
+          "reason": null,
+          "action_name": "join",
+          "cost": 2
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [
+          {
+            "priority": 0,
+            "relation_ref": [
+              "authored:join-condition",
+              "r1",
+              "57527364df6d2e6134eb716a929920cf0ec57785c1363916cad1fb57948b7795"
+            ],
+            "truth": "TRUE"
+          }
+        ],
+        "selected_rule_provenance": {
+          "priority": 0,
+          "relation_ref": [
+            "authored:join-condition",
+            "r1",
+            "57527364df6d2e6134eb716a929920cf0ec57785c1363916cad1fb57948b7795"
+          ],
+          "truth": "TRUE"
+        }
+      }
+    }
+  },
+  {
+    "name": "any unknown",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "any",
+          "children": [
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "not",
+              "child": {
+                "op": "eq",
+                "left": {
+                  "role": "part",
+                  "field": "ready"
+                },
+                "right": 1
+              }
+            }
+          ]
+        }
+      },
+      "observations": [],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "63be57adf7c4e4dbf6af7d81a47f1120cd2050fa1c517172ee6d2b8fcf0521db",
+        "step_input_digest": "7b48ccc295c9a8b295d2c35b7e7b8617592e018a2a586c3c2aadcf5374852238",
+        "hypothetical_read_set": [
+          {
+            "field": [
+              "part",
+              "ready"
+            ],
+            "source": null,
+            "revision": null,
+            "observation_digest": null,
+            "fresh": false
+          }
+        ],
+        "hypothetical_next_step": {
+          "kind": "OBSERVE",
+          "reason": null,
+          "observation_refs": [
+            [
+              "part",
+              "ready"
+            ]
+          ],
+          "cost": 1
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [
+          {
+            "priority": 0,
+            "relation_ref": [
+              "authored:join-condition",
+              "r1",
+              "57527364df6d2e6134eb716a929920cf0ec57785c1363916cad1fb57948b7795"
+            ],
+            "truth": "UNKNOWN"
+          }
+        ],
+        "selected_rule_provenance": {
+          "priority": 0,
+          "relation_ref": [
+            "authored:join-condition",
+            "r1",
+            "57527364df6d2e6134eb716a929920cf0ec57785c1363916cad1fb57948b7795"
+          ],
+          "truth": "UNKNOWN"
+        }
+      }
+    }
+  },
+  {
+    "name": "all observed",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "all",
+          "children": [
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "not",
+              "child": {
+                "op": "eq",
+                "left": {
+                  "role": "part",
+                  "field": "ready"
+                },
+                "right": 1
+              }
+            }
+          ]
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "ec2a28efc77974c3351a8518a67f5499620d36bdde7b51839865c537a9dfea22",
+        "step_input_digest": "5c558ce1f37170ee119ad2e2ca6a2c33907483cb64da8f090a2eedd3574ab4b0",
+        "hypothetical_read_set": [
+          {
+            "field": [
+              "part",
+              "ready"
+            ],
+            "source": "authored:query:ready",
+            "revision": "p1",
+            "observation_digest": "e4c5e17efb066fe1e9a12b26ef13aa50f22d1b30c7618f27e6d2b229f8078fd3",
+            "fresh": true
+          }
+        ],
+        "hypothetical_next_step": {
+          "kind": "WITHHOLD",
+          "reason": "no_applicable_rule"
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [
+          {
+            "priority": 0,
+            "relation_ref": [
+              "authored:join-condition",
+              "r1",
+              "9c71dd678dd547760eda30a40bf57afc2b8a1b0bab6c57eefde49fa664da0ea1"
+            ],
+            "truth": "FALSE"
+          }
+        ],
+        "selected_rule_provenance": null
+      }
+    }
+  },
+  {
+    "name": "all unknown",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "all",
+          "children": [
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "not",
+              "child": {
+                "op": "eq",
+                "left": {
+                  "role": "part",
+                  "field": "ready"
+                },
+                "right": 1
+              }
+            }
+          ]
+        }
+      },
+      "observations": [],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "DESIGN_ONLY_NO_EXECUTION",
+        "preview_uid": "ec2a28efc77974c3351a8518a67f5499620d36bdde7b51839865c537a9dfea22",
+        "step_input_digest": "adcf9992177ded25d6a6c334bc0a53e2a818a7ad13d6f87162454e0b7d3b9661",
+        "hypothetical_read_set": [
+          {
+            "field": [
+              "part",
+              "ready"
+            ],
+            "source": null,
+            "revision": null,
+            "observation_digest": null,
+            "fresh": false
+          }
+        ],
+        "hypothetical_next_step": {
+          "kind": "OBSERVE",
+          "reason": null,
+          "observation_refs": [
+            [
+              "part",
+              "ready"
+            ]
+          ],
+          "cost": 1
+        },
+        "input_provenance": "authored:caller-checks",
+        "credit": "UNIDENTIFIED_CREDIT",
+        "evaluated_rule_provenance": [
+          {
+            "priority": 0,
+            "relation_ref": [
+              "authored:join-condition",
+              "r1",
+              "9c71dd678dd547760eda30a40bf57afc2b8a1b0bab6c57eefde49fa664da0ea1"
+            ],
+            "truth": "UNKNOWN"
+          }
+        ],
+        "selected_rule_provenance": {
+          "priority": 0,
+          "relation_ref": [
+            "authored:join-condition",
+            "r1",
+            "9c71dd678dd547760eda30a40bf57afc2b8a1b0bab6c57eefde49fa664da0ea1"
+          ],
+          "truth": "UNKNOWN"
+        }
+      }
+    }
+  },
+  {
+    "name": "AST node bound",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "all",
+          "children": [
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            }
+          ]
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": false,
+      "reason": "AST bound or type"
+    }
+  },
+  {
+    "name": "AST depth bound",
+    "command": "preview",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "not",
+          "child": {
+            "op": "not",
+            "child": {
+              "op": "not",
+              "child": {
+                "op": "not",
+                "child": {
+                  "op": "eq",
+                  "left": {
+                    "role": "part",
+                    "field": "ready"
+                  },
+                  "right": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "observations": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      }
+    },
+    "expected": {
+      "ok": false,
+      "reason": "AST bound or type"
+    }
+  },
+  {
+    "name": "synthesize resume_cursor",
+    "command": "synthesize",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 0
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:00"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:01"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 1
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": true,
+          "source": "authored:episode:11"
+        }
+      ],
+      "resume_cursor": null
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "PROPOSED_NOT_ADMITTED",
+        "candidates": [
+          {
+            "relation_ast": {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            "parent_revision": null,
+            "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+            "status": "PROPOSED_NOT_ADMITTED",
+            "origin": "BOUNDED_GRAMMAR_SYNTHESIS",
+            "other_remainder": "OPEN",
+            "credit": "UNIDENTIFIED_CREDIT"
+          },
+          {
+            "relation_ast": {
+              "op": "all",
+              "children": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "role": "part",
+                    "field": "clean"
+                  },
+                  "right": 1
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "role": "part",
+                    "field": "ready"
+                  },
+                  "right": 1
+                }
+              ]
+            },
+            "parent_revision": null,
+            "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+            "status": "PROPOSED_NOT_ADMITTED",
+            "origin": "BOUNDED_GRAMMAR_SYNTHESIS",
+            "other_remainder": "OPEN",
+            "credit": "UNIDENTIFIED_CREDIT"
+          }
+        ],
+        "examined": 14,
+        "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+        "stop_reason": "SPACE_EXHAUSTED",
+        "search_complete": true,
+        "truncated": false,
+        "resume_cursor": null,
+        "candidate_space_size": 14,
+        "search_offset": 0,
+        "enumeration_progress": 14
+      }
+    }
+  },
+  {
+    "name": "synthesize parent",
+    "command": "synthesize",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 0
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:00"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:01"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 1
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": true,
+          "source": "authored:episode:11"
+        }
+      ],
+      "parent": null
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "PROPOSED_NOT_ADMITTED",
+        "candidates": [
+          {
+            "relation_ast": {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            "parent_revision": null,
+            "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+            "status": "PROPOSED_NOT_ADMITTED",
+            "origin": "BOUNDED_GRAMMAR_SYNTHESIS",
+            "other_remainder": "OPEN",
+            "credit": "UNIDENTIFIED_CREDIT"
+          },
+          {
+            "relation_ast": {
+              "op": "all",
+              "children": [
+                {
+                  "op": "eq",
+                  "left": {
+                    "role": "part",
+                    "field": "clean"
+                  },
+                  "right": 1
+                },
+                {
+                  "op": "eq",
+                  "left": {
+                    "role": "part",
+                    "field": "ready"
+                  },
+                  "right": 1
+                }
+              ]
+            },
+            "parent_revision": null,
+            "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+            "status": "PROPOSED_NOT_ADMITTED",
+            "origin": "BOUNDED_GRAMMAR_SYNTHESIS",
+            "other_remainder": "OPEN",
+            "credit": "UNIDENTIFIED_CREDIT"
+          }
+        ],
+        "examined": 14,
+        "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+        "stop_reason": "SPACE_EXHAUSTED",
+        "search_complete": true,
+        "truncated": false,
+        "resume_cursor": null,
+        "candidate_space_size": 14,
+        "search_offset": 0,
+        "enumeration_progress": 14
+      }
+    }
+  },
+  {
+    "name": "synthesize candidate_limit",
+    "command": "synthesize",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 0
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:00"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:01"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 1
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": true,
+          "source": "authored:episode:11"
+        }
+      ],
+      "candidate_limit": 1
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "PROPOSED_NOT_ADMITTED",
+        "candidates": [
+          {
+            "relation_ast": {
+              "op": "eq",
+              "left": {
+                "role": "part",
+                "field": "ready"
+              },
+              "right": 1
+            },
+            "parent_revision": null,
+            "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+            "status": "PROPOSED_NOT_ADMITTED",
+            "origin": "BOUNDED_GRAMMAR_SYNTHESIS",
+            "other_remainder": "OPEN",
+            "credit": "UNIDENTIFIED_CREDIT"
+          }
+        ],
+        "examined": 4,
+        "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+        "stop_reason": "CANDIDATE_LIMIT",
+        "search_complete": false,
+        "truncated": true,
+        "resume_cursor": {
+          "version": 1,
+          "binding": "cc0bc8938568705a3f11fea45983afd7ca371c8e392616e4d29068921d451643",
+          "offset": 4,
+          "integrity": "169235cad885e97d55fbd006bf28817c4812f19aa8529f42dbe8a5d4d7793015"
+        },
+        "candidate_space_size": 14,
+        "search_offset": 0,
+        "enumeration_progress": 4
+      }
+    }
+  },
+  {
+    "name": "synthesize search_budget",
+    "command": "synthesize",
+    "request": {
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 0
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:00"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:01"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 1
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": true,
+          "source": "authored:episode:11"
+        }
+      ],
+      "search_budget": 1
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "PROPOSED_NOT_ADMITTED",
+        "candidates": [],
+        "examined": 1,
+        "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+        "stop_reason": "SEARCH_BUDGET",
+        "search_complete": false,
+        "truncated": true,
+        "resume_cursor": {
+          "version": 1,
+          "binding": "cc0bc8938568705a3f11fea45983afd7ca371c8e392616e4d29068921d451643",
+          "offset": 1,
+          "integrity": "bfd08cac22288cc5a795acb346258ce559b85cd62b21c18ab1fb8089a7fc302d"
+        },
+        "candidate_space_size": 14,
+        "search_offset": 0,
+        "enumeration_progress": 1
+      }
+    }
+  },
+  {
+    "name": "duplicate outcome",
+    "command": "demo",
+    "request": {
+      "schema_version": "hswm-conditional-demo/v1",
+      "outcome_projection": {
+        "kind": "BOOLEAN_SUCCESS_IS_RELATION_TRUTH",
+        "source": "authored:workshop-success-predicate-contract"
+      },
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 0
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:00"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:01"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 1
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": true,
+          "source": "authored:episode:11"
+        }
+      ],
+      "initial_relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "query": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      },
+      "contexts": [
+        {
+          "id": "ready-dirty",
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 1
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 0
+            }
+          ],
+          "source": "authored:available-context:10",
+          "cost": 1
+        },
+        {
+          "id": "ready-clean",
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 1
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "source": "authored:available-context:11",
+          "cost": 1
+        }
+      ],
+      "allowed_probe_ids": [
+        "ready-dirty",
+        "ready-clean"
+      ],
+      "probe_budget": 1,
+      "subsequent_outcomes": [
+        {
+          "probe_id": "ready-dirty",
+          "outcome": false,
+          "source": "authored:subsequent-public-feedback:10"
+        },
+        {
+          "probe_id": "ready-dirty",
+          "outcome": false,
+          "source": "authored:subsequent-public-feedback:10"
+        }
+      ]
+    },
+    "expected": {
+      "ok": false,
+      "reason": "duplicate or malformed subsequent outcome"
+    }
+  },
+  {
+    "name": "malformed unselected",
+    "command": "demo",
+    "request": {
+      "schema_version": "hswm-conditional-demo/v1",
+      "outcome_projection": {
+        "kind": "BOOLEAN_SUCCESS_IS_RELATION_TRUTH",
+        "source": "authored:workshop-success-predicate-contract"
+      },
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 0
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:00"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:01"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 1
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": true,
+          "source": "authored:episode:11"
+        }
+      ],
+      "initial_relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "query": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      },
+      "contexts": [
+        {
+          "id": "ready-dirty",
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 1
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 0
+            }
+          ],
+          "source": "authored:available-context:10",
+          "cost": 1
+        },
+        {
+          "id": "ready-clean",
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 1
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "source": "authored:available-context:11",
+          "cost": 1
+        }
+      ],
+      "allowed_probe_ids": [
+        "ready-dirty",
+        "ready-clean"
+      ],
+      "probe_budget": 1,
+      "subsequent_outcomes": [
+        {
+          "probe_id": "ready-dirty",
+          "outcome": false,
+          "source": "authored:subsequent-public-feedback:10"
+        },
+        {
+          "probe_id": "unused",
+          "outcome": 1,
+          "source": "s"
+        }
+      ]
+    },
+    "expected": {
+      "ok": false,
+      "reason": "duplicate or malformed subsequent outcome"
+    }
+  },
+  {
+    "name": "missing outcome",
+    "command": "demo",
+    "request": {
+      "schema_version": "hswm-conditional-demo/v1",
+      "outcome_projection": {
+        "kind": "BOOLEAN_SUCCESS_IS_RELATION_TRUTH",
+        "source": "authored:workshop-success-predicate-contract"
+      },
+      "domain": [
+        {
+          "role": "part",
+          "field": "ready",
+          "values": [
+            0,
+            1
+          ]
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "values": [
+            0,
+            1
+          ]
+        }
+      ],
+      "examples": [
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 0
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:00"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 0
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": false,
+          "source": "authored:episode:01"
+        },
+        {
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 1
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "outcome": true,
+          "source": "authored:episode:11"
+        }
+      ],
+      "initial_relation": {
+        "uid": "authored:join-condition",
+        "revision": "r1",
+        "source": "authored:initial-proposal",
+        "ast": {
+          "op": "eq",
+          "left": {
+            "role": "part",
+            "field": "ready"
+          },
+          "right": 1
+        }
+      },
+      "query": [
+        {
+          "role": "part",
+          "field": "ready",
+          "value": 1,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:ready"
+        },
+        {
+          "role": "part",
+          "field": "clean",
+          "value": 0,
+          "revision": "p1",
+          "expires_at": 10,
+          "source": "authored:query:clean"
+        }
+      ],
+      "action": "join",
+      "checks": {
+        "scope": "authored:workshop",
+        "expected_scope": "authored:workshop",
+        "revision": "p1",
+        "expected_revision": "p1",
+        "now": 1,
+        "allowed_reads": [
+          [
+            "part",
+            "ready"
+          ],
+          [
+            "part",
+            "clean"
+          ]
+        ],
+        "permitted": [
+          "join",
+          "OBSERVE"
+        ],
+        "available": [
+          "join",
+          "OBSERVE"
+        ],
+        "costs": {
+          "join": 2,
+          "OBSERVE": 1
+        },
+        "budget": 3,
+        "source": "authored:caller-checks"
+      },
+      "contexts": [
+        {
+          "id": "ready-dirty",
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 1
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 0
+            }
+          ],
+          "source": "authored:available-context:10",
+          "cost": 1
+        },
+        {
+          "id": "ready-clean",
+          "values": [
+            {
+              "role": "part",
+              "field": "ready",
+              "value": 1
+            },
+            {
+              "role": "part",
+              "field": "clean",
+              "value": 1
+            }
+          ],
+          "source": "authored:available-context:11",
+          "cost": 1
+        }
+      ],
+      "allowed_probe_ids": [
+        "ready-dirty",
+        "ready-clean"
+      ],
+      "probe_budget": 1,
+      "subsequent_outcomes": []
+    },
+    "expected": {
+      "ok": true,
+      "value": {
+        "status": "AUTHORED_EPISODE_REPLAY_NOT_EFFICACY",
+        "input_digest": "e4396abb2063c29628e7879d5249637ac9ea2a549fbe3687a113e09a5986b679",
+        "initial_candidates": {
+          "status": "PROPOSED_NOT_ADMITTED",
+          "candidates": [
+            {
+              "relation_ast": {
+                "op": "eq",
+                "left": {
+                  "role": "part",
+                  "field": "ready"
+                },
+                "right": 1
+              },
+              "parent_revision": null,
+              "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+              "status": "PROPOSED_NOT_ADMITTED",
+              "origin": "BOUNDED_GRAMMAR_SYNTHESIS",
+              "other_remainder": "OPEN",
+              "credit": "UNIDENTIFIED_CREDIT"
+            },
+            {
+              "relation_ast": {
+                "op": "all",
+                "children": [
+                  {
+                    "op": "eq",
+                    "left": {
+                      "role": "part",
+                      "field": "clean"
+                    },
+                    "right": 1
+                  },
+                  {
+                    "op": "eq",
+                    "left": {
+                      "role": "part",
+                      "field": "ready"
+                    },
+                    "right": 1
+                  }
+                ]
+              },
+              "parent_revision": null,
+              "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+              "status": "PROPOSED_NOT_ADMITTED",
+              "origin": "BOUNDED_GRAMMAR_SYNTHESIS",
+              "other_remainder": "OPEN",
+              "credit": "UNIDENTIFIED_CREDIT"
+            }
+          ],
+          "examined": 14,
+          "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+          "stop_reason": "SPACE_EXHAUSTED",
+          "search_complete": true,
+          "truncated": false,
+          "resume_cursor": null,
+          "candidate_space_size": 14,
+          "search_offset": 0,
+          "enumeration_progress": 14
+        },
+        "before": {
+          "status": "DESIGN_ONLY_NO_EXECUTION",
+          "preview_uid": "8d1ee5872f92a2e0787130ad48e81acadbc06c3dbe0669dacf3292b6e8b6343a",
+          "step_input_digest": "34e5dee7b490755bfe6ee90094c7233cc478a5bba9d4019ab1a0b90686609939",
+          "hypothetical_read_set": [
+            {
+              "field": [
+                "part",
+                "ready"
+              ],
+              "source": "authored:query:ready",
+              "revision": "p1",
+              "observation_digest": "e4c5e17efb066fe1e9a12b26ef13aa50f22d1b30c7618f27e6d2b229f8078fd3",
+              "fresh": true
+            }
+          ],
+          "hypothetical_next_step": {
+            "kind": "ACTION_PROPOSAL",
+            "reason": null,
+            "action_name": "join",
+            "cost": 2
+          },
+          "input_provenance": "authored:caller-checks",
+          "credit": "UNIDENTIFIED_CREDIT",
+          "evaluated_rule_provenance": [
+            {
+              "priority": 0,
+              "relation_ref": [
+                "authored:join-condition",
+                "r1",
+                "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+              ],
+              "truth": "TRUE"
+            }
+          ],
+          "selected_rule_provenance": {
+            "priority": 0,
+            "relation_ref": [
+              "authored:join-condition",
+              "r1",
+              "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+            ],
+            "truth": "TRUE"
+          }
+        },
+        "probe": {
+          "status": "PROBE_PROPOSAL",
+          "selected_probe": {
+            "probe_id": "ready-dirty",
+            "source": "authored:available-context:10",
+            "cost": 1,
+            "predictions": [
+              {
+                "candidate_index": 0,
+                "relation_prediction": "TRUE"
+              },
+              {
+                "candidate_index": 1,
+                "relation_prediction": "FALSE"
+              }
+            ],
+            "separation": 1
+          },
+          "evaluated_contexts": [
+            {
+              "probe_id": "ready-dirty",
+              "source": "authored:available-context:10",
+              "cost": 1,
+              "predictions": [
+                {
+                  "candidate_index": 0,
+                  "relation_prediction": "TRUE"
+                },
+                {
+                  "candidate_index": 1,
+                  "relation_prediction": "FALSE"
+                }
+              ],
+              "separation": 1
+            },
+            {
+              "probe_id": "ready-clean",
+              "source": "authored:available-context:11",
+              "cost": 1,
+              "predictions": [
+                {
+                  "candidate_index": 0,
+                  "relation_prediction": "TRUE"
+                },
+                {
+                  "candidate_index": 1,
+                  "relation_prediction": "TRUE"
+                }
+              ],
+              "separation": 0
+            }
+          ],
+          "credit": "UNIDENTIFIED_CREDIT",
+          "read_set": [
+            [
+              "part",
+              "clean"
+            ],
+            [
+              "part",
+              "ready"
+            ]
+          ],
+          "counters": {
+            "candidate_count": 2,
+            "context_count": 2,
+            "candidates_evaluated": 4,
+            "contexts_evaluated": 2,
+            "feasible_contexts": 1
+          },
+          "proposal_digest": "aa66569f5419288dabde2e8bac11018a760a15d522d5167fc17d758d4da9f4b6"
+        },
+        "outcome_projection": {
+          "kind": "BOOLEAN_SUCCESS_IS_RELATION_TRUTH",
+          "source": "authored:workshop-success-predicate-contract"
+        },
+        "preview_query": {
+          "role": "SAME_SUPPLIED_QUERY_BEFORE_AFTER_RESTORE",
+          "digest": "c0498bdfb46ce46da11e550fd298b2b65967bfd501c40c19e54baea82b23df96"
+        },
+        "credit": "UNIDENTIFIED_CREDIT",
+        "canonical_revision": null,
+        "revised_candidates": null,
+        "after": null,
+        "reason": "await_public_outcome"
+      }
+    }
+  }
+]

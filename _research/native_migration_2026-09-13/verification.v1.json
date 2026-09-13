@@ -1,0 +1,390 @@
+{
+  "schema_version": "hswm-native-engineering-verification/v1",
+  "date": "2026-09-13",
+  "authority_class": "SECONDARY_AI",
+  "source_base_commit": "974c64418c9f29248eb538ffa78912bfa12eb0ea",
+  "source_observation": "STAGED_CORE_CHECKPOINT_BYTES_NOT_AT_BASE_COMMIT",
+  "scope": "ISOLATED_CHECKOUT_CORE_TASK_USL_KG_CATALOG_ONLY; later untracked native ports excluded",
+  "toolchain": {
+    "node": "24.13.0",
+    "npm": "11.6.2"
+  },
+  "claim_ceiling": "BOUNDED_ENGINEERING_VERIFICATION_NOT_FULL_MIGRATION_NOT_HSWM_EFFICACY",
+  "source_pins": [
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-kg-bundle",
+      "sha256": "f237612668da4be25c0b0824e917a65300d0c44e976343ac477e09dd96330ce9",
+      "byte_length": 118,
+      "git_blob": "3cbeaaf0adf8db2671976aa2e7c4ca795eb066da"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-knowledge-catalog",
+      "sha256": "c0f9ce570cbd1fd5712a51b5ae0a4e89ea706b5106f5694d4799b2013d2f4cc0",
+      "byte_length": 126,
+      "git_blob": "c97bceda9b9c331f6919e44ad51613e11ef654c3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-task",
+      "sha256": "40e2291cebbfe990a8fc2cff3649c7c65522ff7790e68ecfc7b661b244a0b04a",
+      "byte_length": 120,
+      "git_blob": "558f31eabca123ab25e9c19094aa3186afe379e8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-usl",
+      "sha256": "3ede382d913fb11aad45553199573598df4ed9c2da688f9547f8fc1b9bfb3c81",
+      "byte_length": 119,
+      "git_blob": "69535b7a0967f7025f3d6662b3e3502ff3da499d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "d4a20cb4f26ac1ee73bc6c0daec6a0561a9ec7202125ffc5d1709679cbb8617e",
+      "byte_length": 477082,
+      "git_blob": "8320467f8cfaa9b388dba852e09fd59bf4a42ba7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package.json",
+      "sha256": "9b9744ad849c99d884994bedebdfb5e705935dbce0914d09c8f9b5a0e6bbf03b",
+      "byte_length": 3758,
+      "git_blob": "45c6d2bd5876ae391f7b2c630a22dfc9ffb7db54"
+    },
+    {
+      "path": "src/hswm/effect-runtime/scripts/lint-adaptive-functional.mjs",
+      "sha256": "06f058dd8d695a07125177d4c2ab7bf59db5ae129458739dfd650f0d5285a6b9",
+      "byte_length": 3735,
+      "git_blob": "085939117d12f5de514155001ddd348b984089a7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/general-json-domain.ts",
+      "sha256": "7452c467750b97b6e7afbda4d59aff39748d392335c10ee220ee86985676af16",
+      "byte_length": 10401,
+      "git_blob": "25c68873c0ba0c007566fcccc8511d9b37c93338"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/knowledge-catalog-cli.ts",
+      "sha256": "4e9dcf20ad7e3199055f608ab0e5172733722ccd87e45ba2f1a244a39d3b9181",
+      "byte_length": 1800,
+      "git_blob": "fa2d715316f10bcc2e10fc5403abb9fbf472d2bc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/knowledge-catalog-process.ts",
+      "sha256": "7a7cc1f7e03d75af7d7d11130df1294518c5d2f5f435515a595122a43e996912",
+      "byte_length": 318,
+      "git_blob": "c69878865f56c5895b4789b5720a88f8cda6b71f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/knowledge-catalog-runtime.ts",
+      "sha256": "13cc219a671e1852f0d8ba0154a8aca79ad4ef3708a18e13e43c7e23f19e199a",
+      "byte_length": 12153,
+      "git_blob": "cb05fdade8cc1c56fde7d29d292064b09815edd0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/knowledge-map-domain.ts",
+      "sha256": "a2885d6df2544294f24010052c898b6dcf54b75bcbd9d788b2f22e2602d72460",
+      "byte_length": 20490,
+      "git_blob": "3c44677ef92d5f005a2873e7b9bb6628234b295c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-bundle-domain.ts",
+      "sha256": "8d4a9505b08b97c385315c83f8c68d68ea2930c082947db7331c07d64a33200b",
+      "byte_length": 21462,
+      "git_blob": "87dacd6f7b6b2ecac2d023476de1d9c4c893c324"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-cli.ts",
+      "sha256": "784c16d142b769d02fe7f61595790149031c068f0a9dde82f9deb5e2bc474557",
+      "byte_length": 4386,
+      "git_blob": "07fe3bfd7dd0159dbcb53a1f48689ba8c4a59268"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-process.ts",
+      "sha256": "9dd7be587eaa9acce6afff36bfacdf977aa5d77e589b2ff9ef459dcfa91b7246",
+      "byte_length": 292,
+      "git_blob": "a79fd1e9242064cf2de0a9e6fe7d136243ffd219"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-qualification-process.ts",
+      "sha256": "30a4f1ec5ef8100e72ebc3c8dcdb6d483fe471331dd5d3e345cf1814a9acde54",
+      "byte_length": 783,
+      "git_blob": "f1431a339949a49488471255a5d5b6db4033ce1b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-qualification.ts",
+      "sha256": "df6f1894887041df24147e9db37062b27b64bfa4b9626968dfc7acb03ddfce4b",
+      "byte_length": 11808,
+      "git_blob": "77dde14057eee8bf2901fb14360818eb1820e028"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-standards.ts",
+      "sha256": "ebc72dfd681f7a647c10452777cffdcfa7e762b503f83d1d31faaf1598833335",
+      "byte_length": 8146,
+      "git_blob": "59fc61498fcaa81f5f0c9c232a7b070bbf573425"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-vendor.ts",
+      "sha256": "b3ac276d1abaebfb030006977d6ea1fe6335c8e62a5edfc2ea9e97badce938b8",
+      "byte_length": 3675,
+      "git_blob": "ff4f0a32e49a699f16f0134fa84387772f311354"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-task-domain.ts",
+      "sha256": "2a9c64e22c1da0fe716837f5b6788117976a0b7768a70520b011147b0c88533d",
+      "byte_length": 32795,
+      "git_blob": "dcafc4034467555d8f8043df8e36271f11fadd67"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-task-io.ts",
+      "sha256": "1c0281e705cc55dc464adb1fc550f83fa78c40e75635114181304c1ed54241ed",
+      "byte_length": 2342,
+      "git_blob": "67ca9a957dc973305bbd7f6e4bb81cfa939f789e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-task-json-domain.ts",
+      "sha256": "6d475140b4ebe21ca8317273c253dc7097a990d9210bf47e7eb3a6b222aa8ed3",
+      "byte_length": 5684,
+      "git_blob": "a81f11068f32087876d0676a4dc60909e80cbbb9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-task-process.ts",
+      "sha256": "ab84d42c5336c14268f6278d851fc988adb6ba7641155e8b6e722ba7d2472087",
+      "byte_length": 4661,
+      "git_blob": "27af891fe04d97d9c31d85e0e7c63b98ad9859c6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-usl-cli-domain.ts",
+      "sha256": "8e92b3df65c47c7b1261912dfdf8e3cdb6da2c824dfb7b58cbe7a35293b12440",
+      "byte_length": 4894,
+      "git_blob": "f8684b9ab895d85e73bc047c4d9900a018b40885"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-usl-cli.ts",
+      "sha256": "13598a85873089a5ad6a9c40c910fce08cad9af7e0c56f26f649b42deb0b307f",
+      "byte_length": 2208,
+      "git_blob": "92b50bffb3d0e00877d484e52d7828b51ba27e64"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-usl-process.ts",
+      "sha256": "572eedecb941c5cc3fb4ec1795b46c7c9fd9e5eb86122d03bfad88ff643a1e5a",
+      "byte_length": 507,
+      "git_blob": "ba9160ba2a3389ecf2bac294db1be9077de66f88"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-usl-v1-domain.ts",
+      "sha256": "7270a85f0aaf37157287897661cc76dae97cbc7011787a2f001e7730b52d40a3",
+      "byte_length": 6776,
+      "git_blob": "71c3e13d24960a3e8d392051921e39928c7adc11"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-usl-v2-wire-domain.ts",
+      "sha256": "205434c1558feb74fcf86778420fca6f67cb684748a1bb09b01ca5d5fa2ef727",
+      "byte_length": 14187,
+      "git_blob": "7af0b100eded7f355529f5a099f8c0f7421744f5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-tooling-domain.ts",
+      "sha256": "a93692614f56678323415bb3894a516917bd444ccd09ed40628362bd244595e4",
+      "byte_length": 25452,
+      "git_blob": "9f0639f25bc0814363e12b5fa6583888e24dd375"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/fixtures/native-usl-v2-projection.golden.json",
+      "sha256": "ae45c10e4e688abf91e73607538f52e50b5dd122ca283a443a37723ebe1881bf",
+      "byte_length": 4286,
+      "git_blob": "4eb6913cb5d346f099941e57c54fd63c7b2678a5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/general-json-domain.test.ts",
+      "sha256": "b4e50ccf8ddb179f2567385dc160acbb39c86b063acb3180fe72818639576975",
+      "byte_length": 1716,
+      "git_blob": "5638be46ca17815557c10c03ab55fc1a3b045787"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/knowledge-catalog-domain.test.ts",
+      "sha256": "b9facb0d992b04d4f70eef46b7fbc987d09fcbaba86b3dd389db1209ab9e4c20",
+      "byte_length": 7322,
+      "git_blob": "f3bd1243c949a48dfeae15acec3deac79a9f39dc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/knowledge-catalog-runtime.integration.test.ts",
+      "sha256": "11d1059097ad24972d7216f84bc6f2c47a83c83ea3afb2115eade1fce2a4b1f1",
+      "byte_length": 2794,
+      "git_blob": "2b1b50413229b384d4efe4b3df6271a544cb1eaa"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-kg-bundle.test.ts",
+      "sha256": "0db51a8d3f622db0b7a55befc248002adb9c75069c318191393561a92548df3a",
+      "byte_length": 6982,
+      "git_blob": "63d47e09bd628a5ba33bf141a8c2eb8e4739ebad"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-kg-qualification.test.ts",
+      "sha256": "6bcbebc7d91767b79bdfc6b529763a5239fad76085e0ce49748428d2a51dbfbe",
+      "byte_length": 2568,
+      "git_blob": "6d7c1c31f6bf823df3e5758ca98d3d01463d1803"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-task-domain.test.ts",
+      "sha256": "c1f3fa2acf994f8e09029c00860c44743370c677da5d852993c2a496e3d90def",
+      "byte_length": 7108,
+      "git_blob": "4a677682e9295e6284d9d871b0b0bfdc44a0f5ef"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-task-process.test.ts",
+      "sha256": "1d81a5457f840dfdb99c08cf7085a091d95dc0c95f903a00def0cc12e7804d06",
+      "byte_length": 1802,
+      "git_blob": "cafd8bdd03340542d4c8112e232296d30e771c7e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-usl-cli-domain.test.ts",
+      "sha256": "c1a3180ebe9179d5b73c164be0963ab3674455188ab3c8bb5a897f256d5faf77",
+      "byte_length": 2437,
+      "git_blob": "9c38f55bc9bdb347046afa11f7758b0c78907d21"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-usl-cli-process.test.ts",
+      "sha256": "c5a1991f7db8c17a5070161dd98df491300f9e38897399b2805daa7f2a1b0a56",
+      "byte_length": 3806,
+      "git_blob": "fea213d5d180a4f3e1eb0c52d69e512fa1c91739"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-usl-v1-domain.test.ts",
+      "sha256": "ceac113bdf1d049ac395af023dd8177b713534b051bd883f3498454e28551446",
+      "byte_length": 3732,
+      "git_blob": "18d756f8963ae7ceb7bff2a933d06ce184abd304"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-usl-v2-wire-domain.test.ts",
+      "sha256": "a87ef2b4e15da0398bbb6f47363ed02430f53e0d34c23932831b1564d0ca5bbd",
+      "byte_length": 2266,
+      "git_blob": "93e750728b1aa0bd2be0c73336b6ad17b0734d7a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/research-tooling-parity.test.ts",
+      "sha256": "69f7f52e8acbf6e3b255765ec26aeff1c02e7e47769877eef666e27e12936429",
+      "byte_length": 3683,
+      "git_blob": "e28c237e9fce8dbcfae3e2879c18c2e4a9ac404b"
+    },
+    {
+      "path": "tests/effect-runtime/adaptive-functional-boundary.test.ts",
+      "sha256": "c9197b061aa57ef18582ead2f4668f567465b3a940fb59236f17b074393d0997",
+      "byte_length": 2311,
+      "git_blob": "569d62c7753dc87ba418a4b20d8c478522d36023"
+    },
+    {
+      "path": "tests/fixtures/native_migration/conditional_task_v1/contracts.json",
+      "sha256": "bdc4848b4957e544634e26d20260d5781896f5169e9b317302724a00a2ff95fa",
+      "byte_length": 110188,
+      "git_blob": "90ff40b0df17001316f6ce749615bd88dfa78ad4"
+    },
+    {
+      "path": "tests/fixtures/native_migration/conditional_task_v1/demo.expected.json",
+      "sha256": "499e09460bd03525e1cde0e3cddbf44ce4f922282ad963fcdbf3ee6e49484d00",
+      "byte_length": 9391,
+      "git_blob": "c0ddc5e9aa61aea4b3dd347b4ad5e44bf09264b5"
+    },
+    {
+      "path": "tests/fixtures/native_migration/conditional_task_v1/numeric-contracts.json",
+      "sha256": "30ef1e3cd510e9cfa9593c7ddbd84a57b4edb5c456c579bc378ca5478da69148",
+      "byte_length": 15281,
+      "git_blob": "f597e0bfa511fa64765c14ccc201c5f12fc6b969"
+    },
+    {
+      "path": "tests/fixtures/native_migration/conditional_task_v1/source-pins.json",
+      "sha256": "43bbbcb9f6f62a8b8e98cd04bd1fee6e0910f7f3927d7d72b0ce74ba7d593670",
+      "byte_length": 1427,
+      "git_blob": "36d82c63eee9077c10ce65bcc371b9c8978803cc"
+    }
+  ],
+  "checks": [
+    {
+      "command": "npm test -- --maxWorkers=2",
+      "exit_code": 0,
+      "local_log_sha256": "0a42929dd7004c78864a38b69a26e163937c7183f786ce15adfa2a255ee5c41a",
+      "local_log_byte_length": 28514,
+      "raw_log_publication": "NOT_INCLUDED_LOCAL_ENGINEERING_OUTPUT",
+      "test_files": 146,
+      "passed_files": 145,
+      "skipped_files": 1,
+      "tests_passed": 1017,
+      "tests_skipped": 10,
+      "skip_reason": "Existing opt-in Temporal and Neo4j external integration tests; no new exclusions",
+      "timing_note": "Before lint-only TYPECHECK_BYPASS rule and one regression test; subsequent strict check and focused adaptive route include this final lint change"
+    },
+    {
+      "command": "npm run check",
+      "exit_code": 0,
+      "local_log_sha256": "0a66f35ba7d811359eecdad6c633ad3936f138b26d161d312d78752d3b85f00e",
+      "local_log_byte_length": 1374,
+      "raw_log_publication": "NOT_INCLUDED_LOCAL_ENGINEERING_OUTPUT"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "local_log_sha256": "51a25d8d4c57a1ea08bb66e4ddd0416369a3279c3984f50d06572439b5862db5",
+      "local_log_byte_length": 105,
+      "raw_log_publication": "NOT_INCLUDED_LOCAL_ENGINEERING_OUTPUT"
+    },
+    {
+      "command": "npm run build:dnrd",
+      "exit_code": 0,
+      "local_log_sha256": "6945bc5a754a1883a538f4e388a1748a91b35e4688df1147fa0ee68a86f43975",
+      "local_log_byte_length": 70,
+      "raw_log_publication": "NOT_INCLUDED_LOCAL_ENGINEERING_OUTPUT"
+    },
+    {
+      "command": "npm pack --dry-run",
+      "exit_code": 0,
+      "local_log_sha256": "591889084d50b77df384ed8498dd00021a47491b6d799be78f9ec12b188bece1",
+      "local_log_byte_length": 48904,
+      "raw_log_publication": "NOT_INCLUDED_LOCAL_ENGINEERING_OUTPUT"
+    },
+    {
+      "command": "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology",
+      "exit_code": 0,
+      "local_log_sha256": "4b17f7bf4fd60b53103509f0f6b3590b5cecadac1bbd8fc54cc4bc1a145076ff",
+      "local_log_byte_length": 175,
+      "raw_log_publication": "NOT_INCLUDED_LOCAL_ENGINEERING_OUTPUT",
+      "documents": 160,
+      "source_bytes_modified": false,
+      "scope": "Main workspace canonical/research/ontology sources; legacy constructs compiled in memory without rewriting evidence"
+    }
+  ],
+  "development_workflow": {
+    "commands": [
+      "hswm-dev hswm plan",
+      "hswm-dev hswm run",
+      "hswm-dev hswm feedback",
+      "hswm-dev hswm status"
+    ],
+    "workspace": "ISOLATED_CORE_CHECKOUT",
+    "state_storage": "PRIVATE_LOCAL_STATE_IN_PRIMARY_WORKSPACE",
+    "episode": "native-migration-core-20260913",
+    "relation": "relation:runtime-focused",
+    "result": "SUCCEEDED",
+    "tests_passed": 53,
+    "usefulness": {
+      "source": "agent(codex)",
+      "useful": true,
+      "judgment": "Useful for native development-route regression only; insufficient for migration parity or efficacy. Full isolated suite and source-bound oracle checks run separately."
+    },
+    "feedback_status": "FEEDBACK_RECORDED"
+  },
+  "resolved_setup_attempts": [
+    {
+      "status": "FAILED_RETAINED_LOCALLY",
+      "reason": "Initial isolated dependencies symlink escaped checkout; DNRD correctly refused it. Replaced only local dependency symlink with exact locked dependency bytes."
+    },
+    {
+      "status": "FAILED_RETAINED_LOCALLY",
+      "reason": "USL test used process.cwd for checkout root; fixed to import.meta.dirname and fresh strict closure compilation."
+    },
+    {
+      "status": "FAILED_RETAINED_LOCALLY",
+      "reason": "Isolated S2S test lacked locked drand node_modules closure; copied existing exact local cache, then reran targeted and full suites successfully."
+    }
+  ],
+  "limits": [
+    "Full migration remains incomplete; Python-backed commands and v3 development routes remain listed in the inventory.",
+    "Official SPARQL suite not run; 12 complete HSWM saved-query goldens only.",
+    "No live KG publication or scientific research outcome is claimed."
+  ]
+}

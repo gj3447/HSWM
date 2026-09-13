@@ -26,6 +26,13 @@ it("accepts a pure Either function", () => {
   expect(JSON.parse(output).violations).toEqual([])
 })
 
+it("rejects compiler directives that bypass native type checking", () => {
+  for (const directive of ["nocheck", "ignore", "expect-error"]) {
+    const output = probe(`// @ts-${directive}\nexport const value: string = 1`)
+    expect(JSON.parse(output).violations).toContainEqual({file: "adaptive-domain.ts", line: 1, rule: "TYPECHECK_BYPASS"})
+  }
+})
+
 it("rejects submodule runners, namespace runners, var and filesystem subpaths", () => {
   const output = probe('import * as Fx from "effect/Effect"; import * as E from "effect"; import { runSync as run } from "effect/Effect"; import fs from "node:fs/promises"; export var state = 0; Fx.runSync(Fx.void); E.Effect.runSync(E.Effect.void); run(Fx.void)')
   const violations = JSON.parse(output).violations as ReadonlyArray<{ readonly rule: string }>

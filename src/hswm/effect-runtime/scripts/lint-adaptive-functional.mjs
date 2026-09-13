@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** AST boundary check for the new local adaptive runtime lane. */
+/** AST boundary check for native adaptive, task, USL and KG migration modules. */
 import { readdirSync, readFileSync } from "node:fs"
 import { join, resolve } from "node:path"
 import ts from "typescript"
@@ -7,7 +7,7 @@ import ts from "typescript"
 const argv = process.argv.slice(2)
 const rootFlag = argv.indexOf("--root")
 const root = resolve(rootFlag < 0 ? "src" : argv[rootFlag + 1] ?? "src")
-const target = (name) => /^adaptive-.*\.ts$/.test(name) || ["hswm-dev-process.ts", "hswm-live-process.ts", "reluvator-check-process.ts"].includes(name)
+const target = (name) => /^(adaptive-|native-|knowledge-).*\.ts$/.test(name) || ["general-json-domain.ts", "research-tooling-domain.ts", "hswm-dev-process.ts", "hswm-live-process.ts", "reluvator-check-process.ts"].includes(name)
 const violations = []
 const files = readdirSync(root).filter(target).sort()
 
@@ -17,6 +17,9 @@ for (const file of files) {
   const report = (node, rule) => {
     const line = source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1
     violations.push({ file, line, rule })
+  }
+  for (const [index, line] of source.text.split(/\r?\n/).entries()) {
+    if (/^\s*\/\/\s*@ts-(?:nocheck|ignore|expect-error)\b/.test(line)) violations.push({file, line: index + 1, rule: "TYPECHECK_BYPASS"})
   }
   const effectNames = new Set()
   const namespaceNames = new Set()
@@ -35,7 +38,7 @@ for (const file of files) {
     }
     if (ts.isVariableStatement(statement) && !(statement.declarationList.flags & ts.NodeFlags.Const)) report(statement, "MODULE_MUTABLE")
   }
-  const directDomain = file === "adaptive-domain.ts" || file === "adaptive-runtime.ts"
+  const directDomain = file.endsWith("-domain.ts") || file === "adaptive-runtime.ts" || file === "native-occurrence-publication.ts"
   const visit = (node) => {
     if (ts.isThrowStatement(node)) report(node, "THROW")
     if (ts.isFunctionLike(node) && node.modifiers?.some((modifier) => modifier.kind === ts.SyntaxKind.AsyncKeyword)) report(node, "ASYNC")
@@ -49,5 +52,5 @@ for (const file of files) {
   }
   visit(source)
 }
-process.stdout.write(`${JSON.stringify({ schema_version: "hswm-adaptive-functional-lint/v1", files, violations })}\n`)
+process.stdout.write(`${JSON.stringify({ schema_version: "hswm-native-functional-lint/v2", files, violations })}\n`)
 if (violations.length > 0) process.exitCode = 1

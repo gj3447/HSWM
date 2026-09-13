@@ -1,0 +1,1485 @@
+{
+  "schema_version": "hswm-native-shacl-qualification/v1",
+  "authority": "INDEPENDENT_ENGINE_AGAINST_PINNED_OFFICIAL_W3C_SUITE",
+  "engine": "rdf-validate-shacl@0.6.5",
+  "source": {
+    "commit": "b7844c776844b4927e1e79393ed05ed8bb80ee11",
+    "tree": "04c1b65bd3e338546ba2d99174f3c5a305da04d3",
+    "licenseSha256": "6e57fea82f0488b42c47fee06e66b98849b64cc721714ad5fb520d3e84b4d4b9"
+  },
+  "comparison": "CONFORMS_AND_NORMATIVE_RESULT_FIELDS_WITH_NESTED_DETAILS_AND_DECLARED_MESSAGES",
+  "selected": 98,
+  "passed": 93,
+  "failed": 5,
+  "excluded": [],
+  "status": "FAIL",
+  "files": [
+    {
+      "path": "data-shapes-test-suite/tests/core/complex/manifest.ttl",
+      "sha256": "342709c2f25acac8dcc6f5cf6655b804e2b81b51ec312123fab79a98316a7ae4"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/complex/personexample.ttl",
+      "sha256": "af4d81bf9925447ae9f83e0f016ed196ed1067a696b936893979bda111cfa90d"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/complex/shacl-shacl-data-shapes.ttl",
+      "sha256": "250d6274cadc8fa5359d5dbc28bc943f1de01adb7ffc3369681216b583122e4a"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/complex/shacl-shacl.ttl",
+      "sha256": "3cdc8f73873558a3278fd304d3d2ed9e0c30cb204950de91092cd95dee140010"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/manifest.ttl",
+      "sha256": "cf87ce03d0991bbdbd1d7227a72eba73bdcfcae6226a277fe82b6e2343c2948b"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/misc/deactivated-001.ttl",
+      "sha256": "5c8b6b0bca15a9dfe5b78bafe1c49eb876335bb71f7af3a540f6c80283dcd4c7"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/misc/deactivated-002.ttl",
+      "sha256": "dad483f8c30613fbb9f946b4e1ae69e12c495a4ee09002e017e95eb2fb335a5a"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/misc/manifest.ttl",
+      "sha256": "6230cc0316145a67ecc80f8d9d1bb230c4778d69515b839a635ced829327d95e"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/misc/message-001.ttl",
+      "sha256": "c38c529e0ddc9af53579c990088b1f1083ab94e600069fcf5f233bab6c29964a"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/misc/severity-001.ttl",
+      "sha256": "c78746965be1f1424b7e5019776a650b058239a3a316010f60b781aa619a1173"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/misc/severity-002.ttl",
+      "sha256": "8cd561bf9cb7d41d1edc98c53f1f2b5ccfda85c14c71bb06c3199eae988e3813"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/and-001.ttl",
+      "sha256": "b22b5ed309c3c71194b63b20d27763f2c2a3fe6f3dcd9d0ecc0303f2f114d129"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/and-002.ttl",
+      "sha256": "302ac688903159a0df42390ed95e1f082b13b296f34bbae3df1ca65050cd1ed0"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/class-001.ttl",
+      "sha256": "c9c1924d2bec333a82e54ab863a03d4142b6c5770d27bfde283de4bc74999f1f"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/class-002.ttl",
+      "sha256": "35c048eec124580be68c36eaf96d65f76b8dc9c1355d7dd0d1497f33f893601c"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/class-003.ttl",
+      "sha256": "6cf474d1ad5801d3f2b41863fead142dc1e8746b015eef49ef8a91245402841b"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/closed-001.ttl",
+      "sha256": "319e1cd5501d586b6c3fbbf746db9936d5c32ebc5aabf348798b3e62428055af"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/closed-002.ttl",
+      "sha256": "6f9be824f6bcb6474cd64a3e9550f128e1f6b89093a1327cabba2b6aa47add08"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/datatype-001.ttl",
+      "sha256": "7e206cb2231a66b52a5cc092c44eb1ad17537d202b66f47942e1214c5ebc2428"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/datatype-002.ttl",
+      "sha256": "901e227057e562accb17c9b84fa4f6140a2a1a5dceae66430fa0dd13c31567a2"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/disjoint-001.ttl",
+      "sha256": "234bd8e2f3e2f6b44381f7a0ce7218d0f4ea1e920159c84abd292e1867906bcf"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/equals-001.ttl",
+      "sha256": "df0b44cf131b7c8f1d1a7c07ba37fc2cce4db6d3be78d50b0552a522319af33e"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/hasValue-001.ttl",
+      "sha256": "e9bb87a1e7752ef08606a65681447362f45347d139c5bb3ea9802a2d678c0a9f"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/in-001.ttl",
+      "sha256": "858a1eadfea4e9789fb8d0eddb988d0c205727c06c97b8ffc85c2098eeb897fd"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/languageIn-001.ttl",
+      "sha256": "82dad02684ca20845e118528827650479d58e52685755602f81e9bfe5b847a54"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/manifest.ttl",
+      "sha256": "339f614a4edea00a328348418fb884ecba7b862cce098b7ac3d2f645fb1fe4d9"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/maxExclusive-001.ttl",
+      "sha256": "0b420c1347f932aca493f1bd8b6f8da585f5113771088a3260934a47261e6c74"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/maxInclusive-001.ttl",
+      "sha256": "4305b835782854efed44e661b13ba6e0efab6d880695a0421472b19920e6029f"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/maxLength-001.ttl",
+      "sha256": "afe761e7e4a8ddb74f77f052eb04f9b4942b99bb258cf7c389d914bea12735b0"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/minExclusive-001.ttl",
+      "sha256": "11c385798e4e24f5546c711c7f25333f948192fe64903f446e76439cd0dfdcad"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/minInclusive-001.ttl",
+      "sha256": "9801c96ad6e93f9ccc1b6d92d4b746d73d438e32c0579c8168fd7bbf824ecf7d"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/minInclusive-002.ttl",
+      "sha256": "4305a1857ef2eedf78f5eccc40a99bbf772a1bd5bfb0776cb59597ef09f73896"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/minInclusive-003.ttl",
+      "sha256": "055a03f3090bd73c7291481b5d9b730128bb94306bb0261974efd6c0a0a3030d"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/minLength-001.ttl",
+      "sha256": "0838f6edcb1923fc3d6ca65bbaac127b11d63a00b5a1d64cb8d95674307b34db"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/node-001.ttl",
+      "sha256": "9f166cf02f9ce5e183871fd55afa478ef567fd35436810105987e8749f2ea6b7"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/nodeKind-001.ttl",
+      "sha256": "f1124da208845147aaf736ba594fe2ff8523a6bdde3edd4f6e75b6cef4ff7869"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/not-001.ttl",
+      "sha256": "3efb9c3b8f57b7bb473c638b7a0ab3827d6deef1f53ff6115e5dabb2bda26eb4"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/not-002.ttl",
+      "sha256": "85ec25f8f05b4bfa92c88ce332e8092ce27350bf7268452e2048b58daa8b5376"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/or-001.ttl",
+      "sha256": "d5c8b11e092e24472610baaeb2f13ce2e51a695c353c680002b7aa2a837bfb23"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/pattern-001.ttl",
+      "sha256": "248174b5307ba216f48de30658dd954880ecf5751452c35d04a53136b42ca568"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/pattern-002.ttl",
+      "sha256": "ec2f848ebd12d50dd63109a41d5fed53893a050491de55db907008c57523483d"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/qualified-001-data.ttl",
+      "sha256": "aff795ecc25bde22b15d5da2dc58e8d48490a317b13ec72fb2cadeb9760af192"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/qualified-001-shapes.ttl",
+      "sha256": "2ceddd2990396bed2a1d408fdbee0ed0777eab6d9bbc50189f9017a9ed86c028"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/qualified-001.ttl",
+      "sha256": "23e53d105fadff9d0e3299549b10602a91ba9cb42cc3c13e1433c25ccee2a2ce"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/xone-001.ttl",
+      "sha256": "e875a51c91642bc9c006381e894157a65ae9ad09ae19610e86463f34aa18cc10"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/xone-duplicate-data.ttl",
+      "sha256": "aff795ecc25bde22b15d5da2dc58e8d48490a317b13ec72fb2cadeb9760af192"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/xone-duplicate-shapes.ttl",
+      "sha256": "afd353b536de6a56ff3cde9cbba9d4ee0ccefea9c300af5c0b13e8936f809dee"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/node/xone-duplicate.ttl",
+      "sha256": "18c1139c7c7814e11d97dc8e13a64ade4c1ac96bb37517a8379be4c8438226ff"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/manifest.ttl",
+      "sha256": "45e9b96191c8428617235fef39be875be01766441c5028fe78a2124df96455f3"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-alternative-001.ttl",
+      "sha256": "ad241cbf524fc1f2b775359965bd597dd2b15334e3e501c4d72334b10ec3bfc5"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-complex-001.ttl",
+      "sha256": "01ae3db9d24837d2b74afbf874135eb17be9138abac6493fd05e1db8f04ba21a"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-complex-002-data.ttl",
+      "sha256": "b58f59c68e56bcdbf3cda719c95a8dcc99139da4b1193e0e35d43690a9100ffb"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-complex-002-shapes.ttl",
+      "sha256": "d346e84b460cb38051bc2b9bd0a7baef23bfa280cda5b59374841207eee81f32"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-complex-002.ttl",
+      "sha256": "437ca18bcb344147c2a099699f6920ff844687c4ae83e109b6e3e689766388cd"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-inverse-001.ttl",
+      "sha256": "a5ca2cfb8511dddae4f3bc6f573175d9d918d32076038f92db0fb966d8c4da2c"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-oneOrMore-001.ttl",
+      "sha256": "ce73c290467d21016332c944a99631c37e60da5c347b5374fb92c91b13c8940f"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-sequence-001.ttl",
+      "sha256": "f8f6b3cd3f28b5ed9494b29daa3e256b9f9d2cb05f3163dc2882e57612e3ba75"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-sequence-002.ttl",
+      "sha256": "2de40f0597d503b4a6c1f3a999b24210a8786343ee20299bf54cfa9847256158"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-sequence-duplicate-001.ttl",
+      "sha256": "0cfa51a93b38d70c91ea9b2e1393d9e9c4d882a84623225be242519388efc3d6"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-strange-001.ttl",
+      "sha256": "88642d45858dbe2614c344edfa6457f8ce27ba89e507cb5f094ec267b38b2456"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-strange-002.ttl",
+      "sha256": "2128ebb124716efe6d071f64ce8b4bb6a65ae681fa7d17bd3df8e00ce1643644"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-unused-001-data.ttl",
+      "sha256": "1c4347adf57cb2e66047b263c8feef98674881651ae9462b11748c60b4002e73"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-unused-001-shapes.ttl",
+      "sha256": "a7b089f8cfde8dd438cedce996a2497796c05ebb111b813248827b2106883ca3"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-unused-001.ttl",
+      "sha256": "baad098df2eac41df024ef9db50be0860594eddae70687565b6106df00fac68f"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-zeroOrMore-001.ttl",
+      "sha256": "dd18a68be41fbf48b1bd3ffb0582c9e6390589646f4412c82f2e1b57438fba85"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/path/path-zeroOrOne-001.ttl",
+      "sha256": "9fd16fd3dcc094da100c5e3a91524f2f2a9bde382a7cfcc7b5c4cfa775e3f488"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/and-001.ttl",
+      "sha256": "50efa484f729a4a13f518e8d6614fdef27eb8ad7353cf3adb951cf53434c358b"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/class-001.ttl",
+      "sha256": "a481a8c12a8af13331d7a19c96afd1cb6a62cb1f2d593ae05766dbe2b6496d8a"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/datatype-001.ttl",
+      "sha256": "e8824e81d0e6bd7a45e48ec8e096aa625b96fb97f2648e42f4105da5511910f6"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/datatype-002.ttl",
+      "sha256": "3512f2ab595b75a934a32ba779e3618f3cd5d80843b9a162374af001ab6ff566"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/datatype-003.ttl",
+      "sha256": "f9038c934cbae46057210abea721fecc1102c3172788279397508fed27aae8cb"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/datatype-ill-formed-data.ttl",
+      "sha256": "8e47890c42ea183a664b6d286654d2001c3ea0a1f910befe3a01fcd398bc392b"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/datatype-ill-formed-shapes.ttl",
+      "sha256": "8165089e00de3b42b2787ad8db5da4e4d7206e3424839d4a0472ea526007777c"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/datatype-ill-formed.ttl",
+      "sha256": "533e9c900671286128dfbe5f574da4dfe3c38b96b40a0a57df8781c1335628f9"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/disjoint-001.ttl",
+      "sha256": "8a8d6f8be12cd8e3ecb8cc8ffb68bb6a8e78b89127626783c7bf125d0c4ddb87"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/equals-001.ttl",
+      "sha256": "b27ed862db942f64d8f7ec037f879fc31bee465eba5a2444c71423874854d138"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/hasValue-001.ttl",
+      "sha256": "4123f6e9a8258d79406493f01b3d30c45c91fd03274bc87dc555a53652f470aa"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/in-001.ttl",
+      "sha256": "38a5db152d2f80acda1dbb4ee3788c201066739dc7c49e76b255a738ef67a8ed"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/languageIn-001.ttl",
+      "sha256": "2cd845129b0d94ca0af33c299ae0f3fb789f194f53c092927f024b0159e2b125"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/lessThan-001.ttl",
+      "sha256": "671d18300babd4972899876a313419caf77acbdf3037805ca2a8a9858c28aff6"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/lessThan-002.ttl",
+      "sha256": "50d59ae373eef3f5dcb2b3a9a8feb650e309242ab5bee0d0897bd779e736cefe"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/lessThanOrEquals-001.ttl",
+      "sha256": "9e8b8529ff2870a8478c8cdba4e2accd6cbe8bd5b4efcca1768114ff72d0443c"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/manifest.ttl",
+      "sha256": "239d41140be5afeb07796cdd58a8e54d3889c7d292e8e379d66c3ce2fbfa88ad"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/maxCount-001.ttl",
+      "sha256": "adfeb1b713dbbdb5d84a14df38c3637e164660f36e3d32464fbdd7e2525cbd9d"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/maxCount-002.ttl",
+      "sha256": "2deef056c491d680818d32cd8da5c23baba7a80405cfb9151132452a3a3ad788"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/maxExclusive-001.ttl",
+      "sha256": "00d851f77aaa384aa4589cf66e9dede0d9ea6052ba9a5c8ec81a3426c2225b98"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/maxInclusive-001.ttl",
+      "sha256": "cc6debc85df8dc6aabf9f4b1f48c4ee6e91c8b586dd7c94a197061a81cc875ea"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/maxLength-001.ttl",
+      "sha256": "b2297b3731258f898a9b48b9879141971b09410c0cd8098d57c600ef6ebb3b18"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/minCount-001.ttl",
+      "sha256": "39ddbe04c69100523bb2181d38a04e8ee78e16ed8adc8e22955a4e7fa84d8f11"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/minCount-002.ttl",
+      "sha256": "bbe5cc8feb57c2e728bd849285014ba266a13a616c76e3458647e53653692197"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/minExclusive-001.ttl",
+      "sha256": "73fab3e0aab611040be519951baf08edf7e3a28d769184a00aa16e930c6d2d57"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/minExclusive-002.ttl",
+      "sha256": "a7df56f6e66a30e53c0016979a357dcc3383958b315bded1b3f6927f2fed5d50"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/minLength-001.ttl",
+      "sha256": "08e675f659af746efe3bbbc97d60080e9b7c636a70e731295ccda134fa55d98f"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/node-001.ttl",
+      "sha256": "7ff3727d8937d5714d27982047ae4beb8a6a2eb450e707f42204961ffda6dc1e"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/node-002.ttl",
+      "sha256": "c2eec3398a50456e8d9fc9438be19a7fbec134b54ae50f36851fef5d6748d585"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/nodeKind-001.ttl",
+      "sha256": "d6626f4e6f30c97fd2d72c86cb5836671d4b082b97ce84db057ccc4edb19fefe"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/not-001.ttl",
+      "sha256": "1b551ef684ca6524bf3245e8ac797533cc4b926db42bd44d0e4c97cd18e7ecee"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/or-001.ttl",
+      "sha256": "e4265f6517738414496414e49466bf5fa01b8c8c53c724fec648a56dca84c4f0"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/or-datatypes-001.ttl",
+      "sha256": "0da4c45349d3c8e01f6441209454b11a037a3156bdce44d1d5d526073dd80d6d"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/pattern-001.ttl",
+      "sha256": "3ecaebd227b7eb249ac0f71cffece5df77fa97fbb78c019987c1275518568a2c"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/pattern-002.ttl",
+      "sha256": "1a8685e178c57955494b704f8a31fc6284b7adf4c8e6b441b6febfba18756e0f"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/property-001.ttl",
+      "sha256": "2c461b80e0bdc9e1a79f72017d70bab5d9cc100cd5f68fe786ca3758a785a006"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/qualifiedMinCountDisjoint-001.ttl",
+      "sha256": "947f7ddc3eca53e0c49967dd49d62070a8136b33728289e91846600c2e774dbf"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/qualifiedValueShape-001.ttl",
+      "sha256": "ab2a83bc5c6cd26a849b5e1a8bc400af2e7c6180e06917732152fde4386d8cc6"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/qualifiedValueShapesDisjoint-001.ttl",
+      "sha256": "d8417c8f15ad9fe841ef2b4f667b3d1ad43e8e1292df33943363c749d2dbfe95"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/uniqueLang-001.ttl",
+      "sha256": "003d3ea97faf3de1e5ee5147db2041ed8b228d6fa0dc2287ea8ed8875a8d69a1"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/uniqueLang-002-data.ttl",
+      "sha256": "0f1e2c7004a8aa7c6d3c6521e021c6fdb2073782e4daa4dd6071465a071281e0"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/uniqueLang-002-shapes.ttl",
+      "sha256": "65b61862b579051a04a6915b0677a60f4f002d3b4b7587fcea73e046468d4b40"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/property/uniqueLang-002.ttl",
+      "sha256": "c2150ae70be28dab20e0fe85ed8599c82573d81e2b64d283ef838c36d7652268"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/targets/manifest.ttl",
+      "sha256": "074b6b4b7161501c2dea78152703e40e534c02b36fe54d1149f264a731ddf729"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/targets/multipleTargets-001.ttl",
+      "sha256": "9c9f7934a9c95aea75d221a048b5ed5fe46f25a3ab73b7bcdf238caedee22ea1"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/targets/targetClass-001.ttl",
+      "sha256": "af8b4cbba827533cd8549b9748302165f1bcff4c6e4fb73fe9c6d903b335aa84"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/targets/targetClassImplicit-001.ttl",
+      "sha256": "fb333138d3d0c466a4134d0c653c74ab9be4216a21b7807d427973b9608f1594"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/targets/targetNode-001.ttl",
+      "sha256": "1dbc32ee9c93a788f0300678a723f0e48e2acd3e6a4b456bd6fc984184f13c10"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/targets/targetObjectsOf-001.ttl",
+      "sha256": "c0295cdd3183ee9d32a6d0bbc65402c04c08bdb61088e9104e80d3ab1e5e204b"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/targets/targetSubjectsOf-001.ttl",
+      "sha256": "00e596d411f6cb77bbc44235c2106ae454c2cb1ae2c92d554092a41cbef0a07a"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/targets/targetSubjectsOf-002.ttl",
+      "sha256": "61421f88d7fd35165c567061a06bb86b75afef030b0138cf599f3dc85dc6b1af"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/validation-reports/manifest.ttl",
+      "sha256": "0b93bfa52f6d620289627a95dd322fba60e5c89c8dddff95485e30df7d0dfd2b"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/validation-reports/shared-data.ttl",
+      "sha256": "bbc6702c87a204e80fd14c1872d275b27e839a404bb7b488d1723c3b138adb45"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/validation-reports/shared-shapes.ttl",
+      "sha256": "0b30c38251ec24f4934d9267179a5fa061ebc826a43914973a96c343eedc473f"
+    },
+    {
+      "path": "data-shapes-test-suite/tests/core/validation-reports/shared.ttl",
+      "sha256": "85a246e2ccd04e9da88a3c43eafe18a10417877fc3c5905ac7f556dd9ab910f3"
+    }
+  ],
+  "results": [
+    {
+      "id": "/tests/core/complex/personexample",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 4,
+      "actualResultCount": 4,
+      "expectedSha256": "742ae3e27fc47ca65fcf114622109a07aee76162f13618f2fe4f5e5557005da3",
+      "actualSha256": "742ae3e27fc47ca65fcf114622109a07aee76162f13618f2fe4f5e5557005da3"
+    },
+    {
+      "id": "/tests/core/complex/shacl-shacl",
+      "passed": true,
+      "expectedConforms": true,
+      "actualConforms": true,
+      "expectedResultCount": 0,
+      "actualResultCount": 0,
+      "expectedSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "actualSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "/tests/core/misc/deactivated-001",
+      "passed": true,
+      "expectedConforms": true,
+      "actualConforms": true,
+      "expectedResultCount": 0,
+      "actualResultCount": 0,
+      "expectedSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "actualSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "/tests/core/misc/deactivated-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "dc35a6d1ad527c2d2014be3dfd165153b577f6dcf66f4e2a1a47a791fe6ad7a5",
+      "actualSha256": "dc35a6d1ad527c2d2014be3dfd165153b577f6dcf66f4e2a1a47a791fe6ad7a5"
+    },
+    {
+      "id": "/tests/core/misc/message-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "fef8afe0085b632a4e51133a61e88f832d6bd68d4e66c79292b1acd7c95ea24c",
+      "actualSha256": "fef8afe0085b632a4e51133a61e88f832d6bd68d4e66c79292b1acd7c95ea24c"
+    },
+    {
+      "id": "/tests/core/misc/severity-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "d2a7eb7390a0e9538436e77be681925dbf5328f4bf837de823f3f455f26f699b",
+      "actualSha256": "d2a7eb7390a0e9538436e77be681925dbf5328f4bf837de823f3f455f26f699b"
+    },
+    {
+      "id": "/tests/core/misc/severity-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "6d25b6e3dfb35b28841d3d4ca2067c9e10acbdecab7a16de43bf2fe07b8cefaa",
+      "actualSha256": "6d25b6e3dfb35b28841d3d4ca2067c9e10acbdecab7a16de43bf2fe07b8cefaa"
+    },
+    {
+      "id": "/tests/core/node/and-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "cad6aaf6ced057b806e185b3333309930acfa2830417bfa71786b145d7e7c1d5",
+      "actualSha256": "cad6aaf6ced057b806e185b3333309930acfa2830417bfa71786b145d7e7c1d5"
+    },
+    {
+      "id": "/tests/core/node/and-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "2fb803ee3e45754a135fe4b3754432022a08028f2ecdaea5f6a85afe5d216bd3",
+      "actualSha256": "2fb803ee3e45754a135fe4b3754432022a08028f2ecdaea5f6a85afe5d216bd3"
+    },
+    {
+      "id": "/tests/core/node/class-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "d95c1b1dc76e34405e93c546034949b28ad4aeb91ba275fef5dadcf9d49d5213",
+      "actualSha256": "d95c1b1dc76e34405e93c546034949b28ad4aeb91ba275fef5dadcf9d49d5213"
+    },
+    {
+      "id": "/tests/core/node/class-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "9d1d9b1a54bf0df54fc5e6f45c34c6a3830f90b0652bcddbbb44c0536101c2b6",
+      "actualSha256": "9d1d9b1a54bf0df54fc5e6f45c34c6a3830f90b0652bcddbbb44c0536101c2b6"
+    },
+    {
+      "id": "/tests/core/node/class-003",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 5,
+      "actualResultCount": 5,
+      "expectedSha256": "1d8349e406f7f9cce8e8b7d6ebc5e9b4723167b0274e3a1c282c3ca85999be64",
+      "actualSha256": "1d8349e406f7f9cce8e8b7d6ebc5e9b4723167b0274e3a1c282c3ca85999be64"
+    },
+    {
+      "id": "/tests/core/node/closed-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "8eefd892c811eed1971ab106b6413c5e7090766736738a760caf4555dfac4f8b",
+      "actualSha256": "8eefd892c811eed1971ab106b6413c5e7090766736738a760caf4555dfac4f8b"
+    },
+    {
+      "id": "/tests/core/node/closed-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "f7ec088e869114ef9395da0549873f0b1bbf0c55fe6d04c597fb8de985af7a2b",
+      "actualSha256": "f7ec088e869114ef9395da0549873f0b1bbf0c55fe6d04c597fb8de985af7a2b"
+    },
+    {
+      "id": "/tests/core/node/datatype-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 3,
+      "actualResultCount": 3,
+      "expectedSha256": "fd925e3566e90d988ca375f9354ac33e7b21c339e8ec51ddf419a5ff8c65945e",
+      "actualSha256": "fd925e3566e90d988ca375f9354ac33e7b21c339e8ec51ddf419a5ff8c65945e"
+    },
+    {
+      "id": "/tests/core/node/datatype-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "bc58904be067862f7c83d22ce347769861539f89294e5aa5886e538f8ee38167",
+      "actualSha256": "bc58904be067862f7c83d22ce347769861539f89294e5aa5886e538f8ee38167"
+    },
+    {
+      "id": "/tests/core/node/disjoint-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "1734545940a93c472fa326d2fea6deb40c07bb5572923aa4eeda0e8d185abb1b",
+      "actualSha256": "1734545940a93c472fa326d2fea6deb40c07bb5572923aa4eeda0e8d185abb1b"
+    },
+    {
+      "id": "/tests/core/node/equals-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "9044d3c2eeae3a4ee177c294b8fc89c8b0a05435cb0b1c7fdc3a7e9b67096f87",
+      "actualSha256": "9044d3c2eeae3a4ee177c294b8fc89c8b0a05435cb0b1c7fdc3a7e9b67096f87"
+    },
+    {
+      "id": "/tests/core/node/hasValue-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "fad52af602c6f4ceced8fff3618c4d71cafdc3a41be106815576202c34b2c31f",
+      "actualSha256": "fad52af602c6f4ceced8fff3618c4d71cafdc3a41be106815576202c34b2c31f"
+    },
+    {
+      "id": "/tests/core/node/in-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "f490e92ea64cc7849e60133b5bf5c64b4880a6dea390ec208ab6e280b99e6dc5",
+      "actualSha256": "f490e92ea64cc7849e60133b5bf5c64b4880a6dea390ec208ab6e280b99e6dc5"
+    },
+    {
+      "id": "/tests/core/node/languageIn-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 3,
+      "actualResultCount": 3,
+      "expectedSha256": "ad181c27560424b5e59f45a9d06287f7c903af431d81c64690cc66afb5200152",
+      "actualSha256": "ad181c27560424b5e59f45a9d06287f7c903af431d81c64690cc66afb5200152"
+    },
+    {
+      "id": "/tests/core/node/maxExclusive-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 6,
+      "actualResultCount": 6,
+      "expectedSha256": "102b73689b0f307566e9d7b6537c367c7d6d850d1c6849e9c0c5e8b185051838",
+      "actualSha256": "102b73689b0f307566e9d7b6537c367c7d6d850d1c6849e9c0c5e8b185051838"
+    },
+    {
+      "id": "/tests/core/node/maxInclusive-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 4,
+      "actualResultCount": 4,
+      "expectedSha256": "545b711ff484d36f1441cb5f36ecbbdba70700a1df565e6b31e97d28f47588ae",
+      "actualSha256": "545b711ff484d36f1441cb5f36ecbbdba70700a1df565e6b31e97d28f47588ae"
+    },
+    {
+      "id": "/tests/core/node/maxLength-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 5,
+      "actualResultCount": 5,
+      "expectedSha256": "374f226f7813a36590c9966346b0715a7e084652a587ead34947a560fd3f7cfa",
+      "actualSha256": "374f226f7813a36590c9966346b0715a7e084652a587ead34947a560fd3f7cfa"
+    },
+    {
+      "id": "/tests/core/node/minExclusive-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 6,
+      "actualResultCount": 6,
+      "expectedSha256": "88f444894d4f2beeac9411c418b1e07c2589a58d8683ad79f04e78b5e1e34b8e",
+      "actualSha256": "88f444894d4f2beeac9411c418b1e07c2589a58d8683ad79f04e78b5e1e34b8e"
+    },
+    {
+      "id": "/tests/core/node/minInclusive-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "e50d35e4f28b58449ea8f794945275653c5a179ced894d42240c00146b4cc045",
+      "actualSha256": "e50d35e4f28b58449ea8f794945275653c5a179ced894d42240c00146b4cc045"
+    },
+    {
+      "id": "/tests/core/node/minInclusive-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 3,
+      "actualResultCount": 3,
+      "expectedSha256": "c23a5ac76f099651f4daaee45eaf784b02e381fc6ecfdd829352de2fc6b86662",
+      "actualSha256": "c23a5ac76f099651f4daaee45eaf784b02e381fc6ecfdd829352de2fc6b86662"
+    },
+    {
+      "id": "/tests/core/node/minInclusive-003",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 4,
+      "actualResultCount": 4,
+      "expectedSha256": "4321a939e0330bd8b57d1cd04fae6eb454f32295ed350927f52834c0f84eabb8",
+      "actualSha256": "4321a939e0330bd8b57d1cd04fae6eb454f32295ed350927f52834c0f84eabb8"
+    },
+    {
+      "id": "/tests/core/node/minLength-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 4,
+      "actualResultCount": 4,
+      "expectedSha256": "edcd66d386742135c5d57a7284ba81c94de917657a13f1f70376fa8d43569450",
+      "actualSha256": "edcd66d386742135c5d57a7284ba81c94de917657a13f1f70376fa8d43569450"
+    },
+    {
+      "id": "/tests/core/node/node-001",
+      "passed": false,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "b7f40e9637ff723e6794c41976cb67221d9f642147691efb1cb1845a3cf531cc",
+      "actualSha256": "8c0d81469986d8d7c65e687260195a3a51b01556d1ef98eae6696d3c2d743bde"
+    },
+    {
+      "id": "/tests/core/node/nodeKind-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "302107d78e64a8b453347542cfb4fbb883e7ecd169b5cf36d6f076e51a8992ed",
+      "actualSha256": "302107d78e64a8b453347542cfb4fbb883e7ecd169b5cf36d6f076e51a8992ed"
+    },
+    {
+      "id": "/tests/core/node/not-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "a6d167ebbe198d602dcbd0800ef5ac9a80857e85b0e062d1a0866044cd6fcf64",
+      "actualSha256": "a6d167ebbe198d602dcbd0800ef5ac9a80857e85b0e062d1a0866044cd6fcf64"
+    },
+    {
+      "id": "/tests/core/node/not-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "61f710b70e8508b7519759f0490831afe27ae081259f9277a49268caf0724cd8",
+      "actualSha256": "61f710b70e8508b7519759f0490831afe27ae081259f9277a49268caf0724cd8"
+    },
+    {
+      "id": "/tests/core/node/or-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "dd43323546a9a6f9e77af24464514850718fb54ddfac8745ad4bf2c03bcc4258",
+      "actualSha256": "dd43323546a9a6f9e77af24464514850718fb54ddfac8745ad4bf2c03bcc4258"
+    },
+    {
+      "id": "/tests/core/node/pattern-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 4,
+      "actualResultCount": 4,
+      "expectedSha256": "0416f6df0b1f9cc66d0422fd6e3dff23d58f9eb30e31def8589706873c22d381",
+      "actualSha256": "0416f6df0b1f9cc66d0422fd6e3dff23d58f9eb30e31def8589706873c22d381"
+    },
+    {
+      "id": "/tests/core/node/pattern-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "1bedfb9effdb93983bb94b06a04097b69744583ab8c7c4901eefb4222a68b4cd",
+      "actualSha256": "1bedfb9effdb93983bb94b06a04097b69744583ab8c7c4901eefb4222a68b4cd"
+    },
+    {
+      "id": "/tests/core/node/qualified-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "46dbe8b909a50b46bd399112ed8b58051713e9c222fa493e7b66c4006be96354",
+      "actualSha256": "46dbe8b909a50b46bd399112ed8b58051713e9c222fa493e7b66c4006be96354"
+    },
+    {
+      "id": "/tests/core/node/xone-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "1c4c9c4b5cd05673ef83dcd4bd9216a5ce94984a2d58e600c5141bcdb2e47a2f",
+      "actualSha256": "1c4c9c4b5cd05673ef83dcd4bd9216a5ce94984a2d58e600c5141bcdb2e47a2f"
+    },
+    {
+      "id": "/tests/core/node/xone-duplicate",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "6e53e45f243873c99dba3bbca3834c6cbb63cfbe07e3564b6428917420485699",
+      "actualSha256": "6e53e45f243873c99dba3bbca3834c6cbb63cfbe07e3564b6428917420485699"
+    },
+    {
+      "id": "/tests/core/path/path-alternative-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "442948e589c2d50df708e89ffc8bf12daae850f9814ec13164839f90b1e3cc2d",
+      "actualSha256": "442948e589c2d50df708e89ffc8bf12daae850f9814ec13164839f90b1e3cc2d"
+    },
+    {
+      "id": "/tests/core/path/path-complex-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "b1ab22a4951d1d151dc9801fafc4c4ef202eafbf6be11de9e5910cadf2dab456",
+      "actualSha256": "b1ab22a4951d1d151dc9801fafc4c4ef202eafbf6be11de9e5910cadf2dab456"
+    },
+    {
+      "id": "/tests/core/path/path-complex-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 4,
+      "actualResultCount": 4,
+      "expectedSha256": "e8c567c9d14c3998335b670699baa71fe67b4a7368d564de420f77b8fa6f36bb",
+      "actualSha256": "e8c567c9d14c3998335b670699baa71fe67b4a7368d564de420f77b8fa6f36bb"
+    },
+    {
+      "id": "/tests/core/path/path-inverse-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "95037d9e4e4f78ed7eaebc84d22861b5d3c63aa16631cad97a170946729c6b36",
+      "actualSha256": "95037d9e4e4f78ed7eaebc84d22861b5d3c63aa16631cad97a170946729c6b36"
+    },
+    {
+      "id": "/tests/core/path/path-oneOrMore-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "129e69705c84bc43fea8051655b5309b1d6953083c9aa417b3a1d7ff9531672b",
+      "actualSha256": "129e69705c84bc43fea8051655b5309b1d6953083c9aa417b3a1d7ff9531672b"
+    },
+    {
+      "id": "/tests/core/path/path-sequence-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "47f29af649fa3f3b5b6e1420577cd5ce6091d48ef5ccf03e780a22e2a42ddf36",
+      "actualSha256": "47f29af649fa3f3b5b6e1420577cd5ce6091d48ef5ccf03e780a22e2a42ddf36"
+    },
+    {
+      "id": "/tests/core/path/path-sequence-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "45d3c6e974327e17c767c4e1d0d5978fb05f10487951c3507311ed8002885d11",
+      "actualSha256": "45d3c6e974327e17c767c4e1d0d5978fb05f10487951c3507311ed8002885d11"
+    },
+    {
+      "id": "/tests/core/path/path-sequence-duplicate-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "f4fab1d36d289f40b7753e2e3cd5e3d24f63283c2a4b189a1afadf19ac3f3f2e",
+      "actualSha256": "f4fab1d36d289f40b7753e2e3cd5e3d24f63283c2a4b189a1afadf19ac3f3f2e"
+    },
+    {
+      "id": "/tests/core/path/path-strange-001",
+      "passed": false,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "a64ad96727013c9f58773cf4bc3bce0b90827ce0bf09e02c0ff14fe42d0dbea8",
+      "actualSha256": "eb72511ab7c0ffd849fc8d6a130f6f0cea0bd97441645d460fd0c8cf3a873f01"
+    },
+    {
+      "id": "/tests/core/path/path-strange-002",
+      "passed": false,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "a64ad96727013c9f58773cf4bc3bce0b90827ce0bf09e02c0ff14fe42d0dbea8",
+      "actualSha256": "8a8529a7b07f7e0934d5ad26f812acc9c4da484a9502a4c66e88e5b023ef8fca"
+    },
+    {
+      "id": "/tests/core/path/path-unused-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "535d20c9713faef01f80b134535eb008624ead823f1f030fc46593ab59f79282",
+      "actualSha256": "535d20c9713faef01f80b134535eb008624ead823f1f030fc46593ab59f79282"
+    },
+    {
+      "id": "/tests/core/path/path-zeroOrMore-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "6fbc43aa5ecb796f0593b5fdc54a81ff97f915e83699a3d07d5e497d5f564777",
+      "actualSha256": "6fbc43aa5ecb796f0593b5fdc54a81ff97f915e83699a3d07d5e497d5f564777"
+    },
+    {
+      "id": "/tests/core/path/path-zeroOrOne-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "62fcf0952f0dc5ed6654c25687f8be648e039a664f57098cf4b895d187354453",
+      "actualSha256": "62fcf0952f0dc5ed6654c25687f8be648e039a664f57098cf4b895d187354453"
+    },
+    {
+      "id": "/tests/core/property/and-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 3,
+      "actualResultCount": 3,
+      "expectedSha256": "fd90b113a099759b9ea2d2c56a438ee19d8cc9bb5ad0fc1dd8ed619eac108373",
+      "actualSha256": "fd90b113a099759b9ea2d2c56a438ee19d8cc9bb5ad0fc1dd8ed619eac108373"
+    },
+    {
+      "id": "/tests/core/property/class-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "7dc085d446cdc961285ebaf9cbacd445ac8c4a69bb13a0720ee52a6620c31943",
+      "actualSha256": "7dc085d446cdc961285ebaf9cbacd445ac8c4a69bb13a0720ee52a6620c31943"
+    },
+    {
+      "id": "/tests/core/property/datatype-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "08dbbf711ced4ca4428fecc63390c8c7b862412d0f86ab3cd049b53c85c78a90",
+      "actualSha256": "08dbbf711ced4ca4428fecc63390c8c7b862412d0f86ab3cd049b53c85c78a90"
+    },
+    {
+      "id": "/tests/core/property/datatype-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "7837fee5e804e5b8707c71a48b8a2b5351522777080a6536ff5b08529152d96e",
+      "actualSha256": "7837fee5e804e5b8707c71a48b8a2b5351522777080a6536ff5b08529152d96e"
+    },
+    {
+      "id": "/tests/core/property/datatype-003",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "acab36bcd02056364d8ff174db8bd4ccf208bdbacdb60ab08bd9201328ccf0d5",
+      "actualSha256": "acab36bcd02056364d8ff174db8bd4ccf208bdbacdb60ab08bd9201328ccf0d5"
+    },
+    {
+      "id": "/tests/core/property/datatype-ill-formed",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 3,
+      "actualResultCount": 3,
+      "expectedSha256": "814d6dc589c72537dde4647418c5b82804992ac8281d78a795337fd221b1cc30",
+      "actualSha256": "814d6dc589c72537dde4647418c5b82804992ac8281d78a795337fd221b1cc30"
+    },
+    {
+      "id": "/tests/core/property/disjoint-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "a83e56bddd939e41e41f298eafa33bc8dd77f90071e0cf27053bb494c8177240",
+      "actualSha256": "a83e56bddd939e41e41f298eafa33bc8dd77f90071e0cf27053bb494c8177240"
+    },
+    {
+      "id": "/tests/core/property/equals-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 5,
+      "actualResultCount": 5,
+      "expectedSha256": "f078e22e8834e2ddc90eb5e6cb9900f1f0db0751ff6a37818430ee81de2ab9bd",
+      "actualSha256": "f078e22e8834e2ddc90eb5e6cb9900f1f0db0751ff6a37818430ee81de2ab9bd"
+    },
+    {
+      "id": "/tests/core/property/hasValue-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "d7cb5dd3b71ce9ca71a70dffb3ec3b0bd8e7d624eea4ff7864acfde64aa74ae1",
+      "actualSha256": "d7cb5dd3b71ce9ca71a70dffb3ec3b0bd8e7d624eea4ff7864acfde64aa74ae1"
+    },
+    {
+      "id": "/tests/core/property/in-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "efbbd80e0f204341e3b266e54eac434c35646de37d39c54638f5ed63b94bf8ec",
+      "actualSha256": "efbbd80e0f204341e3b266e54eac434c35646de37d39c54638f5ed63b94bf8ec"
+    },
+    {
+      "id": "/tests/core/property/languageIn-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 3,
+      "actualResultCount": 3,
+      "expectedSha256": "9342422c3551cb8b7153b71a63f997d7eca8de6fabd52040842a8dd34ca28e4e",
+      "actualSha256": "9342422c3551cb8b7153b71a63f997d7eca8de6fabd52040842a8dd34ca28e4e"
+    },
+    {
+      "id": "/tests/core/property/lessThan-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 3,
+      "actualResultCount": 3,
+      "expectedSha256": "8d2d7ee238f4bbfad67cd0c28889bdd0b4f5a3cb430456ef0824167b1e3f85b5",
+      "actualSha256": "8d2d7ee238f4bbfad67cd0c28889bdd0b4f5a3cb430456ef0824167b1e3f85b5"
+    },
+    {
+      "id": "/tests/core/property/lessThan-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 4,
+      "actualResultCount": 4,
+      "expectedSha256": "c7e9a3987f8ed56e9c345d554548f38bcc55dea46a90ff43c67d1b544d1aa58d",
+      "actualSha256": "c7e9a3987f8ed56e9c345d554548f38bcc55dea46a90ff43c67d1b544d1aa58d"
+    },
+    {
+      "id": "/tests/core/property/lessThanOrEquals-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "7123951b5f9b56b27ffa23508a19d8e1bca2a21e649e81f0f1ab78ad9bb8e13c",
+      "actualSha256": "7123951b5f9b56b27ffa23508a19d8e1bca2a21e649e81f0f1ab78ad9bb8e13c"
+    },
+    {
+      "id": "/tests/core/property/maxCount-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "31be1a26e9962c8dba3ab262d68121b13ae23df9bedcdfe817e6dbfdc1fb874c",
+      "actualSha256": "31be1a26e9962c8dba3ab262d68121b13ae23df9bedcdfe817e6dbfdc1fb874c"
+    },
+    {
+      "id": "/tests/core/property/maxCount-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "7365e112dc0259f0e1a09386400669030d3d0547368393fde7b5dba68ba5cf67",
+      "actualSha256": "7365e112dc0259f0e1a09386400669030d3d0547368393fde7b5dba68ba5cf67"
+    },
+    {
+      "id": "/tests/core/property/maxExclusive-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 3,
+      "actualResultCount": 3,
+      "expectedSha256": "43376f73681ef74e475653934d1a316c8d833498f4c9ddb0fca0106158f93b5f",
+      "actualSha256": "43376f73681ef74e475653934d1a316c8d833498f4c9ddb0fca0106158f93b5f"
+    },
+    {
+      "id": "/tests/core/property/maxInclusive-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "afd149a3d61812486673c01430fd716b7471cba6ea6c4f1d93846eda250a83bd",
+      "actualSha256": "afd149a3d61812486673c01430fd716b7471cba6ea6c4f1d93846eda250a83bd"
+    },
+    {
+      "id": "/tests/core/property/maxLength-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "6487b3a06ba3df690155cbbfd84e21cb61b1bd74351c334ce53d17ff3b31aa62",
+      "actualSha256": "6487b3a06ba3df690155cbbfd84e21cb61b1bd74351c334ce53d17ff3b31aa62"
+    },
+    {
+      "id": "/tests/core/property/minCount-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "a942b6a56263bd9099f8458bd645e03638d90fd2f3625e0aefd6612a88bd9240",
+      "actualSha256": "a942b6a56263bd9099f8458bd645e03638d90fd2f3625e0aefd6612a88bd9240"
+    },
+    {
+      "id": "/tests/core/property/minCount-002",
+      "passed": true,
+      "expectedConforms": true,
+      "actualConforms": true,
+      "expectedResultCount": 0,
+      "actualResultCount": 0,
+      "expectedSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "actualSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "/tests/core/property/minExclusive-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "9b64d5e3ac2a87318e3bc9af219a5a299cd46f4c53cda0db410ef485559ed653",
+      "actualSha256": "9b64d5e3ac2a87318e3bc9af219a5a299cd46f4c53cda0db410ef485559ed653"
+    },
+    {
+      "id": "/tests/core/property/minExclusive-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "894252d79b56c909e5c3d1d1fef00266254a386eb99f8e657b158520c88701e2",
+      "actualSha256": "894252d79b56c909e5c3d1d1fef00266254a386eb99f8e657b158520c88701e2"
+    },
+    {
+      "id": "/tests/core/property/minLength-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "d7d5e9f0bec754de58fbbf47efc29fae4014aece6b9edc2fdf153c13ca9b04ca",
+      "actualSha256": "d7d5e9f0bec754de58fbbf47efc29fae4014aece6b9edc2fdf153c13ca9b04ca"
+    },
+    {
+      "id": "/tests/core/property/node-001",
+      "passed": false,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "f4979ea6ad5d94cc63284b50df64fb7e94401ff1af5954fde20ec1de59622ccf",
+      "actualSha256": "2cffc4bc75f48613f36f37b4811c5eb35264570df167601e88ea459350d22d61"
+    },
+    {
+      "id": "/tests/core/property/node-002",
+      "passed": false,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "e8146beb115f4cc4ca5bde5c2aa1dbff38de64ed79bd680fa667b1d587bddfb8",
+      "actualSha256": "96e1b8550d976eea02c5622058b1242b9f37c22df8fe9789654d2a088f26c62e"
+    },
+    {
+      "id": "/tests/core/property/nodeKind-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 27,
+      "actualResultCount": 27,
+      "expectedSha256": "e8bea2589ba101088e7d87daf913c0b285e006ca932c24374585a35ee3f7cdd4",
+      "actualSha256": "e8bea2589ba101088e7d87daf913c0b285e006ca932c24374585a35ee3f7cdd4"
+    },
+    {
+      "id": "/tests/core/property/not-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "4af5e54b25503ece871c3efa20f142f000484b6b76b29ecbb4dbdd7ab6f0cc7e",
+      "actualSha256": "4af5e54b25503ece871c3efa20f142f000484b6b76b29ecbb4dbdd7ab6f0cc7e"
+    },
+    {
+      "id": "/tests/core/property/or-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "34d22dd9dafada8dffc7cbd53829c481fe79ec7aeed33a27dd8c083c4536afd5",
+      "actualSha256": "34d22dd9dafada8dffc7cbd53829c481fe79ec7aeed33a27dd8c083c4536afd5"
+    },
+    {
+      "id": "/tests/core/property/or-datatypes-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 3,
+      "actualResultCount": 3,
+      "expectedSha256": "71e0f13ed634f431fc056cee205e643a23f2ff8d1438a3554ace8c82e82daec8",
+      "actualSha256": "71e0f13ed634f431fc056cee205e643a23f2ff8d1438a3554ace8c82e82daec8"
+    },
+    {
+      "id": "/tests/core/property/pattern-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "a1278131ca2b70f25bd8f256e4e697ce37032444d2704b65a32c78866a76e338",
+      "actualSha256": "a1278131ca2b70f25bd8f256e4e697ce37032444d2704b65a32c78866a76e338"
+    },
+    {
+      "id": "/tests/core/property/pattern-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "240ce88af7c66fbe6a54389b0e446a3ecacd731b065f81f7ade38fa2ac6a102a",
+      "actualSha256": "240ce88af7c66fbe6a54389b0e446a3ecacd731b065f81f7ade38fa2ac6a102a"
+    },
+    {
+      "id": "/tests/core/property/property-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "079e4dda980355e2337c5b5643bb5752f482e9746e95ad10606608b821534c3c",
+      "actualSha256": "079e4dda980355e2337c5b5643bb5752f482e9746e95ad10606608b821534c3c"
+    },
+    {
+      "id": "/tests/core/property/qualifiedMinCountDisjoint-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "93d03173dcf1a0e54fd833be30d0b3d88d23bc0cfa3261c4452ab14c9ab5b5bb",
+      "actualSha256": "93d03173dcf1a0e54fd833be30d0b3d88d23bc0cfa3261c4452ab14c9ab5b5bb"
+    },
+    {
+      "id": "/tests/core/property/qualifiedValueShape-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "a75bc040a11f7cb6c7eb480bab4c24f8a610d5b566202637e2a6af4cfc554c93",
+      "actualSha256": "a75bc040a11f7cb6c7eb480bab4c24f8a610d5b566202637e2a6af4cfc554c93"
+    },
+    {
+      "id": "/tests/core/property/qualifiedValueShapesDisjoint-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "2b0c7d1c55637bb009a8404fb749d6878c6301889a5c31e08e8ae554dd084f51",
+      "actualSha256": "2b0c7d1c55637bb009a8404fb749d6878c6301889a5c31e08e8ae554dd084f51"
+    },
+    {
+      "id": "/tests/core/property/uniqueLang-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 3,
+      "actualResultCount": 3,
+      "expectedSha256": "0cbee298ed86eb278abf79e1e525ffa2717da8be5af1ebec25eacf68ffbefebd",
+      "actualSha256": "0cbee298ed86eb278abf79e1e525ffa2717da8be5af1ebec25eacf68ffbefebd"
+    },
+    {
+      "id": "/tests/core/property/uniqueLang-002",
+      "passed": true,
+      "expectedConforms": true,
+      "actualConforms": true,
+      "expectedResultCount": 0,
+      "actualResultCount": 0,
+      "expectedSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "actualSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "/tests/core/targets/multipleTargets-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "dc8d6f0043de7181632f54cec402c8830212575df67ccee6056cd3005e8593e9",
+      "actualSha256": "dc8d6f0043de7181632f54cec402c8830212575df67ccee6056cd3005e8593e9"
+    },
+    {
+      "id": "/tests/core/targets/targetClass-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "07cfb0ec2789922c277ac74bfa80ab30a2fbed20754139a2428378ef8a209937",
+      "actualSha256": "07cfb0ec2789922c277ac74bfa80ab30a2fbed20754139a2428378ef8a209937"
+    },
+    {
+      "id": "/tests/core/targets/targetClassImplicit-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "70030333a290fd596a9e6e55e5dfdcd0435b827b8244fde63b49d149511ec836",
+      "actualSha256": "70030333a290fd596a9e6e55e5dfdcd0435b827b8244fde63b49d149511ec836"
+    },
+    {
+      "id": "/tests/core/targets/targetNode-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "f84244cc2f51815355d4167fbdb29d8180faf2c4c723fc187ec5580eee6edd53",
+      "actualSha256": "f84244cc2f51815355d4167fbdb29d8180faf2c4c723fc187ec5580eee6edd53"
+    },
+    {
+      "id": "/tests/core/targets/targetObjectsOf-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "bf2943861caafee644d3a43af252c32e0bcd5aba5d38bef58fbe674ac01323ba",
+      "actualSha256": "bf2943861caafee644d3a43af252c32e0bcd5aba5d38bef58fbe674ac01323ba"
+    },
+    {
+      "id": "/tests/core/targets/targetSubjectsOf-001",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 1,
+      "actualResultCount": 1,
+      "expectedSha256": "facac5678b08ad9504b02546e3cd6a6e022fad93e10648b2234d0b241f621567",
+      "actualSha256": "facac5678b08ad9504b02546e3cd6a6e022fad93e10648b2234d0b241f621567"
+    },
+    {
+      "id": "/tests/core/targets/targetSubjectsOf-002",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "2e1a85941f97c8388da72436888b6535a74ecf8a6865f651a86f7942efc77272",
+      "actualSha256": "2e1a85941f97c8388da72436888b6535a74ecf8a6865f651a86f7942efc77272"
+    },
+    {
+      "id": "/tests/core/validation-reports/shared",
+      "passed": true,
+      "expectedConforms": false,
+      "actualConforms": false,
+      "expectedResultCount": 2,
+      "actualResultCount": 2,
+      "expectedSha256": "7e49ffc7fdec776d8279c62ac6c9c60131500a9e2eceb63c719df5fee0df2774",
+      "actualSha256": "7e49ffc7fdec776d8279c62ac6c9c60131500a9e2eceb63c719df5fee0df2774"
+    }
+  ],
+  "claim_ceiling": "ENGINEERING_QUALIFICATION_ONLY_NOT_HSWM_EFFICACY_OR_CANONICAL_AUTHORITY"
+}

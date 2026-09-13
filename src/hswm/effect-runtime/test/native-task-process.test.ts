@@ -1,0 +1,9 @@
+import { mkdtemp, readFile, writeFile } from "node:fs/promises"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import { Effect } from "effect"
+import { expect,it } from "vitest"
+import { runNativeTaskProcess } from "../src/native-task-process.js"
+const fixture={domain:[{role:"part",field:"ready",values:[0,1]},{role:"part",field:"clean",values:[0,1]}],examples:[{values:[{role:"part",field:"ready",value:0},{role:"part",field:"clean",value:0}],outcome:false,source:"a"},{values:[{role:"part",field:"ready",value:1},{role:"part",field:"clean",value:1}],outcome:true,source:"b"}]}
+it("merges only a prior synthesis cursor and writes the requested output",async()=>{const root=await mkdtemp(join(tmpdir(),"native-task-"));const source=join(root,"input.json"),prior=join(root,"prior.json"),output=join(root,"output.json");await writeFile(source,JSON.stringify({...fixture,candidate_limit:1}));const first=await Effect.runPromise(runNativeTaskProcess(["synthesize",source]));await writeFile(prior,first.stdout);const next=await Effect.runPromise(runNativeTaskProcess(["synthesize",source,"--resume-from",prior,"--output",output]));expect(next.stdout).toBe("");const decoded=JSON.parse(await readFile(output,"utf8"));expect(decoded.search_offset).toBeGreaterThan(0)})
+it("refuses a second cursor source and absent continuation",async()=>{const root=await mkdtemp(join(tmpdir(),"native-task-"));const source=join(root,"input.json"),prior=join(root,"prior.json");await writeFile(source,JSON.stringify({...fixture,resume_cursor:{}}));await writeFile(prior,"{}");const result=await Effect.runPromise(runNativeTaskProcess(["synthesize",source,"--resume-from",prior]).pipe(Effect.either));expect(result).toMatchObject({_tag:"Left",left:{detail:"resume cursor must have exactly one source"}})})

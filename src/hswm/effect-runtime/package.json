@@ -14,7 +14,11 @@
     "hswm-dev": "./dist/hswm-dev-process.js",
     "hswm-reluvator-check": "./dist/reluvator-check-process.js",
     "hswm-backup": "./dist/development-backup-process.js",
-    "hswm-research-graph": "./dist/research-graph-process.js"
+    "hswm-research-graph": "./dist/research-graph-process.js",
+    "hswm-kg-bundle": "./dist/native-kg-process.js",
+    "hswm-task": "./dist/native-task-process.js",
+    "hswm-knowledge-catalog": "./dist/knowledge-catalog-process.js",
+    "hswm-usl": "./dist/native-usl-process.js"
   },
   "exports": {
     ".": {
@@ -48,9 +52,11 @@
     "test:adaptive": "vitest run ../../../tests/effect-runtime/adaptive-",
     "check:adaptive-functional": "node scripts/lint-adaptive-functional.mjs",
     "test:watch": "vitest --maxWorkers=2",
-    "test:changed": "vitest run --changed --maxWorkers=2"
+    "test:changed": "vitest run --changed --maxWorkers=2",
+    "test:native-migration": "vitest run test/native- test/general-json-domain.test.ts test/knowledge-catalog- test/research-tooling-parity.test.ts --maxWorkers=1"
   },
   "dependencies": {
+    "@comunica/query-sparql-rdfjs": "5.3.0",
     "@effect/opentelemetry": "0.64.0",
     "@effect/platform": "0.97.0",
     "@opentelemetry/api": "1.9.0",
@@ -62,6 +68,7 @@
     "@opentelemetry/sdk-trace-node": "2.2.0",
     "@opentelemetry/sdk-trace-web": "2.2.0",
     "@opentelemetry/semantic-conventions": "1.34.0",
+    "@rdfjs/types": "2.0.1",
     "@temporalio/activity": "1.23.0",
     "@temporalio/client": "1.23.0",
     "@temporalio/common": "1.23.0",
@@ -69,7 +76,10 @@
     "@temporalio/workflow": "1.23.0",
     "effect": "3.22.1",
     "jsonld": "9.0.0",
-    "neo4j-driver": "6.2.0"
+    "n3": "2.7.2",
+    "neo4j-driver": "6.2.0",
+    "rdf-canonize": "5.0.0",
+    "rdf-validate-shacl": "0.6.5"
   },
   "devDependencies": {
     "@effect/language-service": "0.23.3",
@@ -78,8 +88,6 @@
     "@types/jsonld": "1.5.15",
     "@types/n3": "1.26.3",
     "@types/node": "24.13.3",
-    "n3": "2.7.2",
-    "rdf-canonize": "5.0.0",
     "typescript": "5.9.3",
     "vitest": "3.2.7"
   }

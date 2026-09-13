@@ -1,0 +1,58 @@
+{
+  "schema_version": "hswm-native-graph-source-pins/v1",
+  "accessed_on": "2026-09-13",
+  "authority": "INDEPENDENT_IMPLEMENTATIONS_OF_W3C_STANDARDS_NOT_W3C_SDK",
+  "standards": [
+    "https://www.w3.org/TR/shacl/",
+    "https://www.w3.org/TR/sparql11-query/",
+    "https://www.w3.org/TR/n-quads/"
+  ],
+  "packages": [
+    {
+      "name": "@comunica/query-sparql-rdfjs",
+      "version": "5.3.0",
+      "source": "https://github.com/comunica/comunica",
+      "commit": "8a9d8e4a706d64268e1e222b4c561caa47798f72",
+      "license": "MIT",
+      "integrity": "sha512-isXNLwV1PB3hGXtcKXOfV134/X2q53J2ZELS82F07KbHVLoGCwF+DxfQ/gXvPxIatGKO2w0v3At3uAwVPzfZDA=="
+    },
+    {
+      "name": "rdf-validate-shacl",
+      "version": "0.6.5",
+      "source": "https://github.com/zazuko/rdf-validate-shacl",
+      "commit": "599e0f1dd58ab16cfbcbddef7108c0c1157b5028",
+      "license": "MIT",
+      "integrity": "sha512-rwIibopSixDE8ecA9x0c7oTVxdMWxGiJh7h3uJ+WS2h4lq2nx3DZVO7rJvwa5kZpDq9QEFPoyZINAUyfaaoN4Q=="
+    },
+    {
+      "name": "n3",
+      "version": "2.7.2",
+      "source": "https://github.com/rdfjs/N3.js",
+      "commit": "ffb71f9f7ddbdcb4ac831f019ce030b361cc860d",
+      "license": "MIT",
+      "integrity": "sha512-8Y/GU78BFSecvIv7OiJacY28l/zHiLo5/apxM+kyyUNCTWmqWyzzNjLlja4/vbLogoCHDPwCChLuDEZcpOKeDw=="
+    },
+    {
+      "name": "rdf-canonize",
+      "version": "5.0.0",
+      "source": "https://github.com/digitalbazaar/rdf-canonize",
+      "commit": "9502eee92d87e8685d96b9d325477d767c86fb83",
+      "license": "BSD-3-Clause",
+      "integrity": "sha512-g8OUrgMXAR9ys/ZuJVfBr05sPPoMA7nHIVs8VEvg9QwM5W4GR2qSFEEHjsyHF1eWlBaf8Ev40WNjQFQ+nJTO3w=="
+    },
+    {
+      "name": "@rdfjs/types",
+      "version": "2.0.1",
+      "source": "https://github.com/rdfjs/types",
+      "commit": "1b1208dcc9389415b62717092c40d6b6954f4872",
+      "license": "MIT",
+      "integrity": "sha512-uyAzpugX7KekAXAHq26m3JlUIZJOC0uSBhpnefGV5i15bevDyyejoB7I+9MKeUrzXD8OOUI3+4FeV1wwQr5ihA=="
+    }
+  ],
+  "dependency_lock": "src/hswm/effect-runtime/package-lock.json",
+  "qualification": {
+    "shacl_core": "98_APPROVED_OFFICIAL_TESTS_PASS_NO_EXCLUSIONS",
+    "sparql": "12_HSWM_SAVED_QUERY_RESULT_GOLDENS_PASS_OFFICIAL_SPARQL_SUITE_NOT_YET_RUN",
+    "scope": "PUBLISHED_W3C_RECOMMENDATIONS_ONLY_NO_EXPERIMENTAL_PROMOTION"
+  }
+}

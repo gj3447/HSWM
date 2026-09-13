@@ -1,0 +1,330 @@
+{
+  "after": {
+    "credit": "UNIDENTIFIED_CREDIT",
+    "evaluated_rule_provenance": [
+      {
+        "priority": 0,
+        "relation_ref": [
+          "authored:join-condition",
+          "demo-proposal:1c3cbc7924a420b70cff8967d723245be148035f46ea80a3d9cf1e1f1dbc5eae",
+          "dea56077350543b96ee4da1516e4f25f5ac466bee1e26780441f9562c87a6508"
+        ],
+        "truth": "FALSE"
+      }
+    ],
+    "hypothetical_next_step": {
+      "kind": "WITHHOLD",
+      "reason": "no_applicable_rule"
+    },
+    "hypothetical_read_set": [
+      {
+        "field": [
+          "part",
+          "clean"
+        ],
+        "fresh": true,
+        "observation_digest": "aaff29382f694608e53464504cbeb68ceed0b0e1aef307ec4770b1a8b2fc3713",
+        "revision": "p1",
+        "source": "authored:query:clean"
+      },
+      {
+        "field": [
+          "part",
+          "ready"
+        ],
+        "fresh": true,
+        "observation_digest": "e4c5e17efb066fe1e9a12b26ef13aa50f22d1b30c7618f27e6d2b229f8078fd3",
+        "revision": "p1",
+        "source": "authored:query:ready"
+      }
+    ],
+    "input_provenance": "authored:caller-checks",
+    "preview_uid": "f626a89c9aabe7f0d3197048457d75f98da1e24a4bb6b4348ba52a80d202b4f5",
+    "selected_rule_provenance": null,
+    "status": "DESIGN_ONLY_NO_EXECUTION",
+    "step_input_digest": "5732c27801ac039d1734c24d16083c26eeef4faff2315ead8a56e4a1d25b5ee2"
+  },
+  "before": {
+    "credit": "UNIDENTIFIED_CREDIT",
+    "evaluated_rule_provenance": [
+      {
+        "priority": 0,
+        "relation_ref": [
+          "authored:join-condition",
+          "r1",
+          "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+        ],
+        "truth": "TRUE"
+      }
+    ],
+    "hypothetical_next_step": {
+      "action_name": "join",
+      "cost": 2,
+      "kind": "ACTION_PROPOSAL",
+      "reason": null
+    },
+    "hypothetical_read_set": [
+      {
+        "field": [
+          "part",
+          "ready"
+        ],
+        "fresh": true,
+        "observation_digest": "e4c5e17efb066fe1e9a12b26ef13aa50f22d1b30c7618f27e6d2b229f8078fd3",
+        "revision": "p1",
+        "source": "authored:query:ready"
+      }
+    ],
+    "input_provenance": "authored:caller-checks",
+    "preview_uid": "8d1ee5872f92a2e0787130ad48e81acadbc06c3dbe0669dacf3292b6e8b6343a",
+    "selected_rule_provenance": {
+      "priority": 0,
+      "relation_ref": [
+        "authored:join-condition",
+        "r1",
+        "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+      ],
+      "truth": "TRUE"
+    },
+    "status": "DESIGN_ONLY_NO_EXECUTION",
+    "step_input_digest": "34e5dee7b490755bfe6ee90094c7233cc478a5bba9d4019ab1a0b90686609939"
+  },
+  "canonical_revision": null,
+  "credit": "UNIDENTIFIED_CREDIT",
+  "initial_candidates": {
+    "candidate_space_size": 14,
+    "candidates": [
+      {
+        "credit": "UNIDENTIFIED_CREDIT",
+        "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+        "origin": "BOUNDED_GRAMMAR_SYNTHESIS",
+        "other_remainder": "OPEN",
+        "parent_revision": null,
+        "relation_ast": {
+          "left": {
+            "field": "ready",
+            "role": "part"
+          },
+          "op": "eq",
+          "right": 1
+        },
+        "status": "PROPOSED_NOT_ADMITTED"
+      },
+      {
+        "credit": "UNIDENTIFIED_CREDIT",
+        "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+        "origin": "BOUNDED_GRAMMAR_SYNTHESIS",
+        "other_remainder": "OPEN",
+        "parent_revision": null,
+        "relation_ast": {
+          "children": [
+            {
+              "left": {
+                "field": "clean",
+                "role": "part"
+              },
+              "op": "eq",
+              "right": 1
+            },
+            {
+              "left": {
+                "field": "ready",
+                "role": "part"
+              },
+              "op": "eq",
+              "right": 1
+            }
+          ],
+          "op": "all"
+        },
+        "status": "PROPOSED_NOT_ADMITTED"
+      }
+    ],
+    "enumeration_progress": 14,
+    "examined": 14,
+    "input_provenance_digest": "92d6fca81a06a9eaa7dd7e65a0c671a0e252a6d1a1af0d5a0f1fbcc1f5182e66",
+    "resume_cursor": null,
+    "search_complete": true,
+    "search_offset": 0,
+    "status": "PROPOSED_NOT_ADMITTED",
+    "stop_reason": "SPACE_EXHAUSTED",
+    "truncated": false
+  },
+  "input_digest": "903d0460b01fa2af703f26871d591769e7387b451c9a2550ff1a2908d91866ad",
+  "outcome_projection": {
+    "kind": "BOOLEAN_SUCCESS_IS_RELATION_TRUTH",
+    "source": "authored:workshop-success-predicate-contract"
+  },
+  "preview_query": {
+    "digest": "c0498bdfb46ce46da11e550fd298b2b65967bfd501c40c19e54baea82b23df96",
+    "role": "SAME_SUPPLIED_QUERY_BEFORE_AFTER_RESTORE"
+  },
+  "probe": {
+    "counters": {
+      "candidate_count": 2,
+      "candidates_evaluated": 4,
+      "context_count": 2,
+      "contexts_evaluated": 2,
+      "feasible_contexts": 1
+    },
+    "credit": "UNIDENTIFIED_CREDIT",
+    "evaluated_contexts": [
+      {
+        "cost": 1,
+        "predictions": [
+          {
+            "candidate_index": 0,
+            "relation_prediction": "TRUE"
+          },
+          {
+            "candidate_index": 1,
+            "relation_prediction": "FALSE"
+          }
+        ],
+        "probe_id": "ready-dirty",
+        "separation": 1,
+        "source": "authored:available-context:10"
+      },
+      {
+        "cost": 1,
+        "predictions": [
+          {
+            "candidate_index": 0,
+            "relation_prediction": "TRUE"
+          },
+          {
+            "candidate_index": 1,
+            "relation_prediction": "TRUE"
+          }
+        ],
+        "probe_id": "ready-clean",
+        "separation": 0,
+        "source": "authored:available-context:11"
+      }
+    ],
+    "proposal_digest": "aa66569f5419288dabde2e8bac11018a760a15d522d5167fc17d758d4da9f4b6",
+    "read_set": [
+      [
+        "part",
+        "clean"
+      ],
+      [
+        "part",
+        "ready"
+      ]
+    ],
+    "selected_probe": {
+      "cost": 1,
+      "predictions": [
+        {
+          "candidate_index": 0,
+          "relation_prediction": "TRUE"
+        },
+        {
+          "candidate_index": 1,
+          "relation_prediction": "FALSE"
+        }
+      ],
+      "probe_id": "ready-dirty",
+      "separation": 1,
+      "source": "authored:available-context:10"
+    },
+    "status": "PROBE_PROPOSAL"
+  },
+  "restored": {
+    "credit": "UNIDENTIFIED_CREDIT",
+    "evaluated_rule_provenance": [
+      {
+        "priority": 0,
+        "relation_ref": [
+          "authored:join-condition",
+          "r1",
+          "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+        ],
+        "truth": "TRUE"
+      }
+    ],
+    "hypothetical_next_step": {
+      "action_name": "join",
+      "cost": 2,
+      "kind": "ACTION_PROPOSAL",
+      "reason": null
+    },
+    "hypothetical_read_set": [
+      {
+        "field": [
+          "part",
+          "ready"
+        ],
+        "fresh": true,
+        "observation_digest": "e4c5e17efb066fe1e9a12b26ef13aa50f22d1b30c7618f27e6d2b229f8078fd3",
+        "revision": "p1",
+        "source": "authored:query:ready"
+      }
+    ],
+    "input_provenance": "authored:caller-checks",
+    "preview_uid": "8d1ee5872f92a2e0787130ad48e81acadbc06c3dbe0669dacf3292b6e8b6343a",
+    "selected_rule_provenance": {
+      "priority": 0,
+      "relation_ref": [
+        "authored:join-condition",
+        "r1",
+        "bbade3553a95ab22ea94131f648c9c926aadcaebfd18ebc4975dd31af846fd4f"
+      ],
+      "truth": "TRUE"
+    },
+    "status": "DESIGN_ONLY_NO_EXECUTION",
+    "step_input_digest": "34e5dee7b490755bfe6ee90094c7233cc478a5bba9d4019ab1a0b90686609939"
+  },
+  "revised_candidates": {
+    "candidate_space_size": 14,
+    "candidates": [
+      {
+        "credit": "UNIDENTIFIED_CREDIT",
+        "input_provenance_digest": "1c3cbc7924a420b70cff8967d723245be148035f46ea80a3d9cf1e1f1dbc5eae",
+        "origin": "BOUNDED_GRAMMAR_SYNTHESIS",
+        "other_remainder": "OPEN",
+        "parent_revision": "234ebeeeef558d572e86fbab081c9d78cab2f1706d6b61586a663df3b71d635e",
+        "relation_ast": {
+          "children": [
+            {
+              "left": {
+                "field": "clean",
+                "role": "part"
+              },
+              "op": "eq",
+              "right": 1
+            },
+            {
+              "left": {
+                "field": "ready",
+                "role": "part"
+              },
+              "op": "eq",
+              "right": 1
+            }
+          ],
+          "op": "all"
+        },
+        "status": "PROPOSED_NOT_ADMITTED"
+      }
+    ],
+    "enumeration_progress": 14,
+    "examined": 14,
+    "input_provenance_digest": "1c3cbc7924a420b70cff8967d723245be148035f46ea80a3d9cf1e1f1dbc5eae",
+    "resume_cursor": null,
+    "search_complete": true,
+    "search_offset": 0,
+    "status": "PROPOSED_NOT_ADMITTED",
+    "stop_reason": "SPACE_EXHAUSTED",
+    "truncated": false
+  },
+  "selection": "FIRST_ENUMERATED_FOR_AUTHORED_DEMO_NOT_ADMITTED",
+  "status": "AUTHORED_EPISODE_REPLAY_NOT_EFFICACY",
+  "subsequent_public_outcome": {
+    "outcome": false,
+    "probe_id": "ready-dirty",
+    "probe_proposal_digest": "aa66569f5419288dabde2e8bac11018a760a15d522d5167fc17d758d4da9f4b6",
+    "source": "authored:subsequent-public-feedback:10"
+  }
+}

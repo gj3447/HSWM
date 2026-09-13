@@ -1,0 +1,9 @@
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+
+SELECT ?task ?taskId WHERE {
+ ?task a role:WORK_PACKAGE ; p:task_id ?taskId .
+ ?task r:DEPENDS_ON+ ?endpoint .
+ FILTER(?task = ?endpoint)
+} ORDER BY ?taskId

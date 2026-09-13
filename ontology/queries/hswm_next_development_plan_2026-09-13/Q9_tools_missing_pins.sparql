@@ -1,0 +1,22 @@
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+
+SELECT ?tool ?missing WHERE {
+ {
+  ?tool a role:TOOL_PROFILE .
+  VALUES (?predicate ?missing) {
+   (p:package_version "package_version")
+   (p:package_integrity "package_integrity")
+   (p:license "license")
+   (p:authority_class "authority_class")
+   (r:HAS_SOURCE "engineering_source")
+  }
+  FILTER NOT EXISTS { ?tool ?predicate ?value }
+ }
+ UNION {
+  ?tool a role:TOOL_PROFILE ; r:HAS_SOURCE ?s .
+  FILTER NOT EXISTS { ?s p:source_path ?path ; p:sha256 ?sha ; p:byte_length ?bytes ; p:source_revision ?revision }
+  BIND("incomplete_engineering_source" AS ?missing)
+ }
+} ORDER BY ?tool ?missing

@@ -1,0 +1,2302 @@
+{
+  "schema_version": "hswm-next-development-plan/v1",
+  "source_base_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+  "date": "2026-09-13",
+  "authority_class": "SECONDARY_AI_IMPLEMENTATION_PLAN",
+  "status": "PLANNED_NOT_IMPLEMENTED",
+  "user_request": {
+    "authority_class": "USER_PRIMARY",
+    "verbatim": "ㅇㅇ 다음 개발에 대해서 표준 그래프 엔지니어링으로 꼼꼼하게 계획좀 해줘봐봐",
+    "source": "CURRENT_CONVERSATION"
+  },
+  "target": "One token-native evolving-hypergraph HSWM; FCL1-8 and schema-relative single-owner invariants unchanged.",
+  "conceptual_delta": "Work packages link source-bound gap → single proposed responsibility role → typed input/output → actual hard dependency → acceptance/counterexample → expected artifact; scheduling preference is separate.",
+  "dependency_semantics": "DEPENDS_ON means a required accepted deliverable; order_hint is scheduling only. A completed negative research result cannot satisfy a support condition. These are planning predicates, not canonical Permit/approval authority.",
+  "state_rules": {
+    "completion": "COMPLETE requires accepted artifacts at exact source/config, verified criterion evidence, complete hard dependencies and SATISFIED completion decisions. Mere test count, generated files, mocks or agent agreement cannot complete a route.",
+    "failure": "Keep failed evidence and current working route; retire or reroute exact mechanism as source contract requires.",
+    "successor": "Preserve this snapshot; publish a successor with task ID, implementation revision, outcome/evidence and disposition. No future activity/actual cost is fabricated.",
+    "decision_resolution": "An ACTIVE resolver can bind resolution evidence and set SATISFIED before its own COMPLETE; resolving a decision never requires the resolver already COMPLETE."
+  },
+  "standards": [
+    {
+      "id": "rdf11",
+      "url": "https://www.w3.org/TR/2014/REC-rdf11-concepts-20140225/",
+      "status": "W3C_RECOMMENDATION",
+      "published_on": "2014-02-25",
+      "accessed_on": "2026-09-13",
+      "authority": "EXTERNAL_PRIMARY_STANDARD_SOURCE",
+      "lane": "STABLE_SELECTED",
+      "scope": "Entity/edge identity and source-specific RDF dataset snapshots.",
+      "observation": "Official pages read through web tool; summary metadata, not downloaded executable or page-byte pin."
+    },
+    {
+      "id": "nquads",
+      "url": "https://www.w3.org/TR/2014/REC-n-quads-20140225/",
+      "status": "W3C_RECOMMENDATION",
+      "published_on": "2014-02-25",
+      "accessed_on": "2026-09-13",
+      "authority": "EXTERNAL_PRIMARY_STANDARD_SOURCE",
+      "lane": "STABLE_SELECTED",
+      "scope": "Deterministic blank-node-free exchange via existing native compiler.",
+      "observation": "Official pages read through web tool; summary metadata, not downloaded executable or page-byte pin."
+    },
+    {
+      "id": "shacl",
+      "url": "https://www.w3.org/TR/2017/REC-shacl-20170720/",
+      "status": "W3C_RECOMMENDATION",
+      "published_on": "2017-07-20",
+      "accessed_on": "2026-09-13",
+      "authority": "EXTERNAL_PRIMARY_STANDARD_SOURCE",
+      "lane": "STABLE_SELECTED",
+      "scope": "Local Core cardinality, type and structural constraints; cycles handled by separate SPARQL query.",
+      "observation": "Official pages read through web tool; summary metadata, not downloaded executable or page-byte pin."
+    },
+    {
+      "id": "prov",
+      "url": "https://www.w3.org/TR/2013/REC-prov-o-20130430/",
+      "status": "W3C_RECOMMENDATION",
+      "published_on": "2013-04-30",
+      "accessed_on": "2026-09-13",
+      "authority": "EXTERNAL_PRIMARY_STANDARD_SOURCE",
+      "lane": "STABLE_SELECTED",
+      "scope": "Existing projection derivation provenance only. Planned work is not an executed Activity; expected output is not wasGeneratedBy evidence.",
+      "observation": "Official pages read through web tool; summary metadata, not downloaded executable or page-byte pin."
+    },
+    {
+      "id": "sparql",
+      "url": "https://www.w3.org/TR/2013/REC-sparql11-query-20130321/",
+      "status": "W3C_RECOMMENDATION",
+      "published_on": "2013-03-21",
+      "accessed_on": "2026-09-13",
+      "authority": "EXTERNAL_PRIMARY_STANDARD_SOURCE",
+      "lane": "STABLE_SELECTED",
+      "scope": "Bounded local SELECT/ASK, dependency paths, missing evidence and readiness.",
+      "observation": "Official pages read through web tool; summary metadata, not downloaded executable or page-byte pin."
+    },
+    {
+      "id": "rdf12",
+      "url": "https://www.w3.org/TR/2026/CR-rdf12-concepts-20260407/",
+      "status": "CANDIDATE_RECOMMENDATION_SNAPSHOT",
+      "published_on": "2026-04-07",
+      "accessed_on": "2026-09-13",
+      "authority": "EXTERNAL_PRIMARY_STANDARD_SOURCE",
+      "lane": "EXPERIMENTAL_NOT_SELECTED",
+      "scope": "Observed official status; experimental, not selected for this plan.",
+      "observation": "Official pages read through web tool; summary metadata, not downloaded executable or page-byte pin."
+    },
+    {
+      "id": "shacl12",
+      "url": "https://www.w3.org/TR/2026/WD-shacl12-core-20260828/",
+      "status": "WORKING_DRAFT",
+      "published_on": "2026-08-28",
+      "accessed_on": "2026-09-13",
+      "authority": "EXTERNAL_PRIMARY_STANDARD_SOURCE",
+      "lane": "EXPERIMENTAL_NOT_SELECTED",
+      "scope": "Observed official status; experimental, not selected for this plan.",
+      "observation": "Official pages read through web tool; summary metadata, not downloaded executable or page-byte pin."
+    }
+  ],
+  "tools": [
+    {
+      "name": "effect",
+      "version": "3.22.1",
+      "integrity": "sha512-TNoXushmPOBAjJlthF5d2QwnX2xBPEtcNJr5XKNKbRLbDvBcOYkXlYDfvGfSA0zriwLFuCll5MDtNMAdZL17PQ==",
+      "license": "MIT",
+      "authority_class": "OFFICIAL_PROJECT_IMPLEMENTATION",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/Effect-TS/effect.git",
+        "directory": "packages/effect"
+      },
+      "lock": {
+        "path": "src/hswm/effect-runtime/package-lock.json",
+        "sha256": "a11cd7f1942df3811d4a818131c38c918a971d65b386caf5ea3dee108225ed2c",
+        "byte_length": 513714,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "qualification_scope": "Existing bounded HSWM compiler/query/Core validation; plan checks are not full official suite conformance.",
+      "new_install": false
+    },
+    {
+      "name": "n3",
+      "version": "2.7.2",
+      "integrity": "sha512-8Y/GU78BFSecvIv7OiJacY28l/zHiLo5/apxM+kyyUNCTWmqWyzzNjLlja4/vbLogoCHDPwCChLuDEZcpOKeDw==",
+      "license": "MIT",
+      "authority_class": "INDEPENDENT_IMPLEMENTATION_NOT_W3C_AUTHORITY",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/rdfjs/N3.js.git"
+      },
+      "lock": {
+        "path": "src/hswm/effect-runtime/package-lock.json",
+        "sha256": "a11cd7f1942df3811d4a818131c38c918a971d65b386caf5ea3dee108225ed2c",
+        "byte_length": 513714,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "qualification_scope": "Existing bounded HSWM compiler/query/Core validation; plan checks are not full official suite conformance.",
+      "new_install": false
+    },
+    {
+      "name": "rdf-validate-shacl",
+      "version": "0.6.5",
+      "integrity": "sha512-rwIibopSixDE8ecA9x0c7oTVxdMWxGiJh7h3uJ+WS2h4lq2nx3DZVO7rJvwa5kZpDq9QEFPoyZINAUyfaaoN4Q==",
+      "license": "MIT",
+      "authority_class": "INDEPENDENT_IMPLEMENTATION_NOT_W3C_AUTHORITY",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/zazuko/rdf-validate-shacl.git"
+      },
+      "lock": {
+        "path": "src/hswm/effect-runtime/package-lock.json",
+        "sha256": "a11cd7f1942df3811d4a818131c38c918a971d65b386caf5ea3dee108225ed2c",
+        "byte_length": 513714,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "qualification_scope": "Existing bounded HSWM compiler/query/Core validation; plan checks are not full official suite conformance.",
+      "new_install": false
+    },
+    {
+      "name": "@comunica/query-sparql-rdfjs",
+      "version": "5.3.0",
+      "integrity": "sha512-isXNLwV1PB3hGXtcKXOfV134/X2q53J2ZELS82F07KbHVLoGCwF+DxfQ/gXvPxIatGKO2w0v3At3uAwVPzfZDA==",
+      "license": "MIT",
+      "authority_class": "INDEPENDENT_IMPLEMENTATION_NOT_W3C_AUTHORITY",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/comunica/comunica.git",
+        "directory": "engines/query-sparql-rdfjs"
+      },
+      "lock": {
+        "path": "src/hswm/effect-runtime/package-lock.json",
+        "sha256": "a11cd7f1942df3811d4a818131c38c918a971d65b386caf5ea3dee108225ed2c",
+        "byte_length": 513714,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "qualification_scope": "Existing bounded HSWM compiler/query/Core validation; plan checks are not full official suite conformance.",
+      "new_install": false
+    }
+  ],
+  "requirements": [
+    {
+      "id": "f1-run-unconnected",
+      "title": "Native F1 accepts judge only; HTTP, tokenizer and network components are not wired into a durable run owner.",
+      "baseline_status": "CONFIRMED_OPEN",
+      "source": {
+        "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+        "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+        "byte_length": 59103,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "coverage": [
+        "F1-LEDGER",
+        "F1-SPOOL",
+        "F1-DURABLE-PORT",
+        "F1-RUN-CLI",
+        "F1-QUALIFY-CUTOVER"
+      ],
+      "disposition": "WORK_PLANNED",
+      "existing_evidence": null
+    },
+    {
+      "id": "s2s-protocol-pilot-unconnected",
+      "title": "Model fit/verify is implemented; fit replay, Q intervention, integrity, task/final candidate and pilot remain original Python protocol responsibilities.",
+      "baseline_status": "CONFIRMED_OPEN",
+      "source": {
+        "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+        "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+        "byte_length": 59103,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "coverage": [
+        "S2S-01",
+        "S2S-02",
+        "S2S-03",
+        "S2S-04",
+        "S2S-05",
+        "S2S-06",
+        "S2S-07",
+        "S2S-08"
+      ],
+      "disposition": "WORK_PLANNED",
+      "existing_evidence": null
+    },
+    {
+      "id": "f3-lifecycle-unconnected",
+      "title": "Injected cache/chat and next counters do not yet have a native lifecycle owner or executable run that preserves budget across calls.",
+      "baseline_status": "CONFIRMED_OPEN",
+      "source": {
+        "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+        "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+        "byte_length": 59103,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "coverage": [
+        "F3-STATE-CACHE",
+        "F3-PROVIDER",
+        "F3-LIFECYCLE"
+      ],
+      "disposition": "WORK_PLANNED",
+      "existing_evidence": null
+    },
+    {
+      "id": "confirmatory-route-grouped-away",
+      "title": "SWM-0W confirmatory register/confirm/adjudicate is an explicit active workflow grouped only generically in v8.",
+      "baseline_status": "CONFIRMED_OPEN",
+      "source": {
+        "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+        "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+        "byte_length": 59103,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "coverage": [
+        "OPS-02"
+      ],
+      "disposition": "WORK_PLANNED",
+      "existing_evidence": null
+    },
+    {
+      "id": "fit-config-getter-escapes-either",
+      "title": "Direct module validateNativeS2SFitConfig(unknown) executes an enumerable seed getter and throws outside its Either error type.",
+      "baseline_status": "REPRODUCED_UNFIXED",
+      "source": {
+        "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+        "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+        "byte_length": 59103,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "coverage": [
+        "S2S-00"
+      ],
+      "disposition": "WORK_PLANNED",
+      "existing_evidence": null
+    },
+    {
+      "id": "s5-navigation-stale",
+      "title": "Knowledge map and closure v5 retain OPEN/PARTIAL S5 states while final S5 result file and F1_R8 log mark the first-result deliverable complete.",
+      "baseline_status": "CORRECTED_IN_SUCCESSOR_READING",
+      "source": {
+        "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+        "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+        "byte_length": 59103,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "coverage": [],
+      "disposition": "REUSE_COMPLETED_SUCCESSOR_READING",
+      "existing_evidence": {
+        "path": "results/HSWM_S5_B0_B2_COMPARISON_2026-09-06.md",
+        "sha256": "33c2f8eaccd8854fac9efd646279e5d9dcd34661de3ba9c2a2b598a880f4a457",
+        "byte_length": 2234,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      }
+    },
+    {
+      "id": "functional-check-ceiling",
+      "title": "Zero violations covers 297 top-level TS files under five pattern rules and 155 selected files under the AST guard; 38 documented exception files remain.",
+      "baseline_status": "CONFIRMED_LIMIT",
+      "source": {
+        "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+        "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+        "byte_length": 59103,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "coverage": [
+        "S2S-00",
+        "OPS-03"
+      ],
+      "disposition": "WORK_PLANNED",
+      "existing_evidence": null
+    },
+    {
+      "id": "hidden-python-dependencies",
+      "title": "Native graph qualify intentionally executes uv/Python for Python runner profiles; bootstrap sync and mandatory math publishing compiler also remain Python.",
+      "baseline_status": "CONFIRMED_OPEN",
+      "source": {
+        "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+        "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+        "byte_length": 59103,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "coverage": [
+        "OPS-03",
+        "OPS-04"
+      ],
+      "disposition": "WORK_PLANNED",
+      "existing_evidence": null
+    },
+    {
+      "id": "unknown-research-entrypoints",
+      "title": "Main-guard lexical catalog leaves 248 of 263 Python candidates unclassified; executable P1v4 scripts exist without observed current activation.",
+      "baseline_status": "UNCLASSIFIED_NOT_INACTIVE",
+      "source": {
+        "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+        "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+        "byte_length": 59103,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "coverage": [
+        "OPS-01"
+      ],
+      "disposition": "WORK_PLANNED",
+      "existing_evidence": null
+    },
+    {
+      "id": "d4-research-loop-open",
+      "title": "Opaque v5 local state-readout/remove/restore and real local Permit bridge do not supply one durable canonical revision plus genuinely held-out behavior run required by D4.",
+      "baseline_status": "UNJUDGED_NOT_COMPLETE",
+      "source": {
+        "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+        "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+        "byte_length": 59103,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "coverage": [
+        "R-00",
+        "R-01",
+        "R-02",
+        "R-03"
+      ],
+      "disposition": "WORK_PLANNED",
+      "existing_evidence": null
+    },
+    {
+      "id": "formal-and-fractal-witness-open",
+      "title": "Finite conditional Lean models are actual formal progress but do not give one executable witness satisfying CR0-7 or integrated FCL1-8.",
+      "baseline_status": "INTEGRATED_CLAIM_UNJUDGED",
+      "source": {
+        "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+        "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+        "byte_length": 59103,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "coverage": [
+        "R-04",
+        "R-05"
+      ],
+      "disposition": "WORK_PLANNED",
+      "existing_evidence": null
+    },
+    {
+      "id": "inventory-not-progress-denominator",
+      "title": "Inventory v8 mixes launchers, components, compatibility and experiments; 6 native and 16 partial entries do not define a migration percentage. Native watchdog is an offline judge dependent on upstream suite production.",
+      "baseline_status": "CLARIFIED_IN_SUCCESSOR",
+      "source": {
+        "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+        "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+        "byte_length": 59103,
+        "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+      },
+      "coverage": [
+        "OPS-01",
+        "OPS-04"
+      ],
+      "disposition": "WORK_PLANNED",
+      "existing_evidence": null
+    }
+  ],
+  "tasks": [
+    {
+      "id": "S2S-00",
+      "title": "설정 입력 경계의 getter 결함 수정",
+      "track": "S2S",
+      "responsibility_role": "native-boundary-validator",
+      "objective": "Descriptor-safe config admission",
+      "input_contract": "unknown config",
+      "output_contract": "Either<readonly frozen NativeS2SFitConfig,NativeS2SFitError>",
+      "hard_dependencies": [],
+      "source_refs": [
+        {
+          "path": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts",
+          "sha256": "ca4a2a65669a4d8cbb18cd20c01017389533ad064335c82194e98e3c38d328ab",
+          "byte_length": 12011,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 78
+        }
+      ],
+      "edit_targets": [
+        "existing: native-s2s-fit-domain.ts",
+        "existing: native-s2s-task-fit-domain.ts"
+      ],
+      "acceptance": [
+        "Own data descriptors only: getter is not evaluated; invalid/proxy descriptor access is refused as a typed Left. Valid original scalar configs and pinned numerical fixtures remain accepted.",
+        "Probe the direct source API and normal JSON CLI; preserve the historical defect probe without rewriting its recorded meaning."
+      ],
+      "failure_action": "If source itself requires accessor semantics, label native strict boundary and do not claim Python equivalence.",
+      "artifact": "Source fix, focused direct-API/CLI rejection tests and original valid-config regression evidence",
+      "order_hint": 0,
+      "addresses": [
+        "fit-config-getter-escapes-either",
+        "functional-check-ceiling"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "S2S-01",
+      "title": "실제 재학습 replay와 수치 backend 자격 확인",
+      "track": "S2S",
+      "responsibility_role": "fit-replay-verifier",
+      "objective": "Execute repeat native fit and replay its emitted optimization/model artifacts under one recorded native float64 backend; verify byte/canonical repeatability and fit-replay receipt binding, without asserting original Python trajectory identity.",
+      "input_contract": "Pinned task archive + config + candidate native model archive + exact native backend/profile identity",
+      "output_contract": "Actual repeated-fit evidence and parsed fit-replay binding under the declared backend, or typed divergence; not an original-byte-equivalence assertion",
+      "hard_dependencies": [
+        "S2S-00"
+      ],
+      "source_refs": [
+        {
+          "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+          "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+          "byte_length": 157742,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1276
+        }
+      ],
+      "edit_targets": [
+        "proposed: native-s2s-fit-replay-domain.ts",
+        "existing: native-s2s-model-cli.ts",
+        "proposed: tests/fixtures/native_migration/s2s_fit_replay_v1"
+      ],
+      "acceptance": [
+        "Run same pinned task/config twice through native model CLI; compare emitted archive/optimization receipts and native replay outputs. Compare original fixtures only as numerical/profile evidence, never as trajectory-identity proof.",
+        "two-run native qualification record with backend/version/CPU profile, input hashes, canonical outputs and source fixture comparison must be generated from the actual implementation and independently checked; help-only or mock-only success is insufficient.",
+        "Recompute from task/config in a fresh process and compare full parameter/history/model bytes; reject resealed receipts with false replay statements. Declare a native profile when original gradients differ; source acceptance alone does not authorize an original replay claim."
+      ],
+      "failure_action": "Numerical divergence records profile mismatch; never substitute self-consistency for replay.",
+      "artifact": "two-run native qualification record with backend/version/CPU profile, input hashes, canonical outputs and source fixture comparison",
+      "order_hint": 1,
+      "addresses": [
+        "s2s-protocol-pilot-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [
+        "D-NUMERIC"
+      ],
+      "resolves_decisions": [
+        "D-NUMERIC"
+      ],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "S2S-02",
+      "title": "학습된 Q의 제거·복원 계약",
+      "track": "S2S",
+      "responsibility_role": "intervention-receipt-verifier",
+      "objective": "Learned-Q remove/restore and intervention receipt",
+      "input_contract": "archive/intervention receipt",
+      "output_contract": "Either<bound intervention receipt,error>",
+      "hard_dependencies": [],
+      "source_refs": [
+        {
+          "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+          "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+          "byte_length": 157742,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1473
+        }
+      ],
+      "edit_targets": [
+        "proposed: native domain/test/fixture scoped to S2S-02"
+      ],
+      "acceptance": [
+        "Original remove/restore accepted corpus and altered tensor/hash refusal corpus.",
+        "canonical receipt fixtures must be generated from the actual implementation and independently checked; help-only or mock-only success is insufficient."
+      ],
+      "failure_action": "If native tensor layout cannot reproduce binding, retain Python oracle and mark boundary unclosed.",
+      "artifact": "canonical receipt fixtures",
+      "order_hint": 2,
+      "addresses": [
+        "s2s-protocol-pilot-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "S2S-03",
+      "title": "대칭성·무결성 receipt 재계산",
+      "track": "S2S",
+      "responsibility_role": "integrity-audit-verifier",
+      "objective": "Integrity receipt and symmetry rows",
+      "input_contract": "task/model/integrity receipt",
+      "output_contract": "Either<verified integrity receipt,error>",
+      "hard_dependencies": [
+        "S2S-06"
+      ],
+      "source_refs": [
+        {
+          "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+          "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+          "byte_length": 157742,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 2206
+        }
+      ],
+      "edit_targets": [
+        "proposed: native domain/test/fixture scoped to S2S-03"
+      ],
+      "acceptance": [
+        "Python acceptance plus swapped/member-action/tampered hash refusals.",
+        "source-pinned integrity corpus must be generated from the actual implementation and independently checked; help-only or mock-only success is insufficient."
+      ],
+      "failure_action": "Do not turn a structural audit into outcome evidence.",
+      "artifact": "source-pinned integrity corpus",
+      "order_hint": 3,
+      "addresses": [
+        "s2s-protocol-pilot-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "S2S-04",
+      "title": "과제별 점수·metric·evaluation 결속",
+      "track": "S2S",
+      "responsibility_role": "task-evaluation-verifier",
+      "objective": "Six-stratum scores, metrics, and task-evaluation receipt recomputation",
+      "input_contract": "task/model/evaluation receipt",
+      "output_contract": "Either<recomputed receipt,error>",
+      "hard_dependencies": [
+        "S2S-01",
+        "S2S-02",
+        "S2S-03",
+        "S2S-06"
+      ],
+      "source_refs": [
+        {
+          "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+          "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+          "byte_length": 157742,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1776
+        }
+      ],
+      "edit_targets": [
+        "proposed: native domain/test/fixture scoped to S2S-04"
+      ],
+      "acceptance": [
+        "Original accepted fixtures, altered score/metric/canonical-hash refusals.",
+        "full canonical output comparison must be generated from the actual implementation and independently checked; help-only or mock-only success is insufficient."
+      ],
+      "failure_action": "Numerical profile divergence is RED for equivalence, not a reason to relax comparisons.",
+      "artifact": "full canonical output comparison",
+      "order_hint": 4,
+      "addresses": [
+        "s2s-protocol-pilot-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "S2S-05",
+      "title": "고정 bootstrap·최종 후보 집계",
+      "track": "S2S",
+      "responsibility_role": "candidate-finalizer",
+      "objective": "Shared bootstrap, candidate reduction, final candidate receipt parse/build",
+      "input_contract": "complete task evaluations and candidate inputs",
+      "output_contract": "Either<final candidate receipt,error>",
+      "hard_dependencies": [
+        "S2S-04"
+      ],
+      "source_refs": [
+        {
+          "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+          "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+          "byte_length": 157742,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 3431
+        }
+      ],
+      "edit_targets": [
+        "proposed: native domain/test/fixture scoped to S2S-05"
+      ],
+      "acceptance": [
+        "Original accepted final candidate and duplicate/missing/bootstrap/hash refusal cases.",
+        "candidate/final receipt oracle corpus must be generated from the actual implementation and independently checked; help-only or mock-only success is insufficient."
+      ],
+      "failure_action": "No threshold invention; use only source-declared contracts.",
+      "artifact": "candidate/final receipt oracle corpus",
+      "order_hint": 5,
+      "addresses": [
+        "s2s-protocol-pilot-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "S2S-06",
+      "title": "protocol 설정·task batch·pilot artifact 검증",
+      "track": "S2S",
+      "responsibility_role": "pilot-artifact-verifier",
+      "objective": "Parse/validate protocol config, task batch, and pilot artifact including public roster/environment and all configured receipt bindings; no runner.",
+      "input_contract": "artifact bytes",
+      "output_contract": "Either<validated pilot artifact,error>",
+      "hard_dependencies": [],
+      "source_refs": [
+        {
+          "path": "src/hswm/experiments/swm0w_s2s_pilot.py",
+          "sha256": "46ee8a607224e198cf53f89d32ff7d7a8940cf99a15a138cce128b6e014e56d6",
+          "byte_length": 98350,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 239
+        }
+      ],
+      "edit_targets": [
+        "proposed: native-s2s-protocol-config-domain.ts",
+        "proposed: native-s2s-pilot-artifact-domain.ts",
+        "proposed: tests/fixtures/native_migration/s2s_pilot_artifact_v1"
+      ],
+      "acceptance": [
+        "Original artifact acceptance and roster/environment/cell-hash refusal corpus.",
+        "pinned artifact corpus and no-I/O verifier must be generated from the actual implementation and independently checked; help-only or mock-only success is insufficient."
+      ],
+      "failure_action": "Keep runtime environment collection separate from historical artifact verification.",
+      "artifact": "pinned artifact corpus and no-I/O verifier",
+      "order_hint": 6,
+      "addresses": [
+        "s2s-protocol-pilot-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "S2S-07",
+      "title": "실제 native train/dev pilot 실행",
+      "track": "S2S",
+      "responsibility_role": "native-pilot-runner",
+      "objective": "Execute a bounded real native train/dev pilot from pinned task batch/protocol config, emit write-once artifact, then require an independent native artifact verifier.",
+      "input_contract": "declared local config and task sources",
+      "output_contract": "Effect<artifact path/receipt,typed I/O error>",
+      "hard_dependencies": [
+        "S2S-00",
+        "S2S-01",
+        "S2S-06"
+      ],
+      "source_refs": [
+        {
+          "path": "src/hswm/experiments/swm0w_s2s_pilot.py",
+          "sha256": "46ee8a607224e198cf53f89d32ff7d7a8940cf99a15a138cce128b6e014e56d6",
+          "byte_length": 98350,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1516
+        }
+      ],
+      "edit_targets": [
+        "proposed: native-s2s-pilot-cli.ts",
+        "proposed: native-s2s-pilot-runtime.ts",
+        "existing: native-s2s-model-cli.ts"
+      ],
+      "acceptance": [
+        "Run emitted CLI on bounded declared local fixture; independently invoke verifier on produced bytes; test repeat/conflicting output and help/refusal. This does not establish original-pilot identity.",
+        "native run artifact, independent verification output, invocation/environment receipt must be generated from the actual implementation and independently checked; help-only or mock-only success is insufficient."
+      ],
+      "failure_action": "Do not redirect CI or claim pilot equivalence until deterministic replay and independent artifact verification pass.",
+      "artifact": "native run artifact, independent verification output, invocation/environment receipt",
+      "order_hint": 7,
+      "addresses": [
+        "s2s-protocol-pilot-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [
+        "D-NUMERIC"
+      ],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "F1-LEDGER",
+      "title": "원본 SQLite 호출·item 상태와 audit",
+      "track": "F1",
+      "responsibility_role": "durable_call_and_item_state_owner",
+      "objective": "typed Effect ledger service; exact DDL/user-version/schema-readback fixture; restart, corruption, duplicate/mismatch, illegal-transition and atomic item-binding test evidence",
+      "input_contract": "canonical call intent/request bytes and digests; raw spool response and parsed model response; validated call receipt; validated item-run receipt; private attempt-db path",
+      "output_contract": "source-schema SQLite WAL/FULL call_state, attempt_events and item_runs; per-call state transition result; event-chain digest; source-shaped audit",
+      "hard_dependencies": [],
+      "source_refs": [
+        {
+          "path": "prom_search_hswm/hswm_f1_sqlite_schema.py",
+          "sha256": "e136b2006bc00c6bd96d2b1454c958ede1fbccd07b574dd792d71bf76c59cb56",
+          "byte_length": 23311,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 24
+        },
+        {
+          "path": "prom_search_hswm/hswm_f1_sqlite_schema.py",
+          "sha256": "e136b2006bc00c6bd96d2b1454c958ede1fbccd07b574dd792d71bf76c59cb56",
+          "byte_length": 23311,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 369
+        },
+        {
+          "path": "prom_search_hswm/hswm_f1_durable_transport.py",
+          "sha256": "09ecd886901ac95c0be86e59369d8672d0fad0b912d97e488c5c41c79692a7cc",
+          "byte_length": 73869,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 315
+        },
+        {
+          "path": "prom_search_hswm/hswm_f1_durable_transport.py",
+          "sha256": "09ecd886901ac95c0be86e59369d8672d0fad0b912d97e488c5c41c79692a7cc",
+          "byte_length": 73869,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 668
+        },
+        {
+          "path": "prom_search_hswm/hswm_f1_durable_transport.py",
+          "sha256": "09ecd886901ac95c0be86e59369d8672d0fad0b912d97e488c5c41c79692a7cc",
+          "byte_length": 73869,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 720
+        }
+      ],
+      "edit_targets": [
+        {
+          "kind": "PROPOSED_IMPLEMENTATION_FAMILY",
+          "path": "src/hswm/effect-runtime/src/native-prom9-*"
+        },
+        {
+          "kind": "TESTS_AND_FIXTURES",
+          "path": "tests/fixtures/native_migration/"
+        }
+      ],
+      "acceptance": [
+        "typed Effect ledger service",
+        "exact DDL/user-version/schema-readback fixture",
+        "restart, corruption, duplicate/mismatch, illegal-transition and atomic item-binding test evidence"
+      ],
+      "failure_action": "Refuse unsafe parent, symlink/hardlink/family/permission/generation/WAL-FULL state before authority use. Rollback every failed transaction; exact duplicate may be idempotent, mismatching physical or logical identity must refuse. Never revive the excluded ledger drafts as evidence or fall back to their schema.",
+      "artifact": "source-schema SQLite WAL/FULL call_state, attempt_events and item_runs; per-call state transition result; event-chain digest; source-shaped audit",
+      "order_hint": 8,
+      "addresses": [
+        "f1-run-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "F1-SPOOL",
+      "title": "중복 추론을 막는 결과 spool",
+      "track": "F1",
+      "responsibility_role": "idempotent_upstream_delivery_owner",
+      "objective": "typed Effect spool store/service with exact spool DDL; local injected-upstream oracle tests for complete replay, identity conflict, disconnect/unknown, restart and corrupt-row refusal; bounded HTTP adapter only if source spool endpoint is part of the chosen cutover",
+      "input_contract": "physical_call_id; intent/request hashes and exact request bytes; admitted deployment identity; one bounded upstream transport result",
+      "output_contract": "COMPLETE replay bytes with attestation; UNKNOWN terminal outcome without resampling; source-shaped spool audit",
+      "hard_dependencies": [],
+      "source_refs": [
+        {
+          "path": "prom_search_hswm/hswm_f1_sqlite_schema.py",
+          "sha256": "e136b2006bc00c6bd96d2b1454c958ede1fbccd07b574dd792d71bf76c59cb56",
+          "byte_length": 23311,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 66
+        },
+        {
+          "path": "prom_search_hswm/hswm_result_spool.py",
+          "sha256": "83fc2e1b702569f73101c20b685f70d6e82da7c371220109c92d9e0dd25b172e",
+          "byte_length": 47744,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 369
+        },
+        {
+          "path": "prom_search_hswm/hswm_result_spool.py",
+          "sha256": "83fc2e1b702569f73101c20b685f70d6e82da7c371220109c92d9e0dd25b172e",
+          "byte_length": 47744,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 658
+        },
+        {
+          "path": "prom_search_hswm/hswm_result_spool.py",
+          "sha256": "83fc2e1b702569f73101c20b685f70d6e82da7c371220109c92d9e0dd25b172e",
+          "byte_length": 47744,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 831
+        },
+        {
+          "path": "prom_search_hswm/hswm_result_spool.py",
+          "sha256": "83fc2e1b702569f73101c20b685f70d6e82da7c371220109c92d9e0dd25b172e",
+          "byte_length": 47744,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1005
+        }
+      ],
+      "edit_targets": [
+        {
+          "kind": "PROPOSED_IMPLEMENTATION_FAMILY",
+          "path": "src/hswm/effect-runtime/src/native-prom9-*"
+        },
+        {
+          "kind": "TESTS_AND_FIXTURES",
+          "path": "tests/fixtures/native_migration/"
+        }
+      ],
+      "acceptance": [
+        "typed Effect spool store/service with exact spool DDL",
+        "local injected-upstream oracle tests for complete replay, identity conflict, disconnect/unknown, restart and corrupt-row refusal",
+        "bounded HTTP adapter only if source spool endpoint is part of the chosen cutover",
+        "For a full native spool endpoint, provide the source-compatible bounded HTTP routes and authentication/attestation observations; a store-only implementation cannot close the route."
+      ],
+      "failure_action": "Persist DISPATCHING before dispatch and UNKNOWN after ambiguous delivery; never issue a second upstream inference for an unknown outcome. Reject changed intent/request under the same physical_call_id. If deployment identity or private SQLite authority cannot be verified, refuse before forwarding.",
+      "artifact": "COMPLETE replay bytes with attestation; UNKNOWN terminal outcome without resampling; source-shaped spool audit",
+      "order_hint": 9,
+      "addresses": [
+        "f1-run-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "F1-DURABLE-PORT",
+      "title": "ledger·spool·3단계 호출 연결",
+      "track": "F1",
+      "responsibility_role": "call_protocol_orchestrator",
+      "objective": "one concrete layer/service that binds each network call to state transitions and final receipts; full three-call injected transport test covering receipt and item acceptance; source oracle fixtures for response/header identity binding",
+      "input_contract": "prepared NativeProm9 model call; F1 ledger service; F1 spool service or source-compatible client; exact response/body/header observations",
+      "output_contract": "NativeProm9ModelPort with ledger-backed invoke, acceptCallReceipt and acceptItemRun; durable call and item receipts; transport audit consumable by suite assembly",
+      "hard_dependencies": [
+        "F1-LEDGER",
+        "F1-SPOOL"
+      ],
+      "source_refs": [
+        {
+          "path": "prom_search_hswm/hswm_f1_durable_transport.py",
+          "sha256": "09ecd886901ac95c0be86e59369d8672d0fad0b912d97e488c5c41c79692a7cc",
+          "byte_length": 73869,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1354
+        },
+        {
+          "path": "prom_search_hswm/hswm_f1_durable_transport.py",
+          "sha256": "09ecd886901ac95c0be86e59369d8672d0fad0b912d97e488c5c41c79692a7cc",
+          "byte_length": 73869,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1416
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-prom9-call-runtime.ts",
+          "sha256": "a7dd30c72d3f4ec4046887aea3fba1ab5dfdf73a003f5817eeeee822e44f1095",
+          "byte_length": 1860,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 14
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-prom9-network-runtime.ts",
+          "sha256": "70e6840a50b0a2c54519f8618dd2c7884aa0bfeb1f16fd3c01b01d848b245a2e",
+          "byte_length": 2071,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 12
+        }
+      ],
+      "edit_targets": [
+        {
+          "kind": "PROPOSED_IMPLEMENTATION_FAMILY",
+          "path": "src/hswm/effect-runtime/src/native-prom9-*"
+        },
+        {
+          "kind": "TESTS_AND_FIXTURES",
+          "path": "tests/fixtures/native_migration/"
+        }
+      ],
+      "acceptance": [
+        "one concrete layer/service that binds each network call to state transitions and final receipts",
+        "full three-call injected transport test covering receipt and item acceptance",
+        "source oracle fixtures for response/header identity binding"
+      ],
+      "failure_action": "Do not expose the existing one-shot HTTP port as durable execution without both durable owners. On invalid envelope/schema/receipt, record only source-allowed rejection state and refuse the item. On ambiguity, propagate terminal ambiguity and require operator/recovery procedure rather than retrying inference.",
+      "artifact": "NativeProm9ModelPort with ledger-backed invoke, acceptCallReceipt and acceptItemRun; durable call and item receipts; transport audit consumable by suite assembly",
+      "order_hint": 10,
+      "addresses": [
+        "f1-run-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "F1-RUN-CLI",
+      "title": "실제 F1 run·tokenizer 결속",
+      "track": "F1",
+      "responsibility_role": "sealed_suite_execution_owner",
+      "objective": "run subcommand with source-equivalent accepted options and explicit source-compatible deviations; offline injected spool/tokenizer test suite for three calls per item across arms; crash/resume and no-replace output evidence",
+      "input_contract": "sealed manifest and protocol; fixed tokenizer artifact directory and qualification identity; spool endpoint/configuration and attempt-db path; bounded delivery/worker/timeout options",
+      "output_contract": "native hswm-prom9-f1 run output receipt; durable audit bound to every expected call and item; write-once suite result",
+      "hard_dependencies": [
+        "F1-DURABLE-PORT"
+      ],
+      "source_refs": [
+        {
+          "path": "prom_search_hswm/prom_f1_function_network.py",
+          "sha256": "59e88cda18061bf312697b48e1df4639dae5b31be25dd1bfade6602db0468bfe",
+          "byte_length": 36152,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 710
+        },
+        {
+          "path": "prom_search_hswm/prom_f1_function_network.py",
+          "sha256": "59e88cda18061bf312697b48e1df4639dae5b31be25dd1bfade6602db0468bfe",
+          "byte_length": 36152,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1
+        },
+        {
+          "path": "prom_search_hswm/hswm_token_meter.py",
+          "sha256": "5149473c7ca3efea865d97cee324ff2c9ccca5d4d637c66a049f34eae15da274",
+          "byte_length": 18138,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-prom9-json-transport-runtime.ts",
+          "sha256": "2b14202f1a4ae62b45ce82d9d56d32b54f2f03899301286efa193a11b9056368",
+          "byte_length": 7413,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 50
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-prom9-f1-cli.ts",
+          "sha256": "19354e2af85f41dbeba638fda7e2a1443b47b5ccc43460212713417090651a2a",
+          "byte_length": 4438,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 24
+        }
+      ],
+      "edit_targets": [
+        {
+          "kind": "PROPOSED_IMPLEMENTATION_FAMILY",
+          "path": "src/hswm/effect-runtime/src/native-prom9-*"
+        },
+        {
+          "kind": "TESTS_AND_FIXTURES",
+          "path": "tests/fixtures/native_migration/"
+        }
+      ],
+      "acceptance": [
+        "run subcommand with source-equivalent accepted options and explicit source-compatible deviations",
+        "offline injected spool/tokenizer test suite for three calls per item across arms",
+        "crash/resume and no-replace output evidence",
+        "Qualify max_workers 1..8 with actual injected concurrency above one: worker-sized batches, FIRST_EXCEPTION preventing later batch launches, and results materialized in manifest order; preserve Python on unsupported concurrency.",
+        "Check referenced tokenizer qualification receipt bytes and their source/profile binding; syntactically valid echoed hashes or historical capture are not live native tokenizer admission."
+      ],
+      "failure_action": "Reject direct provider endpoints where the source requires the result spool. Refuse missing or mismatched fixed tokenizer artifacts and incomplete durable audit. Keep judge behavior separate; a failed run must not publish a partial suite or change gold/evaluator authority.",
+      "artifact": "native hswm-prom9-f1 run output receipt; durable audit bound to every expected call and item; write-once suite result",
+      "order_hint": 11,
+      "addresses": [
+        "f1-run-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [
+        "D-TOKENIZER"
+      ],
+      "resolves_decisions": [
+        "D-TOKENIZER"
+      ],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "F1-QUALIFY-CUTOVER",
+      "title": "F1 복구 검증과 호출자 전환",
+      "track": "F1",
+      "responsibility_role": "route_qualification_and_caller_cutover_owner",
+      "objective": "byte/semantic comparisons for supported and refusal cases, including durable crash/duplicate behavior; native CLI invocation evidence without live model calls unless separately authorized; caller-level cutover record and rollback invocation",
+      "input_contract": "F1-RUN-CLI accepted artifacts; source-pinned historical/rejection fixtures; documented current launcher/caller inventory",
+      "output_contract": "source-bound qualification report; explicit caller switch or retained-Python boundary declaration; updated route status only after acceptance",
+      "hard_dependencies": [
+        "F1-RUN-CLI"
+      ],
+      "source_refs": [
+        {
+          "path": "_research/native_migration_2026-09-13/active-route-audit.v7.json",
+          "sha256": "58d143988f4b1929e1b2670e12cce1dbf1950760106f7778adbb303d60e0b9a5",
+          "byte_length": 15339,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 72
+        },
+        {
+          "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+          "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+          "byte_length": 59103,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 190
+        },
+        {
+          "path": "prom_search_hswm/prom_f1_function_network.py",
+          "sha256": "59e88cda18061bf312697b48e1df4639dae5b31be25dd1bfade6602db0468bfe",
+          "byte_length": 36152,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 710
+        }
+      ],
+      "edit_targets": [
+        {
+          "kind": "PROPOSED_IMPLEMENTATION_FAMILY",
+          "path": "src/hswm/effect-runtime/src/native-prom9-*"
+        },
+        {
+          "kind": "TESTS_AND_FIXTURES",
+          "path": "tests/fixtures/native_migration/"
+        }
+      ],
+      "acceptance": [
+        "byte/semantic comparisons for supported and refusal cases, including durable crash/duplicate behavior",
+        "native CLI invocation evidence without live model calls unless separately authorized",
+        "caller-level cutover record and rollback invocation"
+      ],
+      "failure_action": "Do not cut over merely because domain or offline judge tests pass. If parity or safety criteria fail, retain the Python route and record the failing mechanism; do not weaken source criteria or claim F1 efficacy.",
+      "artifact": "source-bound qualification report; explicit caller switch or retained-Python boundary declaration; updated route status only after acceptance",
+      "order_hint": 12,
+      "addresses": [
+        "f1-run-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [
+        "D-TOKENIZER"
+      ],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "F3-STATE-CACHE",
+      "title": "여러 호출의 cache·budget 상태 소유",
+      "track": "F3",
+      "responsibility_role": "cache_and_budget_lifecycle_owner",
+      "objective": "typed state/cache service and bounded filesystem adapter; multi-call/restart/cache-hit/miss/budget-exhaustion tests; source identity and cache-document oracle fixtures",
+      "input_contract": "cache identity; request configuration; budget state; cache root policy; provider result meta",
+      "output_contract": "one owner preserving cache and budget/hit/miss state across calls; cache documents keyed by source identity; typed terminal state/error observations",
+      "hard_dependencies": [],
+      "source_refs": [
+        {
+          "path": "_research/f_series/f2_delta_w_credit.py",
+          "sha256": "1cf1518cf0cd9172b560c662b52c4261bc3cdcb57e7a6c8e34b80c7c55f58691",
+          "byte_length": 50288,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 151
+        },
+        {
+          "path": "_research/f_series/f2_delta_w_credit.py",
+          "sha256": "1cf1518cf0cd9172b560c662b52c4261bc3cdcb57e7a6c8e34b80c7c55f58691",
+          "byte_length": 50288,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 246
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-f3-chat-domain.ts",
+          "sha256": "2728c576ae265f37974afc7df5a70c9506e55c81dfeb23e57f076ebc712db121",
+          "byte_length": 13230,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 146
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-f3-chat-runtime.ts",
+          "sha256": "80a33b0ae0b6cae7f991720a86c4f71d990a53b72eb48e40a93c7fc997de1fb5",
+          "byte_length": 5726,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 14
+        }
+      ],
+      "edit_targets": [
+        {
+          "kind": "PROPOSED_IMPLEMENTATION_FAMILY",
+          "path": "src/hswm/effect-runtime/src/native-f3-*"
+        },
+        {
+          "kind": "TESTS_AND_FIXTURES",
+          "path": "tests/fixtures/native_migration/"
+        }
+      ],
+      "acceptance": [
+        "typed state/cache service and bounded filesystem adapter",
+        "multi-call/restart/cache-hit/miss/budget-exhaustion tests",
+        "source identity and cache-document oracle fixtures"
+      ],
+      "failure_action": "A cache read/write or corrupted document must preserve the source terminal semantics; no caller may silently reset returned counters between worlds. Do not present an injected read/write test double as a live lifecycle owner.",
+      "artifact": "one owner preserving cache and budget/hit/miss state across calls; cache documents keyed by source identity; typed terminal state/error observations",
+      "order_hint": 13,
+      "addresses": [
+        "f3-lifecycle-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "F3-PROVIDER",
+      "title": "F3 provider의 정해진 retry·실패 처리",
+      "track": "F3",
+      "responsibility_role": "bounded_chat_provider_owner",
+      "objective": "typed provider adapter with injected HTTP/time tests for source retry classes and exhaustion; request/response fixtures and credential handling boundary; explicit distinction from F1 no-retry spool transport",
+      "input_contract": "source-shaped chat request; timeout; configured retry/backoff policy; typed HTTP capability",
+      "output_contract": "validated OpenAI-compatible response meta; source-shaped provider failure/status observations; one cacheable completion observation",
+      "hard_dependencies": [],
+      "source_refs": [
+        {
+          "path": "_research/f_series/f2_delta_w_credit.py",
+          "sha256": "1cf1518cf0cd9172b560c662b52c4261bc3cdcb57e7a6c8e34b80c7c55f58691",
+          "byte_length": 50288,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 267
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-f3-chat-runtime.ts",
+          "sha256": "80a33b0ae0b6cae7f991720a86c4f71d990a53b72eb48e40a93c7fc997de1fb5",
+          "byte_length": 5726,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 59
+        }
+      ],
+      "edit_targets": [
+        {
+          "kind": "PROPOSED_IMPLEMENTATION_FAMILY",
+          "path": "src/hswm/effect-runtime/src/native-f3-*"
+        },
+        {
+          "kind": "TESTS_AND_FIXTURES",
+          "path": "tests/fixtures/native_migration/"
+        }
+      ],
+      "acceptance": [
+        "typed provider adapter with injected HTTP/time tests for source retry classes and exhaustion",
+        "request/response fixtures and credential handling boundary",
+        "explicit distinction from F1 no-retry spool transport"
+      ],
+      "failure_action": "Never retry outside the source-defined F3 policy and never turn a failed call into cache success. On exhausted retries, preserve the consumed miss budget and source failure taxonomy; no live endpoint is called during qualification.",
+      "artifact": "validated OpenAI-compatible response meta; source-shaped provider failure/status observations; one cacheable completion observation",
+      "order_hint": 14,
+      "addresses": [
+        "f3-lifecycle-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "F3-LIFECYCLE",
+      "title": "world→lesson→retrieval→evaluation 전체 실행",
+      "track": "F3",
+      "responsibility_role": "world_experience_lesson_evaluation_run_owner",
+      "objective": "source-bounded world-to-experience-to-lesson-to-evaluation implementation; offline deterministic world/lesson/retrieval and arm/null-control oracle tests; interrupted-run and whole-budget receipt tests; native smoke command and source-bound caller qualification",
+      "input_contract": "sealed world/cohort manifest; F3 state/cache owner and provider; donor/receiver configurations; arm configuration, lessons and retrieval artifact identity",
+      "output_contract": "trajectory rows; lesson/retrieval/evaluation outputs; whole-run cost and terminal receipt; native launcher only after qualification",
+      "hard_dependencies": [
+        "F3-STATE-CACHE",
+        "F3-PROVIDER"
+      ],
+      "source_refs": [
+        {
+          "path": "_research/f_series/f3v2_arms.py",
+          "sha256": "19848eb4d3b7f6377d28793324652f4a45631dc74f16ba91b7d5e3636d991915",
+          "byte_length": 55372,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 206
+        },
+        {
+          "path": "_research/f_series/f3v2_arms.py",
+          "sha256": "19848eb4d3b7f6377d28793324652f4a45631dc74f16ba91b7d5e3636d991915",
+          "byte_length": 55372,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 397
+        },
+        {
+          "path": "_research/f_series/f3v2_arms.py",
+          "sha256": "19848eb4d3b7f6377d28793324652f4a45631dc74f16ba91b7d5e3636d991915",
+          "byte_length": 55372,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 705
+        },
+        {
+          "path": "_research/f_series/f3v2_arms.py",
+          "sha256": "19848eb4d3b7f6377d28793324652f4a45631dc74f16ba91b7d5e3636d991915",
+          "byte_length": 55372,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 837
+        },
+        {
+          "path": "_research/f_series/f3v2_dev_smoke.py",
+          "sha256": "32bfeced638211e8f68d25c98069392e9d0004e77095c6ad3d3dad8d4fa7bc01",
+          "byte_length": 18167,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 135
+        },
+        {
+          "path": "scripts/f3v2_smoke_preflight.sh",
+          "sha256": "27d95cf232021e46b96117a8794df3f95475a2b967adf92da23d1ef91e84fb6e",
+          "byte_length": 2193,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1
+        }
+      ],
+      "edit_targets": [
+        {
+          "kind": "PROPOSED_IMPLEMENTATION_FAMILY",
+          "path": "src/hswm/effect-runtime/src/native-f3-*"
+        },
+        {
+          "kind": "TESTS_AND_FIXTURES",
+          "path": "tests/fixtures/native_migration/"
+        }
+      ],
+      "acceptance": [
+        "source-bounded world-to-experience-to-lesson-to-evaluation implementation",
+        "offline deterministic world/lesson/retrieval and arm/null-control oracle tests",
+        "interrupted-run and whole-budget receipt tests",
+        "native smoke command and source-bound caller qualification"
+      ],
+      "failure_action": "Fail closed on cohort hash, lesson abstraction/placebo purity, retrieval tie/order, or arm-control drift. Do not infer efficacy from a lifecycle completion; preserve matched/unmatched, held-out, cost and stop-rule criteria. Retain the Python launcher until the complete native route is accepted; rollback is caller retention, never deleting historical evidence.",
+      "artifact": "trajectory rows; lesson/retrieval/evaluation outputs; whole-run cost and terminal receipt; native launcher only after qualification",
+      "order_hint": 15,
+      "addresses": [
+        "f3-lifecycle-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "S2S-08",
+      "title": "최종 후보 pipeline 연결·별도 profile 판정",
+      "track": "S2S",
+      "responsibility_role": "native-candidate-pipeline-owner",
+      "objective": "Connect actual fit/replay, Q interventions, integrity, complete scores and bootstrap into a runnable final-candidate pipeline.",
+      "input_contract": "Complete frozen task batch/protocol configuration and qualified native backend",
+      "output_contract": "Native end-to-end candidate artifact plus independent verification and compatibility/profile qualification",
+      "hard_dependencies": [
+        "S2S-05"
+      ],
+      "source_refs": [
+        {
+          "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+          "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+          "byte_length": 157742,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 2922
+        }
+      ],
+      "edit_targets": [],
+      "acceptance": [
+        "All required task/arm rows are produced from actual parameters; independently rederive final receipt and reject crossed task/config/state/threshold/bootstrap bindings.",
+        "A bounded local integration run proves only that declared profile; full original-protocol equivalence needs the complete original acceptance/refusal scope before caller cutover."
+      ],
+      "failure_action": "Retain original route on any unsupported receipt family or numerical-profile mismatch; do not lower a scientific threshold.",
+      "artifact": "Native end-to-end candidate artifact plus independent verification and compatibility/profile qualification",
+      "order_hint": 16,
+      "addresses": [
+        "s2s-protocol-pilot-unconnected"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [
+        "D-NUMERIC"
+      ],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "OPS-01",
+      "title": "활성 호출자 우선 분류와 미분류 backlog",
+      "track": "OPERATIONS",
+      "responsibility_role": "entrypoint-inventory-custodian",
+      "objective": "Classify concrete active callers first, then inspect lexical UNKNOWN families in bounded batches.",
+      "input_contract": "Eight console scripts, workflows and 248 UNKNOWN candidates at the audited source cut",
+      "output_contract": "Source-bound per-caller native/owned-Python/compatibility/historical/external/unknown rows with next observation",
+      "hard_dependencies": [],
+      "source_refs": [
+        {
+          "path": "_research/native_migration_2026-09-13/scope-entrypoint-catalog.v1.json",
+          "sha256": "3e970bcb49b7ba96e534a3ed6894b0d709e82a96acf2649bab928fd70d295f3f",
+          "byte_length": 204499,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "d1a67c9af3a27b9de8f174d7948e3793b95335a231f5d2d3a7fe76d4f0b00e34",
+          "byte_length": 6084,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 16
+        }
+      ],
+      "edit_targets": [],
+      "acceptance": [
+        "Explicitly enumerate all eight packaged scripts and concrete CI/container/math callers; each row has source, owner role, dependency and replacement/preservation decision.",
+        "Unknown rows retain specific missing evidence and next read; remaining UNKNOWN does not count as inactive or completed migration. No other task waits for all 248 to be classified."
+      ],
+      "failure_action": "Do not infer activation from executable bits or inactivity from no lexical caller; preserve unknowns rather than fabricate deployment access.",
+      "artifact": "Source-bound per-caller native/owned-Python/compatibility/historical/external/unknown rows with next observation",
+      "order_hint": 17,
+      "addresses": [
+        "unknown-research-entrypoints",
+        "inventory-not-progress-denominator"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "OPS-02",
+      "title": "SWM-0W confirmatory 세 단계 이식",
+      "track": "OPERATIONS",
+      "responsibility_role": "confirmatory-protocol-owner",
+      "objective": "Implement register-carrier, confirm and adjudicate as separate typed operations under the existing source contract.",
+      "input_contract": "Original carrier/protocol/evidence and pinned verification dependencies",
+      "output_contract": "Native three-operation artifacts and supported/refused command contract",
+      "hard_dependencies": [],
+      "source_refs": [
+        {
+          "path": ".github/workflows/swm0w-confirmatory.yml",
+          "sha256": "14b7c664f9445989a359b1a6c2bad0164ed2760c82bb1b7092b3369cdd9ad8a2",
+          "byte_length": 28527,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 91
+        },
+        {
+          "path": "src/hswm/experiments/swm0w_confirmatory.py",
+          "sha256": "9cf4be62a3f5e083c4c35815a4f3a37acb9061f2cfb421bcf7bbd4b2bc45509b",
+          "byte_length": 133497,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1
+        }
+      ],
+      "edit_targets": [],
+      "acceptance": [
+        "Preserve operation ordering and source-bound BLS/task/reducer checks with positive and forged receipts; no wrapper-only native classification.",
+        "Actual emitted CLI calls exercise each operation on local fixtures; preserve old scientific results and compatibility callers until qualification."
+      ],
+      "failure_action": "A failed carrier or evidence binding must remain refused; never relabel a candidate-only receipt as adjudicated PASS.",
+      "artifact": "Native three-operation artifacts and supported/refused command contract",
+      "order_hint": 18,
+      "addresses": [
+        "confirmatory-route-grouped-away"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "OPS-03",
+      "title": "표준·유지보수·설치·패키지 호출 전환",
+      "track": "OPERATIONS",
+      "responsibility_role": "toolchain-and-compatibility-owner",
+      "objective": "Work per caller across graph qualification, mandatory math compiler, container bootstrap and the eight console compatibility interfaces.",
+      "input_contract": "OPS-01 active-caller tranche plus package/SDK/suite pins",
+      "output_contract": "Per-caller native replacements or explicitly retained external/compatibility boundary with original verification scope",
+      "hard_dependencies": [],
+      "source_refs": [
+        {
+          "path": "src/hswm/effect-runtime/src/native-graph-standards-runtime.ts",
+          "sha256": "7b97776a1b06caf83cb64e46f2839c7b6f59799a0ecd1270b09a9fae48fc6cea",
+          "byte_length": 18882,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 93
+        },
+        {
+          "path": "src/hswm/development/container/bootstrap.sh",
+          "sha256": "2d8024d3987faebde9309c33c52fbfa4c856cf35895c1b0c4eaf83c82ff9c361",
+          "byte_length": 755,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 17
+        },
+        {
+          "path": "AGENTS.md",
+          "sha256": "b67a175bc7f2d8c701d9a9cf6ddd157565599f4960039f4d045e0ab4c53c08af",
+          "byte_length": 8198,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 122
+        },
+        {
+          "path": ".github/workflows/ci.yml",
+          "sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0",
+          "byte_length": 20916,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 103
+        },
+        {
+          "path": "pyproject.toml",
+          "sha256": "d1a67c9af3a27b9de8f174d7948e3793b95335a231f5d2d3a7fe76d4f0b00e34",
+          "byte_length": 6084,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 16
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-kg-standards.ts",
+          "sha256": "ebc72dfd681f7a647c10452777cffdcfa7e762b503f83d1d31faaf1598833335",
+          "byte_length": 8146,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 102
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-kg-vendor.ts",
+          "sha256": "b3ac276d1abaebfb030006977d6ea1fe6335c8e62a5edfc2ea9e97badce938b8",
+          "byte_length": 3675,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 31
+        }
+      ],
+      "edit_targets": [],
+      "acceptance": [
+        "Repair the observed native SHACL report boundary: rdf-validate-shacl can return path=null for node-level OrConstraintComponent; preserve an ordinary nonconforming report as typed output without TypeError. Verify both conforming and pathless nonconforming cases through the emitted public CLI; raw vendor rejection alone does not qualify the native wrapper.",
+        "Retain the observed Comunica property-path co-reference counterexample and the qualified distinct-variable/equality form: baseline DAG zero rows, injected F1 cycle exactly four members. Any future query or engine upgrade must requalify this behavior against the same source graph.",
+        "Keep graph suite source authority separate from independent implementation; exact version/integrity/license and lock apply to each used profile.",
+        "Maintain installed wheel/sdist public contracts; validate arguments/output from outside the checkout. Update ordinary callers only after their individual native replacement passes.",
+        "Inventory container sync/core/graph and mandatory math path explicitly; any retained Python owned behavior keeps its scope PARTIAL."
+      ],
+      "failure_action": "Retain failed caller routes and rollback commands. Do not require reimplementing Lean, a vendor SDK or an official suite in TypeScript.",
+      "artifact": "Per-caller native replacements or explicitly retained external/compatibility boundary with original verification scope",
+      "order_hint": 19,
+      "addresses": [
+        "hidden-python-dependencies",
+        "functional-check-ceiling"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "OPS-04",
+      "title": "전체 실행 경로 전환 확인",
+      "track": "OPERATIONS",
+      "responsibility_role": "migration-integration-owner",
+      "objective": "Verify the sum of qualified routes and make a source-bound whole-scope migration judgment.",
+      "input_contract": "Qualified route artifacts and caller-by-caller inventory",
+      "output_contract": "Native operational route matrix, external-tool/compatibility exceptions and unresolved set",
+      "hard_dependencies": [
+        "S2S-07",
+        "S2S-08",
+        "F1-QUALIFY-CUTOVER",
+        "F3-LIFECYCLE",
+        "OPS-01",
+        "OPS-02",
+        "OPS-03"
+      ],
+      "source_refs": [
+        {
+          "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+          "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+          "byte_length": 59103,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1
+        },
+        {
+          "path": ".github/workflows/ci.yml",
+          "sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0",
+          "byte_length": 20916,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1
+        }
+      ],
+      "edit_targets": [],
+      "acceptance": [
+        "No claimed native operational path hides an unclassified owned Python child; retain explicit external tools and historical compatibility without deleting evidence.",
+        "Run proportional aggregate checks on the final source snapshot and actual emitted commands; bin inclusion or tests alone do not close missing run behavior.",
+        "Whole migration remains incomplete if any active owned route or material UNKNOWN remains unresolved."
+      ],
+      "failure_action": "Use per-route rollback and report PARTIAL if any boundary remains; do not compute completion percentage from file counts.",
+      "artifact": "Native operational route matrix, external-tool/compatibility exceptions and unresolved set",
+      "order_hint": 20,
+      "addresses": [
+        "inventory-not-progress-denominator",
+        "hidden-python-dependencies"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY"
+    },
+    {
+      "id": "R-00",
+      "title": "D-4 과제·측정 계약 선택",
+      "track": "RESEARCH",
+      "responsibility_role": "study-contract-custodian",
+      "objective": "Select one task family with a falsifiable update mechanism and prospectively disjoint held-out relation; resolve study inputs before outcomes.",
+      "input_contract": "Existing D4/D3 contracts and candidate mechanism evidence",
+      "output_contract": "Draft study specification and resolved task/model/evaluator/cost/analysis choices",
+      "hard_dependencies": [],
+      "source_refs": [
+        {
+          "path": "_research/causal_composition/preregistrations/d4_v1_canonical_heldout_DRAFT/README.md",
+          "sha256": "6d63e0c296c69679e10606b5460afcaa5bb6ba02955f86c79145bdd7c8f872dc",
+          "byte_length": 10741,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 33
+        },
+        {
+          "path": "docs/research/HSWM_RELATION_RESEARCH_ROUND_1_2026-09-10.md",
+          "sha256": "1925af8adfd6ebf0d85248cf74e2153a883e9a4451e2e20e91f63cb431b5b80b",
+          "byte_length": 10752,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1
+        }
+      ],
+      "edit_targets": [],
+      "acceptance": [
+        "Name generator/rendering, outcome source/custody, train/held-out split, prior information, metric, sample-size rationale, model revision, budget and stop rule. Unknown values stay null until established.",
+        "Preserve D3 primary estimand; B0/B2 remain secondary comparators and completed S5 is reused. No readout of a just-admitted cue is called fresh held-out transfer."
+      ],
+      "failure_action": "If family is saturated, unidentifiable or lacks independent attributable outcomes, reroute the exact mechanism with its failed evidence preserved.",
+      "artifact": "Draft study specification and resolved task/model/evaluator/cost/analysis choices",
+      "order_hint": 21,
+      "addresses": [
+        "d4-research-loop-open"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [
+        "D-STUDY"
+      ],
+      "resolves_decisions": [
+        "D-STUDY"
+      ],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "PROSPECTIVE_RESEARCH_NOT_RESULT_OR_GATE_PASS"
+    },
+    {
+      "id": "R-01",
+      "title": "같은 후보의 canonical journal·행동 compiler",
+      "track": "RESEARCH",
+      "responsibility_role": "study-state-and-transition-owner",
+      "objective": "Connect actual schema-approved state and evidence through one verified-admission journal to the held-out action compiler.",
+      "input_contract": "R-00 selected task semantics and schema/owner/lineage/transition contract",
+      "output_contract": "Typed proposal/credit/Permit-bound revision, durable recovery and compiled-readset evidence",
+      "hard_dependencies": [
+        "R-00"
+      ],
+      "source_refs": [
+        {
+          "path": "_research/causal_composition/preregistrations/d4_v1_canonical_heldout_DRAFT/README.md",
+          "sha256": "6d63e0c296c69679e10606b5460afcaa5bb6ba02955f86c79145bdd7c8f872dc",
+          "byte_length": 10741,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 63
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+          "sha256": "76a2e5a1127988d4d889f87ecab9389d61f850bf7d6edf52affbcc235aaee754",
+          "byte_length": 21748,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 1
+        }
+      ],
+      "edit_targets": [],
+      "acceptance": [
+        "Bind the same revision bytes to owner, parent head, schema, invariant, outcome/credit and actual Permit; use one authoritative journal with state/content recovery.",
+        "Fresh-process recovery, exact remove/restore, sham and shuffled credit all use the same declared state and compiler. Local adaptive/experiment state is not promoted by renaming."
+      ],
+      "failure_action": "If a two-store or two-commit gap appears, repair the single-journal design; do not claim canonical admission or effect from an fsync receipt.",
+      "artifact": "Typed proposal/credit/Permit-bound revision, durable recovery and compiled-readset evidence",
+      "order_hint": 22,
+      "addresses": [
+        "d4-research-loop-open"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [
+        "D-STUDY"
+      ],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "PROSPECTIVE_RESEARCH_NOT_RESULT_OR_GATE_PASS"
+    },
+    {
+      "id": "R-02",
+      "title": "개입·비용 rehearsal 후 전향적 freeze",
+      "track": "RESEARCH",
+      "responsibility_role": "study-instrument-verification-owner",
+      "objective": "Exercise the complete study instrument locally and freeze only the ready prospective protocol.",
+      "input_contract": "R-00 study choices and R-01 journal/compiler/interventions",
+      "output_contract": "Leakage/accounting/intervention rehearsal evidence and frozen prospective source/configuration",
+      "hard_dependencies": [
+        "R-00",
+        "R-01"
+      ],
+      "source_refs": [
+        {
+          "path": "_research/causal_composition/preregistrations/d4_v1_canonical_heldout_DRAFT/README.md",
+          "sha256": "6d63e0c296c69679e10606b5460afcaa5bb6ba02955f86c79145bdd7c8f872dc",
+          "byte_length": 10741,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 41
+        }
+      ],
+      "edit_targets": [],
+      "acceptance": [
+        "Verify ACTIVE/NO_UPDATE/SHAM/SHUFFLED_CREDIT/REMOVE/RESTORE identity and all failed/aborted calls in resource accounting.",
+        "Record held-out partition and source/config/analysis hashes before inspecting study outcomes; engineering fixtures do not become scientific episodes."
+      ],
+      "failure_action": "Instrument failure keeps the study unfrozen or terminates according to its frozen rule; no post-outcome threshold, denominator, comparator or budget change.",
+      "artifact": "Leakage/accounting/intervention rehearsal evidence and frozen prospective source/configuration",
+      "order_hint": 23,
+      "addresses": [
+        "d4-research-loop-open"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [
+        "D-STUDY"
+      ],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "PROSPECTIVE_RESEARCH_NOT_RESULT_OR_GATE_PASS"
+    },
+    {
+      "id": "R-03",
+      "title": "D-4 실제 occurrence와 범위 한정 판정",
+      "track": "RESEARCH",
+      "responsibility_role": "study-result-custodian",
+      "objective": "Execute the frozen candidate and report the whole outcome-credit-revision-heldout chain with all controls.",
+      "input_contract": "Frozen R-02 protocol, actual evaluator/model capabilities and approved local execution resources",
+      "output_contract": "One all-run artifact and SUPPORTED/RED/UNDERDETERMINED conclusion within the declared estimand",
+      "hard_dependencies": [
+        "R-02"
+      ],
+      "source_refs": [
+        {
+          "path": "_research/causal_composition/preregistrations/d4_v1_canonical_heldout_DRAFT/README.md",
+          "sha256": "6d63e0c296c69679e10606b5460afcaa5bb6ba02955f86c79145bdd7c8f872dc",
+          "byte_length": 10741,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 139
+        },
+        {
+          "path": "results/HSWM_S5_B0_B2_COMPARISON_2026-09-06.md",
+          "sha256": "33c2f8eaccd8854fac9efd646279e5d9dcd34661de3ba9c2a2b598a880f4a457",
+          "byte_length": 2234,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 37
+        }
+      ],
+      "edit_targets": [],
+      "acceptance": [
+        "Show independently attributable outcome, exact credit, durable canonical revision and changed genuinely held-out behavior in the same run. Report remove/restore/sham/shuffled controls, uncertainty and total cost.",
+        "A valid negative/inconclusive report completes this reporting task without satisfying first-scale support or authorizing the next-scale efficacy claim."
+      ],
+      "failure_action": "Retire or reroute the exact failed mechanism and preserve all failures. No upstream failure rescued by larger graph or more agents.",
+      "artifact": "One all-run artifact and SUPPORTED/RED/UNDERDETERMINED conclusion within the declared estimand",
+      "order_hint": 24,
+      "addresses": [
+        "d4-research-loop-open"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [
+        "D-STUDY"
+      ],
+      "required_completion_decisions": [],
+      "resolves_decisions": [
+        "D-FIRST-SCALE"
+      ],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "PROSPECTIVE_RESEARCH_NOT_RESULT_OR_GATE_PASS"
+    },
+    {
+      "id": "R-04",
+      "title": "같은 구성의 정리 전제와 실행 관측 연결",
+      "track": "FORMAL",
+      "responsibility_role": "formal-runtime-refinement-custodian",
+      "objective": "Reuse finite Lean results and connect exact premises to runtime witnesses, counterexamples and remaining CR obligations.",
+      "input_contract": "R-00 candidate semantics, existing Lean files and explicit axiom checks",
+      "output_contract": "Premise→observable→evidence/null matrix and bounded theorem/refinement artifacts",
+      "hard_dependencies": [
+        "R-00"
+      ],
+      "source_refs": [
+        {
+          "path": "_research/constructive_realizability_v1/README.md",
+          "sha256": "315d4372321dcabab786934fc27df6606b5f7148677d74183c6ac79269509eba",
+          "byte_length": 2066,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 8
+        },
+        {
+          "path": "docs/research/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.md",
+          "sha256": "4274b27b876f1d2fecde18131054dbe05b93563c5a74e519fab64e1f78107e98",
+          "byte_length": 19771,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 191
+        }
+      ],
+      "edit_targets": [],
+      "acceptance": [
+        "Run the documented explicit Lean files and axiom audit; default lake build alone is insufficient.",
+        "Cover CR0-7 and FCL1-8 in a matrix, marking unresolved premises explicitly. No union of unrelated toy witnesses and no theorem assumes its desired empirical conclusion."
+      ],
+      "failure_action": "Counterexamples revise the exact construction, retaining the full target and previous RED evidence. Formal validity does not provide external outcome custody.",
+      "artifact": "Premise→observable→evidence/null matrix and bounded theorem/refinement artifacts",
+      "order_hint": 25,
+      "addresses": [
+        "formal-and-fractal-witness-open"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "PROSPECTIVE_RESEARCH_NOT_RESULT_OR_GATE_PASS"
+    },
+    {
+      "id": "R-05",
+      "title": "두 scale의 합성·효과·계보 검증",
+      "track": "RESEARCH",
+      "responsibility_role": "composition-study-custodian",
+      "objective": "Only after bounded first-scale support, specify and test same-type composition with macro intervention and preserved member rights/lineage.",
+      "input_contract": "Supported first-scale candidate and same-construction formal/measurement obligations",
+      "output_contract": "Prospective two-scale contract and scope-bound evidence against wrapper/pairwise/fixed-router/topology-fixed/lineage-copy nulls",
+      "hard_dependencies": [
+        "R-03",
+        "R-04"
+      ],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+          "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81",
+          "byte_length": 26525,
+          "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+          "line": 22
+        }
+      ],
+      "edit_targets": [],
+      "acceptance": [
+        "Same typed outcome-bound Step/Learn dynamics at both scales, with actual effect and continuity rather than nested graph shape alone.",
+        "A completed R-03 RED or UNDERDETERMINED report does not unlock this task; explicit first-scale support remains required."
+      ],
+      "failure_action": "If composition fails, retire/reroute that composition mechanism; do not weaken FCL2/FCL8 or erase lower-scale results.",
+      "artifact": "Prospective two-scale contract and scope-bound evidence against wrapper/pairwise/fixed-router/topology-fixed/lineage-copy nulls",
+      "order_hint": 26,
+      "addresses": [
+        "formal-and-fractal-witness-open"
+      ],
+      "status": "PLANNED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "actual_cost": null,
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "required_start_decisions": [
+        "D-FIRST-SCALE"
+      ],
+      "required_completion_decisions": [],
+      "resolves_decisions": [],
+      "shared_file_policy": "Single integrator for shared CLI/package/workflow edits; independent pure modules may proceed in parallel.",
+      "claim_ceiling": "PROSPECTIVE_RESEARCH_NOT_RESULT_OR_GATE_PASS"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D-NUMERIC",
+      "title": "S2S native backend와 replay 자격",
+      "resolver": "S2S-01",
+      "required_condition": "Actual repeat fit profile qualified; original vs native trajectory distinction and downstream receipt compatibility explicitly resolved.",
+      "unknown_fields": [
+        "qualified_backend_profile",
+        "repeat_fit_evidence",
+        "original_protocol_compatibility_disposition"
+      ],
+      "start_for": [],
+      "completion_for": [
+        "S2S-01",
+        "S2S-07",
+        "S2S-08"
+      ],
+      "status": "OPEN",
+      "value": null,
+      "authority_class": "SECONDARY_AI_PLANNED_RESOLUTION",
+      "resolution_evidence": []
+    },
+    {
+      "id": "D-TOKENIZER",
+      "title": "F1 live tokenizer 근거의 실제 바이트 결속",
+      "resolver": "F1-RUN-CLI",
+      "required_condition": "Referenced qualification receipt bytes and native tokenizer/artifact/source profile checked, not echoed hash identity.",
+      "unknown_fields": [
+        "live_native_qualification_receipt",
+        "validated_manifest_binding"
+      ],
+      "start_for": [],
+      "completion_for": [
+        "F1-RUN-CLI",
+        "F1-QUALIFY-CUTOVER"
+      ],
+      "status": "OPEN",
+      "value": null,
+      "authority_class": "SECONDARY_AI_PLANNED_RESOLUTION",
+      "resolution_evidence": []
+    },
+    {
+      "id": "D-STUDY",
+      "title": "D-4 과제·평가기·모델·총자원 계약",
+      "resolver": "R-00",
+      "required_condition": "Named task/heldout relation, evaluator custody, metric/cohort/uncertainty, model revision, budget and stop rule bound prospectively.",
+      "unknown_fields": [
+        "task_family",
+        "heldout_partition",
+        "evaluator_custody",
+        "model_revision",
+        "sample_size",
+        "metric_and_analysis",
+        "total_resource_budget",
+        "stop_rule"
+      ],
+      "start_for": [
+        "R-01",
+        "R-02",
+        "R-03"
+      ],
+      "completion_for": [
+        "R-00"
+      ],
+      "status": "OPEN",
+      "value": null,
+      "authority_class": "SECONDARY_AI_PLANNED_RESOLUTION",
+      "resolution_evidence": []
+    },
+    {
+      "id": "D-FIRST-SCALE",
+      "title": "첫 scale의 범위 한정 지지",
+      "resolver": "R-03",
+      "required_condition": "Declared first-scale empirical criteria supported; a completed RED/UNDERDETERMINED report is NOT_SATISFIED.",
+      "unknown_fields": [
+        "first_scale_conclusion",
+        "bound_evidence"
+      ],
+      "start_for": [
+        "R-05"
+      ],
+      "completion_for": [],
+      "status": "OPEN",
+      "value": null,
+      "authority_class": "SECONDARY_AI_PLANNED_RESOLUTION",
+      "resolution_evidence": []
+    }
+  ],
+  "tooling_observations": [
+    {
+      "id": "native-shacl-null-result-path",
+      "status": "REPRODUCED_UNFIXED",
+      "owner_work_package": "OPS-03",
+      "evidence_path": "_research/native_development_plan_2026-09-13/tooling-observation.v1.json",
+      "scope": "Raw pinned engine rejects; native typed report conversion fails for path=null. Plan validation fallback is not native wrapper qualification."
+    },
+    {
+      "id": "comunica-repeated-property-path-variable",
+      "status": "LOCALLY_QUALIFIED_EQUIVALENT_QUERY_EXTERNAL_BEHAVIOR_UNRESOLVED",
+      "owner_work_package": "OPS-03",
+      "evidence_path": "_research/native_development_plan_2026-09-13/tooling-observation.v1.json",
+      "scope": "Q6 uses distinct endpoint variable plus equality FILTER; original repeated-variable form missed a four-node cycle under current pinned Comunica."
+    }
+  ],
+  "scheduling": {
+    "recommended_first": [
+      "S2S-00",
+      "F1-LEDGER",
+      "R-00"
+    ],
+    "focus": "Start with the small reproducible config boundary fix. In parallel only independent ledger/study contract work; keep a reviewer for integration.",
+    "preferred_migration_order": [
+      "S2S",
+      "F1",
+      "F3",
+      "OPERATIONS"
+    ],
+    "research_independent_of_full_migration": true,
+    "durations": "UNESTIMATED_UNTIL_LOCAL_PROFILE; no completion date or resource forecast invented.",
+    "integration": "Shared CLI/package/lock/workflow edits are integrated sequentially; task dependencies determine actual readiness."
+  },
+  "preservation": {
+    "unaccepted_f1_ledger_drafts": "REMAIN_UNACCEPTED_NOT_A_SOURCE_OF_AUTHORITY",
+    "s5": "FIRST_RESULT_DELIVERABLE_COMPLETE_NO_MATCHED_EFFICACY; no new S5 recording task",
+    "unknown_python_entrypoints": 248,
+    "user_dirty_paths": [
+      "_research/causal_composition/relation_synthesis_usl_v1/README.md",
+      "_research/causal_composition/relation_synthesis_usl_v1/run.mts",
+      "_research/causal_composition/relation_synthesis_usl_v1/source-pins.v5.json",
+      "tests/test_hswm_relation_synthesis_runner_cli.py"
+    ],
+    "historical_records": "NO_REWRITE_OF_HASH_BOUND_RESULTS",
+    "runtime_changes_this_turn": false,
+    "live_kg_publication": false
+  },
+  "source_pins": [
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts",
+      "sha256": "ca4a2a65669a4d8cbb18cd20c01017389533ad064335c82194e98e3c38d328ab",
+      "byte_length": 12011,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+      "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+      "byte_length": 157742,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/experiments/swm0w_s2s_pilot.py",
+      "sha256": "46ee8a607224e198cf53f89d32ff7d7a8940cf99a15a138cce128b6e014e56d6",
+      "byte_length": 98350,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "prom_search_hswm/hswm_f1_sqlite_schema.py",
+      "sha256": "e136b2006bc00c6bd96d2b1454c958ede1fbccd07b574dd792d71bf76c59cb56",
+      "byte_length": 23311,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "prom_search_hswm/hswm_f1_durable_transport.py",
+      "sha256": "09ecd886901ac95c0be86e59369d8672d0fad0b912d97e488c5c41c79692a7cc",
+      "byte_length": 73869,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "prom_search_hswm/hswm_result_spool.py",
+      "sha256": "83fc2e1b702569f73101c20b685f70d6e82da7c371220109c92d9e0dd25b172e",
+      "byte_length": 47744,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-call-runtime.ts",
+      "sha256": "a7dd30c72d3f4ec4046887aea3fba1ab5dfdf73a003f5817eeeee822e44f1095",
+      "byte_length": 1860,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-network-runtime.ts",
+      "sha256": "70e6840a50b0a2c54519f8618dd2c7884aa0bfeb1f16fd3c01b01d848b245a2e",
+      "byte_length": 2071,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "prom_search_hswm/prom_f1_function_network.py",
+      "sha256": "59e88cda18061bf312697b48e1df4639dae5b31be25dd1bfade6602db0468bfe",
+      "byte_length": 36152,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "prom_search_hswm/hswm_token_meter.py",
+      "sha256": "5149473c7ca3efea865d97cee324ff2c9ccca5d4d637c66a049f34eae15da274",
+      "byte_length": 18138,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-json-transport-runtime.ts",
+      "sha256": "2b14202f1a4ae62b45ce82d9d56d32b54f2f03899301286efa193a11b9056368",
+      "byte_length": 7413,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-cli.ts",
+      "sha256": "19354e2af85f41dbeba638fda7e2a1443b47b5ccc43460212713417090651a2a",
+      "byte_length": 4438,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "_research/native_migration_2026-09-13/active-route-audit.v7.json",
+      "sha256": "58d143988f4b1929e1b2670e12cce1dbf1950760106f7778adbb303d60e0b9a5",
+      "byte_length": 15339,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+      "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+      "byte_length": 59103,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "_research/f_series/f2_delta_w_credit.py",
+      "sha256": "1cf1518cf0cd9172b560c662b52c4261bc3cdcb57e7a6c8e34b80c7c55f58691",
+      "byte_length": 50288,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-chat-domain.ts",
+      "sha256": "2728c576ae265f37974afc7df5a70c9506e55c81dfeb23e57f076ebc712db121",
+      "byte_length": 13230,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-chat-runtime.ts",
+      "sha256": "80a33b0ae0b6cae7f991720a86c4f71d990a53b72eb48e40a93c7fc997de1fb5",
+      "byte_length": 5726,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "_research/f_series/f3v2_arms.py",
+      "sha256": "19848eb4d3b7f6377d28793324652f4a45631dc74f16ba91b7d5e3636d991915",
+      "byte_length": 55372,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "_research/f_series/f3v2_dev_smoke.py",
+      "sha256": "32bfeced638211e8f68d25c98069392e9d0004e77095c6ad3d3dad8d4fa7bc01",
+      "byte_length": 18167,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "scripts/f3v2_smoke_preflight.sh",
+      "sha256": "27d95cf232021e46b96117a8794df3f95475a2b967adf92da23d1ef91e84fb6e",
+      "byte_length": 2193,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "_research/native_migration_2026-09-13/scope-entrypoint-catalog.v1.json",
+      "sha256": "3e970bcb49b7ba96e534a3ed6894b0d709e82a96acf2649bab928fd70d295f3f",
+      "byte_length": 204499,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "d1a67c9af3a27b9de8f174d7948e3793b95335a231f5d2d3a7fe76d4f0b00e34",
+      "byte_length": 6084,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": ".github/workflows/swm0w-confirmatory.yml",
+      "sha256": "14b7c664f9445989a359b1a6c2bad0164ed2760c82bb1b7092b3369cdd9ad8a2",
+      "byte_length": 28527,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/experiments/swm0w_confirmatory.py",
+      "sha256": "9cf4be62a3f5e083c4c35815a4f3a37acb9061f2cfb421bcf7bbd4b2bc45509b",
+      "byte_length": 133497,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-runtime.ts",
+      "sha256": "7b97776a1b06caf83cb64e46f2839c7b6f59799a0ecd1270b09a9fae48fc6cea",
+      "byte_length": 18882,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/development/container/bootstrap.sh",
+      "sha256": "2d8024d3987faebde9309c33c52fbfa4c856cf35895c1b0c4eaf83c82ff9c361",
+      "byte_length": 755,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "b67a175bc7f2d8c701d9a9cf6ddd157565599f4960039f4d045e0ab4c53c08af",
+      "byte_length": 8198,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0",
+      "byte_length": 20916,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-standards.ts",
+      "sha256": "ebc72dfd681f7a647c10452777cffdcfa7e762b503f83d1d31faaf1598833335",
+      "byte_length": 8146,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-vendor.ts",
+      "sha256": "b3ac276d1abaebfb030006977d6ea1fe6335c8e62a5edfc2ea9e97badce938b8",
+      "byte_length": 3675,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "_research/causal_composition/preregistrations/d4_v1_canonical_heldout_DRAFT/README.md",
+      "sha256": "6d63e0c296c69679e10606b5460afcaa5bb6ba02955f86c79145bdd7c8f872dc",
+      "byte_length": 10741,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "docs/research/HSWM_RELATION_RESEARCH_ROUND_1_2026-09-10.md",
+      "sha256": "1925af8adfd6ebf0d85248cf74e2153a883e9a4451e2e20e91f63cb431b5b80b",
+      "byte_length": 10752,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+      "sha256": "76a2e5a1127988d4d889f87ecab9389d61f850bf7d6edf52affbcc235aaee754",
+      "byte_length": 21748,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "results/HSWM_S5_B0_B2_COMPARISON_2026-09-06.md",
+      "sha256": "33c2f8eaccd8854fac9efd646279e5d9dcd34661de3ba9c2a2b598a880f4a457",
+      "byte_length": 2234,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "_research/constructive_realizability_v1/README.md",
+      "sha256": "315d4372321dcabab786934fc27df6606b5f7148677d74183c6ac79269509eba",
+      "byte_length": 2066,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "docs/research/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.md",
+      "sha256": "4274b27b876f1d2fecde18131054dbe05b93563c5a74e519fab64e1f78107e98",
+      "byte_length": 19771,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    },
+    {
+      "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+      "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81",
+      "byte_length": 26525,
+      "source_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e"
+    }
+  ]
+}

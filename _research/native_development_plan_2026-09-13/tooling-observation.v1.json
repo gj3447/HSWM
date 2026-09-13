@@ -1,0 +1,79 @@
+{
+  "schema_version": "hswm-planning-tool-observation/v1",
+  "date": "2026-09-13",
+  "id": "native-shacl-null-result-path",
+  "status": "REPRODUCED_UNFIXED",
+  "authority_class": "SECONDARY_AI_ENGINEERING_OBSERVATION",
+  "owner_work_package": "OPS-03",
+  "finding": "Native SHACL report conversion accepts undefined path but dereferences null as a Term. Raw vendor correctly reports nonconformance; public typed service result is not delivered.",
+  "source_base_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+  "sources": [
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-standards.ts",
+      "sha256": "ebc72dfd681f7a647c10452777cffdcfa7e762b503f83d1d31faaf1598833335"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-vendor.ts",
+      "sha256": "b3ac276d1abaebfb030006977d6ea1fe6335c8e62a5edfc2ea9e97badce938b8"
+    },
+    {
+      "path": "schemas/HSWM_NEXT_DEVELOPMENT_PLAN_SHACL_1_0.v1.ttl",
+      "sha256": "c211bc5c044d6fc4924c65d2c2b476b44878a5bcfdebf111515a75a5e48b5132"
+    }
+  ],
+  "raw_engine": "rdf-validate-shacl@0.6.5",
+  "observed_error": "Cannot read properties of null (reading 'termType')",
+  "probes": [
+    {
+      "name": "claimed-output-without-evidence",
+      "raw_conforms": false,
+      "result_count": 1,
+      "path": null,
+      "severity": "http://www.w3.org/ns/shacl#Violation",
+      "component": "http://www.w3.org/ns/shacl#OrConstraintComponent",
+      "focus_node": "urn:hswm:kg:node:sym:AbstractNode:hswm-next-development-graph-plan-2026-09-13-output-S2S-00",
+      "source_shape": "https://hswm.invalid/kg-bundle-rdf/v1/role/ExpectedArtifactShape",
+      "messages": [],
+      "native_status": "REPORT_SERIALIZATION_DEFECT_NOT_SUCCESSFUL_REFUSAL"
+    },
+    {
+      "name": "satisfied-decision-without-evidence",
+      "raw_conforms": false,
+      "result_count": 1,
+      "path": null,
+      "severity": "http://www.w3.org/ns/shacl#Violation",
+      "component": "http://www.w3.org/ns/shacl#OrConstraintComponent",
+      "focus_node": "urn:hswm:kg:node:sym:AbstractNode:hswm-next-development-graph-plan-2026-09-13-decision-D-FIRST-SCALE",
+      "source_shape": "https://hswm.invalid/kg-bundle-rdf/v1/role/PlanDecisionShape",
+      "messages": [],
+      "native_status": "REPORT_SERIALIZATION_DEFECT_NOT_SUCCESSFUL_REFUSAL"
+    }
+  ],
+  "reproduction": "verify-plan.mjs runs the exact graph mutations, requires the observed native reporting defect for these two cases, and independently checks the pinned raw engine result. Any different native failure or raw acceptance fails verification.",
+  "completion_contract": "Repair null/undefined report-path normalization and vendor boundary typing; require emitted public CLI to report conforms=false without TypeError for both pathless violations. Preserve actual validation semantics.",
+  "claim_ceiling": "LOCAL_ENGINEERING_FINDING_NOT_HSWM_RESEARCH_RESULT_OR_OFFICIAL_SUITE_CONFORMANCE",
+  "query_observation": {
+    "id": "comunica-repeated-property-path-variable",
+    "status": "OBSERVED_LOCAL_QUERY_FORM_FAILURE_NO_UPSTREAM_ADJUDICATION",
+    "engine": "@comunica/query-sparql-rdfjs@5.3.0",
+    "owner_work_package": "OPS-03",
+    "mutation": "Add F1-LEDGER DEPENDS_ON F1-QUALIFY-CUTOVER to close the existing 4-node chain.",
+    "original_body": "?task a role:WORK_PACKAGE ; p:task_id ?taskId ; r:DEPENDS_ON+ ?task .",
+    "qualified_body": "?task a role:WORK_PACKAGE ; p:task_id ?taskId . ?task r:DEPENDS_ON+ ?endpoint . FILTER(?task = ?endpoint)",
+    "observed_baseline_rows": {
+      "original": 0,
+      "qualified": 0
+    },
+    "observed_mutated_rows": {
+      "original": 0,
+      "qualified": 4
+    },
+    "qualified_members": [
+      "F1-DURABLE-PORT",
+      "F1-LEDGER",
+      "F1-QUALIFY-CUTOVER",
+      "F1-RUN-CLI"
+    ],
+    "disposition": "Use the locally qualified equivalent query and retain adversarial cycle probe. No package upgrade, new install or full suite claim."
+  }
+}

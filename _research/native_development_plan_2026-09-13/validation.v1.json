@@ -1,0 +1,159 @@
+{
+  "schema_version": "hswm-next-development-plan-validation/v1",
+  "date": "2026-09-13",
+  "authority_class": "SECONDARY_AI_ENGINEERING_OBSERVATION",
+  "source_base_commit": "f0d1e2c3c0f33a0ceeb5852d6a67f3d420a62e5e",
+  "status": "PLAN_VALIDATED_WITH_KNOWN_NATIVE_REPORTING_GAP",
+  "claim_ceiling": "PLAN_STRUCTURE_SOURCE_BINDING_AND_BOUNDED_TOOL_QUALIFICATION_NOT_IMPLEMENTATION_OR_RESEARCH_EFFICACY",
+  "artifact_bindings": [
+    {
+      "path": "ontology/development/HSWM_NEXT_DEVELOPMENT_GRAPH_PLAN_2026-09-13.v1.json",
+      "sha256": "58a4d15b7e707cd695badaa522c24e928d75cc7e0ce89dd6ac4d7a7024c71ff5",
+      "byte_length": 623738
+    },
+    {
+      "path": "_research/native_development_plan_2026-09-13/development-plan.v1.json",
+      "sha256": "04bafaf90a434cca402292bbaf961bdfa2e53df0d1e163d9a43e63883bf3876b",
+      "byte_length": 110484
+    },
+    {
+      "path": "_research/native_development_plan_2026-09-13/source-catalog.v1.json",
+      "sha256": "97ccc374fc30f7d040af80ea302bbb141fdd16c6c900e94877d71e586b9ad691",
+      "byte_length": 17002
+    },
+    {
+      "path": "_research/native_development_plan_2026-09-13/verify-plan.mjs",
+      "sha256": "40378ff13c8ce1c9310e6cb6df7abcddf5ebbb3028f95051995ca03348032ff4",
+      "byte_length": 20628
+    },
+    {
+      "path": "_research/native_development_plan_2026-09-13/tooling-observation.v1.json",
+      "sha256": "35ef89b0ae86fe7e740f969009461aed6a25311afc13f4c724b802af5a10ab36",
+      "byte_length": 3921
+    },
+    {
+      "path": "ontology/projections/hswm_next_development_plan_2026-09-13/dataset.nq",
+      "sha256": "a0fb1dcaf82d77e31a3a602c058a29227bf45af0e24839213f37160800106569",
+      "byte_length": 3895827
+    },
+    {
+      "path": "ontology/projections/hswm_next_development_plan_2026-09-13/descriptor.json",
+      "sha256": "ec09003085c5e75ff91be8d796d01930bf7fa5d9a4927e4342dd67dda59e479b",
+      "byte_length": 1802
+    },
+    {
+      "path": "ontology/projections/hswm_next_development_plan_2026-09-13/provenance.jsonld",
+      "sha256": "a479df987dc99bef9c9bd99f9c75d5ec0b7511126ff08a58af8fec8a3ceeb7ad",
+      "byte_length": 1033
+    }
+  ],
+  "actual_verification": {
+    "status": "PLAN_VALIDATED_WITH_KNOWN_NATIVE_REPORTING_GAP",
+    "known_native_reporting_gaps": [
+      {
+        "probe": "claimed-output-without-evidence",
+        "native_status": "REPORT_SERIALIZATION_DEFECT",
+        "raw_engine": "rdf-validate-shacl@0.6.5",
+        "raw_conforms": false,
+        "path": null,
+        "component": "http://www.w3.org/ns/shacl#OrConstraintComponent"
+      },
+      {
+        "probe": "satisfied-decision-without-evidence",
+        "native_status": "REPORT_SERIALIZATION_DEFECT",
+        "raw_engine": "rdf-validate-shacl@0.6.5",
+        "raw_conforms": false,
+        "path": null,
+        "component": "http://www.w3.org/ns/shacl#OrConstraintComponent"
+      }
+    ],
+    "task_count": 27,
+    "decision_count": 4,
+    "requirement_count": 12,
+    "graph_counts": {
+      "nodes": 275,
+      "anchors": 3,
+      "relations": 439
+    },
+    "source_count": 64,
+    "artifact_binding_count": 63,
+    "shacl_conforms": [
+      true,
+      true
+    ],
+    "ready_task_ids": [
+      "F1-LEDGER",
+      "F1-SPOOL",
+      "F3-PROVIDER",
+      "F3-STATE-CACHE",
+      "OPS-01",
+      "OPS-02",
+      "OPS-03",
+      "R-00",
+      "S2S-00",
+      "S2S-02",
+      "S2S-06"
+    ],
+    "query_counts": {
+      "Q1": 11,
+      "Q2": 66,
+      "Q3": 214,
+      "Q4": 4,
+      "Q5": 0,
+      "Q6": 0,
+      "Q7": 0,
+      "Q8": 0,
+      "Q9": 0
+    },
+    "probes": [
+      "missing-role:native-shacl",
+      "duplicate-role:native-shacl",
+      "missing-criterion-source:native-shacl",
+      "cycle:Q6",
+      "premature-complete:Q7",
+      "missing-tool-integrity:Q9",
+      "false-r03-ops04:Q8",
+      "missing-s5-reuse:Q5",
+      "claimed-output-without-evidence:raw-engine-only-native-reporting-gap",
+      "satisfied-decision-without-evidence:raw-engine-only-native-reporting-gap"
+    ],
+    "claim_ceilings": [
+      "NATIVE_ENGINEERING_SCOPE_NOT_HSWM_EFFICACY",
+      "PROSPECTIVE_RESEARCH_NOT_RESULT_OR_GATE_PASS"
+    ],
+    "projection_sha256": "a0fb1dcaf82d77e31a3a602c058a29227bf45af0e24839213f37160800106569",
+    "readiness_counterfactual": "synthetic readiness only; no evidence or efficacy claim"
+  },
+  "qualification_limits": [
+    "Two conditional violations raw-rejected while native result conversion defects remain unresolved under OPS-03.",
+    "Q6 equivalent distinct-endpoint query qualified against actual four-member cycle after original form missed it. No full official suite claim.",
+    "The Q9 draft branch-scope mistake was corrected before sealing: every missing-field query binds the tool in its own group.",
+    "Synthetic readiness counterfactual is a predicate test, not a completed study or authorization."
+  ],
+  "hswm_dev": {
+    "episode_id": "next-development-plan-20260913",
+    "backend": "typescript-effect",
+    "selected_relation": "relation:ontology-focused",
+    "status": "SUCCEEDED",
+    "profile": "ontology",
+    "test_files": 4,
+    "tests_passed": 48,
+    "output_digest": "e22709dcdfece99a49bb5becb102dc1e395253457f2cf016efdf9d2f7e1ee489",
+    "feedback": {
+      "success": true,
+      "source": "agent(codex):ontology route useful for checking existing projection tools; task-specific SHACL/SPARQL and source/DAG probes remain separate; no research efficacy or causal credit established"
+    },
+    "pending_feedback": 0,
+    "private_state_not_published": true,
+    "claim": "DEVELOPMENT_TOOL_CHECK_USEFULNESS_NOT_RESEARCH_EFFICACY_OR_CAUSAL_CREDIT"
+  },
+  "portable_markdown_math": {
+    "command": "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology",
+    "status": "PORTABLE_MATH_COMPILED",
+    "documents": 160,
+    "derived_projection": true
+  },
+  "runtime_implementation_changed": false,
+  "live_kg_publication": false,
+  "research_results_log_entry": false
+}

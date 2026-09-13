@@ -1,0 +1,8 @@
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+
+SELECT ?decision ?decisionId ?resolver ?resolverId WHERE {
+ ?decision a role:PLAN_DECISION ; p:decision_id ?decisionId ; p:status "OPEN" ; r:RESOLVED_BY ?resolver .
+ ?resolver p:task_id ?resolverId .
+} ORDER BY ?decisionId

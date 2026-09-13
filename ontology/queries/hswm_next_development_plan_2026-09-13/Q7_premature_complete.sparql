@@ -1,0 +1,15 @@
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+
+SELECT DISTINCT ?task ?taskId ?reason WHERE {
+ ?task a role:WORK_PACKAGE ; p:task_id ?taskId ; p:status "COMPLETE" .
+ { ?task r:EXPECTS_OUTPUT ?output . ?output p:status ?outputStatus . FILTER(?outputStatus != "ACCEPTED") BIND("output_not_accepted" AS ?reason) }
+ UNION { ?task r:HAS_CRITERION ?criterion . ?criterion p:status ?criterionStatus . FILTER(?criterionStatus != "PASS") BIND("criterion_not_pass" AS ?reason) }
+ UNION { ?task r:DEPENDS_ON ?dep . ?dep p:status ?depStatus . FILTER(?depStatus != "COMPLETE") BIND("dependency_not_complete" AS ?reason) }
+ UNION { ?task r:REQUIRES_COMPLETION_DECISION ?decision . ?decision p:status ?decisionStatus . FILTER(?decisionStatus != "SATISFIED") BIND("completion_decision_unsatisfied" AS ?reason) }
+ UNION { ?task r:REQUIRES_START_DECISION ?decision . ?decision p:status ?decisionStatus . FILTER(?decisionStatus != "SATISFIED") BIND("start_decision_unsatisfied" AS ?reason) }
+ UNION { ?task r:EXPECTS_OUTPUT ?output . FILTER NOT EXISTS { ?output r:HAS_ACTUAL_EVIDENCE ?evidence } BIND("output_evidence_missing" AS ?reason) }
+ UNION { ?task r:HAS_CRITERION ?criterion . FILTER NOT EXISTS { ?criterion r:HAS_ACTUAL_EVIDENCE ?evidence } BIND("criterion_evidence_missing" AS ?reason) }
+ UNION { ?task r:REQUIRES_COMPLETION_DECISION ?decision . FILTER NOT EXISTS { ?decision r:HAS_ACTUAL_EVIDENCE ?evidence } BIND("decision_evidence_missing" AS ?reason) }
+} ORDER BY ?taskId ?reason

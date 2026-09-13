@@ -1,0 +1,82 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+
+role:WorkPackageShape a sh:NodeShape ;
+  sh:targetClass role:WORK_PACKAGE ;
+  sh:property [ sh:path p:task_id ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:track ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:status ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ( "PLANNED" "ACTIVE" "COMPLETE" "BLOCKED" "RETIRED" ) ] ;
+  sh:property [ sh:path p:responsibility_owner ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:claim_ceiling ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path r:HAS_RESPONSIBILITY_ROLE ; sh:minCount 1 ; sh:maxCount 1 ; sh:class role:RESPONSIBILITY_ROLE ] ;
+  sh:property [ sh:path r:USES_INPUT ; sh:minCount 1 ; sh:class role:INPUT_CONTRACT ] ;
+  sh:property [ sh:path r:EXPECTS_OUTPUT ; sh:minCount 1 ; sh:class role:EXPECTED_ARTIFACT ] ;
+  sh:property [ sh:path r:HAS_CRITERION ; sh:minCount 1 ; sh:class role:ACCEPTANCE_CRITERION ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:minCount 1 ; sh:class role:ENGINEERING_SOURCE ] ;
+  sh:property [ sh:path r:ADDRESSES ; sh:minCount 1 ; sh:class role:AUDIT_REQUIREMENT ] ;
+  sh:property [ sh:path r:DEPENDS_ON ; sh:class role:WORK_PACKAGE ] ;
+  sh:property [ sh:path r:REQUIRES_START_DECISION ; sh:class role:PLAN_DECISION ] ;
+  sh:property [ sh:path r:REQUIRES_COMPLETION_DECISION ; sh:class role:PLAN_DECISION ] ;
+  sh:property [ sh:path r:RESOLVES ; sh:class role:PLAN_DECISION ] .
+
+role:ExpectedArtifactShape a sh:NodeShape ;
+  sh:targetClass role:EXPECTED_ARTIFACT ;
+  sh:property [ sh:path p:status ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ( "NOT_PRODUCED" "PRODUCED" "ACCEPTED" ) ] ;
+  sh:or (
+    [ sh:property [ sh:path p:status ; sh:hasValue "NOT_PRODUCED" ] ]
+    [ sh:property [ sh:path r:HAS_ACTUAL_EVIDENCE ; sh:minCount 1 ; sh:class role:ENGINEERING_SOURCE ] ]
+  ) .
+
+role:AcceptanceCriterionShape a sh:NodeShape ;
+  sh:targetClass role:ACCEPTANCE_CRITERION ;
+  sh:property [ sh:path p:status ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ( "NOT_RUN" "PASS" "FAIL" ) ] ;
+  sh:or (
+    [ sh:property [ sh:path p:status ; sh:hasValue "NOT_RUN" ] ]
+    [ sh:property [ sh:path r:HAS_ACTUAL_EVIDENCE ; sh:minCount 1 ; sh:class role:ENGINEERING_SOURCE ] ]
+  ) .
+
+role:PlanDecisionShape a sh:NodeShape ;
+  sh:targetClass role:PLAN_DECISION ;
+  sh:property [ sh:path p:decision_id ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:status ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ( "OPEN" "SATISFIED" "NOT_SATISFIED" ) ] ;
+  sh:property [ sh:path r:RESOLVED_BY ; sh:minCount 1 ; sh:maxCount 1 ; sh:class role:WORK_PACKAGE ] ;
+  sh:or (
+    [ sh:property [ sh:path p:status ; sh:hasValue "OPEN" ] ]
+    [ sh:property [ sh:path r:HAS_ACTUAL_EVIDENCE ; sh:minCount 1 ; sh:class role:ENGINEERING_SOURCE ] ]
+  ) .
+
+role:AuditRequirementShape a sh:NodeShape ;
+  sh:targetClass role:AUDIT_REQUIREMENT ;
+  sh:property [ sh:path p:requirement_id ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:status ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ( "OPEN" "REUSE_COMPLETED_SUCCESSOR_READING" ) ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:minCount 1 ; sh:class role:ENGINEERING_SOURCE ] ;
+  sh:property [ sh:path r:REUSES_EVIDENCE ; sh:class role:ENGINEERING_SOURCE ] ;
+  sh:or (
+    [ sh:property [ sh:path p:status ; sh:hasValue "OPEN" ] ]
+    [ sh:property [ sh:path p:requirement_id ; sh:hasValue "s5-navigation-stale" ] ]
+  ) .
+
+role:EngineeringSourceShape a sh:NodeShape ;
+  sh:targetClass role:ENGINEERING_SOURCE ;
+  sh:property [ sh:path p:source_path ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:sha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] ;
+  sh:property [ sh:path p:byte_length ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 0 ] ;
+  sh:property [ sh:path p:source_revision ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+role:ToolProfileShape a sh:NodeShape ;
+  sh:targetClass role:TOOL_PROFILE ;
+  sh:property [ sh:path p:package_version ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:package_integrity ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:license ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:authority_class ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:minCount 1 ; sh:class role:ENGINEERING_SOURCE ] .
+
+role:S5SuccessorReadingRequirementShape a sh:NodeShape ;
+  sh:targetClass role:S5_SUCCESSOR_READING_REQUIREMENT ;
+  sh:class role:AUDIT_REQUIREMENT ;
+  sh:property [ sh:path p:requirement_id ; sh:hasValue "s5-navigation-stale" ] ;
+  sh:property [ sh:path p:status ; sh:minCount 1 ; sh:maxCount 1 ; sh:hasValue "REUSE_COMPLETED_SUCCESSOR_READING" ] ;
+  sh:property [ sh:path r:REUSES_EVIDENCE ; sh:minCount 1 ; sh:class role:ENGINEERING_SOURCE ] .

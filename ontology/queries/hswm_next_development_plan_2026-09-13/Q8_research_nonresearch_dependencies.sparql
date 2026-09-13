@@ -1,0 +1,8 @@
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+
+SELECT ?research ?researchId ?dependency ?dependencyId ?dependencyTrack WHERE {
+ ?research a role:WORK_PACKAGE ; p:task_id ?researchId ; p:track "RESEARCH" ; r:DEPENDS_ON+ ?dependency .
+ ?dependency p:task_id ?dependencyId ; p:track ?dependencyTrack . FILTER(?dependencyTrack NOT IN ("RESEARCH", "FORMAL"))
+} ORDER BY ?researchId ?dependencyId

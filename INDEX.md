@@ -1,5 +1,9 @@
 # HSWM — public repository index
 
+2026-09-13 [다음 개발 · 표준 그래프 계획](docs/operations/HSWM_NEXT_DEVELOPMENT_GRAPH_PLAN_2026-09-13.md)은
+27개 작업의 책임·실제 의존성·완료 조건과 4개 미해결 결정을 소스에 결속한다.
+SHACL/SPARQL로 구조와 성급한 완료 표시를 검사하며 이식과 연구의 선행 관계를 구분한다.
+
 2026-09-13 [전체 범위 감사 · TS/Effect 전환·연구 완료 조건](docs/operations/HSWM_OVERALL_SCOPE_AUDIT_2026-09-13.md)은
 `6b6c3fd`의 실제 실행 경로, 함수형 검사 범위, 미연결 부품과 S-5 최신 결과 판독을 대조한다.
 

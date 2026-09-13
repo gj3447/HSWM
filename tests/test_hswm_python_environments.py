@@ -32,6 +32,16 @@ def checkout(tmp_path):
         "'active': os.environ.get('VIRTUAL_ENV')}) + '\\n')\n"
     )
     uv.chmod(0o755)
+    native = root / "src/hswm/effect-runtime/bin/hswm-infrastructure-smoke"
+    native.parent.mkdir(parents=True)
+    native.write_text(
+        "#!/usr/bin/env python3\n"
+        "import json, os, sys\n"
+        "with open(os.environ['CALL_LOG'], 'a') as out:\n"
+        "    out.write(json.dumps({'command': 'native-infrastructure-smoke', "
+        "'args': sys.argv[1:]}) + '\\n')\n"
+    )
+    native.chmod(0o755)
     log = tmp_path / "calls.jsonl"
     env = dict(os.environ, PATH=f"{fake_bin}:{os.environ['PATH']}", CALL_LOG=str(log),
                UV_PROJECT_ENVIRONMENT="/must-not-reconcile", VIRTUAL_ENV="/active-user-env")
@@ -84,12 +94,11 @@ def test_missing_environment_cannot_fall_back_to_global_tools(checkout):
     assert calls == []
 
 
-def test_infra_uses_existing_script_lock_with_no_inherited_project(checkout):
-    result, calls = invoke(checkout, "infra", "fabric")
+def test_infra_compatibility_entrypoint_delegates_to_native_runtime(checkout):
+    result, calls = invoke(checkout, "infra", "fabric", "--run-id", "fixture-id")
     assert result.returncode == 0, result.stderr
-    assert calls[0]["environment"] is None and calls[0]["active"] is None
-    assert "--locked" in calls[0]["args"] and "--script" in calls[0]["args"]
-    assert calls[0]["args"][-1] == "_research/infrastructure_smoke/research_fabric_smoke.py"
+    assert calls == [{"command": "native-infrastructure-smoke",
+                      "args": ["fabric", "--run-id", "fixture-id"]}]
 
 
 def test_unknown_infra_tool_does_not_invoke_uv_run(checkout):

@@ -1,0 +1,479 @@
+{
+  "authority": "ORIGINAL_PYTHON_OVER_MOCKED_MCP_VENDOR_NOT_LIVE_SERVICE_EVIDENCE",
+  "source": {
+    "path": "_research/infrastructure_smoke/phoenix_viewer_mcp_smoke.py",
+    "sha256": "e563216ee7138aecb9639a4e6ba233ef1f269f9e8d4b547d00d492a8a42ffab6"
+  },
+  "cases": [
+    {
+      "name": "valid",
+      "probe": {
+        "tools": [
+          {
+            "name": "describeSqlSchema",
+            "readOnlyHint": true
+          },
+          {
+            "name": "executeSql",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProjects",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProject",
+            "readOnlyHint": true
+          }
+        ],
+        "readRows": [
+          [
+            1
+          ]
+        ],
+        "readIsError": false,
+        "unsafeError": "not_read_only",
+        "unsafeIsError": false
+      },
+      "decision": "ACCEPT",
+      "stdout": "{\n  \"claim_boundary\": \"infrastructure smoke only; not HSWM cognition, causal credit, canonical admission, continuous learning, or efficacy evidence\",\n  \"mutation_tools_exposed\": false,\n  \"read_probe_rows\": 1,\n  \"schema\": \"hswm-phoenix-viewer-mcp-smoke/v1\",\n  \"status\": \"PASS\",\n  \"tools\": [\n    \"describeSqlSchema\",\n    \"executeSql\",\n    \"getProject\",\n    \"getProjects\"\n  ],\n  \"unsafe_sql_code\": \"not_read_only\"\n}\n",
+      "expected": {
+        "claim_boundary": "infrastructure smoke only; not HSWM cognition, causal credit, canonical admission, continuous learning, or efficacy evidence",
+        "mutation_tools_exposed": false,
+        "read_probe_rows": 1,
+        "schema": "hswm-phoenix-viewer-mcp-smoke/v1",
+        "status": "PASS",
+        "tools": [
+          "describeSqlSchema",
+          "executeSql",
+          "getProject",
+          "getProjects"
+        ],
+        "unsafe_sql_code": "not_read_only"
+      }
+    },
+    {
+      "name": "unsupported",
+      "probe": {
+        "tools": [
+          {
+            "name": "describeSqlSchema",
+            "readOnlyHint": true
+          },
+          {
+            "name": "executeSql",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProjects",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProject",
+            "readOnlyHint": true
+          }
+        ],
+        "readRows": [
+          [
+            1
+          ]
+        ],
+        "readIsError": false,
+        "unsafeError": "unsupported_syntax",
+        "unsafeIsError": false
+      },
+      "decision": "ACCEPT",
+      "stdout": "{\n  \"claim_boundary\": \"infrastructure smoke only; not HSWM cognition, causal credit, canonical admission, continuous learning, or efficacy evidence\",\n  \"mutation_tools_exposed\": false,\n  \"read_probe_rows\": 1,\n  \"schema\": \"hswm-phoenix-viewer-mcp-smoke/v1\",\n  \"status\": \"PASS\",\n  \"tools\": [\n    \"describeSqlSchema\",\n    \"executeSql\",\n    \"getProject\",\n    \"getProjects\"\n  ],\n  \"unsafe_sql_code\": \"unsupported_syntax\"\n}\n",
+      "expected": {
+        "claim_boundary": "infrastructure smoke only; not HSWM cognition, causal credit, canonical admission, continuous learning, or efficacy evidence",
+        "mutation_tools_exposed": false,
+        "read_probe_rows": 1,
+        "schema": "hswm-phoenix-viewer-mcp-smoke/v1",
+        "status": "PASS",
+        "tools": [
+          "describeSqlSchema",
+          "executeSql",
+          "getProject",
+          "getProjects"
+        ],
+        "unsafe_sql_code": "unsupported_syntax"
+      }
+    },
+    {
+      "name": "extra-column",
+      "probe": {
+        "tools": [
+          {
+            "name": "describeSqlSchema",
+            "readOnlyHint": true
+          },
+          {
+            "name": "executeSql",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProjects",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProject",
+            "readOnlyHint": true
+          }
+        ],
+        "readRows": [
+          [
+            1,
+            2
+          ]
+        ],
+        "readIsError": false,
+        "unsafeError": "not_read_only",
+        "unsafeIsError": false
+      },
+      "decision": "REJECT",
+      "error_type": "RuntimeError",
+      "error_message": "bounded analytics read probe failed"
+    },
+    {
+      "name": "string-column",
+      "probe": {
+        "tools": [
+          {
+            "name": "describeSqlSchema",
+            "readOnlyHint": true
+          },
+          {
+            "name": "executeSql",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProjects",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProject",
+            "readOnlyHint": true
+          }
+        ],
+        "readRows": [
+          [
+            "bad",
+            1
+          ]
+        ],
+        "readIsError": false,
+        "unsafeError": "not_read_only",
+        "unsafeIsError": false
+      },
+      "decision": "REJECT",
+      "error_type": "RuntimeError",
+      "error_message": "bounded analytics read probe failed"
+    },
+    {
+      "name": "true-python-numeric-equality",
+      "probe": {
+        "tools": [
+          {
+            "name": "describeSqlSchema",
+            "readOnlyHint": true
+          },
+          {
+            "name": "executeSql",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProjects",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProject",
+            "readOnlyHint": true
+          }
+        ],
+        "readRows": [
+          [
+            true
+          ]
+        ],
+        "readIsError": false,
+        "unsafeError": "not_read_only",
+        "unsafeIsError": false
+      },
+      "decision": "ACCEPT",
+      "stdout": "{\n  \"claim_boundary\": \"infrastructure smoke only; not HSWM cognition, causal credit, canonical admission, continuous learning, or efficacy evidence\",\n  \"mutation_tools_exposed\": false,\n  \"read_probe_rows\": 1,\n  \"schema\": \"hswm-phoenix-viewer-mcp-smoke/v1\",\n  \"status\": \"PASS\",\n  \"tools\": [\n    \"describeSqlSchema\",\n    \"executeSql\",\n    \"getProject\",\n    \"getProjects\"\n  ],\n  \"unsafe_sql_code\": \"not_read_only\"\n}\n",
+      "expected": {
+        "claim_boundary": "infrastructure smoke only; not HSWM cognition, causal credit, canonical admission, continuous learning, or efficacy evidence",
+        "mutation_tools_exposed": false,
+        "read_probe_rows": 1,
+        "schema": "hswm-phoenix-viewer-mcp-smoke/v1",
+        "status": "PASS",
+        "tools": [
+          "describeSqlSchema",
+          "executeSql",
+          "getProject",
+          "getProjects"
+        ],
+        "unsafe_sql_code": "not_read_only"
+      }
+    },
+    {
+      "name": "read-error",
+      "probe": {
+        "tools": [
+          {
+            "name": "describeSqlSchema",
+            "readOnlyHint": true
+          },
+          {
+            "name": "executeSql",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProjects",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProject",
+            "readOnlyHint": true
+          }
+        ],
+        "readRows": [
+          [
+            1
+          ]
+        ],
+        "readIsError": true,
+        "unsafeError": "not_read_only",
+        "unsafeIsError": false
+      },
+      "decision": "REJECT",
+      "error_type": "RuntimeError",
+      "error_message": "bounded analytics read probe failed"
+    },
+    {
+      "name": "unsafe-error",
+      "probe": {
+        "tools": [
+          {
+            "name": "describeSqlSchema",
+            "readOnlyHint": true
+          },
+          {
+            "name": "executeSql",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProjects",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProject",
+            "readOnlyHint": true
+          }
+        ],
+        "readRows": [
+          [
+            1
+          ]
+        ],
+        "readIsError": false,
+        "unsafeError": "not_read_only",
+        "unsafeIsError": true
+      },
+      "decision": "REJECT",
+      "error_type": "RuntimeError",
+      "error_message": "unsafe SQL was not refused by the analytics admission gate"
+    },
+    {
+      "name": "unsafe-accepted",
+      "probe": {
+        "tools": [
+          {
+            "name": "describeSqlSchema",
+            "readOnlyHint": true
+          },
+          {
+            "name": "executeSql",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProjects",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProject",
+            "readOnlyHint": true
+          }
+        ],
+        "readRows": [
+          [
+            1
+          ]
+        ],
+        "readIsError": false,
+        "unsafeError": null,
+        "unsafeIsError": false
+      },
+      "decision": "REJECT",
+      "error_type": "RuntimeError",
+      "error_message": "unsafe SQL was not refused by the analytics admission gate"
+    },
+    {
+      "name": "wrong-code",
+      "probe": {
+        "tools": [
+          {
+            "name": "describeSqlSchema",
+            "readOnlyHint": true
+          },
+          {
+            "name": "executeSql",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProjects",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProject",
+            "readOnlyHint": true
+          }
+        ],
+        "readRows": [
+          [
+            1
+          ]
+        ],
+        "readIsError": false,
+        "unsafeError": "unknown",
+        "unsafeIsError": false
+      },
+      "decision": "REJECT",
+      "error_type": "RuntimeError",
+      "error_message": "unsafe SQL was not refused by the analytics admission gate"
+    },
+    {
+      "name": "extra-tool",
+      "probe": {
+        "tools": [
+          {
+            "name": "describeSqlSchema",
+            "readOnlyHint": true
+          },
+          {
+            "name": "executeSql",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProjects",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProject",
+            "readOnlyHint": true
+          },
+          {
+            "name": "write",
+            "readOnlyHint": true
+          }
+        ],
+        "readRows": [
+          [
+            1
+          ]
+        ],
+        "readIsError": false,
+        "unsafeError": "not_read_only",
+        "unsafeIsError": false
+      },
+      "decision": "REJECT",
+      "error_type": "RuntimeError",
+      "error_message": "unexpected tool surface: ['describeSqlSchema', 'executeSql', 'getProject', 'getProjects', 'write']"
+    },
+    {
+      "name": "missing-readonly",
+      "probe": {
+        "tools": [
+          {
+            "name": "describeSqlSchema",
+            "readOnlyHint": false
+          },
+          {
+            "name": "executeSql",
+            "readOnlyHint": false
+          },
+          {
+            "name": "getProjects",
+            "readOnlyHint": false
+          },
+          {
+            "name": "getProject",
+            "readOnlyHint": false
+          }
+        ],
+        "readRows": [
+          [
+            1
+          ]
+        ],
+        "readIsError": false,
+        "unsafeError": "not_read_only",
+        "unsafeIsError": false
+      },
+      "decision": "REJECT",
+      "error_type": "RuntimeError",
+      "error_message": "every exposed tool must carry read-only annotations"
+    },
+    {
+      "name": "duplicate-tool",
+      "probe": {
+        "tools": [
+          {
+            "name": "describeSqlSchema",
+            "readOnlyHint": true
+          },
+          {
+            "name": "executeSql",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProjects",
+            "readOnlyHint": true
+          },
+          {
+            "name": "getProject",
+            "readOnlyHint": true
+          },
+          {
+            "name": "describeSqlSchema",
+            "readOnlyHint": true
+          }
+        ],
+        "readRows": [
+          [
+            1
+          ]
+        ],
+        "readIsError": false,
+        "unsafeError": "not_read_only",
+        "unsafeIsError": false
+      },
+      "decision": "ACCEPT",
+      "stdout": "{\n  \"claim_boundary\": \"infrastructure smoke only; not HSWM cognition, causal credit, canonical admission, continuous learning, or efficacy evidence\",\n  \"mutation_tools_exposed\": false,\n  \"read_probe_rows\": 1,\n  \"schema\": \"hswm-phoenix-viewer-mcp-smoke/v1\",\n  \"status\": \"PASS\",\n  \"tools\": [\n    \"describeSqlSchema\",\n    \"executeSql\",\n    \"getProject\",\n    \"getProjects\"\n  ],\n  \"unsafe_sql_code\": \"not_read_only\"\n}\n",
+      "expected": {
+        "claim_boundary": "infrastructure smoke only; not HSWM cognition, causal credit, canonical admission, continuous learning, or efficacy evidence",
+        "mutation_tools_exposed": false,
+        "read_probe_rows": 1,
+        "schema": "hswm-phoenix-viewer-mcp-smoke/v1",
+        "status": "PASS",
+        "tools": [
+          "describeSqlSchema",
+          "executeSql",
+          "getProject",
+          "getProjects"
+        ],
+        "unsafe_sql_code": "not_read_only"
+      }
+    }
+  ]
+}

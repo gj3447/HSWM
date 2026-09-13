@@ -1,0 +1,53 @@
+{
+  "schema_version": "hswm-native-graph-standards-successor-profile/v1",
+  "date": "2026-09-13",
+  "status": "SUCCESSOR_QUALIFICATION_PROFILE_NOT_A_REWRITE_OF_HISTORICAL_ACCEPTANCE_LOCK",
+  "authority": "INDEPENDENT_NPM_ENGINE_AGAINST_PINNED_OFFICIAL_W3C_SUITE_NOT_W3C_SDK",
+  "official_source": {
+    "specification": "https://www.w3.org/TR/rdf11-testcases/",
+    "repository": "https://github.com/w3c/rdf-tests.git",
+    "commit": "369a90d1a60c021b746df2e411da0ff36258a758",
+    "selected_path": "rdf/rdf11/rdf-n-quads",
+    "git_tree_sha1": "15ea3f8713598aecc2cdf16d44487e43eeacb146",
+    "git_archive_sha256": "192534988e00895f5d4be9fe0dc3e5b72d1b11fcabf1858060fcf833a701b784",
+    "manifest_path": "rdf/rdf11/rdf-n-quads/manifest.ttl",
+    "manifest_sha256": "4c658a4e111adff512e89ff2c39acf9195109592f54711ce06823dac544c62ca",
+    "license": "W3C Software and Document License; suite manifests declare W3C Test Suite License / W3C 3-clause BSD",
+    "license_sha256": "7fa36904d5d6d32848307af7b22d416b708aaa0b98f5c719b26adb5ed3594b2a"
+  },
+  "engine": {
+    "package": "n3",
+    "version": "2.7.2",
+    "source_commit": "ffb71f9f7ddbdcb4ac831f019ce030b361cc860d",
+    "npm_integrity": "sha512-8Y/GU78BFSecvIv7OiJacY28l/zHiLo5/apxM+kyyUNCTWmqWyzzNjLlja4/vbLogoCHDPwCChLuDEZcpOKeDw==",
+    "license": "MIT",
+    "lockfile": "src/hswm/effect-runtime/package-lock.json",
+    "lockfile_sha256": "981cd0af47ca148eef7d1cb47e57fe5fd568539384aba8ebf1d7fc111139c749"
+  },
+  "runtime": {
+    "node": "24.13.0",
+    "npm": "11.6.2"
+  },
+  "runner": {
+    "path": "src/hswm/effect-runtime/src/native-graph-standards-suite-runner-process.ts",
+    "sha256": "02ec7c2ec3954fedc4aae73223f63657a434d283ef7589b1b7b1b0a1175104dc"
+  },
+  "domain_runner": {
+    "path": "src/hswm/effect-runtime/src/native-graph-standards-suite-runner.ts",
+    "sha256": "ea579c260dc790193789ed07fe83aa0141d688411cda65592fa7a49633d06035"
+  },
+  "criteria": "Discover only manifest entries whose type is rdft:TestNQuadsPositiveSyntax or rdft:TestNQuadsNegativeSyntax and whose rdft:approval is rdft:Approved. A positive passes only when N3 parses its local mf:action; a negative passes only when N3 rejects it. Actions must resolve inside the pinned selected path.",
+  "expected": {
+    "positive": 53,
+    "negative": 32,
+    "total": 85,
+    "passed": 85,
+    "failed": 0
+  },
+  "claim_ceiling": "PINNED_N3_2_7_2_NATIVE_TS_RUNNER_ACCEPTS_AND_REJECTS_85_APPROVED_W3C_RDF11_NQUADS_SYNTAX_FIXTURES_ONLY_NOT_UNIVERSAL_CONFORMANCE_NOT_HSWM_COGNITION_CANONICAL_ADMISSION_PERMIT_OUTCOME_TRUTH_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+  "source_binding": {
+    "path": "src/hswm/effect-runtime/src/native-pinned-suite-binding.ts",
+    "sha256": "fa6393d3e7940b3d864fad4a5bd70ffc653b40d6702365ea64d791f3a0b1a66f",
+    "contract": "exact real subtree; every disk file byte matches pinned Git blob; exact consumed manifest/action bytes verified before parse; frozen hash record; repeat binding after run"
+  }
+}

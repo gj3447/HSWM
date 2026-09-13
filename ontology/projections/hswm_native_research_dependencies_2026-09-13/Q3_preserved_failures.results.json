@@ -1,0 +1,92 @@
+[
+  {
+    "name": {
+      "kind": "literal",
+      "value": "suite-source-time-of-use"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "REPAIRED_WITH_ADVERSARIAL_TEST"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "Exact real subtree and all disk bytes bound to pinned Git blobs; parser checks the exact bytes it consumed against an immutable hash record, including after temporary read substitution."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/extension-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "isolated-shared-git-objects"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "SETUP_REFUSAL_PRESERVED_FAILED_SUITE_RECHECK_PASSED"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "Full final-source run passed 1304 cases and refused 3 legacy materializations because the isolated --shared clone carried object alternates. Repacked only isolated Git objects and removed its alternate after connectivity verification; all 6 tests in that suite rerun without source/test changes. Aggregate counts avoid double counting the 3 already passing cases."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/extension-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "loss-only-gradient-overflow"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "REPAIRED_WITH_ORIGINAL_COUNTEREXAMPLE"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "Loss-only no longer evaluates reverse mode; preserves finite 1.8465232209337043e275 loss when gradients overflow. Weighted squares are summed before division, preserving original overflow refusal."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/extension-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "sparql-planning-used-as-syntax"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "METHOD_INVALID_RETAINED_AND_REPLACED"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "The initial diagnostic used non-selected Node 24.20.0 and QueryEngine planning/execution mixed non-syntax failures into a syntax test: 57/94. Corrected direct parser boundary passes all 94 syntax fixtures without exclusions."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/graph_standards/native_typescript_2026-09-13/qualification/sparql11-comunica-official-syntax-query.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "isolated-vitest-duplicate-instance"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "SETUP_FAILURE_CORRECTED_FULL_SUITE_RERUN"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "fs.cp default rewrote relative .bin links to absolute original-checkout links, loading two Vitest instances. Re-copied locked dependencies with verbatimSymlinks=true; no exclusion or criterion change. Final full run also includes final DS870 exact-key repair and fit config provenance."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/extension-verification.v1.json"
+    }
+  }
+]

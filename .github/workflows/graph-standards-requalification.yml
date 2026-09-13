@@ -7,8 +7,33 @@ permissions:
   contents: read
 
 jobs:
+  native-successors:
+    name: qualify native RDF 1.1 and SPARQL 1.1 syntax runners
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "24.13.0"
+          cache: npm
+          cache-dependency-path: src/hswm/effect-runtime/package-lock.json
+      - name: Verify and build the locked native runtime
+        working-directory: src/hswm/effect-runtime
+        run: |
+          test "$(node --version)" = "v24.13.0"
+          test "$(npm --version)" = "11.6.2"
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+      - name: Fetch the pinned official W3C source and qualify syntax only
+        run: |
+          hswm_native_suite_parent="$(mktemp -d "${RUNNER_TEMP}/hswm-native-suites.XXXXXX")"
+          src/hswm/effect-runtime/bin/hswm-graph-standards fetch --source-id w3c-rdf-tests-rdf11-nquads --destination "${hswm_native_suite_parent}/rdf-tests"
+          src/hswm/effect-runtime/bin/hswm-rdf11-nquads-suite --profile rdf11-nquads-n3-native-ts --suite-root "${hswm_native_suite_parent}/rdf-tests/rdf/rdf11/rdf-n-quads"
+          src/hswm/effect-runtime/bin/hswm-sparql11-syntax-suite --profile sparql11-traqula-comunica-parser-official-syntax-query --suite-root "${hswm_native_suite_parent}/rdf-tests/sparql/sparql11/syntax-query"
+
   requalify:
-    name: replay pinned official suites
+    name: replay historical acceptance-locked official suites
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:

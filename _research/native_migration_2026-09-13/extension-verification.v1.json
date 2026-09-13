@@ -1,0 +1,949 @@
+{
+  "schema_version": "hswm-native-engineering-verification/v1",
+  "date": "2026-09-13",
+  "authority_class": "SECONDARY_AI",
+  "source_base_commit": "27822cabbabd6608522b8ac6f9dd6b5d51f99431",
+  "source_observation": "EXACT_TESTED_ISOLATED_CHECKOUT_BYTES_NOT_AT_BASE_COMMIT",
+  "scope": "54 files: native infrastructure clients and executable routes, exact-consumed-source official syntax suites, S2S worlds/forward/gradient/compiled-array Adam, PROM9 ports and structured-output schemas.",
+  "migration_complete": false,
+  "claim_ceiling": "BOUNDED_ENGINEERING_VERIFICATION_NOT_HSWM_EFFICACY",
+  "toolchain": {
+    "node": "24.13.0",
+    "npm": "11.6.2"
+  },
+  "source_pins": [
+    {
+      "path": ".github/workflows/graph-standards-requalification.yml",
+      "sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+      "byte_length": 7013,
+      "git_blob": "10c23b9841972a57ca0158e79d4bf46b3e1059c5"
+    },
+    {
+      "path": "_research/graph_standards/native_typescript_2026-09-13/qualification/rdf11-nquads-n3-native-ts.json",
+      "sha256": "e2541d318b3d240dbaab2ed5e8cf476dadd63a8258294ac416dfc0542e03f807",
+      "byte_length": 429,
+      "git_blob": "8a469363455408a9627acc2bee90f753ae0f53bb"
+    },
+    {
+      "path": "_research/graph_standards/native_typescript_2026-09-13/qualification/sparql11-comunica-official-syntax-query.json",
+      "sha256": "ed0ec42df12e76de131678688c43d01b85a8f34f2f33bac54c8dc88a2acf3653",
+      "byte_length": 2239,
+      "git_blob": "19814c8d653a9257a6e3bdc6809a142a09c77011"
+    },
+    {
+      "path": "_research/graph_standards/native_typescript_2026-09-13/qualification/sparql11-traqula-comunica-parser-official-syntax-query.json",
+      "sha256": "2ae599df898270f558bf000cb7c23603cab2fa11bc6c870ac5000a64712cfe80",
+      "byte_length": 951,
+      "git_blob": "7f8a228aab485d8c47475e32889b14839dc859f6"
+    },
+    {
+      "path": "_research/graph_standards/native_typescript_2026-09-13/rdf11-nquads-n3-successor-profile.v1.json",
+      "sha256": "946f906bde85755f3abe30aff31f40e3e1db97a60b7b6a9ea03f3c3378856faf",
+      "byte_length": 2964,
+      "git_blob": "72108dfa321efa8e62ee86adea6520c46e8f41be"
+    },
+    {
+      "path": "_research/graph_standards/native_typescript_2026-09-13/sparql11-comunica-parser-successor-profile.v1.json",
+      "sha256": "06963945200e8f3b8d85881894508a2f097a7c1bcdb58c0ff8536e7d193f284c",
+      "byte_length": 3082,
+      "git_blob": "c0daeac53d79328aec192d941e8a80b61d9aebc6"
+    },
+    {
+      "path": "src/hswm/development/bin/hswm-python",
+      "sha256": "ac3f960827dfba339bccd4e7cd637591b68a616632f5f337477142bb8d4cd6ef",
+      "byte_length": 2539,
+      "git_blob": "b4f15f3aa0ec1dcfa0924b457960ad89414102f9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-infrastructure-smoke",
+      "sha256": "a9c3d28ba355b2a63a570155d33bfa7f62c9dda20738401b76b4002fd63e54e6",
+      "byte_length": 160,
+      "git_blob": "b1bb37d2a9148fa9281903f7a18ef0d45be0be21"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-rdf11-nquads-suite",
+      "sha256": "704c05c29856e73a22adce59b03c6a41d0f4f6baaf037c75df403c37fb6ffc6f",
+      "byte_length": 168,
+      "git_blob": "574e0e5f0edd824ade7d0cff504f5e6a20ebe6a3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-sparql11-syntax-suite",
+      "sha256": "163729c652acb206ec0b8011c6f93be4d9bc41a4b67a4b33ccd25af1d5cae43e",
+      "byte_length": 168,
+      "git_blob": "580af977c1a95ce3840edaf7af7bfe53955c456d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "981cd0af47ca148eef7d1cb47e57fe5fd568539384aba8ebf1d7fc111139c749",
+      "byte_length": 483553,
+      "git_blob": "78ee4bb9a3094cc1800ddfa3d33b0f9fe6ebe324"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package.json",
+      "sha256": "e334c5ab61c15ca575de3e917267a2b20c7e34593b806e3c6b0323e780b8ddbe",
+      "byte_length": 5258,
+      "git_blob": "3700483a19a79e1c75b0a3f71aecad62ef1a7f25"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-suite-runner-process.ts",
+      "sha256": "02ec7c2ec3954fedc4aae73223f63657a434d283ef7589b1b7b1b0a1175104dc",
+      "byte_length": 2693,
+      "git_blob": "e5cb681b7ee05440f185a11e3087f6eb5b4c62fa"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-suite-runner.ts",
+      "sha256": "ea579c260dc790193789ed07fe83aa0141d688411cda65592fa7a49633d06035",
+      "byte_length": 9178,
+      "git_blob": "80fac53124198f9a8d6bea3cec4b555506ad4a4f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-cli.ts",
+      "sha256": "2a031aa533353495cbac3dc62821efb1fe13e86102d42bd45de6ee805ad019ab",
+      "byte_length": 4056,
+      "git_blob": "2264297aacd6aefcdc8c6887b8b1fa1846277f64"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-domain.ts",
+      "sha256": "49d9f03be9483be0ad51fd2c20e3c3e1f3ee7cfa5838c77ddb092af6ffba35c6",
+      "byte_length": 3764,
+      "git_blob": "b048c438c816767a4d156c291fb6b2a87283f2b6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-phoenix.ts",
+      "sha256": "58bd1ffdc991b7b7ad2afb76e27531cf1bdfd26a99008adb66b164048aad8869",
+      "byte_length": 6146,
+      "git_blob": "c6969b9af281c168b6aced23b73ea7d8fb94e0a1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-process.ts",
+      "sha256": "1a40b9ccf67d5a99a60f112ee9d9ace096ba9f79f6d44e4980c30d89acf1c4a5",
+      "byte_length": 351,
+      "git_blob": "3261737bb463668552f51cb433efc809b77274be"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-runtime.ts",
+      "sha256": "125a53262fc02fe6a5b0f2c5b5ce0672e941f00fd284af6e45df3f60fcb61723",
+      "byte_length": 7750,
+      "git_blob": "3bffed98abeddd84c3e2903fd6d614dead854bcd"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-workflow.ts",
+      "sha256": "5ded3ea8ed05ad49393d5c27cff7ba3343d4a2af7459c3b48c73973238606fba",
+      "byte_length": 631,
+      "git_blob": "ab6419600d66bf5e8816f12c3036fdcca2142b3b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-pinned-suite-binding.ts",
+      "sha256": "fa6393d3e7940b3d864fad4a5bd70ffc653b40d6702365ea64d791f3a0b1a66f",
+      "byte_length": 7648,
+      "git_blob": "918a00ee84ce530fe8747d6968a1767ae54db15f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-ports-domain.ts",
+      "sha256": "2ba15fa7bc8473f55e4dd65ad5f9a8303ce72599c10adb49846c4d7fe62dd80d",
+      "byte_length": 13935,
+      "git_blob": "438c977ab8bd7662dae09a5f77a9926fc88b1361"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts",
+      "sha256": "e8016dbc8b234264d1a295ffe473f003b1205ab53bf9814197087f1014bf4ca9",
+      "byte_length": 11322,
+      "git_blob": "720ba694701a01398a374f6197e59964dd2383d8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-operator-domain.ts",
+      "sha256": "b2c4b443b4586a615e0ccadd8a8bf878312a5621a713d81bbbb670be88cde3f2",
+      "byte_length": 10232,
+      "git_blob": "f125584fdce1598f3708dd736af752f0d51c85e9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-training-numeric-domain.ts",
+      "sha256": "7ead6aa16e7f3987001bcf9b1b78f7fdb1850f4b95be1d4e834bda2210a517fc",
+      "byte_length": 17825,
+      "git_blob": "9d7dd16cc00d35a72b479aac3c7ca7c74930de11"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-world-domain.ts",
+      "sha256": "39b3ed9a2ede786b7e048688a0d320144c126ae60879b732e0173c9248844e25",
+      "byte_length": 5268,
+      "git_blob": "3d22fdc15c68b19ea97b3e8f3a0ff69c4088bbe2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-sparql11-syntax-suite-runner-process.ts",
+      "sha256": "45508fc4c9ca78823e700ae4741b7c12aa16ccb1663b1226f64f0c6c26a58393",
+      "byte_length": 2441,
+      "git_blob": "ad5c0aea04fe7bdf53d7a9784aae4b902ef0a035"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-sparql11-syntax-suite-runner.ts",
+      "sha256": "d6e5d53b67058526fe48280220437d6270b9c28d5eb75a9461f26faf3ddbb67f",
+      "byte_length": 5638,
+      "git_blob": "294ae6419904ae40afc1cfc20b1140201b276227"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-graph-standards-suite-runner.test.ts",
+      "sha256": "2b752f30fa3c4a6e976634f6ac8072a10016464f2f9f3db9423dc910b4d458bb",
+      "byte_length": 6178,
+      "git_blob": "953e11b7729a60ac9a46da35e16b44a48e0b7996"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-infrastructure-phoenix-original.test.ts",
+      "sha256": "8529d5bd92b39e25c68f65f84807a6fc4c6284b9c370439cb415b2514723daa0",
+      "byte_length": 1530,
+      "git_blob": "ceacb4ee89ae1d22c6ef11b95b50b5a0b5c7dd45"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-infrastructure-phoenix-stdio.test.ts",
+      "sha256": "15654c6b02e616344b24708b3ed50e8353f29944502bf3ade7e1c7bccde5c688",
+      "byte_length": 2440,
+      "git_blob": "1ad2dcd79a1f80f13d262744454e8df0a6ba635c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-infrastructure-smoke-lifecycle.test.ts",
+      "sha256": "e431bf6a8978f15c170f68f0225f243e97aa3116c661e5e1963300f1fb0ad239",
+      "byte_length": 7903,
+      "git_blob": "c635b7ba4cb366dd690cc3dd5e30c06926647d75"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-infrastructure-smoke.test.ts",
+      "sha256": "b900476a3c7f0e8c3b0fb88bd6072e2ce3766af53747499c94db4106160cc124",
+      "byte_length": 2454,
+      "git_blob": "17974cd510f007a9835a95448f2d3f78b567bd13"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-pinned-suite-binding.test.ts",
+      "sha256": "6175785ee4370ab510e4e851f75e60f731d0b5e026a9ad6a205215dc93914788",
+      "byte_length": 4296,
+      "git_blob": "f51c0071df152ffedc21345852730263b4b920fe"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-ports-domain.test.ts",
+      "sha256": "2919ecbd83e00e5eea658292d828d45defda958baea04e87df8a760e5bfbe376",
+      "byte_length": 2861,
+      "git_blob": "3a1691607a3b662f44b55fc55ab629d5da7a779a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-publication-projection-oracle.test.ts",
+      "sha256": "1379a491614083b3c80545ceabc18b8cf56cb0873bb539b0a6621e78135c1806",
+      "byte_length": 3039,
+      "git_blob": "da0971800bd5ddd42b6c90751d13c0d29f9b9ed2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-fit-domain.test.ts",
+      "sha256": "ec6993058ea82ca4dff25875b39e6a87ee46e5754e07a1d6b9dc26c8cd8ae703",
+      "byte_length": 7120,
+      "git_blob": "ae8703b144e3d6af89f412ee502e84ff9a871b8e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-operator-domain.test.ts",
+      "sha256": "baf4b0d30c69ae6a797fb8fbe17509b0bd0888b2fa57454992c63db44ca40bf9",
+      "byte_length": 4669,
+      "git_blob": "2363a7c74eeced50364ecf0f0c68a7c8798f9de9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-training-numeric-domain.test.ts",
+      "sha256": "8395fe648dfbfbaa532c6388629332b41e0d4e0147f21fe80d3810761adc43de",
+      "byte_length": 6816,
+      "git_blob": "3e490f2e2e9789250d89ba9d9429f2bb7f3ff97c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-world-domain.test.ts",
+      "sha256": "b0b66fb3afb19d8390bc170e29ae8eff7944b1f8b8e94773491d08721abf76c3",
+      "byte_length": 3541,
+      "git_blob": "f875d6fca66a617f64ead94390a66ecf6f8a896c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/tsconfig.build.json",
+      "sha256": "e6871bc458421702109f81d48e78e6d298509b913cc469529ac0dc76439d97d8",
+      "byte_length": 780,
+      "git_blob": "6476d86ebe4d255177b5bd0fe902e9856fdb6f41"
+    },
+    {
+      "path": "src/hswm/effect-runtime/tsconfig.json",
+      "sha256": "333d6cb617da6f51762899bfa1d5b12a9fca33ba3ceefdfd5769bd69df5eaf67",
+      "byte_length": 2157,
+      "git_blob": "eb5fb0952f9a51a9636e296e1a2383b067fdb54f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/tsconfig.temporal-build.json",
+      "sha256": "e43827b95bba422d02bc4a9f7abf3072e429cf08c7e580566863fba30a50c3a6",
+      "byte_length": 836,
+      "git_blob": "886bcbea9593bd648f744a9ec3543894044a297b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/tsconfig.temporal.json",
+      "sha256": "2742be26cdddd87284f524484393c01aeb609d15ad7fd17a3ee0139a0ecd338d",
+      "byte_length": 1033,
+      "git_blob": "43b92e026a57f43646aabb9b6bd9cee7766be4a3"
+    },
+    {
+      "path": "tests/fixtures/native_migration/infrastructure_smoke_v1/phoenix-fake-vendor.original.v1.json",
+      "sha256": "c5b70bdf4675ae4c54ea39d4fbe36bc969e32050c5cca73f246d09a6a600db8a",
+      "byte_length": 13468,
+      "git_blob": "5b7aea95de66878e020130050d552fe2e982c6c9"
+    },
+    {
+      "path": "tests/fixtures/native_migration/infrastructure_smoke_v1/research-fabric-fake-vendor.original.v1.json",
+      "sha256": "8babde70f2ba37faee6c709108f38c8e21dffa07fdcdca153bcc160075793120",
+      "byte_length": 427,
+      "git_blob": "8cdce8ceb1239cb8c1eee8c3f7998aa31e86280d"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_ports_v1/original.v1.json",
+      "sha256": "92d0c9543396b9c323f1a13530951637a89e7ccd245b6f4a3baa009f30f94d0d",
+      "byte_length": 2740777,
+      "git_blob": "83fe4f36291109a7e10f4fd744ac3d8c4ef44348"
+    },
+    {
+      "path": "tests/fixtures/native_migration/publication_compilers_v1/original-python-oracle.v1.json",
+      "sha256": "61a189657dd0030bf4acd8d6f3c1ffa0f35d4ce5af7c01eaaa76c931236fc590",
+      "byte_length": 2619,
+      "git_blob": "f9d1983101aea885e97b71b53fcc69a562c44f36"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_fit_v1/original_all_arms_three_updates.json",
+      "sha256": "7bbc740e3e2a2e96df4a9fab52e6c08a56e42ffe4d9dbbe702ade5295d5b62e8",
+      "byte_length": 59612,
+      "git_blob": "f8ba165a0d7f7121d236d14706b1a3789ecf232a"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_operator_v1/pcap18.original.json",
+      "sha256": "c3bdd22f5785a5cf2350b23695c5b8cd677309e691709d114e3e24e17add83a0",
+      "byte_length": 395,
+      "git_blob": "23d831c2b26fcdbf80821bd59cca7c7caff0e2b8"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_training_numeric_v1/original_batch2.json",
+      "sha256": "3e6d84ff35ef20209a053a39c4fcb435cc747f4c4b89040dbb25f1e77e863b35",
+      "byte_length": 2825,
+      "git_blob": "af34163404115b325103c7740d7b86a03c7cc2e3"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_world_v1/full-domain.original.txt",
+      "sha256": "9b06b80d936501696d16a02d9e9a94ae27796762dde40c59d6fef153ae0a5c65",
+      "byte_length": 437,
+      "git_blob": "62de06d6cfdcec309214227a99617e7881f37b03"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_world_v1/original_python.json",
+      "sha256": "c5395a3789c8f85ded9bf54a71be30b5ba9577c183ed2e5142c114c28c71e003",
+      "byte_length": 2100,
+      "git_blob": "b8b5298476c0f083b0b203b19c5294ba1ee4855f"
+    },
+    {
+      "path": "tests/test_hswm_python_environments.py",
+      "sha256": "5596bfd4d1a7e227b841299a3ee4e1ba15eb76f580488b20dda9b41300fcee8c",
+      "byte_length": 4343,
+      "git_blob": "e2b1e6438eb94fed0b4f8d2918f36ce5a4b4c6ee"
+    }
+  ],
+  "aggregate_validation": {
+    "method": "FINAL_SOURCE_FULL_SUITE_THEN_FAILED_SETUP_SUITE_RERUN_WITHOUT_SOURCE_OR_TEST_CHANGE",
+    "passed_files": 193,
+    "skipped_files": 1,
+    "tests_passed": 1307,
+    "tests_skipped": 10,
+    "full_suite": {
+      "passed_files": 192,
+      "failed_files": 1,
+      "skipped_files": 1,
+      "tests_passed": 1304,
+      "tests_failed": 3,
+      "tests_skipped": 10,
+      "exit_code": 1
+    },
+    "retry": {
+      "suite": "test/native-legacy-replay.integration.test.ts",
+      "passed_files": 1,
+      "tests_passed": 6,
+      "exit_code": 0
+    },
+    "repair": "Made only isolated Git object store standalone; existing materialization refusal retained. Three overlapping successful tests counted once."
+  },
+  "checks": [
+    {
+      "command": "npm run check",
+      "exit_code": 0,
+      "local_log_sha256": "802ac3484c11e061f2a8bfa6743ff681b40fa216471f052a8913602aed708135",
+      "local_log_byte_length": 4078,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "npm test -- --maxWorkers=1",
+      "exit_code": 1,
+      "local_log_sha256": "8cfac8c2bd38a0817c914a02b50e28e9bf65cb635fe4e6dde0a6527e9d8deb59",
+      "local_log_byte_length": 41736,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED",
+      "status": "LEGACY_REPLAY_SETUP_FAILURE"
+    },
+    {
+      "command": "npm test -- test/native-legacy-replay.integration.test.ts --maxWorkers=1",
+      "exit_code": 0,
+      "local_log_sha256": "574e6d976534beee2e4e0418320e7af6380345e51121658d090b1b24fed2fbb3",
+      "local_log_byte_length": 3000,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "local_log_sha256": "51a25d8d4c57a1ea08bb66e4ddd0416369a3279c3984f50d06572439b5862db5",
+      "local_log_byte_length": 105,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "npm run build:dnrd",
+      "exit_code": 0,
+      "local_log_sha256": "6945bc5a754a1883a538f4e388a1748a91b35e4688df1147fa0ee68a86f43975",
+      "local_log_byte_length": 70,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "npm pack --dry-run",
+      "exit_code": 0,
+      "local_log_sha256": "9a9fddd1244aa775ad40165500b453ec8e575a455e5607ff1775b00db1f26c00",
+      "local_log_byte_length": 71044,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology",
+      "exit_code": 0,
+      "local_log_sha256": "4b17f7bf4fd60b53103509f0f6b3590b5cecadac1bbd8fc54cc4bc1a145076ff",
+      "local_log_byte_length": 175,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    }
+  ],
+  "emitted_cli_smokes": [
+    {
+      "name": "infra-help",
+      "entrypoint": "src/hswm/effect-runtime/dist/native-infrastructure-smoke-process.js",
+      "argv": [
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "790da0f803cf14f3e814dd5e5af374dff4304917b1aad4718177df60205c8136",
+      "path_tools": [
+        "node"
+      ],
+      "private_stdout_publication": false
+    },
+    {
+      "name": "rdf-help",
+      "entrypoint": "src/hswm/effect-runtime/dist/native-graph-standards-suite-runner-process.js",
+      "argv": [
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "df2626a9160d7aca8f0e3bdf785f9808faef30571842e513f64a7cc494e307f1",
+      "path_tools": [
+        "node"
+      ],
+      "private_stdout_publication": false
+    },
+    {
+      "name": "sparql-help",
+      "entrypoint": "src/hswm/effect-runtime/dist/native-sparql11-syntax-suite-runner-process.js",
+      "argv": [
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "84ff0934395a1c79095f2ea58f2da0f4bea8b218c1c07f99acf74e542dddd83e",
+      "path_tools": [
+        "node"
+      ],
+      "private_stdout_publication": false
+    },
+    {
+      "name": "phoenix-real-sdk-isolated-wire",
+      "entrypoint": "src/hswm/effect-runtime/dist/native-infrastructure-smoke-process.js",
+      "argv": [
+        "phoenix",
+        "--launcher",
+        "ISOLATED_LOCAL_FIXTURE"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "029a6053f63c8fd5599e5f2b22c66d90a494f74984ef8d5c052de7155ebd96c3",
+      "path_tools": [
+        "node"
+      ],
+      "private_stdout_publication": false
+    },
+    {
+      "name": "rdf11-official-full-syntax",
+      "entrypoint": "src/hswm/effect-runtime/dist/native-graph-standards-suite-runner-process.js",
+      "argv": [
+        "--profile",
+        "rdf11-nquads-n3-native-ts",
+        "--suite-root",
+        "ISOLATED_LOCAL_FIXTURE"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "8ac3fc6d34427db571d5d6278aa59d28e31c703b0b784e2f042cf3660e5b0e77",
+      "path_tools": [
+        "node",
+        "git"
+      ],
+      "private_stdout_publication": false
+    },
+    {
+      "name": "sparql11-official-full-syntax",
+      "entrypoint": "src/hswm/effect-runtime/dist/native-sparql11-syntax-suite-runner-process.js",
+      "argv": [
+        "--profile",
+        "sparql11-traqula-comunica-parser-official-syntax-query",
+        "--suite-root",
+        "ISOLATED_LOCAL_FIXTURE"
+      ],
+      "exit_code": 0,
+      "stdout_sha256": "b46375a7229ad208cf2670650f57803e1ae54d14df3a1820442651cb2bf92093",
+      "path_tools": [
+        "node",
+        "git"
+      ],
+      "private_stdout_publication": false
+    }
+  ],
+  "dependencies": {
+    "lockfile": {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "981cd0af47ca148eef7d1cb47e57fe5fd568539384aba8ebf1d7fc111139c749",
+      "byte_length": 483553,
+      "git_blob": "78ee4bb9a3094cc1800ddfa3d33b0f9fe6ebe324"
+    },
+    "changed_packages": [
+      {
+        "package": "@modelcontextprotocol/client",
+        "version": "2.0.0",
+        "integrity": "sha512-8f1OghQ2rjzIOfqgUCP+8GiUWqRs89njoWLNqAe8kWmDePv3s1fZXseej+QXemssEuuOvLLmLO/kqM3IQHtISw==",
+        "resolved": "https://registry.npmjs.org/@modelcontextprotocol/client/-/client-2.0.0.tgz",
+        "license": "MIT",
+        "authority_class": "OFFICIAL_MCP_SDK",
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/modelcontextprotocol/typescript-sdk.git"
+        }
+      },
+      {
+        "package": "@modelcontextprotocol/core",
+        "version": "2.0.0",
+        "integrity": "sha512-pJCEwGG7Lfr/+PQp9ZTwKXNeO5wzbfKL7H3MYpCorM4oFBoQrdjnBgEoqG+RjhsvS1FKrDbKux+M1HhlnGWqcA==",
+        "resolved": "https://registry.npmjs.org/@modelcontextprotocol/core/-/core-2.0.0.tgz",
+        "license": "MIT",
+        "authority_class": "OFFICIAL_MCP_SDK",
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/modelcontextprotocol/typescript-sdk.git"
+        }
+      },
+      {
+        "package": "cross-spawn",
+        "version": "7.0.6",
+        "integrity": "sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==",
+        "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.6.tgz",
+        "license": "MIT",
+        "authority_class": "LOCKED_INDEPENDENT_TRANSITIVE_IMPLEMENTATION",
+        "repository": {
+          "type": "git",
+          "url": "git@github.com:moxystudio/node-cross-spawn.git"
+        }
+      },
+      {
+        "package": "eventsource",
+        "version": "3.0.7",
+        "integrity": "sha512-CRT1WTyuQoD771GW56XEZFQ/ZoSfWid1alKGDYMmkt2yl8UXrVR4pspqWNEcqKvVIzg6PAltWjxcSSPrboA4iA==",
+        "resolved": "https://registry.npmjs.org/eventsource/-/eventsource-3.0.7.tgz",
+        "license": "MIT",
+        "authority_class": "LOCKED_INDEPENDENT_TRANSITIVE_IMPLEMENTATION",
+        "repository": {
+          "type": "git",
+          "url": "git://git@github.com/EventSource/eventsource.git"
+        }
+      },
+      {
+        "package": "eventsource-parser",
+        "version": "3.1.1",
+        "integrity": "sha512-EKN1vKAMcZ8MlYMpaNuxN6R9yakzH6uajHcHVTqWJzvu5pWw9DyhbP35HH8MVBQ+dZjAfDxk+A8NiR9KWaXiyQ==",
+        "resolved": "https://registry.npmjs.org/eventsource-parser/-/eventsource-parser-3.1.1.tgz",
+        "license": "MIT",
+        "authority_class": "LOCKED_INDEPENDENT_TRANSITIVE_IMPLEMENTATION",
+        "repository": {
+          "type": "git",
+          "url": "git+ssh://git@github.com/rexxars/eventsource-parser.git"
+        }
+      },
+      {
+        "package": "isexe",
+        "version": "2.0.0",
+        "integrity": "sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==",
+        "resolved": "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz",
+        "license": "ISC",
+        "authority_class": "LOCKED_INDEPENDENT_TRANSITIVE_IMPLEMENTATION",
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/isaacs/isexe.git"
+        }
+      },
+      {
+        "package": "jose",
+        "version": "6.2.12",
+        "integrity": "sha512-9NiFmJEex0sy2Dk58j2UGBSHgUs2ypF9eZSu4L6vjOX3Dp96Sw1F3uL+H+D1sx02jZZdzUT0HgvCy59CuvXcWw==",
+        "resolved": "https://registry.npmjs.org/jose/-/jose-6.2.12.tgz",
+        "license": "MIT",
+        "authority_class": "LOCKED_INDEPENDENT_TRANSITIVE_IMPLEMENTATION",
+        "repository": "panva/jose"
+      },
+      {
+        "package": "path-key",
+        "version": "3.1.1",
+        "integrity": "sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==",
+        "resolved": "https://registry.npmjs.org/path-key/-/path-key-3.1.1.tgz",
+        "license": "MIT",
+        "authority_class": "LOCKED_INDEPENDENT_TRANSITIVE_IMPLEMENTATION",
+        "repository": "sindresorhus/path-key"
+      },
+      {
+        "package": "pkce-challenge",
+        "version": "5.0.1",
+        "integrity": "sha512-wQ0b/W4Fr01qtpHlqSqspcj3EhBvimsdh0KlHhH8HRZnMsEa0ea2fTULOXOS9ccQr3om+GcGRk4e+isrZWV8qQ==",
+        "resolved": "https://registry.npmjs.org/pkce-challenge/-/pkce-challenge-5.0.1.tgz",
+        "license": "MIT",
+        "authority_class": "LOCKED_INDEPENDENT_TRANSITIVE_IMPLEMENTATION",
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/crouchcd/pkce-challenge.git"
+        }
+      },
+      {
+        "package": "shebang-command",
+        "version": "2.0.0",
+        "integrity": "sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==",
+        "resolved": "https://registry.npmjs.org/shebang-command/-/shebang-command-2.0.0.tgz",
+        "license": "MIT",
+        "authority_class": "LOCKED_INDEPENDENT_TRANSITIVE_IMPLEMENTATION",
+        "repository": "kevva/shebang-command"
+      },
+      {
+        "package": "shebang-regex",
+        "version": "3.0.0",
+        "integrity": "sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==",
+        "resolved": "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz",
+        "license": "MIT",
+        "authority_class": "LOCKED_INDEPENDENT_TRANSITIVE_IMPLEMENTATION",
+        "repository": "sindresorhus/shebang-regex"
+      },
+      {
+        "package": "which",
+        "version": "2.0.2",
+        "integrity": "sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==",
+        "resolved": "https://registry.npmjs.org/which/-/which-2.0.2.tgz",
+        "license": "ISC",
+        "authority_class": "LOCKED_INDEPENDENT_TRANSITIVE_IMPLEMENTATION",
+        "repository": {
+          "type": "git",
+          "url": "git://github.com/isaacs/node-which.git"
+        }
+      },
+      {
+        "package": "zod",
+        "version": "4.6.4",
+        "integrity": "sha512-AXSD6hvGdvRjajG/l1cC+d6IrhH+sjmPKtYeQdJIK8MFJl3LyClzS+o/YsVC+zQZPupAaeH5skwwm8YqYH7BqA==",
+        "resolved": "https://registry.npmjs.org/zod/-/zod-4.6.4.tgz",
+        "license": "MIT",
+        "authority_class": "LOCKED_INDEPENDENT_TRANSITIVE_IMPLEMENTATION",
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/colinhacks/zod.git"
+        }
+      }
+    ],
+    "official_mcp_sdk": {
+      "package": "@modelcontextprotocol/client",
+      "version": "2.0.0",
+      "source_commit": "cc4b41617ce3601b1290d67216ea0b194a3cd9ac",
+      "license": "MIT",
+      "official_documentation": "https://ts.sdk.modelcontextprotocol.io/v2/"
+    },
+    "sparql_parser": {
+      "package": "@traqula/parser-sparql-1-2",
+      "version": "1.3.0",
+      "source_commit": "fbc00260c1a1b1457f675d51fa1a49dfabf82563",
+      "license": "MIT",
+      "authority_class": "INDEPENDENT_IMPLEMENTATION_NOT_W3C_STANDARD_AUTHORITY"
+    }
+  },
+  "original_contracts": {
+    "phoenix": "12 original fake-vendor acceptance/refusal cases and exact successful output; real official MCP SDK against isolated stdio fixtures with pagination; no live Phoenix SQL executed",
+    "temporal": "Original workflow/activity/search attributes and 5 real SDK span attributes verified through explicitly mocked vendor transport seams; no live Temporal success claim",
+    "s2s_world": "All 15625 finite Z5 worlds target-numerator digest; source-bound fixtures",
+    "s2s_forward_and_gradients": "Three arms; nonzero batch of two. Whole gradient tensors compared after 12-decimal engineering rounding; loss tolerance 5e-14. Not bit-for-bit NumPy/BLAS interchangeability.",
+    "s2s_fit": "Actual original fit_task_operator loop with declared upstream task and downstream receipt seams mocked. Three updates for all three arms; every final parameter and history numeric field compared within 5e-14. Initial hashes exact, post-update hashes retained but not equated. Caller supplies initial parameters; config.seed is retained initialization metadata.",
+    "prom9": "343 original cases: 37 accepted and 306 refused; exact normalized values and digests for accepted cases; all 3 output schemas and hashes. Includes reordered budgets, int-to-float and signed-zero normalization, Unicode whitespace and codepoint filler ceiling."
+  },
+  "preserved_failures": [
+    {
+      "id": "isolated-vitest-duplicate-instance",
+      "status": "SETUP_FAILURE_CORRECTED_FULL_SUITE_RERUN",
+      "failed_files": 194,
+      "tests_executed": 0,
+      "exit_code": 1,
+      "log_sha256": "fd5cc69696530a3f502744b717a81bd84e37141d13d5ade0e4bbc10452eb51a9",
+      "source_pins": [
+        {
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504"
+        },
+        {
+          "path": "_research/graph_standards/native_typescript_2026-09-13/qualification/rdf11-nquads-n3-native-ts.json",
+          "sha256": "e2541d318b3d240dbaab2ed5e8cf476dadd63a8258294ac416dfc0542e03f807"
+        },
+        {
+          "path": "_research/graph_standards/native_typescript_2026-09-13/qualification/sparql11-comunica-official-syntax-query.json",
+          "sha256": "ed0ec42df12e76de131678688c43d01b85a8f34f2f33bac54c8dc88a2acf3653"
+        },
+        {
+          "path": "_research/graph_standards/native_typescript_2026-09-13/qualification/sparql11-traqula-comunica-parser-official-syntax-query.json",
+          "sha256": "2ae599df898270f558bf000cb7c23603cab2fa11bc6c870ac5000a64712cfe80"
+        },
+        {
+          "path": "_research/graph_standards/native_typescript_2026-09-13/rdf11-nquads-n3-successor-profile.v1.json",
+          "sha256": "946f906bde85755f3abe30aff31f40e3e1db97a60b7b6a9ea03f3c3378856faf"
+        },
+        {
+          "path": "_research/graph_standards/native_typescript_2026-09-13/sparql11-comunica-parser-successor-profile.v1.json",
+          "sha256": "06963945200e8f3b8d85881894508a2f097a7c1bcdb58c0ff8536e7d193f284c"
+        },
+        {
+          "path": "src/hswm/development/bin/hswm-python",
+          "sha256": "ac3f960827dfba339bccd4e7cd637591b68a616632f5f337477142bb8d4cd6ef"
+        },
+        {
+          "path": "src/hswm/effect-runtime/bin/hswm-infrastructure-smoke",
+          "sha256": "a9c3d28ba355b2a63a570155d33bfa7f62c9dda20738401b76b4002fd63e54e6"
+        },
+        {
+          "path": "src/hswm/effect-runtime/bin/hswm-rdf11-nquads-suite",
+          "sha256": "704c05c29856e73a22adce59b03c6a41d0f4f6baaf037c75df403c37fb6ffc6f"
+        },
+        {
+          "path": "src/hswm/effect-runtime/bin/hswm-sparql11-syntax-suite",
+          "sha256": "163729c652acb206ec0b8011c6f93be4d9bc41a4b67a4b33ccd25af1d5cae43e"
+        },
+        {
+          "path": "src/hswm/effect-runtime/package-lock.json",
+          "sha256": "981cd0af47ca148eef7d1cb47e57fe5fd568539384aba8ebf1d7fc111139c749"
+        },
+        {
+          "path": "src/hswm/effect-runtime/package.json",
+          "sha256": "e334c5ab61c15ca575de3e917267a2b20c7e34593b806e3c6b0323e780b8ddbe"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-graph-standards-suite-runner-process.ts",
+          "sha256": "02ec7c2ec3954fedc4aae73223f63657a434d283ef7589b1b7b1b0a1175104dc"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-graph-standards-suite-runner.ts",
+          "sha256": "ea579c260dc790193789ed07fe83aa0141d688411cda65592fa7a49633d06035"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-cli.ts",
+          "sha256": "2a031aa533353495cbac3dc62821efb1fe13e86102d42bd45de6ee805ad019ab"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-domain.ts",
+          "sha256": "49d9f03be9483be0ad51fd2c20e3c3e1f3ee7cfa5838c77ddb092af6ffba35c6"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-phoenix.ts",
+          "sha256": "58bd1ffdc991b7b7ad2afb76e27531cf1bdfd26a99008adb66b164048aad8869"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-process.ts",
+          "sha256": "1a40b9ccf67d5a99a60f112ee9d9ace096ba9f79f6d44e4980c30d89acf1c4a5"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-runtime.ts",
+          "sha256": "125a53262fc02fe6a5b0f2c5b5ce0672e941f00fd284af6e45df3f60fcb61723"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-workflow.ts",
+          "sha256": "5ded3ea8ed05ad49393d5c27cff7ba3343d4a2af7459c3b48c73973238606fba"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-pinned-suite-binding.ts",
+          "sha256": "fa6393d3e7940b3d864fad4a5bd70ffc653b40d6702365ea64d791f3a0b1a66f"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-prom9-ports-domain.ts",
+          "sha256": "2ba15fa7bc8473f55e4dd65ad5f9a8303ce72599c10adb49846c4d7fe62dd80d"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts",
+          "sha256": "b3bb5df70f9cf1652fd551463400afdfd430802f50ef8cae2801777b3481572b"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-s2s-operator-domain.ts",
+          "sha256": "48d7f36cf9d7b59871d50d1084aead1901e010739df1ceea82c6c4f64107ef5c"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-s2s-training-numeric-domain.ts",
+          "sha256": "7ead6aa16e7f3987001bcf9b1b78f7fdb1850f4b95be1d4e834bda2210a517fc"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-s2s-world-domain.ts",
+          "sha256": "39b3ed9a2ede786b7e048688a0d320144c126ae60879b732e0173c9248844e25"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-sparql11-syntax-suite-runner-process.ts",
+          "sha256": "45508fc4c9ca78823e700ae4741b7c12aa16ccb1663b1226f64f0c6c26a58393"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-sparql11-syntax-suite-runner.ts",
+          "sha256": "d6e5d53b67058526fe48280220437d6270b9c28d5eb75a9461f26faf3ddbb67f"
+        },
+        {
+          "path": "src/hswm/effect-runtime/test/native-graph-standards-suite-runner.test.ts",
+          "sha256": "2b752f30fa3c4a6e976634f6ac8072a10016464f2f9f3db9423dc910b4d458bb"
+        },
+        {
+          "path": "src/hswm/effect-runtime/test/native-infrastructure-phoenix-original.test.ts",
+          "sha256": "8529d5bd92b39e25c68f65f84807a6fc4c6284b9c370439cb415b2514723daa0"
+        },
+        {
+          "path": "src/hswm/effect-runtime/test/native-infrastructure-phoenix-stdio.test.ts",
+          "sha256": "15654c6b02e616344b24708b3ed50e8353f29944502bf3ade7e1c7bccde5c688"
+        },
+        {
+          "path": "src/hswm/effect-runtime/test/native-infrastructure-smoke-lifecycle.test.ts",
+          "sha256": "e431bf6a8978f15c170f68f0225f243e97aa3116c661e5e1963300f1fb0ad239"
+        },
+        {
+          "path": "src/hswm/effect-runtime/test/native-infrastructure-smoke.test.ts",
+          "sha256": "b900476a3c7f0e8c3b0fb88bd6072e2ce3766af53747499c94db4106160cc124"
+        },
+        {
+          "path": "src/hswm/effect-runtime/test/native-pinned-suite-binding.test.ts",
+          "sha256": "6175785ee4370ab510e4e851f75e60f731d0b5e026a9ad6a205215dc93914788"
+        },
+        {
+          "path": "src/hswm/effect-runtime/test/native-prom9-ports-domain.test.ts",
+          "sha256": "2919ecbd83e00e5eea658292d828d45defda958baea04e87df8a760e5bfbe376"
+        },
+        {
+          "path": "src/hswm/effect-runtime/test/native-publication-projection-oracle.test.ts",
+          "sha256": "1379a491614083b3c80545ceabc18b8cf56cb0873bb539b0a6621e78135c1806"
+        },
+        {
+          "path": "src/hswm/effect-runtime/test/native-s2s-fit-domain.test.ts",
+          "sha256": "ec6993058ea82ca4dff25875b39e6a87ee46e5754e07a1d6b9dc26c8cd8ae703"
+        },
+        {
+          "path": "src/hswm/effect-runtime/test/native-s2s-operator-domain.test.ts",
+          "sha256": "87822dc671367f39a45c4803f8ba08dcfaeec377c0ac7c392f1a05356b6b8c03"
+        },
+        {
+          "path": "src/hswm/effect-runtime/test/native-s2s-training-numeric-domain.test.ts",
+          "sha256": "8395fe648dfbfbaa532c6388629332b41e0d4e0147f21fe80d3810761adc43de"
+        },
+        {
+          "path": "src/hswm/effect-runtime/test/native-s2s-world-domain.test.ts",
+          "sha256": "b0b66fb3afb19d8390bc170e29ae8eff7944b1f8b8e94773491d08721abf76c3"
+        },
+        {
+          "path": "src/hswm/effect-runtime/tsconfig.build.json",
+          "sha256": "e6871bc458421702109f81d48e78e6d298509b913cc469529ac0dc76439d97d8"
+        },
+        {
+          "path": "src/hswm/effect-runtime/tsconfig.json",
+          "sha256": "333d6cb617da6f51762899bfa1d5b12a9fca33ba3ceefdfd5769bd69df5eaf67"
+        },
+        {
+          "path": "src/hswm/effect-runtime/tsconfig.temporal-build.json",
+          "sha256": "e43827b95bba422d02bc4a9f7abf3072e429cf08c7e580566863fba30a50c3a6"
+        },
+        {
+          "path": "src/hswm/effect-runtime/tsconfig.temporal.json",
+          "sha256": "2742be26cdddd87284f524484393c01aeb609d15ad7fd17a3ee0139a0ecd338d"
+        },
+        {
+          "path": "tests/fixtures/native_migration/infrastructure_smoke_v1/phoenix-fake-vendor.original.v1.json",
+          "sha256": "c5b70bdf4675ae4c54ea39d4fbe36bc969e32050c5cca73f246d09a6a600db8a"
+        },
+        {
+          "path": "tests/fixtures/native_migration/infrastructure_smoke_v1/research-fabric-fake-vendor.original.v1.json",
+          "sha256": "8babde70f2ba37faee6c709108f38c8e21dffa07fdcdca153bcc160075793120"
+        },
+        {
+          "path": "tests/fixtures/native_migration/prom9_ports_v1/original.v1.json",
+          "sha256": "92d0c9543396b9c323f1a13530951637a89e7ccd245b6f4a3baa009f30f94d0d"
+        },
+        {
+          "path": "tests/fixtures/native_migration/publication_compilers_v1/original-python-oracle.v1.json",
+          "sha256": "61a189657dd0030bf4acd8d6f3c1ffa0f35d4ce5af7c01eaaa76c931236fc590"
+        },
+        {
+          "path": "tests/fixtures/native_migration/s2s_fit_v1/original_all_arms_three_updates.json",
+          "sha256": "7bbc740e3e2a2e96df4a9fab52e6c08a56e42ffe4d9dbbe702ade5295d5b62e8"
+        },
+        {
+          "path": "tests/fixtures/native_migration/s2s_operator_v1/pcap18.original.json",
+          "sha256": "c3bdd22f5785a5cf2350b23695c5b8cd677309e691709d114e3e24e17add83a0"
+        },
+        {
+          "path": "tests/fixtures/native_migration/s2s_training_numeric_v1/original_batch2.json",
+          "sha256": "3e6d84ff35ef20209a053a39c4fcb435cc747f4c4b89040dbb25f1e77e863b35"
+        },
+        {
+          "path": "tests/fixtures/native_migration/s2s_world_v1/full-domain.original.txt",
+          "sha256": "9b06b80d936501696d16a02d9e9a94ae27796762dde40c59d6fef153ae0a5c65"
+        },
+        {
+          "path": "tests/fixtures/native_migration/s2s_world_v1/original_python.json",
+          "sha256": "c5395a3789c8f85ded9bf54a71be30b5ba9577c183ed2e5142c114c28c71e003"
+        },
+        {
+          "path": "tests/test_hswm_python_environments.py",
+          "sha256": "5596bfd4d1a7e227b841299a3ee4e1ba15eb76f580488b20dda9b41300fcee8c"
+        }
+      ],
+      "finding": "fs.cp default rewrote relative .bin links to absolute original-checkout links, loading two Vitest instances. Re-copied locked dependencies with verbatimSymlinks=true; no exclusion or criterion change. Final full run also includes final DS870 exact-key repair and fit config provenance."
+    },
+    {
+      "id": "isolated-shared-git-objects",
+      "status": "SETUP_REFUSAL_PRESERVED_FAILED_SUITE_RECHECK_PASSED",
+      "finding": "Full final-source run passed 1304 cases and refused 3 legacy materializations because the isolated --shared clone carried object alternates. Repacked only isolated Git objects and removed its alternate after connectivity verification; all 6 tests in that suite rerun without source/test changes. Aggregate counts avoid double counting the 3 already passing cases."
+    },
+    {
+      "id": "sparql-planning-used-as-syntax",
+      "status": "METHOD_INVALID_RETAINED_AND_REPLACED",
+      "source_path": "_research/graph_standards/native_typescript_2026-09-13/qualification/sparql11-comunica-official-syntax-query.json",
+      "finding": "The initial diagnostic used non-selected Node 24.20.0 and QueryEngine planning/execution mixed non-syntax failures into a syntax test: 57/94. Corrected direct parser boundary passes all 94 syntax fixtures without exclusions."
+    },
+    {
+      "id": "loss-only-gradient-overflow",
+      "status": "REPAIRED_WITH_ORIGINAL_COUNTEREXAMPLE",
+      "finding": "Loss-only no longer evaluates reverse mode; preserves finite 1.8465232209337043e275 loss when gradients overflow. Weighted squares are summed before division, preserving original overflow refusal."
+    },
+    {
+      "id": "suite-source-time-of-use",
+      "status": "REPAIRED_WITH_ADVERSARIAL_TEST",
+      "finding": "Exact real subtree and all disk bytes bound to pinned Git blobs; parser checks the exact bytes it consumed against an immutable hash record, including after temporary read substitution."
+    }
+  ],
+  "development_workflow": {
+    "episode": "native-research-dependencies-20260913",
+    "relation": "relation:runtime-focused",
+    "result": "SUCCEEDED",
+    "feedback_status": "FEEDBACK_RECORDED",
+    "usefulness": {
+      "success": true,
+      "source": "agent(codex):useful for native development-route regression; direct original-corpus, numerical counterexamples, full isolated checks and preserved setup failure provide separate evidence; passing checks do not establish causal credit or HSWM efficacy"
+    },
+    "state_storage": "PRIVATE_LOCAL_STATE_NOT_PUBLIC_KG"
+  },
+  "limits": [
+    "Full S2S family/task/dataset/protocol receipt closure and active Python numeric oracle remain unfinished. Native compiled-array fit is not the full research workflow.",
+    "F1 watchdog full judge, run/call receipt validation and token-parity verification remain active Python; typed ports alone do not replace the judge.",
+    "P1 uncached model embedding generation, F3v2 model caller and remaining package/CI compatibility surfaces remain.",
+    "Existing Temporal vendor-declaration compilation lane is reused with its existing skipLibCheck flag; owned code remains strictly checked and no functional/boundary allowlist was expanded.",
+    "Current native CI syntax job added, historical acceptance-locked replay remains unchanged. No live graph write, service deployment, external publication or new scientific result claimed."
+  ]
+}

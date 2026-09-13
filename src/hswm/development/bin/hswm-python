@@ -17,6 +17,17 @@ case "$hswm_python_action" in
   *) echo "Unknown environment: $hswm_python_action" >&2; exit 2 ;;
 esac
 
+# Compatibility entrypoint; infrastructure probes now execute the native runtime.
+if [ "$hswm_python_action" = infra ]; then
+  hswm_python_probe=${1:-}
+  if [ "$#" -gt 0 ]; then shift; fi
+  case "$hswm_python_probe" in
+    fabric|phoenix) ;;
+    *) echo 'infra requires fabric or phoenix; these contact the configured local services.' >&2; exit 2 ;;
+  esac
+  exec "$hswm_python_root/src/hswm/effect-runtime/bin/hswm-infrastructure-smoke" "$hswm_python_probe" "$@"
+fi
+
 case "$(uv --version)" in
   'uv 0.12.3'|'uv 0.12.3 '*) ;;
   *) echo 'This development toolchain requires the pinned uv 0.12.3.' >&2; exit 2 ;;
@@ -47,17 +58,5 @@ case "$hswm_python_action" in
       exit 2
     fi
     exec uv run --project "$hswm_python_project" --no-sync --no-python-downloads -- "$@"
-    ;;
-  infra)
-    hswm_python_probe=${1:-}
-    if [ "$#" -gt 0 ]; then shift; fi
-    case "$hswm_python_probe" in
-      fabric) hswm_python_script='_research/infrastructure_smoke/research_fabric_smoke.py' ;;
-      phoenix) hswm_python_script='_research/infrastructure_smoke/phoenix_viewer_mcp_smoke.py' ;;
-      *) echo 'infra requires fabric or phoenix; these contact the configured local services.' >&2; exit 2 ;;
-    esac
-    # PEP 723 script locks are independent of both project environments.
-    unset UV_PROJECT_ENVIRONMENT VIRTUAL_ENV
-    exec uv run --locked --python 3.12.13 --no-python-downloads --script "$hswm_python_script" "$@"
     ;;
 esac

@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "strict": true,
@@ -19,13 +21,25 @@
     "skipLibCheck": false,
     "baseUrl": ".",
     "paths": {
-      "effect": ["node_modules/effect/dist/dts/index.d.ts"],
-      "@effect/vitest": ["node_modules/@effect/vitest/dist/dts/index.d.ts"],
-      "vitest": ["node_modules/vitest/dist/index.d.ts"],
-      "neo4j-driver": ["node_modules/neo4j-driver/types/index.d.ts"],
-      "n3": ["node_modules/@types/n3/index.d.ts"]
+      "effect": [
+        "node_modules/effect/dist/dts/index.d.ts"
+      ],
+      "@effect/vitest": [
+        "node_modules/@effect/vitest/dist/dts/index.d.ts"
+      ],
+      "vitest": [
+        "node_modules/vitest/dist/index.d.ts"
+      ],
+      "neo4j-driver": [
+        "node_modules/neo4j-driver/types/index.d.ts"
+      ],
+      "n3": [
+        "node_modules/@types/n3/index.d.ts"
+      ]
     },
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "plugins": [
       {
         "name": "@effect/language-service",
@@ -33,7 +47,11 @@
       }
     ]
   },
-  "include": ["src/**/*.ts", "test/**/*.ts", "../../../tests/effect-runtime/**/*.ts"],
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "../../../tests/effect-runtime/**/*.ts"
+  ],
   "exclude": [
     "src/g0-occurrence-temporal-audit.ts",
     "src/g0-occurrence-temporal-activities.ts",
@@ -45,6 +63,12 @@
     "test/g0-occurrence-temporal-runtime.test.ts",
     "test/g0-occurrence-temporal-audit.test.ts",
     "test/g0-occurrence-temporal-worker-process.test.ts",
-    "test/g0-occurrence-temporal.integration.test.ts"
+    "test/g0-occurrence-temporal.integration.test.ts",
+    "src/native-infrastructure-smoke-runtime.ts",
+    "src/native-infrastructure-smoke-workflow.ts",
+    "src/native-infrastructure-smoke-cli.ts",
+    "src/native-infrastructure-smoke-process.ts",
+    "test/native-infrastructure-smoke.test.ts",
+    "test/native-infrastructure-smoke-lifecycle.test.ts"
   ]
 }

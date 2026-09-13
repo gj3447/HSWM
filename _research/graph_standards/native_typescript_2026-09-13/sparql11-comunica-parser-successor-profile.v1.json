@@ -1,0 +1,51 @@
+{
+  "schema_version": "hswm-native-graph-standards-successor-profile/v1",
+  "date": "2026-09-13",
+  "status": "SUCCESSOR_QUALIFICATION_PROFILE_NOT_A_REWRITE_OF_HISTORICAL_ACCEPTANCE_LOCK",
+  "authority": "INDEPENDENT_COMUNICA_PARSER_DEPENDENCY_AGAINST_PINNED_OFFICIAL_W3C_SUITE_NOT_W3C_SDK",
+  "official_source": {
+    "specification": "https://www.w3.org/TR/sparql11-query/",
+    "repository": "https://github.com/w3c/rdf-tests.git",
+    "commit": "369a90d1a60c021b746df2e411da0ff36258a758",
+    "selected_path": "sparql/sparql11/syntax-query",
+    "git_tree_sha1": "153277fe050edd1834234c392081b072201336f4",
+    "git_archive_sha256": "b7470b73dee6854fc42e4b2e8480b96bdcee00ce9e2c7e6b4397d4c43cfbcb40",
+    "manifest_sha256": "10bb104ac4823b9b3bdd356a0c07ccfc00e0b198dbd23453910576e4d538417d",
+    "license_sha256": "7fa36904d5d6d32848307af7b22d416b708aaa0b98f5c719b26adb5ed3594b2a",
+    "license": "W3C Software and Document License; suite manifests declare W3C Test Suite License / W3C 3-clause BSD"
+  },
+  "engine": {
+    "package": "@traqula/parser-sparql-1-2",
+    "version": "1.3.0",
+    "npm_integrity": "sha512-DuWxkjA2yaotgruYxAYodC0DnpPhgB5oaRdLvae/wX1Q6dlJakesVi1veDC+IzLaGMa6jYwfqFN9VydWjHLxqg==",
+    "license": "MIT",
+    "relationship": "This is the syntax parser instantiated by @comunica/actor-query-parse-sparql@5.3.0; direct Parser.parse isolates syntax recognition from QueryEngine planning and execution.",
+    "lockfile": "src/hswm/effect-runtime/package-lock.json",
+    "lockfile_sha256": "981cd0af47ca148eef7d1cb47e57fe5fd568539384aba8ebf1d7fc111139c749",
+    "source_commit": "fbc00260c1a1b1457f675d51fa1a49dfabf82563",
+    "repository": "https://github.com/comunica/traqula.git"
+  },
+  "runner": {
+    "path": "src/hswm/effect-runtime/src/native-sparql11-syntax-suite-runner-process.ts",
+    "sha256": "45508fc4c9ca78823e700ae4741b7c12aa16ccb1663b1226f64f0c6c26a58393"
+  },
+  "domain_runner": {
+    "path": "src/hswm/effect-runtime/src/native-sparql11-syntax-suite-runner.ts",
+    "sha256": "d6e5d53b67058526fe48280220437d6270b9c28d5eb75a9461f26faf3ddbb67f"
+  },
+  "criteria": "Every manifest entry directly typed mf:PositiveSyntaxTest11 or mf:NegativeSyntaxTest11 is selected; mf:action is decoded as a local file and Parser.parse receives its action document IRI as baseIRI. Positive passes on parse acceptance and negative passes on parse rejection.",
+  "expected": {
+    "positive": 63,
+    "negative": 31,
+    "total": 94,
+    "passed": 94,
+    "failed": 0,
+    "excluded": 0
+  },
+  "claim_ceiling": "PINNED_PARSER_SYNTAX_QUALIFICATION_ONLY_NOT_FULL_SPARQL_EVALUATION_CONFORMANCE_OR_HSWM_COGNITION_CANONICAL_ADMISSION_PERMIT_OUTCOME_TRUTH_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+  "source_binding": {
+    "path": "src/hswm/effect-runtime/src/native-pinned-suite-binding.ts",
+    "sha256": "fa6393d3e7940b3d864fad4a5bd70ffc653b40d6702365ea64d791f3a0b1a66f",
+    "contract": "exact real subtree; every disk file byte matches pinned Git blob; exact consumed manifest/action bytes verified before parse; frozen hash record; repeat binding after run"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": "hswm-native-publication-compilers-original-python-oracle/v1",
+  "oracle": "EXACT_ORIGINAL_PYTHON_ONE_TIME_STATIC_FIXTURES",
+  "source_pins": [
+    {
+      "path": "src/hswm/infrastructure/research_tooling_projection.py",
+      "git_commit": "974c64418c9f29248eb538ffa78912bfa12eb0ea",
+      "sha256": "3792cb57220678bdf6a9fcf148629236bb2ebc914a49363bd29289888c43079c"
+    },
+    {
+      "path": "src/hswm/infrastructure/knowledge_map_projection.py",
+      "git_commit": "c57f39a8c33bb86d19cfcaa40b880b944707e53d",
+      "sha256": "7734bc692ab9a8c15369eaf1a440abbe7488bda55a3e24f44d54bcf3161bd318"
+    }
+  ],
+  "positive": {
+    "research_tooling": {
+      "command": "src/hswm/development/bin/hswm-python graph python src/hswm/infrastructure/research_tooling_projection.py --check",
+      "artifact_count": 8,
+      "result": {
+        "bundle_sha256": "f4adc0b76ec8671c193b8520fe53f11156696d1d81c51653ff56727d64a17cbd",
+        "counts": { "anchors": 2, "nodes": 265, "relations": 662 },
+        "query_row_counts": {
+          "Q1_candidate_decisions_and_priority.sparql": 35,
+          "Q2_existing_reuse_mappings.sparql": 76,
+          "Q3_experimental_development_specs.sparql": 4,
+          "Q4_requirement_qualification.sparql": 73,
+          "Q5_adoption_evidence_class_source.sparql": 82,
+          "Q6_missing_source_assessment_orphan_refs.sparql": 0
+        },
+        "source_commit": "c57f39a8c33bb86d19cfcaa40b880b944707e53d"
+      }
+    },
+    "knowledge_map": {
+      "command": "src/hswm/development/bin/hswm-python graph python src/hswm/infrastructure/knowledge_map_projection.py --check",
+      "artifact_count": 8,
+      "result": {
+        "bundle_sha256": "b539c2f217c960d5e02250ec250aaf7434afb6d5665bd4a577b6ec7ebc045cca",
+        "counts": { "anchors": 73, "nodes": 287, "relations": 523 },
+        "query_row_counts": {
+          "Q1_topic_states.sparql": 13,
+          "Q2_current_entrypoints.sparql": 40,
+          "Q3_coverage_obligations.sparql": 16,
+          "Q4_source_status_ambiguities.sparql": 1,
+          "Q5_formal_vs_efficacy.sparql": 16,
+          "Q6_unresolved_source_bundle_uids.sparql": 40
+        },
+        "source_commit": "5cb22703cf42128dd204966087594ad8561a554d",
+        "source_count": 246
+      }
+    }
+  },
+  "negative": {
+    "research_tooling_invalid_json_pointer": "ValueError:curation pointer is not a JSON pointer",
+    "research_tooling_missing_json_pointer": "KeyError:'missing'",
+    "knowledge_map_missing_json_pointer": "KeyError:'missing'",
+    "knowledge_map_out_of_range_json_pointer": "IndexError:list index out of range"
+  }
+}

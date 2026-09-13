@@ -1,0 +1,16 @@
+{
+  "schema_version": "hswm-official-suite-diagnostic/v1",
+  "status": "FAIL",
+  "authority": "INDEPENDENT_NPM_ENGINE_AGAINST_PINNED_OFFICIAL_W3C_SUITE_NOT_W3C_SDK",
+  "standard": "https://www.w3.org/TR/sparql11-query/",
+  "source": {"repository":"https://github.com/w3c/rdf-tests.git","commit":"369a90d1a60c021b746df2e411da0ff36258a758","selected_path":"sparql/sparql11/syntax-query","git_tree_sha1":"153277fe050edd1834234c392081b072201336f4","git_archive_sha256":"b7470b73dee6854fc42e4b2e8480b96bdcee00ce9e2c7e6b4397d4c43cfbcb40","manifest_sha256":"10bb104ac4823b9b3bdd356a0c07ccfc00e0b198dbd23453910576e4d538417d","license_sha256":"7fa36904d5d6d32848307af7b22d416b708aaa0b98f5c719b26adb5ed3594b2a"},
+  "engine": {"package":"@comunica/query-sparql-rdfjs","version":"5.3.0","source_commit":"8a9d8e4a706d64268e1e222b4c561caa47798f72","npm_integrity":"sha512-isXNLwV1PB3hGXtcKXOfV134/X2q53J2ZELS82F07KbHVLoGCwF+DxfQ/gXvPxIatGKO2w0v3At3uAwVPzfZDA==","license":"MIT"},
+  "runtime":{"node":"v24.20.0"},
+  "selection":"All 94 mf:PositiveSyntaxTest11 and mf:NegativeSyntaxTest11 entries directly declared by the pinned syntax-query manifest; no entries excluded.",
+  "execution":"QueryEngine.query(actionText, { sources: [] }) to exercise the supported SPARQL parser entrypoint without a remote source.",
+  "counts":{"positive":63,"negative":31,"total":94,"passed":57,"failed":37,"excluded":0},
+  "failure_semantics":{"expected":"ACCEPT","observed":"REJECT","all_failures_share_this_pair":true},
+  "failure_ids":["test_4","test_21","test_22","test_23","test_24","test_25","test_26","test_27","test_28","test_29","test_30","test_31","test_32","test_33","test_34","test_40","test_41","test_42","test_53","test_54","test_55","test_56","test_57","test_58","test_59","test_63","test_pn_03","test_pn_04","test_pn_05","test_pn_06","test_pn_07","test_pn_08","test_pn_09","test_pp_coll","test_codepoint_escape_01","test_codepoint_boundaries_04","test_codepoint_boundaries_escaped_05"],
+  "failure_id_base":"http://www.w3.org/2009/sparql/docs/tests/data-sparql11/syntax-query/manifest#",
+  "claim_ceiling":"NEGATIVE_ENGINEERING_DIAGNOSTIC_ONLY; 12 SAVED HSWM QUERY GOLDENS ARE NOT OFFICIAL-SPARQL-SUITE CONFORMANCE; NO HSWM COGNITION OR EFFICACY CLAIM"
+}

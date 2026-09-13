@@ -21,14 +21,14 @@ if [ ! -f "$RUN_DIR/suite.json" ]; then
 fi
 
 cd "$BASE" || exit 1
-python3 -m prom_search_hswm.prom_f1_function_network judge \
+src/hswm/effect-runtime/bin/hswm-prom9-f1 judge \
   --suite "$RUN_DIR/suite.json" \
   --gold "$RUN_DIR/gold.separate.json" \
   --output "$RUN_DIR/judgment.json" \
   >> "$RUN_DIR/judge.log" 2>&1
 rc=$?
 if [ $rc -eq 0 ]; then
-  verdict=$(python3 -c "import json;print(json.load(open('$RUN_DIR/judgment.json'))['verdict'])" 2>/dev/null)
+  verdict=$(node -p 'JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8")).verdict' "$RUN_DIR/judgment.json" 2>/dev/null)
   echo "JUDGED verdict=$verdict $(date -Is)" >> "$STATUS"
 else
   echo "JUDGE_FAILED rc=$rc $(date -Is)" >> "$STATUS"

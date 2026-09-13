@@ -1,0 +1,639 @@
+{
+  "schema_version": "hswm-native-engineering-verification/v1",
+  "date": "2026-09-13",
+  "authority_class": "SECONDARY_AI",
+  "source_base_commit": "c04ead22aa607190b086ce4e0af81c76a924a92c",
+  "source_observation": "EXACT_TESTED_ISOLATED_CHECKOUT_BYTES_NOT_AT_BASE_COMMIT",
+  "scope": "F1 offline judgment and bounded suite assembly; Python scalar/text semantics; S2S full family/archive/data/seeded task fit and bounded metric reduction.",
+  "migration_complete": false,
+  "claim_ceiling": "BOUNDED_ENGINEERING_VERIFICATION_NOT_HSWM_EFFICACY",
+  "toolchain": {
+    "node": "24.13.0",
+    "npm": "11.6.2"
+  },
+  "source_pins": [
+    {
+      "path": "scripts/bin_hswm_f1_watchdog.sh",
+      "sha256": "d904af106dbc7a375731d06085d0864f3d8e2ca1a21aa807e755c4923b43fe98",
+      "byte_length": 1185,
+      "git_blob": "15a469035874cd10849877d1f975b58e4601394a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/assets/licenses/NUMPY_NUMERICAL_REFERENCE_NOTICE.txt",
+      "sha256": "5d6c800afbb24c8b49d7864591e4f003f20bec59a2913a2c8b2b12d4130768ff",
+      "byte_length": 6162,
+      "git_blob": "3308af7e102f4aec7428a3629959503b59327ccc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-prom9-f1",
+      "sha256": "922f1d1dac2d6e874dc045de03be8f6519cc795ff9a5a5348ce4c96badcbb132",
+      "byte_length": 148,
+      "git_blob": "b74931bbc5277e6f11009852229c768c756cc368"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "90b790c19cc7ecb9a24b7b1fc7e4fb615ef429e6e793408e8a9cfe0de247074b",
+      "byte_length": 483613,
+      "git_blob": "305934a6b384673372afd0a4cf27611f8ee89c67"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package.json",
+      "sha256": "80cd1046e8d124c466f5fab1416a8ac06f42712270945b64b63cf90ede5cb17d",
+      "byte_length": 5316,
+      "git_blob": "55369b406832624ae65b288409593bc8ced87599"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-gate-domain.ts",
+      "sha256": "278559ebe912129843392c47c92f0257413ac44e6097a5843d87364d972e59b7",
+      "byte_length": 2950,
+      "git_blob": "6dba8191c17c63d2635ca7386326a899856535e1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-cli.ts",
+      "sha256": "19354e2af85f41dbeba638fda7e2a1443b47b5ccc43460212713417090651a2a",
+      "byte_length": 4438,
+      "git_blob": "d889b8abd0b7e3e642097c91b3dfb27a9bf3afcc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-domain.ts",
+      "sha256": "347330cd918608d8db19b4523cab14fa3adc8480866df99a28fea0e0e1beb6f2",
+      "byte_length": 24269,
+      "git_blob": "209113ad87ca8121c1bd5dd54905ddd784b95aa2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-process.ts",
+      "sha256": "5aeebdb6a2e9917c6d9cb7a2052bfa6f196aa188b54c7a4fed8d0b4807f2c7cb",
+      "byte_length": 315,
+      "git_blob": "12eee2505ca5b9ed23351c00ef20fc20f4a14eac"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-run-domain.ts",
+      "sha256": "f89434f5ac0b10e1e4ab261a653426632161e771d1b0e2e81785130dd74af11a",
+      "byte_length": 13827,
+      "git_blob": "f86f0958a0d13a846b8f0499d7309cfb19eb2a1d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-receipt-domain.ts",
+      "sha256": "463e5d81a1a10987082e3138d5eaa23fcaa6c71bb63f4a0fd12e1b1fde5d9fa0",
+      "byte_length": 7006,
+      "git_blob": "0bbac21bdebb71f5be04529b8a3ad3a6d38fc822"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-python-casefold-data.ts",
+      "sha256": "d86e5c44046fdfb1a4b6307ccabef47b1470d42e7f770a932906ec2af3607412",
+      "byte_length": 27002,
+      "git_blob": "7ba235b80cc381f1c5a30e6f16d8a7d1d3d2fcc9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-python-isprintable-data.ts",
+      "sha256": "11c017a7c7cabc9d419062fbea106cbde1fbdf107a755f335af21dfb15b9c43a",
+      "byte_length": 5272,
+      "git_blob": "baad2e8983c2ae877807fc4ebf59aeb468d76c1a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-python-json-semantics-domain.ts",
+      "sha256": "72128aa514aeffacb6d02403417a8a6b9a8cd809d10bc8284b98c0433d54baa7",
+      "byte_length": 3827,
+      "git_blob": "38466282c4f64eab314700c220a9044ce5fd23fe"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-python-mt19937-domain.ts",
+      "sha256": "a8617a45136c62ca4ecd95cf702b0e2b0052ab7a0e5ce3c3ed675d6dff5ea4a4",
+      "byte_length": 2989,
+      "git_blob": "0e0216692d1babeae447a00f70ccebd4c0eaed23"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-python-string-domain.ts",
+      "sha256": "3920f6887f18bfe636a66530bd20763973966e81477da5090aeed3c36d91d029",
+      "byte_length": 3538,
+      "git_blob": "3f1e7d6bd2ca91d0340598d9ad83a6f17a54cbc5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-contiguous-reduction-domain.ts",
+      "sha256": "a7aab6c1599419007635f8b6e2fa523d6192675c074891ef4c8b67bd729cc47a",
+      "byte_length": 1095,
+      "git_blob": "96b518622916eb54c6f8eca2b3597c06944b27a0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-dataset-domain.ts",
+      "sha256": "365e2654183e6d5584d51f1619fa58404c83d1437ac956b00e0e6dca95237a42",
+      "byte_length": 20292,
+      "git_blob": "b868a9fd9dcf7c5342e3bb09f2c0145df9778c05"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-family-domain.ts",
+      "sha256": "61940fc4fbc1c4cd7c45d9cca40682cb31e145801399afbd268741eab9e3fe12",
+      "byte_length": 27044,
+      "git_blob": "fc605b1b8a924d063b097a261c93734143057a3c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts",
+      "sha256": "879828e10de2c82fd941cc16a790ed1ee8ff7fbaa937afb24f883b40cfeca624",
+      "byte_length": 11601,
+      "git_blob": "b700b41fe224ae16b762107ad213b9d749f6c5b1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-initialization-domain.ts",
+      "sha256": "1da6a7e9402ee96dd29423f2daffed536650706d335e07a4acec19445b55822b",
+      "byte_length": 9376,
+      "git_blob": "4e7ccea52603f4cfeca5397126bb228095437f9a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-operator-domain.ts",
+      "sha256": "4551b805ac2c9ffcfbfaa37e646ad43b9a2690720c6a8e61b76b66a3b72fce7d",
+      "byte_length": 10637,
+      "git_blob": "708209a30fcccb9340e7f5d30e790387142289ac"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-protocol-metrics-domain.ts",
+      "sha256": "6ac27d5d67ab515554fe2a66f2c66c04ad9e24e7dcf09b16ec21aa13486c97d6",
+      "byte_length": 7580,
+      "git_blob": "6dbcb05739ffbf0dac73d34864c0b9a15d6576ca"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-task-archive-domain.ts",
+      "sha256": "f72d1f3ba03ca9518b3178b9632852708efd75ce5fdd85a124ee7a5f1d4d0964",
+      "byte_length": 6470,
+      "git_blob": "af39eb9bc648344973892dd7d96f50f3efd8e98a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-task-fit-domain.ts",
+      "sha256": "d6aa707e6090a2c4634eacca3a925c08dcb9707dbc1612d15c2a3ae859c5ccf8",
+      "byte_length": 2548,
+      "git_blob": "f101dc5b4095cc02621bdf2f37bf07a420d26258"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-training-numeric-domain.ts",
+      "sha256": "36eb966d455196e458ff905d142f5e6fad9012ad1c1014148060fcdfd028d576",
+      "byte_length": 17811,
+      "git_blob": "168ce02203d78e04e4f43fce9efbad1455676a07"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-task-json-domain.ts",
+      "sha256": "b22653457155b060f47100562b3258f60070efb6ab9ef33fab8ed31bf7fd4833",
+      "byte_length": 6841,
+      "git_blob": "775cd1221fbae1da9e9bf01d7227d67c92732fa9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-f1-adversarial.test.ts",
+      "sha256": "29d3423b100c4c2e4e0e39bf8f85343ac219ad7d155e42a93f8574fb8442496f",
+      "byte_length": 6417,
+      "git_blob": "659361adb8e55aeb348be77b6ce3b54920659207"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-f1-domain.test.ts",
+      "sha256": "19dd94338539420ab2c22561f85f9cc4ec7dd79bd4b9d683ea97cd25a295ad7e",
+      "byte_length": 2480,
+      "git_blob": "7a4e89c8109c7a5afe02cbc96aaec3010b6c8811"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-f1-run-domain.test.ts",
+      "sha256": "ca384dd9ac2af9ea81bf92a885813ba8ebc53fb6708174107b1aaff0d8ab58af",
+      "byte_length": 5790,
+      "git_blob": "84023a029a3b5f9206a202c4bd8f299d06fd1f87"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-receipt-domain.test.ts",
+      "sha256": "17a9bb4e8f548a024c4171b5390a2f371e59dffcf3b633685f68a63e318d97b1",
+      "byte_length": 6228,
+      "git_blob": "efdc0ed3f528dbb19544381bcaaa0b6bb404a247"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-python-string-domain.test.ts",
+      "sha256": "73b1c2002500c68c65058abdadbbd874c772bdd4586cce44a1564ff486b32782",
+      "byte_length": 1822,
+      "git_blob": "049c09725233d57ced11168057586fd0ba36cd12"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-contiguous-reduction-domain.test.ts",
+      "sha256": "dfe1a054b58303b1a06b69178b0e98915b65c2619dd40854d5fd4fc2cb9b8295",
+      "byte_length": 2709,
+      "git_blob": "d812320ad9e52e3a47302918e76f1e23b59550a7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-dataset-domain.test.ts",
+      "sha256": "84b95a409695e0111fbc5f429584ebc88d2335108c69ccee9c0505e01775e1b5",
+      "byte_length": 7018,
+      "git_blob": "f3c26171302b27cb5e9e440eb74e05e286e07940"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-family-domain.test.ts",
+      "sha256": "6a50ffa0f73bb189b9ac676c2a3f6ec583fabe4dff67fac8fcb1ffb44ba8a951",
+      "byte_length": 7260,
+      "git_blob": "da9a211714360deb3f123e7dc7fb73f4917a5d7b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-initialization-domain.test.ts",
+      "sha256": "626204176e7756e0ebcbd95b6679c2b3cbcabf527fa8442ab23402045b1f129f",
+      "byte_length": 5474,
+      "git_blob": "3834d0d463802ca587cdc0ce39c29f3e90858b26"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-protocol-metrics-domain.test.ts",
+      "sha256": "a067150023677d162f9b4fb4426e61edf168872af3d926e316994d738d927eea",
+      "byte_length": 4836,
+      "git_blob": "d8c07b93a0b77e68c6ea8c60e8ca04ad6947bc41"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-task-archive-domain.test.ts",
+      "sha256": "cd8baf3a3afbf4e994461ae54dd713888b9694892eb3f2fa47b8e976b371f277",
+      "byte_length": 2313,
+      "git_blob": "5b6b307d1cfa8a3c973181acd93e1f7085573fa0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-task-fit-domain.test.ts",
+      "sha256": "5d6050189513f3a9443cb30a03c1c244c296ddf58c9a3ae9e552a54b423ee412",
+      "byte_length": 4752,
+      "git_blob": "ad7ab4cc580b019f4c6d335478ead211e9996e4f"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_f1_run_v1/original.v1.json",
+      "sha256": "52af8b9e0a9c8bc176f5c9aecc936e715e19e23fe8b70fa9f3ad19fb0b85cd6a",
+      "byte_length": 445,
+      "git_blob": "fab9288aaf8a8b27530137dfad1e60b0ecce346b"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_receipts_v1/casefold.original.v1.json",
+      "sha256": "567b1772791d770aaf5d8371f554955e87b5197f07e8395f287e69ce84a025e5",
+      "byte_length": 1090,
+      "git_blob": "2ca369a46fcc55f52389e03e46dec168fd55e46c"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_receipts_v1/original.v1.json",
+      "sha256": "8c8bb2372036ab9efcd47987ed346ff99539457e9c1a885c5c872ab8fd612a19",
+      "byte_length": 15121,
+      "git_blob": "6d1ad25c3670517b8959be2c1a5a6664d84047f5"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_receipts_v1/semantics.original.v1.json",
+      "sha256": "76a615e537c02bf8829dc11961cc18c44937d6ba4a368130c8f3a3ae84661012",
+      "byte_length": 336023,
+      "git_blob": "eb834750a028682174bb760cb46521882ce7aafa"
+    },
+    {
+      "path": "tests/fixtures/native_migration/python_string_v1/original_python.json",
+      "sha256": "92525f4144564715d592f65d196001ef445400dca23391ee44f7109b3bd57346",
+      "byte_length": 1216,
+      "git_blob": "829efcb8e1897aeb0bdfe236caac601855445887"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_dataset_v1/multi_task_original_python.json",
+      "sha256": "98cac653384e5e3a0a37a713876bc50cb14ead885a1693346fde0089ce4c3aff",
+      "byte_length": 1066,
+      "git_blob": "98eb9240efb1c8ebf6d57cf36f9da503b931c24b"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_dataset_v1/original_python.json",
+      "sha256": "573f7d5727d2da792865b73608b4669a144332b0d7c0b03fa860bb091a2b92c7",
+      "byte_length": 4883,
+      "git_blob": "c8ee72561cc1618a347a7e86b3ee3583db057057"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_family_v2/archive.original.v1.json",
+      "sha256": "7bd14162bffb2f7ac785cb5603016cf4cd19ef6d8c62fa739c15d8cc3eb03b42",
+      "byte_length": 134275,
+      "git_blob": "0a4aa42f86368f79819aaa33e199246cd40bb642"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_family_v2/original_python.json",
+      "sha256": "4d66f4a5800ae1f1ea606fb7f8d2cecc0eef3dd109a6ecf2dff3c2883c456d10",
+      "byte_length": 16736,
+      "git_blob": "6c22b541a1dcca151114647b8bcd4aa977b100a8"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_fit_v1/original_full_task_three_updates.json",
+      "sha256": "5f69e701335026cb25aea5c20ec7d9f7be83a041eb7d85c14e2598d6b557ae78",
+      "byte_length": 143114,
+      "git_blob": "ba8aa87fa6aeaf94bc5358a7ec545d195d98eb7d"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_initialization_v1/official_numpy_source_provenance.json",
+      "sha256": "9a92ffb6667b7e39b5608052f489547673ec1428831d41f758420b9ec4f9ab60",
+      "byte_length": 1279,
+      "git_blob": "3a62da64c9fb1a96b5b10f195e2c297e2088d5f3"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_initialization_v1/original_python.json",
+      "sha256": "3011a446109f08de43253b2840eaafcb2f120c33080920456735b4852c690b67",
+      "byte_length": 9478,
+      "git_blob": "527b0810107330baec784e2a8dfce80bf0ab8f50"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_protocol_metrics_v1/original_python.json",
+      "sha256": "5035d2802ce8df82537af0e6531e4432fbf123dfdb6a17a18d052a3de14b3211",
+      "byte_length": 20501,
+      "git_blob": "b5696fa6a36ef66ee74122ca7d3703b40b649d3a"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_reduction_v1/original_numpy_x86_v2.json",
+      "sha256": "a5a1f8e8cdedfd16d4f0a9e736605299de667010b7960209f99bfb7c69c1055a",
+      "byte_length": 4608,
+      "git_blob": "862d4cbd63f6bac63e534f4805e7e6f7bb0498fc"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/bigint_tokens.gold.json",
+      "sha256": "42194ccb6ed895de5cb8a46ecb007d496a78421e64526542271e9e2f20e333d4",
+      "byte_length": 1254,
+      "git_blob": "cf209ca51c53e7ede0d33a3e026a99a84507d8a5"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/bigint_tokens.suite.json",
+      "sha256": "0b0de163122a957eb8ed8b393cbfe79e0313ef31b53507e62d2dec09f9fe18fc",
+      "byte_length": 592395,
+      "git_blob": "027533d1a1e3294585d2c43d6a3c942e0d042117"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/control_ws.gold.json",
+      "sha256": "b31b157a7e846fd7817ac9cdf46982dc0021d5315f27d4b826b6e9c57851268e",
+      "byte_length": 1215,
+      "git_blob": "af2598dd22594adbdac79219226aaec195cb3eab"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/control_ws.suite.json",
+      "sha256": "b9996c88578b2ba244102a33bd72ec0ffc0a61ac5bb79f963d0d10ca9031d341",
+      "byte_length": 588368,
+      "git_blob": "c836b684bffa326b830ec2980886a4882e25fd2f"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/mixed_development.gold.json",
+      "sha256": "bab4f26d47029444fe7a1634eda188b1f253dca8bed103d40d86ee01406f917f",
+      "byte_length": 1290,
+      "git_blob": "d283c96587e273d5662c0f4746391f7a78ac9e6a"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/mixed_development.suite.json",
+      "sha256": "ef987f5689f28ae08721240ed155832878bfa2b7fb01a9ff43ce40e95d7bac89",
+      "byte_length": 590404,
+      "git_blob": "8157667d635e911f4c82afca449d3d48d8895b4f"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/model_pair_collision.gold.json",
+      "sha256": "38c0a3b28a014c4226142ad22b1ec3da30d445fb123538cfd839b5c8a8e916da",
+      "byte_length": 1317,
+      "git_blob": "1d03aae69fb933487649095907c1d04f50b83e1d"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/model_pair_collision.suite.json",
+      "sha256": "829190706808bf7f09e0645f2f76ad3bda63febc3d7077f0a7a249b0f81e6a81",
+      "byte_length": 587818,
+      "git_blob": "ea514d18dcaff99ae94cca707522a4280a3dc568"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/negative.gold.json",
+      "sha256": "cac471f1ea854374123e471a865a90c32b7a2ac0375027c4e4d16a4c5a4be059",
+      "byte_length": 1209,
+      "git_blob": "4695ff8f2e53cd030ec774497cf55c1a5e79201e"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/negative.suite.json",
+      "sha256": "a1ef082fab850364c30d4a38fc14f33f267d122c5d02c28f910f639658b1559a",
+      "byte_length": 586552,
+      "git_blob": "1f4966da5a24ed098c239c6f939570392d87089f"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/original.v1.json",
+      "sha256": "95d4ba4dce8815a69a25b2fec6002f03d4a352f9d08b3378f1398b77631f38b2",
+      "byte_length": 133814,
+      "git_blob": "2de28a40327c02e2ce5740dc7bf0f217671996a2"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/positive.gold.json",
+      "sha256": "f8df9c27f940900ca3ee6b80dc105733ef23414eb9b55376c08babfcd66b9fa4",
+      "byte_length": 1209,
+      "git_blob": "8481b7e378a48dfa995864f537881aa6f3f230d3"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/positive.suite.json",
+      "sha256": "009cd9c89e9a0747e23e7fc6f335bb49d3da957762f8dd71ed7743ac49f7993d",
+      "byte_length": 587710,
+      "git_blob": "3564c99750e807808822de3f7f206d25aad98a99"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/unicode_casefold.gold.json",
+      "sha256": "32c297b11d29e1febb5066d288b97636413c2a29eb929684df5313060426e790",
+      "byte_length": 1270,
+      "git_blob": "76c5d65f23e7e2342c6c88b1fbfa7da8e6207eca"
+    },
+    {
+      "path": "tests/fixtures/prom9_f1_v1/unicode_casefold.suite.json",
+      "sha256": "613018532d119d0d068711444c7e9606c3508de6dba2de34075321dbb3459231",
+      "byte_length": 590320,
+      "git_blob": "7f8bf3eed94e32fb15d7895ce7c1ffb3d2cd3cda"
+    }
+  ],
+  "aggregate_validation": {
+    "passed_files": 205,
+    "skipped_files": 1,
+    "tests_passed": 1344,
+    "tests_skipped": 10,
+    "scope": "COMBINED_COMPLETE_FINAL_SOURCE_RUN_AND_UNCHANGED_FAILED_SUITE_RECHECK",
+    "full_run": {
+      "passed_files": 204,
+      "failed_files": 1,
+      "skipped_files": 1,
+      "tests_passed": 1335,
+      "tests_skipped": 19
+    },
+    "recheck": {
+      "file": "test/s2s-live-drand.test.ts",
+      "tests_passed": 9
+    },
+    "skip_scope": "10 EXISTING_OPT_IN_CASES; 9 INITIAL_BEFOREALL_BLOCKED_CASES_RECHECKED_AND_NO_LONGER_SKIPPED"
+  },
+  "checks": [
+    {
+      "command": "npm run check",
+      "exit_code": 0,
+      "local_log_sha256": "76baa08f8c21b608f39112045e04339aeecb512ff5fd685bb008bd51340c3527",
+      "local_log_byte_length": 4653,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "npm test -- --maxWorkers=1",
+      "exit_code": 1,
+      "local_log_sha256": "6ee2d6f94c49874feed89c1c45f27a2d0e103ca44a4177ec3e56b06cd3fa672c",
+      "local_log_byte_length": 40567,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "npm test -- test/s2s-live-drand.test.ts --maxWorkers=1",
+      "exit_code": 0,
+      "local_log_sha256": "98046e981254bd5169e7681bed3dbc7bae49e4941c36277b618bff247fa96abd",
+      "local_log_byte_length": 609,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "local_log_sha256": "51a25d8d4c57a1ea08bb66e4ddd0416369a3279c3984f50d06572439b5862db5",
+      "local_log_byte_length": 105,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "npm run build:dnrd",
+      "exit_code": 0,
+      "local_log_sha256": "6945bc5a754a1883a538f4e388a1748a91b35e4688df1147fa0ee68a86f43975",
+      "local_log_byte_length": 70,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "npm --prefix src/hswm/effect-runtime pack --dry-run",
+      "exit_code": 254,
+      "local_log_sha256": "bbba8676e9a8b790c517054c2518f22cbbee37bff28b258f1cd87e1bfa1396b6",
+      "local_log_byte_length": 494,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "npm pack --dry-run (runtime package working directory)",
+      "exit_code": 0,
+      "local_log_sha256": "f7a49b17b1cdd4ae8445f79c7257b232aff77768f9bf2dad53be624cae220cbf",
+      "local_log_byte_length": 75867,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    },
+    {
+      "command": "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology",
+      "exit_code": 0,
+      "local_log_sha256": "4b17f7bf4fd60b53103509f0f6b3590b5cecadac1bbd8fc54cc4bc1a145076ff",
+      "local_log_byte_length": 175,
+      "raw_log_publication": "PRIVATE_LOCAL_ENGINEERING_OUTPUT_NOT_INCLUDED"
+    }
+  ],
+  "emitted_cli_smokes": {
+    "classification": "SYNTHETIC_ENGINEERING_FIXTURE_NOT_RESEARCH",
+    "environment": "Pinned Node 24.13.0; PATH contains only node and dirname; shell launcher invoked directly",
+    "cases": [
+      {
+        "name": "executable-launcher-help",
+        "exit_code": 0
+      },
+      {
+        "name": "full-original-positive-judgment",
+        "exit_code": 0,
+        "output_sha256": "2c5e2eb768136220f5cffa62feb730ead7404bef977c10c1907afeeba737ad9c",
+        "evaluator_receipt_sha256": "9c226706a0a5c5f1187896910c698f6d9b30f054688e337a57bc64445faf03d9"
+      },
+      {
+        "name": "identical-republication-refused-and-bytes-preserved",
+        "exit_code": 2
+      },
+      {
+        "name": "watchdog-source-shell-syntax",
+        "exit_code": 0
+      }
+    ],
+    "private_output_publication": "NONE",
+    "temporary_directory_retained": true
+  },
+  "original_contracts": {
+    "f1_judge": "Full canonical original judgments for 6 synthetic suite/gold pairs at 2 bootstrap seeds plus original refusal; source dev-r5 replay. Synthetic fixtures are not scientific results.",
+    "f1_suite_assembly": "Exact dev-r5 suite receipt from externally supplied sealed runs; registry construction, envelope projection, BPE, model execution and spool remain outside this boundary.",
+    "call_and_run_receipts": "4 original cases plus 68 semantics cases, including 43 accepted and 25 refused in the expanded corpus.",
+    "python_text": "Python 3.12 Unicode 15 casefold and repr/str semantics; generated tables source-pinned, printable classification checked across all Unicode codepoints.",
+    "s2s_family_archive": "Source-bound SHAKE task draws and canonical hashes; exact original archive parsing and batch duplicate provenance. Dense frozen data-only admission rejects accessors before evaluating them.",
+    "s2s_dataset": "Complete 15625-case task domain; 6250 train, 3125 dev, 6250 test. Three original tasks, exact dataset commitments and rational-to-Float64 rounding.",
+    "s2s_initialization": "PCG64/SeedSequence: 57 raw tensor byte hashes across three arms and uint64 boundary seeds match original NumPy.",
+    "s2s_full_task_fit": "Four unmocked original full-task runs: P_CAP18/T16/DS870 at learning rate 0.01 and T16 at 0.0001, three updates. Complete histories and final parameter arrays use unchanged 5e-14 relative/absolute engineering tolerance. Initial and dataset hashes exact; post-update original hashes retained without claiming universal byte interchangeability. No protocol receipt issued.",
+    "s2s_reduction": "Official NumPy 2.5.2 resolved commit 48fecee5453aa1d31e6b79dcb3969dc1a6d1a891; selected X86_V2 two-double-lane non-FMA einsum reduction. Length16/18 cancellation/tail and repeated source-dot cases exact. This is a fixed reference kernel, not universal BLAS conformance.",
+    "s2s_metrics": "Exact bounded _metric_values Q/B/R/C arithmetic from already supplied eight score variants; receipt construction, integrity and final task/bootstrap admission remain unfinished."
+  },
+  "dependencies": {
+    "lockfile": {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "90b790c19cc7ecb9a24b7b1fc7e4fb615ef429e6e793408e8a9cfe0de247074b",
+      "byte_length": 483613,
+      "git_blob": "305934a6b384673372afd0a4cf27611f8ee89c67"
+    },
+    "changed_package_dependencies": [],
+    "official_numpy_reference": {
+      "path": "tests/fixtures/native_migration/s2s_initialization_v1/official_numpy_source_provenance.json",
+      "sha256": "9a92ffb6667b7e39b5608052f489547673ec1428831d41f758420b9ec4f9ab60",
+      "byte_length": 1279,
+      "git_blob": "3a62da64c9fb1a96b5b10f195e2c297e2088d5f3"
+    },
+    "license_notice": {
+      "path": "src/hswm/effect-runtime/assets/licenses/NUMPY_NUMERICAL_REFERENCE_NOTICE.txt",
+      "sha256": "5d6c800afbb24c8b49d7864591e4f003f20bec59a2913a2c8b2b12d4130768ff",
+      "byte_length": 6162,
+      "git_blob": "3308af7e102f4aec7428a3629959503b59327ccc"
+    }
+  },
+  "preserved_failures": [
+    {
+      "id": "isolated-drand-dependency-omission",
+      "status": "SETUP_REFUSAL_PRESERVED_FAILED_SUITE_RECHECK_PASSED",
+      "finding": "The complete isolated run passed 1335 tests but its drand suite beforeAll refused absent tools/swm0w_drand/node_modules. Copied the existing pinned dependency tree with verbatim symlinks; all 9 unchanged cases passed, including source/runtime hash verification. Combined result is 1344 passed and 10 existing opt-in skipped; this is not a single green full run."
+    },
+    {
+      "id": "full-task-floating-grouping",
+      "status": "REPAIRED_UNCHANGED_5E_MINUS14_TOLERANCE",
+      "finding": "Full original unmocked T16 task training exposed update-2 loss error 0.27362306299351147. Matching source multiplication and separated forward/backward sum groups reduced the error but left approximately 9.21e-10. The source-pinned two-lane non-FMA NumPy einsum reduction repaired the complete four-fit comparison. All earlier failures remain observations; small two-row fixtures alone were insufficient.",
+      "local_evidence": [
+        {
+          "local_log_basename": "hswm-native-full-task-fit-test.log",
+          "sha256": "de75baed7d18bf1452bd1b37534578cb73c6e26abac704ddb4880171ef4c336a",
+          "byte_length": 1501
+        },
+        {
+          "local_log_basename": "hswm-native-full-task-fit-before-forward-grouping.json",
+          "sha256": "7a5545954b12c3cfc958984c5c29f47d02d023954ab6155a133b4bb5c4b13633",
+          "byte_length": 38884
+        },
+        {
+          "local_log_basename": "hswm-native-full-task-fit-before-backward-grouping.json",
+          "sha256": "9fa82962401d3c7b7e0789d13a606092506024d521fa492822351b4ec646f2a3",
+          "byte_length": 38886
+        }
+      ]
+    },
+    {
+      "id": "original-archive-oracle-harness",
+      "status": "HARNESS_ERROR_CORRECTED_NOT_COUNTED_AS_MODEL_REFUSAL",
+      "finding": "An initial harness called a nonexistent canonical_json member, classifying all cases as refusals. Corrected the harness to the actual worlds canonicalizer and exact exception class; final 45 original cases contain 5 accepted and 40 refused.",
+      "local_evidence": [
+        {
+          "local_log_basename": "hswm-s2s-archive-oracle-harness-failure.json",
+          "sha256": "8dd29e8603e475f7e83e394bf3d8f47abd15ae0875baff0745be5eb5568c8e4f",
+          "byte_length": 116847
+        }
+      ]
+    },
+    {
+      "id": "mt19937-in-place-twist",
+      "status": "REPAIRED_ORIGINAL_72_BOOTSTRAP_VECTORS_PRESERVED",
+      "finding": "An immutable port initially read every twist word from the old state, changing Python MT19937 recurrence. Local private-copy sequential replacement restores the original state transition; 72 independent original bootstrap vectors remain mandatory."
+    },
+    {
+      "id": "receipt-boundary-and-output-aliases",
+      "status": "REPAIRED_WITH_RESEALED_AND_RUNTIME_COUNTEREXAMPLES",
+      "finding": "Repaired float/int/bool and Unicode semantics, incorrect task binding, sparse arrays, accessor execution, nested mutable result aliases, and cleanup that could unlink a preexisting partial file. F1 repeated output stays strictly no-replace, including identical bytes."
+    },
+    {
+      "id": "f1-inherited-validation-ceiling",
+      "status": "ORIGINAL_WEAKNESS_PRESERVED_NOT_PROMOTED",
+      "finding": "The source-compatible offline judge preserves original duplicate item-arm map overwrite and shallow envelope-projection field checks. The new assembly API rejects duplicates and requires nonblank string identities as an explicit stricter native admission boundary; it is not an exact replacement for all permissive original inputs."
+    },
+    {
+      "id": "npm-pack-working-directory",
+      "status": "INVOCATION_ERROR_CORRECTED",
+      "finding": "npm --prefix ... pack --dry-run sought package.json at checkout root and exited 254. Re-ran npm pack --dry-run from the actual runtime package directory without source or criteria changes."
+    }
+  ],
+  "development_workflow": {
+    "episode": "native-research-closure-20260913",
+    "relation": "relation:runtime-focused",
+    "result": "SUCCEEDED",
+    "feedback_status": "FEEDBACK_RECORDED",
+    "usefulness": {
+      "success": true,
+      "source": "agent(codex):useful runtime regression; independent full-task original comparison exposed numerical grouping errors and passes unchanged tolerance after repair; no causal credit or HSWM efficacy established"
+    },
+    "state_storage": "PRIVATE_LOCAL_STATE_NOT_PUBLIC_KG"
+  },
+  "limits": [
+    "Full migration remains incomplete. Active S2S protocol/pilot/live Python oracle and candidate stack still need native closure and backend qualification.",
+    "F1 live model execution, original registry/manifest constructor dependencies, durable spool and tokenizer remain active Python; switching the offline watchdog is not full F1 migration.",
+    "P1 uncached embedding and F3v2 model/runtime closure remain; frozen model weights must not be silently replaced by later ONNX artifacts.",
+    "Native F1 CLI adds a 64MiB file bound and reports typed failures with exit 2; original runtime exceptions often exit 1. No claim of identical command-line parser semantics.",
+    "No new scientific result, causal credit, HSWM efficacy, live KG publication or deployment. Existing RED findings and USER_PRIMARY target commitments are preserved."
+  ]
+}

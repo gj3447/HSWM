@@ -5,9 +5,12 @@ class TaskFloat {
   private constructor(readonly value: number) { Object.freeze(this) }
   static fromFiniteToken(token: string): TaskFloat { return new TaskFloat(Number(token)) }
 }
+/** Preserve a Python JSON float lexeme when constructing a native result. */
+export const nativeTaskFloat = (value: number): TaskNumber | undefined => Number.isFinite(value) ? TaskFloat.fromFiniteToken(taskFloatText(value)) : undefined
 export type TaskNumber = number | bigint | TaskFloat
 export type TaskJson = null | boolean | string | TaskNumber | readonly TaskJson[] | {readonly [key: string]: TaskJson}
 export const taskNumberValue = (n: TaskNumber): number | bigint => n instanceof TaskFloat ? n.value : n
+export const taskNumberIsFloat = (n: TaskJson | undefined): boolean => n instanceof TaskFloat
 export const isTaskNumber = (n: TaskJson): n is TaskNumber => typeof n === "bigint" || typeof n === "number" && Number.isFinite(n) || n instanceof TaskFloat && Number.isFinite(n.value)
 export const taskJsonRecord = (v: TaskJson): v is {readonly [key: string]: TaskJson} => typeof v === "object" && v !== null && !Array.isArray(v) && !(v instanceof TaskFloat)
 export const validNativeTaskJson = (value: unknown, depth = 0): value is TaskJson => {
@@ -22,6 +25,17 @@ export const validNativeTaskJson = (value: unknown, depth = 0): value is TaskJso
 export const taskTextCompare = (a: string, b: string): number => Buffer.compare(Buffer.from(a), Buffer.from(b))
 const pointer = (path: string, key: string | number): string => `${path}/${String(key).replaceAll("~", "~0").replaceAll("/", "~1")}`
 const sourceKeyOrder = Symbol("task-json-source-key-order")
+export const nativeTaskSourceKeys = (value: {readonly [key: string]: TaskJson}): readonly string[] => Object.freeze([...(value as {[sourceKeyOrder]?: readonly string[]})[sourceKeyOrder] ?? Object.keys(value)])
+/** Immutable copy with original dictionary insertion order and numeric kinds retained. */
+export const snapshotNativeTaskJson = (value: TaskJson): TaskJson => {
+  if (Array.isArray(value)) return Object.freeze(value.map(snapshotNativeTaskJson))
+  if (taskJsonRecord(value)) {
+    const keys = nativeTaskSourceKeys(value)
+    const copied = Object.fromEntries(keys.map(key => [key, snapshotNativeTaskJson(value[key]!)]))
+    return Object.freeze(Object.defineProperty(copied, sourceKeyOrder, {value: keys, enumerable: false}))
+  }
+  return value
+}
 export const decodeNativeTaskJson = (bytes: Uint8Array, options: GeneralJsonOptions = {}) => decodeGeneralJsonThroughNumberLexemes(bytes, decoded => {
   const restore = (value: GeneralJson, path: string): TaskJson => {
     if (typeof value === "number") {

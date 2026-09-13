@@ -1,0 +1,128 @@
+[
+  {
+    "name": {
+      "kind": "literal",
+      "value": "mt19937-in-place-twist"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "REPAIRED_ORIGINAL_72_BOOTSTRAP_VECTORS_PRESERVED"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "An immutable port initially read every twist word from the old state, changing Python MT19937 recurrence. Local private-copy sequential replacement restores the original state transition; 72 independent original bootstrap vectors remain mandatory."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/closure-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "original-archive-oracle-harness"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "HARNESS_ERROR_CORRECTED_NOT_COUNTED_AS_MODEL_REFUSAL"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "An initial harness called a nonexistent canonical_json member, classifying all cases as refusals. Corrected the harness to the actual worlds canonicalizer and exact exception class; final 45 original cases contain 5 accepted and 40 refused."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/closure-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "full-task-floating-grouping"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "REPAIRED_UNCHANGED_5E_MINUS14_TOLERANCE"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "Full original unmocked T16 task training exposed update-2 loss error 0.27362306299351147. Matching source multiplication and separated forward/backward sum groups reduced the error but left approximately 9.21e-10. The source-pinned two-lane non-FMA NumPy einsum reduction repaired the complete four-fit comparison. All earlier failures remain observations; small two-row fixtures alone were insufficient."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/closure-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "receipt-boundary-and-output-aliases"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "REPAIRED_WITH_RESEALED_AND_RUNTIME_COUNTEREXAMPLES"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "Repaired float/int/bool and Unicode semantics, incorrect task binding, sparse arrays, accessor execution, nested mutable result aliases, and cleanup that could unlink a preexisting partial file. F1 repeated output stays strictly no-replace, including identical bytes."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/closure-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "isolated-drand-dependency-omission"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "SETUP_REFUSAL_PRESERVED_FAILED_SUITE_RECHECK_PASSED"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "The complete isolated run passed 1335 tests but its drand suite beforeAll refused absent tools/swm0w_drand/node_modules. Copied the existing pinned dependency tree with verbatim symlinks; all 9 unchanged cases passed, including source/runtime hash verification. Combined result is 1344 passed and 10 existing opt-in skipped; this is not a single green full run."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/closure-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "f1-inherited-validation-ceiling"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "ORIGINAL_WEAKNESS_PRESERVED_NOT_PROMOTED"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "The source-compatible offline judge preserves original duplicate item-arm map overwrite and shallow envelope-projection field checks. The new assembly API rejects duplicates and requires nonblank string identities as an explicit stricter native admission boundary; it is not an exact replacement for all permissive original inputs."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/closure-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "npm-pack-working-directory"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "INVOCATION_ERROR_CORRECTED"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "npm --prefix ... pack --dry-run sought package.json at checkout root and exited 254. Re-ran npm pack --dry-run from the actual runtime package directory without source or criteria changes."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/closure-verification.v1.json"
+    }
+  }
+]

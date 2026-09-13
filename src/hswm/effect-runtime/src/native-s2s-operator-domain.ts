@@ -1,5 +1,6 @@
 /** Native deterministic P_CAP18 one-sweep forward projection; no training path. */
 import { Data, Either } from "effect";
+import { sumNativeS2SContiguousProducts } from "./native-s2s-contiguous-reduction-domain.js";
 export const NATIVE_S2S_OPERATOR_SOURCE_SHA256 = "7b16eccc74059c6c6dd537ea219c458d7015eadf070d77e1c34ad75c2c828151" as const;
 export class NativeS2SOperatorError extends Data.TaggedError("NativeS2SOperatorError")<{
     readonly reason: "INPUT_INVALID" | "PARAMETERS_INVALID" | "OUTPUT_INVALID";
@@ -67,15 +68,13 @@ export const forwardNativeS2SPCap18 = (input: readonly number[], parameters: Nat
         for (member = 0; member < 2; member += 1) {
             const channels: number[] = [];
             for (let channel = 0; channel < 2; channel += 1) {
-                let total = parameters.outB[role * 2 + channel]!;
-                for (let h = 0; h < 18; h += 1) {
-                    const uh = u[role]![member]![h]!;
-                    total += uh * parameters.unaryW[(role * 2 + channel) * 18 + h]!;
-                    for (let source = 0; source < 3; source += 1) {
-                        const v = source === role ? encoded[source]![1 - member]![h]! : encoded[source]![0]![h]! + encoded[source]![1]![h]!;
-                        total += uh * v * parameters.pairW[((role * 3 + source) * 2 + channel) * 18 + h]!;
-                    }
-                }
+                let unary = 0, pair = 0;
+                unary = sumNativeS2SContiguousProducts(18, h => u[role]![member]![h]! * parameters.unaryW[(role*2+channel)*18+h]!);
+                for (let source = 0; source < 3; source++) pair += sumNativeS2SContiguousProducts(18, h => {
+                    const v = source === role ? encoded[source]![1-member]![h]! : encoded[source]![0]![h]! + encoded[source]![1]![h]!;
+                    return (u[role]![member]![h]!*v)*parameters.pairW[((role*3+source)*2+channel)*18+h]!;
+                });
+                const total = (unary + pair) + parameters.outB[role*2+channel]!;
                 channels.push(total);
             }
             if (!channels.every(Number.isFinite))
@@ -114,14 +113,17 @@ export const forwardNativeS2ST16 = (input: readonly number[], parameters: Native
         for (let m = 0; m < 2; m += 1) {
             const c: number[] = [];
             for (let ch = 0; ch < 2; ch += 1) {
-                let total = parameters.outB[r * 2 + ch]!;
-                for (let h = 0; h < 16; h += 1) {
-                    const uh = u[r]![m]![h]!, vs = [0, 1, 2].map(s => s === r ? e[s]![1 - m]![h]! : e[s]![0]![h]! + e[s]![1]![h]!);
-                    total += uh * parameters.unaryW[(r * 2 + ch) * 16 + h]!;
-                    for (let s = 0; s < 3; s += 1)
-                        total += uh * vs[s]! * parameters.pairW[((r * 3 + s) * 2 + ch) * 16 + h]!;
-                    total += uh * vs[0]! * vs[1]! * vs[2]! * parameters.qW[(r * 2 + ch) * 16 + h]!;
-                }
+                let unary = 0, pair = 0, q = 0;
+                unary = sumNativeS2SContiguousProducts(16, h => u[r]![m]![h]! * parameters.unaryW[(r*2+ch)*16+h]!);
+                for (let source = 0; source < 3; source++) pair += sumNativeS2SContiguousProducts(16, h => {
+                    const v = source === r ? e[source]![1-m]![h]! : e[source]![0]![h]!+e[source]![1]![h]!;
+                    return (u[r]![m]![h]!*v)*parameters.pairW[((r*3+source)*2+ch)*16+h]!;
+                });
+                q = sumNativeS2SContiguousProducts(16, h => {
+                    const vs = [0,1,2].map(source => source === r ? e[source]![1-m]![h]! : e[source]![0]![h]!+e[source]![1]![h]!);
+                    return (u[r]![m]![h]!*(vs[0]!*vs[1]!*vs[2]!))*parameters.qW[(r*2+ch)*16+h]!;
+                });
+                const total = ((unary + pair) + q) + parameters.outB[r*2+ch]!;
                 c.push(total);
             }
             if (!c.every(Number.isFinite))
@@ -139,8 +141,8 @@ export const forwardNativeS2SDs870 = (input: readonly number[], p: NativeS2SDs87
         return fail("PARAMETERS_INVALID", "DS870 parameters must be an object of dense finite arrays");
     if (Object.keys(p).length !== 8 || !finite(p.etaW, 48) || !finite(p.etaB, 12) || !finite(p.hidden1W, 420) || !finite(p.hidden1B, 14) || !finite(p.hidden2W, 308) || !finite(p.hidden2B, 22) || !finite(p.outW, 44) || !finite(p.outB, 2))
         return fail("PARAMETERS_INVALID", "DS870 parameter shapes or finite values are invalid");
-    const x = (r: number, m: number, d: number) => input[(r * 2 + m) * 4 + d]!, eta = (r: number, m: number, k: number) => { let z = p.etaB[r * 4 + k]!; for (let d = 0; d < 4; d += 1)
-        z += x(r, m, d) * p.etaW[(r * 4 + d) * 4 + k]!; return Math.tanh(z); }, out: (readonly [
+    const x = (r: number, m: number, d: number) => input[(r * 2 + m) * 4 + d]!, eta = (r: number, m: number, k: number) => { let z = 0; for (let d = 0; d < 4; d += 1)
+        z += x(r, m, d) * p.etaW[(r * 4 + d) * 4 + k]!; return Math.tanh(z + p.etaB[r * 4 + k]!); }, out: (readonly [
         number,
         number
     ])[][] = [];

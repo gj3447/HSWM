@@ -1,6 +1,7 @@
 /** Immutable, scalar reverse-mode port of swm0w_s2s_training.py (UNJUDGED engineering parity). */
 import { Data, Either } from "effect";
 import { nativeP1AccurateSum } from "./native-p1-gate-domain.js";
+import { sumNativeS2SContiguousProducts } from "./native-s2s-contiguous-reduction-domain.js";
 import type { NativeS2SDs870Parameters, NativeS2SPCap18Parameters, NativeS2ST16Parameters } from "./native-s2s-operator-domain.js";
 import { forwardNativeS2SDs870, forwardNativeS2SPCap18, forwardNativeS2ST16 } from "./native-s2s-operator-domain.js";
 export const NATIVE_S2S_TRAINING_SOURCE_SHA256 = "d84b8336d8bcbe89aeba7f2d2c915fd294b9ee24425e6092505069a74f9cba94" as const;
@@ -57,63 +58,54 @@ export const lossAndGradientsNativeS2S = (arm: NativeS2STrainingArm, parameters:
                 for (let m = 0; m < 2; m++)
                     for (let c = 0; c < 2; c++) {
                         const oi = (r * 2 + m) * 2 + c;
-                        let z = p["outB"]![r * 2 + c]!;
-                        for (let k = 0; k < h; k++) {
-                            const uh = u(r, m, k);
-                            z += uh * p["unaryW"]![(r * 2 + c) * h + k]!;
-                            for (let s = 0; s < 3; s++) {
-                                const v = s === r ? e(s, 1 - m, k) : e(s, 0, k) + e(s, 1, k);
-                                z += uh * v * p["pairW"]![((r * 3 + s) * 2 + c) * h + k]!;
-                            }
-                        }
-                        pred[oi] = z;
+                        let unary = 0, pair = 0, q = 0;
+                        unary = sumNativeS2SContiguousProducts(h, k => u(r,m,k) * p["unaryW"]![(r*2+c)*h+k]!);
+                        for (let source = 0; source < 3; source++) pair += sumNativeS2SContiguousProducts(h, k => {
+                            const v = source === r ? e(source,1-m,k) : e(source,0,k)+e(source,1,k);
+                            return (u(r,m,k)*v)*p["pairW"]![((r*3+source)*2+c)*h+k]!;
+                        });
+                        if (arm === "T16") q = sumNativeS2SContiguousProducts(h, k => {
+                            const vs = [0,1,2].map(source => source === r ? e(source,1-m,k) : e(source,0,k)+e(source,1,k));
+                            return (u(r,m,k)*(vs[0]!*vs[1]!*vs[2]!))*p["qW"]![(r*2+c)*h+k]!;
+                        });
+                        pred[oi] = ((unary + pair) + q) + p["outB"]![r*2+c]!;
                     }
-            if (arm === "T16")
-                for (let r = 0; r < 3; r++)
-                    for (let m = 0; m < 2; m++)
-                        for (let c = 0; c < 2; c++)
-                            for (let k = 0; k < h; k++) {
-                                const vs = [0, 1, 2].map(s => s === r ? e(s, 1 - m, k) : e(s, 0, k) + e(s, 1, k));
-                                pred[(r * 2 + m) * 2 + c]! += u(r, m, k) * vs[0]! * vs[1]! * vs[2]! * p["qW"]![(r * 2 + c) * h + k]!;
-                            }
-            for (let r = 0; r < 3; r++)
-                for (let m = 0; m < 2; m++)
-                    for (let c = 0; c < 2; c++) {
-                        const oi = (r * 2 + m) * 2 + c, der = (pred[oi]! - targets[n * 12 + oi]!) * weights[r * 2 + c]! / (6 * N);
-                        weightedSquares += (pred[oi]! - targets[n * 12 + oi]!) * (pred[oi]! - targets[n * 12 + oi]!) * weights[r * 2 + c]!;
-                        g["outB"]![r * 2 + c]! += der;
-                        for (let k = 0; k < h; k++) {
-                            const uh = u(r, m, k);
-                            g["unaryW"]![(r * 2 + c) * h + k]! += der * uh;
-                            gu[(r * 2 + m) * h + k]! += der * p["unaryW"]![(r * 2 + c) * h + k]!;
-                            for (let s = 0; s < 3; s++) {
-                                const v = s === r ? e(s, 1 - m, k) : e(s, 0, k) + e(s, 1, k), wi = ((r * 3 + s) * 2 + c) * h + k;
-                                g["pairW"]![wi]! += der * uh * v;
-                                gu[(r * 2 + m) * h + k]! += der * p["pairW"]![wi]! * v;
-                                const q = der * p["pairW"]![wi]! * uh;
-                                if (s === r)
-                                    ge[(s * 2 + 1 - m) * h + k]! += q;
-                                else {
-                                    ge[(s * 2) * h + k]! += q;
-                                    ge[(s * 2 + 1) * h + k]! += q;
-                                }
-                            }
-                            if (arm === "T16") {
-                                const vs = [0, 1, 2].map(s => s === r ? e(s, 1 - m, k) : e(s, 0, k) + e(s, 1, k)), wi = (r * 2 + c) * h + k, w = der * p["qW"]![wi]!;
-                                g["qW"]![wi]! += der * uh * vs[0]! * vs[1]! * vs[2]!;
-                                gu[(r * 2 + m) * h + k]! += w * vs[0]! * vs[1]! * vs[2]!;
-                                for (let s = 0; s < 3; s++) {
-                                    const q = w * uh * vs.filter((_, j) => j !== s).reduce((a, b) => a * b, 1);
-                                    if (s === r)
-                                        ge[(s * 2 + 1 - m) * h + k]! += q;
-                                    else {
-                                        ge[(s * 2) * h + k]! += q;
-                                        ge[(s * 2 + 1) * h + k]! += q;
-                                    }
-                                }
-                            }
-                        }
+            const derivative = (r: number,m: number,c: number) => (pred[(r*2+m)*2+c]!-targets[n*12+(r*2+m)*2+c]!)*weights[r*2+c]!/(6*N);
+            for (let r = 0; r < 3; r++) for (let m = 0; m < 2; m++) for (let c = 0; c < 2; c++) {
+                const oi = (r*2+m)*2+c, der = derivative(r,m,c);
+                weightedSquares += (pred[oi]!-targets[n*12+oi]!)*(pred[oi]!-targets[n*12+oi]!)*weights[r*2+c]!;
+                g["outB"]![r*2+c]! += der;
+                for (let k = 0; k < h; k++) {
+                    const uh = u(r,m,k), vs = [0,1,2].map(source => source === r ? e(source,1-m,k) : e(source,0,k)+e(source,1,k));
+                    g["unaryW"]![(r*2+c)*h+k]! += der*uh;
+                    for (let source = 0; source < 3; source++) g["pairW"]![((r*3+source)*2+c)*h+k]! += der*(uh*vs[source]!);
+                    if (arm === "T16") g["qW"]![(r*2+c)*h+k]! += der*(uh*(vs[0]!*vs[1]!*vs[2]!));
+                }
+            }
+            // Match the source's separately reduced unary, pair and weighted-q
+            // intermediates before transporting the recipient gradients.
+            for (let r = 0; r < 3; r++) for (let m = 0; m < 2; m++) for (let k = 0; k < h; k++) {
+                const uh = u(r,m,k), vs = [0,1,2].map(source => source === r ? e(source,1-m,k) : e(source,0,k)+e(source,1,k));
+                let unary = 0, pair = 0, weightedQ = 0;
+                for (let c = 0; c < 2; c++) {
+                    const der = derivative(r,m,c);
+                    unary += der*p["unaryW"]![(r*2+c)*h+k]!;
+                    for (let source = 0; source < 3; source++) pair += der*p["pairW"]![((r*3+source)*2+c)*h+k]!*vs[source]!;
+                    if (arm === "T16") weightedQ += der*p["qW"]![(r*2+c)*h+k]!;
+                }
+                gu[(r*2+m)*h+k] = unary + pair;
+                if (arm === "T16") gu[(r*2+m)*h+k]! += weightedQ*(vs[0]!*vs[1]!*vs[2]!);
+                for (let source = 0; source < 3; source++) {
+                    let contribution = 0;
+                    for (let c = 0; c < 2; c++) contribution += derivative(r,m,c)*p["pairW"]![((r*3+source)*2+c)*h+k]!*uh;
+                    if (arm === "T16") {
+                        const others = [0,1,2].filter(index => index !== source);
+                        contribution += ((weightedQ*uh)*vs[others[0]!]!)*vs[others[1]!]!;
                     }
+                    if (source === r) ge[(source*2+1-m)*h+k]! += contribution;
+                    else { ge[source*2*h+k]! += contribution; ge[(source*2+1)*h+k]! += contribution; }
+                }
+            }
             for (let r = 0; r < 3; r++)
                 for (let m = 0; m < 2; m++)
                     for (let k = 0; k < h; k++)
@@ -127,10 +119,10 @@ export const lossAndGradientsNativeS2S = (arm: NativeS2STrainingArm, parameters:
             for (let r = 0; r < 3; r++)
                 for (let m = 0; m < 2; m++)
                     for (let k = 0; k < 4; k++) {
-                        let z = p["etaB"]![r * 4 + k]!;
+                        let z = 0;
                         for (let d = 0; d < 4; d++)
                             z += x(n, r, m, d) * p["etaW"]![(r * 4 + d) * 4 + k]!;
-                        eta[(r * 2 + m) * 4 + k] = Math.tanh(z);
+                        eta[(r * 2 + m) * 4 + k] = Math.tanh(z + p["etaB"]![r * 4 + k]!);
                     }
             for (let r = 0; r < 3; r++)
                 for (let m = 0; m < 2; m++) {
@@ -143,22 +135,22 @@ export const lossAndGradientsNativeS2S = (arm: NativeS2STrainingArm, parameters:
                     dec[row * 30 + 28] = r === 0 ? 1 : r === 2 ? -1 : 0;
                     dec[row * 30 + 29] = r === 1 ? 1 : r === 2 ? -1 : 0;
                     for (let j = 0; j < 14; j++) {
-                        let z = p["hidden1B"]![j]!;
+                        let z = 0;
                         for (let f = 0; f < 30; f++)
                             z += dec[row * 30 + f]! * p["hidden1W"]![f * 14 + j]!;
-                        h1[row * 14 + j] = Math.tanh(z);
+                        h1[row * 14 + j] = Math.tanh(z + p["hidden1B"]![j]!);
                     }
                     for (let j = 0; j < 22; j++) {
-                        let z = p["hidden2B"]![j]!;
+                        let z = 0;
                         for (let f = 0; f < 14; f++)
                             z += h1[row * 14 + f]! * p["hidden2W"]![f * 22 + j]!;
-                        h2[row * 22 + j] = Math.tanh(z);
+                        h2[row * 22 + j] = Math.tanh(z + p["hidden2B"]![j]!);
                     }
                     for (let c = 0; c < 2; c++) {
-                        let z = p["outB"]![c]!;
+                        let z = 0;
                         for (let j = 0; j < 22; j++)
                             z += h2[row * 22 + j]! * p["outW"]![j * 2 + c]!;
-                        pred[row * 2 + c] = z;
+                        pred[row * 2 + c] = z + p["outB"]![c]!;
                     }
                 }
             const gd = Array<number>(180).fill(0), gh1 = Array<number>(84).fill(0), gh2 = Array<number>(132).fill(0);

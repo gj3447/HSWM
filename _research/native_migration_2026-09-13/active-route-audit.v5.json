@@ -1,0 +1,187 @@
+{
+  "schema_version": "hswm-native-migration-active-route-audit/v5",
+  "as_of": "2026-09-13",
+  "basis": "Read-only successor audit of inventory.v4.json, current launchers, package scripts, CI workflows, and source imports. Active means a documented, packaged, CI, systemd, or shell entrypoint can execute it; historical oracle/comparison modules are excluded unless an active route invokes them.",
+  "claim_ceiling": "EXECUTION_ROUTE_INVENTORY_ONLY_NOT_MIGRATION_COMPLETENESS_OR_RESEARCH_EFFICACY",
+  "statuses": {
+    "VERIFIED_NATIVE": "A native route has current checked verification for its declared bounded scope.",
+    "NATIVE_CANDIDATE_UNVERIFIED": "A current TypeScript implementation exists in the dirty working tree but is not evidence of complete route closure.",
+    "PYTHON_ACTIVE_BLOCKER": "An active route still executes owned Python and lacks a verified complete native replacement.",
+    "PARTIAL_ROUTE": "A native counterpart exists but an active Python, packaging, deployment, or missing-capability branch remains.",
+    "HISTORICAL_ORACLE_ONLY": "Not an active route; retained only as a bounded comparison/oracle."
+  },
+  "routes": [
+    {
+      "id": "dev-runtime",
+      "status": "VERIFIED_NATIVE",
+      "entrypoint": "src/hswm/effect-runtime/bin/hswm-dev",
+      "source_refs": [
+        {"path": "src/hswm/effect-runtime/src/adaptive-cli.ts", "role": "native dispatcher"},
+        {"path": "_research/native_migration_2026-09-13/operations-verification.v1.json", "role": "bounded verification"}
+      ],
+      "why_active": "AGENTS.md requires hswm-dev hswm plan/run/status/feedback for HSWM development.",
+      "closure_criterion": "Native selected relation and required checks run without invoking src/hswm/development/bin/hswm-python."
+    },
+    {
+      "id": "python-toolchain-launcher",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": "src/hswm/development/bin/hswm-python",
+      "source_refs": [
+        {"path": "src/hswm/development/bin/hswm-python", "role": "active compatibility launcher"},
+        {"path": "AGENTS.md", "role": "documented Linux and one-time oracle workflow"}
+      ],
+      "why_active": "Core, graph, sync, historical comparisons, and explicit one-time Python oracles remain callable.",
+      "closure_criterion": "Every documented production/development invocation either has a verified native replacement or is explicitly reclassified historical-only with no launcher route."
+    },
+    {
+      "id": "package-python-console-scripts",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": "pyproject.toml:[project.scripts]",
+      "source_refs": [
+        {"path": "pyproject.toml", "role": "eight Python console entrypoints"}
+      ],
+      "why_active": "Wheel/sdist and documented operational compatibility still expose Python hswm-p1-gate-diagnostic, hswm-verify-efficacy, hswm-legacy-replay, hswm-research-fabric, hswm-graph-standards, hswm-g0-occurrence, hswm-task, and hswm-usl.",
+      "closure_criterion": "Package metadata and operational docs select native launchers, or each retained Python script has a bounded compatibility-only classification and no active production caller."
+    },
+    {
+      "id": "p1-gate-uncached-embedding",
+      "status": "PYTHON_ACTIVE_BLOCKER",
+      "entrypoint": "hswm-p1-gate-diagnostic -> src/hswm/diagnostics/p1_gate.py:main",
+      "source_refs": [
+        {"path": "src/hswm/diagnostics/p1_gate.py", "sha256": "e4b401bdaa92eedb3cdc0792f8a2a5913c70413ec97cb6373f86f0452b6d9ac0", "role": "active Python diagnostic and missing-cache embedding branch"},
+        {"path": "src/hswm/effect-runtime/src/native-p1-gate-runtime.ts", "role": "native frozen-cache candidate/replay"},
+        {"path": "pyproject.toml", "role": "active package script"}
+      ],
+      "why_active": "The native route reads a precomputed embedding cache; uncached embedding generation remains Python.",
+      "closure_criterion": "Native bounded embedding acquisition, exact cache construction, and no-cache diagnostic replay agree with Python on source-pinned fresh inputs; package route is migrated or retired."
+    },
+    {
+      "id": "s2s-full-training-protocol",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": ".github/workflows/swm0w-s2s-train-dev-pilot.yml -> python -m hswm.experiments.swm0w_s2s_pilot",
+      "source_refs": [
+        {"path": "src/hswm/experiments/swm0w_s2s_protocol.py", "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1", "role": "Python protocol closure"},
+        {"path": "src/hswm/experiments/swm0w_s2s_training.py", "sha256": "d84b8336d8bcbe89aeba7f2d2c915fd294b9ee24425e6092505069a74f9cba94", "role": "Python full-batch training"},
+        {"path": "src/hswm/experiments/swm0w_s2s_operator.py", "sha256": "7b16eccc74059c6c6dd537ea219c458d7015eadf070d77e1c34ad75c2c828151", "role": "Python operator/compiler"},
+        {"path": "src/hswm/experiments/swm0w_s2s_family.py", "sha256": "e00a3365e89592038b66820f57655d28e908425e3586385fd2be1e407944e93a", "role": "Python task family"},
+        {"path": ".github/workflows/swm0w-s2s-train-dev-pilot.yml", "role": "active CI Python execution"},
+        {"path": "src/hswm/effect-runtime/src/native-s2s-task-fit-domain.ts", "role": "uncommitted native candidate"}
+      ],
+      "why_active": "The pilot workflow remains Python and is the only complete current task-to-training-to-protocol route.",
+      "closure_criterion": "A native task generator, complete finite dataset compiler, initialization, optimizer/update/checkpoint selection, protocol receipts, pilot document, and CI invocation reproduce source-pinned complete-task outcomes including post-update parameter hashes; no Python numeric oracle subprocess participates."
+    },
+    {
+      "id": "s2s-python-numeric-oracle",
+      "status": "PYTHON_ACTIVE_BLOCKER",
+      "entrypoint": "src/hswm/effect-runtime/src/s2s-live-python.ts",
+      "source_refs": [
+        {"path": "src/hswm/experiments/swm0w_s2s_numeric_oracle.py", "sha256": "27854351f642727dc21ec63e987bf3ae67a205f4664f5e0ad448eb3b7a8c570b", "role": "subprocess oracle"},
+        {"path": "src/hswm/effect-runtime/src/s2s-live-python.ts", "role": "active Effect-to-Python bridge"},
+        {"path": "src/hswm/experiments/swm0w_s2s_worlds.py", "sha256": "365a2d57e9988f1223b5ea39e26c9196c0d26400c821acbcd8c62a6f224d4f81", "role": "oracle dependency"}
+      ],
+      "why_active": "The live confirm/adjudicate route deliberately launches a pinned Python/NumPy oracle.",
+      "closure_criterion": "Native confirm/adjudicate owns full protocol numeric semantics and source-bound task/training closure; the Python module becomes historical oracle-only with no live subprocess route."
+    },
+    {
+      "id": "s2s-native-candidates",
+      "status": "NATIVE_CANDIDATE_UNVERIFIED",
+      "entrypoint": "uncommitted src/hswm/effect-runtime/src/native-s2s-{family,dataset,initialization,task-fit,fit}-domain.ts",
+      "source_refs": [
+        {"path": "src/hswm/effect-runtime/src/native-s2s-family-domain.ts", "role": "task candidate"},
+        {"path": "src/hswm/effect-runtime/src/native-s2s-dataset-domain.ts", "role": "dataset candidate"},
+        {"path": "src/hswm/effect-runtime/src/native-s2s-initialization-domain.ts", "role": "initializer candidate"},
+        {"path": "src/hswm/effect-runtime/src/native-s2s-task-fit-domain.ts", "role": "fit composition candidate"}
+      ],
+      "why_active": "These files are present in the current dirty worktree but are not current committed/CI-selected route closure evidence.",
+      "closure_criterion": "Commit, bind a native CLI/CI entrypoint, and verify complete source-pinned task outcomes beyond static fixtures."
+    },
+    {
+      "id": "prom9-f1-run-suite",
+      "status": "PYTHON_ACTIVE_BLOCKER",
+      "entrypoint": "prom_search_hswm/prom_f1_function_network.py:run_suite",
+      "source_refs": [
+        {"path": "prom_search_hswm/prom_f1_function_network.py", "sha256": "59e88cda18061bf312697b48e1df4639dae5b31be25dd1bfade6602db0468bfe", "role": "manifest validation, run, verify, judge"},
+        {"path": "prom_search_hswm/hswm_function_network.py", "sha256": "dae4a62b44ae3198b48e82ea48515b00b854b3b440fa7d13ee7567910584f5e5", "role": "three-call function execution"},
+        {"path": "prom_search_hswm/hswm_function_registry.py", "sha256": "b9d858a8d84ba1b6ed1c88250a2f8936cbe78c459987a155c1f3fba8a77aede1", "role": "registry construction"},
+        {"path": "prom_search_hswm/prom9_f1_envelope.py", "sha256": "d96793530133391f42be298eb5a742e92aada92cae1e61e23981eafdf2237fc2", "role": "projection/envelope gate"},
+        {"path": "src/hswm/effect-runtime/src/native-prom9-f1-domain.ts", "role": "uncommitted native judge candidate"}
+      ],
+      "why_active": "Only the Python route constructs registries, validates envelope feasibility, performs all three model calls, and produces complete suite receipts.",
+      "closure_criterion": "Native run command performs manifest/token-envelope projection, registry construction, exact three-call execution, port validation, suite receipt construction, and independently verifies sealed/development judgment without Python."
+    },
+    {
+      "id": "prom9-f1-durable-spool",
+      "status": "PYTHON_ACTIVE_BLOCKER",
+      "entrypoint": "prom_search_hswm/hswm_f1_durable_transport.py and prom_search_hswm/hswm_result_spool.py",
+      "source_refs": [
+        {"path": "prom_search_hswm/hswm_f1_durable_transport.py", "sha256": "09ecd886901ac95c0be86e59369d8672d0fad0b912d97e488c5c41c79692a7cc", "role": "durable client/receipt transport"},
+        {"path": "prom_search_hswm/hswm_result_spool.py", "sha256": "83fc2e1b702569f73101c20b685f70d6e82da7c371220109c92d9e0dd25b172e", "role": "spool service"}
+      ],
+      "why_active": "The F1 runner's live model-call and durable acceptance path remains Python.",
+      "closure_criterion": "A native authenticated transport/spool surface preserves retries, idempotency, durable acceptance, and source-bound receipt semantics under an isolated smoke test."
+    },
+    {
+      "id": "prom9-f1-bpe-meter",
+      "status": "PYTHON_ACTIVE_BLOCKER",
+      "entrypoint": "prom_search_hswm/hswm_token_meter.py:QwenBpeMeter",
+      "source_refs": [
+        {"path": "prom_search_hswm/hswm_token_meter.py", "sha256": "5149473c7ca3efea865d97cee324ff2c9ccca5d4d637c66a049f34eae15da274", "role": "Qwen BPE/chat token meter"}
+      ],
+      "why_active": "F1 equal-budget enforcement and feasibility projection use the Python tokenizer implementation.",
+      "closure_criterion": "Native tokenizer reads the same pinned files and matches Python/server token counts over registered prompts, filler boundary cases, Unicode, special tokens, and chat-template construction."
+    },
+    {
+      "id": "prom9-f1-envelope-replay",
+      "status": "PYTHON_ACTIVE_BLOCKER",
+      "entrypoint": "prom_search_hswm/prom9_f1_envelope_replay.py:main",
+      "source_refs": [
+        {"path": "prom_search_hswm/prom9_f1_envelope_replay.py", "sha256": "ed3f08e0bedc7e5213594969c0f46bdc4a079f39783e0251aacefaa4737559ee", "role": "active replay runner"}
+      ],
+      "why_active": "This documented replay invokes Python run_suite and its live/cache model port.",
+      "closure_criterion": "Native run-suite closure replaces this operational replay or it is explicitly historical-only with no active documentation/automation caller."
+    },
+    {
+      "id": "f1-watchdog",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": "scripts/bin_hswm_f1_watchdog.sh",
+      "source_refs": [
+        {"path": "scripts/bin_hswm_f1_watchdog.sh", "sha256": "d904af106dbc7a375731d06085d0864f3d8e2ca1a21aa807e755c4923b43fe98", "role": "operational sealed-run watchdog"},
+        {"path": "src/hswm/effect-runtime/bin/hswm-prom9-f1", "role": "uncommitted native judge candidate"}
+      ],
+      "why_active": "The shell watchdog remains an operational path; its judge target is native only in the current uncommitted worktree while its runner remains Python.",
+      "closure_criterion": "Committed native run and judge commands replace the mixed shell route, with sealed output and failure behavior tested."
+    },
+    {
+      "id": "f3v2-live-smoke",
+      "status": "PYTHON_ACTIVE_BLOCKER",
+      "entrypoint": "scripts/f3v2_smoke_preflight.sh -> python -m _research.f_series.f3v2_arms",
+      "source_refs": [
+        {"path": "scripts/f3v2_smoke_preflight.sh", "sha256": "27d95cf232021e46b96117a8794df3f95475a2b967adf92da23d1ef91e84fb6e", "role": "active external model smoke launcher"}
+      ],
+      "why_active": "The only documented F3v2 live smoke uses Python, curl, ssh/docker, and external model endpoints.",
+      "closure_criterion": "A native bounded live-smoke command owns endpoint identity checks, receiver lifecycle policy, call budget, sequential execution, and receipt validation; external execution remains separate from efficacy claims."
+    },
+    {
+      "id": "ci-python-research-lanes",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": ".github/workflows/{ci.yml,swm0w-s2s-train-dev-pilot.yml,graph-standards-requalification.yml,hypergraph-projection.yml}",
+      "source_refs": [
+        {"path": ".github/workflows/swm0w-s2s-train-dev-pilot.yml", "role": "active Python pilot"},
+        {"path": ".github/workflows/ci.yml", "role": "Python package compatibility lanes"}
+      ],
+      "why_active": "CI still executes Python package tests and research replays in addition to bounded native checks.",
+      "closure_criterion": "Each CI Python lane is either a deliberately retained historical/packaging compatibility lane with exact stated scope, or its production behavior has a verified native replacement."
+    },
+    {
+      "id": "historical-python-oracles",
+      "status": "HISTORICAL_ORACLE_ONLY",
+      "entrypoint": "source-pinned Python differential fixtures and explicit one-time oracle scripts",
+      "source_refs": [
+        {"path": "tests/fixtures/native_migration", "role": "static oracle outputs"},
+        {"path": "src/hswm/experiments/swm0w_s2s_numeric_oracle.py", "sha256": "27854351f642727dc21ec63e987bf3ae67a205f4664f5e0ad448eb3b7a8c570b", "role": "comparison source when not launched by s2s-live-python"}
+      ],
+      "why_active": "Excluded from active-route count unless an entrypoint above invokes them.",
+      "closure_criterion": "No normal runtime, CI production gate, or operational launcher invokes the oracle; source/fixture provenance remains preserved."
+    }
+  ]
+}

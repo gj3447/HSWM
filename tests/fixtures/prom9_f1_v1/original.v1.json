@@ -1,0 +1,2013 @@
+{
+  "cases": [
+    {
+      "expected": {
+        "101:42": {
+          "allowed_claim": "On the registered sealed scope, typed composition beat matched flat/vector controls and lost its effect under role removal/shuffle.",
+          "bootstrap": {
+            "paired": true,
+            "reps": 101,
+            "seed": 42
+          },
+          "comparisons": {
+            "typed_minus_flat_single_llm_three_call_workflow": {
+              "bootstrap95": [
+                0.5,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_typed_network_role_removed_schema_preserving_null": {
+              "bootstrap95": [
+                0.625,
+                1.0
+              ],
+              "mean": 0.875
+            },
+            "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "bootstrap95": [
+                0.625,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_vector_memory_three_call_workflow": {
+              "bootstrap95": [
+                0.5,
+                1.0
+              ],
+              "mean": 0.75
+            }
+          },
+          "evaluator_receipt_sha256": "9c226706a0a5c5f1187896910c698f6d9b30f054688e337a57bc64445faf03d9",
+          "gates": {
+            "equal_budget": true,
+            "exact_three_calls_each": true,
+            "removal_loses_effect": true,
+            "shuffle_loses_effect": true,
+            "typed_beats_flat_lcb_gt_0": true,
+            "typed_beats_vector": true
+          },
+          "item_scores": [
+            {
+              "item_id": "synthetic-positive-item-01",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-02",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-03",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-04",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-05",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-06",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-07",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-08",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            }
+          ],
+          "judgment_sha256": "1a7d76dd48cb299da251ba8a71244c75429240d6ea5986971dd50eefa303b236",
+          "metrics": {
+            "flat_single_llm_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "typed_hswm_three_function_network": {
+              "n": 8,
+              "success_rate": 1.0
+            },
+            "typed_network_role_removed_schema_preserving_null": {
+              "n": 8,
+              "success_rate": 0.125
+            },
+            "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "vector_memory_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            }
+          },
+          "mode": "sealed",
+          "parity_failures": [],
+          "run_id": "synthetic-prom9-f1-positive-v1",
+          "schema_version": "hswm-prom9-f1-judgment/v1",
+          "suite_receipt_sha256": "e9cbf48247e7ba6aca318b24098049f0680d81dd08a1a82472d0662d85410c95",
+          "verdict": "F1_SUPPORTED_NARROW"
+        },
+        "101:99": {
+          "allowed_claim": "On the registered sealed scope, typed composition beat matched flat/vector controls and lost its effect under role removal/shuffle.",
+          "bootstrap": {
+            "paired": true,
+            "reps": 101,
+            "seed": 99
+          },
+          "comparisons": {
+            "typed_minus_flat_single_llm_three_call_workflow": {
+              "bootstrap95": [
+                0.375,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_typed_network_role_removed_schema_preserving_null": {
+              "bootstrap95": [
+                0.625,
+                1.0
+              ],
+              "mean": 0.875
+            },
+            "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "bootstrap95": [
+                0.375,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_vector_memory_three_call_workflow": {
+              "bootstrap95": [
+                0.5,
+                1.0
+              ],
+              "mean": 0.75
+            }
+          },
+          "evaluator_receipt_sha256": "9c226706a0a5c5f1187896910c698f6d9b30f054688e337a57bc64445faf03d9",
+          "gates": {
+            "equal_budget": true,
+            "exact_three_calls_each": true,
+            "removal_loses_effect": true,
+            "shuffle_loses_effect": true,
+            "typed_beats_flat_lcb_gt_0": true,
+            "typed_beats_vector": true
+          },
+          "item_scores": [
+            {
+              "item_id": "synthetic-positive-item-01",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-02",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-03",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-04",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-05",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-06",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-07",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-positive-item-08",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            }
+          ],
+          "judgment_sha256": "a4d593a9dba83b5f9e9795c01186f0ffc73dda8b16d58cb8d4ab9bf4a1e60fb3",
+          "metrics": {
+            "flat_single_llm_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "typed_hswm_three_function_network": {
+              "n": 8,
+              "success_rate": 1.0
+            },
+            "typed_network_role_removed_schema_preserving_null": {
+              "n": 8,
+              "success_rate": 0.125
+            },
+            "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "vector_memory_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            }
+          },
+          "mode": "sealed",
+          "parity_failures": [],
+          "run_id": "synthetic-prom9-f1-positive-v1",
+          "schema_version": "hswm-prom9-f1-judgment/v1",
+          "suite_receipt_sha256": "e9cbf48247e7ba6aca318b24098049f0680d81dd08a1a82472d0662d85410c95",
+          "verdict": "F1_SUPPORTED_NARROW"
+        }
+      },
+      "expected_canonical": {
+        "101:42": "{\"allowed_claim\":\"On the registered sealed scope, typed composition beat matched flat/vector controls and lost its effect under role removal/shuffle.\",\"bootstrap\":{\"paired\":true,\"reps\":101,\"seed\":42},\"comparisons\":{\"typed_minus_flat_single_llm_three_call_workflow\":{\"bootstrap95\":[0.5,1.0],\"mean\":0.75},\"typed_minus_typed_network_role_removed_schema_preserving_null\":{\"bootstrap95\":[0.625,1.0],\"mean\":0.875},\"typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"bootstrap95\":[0.625,1.0],\"mean\":0.75},\"typed_minus_vector_memory_three_call_workflow\":{\"bootstrap95\":[0.5,1.0],\"mean\":0.75}},\"evaluator_receipt_sha256\":\"9c226706a0a5c5f1187896910c698f6d9b30f054688e337a57bc64445faf03d9\",\"gates\":{\"equal_budget\":true,\"exact_three_calls_each\":true,\"removal_loses_effect\":true,\"shuffle_loses_effect\":true,\"typed_beats_flat_lcb_gt_0\":true,\"typed_beats_vector\":true},\"item_scores\":[{\"item_id\":\"synthetic-positive-item-01\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-positive-item-02\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-positive-item-03\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-positive-item-04\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-positive-item-05\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-positive-item-06\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-positive-item-07\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-positive-item-08\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}}],\"judgment_sha256\":\"1a7d76dd48cb299da251ba8a71244c75429240d6ea5986971dd50eefa303b236\",\"metrics\":{\"flat_single_llm_three_call_workflow\":{\"n\":8,\"success_rate\":0.25},\"typed_hswm_three_function_network\":{\"n\":8,\"success_rate\":1.0},\"typed_network_role_removed_schema_preserving_null\":{\"n\":8,\"success_rate\":0.125},\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"n\":8,\"success_rate\":0.25},\"vector_memory_three_call_workflow\":{\"n\":8,\"success_rate\":0.25}},\"mode\":\"sealed\",\"parity_failures\":[],\"run_id\":\"synthetic-prom9-f1-positive-v1\",\"schema_version\":\"hswm-prom9-f1-judgment/v1\",\"suite_receipt_sha256\":\"e9cbf48247e7ba6aca318b24098049f0680d81dd08a1a82472d0662d85410c95\",\"verdict\":\"F1_SUPPORTED_NARROW\"}",
+        "101:99": "{\"allowed_claim\":\"On the registered sealed scope, typed composition beat matched flat/vector controls and lost its effect under role removal/shuffle.\",\"bootstrap\":{\"paired\":true,\"reps\":101,\"seed\":99},\"comparisons\":{\"typed_minus_flat_single_llm_three_call_workflow\":{\"bootstrap95\":[0.375,1.0],\"mean\":0.75},\"typed_minus_typed_network_role_removed_schema_preserving_null\":{\"bootstrap95\":[0.625,1.0],\"mean\":0.875},\"typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"bootstrap95\":[0.375,1.0],\"mean\":0.75},\"typed_minus_vector_memory_three_call_workflow\":{\"bootstrap95\":[0.5,1.0],\"mean\":0.75}},\"evaluator_receipt_sha256\":\"9c226706a0a5c5f1187896910c698f6d9b30f054688e337a57bc64445faf03d9\",\"gates\":{\"equal_budget\":true,\"exact_three_calls_each\":true,\"removal_loses_effect\":true,\"shuffle_loses_effect\":true,\"typed_beats_flat_lcb_gt_0\":true,\"typed_beats_vector\":true},\"item_scores\":[{\"item_id\":\"synthetic-positive-item-01\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-positive-item-02\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-positive-item-03\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-positive-item-04\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-positive-item-05\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-positive-item-06\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-positive-item-07\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-positive-item-08\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}}],\"judgment_sha256\":\"a4d593a9dba83b5f9e9795c01186f0ffc73dda8b16d58cb8d4ab9bf4a1e60fb3\",\"metrics\":{\"flat_single_llm_three_call_workflow\":{\"n\":8,\"success_rate\":0.25},\"typed_hswm_three_function_network\":{\"n\":8,\"success_rate\":1.0},\"typed_network_role_removed_schema_preserving_null\":{\"n\":8,\"success_rate\":0.125},\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"n\":8,\"success_rate\":0.25},\"vector_memory_three_call_workflow\":{\"n\":8,\"success_rate\":0.25}},\"mode\":\"sealed\",\"parity_failures\":[],\"run_id\":\"synthetic-prom9-f1-positive-v1\",\"schema_version\":\"hswm-prom9-f1-judgment/v1\",\"suite_receipt_sha256\":\"e9cbf48247e7ba6aca318b24098049f0680d81dd08a1a82472d0662d85410c95\",\"verdict\":\"F1_SUPPORTED_NARROW\"}"
+      },
+      "gold": "positive.gold.json",
+      "mode": "sealed",
+      "name": "positive",
+      "suite": "positive.suite.json"
+    },
+    {
+      "expected": {
+        "101:42": {
+          "allowed_claim": "The sealed F1 result did not satisfy the complete topology-and-budget conjunction.",
+          "bootstrap": {
+            "paired": true,
+            "reps": 101,
+            "seed": 42
+          },
+          "comparisons": {
+            "typed_minus_flat_single_llm_three_call_workflow": {
+              "bootstrap95": [
+                0.0,
+                0.0
+              ],
+              "mean": 0.0
+            },
+            "typed_minus_typed_network_role_removed_schema_preserving_null": {
+              "bootstrap95": [
+                0.25,
+                0.875
+              ],
+              "mean": 0.5
+            },
+            "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "bootstrap95": [
+                0.125,
+                0.875
+              ],
+              "mean": 0.5
+            },
+            "typed_minus_vector_memory_three_call_workflow": {
+              "bootstrap95": [
+                0.125,
+                0.75
+              ],
+              "mean": 0.5
+            }
+          },
+          "evaluator_receipt_sha256": "5ede7df66a1138d6f1828e91c42a8a0ef1e952e9a9b51874745512bd33063437",
+          "gates": {
+            "equal_budget": true,
+            "exact_three_calls_each": true,
+            "removal_loses_effect": true,
+            "shuffle_loses_effect": true,
+            "typed_beats_flat_lcb_gt_0": false,
+            "typed_beats_vector": true
+          },
+          "item_scores": [
+            {
+              "item_id": "synthetic-negative-item-01",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-02",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-03",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-04",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-05",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-06",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-07",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-08",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            }
+          ],
+          "judgment_sha256": "669766b85ea969b0974d7cc84406ed0708f912fa5ec099a53a4adf60d36700ca",
+          "metrics": {
+            "flat_single_llm_three_call_workflow": {
+              "n": 8,
+              "success_rate": 1.0
+            },
+            "typed_hswm_three_function_network": {
+              "n": 8,
+              "success_rate": 1.0
+            },
+            "typed_network_role_removed_schema_preserving_null": {
+              "n": 8,
+              "success_rate": 0.5
+            },
+            "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "n": 8,
+              "success_rate": 0.5
+            },
+            "vector_memory_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.5
+            }
+          },
+          "mode": "sealed",
+          "parity_failures": [],
+          "run_id": "synthetic-prom9-f1-negative-v1",
+          "schema_version": "hswm-prom9-f1-judgment/v1",
+          "suite_receipt_sha256": "5f6508ff4a8776141558f6edfeb8a353810a307a913512f32223ef1edeca0da7",
+          "verdict": "REJECTED_OR_NARROWED"
+        },
+        "101:99": {
+          "allowed_claim": "The sealed F1 result did not satisfy the complete topology-and-budget conjunction.",
+          "bootstrap": {
+            "paired": true,
+            "reps": 101,
+            "seed": 99
+          },
+          "comparisons": {
+            "typed_minus_flat_single_llm_three_call_workflow": {
+              "bootstrap95": [
+                0.0,
+                0.0
+              ],
+              "mean": 0.0
+            },
+            "typed_minus_typed_network_role_removed_schema_preserving_null": {
+              "bootstrap95": [
+                0.125,
+                0.875
+              ],
+              "mean": 0.5
+            },
+            "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "bootstrap95": [
+                0.125,
+                0.75
+              ],
+              "mean": 0.5
+            },
+            "typed_minus_vector_memory_three_call_workflow": {
+              "bootstrap95": [
+                0.125,
+                0.75
+              ],
+              "mean": 0.5
+            }
+          },
+          "evaluator_receipt_sha256": "5ede7df66a1138d6f1828e91c42a8a0ef1e952e9a9b51874745512bd33063437",
+          "gates": {
+            "equal_budget": true,
+            "exact_three_calls_each": true,
+            "removal_loses_effect": true,
+            "shuffle_loses_effect": true,
+            "typed_beats_flat_lcb_gt_0": false,
+            "typed_beats_vector": true
+          },
+          "item_scores": [
+            {
+              "item_id": "synthetic-negative-item-01",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-02",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-03",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-04",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-05",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-06",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-07",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-negative-item-08",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            }
+          ],
+          "judgment_sha256": "d55bd7c90f6afbfd53ab54d5e709fd3fa0c878dab4eb9c4d989b8356ebc2a77c",
+          "metrics": {
+            "flat_single_llm_three_call_workflow": {
+              "n": 8,
+              "success_rate": 1.0
+            },
+            "typed_hswm_three_function_network": {
+              "n": 8,
+              "success_rate": 1.0
+            },
+            "typed_network_role_removed_schema_preserving_null": {
+              "n": 8,
+              "success_rate": 0.5
+            },
+            "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "n": 8,
+              "success_rate": 0.5
+            },
+            "vector_memory_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.5
+            }
+          },
+          "mode": "sealed",
+          "parity_failures": [],
+          "run_id": "synthetic-prom9-f1-negative-v1",
+          "schema_version": "hswm-prom9-f1-judgment/v1",
+          "suite_receipt_sha256": "5f6508ff4a8776141558f6edfeb8a353810a307a913512f32223ef1edeca0da7",
+          "verdict": "REJECTED_OR_NARROWED"
+        }
+      },
+      "expected_canonical": {
+        "101:42": "{\"allowed_claim\":\"The sealed F1 result did not satisfy the complete topology-and-budget conjunction.\",\"bootstrap\":{\"paired\":true,\"reps\":101,\"seed\":42},\"comparisons\":{\"typed_minus_flat_single_llm_three_call_workflow\":{\"bootstrap95\":[0.0,0.0],\"mean\":0.0},\"typed_minus_typed_network_role_removed_schema_preserving_null\":{\"bootstrap95\":[0.25,0.875],\"mean\":0.5},\"typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"bootstrap95\":[0.125,0.875],\"mean\":0.5},\"typed_minus_vector_memory_three_call_workflow\":{\"bootstrap95\":[0.125,0.75],\"mean\":0.5}},\"evaluator_receipt_sha256\":\"5ede7df66a1138d6f1828e91c42a8a0ef1e952e9a9b51874745512bd33063437\",\"gates\":{\"equal_budget\":true,\"exact_three_calls_each\":true,\"removal_loses_effect\":true,\"shuffle_loses_effect\":true,\"typed_beats_flat_lcb_gt_0\":false,\"typed_beats_vector\":true},\"item_scores\":[{\"item_id\":\"synthetic-negative-item-01\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-negative-item-02\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-negative-item-03\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-negative-item-04\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-negative-item-05\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-negative-item-06\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-negative-item-07\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-negative-item-08\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}}],\"judgment_sha256\":\"669766b85ea969b0974d7cc84406ed0708f912fa5ec099a53a4adf60d36700ca\",\"metrics\":{\"flat_single_llm_three_call_workflow\":{\"n\":8,\"success_rate\":1.0},\"typed_hswm_three_function_network\":{\"n\":8,\"success_rate\":1.0},\"typed_network_role_removed_schema_preserving_null\":{\"n\":8,\"success_rate\":0.5},\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"n\":8,\"success_rate\":0.5},\"vector_memory_three_call_workflow\":{\"n\":8,\"success_rate\":0.5}},\"mode\":\"sealed\",\"parity_failures\":[],\"run_id\":\"synthetic-prom9-f1-negative-v1\",\"schema_version\":\"hswm-prom9-f1-judgment/v1\",\"suite_receipt_sha256\":\"5f6508ff4a8776141558f6edfeb8a353810a307a913512f32223ef1edeca0da7\",\"verdict\":\"REJECTED_OR_NARROWED\"}",
+        "101:99": "{\"allowed_claim\":\"The sealed F1 result did not satisfy the complete topology-and-budget conjunction.\",\"bootstrap\":{\"paired\":true,\"reps\":101,\"seed\":99},\"comparisons\":{\"typed_minus_flat_single_llm_three_call_workflow\":{\"bootstrap95\":[0.0,0.0],\"mean\":0.0},\"typed_minus_typed_network_role_removed_schema_preserving_null\":{\"bootstrap95\":[0.125,0.875],\"mean\":0.5},\"typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"bootstrap95\":[0.125,0.75],\"mean\":0.5},\"typed_minus_vector_memory_three_call_workflow\":{\"bootstrap95\":[0.125,0.75],\"mean\":0.5}},\"evaluator_receipt_sha256\":\"5ede7df66a1138d6f1828e91c42a8a0ef1e952e9a9b51874745512bd33063437\",\"gates\":{\"equal_budget\":true,\"exact_three_calls_each\":true,\"removal_loses_effect\":true,\"shuffle_loses_effect\":true,\"typed_beats_flat_lcb_gt_0\":false,\"typed_beats_vector\":true},\"item_scores\":[{\"item_id\":\"synthetic-negative-item-01\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-negative-item-02\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-negative-item-03\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-negative-item-04\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-negative-item-05\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-negative-item-06\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-negative-item-07\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-negative-item-08\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}}],\"judgment_sha256\":\"d55bd7c90f6afbfd53ab54d5e709fd3fa0c878dab4eb9c4d989b8356ebc2a77c\",\"metrics\":{\"flat_single_llm_three_call_workflow\":{\"n\":8,\"success_rate\":1.0},\"typed_hswm_three_function_network\":{\"n\":8,\"success_rate\":1.0},\"typed_network_role_removed_schema_preserving_null\":{\"n\":8,\"success_rate\":0.5},\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"n\":8,\"success_rate\":0.5},\"vector_memory_three_call_workflow\":{\"n\":8,\"success_rate\":0.5}},\"mode\":\"sealed\",\"parity_failures\":[],\"run_id\":\"synthetic-prom9-f1-negative-v1\",\"schema_version\":\"hswm-prom9-f1-judgment/v1\",\"suite_receipt_sha256\":\"5f6508ff4a8776141558f6edfeb8a353810a307a913512f32223ef1edeca0da7\",\"verdict\":\"REJECTED_OR_NARROWED\"}"
+      },
+      "gold": "negative.gold.json",
+      "mode": "sealed",
+      "name": "negative",
+      "suite": "negative.suite.json"
+    },
+    {
+      "expected": {
+        "101:42": {
+          "allowed_claim": "No scientific efficacy claim; use this result only to debug and freeze F1.",
+          "bootstrap": {
+            "paired": true,
+            "reps": 101,
+            "seed": 42
+          },
+          "comparisons": {
+            "typed_minus_flat_single_llm_three_call_workflow": {
+              "bootstrap95": [
+                -0.25,
+                0.625
+              ],
+              "mean": 0.25
+            },
+            "typed_minus_typed_network_role_removed_schema_preserving_null": {
+              "bootstrap95": [
+                -0.125,
+                0.75
+              ],
+              "mean": 0.25
+            },
+            "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "bootstrap95": [
+                -0.25,
+                0.75
+              ],
+              "mean": 0.25
+            },
+            "typed_minus_vector_memory_three_call_workflow": {
+              "bootstrap95": [
+                -0.125,
+                0.625
+              ],
+              "mean": 0.25
+            }
+          },
+          "evaluator_receipt_sha256": "7a893467bc4978c24be39020b555f5f51796726e75d963bd10ce2842b1985428",
+          "gates": {
+            "equal_budget": true,
+            "exact_three_calls_each": true,
+            "removal_loses_effect": true,
+            "shuffle_loses_effect": true,
+            "typed_beats_flat_lcb_gt_0": false,
+            "typed_beats_vector": true
+          },
+          "item_scores": [
+            {
+              "item_id": "synthetic-mixed_development-item-01",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-02",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 0.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-03",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-04",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-05",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 0.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-06",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-07",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 0.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-08",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            }
+          ],
+          "judgment_sha256": "0bf72c37e4fef7f281ee22b72dc5522cec2e35e4022e10e6bfde565033a3b7a9",
+          "metrics": {
+            "flat_single_llm_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.375
+            },
+            "typed_hswm_three_function_network": {
+              "n": 8,
+              "success_rate": 0.625
+            },
+            "typed_network_role_removed_schema_preserving_null": {
+              "n": 8,
+              "success_rate": 0.375
+            },
+            "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "n": 8,
+              "success_rate": 0.375
+            },
+            "vector_memory_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.375
+            }
+          },
+          "mode": "development",
+          "parity_failures": [],
+          "run_id": "synthetic-prom9-f1-mixed_development-v1",
+          "schema_version": "hswm-prom9-f1-judgment/v1",
+          "suite_receipt_sha256": "ae425d6f866d3337fe5be57ff8e73dfe83c281190438ff7768e45868e1f78513",
+          "verdict": "DEVELOPMENT_ONLY"
+        },
+        "101:99": {
+          "allowed_claim": "No scientific efficacy claim; use this result only to debug and freeze F1.",
+          "bootstrap": {
+            "paired": true,
+            "reps": 101,
+            "seed": 99
+          },
+          "comparisons": {
+            "typed_minus_flat_single_llm_three_call_workflow": {
+              "bootstrap95": [
+                -0.375,
+                0.75
+              ],
+              "mean": 0.25
+            },
+            "typed_minus_typed_network_role_removed_schema_preserving_null": {
+              "bootstrap95": [
+                -0.25,
+                0.625
+              ],
+              "mean": 0.25
+            },
+            "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "bootstrap95": [
+                -0.375,
+                0.625
+              ],
+              "mean": 0.25
+            },
+            "typed_minus_vector_memory_three_call_workflow": {
+              "bootstrap95": [
+                -0.25,
+                0.625
+              ],
+              "mean": 0.25
+            }
+          },
+          "evaluator_receipt_sha256": "7a893467bc4978c24be39020b555f5f51796726e75d963bd10ce2842b1985428",
+          "gates": {
+            "equal_budget": true,
+            "exact_three_calls_each": true,
+            "removal_loses_effect": true,
+            "shuffle_loses_effect": true,
+            "typed_beats_flat_lcb_gt_0": false,
+            "typed_beats_vector": true
+          },
+          "item_scores": [
+            {
+              "item_id": "synthetic-mixed_development-item-01",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-02",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 0.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-03",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-04",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-05",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 0.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-06",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-07",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 0.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-mixed_development-item-08",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            }
+          ],
+          "judgment_sha256": "17d162a7104988b0a8cd8620c53d54012ebc31394275e3899eed976488a61462",
+          "metrics": {
+            "flat_single_llm_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.375
+            },
+            "typed_hswm_three_function_network": {
+              "n": 8,
+              "success_rate": 0.625
+            },
+            "typed_network_role_removed_schema_preserving_null": {
+              "n": 8,
+              "success_rate": 0.375
+            },
+            "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "n": 8,
+              "success_rate": 0.375
+            },
+            "vector_memory_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.375
+            }
+          },
+          "mode": "development",
+          "parity_failures": [],
+          "run_id": "synthetic-prom9-f1-mixed_development-v1",
+          "schema_version": "hswm-prom9-f1-judgment/v1",
+          "suite_receipt_sha256": "ae425d6f866d3337fe5be57ff8e73dfe83c281190438ff7768e45868e1f78513",
+          "verdict": "DEVELOPMENT_ONLY"
+        }
+      },
+      "expected_canonical": {
+        "101:42": "{\"allowed_claim\":\"No scientific efficacy claim; use this result only to debug and freeze F1.\",\"bootstrap\":{\"paired\":true,\"reps\":101,\"seed\":42},\"comparisons\":{\"typed_minus_flat_single_llm_three_call_workflow\":{\"bootstrap95\":[-0.25,0.625],\"mean\":0.25},\"typed_minus_typed_network_role_removed_schema_preserving_null\":{\"bootstrap95\":[-0.125,0.75],\"mean\":0.25},\"typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"bootstrap95\":[-0.25,0.75],\"mean\":0.25},\"typed_minus_vector_memory_three_call_workflow\":{\"bootstrap95\":[-0.125,0.625],\"mean\":0.25}},\"evaluator_receipt_sha256\":\"7a893467bc4978c24be39020b555f5f51796726e75d963bd10ce2842b1985428\",\"gates\":{\"equal_budget\":true,\"exact_three_calls_each\":true,\"removal_loses_effect\":true,\"shuffle_loses_effect\":true,\"typed_beats_flat_lcb_gt_0\":false,\"typed_beats_vector\":true},\"item_scores\":[{\"item_id\":\"synthetic-mixed_development-item-01\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-mixed_development-item-02\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":0.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-mixed_development-item-03\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-mixed_development-item-04\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-mixed_development-item-05\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":0.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-mixed_development-item-06\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-mixed_development-item-07\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":0.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-mixed_development-item-08\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}}],\"judgment_sha256\":\"0bf72c37e4fef7f281ee22b72dc5522cec2e35e4022e10e6bfde565033a3b7a9\",\"metrics\":{\"flat_single_llm_three_call_workflow\":{\"n\":8,\"success_rate\":0.375},\"typed_hswm_three_function_network\":{\"n\":8,\"success_rate\":0.625},\"typed_network_role_removed_schema_preserving_null\":{\"n\":8,\"success_rate\":0.375},\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"n\":8,\"success_rate\":0.375},\"vector_memory_three_call_workflow\":{\"n\":8,\"success_rate\":0.375}},\"mode\":\"development\",\"parity_failures\":[],\"run_id\":\"synthetic-prom9-f1-mixed_development-v1\",\"schema_version\":\"hswm-prom9-f1-judgment/v1\",\"suite_receipt_sha256\":\"ae425d6f866d3337fe5be57ff8e73dfe83c281190438ff7768e45868e1f78513\",\"verdict\":\"DEVELOPMENT_ONLY\"}",
+        "101:99": "{\"allowed_claim\":\"No scientific efficacy claim; use this result only to debug and freeze F1.\",\"bootstrap\":{\"paired\":true,\"reps\":101,\"seed\":99},\"comparisons\":{\"typed_minus_flat_single_llm_three_call_workflow\":{\"bootstrap95\":[-0.375,0.75],\"mean\":0.25},\"typed_minus_typed_network_role_removed_schema_preserving_null\":{\"bootstrap95\":[-0.25,0.625],\"mean\":0.25},\"typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"bootstrap95\":[-0.375,0.625],\"mean\":0.25},\"typed_minus_vector_memory_three_call_workflow\":{\"bootstrap95\":[-0.25,0.625],\"mean\":0.25}},\"evaluator_receipt_sha256\":\"7a893467bc4978c24be39020b555f5f51796726e75d963bd10ce2842b1985428\",\"gates\":{\"equal_budget\":true,\"exact_three_calls_each\":true,\"removal_loses_effect\":true,\"shuffle_loses_effect\":true,\"typed_beats_flat_lcb_gt_0\":false,\"typed_beats_vector\":true},\"item_scores\":[{\"item_id\":\"synthetic-mixed_development-item-01\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-mixed_development-item-02\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":0.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-mixed_development-item-03\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-mixed_development-item-04\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-mixed_development-item-05\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":0.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-mixed_development-item-06\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-mixed_development-item-07\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":0.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-mixed_development-item-08\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}}],\"judgment_sha256\":\"17d162a7104988b0a8cd8620c53d54012ebc31394275e3899eed976488a61462\",\"metrics\":{\"flat_single_llm_three_call_workflow\":{\"n\":8,\"success_rate\":0.375},\"typed_hswm_three_function_network\":{\"n\":8,\"success_rate\":0.625},\"typed_network_role_removed_schema_preserving_null\":{\"n\":8,\"success_rate\":0.375},\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"n\":8,\"success_rate\":0.375},\"vector_memory_three_call_workflow\":{\"n\":8,\"success_rate\":0.375}},\"mode\":\"development\",\"parity_failures\":[],\"run_id\":\"synthetic-prom9-f1-mixed_development-v1\",\"schema_version\":\"hswm-prom9-f1-judgment/v1\",\"suite_receipt_sha256\":\"ae425d6f866d3337fe5be57ff8e73dfe83c281190438ff7768e45868e1f78513\",\"verdict\":\"DEVELOPMENT_ONLY\"}"
+      },
+      "gold": "mixed_development.gold.json",
+      "mode": "development",
+      "name": "mixed_development",
+      "suite": "mixed_development.suite.json"
+    },
+    {
+      "expected": {
+        "101:42": {
+          "allowed_claim": "On the registered sealed scope, typed composition beat matched flat/vector controls and lost its effect under role removal/shuffle.",
+          "bootstrap": {
+            "paired": true,
+            "reps": 101,
+            "seed": 42
+          },
+          "comparisons": {
+            "typed_minus_flat_single_llm_three_call_workflow": {
+              "bootstrap95": [
+                0.5,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_typed_network_role_removed_schema_preserving_null": {
+              "bootstrap95": [
+                0.625,
+                1.0
+              ],
+              "mean": 0.875
+            },
+            "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "bootstrap95": [
+                0.625,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_vector_memory_three_call_workflow": {
+              "bootstrap95": [
+                0.5,
+                1.0
+              ],
+              "mean": 0.75
+            }
+          },
+          "evaluator_receipt_sha256": "03ed56418ec488803cc41eff35ce21bb44c376d5d7627352f6da99d302f4200a",
+          "gates": {
+            "equal_budget": true,
+            "exact_three_calls_each": true,
+            "removal_loses_effect": true,
+            "shuffle_loses_effect": true,
+            "typed_beats_flat_lcb_gt_0": true,
+            "typed_beats_vector": true
+          },
+          "item_scores": [
+            {
+              "item_id": "synthetic-unicode_casefold-item-01",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-02",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-03",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-04",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-05",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-06",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-07",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-08",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            }
+          ],
+          "judgment_sha256": "7737cc1056880162c8ef0ac3589431abf73de4c5a27fa83d2f175debcf8644ba",
+          "metrics": {
+            "flat_single_llm_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "typed_hswm_three_function_network": {
+              "n": 8,
+              "success_rate": 1.0
+            },
+            "typed_network_role_removed_schema_preserving_null": {
+              "n": 8,
+              "success_rate": 0.125
+            },
+            "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "vector_memory_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            }
+          },
+          "mode": "sealed",
+          "parity_failures": [],
+          "run_id": "synthetic-prom9-f1-unicode_casefold-v1",
+          "schema_version": "hswm-prom9-f1-judgment/v1",
+          "suite_receipt_sha256": "ab51b47d6620177fc36de5a64242c094fddc0df994856fcf8ec226db24ce0bca",
+          "verdict": "F1_SUPPORTED_NARROW"
+        },
+        "101:99": {
+          "allowed_claim": "On the registered sealed scope, typed composition beat matched flat/vector controls and lost its effect under role removal/shuffle.",
+          "bootstrap": {
+            "paired": true,
+            "reps": 101,
+            "seed": 99
+          },
+          "comparisons": {
+            "typed_minus_flat_single_llm_three_call_workflow": {
+              "bootstrap95": [
+                0.375,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_typed_network_role_removed_schema_preserving_null": {
+              "bootstrap95": [
+                0.625,
+                1.0
+              ],
+              "mean": 0.875
+            },
+            "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "bootstrap95": [
+                0.375,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_vector_memory_three_call_workflow": {
+              "bootstrap95": [
+                0.5,
+                1.0
+              ],
+              "mean": 0.75
+            }
+          },
+          "evaluator_receipt_sha256": "03ed56418ec488803cc41eff35ce21bb44c376d5d7627352f6da99d302f4200a",
+          "gates": {
+            "equal_budget": true,
+            "exact_three_calls_each": true,
+            "removal_loses_effect": true,
+            "shuffle_loses_effect": true,
+            "typed_beats_flat_lcb_gt_0": true,
+            "typed_beats_vector": true
+          },
+          "item_scores": [
+            {
+              "item_id": "synthetic-unicode_casefold-item-01",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-02",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-03",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-04",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-05",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-06",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-07",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-unicode_casefold-item-08",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            }
+          ],
+          "judgment_sha256": "5336f2473a75c9e8d74f2ecb98dc590878d184a6a759579885b4445e81be049f",
+          "metrics": {
+            "flat_single_llm_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "typed_hswm_three_function_network": {
+              "n": 8,
+              "success_rate": 1.0
+            },
+            "typed_network_role_removed_schema_preserving_null": {
+              "n": 8,
+              "success_rate": 0.125
+            },
+            "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "vector_memory_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            }
+          },
+          "mode": "sealed",
+          "parity_failures": [],
+          "run_id": "synthetic-prom9-f1-unicode_casefold-v1",
+          "schema_version": "hswm-prom9-f1-judgment/v1",
+          "suite_receipt_sha256": "ab51b47d6620177fc36de5a64242c094fddc0df994856fcf8ec226db24ce0bca",
+          "verdict": "F1_SUPPORTED_NARROW"
+        }
+      },
+      "expected_canonical": {
+        "101:42": "{\"allowed_claim\":\"On the registered sealed scope, typed composition beat matched flat/vector controls and lost its effect under role removal/shuffle.\",\"bootstrap\":{\"paired\":true,\"reps\":101,\"seed\":42},\"comparisons\":{\"typed_minus_flat_single_llm_three_call_workflow\":{\"bootstrap95\":[0.5,1.0],\"mean\":0.75},\"typed_minus_typed_network_role_removed_schema_preserving_null\":{\"bootstrap95\":[0.625,1.0],\"mean\":0.875},\"typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"bootstrap95\":[0.625,1.0],\"mean\":0.75},\"typed_minus_vector_memory_three_call_workflow\":{\"bootstrap95\":[0.5,1.0],\"mean\":0.75}},\"evaluator_receipt_sha256\":\"03ed56418ec488803cc41eff35ce21bb44c376d5d7627352f6da99d302f4200a\",\"gates\":{\"equal_budget\":true,\"exact_three_calls_each\":true,\"removal_loses_effect\":true,\"shuffle_loses_effect\":true,\"typed_beats_flat_lcb_gt_0\":true,\"typed_beats_vector\":true},\"item_scores\":[{\"item_id\":\"synthetic-unicode_casefold-item-01\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-unicode_casefold-item-02\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-unicode_casefold-item-03\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-unicode_casefold-item-04\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-unicode_casefold-item-05\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-unicode_casefold-item-06\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-unicode_casefold-item-07\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-unicode_casefold-item-08\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}}],\"judgment_sha256\":\"7737cc1056880162c8ef0ac3589431abf73de4c5a27fa83d2f175debcf8644ba\",\"metrics\":{\"flat_single_llm_three_call_workflow\":{\"n\":8,\"success_rate\":0.25},\"typed_hswm_three_function_network\":{\"n\":8,\"success_rate\":1.0},\"typed_network_role_removed_schema_preserving_null\":{\"n\":8,\"success_rate\":0.125},\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"n\":8,\"success_rate\":0.25},\"vector_memory_three_call_workflow\":{\"n\":8,\"success_rate\":0.25}},\"mode\":\"sealed\",\"parity_failures\":[],\"run_id\":\"synthetic-prom9-f1-unicode_casefold-v1\",\"schema_version\":\"hswm-prom9-f1-judgment/v1\",\"suite_receipt_sha256\":\"ab51b47d6620177fc36de5a64242c094fddc0df994856fcf8ec226db24ce0bca\",\"verdict\":\"F1_SUPPORTED_NARROW\"}",
+        "101:99": "{\"allowed_claim\":\"On the registered sealed scope, typed composition beat matched flat/vector controls and lost its effect under role removal/shuffle.\",\"bootstrap\":{\"paired\":true,\"reps\":101,\"seed\":99},\"comparisons\":{\"typed_minus_flat_single_llm_three_call_workflow\":{\"bootstrap95\":[0.375,1.0],\"mean\":0.75},\"typed_minus_typed_network_role_removed_schema_preserving_null\":{\"bootstrap95\":[0.625,1.0],\"mean\":0.875},\"typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"bootstrap95\":[0.375,1.0],\"mean\":0.75},\"typed_minus_vector_memory_three_call_workflow\":{\"bootstrap95\":[0.5,1.0],\"mean\":0.75}},\"evaluator_receipt_sha256\":\"03ed56418ec488803cc41eff35ce21bb44c376d5d7627352f6da99d302f4200a\",\"gates\":{\"equal_budget\":true,\"exact_three_calls_each\":true,\"removal_loses_effect\":true,\"shuffle_loses_effect\":true,\"typed_beats_flat_lcb_gt_0\":true,\"typed_beats_vector\":true},\"item_scores\":[{\"item_id\":\"synthetic-unicode_casefold-item-01\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-unicode_casefold-item-02\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-unicode_casefold-item-03\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-unicode_casefold-item-04\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-unicode_casefold-item-05\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-unicode_casefold-item-06\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-unicode_casefold-item-07\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-unicode_casefold-item-08\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}}],\"judgment_sha256\":\"5336f2473a75c9e8d74f2ecb98dc590878d184a6a759579885b4445e81be049f\",\"metrics\":{\"flat_single_llm_three_call_workflow\":{\"n\":8,\"success_rate\":0.25},\"typed_hswm_three_function_network\":{\"n\":8,\"success_rate\":1.0},\"typed_network_role_removed_schema_preserving_null\":{\"n\":8,\"success_rate\":0.125},\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"n\":8,\"success_rate\":0.25},\"vector_memory_three_call_workflow\":{\"n\":8,\"success_rate\":0.25}},\"mode\":\"sealed\",\"parity_failures\":[],\"run_id\":\"synthetic-prom9-f1-unicode_casefold-v1\",\"schema_version\":\"hswm-prom9-f1-judgment/v1\",\"suite_receipt_sha256\":\"ab51b47d6620177fc36de5a64242c094fddc0df994856fcf8ec226db24ce0bca\",\"verdict\":\"F1_SUPPORTED_NARROW\"}"
+      },
+      "gold": "unicode_casefold.gold.json",
+      "mode": "sealed",
+      "name": "unicode_casefold",
+      "suite": "unicode_casefold.suite.json"
+    },
+    {
+      "expected": {
+        "101:42": {
+          "allowed_claim": "On the registered sealed scope, typed composition beat matched flat/vector controls and lost its effect under role removal/shuffle.",
+          "bootstrap": {
+            "paired": true,
+            "reps": 101,
+            "seed": 42
+          },
+          "comparisons": {
+            "typed_minus_flat_single_llm_three_call_workflow": {
+              "bootstrap95": [
+                0.5,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_typed_network_role_removed_schema_preserving_null": {
+              "bootstrap95": [
+                0.625,
+                1.0
+              ],
+              "mean": 0.875
+            },
+            "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "bootstrap95": [
+                0.625,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_vector_memory_three_call_workflow": {
+              "bootstrap95": [
+                0.5,
+                1.0
+              ],
+              "mean": 0.75
+            }
+          },
+          "evaluator_receipt_sha256": "f2b9fa68f39dcd56445b79c989af98be26b5cb993ba4f43180de6c4ce53c043b",
+          "gates": {
+            "equal_budget": true,
+            "exact_three_calls_each": true,
+            "removal_loses_effect": true,
+            "shuffle_loses_effect": true,
+            "typed_beats_flat_lcb_gt_0": true,
+            "typed_beats_vector": true
+          },
+          "item_scores": [
+            {
+              "item_id": "synthetic-bigint_tokens-item-01",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-02",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-03",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-04",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-05",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-06",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-07",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-08",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            }
+          ],
+          "judgment_sha256": "fa665e64e3b0d63f12c339cef1452f566474f333875ed60fe59493cd2a2fd5f2",
+          "metrics": {
+            "flat_single_llm_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "typed_hswm_three_function_network": {
+              "n": 8,
+              "success_rate": 1.0
+            },
+            "typed_network_role_removed_schema_preserving_null": {
+              "n": 8,
+              "success_rate": 0.125
+            },
+            "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "vector_memory_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            }
+          },
+          "mode": "sealed",
+          "parity_failures": [],
+          "run_id": "synthetic-prom9-f1-bigint_tokens-v1",
+          "schema_version": "hswm-prom9-f1-judgment/v1",
+          "suite_receipt_sha256": "263c81d8fc28b01d144384b60418313c74988e69709e562bb2f808fddfdf6e6d",
+          "verdict": "F1_SUPPORTED_NARROW"
+        },
+        "101:99": {
+          "allowed_claim": "On the registered sealed scope, typed composition beat matched flat/vector controls and lost its effect under role removal/shuffle.",
+          "bootstrap": {
+            "paired": true,
+            "reps": 101,
+            "seed": 99
+          },
+          "comparisons": {
+            "typed_minus_flat_single_llm_three_call_workflow": {
+              "bootstrap95": [
+                0.375,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_typed_network_role_removed_schema_preserving_null": {
+              "bootstrap95": [
+                0.625,
+                1.0
+              ],
+              "mean": 0.875
+            },
+            "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "bootstrap95": [
+                0.375,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_vector_memory_three_call_workflow": {
+              "bootstrap95": [
+                0.5,
+                1.0
+              ],
+              "mean": 0.75
+            }
+          },
+          "evaluator_receipt_sha256": "f2b9fa68f39dcd56445b79c989af98be26b5cb993ba4f43180de6c4ce53c043b",
+          "gates": {
+            "equal_budget": true,
+            "exact_three_calls_each": true,
+            "removal_loses_effect": true,
+            "shuffle_loses_effect": true,
+            "typed_beats_flat_lcb_gt_0": true,
+            "typed_beats_vector": true
+          },
+          "item_scores": [
+            {
+              "item_id": "synthetic-bigint_tokens-item-01",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-02",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-03",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-04",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-05",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-06",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-07",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-bigint_tokens-item-08",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            }
+          ],
+          "judgment_sha256": "79e5f913c8978db414994c0babdeaa4d180693b8cc24454f14aac54c172f04d0",
+          "metrics": {
+            "flat_single_llm_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "typed_hswm_three_function_network": {
+              "n": 8,
+              "success_rate": 1.0
+            },
+            "typed_network_role_removed_schema_preserving_null": {
+              "n": 8,
+              "success_rate": 0.125
+            },
+            "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "vector_memory_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            }
+          },
+          "mode": "sealed",
+          "parity_failures": [],
+          "run_id": "synthetic-prom9-f1-bigint_tokens-v1",
+          "schema_version": "hswm-prom9-f1-judgment/v1",
+          "suite_receipt_sha256": "263c81d8fc28b01d144384b60418313c74988e69709e562bb2f808fddfdf6e6d",
+          "verdict": "F1_SUPPORTED_NARROW"
+        }
+      },
+      "expected_canonical": {
+        "101:42": "{\"allowed_claim\":\"On the registered sealed scope, typed composition beat matched flat/vector controls and lost its effect under role removal/shuffle.\",\"bootstrap\":{\"paired\":true,\"reps\":101,\"seed\":42},\"comparisons\":{\"typed_minus_flat_single_llm_three_call_workflow\":{\"bootstrap95\":[0.5,1.0],\"mean\":0.75},\"typed_minus_typed_network_role_removed_schema_preserving_null\":{\"bootstrap95\":[0.625,1.0],\"mean\":0.875},\"typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"bootstrap95\":[0.625,1.0],\"mean\":0.75},\"typed_minus_vector_memory_three_call_workflow\":{\"bootstrap95\":[0.5,1.0],\"mean\":0.75}},\"evaluator_receipt_sha256\":\"f2b9fa68f39dcd56445b79c989af98be26b5cb993ba4f43180de6c4ce53c043b\",\"gates\":{\"equal_budget\":true,\"exact_three_calls_each\":true,\"removal_loses_effect\":true,\"shuffle_loses_effect\":true,\"typed_beats_flat_lcb_gt_0\":true,\"typed_beats_vector\":true},\"item_scores\":[{\"item_id\":\"synthetic-bigint_tokens-item-01\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-bigint_tokens-item-02\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-bigint_tokens-item-03\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-bigint_tokens-item-04\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-bigint_tokens-item-05\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-bigint_tokens-item-06\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-bigint_tokens-item-07\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-bigint_tokens-item-08\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}}],\"judgment_sha256\":\"fa665e64e3b0d63f12c339cef1452f566474f333875ed60fe59493cd2a2fd5f2\",\"metrics\":{\"flat_single_llm_three_call_workflow\":{\"n\":8,\"success_rate\":0.25},\"typed_hswm_three_function_network\":{\"n\":8,\"success_rate\":1.0},\"typed_network_role_removed_schema_preserving_null\":{\"n\":8,\"success_rate\":0.125},\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"n\":8,\"success_rate\":0.25},\"vector_memory_three_call_workflow\":{\"n\":8,\"success_rate\":0.25}},\"mode\":\"sealed\",\"parity_failures\":[],\"run_id\":\"synthetic-prom9-f1-bigint_tokens-v1\",\"schema_version\":\"hswm-prom9-f1-judgment/v1\",\"suite_receipt_sha256\":\"263c81d8fc28b01d144384b60418313c74988e69709e562bb2f808fddfdf6e6d\",\"verdict\":\"F1_SUPPORTED_NARROW\"}",
+        "101:99": "{\"allowed_claim\":\"On the registered sealed scope, typed composition beat matched flat/vector controls and lost its effect under role removal/shuffle.\",\"bootstrap\":{\"paired\":true,\"reps\":101,\"seed\":99},\"comparisons\":{\"typed_minus_flat_single_llm_three_call_workflow\":{\"bootstrap95\":[0.375,1.0],\"mean\":0.75},\"typed_minus_typed_network_role_removed_schema_preserving_null\":{\"bootstrap95\":[0.625,1.0],\"mean\":0.875},\"typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"bootstrap95\":[0.375,1.0],\"mean\":0.75},\"typed_minus_vector_memory_three_call_workflow\":{\"bootstrap95\":[0.5,1.0],\"mean\":0.75}},\"evaluator_receipt_sha256\":\"f2b9fa68f39dcd56445b79c989af98be26b5cb993ba4f43180de6c4ce53c043b\",\"gates\":{\"equal_budget\":true,\"exact_three_calls_each\":true,\"removal_loses_effect\":true,\"shuffle_loses_effect\":true,\"typed_beats_flat_lcb_gt_0\":true,\"typed_beats_vector\":true},\"item_scores\":[{\"item_id\":\"synthetic-bigint_tokens-item-01\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-bigint_tokens-item-02\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-bigint_tokens-item-03\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-bigint_tokens-item-04\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-bigint_tokens-item-05\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-bigint_tokens-item-06\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-bigint_tokens-item-07\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-bigint_tokens-item-08\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}}],\"judgment_sha256\":\"79e5f913c8978db414994c0babdeaa4d180693b8cc24454f14aac54c172f04d0\",\"metrics\":{\"flat_single_llm_three_call_workflow\":{\"n\":8,\"success_rate\":0.25},\"typed_hswm_three_function_network\":{\"n\":8,\"success_rate\":1.0},\"typed_network_role_removed_schema_preserving_null\":{\"n\":8,\"success_rate\":0.125},\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"n\":8,\"success_rate\":0.25},\"vector_memory_three_call_workflow\":{\"n\":8,\"success_rate\":0.25}},\"mode\":\"sealed\",\"parity_failures\":[],\"run_id\":\"synthetic-prom9-f1-bigint_tokens-v1\",\"schema_version\":\"hswm-prom9-f1-judgment/v1\",\"suite_receipt_sha256\":\"263c81d8fc28b01d144384b60418313c74988e69709e562bb2f808fddfdf6e6d\",\"verdict\":\"F1_SUPPORTED_NARROW\"}"
+      },
+      "gold": "bigint_tokens.gold.json",
+      "mode": "sealed",
+      "name": "bigint_tokens",
+      "suite": "bigint_tokens.suite.json"
+    },
+    {
+      "expected": {
+        "101:42": {
+          "allowed_claim": "The sealed F1 result did not satisfy the complete topology-and-budget conjunction.",
+          "bootstrap": {
+            "paired": true,
+            "reps": 101,
+            "seed": 42
+          },
+          "comparisons": {
+            "typed_minus_flat_single_llm_three_call_workflow": {
+              "bootstrap95": [
+                0.5,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_typed_network_role_removed_schema_preserving_null": {
+              "bootstrap95": [
+                0.625,
+                1.0
+              ],
+              "mean": 0.875
+            },
+            "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "bootstrap95": [
+                0.625,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_vector_memory_three_call_workflow": {
+              "bootstrap95": [
+                0.5,
+                1.0
+              ],
+              "mean": 0.75
+            }
+          },
+          "evaluator_receipt_sha256": "8693b6b26d5742c77890e25389d3f3da088b3b2d0ad88076dc8001c6464898fe",
+          "gates": {
+            "equal_budget": false,
+            "exact_three_calls_each": true,
+            "removal_loses_effect": true,
+            "shuffle_loses_effect": true,
+            "typed_beats_flat_lcb_gt_0": true,
+            "typed_beats_vector": true
+          },
+          "item_scores": [
+            {
+              "item_id": "synthetic-model_pair_collision-item-01",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-02",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-03",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-04",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-05",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-06",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-07",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-08",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            }
+          ],
+          "judgment_sha256": "e9235c265fc3ed356d96ec809809f2add0b13ba0b3149ea20c74c5e1357528c9",
+          "metrics": {
+            "flat_single_llm_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "typed_hswm_three_function_network": {
+              "n": 8,
+              "success_rate": 1.0
+            },
+            "typed_network_role_removed_schema_preserving_null": {
+              "n": 8,
+              "success_rate": 0.125
+            },
+            "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "vector_memory_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            }
+          },
+          "mode": "sealed",
+          "parity_failures": [
+            "synthetic-model_pair_collision-item-01:model",
+            "synthetic-model_pair_collision-item-02:model",
+            "synthetic-model_pair_collision-item-03:model",
+            "synthetic-model_pair_collision-item-04:model",
+            "synthetic-model_pair_collision-item-05:model",
+            "synthetic-model_pair_collision-item-06:model",
+            "synthetic-model_pair_collision-item-07:model",
+            "synthetic-model_pair_collision-item-08:model"
+          ],
+          "run_id": "synthetic-prom9-f1-model_pair_collision-v1",
+          "schema_version": "hswm-prom9-f1-judgment/v1",
+          "suite_receipt_sha256": "02c49c146f743bece2f766befee1ae88fe4bbd9d845586bcd00ba3e91d0e8dc9",
+          "verdict": "REJECTED_OR_NARROWED"
+        },
+        "101:99": {
+          "allowed_claim": "The sealed F1 result did not satisfy the complete topology-and-budget conjunction.",
+          "bootstrap": {
+            "paired": true,
+            "reps": 101,
+            "seed": 99
+          },
+          "comparisons": {
+            "typed_minus_flat_single_llm_three_call_workflow": {
+              "bootstrap95": [
+                0.375,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_typed_network_role_removed_schema_preserving_null": {
+              "bootstrap95": [
+                0.625,
+                1.0
+              ],
+              "mean": 0.875
+            },
+            "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "bootstrap95": [
+                0.375,
+                1.0
+              ],
+              "mean": 0.75
+            },
+            "typed_minus_vector_memory_three_call_workflow": {
+              "bootstrap95": [
+                0.5,
+                1.0
+              ],
+              "mean": 0.75
+            }
+          },
+          "evaluator_receipt_sha256": "8693b6b26d5742c77890e25389d3f3da088b3b2d0ad88076dc8001c6464898fe",
+          "gates": {
+            "equal_budget": false,
+            "exact_three_calls_each": true,
+            "removal_loses_effect": true,
+            "shuffle_loses_effect": true,
+            "typed_beats_flat_lcb_gt_0": true,
+            "typed_beats_vector": true
+          },
+          "item_scores": [
+            {
+              "item_id": "synthetic-model_pair_collision-item-01",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-02",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-03",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-04",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 1.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-05",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 1.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-06",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 1.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-07",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 1.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            },
+            {
+              "item_id": "synthetic-model_pair_collision-item-08",
+              "scores": {
+                "flat_single_llm_three_call_workflow": 0.0,
+                "typed_hswm_three_function_network": 1.0,
+                "typed_network_role_removed_schema_preserving_null": 0.0,
+                "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+                "vector_memory_three_call_workflow": 0.0
+              }
+            }
+          ],
+          "judgment_sha256": "2c21eb182ba13b4cebfb115004d86a3bbea24f63e13fd737e1b7b0fd06d45ebf",
+          "metrics": {
+            "flat_single_llm_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "typed_hswm_three_function_network": {
+              "n": 8,
+              "success_rate": 1.0
+            },
+            "typed_network_role_removed_schema_preserving_null": {
+              "n": 8,
+              "success_rate": 0.125
+            },
+            "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+              "n": 8,
+              "success_rate": 0.25
+            },
+            "vector_memory_three_call_workflow": {
+              "n": 8,
+              "success_rate": 0.25
+            }
+          },
+          "mode": "sealed",
+          "parity_failures": [
+            "synthetic-model_pair_collision-item-01:model",
+            "synthetic-model_pair_collision-item-02:model",
+            "synthetic-model_pair_collision-item-03:model",
+            "synthetic-model_pair_collision-item-04:model",
+            "synthetic-model_pair_collision-item-05:model",
+            "synthetic-model_pair_collision-item-06:model",
+            "synthetic-model_pair_collision-item-07:model",
+            "synthetic-model_pair_collision-item-08:model"
+          ],
+          "run_id": "synthetic-prom9-f1-model_pair_collision-v1",
+          "schema_version": "hswm-prom9-f1-judgment/v1",
+          "suite_receipt_sha256": "02c49c146f743bece2f766befee1ae88fe4bbd9d845586bcd00ba3e91d0e8dc9",
+          "verdict": "REJECTED_OR_NARROWED"
+        }
+      },
+      "expected_canonical": {
+        "101:42": "{\"allowed_claim\":\"The sealed F1 result did not satisfy the complete topology-and-budget conjunction.\",\"bootstrap\":{\"paired\":true,\"reps\":101,\"seed\":42},\"comparisons\":{\"typed_minus_flat_single_llm_three_call_workflow\":{\"bootstrap95\":[0.5,1.0],\"mean\":0.75},\"typed_minus_typed_network_role_removed_schema_preserving_null\":{\"bootstrap95\":[0.625,1.0],\"mean\":0.875},\"typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"bootstrap95\":[0.625,1.0],\"mean\":0.75},\"typed_minus_vector_memory_three_call_workflow\":{\"bootstrap95\":[0.5,1.0],\"mean\":0.75}},\"evaluator_receipt_sha256\":\"8693b6b26d5742c77890e25389d3f3da088b3b2d0ad88076dc8001c6464898fe\",\"gates\":{\"equal_budget\":false,\"exact_three_calls_each\":true,\"removal_loses_effect\":true,\"shuffle_loses_effect\":true,\"typed_beats_flat_lcb_gt_0\":true,\"typed_beats_vector\":true},\"item_scores\":[{\"item_id\":\"synthetic-model_pair_collision-item-01\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-model_pair_collision-item-02\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-model_pair_collision-item-03\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-model_pair_collision-item-04\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-model_pair_collision-item-05\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-model_pair_collision-item-06\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-model_pair_collision-item-07\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-model_pair_collision-item-08\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}}],\"judgment_sha256\":\"e9235c265fc3ed356d96ec809809f2add0b13ba0b3149ea20c74c5e1357528c9\",\"metrics\":{\"flat_single_llm_three_call_workflow\":{\"n\":8,\"success_rate\":0.25},\"typed_hswm_three_function_network\":{\"n\":8,\"success_rate\":1.0},\"typed_network_role_removed_schema_preserving_null\":{\"n\":8,\"success_rate\":0.125},\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"n\":8,\"success_rate\":0.25},\"vector_memory_three_call_workflow\":{\"n\":8,\"success_rate\":0.25}},\"mode\":\"sealed\",\"parity_failures\":[\"synthetic-model_pair_collision-item-01:model\",\"synthetic-model_pair_collision-item-02:model\",\"synthetic-model_pair_collision-item-03:model\",\"synthetic-model_pair_collision-item-04:model\",\"synthetic-model_pair_collision-item-05:model\",\"synthetic-model_pair_collision-item-06:model\",\"synthetic-model_pair_collision-item-07:model\",\"synthetic-model_pair_collision-item-08:model\"],\"run_id\":\"synthetic-prom9-f1-model_pair_collision-v1\",\"schema_version\":\"hswm-prom9-f1-judgment/v1\",\"suite_receipt_sha256\":\"02c49c146f743bece2f766befee1ae88fe4bbd9d845586bcd00ba3e91d0e8dc9\",\"verdict\":\"REJECTED_OR_NARROWED\"}",
+        "101:99": "{\"allowed_claim\":\"The sealed F1 result did not satisfy the complete topology-and-budget conjunction.\",\"bootstrap\":{\"paired\":true,\"reps\":101,\"seed\":99},\"comparisons\":{\"typed_minus_flat_single_llm_three_call_workflow\":{\"bootstrap95\":[0.375,1.0],\"mean\":0.75},\"typed_minus_typed_network_role_removed_schema_preserving_null\":{\"bootstrap95\":[0.625,1.0],\"mean\":0.875},\"typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"bootstrap95\":[0.375,1.0],\"mean\":0.75},\"typed_minus_vector_memory_three_call_workflow\":{\"bootstrap95\":[0.5,1.0],\"mean\":0.75}},\"evaluator_receipt_sha256\":\"8693b6b26d5742c77890e25389d3f3da088b3b2d0ad88076dc8001c6464898fe\",\"gates\":{\"equal_budget\":false,\"exact_three_calls_each\":true,\"removal_loses_effect\":true,\"shuffle_loses_effect\":true,\"typed_beats_flat_lcb_gt_0\":true,\"typed_beats_vector\":true},\"item_scores\":[{\"item_id\":\"synthetic-model_pair_collision-item-01\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-model_pair_collision-item-02\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-model_pair_collision-item-03\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-model_pair_collision-item-04\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":1.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-model_pair_collision-item-05\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":1.0}},{\"item_id\":\"synthetic-model_pair_collision-item-06\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":1.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-model_pair_collision-item-07\",\"scores\":{\"flat_single_llm_three_call_workflow\":1.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}},{\"item_id\":\"synthetic-model_pair_collision-item-08\",\"scores\":{\"flat_single_llm_three_call_workflow\":0.0,\"typed_hswm_three_function_network\":1.0,\"typed_network_role_removed_schema_preserving_null\":0.0,\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":0.0,\"vector_memory_three_call_workflow\":0.0}}],\"judgment_sha256\":\"2c21eb182ba13b4cebfb115004d86a3bbea24f63e13fd737e1b7b0fd06d45ebf\",\"metrics\":{\"flat_single_llm_three_call_workflow\":{\"n\":8,\"success_rate\":0.25},\"typed_hswm_three_function_network\":{\"n\":8,\"success_rate\":1.0},\"typed_network_role_removed_schema_preserving_null\":{\"n\":8,\"success_rate\":0.125},\"typed_network_with_role_instructions_shuffled_but_ports_preserved\":{\"n\":8,\"success_rate\":0.25},\"vector_memory_three_call_workflow\":{\"n\":8,\"success_rate\":0.25}},\"mode\":\"sealed\",\"parity_failures\":[\"synthetic-model_pair_collision-item-01:model\",\"synthetic-model_pair_collision-item-02:model\",\"synthetic-model_pair_collision-item-03:model\",\"synthetic-model_pair_collision-item-04:model\",\"synthetic-model_pair_collision-item-05:model\",\"synthetic-model_pair_collision-item-06:model\",\"synthetic-model_pair_collision-item-07:model\",\"synthetic-model_pair_collision-item-08:model\"],\"run_id\":\"synthetic-prom9-f1-model_pair_collision-v1\",\"schema_version\":\"hswm-prom9-f1-judgment/v1\",\"suite_receipt_sha256\":\"02c49c146f743bece2f766befee1ae88fe4bbd9d845586bcd00ba3e91d0e8dc9\",\"verdict\":\"REJECTED_OR_NARROWED\"}"
+      },
+      "gold": "model_pair_collision.gold.json",
+      "mode": "sealed",
+      "name": "model_pair_collision",
+      "suite": "model_pair_collision.suite.json"
+    }
+  ],
+  "classification": "SYNTHETIC_ENGINEERING_FIXTURE_NOT_RESEARCH",
+  "generator_sha256": "01e96ca588144985e304a95290ee542e2fb03cf616679e7ab457b5e64c8f2090",
+  "oracle_invocation": "src/hswm/development/bin/hswm-python core python prom_search_hswm.prom_f1_function_network.judge_suite",
+  "refusals": [
+    {
+      "error": "gold item 0 accepted answers are invalid",
+      "error_type": "F1HarnessError",
+      "gold": "control_ws.gold.json",
+      "name": "control_ws_blank_gold",
+      "suite": "control_ws.suite.json"
+    }
+  ],
+  "scaffold_artifact_pins": {
+    "gold.json": "205a1a6bd05b5fc00dce92e8497dac6cfa08f4b82978db52d937e84b8ed5a1d6",
+    "suite.json": "5ba900940a5aee23977a1a2409d6cf67e3ebc79413f089088c870f0cdeceeb58"
+  },
+  "schema_version": "hswm-prom9-f1-adversarial-fixture-index/v1",
+  "source_pins": {
+    "hswm_call_receipt.py": "eb544dab0b817feca03d1061f65273c3c8162b1fa40b12a56f25d37fcf5ea9af",
+    "hswm_function_network.py": "dae4a62b44ae3198b48e82ea48515b00b854b3b440fa7d13ee7567910584f5e5",
+    "hswm_typed_ports.py": "ff5dff3be6abf646ed0694839a5181bb8033a6ee4bcdc25966e7808e7cbd0937",
+    "prom_f1_function_network.py": "59e88cda18061bf312697b48e1df4639dae5b31be25dd1bfade6602db0468bfe"
+  }
+}

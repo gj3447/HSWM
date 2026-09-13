@@ -168,7 +168,9 @@ const divideRoundEven = (numerator: bigint, denominator: bigint): bigint => {
     return doubled > denominator || (doubled === denominator && (quotient & 1n) === 1n) ? quotient + 1n : quotient;
 };
 const rationalToFloat64 = (numerator: bigint, denominator: bigint): number => {
-    const power = floorLog2Ratio(numerator, denominator);
+    const power = Math.max(-1022, floorLog2Ratio(numerator, denominator));
+    if (power > 1023)
+        return Infinity;
     const scaledNumerator = power <= 52 ? numerator << BigInt(52 - power) : numerator;
     const scaledDenominator = power <= 52 ? denominator : denominator << BigInt(power - 52);
     let significand = divideRoundEven(scaledNumerator, scaledDenominator);
@@ -177,9 +179,9 @@ const rationalToFloat64 = (numerator: bigint, denominator: bigint): number => {
         significand >>= 1n;
         exponent += 1;
     }
-    if (exponent < -1022 || exponent > 1023)
-        return Number(numerator) / Number(denominator);
-    const bits = BigInt(exponent + 1023) << 52n | (significand & ((1n << 52n) - 1n));
+    if (exponent > 1023)
+        return Infinity;
+    const bits = exponent === -1022 && significand < 1n << 52n ? significand : BigInt(exponent + 1023) << 52n | (significand & ((1n << 52n) - 1n));
     const bytes = Buffer.alloc(8);
     bytes.writeBigUInt64LE(bits);
     return bytes.readDoubleLE();
@@ -284,6 +286,13 @@ const receiptPayload = (role: number, channel: number, count: bigint, sum: bigin
     target_scale_exponent: NATIVE_S2S_TARGET_SCALE_EXPONENT,
     variance_definition: "POPULATION_VARIANCE=(N*SUMSQ-SUM^2)/(N^2*2^(2*SCALE_EXPONENT))"
 });
+/** Python integer true division rounds the exact rational once to Float64. */
+export const nativeS2SPositiveRatio = (numerator: unknown, denominator: unknown): Either.Either<number, NativeS2SDatasetError> => {
+    if (typeof numerator !== "bigint" || numerator <= 0n || typeof denominator !== "bigint" || denominator <= 0n)
+        return fail("DATASET_INVALID", "ratio requires positive exact integers");
+    const result = rationalToFloat64(numerator, denominator);
+    return Number.isFinite(result) && result > 0 ? Either.right(result) : fail("DATASET_INVALID", "ratio must round to a finite positive Float64");
+};
 export const buildNativeS2SStratumLossReceipts = (candidate: unknown): Either.Either<readonly NativeS2SStratumLossReceipt[], NativeS2SDatasetError> => {
     if (!dense(candidate, NATIVE_S2S_TRAIN_CASE_COUNT) || !candidate.every(nativeCase))
         return fail("CASES_INVALID", "stratum receipts require dense immutable native train cases");

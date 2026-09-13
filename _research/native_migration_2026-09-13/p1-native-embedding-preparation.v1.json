@@ -1,0 +1,122 @@
+{
+  "schema": "hswm.native_migration.p1_embedding_preparation.v1",
+  "recorded_at_utc": "2026-09-13",
+  "status": "export_candidate_qualified_against_source_checkpoint",
+  "scope": "Offline export of the already-cached all-MiniLM-L6-v2 source checkpoint. This record does not claim byte parity with the historical SentenceTransformer runtime because P1's historical manifest recorded the model alias but not that package version.",
+  "source_checkpoint": {
+    "repository": "sentence-transformers/all-MiniLM-L6-v2",
+    "cached_snapshot_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "local_only": true,
+    "files_sha256": {
+      "model.safetensors": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db",
+      "config.json": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41",
+      "config_sentence_transformers.json": "061ca9d39661d6c6d6de5ba27f79a1cd5770ea247f8d46412a68a498dc5ac9f3",
+      "sentence_bert_config.json": "fc1993fde0a95c24ec6c022539d41cf6e2f7c9721e5415d6fb6897472a9cd4b7",
+      "modules.json": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf",
+      "tokenizer.json": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+      "tokenizer_config.json": "acb92769e8195aabd29b7b2137a9e6d6e25c476a4f15aa4355c233426c61576b",
+      "special_tokens_map.json": "303df45a03609e4ead04bc3dc1536d0ab19b5358db685b6f3da123d05ec200e3",
+      "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+    }
+  },
+  "historical_p1_source": {
+    "path": "_research/p1_closed_loop/p1_run_real.py",
+    "sha256": "2b9c806599514f5ae5abecbf059a7c8f71c7b8d869a8ebc1e31eb01bae2fcc42",
+    "observed_call_contract": "SentenceTransformer.encode(texts, normalize_embeddings=True, convert_to_numpy=True, batch_size=64), then astype(float64)",
+    "pooling_contract": "BERT tokenizer input truncated to 256 tokens; attention-mask mean pooling over last_hidden_state; L2 normalization; 384 dimensions"
+  },
+  "official_export_tooling": {
+    "optimum": {
+      "version": "1.27.0",
+      "source_url": "https://github.com/huggingface/optimum",
+      "source_tag_commit": "c3fc074e3cbb0ccd53873320558c14dd115dbf25",
+      "source_tag_peeled_commit": "51184933521f8c1ef40ce4f75e7972d53cdc59be",
+      "license": "Apache-2.0",
+      "downloaded_wheel_sha256": "11efa8934860d7456704456405a4bd2d3007bcce098c4430d95840dfdb80e16d",
+      "official_usage_url": "https://huggingface.co/docs/optimum/exporters/onnx/usage_guides/export_a_model"
+    },
+    "transformers": {
+      "version": "4.53.3",
+      "license": "Apache-2.0",
+      "source_url": "https://github.com/huggingface/transformers"
+    },
+    "onnxruntime": {
+      "version": "1.30.0",
+      "license": "MIT",
+      "source_url": "https://github.com/microsoft/onnxruntime"
+    },
+    "transformers_js_target": {
+      "official_usage_url": "https://huggingface.co/docs/transformers.js/custom_usage",
+      "package": "@huggingface/transformers",
+      "version": "4.2.0",
+      "source_url": "https://github.com/huggingface/transformers.js",
+      "source_tag_commit": "54652ba3366ccd1e3b64e689a96504309e6fb53b",
+      "license": "Apache-2.0",
+      "private_lock_sha256": "4258ccb26ee3d06b9f499f385564f36cac0216f5e621b2da273413e8c041f683"
+    },
+    "resolver_lock": {
+      "private_ignored_path": ".hswm-local/p1-onnx-export/requirements.lock",
+      "sha256": "34f4a513ec91d7cacad3d050f3b83e0c215c2167e6aaf07394e3bd339502c3f0",
+      "format": "uv hash-locked transitive package resolution"
+    }
+  },
+  "original_wrapper_oracle": {
+    "status": "executed_offline",
+    "method": "_research/p1_closed_loop/p1_run_real.py:_load_embedder followed by embed_texts",
+    "environment": "private CPython 3.12.13 environment, sentence-transformers 5.6.1, transformers 4.53.3, torch CPU threads=2",
+    "lock_sha256": "5a4da73fe9c8be895245aa3abfc83701993db314a083c6f96d80a693fc60839e",
+    "source_vectors_f32le_sha256": "f6d834f5ce51a223d511ff618f10b63104890d931507c33d1df8f29a09c9af04",
+    "fixture_max_absolute_residual": 0.0,
+    "historical_limit": "The historical P1 manifest did not pin sentence-transformers; this executes the original wrapper with an explicitly pinned current local oracle, rather than proving the unrecorded historical package version."
+  },
+  "typescript_cpu_qualification": {
+    "status": "candidate_qualified_with_profile_correction",
+    "network_model_access": false,
+    "model_loading": "Transformers.js local model loading enabled; remote models disabled; private ONNX artifact only.",
+    "raw_tokenizer_counterexample": "For the 300-token boundary fixture, Transformers.js 4.2.0 emitted content token 19204 in position 255 whereas the Python source tokenizer emitted terminal SEP token 102. All attention masks and token-type IDs matched.",
+    "profile_correction": "After tokenizer output, preserve CLS, padding, masks, and type IDs, and replace the final visible token with configured SEP=102. This makes all four fixture input-ID rows exactly equal to the Python fixture; it reserves two special-token positions at the 256-token bound.",
+    "node_vector_f32le_sha256": "6cc9ee3bd0a0ddf430c8ad741284ad42422a9ad3a9f3a7ac6ad100bee16ec7eb",
+    "node_vs_python_onnx": {
+      "max_absolute_residual": 1.993030309677124e-07,
+      "mean_absolute_residual": 3.406361062721167e-08
+    },
+    "node_vs_original_wrapper_oracle": {
+      "max_absolute_residual": 2.6996713131666183e-07,
+      "mean_absolute_residual": 4.517384868604757e-08
+    },
+    "runtime": "Node 24.13.0, @huggingface/transformers 4.2.0, bundled onnxruntime-node 1.24.3; affinity warnings from ONNX Runtime were emitted by this container but did not stop inference."
+  },
+  "export": {
+    "command": "HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 optimum-cli export onnx --model <cached-snapshot> --task feature-extraction --library-name transformers --dtype fp32 --device cpu --opset 17 <private-output>",
+    "network_model_access": false,
+    "output_private_ignored_path": ".hswm-local/p1-onnx-export/output-20260913",
+    "artifacts_sha256": {
+      "model.onnx": "ea6b0527a417daa76f86e4d8a4c3bea8e0b33ae86fcca69609992d59108d7185",
+      "config.json": "4e1ca650eedb9f844c7124385f7f65e909bfb2c501aad513288b43286753daea",
+      "tokenizer.json": "da0e79933b9ed51798a3ae27893d3c5fa4a201126cef75586296df9b4d2c62a0",
+      "tokenizer_config.json": "ccb4eb21a03e1442ee5c3f85431b9c307960a04579942537d74778dc8080a48c",
+      "special_tokens_map.json": "5d5b662e421ea9fac075174bb0688ee0d9431699900b90662acd44b2a350503a",
+      "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+    }
+  },
+  "cpu_qualification_fixture": {
+    "path": "tests/fixtures/native_migration/p1_native_embedding_v1/source_cpu_token_vector_fixture.json",
+    "sha256": "9df54a442a18e770948abe620fb4adfeab4e81d85b4aa5dd6239dbc1d4cba4ec",
+    "cases": 4,
+    "shape": [4, 384],
+    "source_vectors_f32le_sha256": "f6d834f5ce51a223d511ff618f10b63104890d931507c33d1df8f29a09c9af04",
+    "onnx_vectors_f32le_sha256": "c3165b7451957df7aefa845d6ed57b593817aa3f73f07e0fb431d32760daa508",
+    "max_absolute_residual": 2.2724270820617676e-07,
+    "mean_absolute_residual": 3.566687922784695e-08,
+    "qualification_platform": "Linux x86_64, CPython 3.12.13, torch 2.7.1+cu126 executing CPU with two Torch threads, ONNX Runtime 1.30.0 CPU with two intra-op threads"
+  },
+  "interpretation": {
+    "candidate_status": "The ONNX graph is cryptographically bound to the cached safetensors source and is numerically close to a direct Transformers CPU source-checkpoint calculation on boundary-bearing tokenization cases.",
+    "not_established": [
+      "Bit-exact equality: float32 source and ONNX vector byte hashes differ.",
+      "Bit-exact equality: the Node and Python float32 output byte hashes differ despite bounded residuals.",
+      "Historical SentenceTransformer package/runtime parity: its version was not pinned in the original P1 manifest."
+    ],
+    "next_qualification": "Wire the source-bound profile correction and the local-only Node backend into the Effect runtime after its package checkpoint, then retain the raw tokenizer counterexample and require fixture token equality before accepting numeric residual bounds."
+  }
+}

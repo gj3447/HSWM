@@ -1,4 +1,4 @@
-/** CLI shell for the frozen-cache P1 post-hoc diagnostic. */
+/** CLI shell for P1 post-hoc diagnostics with frozen-cache or pinned local inference. */
 import { resolve } from "node:path"
 import { createHash } from "node:crypto"
 import { parseArgs } from "node:util"
@@ -23,12 +23,12 @@ export const runNativeP1GateCli = (argv: readonly string[]): Effect.Effect<strin
     } }),
     catch: () => new NativeP1GateCliError({ detail: usage }),
   })
-  if (parsed.values.help) return `${usage}\nReplays frozen candidate snapshots and cached embeddings; does not create a new arm outcome.\n`
+  if (parsed.values.help) return `${usage}\nReplays frozen candidate snapshots. If the embedding cache is absent, uses the pinned local native-p1-onnx artifacts; does not create a new arm outcome.\n`
   const flat = Object.entries(parsed.values).flatMap(([key, value]) => typeof value === "string" ? [`--${key}`, value] : [])
   const command = decodeNativeP1GateCommand(flat)
   if (Either.isLeft(command)) return yield* Effect.fail(new NativeP1GateCliError({ detail: usage }))
   const inputs = command.right
-  const diagnostic = yield* evaluateNativeP1Gate(resolve(inputs.evidence), resolve(inputs.datasetRoot), resolve(inputs.experimentDirectory))
+  const diagnostic = yield* evaluateNativeP1Gate(resolve(inputs.evidence), resolve(inputs.datasetRoot), resolve(inputs.experimentDirectory), resolve(inputs.embeddingCacheFolder))
     .pipe(Effect.mapError(error => new NativeP1GateCliError({ detail: error.detail })))
   const candidates = yield* Effect.forEach(diagnostic.candidate_gates, row => Effect.gen(function* () {
     return Object.freeze({
@@ -40,9 +40,10 @@ export const runNativeP1GateCli = (argv: readonly string[]): Effect.Effect<strin
   const summary = Object.freeze({ candidates: candidates.length, fresh_gate_passes: candidates.filter(row => row.fresh_gate_pass).length,
     nonzero_unseen_delta: diagnostic.candidate_gates.filter(row => row.unseen_delta !== 0).length })
   const output: TaskJson = Object.freeze({
-    schema_version: "hswm-p1-posthoc-gate-diagnostic/v1", scientific_status: "POSTHOC_DIAGNOSTIC_NOT_A_NEW_ARM_OUTCOME",
+    schema_version: diagnostic.embedding_backend === undefined ? "hswm-p1-posthoc-gate-diagnostic/v1" : "hswm-p1-posthoc-gate-diagnostic/v2", scientific_status: "POSTHOC_DIAGNOSTIC_NOT_A_NEW_ARM_OUTCOME",
     source_evidence_sha256: diagnostic.source_evidence_sha256, frozen_split_manifest_sha256: diagnostic.frozen_split_manifest_sha256,
     candidate_gates: Object.freeze(candidates), summary,
+    ...(diagnostic.embedding_backend === undefined ? {} : { embedding_backend: diagnostic.embedding_backend }),
   })
   const digest = createHash("sha256").update(renderNativeTaskJson(output)).digest("hex")
   const document: TaskJson = Object.freeze({ ...output, diagnostic_sha256: digest })

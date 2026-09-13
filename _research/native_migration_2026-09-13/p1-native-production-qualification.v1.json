@@ -1,0 +1,82 @@
+{
+  "schema_version": "hswm-p1-native-production-qualification/v1",
+  "date": "2026-09-13",
+  "profile": {
+    "schema_version": "hswm-p1-native-embedding-backend/v1",
+    "transformers_js": "4.2.0",
+    "onnxruntime_node": "1.24.3",
+    "source_model_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "source_weights_sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db",
+    "artifacts": {
+      "config.json": "4e1ca650eedb9f844c7124385f7f65e909bfb2c501aad513288b43286753daea",
+      "onnx/model.onnx": "ea6b0527a417daa76f86e4d8a4c3bea8e0b33ae86fcca69609992d59108d7185",
+      "special_tokens_map.json": "5d5b662e421ea9fac075174bb0688ee0d9431699900b90662acd44b2a350503a",
+      "tokenizer.json": "da0e79933b9ed51798a3ae27893d3c5fa4a201126cef75586296df9b4d2c62a0",
+      "tokenizer_config.json": "ccb4eb21a03e1442ee5c3f85431b9c307960a04579942537d74778dc8080a48c",
+      "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+    },
+    "device": "cpu",
+    "model_dtype": "fp32",
+    "vector_dtype": "float32_promoted_to_float64",
+    "batch_size": 64,
+    "maximum_sequence_length": 256,
+    "intra_op_threads": 2,
+    "inter_op_threads": 1,
+    "pooling": "MASKED_MEAN_F64_SUM_F32_MEAN_L2_F64_NORM_F32_VECTOR",
+    "truncation": "BERT_FULL_256_WINDOW_TERMINAL_SEP_CORRECTION",
+    "claim_ceiling": "PINNED_NATIVE_BACKEND_NOT_HISTORICAL_VECTOR_BYTE_IDENTITY"
+  },
+  "fixture_sha256": "9df54a442a18e770948abe620fb4adfeab4e81d85b4aa5dd6239dbc1d4cba4ec",
+  "service": {
+    "rows": 4,
+    "columns": 384,
+    "native_f32le_sha256": "fcf563709eb075ed76ae557b0bf36bd637009db24570749460089e6d5e450e70",
+    "source_max_abs_error": 2.6996713131666183e-7,
+    "source_mean_abs_error": 4.518472472685627e-8,
+    "engineering_tolerance": 3e-7,
+    "historical_vector_byte_identity": false
+  },
+  "emitted_cli": {
+    "exit_code": 0,
+    "python_and_uv_absent_from_path": true,
+    "articles": 390,
+    "questions": 390,
+    "candidates": 1,
+    "full_synthetic_candidate_metrics_match": true,
+    "repeat_native_v2_bytes_match": true,
+    "output_sha256": "cf98f94bda5bc436e4ffa2d034ac0783fd725d9a3da0cf9f25cb9f15a1a36d21",
+    "native_embedding_backend": {
+      "artifacts": {
+        "config.json": "4e1ca650eedb9f844c7124385f7f65e909bfb2c501aad513288b43286753daea",
+        "onnx/model.onnx": "ea6b0527a417daa76f86e4d8a4c3bea8e0b33ae86fcca69609992d59108d7185",
+        "special_tokens_map.json": "5d5b662e421ea9fac075174bb0688ee0d9431699900b90662acd44b2a350503a",
+        "tokenizer.json": "da0e79933b9ed51798a3ae27893d3c5fa4a201126cef75586296df9b4d2c62a0",
+        "tokenizer_config.json": "ccb4eb21a03e1442ee5c3f85431b9c307960a04579942537d74778dc8080a48c",
+        "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+      },
+      "batch_size": 64,
+      "claim_ceiling": "PINNED_NATIVE_BACKEND_NOT_HISTORICAL_VECTOR_BYTE_IDENTITY",
+      "device": "cpu",
+      "document_count": 390,
+      "input_manifest_sha256": "7fa722c94fc16fbef9d75bc0bd0648ced1352d290cb8a5a4930e3566a18a0f62",
+      "inter_op_threads": 1,
+      "intra_op_threads": 2,
+      "maximum_sequence_length": 256,
+      "model_dtype": "fp32",
+      "onnxruntime_node": "1.24.3",
+      "ordered_vectors_f64le_sha256": "888eb1d0e875ed94e0c223caf43ae63e82bc98ccf5cb322dc62553fc002b1ffc",
+      "pooling": "MASKED_MEAN_F64_SUM_F32_MEAN_L2_F64_NORM_F32_VECTOR",
+      "question_count": 390,
+      "schema_version": "hswm-p1-native-embedding-backend/v1",
+      "source_model_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "source_weights_sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db",
+      "transformers_js": "4.2.0",
+      "truncation": "BERT_FULL_256_WINDOW_TERMINAL_SEP_CORRECTION",
+      "vector_dtype": "float32_promoted_to_float64"
+    },
+    "snapshot_leaks": 0,
+    "stderr_sha256": "f9e97b1ddf745f35bbf3d12428f62516ad868151439e43c59a55bffaac1f3628",
+    "stdout_sha256": "59e116d9ddd0f046506ac50f58a676a16d6641257e068569323e9154a372ed2c"
+  },
+  "claim_ceiling": "SYNTHETIC_ENGINEERING_QUALIFICATION_NOT_RESEARCH_EFFICACY"
+}

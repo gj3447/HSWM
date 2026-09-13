@@ -1,0 +1,141 @@
+{
+  "schema_version": "hswm-s2s-openblas-ddot-reference-backend/v1",
+  "scientific_status": "CANDIDATE_PROTOCOL_ENGINEERING_ONLY_UNJUDGED",
+  "source": {
+    "project": "OpenBLAS",
+    "tag": "v0.3.34",
+    "commit": "e0166008be8e466242aa76b2ff75ce3f0fbf574a",
+    "license": "BSD-3-Clause",
+    "installed_binary_sha256": "6cad8d2ad994ddc43d2ccdb0fb5d9458373ff1b87ef7ff420f2f94406eb8f082",
+    "files": {
+      "kernel/x86_64/ddot_microk_skylakex-2.c": "c1b487deedcaf34e47c265c3bb941e7f5fe105e5fa707e1e0aac22981efc57ba",
+      "driver/others/blas_l1_thread.c": "f93be78daa900b39a46f45036afe15c3509417dee2c7022c78931f937b9fa4be",
+      "kernel/x86_64/ddot.c": "b51f4e012e2793bcb983f9599462ebc4c663d6210d12a44c6fa6f9dcc1e7c243"
+    },
+    "verified_against_official_checkout": true,
+    "metadata_correction": "Source filename corrected from dot.c to ddot.c after checking the pinned official checkout; numerical vectors and source digest unchanged."
+  },
+  "runtime": {
+    "numpy_version": "2.5.2",
+    "openblas_config": "USE64BITINT DYNAMIC_ARCH Haswell MAX_THREADS=64",
+    "detected_core": "SkylakeX",
+    "active_threads": 16,
+    "single_thread_cutoff": 10000
+  },
+  "operation": {
+    "vector_length": 12500,
+    "worker_partitions": [
+      {
+        "thread_index": 0,
+        "offset": 0,
+        "length": 782
+      },
+      {
+        "thread_index": 1,
+        "offset": 782,
+        "length": 782
+      },
+      {
+        "thread_index": 2,
+        "offset": 1564,
+        "length": 782
+      },
+      {
+        "thread_index": 3,
+        "offset": 2346,
+        "length": 782
+      },
+      {
+        "thread_index": 4,
+        "offset": 3128,
+        "length": 781
+      },
+      {
+        "thread_index": 5,
+        "offset": 3909,
+        "length": 781
+      },
+      {
+        "thread_index": 6,
+        "offset": 4690,
+        "length": 781
+      },
+      {
+        "thread_index": 7,
+        "offset": 5471,
+        "length": 781
+      },
+      {
+        "thread_index": 8,
+        "offset": 6252,
+        "length": 781
+      },
+      {
+        "thread_index": 9,
+        "offset": 7033,
+        "length": 781
+      },
+      {
+        "thread_index": 10,
+        "offset": 7814,
+        "length": 781
+      },
+      {
+        "thread_index": 11,
+        "offset": 8595,
+        "length": 781
+      },
+      {
+        "thread_index": 12,
+        "offset": 9376,
+        "length": 781
+      },
+      {
+        "thread_index": 13,
+        "offset": 10157,
+        "length": 781
+      },
+      {
+        "thread_index": 14,
+        "offset": 10938,
+        "length": 781
+      },
+      {
+        "thread_index": 15,
+        "offset": 11719,
+        "length": 781
+      }
+    ],
+    "worker_kernel": "SKYLAKEX AVX512 four zmm FMA accumulators per 32 values; fold low/high 256 halves; AVX2 FMA 16-tail; scalar FMA tail",
+    "partial_merge": "ascending thread_index: dot = dot + partial",
+    "scalar_tail_instruction": "vfmadd231sd (fused; confirmed installed binary disassembly)"
+  },
+  "proof": {
+    "fixture": "original_nonzero_python.json",
+    "default_openblas_sse_hex": [
+      "0x1.6f81d69098f75p+0",
+      "0x1.5351d0ecd1191p+1",
+      "0x1.eb4cb7a0f8c1ep-2",
+      "0x1.44560114c2c3bp-2",
+      "0x1.6525e1808db64p-1",
+      "0x1.d4af8e1a8c35ep+0"
+    ],
+    "single_thread_skylakex_fma_sse_hex": [
+      "0x1.6f81d69098f72p+0",
+      "0x1.5351d0ecd1192p+1",
+      "0x1.eb4cb7a0f8c1ep-2",
+      "0x1.44560114c2c3ap-2",
+      "0x1.6525e1808db64p-1",
+      "0x1.d4af8e1a8c35cp+0"
+    ],
+    "partitioned_skylakex_fma_sse_hex": [
+      "0x1.6f81d69098f75p+0",
+      "0x1.5351d0ecd1191p+1",
+      "0x1.eb4cb7a0f8c1ep-2",
+      "0x1.44560114c2c3bp-2",
+      "0x1.6525e1808db64p-1",
+      "0x1.d4af8e1a8c35ep+0"
+    ],
+    "candidate_source_sha256": "644117bb60a0be67f9f46dceb3f9437cd7083140259aeb1ec94bcdeb7b55ac1d"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": "hswm-fma-independent-recheck/v1",
+  "date": "2026-09-13",
+  "oracle_fixture_sha256": "5a5f9a42032850b9a6fa213ea3151c3bf62bad2919757bc6082c3ac0be4a5d23",
+  "source_text": "#include <math.h>\n#include <stdint.h>\n#include <inttypes.h>\n#include <stdio.h>\n#include <string.h>\nint main(void) { uint64_t xb, ab, rb; while(scanf(\"%\" SCNx64 \" %\" SCNx64, &xb, &ab)==2) { double x,a,r; memcpy(&x,&xb,8); memcpy(&a,&ab,8); r=fma(x,x,a); memcpy(&rb,&r,8); printf(\"%016\" PRIx64 \"\\n\", rb); } return 0; }\n",
+  "source_sha256": "76a0df51673ccd61ab0a85c9350192958aa77d1c01fa8835d3f71336d9a374d6",
+  "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+  "flags": [
+    "-O2",
+    "-std=c11",
+    "-fno-fast-math",
+    "-ffp-contract=off",
+    "-lm"
+  ],
+  "executable_sha256": "bcda3372e3342647ecd7ea6454fbf9dc91e5d4adb1b791cd58d4e45b44221416",
+  "outputs_sha256": "a6535ba964ecb0ec8e31e28fd48bdf9343a74393d44ffd646b6d9cb9a0116e1e",
+  "total_cases": 1024,
+  "mismatches": 0,
+  "native_domain": {
+    "finite_nonnegative_matches": 742,
+    "overflow_refusals": 258,
+    "negative_accumulator_outside_scope": 24
+  },
+  "claim_ceiling": "INDEPENDENT_LOCAL_ENGINEERING_ORACLE_NOT_GENERAL_BLAS_QUALIFICATION"
+}

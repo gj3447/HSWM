@@ -1,0 +1,142 @@
+{
+  "schema_version": "hswm-native-migration-active-route-audit/v6",
+  "as_of": "2026-09-13",
+  "base_commit": "4198204c34a459dadb13e6e0cfea02fec5fbb1ba",
+  "method": "Read-only source inventory: current tracked launchers, Python package console scripts, workflow commands, and direct source dependencies were inspected with rg and sha256sum. Python file suffixes alone were not counted as active routes.",
+  "claim_ceiling": "EXECUTION_ROUTE_INVENTORY_ONLY_NOT_MIGRATION_COMPLETENESS_OR_RESEARCH_EFFICACY",
+  "statuses": {
+    "VERIFIED_NATIVE": "Current native entrypoint has declared bounded verification.",
+    "PARTIAL_ROUTE": "A native counterpart or component exists, while an active Python/compatibility/deployment route remains.",
+    "PYTHON_ACTIVE_BLOCKER": "A current launcher or workflow executes Python with no accepted complete native replacement.",
+    "HISTORICAL_OR_COMPATIBILITY": "Retained comparison or package-compatibility source; excluded unless an active launcher invokes it.",
+    "CANDIDATE_UNACCEPTED": "Dirty implementation exists but is not route-closure evidence."
+  },
+  "routes": [
+    {
+      "id": "native-development-runtime",
+      "status": "VERIFIED_NATIVE",
+      "entrypoint": "src/hswm/effect-runtime/bin/hswm-dev",
+      "evidence": [
+        "AGENTS.md",
+        "src/hswm/effect-runtime/src/adaptive-cli.ts",
+        "_research/native_migration_2026-09-13/operations-verification.v1.json"
+      ],
+      "remaining_dependency": "None for its bounded development-dispatch scope."
+    },
+    {
+      "id": "python-compatibility-launcher-and-wheel-scripts",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": "src/hswm/development/bin/hswm-python sha256:ac3f960827dfba339bccd4e7cd637591b68a616632f5f337477142bb8d4cd6ef; pyproject.toml [project.scripts]",
+      "evidence": [
+        "pyproject.toml lines 16-23 exposes eight Python console scripts",
+        "AGENTS.md permits explicit one-time Python oracles"
+      ],
+      "remaining_dependency": "Classify each packaged Python script as active compatibility or migrate its operational caller to a native executable."
+    },
+    {
+      "id": "p1-gate-uncached-embedding",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": "hswm-p1-gate-diagnostic -> src/hswm/diagnostics/p1_gate.py:main sha256:e4b401bdaa92eedb3cdc0792f8a2a5913c70413ec97cb6373f86f0452b6d9ac0",
+      "native_state": "Native cached v1 diagnostics preserve original bytes. Missing-cache native v2 performs pinned local ONNX inference, carries explicit backend/vector provenance, and is CPU-qualified through the emitted CLI; historical vector-byte equivalence is not claimed. Python package compatibility route remains.",
+      "remaining_dependency": "Classify or redirect package console entrypoint after full migration; native backend requires six hash-pinned local exported artifacts."
+    },
+    {
+      "id": "s2s-pilot-ci-and-live-numeric-oracle",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": ".github/workflows/swm0w-s2s-train-dev-pilot.yml invokes python -m hswm.experiments.swm0w_s2s_pilot; s2s-live-python remains a Python bridge",
+      "source_pins": {
+        "protocol": "src/hswm/experiments/swm0w_s2s_protocol.py sha256:c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+        "training": "src/hswm/experiments/swm0w_s2s_training.py sha256:d84b8336d8bcbe89aeba7f2d2c915fd294b9ee24425e6092505069a74f9cba94",
+        "family": "src/hswm/experiments/swm0w_s2s_family.py sha256:e00a3365e89592038b66820f57655d28e908425e3586385fd2be1e407944e93a"
+      },
+      "native_state": "Latest worktree contains S2S score/protocol, dataset, initialization, fit, and numerical-reference candidate components. Root reports exact score receipts completed; full native CI-selected task/protocol route is not yet established.",
+      "remaining_dependency": "Bind accepted native task, dataset, initialization, fit/checkpoint, score/protocol receipts to a CLI and CI path; retire the live Python oracle bridge from normal execution."
+    },
+    {
+      "id": "prom9-f1-suite-and-transport",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": "prom_search_hswm/prom_f1_function_network.py:run_suite sha256:59e88cda18061bf312697b48e1df4639dae5b31be25dd1bfade6602db0468bfe",
+      "source_pins": {
+        "function_network": "prom_search_hswm/hswm_function_network.py sha256:dae4a62b44ae3198b48e82ea48515b00b854b3b440fa7d13ee7567910584f5e5",
+        "registry": "prom_search_hswm/hswm_function_registry.py sha256:b9d858a8d84ba1b6ed1c88250a2f8936cbe78c459987a155c1f3fba8a77aede1",
+        "transport": "prom_search_hswm/hswm_f1_durable_transport.py sha256:09ecd886901ac95c0be86e59369d8672d0fad0b912d97e488c5c41c79692a7cc",
+        "meter": "prom_search_hswm/hswm_token_meter.py sha256:5149473c7ca3efea865d97cee324ff2c9ccca5d4d637c66a049f34eae15da274"
+      },
+      "native_state": "Native registry, structural manifest and payload constructors pass original source-oracle and adversarial tests. Tokenizer identity/BPE envelope feasibility, model calls and durable live suite remain outside these bounded components.",
+      "remaining_dependency": "Complete exact token-meter/envelope, three physical calls, typed ports and durable receipts before switching live runner."
+    },
+    {
+      "id": "f3v2-live-smoke",
+      "status": "PYTHON_ACTIVE_BLOCKER",
+      "entrypoint": "scripts/f3v2_smoke_preflight.sh sha256:27d95cf232021e46b96117a8794df3f95475a2b967adf92da23d1ef91e84fb6e",
+      "remaining_dependency": "Native bounded external-smoke lifecycle and receipt validation; no evidence found in this audit that it is replaced."
+    },
+    {
+      "id": "ci-mixed-python-lanes",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": ".github/workflows/ci.yml, swm0w-s2s-train-dev-pilot.yml, graph-standards-requalification.yml",
+      "evidence": "Current workflow commands invoke uv/Python compatibility, protocol, packaging, and standards lanes alongside Effect-runtime npm checks.",
+      "remaining_dependency": "State per-lane purpose and replace active production behavior only where a complete accepted native route exists."
+    },
+    {
+      "id": "inactive-python-source-and-static-oracles",
+      "status": "HISTORICAL_OR_COMPATIBILITY",
+      "entrypoint": "Python sources without a launcher established by this audit; tests/fixtures/native_migration static outputs",
+      "remaining_dependency": "None for inventory purposes. Their presence is not counted as an active execution route."
+    }
+  ],
+  "prioritized_remaining_dependencies": [
+    "1. Retain P1 cached-byte compatibility; native missing-cache v2 is qualified, with explicit local artifact and backend provenance. Package route remains separately tracked.",
+    "2. Bind the S2S native components and exact score receipts into an accepted CLI/CI full protocol route, then remove normal live Python numeric-oracle execution.",
+    "3. Finish F1 token-meter/envelope, execution, transport and runner/watchdog closure as one source-bound route.",
+    "4. Classify or migrate Python console scripts and CI lanes individually; do not infer inactivity from source-file location.",
+    "5. Replace the F3v2 Python live-smoke launcher only with a bounded native external-execution implementation and receipt evidence."
+  ],
+  "source_observation": "Current bytes refreshed after scoped P1 cold-path production qualification and F1 payload/schema fixes; complete live S2S/F1/F3 closure remains absent.",
+  "native_component_pins": [
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-gate-cli.ts",
+      "sha256": "bce4776f4dbbf39bacabc7819a7bb08b04a7083cd024b941295ee478228b5420"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-gate-runtime.ts",
+      "sha256": "2669859998d0a0e16fb4f86bf831cc00587ff11bd4c17dce3054ff82da6bddb0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-dataset-domain.ts",
+      "sha256": "70008b48c78e13aa8cb1fb5763553aa004d0f31eb079a818d2d5dacc0fed28ae"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-artifact-snapshot-runtime.ts",
+      "sha256": "b1b12408109b24b2969c28a8d1562b4bddc2aae76ee90b30a0316c583aec8ba0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-embedding-domain.ts",
+      "sha256": "12dcd04ea67b72e1e047ec9f7a626366e1598b8aad9af7686416bad8e77f6d4d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-embedding-runtime.ts",
+      "sha256": "fe377a76c2d7bad61e74faa771181756bd73e3bde10edb38cdf0b487238bc9cd"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-manifest-domain.ts",
+      "sha256": "a7e4ceb6123a746d68297fd08e1867b64a3304cd2442f628e586a7a2a49b286d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-payload-domain.ts",
+      "sha256": "e222696bcd8fed9e49e5d1a2e42f80a55c1c65874134877185f5efbcbc819877"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-registry-domain.ts",
+      "sha256": "e5f4b87b96894d1ee474309d0b7fbeacf7daa5b39b99ad42a592ccabebbf340e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-protocol-score-domain.ts",
+      "sha256": "83a8f1b9f88adf70472354d95afd8d6a317f237e776c8cf32328b83c68b55d19"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-reference-dot-domain.ts",
+      "sha256": "ea5d2daaec34982f0c855d3dbaaa9af6803708b79e0f49a46bb9c2b336bacb3f"
+    }
+  ]
+}

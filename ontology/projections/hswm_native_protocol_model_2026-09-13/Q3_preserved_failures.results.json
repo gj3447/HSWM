@@ -1,0 +1,146 @@
+[
+  {
+    "name": {
+      "kind": "literal",
+      "value": "f1-manifest-coercion-and-column-key-collision"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "REPAIRED_ORIGINAL_REFUSALS_REPLAYED"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "Integer coercion admitted source-rejected floats/strings; now lexeme-aware strict integers. NUL-joined column names collided for one embedded-NUL key versus two keys; canonical list identity preserves source tuple distinction."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/protocol-model-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "s2s-world-target-segment-order"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "REPAIRED_EXACT_ORIGINAL_RECEIPT"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "Original dataset commitment writes all raw worlds before all target numerators. Initial interleaving changed the hash; corrected without changing the original oracle."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/protocol-model-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "sdk-strict-nodenext-declarations"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "REPAIRED_TYPED_UNKNOWN_VENDOR_BOUNDARY"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "Pinned official Transformers.js declarations failed strict NodeNext. A bounded dynamic import validates unknown module, callable and tensor values. No skipLibCheck, compiler suppression, or Effect/functional allowlist expansion."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/protocol-model-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "official-reference-source-path"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "METADATA_CORRECTED_AGAINST_PINNED_OFFICIAL_CHECKOUT"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "The backend fixture labeled the correct ddot.c digest under dot.c. Verified official commit e0166008be8e466242aa76b2ff75ce3f0fbf574a and corrected filename to kernel/x86_64/ddot.c; source digest and all numerical vectors remain unchanged."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/protocol-model-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "p1-full-window-tokenizer-sep"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "REPAIRED_WITH_SOURCE_TOKEN_ORACLE"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "Transformers.js full 256-token truncation retained a content token where the original BERT tokenizer retained SEP. Correction applies only at a complete 256-token window; short malformed rows are refused. Native vectors retain measured backend differences."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/protocol-model-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "p1-captured-artifact-lifetime"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "REPAIRED_SCOPED_SNAPSHOT_AND_FAILURE_CLEANUP"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "Verify-then-reopen and inner-scope premature deletion were refused during review. Bounded captured bytes now populate a private caller-scoped snapshot; model disposal and snapshot cleanup are exercised. Files 0400 and directory 0700; source mutation and partial write failure tested."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/protocol-model-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "s2s-default-parallel-fma-reduction"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "REPAIRED_PINNED_BACKEND_EXACT_RECEIPT"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "Zero predictions concealed reduction error. Actual nonzero fitted predictions exposed all six scalar SSE hex mismatches. Pinned OpenBLAS SkylakeX FMA lanes, 16 contiguous partitions and ascending merge now reproduce both complete original receipts byte-for-byte. Single-thread differences remain recorded; this is not universal NumPy/BLAS conformance."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/protocol-model-verification.v1.json"
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "development-cli-option"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "INVOCATION_ERROR_PRESERVED_AND_CORRECTED"
+    },
+    "finding": {
+      "kind": "literal",
+      "value": "hswm-dev rejected nonexistent --episode-id; rerun used documented --episode and recorded result/status/explicit agent usefulness feedback."
+    },
+    "source": {
+      "kind": "literal",
+      "value": "_research/native_migration_2026-09-13/protocol-model-verification.v1.json"
+    }
+  }
+]

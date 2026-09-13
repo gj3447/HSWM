@@ -1,0 +1,114 @@
+{
+  "cases": [
+    {
+      "arm_json": "\"typed_hswm_three_function_network\"",
+      "item_json": "{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"candidates\":[{\"bond_id\":\"bond-a\",\"content\":\"alpha\",\"evidence_id\":\"e-a\",\"observable\":{\"flat_position\":1,\"flat_score\":1.0,\"source_type\":\"wiki\",\"vector_score\":0.5,\"😀\":\"first\"}},{\"bond_id\":\"bond-b\",\"content\":\"βeta\",\"evidence_id\":\"e-b\",\"observable\":{\"flat_position\":2,\"flat_score\":2.0,\"source_type\":\"wiki\",\"vector_score\":0.75,\"😀\":\"second\"}}],\"item_id\":\"item-😀\",\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens_per_call\":40,\"query_text\":\"query\\u001c retained\"}",
+      "name": "arm:typed_hswm_three_function_network",
+      "query_plan_json": "{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]}",
+      "result": {
+        "accepted": true,
+        "canonical": "{\"answer\":{\"max_answer_tokens\":40,\"parity_filler\":\"\\u001c\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-1c22f54d\",\"selected_evidence\":[{\"content\":\"alpha\",\"evidence_id\":\"e-a\"}]},\"answer_empty_selected\":{\"max_answer_tokens\":40,\"parity_filler\":\"\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-1c22f54d\",\"selected_evidence\":[]},\"bond\":{\"candidate_budget\":2,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\",\"vector_score\",\"😀\"],\"constants\":{\"source_type\":\"wiki\"},\"rows\":[[\"bond-a\",\"e-a\",1,1.0,0.5,\"first\"],[\"bond-b\",\"e-b\",2,2.0,0.75,\"second\"]]},\"parity_filler\":\"\\u001c\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"request_id\":\"req-1c22f54d\"},\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\",\"vector_score\",\"😀\"],\"constants\":{\"source_type\":\"wiki\"},\"rows\":[[\"bond-a\",\"e-a\",1,1.0,0.5,\"first\"],[\"bond-b\",\"e-b\",2,2.0,0.75,\"second\"]]},\"observable\":{\"flat_position\":1,\"flat_score\":1.0,\"source_type\":\"wiki\",\"vector_score\":0.5,\"😀\":\"first\"},\"query\":{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"budget\":{\"max_candidates\":2,\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens\":40},\"parity_filler\":\"\\u001c\",\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-1c22f54d\"},\"request_id\":\"req-1c22f54d\"}"
+      }
+    },
+    {
+      "arm_json": "\"flat_single_llm_three_call_workflow\"",
+      "item_json": "{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"candidates\":[{\"bond_id\":\"bond-a\",\"content\":\"alpha\",\"evidence_id\":\"e-a\",\"observable\":{\"flat_position\":1,\"flat_score\":1.0,\"source_type\":\"wiki\",\"vector_score\":0.5,\"😀\":\"first\"}},{\"bond_id\":\"bond-b\",\"content\":\"βeta\",\"evidence_id\":\"e-b\",\"observable\":{\"flat_position\":2,\"flat_score\":2.0,\"source_type\":\"wiki\",\"vector_score\":0.75,\"😀\":\"second\"}}],\"item_id\":\"item-😀\",\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens_per_call\":40,\"query_text\":\"query\\u001c retained\"}",
+      "name": "arm:flat_single_llm_three_call_workflow",
+      "query_plan_json": "{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]}",
+      "result": {
+        "accepted": true,
+        "canonical": "{\"answer\":{\"max_answer_tokens\":40,\"parity_filler\":\"\\u001c\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-96dbb3e5\",\"selected_evidence\":[{\"content\":\"alpha\",\"evidence_id\":\"e-a\"}]},\"answer_empty_selected\":{\"max_answer_tokens\":40,\"parity_filler\":\"\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-96dbb3e5\",\"selected_evidence\":[]},\"bond\":{\"candidate_budget\":2,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\"],\"constants\":{\"source_type\":\"wiki\"},\"rows\":[[\"bond-a\",\"e-a\",1,1.0],[\"bond-b\",\"e-b\",2,2.0]]},\"parity_filler\":\"\\u001c\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"request_id\":\"req-96dbb3e5\"},\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\"],\"constants\":{\"source_type\":\"wiki\"},\"rows\":[[\"bond-a\",\"e-a\",1,1.0],[\"bond-b\",\"e-b\",2,2.0]]},\"observable\":{\"flat_position\":1,\"flat_score\":1.0,\"source_type\":\"wiki\"},\"query\":{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"budget\":{\"max_candidates\":2,\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens\":40},\"parity_filler\":\"\\u001c\",\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-96dbb3e5\"},\"request_id\":\"req-96dbb3e5\"}"
+      }
+    },
+    {
+      "arm_json": "\"vector_memory_three_call_workflow\"",
+      "item_json": "{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"candidates\":[{\"bond_id\":\"bond-a\",\"content\":\"alpha\",\"evidence_id\":\"e-a\",\"observable\":{\"flat_position\":1,\"flat_score\":1.0,\"source_type\":\"wiki\",\"vector_score\":0.5,\"😀\":\"first\"}},{\"bond_id\":\"bond-b\",\"content\":\"βeta\",\"evidence_id\":\"e-b\",\"observable\":{\"flat_position\":2,\"flat_score\":2.0,\"source_type\":\"wiki\",\"vector_score\":0.75,\"😀\":\"second\"}}],\"item_id\":\"item-😀\",\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens_per_call\":40,\"query_text\":\"query\\u001c retained\"}",
+      "name": "arm:vector_memory_three_call_workflow",
+      "query_plan_json": "{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]}",
+      "result": {
+        "accepted": true,
+        "canonical": "{\"answer\":{\"max_answer_tokens\":40,\"parity_filler\":\"\\u001c\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-01aa7689\",\"selected_evidence\":[{\"content\":\"alpha\",\"evidence_id\":\"e-a\"}]},\"answer_empty_selected\":{\"max_answer_tokens\":40,\"parity_filler\":\"\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-01aa7689\",\"selected_evidence\":[]},\"bond\":{\"candidate_budget\":2,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"vector_score\"],\"constants\":{\"source_type\":\"wiki\"},\"rows\":[[\"bond-a\",\"e-a\",0.5],[\"bond-b\",\"e-b\",0.75]]},\"parity_filler\":\"\\u001c\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"request_id\":\"req-01aa7689\"},\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"vector_score\"],\"constants\":{\"source_type\":\"wiki\"},\"rows\":[[\"bond-a\",\"e-a\",0.5],[\"bond-b\",\"e-b\",0.75]]},\"observable\":{\"source_type\":\"wiki\",\"vector_score\":0.5},\"query\":{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"budget\":{\"max_candidates\":2,\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens\":40},\"parity_filler\":\"\\u001c\",\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-01aa7689\"},\"request_id\":\"req-01aa7689\"}"
+      }
+    },
+    {
+      "arm_json": "\"typed_network_role_removed_schema_preserving_null\"",
+      "item_json": "{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"candidates\":[{\"bond_id\":\"bond-a\",\"content\":\"alpha\",\"evidence_id\":\"e-a\",\"observable\":{\"flat_position\":1,\"flat_score\":1.0,\"source_type\":\"wiki\",\"vector_score\":0.5,\"😀\":\"first\"}},{\"bond_id\":\"bond-b\",\"content\":\"βeta\",\"evidence_id\":\"e-b\",\"observable\":{\"flat_position\":2,\"flat_score\":2.0,\"source_type\":\"wiki\",\"vector_score\":0.75,\"😀\":\"second\"}}],\"item_id\":\"item-😀\",\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens_per_call\":40,\"query_text\":\"query\\u001c retained\"}",
+      "name": "arm:typed_network_role_removed_schema_preserving_null",
+      "query_plan_json": "{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]}",
+      "result": {
+        "accepted": true,
+        "canonical": "{\"answer\":{\"max_answer_tokens\":40,\"parity_filler\":\"\\u001c\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-88974c7a\",\"selected_evidence\":[{\"content\":\"alpha\",\"evidence_id\":\"e-a\"}]},\"answer_empty_selected\":{\"max_answer_tokens\":40,\"parity_filler\":\"\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-88974c7a\",\"selected_evidence\":[]},\"bond\":{\"candidate_budget\":2,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\",\"vector_score\",\"😀\"],\"constants\":{\"source_type\":\"wiki\"},\"rows\":[[\"bond-a\",\"e-a\",1,1.0,0.5,\"first\"],[\"bond-b\",\"e-b\",2,2.0,0.75,\"second\"]]},\"parity_filler\":\"\\u001c\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"request_id\":\"req-88974c7a\"},\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\",\"vector_score\",\"😀\"],\"constants\":{\"source_type\":\"wiki\"},\"rows\":[[\"bond-a\",\"e-a\",1,1.0,0.5,\"first\"],[\"bond-b\",\"e-b\",2,2.0,0.75,\"second\"]]},\"observable\":{\"flat_position\":1,\"flat_score\":1.0,\"source_type\":\"wiki\",\"vector_score\":0.5,\"😀\":\"first\"},\"query\":{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"budget\":{\"max_candidates\":2,\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens\":40},\"parity_filler\":\"\\u001c\",\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-88974c7a\"},\"request_id\":\"req-88974c7a\"}"
+      }
+    },
+    {
+      "arm_json": "\"typed_network_with_role_instructions_shuffled_but_ports_preserved\"",
+      "item_json": "{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"candidates\":[{\"bond_id\":\"bond-a\",\"content\":\"alpha\",\"evidence_id\":\"e-a\",\"observable\":{\"flat_position\":1,\"flat_score\":1.0,\"source_type\":\"wiki\",\"vector_score\":0.5,\"😀\":\"first\"}},{\"bond_id\":\"bond-b\",\"content\":\"βeta\",\"evidence_id\":\"e-b\",\"observable\":{\"flat_position\":2,\"flat_score\":2.0,\"source_type\":\"wiki\",\"vector_score\":0.75,\"😀\":\"second\"}}],\"item_id\":\"item-😀\",\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens_per_call\":40,\"query_text\":\"query\\u001c retained\"}",
+      "name": "arm:typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "query_plan_json": "{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]}",
+      "result": {
+        "accepted": true,
+        "canonical": "{\"answer\":{\"max_answer_tokens\":40,\"parity_filler\":\"\\u001c\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-6382b68d\",\"selected_evidence\":[{\"content\":\"alpha\",\"evidence_id\":\"e-a\"}]},\"answer_empty_selected\":{\"max_answer_tokens\":40,\"parity_filler\":\"\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-6382b68d\",\"selected_evidence\":[]},\"bond\":{\"candidate_budget\":2,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\",\"vector_score\",\"😀\"],\"constants\":{\"source_type\":\"wiki\"},\"rows\":[[\"bond-a\",\"e-a\",1,1.0,0.5,\"first\"],[\"bond-b\",\"e-b\",2,2.0,0.75,\"second\"]]},\"parity_filler\":\"\\u001c\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"request_id\":\"req-6382b68d\"},\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\",\"vector_score\",\"😀\"],\"constants\":{\"source_type\":\"wiki\"},\"rows\":[[\"bond-a\",\"e-a\",1,1.0,0.5,\"first\"],[\"bond-b\",\"e-b\",2,2.0,0.75,\"second\"]]},\"observable\":{\"flat_position\":1,\"flat_score\":1.0,\"source_type\":\"wiki\",\"vector_score\":0.5,\"😀\":\"first\"},\"query\":{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"budget\":{\"max_candidates\":2,\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens\":40},\"parity_filler\":\"\\u001c\",\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-6382b68d\"},\"request_id\":\"req-6382b68d\"}"
+      }
+    },
+    {
+      "arm_json": "\"unknown_arm_source_default\"",
+      "item_json": "{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"candidates\":[{\"bond_id\":\"bond-a\",\"content\":\"alpha\",\"evidence_id\":\"e-a\",\"observable\":{\"flat_position\":1,\"flat_score\":1.0,\"source_type\":\"wiki\",\"vector_score\":0.5,\"😀\":\"first\"}},{\"bond_id\":\"bond-b\",\"content\":\"βeta\",\"evidence_id\":\"e-b\",\"observable\":{\"flat_position\":2,\"flat_score\":2.0,\"source_type\":\"wiki\",\"vector_score\":0.75,\"😀\":\"second\"}}],\"item_id\":\"item-😀\",\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens_per_call\":40,\"query_text\":\"query\\u001c retained\"}",
+      "name": "arm:unknown_arm_source_default",
+      "query_plan_json": "{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]}",
+      "result": {
+        "accepted": true,
+        "canonical": "{\"answer\":{\"max_answer_tokens\":40,\"parity_filler\":\"\\u001c\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-2ba2dd1c\",\"selected_evidence\":[{\"content\":\"alpha\",\"evidence_id\":\"e-a\"}]},\"answer_empty_selected\":{\"max_answer_tokens\":40,\"parity_filler\":\"\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-2ba2dd1c\",\"selected_evidence\":[]},\"bond\":{\"candidate_budget\":2,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\",\"vector_score\",\"😀\"],\"constants\":{\"source_type\":\"wiki\"},\"rows\":[[\"bond-a\",\"e-a\",1,1.0,0.5,\"first\"],[\"bond-b\",\"e-b\",2,2.0,0.75,\"second\"]]},\"parity_filler\":\"\\u001c\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]},\"request_id\":\"req-2ba2dd1c\"},\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\",\"vector_score\",\"😀\"],\"constants\":{\"source_type\":\"wiki\"},\"rows\":[[\"bond-a\",\"e-a\",1,1.0,0.5,\"first\"],[\"bond-b\",\"e-b\",2,2.0,0.75,\"second\"]]},\"observable\":{\"flat_position\":1,\"flat_score\":1.0,\"source_type\":\"wiki\",\"vector_score\":0.5,\"😀\":\"first\"},\"query\":{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"budget\":{\"max_candidates\":2,\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens\":40},\"parity_filler\":\"\\u001c\",\"query_text\":\"query\\u001c retained\",\"request_id\":\"req-2ba2dd1c\"},\"request_id\":\"req-2ba2dd1c\"}"
+      }
+    },
+    {
+      "arm_json": "\"typed_hswm_three_function_network\"",
+      "item_json": "{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"candidates\":[],\"item_id\":\"item-😀\",\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens_per_call\":40,\"query_text\":\"query\\u001c retained\"}",
+      "name": "empty_candidates",
+      "query_plan_json": "{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]}",
+      "result": {
+        "accepted": false,
+        "error": "item candidates must be non-empty",
+        "error_type": "FunctionNetworkError"
+      }
+    },
+    {
+      "arm_json": "\"typed_hswm_three_function_network\"",
+      "item_json": "{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"candidates\":[{\"bond_id\":\"bond-a\",\"content\":\"alpha\",\"evidence_id\":\"e-a\",\"observable\":{\"flat_position\":1,\"flat_score\":1.0,\"source_type\":\"wiki\",\"vector_score\":0.5,\"😀\":\"first\"}},{\"bond_id\":\"bond-b\",\"content\":\"βeta\",\"evidence_id\":\"e-b\",\"observable\":{\"flat_position\":2,\"flat_score\":2.0,\"source_type\":\"wiki\",\"😀\":\"second\"}}],\"item_id\":\"item-😀\",\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens_per_call\":40,\"query_text\":\"query\\u001c retained\"}",
+      "name": "nonuniform_observable_keys",
+      "query_plan_json": "{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]}",
+      "result": {
+        "accepted": false,
+        "error": "candidate observable key sets must be uniform",
+        "error_type": "FunctionNetworkError"
+      }
+    },
+    {
+      "arm_json": "\"typed_hswm_three_function_network\"",
+      "item_json": "{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"candidates\":[{\"bond_id\":\"bond-a\",\"content\":\"\",\"evidence_id\":\"e-a\",\"observable\":{\"flat_position\":1,\"flat_score\":1.0,\"source_type\":\"wiki\",\"vector_score\":0.5,\"😀\":\"first\"}},{\"bond_id\":\"bond-b\",\"content\":\"βeta\",\"evidence_id\":\"e-b\",\"observable\":{\"flat_position\":2,\"flat_score\":2.0,\"source_type\":\"wiki\",\"vector_score\":0.75,\"😀\":\"second\"}}],\"item_id\":\"item-😀\",\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens_per_call\":40,\"query_text\":\"query\\u001c retained\"}",
+      "name": "empty_candidate_content",
+      "query_plan_json": "{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]}",
+      "result": {
+        "accepted": false,
+        "error": "candidate IDs and content must be non-empty",
+        "error_type": "FunctionNetworkError"
+      }
+    },
+    {
+      "arm_json": "\"typed_hswm_three_function_network\"",
+      "item_json": "{\"allowed_evidence_types\":[\"paragraph\",\"évidence\"],\"candidates\":[{\"bond_id\":\"bond-a\",\"content\":\"alpha\",\"evidence_id\":\"e-a\",\"observable\":{\"a\\u0000b\":1}},{\"bond_id\":\"bond-b\",\"content\":\"βeta\",\"evidence_id\":\"e-b\",\"observable\":{\"a\":1,\"b\":1}}],\"item_id\":\"item-😀\",\"max_evidence_items\":2,\"max_input_tokens\":300,\"max_output_tokens_per_call\":40,\"query_text\":\"query\\u001c retained\"}",
+      "name": "nul_delimited_observable_key_collision",
+      "query_plan_json": "{\"abstain\":false,\"constraints\":[\"bounded\"],\"objectives\":[\"find\"],\"request_id\":\"plan-😀\",\"required_evidence_types\":[\"paragraph\"]}",
+      "result": {
+        "accepted": false,
+        "error": "candidate observable key sets must be uniform",
+        "error_type": "FunctionNetworkError"
+      }
+    }
+  ],
+  "generator_sha256": "5d14d347fb324a983a4d61746d4aea863f8ac5f579b86895817f70213a9805f2",
+  "invocation": "src/hswm/development/bin/hswm-python core python /tmp/generate_prom9_f1_payload_oracle.py",
+  "source_pins": {
+    "prom_search_hswm/hswm_function_network.py": "dae4a62b44ae3198b48e82ea48515b00b854b3b440fa7d13ee7567910584f5e5",
+    "prom_search_hswm/hswm_typed_ports.py": "ff5dff3be6abf646ed0694839a5181bb8033a6ee4bcdc25966e7808e7cbd0937"
+  }
+}

@@ -1,0 +1,1878 @@
+{
+  "schema_version": "hswm-native-usl-differential-failed-attempt/v1",
+  "source_commit": "5870f1e",
+  "source_observation": "COMMITTED_PRE_REPAIR_NATIVE_USL_CLOSURE",
+  "cases": 3191,
+  "matched": 2883,
+  "mismatches": 308,
+  "false_accepts": 293,
+  "unexpected_rejects": 13,
+  "untyped_throws": 0,
+  "corpus": {
+    "path": "tests/fixtures/native_migration/usl_original_contracts_v1/differential-contracts.json.gz",
+    "sha256": "92c0a8190ffe1415965825d14d48e3145906b4afe316396589926066545e82f5",
+    "expanded_sha256": "622e08ed1ab283196bd9a869bb6485e7101f4d4755591ffcbb1bc8c226a1b184",
+    "expanded_bytes": 23369953
+  },
+  "source_pins": [
+    {
+      "path": "src/hswm/effect-runtime/src/native-usl-v1-domain.ts",
+      "sha256": "7270a85f0aaf37157287897661cc76dae97cbc7011787a2f001e7730b52d40a3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-usl-v2-wire-domain.ts",
+      "sha256": "205434c1558feb74fcf86778420fca6f67cb684748a1bb09b01ca5d5fa2ef727"
+    }
+  ],
+  "findings": [
+    {
+      "test": "v1/report/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/status/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/status/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/status/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/status/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/status/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/status/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/status/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/status/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/name/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/name/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/status/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/status/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/status/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/status/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/status/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/status/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/status/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/status/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/locator/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/locator/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/locator/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/locator/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/locator/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/locator/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/guaranteeLevel/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/guaranteeLevel/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/guaranteeLevel/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/guaranteeLevel/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/guaranteeLevel/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/guaranteeLevel/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/guaranteeLevel/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/guaranteeLevel/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/matchCount/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/matchCount/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/matchCount/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/matchCount/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/matchCount/negative",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/matchCount/fraction",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/matchCount/string",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/resolution/matchCount/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/issue/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/issue/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/issue/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/0/issue/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/name/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/name/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/status/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/status/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/status/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/status/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/status/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/status/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/status/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/status/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/locator/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/locator/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/locator/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/locator/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/locator/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/locator/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/guaranteeLevel/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/guaranteeLevel/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/guaranteeLevel/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/guaranteeLevel/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/guaranteeLevel/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/guaranteeLevel/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/guaranteeLevel/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/guaranteeLevel/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/matchCount/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/matchCount/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/matchCount/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/matchCount/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/matchCount/negative",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/matchCount/fraction",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/matchCount/string",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/resolution/matchCount/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/issue/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/issue/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/issue/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/1/issue/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/name/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/name/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/status/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/status/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/status/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/status/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/status/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/status/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/status/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/status/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/locator/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/locator/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/locator/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/locator/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/locator/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/locator/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/guaranteeLevel/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/guaranteeLevel/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/guaranteeLevel/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/guaranteeLevel/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/guaranteeLevel/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/guaranteeLevel/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/guaranteeLevel/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/guaranteeLevel/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/matchCount/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/matchCount/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/matchCount/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/matchCount/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/matchCount/negative",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/matchCount/fraction",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/matchCount/string",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/resolution/matchCount/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/issue/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/issue/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/issue/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/resources/2/issue/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/name/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/name/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/name/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/name/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/name/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/name/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/name/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/name/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/status/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/status/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/status/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/status/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/status/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/status/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/status/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/status/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/locator/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/locator/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/locator/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/locator/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/locator/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/locator/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedLocator/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedLocator/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedLocator/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedLocator/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedLocator/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedLocator/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedLocator/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedLocator/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/contentHash/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/contentHash/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/contentHash/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/contentHash/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/contentHash/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/contentHash/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/contentHash/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/contentHash/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedAt/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedAt/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedAt/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedAt/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedAt/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedAt/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedAt/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/resolvedAt/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/guaranteeLevel/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/guaranteeLevel/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/guaranteeLevel/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/guaranteeLevel/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/guaranteeLevel/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/guaranteeLevel/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/guaranteeLevel/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/guaranteeLevel/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/matchCount/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/matchCount/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/matchCount/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/matchCount/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/matchCount/negative",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/matchCount/fraction",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/matchCount/string",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/resolution/matchCount/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/issue/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/issue/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/issue/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/groundings/0/issue/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/name/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/name/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/name/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/name/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/name/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/name/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/name/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/name/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/meaning/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/meaning/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/meaning/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/meaning/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/meaning/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/meaning/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/meaning/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/meaning/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/participants/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/participants/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/participants/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/participants/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/participants/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/resourcesResolve/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/resourcesResolve/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/resourcesResolve/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/resourcesResolve/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/resourcesResolve/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/semanticTruth/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/semanticTruth/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/semanticTruth/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/semanticTruth/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/semanticTruth/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/semanticTruth/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/semanticTruth/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/report/links/0/semanticTruth/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/bindings/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/policy/resources/0/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/0/name/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/policy/resources/0/name/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/policy/resources/1/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/1/name/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/policy/resources/1/name/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/policy/resources/2/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/2/name/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/policy/resources/2/name/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/policy/resources/3/extra",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/name/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/name/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/content_hash/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/content_hash/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/content_hash/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/content_hash/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/content_hash/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/content_hash/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/content_hash/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/content_hash/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/resolved_locator/null",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/resolved_locator/list",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/resolved_locator/object",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/resolved_locator/false",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/resolved_locator/empty",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/resolved_locator/whitespace",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/resolved_locator/unknown",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/policy/resources/3/resolved_locator/deleted",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "status": "READY"
+    },
+    {
+      "test": "v1/now/negative",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v1/now/fraction",
+      "expected": "ACCEPT",
+      "observed": "ACCEPT",
+      "status": "UNRESOLVED"
+    },
+    {
+      "test": "v2/baseline",
+      "expected": "ACCEPT",
+      "observed": "REJECT",
+      "detail": "USL v2 observation context"
+    },
+    {
+      "test": "v2/report/observationDigest/null",
+      "expected": "ACCEPT",
+      "observed": "REJECT",
+      "detail": "USL v2 observation context"
+    },
+    {
+      "test": "v2/report/observationDigest/list",
+      "expected": "ACCEPT",
+      "observed": "REJECT",
+      "detail": "USL v2 observation context"
+    },
+    {
+      "test": "v2/report/observationDigest/object",
+      "expected": "ACCEPT",
+      "observed": "REJECT",
+      "detail": "USL v2 observation context"
+    },
+    {
+      "test": "v2/report/observationDigest/false",
+      "expected": "ACCEPT",
+      "observed": "REJECT",
+      "detail": "USL v2 observation context"
+    },
+    {
+      "test": "v2/report/observationDigest/empty",
+      "expected": "ACCEPT",
+      "observed": "REJECT",
+      "detail": "USL v2 observation context"
+    },
+    {
+      "test": "v2/report/observationDigest/whitespace",
+      "expected": "ACCEPT",
+      "observed": "REJECT",
+      "detail": "USL v2 observation context"
+    },
+    {
+      "test": "v2/report/observationDigest/unknown",
+      "expected": "ACCEPT",
+      "observed": "REJECT",
+      "detail": "USL v2 observation context"
+    },
+    {
+      "test": "v2/report/observationDigest/deleted",
+      "expected": "ACCEPT",
+      "observed": "REJECT",
+      "detail": "USL v2 observation context"
+    },
+    {
+      "test": "v2/policy/max_age_seconds/fraction",
+      "expected": "ACCEPT",
+      "observed": "REJECT",
+      "detail": "USL v2 observation context"
+    },
+    {
+      "test": "v2/now/fraction",
+      "expected": "ACCEPT",
+      "observed": "REJECT",
+      "detail": "USL v2 observation context"
+    },
+    {
+      "test": "v2/revision/whitespace",
+      "expected": "ACCEPT",
+      "observed": "REJECT",
+      "detail": "USL v2 observation context"
+    },
+    {
+      "test": "v2/revision/unknown",
+      "expected": "ACCEPT",
+      "observed": "REJECT",
+      "detail": "USL v2 observation context"
+    }
+  ],
+  "claim_ceiling": "ENGINEERING_PORT_FAILURE_NOT_SCIENTIFIC_EVIDENCE"
+}

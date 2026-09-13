@@ -1,0 +1,6 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?name ?status ?finding ?source WHERE {
+  ?failure a role:FAILED_ENGINEERING_CHECK; p:name ?name; p:status ?status;
+    p:finding ?finding; p:source_path ?source.
+} ORDER BY ?name

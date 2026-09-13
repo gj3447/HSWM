@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?name ?status ?entrypoint ?source ?pointer WHERE {
+  ?surface a role:MIGRATION_SURFACE; p:name ?name; p:status ?status;
+    p:entrypoint ?entrypoint; p:source_path ?source; p:source_pointer ?pointer.
+  FILTER (?status IN ("PYTHON_ACTIVE", "PARTIAL"))
+} ORDER BY ?name

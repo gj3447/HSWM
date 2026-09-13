@@ -2,17 +2,21 @@ import { mkdtempSync, readFileSync, symlinkSync, writeFileSync } from "node:fs"
 import { execFileSync, spawnSync } from "node:child_process"
 import { tmpdir } from "node:os"
 import { join, resolve } from "node:path"
-import { expect, it } from "vitest"
+import { beforeAll, expect, it } from "vitest"
 
 const runtime = resolve(import.meta.dirname, ".."), root = resolve(runtime, "../../.."), node = process.execPath
+let emitted: string | undefined
 const emit = (): string => {
+  if (emitted !== undefined) return emitted
   const out = mkdtempSync(join(tmpdir(), "native-usl-cli-"));
   symlinkSync(join(runtime, "node_modules"), join(out, "node_modules"), "dir");
   const config = join(out, "tsconfig.json");
   writeFileSync(config, JSON.stringify({extends: join(runtime, "tsconfig.build.json"), compilerOptions: {rootDir: join(runtime,"src"), outDir: out, noEmit: false, declaration: false, declarationMap: false, sourceMap: false}, include: [join(runtime, "src/native-usl-process.ts")], exclude: []}));
   execFileSync(join(runtime, "node_modules/.bin/tsc"), ["-p", config], {cwd: runtime});
+  emitted = out;
   return out;
 }
+beforeAll(() => { emit() }, 30_000)
 const fixture = (version: "v1" | "v2") => JSON.parse(readFileSync(resolve(root, `_research/usl_adapter/examples/preview.${version}.json`), "utf8")) as Record<string, unknown>
 const project = (value: Record<string, unknown>) => { const checks = (value["preview"] as Record<string, Record<string, unknown>>)["checks"]!; return { plan: value["plan"], report: value["report"], policy: value["policy"], allowed_reads: checks["allowed_reads"], now: checks["now"], revision: checks["revision"] } }
 

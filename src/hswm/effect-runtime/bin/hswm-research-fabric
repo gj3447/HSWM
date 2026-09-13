@@ -1,0 +1,4 @@
+#!/bin/sh
+# Checkout launcher for the bounded native research-fabric controller.
+hswm_script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+PATH="$HOME/.local/opt/node-v24.13.0-linux-x64/bin:$PATH" exec node "$hswm_script_dir/../dist/native-research-fabric-process.js" "$@"

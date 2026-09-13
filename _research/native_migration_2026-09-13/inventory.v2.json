@@ -1,0 +1,401 @@
+{
+  "schema_version": "hswm-native-migration-inventory/v1",
+  "as_of": "2026-09-13",
+  "source_observation_basis": "Successor inventory at exact tested command checkpoint; previous source hash observations retained in inventory.v1.json, never rewritten. Native verification source pins are in command-verification.v1.json.",
+  "scope": "Entrypoints evidenced as active by package metadata, launchers, Effect subprocesses, maintained operations/docs commands, or GitHub Actions. This is not a count of all tracked Python files and is not implementation, efficacy, or migration-completeness evidence.",
+  "statuses": {
+    "VERIFIED_NATIVE": "The documented executable is a TypeScript/Effect launcher; this does not validate its research claim.",
+    "PARTIAL": "A native counterpart exists, but a Python entrypoint, validator, or documented operational lane remains active.",
+    "PYTHON_ACTIVE": "An active owned Python execution path has no verified native replacement in this inventory.",
+    "HISTORICAL_ORACLE": "Retained for bounded replay, comparison, or historical artifact reproduction; not the default native runtime."
+  },
+  "entries": [
+    {
+      "id": "dev-runtime",
+      "status": "PARTIAL",
+      "entrypoint": "src/hswm/effect-runtime/bin/hswm-dev",
+      "dependencies": [
+        "src/hswm/effect-runtime/src/hswm-dev-process.ts",
+        "src/hswm/effect-runtime/src/adaptive-cli.ts#DEVELOPMENT_PROFILES",
+        "_research/causal_composition/examples/adaptive_hswm_development.v3.json"
+      ],
+      "native_counterpart": "src/hswm/effect-runtime/bin/hswm-dev",
+      "evidence": [
+        "README.md:108-110",
+        "adaptive-cli.ts:16-22"
+      ],
+      "classification": "native TypeScript/Effect launcher; the hswm profile selects a program with active hswm-python pytest cells.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "dev-runtime"
+      }
+    },
+    {
+      "id": "effect-launchers",
+      "status": "VERIFIED_NATIVE",
+      "entrypoint": "src/hswm/effect-runtime/bin/{hswm-live,hswm-kg-bundle,hswm-task,hswm-research-graph,hswm-backup,hswm-reluvator-check}",
+      "source_observation": "working tree; hswm-kg-bundle and hswm-task were untracked at observation time",
+      "dependencies": [
+        "dist/*-process.js"
+      ],
+      "native_counterpart": "self",
+      "evidence": [
+        "launcher shebangs exec node"
+      ],
+      "classification": "observed native launcher set; only tracked launchers may be attributed to repository_commit.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "effect-launchers"
+      }
+    },
+    {
+      "id": "python-toolchain-launcher",
+      "status": "PYTHON_ACTIVE",
+      "entrypoint": "src/hswm/development/bin/hswm-python",
+      "dependencies": [
+        "pyproject.toml",
+        "_research/graph_standards/runtime/pyproject.toml",
+        "_research/infrastructure_smoke/{research_fabric_smoke,phoenix_viewer_mcp_smoke}.py"
+      ],
+      "native_counterpart": null,
+      "evidence": [
+        "launcher sync/core/graph/infra actions"
+      ],
+      "classification": "active bounded Python environment and infrastructure-smoke launcher.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "python-toolchain-launcher"
+      }
+    },
+    {
+      "id": "package-scripts",
+      "status": "PARTIAL",
+      "entrypoint": "pyproject.toml:[project.scripts]",
+      "dependencies": [
+        "_research/root_compat/pyproject.toml:b6a312cc0c383e0c3a4b584327200476175b330aa4c1225ec81b41f9e8b4ae4b"
+      ],
+      "native_counterpart": "See individual package-script entries",
+      "evidence": [
+        "eight declared console scripts"
+      ],
+      "classification": "active packaging surface; root_compat has only the first three legacy scripts and is a compatibility package.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "package-scripts"
+      }
+    },
+    {
+      "id": "hswm-p1-gate-diagnostic",
+      "status": "PYTHON_ACTIVE",
+      "entrypoint": "hswm-p1-gate-diagnostic -> src/hswm/diagnostics/p1_gate.py:main",
+      "dependencies": [
+        "pyproject.toml"
+      ],
+      "native_counterpart": null,
+      "evidence": [
+        "pyproject.toml project script"
+      ],
+      "classification": "P1 diagnostic lane, not a claim of learning or efficacy.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "hswm-p1-gate-diagnostic"
+      }
+    },
+    {
+      "id": "hswm-verify-efficacy",
+      "status": "PARTIAL",
+      "entrypoint": "hswm-verify-efficacy -> scripts/verify_efficacy_claims.py:main",
+      "dependencies": [
+        "pyproject.toml",
+        ".github/workflows/ci.yml: selected-efficacy-claim-snapshot"
+      ],
+      "native_counterpart": "src/hswm/effect-runtime/bin/hswm-verify-efficacy",
+      "evidence": [
+        "CI runs uv run --locked hswm-verify-efficacy --pretty"
+      ],
+      "classification": "Native command verified against source-bound contracts; legacy package or operational callers remain active.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "hswm-verify-efficacy"
+      },
+      "native_verification": "_research/native_migration_2026-09-13/command-verification.v1.json"
+    },
+    {
+      "id": "hswm-legacy-replay",
+      "status": "PARTIAL",
+      "entrypoint": "hswm-legacy-replay -> src/hswm/infrastructure/legacy_replay.py:main",
+      "dependencies": [
+        "pyproject.toml",
+        "docs/research/ARTIFACT_LAYOUT.md:46eeb3504056dd72c75ada0dfe405b7ad5da3d931a972e32533469eb76f84548"
+      ],
+      "native_counterpart": "src/hswm/effect-runtime/bin/hswm-legacy-replay",
+      "evidence": [
+        "ARTIFACT_LAYOUT says exact historical execution uses hswm-legacy-replay"
+      ],
+      "classification": "Native command verified against source-bound contracts; legacy package or operational callers remain active.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "hswm-legacy-replay"
+      },
+      "native_verification": "_research/native_migration_2026-09-13/command-verification.v1.json"
+    },
+    {
+      "id": "hswm-research-fabric",
+      "status": "PARTIAL",
+      "entrypoint": "hswm-research-fabric -> src/hswm/infrastructure/research_fabric.py:main",
+      "dependencies": [
+        "pyproject.toml",
+        "docs/operations/systemd/hswm-research-fabric.service:21893c7801f38357e568fc0e946b77ae1e3faf4e92e6b6ce8a6a76eed1917973"
+      ],
+      "native_counterpart": "src/hswm/effect-runtime/bin/hswm-research-fabric",
+      "evidence": [
+        "systemd ExecStart/Stop use uv run hswm-research-fabric"
+      ],
+      "classification": "Native command verified against source-bound contracts; legacy package or operational callers remain active.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "hswm-research-fabric"
+      },
+      "native_verification": "_research/native_migration_2026-09-13/command-verification.v1.json"
+    },
+    {
+      "id": "hswm-graph-standards",
+      "status": "PYTHON_ACTIVE",
+      "entrypoint": "hswm-graph-standards -> src/hswm/infrastructure/graph_standard_tooling.py:main",
+      "dependencies": [
+        "pyproject.toml",
+        "_research/graph_standards/runtime/pyproject.toml:87eed7e58e461f56e58b3d2c2634d3aa50cade9e4c1f3c217d7065642d828a72"
+      ],
+      "native_counterpart": null,
+      "evidence": [
+        "graph-standards-requalification workflow fetch/qualify commands"
+      ],
+      "classification": "active standards qualification; external standards remain bounded tooling.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "hswm-graph-standards"
+      }
+    },
+    {
+      "id": "hswm-g0-occurrence",
+      "status": "PARTIAL",
+      "entrypoint": "hswm-g0-occurrence -> src/hswm/infrastructure/occurrence_cli.py:main",
+      "dependencies": [
+        "pyproject.toml"
+      ],
+      "native_counterpart": "src/hswm/effect-runtime/bin/hswm-g0-occurrence",
+      "evidence": [
+        "native CLI source advertises local preparation/inspection only"
+      ],
+      "classification": "All 12 CLI commands ported; external audit and sealed completion/publication remain unverified. Python package callers remain active.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "hswm-g0-occurrence"
+      },
+      "native_verification": "_research/native_migration_2026-09-13/command-verification.v1.json"
+    },
+    {
+      "id": "hswm-task",
+      "status": "PARTIAL",
+      "entrypoint": "hswm-task -> src/hswm/infrastructure/conditional_task_cli.py:main",
+      "dependencies": [
+        "pyproject.toml",
+        "docs/research/HSWM_CONDITIONAL_TASK_CLI_2026-09-07.md"
+      ],
+      "native_counterpart": "src/hswm/effect-runtime/bin/hswm-task",
+      "evidence": [
+        "native-task-process advertises synthesize/preview/probe/demo/validate"
+      ],
+      "classification": "docs still contain Python invocations; migration is partial.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "hswm-task"
+      }
+    },
+    {
+      "id": "hswm-usl",
+      "status": "PARTIAL",
+      "entrypoint": "hswm-usl -> src/hswm/infrastructure/usl_cli.py:main",
+      "dependencies": [
+        "pyproject.toml",
+        "docs/operations/HSWM_USL_ADAPTER_V2_2026-09-08.md"
+      ],
+      "native_counterpart": "src/hswm/effect-runtime/src/native-usl-cli.ts",
+      "evidence": [
+        "native-usl-cli preserves project|preview surface"
+      ],
+      "classification": "Original core checkpoint failed 308/3191 cases. Repair now agrees on 3268 USL and 384 datetime cases; bounded evidence only. Existing Python package/doc callers still active.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "hswm-usl"
+      },
+      "native_verification": "_research/native_migration_2026-09-13/command-verification.v1.json"
+    },
+    {
+      "id": "projection-shacl",
+      "status": "VERIFIED_NATIVE",
+      "entrypoint": "src/hswm/effect-runtime/src/hypergraph-projection-process.ts",
+      "dependencies": [
+        "src/hswm/infrastructure/hypergraph_projection_validation.py:15837612693aad98ede495cb409d6753c2fe061550af80f1330bd993b7e5bceb",
+        "_research/graph_standards/runtime/pyproject.toml"
+      ],
+      "native_counterpart": "src/hswm/effect-runtime/src/native-hypergraph-shacl.ts",
+      "evidence": [
+        "validateWithShacl invokes uv run ... python -m hswm.infrastructure.hypergraph_projection_validation"
+      ],
+      "classification": "Production native projection process invokes qualified native SHACL Core engine; four Node-only emitted CLI smokes include full rehearsal. Original validator retained as comparison evidence.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "projection-shacl"
+      }
+    },
+    {
+      "id": "s2s-python-oracle",
+      "status": "PARTIAL",
+      "entrypoint": "src/hswm/effect-runtime/src/s2s-live-python.ts",
+      "dependencies": [
+        "src/hswm/experiments/swm0w_confirmatory.py:9cf4be62a3f5e083c4c35815a4f3a37acb9061f2cfb421bcf7bbd4b2bc45509b",
+        "src/hswm/experiments/swm0w_s2s_pilot.py:46ee8a607224e198cf53f89d32ff7d7a8940cf99a15a138cce128b6e014e56d6"
+      ],
+      "native_counterpart": "Effect S2S orchestration/evidence modules",
+      "evidence": [
+        "s2s-live-python records pinned Python source closure and runtime identity"
+      ],
+      "classification": "Pinned historical replay remains immutable. Active numeric/live execution still requires dependency closure assessment and native replacement; historical labeling is not migration completion.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "s2s-python-oracle"
+      }
+    },
+    {
+      "id": "ci-python-lanes",
+      "status": "PYTHON_ACTIVE",
+      "entrypoint": ".github/workflows/{ci,graph-standards-requalification,hypergraph-projection,swm0w-confirmatory,swm0w-s2s-train-dev-pilot}.yml",
+      "dependencies": [
+        "pytest suites",
+        "SWM replay/confirmatory modules",
+        "graph standards CLI"
+      ],
+      "native_counterpart": "effect-runtime CI job is native but does not replace these lanes",
+      "evidence": [
+        "workflow uv/python/pytest commands"
+      ],
+      "classification": "active CI evidence and compatibility lanes.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "ci-python-lanes"
+      }
+    },
+    {
+      "id": "shell-watchdog",
+      "status": "PYTHON_ACTIVE",
+      "entrypoint": "scripts/bin_hswm_f1_watchdog.sh",
+      "dependencies": [
+        "prom_search_hswm.prom_f1_function_network"
+      ],
+      "native_counterpart": null,
+      "evidence": [
+        "python3 -m ... judge"
+      ],
+      "classification": "active DGX watchdog.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "shell-watchdog"
+      }
+    },
+    {
+      "id": "shell-f3v2",
+      "status": "PYTHON_ACTIVE",
+      "entrypoint": "scripts/f3v2_smoke_preflight.sh",
+      "dependencies": [
+        "_research.f_series.f3v2_arms"
+      ],
+      "native_counterpart": null,
+      "evidence": [
+        "exec .venv/bin/python -m _research.f_series.f3v2_arms"
+      ],
+      "classification": "active external-model smoke script; not efficacy evidence.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "shell-f3v2"
+      }
+    },
+    {
+      "id": "profile-python-subprocess",
+      "status": "PYTHON_ACTIVE",
+      "entrypoint": "hswm-dev hswm profile -> adaptive_hswm_development.v3.json cells {usl,ontology,docs}",
+      "dependencies": [
+        "src/hswm/development/bin/hswm-python",
+        "pytest tests/test_usl_adapter*.py",
+        "pytest graph projection tests",
+        "pytest markdown tests"
+      ],
+      "native_counterpart": null,
+      "evidence": [
+        "adaptive-cli.ts:21 selects v3; v3 argv cells explicitly invoke hswm-python ... pytest"
+      ],
+      "classification": "active hswm-dev profile-selected Python subprocess targets.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "profile-python-subprocess"
+      }
+    },
+    {
+      "id": "math-formal-verifiers",
+      "status": "PYTHON_ACTIVE",
+      "entrypoint": "formal/verify_hswm_{canonical_permit_vector,cellular_longinus,durable_runtime_longinus}.py",
+      "dependencies": [
+        "formal proof/vector artifacts"
+      ],
+      "native_counterpart": null,
+      "evidence": [
+        "checked-in implementation verifiers; no native replacement established"
+      ],
+      "classification": "active implementation/verifier surfaces; historical inputs do not make the implementation an oracle.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "math-formal-verifiers"
+      }
+    },
+    {
+      "id": "publication-compilers",
+      "status": "PYTHON_ACTIVE",
+      "entrypoint": "src/hswm/infrastructure/{knowledge_map_projection,research_tooling_projection,kg_bundle_graph_view}.py",
+      "dependencies": [
+        "published 2026-09-13 catalogs"
+      ],
+      "native_counterpart": "knowledge-catalog runtime and native KG bundle compiler (partial coverage only)",
+      "evidence": [
+        "published source catalogs pin these bytes"
+      ],
+      "classification": "active implementation/publishing surfaces; historical inputs do not establish retirement.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "publication-compilers"
+      }
+    },
+    {
+      "id": "maintenance-scripts",
+      "status": "PARTIAL",
+      "entrypoint": "scripts/{compile_portable_markdown_math,validate_repository_ontology}.py",
+      "dependencies": [
+        "AGENTS.md required markdown-math command"
+      ],
+      "native_counterpart": "src/hswm/effect-runtime/bin/hswm-markdown-math",
+      "evidence": [
+        "AGENTS.md explicitly requires compile_portable_markdown_math.py before publishing Markdown math"
+      ],
+      "classification": "Math compiler and rendering contracts ported. Repository ontology validator and explicit AGENTS Python check remain active.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/inventory.v1.json",
+        "entry_id": "maintenance-scripts"
+      }
+    }
+  ],
+  "excluded_population": {
+    "tracked_python_files": 842,
+    "reason": "The tracked population includes tests, research experiments, archived receipts, compatibility packages and oracle material. Presence alone does not establish active runtime ownership."
+  },
+  "source_base_commit": "5870f1ead147f5d868aaa0a8d2595b5f1556c533",
+  "migration_complete": false
+}

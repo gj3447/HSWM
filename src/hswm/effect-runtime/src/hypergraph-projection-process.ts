@@ -3,16 +3,15 @@
  * Argv-driven executable for the bounded hypergraph projection.
  *
  * It compiles or decodes one projection, validates the derived RDF dataset
- * with the repository's Python SHACL runtime, optionally publishes and reads
+ * with the qualified native SHACL Core engine, optionally publishes and reads
  * back the exact projection namespace in Neo4j, and writes one receipt
  * package into a directory it creates.  The whole invocation is one Effect
  * program: flags parse to typed refusals, files go through `PosixFileSystem`,
- * the SHACL step runs through `BoundedSubprocess`, the Neo4j driver is a
+ * the SHACL step uses the local pinned RDF/JS engine, the Neo4j driver is a
  * bracketed resource, and the executable's only runtime boundary is
  * `runArgvProcessMain`.
  */
 import { randomUUID } from "node:crypto"
-import { tmpdir } from "node:os"
 import { dirname, join, resolve } from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
 
@@ -25,15 +24,13 @@ import {
   type ProjectionGraph
 } from "./canonical-atom-v2-hypergraph-projection.js"
 import { HSWM_CANONICAL_JSON_V1_MAX_BYTES } from "./canonical-atom-v2-json.js"
-import { canonicalAtomV2RdfProjectionBytes } from "./canonical-atom-v2-rdf-projection.js"
+import { validateNativeHypergraphShacl } from "./native-hypergraph-shacl.js"
 import { publishNeo4jHypergraphProjection, rebuildNeo4jHypergraphProjection, withNeo4jDriver } from "./canonical-atom-v2-neo4j-projection.js"
 import { makeHypergraphProjectionRehearsal } from "./hypergraph-projection-rehearsal.js"
 import { buildHypergraphProjectionPackage, type HypergraphProjectionPackageInput } from "./hypergraph-projection-receipt.js"
 import { makeOpenConnectivityRehearsal } from "./open-connectivity-rehearsal.js"
 import {
-  BoundedSubprocess,
   PosixFileSystem,
-  type BoundedSubprocessShape,
   type PosixFileSystemShape
 } from "./effect-posix-services.js"
 import { runArgvProcessMain } from "./effect-process-main.js"
@@ -46,8 +43,6 @@ export const HSWM_HYPERGRAPH_PROJECTION_PROCESS_FAILURE_MESSAGE =
   "Hypergraph projection failed; no success receipt was emitted. Check source, SHACL runtime, output path and DB configuration."
 
 const MAX_SOURCE_CONFIG_BYTES = 65_536
-const SHACL_TIMEOUT_MS = 120_000
-const SHACL_MAX_OUTPUT_BYTES = 1_048_576
 const NEO4J_TIMEOUT_MS = 10_000
 const BOOLEAN_FLAGS: ReadonlySet<string> = new Set(["--rehearsal", "--connectivity-rehearsal", "--apply", "--rebuild", "--help"])
 const VALUE_FLAGS: ReadonlySet<string> = new Set(["--input", "--out", "--repository-root", "--source-config"])
@@ -194,93 +189,12 @@ const loadProjection = (
   }
 }
 
-interface ValidationInputs {
-  readonly projectionJsonPath: string
-  readonly nquadsPath: string
-}
-
-/**
- * The SHACL runtime reads two files.  They are created exclusively under a
- * fresh random name in the temporary directory and unlinked on every exit
- * path, which is the bracketed equivalent of the former mkdtemp/rm pair.
- */
-const withValidationInputs = <A, E>(
-  fs: PosixFileSystemShape,
-  use: (inputs: ValidationInputs) => Effect.Effect<A, E>
-): Effect.Effect<A, E> =>
-  Effect.acquireUseRelease(
-    Effect.sync((): ValidationInputs => {
-      const prefix = join(tmpdir(), `hswm-projection-validation-${randomUUID()}`)
-      return { projectionJsonPath: `${prefix}.rdf.json`, nquadsPath: `${prefix}.rdf.nq` }
-    }),
-    use,
-    (inputs) => Effect.all([
-      fs.unlinkIfPresent(inputs.projectionJsonPath, "validation-cleanup"),
-      fs.unlinkIfPresent(inputs.nquadsPath, "validation-cleanup")
-    ]).pipe(Effect.ignore)
-  )
-
-const writeValidationInputs = (
-  fs: PosixFileSystemShape,
-  inputs: ValidationInputs,
-  projection: HypergraphProjection
-): Effect.Effect<void, HypergraphProjectionProcessError> =>
-  Effect.gen(function* () {
-    const rdfJson = yield* right(canonicalAtomV2RdfProjectionBytes(projection.rdf), "SOURCE_INVALID", "projection contract verification failed")
-    const options = { mode: 0o600, sync: false, operation: "validation-input" } as const
-    yield* fs.writeExclusive(inputs.projectionJsonPath, rdfJson, options).pipe(
-      Effect.mapError((cause) => processError("VALIDATION_INPUT_UNAVAILABLE", `validation-input: ${cause.code}`))
-    )
-    yield* fs.writeExclusive(inputs.nquadsPath, projection.rdf.nquads, options).pipe(
-      Effect.mapError((cause) => processError("VALIDATION_INPUT_UNAVAILABLE", `validation-input: ${cause.code}`))
-    )
-  })
-
-// ---------------------------------------------------------------------------
-// SHACL validation through the bounded subprocess service
-// ---------------------------------------------------------------------------
-
-/** The Python SHACL runtime is a repository tool and inherits this process's environment, as `execFile` did. */
-const inheritedEnvironment = (): Readonly<Record<string, string>> =>
-  Object.freeze(Object.fromEntries(
-    Object.entries(process.env).flatMap(([name, value]) => (value === undefined ? [] : [[name, value] as const]))
-  ))
-
-const field = (value: unknown, key: string): unknown =>
-  typeof value === "object" && value !== null && !Array.isArray(value) ? (value as Readonly<Record<string, unknown>>)[key] : undefined
-
-/** Returns the exact SHACL evidence bytes the runtime printed; they are retained in the receipt. */
-const validateWithShacl = (
-  subprocess: BoundedSubprocessShape,
-  root: string,
-  inputs: ValidationInputs,
-  projection: HypergraphProjection
-): Effect.Effect<Uint8Array, HypergraphProjectionProcessError> =>
-  Effect.gen(function* () {
-    const observation = yield* subprocess.observe({
-      argv: [
-        "uv", "run", "--project", join(root, "_research/graph_standards/runtime"), "--locked", "--extra", "graph",
-        "python", "-m", "hswm.infrastructure.hypergraph_projection_validation",
-        "--projection-json", inputs.projectionJsonPath, "--nquads", inputs.nquadsPath,
-        "--shapes", join(root, "schemas/HSWM_CANONICAL_ATOM_V2_RDF_PROJECTION_SHACL_1_0.ttl")
-      ],
-      cwd: root,
-      environment: inheritedEnvironment(),
-      timeoutMs: SHACL_TIMEOUT_MS,
-      maximumOutputBytes: SHACL_MAX_OUTPUT_BYTES
-    }).pipe(Effect.mapError((cause) => processError("SHACL_RUNTIME_FAILED", cause.detail)))
-    if (observation.launchError !== null || observation.timedOut || observation.outputTruncated || observation.exitCode !== 0) {
-      return yield* Effect.fail(processError("SHACL_RUNTIME_FAILED", "SHACL validation runtime did not complete cleanly"))
-    }
-    const evidence = yield* Effect.try({
-      try: (): unknown => JSON.parse(new TextDecoder().decode(observation.stdout)),
-      catch: () => processError("SHACL_RUNTIME_FAILED", "SHACL evidence is not JSON")
-    })
-    if (field(evidence, "conforms") !== true || field(evidence, "datasetSha256") !== projection.manifest.rdfSha256) {
-      return yield* Effect.fail(processError("SHACL_MISMATCH", "SHACL did not verify this exact RDF dataset"))
-    }
-    return observation.stdout
-  })
+const validateWithShacl = (fs: PosixFileSystemShape, root: string, projection: HypergraphProjection): Effect.Effect<Uint8Array, HypergraphProjectionProcessError> => Effect.gen(function* () {
+  const shapes = yield* readCallerFile(fs, join(root, "schemas/HSWM_CANONICAL_ATOM_V2_RDF_PROJECTION_SHACL_1_0.ttl"), 1048576, "projection-shapes", "VALIDATION_INPUT_UNAVAILABLE")
+  const evidence = yield* validateNativeHypergraphShacl(projection, shapes).pipe(Effect.mapError(cause => processError("SHACL_RUNTIME_FAILED", cause.detail)))
+  if (!evidence.conforms || evidence.datasetSha256 !== projection.manifest.rdfSha256) return yield* Effect.fail(processError("SHACL_MISMATCH", "SHACL did not verify this exact RDF dataset"))
+  return new TextEncoder().encode(JSON.stringify(evidence) + "\n")
+})
 
 // ---------------------------------------------------------------------------
 // Neo4j publication as a bracketed driver resource
@@ -353,21 +267,19 @@ const writePackage = (
 /** The whole invocation as one Effect program; the returned text is the exact stdout. */
 export const executeHypergraphProjectionProcess = (
   argv: ReadonlyArray<string>
-): Effect.Effect<string, HypergraphProjectionProcessError, PosixFileSystem | BoundedSubprocess> =>
+): Effect.Effect<string, HypergraphProjectionProcessError, PosixFileSystem> =>
   Effect.gen(function* () {
     const invocation = yield* planInvocation(yield* parseArguments(argv))
     if (invocation === null) return HSWM_HYPERGRAPH_PROJECTION_PROCESS_USAGE
     const fs = yield* PosixFileSystem
-    const subprocess = yield* BoundedSubprocess
     const startedAt = yield* Effect.sync(() => new Date().toISOString())
     const projection = yield* loadProjection(fs, invocation.source)
     // Reserve a new directory before any DB action; never overwrite user output.
     yield* fs.makeDirectory(invocation.output, { mode: 0o777, recursive: false, operation: "output-directory" }).pipe(
       Effect.mapError((cause) => processError("OUTPUT_DIRECTORY_UNAVAILABLE", `output-directory: ${cause.code}`))
     )
-    return yield* withValidationInputs(fs, (inputs) => Effect.gen(function* () {
-      yield* writeValidationInputs(fs, inputs, projection)
-      const shaclEvidence = yield* validateWithShacl(subprocess, invocation.root, inputs, projection)
+    return yield* Effect.gen(function* () {
+      const shaclEvidence = yield* validateWithShacl(fs, invocation.root, projection)
       const readbackGraph: ProjectionGraph | null = invocation.apply === null
         ? null
         : yield* readCallerFile(fs, invocation.apply.sourceConfigPath, MAX_SOURCE_CONFIG_BYTES, "source-config", "SOURCE_CONFIG_INVALID").pipe(
@@ -397,7 +309,7 @@ export const executeHypergraphProjectionProcess = (
         output: invocation.output,
         claimCeiling: projection.manifest.claimCeiling
       })}\n`
-    }))
+    })
   })
 
 /** Every failure renders as the one bounded public line; typed reasons stay in the Effect for callers. */

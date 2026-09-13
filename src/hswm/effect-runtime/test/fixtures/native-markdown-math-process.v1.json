@@ -1,0 +1,29 @@
+{
+  "schema_version": "hswm-native-markdown-math-process-fixture/v1",
+  "source_commit": "5870f1ead147f5d868aaa0a8d2595b5f1556c533",
+  "inputs": {
+    "input/one.md": "Before $\\operatorname{Readout}(x)$.\n\\[\nz=\\operatorname*{argmax}_{i} x_i\n\\]\n",
+    "input/two.md": "```math\np_j_adjusted = min(1, 3 p_j).\n```\n",
+    "input/ignore.txt": "\\operatorname{ignored}\n"
+  },
+  "directory_report": {
+    "documents": 2,
+    "operatorname_rewrites": 2,
+    "legacy_compatibility_rewrites": 1,
+    "display_fence_rewrites": 1,
+    "math_fences_seen": 2,
+    "status": "PORTABLE_MATH_COMPILED"
+  },
+  "derived": {
+    "input/one.md": "Before $\\mathrm{Readout}(x)$.\n```math\nz=\\mathrm{argmax}_{i} x_i\n```\n",
+    "input/two.md": "```math\np_{j,\\mathrm{adjusted}} = \\min(1, 3p_j).\n```\n"
+  },
+  "single_report": {
+    "documents": 1,
+    "operatorname_rewrites": 2,
+    "legacy_compatibility_rewrites": 0,
+    "display_fence_rewrites": 1,
+    "math_fences_seen": 1,
+    "status": "PORTABLE_MATH_COMPILED"
+  }
+}

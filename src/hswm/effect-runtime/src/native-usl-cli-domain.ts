@@ -35,11 +35,11 @@ export const previewNativeUsl = (request: TaskJson): Either.Either<TaskJson, Nat
   const expected = new Set<string>()
   for (const binding of policy["bindings"]) {
     if (!object(binding) || !text(binding["role"]) || !text(binding["field"])) return fail("invalid JSON object fields")
-    expected.add(`${binding["role"]}\u0000${binding["field"]}`)
+    expected.add(JSON.stringify([binding["role"],binding["field"]]))
   }
   if (!Array.isArray(preview["domain"]) || preview["domain"].length !== expected.size) return fail("USL preview domain must contain exactly the mapped Boolean reference fields")
   for (const row of preview["domain"]) {
-    if (!object(row) || !text(row["role"]) || !text(row["field"]) || !Array.isArray(row["values"]) || row["values"].length !== 2 || !row["values"].includes(false) || !row["values"].includes(true) || !expected.delete(`${row["role"]}\u0000${row["field"]}`)) return fail("USL preview domain must contain exactly the mapped Boolean reference fields")
+    if (!object(row) || !text(row["role"]) || !text(row["field"]) || !Array.isArray(row["values"]) || row["values"].length !== 2 || !row["values"].includes(false) || !row["values"].includes(true) || !expected.delete(JSON.stringify([row["role"],row["field"]]))) return fail("USL preview domain must contain exactly the mapped Boolean reference fields")
   }
   if (expected.size !== 0) return fail("USL preview domain must contain exactly the mapped Boolean reference fields")
   const projectionRequest: TaskJson = { plan: request["plan"]!, report: request["report"]!, policy, allowed_reads: checks["allowed_reads"]!, now: checks["now"]!, revision: checks["revision"]! }

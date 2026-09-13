@@ -1,5 +1,9 @@
 # HSWM — public repository index
 
+2026-09-13 [과학 연구 도구·최신 표준 조사](docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md)는
+35개 후보를 기존 기능과 8개 연구 요구사항에 연결한다. 실제 기관 사용 근거, 확정 표준과
+개발 중 명세, 재사용·조건부 추가·보류 판단과 검증 과제를 출처가 있는 KG로 기록한다.
+
 2026-09-13 [HSWM 전체 지식 지도](docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md)는
 기존 설계·구현·형식검증·실험을 13개 주제와 FCL/CR 16개 의무로 연결한다.
 고정 소스의 전체 목록, 현재 진입점과 역사적 기록, 실제 KG 조회 상태를

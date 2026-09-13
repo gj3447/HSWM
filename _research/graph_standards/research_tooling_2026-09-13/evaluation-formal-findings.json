@@ -1,0 +1,402 @@
+{
+  "schema_version": "hswm-research-tooling-findings/v1",
+  "authority": "SECONDARY_AI",
+  "accessed_on": "2026-09-13",
+  "scope": "Candidate tooling review for HSWM empirical efficacy, causal identification, and bounded formal verification. No package, model, benchmark, or experiment was installed or run.",
+  "method_note": "Standard status is not an adoption ranking. Adoption evidence records only a direct publisher, institutional, or scholarly statement. `verified_version` records an observed version or existing HSWM pin; `version_status` says whether that observation was confirmed as an upstream-current release. A tool is a candidate until a task-specific source revision, license, integrity record, isolated qualification, and a HSWM evidence protocol are approved in a separate source-bound plan.",
+  "non_substitution_boundary": "Agent evaluation measures outcomes under a declared task and resource protocol; causal analysis identifies an estimand only under stated design and assumptions; proof assistants check formal statements; bounded model checking searches finite executions. None establishes the other kind of claim, and none alone establishes HSWM efficacy or FCL passage.",
+  "existing_hswm_context": [
+    {
+      "path": "docs/research/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.md",
+      "finding": "CR-1 through CR-7 remain open; CR-2 requires an explicit assignment, intervention, interference, and identification model, while CR-7 requires a single bounded runtime witness plus independent outcome measurement."
+    },
+    {
+      "path": "ontology/evidence/HSWM_CONSTRUCTIVE_PROOF_ROUND_1_2026-09-10.v1.json",
+      "finding": "Finite selection, randomized identification, and composition-interference results were machine-checked, but G0 is NOT_PASSED and G1 NOT_EVALUATED."
+    },
+    {
+      "path": "ontology/evidence/HSWM_RELATION_RESEARCH_ROUND_1_2026-09-10.v1.json",
+      "finding": "RU-1 is a candidate; no separately configured calibration API evaluation calls occurred, G0 is NOT_PASSED, and G1 is NOT_EVALUATED."
+    },
+    {
+      "path": "formal/lean-toolchain",
+      "finding": "The checked-in Lean formalization is currently pinned to leanprover/lean4:v4.32.1."
+    },
+    {
+      "path": "src/hswm/evaluation/inspect_outer_runner.py",
+      "finding": "Inspect AI is already integrated as an outer, exact-pinned 0.3.260 preflight observer; it deliberately does not execute HSWM transitions or establish efficacy."
+    },
+    {
+      "path": "src/hswm/evaluation/occurrence_dual_evaluator.py",
+      "finding": "The existing blinded dual-evaluation contract binds Inspector A to inspect-ai==0.3.260 and fail-closes on evaluator disagreement or non-independence."
+    },
+    {
+      "path": "_research/graph_standards/HSWM_GRAPH_STANDARDS_ACCEPTANCE.v1.json",
+      "finding": "Existing graph-engineering qualification is RDF/JSON-LD/SHACL/SPARQL-oriented; it does not qualify agent evaluation, causal inference, proof automation, or model checking."
+    }
+  ],
+  "sources": [
+    {
+      "id": "inspect-home",
+      "url": "https://inspect.aisi.org.uk/",
+      "title": "Inspect",
+      "organization": "UK AI Security Institute and Meridian Labs",
+      "accessed_on": "2026-09-13",
+      "source_date": null,
+      "kind": "official documentation",
+      "finding": "Inspect documents composable datasets, agents, tools, scorers, sandboxes, over 200 pre-built evaluations, and support for arbitrary external agents."
+    },
+    {
+      "id": "inspect-evals-release",
+      "url": "https://github.com/UKGovernmentBEIS/inspect_evals/releases",
+      "title": "inspect_evals releases",
+      "organization": "UK Government BEIS / UK AI Security Institute project",
+      "accessed_on": "2026-09-13",
+      "source_date": "2026-08-11",
+      "kind": "official repository release record",
+      "finding": "The release record documents an inspect_ai >=0.3.258 score-semantics change and warns that it can move reported compliance rates; evaluation versions therefore need source pinning."
+    },
+    {
+      "id": "hswm-inspect-implementation",
+      "url": "https://github.com/gj3447/HSWM/blob/main/src/hswm/evaluation/inspect_outer_runner.py",
+      "title": "HSWM Inspect outer preflight",
+      "organization": "HSWM repository",
+      "accessed_on": "2026-09-13",
+      "source_date": null,
+      "kind": "checked-in implementation",
+      "finding": "The checked-in observer pins inspect-ai==0.3.260, sanitizes provider-secret inheritance for no-model preflight commands, and explicitly excludes HSWM execution and efficacy claims. This is an HSWM integration pin, not a claim that 0.3.260 is upstream-current."
+    },
+    {
+      "id": "inspect-pypi-current",
+      "url": "https://pypi.org/project/inspect-ai/",
+      "title": "inspect-ai",
+      "organization": "UK AI Security Institute / PyPI",
+      "accessed_on": "2026-09-13",
+      "source_date": "2026-09-04",
+      "kind": "package index release record",
+      "finding": "PyPI lists 0.3.263 as the latest release, uploaded 2026-09-04, and records 0.3.260 as the 2026-08-21 release. HSWM's 0.3.260 pin is therefore observed but is not upstream-current."
+    },
+    {
+      "id": "aisi-inspect-use",
+      "url": "https://www.aisi.gov.uk/blog/releasing-aisis-engineering-playbook",
+      "title": "Releasing AISI's Engineering Playbook",
+      "organization": "UK AI Security Institute",
+      "accessed_on": "2026-09-13",
+      "source_date": null,
+      "kind": "official institutional use report",
+      "finding": "AISI states that Inspect powers many of its frontier evaluations; it reports METR migrated its time-horizon evaluations to Inspect and that Apollo Research builds new evaluations on Inspect. These are AISI-reported adoption statements, not independent comparative measurements."
+    },
+    {
+      "id": "metr-task-standard",
+      "url": "https://github.com/METR/task-standard/blob/main/README.md",
+      "title": "METR Task Standard overview",
+      "organization": "METR",
+      "accessed_on": "2026-09-13",
+      "source_date": "2024-01",
+      "kind": "official repository specification",
+      "finding": "Defines a common task format with an environment, instructions, and optional automated scoring; METR reports using it for about 200 task families and about 2,000 tasks as of January 2024."
+    },
+    {
+      "id": "metr-public-tasks",
+      "url": "https://github.com/METR/public-tasks",
+      "title": "METR Example Task Suite",
+      "organization": "METR",
+      "accessed_on": "2026-09-13",
+      "source_date": null,
+      "kind": "official repository",
+      "finding": "Public tasks conform to METR Task Standard and direct runners to the METR Inspect Task Bridge; publisher labels them work in progress."
+    },
+    {
+      "id": "lm-eval-release",
+      "url": "https://github.com/EleutherAI/lm-evaluation-harness/releases",
+      "title": "lm-evaluation-harness releases",
+      "organization": "EleutherAI",
+      "accessed_on": "2026-09-13",
+      "source_date": "2026-08-31",
+      "kind": "official repository release record",
+      "finding": "Latest listed release v0.4.13 documents fixes that can change results, including few-shot evaluation-document leakage and a multiple-choice filter bug."
+    },
+    {
+      "id": "lm-eval-paper",
+      "url": "https://arxiv.org/abs/2405.14782",
+      "title": "Lessons from the Trenches on Reproducible Evaluation of Language Models",
+      "organization": "EleutherAI authors",
+      "accessed_on": "2026-09-13",
+      "source_date": "2024-05-23",
+      "kind": "research paper",
+      "finding": "Describes lm-eval as an independent, reproducible, and extensible evaluation library; this is evidence of intended use, not evidence that any HSWM result generalizes."
+    },
+    {
+      "id": "lean-release",
+      "url": "https://lean-lang.org/doc/reference/latest/releases/v4.22.0/",
+      "title": "Lean 4.22.0 release notes",
+      "organization": "Lean FRO / Lean project",
+      "accessed_on": "2026-09-13",
+      "source_date": "2025-08-14",
+      "kind": "official release documentation",
+      "finding": "Documents Lean release changes and formal-proof tooling; it is evidence for the proof-assistant ecosystem, not a substitute for reviewing HSWM theorem statements and assumptions."
+    },
+    {
+      "id": "mathlib-repository",
+      "url": "https://github.com/leanprover-community/mathlib4",
+      "title": "mathlib4",
+      "organization": "Lean Community",
+      "accessed_on": "2026-09-13",
+      "source_date": null,
+      "kind": "official community repository",
+      "finding": "mathlib4 is the community-maintained Lean 4 mathematics and programming library."
+    },
+    {
+      "id": "lean-mathlib-research-use",
+      "url": "https://lean-lang.org/use-cases/mathlib/",
+      "title": "Mathlib: A Foundation for Formal Mathematics Research and Verification",
+      "organization": "Lean project",
+      "accessed_on": "2026-09-13",
+      "source_date": null,
+      "kind": "official use-case documentation",
+      "finding": "Lean's official documentation describes Mathlib as enabling research and verification, cites the Polynomial Freiman-Ruzsa and Liquid Tensor projects, and describes a human-review process for contributions."
+    },
+    {
+      "id": "leandojo-v2",
+      "url": "https://github.com/lean-dojo/LeanDojo-v2",
+      "title": "LeanDojo-v2",
+      "organization": "LeanDojo project",
+      "accessed_on": "2026-09-13",
+      "source_date": null,
+      "kind": "project repository",
+      "finding": "Describes an end-to-end framework for training, evaluating, and deploying AI-assisted Lean 4 theorem provers; its stated installation requires Pantograph for Lean RPC."
+    },
+    {
+      "id": "leandojo-original",
+      "url": "https://github.com/lean-dojo/leandojo",
+      "title": "LeanDojo",
+      "organization": "LeanDojo project",
+      "accessed_on": "2026-09-13",
+      "source_date": "2025-06-13",
+      "kind": "project repository release record",
+      "finding": "The original library labels itself deprecated and directs new projects to LeanDojo-v2; its last listed release is v4.20.0."
+    },
+    {
+      "id": "tla-tools",
+      "url": "https://www.microsoft.com/en-us/download/details.aspx?id=52467",
+      "title": "TLA+ Tools",
+      "organization": "Microsoft",
+      "accessed_on": "2026-09-13",
+      "source_date": null,
+      "kind": "official distribution page",
+      "finding": "The toolkit includes a parser, syntax checker, model checker and simulator for an executable subclass, typesetter, and PlusCal translator."
+    },
+    {
+      "id": "apalache-docs",
+      "url": "https://apalache-mc.org/docs/apalache/index.html",
+      "title": "Apalache documentation",
+      "organization": "Apalache project",
+      "accessed_on": "2026-09-13",
+      "source_date": null,
+      "kind": "official documentation",
+      "finding": "Apalache is a symbolic TLA+ model checker using SMT solving for finite, bounded executions; its own documentation calls it experimental and describes TLC as mature."
+    },
+    {
+      "id": "dowhy-docs",
+      "url": "https://www.pywhy.org/dowhy/",
+      "title": "DoWhy documentation",
+      "organization": "PyWhy",
+      "accessed_on": "2026-09-13",
+      "source_date": "2025-11-08",
+      "kind": "official documentation",
+      "finding": "DoWhy v0.14 documents explicit identifying assumptions, causal models, effect estimation, refutation, interventions, counterfactuals, and causal graphical models."
+    },
+    {
+      "id": "econml-release",
+      "url": "https://github.com/py-why/EconML/releases",
+      "title": "EconML releases",
+      "organization": "Microsoft Research ALICE / PyWhy",
+      "accessed_on": "2026-09-13",
+      "source_date": "2025-07-14",
+      "kind": "official repository release record",
+      "finding": "Latest listed v0.16.0 adds sensitivity analysis for several estimators; the project states its purpose is estimating treatment effects using machine learning."
+    },
+    {
+      "id": "econml-msr",
+      "url": "https://www.microsoft.com/research/project/econml/",
+      "title": "EconML",
+      "organization": "Microsoft Research",
+      "accessed_on": "2026-09-13",
+      "source_date": null,
+      "kind": "official project page",
+      "finding": "Microsoft Research describes EconML as open-source causal machine-learning software for individualized causal responses from observational or experimental data."
+    },
+    {
+      "id": "pymc-pypi",
+      "url": "https://pypi.org/project/pymc/",
+      "title": "pymc",
+      "organization": "PyMC Developers",
+      "accessed_on": "2026-09-13",
+      "source_date": "2026-09-08",
+      "kind": "package index release record",
+      "finding": "The PyPI project lists PyMC 6.3.2; it is a probabilistic-programming tool, so posterior uncertainty is conditional on the supplied statistical model."
+    },
+    {
+      "id": "arviz-pypi",
+      "url": "https://pypi.org/project/arviz/",
+      "title": "arviz",
+      "organization": "ArviZ Developers",
+      "accessed_on": "2026-09-13",
+      "source_date": "2026-08-11",
+      "kind": "package index release record",
+      "finding": "The PyPI project lists ArviZ 1.3.0; the project describes posterior analysis, model checking, comparison, and diagnostics for Bayesian models."
+    }
+  ],
+  "candidates": [
+    {
+      "id": "inspect-ai",
+      "name": "Inspect AI with Inspect Evals",
+      "category": "agent/LLM outcome evaluation",
+      "standard_status": "Open-source evaluation framework, not a formal interoperability standard.",
+      "verified_version": "inspect-ai==0.3.260 (existing HSWM outer-preflight pin)",
+      "version_status": "Existing HSWM pin; upstream-current version separately observed as 0.3.263 on 2026-09-13. No upgrade is proposed by this review.",
+      "version_source_ids": ["hswm-inspect-implementation", "inspect-pypi-current"],
+      "source_ids": ["inspect-home", "inspect-evals-release", "hswm-inspect-implementation", "inspect-pypi-current", "aisi-inspect-use"],
+      "adoption_evidence": "AISI reports that Inspect powers many of its frontier evaluations, that METR migrated its time-horizon evaluations to Inspect, and that Apollo Research builds new evaluations on it. These are direct institutional statements, not a popularity ranking or independent effectiveness comparison.",
+      "hswm_fit": "Already the HSWM outer evaluator. The immediate CR-1/CR-7 and RU-1 gap is a real held-out evaluator integration: bind frozen baseline, candidate, sham/restore, total-resource accounting, task version, sealed test, and machine-readable traces to the existing observer rather than adding another harness.",
+      "cost_or_overlap": "A new harness would duplicate an existing bounded observer. Inspect still cannot define HSWM causal estimands or prove an update rule; model-generated code requires sandbox and log-secret review.",
+      "qualification_needed": "Keep the existing 0.3.260 pin; add one source-bound held-out-task integration only after model/provider identity, seed policy, scorer determinism, log custody, and leakage controls are declared. Pin any Inspect Evals task revision separately because upstream scorer changes can move results.",
+      "recommendation": "INTEGRATE_EXISTING_PINNED_EVALUATOR_WITH_REAL_HELDOUT_PROTOCOL"
+    },
+    {
+      "id": "metr-task-standard-bridge",
+      "name": "METR Task Standard plus Inspect Task Bridge",
+      "category": "portable agent-task specification",
+      "standard_status": "Published project specification, explicitly work in progress; not a ratified international standard.",
+      "verified_version": "No release/version selected; task definition must declare its standard version.",
+      "version_status": "No upstream-current version claim; this review inspected the main specification only.",
+      "version_source_ids": ["metr-task-standard"],
+      "source_ids": ["metr-task-standard", "metr-public-tasks"],
+      "adoption_evidence": "METR states that it used the format for approximately 200 task families and 2,000 tasks as of January 2024; public tasks state they conform to it.",
+      "hswm_fit": "Use after a first HSWM task is stable, to make an outcome task portable beyond a HSWM-only harness and distinguish task construction from agent implementation.",
+      "cost_or_overlap": "Container/VM environment construction and scorer work are substantial. It overlaps Inspect task execution but adds portability; it does not test continual learning across a task distribution by itself.",
+      "qualification_needed": "Choose a task family only after the estimand and source cutoff are fixed; pin the standard revision, image digest, external-service policy, scorer tests, and bridge revision; verify no HSWM state crosses reset boundaries.",
+      "recommendation": "DEFER_UNTIL_ONE_SEALED_TASK_PROTOCOL_EXISTS"
+    },
+    {
+      "id": "lm-evaluation-harness",
+      "name": "lm-evaluation-harness",
+      "category": "static language-model benchmark evaluation",
+      "standard_status": "Open-source framework, not a standard.",
+      "verified_version": "v0.4.13",
+      "version_status": "Observed as the latest listed release on 2026-09-13.",
+      "version_source_ids": ["lm-eval-release"],
+      "source_ids": ["lm-eval-release", "lm-eval-paper"],
+      "adoption_evidence": "The authors describe the project as an independent, reproducible, extensible evaluation library; this does not establish suitability for HSWM's agentic causal claims.",
+      "hswm_fit": "Useful only as a fixed-model regression and contamination-sensitive language baseline. It can establish that a model/API change shifts static task scores before running a dynamic HSWM protocol.",
+      "cost_or_overlap": "Directly overlaps only static benchmark scoring. Its release notes show score-affecting leakage fixes, so historical scores cannot be compared across versions without a migration record.",
+      "qualification_needed": "Pin harness, task YAML, dataset revision, tokenizer/template, decoding parameters, model revision, and scoring patch level; require held-out task suitability review and no use as a proxy for causal learning.",
+      "recommendation": "BASELINE_ONLY_NOT_PRIMARY_HSWM_EFFICACY_TOOL"
+    },
+    {
+      "id": "lean4-mathlib",
+      "name": "Lean 4 and mathlib",
+      "category": "kernel-checked formal proof",
+      "standard_status": "Proof assistant and community library, not a graph or experiment standard.",
+      "verified_version": "HSWM checked-in pin: leanprover/lean4:v4.32.1; no upgrade selected.",
+      "version_status": "Existing HSWM pin, not an upstream-current version claim.",
+      "version_source_ids": ["lean-release", "mathlib-repository"],
+      "source_ids": ["lean-release", "mathlib-repository", "lean-mathlib-research-use"],
+      "adoption_evidence": "Lean's official Mathlib use-case documentation cites frontier formalization projects and describes a reviewed common library; existing HSWM proof artifacts already use Lean. This does not validate HSWM theorem premises.",
+      "hswm_fit": "Keep as the primary formal layer for CR-0 through CR-6: formalize the finite randomized assignment/identification model, noninterference prerequisites, and composition preservation before claiming a constructed witness.",
+      "cost_or_overlap": "Already present and avoids duplicate formal stacks. It cannot validate that runtime traces faithfully represent reality or that the stated environment assumptions hold.",
+      "qualification_needed": "Retain the local toolchain pin and build with trust restrictions; for each theorem record exact statement, imports, admitted axioms, `sorry` audit, and the empirical mapping that remains outside Lean.",
+      "recommendation": "CONTINUE_EXISTING_PRIMARY_FORMAL_TOOL"
+    },
+    {
+      "id": "leandojo-v2-pantograph",
+      "name": "LeanDojo-v2 with Pantograph",
+      "category": "AI-assisted theorem-prover training/evaluation and Lean RPC",
+      "standard_status": "Research/project tooling, not a proof checker or standard.",
+      "verified_version": "LeanDojo-v2 main documentation reviewed; exact immutable revision not selected.",
+      "version_status": "No upstream-current version claim; the original LeanDojo repository labels itself deprecated in favor of v2.",
+      "version_source_ids": ["leandojo-v2", "leandojo-original"],
+      "source_ids": ["leandojo-v2", "leandojo-original"],
+      "adoption_evidence": "The project explicitly supersedes its original deprecated library with LeanDojo-v2; no broad-adoption inference is made from this source review.",
+      "hswm_fit": "Potential future instrument for measuring an LLM-assisted proof-search policy on HSWM-local lemmas, separately from accepting proofs. It could support bounded research on whether outcome feedback improves proof search.",
+      "cost_or_overlap": "Adds Python, Lean RPC, model, GPU/dataset, and GitHub-token dependencies; it overlaps existing direct Lean checking but does not replace its kernel.",
+      "qualification_needed": "Do not add until a preregistered theorem-search study exists. Then pin LeanDojo-v2, Pantograph, Lean/mathlib, theorem corpus cutoff, model, prompt, retry/budget policy, and held-out theorem split; report accepted kernel proofs separately from search success.",
+      "recommendation": "DEFER_RESEARCH_AUTOMATION_NOT_NEEDED_FOR_CURRENT_PROOF_OBLIGATIONS"
+    },
+    {
+      "id": "tla-plus-tlc",
+      "name": "TLA+ Tools and TLC",
+      "category": "finite-state protocol model checking",
+      "standard_status": "Established specification-language/tool ecosystem; no claim of formal standards-body ratification.",
+      "verified_version": "No exact version selected in this review.",
+      "version_status": "No upstream-current version claim.",
+      "version_source_ids": ["tla-tools"],
+      "source_ids": ["tla-tools"],
+      "adoption_evidence": "Microsoft distributes the toolkit and documents the parser, model checker, simulator, and PlusCal translator; no popularity ranking is inferred.",
+      "hswm_fit": "Strong candidate for a small finite CR-0/CR-6 protocol model: concurrent revision proposals, owner/Permit transition ordering, migration, conflict resolution, and rollback/recovery safety invariants.",
+      "cost_or_overlap": "Complements Lean: TLC finds counterexample traces in bounded instances; it does not prove unbounded theorems or establish probabilistic/effect-size claims. A translation must not become a second HSWM runtime.",
+      "qualification_needed": "Write a source-bound finite abstraction with explicit abstraction loss, state bounds, invariants, fairness assumptions, and reproducible TLC configuration; independently relate any discovered trace to the TypeScript Effect transition semantics.",
+      "recommendation": "PILOT_FOR_CR0_CR6_CONCURRENCY_COUNTEREXAMPLES"
+    },
+    {
+      "id": "apalache",
+      "name": "Apalache",
+      "category": "symbolic bounded TLA+ model checking",
+      "standard_status": "Experimental research/project tool.",
+      "verified_version": "No exact version selected in this review.",
+      "version_status": "No upstream-current version claim.",
+      "version_source_ids": ["apalache-docs"],
+      "source_ids": ["apalache-docs"],
+      "adoption_evidence": "Its official documentation calls it a symbolic TLA+ checker and explicitly identifies it as experimental; no broader adoption claim is made.",
+      "hswm_fit": "Use only if the TLC state space blocks the CR-0/CR-6 finite abstraction and an SMT-based bounded search gives a concrete advantage.",
+      "cost_or_overlap": "Overlaps TLC's finite model-checking purpose, adds SMT solver/version sensitivity, and remains bounded by documented finite parameter/execution assumptions.",
+      "qualification_needed": "Compare one identical finite specification against TLC first; pin Apalache and solver versions, config, bounds, and counterexample replay. Reject it if it adds no falsification reach beyond TLC.",
+      "recommendation": "EXPERIMENTAL_FALLBACK_AFTER_TLC_BASELINE"
+    },
+    {
+      "id": "dowhy",
+      "name": "DoWhy",
+      "category": "causal identification, estimation, refutation, intervention/counterfactual analysis",
+      "standard_status": "Open-source causal-inference library, not a causal-identification standard.",
+      "verified_version": "v0.14",
+      "version_status": "Observed in the current documentation; no independent latest-release assertion is made.",
+      "version_source_ids": ["dowhy-docs"],
+      "source_ids": ["dowhy-docs"],
+      "adoption_evidence": "PyWhy's documentation states that identifying assumptions are first-class and publishes the v0.14 API; this is direct project evidence only.",
+      "hswm_fit": "Highest-priority causal-analysis candidate for CR-2 once an HSWM experiment declares treatment/revision, outcome, unit, interference boundary, DAG, and refuters. It forces the identification assumptions into the recorded protocol.",
+      "cost_or_overlap": "Overlaps parts of custom analysis but adds explicit causal-model and refutation discipline. It cannot repair violated randomization, hidden interference, outcome leakage, or a post-hoc estimand.",
+      "qualification_needed": "Create a synthetic randomized HSWM-like data-generating process with known estimand; pin library/graph algorithms; confirm the DAG, treatment timing, unit, SUTVA/interference policy, identification output, placebo/subset/unobserved-confounding refuters, and calculation against an independent implementation.",
+      "recommendation": "ADOPT_AS_FIRST_CAUSAL_ANALYSIS_CANDIDATE"
+    },
+    {
+      "id": "econml",
+      "name": "EconML",
+      "category": "heterogeneous treatment-effect estimation",
+      "standard_status": "Open-source research library, not a standard.",
+      "verified_version": "v0.16.0",
+      "version_status": "Observed as the latest listed release on 2026-09-13.",
+      "version_source_ids": ["econml-release"],
+      "source_ids": ["econml-release", "econml-msr"],
+      "adoption_evidence": "Microsoft Research identifies EconML as its ALICE project's open-source software; the release record documents sensitivity analysis in v0.16.0.",
+      "hswm_fit": "A second-stage CR-2/CR-3 tool when the effect may differ by task family, scale, topology, or cell/coalition context and sample size supports a prespecified heterogeneous-effect analysis.",
+      "cost_or_overlap": "Partly overlaps DoWhy estimators and is conditional on the same causal assumptions. Flexible CATE estimates can magnify multiple-testing and low-power risks in the current small-data state.",
+      "qualification_needed": "Use only after DoWhy identifies the estimand and a power plan supports heterogeneity. Pin estimator/nuisance models/cross-fitting/random seed; preregister effect modifiers and sensitivity analysis; compare against a simple randomized paired estimator.",
+      "recommendation": "DEFER_UNTIL_POWERED_HETEROGENEITY_PROTOCOL"
+    },
+    {
+      "id": "pymc-arviz",
+      "name": "PyMC with ArviZ",
+      "category": "Bayesian outcome modeling, diagnostics, and posterior predictive checking",
+      "standard_status": "Open-source probabilistic-programming and analysis ecosystem, not a standard.",
+      "verified_version": "PyMC 6.3.2; ArviZ 1.3.0",
+      "version_status": "Observed as current PyPI releases on 2026-09-13.",
+      "version_source_ids": ["pymc-pypi", "arviz-pypi"],
+      "source_ids": ["pymc-pypi", "arviz-pypi"],
+      "adoption_evidence": "Package publishers document current releases and ArviZ's posterior analysis/model-checking role; no popularity ranking is inferred.",
+      "hswm_fit": "Useful for a planned multi-level repeated-task analysis: uncertainty intervals, partial pooling across task families/scales, posterior predictive checks, and sensitivity to a declared observation model.",
+      "cost_or_overlap": "Complements frequentist randomization analysis and DoWhy; posterior results depend on likelihood, priors, and hierarchy. It cannot identify a causal effect without the experimental design/assumptions.",
+      "qualification_needed": "Defer until sufficient repeated outcomes exist. Then preregister model, priors, diagnostics thresholds, posterior predictive checks, code/data hashes, and a parallel randomization/frequentist analysis; do not use a favorable posterior model as a substitute for a causal design.",
+      "recommendation": "DEFER_UNTIL_REPEATED_OUTCOME_DATA_EXISTS"
+    }
+  ]
+}

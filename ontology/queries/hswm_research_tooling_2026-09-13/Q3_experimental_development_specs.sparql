@@ -1,0 +1,12 @@
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?candidateId ?candidateName ?standardStatus ?observedVersion ?decision
+WHERE {
+<urn:hswm:kg:node:sym:AbstractNode:hswm-scientific-research-tooling-2026-09-13> kbr:HAS_CONCEPT ?a .
+?a a role:INTEGRATED_ASSESSMENT ; kbp:candidate_id ?candidateId ; kbp:decision ?decision ; kbr:REFERS_TO ?c .
+FILTER(?decision = "WATCH_EXPERIMENTAL")
+?c a role:TOOL_CANDIDATE ; kbp:name ?candidateName ; kbp:standard_status ?standardStatus ; kbp:verified_version ?observedVersion .
+}
+ORDER BY ?candidateId

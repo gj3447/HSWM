@@ -1,0 +1,27 @@
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?itemId ?issue
+WHERE {
+ { <urn:hswm:kg:node:sym:AbstractNode:hswm-scientific-research-tooling-2026-09-13> kbr:HAS_CONCEPT ?c .
+ ?c a role:TOOL_CANDIDATE ; kbp:id ?itemId .
+ FILTER NOT EXISTS { ?c kbr:HAS_SOURCE ?s . ?s a role:RESEARCH_SOURCE }
+ BIND("CANDIDATE_WITHOUT_SOURCE" AS ?issue) }
+ UNION
+ { <urn:hswm:kg:node:sym:AbstractNode:hswm-scientific-research-tooling-2026-09-13> kbr:HAS_CONCEPT ?c .
+ ?c a role:TOOL_CANDIDATE ; kbp:id ?itemId .
+ FILTER NOT EXISTS { <urn:hswm:kg:node:sym:AbstractNode:hswm-scientific-research-tooling-2026-09-13> kbr:HAS_CONCEPT ?a . ?a a role:INTEGRATED_ASSESSMENT ; kbr:REFERS_TO ?c }
+ BIND("CANDIDATE_WITHOUT_ASSESSMENT" AS ?issue) }
+ UNION
+ { <urn:hswm:kg:node:sym:AbstractNode:hswm-scientific-research-tooling-2026-09-13> kbr:HAS_CONCEPT ?a .
+ ?a a role:INTEGRATED_ASSESSMENT ; kbp:candidate_id ?itemId .
+ FILTER NOT EXISTS { ?a kbr:HAS_CONCEPT ?q . ?q a role:QUALIFICATION }
+ BIND("ASSESSMENT_WITHOUT_QUALIFICATION" AS ?issue) }
+ UNION
+ { <urn:hswm:kg:node:sym:AbstractNode:hswm-scientific-research-tooling-2026-09-13> kbr:HAS_CONCEPT ?req .
+ ?req a role:RESEARCH_REQUIREMENT ; kbp:id ?itemId .
+ FILTER NOT EXISTS { <urn:hswm:kg:node:sym:AbstractNode:hswm-scientific-research-tooling-2026-09-13> kbr:HAS_CONCEPT ?a . ?a a role:INTEGRATED_ASSESSMENT ; kbr:REQUIRES ?req }
+ BIND("REQUIREMENT_WITHOUT_ASSESSMENT" AS ?issue) }
+}
+ORDER BY ?itemId ?issue

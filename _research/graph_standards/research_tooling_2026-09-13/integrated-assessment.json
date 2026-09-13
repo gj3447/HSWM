@@ -1,0 +1,792 @@
+{
+  "schema_version": "hswm-research-tooling-integrated-assessment/v1",
+  "authority": "SECONDARY_AI",
+  "as_of": "2026-09-13",
+  "source_commit": "c57f39a8c33bb86d19cfcaa40b880b944707e53d",
+  "conceptual_delta": "Connect existing capabilities and open research obligations to current official sources, candidate fit, adoption-evidence class and bounded qualification work; HSWM target, FCL laws, claim ceilings and negative evidence remain unchanged.",
+  "priority_policy": "P0 integrate the existing instrument into one decisive fresh-task study and bridge one executed witness to existing formal contracts. P1 is conditional, narrowly scoped qualification. P2 is a recorded trigger, not a required implementation backlog. None of these tooling qualifications are new gates to conducting authorized research.",
+  "scientific_boundary": "Tool adoption, graph size, test counts, conformance and observability do not establish HSWM efficacy. G0/G1/second-party protocol mechanics belong to a replaceable route; independent outcomes, strong controls, exact intervention, lineage and claim ceilings remain required under the adaptive strategy.",
+  "artifact_selection_policy": "This scan does not install or select executable artefacts. Before an actual addition, select a concrete contract, verify official publisher/SDK or label an independent implementation, pin exact source/version and artefact digest/integrity plus licence and lockfile, and run the relevant official suite or bounded smoke. No native canonical-write or causal-credit authority may be derived from a connector, skill or report.",
+  "source_boundary": "External source records are dated observations and paraphrases, not content-hashed archives of webpage bytes. Current-version observations from mutable official pages are not immutable package pins. Repository evidence is separately fixed to the stated Git cut, excluding concurrent uncommitted work.",
+  "assessments": [
+    {
+      "candidate_id": "inspect-ai",
+      "decision": "INTEGRATE_EXISTING",
+      "requirement_ids": [
+        "REQ-G0-EXTERNAL",
+        "REQ-D4-CAUSAL-LOOP",
+        "REQ-RU1-PREREGISTRATION"
+      ],
+      "existing_capability_ids": [
+        "CAP-INSPECT-OUTER",
+        "CAP-RESEARCH-COORDINATION",
+        "CAP-RU1-DESIGN"
+      ],
+      "reason": "Already pinned; turn the existing preflight into a real task/arm/scorer bridge. The causal contract is the bottleneck.",
+      "adoption_evidence_class": "INSTITUTIONAL_SELF_REPORT",
+      "qualification": {
+        "id": "QUAL-inspect-ai",
+        "title": "기존 Inspect를 실제 held-out 비교에 연결",
+        "priority": "P0",
+        "acceptance": "Keep the existing 0.3.260 pin; add one source-bound held-out-task integration only after model/provider identity, seed policy, scorer determinism, log custody, and leakage controls are declared. Pin any Inspect Evals task revision separately because upstream scorer changes can move results.",
+        "trigger": "Selected next fresh-task study",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "metr-task-standard-bridge",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-G0-EXTERNAL",
+        "REQ-RU1-PREREGISTRATION"
+      ],
+      "existing_capability_ids": [
+        "CAP-INSPECT-OUTER",
+        "CAP-RESEARCH-COORDINATION"
+      ],
+      "reason": "Only adds value for a concrete external METR task family; does not create independence.",
+      "adoption_evidence_class": "HISTORICAL_TASK_INVENTORY_AND_OFFICIAL_CAPABILITY",
+      "qualification": {
+        "id": "QUAL-metr-task-standard-bridge",
+        "title": "METR task/Inspect bridge 호환성 확인",
+        "priority": "P2",
+        "acceptance": "Choose a task family only after the estimand and source cutoff are fixed; pin the standard revision, image digest, external-service policy, scorer tests, and bridge revision; verify no HSWM state crosses reset boundaries.",
+        "trigger": "Selected task conforms to METR Task Standard",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "lm-evaluation-harness",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-RU1-PREREGISTRATION",
+        "REQ-D4-CAUSAL-LOOP"
+      ],
+      "existing_capability_ids": [
+        "CAP-INSPECT-OUTER"
+      ],
+      "reason": "Static benchmark regression complements a mechanism study; it does not measure persistent causal learning.",
+      "adoption_evidence_class": "OFFICIAL_RELEASE_AND_CAPABILITY",
+      "qualification": {
+        "id": "QUAL-lm-evaluation-harness",
+        "title": "정적 baseline regression 범위 검증",
+        "priority": "P2",
+        "acceptance": "Pin harness, task YAML, dataset revision, tokenizer/template, decoding parameters, model revision, and scoring patch level; require held-out task suitability review and no use as a proxy for causal learning.",
+        "trigger": "A declared static capability regression question",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "lean4-mathlib",
+      "decision": "INTEGRATE_EXISTING",
+      "requirement_ids": [
+        "REQ-CONSTRUCTIVE-WITNESS",
+        "REQ-MULTISCALE-EFFECT",
+        "REQ-D4-CAUSAL-LOOP"
+      ],
+      "existing_capability_ids": [
+        "CAP-FORMAL-LEAN",
+        "CAP-ICE-WP0-3"
+      ],
+      "reason": "Constructive runtime witness/refinement is needed beyond finite conditional premises; preserve existing pin and theorem claim ceiling.",
+      "adoption_evidence_class": "OFFICIAL_FORMAL_RESEARCH_CASES",
+      "qualification": {
+        "id": "QUAL-lean4-mathlib",
+        "title": "실행 witness와 기존 Lean 정리를 연결",
+        "priority": "P0",
+        "acceptance": "Retain the local toolchain pin and build with trust restrictions; for each theorem record exact statement, imports, admitted axioms, `sorry` audit, and the empirical mapping that remains outside Lean.",
+        "trigger": "One selected Step/Learn mechanism has an explicit formal contract",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "leandojo-v2-pantograph",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-CONSTRUCTIVE-WITNESS"
+      ],
+      "existing_capability_ids": [
+        "CAP-FORMAL-LEAN"
+      ],
+      "reason": "Additional proof-search orchestration is useful only after a concrete theorem/proof-search benchmark exists.",
+      "adoption_evidence_class": "OFFICIAL_CAPABILITY_NO_PREVALENCE",
+      "qualification": {
+        "id": "QUAL-leandojo-v2-pantograph",
+        "title": "정해진 theorem의 proof-search pilot",
+        "priority": "P2",
+        "acceptance": "Do not add until a preregistered theorem-search study exists. Then pin LeanDojo-v2, Pantograph, Lean/mathlib, theorem corpus cutoff, model, prompt, retry/budget policy, and held-out theorem split; report accepted kernel proofs separately from search success.",
+        "trigger": "Measured proof-search bottleneck on pinned Lean/mathlib",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "tla-plus-tlc",
+      "decision": "PILOT_FOR_CONCRETE_GAP",
+      "requirement_ids": [
+        "REQ-CONSTRUCTIVE-WITNESS",
+        "REQ-ICE-LEARNER"
+      ],
+      "existing_capability_ids": [
+        "CAP-FORMAL-LEAN",
+        "CAP-ICE-WP0-3",
+        "CAP-RESEARCH-COORDINATION"
+      ],
+      "reason": "A bounded model can expose recovery/interleaving counterexamples; bridge found traces to runtime and do not infer liveness from finite search.",
+      "adoption_evidence_class": "OFFICIAL_CAPABILITY_NO_PREVALENCE",
+      "qualification": {
+        "id": "QUAL-tla-plus-tlc",
+        "title": "TLC로 복구·동시성 반례 하나 탐색",
+        "priority": "P1",
+        "acceptance": "Write a source-bound finite abstraction with explicit abstraction loss, state bounds, invariants, fairness assumptions, and reproducible TLC configuration; independently relate any discovered trace to the TypeScript Effect transition semantics.",
+        "trigger": "An unresolved concurrency/recovery invariant with explicit state variables",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "apalache",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-CONSTRUCTIVE-WITNESS",
+        "REQ-ICE-LEARNER"
+      ],
+      "existing_capability_ids": [
+        "CAP-FORMAL-LEAN",
+        "CAP-ICE-WP0-3"
+      ],
+      "reason": "Use symbolic bounded checking only if TLC's measured state space or arithmetic limitation blocks a real invariant.",
+      "adoption_evidence_class": "OFFICIAL_CAPABILITY_NO_PREVALENCE",
+      "qualification": {
+        "id": "QUAL-apalache",
+        "title": "필요한 경우 symbolic model checking 비교",
+        "priority": "P2",
+        "acceptance": "Compare one identical finite specification against TLC first; pin Apalache and solver versions, config, bounds, and counterexample replay. Reject it if it adds no falsification reach beyond TLC.",
+        "trigger": "TLC measured state-space/model limitation",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "dowhy",
+      "decision": "PILOT_FOR_CONCRETE_GAP",
+      "requirement_ids": [
+        "REQ-D4-CAUSAL-LOOP",
+        "REQ-RU1-PREREGISTRATION",
+        "REQ-MULTISCALE-EFFECT"
+      ],
+      "existing_capability_ids": [
+        "CAP-RU1-DESIGN",
+        "CAP-INSPECT-OUTER"
+      ],
+      "reason": "Useful DAG/estimand/refuter companion for CR-2. Treatment assignment, interference and hidden-state assumptions remain the study's responsibility.",
+      "adoption_evidence_class": "OFFICIAL_METHOD_CAPABILITY_NO_PREVALENCE",
+      "qualification": {
+        "id": "QUAL-dowhy",
+        "title": "DoWhy로 식별 가정·refuter를 명시",
+        "priority": "P1",
+        "acceptance": "Create a synthetic randomized HSWM-like data-generating process with known estimand; pin library/graph algorithms; confirm the DAG, treatment timing, unit, SUTVA/interference policy, identification output, placebo/subset/unobserved-confounding refuters, and calculation against an independent implementation.",
+        "trigger": "Preregistered causal model for selected mechanism",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "econml",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-D4-CAUSAL-LOOP",
+        "REQ-MULTISCALE-EFFECT"
+      ],
+      "existing_capability_ids": [
+        "CAP-INSPECT-OUTER",
+        "CAP-RU1-DESIGN"
+      ],
+      "reason": "Heterogeneous-effect estimation needs adequate independent treatment/outcome data and declared units.",
+      "adoption_evidence_class": "OFFICIAL_RELEASE_AND_CAPABILITY",
+      "qualification": {
+        "id": "QUAL-econml",
+        "title": "충분한 데이터에서 효과 이질성 추정",
+        "priority": "P2",
+        "acceptance": "Use only after DoWhy identifies the estimand and a power plan supports heterogeneity. Pin estimator/nuisance models/cross-fitting/random seed; preregister effect modifiers and sensitivity analysis; compare against a simple randomized paired estimator.",
+        "trigger": "Sufficient repeated data and a preregistered heterogeneous-effect question",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "pymc-arviz",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-D4-CAUSAL-LOOP",
+        "REQ-RU1-PREREGISTRATION",
+        "REQ-MULTISCALE-EFFECT"
+      ],
+      "existing_capability_ids": [
+        "CAP-INSPECT-OUTER",
+        "CAP-RU1-DESIGN"
+      ],
+      "reason": "Uncertainty/hierarchical modeling can help repeated studies; inference cannot rescue unidentified estimands or contaminated holdouts.",
+      "adoption_evidence_class": "OFFICIAL_RELEASE_AND_CAPABILITY",
+      "qualification": {
+        "id": "QUAL-pymc-arviz",
+        "title": "사전 명시한 불확실성 모형 점검",
+        "priority": "P2",
+        "acceptance": "Defer until sufficient repeated outcomes exist. Then preregister model, priors, diagnostics thresholds, posterior predictive checks, code/data hashes, and a parallel randomization/frequentist analysis; do not use a favorable posterior model as a substitute for a causal design.",
+        "trigger": "Preregistered likelihood/prior/unit model and sufficient repeated observations",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "stable-graph-stack",
+      "decision": "REUSE_EXISTING",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-RUN-LINEAGE",
+        "REQ-CONSTRUCTIVE-WITNESS"
+      ],
+      "existing_capability_ids": [
+        "CAP-RDF-PROV-SHACL",
+        "CAP-KG-NAVIGATION",
+        "CAP-RESEARCH-COORDINATION"
+      ],
+      "reason": "Existing stable compiler meets this recording task; preserve typed relations and source lineage.",
+      "adoption_evidence_class": "NORMATIVE_STANDARD_AND_SUITE",
+      "qualification": {
+        "id": "QUAL-stable-graph-stack",
+        "title": "기존 RDF·SHACL·PROV·paired query 검증",
+        "priority": "P0",
+        "acceptance": "Preserve source hashes, directional relation identity, authority, mapping loss and paired query answers. New catalog references must resolve to declared source records; external live UID references retain explicit NOT_FOUND/NOT_CHECKED status where applicable, and ambiguous or incorrect identities are refused when unique resolution is required by the selected contract.",
+        "trigger": "This source-bound research catalog",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "rdf12",
+      "decision": "WATCH_EXPERIMENTAL",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-RUN-LINEAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-RDF-PROV-SHACL",
+        "CAP-KG-NAVIGATION"
+      ],
+      "reason": "Candidate status and no demonstrated mapping need justify observation only.",
+      "adoption_evidence_class": "NORMATIVE_CANDIDATE_NO_PREVALENCE",
+      "qualification": {
+        "id": "QUAL-rdf12",
+        "title": "RDF 1.2 필요성·손실 비교",
+        "priority": "P2",
+        "acceptance": "Only isolate a mapping experiment if a concrete loss or query problem is demonstrated; run official relevant tests and preserve stable export.",
+        "trigger": "A demonstrated stable-profile mapping limitation",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "sparql12",
+      "decision": "WATCH_EXPERIMENTAL",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-RUN-LINEAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-RDF-PROV-SHACL",
+        "CAP-KG-NAVIGATION"
+      ],
+      "reason": "Very recent working draft is not a reason to change working SPARQL1.1 packs.",
+      "adoption_evidence_class": "NORMATIVE_DRAFT_NO_PREVALENCE",
+      "qualification": {
+        "id": "QUAL-sparql12",
+        "title": "SPARQL 1.2 격리 질의 실험",
+        "priority": "P2",
+        "acceptance": "Do not silently emit draft-only syntax in stable query packs; any pilot needs versioned engine and query-suite qualification.",
+        "trigger": "A concrete query unmet by current supported subset",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "shacl12",
+      "decision": "WATCH_EXPERIMENTAL",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-RUN-LINEAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-RDF-PROV-SHACL",
+        "CAP-KG-NAVIGATION"
+      ],
+      "reason": "Keep SHACL1.0 qualification stable while observing Core1.2 development.",
+      "adoption_evidence_class": "NORMATIVE_DRAFT_NO_PREVALENCE",
+      "qualification": {
+        "id": "QUAL-shacl12",
+        "title": "SHACL 1.2 shape 차이 확인",
+        "priority": "P2",
+        "acceptance": "Keep candidate shapes in a separate profile, compare violations with stable shapes and document semantic differences.",
+        "trigger": "A validation requirement absent in current profile",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "dcat3",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-TERMINAL-PUBLICATION",
+        "CAP-RDF-PROV-SHACL",
+        "CAP-KG-NAVIGATION"
+      ],
+      "reason": "Catalog discovery becomes useful when multiple public datasets/distributions exist; unnecessary before that.",
+      "adoption_evidence_class": "INSTITUTIONAL_PROFILE_DEPLOYMENT",
+      "qualification": {
+        "id": "QUAL-dcat3",
+        "title": "DCAT catalog→release→distribution 매핑",
+        "priority": "P2",
+        "acceptance": "Map one public dataset series to releases and distributions while retaining DOI, SHA-256, licence and access distinction.",
+        "trigger": "A public dataset series/distribution catalog",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "gql",
+      "decision": "REUSE_EXISTING",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-RUN-LINEAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-KG-NAVIGATION",
+        "CAP-RDF-PROV-SHACL"
+      ],
+      "reason": "Current Cypher/SPARQL parity is scoped engineering evidence. Full GQL conformance or DB replacement is unsupported.",
+      "adoption_evidence_class": "NORMATIVE_STANDARD_AND_VENDOR_CONFORMANCE",
+      "qualification": {
+        "id": "QUAL-gql",
+        "title": "현재 Cypher 지원 범위 명시",
+        "priority": "P1",
+        "acceptance": "Name exact engine/version and supported subset; run actual cross-engine cases only if a portability requirement arises.",
+        "trigger": "Actual cross-engine portability requirement",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "croissant",
+      "decision": "PILOT_FOR_CONCRETE_GAP",
+      "requirement_ids": [
+        "REQ-RU1-PREREGISTRATION",
+        "REQ-REPRODUCIBLE-PACKAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-RU1-DESIGN",
+        "CAP-INSPECT-OUTER",
+        "CAP-TERMINAL-PUBLICATION"
+      ],
+      "reason": "A fixed record/split descriptor helps real benchmark packaging. Holdout confidentiality/correctness remains separate.",
+      "adoption_evidence_class": "PUBLISHER_REPORTED_AVAILABILITY_AND_NAMED_INTEGRATIONS",
+      "qualification": {
+        "id": "QUAL-croissant",
+        "title": "Croissant로 benchmark record·split descriptor 검증",
+        "priority": "P1",
+        "acceptance": "Pilot one fixed, non-private benchmark descriptor; pin schema/validator, record/split/source hashes and licence; compare loaded record IDs exactly against native manifests.",
+        "trigger": "One selected public or synthetic benchmark manifest",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "openlineage",
+      "decision": "QUALIFY_EXISTING",
+      "requirement_ids": [
+        "REQ-RUN-LINEAGE",
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-G0-EXTERNAL"
+      ],
+      "existing_capability_ids": [
+        "CAP-TERMINAL-PUBLICATION",
+        "CAP-TRACE-OTEL-TEMPORAL-SMOKE",
+        "CAP-RESEARCH-COORDINATION"
+      ],
+      "reason": "Existing exporter already uses RunEvent2.0.2 and pinned facets. First assess actual event interoperability, not add a server.",
+      "adoption_evidence_class": "OFFICIAL_INTEGRATION_CAPABILITY",
+      "qualification": {
+        "id": "QUAL-openlineage",
+        "title": "기존 OpenLineage event·facet 교환 검증",
+        "priority": "P1",
+        "acceptance": "Validate exact RunEvent2.0.2 and custom facet mapping, START/terminal identity and retries; test ingestion only for a named external integration.",
+        "trigger": "A named external executor or consumer needs terminal events",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "opentelemetry",
+      "decision": "REUSE_EXISTING",
+      "requirement_ids": [
+        "REQ-RUN-LINEAGE",
+        "REQ-RU1-PREREGISTRATION",
+        "REQ-D4-CAUSAL-LOOP"
+      ],
+      "existing_capability_ids": [
+        "CAP-TRACE-OTEL-TEMPORAL-SMOKE",
+        "CAP-RESEARCH-COORDINATION"
+      ],
+      "reason": "SDK is already implemented; use bounded spans to diagnose the selected run. Current full-service readback limitations stay explicit.",
+      "adoption_evidence_class": "OFFICIAL_CAPABILITY_NO_PREVALENCE",
+      "qualification": {
+        "id": "QUAL-opentelemetry",
+        "title": "기존 OTLP 관측과 실제 collector readback 확인",
+        "priority": "P0",
+        "acceptance": "Verify selected trace/span correlation, bounded attributes and actual collector readback; keep raw bodies/private outputs out of public KG.",
+        "trigger": "Selected experiment execution",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "genai-semconv",
+      "decision": "WATCH_EXPERIMENTAL",
+      "requirement_ids": [
+        "REQ-RUN-LINEAGE",
+        "REQ-RU1-PREREGISTRATION"
+      ],
+      "existing_capability_ids": [
+        "CAP-TRACE-OTEL-TEMPORAL-SMOKE"
+      ],
+      "reason": "GenAI conventions are Development despite stable core observability.",
+      "adoption_evidence_class": "DEVELOPMENT_SPEC_NO_PREVALENCE",
+      "qualification": {
+        "id": "QUAL-genai-semconv",
+        "title": "GenAI 개발 중 속성의 범위 제한 매핑",
+        "priority": "P2",
+        "acceptance": "Pin exact convention revision and explicitly experimental attribute mapping; prove existing bounded trace export still works.",
+        "trigger": "A diagnostic question requires a GenAI-specific attribute",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "mcp",
+      "decision": "REUSE_EXISTING",
+      "requirement_ids": [
+        "REQ-RUN-LINEAGE",
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-RU1-PREREGISTRATION"
+      ],
+      "existing_capability_ids": [
+        "CAP-RESEARCH-COORDINATION",
+        "CAP-KG-NAVIGATION"
+      ],
+      "reason": "Existing bounded connectors suffice for current research; pinned native SDK metadata is not installed status.",
+      "adoption_evidence_class": "OFFICIAL_PROTOCOL_AND_CAPABILITY",
+      "qualification": {
+        "id": "QUAL-mcp",
+        "title": "필요한 MCP capability만 버전 고정·검증",
+        "priority": "P1",
+        "acceptance": "For a concrete missing surface, exact capability allowlist, protocol revision, official SDK pins/licence/lockfile and isolated smoke test must precede adoption.",
+        "trigger": "A concrete capability missing from existing owner surface",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "scholarly-metadata",
+      "decision": "PILOT_FOR_CONCRETE_GAP",
+      "requirement_ids": [
+        "REQ-RU1-PREREGISTRATION",
+        "REQ-CONSTRUCTIVE-WITNESS",
+        "REQ-MULTISCALE-EFFECT"
+      ],
+      "existing_capability_ids": [
+        "CAP-KG-NAVIGATION",
+        "CAP-RESEARCH-COORDINATION"
+      ],
+      "reason": "Original-source retrieval and contradiction tracking improve literature bridges; citation count does not establish scientific truth.",
+      "adoption_evidence_class": "OFFICIAL_METADATA_SERVICE_CAPABILITY",
+      "qualification": {
+        "id": "QUAL-scholarly-metadata",
+        "title": "논문 DOI·버전·반대 근거를 bounded KG로 연결",
+        "priority": "P1",
+        "acceptance": "On one real HSWM literature question, resolve exact works, deduplicate versions, inspect originals and updates, preserve source URLs/access dates; metadata and citation counts never adjudicate truth.",
+        "trigger": "One explicit HSWM mechanism or bridge literature question",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "ro-crate",
+      "decision": "QUALIFY_EXISTING",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-G0-EXTERNAL"
+      ],
+      "existing_capability_ids": [
+        "CAP-TERMINAL-PUBLICATION",
+        "CAP-RDF-PROV-SHACL",
+        "CAP-RESEARCH-COORDINATION"
+      ],
+      "reason": "Reuse existing1.3 projection; explicitly resolve or retain source-status discrepancy before claiming external profile conformance.",
+      "adoption_evidence_class": "NAMED_IMPLEMENTATIONS_AND_LOCAL_EXISTING_EXPORT",
+      "qualification": {
+        "id": "QUAL-ro-crate",
+        "title": "기존 RO-Crate 버전·profile·validator 검증",
+        "priority": "P1",
+        "acceptance": "First resolve the normative 1.3 publication/status conflict with a direct official versioned specification record or maintain an explicit unresolved qualification. Then run profile/validator qualification against the existing exporter for (a) a preregistration/input-package rehearsal before outcome and (b) both SEALED and valid VOID terminal exports. Keep protected/private state outside public crates.",
+        "trigger": "A study package/rehearsal needs external consumption",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "workflow-run-ro-crate",
+      "decision": "QUALIFY_EXISTING_CONDITIONAL",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-RUN-LINEAGE",
+        "REQ-G0-EXTERNAL"
+      ],
+      "existing_capability_ids": [
+        "CAP-TERMINAL-PUBLICATION",
+        "CAP-RESEARCH-COORDINATION"
+      ],
+      "reason": "Existing terminal crate is not declared WRROC. Add process/workflow step granularity only if needed with exact compatible versions.",
+      "adoption_evidence_class": "NAMED_WORKFLOW_ENGINE_INTEGRATIONS",
+      "qualification": {
+        "id": "QUAL-workflow-run-ro-crate",
+        "title": "WRROC 0.6 추가 매핑의 필요 범위 검증",
+        "priority": "P1",
+        "acceptance": "Use an additive derived exporter/profile adaptor only if the selected scope needs WRROC semantics. Qualify the existing export at v0.6 against the explicit 1.3/1.1 chain, rehearse preregistration/input packages before outcomes, then test replay-verified SEALED and valid VOID terminal packages. Exclude secrets, private datasets and mutable pointers.",
+        "trigger": "Study consumers need process/workflow/step provenance",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "cwl",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-RUN-LINEAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-RESEARCH-COORDINATION",
+        "CAP-TERMINAL-PUBLICATION"
+      ],
+      "reason": "External batch workflow portability may benefit; replacing the native Effect loop would duplicate orchestration.",
+      "adoption_evidence_class": "OFFICIAL_STANDARD_AND_CONFORMANCE_SUITE",
+      "qualification": {
+        "id": "QUAL-cwl",
+        "title": "CWL runner 공식 conformance와 한 workflow 재실행",
+        "priority": "P2",
+        "acceptance": "Choose only after one representative multi-tool batch pipeline needs engine portability. Pin runner/container/input digests and execute the official conformance suite for any selected runner.",
+        "trigger": "A real multi-engine batch portability requirement",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "fair-principles",
+      "decision": "APPLY_AS_GUIDANCE",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-RDF-PROV-SHACL",
+        "CAP-KG-NAVIGATION",
+        "CAP-TERMINAL-PUBLICATION"
+      ],
+      "reason": "Use identifiers/access/metadata checks in existing release work. Do not create a FAIR-certification claim or new gate.",
+      "adoption_evidence_class": "INSTITUTIONAL_GUIDANCE_NOT_CERTIFICATION",
+      "qualification": {
+        "id": "QUAL-fair-principles",
+        "title": "FAIR 식별자·접근·재사용 설명 보완",
+        "priority": "P1",
+        "acceptance": "Define measurable local FAIR profile checks rather than self-labeling. Record which principles each public projection meets and which are intentionally excluded for privacy or licensing.",
+        "trigger": "Existing research evidence export",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "datacite",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-TERMINAL-PUBLICATION",
+        "CAP-KG-NAVIGATION"
+      ],
+      "reason": "Citation metadata is useful at release/DOI boundaries; native provenance remains authoritative for its scope.",
+      "adoption_evidence_class": "OFFICIAL_CONSORTIUM_SCHEMA_AND_CROSSWALKS",
+      "qualification": {
+        "id": "QUAL-datacite",
+        "title": "DataCite 4.7 DOI·version·relation 매핑",
+        "priority": "P2",
+        "acceptance": "Reserve DOI minting for frozen public releases. Map only declared public fields; preserve exact HSWM revision, archive DOI, license and source hash in both directions and test crosswalk loss.",
+        "trigger": "A citable public research release",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "citation-file-format",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-TERMINAL-PUBLICATION",
+        "CAP-KG-NAVIGATION"
+      ],
+      "reason": "Simple software citation surface when authors/release identity are settled; no separate research engine.",
+      "adoption_evidence_class": "NAMED_GITHUB_INTEGRATION",
+      "qualification": {
+        "id": "QUAL-citation-file-format",
+        "title": "CFF 1.2.0 인용 메타데이터 검증",
+        "priority": "P2",
+        "acceptance": "Add only when maintainers settle release title, authorship, license and preferred citation. Validate against the published schema and cross-check the DOI against the archived release.",
+        "trigger": "Public software citation metadata is due",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "swhid",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-TERMINAL-PUBLICATION",
+        "CAP-KG-NAVIGATION"
+      ],
+      "reason": "ISO identifier can supplement Git/SHA256 once archival/resolution is verified; identifier alone guarantees neither.",
+      "adoption_evidence_class": "INTERNATIONAL_STANDARD_AND_ARCHIVE_IMPLEMENTATION",
+      "qualification": {
+        "id": "QUAL-swhid",
+        "title": "ISO SWHID와 실제 archive resolution 결속",
+        "priority": "P2",
+        "acceptance": "Verify actual archive ingestion and resolve the exact qualifier-rich SWHID for a tagged release before recording it. Keep SHA-256, Git commit and SWHID distinct rather than claiming equivalence. The ISO standard explicitly leaves resolution outside its scope.",
+        "trigger": "Archived source needs intrinsic citation",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "zenodo",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-TERMINAL-PUBLICATION",
+        "CAP-KG-NAVIGATION"
+      ],
+      "reason": "A public archive complements source hashes and Git, including negative results; do not publish during tool discovery.",
+      "adoption_evidence_class": "OFFICIAL_SERVICE_CAPABILITY",
+      "qualification": {
+        "id": "QUAL-zenodo",
+        "title": "Zenodo version DOI·Git·파일 hash 대조",
+        "priority": "P2",
+        "acceptance": "Publish only licensed, non-private and reviewable material. Test a sandbox or draft-to-published flow; store exact DOI, concept DOI, record ID, files' hashes and Git tag in the KG.",
+        "trigger": "A concrete licence-cleared public research release",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "dvc",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-RUN-LINEAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-TERMINAL-PUBLICATION",
+        "CAP-RESEARCH-COORDINATION"
+      ],
+      "reason": "No measured large-data restore problem is established. Existing Git/hash/durable-storage metadata suffices for present catalog.",
+      "adoption_evidence_class": "OFFICIAL_RELEASE_AND_CAPABILITY",
+      "qualification": {
+        "id": "QUAL-dvc",
+        "title": "대형 데이터의 clean restore pilot",
+        "priority": "P2",
+        "acceptance": "Pilot only on one non-sensitive, license-cleared large dataset. Pin CLI version, remote policy and lockfiles; verify a clean-machine restore and retain manifest hashes in native KG evidence.",
+        "trigger": "Measured large-data version/restore difficulty",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "mlflow",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-RUN-LINEAGE",
+        "REQ-D4-CAUSAL-LOOP"
+      ],
+      "existing_capability_ids": [
+        "CAP-TRACE-OTEL-TEMPORAL-SMOKE",
+        "CAP-RESEARCH-COORDINATION",
+        "CAP-KG-NAVIGATION"
+      ],
+      "reason": "Add tracking only when repeated experiment comparison materially exceeds current receipt/KG workflow.",
+      "adoption_evidence_class": "OFFICIAL_RELEASE_AND_CAPABILITY",
+      "qualification": {
+        "id": "QUAL-mlflow",
+        "title": "한 run의 읽기 전용 MLflow projection",
+        "priority": "P2",
+        "acceptance": "Do a local-only, read-only export pilot against one existing non-sensitive run. Pin version/backend/artifact URI; prove run IDs, parameter values, source commit and hashes round-trip into KG without secret leakage.",
+        "trigger": "Measured multi-run tracking/retrieval burden",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "nextflow-nf-core",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-RUN-LINEAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-RESEARCH-COORDINATION",
+        "CAP-TERMINAL-PUBLICATION"
+      ],
+      "reason": "Strong external bioinformatics/HPC workflow ecosystem, with limited immediate relevance to HSWM core.",
+      "adoption_evidence_class": "INSTITUTIONAL_CONFIGS_AND_NATIONAL_PROGRAM",
+      "qualification": {
+        "id": "QUAL-nextflow-nf-core",
+        "title": "Nextflow/nf-core external workflow 재현",
+        "priority": "P2",
+        "acceptance": "Choose only for a concrete batch workflow with multi-environment execution needs. Pin Nextflow, all plugins, containers, Git revision, input hashes and nf-core pipeline release; export one-way provenance into existing HSWM records.",
+        "trigger": "Concrete multi-environment scientific batch pipeline",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "snakemake",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-RUN-LINEAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-RESEARCH-COORDINATION",
+        "CAP-TERMINAL-PUBLICATION"
+      ],
+      "reason": "File-DAG transparency may fit a future external analysis; do not add a second orchestration language without need.",
+      "adoption_evidence_class": "PROJECT_REPORTED_DOWNLOADS_AND_CITATIONS",
+      "qualification": {
+        "id": "QUAL-snakemake",
+        "title": "Snakemake external DAG clean replay",
+        "priority": "P2",
+        "acceptance": "Pilot one existing batch analysis, pin its version and Conda/container definitions, and reproduce from a clean checkout. Preserve hidden inputs, seeds, runtime and result hashes in HSWM-native evidence instead of treating a Snakefile as complete provenance.",
+        "trigger": "Concrete file-oriented analysis workflow",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    },
+    {
+      "candidate_id": "galaxy",
+      "decision": "DEFER_UNTIL_TRIGGER",
+      "requirement_ids": [
+        "REQ-REPRODUCIBLE-PACKAGE",
+        "REQ-RUN-LINEAGE"
+      ],
+      "existing_capability_ids": [
+        "CAP-RESEARCH-COORDINATION",
+        "CAP-TERMINAL-PUBLICATION"
+      ],
+      "reason": "Useful domain-specific UI/workflow platform; high overhead for HSWM core research.",
+      "adoption_evidence_class": "PROJECT_REPORTED_SERVICE_STATS_AND_INSTITUTIONAL_DIRECTORY",
+      "qualification": {
+        "id": "QUAL-galaxy",
+        "title": "Galaxy history·tool version export 검증",
+        "priority": "P2",
+        "acceptance": "Use a public/sandbox or isolated deployment first, document exact server/version/tool versions/history export, and evaluate privacy/licensing. Bind Galaxy exports to HSWM source hashes and immutable result artefacts.",
+        "trigger": "Bioinformatics analysis requiring established GUI/history",
+        "status": "PROPOSED_NOT_EXECUTED"
+      }
+    }
+  ]
+}

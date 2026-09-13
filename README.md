@@ -3,7 +3,7 @@
 **Hypergraph Semantic Weight Map**<br>
 관계를 실행하고, 결과로 관계를 바꾸는 토큰 기반 하이퍼그래프 신경망을 연구합니다.
 
-[지식 지도·개발 현황](docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md) · [그래프 구조](#graph-model) · [빠른 실행](#quick-start) · [개발 실사용](#development) · [근거와 판정](#evidence) · [전체 문서](INDEX.md)
+[지식 지도·개발 현황](docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md) · [연구 도구·표준 조사](docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md) · [그래프 구조](#graph-model) · [빠른 실행](#quick-start) · [개발 실사용](#development) · [근거와 판정](#evidence) · [전체 문서](INDEX.md)
 
 > **2026-09-07 · 실사용 가능한 로컬 적응 프로토타입**<br>
 > 실행 → 결과 기록 → 문맥 가중치·조건부 관계 갱신 → 다음 선택이 연결되어 있습니다.

@@ -1,0 +1,12 @@
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?candidateId ?evidenceClass ?statement ?sourceFile ?sourceId ?sourceUrl ?sourceScope
+WHERE {
+<urn:hswm:kg:node:sym:AbstractNode:hswm-scientific-research-tooling-2026-09-13> kbr:HAS_CONCEPT ?c .
+?c a role:TOOL_CANDIDATE ; kbp:id ?candidateId ; kbr:HAS_CONCEPT ?e .
+?e a role:ADOPTION_EVIDENCE ; kbp:evidence_class ?evidenceClass ; kbp:statement ?statement ; kbr:HAS_SOURCE ?s .
+?s a role:RESEARCH_SOURCE ; kbp:source_file ?sourceFile ; kbp:source_id ?sourceId ; kbp:url ?sourceUrl ; kbp:source_scope ?sourceScope .
+}
+ORDER BY ?candidateId ?sourceFile ?sourceId

@@ -1,0 +1,94 @@
+{
+  "schema_version": "hswm-research-tooling-gap-inventory/v1",
+  "source_commit": "c57f39a8c33bb86d19cfcaa40b880b944707e53d",
+  "scope": "Repository-local, source-inspection inventory. Status describes bounded implemented tooling or checked-in records, never scientific efficacy. The USER_PRIMARY target is the token-native, fractal HSWM direction; named second-party custody, G0/G1 gates and the listed tooling are current SECONDARY_AI research-route controls, replaceable only through source-bound rerouting without weakening an active declared test.",
+  "existing_capabilities": [
+    {
+      "id": "CAP-RDF-PROV-SHACL",
+      "capability": "Read-only source-bound RDF 1.1/N-Quads, JSON-LD 1.1, SHACL 1.0, constrained PROV-O and SPARQL SELECT/ASK projections.",
+      "status": "IMPLEMENTED_BOUNDED",
+      "paths": ["src/hswm/infrastructure/standard_graph_view.py", "src/hswm/infrastructure/research_evidence_graph_view.py", "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"],
+      "evidence": [{"path":"docs/operations/HSWM_FULL_STACK_GRAPH_ENGINEERING_2026-09-02.md","line":12,"sha256":"01442a66ac4fbb94d7edfdec1efb4e3561b0a2b35e314bd6a4f424ed675d0ecd","statement":"Declares deterministic RDF/N-Quads, SHACL, JSON-LD, PROV-O and local read-only SPARQL scope."}],
+      "limits": "No graph write-back, canonical admission, causal credit, outcome custody, or universal repository conversion."
+    },
+    {
+      "id": "CAP-KG-NAVIGATION",
+      "capability": "Source-cut knowledge-map bundle with source catalog, RDF/PROV/SHACL projection and paired SPARQL/Cypher navigation queries.",
+      "status": "IMPLEMENTED_SOURCE_BOUND",
+      "paths": ["src/hswm/infrastructure/knowledge_map_projection.py", "ontology/knowledge_map/HSWM_KNOWLEDGE_MAP_2026-09-13.v1.json", "ontology/queries/hswm_knowledge_map_2026-09-13/"],
+      "evidence": [{"path":"ontology/knowledge_map/HSWM_KNOWLEDGE_MAP_2026-09-13.v1.json","line":1,"sha256":"b539c2f217c960d5e02250ec250aaf7434afb6d5665bd4a577b6ec7ebc045cca","statement":"Bundle declares source-bound navigation and non-efficacy boundary."}],
+      "limits": "Catalog and graph-local UID resolution organize evidence; they do not establish that sources are true, current live state, or an HSWM learning loop."
+    },
+    {
+      "id": "CAP-RESEARCH-COORDINATION",
+      "capability": "Native TypeScript/Effect immutable research manifests/events with JSON-LD, N-Quads, PROV-O, SHACL and document-local USL property view.",
+      "status": "LOCAL_ENGINEERING_VERIFIED",
+      "paths": ["src/hswm/effect-runtime/src/research-graph-domain.ts", "src/hswm/effect-runtime/src/research-graph-projection.ts", "src/hswm/effect-runtime/bin/hswm-research-graph"],
+      "evidence": [{"path":"ontology/infrastructure/HSWM_RESEARCH_COORDINATION_2026-09-09.v1.json","line":1,"sha256":"5fac8b7679372ba17787fc25af930c8bae39cf8cb147acba15b40bdd2426380e","statement":"Records bounded CLI operations and local-engineering-only claim ceiling."}],
+      "limits": "Declared actors and sources are not independent provenance, evaluator custody, causal credit or efficacy."
+    },
+    {
+      "id": "CAP-FORMAL-LEAN",
+      "capability": "Existing Lean admission/runtime/causal-bridge artifacts plus round-1 machine-checked finite selection, identification and composition-interference models.",
+      "status": "PARTIAL_CONDITIONAL_FORMALIZATION",
+      "paths": ["formal/HSWMVerifiedAdmissionKernel.lean", "formal/HSWMEndToEndRuntimeRefinement.lean", "formal/HSWMCausalEfficacyBridge.lean", "formal/HSWMFiniteSelection.lean", "formal/HSWMFiniteRandomizedIdentification.lean", "formal/HSWMCompositionInterference.lean", "ontology/evidence/HSWM_CONSTRUCTIVE_PROOF_ROUND_1_2026-09-10.v1.json"],
+      "evidence": [{"path":"ontology/evidence/HSWM_CONSTRUCTIVE_PROOF_ROUND_1_2026-09-10.v1.json","line":6,"sha256":"9820309b98cb70a89af9cdebc09d370b6f13c1cafc60f1cdb790d902124f9b77","statement":"Reports bounded formal models verified while full construction remains open; the three Lean source digests are 6f6faeebb4827e309111002bfea3fefa0501294fe27de53ef8206a8967a8adda, 3456f7d010351350356ad8e394b9c3a03b78fd1bdfeaf961f7e0466393b14a0a, and ea61064e08f46a36b98c0e30e103ffc1e130b92a157ed3989e29888416ca87bc."}],
+      "limits": "Formal premise checks cannot construct the runtime witness, prove unmodeled assumptions, or establish empirical effects."
+    },
+    {
+      "id": "CAP-INSPECT-OUTER",
+      "capability": "Exact-pinned Inspect AI preflight and dual-evaluator declarations kept outside HSWM execution semantics.",
+      "status": "IMPLEMENTED_PREFLIGHT_ONLY",
+      "paths": ["src/hswm/evaluation/inspect_outer_runner.py", "src/hswm/evaluation/occurrence_dual_evaluator.py"],
+      "evidence": [{"path":"src/hswm/evaluation/inspect_outer_runner.py","line":1,"sha256":"b24f8c74371d50066491f180238d5f395a907f658613229996e7df7b319ca838","statement":"Module defines an outer exact-pinned Inspect preflight, not HSWM execution."}],
+      "limits": "A tool preflight is not an independent evaluator, held-out outcome, or causal comparison."
+    },
+    {
+      "id": "CAP-TRACE-OTEL-TEMPORAL-SMOKE",
+      "capability": "W3C Trace Context plus optional loopback-only Effect/OpenTelemetry SDK and OTLP protobuf exporter for bounded adaptive-runtime observations; isolated Temporal/Phoenix smoke remains separate.",
+      "status": "IMPLEMENTED_LOCAL_OTLP_OBSERVATION",
+      "paths": ["src/hswm/infrastructure/trace_context.py", "src/hswm/effect-runtime/src/adaptive-telemetry-otlp.ts", "docs/operations/artifacts/development_environment_2026-09-09/telemetry-source-pins.v1.json", "_research/infrastructure_smoke/research_fabric_smoke.py"],
+      "evidence": [{"path":"docs/operations/HSWM_DEVELOPMENT_WORKFLOW_2026-09-09.md","line":113,"sha256":"e89b325cbf1b9cf9e33eecf877c92abc4c38858b5b4553c3ecb20200332fc35f","statement":"Documents the official Effect/OpenTelemetry SDK and OTLP protobuf exporter, loopback endpoint boundary, and non-causal/non-canonical data policy."},{"path":"docs/operations/artifacts/development_environment_2026-09-09/telemetry-source-pins.v1.json","line":1,"sha256":"28dc637a8587624c28a34a46ae17e61c60827247fa37c65b1eeb4303dd5e2861","statement":"Pins @effect/opentelemetry 0.64.0, OpenTelemetry SDK 2.2.0 and OTLP protobuf exporter 0.208.0."}],
+      "limits": "The 2026-09-02 no-SDK statement is historical and superseded by this local implementation. Telemetry remains observation metadata, cannot serve as provenance/credit/revision evidence, and Phoenix production receipt was not verified."
+    },
+    {
+      "id": "CAP-ICE-WP0-3",
+      "capability": "ICE graph WP0-WP3 payload, query, feedback, occurrence and cost engineering snapshot.",
+      "status": "IMPLEMENTED_LOCAL_ENGINEERING",
+      "paths": ["ontology/evidence/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.v1.json", "docs/operations/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.md"],
+      "evidence": [{"path":"ontology/evidence/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.v1.json","line":6,"sha256":"76a2410fe1acc54821532574da61f29e87964e54ea251319ca57fc11e31a1215","statement":"E1/E2 efficacy, learner v2, stage feedback, revision and real-use evaluation remain unimplemented or unidentified."}],
+      "limits": "Local workflows are not selection-effect, learner, or real-use efficacy evidence."
+    },
+    {
+      "id": "CAP-RU1-DESIGN",
+      "capability": "RU-1 outcome-conditioned relation-update candidate and explicit matched-control requirements.",
+      "status": "PROPOSED_NOT_EXECUTED",
+      "paths": ["docs/research/HSWM_RELATION_RESEARCH_ROUND_1_2026-09-10.md", "_research/causal_composition/relation_synthesis_usl_v1/"],
+      "evidence": [{"path":"docs/research/HSWM_RELATION_RESEARCH_ROUND_1_2026-09-10.md","line":55,"sha256":"1925af8adfd6ebf0d85248cf74e2153a883e9a4451e2e20e91f63cb431b5b80b","statement":"Introduces RU-1 as a successor hypothesis; later text requires source cutoff and evaluator custody."}],
+      "limits": "No preregistered cohort, model, independent outcome custody, budget accounting or result exists."
+    },
+    {
+      "id": "CAP-TERMINAL-PUBLICATION",
+      "capability": "Deterministic RO-Crate 1.3 JSON-LD and OpenLineage RunEvent 2.0.2 START/terminal export views for replay-verified terminal SEALED or VOID occurrences; the open-connectivity rehearsal also emits an RO-Crate/OpenLineage bundle.",
+      "status": "IMPLEMENTED_TERMINAL_FORMAT_PROJECTION",
+      "paths": ["src/hswm/infrastructure/occurrence_publication.py", "src/hswm/effect-runtime/src/hypergraph-projection-receipt.ts", "tests/test_occurrence_publication.py", "tests/effect-runtime/hypergraph-projection-receipt.test.ts"],
+      "evidence": [{"path":"src/hswm/infrastructure/occurrence_publication.py","line":1,"sha256":"e6a6eb739eff01f204b399448ff762c4ef323d0855fbccaf75ec709f896b81fd","statement":"Module declares deterministic non-canonical RO-Crate/OpenLineage projections for already-terminal occurrences."},{"path":"docs/research/HSWM_G0_OCCURRENCE_INTEGRITY_PROFILE_2026-09-03.md","line":171,"sha256":"d46451918200b16e0e710ea1a250682963cdfdd66bf4db9e93daa403047f3a5f","statement":"Documents terminal RO-Crate 1.3 and OpenLineage RunEvent projections after completion replay and audit verification."},{"path":"docs/operations/HSWM_OPEN_CONNECTIVITY_CONTRACT_2026-09-05.md","line":119,"sha256":"0dcbfbfe438ae36c9970cd5cd557e3c012aec75c4f0aa5ca162976f879cb9d2c","statement":"Documents local projection bundle output including OpenLineage and RO-Crate."}],
+      "limits": "This is a custom, terminal-occurrence/WRROC-style format projection, not a demonstrated external executor lineage service, general arbitrary-study crate workflow, publication authority, independent audit, or efficacy result."
+    }
+  ],
+  "requirements": [
+    {"id":"REQ-G0-EXTERNAL","need":"Independent G0 replay/custody for a named second party under the current G0-external route.","existing_capability_ids":["CAP-RESEARCH-COORDINATION","CAP-INSPECT-OUTER","CAP-TRACE-OTEL-TEMPORAL-SMOKE"],"contract_ids":["G0","D-1","CF-07"],"source_paths":["results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_RESULTS_2026-09-06.md#L63-L68","docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md#L3-L16"],"gap":"Current result is G0-local only; tools record workflow but do not create independence. This is a current route control, not an immutable universal definition of the USER_PRIMARY HSWM target.","completion_check":"For this route, second-party-held source cutoff, replayable sealed inputs, independent outcome release and signed/verified report agree before outcome interpretation; a replacement route must preserve its declared evidence burden and lineage.","priority":"P0_INTEGRATE_EXISTING"},
+    {"id":"REQ-D4-CAUSAL-LOOP","need":"One bounded D-4 run binds outcome, attributable credit, real Permit revision and changed held-out behavior with remove/restore/sham controls.","existing_capability_ids":["CAP-KG-NAVIGATION","CAP-ICE-WP0-3","CAP-RDF-PROV-SHACL"],"contract_ids":["D-4","G1","FCL-1","CR-1","CR-2"],"source_paths":["results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_RESULTS_2026-09-06.md#L63-L68"],"gap":"No tested canonical revision-to-held-out behavior mechanism; graph receipts cannot supply causal effect.","completion_check":"Preregistered fresh-task comparison meets estimand and matched controls, with auditable permit/revision lineage and removal/restoration effects.","priority":"P0_BUILD_MECHANISM_AND_EXECUTE"},
+    {"id":"REQ-RU1-PREREGISTRATION","need":"Turn RU-1 into a source-cut, outcome-custodied, resource-matched protocol.","existing_capability_ids":["CAP-RU1-DESIGN","CAP-RESEARCH-COORDINATION","CAP-INSPECT-OUTER"],"contract_ids":["RU-1","G0","G1","FCL-1"],"source_paths":["docs/research/HSWM_RELATION_RESEARCH_ROUND_1_2026-09-10.md#L55-L86","docs/research/HSWM_RELATION_RESEARCH_ROUND_1_2026-09-10.md#L131-L136"],"gap":"The candidate has no fixed cohort/evaluator/model/metric or strong native-history/text/program/frozen-policy controls.","completion_check":"Immutable protocol records all arms, evaluator custody, cost bound, stop rule, held-out scoring and anti-copy control before execution.","priority":"P0_INTEGRATE_EXISTING"},
+    {"id":"REQ-ICE-LEARNER","need":"Implement and compare learner-v2, selection effect, stage feedback and question revision beyond WP0-WP3.","existing_capability_ids":["CAP-ICE-WP0-3"],"contract_ids":["WP4-WP7","CR-1","CR-3"],"source_paths":["ontology/evidence/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.v1.json#L6"],"gap":"Snapshot explicitly leaves those components unimplemented/unidentified.","completion_check":"Pure typed implementation has outcome-bound state transition, eligible alternatives and matched ablations; it then enters REQ-D4 rather than claiming efficacy from tests.","priority":"P1_BUILD"},
+    {"id":"REQ-CONSTRUCTIVE-WITNESS","need":"Construct one runtime witness spanning CR-0..CR-7 rather than conditional premise composition.","existing_capability_ids":["CAP-FORMAL-LEAN","CAP-ICE-WP0-3"],"contract_ids":["CR-0","CR-1","CR-2","CR-3","CR-4","CR-5","CR-6","CR-7","FCL-1","FCL-8"],"source_paths":["ontology/evidence/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.v1.json#L6-L7"],"gap":"Existing Lean/model artifacts do not prove full realization or produce the multi-scale runtime.","completion_check":"Machine-checked refinement assumptions match executed witness, including counterfactual credit, topology recovery and composition; empirical claims remain separately tested.","priority":"P1_BUILD"},
+    {"id":"REQ-MULTISCALE-EFFECT","need":"Two-scale same-type HSWM composition with macro intervention, lineage/rights preservation and matched nulls.","existing_capability_ids":["CAP-FORMAL-LEAN","CAP-RDF-PROV-SHACL","CAP-KG-NAVIGATION"],"contract_ids":["FCL-2","FCL-4","FCL-8","CR-4","CR-6"],"source_paths":["docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md"],"gap":"No composition runtime or macro causal effect exists; interoperability projections cannot close this.","completion_check":"A preregistered two-scale experiment beats wrapper, pairwise, fixed-router, shuffled-credit, topology-fixed and lineage-copy controls on bounded outcomes.","priority":"P1_RESEARCH"},
+    {"id":"REQ-REPRODUCIBLE-PACKAGE","need":"Use a source-pinned package/rehearsal for preregistration and input closure when useful, then extend the existing terminal RO-Crate projection for every terminal result, including valid negative/VOID outcomes; assess DataCite/CFF and CWL separately if their contracts fit.","existing_capability_ids":["CAP-TERMINAL-PUBLICATION","CAP-RDF-PROV-SHACL","CAP-RESEARCH-COORDINATION"],"contract_ids":["G0-external","G1"],"source_paths":["src/hswm/infrastructure/occurrence_publication.py#L1-L6","docs/research/HSWM_G0_OCCURRENCE_INTEGRITY_PROFILE_2026-09-03.md#L171-L200"],"gap":"RO-Crate export already supports terminal SEALED and VOID artifacts, but its explicit boundary is a terminal occurrence/artifact descriptor projection; preregistration/input packaging is a separate rehearsal/profile decision, and no general dataset/software citation or CWL workflow portability contract is established. Packaging remains non-causal.","completion_check":"Before execution, if selected, validate a source-pinned rehearsal package for immutable protocol/input descriptors. At terminal state, validate the existing or extended crate for every valid result (including negative/VOID), with licences and explicit excluded/private data, without changing completion/audit authority.","priority":"P2_EXTEND_EXISTING_NOW_OR_AFTER_RUN"},
+    {"id":"REQ-RUN-LINEAGE","need":"Use the existing OpenLineage terminal-event projection for occurrence artifact handoff; trial MLflow/DVC only if protocol execution creates versioned datasets or experiment tracking requirements it cannot represent.","existing_capability_ids":["CAP-TERMINAL-PUBLICATION","CAP-RESEARCH-COORDINATION","CAP-TRACE-OTEL-TEMPORAL-SMOKE"],"contract_ids":["G0","G1","RU-1"],"source_paths":["src/hswm/infrastructure/occurrence_publication.py#L227-L330","docs/operations/HSWM_DEVELOPMENT_WORKFLOW_2026-09-09.md#L113-L130"],"gap":"OpenLineage format events are already emitted for terminal occurrence artifacts, but no external OpenLineage backend/executor ingestion or general dataset lineage qualification is evidenced. Effect/OTLP remains bounded observation.","completion_check":"For a concrete external executor/dataset contract, verify selected export/ingestion semantics, pin any added client/service and prove the path cannot write canonical state or confer custody/efficacy.","priority":"P2_EXTEND_EXISTING_CONDITIONAL"}
+  ],
+  "not_found_scope": {
+    "searched_paths": ["src/hswm", "_research", "docs", "ontology", "pyproject.toml", "src/hswm/effect-runtime/package.json"],
+    "terms": ["CWL", "DataCite", "CITATION.cff", "DVC", "MLflow"],
+    "result": "No checked-in implementation or dependency pin was identified for these remaining terms by this scoped text/path inventory. RO-Crate and OpenLineage are excluded from this negative statement because checked-in terminal format projections exist. This is not a claim that no compatible tool exists externally or that the repository has no equivalent custom artifact."
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "anchor_boundary": "Prior knowledge-map discovery anchor is source-revision pinned; HSWM target root is an explicitly unpinned identity reference.",
+  "as_of": "2026-09-13",
+  "authority": "SECONDARY_AI",
+  "bindings": [
+    {
+      "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+      "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc"
+    },
+    {
+      "path": "src/hswm/infrastructure/research_tooling_projection.py",
+      "sha256": "3792cb57220678bdf6a9fcf148629236bb2ebc914a49363bd29289888c43079c"
+    },
+    {
+      "path": "tests/test_hswm_research_tooling_projection.py",
+      "sha256": "6edf78b4f02a0167a5c0a719a1b974ebb8c5209bb29ef91d31426762a6311101"
+    },
+    {
+      "path": "tests/test_hswm_research_tooling_queries.py",
+      "sha256": "8b368abd93e05ff0e41e8e45f504ab6d4b9aa1bd76041ab56ba5c11a991b0498"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_research_tooling_2026-09-13/publication.json",
+      "sha256": "ed8865dca132f769e8eb6818ee70faa69eb4487b2f2949ead29f4b1b02a5a5f8"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_research_tooling_2026-09-13/live-query-results.json",
+      "sha256": "c8c030518e222022ee7d22f1b4888f59b231ca19d52f17342d3961f864ec1432"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_research_tooling_2026-09-13/mcp-discovery.json",
+      "sha256": "28ac1a2111d89af231a54e6114e66f690781c2056a7e371927e85c8134f84c2d"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_research_tooling_2026-09-13/validation.json",
+      "sha256": "f58ccfe53ba5fa9a104810563f644d3f1f06268d9caa6dbb0378375d9ef96e2b"
+    }
+  ],
+  "bundle_sha256": "f4adc0b76ec8671c193b8520fe53f11156696d1d81c51653ff56727d64a17cbd",
+  "checks": [
+    {
+      "name": "reproducible build --check",
+      "scope": "all derived graph artifacts, fixed Git sources, curation pointers and hashed compiler/query inputs",
+      "status": "PASSED"
+    },
+    {
+      "name": "SHACL 1.0 v2 bundle profile",
+      "status": "CONFORMS"
+    },
+    {
+      "command": "src/hswm/development/bin/hswm-python graph python -m pytest -q tests/test_hswm_research_tooling_projection.py tests/test_hswm_research_tooling_queries.py tests/test_kg_bundle_graph_view.py tests/test_kg_publication_integrity.py",
+      "name": "focused tooling and graph publication tests",
+      "negative_cases": [
+        "missing declared source",
+        "dangling requirement",
+        "invalid curation pointer",
+        "experimental spec promoted out of lane",
+        "unexecuted qualification marked passed",
+        "candidate source edges removed and Q6 detects missing source"
+      ],
+      "passed": 36,
+      "status": "PASSED"
+    },
+    {
+      "name": "hswm-dev ontology relation",
+      "passed": 9,
+      "status": "PASSED"
+    },
+    {
+      "name": "hswm-dev docs relation",
+      "passed": 343,
+      "status": "PASSED"
+    },
+    {
+      "boundary": "Local feedback only, distinct from user feedback; private state and outputs excluded.",
+      "name": "hswm-dev local usefulness feedback",
+      "source_class": "agent(codex)",
+      "status": "AGENT_FEEDBACK_RECORDED"
+    },
+    {
+      "documents": 160,
+      "name": "portable Markdown math compilation",
+      "status": "PASSED"
+    },
+    {
+      "name": "six live Cypher/local SPARQL pairs",
+      "row_counts": {
+        "Q1_candidate_decisions_and_priority": 35,
+        "Q2_existing_reuse_mappings": 76,
+        "Q3_experimental_development_specs": 4,
+        "Q4_requirement_qualification": 73,
+        "Q5_adoption_evidence_class_source": 82,
+        "Q6_missing_source_assessment_orphan_refs": 0
+      },
+      "status": "ALL_RETURNED_CELLS_EQUAL"
+    },
+    {
+      "name": "MCP bounded discovery/get/neighbors",
+      "scope": "Explicit non-secret preliminary projection, exact root UID, five bounded neighbors; not scientific ratification.",
+      "status": "PASSED"
+    }
+  ],
+  "nonclaim": "No new tool installed, model experiment run, or causal efficacy demonstrated. This is a research tooling survey and graph engineering record, not a material research result receipt.",
+  "publication_counts": {
+    "nodes": 265,
+    "relations": 662
+  },
+  "schema_version": "hswm-research-tooling-engineering-verification/v1",
+  "source_commit": "c57f39a8c33bb86d19cfcaa40b880b944707e53d",
+  "status": "SOURCE_BOUND_PROJECTION_PUBLISHED_AND_EXACTLY_READ_BACK"
+}

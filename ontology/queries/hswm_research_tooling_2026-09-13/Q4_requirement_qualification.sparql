@@ -1,0 +1,12 @@
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?requirementId ?candidateId ?qualificationId ?priority ?trigger ?acceptance ?qualificationStatus
+WHERE {
+<urn:hswm:kg:node:sym:AbstractNode:hswm-scientific-research-tooling-2026-09-13> kbr:HAS_CONCEPT ?a .
+?a a role:INTEGRATED_ASSESSMENT ; kbp:candidate_id ?candidateId ; kbr:REQUIRES ?req ; kbr:HAS_CONCEPT ?q .
+?req a role:RESEARCH_REQUIREMENT ; kbp:id ?requirementId .
+?q a role:QUALIFICATION ; kbp:id ?qualificationId ; kbp:priority ?priority ; kbp:trigger ?trigger ; kbp:acceptance ?acceptance ; kbp:source_status ?qualificationStatus .
+}
+ORDER BY ?requirementId ?candidateId ?qualificationId

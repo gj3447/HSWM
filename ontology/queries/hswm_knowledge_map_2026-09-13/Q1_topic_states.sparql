@@ -1,0 +1,17 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX kbrole: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?topic ?topicName ?designStatus ?engineeringStatus ?formalStatus ?efficacyStatus
+WHERE {
+  <urn:hswm:kg:node:sym:AbstractNode:hswm-knowledge-map-2026-09-13>
+    kbr:HAS_CONCEPT ?topic .
+  ?topic a kbrole:KNOWLEDGE_MAP_TOPIC ;
+    kbp:name ?topicName .
+  OPTIONAL { ?topic kbp:design_status ?designStatus }
+  OPTIONAL { ?topic kbp:engineering_status ?engineeringStatus }
+  OPTIONAL { ?topic kbp:formal_status ?formalStatus }
+  OPTIONAL { ?topic kbp:efficacy_status ?efficacyStatus }
+}
+ORDER BY ?topicName ?topic

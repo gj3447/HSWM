@@ -1,0 +1,86 @@
+{
+  "anchors": [
+    {
+      "name": "HSWM 전체 지식 지도 — 기존 설계·구현·증명·실험·남은 의무",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "uid": "sym:AbstractNode:hswm-knowledge-map-2026-09-13"
+    },
+    {
+      "name": "HSWM",
+      "required_labels": [
+        "Concept"
+      ],
+      "uid": "sym:Concept:hswm"
+    }
+  ],
+  "artifact_bindings": [
+    {
+      "path": "ontology/knowledge_map/HSWM_KNOWLEDGE_MAP_2026-09-13.v1.json",
+      "sha256": "b539c2f217c960d5e02250ec250aaf7434afb6d5665bd4a577b6ec7ebc045cca"
+    }
+  ],
+  "bundle_uid": "sym:AbstractNode:hswm-knowledge-map-discovery-2026-09-13",
+  "expected_counts": {
+    "anchors": 2,
+    "nodes": 1,
+    "relations": 2
+  },
+  "nodes": [
+    {
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "SOURCE_BOUND_NAVIGATION_NOT_NEW_DESIGN_NOT_CANONICAL_STATE_NOT_LEARNING_NOT_EFFICACY",
+        "description": "기존 HSWM 자료 246개를 13개 주제와 FCL/CR 16개 의무에 연결한 지식 지도. 설계·구현·형식검증·효능 상태를 분리한다. 문서: docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md. 전체 원문: docs/operations/artifacts/hswm_knowledge_map_2026-09-13/source-index.md. 전체 지도 UID: sym:AbstractNode:hswm-knowledge-map-2026-09-13. 6개 SPARQL/Cypher 쌍: ontology/queries/hswm_knowledge_map_2026-09-13/. 본 노드는 명시적으로 공개한 MCP 검색 진입점이며, 전체 metadata 노드의 MCP 공개 분류나 효능 판정은 아니다.",
+        "name": "HSWM 전체 지식 지도 — 문서·표준 그래프 질의 진입점",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_domain_v1": "AI",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_semantic_roles_v1": [
+          "KNOWLEDGE_MAP_DISCOVERY"
+        ],
+        "ontology_sensitivity_v1": "NORMAL",
+        "projection_nonclaim": "SOURCE_BOUND_NAVIGATION_NOT_NEW_DESIGN_NOT_CANONICAL_STATE_NOT_LEARNING_NOT_EFFICACY",
+        "responsibility_owner": "hswm:knowledge-map:2026-09-13",
+        "source_commit": "5cb22703cf42128dd204966087594ad8561a554d",
+        "source_path": "ontology/knowledge_map/HSWM_KNOWLEDGE_MAP_2026-09-13.v1.json",
+        "source_sha256": "b539c2f217c960d5e02250ec250aaf7434afb6d5665bd4a577b6ec7ebc045cca",
+        "standard_graph_role": "KNOWLEDGE_MAP_DISCOVERY",
+        "status": "SOURCE_BOUND_NAVIGATION"
+      },
+      "uid": "sym:AbstractNode:hswm-knowledge-map-discovery-2026-09-13"
+    }
+  ],
+  "nonclaim": "SOURCE_BOUND_NAVIGATION_NOT_NEW_DESIGN_NOT_CANONICAL_STATE_NOT_LEARNING_NOT_EFFICACY",
+  "relations": [
+    {
+      "authority_class": "SECONDARY_AI",
+      "from_uid": "sym:AbstractNode:hswm-knowledge-map-discovery-2026-09-13",
+      "scope": "PUBLIC_MCP_DISCOVERY_OF_SOURCE_BOUND_KNOWLEDGE_MAP",
+      "status": "PROJECTION_ONLY",
+      "to_uid": "sym:AbstractNode:hswm-knowledge-map-2026-09-13",
+      "type": "REFERS_TO"
+    },
+    {
+      "authority_class": "SECONDARY_AI",
+      "from_uid": "sym:AbstractNode:hswm-knowledge-map-discovery-2026-09-13",
+      "scope": "PUBLIC_MCP_DISCOVERY_OF_SOURCE_BOUND_KNOWLEDGE_MAP",
+      "status": "PROJECTION_ONLY",
+      "to_uid": "sym:Concept:hswm",
+      "type": "REFERS_TO"
+    }
+  ],
+  "schema_version": "hswm-knowledge-map-discovery/v1",
+  "status": "SOURCE_BOUND_NAVIGATION_NOT_EFFICACY"
+}

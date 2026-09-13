@@ -1,0 +1,41 @@
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX kbrole: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+# Duplicate paths use an aggregate, avoiding a quadratic descriptor self-join.
+# The other branch detects a canonical raw source routed as a retired target.
+SELECT ?ambiguityKind ?sourcePath ?descriptorCount ?snapshot
+       ?navigationStatus ?rawSourceStatus
+WHERE {
+  {
+    {
+      SELECT ?sourcePath (COUNT(DISTINCT ?duplicateSnapshot) AS ?descriptorCount)
+      WHERE {
+        ?duplicateSnapshot a kbrole:SOURCE_SNAPSHOT ; kbp:source_path ?sourcePath .
+        FILTER EXISTS {
+          <urn:hswm:kg:node:sym:AbstractNode:hswm-knowledge-map-2026-09-13>
+            kbr:HAS_CONCEPT ?owner .
+          ?owner kbr:HAS_SOURCE ?duplicateSnapshot .
+        }
+      }
+      GROUP BY ?sourcePath
+      HAVING (COUNT(DISTINCT ?duplicateSnapshot) > 1)
+    }
+    BIND("DUPLICATE_SOURCE_PATH" AS ?ambiguityKind)
+  }
+  UNION
+  {
+    BIND("CANONICAL_RAW_RETIRED_NAVIGATION_CONFLICT" AS ?ambiguityKind)
+    ?snapshot a kbrole:SOURCE_SNAPSHOT ;
+      kbp:source_path ?sourcePath ;
+      kbp:navigation_status ?navigationStatus ;
+      kbp:raw_source_status ?rawSourceStatus .
+    FILTER(?navigationStatus = "RETIRED_TARGET_FORMAT" && STRSTARTS(STR(?rawSourceStatus), "CANONICAL_TARGET"))
+    FILTER EXISTS {
+      <urn:hswm:kg:node:sym:AbstractNode:hswm-knowledge-map-2026-09-13>
+        kbr:HAS_CONCEPT ?owner .
+      ?owner kbr:HAS_SOURCE ?snapshot .
+    }
+  }
+}
+ORDER BY ?ambiguityKind ?sourcePath ?snapshot

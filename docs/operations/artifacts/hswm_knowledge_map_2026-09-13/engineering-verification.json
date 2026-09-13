@@ -1,0 +1,58 @@
+{
+  "as_of": "2026-09-13",
+  "authority": "SECONDARY_AI",
+  "bundle_sha256": "b539c2f217c960d5e02250ec250aaf7434afb6d5665bd4a577b6ec7ebc045cca",
+  "checks": [
+    {
+      "check": "new source/UID/retirement regression tests",
+      "path": "tests/test_hswm_knowledge_map_projection.py",
+      "result": "9 PASSED"
+    },
+    {
+      "check": "existing KG RDF and semantic regressions",
+      "paths": [
+        "tests/test_kg_bundle_graph_view.py",
+        "tests/test_kg_bundle_semantics.py"
+      ],
+      "result": "26 PASSED"
+    },
+    {
+      "check": "hswm-dev hswm ontology profile",
+      "feedback": "agent(codex): useful for compatibility; additional map checks required; not user feedback",
+      "result": "9 PASSED"
+    },
+    {
+      "check": "hswm-dev hswm docs profile",
+      "feedback": "agent(codex): useful for documentation compatibility; not user feedback",
+      "result": "339 PASSED"
+    },
+    {
+      "check": "portable Markdown math compiler",
+      "result": "159 documents compiled into derived projection; source bytes preserved"
+    },
+    {
+      "check": "map rebuild in separate process",
+      "result": "IDENTICAL_DERIVED_BYTES"
+    }
+  ],
+  "claim": "ENGINEERING_VERIFICATION_NOT_HSWM_EFFICACY",
+  "independent_review_findings_addressed": [
+    "FCL/CR missing rows and cross-product aggregation",
+    "quadratic duplicate-source query",
+    "raw CANONICAL_TARGET prefix versus retired navigation",
+    "source-bound query byte hashes",
+    "malformed live unique identity assertions",
+    "topic UID grounding against fixed-cut entrypoints",
+    "GROUP_CONCAT set ordering in reproducible report"
+  ],
+  "limitations": [
+    "Declared inventory excludes uncommitted research changes and private runtime payloads",
+    "Live anchors are identity references, not source revision matches",
+    "No new efficacy experiment or formal theorem was performed"
+  ],
+  "schema_version": "hswm-knowledge-map-engineering-verification/v1",
+  "standard_engines": {
+    "pyshacl": "0.40.1",
+    "rdflib": "7.6.0"
+  }
+}

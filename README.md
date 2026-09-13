@@ -3,7 +3,7 @@
 **Hypergraph Semantic Weight Map**<br>
 관계를 실행하고, 결과로 관계를 바꾸는 토큰 기반 하이퍼그래프 신경망을 연구합니다.
 
-[그래프 구조](#graph-model) · [빠른 실행](#quick-start) · [개발 실사용](#development) · [근거와 판정](#evidence) · [전체 문서](INDEX.md)
+[지식 지도·개발 현황](docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md) · [그래프 구조](#graph-model) · [빠른 실행](#quick-start) · [개발 실사용](#development) · [근거와 판정](#evidence) · [전체 문서](INDEX.md)
 
 > **2026-09-07 · 실사용 가능한 로컬 적응 프로토타입**<br>
 > 실행 → 결과 기록 → 문맥 가중치·조건부 관계 갱신 → 다음 선택이 연결되어 있습니다.
@@ -16,9 +16,9 @@ HSWM의 목표는 LLM이 수행하는 국소 전이들이 하나의 지속되는
 결과에 따라 변하는 **continuous learner**의 역할을 함께 합니다.
 하나의 HSWM이 다시 상위 HSWM의 cell로 참여하는 프랙탈 합성까지가 장기 목표입니다.
 
-현재는 그 목표의 일부를 Python 실행기로 구현했습니다. 명시적으로 허용한 command·typed LLM
-cell을 호출하고, 관계별 문맥 계수와 읽는 정보, 조건부 관계를 지속 상태로 갱신합니다.
-TypeScript + Effect 런타임과 기존 실험 코드는 각각의 [구현 범위](docs/research/HSWM_TYPESCRIPT_EFFECT_RUNTIME_2026-08-21.md)를 유지합니다.
+현재 활성 `hswm-live`·`hswm-dev`는 [TypeScript + Effect 실행기](docs/operations/HSWM_NATIVE_EFFECT_ADAPTIVE_RUNTIME_2026-09-08.md)를 사용합니다.
+명시적으로 허용한 command·typed LLM cell을 호출하고, 관계별 문맥 계수와 읽는 정보,
+조건부 관계를 지속 상태로 갱신합니다. Python 구현과 기존 실험은 역사적 비교 자료로 보존합니다.
 
 | 영역 | 현재 가능한 일 | 아직 남은 일 |
 | --- | --- | --- |

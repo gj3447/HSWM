@@ -1,0 +1,24 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbrole: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+
+# The snapshot exists in this source-bound bundle, but its named source bundle
+# UID is absent from the loaded RDF dataset.  This distinguishes an unresolved
+# live/dataset reference from absence of the snapshot record itself.
+SELECT DISTINCT ?snapshot ?sourcePath ?sourceBundleUid ?rawSourceStatus ?navigationStatus ?liveResolution
+WHERE {
+  ?snapshot a kbrole:SOURCE_SNAPSHOT ;
+    kbp:source_path ?sourcePath ;
+    kbp:source_bundle_uid ?sourceBundleUid ;
+    kbp:raw_source_status ?rawSourceStatus ;
+    kbp:navigation_status ?navigationStatus .
+  OPTIONAL { ?snapshot kbp:live_resolution ?liveResolution }
+  FILTER EXISTS {
+    <urn:hswm:kg:node:sym:AbstractNode:hswm-knowledge-map-2026-09-13>
+      kbr:HAS_CONCEPT ?owner .
+    ?owner kbr:HAS_SOURCE ?snapshot .
+  }
+  FILTER NOT EXISTS { ?target kb:uid ?sourceBundleUid }
+}
+ORDER BY ?sourceBundleUid ?sourcePath ?snapshot

@@ -1,5 +1,10 @@
 # HSWM — public repository index
 
+2026-09-13 [HSWM 전체 지식 지도](docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md)는
+기존 설계·구현·형식검증·실험을 13개 주제와 FCL/CR 16개 의무로 연결한다.
+고정 소스의 전체 목록, 현재 진입점과 역사적 기록, 실제 KG 조회 상태를
+구분하며 [표준 그래프 질의](ontology/queries/hswm_knowledge_map_2026-09-13)로 탐색한다.
+
 2026-09-10 [구성적 증명 첫 형식검증 라운드](docs/research/HSWM_CONSTRUCTIVE_PROOF_ROUND_1_2026-09-10.md)는
 유한 선택의 조건부 개선·유한 배정 식별식·합성 간섭 반례와 제한된 보완을 Lean으로 검사한다.
 전체 HSWM 존재·실제 LLM 효능·FCL 통과는 여전히 미증명이다.

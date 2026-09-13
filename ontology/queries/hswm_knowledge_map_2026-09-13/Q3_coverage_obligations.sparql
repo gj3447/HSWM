@@ -1,0 +1,40 @@
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX kbrole: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+# One coverage row for every FCL and CR.  An unbound ?obligation is a missing
+# coverage record.  FCL mapping is not pre-bound: CR rows have no empty FCL
+# binding that can erase a successful OPTIONAL match.
+SELECT ?requiredObligationId (SAMPLE(?obligation) AS ?obligation)
+       (SAMPLE(?obligationName) AS ?obligationName)
+       (GROUP_CONCAT(DISTINCT STR(?mappedFcl); separator="|") AS ?mappedFcls)
+       (GROUP_CONCAT(DISTINCT STR(?requiredFclObligation); separator="|") AS ?requiredFclObligations)
+       (GROUP_CONCAT(DISTINCT STR(?requiredFcl); separator="|") AS ?requiredFcls)
+       (SAMPLE(?designStatus) AS ?designStatus)
+       (SAMPLE(?engineeringStatus) AS ?engineeringStatus)
+       (SAMPLE(?formalStatus) AS ?formalStatus)
+       (SAMPLE(?efficacyStatus) AS ?efficacyStatus)
+WHERE {
+  VALUES ?requiredObligationId {
+    "FCL-1" "FCL-2" "FCL-3" "FCL-4" "FCL-5" "FCL-6" "FCL-7" "FCL-8"
+    "CR-0" "CR-1" "CR-2" "CR-3" "CR-4" "CR-5" "CR-6" "CR-7"
+  }
+  OPTIONAL {
+    <urn:hswm:kg:node:sym:AbstractNode:hswm-knowledge-map-2026-09-13>
+      kbr:HAS_CONCEPT ?obligation .
+    ?obligation a kbrole:COVERAGE_OBLIGATION ;
+      kbp:obligation_id ?requiredObligationId ;
+      kbp:name ?obligationName .
+    OPTIONAL { ?obligation kbp:mapped_fcl_ids ?mappedFcl }
+    OPTIONAL {
+      ?obligation kbr:REQUIRES ?requiredFclObligation .
+      ?requiredFclObligation kbp:obligation_id ?requiredFcl .
+    }
+    OPTIONAL { ?obligation kbp:design_status ?designStatus }
+    OPTIONAL { ?obligation kbp:engineering_status ?engineeringStatus }
+    OPTIONAL { ?obligation kbp:formal_status ?formalStatus }
+    OPTIONAL { ?obligation kbp:efficacy_status ?efficacyStatus }
+  }
+}
+GROUP BY ?requiredObligationId
+ORDER BY ?requiredObligationId

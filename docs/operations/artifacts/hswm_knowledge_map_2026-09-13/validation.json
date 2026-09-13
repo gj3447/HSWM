@@ -1,0 +1,46 @@
+{
+  "bundle_sha256": "b539c2f217c960d5e02250ec250aaf7434afb6d5665bd4a577b6ec7ebc045cca",
+  "claim_boundary": "SOURCE_BOUND_NAVIGATION_NOT_NEW_DESIGN_NOT_CANONICAL_STATE_NOT_LEARNING_NOT_EFFICACY",
+  "counts": {
+    "anchors": 73,
+    "nodes": 287,
+    "relations": 523
+  },
+  "navigation_counts": {
+    "CATALOGUED_SNAPSHOT": 196,
+    "CURRENT_ENTRYPOINT": 38,
+    "HISTORICAL_REFERENCE": 11,
+    "RETIRED_TARGET_FORMAT": 1
+  },
+  "query_row_counts": {
+    "Q1_topic_states.sparql": 13,
+    "Q2_current_entrypoints.sparql": 40,
+    "Q3_coverage_obligations.sparql": 16,
+    "Q4_source_status_ambiguities.sparql": 1,
+    "Q5_formal_vs_efficacy.sparql": 16,
+    "Q6_unresolved_source_bundle_uids.sparql": 40
+  },
+  "query_serialization": "Q3 GROUP_CONCAT set cells sorted lexically; row order uses existing RDF view canonical sorting",
+  "schema_version": "hswm-knowledge-map-validation/v1",
+  "scope": {
+    "additional_sources": "explicit curated entrypoints, coverage references, history successors and repository entrypoints",
+    "boundary": "Complete inventory for declared path classes; not exhaustive semantic indexing of every repository byte.",
+    "document_count": 161,
+    "document_rule": "tracked docs/**/*.md containing HSWM in path",
+    "excluded": [
+      "uncommitted work",
+      "private runtime state and credentials",
+      "external KG payloads",
+      "transitive source payload expansion"
+    ],
+    "ontology_count": 76,
+    "ontology_rule": "tracked ontology/**/*.json containing HSWM in path"
+  },
+  "shacl": {
+    "claim_ceiling": "KG_BUNDLE_STRUCTURE_AND_BYTE_BINDING_ONLY_NOT_LIVE_KG_STATE_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+    "conforms": true,
+    "report_text": "Validation Report\nConforms: True\n"
+  },
+  "source_commit": "5cb22703cf42128dd204966087594ad8561a554d",
+  "source_count": 246
+}

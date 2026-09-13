@@ -1,0 +1,19 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX kbp: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX kbr: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX kbrole: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?obligation ?obligationId ?obligationName ?designStatus ?engineeringStatus
+       ?formalStatus ?efficacyStatus
+WHERE {
+  <urn:hswm:kg:node:sym:AbstractNode:hswm-knowledge-map-2026-09-13>
+    kbr:HAS_CONCEPT ?obligation .
+  ?obligation a kbrole:COVERAGE_OBLIGATION ;
+    kbp:obligation_id ?obligationId ;
+    kbp:name ?obligationName .
+  OPTIONAL { ?obligation kbp:design_status ?designStatus }
+  OPTIONAL { ?obligation kbp:engineering_status ?engineeringStatus }
+  OPTIONAL { ?obligation kbp:formal_status ?formalStatus }
+  OPTIONAL { ?obligation kbp:efficacy_status ?efficacyStatus }
+}
+ORDER BY ?obligationId ?obligation

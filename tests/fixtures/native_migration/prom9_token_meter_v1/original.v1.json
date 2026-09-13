@@ -1,0 +1,92 @@
+{
+  "cases": [
+    {
+      "cap": 22,
+      "max_chars": 20,
+      "name": "natural_exact",
+      "payload_json": "{\"parity_filler\":\"ignored\",\"request_id\":\"req-😀\",\"z\":\"é\"}",
+      "result": {
+        "accepted": false,
+        "error": "natural prompt of 26 tokens exceeds the registered envelope cap 22",
+        "error_type": "TokenMeterError"
+      },
+      "system": "system",
+      "unit": "x"
+    },
+    {
+      "cap": 24,
+      "max_chars": 20,
+      "name": "search_exact",
+      "payload_json": "{\"parity_filler\":\"ignored\",\"request_id\":\"req-😀\",\"z\":\"é\"}",
+      "result": {
+        "accepted": false,
+        "error": "natural prompt of 26 tokens exceeds the registered envelope cap 24",
+        "error_type": "TokenMeterError"
+      },
+      "system": "system",
+      "unit": "x"
+    },
+    {
+      "cap": 25,
+      "max_chars": 20,
+      "name": "unicode_unit",
+      "payload_json": "{\"parity_filler\":\"ignored\",\"request_id\":\"req-😀\",\"z\":\"é\"}",
+      "result": {
+        "accepted": true,
+        "canonical": "{\"parity_filler\":\"\",\"request_id\":\"req-😀\",\"z\":\"é\"}"
+      },
+      "system": "sys\u001c",
+      "unit": "é"
+    },
+    {
+      "cap": 1,
+      "max_chars": 20,
+      "name": "natural_over_cap",
+      "payload_json": "{\"parity_filler\":\"ignored\",\"request_id\":\"req-😀\",\"z\":\"é\"}",
+      "result": {
+        "accepted": false,
+        "error": "natural prompt of 26 tokens exceeds the registered envelope cap 1",
+        "error_type": "TokenMeterError"
+      },
+      "system": "system",
+      "unit": "x"
+    },
+    {
+      "cap": 23,
+      "max_chars": 2,
+      "name": "no_exact_fit",
+      "payload_json": "{\"parity_filler\":\"ignored\",\"request_id\":\"req-😀\",\"z\":\"é\"}",
+      "result": {
+        "accepted": false,
+        "error": "natural prompt of 26 tokens exceeds the registered envelope cap 23",
+        "error_type": "TokenMeterError"
+      },
+      "system": "system",
+      "unit": "xxxx"
+    },
+    {
+      "cap": 30,
+      "max_chars": 20,
+      "name": "empty_unit",
+      "payload_json": "{\"parity_filler\":\"ignored\",\"request_id\":\"req-😀\",\"z\":\"é\"}",
+      "result": {
+        "accepted": false,
+        "error": "filler unit must be non-empty",
+        "error_type": "TokenMeterError"
+      },
+      "system": "system",
+      "unit": ""
+    }
+  ],
+  "chat_render": {
+    "system": "S\u001c",
+    "user": "U😀",
+    "value": "<|im_start|>system\nS\u001c<|im_end|>\n<|im_start|>user\nU😀<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+  },
+  "generator_sha256": "e9e8708a5f9fac766cff646223d91e081441314eb70201b556b7db8da8de906d",
+  "invocation": "src/hswm/development/bin/hswm-python core python /tmp/generate_prom9_token_meter_oracle.py",
+  "license": "Apache-2.0 (installed @huggingface/transformers 4.2.0; unavailable local Qwen artifacts)",
+  "source_pins": {
+    "prom_search_hswm/hswm_token_meter.py": "5149473c7ca3efea865d97cee324ff2c9ccca5d4d637c66a049f34eae15da274"
+  }
+}

@@ -2,6 +2,8 @@
 import { Data, Either } from "effect";
 import { sumNativeS2SContiguousProducts } from "./native-s2s-contiguous-reduction-domain.js";
 export const NATIVE_S2S_OPERATOR_SOURCE_SHA256 = "7b16eccc74059c6c6dd537ea219c458d7015eadf070d77e1c34ad75c2c828151" as const;
+/** Source-bound architecture commitments used by the training receipt verifier. */
+export const NATIVE_S2S_OPERATOR_ARCHITECTURE_RECEIPT_SHA256: Readonly<Record<"P_CAP18" | "T16" | "DS870", string>> = Object.freeze({ P_CAP18: "52bbfd8bcc1a2c6c420b0673c323d81da82e4475222a132d9bbabe8de3288001", T16: "65e6e27379793a7f483e8c34292ba060b60b89824822167e7483e03f7415ad29", DS870: "bff3df025fd4b8bc4e022334b105b63f2833d45a56fac11aeb4b1d0d6282831d" });
 export class NativeS2SOperatorError extends Data.TaggedError("NativeS2SOperatorError")<{
     readonly reason: "INPUT_INVALID" | "PARAMETERS_INVALID" | "OUTPUT_INVALID";
     readonly detail: string;

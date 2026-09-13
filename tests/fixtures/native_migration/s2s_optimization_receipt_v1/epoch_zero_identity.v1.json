@@ -1,0 +1,283 @@
+{
+  "source_pins": {
+    "src/hswm/experiments/swm0w_s2s_training.py": "d84b8336d8bcbe89aeba7f2d2c915fd294b9ee24425e6092505069a74f9cba94",
+    "src/hswm/experiments/swm0w_s2s_protocol.py": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1"
+  },
+  "receipt": {
+    "arm": "T16",
+    "best_dev_loss_hex": "0x1.056556d36ba09p+0",
+    "best_parameters_sha256": "c207902caf056b13c7d899542c09117b2f0a5a0ceefd047063ce0d81c079ba6e",
+    "best_train_loss_hex": "0x1.ffa0c09b7e505p-1",
+    "best_update": 2,
+    "clipped_update_count": 0,
+    "config": {
+      "beta1_hex": "0x1.ccccccccccccdp-1",
+      "beta2_hex": "0x1.ff7ced916872bp-1",
+      "epsilon_hex": "0x1.5798ee2308c3ap-27",
+      "gradient_clip_hex": "0x1.4000000000000p+2",
+      "learning_rate_hex": "0x1.a36e2eb1c432dp-14",
+      "max_updates": 3,
+      "min_delta_hex": "0x1.12e0be826d695p-30",
+      "patience": 5,
+      "seed": 17
+    },
+    "dataset_bytes_version": "hswm-swm0w-s2s-dataset-bytes/v1",
+    "dataset_schema_sha256": "e488e331121767c537dc7b190f889e4b189f6cad2fb7a64cc5989ab0db6818d0",
+    "dev_case_count": 3125,
+    "dev_dataset_sha256": "faa150b2ba7ef1b1cbe58ad3410b108f5b35f6c07b0cb5b6cb57e5402892e446",
+    "family_certificate_sha256": "a27049ad345be37007dc3099aafa58f957ee851619f9de55aaac69b3589c2329",
+    "family_definition_sha256": "9eea937e0a40511b1fd035e048a6ce6ce4c97898a5eafb86176f4d67059a413b",
+    "history_entry_count": 4,
+    "history": [
+      {
+        "clipped": false,
+        "dev_loss_hex": "0x1.059731af99b7cp+0",
+        "gradient_norm_hex": null,
+        "improved": true,
+        "parameters_sha256": "c207902caf056b13c7d899542c09117b2f0a5a0ceefd047063ce0d81c079ba6e",
+        "schema_version": "hswm-swm0w-s2s-optimization-history-entry/v1",
+        "train_loss_hex": "0x1.0000000000000p+0",
+        "update": 0
+      },
+      {
+        "clipped": false,
+        "dev_loss_hex": "0x1.057aef9baf190p+0",
+        "gradient_norm_hex": "0x1.9e10aca108de2p-1",
+        "improved": true,
+        "parameters_sha256": "779dbe3122f4e9c0f3b1daf3a6870e99df27b6904386f48668d73442ee9a805e",
+        "schema_version": "hswm-swm0w-s2s-optimization-history-entry/v1",
+        "train_loss_hex": "0x1.ffc999a0b1f6ep-1",
+        "update": 1
+      },
+      {
+        "clipped": false,
+        "dev_loss_hex": "0x1.056556d36ba09p+0",
+        "gradient_norm_hex": "0x1.9243fc2e21af3p-1",
+        "improved": true,
+        "parameters_sha256": "c207902caf056b13c7d899542c09117b2f0a5a0ceefd047063ce0d81c079ba6e",
+        "schema_version": "hswm-swm0w-s2s-optimization-history-entry/v1",
+        "train_loss_hex": "0x1.ffa0c09b7e505p-1",
+        "update": 2
+      },
+      {
+        "clipped": false,
+        "dev_loss_hex": "0x1.05b806944ba4bp+0",
+        "gradient_norm_hex": "0x1.e8d226fb30db6p+0",
+        "improved": false,
+        "parameters_sha256": "d6f70213466b0c1d42a489d13ff1835f610517a5be7d741e918a46cc58303cb0",
+        "schema_version": "hswm-swm0w-s2s-optimization-history-entry/v1",
+        "train_loss_hex": "0x1.0024ba0bcaa4bp+0",
+        "update": 3
+      }
+    ],
+    "history_sha256": "7be54f2facdcccaf40c182219636cbd93b02499971a22fe4a241d6e0d9ea48cc",
+    "history_version": "hswm-swm0w-s2s-optimization-history/v1",
+    "initial_parameters_sha256": "c207902caf056b13c7d899542c09117b2f0a5a0ceefd047063ce0d81c079ba6e",
+    "initialization_version": "hswm-swm0w-s2s-task-independent-zero-output-initialization/v1",
+    "loss_definition_sha256": "ecd548f9405537912d0988e974ec6a7ef20df2bade97cdf855fd10fbaca40f4f",
+    "optimizer_version": "hswm-swm0w-s2s-full-batch-adam/v1",
+    "operator_architecture_receipt_sha256": "65e6e27379793a7f483e8c34292ba060b60b89824822167e7483e03f7415ad29",
+    "schema_version": "hswm-swm0w-s2s-optimization-receipt/v1",
+    "receipt_assurance": "SELF_CONSISTENT_COMMITMENT_REQUIRES_DETERMINISTIC_REPLAY",
+    "scientific_status": "LEARNED_ENGINEERING_ARTIFACT_UNJUDGED",
+    "stopped_update": 3,
+    "stratum_loss_receipts": [
+      {
+        "centered_sum_squares_numerator": 4935510900000000,
+        "channel": 0,
+        "inverse_variance_weight_hex": "0x1.0ff163a8a3428p+13",
+        "role": 0,
+        "sample_count": 12500,
+        "schema_version": "hswm-swm0w-s2s-stratum-loss/v1",
+        "target_numerator_sum": 0,
+        "target_numerator_sum_squares": 394840872000,
+        "target_scale_exponent": 19,
+        "variance_definition": "POPULATION_VARIANCE=(N*SUMSQ-SUM^2)/(N^2*2^(2*SCALE_EXPONENT))",
+        "receipt_sha256": "0091bc63a970d95b0166a7edabb7bbdc613095f86ede25ca4038bc48492ad65b"
+      },
+      {
+        "centered_sum_squares_numerator": 8835948910000000,
+        "channel": 1,
+        "inverse_variance_weight_hex": "0x1.2fcc9af7667a5p+12",
+        "role": 0,
+        "sample_count": 12500,
+        "schema_version": "hswm-swm0w-s2s-stratum-loss/v1",
+        "target_numerator_sum": 0,
+        "target_numerator_sum_squares": 706875912800,
+        "target_scale_exponent": 19,
+        "variance_definition": "POPULATION_VARIANCE=(N*SUMSQ-SUM^2)/(N^2*2^(2*SCALE_EXPONENT))",
+        "receipt_sha256": "c4b9db13ff42c2adfc8f5e465d565dd4e0dbe24e80c3e959c1627080e47689d6"
+      },
+      {
+        "centered_sum_squares_numerator": 1732284675000000,
+        "channel": 0,
+        "inverse_variance_weight_hex": "0x1.8366a14d0f561p+14",
+        "role": 1,
+        "sample_count": 12500,
+        "schema_version": "hswm-swm0w-s2s-stratum-loss/v1",
+        "target_numerator_sum": 0,
+        "target_numerator_sum_squares": 138582774000,
+        "target_scale_exponent": 19,
+        "variance_definition": "POPULATION_VARIANCE=(N*SUMSQ-SUM^2)/(N^2*2^(2*SCALE_EXPONENT))",
+        "receipt_sha256": "3d03c4f4a554978c6bb4cfa031e1c02f38690e73ea14695bf21683e4bae1405d"
+      },
+      {
+        "centered_sum_squares_numerator": 1046034675000000,
+        "channel": 1,
+        "inverse_variance_weight_hex": "0x1.40c705fb70f7fp+15",
+        "role": 1,
+        "sample_count": 12500,
+        "schema_version": "hswm-swm0w-s2s-stratum-loss/v1",
+        "target_numerator_sum": 0,
+        "target_numerator_sum_squares": 83682774000,
+        "target_scale_exponent": 19,
+        "variance_definition": "POPULATION_VARIANCE=(N*SUMSQ-SUM^2)/(N^2*2^(2*SCALE_EXPONENT))",
+        "receipt_sha256": "cc959b25fbaa5ec874f0e11f8ebfd1abe26291052066aaed2ded07693b44d256"
+      },
+      {
+        "centered_sum_squares_numerator": 2380933125000000,
+        "channel": 0,
+        "inverse_variance_weight_hex": "0x1.19dc08bd0dac2p+14",
+        "role": 2,
+        "sample_count": 12500,
+        "schema_version": "hswm-swm0w-s2s-stratum-loss/v1",
+        "target_numerator_sum": 0,
+        "target_numerator_sum_squares": 190474650000,
+        "target_scale_exponent": 19,
+        "variance_definition": "POPULATION_VARIANCE=(N*SUMSQ-SUM^2)/(N^2*2^(2*SCALE_EXPONENT))",
+        "receipt_sha256": "583b34c0e47e0e4cbef7d2316eee71747a73be270ce3c3cef4efaee7a83acd06"
+      },
+      {
+        "centered_sum_squares_numerator": 6728550525000000,
+        "channel": 1,
+        "inverse_variance_weight_hex": "0x1.8ef32ca7bcfb3p+12",
+        "role": 2,
+        "sample_count": 12500,
+        "schema_version": "hswm-swm0w-s2s-stratum-loss/v1",
+        "target_numerator_sum": 0,
+        "target_numerator_sum_squares": 538284042000,
+        "target_scale_exponent": 19,
+        "variance_definition": "POPULATION_VARIANCE=(N*SUMSQ-SUM^2)/(N^2*2^(2*SCALE_EXPONENT))",
+        "receipt_sha256": "016344c63500e33d499710338d9f8024319beb9d8fb2aaea74db329bf3046477"
+      }
+    ],
+    "structural_target_sha256": "036185884821cc781d1bed8ff48197959d8efc9fcd5e0da701f6c461fa337a27",
+    "structural_task_sha256": "2a8545c36345115089651d2666ec4cb0602990652c371aaa4f6f52f7938b416d",
+    "task_manifest_sha256": "64c084e01c1225cd4fb8c8f905587c2022b0d09aed8b4d54b62eb97ae6e792db",
+    "task_spec": {
+      "draw_index": 0,
+      "family_certificate_sha256": "a27049ad345be37007dc3099aafa58f957ee851619f9de55aaac69b3589c2329",
+      "family_definition_sha256": "9eea937e0a40511b1fd035e048a6ce6ce4c97898a5eafb86176f4d67059a413b",
+      "rank_gains": [
+        {
+          "channel": "c0",
+          "gain": 8,
+          "rank": 0,
+          "role": "r0"
+        },
+        {
+          "channel": "c0",
+          "gain": 10,
+          "rank": 1,
+          "role": "r0"
+        },
+        {
+          "channel": "c1",
+          "gain": 14,
+          "rank": 0,
+          "role": "r0"
+        },
+        {
+          "channel": "c1",
+          "gain": 13,
+          "rank": 1,
+          "role": "r0"
+        },
+        {
+          "channel": "c0",
+          "gain": 15,
+          "rank": 0,
+          "role": "r1"
+        },
+        {
+          "channel": "c0",
+          "gain": 12,
+          "rank": 1,
+          "role": "r1"
+        },
+        {
+          "channel": "c1",
+          "gain": 13,
+          "rank": 0,
+          "role": "r1"
+        },
+        {
+          "channel": "c1",
+          "gain": 8,
+          "rank": 1,
+          "role": "r1"
+        },
+        {
+          "channel": "c0",
+          "gain": 12,
+          "rank": 0,
+          "role": "r2"
+        },
+        {
+          "channel": "c0",
+          "gain": 13,
+          "rank": 1,
+          "role": "r2"
+        },
+        {
+          "channel": "c1",
+          "gain": 15,
+          "rank": 0,
+          "role": "r2"
+        },
+        {
+          "channel": "c1",
+          "gain": 12,
+          "rank": 1,
+          "role": "r2"
+        }
+      ],
+      "schema_version": "hswm-swm0w-s2s-task/v2",
+      "seed_commitment_sha256": "f67ce7e55e476ffd428ce1bfd27a7dc03fe37edb2d2d2655258f34e15e7b52f5",
+      "split": {
+        "coefficients": [
+          1,
+          2,
+          2
+        ],
+        "residues": {
+          "train": [
+            1,
+            4
+          ],
+          "dev": [
+            0
+          ],
+          "test": [
+            2,
+            3
+          ]
+        }
+      },
+      "structural_target_sha256": "036185884821cc781d1bed8ff48197959d8efc9fcd5e0da701f6c461fa337a27",
+      "structural_task_sha256": "2a8545c36345115089651d2666ec4cb0602990652c371aaa4f6f52f7938b416d",
+      "manifest_sha256": "64c084e01c1225cd4fb8c8f905587c2022b0d09aed8b4d54b62eb97ae6e792db"
+    },
+    "termination_reason": "MAX_UPDATES",
+    "train_case_count": 6250,
+    "train_dataset_sha256": "9b199756baef136349517292a2bb675c79c10069c4f66ac8f9dd80a742c646d1",
+    "training_version": "hswm-swm0w-s2s-training/v1",
+    "update_count": 3,
+    "receipt_sha256": "310e569a51cc2619fbd3c8479df5b28b15b7b2a2a96617103f312af8c9e0e7c2"
+  },
+  "source_result": {
+    "accepted": false,
+    "error": "optimization-receipt validation failed",
+    "cause": "epoch-zero selection and best parameter identity disagree"
+  }
+}

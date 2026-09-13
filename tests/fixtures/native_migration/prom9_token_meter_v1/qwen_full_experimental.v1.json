@@ -1,0 +1,1712 @@
+{
+  "artifacts": {
+    "merges.txt": "a9d356d7bdf1ef4949e3e748e95b8e10ad9d4e2e838eddc38a0a7b6b94d1db8d",
+    "tokenizer.json": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+    "tokenizer_config.json": "5186f0defcd7f232382c7f0aebcd2252d073bb921ab240e407b7ae8745d2b29b",
+    "vocab.json": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003"
+  },
+  "authority": "DERIVED_HISTORICAL_QWEN2_PIPELINE_NOT_PRODUCTION_ADMISSION",
+  "filler": {
+    "cases": [
+      {
+        "cap": 36,
+        "result": {
+          "accepted": false,
+          "error": "natural prompt of 37 tokens exceeds the registered envelope cap 36"
+        }
+      },
+      {
+        "cap": 37,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\"\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 38,
+        "result": {
+          "accepted": false,
+          "error": "no exact parity-filler fit within the declared character ceiling"
+        }
+      },
+      {
+        "cap": 39,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 40,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 41,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 42,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 43,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 44,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 45,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x x x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 46,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x x x x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 47,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x x x x x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 48,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x x x x x x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 49,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x x x x x x x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 50,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x x x x x x x x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 51,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x x x x x x x x x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 52,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x x x x x x x x x x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 53,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x x x x x x x x x x x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      },
+      {
+        "cap": 54,
+        "result": {
+          "accepted": true,
+          "canonical": "{\"parity_filler\":\" x x x x x x x x x x x x x x x x\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}"
+        }
+      }
+    ],
+    "max_chars": 16,
+    "payload_json": "{\"parity_filler\":\"\",\"query_text\":\"Straße 😀\",\"request_id\":\"qwen-filler\"}",
+    "system": "system",
+    "unit": " x"
+  },
+  "fragments": [
+    {
+      "count": 0,
+      "text": ""
+    },
+    {
+      "count": 1,
+      "text": " "
+    },
+    {
+      "count": 2,
+      "text": "\n\r\n"
+    },
+    {
+      "count": 1,
+      "text": "Straße"
+    },
+    {
+      "count": 2,
+      "text": "İstanbul"
+    },
+    {
+      "count": 2,
+      "text": "é"
+    },
+    {
+      "count": 1,
+      "text": "é"
+    },
+    {
+      "count": 1,
+      "text": "😀"
+    },
+    {
+      "count": 1,
+      "text": "\u001c"
+    },
+    {
+      "count": 1,
+      "text": "﻿"
+    },
+    {
+      "count": 1,
+      "text": "<|im_start|>"
+    },
+    {
+      "count": 1,
+      "text": "<|im_end|>"
+    },
+    {
+      "count": 6,
+      "text": "<|im_start|>user\n😀\u001c<|im_end|>"
+    },
+    {
+      "count": 1,
+      "text": "null"
+    },
+    {
+      "count": 1,
+      "text": "false"
+    },
+    {
+      "count": 1,
+      "text": "0"
+    },
+    {
+      "count": 3,
+      "text": "  trailing \n"
+    },
+    {
+      "count": 3,
+      "text": "a\u0000b"
+    },
+    {
+      "count": 2,
+      "text": "à"
+    },
+    {
+      "count": 3,
+      "text": "à\u001c"
+    },
+    {
+      "count": 2,
+      "text": "á"
+    },
+    {
+      "count": 3,
+      "text": "á\u001c"
+    },
+    {
+      "count": 3,
+      "text": "ä"
+    },
+    {
+      "count": 4,
+      "text": "ä\u001c"
+    },
+    {
+      "count": 3,
+      "text": "a̧"
+    },
+    {
+      "count": 4,
+      "text": "a̧\u001c"
+    },
+    {
+      "count": 3,
+      "text": "a⃝"
+    },
+    {
+      "count": 4,
+      "text": "a⃝\u001c"
+    },
+    {
+      "count": 1,
+      "text": "a"
+    },
+    {
+      "count": 2,
+      "text": "a\u001c"
+    },
+    {
+      "count": 2,
+      "text": "è"
+    },
+    {
+      "count": 3,
+      "text": "è\u001c"
+    },
+    {
+      "count": 2,
+      "text": "é"
+    },
+    {
+      "count": 3,
+      "text": "é\u001c"
+    },
+    {
+      "count": 3,
+      "text": "ë"
+    },
+    {
+      "count": 4,
+      "text": "ë\u001c"
+    },
+    {
+      "count": 3,
+      "text": "ȩ"
+    },
+    {
+      "count": 4,
+      "text": "ȩ\u001c"
+    },
+    {
+      "count": 3,
+      "text": "e⃝"
+    },
+    {
+      "count": 4,
+      "text": "e⃝\u001c"
+    },
+    {
+      "count": 1,
+      "text": "e"
+    },
+    {
+      "count": 2,
+      "text": "e\u001c"
+    },
+    {
+      "count": 2,
+      "text": "ì"
+    },
+    {
+      "count": 3,
+      "text": "ì\u001c"
+    },
+    {
+      "count": 2,
+      "text": "í"
+    },
+    {
+      "count": 3,
+      "text": "í\u001c"
+    },
+    {
+      "count": 3,
+      "text": "ï"
+    },
+    {
+      "count": 4,
+      "text": "ï\u001c"
+    },
+    {
+      "count": 3,
+      "text": "i̧"
+    },
+    {
+      "count": 4,
+      "text": "i̧\u001c"
+    },
+    {
+      "count": 3,
+      "text": "i⃝"
+    },
+    {
+      "count": 4,
+      "text": "i⃝\u001c"
+    },
+    {
+      "count": 1,
+      "text": "i"
+    },
+    {
+      "count": 2,
+      "text": "i\u001c"
+    },
+    {
+      "count": 2,
+      "text": "ò"
+    },
+    {
+      "count": 3,
+      "text": "ò\u001c"
+    },
+    {
+      "count": 2,
+      "text": "ó"
+    },
+    {
+      "count": 3,
+      "text": "ó\u001c"
+    },
+    {
+      "count": 3,
+      "text": "ö"
+    },
+    {
+      "count": 4,
+      "text": "ö\u001c"
+    },
+    {
+      "count": 3,
+      "text": "o̧"
+    },
+    {
+      "count": 4,
+      "text": "o̧\u001c"
+    },
+    {
+      "count": 3,
+      "text": "o⃝"
+    },
+    {
+      "count": 4,
+      "text": "o⃝\u001c"
+    },
+    {
+      "count": 1,
+      "text": "o"
+    },
+    {
+      "count": 2,
+      "text": "o\u001c"
+    },
+    {
+      "count": 2,
+      "text": "ù"
+    },
+    {
+      "count": 3,
+      "text": "ù\u001c"
+    },
+    {
+      "count": 2,
+      "text": "ú"
+    },
+    {
+      "count": 3,
+      "text": "ú\u001c"
+    },
+    {
+      "count": 3,
+      "text": "ü"
+    },
+    {
+      "count": 4,
+      "text": "ü\u001c"
+    },
+    {
+      "count": 3,
+      "text": "u̧"
+    },
+    {
+      "count": 4,
+      "text": "u̧\u001c"
+    },
+    {
+      "count": 3,
+      "text": "u⃝"
+    },
+    {
+      "count": 4,
+      "text": "u⃝\u001c"
+    },
+    {
+      "count": 1,
+      "text": "u"
+    },
+    {
+      "count": 2,
+      "text": "u\u001c"
+    },
+    {
+      "count": 2,
+      "text": "À"
+    },
+    {
+      "count": 3,
+      "text": "À\u001c"
+    },
+    {
+      "count": 2,
+      "text": "Á"
+    },
+    {
+      "count": 3,
+      "text": "Á\u001c"
+    },
+    {
+      "count": 3,
+      "text": "Ä"
+    },
+    {
+      "count": 4,
+      "text": "Ä\u001c"
+    },
+    {
+      "count": 3,
+      "text": "A̧"
+    },
+    {
+      "count": 4,
+      "text": "A̧\u001c"
+    },
+    {
+      "count": 3,
+      "text": "A⃝"
+    },
+    {
+      "count": 4,
+      "text": "A⃝\u001c"
+    },
+    {
+      "count": 1,
+      "text": "A"
+    },
+    {
+      "count": 2,
+      "text": "A\u001c"
+    },
+    {
+      "count": 2,
+      "text": "Z̀"
+    },
+    {
+      "count": 3,
+      "text": "Z̀\u001c"
+    },
+    {
+      "count": 2,
+      "text": "Ź"
+    },
+    {
+      "count": 3,
+      "text": "Ź\u001c"
+    },
+    {
+      "count": 3,
+      "text": "Z̈"
+    },
+    {
+      "count": 4,
+      "text": "Z̈\u001c"
+    },
+    {
+      "count": 3,
+      "text": "Z̧"
+    },
+    {
+      "count": 4,
+      "text": "Z̧\u001c"
+    },
+    {
+      "count": 3,
+      "text": "Z⃝"
+    },
+    {
+      "count": 4,
+      "text": "Z⃝\u001c"
+    },
+    {
+      "count": 1,
+      "text": "Z"
+    },
+    {
+      "count": 2,
+      "text": "Z\u001c"
+    },
+    {
+      "count": 2,
+      "text": "क̀"
+    },
+    {
+      "count": 3,
+      "text": "क̀\u001c"
+    },
+    {
+      "count": 2,
+      "text": "क́"
+    },
+    {
+      "count": 3,
+      "text": "क́\u001c"
+    },
+    {
+      "count": 3,
+      "text": "क̈"
+    },
+    {
+      "count": 4,
+      "text": "क̈\u001c"
+    },
+    {
+      "count": 3,
+      "text": "क̧"
+    },
+    {
+      "count": 4,
+      "text": "क̧\u001c"
+    },
+    {
+      "count": 3,
+      "text": "क⃝"
+    },
+    {
+      "count": 4,
+      "text": "क⃝\u001c"
+    },
+    {
+      "count": 1,
+      "text": "क"
+    },
+    {
+      "count": 2,
+      "text": "क\u001c"
+    },
+    {
+      "count": 2,
+      "text": "한̀"
+    },
+    {
+      "count": 3,
+      "text": "한̀\u001c"
+    },
+    {
+      "count": 2,
+      "text": "한́"
+    },
+    {
+      "count": 3,
+      "text": "한́\u001c"
+    },
+    {
+      "count": 3,
+      "text": "한̈"
+    },
+    {
+      "count": 4,
+      "text": "한̈\u001c"
+    },
+    {
+      "count": 3,
+      "text": "한̧"
+    },
+    {
+      "count": 4,
+      "text": "한̧\u001c"
+    },
+    {
+      "count": 3,
+      "text": "한⃝"
+    },
+    {
+      "count": 4,
+      "text": "한⃝\u001c"
+    },
+    {
+      "count": 1,
+      "text": "한"
+    },
+    {
+      "count": 2,
+      "text": "한\u001c"
+    },
+    {
+      "count": 2,
+      "text": "😀̀"
+    },
+    {
+      "count": 3,
+      "text": "😀̀\u001c"
+    },
+    {
+      "count": 2,
+      "text": "😀́"
+    },
+    {
+      "count": 3,
+      "text": "😀́\u001c"
+    },
+    {
+      "count": 3,
+      "text": "😀̈"
+    },
+    {
+      "count": 4,
+      "text": "😀̈\u001c"
+    },
+    {
+      "count": 3,
+      "text": "😀̧"
+    },
+    {
+      "count": 4,
+      "text": "😀̧\u001c"
+    },
+    {
+      "count": 3,
+      "text": "😀⃝"
+    },
+    {
+      "count": 4,
+      "text": "😀⃝\u001c"
+    },
+    {
+      "count": 1,
+      "text": "😀"
+    },
+    {
+      "count": 2,
+      "text": "😀\u001c"
+    }
+  ],
+  "license": "Apache-2.0",
+  "mapping_delta": {
+    "derived_normalizer": null,
+    "reason": "historical QwenBpeMeter source pre-tokenizes UTF-8 directly and has no NFC normalization step",
+    "tokenizer_json_normalizer": {
+      "type": "NFC"
+    }
+  },
+  "registered_calls": [
+    {
+      "arm": "typed_hswm_three_function_network",
+      "call_index": 1,
+      "count": 273,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "You are QF_QUERY_COMPILER, a typed function in HSWM. Convert the QueryEnvelopeV1 into one JSON QueryPlanV1 object. Decompose only what is required to answer, name evidence types rather than answer strings, preserve request_id exactly, and respect the supplied budget. Do not answer the user, select evidence, modify HSWM, predict experiment success, issue a scientific verdict, or inspect outcome labels. If the request is underspecified or unsafe, set abstain=true and state the missing constraint. Output JSON only with exactly these field types: request_id string; objectives array of unique non-empty strings; required_evidence_types array of unique non-empty strings; constraints array of unique non-empty strings; abstain boolean. Do not return an object or string where an array is required.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"0000000\",\"query_text\":\"Who is the mother of the director of film Polish-Russian War (Film)?\",\"request_id\":\"req-d4a4e9eb11880c79be45\"}"
+    },
+    {
+      "arm": "typed_hswm_three_function_network",
+      "call_index": 2,
+      "count": 1565,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "You are BF_BOND_PROPOSER, a typed function in HSWM. Given one QueryPlanV1 and an opaque fixed candidate table, return one JSON BondProposalV1. Preserve request_id exactly. Rank only supplied candidate IDs and assign each selected candidate a finite numeric potential <= 0, where 0 is least suppressed. Use only supplied observable score, provenance, and structural components. Do not use answer strings, query IDs as features, edge-ID embeddings, hop labels, gold labels, private entity surfaces, prior test outcomes, or your own confidence as promotion authority. Do not answer the query, mutate slow HSWM state, or issue a scientific verdict. Output JSON only with exactly these field types: request_id string; ordered_bond_ids array of unique supplied bond-ID strings; bond_potentials object mapping every ordered bond ID to one finite number <= 0 and containing no other keys; evidence_refs array of unique supplied evidence-ID strings corresponding to selected bonds; abstain boolean. When abstain=true, return empty ordered_bond_ids, bond_potentials, and evidence_refs.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"base_score\",\"flat_position\",\"flat_score\",\"incidence_count\",\"seam_count\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"8813f87c0bdd11eba7f7acde48001122:bond:0\",\"8813f87c0bdd11eba7f7acde48001122:evidence:0\",0.02402396,0,1.0,1,0,0.02402396],[\"8813f87c0bdd11eba7f7acde48001122:bond:1\",\"8813f87c0bdd11eba7f7acde48001122:evidence:1\",0.17895602,1,0.88888889,1,0,0.17895602],[\"8813f87c0bdd11eba7f7acde48001122:bond:2\",\"8813f87c0bdd11eba7f7acde48001122:evidence:2\",0.09243713,2,0.77777778,1,0,0.09243713],[\"8813f87c0bdd11eba7f7acde48001122:bond:3\",\"8813f87c0bdd11eba7f7acde48001122:evidence:3\",0.178217,3,0.66666667,1,0,0.178217],[\"8813f87c0bdd11eba7f7acde48001122:bond:4\",\"8813f87c0bdd11eba7f7acde48001122:evidence:4\",0.63966076,4,0.55555556,2,1,0.63966076],[\"8813f87c0bdd11eba7f7acde48001122:bond:5\",\"8813f87c0bdd11eba7f7acde48001122:evidence:5\",0.0177237,5,0.44444444,1,0,0.0177237],[\"8813f87c0bdd11eba7f7acde48001122:bond:6\",\"8813f87c0bdd11eba7f7acde48001122:evidence:6\",0.04513323,6,0.33333333,1,0,0.04513323],[\"8813f87c0bdd11eba7f7acde48001122:bond:7\",\"8813f87c0bdd11eba7f7acde48001122:evidence:7\",0.20116165,7,0.22222222,2,1,0.20116165],[\"8813f87c0bdd11eba7f7acde48001122:bond:8\",\"8813f87c0bdd11eba7f7acde48001122:evidence:8\",0.07242466,8,0.11111111,1,0,0.07242466],[\"8813f87c0bdd11eba7f7acde48001122:bond:9\",\"8813f87c0bdd11eba7f7acde48001122:evidence:9\",0.0254085,9,0.0,1,0,0.0254085]]},\"parity_filler\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the director of the film 'Polish-Russian War'\",\"Identify the mother of the identified director\"],\"request_id\":\"req-d4a4e9eb11880c79be45\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-d4a4e9eb11880c79be45\"}"
+    },
+    {
+      "arm": "typed_hswm_three_function_network",
+      "call_index": 3,
+      "count": 1180,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "You are AF_ANSWER_SYNTHESIZER, a typed function in HSWM. Answer only from the selected evidence in AnswerContextV1. Preserve request_id exactly and cite only supplied evidence IDs. Do not retrieve additional material, rerank candidates, alter HSWM, infer hidden outcome labels, or issue a scientific verdict. If the evidence is insufficient or conflicting, set abstain=true and describe the uncertainty without inventing support. Output JSON only with exactly these field types: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied evidence-ID strings actually used; uncertainty string; abstain boolean. Do not return an object or array where a string is required.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the director of the film 'Polish-Russian War'\",\"Identify the mother of the identified director\"],\"request_id\":\"req-d4a4e9eb11880c79be45\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"Who is the mother of the director of film Polish-Russian War (Film)?\",\"request_id\":\"req-d4a4e9eb11880c79be45\",\"selected_evidence\":[{\"content\":\"Polish-Russian War (film). Polish-Russian War (Wojna polsko-ruska) is a 2009 Polish film directed by Xawery Żuławski based on the novel Polish-Russian War under the white-red flag by Dorota Masłowska.\",\"evidence_id\":\"8813f87c0bdd11eba7f7acde48001122:evidence:4\"},{\"content\":\"Xawery Żuławski. Xawery Żuławski (born 22 December 1971 in Warsaw) is a Polish film director. In 1995 he graduated National Film School in Łódź. He is the son of actress Małgorzata Braunek and director Andrzej Żuławski. His second feature \\\"Wojna polsko-ruska\\\" (2009), adapted from the controversial best-selling novel by Dorota Masłowska, won First Prize in the New Polish Films competition at the 9th Era New Horizons Film Festival in Wrocław. In 2013, he stated he intends to direct a Polish novel \\\"Zły\\\" by Leopold Tyrmand. Żuławski and his wife Maria Strzelecka had 2 children together: son Kaj Żuławski (born 2002) and daughter Jagna Żuławska (born 2009).\",\"evidence_id\":\"8813f87c0bdd11eba7f7acde48001122:evidence:7\"},{\"content\":\"Viktor Yeliseyev. Viktor Petrovich Yeliseyev( born June 9, 1950) is a Russian general, orchestra conductor and music teacher. He is the director of the Ministry of the Interior Ensemble, one of the two Russian Red Army Choirs.\",\"evidence_id\":\"8813f87c0bdd11eba7f7acde48001122:evidence:1\"}]}"
+    },
+    {
+      "arm": "flat_single_llm_three_call_workflow",
+      "call_index": 1,
+      "count": 273,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "Generic flat workflow planning pass. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_text\":\"Who is the mother of the director of film Polish-Russian War (Film)?\",\"request_id\":\"req-f023814d159a30d7bdc4\"}"
+    },
+    {
+      "arm": "flat_single_llm_three_call_workflow",
+      "call_index": 2,
+      "count": 1565,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "Generic flat-context selection pass. Use only flat_position, flat_score, and source_type. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"8813f87c0bdd11eba7f7acde48001122:bond:0\",\"8813f87c0bdd11eba7f7acde48001122:evidence:0\",0,1.0],[\"8813f87c0bdd11eba7f7acde48001122:bond:1\",\"8813f87c0bdd11eba7f7acde48001122:evidence:1\",1,0.88888889],[\"8813f87c0bdd11eba7f7acde48001122:bond:2\",\"8813f87c0bdd11eba7f7acde48001122:evidence:2\",2,0.77777778],[\"8813f87c0bdd11eba7f7acde48001122:bond:3\",\"8813f87c0bdd11eba7f7acde48001122:evidence:3\",3,0.66666667],[\"8813f87c0bdd11eba7f7acde48001122:bond:4\",\"8813f87c0bdd11eba7f7acde48001122:evidence:4\",4,0.55555556],[\"8813f87c0bdd11eba7f7acde48001122:bond:5\",\"8813f87c0bdd11eba7f7acde48001122:evidence:5\",5,0.44444444],[\"8813f87c0bdd11eba7f7acde48001122:bond:6\",\"8813f87c0bdd11eba7f7acde48001122:evidence:6\",6,0.33333333],[\"8813f87c0bdd11eba7f7acde48001122:bond:7\",\"8813f87c0bdd11eba7f7acde48001122:evidence:7\",7,0.22222222],[\"8813f87c0bdd11eba7f7acde48001122:bond:8\",\"8813f87c0bdd11eba7f7acde48001122:evidence:8\",8,0.11111111],[\"8813f87c0bdd11eba7f7acde48001122:bond:9\",\"8813f87c0bdd11eba7f7acde48001122:evidence:9\",9,0.0]]},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only wikipedia_paragraph evidence\",\"Limit candidates to 10\",\"Limit evidence items to 3\",\"Limit input tokens to 16000\",\"Limit output tokens to 512\"],\"objectives\":[\"Identify the director of the film 'Polish-Russian War'\",\"Identify the mother of the identified director\"],\"request_id\":\"req-f023814d159a30d7bdc4\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-f023814d159a30d7bdc4\"}"
+    },
+    {
+      "arm": "flat_single_llm_three_call_workflow",
+      "call_index": 3,
+      "count": 1180,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "Generic flat workflow answering pass. Answer only from selected_evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only wikipedia_paragraph evidence\",\"Limit candidates to 10\",\"Limit evidence items to 3\",\"Limit input tokens to 16000\",\"Limit output tokens to 512\"],\"objectives\":[\"Identify the director of the film 'Polish-Russian War'\",\"Identify the mother of the identified director\"],\"request_id\":\"req-f023814d159a30d7bdc4\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"Who is the mother of the director of film Polish-Russian War (Film)?\",\"request_id\":\"req-f023814d159a30d7bdc4\",\"selected_evidence\":[{\"content\":\"Maheen Khan. Maheen Khan is a Pakistani fashion and costume designer, also an award winner fashion designer for fashion labels like\\\" The Embroidery HouseMaheen\\\" and\\\" Gulabo\\\". She has done many national and international fashion events and shows. She undertook embroidery for the film Snow White and the Huntsman and television series The Jewel in the Crown.\",\"evidence_id\":\"8813f87c0bdd11eba7f7acde48001122:evidence:0\"},{\"content\":\"Viktor Yeliseyev. Viktor Petrovich Yeliseyev( born June 9, 1950) is a Russian general, orchestra conductor and music teacher. He is the director of the Ministry of the Interior Ensemble, one of the two Russian Red Army Choirs.\",\"evidence_id\":\"8813f87c0bdd11eba7f7acde48001122:evidence:1\"},{\"content\":\"Alice Washburn. Alice Washburn( 1860- 1929) was an American stage and film actress. She worked at the Edison, Vitagraph and Kalem studios. Her final film Snow White was her only known feature film. She died of heart attack in November 1929.\",\"evidence_id\":\"8813f87c0bdd11eba7f7acde48001122:evidence:2\"}]}"
+    },
+    {
+      "arm": "vector_memory_three_call_workflow",
+      "call_index": 1,
+      "count": 273,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "Generic vector-memory query planning pass. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_text\":\"Who is the mother of the director of film Polish-Russian War (Film)?\",\"request_id\":\"req-f60d34e37df84c85bf50\"}"
+    },
+    {
+      "arm": "vector_memory_three_call_workflow",
+      "call_index": 2,
+      "count": 1565,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "Vector-memory selection pass. Rank only by supplied vector_score and source_type. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"8813f87c0bdd11eba7f7acde48001122:bond:0\",\"8813f87c0bdd11eba7f7acde48001122:evidence:0\",0.02402396],[\"8813f87c0bdd11eba7f7acde48001122:bond:1\",\"8813f87c0bdd11eba7f7acde48001122:evidence:1\",0.17895602],[\"8813f87c0bdd11eba7f7acde48001122:bond:2\",\"8813f87c0bdd11eba7f7acde48001122:evidence:2\",0.09243713],[\"8813f87c0bdd11eba7f7acde48001122:bond:3\",\"8813f87c0bdd11eba7f7acde48001122:evidence:3\",0.178217],[\"8813f87c0bdd11eba7f7acde48001122:bond:4\",\"8813f87c0bdd11eba7f7acde48001122:evidence:4\",0.63966076],[\"8813f87c0bdd11eba7f7acde48001122:bond:5\",\"8813f87c0bdd11eba7f7acde48001122:evidence:5\",0.0177237],[\"8813f87c0bdd11eba7f7acde48001122:bond:6\",\"8813f87c0bdd11eba7f7acde48001122:evidence:6\",0.04513323],[\"8813f87c0bdd11eba7f7acde48001122:bond:7\",\"8813f87c0bdd11eba7f7acde48001122:evidence:7\",0.20116165],[\"8813f87c0bdd11eba7f7acde48001122:bond:8\",\"8813f87c0bdd11eba7f7acde48001122:evidence:8\",0.07242466],[\"8813f87c0bdd11eba7f7acde48001122:bond:9\",\"8813f87c0bdd11eba7f7acde48001122:evidence:9\",0.0254085]]},\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only wikipedia_paragraph evidence\",\"Max 10 candidates\",\"Max 3 evidence items\",\"Max 16000 input tokens\",\"Max 512 output tokens\"],\"objectives\":[\"Identify the director of the film 'Polish-Russian War'\",\"Identify the mother of the identified director\"],\"request_id\":\"req-f60d34e37df84c85bf50\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-f60d34e37df84c85bf50\"}"
+    },
+    {
+      "arm": "vector_memory_three_call_workflow",
+      "call_index": 3,
+      "count": 1180,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "Vector-memory answering pass. Answer only from selected_evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only wikipedia_paragraph evidence\",\"Max 10 candidates\",\"Max 3 evidence items\",\"Max 16000 input tokens\",\"Max 512 output tokens\"],\"objectives\":[\"Identify the director of the film 'Polish-Russian War'\",\"Identify the mother of the identified director\"],\"request_id\":\"req-f60d34e37df84c85bf50\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"Who is the mother of the director of film Polish-Russian War (Film)?\",\"request_id\":\"req-f60d34e37df84c85bf50\",\"selected_evidence\":[{\"content\":\"Polish-Russian War (film). Polish-Russian War (Wojna polsko-ruska) is a 2009 Polish film directed by Xawery Żuławski based on the novel Polish-Russian War under the white-red flag by Dorota Masłowska.\",\"evidence_id\":\"8813f87c0bdd11eba7f7acde48001122:evidence:4\"},{\"content\":\"Xawery Żuławski. Xawery Żuławski (born 22 December 1971 in Warsaw) is a Polish film director. In 1995 he graduated National Film School in Łódź. He is the son of actress Małgorzata Braunek and director Andrzej Żuławski. His second feature \\\"Wojna polsko-ruska\\\" (2009), adapted from the controversial best-selling novel by Dorota Masłowska, won First Prize in the New Polish Films competition at the 9th Era New Horizons Film Festival in Wrocław. In 2013, he stated he intends to direct a Polish novel \\\"Zły\\\" by Leopold Tyrmand. Żuławski and his wife Maria Strzelecka had 2 children together: son Kaj Żuławski (born 2002) and daughter Jagna Żuławska (born 2009).\",\"evidence_id\":\"8813f87c0bdd11eba7f7acde48001122:evidence:7\"},{\"content\":\"Viktor Yeliseyev. Viktor Petrovich Yeliseyev( born June 9, 1950) is a Russian general, orchestra conductor and music teacher. He is the director of the Ministry of the Interior Ensemble, one of the two Russian Red Army Choirs.\",\"evidence_id\":\"8813f87c0bdd11eba7f7acde48001122:evidence:1\"}]}"
+    },
+    {
+      "arm": "typed_network_role_removed_schema_preserving_null",
+      "call_index": 1,
+      "count": 273,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "You are QF_QUERY_COMPILER, a typed function in HSWM. Convert the QueryEnvelopeV1 into one JSON QueryPlanV1 object. Decompose only what is required to answer, name evidence types rather than answer strings, preserve request_id exactly, and respect the supplied budget. Do not answer the user, select evidence, modify HSWM, predict experiment success, issue a scientific verdict, or inspect outcome labels. If the request is underspecified or unsafe, set abstain=true and state the missing constraint. Output JSON only with exactly these field types: request_id string; objectives array of unique non-empty strings; required_evidence_types array of unique non-empty strings; constraints array of unique non-empty strings; abstain boolean. Do not return an object or string where an array is required.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"00000000\",\"query_text\":\"Who is the mother of the director of film Polish-Russian War (Film)?\",\"request_id\":\"req-e2395ea03643fc8eb714\"}"
+    },
+    {
+      "arm": "typed_network_role_removed_schema_preserving_null",
+      "call_index": 2,
+      "count": 1565,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "Schema-preserving null BF control. Make this physical call but select no bonds. Copy request_id; ordered_bond_ids=[], bond_potentials={}, evidence_refs=[], abstain=true. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"base_score\",\"flat_position\",\"flat_score\",\"incidence_count\",\"seam_count\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"8813f87c0bdd11eba7f7acde48001122:bond:0\",\"8813f87c0bdd11eba7f7acde48001122:evidence:0\",0.02402396,0,1.0,1,0,0.02402396],[\"8813f87c0bdd11eba7f7acde48001122:bond:1\",\"8813f87c0bdd11eba7f7acde48001122:evidence:1\",0.17895602,1,0.88888889,1,0,0.17895602],[\"8813f87c0bdd11eba7f7acde48001122:bond:2\",\"8813f87c0bdd11eba7f7acde48001122:evidence:2\",0.09243713,2,0.77777778,1,0,0.09243713],[\"8813f87c0bdd11eba7f7acde48001122:bond:3\",\"8813f87c0bdd11eba7f7acde48001122:evidence:3\",0.178217,3,0.66666667,1,0,0.178217],[\"8813f87c0bdd11eba7f7acde48001122:bond:4\",\"8813f87c0bdd11eba7f7acde48001122:evidence:4\",0.63966076,4,0.55555556,2,1,0.63966076],[\"8813f87c0bdd11eba7f7acde48001122:bond:5\",\"8813f87c0bdd11eba7f7acde48001122:evidence:5\",0.0177237,5,0.44444444,1,0,0.0177237],[\"8813f87c0bdd11eba7f7acde48001122:bond:6\",\"8813f87c0bdd11eba7f7acde48001122:evidence:6\",0.04513323,6,0.33333333,1,0,0.04513323],[\"8813f87c0bdd11eba7f7acde48001122:bond:7\",\"8813f87c0bdd11eba7f7acde48001122:evidence:7\",0.20116165,7,0.22222222,2,1,0.20116165],[\"8813f87c0bdd11eba7f7acde48001122:bond:8\",\"8813f87c0bdd11eba7f7acde48001122:evidence:8\",0.07242466,8,0.11111111,1,0,0.07242466],[\"8813f87c0bdd11eba7f7acde48001122:bond:9\",\"8813f87c0bdd11eba7f7acde48001122:evidence:9\",0.0254085,9,0.0,1,0,0.0254085]]},\"parity_filler\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the director of the film 'Polish-Russian War'\",\"Identify the mother of the identified director\"],\"request_id\":\"req-e2395ea03643fc8eb714\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-e2395ea03643fc8eb714\"}"
+    },
+    {
+      "arm": "typed_network_role_removed_schema_preserving_null",
+      "call_index": 3,
+      "count": 1180,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "You are AF_ANSWER_SYNTHESIZER, a typed function in HSWM. Answer only from the selected evidence in AnswerContextV1. Preserve request_id exactly and cite only supplied evidence IDs. Do not retrieve additional material, rerank candidates, alter HSWM, infer hidden outcome labels, or issue a scientific verdict. If the evidence is insufficient or conflicting, set abstain=true and describe the uncertainty without inventing support. Output JSON only with exactly these field types: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied evidence-ID strings actually used; uncertainty string; abstain boolean. Do not return an object or array where a string is required.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the director of the film 'Polish-Russian War'\",\"Identify the mother of the identified director\"],\"request_id\":\"req-e2395ea03643fc8eb714\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"Who is the mother of the director of film Polish-Russian War (Film)?\",\"request_id\":\"req-e2395ea03643fc8eb714\",\"selected_evidence\":[]}"
+    },
+    {
+      "arm": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "call_index": 1,
+      "count": 273,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "Use the answer-synthesizer role instruction, but this port has no evidence and must remain a QueryPlanV1. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_text\":\"Who is the mother of the director of film Polish-Russian War (Film)?\",\"request_id\":\"req-7e7d345a6ad383964ed3\"}"
+    },
+    {
+      "arm": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "call_index": 2,
+      "count": 1565,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "Use the query-compiler role instruction on the supplied candidate table while preserving the BondProposalV1 port. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"base_score\",\"flat_position\",\"flat_score\",\"incidence_count\",\"seam_count\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"8813f87c0bdd11eba7f7acde48001122:bond:0\",\"8813f87c0bdd11eba7f7acde48001122:evidence:0\",0.02402396,0,1.0,1,0,0.02402396],[\"8813f87c0bdd11eba7f7acde48001122:bond:1\",\"8813f87c0bdd11eba7f7acde48001122:evidence:1\",0.17895602,1,0.88888889,1,0,0.17895602],[\"8813f87c0bdd11eba7f7acde48001122:bond:2\",\"8813f87c0bdd11eba7f7acde48001122:evidence:2\",0.09243713,2,0.77777778,1,0,0.09243713],[\"8813f87c0bdd11eba7f7acde48001122:bond:3\",\"8813f87c0bdd11eba7f7acde48001122:evidence:3\",0.178217,3,0.66666667,1,0,0.178217],[\"8813f87c0bdd11eba7f7acde48001122:bond:4\",\"8813f87c0bdd11eba7f7acde48001122:evidence:4\",0.63966076,4,0.55555556,2,1,0.63966076],[\"8813f87c0bdd11eba7f7acde48001122:bond:5\",\"8813f87c0bdd11eba7f7acde48001122:evidence:5\",0.0177237,5,0.44444444,1,0,0.0177237],[\"8813f87c0bdd11eba7f7acde48001122:bond:6\",\"8813f87c0bdd11eba7f7acde48001122:evidence:6\",0.04513323,6,0.33333333,1,0,0.04513323],[\"8813f87c0bdd11eba7f7acde48001122:bond:7\",\"8813f87c0bdd11eba7f7acde48001122:evidence:7\",0.20116165,7,0.22222222,2,1,0.20116165],[\"8813f87c0bdd11eba7f7acde48001122:bond:8\",\"8813f87c0bdd11eba7f7acde48001122:evidence:8\",0.07242466,8,0.11111111,1,0,0.07242466],[\"8813f87c0bdd11eba7f7acde48001122:bond:9\",\"8813f87c0bdd11eba7f7acde48001122:evidence:9\",0.0254085,9,0.0,1,0,0.0254085]]},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only Wikipedia paragraphs as evidence\",\"Limit candidates to 10\",\"Limit evidence items to 3\",\"Limit input tokens to 16000\",\"Limit output tokens to 512\"],\"objectives\":[\"Identify the director of the film 'Polish-Russian War'\",\"Identify the mother of the identified director\"],\"request_id\":\"req-7e7d345a6ad383964ed3\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-7e7d345a6ad383964ed3\"}"
+    },
+    {
+      "arm": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "call_index": 3,
+      "count": 1180,
+      "item": "8813f87c0bdd11eba7f7acde48001122",
+      "system": "Use the bond-proposer role instruction, but preserve the AnswerEnvelopeV1 port and cite only supplied evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only Wikipedia paragraphs as evidence\",\"Limit candidates to 10\",\"Limit evidence items to 3\",\"Limit input tokens to 16000\",\"Limit output tokens to 512\"],\"objectives\":[\"Identify the director of the film 'Polish-Russian War'\",\"Identify the mother of the identified director\"],\"request_id\":\"req-7e7d345a6ad383964ed3\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"Who is the mother of the director of film Polish-Russian War (Film)?\",\"request_id\":\"req-7e7d345a6ad383964ed3\",\"selected_evidence\":[{\"content\":\"Polish-Russian War (film). Polish-Russian War (Wojna polsko-ruska) is a 2009 Polish film directed by Xawery Żuławski based on the novel Polish-Russian War under the white-red flag by Dorota Masłowska.\",\"evidence_id\":\"8813f87c0bdd11eba7f7acde48001122:evidence:4\"},{\"content\":\"Viktor Yeliseyev. Viktor Petrovich Yeliseyev( born June 9, 1950) is a Russian general, orchestra conductor and music teacher. He is the director of the Ministry of the Interior Ensemble, one of the two Russian Red Army Choirs.\",\"evidence_id\":\"8813f87c0bdd11eba7f7acde48001122:evidence:1\"},{\"content\":\"Minamoto no Chikako. She was the mother of Prince Morinaga.\",\"evidence_id\":\"8813f87c0bdd11eba7f7acde48001122:evidence:3\"}]}"
+    },
+    {
+      "arm": "typed_hswm_three_function_network",
+      "call_index": 1,
+      "count": 273,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "You are QF_QUERY_COMPILER, a typed function in HSWM. Convert the QueryEnvelopeV1 into one JSON QueryPlanV1 object. Decompose only what is required to answer, name evidence types rather than answer strings, preserve request_id exactly, and respect the supplied budget. Do not answer the user, select evidence, modify HSWM, predict experiment success, issue a scientific verdict, or inspect outcome labels. If the request is underspecified or unsafe, set abstain=true and state the missing constraint. Output JSON only with exactly these field types: request_id string; objectives array of unique non-empty strings; required_evidence_types array of unique non-empty strings; constraints array of unique non-empty strings; abstain boolean. Do not return an object or string where an array is required.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"000000000\",\"query_text\":\"Which film came out first, Blind Shaft or The Mask Of Fu Manchu?\",\"request_id\":\"req-f42eb1f9dcbc0a7ece33\"}"
+    },
+    {
+      "arm": "typed_hswm_three_function_network",
+      "call_index": 2,
+      "count": 1565,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "You are BF_BOND_PROPOSER, a typed function in HSWM. Given one QueryPlanV1 and an opaque fixed candidate table, return one JSON BondProposalV1. Preserve request_id exactly. Rank only supplied candidate IDs and assign each selected candidate a finite numeric potential <= 0, where 0 is least suppressed. Use only supplied observable score, provenance, and structural components. Do not use answer strings, query IDs as features, edge-ID embeddings, hop labels, gold labels, private entity surfaces, prior test outcomes, or your own confidence as promotion authority. Do not answer the query, mutate slow HSWM state, or issue a scientific verdict. Output JSON only with exactly these field types: request_id string; ordered_bond_ids array of unique supplied bond-ID strings; bond_potentials object mapping every ordered bond ID to one finite number <= 0 and containing no other keys; evidence_refs array of unique supplied evidence-ID strings corresponding to selected bonds; abstain boolean. When abstain=true, return empty ordered_bond_ids, bond_potentials, and evidence_refs.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"base_score\",\"flat_position\",\"flat_score\",\"incidence_count\",\"seam_count\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"61a46987092f11ebbdaeac1f6bf848b6:bond:0\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:0\",0.28769544,0,1.0,1,0,0.28769544],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:1\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:1\",0.16752465,1,0.88888889,2,1,0.16752465],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:2\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:2\",0.19271764,2,0.77777778,2,1,0.19271764],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:3\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:3\",0.14296518,3,0.66666667,4,3,0.14296518],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:4\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:4\",0.19073543,4,0.55555556,5,4,0.19073543],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:5\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:5\",0.05110591,5,0.44444444,2,1,0.05110591],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:6\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:6\",0.1386865,6,0.33333333,4,3,0.1386865],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:7\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:7\",0.14873837,7,0.22222222,1,0,0.14873837],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:8\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:8\",0.15153936,8,0.11111111,3,2,0.15153936],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:9\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:9\",0.11891529,9,0.0,2,1,0.11891529]]},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Determine the release date of the film 'Blind Shaft'\",\"Determine the release date of the film 'The Mask Of Fu Manchu'\",\"Compare the release dates to identify which film was released first\"],\"request_id\":\"req-f42eb1f9dcbc0a7ece33\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-f42eb1f9dcbc0a7ece33\"}"
+    },
+    {
+      "arm": "typed_hswm_three_function_network",
+      "call_index": 3,
+      "count": 1180,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "You are AF_ANSWER_SYNTHESIZER, a typed function in HSWM. Answer only from the selected evidence in AnswerContextV1. Preserve request_id exactly and cite only supplied evidence IDs. Do not retrieve additional material, rerank candidates, alter HSWM, infer hidden outcome labels, or issue a scientific verdict. If the evidence is insufficient or conflicting, set abstain=true and describe the uncertainty without inventing support. Output JSON only with exactly these field types: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied evidence-ID strings actually used; uncertainty string; abstain boolean. Do not return an object or array where a string is required.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Determine the release date of the film 'Blind Shaft'\",\"Determine the release date of the film 'The Mask Of Fu Manchu'\",\"Compare the release dates to identify which film was released first\"],\"request_id\":\"req-f42eb1f9dcbc0a7ece33\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"Which film came out first, Blind Shaft or The Mask Of Fu Manchu?\",\"request_id\":\"req-f42eb1f9dcbc0a7ece33\",\"selected_evidence\":[{\"content\":\"Blind Shaft. Blind Shaft is a 2003 film about a pair of brutal con artists operating in the illegal coal mines of present- day northern China. The film was written and directed by Li Yang( 李杨), and is based on Chinese writer Liu Qingbang's short novel\\\" Shen MuSacred Wood\\\").\",\"evidence_id\":\"61a46987092f11ebbdaeac1f6bf848b6:evidence:0\"},{\"content\":\"The Mask of Fu Manchu. The Mask of Fu Manchu is a 1932 pre-Code adventure film directed by Charles Brabin. It was written by Irene Kuhn, Edgar Allan Woolf and John Willard based on the 1932 novel of the same name by Sax Rohmer. Starring Boris Karloff as Fu Manchu, and featuring Myrna Loy as his depraved daughter, the movie revolves around Fu Manchu's quest for the golden sword and mask of Genghis Khan. Lewis Stone plays his nemesis. Dr. Petrie is absent from this film.\",\"evidence_id\":\"61a46987092f11ebbdaeac1f6bf848b6:evidence:2\"},{\"content\":\"The Brides of Fu Manchu. The Brides of Fu Manchu is a 1966 British/ West German Constantin Film co-production adventure crime film based on the fictional Chinese villain Dr. Fu Manchu, created by Sax Rohmer. It was the second film in a series, and was preceded by\\\" The Face of Fu ManchuThe Vengeance of Fu Manchu\\\" followed in 1967,\\\" The Blood of Fu Manchu\\\" in 1968, and\\\" The Castle of Fu Manchu\\\" in 1969. It was produced by Harry Alan Towers for Hallam Productions. Like the first film, it was directed by Don Sharp, and starred Christopher Lee as Fu Manchu. Nigel Green was replaced by Douglas Wilmer as Scotland Yard detective Nayland Smith. The action takes place mainly in London, where much of the location filming took place.\",\"evidence_id\":\"61a46987092f11ebbdaeac1f6bf848b6:evidence:4\"}]}"
+    },
+    {
+      "arm": "flat_single_llm_three_call_workflow",
+      "call_index": 1,
+      "count": 273,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "Generic flat workflow planning pass. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_text\":\"Which film came out first, Blind Shaft or The Mask Of Fu Manchu?\",\"request_id\":\"req-56ad7fa1f719951fb513\"}"
+    },
+    {
+      "arm": "flat_single_llm_three_call_workflow",
+      "call_index": 2,
+      "count": 1565,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "Generic flat-context selection pass. Use only flat_position, flat_score, and source_type. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"61a46987092f11ebbdaeac1f6bf848b6:bond:0\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:0\",0,1.0],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:1\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:1\",1,0.88888889],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:2\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:2\",2,0.77777778],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:3\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:3\",3,0.66666667],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:4\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:4\",4,0.55555556],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:5\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:5\",5,0.44444444],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:6\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:6\",6,0.33333333],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:7\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:7\",7,0.22222222],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:8\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:8\",8,0.11111111],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:9\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:9\",9,0.0]]},\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only Wikipedia paragraphs as evidence\",\"Limit search to a maximum of 10 candidates\",\"Limit evidence items to a maximum of 3\",\"Keep input tokens under 16000\",\"Keep output tokens under 512\"],\"objectives\":[\"Determine the release year of the film 'Blind Shaft'\",\"Determine the release year of the film 'The Mask Of Fu Manchu'\",\"Compare the release years to identify which film was released first\"],\"request_id\":\"req-56ad7fa1f719951fb513\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-56ad7fa1f719951fb513\"}"
+    },
+    {
+      "arm": "flat_single_llm_three_call_workflow",
+      "call_index": 3,
+      "count": 1180,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "Generic flat workflow answering pass. Answer only from selected_evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only Wikipedia paragraphs as evidence\",\"Limit search to a maximum of 10 candidates\",\"Limit evidence items to a maximum of 3\",\"Keep input tokens under 16000\",\"Keep output tokens under 512\"],\"objectives\":[\"Determine the release year of the film 'Blind Shaft'\",\"Determine the release year of the film 'The Mask Of Fu Manchu'\",\"Compare the release years to identify which film was released first\"],\"request_id\":\"req-56ad7fa1f719951fb513\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"Which film came out first, Blind Shaft or The Mask Of Fu Manchu?\",\"request_id\":\"req-56ad7fa1f719951fb513\",\"selected_evidence\":[{\"content\":\"Blind Shaft. Blind Shaft is a 2003 film about a pair of brutal con artists operating in the illegal coal mines of present- day northern China. The film was written and directed by Li Yang( 李杨), and is based on Chinese writer Liu Qingbang's short novel\\\" Shen MuSacred Wood\\\").\",\"evidence_id\":\"61a46987092f11ebbdaeac1f6bf848b6:evidence:0\"},{\"content\":\"The Mysterious Dr. Fu Manchu. The Mysterious Dr. Fu Manchu is a 1929 American pre-Code drama film directed by Rowland V. Lee and starring Warner Oland as Dr. Fu Manchu. It was the first Fu Manchu film of the talkie era. Since this was during the transition period to sound, a silent version was also released in the United States.\",\"evidence_id\":\"61a46987092f11ebbdaeac1f6bf848b6:evidence:1\"},{\"content\":\"The Mask of Fu Manchu. The Mask of Fu Manchu is a 1932 pre-Code adventure film directed by Charles Brabin. It was written by Irene Kuhn, Edgar Allan Woolf and John Willard based on the 1932 novel of the same name by Sax Rohmer. Starring Boris Karloff as Fu Manchu, and featuring Myrna Loy as his depraved daughter, the movie revolves around Fu Manchu's quest for the golden sword and mask of Genghis Khan. Lewis Stone plays his nemesis. Dr. Petrie is absent from this film.\",\"evidence_id\":\"61a46987092f11ebbdaeac1f6bf848b6:evidence:2\"}]}"
+    },
+    {
+      "arm": "vector_memory_three_call_workflow",
+      "call_index": 1,
+      "count": 273,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "Generic vector-memory query planning pass. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_text\":\"Which film came out first, Blind Shaft or The Mask Of Fu Manchu?\",\"request_id\":\"req-0bd0586e7c26c4dccb80\"}"
+    },
+    {
+      "arm": "vector_memory_three_call_workflow",
+      "call_index": 2,
+      "count": 1565,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "Vector-memory selection pass. Rank only by supplied vector_score and source_type. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"61a46987092f11ebbdaeac1f6bf848b6:bond:0\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:0\",0.28769544],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:1\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:1\",0.16752465],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:2\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:2\",0.19271764],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:3\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:3\",0.14296518],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:4\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:4\",0.19073543],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:5\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:5\",0.05110591],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:6\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:6\",0.1386865],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:7\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:7\",0.14873837],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:8\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:8\",0.15153936],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:9\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:9\",0.11891529]]},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Only use evidence from Wikipedia paragraphs\",\"Retrieve at most 10 candidate documents\",\"Select at most 3 evidence items for final reasoning\",\"Ensure total input tokens do not exceed 16000\",\"Ensure total output tokens do not exceed 512\"],\"objectives\":[\"Determine the release year of the film 'Blind Shaft'\",\"Determine the release year of the film 'The Mask Of Fu Manchu'\",\"Compare the release years to identify which film was released first\"],\"request_id\":\"req-0bd0586e7c26c4dccb80\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-0bd0586e7c26c4dccb80\"}"
+    },
+    {
+      "arm": "vector_memory_three_call_workflow",
+      "call_index": 3,
+      "count": 1180,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "Vector-memory answering pass. Answer only from selected_evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Only use evidence from Wikipedia paragraphs\",\"Retrieve at most 10 candidate documents\",\"Select at most 3 evidence items for final reasoning\",\"Ensure total input tokens do not exceed 16000\",\"Ensure total output tokens do not exceed 512\"],\"objectives\":[\"Determine the release year of the film 'Blind Shaft'\",\"Determine the release year of the film 'The Mask Of Fu Manchu'\",\"Compare the release years to identify which film was released first\"],\"request_id\":\"req-0bd0586e7c26c4dccb80\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"Which film came out first, Blind Shaft or The Mask Of Fu Manchu?\",\"request_id\":\"req-0bd0586e7c26c4dccb80\",\"selected_evidence\":[{\"content\":\"Blind Shaft. Blind Shaft is a 2003 film about a pair of brutal con artists operating in the illegal coal mines of present- day northern China. The film was written and directed by Li Yang( 李杨), and is based on Chinese writer Liu Qingbang's short novel\\\" Shen MuSacred Wood\\\").\",\"evidence_id\":\"61a46987092f11ebbdaeac1f6bf848b6:evidence:0\"},{\"content\":\"The Mask of Fu Manchu. The Mask of Fu Manchu is a 1932 pre-Code adventure film directed by Charles Brabin. It was written by Irene Kuhn, Edgar Allan Woolf and John Willard based on the 1932 novel of the same name by Sax Rohmer. Starring Boris Karloff as Fu Manchu, and featuring Myrna Loy as his depraved daughter, the movie revolves around Fu Manchu's quest for the golden sword and mask of Genghis Khan. Lewis Stone plays his nemesis. Dr. Petrie is absent from this film.\",\"evidence_id\":\"61a46987092f11ebbdaeac1f6bf848b6:evidence:2\"},{\"content\":\"The Brides of Fu Manchu. The Brides of Fu Manchu is a 1966 British/ West German Constantin Film co-production adventure crime film based on the fictional Chinese villain Dr. Fu Manchu, created by Sax Rohmer. It was the second film in a series, and was preceded by\\\" The Face of Fu ManchuThe Vengeance of Fu Manchu\\\" followed in 1967,\\\" The Blood of Fu Manchu\\\" in 1968, and\\\" The Castle of Fu Manchu\\\" in 1969. It was produced by Harry Alan Towers for Hallam Productions. Like the first film, it was directed by Don Sharp, and starred Christopher Lee as Fu Manchu. Nigel Green was replaced by Douglas Wilmer as Scotland Yard detective Nayland Smith. The action takes place mainly in London, where much of the location filming took place.\",\"evidence_id\":\"61a46987092f11ebbdaeac1f6bf848b6:evidence:4\"}]}"
+    },
+    {
+      "arm": "typed_network_role_removed_schema_preserving_null",
+      "call_index": 1,
+      "count": 273,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "You are QF_QUERY_COMPILER, a typed function in HSWM. Convert the QueryEnvelopeV1 into one JSON QueryPlanV1 object. Decompose only what is required to answer, name evidence types rather than answer strings, preserve request_id exactly, and respect the supplied budget. Do not answer the user, select evidence, modify HSWM, predict experiment success, issue a scientific verdict, or inspect outcome labels. If the request is underspecified or unsafe, set abstain=true and state the missing constraint. Output JSON only with exactly these field types: request_id string; objectives array of unique non-empty strings; required_evidence_types array of unique non-empty strings; constraints array of unique non-empty strings; abstain boolean. Do not return an object or string where an array is required.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"000000\",\"query_text\":\"Which film came out first, Blind Shaft or The Mask Of Fu Manchu?\",\"request_id\":\"req-f25e4e1a5ddaf9c27701\"}"
+    },
+    {
+      "arm": "typed_network_role_removed_schema_preserving_null",
+      "call_index": 2,
+      "count": 1565,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "Schema-preserving null BF control. Make this physical call but select no bonds. Copy request_id; ordered_bond_ids=[], bond_potentials={}, evidence_refs=[], abstain=true. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"base_score\",\"flat_position\",\"flat_score\",\"incidence_count\",\"seam_count\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"61a46987092f11ebbdaeac1f6bf848b6:bond:0\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:0\",0.28769544,0,1.0,1,0,0.28769544],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:1\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:1\",0.16752465,1,0.88888889,2,1,0.16752465],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:2\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:2\",0.19271764,2,0.77777778,2,1,0.19271764],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:3\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:3\",0.14296518,3,0.66666667,4,3,0.14296518],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:4\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:4\",0.19073543,4,0.55555556,5,4,0.19073543],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:5\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:5\",0.05110591,5,0.44444444,2,1,0.05110591],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:6\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:6\",0.1386865,6,0.33333333,4,3,0.1386865],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:7\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:7\",0.14873837,7,0.22222222,1,0,0.14873837],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:8\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:8\",0.15153936,8,0.11111111,3,2,0.15153936],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:9\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:9\",0.11891529,9,0.0,2,1,0.11891529]]},\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Determine the release date of the film 'Blind Shaft'\",\"Determine the release date of the film 'The Mask Of Fu Manchu'\",\"Compare the release dates to identify which film was released first\"],\"request_id\":\"req-f25e4e1a5ddaf9c27701\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-f25e4e1a5ddaf9c27701\"}"
+    },
+    {
+      "arm": "typed_network_role_removed_schema_preserving_null",
+      "call_index": 3,
+      "count": 1180,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "You are AF_ANSWER_SYNTHESIZER, a typed function in HSWM. Answer only from the selected evidence in AnswerContextV1. Preserve request_id exactly and cite only supplied evidence IDs. Do not retrieve additional material, rerank candidates, alter HSWM, infer hidden outcome labels, or issue a scientific verdict. If the evidence is insufficient or conflicting, set abstain=true and describe the uncertainty without inventing support. Output JSON only with exactly these field types: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied evidence-ID strings actually used; uncertainty string; abstain boolean. Do not return an object or array where a string is required.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Determine the release date of the film 'Blind Shaft'\",\"Determine the release date of the film 'The Mask Of Fu Manchu'\",\"Compare the release dates to identify which film was released first\"],\"request_id\":\"req-f25e4e1a5ddaf9c27701\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"Which film came out first, Blind Shaft or The Mask Of Fu Manchu?\",\"request_id\":\"req-f25e4e1a5ddaf9c27701\",\"selected_evidence\":[]}"
+    },
+    {
+      "arm": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "call_index": 1,
+      "count": 273,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "Use the answer-synthesizer role instruction, but this port has no evidence and must remain a QueryPlanV1. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_text\":\"Which film came out first, Blind Shaft or The Mask Of Fu Manchu?\",\"request_id\":\"req-e0a79800005f5fd9cb9c\"}"
+    },
+    {
+      "arm": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "call_index": 2,
+      "count": 1565,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "Use the query-compiler role instruction on the supplied candidate table while preserving the BondProposalV1 port. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"base_score\",\"flat_position\",\"flat_score\",\"incidence_count\",\"seam_count\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"61a46987092f11ebbdaeac1f6bf848b6:bond:0\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:0\",0.28769544,0,1.0,1,0,0.28769544],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:1\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:1\",0.16752465,1,0.88888889,2,1,0.16752465],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:2\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:2\",0.19271764,2,0.77777778,2,1,0.19271764],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:3\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:3\",0.14296518,3,0.66666667,4,3,0.14296518],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:4\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:4\",0.19073543,4,0.55555556,5,4,0.19073543],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:5\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:5\",0.05110591,5,0.44444444,2,1,0.05110591],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:6\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:6\",0.1386865,6,0.33333333,4,3,0.1386865],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:7\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:7\",0.14873837,7,0.22222222,1,0,0.14873837],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:8\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:8\",0.15153936,8,0.11111111,3,2,0.15153936],[\"61a46987092f11ebbdaeac1f6bf848b6:bond:9\",\"61a46987092f11ebbdaeac1f6bf848b6:evidence:9\",0.11891529,9,0.0,2,1,0.11891529]]},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only Wikipedia paragraphs as evidence\",\"Limit search to maximum 10 candidates\",\"Limit evidence items to maximum 3\",\"Keep input tokens under 16000\",\"Keep output tokens under 512\"],\"objectives\":[\"Determine the release date of the film 'Blind Shaft'\",\"Determine the release date of the film 'The Mask Of Fu Manchu'\",\"Compare the release dates to identify which film was released first\"],\"request_id\":\"req-e0a79800005f5fd9cb9c\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-e0a79800005f5fd9cb9c\"}"
+    },
+    {
+      "arm": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "call_index": 3,
+      "count": 1180,
+      "item": "61a46987092f11ebbdaeac1f6bf848b6",
+      "system": "Use the bond-proposer role instruction, but preserve the AnswerEnvelopeV1 port and cite only supplied evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only Wikipedia paragraphs as evidence\",\"Limit search to maximum 10 candidates\",\"Limit evidence items to maximum 3\",\"Keep input tokens under 16000\",\"Keep output tokens under 512\"],\"objectives\":[\"Determine the release date of the film 'Blind Shaft'\",\"Determine the release date of the film 'The Mask Of Fu Manchu'\",\"Compare the release dates to identify which film was released first\"],\"request_id\":\"req-e0a79800005f5fd9cb9c\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"Which film came out first, Blind Shaft or The Mask Of Fu Manchu?\",\"request_id\":\"req-e0a79800005f5fd9cb9c\",\"selected_evidence\":[{\"content\":\"Blind Shaft. Blind Shaft is a 2003 film about a pair of brutal con artists operating in the illegal coal mines of present- day northern China. The film was written and directed by Li Yang( 李杨), and is based on Chinese writer Liu Qingbang's short novel\\\" Shen MuSacred Wood\\\").\",\"evidence_id\":\"61a46987092f11ebbdaeac1f6bf848b6:evidence:0\"},{\"content\":\"The Mask of Fu Manchu. The Mask of Fu Manchu is a 1932 pre-Code adventure film directed by Charles Brabin. It was written by Irene Kuhn, Edgar Allan Woolf and John Willard based on the 1932 novel of the same name by Sax Rohmer. Starring Boris Karloff as Fu Manchu, and featuring Myrna Loy as his depraved daughter, the movie revolves around Fu Manchu's quest for the golden sword and mask of Genghis Khan. Lewis Stone plays his nemesis. Dr. Petrie is absent from this film.\",\"evidence_id\":\"61a46987092f11ebbdaeac1f6bf848b6:evidence:2\"},{\"content\":\"The Brides of Fu Manchu. The Brides of Fu Manchu is a 1966 British/ West German Constantin Film co-production adventure crime film based on the fictional Chinese villain Dr. Fu Manchu, created by Sax Rohmer. It was the second film in a series, and was preceded by\\\" The Face of Fu ManchuThe Vengeance of Fu Manchu\\\" followed in 1967,\\\" The Blood of Fu Manchu\\\" in 1968, and\\\" The Castle of Fu Manchu\\\" in 1969. It was produced by Harry Alan Towers for Hallam Productions. Like the first film, it was directed by Don Sharp, and starred Christopher Lee as Fu Manchu. Nigel Green was replaced by Douglas Wilmer as Scotland Yard detective Nayland Smith. The action takes place mainly in London, where much of the location filming took place.\",\"evidence_id\":\"61a46987092f11ebbdaeac1f6bf848b6:evidence:4\"}]}"
+    },
+    {
+      "arm": "typed_hswm_three_function_network",
+      "call_index": 1,
+      "count": 273,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "You are QF_QUERY_COMPILER, a typed function in HSWM. Convert the QueryEnvelopeV1 into one JSON QueryPlanV1 object. Decompose only what is required to answer, name evidence types rather than answer strings, preserve request_id exactly, and respect the supplied budget. Do not answer the user, select evidence, modify HSWM, predict experiment success, issue a scientific verdict, or inspect outcome labels. If the request is underspecified or unsafe, set abstain=true and state the missing constraint. Output JSON only with exactly these field types: request_id string; objectives array of unique non-empty strings; required_evidence_types array of unique non-empty strings; constraints array of unique non-empty strings; abstain boolean. Do not return an object or string where an array is required.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"000000\",\"query_text\":\"When did John V, Prince Of Anhalt-Zerbst's father die?\",\"request_id\":\"req-fa2ef7efb9a87f988e3d\"}"
+    },
+    {
+      "arm": "typed_hswm_three_function_network",
+      "call_index": 2,
+      "count": 1565,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "You are BF_BOND_PROPOSER, a typed function in HSWM. Given one QueryPlanV1 and an opaque fixed candidate table, return one JSON BondProposalV1. Preserve request_id exactly. Rank only supplied candidate IDs and assign each selected candidate a finite numeric potential <= 0, where 0 is least suppressed. Use only supplied observable score, provenance, and structural components. Do not use answer strings, query IDs as features, edge-ID embeddings, hop labels, gold labels, private entity surfaces, prior test outcomes, or your own confidence as promotion authority. Do not answer the query, mutate slow HSWM state, or issue a scientific verdict. Output JSON only with exactly these field types: request_id string; ordered_bond_ids array of unique supplied bond-ID strings; bond_potentials object mapping every ordered bond ID to one finite number <= 0 and containing no other keys; evidence_refs array of unique supplied evidence-ID strings corresponding to selected bonds; abstain boolean. When abstain=true, return empty ordered_bond_ids, bond_potentials, and evidence_refs.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"base_score\",\"flat_position\",\"flat_score\",\"incidence_count\",\"seam_count\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:0\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:0\",0.15825193,0,1.0,1,0,0.15825193],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:1\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:1\",0.19295604,1,0.88888889,1,0,0.19295604],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:2\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:2\",0.14482079,2,0.77777778,1,0,0.14482079],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:3\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:3\",0.21699923,3,0.66666667,1,0,0.21699923],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:4\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:4\",0.14887289,4,0.55555556,1,0,0.14887289],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:5\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:5\",0.20002234,5,0.44444444,1,0,0.20002234],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:6\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:6\",0.23394805,6,0.33333333,2,1,0.23394805],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:7\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:7\",0.07682376,7,0.22222222,2,1,0.07682376],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:8\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:8\",0.20634712,8,0.11111111,1,0,0.20634712],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:9\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:9\",0.21692317,9,0.0,1,0,0.21692317]]},\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the father of John V, Prince of Anhalt-Zerbst\",\"Determine the date of death of the identified father\"],\"request_id\":\"req-fa2ef7efb9a87f988e3d\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-fa2ef7efb9a87f988e3d\"}"
+    },
+    {
+      "arm": "typed_hswm_three_function_network",
+      "call_index": 3,
+      "count": 1180,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "You are AF_ANSWER_SYNTHESIZER, a typed function in HSWM. Answer only from the selected evidence in AnswerContextV1. Preserve request_id exactly and cite only supplied evidence IDs. Do not retrieve additional material, rerank candidates, alter HSWM, infer hidden outcome labels, or issue a scientific verdict. If the evidence is insufficient or conflicting, set abstain=true and describe the uncertainty without inventing support. Output JSON only with exactly these field types: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied evidence-ID strings actually used; uncertainty string; abstain boolean. Do not return an object or array where a string is required.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the father of John V, Prince of Anhalt-Zerbst\",\"Determine the date of death of the identified father\"],\"request_id\":\"req-fa2ef7efb9a87f988e3d\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"When did John V, Prince Of Anhalt-Zerbst's father die?\",\"request_id\":\"req-fa2ef7efb9a87f988e3d\",\"selected_evidence\":[{\"content\":\"John V, Prince of Anhalt-Zerbst. John V of Anhalt-Zerbst (Dessau, 4 September 1504 – Zerbst, 4 February 1551), was a German prince of the House of Ascania and ruler of the principality of Anhalt-Dessau. From 1544, he assumed rule of the re-created principality of Anhalt-Zerbst. John was the second (but eldest surviving) son of Ernest I, Prince of Anhalt-Dessau, by his wife Margarete, daughter of Henry I, Duke of Münsterberg-Oels, and granddaughter of George of Poděbrady, King of Bohemia.\",\"evidence_id\":\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:6\"},{\"content\":\"John VI, Prince of Anhalt-Zerbst. John VI of Anhalt-Zerbst (Zerbst, 24 March 1621 – Zerbst, 4 July 1667), was a German prince of the House of Ascania and ruler of the principality of Anhalt-Zerbst. He was the only son of Rudolph, Prince of Anhalt-Zerbst, by his second wife Magdalene, daughter of John VII, Count of Oldenburg.\",\"evidence_id\":\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:3\"},{\"content\":\"Karl I, Prince of Anhalt-Zerbst. Karl I of Anhalt- Zerbst( 17 November 1534 in Dessau – 4 May 1561 in Zerbst), was a German prince of the House of Ascania and ruler of the principality of Anhalt- Zerbst. He was the eldest son of John V, Prince of Anhalt- Zerbst, by his wife Margaret, daughter of Joachim I Nestor, Elector of Brandenburg.\",\"evidence_id\":\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:9\"}]}"
+    },
+    {
+      "arm": "flat_single_llm_three_call_workflow",
+      "call_index": 1,
+      "count": 273,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "Generic flat workflow planning pass. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_text\":\"When did John V, Prince Of Anhalt-Zerbst's father die?\",\"request_id\":\"req-a7a5735c17b885eac461\"}"
+    },
+    {
+      "arm": "flat_single_llm_three_call_workflow",
+      "call_index": 2,
+      "count": 1565,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "Generic flat-context selection pass. Use only flat_position, flat_score, and source_type. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:0\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:0\",0,1.0],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:1\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:1\",1,0.88888889],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:2\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:2\",2,0.77777778],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:3\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:3\",3,0.66666667],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:4\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:4\",4,0.55555556],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:5\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:5\",5,0.44444444],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:6\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:6\",6,0.33333333],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:7\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:7\",7,0.22222222],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:8\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:8\",8,0.11111111],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:9\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:9\",9,0.0]]},\"parity_filler\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the father of John V, Prince of Anhalt-Zerbst\",\"Determine the date of death of John V's father\"],\"request_id\":\"req-a7a5735c17b885eac461\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-a7a5735c17b885eac461\"}"
+    },
+    {
+      "arm": "flat_single_llm_three_call_workflow",
+      "call_index": 3,
+      "count": 1180,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "Generic flat workflow answering pass. Answer only from selected_evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the father of John V, Prince of Anhalt-Zerbst\",\"Determine the date of death of John V's father\"],\"request_id\":\"req-a7a5735c17b885eac461\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"When did John V, Prince Of Anhalt-Zerbst's father die?\",\"request_id\":\"req-a7a5735c17b885eac461\",\"selected_evidence\":[{\"content\":\"Waldemar I, Prince of Anhalt-Zerbst. Waldemar I, Prince of Anhalt- Zerbst( died 7 January 1368) was a German prince of the House of Ascania and ruler of the principality of Anhalt- Zerbst. He was the youngest son of Albert I, Prince of Anhalt- Zerbst, by his second wife Agnes, daughter of Conrad, Margrave of Brandenburg- Stendal.\",\"evidence_id\":\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:0\"},{\"content\":\"Bernhard VII, Prince of Anhalt-Zerbst. Bernhard VII of Anhalt- Zerbst( 17 March 1540 – 1 March 1570), was a German prince of the House of Ascania and ruler of the principality of Anhalt- Zerbst. He was born and died in Dessau, and was the third and youngest son of John V, Prince of Anhalt- Zerbst by his wife Margaret, daughter of Joachim I Nestor, Elector of Brandenburg.\",\"evidence_id\":\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:1\"},{\"content\":\"Albert III, Prince of Anhalt-Zerbst. Albert III, Prince of Anhalt- Zerbst( died ca. 1 August 1359) was a German prince of the House of Ascania and ruler of the principality of Anhalt- Zerbst. He was the eldest son of Albert II, Prince of Anhalt- Zerbst, by his second wife Beatrix, daughter of Rudolf I, Elector of Saxony and Duke of Saxe- Wittemberg.\",\"evidence_id\":\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:2\"}]}"
+    },
+    {
+      "arm": "vector_memory_three_call_workflow",
+      "call_index": 1,
+      "count": 273,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "Generic vector-memory query planning pass. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_text\":\"When did John V, Prince Of Anhalt-Zerbst's father die?\",\"request_id\":\"req-3d0c1a3256c6b9fa5be7\"}"
+    },
+    {
+      "arm": "vector_memory_three_call_workflow",
+      "call_index": 2,
+      "count": 1565,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "Vector-memory selection pass. Rank only by supplied vector_score and source_type. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:0\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:0\",0.15825193],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:1\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:1\",0.19295604],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:2\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:2\",0.14482079],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:3\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:3\",0.21699923],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:4\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:4\",0.14887289],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:5\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:5\",0.20002234],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:6\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:6\",0.23394805],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:7\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:7\",0.07682376],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:8\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:8\",0.20634712],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:9\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:9\",0.21692317]]},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the father of John V, Prince of Anhalt-Zerbst\",\"Determine the date of death of the identified father\"],\"request_id\":\"req-3d0c1a3256c6b9fa5be7\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-3d0c1a3256c6b9fa5be7\"}"
+    },
+    {
+      "arm": "vector_memory_three_call_workflow",
+      "call_index": 3,
+      "count": 1180,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "Vector-memory answering pass. Answer only from selected_evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the father of John V, Prince of Anhalt-Zerbst\",\"Determine the date of death of the identified father\"],\"request_id\":\"req-3d0c1a3256c6b9fa5be7\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"When did John V, Prince Of Anhalt-Zerbst's father die?\",\"request_id\":\"req-3d0c1a3256c6b9fa5be7\",\"selected_evidence\":[{\"content\":\"John V, Prince of Anhalt-Zerbst. John V of Anhalt-Zerbst (Dessau, 4 September 1504 – Zerbst, 4 February 1551), was a German prince of the House of Ascania and ruler of the principality of Anhalt-Dessau. From 1544, he assumed rule of the re-created principality of Anhalt-Zerbst. John was the second (but eldest surviving) son of Ernest I, Prince of Anhalt-Dessau, by his wife Margarete, daughter of Henry I, Duke of Münsterberg-Oels, and granddaughter of George of Poděbrady, King of Bohemia.\",\"evidence_id\":\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:6\"},{\"content\":\"John VI, Prince of Anhalt-Zerbst. John VI of Anhalt-Zerbst (Zerbst, 24 March 1621 – Zerbst, 4 July 1667), was a German prince of the House of Ascania and ruler of the principality of Anhalt-Zerbst. He was the only son of Rudolph, Prince of Anhalt-Zerbst, by his second wife Magdalene, daughter of John VII, Count of Oldenburg.\",\"evidence_id\":\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:3\"},{\"content\":\"Karl I, Prince of Anhalt-Zerbst. Karl I of Anhalt- Zerbst( 17 November 1534 in Dessau – 4 May 1561 in Zerbst), was a German prince of the House of Ascania and ruler of the principality of Anhalt- Zerbst. He was the eldest son of John V, Prince of Anhalt- Zerbst, by his wife Margaret, daughter of Joachim I Nestor, Elector of Brandenburg.\",\"evidence_id\":\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:9\"}]}"
+    },
+    {
+      "arm": "typed_network_role_removed_schema_preserving_null",
+      "call_index": 1,
+      "count": 273,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "You are QF_QUERY_COMPILER, a typed function in HSWM. Convert the QueryEnvelopeV1 into one JSON QueryPlanV1 object. Decompose only what is required to answer, name evidence types rather than answer strings, preserve request_id exactly, and respect the supplied budget. Do not answer the user, select evidence, modify HSWM, predict experiment success, issue a scientific verdict, or inspect outcome labels. If the request is underspecified or unsafe, set abstain=true and state the missing constraint. Output JSON only with exactly these field types: request_id string; objectives array of unique non-empty strings; required_evidence_types array of unique non-empty strings; constraints array of unique non-empty strings; abstain boolean. Do not return an object or string where an array is required.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"0000000\",\"query_text\":\"When did John V, Prince Of Anhalt-Zerbst's father die?\",\"request_id\":\"req-332aa8ac187efa61c344\"}"
+    },
+    {
+      "arm": "typed_network_role_removed_schema_preserving_null",
+      "call_index": 2,
+      "count": 1565,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "Schema-preserving null BF control. Make this physical call but select no bonds. Copy request_id; ordered_bond_ids=[], bond_potentials={}, evidence_refs=[], abstain=true. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"base_score\",\"flat_position\",\"flat_score\",\"incidence_count\",\"seam_count\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:0\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:0\",0.15825193,0,1.0,1,0,0.15825193],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:1\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:1\",0.19295604,1,0.88888889,1,0,0.19295604],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:2\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:2\",0.14482079,2,0.77777778,1,0,0.14482079],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:3\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:3\",0.21699923,3,0.66666667,1,0,0.21699923],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:4\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:4\",0.14887289,4,0.55555556,1,0,0.14887289],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:5\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:5\",0.20002234,5,0.44444444,1,0,0.20002234],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:6\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:6\",0.23394805,6,0.33333333,2,1,0.23394805],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:7\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:7\",0.07682376,7,0.22222222,2,1,0.07682376],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:8\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:8\",0.20634712,8,0.11111111,1,0,0.20634712],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:9\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:9\",0.21692317,9,0.0,1,0,0.21692317]]},\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the father of John V, Prince of Anhalt-Zerbst\",\"Determine the date of death of the identified father\"],\"request_id\":\"req-332aa8ac187efa61c344\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-332aa8ac187efa61c344\"}"
+    },
+    {
+      "arm": "typed_network_role_removed_schema_preserving_null",
+      "call_index": 3,
+      "count": 1180,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "You are AF_ANSWER_SYNTHESIZER, a typed function in HSWM. Answer only from the selected evidence in AnswerContextV1. Preserve request_id exactly and cite only supplied evidence IDs. Do not retrieve additional material, rerank candidates, alter HSWM, infer hidden outcome labels, or issue a scientific verdict. If the evidence is insufficient or conflicting, set abstain=true and describe the uncertainty without inventing support. Output JSON only with exactly these field types: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied evidence-ID strings actually used; uncertainty string; abstain boolean. Do not return an object or array where a string is required.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the father of John V, Prince of Anhalt-Zerbst\",\"Determine the date of death of the identified father\"],\"request_id\":\"req-332aa8ac187efa61c344\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"When did John V, Prince Of Anhalt-Zerbst's father die?\",\"request_id\":\"req-332aa8ac187efa61c344\",\"selected_evidence\":[]}"
+    },
+    {
+      "arm": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "call_index": 1,
+      "count": 273,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "Use the answer-synthesizer role instruction, but this port has no evidence and must remain a QueryPlanV1. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_text\":\"When did John V, Prince Of Anhalt-Zerbst's father die?\",\"request_id\":\"req-252b5964e7bd3e36e91b\"}"
+    },
+    {
+      "arm": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "call_index": 2,
+      "count": 1565,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "Use the query-compiler role instruction on the supplied candidate table while preserving the BondProposalV1 port. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"base_score\",\"flat_position\",\"flat_score\",\"incidence_count\",\"seam_count\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:0\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:0\",0.15825193,0,1.0,1,0,0.15825193],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:1\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:1\",0.19295604,1,0.88888889,1,0,0.19295604],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:2\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:2\",0.14482079,2,0.77777778,1,0,0.14482079],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:3\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:3\",0.21699923,3,0.66666667,1,0,0.21699923],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:4\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:4\",0.14887289,4,0.55555556,1,0,0.14887289],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:5\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:5\",0.20002234,5,0.44444444,1,0,0.20002234],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:6\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:6\",0.23394805,6,0.33333333,2,1,0.23394805],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:7\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:7\",0.07682376,7,0.22222222,2,1,0.07682376],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:8\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:8\",0.20634712,8,0.11111111,1,0,0.20634712],[\"e2a3bf2a0bdd11eba7f7acde48001122:bond:9\",\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:9\",0.21692317,9,0.0,1,0,0.21692317]]},\"parity_filler\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only Wikipedia paragraphs as evidence\",\"Limit candidates to 10\",\"Limit evidence items to 3\",\"Limit input tokens to 16000\",\"Limit output tokens to 512\"],\"objectives\":[\"Identify the father of John V, Prince of Anhalt-Zerbst\",\"Determine the date of death of John V's father\"],\"request_id\":\"req-252b5964e7bd3e36e91b\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-252b5964e7bd3e36e91b\"}"
+    },
+    {
+      "arm": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "call_index": 3,
+      "count": 1180,
+      "item": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "system": "Use the bond-proposer role instruction, but preserve the AnswerEnvelopeV1 port and cite only supplied evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only Wikipedia paragraphs as evidence\",\"Limit candidates to 10\",\"Limit evidence items to 3\",\"Limit input tokens to 16000\",\"Limit output tokens to 512\"],\"objectives\":[\"Identify the father of John V, Prince of Anhalt-Zerbst\",\"Determine the date of death of John V's father\"],\"request_id\":\"req-252b5964e7bd3e36e91b\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"When did John V, Prince Of Anhalt-Zerbst's father die?\",\"request_id\":\"req-252b5964e7bd3e36e91b\",\"selected_evidence\":[{\"content\":\"John V, Prince of Anhalt-Zerbst. John V of Anhalt-Zerbst (Dessau, 4 September 1504 – Zerbst, 4 February 1551), was a German prince of the House of Ascania and ruler of the principality of Anhalt-Dessau. From 1544, he assumed rule of the re-created principality of Anhalt-Zerbst. John was the second (but eldest surviving) son of Ernest I, Prince of Anhalt-Dessau, by his wife Margarete, daughter of Henry I, Duke of Münsterberg-Oels, and granddaughter of George of Poděbrady, King of Bohemia.\",\"evidence_id\":\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:6\"},{\"content\":\"John VI, Prince of Anhalt-Zerbst. John VI of Anhalt-Zerbst (Zerbst, 24 March 1621 – Zerbst, 4 July 1667), was a German prince of the House of Ascania and ruler of the principality of Anhalt-Zerbst. He was the only son of Rudolph, Prince of Anhalt-Zerbst, by his second wife Magdalene, daughter of John VII, Count of Oldenburg.\",\"evidence_id\":\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:3\"},{\"content\":\"Karl I, Prince of Anhalt-Zerbst. Karl I of Anhalt- Zerbst( 17 November 1534 in Dessau – 4 May 1561 in Zerbst), was a German prince of the House of Ascania and ruler of the principality of Anhalt- Zerbst. He was the eldest son of John V, Prince of Anhalt- Zerbst, by his wife Margaret, daughter of Joachim I Nestor, Elector of Brandenburg.\",\"evidence_id\":\"e2a3bf2a0bdd11eba7f7acde48001122:evidence:9\"}]}"
+    },
+    {
+      "arm": "typed_hswm_three_function_network",
+      "call_index": 1,
+      "count": 273,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "You are QF_QUERY_COMPILER, a typed function in HSWM. Convert the QueryEnvelopeV1 into one JSON QueryPlanV1 object. Decompose only what is required to answer, name evidence types rather than answer strings, preserve request_id exactly, and respect the supplied budget. Do not answer the user, select evidence, modify HSWM, predict experiment success, issue a scientific verdict, or inspect outcome labels. If the request is underspecified or unsafe, set abstain=true and state the missing constraint. Output JSON only with exactly these field types: request_id string; objectives array of unique non-empty strings; required_evidence_types array of unique non-empty strings; constraints array of unique non-empty strings; abstain boolean. Do not return an object or string where an array is required.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"\",\"query_text\":\"What is the award that the director of film Wearing Velvet Slippers Under A Golden Umbrella won?\",\"request_id\":\"req-3c57a496d1cc47a28922\"}"
+    },
+    {
+      "arm": "typed_hswm_three_function_network",
+      "call_index": 2,
+      "count": 1565,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "You are BF_BOND_PROPOSER, a typed function in HSWM. Given one QueryPlanV1 and an opaque fixed candidate table, return one JSON BondProposalV1. Preserve request_id exactly. Rank only supplied candidate IDs and assign each selected candidate a finite numeric potential <= 0, where 0 is least suppressed. Use only supplied observable score, provenance, and structural components. Do not use answer strings, query IDs as features, edge-ID embeddings, hop labels, gold labels, private entity surfaces, prior test outcomes, or your own confidence as promotion authority. Do not answer the query, mutate slow HSWM state, or issue a scientific verdict. Output JSON only with exactly these field types: request_id string; ordered_bond_ids array of unique supplied bond-ID strings; bond_potentials object mapping every ordered bond ID to one finite number <= 0 and containing no other keys; evidence_refs array of unique supplied evidence-ID strings corresponding to selected bonds; abstain boolean. When abstain=true, return empty ordered_bond_ids, bond_potentials, and evidence_refs.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"base_score\",\"flat_position\",\"flat_score\",\"incidence_count\",\"seam_count\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"0cd3bdea0bde11eba7f7acde48001122:bond:0\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:0\",0.02294755,0,1.0,1,0,0.02294755],[\"0cd3bdea0bde11eba7f7acde48001122:bond:1\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:1\",0.05479856,1,0.88888889,1,0,0.05479856],[\"0cd3bdea0bde11eba7f7acde48001122:bond:2\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:2\",0.0212356,2,0.77777778,1,0,0.0212356],[\"0cd3bdea0bde11eba7f7acde48001122:bond:3\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:3\",0.07545345,3,0.66666667,1,0,0.07545345],[\"0cd3bdea0bde11eba7f7acde48001122:bond:4\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:4\",0.07395464,4,0.55555556,1,0,0.07395464],[\"0cd3bdea0bde11eba7f7acde48001122:bond:5\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:5\",0.0190113,5,0.44444444,2,1,0.0190113],[\"0cd3bdea0bde11eba7f7acde48001122:bond:6\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:6\",0.49752009,6,0.33333333,2,1,0.49752009],[\"0cd3bdea0bde11eba7f7acde48001122:bond:7\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:7\",0.02018985,7,0.22222222,1,0,0.02018985],[\"0cd3bdea0bde11eba7f7acde48001122:bond:8\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:8\",0.0,8,0.11111111,1,0,0.0],[\"0cd3bdea0bde11eba7f7acde48001122:bond:9\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:9\",0.14627724,9,0.0,1,0,0.14627724]]},\"parity_filler\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the director of the film 'Wearing Velvet Slippers Under A Golden Umbrella'\",\"Identify the award won by the identified director\"],\"request_id\":\"req-3c57a496d1cc47a28922\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-3c57a496d1cc47a28922\"}"
+    },
+    {
+      "arm": "typed_hswm_three_function_network",
+      "call_index": 3,
+      "count": 1180,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "You are AF_ANSWER_SYNTHESIZER, a typed function in HSWM. Answer only from the selected evidence in AnswerContextV1. Preserve request_id exactly and cite only supplied evidence IDs. Do not retrieve additional material, rerank candidates, alter HSWM, infer hidden outcome labels, or issue a scientific verdict. If the evidence is insufficient or conflicting, set abstain=true and describe the uncertainty without inventing support. Output JSON only with exactly these field types: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied evidence-ID strings actually used; uncertainty string; abstain boolean. Do not return an object or array where a string is required.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the director of the film 'Wearing Velvet Slippers Under A Golden Umbrella'\",\"Identify the award won by the identified director\"],\"request_id\":\"req-3c57a496d1cc47a28922\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"What is the award that the director of film Wearing Velvet Slippers Under A Golden Umbrella won?\",\"request_id\":\"req-3c57a496d1cc47a28922\",\"selected_evidence\":[{\"content\":\"Wearing Velvet Slippers under a Golden Umbrella. Wearing Velvet Slippers under a Golden Umbrella (Pronounced as Katipa phanat see shwe htee hsaung) is a 1970 Burmese film directed by Maung Wunna starring Myat Mon, Myat Lay and Thet Naung. The film was Maung Wunna's first feature as director and he also wrote the screenplay, based on the novel of the same name by Maung Thara.\",\"evidence_id\":\"0cd3bdea0bde11eba7f7acde48001122:evidence:6\"},{\"content\":\"All in the Family (film). All in the Family is a 1975 Hong Kong adult comedy film, directed by Mu Zhu and produced under Golden Harvest productions. Despite starring in the film, Jackie Chan does not appear until 1 hour into the movie.\",\"evidence_id\":\"0cd3bdea0bde11eba7f7acde48001122:evidence:9\"},{\"content\":\"Dana Blankstein. Dana Blankstein- Cohen( born March 3, 1981) is the director of the Israeli Academy of Film and Television. She is a film director, and an Israeli culture entrepreneur.\",\"evidence_id\":\"0cd3bdea0bde11eba7f7acde48001122:evidence:3\"}]}"
+    },
+    {
+      "arm": "flat_single_llm_three_call_workflow",
+      "call_index": 1,
+      "count": 273,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "Generic flat workflow planning pass. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_text\":\"What is the award that the director of film Wearing Velvet Slippers Under A Golden Umbrella won?\",\"request_id\":\"req-ff43b63db5acb5a36ab8\"}"
+    },
+    {
+      "arm": "flat_single_llm_three_call_workflow",
+      "call_index": 2,
+      "count": 1565,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "Generic flat-context selection pass. Use only flat_position, flat_score, and source_type. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"flat_position\",\"flat_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"0cd3bdea0bde11eba7f7acde48001122:bond:0\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:0\",0,1.0],[\"0cd3bdea0bde11eba7f7acde48001122:bond:1\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:1\",1,0.88888889],[\"0cd3bdea0bde11eba7f7acde48001122:bond:2\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:2\",2,0.77777778],[\"0cd3bdea0bde11eba7f7acde48001122:bond:3\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:3\",3,0.66666667],[\"0cd3bdea0bde11eba7f7acde48001122:bond:4\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:4\",4,0.55555556],[\"0cd3bdea0bde11eba7f7acde48001122:bond:5\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:5\",5,0.44444444],[\"0cd3bdea0bde11eba7f7acde48001122:bond:6\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:6\",6,0.33333333],[\"0cd3bdea0bde11eba7f7acde48001122:bond:7\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:7\",7,0.22222222],[\"0cd3bdea0bde11eba7f7acde48001122:bond:8\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:8\",8,0.11111111],[\"0cd3bdea0bde11eba7f7acde48001122:bond:9\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:9\",9,0.0]]},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only wikipedia_paragraph evidence\",\"Limit candidates to 10\",\"Limit evidence items to 3\",\"Limit input tokens to 16000\",\"Limit output tokens to 512\"],\"objectives\":[\"Identify the director of the film 'Wearing Velvet Slippers Under A Golden Umbrella'\",\"Determine the awards won by the identified director\"],\"request_id\":\"req-ff43b63db5acb5a36ab8\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-ff43b63db5acb5a36ab8\"}"
+    },
+    {
+      "arm": "flat_single_llm_three_call_workflow",
+      "call_index": 3,
+      "count": 1180,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "Generic flat workflow answering pass. Answer only from selected_evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only wikipedia_paragraph evidence\",\"Limit candidates to 10\",\"Limit evidence items to 3\",\"Limit input tokens to 16000\",\"Limit output tokens to 512\"],\"objectives\":[\"Identify the director of the film 'Wearing Velvet Slippers Under A Golden Umbrella'\",\"Determine the awards won by the identified director\"],\"request_id\":\"req-ff43b63db5acb5a36ab8\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"What is the award that the director of film Wearing Velvet Slippers Under A Golden Umbrella won?\",\"request_id\":\"req-ff43b63db5acb5a36ab8\",\"selected_evidence\":[{\"content\":\"Michael Govan. Michael Govan( born 1963) is the director of the Los Angeles County Museum of Art since 2006. Prior to this, Govan worked as the director of the Dia Art Foundation in New York City.\",\"evidence_id\":\"0cd3bdea0bde11eba7f7acde48001122:evidence:0\"},{\"content\":\"Peter Levin. Peter Levin is an American director of film, television and theatre.\",\"evidence_id\":\"0cd3bdea0bde11eba7f7acde48001122:evidence:1\"},{\"content\":\"John Donatich. John Donatich is the Director of Yale University Press.\",\"evidence_id\":\"0cd3bdea0bde11eba7f7acde48001122:evidence:2\"}]}"
+    },
+    {
+      "arm": "vector_memory_three_call_workflow",
+      "call_index": 1,
+      "count": 273,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "Generic vector-memory query planning pass. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_text\":\"What is the award that the director of film Wearing Velvet Slippers Under A Golden Umbrella won?\",\"request_id\":\"req-55f37ce26e5203a8aa5f\"}"
+    },
+    {
+      "arm": "vector_memory_three_call_workflow",
+      "call_index": 2,
+      "count": 1565,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "Vector-memory selection pass. Rank only by supplied vector_score and source_type. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"0cd3bdea0bde11eba7f7acde48001122:bond:0\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:0\",0.02294755],[\"0cd3bdea0bde11eba7f7acde48001122:bond:1\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:1\",0.05479856],[\"0cd3bdea0bde11eba7f7acde48001122:bond:2\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:2\",0.0212356],[\"0cd3bdea0bde11eba7f7acde48001122:bond:3\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:3\",0.07545345],[\"0cd3bdea0bde11eba7f7acde48001122:bond:4\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:4\",0.07395464],[\"0cd3bdea0bde11eba7f7acde48001122:bond:5\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:5\",0.0190113],[\"0cd3bdea0bde11eba7f7acde48001122:bond:6\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:6\",0.49752009],[\"0cd3bdea0bde11eba7f7acde48001122:bond:7\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:7\",0.02018985],[\"0cd3bdea0bde11eba7f7acde48001122:bond:8\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:8\",0.0],[\"0cd3bdea0bde11eba7f7acde48001122:bond:9\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:9\",0.14627724]]},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only wikipedia_paragraph evidence\",\"Limit candidates to 10\",\"Limit evidence items to 3\",\"Limit input tokens to 16000\",\"Limit output tokens to 512\"],\"objectives\":[\"Identify the director of the film 'Wearing Velvet Slippers Under A Golden Umbrella'\",\"Determine the awards won by the identified director\"],\"request_id\":\"req-55f37ce26e5203a8aa5f\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-55f37ce26e5203a8aa5f\"}"
+    },
+    {
+      "arm": "vector_memory_three_call_workflow",
+      "call_index": 3,
+      "count": 1180,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "Vector-memory answering pass. Answer only from selected_evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only wikipedia_paragraph evidence\",\"Limit candidates to 10\",\"Limit evidence items to 3\",\"Limit input tokens to 16000\",\"Limit output tokens to 512\"],\"objectives\":[\"Identify the director of the film 'Wearing Velvet Slippers Under A Golden Umbrella'\",\"Determine the awards won by the identified director\"],\"request_id\":\"req-55f37ce26e5203a8aa5f\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"What is the award that the director of film Wearing Velvet Slippers Under A Golden Umbrella won?\",\"request_id\":\"req-55f37ce26e5203a8aa5f\",\"selected_evidence\":[{\"content\":\"Wearing Velvet Slippers under a Golden Umbrella. Wearing Velvet Slippers under a Golden Umbrella (Pronounced as Katipa phanat see shwe htee hsaung) is a 1970 Burmese film directed by Maung Wunna starring Myat Mon, Myat Lay and Thet Naung. The film was Maung Wunna's first feature as director and he also wrote the screenplay, based on the novel of the same name by Maung Thara.\",\"evidence_id\":\"0cd3bdea0bde11eba7f7acde48001122:evidence:6\"},{\"content\":\"Dana Blankstein. Dana Blankstein- Cohen( born March 3, 1981) is the director of the Israeli Academy of Film and Television. She is a film director, and an Israeli culture entrepreneur.\",\"evidence_id\":\"0cd3bdea0bde11eba7f7acde48001122:evidence:3\"},{\"content\":\"Ian Barry (director). Ian Barry is an Australian director of film and TV.\",\"evidence_id\":\"0cd3bdea0bde11eba7f7acde48001122:evidence:4\"}]}"
+    },
+    {
+      "arm": "typed_network_role_removed_schema_preserving_null",
+      "call_index": 1,
+      "count": 273,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "You are QF_QUERY_COMPILER, a typed function in HSWM. Convert the QueryEnvelopeV1 into one JSON QueryPlanV1 object. Decompose only what is required to answer, name evidence types rather than answer strings, preserve request_id exactly, and respect the supplied budget. Do not answer the user, select evidence, modify HSWM, predict experiment success, issue a scientific verdict, or inspect outcome labels. If the request is underspecified or unsafe, set abstain=true and state the missing constraint. Output JSON only with exactly these field types: request_id string; objectives array of unique non-empty strings; required_evidence_types array of unique non-empty strings; constraints array of unique non-empty strings; abstain boolean. Do not return an object or string where an array is required.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"0000\",\"query_text\":\"What is the award that the director of film Wearing Velvet Slippers Under A Golden Umbrella won?\",\"request_id\":\"req-077abecfac1a1fff866d\"}"
+    },
+    {
+      "arm": "typed_network_role_removed_schema_preserving_null",
+      "call_index": 2,
+      "count": 1565,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "Schema-preserving null BF control. Make this physical call but select no bonds. Copy request_id; ordered_bond_ids=[], bond_potentials={}, evidence_refs=[], abstain=true. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"base_score\",\"flat_position\",\"flat_score\",\"incidence_count\",\"seam_count\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"0cd3bdea0bde11eba7f7acde48001122:bond:0\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:0\",0.02294755,0,1.0,1,0,0.02294755],[\"0cd3bdea0bde11eba7f7acde48001122:bond:1\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:1\",0.05479856,1,0.88888889,1,0,0.05479856],[\"0cd3bdea0bde11eba7f7acde48001122:bond:2\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:2\",0.0212356,2,0.77777778,1,0,0.0212356],[\"0cd3bdea0bde11eba7f7acde48001122:bond:3\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:3\",0.07545345,3,0.66666667,1,0,0.07545345],[\"0cd3bdea0bde11eba7f7acde48001122:bond:4\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:4\",0.07395464,4,0.55555556,1,0,0.07395464],[\"0cd3bdea0bde11eba7f7acde48001122:bond:5\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:5\",0.0190113,5,0.44444444,2,1,0.0190113],[\"0cd3bdea0bde11eba7f7acde48001122:bond:6\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:6\",0.49752009,6,0.33333333,2,1,0.49752009],[\"0cd3bdea0bde11eba7f7acde48001122:bond:7\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:7\",0.02018985,7,0.22222222,1,0,0.02018985],[\"0cd3bdea0bde11eba7f7acde48001122:bond:8\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:8\",0.0,8,0.11111111,1,0,0.0],[\"0cd3bdea0bde11eba7f7acde48001122:bond:9\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:9\",0.14627724,9,0.0,1,0,0.14627724]]},\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the director of the film 'Wearing Velvet Slippers Under A Golden Umbrella'\",\"Determine the award won by the identified director\"],\"request_id\":\"req-077abecfac1a1fff866d\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-077abecfac1a1fff866d\"}"
+    },
+    {
+      "arm": "typed_network_role_removed_schema_preserving_null",
+      "call_index": 3,
+      "count": 1180,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "You are AF_ANSWER_SYNTHESIZER, a typed function in HSWM. Answer only from the selected evidence in AnswerContextV1. Preserve request_id exactly and cite only supplied evidence IDs. Do not retrieve additional material, rerank candidates, alter HSWM, infer hidden outcome labels, or issue a scientific verdict. If the evidence is insufficient or conflicting, set abstain=true and describe the uncertainty without inventing support. Output JSON only with exactly these field types: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied evidence-ID strings actually used; uncertainty string; abstain boolean. Do not return an object or array where a string is required.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"max_candidates: 10\",\"max_evidence_items: 3\",\"max_input_tokens: 16000\",\"max_output_tokens: 512\"],\"objectives\":[\"Identify the director of the film 'Wearing Velvet Slippers Under A Golden Umbrella'\",\"Determine the award won by the identified director\"],\"request_id\":\"req-077abecfac1a1fff866d\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"What is the award that the director of film Wearing Velvet Slippers Under A Golden Umbrella won?\",\"request_id\":\"req-077abecfac1a1fff866d\",\"selected_evidence\":[]}"
+    },
+    {
+      "arm": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "call_index": 1,
+      "count": 273,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "Use the answer-synthesizer role instruction, but this port has no evidence and must remain a QueryPlanV1. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"allowed_evidence_types\":[\"wikipedia_paragraph\"],\"budget\":{\"max_candidates\":10,\"max_evidence_items\":3,\"max_input_tokens\":16000,\"max_output_tokens\":512},\"parity_filler\":\"0000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_text\":\"What is the award that the director of film Wearing Velvet Slippers Under A Golden Umbrella won?\",\"request_id\":\"req-13f2f974af2dee0b9715\"}"
+    },
+    {
+      "arm": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "call_index": 2,
+      "count": 1565,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "Use the query-compiler role instruction on the supplied candidate table while preserving the BondProposalV1 port. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"candidate_budget\":3,\"candidate_table\":{\"columns\":[\"bond_id\",\"evidence_id\",\"base_score\",\"flat_position\",\"flat_score\",\"incidence_count\",\"seam_count\",\"vector_score\"],\"constants\":{\"source_type\":\"wikipedia_context\"},\"rows\":[[\"0cd3bdea0bde11eba7f7acde48001122:bond:0\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:0\",0.02294755,0,1.0,1,0,0.02294755],[\"0cd3bdea0bde11eba7f7acde48001122:bond:1\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:1\",0.05479856,1,0.88888889,1,0,0.05479856],[\"0cd3bdea0bde11eba7f7acde48001122:bond:2\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:2\",0.0212356,2,0.77777778,1,0,0.0212356],[\"0cd3bdea0bde11eba7f7acde48001122:bond:3\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:3\",0.07545345,3,0.66666667,1,0,0.07545345],[\"0cd3bdea0bde11eba7f7acde48001122:bond:4\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:4\",0.07395464,4,0.55555556,1,0,0.07395464],[\"0cd3bdea0bde11eba7f7acde48001122:bond:5\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:5\",0.0190113,5,0.44444444,2,1,0.0190113],[\"0cd3bdea0bde11eba7f7acde48001122:bond:6\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:6\",0.49752009,6,0.33333333,2,1,0.49752009],[\"0cd3bdea0bde11eba7f7acde48001122:bond:7\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:7\",0.02018985,7,0.22222222,1,0,0.02018985],[\"0cd3bdea0bde11eba7f7acde48001122:bond:8\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:8\",0.0,8,0.11111111,1,0,0.0],[\"0cd3bdea0bde11eba7f7acde48001122:bond:9\",\"0cd3bdea0bde11eba7f7acde48001122:evidence:9\",0.14627724,9,0.0,1,0,0.14627724]]},\"parity_filler\":\"000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only Wikipedia paragraphs as evidence\",\"Limit search to maximum 10 candidates\",\"Limit evidence items to maximum 3\",\"Keep input tokens under 16000\",\"Keep output tokens under 512\"],\"objectives\":[\"Identify the director of the film 'Wearing Velvet Slippers Under A Golden Umbrella'\",\"Determine the awards won by the identified director\"],\"request_id\":\"req-13f2f974af2dee0b9715\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"request_id\":\"req-13f2f974af2dee0b9715\"}"
+    },
+    {
+      "arm": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "call_index": 3,
+      "count": 1180,
+      "item": "0cd3bdea0bde11eba7f7acde48001122",
+      "system": "Use the bond-proposer role instruction, but preserve the AnswerEnvelopeV1 port and cite only supplied evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+      "user": "{\"max_answer_tokens\":512,\"parity_filler\":\"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\",\"query_plan\":{\"abstain\":false,\"constraints\":[\"Use only Wikipedia paragraphs as evidence\",\"Limit search to maximum 10 candidates\",\"Limit evidence items to maximum 3\",\"Keep input tokens under 16000\",\"Keep output tokens under 512\"],\"objectives\":[\"Identify the director of the film 'Wearing Velvet Slippers Under A Golden Umbrella'\",\"Determine the awards won by the identified director\"],\"request_id\":\"req-13f2f974af2dee0b9715\",\"required_evidence_types\":[\"wikipedia_paragraph\"]},\"query_text\":\"What is the award that the director of film Wearing Velvet Slippers Under A Golden Umbrella won?\",\"request_id\":\"req-13f2f974af2dee0b9715\",\"selected_evidence\":[{\"content\":\"Wearing Velvet Slippers under a Golden Umbrella. Wearing Velvet Slippers under a Golden Umbrella (Pronounced as Katipa phanat see shwe htee hsaung) is a 1970 Burmese film directed by Maung Wunna starring Myat Mon, Myat Lay and Thet Naung. The film was Maung Wunna's first feature as director and he also wrote the screenplay, based on the novel of the same name by Maung Thara.\",\"evidence_id\":\"0cd3bdea0bde11eba7f7acde48001122:evidence:6\"},{\"content\":\"All in the Family (film). All in the Family is a 1975 Hong Kong adult comedy film, directed by Mu Zhu and produced under Golden Harvest productions. Despite starring in the film, Jackie Chan does not appear until 1 hour into the movie.\",\"evidence_id\":\"0cd3bdea0bde11eba7f7acde48001122:evidence:9\"},{\"content\":\"Dana Blankstein. Dana Blankstein- Cohen( born March 3, 1981) is the director of the Israeli Academy of Film and Television. She is a film director, and an Israeli culture entrepreneur.\",\"evidence_id\":\"0cd3bdea0bde11eba7f7acde48001122:evidence:3\"}]}"
+    }
+  ],
+  "repository": "Qwen/Qwen3.6-27B",
+  "revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
+  "sdk_dependency_intent": "@huggingface/tokenizers@0.1.3 (package/lock update deferred until checkpoint release)",
+  "sdk_known_divergences": [
+    {
+      "historical_python_count": 2,
+      "observed_sdk_count": 1,
+      "reason": "SDK tokenizer normalizes decomposed combining input; historical QwenBpeMeter does not.",
+      "text": "é"
+    }
+  ],
+  "source_pins": {
+    "prom_search_hswm/hswm_token_meter.py": "5149473c7ca3efea865d97cee324ff2c9ccca5d4d637c66a049f34eae15da274"
+  },
+  "special_token_relation": {
+    "historical_config_added_tokens": {
+      "248044": {
+        "content": "<|endoftext|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248045": {
+        "content": "<|im_start|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248046": {
+        "content": "<|im_end|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248047": {
+        "content": "<|object_ref_start|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248048": {
+        "content": "<|object_ref_end|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248049": {
+        "content": "<|box_start|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248050": {
+        "content": "<|box_end|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248051": {
+        "content": "<|quad_start|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248052": {
+        "content": "<|quad_end|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248053": {
+        "content": "<|vision_start|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248054": {
+        "content": "<|vision_end|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248055": {
+        "content": "<|vision_pad|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248056": {
+        "content": "<|image_pad|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248057": {
+        "content": "<|video_pad|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248058": {
+        "content": "<tool_call>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      "248059": {
+        "content": "</tool_call>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      "248060": {
+        "content": "<|fim_prefix|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      "248061": {
+        "content": "<|fim_middle|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      "248062": {
+        "content": "<|fim_suffix|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      "248063": {
+        "content": "<|fim_pad|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      "248064": {
+        "content": "<|repo_name|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      "248065": {
+        "content": "<|file_sep|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      "248066": {
+        "content": "<tool_response>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      "248067": {
+        "content": "</tool_response>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      "248068": {
+        "content": "<think>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      "248069": {
+        "content": "</think>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      "248070": {
+        "content": "<|audio_start|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248071": {
+        "content": "<|audio_end|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248072": {
+        "content": "<tts_pad>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248073": {
+        "content": "<tts_text_bos>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248074": {
+        "content": "<tts_text_eod>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248075": {
+        "content": "<tts_text_bos_single>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      "248076": {
+        "content": "<|audio_pad|>",
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      }
+    },
+    "sdk_tokenizer_added_tokens": [
+      {
+        "content": "<|endoftext|>",
+        "id": 248044,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<|im_start|>",
+        "id": 248045,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<|im_end|>",
+        "id": 248046,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<|object_ref_start|>",
+        "id": 248047,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<|object_ref_end|>",
+        "id": 248048,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<|box_start|>",
+        "id": 248049,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<|box_end|>",
+        "id": 248050,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<|quad_start|>",
+        "id": 248051,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<|quad_end|>",
+        "id": 248052,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<|vision_start|>",
+        "id": 248053,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<|vision_end|>",
+        "id": 248054,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<|vision_pad|>",
+        "id": 248055,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<|image_pad|>",
+        "id": 248056,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<|video_pad|>",
+        "id": 248057,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": true
+      },
+      {
+        "content": "<tool_call>",
+        "id": 248058,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      {
+        "content": "</tool_call>",
+        "id": 248059,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      {
+        "content": "<|fim_prefix|>",
+        "id": 248060,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      {
+        "content": "<|fim_middle|>",
+        "id": 248061,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      {
+        "content": "<|fim_suffix|>",
+        "id": 248062,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      {
+        "content": "<|fim_pad|>",
+        "id": 248063,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      {
+        "content": "<|repo_name|>",
+        "id": 248064,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      {
+        "content": "<|file_sep|>",
+        "id": 248065,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      {
+        "content": "<tool_response>",
+        "id": 248066,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      {
+        "content": "</tool_response>",
+        "id": 248067,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      {
+        "content": "<think>",
+        "id": 248068,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      },
+      {
+        "content": "</think>",
+        "id": 248069,
+        "lstrip": false,
+        "normalized": false,
+        "rstrip": false,
+        "single_word": false,
+        "special": false
+      }
+    ]
+  }
+}

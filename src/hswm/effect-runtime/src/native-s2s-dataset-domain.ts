@@ -202,6 +202,8 @@ const datasetSchemaSha256 = (): Either.Either<string, NativeS2SDatasetError> => 
     schema_version: NATIVE_S2S_DATASET_BYTES_VERSION,
     task_binding: "structural_task_sha256_raw_32_bytes"
 });
+/** Reusable commitment for receipt verification; no dataset or task state is admitted. */
+export const nativeS2SDatasetSchemaSha256 = (): Either.Either<string, NativeS2SDatasetError> => datasetSchemaSha256();
 export const enumerateNativeS2STaskCases = (task: unknown, split?: NativeS2SSplit): Either.Either<readonly NativeS2SCase[], NativeS2SDatasetError> => {
     if (split !== undefined && split !== "train" && split !== "dev" && split !== "test")
         return fail("CASES_INVALID", "split must be train, dev, test, or absent");

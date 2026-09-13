@@ -1,0 +1,119 @@
+{
+  "schema_version": "hswm-native-tokenizer-qualification/v1",
+  "date": "2026-09-13",
+  "authority_class": "SECONDARY_AI",
+  "status": "BOUNDED_DERIVED_PROFILE_SOURCE_REPLAY",
+  "claim_ceiling": "LOCAL_SOURCE_REPLAY_NOT_LIVE_TOKENIZER_ADMISSION",
+  "sdk": {
+    "name": "@huggingface/tokenizers",
+    "version": "0.1.3",
+    "source_revision": "d6fc380d3d4efec25eb1a132bb0cf4f32d618b6c",
+    "license": "Apache-2.0",
+    "authority_class": "OFFICIAL_VENDOR_IMPLEMENTATION_NOT_INTEROPERABILITY_STANDARD",
+    "integrity": "sha512-8rF/RRT10u+kn7YuUbUg0OF30K8rjTc78aHpxT+qJ1uWSqxT1MHi8+9ltwYfkFYJzT/oS+qw3JVfHtNMGAdqyA==",
+    "official_source": "https://github.com/huggingface/tokenizers.js",
+    "lockfile": {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "944d797cd6756a10e5823719518dc4217c12d0d2c2dfc22256d4b214810c6902",
+      "byte_length": 513666,
+      "git_blob": "44bbefab92d89c057aeeed910c4385e181072b81"
+    }
+  },
+  "artifacts": {
+    "repository": "Qwen/Qwen3.6-27B",
+    "revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
+    "license": "Apache-2.0",
+    "official_source": "https://huggingface.co/Qwen/Qwen3.6-27B/tree/6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
+    "sha256": {
+      "vocab.json": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003",
+      "merges.txt": "a9d356d7bdf1ef4949e3e748e95b8e10ad9d4e2e838eddc38a0a7b6b94d1db8d",
+      "tokenizer_config.json": "5186f0defcd7f232382c7f0aebcd2252d073bb921ab240e407b7ae8745d2b29b",
+      "tokenizer.json": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42"
+    },
+    "scope": "TOKENIZER_ONLY_NO_MODEL_WEIGHTS"
+  },
+  "mapping_delta": {
+    "original_profile": "Python QwenBpeMeter slow tokenizer using vocab, merges, config",
+    "native_profile": "hswm-derived-qwen2-no-nfc/v1",
+    "derivation": "Replace the verified tokenizer.json NFC normalizer with null in memory; downloaded bytes remain unchanged.",
+    "counterexample": {
+      "text": "é",
+      "python_token_count": 2,
+      "unmodified_sdk_token_count": 1
+    },
+    "scope": "198 registered-prompt/Unicode cases and 19 filler boundaries; full historical 20 item-arm/60-call replay. This is bounded qualification, not universal tokenizer equivalence."
+  },
+  "historical_binding": {
+    "identity": "Historical three-file identity is checked against fixed constants; returned native execution profile separately binds SDK and all four artifacts.",
+    "validation_receipt": "Historical validation_receipt_sha256 is checked for shape and association only. Its referenced bytes are not revalidated and it does not authorize native live inference.",
+    "request_id_profile": "Explicit HISTORICAL_20_HEX opt-in, CURRENT_8_HEX remains default.",
+    "source_profile": {
+      "path": "tests/fixtures/native_migration/prom9_network_v1/historical_profile.v1.json",
+      "sha256": "b972daa157286eba0b312e06bbb3baec0fdea18d06074bccef1f3f9b7e2bba45",
+      "byte_length": 1008,
+      "git_blob": "c3e87d5d310efe5a594d311e7897d1fb03f7fe91"
+    }
+  },
+  "evidence": [
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-envelope-domain.ts",
+      "sha256": "a6e19e6071d7e129ebe8f8603b7b26d71acfceef853ff05d0f05a931bd07452f",
+      "byte_length": 12791,
+      "git_blob": "5c2a7eaf9ad64839b7b4000cf01a9881ba9525af"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-envelope-runtime.ts",
+      "sha256": "ff9bab8ad85205036bae9788f9a8a1b461fcdcdb77ab737bf3ad149f505f5e3f",
+      "byte_length": 4034,
+      "git_blob": "feb704b230ce9aa86184e6cdfe54e0a258b9abba"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-token-meter-domain.ts",
+      "sha256": "233b60c709fb223cac8ab8515dbf3c69b457f580ae4676ead48da79705a19f8b",
+      "byte_length": 5981,
+      "git_blob": "05adeeba58ba8a6359b09e9029182f392b9fe07b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-token-meter-runtime.ts",
+      "sha256": "af499cc0fd4d47069e416e10e4c2aa69d0bf74de9ccb8ce1601212296a89c5e7",
+      "byte_length": 10448,
+      "git_blob": "b755d5f802daba7335c0ab2cacbe000a891e1b0b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-f1-envelope-domain.test.ts",
+      "sha256": "2848267fe99ad226ac074a932a3815608b0a0c00f73ff9664a99c9097c2069ae",
+      "byte_length": 7402,
+      "git_blob": "9a3d25212ab779d5898b9b1e33a88ec4fcb7e694"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-historical-network.test.ts",
+      "sha256": "4d8e0d46366d1a516b06b4cdee4a0046a1d1efa0ff3209164d673f02320bc4e5",
+      "byte_length": 5377,
+      "git_blob": "1e17725d198fba16607dc78a25abb8c8d470f8a5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-token-meter-domain.test.ts",
+      "sha256": "d9e9499aa962243e6e3c9f181485dcd8d44f4f6e45fd7267a13f273948d8449d",
+      "byte_length": 7752,
+      "git_blob": "326732818956fec893d12917b99a120885a2562b"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_token_meter_v1/original.v1.json",
+      "sha256": "5063c457cc037110f9db8c9034e57939aa2a13e5d92f998bdd6cb7f24330f27f",
+      "byte_length": 3032,
+      "git_blob": "42fd43a9a295bf06f27fbda8d6affff29bfc0974"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_token_meter_v1/qwen_full_experimental.v1.json",
+      "sha256": "83589f777f44426ca7d9b94744301017ea5e0c1c0ef2babee2c13dac9ffbf961",
+      "byte_length": 171006,
+      "git_blob": "bd0340b613b9bfacbde38f949ffa6acdcd28a52d"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_token_meter_v1/qwen_sdk_experimental.v1.json",
+      "sha256": "f04ccb63ab75056366300f2a7a6540e2454dc0c035a7cd83ccb83440d1db345f",
+      "byte_length": 1044,
+      "git_blob": "07953c74fc72702d0f217035d16abc0dd32ebd5f"
+    }
+  ]
+}

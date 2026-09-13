@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?component ?path ?sha256 WHERE {
+  ?c a role:NATIVE_IMPLEMENTATION; p:name ?component; r:HAS_SOURCE ?source.
+  ?source a role:ENGINEERING_SOURCE; p:source_path ?path; p:sha256 ?sha256.
+} ORDER BY ?component ?path

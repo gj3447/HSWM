@@ -1,0 +1,144 @@
+{
+  "source_pins": {
+    "_research/prom9_runs/f1-2wiki-dev-r5-envelope/manifest.v2.json": "a6358436a688f03a910f94d501e6be506082a3f9cf72004f4de7c29f3d3fae0a",
+    "_research/prom9_runs/f1-2wiki-dev-r5-live/suite.json": "5ba900940a5aee23977a1a2409d6cf67e3ebc79413f089088c870f0cdeceeb58",
+    "prom_search_hswm/prom9_f1_envelope.py": "d96793530133391f42be298eb5a742e92aada92cae1e61e23981eafdf2237fc2",
+    "prom_search_hswm/hswm_token_meter.py": "5149473c7ca3efea865d97cee324ff2c9ccca5d4d637c66a049f34eae15da274"
+  },
+  "projection": {
+    "items": [
+      {
+        "item_id": "8813f87c0bdd11eba7f7acde48001122",
+        "projected_upper_bounds": {
+          "typed_hswm_three_function_network": [
+            282,
+            903,
+            1087
+          ],
+          "flat_single_llm_three_call_workflow": [
+            172,
+            685,
+            1013
+          ],
+          "vector_memory_three_call_workflow": [
+            174,
+            680,
+            1014
+          ],
+          "typed_network_role_removed_schema_preserving_null": [
+            282,
+            768,
+            1085
+          ],
+          "typed_network_with_role_instructions_shuffled_but_ports_preserved": [
+            190,
+            773,
+            1026
+          ]
+        }
+      },
+      {
+        "item_id": "61a46987092f11ebbdaeac1f6bf848b6",
+        "projected_upper_bounds": {
+          "typed_hswm_three_function_network": [
+            281,
+            904,
+            1150
+          ],
+          "flat_single_llm_three_call_workflow": [
+            171,
+            685,
+            1076
+          ],
+          "vector_memory_three_call_workflow": [
+            173,
+            681,
+            1077
+          ],
+          "typed_network_role_removed_schema_preserving_null": [
+            281,
+            769,
+            1148
+          ],
+          "typed_network_with_role_instructions_shuffled_but_ports_preserved": [
+            189,
+            774,
+            1089
+          ]
+        }
+      },
+      {
+        "item_id": "e2a3bf2a0bdd11eba7f7acde48001122",
+        "projected_upper_bounds": {
+          "typed_hswm_three_function_network": [
+            279,
+            905,
+            844
+          ],
+          "flat_single_llm_three_call_workflow": [
+            169,
+            685,
+            770
+          ],
+          "vector_memory_three_call_workflow": [
+            171,
+            681,
+            771
+          ],
+          "typed_network_role_removed_schema_preserving_null": [
+            279,
+            770,
+            842
+          ],
+          "typed_network_with_role_instructions_shuffled_but_ports_preserved": [
+            187,
+            775,
+            783
+          ]
+        }
+      },
+      {
+        "item_id": "0cd3bdea0bde11eba7f7acde48001122",
+        "projected_upper_bounds": {
+          "typed_hswm_three_function_network": [
+            289,
+            900,
+            1132
+          ],
+          "flat_single_llm_three_call_workflow": [
+            179,
+            685,
+            1058
+          ],
+          "vector_memory_three_call_workflow": [
+            181,
+            679,
+            1059
+          ],
+          "typed_network_role_removed_schema_preserving_null": [
+            289,
+            765,
+            1130
+          ],
+          "typed_network_with_role_instructions_shuffled_but_ports_preserved": [
+            197,
+            770,
+            1071
+          ]
+        }
+      }
+    ],
+    "projected_total_tokens_by_arm": {
+      "typed_hswm_three_function_network": 3754,
+      "flat_single_llm_three_call_workflow": 3754,
+      "vector_memory_three_call_workflow": 3762,
+      "typed_network_role_removed_schema_preserving_null": 3360,
+      "typed_network_with_role_instructions_shuffled_but_ports_preserved": 3757
+    },
+    "projected_spread": 402
+  },
+  "enforcement": {
+    "accepted": false,
+    "error": "item 8813f87c0bdd11eba7f7acde48001122 arm typed_hswm_three_function_network call 1: projected natural prompt of 282 tokens exceeds the registered input cap 273"
+  }
+}

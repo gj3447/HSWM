@@ -1,0 +1,17 @@
+# Native receipt and token meter checkpoint — 2026-09-13
+
+F1 now has native token fitting, exact call envelopes and the three-call network. A historical 20 item-arm / 60-call replay reproduces complete request and receipt bytes. S2S verifies complete optimization receipts, and F3 has a source-compatible cached-chat seam. Full migration remains incomplete; [inventory v7](../../_research/native_migration_2026-09-13/inventory.v7.json) retains the active routes.
+
+The conceptual change is verified native execution at these boundaries. HSWM remains one token-native evolving hypergraph macro-network; FCL-1..8, RED paths and outcome-bound success criteria remain unchanged. These source-bound KG projections and engineering tests do not establish cognition or efficacy.
+
+The [verification record](../../_research/native_migration_2026-09-13/receipt-meter-verification.v1.json) binds all 41 final source files to one isolated full run: 1,406 passed, 8 opt-in skips. The pinned tokenizer replay was enabled. TypeScript checks, Effect/functional rules, build, DNRD check, package dry-run and portable math passed; the existing 38-file allowlist was not expanded.
+
+The official [Hugging Face tokenizer SDK](https://github.com/huggingface/tokenizers.js) is pinned at 0.1.3 with source revision, Apache-2.0 license and lock integrity. Four local artifacts bind [Qwen revision 6a9e13b](https://huggingface.co/Qwen/Qwen3.6-27B/tree/6a9e13bd6fc8f0983b9b99948120bc37f49c13e9). Its unmodified NFC normalizer disagreed with original Python on decomposed e plus acute: one token versus two. The derived native profile disables normalization in memory and passes the bounded source corpus. [Qualification](../../_research/native_migration_2026-09-13/qwen-tokenizer-qualification.v1.json) keeps this mapping loss and its separate implementation identity explicit. It is not universal tokenizer equivalence or live admission; the old validation receipt's referenced bytes are not revalidated here.
+
+Historical request IDs used 20 digest characters while the current source uses eight. An explicit historical profile recovers all 60 call receipts without changing the current default or rewriting historical evidence. Call completion is rederived before stage advancement; envelope and output inputs are captured before callbacks. Unicode request checks preserve the original Python isalnum/casefold behavior.
+
+S2S checks canonical hex config/history, complete task train/dev data and strata, initialization, stopping and best-checkpoint constraints, and the outer SHA. Review found a resealed nonzero-best receipt carrying the initializer hash; the original rejects it. That rejection is now preserved and enforced. All four original full-task receipts, including best-update-2, parse byte-exactly. This checks self-consistency and does not replay training or admit a learned model.
+
+F3 cache lookup precedes budget consumption; a failed cache miss consumes the original budget, while a hit does not. Falsey usage and explicit null metadata retain source semantics. The provider backoff and full active F3 lifecycle remain pending.
+
+Next work is the F1 SQLite WAL/FULL ledger and idempotent spool/suite route, S2S actual-parameter model protocol and pilot closure, and F3 lifecycle plus remaining package/CI callers. The native HTTP transport and receipt builder under development are excluded from this checkpoint. No new material scientific result or live publication is claimed. Agent usefulness feedback remains separate from user feedback.

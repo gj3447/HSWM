@@ -1,0 +1,37 @@
+{
+  "configs": {
+    "bad_beta": { "accepted": false, "error": "Adam beta values must lie strictly in (0, 1)" },
+    "bad_max_bool": { "accepted": false, "error": "max_updates must be a non-negative integer" },
+    "bad_patience": { "accepted": false, "error": "patience must be a positive integer" },
+    "bad_seed_bool": { "accepted": false, "error": "seed must be an exact unsigned 64-bit integer" },
+    "custom": { "accepted": true, "canonical": { "beta1_hex": "0x1.0000000000000p-1", "beta2_hex": "0x1.8000000000000p-1", "epsilon_hex": "0x0.0000000000001p-1022", "gradient_clip_hex": "0x1.a000000000000p+1", "learning_rate_hex": "0x1.8000000000000p+0", "max_updates": 0, "min_delta_hex": "0x0.0p+0", "patience": 1, "seed": 18446744073709551615 } },
+    "default": { "accepted": true, "canonical": { "beta1_hex": "0x1.ccccccccccccdp-1", "beta2_hex": "0x1.ff7ced916872bp-1", "epsilon_hex": "0x1.5798ee2308c3ap-27", "gradient_clip_hex": "0x1.4000000000000p+2", "learning_rate_hex": "0x1.47ae147ae147bp-7", "max_updates": 200, "min_delta_hex": "0x1.12e0be826d695p-30", "patience": 25, "seed": 0 } },
+    "integer_float": { "accepted": false, "error": "learning_rate must be an exact finite float" },
+    "negative_lr": { "accepted": false, "error": "learning_rate must be positive" },
+    "negative_zero_min_delta": { "accepted": false, "error": "min_delta must be non-negative" },
+    "nonfinite": { "accepted": false, "error": "learning_rate must be an exact finite float" }
+  },
+  "entries": {
+    "bad_sha": { "accepted": false, "error": "history parameter SHA must be a lowercase SHA-256" },
+    "flags_int": { "accepted": false, "error": "history flags must be exact bools" },
+    "negativezero_loss": { "accepted": false, "error": "history train loss must be an exact finite non-negative float" },
+    "one": { "accepted": true, "canonical": { "clipped": true, "dev_loss_hex": "0x1.c000000000000p+1", "gradient_norm_hex": "0x1.1000000000000p+2", "improved": false, "parameters_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "schema_version": "hswm-swm0w-s2s-optimization-history-entry/v1", "train_loss_hex": "0x0.0000000000001p-1022", "update": 1 } },
+    "one_missing_gradient": { "accepted": false, "error": "post-update history requires a global gradient norm" },
+    "zero": { "accepted": true, "canonical": { "clipped": false, "dev_loss_hex": "0x1.8000000000000p+0", "gradient_norm_hex": null, "improved": true, "parameters_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "schema_version": "hswm-swm0w-s2s-optimization-history-entry/v1", "train_loss_hex": "0x0.0p+0", "update": 0 } },
+    "zero_wrong": { "accepted": false, "error": "epoch-zero history must be improved, unclipped, and gradient-free" }
+  },
+  "history": {
+    "canonical_entries": [
+      { "clipped": false, "dev_loss_hex": "0x1.8000000000000p+0", "gradient_norm_hex": null, "improved": true, "parameters_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "schema_version": "hswm-swm0w-s2s-optimization-history-entry/v1", "train_loss_hex": "0x0.0p+0", "update": 0 },
+      { "clipped": true, "dev_loss_hex": "0x1.c000000000000p+1", "gradient_norm_hex": "0x1.1000000000000p+2", "improved": false, "parameters_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "schema_version": "hswm-swm0w-s2s-optimization-history-entry/v1", "train_loss_hex": "0x0.0000000000001p-1022", "update": 1 }
+    ],
+    "entry_names": ["zero", "one"],
+    "sha256": "b147e86a68a04ddca531514543b1047816b437c3960509de39818ffb77fbb7b4"
+  },
+  "source_sha256": "d84b8336d8bcbe89aeba7f2d2c915fd294b9ee24425e6092505069a74f9cba94",
+  "protocol_parser": {
+    "source": "swm0w_s2s_protocol.parse_training_config/_parse_history_entry",
+    "config": { "valid": { "accepted": true }, "noncanonical_float": { "accepted": false, "error": "training-config validation failed" }, "negativezero": { "accepted": false, "error": "training-config validation failed" }, "missing": { "accepted": false, "error": "training config keys disagree with the exact schema" }, "extra": { "accepted": false, "error": "training config keys disagree with the exact schema" } },
+    "history": { "valid": { "accepted": true }, "noncanonical_float": { "accepted": false, "error": "history-entry validation failed" }, "negativezero": { "accepted": false, "error": "gradient norm may not encode negative zero" }, "schema": { "accepted": false, "error": "history-entry schema drifted" }, "boolint": { "accepted": false, "error": "history-entry validation failed" } }
+  }
+}

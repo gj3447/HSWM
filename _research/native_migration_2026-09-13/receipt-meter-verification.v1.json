@@ -1,0 +1,409 @@
+{
+  "schema_version": "hswm-native-engineering-verification/v1",
+  "date": "2026-09-13",
+  "authority_class": "SECONDARY_AI",
+  "source_base_commit": "c8d0ca9bc836b90b56137b83901f4f40c552363e",
+  "migration_complete": false,
+  "claim_ceiling": "BOUNDED_ENGINEERING_VERIFICATION_NOT_HSWM_EFFICACY",
+  "source_pins": [
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "944d797cd6756a10e5823719518dc4217c12d0d2c2dfc22256d4b214810c6902",
+      "byte_length": 513666,
+      "git_blob": "44bbefab92d89c057aeeed910c4385e181072b81"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package.json",
+      "sha256": "0c531342cfb6543d5c4e45610eb9706e5051253b3e89bd1a7a7591049f2c1ab0",
+      "byte_length": 5398,
+      "git_blob": "af117e6c845598b3ec51972f742d11d39845047f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-chat-domain.ts",
+      "sha256": "2728c576ae265f37974afc7df5a70c9506e55c81dfeb23e57f076ebc712db121",
+      "byte_length": 13230,
+      "git_blob": "276fe9f0f5ad61f31142205e5bfa1a189c311d38"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-chat-runtime.ts",
+      "sha256": "80a33b0ae0b6cae7f991720a86c4f71d990a53b72eb48e40a93c7fc997de1fb5",
+      "byte_length": 5726,
+      "git_blob": "d9209d7bb0dc7fb6ef3029d6b09e1974160879be"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-call-domain.ts",
+      "sha256": "44ef106f4d5148d6e36e0f4b6ee389a64f4be41b52d9c0592b44d045d42b75f5",
+      "byte_length": 8327,
+      "git_blob": "42d051e212e3f69995f78fe372d3c5bf74b17bf7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-call-runtime.ts",
+      "sha256": "a7dd30c72d3f4ec4046887aea3fba1ab5dfdf73a003f5817eeeee822e44f1095",
+      "byte_length": 1860,
+      "git_blob": "434ad03f37df9736073483ecd7a9c3cbbec6be48"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-envelope-domain.ts",
+      "sha256": "a6e19e6071d7e129ebe8f8603b7b26d71acfceef853ff05d0f05a931bd07452f",
+      "byte_length": 12791,
+      "git_blob": "5c2a7eaf9ad64839b7b4000cf01a9881ba9525af"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-envelope-runtime.ts",
+      "sha256": "ff9bab8ad85205036bae9788f9a8a1b461fcdcdb77ab737bf3ad149f505f5e3f",
+      "byte_length": 4034,
+      "git_blob": "feb704b230ce9aa86184e6cdfe54e0a258b9abba"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-network-domain.ts",
+      "sha256": "d02ccde18752c35f2c79651a1dc45499950a5cdced2d790246fbde5b0430cc4b",
+      "byte_length": 15376,
+      "git_blob": "b3bd128b1d9db950d1748da1fade0dd3afc2bc00"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-network-runtime.ts",
+      "sha256": "70e6840a50b0a2c54519f8618dd2c7884aa0bfeb1f16fd3c01b01d848b245a2e",
+      "byte_length": 2071,
+      "git_blob": "5cbb7dc460a76c590f5c49b8360d267bad20ffef"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-token-meter-domain.ts",
+      "sha256": "233b60c709fb223cac8ab8515dbf3c69b457f580ae4676ead48da79705a19f8b",
+      "byte_length": 5981,
+      "git_blob": "05adeeba58ba8a6359b09e9029182f392b9fe07b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-token-meter-runtime.ts",
+      "sha256": "af499cc0fd4d47069e416e10e4c2aa69d0bf74de9ccb8ce1601212296a89c5e7",
+      "byte_length": 10448,
+      "git_blob": "b755d5f802daba7335c0ab2cacbe000a891e1b0b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-python-isalnum-data.ts",
+      "sha256": "4c14ad619dd0905bd75dd7ba8d5cadc20f2935215437a0c33a4abbb2de0834ee",
+      "byte_length": 32681,
+      "git_blob": "a5a350163cd8e37ad54d909fef10e30ace597d20"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-dataset-domain.ts",
+      "sha256": "2056c1f30c2e03601d1b8b33b861bdce17374af1792d322013bebe5b9ba237b9",
+      "byte_length": 21197,
+      "git_blob": "8ef7c6f40467a2025002b1b8d886ab6f2f705990"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts",
+      "sha256": "556e04329d23bc134f76a17ecf11e83b48aa48d12f2a7bfd6769f15fd6417b62",
+      "byte_length": 11667,
+      "git_blob": "c844cabf93742ef7a919127239332f15009a0083"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-operator-domain.ts",
+      "sha256": "ffab5350795ac29707bbd1b860358c651186414dd6e8adcf572b44a4fb6e0319",
+      "byte_length": 11083,
+      "git_blob": "24708a96a6eeff9466dd44a1886ed023283a4e17"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-optimization-receipt-domain.ts",
+      "sha256": "78459ab164431b2088fe42b17cc59e10c6717815d5a6a45ba1d88c71cefffc57",
+      "byte_length": 13798,
+      "git_blob": "7a23e0068b2394a96fa01b0399a691ad2e66238a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-training-receipt-fields-domain.ts",
+      "sha256": "9dfe9d70e8377141e0928b7fa20c90ad8e920965cf81ea990e433887f6908913",
+      "byte_length": 18711,
+      "git_blob": "3c73cea5581e0563525efab13ac161719d2420b5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-f3-chat-domain.test.ts",
+      "sha256": "3f8675fd52a601825a7ae3de6ed724dfdcb58a54c63cc5bca6901df11e1291fc",
+      "byte_length": 10378,
+      "git_blob": "a590b958c12da5f313025e30549d70683c3b1d8d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-call.test.ts",
+      "sha256": "89bebdefc73035292daa44c919d7a7ab8a088f1a5e3f70bae0be1745ece35a81",
+      "byte_length": 8617,
+      "git_blob": "c125212275a595a9f3b9f92961f813f0b5330e46"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-f1-envelope-domain.test.ts",
+      "sha256": "2848267fe99ad226ac074a932a3815608b0a0c00f73ff9664a99c9097c2069ae",
+      "byte_length": 7402,
+      "git_blob": "9a3d25212ab779d5898b9b1e33a88ec4fcb7e694"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-historical-network.test.ts",
+      "sha256": "4d8e0d46366d1a516b06b4cdee4a0046a1d1efa0ff3209164d673f02320bc4e5",
+      "byte_length": 5377,
+      "git_blob": "1e17725d198fba16607dc78a25abb8c8d470f8a5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-network.test.ts",
+      "sha256": "afc12c3b8a6544a58f849198f2e4d745ed65ed12a6e2238cc2be2cac7aa9f207",
+      "byte_length": 5151,
+      "git_blob": "c771334cf492ed136d7956b05c043e1281c66753"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-token-meter-domain.test.ts",
+      "sha256": "d9e9499aa962243e6e3c9f181485dcd8d44f4f6e45fd7267a13f273948d8449d",
+      "byte_length": 7752,
+      "git_blob": "326732818956fec893d12917b99a120885a2562b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-optimization-receipt-domain.test.ts",
+      "sha256": "ed723a0711b88b88a7037c6e29f76a248a86df71d9639abe76b46579f9bf6cc9",
+      "byte_length": 6105,
+      "git_blob": "4122eeae607cd1976d5f1a0ee076949e2b47c48d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-training-receipt-fields-domain.test.ts",
+      "sha256": "dfeae1b325b5a4c80f8b95663dbda3f18a3c565a15e0d34300950e0eb93afc98",
+      "byte_length": 9374,
+      "git_blob": "e0de3324616b56c8e1c8b8441381ad48ed24f553"
+    },
+    {
+      "path": "tests/fixtures/native_migration/f3_chat_v1/original.v1.json",
+      "sha256": "e679c8464670fa6c354550d18c4c6552a236bb26c62dcf9adf52abe418213a47",
+      "byte_length": 4045,
+      "git_blob": "e854ba9a33f010c3ab73f2ca09e273d50577c256"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_f1_envelope_v1/fake_original.v1.json",
+      "sha256": "acc1907e844891f1e639b8fc134bdbe7d448a329e0247e5bafe40e8da0d1134c",
+      "byte_length": 4074,
+      "git_blob": "ee9aa445b6ebd76542024a816444e071fa370968"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_f1_envelope_v1/original.v1.json",
+      "sha256": "0df3822ffae6f304f4d3bb638841226a610070ec12d63cca0327cf92cb585574",
+      "byte_length": 3888,
+      "git_blob": "0a23d34db378b10ea079b05a90f05ca0524cfa96"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_f1_envelope_v1/refusals.v1.json",
+      "sha256": "bdca2bd28fd5add77e500290169a781be8cf79fe1908ce1e913ba019cac8d40e",
+      "byte_length": 6763,
+      "git_blob": "7ba8be249ab143cd18050cf23a2e7cc837555d93"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_invoke_function_v1/original-boundaries.v1.json",
+      "sha256": "0fea941f196d53f3171f5ec1185762252ef6475e4da5927029c46b8a09eea9c8",
+      "byte_length": 11289,
+      "git_blob": "74ff448916e3426c319dd30b94cd15c199182151"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_invoke_function_v1/original.v1.json",
+      "sha256": "bd5541cc3d3f53fb1a1029d9e5cfbbf47bab2df46eb33d3e5c6850fe8348403c",
+      "byte_length": 9744,
+      "git_blob": "b6dc11d9f5517632ef472b3043d50c5379b4f137"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_network_v1/historical_profile.v1.json",
+      "sha256": "b972daa157286eba0b312e06bbb3baec0fdea18d06074bccef1f3f9b7e2bba45",
+      "byte_length": 1008,
+      "git_blob": "c3e87d5d310efe5a594d311e7897d1fb03f7fe91"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_network_v1/original.v1.json",
+      "sha256": "a841724d6576ee12b6bda0854d2af676e50eafbe829c1b45040b8a4ec7fed50f",
+      "byte_length": 849814,
+      "git_blob": "fd7e16dbbd19209a7bc4080d89af52f08023bbdc"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_network_v1/unicode_isalnum.v1.json",
+      "sha256": "35df5601907c4dbfd8bd6f54db0bc710923ff64a9f800ca2cd2609c489f918c7",
+      "byte_length": 1353,
+      "git_blob": "a8f64c96e65841192bb858d6cb06a83fc282adf2"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_token_meter_v1/original.v1.json",
+      "sha256": "5063c457cc037110f9db8c9034e57939aa2a13e5d92f998bdd6cb7f24330f27f",
+      "byte_length": 3032,
+      "git_blob": "42fd43a9a295bf06f27fbda8d6affff29bfc0974"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_token_meter_v1/qwen_full_experimental.v1.json",
+      "sha256": "83589f777f44426ca7d9b94744301017ea5e0c1c0ef2babee2c13dac9ffbf961",
+      "byte_length": 171006,
+      "git_blob": "bd0340b613b9bfacbde38f949ffa6acdcd28a52d"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_token_meter_v1/qwen_sdk_experimental.v1.json",
+      "sha256": "f04ccb63ab75056366300f2a7a6540e2454dc0c035a7cd83ccb83440d1db345f",
+      "byte_length": 1044,
+      "git_blob": "07953c74fc72702d0f217035d16abc0dd32ebd5f"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_optimization_receipt_v1/epoch_zero_identity.v1.json",
+      "sha256": "cc212bffafe33c48f1b924034b7887cf6427f4e1f4f3037922fda48fcb7ed254",
+      "byte_length": 10717,
+      "git_blob": "df032f42a1f89ed13782e3928a9c3fbcdd86c424"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_optimization_receipt_v1/original.v1.json",
+      "sha256": "a30e74db6797c505b1b3b03e3c1e90310088fb4ee8165e3c8aba270481db55db",
+      "byte_length": 72090,
+      "git_blob": "673f1c8edcc41f9de746a38a203ef42bfa651530"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_training_receipt_fields_v1/original_python.json",
+      "sha256": "84f1b5de92b050ca509ab23482608746a8a7cc609cfa7e1e9166f65aa34fb153",
+      "byte_length": 4604,
+      "git_blob": "571e1fa7319cf562c577529359d7b2160640565c"
+    }
+  ],
+  "toolchain": {
+    "node": "24.13.0",
+    "npm": "11.6.2"
+  },
+  "verification": {
+    "scope": "COMPLETE_ISOLATED_RUN_ONE_FINAL_SOURCE_SNAPSHOT",
+    "full_run": {
+      "passed_files": 220,
+      "skipped_files": 1,
+      "passed_tests": 1406,
+      "skipped_tests": 8,
+      "duration_seconds": 553.29,
+      "opt_in_tokenizer_test": "ENABLED_WITH_FIXED_LOCAL_ARTIFACTS",
+      "source_snapshot_verified_unchanged": true
+    },
+    "effect_boundary": {
+      "files": 289,
+      "allowlisted_files": 38,
+      "violations": 0,
+      "allowlist_expansion": false
+    },
+    "checks": {
+      "test": {
+        "local_log_sha256": "89e9aab2c18eed98be5779159afd2c64c48687f6af6be0b68626395b0a0d0693",
+        "local_log_byte_length": 41927,
+        "exit_code": 0
+      },
+      "check": {
+        "local_log_sha256": "33da2ab898c578972a378832afc649234c3129bfea248387351feda58700f34c",
+        "local_log_byte_length": 5400,
+        "exit_code": 0
+      },
+      "build": {
+        "local_log_sha256": "51a25d8d4c57a1ea08bb66e4ddd0416369a3279c3984f50d06572439b5862db5",
+        "local_log_byte_length": 105,
+        "exit_code": 0
+      },
+      "dnrd": {
+        "local_log_sha256": "6945bc5a754a1883a538f4e388a1748a91b35e4688df1147fa0ee68a86f43975",
+        "local_log_byte_length": 70,
+        "exit_code": 0
+      },
+      "pack": {
+        "local_log_sha256": "4f304cff606062c15db1763676eebbc4d840615e8eacbed9800d2e3bfa82d703",
+        "local_log_byte_length": 170794,
+        "exit_code": 0
+      },
+      "math": {
+        "local_log_sha256": "ff6e88e24e4b032a2b7a314a88d4f4b09ea167eb8ecc0d24196375bb4397a9c0",
+        "local_log_byte_length": 723,
+        "exit_code": 0
+      }
+    }
+  },
+  "original_contracts": {
+    "f1": "Exact single-call and three-call network through injected model port, token filler and envelope; actual historical 20 item-arms / 60 captured responses reproduce request, physical call, call receipt and item receipt bytes. No live model call or durable spool is covered.",
+    "s2s": "Canonical training config/history and exact 38-field self-consistent optimization receipt verifier. Complete task data/strata, initialization, history/stopping/best-checkpoint and receipt commitments are recomputed. This does not replay training or admit a model.",
+    "f3": "Original cache key/body, cache-first budget, failure consumption, response metadata and immutable resulting state through typed injected I/O. Provider retry/backoff and active F3 lifecycle remain outside this seam."
+  },
+  "qualification": {
+    "path": "_research/native_migration_2026-09-13/qwen-tokenizer-qualification.v1.json",
+    "sha256": "b37d08cf67158f2db257579e74a03fcf9a705bc637f23795277437887ccbe8c1",
+    "byte_length": 5788,
+    "git_blob": "9e09d119df0376b22a7ddf41752be3183e8bb9f2"
+  },
+  "preserved_failures": [
+    {
+      "id": "tokenizer-nfc-mapping-loss",
+      "status": "PRESERVED_RED_AND_DERIVED_PROFILE_VERIFIED",
+      "finding": "Unmodified official SDK normalizes decomposed e+acute and counts one token versus original two. The native derived profile disables NFC in memory. Historical identity and actual native implementation identity remain separate.",
+      "evidence": {
+        "path": "tests/fixtures/native_migration/prom9_token_meter_v1/qwen_sdk_experimental.v1.json",
+        "sha256": "f04ccb63ab75056366300f2a7a6540e2454dc0c035a7cd83ccb83440d1db345f",
+        "byte_length": 1044,
+        "git_blob": "07953c74fc72702d0f217035d16abc0dd32ebd5f"
+      }
+    },
+    {
+      "id": "tokenizer-caller-echo-identity",
+      "status": "REPAIRED_FIXED_ARTIFACT_AND_PROFILE_BINDING",
+      "finding": "Caller-supplied expected identity could match a forged manifest while unrelated tokenizer bytes loaded. Native historical wrapper now binds six fixed historical identity fields and all four fixed artifacts; caller echo parameter removed."
+    },
+    {
+      "id": "historical-request-id-width",
+      "status": "REPAIRED_EXPLICIT_SOURCE_VERSION_PROFILE",
+      "finding": "Current eight-hex request IDs cannot reproduce source-bound historical twenty-hex IDs; this also changes filler counts. Explicit historical profile matches commit 0b4e97afab88882922df8ea24ed4d6e6d4cf9d37. Current default is unchanged; old receipts were not rewritten.",
+      "evidence": {
+        "path": "tests/fixtures/native_migration/prom9_network_v1/historical_profile.v1.json",
+        "sha256": "b972daa157286eba0b312e06bbb3baec0fdea18d06074bccef1f3f9b7e2bba45",
+        "byte_length": 1008,
+        "git_blob": "c3e87d5d310efe5a594d311e7897d1fb03f7fe91"
+      }
+    },
+    {
+      "id": "call-json-float-lexeme",
+      "status": "REPAIRED_SOURCE_CANONICAL_RECEIPT_REPLAY",
+      "finding": "Ordinary JSON.parse erased BF 0.0 lexemes and changed canonical call receipt hashes. The native lexeme-preserving TaskJson decoder restores source bytes."
+    },
+    {
+      "id": "envelope-and-completion-alias",
+      "status": "REPAIRED_CAPTURE_BEFORE_CALLBACK",
+      "finding": "Meter and stage callbacks could mutate later envelope or output inputs. Native boundaries capture immutable JSON before callbacks and rederive completed calls against the expected request before advancing."
+    },
+    {
+      "id": "s2s-epoch-zero-parameter-identity",
+      "status": "REPAIRED_SOURCE_REFUSAL",
+      "finding": "A fully resealed best-update-2 receipt using initializer parameter hash passed the initial native parser. Original requires bestUpdate zero iff best hash equals initializer hash. Restored exact condition and preserved actual source rejection.",
+      "evidence": {
+        "path": "tests/fixtures/native_migration/s2s_optimization_receipt_v1/epoch_zero_identity.v1.json",
+        "sha256": "cc212bffafe33c48f1b924034b7887cf6427f4e1f4f3037922fda48fcb7ed254",
+        "byte_length": 10717,
+        "git_blob": "df032f42a1f89ed13782e3928a9c3fbcdd86c424"
+      }
+    },
+    {
+      "id": "s2s-canonical-config-and-full-receipt",
+      "status": "REPAIRED_ORIGINAL_PARSER_BOUNDARY",
+      "finding": "Raw training kwargs are not canonical *_hex fields. Native canonical and raw parsers are distinct; nested data, full-task dataset/strata, history, stopping, best checkpoint and receipt SHA are verified. All four original full-task receipts include nonzero best-update-2."
+    },
+    {
+      "id": "f3-cache-budget-and-falsey-usage",
+      "status": "REPAIRED_SOURCE_EVENTS_AND_VALUES",
+      "finding": "Cache hits precede budget consumption; failed miss consumes budget. Source falsey usage maps to empty object while present null token fields remain null. Native event/state replay preserves these cases."
+    },
+    {
+      "id": "json-descriptor-and-depth-boundaries",
+      "status": "REPAIRED_TYPED_DATA_ONLY_CAPTURE",
+      "finding": "Review found getter execution, sparse arrays, wrong depth predicates and shallow aliases. Data-only bounded captures refuse accessors without evaluating them; decoded JSON metadata and valid canonical receipts remain accepted."
+    }
+  ],
+  "development_workflow": {
+    "episode": "native-receipt-meter-20260913",
+    "relation": "relation:runtime-focused",
+    "result": "SUCCEEDED",
+    "feedback": {
+      "success": true,
+      "source": "agent(codex): Useful native dispatch regression; F1 historical 60-call replay and S2S receipt semantics required separate checks. Passing local checks does not establish HSWM efficacy or causal credit."
+    },
+    "selected_check": {
+      "passed_files": 10,
+      "passed_tests": 54,
+      "scope": "ADAPTIVE_RUNTIME_DISPATCH_ONLY_ADDITIONAL_FULL_CHECKS_RUN_SEPARATELY"
+    },
+    "storage": "PRIVATE_LOCAL_STATE_NOT_PUBLIC_KG"
+  },
+  "limits": [
+    "Active Python migration remains incomplete; source-bound inventory retains sixteen partial/active surfaces. Native components alone do not close operational routes.",
+    "Historical Qwen validation receipt is not cryptographically revalidated or promoted to live native tokenizer admission.",
+    "The single-call boundary additionally recomputes prompt SHA; unsupported data objects and unsafe integers are explicit stricter native boundary refusals.",
+    "F1 SQLite durable ledger, idempotent spool, suite CLI; S2S model/protocol/pilot/live closure; F3 lifecycle; package/CI callers remain.",
+    "Target identity, FCL-1..8, RED paths, success criteria and authority classes are unchanged. Engineering parity does not establish cognition, causal credit or HSWM efficacy.",
+    "No live KG publication, deployment, model API call, private model or dataset publication."
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "source_pins": {
+    "_research/f_series/f2_delta_w_credit.py": "1cf1518cf0cd9172b560c662b52c4261bc3cdcb57e7a6c8e34b80c7c55f58691",
+    "_research/f_series/f3v2_arms.py": "19848eb4d3b7f6377d28793324652f4a45631dc74f16ba91b7d5e3636d991915"
+  },
+  "identities": [
+    {"name":"baseline","request":{"endpoint":"http://example.test/v1///","model":"model-A","system":"system","user":"user","seed":7,"maxTokens":64},"request_sha256":"98880ce8797d556fbceba8b247c4b13f49d934c0ec77023e048a046fd07fa736","cache_filename":"98880ce8797d556fbceba8b247c4b13f49d934c0ec77023e048a046fd07fa736.json","endpoint_after_rstrip":"http://example.test/v1","state_after_first_miss":{"maxCalls":3,"used":1,"hits":0,"misses":1}},
+    {"name":"unicode","request":{"endpoint":"https://example.test","model":"mødel","system":"π🙂","user":"line\nbreak","seed":0,"maxTokens":1},"request_sha256":"ac4dea320b912706ffa8414f60bb2c6ae35377be847dedc7c3d38eda0d26daa3","cache_filename":"ac4dea320b912706ffa8414f60bb2c6ae35377be847dedc7c3d38eda0d26daa3.json","endpoint_after_rstrip":"https://example.test","state_after_first_miss":{"maxCalls":3,"used":1,"hits":0,"misses":1}},
+    {"name":"different-seed","request":{"endpoint":"http://example.test/v1","model":"model-A","system":"system","user":"user","seed":8,"maxTokens":64},"request_sha256":"7018933a45220b9df4e61ce3526de687f6d856dfeed3698b6f305bdb973f607a","cache_filename":"7018933a45220b9df4e61ce3526de687f6d856dfeed3698b6f305bdb973f607a.json","endpoint_after_rstrip":"http://example.test/v1","state_after_first_miss":{"maxCalls":3,"used":1,"hits":0,"misses":1}}
+  ],
+  "transitions": {"miss_then_hit":{"first":{"cache":"MISS","state":{"maxCalls":1,"used":1,"hits":0,"misses":1}},"second":{"cache":"HIT","state":{"maxCalls":1,"used":1,"hits":1,"misses":1}}},"exhausted_miss":{"error":"LLM call budget 0 exhausted","state":{"maxCalls":0,"used":0,"hits":0,"misses":0}}},
+  "execution": [
+    {"name":"hit_without_content","events":["read"],"state":{"budget_used":0,"hits":1,"misses":0},"result":{"meta":{"response_model":"served","cached":true}}},
+    {"name":"miss","events":["read","transport","write"],"state":{"budget_used":1,"hits":0,"misses":1},"result":{"meta":{"text":"answer","finish_reason":"stop","response_model":"served","usage":{"prompt_tokens":7,"completion_tokens":3},"cached":false}}},
+    {"name":"corrupt_cache","events":["read"],"state":{"budget_used":0,"hits":0,"misses":0},"result":{"error_type":"JSONDecodeError","error":"bad: line 1 column 1 (char 0)"}},
+    {"name":"transport_error","events":["read","transport"],"state":{"budget_used":1,"hits":0,"misses":1},"result":{"error_type":"OSError","error":"down"}},
+    {"name":"cache_write_error","events":["read","transport","write"],"state":{"budget_used":1,"hits":0,"misses":1},"result":{"error_type":"OSError","error":"disk"}},
+    {"name":"exhausted_miss","events":["read"],"state":{"budget_used":0,"hits":0,"misses":0},"result":{"error_type":"BudgetExceeded","error":"LLM call budget 0 exhausted"}},
+    {"name":"usage_null","events":["read","transport","write"],"state":{"budget_used":1,"hits":0,"misses":1},"result":{"meta":{"text":"answer","finish_reason":null,"response_model":null,"usage":{"prompt_tokens":0,"completion_tokens":0},"cached":false}}},
+    {"name":"usage_false","events":["read","transport","write"],"state":{"budget_used":1,"hits":0,"misses":1},"result":{"meta":{"text":"answer","finish_reason":null,"response_model":null,"usage":{"prompt_tokens":0,"completion_tokens":0},"cached":false}}},
+    {"name":"usage_empty_array","events":["read","transport","write"],"state":{"budget_used":1,"hits":0,"misses":1},"result":{"meta":{"text":"answer","finish_reason":null,"response_model":null,"usage":{"prompt_tokens":0,"completion_tokens":0},"cached":false}}},
+    {"name":"usage_null_tokens","events":["read","transport","write"],"state":{"budget_used":1,"hits":0,"misses":1},"result":{"meta":{"text":"answer","finish_reason":null,"response_model":null,"usage":{"prompt_tokens":null,"completion_tokens":null},"cached":false}}}
+  ]
+}

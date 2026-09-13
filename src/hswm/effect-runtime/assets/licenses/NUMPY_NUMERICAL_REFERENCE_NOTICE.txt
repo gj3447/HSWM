@@ -6,6 +6,8 @@ LICENSE.txt: SHA-256 1be1df33863f97a7bc1c4d67980bd6c69c9a6fef0a5ee76e6ad6cb91e56
 numpy/random/bit_generator.pyx: SHA-256 b5594d6efa3a893aa0ed17caaf376e5d5fc32b21fd644f509566cc7c9abfc0f7
 numpy/random/src/pcg64/pcg64.h: SHA-256 2ce9cc9366a9993cfd786a1ee63eaad35d8761c0ff9744ee5508192156f33d4a
 
+Additional native weighted-loss reference: contiguous float64 pairwise sum from numpy/_core/src/umath/loops_utils.h.src at the same pinned commit. Source SHA-256 ed85d5b99f0b457cb7a316bf8c4acb884034bbbb81a89c5cedb62be80bf7c4f8. The whole contiguous array is reduced with eight lanes and block size 128; the observed getbufsize value is not an imposed chunk size. Modified for pure TypeScript arrays and typed finite-value refusal.
+
 NumPy license
 
 Copyright (c) 2005-2025, NumPy Developers.

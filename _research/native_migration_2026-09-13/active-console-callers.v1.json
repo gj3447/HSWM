@@ -1,0 +1,505 @@
+{
+  "as_of": "2026-09-13",
+  "entries": [
+    {
+      "active_callers": [
+        {
+          "classification": "ACTIVE_CI_PYTHON_WHEEL_COMPATIBILITY",
+          "command": "\"${{ runner.temp }}/wheel-venv/bin/hswm-p1-gate-diagnostic\" --help",
+          "line": 349,
+          "path": ".github/workflows/ci.yml",
+          "source_sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        }
+      ],
+      "blocker": "The observed invocation only tests the installed Python wheel console script. Native --help has compatible syntax but cannot replace a wheel-packaging compatibility assertion.",
+      "historical_or_compatibility_references": [],
+      "native_equivalent": {
+        "arguments_compatible_for_observed_invocations": true,
+        "exists": true,
+        "path": "src/hswm/effect-runtime/bin/hswm-p1-gate-diagnostic",
+        "source_sha256": "cb779cea13ace1853060150c87816e337f0dc61cda26bfdc6fa75c6fccd09700"
+      },
+      "package_declaration": {
+        "line": 16,
+        "path": "pyproject.toml",
+        "source_sha256": "d1a67c9af3a27b9de8f174d7948e3793b95335a231f5d2d3a7fe76d4f0b00e34"
+      },
+      "python_console_script": "hswm-p1-gate-diagnostic -> hswm.diagnostics.p1_gate:main"
+    },
+    {
+      "active_callers": [
+        {
+          "classification": "ACTIVE_CI_PYTHON_SDIST_COMPATIBILITY",
+          "command": "uv run --locked hswm-verify-efficacy --pretty (working-directory: sdist)",
+          "line": 122,
+          "path": ".github/workflows/ci.yml",
+          "source_sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON_WHEEL_COMPATIBILITY",
+          "command": "\"${{ runner.temp }}/wheel-venv/bin/hswm-verify-efficacy\" --root \"${{ github.workspace }}\" --pretty",
+          "line": 351,
+          "path": ".github/workflows/ci.yml",
+          "source_sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_NATIVE",
+          "command": "src/hswm/effect-runtime/bin/hswm-verify-efficacy --pretty",
+          "line": 285,
+          "path": ".github/workflows/ci.yml",
+          "source_sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        }
+      ],
+      "blocker": "The native CLI covers the root checkout selected-snapshot invocation, but the source-distribution and wheel jobs intentionally test the packaged Python console script.",
+      "historical_or_compatibility_references": [
+        {
+          "classification": "HISTORICAL_DOCUMENTATION",
+          "command": "prose reference only; no invocation",
+          "line": 379,
+          "path": "docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md",
+          "source_sha256": "f593f2adac51655bf1902513697e7240cde605701852a301f63d4156558f8cbc",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        }
+      ],
+      "native_equivalent": {
+        "arguments_compatible_for_observed_invocations": true,
+        "exists": true,
+        "path": "src/hswm/effect-runtime/bin/hswm-verify-efficacy",
+        "source_sha256": "9bc26ae688044e6760dbbb8f0b92d3d251a09320c92fab44cbc6977e269dad20"
+      },
+      "package_declaration": {
+        "line": 17,
+        "path": "pyproject.toml",
+        "source_sha256": "d1a67c9af3a27b9de8f174d7948e3793b95335a231f5d2d3a7fe76d4f0b00e34"
+      },
+      "python_console_script": "hswm-verify-efficacy -> scripts.verify_efficacy_claims:main"
+    },
+    {
+      "active_callers": [],
+      "blocker": "No maintained operational Python invocation was found. The retained references prescribe this native command for detached historical execution; it remains a historical/compatibility capability.",
+      "historical_or_compatibility_references": [
+        {
+          "classification": "HISTORICAL_COMPATIBILITY_REFERENCE",
+          "command": "hswm-legacy-replay in detached checkout (prose, no concrete argv)",
+          "line": 78,
+          "path": "docs/research/ARTIFACT_LAYOUT.md",
+          "source_sha256": "46eeb3504056dd72c75ada0dfe405b7ad5da3d931a972e32533469eb76f84548",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "HISTORICAL_COMPATIBILITY_REFERENCE",
+          "command": "hswm-legacy-replay for exact historical execution (prose, no concrete argv)",
+          "line": 86,
+          "path": "docs/research/ARTIFACT_LAYOUT.md",
+          "source_sha256": "46eeb3504056dd72c75ada0dfe405b7ad5da3d931a972e32533469eb76f84548",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        }
+      ],
+      "native_equivalent": {
+        "arguments_compatible_for_observed_invocations": true,
+        "exists": true,
+        "path": "src/hswm/effect-runtime/bin/hswm-legacy-replay",
+        "source_sha256": "e212a5e22ba172d8c1ca77470206218a8c5a27ffb92f7298d9162656afcc021a"
+      },
+      "package_declaration": {
+        "line": 18,
+        "path": "pyproject.toml",
+        "source_sha256": "d1a67c9af3a27b9de8f174d7948e3793b95335a231f5d2d3a7fe76d4f0b00e34"
+      },
+      "python_console_script": "hswm-legacy-replay -> hswm.infrastructure.legacy_replay:main"
+    },
+    {
+      "active_callers": [
+        {
+          "classification": "ACTIVE_MAINTAINED_OPERATIONS_DOC",
+          "command": "uv run --locked hswm-research-fabric start",
+          "line": 114,
+          "path": "docs/operations/HSWM_PROXMOX_RESEARCH_FABRIC_2026-08-28.md",
+          "source_sha256": "6190a9ad120fea0b9ab8b343e68da949a611e240339b5018d79d1075b0914155",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_MAINTAINED_OPERATIONS_DOC",
+          "command": "uv run --locked hswm-research-fabric status",
+          "line": 115,
+          "path": "docs/operations/HSWM_PROXMOX_RESEARCH_FABRIC_2026-08-28.md",
+          "source_sha256": "6190a9ad120fea0b9ab8b343e68da949a611e240339b5018d79d1075b0914155",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_MAINTAINED_OPERATIONS_DOC",
+          "command": "uv run --locked hswm-research-fabric doctor",
+          "line": 116,
+          "path": "docs/operations/HSWM_PROXMOX_RESEARCH_FABRIC_2026-08-28.md",
+          "source_sha256": "6190a9ad120fea0b9ab8b343e68da949a611e240339b5018d79d1075b0914155",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_MAINTAINED_OPERATIONS_DOC",
+          "command": "uv run --locked hswm-research-fabric stop",
+          "line": 117,
+          "path": "docs/operations/HSWM_PROXMOX_RESEARCH_FABRIC_2026-08-28.md",
+          "source_sha256": "6190a9ad120fea0b9ab8b343e68da949a611e240339b5018d79d1075b0914155",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_SYSTEMD_NATIVE",
+          "command": "node .../dist/native-research-fabric-process.js start --timeout 120",
+          "line": 13,
+          "path": "docs/operations/systemd/hswm-research-fabric.service",
+          "source_sha256": "add5386c0734314e86f4ffc21f9d5fb93f9272e60ec46c89ee88cbd7e35028ea",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_SYSTEMD_NATIVE",
+          "command": "node .../dist/native-research-fabric-process.js doctor",
+          "line": 14,
+          "path": "docs/operations/systemd/hswm-research-fabric.service",
+          "source_sha256": "add5386c0734314e86f4ffc21f9d5fb93f9272e60ec46c89ee88cbd7e35028ea",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_SYSTEMD_NATIVE",
+          "command": "node .../dist/native-research-fabric-process.js stop",
+          "line": 15,
+          "path": "docs/operations/systemd/hswm-research-fabric.service",
+          "source_sha256": "add5386c0734314e86f4ffc21f9d5fb93f9272e60ec46c89ee88cbd7e35028ea",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        }
+      ],
+      "blocker": "Maintained operations documentation still invokes the Python package command. The checked-in systemd unit source already invokes the native process with equivalent start/doctor/stop verbs; documentation has not been migrated.",
+      "historical_or_compatibility_references": [],
+      "native_equivalent": {
+        "arguments_compatible_for_observed_invocations": true,
+        "exists": true,
+        "path": "src/hswm/effect-runtime/bin/hswm-research-fabric",
+        "source_sha256": "bb63f9437e612bc78c647f01af6080a30de75c006647bfd65d5f1570c7c7715d"
+      },
+      "package_declaration": {
+        "line": 19,
+        "path": "pyproject.toml",
+        "source_sha256": "d1a67c9af3a27b9de8f174d7948e3793b95335a231f5d2d3a7fe76d4f0b00e34"
+      },
+      "python_console_script": "hswm-research-fabric -> hswm.infrastructure.research_fabric:main"
+    },
+    {
+      "active_callers": [
+        {
+          "classification": "ACTIVE_CI_PYTHON_SDIST_COMPATIBILITY",
+          "command": "uv run --locked hswm-graph-standards verify (working-directory: sdist)",
+          "line": 103,
+          "path": ".github/workflows/ci.yml",
+          "source_sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON_WHEEL_COMPATIBILITY",
+          "command": "\"${{ runner.temp }}/wheel-venv/bin/hswm-graph-standards\" --repository-root \"${GITHUB_WORKSPACE}\" verify",
+          "line": 350,
+          "path": ".github/workflows/ci.yml",
+          "source_sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_NATIVE",
+          "command": "src/hswm/effect-runtime/bin/hswm-graph-standards fetch --source-id w3c-rdf-tests-rdf11-nquads --destination \"${hswm_native_suite_parent}/rdf-tests\"",
+          "line": 31,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON",
+          "command": "uv run ... hswm-graph-standards verify",
+          "line": 67,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON",
+          "command": "uv run ... hswm-graph-standards fetch --source-id w3c-rdf-tests-rdf11-nquads --destination \"${suite_root}/rdf11\"",
+          "line": 72,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON",
+          "command": "uv run ... hswm-graph-standards fetch --source-id w3c-rdf-tests-rdf12-nquads --destination \"${suite_root}/rdf12\"",
+          "line": 73,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON",
+          "command": "uv run ... hswm-graph-standards fetch --source-id w3c-rdf-canon-tests --destination \"${suite_root}/rdfc10\"",
+          "line": 74,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON",
+          "command": "uv run ... hswm-graph-standards fetch --source-id w3c-shacl10-tests --destination \"${suite_root}/shacl10\"",
+          "line": 75,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON",
+          "command": "uv run ... hswm-graph-standards fetch --source-id w3c-jsonld11-tests --destination \"${suite_root}/jsonld11\"",
+          "line": 76,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON",
+          "command": "uv run ... hswm-graph-standards fetch --source-id w3c-rdf-tests-sparql10-basic --destination \"${suite_root}/sparql11\"",
+          "line": 77,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON",
+          "command": "uv run ... hswm-graph-standards qualify --profile rdf11-nquads-n3 --source-root \"${HSWM_GRAPH_SUITE_ROOT}/rdf11\" --output ...",
+          "line": 82,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON",
+          "command": "uv run ... hswm-graph-standards qualify --profile rdf12-nquads-n3-experimental --source-root ...",
+          "line": 83,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON",
+          "command": "uv run ... hswm-graph-standards qualify --profile rdfc10-rdf-canonize --source-root ...",
+          "line": 84,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON",
+          "command": "uv run ... hswm-graph-standards qualify --profile shacl10-pyshacl-hswm-core --source-root ...",
+          "line": 85,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON",
+          "command": "uv run ... hswm-graph-standards qualify --profile jsonld11-jsonldjs-hswm-fromrdf --source-root ...",
+          "line": 86,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_CI_PYTHON",
+          "command": "uv run ... hswm-graph-standards qualify --profile sparql11-rdflib-hswm-basic --source-root ...",
+          "line": 87,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        }
+      ],
+      "blocker": "The native CLI accepts verify/fetch/qualify with the documented option names. However qualify dispatches the profile-pinned runner; the six requalification calls remain Python execution, and Python sdist/wheel jobs intentionally exercise package compatibility.",
+      "historical_or_compatibility_references": [
+        {
+          "classification": "MAINTAINED_DOC_PYTHON_COMMAND",
+          "command": "uv run hswm-graph-standards verify",
+          "line": 174,
+          "path": "docs/operations/HSWM_STANDARD_TOOLCHAIN_POLICY_2026-09-02.md",
+          "source_sha256": "799fd8d8c3ce4f32d6e54ce79777bad4cc2fb2d32aa69cd65e9da5cc99a4ba97",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "MAINTAINED_DOC_PYTHON_COMMAND",
+          "command": "uv run hswm-graph-standards fetch --source-id w3c-rdf-tests-rdf11-nquads --destination /tmp/hswm-w3c-rdf-tests",
+          "line": 189,
+          "path": "docs/operations/HSWM_STANDARD_TOOLCHAIN_POLICY_2026-09-02.md",
+          "source_sha256": "799fd8d8c3ce4f32d6e54ce79777bad4cc2fb2d32aa69cd65e9da5cc99a4ba97",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "MAINTAINED_DOC_PYTHON_COMMAND",
+          "command": "uv run hswm-graph-standards qualify --profile rdf11-nquads-n3 --source-root /tmp/hswm-w3c-rdf-tests",
+          "line": 197,
+          "path": "docs/operations/HSWM_STANDARD_TOOLCHAIN_POLICY_2026-09-02.md",
+          "source_sha256": "799fd8d8c3ce4f32d6e54ce79777bad4cc2fb2d32aa69cd65e9da5cc99a4ba97",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        }
+      ],
+      "native_equivalent": {
+        "arguments_compatible_for_observed_invocations": true,
+        "exists": true,
+        "path": "src/hswm/effect-runtime/bin/hswm-graph-standards",
+        "source_sha256": "b7e547a37f726ea75b9877aa5af1223fe3e535b2ffe798766024a3997c75b10c"
+      },
+      "package_declaration": {
+        "line": 20,
+        "path": "pyproject.toml",
+        "source_sha256": "d1a67c9af3a27b9de8f174d7948e3793b95335a231f5d2d3a7fe76d4f0b00e34"
+      },
+      "python_console_script": "hswm-graph-standards -> hswm.infrastructure.graph_standard_tooling:main"
+    },
+    {
+      "active_callers": [
+        {
+          "classification": "ACTIVE_MAINTAINED_RESEARCH_DOC",
+          "command": "uv run --locked hswm-g0-occurrence external-handoff-template <occurrence-uid>",
+          "line": 87,
+          "path": "docs/research/HSWM_G0_OCCURRENCE_INTEGRITY_PROFILE_2026-09-03.md",
+          "source_sha256": "d46451918200b16e0e710ea1a250682963cdfdd66bf4db9e93daa403047f3a5f",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_MAINTAINED_RESEARCH_DOC",
+          "command": "uv run --locked hswm-g0-occurrence external-handoff-validate <handoff.json>",
+          "line": 104,
+          "path": "docs/research/HSWM_G0_OCCURRENCE_INTEGRITY_PROFILE_2026-09-03.md",
+          "source_sha256": "d46451918200b16e0e710ea1a250682963cdfdd66bf4db9e93daa403047f3a5f",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_MAINTAINED_RESEARCH_DOC",
+          "command": "uv run --locked hswm-g0-occurrence preflight",
+          "line": 321,
+          "path": "docs/research/HSWM_G0_OCCURRENCE_INTEGRITY_PROFILE_2026-09-03.md",
+          "source_sha256": "d46451918200b16e0e710ea1a250682963cdfdd66bf4db9e93daa403047f3a5f",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        }
+      ],
+      "blocker": "The native CLI implements the two documented handoff commands and preflight with matching positional arguments. The remaining blocker is scientific/external qualification, not an argument mismatch.",
+      "historical_or_compatibility_references": [],
+      "native_equivalent": {
+        "arguments_compatible_for_observed_invocations": true,
+        "exists": true,
+        "path": "src/hswm/effect-runtime/bin/hswm-g0-occurrence",
+        "source_sha256": "5c49d42e4b34dcd00853f31ac6ee73ec0a636fb16bd4a83c9d5484658bba78e5"
+      },
+      "package_declaration": {
+        "line": 21,
+        "path": "pyproject.toml",
+        "source_sha256": "d1a67c9af3a27b9de8f174d7948e3793b95335a231f5d2d3a7fe76d4f0b00e34"
+      },
+      "python_console_script": "hswm-g0-occurrence -> hswm.infrastructure.occurrence_cli:main"
+    },
+    {
+      "active_callers": [
+        {
+          "classification": "ACTIVE_MAINTAINED_RESEARCH_DOC",
+          "command": "uv run --locked hswm-task --help",
+          "line": 30,
+          "path": "docs/research/HSWM_CONDITIONAL_TASK_CLI_2026-09-07.md",
+          "source_sha256": "261815512d06f52ebd726fccba37ea039845defb77240d3f73469fb9406be93f",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_MAINTAINED_RESEARCH_DOC",
+          "command": "uv run --locked hswm-task demo _research/causal_composition/examples/conditional_task_demo.v1.json",
+          "line": 31,
+          "path": "docs/research/HSWM_CONDITIONAL_TASK_CLI_2026-09-07.md",
+          "source_sha256": "261815512d06f52ebd726fccba37ea039845defb77240d3f73469fb9406be93f",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_MAINTAINED_RESEARCH_DOC",
+          "command": "uv run --locked hswm-task synthesize /tmp/request.json --output /tmp/page1.json",
+          "line": 67,
+          "path": "docs/research/HSWM_CONDITIONAL_TASK_CLI_2026-09-07.md",
+          "source_sha256": "261815512d06f52ebd726fccba37ea039845defb77240d3f73469fb9406be93f",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_MAINTAINED_RESEARCH_DOC",
+          "command": "uv run --locked hswm-task synthesize /tmp/request.json --resume-from /tmp/page1.json --output /tmp/page2.json",
+          "line": 68,
+          "path": "docs/research/HSWM_CONDITIONAL_TASK_CLI_2026-09-07.md",
+          "source_sha256": "261815512d06f52ebd726fccba37ea039845defb77240d3f73469fb9406be93f",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        }
+      ],
+      "blocker": "The native CLI accepts the documented demo/synthesize verbs and --output/--resume-from options. Maintained documentation is still Python-prefixed; no CI or systemd caller was found in the scoped surfaces.",
+      "historical_or_compatibility_references": [],
+      "native_equivalent": {
+        "arguments_compatible_for_observed_invocations": true,
+        "exists": true,
+        "path": "src/hswm/effect-runtime/bin/hswm-task",
+        "source_sha256": "40e2291cebbfe990a8fc2cff3649c7c65522ff7790e68ecfc7b661b244a0b04a"
+      },
+      "package_declaration": {
+        "line": 22,
+        "path": "pyproject.toml",
+        "source_sha256": "d1a67c9af3a27b9de8f174d7948e3793b95335a231f5d2d3a7fe76d4f0b00e34"
+      },
+      "python_console_script": "hswm-task -> hswm.infrastructure.conditional_task_cli:main"
+    },
+    {
+      "active_callers": [
+        {
+          "classification": "ACTIVE_MAINTAINED_RESEARCH_DOC",
+          "command": "uv run --locked hswm-usl preview --request _research/usl_adapter/examples/preview.v1.json",
+          "line": 83,
+          "path": "docs/research/HSWM_USL_ADAPTER_ADVERSARIAL_REVIEW_2026-09-08.md",
+          "source_sha256": "8d7f460fda77ab5bc38f62b221d8392ba536d1ef79501eb1daed650e444202d3",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        },
+        {
+          "classification": "ACTIVE_MAINTAINED_OPERATIONS_DOC",
+          "command": "uv run --locked hswm-usl preview --request _research/usl_adapter/examples/preview.v2.json",
+          "line": 11,
+          "path": "docs/operations/HSWM_USL_ADAPTER_V2_2026-09-08.md",
+          "source_sha256": "87502334d140d5cadbb0e2d78d3dac716984b563643b0a57e9042e5394f123c1",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        }
+      ],
+      "blocker": "The native CLI preserves project|preview --request PATH exactly. The maintained docs still select the Python package command; no CI or systemd caller was found in the scoped surfaces.",
+      "historical_or_compatibility_references": [
+        {
+          "classification": "HISTORICAL_DOCUMENTATION",
+          "command": "prose surface reference: hswm-usl project|preview",
+          "line": 77,
+          "path": "docs/research/HSWM_USL_ADAPTER_ADVERSARIAL_REVIEW_2026-09-08.md",
+          "source_sha256": "8d7f460fda77ab5bc38f62b221d8392ba536d1ef79501eb1daed650e444202d3",
+          "command_form": "OBSERVED_COMMAND_OR_NORMALIZED_EXCERPT_CHECK_BOUND_SOURCE_FOR_LITERAL_ARGV"
+        }
+      ],
+      "native_equivalent": {
+        "arguments_compatible_for_observed_invocations": true,
+        "exists": true,
+        "path": "src/hswm/effect-runtime/bin/hswm-usl",
+        "source_sha256": "3ede382d913fb11aad45553199573598df4ed9c2da688f9547f8fc1b9bfb3c81"
+      },
+      "package_declaration": {
+        "line": 23,
+        "path": "pyproject.toml",
+        "source_sha256": "d1a67c9af3a27b9de8f174d7948e3793b95335a231f5d2d3a7fe76d4f0b00e34"
+      },
+      "python_console_script": "hswm-usl -> hswm.infrastructure.usl_cli:main"
+    }
+  ],
+  "inventory_source": {
+    "path": "_research/native_migration_2026-09-13/inventory.v7.json",
+    "sha256": "940e2ba6a61ed16f7f288178d420a013c4045eed4e3829c980ed9d2754d17bd4"
+  },
+  "schema_version": "hswm-native-active-python-console-callers-audit/v1",
+  "scope": "Eight pyproject.toml [project.scripts] names only; maintained README/INDEX/docs/scripts/.github/systemd routes searched with rg. _research and tests excluded except package inventory context. A label was not treated as closure evidence.",
+  "authority_class": "SECONDARY_AI",
+  "live_deployment_observed": false,
+  "observation_limit": "Scoped source inspection. Checked-in systemd source is not evidence of installed/deployed unit state. Native argument compatibility does not establish live service or scientific qualification."
+}

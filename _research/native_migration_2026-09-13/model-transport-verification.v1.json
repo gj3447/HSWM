@@ -1,0 +1,335 @@
+{
+  "schema_version": "hswm-native-engineering-verification/v1",
+  "date": "2026-09-13",
+  "authority_class": "SECONDARY_AI",
+  "source_base_commit": "9c7d45c95b0325ea0aab42dde5a59d36bd12d531",
+  "migration_complete": false,
+  "claim_ceiling": "BOUNDED_ENGINEERING_VERIFICATION_NOT_HSWM_EFFICACY",
+  "source_pins": [
+    {
+      "path": "src/hswm/effect-runtime/assets/licenses/NUMPY_NUMERICAL_REFERENCE_NOTICE.txt",
+      "sha256": "9ba20ede5fd6fe344ecdccca532079beffab2be62d368cb3b5ee69393bb8d0b8",
+      "byte_length": 6594,
+      "git_blob": "dea756e9d18381ad80c9d5a3726703b8029aa205"
+    },
+    {
+      "path": "src/hswm/effect-runtime/bin/hswm-s2s-model",
+      "sha256": "3beedae0d0774caf3b648a1d234d57195673c0c95334f4b81334cc4cba294ba6",
+      "byte_length": 149,
+      "git_blob": "68872a688eb0892de034a1794300bd923e09f4eb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "a11cd7f1942df3811d4a818131c38c918a971d65b386caf5ea3dee108225ed2c",
+      "byte_length": 513714,
+      "git_blob": "ef51e5d981d994ec08991f012c3cd0426214e238"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package.json",
+      "sha256": "8a0bba8b3701483d3c119a0bbead27d6dcff3e55b13836a252bc30488c179ee6",
+      "byte_length": 5442,
+      "git_blob": "3deea8eaf070cc6f4c096be1085713d4a74a7edb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-json-http-runtime.ts",
+      "sha256": "f541f048cdf48270829d9b5ec0a7d875e0ec698b47e929f68b35fd3910eadaeb",
+      "byte_length": 2611,
+      "git_blob": "68093c7550d3d5c737e35f8365352b5fe20e61a6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-json-transport-domain.ts",
+      "sha256": "7f922fbb5339d24ff4aa7ca3e240a63a5f67f1f8c95a554a01447694563e46a6",
+      "byte_length": 6561,
+      "git_blob": "c4640955df746314e75996619cb9c6ac18c4faa8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-json-transport-runtime.ts",
+      "sha256": "2b14202f1a4ae62b45ce82d9d56d32b54f2f03899301286efa193a11b9056368",
+      "byte_length": 7413,
+      "git_blob": "9a897c4e7abbc67c8f629fe78c82605f9229428f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts",
+      "sha256": "ca4a2a65669a4d8cbb18cd20c01017389533ad064335c82194e98e3c38d328ab",
+      "byte_length": 12011,
+      "git_blob": "8202f23876fcd80a55e021f925a18275eac4e6c9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-model-cli.ts",
+      "sha256": "6fd5445a7f8b9a3951083275bcef98ecfaf9968ea92738030d966fefdb390031",
+      "byte_length": 4858,
+      "git_blob": "c9be06f88a66641777800c58ea1902de3171364b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-model-process.ts",
+      "sha256": "e321e4ebd5baaf70e53dcf167b646c0e3fe92b7c2dc02deeaf37c67c510ec42e",
+      "byte_length": 318,
+      "git_blob": "7e416260d8ba74cc16f29f0d9253b89f358f6efd"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-model-protocol-domain.ts",
+      "sha256": "dc740abbd7f7a03dab7827aaff8be911de57055025015786819ba4ed1f8d62b8",
+      "byte_length": 13580,
+      "git_blob": "91cc0c907981e69c3605c1ccd33cf3f57f2c7aea"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-optimization-build-domain.ts",
+      "sha256": "97bd5788ca35364e2f662a4daae43860c2fbe928ccd63e01bece7b3ad2dfe4fc",
+      "byte_length": 4596,
+      "git_blob": "ef0dcdfdb7fbab1a74cd53cb415792f459793114"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-reference-loss-domain.ts",
+      "sha256": "da1bea5d9c86967b97f2c810627187be4eea585d02baa82d5a4d33104017aa81",
+      "byte_length": 5158,
+      "git_blob": "7a42d9264daf7405cb7c60ab56653b4495919323"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-json-http-runtime.test.ts",
+      "sha256": "41ed26c272196ee4d410ea0804975415f1f4b451f3c4e9313084304dd5e3e900",
+      "byte_length": 4979,
+      "git_blob": "8a41d1b72ed4582ac2cc99b0072530b4f21e0ed6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-prom9-json-transport.test.ts",
+      "sha256": "49869adaa8f3fe08f60710ce7e98c010ca886c7a46816bd1ca62dc0a58ee9647",
+      "byte_length": 8145,
+      "git_blob": "98e107322024fadddca78dc8424a0b879b495101"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-model-protocol-domain.test.ts",
+      "sha256": "4ca8440f2a33e35a9af675deb4ab25d3c1cfaa495c237b1a625421331557093c",
+      "byte_length": 5207,
+      "git_blob": "82ff2faa8acdcfe82942c245e9654d66eb93214b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-optimization-build-domain.test.ts",
+      "sha256": "b17d33ab9fcb20ee07c21364067fb4c5b9b71b862039b1c537a7d25054d5e6e4",
+      "byte_length": 2890,
+      "git_blob": "f9355275f4b356f9bc2cef2dc1513e52403786e4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-reference-loss-domain.test.ts",
+      "sha256": "e4414cd1e60d397165884ecba81457baa15ed4b1cd1071059d008e7fdd6892a3",
+      "byte_length": 2075,
+      "git_blob": "f7a2ca608ac11f0b621c0f0472f82942038f4d76"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-s2s-reference-sum.test.ts",
+      "sha256": "7e35b208c4a34d567d62b0b5ab70e770b6a98f6b91819d5daadf6175acb658de",
+      "byte_length": 4082,
+      "git_blob": "09ad586b43d4d498dd1588c598106ded5d4e07d9"
+    },
+    {
+      "path": "tests/fixtures/native_migration/prom9_json_transport_v1/original.v1.json",
+      "sha256": "a1bbc4af111d90b7d8a5cf2648eeb792f16ae77f64d1636596a5419e52cf1169",
+      "byte_length": 1812,
+      "git_blob": "0a35e715a27eaf7ef25d13780d2ba5730ebfebb6"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_learned_model_loss_forge_v1/original.v1.json",
+      "sha256": "d4add16bf8768979cfc10a88f7b7ac68bb6f3d057d3b0b52e710736fe506caff",
+      "byte_length": 39230,
+      "git_blob": "e7ef47efd1e9a946979aa0371a6120f75145d3d3"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_learned_model_v1/original.v1.json",
+      "sha256": "c753b54c10bc7890790514cf950d4e88645eed3de5d0c7226e908f73c32ef900",
+      "byte_length": 461782,
+      "git_blob": "abacedefd514c87690a3e5a1fadc945dccc9b3a0"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_reference_loss_v1/original.v1.json",
+      "sha256": "e40c5a2b3f96ce1f8ec6072183ebe85098d7c893659a6e50d9a65208794fa5f3",
+      "byte_length": 409,
+      "git_blob": "b4e6ef12c75e2e277b0881a9b6eef68a092758fd"
+    },
+    {
+      "path": "tests/fixtures/native_migration/s2s_reference_loss_v1/sum_vectors.v1.json",
+      "sha256": "6d34527b98a3c3a5a98009bba2dc399b56b3f4677444f44092fad2b2bbc470e6",
+      "byte_length": 7993,
+      "git_blob": "e75bb21bf078b5976e270da4324a612b4975a599"
+    }
+  ],
+  "toolchain": {
+    "node": "24.13.0",
+    "npm": "11.6.2"
+  },
+  "verification": {
+    "scope": "COMPLETE_ISOLATED_RUN_ONE_FINAL_SOURCE_SNAPSHOT",
+    "full_run": {
+      "passed_files": 226,
+      "passed_tests": 1426,
+      "skipped_tests": 8,
+      "tokenizer_historical_replay": "ENABLED",
+      "source_snapshot_verified_unchanged": true
+    },
+    "effect_boundary": {
+      "files": 297,
+      "clean_files": 259,
+      "allowlisted_files": 38,
+      "violations": 0,
+      "allowlist_expansion": false
+    },
+    "checks": {
+      "test": {
+        "local_log_sha256": "61f49da49539b5e1eab74446c8fcabb72810c52dcbf87fbe64cc4a2c37e3e897",
+        "local_log_byte_length": 42755,
+        "exit_code": 0
+      },
+      "check": {
+        "local_log_sha256": "8192055f2b6e936d62c9797f33f3b4179f55e183959bd6330550b93b3a5a6952",
+        "local_log_byte_length": 5691,
+        "exit_code": 0
+      },
+      "build": {
+        "local_log_sha256": "51a25d8d4c57a1ea08bb66e4ddd0416369a3279c3984f50d06572439b5862db5",
+        "local_log_byte_length": 105,
+        "exit_code": 0
+      },
+      "dnrd": {
+        "local_log_sha256": "6945bc5a754a1883a538f4e388a1748a91b35e4688df1147fa0ee68a86f43975",
+        "local_log_byte_length": 70,
+        "exit_code": 0
+      },
+      "pack": {
+        "local_log_sha256": "763d645e3c1192087f05e132c09c80c9c8419b5f9af9b8d256fb84d0c214047d",
+        "local_log_byte_length": 175663,
+        "exit_code": 0
+      },
+      "math": {
+        "local_log_sha256": "e6ea06de4c2b359a884894c08172310ad12a4618ed02736ea295349d6525afe2",
+        "local_log_byte_length": 727,
+        "exit_code": 0
+      }
+    }
+  },
+  "production_qualification": {
+    "path": "_research/native_migration_2026-09-13/model-native-production-qualification.v1.json",
+    "sha256": "37d2ab66195a36a1b5ec181f7c9dc0456c348ea88e49355299081b711d820b67",
+    "byte_length": 10694,
+    "git_blob": "745b13559c5cf6b5fc9d9be20be00a6b68e89743"
+  },
+  "original_contracts": {
+    "model": "All three source zero-fit archives and a real nonzero T16 best-update-2 archive reconstruct byte-exactly. Canonical tensor hex, ordered shape, parameter/state hashes, both bound best losses, learned/fitted flags and archive receipt are checked. Self-consistency does not establish fit replay.",
+    "native_fit": "The native fit now uses qualified reference loss for best-state selection/history. Receipt builder returns actual native best parameters without retraining. A native nonzero fit enters the model reconstruction and emitted CLI. Gradient/Adam trajectory identity with original Python remains unclaimed.",
+    "transport": "Original canonical OpenAI-compatible request bytes and bounded response metadata pass through the public call boundary. Real native HTTP tested on loopback for exact POST/status, no 503 retries, redirect refusal, abort deadline, streamed 16MiB bound and environment access. No external model call or durable F1 spool is qualified."
+  },
+  "numerical_reference": {
+    "official_source": "https://github.com/numpy/numpy/blob/48fecee5453aa1d31e6b79dcb3969dc1a6d1a891/numpy/_core/src/umath/loops_utils.h.src",
+    "commit": "48fecee5453aa1d31e6b79dcb3969dc1a6d1a891",
+    "source_sha256": "ed85d5b99f0b457cb7a316bf8c4acb884034bbbb81a89c5cedb62be80bf7c4f8",
+    "profile": "NUMPY_2_5_2_CONTIGUOUS_FLOAT64_WHOLE_ARRAY_PAIRWISE_8_LANES_BLOCK128",
+    "license": {
+      "path": "src/hswm/effect-runtime/assets/licenses/NUMPY_NUMERICAL_REFERENCE_NOTICE.txt",
+      "sha256": "9ba20ede5fd6fe344ecdccca532079beffab2be62d368cb3b5ee69393bb8d0b8",
+      "byte_length": 6594,
+      "git_blob": "dea756e9d18381ad80c9d5a3726703b8029aa205"
+    },
+    "claim_ceiling": "PINNED_SOURCE_PROFILE_NOT_UNIVERSAL_NUMPY_BACKEND"
+  },
+  "http_reference": {
+    "official_source": "https://nodejs.org/download/release/v24.13.0/docs/api/globals.html#fetch",
+    "implementation": "PINNED_NODE_BUILTIN_FETCH",
+    "mapping_delta": "Redirects refused; safe integer timeouts and fixed 16MiB response bound; provider failures scrubbed; elapsed latency is measured natively, not historical timing replay."
+  },
+  "preserved_failures": [
+    {
+      "id": "unaccepted-sqlite-ledger-draft",
+      "status": "UNACCEPTED_PRESERVED_PRIVATELY_ACTIVE_ROUTE_REMAINS",
+      "finding": "Draft used a different SQL schema, lacked complete per-call/row/item audit binding and a reachable schema-valid acceptance operation, and contained forbidden raw throws. Swallowed creation failure was repaired, but this did not establish source parity. Six draft files were byte-preserved outside runtime compilation; the source Python durable route remains active.",
+      "draft_pins": [
+        {
+          "original_path": "src/hswm/effect-runtime/src/native-prom9-durable-ledger-domain.ts",
+          "sha256": "1e187a130c0ed5f71bac26a25c608adfa61ecdeaf0d59bf7ab3df10920714552",
+          "byte_length": 5003
+        },
+        {
+          "original_path": "src/hswm/effect-runtime/src/native-prom9-durable-ledger-filesystem.ts",
+          "sha256": "3118d4bdc64a4413814acd84065f3c87286698651bd81c0b85425b383fc01837",
+          "byte_length": 4826
+        },
+        {
+          "original_path": "src/hswm/effect-runtime/src/native-prom9-durable-ledger-runtime.ts",
+          "sha256": "3627fbeb0b348ba21cac9c958166b2c68028d6982ee0b3b387effff963f50ca4",
+          "byte_length": 9855
+        },
+        {
+          "original_path": "src/hswm/effect-runtime/test/native-prom9-durable-ledger-domain.test.ts",
+          "sha256": "630cb7c501a12f7071fe4578fe68b6bbc4e0a6b0d75a8ccf2f290c1443475c5e",
+          "byte_length": 1276
+        },
+        {
+          "original_path": "src/hswm/effect-runtime/test/native-prom9-durable-ledger-filesystem.test.ts",
+          "sha256": "58a229fbf2bee667596c2dc8bd09dbaf08935816639954ece0a0ee73418169fa",
+          "byte_length": 1151
+        },
+        {
+          "original_path": "src/hswm/effect-runtime/test/native-prom9-durable-ledger-runtime.test.ts",
+          "sha256": "b794fb52dce5e8997ecb012640bc87969cc212aca86ce41d29493ae6de9d36b4",
+          "byte_length": 1901
+        }
+      ]
+    },
+    {
+      "id": "model-nominal-type-trust",
+      "status": "REPAIRED_SOURCE_RECONSTRUCTION_BOUNDARY",
+      "finding": "Initial draft trusted a nominal parsed receipt and caller parameter arrays. Final reconstruction reparses the raw optimization receipt, captures finite fixed-shape arrays, derives tensor/parameter/state hashes and recomputes both complete train/dev losses."
+    },
+    {
+      "id": "resealed-model-loss-forgery",
+      "status": "REPAIRED_ORIGINAL_POST_RECEIPT_REFUSAL",
+      "finding": "Original accepts a resealed optimization history/receipt but rejects model reconstruction when actual best-parameter losses differ by one nextafter step. Native enforces the same exact loss check after optimization parsing.",
+      "evidence": {
+        "path": "tests/fixtures/native_migration/s2s_learned_model_loss_forge_v1/original.v1.json",
+        "sha256": "d4add16bf8768979cfc10a88f7b7ac68bb6f3d057d3b0b52e710736fe506caff",
+        "byte_length": 39230,
+        "git_blob": "e7ef47efd1e9a946979aa0371a6120f75145d3d3"
+      }
+    },
+    {
+      "id": "reference-loss-broadcast-and-reduction",
+      "status": "REPAIRED_EXACT_SOURCE_NUMERIC_PROFILE",
+      "finding": "Initial draft used the wrong role/channel weight index and an invented binary split. Corrected to source role-member-channel broadcast and official eight-lane block-128 pairwise fold."
+    },
+    {
+      "id": "numpy-contiguous-buffer-assumption",
+      "status": "PRESERVED_COUNTEREXAMPLES_AND_REPAIRED",
+      "finding": "An imposed 8192-element chunk wrapper happened to pass model cases but failed two independent 75000-element vectors: one ULP for weighted terms and severe cancellation error. NumPy getbufsize is not this contiguous reduction chunk size. Whole-array pairwise reduction now passes all 18 byte-bound source vectors exactly.",
+      "evidence": {
+        "path": "tests/fixtures/native_migration/s2s_reference_loss_v1/sum_vectors.v1.json",
+        "sha256": "6d34527b98a3c3a5a98009bba2dc399b56b3f4677444f44092fad2b2bbc470e6",
+        "byte_length": 7993,
+        "git_blob": "e75bb21bf078b5976e270da4324a612b4975a599"
+      }
+    },
+    {
+      "id": "transport-secret-lifetime-and-call-alias",
+      "status": "REPAIRED_CAPTURE_AND_PER_CALL_SECRET_READ",
+      "finding": "API-key lookup moved from construction to every call. Model identity is captured before environment/HTTP callbacks; transport error details are scrubbed so injected errors cannot echo secrets. Missing key refuses before POST."
+    },
+    {
+      "id": "root-vitest-exec-prefix",
+      "status": "INVOCATION_ERROR_PRESERVED_AND_CORRECTED",
+      "finding": "npm --prefix exec vitest selected root defaults and was interrupted. Qualification uses npm test in the runtime package or npm --prefix runtime test; the final complete run uses the isolated package configuration."
+    }
+  ],
+  "development_workflow": {
+    "episode": "native-model-transport-20260913",
+    "relation": "relation:runtime-focused",
+    "result": "SUCCEEDED",
+    "feedback": {
+      "success": true,
+      "source": "agent(codex): Native dispatch check was useful but needed separate model-loss forgery, original archive and HTTP abort tests. Native fit/archive consistency is not deterministic source fit replay or HSWM efficacy."
+    },
+    "selected_check_scope": "ADAPTIVE_RUNTIME_DISPATCH_ONLY_ADDITIONAL_FULL_CHECKS_RUN_SEPARATELY",
+    "storage": "PRIVATE_LOCAL_STATE_NOT_PUBLIC_KG"
+  },
+  "limits": [
+    "Migration remains incomplete; sixteen partial/active inventory surfaces remain. New native components are not full route closure.",
+    "F1 SQLite durable ledger, idempotent spool and suite CLI remain; unaccepted drafts were not used to retire the original route.",
+    "S2S protocol bootstrap/integrity/final receipt and active pilot/CI/live numeric bridge remain; no final candidate outcome issued.",
+    "F3 full lifecycle and individually classified package/CI compatibility/standards routes remain.",
+    "No criterion, FCL law, RED path or final HSWM target was weakened. No live KG publication/deployment/model API call or private dataset publication."
+  ]
+}

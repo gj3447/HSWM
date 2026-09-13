@@ -1,0 +1,11 @@
+{
+  "source": "prom_search_hswm/hswm_call_receipt.py:235-335",
+  "source_oracle": {
+    "request_url": "https://model.example/v1/chat/completions",
+    "request_method": "POST",
+    "request_content_type": "application/json",
+    "request_body_utf8": "{\"chat_template_kwargs\":{\"enable_thinking\":false},\"max_tokens\":10,\"messages\":[{\"content\":\"system\",\"role\":\"system\"},{\"content\":\"{\\\"allowed_evidence_types\\\":[\\\"fact\\\"],\\\"budget\\\":{\\\"max_candidates\\\":1,\\\"max_evidence_items\\\":1,\\\"max_input_tokens\\\":30,\\\"max_output_tokens\\\":10},\\\"parity_filler\\\":\\\"\\\",\\\"query_text\\\":\\\"question\\\",\\\"request_id\\\":\\\"req\\\"}\",\"role\":\"user\"}],\"model\":\"model\",\"response_format\":{\"json_schema\":{\"name\":\"QueryPlanV1\",\"schema\":{\"additionalProperties\":false,\"properties\":{\"abstain\":{\"type\":\"boolean\"},\"constraints\":{\"items\":{\"minLength\":1,\"type\":\"string\"},\"type\":\"array\"},\"objectives\":{\"items\":{\"minLength\":1,\"type\":\"string\"},\"type\":\"array\"},\"request_id\":{\"minLength\":1,\"type\":\"string\"},\"required_evidence_types\":{\"items\":{\"minLength\":1,\"type\":\"string\"},\"type\":\"array\"}},\"required\":[\"request_id\",\"objectives\",\"required_evidence_types\",\"constraints\",\"abstain\"],\"type\":\"object\"},\"strict\":true},\"type\":\"json_schema\"},\"temperature\":0,\"top_p\":1}",
+    "response": {"model":"model","choices":[{"finish_reason":"stop","message":{"content":"{\"request_id\":\"req\",\"objectives\":[],\"required_evidence_types\":[],\"constraints\":[],\"abstain\":true}"}}],"usage":{"prompt_tokens":12,"completion_tokens":5}},
+    "result": {"model":"model","model_revision":"revision","input_tokens":12,"output_tokens":5,"latency_ms":1700,"cache_status":"provider-unknown","retries":0}
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "schema_version": "hswm-native-migration-active-route-audit/v8",
+  "as_of": "2026-09-13",
+  "base_commit": "9c7d45c95b0325ea0aab42dde5a59d36bd12d531",
+  "method": "Successor scoped source audit. Prior route observations are retained explicitly; current source hashes and newly verified component boundaries are refreshed. This does not reclassify historical Python solely by suffix.",
+  "claim_ceiling": "EXECUTION_ROUTE_INVENTORY_ONLY_NOT_MIGRATION_COMPLETENESS_OR_RESEARCH_EFFICACY",
+  "statuses": {
+    "VERIFIED_NATIVE": "Current native entrypoint has declared bounded verification.",
+    "PARTIAL_ROUTE": "A native counterpart or component exists, while an active Python/compatibility/deployment route remains.",
+    "PYTHON_ACTIVE_BLOCKER": "A current launcher or workflow executes Python with no accepted complete native replacement.",
+    "HISTORICAL_OR_COMPATIBILITY": "Retained comparison or package-compatibility source; excluded unless an active launcher invokes it.",
+    "CANDIDATE_UNACCEPTED": "Dirty implementation exists but is not route-closure evidence."
+  },
+  "routes": [
+    {
+      "id": "native-development-runtime",
+      "status": "VERIFIED_NATIVE",
+      "entrypoint": "src/hswm/effect-runtime/bin/hswm-dev",
+      "evidence": [
+        "AGENTS.md",
+        "src/hswm/effect-runtime/src/adaptive-cli.ts",
+        "_research/native_migration_2026-09-13/operations-verification.v1.json"
+      ],
+      "remaining_dependency": "None for its bounded development-dispatch scope.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/active-route-audit.v7.json",
+        "route_id": "native-development-runtime"
+      }
+    },
+    {
+      "id": "python-compatibility-launcher-and-wheel-scripts",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": "src/hswm/development/bin/hswm-python sha256:ac3f960827dfba339bccd4e7cd637591b68a616632f5f337477142bb8d4cd6ef; pyproject.toml [project.scripts]",
+      "evidence": [
+        "pyproject.toml lines 16-23 exposes eight Python console scripts",
+        "AGENTS.md permits explicit one-time Python oracles"
+      ],
+      "remaining_dependency": "Classify each packaged Python script as active compatibility or migrate its operational caller to a native executable.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/active-route-audit.v7.json",
+        "route_id": "python-compatibility-launcher-and-wheel-scripts"
+      }
+    },
+    {
+      "id": "p1-gate-uncached-embedding",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": "hswm-p1-gate-diagnostic -> src/hswm/diagnostics/p1_gate.py:main sha256:e4b401bdaa92eedb3cdc0792f8a2a5913c70413ec97cb6373f86f0452b6d9ac0",
+      "native_state": "Native cached v1 diagnostics preserve original bytes. Missing-cache native v2 performs pinned local ONNX inference, carries explicit backend/vector provenance, and is CPU-qualified through the emitted CLI; historical vector-byte equivalence is not claimed. Python package compatibility route remains.",
+      "remaining_dependency": "Classify or redirect package console entrypoint after full migration; native backend requires six hash-pinned local exported artifacts.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/active-route-audit.v7.json",
+        "route_id": "p1-gate-uncached-embedding"
+      }
+    },
+    {
+      "id": "s2s-pilot-ci-and-live-numeric-oracle",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": ".github/workflows/swm0w-s2s-train-dev-pilot.yml invokes python -m hswm.experiments.swm0w_s2s_pilot; s2s-live-python remains a Python bridge",
+      "source_pins": {
+        "protocol": "src/hswm/experiments/swm0w_s2s_protocol.py sha256:c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+        "training": "src/hswm/experiments/swm0w_s2s_training.py sha256:d84b8336d8bcbe89aeba7f2d2c915fd294b9ee24425e6092505069a74f9cba94",
+        "family": "src/hswm/experiments/swm0w_s2s_family.py sha256:e00a3365e89592038b66820f57655d28e908425e3586385fd2be1e407944e93a"
+      },
+      "native_state": "Native model fit/verify CLI, actual best parameters, complete optimization and learned-model archives, exact source loss reconstruction and score components qualified. Original independently accepted two native-emitted model archives.",
+      "remaining_dependency": "Finish candidate protocol integrity/bootstrap/final receipts and active pilot/CI/live bridge closure; deterministic source fit replay remains a separate requirement.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/active-route-audit.v7.json",
+        "route_id": "s2s-pilot-ci-and-live-numeric-oracle"
+      }
+    },
+    {
+      "id": "prom9-f1-suite-and-transport",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": "prom_search_hswm/prom_f1_function_network.py:run_suite sha256:59e88cda18061bf312697b48e1df4639dae5b31be25dd1bfade6602db0468bfe",
+      "source_pins": {
+        "function_network": "prom_search_hswm/hswm_function_network.py sha256:dae4a62b44ae3198b48e82ea48515b00b854b3b440fa7d13ee7567910584f5e5",
+        "registry": "prom_search_hswm/hswm_function_registry.py sha256:b9d858a8d84ba1b6ed1c88250a2f8936cbe78c459987a155c1f3fba8a77aede1",
+        "transport": "prom_search_hswm/hswm_f1_durable_transport.py sha256:09ecd886901ac95c0be86e59369d8672d0fad0b912d97e488c5c41c79692a7cc",
+        "meter": "prom_search_hswm/hswm_token_meter.py sha256:5149473c7ca3efea865d97cee324ff2c9ccca5d4d637c66a049f34eae15da274"
+      },
+      "native_state": "Native three-call/envelope replay plus actual one-shot HTTP adapter qualified locally. SQLite durable authority draft failed review and remains unaccepted.",
+      "remaining_dependency": "Complete exact original SQLite ledger and atomic item bindings, idempotent result-spool protocol, suite CLI and launcher. No automatic retry authorization inferred from one-shot HTTP.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/active-route-audit.v7.json",
+        "route_id": "prom9-f1-suite-and-transport"
+      }
+    },
+    {
+      "id": "f3v2-live-smoke",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": "scripts/f3v2_smoke_preflight.sh sha256:27d95cf232021e46b96117a8794df3f95475a2b967adf92da23d1ef91e84fb6e",
+      "remaining_dependency": "Provider backoff, procedural worlds, lessons/retrieval/evaluation, full run lifecycle and receipt before changing active F3 launcher.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/active-route-audit.v7.json",
+        "route_id": "f3v2-live-smoke"
+      },
+      "native_state": "Native source-compatible cached chat seam with immutable budget/state and injected I/O is verified."
+    },
+    {
+      "id": "ci-mixed-python-lanes",
+      "status": "PARTIAL_ROUTE",
+      "entrypoint": ".github/workflows/ci.yml, swm0w-s2s-train-dev-pilot.yml, graph-standards-requalification.yml",
+      "evidence": "Current workflow commands invoke uv/Python compatibility, protocol, packaging, and standards lanes alongside Effect-runtime npm checks.",
+      "remaining_dependency": "State per-lane purpose and replace active production behavior only where a complete accepted native route exists.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/active-route-audit.v7.json",
+        "route_id": "ci-mixed-python-lanes"
+      }
+    },
+    {
+      "id": "inactive-python-source-and-static-oracles",
+      "status": "HISTORICAL_OR_COMPATIBILITY",
+      "entrypoint": "Python sources without a launcher established by this audit; tests/fixtures/native_migration static outputs",
+      "remaining_dependency": "None for inventory purposes. Their presence is not counted as an active execution route.",
+      "prior_observation": {
+        "path": "_research/native_migration_2026-09-13/active-route-audit.v7.json",
+        "route_id": "inactive-python-source-and-static-oracles"
+      }
+    }
+  ],
+  "prioritized_remaining_dependencies": [
+    "Bind S2S actual best parameters and optimization receipt into model protocol, pilot and CI; retire normal Python numeric bridge after closure.",
+    "Complete F1 SQLite durable ledger, idempotent result spool and suite CLI with fixed tokenizer provenance.",
+    "Complete F3 lifecycle beyond cached chat seam.",
+    "Classify package and CI compatibility routes individually; change operational callers only after verified native closure."
+  ],
+  "source_observation": "Successor model/archive CLI and one-shot HTTP checkpoint; original active pilot/durable suite and compatibility lanes remain.",
+  "native_component_pins": [
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-json-http-runtime.ts",
+      "sha256": "f541f048cdf48270829d9b5ec0a7d875e0ec698b47e929f68b35fd3910eadaeb",
+      "byte_length": 2611,
+      "git_blob": "68093c7550d3d5c737e35f8365352b5fe20e61a6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-json-transport-domain.ts",
+      "sha256": "7f922fbb5339d24ff4aa7ca3e240a63a5f67f1f8c95a554a01447694563e46a6",
+      "byte_length": 6561,
+      "git_blob": "c4640955df746314e75996619cb9c6ac18c4faa8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-json-transport-runtime.ts",
+      "sha256": "2b14202f1a4ae62b45ce82d9d56d32b54f2f03899301286efa193a11b9056368",
+      "byte_length": 7413,
+      "git_blob": "9a897c4e7abbc67c8f629fe78c82605f9229428f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts",
+      "sha256": "ca4a2a65669a4d8cbb18cd20c01017389533ad064335c82194e98e3c38d328ab",
+      "byte_length": 12011,
+      "git_blob": "8202f23876fcd80a55e021f925a18275eac4e6c9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-model-cli.ts",
+      "sha256": "6fd5445a7f8b9a3951083275bcef98ecfaf9968ea92738030d966fefdb390031",
+      "byte_length": 4858,
+      "git_blob": "c9be06f88a66641777800c58ea1902de3171364b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-model-process.ts",
+      "sha256": "e321e4ebd5baaf70e53dcf167b646c0e3fe92b7c2dc02deeaf37c67c510ec42e",
+      "byte_length": 318,
+      "git_blob": "7e416260d8ba74cc16f29f0d9253b89f358f6efd"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-model-protocol-domain.ts",
+      "sha256": "dc740abbd7f7a03dab7827aaff8be911de57055025015786819ba4ed1f8d62b8",
+      "byte_length": 13580,
+      "git_blob": "91cc0c907981e69c3605c1ccd33cf3f57f2c7aea"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-optimization-build-domain.ts",
+      "sha256": "97bd5788ca35364e2f662a4daae43860c2fbe928ccd63e01bece7b3ad2dfe4fc",
+      "byte_length": 4596,
+      "git_blob": "ef0dcdfdb7fbab1a74cd53cb415792f459793114"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-reference-loss-domain.ts",
+      "sha256": "da1bea5d9c86967b97f2c810627187be4eea585d02baa82d5a4d33104017aa81",
+      "byte_length": 5158,
+      "git_blob": "7a42d9264daf7405cb7c60ab56653b4495919323"
+    }
+  ],
+  "refreshed_source_pins": [
+    {
+      "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+      "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+      "byte_length": 157742,
+      "git_blob": "844f12677f4fc38eea31e8836abd7dda420e32a0"
+    },
+    {
+      "path": "src/hswm/experiments/swm0w_s2s_training.py",
+      "sha256": "d84b8336d8bcbe89aeba7f2d2c915fd294b9ee24425e6092505069a74f9cba94",
+      "byte_length": 61290,
+      "git_blob": "b7c9fb5cc1f1020631dc5f57f6b7f86a9f8366bc"
+    },
+    {
+      "path": "prom_search_hswm/hswm_call_receipt.py",
+      "sha256": "eb544dab0b817feca03d1061f65273c3c8162b1fa40b12a56f25d37fcf5ea9af",
+      "byte_length": 12762,
+      "git_blob": "9819026e1bb65302d88a9ffa16df26b65fa8605d"
+    },
+    {
+      "path": "prom_search_hswm/hswm_f1_durable_transport.py",
+      "sha256": "09ecd886901ac95c0be86e59369d8672d0fad0b912d97e488c5c41c79692a7cc",
+      "byte_length": 73869,
+      "git_blob": "c922ed013c8b8729f12f7c416e54cd8447a70c8d"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "d1a67c9af3a27b9de8f174d7948e3793b95335a231f5d2d3a7fe76d4f0b00e34",
+      "byte_length": 6084,
+      "git_blob": "fd1121acfa186e09b30c5d24a173853366958e6f"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0",
+      "byte_length": 20916,
+      "git_blob": "f6c24b5094d87719ff6370b8bd5b4b547e528456"
+    },
+    {
+      "path": ".github/workflows/graph-standards-requalification.yml",
+      "sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504",
+      "byte_length": 7013,
+      "git_blob": "10c23b9841972a57ca0158e79d4bf46b3e1059c5"
+    },
+    {
+      "path": ".github/workflows/swm0w-s2s-train-dev-pilot.yml",
+      "sha256": "622f6dbf3861ef1f4d7f35f4cc6698e7fb0e53d5957d90f86c9cc063b958dae8",
+      "byte_length": 4653,
+      "git_blob": "dc7005eaa85deb336a54268a281060d7469d3e2e"
+    }
+  ],
+  "console_callers": {
+    "path": "_research/native_migration_2026-09-13/active-console-callers.v1.json",
+    "sha256": "8edc3765afcbe3ef655900ba46657037981d2a33d63bc011fd683c4cca2a8559",
+    "byte_length": 28358,
+    "git_blob": "fc3055cb00f5bbb9bdd05ec3cb2ad65522ac72be"
+  }
+}

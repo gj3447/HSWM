@@ -1,0 +1,1445 @@
+{
+  "schema_version": "hswm-overall-scope-audit-validation/v1",
+  "date": "2026-09-13",
+  "authority_class": "SECONDARY_AI",
+  "claim_ceiling": "LOCAL_SOURCE_AND_QUERY_CONSISTENCY_NOT_LIVE_KG_OR_SCIENTIFIC_TRUTH",
+  "source_base_commit": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+  "audit": {
+    "path": "_research/native_migration_2026-09-13/overall-scope-audit.v1.json",
+    "sha256": "36b74428f79dad738a8ab6aacf65f948e249aee531fc825630c563c52a9f9ae2",
+    "byte_length": 59103
+  },
+  "bundle": {
+    "path": "ontology/development/HSWM_OVERALL_SCOPE_AUDIT_2026-09-13.v1.json",
+    "sha256": "1290122e419ddbeb734bd36d216a5688eb6b1cb920fd3c6b4b80ab8baa6ad13f",
+    "byte_length": 211492
+  },
+  "projection": [
+    {
+      "path": "ontology/projections/hswm_overall_scope_audit_2026-09-13/dataset.nq",
+      "sha256": "7d00cd0639a5b5fe47e37a4d94d75e032b146771966f818db7f4f66bf2043bcd",
+      "byte_length": 1335868
+    },
+    {
+      "path": "ontology/projections/hswm_overall_scope_audit_2026-09-13/descriptor.json",
+      "sha256": "71ed01484c4074c26f7089d83daf852caff9844704a8836d26d64504151af526",
+      "byte_length": 1794
+    },
+    {
+      "path": "ontology/projections/hswm_overall_scope_audit_2026-09-13/provenance.jsonld",
+      "sha256": "f20a240bdf35f50344850d2b620772e3b3401cae71b9e90d8978b345bb30242b",
+      "byte_length": 1033
+    }
+  ],
+  "source_catalog": {
+    "path": "_research/native_migration_2026-09-13/scope-source-catalog.v1.json",
+    "sha256": "6c3c90f88d112a3657e28587cdaed8df8d41454eeace2f0bc8f76e2d250c960b",
+    "byte_length": 124966
+  },
+  "baseline_pins_verified": 377,
+  "artifact_bindings_verified": 14,
+  "graph": {
+    "nodes": 97,
+    "anchors": 3,
+    "relations": 133,
+    "unique_uids": true,
+    "endpoints_closed": true,
+    "projection_responsibility_owner_per_node": true
+  },
+  "shacl": {
+    "conforms": true,
+    "results": [],
+    "claim_ceiling": "KG_BUNDLE_STRUCTURE_AND_BYTE_BINDING_ONLY_NOT_LIVE_KG_STATE_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+    "engine": "rdf-validate-shacl@0.6.5",
+    "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+  },
+  "queries": {
+    "Q1_scope_remaining": {
+      "query": {
+        "path": "ontology/queries/hswm_overall_scope_audit_2026-09-13/Q1_scope_remaining.sparql",
+        "sha256": "d6eae729996ba67f61416e1899f8e8b1fdcda3ff6601ebe758dd8ad33032f94c",
+        "byte_length": 369
+      },
+      "rows": 9,
+      "source_set_equality": true,
+      "result": [
+        {
+          "name": {
+            "kind": "literal",
+            "value": "ci-package-bootstrap"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "PARTIAL"
+          },
+          "remaining": {
+            "kind": "literal",
+            "value": "Confirmatory, pilot, packaging and environment routes remain."
+          }
+        },
+        {
+          "name": {
+            "kind": "literal",
+            "value": "f1-live-suite"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "PARTIAL"
+          },
+          "remaining": {
+            "kind": "literal",
+            "value": "Durable run owner/command missing."
+          }
+        },
+        {
+          "name": {
+            "kind": "literal",
+            "value": "f3-experiment"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "PARTIAL"
+          },
+          "remaining": {
+            "kind": "literal",
+            "value": "Full lifecycle not implemented natively."
+          }
+        },
+        {
+          "name": {
+            "kind": "literal",
+            "value": "other-entrypoints"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "UNKNOWN"
+          },
+          "remaining": {
+            "kind": "literal",
+            "value": "248 candidates need purpose classification; not declared inactive."
+          }
+        },
+        {
+          "name": {
+            "kind": "literal",
+            "value": "proof-and-fractal-target"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "UNJUDGED"
+          },
+          "remaining": {
+            "kind": "literal",
+            "value": "No simultaneous CR0-7/FCL1-8 integrated witness."
+          }
+        },
+        {
+          "name": {
+            "kind": "literal",
+            "value": "research-v1-done-state"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "UNJUDGED"
+          },
+          "remaining": {
+            "kind": "literal",
+            "value": "Canonical held-out recurrence not completed."
+          }
+        },
+        {
+          "name": {
+            "kind": "literal",
+            "value": "s2s-model-and-pilot"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "PARTIAL"
+          },
+          "remaining": {
+            "kind": "literal",
+            "value": "Original full protocol and Python pilot remain."
+          }
+        },
+        {
+          "name": {
+            "kind": "literal",
+            "value": "standard-tool-qualification"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "PARTIAL"
+          },
+          "remaining": {
+            "kind": "literal",
+            "value": "Python qualification runners remain by profile."
+          }
+        },
+        {
+          "name": {
+            "kind": "literal",
+            "value": "task-usl-kg-tools"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "PARTIAL"
+          },
+          "remaining": {
+            "kind": "literal",
+            "value": "Eight Python console/package contracts and documented callers remain."
+          }
+        }
+      ]
+    },
+    "Q2_findings_sources": {
+      "query": {
+        "path": "ontology/queries/hswm_overall_scope_audit_2026-09-13/Q2_findings_sources.sparql",
+        "sha256": "fdc5662ee54eb755e6b0804ea1b145fd6038f2779134e9eac967ca147a31a3d3",
+        "byte_length": 406
+      },
+      "rows": 45,
+      "source_set_equality": true,
+      "result": [
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "confirmatory-route-grouped-away"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": ".github/workflows/swm0w-confirmatory.yml"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "268",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "confirmatory-route-grouped-away"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": ".github/workflows/swm0w-confirmatory.yml"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "502",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "confirmatory-route-grouped-away"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": ".github/workflows/swm0w-confirmatory.yml"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "91",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "d4-research-loop-open"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "RESEARCH_PRIMARY"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "UNJUDGED_NOT_COMPLETE"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "1",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "d4-research-loop-open"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "RESEARCH_PRIMARY"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "UNJUDGED_NOT_COMPLETE"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_RESULTS_2026-09-06.md"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "118",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "d4-research-loop-open"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "RESEARCH_PRIMARY"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "UNJUDGED_NOT_COMPLETE"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "_research/causal_composition/preregistrations/d4_v1_canonical_heldout_DRAFT/README.md"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "3",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "f1-run-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/effect-runtime/src/native-prom9-network-runtime.ts"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "12",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "f1-run-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/effect-runtime/src/native-prom9-f1-cli.ts"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "24",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "f1-run-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "prom_search_hswm/hswm_f1_durable_transport.py"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "315",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "f1-run-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "prom_search_hswm/prom_f1_function_network.py"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "710",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "f3-lifecycle-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "scripts/f3v2_smoke_preflight.sh"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "1",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "f3-lifecycle-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "_research/f_series/f3v2_arms.py"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "205",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "f3-lifecycle-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "_research/f_series/f2_delta_w_credit.py"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "246",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "f3-lifecycle-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/effect-runtime/src/native-f3-chat-runtime.ts"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "60",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "fit-config-getter-escapes-either"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "REPRODUCED_UNFIXED"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/effect-runtime/src/native-s2s-task-fit-domain.ts"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "24",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "fit-config-getter-escapes-either"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "REPRODUCED_UNFIXED"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/effect-runtime/src/native-s2s-optimization-build-domain.ts"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "29",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "fit-config-getter-escapes-either"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "REPRODUCED_UNFIXED"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/effect-runtime/src/native-s2s-model-cli.ts"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "37",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "fit-config-getter-escapes-either"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "REPRODUCED_UNFIXED"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/effect-runtime/package.json"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "41",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "fit-config-getter-escapes-either"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "REPRODUCED_UNFIXED"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "78",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "formal-and-fractal-witness-open"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "RESEARCH_PRIMARY"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "INTEGRATED_CLAIM_UNJUDGED"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "docs/research/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.md"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "191",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "formal-and-fractal-witness-open"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "RESEARCH_PRIMARY"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "INTEGRATED_CLAIM_UNJUDGED"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "22",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "formal-and-fractal-witness-open"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "RESEARCH_PRIMARY"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "INTEGRATED_CLAIM_UNJUDGED"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "docs/research/HSWM_CONSTRUCTIVE_PROOF_ROUND_1_2026-09-10.md"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "5",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "functional-check-ceiling"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_LIMIT"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/effect-runtime/scripts/effect-boundary-allowlist.json"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "1",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "functional-check-ceiling"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_LIMIT"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/effect-runtime/scripts/lint-effect-boundary.mjs"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "32",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "functional-check-ceiling"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_LIMIT"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/effect-runtime/scripts/lint-adaptive-functional.mjs"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "7",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "hidden-python-dependencies"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "AGENTS.md"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "122",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "hidden-python-dependencies"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/development/container/bootstrap.sh"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "17",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "hidden-python-dependencies"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": ".github/workflows/ci.yml"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "341",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "hidden-python-dependencies"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/development/bin/hswm-python"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "41",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "hidden-python-dependencies"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/effect-runtime/src/native-graph-standards-runtime.ts"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "93",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "inventory-not-progress-denominator"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CLARIFIED_IN_SUCCESSOR"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "scripts/bin_hswm_f1_watchdog.sh"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "18",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "inventory-not-progress-denominator"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CLARIFIED_IN_SUCCESSOR"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "README.md"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "24",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "inventory-not-progress-denominator"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CLARIFIED_IN_SUCCESSOR"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "_research/native_migration_2026-09-13/inventory.v8.json"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "5",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "s2s-protocol-pilot-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": ".github/workflows/swm0w-s2s-train-dev-pilot.yml"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "106",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "s2s-protocol-pilot-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/experiments/swm0w_s2s_protocol.py"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "1276",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "s2s-protocol-pilot-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/experiments/swm0w_s2s_pilot.py"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "1555",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "s2s-protocol-pilot-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/experiments/swm0w_s2s_protocol.py"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "2206",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "s2s-protocol-pilot-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/effect-runtime/src/native-s2s-model-cli.ts"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "29",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "s2s-protocol-pilot-unconnected"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P1"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CONFIRMED_OPEN"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "src/hswm/experiments/swm0w_s2s_protocol.py"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "3595",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "s5-navigation-stale"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CORRECTED_IN_SUCCESSOR_READING"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "1",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "s5-navigation-stale"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CORRECTED_IN_SUCCESSOR_READING"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "F1_R8_RESULTS_LOG.md"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "19",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "s5-navigation-stale"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CORRECTED_IN_SUCCESSOR_READING"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "results/HSWM_S5_B0_B2_COMPARISON_2026-09-06.md"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "37",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "s5-navigation-stale"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P2"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "CORRECTED_IN_SUCCESSOR_READING"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "57",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "unknown-research-entrypoints"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P3"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "UNCLASSIFIED_NOT_INACTIVE"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "_research/p1v4_fresh_replication/dell_measure_heldout_seed5_r2.sh"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "32",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        },
+        {
+          "finding": {
+            "kind": "literal",
+            "value": "unknown-research-entrypoints"
+          },
+          "priority": {
+            "kind": "literal",
+            "value": "P3"
+          },
+          "status": {
+            "kind": "literal",
+            "value": "UNCLASSIFIED_NOT_INACTIVE"
+          },
+          "path": {
+            "kind": "literal",
+            "value": "_research/p1v4_fresh_replication/dell_prepare_seed4.sh"
+          },
+          "line": {
+            "kind": "literal",
+            "value": "33",
+            "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+          }
+        }
+      ]
+    },
+    "Q3_completion_dependencies": {
+      "query": {
+        "path": "ontology/queries/hswm_overall_scope_audit_2026-09-13/Q3_completion_dependencies.sparql",
+        "sha256": "36022e72184cfb8402508d00654f8c21bd062bdb65c84cfd96e29c29b1113792",
+        "byte_length": 381
+      },
+      "rows": 11,
+      "source_set_equality": true,
+      "result": [
+        {
+          "task": {
+            "kind": "literal",
+            "value": "fit-input-boundary"
+          },
+          "track": {
+            "kind": "literal",
+            "value": "ENGINEERING_FIX"
+          },
+          "done": {
+            "kind": "literal",
+            "value": "Descriptor-safe own-data scalar capture before validation; getter never executes; preserve original numeric fixtures."
+          },
+          "dependency": null
+        },
+        {
+          "task": {
+            "kind": "literal",
+            "value": "f1-durable-run"
+          },
+          "track": {
+            "kind": "literal",
+            "value": "MIGRATION"
+          },
+          "done": {
+            "kind": "literal",
+            "value": "Exact source SQLite ledger/state/audit and atomic item acceptance, idempotent spool and native run with crash/duplicate refusals."
+          },
+          "dependency": null
+        },
+        {
+          "task": {
+            "kind": "literal",
+            "value": "theorem-runtime-witness"
+          },
+          "track": {
+            "kind": "literal",
+            "value": "FORMAL_RESEARCH"
+          },
+          "done": {
+            "kind": "literal",
+            "value": "Existing CR theorem premises have specific observables and independently checked witnesses for the same candidate; no theorem assumes its desired efficacy conclusion."
+          },
+          "dependency": null
+        },
+        {
+          "task": {
+            "kind": "literal",
+            "value": "f3-lifecycle"
+          },
+          "track": {
+            "kind": "literal",
+            "value": "MIGRATION"
+          },
+          "done": {
+            "kind": "literal",
+            "value": "Native cache/state owner, provider and world/lesson/retrieval/evaluation loop plus whole-run cost and terminal receipt."
+          },
+          "dependency": null
+        },
+        {
+          "task": {
+            "kind": "literal",
+            "value": "d4-single-candidate"
+          },
+          "track": {
+            "kind": "literal",
+            "value": "RESEARCH"
+          },
+          "done": {
+            "kind": "literal",
+            "value": "Same prospectively specified candidate: independent outcome, credit, canonical journal, changed held-out behavior, exact remove/restore and sham/shuffled controls with all-run costs."
+          },
+          "dependency": null
+        },
+        {
+          "task": {
+            "kind": "literal",
+            "value": "two-scale-composition"
+          },
+          "track": {
+            "kind": "literal",
+            "value": "RESEARCH"
+          },
+          "done": {
+            "kind": "literal",
+            "value": "Connect theorem premises and runtime observables for the same candidate, then two-scale effect/learning/lineage-preserving composition with null controls."
+          },
+          "dependency": {
+            "kind": "literal",
+            "value": "d4-single-candidate"
+          }
+        },
+        {
+          "task": {
+            "kind": "literal",
+            "value": "remaining-callers"
+          },
+          "track": {
+            "kind": "literal",
+            "value": "MIGRATION"
+          },
+          "done": {
+            "kind": "literal",
+            "value": "Each HSWM-owned active caller uses accepted native behavior; explicit external tool and historical compatibility boundaries remain documented and verified."
+          },
+          "dependency": {
+            "kind": "literal",
+            "value": "f1-durable-run"
+          }
+        },
+        {
+          "task": {
+            "kind": "literal",
+            "value": "remaining-callers"
+          },
+          "track": {
+            "kind": "literal",
+            "value": "MIGRATION"
+          },
+          "done": {
+            "kind": "literal",
+            "value": "Each HSWM-owned active caller uses accepted native behavior; explicit external tool and historical compatibility boundaries remain documented and verified."
+          },
+          "dependency": {
+            "kind": "literal",
+            "value": "f3-lifecycle"
+          }
+        },
+        {
+          "task": {
+            "kind": "literal",
+            "value": "s2s-protocol-pilot"
+          },
+          "track": {
+            "kind": "literal",
+            "value": "MIGRATION"
+          },
+          "done": {
+            "kind": "literal",
+            "value": "Whole native pilot artifact, independent replay/profile qualification, all original acceptance and refusal contracts before caller cutover."
+          },
+          "dependency": {
+            "kind": "literal",
+            "value": "fit-input-boundary"
+          }
+        },
+        {
+          "task": {
+            "kind": "literal",
+            "value": "remaining-callers"
+          },
+          "track": {
+            "kind": "literal",
+            "value": "MIGRATION"
+          },
+          "done": {
+            "kind": "literal",
+            "value": "Each HSWM-owned active caller uses accepted native behavior; explicit external tool and historical compatibility boundaries remain documented and verified."
+          },
+          "dependency": {
+            "kind": "literal",
+            "value": "s2s-protocol-pilot"
+          }
+        },
+        {
+          "task": {
+            "kind": "literal",
+            "value": "two-scale-composition"
+          },
+          "track": {
+            "kind": "literal",
+            "value": "RESEARCH"
+          },
+          "done": {
+            "kind": "literal",
+            "value": "Connect theorem premises and runtime observables for the same candidate, then two-scale effect/learning/lineage-preserving composition with null controls."
+          },
+          "dependency": {
+            "kind": "literal",
+            "value": "theorem-runtime-witness"
+          }
+        }
+      ]
+    }
+  },
+  "postrecord_math": {
+    "exit_code": 0,
+    "local_log_sha256": "4b17f7bf4fd60b53103509f0f6b3590b5cecadac1bbd8fc54cc4bc1a145076ff"
+  },
+  "independent_review": {
+    "kind": "SAME_WORKSPACE_AI_REVIEW_NOT_EXTERNAL_INDEPENDENCE",
+    "result": "No correction requested after source/pack/verification-claim/S5 review"
+  },
+  "runtime_changes": false,
+  "reproduced_defect_fixed": false
+}

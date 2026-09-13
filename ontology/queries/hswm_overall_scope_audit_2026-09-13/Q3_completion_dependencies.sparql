@@ -1,0 +1,4 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX edge: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?task ?track ?done ?dependency WHERE { ?t a role:COMPLETION_TASK; p:name ?task; p:track ?track; p:done_when ?done. OPTIONAL { ?t edge:REQUIRES ?d. ?d p:name ?dependency. } } ORDER BY ?task ?dependency

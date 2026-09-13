@@ -1,0 +1,116 @@
+{
+  "schema_version": "hswm-scope-runtime-audit/v1",
+  "reviewed_commit": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+  "review_mode": "read_only_adversarial_source_review",
+  "source_bound_inputs": {
+    "active_route_audit": {
+      "path": "_research/native_migration_2026-09-13/active-route-audit.v7.json",
+      "lines": "72-98",
+      "source_base_commit": "c8d0ca9bc836b90b56137b83901f4f40c552363e"
+    },
+    "f1_source": {
+      "path": "prom_search_hswm/hswm_f1_durable_transport.py",
+      "sha256": "09ecd886901ac95c0be86e59369d8672d0fad0b912d97e488c5c41c79692a7cc"
+    },
+    "f3_sources": {
+      "_research/f_series/f2_delta_w_credit.py": "1cf1518cf0cd9172b560c662b52c4261bc3cdcb57e7a6c8e34b80c7c55f58691",
+      "_research/f_series/f3v2_arms.py": "19848eb4d3b7f6377d28793324652f4a45631dc74f16ba91b7d5e3636d991915"
+    }
+  },
+  "findings": [
+    {
+      "id": "F1-LIVE-DURABLE-CLOSURE-MISSING",
+      "severity": "migration_blocker",
+      "status": "confirmed",
+      "native_anchors": [
+        "src/hswm/effect-runtime/src/native-prom9-f1-cli.ts:1-38",
+        "src/hswm/effect-runtime/src/native-prom9-f1-process.ts:1-5",
+        "src/hswm/effect-runtime/src/native-prom9-network-runtime.ts:12-28",
+        "src/hswm/effect-runtime/src/native-prom9-f1-run-domain.ts:110-163"
+      ],
+      "source_anchors": [
+        "prom_search_hswm/prom_f1_function_network.py:710-766",
+        "prom_search_hswm/hswm_f1_durable_transport.py:1-6",
+        "prom_search_hswm/hswm_f1_durable_transport.py:668-694"
+      ],
+      "evidence": "The packaged native process delegates exclusively to a CLI whose only accepted positional command is judge. Its suite assembler explicitly does not invoke a model, spool, or tokenizer. The three-call runtime only invokes an injected model port and optionally calls injectable sinks; it supplies neither a SQLite ledger nor an idempotent result spool. The source live command accepts endpoint, attempt-db, spool token and tokenizer directory, constructs DurableSpoolJSONPort, then calls run_suite. The source transport documents WAL/FULL per-call state and replay/no-second-inference semantics.",
+      "focused_reproduction": {
+        "command": "cd src/hswm/effect-runtime && node dist/native-prom9-f1-process.js run",
+        "observed": "exit=2; usage: hswm-prom9-f1 judge --suite FILE --gold FILE --output FILE [--bootstrap-reps N] [--bootstrap-seed N]"
+      },
+      "impact": "The native implementation can verify/judge pre-existing receipts but cannot replace the active F1 live runner or establish its durable call/item evidence. A supplied one-shot HTTP port does not provide the source's replay protection or SQLite authority.",
+      "minimal_closure": "Implement and wire a source-compatible durable ledger plus idempotent spool into a native run command before redirecting the active Python launcher. Do not treat an externally supplied transport_audit as proof of that execution."
+    },
+    {
+      "id": "F3-CACHED-CHAT-SEAM-NOT-LIFECYCLE",
+      "severity": "migration_blocker",
+      "status": "confirmed",
+      "native_anchors": [
+        "src/hswm/effect-runtime/src/native-f3-chat-runtime.ts:14-21",
+        "src/hswm/effect-runtime/src/native-f3-chat-runtime.ts:60-94",
+        "src/hswm/effect-runtime/src/index.ts:1-679 (no native-f3 export)"
+      ],
+      "source_anchors": [
+        "_research/f_series/f2_delta_w_credit.py:246-318",
+        "_research/f_series/f3v2_arms.py:205-246",
+        "_research/native_migration_2026-09-13/active-route-audit.v7.json:89-97"
+      ],
+      "evidence": "The native seam requires callers to inject read/post/write and to supply prior counters on every executeNativeF3Chat invocation. It returns a next state but has no state/cache adapter, lifecycle runner, external execution boundary, or exported package entrypoint. The source CachedOpenAIChat owns a disk-cache directory and mutable budget/hit/miss lifecycle, while run_experience repeatedly invokes that owner and turns responses into trajectory rows. The active-route audit itself still marks f3v2-live-smoke PARTIAL_ROUTE and lists full lifecycle and receipt as remaining work.",
+      "impact": "The component reproduces cache identity and one call ordering only. It cannot replace the active F3 smoke route, and callers can discard the returned state so a multi-world run can reset its budget or counters between calls.",
+      "minimal_closure": "Provide a bounded lifecycle owner that persists or otherwise serializes the state/cache transition and a native F3 run entrypoint producing the source trajectory/receipt scope; retain the current injected seam as a component."
+    },
+    {
+      "id": "PROM9-TRANSPORT-NOT-ACTIVELY-REACHABLE",
+      "severity": "migration_blocker_for_live_route",
+      "status": "confirmed",
+      "native_anchors": [
+        "src/hswm/effect-runtime/src/native-prom9-json-transport-runtime.ts:50-74",
+        "src/hswm/effect-runtime/src/native-prom9-json-http-runtime.ts:22-29",
+        "src/hswm/effect-runtime/src/native-prom9-f1-cli.ts:24-38",
+        "src/hswm/effect-runtime/src/index.ts:1-679 (no native-prom9 export)"
+      ],
+      "evidence": "The transport factory and live HTTP/environment values exist, but no active native F1 command constructs the factory, provides NativeProm9JsonHttpLive and NativeProm9JsonEnvironmentLive, supplies a token meter, or calls runNativeProm9Item. The package root export omits all native-prom9 modules. npm pack includes their files, so this is not a pack-files defect; package exports restrict installed consumers to '.' and './g0-temporal'.",
+      "impact": "The HTTP implementation is an internal injectable component, not an executable replacement path. Its existence does not close F1 provider integration.",
+      "minimal_closure": "Wire the existing bounded transport only through the durable F1 run owner; expose a deliberate supported API only if external consumers are intended."
+    },
+    {
+      "id": "EFFECT-GUARDRAIL-COVERAGE-CEILING",
+      "severity": "engineering_limitation",
+      "status": "confirmed_non_blocking",
+      "anchors": [
+        "src/hswm/effect-runtime/scripts/lint-effect-boundary.mjs:32-66",
+        "src/hswm/effect-runtime/scripts/lint-effect-boundary.mjs:69-97",
+        "src/hswm/effect-runtime/scripts/lint-adaptive-functional.mjs:7-55",
+        "src/hswm/effect-runtime/scripts/effect-boundary-allowlist.json:1-12"
+      ],
+      "evidence": "The boundary lint reads only top-level src/*.ts and applies five line-pattern rules (module let, Effect.run, throw, selected mutable Map/Set, async); the native functional lint applies a named-file predicate and checks throw, async, direct domain imports, Effect.run, module mutability and ts bypasses. Neither proves capability provisioning, total error typing, ownership of injected effects, lifecycle reachability, or behavior of bin/test/support files. At this commit all 297 src TypeScript files are top-level, so there is no current nested-src omission. The executed lint report had zero unallowlisted/stale violations, but 38 allowlisted files with 316 R3 and 92 R5 occurrences.",
+      "impact": "A clean report supports only the listed syntactic constraints and documented exemptions. It must not be cited as evidence of complete functional migration or active runtime closure.",
+      "minimal_closure": "Keep the count/stale-entry checks; add semantic or targeted architecture assertions only if the project wants those stronger claims. No allowlist change is indicated by this review."
+    }
+  ],
+  "negative_findings": [
+    {
+      "area": "npm pack bin inclusion",
+      "result": "not a defect",
+      "evidence": "npm pack --dry-run --json from src/hswm/effect-runtime included dist/native-prom9-f1-process.js, dist/native-prom9-f1-cli.js, bin/hswm-prom9-f1, all reviewed transport/F3 files, and package.json. The process is correctly declared under package.json bin."
+    },
+    {
+      "area": "unallowlisted Prom9/F3 raw throw or async",
+      "result": "not observed by the configured guards",
+      "evidence": "effect-boundary lint and adaptive-functional lint completed with zero violations on the reviewed checkout. This is bounded syntactic evidence only."
+    }
+  ],
+  "bounded_coverage": {
+    "executed": [
+      "node dist/native-prom9-f1-process.js run (focused command reachability reproduction)",
+      "node scripts/lint-effect-boundary.mjs --json",
+      "npm run check:adaptive-functional",
+      "npm pack --dry-run --json"
+    ],
+    "not_claimed": [
+      "No full test suite was run.",
+      "No model endpoint, provider, spool, SQLite ledger, or F3 external launcher was invoked.",
+      "No passing test is treated as source parity or migration completion."
+    ]
+  }
+}

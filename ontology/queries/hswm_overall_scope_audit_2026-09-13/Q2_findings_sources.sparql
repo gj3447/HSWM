@@ -1,0 +1,4 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX edge: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?finding ?priority ?status ?path ?line WHERE { ?f a role:AUDIT_FINDING; p:name ?finding; p:priority ?priority; p:status ?status; edge:HAS_SOURCE ?s. ?s p:source_path ?path; p:source_line ?line. } ORDER BY ?finding ?path ?line

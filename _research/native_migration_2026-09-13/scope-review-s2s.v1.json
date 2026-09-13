@@ -1,0 +1,104 @@
+{
+  "schema_version": "hswm-scope-s2s-native-migration-audit/v1",
+  "as_of_commit": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+  "mode": "read_only",
+  "claim_ceiling": "SOURCE_AND_NATIVE_STATIC_AUDIT_ONLY_NOT_PILOT_REPLAY_OR_MODEL_EFFICACY",
+  "source_pins": {
+    "protocol": {
+      "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+      "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1"
+    },
+    "pilot": {
+      "path": "src/hswm/experiments/swm0w_s2s_pilot.py",
+      "sha256": "46ee8a607224e198cf53f89d32ff7d7a8940cf99a15a138cce128b6e014e56d6"
+    },
+    "training": {
+      "path": "src/hswm/experiments/swm0w_s2s_training.py",
+      "sha256": "d84b8336d8bcbe89aeba7f2d2c915fd294b9ee24425e6092505069a74f9cba94"
+    },
+    "active_route_audit": {
+      "path": "_research/native_migration_2026-09-13/active-route-audit.v8.json",
+      "sha256": "294127fdfc821203e9e61ae88e15986ee2b6927ef19caddad8fa42022dc89092"
+    },
+    "native_fit": {
+      "path": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts",
+      "sha256": "ca4a2a65669a4d8cbb18cd20c01017389533ad064335c82194e98e3c38d328ab"
+    },
+    "native_optimization_receipt": {
+      "path": "src/hswm/effect-runtime/src/native-s2s-optimization-receipt-domain.ts",
+      "sha256": "78459ab164431b2088fe42b17cc59e10c6717815d5a6a45ba1d88c71cefffc57"
+    }
+  },
+  "native_closure": [
+    "Pure training fit, task archive/data compilation, parameter/model archive verification, score components, and self-consistent optimization receipt parsing are present.",
+    "Optimization parser reconstructs datasets/strata, initialization, history hashes, update/patience flags, best checkpoint and unsigned receipt hash; it explicitly does not replay optimization.",
+    "Current native semantic status remains LEARNED_ENGINEERING_ARTIFACT_UNJUDGED."
+  ],
+  "active_source_boundaries": [
+    {
+      "priority": "P0",
+      "boundary": "Active CI/pilot still invokes Python module hswm.experiments.swm0w_s2s_pilot; s2s-live-python is still a Python bridge.",
+      "evidence": {
+        "path": "_research/native_migration_2026-09-13/active-route-audit.v8.json",
+        "lines": "42-53"
+      }
+    },
+    {
+      "priority": "P1",
+      "boundary": "Deterministic source fit replay, candidate/final protocol integrity/bootstrap receipts, pilot/CI closure, and retirement of normal Python numeric bridge remain explicitly unclosed.",
+      "evidence": {
+        "path": "_research/native_migration_2026-09-13/active-route-audit.v8.json",
+        "lines": "51-54,139-142"
+      }
+    },
+    {
+      "priority": "P1",
+      "boundary": "Optimization receipt validation is consistency verification, not a rerun of Adam or intervention/replay evidence.",
+      "evidence": {
+        "path": "src/hswm/effect-runtime/src/native-s2s-optimization-receipt-domain.ts",
+        "line": 62
+      }
+    },
+    {
+      "priority": "P1",
+      "boundary": "No native counterpart found for protocol fit-replay receipt, learned-Q removal/restoration intervention receipt, integrity receipt, task evaluation receipt, bootstrap candidate reduction/final candidate receipt.",
+      "evidence": {
+        "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+        "lines": "1276-1434,1521-1725,2206-2686,2922-3430,3595-3820"
+      }
+    },
+    {
+      "priority": "P1",
+      "boundary": "No native pilot artifact construction/validation or runtime environment/roster pipeline found; pilot remains Python.",
+      "evidence": {
+        "path": "src/hswm/experiments/swm0w_s2s_pilot.py",
+        "lines": "239-380,1555-1793,2006-2422"
+      }
+    }
+  ],
+  "concrete_defects": [
+    {
+      "priority": "P1",
+      "title": "Exported fit config validator executes getter and throws rather than returning typed Left",
+      "evidence": {
+        "path": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts",
+        "line": 78,
+        "emitted_module": "/home/lagyeongjun/CD/HSWM/src/hswm/effect-runtime/dist/native-s2s-fit-domain.js"
+      },
+      "repro": {
+        "script": "/tmp/s2s-fit-getter-repro.mjs",
+        "result": {
+          "thrown": "Error: getter-executed",
+          "reads": 1
+        }
+      },
+      "reachability": "The CLI decodes config from JSON and passes it through createNativeS2STrainingConfig before fit, so its ordinary config-file path is guarded. The exported validateNativeS2SFitConfig and fitNativeS2STask interfaces remain callable as library APIs; therefore this is P1 boundary correctness, not P0 active CLI escape.",
+      "repair": "Use descriptor-safe own-data validation and snapshot scalar values before validation."
+    }
+  ],
+  "non_findings": [
+    "No claim that the acknowledged lack of full pilot/CI closure is a newly discovered defect.",
+    "No live call, full pilot, or source mutation was performed.",
+    "Parameter alias concern refuted as an independent defect: fit copies initial parameters and returns copied frozen best parameters; no mutation-based result change was established."
+  ]
+}

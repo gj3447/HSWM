@@ -1,0 +1,1404 @@
+{
+  "schema_version": "hswm-overall-scope-audit/v1",
+  "date": "2026-09-13",
+  "source_base_commit": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+  "authority_class": "SECONDARY_AI",
+  "migration_complete": false,
+  "research_complete": false,
+  "claim_ceiling": "SOURCE_AND_BOUNDED_ENGINEERING_AUDIT_NOT_NEW_SCIENTIFIC_RESULT_NOT_LIVE_DEPLOYMENT",
+  "request": {
+    "path": "_research/native_migration_2026-09-13/scope-user-instruction.v1.json",
+    "sha256": "65d62daea2bb21f1c0e0fe840edc9f9ede2e7ec81150fae710dd80c5af2bf57d",
+    "byte_length": 445,
+    "git_blob": "14488a9ca29e584a7483bcf05dcd2d1ce0d7bd31",
+    "source_revision": "AUDIT_ARTIFACT_WORKTREE"
+  },
+  "coverage": {
+    "entrypoint_catalog": {
+      "path": "_research/native_migration_2026-09-13/scope-entrypoint-catalog.v1.json",
+      "sha256": "3e970bcb49b7ba96e534a3ed6894b0d709e82a96acf2649bab928fd70d295f3f",
+      "byte_length": 204499,
+      "git_blob": "257c39e90a66d10685c5c63cd0afa622ecac7c8f",
+      "source_revision": "AUDIT_ARTIFACT_WORKTREE"
+    },
+    "counts": {
+      "caller_corpus_files": 2052,
+      "caller_status_counts": {
+        "ACTIVE_EXPLICIT_CALL": 4,
+        "HISTORICAL_REPLAY": 11,
+        "UNKNOWN": 248
+      },
+      "excluded_large_or_raw_prefixes": [
+        "_research/dnrd5/vectors/",
+        "_research/graph_standards/results/",
+        "docs/operations/artifacts/",
+        "tests/fixtures/",
+        "_research/causal_composition/relation_synthesis_usl_v1/"
+      ],
+      "native_bin_rows": 30,
+      "python_console_script_rows": 8,
+      "python_entrypoint_candidates": 263,
+      "tracked_python_files": 843
+    },
+    "method": "Tracked HEAD blobs only. Python candidates require def main(...) or a __main__ guard. Caller matching is lexical against bounded maintained launch/document corpus, therefore UNKNOWN means no concrete caller located, not inactive.",
+    "limitations": [
+      "Lexical caller matching cannot prove dynamic import, external cron/systemd not tracked here, or activation of a documented command.",
+      "No raw vector/artifact corpus traversal, expensive execution, live services, model calls, or network access.",
+      "Location class distinguishes HSWM implementation, HSWM research, compatibility/root, and tool profiles; it does not establish legal or vendor ownership.",
+      "UNKNOWN is an unclassified review backlog: it is not evidence that an entrypoint is inert or unreachable."
+    ],
+    "reviewers": "THREE_SAME_WORKSPACE_AI_REVIEWERS_WITH_ROOT_REPRODUCTION_NOT_INDEPENDENT_EXTERNAL_CUSTODY"
+  },
+  "scopes": [
+    {
+      "id": "adaptive-runtime",
+      "implementation": "NATIVE_LOCAL_PROTOTYPE",
+      "status": "VERIFIED_BOUNDED",
+      "remaining": "Independently measured causal learning and novel-task efficacy are not established.",
+      "findings": [
+        "d4-research-loop-open"
+      ],
+      "scientific_claim": "NO_NEW_EFFICACY_CLAIM"
+    },
+    {
+      "id": "task-usl-kg-tools",
+      "implementation": "NATIVE_IMPLEMENTATIONS_WITH_COMPATIBILITY",
+      "status": "PARTIAL",
+      "remaining": "Eight Python console/package contracts and documented callers remain.",
+      "findings": [
+        "hidden-python-dependencies"
+      ],
+      "scientific_claim": "NO_NEW_EFFICACY_CLAIM"
+    },
+    {
+      "id": "s2s-model-and-pilot",
+      "implementation": "NATIVE_FIT_ARCHIVE_COMPONENTS",
+      "status": "PARTIAL",
+      "remaining": "Original full protocol and Python pilot remain.",
+      "findings": [
+        "s2s-protocol-pilot-unconnected",
+        "fit-config-getter-escapes-either"
+      ],
+      "scientific_claim": "NO_NEW_EFFICACY_CLAIM"
+    },
+    {
+      "id": "f1-live-suite",
+      "implementation": "NATIVE_CALL_HTTP_AND_OFFLINE_JUDGE",
+      "status": "PARTIAL",
+      "remaining": "Durable run owner/command missing.",
+      "findings": [
+        "f1-run-unconnected"
+      ],
+      "scientific_claim": "NO_NEW_EFFICACY_CLAIM"
+    },
+    {
+      "id": "f3-experiment",
+      "implementation": "NATIVE_CHAT_SEAM",
+      "status": "PARTIAL",
+      "remaining": "Full lifecycle not implemented natively.",
+      "findings": [
+        "f3-lifecycle-unconnected"
+      ],
+      "scientific_claim": "NO_NEW_EFFICACY_CLAIM"
+    },
+    {
+      "id": "ci-package-bootstrap",
+      "implementation": "MIXED_NATIVE_AND_PYTHON",
+      "status": "PARTIAL",
+      "remaining": "Confirmatory, pilot, packaging and environment routes remain.",
+      "findings": [
+        "confirmatory-route-grouped-away",
+        "hidden-python-dependencies"
+      ],
+      "scientific_claim": "NO_NEW_EFFICACY_CLAIM"
+    },
+    {
+      "id": "standard-tool-qualification",
+      "implementation": "NATIVE_WRAPPERS_AND_PINNED_EXTERNAL_TOOLS",
+      "status": "PARTIAL",
+      "remaining": "Python qualification runners remain by profile.",
+      "findings": [
+        "hidden-python-dependencies"
+      ],
+      "scientific_claim": "NO_NEW_EFFICACY_CLAIM"
+    },
+    {
+      "id": "functional-boundaries",
+      "implementation": "SCOPED_GUARDS_AND_EXEMPTIONS",
+      "status": "VERIFIED_BOUNDED",
+      "remaining": "Syntax checks do not prove all semantic boundaries.",
+      "findings": [
+        "functional-check-ceiling",
+        "fit-config-getter-escapes-either"
+      ],
+      "scientific_claim": "NO_NEW_EFFICACY_CLAIM"
+    },
+    {
+      "id": "package-artifact",
+      "implementation": "ALL_DECLARED_BIN_TARGETS_INCLUDED",
+      "status": "VERIFIED_BOUNDED",
+      "remaining": "Package files are present; native F1/F3 run reachability missing.",
+      "findings": [
+        "f1-run-unconnected"
+      ],
+      "scientific_claim": "NO_NEW_EFFICACY_CLAIM"
+    },
+    {
+      "id": "knowledge-navigation",
+      "implementation": "SOURCE_BOUND_SNAPSHOTS",
+      "status": "CORRECTED_READING",
+      "remaining": "S5 stale reading corrected without rewriting bound history.",
+      "findings": [
+        "s5-navigation-stale"
+      ],
+      "scientific_claim": "NO_NEW_EFFICACY_CLAIM"
+    },
+    {
+      "id": "research-v1-done-state",
+      "implementation": "LOCAL_SEGMENT_OBSERVED",
+      "status": "UNJUDGED",
+      "remaining": "Canonical held-out recurrence not completed.",
+      "findings": [
+        "d4-research-loop-open"
+      ],
+      "scientific_claim": "NO_NEW_EFFICACY_CLAIM"
+    },
+    {
+      "id": "proof-and-fractal-target",
+      "implementation": "BOUNDED_CONDITIONAL_FORMAL_RESULTS",
+      "status": "UNJUDGED",
+      "remaining": "No simultaneous CR0-7/FCL1-8 integrated witness.",
+      "findings": [
+        "formal-and-fractal-witness-open"
+      ],
+      "scientific_claim": "NO_NEW_EFFICACY_CLAIM"
+    },
+    {
+      "id": "other-entrypoints",
+      "implementation": "LEXICAL_CANDIDATE_CATALOG",
+      "status": "UNKNOWN",
+      "remaining": "248 candidates need purpose classification; not declared inactive.",
+      "findings": [
+        "unknown-research-entrypoints",
+        "inventory-not-progress-denominator"
+      ],
+      "scientific_claim": "NO_NEW_EFFICACY_CLAIM"
+    }
+  ],
+  "findings": [
+    {
+      "id": "f1-run-unconnected",
+      "priority": "P1",
+      "kind": "MIGRATION_BLOCKER",
+      "status": "CONFIRMED_OPEN",
+      "finding": "Native F1 accepts judge only; HTTP, tokenizer and network components are not wired into a durable run owner.",
+      "evidence": [
+        {
+          "path": "src/hswm/effect-runtime/src/native-prom9-f1-cli.ts",
+          "sha256": "19354e2af85f41dbeba638fda7e2a1443b47b5ccc43460212713417090651a2a",
+          "byte_length": 4438,
+          "git_blob": "d889b8abd0b7e3e642097c91b3dfb27a9bf3afcc",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 24
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-prom9-network-runtime.ts",
+          "sha256": "70e6840a50b0a2c54519f8618dd2c7884aa0bfeb1f16fd3c01b01d848b245a2e",
+          "byte_length": 2071,
+          "git_blob": "5cbb7dc460a76c590f5c49b8360d267bad20ffef",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 12
+        },
+        {
+          "path": "prom_search_hswm/hswm_f1_durable_transport.py",
+          "sha256": "09ecd886901ac95c0be86e59369d8672d0fad0b912d97e488c5c41c79692a7cc",
+          "byte_length": 73869,
+          "git_blob": "c922ed013c8b8729f12f7c416e54cd8447a70c8d",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 315
+        },
+        {
+          "path": "prom_search_hswm/prom_f1_function_network.py",
+          "sha256": "59e88cda18061bf312697b48e1df4639dae5b31be25dd1bfade6602db0468bfe",
+          "byte_length": 36152,
+          "git_blob": "53c3f6a8cb6843b4f8ce7b994e373a156184e2f8",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 710
+        }
+      ],
+      "closure": "Exact source SQLite ledger/state/audit and atomic item acceptance, idempotent spool and native run with crash/duplicate refusals."
+    },
+    {
+      "id": "s2s-protocol-pilot-unconnected",
+      "priority": "P1",
+      "kind": "MIGRATION_BLOCKER",
+      "status": "CONFIRMED_OPEN",
+      "finding": "Model fit/verify is implemented; fit replay, Q intervention, integrity, task/final candidate and pilot remain original Python protocol responsibilities.",
+      "evidence": [
+        {
+          "path": "src/hswm/effect-runtime/src/native-s2s-model-cli.ts",
+          "sha256": "6fd5445a7f8b9a3951083275bcef98ecfaf9968ea92738030d966fefdb390031",
+          "byte_length": 4858,
+          "git_blob": "c9be06f88a66641777800c58ea1902de3171364b",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 29
+        },
+        {
+          "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+          "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+          "byte_length": 157742,
+          "git_blob": "844f12677f4fc38eea31e8836abd7dda420e32a0",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 1276
+        },
+        {
+          "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+          "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+          "byte_length": 157742,
+          "git_blob": "844f12677f4fc38eea31e8836abd7dda420e32a0",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 2206
+        },
+        {
+          "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+          "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+          "byte_length": 157742,
+          "git_blob": "844f12677f4fc38eea31e8836abd7dda420e32a0",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 3595
+        },
+        {
+          "path": "src/hswm/experiments/swm0w_s2s_pilot.py",
+          "sha256": "46ee8a607224e198cf53f89d32ff7d7a8940cf99a15a138cce128b6e014e56d6",
+          "byte_length": 98350,
+          "git_blob": "ac9c792b328e9cc9142177ef141050cde16779fe",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 1555
+        },
+        {
+          "path": ".github/workflows/swm0w-s2s-train-dev-pilot.yml",
+          "sha256": "622f6dbf3861ef1f4d7f35f4cc6698e7fb0e53d5957d90f86c9cc063b958dae8",
+          "byte_length": 4653,
+          "git_blob": "dc7005eaa85deb336a54268a281060d7469d3e2e",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 106
+        }
+      ],
+      "closure": "Whole native pilot artifact, independent replay/profile qualification, all original acceptance and refusal contracts before caller cutover."
+    },
+    {
+      "id": "f3-lifecycle-unconnected",
+      "priority": "P1",
+      "kind": "MIGRATION_BLOCKER",
+      "status": "CONFIRMED_OPEN",
+      "finding": "Injected cache/chat and next counters do not yet have a native lifecycle owner or executable run that preserves budget across calls.",
+      "evidence": [
+        {
+          "path": "src/hswm/effect-runtime/src/native-f3-chat-runtime.ts",
+          "sha256": "80a33b0ae0b6cae7f991720a86c4f71d990a53b72eb48e40a93c7fc997de1fb5",
+          "byte_length": 5726,
+          "git_blob": "d9209d7bb0dc7fb6ef3029d6b09e1974160879be",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 60
+        },
+        {
+          "path": "_research/f_series/f2_delta_w_credit.py",
+          "sha256": "1cf1518cf0cd9172b560c662b52c4261bc3cdcb57e7a6c8e34b80c7c55f58691",
+          "byte_length": 50288,
+          "git_blob": "67621f82792e9c1b44cd589ab05a01598fc11d1e",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 246
+        },
+        {
+          "path": "_research/f_series/f3v2_arms.py",
+          "sha256": "19848eb4d3b7f6377d28793324652f4a45631dc74f16ba91b7d5e3636d991915",
+          "byte_length": 55372,
+          "git_blob": "d7acb03bc65b92b2f985572587f0b6140673a849",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 205
+        },
+        {
+          "path": "scripts/f3v2_smoke_preflight.sh",
+          "sha256": "27d95cf232021e46b96117a8794df3f95475a2b967adf92da23d1ef91e84fb6e",
+          "byte_length": 2193,
+          "git_blob": "04393e5dd4b65d5ba48101c90e5c12169dd3ad1c",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 1
+        }
+      ],
+      "closure": "Native cache/state owner, provider and world/lesson/retrieval/evaluation loop plus whole-run cost and terminal receipt."
+    },
+    {
+      "id": "confirmatory-route-grouped-away",
+      "priority": "P1",
+      "kind": "SCOPE_OMISSION",
+      "status": "CONFIRMED_OPEN",
+      "finding": "SWM-0W confirmatory register/confirm/adjudicate is an explicit active workflow grouped only generically in v8.",
+      "evidence": [
+        {
+          "path": ".github/workflows/swm0w-confirmatory.yml",
+          "sha256": "14b7c664f9445989a359b1a6c2bad0164ed2760c82bb1b7092b3369cdd9ad8a2",
+          "byte_length": 28527,
+          "git_blob": "665d970e4e65aa8f3fb103c8732934833344735d",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 91
+        },
+        {
+          "path": ".github/workflows/swm0w-confirmatory.yml",
+          "sha256": "14b7c664f9445989a359b1a6c2bad0164ed2760c82bb1b7092b3369cdd9ad8a2",
+          "byte_length": 28527,
+          "git_blob": "665d970e4e65aa8f3fb103c8732934833344735d",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 268
+        },
+        {
+          "path": ".github/workflows/swm0w-confirmatory.yml",
+          "sha256": "14b7c664f9445989a359b1a6c2bad0164ed2760c82bb1b7092b3369cdd9ad8a2",
+          "byte_length": 28527,
+          "git_blob": "665d970e4e65aa8f3fb103c8732934833344735d",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 502
+        }
+      ],
+      "closure": "Separate source-bound native route qualification for all three operations, preserving original research evidence."
+    },
+    {
+      "id": "fit-config-getter-escapes-either",
+      "priority": "P2",
+      "kind": "IMPLEMENTATION_DEFECT",
+      "status": "REPRODUCED_UNFIXED",
+      "finding": "Direct module validateNativeS2SFitConfig(unknown) executes an enumerable seed getter and throws outside its Either error type.",
+      "evidence": [
+        {
+          "path": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts",
+          "sha256": "ca4a2a65669a4d8cbb18cd20c01017389533ad064335c82194e98e3c38d328ab",
+          "byte_length": 12011,
+          "git_blob": "8202f23876fcd80a55e021f925a18275eac4e6c9",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 78
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-s2s-task-fit-domain.ts",
+          "sha256": "d6aa707e6090a2c4634eacca3a925c08dcb9707dbc1612d15c2a3ae859c5ccf8",
+          "byte_length": 2548,
+          "git_blob": "f101dc5b4095cc02621bdf2f37bf07a420d26258",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 24
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-s2s-model-cli.ts",
+          "sha256": "6fd5445a7f8b9a3951083275bcef98ecfaf9968ea92738030d966fefdb390031",
+          "byte_length": 4858,
+          "git_blob": "c9be06f88a66641777800c58ea1902de3171364b",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 37
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/native-s2s-optimization-build-domain.ts",
+          "sha256": "97bd5788ca35364e2f662a4daae43860c2fbe928ccd63e01bece7b3ad2dfe4fc",
+          "byte_length": 4596,
+          "git_blob": "ef0dcdfdb7fbab1a74cd53cb415792f459793114",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 29
+        },
+        {
+          "path": "src/hswm/effect-runtime/package.json",
+          "sha256": "8a0bba8b3701483d3c119a0bbead27d6dcff3e55b13836a252bc30488c179ee6",
+          "byte_length": 5442,
+          "git_blob": "3deea8eaf070cc6f4c096be1085713d4a74a7edb",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 41
+        }
+      ],
+      "reproduction": {
+        "defect_reproduced": true,
+        "reads": 1,
+        "thrown": "Error: getter-executed"
+      },
+      "reachability": "Direct source/emitted-module API; absent from package root exports. Ordinary JSON CLI captures config first. No active CLI exploit or parameter alias defect demonstrated.",
+      "review_disposition": "Reviewer initially proposed P0 then P1; root downgrades to P2 after execution and reachability review.",
+      "closure": "Descriptor-safe own-data scalar capture before validation; getter never executes; preserve original numeric fixtures."
+    },
+    {
+      "id": "s5-navigation-stale",
+      "priority": "P2",
+      "kind": "KNOWLEDGE_STATUS_DEFECT",
+      "status": "CORRECTED_IN_SUCCESSOR_READING",
+      "finding": "Knowledge map and closure v5 retain OPEN/PARTIAL S5 states while final S5 result file and F1_R8 log mark the first-result deliverable complete.",
+      "evidence": [
+        {
+          "path": "docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md",
+          "sha256": "c794dc866475a811835d48d48f34eccafb71e5fe7139863727c6ad42b095ef01",
+          "byte_length": 15528,
+          "git_blob": "580c4a5cfb2ae2025aa44a182c65335c90a14e6a",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 57
+        },
+        {
+          "path": "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json",
+          "sha256": "08f45acbfee42750ac2a463db95bd2faa2dd0bbe5b4cf2da262acdcf27757222",
+          "byte_length": 328226,
+          "git_blob": "26f978cb5e20f205796fb55617c2ca87b5f57583",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 1
+        },
+        {
+          "path": "results/HSWM_S5_B0_B2_COMPARISON_2026-09-06.md",
+          "sha256": "33c2f8eaccd8854fac9efd646279e5d9dcd34661de3ba9c2a2b598a880f4a457",
+          "byte_length": 2234,
+          "git_blob": "8650e61774e861f4911ba265dd99683d7897b6ba",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 37
+        },
+        {
+          "path": "F1_R8_RESULTS_LOG.md",
+          "sha256": "4622bf5b3cda928e9ab5c5d23888c878209058c6725611e94c3eb6a542f22504",
+          "byte_length": 49670,
+          "git_blob": "d04cdad9b554ec607b53433da97eef2b4a669557",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 19
+        }
+      ],
+      "current_reading": "S5_FIRST_RESULT_DELIVERABLE_COMPLETE_NO_VALID_EFFICACY_OR_MATCHED_COMPARISON",
+      "closure": "Use later result-bound reading; preserve historical snapshot bytes. D4 and S6 remain open."
+    },
+    {
+      "id": "functional-check-ceiling",
+      "priority": "P2",
+      "kind": "VERIFICATION_SCOPE",
+      "status": "CONFIRMED_LIMIT",
+      "finding": "Zero violations covers 297 top-level TS files under five pattern rules and 155 selected files under the AST guard; 38 documented exception files remain.",
+      "evidence": [
+        {
+          "path": "src/hswm/effect-runtime/scripts/lint-effect-boundary.mjs",
+          "sha256": "6edc484bac7437c99006f822c690fa4ee55776b43adcf5a44c6b70b9aab240c5",
+          "byte_length": 4609,
+          "git_blob": "53ba90654a7b3ecd136dcad7cfda1d9e744e02ea",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 32
+        },
+        {
+          "path": "src/hswm/effect-runtime/scripts/lint-adaptive-functional.mjs",
+          "sha256": "06f058dd8d695a07125177d4c2ab7bf59db5ae129458739dfd650f0d5285a6b9",
+          "byte_length": 3735,
+          "git_blob": "085939117d12f5de514155001ddd348b984089a7",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 7
+        },
+        {
+          "path": "src/hswm/effect-runtime/scripts/effect-boundary-allowlist.json",
+          "sha256": "8b9becb906ff3a65a9d3a35986ef8cbe569929e5b37a4910b0fb6bcb56d3c6d7",
+          "byte_length": 14632,
+          "git_blob": "78184d51f7a707e5b2c870ca157a5071db70ee02",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 1
+        }
+      ],
+      "closure": "State exact guard coverage; verify actual I/O/lifecycle/error boundaries. No exemption expansion or semantic purity claim from syntax checks."
+    },
+    {
+      "id": "hidden-python-dependencies",
+      "priority": "P2",
+      "kind": "MIGRATION_BLOCKER",
+      "status": "CONFIRMED_OPEN",
+      "finding": "Native graph qualify intentionally executes uv/Python for Python runner profiles; bootstrap sync and mandatory math publishing compiler also remain Python.",
+      "evidence": [
+        {
+          "path": "src/hswm/effect-runtime/src/native-graph-standards-runtime.ts",
+          "sha256": "7b97776a1b06caf83cb64e46f2839c7b6f59799a0ecd1270b09a9fae48fc6cea",
+          "byte_length": 18882,
+          "git_blob": "0df85c456d39c3b7c92470028861dbb12ef43918",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 93
+        },
+        {
+          "path": "src/hswm/development/container/bootstrap.sh",
+          "sha256": "2d8024d3987faebde9309c33c52fbfa4c856cf35895c1b0c4eaf83c82ff9c361",
+          "byte_length": 755,
+          "git_blob": "e10859e7610aab82b4b3bf4f39eaa4a176128748",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 17
+        },
+        {
+          "path": "src/hswm/development/bin/hswm-python",
+          "sha256": "ac3f960827dfba339bccd4e7cd637591b68a616632f5f337477142bb8d4cd6ef",
+          "byte_length": 2539,
+          "git_blob": "b4f15f3aa0ec1dcfa0924b457960ad89414102f9",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 41
+        },
+        {
+          "path": "AGENTS.md",
+          "sha256": "b67a175bc7f2d8c701d9a9cf6ddd157565599f4960039f4d045e0ab4c53c08af",
+          "byte_length": 8198,
+          "git_blob": "e643679fbdb6d56767691e58b09135847cbdc348",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 122
+        },
+        {
+          "path": ".github/workflows/ci.yml",
+          "sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0",
+          "byte_length": 20916,
+          "git_blob": "f6c24b5094d87719ff6370b8bd5b4b547e528456",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 341
+        }
+      ],
+      "closure": "Classify per caller/profile and distinguish HSWM-owned orchestration from external tools and preserved compatibility before replacements."
+    },
+    {
+      "id": "unknown-research-entrypoints",
+      "priority": "P3",
+      "kind": "COVERAGE_UNKNOWN",
+      "status": "UNCLASSIFIED_NOT_INACTIVE",
+      "finding": "Main-guard lexical catalog leaves 248 of 263 Python candidates unclassified; executable P1v4 scripts exist without observed current activation.",
+      "evidence": [
+        {
+          "path": "_research/p1v4_fresh_replication/dell_prepare_seed4.sh",
+          "sha256": "7736ebe7268089b55ec5236ff45ed3d4a0aa665e5150b843e7453bf7a75411c2",
+          "byte_length": 5725,
+          "git_blob": "8dd440794761c11147fec9b631adfbcf3bfec6d2",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 33
+        },
+        {
+          "path": "_research/p1v4_fresh_replication/dell_measure_heldout_seed5_r2.sh",
+          "sha256": "6a57e9e8871c27e0604756b3d7491e28c369274fe1fd1bff422fa84439195c66",
+          "byte_length": 5194,
+          "git_blob": "26c16dc741d2ceb5efdd39dcc28a55393ce1f5b9",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 32
+        }
+      ],
+      "closure": "Resolve caller/deployment/replay purpose when touching each family; no inactivity or completion percentage inferred from lexical absence."
+    },
+    {
+      "id": "d4-research-loop-open",
+      "priority": "RESEARCH_PRIMARY",
+      "kind": "RESEARCH_COMPLETION_GAP",
+      "status": "UNJUDGED_NOT_COMPLETE",
+      "finding": "Opaque v5 local state-readout/remove/restore and real local Permit bridge do not supply one durable canonical revision plus genuinely held-out behavior run required by D4.",
+      "evidence": [
+        {
+          "path": "_research/causal_composition/preregistrations/d4_v1_canonical_heldout_DRAFT/README.md",
+          "sha256": "6d63e0c296c69679e10606b5460afcaa5bb6ba02955f86c79145bdd7c8f872dc",
+          "byte_length": 10741,
+          "git_blob": "acabeced498d7a2979dc1b164f068e63d5a69be6",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 3
+        },
+        {
+          "path": "results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_RESULTS_2026-09-06.md",
+          "sha256": "9783db58c3fee1a1d92bda0014413a2d5742fbcc1043daf97b21b4fdeeb2a61a",
+          "byte_length": 7058,
+          "git_blob": "3195e73d34448317319e2afa0a37dd35476d14fb",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 118
+        },
+        {
+          "path": "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json",
+          "sha256": "08f45acbfee42750ac2a463db95bd2faa2dd0bbe5b4cf2da262acdcf27757222",
+          "byte_length": 328226,
+          "git_blob": "26f978cb5e20f205796fb55617c2ca87b5f57583",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 1
+        }
+      ],
+      "closure": "Same prospectively specified candidate: independent outcome, credit, canonical journal, changed held-out behavior, exact remove/restore and sham/shuffled controls with all-run costs."
+    },
+    {
+      "id": "formal-and-fractal-witness-open",
+      "priority": "RESEARCH_PRIMARY",
+      "kind": "RESEARCH_COMPLETION_GAP",
+      "status": "INTEGRATED_CLAIM_UNJUDGED",
+      "finding": "Finite conditional Lean models are actual formal progress but do not give one executable witness satisfying CR0-7 or integrated FCL1-8.",
+      "evidence": [
+        {
+          "path": "docs/research/HSWM_CONSTRUCTIVE_PROOF_ROUND_1_2026-09-10.md",
+          "sha256": "42679cefd01fa657f1e388e4e6ed1971f6df1c37e129cdff3508c9ac07e673cb",
+          "byte_length": 12738,
+          "git_blob": "baa31450d40868e4a670c660115fbdc483230e4a",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 5
+        },
+        {
+          "path": "docs/research/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.md",
+          "sha256": "4274b27b876f1d2fecde18131054dbe05b93563c5a74e519fab64e1f78107e98",
+          "byte_length": 19771,
+          "git_blob": "d5b6678f4c6c8cea7c38222f6b8eb605dea9a85a",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 191
+        },
+        {
+          "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+          "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81",
+          "byte_length": 26525,
+          "git_blob": "a6326c885630fc03e4a47c1d06c455aeb5df7c65",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 22
+        }
+      ],
+      "closure": "Connect theorem premises and runtime observables for the same candidate, then two-scale effect/learning/lineage-preserving composition with null controls."
+    },
+    {
+      "id": "inventory-not-progress-denominator",
+      "priority": "P2",
+      "kind": "VERIFICATION_SCOPE",
+      "status": "CLARIFIED_IN_SUCCESSOR",
+      "finding": "Inventory v8 mixes launchers, components, compatibility and experiments; 6 native and 16 partial entries do not define a migration percentage. Native watchdog is an offline judge dependent on upstream suite production.",
+      "evidence": [
+        {
+          "path": "_research/native_migration_2026-09-13/inventory.v8.json",
+          "sha256": "c22fb9e7e6dcc72aceb2adff6fccb3015a0f7016606744504ee719bea604430c",
+          "byte_length": 21428,
+          "git_blob": "a782ecf6edd2978a5d01eaec3b34ab860eb0c12c",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 5
+        },
+        {
+          "path": "scripts/bin_hswm_f1_watchdog.sh",
+          "sha256": "d904af106dbc7a375731d06085d0864f3d8e2ca1a21aa807e755c4923b43fe98",
+          "byte_length": 1185,
+          "git_blob": "15a469035874cd10849877d1f975b58e4601394a",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 18
+        },
+        {
+          "path": "README.md",
+          "sha256": "78cd665e0180b9e1f62387ee328aac262a8a6a4f494edfe630f1c97455b0a171",
+          "byte_length": 17022,
+          "git_blob": "9c6914c96819a4ae91ada37f4745a03e6e7dd471",
+          "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+          "line": 24
+        }
+      ],
+      "closure": "Use separate implementation, caller reachability, dependency, verification and efficacy fields. README now states active Python migration remains."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "s2s-protocol-pilot",
+      "order": 1,
+      "track": "MIGRATION",
+      "addresses": [
+        "s2s-protocol-pilot-unconnected"
+      ],
+      "depends_on": [
+        "fit-input-boundary"
+      ],
+      "done_when": "Whole native pilot artifact, independent replay/profile qualification, all original acceptance and refusal contracts before caller cutover.",
+      "status": "PROPOSED_NOT_EXECUTED",
+      "authority_class": "SECONDARY_AI",
+      "dependency_semantics": "WORK_ORDER_FOR_THIS_PROPOSAL_NOT_A_NEW_SCIENTIFIC_GATE"
+    },
+    {
+      "id": "f1-durable-run",
+      "order": 2,
+      "track": "MIGRATION",
+      "addresses": [
+        "f1-run-unconnected"
+      ],
+      "depends_on": [],
+      "done_when": "Exact source SQLite ledger/state/audit and atomic item acceptance, idempotent spool and native run with crash/duplicate refusals.",
+      "status": "PROPOSED_NOT_EXECUTED",
+      "authority_class": "SECONDARY_AI",
+      "dependency_semantics": "WORK_ORDER_FOR_THIS_PROPOSAL_NOT_A_NEW_SCIENTIFIC_GATE"
+    },
+    {
+      "id": "f3-lifecycle",
+      "order": 3,
+      "track": "MIGRATION",
+      "addresses": [
+        "f3-lifecycle-unconnected"
+      ],
+      "depends_on": [],
+      "done_when": "Native cache/state owner, provider and world/lesson/retrieval/evaluation loop plus whole-run cost and terminal receipt.",
+      "status": "PROPOSED_NOT_EXECUTED",
+      "authority_class": "SECONDARY_AI",
+      "dependency_semantics": "WORK_ORDER_FOR_THIS_PROPOSAL_NOT_A_NEW_SCIENTIFIC_GATE"
+    },
+    {
+      "id": "remaining-callers",
+      "order": 4,
+      "track": "MIGRATION",
+      "addresses": [
+        "confirmatory-route-grouped-away",
+        "hidden-python-dependencies",
+        "unknown-research-entrypoints"
+      ],
+      "depends_on": [
+        "s2s-protocol-pilot",
+        "f1-durable-run",
+        "f3-lifecycle"
+      ],
+      "done_when": "Each HSWM-owned active caller uses accepted native behavior; explicit external tool and historical compatibility boundaries remain documented and verified.",
+      "status": "PROPOSED_NOT_EXECUTED",
+      "authority_class": "SECONDARY_AI",
+      "dependency_semantics": "WORK_ORDER_FOR_THIS_PROPOSAL_NOT_A_NEW_SCIENTIFIC_GATE"
+    },
+    {
+      "id": "fit-input-boundary",
+      "order": 0,
+      "track": "ENGINEERING_FIX",
+      "addresses": [
+        "fit-config-getter-escapes-either"
+      ],
+      "depends_on": [],
+      "done_when": "Descriptor-safe own-data scalar capture before validation; getter never executes; preserve original numeric fixtures.",
+      "status": "PROPOSED_NOT_EXECUTED",
+      "authority_class": "SECONDARY_AI",
+      "dependency_semantics": "WORK_ORDER_FOR_THIS_PROPOSAL_NOT_A_NEW_SCIENTIFIC_GATE"
+    },
+    {
+      "id": "d4-single-candidate",
+      "order": 1,
+      "track": "RESEARCH",
+      "addresses": [
+        "d4-research-loop-open"
+      ],
+      "depends_on": [],
+      "done_when": "Same prospectively specified candidate: independent outcome, credit, canonical journal, changed held-out behavior, exact remove/restore and sham/shuffled controls with all-run costs.",
+      "status": "PROPOSED_NOT_EXECUTED",
+      "authority_class": "SECONDARY_AI",
+      "dependency_semantics": "WORK_ORDER_FOR_THIS_PROPOSAL_NOT_A_NEW_SCIENTIFIC_GATE"
+    },
+    {
+      "id": "theorem-runtime-witness",
+      "order": 1,
+      "track": "FORMAL_RESEARCH",
+      "addresses": [
+        "formal-and-fractal-witness-open"
+      ],
+      "depends_on": [],
+      "done_when": "Existing CR theorem premises have specific observables and independently checked witnesses for the same candidate; no theorem assumes its desired efficacy conclusion.",
+      "status": "PROPOSED_NOT_EXECUTED",
+      "authority_class": "SECONDARY_AI",
+      "dependency_semantics": "WORK_ORDER_FOR_THIS_PROPOSAL_NOT_A_NEW_SCIENTIFIC_GATE"
+    },
+    {
+      "id": "two-scale-composition",
+      "order": 2,
+      "track": "RESEARCH",
+      "addresses": [
+        "formal-and-fractal-witness-open"
+      ],
+      "depends_on": [
+        "d4-single-candidate",
+        "theorem-runtime-witness"
+      ],
+      "done_when": "Connect theorem premises and runtime observables for the same candidate, then two-scale effect/learning/lineage-preserving composition with null controls.",
+      "status": "PROPOSED_NOT_EXECUTED",
+      "authority_class": "SECONDARY_AI",
+      "dependency_semantics": "WORK_ORDER_FOR_THIS_PROPOSAL_NOT_A_NEW_SCIENTIFIC_GATE"
+    }
+  ],
+  "verification": {
+    "toolchain": {
+      "node": "24.13.0",
+      "npm": "11.6.2"
+    },
+    "fresh": {
+      "development_profile": {
+        "passed_tests": 54,
+        "passed_files": 10,
+        "relation": "relation:runtime-focused",
+        "episode": "overall-scope-audit-20260913",
+        "result": "SUCCEEDED",
+        "feedback": {
+          "success": true,
+          "source": "agent(codex): Dispatch regression was useful. Separate source audits found missing active routes, stale S5 navigation and a direct-fit getter failure; 54 passes alone do not measure migration closure or HSWM efficacy."
+        },
+        "local_state": "PRIVATE_NOT_PUBLISHED"
+      },
+      "type_effect_functional_check": {
+        "exit_code": 0,
+        "log_sha256": "8192055f2b6e936d62c9797f33f3b4179f55e183959bd6330550b93b3a5a6952",
+        "effect": {
+          "schema_version": "hswm-effect-boundary-lint/v1",
+          "files": 297,
+          "clean_files": 259,
+          "counts": {
+            "R1": 3,
+            "R2": 2,
+            "R3": 316,
+            "R4": 33,
+            "R5": 92
+          },
+          "allowlisted_files": 38,
+          "violations": 0,
+          "stale_allowlist_entries": 0
+        },
+        "functional": {
+          "files": 155,
+          "violations": []
+        }
+      },
+      "getter_probe": {
+        "defect_reproduced": true,
+        "reads": 1,
+        "thrown": "Error: getter-executed",
+        "script": {
+          "path": "_research/native_migration_2026-09-13/scope-fit-getter-probe.mjs",
+          "sha256": "7552bf4b0ae07eaf073dd5c35c289747d45b733e67602c15da091f53a3f11a25",
+          "byte_length": 941,
+          "git_blob": "0fd7a976011fc7034bd838e7d07eba33a9cfe514",
+          "source_revision": "AUDIT_ARTIFACT_WORKTREE"
+        },
+        "emitted_module_sha256": "a5a7206121cfba2b9da2aec10a22255a1b0114269153e7d58a1f7d8e8f93ce3f"
+      },
+      "f1_run_probe": {
+        "exit_code": 2,
+        "stderr": "usage: hswm-prom9-f1 judge --suite FILE --gold FILE --output FILE [--bootstrap-reps N] [--bootstrap-seed N]\n",
+        "stdout": ""
+      },
+      "package_bins": {
+        "declared": 30,
+        "missing": [],
+        "rows": [
+          {
+            "name": "hswm-hypergraph-projection",
+            "target": "./dist/hypergraph-projection-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-graph-loop-job",
+            "target": "./dist/canonical-atom-v2-graph-loop-job-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-local-permit-commit",
+            "target": "./dist/canonical-atom-v2-local-permit-commit-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-g0-temporal-rehearsal-worker",
+            "target": "./dist/g0-occurrence-temporal-worker-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-live",
+            "target": "./dist/hswm-live-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-dev",
+            "target": "./dist/hswm-dev-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-reluvator-check",
+            "target": "./dist/reluvator-check-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-backup",
+            "target": "./dist/development-backup-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-research-graph",
+            "target": "./dist/research-graph-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-kg-bundle",
+            "target": "./dist/native-kg-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-task",
+            "target": "./dist/native-task-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-knowledge-catalog",
+            "target": "./dist/knowledge-catalog-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-usl",
+            "target": "./dist/native-usl-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-g0-occurrence",
+            "target": "./dist/native-occurrence-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-legacy-replay",
+            "target": "./dist/native-legacy-replay-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-markdown-math",
+            "target": "./dist/native-markdown-math-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-research-fabric",
+            "target": "./dist/native-research-fabric-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-verify-efficacy",
+            "target": "./dist/native-efficacy-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-graph-standards",
+            "target": "./dist/native-graph-standards-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-repository-ontology",
+            "target": "./dist/native-repository-ontology-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-formal-verify",
+            "target": "./dist/native-formal-verify-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-development-work-projection",
+            "target": "./bin/hswm-development-work-projection",
+            "included": true
+          },
+          {
+            "name": "hswm-development-day-projection",
+            "target": "./bin/hswm-development-day-projection",
+            "included": true
+          },
+          {
+            "name": "hswm-frontier-learning-projection",
+            "target": "./bin/hswm-frontier-learning-projection",
+            "included": true
+          },
+          {
+            "name": "hswm-p1-gate-diagnostic",
+            "target": "./dist/native-p1-gate-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-infrastructure-smoke",
+            "target": "./dist/native-infrastructure-smoke-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-rdf11-nquads-suite",
+            "target": "./dist/native-graph-standards-suite-runner-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-sparql11-syntax-suite",
+            "target": "./dist/native-sparql11-syntax-suite-runner-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-prom9-f1",
+            "target": "./dist/native-prom9-f1-process.js",
+            "included": true
+          },
+          {
+            "name": "hswm-s2s-model",
+            "target": "bin/hswm-s2s-model",
+            "included": true
+          }
+        ]
+      },
+      "math": {
+        "exit_code": 0,
+        "log_sha256": "4b17f7bf4fd60b53103509f0f6b3590b5cecadac1bbd8fc54cc4bc1a145076ff"
+      },
+      "independently_checked_catalog_source_pins": 354
+    },
+    "prior_full_suite": {
+      "source": {
+        "path": "_research/native_migration_2026-09-13/model-transport-verification.v1.json",
+        "sha256": "7cd555acfa66405aae00ce2c8f9c138dc3631a29d7ecc810e201e10cad3c3e30",
+        "byte_length": 16946,
+        "git_blob": "af61c0d98b128a57f1a529a66fe3c4daa8d9c75a",
+        "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+      },
+      "passed": 1426,
+      "skipped": 8,
+      "rerun_this_audit": false
+    },
+    "catalog_checks": {
+      "baseline_worktree_comparison": [
+        {
+          "catalog": "_research/native_migration_2026-09-13/model-transport-source-catalog.v1.json",
+          "group": "sources",
+          "checked": 34,
+          "matched": 34,
+          "changed": []
+        },
+        {
+          "catalog": "docs/operations/artifacts/hswm_knowledge_map_2026-09-13/source-catalog.json",
+          "group": "curation_inputs",
+          "checked": 18,
+          "matched": 18,
+          "changed": []
+        },
+        {
+          "catalog": "docs/operations/artifacts/hswm_knowledge_map_2026-09-13/source-catalog.json",
+          "group": "sources",
+          "checked": 246,
+          "matched": 244,
+          "changed": [
+            {
+              "path": "INDEX.md",
+              "recorded": "f0bc65eb230b44ba0981db16fc1937f6d73069db92057702b4a301e3aa72ee64",
+              "current": "d92fb2d89b6ac59031246a0d3dc7c22161c7862e8bd6ecbfe654585103285af1"
+            },
+            {
+              "path": "README.md",
+              "recorded": "5352753312a18ae441e16b6095a0a654078c9b570bca17377fa34212ba58d977",
+              "current": "78cd665e0180b9e1f62387ee328aac262a8a6a4f494edfe630f1c97455b0a171"
+            }
+          ]
+        }
+      ],
+      "historical_reproduction": {
+        "source_commit": "5cb22703cf42128dd204966087594ad8561a554d",
+        "checked": 246,
+        "matched": 246,
+        "failed": []
+      },
+      "interpretation": "README/INDEX changed since old cutoff but all 246 match original commit; not historical corruption. Comparison was made before this audit navigation edits."
+    }
+  },
+  "negative_findings": [
+    {
+      "id": "package-bin-omission",
+      "decision": "REFUTED_BY_ACTUAL_PACK",
+      "reason": "All 30 declared targets are included."
+    },
+    {
+      "id": "s2s-returned-parameter-alias",
+      "decision": "NOT_SUBSTANTIATED_AFTER_COPY_FREEZE_REVIEW",
+      "reason": "No mutable-output alias defect demonstrated."
+    },
+    {
+      "id": "knowledge-map-hash-corruption",
+      "decision": "REFUTED_AT_BOUND_COMMIT",
+      "reason": "All 246 source pins match the original source commit."
+    },
+    {
+      "id": "fit-getter-p0",
+      "decision": "DOWNGRADED_TO_P2",
+      "reason": "JSON CLI capture guards the observed active file path and package root omits direct API."
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-cli.ts",
+      "sha256": "19354e2af85f41dbeba638fda7e2a1443b47b5ccc43460212713417090651a2a",
+      "byte_length": 4438,
+      "git_blob": "d889b8abd0b7e3e642097c91b3dfb27a9bf3afcc",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-network-runtime.ts",
+      "sha256": "70e6840a50b0a2c54519f8618dd2c7884aa0bfeb1f16fd3c01b01d848b245a2e",
+      "byte_length": 2071,
+      "git_blob": "5cbb7dc460a76c590f5c49b8360d267bad20ffef",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "prom_search_hswm/hswm_f1_durable_transport.py",
+      "sha256": "09ecd886901ac95c0be86e59369d8672d0fad0b912d97e488c5c41c79692a7cc",
+      "byte_length": 73869,
+      "git_blob": "c922ed013c8b8729f12f7c416e54cd8447a70c8d",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "prom_search_hswm/prom_f1_function_network.py",
+      "sha256": "59e88cda18061bf312697b48e1df4639dae5b31be25dd1bfade6602db0468bfe",
+      "byte_length": 36152,
+      "git_blob": "53c3f6a8cb6843b4f8ce7b994e373a156184e2f8",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-model-cli.ts",
+      "sha256": "6fd5445a7f8b9a3951083275bcef98ecfaf9968ea92738030d966fefdb390031",
+      "byte_length": 4858,
+      "git_blob": "c9be06f88a66641777800c58ea1902de3171364b",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/experiments/swm0w_s2s_protocol.py",
+      "sha256": "c0df25e37d0e54c792f0eca9f78d83029e4fedd8f837743096eef2b29a62a2c1",
+      "byte_length": 157742,
+      "git_blob": "844f12677f4fc38eea31e8836abd7dda420e32a0",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/experiments/swm0w_s2s_pilot.py",
+      "sha256": "46ee8a607224e198cf53f89d32ff7d7a8940cf99a15a138cce128b6e014e56d6",
+      "byte_length": 98350,
+      "git_blob": "ac9c792b328e9cc9142177ef141050cde16779fe",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": ".github/workflows/swm0w-s2s-train-dev-pilot.yml",
+      "sha256": "622f6dbf3861ef1f4d7f35f4cc6698e7fb0e53d5957d90f86c9cc063b958dae8",
+      "byte_length": 4653,
+      "git_blob": "dc7005eaa85deb336a54268a281060d7469d3e2e",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-chat-runtime.ts",
+      "sha256": "80a33b0ae0b6cae7f991720a86c4f71d990a53b72eb48e40a93c7fc997de1fb5",
+      "byte_length": 5726,
+      "git_blob": "d9209d7bb0dc7fb6ef3029d6b09e1974160879be",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "_research/f_series/f2_delta_w_credit.py",
+      "sha256": "1cf1518cf0cd9172b560c662b52c4261bc3cdcb57e7a6c8e34b80c7c55f58691",
+      "byte_length": 50288,
+      "git_blob": "67621f82792e9c1b44cd589ab05a01598fc11d1e",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "_research/f_series/f3v2_arms.py",
+      "sha256": "19848eb4d3b7f6377d28793324652f4a45631dc74f16ba91b7d5e3636d991915",
+      "byte_length": 55372,
+      "git_blob": "d7acb03bc65b92b2f985572587f0b6140673a849",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "scripts/f3v2_smoke_preflight.sh",
+      "sha256": "27d95cf232021e46b96117a8794df3f95475a2b967adf92da23d1ef91e84fb6e",
+      "byte_length": 2193,
+      "git_blob": "04393e5dd4b65d5ba48101c90e5c12169dd3ad1c",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": ".github/workflows/swm0w-confirmatory.yml",
+      "sha256": "14b7c664f9445989a359b1a6c2bad0164ed2760c82bb1b7092b3369cdd9ad8a2",
+      "byte_length": 28527,
+      "git_blob": "665d970e4e65aa8f3fb103c8732934833344735d",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts",
+      "sha256": "ca4a2a65669a4d8cbb18cd20c01017389533ad064335c82194e98e3c38d328ab",
+      "byte_length": 12011,
+      "git_blob": "8202f23876fcd80a55e021f925a18275eac4e6c9",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-task-fit-domain.ts",
+      "sha256": "d6aa707e6090a2c4634eacca3a925c08dcb9707dbc1612d15c2a3ae859c5ccf8",
+      "byte_length": 2548,
+      "git_blob": "f101dc5b4095cc02621bdf2f37bf07a420d26258",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-optimization-build-domain.ts",
+      "sha256": "97bd5788ca35364e2f662a4daae43860c2fbe928ccd63e01bece7b3ad2dfe4fc",
+      "byte_length": 4596,
+      "git_blob": "ef0dcdfdb7fbab1a74cd53cb415792f459793114",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package.json",
+      "sha256": "8a0bba8b3701483d3c119a0bbead27d6dcff3e55b13836a252bc30488c179ee6",
+      "byte_length": 5442,
+      "git_blob": "3deea8eaf070cc6f4c096be1085713d4a74a7edb",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md",
+      "sha256": "c794dc866475a811835d48d48f34eccafb71e5fe7139863727c6ad42b095ef01",
+      "byte_length": 15528,
+      "git_blob": "580c4a5cfb2ae2025aa44a182c65335c90a14e6a",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json",
+      "sha256": "08f45acbfee42750ac2a463db95bd2faa2dd0bbe5b4cf2da262acdcf27757222",
+      "byte_length": 328226,
+      "git_blob": "26f978cb5e20f205796fb55617c2ca87b5f57583",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "results/HSWM_S5_B0_B2_COMPARISON_2026-09-06.md",
+      "sha256": "33c2f8eaccd8854fac9efd646279e5d9dcd34661de3ba9c2a2b598a880f4a457",
+      "byte_length": 2234,
+      "git_blob": "8650e61774e861f4911ba265dd99683d7897b6ba",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "F1_R8_RESULTS_LOG.md",
+      "sha256": "4622bf5b3cda928e9ab5c5d23888c878209058c6725611e94c3eb6a542f22504",
+      "byte_length": 49670,
+      "git_blob": "d04cdad9b554ec607b53433da97eef2b4a669557",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/scripts/lint-effect-boundary.mjs",
+      "sha256": "6edc484bac7437c99006f822c690fa4ee55776b43adcf5a44c6b70b9aab240c5",
+      "byte_length": 4609,
+      "git_blob": "53ba90654a7b3ecd136dcad7cfda1d9e744e02ea",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/scripts/lint-adaptive-functional.mjs",
+      "sha256": "06f058dd8d695a07125177d4c2ab7bf59db5ae129458739dfd650f0d5285a6b9",
+      "byte_length": 3735,
+      "git_blob": "085939117d12f5de514155001ddd348b984089a7",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/scripts/effect-boundary-allowlist.json",
+      "sha256": "8b9becb906ff3a65a9d3a35986ef8cbe569929e5b37a4910b0fb6bcb56d3c6d7",
+      "byte_length": 14632,
+      "git_blob": "78184d51f7a707e5b2c870ca157a5071db70ee02",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-runtime.ts",
+      "sha256": "7b97776a1b06caf83cb64e46f2839c7b6f59799a0ecd1270b09a9fae48fc6cea",
+      "byte_length": 18882,
+      "git_blob": "0df85c456d39c3b7c92470028861dbb12ef43918",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/development/container/bootstrap.sh",
+      "sha256": "2d8024d3987faebde9309c33c52fbfa4c856cf35895c1b0c4eaf83c82ff9c361",
+      "byte_length": 755,
+      "git_blob": "e10859e7610aab82b4b3bf4f39eaa4a176128748",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "src/hswm/development/bin/hswm-python",
+      "sha256": "ac3f960827dfba339bccd4e7cd637591b68a616632f5f337477142bb8d4cd6ef",
+      "byte_length": 2539,
+      "git_blob": "b4f15f3aa0ec1dcfa0924b457960ad89414102f9",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "b67a175bc7f2d8c701d9a9cf6ddd157565599f4960039f4d045e0ab4c53c08af",
+      "byte_length": 8198,
+      "git_blob": "e643679fbdb6d56767691e58b09135847cbdc348",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0",
+      "byte_length": 20916,
+      "git_blob": "f6c24b5094d87719ff6370b8bd5b4b547e528456",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "_research/p1v4_fresh_replication/dell_prepare_seed4.sh",
+      "sha256": "7736ebe7268089b55ec5236ff45ed3d4a0aa665e5150b843e7453bf7a75411c2",
+      "byte_length": 5725,
+      "git_blob": "8dd440794761c11147fec9b631adfbcf3bfec6d2",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "_research/p1v4_fresh_replication/dell_measure_heldout_seed5_r2.sh",
+      "sha256": "6a57e9e8871c27e0604756b3d7491e28c369274fe1fd1bff422fa84439195c66",
+      "byte_length": 5194,
+      "git_blob": "26c16dc741d2ceb5efdd39dcc28a55393ce1f5b9",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "_research/causal_composition/preregistrations/d4_v1_canonical_heldout_DRAFT/README.md",
+      "sha256": "6d63e0c296c69679e10606b5460afcaa5bb6ba02955f86c79145bdd7c8f872dc",
+      "byte_length": 10741,
+      "git_blob": "acabeced498d7a2979dc1b164f068e63d5a69be6",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_RESULTS_2026-09-06.md",
+      "sha256": "9783db58c3fee1a1d92bda0014413a2d5742fbcc1043daf97b21b4fdeeb2a61a",
+      "byte_length": 7058,
+      "git_blob": "3195e73d34448317319e2afa0a37dd35476d14fb",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "docs/research/HSWM_CONSTRUCTIVE_PROOF_ROUND_1_2026-09-10.md",
+      "sha256": "42679cefd01fa657f1e388e4e6ed1971f6df1c37e129cdff3508c9ac07e673cb",
+      "byte_length": 12738,
+      "git_blob": "baa31450d40868e4a670c660115fbdc483230e4a",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "docs/research/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.md",
+      "sha256": "4274b27b876f1d2fecde18131054dbe05b93563c5a74e519fab64e1f78107e98",
+      "byte_length": 19771,
+      "git_blob": "d5b6678f4c6c8cea7c38222f6b8eb605dea9a85a",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+      "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81",
+      "byte_length": 26525,
+      "git_blob": "a6326c885630fc03e4a47c1d06c455aeb5df7c65",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "_research/native_migration_2026-09-13/inventory.v8.json",
+      "sha256": "c22fb9e7e6dcc72aceb2adff6fccb3015a0f7016606744504ee719bea604430c",
+      "byte_length": 21428,
+      "git_blob": "a782ecf6edd2978a5d01eaec3b34ab860eb0c12c",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "scripts/bin_hswm_f1_watchdog.sh",
+      "sha256": "d904af106dbc7a375731d06085d0864f3d8e2ca1a21aa807e755c4923b43fe98",
+      "byte_length": 1185,
+      "git_blob": "15a469035874cd10849877d1f975b58e4601394a",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    },
+    {
+      "path": "README.md",
+      "sha256": "78cd665e0180b9e1f62387ee328aac262a8a6a4f494edfe630f1c97455b0a171",
+      "byte_length": 17022,
+      "git_blob": "9c6914c96819a4ae91ada37f4745a03e6e7dd471",
+      "source_revision": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8"
+    }
+  ],
+  "review_records": [
+    {
+      "path": "_research/native_migration_2026-09-13/scope-review-executable.v1.json",
+      "sha256": "955121de7eadca3dca382d74357ae0c83933ae1a9dd3dc89bbb7030ca934adb1",
+      "byte_length": 17615,
+      "git_blob": "4d27cfd1032a2a42d0376c8b1a2d78b67899684d",
+      "source_revision": "AUDIT_ARTIFACT_WORKTREE"
+    },
+    {
+      "path": "_research/native_migration_2026-09-13/scope-review-runtime.v1.json",
+      "sha256": "36961cc354c693fc5b40ebcf1dc7171f163c6f55876abc982ea202fc3c7d281e",
+      "byte_length": 8757,
+      "git_blob": "ade93becd36c00b2cd05980681cf8d65c8a12d69",
+      "source_revision": "AUDIT_ARTIFACT_WORKTREE"
+    },
+    {
+      "path": "_research/native_migration_2026-09-13/scope-review-s2s.v1.json",
+      "sha256": "aff6336963d35e5b867af82b3fa349ac355b46ef1468e4da69518ae6e96a459a",
+      "byte_length": 5023,
+      "git_blob": "2a3ff3c4f144c1ddf7bb5902e6cde68e2615cf63",
+      "source_revision": "AUDIT_ARTIFACT_WORKTREE"
+    }
+  ],
+  "user_changes_preserved": [
+    "_research/causal_composition/relation_synthesis_usl_v1/README.md",
+    "_research/causal_composition/relation_synthesis_usl_v1/run.mts",
+    "_research/causal_composition/relation_synthesis_usl_v1/source-pins.v5.json",
+    "tests/test_hswm_relation_synthesis_runner_cli.py"
+  ],
+  "limits": [
+    "No live model/GPU/remote service/live KG observation or publication.",
+    "No complete dynamic/transitive call graph or classification of every research entrypoint.",
+    "No new research result, FCL pass, canonical admission or user ratification inferred.",
+    "Runtime implementation unchanged; direct-fit getter defect remains open. README/INDEX navigation clarified."
+  ]
+}

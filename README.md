@@ -18,7 +18,9 @@ HSWM의 목표는 LLM이 수행하는 국소 전이들이 하나의 지속되는
 
 현재 활성 `hswm-live`·`hswm-dev`는 [TypeScript + Effect 실행기](docs/operations/HSWM_NATIVE_EFFECT_ADAPTIVE_RUNTIME_2026-09-08.md)를 사용합니다.
 명시적으로 허용한 command·typed LLM cell을 호출하고, 관계별 문맥 계수와 읽는 정보,
-조건부 관계를 지속 상태로 갱신합니다. Python 구현과 기존 실험은 역사적 비교 자료로 보존합니다.
+조건부 관계를 지속 상태로 갱신합니다. Python 연구 실행·패키지 호환 경로의 전환은 진행 중이며,
+과거 결과와 비교 구현도 보존합니다. [전체 범위 감사](docs/operations/HSWM_OVERALL_SCOPE_AUDIT_2026-09-13.md)에
+S2S·F1·F3의 미연결 실행 경로와 연구 완료 조건을 구분해 기록했습니다.
 
 | 영역 | 현재 가능한 일 | 아직 남은 일 |
 | --- | --- | --- |

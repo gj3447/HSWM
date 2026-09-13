@@ -1,5 +1,8 @@
 # HSWM — public repository index
 
+2026-09-13 [전체 범위 감사 · TS/Effect 전환·연구 완료 조건](docs/operations/HSWM_OVERALL_SCOPE_AUDIT_2026-09-13.md)은
+`6b6c3fd`의 실제 실행 경로, 함수형 검사 범위, 미연결 부품과 S-5 최신 결과 판독을 대조한다.
+
 2026-09-13 [과학 연구 도구·최신 표준 조사](docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md)는
 35개 후보를 기존 기능과 8개 연구 요구사항에 연결한다. 실제 기관 사용 근거, 확정 표준과
 개발 중 명세, 재사용·조건부 추가·보류 판단과 검증 과제를 출처가 있는 KG로 기록한다.

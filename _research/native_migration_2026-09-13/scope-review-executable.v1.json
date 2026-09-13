@@ -1,0 +1,354 @@
+{
+  "audit_kind": "READ_ONLY_EXECUTABLE_ROUTE_SCOPE",
+  "claim_ceiling": "EXECUTABLE_ROUTE_AUDIT_ONLY; no language/module count is migration completion, operational activation, scientific efficacy, or research success evidence.",
+  "coverage": {
+    "excluded_or_unknowns": [
+      "No live services, GPU, model, provider, or external network calls were run.",
+      "Executable status of _research P1 runners is unproven: they are runnable checked-in scripts but no current workflow/systemd caller was found.",
+      "Python files without a command surface were not classified active solely from extension.",
+      "Generated dist/build and node_modules were excluded; findings are source-route observations at HEAD.",
+      "User-dirty relation_synthesis files were observed in git status and never read, changed, or used as audit evidence."
+    ],
+    "searched_surfaces": [
+      "pyproject.toml project scripts",
+      "all tracked package.json scripts excluding node_modules/build",
+      "src/hswm/development/bin and container bootstrap",
+      "scripts executable shell/maintenance paths",
+      "all .github/workflows YAML",
+      "executable _research/*.sh runners",
+      "Effect runtime process/runtime source text for actual uv/python subprocess argv"
+    ]
+  },
+  "descriptive_counts": {
+    "executable_research_p1_shell_runners": 7,
+    "package_json_files_scanned": 5,
+    "python_console_scripts_declared": 8,
+    "workflows_scanned": 6
+  },
+  "head": "6b6c3fd51f496bdb43c3f1667e6d5bc62adbf7b8",
+  "inventory_compared": {
+    "active_route_audit_v8": {
+      "path": "_research/native_migration_2026-09-13/active-route-audit.v8.json",
+      "sha256": "294127fdfc821203e9e61ae88e15986ee2b6927ef19caddad8fa42022dc89092"
+    },
+    "inventory_v8": {
+      "path": "_research/native_migration_2026-09-13/inventory.v8.json",
+      "sha256": "c22fb9e7e6dcc72aceb2adff6fccb3015a0f7016606744504ee719bea604430c"
+    }
+  },
+  "prioritized_findings": [
+    {
+      "evidence": [
+        {
+          "classification": [
+            "ACTIVE_WORKFLOW"
+          ],
+          "command": "uv run --locked python -m hswm.experiments.swm0w_confirmatory register-carrier ...",
+          "dependency_chain": "GitHub Actions \u2192 uv Python \u2192 hswm.experiments.swm0w_confirmatory",
+          "line": 91,
+          "path": ".github/workflows/swm0w-confirmatory.yml",
+          "source_sha256": "14b7c664f9445989a359b1a6c2bad0164ed2760c82bb1b7092b3369cdd9ad8a2"
+        },
+        {
+          "classification": [
+            "ACTIVE_WORKFLOW"
+          ],
+          "command": "uv run --locked python -m hswm.experiments.swm0w_confirmatory confirm ...",
+          "dependency_chain": "GitHub Actions \u2192 uv Python \u2192 confirmatory module",
+          "line": 268,
+          "path": ".github/workflows/swm0w-confirmatory.yml",
+          "source_sha256": "14b7c664f9445989a359b1a6c2bad0164ed2760c82bb1b7092b3369cdd9ad8a2"
+        },
+        {
+          "classification": [
+            "ACTIVE_WORKFLOW"
+          ],
+          "command": "uv run --locked python -m hswm.experiments.swm0w_confirmatory adjudicate ...",
+          "dependency_chain": "GitHub Actions \u2192 uv Python \u2192 confirmatory module",
+          "line": 502,
+          "path": ".github/workflows/swm0w-confirmatory.yml",
+          "source_sha256": "14b7c664f9445989a359b1a6c2bad0164ed2760c82bb1b7092b3369cdd9ad8a2"
+        }
+      ],
+      "id": "swm0w-confirmatory-workflow-omitted-as-concrete-route",
+      "inventory_comparison": "inventory.v8 and active-route-audit.v8 only group this under generic CI mixed lanes; neither makes this active confirmatory executable and its multi-stage module chain separately inspectable.",
+      "native_counterpart": "No accepted native confirmatory workflow/module route identified in the scoped executable sources.",
+      "priority": 1,
+      "status": "PYTHON_ACTIVE_BLOCKER"
+    },
+    {
+      "evidence": [
+        {
+          "classification": [
+            "NATIVE_WRAPPER_WITH_PYTHON_DEPENDENCY"
+          ],
+          "command": "execute([\"uv\",\"run\",...,\"python\",\"-I\",runnerPath,\"--profile\",profileId,...])",
+          "dependency_chain": "native hswm-graph-standards qualify \u2192 bounded subprocess \u2192 uv \u2192 Python runner",
+          "line": 93,
+          "path": "src/hswm/effect-runtime/src/native-graph-standards-runtime.ts",
+          "source_sha256": "7b97776a1b06caf83cb64e46f2839c7b6f59799a0ecd1270b09a9fae48fc6cea"
+        },
+        {
+          "classification": [
+            "ACTIVE_WORKFLOW"
+          ],
+          "command": "uv run ... hswm-graph-standards qualify --profile rdf11-nquads-n3 ...",
+          "dependency_chain": "CI \u2192 Python package console script \u2192 historical qualification runner",
+          "line": 82,
+          "path": ".github/workflows/graph-standards-requalification.yml",
+          "source_sha256": "b35b7f24285889c8f0430989f6f795d28363d3811923d3f3df0fbcad475d6504"
+        }
+      ],
+      "id": "graph-native-cli-contains-python-profile-execution",
+      "inventory_comparison": "v8 calls graph standards PARTIAL, but its native-state wording can be misread as native qualification closure. The native CLI itself intentionally executes Python for profiles whose locked runner_runtime is python.",
+      "native_counterpart": "Native command wrapper exists, but it is not a Python-free equivalent for those qualification profiles.",
+      "priority": 2,
+      "status": "PARTIAL_ROUTE"
+    },
+    {
+      "evidence": [
+        {
+          "classification": [
+            "EXECUTABLE_RESEARCH_RUNNER"
+          ],
+          "command": "\"$python_bin\" \"$code_root/p1v3_prepare.py\" ...",
+          "dependency_chain": "shell \u2192 pinned vLLM Python \u2192 detached historical checkout P1 preparation",
+          "line": 33,
+          "path": "_research/p1v4_fresh_replication/dell_prepare_seed4.sh",
+          "source_sha256": "7736ebe7268089b55ec5236ff45ed3d4a0aa665e5150b843e7453bf7a75411c2"
+        },
+        {
+          "classification": [
+            "EXECUTABLE_RESEARCH_RUNNER"
+          ],
+          "command": "\"$python_bin\" \"$code_root/p1v3_prepare.py\" ...",
+          "dependency_chain": "shell \u2192 pinned vLLM Python \u2192 detached historical checkout P1 preparation",
+          "line": 33,
+          "path": "_research/p1v4_fresh_replication/dell_prepare_seed5_r2.sh",
+          "source_sha256": "6ef25260a02555af0ab862ebd74bfd8adc647aad2c2ec16c8065d28ca4f775b2"
+        },
+        {
+          "classification": [
+            "EXECUTABLE_RESEARCH_RUNNER"
+          ],
+          "command": "\"$python_bin\" p1v3_calibration_preflight.py ...; then p1v3_calibration_measure.py ...",
+          "dependency_chain": "shell \u2192 pinned vLLM Python \u2192 detached historical checkout calibration",
+          "line": 37,
+          "path": "_research/p1v4_fresh_replication/dell_calibrate_seed5_r2.sh",
+          "source_sha256": "8178191c8374d510057f74b92e98421b80469deb3dc89ee26d0ebeaf7c178b07"
+        },
+        {
+          "classification": [
+            "EXECUTABLE_RESEARCH_RUNNER"
+          ],
+          "command": "\"$python_bin\" p1v3_heldout_preflight.py ...",
+          "dependency_chain": "shell \u2192 pinned vLLM Python \u2192 detached historical checkout heldout preflight",
+          "line": 32,
+          "path": "_research/p1v4_fresh_replication/dell_preflight_heldout_seed5_r2.sh",
+          "source_sha256": "d2d818c1747f641066ae736bf9abf933c650c893be874d686ddff6dfa71190f5"
+        },
+        {
+          "classification": [
+            "EXECUTABLE_RESEARCH_RUNNER"
+          ],
+          "command": "\"$python_bin\" p1v4_heldout_measure.py ...; judge/replay ...",
+          "dependency_chain": "shell \u2192 pinned vLLM Python \u2192 detached historical checkout heldout measurement",
+          "line": 32,
+          "path": "_research/p1v4_fresh_replication/dell_measure_heldout_seed5_r2.sh",
+          "source_sha256": "6a57e9e8871c27e0604756b3d7491e28c369274fe1fd1bff422fa84439195c66"
+        },
+        {
+          "classification": [
+            "EXECUTABLE_RESEARCH_RUNNER"
+          ],
+          "command": "\"$env_root/bin/python\" ...; pw-generate ...",
+          "dependency_chain": "shell \u2192 pinned PhantomWiki env Python/CLI \u2192 frozen data generation",
+          "line": 18,
+          "path": "_research/p1v4_fresh_replication/dell_generate_seed4.sh",
+          "source_sha256": "c78e5319dbc614d6965648045c7ff18a865b36816f79d9c54c3299a0e4428800"
+        },
+        {
+          "classification": [
+            "EXECUTABLE_RESEARCH_RUNNER"
+          ],
+          "command": "\"$env_root/bin/python\" ...; pw-generate ...",
+          "dependency_chain": "shell \u2192 pinned PhantomWiki env Python/CLI \u2192 frozen data generation",
+          "line": 17,
+          "path": "_research/p1v4_fresh_replication/dell_generate_seed5_r2.sh",
+          "source_sha256": "e518c667ef06fc42368b30b58fb72aea9aeaf92089d28321fa62832386567103"
+        }
+      ],
+      "id": "p1v4-replication-shell-runners-omitted",
+      "inventory_comparison": "Neither v8 document lists these executable shell runners. Their old detached commits and hard-coded paths make current operational activation unknown, but they cannot be classified as inert from filename or location alone.",
+      "native_counterpart": "None identified.",
+      "priority": 3,
+      "status": "EXECUTABLE_RESEARCH_RUNNERS_STATUS_UNPROVEN"
+    },
+    {
+      "evidence": [
+        {
+          "classification": [
+            "REQUIRED_MAINTENANCE_COMMAND"
+          ],
+          "command": "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology",
+          "dependency_chain": "maintainer publishing workflow \u2192 Python maintenance compiler",
+          "line": 122,
+          "path": "AGENTS.md",
+          "source_sha256": "b67a175bc7f2d8c701d9a9cf6ddd157565599f4960039f4d045e0ab4c53c08af"
+        },
+        {
+          "classification": [
+            "MAINTAINED_DOC_COMMAND"
+          ],
+          "command": "uv run python scripts/compile_portable_markdown_math.py ...",
+          "dependency_chain": "maintained research reproduction command \u2192 Python compiler",
+          "line": 225,
+          "path": "docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md",
+          "source_sha256": "4a853906160c7384fb1243484d0f1f69ec378fa9f1b5b0a40ac8f3a529a76ee3"
+        }
+      ],
+      "id": "python-maintenance-command-remains-required",
+      "inventory_comparison": "inventory.v8 retains a generic maintenance-scripts entry but active-route-audit.v8 omits the required AGENTS command; a native markdown-math bin exists but does not by itself retire the explicit Python requirement.",
+      "native_counterpart": "src/hswm/effect-runtime/bin/hswm-markdown-math exists; argument/byte parity for this mandatory invocation was not established in this read-only audit.",
+      "priority": 4,
+      "status": "PARTIAL_ROUTE"
+    },
+    {
+      "evidence": [
+        {
+          "classification": [
+            "ACTIVE_CONTAINER_BOOTSTRAP"
+          ],
+          "command": "src/hswm/development/bin/hswm-python sync",
+          "dependency_chain": "dev container bootstrap \u2192 hswm-python sync \u2192 uv sync core and graph Python environments",
+          "line": 17,
+          "path": "src/hswm/development/container/bootstrap.sh",
+          "source_sha256": "2d8024d3987faebde9309c33c52fbfa4c856cf35895c1b0c4eaf83c82ff9c361"
+        },
+        {
+          "classification": [
+            "PYTHON_TOOLCHAIN"
+          ],
+          "command": "UV_PROJECT_ENVIRONMENT=... uv sync --project ...",
+          "dependency_chain": "hswm-python sync \u2192 locked core and graph Python environments",
+          "line": 41,
+          "path": "src/hswm/development/bin/hswm-python",
+          "source_sha256": "ac3f960827dfba339bccd4e7cd637591b68a616632f5f337477142bb8d4cd6ef"
+        }
+      ],
+      "id": "container-bootstrap-python-sync-omitted",
+      "inventory_comparison": "v8 names the Python toolchain launcher but does not identify the executable container bootstrap caller.",
+      "native_counterpart": "No native replacement for Python environment materialization; infrastructure subcommand delegation does not cover sync/core/graph.",
+      "priority": 5,
+      "status": "PARTIAL_ROUTE"
+    },
+    {
+      "evidence": [
+        {
+          "classification": [
+            "NATIVE_JUDGE_ONLY"
+          ],
+          "command": "src/hswm/effect-runtime/bin/hswm-prom9-f1 judge --suite ... --gold ... --output ...",
+          "dependency_chain": "shell watchdog \u2192 waits for separately produced suite.json \u2192 native offline judge",
+          "line": 24,
+          "path": "scripts/bin_hswm_f1_watchdog.sh",
+          "source_sha256": "d904af106dbc7a375731d06085d0864f3d8e2ca1a21aa807e755c4923b43fe98"
+        },
+        {
+          "classification": [
+            "UPSTREAM_SUITE_DEPENDENCY"
+          ],
+          "command": "test -f \"$RUN_DIR/suite.json\"",
+          "dependency_chain": "watchdog depends on suite production outside its native judge phase",
+          "line": 18,
+          "path": "scripts/bin_hswm_f1_watchdog.sh",
+          "source_sha256": "d904af106dbc7a375731d06085d0864f3d8e2ca1a21aa807e755c4923b43fe98"
+        }
+      ],
+      "id": "f1-watchdog-verified-native-label-too-broad",
+      "inventory_comparison": "inventory.v8 marks shell-watchdog VERIFIED_NATIVE. That is accurate for its offline judge call, but misleading if read as closure of the F1 suite-production route, which active-route-audit.v8 still calls partial.",
+      "native_counterpart": "Native judge only; full suite/transport/SQLite spool remains unclosed per active-route-audit.v8.",
+      "priority": 6,
+      "status": "PARTIAL_ROUTE"
+    },
+    {
+      "evidence": [
+        {
+          "classification": [
+            "ACTIVE_CI"
+          ],
+          "command": "uv run --locked --extra dev pytest -q tests ...",
+          "dependency_chain": "CI core-tests \u2192 Python pytest corpus",
+          "line": 22,
+          "path": ".github/workflows/ci.yml",
+          "source_sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0"
+        },
+        {
+          "classification": [
+            "ACTIVE_CI"
+          ],
+          "command": "uv run --locked --extra dev pytest -q prom_search_hswm _research/shared_field_hypothesis",
+          "dependency_chain": "CI \u2192 Python Prom/research tests",
+          "line": 47,
+          "path": ".github/workflows/ci.yml",
+          "source_sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0"
+        },
+        {
+          "classification": [
+            "ACTIVE_CI_HISTORICAL_REPLAY"
+          ],
+          "command": "PYTHONPATH=... python -m hswm.experiments.swm0_protocol --mode confirmatory ...",
+          "dependency_chain": "CI \u2192 detached historical Python SWM-0R replay",
+          "line": 68,
+          "path": ".github/workflows/ci.yml",
+          "source_sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0"
+        },
+        {
+          "classification": [
+            "ACTIVE_CI_PACKAGE_COMPATIBILITY"
+          ],
+          "command": "\"$wheel_python\" -I -c import ...",
+          "dependency_chain": "CI wheel-install \u2192 broad Python installed-package import surface",
+          "line": 341,
+          "path": ".github/workflows/ci.yml",
+          "source_sha256": "8983eb148fe671aeea98da5c5a23444423dc3a28a4fb4e4f20a0e06c2ab1e4a0"
+        }
+      ],
+      "id": "ci-python-matrix-and-wheel-surface-under-specified",
+      "inventory_comparison": "v8 groups these under ci-mixed-python-lanes and console compatibility, which is directionally correct but does not enumerate the distinct executable dependency chains or the wheel\u2019s broader Python import contract.",
+      "native_counterpart": "Native Effect CI is a separate job; no complete native replacement for the Python test/package compatibility surfaces is identified.",
+      "priority": 7,
+      "status": "PARTIAL_ROUTE"
+    },
+    {
+      "evidence": [
+        {
+          "classification": [
+            "ACTIVE_WORKFLOW"
+          ],
+          "command": "PYTHONPATH=\"$GITHUB_WORKSPACE/src\" python3 -m hswm.experiments.swm0w_s2s_pilot --initialize-void ...",
+          "dependency_chain": "workflow \u2192 system Python \u2192 pilot initialize-void",
+          "line": 48,
+          "path": ".github/workflows/swm0w-s2s-train-dev-pilot.yml",
+          "source_sha256": "622f6dbf3861ef1f4d7f35f4cc6698e7fb0e53d5957d90f86c9cc063b958dae8"
+        },
+        {
+          "classification": [
+            "ACTIVE_WORKFLOW"
+          ],
+          "command": "uv run ... python -m hswm.experiments.swm0w_s2s_pilot --output ...",
+          "dependency_chain": "workflow \u2192 pinned uv Python \u2192 fit-and-replay pilot roster",
+          "line": 106,
+          "path": ".github/workflows/swm0w-s2s-train-dev-pilot.yml",
+          "source_sha256": "622f6dbf3861ef1f4d7f35f4cc6698e7fb0e53d5957d90f86c9cc063b958dae8"
+        }
+      ],
+      "id": "s2s-pilot-remains-python-initialize-and-fit",
+      "inventory_comparison": "v8 identifies this partial route correctly; this audit preserves it as a concrete blocker rather than treating new model/transport components as pilot closure.",
+      "native_counterpart": "Native model CLI/components exist, but no active native pilot workflow replacement was found.",
+      "priority": 8,
+      "status": "PARTIAL_ROUTE"
+    }
+  ],
+  "schema_version": "hswm-scope-executable-audit/v1"
+}

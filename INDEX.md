@@ -1,5 +1,10 @@
 # HSWM — public repository index
 
+2026-09-14 [Semantic Weight 구성적 증명](docs/research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md)은
+세 역할의 유한 outcome learner, 관계 연산 재구성, 실행·학습 요약 보존과 관측 부족의 반례를
+Lean source와 연결한다. [증명 그래프](ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_ONTOLOGY.v1.json)는
+정리·가정·검증 범위에서 기존 CR/FCL의 미해결 연결까지 추적한다. 전체 HSWM 실현가능성은 미증명이다.
+
 2026-09-14 [Semantic Weight의 이론적 기반](docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md)은
 역할·문맥별 전이 성향을 score·인과 효과·근거와 구분하고, 정확한 Step/Learn 요약의 필요충분조건,
 공유 원인·손실·역할 대칭 반례를 기존 CR-0..7/FCL-1..8에 연결한다.

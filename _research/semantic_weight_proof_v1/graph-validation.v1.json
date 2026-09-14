@@ -1,0 +1,130 @@
+{
+  "schema_version": "hswm-semantic-proof-graph-validation/v1",
+  "recorded_on": "2026-09-14",
+  "status": "PASS_FINAL_BOUND_SOURCES",
+  "authority": "LOCAL_STRUCTURE_AND_SOURCE_VALIDATION",
+  "claim_ceiling": "GRAPH_STRUCTURE_SOURCE_BINDING_AND_QUERY_COVERAGE_NOT_MATHEMATICAL_OR_SCIENTIFIC_TRUTH",
+  "artifact_bindings": [
+    {
+      "path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_ONTOLOGY.v1.json",
+      "sha256": "605e69fa925468ae880f72abd0149240f80b18630aab371df060f808e924e224"
+    },
+    {
+      "path": "_research/semantic_weight_proof_v1/verification.v1.json",
+      "sha256": "e0dedc735decb75f56ca4fa17dec646ba85d49a8364a07ec444fec53c4d6167e"
+    },
+    {
+      "path": "docs/research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md",
+      "sha256": "868c4d358b37a6cb43ffbe129a8d1ee3a7fc7a213e112071b34b5901a7019c37"
+    },
+    {
+      "path": "_research/semantic_weight_proof_v1/README.md",
+      "sha256": "46ceb59a5e619cc725c315170099c749e45fc32eb89bacfe1c8562229c8a2913"
+    },
+    {
+      "path": "ontology/queries/hswm_semantic_weight_proof_2026-09-14/theorems_and_open_obligations.rq",
+      "sha256": "6277fac40059bc11852610992e06ac0b6bc6fba6993d7a64cc4d957e955f4291"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "2158a45a62e24f45faaa9096af54f5a412fe1ee823ed94557a7239437b1e08da"
+    },
+    {
+      "path": "README.md",
+      "sha256": "27e3a48a0f4ab3b6cfb1807a6f851bd20c93461d272ec9389092604dbafc29f4"
+    },
+    {
+      "path": "INDEX.md",
+      "sha256": "a644aee569fcc3905eeb790e21cff24fac47bf5f1b7ee1bb62e509a27c852010"
+    }
+  ],
+  "integrity": {
+    "bundle_source_hashes": 24,
+    "anchors_resolved_against_exact_source_owner": 21,
+    "nodes": 61,
+    "relations": 309,
+    "all_nodes_and_anchors_reachable": true,
+    "public_theorem_symbols_match_axiom_audit": 38,
+    "private_theorems_in_transitive_audit": 8,
+    "existing_CR_statuses_unchanged": 8,
+    "existing_FCL_anchors": 8,
+    "relative_links_checked": 21
+  },
+  "shacl": {
+    "conforms": true,
+    "results": [],
+    "claim_ceiling": "KG_BUNDLE_STRUCTURE_AND_BYTE_BINDING_ONLY_NOT_LIVE_KG_STATE_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+    "engine": "rdf-validate-shacl@0.6.5",
+    "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+  },
+  "sparql": {
+    "query": "ontology/queries/hswm_semantic_weight_proof_2026-09-14/theorems_and_open_obligations.rq",
+    "rows": 194,
+    "public_theorems": 38,
+    "source_files": 4,
+    "CR_obligations": 8,
+    "target_statuses": [
+      "UNPROVED_TARGET_CONNECTION_NOT_DISCHARGED"
+    ],
+    "claim": "Each checked theorem leads to stated remaining target requirements; no target discharge."
+  },
+  "rdf_projection": {
+    "_tag": "HSWMKgBundleRdfProjectionManifest",
+    "contractVersion": "hswm-kg-bundle-rdf-projection/v2",
+    "compilerId": "hswm-kg-bundle-rdf-compiler/v2",
+    "rdfProfile": "RDF_1_1_N_QUADS_BLANK_NODE_FREE_DETERMINISTIC_PROFILE",
+    "mapping": "ROLE_PRESERVING_REIFIED_RELATIONS_WITH_DIRECT_TYPED_EDGES",
+    "dataset": {
+      "mediaType": "application/n-quads",
+      "sha256": "be3ff8b6522b944f8b415aa8efacb9e2bf51c5dfa1f71e3f6c7a85e091f09c69",
+      "byteLength": 1658945
+    },
+    "sources": [
+      {
+        "id": "proof",
+        "mediaType": "application/json",
+        "sha256": "605e69fa925468ae880f72abd0149240f80b18630aab371df060f808e924e224",
+        "byteLength": 249703,
+        "bundleUid": "sym:AbstractNode:hswm-semantic-weight-constructive-proof-2026-09-14"
+      }
+    ],
+    "sourceSetSha256": "39aef412d89fec4fa745d87cf28f3f72c414dd0c3f16bc7676a93c48c2726a3b",
+    "projectionIdentitySha256": "e3c11fe925da5f64016ffa07e8b630f82c1c1879510048c76a8b2fa57ddd0a45",
+    "projectionIri": "urn:hswm:kg-bundle-projection:e3c11fe925da5f64016ffa07e8b630f82c1c1879510048c76a8b2fa57ddd0a45",
+    "nodeCount": 61,
+    "relationCount": 309,
+    "writeBack": "FORBIDDEN",
+    "nonclaim": "DERIVED_READ_ONLY_KG_BUNDLE_EXCHANGE_NOT_CANONICAL_STATE_NOT_PERMIT_NOT_USER_RATIFICATION_NOT_GATE_PASS_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+    "claimCeiling": "KG_BUNDLE_STRUCTURE_AND_BYTE_BINDING_ONLY_NOT_LIVE_KG_STATE_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+    "invalidatedBy": [
+      "ANY_BOUND_BUNDLE_BYTES_CHANGED",
+      "PROJECTION_PROFILE_OR_COMPILER_CHANGED"
+    ],
+    "rdfDatasetOmits": [
+      "LIVE_KG_STATE_AND_PUBLICATION_STATUS",
+      "ARTIFACT_BINDING_CONTENT_BYTES",
+      "CANONICAL_STATE_AND_PERMIT_CONTENT",
+      "CAUSAL_CREDIT_AND_LEARNING_ASSERTIONS"
+    ]
+  },
+  "portable_math": {
+    "display_fence_rewrites": 66,
+    "documents": 165,
+    "legacy_compatibility_rewrites": 6,
+    "math_fences_seen": 202,
+    "operatorname_rewrites": 36,
+    "status": "PORTABLE_MATH_COMPILED"
+  },
+  "draft_repairs": [
+    {
+      "failure": "STRICT_BUNDLE_DECODER_REJECTED_EXTRA_TOP_LEVEL_METADATA",
+      "repair": "Moved source/anchor/audit metadata into the verification record and used the existing allowed source_accessed_on field."
+    },
+    {
+      "failure": "SHACL_REQUIRED_NODE_PROJECTION_NONCLAIM_MISSING",
+      "repair": "Added the explicit bounded-projection boundary to each node; final profile passes without changes to validator or shapes."
+    }
+  ],
+  "recheck_scope": "Final source hashes and artifact links; exact-source Lean audit recorded separately. No conformance negative-suite or independent proof-checker run claimed.",
+  "live_kg_publication": "NONE"
+}

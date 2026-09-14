@@ -1,0 +1,12 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT DISTINCT ?theorem ?source ?proofStatus ?obligation ?remaining ?targetStatus WHERE {
+  ?t p:standard_graph_role "FORMAL_THEOREM";
+     p:theorem_symbol ?theorem;
+     p:source_path ?source;
+     p:status ?proofStatus;
+     r:BOUNDS_TARGET_CONNECTION ?gap.
+  ?gap p:obligation_id ?obligation;
+       p:remaining_requirement ?remaining;
+       p:status ?targetStatus.
+} ORDER BY ?theorem ?obligation

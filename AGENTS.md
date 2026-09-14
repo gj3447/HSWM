@@ -43,6 +43,10 @@
   causal estimands and evidence distinct. Connect work to the existing CR-0..7
   and FCL-1..8; the new analytic propositions do not discharge those obligations.
   This is the theory-reading workflow, not an approval gate or a new subsystem.
+- For realizability proof claims, also read
+  `docs/research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md`.
+  Preserve its distinction between the checked finite learner/refinement results
+  and the unproved full HSWM target; inspect theorem premises and runtime mapping.
 - Do not map implementation to the retired fixed `H/W/A/F/Π` decomposition.
   Map it instead to schema-approved canonical atoms, exactly one
   schema-relative responsibility owner per atom, typed references,

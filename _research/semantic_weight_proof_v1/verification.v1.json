@@ -1,0 +1,750 @@
+{
+  "schema_version": "hswm-semantic-weight-constructive-proof-verification/v1",
+  "recorded_on": "2026-09-14",
+  "source_base_commit": "734f586fb255f0ac706507269180ca1f2daa7ad8",
+  "status": "FOUR_EXACT_SOURCE_MODULES_KERNEL_CHECKED",
+  "claim_ceiling": "EXHAUSTIVE_FINITE_BOOLEAN_LEARNING_AND_EXACT_DETERMINISTIC_REFINEMENT_NOT_FULL_HSWM_REALIZABILITY",
+  "authority": "LOCAL_FORMAL_VERIFICATION_AND_SECONDARY_AI_STATEMENT_REVIEW",
+  "toolchain": {
+    "name": "leanprover/lean4:v4.32.1",
+    "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+    "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+    "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "pin_path": "formal/lean-toolchain",
+    "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+    "authority": "OFFICIAL_EXISTING_PIN_REUSED",
+    "main_license": "Apache-2.0",
+    "license_file_sha256": "8b28515ffffc5c0fe2807d8ae3735b00b324d9b7ce807dd63ff6ac8922fbce7e",
+    "bundled_notices_sha256": "00cce2ac071f63d470a287438a7c6bbc4334706be244384e9af4fc9ead11cdce",
+    "license_scope": "Compiler main license with bundled third-party notices retained in installed distribution.",
+    "new_dependencies_installed": false,
+    "dependency_scope": "Std shipped with this toolchain; this report is not a full binary-distribution supply-chain attestation."
+  },
+  "proof_sources": [
+    {
+      "path": "formal/HSWMSemanticQuotient.lean",
+      "sha256": "8dab893fb049284cbfe7b2cffb5abd8a11b6396dfe1422a89a823f41b17a6f52",
+      "exit_code": 0,
+      "audit_command": "lake env lean --trust=0 --stdin (exact source followed by #check/#print axioms for every named theorem)",
+      "named_theorems": [
+        {
+          "symbol": "HSWM.SemanticQuotient.advance_refines",
+          "private": false,
+          "observed_axioms": []
+        },
+        {
+          "symbol": "HSWM.SemanticQuotient.run_refines",
+          "private": false,
+          "observed_axioms": []
+        },
+        {
+          "symbol": "HSWM.SemanticQuotient.refinement_requires_step_commutation",
+          "private": false,
+          "observed_axioms": []
+        },
+        {
+          "symbol": "HSWM.SemanticQuotient.refinement_requires_learn_commutation",
+          "private": false,
+          "observed_axioms": []
+        },
+        {
+          "symbol": "HSWM.SemanticQuotient.mapStep_composes",
+          "private": false,
+          "observed_axioms": []
+        },
+        {
+          "symbol": "HSWM.SemanticQuotient.ExactRefinement.compose",
+          "private": false,
+          "observed_axioms": []
+        },
+        {
+          "symbol": "HSWM.SemanticQuotient.run_refines_composed",
+          "private": false,
+          "observed_axioms": []
+        }
+      ],
+      "observed_axioms": [],
+      "local_audit_output_sha256": "4092a68aa80cc48c557f0db805cee60fc6c1af8d988ad4aefc3a37b592813d68"
+    },
+    {
+      "path": "formal/HSWMFiniteSemanticLearning.lean",
+      "sha256": "3a2683bc12c6aa84976296a3f0a75b9619b23e2c437d11d12c25438b242fd9c1",
+      "exit_code": 0,
+      "audit_command": "lake env lean --trust=0 --stdin (exact source followed by #check/#print axioms for every named theorem)",
+      "named_theorems": [
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.observe_here",
+          "private": false,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.observe_other",
+          "private": false,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.step_reads_only_table_and_input",
+          "private": false,
+          "observed_axioms": []
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.train_complete",
+          "private": false,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.learned_prediction_exact",
+          "private": false,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.learned_errors_zero",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.cubic_empty_has_one_error",
+          "private": false,
+          "observed_axioms": []
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.cubic_learning_strictly_improves",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.anf_at_000",
+          "private": true,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.anf_at_100",
+          "private": true,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.anf_at_010",
+          "private": true,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.anf_at_110",
+          "private": true,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.anf_at_001",
+          "private": true,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.anf_at_101",
+          "private": true,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.anf_at_011",
+          "private": true,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.anf_at_111",
+          "private": true,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.anf_reconstructs",
+          "private": false,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.learned_anf_exact",
+          "private": false,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.semanticStep_eq_step",
+          "private": false,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.cubic_has_pure_triple_coefficient",
+          "private": false,
+          "observed_axioms": []
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.source_role_is_not_modulator_role",
+          "private": false,
+          "observed_axioms": []
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.summary_append",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.summary_noninjective",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.substitution_preserves_learned_output",
+          "private": false,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticLearning.both_learned_substitution",
+          "private": false,
+          "observed_axioms": [
+            "propext"
+          ]
+        }
+      ],
+      "observed_axioms": [
+        "Quot.sound",
+        "propext"
+      ],
+      "local_audit_output_sha256": "d2c2fa1eec3a3b0a2987495c47b14917c13f6abb1b677556ca44cde32fa2fbb3"
+    },
+    {
+      "path": "formal/HSWMSemanticLearningLimits.lean",
+      "sha256": "f1a70d9c3883c2386e19757ee763ffbf2e9cc0dc1d8ef495bcfe3afbd5a54b21",
+      "exit_code": 0,
+      "audit_command": "lake env lean --trust=0 --stdin (exact source followed by #check/#print axioms for every named theorem)",
+      "named_theorems": [
+        {
+          "symbol": "HSWM.SemanticLearningLimits.zero_at",
+          "private": false,
+          "observed_axioms": []
+        },
+        {
+          "symbol": "HSWM.SemanticLearningLimits.spike_at",
+          "private": false,
+          "observed_axioms": [
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.SemanticLearningLimits.transcript_zero_eq_spike_of_not_mem",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.SemanticLearningLimits.no_fixed_transcript_decoder_exact_both",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.SemanticLearningLimits.frozenLearn_state_unchanged",
+          "private": false,
+          "observed_axioms": []
+        },
+        {
+          "symbol": "HSWM.SemanticLearningLimits.frozenLearn_preserves_readout",
+          "private": false,
+          "observed_axioms": []
+        }
+      ],
+      "observed_axioms": [
+        "Quot.sound",
+        "propext"
+      ],
+      "local_audit_output_sha256": "abb38c6761d598175da2873c3cce126aeccb69ac4a712f3402707b7c09d7cc7d"
+    },
+    {
+      "path": "formal/HSWMFiniteSemanticRefinement.lean",
+      "sha256": "ff8e6a50a94371e7378e220cee533d9b30c8d2b6221518efd061101f73b6db19",
+      "exit_code": 0,
+      "audit_command": "lake env lean --trust=0 --stdin (exact source followed by #check/#print axioms for every named theorem)",
+      "named_theorems": [
+        {
+          "symbol": "HSWM.FiniteSemanticRefinement.fullHistory_refines_table",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticRefinement.fullHistory_trace_refines_table",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticRefinement.summary_fullEpisode",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticRefinement.summary_fullSweep",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticRefinement.summary_fullSweep_allInputs",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticRefinement.fullSweep_prediction_exact",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticRefinement.fullSweep_semantic_prediction_exact",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "symbol": "HSWM.FiniteSemanticRefinement.fullSweep_cubic_strict_gain",
+          "private": false,
+          "observed_axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        }
+      ],
+      "observed_axioms": [
+        "Quot.sound",
+        "propext"
+      ],
+      "local_audit_output_sha256": "27d7ccaa5e950ad1e2024d8eeb281510735cd3a817712166f48b2b24c411b0f9"
+    }
+  ],
+  "named_theorem_count": 46,
+  "count_semantics": "PUBLIC_AND_PRIVATE_AXIOM_AUDIT_COVERAGE_NOT_PROGRESS_OR_EFFICACY",
+  "forbidden_axioms_observed": [],
+  "foundational_axioms_observed": [
+    "Quot.sound",
+    "propext"
+  ],
+  "exact_source_bindings": [
+    {
+      "path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+      "sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373"
+    },
+    {
+      "path": "docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md",
+      "sha256": "64a9436bd83c306db6aa1ecb3d29e3ba1f3fd054f1d37bd164cb948c9da226af"
+    },
+    {
+      "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+      "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81"
+    },
+    {
+      "path": "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md",
+      "sha256": "9b746abf743872af6d441de9cac1690030639851a0690884cb5f0c85dc3353b5"
+    },
+    {
+      "path": "docs/research/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.md",
+      "sha256": "4274b27b876f1d2fecde18131054dbe05b93563c5a74e519fab64e1f78107e98"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "path": "ontology/evidence/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.v1.json",
+      "sha256": "79bb6567407a4f0de9dd6fb98ac2860e2298e61f1a40417e25763f92e164a339"
+    },
+    {
+      "path": "formal/HSWMCompositionInterference.lean",
+      "sha256": "ea61064e08f46a36b98c0e30e103ffc1e130b92a157ed3989e29888416ca87bc"
+    },
+    {
+      "path": "formal/lean-toolchain",
+      "sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af"
+    },
+    {
+      "path": "formal/lakefile.toml",
+      "sha256": "cc13ea56a1b745f02ab8cda036c841f8ef9c7fef2153d80b2c33f61486b18f07"
+    },
+    {
+      "path": "formal/lake-manifest.json",
+      "sha256": "a208d7808d1fc3ac2f04ddc717b69feebd626770f25bb4293973194f99a2c1bf"
+    },
+    {
+      "path": "docs/research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md",
+      "sha256": "868c4d358b37a6cb43ffbe129a8d1ee3a7fc7a213e112071b34b5901a7019c37"
+    },
+    {
+      "path": "docs/canon/sources/USER_PRIMARY_HSWM_RIGOROUS_REALIZABILITY_PROOF_2026-09-14.txt",
+      "sha256": "b30e1acfe8bc17e4ab0b40076edba19149ead31e2346776baa64afd0769e090f"
+    },
+    {
+      "path": "_research/semantic_weight_proof_v1/README.md",
+      "sha256": "46ceb59a5e619cc725c315170099c749e45fc32eb89bacfe1c8562229c8a2913"
+    },
+    {
+      "path": "ontology/queries/hswm_semantic_weight_proof_2026-09-14/theorems_and_open_obligations.rq",
+      "sha256": "6277fac40059bc11852610992e06ac0b6bc6fba6993d7a64cc4d957e955f4291"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "2158a45a62e24f45faaa9096af54f5a412fe1ee823ed94557a7239437b1e08da"
+    },
+    {
+      "path": "README.md",
+      "sha256": "27e3a48a0f4ab3b6cfb1807a6f851bd20c93461d272ec9389092604dbafc29f4"
+    },
+    {
+      "path": "INDEX.md",
+      "sha256": "a644aee569fcc3905eeb790e21cff24fac47bf5f1b7ee1bb62e509a27c852010"
+    },
+    {
+      "path": "formal/HSWMSemanticQuotient.lean",
+      "sha256": "8dab893fb049284cbfe7b2cffb5abd8a11b6396dfe1422a89a823f41b17a6f52"
+    },
+    {
+      "path": "formal/HSWMFiniteSemanticLearning.lean",
+      "sha256": "3a2683bc12c6aa84976296a3f0a75b9619b23e2c437d11d12c25438b242fd9c1"
+    },
+    {
+      "path": "formal/HSWMSemanticLearningLimits.lean",
+      "sha256": "f1a70d9c3883c2386e19757ee763ffbf2e9cc0dc1d8ef495bcfe3afbd5a54b21"
+    },
+    {
+      "path": "formal/HSWMFiniteSemanticRefinement.lean",
+      "sha256": "ff8e6a50a94371e7378e220cee533d9b30c8d2b6221518efd061101f73b6db19"
+    }
+  ],
+  "assumption_boundary": {
+    "positive_learner": "Three already named Boolean roles; all eight permitted inputs; deterministic stationary reset response; post-Step pure Env value flow; finite-domain prediction loss. No LLM calls or runtime custody in model.",
+    "polynomial": "ANF re-expression of the same learned table/fallback function. Fixed monomial dictionary; not unseen variable or sample-efficient discovery.",
+    "refinement": "Source stores observation records; target is a sufficient read view. Generic events allow arbitrary records. Concrete fullEpisode generates records via the same semanticStep/Env; fullSweep theorem connects to the same train.",
+    "limits": "Unqueried point, deterministic decoder of a fixed response transcript. Not an adaptive/stochastic complexity theorem.",
+    "composition": "Exact equality of learned Boolean parent/child substitution and deterministic refinement composition; not shared-outcome credit or cognition-bearing FCL closure."
+  },
+  "statement_review": {
+    "source": "agent(codex):root, constructive_proof_design, lean_proof_surface, full_realizability_adversary",
+    "addressed_findings": [
+      "train now folds actual Step/Env/Learn episode rather than bypassing the dataflow",
+      "semanticStep executes ANF from the same learned partial table and equals direct Step",
+      "both learned parent and child participate in the substitution theorem",
+      "concrete fullEpisode/fullSweep bind generated Env records to the history/table refinement",
+      "observation-record history is not mislabeled cryptographic provenance or Permit",
+      "full HSWM non-entailment and unobserved-input obstruction preserved"
+    ],
+    "scope": "SECONDARY_AI_READ_ONLY_REVIEW_NOT_EXTERNAL_INDEPENDENT_CHECKER_OR_SCIENTIFIC_VALIDATION"
+  },
+  "hswm_development_workflow": {
+    "commands": [
+      "hswm plan",
+      "hswm run",
+      "hswm feedback",
+      "hswm status"
+    ],
+    "backend": "typescript-effect",
+    "selected_relation": "relation:docs-focused",
+    "result": "SUCCEEDED",
+    "documentation_test_files": 3,
+    "documentation_tests_passed": 8,
+    "feedback_status": "FEEDBACK_RECORDED",
+    "usefulness": {
+      "success": true,
+      "source": "agent(codex):useful for Markdown rendering regression only; mathematical claims separately kernel-checked with explicit assumptions and adversarial review; graph/source validation outside docs route; not HSWM efficacy"
+    },
+    "private_outputs": "RETAINED_LOCALLY_NOT_EMBEDDED",
+    "scope": "DOCUMENTATION_REGRESSION_ONLY; LEAN AND GRAPH CHECKS OUTSIDE SELECTED ROUTE"
+  },
+  "default_lake_targets": "UNCHANGED; STANDALONE_COMMANDS_REQUIRED; BRIDGE_IMPORTS_EXPLICITLY_COMPILED_DEPENDENCIES",
+  "new_runtime_behavior": "NONE; FORMAL_MODEL_EXECUTABLE_DEFINITIONS_ONLY",
+  "full_hswm_status": "INTEGRATED_CLAIM_UNJUDGED",
+  "existing_cr_fcl_statuses": "UNCHANGED",
+  "scientific_efficacy_experiments": "NONE",
+  "live_kg_write": "NONE",
+  "research_novelty": "ELEMENTARY_EXISTING_MATHEMATICS_FORMALIZED; NOT_A_NEW_MATHEMATICAL_DISCOVERY",
+  "external_anchor_bindings": [
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "name": "CR-0: Concrete Step/Learn semantics and safety",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-local-causal-learning",
+      "name": "FCL-1 local causal learning law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-composition-preservation",
+      "name": "FCL-2 composition preservation law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-emergent-coalition",
+      "name": "FCL-3 emergent coalition law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-multiscale-credit",
+      "name": "FCL-4 multiscale credit law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-topology-morphogenesis",
+      "name": "FCL-5 topology morphogenesis law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-world-self-co-model",
+      "name": "FCL-6 world-self co-model law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-diachronic-continuity",
+      "name": "FCL-7 diachronic continuity law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-hswm-of-hswms",
+      "name": "FCL-8 HSWM-of-HSWMs law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+      "name": "CR-1: Constructive outcome-conditioned improvement",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-2",
+      "name": "CR-2: Derived causal identification",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-3",
+      "name": "CR-3: Causal multiscale credit without double counting",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-4",
+      "name": "CR-4: Useful coalition and topology construction/recovery",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "name": "CR-5: Joint world/self prediction and diachronic continuity",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-6",
+      "name": "CR-6: Concrete composition, intervention and effect preservation",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-7",
+      "name": "CR-7: One simultaneous witness, runtime refinement and external validity",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-P1",
+      "name": "Exact Step and Learn quotient criterion",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-D2",
+      "name": "D2. 역할을 가진 n항 입력과 수신자별 전이 성향",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-D2a",
+      "name": "D2a. 의미 접지: 그 관계는 세계의 무엇을 가리키는가",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-D4",
+      "name": "D4. 실행·외부 결과·학습의 시간 순서",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-P3",
+      "name": "Observational law need not identify causal effect",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    }
+  ],
+  "public_theorem_nodes": 38
+}

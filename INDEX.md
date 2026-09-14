@@ -1,5 +1,9 @@
 # HSWM — public repository index
 
+2026-09-14 [LLM이 실행하는 Semantic Weight](docs/research/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.md)는
+LLM의 의미 해석·관계 생성·실행·수정을 중심에 놓고 VML·VPP·Pinductor와 학습 이론을 연결한다.
+의미 전체의 수작업 정의 대신 관측·행동·교정 계약을 제안하며, 기존 CR/FCL 완료 판정은 바꾸지 않는다.
+
 2026-09-14 [Semantic Weight 구성적 증명](docs/research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md)은
 세 역할의 유한 outcome learner, 관계 연산 재구성, 실행·학습 요약 보존과 관측 부족의 반례를
 Lean source와 연결한다. [증명 그래프](ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_ONTOLOGY.v1.json)는

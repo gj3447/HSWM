@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT DISTINCT ?bridge ?source ?url ?resultKind ?assumptions ?remaining ?targetStatus WHERE {
+ ?b p:standard_graph_role "UNPROVED_HSWM_BRIDGE";
+    p:bridge_id ?bridge; p:remaining_requirement ?remaining;
+    p:status ?targetStatus; r:USES_SCOPED_RESULT ?s.
+ ?s p:source_id ?source; p:source_url ?url;
+    p:status ?resultKind; p:assumptions ?assumptions.
+} ORDER BY ?bridge ?source

@@ -1,0 +1,92 @@
+{
+  "schema_version": "hswm-llm-semantic-engine-research-validation/v1",
+  "recorded_on": "2026-09-14",
+  "status": "PASS_SOURCE_BINDINGS_GRAPH_AND_DOCUMENT_CHECKS",
+  "claim_ceiling": "SOURCE_STRUCTURE_AND_DOCUMENT_CHECKS_NOT_LLM_EXECUTION_PROOF_OR_HSWM_EFFICACY",
+  "artifact_bindings": [
+    {
+      "path": "docs/research/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.md",
+      "sha256": "5a0609f77a097ec45733a5cb701996210e6bb3df8789d35e8896ebe45467cdc9"
+    },
+    {
+      "path": "ontology/development/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.v1.json",
+      "sha256": "90670ec9463ef0ae2ddd14118ac65a25149fc3530d2d4861a80131abc174bb9e"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_llm_semantic_engine_2026-09-14/research.v1.json",
+      "sha256": "c189fe0040dc1e177ce963144c691ce6995ec52d22290ff01ff3366b841ca877"
+    },
+    {
+      "path": "ontology/queries/hswm_llm_semantic_engine_2026-09-14/sources_to_open_obligations.rq",
+      "sha256": "47b161eee82089adfd4cc68f1876906b6c47fedd01fe35bbcbf664a060925923"
+    },
+    {
+      "path": "ontology/queries/hswm_llm_semantic_engine_2026-09-14/README.md",
+      "sha256": "6b917c3ab627c741ec5e37d38943ca374725234ef093ce363faf0a4896b16ad1"
+    },
+    {
+      "path": "README.md",
+      "sha256": "4a174dcde7b7e3b9317e75ec0273a3c9dce880ea0def8e1e267c7bd51d0766fd"
+    },
+    {
+      "path": "INDEX.md",
+      "sha256": "fcd441a2e1d18c220ea8e2bce542d89c79d5b55bacc93327bae343235d3d0c9a"
+    }
+  ],
+  "integrity": {
+    "nodes": 20,
+    "anchors": 17,
+    "relations": 71,
+    "primary_sources": 11,
+    "bridges": 5,
+    "all_owned_and_anchor_nodes_reachable": true,
+    "local_source_bindings": 12,
+    "exact_source_owner_anchor_checks": 17,
+    "cr_obligations_preserved": 8,
+    "fcl_laws_preserved": 8,
+    "relative_links_checked": 13
+  },
+  "shacl": {
+    "conforms": true,
+    "results": [],
+    "claim_ceiling": "KG_BUNDLE_STRUCTURE_AND_BYTE_BINDING_ONLY_NOT_LIVE_KG_STATE_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+    "engine": "rdf-validate-shacl@0.6.5",
+    "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+  },
+  "sparql": {
+    "rows": 23,
+    "sources": 11,
+    "bridges": 5,
+    "target_statuses": [
+      "OPEN_NOT_DISCHARGED"
+    ]
+  },
+  "portable_math": {
+    "display_fence_rewrites": 66,
+    "documents": 166,
+    "legacy_compatibility_rewrites": 6,
+    "math_fences_seen": 207,
+    "operatorname_rewrites": 36,
+    "status": "PORTABLE_MATH_COMPILED"
+  },
+  "development_checks": {
+    "backend": "typescript-effect",
+    "selected_relation": "relation:docs-focused",
+    "status": "SUCCEEDED",
+    "files_passed": 3,
+    "tests_passed": 8,
+    "feedback_source": "agent(codex)",
+    "usefulness": "Useful Markdown regression checks; source review and graph checks were additional; no efficacy inferred.",
+    "plan_run_feedback_status_recorded_locally": true,
+    "raw_outputs_public": false
+  },
+  "new_lean_proofs": 0,
+  "new_runtime_changes": false,
+  "new_research_experiments": 0,
+  "live_kg_write": false,
+  "recheck_commands": [
+    "hswm-kg-bundle validate --source engine=ontology/development/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.v1.json --profile v2 --shapes schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+    "hswm-kg-bundle query --source engine=ontology/development/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.v1.json --profile v2 --query ontology/queries/hswm_llm_semantic_engine_2026-09-14/sources_to_open_obligations.rq",
+    "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology"
+  ]
+}

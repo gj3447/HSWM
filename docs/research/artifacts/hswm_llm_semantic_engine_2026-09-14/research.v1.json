@@ -1,0 +1,572 @@
+{
+  "schema_version": "hswm-llm-semantic-engine-research/v1",
+  "accessed_on": "2026-09-14",
+  "source_base_commit": "0402a521909122ef0de4f1e499036ddaa8edf4ff",
+  "status": "LITERATURE_AND_CONDITIONAL_THEORY_NOT_TARGET_REALIZATION",
+  "nonclaim": "NOT_NEW_RUNTIME_LEAN_PROOF_CAUSAL_ADMISSION_OR_HSWM_EFFICACY",
+  "user_direction": {
+    "source_path": "docs/canon/sources/USER_PRIMARY_HSWM_LLM_ENGINE_2026-09-14.txt",
+    "authority": "USER_PRIMARY",
+    "scope": "LLM is the semantic execution engine; expectation is research direction, not scientific evidence."
+  },
+  "conceptual_delta": "Use pretrained LLM semantics and in-context adaptation inside the existing role/context-conditioned disposition; formalize observational/action/revision contracts without hand-defining all meaning.",
+  "sources": [
+    {
+      "id": "S01",
+      "short_name": "VML",
+      "title": "Verbalized Machine Learning: Revisiting Machine Learning with Language Models",
+      "authors": "Tim Z. Xiao; Robert Bamler; Bernhard Schölkopf; Weiyang Liu",
+      "source_version_date": "2025-02-14",
+      "version": "v3 / TMLR",
+      "url": "https://arxiv.org/html/2406.04344v3",
+      "accessed_on": "2026-09-14",
+      "source_authority": "PRIMARY_RESEARCH_PUBLICATION",
+      "summary_authority": "SECONDARY_AI",
+      "result_kind": "EMPIRICAL_CONSTRUCTION",
+      "read_depth": "§3; §4.10; §5; Appendix G/K",
+      "reported_result": "Natural-language parameters are executed by a frozen LLM and revised from predictions and labels by an LLM optimizer.",
+      "assumptions": "Task labels, prompts, model and context; reported numerical error and optimization variance.",
+      "claim_ceiling": "No general convergence or faithful internal-explanation theorem.",
+      "hswm_target_discharged": false
+    },
+    {
+      "id": "S02",
+      "short_name": "VPP",
+      "title": "Verbalized Particle Posterior: Bayesian Inference over Natural Language Hypotheses",
+      "authors": "Yan Zhang; Shikan Lian; Shibo Li",
+      "source_version_date": "2026-07-25",
+      "version": "v1 / PREPRINT",
+      "url": "https://arxiv.org/html/2607.22961v1",
+      "accessed_on": "2026-09-14",
+      "source_authority": "PRIMARY_RESEARCH_PUBLICATION",
+      "summary_authority": "SECONDARY_AI",
+      "result_kind": "EMPIRICAL_HEURISTIC",
+      "read_depth": "§2–3; §5–6",
+      "reported_result": "Multiple verbal hypotheses are proposed and revised by an LLM; small benchmark gains.",
+      "assumptions": "Externally defined label loss; fixed small benchmarks; black-box proposal density unavailable.",
+      "claim_ceiling": "MH drops prior/proposal ratios; SMC lacks incremental ratios. Exact posterior/invariance is not established.",
+      "hswm_target_discharged": false
+    },
+    {
+      "id": "S03",
+      "short_name": "Pinductor",
+      "title": "Learning POMDP World Models from Observations with Language-Model Priors",
+      "authors": "Valentin Six et al.",
+      "source_version_date": "2026-05-13",
+      "version": "v1 / PREPRINT",
+      "url": "https://arxiv.org/html/2605.13740v1",
+      "accessed_on": "2026-09-14",
+      "source_authority": "PRIMARY_RESEARCH_PUBLICATION",
+      "summary_authority": "SECONDARY_AI",
+      "result_kind": "EMPIRICAL_WORLD_MODEL",
+      "read_depth": "§3–6; Appendix G/H",
+      "reported_result": "LLM priors generate POMDP code refined using observation-action trajectories; semantic masking ablation reduces performance.",
+      "assumptions": "Given state/action/observation API, chosen trajectories and observation distance; MiniGrid only.",
+      "claim_ceiling": "Code execution is not the same realization as recurrent LLM semantic interpretation; no latent-ontology or causal-credit theorem.",
+      "hswm_target_discharged": false
+    },
+    {
+      "id": "S04",
+      "short_name": "Bayesian ICL",
+      "title": "An Explanation of In-context Learning as Implicit Bayesian Inference",
+      "authors": "Sang Michael Xie; Aditi Raghunathan; Percy Liang; Tengyu Ma",
+      "source_version_date": "2022",
+      "version": "v2 / ICLR 2022",
+      "url": "https://arxiv.org/html/2111.02080v2",
+      "accessed_on": "2026-09-14",
+      "source_authority": "PRIMARY_RESEARCH_PUBLICATION",
+      "summary_authority": "SECONDARY_AI",
+      "result_kind": "LITERATURE_THEOREM_WITH_ASSUMPTIONS",
+      "read_depth": "HMM setup; Condition 1; Theorems 1–3",
+      "reported_result": "An exact pretraining-distribution predictor asymptotically reaches prompt Bayes-optimal risk under distinguishability.",
+      "assumptions": "Latent HMM concepts, regularity/delimiters, KL separation overcoming distribution mismatch; asymptotic examples.",
+      "claim_ceiling": "Not a theorem of arbitrary pretrained LLMs, action grounding or persistent learning.",
+      "hswm_target_discharged": false
+    },
+    {
+      "id": "S05",
+      "short_name": "Attention implements learning",
+      "title": "Transformers Learn In-Context by Gradient Descent",
+      "authors": "Johannes von Oswald et al.",
+      "source_version_date": "2023",
+      "version": "ICML 2023 / PMLR 202",
+      "url": "https://proceedings.mlr.press/v202/von-oswald23a.html",
+      "accessed_on": "2026-09-14",
+      "source_authority": "PRIMARY_RESEARCH_PUBLICATION",
+      "summary_authority": "SECONDARY_AI",
+      "result_kind": "CONSTRUCTIVE_LITERATURE_THEOREM",
+      "read_depth": "Proposition 1; regression construction and experiments",
+      "reported_result": "A linear self-attention layer has weights implementing a gradient step in linear regression.",
+      "assumptions": "Specified continuous regression encoding and constructed weights; empirical trained models in controlled tasks.",
+      "claim_ceiling": "Expressibility does not establish real-model learning, semantic identification or repeated stability.",
+      "hswm_target_discharged": false
+    },
+    {
+      "id": "S06",
+      "short_name": "Finite-sample ICL",
+      "title": "In-Context Learning Is Provably Bayesian Inference: A Generalization Theory for Meta-Learning",
+      "authors": "Tomoya Wakayama; Taiji Suzuki",
+      "source_version_date": "2026-06-14",
+      "version": "v3 / PREPRINT",
+      "url": "https://arxiv.org/html/2510.10981v3",
+      "accessed_on": "2026-09-14",
+      "source_authority": "PRIMARY_RESEARCH_PUBLICATION",
+      "summary_authority": "SECONDARY_AI",
+      "result_kind": "LITERATURE_THEOREM_WITH_ASSUMPTIONS",
+      "read_depth": "Definition 2.2; Proposition 3.1; Theorem 3.2; Appendix C",
+      "reported_result": "Squared risk splits into Bayes Gap and Posterior Variance; uniform-attention class has a finite-sample gap bound.",
+      "assumptions": "Specified meta-distribution; conditionally IID examples; bounded domains, regularity/Hölder assumptions, ERM and uniform attention.",
+      "claim_ceiling": "Bound does not cover arbitrary softmax LLM, active or drifting histories; reported theorem not independently formalized here.",
+      "hswm_target_discharged": false
+    },
+    {
+      "id": "S07",
+      "short_name": "Bayesian mixture loss",
+      "title": "Optimality of Universal Bayesian Sequence Prediction for General Loss and Alphabet",
+      "authors": "Marcus Hutter",
+      "source_version_date": "2003",
+      "version": "JMLR 4:971–1000",
+      "url": "https://www.jmlr.org/papers/volume4/hutter03a/hutter03a.pdf",
+      "accessed_on": "2026-09-14",
+      "source_authority": "PRIMARY_RESEARCH_PUBLICATION",
+      "summary_authority": "SECONDARY_AI",
+      "result_kind": "LITERATURE_THEOREM_WITH_ASSUMPTIONS",
+      "read_depth": "§2.2–2.5; equations 1–3; Theorem 1",
+      "reported_result": "Exact mixture dominance gives prior-dependent loss/convergence bounds.",
+      "assumptions": "Normalized models and positive prior; convergence-to-truth requires supported truth or explicit misspecification bounds.",
+      "claim_ceiling": "Does not prove useful control or that an LLM interpreter implements the mixture. Report derives shared-action path inequality separately.",
+      "hswm_target_discharged": false
+    },
+    {
+      "id": "S08",
+      "short_name": "Interventional representation",
+      "title": "Interventional Causal Representation Learning",
+      "authors": "Kartik Ahuja; Divyat Mahajan; Yixin Wang; Yoshua Bengio",
+      "source_version_date": "2024-02-22",
+      "version": "v4",
+      "url": "https://arxiv.org/html/2209.11924v4",
+      "accessed_on": "2026-09-14",
+      "source_authority": "PRIMARY_RESEARCH_PUBLICATION",
+      "summary_authority": "SECONDARY_AI",
+      "result_kind": "LITERATURE_THEOREM_WITH_ASSUMPTIONS",
+      "read_depth": "Assumptions 4.1/4.2; Constraints 4.3/5.2; Theorem 5.3; A.12",
+      "reported_result": "Under specified observational and hard-intervention data, the intervened latent coordinate is identified up to shift and scaling.",
+      "assumptions": "Full-column-rank polynomial decoder, support interior, reconstruction/noncollapse and intervention-output constraints.",
+      "claim_ceiling": "Not general latent graph or natural-language referent identification; diffeomorphism extension needs more interventions.",
+      "hswm_target_discharged": false
+    },
+    {
+      "id": "S09",
+      "short_name": "LLM causal constraints",
+      "title": "Leveraging Large Language Models for Causal Discovery: a Constraint-based, Argumentation-driven Approach",
+      "authors": "Zihao Li; Fabrizio Russo",
+      "source_version_date": "2026-08-11",
+      "version": "v2 / UAI 2026 acceptance reported",
+      "url": "https://arxiv.org/html/2602.16481v2",
+      "accessed_on": "2026-09-14",
+      "source_authority": "PRIMARY_RESEARCH_PUBLICATION",
+      "summary_authority": "SECONDARY_AI",
+      "result_kind": "SYMBOLIC_FRAMEWORK_AND_EMPIRICAL",
+      "read_depth": "§3–6; metadata and prior-quality analysis",
+      "reported_result": "LLM semantic structural priors are combined with conditional-independence evidence using Causal ABA.",
+      "assumptions": "Causal graph/CI assumptions; elicited priors are imperfect; some metadata generated from ground-truth graph.",
+      "claim_ceiling": "Symbolic constraint-to-graph correspondence is not truth of LLM constraints; bad priors can hurt.",
+      "hswm_target_discharged": false
+    },
+    {
+      "id": "S10",
+      "short_name": "EvoMemBench",
+      "title": "EvoMemBench: Benchmarking Agent Memory from a Self-Evolving Perspective",
+      "authors": "Yuyao Wang et al.",
+      "source_version_date": "2026-06-15",
+      "version": "v2 / PREPRINT",
+      "url": "https://arxiv.org/html/2605.18421v2",
+      "accessed_on": "2026-09-14",
+      "source_authority": "PRIMARY_RESEARCH_PUBLICATION",
+      "summary_authority": "SECONDARY_AI",
+      "result_kind": "EMPIRICAL_BENCHMARK",
+      "read_depth": "§3–5; §5.2.1",
+      "reported_result": "Long-context baselines remain strong; memory revision is harder than retention in tested systems.",
+      "assumptions": "Specified tasks, models, context and memory methods; not universal ranking.",
+      "claim_ceiling": "A memory or KG structure alone does not establish useful persistent learning.",
+      "hswm_target_discharged": false
+    },
+    {
+      "id": "S11",
+      "short_name": "RAP",
+      "title": "Reasoning with Language Model is Planning with World Model",
+      "authors": "Shibo Hao et al.",
+      "source_version_date": "2023-12",
+      "version": "EMNLP 2023",
+      "url": "https://aclanthology.org/2023.emnlp-main.507/",
+      "accessed_on": "2026-09-14",
+      "source_authority": "PRIMARY_RESEARCH_PUBLICATION",
+      "summary_authority": "SECONDARY_AI",
+      "result_kind": "EMPIRICAL_CONSTRUCTION",
+      "read_depth": "Primary ACL paper methods and reported experiments",
+      "reported_result": "LLM predicts language state transitions and proposes actions in an MCTS planning construction.",
+      "assumptions": "Task-specific state/action/reward and planner; self-generated rollouts.",
+      "claim_ceiling": "No guarantee those rollouts match an external environment, nor continuous or fractal learning.",
+      "hswm_target_discharged": false
+    }
+  ],
+  "bridges": [
+    {
+      "id": "B1",
+      "name": "LLM이 해석하고 실행하는 관계 의미",
+      "sources": [
+        "S01",
+        "S04",
+        "S05",
+        "S06",
+        "S11"
+      ],
+      "cr": [
+        0,
+        4,
+        7
+      ],
+      "fcl": [
+        3,
+        5
+      ],
+      "remaining": "Construct an actual LLM relation interpreter and grounded observation/action contract; measure model/context-dependent error."
+    },
+    {
+      "id": "B2",
+      "name": "의미 prior를 활용한 관계 후보 탐색",
+      "sources": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S07"
+      ],
+      "cr": [
+        1,
+        4,
+        7
+      ],
+      "fcl": [
+        1,
+        5
+      ],
+      "remaining": "Demonstrate useful LLM-generated hypotheses under equal-information/equal-resource baselines and fresh evaluation; no exhaustive-answer leakage."
+    },
+    {
+      "id": "B3",
+      "name": "외부 결과에 결속된 관계 교정과 식별",
+      "sources": [
+        "S02",
+        "S03",
+        "S07",
+        "S08",
+        "S09"
+      ],
+      "cr": [
+        1,
+        2,
+        3
+      ],
+      "fcl": [
+        1,
+        4
+      ],
+      "remaining": "Implement a declared outcome update and identifying intervention family; separate predictive fit, causal attribution and fresh utility."
+    },
+    {
+      "id": "B4",
+      "name": "지속되는 의미 revision과 world/self 상태",
+      "sources": [
+        "S01",
+        "S02",
+        "S06",
+        "S10"
+      ],
+      "cr": [
+        5,
+        7
+      ],
+      "fcl": [
+        6,
+        7
+      ],
+      "remaining": "Show revisions alter fresh execution and preserve exceptions, uncertainty, provenance and learned self/world readouts."
+    },
+    {
+      "id": "B5",
+      "name": "LLM 셀 합성의 공동 전이와 학습 보존",
+      "sources": [
+        "S02",
+        "S06",
+        "S10",
+        "S11"
+      ],
+      "cr": [
+        3,
+        6,
+        7
+      ],
+      "fcl": [
+        2,
+        4,
+        8
+      ],
+      "remaining": "Construct joint Step/Learn preservation with shared causes, uncertainty, delays, costs, rights and bounded recursive gain."
+    }
+  ],
+  "analytical_derivations": [
+    {
+      "id": "A1",
+      "name": "Finite mixture path log-loss inequality",
+      "source": "S07",
+      "report_section": "5",
+      "status": "ELEMENTARY_DERIVATION_NOT_LEAN_CHECKED",
+      "scope": "Fixed supported models and positive prior, exact updating, non-anticipatory shared actions; no control or efficacy theorem."
+    },
+    {
+      "id": "A2",
+      "name": "Finite joint-trace coupling inequality",
+      "source": "Existing Step/Learn quotient scope and elementary finite maximal coupling",
+      "report_section": "7",
+      "status": "ELEMENTARY_DERIVATION_NOT_LEAN_CHECKED",
+      "scope": "Uniform per-common-prefix joint-kernel TV bound including learning; no inference from child marginals."
+    }
+  ],
+  "external_anchor_bindings": [
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "name": "CR-0: Concrete Step/Learn semantics and safety",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+      "name": "CR-1: Constructive outcome-conditioned improvement",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-2",
+      "name": "CR-2: Derived causal identification",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-3",
+      "name": "CR-3: Causal multiscale credit without double counting",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-4",
+      "name": "CR-4: Useful coalition and topology construction/recovery",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "name": "CR-5: Joint world/self prediction and diachronic continuity",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-6",
+      "name": "CR-6: Concrete composition, intervention and effect preservation",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-7",
+      "name": "CR-7: One simultaneous witness, runtime refinement and external validity",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-local-causal-learning",
+      "name": "FCL-1 local causal learning law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-composition-preservation",
+      "name": "FCL-2 composition preservation law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-emergent-coalition",
+      "name": "FCL-3 emergent coalition law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-multiscale-credit",
+      "name": "FCL-4 multiscale credit law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-topology-morphogenesis",
+      "name": "FCL-5 topology morphogenesis law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-world-self-co-model",
+      "name": "FCL-6 world-self co-model law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-diachronic-continuity",
+      "name": "FCL-7 diachronic continuity law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-hswm-of-hswms",
+      "name": "FCL-8 HSWM-of-HSWMs law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ],
+      "source_path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "source_sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14",
+      "name": "HSWM Semantic Weight: current theoretical foundation and discovery",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "source_path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "source_sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    }
+  ],
+  "local_source_bindings": [
+    {
+      "path": "docs/canon/sources/USER_PRIMARY_HSWM_LLM_ENGINE_2026-09-14.txt",
+      "sha256": "c9be2cfecc9266ef85245202d27dcf16bad8fe8a6a27016d5bd9dddc71deb082"
+    },
+    {
+      "path": "docs/research/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.md",
+      "sha256": "5a0609f77a097ec45733a5cb701996210e6bb3df8789d35e8896ebe45467cdc9"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+      "sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373"
+    },
+    {
+      "path": "docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md",
+      "sha256": "64a9436bd83c306db6aa1ecb3d29e3ba1f3fd054f1d37bd164cb948c9da226af"
+    },
+    {
+      "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+      "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81"
+    },
+    {
+      "path": "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md",
+      "sha256": "9b746abf743872af6d441de9cac1690030639851a0690884cb5f0c85dc3353b5"
+    },
+    {
+      "path": "docs/research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md",
+      "sha256": "868c4d358b37a6cb43ffbe129a8d1ee3a7fc7a213e112071b34b5901a7019c37"
+    },
+    {
+      "path": "docs/research/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.md",
+      "sha256": "4274b27b876f1d2fecde18131054dbe05b93563c5a74e519fab64e1f78107e98"
+    },
+    {
+      "path": "ontology/evidence/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.v1.json",
+      "sha256": "79bb6567407a4f0de9dd6fb98ac2860e2298e61f1a40417e25763f92e164a339"
+    }
+  ],
+  "review": [
+    "LLM is execution/meaning engine, not proposal-only sidecar.",
+    "Ahuja claim narrowed to intervened coordinate under named observation/intervention/decoder constraints.",
+    "Causal ABA correspondence separated from truth and from a new theorem in Li–Russo.",
+    "Adaptive-action and positive log-probability premises made explicit.",
+    "Coupling bound applies to joint kernels on every common prefix."
+  ],
+  "new_dependencies": [],
+  "new_runtime_or_lean_changes": false,
+  "live_kg_write": false
+}

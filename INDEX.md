@@ -1,5 +1,9 @@
 # HSWM — public repository index
 
+2026-09-14 [성능 증명의 추가 확장](docs/research/HSWM_SEMANTIC_FRONTIER_PROOFS_2026-09-14.md)은
+관계 생성·상관된 오류·라벨 오염·비용·재귀 학습을 다룬다. 생성된 관계와 noisy guard,
+재귀 실행을 한 유한 구성에 연결하며 실제 LLM 효능과 CR/FCL 판정은 구분한다.
+
 2026-09-14 [문헌에서 HSWM 성능 증명으로](docs/research/HSWM_LITERATURE_TO_PERFORMANCE_PROOF_2026-09-14.md)는
 국소 연산 집계의 조건부 이득과 outcome 뒤 후보 제거를 같은 Lean graph Step/Learn에 연결한다.
 참조 모형의 18/27→20/27 향상과 유한 오류 경계는 실제 LLM 측정과 구별하며,

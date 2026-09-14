@@ -81,6 +81,12 @@
   transfer obligations. The local ensemble and finite outcome learner connect
   through one checked graph-revision model; their gain does not prove real-LLM
   fidelity, new semantic/topology discovery, equal-cost superiority, or CR/FCL closure.
+  Its bounded extension is
+  `docs/research/HSWM_SEMANTIC_FRONTIER_PROOFS_2026-09-14.md`: grammar-generated
+  relations, arbitrary joint errors, bounded corrupt feedback and recursive
+  joint-candidate learning. Keep clean synthesis labels distinct from the
+  overlapping weighted assessment population; cost units are declared, and
+  preserved uncertainty/exception fields do not establish calibration or cognition.
 - For LLM-executed Semantic Weight work, read
   `docs/research/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.md` and
   `docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md`.

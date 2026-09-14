@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?area ?result ?remaining ?status WHERE {
+ ?a p:standard_graph_role "PROOF_AREA"; p:name ?area; p:description ?result;
+    r:LEAVES_TRANSFER_OPEN ?o.
+ ?o p:description ?remaining; p:status ?status.
+} ORDER BY ?area

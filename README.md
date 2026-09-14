@@ -50,6 +50,8 @@ Semantic Weight는 **역할·문맥에 따라 관계가 다음 전이를 어떻�
 [문헌 기반 성능 증명](docs/research/HSWM_LITERATURE_TO_PERFORMANCE_PROOF_2026-09-14.md)은
 국소 집계의 조건부 이득과 outcome 학습을 같은 그래프 갱신에 연결합니다.
 Lean 참조 모형의 기대 정확도 향상이며 실제 LLM의 측정 결과는 아닙니다.
+[후속 증명](docs/research/HSWM_SEMANTIC_FRONTIER_PROOFS_2026-09-14.md)은 문법에서 새 관계를 생성하고,
+상관된 오류·일부 틀린 피드백·명시한 비용·재귀 실행과 학습을 제한된 모형에서 연결합니다.
 현재 정본에서는 schema-approved transition-disposition candidate로 다루며, 이를 읽는 score와
 실제로 식별한 causal effect·그 근거를 구분합니다. [현재 이론 기반](docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md)은
 정의·가정·분석적 증명·반례를 기존 CR/FCL 의무와 연결합니다. 특히 요약된 상위 상태가

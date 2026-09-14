@@ -1,0 +1,373 @@
+{
+  "schema_version": "hswm-semantic-frontier-lean-verification/v1",
+  "recorded_on": "2026-09-14",
+  "source_base_commit": "b8c7119d1e5a551e8d978cd4350a7b691a76724d",
+  "status": "EXACT_SOURCE_KERNEL_CHECKED_WITH_FRESH_IMPORTS",
+  "toolchain": {
+    "name": "leanprover/lean4:v4.32.1",
+    "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+    "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+    "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "pin_path": "formal/lean-toolchain",
+    "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+    "authority": "OFFICIAL_EXISTING_PIN_REUSED",
+    "main_license": "Apache-2.0",
+    "license_file_sha256": "8b28515ffffc5c0fe2807d8ae3735b00b324d9b7ce807dd63ff6ac8922fbce7e",
+    "bundled_notices_sha256": "00cce2ac071f63d470a287438a7c6bbc4334706be244384e9af4fc9ead11cdce",
+    "license_scope": "Compiler main license with bundled third-party notices retained in installed distribution.",
+    "new_dependencies_installed": false,
+    "dependency_scope": "Std shipped with this toolchain; this report is not a full binary-distribution supply-chain attestation."
+  },
+  "proof_dependencies": [
+    {
+      "path": "formal/HSWMSemanticWeightDefinition.lean",
+      "sha256": "4173e860743f321c3ee87f6d48ef0570eba3f412d4ddca5ab4ff070e5d145ba5",
+      "clean_compile_exit_code": 0
+    },
+    {
+      "path": "formal/HSWMHypergraphRepresentation.lean",
+      "sha256": "4025a678ce0686ac9bb49b3f4f413ca9650869e897c4d33cc595ac2897cda293",
+      "clean_compile_exit_code": 0
+    },
+    {
+      "path": "formal/HSWMLocalEnsembleGain.lean",
+      "sha256": "e0166cd149f8bf20ce908d4b3f7f60537dd392baa99d85acb733e57c346f7bb8",
+      "clean_compile_exit_code": 0
+    },
+    {
+      "path": "formal/HSWMOutcomeLearningGain.lean",
+      "sha256": "625c1046dc991edf035c4b9f42995971dfc9e6b161f35f3ab868eb3f67cb7054",
+      "clean_compile_exit_code": 0
+    }
+  ],
+  "proof_sources": [
+    {
+      "path": "formal/HSWMConstructiveRelationSynthesis.lean",
+      "sha256": "19c2c246b722f4f89810fb47f34195df7754ee5472e1b8556723aa682b01ddd9",
+      "clean_compile_exit_code": 0,
+      "named_theorem_count": 17,
+      "theorems": {
+        "HSWM.ConstructiveRelationSynthesis.mem_grow_of_mem": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.and_mem_grow": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.generated_complete": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.relation_payload_evaluates": [
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.synthesizeFrom_some_of_member_consistent": [
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.identifies_sound": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.synthesis_equivalent_of_identifies": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.conjunction_not_primitive": [
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.conjunction_generated": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.conjunction_consistent": [
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.synthesis_returns_conjunction": [
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.computed_synthesis_correct_forall": [
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.conjunction_semantically_novel_from_every_primitive": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.allFalse_not_in_separating_inputs": [
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.separating_observations_identify_conjunction": [
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.conjunction_synthesized_semantically": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.ConstructiveRelationSynthesis.conjunction_synthesis_predicts_untrained_false": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      "exit_code": 0,
+      "private_helper_theorems": 0,
+      "audit_output_sha256": "98f95a2ac7849ea55360c45ccb55bc8bcdc4c35b4014fb54ddaa103ceba449f1"
+    },
+    {
+      "path": "formal/HSWMCorrelatedReliability.lean",
+      "sha256": "12babc171ab65fee19d09e0abff070bf7c9035fe4966552a0f80a5f76f7920d8",
+      "clean_compile_exit_code": 0,
+      "named_theorem_count": 9,
+      "theorems": {
+        "HSWM.CorrelatedReliability.majority_first_balance": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.CorrelatedReliability.majority_strict_gain_iff": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.CorrelatedReliability.correlated_improving_mass_events": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.CorrelatedReliability.correlated_improving_mass_has_strict_gain": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.CorrelatedReliability.correlated_harming_mass_has_negative_gain": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.CorrelatedReliability.perfectly_correlated_has_no_gain": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.CorrelatedReliability.actual_mass_not_far_below_ideal": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.CorrelatedReliability.actual_gain_survives_disagreement": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.CorrelatedReliability.actual_gain_survives_disagreement_and_cost": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      "exit_code": 0,
+      "private_helper_theorems": 3,
+      "audit_output_sha256": "abb571432cb29d3c96b801705cafa59ab718f9644562d59c6f42f707a22b9344"
+    },
+    {
+      "path": "formal/HSWMNoisyFeedback.lean",
+      "sha256": "113b7d1faf400dcf03965f8087c447ebef59409fa4d0be91607ec0a19cb83bcc",
+      "clean_compile_exit_code": 0,
+      "named_theorem_count": 6,
+      "theorems": {
+        "HSWM.NoisyFeedback.score_error_bounded_by_actual_corruption": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.NoisyFeedback.guarded_true_gain": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.NoisyFeedback.choose_nondecreases_true_score": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.NoisyFeedback.large_true_margin_forces_acceptance": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.NoisyFeedback.insufficient_observed_margin_preserves_current": [
+          "propext"
+        ],
+        "HSWM.NoisyFeedback.false_noise_allowance_can_accept_degradation": []
+      },
+      "exit_code": 0,
+      "private_helper_theorems": 0,
+      "audit_output_sha256": "b8dfdd62766e79b3b5fa0166db0a9107873688a9ab668cddd32b1416d90bbbd5"
+    },
+    {
+      "path": "formal/HSWMRecursiveLearningComposition.lean",
+      "sha256": "0319ab35928ba6db7db86c4d8be775d52ed49df417fd0610fc9712583f300011",
+      "clean_compile_exit_code": 0,
+      "named_theorem_count": 23,
+      "theorems": {
+        "HSWM.RecursiveLearningComposition.regroup_shape_flatten_append": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.regroup_shape_flatten": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.flatten_bracket": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.forward_flatten": [],
+        "HSWM.RecursiveLearningComposition.allTrue_append": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.recursiveAnd_flatten": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.recursiveAnd_is_forward": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.andLearn_eq_learn": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.flatten_learn": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.recursiveAnd_learn_flatten": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.regroup_preserves_forward": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.learn_projection": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.step_projection": [],
+        "HSWM.RecursiveLearningComposition.mistakeCount_projection": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.advance_flatten": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.run_flatten": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.joint_tree_mistake_bound": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.recursive_tree_mistake_bound": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.xor_joint_filter_keeps_only_correlated_pairs": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.xor_posterior_pairs_are_derived_from_joint_filter": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.xor_marginals_are_derived_not_supplied": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.recombining_xor_marginals_admits_invalid_pairs": [
+          "propext"
+        ],
+        "HSWM.RecursiveLearningComposition.invalid_pairs_are_absent_from_joint_xor_posterior": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      "exit_code": 0,
+      "private_helper_theorems": 0,
+      "audit_output_sha256": "d400c8a58aba1a507b8f85fc6d81584738d51e729f21715d63eb655760af3bc9"
+    },
+    {
+      "path": "formal/HSWMGeneratedLearningBridge.lean",
+      "sha256": "ef9e6ab81021e8dda1b995d99a9c466f65cf104c7dca4abfbd4d82d01e0a51f5",
+      "clean_compile_exit_code": 0,
+      "named_theorem_count": 17,
+      "theorems": {
+        "HSWM.GeneratedLearningBridge.graph_endpoint": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.graph_forward_is_generated_semantics": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.recursive_local_execution_matches_relation": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.computed_candidate_is_conjunction": [
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.generated_candidate_correct_for_every_input": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.reference_world_is_nonconstant": [
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.every_boolean_triple_has_mass_two": [
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.assessmentPopulation_mass_and_noise": [
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.observed_and_true_scores": [
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.computed_noisy_cost_guard_accepts_generated_graph": [
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.generated_noisy_cost_update_has_true_gain": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.same_population_majority_corrective_destructive_balance": [
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.majority_ties_baseline_on_same_world": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.generated_tree_executes_same_relation": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.generated_tree_learning_commutes": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.synthesized_recursive_tree_correct": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.GeneratedLearningBridge.noisy_selection_preserved_by_recursive_execution": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      "exit_code": 0,
+      "private_helper_theorems": 0,
+      "audit_output_sha256": "6b553e60fcb9b73baee0598c6926061824e6b49d4117cac7320f6e4e444da0fa"
+    }
+  ],
+  "named_theorems": 72,
+  "count_scope": "Public named theorems; transitive axioms cover their private proof helpers.",
+  "verification_program": {
+    "path": "_research/semantic_frontier_proof_v1/verify_lean.py",
+    "sha256": "92f91207d86af95ecd133cab3edd8e16e8915717e31bc22a7f34e5f21ab9117e"
+  },
+  "import_isolation": "Fresh temporary LEAN_PATH; dependencies rebuilt from exact recorded source with trust=0.",
+  "command": "python3 _research/semantic_frontier_proof_v1/verify_lean.py",
+  "new_dependencies_installed": false,
+  "claim_ceiling": "FINITE_GRAMMAR_SYNTHESIS_CORRELATED_RELIABILITY_NOISY_FEEDBACK_AND_RECURSIVE_LEARNING",
+  "empirical_paper_results_used_as_axioms": false,
+  "real_llm_refinement_proved": false,
+  "full_hswm_proved": false
+}

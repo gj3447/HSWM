@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?theorem ?status ?scope ?source ?sha256 WHERE {
+ ?t p:standard_graph_role "FORMAL_THEOREM"; p:theorem_symbol ?theorem;
+    p:status ?status; p:source_path ?source; p:source_sha256 ?sha256;
+    r:HAS_PROOF_SCOPE ?s.
+ ?s p:description ?scope.
+} ORDER BY ?theorem

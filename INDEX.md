@@ -1,5 +1,10 @@
 # HSWM — public repository index
 
+2026-09-14 [HSWM 기본 정체성](docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md)은
+**하나의 거대한 AI · 하이퍼그래프 신경망 · LLM 기본 계산 · Semantic Weight 작동**이라는
+사용자 재확인을 [정체성 KG](ontology/identity/hswm_core/HSWM_HYPERGRAPH_NEURAL_AI_IDENTITY_ONTOLOGY.v1.json)에
+출처·권위·기존 개념 참조로 연결한다. 현재 구현과 과학적 판정은 별도로 유지한다.
+
 2026-09-14 [LLM 의미 그래프 구현과 Lean4](docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md)는
 관계 의미·역할·예외·근거를 LLM 실행과 outcome-conditioned canonical revision에 연결한다.
 [검증 기록](_research/llm_semantic_graph_v1/README.md)은 34개 Lean 정리와 transport·영속성 검사를

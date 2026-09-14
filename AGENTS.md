@@ -6,6 +6,15 @@
   entrypoint. HSWM is one token-native LLM-function macro-neural network whose
   evolving hypergraph plays the roles of living harness, world model, and
   continuous learner; these are not separate subsystems.
+- For the user's basic HSWM concept, read
+  `docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md`
+  and `ontology/identity/hswm_core/HSWM_HYPERGRAPH_NEURAL_AI_IDENTITY_ONTOLOGY.v1.json`.
+  Preserve all four USER_PRIMARY identity statements together: one large AI,
+  hypergraph neural-network organization, LLM as the basic computation unit,
+  and operation through hypergraph Semantic Weight. LLM-function execution is
+  the computational core; provider/API call count is an implementation detail.
+  The detailed operational interpretation remains separately sourced, and
+  this identity reaffirmation does not change implementation evidence or CR/FCL status.
 - For fractal, multiscale, hypergraph, or HSWM-of-HSWMs work, next read
   `docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md` and its
   checked-in/live-KG projection

@@ -1,0 +1,72 @@
+{
+  "schema_version": "hswm-hypergraph-neural-ai-identity-validation/v1",
+  "recorded_on": "2026-09-14",
+  "status": "PASS_SOURCE_AUTHORITY_GRAPH_AND_DOCUMENT_CHECKS",
+  "claim_ceiling": "IDENTITY_RECORD_VALIDATION_NOT_IMPLEMENTATION_OR_EFFICACY",
+  "artifact_bindings": [
+    {
+      "path": "ontology/identity/hswm_core/HSWM_HYPERGRAPH_NEURAL_AI_IDENTITY_ONTOLOGY.v1.json",
+      "sha256": "1e22b92ff4df3f1ea2e56adcff15070a5adc9126cf3b0428a56bae0d49a30d88"
+    },
+    {
+      "path": "docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md",
+      "sha256": "007344028c946737fa53033cdaf43e14a2850c5d4c4e2ac4e72c940c0c487ce6"
+    },
+    {
+      "path": "docs/canon/artifacts/hswm_hypergraph_neural_ai_2026-09-14/source-map.v1.json",
+      "sha256": "9c3f709610ebb3cd3b081bb68d8f4f2f6d9a2c6e860409f3408156b31e83c424"
+    },
+    {
+      "path": "ontology/queries/hswm_hypergraph_neural_ai_2026-09-14/basic_identity.rq",
+      "sha256": "f1ab1d0bb6de55af863e1ebd16ea7bcf07194364767c47b8981055db10a4c912"
+    },
+    {
+      "path": "ontology/queries/hswm_hypergraph_neural_ai_2026-09-14/README.md",
+      "sha256": "81f39ab46e279a17bfa108e8d1fa67e50621d071452fa664942eb2068e1c6453"
+    }
+  ],
+  "counts": {
+    "nodes": 14,
+    "anchors": 9,
+    "relations": 30
+  },
+  "source_bound_anchors_verified": 9,
+  "all_nodes_reachable": true,
+  "user_primary_identity_facets": 4,
+  "secondary_operational_connections": 6,
+  "sparql_rows": 4,
+  "shacl": {
+    "conforms": true,
+    "results": [],
+    "claim_ceiling": "KG_BUNDLE_STRUCTURE_AND_BYTE_BINDING_ONLY_NOT_LIVE_KG_STATE_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+    "engine": "rdf-validate-shacl@0.6.5",
+    "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+  },
+  "relative_links_checked": 10,
+  "docs_checks": {
+    "tests_passed": 8,
+    "files_passed": 3,
+    "backend": "typescript-effect",
+    "feedback_source": "agent(codex)",
+    "selected_relation": "relation:docs-focused",
+    "plan_run_feedback_status_recorded_locally": true,
+    "public_raw_episodes": false,
+    "usefulness": "Markdown compatibility useful; source meanings, authority, anchors and RDF checks separately verified."
+  },
+  "portable_math": {
+    "display_fence_rewrites": 66,
+    "documents": 171,
+    "legacy_compatibility_rewrites": 6,
+    "math_fences_seen": 208,
+    "operatorname_rewrites": 36,
+    "status": "PORTABLE_MATH_COMPILED"
+  },
+  "new_runtime_or_lean_changes": false,
+  "scientific_status_changed": false,
+  "new_dependencies": [],
+  "live_kg_write": false,
+  "recheck_commands": [
+    "hswm-kg-bundle validate --source identity=ontology/identity/hswm_core/HSWM_HYPERGRAPH_NEURAL_AI_IDENTITY_ONTOLOGY.v1.json --profile v2 --shapes schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+    "hswm-kg-bundle query --source identity=ontology/identity/hswm_core/HSWM_HYPERGRAPH_NEURAL_AI_IDENTITY_ONTOLOGY.v1.json --profile v2 --query ontology/queries/hswm_hypergraph_neural_ai_2026-09-14/basic_identity.rq"
+  ]
+}

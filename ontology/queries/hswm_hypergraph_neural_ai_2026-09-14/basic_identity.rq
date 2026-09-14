@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?aspect ?relation ?meaning ?authority ?excerpt ?source ?sha256 WHERE {
+ VALUES ?relation { r:HAS_UNIFIED_AI_IDENTITY r:HAS_NETWORK_ARCHITECTURE r:HAS_BASIC_COMPUTATION_UNIT r:OPERATES_THROUGH }
+ ?definition p:standard_graph_role "USER_TARGET_IDENTITY_RESTATEMENT"; ?relation ?facet.
+ ?facet p:identity_facet ?aspect; p:name ?meaning; p:authority_class ?authority;
+   p:source_excerpt ?excerpt; p:source_path ?source; p:source_sha256 ?sha256.
+} ORDER BY ?aspect

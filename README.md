@@ -3,7 +3,7 @@
 **Hypergraph Semantic Weight Map**<br>
 관계를 실행하고, 결과로 관계를 바꾸는 토큰 기반 하이퍼그래프 신경망을 연구합니다.
 
-[지식 지도·개발 현황](docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md) · [연구 도구·표준 조사](docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md) · [그래프 구조](#graph-model) · [빠른 실행](#quick-start) · [개발 실사용](#development) · [근거와 판정](#evidence) · [전체 문서](INDEX.md)
+[Semantic Weight·이론 기반](docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md) · [지식 지도·개발 현황](docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md) · [연구 도구·표준 조사](docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md) · [그래프 구조](#graph-model) · [빠른 실행](#quick-start) · [개발 실사용](#development) · [근거와 판정](#evidence) · [전체 문서](INDEX.md)
 
 > **2026-09-07 · 실사용 가능한 로컬 적응 프로토타입**<br>
 > 실행 → 결과 기록 → 문맥 가중치·조건부 관계 갱신 → 다음 선택이 연결되어 있습니다.
@@ -33,6 +33,12 @@ S2S·F1·F3의 미연결 실행 경로와 연구 완료 조건을 구분해 기�
 목표 정체성과 현재 증거는 [헌법](docs/canon/HSWM_CONSTITUTION_2026-08-20.md),
 [프랙탈 합성 계약](docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md),
 [적응 연구 전략](docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)에 각각 연결합니다.
+
+Semantic Weight는 **역할·문맥에 따라 관계가 다음 전이를 어떻게 바꾸는지에 관한 학습 가능한 성향**입니다.
+현재 정본에서는 schema-approved transition-disposition candidate로 다루며, 이를 읽는 score와
+실제로 식별한 causal effect·그 근거를 구분합니다. [현재 이론 기반](docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md)은
+정의·가정·분석적 증명·반례를 기존 CR/FCL 의무와 연결합니다. 특히 요약된 상위 상태가
+현재 실행뿐 아니라 **다음 학습 갱신도 보존하는 조건**을 다룹니다. 전체 HSWM의 실현은 아직 미증명입니다.
 
 <a id="graph-model"></a>
 
@@ -210,6 +216,7 @@ flowchart LR
 | --- | --- |
 | 목표 → 정체성·철학 | [헌법](docs/canon/HSWM_CONSTITUTION_2026-08-20.md), [THE_WORLD_REMEMBERS.md](docs/canon/THE_WORLD_REMEMBERS.md) |
 | 합성 목표 → FCL-1..8 | [프랙탈 연결](docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md), [기계 온톨로지](ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json) |
+| Semantic Weight → 정의·명제·반례·기존 증명 의무 | [현재 이론 기반](docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md), [이론 KG](ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json), [기법 채택 조건 질의](ontology/queries/hswm_semantic_weight_theory_2026-09-14/README.md) |
 | 설계 → 조건·관계 계약 | [조건부 능력 계약](docs/research/HSWM_CONDITIONAL_CAPABILITY_CONTRACT_2026-09-07.md), [현재 적응 런타임](docs/research/HSWM_ADAPTIVE_HYPERGRAPH_RUNTIME_2026-09-07.md) |
 | 문헌 → 채택 후보·반증 조건 | [학습 이론 KG](docs/research/HSWM_FRONTIER_LEARNING_THEORY_KG_2026-09-07.md), [고정된 문헌 번들](ontology/identity/hswm_core/HSWM_FRONTIER_LEARNING_THEORY_ONTOLOGY.v1.json), [적대적 검토](docs/research/HSWM_ADVERSARIAL_REVIEW_AND_THEORY_ADOPTION_2026-09-07.md) |
 | 그래프 설계 → 출처·투영 계약 | [graph·loop engineering](docs/research/HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md), [2026-09-02 게시 스냅샷 v6](ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json) |
@@ -235,7 +242,8 @@ flowchart LR
 | [_research/](_research/) · [tests/](tests/) | 실행 profile, 연구 프로그램, 구현 검사 |
 | [results/](results/) · [evidence/](evidence/) · [receipts/](receipts/) | 측정과 검증 기록 |
 
-작업은 **작은 구현 → 필요한 검사 → 실사용 → 결과·피드백 → 수정**으로 진행합니다.
+HSWM 핵심 연구는 **의미 정의 → 명시적 가정 → 구성과 반례 → 증명 의무 → 필요한 관측 → 구현 선택**으로 진행합니다.
+구현 작업은 그 연구 조건에 연결해 필요한 검사·실사용·결과 피드백으로 수정합니다.
 실패한 기전은 그 근거를 남기고 교체하며, 중요한 연구 결과에만 별도의 content-addressed receipt를 둡니다.
 전체 문서와 과거 경로는 [INDEX.md](INDEX.md),
 이전 README의 상세 수식·연구 설명은 [3ac0026 시점의 원문](https://github.com/gj3447/HSWM/blob/3ac002655b5c93ed0a7e768d9cac79e216f2a154/README.md)에서 볼 수 있습니다.

@@ -1,5 +1,14 @@
 # HSWM — public repository index
 
+2026-09-14 [Semantic Weight의 이론적 기반](docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md)은
+역할·문맥별 전이 성향을 score·인과 효과·근거와 구분하고, 정확한 Step/Learn 요약의 필요충분조건,
+공유 원인·손실·역할 대칭 반례를 기존 CR-0..7/FCL-1..8에 연결한다.
+[이론 KG](ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json)의
+`sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14`가 현재 이론 탐색 진입점이다.
+[Transformer·수학 연구](docs/research/HSWM_TRANSFORMER_ARCHITECTURE_AND_MATH_2026-09-14.md)를
+구체적인 채택 전제와 미해결 의무로 연결하며, 과거 지식 지도는 source-cut 그대로 보존한다.
+분석적 유도와 연구 통합이며 새 Lean 검증·HSWM 효능·FCL 통과를 보고하지 않는다.
+
 2026-09-13 [다음 개발 · 표준 그래프 계획](docs/operations/HSWM_NEXT_DEVELOPMENT_GRAPH_PLAN_2026-09-13.md)은
 27개 작업의 책임·실제 의존성·완료 조건과 4개 미해결 결정을 소스에 결속한다.
 SHACL/SPARQL로 구조와 성급한 완료 표시를 검사하며 이식과 연구의 선행 관계를 구분한다.

@@ -1,0 +1,12 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT DISTINCT ?method ?operation ?unmet ?source ?obligation ?fcl WHERE {
+  ?connection p:standard_graph_role "METHOD_CONNECTION";
+              p:connection_id ?method;
+              p:usable_operation ?operation;
+              p:unmet_hswm_premise ?unmet;
+              r:HAS_SOURCE/p:source_url ?source;
+              r:ADDRESSES_EXISTING_OBLIGATION ?reference.
+  ?reference p:obligation_id ?obligation;
+             r:PRESERVES_TARGET_LAW ?fcl.
+} ORDER BY ?method ?source ?obligation ?fcl

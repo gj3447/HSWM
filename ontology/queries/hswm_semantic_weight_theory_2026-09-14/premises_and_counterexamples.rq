@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?proposition ?status ?assumption ?proof ?counterexample WHERE {
+  ?claim p:standard_graph_role "ANALYTIC_PROPOSITION";
+         p:proposition_id ?proposition; p:status ?status;
+         r:HAS_PROOF/p:description ?proof.
+  OPTIONAL { ?claim r:REQUIRES_ASSUMPTION/p:description ?assumption. }
+  OPTIONAL { ?claim r:HAS_COUNTEREXAMPLE/p:description ?counterexample. }
+} ORDER BY ?proposition ?assumption ?counterexample

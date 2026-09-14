@@ -35,6 +35,14 @@
 - For philosophy, research direction, or architecture work, establish the
   canonical role, separate target identity from current evidence, and state the
   conceptual delta before implementing. Do not default to code or tests.
+- For Semantic Weight or adoption of mathematical/AI theory, then read
+  `docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md`
+  and `ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json`.
+  Start with role/context-conditioned transition disposition, explicit assumptions,
+  constructions and counterexamples before choosing a backend. Keep scores,
+  causal estimands and evidence distinct. Connect work to the existing CR-0..7
+  and FCL-1..8; the new analytic propositions do not discharge those obligations.
+  This is the theory-reading workflow, not an approval gate or a new subsystem.
 - Do not map implementation to the retired fixed `H/W/A/F/Π` decomposition.
   Map it instead to schema-approved canonical atoms, exactly one
   schema-relative responsibility owner per atom, typed references,

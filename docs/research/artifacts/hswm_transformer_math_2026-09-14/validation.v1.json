@@ -1,0 +1,101 @@
+{
+  "schema_version": "hswm-transformer-architecture-math-validation/v1",
+  "checked_on": "2026-09-14",
+  "status": "PASS_WITH_DECLARED_SCOPE",
+  "claim_ceiling": "DOCUMENT_STRUCTURE_SOURCE_BINDING_AND_METHODOLOGICAL_REVIEW_NOT_EXPERIMENT_OR_HSWM_PROOF",
+  "artifact_bindings": [
+    {
+      "path": "docs/research/HSWM_TRANSFORMER_ARCHITECTURE_AND_MATH_2026-09-14.md",
+      "sha256": "b3c073de798d327448c5c719268305ee57f4b5cea70ed8285ac26c9768bf567f"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_transformer_math_2026-09-14/research.v1.json",
+      "sha256": "cfe4ba3a48f9c7a3a8740b4a2ec658fab1432ba175592991b927d3b1cbed3d59"
+    },
+    {
+      "path": "ontology/development/HSWM_TRANSFORMER_ARCHITECTURE_AND_MATH_2026-09-14.v1.json",
+      "sha256": "9122181221e466361052cfe63012d2a988d50c3d8b8dfaf388d54dbb744f9a75"
+    }
+  ],
+  "checks": {
+    "source_graph_integrity": {
+      "status": "PASS",
+      "artifact_bindings_checked": 10,
+      "unique_records": 30,
+      "nodes": 49,
+      "anchors_resolved": 5,
+      "relations": 111,
+      "all_source_authorities_and_read_depths_recorded": true,
+      "hswm_connections_remain_untested": true
+    },
+    "native_shacl": {
+      "status": "PASS",
+      "conforms": true,
+      "results": [],
+      "engine": "rdf-validate-shacl@0.6.5",
+      "shapes": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle validate --source transformer-math=ontology/development/HSWM_TRANSFORMER_ARCHITECTURE_AND_MATH_2026-09-14.v1.json --profile v2 --shapes schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+      "scope": "Existing positive structural profile; not a new official conformance or semantic-truth qualification."
+    },
+    "rdf_projection": {
+      "status": "PASS",
+      "profile": "hswm-kg-bundle-rdf-projection/v2",
+      "dataset_sha256": "08e3b5029ce8322e6acd9383574b1982b0624dcded4b45d6e718b800102179c8",
+      "dataset_byte_length": 860138,
+      "storage": "Transient local projection; reproducible from committed bundle. No live KG write.",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle project --source transformer-math=ontology/development/HSWM_TRANSFORMER_ARCHITECTURE_AND_MATH_2026-09-14.v1.json --profile v2 --output-dir NEW_EMPTY_DIRECTORY"
+    },
+    "sparql_coverage": {
+      "status": "PASS",
+      "engine": "@comunica/query-sparql@5.3.0",
+      "query": "PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>\nPREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>\nSELECT ?family ?method ?theory ?gap WHERE {\n ?f p:standard_graph_role \"RESEARCH_TECHNIQUE_FAMILY\"; p:name ?family;\n    r:HAS_SOURCE/p:source_id ?method.\n OPTIONAL { ?f r:HAS_MATHEMATICAL_CONNECTION/p:source_id ?theory. }\n OPTIONAL { ?f r:INFORMS_HYPOTHESIS/r:ADDRESSES ?gap. }\n} ORDER BY ?family ?method ?theory ?gap\n",
+      "row_count": 56,
+      "distinct": {
+        "family": 14,
+        "method": 22,
+        "theory": 8,
+        "gap": 3
+      }
+    },
+    "portable_markdown": {
+      "status": "PASS",
+      "command": "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology",
+      "display_fence_rewrites": 66,
+      "documents": 162,
+      "legacy_compatibility_rewrites": 6,
+      "math_fences_seen": 192,
+      "operatorname_rewrites": 36,
+      "scope": "Derived portable projections only; historical bound bytes preserved."
+    },
+    "hswm_development_workflow": {
+      "status": "PLAN_RUN_FEEDBACK_STATUS_RECORDED_LOCALLY",
+      "backend": "TypeScript/Effect; existing Node 24.13.0",
+      "selected_relation": "relation:docs-focused",
+      "check_result": "3 files / 8 existing documentation tests passed",
+      "feedback_source": "agent(codex):useful for portable Markdown regression and derived projection checks; separate source/KG/math review required; passing checks do not establish HSWM efficacy or causal credit",
+      "boundary": "Private local episodes not included; agent usefulness is distinct from user feedback."
+    },
+    "adversarial_mathematical_review": {
+      "status": "FINDINGS_ADDRESSED",
+      "scope": [
+        "Attention/Hopfield dimensions and mask domain",
+        "SVD singular-value definition and Frobenius scope",
+        "Delta gradient sign/dimensions and positive step size",
+        "Kalman Gaussian independence/invertibility conditions",
+        "MDL code-class and multi-environment identification assumptions",
+        "Labelled hyperedge incidence versus derived pairwise operator",
+        "Exact versus approximate doubly stochastic mixing",
+        "Allowed intervention maps and pushforward equality",
+        "Small-gain assumptions versus learning preservation",
+        "No whole-model stability claim from constrained residual mixing"
+      ]
+    }
+  },
+  "limitations": [
+    "Selective literature review, not an exhaustive survey or empirical adoption ranking.",
+    "Some sources were read at abstract/metadata level; per-record depth is explicit.",
+    "Recent preprints were not independently reproduced; metadata-latest versions may differ from reviewed full text.",
+    "No runtime implementation, training, package/model install, new Lean proof or scientific support promotion.",
+    "The native KG projection is a bounded structural exchange; no live KG ingestion or learning path executed."
+  ]
+}

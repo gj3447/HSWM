@@ -1,0 +1,922 @@
+{
+  "schema_version": "hswm-transformer-architecture-math-research/v1",
+  "source_base_commit": "af083c5be71fb29335dfe02e6fea89e225b04f7a",
+  "source_accessed_on": "2026-09-14",
+  "record_count": 30,
+  "authority_boundary": "All records are external methods/theory. Their HSWM connections are SECONDARY_AI hypotheses and do not support or prove HSWM identity, cognition, causal learning, or efficacy.",
+  "records": [
+    {
+      "id": "gqa_2023",
+      "title": "GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints",
+      "primary_urls": [
+        "https://aclanthology.org/2023.emnlp-main.298/"
+      ],
+      "version_status": "EMNLP 2023, December; peer-reviewed.",
+      "read_depth": "ACL primary abstract/bibliographic record; equations are standard GQA construction.",
+      "mechanism": "H_q query heads share H_kv grouped K,V heads, with 1<H_kv<H_q.",
+      "state_lifetime": "Per-request KV cache; grouped K,V shared at decode.",
+      "mathematical_assumptions": "Each query head retains softmax(Q_h K_g^T/sqrt(d))V_g; reducing K,V-head diversity trades capacity for bandwidth.",
+      "limitations": "Speed/quality trade-off is architecture/checkpoint dependent; grouping is not relation learning.",
+      "access_requirement": "MODEL_INTERNALS_AND_SERVING_RUNTIME",
+      "hswm_hypothesis": "Share immutable evidence representations only when role/provenance distinctions remain explicit; test against full retrieval.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "flashattention2_2023",
+      "title": "FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning",
+      "primary_urls": [
+        "https://arxiv.org/abs/2307.08691"
+      ],
+      "version_status": "arXiv:2307.08691v1, 2023-07-17.",
+      "read_depth": "Primary abstract/method claims.",
+      "mechanism": "Exact tiled online-softmax attention with improved thread-block and warp partitioning.",
+      "state_lifetime": "Transient SRAM/online normalization state; no learned state changes.",
+      "mathematical_assumptions": "Computes dense quadratic softmax attention without materializing n-by-n scores in HBM.",
+      "limitations": "Hardware/kernel dependent; no subquadratic FLOPs, causal inference, or semantic guarantee.",
+      "access_requirement": "ACCELERATOR_KERNEL_RUNTIME",
+      "hswm_hypothesis": "Optimize execution only under an unchanged evidence/read semantics contract.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "flashattention4_2026",
+      "title": "FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling",
+      "primary_urls": [
+        "https://arxiv.org/abs/2603.05451",
+        "https://arxiv.org/html/2603.05451v1",
+        "https://tridao.me/blog/2026/flash4/"
+      ],
+      "version_status": "arXiv:2603.05451v1, 2026-03-05; author method article.",
+      "read_depth": "Primary algorithm HTML and official article: approximation, rescaling, 2-CTA, benchmarks.",
+      "mechanism": "Blackwell async-MMA/TMEM pipeline; part of exp2 uses cubic FMA approximation after range reduction; final normalization uses true statistics.",
+      "state_lifetime": "Transient numerical/tile state only; model topology and quadratic attention remain.",
+      "mathematical_assumptions": "Approximate exponent path means not bitwise-identical output; benefits depend on B200 BF16 schedule and libraries.",
+      "limitations": "Not subquadratic; B200-specific; later cuDNN incorporates similar optimizations.",
+      "access_requirement": "BLACKWELL_KERNEL_RUNTIME_CUTE_DSL",
+      "hswm_hypothesis": "Record numerical/device/determinism contracts for approximating performance paths; never equate speed with learning.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "deepseek_v3_mla_moe_2025",
+      "title": "DeepSeek-V3 Technical Report",
+      "primary_urls": [
+        "https://arxiv.org/abs/2412.19437",
+        "https://arxiv.org/html/2412.19437v2",
+        "https://github.com/deepseek-ai/DeepSeek-V3"
+      ],
+      "version_status": "First 2024-12-27; reviewed arXiv v2 2025-02-18; technical report.",
+      "read_depth": "Primary MLA, MoE/balancing and ablation sections.",
+      "mechanism": "Cache latent cKV plus RoPE key; shared FFN experts plus top-K routed experts; utilization bias affects selection but not selected output weights.",
+      "state_lifetime": "KV per request; router biases update during training; weights persist only through training.",
+      "mathematical_assumptions": "Low-rank reconstruction and top-K affinity routing preserve adequate task behavior under author stack.",
+      "limitations": "Load balance is not semantic specialization; author-reported large-scale evidence, complementary sequence loss remains.",
+      "access_requirement": "MODEL_WEIGHTS_KV_ROUTER_TRAINING",
+      "hswm_hypothesis": "Separate capacity/utilization controller from outcome-based relation credit and audit both.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "native_sparse_attention_2025",
+      "title": "Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention",
+      "primary_urls": [
+        "https://arxiv.org/abs/2502.11089",
+        "https://arxiv.org/html/2502.11089v1"
+      ],
+      "version_status": "Metadata latest v2 2025-02-27; reviewed content v1 2025-02-16.",
+      "read_depth": "v1 method, kernel, experiments and efficiency sections.",
+      "mechanism": "Gated sum of compressed blocks, top-n selected contiguous blocks and exact local window attention.",
+      "state_lifetime": "Current-sequence K,V retained as summaries, selected raw blocks and window.",
+      "mathematical_assumptions": "N_t<<t and spatially continuous relevance; GQA group selection enables cache sharing.",
+      "limitations": "Sparse selection can omit decisive evidence; custom kernels/native sparse training required; v2 full text not reviewed.",
+      "access_requirement": "MODEL_INTERNALS_PRETRAINING_GPU_KERNELS",
+      "hswm_hypothesis": "Keep exact recent evidence, provenance-preserving summaries and explicit omissions/UNKNOWN for selected history.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "mhc_2026_revision",
+      "title": "mHC: Manifold-Constrained Hyper-Connections",
+      "primary_urls": [
+        "https://arxiv.org/abs/2512.24880",
+        "https://arxiv.org/html/2512.24880v1"
+      ],
+      "version_status": "Metadata latest v2 2026-01-05; reviewed content v1 2025-12-31.",
+      "read_depth": "v1 preliminary, method, infrastructure and 27B evaluations.",
+      "mechanism": "n residual streams; Sinkhorn-Knopp projects residual mixing to doubly stochastic matrices.",
+      "state_lifetime": "n per-layer residual streams/mixing activations within forward/backward passes.",
+      "mathematical_assumptions": "Exact nonnegative matrices with row/column sums one are closed under products; finite Sinkhorn iterations approximate this condition. These transport properties do not prove whole-model stability.",
+      "limitations": "Does not preserve arbitrary information, exceptions or calibrated uncertainty; overhead needs specialized fused infrastructure; v2 full text not reviewed.",
+      "access_requirement": "MODEL_INTERNALS_TRAINING_KERNELS",
+      "hswm_hypothesis": "Use explicit normalized composition weights only with a stated invariant and preserve child records outside aggregate weights.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "attention_residuals_2026",
+      "title": "Attention Residuals",
+      "primary_urls": [
+        "https://arxiv.org/abs/2603.15031",
+        "https://arxiv.org/abs/2603.15031v1",
+        "https://github.com/MoonshotAI/Attention-Residuals"
+      ],
+      "version_status": "arXiv v1, 2026-03-16; technical preprint.",
+      "read_depth": "Primary abstract/version record; HTML rendering incomplete, so no unverified equation detail.",
+      "mechanism": "Input-dependent softmax attention over earlier depth representations; block variant reduces stored depth sources.",
+      "state_lifetime": "Depth states/block summaries during model evaluation or training.",
+      "mathematical_assumptions": "Depth selection is learned from activations and reported to mitigate PreNorm dilution.",
+      "limitations": "Single-team report, memory/communication cost and block omission; no causal-credit result.",
+      "access_requirement": "MODEL_INTERNALS_TRAINING",
+      "hswm_hypothesis": "Retrieve typed lower-level exceptions conditionally with an auditable readset, never a uniform success average.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "mixture_of_layers_2026",
+      "title": "Mixture of Layers with Hybrid Attention",
+      "primary_urls": [
+        "https://arxiv.org/abs/2605.09516",
+        "https://arxiv.org/html/2605.09516v1"
+      ],
+      "version_status": "arXiv v1, 2026-05-10; preprint.",
+      "read_depth": "Primary architecture, controls, evaluations and hardware sections.",
+      "mechanism": "Top-k routes through down/projected thin Transformer blocks; an always-on softmax block preserves global coverage, routed blocks use DeltaNet.",
+      "state_lifetime": "Per-token selected block activations and shared-path context.",
+      "mathematical_assumptions": "Sparse block routes need a shared global path; performance compares iso-active and iso-total budgets differently.",
+      "limitations": "Training slower in reported 1.3B setting; hardware/length crossover varies; sparse use is not semantic decomposition.",
+      "access_requirement": "MODEL_INTERNALS_ROUTER_TRAINING",
+      "hswm_hypothesis": "Test common evidence path plus conditional candidate paths with shuffled/no-common-path controls.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "mamba-selective-ssm",
+      "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+      "primary_urls": [
+        "https://arxiv.org/abs/2312.00752",
+        "https://arxiv.org/html/2312.00752v2"
+      ],
+      "version_status": "First 2023-12-01; reviewed v2 2024-05-31; COLM 2024.",
+      "read_depth": "v2 selective-SSM algorithm/theorem/hardware discussion.",
+      "mechanism": "h_t=Abar(x_t)h_(t-1)+Bbar(x_t)x_t with input-dependent selection.",
+      "state_lifetime": "Fixed recurrent state resets per sequence; base weights unchanged at deployment.",
+      "mathematical_assumptions": "Finite state compresses history and learned gates determine retention.",
+      "limitations": "No exact arbitrary recall, truth or causal credit guarantee.",
+      "access_requirement": "MODEL_INTERNALS",
+      "hswm_hypothesis": "Compare bounded episode state against exact retrieval on withheld exceptions.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "mamba-3-state-space-principles",
+      "title": "Mamba-3: Improved Sequence Modeling using State Space Principles",
+      "primary_urls": [
+        "https://arxiv.org/abs/2603.15569",
+        "https://arxiv.org/html/2603.15569v1",
+        "https://openreview.net/forum?id=HwCvaJOiCj",
+        "https://pli.princeton.edu/blog/2026/mamba-3-improved-sequence-modeling-using-state-space-principles"
+      ],
+      "version_status": "v1 2026-03-16; ICLR 2026 per primary release.",
+      "read_depth": "Primary method/results/latency and author release.",
+      "mechanism": "Expressive SSM recurrence with complex RoPE-like state rotations and MIMO channels.",
+      "state_lifetime": "Fixed recurrent episode state.",
+      "mathematical_assumptions": "MIMO improves representation/arithmetic intensity while keeping recurrent decode design.",
+      "limitations": "Higher prefill cost and weaker unstructured retrieval than Transformer reported; no durable learning.",
+      "access_requirement": "SELF_HOSTED_MODEL_KERNELS",
+      "hswm_hypothesis": "Use only as a self-hosted sequence-mixer baseline under matched exception-retention tests.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "ttt-expressive-hidden-states",
+      "title": "Learning to (Learn at Test Time): RNNs with Expressive Hidden States",
+      "primary_urls": [
+        "https://arxiv.org/abs/2407.04620",
+        "https://arxiv.org/html/2407.04620v4"
+      ],
+      "version_status": "First 2024-07-05; reviewed arXiv v4 2025-08-31; venue not independently audited in this pass.",
+      "read_depth": "v4 inner-loss, parallelization, limitations and experiments.",
+      "mechanism": "Fast weights update W_t=W_(t-1)-eta grad ell(W_(t-1);x_t).",
+      "state_lifetime": "Fast weights per sequence; outer weights update only in training.",
+      "mathematical_assumptions": "Learned self-supervised inner objective provides useful online compression.",
+      "limitations": "Memory-I/O cost; inner adaptation is not persistent factual or causal learning.",
+      "access_requirement": "DIFFERENTIABLE_MODEL_INTERNALS",
+      "hswm_hypothesis": "Keep resettable predictive adapters distinct from canonical relation admission.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "titans-learning-to-memorize",
+      "title": "Titans: Learning to Memorize at Test Time",
+      "primary_urls": [
+        "https://arxiv.org/abs/2501.00663",
+        "https://arxiv.org/html/2501.00663v1"
+      ],
+      "version_status": "v1 2024-12-31; preprint.",
+      "read_depth": "v1 memory objective/update/forgetting and experiments.",
+      "mechanism": "Neural memory updates association loss with surprise/momentum and forgetting gate.",
+      "state_lifetime": "Fast memory changes within sequence; persistent memory means trained parameters.",
+      "mathematical_assumptions": "Gradient surprise ranks what to write/forget.",
+      "limitations": "Surprise can be noise and predictable evidence can be missed; no auditability or causal credit.",
+      "access_requirement": "EDITABLE_NEURAL_MEMORY",
+      "hswm_hypothesis": "Use residuals only to prioritize proposals, then require independent outcome evidence.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "nested-learning-hope",
+      "title": "Nested Learning: The Illusion of Deep Learning Architecture",
+      "primary_urls": [
+        "https://arxiv.org/abs/2512.24695",
+        "https://arxiv.org/html/2512.24695v1",
+        "https://research.google/blog/introducing-nested-learning-a-new-ml-paradigm-for-continual-learning/"
+      ],
+      "version_status": "v1 2025-12-31; paper reports NeurIPS 2025 version.",
+      "read_depth": "Primary CMS/self-reference/experiments plus official explanation.",
+      "mechanism": "Multi-rate memory components update at different periods; Hope combines fast self-modifying memory with CMS.",
+      "state_lifetime": "Explicit high-frequency temporary and slower persistent parameter horizons.",
+      "mathematical_assumptions": "Nested update schedules help tasks evaluated by authors.",
+      "limitations": "No provenance, causal estimator, or exception-preservation guarantee; feedback can amplify errors.",
+      "access_requirement": "MODEL_TRAINING_INTERNALS",
+      "hswm_hypothesis": "Declare reset, persistence and update conditions for each actual state; compare update timescales without imposing a fixed HSWM subsystem decomposition.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "gated-deltanet-2",
+      "title": "Gated DeltaNet-2: Decoupling Erase and Write in Linear Attention",
+      "primary_urls": [
+        "https://arxiv.org/abs/2605.22791",
+        "https://arxiv.org/html/2605.22791v1"
+      ],
+      "version_status": "v1 2026-05-21; preprint.",
+      "read_depth": "Primary delta equations, gates, fast-weight and results sections.",
+      "mechanism": "Decouples decay, channel erase and write in delta-rule associative state S.",
+      "state_lifetime": "Fast association matrix evolves tokenwise then resets per sequence.",
+      "mathematical_assumptions": "Online least-squares-like update learns useful key/value associations.",
+      "limitations": "Pre-future relevance gating and better recall do not establish semantic validity/causal credit.",
+      "access_requirement": "CUSTOM_LINEAR_ATTENTION_KERNEL",
+      "hswm_hypothesis": "Compare separately typed memory write, retention and correction candidates while keeping their provenance and outcome-bound revision explicit.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "kalman-delta-networks",
+      "title": "Kalman Delta Networks: Uncertainty-aware Associative Memory",
+      "primary_urls": [
+        "https://arxiv.org/abs/2609.07816",
+        "https://arxiv.org/html/2609.07816v1"
+      ],
+      "version_status": "v1 2026-09-07; very recent preprint.",
+      "read_depth": "Primary linear-Gaussian assumptions, diagonal approximation and protocol.",
+      "mechanism": "Associative mean state and covariance use Kalman-style gain; frozen uncertainty recovers delta rule.",
+      "state_lifetime": "Fast mean/covariance per head within sequence.",
+      "mathematical_assumptions": "Optimality is conditional on linear-Gaussian/independence model; diagonal scan is approximation.",
+      "limitations": "Token-derived noise is not claim reliability; no replication or calibrated science uncertainty.",
+      "access_requirement": "MODEL_INTERNALS_CUSTOM_KERNELS",
+      "hswm_hypothesis": "Store prediction uncertainty, observation reliability and drift separately; validate coverage prospectively.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "MF01_MODERN_HOPFIELD_ATTENTION",
+      "title": "Hopfield Networks is All You Need",
+      "primary_urls": [
+        "https://arxiv.org/abs/2008.02217",
+        "https://arxiv.org/abs/2008.02217v3"
+      ],
+      "version_status": "arXiv v3 2021-04-28; first 2020-07-16.",
+      "read_depth": "Primary derivation and submission history.",
+      "mechanism": "Modern Hopfield retrieval xi+=R softmax(beta R^T xi), algebraically matching projected attention.",
+      "state_lifetime": "NOT_APPLICABLE_THEORY",
+      "mathematical_assumptions": "Energy/retrieval results require its continuous-state construction and stated pattern conditions.",
+      "limitations": "Keys are not world entities and attention is not causal truth.",
+      "access_requirement": "THEORY_OR_MODEL_INTERNALS",
+      "hswm_hypothesis": "Log query/readset/distribution/abstention as retrieval evidence, then test against outcomes.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "MATHEMATICAL_CONNECTION",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "MF02_ECKART_YOUNG_LOW_RANK",
+      "title": "The Approximation of One Matrix by Another of Lower Rank",
+      "primary_urls": [
+        "https://doi.org/10.1007/BF02288367"
+      ],
+      "version_status": "Psychometrika 1936 original article.",
+      "read_depth": "Original-result statement and bibliographic record.",
+      "mechanism": "Truncated SVD A_r minimizes Frobenius reconstruction error among rank-r matrices.",
+      "state_lifetime": "NOT_APPLICABLE_THEORY",
+      "mathematical_assumptions": "A=U diag(sigma)V^T; uniqueness at cutoff needs sigma_r>sigma_(r+1).",
+      "limitations": "Numerical reconstruction says nothing about task loss, causal validity or preserved exceptions.",
+      "access_requirement": "THEORY",
+      "hswm_hypothesis": "Factorize only derived read models while retaining immutable full lineage and reporting rank/held-out loss.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "MATHEMATICAL_CONNECTION",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "MF03_ROBBINS_MONRO",
+      "title": "A Stochastic Approximation Method",
+      "primary_urls": [
+        "https://www.columbia.edu/~ww2040/8100F16/RM51.pdf"
+      ],
+      "version_status": "Annals of Mathematical Statistics 1951.",
+      "read_depth": "Full original 8-page paper.",
+      "mechanism": "x_(n+1)=x_n+a_n(alpha-Y_n) seeks a conditional-mean root. The original result is scoped mean-square/probability convergence under its assumptions.",
+      "state_lifetime": "NOT_APPLICABLE_THEORY",
+      "mathematical_assumptions": "Original bounded-observation, conditional-mean/root regularity hypotheses and sum a_n=infinity, sum a_n^2<infinity; step-size conditions alone are insufficient.",
+      "limitations": "Binary reward rarely establishes these conditions or causal relation attribution.",
+      "access_requirement": "THEORY",
+      "hswm_hypothesis": "Use only after declared estimand/outcome/sampling and log reversible bounded updates.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "MATHEMATICAL_CONNECTION",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "MF04_ONLINE_CONVEX_REGRET",
+      "title": "Introduction to Online Convex Optimization",
+      "primary_urls": [
+        "https://mitpress.mit.edu/9780262046985/introduction-to-online-convex-optimization/"
+      ],
+      "version_status": "MIT Press second edition, 2022.",
+      "read_depth": "Publisher/open-edition provenance and standard projected-OGD theorem.",
+      "mechanism": "Projected OGD attains O(DG sqrt(T)) regret to best fixed decision.",
+      "state_lifetime": "NOT_APPLICABLE_THEORY",
+      "mathematical_assumptions": "Convex losses on a bounded convex domain, bounded subgradients, and the stated projected-OGD step-size choice.",
+      "limitations": "No absolute accuracy, nonconvex LLM convergence, causal identification or relation discovery.",
+      "access_requirement": "THEORY",
+      "hswm_hypothesis": "Track regret against a declared fixed comparator family under a frozen study contract; this is distinct from causal credit.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "MATHEMATICAL_CONNECTION",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "MF05_KALMAN_BAYESIAN_FILTERING",
+      "title": "A New Approach to Linear Filtering and Prediction Problems",
+      "primary_urls": [
+        "https://doi.org/10.1115/1.3662552"
+      ],
+      "version_status": "ASME 1960 original article.",
+      "read_depth": "Original bibliographic abstract; standard linear-Gaussian recursion scoped.",
+      "mechanism": "Kalman gain updates posterior state mean/covariance from linear noisy observation.",
+      "state_lifetime": "NOT_APPLICABLE_THEORY",
+      "mathematical_assumptions": "For exact Gaussian posterior: Gaussian prior, independent zero-mean Gaussian observation noise, stated linear observation model and invertible innovation covariance.",
+      "limitations": "LLM confidence is not covariance; drift/selective observations invalidate interpretation.",
+      "access_requirement": "THEORY",
+      "hswm_hypothesis": "Maintain calibrated intervals, observation provenance and UNKNOWN/OOD rather than scalar confidence.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "MATHEMATICAL_CONNECTION",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "MF06_MDL_VS_CAUSAL_IDENTIFIABILITY",
+      "title": "Elements of Causal Inference / Algorithmic Markov Condition",
+      "primary_urls": [
+        "https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/",
+        "https://arxiv.org/abs/0804.3678",
+        "https://web.math.ku.dk/~peters/jonas_files/ElementsOfCausalInference.pdf"
+      ],
+      "version_status": "Book 2017; algorithmic-causality paper 2010.",
+      "read_depth": "Book causal Markov/faithfulness/equivalence sections and primary abstract.",
+      "mechanism": "MDL minimizes L(M)+L(D|M); DAG factorization can retain observational equivalence.",
+      "state_lifetime": "NOT_APPLICABLE_THEORY",
+      "mathematical_assumptions": "MDL needs a declared valid code class; causal direction additionally needs identifying structural or intervention assumptions. Environment changes alone do not identify direction.",
+      "limitations": "Shortest graph/program is not automatically causal; Kolmogorov complexity is uncomputable generally.",
+      "access_requirement": "THEORY",
+      "hswm_hypothesis": "Rank candidates by explicit code, then require outcome/intervention evidence for admission.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "MATHEMATICAL_CONNECTION",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "MF07_HYPERGRAPH_SPECTRAL_REGULARIZATION",
+      "title": "Learning with Hypergraphs: Clustering, Classification, and Embedding",
+      "primary_urls": [
+        "https://papers.nips.cc/paper/2006/file/dff8e9c2ac33381546d96deea9922999-Paper.pdf"
+      ],
+      "version_status": "NeurIPS 2006.",
+      "read_depth": "Full official paper/incidence and Laplacian construction.",
+      "mechanism": "Incidence H and L=I-Dv^-1/2 H W De^-1 H^T Dv^-1/2 give spectral smoothness.",
+      "state_lifetime": "NOT_APPLICABLE_THEORY",
+      "mathematical_assumptions": "Undirected weighted co-membership supports its transductive spectral objective.",
+      "limitations": "Labelled incidence H can retain hyperedge identity; derived pairwise L can collapse different higher-order structures and does not encode directed roles or causal counterfactuals.",
+      "access_requirement": "THEORY",
+      "hswm_hypothesis": "Keep typed directed hyperedges canonical; use spectral forms only as derived retrieval aids.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "MATHEMATICAL_CONNECTION",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "MF08_COMPOSITION_CAUSAL_ABSTRACTION_AND_STABILITY",
+      "title": "Causal Consistency of Structural Equation Models / Small-Gain Theorem",
+      "primary_urls": [
+        "https://arxiv.org/abs/1707.00819",
+        "https://web.ece.ucsb.edu/~teel/ECE236/jiang-teel-praly-1994"
+      ],
+      "version_status": "UAI 2017 and journal 1994.",
+      "read_depth": "Causal definitions/theorems and full small-gain paper.",
+      "mechanism": "Intervention-commuting maps define abstraction; gamma12 o gamma21(s)<s gives a separate feedback stability condition.",
+      "state_lifetime": "NOT_APPLICABLE_THEORY",
+      "mathematical_assumptions": "Exact transformation requires state and order-preserving surjective intervention maps and pushforward equality for every allowed intervention. Separately, small gain needs component ISS and well-posed interconnection assumptions.",
+      "limitations": "Neither proves learner retention, uncertainty calibration or macro-to-child credit.",
+      "access_requirement": "THEORY",
+      "hswm_hypothesis": "Require intervention, exception, uncertainty and credit contracts; test each claim separately.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "MATHEMATICAL_CONNECTION",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "transformer-2017",
+      "title": "Attention Is All You Need",
+      "primary_urls": [
+        "https://arxiv.org/html/1706.03762v7"
+      ],
+      "version_status": "First 2017-06-12; reviewed v7 2023-08-02.",
+      "read_depth": "Primary architecture/attention/FFN/position sections.",
+      "mechanism": "Masked scaled dot-product multihead attention plus residual normalized positionwise FFN.",
+      "state_lifetime": "Activations/KV per forward request; weights change only under explicit training.",
+      "mathematical_assumptions": "A(Q,K,V)=softmax(QK^T/sqrt(d)+mask)V is dense quadratic at fixed width.",
+      "limitations": "Attention coefficients are not truth probabilities/intervention effects.",
+      "access_requirement": "MODEL_INTERNALS",
+      "hswm_hypothesis": "Keep routing scores distinct from causal credit; compare equal-information baselines.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "rope",
+      "title": "RoFormer: Enhanced Transformer with Rotary Position Embedding",
+      "primary_urls": [
+        "https://arxiv.org/html/2104.09864v5"
+      ],
+      "version_status": "First 2021-04-20; reviewed v5 2023-11-08.",
+      "read_depth": "Primary abstract and mathematical setup.",
+      "mechanism": "Position-dependent block rotations make Q/K inner products relative-position sensitive.",
+      "state_lifetime": "Per-token positional transformation.",
+      "mathematical_assumptions": "(R_m q)^T(R_n k)=q^T R_(n-m)k for shared rotation family.",
+      "limitations": "No guarantee of arbitrary long retrieval; positions are not semantic roles/causal time.",
+      "access_requirement": "MODEL_INTERNALS",
+      "hswm_hypothesis": "Preserve ordering/time explicitly but do not identify it with relation roles.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "rasp",
+      "title": "Thinking Like Transformers",
+      "primary_urls": [
+        "https://proceedings.mlr.press/v139/weiss21a.html"
+      ],
+      "version_status": "ICML 2021, PMLR 139.",
+      "read_depth": "Publisher abstract and primary programming-model passages.",
+      "mechanism": "RASP sequence-program primitives map information flow to encoder Transformer constructions.",
+      "state_lifetime": "NOT_APPLICABLE_THEORY",
+      "mathematical_assumptions": "An expressibility construction differs logically from finite-budget optimizer learnability.",
+      "limitations": "No generalization, optimization, persistent learning or efficacy proof.",
+      "access_requirement": "THEORY_AND_REFERENCE_PROGRAMS",
+      "hswm_hypothesis": "Use executable witness tasks and same-construction refinement, not universality claims.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "recurrent-transformer",
+      "title": "The Recurrent Transformer: Greater Effective Depth and Efficient Decoding",
+      "primary_urls": [
+        "https://arxiv.org/html/2604.21215v1",
+        "https://github.com/geniucos/recurrent-transformer"
+      ],
+      "version_status": "arXiv v1 2026-04-23; preprint.",
+      "read_depth": "Primary method, representational, I/O and experiment sections.",
+      "mechanism": "Persistent KV from updated layer output; temporary input KV prevents circularity at current position.",
+      "state_lifetime": "Layer output-derived KV persists across later positions in sequence.",
+      "mathematical_assumptions": "Reported Theta(N log N) is tiled HBM traffic, not universal arithmetic reduction.",
+      "limitations": "150M/300M scope and width-overhead emulation; no claim optimizer discovers recurrence.",
+      "access_requirement": "MODEL_INTERNALS_TRAINING",
+      "hswm_hypothesis": "Test explicit state reuse under matched resource and new-composition controls.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "twotower",
+      "title": "Nemotron-Labs-TwoTower: Diffusion Language Modeling with Pretrained Autoregressive Context",
+      "primary_urls": [
+        "https://arxiv.org/html/2606.26493v2"
+      ],
+      "version_status": "First 2026-06-25; reviewed v2 2026-06-29; author technical preprint.",
+      "read_depth": "Primary architecture, algorithms, loss/operating point.",
+      "mechanism": "Frozen AR context tower caches prefix representations for trainable masked-diffusion block denoiser.",
+      "state_lifetime": "AR cached prefix and iterative block denoising state per generation.",
+      "mathematical_assumptions": "Block conditional generation uses declared confidence threshold/step budget; implementation loss omits theoretical 1/t weighting.",
+      "limitations": "Additional tower/training/hardware costs; denoising is neither proof nor persistent relation learning.",
+      "access_requirement": "MODEL_INTERNALS_AND_TRAINING",
+      "hswm_hypothesis": "Candidate parallel-revision backend only after outcome verification remains external and fixed.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "r1-grpo",
+      "title": "DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning",
+      "primary_urls": [
+        "https://arxiv.org/html/2501.12948v2"
+      ],
+      "version_status": "First 2025-01-22; reviewed v2 2026-01-04.",
+      "read_depth": "Primary GRPO objective/reward normalization and pipeline sections.",
+      "mechanism": "Group-relative advantage with clipped policy ratio and KL regularization, plus SFT/rejection/distillation stages.",
+      "state_lifetime": "Training-time policy parameters; sampled trajectories/rewards per group.",
+      "mathematical_assumptions": "A_i=(r_i-mean r)/std r needs explicit zero-variance handling.",
+      "limitations": "Post-training is not backbone architecture; reward normalization is not causal relation credit.",
+      "access_requirement": "TRAINING_ACCESS_OR_SEPARATE_WRAPPER_EVAL",
+      "hswm_hypothesis": "Reuse verifiable outcomes/budget accounting while preserving controlled relation-correction tests.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    },
+    {
+      "id": "lora_2021",
+      "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+      "primary_urls": [
+        "https://arxiv.org/abs/2106.09685",
+        "https://arxiv.org/html/2106.09685v2"
+      ],
+      "version_status": "First 2021-06-17; reviewed v2 2021-10-16.",
+      "read_depth": "Primary §4.1 low-rank frozen-W0 formulation.",
+      "mechanism": "Freeze W0 and train low-rank delta: W=W0+(alpha/r)BA.",
+      "state_lifetime": "Adapter weights persist across selected training/deployment version; W0 remains frozen.",
+      "mathematical_assumptions": "A low-rank update is sufficient for evaluated downstream adaptation and scale alpha/r controls magnitude.",
+      "limitations": "No optimality/causal/continual-learning guarantee; rank and data govern retained capability and interference.",
+      "access_requirement": "MODEL_WEIGHTS_TRAINING_OR_ADAPTER_RUNTIME",
+      "hswm_hypothesis": "Use versioned, reversible adapters only after evidence-qualified experiments; do not conflate adapter edit with canonical relation truth.",
+      "reviewed_source_authority": "EXTERNAL_PRIMARY",
+      "synthesis_authority": "SECONDARY_AI",
+      "accessed_on": "2026-09-14",
+      "hswm_status": "METHOD_CONNECTION_UNTESTED",
+      "record_kind": "ARCHITECTURE_TRAINING_OR_REPRESENTATION_METHOD",
+      "implementation_adoption": "NONE; source is a literature reference, not a qualified package dependency"
+    }
+  ],
+  "global_adversarial_boundary": "Architecture efficiency, expressivity, online memory and mathematical transport theorems are bounded methodological inputs. They do not establish HSWM's target identity, provide causal credit from reward, preserve exceptions under composition, or demonstrate HSWM efficacy without frozen prospective outcome experiments.",
+  "status": "LITERATURE_METHOD_MAP_NOT_IMPLEMENTED_OR_EMPIRICALLY_VALIDATED",
+  "provenance_note": "Primary URLs, inspected revisions and reading depth are recorded per research entry. Local search output is private/transient. No downloaded implementation is adopted as a dependency.",
+  "scientific_status": "SCIENTIFICALLY_CONNECTED / INTEGRATED_CLAIM_UNJUDGED",
+  "selection_scope": "Current architectural operations, memory updates and foundational mathematics relevant to HSWM; selective review, not systematic completeness or a popularity ranking.",
+  "record_count_semantics": "22 architecture/training/representation records plus 8 mathematical-connection records; not a count of distinct papers.",
+  "user_request": {
+    "authority_class": "USER_PRIMARY",
+    "text": "최신 ai 내용이랑 원론적인 수학 이론들 좀 가져와줘야할거같은데 ㅇㅇ. 최신 ai transformer 아키텍쳐의 다양한 그 기법들 인터넷에서 가져와줘봐봐 ㅇㅇ."
+  },
+  "method_families": [
+    {
+      "id": "F01",
+      "name": "Attention / associative retrieval",
+      "source_ids": [
+        "transformer-2017"
+      ],
+      "mathematical_connection_ids": [
+        "MF01_MODERN_HOPFIELD_ATTENTION"
+      ],
+      "hypothesis_ids": [
+        "G1",
+        "G2"
+      ],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    },
+    {
+      "id": "F02",
+      "name": "Grouped and latent KV compression",
+      "source_ids": [
+        "gqa_2023",
+        "deepseek_v3_mla_moe_2025"
+      ],
+      "mathematical_connection_ids": [
+        "MF02_ECKART_YOUNG_LOW_RANK"
+      ],
+      "hypothesis_ids": [
+        "G1",
+        "G3"
+      ],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    },
+    {
+      "id": "F03",
+      "name": "Attention kernels and IO scheduling",
+      "source_ids": [
+        "flashattention2_2023",
+        "flashattention4_2026"
+      ],
+      "mathematical_connection_ids": [],
+      "hypothesis_ids": [],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    },
+    {
+      "id": "F04",
+      "name": "Selective sparse attention",
+      "source_ids": [
+        "native_sparse_attention_2025"
+      ],
+      "mathematical_connection_ids": [
+        "MF07_HYPERGRAPH_SPECTRAL_REGULARIZATION"
+      ],
+      "hypothesis_ids": [
+        "G1",
+        "G3"
+      ],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    },
+    {
+      "id": "F05",
+      "name": "Conditional expert and layer computation",
+      "source_ids": [
+        "deepseek_v3_mla_moe_2025",
+        "mixture_of_layers_2026"
+      ],
+      "mathematical_connection_ids": [
+        "MF06_MDL_VS_CAUSAL_IDENTIFIABILITY"
+      ],
+      "hypothesis_ids": [
+        "G1",
+        "G2"
+      ],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    },
+    {
+      "id": "F06",
+      "name": "Rotary position encoding",
+      "source_ids": [
+        "rope"
+      ],
+      "mathematical_connection_ids": [],
+      "hypothesis_ids": [],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    },
+    {
+      "id": "F07",
+      "name": "Residual transport and depth selection",
+      "source_ids": [
+        "mhc_2026_revision",
+        "attention_residuals_2026"
+      ],
+      "mathematical_connection_ids": [
+        "MF08_COMPOSITION_CAUSAL_ABSTRACTION_AND_STABILITY"
+      ],
+      "hypothesis_ids": [
+        "G3"
+      ],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    },
+    {
+      "id": "F08",
+      "name": "Selective state-space sequence mixing",
+      "source_ids": [
+        "mamba-selective-ssm",
+        "mamba-3-state-space-principles"
+      ],
+      "mathematical_connection_ids": [
+        "MF05_KALMAN_BAYESIAN_FILTERING",
+        "MF08_COMPOSITION_CAUSAL_ABSTRACTION_AND_STABILITY"
+      ],
+      "hypothesis_ids": [
+        "G1",
+        "G3"
+      ],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    },
+    {
+      "id": "F09",
+      "name": "Delta-rule and uncertainty-aware memory",
+      "source_ids": [
+        "gated-deltanet-2",
+        "kalman-delta-networks"
+      ],
+      "mathematical_connection_ids": [
+        "MF03_ROBBINS_MONRO",
+        "MF04_ONLINE_CONVEX_REGRET",
+        "MF05_KALMAN_BAYESIAN_FILTERING"
+      ],
+      "hypothesis_ids": [
+        "G2"
+      ],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    },
+    {
+      "id": "F10",
+      "name": "Fast weights and multiple update timescales",
+      "source_ids": [
+        "ttt-expressive-hidden-states",
+        "titans-learning-to-memorize",
+        "nested-learning-hope"
+      ],
+      "mathematical_connection_ids": [
+        "MF03_ROBBINS_MONRO",
+        "MF04_ONLINE_CONVEX_REGRET"
+      ],
+      "hypothesis_ids": [
+        "G1",
+        "G2",
+        "G3"
+      ],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    },
+    {
+      "id": "F11",
+      "name": "Recurrent computation and constructive expressivity",
+      "source_ids": [
+        "recurrent-transformer",
+        "rasp"
+      ],
+      "mathematical_connection_ids": [
+        "MF08_COMPOSITION_CAUSAL_ABSTRACTION_AND_STABILITY"
+      ],
+      "hypothesis_ids": [
+        "G3"
+      ],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    },
+    {
+      "id": "F12",
+      "name": "Block diffusion with pretrained context",
+      "source_ids": [
+        "twotower"
+      ],
+      "mathematical_connection_ids": [],
+      "hypothesis_ids": [],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    },
+    {
+      "id": "F13",
+      "name": "Parameter-efficient adaptation",
+      "source_ids": [
+        "lora_2021"
+      ],
+      "mathematical_connection_ids": [
+        "MF02_ECKART_YOUNG_LOW_RANK",
+        "MF04_ONLINE_CONVEX_REGRET"
+      ],
+      "hypothesis_ids": [
+        "G2"
+      ],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    },
+    {
+      "id": "F14",
+      "name": "Reward-based post-training",
+      "source_ids": [
+        "r1-grpo"
+      ],
+      "mathematical_connection_ids": [
+        "MF04_ONLINE_CONVEX_REGRET",
+        "MF06_MDL_VS_CAUSAL_IDENTIFIABILITY"
+      ],
+      "hypothesis_ids": [
+        "G2"
+      ],
+      "connection_authority": "SECONDARY_AI",
+      "connection_scope": "Analogies and boundary checks; not theorem applicability to full neural models or author endorsement of HSWM"
+    }
+  ],
+  "hswm_application_hypotheses": [
+    {
+      "id": "G1",
+      "name": "Operational variable and relation discovery",
+      "proposal": "Candidate retrieval/compression/fast adaptation must produce observable new relation hypotheses beyond a fixed feature/DSL boundary.",
+      "required_evidence": "Held-out operational discovery, false/empty representation controls, evidence-grounded changed behavior; compression alone is insufficient.",
+      "status": "UNTESTED_METHOD_CONNECTION",
+      "authority_class": "SECONDARY_AI"
+    },
+    {
+      "id": "G2",
+      "name": "Outcome-specific correction with explicit uncertainty",
+      "proposal": "Residual and uncertainty can prioritize relation correction, while causal attribution needs identified contrasts.",
+      "required_evidence": "Prospective predictions, independent correctness/causal evidence, intervention/remove-restore, sham/no-update/reward-contamination controls; same revision changes fresh outcomes.",
+      "status": "UNTESTED_METHOD_CONNECTION",
+      "authority_class": "SECONDARY_AI"
+    },
+    {
+      "id": "G3",
+      "name": "Learning preservation across composition",
+      "proposal": "Use constrained transport and abstraction/stability tools only under named assumptions; preserve child exceptions, dependence and uncertainty.",
+      "required_evidence": "Same-construction credit and revision, shared-cause and conflicting-exception cases, matched no-composition comparison, both-scale fresh learning evidence; no rescue of first-scale failure.",
+      "status": "UNTESTED_METHOD_CONNECTION",
+      "authority_class": "SECONDARY_AI"
+    }
+  ]
+}

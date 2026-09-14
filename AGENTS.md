@@ -75,6 +75,12 @@
   `docs/research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md`.
   Preserve its distinction between the checked finite learner/refinement results
   and the unproved full HSWM target; inspect theorem premises and runtime mapping.
+- For literature-to-performance proof claims, read
+  `docs/research/HSWM_LITERATURE_TO_PERFORMANCE_PROOF_2026-09-14.md`.
+  Keep observed paper results separate from mathematical assumptions and HSWM
+  transfer obligations. The local ensemble and finite outcome learner connect
+  through one checked graph-revision model; their gain does not prove real-LLM
+  fidelity, new semantic/topology discovery, equal-cost superiority, or CR/FCL closure.
 - For LLM-executed Semantic Weight work, read
   `docs/research/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.md` and
   `docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md`.

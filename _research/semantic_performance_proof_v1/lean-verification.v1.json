@@ -1,0 +1,205 @@
+{
+  "schema_version": "hswm-semantic-performance-lean-verification/v1",
+  "recorded_on": "2026-09-14",
+  "source_base_commit": "de2b92453f3ae9cf4697f5fe5c23306af7b30506",
+  "status": "EXACT_SOURCE_KERNEL_CHECKED_WITH_FRESH_IMPORTS",
+  "toolchain": {
+    "name": "leanprover/lean4:v4.32.1",
+    "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+    "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+    "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "pin_path": "formal/lean-toolchain",
+    "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+    "authority": "OFFICIAL_EXISTING_PIN_REUSED",
+    "main_license": "Apache-2.0",
+    "license_file_sha256": "8b28515ffffc5c0fe2807d8ae3735b00b324d9b7ce807dd63ff6ac8922fbce7e",
+    "bundled_notices_sha256": "00cce2ac071f63d470a287438a7c6bbc4334706be244384e9af4fc9ead11cdce",
+    "license_scope": "Compiler main license with bundled third-party notices retained in installed distribution.",
+    "new_dependencies_installed": false,
+    "dependency_scope": "Std shipped with this toolchain; this report is not a full binary-distribution supply-chain attestation."
+  },
+  "proof_dependencies": [
+    {
+      "path": "formal/HSWMSemanticWeightDefinition.lean",
+      "sha256": "4173e860743f321c3ee87f6d48ef0570eba3f412d4ddca5ab4ff070e5d145ba5",
+      "clean_compile_exit_code": 0
+    },
+    {
+      "path": "formal/HSWMHypergraphRepresentation.lean",
+      "sha256": "4025a678ce0686ac9bb49b3f4f413ca9650869e897c4d33cc595ac2897cda293",
+      "clean_compile_exit_code": 0
+    }
+  ],
+  "proof_sources": [
+    {
+      "path": "formal/HSWMLocalEnsembleGain.lean",
+      "sha256": "e0166cd149f8bf20ce908d4b3f7f60537dd392baa99d85acb733e57c346f7bb8",
+      "clean_compile_exit_code": 0,
+      "named_theorem_count": 9,
+      "theorems": {
+        "HSWM.LocalEnsembleGain.iid_majority_mass_enumerates_product_joint_law": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.LocalEnsembleGain.iid_total_mass_enumerates_product_joint_law": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.LocalEnsembleGain.iid_first_correct_mass_enumerates_product_joint_law": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.LocalEnsembleGain.iid_majority_strictly_beats_single": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.LocalEnsembleGain.perfectly_correlated_marginal_and_majority_have_same_correct_mass": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.LocalEnsembleGain.perfectly_correlated_total_mass": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.LocalEnsembleGain.correlated_total_positive": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.LocalEnsembleGain.iid_and_correlated_single_marginal_cross_product": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.LocalEnsembleGain.accuracy_is_not_monotone_in_budget_value": []
+      },
+      "exit_code": 0,
+      "private_helper_theorems": 4,
+      "audit_output_sha256": "15b680bcfb241cf4eaf9e39d7ac03aba0ed39c131fd95c3b70c05d4e529306b4"
+    },
+    {
+      "path": "formal/HSWMOutcomeLearningGain.lean",
+      "sha256": "625c1046dc991edf035c4b9f42995971dfc9e6b161f35f3ab868eb3f67cb7054",
+      "clean_compile_exit_code": 0,
+      "named_theorem_count": 12,
+      "theorems": {
+        "HSWM.OutcomeLearningGain.step_reads_only_state_and_input": [],
+        "HSWM.OutcomeLearningGain.truth_retained": [
+          "propext"
+        ],
+        "HSWM.OutcomeLearningGain.mistaken_head_removed": [
+          "propext"
+        ],
+        "HSWM.OutcomeLearningGain.mistaken_head_strictly_shrinks": [
+          "propext"
+        ],
+        "HSWM.OutcomeLearningGain.step_cons": [],
+        "HSWM.OutcomeLearningGain.learn_length_le": [
+          "propext"
+        ],
+        "HSWM.OutcomeLearningGain.truth_retained_learnAll": [
+          "propext"
+        ],
+        "HSWM.OutcomeLearningGain.learnAll_nonempty_of_truth": [
+          "propext"
+        ],
+        "HSWM.OutcomeLearningGain.mistakeCount_le_initial_sub_one": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.OutcomeLearningGain.inconsistent_feedback_removes_truth": [
+          "propext"
+        ],
+        "HSWM.OutcomeLearningGain.before_bad_feedback_prediction_correct": [],
+        "HSWM.OutcomeLearningGain.inconsistent_feedback_can_degrade": []
+      },
+      "exit_code": 0,
+      "private_helper_theorems": 0,
+      "audit_output_sha256": "e0487bed1eaf23faf7080dc5e0586f5f3cfd6934a70b71745d745c0d57ef7ad2"
+    },
+    {
+      "path": "formal/HSWMSemanticPerformanceBridge.lean",
+      "sha256": "4ca8c18210e5d640becb20d69aaa66c1f627f30fa291ae38740a558ed07597b7",
+      "clean_compile_exit_code": 0,
+      "named_theorem_count": 18,
+      "theorems": {
+        "HSWM.SemanticPerformanceBridge.forward_is_local_semantic_weight": [
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.labelled_local_outputs": [
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.forward_first": [
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.forward_majority": [
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.forward_truth": [
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.step_projection": [
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.learn_projection": [
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.mistake_count_projection": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.graph_mistake_bound": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.update_changes_semantic_relation": [
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.feedback_follows_mistaken_prediction": [
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.initial_correct_mass": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.learned_correct_mass": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.computed_semantic_update_strictly_improves": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.concrete_accuracy_mass_gain": [
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.any_truthful_initial_update_nondecreases": [
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.any_initial_mistake_strictly_improves": [
+          "propext"
+        ],
+        "HSWM.SemanticPerformanceBridge.same_graph_dynamics_at_most_two_mistakes": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      "exit_code": 0,
+      "private_helper_theorems": 0,
+      "audit_output_sha256": "c5b2e5b63ec2f40e3680d9a1b5f591b9901d467687ae3ea03989e69c016ebf86"
+    }
+  ],
+  "named_theorems": 39,
+  "count_scope": "Public named theorems; transitive axioms cover their private proof helpers.",
+  "verification_program": {
+    "path": "_research/semantic_performance_proof_v1/verify_lean.py",
+    "sha256": "c59bc73e1a9553773ee5aae8b31a65029884fc58d19a721f1cfcf2019abf7bd6"
+  },
+  "import_isolation": "Fresh temporary LEAN_PATH; dependencies rebuilt from exact recorded source with trust=0.",
+  "command": "python3 _research/semantic_performance_proof_v1/verify_lean.py",
+  "new_dependencies_installed": false,
+  "claim_ceiling": "FINITE_CONDITIONAL_GAIN_AND_REALIZABLE_MISTAKE_BOUND_IN_ONE_REFERENCE_GRAPH_DYNAMICS",
+  "empirical_paper_results_used_as_axioms": false,
+  "real_llm_refinement_proved": false,
+  "full_hswm_proved": false
+}

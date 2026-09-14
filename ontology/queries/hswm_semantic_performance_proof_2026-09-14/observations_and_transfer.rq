@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?paper ?url ?observation ?limit ?mechanism WHERE {
+ ?s p:standard_graph_role "EXTERNAL_SOURCE_OBSERVATION"; p:name ?paper;
+    p:external_url ?url; p:description ?observation; p:observation_limit ?limit;
+    r:MOTIVATES_ONLY ?m.
+ ?m p:name ?mechanism.
+} ORDER BY ?paper

@@ -1,5 +1,10 @@
 # HSWM — public repository index
 
+2026-09-14 [문헌에서 HSWM 성능 증명으로](docs/research/HSWM_LITERATURE_TO_PERFORMANCE_PROOF_2026-09-14.md)는
+국소 연산 집계의 조건부 이득과 outcome 뒤 후보 제거를 같은 Lean graph Step/Learn에 연결한다.
+참조 모형의 18/27→20/27 향상과 유한 오류 경계는 실제 LLM 측정과 구별하며,
+[문헌·가정·정리 KG](ontology/identity/hswm_core/HSWM_SEMANTIC_PERFORMANCE_PROOF_ONTOLOGY.v1.json)에 기록한다.
+
 2026-09-14 [Semantic Weight의 Lean4 정의와 하이퍼그래프 필요 조건](docs/research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md)은
 국소 LLM 전이 성향·입력 정보 손실·현재 예측과 학습의 차이·다자 관계의 표현을 엄밀히 구분한다.
 쌍별 투영의 불가능성 범위와 incidence encoding의 복원을 함께 검사하며,

@@ -1,0 +1,475 @@
+{
+  "schema_version": "hswm-three-learning-gaps-research/v1",
+  "accessed_on": "2026-09-14",
+  "source_base_commit": "9f140a846d018315d483ddf75200b9abe8539034",
+  "status": "LITERATURE_REVIEW_AND_IMPLEMENTATION_PROPOSAL",
+  "nonclaim": "NOT_IMPLEMENTATION_EXPERIMENTAL_RESULT_CAUSAL_ADMISSION_OR_HSWM_TARGET_REALIZATION",
+  "user_request": {
+    "verbatim": "그러면 어케하면 지금 단점들 해소할수 있을지 필요한것을 어케 구현할수 있을지 인터넷 검색좀 해줘봐봐 ㅇㅇ",
+    "authority_class": "USER_PRIMARY",
+    "scope": "REQUEST_FOR_RESEARCH_NOT_RATIFICATION_OF_RECOMMENDATIONS"
+  },
+  "analysis_authority_class": "SECONDARY_AI",
+  "conceptual_delta": "Operationalize the three gaps as source-bound candidate discovery, controlled relation correction and same-construction composition-learning acceptance criteria; preserve the one hypergraph HSWM identity and FCL-1..8.",
+  "search_method": "Bounded fresh primary-source search plus installed HF paper discovery; selected methods/assumptions read. Not systematic coverage, popularity ranking or conformance qualification.",
+  "sources": [
+    {
+      "id": "dreamcoder",
+      "title": "DreamCoder: Bootstrapping Inductive Program Synthesis with Wake-Sleep Library Learning",
+      "url": "https://doi.org/10.1145/3453483.3454080",
+      "version": "PLDI 2021",
+      "accessed_on": "2026-09-14",
+      "source_authority_class": "EXTERNAL_PRIMARY",
+      "record_authority_class": "SECONDARY_AI",
+      "read_depth": "Paper abstract, project description and author repository",
+      "finding": "Learns reusable typed program-library abstractions from solved programs.",
+      "limit": "Assumes base language and task corpus; compression does not establish new grounded causal meaning.",
+      "adoption_status": "METHOD_REFERENCE_ONLY_NOT_INSTALLED_OR_QUALIFIED",
+      "code_url": "https://github.com/CatherineWong/dreamcoder"
+    },
+    {
+      "id": "stitch",
+      "title": "Top-Down Synthesis for Library Learning",
+      "url": "https://mlb2251.github.io/stitch.pdf",
+      "version": "2023 author paper/artifact",
+      "accessed_on": "2026-09-14",
+      "source_authority_class": "EXTERNAL_PRIMARY",
+      "record_authority_class": "SECONDARY_AI",
+      "read_depth": "Paper landing PDF and author repository/artifact README",
+      "finding": "Extracts abstractions that compress a collection of programs.",
+      "limit": "Existing syntax/semantics and cost model; HSWM needs execution equivalence and held-out outcome checks.",
+      "adoption_status": "METHOD_REFERENCE_ONLY_NOT_INSTALLED_OR_QUALIFIED",
+      "code_url": "https://github.com/mlb2251/stitch"
+    },
+    {
+      "id": "finite-sample-crl",
+      "title": "Beyond identifiability: Learning causal representations with few environments and finite samples",
+      "url": "https://arxiv.org/html/2603.25796v1",
+      "version": "arXiv v1, 2026-03-26",
+      "accessed_on": "2026-09-14",
+      "source_authority_class": "EXTERNAL_PRIMARY",
+      "record_authority_class": "SECONDARY_AI",
+      "read_depth": "Full arXiv HTML: abstract, Introduction, Model §2.1–2.2, Estimation opening §3.",
+      "finding": "Reconstructs target sets from dimensions of intersections of covariance column spaces across environments, then estimates B and graph using a generalized eigenvalue problem; it is not neural variable naming or open-ended semantic discovery.",
+      "limit": "Full-column-rank linear decoder; acyclic linear SEM; independent noise coordinates; observational environment; two noise-scale settings; strongly-separating unknown multi-target intervention design; distinct baseline noise-variance ratios; subgaussian X for finite-sample results. Recovery is up to label permutation and scale as specified by Theorem 2.1.",
+      "adoption_status": "METHOD_REFERENCE_ONLY_NOT_INSTALLED_OR_QUALIFIED",
+      "venue_status": "PREPRINT",
+      "code_status": "NO_AUTHOR_CODE_LINK_LOCATED_ON_ARXIV_RECORD"
+    },
+    {
+      "id": "int",
+      "title": "InT: Self-Proposed Interventions Enable Credit Assignment in LLM Reasoning",
+      "url": "https://arxiv.org/html/2601.14209v1",
+      "version": "arXiv v1, 2026-01-20",
+      "accessed_on": "2026-09-14",
+      "source_authority_class": "EXTERNAL_PRIMARY",
+      "record_authority_class": "SECONDARY_AI",
+      "read_depth": "Primary HTML Sections 2, 3.1-3.2, reference-solution ablations, Section 4 training opening",
+      "finding": "Reference-solution-conditioned first-error localization and single-step corrective intervention; evaluates continuation reward and trains on corrections.",
+      "limit": "Primarily incorrect traces; reference information is important. This does not solve all wrong relations in positive-reward traces, and supplied training solutions cannot become held-out evidence.",
+      "adoption_status": "METHOD_REFERENCE_ONLY_NOT_INSTALLED_OR_QUALIFIED",
+      "venue_status": "PREPRINT",
+      "project_url": "https://intervention-training.github.io/"
+    },
+    {
+      "id": "c3",
+      "title": "Contextual Counterfactual Credit Assignment for Multi-Agent Reinforcement Learning in LLM Collaboration",
+      "url": "https://arxiv.org/html/2603.06859v1",
+      "version": "arXiv v1, 2026-03-06",
+      "accessed_on": "2026-09-14",
+      "source_authority_class": "EXTERNAL_PRIMARY",
+      "record_authority_class": "SECONDARY_AI",
+      "read_depth": "Primary HTML Sections 2-3, fixed continuation Monte Carlo and LOO baseline; empirical/evaluation limitation passages",
+      "finding": "Compares context-matched alternative actions under a fixed continuation distribution and builds occurrence-level advantages.",
+      "limit": "Requires observable-context restoration and a defined continuation distribution/support. Fixed prefix does not eliminate downstream stochasticity. Marginal effects are not individual same-noise counterfactuals.",
+      "adoption_status": "METHOD_REFERENCE_ONLY_NOT_INSTALLED_OR_QUALIFIED",
+      "venue_status": "PREPRINT",
+      "code_url": "https://github.com/EIT-EAST-Lab/C3"
+    },
+    {
+      "id": "dowhy",
+      "title": "DoWhy: Counterfactuals",
+      "url": "https://www.pywhy.org/dowhy/v0.13/user_guide/causal_tasks/what_if/counterfactuals.html",
+      "version": "Versioned v0.13 documentation, not asserted latest",
+      "accessed_on": "2026-09-14",
+      "source_authority_class": "OFFICIAL_SOFTWARE_DOCUMENTATION",
+      "record_authority_class": "SECONDARY_AI",
+      "read_depth": "Official user-guide causal-task description and invertible-noise requirements",
+      "finding": "Individual counterfactual estimation requires stronger assumptions than interventional sampling, including recoverable noise in the documented mechanism.",
+      "limit": "Python method reference; refutation cannot prove causal assumptions. Missing exact replay does not prevent a separately designed prospective randomized average-effect experiment.",
+      "adoption_status": "METHOD_REFERENCE_ONLY_NOT_INSTALLED_OR_QUALIFIED"
+    },
+    {
+      "id": "nonlinear-dilemma",
+      "title": "The Non-Linear Representation Dilemma: Is Causal Abstraction Enough for Mechanistic Interpretability?",
+      "url": "https://arxiv.org/html/2507.08802v2",
+      "version": "arXiv:2507.08802v2; NeurIPS 2025 Spotlight",
+      "accessed_on": "2026-09-14",
+      "source_authority_class": "EXTERNAL_PRIMARY",
+      "record_authority_class": "SECONDARY_AI",
+      "read_depth": "Primary arXiv v2 abstract, Sections 1-5, theorem assumptions, experiments, and limitations.",
+      "finding": "Shows that, with arbitrary expressive alignment maps, high intervention-alignment scores can be vacuous: the paper proves an alignment can be constructed for nearly any neural network and target algorithm under stated assumptions, and reports 100% IIA for randomly initialized language models on IOI.",
+      "limit": "The theorem relies on input injectivity and strict output surjectivity and its construction overfits; these assumptions can fail. The result diagnoses unrestricted-map causal-abstraction evaluation and does not establish an HSWM mapping, causal mechanism, or task competence.",
+      "adoption_status": "METHOD_REFERENCE_ONLY_NOT_INSTALLED_OR_QUALIFIED",
+      "venue_status": "PEER_REVIEWED",
+      "code_status": "Author-provided reproducibility code: https://github.com/densutter/non-linear-representation-dilemma ; identified from the paper, not downloaded, executed, or pinned."
+    },
+    {
+      "id": "good-apples",
+      "title": "Bucketing the Good Apples: A Method for Diagnosing and Improving Causal Abstraction",
+      "url": "https://arxiv.org/html/2605.02234v1",
+      "version": "arXiv:2605.02234v1",
+      "accessed_on": "2026-09-14",
+      "source_authority_class": "EXTERNAL_PRIMARY",
+      "record_authority_class": "SECONDARY_AI",
+      "read_depth": "Primary arXiv v1 abstract, causal-abstraction setup, Algorithms 1-2, experiments, and limitations.",
+      "finding": "Provides a finite diagnostic workflow: restrict to correctly handled low-level inputs, build a pairwise interchangeability graph, greedily extract high-density quasi-clique buckets, retain a residual bucket, then train a membership classifier for unseen in-distribution inputs.",
+      "limit": "It requires a prior task construal and candidate causal abstraction; it is structured program search rather than unconstrained automatic interpretation. Its greedy quasi-clique search is heuristic, experiments are mainly simple single-variable hypotheses, and interactions or accumulated approximation error can prevent large high-IIA buckets.",
+      "adoption_status": "METHOD_REFERENCE_ONLY_NOT_INSTALLED_OR_QUALIFIED",
+      "venue_status": "PREPRINT",
+      "code_status": "Paper identifies code base: https://github.com/Paulineli/apple-bucket ; identified from the paper, not downloaded, executed, or pinned."
+    },
+    {
+      "id": "compositional-error",
+      "title": "Compositional abstraction error and a category of causal models",
+      "url": "https://proceedings.mlr.press/v161/rischel21a.html",
+      "version": "UAI 2021, PMLR 161:1013-1023",
+      "accessed_on": "2026-09-14",
+      "source_authority_class": "EXTERNAL_PRIMARY",
+      "record_authority_class": "SECONDARY_AI",
+      "read_depth": "Publisher abstract and bibliographic record",
+      "finding": "Finite interventional causal-model transformations admit compositional abstraction-error bounds in the proposed framework.",
+      "limit": "Does not prove that changing HSWM learners satisfy the model or preserve continual learning.",
+      "adoption_status": "METHOD_REFERENCE_ONLY_NOT_INSTALLED_OR_QUALIFIED",
+      "venue_status": "PEER_REVIEWED"
+    },
+    {
+      "id": "component-abstraction",
+      "title": "Causal and Compositional Abstraction",
+      "url": "https://arxiv.org/abs/2602.16612v1",
+      "version": "arXiv v1, 2026-02-18",
+      "accessed_on": "2026-09-14",
+      "source_authority_class": "EXTERNAL_PRIMARY",
+      "record_authority_class": "SECONDARY_AI",
+      "read_depth": "Primary abstract only; HTML retrieval failed",
+      "finding": "Unifies causal abstractions using compositional models and strengthens component/mechanism-level abstraction.",
+      "limit": "Conceptual formal reference only; no claim of HSWM instantiation or adaptive-learning preservation.",
+      "adoption_status": "METHOD_REFERENCE_ONLY_NOT_INSTALLED_OR_QUALIFIED",
+      "venue_status": "PREPRINT"
+    },
+    {
+      "id": "cpcl",
+      "title": "Model Uncertainty Quantification by Conformal Prediction in Continual Learning",
+      "url": "https://proceedings.mlr.press/v267/gao25i.html",
+      "version": "ICML 2025, PMLR 267:18453-18469",
+      "accessed_on": "2026-09-14",
+      "source_authority_class": "EXTERNAL_PRIMARY",
+      "record_authority_class": "SECONDARY_AI",
+      "read_depth": "Publisher abstract and bibliographic record",
+      "finding": "Studies continual-learning calibration and reports an asymptotic CPCL coverage result.",
+      "limit": "Abstract-level candidate only; no finite-sample coverage claim under arbitrary drift or recursive composition.",
+      "adoption_status": "METHOD_REFERENCE_ONLY_NOT_INSTALLED_OR_QUALIFIED",
+      "venue_status": "PEER_REVIEWED"
+    },
+    {
+      "id": "causalab",
+      "title": "CausaLab: A Scalable Environment for Interactive Causal Discovery Toward AI Scientists",
+      "url": "https://arxiv.org/html/2605.26029v2",
+      "version": "arXiv v2, 2026-05-28",
+      "accessed_on": "2026-09-14",
+      "source_authority_class": "EXTERNAL_PRIMARY",
+      "record_authority_class": "SECONDARY_AI",
+      "read_depth": "Primary HTML task/SCM/interface/DSL/evaluation/experiments and relevant appendices",
+      "finding": "Synthetic observation-intervention-hypothesis loop evaluates held-out prediction separately from hidden graph/equation recovery.",
+      "limit": "Supplies variable vocabulary and function family; finite linear/quadratic DAGs, shift interventions preserve incoming parent contributions. Does not test open-ended variable invention.",
+      "adoption_status": "METHOD_REFERENCE_ONLY_NOT_INSTALLED_OR_QUALIFIED",
+      "venue_status": "PREPRINT",
+      "code_url": "https://github.com/DylanZSZ/CausaLab",
+      "code_status": "PAPER_ADVERTISED_URL_RETURNED_404_ON_REVIEW",
+      "paper_license": "CC-BY-4.0",
+      "code_license": "UNVERIFIED_NOT_ADOPTED"
+    }
+  ],
+  "local_source_bindings": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "b67a175bc7f2d8c701d9a9cf6ddd157565599f4960039f4d045e0ab4c53c08af",
+      "source_revision": "9f140a846d018315d483ddf75200b9abe8539034"
+    },
+    {
+      "path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+      "sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373",
+      "source_revision": "9f140a846d018315d483ddf75200b9abe8539034"
+    },
+    {
+      "path": "docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md",
+      "sha256": "64a9436bd83c306db6aa1ecb3d29e3ba1f3fd054f1d37bd164cb948c9da226af",
+      "source_revision": "9f140a846d018315d483ddf75200b9abe8539034"
+    },
+    {
+      "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+      "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81",
+      "source_revision": "9f140a846d018315d483ddf75200b9abe8539034"
+    },
+    {
+      "path": "docs/operations/HSWM_NEXT_DEVELOPMENT_GRAPH_PLAN_2026-09-13.md",
+      "sha256": "8cb75bc03729680dc6e890d9d6b288892db6f158bfd1e389ccb173ecd3fa1ed3",
+      "source_revision": "9f140a846d018315d483ddf75200b9abe8539034"
+    },
+    {
+      "path": "ontology/development/HSWM_NEXT_DEVELOPMENT_GRAPH_PLAN_2026-09-13.v1.json",
+      "sha256": "58a4d15b7e707cd695badaa522c24e928d75cc7e0ce89dd6ac4d7a7024c71ff5",
+      "source_revision": "9f140a846d018315d483ddf75200b9abe8539034"
+    },
+    {
+      "path": "results/HSWM_USL_RELATION_INSTRUMENT_RESULTS_2026-09-08.md",
+      "sha256": "87778b65f74d4d032dce518e44ef13517f4e3705e717e61193612c385f383a99",
+      "source_revision": "9f140a846d018315d483ddf75200b9abe8539034"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+      "sha256": "0a47ff72b566c6e6f05dc0e62beab21ab5169c19f788d512c01530877d055fb6",
+      "source_revision": "9f140a846d018315d483ddf75200b9abe8539034"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+      "sha256": "f1a85ca17c00177e1b9c9293b19b9a383802af61a6636e9ce13eaf8b6b815fa0",
+      "source_revision": "9f140a846d018315d483ddf75200b9abe8539034"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/relation-program-research.ts",
+      "sha256": "afffed9362189183fe301b983b6b4c4bb27392deb53e4c99645184265355e916",
+      "source_revision": "9f140a846d018315d483ddf75200b9abe8539034"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+      "sha256": "15a04a6daee640f40e4a6b9a484528ae10a949f1f93ee1badc33cad4ded4b0b4",
+      "source_revision": "9f140a846d018315d483ddf75200b9abe8539034"
+    },
+    {
+      "path": "formal/HSWMCellular.lean",
+      "sha256": "501ec200ca367bc6a898f23657d1a684c178073ebd898c2ccb0522564c303e50",
+      "source_revision": "9f140a846d018315d483ddf75200b9abe8539034"
+    },
+    {
+      "path": "formal/HSWMCompositionInterference.lean",
+      "sha256": "ea61064e08f46a36b98c0e30e103ffc1e130b92a157ed3989e29888416ca87bc",
+      "source_revision": "9f140a846d018315d483ddf75200b9abe8539034"
+    }
+  ],
+  "excluded_user_changes": [
+    "_research/causal_composition/relation_synthesis_usl_v1/README.md",
+    "_research/causal_composition/relation_synthesis_usl_v1/run.mts",
+    "_research/causal_composition/relation_synthesis_usl_v1/source-pins.v5.json",
+    "tests/test_hswm_relation_synthesis_runner_cli.py"
+  ],
+  "gaps": [
+    {
+      "id": "G1",
+      "name": "Experience-grounded variable and relation discovery",
+      "current_state": "PARTIAL_FIXED_CONTEXT_AND_DSL_COMPOSITION",
+      "local_sources": [
+        "src/hswm/effect-runtime/src/adaptive-domain.ts",
+        "src/hswm/effect-runtime/src/relation-program-research.ts",
+        "results/HSWM_USL_RELATION_INSTRUMENT_RESULTS_2026-09-08.md"
+      ],
+      "criterion": "Seal initial program, generator/prompt/model revision, allowed read-set and primitive inventory before outcomes. Experience proposes an operational extractor/conditional relation absent from that declared initial inventory; evaluate untouched intervention/context predictions against an information/action/budget-matched strong text/program learner. Audit hidden extractors/answers in metadata. Novelty is relative to declared construction, not unknown LLM pretraining.",
+      "failure": "Renaming, pre-embedded extractor, same-DSL path length, corpus compression or held-out leakage does not satisfy G1.",
+      "status": "OPEN",
+      "criterion_status": "NOT_RUN"
+    },
+    {
+      "id": "G2",
+      "name": "Correct a wrong relation despite positive terminal reward",
+      "current_state": "PREDICTION_RESIDUAL_EXISTS_CAUSAL_CREDIT_UNIDENTIFIED",
+      "local_sources": [
+        "src/hswm/effect-runtime/src/adaptive-domain.ts",
+        "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts"
+      ],
+      "criterion": "Bind independent relation-wrongness evidence/access policy, pre-outcome prediction and frozen estimand; compare original/correction/remove/restore/sham and declared nuisance perturbation with arm-level actual outcomes. Preserve correct adjacent relations; qualifying credit must drive a schema/owner/provenance-bound canonical revision and fresh behavior.",
+      "failure": "Positive reward, evaluator agreement, residual magnitude, or non-significance alone does not establish causal correction. Uncertain relation truth remains a competing-hypothesis study.",
+      "status": "OPEN",
+      "criterion_status": "NOT_RUN"
+    },
+    {
+      "id": "G3",
+      "name": "Preserve exceptions, uncertainty and learning under composition",
+      "current_state": "TYPED_COMPOSITION_AND_BOUNDED_INTERFERENCE_COUNTEREXAMPLE",
+      "local_sources": [
+        "formal/HSWMCellular.lean",
+        "formal/HSWMCompositionInterference.lean",
+        "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md"
+      ],
+      "criterion": "After first-scale support, compose the same construction. Preserve conditional exceptions, shared evidence/dependence and calibration domains; compare actual/uniform/shuffled credit and a no-composition baseline matched for member computation, information, total budget and coordinator capacity. Measure fresh macro-to-micro learning and retention under joint-failure/shift slices.",
+      "failure": "Nested execution, averaged confidence, erased residual buckets, extra-compute gains, or joint positive score alone does not satisfy G3. RED never satisfies first-scale support.",
+      "status": "OPEN",
+      "criterion_status": "NOT_RUN"
+    }
+  ],
+  "proposals": [
+    {
+      "id": "P1",
+      "name": "Freeze measurement and prediction contract",
+      "gaps": [
+        "G1",
+        "G2",
+        "G3"
+      ],
+      "plan_tasks": [
+        "R-00",
+        "R-01"
+      ],
+      "sources": [
+        "dowhy",
+        "c3",
+        "causalab"
+      ],
+      "depends_on": [],
+      "touchpoints": [
+        "src/hswm/effect-runtime/src/adaptive-domain.ts",
+        "src/hswm/effect-runtime/src/adaptive-runtime.ts"
+      ],
+      "output": "Immutable pre-outcome predictions and observation/evaluator/assignment ports; task, wrongness authority, holdout, generator, estimand, minimum relevant effect, budget and stopping policy. Every later proposal/assignment/evaluation/revision binds this contract hash.",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "output_status": "NOT_PRODUCED",
+      "responsibility_owner": "hswm:research:three-learning-gaps:2026-09-14",
+      "owner_semantics": "RECORD_RESPONSIBILITY_NOT_CANONICAL_ATOM_OWNERSHIP_OR_HUMAN_ASSIGNMENT"
+    },
+    {
+      "id": "P2",
+      "name": "Propose operational variables and conditional relations",
+      "gaps": [
+        "G1"
+      ],
+      "plan_tasks": [
+        "R-01",
+        "R-02"
+      ],
+      "sources": [
+        "dreamcoder",
+        "stitch",
+        "finite-sample-crl",
+        "good-apples"
+      ],
+      "depends_on": [
+        "P1"
+      ],
+      "touchpoints": [
+        "src/hswm/effect-runtime/src/relation-program-research.ts"
+      ],
+      "output": "Pure immutable extractor/relation proposals with source, condition, missingness, executable meaning, competing hypotheses and counterexamples; active discriminating experience. New research types must be mapped to schema-approved atoms before any canonical update.",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "output_status": "NOT_PRODUCED",
+      "responsibility_owner": "hswm:research:three-learning-gaps:2026-09-14",
+      "owner_semantics": "RECORD_RESPONSIBILITY_NOT_CANONICAL_ATOM_OWNERSHIP_OR_HUMAN_ASSIGNMENT"
+    },
+    {
+      "id": "P3",
+      "name": "Connect controlled correction to real canonical revision",
+      "gaps": [
+        "G2"
+      ],
+      "plan_tasks": [
+        "R-01",
+        "R-02",
+        "R-03"
+      ],
+      "sources": [
+        "int",
+        "c3",
+        "dowhy",
+        "causalab"
+      ],
+      "depends_on": [
+        "P1",
+        "P2"
+      ],
+      "touchpoints": [
+        "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts"
+      ],
+      "output": "Typed Effect replay or prospective randomized-assignment/evaluator ports, pure effect/uncertainty calculation, and existing canonical admission/journal integration through fresh behavior. Exact individual counterfactual and prospective average-effect estimands remain distinct.",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "output_status": "NOT_PRODUCED",
+      "responsibility_owner": "hswm:research:three-learning-gaps:2026-09-14",
+      "owner_semantics": "RECORD_RESPONSIBILITY_NOT_CANONICAL_ATOM_OWNERSHIP_OR_HUMAN_ASSIGNMENT"
+    },
+    {
+      "id": "P4",
+      "name": "Preserve conditional composition and connect formal premises",
+      "gaps": [
+        "G3"
+      ],
+      "plan_tasks": [
+        "R-04"
+      ],
+      "sources": [
+        "good-apples",
+        "nonlinear-dilemma",
+        "compositional-error",
+        "component-abstraction",
+        "cpcl"
+      ],
+      "depends_on": [
+        "P1"
+      ],
+      "touchpoints": [
+        "formal/HSWMCellular.lean",
+        "formal/HSWMCompositionInterference.lean"
+      ],
+      "output": "Same-construction typed contracts preserving exceptions, residual cases, shared evidence/dependence, calibration and revision lineage. Bound abstraction-map complexity; use untouched interventions and random/untrained controls. Design and counterexample preparation may precede first-scale outcome.",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "output_status": "NOT_PRODUCED",
+      "responsibility_owner": "hswm:research:three-learning-gaps:2026-09-14",
+      "owner_semantics": "RECORD_RESPONSIBILITY_NOT_CANONICAL_ATOM_OWNERSHIP_OR_HUMAN_ASSIGNMENT"
+    },
+    {
+      "id": "P5",
+      "name": "Measure two-scale learning and retention",
+      "gaps": [
+        "G3"
+      ],
+      "plan_tasks": [
+        "R-05"
+      ],
+      "sources": [
+        "c3",
+        "compositional-error",
+        "cpcl"
+      ],
+      "depends_on": [
+        "P3",
+        "P4"
+      ],
+      "touchpoints": [
+        "docs/operations/HSWM_NEXT_DEVELOPMENT_GRAPH_PLAN_2026-09-13.md"
+      ],
+      "start_condition": "D-FIRST-SCALE SATISFIED; completing R-03 with RED or UNDERDETERMINED does not satisfy it.",
+      "output": "Same-candidate macro/micro intervention outcomes, actual/uniform/shuffled credit, matched no-composition baseline, per-condition retention/calibration and shared-failure analysis; scoped negative outcomes preserved.",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "output_status": "NOT_PRODUCED",
+      "responsibility_owner": "hswm:research:three-learning-gaps:2026-09-14",
+      "owner_semantics": "RECORD_RESPONSIBILITY_NOT_CANONICAL_ATOM_OWNERSHIP_OR_HUMAN_ASSIGNMENT"
+    }
+  ],
+  "open_choices": [
+    "Task family and allowed measurements/interventions",
+    "Relation-truth/adjudication source and blinded evaluator/access policy",
+    "Model/provider and candidate-generator revision/read-set",
+    "Sample size, estimand, minimum relevant effect, multiplicity/sequential analysis, total budget and stopping rule",
+    "Joint-uncertainty calibration and retention tradeoff thresholds"
+  ],
+  "adversarial_review": {
+    "source": "agent(codex):independent-literature-plan-review",
+    "findings_addressed": [
+      "Seal novelty comparison against initial generator/prompt/read-set/primitive bytes; qualify unknown pretraining.",
+      "Bind independent wrongness authority and access policy.",
+      "Bind frozen R-00 study contract hash through proposals, assignments, evaluation and canonical revisions.",
+      "Include matched no-composition baseline separate from credit ablations."
+    ],
+    "claim_ceiling": "REVIEW_IMPROVES_DESIGN_NOT_EFFICACY"
+  },
+  "new_dependencies": [],
+  "model_calls_or_scientific_experiments_run": false
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": "hswm-three-learning-gaps-validation/v1",
+  "checked_on": "2026-09-14",
+  "status": "PASS_WITH_DECLARED_SCOPE",
+  "claim_ceiling": "DOCUMENT_STRUCTURE_SOURCE_BINDING_AND_RESEARCH_DESIGN_REVIEW_ONLY_NOT_SCIENTIFIC_RESULT",
+  "artifact_bindings": [
+    {
+      "path": "ontology/development/HSWM_THREE_LEARNING_GAPS_RESEARCH_2026-09-14.v1.json",
+      "sha256": "af26cbdc8618a106b0659fecb8daba910c803ee4305f77027bc19687038b0292"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_three_learning_gaps_2026-09-14/research.v1.json",
+      "sha256": "b73c7d031db1c1a327c2f697def8848d4d7da523f06b8c136e93674833ca88f4"
+    },
+    {
+      "path": "docs/research/HSWM_THREE_LEARNING_GAPS_IMPLEMENTATION_RESEARCH_2026-09-14.md",
+      "sha256": "617125b47b14a71a1ae6e98db0fe531591d7f8caf2a9693036e65e5677a5db62"
+    }
+  ],
+  "checks": {
+    "source_and_graph_integrity": {
+      "status": "PASS",
+      "artifact_bindings_checked": 15,
+      "unique_nodes": 38,
+      "resolved_anchors": 7,
+      "relations": 88,
+      "proposal_dependencies_acyclic": true,
+      "no_gap_or_proposal_promoted": true
+    },
+    "native_shacl": {
+      "status": "PASS",
+      "conforms": true,
+      "results": [],
+      "engine": "rdf-validate-shacl@0.6.5",
+      "shapes": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle validate --source three-gaps=ontology/development/HSWM_THREE_LEARNING_GAPS_RESEARCH_2026-09-14.v1.json --profile v2 --shapes schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+      "scope": "Existing positive structural profile only; no new conformance-suite or negative serializer qualification claimed."
+    },
+    "rdf_projection": {
+      "status": "PASS",
+      "profile": "hswm-kg-bundle-rdf-projection/v2",
+      "dataset_sha256": "2d82c3a85e81e28d1c6fd36a02547e807f9d117a7bce4f0152dd981fee0ee617",
+      "dataset_byte_length": 664071,
+      "storage": "Transient local projection; regenerate using native project CLI and committed bundle.",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle project --source three-gaps=ontology/development/HSWM_THREE_LEARNING_GAPS_RESEARCH_2026-09-14.v1.json --profile v2 --output-dir NEW_EMPTY_DIRECTORY"
+    },
+    "sparql_coverage": {
+      "status": "PASS",
+      "engine": "@comunica/query-sparql@5.3.0",
+      "query": "PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>\nPREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>\nSELECT ?gap ?criterion ?proposal ?source WHERE {\n ?g p:standard_graph_role \"LEARNING_GAP\"; p:name ?gap; r:HAS_CRITERION/p:acceptance ?criterion.\n ?p p:standard_graph_role \"IMPLEMENTATION_PROPOSAL\"; p:name ?proposal; r:ADDRESSES ?g; r:HAS_SOURCE/p:source_url ?source.\n} ORDER BY ?gap ?proposal ?source\n",
+      "row_count": 25,
+      "distinct_gaps": 3,
+      "distinct_proposals": 5,
+      "distinct_sources": 12
+    },
+    "hswm_development_workflow": {
+      "status": "PLAN_RUN_STATUS_FEEDBACK_RECORDED_LOCALLY",
+      "backend": "TypeScript/Effect; existing qualified Node 24.13.0",
+      "selected_relation": "relation:docs-focused",
+      "check_result": "3 files / 8 existing documentation tests passed",
+      "feedback_source": "agent(codex):useful for Markdown rendering/projection regression checks; separate KG/source checks required",
+      "boundary": "Passing checks are not user feedback, causal credit or HSWM efficacy; private episode output remains local."
+    },
+    "portable_markdown": {
+      "status": "PASS",
+      "command": "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology",
+      "documents": 161,
+      "math_fences_seen": 186,
+      "display_fence_rewrites": 66,
+      "legacy_compatibility_rewrites": 6,
+      "operatorname_rewrites": 36,
+      "scope": "Derived projections only; historical source bytes preserved."
+    },
+    "adversarial_design_review": {
+      "status": "FOUR_FINDINGS_ADDRESSED",
+      "scope": "Generator novelty boundary, independent relation-wrongness evidence, persistent frozen study-contract binding, and matched no-composition baseline."
+    }
+  },
+  "limitations": [
+    "No runtime implementation or model experiment performed.",
+    "No external package/model/repository installed or selected as dependency.",
+    "Some sources read at abstract level only; per-source depth is in research.v1.json.",
+    "No live KG write/publication, scientific evidence promotion or first-scale support decision.",
+    "The code URL advertised by CausaLab returned 404 during review; no code revision/license qualified."
+  ]
+}

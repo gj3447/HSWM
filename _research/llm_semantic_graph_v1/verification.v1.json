@@ -1,0 +1,119 @@
+{
+  "schema_version": "hswm-llm-semantic-graph-verification/v1",
+  "recorded_on": "2026-09-14",
+  "status": "PASS_SOURCE_BOUND_ENGINEERING_AND_LEAN_CHECKS",
+  "claim_ceiling": "SEMANTIC_CONTENT_DATAFLOW_DURABLE_REVISION_AND_FORMAL_STRUCTURE_NOT_ACTUAL_LLM_IMPROVEMENT_CAUSAL_IDENTIFICATION_OR_FULL_HSWM",
+  "artifact_bindings": [
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+      "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/index.ts",
+      "sha256": "876dff1f6d2d97f25ca1478c13071b25fa2532050130ea1eafc7816ac51aca89"
+    },
+    {
+      "path": "tests/effect-runtime/canonical-atom-v2-llm-semantic-runtime.test.ts",
+      "sha256": "e098f3728ef59d3243dfe865efaa03fb92c71aac1a9b38a40caf14f99e739f69"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package.json",
+      "sha256": "8a0bba8b3701483d3c119a0bbead27d6dcff3e55b13836a252bc30488c179ee6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "a11cd7f1942df3811d4a818131c38c918a971d65b386caf5ea3dee108225ed2c"
+    }
+  ],
+  "build": {
+    "exit_code": 0,
+    "command": "npm --prefix src/hswm/effect-runtime run build"
+  },
+  "type_and_effect_check": {
+    "exit_code": 0,
+    "command": "npm --prefix src/hswm/effect-runtime run check"
+  },
+  "tests": {
+    "passed": 41,
+    "failed": 0,
+    "files": [
+      {
+        "path": "tests/effect-runtime/canonical-atom-v2-llm-semantic-runtime.test.ts",
+        "status": "passed",
+        "tests": 4
+      },
+      {
+        "path": "src/hswm/effect-runtime/test/canonical-atom-v2-durable-runtime.test.ts",
+        "status": "passed",
+        "tests": 29
+      },
+      {
+        "path": "src/hswm/effect-runtime/test/native-markdown-math-domain.test.ts",
+        "status": "passed",
+        "tests": 4
+      },
+      {
+        "path": "src/hswm/effect-runtime/test/native-markdown-math-process.integration.test.ts",
+        "status": "passed",
+        "tests": 1
+      },
+      {
+        "path": "src/hswm/effect-runtime/test/native-markdown-rendering-contract.test.ts",
+        "status": "passed",
+        "tests": 3
+      }
+    ],
+    "transport": "INJECTED_FIXTURE_NOT_MODEL_INFERENCE",
+    "coverage": [
+      "durable reopen and next-request semantic text",
+      "full role and exception content",
+      "prior prediction uncertainty and external observation reused",
+      "forged receipt descriptor/value/backend/status rejected",
+      "duplicate JSON prediction/revision rejected",
+      "missing or duplicated exception refs rejected",
+      "concurrent state mutation during LLM call rejected",
+      "distinct repeated executions and cross-execution outcome rejection",
+      "existing durable journal regressions",
+      "native Markdown regressions"
+    ]
+  },
+  "lean": {
+    "record": "_research/llm_semantic_graph_v1/lean-verification.v1.json",
+    "named_theorems": 34,
+    "modules": 2,
+    "trust_level": 0,
+    "runtime_refinement_proved": false
+  },
+  "development_workflow": {
+    "backend": "typescript-effect",
+    "selected_relation": "relation:runtime-focused",
+    "selected_profile_tests_passed": 54,
+    "task_result_usefulness_feedback_status_kept_locally": true,
+    "feedback_authority": "agent(codex)",
+    "usefulness": "Existing adaptive runtime compatibility useful; focused canonical semantic/Lean/docs/graph checks run separately because learned profile does not select them. No learning efficacy or causal credit inferred.",
+    "public_raw_episodes": false
+  },
+  "portable_math": {
+    "display_fence_rewrites": 66,
+    "documents": 169,
+    "legacy_compatibility_rewrites": 6,
+    "math_fences_seen": 208,
+    "operatorname_rewrites": 36,
+    "status": "PORTABLE_MATH_COMPILED"
+  },
+  "new_dependencies_installed": false,
+  "actual_provider_calls": 0,
+  "actual_model_efficacy_evaluated": false,
+  "new_research_experiments": 0,
+  "live_kg_write": false,
+  "limitations": [
+    "typed library integration, not default hswm-dev/hswm-live route replacement",
+    "fixed declared role topology, no variable/relation invention",
+    "latest observation summary plus immutable older history, not full-history-in-prompt",
+    "global state-revision CAS is conservative under unrelated writes",
+    "caller-declared outcome source not independently authenticated or judged true",
+    "declared backend config equality not actual checkpoint attestation",
+    "Lean deterministic abstraction is not a checked TypeScript/HTTP/POSIX/crypto refinement",
+    "optional Nat evidence theory is not the LLM revision algorithm"
+  ]
+}

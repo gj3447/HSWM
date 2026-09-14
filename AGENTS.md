@@ -47,6 +47,19 @@
   `docs/research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md`.
   Preserve its distinction between the checked finite learner/refinement results
   and the unproved full HSWM target; inspect theorem premises and runtime mapping.
+- For LLM-executed Semantic Weight work, read
+  `docs/research/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.md` and
+  `docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md`.
+  The user's working premise is that an LLM can directly use the semantic
+  hypergraph, not merely score a hand-authored routing DSL. Preserve the exact
+  direction in `docs/canon/sources/USER_PRIMARY_HSWM_SEMANTIC_GRAPH_ENGINE_2026-09-14.txt`.
+  Supply relation text, ordered typed roles, context, exceptions and evidence to
+  the LLM; feed the bound observed outcome back into semantic revision; make
+  future execution read the revised canonical graph. Treat pretrained semantic
+  knowledge as a useful prior to test, not as absent information or established
+  world truth. Keep semantic disposition, evidence mass and routing score
+  distinct. Structural Lean proofs and fixture transport checks establish their
+  stated contracts, not real-model improvement or full CR/FCL realization.
 - Do not map implementation to the retired fixed `H/W/A/F/Π` decomposition.
   Map it instead to schema-approved canonical atoms, exactly one
   schema-relative responsibility owner per atom, typed references,

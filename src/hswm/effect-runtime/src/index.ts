@@ -677,3 +677,18 @@ export {
 export * from "./canonical-atom-v2-hypergraph-projection.js"
 export * from "./canonical-atom-v2-neo4j-projection.js"
 export * from "./hypergraph-projection-receipt.js"
+export {
+  HSWM_LLM_SEMANTIC_RELATION_MEDIA_TYPE,
+  HSWM_LLM_SEMANTIC_TRACE_MEDIA_TYPE,
+  HSWM_LLM_SEMANTIC_OUTCOME_MEDIA_TYPE,
+  LlmSemanticRuntimeError,
+  readLlmSemanticFrame,
+  executeLlmSemanticRelation,
+  stageLlmSemanticOutcome,
+  learnLlmSemanticRelation,
+  type SemanticRelationContent,
+  type SemanticReadFrame,
+  type SemanticTrace,
+  type SemanticOutcome,
+  type LlmSemanticCell
+} from "./canonical-atom-v2-llm-semantic-runtime.js"

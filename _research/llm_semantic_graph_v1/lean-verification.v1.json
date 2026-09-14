@@ -1,0 +1,125 @@
+{
+  "schema_version": "hswm-llm-semantic-graph-lean-verification/v1",
+  "recorded_on": "2026-09-14",
+  "source_base_commit": "f63045cf66f8447205a78c627a8a3375afeda267",
+  "status": "EXACT_SOURCE_KERNEL_CHECKED",
+  "claim_ceiling": "STRUCTURAL_OUTCOME_CONDITIONED_TEXT_REVISION_AND_GENERIC_NAT_EVIDENCE_IDENTITIES_NOT_LLM_EFFICACY_OR_RUNTIME_REFINEMENT",
+  "toolchain": {
+    "name": "leanprover/lean4:v4.32.1",
+    "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+    "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+    "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "pin_path": "formal/lean-toolchain",
+    "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+    "authority": "OFFICIAL_EXISTING_PIN_REUSED",
+    "main_license": "Apache-2.0",
+    "license_file_sha256": "8b28515ffffc5c0fe2807d8ae3735b00b324d9b7ce807dd63ff6ac8922fbce7e",
+    "bundled_notices_sha256": "00cce2ac071f63d470a287438a7c6bbc4334706be244384e9af4fc9ead11cdce",
+    "license_scope": "Compiler main license with bundled third-party notices retained in installed distribution.",
+    "new_dependencies_installed": false,
+    "dependency_scope": "Std shipped with this toolchain; this report is not a full binary-distribution supply-chain attestation."
+  },
+  "proof_sources": [
+    {
+      "path": "formal/HSWMLLMSemanticGraph.lean",
+      "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+      "exit_code": 0,
+      "named_theorem_count": 24,
+      "theorems": {
+        "HSWM.LLMSemanticGraph.serialize_preserves_roles": [],
+        "HSWM.LLMSemanticGraph.serialize_preserves_semantic_and_evidence": [],
+        "HSWM.LLMSemanticGraph.serialize_preserves_extra_role_bindings": [],
+        "HSWM.LLMSemanticGraph.step_uses_current_relation": [],
+        "HSWM.LLMSemanticGraph.step_gives_llm_exact_serialization": [],
+        "HSWM.LLMSemanticGraph.revise_preserves_roles_and_owner": [],
+        "HSWM.LLMSemanticGraph.revise_preserves_extra_role_bindings": [],
+        "HSWM.LLMSemanticGraph.revise_binds_outcome_and_increments_version": [],
+        "HSWM.LLMSemanticGraph.revise_uses_exact_llm_proposal": [],
+        "HSWM.LLMSemanticGraph.revision_proposal_receives_exact_outcome": [],
+        "HSWM.LLMSemanticGraph.outcome_sensitive_revision_witness": [],
+        "HSWM.LLMSemanticGraph.outcome_sensitive_successors_differ": [],
+        "HSWM.LLMSemanticGraph.replace_here": [
+          "propext"
+        ],
+        "HSWM.LLMSemanticGraph.replace_other": [
+          "propext"
+        ],
+        "HSWM.LLMSemanticGraph.learn_rejects_mismatched_trace": [
+          "propext"
+        ],
+        "HSWM.LLMSemanticGraph.learn_rejects_stale_snapshot": [
+          "propext"
+        ],
+        "HSWM.LLMSemanticGraph.learn_rejects_malformed_serialization": [
+          "propext"
+        ],
+        "HSWM.LLMSemanticGraph.learn_accepts_exactly_bound_receipt": [
+          "propext"
+        ],
+        "HSWM.LLMSemanticGraph.llm_step_then_bound_outcome_updates": [
+          "propext"
+        ],
+        "HSWM.LLMSemanticGraph.accepted_learn_readout_is_new_relation": [
+          "propext"
+        ],
+        "HSWM.LLMSemanticGraph.accepted_learn_retains_prior_history": [
+          "propext"
+        ],
+        "HSWM.LLMSemanticGraph.accepted_learn_frames_unrelated_relation": [
+          "propext"
+        ],
+        "HSWM.LLMSemanticGraph.accepted_learn_preserves_addresses": [
+          "propext"
+        ],
+        "HSWM.LLMSemanticGraph.joint_cell_preserves_unrevised_member": [
+          "propext"
+        ]
+      },
+      "audit_output_sha256": "2edf724fc6c2e826d5ca3a9f35835ed31166070674de83f4dbefdc549546ed5d"
+    },
+    {
+      "path": "formal/HSWMSemanticEvidence.lean",
+      "sha256": "2141f00ae2058db25e03c5d2957e6c556fe232ccc478cb3a741ed1484073ae97",
+      "exit_code": 0,
+      "named_theorem_count": 10,
+      "theorems": {
+        "HSWM.SemanticEvidence.run_eq_aggregate": [
+          "propext"
+        ],
+        "HSWM.SemanticEvidence.update_positive": [],
+        "HSWM.SemanticEvidence.run_positive": [
+          "propext"
+        ],
+        "HSWM.SemanticEvidence.update_dominance_iff": [],
+        "HSWM.SemanticEvidence.run_dominance_iff": [
+          "propext"
+        ],
+        "HSWM.SemanticEvidence.equal_factor_preserves_relative_odds": [
+          "propext"
+        ],
+        "HSWM.SemanticEvidence.equal_positive_factor_preserves_dominance_iff": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.SemanticEvidence.true_input_is_unobserved": [
+          "propext"
+        ],
+        "HSWM.SemanticEvidence.external_outcome_flips_preference_without_full_input_sweep": [
+          "propext"
+        ],
+        "HSWM.SemanticEvidence.equal_marginals_do_not_determine_joint_xor": [
+          "propext"
+        ]
+      },
+      "audit_output_sha256": "da8edc4b5c0d74f92d752cfd883821e1ac61e4cd851af0ac70c7bf388ae69bf0"
+    }
+  ],
+  "named_theorems": 34,
+  "commands": [
+    "lake env lean --trust=0 --stdin (exact source followed by #print axioms for all named theorems)"
+  ],
+  "llm_execution_formalized": false,
+  "sha256_or_posix_formalized": false,
+  "new_dependencies_installed": false
+}

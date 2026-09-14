@@ -1,0 +1,3005 @@
+{
+  "schema_version": "hswm-llm-semantic-graph-implementation-kg/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+  "status": "SCOPED_IMPLEMENTED_AND_KERNEL_CHECKED",
+  "nonclaim": "NOT_REAL_LLM_EFFICACY_CAUSAL_CREDIT_OR_FULL_CR_FCL_REALIZATION",
+  "authority_boundary": "USER_PRIMARY working direction is distinct from SECONDARY_AI construction and local test evidence.",
+  "source_accessed_on": "2026-09-14",
+  "artifact_bindings": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "5676109dbefd7b48f00c1bfda068d72a191d751de6e1730f596e1da86a7cc225"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/index.ts",
+      "sha256": "876dff1f6d2d97f25ca1478c13071b25fa2532050130ea1eafc7816ac51aca89"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package.json",
+      "sha256": "8a0bba8b3701483d3c119a0bbead27d6dcff3e55b13836a252bc30488c179ee6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "a11cd7f1942df3811d4a818131c38c918a971d65b386caf5ea3dee108225ed2c"
+    },
+    {
+      "path": "docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md",
+      "sha256": "f18f517ce3141c803ae8c92ebbe72d97196d9640d3f9526bf769e7ed8719704e"
+    },
+    {
+      "path": "docs/canon/sources/USER_PRIMARY_HSWM_SEMANTIC_GRAPH_ENGINE_2026-09-14.txt",
+      "sha256": "c3a4c5a2efd688984298fde6eb076ef6cb32960ffafdbdb63e0cb2e579f5cb72"
+    },
+    {
+      "path": "_research/llm_semantic_graph_v1/README.md",
+      "sha256": "c51a9e3937a4408f30e6f88436a6ec493dd44a2a2e0fe37693837f00f330cc1c"
+    },
+    {
+      "path": "_research/llm_semantic_graph_v1/lean-verification.v1.json",
+      "sha256": "9b600db971fb900b504f185a5742b5e1da46c2141488c63271a3acb93e6583b2"
+    },
+    {
+      "path": "_research/llm_semantic_graph_v1/verification.v1.json",
+      "sha256": "f566f325b4c2d9f528bfda6fa0bdb4f83a4c1bc7fc36bc1340e4c37c04800f8d"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "sha256": "c004e8bb5ab17b2b774b61f43fda90b577dc6949980626064e6a91382abfad57"
+    },
+    {
+      "path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+      "sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb"
+    },
+    {
+      "path": "ontology/development/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.v1.json",
+      "sha256": "90670ec9463ef0ae2ddd14118ac65a25149fc3530d2d4861a80131abc174bb9e"
+    },
+    {
+      "path": "formal/HSWMLLMSemanticGraph.lean",
+      "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a"
+    },
+    {
+      "path": "formal/HSWMSemanticEvidence.lean",
+      "sha256": "2141f00ae2058db25e03c5d2957e6c556fe232ccc478cb3a741ed1484073ae97"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+      "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+    },
+    {
+      "path": "tests/effect-runtime/canonical-atom-v2-llm-semantic-runtime.test.ts",
+      "sha256": "e098f3728ef59d3243dfe865efaa03fb92c71aac1a9b38a40caf14f99e739f69"
+    },
+    {
+      "path": "_research/llm_semantic_graph_v1/source-map.v1.json",
+      "sha256": "cf50149a5a43e8aceb99719d5201ea4b2f91b220e323a8cbfbc6b17159c2d205"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 48,
+    "anchors": 22,
+    "relations": 137
+  },
+  "anchors": [
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "name": "CR-0: Concrete Step/Learn semantics and safety",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+      "name": "CR-1: Constructive outcome-conditioned improvement",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-2",
+      "name": "CR-2: Derived causal identification",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-3",
+      "name": "CR-3: Causal multiscale credit without double counting",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-4",
+      "name": "CR-4: Useful coalition and topology construction/recovery",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "name": "CR-5: Joint world/self prediction and diachronic continuity",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-6",
+      "name": "CR-6: Concrete composition, intervention and effect preservation",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-7",
+      "name": "CR-7: One simultaneous witness, runtime refinement and external validity",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-local-causal-learning",
+      "name": "FCL-1 local causal learning law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-composition-preservation",
+      "name": "FCL-2 composition preservation law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-emergent-coalition",
+      "name": "FCL-3 emergent coalition law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-multiscale-credit",
+      "name": "FCL-4 multiscale credit law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-topology-morphogenesis",
+      "name": "FCL-5 topology morphogenesis law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-world-self-co-model",
+      "name": "FCL-6 world-self co-model law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-diachronic-continuity",
+      "name": "FCL-7 diachronic continuity law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-fractal-law-hswm-of-hswms",
+      "name": "FCL-8 HSWM-of-HSWMs law",
+      "required_labels": [
+        "Concept",
+        "EngineeringInstantiation",
+        "Guardrail"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-engine-research-2026-09-14",
+      "name": "HSWM LLM semantic execution: literature and theoretical path",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-engine-research-2026-09-14-S01",
+      "name": "Verbalized Machine Learning: Revisiting Machine Learning with Language Models",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-engine-research-2026-09-14-S02",
+      "name": "Verbalized Particle Posterior: Bayesian Inference over Natural Language Hypotheses",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-engine-research-2026-09-14-S03",
+      "name": "Learning POMDP World Models from Observations with Language-Model Priors",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-engine-research-2026-09-14-S07",
+      "name": "Optimality of Universal Bayesian Sequence Prediction for General Loss and Alphabet",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-engine-research-2026-09-14-S10",
+      "name": "EvoMemBench: Benchmarking Agent Memory from a Self-Evolving Perspective",
+      "required_labels": [
+        "Concept",
+        "AbstractNode"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "LLM semantic graph: execution, outcome-conditioned revision and Lean structure",
+        "description": "LLM semantic graph: execution, outcome-conditioned revision and Lean structure",
+        "standard_graph_role": "IMPLEMENTATION_AND_FORMAL_EVIDENCE",
+        "status": "SCOPED_IMPLEMENTED_AND_KERNEL_CHECKED",
+        "source_path": "docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "IMPLEMENTATION_AND_FORMAL_EVIDENCE"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "actual_provider_calls": 0,
+        "runtime_refinement_proved": false
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-user",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "AI directly uses the Semantic Weight hypergraph",
+        "description": "AI directly uses the Semantic Weight hypergraph",
+        "standard_graph_role": "USER_DIRECTION",
+        "status": "USER_PRIMARY_DIRECTION",
+        "source_path": "docs/canon/sources/USER_PRIMARY_HSWM_SEMANTIC_GRAPH_ENGINE_2026-09-14.txt",
+        "authority_class": "USER_PRIMARY",
+        "ontology_authority_class_v1": "USER_PRIMARY",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "USER_DIRECTION_ONLY",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "USER_DIRECTION"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-runtime",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Canonical relation semantic content becomes LLM execution and revision input",
+        "description": "Canonical relation semantic content becomes LLM execution and revision input",
+        "standard_graph_role": "IMPLEMENTATION",
+        "status": "TRANSPORT_FIXTURE_AND_DURABLE_REOPEN_VERIFIED",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "IMPLEMENTATION"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "real_model_efficacy": "NOT_MEASURED",
+        "claim_ceiling": "Bounded local relation-content revision, not topology invention, verified external outcomes, or full cognition"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-checks",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Source-bound runtime and proof verification",
+        "description": "Source-bound runtime and proof verification",
+        "standard_graph_role": "ENGINEERING_VERIFICATION",
+        "status": "PASS_SOURCE_BOUND_ENGINEERING_AND_LEAN_CHECKS",
+        "source_path": "_research/llm_semantic_graph_v1/verification.v1.json",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_VERIFICATION"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWMLLMSemanticGraph.lean",
+        "description": "HSWMLLMSemanticGraph.lean",
+        "standard_graph_role": "FORMAL_CONSTRUCTION",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_CONSTRUCTION"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "named_theorems": 24,
+        "runtime_algorithm": "GRAPH_DATAFLOW_ABSTRACTION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-serialize_preserves_roles",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.serialize_preserves_roles",
+        "description": "HSWM.LLMSemanticGraph.serialize_preserves_roles",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.serialize_preserves_roles",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-serialize_preserves_semantic_and_evidence",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.serialize_preserves_semantic_and_evidence",
+        "description": "HSWM.LLMSemanticGraph.serialize_preserves_semantic_and_evidence",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.serialize_preserves_semantic_and_evidence",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-serialize_preserves_extra_role_bindings",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.serialize_preserves_extra_role_bindings",
+        "description": "HSWM.LLMSemanticGraph.serialize_preserves_extra_role_bindings",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.serialize_preserves_extra_role_bindings",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-step_uses_current_relation",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.step_uses_current_relation",
+        "description": "HSWM.LLMSemanticGraph.step_uses_current_relation",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.step_uses_current_relation",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-step_gives_llm_exact_serialization",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.step_gives_llm_exact_serialization",
+        "description": "HSWM.LLMSemanticGraph.step_gives_llm_exact_serialization",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.step_gives_llm_exact_serialization",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_preserves_roles_and_owner",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.revise_preserves_roles_and_owner",
+        "description": "HSWM.LLMSemanticGraph.revise_preserves_roles_and_owner",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.revise_preserves_roles_and_owner",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_preserves_extra_role_bindings",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.revise_preserves_extra_role_bindings",
+        "description": "HSWM.LLMSemanticGraph.revise_preserves_extra_role_bindings",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.revise_preserves_extra_role_bindings",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_binds_outcome_and_increments_version",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.revise_binds_outcome_and_increments_version",
+        "description": "HSWM.LLMSemanticGraph.revise_binds_outcome_and_increments_version",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.revise_binds_outcome_and_increments_version",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_uses_exact_llm_proposal",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.revise_uses_exact_llm_proposal",
+        "description": "HSWM.LLMSemanticGraph.revise_uses_exact_llm_proposal",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.revise_uses_exact_llm_proposal",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revision_proposal_receives_exact_outcome",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.revision_proposal_receives_exact_outcome",
+        "description": "HSWM.LLMSemanticGraph.revision_proposal_receives_exact_outcome",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.revision_proposal_receives_exact_outcome",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-outcome_sensitive_revision_witness",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.outcome_sensitive_revision_witness",
+        "description": "HSWM.LLMSemanticGraph.outcome_sensitive_revision_witness",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.outcome_sensitive_revision_witness",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-outcome_sensitive_successors_differ",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.outcome_sensitive_successors_differ",
+        "description": "HSWM.LLMSemanticGraph.outcome_sensitive_successors_differ",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.outcome_sensitive_successors_differ",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-replace_here",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.replace_here",
+        "description": "HSWM.LLMSemanticGraph.replace_here",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.replace_here",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-replace_other",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.replace_other",
+        "description": "HSWM.LLMSemanticGraph.replace_other",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.replace_other",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_rejects_mismatched_trace",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.learn_rejects_mismatched_trace",
+        "description": "HSWM.LLMSemanticGraph.learn_rejects_mismatched_trace",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.learn_rejects_mismatched_trace",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_rejects_stale_snapshot",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.learn_rejects_stale_snapshot",
+        "description": "HSWM.LLMSemanticGraph.learn_rejects_stale_snapshot",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.learn_rejects_stale_snapshot",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_rejects_malformed_serialization",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.learn_rejects_malformed_serialization",
+        "description": "HSWM.LLMSemanticGraph.learn_rejects_malformed_serialization",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.learn_rejects_malformed_serialization",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_accepts_exactly_bound_receipt",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.learn_accepts_exactly_bound_receipt",
+        "description": "HSWM.LLMSemanticGraph.learn_accepts_exactly_bound_receipt",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.learn_accepts_exactly_bound_receipt",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-llm_step_then_bound_outcome_updates",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.llm_step_then_bound_outcome_updates",
+        "description": "HSWM.LLMSemanticGraph.llm_step_then_bound_outcome_updates",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.llm_step_then_bound_outcome_updates",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_readout_is_new_relation",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.accepted_learn_readout_is_new_relation",
+        "description": "HSWM.LLMSemanticGraph.accepted_learn_readout_is_new_relation",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.accepted_learn_readout_is_new_relation",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_retains_prior_history",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.accepted_learn_retains_prior_history",
+        "description": "HSWM.LLMSemanticGraph.accepted_learn_retains_prior_history",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.accepted_learn_retains_prior_history",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_frames_unrelated_relation",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.accepted_learn_frames_unrelated_relation",
+        "description": "HSWM.LLMSemanticGraph.accepted_learn_frames_unrelated_relation",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.accepted_learn_frames_unrelated_relation",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_preserves_addresses",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.accepted_learn_preserves_addresses",
+        "description": "HSWM.LLMSemanticGraph.accepted_learn_preserves_addresses",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.accepted_learn_preserves_addresses",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-joint_cell_preserves_unrevised_member",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.LLMSemanticGraph.joint_cell_preserves_unrevised_member",
+        "description": "HSWM.LLMSemanticGraph.joint_cell_preserves_unrevised_member",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMLLMSemanticGraph.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.LLMSemanticGraph.joint_cell_preserves_unrevised_member",
+        "source_sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-evidence-proof",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWMSemanticEvidence.lean",
+        "description": "HSWMSemanticEvidence.lean",
+        "standard_graph_role": "FORMAL_CONSTRUCTION",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMSemanticEvidence.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_CONSTRUCTION"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "source_sha256": "2141f00ae2058db25e03c5d2957e6c556fe232ccc478cb3a741ed1484073ae97",
+        "named_theorems": 10,
+        "runtime_algorithm": "OPTIONAL_EVIDENCE_ARITHMETIC_NOT_RUNTIME_LEARNER"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-run_eq_aggregate",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.SemanticEvidence.run_eq_aggregate",
+        "description": "HSWM.SemanticEvidence.run_eq_aggregate",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMSemanticEvidence.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.SemanticEvidence.run_eq_aggregate",
+        "source_sha256": "2141f00ae2058db25e03c5d2957e6c556fe232ccc478cb3a741ed1484073ae97",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-update_positive",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.SemanticEvidence.update_positive",
+        "description": "HSWM.SemanticEvidence.update_positive",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMSemanticEvidence.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.SemanticEvidence.update_positive",
+        "source_sha256": "2141f00ae2058db25e03c5d2957e6c556fe232ccc478cb3a741ed1484073ae97",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-run_positive",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.SemanticEvidence.run_positive",
+        "description": "HSWM.SemanticEvidence.run_positive",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMSemanticEvidence.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.SemanticEvidence.run_positive",
+        "source_sha256": "2141f00ae2058db25e03c5d2957e6c556fe232ccc478cb3a741ed1484073ae97",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-update_dominance_iff",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.SemanticEvidence.update_dominance_iff",
+        "description": "HSWM.SemanticEvidence.update_dominance_iff",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMSemanticEvidence.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.SemanticEvidence.update_dominance_iff",
+        "source_sha256": "2141f00ae2058db25e03c5d2957e6c556fe232ccc478cb3a741ed1484073ae97",
+        "observed_axioms": [],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-run_dominance_iff",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.SemanticEvidence.run_dominance_iff",
+        "description": "HSWM.SemanticEvidence.run_dominance_iff",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMSemanticEvidence.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.SemanticEvidence.run_dominance_iff",
+        "source_sha256": "2141f00ae2058db25e03c5d2957e6c556fe232ccc478cb3a741ed1484073ae97",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-equal_factor_preserves_relative_odds",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.SemanticEvidence.equal_factor_preserves_relative_odds",
+        "description": "HSWM.SemanticEvidence.equal_factor_preserves_relative_odds",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMSemanticEvidence.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.SemanticEvidence.equal_factor_preserves_relative_odds",
+        "source_sha256": "2141f00ae2058db25e03c5d2957e6c556fe232ccc478cb3a741ed1484073ae97",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-equal_positive_factor_preserves_dominance_iff",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.SemanticEvidence.equal_positive_factor_preserves_dominance_iff",
+        "description": "HSWM.SemanticEvidence.equal_positive_factor_preserves_dominance_iff",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMSemanticEvidence.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.SemanticEvidence.equal_positive_factor_preserves_dominance_iff",
+        "source_sha256": "2141f00ae2058db25e03c5d2957e6c556fe232ccc478cb3a741ed1484073ae97",
+        "observed_axioms": [
+          "Classical.choice",
+          "Quot.sound",
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-true_input_is_unobserved",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.SemanticEvidence.true_input_is_unobserved",
+        "description": "HSWM.SemanticEvidence.true_input_is_unobserved",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMSemanticEvidence.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.SemanticEvidence.true_input_is_unobserved",
+        "source_sha256": "2141f00ae2058db25e03c5d2957e6c556fe232ccc478cb3a741ed1484073ae97",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-external_outcome_flips_preference_without_full_input_sweep",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.SemanticEvidence.external_outcome_flips_preference_without_full_input_sweep",
+        "description": "HSWM.SemanticEvidence.external_outcome_flips_preference_without_full_input_sweep",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMSemanticEvidence.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.SemanticEvidence.external_outcome_flips_preference_without_full_input_sweep",
+        "source_sha256": "2141f00ae2058db25e03c5d2957e6c556fe232ccc478cb3a741ed1484073ae97",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-equal_marginals_do_not_determine_joint_xor",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM.SemanticEvidence.equal_marginals_do_not_determine_joint_xor",
+        "description": "HSWM.SemanticEvidence.equal_marginals_do_not_determine_joint_xor",
+        "standard_graph_role": "FORMAL_THEOREM",
+        "status": "KERNEL_CHECKED",
+        "source_path": "formal/HSWMSemanticEvidence.lean",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "FORMAL_THEOREM"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "lean_symbol": "HSWM.SemanticEvidence.equal_marginals_do_not_determine_joint_xor",
+        "source_sha256": "2141f00ae2058db25e03c5d2957e6c556fe232ccc478cb3a741ed1484073ae97",
+        "observed_axioms": [
+          "propext"
+        ],
+        "interpretation_boundary": "See exact Lean premises; deterministic interpreter model or Nat evidence factors; no semantic truth or normalized posterior claim"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-0",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "CR-0 remaining research requirement",
+        "description": "CR-0 remaining research requirement",
+        "standard_graph_role": "REMAINING_RESEARCH_OBLIGATION",
+        "status": "OPEN_NOT_DISCHARGED",
+        "source_path": "docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "REMAINING_RESEARCH_OBLIGATION"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "remaining_requirement": "Actual TS/Effect-to-Lean refinement, LLM stochastic realization, and rights/observation semantics remain open."
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-1",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "CR-1 remaining research requirement",
+        "description": "CR-1 remaining research requirement",
+        "standard_graph_role": "REMAINING_RESEARCH_OBLIGATION",
+        "status": "OPEN_NOT_DISCHARGED",
+        "source_path": "docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "REMAINING_RESEARCH_OBLIGATION"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "remaining_requirement": "Fresh held-out prediction/control improvement from outcome-conditioned semantic revision; equal-information baselines."
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-2",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "CR-2 remaining research requirement",
+        "description": "CR-2 remaining research requirement",
+        "standard_graph_role": "REMAINING_RESEARCH_OBLIGATION",
+        "status": "OPEN_NOT_DISCHARGED",
+        "source_path": "docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "REMAINING_RESEARCH_OBLIGATION"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "remaining_requirement": "An identifying observation/intervention family; external outcome truth and causal relation interpretation."
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-3",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "CR-3 remaining research requirement",
+        "description": "CR-3 remaining research requirement",
+        "standard_graph_role": "REMAINING_RESEARCH_OBLIGATION",
+        "status": "OPEN_NOT_DISCHARGED",
+        "source_path": "docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "REMAINING_RESEARCH_OBLIGATION"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "remaining_requirement": "Joint causal credit under shared causes, delayed feedback and overlapping participants without double counting."
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-4",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "CR-4 remaining research requirement",
+        "description": "CR-4 remaining research requirement",
+        "standard_graph_role": "REMAINING_RESEARCH_OBLIGATION",
+        "status": "OPEN_NOT_DISCHARGED",
+        "source_path": "docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "REMAINING_RESEARCH_OBLIGATION"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "remaining_requirement": "Learn new meaningful variables, typed relations and useful topology; fixed-role content revision alone is insufficient."
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-5",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "CR-5 remaining research requirement",
+        "description": "CR-5 remaining research requirement",
+        "standard_graph_role": "REMAINING_RESEARCH_OBLIGATION",
+        "status": "OPEN_NOT_DISCHARGED",
+        "source_path": "docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "REMAINING_RESEARCH_OBLIGATION"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "remaining_requirement": "World/self readout continuity and useful persistent change beyond content durability."
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-6",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "CR-6 remaining research requirement",
+        "description": "CR-6 remaining research requirement",
+        "standard_graph_role": "REMAINING_RESEARCH_OBLIGATION",
+        "status": "OPEN_NOT_DISCHARGED",
+        "source_path": "docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "REMAINING_RESEARCH_OBLIGATION"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "remaining_requirement": "Joint Step and Learn preservation, uncertainties and exceptions under recursive cognition-bearing composition."
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-7",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "CR-7 remaining research requirement",
+        "description": "CR-7 remaining research requirement",
+        "standard_graph_role": "REMAINING_RESEARCH_OBLIGATION",
+        "status": "OPEN_NOT_DISCHARGED",
+        "source_path": "docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_semantic_roles_v1": [
+          "REMAINING_RESEARCH_OBLIGATION"
+        ],
+        "responsibility_owner": "hswm:research:llm-semantic-graph:2026-09-14",
+        "claim_boundary": "STRUCTURAL_CONSTRUCTION_NOT_REAL_MODEL_EFFICACY_OR_FULL_HSWM_REALIZATION",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_CANONICAL_ADMISSION_OR_LEARNING",
+        "remaining_requirement": "Construct integrated bounded recursive HSWM under original success criteria; no upstream failure rescued by scale."
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-user",
+      "type": "RESPONDS_TO",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-engine-research-2026-09-14",
+      "type": "IMPLEMENTS_SCOPED_BRIDGE_FROM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-runtime",
+      "type": "HAS_IMPLEMENTATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-runtime",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-engine-research-2026-09-14-S01",
+      "type": "USES_SCOPED_RESEARCH_DESIGN",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-runtime",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-engine-research-2026-09-14-S02",
+      "type": "USES_SCOPED_RESEARCH_DESIGN",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-runtime",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-engine-research-2026-09-14-S03",
+      "type": "USES_SCOPED_RESEARCH_DESIGN",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-runtime",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-engine-research-2026-09-14-S07",
+      "type": "USES_SCOPED_RESEARCH_DESIGN",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-runtime",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-engine-research-2026-09-14-S10",
+      "type": "USES_SCOPED_RESEARCH_DESIGN",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-checks",
+      "type": "HAS_VERIFICATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-runtime",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-checks",
+      "type": "CHECKED_BY",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "type": "HAS_FORMAL_CONSTRUCTION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-checks",
+      "type": "AUDITED_BY",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-runtime",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "type": "HAS_EXPLICIT_ABSTRACTION_NOT_PROVED_REFINEMENT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-serialize_preserves_roles",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-serialize_preserves_roles",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-serialize_preserves_roles",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-serialize_preserves_semantic_and_evidence",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-serialize_preserves_semantic_and_evidence",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-serialize_preserves_semantic_and_evidence",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-serialize_preserves_extra_role_bindings",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-serialize_preserves_extra_role_bindings",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-serialize_preserves_extra_role_bindings",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-step_uses_current_relation",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-step_uses_current_relation",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-step_uses_current_relation",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-step_gives_llm_exact_serialization",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-step_gives_llm_exact_serialization",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-step_gives_llm_exact_serialization",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_preserves_roles_and_owner",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_preserves_roles_and_owner",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_preserves_roles_and_owner",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_preserves_extra_role_bindings",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_preserves_extra_role_bindings",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_preserves_extra_role_bindings",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_binds_outcome_and_increments_version",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_binds_outcome_and_increments_version",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_binds_outcome_and_increments_version",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_uses_exact_llm_proposal",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_uses_exact_llm_proposal",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revise_uses_exact_llm_proposal",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revision_proposal_receives_exact_outcome",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revision_proposal_receives_exact_outcome",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-revision_proposal_receives_exact_outcome",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-outcome_sensitive_revision_witness",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-outcome_sensitive_revision_witness",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-outcome_sensitive_revision_witness",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-outcome_sensitive_successors_differ",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-outcome_sensitive_successors_differ",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-outcome_sensitive_successors_differ",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-replace_here",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-replace_here",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-replace_here",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-replace_other",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-replace_other",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-replace_other",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_rejects_mismatched_trace",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_rejects_mismatched_trace",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_rejects_mismatched_trace",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_rejects_stale_snapshot",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_rejects_stale_snapshot",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_rejects_stale_snapshot",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_rejects_malformed_serialization",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_rejects_malformed_serialization",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_rejects_malformed_serialization",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_accepts_exactly_bound_receipt",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_accepts_exactly_bound_receipt",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-learn_accepts_exactly_bound_receipt",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-llm_step_then_bound_outcome_updates",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-llm_step_then_bound_outcome_updates",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-llm_step_then_bound_outcome_updates",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_readout_is_new_relation",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_readout_is_new_relation",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_readout_is_new_relation",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_retains_prior_history",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_retains_prior_history",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_retains_prior_history",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_frames_unrelated_relation",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_frames_unrelated_relation",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_frames_unrelated_relation",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_preserves_addresses",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_preserves_addresses",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-accepted_learn_preserves_addresses",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-graph-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-joint_cell_preserves_unrevised_member",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-joint_cell_preserves_unrevised_member",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-joint_cell_preserves_unrevised_member",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-evidence-proof",
+      "type": "HAS_FORMAL_CONSTRUCTION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-evidence-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-checks",
+      "type": "AUDITED_BY",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-evidence-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-run_eq_aggregate",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-run_eq_aggregate",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-evidence-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-update_positive",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-update_positive",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-evidence-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-run_positive",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-run_positive",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-evidence-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-update_dominance_iff",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-update_dominance_iff",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-evidence-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-run_dominance_iff",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-run_dominance_iff",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-evidence-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-equal_factor_preserves_relative_odds",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-equal_factor_preserves_relative_odds",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-evidence-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-equal_positive_factor_preserves_dominance_iff",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-equal_positive_factor_preserves_dominance_iff",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-evidence-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-true_input_is_unobserved",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-true_input_is_unobserved",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-evidence-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-external_outcome_flips_preference_without_full_input_sweep",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-external_outcome_flips_preference_without_full_input_sweep",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-evidence-proof",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-equal_marginals_do_not_determine_joint_xor",
+      "type": "HAS_THEOREM",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-theorem-equal_marginals_do_not_determine_joint_xor",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-6",
+      "type": "SUPPORTS_SCOPED_CONSTRUCTION_FOR",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-0",
+      "type": "RETAINS_OPEN_REQUIREMENT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-0",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+      "type": "ADDRESSES_EXISTING_OBLIGATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-0",
+      "to_uid": "sym:Concept:hswm-fractal-law-topology-morphogenesis",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-0",
+      "to_uid": "sym:Concept:hswm-fractal-law-diachronic-continuity",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-1",
+      "type": "RETAINS_OPEN_REQUIREMENT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-1",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+      "type": "ADDRESSES_EXISTING_OBLIGATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-1",
+      "to_uid": "sym:Concept:hswm-fractal-law-local-causal-learning",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-2",
+      "type": "RETAINS_OPEN_REQUIREMENT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-2",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-2",
+      "type": "ADDRESSES_EXISTING_OBLIGATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-2",
+      "to_uid": "sym:Concept:hswm-fractal-law-local-causal-learning",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-2",
+      "to_uid": "sym:Concept:hswm-fractal-law-multiscale-credit",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-3",
+      "type": "RETAINS_OPEN_REQUIREMENT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-3",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-3",
+      "type": "ADDRESSES_EXISTING_OBLIGATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-3",
+      "to_uid": "sym:Concept:hswm-fractal-law-multiscale-credit",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-4",
+      "type": "RETAINS_OPEN_REQUIREMENT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-4",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-4",
+      "type": "ADDRESSES_EXISTING_OBLIGATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-4",
+      "to_uid": "sym:Concept:hswm-fractal-law-emergent-coalition",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-4",
+      "to_uid": "sym:Concept:hswm-fractal-law-topology-morphogenesis",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-5",
+      "type": "RETAINS_OPEN_REQUIREMENT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-5",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+      "type": "ADDRESSES_EXISTING_OBLIGATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-5",
+      "to_uid": "sym:Concept:hswm-fractal-law-world-self-co-model",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-5",
+      "to_uid": "sym:Concept:hswm-fractal-law-diachronic-continuity",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-6",
+      "type": "RETAINS_OPEN_REQUIREMENT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-6",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-6",
+      "type": "ADDRESSES_EXISTING_OBLIGATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-6",
+      "to_uid": "sym:Concept:hswm-fractal-law-composition-preservation",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-6",
+      "to_uid": "sym:Concept:hswm-fractal-law-hswm-of-hswms",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14",
+      "to_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-7",
+      "type": "RETAINS_OPEN_REQUIREMENT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-7",
+      "to_uid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-7",
+      "type": "ADDRESSES_EXISTING_OBLIGATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-7",
+      "to_uid": "sym:Concept:hswm-fractal-law-composition-preservation",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-llm-semantic-graph-implementation-2026-09-14-remaining-CR-7",
+      "to_uid": "sym:Concept:hswm-fractal-law-hswm-of-hswms",
+      "type": "PRESERVES_TARGET_LAW",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_IMPLEMENTATION_PROOF_PROJECTION",
+      "status": "NO_TARGET_PROMOTION"
+    }
+  ]
+}

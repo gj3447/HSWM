@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT DISTINCT ?symbol ?source ?obligation ?remaining ?status WHERE {
+ ?t p:standard_graph_role "FORMAL_THEOREM"; p:lean_symbol ?symbol;
+    p:source_path ?source; r:SUPPORTS_SCOPED_CONSTRUCTION_FOR ?o.
+ ?o <https://hswm.invalid/kg-bundle-rdf/v1/uid> ?obligation.
+ ?b r:ADDRESSES_EXISTING_OBLIGATION ?o;
+    p:remaining_requirement ?remaining; p:status ?status.
+} ORDER BY ?symbol ?obligation

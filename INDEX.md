@@ -1,5 +1,11 @@
 # HSWM — public repository index
 
+2026-09-14 [LLM 의미 그래프 구현과 Lean4](docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md)는
+관계 의미·역할·예외·근거를 LLM 실행과 outcome-conditioned canonical revision에 연결한다.
+[검증 기록](_research/llm_semantic_graph_v1/README.md)은 34개 Lean 정리와 transport·영속성 검사를
+구분한다. [KG](ontology/development/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.v1.json)는
+정리별 source와 남은 CR/FCL 의무를 연결하며 실제 모델 효능·전체 HSWM 완료는 주장하지 않는다.
+
 2026-09-14 [LLM이 실행하는 Semantic Weight](docs/research/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.md)는
 LLM의 의미 해석·관계 생성·실행·수정을 중심에 놓고 VML·VPP·Pinductor와 학습 이론을 연결한다.
 의미 전체의 수작업 정의 대신 관측·행동·교정 계약을 제안하며, 기존 CR/FCL 완료 판정은 바꾸지 않는다.

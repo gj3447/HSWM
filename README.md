@@ -49,6 +49,11 @@ LLM의 사전학습 의미를 활용해 관계를 실행하고 경험으로 수�
 VML·VPP·Pinductor와 조건부 학습 정리를 연결하며, 자연어 의미 전체를 수작업으로 정의하는
 대신 관측·실행·교정의 계약을 정합니다. 문헌 근거와 미완료 CR/FCL 의무를 구분한 연구 제안입니다.
 
+[LLM 의미 그래프 구현](docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md)은
+역할별 내용을 LLM에 전달하고, 예측 뒤 관측 결과로 같은 canonical 관계의 의미를 수정하여
+다음 실행에서 재사용하는 TypeScript/Effect 경로와 Lean4의 구조 증명을 연결합니다.
+현재 기본 CLI의 scalar routing을 대체한 상태는 아니며, 실제 모델 효능은 아직 측정하지 않았습니다.
+
 <a id="graph-model"></a>
 
 ## 그래프가 실행을 바꾸는 방식

@@ -1,0 +1,92 @@
+{
+  "schema_version": "hswm-semantic-weight-definition-lean-verification/v1",
+  "recorded_on": "2026-09-14",
+  "source_base_commit": "fa069bff728198756fcb3772b7936207beb5ac0e",
+  "status": "EXACT_SOURCE_KERNEL_CHECKED",
+  "claim_ceiling": "PARAMETRIC_OPERATIONAL_DEFINITION_FINITE_REPRESENTATION_AND_COUNTEREXAMPLES_NOT_PROBABILITY_NORMALIZATION_LLM_EFFICACY_OR_FULL_HSWM",
+  "toolchain": {
+    "name": "leanprover/lean4:v4.32.1",
+    "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+    "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+    "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "pin_path": "formal/lean-toolchain",
+    "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+    "authority": "OFFICIAL_EXISTING_PIN_REUSED",
+    "main_license": "Apache-2.0",
+    "license_file_sha256": "8b28515ffffc5c0fe2807d8ae3735b00b324d9b7ce807dd63ff6ac8922fbce7e",
+    "bundled_notices_sha256": "00cce2ac071f63d470a287438a7c6bbc4334706be244384e9af4fc9ead11cdce",
+    "license_scope": "Compiler main license with bundled third-party notices retained in installed distribution.",
+    "new_dependencies_installed": false,
+    "dependency_scope": "Std shipped with this toolchain; this report is not a full binary-distribution supply-chain attestation."
+  },
+  "proof_sources": [
+    {
+      "path": "formal/HSWMSemanticWeightDefinition.lean",
+      "sha256": "4173e860743f321c3ee87f6d48ef0570eba3f412d4ddca5ab4ff070e5d145ba5",
+      "exit_code": 0,
+      "named_theorem_count": 8,
+      "theorems": {
+        "HSWM.SemanticWeightDefinition.equal_local_reads_equal_behavior": [
+          "propext"
+        ],
+        "HSWM.SemanticWeightDefinition.no_read_only_decoder_for_lost_distinction": [],
+        "HSWM.SemanticWeightDefinition.constant_read_cannot_decode_boolean_target": [],
+        "HSWM.SemanticWeightDefinition.llm_realization_factors_declared_behavior": [],
+        "HSWM.SemanticWeightDefinition.from_llm_behavior_is_operator": [],
+        "HSWM.SemanticWeightDefinition.same_behavior_does_not_imply_same_learned_successor": [],
+        "HSWM.SemanticWeightDefinition.presentation_reindex_preserves_labelled_role_behavior": [],
+        "HSWM.SemanticWeightDefinition.role_swap_is_not_presentation_reindex": []
+      },
+      "audit_output_sha256": "c675c3630779550af09272c41d6c191b4a3ff53d5b1522eb9d220c72805384fd"
+    },
+    {
+      "path": "formal/HSWMHypergraphRepresentation.lean",
+      "sha256": "4025a678ce0686ac9bb49b3f4f413ca9650869e897c4d33cc595ac2897cda293",
+      "exit_code": 0,
+      "named_theorem_count": 14,
+      "theorems": {
+        "HSWM.HypergraphRepresentation.decode_encode": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.HypergraphRepresentation.encode_retains_subject": [],
+        "HSWM.HypergraphRepresentation.encode_retains_context": [],
+        "HSWM.HypergraphRepresentation.encode_retains_evidence": [],
+        "HSWM.HypergraphRepresentation.decode_encodeNary": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.HypergraphRepresentation.same_clique_projection": [
+          "Quot.sound"
+        ],
+        "HSWM.HypergraphRepresentation.ternary_families_differ": [],
+        "HSWM.HypergraphRepresentation.bcd_response_differs": [],
+        "HSWM.HypergraphRepresentation.no_pair_projection_decoder": [
+          "Quot.sound"
+        ],
+        "HSWM.HypergraphRepresentation.no_pair_projection_response_decoder": [
+          "Quot.sound"
+        ],
+        "HSWM.HypergraphRepresentation.mixedThird_unaryPairwise": [
+          "Quot.sound",
+          "propext"
+        ],
+        "HSWM.HypergraphRepresentation.cubic_has_binary_composition": [],
+        "HSWM.HypergraphRepresentation.mixedThird_cubicInteraction": [],
+        "HSWM.HypergraphRepresentation.cubic_not_unaryPairwise": [
+          "Quot.sound",
+          "propext"
+        ]
+      },
+      "audit_output_sha256": "8d1333ce4f49c15012cda84d565d6f547b112056f579a149f52c728eb06fc267"
+    }
+  ],
+  "named_theorems": 22,
+  "commands": [
+    "lake env lean --trust=0 --stdin (exact source followed by #print axioms for every named theorem)"
+  ],
+  "new_dependencies_installed": false,
+  "runtime_refinement_proved": false,
+  "general_probability_laws_formalized": false,
+  "full_hswm_proved": false
+}

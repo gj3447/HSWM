@@ -62,6 +62,15 @@
   causal estimands and evidence distinct. Connect work to the existing CR-0..7
   and FCL-1..8; the new analytic propositions do not discharge those obligations.
   This is the theory-reading workflow, not an approval gate or a new subsystem.
+- For the precise Semantic Weight definition and hypergraph necessity, read
+  `docs/research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md`
+  and its linked Lean sources. Preserve the distinction between stored meaning,
+  role/context-conditioned disposition, the local LLM realization, and measured
+  causal efficacy. Pair-only clique projection and additive pairwise potentials
+  have stated losses; tagged incidence/factor graphs can preserve n-ary structure.
+  Never infer that all binary graphs or nonlinear pairwise computations are
+  incapable of HSWM. Abstract output-law types and finite witnesses keep their
+  stated scope; no CR/FCL status follows from the representation proofs.
 - For realizability proof claims, also read
   `docs/research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md`.
   Preserve its distinction between the checked finite learner/refinement results

@@ -1,5 +1,10 @@
 # HSWM — public repository index
 
+2026-09-14 [Semantic Weight의 Lean4 정의와 하이퍼그래프 필요 조건](docs/research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md)은
+국소 LLM 전이 성향·입력 정보 손실·현재 예측과 학습의 차이·다자 관계의 표현을 엄밀히 구분한다.
+쌍별 투영의 불가능성 범위와 incidence encoding의 복원을 함께 검사하며,
+[정리·근거 KG](ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_DEFINITION_ONTOLOGY.v1.json)로 연결한다.
+
 2026-09-14 [상태 자체인 하이퍼그래프와 국소 LLM 연산자](docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md)는
 사용자 원문과 **OpenCog Hyperon 필수 핵심 비교 원칙**을
 [출처 결속 KG](ontology/identity/hswm_core/HSWM_STATE_LOCAL_OPERATOR_HYPERON_ONTOLOGY.v1.json)에 기록한다.

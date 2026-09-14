@@ -7,6 +7,11 @@
 전체가 하나의 거대한 AI를 이루는 하이퍼그래프 신경망입니다.
 [사용자 정체성 정의와 KG](docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md)에 기록합니다.
 
+**거대한 Semantic Weight 하이퍼그래프가 AI 상태 자체이고, LLM은 작은 국소 입력을 받아
+내부 신경 연산자로 작동한다**는 목표를 유지합니다.
+[상태·연산자 정의와 비교 원칙](docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md)에
+원문을 보존하며, **OpenCog Hyperon을 필수 핵심 비교 대상**으로 둡니다.
+
 [Semantic Weight·이론 기반](docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md) · [지식 지도·개발 현황](docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md) · [연구 도구·표준 조사](docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md) · [그래프 구조](#graph-model) · [빠른 실행](#quick-start) · [개발 실사용](#development) · [근거와 판정](#evidence) · [전체 문서](INDEX.md)
 
 > **2026-09-07 · 실사용 가능한 로컬 적응 프로토타입**<br>

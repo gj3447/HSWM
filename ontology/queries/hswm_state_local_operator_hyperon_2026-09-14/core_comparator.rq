@@ -1,0 +1,10 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX kg: <https://hswm.invalid/kg-bundle-rdf/v1/>
+SELECT ?comparator ?status ?authority ?excerpt ?source ?sha256 WHERE {
+ ?commitment p:standard_graph_role "USER_COMPARISON_COMMITMENT";
+   r:REQUIRES_CORE_COMPARATOR ?prior;
+   p:comparison_status ?status; p:authority_class ?authority;
+   p:source_excerpt ?excerpt; p:source_path ?source; p:source_sha256 ?sha256.
+ ?prior kg:uid ?comparator.
+}

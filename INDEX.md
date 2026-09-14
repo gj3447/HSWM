@@ -1,5 +1,10 @@
 # HSWM — public repository index
 
+2026-09-14 [상태 자체인 하이퍼그래프와 국소 LLM 연산자](docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md)는
+사용자 원문과 **OpenCog Hyperon 필수 핵심 비교 원칙**을
+[출처 결속 KG](ontology/identity/hswm_core/HSWM_STATE_LOCAL_OPERATOR_HYPERON_ONTOLOGY.v1.json)에 기록한다.
+공식 자료의 개념적 중첩과 구현 성숙도를 구별하며 현재 효능 판정은 유지한다.
+
 2026-09-14 [HSWM 기본 정체성](docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md)은
 **하나의 거대한 AI · 하이퍼그래프 신경망 · LLM 기본 계산 · Semantic Weight 작동**이라는
 사용자 재확인을 [정체성 KG](ontology/identity/hswm_core/HSWM_HYPERGRAPH_NEURAL_AI_IDENTITY_ONTOLOGY.v1.json)에

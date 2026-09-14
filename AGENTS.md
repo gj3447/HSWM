@@ -15,6 +15,16 @@
   the computational core; provider/API call count is an implementation detail.
   The detailed operational interpretation remains separately sourced, and
   this identity reaffirmation does not change implementation evidence or CR/FCL status.
+- Preserve the user's state/operator definition in
+  `docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md`:
+  the large Semantic Weight hypergraph is the AI state itself; an LLM receives
+  small local inputs and acts as an internal neural operator. Local read scope
+  and information sufficiency remain explicit research questions.
+  OpenCog Hyperon is a mandatory core comparator for architecture, novelty and
+  empirical comparisons. Read the linked 2026 direct-prior audit; compare its
+  persistent metagraph and neural bridges at their stated maturity and exact
+  implementation versions. Keep this comparison obligation distinct from
+  backend adoption, and preserve the existing HSWM evidence and CR/FCL ceilings.
 - For fractal, multiscale, hypergraph, or HSWM-of-HSWMs work, next read
   `docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md` and its
   checked-in/live-KG projection

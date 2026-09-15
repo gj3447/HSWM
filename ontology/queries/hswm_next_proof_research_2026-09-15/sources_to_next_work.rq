@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?work ?task ?paper ?version ?url ?evidenceKind ?limit WHERE {
+ ?w p:standard_graph_role "PROPOSED_RESEARCH_TASK";
+    p:work_id ?work; p:name ?task; r:DRAWS_ON ?s.
+ ?s p:name ?paper; p:source_version ?version; p:source_url ?url;
+    p:evidence_kind ?evidenceKind; p:transfer_limit ?limit.
+} ORDER BY ?work ?paper

@@ -1,5 +1,9 @@
 # HSWM — public repository index
 
+2026-09-15 [실제 LLM으로 이어지는 다음 증명 연구](docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md)는
+VML·GEPA, C3·Memory-R2, 순차 신뢰구간과 인과적 합성 이론을 현재 Lean 4의 미증명 의무에 연결한다.
+문헌·후속 계획이며 새 Lean 증명이나 전체 HSWM 실현 판정은 아니다.
+
 2026-09-14 [성능 증명의 추가 확장](docs/research/HSWM_SEMANTIC_FRONTIER_PROOFS_2026-09-14.md)은
 관계 생성·상관된 오류·라벨 오염·비용·재귀 학습을 다룬다. 생성된 관계와 noisy guard,
 재귀 실행을 한 유한 구성에 연결하며 실제 LLM 효능과 CR/FCL 판정은 구분한다.

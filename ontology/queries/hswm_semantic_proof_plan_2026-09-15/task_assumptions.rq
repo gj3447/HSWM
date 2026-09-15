@@ -1,0 +1,8 @@
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?taskId ?title ?assumption ?state ?contract WHERE {
+ ?task a role:WORK_PACKAGE; p:task_id ?taskId; p:name ?title;
+       r:REQUIRES_ASSUMPTION ?a.
+ ?a p:assumption_id ?assumption; p:status ?state; p:contract ?contract.
+} ORDER BY ?taskId ?assumption

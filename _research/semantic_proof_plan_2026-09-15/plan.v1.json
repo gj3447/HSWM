@@ -1,0 +1,1649 @@
+{
+  "schema_version": "hswm-semantic-proof-work-plan/v1",
+  "created_on": "2026-09-15",
+  "source_base_commit": "efd2bf0d5cf69d3c39d40d5e4ff4338211de2a74",
+  "status": "PLANNED_NOT_IMPLEMENTED",
+  "target": "One evolving Semantic Weight hypergraph AI with local LLM operators; all existing CR/FCL obligations preserved.",
+  "conceptual_delta": "Turn N1-N6 literature bridge into source-bound accountable work contracts, assumptions, outputs, actual dependencies, separate task outcomes and scientific support. Early runtime/comparator feasibility and parallel proposal research.",
+  "user_request": "해당 작업을 표준 그래프 엔지니어링 기반으로 작업 계획 정리를 해줘봐봐 ㅇ",
+  "authority_boundary": "User authorizes planning; decomposition and criteria are SECONDARY_AI proposals, not a new approval or canonical admission path.",
+  "tasks": [
+    {
+      "id": "P00",
+      "title": "동일 HSWM 연구 계약과 검증 질문",
+      "track": "N1",
+      "responsibility_role": "formal-methods",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [],
+      "input_contract": "기존 D1-D6, CR/FCL, 실제 소스와 반례",
+      "output_contract": "역할·관측·허용 개입·과제족·효용·공통 Step/Learn 및 claim matrix",
+      "acceptance": [
+        "HSWM 상태와 operational configuration을 구별하고 target law에 미래 정답을 읽는 경로가 없음을 명시한다.",
+        "같은 구성에서 닫을 CR-0..7/FCL-1..8와 유한 참조 범위의 차이를 기록한다."
+      ],
+      "failure_action": "식별 불가능한 질문과 관측 접근권 부족을 표시하고 목표를 축소하지 않은 새 관측/방법 후보를 기록한다.",
+      "assumptions": [
+        "A-OBS"
+      ],
+      "cr": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fcl": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "task_kind": "SPECIFICATION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMSemanticWeightDefinition.lean",
+          "sha256": "4173e860743f321c3ee87f6d48ef0570eba3f412d4ddca5ab4ff070e5d145ba5"
+        },
+        {
+          "path": "formal/HSWMSemanticQuotient.lean",
+          "sha256": "8dab893fb049284cbfe7b2cffb5abd8a11b6396dfe1422a89a823f41b17a6f52"
+        }
+      ],
+      "verification_method": "Inspect exact implementation/configuration and source-bound result; independently check specified input/output, controls and failure cases. Transport success and fixture tests are not model efficacy.",
+      "planned_output_area": "docs/research/ and _research/; public summaries with exact source/evidence scope",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "P01",
+      "title": "실제 LLM 실행·복원 가능성 조기 확인",
+      "track": "N6",
+      "responsibility_role": "runtime-integration",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [],
+      "input_contract": "기존 execute/stage/learn, receipt와 provider 계약",
+      "output_contract": "현재 실행→outcome→revision 경로의 모델 접근·숨은 상태·복원 가능성 보고",
+      "acceptance": [
+        "자격 있는 환경에서 실행 가능하면 모델/version/config, state root/read-set, 응답·수정·재시작 뒤 읽기를 추적한다. 접근 불가면 실제 호출 미실행과 원인을 기록한다.",
+        "캐시·session·RNG·동시 쓰기·외부 환경 중 복원되지 않는 조건을 명시하고 exact replay와 근사 커널 경로를 구분한다."
+      ],
+      "failure_action": "연결 불가 보고로 조사를 종료할 수 있지만 D-MODEL은 NOT_SATISFIED이며 efficacy 증거는 생성되지 않는다.",
+      "assumptions": [
+        "A-KERNEL",
+        "A-RESTORE"
+      ],
+      "cr": [
+        0,
+        7
+      ],
+      "fcl": [
+        1
+      ],
+      "task_kind": "FEASIBILITY_AUDIT",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [
+        "D-MODEL"
+      ],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+          "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+        },
+        {
+          "path": "formal/HSWMLLMSemanticGraph.lean",
+          "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a"
+        },
+        {
+          "path": "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md",
+          "sha256": "8b1b89e5ef848c3ce76ea6f76d8d60622768e0fc14aeacc7d5177f7ee35967b5"
+        },
+        {
+          "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+          "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81"
+        }
+      ],
+      "verification_method": "Inspect exact implementation/configuration and source-bound result; independently check specified input/output, controls and failure cases. Transport success and fixture tests are not model efficacy.",
+      "planned_output_area": "docs/research/ and _research/; public summaries with exact source/evidence scope",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "P02",
+      "title": "Hyperon과 강한 대조군의 실행 가능성 조사",
+      "track": "N6",
+      "responsibility_role": "comparison-design",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [],
+      "input_contract": "기존 Hyperon 고정 소스 감사와 baseline 기록",
+      "output_contract": "동일 과제·모델 접근·예산에서 재현 가능한 comparator 명세",
+      "acceptance": [
+        "Hyperon component/commit/license/config, 실제 실행 범위와 설계만 있는 범위를 구별한다.",
+        "긴 문맥·fixed graph·sham revision·matched ensemble·손실 없는 incidence 기준의 질문과 정보/비용 matching을 정의한다."
+      ],
+      "failure_action": "Hyperon 실행 불가 항목은 미평가이며 우위 주장을 하지 않는다. 필수 기전 대조군이 자격을 갖추고 Hyperon의 불가/비교불가 상태를 명시하면 범위 제한 첫 scale 연구는 가능하다.",
+      "assumptions": [],
+      "cr": [
+        7
+      ],
+      "fcl": [
+        1,
+        2,
+        8
+      ],
+      "task_kind": "FEASIBILITY_AUDIT",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [
+        "D-COMPARATOR"
+      ],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+          "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+        },
+        {
+          "path": "formal/HSWMLLMSemanticGraph.lean",
+          "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a"
+        },
+        {
+          "path": "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md",
+          "sha256": "8b1b89e5ef848c3ce76ea6f76d8d60622768e0fc14aeacc7d5177f7ee35967b5"
+        },
+        {
+          "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+          "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81"
+        }
+      ],
+      "verification_method": "Inspect exact implementation/configuration and source-bound result; independently check specified input/output, controls and failure cases. Transport success and fixture tests are not model efficacy.",
+      "planned_output_area": "docs/research/ and _research/; public summaries with exact source/evidence scope",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "K01",
+      "title": "정규화된 유한 공동 커널과 전이 의미",
+      "track": "N1",
+      "responsibility_role": "formal-methods",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "P00"
+      ],
+      "input_contract": "SemanticWeight의 추상 Law와 전체 Step/Learn 계약",
+      "output_contract": "Lean의 유한 joint law, bind/pushforward, 확률·타입 불변식",
+      "acceptance": [
+        "비음수·총질량 1, joint output, 역할·입력 타입, 허용/거부 전이를 정의하고 Lean 4 kernel로 검사한다.",
+        "기존 deterministic eval이 특수 경우임을 보이되 실제 LLM 정확성으로 확대하지 않는다."
+      ],
+      "failure_action": "분포 정규화 또는 공통 상태 모델이 성립하지 않으면 그 구성을 폐기/수정한다.",
+      "assumptions": [
+        "A-KERNEL"
+      ],
+      "cr": [
+        0,
+        5,
+        7
+      ],
+      "fcl": [
+        1,
+        2
+      ],
+      "task_kind": "CONSTRUCTION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMSemanticWeightDefinition.lean",
+          "sha256": "4173e860743f321c3ee87f6d48ef0570eba3f412d4ddca5ab4ff070e5d145ba5"
+        },
+        {
+          "path": "formal/HSWMSemanticQuotient.lean",
+          "sha256": "8dab893fb049284cbfe7b2cffb5abd8a11b6396dfe1422a89a823f41b17a6f52"
+        }
+      ],
+      "verification_method": "Lean 4.32.1: fresh exact-source imports; check definitions and all claimed theorem bodies with --trust=0; audit transitive axioms; include specified counterexamples. This plan does not run those future proofs.",
+      "planned_output_area": "formal/ plus _research/ and docs/research/",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "K02",
+      "title": "근사 국소 읽기 한계와 추가 관측 규칙",
+      "track": "N1",
+      "responsibility_role": "formal-methods",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "K01",
+        "P01"
+      ],
+      "input_contract": "read map, metric, 실제 모델 접근의 관측 한계",
+      "output_contract": "read 충돌의 오차 하한과 bounded read 확장/보류 규칙",
+      "acceptance": [
+        "같은 read의 서로 다른 target law에 대해 D≤2ε 필요조건을 유도하고 손실 반례를 검사한다.",
+        "추가 읽기의 종료·비용·접근 범위를 정하고 관측 불가능한 변수를 oracle로 삽입하지 않는다."
+      ],
+      "failure_action": "관련 차이를 잃는 read 또는 비용이 무제한인 확장은 미해결로 남기고 read/관측 정책을 바꾼다.",
+      "assumptions": [
+        "A-OBS",
+        "A-KERNEL"
+      ],
+      "cr": [
+        0,
+        5,
+        7
+      ],
+      "fcl": [
+        1,
+        6
+      ],
+      "task_kind": "CONSTRUCTION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMSemanticWeightDefinition.lean",
+          "sha256": "4173e860743f321c3ee87f6d48ef0570eba3f412d4ddca5ab4ff070e5d145ba5"
+        },
+        {
+          "path": "formal/HSWMSemanticQuotient.lean",
+          "sha256": "8dab893fb049284cbfe7b2cffb5abd8a11b6396dfe1422a89a823f41b17a6f52"
+        }
+      ],
+      "verification_method": "Lean 4.32.1: fresh exact-source imports; check definitions and all claimed theorem bodies with --trust=0; audit transitive axioms; include specified counterexamples. This plan does not run those future proofs.",
+      "planned_output_area": "formal/ plus _research/ and docs/research/",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "C01",
+      "title": "국소 기여와 현실 revision 효과의 식별 계약",
+      "track": "N2",
+      "responsibility_role": "causal-inference",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "P00",
+        "P01"
+      ],
+      "input_contract": "완전 이력/복원 가능성 보고와 외부 outcome 접근",
+      "output_contract": "서로 다른 두 estimand, 무작위화·간섭·누락/지연 관측 계약",
+      "acceptance": [
+        "C3의 frozen-continuation action advantage와 현실 revision 처치 효과의 unit/treatment/outcome/time window를 분리한다.",
+        "배정 확률·positivity·interference·숨은 상태·censoring 조건을 측정/설계 가정으로 구분하고 결과 전에 고정한다."
+      ],
+      "failure_action": "식별 조건 불충족을 효과 없음으로 재명명하지 않는다. 복원 불가면 실제 무작위 비교 또는 명시적 근사 법칙을 택한다.",
+      "assumptions": [
+        "A-RESTORE",
+        "A-ID"
+      ],
+      "cr": [
+        2,
+        3
+      ],
+      "fcl": [
+        1,
+        4
+      ],
+      "task_kind": "SPECIFICATION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [
+        "D-STUDY"
+      ],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMLLMSemanticGraph.lean",
+          "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+          "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+        }
+      ],
+      "verification_method": "Inspect exact implementation/configuration and source-bound result; independently check specified input/output, controls and failure cases. Transport success and fixture tests are not model efficacy.",
+      "planned_output_area": "docs/research/ and _research/; public summaries with exact source/evidence scope",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "C02",
+      "title": "관측 설계에서 효과 추정 정리 도출",
+      "track": "N2",
+      "responsibility_role": "causal-inference",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "C01",
+        "K01"
+      ],
+      "input_contract": "선택한 식별 계약과 공동 커널",
+      "output_contract": "finite conditional estimator의 기대값/편향 경계 및 위반 반례",
+      "acceptance": [
+        "선택한 LOO 또는 현실 무작위 revision estimator의 식과 bias 범위를 유도한다. C3 LOO는 완전 checkpoint/고정 evaluator·continuation 아래 n≥2 iid 행동(고정 π_b), 각 c_j≥1의 결과 관측 전 고정 배정, (h,a) 조건부 독립 rollout과 자기 표본 제외를 명시한다. 현실 처치 효과의 배정·간섭 가정과 구별한다.",
+        "공유 난수·지원 범위 없음·상태 불일치·평가 자료 재사용 반례를 넣는다. DR은 알려진 propensities와 자료 분리를 확보한 경우만 선택한다."
+      ],
+      "failure_action": "효과 식별을 결론으로 가정한 정리는 불수용. 선택한 방법이 실패하면 정확한 estimand와 가정을 남겨 교체한다.",
+      "assumptions": [
+        "A-ID",
+        "A-KERNEL"
+      ],
+      "cr": [
+        2,
+        3
+      ],
+      "fcl": [
+        1,
+        4
+      ],
+      "task_kind": "CONSTRUCTION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMLLMSemanticGraph.lean",
+          "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+          "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+        }
+      ],
+      "verification_method": "Lean 4.32.1: fresh exact-source imports; check definitions and all claimed theorem bodies with --trust=0; audit transitive axioms; include specified counterexamples. This plan does not run those future proofs.",
+      "planned_output_area": "formal/ plus _research/ and docs/research/",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "S01",
+      "title": "관측으로 계산하는 순차 신뢰 하한",
+      "track": "N3",
+      "responsibility_role": "statistical-learning",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "C01",
+        "K01"
+      ],
+      "input_contract": "estimand, 관측 stream, filtration과 유한 law",
+      "output_contract": "데이터 기반 L_t 계산과 동시 coverage의 Lean 정리",
+      "acceptance": [
+        "bounded/tail 조건, 후보 버전, 반복 관측·중단 규칙과 오류 예산을 명시하고 coverage를 유도한다.",
+        "효과 하한을 입력으로 주는 산술 정리에 그치지 않고 경계 계산을 관측값에 연결한다."
+      ],
+      "failure_action": "coverage 증명이 없으면 heuristic 점수로만 표기하고 유효한 후보군/관측 설계로 재구성한다.",
+      "assumptions": [
+        "A-STAT"
+      ],
+      "cr": [
+        1,
+        2,
+        7
+      ],
+      "fcl": [
+        1
+      ],
+      "task_kind": "CONSTRUCTION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMNoisyFeedback.lean",
+          "sha256": "113b7d1faf400dcf03965f8087c447ebef59409fa4d0be91607ec0a19cb83bcc"
+        },
+        {
+          "path": "formal/HSWMCorrelatedReliability.lean",
+          "sha256": "12babc171ab65fee19d09e0abff070bf7c9035fe4966552a0f80a5f76f7920d8"
+        }
+      ],
+      "verification_method": "Lean 4.32.1: fresh exact-source imports; check definitions and all claimed theorem bodies with --trust=0; audit transitive axioms; include specified counterexamples. This plan does not run those future proofs.",
+      "planned_output_area": "formal/ plus _research/ and docs/research/",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "S02",
+      "title": "오염·지연 outcome과 비용의 측정 계약",
+      "track": "N3",
+      "responsibility_role": "statistical-learning",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "C01"
+      ],
+      "input_contract": "외부 outcome·누락 규칙·예산과 비용 계측 가능성",
+      "output_contract": "보정 가능한 오염/결측 경계와 공통 효용 단위 비용 계약",
+      "acceptance": [
+        "오염 상계의 확보 방법과 검증 불가 범위를 명시한다. 비용은 토큰·시간·돈을 기록하고 사전에 정한 효용 변환과 상계를 구분한다.",
+        "미측정 비용을 0으로 놓지 않고 지연·누락·censoring과 label noise를 서로 다른 가정으로 다룬다."
+      ],
+      "failure_action": "B나 비용 단위를 검증하지 못하면 net-utility 보장을 보류하고 민감도/부분 식별 범위를 기록한다.",
+      "assumptions": [
+        "A-NOISE"
+      ],
+      "cr": [
+        1,
+        2,
+        7
+      ],
+      "fcl": [
+        1
+      ],
+      "task_kind": "SPECIFICATION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMNoisyFeedback.lean",
+          "sha256": "113b7d1faf400dcf03965f8087c447ebef59409fa4d0be91607ec0a19cb83bcc"
+        },
+        {
+          "path": "formal/HSWMCorrelatedReliability.lean",
+          "sha256": "12babc171ab65fee19d09e0abff070bf7c9035fe4966552a0f80a5f76f7920d8"
+        }
+      ],
+      "verification_method": "Inspect exact implementation/configuration and source-bound result; independently check specified input/output, controls and failure cases. Transport success and fixture tests are not model efficacy.",
+      "planned_output_area": "docs/research/ and _research/; public summaries with exact source/evidence scope",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "S03",
+      "title": "수정 채택의 타당성·검정력·종료",
+      "track": "N3",
+      "responsibility_role": "statistical-learning",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "S01",
+        "S02",
+        "C02"
+      ],
+      "input_contract": "관측 신뢰 하한·효과 추정·비용/오염 계약",
+      "output_contract": "accept/continue/reject 규칙, false-adoption 제어와 충분한 margin에서의 종료 정리",
+      "acceptance": [
+        "coverage 사건에서 L>비용이면 참 순이득이 남음을 전체 계산과 연결하고 다중 후보 error allocation을 검증한다.",
+        "충분한 효과·관측 조건에서 표본/비용 내 채택되는 조건과 counterexample를 보인다. 아무 후보도 채택하지 않는 규칙은 학습의 충분한 결과가 아니다."
+      ],
+      "failure_action": "후보 mutation/분포 변화/평가 누수는 기존 구간의 재사용을 중단한다. 효과가 약하거나 관측이 부족하면 CONTINUE/INCONCLUSIVE를 남긴다.",
+      "assumptions": [
+        "A-STAT",
+        "A-NOISE",
+        "A-ID"
+      ],
+      "cr": [
+        1,
+        2,
+        7
+      ],
+      "fcl": [
+        1
+      ],
+      "task_kind": "CONSTRUCTION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMNoisyFeedback.lean",
+          "sha256": "113b7d1faf400dcf03965f8087c447ebef59409fa4d0be91607ec0a19cb83bcc"
+        },
+        {
+          "path": "formal/HSWMCorrelatedReliability.lean",
+          "sha256": "12babc171ab65fee19d09e0abff070bf7c9035fe4966552a0f80a5f76f7920d8"
+        }
+      ],
+      "verification_method": "Lean 4.32.1: fresh exact-source imports; check definitions and all claimed theorem bodies with --trust=0; audit transitive axioms; include specified counterexamples. This plan does not run those future proofs.",
+      "planned_output_area": "formal/ plus _research/ and docs/research/",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "D01",
+      "title": "LLM 의미 prior와 접지된 새 후보 설계",
+      "track": "N4",
+      "responsibility_role": "semantic-discovery",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "P00"
+      ],
+      "input_contract": "VML/GEPA/TextGrad/DreamCoder와 기존 text revision",
+      "output_contract": "새 relation/변수/관측 경로의 typed proposal 계약과 검색 전략",
+      "acceptance": [
+        "단순 재서술과 새로운 구별 가능한 예측을 분리하고 referent·role·조건·예외·관측 경로를 후보에 연결한다.",
+        "초기 고정 AND 문법 밖 후보를 생성할 경로를 정의하되 읽을 수 없는 변수를 관측한 것으로 처리하지 않는다."
+      ],
+      "failure_action": "새로운 문장만 만든 경우 discovery로 세지 않고 관측 가능한 구별 예측을 다시 구성한다.",
+      "assumptions": [
+        "A-OBS",
+        "A-DISCOVERY"
+      ],
+      "cr": [
+        4
+      ],
+      "fcl": [
+        3,
+        5
+      ],
+      "task_kind": "SPECIFICATION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMConstructiveRelationSynthesis.lean",
+          "sha256": "19c2c246b722f4f89810fb47f34195df7754ee5472e1b8556723aa682b01ddd9"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+          "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+        }
+      ],
+      "verification_method": "Inspect exact implementation/configuration and source-bound result; independently check specified input/output, controls and failure cases. Transport success and fixture tests are not model efficacy.",
+      "planned_output_area": "docs/research/ and _research/; public summaries with exact source/evidence scope",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "D02",
+      "title": "후보 생성의 도달성과 탐색 비용",
+      "track": "N4",
+      "responsibility_role": "semantic-discovery",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "D01",
+        "K01"
+      ],
+      "input_contract": "제안 분포·허용 관측·typed relation grammar",
+      "output_contract": "유익 후보의 도달 조건·novelty witness·탐색 비용 및 실패 분석",
+      "acceptance": [
+        "문법/변수 확장의 의미와 support를 명시하고 조건부 도달 확률을 독립성 없이 다룰 범위를 정한다.",
+        "정답 후보가 이미 있다는 가정만으로 discovery를 완료하지 않는다. proposal support 조건의 측정 가능성과 비용 한계를 분리한다."
+      ],
+      "failure_action": "확률 하한 p를 가정한 조건부 정리는 CONDITIONAL로 남긴다. 실현/관측 근거가 없으면 actual discovery는 미증명이다.",
+      "assumptions": [
+        "A-DISCOVERY"
+      ],
+      "cr": [
+        4
+      ],
+      "fcl": [
+        3,
+        5
+      ],
+      "task_kind": "CONSTRUCTION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMConstructiveRelationSynthesis.lean",
+          "sha256": "19c2c246b722f4f89810fb47f34195df7754ee5472e1b8556723aa682b01ddd9"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+          "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+        }
+      ],
+      "verification_method": "Lean 4.32.1: fresh exact-source imports; check definitions and all claimed theorem bodies with --trust=0; audit transitive axioms; include specified counterexamples. This plan does not run those future proofs.",
+      "planned_output_area": "formal/ plus _research/ and docs/research/",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "D03",
+      "title": "새 관계의 평가·지속 revision 연결",
+      "track": "N4",
+      "responsibility_role": "semantic-discovery",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "D02",
+        "S03"
+      ],
+      "input_contract": "새 후보와 관측 기반 채택 규칙",
+      "output_contract": "생성→grounding→평가→canonical revision→다음 읽기의 동일 학습 구성",
+      "acceptance": [
+        "기존 text-only revision과 새 relation/role/topology 도입을 구별하며 schema/owner/provenance를 보존한다.",
+        "생성 자료와 평가 자료를 분리하고 candidate identity가 바뀌면 평가 법칙/오류 예산을 다시 결속한다."
+      ],
+      "failure_action": "유익성·신규성·허용성 중 실패한 축을 각각 남기고 원래 실패 경로를 보존한다.",
+      "assumptions": [
+        "A-DISCOVERY",
+        "A-STAT",
+        "A-NOISE"
+      ],
+      "cr": [
+        1,
+        4,
+        7
+      ],
+      "fcl": [
+        1,
+        3,
+        5
+      ],
+      "task_kind": "CONSTRUCTION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMConstructiveRelationSynthesis.lean",
+          "sha256": "19c2c246b722f4f89810fb47f34195df7754ee5472e1b8556723aa682b01ddd9"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+          "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+        }
+      ],
+      "verification_method": "Lean 4.32.1: fresh exact-source imports; check definitions and all claimed theorem bodies with --trust=0; audit transitive axioms; include specified counterexamples. This plan does not run those future proofs.",
+      "planned_output_area": "formal/ plus _research/ and docs/research/",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "W01",
+      "title": "세계·자기 구조·장기 연속성의 관측 계약",
+      "track": "N6",
+      "responsibility_role": "world-self-model",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "P00"
+      ],
+      "input_contract": "현재 graph membership/reliability/lineage와 외부 세계 관측",
+      "output_contract": "world/self joint prediction, 예외·교체·fork/merge·exit의 판별 질문",
+      "acceptance": [
+        "외부 결과와 자신의 역할·연결·기억 신뢰성의 예측을 같은 graph/Step/Learn에 매핑한다.",
+        "UID 보존과 행동을 조건화하는 학습 계보 지속을 구별하고 world-only/self-only·sham-history 대조를 설계한다."
+      ],
+      "failure_action": "메타데이터 보존만 있는 경우 FCL-6/7 성립으로 기록하지 않고 인과적 read/learn 경로를 재설계한다.",
+      "assumptions": [
+        "A-WORLD"
+      ],
+      "cr": [
+        5,
+        7
+      ],
+      "fcl": [
+        6,
+        7
+      ],
+      "task_kind": "SPECIFICATION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+          "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+        },
+        {
+          "path": "formal/HSWMLLMSemanticGraph.lean",
+          "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a"
+        },
+        {
+          "path": "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md",
+          "sha256": "8b1b89e5ef848c3ce76ea6f76d8d60622768e0fc14aeacc7d5177f7ee35967b5"
+        },
+        {
+          "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+          "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81"
+        }
+      ],
+      "verification_method": "Inspect exact implementation/configuration and source-bound result; independently check specified input/output, controls and failure cases. Transport success and fixture tests are not model efficacy.",
+      "planned_output_area": "docs/research/ and _research/; public summaries with exact source/evidence scope",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "M01",
+      "title": "Step·Learn·개입을 보존하는 합성 계약",
+      "track": "N5",
+      "responsibility_role": "composition-theory",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "P00",
+        "K01",
+        "W01"
+      ],
+      "input_contract": "finite joint dynamics와 world/self/lineage 계약",
+      "output_contract": "child→macro state/output/intervention maps, Step와 Learn의 별도 오차 계약",
+      "acceptance": [
+        "joint coupling, 공유 원인, update 순서, 허용/거부·예외·rollback 관측을 명시한다.",
+        "q=id의 무손실성과 실제 작은 요약의 충분성/비용을 별개 의무로 둔다."
+      ],
+      "failure_action": "요약이 소거한 차이가 Learn에 필요하면 exact quotient 주장 중단, 필요한 상태 또는 근사 오차 범위를 기록한다.",
+      "assumptions": [
+        "A-COMPOSITION",
+        "A-WORLD"
+      ],
+      "cr": [
+        3,
+        5,
+        6
+      ],
+      "fcl": [
+        2,
+        4,
+        6,
+        7,
+        8
+      ],
+      "task_kind": "SPECIFICATION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMSemanticQuotient.lean",
+          "sha256": "8dab893fb049284cbfe7b2cffb5abd8a11b6396dfe1422a89a823f41b17a6f52"
+        },
+        {
+          "path": "formal/HSWMRecursiveLearningComposition.lean",
+          "sha256": "0319ab35928ba6db7db86c4d8be775d52ed49df417fd0610fc9712583f300011"
+        },
+        {
+          "path": "formal/HSWMCompositionInterference.lean",
+          "sha256": "ea61064e08f46a36b98c0e30e103ffc1e130b92a157ed3989e29888416ca87bc"
+        }
+      ],
+      "verification_method": "Inspect exact implementation/configuration and source-bound result; independently check specified input/output, controls and failure cases. Transport success and fixture tests are not model efficacy.",
+      "planned_output_area": "docs/research/ and _research/; public summaries with exact source/evidence scope",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "M02",
+      "title": "공유 원인 아래 실행·학습 합성 오차",
+      "track": "N5",
+      "responsibility_role": "composition-theory",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "M01"
+      ],
+      "input_contract": "M01이 명시한 finite joint Step/Learn 계약과 macro maps",
+      "output_contract": "구조적 joint Step/Learn 합성 상계와 비가환 갱신·공유 원인 반례",
+      "acceptance": [
+        "metric의 비팽창/삼각 성질에서 선언한 finite Step/Learn의 합성 오차를 도출한다. 통계 estimator/채택 규칙의 보존은 M04로 분리한다.",
+        "XOR marginal 손실, shared noise, update-order, 예외·불확실성이 실제 행동에 미치는 반례를 검사한다."
+      ],
+      "failure_action": "정확한 coupling/범위에서 실패한 합성 방식을 retire/reroute하고 upstream 실패를 scale로 구제하지 않는다.",
+      "assumptions": [
+        "A-COMPOSITION"
+      ],
+      "cr": [
+        3,
+        5,
+        6
+      ],
+      "fcl": [
+        2,
+        4,
+        8
+      ],
+      "task_kind": "CONSTRUCTION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMSemanticQuotient.lean",
+          "sha256": "8dab893fb049284cbfe7b2cffb5abd8a11b6396dfe1422a89a823f41b17a6f52"
+        },
+        {
+          "path": "formal/HSWMRecursiveLearningComposition.lean",
+          "sha256": "0319ab35928ba6db7db86c4d8be775d52ed49df417fd0610fc9712583f300011"
+        },
+        {
+          "path": "formal/HSWMCompositionInterference.lean",
+          "sha256": "ea61064e08f46a36b98c0e30e103ffc1e130b92a157ed3989e29888416ca87bc"
+        }
+      ],
+      "verification_method": "Lean 4.32.1: fresh exact-source imports; check definitions and all claimed theorem bodies with --trust=0; audit transitive axioms; include specified counterexamples. This plan does not run those future proofs.",
+      "planned_output_area": "formal/ plus _research/ and docs/research/",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "M03",
+      "title": "유용한 압축과 여러 단계 학습의 비용",
+      "track": "N5",
+      "responsibility_role": "composition-theory",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "M02",
+        "K02"
+      ],
+      "input_contract": "합성 오차 정리와 bounded read/관측 정책",
+      "output_contract": "작은 macro 상태의 구성·압축비/비용·오차 성장 분석",
+      "acceptance": [
+        "identity map·모든 공동 후보 보관을 넘어 구체적인 요약의 저장·읽기 비용을 계산한다.",
+        "유한 horizon에서 Step/Learn 오차 및 예외 보존을 평가하고 압축이 불가능한 범위를 명시한다."
+      ],
+      "failure_action": "자명한 보존만 가능하면 SCALE_READY로 표시하지 않고 해당 압축 기전의 실패를 남긴다.",
+      "assumptions": [
+        "A-COMPOSITION",
+        "A-WORLD"
+      ],
+      "cr": [
+        5,
+        6
+      ],
+      "fcl": [
+        2,
+        7,
+        8
+      ],
+      "task_kind": "CONSTRUCTION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMSemanticQuotient.lean",
+          "sha256": "8dab893fb049284cbfe7b2cffb5abd8a11b6396dfe1422a89a823f41b17a6f52"
+        },
+        {
+          "path": "formal/HSWMRecursiveLearningComposition.lean",
+          "sha256": "0319ab35928ba6db7db86c4d8be775d52ed49df417fd0610fc9712583f300011"
+        },
+        {
+          "path": "formal/HSWMCompositionInterference.lean",
+          "sha256": "ea61064e08f46a36b98c0e30e103ffc1e130b92a157ed3989e29888416ca87bc"
+        }
+      ],
+      "verification_method": "Lean 4.32.1: fresh exact-source imports; check definitions and all claimed theorem bodies with --trust=0; audit transitive axioms; include specified counterexamples. This plan does not run those future proofs.",
+      "planned_output_area": "formal/ plus _research/ and docs/research/",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "M04",
+      "title": "효과 추정·채택 규칙까지의 합성 보존",
+      "track": "N5",
+      "responsibility_role": "composition-theory",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "M02",
+        "C02",
+        "S03"
+      ],
+      "input_contract": "구조적 합성 map, 실제로 선택한 estimator와 순차 채택 규칙",
+      "output_contract": "동일 estimator·신뢰 하한·오류 예산·비용 채택의 macro 보존/오차 정리",
+      "acceptance": [
+        "상태·관측·처치·후보 버전의 macro 사상 아래 C02/S03의 실제 계산과 가정이 어떻게 변하는지 연결한다.",
+        "구조적 Step/Learn 보존만으로 통계적 coverage가 유지된다고 주장하지 않고 shared-cause·선택·비용 오차를 각각 증명하거나 반례로 거부한다."
+      ],
+      "failure_action": "정확한 coupling/범위에서 실패한 합성 방식을 retire/reroute하고 upstream 실패를 scale로 구제하지 않는다.",
+      "assumptions": [
+        "A-COMPOSITION",
+        "A-ID",
+        "A-STAT",
+        "A-NOISE"
+      ],
+      "cr": [
+        1,
+        2,
+        3,
+        6,
+        7
+      ],
+      "fcl": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "task_kind": "CONSTRUCTION",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "formal/HSWMSemanticQuotient.lean",
+          "sha256": "8dab893fb049284cbfe7b2cffb5abd8a11b6396dfe1422a89a823f41b17a6f52"
+        },
+        {
+          "path": "formal/HSWMRecursiveLearningComposition.lean",
+          "sha256": "0319ab35928ba6db7db86c4d8be775d52ed49df417fd0610fc9712583f300011"
+        },
+        {
+          "path": "formal/HSWMCompositionInterference.lean",
+          "sha256": "ea61064e08f46a36b98c0e30e103ffc1e130b92a157ed3989e29888416ca87bc"
+        }
+      ],
+      "verification_method": "Lean 4.32.1: fresh exact-source imports; check definitions and all claimed theorem bodies with --trust=0; audit transitive axioms; include specified counterexamples. This plan does not run those future proofs.",
+      "planned_output_area": "formal/ plus _research/ and docs/research/",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "I01",
+      "title": "동일 구성의 TS/Effect·Lean 연결",
+      "track": "N6",
+      "responsibility_role": "runtime-integration",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "K02",
+        "C02",
+        "S03",
+        "D03",
+        "W01"
+      ],
+      "input_contract": "검사한 이론 구성과 기존 semantic runtime",
+      "output_contract": "순수 domain/Effect I/O adapter, 모델·outcome·revision 대응과 실행 기록",
+      "acceptance": [
+        "기존 journal/receipt/CAS를 재사용하며 검사한 update가 다음 실행에서 읽힌다는 대응을 확인한다.",
+        "Lean 추상 정의↔TS 함수↔provider 실행의 검증/가정/미검증 경계를 각각 기록하고 실제 모델 출력을 Boolean oracle로 대체하지 않는다."
+      ],
+      "failure_action": "모델 연결 또는 refinement 불일치가 남으면 기능/정리의 부분 범위를 보고하고 integrated-realization을 보류한다.",
+      "assumptions": [
+        "A-KERNEL",
+        "A-ID",
+        "A-STAT",
+        "A-NOISE"
+      ],
+      "cr": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        7
+      ],
+      "fcl": [
+        1,
+        3,
+        5,
+        6,
+        7
+      ],
+      "task_kind": "CONSTRUCTION",
+      "required_start_decisions": [
+        "D-MODEL"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+          "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+        },
+        {
+          "path": "formal/HSWMLLMSemanticGraph.lean",
+          "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a"
+        },
+        {
+          "path": "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md",
+          "sha256": "8b1b89e5ef848c3ce76ea6f76d8d60622768e0fc14aeacc7d5177f7ee35967b5"
+        },
+        {
+          "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+          "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81"
+        }
+      ],
+      "verification_method": "Inspect exact implementation/configuration and source-bound result; independently check specified input/output, controls and failure cases. Transport success and fixture tests are not model efficacy.",
+      "planned_output_area": "src/hswm/ and tests/; public research reports in _research/; private runtime traces excluded",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "I02",
+      "title": "독립 outcome의 첫 scale 기전 평가",
+      "track": "N6",
+      "responsibility_role": "comparison-design",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "I01",
+        "P02"
+      ],
+      "input_contract": "사전 고정 과제/분할/estimand/예산·비교군",
+      "output_contract": "첫 scale의 SUPPORTED/RED/UNDERDETERMINED 보고와 remove/restore 결과",
+      "acceptance": [
+        "같은 모델 접근·정보·총비용의 필수 기전 대조군, 독립 outcome, 새 사례, relation 제거/복원으로 선언한 기전을 판단한다. Hyperon은 실행/불가/비교불가 상태를 보고하고 미실행이면 Hyperon 대비 우위를 주장하지 않는다.",
+        "음성/불충분 결과와 비용·불리한 대조를 포함해 결과를 완결한다. 유효한 음성 보고도 조사 완료이나 D-FIRST-SCALE을 충족시키지 않는다."
+      ],
+      "failure_action": "효과 미분리면 정확한 기전 RED, 측정 결함이면 UNDERDETERMINED. 기준·holdout·비용을 사후 변경하지 않는다.",
+      "assumptions": [
+        "A-ID",
+        "A-STAT",
+        "A-NOISE",
+        "A-DISCOVERY"
+      ],
+      "cr": [
+        1,
+        2,
+        4,
+        5,
+        7
+      ],
+      "fcl": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "task_kind": "EMPIRICAL_ASSESSMENT",
+      "required_start_decisions": [
+        "D-STUDY",
+        "D-COMPARATOR"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [
+        "D-FIRST-SCALE"
+      ],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+          "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+        },
+        {
+          "path": "formal/HSWMLLMSemanticGraph.lean",
+          "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a"
+        },
+        {
+          "path": "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md",
+          "sha256": "8b1b89e5ef848c3ce76ea6f76d8d60622768e0fc14aeacc7d5177f7ee35967b5"
+        },
+        {
+          "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+          "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81"
+        }
+      ],
+      "verification_method": "Inspect exact implementation/configuration and source-bound result; independently check specified input/output, controls and failure cases. Transport success and fixture tests are not model efficacy.",
+      "planned_output_area": "docs/research/ and _research/; public summaries with exact source/evidence scope",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "I03",
+      "title": "합성·세계/자기·세대 변화의 두 scale 평가",
+      "track": "N6",
+      "responsibility_role": "comparison-design",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "I02",
+        "M03",
+        "W01",
+        "M04"
+      ],
+      "input_contract": "지지된 첫 scale 기전·합성 범위·동일 측정 문법",
+      "output_contract": "두 scale의 shared-cause/uncertainty/exception/lineage/churn 평가",
+      "acceptance": [
+        "첫 scale 지원 조건이 실제로 충족된 경우에만 같은 구성으로 확장 효과 실험을 한다.",
+        "whole-state wrapper null, world-only/self-only, model/member 교체·fork/merge·exit와 비용을 검사하고 FCL별 범위를 남긴다."
+      ],
+      "failure_action": "상위의 음성 결과는 해당 합성 기전을 교체하며 첫 scale 범위 밖 전체 HSWM 성공을 선언하지 않는다.",
+      "assumptions": [
+        "A-COMPOSITION",
+        "A-WORLD",
+        "A-ID",
+        "A-STAT"
+      ],
+      "cr": [
+        3,
+        5,
+        6,
+        7
+      ],
+      "fcl": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "task_kind": "EMPIRICAL_ASSESSMENT",
+      "required_start_decisions": [
+        "D-FIRST-SCALE"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+          "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+        },
+        {
+          "path": "formal/HSWMLLMSemanticGraph.lean",
+          "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a"
+        },
+        {
+          "path": "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md",
+          "sha256": "8b1b89e5ef848c3ce76ea6f76d8d60622768e0fc14aeacc7d5177f7ee35967b5"
+        },
+        {
+          "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+          "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81"
+        }
+      ],
+      "verification_method": "Inspect exact implementation/configuration and source-bound result; independently check specified input/output, controls and failure cases. Transport success and fixture tests are not model efficacy.",
+      "planned_output_area": "docs/research/ and _research/; public summaries with exact source/evidence scope",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    },
+    {
+      "id": "A00",
+      "title": "동일 구성의 전체 의무와 남은 간극 감사",
+      "track": "N6",
+      "responsibility_role": "scientific-audit",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "hard_dependencies": [
+        "I02"
+      ],
+      "input_contract": "가용한 formal/runtime/실험 산출물과 모든 미완료 작업",
+      "output_contract": "CR/FCL별 proved/conditional/observed/refuted/unresolved matrix",
+      "acceptance": [
+        "정리의 전제와 실제 모델/환경 근거가 동일한 구성에서 동시에 성립하는지 source와 scope로 대조한다.",
+        "I03 미실행·RED, formal-only·미검증 비용·world/self/continuity 간극을 보존한다. 감사 완료를 full HSWM 완료로 바꾸지 않는다."
+      ],
+      "failure_action": "미폐쇄 의무와 다음 방법을 기록한다. 성공 증거가 없는 단계는 그대로 OPEN/UNJUDGED다.",
+      "assumptions": [],
+      "cr": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fcl": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "task_kind": "SCOPE_AUDIT",
+      "required_start_decisions": [],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_RESULT_ONLY_NOT_FULL_HSWM_PROOF",
+      "resource_policy": "No fabricated cost or deadline; model runs require an exact version and declared budget before execution; no resource purchase in this plan.",
+      "resolves_decisions": [],
+      "source_refs": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4"
+        },
+        {
+          "path": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+          "sha256": "917b621b1e595eaa4e20f690e8b7a5132bd94c9592cf069a03cae558c91b2d23"
+        },
+        {
+          "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+          "sha256": "bd9dd2fc5d2fa3f80f55a66669f69027a7d997a4ff2f217f7078329a1775f03a"
+        },
+        {
+          "path": "formal/HSWMLLMSemanticGraph.lean",
+          "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a"
+        },
+        {
+          "path": "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md",
+          "sha256": "8b1b89e5ef848c3ce76ea6f76d8d60622768e0fc14aeacc7d5177f7ee35967b5"
+        },
+        {
+          "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+          "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81"
+        }
+      ],
+      "verification_method": "Inspect exact implementation/configuration and source-bound result; independently check specified input/output, controls and failure cases. Transport success and fixture tests are not model efficacy.",
+      "planned_output_area": "docs/research/ and _research/; public summaries with exact source/evidence scope",
+      "shared_edit_policy": "One runtime integrator for shared canonical runtime/domain files; independent Lean modules and read-only research may proceed concurrently."
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A-OBS",
+      "title": "관측·참조·국소 읽기 충분성",
+      "resolver": "P00",
+      "contract": "해당 relation의 referent, accessible observation, prediction과 task distribution; hidden truth는 입력에 넣지 않음.",
+      "status": "UNVERIFIED",
+      "evidence": []
+    },
+    {
+      "id": "A-KERNEL",
+      "title": "backend와 공동 출력 법칙",
+      "resolver": "K01",
+      "contract": "모델/version, context/cache/session, seed 또는 주변화 법칙 및 정규화; empirical fidelity는 별도.",
+      "status": "UNVERIFIED",
+      "evidence": []
+    },
+    {
+      "id": "A-RESTORE",
+      "title": "재실행 가능한 이력의 범위",
+      "resolver": "P01",
+      "contract": "root뿐 아니라 모든 유관 실행 상태 또는 명시한 conditional law; 외부 세계를 복원 가능하다고 가정하지 않음.",
+      "status": "UNVERIFIED",
+      "evidence": []
+    },
+    {
+      "id": "A-ID",
+      "title": "인과 식별",
+      "resolver": "C01",
+      "contract": "처치 단위·배정·positivity·interference·outcome access; C3 advantage와 현실 효과를 분리.",
+      "status": "UNVERIFIED",
+      "evidence": []
+    },
+    {
+      "id": "A-STAT",
+      "title": "순차 추론과 선택",
+      "resolver": "S01",
+      "contract": "filtration, bounded/tail model, 후보 버전·error allocation·stopping; 새 분포는 자동 포함하지 않음.",
+      "status": "UNVERIFIED",
+      "evidence": []
+    },
+    {
+      "id": "A-NOISE",
+      "title": "피드백·누락·비용",
+      "resolver": "S02",
+      "contract": "독립성/오염 상계 확보, 지연·censoring, common utility와 측정·보정 방법.",
+      "status": "UNVERIFIED",
+      "evidence": []
+    },
+    {
+      "id": "A-DISCOVERY",
+      "title": "유익한 새 후보의 도달 조건",
+      "resolver": "D02",
+      "contract": "명시한 제안/문법의 support·접지·탐색 비용; support 가정과 실제 검증을 구분.",
+      "status": "UNVERIFIED",
+      "evidence": []
+    },
+    {
+      "id": "A-COMPOSITION",
+      "title": "공유 상태와 요약",
+      "resolver": "M01",
+      "contract": "joint coupling·update 순서·Step/Learn maps·metric·horizon·오차와 압축 비용.",
+      "status": "UNVERIFIED",
+      "evidence": []
+    },
+    {
+      "id": "A-WORLD",
+      "title": "세계·자기·계보의 관측",
+      "resolver": "W01",
+      "contract": "world/self joint prediction, 변경 뒤 causal memory continuity; 메타데이터만으로 충족되지 않음.",
+      "status": "UNVERIFIED",
+      "evidence": []
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D-MODEL",
+      "resolver": "P01",
+      "required_condition": "정확한 provider/model/config와 허용된 예산에서 실제 I/O를 실행·관측할 수 있음.",
+      "status": "OPEN",
+      "value": null,
+      "evidence": []
+    },
+    {
+      "id": "D-STUDY",
+      "resolver": "C01",
+      "required_condition": "과제족·효과·관측/개입·데이터 분리·오류 예산·비용·중단·판정 규칙을 결과 전에 고정.",
+      "status": "OPEN",
+      "value": null,
+      "evidence": []
+    },
+    {
+      "id": "D-COMPARATOR",
+      "resolver": "P02",
+      "required_condition": "필수 기전 대조군의 정확한 실행 버전·matching 자격 확보 및 Hyperon 상태(RUNNABLE/UNAVAILABLE/NOT_COMPARABLE)·아키텍처 비교·제한 공개. Hyperon 미실행이면 그 대비 우위 주장은 금지하며 범위 제한 기전 연구만 허용.",
+      "status": "OPEN",
+      "value": null,
+      "evidence": []
+    },
+    {
+      "id": "D-FIRST-SCALE",
+      "resolver": "I02",
+      "required_condition": "독립 outcome과 필수 대조에서 사전 선언한 첫 scale 기전이 범위 한정 지지를 얻음.",
+      "status": "OPEN",
+      "value": null,
+      "evidence": []
+    }
+  ],
+  "tools": [
+    {
+      "name": "effect",
+      "version": "3.22.1",
+      "integrity": "sha512-TNoXushmPOBAjJlthF5d2QwnX2xBPEtcNJr5XKNKbRLbDvBcOYkXlYDfvGfSA0zriwLFuCll5MDtNMAdZL17PQ==",
+      "license": "MIT",
+      "authority_class": "OFFICIAL_PROJECT_IMPLEMENTATION",
+      "status": "EXISTING_LOCKED_NO_INSTALL"
+    },
+    {
+      "name": "n3",
+      "version": "2.7.2",
+      "integrity": "sha512-8Y/GU78BFSecvIv7OiJacY28l/zHiLo5/apxM+kyyUNCTWmqWyzzNjLlja4/vbLogoCHDPwCChLuDEZcpOKeDw==",
+      "license": "MIT",
+      "authority_class": "INDEPENDENT_IMPLEMENTATION_NOT_W3C_SDK",
+      "status": "EXISTING_LOCKED_NO_INSTALL"
+    },
+    {
+      "name": "rdf-validate-shacl",
+      "version": "0.6.5",
+      "integrity": "sha512-rwIibopSixDE8ecA9x0c7oTVxdMWxGiJh7h3uJ+WS2h4lq2nx3DZVO7rJvwa5kZpDq9QEFPoyZINAUyfaaoN4Q==",
+      "license": "MIT",
+      "authority_class": "INDEPENDENT_IMPLEMENTATION_NOT_W3C_SDK",
+      "status": "EXISTING_LOCKED_NO_INSTALL"
+    },
+    {
+      "name": "@comunica/query-sparql-rdfjs",
+      "version": "5.3.0",
+      "integrity": "sha512-isXNLwV1PB3hGXtcKXOfV134/X2q53J2ZELS82F07KbHVLoGCwF+DxfQ/gXvPxIatGKO2w0v3At3uAwVPzfZDA==",
+      "license": "MIT",
+      "authority_class": "INDEPENDENT_IMPLEMENTATION_NOT_W3C_SDK",
+      "status": "EXISTING_LOCKED_NO_INSTALL"
+    }
+  ],
+  "completion_semantics": {
+    "construction": "COMPLETE requires accepted construction and verified specified criteria. A counterexample that defeats the required construction leaves it RETIRED/BLOCKED or revised, not successful.",
+    "assessment": "A complete valid report may be RED or UNDERDETERMINED. Task closure is separate from scientific support; only scoped positive evidence can satisfy D-FIRST-SCALE.",
+    "scope_audit": "Can complete while target obligations remain open. I03 need not run if first scale fails.",
+    "successor": "Preserve this snapshot; future revisions cite stable task ID, exact source/actual artifact hashes and results. Do not manufacture evidence for planned outputs."
+  },
+  "initial_ready_tasks": [
+    "P00",
+    "P01",
+    "P02"
+  ],
+  "new_lean_proofs": false,
+  "new_runtime_implementation": false,
+  "real_model_experiments": false,
+  "full_hswm_proved": false,
+  "deadline": null,
+  "budget": null
+}

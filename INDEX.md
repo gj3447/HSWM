@@ -1,5 +1,9 @@
 # HSWM — public repository index
 
+2026-09-15 [Lean·실제 LLM 연구의 표준 그래프 작업 계획](docs/operations/HSWM_SEMANTIC_PROOF_WORK_PLAN_2026-09-15.md)은
+22개 작업의 책임·가정·산출물·선행·수용·실패 조건을 기존 N1–N6와 CR/FCL에 연결한다.
+현재 시작 후보는 P00/P01/P02이며 후속 구현·증명·실험은 미실행이다.
+
 2026-09-15 [실제 LLM으로 이어지는 다음 증명 연구](docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md)는
 VML·GEPA, C3·Memory-R2, 순차 신뢰구간과 인과적 합성 이론을 현재 Lean 4의 미증명 의무에 연결한다.
 문헌·후속 계획이며 새 Lean 증명이나 전체 HSWM 실현 판정은 아니다.

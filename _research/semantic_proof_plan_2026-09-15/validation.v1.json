@@ -1,0 +1,60 @@
+{
+  "schema_version": "hswm-semantic-proof-plan-validation/v1",
+  "status": "PASS",
+  "checked_on": "2026-09-15",
+  "source_bindings": [
+    {
+      "path": "_research/semantic_proof_plan_2026-09-15/plan.v1.json",
+      "sha256": "a4576cc2659445e9e745c05ffa47b41dc6138d34da77bf3df285d0281733c965"
+    },
+    {
+      "path": "ontology/development/HSWM_SEMANTIC_PROOF_WORK_PLAN_2026-09-15.v1.json",
+      "sha256": "1dfa915a3514e4edcd95c8db6b3688ba2af2091c5e8f6e7434a42924c6f570cf"
+    },
+    {
+      "path": "docs/operations/HSWM_SEMANTIC_PROOF_WORK_PLAN_2026-09-15.md",
+      "sha256": "585eb45b99cca8a92223ba5695694bed96800ee246a7af709c6e96287ca2e540"
+    },
+    {
+      "path": "_research/semantic_proof_plan_2026-09-15/verify-plan.mjs",
+      "sha256": "deae9240748a15cfb1c289d5c117cbb21b2c33c0f3c56056e2393095a9a02c01"
+    }
+  ],
+  "counts": {
+    "nodes": 180,
+    "anchors": 27,
+    "relations": 602,
+    "work_packages": 22,
+    "assumptions": 9,
+    "decisions": 4
+  },
+  "source_bindings_checked": 36,
+  "shacl": [
+    "GENERIC_V2_PASS",
+    "EXISTING_WORK_PLAN_CORE_PASS"
+  ],
+  "queries": {
+    "Q1": 3,
+    "Q2": 128,
+    "Q3": 212,
+    "Q4": 4,
+    "Q5": 0,
+    "Q6": 0,
+    "Q7": 0
+  },
+  "assumption_query_rows": 43,
+  "initial_ready_tasks": [
+    "P00",
+    "P01",
+    "P02"
+  ],
+  "negative_probes": [
+    "CORRUPT_SOURCE_HASH_REJECTED",
+    "MISSING_ROLE_REJECTED",
+    "CYCLE_DETECTED",
+    "PREMATURE_COMPLETE_DETECTED"
+  ],
+  "new_lean_proofs": false,
+  "real_model_experiments": false,
+  "claim_ceiling": "PLAN_STRUCTURE_SOURCE_BINDINGS_AND_QUERY_VALIDATION_ONLY"
+}

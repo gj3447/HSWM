@@ -95,3 +95,22 @@ it("marks missing or malformed provider usage as null rather than zero", async (
     expect(usage["total_tokens"]).toBeNull()
   }
 })
+
+it("contains non-JSON root values before command or provider dispatch", async () => {
+  const subprocess = Layer.succeed(BoundedSubprocess, BoundedSubprocess.of({
+    observe: () => Effect.die("must not launch")
+  }))
+  const http = Layer.succeed(AdaptiveHttpClient, AdaptiveHttpClient.of({
+    postJson: () => Effect.die("must not call HTTP")
+  }))
+  for (const payload of [undefined, () => undefined, Symbol("not-json")]) {
+    const command = await Effect.runPromise(executeAdaptiveCell(
+      { kind: "command", argv: ["ignored"] }, payload, process.cwd(), 1_000
+    ).pipe(Effect.provide(Layer.merge(subprocess, http))))
+    expect(command).toMatchObject({ status: "FAILED", success: null, metadata: { error: "INPUT_INVALID" } })
+    const llm = await Effect.runPromise(executeAdaptiveCell(
+      { kind: "llm", base_url: "https://provider.example", model: "configured" }, payload, process.cwd(), 1_000
+    ).pipe(Effect.provide(Layer.merge(subprocess, http))))
+    expect(llm).toMatchObject({ status: "FAILED", success: null, metadata: { error: "INPUT_INVALID" } })
+  }
+})

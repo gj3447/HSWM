@@ -70,10 +70,12 @@ const observation = (kind: "command" | "llm", cell: AdaptiveLeafCell, usage: Pro
 });
 const noUsage = (): ProviderUsageObservation => Object.freeze({ status: "NOT_APPLICABLE", prompt_tokens: null, completion_tokens: null, total_tokens: null, reported_model: null });
 const now = Effect.clockWith((clock) => clock.currentTimeMillis);
-const jsonInput = (value: unknown) => Effect.try({
+const jsonInput = (value: unknown): Effect.Effect<string, AdaptiveExecutorError> => Effect.try({
     try: () => JSON.stringify(value),
     catch: () => new AdaptiveExecutorError({ code: "INPUT_INVALID", detail: "input is not JSON serializable" })
-});
+}).pipe(Effect.flatMap((encoded) => typeof encoded === "string"
+    ? Effect.succeed(encoded)
+    : Effect.fail(new AdaptiveExecutorError({ code: "INPUT_INVALID", detail: "input has no JSON root representation" }))));
 const finish = (status: AdaptiveExecution["status"], success: boolean | null, started: number, ended: number, output: string, metadata: Readonly<Record<string, unknown>>): AdaptiveExecution => {
     const durationSeconds = Math.max(0, (ended - started) / 1000);
     const outputDigest = digest(output);

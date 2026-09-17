@@ -20,6 +20,7 @@ import pytest
 from _research.dnrd.execute import _copy_runtime_closure, execute_with_dependencies
 from _research.dnrd.judge import _runtime_closure_files, judge_bundle
 from _research.dnrd.live import HttpResponse, OpenAICompatibleDnrdAnswerer, OpenAICompatibleDnrdConfig
+from _research.dnrd.prepare import _EXPECTED_COMPILED_PATHS
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -81,14 +82,14 @@ def _runtime_manifest_rows(runtime_root: Path, relative_root: str) -> list[dict[
     return sorted(rows, key=lambda row: row["path"])
 
 
-def test_current_runtime_closure_copies_all_4070_manifest_selected_files_and_judge_reads_it(
+def test_current_runtime_closure_copies_exact_manifest_selected_files_and_judge_reads_it(
     tmp_path: Path,
 ) -> None:
     """Exercise the checkout's production-selected runtime tree and sealing.
 
     This is the strongest checkout-faithful runtime edge that can be exercised
     without fabricating a Source-A/B-CI provenance chain: execute's copier
-    seals the complete 4,070-file manifest and the judge-side closure reader
+    seals the complete 4,074-file manifest and the judge-side closure reader
     consumes those sealed bytes.  The terminal tests below intentionally use
     a small source/runtime fixture, because a full candidate judgment also
     requires the checkout's source closure, lockfile, Node pin, and CI
@@ -103,7 +104,9 @@ def test_current_runtime_closure_copies_all_4070_manifest_selected_files_and_jud
     )
     compiled = _runtime_manifest_rows(runtime_root, "dist-dnrd")
     package_rows = [_runtime_manifest_rows(runtime_root, f"node_modules/{name}") for name in packages]
-    assert len(compiled) == 76
+    assert len(_EXPECTED_COMPILED_PATHS) == 80
+    assert {row["path"] for row in compiled} == _EXPECTED_COMPILED_PATHS
+    assert len(compiled) == 80
     assert sum(len(rows) for rows in package_rows) == 3_994
     manifest = {"files": compiled, "external_packages": [{"files": rows} for rows in package_rows]}
 
@@ -113,7 +116,7 @@ def test_current_runtime_closure_copies_all_4070_manifest_selected_files_and_jud
     copied = _regular_runtime_files(copied_root)
     expected = {row["path"]: row["sha256"] for row in compiled}
     expected.update({row["path"]: row["sha256"] for rows in package_rows for row in rows})
-    assert len(copied) == 4_070
+    assert len(copied) == 4_074
     assert set(copied) == set(expected)
     assert all(sha256(path.read_bytes()).hexdigest() == expected[relative] for relative, path in copied.items())
     assert sum(path.stat().st_size for path in copied.values()) == sum(
@@ -129,7 +132,7 @@ def test_current_runtime_closure_copies_all_4070_manifest_selected_files_and_jud
     # bundle-indexing.  It must retain the manifest-addressed zero-byte npm
     # member instead of voiding the occurrence before exact row rehashing.
     judge_files = _runtime_closure_files(tmp_path)
-    assert len(judge_files) == 4_070
+    assert len(judge_files) == 4_074
     assert judge_files[known_zero] == b""
     # The production copy is intentionally sealed. Re-open this test-owned
     # temporary tree so pytest can remove it without emitting cleanup noise.

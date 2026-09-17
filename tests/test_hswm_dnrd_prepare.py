@@ -11,12 +11,32 @@ import pytest
 from _research.dnrd.execute import CORE_SOURCE_FILES
 from _research.dnrd.prepare import (
     PreparationRefusal,
+    _EXPECTED_COMPILED_PATHS,
     _regular_files,
+    _validate_compiled_files,
     generate_preregistration_b_ci_receipt,
     generate_source_ci_receipt,
     generate_source_manifest,
 )
 from _research.dnrd.task_family import canonical_json, commitment
+
+
+@pytest.mark.parametrize("corruption", ["missing", "extra", "same_count_swap", "duplicate"])
+def test_compiled_runtime_requires_exact_members_even_when_counts_match(corruption: str) -> None:
+    rows = [{"path": path} for path in sorted(_EXPECTED_COMPILED_PATHS)]
+    _validate_compiled_files(rows)
+    required = "dist-dnrd/native-pinned-verifier-runtime.js.map"
+    assert required in _EXPECTED_COMPILED_PATHS
+    if corruption in {"missing", "same_count_swap"}:
+        rows = [row for row in rows if row["path"] != required]
+    if corruption in {"extra", "same_count_swap"}:
+        rows.append({"path": "dist-dnrd/unexpected-module.js.map"})
+    if corruption == "duplicate":
+        rows.append(rows[0])
+    if corruption == "same_count_swap":
+        assert len(rows) == len(_EXPECTED_COMPILED_PATHS)
+    with pytest.raises(PreparationRefusal, match="compiled artifact paths differ"):
+        _validate_compiled_files(rows)
 
 
 def _git(repo: Path, *args: str) -> str:

@@ -48,7 +48,24 @@ _RUNTIME_RELATIVE = Path("src/hswm/effect-runtime")
 _COMPILED_RELATIVE = Path("dist-dnrd")
 _ENTRYPOINT_RELATIVE = _COMPILED_RELATIVE / "canonical-atom-v2-routing-diagnostic-process.js"
 _PACKAGE_ROOTS = ("@types/node", "effect", "typescript")
-_EXPECTED_COMPILED_FILE_COUNT = 56
+_EXPECTED_COMPILED_MODULES = frozenset({
+    "canonical-atom-v2-content-bound", "canonical-atom-v2-content-file",
+    "canonical-atom-v2-content-runtime", "canonical-atom-v2-content",
+    "canonical-atom-v2-dnrd5-identity", "canonical-atom-v2-domain",
+    "canonical-atom-v2-durable-runtime", "canonical-atom-v2-json",
+    "canonical-atom-v2-routing-diagnostic-file",
+    "canonical-atom-v2-routing-diagnostic-process",
+    "canonical-atom-v2-routing-diagnostic", "canonical-atom-v2-schema",
+    "canonical-atom-v2-state-journal-file", "canonical-atom-v2-state-journal-store",
+    "canonical-atom-v2-state-journal", "effect-bounded-subprocess",
+    "effect-posix-filesystem", "effect-posix-services", "effect-process-main",
+    "native-pinned-verifier-runtime",
+})
+_EXPECTED_COMPILED_PATHS = frozenset(
+    f"dist-dnrd/{module}{suffix}"
+    for module in _EXPECTED_COMPILED_MODULES
+    for suffix in (".js", ".js.map", ".d.ts", ".d.ts.map")
+)
 _EXPECTED_EXTERNAL_PACKAGE_NAMES = frozenset(
     {
         "@standard-schema/spec",
@@ -351,6 +368,17 @@ def _external_package_closure(runtime_root: Path) -> list[dict[str, Any]]:
     return [packages[name] for name in sorted(packages)]
 
 
+def _validate_compiled_files(compiled: Sequence[Mapping[str, Any]]) -> None:
+    paths = {row["path"] for row in compiled}
+    if paths != _EXPECTED_COMPILED_PATHS or len(compiled) != len(paths):
+        raise PreparationRefusal(
+            "DNRD-4S1 compiled artifact paths differ from the current source closure: "
+            f"missing={sorted(_EXPECTED_COMPILED_PATHS - paths)}, "
+            f"unexpected={sorted(paths - _EXPECTED_COMPILED_PATHS)}, "
+            f"duplicate_paths={len(compiled) != len(paths)}"
+        )
+
+
 def generate_runtime_manifest(
     *, repo_root: Path, source_manifest_path: str, node_executable: Path, output: Path
 ) -> str:
@@ -369,10 +397,7 @@ def generate_runtime_manifest(
     runtime_root = repo_root / _RUNTIME_RELATIVE
     _plain_directory(runtime_root, "effect runtime root")
     compiled = _regular_files(runtime_root, _COMPILED_RELATIVE.as_posix())
-    if len(compiled) != _EXPECTED_COMPILED_FILE_COUNT:
-        raise PreparationRefusal(
-            f"DNRD-4S1 requires exactly {_EXPECTED_COMPILED_FILE_COUNT} compiled dist-dnrd files, got {len(compiled)}"
-        )
+    _validate_compiled_files(compiled)
     entrypoint = runtime_root / _ENTRYPOINT_RELATIVE
     _plain_file(entrypoint, "DNRD runtime bridge entrypoint")
     node_executable = node_executable.resolve()

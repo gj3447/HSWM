@@ -462,6 +462,7 @@ CORE_SOURCE_FILES = frozenset(
         "src/hswm/effect-runtime/src/effect-bounded-subprocess.ts",
         "src/hswm/effect-runtime/src/effect-posix-filesystem.ts",
         "src/hswm/effect-runtime/src/effect-posix-services.ts",
+        "src/hswm/effect-runtime/src/native-pinned-verifier-runtime.ts",
         "src/hswm/effect-runtime/src/effect-process-main.ts",
         "src/hswm/effect-runtime/test/canonical-atom-v2-routing-diagnostic.test.ts",
         "src/hswm/effect-runtime/test/canonical-atom-v2-routing-diagnostic-file.test.ts",

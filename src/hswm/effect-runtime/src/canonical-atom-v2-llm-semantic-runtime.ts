@@ -10,7 +10,7 @@ import { Data, Effect, Either } from "effect"
 
 import { AdaptiveHttpClient, executeAdaptiveCell, type AdaptiveHttpClientShape } from "./adaptive-executor.js"
 import { canonicalJson, parseJson } from "./adaptive-domain.js"
-import { describeCanonicalAtomV2Envelope, makeCanonicalAtomV2ContentBoundInput, type CanonicalAtomV2WriteContentBinding } from "./canonical-atom-v2-content-bound.js"
+import { describeCanonicalAtomV2Envelope, makeCanonicalAtomV2ContentBoundInput, type CanonicalAtomV2WriteContentBinding, type CommitCanonicalAtomsV2ContentBound } from "./canonical-atom-v2-content-bound.js"
 import { type CanonicalAtomV2DurableRuntime } from "./canonical-atom-v2-durable-runtime.js"
 import { canonicalAtomV2KeyId, HSWM_CANONICAL_ATOM_V2_CONTRACT_VERSION, HSWM_CANONICAL_TRANSITION_V2_CONTRACT_VERSION, HSWM_SUPERSEDES_REFERENCE_ROLE, HSWM_SUPERSEDES_REFERENCE_TYPE, type CanonicalAtomV2, type CanonicalAtomV2Key } from "./canonical-atom-v2-schema.js"
 
@@ -97,6 +97,20 @@ export interface SemanticOutcome {
   readonly source: string
   readonly outcomeContent: { readonly sha256: string; readonly mediaType: string; readonly byteLength: number }
   readonly status: "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+}
+
+/** A fully content-bound candidate. It has no authority to mutate durable state. */
+export interface LlmSemanticRevisionProposal {
+  readonly candidate: CommitCanonicalAtomsV2ContentBound
+  readonly affectedKeys: ReadonlyArray<CanonicalAtomV2Key>
+  readonly revisionEvidence: ContentDescriptor
+  readonly trace: SemanticTrace
+  readonly outcome: SemanticOutcome
+}
+
+/** Explicit capability supplied by an authorized admission owner. */
+export interface LlmSemanticRevisionAdmission<R = never, E = never, A = unknown> {
+  readonly admit: (proposal: LlmSemanticRevisionProposal) => Effect.Effect<A, E, R>
 }
 
 export interface LlmSemanticCell {
@@ -201,8 +215,8 @@ export const stageLlmSemanticOutcome = (runtime: CanonicalAtomV2DurableRuntime["
   return Object.freeze({ traceSha256: trace.traceSha256, predictionSha256: trace.predictionSha256, observed, source, outcomeContent: { sha256: staged.sha256, mediaType: staged.mediaType, byteLength: staged.byteLength }, status: payload.status }) satisfies SemanticOutcome
 })
 
-/** Rechecks all pinned reads after the remote call, then commits one linear successor through durable submit. */
-export const learnLlmSemanticRelation = (runtime: CanonicalAtomV2DurableRuntime["Type"], traceInput: SemanticTrace, outcomeInput: SemanticOutcome, cellInput: LlmSemanticCell, http: AdaptiveHttpClientShape, authorizationRef: string, scope: string, decidedAt: string) => Effect.gen(function* () {
+/** Rechecks pinned reads after the remote call and prepares one content-bound successor for admission. */
+export const prepareLlmSemanticRelationRevision = (runtime: CanonicalAtomV2DurableRuntime["Type"], traceInput: SemanticTrace, outcomeInput: SemanticOutcome, cellInput: LlmSemanticCell, http: AdaptiveHttpClientShape, authorizationRef: string, scope: string, decidedAt: string) => Effect.gen(function* () {
   const trace = yield* snapshotInput(traceInput)
   const outcome = yield* snapshotInput(outcomeInput)
   const cell = yield* snapshotInput(cellInput)
@@ -248,5 +262,22 @@ export const learnLlmSemanticRelation = (runtime: CanonicalAtomV2DurableRuntime[
   const envelope = describeCanonicalAtomV2Envelope(atom); if (Either.isLeft(envelope)) return yield* Effect.fail(fail("CONTENT_INVALID", "cannot bind semantic successor envelope"))
   const binding: CanonicalAtomV2WriteContentBinding = { key: atom.key, payload: content, envelope: envelope.right }
   const command = { _tag: "CommitCanonicalAtomsV2" as const, contractVersion: HSWM_CANONICAL_TRANSITION_V2_CONTRACT_VERSION, transitionId: `semantic-learn:${trace.traceSha256}`, expectedStateRevision: afterCall.stateRevision, schemaVersion: frame.relation.key.schemaVersion, actorClaim: "llm:semantic-engine", authorizationRef, scope, decidedAt, traceRef: null, readSet: [frame.relation.key, ...frame.roles.map((role) => role.key)], writes: [atom], provenanceSha256: outcome.outcomeContent.sha256 }
-  return yield* runtime.submit(makeCanonicalAtomV2ContentBoundInput(runtime.schemaContent.content.sha256, command, [binding]))
+  const candidate = makeCanonicalAtomV2ContentBoundInput(runtime.schemaContent.content.sha256, command, [binding])
+  return Object.freeze({
+    candidate,
+    affectedKeys: Object.freeze([frame.relation.key, ...frame.roles.map((role) => role.key)]),
+    revisionEvidence,
+    trace,
+    outcome
+  }) satisfies LlmSemanticRevisionProposal
 })
+
+/**
+ * Performs semantic proposal construction, then delegates the actual mutation
+ * to an explicitly supplied admission owner. This module never submits a
+ * durable mutation itself.
+ */
+export const learnLlmSemanticRelation = <R, E, A>(runtime: CanonicalAtomV2DurableRuntime["Type"], traceInput: SemanticTrace, outcomeInput: SemanticOutcome, cellInput: LlmSemanticCell, http: AdaptiveHttpClientShape, authorizationRef: string, scope: string, decidedAt: string, admission: LlmSemanticRevisionAdmission<R, E, A>) =>
+  prepareLlmSemanticRelationRevision(runtime, traceInput, outcomeInput, cellInput, http, authorizationRef, scope, decidedAt).pipe(
+    Effect.flatMap((proposal) => admission.admit(proposal))
+  )

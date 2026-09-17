@@ -685,10 +685,18 @@ export {
   readLlmSemanticFrame,
   executeLlmSemanticRelation,
   stageLlmSemanticOutcome,
+  prepareLlmSemanticRelationRevision,
   learnLlmSemanticRelation,
+  type LlmSemanticRevisionAdmission,
+  type LlmSemanticRevisionProposal,
   type SemanticRelationContent,
   type SemanticReadFrame,
   type SemanticTrace,
   type SemanticOutcome,
   type LlmSemanticCell
 } from "./canonical-atom-v2-llm-semantic-runtime.js"
+export {
+  makeLlmSemanticGraphLoopAdmission,
+  type LlmSemanticGraphLoopAdmissionInput,
+  type LlmSemanticGraphLoopAdmissionResult
+} from "./canonical-atom-v2-llm-semantic-graph-loop-admission.js"

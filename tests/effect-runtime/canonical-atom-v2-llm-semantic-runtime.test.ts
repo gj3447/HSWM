@@ -25,8 +25,15 @@ import {
   readLlmSemanticFrame,
   stageLlmSemanticOutcome,
   type LlmSemanticCell,
-  type SemanticOutcome
+  type SemanticOutcome,
+  type LlmSemanticRevisionAdmission
 } from "../../src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.js"
+import { makeLlmSemanticGraphLoopAdmission, type LlmSemanticGraphLoopAdmissionInput } from "../../src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-graph-loop-admission.js"
+import {
+  GraphLoopEngineeringController,
+  makeGraphLoopControlJournalFileLayer,
+  makeGraphLoopEngineeringControllerLayer
+} from "../../src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-engineering.js"
 import {
   HSWM_CANONICAL_ATOM_V2_CONTRACT_VERSION,
   HSWM_CANONICAL_SCHEMA_V2_CONTRACT_VERSION,
@@ -104,18 +111,22 @@ const grants = (): ReadonlyArray<CanonicalAtomV2ContentAuthorizationGrant> => [{
   scopes: [scope]
 }]
 
-const fileLayer = (root: string) => makeCanonicalAtomV2DurableRuntimeFileLayer(
-  root,
-  journalLineage,
-  schemaBytes.right,
-  grants()
-)
+const fileLayer = (root: string) => {
+  const runtime = makeCanonicalAtomV2DurableRuntimeFileLayer(root, journalLineage, schemaBytes.right, grants())
+  const journal = makeGraphLoopControlJournalFileLayer(join(root, "semantic-graph-loop"))
+  const controller = makeGraphLoopEngineeringControllerLayer.pipe(Layer.provide([runtime, journal]))
+  return Layer.mergeAll(runtime, journal, controller)
+}
 
 const cell: LlmSemanticCell = {
   base_url: "https://fixture.invalid/v1",
   model: "fixture-semantic-engine",
   max_tokens: 128
 }
+
+const unexpectedAdmission: LlmSemanticRevisionAdmission = Object.freeze({
+  admit: () => Effect.die("invalid semantic proposal reached admission")
+})
 
 const noSubprocess = Layer.succeed(BoundedSubprocess, BoundedSubprocess.of({
   observe: () => Effect.die("LLM semantic fixture must not launch a subprocess")
@@ -271,7 +282,19 @@ it.effect("reopens a role-bearing semantic relation and feeds its outcome-condit
         expect(firstPrompt).toContain("priorEvidence")
         expect(firstPrompt).not.toContain("observed outcome")
         const outcome = yield* stageLlmSemanticOutcome(runtime, trace, "observed outcome", "fixture:outcome")
-        yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, http, authorizationRef, scope, "2026-09-14T00:01:00.000Z")
+        const controller = yield* GraphLoopEngineeringController
+        const action = yield* runtime.stageContent("application/json", encoder.encode("caller-sealed semantic action"))
+        const verifierOutcome = yield* runtime.stageContent("application/json", encoder.encode("caller-owned verifier outcome"))
+        const evidence = yield* runtime.stageContent("application/json", encoder.encode("caller-owned graph evidence"))
+        const admission = makeLlmSemanticGraphLoopAdmission(controller, {
+          contract: { runId: "semantic:run:accepted", triggerId: "semantic:trigger", actorId: "semantic:actor", verifierId: "semantic:verifier", maximumAttempts: 1, maximumActions: 1 },
+          transactionId: "semantic:transaction:accepted",
+          action,
+          verification: { decision: "ACCEPT", outcome: verifierOutcome },
+          evidence: { sealedTrajectory: evidence, outcome: verifierOutcome, credit: evidence, authorization: evidence, invariant: evidence, authorizationStatus: "REFERENCE_AUTHORIZATION_NOT_CANONICAL_PERMIT", conflictPolicy: "SERIALIZABLE_COMPARE_AND_SWAP" }
+        })
+        const committed = yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, http, authorizationRef, scope, "2026-09-14T00:01:00.000Z", admission)
+        expect(committed.disposition).toBe("COMMITTED")
         return { trace, outcome }
       }).pipe(Effect.provide(fileLayer(root)))),
       Effect.flatMap(({ trace, outcome }) => Effect.gen(function* () {
@@ -317,25 +340,25 @@ it.effect("rejects forged outcomes and LLM revisions that delete or duplicate ex
         const trace = yield* executeLlmSemanticRelation(runtime, "relation:sample", "event:negative", cell, response({ prediction: "prediction", uncertainty: "unknown" }))
         const outcome = yield* stageLlmSemanticOutcome(runtime, trace, "observed", "fixture:outcome")
         const forged: SemanticOutcome = { ...outcome, outcomeContent: { sha256: "0".repeat(64), mediaType: outcome.outcomeContent.mediaType, byteLength: outcome.outcomeContent.byteLength } }
-        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, trace, forged, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z").pipe(Effect.either))).toBe(true)
+        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, trace, forged, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z", unexpectedAdmission).pipe(Effect.either))).toBe(true)
         const forgedCallerOutcome: SemanticOutcome = { ...outcome, observed: "forged observed", source: "forged source" }
-        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, trace, forgedCallerOutcome, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z").pipe(Effect.either))).toBe(true)
+        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, trace, forgedCallerOutcome, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z", unexpectedAdmission).pipe(Effect.either))).toBe(true)
         const forgedCallerTrace = { ...trace, prediction: "forged prediction" }
-        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, forgedCallerTrace, outcome, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z").pipe(Effect.either))).toBe(true)
+        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, forgedCallerTrace, outcome, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z", unexpectedAdmission).pipe(Effect.either))).toBe(true)
         const forgedUncertainty = { ...trace, uncertainty: "forged uncertainty" }
-        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, forgedUncertainty, outcome, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z").pipe(Effect.either))).toBe(true)
+        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, forgedUncertainty, outcome, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z", unexpectedAdmission).pipe(Effect.either))).toBe(true)
         const forgedBackend = { ...trace, backendConfigurationSha256: "1".repeat(64) }
-        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, forgedBackend, outcome, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z").pipe(Effect.either))).toBe(true)
+        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, forgedBackend, outcome, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z", unexpectedAdmission).pipe(Effect.either))).toBe(true)
         const wrongTrace: SemanticOutcome = { ...outcome, traceSha256: "f".repeat(64) }
-        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, trace, wrongTrace, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z").pipe(Effect.either))).toBe(true)
+        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, trace, wrongTrace, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z", unexpectedAdmission).pipe(Effect.either))).toBe(true)
         const badStatus = { ...outcome, status: "FORGED" } as unknown as SemanticOutcome
-        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, trace, badStatus, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z").pipe(Effect.either))).toBe(true)
+        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, trace, badStatus, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs: ["exception:irreversible"] }), authorizationRef, scope, "2026-09-14T00:01:00.000Z", unexpectedAdmission).pipe(Effect.either))).toBe(true)
         const duplicateRevision: AdaptiveHttpClientShape = {
           postJson: () => Effect.succeed(openAiContent('{"semanticText":"one","semanticText":"two","disposition":"x","uncertainty":"x","exceptionRefs":["exception:irreversible"]}'))
         }
-        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, duplicateRevision, authorizationRef, scope, "2026-09-14T00:01:00.000Z").pipe(Effect.either))).toBe(true)
+        expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, duplicateRevision, authorizationRef, scope, "2026-09-14T00:01:00.000Z", unexpectedAdmission).pipe(Effect.either))).toBe(true)
         for (const exceptionRefs of [[], ["exception:irreversible", "exception:irreversible"]]) {
-          const rejected = yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs }), authorizationRef, scope, "2026-09-14T00:01:00.000Z").pipe(Effect.either)
+          const rejected = yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, response({ semanticText: "x", disposition: "x", uncertainty: "x", exceptionRefs }), authorizationRef, scope, "2026-09-14T00:01:00.000Z", unexpectedAdmission).pipe(Effect.either)
           expect(Either.isLeft(rejected)).toBe(true)
         }
       }).pipe(Effect.provide(fileLayer(root))))
@@ -355,7 +378,7 @@ it.effect("rejects a relation revision that becomes stale while its LLM revision
         const staleHttp: AdaptiveHttpClientShape = {
           postJson: () => commitConcurrentRelationRevision(runtime).pipe(Effect.orDie, Effect.andThen(openAiResponse({ semanticText: "late", disposition: "late", uncertainty: "late", exceptionRefs: ["exception:irreversible"] })))
         }
-        const rejected = yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, staleHttp, authorizationRef, scope, "2026-09-14T00:01:00.000Z").pipe(Effect.either)
+        const rejected = yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, staleHttp, authorizationRef, scope, "2026-09-14T00:01:00.000Z", unexpectedAdmission).pipe(Effect.either)
         expect(Either.isLeft(rejected)).toBe(true)
         if (Either.isLeft(rejected)) expect(rejected.left).toMatchObject({ code: "FRAME_STALE" })
       }).pipe(Effect.provide(fileLayer(root))))
@@ -378,8 +401,156 @@ it.effect("keeps repeated identical predictions as distinct executions and rejec
       expect(first.executionId).not.toBe(second.executionId)
       expect(first.traceSha256).not.toBe(second.traceSha256)
       const outcome = yield* stageLlmSemanticOutcome(runtime, first, "observed", "fixture:outcome")
-      const result = yield* learnLlmSemanticRelation(runtime, second, outcome, cell, http, authorizationRef, scope, "2026-09-14T00:01:00.000Z").pipe(Effect.either)
+      const result = yield* learnLlmSemanticRelation(runtime, second, outcome, cell, http, authorizationRef, scope, "2026-09-14T00:01:00.000Z", unexpectedAdmission).pipe(Effect.either)
       expect(Either.isLeft(result)).toBe(true)
     }).pipe(Effect.provide(fileLayer(root))))
   )).pipe(Effect.provide(noSubprocess))
+)
+
+it.effect("does not commit a semantic proposal when caller verifier content is missing", () =>
+  withTemporaryRoot((root) => seed.pipe(
+    Effect.provide(fileLayer(root)),
+    Effect.andThen(Effect.gen(function* () {
+      const runtime = yield* CanonicalAtomV2DurableRuntime
+      const controller = yield* GraphLoopEngineeringController
+      const http: AdaptiveHttpClientShape = { postJson: () => Effect.succeed(openAiResponse({ prediction: "p", uncertainty: "u" })) }
+      const trace = yield* executeLlmSemanticRelation(runtime, "relation:sample", "event:reject", cell, http)
+      const outcome = yield* stageLlmSemanticOutcome(runtime, trace, "observed", "fixture:outcome")
+      const action = yield* runtime.stageContent("application/json", encoder.encode("caller action"))
+      const evidence = yield* runtime.stageContent("application/json", encoder.encode("caller evidence"))
+      const absent = { mediaType: "application/json", byteLength: 1, sha256: "0".repeat(64) }
+      const missingEvidenceAdmission = makeLlmSemanticGraphLoopAdmission(controller, {
+        contract: { runId: "semantic:run:missing", triggerId: "semantic:trigger", actorId: "semantic:actor", verifierId: "semantic:verifier", maximumAttempts: 1, maximumActions: 1 },
+        transactionId: "semantic:transaction:missing",
+        action,
+        verification: { decision: "ACCEPT", outcome: absent },
+        evidence: { sealedTrajectory: evidence, outcome: absent, credit: evidence, authorization: evidence, invariant: evidence, authorizationStatus: "REFERENCE_AUTHORIZATION_NOT_CANONICAL_PERMIT", conflictPolicy: "SERIALIZABLE_COMPARE_AND_SWAP" }
+      })
+      const revisionHttp: AdaptiveHttpClientShape = { postJson: () => Effect.succeed(openAiResponse({ semanticText: "must not commit", disposition: "d", uncertainty: "u", exceptionRefs: ["exception:irreversible"] })) }
+      expect(Either.isLeft(yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, revisionHttp, authorizationRef, scope, "2026-09-14T00:01:00.000Z", missingEvidenceAdmission).pipe(Effect.either))).toBe(true)
+      const frame = yield* readLlmSemanticFrame(runtime, "relation:sample", "event:after-missing")
+      expect(frame.relation.key.revisionId).toBe(0)
+    }).pipe(Effect.provide(fileLayer(root))))
+  )).pipe(Effect.provide(noSubprocess))
+)
+
+
+const semanticAdmissionInput = (runId: string, action: CanonicalAtomV2["content"], outcome: CanonicalAtomV2["content"], evidence: CanonicalAtomV2["content"], decision: "ACCEPT" | "RETRY" | "REJECT", maximumAttempts = 2, maximumActions = 2): LlmSemanticGraphLoopAdmissionInput => ({
+  contract: { runId, triggerId: `${runId}:trigger`, actorId: `${runId}:actor`, verifierId: `${runId}:verifier`, maximumAttempts, maximumActions },
+  transactionId: `${runId}:transaction`, action, verification: { decision, outcome },
+  evidence: { sealedTrajectory: evidence, outcome, credit: evidence, authorization: evidence, invariant: evidence, authorizationStatus: "REFERENCE_AUTHORIZATION_NOT_CANONICAL_PERMIT", conflictPolicy: "SERIALIZABLE_COMPARE_AND_SWAP" }
+})
+const revisionResponse: AdaptiveHttpClientShape = { postJson: () => Effect.succeed(openAiResponse({ semanticText: "authorized revision", disposition: "d", uncertainty: "u", exceptionRefs: ["exception:irreversible"] })) }
+
+it.effect("schedules RETRY then permits its second ACCEPT attempt", () =>
+  withTemporaryRoot((root) => seed.pipe(Effect.provide(fileLayer(root)), Effect.andThen(Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const controller = yield* GraphLoopEngineeringController
+    const prediction: AdaptiveHttpClientShape = { postJson: () => Effect.succeed(openAiResponse({ prediction: "p", uncertainty: "u" })) }
+    const trace = yield* executeLlmSemanticRelation(runtime, "relation:sample", "event:retry", cell, prediction)
+    const outcome = yield* stageLlmSemanticOutcome(runtime, trace, "observed", "fixture")
+    const action = yield* runtime.stageContent("application/json", encoder.encode("action"))
+    const verifier = yield* runtime.stageContent("application/json", encoder.encode("verifier"))
+    const evidence = yield* runtime.stageContent("application/json", encoder.encode("evidence"))
+    const retry = makeLlmSemanticGraphLoopAdmission(controller, semanticAdmissionInput("semantic:retry", action, verifier, evidence, "RETRY"))
+    const scheduled = yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, revisionResponse, authorizationRef, scope, "2026-09-14T00:01:00.000Z", retry)
+    expect(scheduled.disposition).toBe("RETRY_SCHEDULED")
+    expect((yield* controller.recover).get("semantic:retry")?.phase).toBe("RETRY_SCHEDULED")
+    const accepted = makeLlmSemanticGraphLoopAdmission(controller, semanticAdmissionInput("semantic:retry", action, verifier, evidence, "ACCEPT"))
+    const committed = yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, revisionResponse, authorizationRef, scope, "2026-09-14T00:01:00.000Z", accepted)
+    expect(committed.disposition).toBe("COMMITTED")
+    expect((yield* readLlmSemanticFrame(runtime, "relation:sample", "event:after-retry")).relation.key.revisionId).toBe(1)
+  }).pipe(Effect.provide(fileLayer(root)))))).pipe(Effect.provide(noSubprocess))
+)
+
+it.effect("rejects terminally and refuses RETRY beyond the graph-loop attempt budget", () =>
+  withTemporaryRoot((root) => seed.pipe(Effect.provide(fileLayer(root)), Effect.andThen(Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const controller = yield* GraphLoopEngineeringController
+    const prediction: AdaptiveHttpClientShape = { postJson: () => Effect.succeed(openAiResponse({ prediction: "p", uncertainty: "u" })) }
+    const trace = yield* executeLlmSemanticRelation(runtime, "relation:sample", "event:reject", cell, prediction)
+    const outcome = yield* stageLlmSemanticOutcome(runtime, trace, "observed", "fixture")
+    const action = yield* runtime.stageContent("application/json", encoder.encode("action"))
+    const verifier = yield* runtime.stageContent("application/json", encoder.encode("verifier"))
+    const evidence = yield* runtime.stageContent("application/json", encoder.encode("evidence"))
+    const rejected = makeLlmSemanticGraphLoopAdmission(controller, semanticAdmissionInput("semantic:reject", action, verifier, evidence, "REJECT"))
+    expect((yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, revisionResponse, authorizationRef, scope, "2026-09-14T00:01:00.000Z", rejected)).disposition).toBe("REJECTED")
+    expect((yield* controller.recover).get("semantic:reject")?.phase).toBe("STOPPED")
+    expect((yield* readLlmSemanticFrame(runtime, "relation:sample", "event:after-reject")).relation.key.revisionId).toBe(0)
+    const exhausted = makeLlmSemanticGraphLoopAdmission(controller, semanticAdmissionInput("semantic:exhausted", action, verifier, evidence, "RETRY", 1))
+    expect((yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, revisionResponse, authorizationRef, scope, "2026-09-14T00:01:00.000Z", exhausted)).disposition).toBe("ESCALATED")
+    expect((yield* controller.recover).get("semantic:exhausted")?.phase).toBe("ESCALATED")
+    expect((yield* readLlmSemanticFrame(runtime, "relation:sample", "event:after-exhausted")).relation.key.revisionId).toBe(0)
+    const actionExhausted = makeLlmSemanticGraphLoopAdmission(controller, semanticAdmissionInput("semantic:action-exhausted", action, verifier, evidence, "RETRY", 2, 1))
+    expect((yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, revisionResponse, authorizationRef, scope, "2026-09-14T00:01:00.000Z", actionExhausted)).disposition).toBe("ESCALATED")
+    expect((yield* controller.recover).get("semantic:action-exhausted")?.phase).toBe("ESCALATED")
+  }).pipe(Effect.provide(fileLayer(root)))))).pipe(Effect.provide(noSubprocess))
+)
+
+it.effect("snapshots caller admission input before later mutation", () =>
+  withTemporaryRoot((root) => seed.pipe(Effect.provide(fileLayer(root)), Effect.andThen(Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const controller = yield* GraphLoopEngineeringController
+    const prediction: AdaptiveHttpClientShape = { postJson: () => Effect.succeed(openAiResponse({ prediction: "p", uncertainty: "u" })) }
+    const trace = yield* executeLlmSemanticRelation(runtime, "relation:sample", "event:snapshot", cell, prediction)
+    const outcome = yield* stageLlmSemanticOutcome(runtime, trace, "observed", "fixture")
+    const action = yield* runtime.stageContent("application/json", encoder.encode("action"))
+    const verifier = yield* runtime.stageContent("application/json", encoder.encode("verifier"))
+    const evidence = yield* runtime.stageContent("application/json", encoder.encode("evidence"))
+    const mutableAction = { ...action }, mutableVerifier = { ...verifier }, mutableEvidence = { ...evidence }
+    const input = semanticAdmissionInput("semantic:snapshot", mutableAction, mutableVerifier, mutableEvidence, "ACCEPT") as { contract: { runId: string }; action: { sha256: string }; verification: { decision: "ACCEPT" | "RETRY" | "REJECT" }; evidence: { outcome: { sha256: string } } } & LlmSemanticGraphLoopAdmissionInput
+    const admission = makeLlmSemanticGraphLoopAdmission(controller, input)
+    input.contract.runId = "mutated:run"; input.action.sha256 = "0".repeat(64); input.verification.decision = "REJECT"; input.evidence.outcome.sha256 = "0".repeat(64)
+    expect((yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, revisionResponse, authorizationRef, scope, "2026-09-14T00:01:00.000Z", admission)).disposition).toBe("COMMITTED")
+    expect((yield* readLlmSemanticFrame(runtime, "relation:sample", "event:after-snapshot")).relation.key.revisionId).toBe(1)
+  }).pipe(Effect.provide(fileLayer(root)))))).pipe(Effect.provide(noSubprocess))
+)
+
+it.effect("preserves QUARANTINED when a real file-backed graph-loop snapshot loses a CAS race", () =>
+  withTemporaryRoot((root) => seed.pipe(Effect.provide(fileLayer(root)), Effect.andThen(Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const controller = yield* GraphLoopEngineeringController
+    const prediction: AdaptiveHttpClientShape = { postJson: () => Effect.succeed(openAiResponse({ prediction: "p", uncertainty: "u" })) }
+    const trace = yield* executeLlmSemanticRelation(runtime, "relation:sample", "event:graph-loop-race", cell, prediction)
+    const outcome = yield* stageLlmSemanticOutcome(runtime, trace, "observed", "fixture")
+    const action = yield* runtime.stageContent("application/json", encoder.encode("action"))
+    const verifier = yield* runtime.stageContent("application/json", encoder.encode("verifier"))
+    const evidence = yield* runtime.stageContent("application/json", encoder.encode("evidence"))
+    const racingController = Object.freeze({
+      ...controller,
+      submitDelta: (request: Parameters<typeof controller.submitDelta>[0]) =>
+        commitConcurrentRelationRevision(runtime).pipe(Effect.orDie, Effect.andThen(controller.submitDelta(request)))
+    })
+    const admission = makeLlmSemanticGraphLoopAdmission(
+      racingController,
+      semanticAdmissionInput("semantic:race", action, verifier, evidence, "ACCEPT")
+    )
+    const result = yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, revisionResponse, authorizationRef, scope, "2026-09-14T00:01:00.000Z", admission)
+    expect(result.disposition).toBe("QUARANTINED")
+    expect((yield* controller.recover).get("semantic:race")?.phase).toBe("QUARANTINED")
+    const frame = yield* readLlmSemanticFrame(runtime, "relation:sample", "event:after-graph-loop-race")
+    expect(frame.relation.key.revisionId).toBe(1)
+    expect(frame.relation.semantic.semanticText).toBe("concurrent semantic text")
+  }).pipe(Effect.provide(fileLayer(root)))))).pipe(Effect.provide(noSubprocess))
+)
+
+it.effect("preserves REJECTED for a real durable authorization denial without revising the relation", () =>
+  withTemporaryRoot((root) => seed.pipe(Effect.provide(fileLayer(root)), Effect.andThen(Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const controller = yield* GraphLoopEngineeringController
+    const prediction: AdaptiveHttpClientShape = { postJson: () => Effect.succeed(openAiResponse({ prediction: "p", uncertainty: "u" })) }
+    const trace = yield* executeLlmSemanticRelation(runtime, "relation:sample", "event:grant-denied", cell, prediction)
+    const outcome = yield* stageLlmSemanticOutcome(runtime, trace, "observed", "fixture")
+    const action = yield* runtime.stageContent("application/json", encoder.encode("action"))
+    const verifier = yield* runtime.stageContent("application/json", encoder.encode("verifier"))
+    const evidence = yield* runtime.stageContent("application/json", encoder.encode("evidence"))
+    const admission = makeLlmSemanticGraphLoopAdmission(
+      controller,
+      semanticAdmissionInput("semantic:grant-denied", action, verifier, evidence, "ACCEPT")
+    )
+    const result = yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, revisionResponse, "authorization:ungranted", scope, "2026-09-14T00:01:00.000Z", admission)
+    expect(result.disposition).toBe("REJECTED")
+    expect((yield* controller.recover).get("semantic:grant-denied")?.phase).toBe("REJECTED")
+    expect((yield* readLlmSemanticFrame(runtime, "relation:sample", "event:after-grant-denied")).relation.key.revisionId).toBe(0)
+  }).pipe(Effect.provide(fileLayer(root)))))).pipe(Effect.provide(noSubprocess))
 )

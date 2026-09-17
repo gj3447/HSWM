@@ -288,6 +288,12 @@ def test_source_distribution_carries_the_default_test_surface() -> None:
         "recursive-exclude tests "
         "test_hswm_swm0w_s2s_effect_handoff_v*.py"
     ) in manifest
+    assert "exclude tests/test_hswm_swm0w_s2s_effect_handoff_retained.py" in manifest
+    assert "exclude tests/test_hswm_knowledge_map_projection.py" in manifest
+    assert "exclude tests/test_hswm_research_tooling_projection.py" in manifest
+    assert "exclude tests/test_hswm_research_tooling_queries.py" in manifest
+    assert "exclude tests/test_frontier_learning_historical_snapshot.py" in manifest
+    assert "include _research/g0_occurrence/occurrence_temporal_worker.py.lock" in manifest
     assert (
         "include "
         "_research/dgx_q1/preregistrations/"
@@ -305,6 +311,9 @@ def test_source_distribution_carries_the_default_test_surface() -> None:
         "src": {"*.py"},
         "scripts": {"*.py", "*.sh"},
         "docs": {"*.md", "*.txt"},
+        "docs/operations/artifacts": {"*.json"},
+        "docs/research/artifacts": {"*.json"},
+        "ontology": {"*.json", "*.md", "*.cypher", "*.sparql"},
         "prereg": {"*.json", "*.md"},
         "results": {"*.md", "*.log", "*.json"},
         "receipts": {"*.py", "*.json"},
@@ -443,6 +452,8 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
         "src/hswm/effect-runtime/package-lock.json",
         "src/hswm/effect-runtime/src",
         "src/hswm/effect-runtime/src/canonical-atom-v2-jsonld-view.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-d4-study-process.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-d4-study.ts",
     }
     assert effect_runtime == graph_qualification_effect_inputs, (
         "Python sdist의 Effect 경계는 해시 결박 graph qualification 최소 번들이어야 "
@@ -488,6 +499,8 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
         "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
         "schemas/HSWM_HYPERGRAPH_LEARNING_PLAN_SHACL_1_0.ttl",
         "schemas/HSWM_RESEARCH_EVIDENCE_RDF_PROJECTION_SHACL_1_0.ttl",
+        "schemas/HSWM_NEXT_DEVELOPMENT_PLAN_SHACL_1_0.v1.ttl",
+        "schemas/HSWM_RESEARCH_COORDINATION_SHACL_1_0.ttl",
     }, "Python sdist는 현행·호환 read-only graph view와 학습 계획의 정확한 SHACL shape를 운송해야 한다"
     assert {
         "_research/graph_standards/qualify_graph_standards.mjs",
@@ -508,6 +521,22 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
     assert "tests/test_hswm_graph_and_loop_engineering_ontology.py" not in inner, (
         "Python sdist가 별도 npm runtime 전체를 요구하는 graph ontology "
         "repository-only replay test를 운송한다"
+    )
+    repository_only_git_cut = {
+        "tests/test_frontier_learning_historical_snapshot.py",
+        "tests/test_hswm_knowledge_map_projection.py",
+        "tests/test_hswm_research_tooling_projection.py",
+        "tests/test_hswm_research_tooling_queries.py",
+        "tests/test_hswm_swm0w_s2s_effect_handoff_retained.py",
+        "tests/test_hswm_effect_fp_boundary_repository.py",
+        "tests/test_hswm_session_ledger_historical_snapshot.py",
+    }
+    assert not (repository_only_git_cut & set(inner)), (
+        "Python sdist가 Git object database 또는 pruned Effect closure를 요구하는 "
+        f"repository-only tests를 운송한다: {sorted(repository_only_git_cut & set(inner))}"
+    )
+    assert "tests/test_frontier_learning_projection.py" in inner, (
+        "self-contained frontier projection tests must remain in the sdist"
     )
     assert {
         "_research/causal_composition/priors/expel_b2_text_lesson_v1/"

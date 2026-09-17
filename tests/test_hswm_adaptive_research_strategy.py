@@ -132,7 +132,13 @@ def test_external_fractal_sources_are_anchors_not_duplicate_local_nodes() -> Non
         if path == ONTOLOGY_PATH:
             continue
         candidate = json.loads(path.read_text(encoding="utf-8"))
-        for row in candidate.get("nodes", []):
+        # Query result arrays and reports with numeric node counts are not bundles.
+        if not isinstance(candidate, dict):
+            continue
+        nodes = candidate.get("nodes", [])
+        if not isinstance(nodes, list):
+            continue
+        for row in nodes:
             if row.get("uid") in local_uids:
                 duplicate_local_uids.add(row["uid"])
             if row.get("uid") in external:

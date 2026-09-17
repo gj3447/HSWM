@@ -1,0 +1,609 @@
+{
+  "schema_version": "hswm-native-engineering-checkpoint/v1",
+  "status": "PARTIAL_MIGRATION_ENGINEERING_CHECKPOINT",
+  "nonclaim": "NOT_HSWM_EFFICACY_NOT_CANONICAL_ADMISSION_NOT_TARGET_REALIZATION",
+  "authority_boundary": "USER_PRIMARY_VERBATIM_REQUEST_DISTINCT_FROM_SECONDARY_AI_IMPLEMENTATION_AND_JUDGMENTS",
+  "source_accessed_on": "2026-09-17",
+  "bundle_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+  "artifact_bindings": [
+    {
+      "path": "_research/f_series/f3v2_dev_smoke.py",
+      "sha256": "954a0f487f2483333df44ba200b6166bff835bef49137e0bface075f6742581e"
+    },
+    {
+      "path": "src/hswm/infrastructure/native_f3_development_bridge.py",
+      "sha256": "18b612c304db8f953804028fa813b1e445a7d55c7e21907b1fc3b95995df497d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-development-process.ts",
+      "sha256": "2ce649754a098279771f489a3ca35314ec635d45681e325726dcdba4e0ccf50b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-fetch-provider.ts",
+      "sha256": "84b1e7cd9a546061d820b4a10b205a12028ffa8eab05639a16e500dfb80f37fb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-cache-runtime.ts",
+      "sha256": "659c7f3925fd30176b896d55debe491e5db7a21625bb8dbaca19c4118d50ffc7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-pg-persistence.ts",
+      "sha256": "d5958501aa6ef43d932be3b607ef8fbf7903db525ac72e6937cafe4fa0afb91e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-chat-domain.ts",
+      "sha256": "2728c576ae265f37974afc7df5a70c9506e55c81dfeb23e57f076ebc712db121"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-f3-development-process.test.ts",
+      "sha256": "a73492ebf39f37882ecdebd9c9290a415b608e4c93ad214de2bdaca0b9d9fec1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/native-f3-fetch-provider.test.ts",
+      "sha256": "53816abc6fbf41438c906f9ac7e07aa7e38d9a9f571ae0f1be6c8fae9078faff"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package.json",
+      "sha256": "60b61622a786dcd44cb49e94b4caa549007543ee78175ad9183d795dae6e0f62"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "44a3f32fbeb5ad30069b2c82db7fe5e8db95c34a66be603a2e89d82d230c4191"
+    },
+    {
+      "path": "tests/test_native_f3_development_bridge.py",
+      "sha256": "f424829646ccc7917b59d60d696ac838d47a9021156d3a94d8fcdcc7bef3874b"
+    },
+    {
+      "path": "docs/operations/HSWM_NATIVE_F3_DEVELOPMENT_CALLER_2026-09-17.md",
+      "sha256": "290819f908708c2c0761da4edd416079c1bed8aba7198d7c398a2789a45dc055"
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_CHECKPOINT"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "Opt-in F3 development caller using native durable cache and budget",
+        "description": "Opt-in F3 development caller using native durable cache and budget",
+        "standard_graph_role": "ENGINEERING_CHECKPOINT",
+        "status": "BOUNDED_ENGINEERING_VERIFICATION",
+        "source_base_commit": "5985dede4e57f3850207c753df374191433e96c4",
+        "source_path": "docs/operations/HSWM_NATIVE_F3_DEVELOPMENT_CALLER_2026-09-17.md",
+        "migration_complete": false,
+        "execution_scope": "EXPLICIT_DEVELOPMENT_ONLY_NON_SEALED",
+        "cache_policy": "RUN_SCOPED_NOT_FULL_PYTHON_CACHE_DIR_PARITY",
+        "verification": "21 native tests including real PG and actual Python/process/local HTTP; 50 Python tests; 55 workflow regressions; types, lint, build and package check",
+        "live_model_calls": 0,
+        "conceptual_delta": "NONE_NO_CR_OR_FCL_PROMOTION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-50336af8269bed3d8c18",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_SOURCE"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "_research/f_series/f3v2_dev_smoke.py",
+        "description": "_research/f_series/f3v2_dev_smoke.py",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "status": "SOURCE_BOUND_ENGINEERING_OBSERVATION",
+        "source_path": "_research/f_series/f3v2_dev_smoke.py",
+        "sha256": "954a0f487f2483333df44ba200b6166bff835bef49137e0bface075f6742581e",
+        "byte_length": 20951
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-15efac5b88128926f3a7",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_SOURCE"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "src/hswm/infrastructure/native_f3_development_bridge.py",
+        "description": "src/hswm/infrastructure/native_f3_development_bridge.py",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "status": "SOURCE_BOUND_ENGINEERING_OBSERVATION",
+        "source_path": "src/hswm/infrastructure/native_f3_development_bridge.py",
+        "sha256": "18b612c304db8f953804028fa813b1e445a7d55c7e21907b1fc3b95995df497d",
+        "byte_length": 6735
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-e45356edd78e912c2cba",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_SOURCE"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "src/hswm/effect-runtime/src/native-f3-development-process.ts",
+        "description": "src/hswm/effect-runtime/src/native-f3-development-process.ts",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "status": "SOURCE_BOUND_ENGINEERING_OBSERVATION",
+        "source_path": "src/hswm/effect-runtime/src/native-f3-development-process.ts",
+        "sha256": "2ce649754a098279771f489a3ca35314ec635d45681e325726dcdba4e0ccf50b",
+        "byte_length": 5813
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-9f2b88d0cb49b6271b8d",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_SOURCE"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "src/hswm/effect-runtime/src/native-f3-fetch-provider.ts",
+        "description": "src/hswm/effect-runtime/src/native-f3-fetch-provider.ts",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "status": "SOURCE_BOUND_ENGINEERING_OBSERVATION",
+        "source_path": "src/hswm/effect-runtime/src/native-f3-fetch-provider.ts",
+        "sha256": "84b1e7cd9a546061d820b4a10b205a12028ffa8eab05639a16e500dfb80f37fb",
+        "byte_length": 5009
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-4491f5b91269b6c8e123",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_SOURCE"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "src/hswm/effect-runtime/src/native-f3-cache-runtime.ts",
+        "description": "src/hswm/effect-runtime/src/native-f3-cache-runtime.ts",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "status": "SOURCE_BOUND_ENGINEERING_OBSERVATION",
+        "source_path": "src/hswm/effect-runtime/src/native-f3-cache-runtime.ts",
+        "sha256": "659c7f3925fd30176b896d55debe491e5db7a21625bb8dbaca19c4118d50ffc7",
+        "byte_length": 10368
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-ebb24d07130d74bb1e1c",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_SOURCE"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "src/hswm/effect-runtime/src/native-f3-pg-persistence.ts",
+        "description": "src/hswm/effect-runtime/src/native-f3-pg-persistence.ts",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "status": "SOURCE_BOUND_ENGINEERING_OBSERVATION",
+        "source_path": "src/hswm/effect-runtime/src/native-f3-pg-persistence.ts",
+        "sha256": "d5958501aa6ef43d932be3b607ef8fbf7903db525ac72e6937cafe4fa0afb91e",
+        "byte_length": 15478
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-2f918894e406e105fa94",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_SOURCE"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "src/hswm/effect-runtime/src/native-f3-chat-domain.ts",
+        "description": "src/hswm/effect-runtime/src/native-f3-chat-domain.ts",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "status": "SOURCE_BOUND_ENGINEERING_OBSERVATION",
+        "source_path": "src/hswm/effect-runtime/src/native-f3-chat-domain.ts",
+        "sha256": "2728c576ae265f37974afc7df5a70c9506e55c81dfeb23e57f076ebc712db121",
+        "byte_length": 13230
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-33326ff53eb964d33513",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_SOURCE"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "src/hswm/effect-runtime/test/native-f3-development-process.test.ts",
+        "description": "src/hswm/effect-runtime/test/native-f3-development-process.test.ts",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "status": "SOURCE_BOUND_ENGINEERING_OBSERVATION",
+        "source_path": "src/hswm/effect-runtime/test/native-f3-development-process.test.ts",
+        "sha256": "a73492ebf39f37882ecdebd9c9290a415b608e4c93ad214de2bdaca0b9d9fec1",
+        "byte_length": 7634
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-d50ef1f44383941dbda1",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_SOURCE"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "src/hswm/effect-runtime/test/native-f3-fetch-provider.test.ts",
+        "description": "src/hswm/effect-runtime/test/native-f3-fetch-provider.test.ts",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "status": "SOURCE_BOUND_ENGINEERING_OBSERVATION",
+        "source_path": "src/hswm/effect-runtime/test/native-f3-fetch-provider.test.ts",
+        "sha256": "53816abc6fbf41438c906f9ac7e07aa7e38d9a9f571ae0f1be6c8fae9078faff",
+        "byte_length": 4125
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-4317a354d35850647420",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_SOURCE"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "src/hswm/effect-runtime/package.json",
+        "description": "src/hswm/effect-runtime/package.json",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "status": "SOURCE_BOUND_ENGINEERING_OBSERVATION",
+        "source_path": "src/hswm/effect-runtime/package.json",
+        "sha256": "60b61622a786dcd44cb49e94b4caa549007543ee78175ad9183d795dae6e0f62",
+        "byte_length": 5577
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-de16964fb2493fc6de3f",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_SOURCE"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "src/hswm/effect-runtime/package-lock.json",
+        "description": "src/hswm/effect-runtime/package-lock.json",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "status": "SOURCE_BOUND_ENGINEERING_OBSERVATION",
+        "source_path": "src/hswm/effect-runtime/package-lock.json",
+        "sha256": "44a3f32fbeb5ad30069b2c82db7fe5e8db95c34a66be603a2e89d82d230c4191",
+        "byte_length": 519669
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-a52db83c0a97377316a9",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_SOURCE"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "tests/test_native_f3_development_bridge.py",
+        "description": "tests/test_native_f3_development_bridge.py",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "status": "SOURCE_BOUND_ENGINEERING_OBSERVATION",
+        "source_path": "tests/test_native_f3_development_bridge.py",
+        "sha256": "f424829646ccc7917b59d60d696ac838d47a9021156d3a94d8fcdcc7bef3874b",
+        "byte_length": 7524
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-1d90bea5ca3b31f545ae",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "AI",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "AI_ANALYSIS_NOT_USER_RATIFIED",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "claim_boundary": "ENGINEERING_ONLY_NOT_HSWM_COGNITION_CAUSAL_CREDIT_LEARNING_OR_EFFICACY",
+        "ontology_semantic_roles_v1": [
+          "ENGINEERING_SOURCE"
+        ],
+        "responsibility_owner": "hswm:engineering:native-f3-development-caller:2026-09-17",
+        "name": "docs/operations/HSWM_NATIVE_F3_DEVELOPMENT_CALLER_2026-09-17.md",
+        "description": "docs/operations/HSWM_NATIVE_F3_DEVELOPMENT_CALLER_2026-09-17.md",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "status": "SOURCE_BOUND_ENGINEERING_OBSERVATION",
+        "source_path": "docs/operations/HSWM_NATIVE_F3_DEVELOPMENT_CALLER_2026-09-17.md",
+        "sha256": "290819f908708c2c0761da4edd416079c1bed8aba7198d7c398a2789a45dc055",
+        "byte_length": 5027
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "to_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-50336af8269bed3d8c18",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROJECTION_ONLY",
+      "scope": "SOURCE_BOUND_ENGINEERING_PROJECTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "to_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-15efac5b88128926f3a7",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROJECTION_ONLY",
+      "scope": "SOURCE_BOUND_ENGINEERING_PROJECTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "to_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-e45356edd78e912c2cba",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROJECTION_ONLY",
+      "scope": "SOURCE_BOUND_ENGINEERING_PROJECTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "to_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-9f2b88d0cb49b6271b8d",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROJECTION_ONLY",
+      "scope": "SOURCE_BOUND_ENGINEERING_PROJECTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "to_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-4491f5b91269b6c8e123",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROJECTION_ONLY",
+      "scope": "SOURCE_BOUND_ENGINEERING_PROJECTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "to_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-ebb24d07130d74bb1e1c",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROJECTION_ONLY",
+      "scope": "SOURCE_BOUND_ENGINEERING_PROJECTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "to_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-2f918894e406e105fa94",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROJECTION_ONLY",
+      "scope": "SOURCE_BOUND_ENGINEERING_PROJECTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "to_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-33326ff53eb964d33513",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROJECTION_ONLY",
+      "scope": "SOURCE_BOUND_ENGINEERING_PROJECTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "to_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-d50ef1f44383941dbda1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROJECTION_ONLY",
+      "scope": "SOURCE_BOUND_ENGINEERING_PROJECTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "to_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-4317a354d35850647420",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROJECTION_ONLY",
+      "scope": "SOURCE_BOUND_ENGINEERING_PROJECTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "to_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-de16964fb2493fc6de3f",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROJECTION_ONLY",
+      "scope": "SOURCE_BOUND_ENGINEERING_PROJECTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "to_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-a52db83c0a97377316a9",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROJECTION_ONLY",
+      "scope": "SOURCE_BOUND_ENGINEERING_PROJECTION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17",
+      "to_uid": "sym:AbstractNode:hswm-native-f3-development-caller-2026-09-17-source-1d90bea5ca3b31f545ae",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "status": "PROJECTION_ONLY",
+      "scope": "SOURCE_BOUND_ENGINEERING_PROJECTION"
+    }
+  ]
+}

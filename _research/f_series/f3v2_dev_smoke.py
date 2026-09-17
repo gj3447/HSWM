@@ -169,6 +169,10 @@ def main(argv=None) -> int:
                     help="REQUIRED for any network call; refused without a "
                          "sealed manifest or --dev")
     ap.add_argument("--out", default="")
+    ap.add_argument("--native-f3-run-id", default="",
+                    help="explicit durable run ID for native PG development calls")
+    ap.add_argument("--native-f3-config", default="",
+                    help="private mode-0600 PG config; requires --live --dev and native run ID")
     args = ap.parse_args(argv)
 
     manifest = None
@@ -183,6 +187,11 @@ def main(argv=None) -> int:
                          manifest.get("mode") if manifest else None)
     if gate_err:
         ap.error(gate_err)
+    native_enabled = bool(args.native_f3_run_id or args.native_f3_config)
+    if native_enabled and (not args.native_f3_run_id or not args.native_f3_config
+                           or not args.live or not args.dev
+                           or (manifest and manifest.get("mode") == "sealed")):
+        ap.error("native F3 requires both native flags, --live --dev, and a non-sealed input")
 
     if manifest:
         cohort = arms.cohort_from_manifest(manifest)  # regenerates + verifies
@@ -213,6 +222,7 @@ def main(argv=None) -> int:
         RECEIPT_DIR / f"f3v2_arms_smoke_{'live' if args.live else 'dry'}_{ts}.json")
 
     budget = None
+    native_digest = None
     endpoint_v1 = receiver_endpoint_v1 = "scripted-offline"
     if args.live:
         if plan_calls > max_calls:
@@ -221,14 +231,34 @@ def main(argv=None) -> int:
                      "deliberately or trim the panel")
         # lazy imports: the dry-run path (and the offline test suite) never
         # touches the f2/hswm dependency chain or any socket.
-        from . import f2_delta_w_credit as f2
         from . import f3v2_canary_gate as gate
-        budget = f2.Budget(max_calls)
         endpoint_v1 = gate._normalize_endpoint(args.endpoint)
         receiver_endpoint_v1 = gate._normalize_endpoint(
             args.receiver_endpoint or args.endpoint)
-        donor_chat = f2.CachedOpenAIChat(endpoint_v1, budget)
-        receiver_chat = f2.CachedOpenAIChat(receiver_endpoint_v1, budget)
+        if native_enabled:
+            from hswm.infrastructure.native_f3_development_bridge import make_native_f3_development_chats
+            run_snapshot = {
+                "schema_version": "hswm-native-f3-dev-smoke-run/v1",
+                "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                "manifest_sha256": manifest_sha, "donor_endpoint": endpoint_v1,
+                "receiver_endpoint": receiver_endpoint_v1,
+                "donor_model": args.donor_model, "receiver_model": args.receiver_model,
+                "seed": args.seed, "train_seed": train_seed, "test_seed": test_seed,
+                "train_world_sha256": [fw.world_sha256(w) for w in cohort["train"]],
+                "test_world_sha256": [fw.world_sha256(w) for w in cohort["test"]],
+                "arms": arm_ids, "tier": args.tier, "max_tokens": args.max_tokens,
+                "plan_calls": plan_calls, "max_calls": max_calls,
+                "boot_reps": boot_reps, "boot_seed": boot_seed,
+            }
+            budget, donor_chat, receiver_chat, native_digest = make_native_f3_development_chats(
+                run_id=args.native_f3_run_id, config_path=args.native_f3_config,
+                run_snapshot=run_snapshot, max_calls=max_calls,
+                donor_endpoint=endpoint_v1, receiver_endpoint=receiver_endpoint_v1)
+        else:
+            from . import f2_delta_w_credit as f2
+            budget = f2.Budget(max_calls)
+            donor_chat = f2.CachedOpenAIChat(endpoint_v1, budget)
+            receiver_chat = f2.CachedOpenAIChat(receiver_endpoint_v1, budget)
     else:
         donor_chat = arms.ScriptedChat()
         receiver_chat = arms.ScriptedChat()
@@ -270,7 +300,8 @@ def main(argv=None) -> int:
         trr = arms.trr_table(results)
         kills = arms.evaluate_kills(trr[args.tier], reps=boot_reps,
                                     seed=boot_seed)
-        config = vars(args) | {
+        config = {key: value for key, value in vars(args).items()
+                  if key not in {"native_f3_config", "native_f3_run_id"}} | {
             "train_seed": train_seed, "test_seed": test_seed,
             "arm_ids": arm_ids, "plan_calls": plan_calls,
             "max_calls_effective": max_calls,
@@ -345,6 +376,17 @@ def main(argv=None) -> int:
     except Exception as err:  # noqa: BLE001 — recorded, never hidden
         aborted = f"{type(err).__name__}: {err}"
 
+    if native_enabled:
+        receipt["native_f3"] = {
+            "enabled": True, "development_only": True,
+            "backend": "native-f3-postgres-development-v1",
+            "run_id": args.native_f3_run_id, "run_config_sha256": native_digest,
+            "counter_scope": "durable-run", "max_calls": max_calls,
+            "used": budget.used if budget.observed else None,
+            "donor_client_id": donor_chat.client_id,
+            "receiver_client_id": receiver_chat.client_id,
+            "cache_scope": "run-only; not cross-run Python file-cache parity",
+        }
     receipt.setdefault("schema_version", "hswm-f3v2-arms-receipt/v1")
     receipt.setdefault("mode", "development")
     receipt.setdefault("stage", "DEVELOPMENT_ONLY")

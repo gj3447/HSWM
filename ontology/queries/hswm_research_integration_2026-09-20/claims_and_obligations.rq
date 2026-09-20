@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?title ?proposal ?limit ?source ?remaining WHERE {
+  ?claim p:standard_graph_role "RESEARCH_PROPOSAL"; p:name ?title;
+    p:description ?proposal; p:limitation ?limit; r:DERIVED_FROM/p:source_ref ?source;
+    r:RELATES_TO ?question.
+  ?question p:standard_graph_role "OPEN_OBLIGATION"; p:description ?remaining.
+} ORDER BY ?title

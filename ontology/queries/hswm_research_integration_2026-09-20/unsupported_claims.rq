@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?claim ?role WHERE {
+  ?claim p:standard_graph_role ?role.
+  VALUES ?role { "RESEARCH_PROPOSAL" "LITERATURE_CLAIM" "OBSERVED_RESULT" "FORMAL_PROPOSAL_REFERENCE" "TARGET_IDENTITY_REFERENCE" }
+  FILTER NOT EXISTS { ?claim r:DERIVED_FROM ?source }
+}

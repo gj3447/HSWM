@@ -1,0 +1,4 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?role (COUNT(DISTINCT ?node) AS ?count) WHERE {
+  ?node p:standard_graph_role ?role.
+} GROUP BY ?role ORDER BY ?role

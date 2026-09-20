@@ -1,0 +1,22 @@
+{
+  "schema_version": "hswm-local-semantic-probe-analysis/v1",
+  "analysis_timing": "POSTHOC_DIAGNOSTIC_PRESERVES_PREDECLARED_ORIGINAL_LABEL_METRIC",
+  "majority_deny_original_label_agreement": 13,
+  "n": 16,
+  "role_swap_own_input_correct": 16,
+  "role_swap_original_label_agreement": 14,
+  "meaning_removed_error_case_ids": [
+    9
+  ],
+  "brier_scope": "Raw brier_correctness compares confidence with original-label agreement. For role_swap this is NOT correctness calibration against the changed input; do not interpret it as model error or miscalibration. No population calibration claim for any arm.",
+  "prompt_tokens": 14304,
+  "completion_tokens": 1703,
+  "model": "qwen3.6-35b-a3b",
+  "model_root_service_reported": "Qwen/Qwen3.6-35B-A3B-FP8",
+  "loaded_checkpoint_commit": "UNVERIFIED",
+  "fingerprint": "vllm-0.25.1-03412ebf",
+  "no_downloads": true,
+  "learning_or_runtime_integration": false,
+  "conclusion": "Role-sensitive local interpretation observed; incremental semantic-relation utility not established because meaning_removed already agrees on 15/16.",
+  "next_experiment": "Predeclare balanced counterfactual relation meanings with nonce attributes, fresh held-out cases, exact model pins and budget-matched controls before testing outcome-conditioned durable revision."
+}

@@ -1,0 +1,48 @@
+{
+  "artifacts": [
+    {
+      "path": "_research/semantic_locality_dgx_v1/run.mts",
+      "sha256": "61a7bcc545bb26cec3751272b9aa75c7e18e990d560cf256f59e37a48c4d225c"
+    },
+    {
+      "path": "_research/semantic_locality_dgx_v1/protocol.v1.json",
+      "sha256": "790c16aa3d336fff2f95fcacad394b68f9508210688e8fcfa81552e1cae04e66"
+    },
+    {
+      "path": "_research/semantic_locality_dgx_v1/summary.json",
+      "sha256": "16f8e14fd36b543288a31b0c3f3947c52138420c1c14989a6ad1dc42c25dd906"
+    },
+    {
+      "path": "_research/semantic_locality_dgx_v1/observations.jsonl",
+      "sha256": "9905d50552259d688e2e5d835cea4d617681389a67ace3aa7e0fffdbd58e9474"
+    },
+    {
+      "path": "_research/semantic_locality_dgx_v1/analysis.v1.json",
+      "sha256": "06d990ea416160123e7c53860532653121559d9c61879dd6ca5478bd32530422"
+    },
+    {
+      "path": "_research/semantic_locality_dgx_v1/durable-receipt.v1.json",
+      "sha256": "2cf8fb1fdeb9663e70cfe1ee61e0600e2f7f47b15640c89161cdced8dc9e6b1b"
+    }
+  ],
+  "authority_class": "SECONDARY_AI",
+  "claim_ceiling": "NO_HSWM_LEARNING_OR_CR_FCL_PROMOTION",
+  "date": "2026-09-20",
+  "durable_run": "data01:/mnt/hswm/runs/semantic-locality-20260920-v1",
+  "excluded_setup_calls": {
+    "count": 1,
+    "prompt": "Reply with the single word ready.",
+    "purpose": "endpoint readiness only, outside study and hswm-run"
+  },
+  "execution": "DGX hswm-run; existing local vLLM service",
+  "limitations": [
+    "single fixed synthetic family",
+    "no equal-cost causal inference",
+    "no exact checkpoint attestation",
+    "no Hyperon or Jev model execution",
+    "restored arm repeats prompt, not durable graph restoration"
+  ],
+  "research_status": "FINITE_LOCAL_INTERPRETATION_OBSERVED_SEMANTIC_UTILITY_UNESTABLISHED",
+  "run_id": "semantic-locality-20260920-v1",
+  "schema_version": "hswm-material-research-receipt/v1"
+}

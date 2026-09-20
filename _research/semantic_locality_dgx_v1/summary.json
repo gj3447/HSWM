@@ -1,0 +1,67 @@
+{
+  "schema_version": "hswm-local-semantic-probe-result/v1",
+  "start": "2026-09-20T12:13:13.720Z",
+  "finished": "2026-09-20T12:14:01.332Z",
+  "protocol_sha256": "790c16aa3d336fff2f95fcacad394b68f9508210688e8fcfa81552e1cae04e66",
+  "runner_sha256": "61a7bcc545bb26cec3751272b9aa75c7e18e990d560cf256f59e37a48c4d225c",
+  "requests": 80,
+  "arms": [
+    {
+      "arm": "full",
+      "n": 16,
+      "valid": 16,
+      "correct": 16,
+      "brier_correctness": 0.0006250000000000011,
+      "prompt_tokens": 2976,
+      "completion_tokens": 340,
+      "usage_complete": true,
+      "mean_latency_ms": 589.1603021250003
+    },
+    {
+      "arm": "reordered",
+      "n": 16,
+      "valid": 16,
+      "correct": 16,
+      "brier_correctness": 0.0007812500000000013,
+      "prompt_tokens": 2976,
+      "completion_tokens": 341,
+      "usage_complete": true,
+      "mean_latency_ms": 589.6508246874996
+    },
+    {
+      "arm": "role_swap",
+      "n": 16,
+      "valid": 16,
+      "correct": 14,
+      "brier_correctness": 0.119375,
+      "prompt_tokens": 2976,
+      "completion_tokens": 340,
+      "usage_complete": true,
+      "mean_latency_ms": 589.4778514374998
+    },
+    {
+      "arm": "meaning_removed",
+      "n": 16,
+      "valid": 16,
+      "correct": 15,
+      "brier_correctness": 0.0990625,
+      "prompt_tokens": 2400,
+      "completion_tokens": 342,
+      "usage_complete": true,
+      "mean_latency_ms": 611.9374184374998
+    },
+    {
+      "arm": "restored",
+      "n": 16,
+      "valid": 16,
+      "correct": 16,
+      "brier_correctness": 0.0006250000000000011,
+      "prompt_tokens": 2976,
+      "completion_tokens": 340,
+      "usage_complete": true,
+      "mean_latency_ms": 587.3438081249996
+    }
+  ],
+  "restored_disagreements": 0,
+  "claim_ceiling": "FINITE_SYNTHETIC_LOCAL_INTERPRETATION_ONLY_NO_CR_FCL_PROMOTION"
+}

@@ -1,0 +1,36 @@
+@prefix kb: <https://hswm.invalid/kg-bundle-rdf/v1/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+kb:IntegratedSourceShape a sh:NodeShape ;
+  sh:targetClass role:REPOSITORY_SOURCE, role:PRIOR_RESEARCH_RESPONSE, role:EXISTING_KG_SOURCE ;
+  sh:property [ sh:path p:source_ref ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[0-9a-f]{64}$" ] .
+
+kb:IntegratedAssertionShape a sh:NodeShape ;
+  sh:targetClass role:RESEARCH_PROPOSAL, role:LITERATURE_CLAIM, role:OBSERVED_RESULT, role:FORMAL_PROPOSAL_REFERENCE, role:TARGET_IDENTITY_REFERENCE ;
+  sh:property [ sh:path r:DERIVED_FROM ; sh:minCount 1 ; sh:nodeKind sh:IRI ] ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:status ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+kb:IntegratedProposalShape a sh:NodeShape ;
+  sh:targetClass role:RESEARCH_PROPOSAL ;
+  sh:property [ sh:path p:limitation ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path r:RELATES_TO ; sh:class role:OPEN_OBLIGATION ; sh:minCount 1 ] ;
+  sh:property [ sh:path r:HAS_PARTICIPATION ; sh:class role:ROLE_PARTICIPATION ; sh:minCount 3 ; sh:maxCount 3 ] .
+
+kb:IntegratedOccurrenceShape a sh:NodeShape ;
+  sh:targetClass role:ROLE_PARTICIPATION ;
+  sh:property [ sh:path p:role_name ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:ordinal ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 0 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] .
+
+kb:IntegratedObservationShape a sh:NodeShape ;
+  sh:targetClass role:OBSERVED_RESULT ;
+  sh:property [ sh:path p:cr_fcl_promotion ; sh:hasValue false ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:n ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 1 ] ;
+  sh:property [ sh:path p:correct ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:integer ; sh:minInclusive 0 ] ;
+  sh:property [ sh:path r:HAS_PARTICIPATION ; sh:minCount 3 ; sh:maxCount 3 ] .

@@ -1,0 +1,71 @@
+{
+  "schema_version": "hswm-research-integration-validation/v1",
+  "date": "2026-09-20",
+  "bundle_sha256": "b361596768c8e56807464b7723aea3c2bfdcfeb9644e04412a7ed82161c08453",
+  "counts": {
+    "nodes": 677,
+    "anchors": 63,
+    "relations": 1224
+  },
+  "artifact_bindings_verified": 15,
+  "repository_source_hashes_verified": 244,
+  "prior_response_hashes_verified_at_import": 12,
+  "shacl_base_conforms": true,
+  "shacl_research_conforms": true,
+  "missing_source_mutation_rejected": true,
+  "role_occurrence_ordinals_and_targets_verified": 51,
+  "query_rows": {
+    "claims_and_obligations": 12,
+    "observations": 5,
+    "coverage": 17,
+    "unsupported_claims": 0
+  },
+  "experiment_rows_verified": 80,
+  "content_addressed_receipt_verified": "evidence/hswm_local_semantic_probe_2026-09-20/96cd695d7d8996c2f0cb728bf454d814519971e1001046f9c07868bc324012b2.json",
+  "self_development": {
+    "backend": "native TypeScript/Effect",
+    "episode": "cba48a01-f6e6-4bef-80e4-0996805f68a6",
+    "relation": "relation:ontology-focused",
+    "result": "48 tests passed",
+    "feedback": "agent(codex): useful regression evidence; not efficacy or user feedback"
+  },
+  "portable_markdown_math": "PASS; derived portable compilation, no source drift",
+  "packages": [
+    {
+      "name": "effect",
+      "version": "3.22.1",
+      "license": "MIT"
+    },
+    {
+      "name": "n3",
+      "version": "2.7.2",
+      "license": "MIT"
+    },
+    {
+      "name": "rdf-validate-shacl",
+      "version": "0.6.5",
+      "license": "MIT"
+    },
+    {
+      "name": "neo4j-driver",
+      "version": "6.2.0",
+      "license": "Apache-2.0"
+    },
+    {
+      "name": "@comunica/query-sparql-rdfjs",
+      "version": "5.3.0",
+      "license": "MIT"
+    }
+  ],
+  "claim_ceiling": "STRUCTURE_AND_OBSERVATION_INTEGRITY_NOT_HSWM_EFFICACY",
+  "live_publication": {
+    "status": "COMMITTED_WITH_EXACT_NODE_AND_RELATION_READBACK",
+    "readback_nodes": 677,
+    "readback_relations": 1224,
+    "post_commit_query_rows": 12,
+    "mcp_get_uid_unique": true,
+    "mcp_search_discoverable": true,
+    "prior_failed_attempt_preserved": true,
+    "query_optimization": "Bound registry-validated endpoint labels retain all existing transaction checks; exact live node and edge properties verified."
+  }
+}

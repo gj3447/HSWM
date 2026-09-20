@@ -1,0 +1,6 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?arm ?n ?agreement ?brier ?promptTokens ?completionTokens ?status WHERE {
+  ?result p:standard_graph_role "OBSERVED_RESULT"; p:arm ?arm;
+    p:n ?n; p:correct ?agreement; p:brier_original_label_agreement ?brier;
+    p:prompt_tokens ?promptTokens; p:completion_tokens ?completionTokens; p:status ?status.
+} ORDER BY ?arm

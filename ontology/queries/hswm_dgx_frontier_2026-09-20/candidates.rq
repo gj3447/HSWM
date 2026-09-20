@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?name ?revision ?license ?status ?source ?qualification WHERE {
+  ?proposal p:standard_graph_role "RESEARCH_PROPOSAL"; r:ABOUT ?candidate; r:RELATES_TO ?obligation.
+  ?candidate p:name ?name; p:revision ?revision; p:license ?license; p:status ?status; p:source_ref ?source.
+  ?obligation p:description ?qualification.
+} ORDER BY ?name

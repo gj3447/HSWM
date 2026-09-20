@@ -1,0 +1,236 @@
+[
+  {
+    "name": {
+      "kind": "literal",
+      "value": "NVIDIA Qwen3.6-35B-A3B NVFP4"
+    },
+    "revision": {
+      "kind": "literal",
+      "value": "1355db6a052410cfd62085d94b58866fd0f2c3c5"
+    },
+    "license": {
+      "kind": "literal",
+      "value": "Apache-2.0"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "SERVING_PRIORITY"
+    },
+    "source": {
+      "kind": "literal",
+      "value": "https://huggingface.co/nvidia/Qwen3.6-35B-A3B-NVFP4"
+    },
+    "qualification": {
+      "kind": "literal",
+      "value": "현재 FP8와 동일 모델 계열의 품질 손실, 안정성, 처리량·메모리를 비교. 제조사 속도 수치를 우리 측정으로 취급하지 않음."
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "Qwen3.8-27B FP8"
+    },
+    "revision": {
+      "kind": "literal",
+      "value": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a"
+    },
+    "license": {
+      "kind": "literal",
+      "value": "Apache-2.0"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "COMPARE_NEXT"
+    },
+    "source": {
+      "kind": "literal",
+      "value": "https://huggingface.co/Qwen/Qwen3.8-27B-FP8"
+    },
+    "qualification": {
+      "kind": "literal",
+      "value": "기존 35B 서비스를 대체하는 격리 창에서 비교; FP8 GB10 경로와 가중치 외 KV/runtime 여유를 먼저 검증."
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "vLLM 0.29.0"
+    },
+    "revision": {
+      "kind": "literal",
+      "value": "98dff2a81d747d1dba01a47f939f48c3526d4206"
+    },
+    "license": {
+      "kind": "literal",
+      "value": "Apache-2.0"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "ISOLATED_QUALIFICATION"
+    },
+    "source": {
+      "kind": "literal",
+      "value": "https://github.com/vllm-project/vllm"
+    },
+    "qualification": {
+      "kind": "literal",
+      "value": "GB10 FP8 장문/동시성/예외 출력 회귀를 통과한 뒤 운영 교체. 0.29가 관측 오류를 고쳤다는 주장은 아직 불가."
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "DeepSeek-V4.1-Flash"
+    },
+    "revision": {
+      "kind": "literal",
+      "value": "dba1be0a40aa45a94ad051997016db3960a90277"
+    },
+    "license": {
+      "kind": "literal",
+      "value": "MIT"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "EXTERNAL_COMPARATOR_ONLY"
+    },
+    "source": {
+      "kind": "literal",
+      "value": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash"
+    },
+    "qualification": {
+      "kind": "literal",
+      "value": "552B backbone/763B tensor inventory로 이 단일 DGX에 상주시키는 후보에서 제외. API 실험은 현재 수행하지 않음."
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "GEPA 0.1.4"
+    },
+    "revision": {
+      "kind": "literal",
+      "value": "8b0ce6cd99a234f6b74daf37558a2ac0ce18f975"
+    },
+    "license": {
+      "kind": "literal",
+      "value": "MIT"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "NEXT_RESEARCH_BASELINE"
+    },
+    "source": {
+      "kind": "literal",
+      "value": "https://github.com/gepa-ai/gepa"
+    },
+    "qualification": {
+      "kind": "literal",
+      "value": "동일 모델 호출/토큰 예산에서 단일 수정·feedback-only·GEPA 비교. 제안 생성만 맡기고 canonical 쓰기는 native admission이 담당."
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "GLM-5.3-Flash"
+    },
+    "revision": {
+      "kind": "literal",
+      "value": "eb9eb208eb0d988989d07a6a12d0fdeb5f52574a"
+    },
+    "license": {
+      "kind": "literal",
+      "value": "MIT"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "EXTERNAL_COMPARATOR_ONLY"
+    },
+    "source": {
+      "kind": "literal",
+      "value": "https://huggingface.co/zai-org/GLM-5.3-Flash"
+    },
+    "qualification": {
+      "kind": "literal",
+      "value": "FP8 전체 가중치는 DGX 메모리를 초과. 활성 파라미터 수를 적재 용량으로 오인하지 않음."
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "Hyperon experimental 0.2.10"
+    },
+    "revision": {
+      "kind": "literal",
+      "value": "3f76dc460da6961f57f69f6c3e550c59c74ada83"
+    },
+    "license": {
+      "kind": "literal",
+      "value": "MIT"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "MANDATORY_COMPARATOR_NOT_BACKEND_DECISION"
+    },
+    "source": {
+      "kind": "literal",
+      "value": "https://github.com/trueagi-io/hyperon-experimental"
+    },
+    "qualification": {
+      "kind": "literal",
+      "value": "구성요소별 성숙도와 정확한 구현 버전을 유지. 이번 합성 실험은 Hyperon 성능 비교를 수행하지 않음."
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "Inspect AI 0.3.266"
+    },
+    "revision": {
+      "kind": "literal",
+      "value": "0.3.266"
+    },
+    "license": {
+      "kind": "literal",
+      "value": "MIT"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "EXTERNAL_EVALUATION_CANDIDATE"
+    },
+    "source": {
+      "kind": "literal",
+      "value": "https://inspect.aisi.org.uk/"
+    },
+    "qualification": {
+      "kind": "literal",
+      "value": "기존 typed runtime을 대체하지 않고 평가 경계를 분리; 외부 데이터와 scorer 검증 후 작은 비교부터 시작."
+    }
+  },
+  {
+    "name": {
+      "kind": "literal",
+      "value": "UnifiedMem"
+    },
+    "revision": {
+      "kind": "literal",
+      "value": "3df9428e6a788d2c2ab6b859c85b937a0128ba2f"
+    },
+    "license": {
+      "kind": "literal",
+      "value": "UNVERIFIED_DO_NOT_ADOPT_CODE"
+    },
+    "status": {
+      "kind": "literal",
+      "value": "LITERATURE_BASELINE"
+    },
+    "source": {
+      "kind": "literal",
+      "value": "https://github.com/AvatarMemory/UnifiedMem"
+    },
+    "qualification": {
+      "kind": "literal",
+      "value": "공식 저장소에서 SPDX 라이선스를 확인하지 못했으므로 코드 도입 보류. 대화 기억 성능은 HSWM 전체 AI 증거가 아님."
+    }
+  }
+]

@@ -1,0 +1,1980 @@
+{
+  "schema_version": "hswm-dgx-learning-observation/v1",
+  "protocol_version": "hswm-dgx-semantic-learning/v2",
+  "raw_summary_sha256": "3186cbe3092d43455f105d51683c4790a46fd7cdd4fd451b4aaa9eeeef499171",
+  "protocol_sha256": "8bdeed6668f38e34332e094485122b25ea15308e1450749f12db320da50f6f2c",
+  "durable_receipt": {
+    "schema": "bhgman-hswm-run/v1",
+    "run_id": "hswm-semantic-learning-20260920-v2",
+    "status": "success",
+    "exit_code": 0,
+    "started_at": "2026-09-20T13:21:29Z",
+    "finished_at": "2026-09-20T13:29:11Z",
+    "execution_tier": "dgx-nvme",
+    "durable_tier": "data01-4tb-nfs",
+    "source_root": "/home/metahumotonic27/hswm-source",
+    "source_commit": "3d7485befbf7d6847018c80d46ad4a00c294ed2d",
+    "command_sha256": "d1d73110b096afb815ebe70c7af944afe3992c34efdd83a2925027c2d37fb772",
+    "artifact": {
+      "name": "artifacts.tar",
+      "sha256": "d8bf58f64973e06892435bc38ec086378837e13dcf4eae3536cb7372ca13d99c",
+      "bytes": 20480000
+    }
+  },
+  "started": "2026-09-20T13:21:30.328Z",
+  "finished": "2026-09-20T13:29:10.830Z",
+  "wall_seconds": 460.502,
+  "planned_trials": 32,
+  "attempted_trials": 32,
+  "complete_trials": 16,
+  "runtime_committed_learns": 16,
+  "input_audit": {
+    "auditedRequests": 144,
+    "auditedLearningRequests": 16,
+    "predictionCasesLabelFree": true,
+    "learnerOnlySawDeclaredTrainingOutcomes": true,
+    "scope": "Exact captured HTTP requests; oracle rule intentionally provided only in the separately declared oracle arm."
+  },
+  "http": {
+    "requestArtifacts": 144,
+    "recordedResponses": 128,
+    "successfulResponses": 128,
+    "errorResponses": 0,
+    "prompt_tokens": 300280,
+    "completion_tokens": 6204,
+    "usageMissingResponses": 0,
+    "reportedFingerprints": [
+      "vllm-0.25.1-697a994d"
+    ]
+  },
+  "gpu": {
+    "samples": 231,
+    "meanUtilization": 76.2943722943723,
+    "peakUtilization": 96,
+    "meanPowerWatts": 35.1834632034632,
+    "caveat": "Device-wide sampling includes serving reload and any co-resident activity; not isolated job attribution or energy measurement."
+  },
+  "aggregates": [
+    {
+      "model": "qwen3.6-35b-a3b",
+      "arm": "frozen",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3.6-35b-a3b",
+      "arm": "learned",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3.6-35b-a3b",
+      "arm": "evidence_only",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3.6-35b-a3b",
+      "arm": "removed",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3.6-35b-a3b",
+      "arm": "restored",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3.6-35b-a3b",
+      "arm": "oracle",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3-4b-real",
+      "arm": "frozen",
+      "batches": 16,
+      "validBatches": 4,
+      "correct": 38,
+      "total": 320,
+      "accuracy": 0.11875,
+      "unavailableTrials": 0
+    },
+    {
+      "model": "qwen3-4b-real",
+      "arm": "learned",
+      "batches": 16,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 320,
+      "accuracy": 0,
+      "unavailableTrials": 0
+    },
+    {
+      "model": "qwen3-4b-real",
+      "arm": "evidence_only",
+      "batches": 16,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 320,
+      "accuracy": 0,
+      "unavailableTrials": 0
+    },
+    {
+      "model": "qwen3-4b-real",
+      "arm": "removed",
+      "batches": 16,
+      "validBatches": 5,
+      "correct": 49,
+      "total": 320,
+      "accuracy": 0.153125,
+      "unavailableTrials": 0
+    },
+    {
+      "model": "qwen3-4b-real",
+      "arm": "restored",
+      "batches": 16,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 320,
+      "accuracy": 0,
+      "unavailableTrials": 0
+    },
+    {
+      "model": "qwen3-4b-real",
+      "arm": "oracle",
+      "batches": 16,
+      "validBatches": 3,
+      "correct": 35,
+      "total": 320,
+      "accuracy": 0.109375,
+      "unavailableTrials": 0
+    }
+  ],
+  "paired": [
+    {
+      "model": "qwen3.6-35b-a3b",
+      "completeTrials": 0,
+      "learnedMinusFrozenCorrect": 0,
+      "learnedMinusEvidenceOnlyCorrect": 0,
+      "regressionsVsFrozen": 0,
+      "improvementsVsFrozen": 0,
+      "restoredPredictionDisagreements": 0,
+      "removedPredictionDisagreements": 0,
+      "exactRestorations": 0,
+      "exactRemovals": 0,
+      "feedbackEqual": 0
+    },
+    {
+      "model": "qwen3-4b-real",
+      "completeTrials": 16,
+      "learnedMinusFrozenCorrect": -38,
+      "learnedMinusEvidenceOnlyCorrect": 0,
+      "regressionsVsFrozen": 4,
+      "improvementsVsFrozen": 0,
+      "restoredPredictionDisagreements": 0,
+      "removedPredictionDisagreements": 6,
+      "exactRestorations": 16,
+      "exactRemovals": 16,
+      "feedbackEqual": 16
+    }
+  ],
+  "observations": [
+    {
+      "id": "qwen3.6-35b-a3b-xor-seed0",
+      "model": "qwen3.6-35b-a3b",
+      "family": 0,
+      "seed": 0,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-xor-seed1",
+      "model": "qwen3.6-35b-a3b",
+      "family": 0,
+      "seed": 1,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-xor-seed2",
+      "model": "qwen3.6-35b-a3b",
+      "family": 0,
+      "seed": 2,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-xor-seed3",
+      "model": "qwen3.6-35b-a3b",
+      "family": 0,
+      "seed": 3,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-role_selection-seed0",
+      "model": "qwen3.6-35b-a3b",
+      "family": 1,
+      "seed": 0,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-role_selection-seed1",
+      "model": "qwen3.6-35b-a3b",
+      "family": 1,
+      "seed": 1,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-role_selection-seed2",
+      "model": "qwen3.6-35b-a3b",
+      "family": 1,
+      "seed": 2,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-role_selection-seed3",
+      "model": "qwen3.6-35b-a3b",
+      "family": 1,
+      "seed": 3,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conjunction-seed0",
+      "model": "qwen3.6-35b-a3b",
+      "family": 2,
+      "seed": 0,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conjunction-seed1",
+      "model": "qwen3.6-35b-a3b",
+      "family": 2,
+      "seed": 1,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conjunction-seed2",
+      "model": "qwen3.6-35b-a3b",
+      "family": 2,
+      "seed": 2,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conjunction-seed3",
+      "model": "qwen3.6-35b-a3b",
+      "family": 2,
+      "seed": 3,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conditional-seed0",
+      "model": "qwen3.6-35b-a3b",
+      "family": 3,
+      "seed": 0,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conditional-seed1",
+      "model": "qwen3.6-35b-a3b",
+      "family": 3,
+      "seed": 1,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conditional-seed2",
+      "model": "qwen3.6-35b-a3b",
+      "family": 3,
+      "seed": 2,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conditional-seed3",
+      "model": "qwen3.6-35b-a3b",
+      "family": 3,
+      "seed": 3,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-xor-seed0",
+      "model": "qwen3-4b-real",
+      "family": 0,
+      "seed": 0,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "77288f90c11aff1ddec2242a59a62ab4871e3881ea02790ab4bf2e0c99bd7193",
+          "relationRevision": 0,
+          "semanticSha256": "46232a30fdd7be8d170ab21df22bae7d1f046854ec92993907334bf8240282f4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101101101010",
+          "canonicalSha256": "94e71ffb3b633346485dca3bbac0bfbbfa85a72124b995414f049c1dae994ed7",
+          "relationRevision": 1,
+          "semanticSha256": "3d547304a7106511fea55603a40042c610f668949d0ee8833b9acd8529388fbd",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101101101010",
+          "canonicalSha256": "262ad30dd3f36edef813649c9b41d1a155ffdd134e7d063703769ba75bbfaee2",
+          "relationRevision": 2,
+          "semanticSha256": "3d547304a7106511fea55603a40042c610f668949d0ee8833b9acd8529388fbd",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "77288f90c11aff1ddec2242a59a62ab4871e3881ea02790ab4bf2e0c99bd7193",
+          "relationRevision": 0,
+          "semanticSha256": "46232a30fdd7be8d170ab21df22bae7d1f046854ec92993907334bf8240282f4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101101101010",
+          "canonicalSha256": "94e71ffb3b633346485dca3bbac0bfbbfa85a72124b995414f049c1dae994ed7",
+          "relationRevision": 1,
+          "semanticSha256": "3d547304a7106511fea55603a40042c610f668949d0ee8833b9acd8529388fbd",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "afaa48d8b2b61f58c96282598f4957a72d3c7e4110814d2adf08ef72b294735c",
+          "relationRevision": 0,
+          "semanticSha256": "b9a4ebd3eb168968e0501ae23ab20527b89aef9fdbd1b18576473d2f04ee7889",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-xor-seed1",
+      "model": "qwen3-4b-real",
+      "family": 0,
+      "seed": 1,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": true,
+          "correct": 6,
+          "total": 20,
+          "prediction": "10101010101010101010",
+          "canonicalSha256": "77288f90c11aff1ddec2242a59a62ab4871e3881ea02790ab4bf2e0c99bd7193",
+          "relationRevision": 0,
+          "semanticSha256": "46232a30fdd7be8d170ab21df22bae7d1f046854ec92993907334bf8240282f4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "d00d3afbe643abcafcb2d51558a5c23f60ea29e69371d2f45c3f12317c66859b",
+          "relationRevision": 1,
+          "semanticSha256": "7f5bbb8bb2c9f23768f0b9c40f180e8789a405ddf718904e3dad4fe2bf180ca7",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "d6b77a00e378b2bded1a9334d7b3c7d105552bc0bd75a8fc7a88f221e453aab0",
+          "relationRevision": 2,
+          "semanticSha256": "7f5bbb8bb2c9f23768f0b9c40f180e8789a405ddf718904e3dad4fe2bf180ca7",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": true,
+          "correct": 6,
+          "total": 20,
+          "prediction": "10101010101010101010",
+          "canonicalSha256": "77288f90c11aff1ddec2242a59a62ab4871e3881ea02790ab4bf2e0c99bd7193",
+          "relationRevision": 0,
+          "semanticSha256": "46232a30fdd7be8d170ab21df22bae7d1f046854ec92993907334bf8240282f4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "d00d3afbe643abcafcb2d51558a5c23f60ea29e69371d2f45c3f12317c66859b",
+          "relationRevision": 1,
+          "semanticSha256": "7f5bbb8bb2c9f23768f0b9c40f180e8789a405ddf718904e3dad4fe2bf180ca7",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10110110101010101010101010101010",
+          "canonicalSha256": "afaa48d8b2b61f58c96282598f4957a72d3c7e4110814d2adf08ef72b294735c",
+          "relationRevision": 0,
+          "semanticSha256": "b9a4ebd3eb168968e0501ae23ab20527b89aef9fdbd1b18576473d2f04ee7889",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-xor-seed2",
+      "model": "qwen3-4b-real",
+      "family": 0,
+      "seed": 2,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "77288f90c11aff1ddec2242a59a62ab4871e3881ea02790ab4bf2e0c99bd7193",
+          "relationRevision": 0,
+          "semanticSha256": "46232a30fdd7be8d170ab21df22bae7d1f046854ec92993907334bf8240282f4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101010101010",
+          "canonicalSha256": "863b73aecac86ade1d1ba6e7a3328edc28b95346dc96e85e3e56fa7572631f18",
+          "relationRevision": 1,
+          "semanticSha256": "223ed70f98419157410095668afeab7f513364f1843463f2977603b40a7736e4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101010101010",
+          "canonicalSha256": "3210d57cbea027e8330cef6005d8a031b0fb80115eef15fd7ad8e869f7cf3256",
+          "relationRevision": 2,
+          "semanticSha256": "223ed70f98419157410095668afeab7f513364f1843463f2977603b40a7736e4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "77288f90c11aff1ddec2242a59a62ab4871e3881ea02790ab4bf2e0c99bd7193",
+          "relationRevision": 0,
+          "semanticSha256": "46232a30fdd7be8d170ab21df22bae7d1f046854ec92993907334bf8240282f4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101010101010",
+          "canonicalSha256": "863b73aecac86ade1d1ba6e7a3328edc28b95346dc96e85e3e56fa7572631f18",
+          "relationRevision": 1,
+          "semanticSha256": "223ed70f98419157410095668afeab7f513364f1843463f2977603b40a7736e4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "afaa48d8b2b61f58c96282598f4957a72d3c7e4110814d2adf08ef72b294735c",
+          "relationRevision": 0,
+          "semanticSha256": "b9a4ebd3eb168968e0501ae23ab20527b89aef9fdbd1b18576473d2f04ee7889",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-xor-seed3",
+      "model": "qwen3-4b-real",
+      "family": 0,
+      "seed": 3,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "77288f90c11aff1ddec2242a59a62ab4871e3881ea02790ab4bf2e0c99bd7193",
+          "relationRevision": 0,
+          "semanticSha256": "46232a30fdd7be8d170ab21df22bae7d1f046854ec92993907334bf8240282f4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "a4720d5d31cb98f106a15a4157fa63f9b784d414f410ff56e50318ff1a9f9286",
+          "relationRevision": 1,
+          "semanticSha256": "60f43d4859c3c1e2e5398c9c21108f44e14601455528927aace4bbe4e697bae8",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "3b6476f1af603957a25e8dab5d22f981a77a37d00919bcc115e0a8f9278288a4",
+          "relationRevision": 2,
+          "semanticSha256": "60f43d4859c3c1e2e5398c9c21108f44e14601455528927aace4bbe4e697bae8",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "77288f90c11aff1ddec2242a59a62ab4871e3881ea02790ab4bf2e0c99bd7193",
+          "relationRevision": 0,
+          "semanticSha256": "46232a30fdd7be8d170ab21df22bae7d1f046854ec92993907334bf8240282f4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "a4720d5d31cb98f106a15a4157fa63f9b784d414f410ff56e50318ff1a9f9286",
+          "relationRevision": 1,
+          "semanticSha256": "60f43d4859c3c1e2e5398c9c21108f44e14601455528927aace4bbe4e697bae8",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "afaa48d8b2b61f58c96282598f4957a72d3c7e4110814d2adf08ef72b294735c",
+          "relationRevision": 0,
+          "semanticSha256": "b9a4ebd3eb168968e0501ae23ab20527b89aef9fdbd1b18576473d2f04ee7889",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-role_selection-seed0",
+      "model": "qwen3-4b-real",
+      "family": 1,
+      "seed": 0,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "593ede6c9da9e806851696dad91579d0221ba57c4131641fcc76d8bae238e501",
+          "relationRevision": 0,
+          "semanticSha256": "5a2c18cdef42ed9520bcdf49c555235b90ec947227eb264351750dbccc8d2c69",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101101010101",
+          "canonicalSha256": "35b8efe670549d7861da33c68df867c88f61d2f103cd896f394749631196352c",
+          "relationRevision": 1,
+          "semanticSha256": "f1450cdf7a396598a510ede227cbb419dc6441d786b9e8b1170a22de316af113",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101101010101",
+          "canonicalSha256": "60451335c3b2ffde2f6b58a123cbb462c53ff49292ef63dfa57793f782abdd76",
+          "relationRevision": 2,
+          "semanticSha256": "f1450cdf7a396598a510ede227cbb419dc6441d786b9e8b1170a22de316af113",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "593ede6c9da9e806851696dad91579d0221ba57c4131641fcc76d8bae238e501",
+          "relationRevision": 0,
+          "semanticSha256": "5a2c18cdef42ed9520bcdf49c555235b90ec947227eb264351750dbccc8d2c69",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101101010101",
+          "canonicalSha256": "35b8efe670549d7861da33c68df867c88f61d2f103cd896f394749631196352c",
+          "relationRevision": 1,
+          "semanticSha256": "f1450cdf7a396598a510ede227cbb419dc6441d786b9e8b1170a22de316af113",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "b0b0222079771b176ca55c0725149dd4ba2fb5066f8c42f544be194a09c4a0e1",
+          "relationRevision": 0,
+          "semanticSha256": "b3d372a8f17a05bb47067786cfcc1617d74e567ac6e5ed8bb1ebff8b0b37ccea",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-role_selection-seed1",
+      "model": "qwen3-4b-real",
+      "family": 1,
+      "seed": 1,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "00101010101010101010101010101010",
+          "canonicalSha256": "593ede6c9da9e806851696dad91579d0221ba57c4131641fcc76d8bae238e501",
+          "relationRevision": 0,
+          "semanticSha256": "5a2c18cdef42ed9520bcdf49c555235b90ec947227eb264351750dbccc8d2c69",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "010100101010",
+          "canonicalSha256": "d9e63a48d433715cc79b3ce7799e48352a656bdea49a16b85055f56f8ea60c3c",
+          "relationRevision": 1,
+          "semanticSha256": "36c8e42a2cd68dbb2ba858562a19fee8600af96677abdb375f12ebf2731a791a",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "010100101010",
+          "canonicalSha256": "49d0e779682d395e41cc5de424ff9401fafd2f6316fb0abf6c745db12475d3e3",
+          "relationRevision": 2,
+          "semanticSha256": "36c8e42a2cd68dbb2ba858562a19fee8600af96677abdb375f12ebf2731a791a",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "00101010101010101010101010101010",
+          "canonicalSha256": "593ede6c9da9e806851696dad91579d0221ba57c4131641fcc76d8bae238e501",
+          "relationRevision": 0,
+          "semanticSha256": "5a2c18cdef42ed9520bcdf49c555235b90ec947227eb264351750dbccc8d2c69",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "010100101010",
+          "canonicalSha256": "d9e63a48d433715cc79b3ce7799e48352a656bdea49a16b85055f56f8ea60c3c",
+          "relationRevision": 1,
+          "semanticSha256": "36c8e42a2cd68dbb2ba858562a19fee8600af96677abdb375f12ebf2731a791a",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "00101010101010101010101010101010",
+          "canonicalSha256": "b0b0222079771b176ca55c0725149dd4ba2fb5066f8c42f544be194a09c4a0e1",
+          "relationRevision": 0,
+          "semanticSha256": "b3d372a8f17a05bb47067786cfcc1617d74e567ac6e5ed8bb1ebff8b0b37ccea",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-role_selection-seed2",
+      "model": "qwen3-4b-real",
+      "family": 1,
+      "seed": 2,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "01010101010001000100010001000100",
+          "canonicalSha256": "593ede6c9da9e806851696dad91579d0221ba57c4131641fcc76d8bae238e501",
+          "relationRevision": 0,
+          "semanticSha256": "5a2c18cdef42ed9520bcdf49c555235b90ec947227eb264351750dbccc8d2c69",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101101010101",
+          "canonicalSha256": "729668d4a55a01b93591831a13a874eb4be12daebaa970fe0ecca624a630ff6c",
+          "relationRevision": 1,
+          "semanticSha256": "b8454fda00f8f4ce32187298ceafda8f75e502bbe47421319de44715b963b8be",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101101010101",
+          "canonicalSha256": "1b49630dc9e3cd3d099beb0692a029f202eaa8dcaf5f59347c7c7b0e410eb244",
+          "relationRevision": 2,
+          "semanticSha256": "b8454fda00f8f4ce32187298ceafda8f75e502bbe47421319de44715b963b8be",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "01010101010010101010101010101010",
+          "canonicalSha256": "593ede6c9da9e806851696dad91579d0221ba57c4131641fcc76d8bae238e501",
+          "relationRevision": 0,
+          "semanticSha256": "5a2c18cdef42ed9520bcdf49c555235b90ec947227eb264351750dbccc8d2c69",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101101010101",
+          "canonicalSha256": "729668d4a55a01b93591831a13a874eb4be12daebaa970fe0ecca624a630ff6c",
+          "relationRevision": 1,
+          "semanticSha256": "b8454fda00f8f4ce32187298ceafda8f75e502bbe47421319de44715b963b8be",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "01010101010010101010101010101010",
+          "canonicalSha256": "b0b0222079771b176ca55c0725149dd4ba2fb5066f8c42f544be194a09c4a0e1",
+          "relationRevision": 0,
+          "semanticSha256": "b3d372a8f17a05bb47067786cfcc1617d74e567ac6e5ed8bb1ebff8b0b37ccea",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-role_selection-seed3",
+      "model": "qwen3-4b-real",
+      "family": 1,
+      "seed": 3,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "001010110101001010100010",
+          "canonicalSha256": "593ede6c9da9e806851696dad91579d0221ba57c4131641fcc76d8bae238e501",
+          "relationRevision": 0,
+          "semanticSha256": "5a2c18cdef42ed9520bcdf49c555235b90ec947227eb264351750dbccc8d2c69",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "011010101100",
+          "canonicalSha256": "869400a13ad656a4deb0088a52828e392f6db0e0543f5a75155ff2a44ebdd128",
+          "relationRevision": 1,
+          "semanticSha256": "a931c5313db16e34360f95449110f05f1ce9920962d3d1c2c579634cf64ea1b8",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "011010101100",
+          "canonicalSha256": "d6413906aca146464419d1858ff7290afcbd50618b8145a2adf66973996c2dba",
+          "relationRevision": 2,
+          "semanticSha256": "a931c5313db16e34360f95449110f05f1ce9920962d3d1c2c579634cf64ea1b8",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "00101101010010101010101010101010",
+          "canonicalSha256": "593ede6c9da9e806851696dad91579d0221ba57c4131641fcc76d8bae238e501",
+          "relationRevision": 0,
+          "semanticSha256": "5a2c18cdef42ed9520bcdf49c555235b90ec947227eb264351750dbccc8d2c69",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "011010101100",
+          "canonicalSha256": "869400a13ad656a4deb0088a52828e392f6db0e0543f5a75155ff2a44ebdd128",
+          "relationRevision": 1,
+          "semanticSha256": "a931c5313db16e34360f95449110f05f1ce9920962d3d1c2c579634cf64ea1b8",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "00101011010101010101010101010101",
+          "canonicalSha256": "b0b0222079771b176ca55c0725149dd4ba2fb5066f8c42f544be194a09c4a0e1",
+          "relationRevision": 0,
+          "semanticSha256": "b3d372a8f17a05bb47067786cfcc1617d74e567ac6e5ed8bb1ebff8b0b37ccea",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-conjunction-seed0",
+      "model": "qwen3-4b-real",
+      "family": 2,
+      "seed": 0,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": true,
+          "correct": 12,
+          "total": 20,
+          "prediction": "10110110110101010101",
+          "canonicalSha256": "0c2d07e6c35c0184740b5a325d68f798700ca83d38f501e99ef977df9db2f157",
+          "relationRevision": 0,
+          "semanticSha256": "ca53bd193235a24d280400edd293be3b9acfd61aacf00f0461e308243188db90",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "110101010110",
+          "canonicalSha256": "f3be150e39378771e52ecff65a27af4e7019a23266b99b54a17670895f108e74",
+          "relationRevision": 1,
+          "semanticSha256": "ffb2b92f7d9cf693c17ec44560b757256981fe1d6220a99509fa8e4353119308",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "110101010110",
+          "canonicalSha256": "66102a222da42b01a3696c133e44e6b6af1bb3e0a5d65322310a2ffa244dca4b",
+          "relationRevision": 2,
+          "semanticSha256": "ffb2b92f7d9cf693c17ec44560b757256981fe1d6220a99509fa8e4353119308",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": true,
+          "correct": 10,
+          "total": 20,
+          "prediction": "10101010101010101010",
+          "canonicalSha256": "0c2d07e6c35c0184740b5a325d68f798700ca83d38f501e99ef977df9db2f157",
+          "relationRevision": 0,
+          "semanticSha256": "ca53bd193235a24d280400edd293be3b9acfd61aacf00f0461e308243188db90",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "110101010110",
+          "canonicalSha256": "f3be150e39378771e52ecff65a27af4e7019a23266b99b54a17670895f108e74",
+          "relationRevision": 1,
+          "semanticSha256": "ffb2b92f7d9cf693c17ec44560b757256981fe1d6220a99509fa8e4353119308",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": true,
+          "correct": 10,
+          "total": 20,
+          "prediction": "10101010101010101010",
+          "canonicalSha256": "cd7f300e6c41658af82158987842c4fa1348253e978ce539224b2baf29f36bfe",
+          "relationRevision": 0,
+          "semanticSha256": "c51ac188e513e67e20b4e599daa0a014ea7440abcd434cd67696e8d0b6d9a3ff",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-conjunction-seed1",
+      "model": "qwen3-4b-real",
+      "family": 2,
+      "seed": 1,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": true,
+          "correct": 12,
+          "total": 20,
+          "prediction": "10101010101010101010",
+          "canonicalSha256": "0c2d07e6c35c0184740b5a325d68f798700ca83d38f501e99ef977df9db2f157",
+          "relationRevision": 0,
+          "semanticSha256": "ca53bd193235a24d280400edd293be3b9acfd61aacf00f0461e308243188db90",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "bb3e49762bb4944ea62d8f3115251ec94fe339f86fec2faeb29237a915ae14ee",
+          "relationRevision": 1,
+          "semanticSha256": "6d349ca0af900008e5356e14a55a7b5792e50855bf65bc1ae19fd0ed6d9b6206",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "66b07c87c64cba580b4e7e9028ab519308d43490a100a605a0110564ba053911",
+          "relationRevision": 2,
+          "semanticSha256": "6d349ca0af900008e5356e14a55a7b5792e50855bf65bc1ae19fd0ed6d9b6206",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": true,
+          "correct": 12,
+          "total": 20,
+          "prediction": "10101010101010101010",
+          "canonicalSha256": "0c2d07e6c35c0184740b5a325d68f798700ca83d38f501e99ef977df9db2f157",
+          "relationRevision": 0,
+          "semanticSha256": "ca53bd193235a24d280400edd293be3b9acfd61aacf00f0461e308243188db90",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "bb3e49762bb4944ea62d8f3115251ec94fe339f86fec2faeb29237a915ae14ee",
+          "relationRevision": 1,
+          "semanticSha256": "6d349ca0af900008e5356e14a55a7b5792e50855bf65bc1ae19fd0ed6d9b6206",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": true,
+          "correct": 12,
+          "total": 20,
+          "prediction": "10101010101010101010",
+          "canonicalSha256": "cd7f300e6c41658af82158987842c4fa1348253e978ce539224b2baf29f36bfe",
+          "relationRevision": 0,
+          "semanticSha256": "c51ac188e513e67e20b4e599daa0a014ea7440abcd434cd67696e8d0b6d9a3ff",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-conjunction-seed2",
+      "model": "qwen3-4b-real",
+      "family": 2,
+      "seed": 2,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "0c2d07e6c35c0184740b5a325d68f798700ca83d38f501e99ef977df9db2f157",
+          "relationRevision": 0,
+          "semanticSha256": "ca53bd193235a24d280400edd293be3b9acfd61aacf00f0461e308243188db90",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "419f3216465b66e79e410472525647856531fa729140602a661999cf31c44d2c",
+          "relationRevision": 1,
+          "semanticSha256": "7d85e29da48c6944fce3b9a9cbde228aec50d32e51ab028e02d9d0cb01fd01d4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "0a6101c17ab6ecc92b33293bb73f317ef1703f68bb6667244f915f59df296fa0",
+          "relationRevision": 2,
+          "semanticSha256": "7d85e29da48c6944fce3b9a9cbde228aec50d32e51ab028e02d9d0cb01fd01d4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "0c2d07e6c35c0184740b5a325d68f798700ca83d38f501e99ef977df9db2f157",
+          "relationRevision": 0,
+          "semanticSha256": "ca53bd193235a24d280400edd293be3b9acfd61aacf00f0461e308243188db90",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "419f3216465b66e79e410472525647856531fa729140602a661999cf31c44d2c",
+          "relationRevision": 1,
+          "semanticSha256": "7d85e29da48c6944fce3b9a9cbde228aec50d32e51ab028e02d9d0cb01fd01d4",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "cd7f300e6c41658af82158987842c4fa1348253e978ce539224b2baf29f36bfe",
+          "relationRevision": 0,
+          "semanticSha256": "c51ac188e513e67e20b4e599daa0a014ea7440abcd434cd67696e8d0b6d9a3ff",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-conjunction-seed3",
+      "model": "qwen3-4b-real",
+      "family": 2,
+      "seed": 3,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10110101101011010110101101011010",
+          "canonicalSha256": "0c2d07e6c35c0184740b5a325d68f798700ca83d38f501e99ef977df9db2f157",
+          "relationRevision": 0,
+          "semanticSha256": "ca53bd193235a24d280400edd293be3b9acfd61aacf00f0461e308243188db90",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101010101101",
+          "canonicalSha256": "0b1cc152985a335abb31def3cc02718705d2bce2666b0c679e2c47d9975c379a",
+          "relationRevision": 1,
+          "semanticSha256": "fa4ad07e35968c29bb03e8ac9c844f447a5184f7e116898cae7056b30c4ecd3f",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101010101101",
+          "canonicalSha256": "845151c5256cb4b6757f85f6f737bcc1501d402c94447ce98032f8f1f8110054",
+          "relationRevision": 2,
+          "semanticSha256": "fa4ad07e35968c29bb03e8ac9c844f447a5184f7e116898cae7056b30c4ecd3f",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "0c2d07e6c35c0184740b5a325d68f798700ca83d38f501e99ef977df9db2f157",
+          "relationRevision": 0,
+          "semanticSha256": "ca53bd193235a24d280400edd293be3b9acfd61aacf00f0461e308243188db90",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101010101101",
+          "canonicalSha256": "0b1cc152985a335abb31def3cc02718705d2bce2666b0c679e2c47d9975c379a",
+          "relationRevision": 1,
+          "semanticSha256": "fa4ad07e35968c29bb03e8ac9c844f447a5184f7e116898cae7056b30c4ecd3f",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10110101101011010101010101010101",
+          "canonicalSha256": "cd7f300e6c41658af82158987842c4fa1348253e978ce539224b2baf29f36bfe",
+          "relationRevision": 0,
+          "semanticSha256": "c51ac188e513e67e20b4e599daa0a014ea7440abcd434cd67696e8d0b6d9a3ff",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-conditional-seed0",
+      "model": "qwen3-4b-real",
+      "family": 3,
+      "seed": 0,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": true,
+          "correct": 8,
+          "total": 20,
+          "prediction": "10101010101010101010",
+          "canonicalSha256": "cd1fda37dc17f6ba157dac2323bbb3d85113fc8fdd44eb85a1e7dfef1dfd6448",
+          "relationRevision": 0,
+          "semanticSha256": "0242207ea8af78d595f3cf8aba0cd2085150c49ced43fdadee7c93a281cad8cc",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "cc0b7f620fd657f799e070367eaa6ac92413d33d9919ee155d30bcd76d426c0e",
+          "relationRevision": 1,
+          "semanticSha256": "3624b5a9f8b7d40b7d6a9cfb1a6dcf1a66ec14898369b4d1af28635e7e88ad95",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "cf2455d9a7ed35eca3729a77d630fe20af270aa75ed254cbf8558b5d945c7ca2",
+          "relationRevision": 2,
+          "semanticSha256": "3624b5a9f8b7d40b7d6a9cfb1a6dcf1a66ec14898369b4d1af28635e7e88ad95",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": true,
+          "correct": 12,
+          "total": 20,
+          "prediction": "01010101010101010101",
+          "canonicalSha256": "cd1fda37dc17f6ba157dac2323bbb3d85113fc8fdd44eb85a1e7dfef1dfd6448",
+          "relationRevision": 0,
+          "semanticSha256": "0242207ea8af78d595f3cf8aba0cd2085150c49ced43fdadee7c93a281cad8cc",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "cc0b7f620fd657f799e070367eaa6ac92413d33d9919ee155d30bcd76d426c0e",
+          "relationRevision": 1,
+          "semanticSha256": "3624b5a9f8b7d40b7d6a9cfb1a6dcf1a66ec14898369b4d1af28635e7e88ad95",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "c8cd84f39c34b2dedb966ac364702f2945bafd763dd056efc7e27bfec8e710a5",
+          "relationRevision": 0,
+          "semanticSha256": "76e9152e870c44b726871b18e74edade911066965967e611758031e71e6ba14a",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-conditional-seed1",
+      "model": "qwen3-4b-real",
+      "family": 3,
+      "seed": 1,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10110101101011010101010101010101",
+          "canonicalSha256": "cd1fda37dc17f6ba157dac2323bbb3d85113fc8fdd44eb85a1e7dfef1dfd6448",
+          "relationRevision": 0,
+          "semanticSha256": "0242207ea8af78d595f3cf8aba0cd2085150c49ced43fdadee7c93a281cad8cc",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "9f1235fd4537e4fff282b8235e6b82214e3ffdc5b5bad843c7a8a1b51fd556f3",
+          "relationRevision": 1,
+          "semanticSha256": "9108c7f49b28b75a7ba04c6f8f616fe83b3ede098d4b50894ba6dc75cb5d3c42",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "1878598a6672237f130fa3c9d1d2a98517719a9b2fe04bbb6c18a823a1e00e59",
+          "relationRevision": 2,
+          "semanticSha256": "9108c7f49b28b75a7ba04c6f8f616fe83b3ede098d4b50894ba6dc75cb5d3c42",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": true,
+          "correct": 9,
+          "total": 20,
+          "prediction": "10110101010101010101",
+          "canonicalSha256": "cd1fda37dc17f6ba157dac2323bbb3d85113fc8fdd44eb85a1e7dfef1dfd6448",
+          "relationRevision": 0,
+          "semanticSha256": "0242207ea8af78d595f3cf8aba0cd2085150c49ced43fdadee7c93a281cad8cc",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "1010101010101010",
+          "canonicalSha256": "9f1235fd4537e4fff282b8235e6b82214e3ffdc5b5bad843c7a8a1b51fd556f3",
+          "relationRevision": 1,
+          "semanticSha256": "9108c7f49b28b75a7ba04c6f8f616fe83b3ede098d4b50894ba6dc75cb5d3c42",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "c8cd84f39c34b2dedb966ac364702f2945bafd763dd056efc7e27bfec8e710a5",
+          "relationRevision": 0,
+          "semanticSha256": "76e9152e870c44b726871b18e74edade911066965967e611758031e71e6ba14a",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-conditional-seed2",
+      "model": "qwen3-4b-real",
+      "family": 3,
+      "seed": 2,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "cd1fda37dc17f6ba157dac2323bbb3d85113fc8fdd44eb85a1e7dfef1dfd6448",
+          "relationRevision": 0,
+          "semanticSha256": "0242207ea8af78d595f3cf8aba0cd2085150c49ced43fdadee7c93a281cad8cc",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "110101010010",
+          "canonicalSha256": "28f933bdaa6bc39e3e9d60497e996674ca25fd659516c77ec1734aca7b27903c",
+          "relationRevision": 1,
+          "semanticSha256": "6bc31fa6de4f5f7b58a9dec2cf865af4f3d0ce98e430635b35776433b6405d57",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "110101010010",
+          "canonicalSha256": "71e839f70ab928fc56c0e5d9b5b3a2afc3f4b6f9a080f864fe86211d4c58c7f4",
+          "relationRevision": 2,
+          "semanticSha256": "6bc31fa6de4f5f7b58a9dec2cf865af4f3d0ce98e430635b35776433b6405d57",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "cd1fda37dc17f6ba157dac2323bbb3d85113fc8fdd44eb85a1e7dfef1dfd6448",
+          "relationRevision": 0,
+          "semanticSha256": "0242207ea8af78d595f3cf8aba0cd2085150c49ced43fdadee7c93a281cad8cc",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "110101010010",
+          "canonicalSha256": "28f933bdaa6bc39e3e9d60497e996674ca25fd659516c77ec1734aca7b27903c",
+          "relationRevision": 1,
+          "semanticSha256": "6bc31fa6de4f5f7b58a9dec2cf865af4f3d0ce98e430635b35776433b6405d57",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "c8cd84f39c34b2dedb966ac364702f2945bafd763dd056efc7e27bfec8e710a5",
+          "relationRevision": 0,
+          "semanticSha256": "76e9152e870c44b726871b18e74edade911066965967e611758031e71e6ba14a",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-4b-real-conditional-seed3",
+      "model": "qwen3-4b-real",
+      "family": 3,
+      "seed": 3,
+      "status": "COMPLETE",
+      "restorationExact": true,
+      "removalExact": true,
+      "feedbackEqual": true,
+      "error": null,
+      "arms": [
+        {
+          "arm": "frozen",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "cd1fda37dc17f6ba157dac2323bbb3d85113fc8fdd44eb85a1e7dfef1dfd6448",
+          "relationRevision": 0,
+          "semanticSha256": "0242207ea8af78d595f3cf8aba0cd2085150c49ced43fdadee7c93a281cad8cc",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "learned",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101010101010",
+          "canonicalSha256": "9d89d470ba3c062d331d59b00ee794ab6208a24f3f3b9b0829c7ba9e772c0a36",
+          "relationRevision": 1,
+          "semanticSha256": "863f0bae372ce228d95f475d652c97f338c1d4b6d48a66eae771fa1ae48a429e",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "evidence_only",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101010101010",
+          "canonicalSha256": "394f84ed33f09fc089f23b84d8c188631d81356684c2d2f9bb9a61707b9fab5a",
+          "relationRevision": 2,
+          "semanticSha256": "863f0bae372ce228d95f475d652c97f338c1d4b6d48a66eae771fa1ae48a429e",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "removed",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "10101010101010101010101010101010",
+          "canonicalSha256": "cd1fda37dc17f6ba157dac2323bbb3d85113fc8fdd44eb85a1e7dfef1dfd6448",
+          "relationRevision": 0,
+          "semanticSha256": "0242207ea8af78d595f3cf8aba0cd2085150c49ced43fdadee7c93a281cad8cc",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "restored",
+          "valid": false,
+          "correct": 0,
+          "total": 20,
+          "prediction": "101010101010",
+          "canonicalSha256": "9d89d470ba3c062d331d59b00ee794ab6208a24f3f3b9b0829c7ba9e772c0a36",
+          "relationRevision": 1,
+          "semanticSha256": "863f0bae372ce228d95f475d652c97f338c1d4b6d48a66eae771fa1ae48a429e",
+          "canonicalUnchanged": true,
+          "error": null
+        },
+        {
+          "arm": "oracle",
+          "valid": true,
+          "correct": 13,
+          "total": 20,
+          "prediction": "01101011011101101110",
+          "canonicalSha256": "c8cd84f39c34b2dedb966ac364702f2945bafd763dd056efc7e27bfec8e710a5",
+          "relationRevision": 0,
+          "semanticSha256": "76e9152e870c44b726871b18e74edade911066965967e611758031e71e6ba14a",
+          "canonicalUnchanged": true,
+          "error": null
+        }
+      ]
+    }
+  ],
+  "learned_relations": [
+    {
+      "relation": "If subject field dax is 1, the initial bit is wug; otherwise it is zif. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "3624b5a9f8b7d40b7d6a9cfb1a6dcf1a66ec14898369b4d1af28635e7e88ad95",
+      "traceSha256": "e619666c7c321b2247a7391b1648da20826dbdfab8aa430c4a02af5e3f62bdd0",
+      "trainingScore": {
+        "valid": false,
+        "correct": 0,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "If subject field dax is 1, the initial bit is wug; otherwise it is zif. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "9108c7f49b28b75a7ba04c6f8f616fe83b3ede098d4b50894ba6dc75cb5d3c42",
+      "traceSha256": "f266cb6adc4b0601c0a5b4a4d21bc4b3106c51bc0fa3a185766a3a1776cd1498",
+      "trainingScore": {
+        "valid": false,
+        "correct": 0,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "If subject field dax is 1, the initial bit is wug; otherwise it is zif. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "6bc31fa6de4f5f7b58a9dec2cf865af4f3d0ce98e430635b35776433b6405d57",
+      "traceSha256": "f3ff5959deec41d2b2e5156a316ea911bd4bebc5642fbdea5d4a7b2a7a6a84aa",
+      "trainingScore": {
+        "valid": true,
+        "correct": 8,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "If subject field dax is 1, the initial bit is wug; otherwise it is zif. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "863f0bae372ce228d95f475d652c97f338c1d4b6d48a66eae771fa1ae48a429e",
+      "traceSha256": "6b093bd6fd7b5a9ee46b08d6e8463e4243a3351e3c7a3ef3967cbd3dd8578796",
+      "trainingScore": {
+        "valid": true,
+        "correct": 8,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when both subject fields dax and wug are 1. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "ffb2b92f7d9cf693c17ec44560b757256981fe1d6220a99509fa8e4353119308",
+      "traceSha256": "897717d1f17fc6460606114082fde4e40eb14cc7c78f205fc6a556587feb0837",
+      "trainingScore": {
+        "valid": true,
+        "correct": 7,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when both subject fields dax and wug are 1. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "6d349ca0af900008e5356e14a55a7b5792e50855bf65bc1ae19fd0ed6d9b6206",
+      "traceSha256": "ec3c30c5537479d534d2d17060948f44421765e3f34dea3cddaf458341456d0d",
+      "trainingScore": {
+        "valid": false,
+        "correct": 0,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when both subject fields dax and wug are 1. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "7d85e29da48c6944fce3b9a9cbde228aec50d32e51ab028e02d9d0cb01fd01d4",
+      "traceSha256": "bde29acd7a57b50adc0acc1d5938db48b01f0e612ae6f974bef6dbc62f89b397",
+      "trainingScore": {
+        "valid": false,
+        "correct": 0,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when both subject fields dax and wug are 1. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "fa4ad07e35968c29bb03e8ac9c844f447a5184f7e116898cae7056b30c4ecd3f",
+      "traceSha256": "26a88bcfd545c0af5bf1c0bdfad6ae39d05aa5928d5bda47bfc4243417646654",
+      "trainingScore": {
+        "valid": true,
+        "correct": 5,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is the value of subject field zif; dax and wug do not determine it. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "f1450cdf7a396598a510ede227cbb419dc6441d786b9e8b1170a22de316af113",
+      "traceSha256": "bcc4fd668020ad51b432eec7c8f6f902eda82f24354744ec32b4e52423cfe3e4",
+      "trainingScore": {
+        "valid": true,
+        "correct": 7,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is the value of subject field zif; dax and wug do not determine it. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "36c8e42a2cd68dbb2ba858562a19fee8600af96677abdb375f12ebf2731a791a",
+      "traceSha256": "e3ed50d75aeeec6764fdbe0a42e825fc2bfc8e667cf8a42b16376ec59fc0b583",
+      "trainingScore": {
+        "valid": true,
+        "correct": 5,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is the value of subject field zif; dax and wug do not determine it. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "b8454fda00f8f4ce32187298ceafda8f75e502bbe47421319de44715b963b8be",
+      "traceSha256": "f811764f3134aec0142818af98a0eccf7999328c6dac1edde90da75ad890b35d",
+      "trainingScore": {
+        "valid": true,
+        "correct": 7,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is the value of subject field zif; dax and wug do not determine it. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "a931c5313db16e34360f95449110f05f1ce9920962d3d1c2c579634cf64ea1b8",
+      "traceSha256": "c91a901ec0ad05b5cab110208dbfdd4bc7447b87f5e2e21d6f44c6c21d5c4368",
+      "trainingScore": {
+        "valid": true,
+        "correct": 6,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when subject fields dax and wug differ. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "3d547304a7106511fea55603a40042c610f668949d0ee8833b9acd8529388fbd",
+      "traceSha256": "964db4fa827c3107be18c1419afc937f3c5474a3bc5b18ff54baef5ab51ac10f",
+      "trainingScore": {
+        "valid": true,
+        "correct": 3,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when subject fields dax and wug differ. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "7f5bbb8bb2c9f23768f0b9c40f180e8789a405ddf718904e3dad4fe2bf180ca7",
+      "traceSha256": "95182be5a3d19fea91a9cb9756f7533df1a7f1df0c66bcf78717be560b0fff8a",
+      "trainingScore": {
+        "valid": false,
+        "correct": 0,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when subject fields dax and wug differ. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "223ed70f98419157410095668afeab7f513364f1843463f2977603b40a7736e4",
+      "traceSha256": "eb98d6de1f045619c80332d86775ab0036c14a38443d87bbf8cf4d502205ebaa",
+      "trainingScore": {
+        "valid": true,
+        "correct": 4,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when subject fields dax and wug differ. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "60f43d4859c3c1e2e5398c9c21108f44e14601455528927aace4bbe4e697bae8",
+      "traceSha256": "b48705de9f978b02e414d74dab6834acab9bd9beb0fda572ec564e4bb16880a0",
+      "trainingScore": {
+        "valid": false,
+        "correct": 0,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    }
+  ],
+  "limitations": [
+    "Authored synthetic rules and caller-owned observations",
+    "No checkpoint-weight training, novel topology discovery or external real-world task",
+    "Train/heldout cases are disjoint within each trial but overlap across seeds; seeds are not independent task populations",
+    "Evidence-only control changes canonical revision metadata and preserves feedback; token costs are not matched",
+    "Exact canonical clones still generate fresh execution IDs and requests; temperature zero does not establish output determinism",
+    "No Hyperon empirical comparison, independent causal credit, CR/FCL closure or general HSWM efficacy"
+  ],
+  "claim_ceiling": "BOUNDED_SYNTHETIC_RUNTIME_OBSERVATION_NOT_GENERAL_HSWM_EFFICACY_CAUSAL_CREDIT_OR_CR_FCL_CLOSURE"
+}

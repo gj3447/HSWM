@@ -1,0 +1,38 @@
+{
+  "schema_version": "hswm-dgx-research-validation/v1",
+  "date": "2026-09-20",
+  "native_semantic_runtime_tests": {
+    "passed": 10
+  },
+  "instrument_tests": {
+    "passed": 5,
+    "includes": [
+      "balanced disjoint splits",
+      "counterfactual context/exception truth",
+      "strict no-repair scorer",
+      "hardlink-preserving isolated clones",
+      "label-free JSON Schema constraints"
+    ]
+  },
+  "hswm_dev": {
+    "episode": "323c5fc4-ee18-465d-b497-6b6b2cfd6b35",
+    "relation": "relation:runtime-focused",
+    "tests_passed": 55,
+    "usefulness_source": "agent(codex):Useful for native development workflow regression only; supplemented with semantic runtime, instrument, source-binding and DGX observations. Passing checks did not prevent serving or clone-format failures and are not efficacy evidence.",
+    "feedback_is_user_feedback": false
+  },
+  "ontology_tests_passed": 48,
+  "source_binding_checks": 1835,
+  "captured_request_audit": 322,
+  "bootstrap_failure": {
+    "command": "npx vitest from repository root",
+    "result": "Native suite dependency resolution failed; no runtime acceptance based on this run. Corrected to repository-pinned npm --prefix test command.",
+    "incidental_npm_cache_download": {
+      "version": "5.0.1",
+      "license": "MIT",
+      "dist.integrity": "sha512-iA95lQbKEkvrtTkdAgnWbXfbipWiiWe/hDl2P5tMi6WFwD76G0NxXAGp/M9EOcYupeGJRr6wppMc7CoA41TQjg=="
+    },
+    "repository_dependency_changes": false
+  },
+  "nonclaim": "Verification of engineering instruments and sources, not HSWM efficacy."
+}

@@ -1,0 +1,2463 @@
+{
+  "schema_version": "hswm-research-source-pins/v1",
+  "repository_commit": "21cd1b052bcdb401b9658a75ed2a17a72bba6c30",
+  "protocol_sha256": "544c1886cc3eb16ed0b7fb4c49c80c623d16a93906dd2e81fa4614ad5ed42b74",
+  "node": "24.13.0",
+  "effect": "3.22.1",
+  "effect_license": "MIT",
+  "model_license": "Apache-2.0",
+  "serving_license": "Apache-2.0",
+  "serving_image_id": "sha256:30a38a1d74a17365eca400e83ffd885b250e0c8c0d3c5b508afa8c412d2ddf95",
+  "serving_repo_digest": "vllm/vllm-openai@sha256:e4f88a835143cd22aee2397a26ec6bb80b3a4a6fe0c882bcbc63822904766089",
+  "model_cache_revisions": {
+    "Qwen/Qwen3.6-35B-A3B-FP8": "95a723d08a9490559dae23d0cff1d9466213d989",
+    "Qwen/Qwen3-4B": "1cfa9a7208912126459214e8b04321603b3df60c"
+  },
+  "model_pin_evidence": "Read sole snapshot and refs/main from serving container cache; loaded revision is not independently reported by the model endpoint. No weights downloaded or service restarted.",
+  "artifacts": [
+    {
+      "path": "_research/dgx_semantic_learning_v1/domain.mts",
+      "sha256": "88e4bf76a65e8324f0278f9a48cb9893934a3dccdd65de577740f51e7608285e"
+    },
+    {
+      "path": "_research/dgx_semantic_learning_v1/run.mts",
+      "sha256": "176ebd163623cae15c5a04798edff7c8971fd8f88c0eb5c4443808fbb9f87c9b"
+    },
+    {
+      "path": "_research/dgx_semantic_learning_v1/launch.sh",
+      "sha256": "4e2f676acd7144358d02e181bf4441b505eb99ccaaebab4bcb9cc89937155026"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "44a3f32fbeb5ad30069b2c82db7fe5e8db95c34a66be603a2e89d82d230c4191"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/adaptive-cli.js",
+      "sha256": "ae71ad83b647ef31ef4c3f4c32cd41188fed601125b4487de78d4f1dd39193a1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/adaptive-domain.js",
+      "sha256": "9114c20f493dc16db1b8580934bf279d7bd07528914eea9290db7f30feb0782f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/adaptive-executor.js",
+      "sha256": "2a7b97bcc68827e84618093ddbbccd3f67d5fb1360463090c779b99c734f42e2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/adaptive-observation.js",
+      "sha256": "cb7e38af7cb8de533dd9a30ced8d3dcc8f7cb50abab30c83d6a26e963cd2d2bc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/adaptive-runtime.js",
+      "sha256": "ecb4e9dc7210b6df426a4e6918401ac5cabc3beeb60065156f27df07b6de1646"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/adaptive-store.js",
+      "sha256": "ffb359b7019f0811678ab1f32156ec594ee3cb6bc8f7b226fcb0977695c5f260"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/adaptive-telemetry-otlp.js",
+      "sha256": "e87882ce4bd84767f0cd69259e5db9fd3ceb4ae5d2367004e0096ad334cf89f1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/adaptive-telemetry.js",
+      "sha256": "957ccb5464a662e940206abd502c9032ba272a911108148154889c09dbded644"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-atomic-admission-refinement.js",
+      "sha256": "36a80ad3752dbee611970fbc839274f2fcb4f2606b298527e9037bf8303b80ab"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-content-bound.js",
+      "sha256": "2282e3eea4813d5fbd3c1acdfac89f0d7ea30f3703741f20411ef1a52505c203"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-content-file.js",
+      "sha256": "4e32eb9eec1d006570774e5e69f5469e1c536c0c4b39c12c75524939f7a4a2eb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-content-runtime.js",
+      "sha256": "a1ec10810a58498cde12ae2ead17eb491e55a50e206939ef613f535653cec8f5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-content.js",
+      "sha256": "1857ef46d507542acdf73b4dcb8267ab8fbc36623527ccd0a0c67b3c547f75ae"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-current-state-permit.js",
+      "sha256": "cf4cc5bd95d209ddd1764872fd9eaaf2830513b66665381bd68c29e18d9e9858"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-d4-study-process.js",
+      "sha256": "0feff3e16af3d534d8cc8b1d1f3efe1b2564966ca3dff1cd2c27c906af86c285"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-d4-study.js",
+      "sha256": "c4dfd544a7cd8077ade2a478af180f1353fe57678fadf670b8b0c21b60613e80"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-capability-consumption.js",
+      "sha256": "68fea6bee99a0e2730757f4259d149b09a6931cf4aa7f6b3f0fdb41257aecf92"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-durable-permit.js",
+      "sha256": "1c2c3a8691ab6c19c0eca427fc2408d977cd3a3a32324370904eff18227fbdba"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-identity.js",
+      "sha256": "e78fbe3ae4ae4b0b4a3eec6db3b266fb1f166f194da16542684b7bfe118f6128"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-lifecycle-alignment.js",
+      "sha256": "5b3e74ae18751300886af0d69bd863d3de5bea8c74f7c239d1a0595af078411e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-lifecycle-vector.js",
+      "sha256": "bec19931a4eb5b396ee8490ca94a0785a80569a42f4986dbf2fdcd1481d916b7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-lifecycle.js",
+      "sha256": "5e42abd29d91d6f966782fee4f644069e186319e883eeaa4350e99910ee41d2c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-nine-call.js",
+      "sha256": "0251ec67aa34bbf3a215d02a85e22c9eadbbf95ba9583bcc433f8fb47d08fc26"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-permit.js",
+      "sha256": "1bdd6a58ba11924ab880944d2e5b02629d1e538a1fc196c2545c7afd0ba50182"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-plan-json.js",
+      "sha256": "da02d0ef123e75c05304bf9b67ca29c17cb4ebadae2780a6d1da11c62921b5b4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-randomization.js",
+      "sha256": "14a9722ac1249a450c25366daa13dfc3007714a5e26e061a46619de9972ec299"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-restore.js",
+      "sha256": "71ad69fc7124fd849cfbfa3e0b406fea2e151de99c63f82bb78e543e0df197b9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-revision.js",
+      "sha256": "5c0ee9e8440d45a2d0265293744d8b6c9f12d5f09db31d64eb4c389f657d4642"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-schema.js",
+      "sha256": "75ac75037e5a55b85a6f0dcfb49f3913de5f5abca5cfb56f722b268eb277ad29"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-v2-audit-release.js",
+      "sha256": "8f9993974e6d3db977f0d2e1bf081ced2b24b573063ac72d1c75d9538b74a494"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-v2-authority.js",
+      "sha256": "f1b84edf925cccd9d2979959eeef39aa0d76b80f6c01d56820c6a1a8974c736e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-v2-batch-chronology.js",
+      "sha256": "fc42cbd035a5b4180a92a0eb174a544717e9335945cc10c5a2b6439be909298d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-v2-consumption.js",
+      "sha256": "c17148b92c3cbd0122faf65317f69f2ed466406e1ca68369fe98bda5ddf02a6b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-v2-durable-permit.js",
+      "sha256": "6c5c22b7c1d16bddcb4ead859b41b09638a223c20c89560dc185de5ee6df7449"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-v2-effect-protocol.js",
+      "sha256": "2103371c0753b462ecf97de09f838507017f6ed451cf914f4d31422b85c75f6d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-v2-exact-w0-restore-projection.js",
+      "sha256": "763a323d05000c472367326a405796aefcbd8c925f4b86846f0d79c99fb8786f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-v2-identity.js",
+      "sha256": "6240dca80b6fc3c742eadcb6044949322d17ec95283ffc732e56225699c63985"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-v2-lifecycle-adapter.js",
+      "sha256": "57974781d3d5c74042e9da274c05e8b5bc822812827831201069fcf0823148ed"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-v2-receipt-identity.js",
+      "sha256": "8830d90c64e4be51124c71906c1c1e22100d24cae9bdd3ebf6209d676cf86697"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-v2-receipt-seal.js",
+      "sha256": "345f2a449f5166a6217652228420a6f92c437bd1c854832ba23614cd6c14f2b3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-v2-record-bound-effect.js",
+      "sha256": "69b7fcd6ff6d902865d2953c493b3fbaa72688fd2980e9fb7bf9aa92dbeb5804"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-v2-schema.js",
+      "sha256": "2f3fea900f383e8603fdb5648194eef4bf875ef24caefecf4f2247eb7afd0797"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-dnrd5-w0.js",
+      "sha256": "d54f9159c205f5334659b0035b93255125b0d2e6c16db781f5460a46198bb9e9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-domain.js",
+      "sha256": "a47c641400045218d2d5f9d75e7e1076a94d310e8ead6d4db0b925a34c3ef4e1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-durable-rdf-projection.js",
+      "sha256": "fb7607e95353dfd04ae6cf09ceef4997a85f4b88c2e06a1367bee3e9c0f20425"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-durable-runtime.js",
+      "sha256": "999442c384b60828b9e514af1de31aace446f748cd2fef321fceba92414c0f48"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-execution-certificate-wire.js",
+      "sha256": "f2b1557e7f320f8cbc4d4a2156e6d2e5589dd78f0c52fdd9f31d3141a491448f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-graph-loop-engineering.js",
+      "sha256": "7f7bd346f61262226b6ddbe156ed6c0bacc69db00dda46f9ea6d7fa562f83c8a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-graph-loop-job-process.js",
+      "sha256": "a6741b0f9bafd355514f49023f20b4728304e7a1ee90961672fd7b6fc947a799"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-graph-loop-research-job.js",
+      "sha256": "4aefb61fb03465b6bacb83a6a4c0b5335b38caad3e9ae1f8fe19a4f24c793db4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-hypergraph-projection.js",
+      "sha256": "2a2a29f79ae97f90b953f7a92f5a9c6f55e647dd2028f57b745345f325591391"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-json.js",
+      "sha256": "ac53c919599c76b280104f94529f1d674e62dddb34be0682831b0e0718eaca5c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-jsonld-view.js",
+      "sha256": "55a0a5ded74d8ef8213b492b2b610918cb0fc1705859944d591ce49117309e62"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-learning-refinement.js",
+      "sha256": "ec3aae58006281b405ef7e211917ae6d91d136fe0e0d0153d79f623e578eb9b4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-llm-semantic-graph-loop-admission.js",
+      "sha256": "adae145e80ccf1e89e446df429feb81a76e413b17c0b6f350e91e7d8697638c2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-llm-semantic-runtime.js",
+      "sha256": "0646cd632f50b95fa975dc2670bebd9c9629015b1d3deddb2cf154c5c225dbde"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-local-permit-commit-process.js",
+      "sha256": "6bd3d8faa9c5cb69b9427aff2f970dd5e94ef9352ff80c14c7a268f3a7ea81ad"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-local-permit-commit.js",
+      "sha256": "47c59c40a41f5306db8ea1967089bf7a1afa947d73ea6bdf83c513686232434f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-neo4j-projection.js",
+      "sha256": "a5b413339174c2df2ad2761c9aec810414bc16c54f03da585438d705d40ea24c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-outcome-judgment.js",
+      "sha256": "3cf5f487ce0a862525a894e4febfbb9a71f31fe57cb7eaa1e07fa6910e1dd17a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-permit-envelope.js",
+      "sha256": "de7f7afa87a16f02c258a9517b751a6dbb2d09e140f3edd3be3ba823a1aca928"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-rdf-projection.js",
+      "sha256": "3a32d1085139cbe41c11a89f2e6e7b9faa89404e853dc3ad8312449ee34700c2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-routing-diagnostic-file.js",
+      "sha256": "66e2608c4db48bffe8a6992638af20be3bbf2311bc4bfe37782aa00ea799a95c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-routing-diagnostic-process.js",
+      "sha256": "667d4b1601960895b4a930bb6e8be9d2bdc8482e404daadf9a56d99c646522b1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-routing-diagnostic.js",
+      "sha256": "d3f9aa2ccddc2a82ecbadc1285deca3ef6f188d6b71458193b89ccb59626c3e6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-runtime.js",
+      "sha256": "a0ec23843568fdc3e06d574ec04ff78adb76993ba679dbebc3278fb6560cad19"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-schema.js",
+      "sha256": "b9e7eedcd4a52a5eca37e121132b5d157dd64bab979ff14a7945f99af45722f2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-state-journal-file.js",
+      "sha256": "afce931d23cec2bfa85091d55386089764ec65913a082be9ce533814035b7876"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-state-journal-store.js",
+      "sha256": "79ed646515f8b51da4aed70de362193b62d793d04b455a2a73769bf3eac9e40f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-state-journal.js",
+      "sha256": "d0534a9e4f59a1abfc58afb144fa0588ea36f78e00dd8def055d74a2c71a2532"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-transition-evidence.js",
+      "sha256": "af8533bd9043e346338351562770f78de2e017c747c70986b05500e4401baa1d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/canonical-atom-v2-verified-admission-gateway.js",
+      "sha256": "79086b0cc7e6a073e82d6934ce3ae4b333b5d278cd3c21b9cfa63f969f5ade6d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/contracts.js",
+      "sha256": "e29442d5a7ae1fc4ce7b5ab7db7903bdc4f357d1eb1921059f0ef03c6f31d170"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/development-backup-process.js",
+      "sha256": "26a95b24a7709bbb8c005606f5d069708fe61b6d9a17bbf719a4882cf27b7f9a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/development-backup.js",
+      "sha256": "4912c15846389b10d9144dfd04c4aaf213d79dbc9a67965448958a56ca81d534"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/domain.js",
+      "sha256": "cb85dbf0b615bff849c1a7293742c0d9ec0fbc734a44c8c14b20e6f61375aefb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/effect-bounded-subprocess.js",
+      "sha256": "dc327652725afb1ec9842457e01c5fdf1255e45a0f9ec0897f6f21b987008c03"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/effect-posix-filesystem.js",
+      "sha256": "10da8e04b4f0059587fe607cbded15fb98f01c7fb63b1d2c617ccbf5b532860c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/effect-posix-services.js",
+      "sha256": "7d5159c0dd1189baac185356bc9f937148561cf694c06b01805d537be87ed718"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/effect-process-main.js",
+      "sha256": "7e3f0dd705a347582ac782b25a0a59e3ce029e73e7007c1d067c2ec8cdd933c4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/g0-occurrence-phase-kernel.js",
+      "sha256": "bc1a6e81bb37850ded5cd87beda7885e1705ab9f52e288b25ad6a647604b51af"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/g0-occurrence-temporal-activities.js",
+      "sha256": "88458a67533ae2892dff142fb873f658a8e0aa6e18cfd1d1885479670887750a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/g0-occurrence-temporal-audit.js",
+      "sha256": "bf7d50e03a6fd4ec8b2dab086801a92dfc8fe16ed3d21795ceab1bd1db7df9c8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/g0-occurrence-temporal-contract.js",
+      "sha256": "a4a9dd3c551cba4811ce8efb509b19c9877c55e48caf7aafdb3c42a61536d893"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/g0-occurrence-temporal-domain.js",
+      "sha256": "b38efc63e5e54cabdce166a88b0dff094590428c8099e53107ae863dce9be76d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/g0-occurrence-temporal-public.js",
+      "sha256": "dbd9832f24fd48d2685af064bf26a96a9798d3e4205d88efc5916d292b24d765"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/g0-occurrence-temporal-runtime.js",
+      "sha256": "2df5cc5dfa92ef4e93d43bd910fb7eae979237aba18443996ee18d4e2d0b10b3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/g0-occurrence-temporal-wire.js",
+      "sha256": "981761d962b2f9130c0ae1fa9fe81ff15436c8551992d3d53744b7009bc1dce6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/g0-occurrence-temporal-worker-process.js",
+      "sha256": "29a52c3770348ba41a5b150d89f57b3fa64e533d1425f00afecbb292df45e54e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/g0-occurrence-temporal-workflow.js",
+      "sha256": "b74f2db16c5a1a5530af6ec17f26ad51957171a6a339bb4ec5d95c105a6dbeb7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/g0-test-only-operator-simulation.js",
+      "sha256": "b52d65e8f69867df14b8a8f2e56a6e83d195017bca641f43425f1fd62bfd47c5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/general-json-domain.js",
+      "sha256": "04341e770583272f42b974204e96147c77f3171863d706976c973f562b072576"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/hswm-core-ontology-schema.js",
+      "sha256": "5680dbd82d1b7a49565354850466488d502344a180cba70570ac42c423c9732f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/hswm-core-ontology.js",
+      "sha256": "b337b8172b9804aec3c0f70892b860464aaa8d1f64c2c615bb21fc001197b2b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/hswm-dev-process.js",
+      "sha256": "9c3e72320f8737a77096fd71db3d2388bd573fc11b5b2177f9924610476f3921"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/hswm-live-process.js",
+      "sha256": "1abceef53474f1f52c1f8fcee914015930552de64167fc77b2b3137ce539d897"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/hypergraph-projection-process.js",
+      "sha256": "2c7edd0282df9388c8d10eeb769cae5187f45f0b2ed81cb5bb964632b80c81eb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/hypergraph-projection-receipt.js",
+      "sha256": "0c7a21570a8e55ebe0a8443b3cb873f4ac772f8cd7d5203e945cd1d12fc7bdb7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/hypergraph-projection-rehearsal.js",
+      "sha256": "52028ad9ca96df50faad1759c51ccf3e28893bb763bc314e9f4ce6715b357f4b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/index.js",
+      "sha256": "19e4b542d6c73908ceb1a115dda1b8052fe602d607b9d15137f8c400d3ec3efc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/knowledge-catalog-cli.js",
+      "sha256": "da92525f18bd6a15fb1e6767cf0136c8000f27d102232fc7c8597b879d6774fc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/knowledge-catalog-process.js",
+      "sha256": "e4581fca05f3b337cfc893bfca0c87b30dc7a9e3cce3263e4e45c3c283158786"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/knowledge-catalog-runtime.js",
+      "sha256": "c95c80850edbc808a2ff789b63fcd60e9df5aed58803fa75ef1c816a3074fdc7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/knowledge-map-domain.js",
+      "sha256": "36ee83e1bfeb663f11de7bdc0f5a2103447e47a429128ac585d7097e41fcd73f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-development-day-projection.js",
+      "sha256": "60c6660d8e30fb807c7bd745f0578def34105bfa6f7709a2b292e93030898e69"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-development-projection-cli.js",
+      "sha256": "8ec75354e965a034d064d7a0f0ba2776ff3699b58db0d3eb47e776331b3bb9bf"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-development-projection-domain.js",
+      "sha256": "acdfa391ae3f08021dda13c236657e41723b3ddacccd00045ae297064f6b01ea"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-development-projection-io.js",
+      "sha256": "05b70618079d7413357ec19d1a333af39eeb70493809a903d0164f811914bf02"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-development-projection-process.js",
+      "sha256": "f08b7583338fd1187612e188dbdab286a96088ef10891d5f0713f3dc4c3d3280"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-development-projection-publisher.js",
+      "sha256": "e63b12b119545ad86bbda0ef6c0b67d7e332da25f6821c2b21bf844850fc7487"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-development-work-projection.js",
+      "sha256": "0efe18199b6f4266e94dc6e43bb873c6e47349641dc7379158afd1ba3116b3af"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-efficacy-domain.js",
+      "sha256": "9d95fd48eb07d67e3987410e58b544e3d5fe186edc6f1a183f1d2d855280b315"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-efficacy-process.js",
+      "sha256": "896c7918c617ed13dd628159a5b4415cffc3e7653c29b34bff14d36ba48828a1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-efficacy-runtime.js",
+      "sha256": "dbe4b5ad165fbb403894b505d9b0228a13606fb075483f4439cd1fdc45da630a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-f3-cache-runtime.js",
+      "sha256": "126fc5ce46f0d061a4c4f73e9433dd5af90ebdb9a67fb0faa5d088445de7d568"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-f3-chat-domain.js",
+      "sha256": "fc22064f1e690ceeaa54f8697a725ca519b37f6cdde7856b97412a5b24b15371"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-f3-chat-runtime.js",
+      "sha256": "955f77ee64ac373d90ae0e981afe62f83d5e25aa520ffa962d89bdef9f2fde05"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-f3-development-process.js",
+      "sha256": "705d5062279d3ce7dabd15f7eefe25d2eb4e9b7c41bbd98438ad1b1cb3a2b499"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-f3-fetch-provider.js",
+      "sha256": "406f3ccd5c577a046fb2bc290306f9eca7b7c55ffed43bd47e537f488069eeed"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-f3-pg-persistence.js",
+      "sha256": "c6ebf926d0e46b9aa280bbe71a7af4f5217ba0e154ea6fcb120615d3eb2bcdee"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-formal-crypto-runtime.js",
+      "sha256": "374e08a73b34e3f17c33a2b913a2ec7ad69690175a9a4ed2716a4e409c9d2f0d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-formal-verifier-domain.js",
+      "sha256": "97f92970298ee56f2023ad5d839ff412d333d1c0619af84712f39a3b1f76fb01"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-formal-verify-cli.js",
+      "sha256": "5b5fb572da375d3ffab4cbcfda02d6916162039de4906efe90f4327f9d2ed31c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-formal-verify-process.js",
+      "sha256": "1ff03e547852498bb6a591ef4c3bafe58e5c341188bd7348b3266bf60b518bef"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-frontier-learning-projection.js",
+      "sha256": "42bd8f22d3aabe7de14ddf47a34c872aa85b74da144b9b34777ffefcd3d6c624"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-graph-standards-cli.js",
+      "sha256": "7722bfde9b5af11f93a43fffb893208228cbbc603d733dd9cec952e2c08e22a9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-graph-standards-domain.js",
+      "sha256": "d154ae02208e3b206d4f1403488936c8b1fa6677edf3a058719534118bae202d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-graph-standards-process.js",
+      "sha256": "55ac6276076e40cb361cdc002dcb4283e5720afc99e08b2affbc9e905ddb6fdf"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-graph-standards-runtime.js",
+      "sha256": "7969360edab255fd0e2451034e1ff26784cea4738cca97ecc60054fc321fe904"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-graph-standards-suite-runner-process.js",
+      "sha256": "28e3fdb928fd36dd4277a3676f2e02bbb4a05c1f5ea80891539b3abb4a6df87b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-graph-standards-suite-runner.js",
+      "sha256": "003e77cd4d6438e1f1dec4772e5e320d5856f9f2157aeb2803406d435d3219b0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-hypergraph-shacl.js",
+      "sha256": "05d294040d0f2d6025de82fb6b8fa8867f338472f32cbb40678c8a26faf90b65"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-infrastructure-smoke-cli.js",
+      "sha256": "f916f0ba2e3fbf4cc46942253edbb2b4a6e27b2cf9571b537bd4d17e0a6369c0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-infrastructure-smoke-domain.js",
+      "sha256": "4336b0a43e1721c7b2fb3d4da995d4484bb129bf3481b07ea95fa62ce5bd3840"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-infrastructure-smoke-phoenix.js",
+      "sha256": "a4d0bb683a0b92be676617dd9ae56e6928268678e333b38e0b2f4b3db596c5dc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-infrastructure-smoke-process.js",
+      "sha256": "03c31a94052d8217bb62a4287a556ad752c8556d4cc7178ff009b82bbb6fad82"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-infrastructure-smoke-runtime.js",
+      "sha256": "3a919353a911de46e4023e0ac601b32f44706efd30630b5043bf06f8a3027839"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-infrastructure-smoke-workflow.js",
+      "sha256": "dabe7a6b075d913175c064b3ee2ca11ec76c35738aee33432d14370f962a01a4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-instant-domain.js",
+      "sha256": "93c4b893198c4ee70edd354ea438e15b7ac846e68bd32a3208cee6ca4f3269a6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-issued-record-domain.js",
+      "sha256": "24ee7e2432ff16da523119d78ca4ca05f213b0ec986cf297cc2af1977f9aefe1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-bundle-domain.js",
+      "sha256": "09795e276498819aff8b3e3b3a88ea69e5b7c9319ccb5d3bd820c9d61816daad"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-cli.js",
+      "sha256": "8a132fcd2da096a11cf2dedf20668766843db1f643eb5b937803686a2eb6e504"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-process.js",
+      "sha256": "2fcc270beb287d73a07a41967c0701bfe5477cb0c49d16a6e492be94b40fa081"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-qualification-process.js",
+      "sha256": "8ea5d11e95bfe14ce1a8f41397c9ac40e4ef1622b243b0a8845a33964f92fadb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-qualification.js",
+      "sha256": "c337ddb7536ec28c101deffcf263baa560c2f8eb041eb29ff6cdf4464ed7d432"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-standards.js",
+      "sha256": "b3224de381bc3dd05af5db80f7e4dcd34fdcd15da170fc0d6dde0c89cf742fbf"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-vendor.js",
+      "sha256": "6e486bdd5b6c7e6503df2c376c7941570122d2fd83a2cb84efb6e3b80ab64250"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-legacy-replay-cli.js",
+      "sha256": "32dab9935bd862a6313ec585f07c4703c7e7b28ef9645c1163d76df5cfc90451"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-legacy-replay-domain.js",
+      "sha256": "c60e5bc54f676d1f93466518d0c704fa441e5a9c0adcd22e853767eef39dab41"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-legacy-replay-process.js",
+      "sha256": "05f432e52edb3426ee8b1eedfe7d04b47c9eeb62cd51f358ae181b74c08a168a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-markdown-math-cli.js",
+      "sha256": "6a37514d0be3be65827d889e4cc513dbfb6cdfdcd44b1e180d1cef4aca7bda33"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-markdown-math-domain.js",
+      "sha256": "dd99a0af8fa9eade3c00f94d3d7bc7d87bad7feb0b8d0c73337a7fd3488dc9b5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-markdown-math-process.js",
+      "sha256": "2270f4d40d896421c93d747f48171b8b1b68160f462bfce6882e53735ee37422"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-audit-runtime.js",
+      "sha256": "dec8021d44232786c4f9b05924c1317bcee62d874f39df126f221cdbfa79cef7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-cli-domain.js",
+      "sha256": "b0dec77d38377749a1d468efb2526abbb3b754ae2b10f265258f7be26cd35d65"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-cli.js",
+      "sha256": "7763f2eb1a17563d5c434ddf912d3af9bf6faa767b4f0adb71976defb904045e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-completion-domain.js",
+      "sha256": "2de26a2e36c89105e2ff251ed650af0bdce1d7a307f9df3dc7b44d3fbf5cc563"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-completion-runtime.js",
+      "sha256": "e2f6edf11c5ee1cc0d5b25b39c1aa79447f612a25dd8e29360d184bcc28e0211"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-dual-evaluator-domain.js",
+      "sha256": "0450bcd14bab252d778b61c0235bb2f64d607dd71f828ed668cb83cd45d332d4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-handoff-domain.js",
+      "sha256": "e399e6b2dbae2d5c813fc2950cd34759f1bbf5df523bb989ca9d68a52592440f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-integrity-domain.js",
+      "sha256": "5c612c835aefa3ffa5051006e79c6aa13ab9e9cb0b08b8f0a8e1ed046774a38b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-preflight-domain.js",
+      "sha256": "a5001bf59fddbfd4323f4cb6ce804a836bff7a9404e3f6a00b467081d606247e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-preflight-runtime.js",
+      "sha256": "baa1a3cd4d36d8a9fd8e3fd6c1d2ea3385984c28431b5c8c5e9173c2394839e4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-process.js",
+      "sha256": "7822575f5945c8960c0a706db4297fe288064e37df4c1603c660c30dbc371325"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-publication-runtime.js",
+      "sha256": "d21f12ea79a230b92d1270e8deeed8f27b05feb5785282f985f7ef8cc989eba1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-publication.js",
+      "sha256": "85a46feeb3e4cab359c035656e96025fdc6c493e2eb9cd027fcb25a2c8260083"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-readback-domain.js",
+      "sha256": "c6574988b910d5af9d4c7aeff36930493604a19774105d0b471235de38fd0d96"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-occurrence-workflow-domain.js",
+      "sha256": "a2b937bb067c3088ba5ad97087171b279f3ed4215e7a8434a3ddc47308fee180"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-p1-artifact-snapshot-runtime.js",
+      "sha256": "68f4b095b7bcf9a195008886e705b6e7846c1297c48ad7fa6efe16b443fae4f4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-p1-embedding-domain.js",
+      "sha256": "7a3c41cb7cab8dbf5db7286132f164c10ba589544538c14280bd44739d0d41c2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-p1-embedding-runtime.js",
+      "sha256": "2d9582b05f041759e8750c238af93b7cc6808796b9a82078dea2cc5ea420a763"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-p1-gate-cli.js",
+      "sha256": "df7d8621703ffe4d9c95ff080a1ea201ace87c77698d052778f6dc05407aae15"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-p1-gate-domain.js",
+      "sha256": "dea899e1232fff3cf41150111b1c676145f18c32847ab3671d7c9d1d8fe85d8b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-p1-gate-process.js",
+      "sha256": "2dbc106bfd3948a380482d3c20729d418a437838a4bddf3cb0185e55abdac6bb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-p1-gate-runtime.js",
+      "sha256": "b8035cd6f717b8c6833823cffe4580446219b0b2f622a171efc33a83652d374f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-p1-npy-domain.js",
+      "sha256": "1e500b901f6ef9eb7894887a237cfd078bb3bcc5726bb369f5269cde3ab3e12e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-p1-output-runtime.js",
+      "sha256": "6c979cfaaaccd318ca3c85eef1d2b8d5d5417b6742685604eccb5df5be475472"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-p1-retrieval-domain.js",
+      "sha256": "6fe5a46d03e605adf0fcf00920ce29042a69194a2c84bc709649ca95a2e30eeb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-p1-snapshot-domain.js",
+      "sha256": "25e6c536c38156f75b969241a4ca2979125692462c0c0f1566a7b0b9260e6889"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-pinned-suite-binding.js",
+      "sha256": "d33f9daf7ef0350b73d7dd156f80664887e003fa77b25847a5fb1c042ce7e396"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-pinned-verifier-runtime.js",
+      "sha256": "3333b849822f9da85589c0f7cc2ceb9f56fd3d1e028884bce14c0a1422187637"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-call-domain.js",
+      "sha256": "3258d7a682c2a6df18cdb47b85b6dd77f860cb57a9ae72091f1fbaadd7b9bed1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-call-runtime.js",
+      "sha256": "16ba7226651de37c31db04bac147dc561ccbd24e285677d33ed165c106875ab0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-f1-cli.js",
+      "sha256": "19624b67acf73adda38ee06fad987d09a4df08678d6fd8223bbd59dabc5cdb03"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-f1-domain.js",
+      "sha256": "9f9390b0a6d242e257872bdaf71acd6f00bf69e83b4c81a5dcd7e9b6128613bd"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-f1-envelope-domain.js",
+      "sha256": "5afd9ab6a40e2b1bfff09f5ca51da61493a6b4e70760f0a2aa9cb6ca90409d11"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-f1-envelope-runtime.js",
+      "sha256": "0aec8754840eea8df7f24cbca66dc7c2d4c41c1ced4bb0138b5e32714b8b18e6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-f1-manifest-domain.js",
+      "sha256": "32c078f7c4a3fddbb9b659662e35d27d10975e840ca30a6e60e18b021f806360"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-f1-payload-domain.js",
+      "sha256": "30f242ecbbcfd445ef316422a8476400a3272876d62f97147602b811efee78b3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-f1-process.js",
+      "sha256": "0a46bb73549ca88f4685e0b7b09e079dce494b5b6ad217ac8cb73d181b48929a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-f1-registry-domain.js",
+      "sha256": "2283d9e36a2bd2d10f836849056d989f77905b915b9b51aa04a1ff304976b2f2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-f1-run-domain.js",
+      "sha256": "ea6c08836c5cf3c55b671dcd3627988ca45f2edb5fa7029bd10aebfdd068f62a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-json-http-runtime.js",
+      "sha256": "ca765acf6f027b138eabefcb53a2968191c49122fadb84e48a6185d4ef54aa9b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-json-transport-domain.js",
+      "sha256": "f90e37947a7672d82da8ee2e2bf099db787f67041c6d7189afd5f36b1ad823c6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-json-transport-runtime.js",
+      "sha256": "65b023a17dc2ca802c349801ca5371f83ae06d9234634fdf211d2764ea0d16fc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-network-domain.js",
+      "sha256": "20242a937c9f9a6569d219a819cc6e137a732aeeb95a2368906c64ab6ed7617f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-network-runtime.js",
+      "sha256": "03bb2c02615578a504b8cfe2c87f210eafb4c87718a48841edbb97162693a07a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-ports-domain.js",
+      "sha256": "8e17b670eaefeaa9484b8de196b88f21a00a953152f27e7e91903de036b6834f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-receipt-domain.js",
+      "sha256": "7dd293339c442c86cfb411e948990c4b90f0fec8a2924a2437ebdbac126a9ddc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-token-meter-domain.js",
+      "sha256": "cc6ce31f5578a135111a416abc12afbd059a2565b9b5796a0c00ba9fc07a0aa8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-prom9-token-meter-runtime.js",
+      "sha256": "e96253e4e4076ceffeb80b3c1529dd4644474e78ddb356a4e6665f7ce8b5d3f8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-python-casefold-data.js",
+      "sha256": "53f2ecc937910e8224d5360b49cdbd07a2a3a136ad6d2fa98ef3ccba1abe4479"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-python-instant-domain.js",
+      "sha256": "0a9245235d20019d73d8edd7f99af4ddf204581bb3b6d8de2716b47a2e2fc675"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-python-isalnum-data.js",
+      "sha256": "4ad23f052048a287af8a5f1478ce306c43162dcf9f715248984422b777bb4fdd"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-python-isprintable-data.js",
+      "sha256": "37bd631c782fa9491e6647aecf5fb05c83d328d99e5075f1c279bf0a4019b20f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-python-json-semantics-domain.js",
+      "sha256": "ee8379811f219d4d576192ac1fa501202a262fb3789c8829045ff75c17cc10d7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-python-mt19937-domain.js",
+      "sha256": "69266767eab11092332c0d6e655a6b73e0140384bb61df105dad0a6b467f0517"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-python-string-domain.js",
+      "sha256": "cb3ba8180f8ff004b9bd17fe454d645f1ceb9a1c0ecd5224c8d9b1cb647ba4bc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-repository-ontology-domain.js",
+      "sha256": "2c02c6c58c0326abc4836659b36405a1c56b185a5cf248a483b8907dd315a075"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-repository-ontology-process.js",
+      "sha256": "913f5a1909a3813df7d0a36ce754e934cc3e68389d3b2a185a7a4dbc781cf391"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-repository-ontology-runtime.js",
+      "sha256": "ea77e73be947c08537072002b112526ee29c29a63315b58b9436e8b1fbf30dd1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-research-fabric-domain.js",
+      "sha256": "504a45d928d1d0eaba0b946f3fdb399cb2396beb78355ee8a0f1c5da59a6db8a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-research-fabric-process.js",
+      "sha256": "696d78907ff95fdebba8b92f323fe0c97d2c9802b8cead57848014455ebe59dd"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-research-fabric-runtime.js",
+      "sha256": "4349a9a401cf736654aec0819a84b50131e96fda687c165811e13a2a5528df29"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-research-fabric.js",
+      "sha256": "426347e80ecdcddc34d5768bcdf39fbd75d33aae406d4010e0e3918413f3b74b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-contiguous-reduction-domain.js",
+      "sha256": "81620669875ccdce04eaccc0cfdb821f7c300212cc8533e4f269d4238809ac57"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-dataset-domain.js",
+      "sha256": "b4ffc0faa0a877665900b2a6aff8a9b6c7484e8b3bfb9e91d058909a0b46f5c2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-family-domain.js",
+      "sha256": "91cf9e6e84e0988c52c38e4ecd130f9cef27ac4e0dfb4ec931f822830b49cf0b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-fit-domain.js",
+      "sha256": "a5a7206121cfba2b9da2aec10a22255a1b0114269153e7d58a1f7d8e8f93ce3f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-initialization-domain.js",
+      "sha256": "197a7d88f6649985475790f04a61ec4e66f5ee5a41268e49f0857748ad478471"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-model-cli.js",
+      "sha256": "f6dd1ff25d8a9ff543ea0301b9212f7fcd7d8c9903e1081fdbdcef925382c28d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-model-process.js",
+      "sha256": "acd41583e738f835e8c992fc69515bb6153d75a52667705684b1d7efe298513f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-model-protocol-domain.js",
+      "sha256": "0c14766fd338c2e3e549801c2e1cdf5e172f44b04e111c027aacc73ae9f831ec"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-operator-domain.js",
+      "sha256": "f40531c3b5d333bbda98e5b67536e01ed9a78a71a18b93ccb53879fb3323b5df"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-optimization-build-domain.js",
+      "sha256": "b79e86bd9b585a8df7380cc008278407606a409a4604a4e3e54004d135e47730"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-optimization-receipt-domain.js",
+      "sha256": "f631813002bbc847e8e7a86fd8a109253420c197ede098dab6d1475069b1f416"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-protocol-metrics-domain.js",
+      "sha256": "c1647820a83ad42e2909a8815ba63e33b4f52fdf2187f6aaf3821b82d883ad8e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-protocol-score-domain.js",
+      "sha256": "40a35d2ee8a5ed78c69a6339e955902c0d1f1fc63fc32634a9d43ddcb0f078d1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-reference-dot-domain.js",
+      "sha256": "9d18f396e697d167ae7fede5ea656f611167b7e6588311c4ccbf1e4974224b8e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-reference-loss-domain.js",
+      "sha256": "c0ffbdbe5feb1273c210da0aebce7c1d82ed8c3269a8d333a8a9285f0b695c49"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-task-archive-domain.js",
+      "sha256": "7b33365e8bcfe68def59c5d4386e953c5fad31f6e86fdfd4eafc1ce163730873"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-task-fit-domain.js",
+      "sha256": "d8a4de1d864d147b291d7e8dcc14499af1488005067c0aa6b259f5e9fa87531a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-training-numeric-domain.js",
+      "sha256": "ef5066486b0bbaa60f525c778b3f9fab64545fca16ee68741728b9fb566b0e49"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-training-receipt-fields-domain.js",
+      "sha256": "38f1a334e65ceb3d7c8f2fb5da857aa5c40e1e7f731533331561458cc614ea7b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-s2s-world-domain.js",
+      "sha256": "1a0cf46ea089ad77a5626c26f6d022cbaf170484d7a6e73c69da85fb8b974148"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-sparql11-syntax-suite-runner-process.js",
+      "sha256": "5f1d66df3bc99fab1c76411649ff9a1c095b123f706ec1b626fe9f4b9004c970"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-sparql11-syntax-suite-runner.js",
+      "sha256": "bcfe75c4ced636092cec43c3b5820fd5535ea89c2cda8ed80ea596aa6b5babcb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-task-domain.js",
+      "sha256": "a4bb526afdf9dcc151210a4388575ddcd03e6e7bbf2367e7741f5a6b98225e1a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-task-io.js",
+      "sha256": "dc13cea9580360203f67bbb5313776419b1c6328735976576e42e6f4384e935b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-task-json-domain.js",
+      "sha256": "5e7b805e5b003beb3773f768bdded8c05b307592cc581272740d5191f9ad515c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-task-process.js",
+      "sha256": "fc2d533fd8568a4d7a2cacaf3964b0996ea9a9cdea96c48c61192b238f27256b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-usl-cli-domain.js",
+      "sha256": "b950eabfe0a88de988de02682120a8addf9457c2e0f7afb39a408daa9520b486"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-usl-cli.js",
+      "sha256": "048742835ffa3e0950c17139d0985c1b4fd27da81dbfdebae50d543941d99689"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-usl-process.js",
+      "sha256": "dfab54ab3e01f39da187869e4402f5997c0e1e00a5e8f84360a925b6e137719d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-usl-v1-domain.js",
+      "sha256": "f3d2552be3222e26d7516cb6c13601f05d77c78a212a4592c939f4e5d8f918a8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-usl-v2-wire-domain.js",
+      "sha256": "1fd50cd2b294a7bd0919bc69eefcf6da21dcef1417cb69b916ef4931eea3eba3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/open-connectivity-rehearsal.js",
+      "sha256": "cb4e4815a2ba8916a26034ad67513556620ff29d219e6af3cd94e6a7048643e3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/relation-program-research.js",
+      "sha256": "a004824d3591824d88d1c37365e64f359721fe642fa99f68e33cb270e03d7106"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/reluvator-check-process.js",
+      "sha256": "19a4728b209e1578ca27e0ce2aa904157609202f16429138f14f817c52d106d8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/research-graph-cli.js",
+      "sha256": "b7216cb72778334e0b479a3792c2afd5ca64ee8907dcebc498560a9993e13ae6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/research-graph-domain.js",
+      "sha256": "d784af25a6497cc05665561b49d7392ea3b02db4164b0e719d4b9ddc48a4f619"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/research-graph-process.js",
+      "sha256": "d1102557f23f9ca85dc4d06a0a9779ab0afc8a6d70fbe4659bdcd4dd42ad524e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/research-graph-projection.js",
+      "sha256": "48daf42afa9eac8214ebb216ee17a76b307301f17a2fe22098c9a1bdb417de11"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/research-pinned-chat.js",
+      "sha256": "d60dc3dd0bacfd49020db9f7c6bff89087637eb00b7bc13731791f326eef599e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/research-relation-comparison.js",
+      "sha256": "5f62d333b649aef2566a158f559087d27a4d63bef2c1da793d27cbf569837502"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/research-tooling-domain.js",
+      "sha256": "cff116f8ecb1b5738d9a93e6b3fdf358bb043940bb5a9e6d420d94d57f434546"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/runtime.js",
+      "sha256": "6c3c82afa05f0241d4a8d7645c3cd73b27f926c6e28d78222f2941378f9185eb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-bounded-process.js",
+      "sha256": "78fff2243b32303e35a4071f62e1c1d180159f544fa81e6f3d527bb84c688605"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-canonical.js",
+      "sha256": "a9ff6e7054131ee00ff98226312689e5818d15fa01787100b8fc7a39028cf4a6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-confirmatory.js",
+      "sha256": "9d33d26fb96893975b03b100f8eb1273390f6cca7ea40ac671d4630c7d762971"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-durable-file.js",
+      "sha256": "7c03f7363bc13655619d658fa8c8c6687228381bd06468f37edcef8fd9542c8f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-durable.js",
+      "sha256": "6ec7bef1692d268d62989101d0bad5576cbdea2554df98b31371921bee0f93bf"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-evidence-envelope.js",
+      "sha256": "97641c3ff06175faaf7f7f25f259eaa7f0a8fa8197b825087c19b9fc290ca61c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-evidence-file.js",
+      "sha256": "0ad5e4e247c25c37ee70163e0d3285880fe3896f7b7c562e906ab80f290f9447"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-evidence-profile.js",
+      "sha256": "5a0339590e1e66aa56c0e98b6d8818d874dd39fd5d880221e6809eb1532c5115"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-golden-numeric-dry-run.js",
+      "sha256": "5a39a54d2a232c81d345e025a4f6eec9e7c988f208a0944664caff6e4af5ec1b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-hosted-process-continuity-contract.js",
+      "sha256": "6cc8ca96320e89cc26be25e29bd1261c9d7d1c6b0baa72e5a16e06ad4143e922"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-invocation.js",
+      "sha256": "6e4dce5c07476354f1a8c0c6c084f41a71609a7f4ec32257e6dfc184cdf9f3e9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-job-sequence.js",
+      "sha256": "f978f4defba3ba7922f2e9d5afccab096c2a2520c454aa0e33e7485d97436dbf"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-json.js",
+      "sha256": "7c0e84017a9a8447fbab5000636979f87af6fff6150f56bac0995a648e0dd69b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-live-artifact.js",
+      "sha256": "f31dd5dcb99ef766f676833b1d4eedd31dbc7abb7c73d6e0bca603848fcefad7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-live-drand-http.js",
+      "sha256": "66182dcc6c7ac79a285bd098ebec1b8a2ebdd4dc5e52206d49be7672983f77f6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-live-drand.js",
+      "sha256": "9c67305d86a281e6e4bb20c0df6ad3cff46739d38d43c5d82a5e3cb2433f45f8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-live-github.js",
+      "sha256": "d17a3f2dd193384a3154ebcfc6e5f91e8e1db049f6afa6f4a6b9483be2640a43"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-live-python.js",
+      "sha256": "2c8f135031bd9ff4e67e4f391cb830208e2396e7f533e11e7d8a22a75b3d2617"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-orchestration.js",
+      "sha256": "31af264f35b7872f002eac7fe40161876c85e13cca772f47216655c5ecb0d31a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-prepared-stage-carrier.js",
+      "sha256": "5094671c1b0c5b3bacf54238ae28d15701066912b5227ce6af73054c068b3514"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-preregistration.js",
+      "sha256": "947aaeceb59a1b9aa894076d761ca219cdca10e53f96d6cd8649e2ae33531c01"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-protocol-config-asset.js",
+      "sha256": "830312e0a7883a4885cf79dbf961ad194d893126915de8e13612627dbf0da8b4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-python-evidence.js",
+      "sha256": "b622d372c56a7a855e2e343161114980327d24c864205eb507c88c5ae111e00f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-quicknet.js",
+      "sha256": "d064b14c213ac471dc59bdda0f1df7335127adcb009ddb1e1d902b77a6773177"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-resource-limits.js",
+      "sha256": "343fcadf7c2d587ebe8b28ad4448cf6f4e7adfb74f665fd97e8e82faa47d5fd3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-run-authority.js",
+      "sha256": "5325a66dea2dc3e28e4cd776f0f6c062abe1554e89d090dddec950013620e3d9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-seed.js",
+      "sha256": "9e2188bc31883a04d1d0450655751380e32b815900a78fac749c87b49e046d74"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-stage-artifact-permits.js",
+      "sha256": "980abe285be2cac03100d6545a0bfe53b036d6e9db6364b562c382d75e399a7e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-stage-artifact-read-replay-contract.js",
+      "sha256": "cb86cc5957c1d4ec89ae765629f389b5b1ee2e3ae5f00f08dfd0aa3a1e11b5fc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-stage-artifact-read-replay.js",
+      "sha256": "e479d7bec47cab3c5520fa8a718f3de042633ab7faa1905aa1016dfb2cc6b63c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-stage-artifact-spec.js",
+      "sha256": "129a381cada6f2fb39c2baca5d81b4a4d7740b80ffa1ce23579b11af25d39ce2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-stage-read-replay-durable-profile.js",
+      "sha256": "155cbd9b546cac7e817d3a25fa4815b245c0bc6b5668cc1af537510414bfdcfc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-stage-upload-assertion.js",
+      "sha256": "d02fa1e91a52567d43bb39f6712594b539bdcf47da9a933c8899758a35ec5ff4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-stage-upload-outcome.js",
+      "sha256": "b2c5311acd64f28898d61bef5a4ab4f1232effe9820a82c51252b05e78f0c1f4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-stage-upload-postcondition-contract.js",
+      "sha256": "acca8d3241dbd6e19a15ab6c68d5cf06916583bb57e248e2d3a646b1e6efcc56"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-stage-upload-postcondition.js",
+      "sha256": "8c983e12c02f0d554e172d4e6273be7ff03c9ef675ff791d5e25de268c1aaad5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-test-only-golden-artifact-store.js",
+      "sha256": "1d14658b51e87813351a4bcdb30b6e57ac14d590738ee8489266f5c7588e3116"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-test-only-golden-upload.js",
+      "sha256": "52943db6c0534e6e3dd05b04a0ee47119138861d2c0e801b201720f7e27dbbe4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-test-only-hosted-process-cli.js",
+      "sha256": "87aaa57dadab16e2952bc261cf676586975b8476630254c2372870c6c193a54e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-test-only-hosted-process-protocol.js",
+      "sha256": "d8a2cb21a73d1eb3b585e39e0f19f5289350ee93c4914ce0f57a62e4649fa2ab"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-test-only-hosted-process-root.js",
+      "sha256": "2f1a926b9ff77bd4dc42114a83f63b7b79d30f2b67bc406e23c5a89c5bad16ac"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-workflow-contract.js",
+      "sha256": "8abf204b0fbcb5027b117002b48c4889b39afecdafd4914fba7072b28ae0146f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/s2s-zip.js",
+      "sha256": "fb240cd6559d28e45bc986f580354b00e40f1b35d212cbf09030d4dd4e307628"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/schema.js",
+      "sha256": "e410362654aae91dd279ddd6904c57014ec07c3f12f091203e3fb0434353326e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/swm0-role-aware-core-schema.js",
+      "sha256": "e269e0922a15eed0c6a77d6420954a71983d4f1b0205098e036b9ac93454ec5a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/swm0-role-aware-core.js",
+      "sha256": "40ae2460dbadbd1b4cc45182c8e97a870a805f80329a433197ac947997855473"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/usl-native-snapshot.js",
+      "sha256": "3eb3bf0a1f168ff004aed05bea761dfe4f01e20a586929c71c29d9ae1c68d23b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-cli.ts",
+      "sha256": "ed805201d11be3511fd5f38df39ba47eac1766ca21385ae6c36e3a25399393eb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+      "sha256": "0a47ff72b566c6e6f05dc0e62beab21ab5169c19f788d512c01530877d055fb6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-executor.ts",
+      "sha256": "fb19126f63b8071539d1bdbb4b60fb8a9a30416e4e6d9ffa572ec92e0c988c0b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-observation.ts",
+      "sha256": "696a44e00365d576503c7c14adb2348b48a780d2d59487042e88f4fcd9ed7009"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+      "sha256": "f1a85ca17c00177e1b9c9293b19b9a383802af61a6636e9ce13eaf8b6b815fa0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-store.ts",
+      "sha256": "138a7ba30d377239fc55b78c2e19556c84d438b205c8322d84bfc56788b1aa5a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-telemetry-otlp.ts",
+      "sha256": "f104d82f7b3f35587d8b06bb9f83b9165ee1c4cac61b289d3b2f362d36133d15"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/adaptive-telemetry.ts",
+      "sha256": "0e1e1914711e505337503df6de49aa655cb74a396bd474bd75d811027ae9d7db"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-atomic-admission-refinement.ts",
+      "sha256": "24455099b017085e50f262cabe9d0d3149ce60590819d92d5718035114674253"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-content-bound.ts",
+      "sha256": "a63d925e0a72cd7ab6384ef8416bdb625ae51d076ec80ad71c697678145b9e0f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-content-file.ts",
+      "sha256": "bd24bf8d7379e67d9fa8fc40a0573160e0d7f43323f0bedf0c557ed59c712bfa"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-content-runtime.ts",
+      "sha256": "ccdd0569d792a10967be3066766e7dfa32644a2604531ff3bf321df8ee2df8fc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-content.ts",
+      "sha256": "c37f21ace17ca3dc8d81f03078d7b0ddb6790a8f7933c9771aee039d629d7e55"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-current-state-permit.ts",
+      "sha256": "5dbd33e69ca0b3c3cea00d6f1c65452aa73332afded9f691251484c5654bebd1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-d4-study-process.ts",
+      "sha256": "0cb98867b3f32c4c77e054a2cd1034fb84e31bbd3f589c3d386a16aa805fa6b1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-d4-study.ts",
+      "sha256": "152f43a2c370f481b9d918dd310ee80eadba91af679aa49eb307d578a09c0dcb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-capability-consumption.ts",
+      "sha256": "62dfb538bddd88d09038c8d16ffb8f19a6404b7057ddcf55b890e4608b22f803"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-durable-permit.ts",
+      "sha256": "312d877f8a9cf5695d321db1fad5682f42ba0c93fb31451110eae652c48317a8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-identity.ts",
+      "sha256": "7d86985df145ff188be5b0be759ca1df786a5ff2c4464367395d8060e0d70a39"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-lifecycle-alignment.ts",
+      "sha256": "57aacfa39cc3fe9aa630ba59282c2030b0e26bb01b99237af9c09ebfc42ff907"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-lifecycle-vector.ts",
+      "sha256": "3f1f9a188b6dd69148efdc0daf4dfb6e40517c5139db2b3a836b28470c9404dd"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-lifecycle.ts",
+      "sha256": "02f95f95663477d80246d87590fde2b4c50f2cf7ec306de2759c5b994ef49588"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-nine-call.ts",
+      "sha256": "9d7e8209dd6dd56bd98c79d598947819214a9514db4cf81f43f61898ab2c4f3d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-permit.ts",
+      "sha256": "b67b5661ef14335c57dbc77301fb07681b9c5bc038b6e7cfae341553ec71b30e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-plan-json.ts",
+      "sha256": "c2dd1f3c061d376f97bc6665fdab2c4ec503756068cc58e511ff879ac9cd52d4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-randomization.ts",
+      "sha256": "e31eeca9a685bd83c4de6bfc4d26ca7e673cce4f5c45893e719bbe312a110daf"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-restore.ts",
+      "sha256": "cdb3626e98c1aee69fda6da41fe874205ccc6a721b755a856e24c6e6132a8692"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-revision.ts",
+      "sha256": "49e0b991cb2b9e7aeb842a6869ccbcf3832d2f6a71d63b12375c5dd3f58d3c7b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-schema.ts",
+      "sha256": "82be5fb31c8268ecb2d27d7b845849fec77b69f92a17a7af605f81b384ac177e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-v2-audit-release.ts",
+      "sha256": "7f5808d9f85b2d06bc06e32268b5730207a13b24310825f40343e2f206944707"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-v2-authority.ts",
+      "sha256": "781b01bf82c196218ec5829d779f4322e2127cb9182cec4929bf98f3caaec719"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-v2-batch-chronology.ts",
+      "sha256": "c0819745dcb334b0d5d35b0992fb090c98a7ceace1b9c1c055bcd60a5a0ad942"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-v2-consumption.ts",
+      "sha256": "977a7c4a45c0775c7d5d16e79c43f7644037c9580de64d35742f9cc1239a8675"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-v2-effect-protocol.ts",
+      "sha256": "ba2a2dac83ffbae13f49ed947e59561770723b089e1937150ae268f9e8910f5f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-v2-exact-w0-restore-projection.ts",
+      "sha256": "a02947d1c964b08390aaea1fd69f2d683954c22cd2831c94f4c3234000a61e25"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-v2-identity.ts",
+      "sha256": "61a94119e268c8d81751813f86caa098e8d85a690a81682fe4b27adc560a4236"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-v2-lifecycle-adapter.ts",
+      "sha256": "2cd39e5a1306d476c603d37f5ddc6f6ca16cdac36ee5a988c4627b64a9432324"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-v2-receipt-identity.ts",
+      "sha256": "3646c3ca2f28dea9235740da07d2387c3646622a9527027e9c5be24954254416"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-v2-receipt-seal.ts",
+      "sha256": "9153edf5eaa4b945e23e51c1c565f6467bc0656bbc05ae1742b0a28552dc3875"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-v2-record-bound-effect.ts",
+      "sha256": "dd0f7001f11ce64a27dd1e6847883d4b16c18d43666c315d8f93f8b116cbad03"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-v2-schema.ts",
+      "sha256": "bf58ed331d260d2f352113c29015b8591993055e91561631552e78ef74928127"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-dnrd5-w0.ts",
+      "sha256": "3f52c29a2d381ddd6b9ea85aa5d239fc1eaa2dde3d76da2dea92d041c0ca774a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-domain.ts",
+      "sha256": "f484bc7115f8e5c7d737739ce4fd98e3f55687609dcdf22d5179d227fc36eeab"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-durable-rdf-projection.ts",
+      "sha256": "34e2dca8ee36db8b21366bccdc214f6498381c6f6c40319ffdb36a85f371e098"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-durable-runtime.ts",
+      "sha256": "a9b47f528e84516027e78e0dbc246a6a70f054c860b0485918f9ddde2df015a6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-execution-certificate-wire.ts",
+      "sha256": "490ab779c21c21c154953baede5eb994847a155933e3ff01f7f953973945425e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-engineering.ts",
+      "sha256": "33d2ae6b88d733ef99d6cd35930808c0c2da711ca0c27dd729c697a5e1e415c0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-job-process.ts",
+      "sha256": "d57dc2751ebb9432459bfa8935693482d2d4518f9b290bed24e76cd757f54a83"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-graph-loop-research-job.ts",
+      "sha256": "dcbaa6912c47e6ae0c396cf545a187615aaf0538c557c9f8d9fec797d308123c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-hypergraph-projection.ts",
+      "sha256": "ba4251a6a940726fc79705289bb010540d5704351a8419fac90f703b63f33995"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-json.ts",
+      "sha256": "dcd01366afdc83c8996775207b5de716e7ca5153f227d544ee25bda17b9bf134"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-jsonld-view.ts",
+      "sha256": "c7f106cf0c60cb7fa3c78e24987d5517f819a1a609564d2bc07348a11ccbb551"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-learning-refinement.ts",
+      "sha256": "68e257b7e07fcf77e1bebb4159d76fd456e5be3aa0d89ac75bf0d2563780a0f7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-graph-loop-admission.ts",
+      "sha256": "2480f7685c0b15aab13cf7cdc588ffe2dec09dc78254d431017cb5ecddc3bfd0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+      "sha256": "a2302c05c058c855e21cba709e5b90f8e9336534d42c18a347e28f8c0977a1a0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit-process.ts",
+      "sha256": "ca1d3138d648a4360e3b6ae6e8e168072804ce4565e9fd9c6e0043d107862951"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit.ts",
+      "sha256": "bbec4cd759176dce28876bd378b5e4e11185a8e46c0ffbc8dab396dda508693a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-neo4j-projection.ts",
+      "sha256": "1ca32e18cc5aaea4541199fcb7ca8049d0dfb2ea06de3e2cb0e434e6b9f43b48"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-outcome-judgment.ts",
+      "sha256": "931653232c479fb5154ebdeab7e931ccfd3181387a0eea657e4c1e62cad842c0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-permit-envelope.ts",
+      "sha256": "d7336f323d544946586b599b146c2474a9199872d70c2e91c8a8ee33145cdf36"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-rdf-projection.ts",
+      "sha256": "6bba63be02c36fd245c89a0739afc8def0336015133563be9e89f576007bee41"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-routing-diagnostic-file.ts",
+      "sha256": "f1a01e22fb8b3ed7486af801b633d95ae07e0189ecf7ae181b3f3902a04f054c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-routing-diagnostic-process.ts",
+      "sha256": "7a7b546851c2feeda4fed31c62020ff28036a5d2d359a4b0799c44230ab0d57a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-routing-diagnostic.ts",
+      "sha256": "c74c1131ca9be14d493244565d83b3c500db22138c1e88297a5d366020776c46"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-runtime.ts",
+      "sha256": "dfb0b0b5d471a85462dc01de24346c3ec6c2b1909314c20419d38ae3ff99b72e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-schema.ts",
+      "sha256": "65696f948a410954c12fb93c1fce1fe68e875454002844ff1e3e3688c4da3a78"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal-file.ts",
+      "sha256": "50dbbed0099c04bce159c4308153c2f69966815ad7b8f8f8eba38013c02b0ea9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal-store.ts",
+      "sha256": "351ef435a1356595e96feebafc01fd5a49d403421c719a89db158e5059f0fd9c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+      "sha256": "15a04a6daee640f40e4a6b9a484528ae10a949f1f93ee1badc33cad4ded4b0b4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-transition-evidence.ts",
+      "sha256": "80ddcd105162d96af48f2662525f947caa49ab126a452f62aeec6e9c137e3e2b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+      "sha256": "76a2e5a1127988d4d889f87ecab9389d61f850bf7d6edf52affbcc235aaee754"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/contracts.ts",
+      "sha256": "4c43bfc30fd296d1e60cc9ba44eec9e749ff7f31b1c5427d05aaac298411487b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/development-backup-process.ts",
+      "sha256": "46ad16ff36780f5df3178e94124e93d99eebcd82749464d81db6fed01c68bb72"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/development-backup.ts",
+      "sha256": "d37c84a999c066c4de4a970710e9abbd67a3cefe8d7aadec5c9832f1f5e1eac0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/domain.ts",
+      "sha256": "8b61a67824fb01cb0f94c0e6fcf277700c6e993e362b3f7d60ceb6e3dc0481b7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/effect-bounded-subprocess.ts",
+      "sha256": "a9d7c6ccc7b8c81d61215f17a5e46a2c531165eb5aaa7b1b8a4731b7a8034a0e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/effect-posix-filesystem.ts",
+      "sha256": "d536bc328faea33ed34b22308c33bdcc7a30f2ce486d8424646d8f482cdd475e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/effect-posix-services.ts",
+      "sha256": "9cb275c41480d0d968462b044cea9246f4708a0b93a39a4e102f50d902219f6b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/effect-process-main.ts",
+      "sha256": "fb72738d37f326275ed125380bb2ae1f5ba0637c9d47771bafb80bfa2ae403b7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/g0-occurrence-phase-kernel.ts",
+      "sha256": "72c27ae26ab0c575ef5a446167c03449c67499b28a33de78ac1f5daada42d51d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/g0-occurrence-temporal-activities.ts",
+      "sha256": "46115776fe82259e94e63dcde1ab0650301b40bd2b02d8f523ed6a71a5937752"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/g0-occurrence-temporal-audit.ts",
+      "sha256": "067e35a2d7c690da971afe67ef1be3fffab1bb3cf16a01f702ebc7c76beaeaf6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/g0-occurrence-temporal-contract.ts",
+      "sha256": "dcc97f8b34f3fc48db6540b57a58a284e266ae89947bb709c56c0bb903232373"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/g0-occurrence-temporal-domain.ts",
+      "sha256": "7422c506fe19322d169ebf99fed537b6d301dbeb17c4ff148ea79dfd2e5dcb77"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/g0-occurrence-temporal-public.ts",
+      "sha256": "65fa48dcb9233597458ab642c393b90b3a95965a22b066ba80d9087c898bcb19"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/g0-occurrence-temporal-runtime.ts",
+      "sha256": "aa4278cc8bcea84140ff6e9ad37c8a411ec5ee9126d91750ea6a9bb6e381c00f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/g0-occurrence-temporal-wire.ts",
+      "sha256": "48f1b380a1c50aa83e10c1946b720d11fa3a04a2fc21044912c07f50082b887e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/g0-occurrence-temporal-worker-process.ts",
+      "sha256": "e2c510acacbdbe615affbc11701bbcee80fea91c7b30969de8cd5d3f54cb0291"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/g0-occurrence-temporal-workflow.ts",
+      "sha256": "7b90ee0dc85621264b6fabf6ceec87a59bcf5af763a32c53c70f171570276dda"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/g0-test-only-operator-simulation.ts",
+      "sha256": "e23c695abc2f5a961cc3deaa88cfdb40db5768b1be7490aea0a62706c1cf86b5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/general-json-domain.ts",
+      "sha256": "7452c467750b97b6e7afbda4d59aff39748d392335c10ee220ee86985676af16"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/hswm-core-ontology-schema.ts",
+      "sha256": "b75398780359ff88c1da72a634f263ecdfe74603ad2bc3240650c9f60c252fbc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/hswm-core-ontology.ts",
+      "sha256": "bc3c38a6676cfaf7509f9471559f8e15edbe9475531c25d38bc624de09d5430e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/hswm-dev-process.ts",
+      "sha256": "68d078d17029890c7efa7f65e1fdcb0cadee7cef5f52ef7fed2680c2173b0062"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/hswm-live-process.ts",
+      "sha256": "8ef50d194db9d6e5b176f75e839f78ff81098580e93f1aaf8f223076a8624349"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/hypergraph-projection-process.ts",
+      "sha256": "07cede97fd8f0a9ea388df1eddc5745d8fb579570219a76d4989b2ba3ce9ee7e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/hypergraph-projection-receipt.ts",
+      "sha256": "f9328ce487a99a97519f4ca3248c8ab9aeb9bbdcdeccb365f4c7436716f22bc5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/hypergraph-projection-rehearsal.ts",
+      "sha256": "ef49481a0b13c723be2965b213a0093872b964ce0d81d1885d5e48eae57d2f4c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/index.ts",
+      "sha256": "8c436657ddf34977d5ed04690577a16c617bad74934e213bcc2a0ace51f29646"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/knowledge-catalog-cli.ts",
+      "sha256": "4e9dcf20ad7e3199055f608ab0e5172733722ccd87e45ba2f1a244a39d3b9181"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/knowledge-catalog-process.ts",
+      "sha256": "7a7cc1f7e03d75af7d7d11130df1294518c5d2f5f435515a595122a43e996912"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/knowledge-catalog-runtime.ts",
+      "sha256": "13cc219a671e1852f0d8ba0154a8aca79ad4ef3708a18e13e43c7e23f19e199a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/knowledge-map-domain.ts",
+      "sha256": "a2885d6df2544294f24010052c898b6dcf54b75bcbd9d788b2f22e2602d72460"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-day-projection.ts",
+      "sha256": "e9b268d2df32d17ec22677da835e4dd7cbc6126c1e051ee82c4c836290858940"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-projection-cli.ts",
+      "sha256": "3d5d9e69cb72e1f64560b337fdf5e349b6a2a55580cc269808750c7de751b21a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-projection-domain.ts",
+      "sha256": "0af74d37f95a7e720bd664bdf144bdd63be17ce1bafab558e75858918c0e6085"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-projection-io.ts",
+      "sha256": "3ea3ce992c974eaa81c5747f07730acb304d026c5afff5ab1b9a73a0c7651b4a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-projection-process.ts",
+      "sha256": "45577c01882ac0827e04683b033dd54c066bf70900b91515e8522a5d7628b1bb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-projection-publisher.ts",
+      "sha256": "d201eff7005f512ab69d1380a0fc749b96711c465d32bfa0856d19ef81cdb325"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-development-work-projection.ts",
+      "sha256": "ff4561aca9203794d359e960d43ab49d7c99b2a373189942ec162567b69b7311"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-efficacy-domain.ts",
+      "sha256": "0e4077876ee1a671b58a39f91d278a5dade85b16ad902c90df6a0bd2b29832a3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-efficacy-process.ts",
+      "sha256": "1f6eb44e6eec78dd22f76d81721f68b308bb79f8089d8724b2d8f9b35ad7ce12"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-efficacy-runtime.ts",
+      "sha256": "a8247291bc3736cc16f44c69f2aabeca87e7ce11ba9717e2102889a1504449f5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-cache-runtime.ts",
+      "sha256": "659c7f3925fd30176b896d55debe491e5db7a21625bb8dbaca19c4118d50ffc7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-chat-domain.ts",
+      "sha256": "2728c576ae265f37974afc7df5a70c9506e55c81dfeb23e57f076ebc712db121"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-chat-runtime.ts",
+      "sha256": "80a33b0ae0b6cae7f991720a86c4f71d990a53b72eb48e40a93c7fc997de1fb5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-development-process.ts",
+      "sha256": "2ce649754a098279771f489a3ca35314ec635d45681e325726dcdba4e0ccf50b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-fetch-provider.ts",
+      "sha256": "84b1e7cd9a546061d820b4a10b205a12028ffa8eab05639a16e500dfb80f37fb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-f3-pg-persistence.ts",
+      "sha256": "d5958501aa6ef43d932be3b607ef8fbf7903db525ac72e6937cafe4fa0afb91e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-formal-crypto-runtime.ts",
+      "sha256": "34d5db2b2fc2e9b1821f44dae0011fcb4ed38e9a275aaa81ca01c4002e0cbfd2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-formal-verifier-domain.ts",
+      "sha256": "82b10a04445a1aae4e78d91b2b456437c65aa8d1e9e5663ea92adc5d14af5e5a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-formal-verify-cli.ts",
+      "sha256": "a47edbc31be0ae785cd6b38a48792099b3529cb293db969b12ecb155c5bdf6fc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-formal-verify-process.ts",
+      "sha256": "8f3a53a9044b141f0a4942cf9a00f94e25c9ed140ceea1029b81f9d390e967c4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-frontier-learning-projection.ts",
+      "sha256": "29581d1e8296ff0ddde2aee95591f84aff65ba1b0163c3757aabba4f9ec62002"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-cli.ts",
+      "sha256": "0be5c9b2a8fd5e3d2b548258720cfde78b21b4c5a16f17812c04d737c3a31266"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-domain.ts",
+      "sha256": "7d44d2b640d4e82258378d65ba3a41e577f85d0c4b34076a73e67e0a4343ef7b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-process.ts",
+      "sha256": "2376bd630a748a202755e825dbf354324e1637b69e6c86ab23bc9783c8c2de3e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-runtime.ts",
+      "sha256": "7b97776a1b06caf83cb64e46f2839c7b6f59799a0ecd1270b09a9fae48fc6cea"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-suite-runner-process.ts",
+      "sha256": "02ec7c2ec3954fedc4aae73223f63657a434d283ef7589b1b7b1b0a1175104dc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-graph-standards-suite-runner.ts",
+      "sha256": "ea579c260dc790193789ed07fe83aa0141d688411cda65592fa7a49633d06035"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-hypergraph-shacl.ts",
+      "sha256": "9cb9fc9dea83671017bcab0d6815dce1c700b6e38ca02b79e9bd2183ecfe00fa"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-cli.ts",
+      "sha256": "2a031aa533353495cbac3dc62821efb1fe13e86102d42bd45de6ee805ad019ab"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-domain.ts",
+      "sha256": "49d9f03be9483be0ad51fd2c20e3c3e1f3ee7cfa5838c77ddb092af6ffba35c6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-phoenix.ts",
+      "sha256": "58bd1ffdc991b7b7ad2afb76e27531cf1bdfd26a99008adb66b164048aad8869"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-process.ts",
+      "sha256": "1a40b9ccf67d5a99a60f112ee9d9ace096ba9f79f6d44e4980c30d89acf1c4a5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-runtime.ts",
+      "sha256": "125a53262fc02fe6a5b0f2c5b5ce0672e941f00fd284af6e45df3f60fcb61723"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-infrastructure-smoke-workflow.ts",
+      "sha256": "5ded3ea8ed05ad49393d5c27cff7ba3343d4a2af7459c3b48c73973238606fba"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-instant-domain.ts",
+      "sha256": "d3aee348465dc0a680674dcb46dbc28237ca1f9ba09320d38ccbf6834a08151a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-issued-record-domain.ts",
+      "sha256": "e87c29fb926cbefa5790915307b97f33a6579aa99632863787086bbed8fd3b9c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-bundle-domain.ts",
+      "sha256": "8d4a9505b08b97c385315c83f8c68d68ea2930c082947db7331c07d64a33200b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-cli.ts",
+      "sha256": "784c16d142b769d02fe7f61595790149031c068f0a9dde82f9deb5e2bc474557"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-process.ts",
+      "sha256": "9dd7be587eaa9acce6afff36bfacdf977aa5d77e589b2ff9ef459dcfa91b7246"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-qualification-process.ts",
+      "sha256": "30a4f1ec5ef8100e72ebc3c8dcdb6d483fe471331dd5d3e345cf1814a9acde54"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-qualification.ts",
+      "sha256": "df6f1894887041df24147e9db37062b27b64bfa4b9626968dfc7acb03ddfce4b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-standards.ts",
+      "sha256": "ebc72dfd681f7a647c10452777cffdcfa7e762b503f83d1d31faaf1598833335"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-kg-vendor.ts",
+      "sha256": "b3ac276d1abaebfb030006977d6ea1fe6335c8e62a5edfc2ea9e97badce938b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-legacy-replay-cli.ts",
+      "sha256": "788a0a44faa13d4e1674dc9eb862227425e9f371cfbec046da2830d65321a396"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-legacy-replay-domain.ts",
+      "sha256": "5b985ed2a1604d6376aea7bac7ece23cfb4a633c968e9b119491abcc1e2b3966"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-legacy-replay-process.ts",
+      "sha256": "531cc562b34d604182b607f2985f0972faf69bf3b0de8009719a89f73eed7fa3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-markdown-math-cli.ts",
+      "sha256": "2ac6ca001365002093cfa4b82a3f97a642e287046dd92c3a8ed69ac13a41e177"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-markdown-math-domain.ts",
+      "sha256": "d8bb9398948ab4a67d59066611b2ec701953e1058c6b3554eae5a5a501c34664"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-markdown-math-process.ts",
+      "sha256": "ea749a9a2295692129b714cfeed29df88bca4886ffbccd11dec1a9b654e1b380"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-audit-runtime.ts",
+      "sha256": "79b220957db36b97c06f7f1bedc343b40cdb87c6e12a395f15bb774c51cc04eb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-cli-domain.ts",
+      "sha256": "2f481e21b66a7e4444c55c471ead0d617cdb167a5c6237540651bdaf339a74cb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-cli.ts",
+      "sha256": "8045427a7badf716b802538af45b1830eb55d60af5273e5c397fc37da51f6691"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-completion-domain.ts",
+      "sha256": "43c03c6bcfbd58c325b432b1a0d900f705e4827b79083d570339619074f5d9fd"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-completion-runtime.ts",
+      "sha256": "cddcebace66bdb033b3942cf93ed3152cf5b9dc0d706b8b6dea594293e734395"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-dual-evaluator-domain.ts",
+      "sha256": "2d00e0f0760452f20ec4687bb4f400714b12741834425c593657ce8c918c6985"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-handoff-domain.ts",
+      "sha256": "8642f4757b819c9b61ee79122ab7d857c46868e8ced30abce88fa5221375829c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-integrity-domain.ts",
+      "sha256": "cb0dd8a38f4002ab8b9af3695d616c68b68b6639b7953fd50b490a707a09d8d3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-preflight-domain.ts",
+      "sha256": "52bdf8d3742ff5b7585535621f69f9172dc899b112d4c51285428f59d81ac228"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-preflight-runtime.ts",
+      "sha256": "e4dffdb5e7725889b7e27c89cca416f360a7f778fca70a70e1d27f9709931c85"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-process.ts",
+      "sha256": "9a41defa8660241434a54393c318b8f2fb261c90c54b2abf1a6f0256d2dac718"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-publication-runtime.ts",
+      "sha256": "c8e707390fdebf6f017d47e8ee429b1aa0ce152dd6b6cf4667398a297172fc8c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-publication.ts",
+      "sha256": "40fdd0c0843c84692526fb0598c2c86e422c151c7e9b103d3bd83fe2437901ed"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-readback-domain.ts",
+      "sha256": "aa0cc1d401842ce9b99f5c8dc8bb7abe95e24e6dcf43ac97ded7cfc8a6f8c0f5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-occurrence-workflow-domain.ts",
+      "sha256": "65e8f38dd1e5849b5adafb30cfb4b1964884c4bd20abdeae282febf9f7866cf9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-artifact-snapshot-runtime.ts",
+      "sha256": "b1b12408109b24b2969c28a8d1562b4bddc2aae76ee90b30a0316c583aec8ba0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-embedding-domain.ts",
+      "sha256": "12dcd04ea67b72e1e047ec9f7a626366e1598b8aad9af7686416bad8e77f6d4d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-embedding-runtime.ts",
+      "sha256": "fe377a76c2d7bad61e74faa771181756bd73e3bde10edb38cdf0b487238bc9cd"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-gate-cli.ts",
+      "sha256": "bce4776f4dbbf39bacabc7819a7bb08b04a7083cd024b941295ee478228b5420"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-gate-domain.ts",
+      "sha256": "278559ebe912129843392c47c92f0257413ac44e6097a5843d87364d972e59b7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-gate-process.ts",
+      "sha256": "3e8ccc5af6074525812906b77735adc0e42f316943bf30f47e70e659744a6bcf"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-gate-runtime.ts",
+      "sha256": "2669859998d0a0e16fb4f86bf831cc00587ff11bd4c17dce3054ff82da6bddb0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-npy-domain.ts",
+      "sha256": "6d8a2c4c7ba900bb87f27e5f4866626b60e5678e1d58422125e09ff487b943e2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-output-runtime.ts",
+      "sha256": "b7db9ab0245fe0e0f993713d9458de2757c8efd061f64dc4454e1998b2066312"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-retrieval-domain.ts",
+      "sha256": "ae358b4efac2a4fda931d05352820789d33aaf7b6f4490bd3390551245bbf7a0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-p1-snapshot-domain.ts",
+      "sha256": "b744b0dc5509ab07d9b4f0e10ecfc4b5f7b7e40ac5cec0c28eb1910caf735f77"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-pinned-suite-binding.ts",
+      "sha256": "fa6393d3e7940b3d864fad4a5bd70ffc653b40d6702365ea64d791f3a0b1a66f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-pinned-verifier-runtime.ts",
+      "sha256": "5195a6a575c00090510338a2d155cd7db46145bcf2fcaa25dfcf60ebe22e5023"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-call-domain.ts",
+      "sha256": "44ef106f4d5148d6e36e0f4b6ee389a64f4be41b52d9c0592b44d045d42b75f5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-call-runtime.ts",
+      "sha256": "a7dd30c72d3f4ec4046887aea3fba1ab5dfdf73a003f5817eeeee822e44f1095"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-cli.ts",
+      "sha256": "19354e2af85f41dbeba638fda7e2a1443b47b5ccc43460212713417090651a2a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-domain.ts",
+      "sha256": "347330cd918608d8db19b4523cab14fa3adc8480866df99a28fea0e0e1beb6f2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-envelope-domain.ts",
+      "sha256": "a6e19e6071d7e129ebe8f8603b7b26d71acfceef853ff05d0f05a931bd07452f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-envelope-runtime.ts",
+      "sha256": "ff9bab8ad85205036bae9788f9a8a1b461fcdcdb77ab737bf3ad149f505f5e3f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-manifest-domain.ts",
+      "sha256": "a7e4ceb6123a746d68297fd08e1867b64a3304cd2442f628e586a7a2a49b286d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-payload-domain.ts",
+      "sha256": "e222696bcd8fed9e49e5d1a2e42f80a55c1c65874134877185f5efbcbc819877"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-process.ts",
+      "sha256": "5aeebdb6a2e9917c6d9cb7a2052bfa6f196aa188b54c7a4fed8d0b4807f2c7cb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-registry-domain.ts",
+      "sha256": "e5f4b87b96894d1ee474309d0b7fbeacf7daa5b39b99ad42a592ccabebbf340e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-f1-run-domain.ts",
+      "sha256": "f89434f5ac0b10e1e4ab261a653426632161e771d1b0e2e81785130dd74af11a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-json-http-runtime.ts",
+      "sha256": "f541f048cdf48270829d9b5ec0a7d875e0ec698b47e929f68b35fd3910eadaeb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-json-transport-domain.ts",
+      "sha256": "7f922fbb5339d24ff4aa7ca3e240a63a5f67f1f8c95a554a01447694563e46a6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-json-transport-runtime.ts",
+      "sha256": "2b14202f1a4ae62b45ce82d9d56d32b54f2f03899301286efa193a11b9056368"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-network-domain.ts",
+      "sha256": "d02ccde18752c35f2c79651a1dc45499950a5cdced2d790246fbde5b0430cc4b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-network-runtime.ts",
+      "sha256": "70e6840a50b0a2c54519f8618dd2c7884aa0bfeb1f16fd3c01b01d848b245a2e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-ports-domain.ts",
+      "sha256": "2ba15fa7bc8473f55e4dd65ad5f9a8303ce72599c10adb49846c4d7fe62dd80d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-receipt-domain.ts",
+      "sha256": "463e5d81a1a10987082e3138d5eaa23fcaa6c71bb63f4a0fd12e1b1fde5d9fa0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-token-meter-domain.ts",
+      "sha256": "233b60c709fb223cac8ab8515dbf3c69b457f580ae4676ead48da79705a19f8b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-prom9-token-meter-runtime.ts",
+      "sha256": "af499cc0fd4d47069e416e10e4c2aa69d0bf74de9ccb8ce1601212296a89c5e7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-python-casefold-data.ts",
+      "sha256": "d86e5c44046fdfb1a4b6307ccabef47b1470d42e7f770a932906ec2af3607412"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-python-instant-domain.ts",
+      "sha256": "8a8087f75133d767d1f915fe441f93ff76e78ab8bf49128a22d74d8a427c15a8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-python-isalnum-data.ts",
+      "sha256": "4c14ad619dd0905bd75dd7ba8d5cadc20f2935215437a0c33a4abbb2de0834ee"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-python-isprintable-data.ts",
+      "sha256": "11c017a7c7cabc9d419062fbea106cbde1fbdf107a755f335af21dfb15b9c43a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-python-json-semantics-domain.ts",
+      "sha256": "72128aa514aeffacb6d02403417a8a6b9a8cd809d10bc8284b98c0433d54baa7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-python-mt19937-domain.ts",
+      "sha256": "a8617a45136c62ca4ecd95cf702b0e2b0052ab7a0e5ce3c3ed675d6dff5ea4a4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-python-string-domain.ts",
+      "sha256": "3920f6887f18bfe636a66530bd20763973966e81477da5090aeed3c36d91d029"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-repository-ontology-domain.ts",
+      "sha256": "5294c9689b6c40d1de5f32b6b0b5f095f5fe8d92c1c112a925d435b4e4335c29"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-repository-ontology-process.ts",
+      "sha256": "12e7cbe2e6505c92158bc7144155846c94b254239b1cd0917249884012e08e63"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-repository-ontology-runtime.ts",
+      "sha256": "3c73ae35e89e81dcf7bcd6343189482f603ceba81ba98025219bb333101ebe6e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-research-fabric-domain.ts",
+      "sha256": "19830ad40672b04c16e53ef00e88ba3c50a40b3741c757985d573c6f413a19de"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-research-fabric-process.ts",
+      "sha256": "fb684c6682ea7d2e4e8a01704e69be83c367cf4f9d986eebfd23062d3d7b875a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-research-fabric-runtime.ts",
+      "sha256": "9cad5c83677e9eb262471fea7848ad29eb0f3554def222a18f98a3547c49de81"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-research-fabric.ts",
+      "sha256": "907b71e1ca8101785a9977a6deec50b819a28cbc08a092c105fb341b5a96ca3e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-contiguous-reduction-domain.ts",
+      "sha256": "a7aab6c1599419007635f8b6e2fa523d6192675c074891ef4c8b67bd729cc47a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-dataset-domain.ts",
+      "sha256": "2056c1f30c2e03601d1b8b33b861bdce17374af1792d322013bebe5b9ba237b9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-family-domain.ts",
+      "sha256": "61940fc4fbc1c4cd7c45d9cca40682cb31e145801399afbd268741eab9e3fe12"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-fit-domain.ts",
+      "sha256": "ca4a2a65669a4d8cbb18cd20c01017389533ad064335c82194e98e3c38d328ab"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-initialization-domain.ts",
+      "sha256": "1da6a7e9402ee96dd29423f2daffed536650706d335e07a4acec19445b55822b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-model-cli.ts",
+      "sha256": "6fd5445a7f8b9a3951083275bcef98ecfaf9968ea92738030d966fefdb390031"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-model-process.ts",
+      "sha256": "e321e4ebd5baaf70e53dcf167b646c0e3fe92b7c2dc02deeaf37c67c510ec42e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-model-protocol-domain.ts",
+      "sha256": "dc740abbd7f7a03dab7827aaff8be911de57055025015786819ba4ed1f8d62b8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-operator-domain.ts",
+      "sha256": "ffab5350795ac29707bbd1b860358c651186414dd6e8adcf572b44a4fb6e0319"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-optimization-build-domain.ts",
+      "sha256": "97bd5788ca35364e2f662a4daae43860c2fbe928ccd63e01bece7b3ad2dfe4fc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-optimization-receipt-domain.ts",
+      "sha256": "78459ab164431b2088fe42b17cc59e10c6717815d5a6a45ba1d88c71cefffc57"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-protocol-metrics-domain.ts",
+      "sha256": "6ac27d5d67ab515554fe2a66f2c66c04ad9e24e7dcf09b16ec21aa13486c97d6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-protocol-score-domain.ts",
+      "sha256": "83a8f1b9f88adf70472354d95afd8d6a317f237e776c8cf32328b83c68b55d19"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-reference-dot-domain.ts",
+      "sha256": "ea5d2daaec34982f0c855d3dbaaa9af6803708b79e0f49a46bb9c2b336bacb3f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-reference-loss-domain.ts",
+      "sha256": "da1bea5d9c86967b97f2c810627187be4eea585d02baa82d5a4d33104017aa81"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-task-archive-domain.ts",
+      "sha256": "f72d1f3ba03ca9518b3178b9632852708efd75ce5fdd85a124ee7a5f1d4d0964"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-task-fit-domain.ts",
+      "sha256": "d6aa707e6090a2c4634eacca3a925c08dcb9707dbc1612d15c2a3ae859c5ccf8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-training-numeric-domain.ts",
+      "sha256": "36eb966d455196e458ff905d142f5e6fad9012ad1c1014148060fcdfd028d576"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-training-receipt-fields-domain.ts",
+      "sha256": "9dfe9d70e8377141e0928b7fa20c90ad8e920965cf81ea990e433887f6908913"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-s2s-world-domain.ts",
+      "sha256": "39b3ed9a2ede786b7e048688a0d320144c126ae60879b732e0173c9248844e25"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-sparql11-syntax-suite-runner-process.ts",
+      "sha256": "45508fc4c9ca78823e700ae4741b7c12aa16ccb1663b1226f64f0c6c26a58393"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-sparql11-syntax-suite-runner.ts",
+      "sha256": "d6e5d53b67058526fe48280220437d6270b9c28d5eb75a9461f26faf3ddbb67f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-task-domain.ts",
+      "sha256": "2a9c64e22c1da0fe716837f5b6788117976a0b7768a70520b011147b0c88533d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-task-io.ts",
+      "sha256": "1c0281e705cc55dc464adb1fc550f83fa78c40e75635114181304c1ed54241ed"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-task-json-domain.ts",
+      "sha256": "b22653457155b060f47100562b3258f60070efb6ab9ef33fab8ed31bf7fd4833"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-task-process.ts",
+      "sha256": "ab84d42c5336c14268f6278d851fc988adb6ba7641155e8b6e722ba7d2472087"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-usl-cli-domain.ts",
+      "sha256": "9aa0dd470d6e895d939f333ef919bb8d0ef95de8e978f3a851a48a335ff6e1c5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-usl-cli.ts",
+      "sha256": "13598a85873089a5ad6a9c40c910fce08cad9af7e0c56f26f649b42deb0b307f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-usl-process.ts",
+      "sha256": "572eedecb941c5cc3fb4ec1795b46c7c9fd9e5eb86122d03bfad88ff643a1e5a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-usl-v1-domain.ts",
+      "sha256": "c7d5645fd87dd95bd4cbc1731654d9ede645ce1a1d2a3ef7f13ad3270654e6d1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/native-usl-v2-wire-domain.ts",
+      "sha256": "1c47cbd651f77b53bb647f14f52599c758e3b0c078a6fd1f0743f870fffb2c01"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/open-connectivity-rehearsal.ts",
+      "sha256": "a6b5ee17a0d850a50fdfd4768a4b2d22d29ef486d760c95969fd2b81c4428bb4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/relation-program-research.ts",
+      "sha256": "afffed9362189183fe301b983b6b4c4bb27392deb53e4c99645184265355e916"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/reluvator-check-process.ts",
+      "sha256": "5bb0695a56303b3c14a88369765906c852628751c492fd777424361458a12427"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-graph-cli.ts",
+      "sha256": "10a334a3b778db3c20cf5a005212ca02c05048daa83cb979522531bf29cbfeec"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-graph-domain.ts",
+      "sha256": "a08fe7c8dc066bb85eff7f2b543f8b67cba10cf8223dc8475d20775165fbf6e7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-graph-process.ts",
+      "sha256": "ed89216b0875f5144c1d95cbd757a61467ae403149cce7d9d4b981ec8bc4200b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-graph-projection.ts",
+      "sha256": "7c0d5ac08dee798677eb34d0caa0e9bbc83899c9e71ff7dd9b411ea3fe690308"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-pinned-chat.ts",
+      "sha256": "0ba40851bb3c5b772db1e73728e917e6bcb481667186779a8e75792cb5a7f058"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-relation-comparison.ts",
+      "sha256": "81eae2a5cb3529a3f5da16402e12729849987f5550fa033ea5728842213eb93b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/research-tooling-domain.ts",
+      "sha256": "a93692614f56678323415bb3894a516917bd444ccd09ed40628362bd244595e4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/runtime.ts",
+      "sha256": "106eec940288645d22bd667e58ef977e9d8436daed78345869486e08f562eb5e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-bounded-process.ts",
+      "sha256": "57ea49333a2422c3e90322dcadf6bd94749f8a88b2685a9ee8f8560d41a1423a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-canonical.ts",
+      "sha256": "c3d8f36853124ad0387cc68b9373571f8d45b888472fc20581e3b7993dacb257"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-confirmatory.ts",
+      "sha256": "37461b7d8f6e3a8c73f2fe1aee7342441e564697669bbaf87e97e11a22d5ad0f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-durable-file.ts",
+      "sha256": "de8dec3f7a6a3cdb45d5ff26a8edb1ebc355b1ad777e5fdc1095735047394398"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-durable.ts",
+      "sha256": "4e5cc00f1fe3b59854522ceec1d5ac8a012c55397ef982f4d6e2ad006e0845c6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-evidence-envelope.ts",
+      "sha256": "d46fc1fbaabbe495e1ae11f98057ce9a8becf21e3401dc82b3ff0c5d842a70c2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-evidence-file.ts",
+      "sha256": "035c8966daf81198c5c08b1c9416589545481a704b298bca0f0b5712fbfc9f12"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-evidence-profile.ts",
+      "sha256": "7399bcc3e9dcc809aa898d609b4376c976cf267ce4097d0c4196959ae2e3ecd8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-golden-numeric-dry-run.ts",
+      "sha256": "4ba077828395a53e47d5a29eabdbb3c4dfb3d224a5378b5c1f90293c73658a87"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-hosted-process-continuity-contract.ts",
+      "sha256": "7319043cd2b8bd74dc718475a0638ac6be40497aad9aca5b2c8449459f48cdaa"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-invocation.ts",
+      "sha256": "73ececd3050515928cdc42aa1c8919ae79fadc7855fc31cada7eacee96f618a0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-job-sequence.ts",
+      "sha256": "52cc93f96f3edb9e8194c283c36fe1fbec6a03e9081b179a6151926452027589"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-json.ts",
+      "sha256": "a311048ed4fbeb85c1aa7ef5916cce1ce176975e1ac4e2f92da12794f9ae30b9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-live-artifact.ts",
+      "sha256": "29a5a31248ab500f83e9758f42db3895c8c1f9ac71205a79305772e394c416ef"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-live-drand-http.ts",
+      "sha256": "dbea3ad3f6ee1975f18089d381108b5946a157381e3f3212325ed3bd0e5e12a1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-live-drand.ts",
+      "sha256": "8d8562255884d9650fbdb21bbea686be3f30ae7682bd62af6782d984b26103f2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-live-github.ts",
+      "sha256": "345000d95fe0d3dbb05082b8d2250aa5c65348d18f001f905a052ae3b772af47"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-live-python.ts",
+      "sha256": "9f6dccd55c96571e8022158cbf5bfea5a5faf91fe26160494f61ade461c71fd2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-orchestration.ts",
+      "sha256": "d9bbaa35bc8c91576ef5c121699c201c06807da47270e0c63002987d35f7a9c8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-prepared-stage-carrier.ts",
+      "sha256": "9442c53872a3fd3d98fc5414b116af5535f8c574eab99bbd3a09bb3c1edd2c41"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-preregistration.ts",
+      "sha256": "bba385d3dbecfb53c89e3cb49749484e32cd6d76ca8e2c73a61816266b2caaa4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-protocol-config-asset.ts",
+      "sha256": "838392b7ac332b58d8f3853ce8519098c884e5653370b2a4c08cdddf94cd0bb1"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-python-evidence.ts",
+      "sha256": "0333daa3b243f4158d337a7590010fa11fdff7921bfedd376ec85734f597c25c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-quicknet.ts",
+      "sha256": "a78cb00e11815cc047a069f49a674a6d45f6a9e0947c5685a67d50eec82e21ec"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-resource-limits.ts",
+      "sha256": "a2145c3ca011543fbcd2066414d6354c3df78adbb2969b8fa050b8f3c1921ecd"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-run-authority.ts",
+      "sha256": "0965b49eafd9b72de9f83daecd3781becef25f61db452c4ff18e529cac65ad8d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-seed.ts",
+      "sha256": "bfbdce6f09360c10c989a145c441fbd8bf00d51a607dfc7719170d42820cef2c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-artifact-permits.ts",
+      "sha256": "91c30f85f0aaf2493ae457a0824a0b452c50ad1c738b65abfddd1668fb6f680c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-artifact-read-replay-contract.ts",
+      "sha256": "54984bb054d6d63ba185d3ac6806fe5169ce1ea7ae2c1a807acdd68f4b45b53b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-artifact-read-replay.ts",
+      "sha256": "b36d076496c531510133899b50c4d20f1e8d19759a50ca893e80395aef5bb7ab"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-artifact-spec.ts",
+      "sha256": "958c0534d185d380c0febd47989bc7268a7e1ad5f74a72d8bfe7c80375a28b70"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-read-replay-durable-profile.ts",
+      "sha256": "e62262d25a44c49a2a005acaca4fa09c06e1fd527d0a9a2f756e32656bb14da4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-upload-assertion.ts",
+      "sha256": "44ced27c7c12da8af1af17cbf38467d1a58f721fa1c174952125c709741a60c8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-upload-outcome.ts",
+      "sha256": "845b8c9c71cf34dd2f73b36ecacfcc6bbd2a8a02834f79efc2bcb4e52d5bba8e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-upload-postcondition-contract.ts",
+      "sha256": "4a283560c890770667af567c433a8ba72625cdeb1bcf9d6d7ab0b39b70ba2c40"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-stage-upload-postcondition.ts",
+      "sha256": "503a649998095b5d66e251201896c0c168a82b8b7674cda752a2a0a858f73210"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-test-only-golden-artifact-store.ts",
+      "sha256": "5fe8415fac3c5a66da27519d714d37ef627e2998b3fe376f65de6b2ecc248cfc"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-test-only-golden-upload.ts",
+      "sha256": "3fda28c666c385b054cbcd23467a4a08a2cc3658083804baba187f59ca6fb889"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-test-only-hosted-process-cli.ts",
+      "sha256": "6090abde7fbb7df53d9ee30776e36451fe1d5846cae0abaad2a0b6f40c87e897"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-test-only-hosted-process-protocol.ts",
+      "sha256": "7c588ec35ddbd999c0371989a04ceea1b78edfb77699234248d699e6e6d12c67"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-test-only-hosted-process-root.ts",
+      "sha256": "df8f38619b32cd368e6787213563a35adc7aa82b29a0626bb75f30bb29975fba"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-workflow-contract.ts",
+      "sha256": "6009581aa2831839e0bc3cdecbef304aca62714024ecf94e7d69429ee4b890fb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-zip.ts",
+      "sha256": "becd7975dbbe1aec8eec64947625e4902e16b68b027919c634773b24be0cb085"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/schema.ts",
+      "sha256": "1ff29fc481a99cdc642d775c85c1b39c12a62a823d4f11c9e00204b1d28e06e8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/swm0-role-aware-core-schema.ts",
+      "sha256": "2ee8ba42e96bca3269eda595ebeab1295a9543a821dd7d57817faeca677fdf68"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/swm0-role-aware-core.ts",
+      "sha256": "ae96d67a938d8f1c7ecfecfe51674ce22e31d80e6c0724b321b952bf2e5665af"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/usl-native-snapshot.ts",
+      "sha256": "566646452e696dd17d3c3ef601b2da25d850a90e64509e9b16b70698b28f5cf0"
+    }
+  ]
+}

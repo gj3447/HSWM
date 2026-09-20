@@ -1,0 +1,813 @@
+{
+  "schema_version": "hswm-dgx-learning-observation/v1",
+  "protocol_version": "hswm-dgx-semantic-learning/v1",
+  "raw_summary_sha256": "2251e43622f0068918441acdeec846a60c639acb33be8e88a6ea4733cbaf890f",
+  "protocol_sha256": "544c1886cc3eb16ed0b7fb4c49c80c623d16a93906dd2e81fa4614ad5ed42b74",
+  "durable_receipt": {
+    "schema": "bhgman-hswm-run/v1",
+    "run_id": "hswm-semantic-learning-20260920-v1",
+    "status": "success",
+    "exit_code": 0,
+    "started_at": "2026-09-20T13:18:45Z",
+    "finished_at": "2026-09-20T13:19:59Z",
+    "execution_tier": "dgx-nvme",
+    "durable_tier": "data01-4tb-nfs",
+    "source_root": "/home/metahumotonic27/hswm-source",
+    "source_commit": "3d7485befbf7d6847018c80d46ad4a00c294ed2d",
+    "command_sha256": "d1d73110b096afb815ebe70c7af944afe3992c34efdd83a2925027c2d37fb772",
+    "artifact": {
+      "name": "artifacts.tar",
+      "sha256": "02ff5084f33b3612d915b259cf864c55e21878ec13b9e321eb821b1448f36ed6",
+      "bytes": 15114240
+    }
+  },
+  "started": "2026-09-20T13:18:45.726Z",
+  "finished": "2026-09-20T13:19:58.820Z",
+  "wall_seconds": 73.094,
+  "planned_trials": 32,
+  "attempted_trials": 32,
+  "complete_trials": 0,
+  "runtime_committed_learns": 16,
+  "input_audit": {
+    "auditedRequests": 50,
+    "auditedLearningRequests": 18,
+    "predictionCasesLabelFree": true,
+    "learnerOnlySawDeclaredTrainingOutcomes": true,
+    "scope": "Exact captured HTTP requests; oracle rule intentionally provided only in the separately declared oracle arm."
+  },
+  "http": {
+    "requestArtifacts": 50,
+    "recordedResponses": 36,
+    "successfulResponses": 34,
+    "errorResponses": 2,
+    "prompt_tokens": 80232,
+    "completion_tokens": 2220,
+    "usageMissingResponses": 2,
+    "reportedFingerprints": [
+      "vllm-0.25.1-697a994d",
+      "vllm-0.25.1-03412ebf"
+    ]
+  },
+  "gpu": {
+    "samples": 37,
+    "meanUtilization": 75.94594594594595,
+    "peakUtilization": 96,
+    "meanPowerWatts": 33.087837837837846,
+    "caveat": "Device-wide sampling includes serving reload and any co-resident activity; not isolated job attribution or energy measurement."
+  },
+  "aggregates": [
+    {
+      "model": "qwen3.6-35b-a3b",
+      "arm": "frozen",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3.6-35b-a3b",
+      "arm": "learned",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3.6-35b-a3b",
+      "arm": "evidence_only",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3.6-35b-a3b",
+      "arm": "removed",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3.6-35b-a3b",
+      "arm": "restored",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3.6-35b-a3b",
+      "arm": "oracle",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3-4b-real",
+      "arm": "frozen",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3-4b-real",
+      "arm": "learned",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3-4b-real",
+      "arm": "evidence_only",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3-4b-real",
+      "arm": "removed",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3-4b-real",
+      "arm": "restored",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    },
+    {
+      "model": "qwen3-4b-real",
+      "arm": "oracle",
+      "batches": 0,
+      "validBatches": 0,
+      "correct": 0,
+      "total": 0,
+      "accuracy": null,
+      "unavailableTrials": 16
+    }
+  ],
+  "paired": [
+    {
+      "model": "qwen3.6-35b-a3b",
+      "completeTrials": 0,
+      "learnedMinusFrozenCorrect": 0,
+      "learnedMinusEvidenceOnlyCorrect": 0,
+      "regressionsVsFrozen": 0,
+      "improvementsVsFrozen": 0,
+      "restoredPredictionDisagreements": 0,
+      "removedPredictionDisagreements": 0,
+      "exactRestorations": 0,
+      "exactRemovals": 0,
+      "feedbackEqual": 0
+    },
+    {
+      "model": "qwen3-4b-real",
+      "completeTrials": 0,
+      "learnedMinusFrozenCorrect": 0,
+      "learnedMinusEvidenceOnlyCorrect": 0,
+      "regressionsVsFrozen": 0,
+      "improvementsVsFrozen": 0,
+      "restoredPredictionDisagreements": 0,
+      "removedPredictionDisagreements": 0,
+      "exactRestorations": 0,
+      "exactRemovals": 0,
+      "feedbackEqual": 0
+    }
+  ],
+  "observations": [
+    {
+      "id": "qwen3.6-35b-a3b-xor-seed0",
+      "model": "qwen3.6-35b-a3b",
+      "family": 0,
+      "seed": 0,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-xor-seed1",
+      "model": "qwen3.6-35b-a3b",
+      "family": 0,
+      "seed": 1,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-xor-seed2",
+      "model": "qwen3.6-35b-a3b",
+      "family": 0,
+      "seed": 2,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-xor-seed3",
+      "model": "qwen3.6-35b-a3b",
+      "family": 0,
+      "seed": 3,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-role_selection-seed0",
+      "model": "qwen3.6-35b-a3b",
+      "family": 1,
+      "seed": 0,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-role_selection-seed1",
+      "model": "qwen3.6-35b-a3b",
+      "family": 1,
+      "seed": 1,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-role_selection-seed2",
+      "model": "qwen3.6-35b-a3b",
+      "family": 1,
+      "seed": 2,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-role_selection-seed3",
+      "model": "qwen3.6-35b-a3b",
+      "family": 1,
+      "seed": 3,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conjunction-seed0",
+      "model": "qwen3.6-35b-a3b",
+      "family": 2,
+      "seed": 0,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conjunction-seed1",
+      "model": "qwen3.6-35b-a3b",
+      "family": 2,
+      "seed": 1,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conjunction-seed2",
+      "model": "qwen3.6-35b-a3b",
+      "family": 2,
+      "seed": 2,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conjunction-seed3",
+      "model": "qwen3.6-35b-a3b",
+      "family": 2,
+      "seed": 3,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conditional-seed0",
+      "model": "qwen3.6-35b-a3b",
+      "family": 3,
+      "seed": 0,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conditional-seed1",
+      "model": "qwen3.6-35b-a3b",
+      "family": 3,
+      "seed": 1,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conditional-seed2",
+      "model": "qwen3.6-35b-a3b",
+      "family": 3,
+      "seed": 2,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3.6-35b-a3b-conditional-seed3",
+      "model": "qwen3.6-35b-a3b",
+      "family": 3,
+      "seed": 3,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: train/learned exit 1: (FiberFailure) LlmSemanticRuntimeError: An error has occurred\n    at fail (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:20:32)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-llm-semantic-runtime.js:126:331\n    at /home/metahumotonic27/hswm-source/src/hswm/effect-runtime/node_modules/effect/dist/cjs/internal/fiberRuntime.js:103:48\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-xor-seed0",
+      "model": "qwen3-4b-real",
+      "family": 0,
+      "seed": 0,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-xor-seed1",
+      "model": "qwen3-4b-real",
+      "family": 0,
+      "seed": 1,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-xor-seed2",
+      "model": "qwen3-4b-real",
+      "family": 0,
+      "seed": 2,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-xor-seed3",
+      "model": "qwen3-4b-real",
+      "family": 0,
+      "seed": 3,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-role_selection-seed1",
+      "model": "qwen3-4b-real",
+      "family": 1,
+      "seed": 1,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-role_selection-seed0",
+      "model": "qwen3-4b-real",
+      "family": 1,
+      "seed": 0,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-role_selection-seed2",
+      "model": "qwen3-4b-real",
+      "family": 1,
+      "seed": 2,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-role_selection-seed3",
+      "model": "qwen3-4b-real",
+      "family": 1,
+      "seed": 3,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-conjunction-seed0",
+      "model": "qwen3-4b-real",
+      "family": 2,
+      "seed": 0,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-conjunction-seed1",
+      "model": "qwen3-4b-real",
+      "family": 2,
+      "seed": 1,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-conjunction-seed2",
+      "model": "qwen3-4b-real",
+      "family": 2,
+      "seed": 2,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-conjunction-seed3",
+      "model": "qwen3-4b-real",
+      "family": 2,
+      "seed": 3,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-conditional-seed0",
+      "model": "qwen3-4b-real",
+      "family": 3,
+      "seed": 0,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-conditional-seed1",
+      "model": "qwen3-4b-real",
+      "family": 3,
+      "seed": 1,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-conditional-seed2",
+      "model": "qwen3-4b-real",
+      "family": 3,
+      "seed": 2,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    },
+    {
+      "id": "qwen3-4b-real-conditional-seed3",
+      "model": "qwen3-4b-real",
+      "family": 3,
+      "seed": 3,
+      "status": "TRAIN_OR_SETUP_FAILURE",
+      "restorationExact": null,
+      "removalExact": null,
+      "feedbackEqual": null,
+      "error": "Error: control/evidence_only exit 1: (FiberFailure) CanonicalAtomV2StateJournalStoreError: An error has occurred\n    at makeCanonicalAtomV2StateJournalStoreError (file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-store.js:10:89)\n    at file:///home/metahumotonic27/hswm-source/_research/dgx_semantic_learning_v1/runtime-dist/canonical-atom-v2-state-journal-file.js:268:39\n",
+      "arms": []
+    }
+  ],
+  "learned_relations": [
+    {
+      "relation": "If subject field dax is 1, the initial bit is wug; otherwise it is zif. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "8f74058390259bfbe9f456adeffee2aff3a6a79617162aef071069006afc6899",
+      "traceSha256": "aa6e3bb35e75471333695aa6e97e784f94341bcc3cce5b462c4f7d6bc4b04a5c",
+      "trainingScore": {
+        "valid": false,
+        "correct": 0,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "If subject field dax is 1, the initial bit is wug; otherwise it is zif. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "c7404e282da91f4dc69d0e7d53775207e984c66b0414822df456deeceaaf7ef8",
+      "traceSha256": "f4ffcbae0871a10b2c46af6426dc49447aecc6b0214d4513afbf262814a4bd0e",
+      "trainingScore": {
+        "valid": false,
+        "correct": 0,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "If subject field dax is 1, the initial bit is wug; otherwise it is zif. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "cf0a8fdd46fb853f4d60d3d99fcadaf1f1a2097124fd993fc9186cf74e1aa9ec",
+      "traceSha256": "9f13bce12274f94636cfec5e0c78ab0d9ef9f7b313abc732eda11c9d19d32cab",
+      "trainingScore": {
+        "valid": true,
+        "correct": 8,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "If subject field dax is 1, the initial bit is wug; otherwise it is zif. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "58e2c4da8b0d085f187f3dfe5d74f03bf96f6eb505011d98aac218900acd878b",
+      "traceSha256": "d06c605db21d6831d7538a09353115b24510e6b015c9474d24aef7e43ba6b265",
+      "trainingScore": {
+        "valid": true,
+        "correct": 8,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when both subject fields dax and wug are 1. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "84942d0fba09023ef882b3c894b2b51b1366006e59964a6a45ee0b777532d9fd",
+      "traceSha256": "ccb50fd428f7e430952c7f2b150837879f04bbb400c4bdfe299c1eec296e06b0",
+      "trainingScore": {
+        "valid": true,
+        "correct": 7,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when both subject fields dax and wug are 1. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "b2972c6d154fe5245018ba99de80a1bc4a9b220d75400ca1400c4fb9d1531dd7",
+      "traceSha256": "2df71cad7baea38003982ee6e80a28d96da8deb8d7b73e7b4f7f002e2fc42346",
+      "trainingScore": {
+        "valid": true,
+        "correct": 3,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when both subject fields dax and wug are 1. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "1a96588348dffad67e94c6f08c5bf16e27f655c7b5e8b9aa87f3897dd8c0d88c",
+      "traceSha256": "ca3c5cb15a0141e50f288bc811ea5ec0fc5006e464b5489bbc27e2b6fb8fc720",
+      "trainingScore": {
+        "valid": false,
+        "correct": 0,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when both subject fields dax and wug are 1. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "6c9b3e19ac0cbfd8992adbfaf5581b746aaeaa3ad1635e695445fafbc47a9f1b",
+      "traceSha256": "a23e80cb0b4a18d56edc96717aa40a5852ad74ff08ad43b44d2a80233af46c74",
+      "trainingScore": {
+        "valid": true,
+        "correct": 5,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is the value of subject field zif; dax and wug do not determine it. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "24ce9aeaa4ae157300bbce9b36e8cb586a1136d3624a3356a8660c7c9109fd18",
+      "traceSha256": "88aa9ab07104a61f8e226f6f9c3d3897ce9e09f1ac0eac359744109b60e6a72c",
+      "trainingScore": {
+        "valid": true,
+        "correct": 7,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is the value of subject field zif; dax and wug do not determine it. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "03c7b4d6a156dccd02d92df5da29ab3b45bfe15c21c98537cd78691af0ff33da",
+      "traceSha256": "08f982bc0c8ee05dc80a38d2a78ec1be8fef0ad83a72e226ecd8c6f795a6cba6",
+      "trainingScore": {
+        "valid": true,
+        "correct": 5,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is the value of subject field zif; dax and wug do not determine it. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "1b731780d9e5b069c9fef26498d0db47a923c07eb60ea283a3e00bbaa2f965ba",
+      "traceSha256": "75180eff003f55da56ce333578d1f17d6198a4ec180d0cb0378b676e0bae17d9",
+      "trainingScore": {
+        "valid": true,
+        "correct": 7,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is the value of subject field zif; dax and wug do not determine it. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "6f6c13e333caa63185e4e41a8a3536e54b83c14fd8a092e547b5e8f6f924c502",
+      "traceSha256": "ced0d4f8c2c956531762f977b40ef77230f6b59b8a1042516fccff243bb085b8",
+      "trainingScore": {
+        "valid": true,
+        "correct": 6,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when subject fields dax and wug differ. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "4dfe42c8c8c21d462fa86968bb1315d2eb99d732cb62b079719497391f9b196e",
+      "traceSha256": "6b65e32e5416632419cf5424cf3ec6fe7fd8dd1d5a88020e5b1d6fb2fb453ba7",
+      "trainingScore": {
+        "valid": true,
+        "correct": 3,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when subject fields dax and wug differ. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "bcb36eb05574319d66829a6c23b3789497c56ced7500a75251c8a7eb81694fb5",
+      "traceSha256": "2ba04e25de7a1ab0f2250dd2e2dff350d311e7e6e51330f7d51b7a2d3c59ecf3",
+      "trainingScore": {
+        "valid": false,
+        "correct": 0,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when subject fields dax and wug differ. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "c95100f8cc35bec272215e609137532e669f63bd746cc6fd2d1310469288adeb",
+      "traceSha256": "9a45d8f275f0b76a2352df55cf9a949e81447b9efd85118ea68db526de72f8a3",
+      "trainingScore": {
+        "valid": true,
+        "correct": 4,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    },
+    {
+      "relation": "The initial bit is 1 exactly when subject fields dax and wug differ. Provisional hypothesis: context flag pel never affects the initial bit. Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.",
+      "disposition": "predict-binary-output-under-context",
+      "uncertainty": "provisional-context-effect",
+      "semanticSha256": "37414a2ffcf570a4e7b24888394699853a268526f595018f244db6e41f5d0417",
+      "traceSha256": "6bc8f627fca7798a5f5ebaf5abfe929edf871c2fb2f9f5f4f244b69a4da0b221",
+      "trainingScore": {
+        "valid": true,
+        "correct": 6,
+        "total": 12
+      },
+      "observedStatus": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+    }
+  ],
+  "limitations": [
+    "Authored synthetic rules and caller-owned observations",
+    "No checkpoint-weight training, novel topology discovery or external real-world task",
+    "Train/heldout cases are disjoint within each trial but overlap across seeds; seeds are not independent task populations",
+    "Evidence-only control changes canonical revision metadata and preserves feedback; token costs are not matched",
+    "Exact canonical clones still generate fresh execution IDs and requests; temperature zero does not establish output determinism",
+    "No Hyperon empirical comparison, independent causal credit, CR/FCL closure or general HSWM efficacy"
+  ],
+  "claim_ceiling": "BOUNDED_SYNTHETIC_RUNTIME_OBSERVATION_NOT_GENERAL_HSWM_EFFICACY_CAUSAL_CREDIT_OR_CR_FCL_CLOSURE"
+}

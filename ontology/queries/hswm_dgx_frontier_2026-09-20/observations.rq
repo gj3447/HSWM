@@ -1,0 +1,5 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?name ?model ?arm ?correct ?n ?validBatches ?status WHERE {
+  ?observation p:standard_graph_role "OBSERVED_RESULT"; p:name ?name; p:model ?model;
+    p:arm ?arm; p:correct ?correct; p:n ?n; p:valid_batches ?validBatches; p:status ?status.
+} ORDER BY ?name

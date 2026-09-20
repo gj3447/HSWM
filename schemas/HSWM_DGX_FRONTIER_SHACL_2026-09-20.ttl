@@ -1,0 +1,23 @@
+@prefix kb: <https://hswm.invalid/kg-bundle-rdf/v1/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+kb:DgxSourceShape a sh:NodeShape ; sh:targetClass role:RESEARCH_SOURCE ;
+  sh:property [ sh:path p:source_ref ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:or (
+    [ sh:property [ sh:path p:source_sha256 ; sh:minCount 1 ; sh:pattern "^[0-9a-f]{64}$" ] ]
+    [ sh:property [ sh:path p:source_ref ; sh:pattern "^https://" ] ]
+  ) .
+
+kb:DgxCandidateShape a sh:NodeShape ; sh:targetClass role:TOOL_OR_MODEL_CANDIDATE ;
+  sh:property [ sh:path p:revision ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:license ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:installed_or_executed ; sh:hasValue false ; sh:maxCount 1 ] .
+
+kb:DgxRunShape a sh:NodeShape ; sh:targetClass role:EMPIRICAL_RUN ;
+  sh:property [ sh:path r:DERIVED_FROM ; sh:minCount 1 ; sh:nodeKind sh:IRI ] ;
+  sh:property [ sh:path p:protocol_sha256 ; sh:minCount 1 ; sh:pattern "^[0-9a-f]{64}$" ] ;
+  sh:property [ sh:path p:cr_fcl_promotion ; sh:hasValue false ; sh:maxCount 1 ] .

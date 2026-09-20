@@ -1,0 +1,248 @@
+{
+  "schema_version": "hswm-dgx-frontier-catalog/v1",
+  "as_of": "2026-09-20",
+  "scope": "Bounded official-source search, not an exhaustive global ranking or claim that every item was released today.",
+  "candidates": [
+    {
+      "id": "qwen38-fp8",
+      "name": "Qwen3.8-27B FP8",
+      "kind": "MODEL",
+      "source": "https://huggingface.co/Qwen/Qwen3.8-27B-FP8",
+      "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+      "revision_url": "https://huggingface.co/Qwen/Qwen3.8-27B-FP8/tree/017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+      "created_at": "2026-08-13T08:01:58+00:00",
+      "last_modified": "2026-08-14T14:44:41+00:00",
+      "license": "Apache-2.0",
+      "authority": "OFFICIAL_VENDOR_MODEL",
+      "metadata_sha256": "881bb450c7de75d35c5ac1162687f10c9a229e363027db6e4e583daf44f624e9",
+      "tensor_storage_lower_bound_bytes": 30863648224,
+      "memory_caveat": "Tensor bytes only; includes packed storage conventions, excludes KV/cache/runtime. Not logical parameter count or a guaranteed load footprint.",
+      "recommendation": "COMPARE_NEXT",
+      "reason": "더 강한 국소 의미 연산자 후보. 27B dense 모델의 실제 품질·지연·예외 보존을 동일 과제로 비교.",
+      "qualification": "기존 35B 서비스를 대체하는 격리 창에서 비교; FP8 GB10 경로와 가중치 외 KV/runtime 여유를 먼저 검증.",
+      "installed_or_executed": false
+    },
+    {
+      "id": "nvfp4",
+      "name": "NVIDIA Qwen3.6-35B-A3B NVFP4",
+      "kind": "MODEL",
+      "source": "https://huggingface.co/nvidia/Qwen3.6-35B-A3B-NVFP4",
+      "revision": "1355db6a052410cfd62085d94b58866fd0f2c3c5",
+      "revision_url": "https://huggingface.co/nvidia/Qwen3.6-35B-A3B-NVFP4/tree/1355db6a052410cfd62085d94b58866fd0f2c3c5",
+      "created_at": "2026-05-27T18:09:46+00:00",
+      "last_modified": "2026-08-29T02:26:14+00:00",
+      "license": "Apache-2.0",
+      "authority": "OFFICIAL_VENDOR_MODEL",
+      "metadata_sha256": "73cca480a2ff77396dd5cc163467797f8fe28217aaa1c51b0038053be770ae37",
+      "tensor_storage_lower_bound_bytes": 21354417888,
+      "memory_caveat": "Tensor bytes only; includes packed storage conventions, excludes KV/cache/runtime. Not logical parameter count or a guaranteed load footprint.",
+      "recommendation": "SERVING_PRIORITY",
+      "reason": "NVIDIA가 DGX Spark용으로 직접 제시하는 양자화·서빙 후보.",
+      "qualification": "현재 FP8와 동일 모델 계열의 품질 손실, 안정성, 처리량·메모리를 비교. 제조사 속도 수치를 우리 측정으로 취급하지 않음.",
+      "installed_or_executed": false
+    },
+    {
+      "id": "deepseek41",
+      "name": "DeepSeek-V4.1-Flash",
+      "kind": "MODEL",
+      "source": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+      "revision": "dba1be0a40aa45a94ad051997016db3960a90277",
+      "revision_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/tree/dba1be0a40aa45a94ad051997016db3960a90277",
+      "created_at": "2026-09-10T02:17:58+00:00",
+      "last_modified": "2026-09-10T08:18:10+00:00",
+      "license": "MIT",
+      "authority": "OFFICIAL_VENDOR_MODEL",
+      "metadata_sha256": "4392f9fa28e8b588968757b8ba339a28d04e994ec327de26a7a90c9c5c009091",
+      "tensor_storage_lower_bound_bytes": 765308679496,
+      "memory_caveat": "Tensor bytes only; includes packed storage conventions, excludes KV/cache/runtime. Not logical parameter count or a guaranteed load footprint.",
+      "recommendation": "EXTERNAL_COMPARATOR_ONLY",
+      "reason": "2026-09-10 공개된 CED·CSA2·압축 KV·Engram 설계의 최신 비교 문헌.",
+      "qualification": "552B backbone/763B tensor inventory로 이 단일 DGX에 상주시키는 후보에서 제외. API 실험은 현재 수행하지 않음.",
+      "installed_or_executed": false
+    },
+    {
+      "id": "glm53",
+      "name": "GLM-5.3-Flash",
+      "kind": "MODEL",
+      "source": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+      "revision": "eb9eb208eb0d988989d07a6a12d0fdeb5f52574a",
+      "revision_url": "https://huggingface.co/zai-org/GLM-5.3-Flash/tree/eb9eb208eb0d988989d07a6a12d0fdeb5f52574a",
+      "created_at": "2026-08-25T06:43:14+00:00",
+      "last_modified": "2026-09-07T12:13:47+00:00",
+      "license": "MIT",
+      "authority": "OFFICIAL_VENDOR_MODEL",
+      "metadata_sha256": "80018b90c6e983312d8969a87a1002431df5221b5eac4945cd97659461531345",
+      "tensor_storage_lower_bound_bytes": 328250014584,
+      "memory_caveat": "Tensor bytes only; includes packed storage conventions, excludes KV/cache/runtime. Not logical parameter count or a guaranteed load footprint.",
+      "recommendation": "EXTERNAL_COMPARATOR_ONLY",
+      "reason": "320B total/18B active, sparse+linear attention의 최신 비교 모델.",
+      "qualification": "FP8 전체 가중치는 DGX 메모리를 초과. 활성 파라미터 수를 적재 용량으로 오인하지 않음.",
+      "installed_or_executed": false
+    },
+    {
+      "id": "vllm029",
+      "name": "vLLM 0.29.0",
+      "kind": "SERVING",
+      "source": "https://github.com/vllm-project/vllm",
+      "revision": "98dff2a81d747d1dba01a47f939f48c3526d4206",
+      "revision_url": "https://github.com/vllm-project/vllm/tree/98dff2a81d747d1dba01a47f939f48c3526d4206",
+      "release_date": "2026-09-09T08:54:49Z",
+      "license": "Apache-2.0",
+      "authority": "OFFICIAL_IMPLEMENTATION_NOT_A_STANDARD",
+      "recommendation": "ISOLATED_QUALIFICATION",
+      "reason": "공식 2026-09-09 release; 현재 서버 0.25.1과 구분. JSON Schema 출력 제한은 기존 서버에서 바로 실험.",
+      "qualification": "GB10 FP8 장문/동시성/예외 출력 회귀를 통과한 뒤 운영 교체. 0.29가 관측 오류를 고쳤다는 주장은 아직 불가.",
+      "installed_or_executed": false
+    },
+    {
+      "id": "gepa",
+      "name": "GEPA 0.1.4",
+      "kind": "OPTIMIZER",
+      "source": "https://github.com/gepa-ai/gepa",
+      "revision": "8b0ce6cd99a234f6b74daf37558a2ac0ce18f975",
+      "revision_url": "https://github.com/gepa-ai/gepa/tree/8b0ce6cd99a234f6b74daf37558a2ac0ce18f975",
+      "release_date": "2026-07-15T14:50:58Z",
+      "license": "MIT",
+      "authority": "OFFICIAL_IMPLEMENTATION_NOT_A_STANDARD",
+      "recommendation": "NEXT_RESEARCH_BASELINE",
+      "reason": "관측 실패를 반영하는 의미 텍스트 후보 생성·선택 비교에 적합.",
+      "qualification": "동일 모델 호출/토큰 예산에서 단일 수정·feedback-only·GEPA 비교. 제안 생성만 맡기고 canonical 쓰기는 native admission이 담당.",
+      "installed_or_executed": false,
+      "package_pin": {
+        "name": "gepa",
+        "version": "0.1.4",
+        "license": "MIT",
+        "project_urls": {
+          "Bug Tracker": "https://github.com/gepa-ai/gepa/issues",
+          "Homepage": "https://github.com/gepa-ai/gepa"
+        },
+        "artifacts": [
+          {
+            "filename": "gepa-0.1.4.tar.gz",
+            "sha256": "6dd153a676ae5481764860d19286a9c0e8ddb5ef70d7f13044faf24978bdb6b8",
+            "url": "https://files.pythonhosted.org/packages/95/56/925779e5690971f1b022f7d107caf015c33ec09560261273ec137e23a8f2/gepa-0.1.4.tar.gz"
+          }
+        ]
+      }
+    },
+    {
+      "id": "unifiedmem",
+      "name": "UnifiedMem",
+      "kind": "BENCHMARK",
+      "source": "https://github.com/AvatarMemory/UnifiedMem",
+      "revision": "3df9428e6a788d2c2ab6b859c85b937a0128ba2f",
+      "revision_url": "https://github.com/AvatarMemory/UnifiedMem/tree/3df9428e6a788d2c2ab6b859c85b937a0128ba2f",
+      "release_date": null,
+      "license": "UNVERIFIED_DO_NOT_ADOPT_CODE",
+      "authority": "OFFICIAL_IMPLEMENTATION_NOT_A_STANDARD",
+      "recommendation": "LITERATURE_BASELINE",
+      "reason": "그래프/비그래프 기억의 구현 조건을 맞추는 비교 참고.",
+      "qualification": "공식 저장소에서 SPDX 라이선스를 확인하지 못했으므로 코드 도입 보류. 대화 기억 성능은 HSWM 전체 AI 증거가 아님.",
+      "installed_or_executed": false
+    },
+    {
+      "id": "inspect",
+      "name": "Inspect AI 0.3.266",
+      "kind": "EVALUATOR",
+      "source": "https://inspect.aisi.org.uk/",
+      "revision": "0.3.266",
+      "license": "MIT",
+      "authority": "OFFICIAL_AISI_IMPLEMENTATION_NOT_A_STANDARD",
+      "recommendation": "EXTERNAL_EVALUATION_CANDIDATE",
+      "reason": "HSWM 런타임과 별도로 과제·scorer·trace를 관리할 외부 평가 후보.",
+      "qualification": "기존 typed runtime을 대체하지 않고 평가 경계를 분리; 외부 데이터와 scorer 검증 후 작은 비교부터 시작.",
+      "installed_or_executed": false,
+      "package_pin": {
+        "name": "inspect-ai",
+        "version": "0.3.266",
+        "license": "MIT License",
+        "project_urls": {
+          "Documentation": "https://inspect.aisi.org.uk/",
+          "Issue Tracker": "https://github.com/UKGovernmentBEIS/inspect_ai/issues",
+          "Source Code": "https://github.com/UKGovernmentBEIS/inspect_ai"
+        },
+        "artifacts": [
+          {
+            "filename": "inspect_ai-0.3.266.tar.gz",
+            "sha256": "07b26e1d197f22bf5d512f96e1790dc6130208eac4eafce6c170edd632856f0f",
+            "url": "https://files.pythonhosted.org/packages/5a/5b/2bb88d9bae363c613f64d1f9592ea93920c4a75da52669a18198a4b8d3fc/inspect_ai-0.3.266.tar.gz"
+          }
+        ]
+      }
+    },
+    {
+      "id": "hyperon",
+      "name": "Hyperon experimental 0.2.10",
+      "kind": "ARCHITECTURE_COMPARATOR",
+      "source": "https://github.com/trueagi-io/hyperon-experimental",
+      "revision": "3f76dc460da6961f57f69f6c3e550c59c74ada83",
+      "license": "MIT",
+      "authority": "OFFICIAL_IMPLEMENTATION_NOT_A_STANDARD",
+      "recommendation": "MANDATORY_COMPARATOR_NOT_BACKEND_DECISION",
+      "reason": "영속 metagraph·MeTTa·neural bridge의 직접 선행. 현재 확인한 tag는 기존 감사와 동일.",
+      "qualification": "구성요소별 성숙도와 정확한 구현 버전을 유지. 이번 합성 실험은 Hyperon 성능 비교를 수행하지 않음.",
+      "installed_or_executed": false,
+      "existing_audit": "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md"
+    }
+  ],
+  "papers": [
+    {
+      "id": "gab",
+      "title": "GABench: A Comprehensive Benchmark for Evaluating LLM Agents on Graph Analysis Tasks",
+      "url": "https://arxiv.org/abs/2608.01684v1",
+      "pdf": "https://arxiv.org/pdf/2608.01684v1",
+      "date": "2026-08-03",
+      "finding": "84 executable tools and 10,400 verifiable tasks across graph retrieval, theory, ML and open-ended QA.",
+      "transfer": "Independent graph-operation benchmark candidate, not proof of hypergraph state learning. Dataset/code license and immutable revision still need qualification."
+    },
+    {
+      "id": "memory",
+      "title": "Does Memory Need Graphs? A Unified Framework and Empirical Analysis for Long-Term Dialog Memory",
+      "url": "https://aclanthology.org/2026.acl-long.1232/",
+      "pdf": "https://aclanthology.org/2026.acl-long.1232.pdf",
+      "date": "2026-07",
+      "finding": "Controlled LongMemEval/HaluMem comparisons find that graph construction, value granularity and retrieval choices can determine whether graphs help or hurt.",
+      "transfer": "Require strong flat-memory and feedback-only controls. Findings concern dialog memory, not a refutation or validation of HSWM identity."
+    },
+    {
+      "id": "gepa-paper",
+      "title": "GEPA: Reflective Prompt Evolution Can Outperform Reinforcement Learning",
+      "url": "https://arxiv.org/abs/2507.19457",
+      "pdf": "https://arxiv.org/pdf/2507.19457",
+      "date": "2025-07-25",
+      "finding": "Reflective natural-language mutations and Pareto selection improve studied task prompts with fewer rollouts than reported comparison methods.",
+      "transfer": "A proposal-search comparator; no paper result establishes outcome-bound HSWM efficacy or general superiority."
+    },
+    {
+      "id": "qwen-next",
+      "title": "On the Design of Qwen3.8-Next Architecture: Evaluation, Efficiency, and Training Stability",
+      "url": "https://arxiv.org/abs/2608.30320v1",
+      "pdf": "https://arxiv.org/pdf/2608.30320v1",
+      "date": "2026-08-31",
+      "finding": "125B/6B MoE plus 51B host embedding tables; combines hybrid attention, gated residuals and training ablations.",
+      "transfer": "Architecture/efficiency reference for Flash-Next, not the development paper of the distinct dense Qwen3.8-27B candidate."
+    },
+    {
+      "id": "deepseek-report",
+      "title": "DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/tree/dba1be0a40aa45a94ad051997016db3960a90277",
+      "pdf": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/resolve/dba1be0a40aa45a94ad051997016db3960a90277/DeepSeek_V41_Tech_Report.pdf",
+      "date": "2026-09-10",
+      "finding": "Vendor reports CED encoder/decoder splitting, CSA2 KV sharing, FP4 KV, Engram memory and SFT/RL/on-policy distillation.",
+      "transfer": "Inference-memory architecture reference; not a local deployment or an HSWM effectiveness result."
+    }
+  ],
+  "adopted_here": [
+    "Existing native Effect durable semantic runtime for actual LLM prediction/revision/reopen",
+    "Existing vLLM JSON Schema structured output in separately frozen v3 condition",
+    "Existing RDF 1.1/PROV-O/SHACL projection with exact sources and distinct evidence status"
+  ],
+  "current_service_failure_source": "https://github.com/vllm-project/vllm/issues/43367",
+  "source_boundary": "Upstream reports are diagnostic comparisons, not independent proof of the exact local root cause.",
+  "sources": [
+    "https://build.nvidia.com/spark/vllm/agent-ready-models",
+    "https://docs.vllm.ai/en/latest/features/structured_outputs/",
+    "https://github.com/vllm-project/vllm/releases/tag/v0.29.0",
+    "https://github.com/gepa-ai/gepa/releases/tag/v0.1.4"
+  ]
+}

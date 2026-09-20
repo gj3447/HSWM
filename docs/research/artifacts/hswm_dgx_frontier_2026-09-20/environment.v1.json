@@ -1,0 +1,34 @@
+{
+  "schema_version": "hswm-dgx-environment-observation/v1",
+  "date": "2026-09-20",
+  "hardware": "NVIDIA GB10, 121 GiB reported unified RAM",
+  "initial_gpu_utilization_percent": 0,
+  "initial_available_ram_gib": 42,
+  "scratch_free_gib": 125,
+  "durable_free_gib": 1418,
+  "execution": "DGX hswm-run with preflight, bounded 2400-second runs, data-01 atomic archives",
+  "source_pin_verification": {
+    "verified_runner_and_compiled_artifacts": 308,
+    "effect_version": "3.22.1",
+    "effect_license": "MIT",
+    "remote_lock_sha256": "5d07d8039964bdac93beb5e1c6e8071234308cc232480d230378e782072c4b5d",
+    "local_lock_sha256": "44a3f32fbeb5ad30069b2c82db7fe5e8db95c34a66be603a2e89d82d230c4191",
+    "boundary": "Runtime JS and experiment files verified byte-exact. Existing remote dependencies reused; full remote lock differs from local build lock. No claim of identical complete installed dependency trees."
+  },
+  "server_image_digest": "vllm/vllm-openai@sha256:e4f88a835143cd22aee2397a26ec6bb80b3a4a6fe0c882bcbc63822904766089",
+  "runtime_version_reported": "0.25.1",
+  "loaded_35b_snapshot_from_engine_log": "95a723d08a9490559dae23d0cff1d9466213d989",
+  "cache_4b_snapshot": "1cfa9a7208912126459214e8b04321603b3df60c",
+  "failure": {
+    "at": "2026-09-20T13:18:49Z",
+    "component": "CutlassFp8BlockScaledMMKernel",
+    "error": "cutlass_gemm_caller.cuh:62, Error Internal; EngineDeadError",
+    "recovery": "Existing container restart policy reloaded the same model; /health returned 200 at the later check. No serving configuration or model weights replaced.",
+    "cause_status": "MATCHING_UPSTREAM_SYMPTOM_NOT_LOCAL_ROOT_CAUSE_PROOF",
+    "upstream": "https://github.com/vllm-project/vllm/issues/43367"
+  },
+  "private_inputs_used": false,
+  "new_model_weights_downloaded": false,
+  "automatic_recurring_schedule_enabled": false,
+  "schedule_note": "Optional cadence clarification pending; current execution is finite and on demand."
+}

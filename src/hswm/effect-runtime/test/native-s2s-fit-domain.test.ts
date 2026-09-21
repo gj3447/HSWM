@@ -2,7 +2,7 @@ import { expect, it } from "@effect/vitest"
 import { Either } from "effect"
 import { createHash } from "node:crypto"
 import { readFileSync } from "node:fs"
-import { NATIVE_S2S_FIT_SOURCE_SHA256, fitNativeS2SCompiledArrays } from "../src/native-s2s-fit-domain.js"
+import { NATIVE_S2S_FIT_SOURCE_SHA256, fitNativeS2SCompiledArrays, validateNativeS2SFitConfig } from "../src/native-s2s-fit-domain.js"
 
 type Arm = "P_CAP18" | "T16" | "DS870"
 interface OracleHistoryEntry { readonly update:number; readonly train_loss:number; readonly dev_loss:number; readonly gradient_norm:number|null; readonly clipped:boolean; readonly improved:boolean; readonly parameters_sha256:string }
@@ -56,4 +56,50 @@ it("returns typed errors for malformed configuration and runtime values",()=>{
  expect(Either.isLeft(invoke("P_CAP18",null,null,null,null,null,null,null) as Either.Either<unknown,unknown>)).toBe(true)
  expect(Either.isLeft(invoke("P_CAP18",parameters("P_CAP18"),oracle.inputs.input,oracle.inputs.targets,oracle.inputs.input,oracle.inputs.targets,oracle.inputs.weights,{...nativeConfig(),patience:0}) as Either.Either<unknown,unknown>)).toBe(true)
  expect(Either.isLeft(invoke("P_CAP18",parameters("P_CAP18"),oracle.inputs.input,oracle.inputs.targets,oracle.inputs.input,oracle.inputs.targets,oracle.inputs.weights,{...nativeConfig(),minDelta:-0}) as Either.Either<unknown,unknown>)).toBe(true)
+})
+
+it("accepts a valid own-data config as an immutable detached copy",()=>{
+ const input=nativeConfig(),result=validateNativeS2SFitConfig(input)
+ expect(Either.isRight(result)).toBe(true)
+ if(Either.isRight(result)){
+  expect(result.right).not.toBe(input)
+  expect(Object.isFrozen(result.right)).toBe(true)
+  expect(result.right).toEqual(input)
+  input.learningRate=.25
+  expect(result.right.learningRate).not.toBe(input.learningRate)
+ }
+})
+
+it("refuses an own accessor without evaluating it in validation or fit ingress",()=>{
+ let reads=0
+ const input=nativeConfig()
+ Object.defineProperty(input,"seed",{configurable:true,enumerable:true,get:()=>{reads+=1;return 7}})
+ const validated=validateNativeS2SFitConfig(input)
+ expect(Either.isLeft(validated)).toBe(true)
+ if(Either.isLeft(validated))expect(validated.left.reason).toBe("CONFIG_INVALID")
+ const invoke=fitNativeS2SCompiledArrays as unknown as (...values:readonly unknown[])=>Either.Either<unknown,unknown>
+ const fitted=invoke("P_CAP18",null,null,null,null,null,null,input)
+ expect(Either.isLeft(fitted)).toBe(true)
+ expect(reads).toBe(0)
+})
+
+it("turns reflective failures into typed invalid config errors",()=>{
+ const input=new Proxy(nativeConfig(),{ownKeys:()=>{throw new Error("reflective trap")}})
+ const descriptorFailure=new Proxy(nativeConfig(),{getOwnPropertyDescriptor:()=>{throw new Error("descriptor trap")}})
+ const revoked=Proxy.revocable(nativeConfig(),{})
+ revoked.revoke()
+ for(const value of [input,descriptorFailure,revoked.proxy]){
+  const result=validateNativeS2SFitConfig(value)
+  expect(Either.isLeft(result)).toBe(true)
+  if(Either.isLeft(result))expect(result.left.reason).toBe("CONFIG_INVALID")
+ }
+})
+
+it("does not coerce numeric-like values during config admission",()=>{
+ let coercions=0
+ const numericLike={valueOf:()=>{coercions+=1;return .5},[Symbol.toPrimitive]:()=>{coercions+=1;return .5}}
+ const result=validateNativeS2SFitConfig({...nativeConfig(),learningRate:numericLike})
+ expect(Either.isLeft(result)).toBe(true)
+ if(Either.isLeft(result))expect(result.left.reason).toBe("CONFIG_INVALID")
+ expect(coercions).toBe(0)
 })

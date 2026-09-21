@@ -75,16 +75,47 @@ export const nativeS2SParameterSha256 = (parameters: NativeS2SParameters, arm: N
 };
 const parameterSha256 = nativeS2SParameterSha256;
 const uint64 = (value: unknown): boolean => (typeof value === "bigint" && value >= 0n && value < 2n ** 64n) || (typeof value === "number" && Number.isSafeInteger(value) && value >= 0);
-const validConfig = (config: unknown): config is NativeS2SFitConfig => typeof config === "object" && config !== null && !Array.isArray(config) && Object.keys(config).length === 9 && ["seed", "maxUpdates", "learningRate", "beta1", "beta2", "epsilon", "gradientClip", "patience", "minDelta"].every(key => Object.hasOwn(config, key)) && uint64((config as NativeS2SFitConfig).seed) && Number.isSafeInteger((config as NativeS2SFitConfig).maxUpdates) && (config as NativeS2SFitConfig).maxUpdates >= 0 && Number.isSafeInteger((config as NativeS2SFitConfig).patience) && (config as NativeS2SFitConfig).patience > 0 && [(config as NativeS2SFitConfig).learningRate, (config as NativeS2SFitConfig).beta1, (config as NativeS2SFitConfig).beta2, (config as NativeS2SFitConfig).epsilon, (config as NativeS2SFitConfig).gradientClip, (config as NativeS2SFitConfig).minDelta].every(Number.isFinite) && (config as NativeS2SFitConfig).learningRate > 0 && (config as NativeS2SFitConfig).beta1 > 0 && (config as NativeS2SFitConfig).beta1 < 1 && (config as NativeS2SFitConfig).beta2 > 0 && (config as NativeS2SFitConfig).beta2 < 1 && (config as NativeS2SFitConfig).epsilon > 0 && (config as NativeS2SFitConfig).gradientClip > 0 && (config as NativeS2SFitConfig).minDelta >= 0 && !Object.is((config as NativeS2SFitConfig).minDelta, -0);
+const configKeys = ["seed", "maxUpdates", "learningRate", "beta1", "beta2", "epsilon", "gradientClip", "patience", "minDelta"] as const;
+type ConfigKey = (typeof configKeys)[number];
+const configInvalid = (): Either.Either<never, NativeS2SFitError> => fail("CONFIG_INVALID", "configuration must contain exactly the finite full-batch Adam data fields");
+const finiteNumber = (value: unknown): value is number => typeof value === "number" && Number.isFinite(value);
+const validConfigValues = (config: Readonly<Record<ConfigKey, unknown>>): config is Readonly<NativeS2SFitConfig> => uint64(config.seed) && typeof config.maxUpdates === "number" && Number.isSafeInteger(config.maxUpdates) && config.maxUpdates >= 0 && typeof config.patience === "number" && Number.isSafeInteger(config.patience) && config.patience > 0 && finiteNumber(config.learningRate) && finiteNumber(config.beta1) && finiteNumber(config.beta2) && finiteNumber(config.epsilon) && finiteNumber(config.gradientClip) && finiteNumber(config.minDelta) && config.learningRate > 0 && config.beta1 > 0 && config.beta1 < 1 && config.beta2 > 0 && config.beta2 < 1 && config.epsilon > 0 && config.gradientClip > 0 && config.minDelta >= 0 && !Object.is(config.minDelta, -0);
+/** Decodes only own data descriptors: accessors and failed reflection are invalid input. */
+export const validateNativeS2SFitConfig = (config: unknown): Either.Either<Readonly<NativeS2SFitConfig>, NativeS2SFitError> => {
+    if (typeof config !== "object" || config === null)
+        return configInvalid();
+    try {
+        if (Array.isArray(config))
+            return configInvalid();
+        const record = config as Record<PropertyKey, unknown>, ownKeys = Reflect.ownKeys(record);
+        if (ownKeys.length !== configKeys.length || !configKeys.every(key => ownKeys.includes(key)))
+            return configInvalid();
+        const values: Partial<Record<ConfigKey, unknown>> = {};
+        for (const key of configKeys) {
+            const descriptor = Object.getOwnPropertyDescriptor(record, key);
+            if (descriptor === undefined || !("value" in descriptor))
+                return configInvalid();
+            values[key] = descriptor.value;
+        }
+        const candidate = values as Readonly<Record<ConfigKey, unknown>>;
+        if (!validConfigValues(candidate))
+            return configInvalid();
+        return Either.right(Object.freeze({ seed: candidate.seed, maxUpdates: candidate.maxUpdates, learningRate: candidate.learningRate, beta1: candidate.beta1, beta2: candidate.beta2, epsilon: candidate.epsilon, gradientClip: candidate.gradientClip, patience: candidate.patience, minDelta: candidate.minDelta }));
+    }
+    catch {
+        return configInvalid();
+    }
+};
 const trainingFailure = (error: NativeS2STrainingError | {
     readonly detail: string;
     readonly reason?: undefined;
 }): Either.Either<never, NativeS2SFitError> => fail(error.reason === "NUMERIC_INVALID" ? "NUMERIC_INVALID" : "INPUT_INVALID", error.detail);
-export const validateNativeS2SFitConfig = (config: unknown): Either.Either<Readonly<NativeS2SFitConfig>, NativeS2SFitError> => validConfig(config) ? Either.right(Object.freeze({ ...config })) : fail("CONFIG_INVALID", "configuration must match finite full-batch Adam constraints");
 /** Fits only numeric arrays supplied by the caller; it does not construct task or receipt claims. */
 export const fitNativeS2SCompiledArrays = (arm: NativeS2STrainingArm, initialParameters: NativeS2SParameters, trainInput: readonly number[], trainTargets: readonly number[], devInput: readonly number[], devTargets: readonly number[], weights: readonly number[], config: NativeS2SFitConfig): Either.Either<NativeS2SFitResult, NativeS2SFitError> => {
-    if (!validConfig(config))
-        return fail("CONFIG_INVALID", "configuration must match finite full-batch Adam constraints");
+    const decodedConfig = validateNativeS2SFitConfig(config);
+    if (Either.isLeft(decodedConfig))
+        return Either.left(decodedConfig.left);
+    const safeConfig = decodedConfig.right;
     if (arm !== "P_CAP18" && arm !== "T16" && arm !== "DS870")
         return fail("INPUT_INVALID", "arm must be P_CAP18, T16, or DS870");
     const initialTrain = lossForNativeS2SParameters(arm, initialParameters, trainInput, trainTargets, weights), initialDev = lossForNativeS2SParameters(arm, initialParameters, devInput, devTargets, weights);
@@ -95,11 +126,11 @@ export const fitNativeS2SCompiledArrays = (arm: NativeS2STrainingArm, initialPar
     let parameters = copy(initialParameters, arm), bestParameters = copy(initialParameters, arm), bestTrainLoss = initialTrain.right, bestDevLoss = initialDev.right, bestUpdate = 0, stale = 0, clippedUpdates = 0, stoppedUpdate = 0, termination: "MAX_UPDATES" | "PATIENCE" = "MAX_UPDATES";
     const moments: Record<string, number[]> = Object.fromEntries(names(arm).map(([key]) => [key, Array<number>(parameterRecord(parameters)[key]!.length).fill(0)])), variances: Record<string, number[]> = Object.fromEntries(names(arm).map(([key]) => [key, Array<number>(parameterRecord(parameters)[key]!.length).fill(0)])), initialParametersSha256 = parameterSha256(parameters, arm);
     const history: NativeS2SFitHistoryEntry[] = [Object.freeze({ update: 0, trainLoss: bestTrainLoss, devLoss: bestDevLoss, gradientNorm: null, clipped: false, improved: true, parametersSha256: initialParametersSha256 })];
-    for (let update = 1; update <= config.maxUpdates; update += 1) {
+    for (let update = 1; update <= safeConfig.maxUpdates; update += 1) {
         const differentiated = lossAndGradientsNativeS2S(arm, parameters, trainInput, trainTargets, weights);
         if (Either.isLeft(differentiated))
             return trainingFailure(differentiated.left);
-        const clipped = clipNativeS2SGradients(differentiated.right.gradients, config.gradientClip);
+        const clipped = clipNativeS2SGradients(differentiated.right.gradients, safeConfig.gradientClip);
         if (Either.isLeft(clipped))
             return trainingFailure(clipped.left);
         clippedUpdates += clipped.right.clipped ? 1 : 0;
@@ -108,7 +139,7 @@ export const fitNativeS2SCompiledArrays = (arm: NativeS2STrainingArm, initialPar
         for (const [key] of names(arm)) {
             const values = parameterRecord(parameters)[key]!, gradient = clipped.right.gradients[key]!, next = Array<number>(values.length);
             for (let index = 0; index < values.length; index += 1) {
-                const moment = config.beta1 * moments[key]![index]! + (1 - config.beta1) * gradient[index]!, variance = config.beta2 * variances[key]![index]! + (1 - config.beta2) * gradient[index]! * gradient[index]!, value = values[index]! - config.learningRate * (moment / (1 - config.beta1 ** update)) / (Math.sqrt(variance / (1 - config.beta2 ** update)) + config.epsilon);
+                const moment = safeConfig.beta1 * moments[key]![index]! + (1 - safeConfig.beta1) * gradient[index]!, variance = safeConfig.beta2 * variances[key]![index]! + (1 - safeConfig.beta2) * gradient[index]! * gradient[index]!, value = values[index]! - safeConfig.learningRate * (moment / (1 - safeConfig.beta1 ** update)) / (Math.sqrt(variance / (1 - safeConfig.beta2 ** update)) + safeConfig.epsilon);
                 if (!Number.isFinite(moment) || !Number.isFinite(variance) || !Number.isFinite(value))
                     return fail("NUMERIC_INVALID", "Adam produced a non-finite state");
                 moments[key]![index] = moment;
@@ -123,7 +154,7 @@ export const fitNativeS2SCompiledArrays = (arm: NativeS2STrainingArm, initialPar
             return trainingFailure(trainLoss.left);
         if (Either.isLeft(devLoss))
             return trainingFailure(devLoss.left);
-        const improved = devLoss.right < bestDevLoss - config.minDelta, parametersSha256 = parameterSha256(parameters, arm);
+        const improved = devLoss.right < bestDevLoss - safeConfig.minDelta, parametersSha256 = parameterSha256(parameters, arm);
         history.push(Object.freeze({ update, trainLoss: trainLoss.right, devLoss: devLoss.right, gradientNorm: clipped.right.norm, clipped: clipped.right.clipped, improved, parametersSha256 }));
         if (improved) {
             bestTrainLoss = trainLoss.right;
@@ -134,11 +165,11 @@ export const fitNativeS2SCompiledArrays = (arm: NativeS2STrainingArm, initialPar
         }
         else {
             stale += 1;
-            if (stale >= config.patience) {
+            if (stale >= safeConfig.patience) {
                 termination = "PATIENCE";
                 break;
             }
         }
     }
-    return Either.right(Object.freeze({ arm, config: Object.freeze({ ...config }), parameters: bestParameters, initialParametersSha256, bestParametersSha256: parameterSha256(bestParameters, arm), bestUpdate, stoppedUpdate, bestTrainLoss, bestDevLoss, updateCount: stoppedUpdate, clippedUpdateCount: clippedUpdates, history: Object.freeze(history), terminationReason: termination, scientificStatus: NATIVE_S2S_TRAINING_SCIENTIFIC_STATUS }));
+    return Either.right(Object.freeze({ arm, config: safeConfig, parameters: bestParameters, initialParametersSha256, bestParametersSha256: parameterSha256(bestParameters, arm), bestUpdate, stoppedUpdate, bestTrainLoss, bestDevLoss, updateCount: stoppedUpdate, clippedUpdateCount: clippedUpdates, history: Object.freeze(history), terminationReason: termination, scientificStatus: NATIVE_S2S_TRAINING_SCIENTIFIC_STATUS }));
 };

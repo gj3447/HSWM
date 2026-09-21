@@ -9,27 +9,20 @@ export const families = [
   { name: 'conditional', base: 'If subject field dax is 1, the initial bit is wug; otherwise it is zif.' }
 ] as const;
 export const example = (id: number) => ({ id, subject: { dax: id & 1, wug: (id >> 1) & 1, zif: (id >> 2) & 1 }, context: { pel: (id >> 3) & 1 }, exception: { nub: (id >> 4) & 1 } });
-const familyDefinition = (family: number): (typeof families)[number] => {
-  const definition = families[family];
-  if (definition === undefined)
-    throw new RangeError('family must select a declared semantic relation');
-  return definition;
-};
 export function label(family: number, id: number): number {
   const { subject: { dax: a, wug: b, zif: c }, context: { pel: d }, exception: { nub: e } } = example(id);
-  const base = family === 0 ? a ^ b : family === 1 ? c : family === 2 ? a & b : family === 3 ? (a ? b : c) : (() => { throw new RangeError('family must select a declared semantic relation'); })();
+  const base = [a ^ b, c, a & b, a ? b : c][family];
   return base ^ d ^ e;
 }
 export function task(family: number, seed: number) {
-  const definition = familyDefinition(family);
   const ids = Array.from({ length: 32 }, (_, i) => i);
   const rank = (a: number, b: number) => digest(`${family}:${seed}:${a}`).localeCompare(digest(`${family}:${seed}:${b}`));
   const train = [0, 1].flatMap(bit => ids.filter(id => label(family, id) === bit).sort(rank).slice(0, 6)).sort(rank);
   const heldout = ids.filter(id => !train.includes(id)).sort(rank);
   const suffix = 'Finally, exception flag nub equal to 1 flips the bit; nub equal to 0 leaves it unchanged.';
-  return { id: `${definition.name}-seed${seed}`, family, seed, train, heldout,
-    initial: `${definition.base} Provisional hypothesis: context flag pel never affects the initial bit. ${suffix}`,
-    oracle: `${definition.base} Context flag pel equal to 1 flips that bit, while pel equal to 0 leaves it unchanged. ${suffix}` };
+  return { id: `${families[family].name}-seed${seed}`, family, seed, train, heldout,
+    initial: `${families[family].base} Provisional hypothesis: context flag pel never affects the initial bit. ${suffix}`,
+    oracle: `${families[family].base} Context flag pel equal to 1 flips that bit, while pel equal to 0 leaves it unchanged. ${suffix}` };
 }
 export const protocol = {
   schema_version: 'hswm-dgx-semantic-learning/v3', date: '2026-09-20',

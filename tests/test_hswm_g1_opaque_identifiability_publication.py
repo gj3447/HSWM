@@ -98,8 +98,15 @@ def test_public_verification_is_bound_to_execution_projection() -> None:
 
 
 def test_publication_is_redacted_and_preserves_the_claim_ceiling() -> None:
-    public_files = [PROJECTION, VERIFICATION, NARRATIVE, EVIDENCE, RESULTS_LOG]
-    public_text = "\n".join(path.read_text(encoding="utf-8") for path in public_files)
+    public_files = [PROJECTION, VERIFICATION, NARRATIVE, EVIDENCE]
+    log = RESULTS_LOG.read_text(encoding="utf-8")
+    # This sealed pilot's redaction contract applies to its own result row,
+    # not unrelated studies subsequently appended to the shared results log.
+    log_rows = [line for line in log.splitlines() if EVIDENCE.name in line]
+    assert len(log_rows) == 1
+    public_text = "\n".join(
+        [*(path.read_text(encoding="utf-8") for path in public_files), *log_rows]
+    )
     forbidden_literals = (
         "correct_action_code",
         "leakage_canary",
@@ -131,6 +138,4 @@ def test_publication_is_redacted_and_preserves_the_claim_ceiling() -> None:
     assert boundary["eight_fcl_laws"] == "NOT_TESTED_OR_CHANGED"
     assert boundary["live_kg_mutated"] is False
 
-    log = RESULTS_LOG.read_text(encoding="utf-8")
-    assert "EVIDENCE_HSWM_G1_OPAQUE_IDENTIFIABILITY_V2_2026-08-30.json" in log
-    assert "G0 `NOT_PASSED`, G1 `NOT_EVALUATED`" in log
+    assert "G0 `NOT_PASSED`, G1 `NOT_EVALUATED`" in log_rows[0]

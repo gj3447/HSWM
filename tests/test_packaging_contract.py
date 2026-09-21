@@ -501,6 +501,8 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
         "schemas/HSWM_RESEARCH_EVIDENCE_RDF_PROJECTION_SHACL_1_0.ttl",
         "schemas/HSWM_NEXT_DEVELOPMENT_PLAN_SHACL_1_0.v1.ttl",
         "schemas/HSWM_RESEARCH_COORDINATION_SHACL_1_0.ttl",
+        "schemas/HSWM_RESEARCH_INTEGRATION_SHACL_2026-09-20.ttl",
+        "schemas/HSWM_DGX_FRONTIER_SHACL_2026-09-20.ttl",
     }, "Python sdist는 현행·호환 read-only graph view와 학습 계획의 정확한 SHACL shape를 운송해야 한다"
     assert {
         "_research/graph_standards/qualify_graph_standards.mjs",

@@ -1,0 +1,5 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?arm ?mode ?correct ?n ?valid ?rawNll ?calibratedNll WHERE {
+  ?o p:standard_graph_role "OBSERVED_RESULT"; p:arm ?arm; p:mode ?mode;
+    p:correct ?correct; p:n ?n; p:valid ?valid; p:raw_nll ?rawNll; p:calibrated_nll ?calibratedNll.
+} ORDER BY ?arm ?mode

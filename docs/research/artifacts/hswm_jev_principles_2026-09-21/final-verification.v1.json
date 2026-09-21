@@ -1,0 +1,87 @@
+{
+  "schema_version": "hswm-jevp-final-verification/v1",
+  "date": "2026-09-21",
+  "source_artifact_hashes_verified": 315,
+  "bundle_artifact_bindings_verified": 26,
+  "receipt_hash_verified": true,
+  "durable_archive_recomputed_on_dgx_and_local": true,
+  "shacl_profiles": [
+    "base-v2",
+    "research-integration",
+    "dgx-source"
+  ],
+  "all_shacl_conform": true,
+  "missing_source_mutation_rejected": true,
+  "competency_query_rows": {
+    "applications": 6,
+    "obligations": 16,
+    "observations": 12,
+    "unsupported": 0
+  },
+  "rdf_projection": {
+    "_tag": "HSWMKgBundleRdfProjectionManifest",
+    "contractVersion": "hswm-kg-bundle-rdf-projection/v2",
+    "compilerId": "hswm-kg-bundle-rdf-compiler/v2",
+    "rdfProfile": "RDF_1_1_N_QUADS_BLANK_NODE_FREE_DETERMINISTIC_PROFILE",
+    "mapping": "ROLE_PRESERVING_REIFIED_RELATIONS_WITH_DIRECT_TYPED_EDGES",
+    "dataset": {
+      "mediaType": "application/n-quads",
+      "sha256": "1bf9a20723fde941518149f9394af0a230d8547d5efd68b7c60e9434b462dc33",
+      "byteLength": 1944471
+    },
+    "sources": [
+      {
+        "id": "jev",
+        "mediaType": "application/json",
+        "sha256": "18200d2fbfb9803a3ab9d50461ef5d72dfb0643f49f0d44bdc57544ebb242da7",
+        "byteLength": 298686,
+        "bundleUid": "sym:AbstractNode:hswm-jev-principles-2026-09-21"
+      }
+    ],
+    "sourceSetSha256": "e6b9d9234305a34e2a3a45eb5394937027876f80534534a0bf7f2071963bbfa2",
+    "projectionIdentitySha256": "2a8117a9af4dce43efbd92d51fb466f6a9a64966bce83d9f4cc7876d2713d085",
+    "projectionIri": "urn:hswm:kg-bundle-projection:2a8117a9af4dce43efbd92d51fb466f6a9a64966bce83d9f4cc7876d2713d085",
+    "nodeCount": 134,
+    "relationCount": 307,
+    "writeBack": "FORBIDDEN",
+    "nonclaim": "DERIVED_READ_ONLY_KG_BUNDLE_EXCHANGE_NOT_CANONICAL_STATE_NOT_PERMIT_NOT_USER_RATIFICATION_NOT_GATE_PASS_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+    "claimCeiling": "KG_BUNDLE_STRUCTURE_AND_BYTE_BINDING_ONLY_NOT_LIVE_KG_STATE_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+    "invalidatedBy": [
+      "ANY_BOUND_BUNDLE_BYTES_CHANGED",
+      "PROJECTION_PROFILE_OR_COMPILER_CHANGED"
+    ],
+    "rdfDatasetOmits": [
+      "LIVE_KG_STATE_AND_PUBLICATION_STATUS",
+      "ARTIFACT_BINDING_CONTENT_BYTES",
+      "CANONICAL_STATE_AND_PERMIT_CONTENT",
+      "CAUSAL_CREDIT_AND_LEARNING_ASSERTIONS"
+    ]
+  },
+  "live_readback": {
+    "schema_version": "hswm-post-commit-readback/v1",
+    "at": "2026-09-21T11:01:15.876Z",
+    "bundle_uid": "sym:AbstractNode:hswm-jev-principles-2026-09-21",
+    "bundle_sha256": "18200d2fbfb9803a3ab9d50461ef5d72dfb0643f49f0d44bdc57544ebb242da7",
+    "nodes": 134,
+    "relations": 307,
+    "exactNodePropertiesAndLabels": true,
+    "exactRelationPropertiesAndEndpoints": true,
+    "freshReadSessionAfterPublication": true,
+    "nonclaim": "EXACT_RESEARCH_PROJECTION_READBACK_NOT_TRUTH_OR_EFFICACY"
+  },
+  "mcp_discoverability": {
+    "uid_match_count": 1,
+    "uid_collision": false,
+    "observed": true
+  },
+  "model8001_health": 200,
+  "hswm_run_preflight": "PASS",
+  "portable_markdown_math": "PASS",
+  "closure_burden": {
+    "status": "CAP_VIOLATED",
+    "core_commits": 35,
+    "window": 100,
+    "disposition": "INSTRUMENT_RED_RECORDED_NO_NEW_EXPERIMENT_SCOPE"
+  },
+  "scientific_boundary": "Faster reliable encoding, no useful semantic learning or overall efficacy claim."
+}

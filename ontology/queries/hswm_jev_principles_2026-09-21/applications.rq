@@ -1,0 +1,6 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?principle ?structure ?status ?limitation WHERE {
+  ?a p:principle_id ?principle; p:status ?status; p:limitation ?limitation; r:ABOUT ?s.
+  ?s p:standard_graph_role "APPLICATION_STRUCTURE"; p:name ?structure.
+} ORDER BY ?principle

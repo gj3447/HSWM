@@ -1,0 +1,141 @@
+{
+  "schema_version": "hswm-jev-principle-applicability/v1",
+  "date": "2026-09-21",
+  "authority": "SECONDARY_AI",
+  "principles": [
+    {
+      "id": "P1",
+      "name": "Typed decision readout",
+      "structure": "Local LLM relation execution and trace",
+      "status": "IMPLEMENTED_MEASURED_RESEARCH_ONLY",
+      "finding": "Fast and structurally reliable here; no overall semantic-quality gain.",
+      "obligations": [
+        "CR-0",
+        "CR-1",
+        "FCL-1"
+      ],
+      "source": "https://docs.typesafe.ai/primitives",
+      "implementation": "src/hswm/effect-runtime/src/semantic-decision-domain.ts",
+      "limitation": "Same-case meaning accuracy and refusal-aware proper scores."
+    },
+    {
+      "id": "P2",
+      "name": "Outcome-fitted probability assessment",
+      "structure": "Version-bound prediction assessment in the same semantic graph loop",
+      "status": "IMPLEMENTED_POSTHOC_NOT_CANONICAL_LEARNING",
+      "finding": "Overconfidence shrank; direct probabilities remain worse than p=0.5.",
+      "obligations": [
+        "CR-1",
+        "CR-2",
+        "CR-3",
+        "FCL-1",
+        "FCL-4"
+      ],
+      "source": "https://docs.typesafe.ai/introduction/machine-learning-primer",
+      "implementation": "src/hswm/effect-runtime/src/semantic-decision-domain.ts",
+      "limitation": "Independent outcomes, held-out calibration, drift and causal-credit separation."
+    },
+    {
+      "id": "P3",
+      "name": "Shared-state computation",
+      "structure": "Snapshot-bound scheduling of dependency-free local LLM reads",
+      "status": "DESIGN_ONLY_NOT_MEASURED",
+      "finding": "Serial latency does not establish shared-trunk or parallel-head gains.",
+      "obligations": [
+        "CR-0",
+        "CR-6",
+        "FCL-2"
+      ],
+      "source": "https://docs.typesafe.ai/primitives",
+      "implementation": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+      "limitation": "Preserve dependencies and serializable revisions; compare actual shared compute at equal quality."
+    },
+    {
+      "id": "P4",
+      "name": "Dynamic candidate and read construction",
+      "structure": "Role-bearing relation proposals and local read scope",
+      "status": "HSWM_EXTENSION_NOT_IMPLEMENTED",
+      "finding": "Fixed binary support and no-op proposals do not discover relations.",
+      "obligations": [
+        "CR-4",
+        "FCL-3",
+        "FCL-5"
+      ],
+      "source": "docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md",
+      "implementation": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+      "limitation": "Candidate recall, none/expand, context sufficiency and fixed-topology controls."
+    },
+    {
+      "id": "P5",
+      "name": "Joint output-law preservation",
+      "structure": "Ordered n-ary role incidence and joint transition messages",
+      "status": "HSWM_REQUIREMENT_NOT_MEASURED",
+      "finding": "Computationally independent questions do not imply statistical independence.",
+      "obligations": [
+        "CR-4",
+        "CR-5",
+        "FCL-3",
+        "FCL-5",
+        "FCL-6"
+      ],
+      "source": "docs/research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md",
+      "implementation": "formal/HSWMSemanticWeightDefinition.lean",
+      "limitation": "Test exclusion/complementarity and higher-order response; do not multiply marginals without assumptions."
+    },
+    {
+      "id": "P6",
+      "name": "Typed recursive composition",
+      "structure": "Cognition-bearing HSWM cells composing under the same Step/Learn",
+      "status": "HSWM_TRANSFER_HYPOTHESIS_NOT_IMPLEMENTED",
+      "finding": "No measured two-scale closure or continuity.",
+      "obligations": [
+        "CR-5",
+        "CR-6",
+        "CR-7",
+        "FCL-2",
+        "FCL-6",
+        "FCL-7",
+        "FCL-8"
+      ],
+      "source": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+      "implementation": "ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json",
+      "limitation": "Preserve effects, rights, exit, lineage and calibration in concrete two-scale interventions."
+    }
+  ],
+  "standards": [
+    {
+      "name": "SHACL 1.0",
+      "url": "https://www.w3.org/TR/shacl/",
+      "status": "W3C_RECOMMENDATION"
+    },
+    {
+      "name": "SPARQL 1.1 Query",
+      "url": "https://www.w3.org/TR/sparql11-query/",
+      "status": "W3C_RECOMMENDATION"
+    },
+    {
+      "name": "N-ary relations pattern",
+      "url": "https://www.w3.org/TR/swbp-n-aryRelations/",
+      "status": "W3C_WORKING_GROUP_NOTE_NOT_RECOMMENDATION"
+    }
+  ],
+  "papers": [
+    {
+      "title": "On Calibration of Modern Neural Networks",
+      "url": "https://proceedings.mlr.press/v70/guo17a.html",
+      "role": "Temperature scaling foundation, independent of Jev; not a guarantee of HSWM calibration"
+    },
+    {
+      "title": "Strictly Proper Scoring Rules, Prediction, and Estimation",
+      "url": "https://sites.stat.washington.edu/raftery/Research/PDF/Gneiting2007jasa.pdf",
+      "role": "Proper scoring foundation, not empirical calibration evidence"
+    }
+  ],
+  "mandatory_comparator": {
+    "name": "OpenCog Hyperon",
+    "metta_version": "0.2.10",
+    "metta_commit": "3f76dc460da6961f57f69f6c3e550c59c74ada83",
+    "source": "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md",
+    "status": "PINNED_PRIOR_AUDIT_NOT_EXECUTED_IN_THIS_STUDY"
+  }
+}

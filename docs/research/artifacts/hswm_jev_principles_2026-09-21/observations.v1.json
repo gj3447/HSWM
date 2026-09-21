@@ -1,0 +1,1390 @@
+{
+  "schema_version": "hswm-jev-principle-observations/v1",
+  "date": "2026-09-21",
+  "completion": {
+    "started": "2026-09-21T10:38:33.042Z",
+    "finished": "2026-09-21T10:47:48.916Z",
+    "callCount": 960,
+    "planned": 960,
+    "valid": 869,
+    "protocol_sha256": "cf8fb046bdea251aa4df8dd57fe577adab9f1da43c7df64280c21eba2630c0be"
+  },
+  "protocol_sha256": "cf8fb046bdea251aa4df8dd57fe577adab9f1da43c7df64280c21eba2630c0be",
+  "summaries": [
+    {
+      "arm": "frozen",
+      "mode": "direct",
+      "planned_test": 48,
+      "attempted_test": 48,
+      "valid_test": 48,
+      "correct_including_refusals": 29,
+      "raw": {
+        "n": 48,
+        "correct": 29,
+        "brier": 0.3790856105513227,
+        "nll": 3.7591845381918882
+      },
+      "temperature": {
+        "temperature": 4,
+        "calibrationNll": 1.5005835544086341,
+        "n": 32
+      },
+      "calibrated_test": {
+        "n": 48,
+        "correct": 29,
+        "brier": 0.32617252500661714,
+        "nll": 1.1159297722628247
+      },
+      "decision_only_auxiliary": null,
+      "family_test": [
+        {
+          "family": 0,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.41421008192151615,
+            "nll": 5.0701436155892505
+          }
+        },
+        {
+          "family": 1,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 8,
+            "brier": 0.276502000637175,
+            "nll": 2.7015095869825507
+          }
+        },
+        {
+          "family": 2,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.4190111557022315,
+            "nll": 4.883525809889024
+          }
+        },
+        {
+          "family": 3,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.4066192039443686,
+            "nll": 2.3815591403067304
+          }
+        }
+      ],
+      "attempted_calls": 80,
+      "mean_latency_ms": 72.96000847499727,
+      "prompt_tokens": 68180,
+      "completion_tokens": 80,
+      "selective_accuracy": [
+        {
+          "threshold": 0.6,
+          "n": 47,
+          "correct": 29
+        },
+        {
+          "threshold": 0.8,
+          "n": 46,
+          "correct": 28
+        },
+        {
+          "threshold": 0.9,
+          "n": 44,
+          "correct": 26
+        }
+      ],
+      "refusal_reasons": {}
+    },
+    {
+      "arm": "frozen",
+      "mode": "generated",
+      "planned_test": 48,
+      "attempted_test": 48,
+      "valid_test": 40,
+      "correct_including_refusals": 23,
+      "raw": {
+        "n": 40,
+        "correct": 23,
+        "brier": 0.29306257499999994,
+        "nll": 2.0516725162821845
+      },
+      "temperature": {
+        "temperature": 4,
+        "calibrationNll": 0.8589231095420435,
+        "n": 19
+      },
+      "calibrated_test": {
+        "n": 40,
+        "correct": 23,
+        "brier": 0.2625407834633753,
+        "nll": 1.9750132524083406
+      },
+      "decision_only_auxiliary": {
+        "status": "SECONDARY_DESCRIPTIVE_NOT_PRIMARY_PROTOCOL_REPAIR",
+        "n": 48,
+        "correct": 28
+      },
+      "family_test": [
+        {
+          "family": 0,
+          "attempted": 12,
+          "valid": 5,
+          "metrics": {
+            "n": 5,
+            "correct": 4,
+            "brier": 0.2000002,
+            "nll": 0.554717844514673
+          }
+        },
+        {
+          "family": 1,
+          "attempted": 12,
+          "valid": 11,
+          "metrics": {
+            "n": 11,
+            "correct": 6,
+            "brier": 0.31977272727272726,
+            "nll": 0.8740615424276862
+          }
+        },
+        {
+          "family": 2,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.3333333333333333,
+            "nll": 5.067268306361389
+          }
+        },
+        {
+          "family": 3,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.26708350000000003,
+            "nll": 0.7392845654727297
+          }
+        }
+      ],
+      "attempted_calls": 80,
+      "mean_latency_ms": 967.7482086500025,
+      "prompt_tokens": 70260,
+      "completion_tokens": 1626,
+      "selective_accuracy": [
+        {
+          "threshold": 0.6,
+          "n": 22,
+          "correct": 12
+        },
+        {
+          "threshold": 0.8,
+          "n": 11,
+          "correct": 7
+        },
+        {
+          "threshold": 0.9,
+          "n": 11,
+          "correct": 7
+        }
+      ],
+      "refusal_reasons": {
+        "PREDICTION_PROBABILITY_DISAGREEMENT": 21
+      }
+    },
+    {
+      "arm": "learned",
+      "mode": "direct",
+      "planned_test": 48,
+      "attempted_test": 48,
+      "valid_test": 48,
+      "correct_including_refusals": 26,
+      "raw": {
+        "n": 48,
+        "correct": 26,
+        "brier": 0.4053513426508027,
+        "nll": 2.825176439562131
+      },
+      "temperature": {
+        "temperature": 4,
+        "calibrationNll": 1.1385547886745226,
+        "n": 32
+      },
+      "calibrated_test": {
+        "n": 48,
+        "correct": 26,
+        "brier": 0.31781580314197955,
+        "nll": 0.9539440281529843
+      },
+      "decision_only_auxiliary": null,
+      "family_test": [
+        {
+          "family": 0,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.44725912430250747,
+            "nll": 2.9028396395316567
+          }
+        },
+        {
+          "family": 1,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.4646754495914081,
+            "nll": 4.168480236055744
+          }
+        },
+        {
+          "family": 2,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.3904514110355824,
+            "nll": 2.977327546795445
+          }
+        },
+        {
+          "family": 3,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.31901938567371246,
+            "nll": 1.2520583358656827
+          }
+        }
+      ],
+      "attempted_calls": 80,
+      "mean_latency_ms": 74.93358426249874,
+      "prompt_tokens": 121860,
+      "completion_tokens": 80,
+      "selective_accuracy": [
+        {
+          "threshold": 0.6,
+          "n": 48,
+          "correct": 26
+        },
+        {
+          "threshold": 0.8,
+          "n": 41,
+          "correct": 22
+        },
+        {
+          "threshold": 0.9,
+          "n": 33,
+          "correct": 19
+        }
+      ],
+      "refusal_reasons": {}
+    },
+    {
+      "arm": "learned",
+      "mode": "generated",
+      "planned_test": 48,
+      "attempted_test": 48,
+      "valid_test": 39,
+      "correct_including_refusals": 22,
+      "raw": {
+        "n": 39,
+        "correct": 22,
+        "brier": 0.24972932193733335,
+        "nll": 0.693387280452529
+      },
+      "temperature": {
+        "temperature": 4,
+        "calibrationNll": 0.7101972725980447,
+        "n": 25
+      },
+      "calibrated_test": {
+        "n": 39,
+        "correct": 22,
+        "brier": 0.24727180656531375,
+        "nll": 0.687664549302669
+      },
+      "decision_only_auxiliary": {
+        "status": "SECONDARY_DESCRIPTIVE_NOT_PRIMARY_PROTOCOL_REPAIR",
+        "n": 48,
+        "correct": 26
+      },
+      "family_test": [
+        {
+          "family": 0,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.2552083333333333,
+            "nll": 0.7073054336262284
+          }
+        },
+        {
+          "family": 1,
+          "attempted": 12,
+          "valid": 5,
+          "metrics": {
+            "n": 5,
+            "correct": 3,
+            "brier": 0.254,
+            "nll": 0.7013115794639964
+          }
+        },
+        {
+          "family": 2,
+          "attempted": 12,
+          "valid": 10,
+          "metrics": {
+            "n": 10,
+            "correct": 5,
+            "brier": 0.2416943555556,
+            "nll": 0.6749148248807499
+          }
+        },
+        {
+          "family": 3,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.24916666666666673,
+            "nll": 0.6915610490005341
+          }
+        }
+      ],
+      "attempted_calls": 80,
+      "mean_latency_ms": 978.3233576374985,
+      "prompt_tokens": 123940,
+      "completion_tokens": 1625,
+      "selective_accuracy": [
+        {
+          "threshold": 0.6,
+          "n": 19,
+          "correct": 11
+        },
+        {
+          "threshold": 0.8,
+          "n": 0,
+          "correct": 0
+        },
+        {
+          "threshold": 0.9,
+          "n": 0,
+          "correct": 0
+        }
+      ],
+      "refusal_reasons": {
+        "PREDICTION_PROBABILITY_DISAGREEMENT": 16
+      }
+    },
+    {
+      "arm": "evidence_only",
+      "mode": "direct",
+      "planned_test": 48,
+      "attempted_test": 48,
+      "valid_test": 48,
+      "correct_including_refusals": 25,
+      "raw": {
+        "n": 48,
+        "correct": 25,
+        "brier": 0.4097677287482735,
+        "nll": 2.8696875590377986
+      },
+      "temperature": {
+        "temperature": 4,
+        "calibrationNll": 1.1320589803102767,
+        "n": 32
+      },
+      "calibrated_test": {
+        "n": 48,
+        "correct": 25,
+        "brier": 0.32034201486185804,
+        "nll": 0.9620700359105757
+      },
+      "decision_only_auxiliary": null,
+      "family_test": [
+        {
+          "family": 0,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.45198954871432057,
+            "nll": 3.0494149537179305
+          }
+        },
+        {
+          "family": 1,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.4640290499055129,
+            "nll": 4.168635893558581
+          }
+        },
+        {
+          "family": 2,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.3959958069046221,
+            "nll": 2.981960856717436
+          }
+        },
+        {
+          "family": 3,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.32705650946863835,
+            "nll": 1.2787385321572524
+          }
+        }
+      ],
+      "attempted_calls": 80,
+      "mean_latency_ms": 70.83515561249752,
+      "prompt_tokens": 121860,
+      "completion_tokens": 80,
+      "selective_accuracy": [
+        {
+          "threshold": 0.6,
+          "n": 47,
+          "correct": 25
+        },
+        {
+          "threshold": 0.8,
+          "n": 40,
+          "correct": 22
+        },
+        {
+          "threshold": 0.9,
+          "n": 33,
+          "correct": 19
+        }
+      ],
+      "refusal_reasons": {}
+    },
+    {
+      "arm": "evidence_only",
+      "mode": "generated",
+      "planned_test": 48,
+      "attempted_test": 48,
+      "valid_test": 40,
+      "correct_including_refusals": 22,
+      "raw": {
+        "n": 40,
+        "correct": 22,
+        "brier": 0.2524860888889,
+        "nll": 0.6989598667380695
+      },
+      "temperature": {
+        "temperature": 4,
+        "calibrationNll": 0.7175338665272464,
+        "n": 27
+      },
+      "calibrated_test": {
+        "n": 40,
+        "correct": 22,
+        "brier": 0.24798903613897835,
+        "nll": 0.6891007895658153
+      },
+      "decision_only_auxiliary": {
+        "status": "SECONDARY_DESCRIPTIVE_NOT_PRIMARY_PROTOCOL_REPAIR",
+        "n": 48,
+        "correct": 26
+      },
+      "family_test": [
+        {
+          "family": 0,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.2552083333333333,
+            "nll": 0.7073054336262284
+          }
+        },
+        {
+          "family": 1,
+          "attempted": 12,
+          "valid": 6,
+          "metrics": {
+            "n": 6,
+            "correct": 3,
+            "brier": 0.27166666666666667,
+            "nll": 0.7371414381990228
+          }
+        },
+        {
+          "family": 2,
+          "attempted": 12,
+          "valid": 10,
+          "metrics": {
+            "n": 10,
+            "correct": 5,
+            "brier": 0.2416943555556,
+            "nll": 0.6749148248807499
+          }
+        },
+        {
+          "family": 3,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.24916666666666673,
+            "nll": 0.6915610490005341
+          }
+        }
+      ],
+      "attempted_calls": 80,
+      "mean_latency_ms": 969.6972851499977,
+      "prompt_tokens": 123940,
+      "completion_tokens": 1621,
+      "selective_accuracy": [
+        {
+          "threshold": 0.6,
+          "n": 20,
+          "correct": 11
+        },
+        {
+          "threshold": 0.8,
+          "n": 0,
+          "correct": 0
+        },
+        {
+          "threshold": 0.9,
+          "n": 0,
+          "correct": 0
+        }
+      ],
+      "refusal_reasons": {
+        "PREDICTION_PROBABILITY_DISAGREEMENT": 13
+      }
+    },
+    {
+      "arm": "removed",
+      "mode": "direct",
+      "planned_test": 48,
+      "attempted_test": 48,
+      "valid_test": 48,
+      "correct_including_refusals": 29,
+      "raw": {
+        "n": 48,
+        "correct": 29,
+        "brier": 0.3802520768547542,
+        "nll": 3.7448373096553538
+      },
+      "temperature": {
+        "temperature": 4,
+        "calibrationNll": 1.496512756382919,
+        "n": 32
+      },
+      "calibrated_test": {
+        "n": 48,
+        "correct": 29,
+        "brier": 0.32877551454250237,
+        "nll": 1.1134731706317293
+      },
+      "decision_only_auxiliary": null,
+      "family_test": [
+        {
+          "family": 0,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.41336516290979186,
+            "nll": 4.94681514960155
+          }
+        },
+        {
+          "family": 1,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 8,
+            "brier": 0.27621131270605287,
+            "nll": 2.751066777835978
+          }
+        },
+        {
+          "family": 2,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.42255238309780546,
+            "nll": 4.837647744697642
+          }
+        },
+        {
+          "family": 3,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.4088794487053667,
+            "nll": 2.4438195664862423
+          }
+        }
+      ],
+      "attempted_calls": 80,
+      "mean_latency_ms": 69.71873837500134,
+      "prompt_tokens": 68180,
+      "completion_tokens": 80,
+      "selective_accuracy": [
+        {
+          "threshold": 0.6,
+          "n": 47,
+          "correct": 29
+        },
+        {
+          "threshold": 0.8,
+          "n": 46,
+          "correct": 28
+        },
+        {
+          "threshold": 0.9,
+          "n": 42,
+          "correct": 24
+        }
+      ],
+      "refusal_reasons": {}
+    },
+    {
+      "arm": "removed",
+      "mode": "generated",
+      "planned_test": 48,
+      "attempted_test": 48,
+      "valid_test": 41,
+      "correct_including_refusals": 24,
+      "raw": {
+        "n": 41,
+        "correct": 24,
+        "brier": 0.2861586097560975,
+        "nll": 2.0042014918767124
+      },
+      "temperature": {
+        "temperature": 4,
+        "calibrationNll": 0.9066410600721571,
+        "n": 18
+      },
+      "calibrated_test": {
+        "n": 41,
+        "correct": 24,
+        "brier": 0.25940502279879446,
+        "nll": 1.937957963188828
+      },
+      "decision_only_auxiliary": {
+        "status": "SECONDARY_DESCRIPTIVE_NOT_PRIMARY_PROTOCOL_REPAIR",
+        "n": 48,
+        "correct": 28
+      },
+      "family_test": [
+        {
+          "family": 0,
+          "attempted": 12,
+          "valid": 6,
+          "metrics": {
+            "n": 6,
+            "correct": 5,
+            "brier": 0.16666699999999998,
+            "nll": 0.4624316204844914
+          }
+        },
+        {
+          "family": 1,
+          "attempted": 12,
+          "valid": 11,
+          "metrics": {
+            "n": 11,
+            "correct": 6,
+            "brier": 0.31977272727272726,
+            "nll": 0.8740615424276862
+          }
+        },
+        {
+          "family": 2,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.3333333333333333,
+            "nll": 5.067268306361389
+          }
+        },
+        {
+          "family": 3,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.26791675,
+            "nll": 0.7479812334164166
+          }
+        }
+      ],
+      "attempted_calls": 80,
+      "mean_latency_ms": 963.3863957374979,
+      "prompt_tokens": 70260,
+      "completion_tokens": 1626,
+      "selective_accuracy": [
+        {
+          "threshold": 0.6,
+          "n": 23,
+          "correct": 13
+        },
+        {
+          "threshold": 0.8,
+          "n": 12,
+          "correct": 8
+        },
+        {
+          "threshold": 0.9,
+          "n": 12,
+          "correct": 8
+        }
+      ],
+      "refusal_reasons": {
+        "PREDICTION_PROBABILITY_DISAGREEMENT": 21
+      }
+    },
+    {
+      "arm": "restored",
+      "mode": "direct",
+      "planned_test": 48,
+      "attempted_test": 48,
+      "valid_test": 48,
+      "correct_including_refusals": 25,
+      "raw": {
+        "n": 48,
+        "correct": 25,
+        "brier": 0.4097677287482735,
+        "nll": 2.8696875590377986
+      },
+      "temperature": {
+        "temperature": 4,
+        "calibrationNll": 1.1320589803102767,
+        "n": 32
+      },
+      "calibrated_test": {
+        "n": 48,
+        "correct": 25,
+        "brier": 0.32034201486185804,
+        "nll": 0.9620700359105757
+      },
+      "decision_only_auxiliary": null,
+      "family_test": [
+        {
+          "family": 0,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.45198954871432057,
+            "nll": 3.0494149537179305
+          }
+        },
+        {
+          "family": 1,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.4640290499055129,
+            "nll": 4.168635893558581
+          }
+        },
+        {
+          "family": 2,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.3959958069046221,
+            "nll": 2.981960856717436
+          }
+        },
+        {
+          "family": 3,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.32705650946863835,
+            "nll": 1.2787385321572524
+          }
+        }
+      ],
+      "attempted_calls": 80,
+      "mean_latency_ms": 70.94617898749948,
+      "prompt_tokens": 121860,
+      "completion_tokens": 80,
+      "selective_accuracy": [
+        {
+          "threshold": 0.6,
+          "n": 47,
+          "correct": 25
+        },
+        {
+          "threshold": 0.8,
+          "n": 40,
+          "correct": 22
+        },
+        {
+          "threshold": 0.9,
+          "n": 33,
+          "correct": 19
+        }
+      ],
+      "refusal_reasons": {}
+    },
+    {
+      "arm": "restored",
+      "mode": "generated",
+      "planned_test": 48,
+      "attempted_test": 48,
+      "valid_test": 40,
+      "correct_including_refusals": 22,
+      "raw": {
+        "n": 40,
+        "correct": 22,
+        "brier": 0.2524860888889,
+        "nll": 0.6989598667380695
+      },
+      "temperature": {
+        "temperature": 4,
+        "calibrationNll": 0.7175338665272464,
+        "n": 27
+      },
+      "calibrated_test": {
+        "n": 40,
+        "correct": 22,
+        "brier": 0.24798903613897835,
+        "nll": 0.6891007895658153
+      },
+      "decision_only_auxiliary": {
+        "status": "SECONDARY_DESCRIPTIVE_NOT_PRIMARY_PROTOCOL_REPAIR",
+        "n": 48,
+        "correct": 26
+      },
+      "family_test": [
+        {
+          "family": 0,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.2552083333333333,
+            "nll": 0.7073054336262284
+          }
+        },
+        {
+          "family": 1,
+          "attempted": 12,
+          "valid": 6,
+          "metrics": {
+            "n": 6,
+            "correct": 3,
+            "brier": 0.27166666666666667,
+            "nll": 0.7371414381990228
+          }
+        },
+        {
+          "family": 2,
+          "attempted": 12,
+          "valid": 10,
+          "metrics": {
+            "n": 10,
+            "correct": 5,
+            "brier": 0.2416943555556,
+            "nll": 0.6749148248807499
+          }
+        },
+        {
+          "family": 3,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.24916666666666673,
+            "nll": 0.6915610490005341
+          }
+        }
+      ],
+      "attempted_calls": 80,
+      "mean_latency_ms": 969.9650022624995,
+      "prompt_tokens": 123940,
+      "completion_tokens": 1621,
+      "selective_accuracy": [
+        {
+          "threshold": 0.6,
+          "n": 20,
+          "correct": 11
+        },
+        {
+          "threshold": 0.8,
+          "n": 0,
+          "correct": 0
+        },
+        {
+          "threshold": 0.9,
+          "n": 0,
+          "correct": 0
+        }
+      ],
+      "refusal_reasons": {
+        "PREDICTION_PROBABILITY_DISAGREEMENT": 13
+      }
+    },
+    {
+      "arm": "oracle",
+      "mode": "direct",
+      "planned_test": 48,
+      "attempted_test": 48,
+      "valid_test": 48,
+      "correct_including_refusals": 27,
+      "raw": {
+        "n": 48,
+        "correct": 27,
+        "brier": 0.38080277123849643,
+        "nll": 2.011209289786236
+      },
+      "temperature": {
+        "temperature": 4,
+        "calibrationNll": 1.0873830656187837,
+        "n": 32
+      },
+      "calibrated_test": {
+        "n": 48,
+        "correct": 27,
+        "brier": 0.2811493164966915,
+        "nll": 0.7859380326164236
+      },
+      "decision_only_auxiliary": null,
+      "family_test": [
+        {
+          "family": 0,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.3908076036983655,
+            "nll": 2.668067510837959
+          }
+        },
+        {
+          "family": 1,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.4242373267084801,
+            "nll": 1.695275850456187
+          }
+        },
+        {
+          "family": 2,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 8,
+            "brier": 0.31108079147359874,
+            "nll": 1.6866952363820957
+          }
+        },
+        {
+          "family": 3,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.3970853630735413,
+            "nll": 1.9947985614687014
+          }
+        }
+      ],
+      "attempted_calls": 80,
+      "mean_latency_ms": 72.29430063750078,
+      "prompt_tokens": 68820,
+      "completion_tokens": 80,
+      "selective_accuracy": [
+        {
+          "threshold": 0.6,
+          "n": 46,
+          "correct": 26
+        },
+        {
+          "threshold": 0.8,
+          "n": 41,
+          "correct": 24
+        },
+        {
+          "threshold": 0.9,
+          "n": 34,
+          "correct": 19
+        }
+      ],
+      "refusal_reasons": {}
+    },
+    {
+      "arm": "oracle",
+      "mode": "generated",
+      "planned_test": 48,
+      "attempted_test": 48,
+      "valid_test": 48,
+      "correct_including_refusals": 24,
+      "raw": {
+        "n": 48,
+        "correct": 24,
+        "brier": 0.2971042916666667,
+        "nll": 0.9898337351834853
+      },
+      "temperature": {
+        "temperature": 4,
+        "calibrationNll": 0.7802398791681184,
+        "n": 25
+      },
+      "calibrated_test": {
+        "n": 48,
+        "correct": 24,
+        "brier": 0.2559918135834975,
+        "nll": 0.7096974558215924
+      },
+      "decision_only_auxiliary": {
+        "status": "SECONDARY_DESCRIPTIVE_NOT_PRIMARY_PROTOCOL_REPAIR",
+        "n": 48,
+        "correct": 24
+      },
+      "family_test": [
+        {
+          "family": 0,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.29670858333333333,
+            "nll": 1.1534356737707296
+          }
+        },
+        {
+          "family": 1,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 5,
+            "brier": 0.33395833333333336,
+            "nll": 0.9079675676805511
+          }
+        },
+        {
+          "family": 2,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 6,
+            "brier": 0.29150016666666667,
+            "nll": 1.153352298742931
+          }
+        },
+        {
+          "family": 3,
+          "attempted": 12,
+          "valid": 12,
+          "metrics": {
+            "n": 12,
+            "correct": 7,
+            "brier": 0.2662500833333334,
+            "nll": 0.7445794005397287
+          }
+        }
+      ],
+      "attempted_calls": 80,
+      "mean_latency_ms": 975.1440483875022,
+      "prompt_tokens": 70900,
+      "completion_tokens": 1632,
+      "selective_accuracy": [
+        {
+          "threshold": 0.6,
+          "n": 20,
+          "correct": 10
+        },
+        {
+          "threshold": 0.8,
+          "n": 10,
+          "correct": 6
+        },
+        {
+          "threshold": 0.9,
+          "n": 10,
+          "correct": 6
+        }
+      ],
+      "refusal_reasons": {
+        "PREDICTION_PROBABILITY_DISAGREEMENT": 7
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "arm": "frozen",
+      "paired_valid": 40,
+      "direct": {
+        "n": 40,
+        "correct": 24,
+        "brier": 0.3798895357673103,
+        "nll": 3.235429112124219
+      },
+      "generated": {
+        "n": 40,
+        "correct": 23,
+        "brier": 0.29306257499999994,
+        "nll": 2.0516725162821845
+      },
+      "direct_wins": 5,
+      "generated_wins": 4
+    },
+    {
+      "arm": "learned",
+      "paired_valid": 39,
+      "direct": {
+        "n": 39,
+        "correct": 22,
+        "brier": 0.37772380521584675,
+        "nll": 2.2935402495754307
+      },
+      "generated": {
+        "n": 39,
+        "correct": 22,
+        "brier": 0.24972932193733335,
+        "nll": 0.693387280452529
+      },
+      "direct_wins": 8,
+      "generated_wins": 8
+    },
+    {
+      "arm": "evidence_only",
+      "paired_valid": 40,
+      "direct": {
+        "n": 40,
+        "correct": 21,
+        "brier": 0.40161784703760783,
+        "nll": 2.5310744370601888
+      },
+      "generated": {
+        "n": 40,
+        "correct": 22,
+        "brier": 0.2524860888889,
+        "nll": 0.6989598667380695
+      },
+      "direct_wins": 7,
+      "generated_wins": 8
+    },
+    {
+      "arm": "removed",
+      "paired_valid": 41,
+      "direct": {
+        "n": 41,
+        "correct": 25,
+        "brier": 0.37198956283044693,
+        "nll": 3.1702114723346466
+      },
+      "generated": {
+        "n": 41,
+        "correct": 24,
+        "brier": 0.2861586097560975,
+        "nll": 2.0042014918767124
+      },
+      "direct_wins": 5,
+      "generated_wins": 4
+    },
+    {
+      "arm": "restored",
+      "paired_valid": 40,
+      "direct": {
+        "n": 40,
+        "correct": 21,
+        "brier": 0.40161784703760783,
+        "nll": 2.5310744370601888
+      },
+      "generated": {
+        "n": 40,
+        "correct": 22,
+        "brier": 0.2524860888889,
+        "nll": 0.6989598667380695
+      },
+      "direct_wins": 7,
+      "generated_wins": 8
+    },
+    {
+      "arm": "oracle",
+      "paired_valid": 48,
+      "direct": {
+        "n": 48,
+        "correct": 27,
+        "brier": 0.38080277123849643,
+        "nll": 2.011209289786236
+      },
+      "generated": {
+        "n": 48,
+        "correct": 24,
+        "brier": 0.2971042916666667,
+        "nll": 0.9898337351834853
+      },
+      "direct_wins": 8,
+      "generated_wins": 5
+    }
+  ],
+  "controls": [
+    {
+      "family": 0,
+      "removal_exact": true,
+      "restoration_exact": true,
+      "evidence_equal": true,
+      "learned_relation_revision": 1,
+      "repeated_predictions": [
+        {
+          "mode": "direct",
+          "frozen_removed": 16,
+          "learned_restored": 13
+        },
+        {
+          "mode": "generated",
+          "frozen_removed": 1,
+          "learned_restored": 1
+        }
+      ]
+    },
+    {
+      "family": 1,
+      "removal_exact": true,
+      "restoration_exact": true,
+      "evidence_equal": true,
+      "learned_relation_revision": 1,
+      "repeated_predictions": [
+        {
+          "mode": "direct",
+          "frozen_removed": 11,
+          "learned_restored": 14
+        },
+        {
+          "mode": "generated",
+          "frozen_removed": 0,
+          "learned_restored": 1
+        }
+      ]
+    },
+    {
+      "family": 2,
+      "removal_exact": true,
+      "restoration_exact": true,
+      "evidence_equal": true,
+      "learned_relation_revision": 1,
+      "repeated_predictions": [
+        {
+          "mode": "direct",
+          "frozen_removed": 13,
+          "learned_restored": 17
+        },
+        {
+          "mode": "generated",
+          "frozen_removed": 1,
+          "learned_restored": 1
+        }
+      ]
+    },
+    {
+      "family": 3,
+      "removal_exact": true,
+      "restoration_exact": true,
+      "evidence_equal": true,
+      "learned_relation_revision": 1,
+      "repeated_predictions": [
+        {
+          "mode": "direct",
+          "frozen_removed": 17,
+          "learned_restored": 17
+        },
+        {
+          "mode": "generated",
+          "frozen_removed": 1,
+          "learned_restored": 1
+        }
+      ]
+    }
+  ],
+  "request_audit": 960,
+  "unique_queries": 960,
+  "gpu": {
+    "samples": 278,
+    "mean_utilization_percent": 90.17985611510791,
+    "peak_utilization_percent": 96,
+    "boundary": "Device-wide, not job-exclusive energy"
+  },
+  "uninformative_baseline": {
+    "p1": 0.5,
+    "brier": 0.25,
+    "nll": 0.6931471805599453,
+    "balanced_test_accuracy": 0.5
+  },
+  "limitations": [
+    "Four authored binary task families, one partition each; no population generalization or independent-world-outcome claim.",
+    "Direct conditions reuse pretrained LM logits; no learned neural head, shared-trunk parallel sampler or RLCD implementation.",
+    "Conditional candidate probabilities are not prior full-vocabulary probabilities; generated and direct instructions/output contracts differ.",
+    "Temperature fits calibration partition only, cannot change argmax accuracy; 32 cases per fit is small.",
+    "Fresh native stores preserve reference authorization and mechanical admission, not full canonical Permit or causal credit.",
+    "Generated decision-only accuracy is a secondary diagnostic retaining inconsistent outputs; it does not alter the preregistered refusal rule."
+  ],
+  "claim_ceiling": "BOUNDED_SYNTHETIC_READOUT_AND_CALIBRATION_NOT_HSWM_EFFICACY_CR_FCL_CLOSURE"
+}

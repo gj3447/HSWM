@@ -1,0 +1,6 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT DISTINCT ?id ?name ?status ?source WHERE {
+  ?a p:principle_id ?principle; r:RELATES_TO ?o.
+  ?o p:obligation_id ?id; p:name ?name; p:status ?status; p:source_ref ?source.
+} ORDER BY ?id

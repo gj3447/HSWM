@@ -1,0 +1,11 @@
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+# Anchors carry stable identities; do not require local task_id fields on them.
+SELECT ?taskId ?relation ?target WHERE {
+  ?task a role:WORK_PACKAGE; p:task_id ?taskId; ?relation ?target .
+  VALUES ?relation {
+    r:REUSES_PRIOR_TASK r:ADDRESSES_JEV_PRINCIPLE r:ADDRESSES_OBLIGATION
+    r:PRESERVES_FRACTAL_LAW r:RELATES_TO
+  }
+} ORDER BY ?taskId ?relation ?target

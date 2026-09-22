@@ -1,0 +1,49 @@
+{
+  "schema_version": "hswm-jev-research-work-plan-graph-validation/v1",
+  "date": "2026-09-22",
+  "bundle_path": "ontology/development/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.v1.json",
+  "sha256": "3db347cee8941b375a23a467c29ed7091779092aa933320fc5c9a639d4d1d8a3",
+  "command": "node _research/jev_research_work_plan_2026-09-22/verify-plan.mjs",
+  "status": "PASS",
+  "counts": {
+    "nodes": 254,
+    "anchors": 49,
+    "relations": 907
+  },
+  "artifact_bindings": 49,
+  "ready_tasks": [
+    "B00",
+    "B01",
+    "B02"
+  ],
+  "crosswalk": {
+    "prior_tasks": 22,
+    "jev_principles": 6,
+    "work_stages": 5,
+    "anchors_resolved": 49
+  },
+  "queries": {
+    "ready_roots.rq": 3,
+    "task_contracts.rq": 219,
+    "dependencies.rq": 195,
+    "crosswalk.rq": 340,
+    "open_conditions.rq": 26,
+    "violations.rq": 0
+  },
+  "negative_probes": [
+    "CYCLE_DETECTED",
+    "MISSING_ROLE_REJECTED",
+    "PREMATURE_COMPLETE_DETECTED",
+    "SOURCE_HASH_CORRUPTION_DETECTED",
+    "CONDITION_DEADLOCK_DETECTED",
+    "NONVACUOUS_ROOT_ROLE_DETECTED",
+    "EMPTY_GRAPH_REJECTED"
+  ],
+  "limitation": "Root negative SHACL reports use the same pinned engine directly because the native failed-report formatter cannot serialize a null resultPath. No engine exception counts as passing.",
+  "shacl": {
+    "generic_v2": "PASS",
+    "existing_work_plan": "PASS",
+    "exact_target_root": "PASS"
+  },
+  "boundary": "Planning delivery only. Future research outputs absent; all 30 tasks PLANNED and all 13 support conditions OPEN. No CR/FCL promotion or model efficacy result."
+}

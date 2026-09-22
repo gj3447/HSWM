@@ -1,5 +1,10 @@
 # HSWM — public repository index
 
+2026-09-22 [Jev 통합 연구 작업 계획](docs/operations/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.md)은
+국소 실행·반례 교정·작은 읽기·공동 출력·두 scale 합성을 30개 작업, 13개 가정, 13개 진행 조건으로 나눈다.
+Jev P1–P6과 기존 22개 작업을 source-bound KG로 연결하고, 최초 착수 B00/B01/B02와
+병렬 설계·실험 선행 조건·실패 후 경로 변경을 구분한다. 새 모델 실험과 CR/FCL 승격은 없다.
+
 2026-09-22 [HSWM 심층 연구·실현 경로](docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md)는
 17편의 원 논문과 Hyperon 공식 자료를 기존 Jev 코드·관측에 연결한다.
 국소 의미 실행, 반례 기반 관계 교정, 능동 읽기, joint law와 두 scale 합성의 대조군·실패 조건을

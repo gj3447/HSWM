@@ -1,0 +1,7 @@
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?taskId ?track ?owner ?input ?output ?criterion ?source WHERE {
+  ?task a role:WORK_PACKAGE; p:task_id ?taskId; p:track ?track; p:responsibility_owner ?owner;
+    r:USES_INPUT ?input; r:EXPECTS_OUTPUT ?output; r:HAS_CRITERION ?criterion; r:HAS_SOURCE ?source .
+} ORDER BY ?taskId ?output ?criterion

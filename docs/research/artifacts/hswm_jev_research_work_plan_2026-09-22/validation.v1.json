@@ -1,0 +1,80 @@
+{
+  "schema_version": "hswm-jev-research-work-plan-validation/v1",
+  "date": "2026-09-22",
+  "status": "PASS",
+  "delivery": "SOURCE_BOUND_RESEARCH_PLAN_ONLY",
+  "bundle": {
+    "path": "ontology/development/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.v1.json",
+    "sha256": "3db347cee8941b375a23a467c29ed7091779092aa933320fc5c9a639d4d1d8a3",
+    "nodes": 254,
+    "anchors": 49,
+    "relations": 907,
+    "artifact_bindings": 49
+  },
+  "checks": [
+    {
+      "command": "npm --prefix src/hswm/effect-runtime run build",
+      "status": "PASS"
+    },
+    {
+      "command": "node _research/jev_research_work_plan_2026-09-22/verify-plan.mjs",
+      "status": "PASS",
+      "negative_probes": [
+        "CYCLE_DETECTED",
+        "MISSING_ROLE_REJECTED",
+        "PREMATURE_COMPLETE_DETECTED",
+        "SOURCE_HASH_CORRUPTION_DETECTED",
+        "CONDITION_DEADLOCK_DETECTED",
+        "NONVACUOUS_ROOT_ROLE_DETECTED",
+        "EMPTY_GRAPH_REJECTED"
+      ],
+      "scope": "Exact source/graph/anchor/dependency/crosswalk parity and structural constraints; not empirical research"
+    },
+    {
+      "command": "src/hswm/effect-runtime/bin/hswm-dev hswm run --focus ontology --task <research-plan-task>",
+      "status": "SUCCEEDED",
+      "selected_relation": "relation:ontology-focused",
+      "tests": 48,
+      "test_files": 4
+    },
+    {
+      "command": "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology",
+      "status": "PASS"
+    },
+    {
+      "command": "native hswm-kg-bundle query ready_roots.rq",
+      "status": "PASS",
+      "ready_tasks": [
+        "B00",
+        "B01",
+        "B02"
+      ]
+    }
+  ],
+  "development_feedback": {
+    "recorded": "FEEDBACK_RECORDED",
+    "source_class": "agent(codex)",
+    "usefulness": "Existing ontology checks useful for projection contracts; separate plan verifier required. Agent judgment, not user feedback or causal efficacy.",
+    "pending_feedback_for_this_task": false,
+    "unrelated_pending_feedback": "PRESERVED_NOT_MODIFIED_OR_PUBLISHED"
+  },
+  "review_corrections": [
+    "Namespaced prior task IDs; no accidental A00/M01/M02 self-dependencies.",
+    "Separated design parallelism from support conditions; negative reports can complete.",
+    "Recorded current roles/exceptionRefs mutation limits and separate future typed extension.",
+    "Resolved all 49 prior/Jev/W/CR/FCL anchors against hash-bound owner sources.",
+    "SPARQL crosswalk reads actual anchor edges instead of requiring nonexistent anchor task properties.",
+    "Condition-deadlock probe invokes the same DAG validation as the positive plan."
+  ],
+  "limitation": "Root negative SHACL reports use the same pinned engine directly because the native failed-report formatter cannot serialize a null resultPath. No engine exception counts as passing.",
+  "nonclaims": {
+    "new_model_experiments": 0,
+    "new_runtime_implementation_in_this_delivery": false,
+    "new_lean_proofs": false,
+    "cr_fcl_promotion": false,
+    "official_suite_requalification": false,
+    "live_kg_write": false,
+    "new_packages_installed": 0
+  },
+  "publication_scope": "Only this plan/doc/query/artifact bundle and README/INDEX; unrelated existing working-tree changes preserved."
+}

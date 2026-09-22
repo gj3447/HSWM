@@ -1,0 +1,16 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+
+# Core-only non-vacuity guard: the root exists and owns a meaningful plan inventory.
+role:JevResearchPlanRootShape a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-jev-research-work-plan-2026-09-22> ;
+  sh:class role:PLAN_ROOT ;
+  sh:property [ sh:path p:source_ref ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[0-9a-f]{64}$" ] ;
+  sh:property [ sh:path p:responsibility_owner ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:claim_ceiling ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:WORK_PACKAGE ] ; sh:qualifiedMinCount 30 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:minCount 1 ; sh:class role:ENGINEERING_SOURCE ] .

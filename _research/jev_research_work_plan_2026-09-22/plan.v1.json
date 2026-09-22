@@ -1,0 +1,2231 @@
+{
+  "schema_version": "hswm-jev-research-work-plan/v1",
+  "created_on": "2026-09-22",
+  "source_base_commit": "18d47869fbf2f471c9487ebdec2107d506e64145",
+  "status": "PLANNED_NOT_IMPLEMENTED",
+  "authority_boundary": "User authorizes planning. Decomposition/criteria SECONDARY_AI; no new approval gate or scientific promotion.",
+  "target": "One AI, hypergraph neural organization, LLM basic computation, hypergraph Semantic Weight. Evolving graph is state, harness, world/self model and learner.",
+  "conceptual_delta": "Operational W1–W5 work with Jev P1–P6, runtime limits, artifact dependencies and separate empirical conditions; preserve prior 22-task proof program.",
+  "plan_doc": "docs/operations/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.md",
+  "source_paths": [
+    "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+    "docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md",
+    "docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md",
+    "docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md",
+    "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md",
+    "docs/research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md",
+    "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+    "docs/research/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.md",
+    "_research/semantic_proof_plan_2026-09-15/plan.v1.json",
+    "ontology/development/HSWM_SEMANTIC_PROOF_WORK_PLAN_2026-09-15.v1.json",
+    "ontology/development/HSWM_JEV_PRINCIPLES_2026-09-21.v1.json",
+    "ontology/development/HSWM_DEEP_RESEARCH_2026-09-22.v1.json",
+    "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+    "ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json",
+    "docs/research/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.md",
+    "results/HSWM_JEV_PRINCIPLES_2026-09-21.md",
+    "docs/research/artifacts/hswm_jev_principles_2026-09-21/audit.v1.json",
+    "docs/research/artifacts/hswm_jev_principles_2026-09-21/observations.v1.json",
+    "docs/research/artifacts/hswm_jev_research_work_plan_2026-09-22/jev-source-review.v1.json",
+    "docs/research/artifacts/hswm_jev_research_work_plan_2026-09-22/mechanism-work-review.md",
+    "docs/research/artifacts/hswm_jev_research_work_plan_2026-09-22/navigation.v1.json",
+    "docs/research/artifacts/hswm_jev_research_work_plan_2026-09-22/research-crosswalk-review.md",
+    "docs/research/artifacts/hswm_jev_research_work_plan_2026-09-22/standard-review.v1.json",
+    "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+    "_research/hswm_deep_research_v1/protocol.v1.json",
+    "docs/research/HSWM_JEV_PRINCIPLES_2026-09-21.md",
+    "docs/research/artifacts/hswm_deep_research_2026-09-22/mechanism-audit.v1.json",
+    "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+    "src/hswm/effect-runtime/src/semantic-decision-domain.ts",
+    "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md",
+    "_research/jev_principles_v1/support/domain.mts",
+    "_research/jev_principles_v1/run.mts",
+    "docs/research/artifacts/hswm_deep_research_2026-09-22/learning-sources.v1.json",
+    "src/hswm/effect-runtime/package-lock.json",
+    "ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json",
+    "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json"
+  ],
+  "tasks": [
+    {
+      "id": "B00",
+      "title": "연구 대상·기존 실패·관측 계약",
+      "track": "FOUNDATION",
+      "responsibility_role": "research-contract",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "SPECIFICATION",
+      "hard_dependencies": [],
+      "required_start_decisions": [],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "P00",
+        "A00"
+      ],
+      "jev_principles": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "cr": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fcl": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "assumptions": [
+        "A-OBS",
+        "A-EXEC"
+      ],
+      "input_contract": "HSWM 정체성, 기존22작업, Jev 관측, W1–W5",
+      "output_contract": "공통 질문·관측·기존 실패·crosswalk 계약",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/B00.v1.json",
+      "acceptance": [
+        "하나의 AI/하이퍼그래프/LLM 계산/Semantic Weight를 함께 보존하고 기존 CR/FCL 상태를 바꾸지 않는다.",
+        "bytes, 전이 성향, 예측 확률, evidence, routing score, causal effect를 별도 항목으로 정의한다."
+      ],
+      "failure_action": "관측 불가능한 질문은 미확정으로 남기고 목표·기존 RED를 축소하지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+        "docs/research/HSWM_JEV_PRINCIPLES_2026-09-21.md",
+        "docs/research/artifacts/hswm_deep_research_2026-09-22/mechanism-audit.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "FOUNDATION"
+      ]
+    },
+    {
+      "id": "B01",
+      "title": "모델·tokenizer·서버·복원 범위",
+      "track": "FOUNDATION",
+      "responsibility_role": "runtime-integration",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "FEASIBILITY_AUDIT",
+      "hard_dependencies": [],
+      "required_start_decisions": [],
+      "resolves_decisions": [
+        "D-MODEL"
+      ],
+      "prior_tasks": [
+        "P01"
+      ],
+      "jev_principles": [
+        "P1",
+        "P3"
+      ],
+      "cr": [
+        0,
+        7
+      ],
+      "fcl": [
+        1
+      ],
+      "assumptions": [
+        "A-PIN"
+      ],
+      "input_contract": "현재 실행 코드·역사적 pins·실제 serving 접근 정보",
+      "output_contract": "실행 pin·capability·숨은 상태·복원 가능성 보고",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/B01.v1.json",
+      "acceptance": [
+        "checkpoint/revision, tokenizer/template bytes, server version/digest, precision/flags/hardware를 고정한다.",
+        "접근 불가·session/cache·masked logprob 불명확성을 그대로 기록하고 D-MODEL을 판정한다."
+      ],
+      "failure_action": "불가 보고로 조사는 완료 가능하나 D-MODEL은 충족되지 않는다. 모델 alias만으로 원인을 단정하지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+        "src/hswm/effect-runtime/src/semantic-decision-domain.ts",
+        "docs/research/artifacts/hswm_deep_research_2026-09-22/mechanism-audit.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "FOUNDATION"
+      ]
+    },
+    {
+      "id": "B02",
+      "title": "Jev·Hyperon·대조군 자격",
+      "track": "FOUNDATION",
+      "responsibility_role": "comparator-research",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "FEASIBILITY_AUDIT",
+      "hard_dependencies": [],
+      "required_start_decisions": [],
+      "resolves_decisions": [
+        "D-COMPARATOR",
+        "D-HYPERON"
+      ],
+      "prior_tasks": [
+        "P02"
+      ],
+      "jev_principles": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "cr": [
+        0,
+        7
+      ],
+      "fcl": [
+        2,
+        8
+      ],
+      "assumptions": [
+        "A-COMPARE"
+      ],
+      "input_contract": "공식 Jev 자료·Hyperon pinned audit·text/memory/code baseline",
+      "output_contract": "component별 비교 가능성·동일 조건·성숙도 행렬",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/B02.v1.json",
+      "acceptance": [
+        "P1–P3 vendor 원리와 P4–P6 HSWM 확장을 구분한다. frozen readout을 RLCD 재현으로 부르지 않는다.",
+        "Hyperon component/commit과 자체 adapter 기여를 분리하고 불가도 근거 있는 상태로 기록한다.",
+        "D-COMPARATOR는 frozen/evidence/sham 필수 대조 준비와 비교 범위의 기록만 요구한다. Hyperon 미가용이어도 제한된 W2는 가능하며, Hyperon 실제 실행은 별도 D-HYPERON을 요구한다."
+      ],
+      "failure_action": "미실행 Hyperon 대비 우위는 주장하지 않는다. 필수 기전 대조가 가능하면 범위 제한 연구는 진행한다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md",
+        "docs/research/HSWM_JEV_PRINCIPLES_2026-09-21.md",
+        "docs/research/artifacts/hswm_jev_research_work_plan_2026-09-22/jev-source-review.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "FOUNDATION"
+      ]
+    },
+    {
+      "id": "B03",
+      "title": "자료 분리·비용·판정 규칙",
+      "track": "FOUNDATION",
+      "responsibility_role": "evaluation-design",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "SPECIFICATION",
+      "hard_dependencies": [
+        "B00"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [
+        "D-STUDY"
+      ],
+      "prior_tasks": [
+        "C01",
+        "S02",
+        "S03"
+      ],
+      "jev_principles": [
+        "P1",
+        "P2"
+      ],
+      "cr": [
+        1,
+        2
+      ],
+      "fcl": [
+        1,
+        4
+      ],
+      "assumptions": [
+        "A-OBS",
+        "A-CAUSAL"
+      ],
+      "input_contract": "관측 계약·W1/W2 proposed protocol",
+      "output_contract": "split·label custody·비용·거절·중단·분석 계약",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/B03.v1.json",
+      "acceptance": [
+        "pilot/train/selection/calibration/final-test/retention 접근과 재사용 정책을 분리한다.",
+        "W1 2784회, W2 후보4/round3 및 +5pp/2pp는 제안값이다. 각 실행의 수치·예산·순서를 결과 전에 동결한다."
+      ],
+      "failure_action": "label 누출·분모 변경·test 후 기준 변경은 확증에서 제외한다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/research/HSWM_JEV_PRINCIPLES_2026-09-21.md"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "FOUNDATION"
+      ]
+    },
+    {
+      "id": "E00",
+      "title": "128-case와 의미 변환 fixture",
+      "track": "W1",
+      "responsibility_role": "experiment-instrumentation",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "DESIGN_AND_IMPLEMENTATION",
+      "hard_dependencies": [
+        "B00"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "K01",
+        "K02"
+      ],
+      "jev_principles": [
+        "P1",
+        "P4",
+        "P5"
+      ],
+      "cr": [
+        0,
+        5
+      ],
+      "fcl": [
+        6
+      ],
+      "assumptions": [
+        "A-OBS"
+      ],
+      "input_contract": "4개 authored rule·5-bit case·role/ordinal 계약",
+      "output_contract": "독립 참조 실행기·6종 변환·평가 전용 label manifest",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/E00.v1.json",
+      "acceptance": [
+        "4×32=128을 독립 참조로 확인한다. 원본/paraphrase2/opaque 재명명/열거 재배치/의미 변경 role 교환을 고정한다.",
+        "정답·expected intermediate는 모델에 넣지 않는다. role 교환과 같은 역할 내 열거 순서를 구분한다."
+      ],
+      "failure_action": "fixture/변환 오류는 모델 실패로 채점하지 않고 manifest를 교정한다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "_research/jev_principles_v1/support/domain.mts"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W1"
+      ]
+    },
+    {
+      "id": "E01",
+      "title": "E0/E1/E2 실행·파서 계약",
+      "track": "W1",
+      "responsibility_role": "runtime-integration",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "DESIGN_AND_IMPLEMENTATION",
+      "hard_dependencies": [
+        "E00"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "K01",
+        "I01"
+      ],
+      "jev_principles": [
+        "P1"
+      ],
+      "cr": [
+        0
+      ],
+      "fcl": [
+        1
+      ],
+      "assumptions": [
+        "A-PIN"
+      ],
+      "input_contract": "fixture·ReadFrame·direct/generative 경로",
+      "output_contract": "typed frame·3개 channel·거절/중간 출력 parser",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/E01.v1.json",
+      "acceptance": [
+        "E0 tokenizer/logprob 의미, E1 answer-only, E2 base/context_flip/exception_flip/answer schema를 고정한다.",
+        "오류 출력은 실패로 포함하고 숨은 repair/retry/extraction을 금지한다. 중간 record를 내부 사고 관측으로 부르지 않는다."
+      ],
+      "failure_action": "부재 channel은 CHANNEL_UNAVAILABLE로 남기고 확률을 보충하지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+        "src/hswm/effect-runtime/src/semantic-decision-domain.ts",
+        "_research/jev_principles_v1/run.mts"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W1"
+      ],
+      "hypotheses_under_test": [
+        "A-EXEC"
+      ]
+    },
+    {
+      "id": "E02",
+      "title": "serving 반복성·분모·비용 recorder",
+      "track": "W1",
+      "responsibility_role": "experiment-instrumentation",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "DESIGN_AND_IMPLEMENTATION",
+      "hard_dependencies": [
+        "B01",
+        "E01",
+        "B03"
+      ],
+      "required_start_decisions": [
+        "D-MODEL",
+        "D-STUDY"
+      ],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "P01",
+        "C01",
+        "I01"
+      ],
+      "jev_principles": [
+        "P1",
+        "P3"
+      ],
+      "cr": [
+        0,
+        2
+      ],
+      "fcl": [
+        1
+      ],
+      "assumptions": [
+        "A-PIN"
+      ],
+      "input_contract": "pins·channel·fixed sentinels",
+      "output_contract": "봉인 trace·반복성·logprob normalization·비용 보고",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/E02.v1.json",
+      "acceptance": [
+        "8 sentinel×20 technical repeat를 사전 선택한다. 동일 bytes 요청의 bit/probability 변동을 분리한다.",
+        "frame/request/response hash, calls, tokens, latency, failure, service drift를 기록한다. private raw를 공개 KG에 넣지 않는다."
+      ],
+      "failure_action": "drift는 새 manifest로 분리한다. seed/temperature만으로 결정론을 선언하지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/research/artifacts/hswm_deep_research_2026-09-22/mechanism-audit.v1.json",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W1"
+      ],
+      "hypotheses_under_test": [
+        "A-EXEC"
+      ]
+    },
+    {
+      "id": "E03",
+      "title": "oracle 국소 실행 census 판정",
+      "track": "W1",
+      "responsibility_role": "empirical-evaluation",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "EMPIRICAL_STUDY",
+      "hard_dependencies": [
+        "E00",
+        "E01",
+        "E02",
+        "B03"
+      ],
+      "required_start_decisions": [
+        "D-MODEL",
+        "D-STUDY"
+      ],
+      "resolves_decisions": [
+        "D-EXEC",
+        "D-REROUTE"
+      ],
+      "prior_tasks": [
+        "I02",
+        "K02"
+      ],
+      "jev_principles": [
+        "P1"
+      ],
+      "cr": [
+        0,
+        5
+      ],
+      "fcl": [
+        6
+      ],
+      "assumptions": [
+        "A-EXEC"
+      ],
+      "input_contract": "128×6 cases·3 LLM arm·E3 reference",
+      "output_contract": "W1 정확도·거절·안정성·비용·실패 기전 보고",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/E03.v1.json",
+      "acceptance": [
+        "각 LLM arm의768 census와160 technical requests를 분리한다. 총2784회 제안 외 호출은 추가 비용이다.",
+        "하나 이상의 LLM 조건이 고정 census/변환 오류·거절0 및 bit 안정성을 보여야 instrument readiness다. E3는 효능에서 제외한다."
+      ],
+      "failure_action": "미충족이면 D-EXEC를 올리지 않는다. E05에서 실패 가족의 교체를 설계한다. 유효한 음성 보고도 작업 완료는 가능하다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/research/artifacts/hswm_deep_research_2026-09-22/mechanism-audit.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W1"
+      ]
+    },
+    {
+      "id": "E04",
+      "title": "확률 보정·적용 범위",
+      "track": "W1",
+      "responsibility_role": "uncertainty-evaluation",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "EMPIRICAL_ANALYSIS",
+      "hard_dependencies": [
+        "E03",
+        "B03"
+      ],
+      "required_start_decisions": [
+        "D-MODEL",
+        "D-STUDY"
+      ],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "S01",
+        "S02",
+        "S03"
+      ],
+      "jev_principles": [
+        "P2"
+      ],
+      "cr": [
+        1,
+        2
+      ],
+      "fcl": [
+        1
+      ],
+      "assumptions": [
+        "A-CAL"
+      ],
+      "input_contract": "확률이 정의된 channel·별도 calibration split",
+      "output_contract": "NLL/Brier·uniform 기준·scope/invalidation 보고",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/E04.v1.json",
+      "acceptance": [
+        "형식/정확도/확률 품질을 분리하고 p1=0.5와 proper score를 비교한다. 확률 없는 E1/E2 지표를 만들지 않는다.",
+        "model/relation/contract/population 변경 시 무효화·재평가 규칙을 정한다. final test로 T를 고르지 않는다.",
+        "B03가 별도 label-blind calibration 모집단을 고정하고 pinned E0 logprob 의미가 유지되어야 한다. readiness census나 final test로 T를 고르지 않는다. 미가용이면 CALIBRATION_UNAVAILABLE/NOT_APPLICABLE을 보고한다."
+      ],
+      "failure_action": "보정의 기준 대비 열세를 보존한다. calibration을 의미 학습이나 causal credit으로 승격하지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/research/HSWM_JEV_PRINCIPLES_2026-09-21.md",
+        "src/hswm/effect-runtime/src/semantic-decision-domain.ts"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W1"
+      ]
+    },
+    {
+      "id": "E05",
+      "title": "국소 연산 실패의 교체 설계",
+      "track": "W1",
+      "responsibility_role": "runtime-research",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "CONDITIONAL_REROUTE_DESIGN",
+      "hard_dependencies": [
+        "E03"
+      ],
+      "required_start_decisions": [
+        "D-REROUTE"
+      ],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "P01",
+        "D01"
+      ],
+      "jev_principles": [
+        "P1",
+        "P2"
+      ],
+      "cr": [
+        0,
+        1
+      ],
+      "fcl": [
+        1
+      ],
+      "assumptions": [],
+      "input_contract": "W1 실패·비용·오류 분해",
+      "output_contract": "새 realization/model/operator-training 후속 protocol",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/E05.v1.json",
+      "acceptance": [
+        "binding/prompt/추론 계산/model 학습을 별도 개입으로 두고 pretrained prior와 비용을 대조한다.",
+        "supervised typed decision 학습도 후보이나 RLCD 재현으로 부르지 않는다. 기존 기준·실패를 보존한다."
+      ],
+      "failure_action": "설계만으로 D-EXEC를 충족하지 않는다. 새 가족의 실행은 별도 source-bound successor 계획에 기록한다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/research/HSWM_JEV_PRINCIPLES_2026-09-21.md"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W1"
+      ]
+    },
+    {
+      "id": "L00",
+      "title": "revision 후보 언어·변경 분류",
+      "track": "W2",
+      "responsibility_role": "semantic-learning",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "DESIGN_AND_IMPLEMENTATION",
+      "hard_dependencies": [
+        "B00"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "D01",
+        "D02"
+      ],
+      "jev_principles": [
+        "P2",
+        "P4"
+      ],
+      "cr": [
+        1,
+        4
+      ],
+      "fcl": [
+        1,
+        5
+      ],
+      "assumptions": [
+        "A-OBS",
+        "A-CANDIDATE"
+      ],
+      "input_contract": "strictRevision·GEPA/VML/WorldCoder/Pinductor",
+      "output_contract": "feedback packet·parent/no-op·taxonomy·후보 예산",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/L00.v1.json",
+      "acceptance": [
+        "실패/관측/기존 성공을 함께 주며 parent/NO_CHANGE를 정당한 후보로 둔다.",
+        "첫 slice는 semanticText/disposition와 evidence/uncertainty를 범위화한다. 고정 roles/exceptionRefs 변경은 T00 이후다."
+      ],
+      "failure_action": "문장 hash를 의미 개선으로 보지 않고 불필요한 edit를 강제하지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+        "docs/research/artifacts/hswm_deep_research_2026-09-22/learning-sources.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W2"
+      ]
+    },
+    {
+      "id": "L01",
+      "title": "world·outcome·대조군 custody",
+      "track": "W2",
+      "responsibility_role": "evaluation-design",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "DESIGN_AND_IMPLEMENTATION",
+      "hard_dependencies": [
+        "B03",
+        "L00"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "C01",
+        "S02",
+        "D03"
+      ],
+      "jev_principles": [
+        "P2"
+      ],
+      "cr": [
+        1,
+        2,
+        3
+      ],
+      "fcl": [
+        1,
+        4
+      ],
+      "assumptions": [
+        "A-OBS",
+        "A-CAUSAL"
+      ],
+      "input_contract": "split·잘못된 초기 관계·evaluator",
+      "output_contract": "world generator·관측자·4-arm·retention 명세",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/L01.v1.json",
+      "acceptance": [
+        "frozen/evidence-only/sham/selected revision의 evidence와 이용 가능 정보를 교차·일치시킨다.",
+        "독립 world seed, 관측시점, 할당확률, 결측/지연, 거절, label 누출 검사를 정한다."
+      ],
+      "failure_action": "관측이 후보 답에 종속되거나 final label이 보이면 OUTCOME_CUSTODY_INVALID다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W2"
+      ]
+    },
+    {
+      "id": "L02",
+      "title": "선택·격리 branch·fresh read",
+      "track": "W2",
+      "responsibility_role": "runtime-integration",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "DESIGN_AND_IMPLEMENTATION",
+      "hard_dependencies": [
+        "L00",
+        "L01",
+        "E01"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [
+        "D-OUTCOME"
+      ],
+      "prior_tasks": [
+        "D03",
+        "I01"
+      ],
+      "jev_principles": [
+        "P2"
+      ],
+      "cr": [
+        0,
+        1,
+        2
+      ],
+      "fcl": [
+        1,
+        7
+      ],
+      "assumptions": [
+        "A-OBS",
+        "A-CAUSAL"
+      ],
+      "input_contract": "후보/control/관측 계약·기존 admission",
+      "output_contract": "후보 선택·commit/restart/remove-restore harness",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/L02.v1.json",
+      "acceptance": [
+        "score는 순위만 정한다. schema/owner/허용 전이 검사를 유지하고 arm별 mutable state/cache를 격리한다.",
+        "prediction→outcome→revision→새 process read를 결속하고 no-op/invalid/failed commit도 남긴다. bytes와 출력 분포 복원을 구분한다.",
+        "injected HTTP fixture와 pinned real service 검증을 명시적으로 분리한다. fixture만으로 D-OUTCOME의 transport/instrument 범위를 판단할 수 있으나 실제 provider outcome 검증으로 세지 않는다. 실험은 D-MODEL 충족 구성을 별도로 사용한다."
+      ],
+      "failure_action": "새 version 미사용·branch 누출이면 학습 효과 실험을 보류한다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+        "docs/research/artifacts/hswm_deep_research_2026-09-22/mechanism-audit.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W2"
+      ]
+    },
+    {
+      "id": "L03",
+      "title": "pilot·표본 수·확증 규칙 동결",
+      "track": "W2",
+      "responsibility_role": "statistical-design",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "PILOT_AND_PROTOCOL_FREEZE",
+      "hard_dependencies": [
+        "L01",
+        "L02",
+        "E03",
+        "B03"
+      ],
+      "required_start_decisions": [
+        "D-EXEC",
+        "D-OUTCOME"
+      ],
+      "resolves_decisions": [
+        "D-W2"
+      ],
+      "prior_tasks": [
+        "C02",
+        "S01",
+        "S02",
+        "S03"
+      ],
+      "jev_principles": [
+        "P2"
+      ],
+      "cr": [
+        1,
+        2
+      ],
+      "fcl": [
+        1,
+        4
+      ],
+      "assumptions": [
+        "A-CAUSAL",
+        "A-EXEC"
+      ],
+      "input_contract": "qualified 실행·비용/변동·독립 pilot",
+      "output_contract": "고정 n·분석 가정·오류 예산·retention·중단 계약",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/L03.v1.json",
+      "acceptance": [
+        "3 개선/3 retention one-sided Bonferroni t bounds의 world 독립성과 근사 조건·feasible n을 pilot으로 확인한다.",
+        "+5pp/2pp와 후보4/round3 제안은 final test 이전 확정한다. test 기반 튜닝·optional stopping을 금지한다."
+      ],
+      "failure_action": "예산·가정이 불충분하면 final test 이전 새 protocol을 제안하고 미확정 상태를 유지한다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W2"
+      ]
+    },
+    {
+      "id": "L04",
+      "title": "fresh-world 의미 교정 효과",
+      "track": "W2",
+      "responsibility_role": "empirical-evaluation",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "EMPIRICAL_STUDY",
+      "hard_dependencies": [
+        "L02",
+        "L03"
+      ],
+      "required_start_decisions": [
+        "D-EXEC",
+        "D-OUTCOME",
+        "D-W2",
+        "D-COMPARATOR"
+      ],
+      "resolves_decisions": [
+        "D-LEARN"
+      ],
+      "prior_tasks": [
+        "I02",
+        "D03"
+      ],
+      "jev_principles": [
+        "P2"
+      ],
+      "cr": [
+        1,
+        2,
+        3
+      ],
+      "fcl": [
+        1,
+        4,
+        7
+      ],
+      "assumptions": [
+        "A-OBS",
+        "A-CAUSAL"
+      ],
+      "input_contract": "동결 W2와 봉인 final population",
+      "output_contract": "ITT 효과·retention·mediation·복원 보고",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/L04.v1.json",
+      "acceptance": [
+        "각 대조군에 사전 기준을 적용한다. world 내 반복을 먼저 평균하고 changed-only는 부 분석으로 둔다.",
+        "semantic/evidence/byte/behavior 변화를 분리한다. 유효 음성 보고의 완료와 D-LEARN 충족은 다르다."
+      ],
+      "failure_action": "효과 범위 배제는 RED_WITHIN_SCOPE, 정밀도 부족은 UNDERDETERMINED다. no-op·추가 근거/비용을 의미 효과로 재명명하지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W2"
+      ]
+    },
+    {
+      "id": "R00",
+      "title": "국소 읽기·후속 학습 반례",
+      "track": "W3",
+      "responsibility_role": "formal-and-task-design",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "SPECIFICATION_AND_COUNTEREXAMPLE",
+      "hard_dependencies": [
+        "B00"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "K02",
+        "W01"
+      ],
+      "jev_principles": [
+        "P4"
+      ],
+      "cr": [
+        4,
+        5,
+        6
+      ],
+      "fcl": [
+        6,
+        7
+      ],
+      "assumptions": [
+        "A-READ"
+      ],
+      "input_contract": "read-loss 정리·POMDP/PSR·과제 제약",
+      "output_contract": "현재/제어/학습 충분성 witness·허용 관측 계약",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/R00.v1.json",
+      "acceptance": [
+        "같은 frame/다른 정답인 상태 쌍과 어떤 허용 관측으로도 구별 못 하는 쌍을 구분한다.",
+        "budget/horizon/action family와 숨은 label 금지를 고정한다. 현재 답 일치와 후속 갱신 보존을 구별한다."
+      ],
+      "failure_action": "정보 손실은 model 크기로 자동 복구되지 않는다. 관측 불가능하면 uncertainty/abstention을 유지한다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W3"
+      ]
+    },
+    {
+      "id": "R01",
+      "title": "other/expand·read 후보 정책",
+      "track": "W3",
+      "responsibility_role": "semantic-learning",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "DESIGN_AND_IMPLEMENTATION",
+      "hard_dependencies": [
+        "R00",
+        "L00"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "K02",
+        "D01",
+        "D02"
+      ],
+      "jev_principles": [
+        "P4"
+      ],
+      "cr": [
+        4,
+        5
+      ],
+      "fcl": [
+        3,
+        5,
+        6
+      ],
+      "assumptions": [
+        "A-READ",
+        "A-CANDIDATE"
+      ],
+      "input_contract": "허용 read/action·recall·비용",
+      "output_contract": "full/fixed/active read·후보 누락·정지 정책",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/R01.v1.json",
+      "acceptance": [
+        "추가 read를 source/budget/provenance가 있는 action으로 두고 relevance/확신/recall을 분리한다.",
+        "같은 admissible 정보·총비용에서 actual read를 비교한다. committee 일치가 충분성은 아니다."
+      ],
+      "failure_action": "후보 밖 정답을 후보 내 확신으로 가리지 않는다. 추가 정보 불가면 unknown을 유지한다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W3"
+      ]
+    },
+    {
+      "id": "R02",
+      "title": "국소 정보 가치·충분성 평가",
+      "track": "W3",
+      "responsibility_role": "empirical-evaluation",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "EMPIRICAL_STUDY",
+      "hard_dependencies": [
+        "R01",
+        "E03",
+        "B03",
+        "L01"
+      ],
+      "required_start_decisions": [
+        "D-EXEC",
+        "D-STUDY"
+      ],
+      "resolves_decisions": [
+        "D-READ"
+      ],
+      "prior_tasks": [
+        "K02",
+        "I02"
+      ],
+      "jev_principles": [
+        "P4"
+      ],
+      "cr": [
+        4,
+        5
+      ],
+      "fcl": [
+        3,
+        6,
+        7
+      ],
+      "assumptions": [
+        "A-READ",
+        "A-OBS"
+      ],
+      "input_contract": "qualified 실행·alias witnesses·read 정책",
+      "output_contract": "비용 대비 read 효과·충돌·coverage·한계 보고",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/R02.v1.json",
+      "acceptance": [
+        "수치 margin/horizon/world 수를 실행 전 고정하고 frame충돌·추가read 회복을 직접 시험한다.",
+        "current/control/후속학습정보 endpoint를 분리한다. 실제 learning efficacy는 별도 L04, 상위효과는 M02를 요구한다.",
+        "R02 실행 전에 read/비용 효과 한계와 비교 모집단을 고정하고 artifact에 기록한다. D-STUDY만으로 W3 수치 기준이 고정되었다고 간주하지 않는다."
+      ],
+      "failure_action": "구분 회복 실패나 추가 비용/label누출로 설명되는 이득이면 해당 read 정책을 교체한다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W3"
+      ]
+    },
+    {
+      "id": "J00",
+      "title": "joint law·factor·표현 손실",
+      "track": "W4",
+      "responsibility_role": "formal-and-task-design",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "SPECIFICATION_AND_FORMAL_BRIDGE",
+      "hard_dependencies": [
+        "B00",
+        "R00"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "K01",
+        "M01",
+        "M02"
+      ],
+      "jev_principles": [
+        "P5"
+      ],
+      "cr": [
+        3,
+        4,
+        6
+      ],
+      "fcl": [
+        2,
+        3,
+        4
+      ],
+      "assumptions": [
+        "A-JOINT"
+      ],
+      "input_contract": "같은 marginal 반례·incidence·기존 Lean",
+      "output_contract": "shared-cause·배타/상보/삼중 출력·개입 명세",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/J00.v1.json",
+      "acceptance": [
+        "00/11 대01/10과 shared-cause intervention, joint proper score/금지조합을 포함한다.",
+        "tagged incidence 보존과 pair-only/additive 손실을 구분한다. marginal 곱을 joint로 자동 정의하지 않는다."
+      ],
+      "failure_action": "틀린 독립성은 coupling/공동 후보로 교체한다. 모든 binary graph 불가능성을 주장하지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W4"
+      ]
+    },
+    {
+      "id": "J01",
+      "title": "snapshot scheduling·stale-write",
+      "track": "W4",
+      "responsibility_role": "runtime-integration",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "DESIGN_AND_IMPLEMENTATION",
+      "hard_dependencies": [
+        "B01",
+        "E01",
+        "B00"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "P01",
+        "I01"
+      ],
+      "jev_principles": [
+        "P3"
+      ],
+      "cr": [
+        0,
+        6
+      ],
+      "fcl": [
+        2,
+        7
+      ],
+      "assumptions": [
+        "A-SCHED",
+        "A-PIN"
+      ],
+      "input_contract": "read/write set·dependency DAG·serving surface",
+      "output_contract": "serial/batch/실제 공유 연산 instrument 계약",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/J01.v1.json",
+      "acceptance": [
+        "독립 snapshot read만 묶고 dependent 질문은 다음 단계로 둔다. stale commit/CAS 거부를 유지한다.",
+        "HTTP batch/concurrent/KV reuse/shared trunk 제공 여부를 각각 계측한다. 없는 기능은 미지원이다."
+      ],
+      "failure_action": "계산 scheduling 독립성을 세계 변수 독립성·동시 write 허가로 바꾸지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+        "docs/research/HSWM_JEV_PRINCIPLES_2026-09-21.md"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W4"
+      ]
+    },
+    {
+      "id": "J02",
+      "title": "공동 출력·개입 응답 평가",
+      "track": "W4",
+      "responsibility_role": "empirical-evaluation",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "EMPIRICAL_STUDY",
+      "hard_dependencies": [
+        "J00",
+        "R02",
+        "E03",
+        "B03"
+      ],
+      "required_start_decisions": [
+        "D-EXEC",
+        "D-READ",
+        "D-STUDY"
+      ],
+      "resolves_decisions": [
+        "D-JOINT"
+      ],
+      "prior_tasks": [
+        "M02",
+        "I02"
+      ],
+      "jev_principles": [
+        "P5"
+      ],
+      "cr": [
+        3,
+        4,
+        6
+      ],
+      "fcl": [
+        2,
+        3,
+        4
+      ],
+      "assumptions": [
+        "A-JOINT",
+        "A-READ"
+      ],
+      "input_contract": "joint 계약과 qualified read/실행",
+      "output_contract": "marginal 대joint/factor 오류·개입·비용 보고",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/J02.v1.json",
+      "acceptance": [
+        "수치 margin/population을 고정해 joint score·금지조합·역할개입을 함께 비교한다.",
+        "현재 joint 실행과 learning effect를 분리한다. L04 실패를 공동 출력 정확도로 구제하지 않는다.",
+        "J02 실행 전에 joint discrepancy/금지조합/intervention/비용 기준과 반복 수를 고정한다. W1 readiness 기준을 그대로 전용하지 않는다."
+      ],
+      "failure_action": "marginal만 맞으면 해당 factorization을 기각하고 shared context/실현을 교체한다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W4"
+      ]
+    },
+    {
+      "id": "J03",
+      "title": "의미 보존 아래 계산 공유 비교",
+      "track": "W4",
+      "responsibility_role": "empirical-evaluation",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "EMPIRICAL_STUDY",
+      "hard_dependencies": [
+        "J01",
+        "J02",
+        "B03"
+      ],
+      "required_start_decisions": [
+        "D-EXEC",
+        "D-JOINT"
+      ],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "I02"
+      ],
+      "jev_principles": [
+        "P3",
+        "P5"
+      ],
+      "cr": [
+        0,
+        6
+      ],
+      "fcl": [
+        2,
+        4
+      ],
+      "assumptions": [
+        "A-SCHED",
+        "A-JOINT"
+      ],
+      "input_contract": "qualified joint law·실제 scheduling 기능",
+      "output_contract": "동일 의미·정보·비용의 throughput 비교",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/J03.v1.json",
+      "acceptance": [
+        "serial/batch/shared를 의미 품질·latency·memory·throughput·stale 오류로 평가한다.",
+        "출력token 절약을 shared trunk 이득으로 환산하지 않는다. equal-quality/equal-cost frontier를 명시한다."
+      ],
+      "failure_action": "빠르나 의미·stale조건이 악화되면 채택하지 않는다. 미지원 shared compute는 NOT_EVALUATED다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W4"
+      ]
+    },
+    {
+      "id": "T00",
+      "title": "role·exception·topology typed 확장",
+      "track": "CROSSCUT",
+      "responsibility_role": "runtime-integration",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "DESIGN_AND_IMPLEMENTATION",
+      "hard_dependencies": [
+        "L00",
+        "R00",
+        "B00"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [
+        "D-TYPED"
+      ],
+      "prior_tasks": [
+        "D01",
+        "D03",
+        "I01"
+      ],
+      "jev_principles": [
+        "P4",
+        "P5"
+      ],
+      "cr": [
+        0,
+        4
+      ],
+      "fcl": [
+        3,
+        5,
+        7
+      ],
+      "assumptions": [
+        "A-CHANGE"
+      ],
+      "input_contract": "고정 roles/exceptionRefs·schema/owner/lineage",
+      "output_contract": "범위화된 변경·검사·revision·복구 계약/구현",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/T00.v1.json",
+      "acceptance": [
+        "text/disposition slice와 별도 version으로 role/exception/새 incidence 변경 범위를 정한다.",
+        "owner·typed target version·허용 전이·conflict·restoration을 보존하며 기존 역사 bytes는 변경하지 않는다."
+      ],
+      "failure_action": "지원하지 않는 mutation은 semantic discovery로 세지 않는다. 부적합 변경은 거부한다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+        "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+        "docs/research/artifacts/hswm_jev_research_work_plan_2026-09-22/mechanism-work-review.md"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "CROSSCUT"
+      ],
+      "implementation_scope": "FUTURE_TASK_NOT_IMPLEMENTED_BY_THIS_PLANNING_DELIVERY; versioned extension separate from initial W2 text/disposition slice"
+    },
+    {
+      "id": "T01",
+      "title": "후보 발견·예외·topology 효과",
+      "track": "CROSSCUT",
+      "responsibility_role": "empirical-evaluation",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "EMPIRICAL_STUDY",
+      "hard_dependencies": [
+        "T00",
+        "L04",
+        "R02"
+      ],
+      "required_start_decisions": [
+        "D-TYPED",
+        "D-LEARN",
+        "D-READ"
+      ],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "D02",
+        "D03",
+        "I02"
+      ],
+      "jev_principles": [
+        "P4",
+        "P5"
+      ],
+      "cr": [
+        4
+      ],
+      "fcl": [
+        3,
+        5
+      ],
+      "assumptions": [
+        "A-CHANGE",
+        "A-CANDIDATE"
+      ],
+      "input_contract": "typed 변경·qualified local learning/read",
+      "output_contract": "고정후보/새조합/새primitive·sham topology 대조",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/T01.v1.json",
+      "acceptance": [
+        "새 조합과 문법 밖 primitive 발견을 분리하고 grounding/recall/탐색비용/손상회복을 측정한다.",
+        "허용 변경만 admit하고 fixed router/roster 및 sham보다 outcome이 개선되는지 시험한다."
+      ],
+      "failure_action": "후보 언어 한계를 기록해 교체한다. node수 증가만으로 FCL-5를 충족하지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "CROSSCUT"
+      ]
+    },
+    {
+      "id": "M00",
+      "title": "두 scale Step/Learn·world/self 계약",
+      "track": "W5",
+      "responsibility_role": "formal-and-task-design",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "SPECIFICATION_AND_FORMAL_BRIDGE",
+      "hard_dependencies": [
+        "J00",
+        "R00",
+        "B00"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "M01",
+        "M02",
+        "M03",
+        "M04",
+        "W01"
+      ],
+      "jev_principles": [
+        "P5",
+        "P6"
+      ],
+      "cr": [
+        3,
+        5,
+        6
+      ],
+      "fcl": [
+        2,
+        4,
+        6,
+        7,
+        8
+      ],
+      "assumptions": [
+        "A-COMPOSE",
+        "A-CONTINUITY"
+      ],
+      "input_contract": "기존 합성·world/self 의무와 joint/read 반례",
+      "output_contract": "child→parent 상태·개입·학습·오차·연속성 계약",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/M00.v1.json",
+      "acceptance": [
+        "Step/Learn·현재출력/다음revision 보존을 별도 정리와 반례로 다룬다. 공유원인·비가환갱신·credit중복을 남긴다.",
+        "world/self membership·capability·topology·lineage와 permission/exit/recovery를 측정 의무로 둔다."
+      ],
+      "failure_action": "요약이 미래학습·예외를 지우면 composition map을 교체한다. 추상 가정을 실제 성능으로 승격하지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md",
+        "docs/canon/HSWM_CONSTITUTION_2026-08-20.md"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W5"
+      ]
+    },
+    {
+      "id": "M01",
+      "title": "flat/wrapper/학습 parent 구성",
+      "track": "W5",
+      "responsibility_role": "runtime-integration",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "DESIGN_AND_IMPLEMENTATION",
+      "hard_dependencies": [
+        "M00",
+        "L02",
+        "J01",
+        "R01"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [
+        "D-SCALE"
+      ],
+      "prior_tasks": [
+        "I01",
+        "W01",
+        "M04"
+      ],
+      "jev_principles": [
+        "P6"
+      ],
+      "cr": [
+        0,
+        3,
+        5,
+        6
+      ],
+      "fcl": [
+        1,
+        2,
+        4,
+        6,
+        7,
+        8
+      ],
+      "assumptions": [
+        "A-COMPOSE",
+        "A-CONTINUITY"
+      ],
+      "input_contract": "child계약·parent persistent state·observer",
+      "output_contract": "2-scale branch·intervention·비용·복원 instrument",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/M01.v1.json",
+      "acceptance": [
+        "flat/static wrapper/learning parent의 model·정보·자원을 맞추고 손상/model교체/예외추가를 고정한다.",
+        "각 scale의 prediction→outcome→revision→freshread를 같은 계보에 결속한다. futurelabel 접근을 차단한다."
+      ],
+      "failure_action": "parent state/효과를 추적하지 못하면 wrapper로 분류하고 상위학습 결과를 만들지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W5"
+      ]
+    },
+    {
+      "id": "M02",
+      "title": "두 scale 학습·손상·연속성",
+      "track": "W5",
+      "responsibility_role": "empirical-evaluation",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "EMPIRICAL_STUDY",
+      "hard_dependencies": [
+        "M01",
+        "L04",
+        "R02",
+        "J02"
+      ],
+      "required_start_decisions": [
+        "D-LEARN",
+        "D-READ",
+        "D-JOINT",
+        "D-SCALE"
+      ],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "I03",
+        "W01",
+        "M04"
+      ],
+      "jev_principles": [
+        "P6"
+      ],
+      "cr": [
+        3,
+        5,
+        6,
+        7
+      ],
+      "fcl": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "assumptions": [
+        "A-COMPOSE",
+        "A-CONTINUITY"
+      ],
+      "input_contract": "qualified local learning/read/joint·동결2-scale protocol",
+      "output_contract": "상위 효과·후속학습·world/self·회복·권리 보고",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/M02.v1.json",
+      "acceptance": [
+        "오차/효과/retention/비용·간섭 범위를 미리 고정해 child와parent 모두의 개입효과를 측정한다.",
+        "scale별 credit중복·불확실성·예외·lineage·exit를 검증한다. 인지/의식·무한scale closure를 추론하지 않는다."
+      ],
+      "failure_action": "하위 실패를 상위점수로 구제하지 않는다. 손실된 합성 가족을 RED/UNDERDETERMINED로 남긴다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "W5"
+      ]
+    },
+    {
+      "id": "H00",
+      "title": "Hyperon 동일과제 component 비교",
+      "track": "CROSSCUT",
+      "responsibility_role": "comparator-research",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "COMPARATOR_STUDY",
+      "hard_dependencies": [
+        "B02",
+        "E03",
+        "L02",
+        "B03"
+      ],
+      "required_start_decisions": [
+        "D-HYPERON",
+        "D-EXEC",
+        "D-OUTCOME",
+        "D-STUDY"
+      ],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "P02",
+        "I02",
+        "I03"
+      ],
+      "jev_principles": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "cr": [
+        0,
+        1,
+        6,
+        7
+      ],
+      "fcl": [
+        1,
+        2,
+        8
+      ],
+      "assumptions": [
+        "A-COMPARE"
+      ],
+      "input_contract": "이용 가능한 pinned component·공통 W1/W2",
+      "output_contract": "실행/read/revision의 scope-matched 비교",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/H00.v1.json",
+      "acceptance": [
+        "같은 model/frame/관측·행동/비용을 맞추고 upstream과 자체 adapter 기여를 분리한다.",
+        "joint/scale 비교는 해당 J02/M02 계약·근거가 있어야 확장한다. 미비교 범위를 명시한다."
+      ],
+      "failure_action": "조건 불일치면 NOT_COMPARABLE/NOT_EVALUATED로 남기고 우위·독창성 주장을 보류한다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "CROSSCUT"
+      ]
+    },
+    {
+      "id": "A00",
+      "title": "첫 보고·중단·reroute 감사",
+      "track": "CROSSCUT",
+      "responsibility_role": "research-audit",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "EVIDENCE_AUDIT",
+      "hard_dependencies": [
+        "E03",
+        "B02"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "A00",
+        "I02"
+      ],
+      "jev_principles": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "cr": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fcl": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "assumptions": [
+        "A-OBS",
+        "A-COMPARE"
+      ],
+      "input_contract": "유효 보고와 미실행/실패 task 상태",
+      "output_contract": "첫 checkpoint 지지/반증/미확정·다음작업 행렬",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/A00.v1.json",
+      "acceptance": [
+        "E03 음성이어도 감사를 수행해 downstream 미실행을 명시한다. 보고 완료와 조건 충족을 구별한다.",
+        "Jev·기존22작업·CR/FCL residual을 보존하고 대조군 부재를 성공으로 처리하지 않는다."
+      ],
+      "failure_action": "상충 근거를 삭제하지 않고 다음 관측을 명시한다. 작업 개수로 연구 성과를 계산하지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/research/artifacts/hswm_deep_research_2026-09-22/mechanism-audit.v1.json"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "CROSSCUT"
+      ]
+    },
+    {
+      "id": "A01",
+      "title": "동일 구성 CR/FCL·전체 감사",
+      "track": "CROSSCUT",
+      "responsibility_role": "research-audit",
+      "status": "PLANNED",
+      "result_status": "NOT_ASSESSED",
+      "assignment_status": "ROLE_PROPOSED_NO_PERSON_ASSIGNED",
+      "task_kind": "EVIDENCE_AUDIT",
+      "hard_dependencies": [
+        "A00",
+        "M00"
+      ],
+      "required_start_decisions": [],
+      "resolves_decisions": [],
+      "prior_tasks": [
+        "A00",
+        "I03"
+      ],
+      "jev_principles": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6"
+      ],
+      "cr": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "fcl": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "assumptions": [
+        "A-COMPOSE",
+        "A-CONTINUITY"
+      ],
+      "input_contract": "현재 결과/미실행 상태·2-scale 계약·기존 정의",
+      "output_contract": "co-witness·미해결 의무·후속 snapshot",
+      "planned_output_path": "docs/research/artifacts/hswm_jev_realization_next/A01.v1.json",
+      "acceptance": [
+        "model/state/schema/split을 대조해 서로 다른 구성의 부분성공을 CR-7 완료로 합치지 않는다.",
+        "M02/H00/T01 미실행도 명시해 감사를 완료할 수 있다. 실제 결과는 새 snapshot으로 갱신한다."
+      ],
+      "failure_action": "효능 근거가 없으면 상태를 유지한다. 감사 완료를 HSWM 완료로 쓰지 않는다.",
+      "source_paths": [
+        "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "_research/hswm_deep_research_v1/protocol.v1.json",
+        "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+        "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md"
+      ],
+      "expected_artifact_status": "NOT_PRODUCED",
+      "validation_state": "NOT_RUN",
+      "actual_evidence": [],
+      "claim_ceiling": "SCOPED_WORK_NOT_CR_FCL_DISCHARGE_OR_RLCD_REPRODUCTION",
+      "resource_policy": "No invented deadline or cost. Freeze exact pins, per-stage cap, total budget and stopping rule before execution; include proposals/evaluation/read/retries.",
+      "shared_edit_policy": "One integrator for shared runtime files. Independent specifications/fixtures/analyses may run in parallel. Preserve unrelated working-tree changes.",
+      "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+      "requirements": [
+        "CROSSCUT"
+      ]
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A-PIN",
+      "contract": "모델·serving identity와 숨은 상태 범위의 추적 가능성",
+      "resolver": "B01",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "A-EXEC",
+      "contract": "고정 oracle 의미를 실행하는 국소 realization의 충실도",
+      "resolver": "E03",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "A-OBS",
+      "contract": "관측자와 label/split custody가 후보 답에 오염되지 않음",
+      "resolver": "L01",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "A-CAUSAL",
+      "contract": "격리·배정·결측·world 단위 추론이 해당 효과를 식별",
+      "resolver": "L03",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "A-CAL",
+      "contract": "지정 population/contract 내 calibration 적용 가능성",
+      "resolver": "E04",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "A-READ",
+      "contract": "예산·horizon 내 필요한 상태 구분을 local read가 보존",
+      "resolver": "R02",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "A-CANDIDATE",
+      "contract": "후보 언어·추가 관측이 유용한 후보에 비용 내 도달",
+      "resolver": "R01",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "A-JOINT",
+      "contract": "joint realization이 coupling과 개입 응답을 보존",
+      "resolver": "J02",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "A-SCHED",
+      "contract": "독립 snapshot read의 scheduling 뒤 의미 보존",
+      "resolver": "J01",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "A-CHANGE",
+      "contract": "role/exception/incidence 변경의 schema·owner·lineage 양립성",
+      "resolver": "T00",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "A-COMPOSE",
+      "contract": "Step/Learn/개입/오차/비용을 보존하는 구체적 composition",
+      "resolver": "M00",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "A-CONTINUITY",
+      "contract": "교체·손상 뒤 world/self·학습·계보 연속성",
+      "resolver": "M02",
+      "status": "UNVERIFIED"
+    },
+    {
+      "id": "A-COMPARE",
+      "contract": "동일 과제·정보·모델·예산 comparator의 실제 가용성",
+      "resolver": "B02",
+      "status": "UNVERIFIED"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D-MODEL",
+      "required_condition": "정확한 pins와 해당 I/O·비용 계측이 준비됨",
+      "resolver": "B01",
+      "status": "OPEN"
+    },
+    {
+      "id": "D-COMPARATOR",
+      "required_condition": "필수 기전 대조 준비 및 Hyperon 가용성/미비교 범위 기록 완료; 실행 가능 자체는 D-HYPERON",
+      "resolver": "B02",
+      "status": "OPEN"
+    },
+    {
+      "id": "D-HYPERON",
+      "required_condition": "동일 조건의 pinned Hyperon component/adapter가 실제 이용 가능",
+      "resolver": "B02",
+      "status": "OPEN"
+    },
+    {
+      "id": "D-STUDY",
+      "required_condition": "해당 W1 split/label/거절/cost cap/순서/분석을 결과 전 고정",
+      "resolver": "B03",
+      "status": "OPEN"
+    },
+    {
+      "id": "D-EXEC",
+      "required_condition": "고정 finite oracle/변환에서 한 LLM 조건 이상 오류·거절0 및 bit안정성",
+      "resolver": "E03",
+      "status": "OPEN"
+    },
+    {
+      "id": "D-REROUTE",
+      "required_condition": "유효한 W1 readiness 미충족 보고가 있어 새 방식 설계 필요",
+      "resolver": "E03",
+      "status": "OPEN"
+    },
+    {
+      "id": "D-OUTCOME",
+      "required_condition": "outcome 결속·격리 branch·freshread instrument 검증",
+      "resolver": "L02",
+      "status": "OPEN"
+    },
+    {
+      "id": "D-W2",
+      "required_condition": "독립pilot 후 n·분석가정·6contrast·예산·stopping을 finaltest전 동결",
+      "resolver": "L03",
+      "status": "OPEN"
+    },
+    {
+      "id": "D-LEARN",
+      "required_condition": "같은 구성의 W2 효과/retention이 세 대조 모두에서 범위한정 지지",
+      "resolver": "L04",
+      "status": "OPEN"
+    },
+    {
+      "id": "D-READ",
+      "required_condition": "current/control/read 정보구분·비용/효과 기준 통과; learning efficacy는 별도 D-LEARN",
+      "resolver": "R02",
+      "status": "OPEN"
+    },
+    {
+      "id": "D-JOINT",
+      "required_condition": "jointlaw/금지조합/개입응답의 고정 기준 통과",
+      "resolver": "J02",
+      "status": "OPEN"
+    },
+    {
+      "id": "D-TYPED",
+      "required_condition": "role/exception/topology 변경의 typed·owner·복구 계약 검증",
+      "resolver": "T00",
+      "status": "OPEN"
+    },
+    {
+      "id": "D-SCALE",
+      "required_condition": "두scale 관측·개입·비용·분석 규칙과 instrument 준비",
+      "resolver": "M01",
+      "status": "OPEN"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "FOUNDATION",
+      "title": "공통 source·측정·비교 계약",
+      "source_path": "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md"
+    },
+    {
+      "id": "W1",
+      "title": "국소 의미 실행·확률 측정",
+      "source_path": "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md"
+    },
+    {
+      "id": "W2",
+      "title": "outcome-bound 관계 교정",
+      "source_path": "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md"
+    },
+    {
+      "id": "W3",
+      "title": "국소 읽기·후보 충분성",
+      "source_path": "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md"
+    },
+    {
+      "id": "W4",
+      "title": "공동 법칙·동일 snapshot 계산",
+      "source_path": "docs/research/HSWM_JEV_PRINCIPLES_2026-09-21.md"
+    },
+    {
+      "id": "W5",
+      "title": "두 scale 실행·학습·연속성",
+      "source_path": "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md"
+    },
+    {
+      "id": "CROSSCUT",
+      "title": "typed 발견·Hyperon·동일구성 감사",
+      "source_path": "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md"
+    }
+  ],
+  "tools": [
+    {
+      "name": "effect",
+      "version": "3.22.1",
+      "integrity": "sha512-TNoXushmPOBAjJlthF5d2QwnX2xBPEtcNJr5XKNKbRLbDvBcOYkXlYDfvGfSA0zriwLFuCll5MDtNMAdZL17PQ==",
+      "license": "MIT",
+      "authority_class": "OFFICIAL_PROJECT_IMPLEMENTATION",
+      "status": "EXISTING_LOCKED_NO_INSTALL"
+    },
+    {
+      "name": "n3",
+      "version": "2.7.2",
+      "integrity": "sha512-8Y/GU78BFSecvIv7OiJacY28l/zHiLo5/apxM+kyyUNCTWmqWyzzNjLlja4/vbLogoCHDPwCChLuDEZcpOKeDw==",
+      "license": "MIT",
+      "authority_class": "INDEPENDENT_IMPLEMENTATION_NOT_W3C_SDK",
+      "status": "EXISTING_LOCKED_NO_INSTALL"
+    },
+    {
+      "name": "rdf-validate-shacl",
+      "version": "0.6.5",
+      "integrity": "sha512-rwIibopSixDE8ecA9x0c7oTVxdMWxGiJh7h3uJ+WS2h4lq2nx3DZVO7rJvwa5kZpDq9QEFPoyZINAUyfaaoN4Q==",
+      "license": "MIT",
+      "authority_class": "INDEPENDENT_IMPLEMENTATION_NOT_W3C_SDK",
+      "status": "EXISTING_LOCKED_NO_INSTALL"
+    },
+    {
+      "name": "@comunica/query-sparql-rdfjs",
+      "version": "5.3.0",
+      "integrity": "sha512-isXNLwV1PB3hGXtcKXOfV134/X2q53J2ZELS82F07KbHVLoGCwF+DxfQ/gXvPxIatGKO2w0v3At3uAwVPzfZDA==",
+      "license": "MIT",
+      "authority_class": "INDEPENDENT_IMPLEMENTATION_NOT_W3C_SDK",
+      "status": "EXISTING_LOCKED_NO_INSTALL"
+    }
+  ],
+  "initial_ready_tasks": [
+    "B00",
+    "B01",
+    "B02"
+  ],
+  "completion_semantics": "Qualified negative/indeterminate reports may complete empirical/feasibility tasks while support decisions remain OPEN/NOT_SATISFIED. Construction needs accepted artifact. No resolver requires its own decision.",
+  "protocol_status": "PROPOSED_NOT_RUN. Execution pins/prompts/transforms/pilot/n/budget still need task-owned freeze.",
+  "dependency_semantics": "DEPENDS_ON=accepted artifact. REQUIRES_START_DECISION=qualified measured condition. Research priority alone creates no dependency; R00/J00/M00 designs need no positive W1/W2 result.",
+  "new_runtime_implementation": false,
+  "new_model_experiments": 0,
+  "new_lean_proofs": false,
+  "full_hswm_proved": false,
+  "cr_fcl_promotion": false,
+  "deadline": null,
+  "budget": null,
+  "prior_plan_uid": "sym:AbstractNode:hswm-semantic-proof-work-plan-2026-09-15",
+  "prior_task_reference_semantics": "Every prior_tasks value is scoped by prior_plan_uid; it is a crosswalk, never a local dependency.",
+  "delivery_scope": "This delivery creates the research plan and its graph only. new_runtime_implementation/new_model_experiments describe work executed in this delivery; future tasks explicitly include bounded implementation and experiments.",
+  "assumption_semantics": "Non-gating hypotheses or validity obligations to test/report; neither a start condition nor an assertion that they hold. Only hard_dependencies and required_start_decisions gate a task."
+}

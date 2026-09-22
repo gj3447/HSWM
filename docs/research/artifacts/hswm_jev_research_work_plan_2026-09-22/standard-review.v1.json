@@ -1,0 +1,165 @@
+{
+  "schema_version": "hswm-jev-research-work-plan-standard-review/v1",
+  "reviewed_on": "2026-09-22",
+  "scope": "Planning-only recommendation for a source-bound JEV plus W1-W5 engineering work-plan projection. No experiment, runtime execution, result, CR/FCL promotion, or HSWM efficacy is asserted.",
+  "official_standards": [
+    {
+      "id": "rdf11-concepts",
+      "title": "RDF 1.1 Concepts and Abstract Syntax",
+      "url": "https://www.w3.org/TR/2014/REC-rdf11-concepts-20140225/",
+      "publication_status": "W3C Recommendation",
+      "publication_date": "2014-02-25",
+      "plan_scope": "Stable RDF graph/dataset and term model for the existing deterministic N-Quads projection. RDF describes a structural graph; it does not establish the truth, execution, or causal efficacy of its nodes."
+    },
+    {
+      "id": "rdf12-concepts",
+      "title": "RDF 1.2 Concepts and Abstract Data Model",
+      "url": "https://www.w3.org/TR/2026/CR-rdf12-concepts-20260407/",
+      "publication_status": "W3C Candidate Recommendation Snapshot",
+      "publication_date": "2026-04-07",
+      "plan_scope": "Candidate-only comparison lane. It adds triple terms and RDF version announcement, but does not justify a stable-plan migration or a claim that provenance/reification changes evidence status."
+    },
+    {
+      "id": "prov-o",
+      "title": "PROV-O: The PROV Ontology",
+      "url": "https://www.w3.org/TR/2013/REC-prov-o-20130430/",
+      "publication_status": "W3C Recommendation",
+      "publication_date": "2013-04-30",
+      "plan_scope": "Reuse derivation links for source-bound plan statements and, only after a real occurrence, Entity/Activity/Agent provenance. A planned work package, acceptance criterion, or future output is not itself a prov:Activity."
+    },
+    {
+      "id": "shacl10",
+      "title": "Shapes Constraint Language (SHACL)",
+      "url": "https://www.w3.org/TR/2017/REC-shacl-20170720/",
+      "publication_status": "W3C Recommendation",
+      "publication_date": "2017-07-20",
+      "plan_scope": "Stable Core validation for local plan vocabulary: cardinality, datatype, status enumerations, typed relations, and qualified task membership. SHACL conformance is structural only."
+    },
+    {
+      "id": "shacl12-core",
+      "title": "SHACL 1.2 Core",
+      "url": "https://www.w3.org/TR/2026/WD-shacl12-core-20260828/",
+      "publication_status": "W3C Working Draft",
+      "publication_date": "2026-08-28",
+      "plan_scope": "Experimental comparison only. Do not put draft-only constraints in the stable validator or label them as interoperable acceptance evidence."
+    },
+    {
+      "id": "sparql11-query",
+      "title": "SPARQL 1.1 Query Language",
+      "url": "https://www.w3.org/TR/2013/REC-sparql11-query-20130321/",
+      "publication_status": "W3C Recommendation",
+      "publication_date": "2013-03-21",
+      "plan_scope": "Stable SELECT/ASK review queries, including property paths for dependency closure and cycles. A query result is an inspection of the projected snapshot, not an outcome measurement."
+    },
+    {
+      "id": "sparql12-query",
+      "title": "SPARQL 1.2 Query Language",
+      "url": "https://www.w3.org/TR/sparql12-query/",
+      "publication_status": "W3C Working Draft",
+      "publication_date": "2026-08-20",
+      "plan_scope": "Experimental only; SPARQL 1.1 remains the stable query contract. No future plan may require draft syntax without a separately pinned qualification."
+    }
+  ],
+  "exact_reuse": {
+    "plan_projection": {
+      "source": "_research/semantic_proof_plan_2026-09-15/plan.v1.json",
+      "projection": "ontology/development/HSWM_SEMANTIC_PROOF_WORK_PLAN_2026-09-15.v1.json",
+      "reuse": "Keep its source-bound plan/bundle split, one schema-relative responsibility owner per WORK_PACKAGE, INPUT_CONTRACT, EXPECTED_ARTIFACT, ACCEPTANCE_CRITERION, PLAN_DECISION, AUDIT_REQUIREMENT and ENGINEERING_SOURCE roles, explicit dependencies, immutable source hashes, and create-only snapshot generation."
+    },
+    "shacl": {
+      "path": "schemas/HSWM_NEXT_DEVELOPMENT_PLAN_SHACL_1_0.v1.ttl",
+      "reuse": "Reuse WorkPackageShape, ExpectedArtifactShape, AcceptanceCriterionShape, PlanDecisionShape, EngineeringSourceShape and ToolProfileShape. Keep planned artifacts NOT_PRODUCED, criteria NOT_RUN and decisions OPEN until an independently bound result exists."
+    },
+    "native_tools": {
+      "paths": [
+        "src/hswm/effect-runtime/bin/hswm-kg-bundle",
+        "src/hswm/effect-runtime/src/native-kg-bundle-domain.ts",
+        "src/hswm/effect-runtime/src/native-kg-standards.ts",
+        "_research/graph_standards/HSWM_GRAPH_STANDARDS_ACCEPTANCE.v1.json"
+      ],
+      "reuse": "Use the existing v2 RDF/N-Quads projection, SHACL validator and SPARQL query runner. Its accepted stable qualification is RDF 1.1 N-Quads; the pinned RDF 1.2 N-Quads profile is explicitly experimental. No package, adapter or live-KG path is needed for plan creation."
+    }
+  },
+  "local_vocabulary_boundary": {
+    "standard_terms": [
+      "rdf: type and graph/dataset model",
+      "prov:wasDerivedFrom for source derivation",
+      "sh:NodeShape/property constraints",
+      "SPARQL 1.1 SELECT/ASK and property paths"
+    ],
+    "local_terms": [
+      "WORK_PACKAGE",
+      "RESPONSIBILITY_ROLE",
+      "INPUT_CONTRACT",
+      "EXPECTED_ARTIFACT",
+      "ACCEPTANCE_CRITERION",
+      "PLAN_DECISION",
+      "AUDIT_REQUIREMENT",
+      "ENGINEERING_SOURCE",
+      "PLANNED",
+      "NOT_RUN",
+      "NOT_PRODUCED",
+      "CR-0..CR-7",
+      "FCL-1..FCL-8",
+      "W1..W5"
+    ],
+    "rule": "Local role/status/CR/FCL/W identifiers are HSWM plan vocabulary carried by the RDF projection; they are not asserted to be W3C vocabulary or PROV classes."
+  },
+  "nonvacuous_shacl_guidance": [
+    "Retain class-targeted shapes for every local plan role, but add a root-targeted plan shape to the fresh plan root so an empty graph cannot pass merely because it has no role:WORK_PACKAGE focus node.",
+    "The root shape should require source_ref, source_sha256, responsibility_owner, claim_ceiling, at least five r:HAS_CONCEPT values qualified as role:WORK_PACKAGE, and one source-bound ENGINEERING_SOURCE for the plan document/catalog.",
+    "For each required W1-W5 identifier, use a named target node or one explicit qualified value constraint and require task_id, PLANNED status, owner role, input, output, acceptance criterion, source, audit requirement, and the specified DEPENDS_ON edges. Do not rely on sh:targetClass alone for required task existence.",
+    "Keep actual-evidence requirements conditional on PRODUCED/ACCEPTED, PASS/FAIL, or SATISFIED/NOT_SATISFIED states. Add a plan-specific negative query that reports HAS_ACTUAL_EVIDENCE on NOT_PRODUCED, NOT_RUN, or OPEN nodes, because the reusable shape permits these planned states."
+  ],
+  "future_plan_invariants": [
+    "All W1-W5 nodes are PLANNED; all proposed empirical artifacts are NOT_PRODUCED; all empirical criteria are NOT_RUN; no plan node represents an executed experiment.",
+    "Design tasks may run in parallel. W2 efficacy needs qualified W1; W3 read measurement needs qualified W1 while its learning claim remains separate W2; W4 joint measurement may run alongside W2 after read readiness; W5 learning requires qualified W2, W3 and W4. W2 retains NO_CHANGE and all assigned worlds in intent-to-treat.",
+    "Every work package has exactly one local responsibility owner and one responsibility-role node, typed input/output/criterion/source/audit links, an explicit failure or reroute condition, and a source hash checked outside SPARQL.",
+    "W3 compares distinct actual reads under the same admissible-information and total-cost budget; it must not encode active reading as free extra information.",
+    "A work package cannot become COMPLETE unless its output is ACCEPTED, its criterion PASS, its dependencies COMPLETE, required decisions SATISFIED, and each such terminal assertion has actual source-bound evidence.",
+    "No planned node is typed prov:Activity. When an occurrence later happens, model the occurrence separately with PROV-O and link its resulting evidence to the plan; do not rewrite the historical plan node into an activity."
+  ],
+  "query_reuse_and_additions": [
+    {
+      "query": "Q1_ready_roots.sparql",
+      "expectation": "Returns only PLANNED tasks whose dependencies are COMPLETE and start decisions SATISFIED; planning-only W1-W5 should not be reported ready if their empirical prerequisites remain open."
+    },
+    {
+      "query": "Q2_transitive_dependencies.sparql and Q6_dependency_cycles.sparql",
+      "expectation": "Inspect W1-W5 closure and require zero cycle rows."
+    },
+    {
+      "query": "Q3_task_contracts.sparql and Q5_uncovered_requirements.sparql",
+      "expectation": "Every task returns the owner/role/input/output/criterion/source/requirement contract and zero audit requirements are uncovered."
+    },
+    {
+      "query": "Q4_open_decisions.sparql and Q7_premature_complete.sparql",
+      "expectation": "Open decisions remain visible; premature-complete rows must be zero."
+    },
+    {
+      "query": "Q9_tools_missing_pins.sparql",
+      "expectation": "Returns zero for any plan that declares a TOOL_PROFILE; omit tool nodes rather than inventing pins."
+    },
+    {
+      "query": "new W1-W5 dependency matrix SELECT",
+      "expectation": "Returns each W task with its direct dependency IDs and flags any missing or extra edge against the explicit invariant."
+    },
+    {
+      "query": "new planned-evidence leakage SELECT",
+      "expectation": "Returns NOT_PRODUCED/NOT_RUN/OPEN nodes that nevertheless have HAS_ACTUAL_EVIDENCE; expected zero."
+    },
+    {
+      "query": "new future-work-is-not-activity ASK/SELECT",
+      "expectation": "Returns any role:WORK_PACKAGE or planned artifact also typed prov:Activity; expected zero."
+    },
+    {
+      "query": "external verifier source-hash check",
+      "expectation": "Recompute every ENGINEERING_SOURCE SHA-256 and artifact binding; SPARQL can test presence/typing but cannot recompute file bytes."
+    }
+  ],
+  "limits": [
+    "RDF/SHACL/SPARQL validate or query a static projection. They do not execute the local LLM operator, validate outcome independence, establish semantic revision, prove read sufficiency, prove joint-law preservation, or establish two-scale cognition.",
+    "PROV-O records provenance structure. It does not confer truth, permission, causal credit, owner authority, experiment completion, or CR/FCL promotion.",
+    "RDF 1.2, SHACL 1.2 and SPARQL 1.2 are not stable-plan dependencies at the reviewed dates."
+  ]
+}

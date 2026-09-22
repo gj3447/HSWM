@@ -1,0 +1,11 @@
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT DISTINCT ?item ?reason WHERE {
+  { ?item a role:WORK_PACKAGE; r:DEPENDS_ON+ ?item . BIND("DEPENDENCY_CYCLE" AS ?reason) }
+  UNION { ?item a role:WORK_PACKAGE; p:status "COMPLETE" . ?item r:EXPECTS_OUTPUT ?o . ?o p:status ?s . FILTER(?s != "ACCEPTED") BIND("PREMATURE_COMPLETE" AS ?reason) }
+  UNION { ?item p:status ?s; r:HAS_ACTUAL_EVIDENCE ?e . FILTER(?s IN ("NOT_PRODUCED", "NOT_RUN", "OPEN", "UNVERIFIED")) BIND("FUTURE_EVIDENCE" AS ?reason) }
+  UNION { ?item a role:WORK_PACKAGE, prov:Activity . BIND("FUTURE_WORK_TYPED_ACTIVITY" AS ?reason) }
+  UNION { ?item p:cr_fcl_promotion ?v . FILTER(?v != false) BIND("PROMOTION" AS ?reason) }
+} ORDER BY ?reason ?item

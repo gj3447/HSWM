@@ -1,0 +1,32 @@
+{
+  "schema_version": "hswm-jev-work-plan-vendor-review/v1",
+  "reviewed_on": "2026-09-22",
+  "authority": "SECONDARY_AI_SUMMARY",
+  "sources": [
+    {
+      "id": "typesafe-primer",
+      "url": "https://docs.typesafe.ai/introduction/machine-learning-primer",
+      "authority": "OFFICIAL_VENDOR_DESIGN",
+      "scope": "RLCD output/calibration contract",
+      "finding": "Trained decisions/probabilities are described; frozen next-token renormalization does not reproduce RLCD."
+    },
+    {
+      "id": "typesafe-primitives",
+      "url": "https://docs.typesafe.ai/primitives",
+      "authority": "OFFICIAL_VENDOR_INTERFACE",
+      "scope": "Choice/Score/Noul, same state, independent and dependent questions",
+      "finding": "Independent same-state questions and later dependent requests are distinguished. No evidence here of HSWM joint-law or shared-trunk efficacy."
+    },
+    {
+      "id": "guo-calibration",
+      "url": "https://proceedings.mlr.press/v70/guo17a.html",
+      "authority": "PRIMARY_PAPER",
+      "version": "ICML 2017 PMLR70",
+      "scope": "Official proceedings abstract; method inherited from bound JEV review",
+      "finding": "Temperature scaling is a post-hoc calibration reference, not semantic revision."
+    }
+  ],
+  "api_called": false,
+  "implementations_installed": 0,
+  "cr_fcl_promotion": false
+}

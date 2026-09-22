@@ -1,0 +1,8 @@
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?id ?kind ?resolver WHERE {
+  { ?x a role:PLAN_DECISION; p:decision_id ?id; p:status "OPEN"; r:RESOLVED_BY ?r . BIND("decision" AS ?kind) }
+  UNION { ?x a role:RESEARCH_ASSUMPTION; p:assumption_id ?id; p:status "UNVERIFIED"; r:RESOLVED_BY ?r . BIND("assumption" AS ?kind) }
+  ?r p:task_id ?resolver .
+} ORDER BY ?kind ?id

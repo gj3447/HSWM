@@ -1,0 +1,5 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?work ?priority ?name ?dependencies ?reroute ?related WHERE {
+  ?task p:standard_graph_role "NEXT_WORK"; p:work_id ?work; p:priority ?priority; p:name ?name;
+    p:dependencies ?dependencies; p:failure_reroute ?reroute; p:related_obligations ?related.
+} ORDER BY ?priority

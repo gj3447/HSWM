@@ -1,5 +1,10 @@
 # HSWM — public repository index
 
+2026-09-22 [Jev 연구 · 표준 그래프 엔지니어링](docs/research/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.md)은
+기존 P1–P6을 관계 버전·역할·결정·관측·수정 계보로 연결하고,
+의미 변경 부재와 국소 실행 병목에서 다음 연구 과제를 정한다.
+[조회 가능한 KG](ontology/queries/hswm_jev_graph_engineering_2026-09-22/README.md)는 연구 projection이며 효능 판정을 승격하지 않는다.
+
 2026-09-15 [Lean·실제 LLM 연구의 표준 그래프 작업 계획](docs/operations/HSWM_SEMANTIC_PROOF_WORK_PLAN_2026-09-15.md)은
 22개 작업의 책임·가정·산출물·선행·수용·실패 조건을 기존 N1–N6와 CR/FCL에 연결한다.
 현재 시작 후보는 P00/P01/P02이며 후속 구현·증명·실험은 미실행이다.

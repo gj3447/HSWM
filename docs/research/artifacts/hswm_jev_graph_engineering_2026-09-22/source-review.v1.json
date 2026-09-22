@@ -1,0 +1,67 @@
+{
+  "schema_version": "hswm-official-source-review/v1",
+  "reviewed_on": "2026-09-22",
+  "authority": "SECONDARY_AI_SOURCE_REVIEW",
+  "scope": "Official source status and stated interface contracts; no vendor efficacy replication or new implementation qualification.",
+  "artifact_policy": "No package, model, binary, image or repository downloaded or installed. Existing locked graph tools reused. URLs identify consulted pages, not immutable content digests.",
+  "sources": [
+    {
+      "url": "https://docs.typesafe.ai/introduction/machine-learning-primer",
+      "authority_class": "OFFICIAL_VENDOR_DESCRIPTION_NOT_INDEPENDENT_EVIDENCE",
+      "sections": "RLCD and calibrated decisions",
+      "finding": "Vendor describes typed decisions and probabilities trained for calibration; observed group rates are not a guarantee for an individual answer.",
+      "limit": "Does not supply an independently reproduced Jev training method or HSWM transfer result."
+    },
+    {
+      "url": "https://docs.typesafe.ai/primitives",
+      "authority_class": "OFFICIAL_VENDOR_INTERFACE_DOCUMENTATION",
+      "sections": "Question types, same state, answer fields and independent questions",
+      "finding": "Choice, Score and Noul typed questions read the same state; the documented per-question independence is not a proof of statistical independence of world variables.",
+      "limit": "No API call, SDK adoption, checkpoint certification or joint-output benchmark performed."
+    },
+    {
+      "url": "https://www.w3.org/TR/2014/REC-rdf11-concepts-20140225/",
+      "authority_class": "W3C_RECOMMENDATION",
+      "version": "2014-02-25",
+      "sections": "Abstract data model and RDF datasets",
+      "finding": "Stable dataset vocabulary for existing source-bound RDF 1.1 projection."
+    },
+    {
+      "url": "https://www.w3.org/TR/2013/REC-prov-o-20130430/",
+      "authority_class": "W3C_RECOMMENDATION",
+      "version": "2013-04-30",
+      "sections": "Status; Entity, Activity and derivation vocabulary",
+      "finding": "Provenance representation; the existing HSWM adapter implements a bounded view-derivation envelope, not generic runtime learning provenance."
+    },
+    {
+      "url": "https://www.w3.org/TR/2017/REC-shacl-20170720/",
+      "authority_class": "W3C_RECOMMENDATION",
+      "version": "2017-07-20",
+      "sections": "Status and validation model",
+      "finding": "Structural constraints are evaluated against a shapes graph; conformance is not factual truth or scientific efficacy."
+    },
+    {
+      "url": "https://www.w3.org/TR/2013/REC-sparql11-query-20130321/",
+      "authority_class": "W3C_RECOMMENDATION",
+      "version": "2013-03-21",
+      "sections": "Status and query forms",
+      "finding": "Reuse the repository's local SELECT/ASK subset; no update or remote SERVICE added."
+    },
+    {
+      "url": "https://www.w3.org/TR/2006/NOTE-swbp-n-aryRelations-20060412/",
+      "authority_class": "W3C_WORKING_GROUP_NOTE_NOT_RECOMMENDATION",
+      "version": "2006-04-12",
+      "sections": "Status; Pattern 1 introducing a class for a relation; ordered arguments",
+      "finding": "Relation instances and participant roles can express n-ary structure using RDF binary properties; HSWM version/owner/slot preservation remains an application contract."
+    },
+    {
+      "url": "https://www.w3.org/TR/rdf12-concepts/",
+      "version_url": "https://www.w3.org/TR/2026/CR-rdf12-concepts-20260407/",
+      "authority_class": "W3C_CANDIDATE_RECOMMENDATION_SNAPSHOT_NOT_RECOMMENDATION",
+      "version": "2026-04-07",
+      "sections": "Status and Latest Recommendation pointer",
+      "finding": "Page retrieved on the review date still identifies the April 2026 Candidate Recommendation snapshot and points to RDF 1.1 as latest Recommendation.",
+      "decision": "Keep existing stable RDF 1.1 path; no RDF 1.2 adoption."
+    }
+  ]
+}

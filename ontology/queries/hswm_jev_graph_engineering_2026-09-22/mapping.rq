@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?principle ?role ?status ?contract ?unproven WHERE {
+  ?mapping p:standard_graph_role "PRINCIPLE_MAPPING"; p:principle_id ?principle;
+    p:graph_engineering_role ?role; p:status ?status; p:adopted_measurement_contract ?contract;
+    p:unproven_hswm_extension ?unproven.
+} ORDER BY ?principle

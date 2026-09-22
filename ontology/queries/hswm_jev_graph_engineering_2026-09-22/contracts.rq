@@ -1,0 +1,5 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?contract ?fields ?distinction ?ownerLineage ?status WHERE {
+  ?item p:standard_graph_role "GRAPH_DATA_CONTRACT"; p:name ?contract; p:minimum_fields ?fields;
+    p:distinction ?distinction; p:owner_lineage_obligation ?ownerLineage; p:status ?status.
+} ORDER BY ?contract

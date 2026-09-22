@@ -1,0 +1,140 @@
+{
+  "schema_version": "hswm-jev-graph-engineering-validation/v1",
+  "date": "2026-09-22",
+  "status": "PASS",
+  "authority": "SECONDARY_AI_ENGINEERING_CHECK",
+  "claim": "SOURCE_BOUND_ENGINEERING_STRUCTURE_AND_QUERY_VALIDATION_NOT_NEW_RESEARCH_RESULT_OR_HSWM_EFFICACY",
+  "bundle": {
+    "path": "ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json",
+    "sha256": "48b7454d902f41237f4d0317a04c75c15624ac6d43d0c0b196dcf723d836d32d",
+    "nodes": 54,
+    "anchors": 25,
+    "relations": 140
+  },
+  "local_artifact_bindings_verified": 23,
+  "prior_anchors_verified_against_bound_2026_09_21_snapshot": 25,
+  "owned_nodes_explicitly_nonpromoting": 54,
+  "native_build": {
+    "command": "npm --prefix src/hswm/effect-runtime run build",
+    "status": "PASS"
+  },
+  "hswm_dev": {
+    "episode": "b3f4129f-3d29-4f35-85bf-0928c4adb426",
+    "selected_relation": "relation:ontology-focused",
+    "task": "Jev source-bound standard graph organization and research dependency validation",
+    "status": "FEEDBACK_RECORDED",
+    "tests_passed": 48,
+    "test_files_passed": 4,
+    "result_output_sha256": "fe32ddfbe2019a766c5f607eaccacac4cebfa30708992ddf6f025f70f2a81c9a",
+    "feedback_source": "agent(codex): Useful ontology regression coverage: 48 checks passed. New Jev graph requires separate shape/query checks. Agent judgment, not user feedback or efficacy evidence.",
+    "feedback_is_user_feedback": false,
+    "feedback_retry": "Initial source text exceeded the 256-character API limit; shortened explicit agent feedback was accepted.",
+    "coverage_limit": "Existing graph-tool regressions, not new Jev semantic efficacy or the new bundle-specific checks below."
+  },
+  "portable_math": {
+    "command": "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology",
+    "status": "PORTABLE_MATH_COMPILED",
+    "documents": 190,
+    "display_fence_rewrites_in_memory": 66,
+    "legacy_compatibility_rewrites_in_memory": 6,
+    "operatorname_rewrites_in_memory": 36,
+    "math_fences_seen": 215,
+    "source_files_rewritten": false
+  },
+  "projection": {
+    "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle project --source jev_graph_engineering=ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json --profile v2 --output-dir NEW_DIRECTORY",
+    "descriptor": "projection-descriptor.v1.json",
+    "provenance": "projection-provenance.v1.jsonld",
+    "dataset_sha256": "5bb2058ae84fbd1714278a38e3df40aef12950b89bb99f16d5d7b12da08e1674",
+    "dataset_bytes": 917795,
+    "write_back": "FORBIDDEN",
+    "dataset_storage": "Regenerate with the existing native CLI; temporary dataset not committed."
+  },
+  "shacl": [
+    {
+      "shape": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+      "sha256": "6eb4d0be63fccd71e02e25d86baa1ae81c0ddf31a9eb4d05fc4f0cf655225371",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle validate --source jev_graph_engineering=ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json --profile v2 --shapes schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+      "conforms": true,
+      "results": 0,
+      "coverage": "Base RDF v2 projection structure."
+    },
+    {
+      "shape": "schemas/HSWM_RESEARCH_INTEGRATION_SHACL_2026-09-20.ttl",
+      "sha256": "8482caf0042885c8bada2257322c8ebfd59ff77c35c6db9ccee27b63f331d303",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle validate --source jev_graph_engineering=ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json --profile v2 --shapes schemas/HSWM_RESEARCH_INTEGRATION_SHACL_2026-09-20.ttl",
+      "conforms": true,
+      "results": 0,
+      "coverage": "No applicable custom role targets in this new bundle; conformance is not additional assertion coverage."
+    },
+    {
+      "shape": "schemas/HSWM_DGX_FRONTIER_SHACL_2026-09-20.ttl",
+      "sha256": "04333e72a6b82242df746e1f15a52015c01d93bc61297af6947348aa28fd2b80",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle validate --source jev_graph_engineering=ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json --profile v2 --shapes schemas/HSWM_DGX_FRONTIER_SHACL_2026-09-20.ttl",
+      "conforms": true,
+      "results": 0,
+      "coverage": "23 RESEARCH_SOURCE nodes; candidate/run shapes have no targets.",
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+      "executed_by": "agent(codex):root"
+    }
+  ],
+  "queries": [
+    {
+      "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/mapping.rq",
+      "sha256": "8eff1e73aa2108e6fd65661f39a7d5135178a3342ed978b3e07824668eb05e31",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle query --source jev_graph_engineering=ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json --profile v2 --query ontology/queries/hswm_jev_graph_engineering_2026-09-22/mapping.rq",
+      "expected_rows": 6,
+      "observed_rows": 6
+    },
+    {
+      "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/next_work.rq",
+      "sha256": "2590007b7235e221a99201a87a1dc4a83e0e9dba262dc8dac020fd675257516d",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle query --source jev_graph_engineering=ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json --profile v2 --query ontology/queries/hswm_jev_graph_engineering_2026-09-22/next_work.rq",
+      "expected_rows": 5,
+      "observed_rows": 5
+    },
+    {
+      "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/contracts.rq",
+      "sha256": "a3f3ac37f2d50ccf05b5c94ed84088aea0c1efe8026bf65c7b2a1463a853a0b8",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle query --source jev_graph_engineering=ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json --profile v2 --query ontology/queries/hswm_jev_graph_engineering_2026-09-22/contracts.rq",
+      "expected_rows": 8,
+      "observed_rows": 8
+    },
+    {
+      "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/unsupported.rq",
+      "sha256": "29de32d9b8be5153ff4d231968c9816494181e997748d5647fdbebfd1692f6de",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle query --source jev_graph_engineering=ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json --profile v2 --query ontology/queries/hswm_jev_graph_engineering_2026-09-22/unsupported.rq",
+      "expected_rows": 0,
+      "observed_rows": 0
+    },
+    {
+      "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/inherited_negative.rq",
+      "sha256": "58bd9dfa103cc4c94db63531f4cd599c2b61677b51c1eb32aca31f5f08a0960b",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle query --source jev_graph_engineering=ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json --profile v2 --query ontology/queries/hswm_jev_graph_engineering_2026-09-22/inherited_negative.rq",
+      "expected_rows": 1,
+      "observed_rows": 1
+    }
+  ],
+  "negative_checks": [
+    {
+      "mutation": "Remove P1 mapping DERIVED_FROM relation; adjust expected relation count only.",
+      "input_sha256": "cfdf17fd582780b151717ae6a8ab9e8245e060cb4e916c82aeacd25839a37159",
+      "query": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/unsupported.rq",
+      "rows": 1,
+      "reason": "MISSING_SOURCE"
+    },
+    {
+      "mutation": "Set owned root cr_fcl_promotion to true.",
+      "input_sha256": "91f9a1b0c9007784166460e55accfe114815594f9d1f9b969b7acb52153e9b53",
+      "query": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/unsupported.rq",
+      "rows": 1,
+      "reason": "MISSING_OR_NONFALSE_CR_FCL_PROMOTION"
+    }
+  ],
+  "validation_reporting": "Shape/query/mutation commands executed by agent(codex):graph_workflow; source/anchor/nonpromotion and emitted dataset byte checks independently verified by agent(codex):root.",
+  "reproduction_note": "The builder creates the fixed snapshot with exclusive write and intentionally refuses overwriting an existing snapshot. For an existing checkout, use the native project/validate/query commands above without rerunning creation.",
+  "new_model_experiments": 0,
+  "live_kg_publication": false,
+  "cr_fcl_promotion": false
+}

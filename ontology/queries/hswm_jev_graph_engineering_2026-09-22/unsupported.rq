@@ -1,0 +1,12 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?name ?reason WHERE {
+  { ?item p:responsibility_owner ?owner; p:standard_graph_role ?role; p:name ?name.
+    VALUES ?role { "RESEARCH_PROGRAM" "PRINCIPLE_MAPPING" "NEXT_WORK" "INHERITED_NEGATIVE_EVIDENCE" "GRAPH_ENGINEERING_CONTRACT" "GRAPH_DATA_CONTRACT" "MANDATORY_COMPARATOR" }
+    FILTER NOT EXISTS { ?item r:DERIVED_FROM ?source }
+    BIND("MISSING_SOURCE" AS ?reason) }
+  UNION
+  { ?item p:responsibility_owner ?owner; p:name ?name.
+    FILTER NOT EXISTS { ?item p:cr_fcl_promotion false }
+    BIND("MISSING_OR_NONFALSE_CR_FCL_PROMOTION" AS ?reason) }
+} ORDER BY ?name ?reason

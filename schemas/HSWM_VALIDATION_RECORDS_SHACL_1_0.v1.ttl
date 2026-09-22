@@ -1,0 +1,156 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+
+# HSWM validation-record structural profile.  It records declared evidence
+# structure only.  Conformance does not establish independence, equal budget,
+# semantic improvement, causal credit, learning, or HSWM efficacy.
+
+role:ValidationGraphRootShape a sh:NodeShape ;
+  sh:targetClass role:VALIDATION_GRAPH_ROOT ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:minCount 1 ] ;
+  sh:property [ sh:path p:claim_ceiling ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:projection_nonclaim ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:Common a sh:NodeShape ;
+  sh:property [ sh:path p:evidence_kind ; sh:in ( "FIXTURE_ONLY" "OBSERVED_DECLARATION" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:protocol_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:protocol_version ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:protocol_sha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:case_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:world_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:split_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:model_pin ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:tokenizer_pin ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:template_pin ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:server_pin ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:generation_pin ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:snapshot_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:relation_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:frame_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:request_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:response_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:sealed_prediction_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:metrics_plan ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:analysis_plan ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:prediction_order ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:outcome_order ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:USES_PROTOCOL ; sh:class role:VALIDATION_PROTOCOL_RECORD ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_EXECUTION ; sh:class role:VALIDATION_EXECUTION_RECORD ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_OUTCOME ; sh:class role:VALIDATION_OUTCOME_RECORD ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:USES_SPLIT ; sh:class role:VALIDATION_SPLIT_RECORD ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_COST ; sh:class role:VALIDATION_COST_RECORD ; sh:minCount 1 ] ;
+  sh:property [ sh:path r:HAS_PARTICIPATION ; sh:class role:VALIDATION_PARTICIPATION_RECORD ; sh:minCount 1 ] .
+
+role:Protocol a sh:NodeShape ; sh:targetClass role:VALIDATION_PROTOCOL_RECORD ;
+  sh:property [ sh:path p:protocol_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:protocol_version ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:protocol_sha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:frozen_order ; sh:datatype xsd:integer ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:Execution a sh:NodeShape ; sh:targetClass role:VALIDATION_EXECUTION_RECORD ;
+  sh:property [ sh:path p:sealed_prediction_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:frame_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:relation_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:Outcome a sh:NodeShape ; sh:targetClass role:VALIDATION_OUTCOME_RECORD ;
+  sh:property [ sh:path p:outcome_source ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:independence_status ; sh:in ( "CALLER_DECLARED" "PROCEDURE_DOCUMENTED" "UNVERIFIED" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:sealed_prediction_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:ABOUT ; sh:class role:VALIDATION_EXECUTION_RECORD ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:Split a sh:NodeShape ; sh:targetClass role:VALIDATION_SPLIT_RECORD ;
+  sh:property [ sh:path p:split_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:split_role ; sh:in ( "SEARCH" "SELECTION" "FINAL" "CALIBRATION" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:manifest_sha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_MEMBER ; sh:class role:VALIDATION_CASE_RECORD ; sh:minCount 1 ] ;
+  sh:property [ sh:path r:USES_PROTOCOL ; sh:class role:VALIDATION_PROTOCOL_RECORD ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:Case a sh:NodeShape ; sh:targetClass role:VALIDATION_CASE_RECORD ;
+  sh:property [ sh:path p:case_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:world_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:Cost a sh:NodeShape ; sh:targetClass role:VALIDATION_COST_RECORD ;
+  sh:property [ sh:path p:component ; sh:in ( "INPUT_TOKENS" "OUTPUT_TOKENS" "REASONING_TOKENS" "READ_TOKENS" "UPDATE_TOKENS" "RETRY_TOKENS" "WALL_TIME_MS" "REQUEST_COUNT" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:unit ; sh:in ( "TOKEN" "MILLISECOND" "REQUEST" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:accounting_basis ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:measurement_status ; sh:in ( "MEASURED" "UNREPORTED" "NOT_APPLICABLE" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:or (
+    [ sh:property [ sh:path p:measurement_status ; sh:hasValue "MEASURED" ; sh:minCount 1 ; sh:maxCount 1 ] ; sh:property [ sh:path p:amount ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ]
+    [ sh:property [ sh:path p:measurement_status ; sh:hasValue "MEASURED" ; sh:minCount 1 ; sh:maxCount 1 ] ; sh:property [ sh:path p:amount ; sh:datatype xsd:double ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ]
+    [ sh:property [ sh:path p:measurement_status ; sh:in ( "UNREPORTED" "NOT_APPLICABLE" ) ; sh:minCount 1 ; sh:maxCount 1 ] ; sh:property [ sh:path p:amount ; sh:maxCount 0 ] ; sh:property [ sh:path p:reason ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ]
+  ) .
+
+role:Participation a sh:NodeShape ; sh:targetClass role:VALIDATION_PARTICIPATION_RECORD ;
+  sh:property [ sh:path p:role_name ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:slot_ordinal ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:participant_version ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:participant_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:LOCAL a sh:NodeShape ; sh:targetClass role:LOCAL_VALIDATION_RECORD ; sh:node role:Common ;
+  sh:property [ sh:path p:family_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:transform_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:output_mode ; sh:in ( "E0" "E1" "E2" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:repeat_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:Revision a sh:NodeShape ; sh:targetClass role:VALIDATION_REVISION_RECORD ;
+  sh:property [ sh:path p:revision_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:parent_revision_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:revision_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:revision_status ; sh:in ( "NO_OP" "COMMITTED" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:DERIVED_FROM ; sh:class role:VALIDATION_OUTCOME_RECORD ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:FreshRead a sh:NodeShape ; sh:targetClass role:VALIDATION_FRESH_READ_RECORD ;
+  sh:property [ sh:path p:revision_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:READS_REVISION ; sh:class role:VALIDATION_REVISION_RECORD ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:LEARNING a sh:NodeShape ; sh:targetClass role:LEARNING_VALIDATION_RECORD ; sh:node role:Common ;
+  sh:property [ sh:path p:control_arm ; sh:in ( "FROZEN" "EVIDENCE_ONLY" "SHAM" "SEMANTIC" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:revision_delta ; sh:in ( "NO_OP" "EVIDENCE_ONLY" "PARAPHRASE" "SEMANTIC_TEXT" "DISPOSITION" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:retention_plan ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_REVISION ; sh:class role:VALIDATION_REVISION_RECORD ; sh:node role:Revision ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_FRESH_READ ; sh:class role:VALIDATION_FRESH_READ_RECORD ; sh:node role:FreshRead ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:READ a sh:NodeShape ; sh:targetClass role:READ_VALIDATION_RECORD ; sh:node role:Common ;
+  sh:property [ sh:path p:read_arm ; sh:in ( "FULL" "FIXED" "ACTIVE" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:sufficiency_kind ; sh:in ( "CURRENT" "CONTROL" "LEARNING" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:initial_read_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:expanded_read_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:witness_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:allowed_observations ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:stop_rule ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:JointTuple a sh:NodeShape ; sh:targetClass role:VALIDATION_JOINT_TUPLE_RECORD ;
+  sh:property [ sh:path p:tuple_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:recipients_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:JOINT a sh:NodeShape ; sh:targetClass role:JOINT_VALIDATION_RECORD ; sh:node role:Common ;
+  sh:property [ sh:path p:candidate_space_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:probability_status ; sh:in ( "JOINT_SAMPLES" "JOINT_PROBABILITIES" "UNAVAILABLE" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:dependence_contract ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_JOINT_TUPLE ; sh:class role:VALIDATION_JOINT_TUPLE_RECORD ; sh:node role:JointTuple ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:ScaleBinding a sh:NodeShape ; sh:targetClass role:VALIDATION_SCALE_BINDING_RECORD ;
+  sh:property [ sh:path p:parent_revision_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:child_revision_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:summary_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:exception_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:uncertainty_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:lineage_mapping ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:SCALE a sh:NodeShape ; sh:targetClass role:SCALE_VALIDATION_RECORD ; sh:node role:Common ;
+  sh:property [ sh:path p:scale_arm ; sh:in ( "FLAT" "STATIC_WRAPPER" "LEARNING_PARENT" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:preservation_kind ; sh:in ( "CURRENT" "CONTROL" "LEARNING" ) ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SCALE_BINDING ; sh:class role:VALIDATION_SCALE_BINDING_RECORD ; sh:node role:ScaleBinding ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+role:HYPERON a sh:NodeShape ; sh:targetClass role:HYPERON_VALIDATION_RECORD ; sh:node role:Common ;
+  sh:property [ sh:path p:hyperon_component ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:hyperon_commit ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:hyperon_config_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:adapter_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:comparison_scope ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:information_manifest_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:budget_contract_digest ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:comparison_status ; sh:in ( "NOT_EVALUATED" "DECLARED_MATCHED" ) ; sh:minCount 1 ; sh:maxCount 1 ] .

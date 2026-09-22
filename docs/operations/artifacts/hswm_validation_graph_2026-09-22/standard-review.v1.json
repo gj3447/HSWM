@@ -1,0 +1,135 @@
+{
+  "schema_version": "hswm-validation-graph-standard-review/v1",
+  "observed_at_utc": "2026-09-22",
+  "scope": "Read-only standards and implementation-source classification for the five HSWM validation workstreams. This is an engineering-input review, not a runtime admission, Permit, causal-credit, learning, efficacy, or conformance result.",
+  "source_read_policy": "Official public pages were read by URL on the observation date. No copyrighted source text, private raw output, package archive, install, or network endpoint is copied into this artifact.",
+  "selected_stable_standards": [
+    {
+      "id": "rdf-1.1-concepts",
+      "official_url": "https://www.w3.org/TR/rdf11-concepts/",
+      "official_status_observed": "W3C Recommendation, 2014-02-25",
+      "selection": "REUSE_EXISTING",
+      "role": "Named RDF datasets and derived N-Quads projection for immutable occurrence separation.",
+      "limit": "An RDF graph is a representation projection; it is not HSWM state, semantic understanding, outcome truth, or causal evidence."
+    },
+    {
+      "id": "prov-o",
+      "official_url": "https://www.w3.org/TR/prov-o/",
+      "official_status_observed": "W3C Recommendation, 2013-04-30",
+      "selection": "REUSE_EXISTING",
+      "role": "Interchange vocabulary for source/request/response/snapshot/outcome/revision entities and their generating activities and responsible agents.",
+      "limit": "PROV records asserted lineage; it neither attributes causal credit nor establishes an outcome-bound semantic update."
+    },
+    {
+      "id": "shacl-1.0",
+      "official_url": "https://www.w3.org/TR/shacl/",
+      "official_status_observed": "W3C Recommendation, 2017-07-20",
+      "selection": "REUSE_EXISTING",
+      "role": "Structural validation of exported graph constraints such as required pins, role incidence, control identifiers, and declared references.",
+      "limit": "A conforming shape report does not establish model behavior, semantic validity, equal information, equal budget, or scientific efficacy."
+    },
+    {
+      "id": "sparql-1.1-query",
+      "official_url": "https://www.w3.org/TR/sparql11-query/",
+      "official_status_observed": "W3C Recommendation, 2013-03-21",
+      "selection": "REUSE_EXISTING",
+      "role": "Local read-only SELECT/ASK inspection of source-bound projection artifacts.",
+      "limit": "The selected adapter remains a constrained local read-only subset; this is not full SPARQL protocol, update, federation, or universal-conformance evidence."
+    }
+  ],
+  "representation_pattern": {
+    "id": "w3c-nary-relations",
+    "official_url": "https://www.w3.org/TR/swbp-n-aryRelations/",
+    "official_status_observed": "W3C Working Group Note, 2006-04-12; not a Recommendation",
+    "selection": "PATTERN_REFERENCE_ONLY",
+    "use": "Represent a RelationVersion and each RoleParticipation as identified resources, preserving participant version, role, and slotOrdinal; do not replace n-ary role incidence with a pairwise clique.",
+    "limit": "The Note supplies no HSWM semantic-weight, joint-distribution, ownership, permission, or learning semantics."
+  },
+  "considered_not_implemented": [
+    {
+      "id": "rdfc-1.0",
+      "official_url": "https://www.w3.org/TR/rdf-canon/",
+      "official_status_observed": "W3C Recommendation, 2024-05-21",
+      "selection": "CONSIDERED_NOT_IMPLEMENTED",
+      "reason": "The present validation projection is blank-node-free and deterministically serialized, so its existing source-bound bytes and hashes are adequate for this artifact lane. No new dependency or canonicalization step is selected.",
+      "limit": "RDFC 1.0 canonicalizes an RDF dataset only. It would not bind raw prompt/request JSON bytes, tokenizer inputs, model output bytes, server behavior, or an equal-budget comparison."
+    }
+  ],
+  "draft_lane_not_selected": [
+    {
+      "id": "shacl-1.2-core",
+      "official_url": "https://www.w3.org/TR/shacl12-core/",
+      "official_status_observed": "W3C Working Draft, observed current page 2026-09-22",
+      "decision": "NOT_SELECTED_FOR_STABLE_VALIDATION"
+    },
+    {
+      "id": "sparql-1.2-query",
+      "official_url": "https://www.w3.org/TR/sparql12-query/",
+      "official_status_observed": "W3C Working Draft, observed current page 2026-09-22",
+      "decision": "NOT_SELECTED_FOR_STABLE_VALIDATION"
+    },
+    {
+      "id": "rdf-1.2-family",
+      "official_url": "https://www.w3.org/TR/rdf12-concepts/",
+      "official_status_observed": "RDF 1.2 family has active Working Draft components on the official current page; no migration selected",
+      "decision": "NOT_SELECTED_FOR_STABLE_VALIDATION"
+    }
+  ],
+  "experiment_contract_boundary": {
+    "joint_predictions": "No selected standard defines the intended joint candidate semantics. Record CandidateSet version, ordered candidate identities, joint outcome law/constraint, and exact evaluation interpretation in a local typed protocol.",
+    "outcome_bound_updates": "Use PROV links to locate the exact Prediction, Outcome, RevisionProposal, CommittedRevision, and fresh execution; the causal estimand, sham/remove/restore conditions, and no-change classification remain local protocol requirements.",
+    "equal_budget": "No selected standard certifies a fair comparison. Predeclare and observe model/checkpoint, tokenizer, server/build, generation configuration, input/output token counts, request count, read-set bytes, repeats, wall time, failures, and any explicit compute-budget factor. Identical provenance shape does not imply equal information or cost."
+  },
+  "existing_runtime_package_pins": {
+    "package_lock": "src/hswm/effect-runtime/package-lock.json",
+    "package_lock_sha256": "44a3f32fbeb5ad30069b2c82db7fe5e8db95c34a66be603a2e89d82d230c4191",
+    "verification": "Version, registry URL, and integrity were copied from this package-lock. License was checked against the corresponding already-installed package manifest; it is not an assertion that any package is a standards authority or universal implementation.",
+    "packages": [
+      {
+        "package": "effect",
+        "version": "3.22.1",
+        "resolved": "https://registry.npmjs.org/effect/-/effect-3.22.1.tgz",
+        "integrity": "sha512-TNoXushmPOBAjJlthF5d2QwnX2xBPEtcNJr5XKNKbRLbDvBcOYkXlYDfvGfSA0zriwLFuCll5MDtNMAdZL17PQ==",
+        "license_checked": "MIT",
+        "scope": "Native TypeScript Effect runtime support; not a graph-standard implementation."
+      },
+      {
+        "package": "n3",
+        "version": "2.7.2",
+        "resolved": "https://registry.npmjs.org/n3/-/n3-2.7.2.tgz",
+        "integrity": "sha512-8Y/GU78BFSecvIv7OiJacY28l/zHiLo5/apxM+kyyUNCTWmqWyzzNjLlja4/vbLogoCHDPwCChLuDEZcpOKeDw==",
+        "license_checked": "MIT",
+        "scope": "Independent RDFJS implementation used in the bounded projection path; not W3C authority."
+      },
+      {
+        "package": "rdf-validate-shacl",
+        "version": "0.6.5",
+        "resolved": "https://registry.npmjs.org/rdf-validate-shacl/-/rdf-validate-shacl-0.6.5.tgz",
+        "integrity": "sha512-rwIibopSixDE8ecA9x0c7oTVxdMWxGiJh7h3uJ+WS2h4lq2nx3DZVO7rJvwa5kZpDq9QEFPoyZINAUyfaaoN4Q==",
+        "license_checked": "MIT",
+        "scope": "Independent SHACL validator in the bounded runtime profile; structural validation only."
+      },
+      {
+        "package": "@comunica/query-sparql-rdfjs",
+        "version": "5.3.0",
+        "resolved": "https://registry.npmjs.org/@comunica/query-sparql-rdfjs/-/query-sparql-rdfjs-5.3.0.tgz",
+        "integrity": "sha512-isXNLwV1PB3hGXtcKXOfV134/X2q53J2ZELS82F07KbHVLoGCwF+DxfQ/gXvPxIatGKO2w0v3At3uAwVPzfZDA==",
+        "license_checked": "MIT",
+        "scope": "Independent SPARQL implementation in the bounded local read-only profile; not W3C authority."
+      }
+    ]
+  },
+  "hyperon_historical_reference": {
+    "official_repository_url": "https://github.com/trueagi-io/hyperon-experimental",
+    "pinned_tree_url": "https://github.com/trueagi-io/hyperon-experimental/tree/3f76dc460da6961f57f69f6c3e550c59c74ada83",
+    "release_url": "https://github.com/trueagi-io/hyperon-experimental/releases",
+    "version": "v0.2.10",
+    "commit": "3f76dc460da6961f57f69f6c3e550c59c74ada83",
+    "classification": "HISTORICAL_DIRECT_PRIOR_REFERENCE_NOT_EXECUTED_OR_REQUALIFIED",
+    "official_status_observed": "The official release page identifies v0.2.10 with the abbreviated commit 3f76dc4 and labels the release pre-release.",
+    "scope_observed_from_existing_direct_prior_audit": "Rust core, MeTTa interpreter/REPL, typed Atom/Space API, C/Python binding, and DAS integration-test path.",
+    "excluded_claims": "This reference does not establish a full Hyperon integration, Omega* or TECAN implementation, token-position symbolic head, predictive-coding bridge, outcome-bound HSWM learning, equal-budget comparison, or efficacy result.",
+    "future_comparison_pin_requirements": ["repository commit", "Cargo.lock and Git dependency revisions", "enabled features", "MeTTa source and exact input state", "invocation", "compiler/OS or image digest", "comparison model/tokenizer/server configuration", "identical information and fully accounted cost contract"]
+  },
+  "non_actions": ["No package, SDK, model, Hyperon component, or skill was installed.", "No external model-serving, graph-serving, or Hyperon runtime endpoint was invoked.", "No runtime code, protocol, historical source, or source-bound prior artifact was rewritten."]
+}

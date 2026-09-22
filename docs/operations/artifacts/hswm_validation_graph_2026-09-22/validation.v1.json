@@ -1,0 +1,163 @@
+{
+  "schema_version": "hswm-validation-graph-check/v1",
+  "status": "PASS",
+  "bundle": {
+    "path": "ontology/development/HSWM_VALIDATION_GRAPH_2026-09-22.v1.json",
+    "sha256": "0c622ce457152760b0a9e42e5a682801512b7e1af949a2d297df9ed3fcff3051",
+    "counts": {
+      "nodes": 49,
+      "anchors": 22,
+      "relations": 70
+    }
+  },
+  "bindings_recomputed": 20,
+  "tracks": 5,
+  "record_subtypes": 6,
+  "unresolved_task_rows": 22,
+  "actual_model_runs": 0,
+  "shacl": {
+    "base_conforms": true,
+    "profile_conforms": true,
+    "root_negative_detected": true
+  },
+  "positive_fixture": {
+    "record_subtypes": 6,
+    "shacl_conforms": true,
+    "audit_rows": {
+      "lineage": 0,
+      "splits": 0,
+      "accounting": 0,
+      "joint-scale": 0
+    },
+    "valid_no_op_retained": true,
+    "unreported_cost_amount_absent": true
+  },
+  "negative_probes": [
+    {
+      "name": "unsupported-record-subtype",
+      "query": "accounting",
+      "shacl_conforms": true,
+      "violation_rows": 13
+    },
+    {
+      "name": "orphan-cost-record",
+      "query": "accounting",
+      "shacl_conforms": true,
+      "violation_rows": 1
+    },
+    {
+      "name": "missing-outcome",
+      "query": "lineage",
+      "shacl_conforms": false,
+      "violation_rows": 1
+    },
+    {
+      "name": "wrong-outcome-execution",
+      "query": "lineage",
+      "shacl_conforms": true,
+      "violation_rows": 1
+    },
+    {
+      "name": "wrong-revision-outcome",
+      "query": "lineage",
+      "shacl_conforms": true,
+      "violation_rows": 1
+    },
+    {
+      "name": "stale-fresh-read",
+      "query": "lineage",
+      "shacl_conforms": true,
+      "violation_rows": 1
+    },
+    {
+      "name": "outcome-before-prediction",
+      "query": "lineage",
+      "shacl_conforms": true,
+      "violation_rows": 1
+    },
+    {
+      "name": "protocol-hash-mismatch",
+      "query": "lineage",
+      "shacl_conforms": true,
+      "violation_rows": 1
+    },
+    {
+      "name": "split-overlap-despite-different-manifest-hashes",
+      "query": "splits",
+      "shacl_conforms": true,
+      "violation_rows": 1
+    },
+    {
+      "name": "missing-output-cost",
+      "query": "accounting",
+      "shacl_conforms": true,
+      "violation_rows": 2
+    },
+    {
+      "name": "unreported-cost-has-zero",
+      "query": "accounting",
+      "shacl_conforms": false,
+      "violation_rows": 1
+    },
+    {
+      "name": "wrong-cost-unit",
+      "query": "accounting",
+      "shacl_conforms": true,
+      "violation_rows": 1
+    },
+    {
+      "name": "missing-learning-control",
+      "query": "accounting",
+      "shacl_conforms": false,
+      "violation_rows": 1
+    },
+    {
+      "name": "missing-hyperon-pin",
+      "query": "accounting",
+      "shacl_conforms": false,
+      "violation_rows": 1
+    },
+    {
+      "name": "duplicate-participation-slot",
+      "query": "accounting",
+      "shacl_conforms": true,
+      "violation_rows": 1
+    },
+    {
+      "name": "marginal-only-joint",
+      "query": "joint-scale",
+      "shacl_conforms": false,
+      "violation_rows": 1
+    },
+    {
+      "name": "missing-scale-binding",
+      "query": "joint-scale",
+      "shacl_conforms": false,
+      "violation_rows": 1
+    },
+    {
+      "name": "subtype-inherits-common-model",
+      "shacl_conforms": false
+    },
+    {
+      "name": "malformed-request-hash",
+      "shacl_conforms": false
+    },
+    {
+      "name": "negative-measured-cost",
+      "shacl_conforms": false
+    },
+    {
+      "name": "unreported-cost-missing-reason",
+      "shacl_conforms": false
+    }
+  ],
+  "limitations": [
+    "Synthetic declared-record checks only; not actual model experiments or efficacy.",
+    "Hash syntax and links do not authenticate external source bytes or independence.",
+    "Split audit compares declared world/case membership; it cannot detect undeclared semantic duplicates or hidden training exposure.",
+    "Required cost component coverage and measurement status do not prove complete counters or equal actual compute.",
+    "Arm labels, probability/tuple and scale digests are contracts; no complete experiment-arm census, normalized joint-law proof, or parent learning is established.",
+    "Model/server/tokenizer pin strings are required but external identities and artifacts are not resolved."
+  ]
+}

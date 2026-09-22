@@ -1,0 +1,83 @@
+{
+  "schema_version": "hswm-validation-graph-engineering-review/v1",
+  "status": "VERIFIED_LOCAL_CONTRACT_ONLY",
+  "date": "2026-09-22",
+  "conceptual_delta": "Connect five existing research tracks to reusable evidence-record shapes and cross-record audits without adding observed model results or changing prior plans.",
+  "graph": {
+    "path": "ontology/development/HSWM_VALIDATION_GRAPH_2026-09-22.v1.json",
+    "sha256": "0c622ce457152760b0a9e42e5a682801512b7e1af949a2d297df9ed3fcff3051",
+    "counts": {
+      "nodes": 49,
+      "anchors": 22,
+      "relations": 70
+    }
+  },
+  "checks": {
+    "existing_ontology_tests": {
+      "status": "PASS",
+      "tests": 49,
+      "files": 4
+    },
+    "native_profile_shacl": {
+      "base_conforms": true,
+      "profile_conforms": true,
+      "root_negative_detected": true
+    },
+    "synthetic_positive_subtypes": 6,
+    "synthetic_negative_probes": 21,
+    "normal_no_op_retained": true,
+    "all_five_queries_executed": true,
+    "portable_math_documents": 199,
+    "guide_local_links": "ALL_RESOLVE"
+  },
+  "initial_findings_and_repairs": [
+    {
+      "finding": "Initial draft conflated common fields with learning-only revision fields and missed subtype Core application.",
+      "repair": "Shared Common shape plus six separate record subtype shapes; LOCAL/READ do not require learning revision records."
+    },
+    {
+      "finding": "Initial missing-outcome negative probe returned zero rows because FILTER NOT EXISTS was inside a UNION branch while record binding was outside that branch.",
+      "repair": "Each audit branch binds the record locally. The missing-outcome and other query probes now detect violations."
+    },
+    {
+      "finding": "Hashes of distinct split manifests alone do not establish disjoint evaluation membership.",
+      "repair": "Audit compares declared world/case membership in FINAL versus SEARCH/SELECTION/CALIBRATION under the same protocol."
+    },
+    {
+      "finding": "Unknown validation subtypes and orphan support records could evade subtype checks.",
+      "repair": "Added supported-role and reverse-reference audits plus negative probes."
+    }
+  ],
+  "hswm_dev": {
+    "task": "Engineer five HSWM experiment evidence contracts with standard graph validation and explicit skill provenance",
+    "selected_relation": "relation:ontology-focused",
+    "run_status": "SUCCEEDED",
+    "feedback_status": "FEEDBACK_RECORDED",
+    "feedback_authority": "agent(codex)",
+    "feedback_is_user_judgment": false
+  },
+  "workspace": {
+    "entry_id": "validation-contracts",
+    "entries": 22,
+    "registered_query_aliases": 50,
+    "historical_workspace_snapshot_policy": "Earlier source-bound workspace and plan bytes preserved; its former manifest binding may differ from current manifest, as expected for a new revision.",
+    "new_bundle_bindings": "20/20 MATCH after staging"
+  },
+  "nonclaims": {
+    "actual_model_runs": 0,
+    "hyperon_runs": 0,
+    "live_kg_writes": 0,
+    "new_packages_or_skills_installed": 0,
+    "cr_fcl_promotion": false,
+    "runtime_to_evidence_adapter_implemented": false,
+    "census_or_complete_control_arm_coverage_proven": false
+  },
+  "limitations": [
+    "Synthetic declared-record checks only; not actual model experiments or efficacy.",
+    "Hash syntax and links do not authenticate external source bytes or independence.",
+    "Split audit compares declared world/case membership; it cannot detect undeclared semantic duplicates or hidden training exposure.",
+    "Required cost component coverage and measurement status do not prove complete counters or equal actual compute.",
+    "Arm labels, probability/tuple and scale digests are contracts; no complete experiment-arm census, normalized joint-law proof, or parent learning is established.",
+    "Model/server/tokenizer pin strings are required but external identities and artifacts are not resolved."
+  ]
+}

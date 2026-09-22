@@ -1,0 +1,24 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT DISTINCT ?record ?reason WHERE {
+  { ?record p:standard_graph_role ?recordRole . VALUES ?recordRole { "LOCAL_VALIDATION_RECORD" "LEARNING_VALIDATION_RECORD" "READ_VALIDATION_RECORD" "JOINT_VALIDATION_RECORD" "SCALE_VALIDATION_RECORD" "HYPERON_VALIDATION_RECORD" }
+ FILTER NOT EXISTS { ?record r:HAS_OUTCOME ?o } BIND("MISSING_OUTCOME" AS ?reason) }
+  UNION { ?record p:standard_graph_role ?recordRole . VALUES ?recordRole { "LOCAL_VALIDATION_RECORD" "LEARNING_VALIDATION_RECORD" "READ_VALIDATION_RECORD" "JOINT_VALIDATION_RECORD" "SCALE_VALIDATION_RECORD" "HYPERON_VALIDATION_RECORD" }
+ ?record r:HAS_EXECUTION ?execution; r:HAS_OUTCOME ?outcome . FILTER NOT EXISTS { ?outcome r:ABOUT ?execution } BIND("OUTCOME_EXECUTION_MISMATCH" AS ?reason) }
+  UNION { ?record p:standard_graph_role ?recordRole . VALUES ?recordRole { "LOCAL_VALIDATION_RECORD" "LEARNING_VALIDATION_RECORD" "READ_VALIDATION_RECORD" "JOINT_VALIDATION_RECORD" "SCALE_VALIDATION_RECORD" "HYPERON_VALIDATION_RECORD" }
+ ?record r:HAS_EXECUTION ?execution; p:sealed_prediction_digest ?prediction; p:frame_digest ?frame; p:relation_digest ?relation . ?execution p:sealed_prediction_digest ?ep; p:frame_digest ?ef; p:relation_digest ?er . FILTER(?prediction != ?ep || ?frame != ?ef || ?relation != ?er) BIND("EXECUTION_DIGEST_MISMATCH" AS ?reason) }
+  UNION { ?record p:standard_graph_role ?recordRole . VALUES ?recordRole { "LOCAL_VALIDATION_RECORD" "LEARNING_VALIDATION_RECORD" "READ_VALIDATION_RECORD" "JOINT_VALIDATION_RECORD" "SCALE_VALIDATION_RECORD" "HYPERON_VALIDATION_RECORD" }
+ ?record r:HAS_OUTCOME ?outcome; p:sealed_prediction_digest ?prediction . ?outcome p:sealed_prediction_digest ?bound . FILTER(?prediction != ?bound) BIND("OUTCOME_PREDICTION_MISMATCH" AS ?reason) }
+  UNION { ?record p:standard_graph_role ?recordRole . VALUES ?recordRole { "LOCAL_VALIDATION_RECORD" "LEARNING_VALIDATION_RECORD" "READ_VALIDATION_RECORD" "JOINT_VALIDATION_RECORD" "SCALE_VALIDATION_RECORD" "HYPERON_VALIDATION_RECORD" }
+ ?record p:prediction_order ?prediction; p:outcome_order ?outcome . FILTER(?prediction >= ?outcome) BIND("INVALID_DECLARED_TEMPORAL_ORDER" AS ?reason) }
+  UNION { ?record p:standard_graph_role ?recordRole . VALUES ?recordRole { "LOCAL_VALIDATION_RECORD" "LEARNING_VALIDATION_RECORD" "READ_VALIDATION_RECORD" "JOINT_VALIDATION_RECORD" "SCALE_VALIDATION_RECORD" "HYPERON_VALIDATION_RECORD" }
+ ?record r:USES_PROTOCOL ?protocol; p:protocol_id ?id; p:protocol_version ?version; p:protocol_sha256 ?hash; p:prediction_order ?prediction . ?protocol p:protocol_id ?pid; p:protocol_version ?pv; p:protocol_sha256 ?ph; p:frozen_order ?frozen . FILTER(?id != ?pid || ?version != ?pv || ?hash != ?ph || ?frozen >= ?prediction) BIND("PROTOCOL_BINDING_OR_FREEZE_MISMATCH" AS ?reason) }
+  UNION { ?record p:standard_graph_role ?recordRole . VALUES ?recordRole { "LOCAL_VALIDATION_RECORD" "LEARNING_VALIDATION_RECORD" "READ_VALIDATION_RECORD" "JOINT_VALIDATION_RECORD" "SCALE_VALIDATION_RECORD" "HYPERON_VALIDATION_RECORD" }
+ ?record p:standard_graph_role "LEARNING_VALIDATION_RECORD"; r:HAS_OUTCOME ?outcome; r:HAS_REVISION ?revision . FILTER NOT EXISTS { ?revision r:DERIVED_FROM ?outcome } BIND("REVISION_OUTCOME_MISMATCH" AS ?reason) }
+  UNION { ?record p:standard_graph_role ?recordRole . VALUES ?recordRole { "LOCAL_VALIDATION_RECORD" "LEARNING_VALIDATION_RECORD" "READ_VALIDATION_RECORD" "JOINT_VALIDATION_RECORD" "SCALE_VALIDATION_RECORD" "HYPERON_VALIDATION_RECORD" }
+ ?record p:standard_graph_role "LEARNING_VALIDATION_RECORD"; r:HAS_REVISION ?revision; r:HAS_FRESH_READ ?read . FILTER NOT EXISTS { ?read r:READS_REVISION ?revision } BIND("STALE_FRESH_READ_REFERENCE" AS ?reason) }
+  UNION { ?record p:standard_graph_role ?recordRole . VALUES ?recordRole { "LOCAL_VALIDATION_RECORD" "LEARNING_VALIDATION_RECORD" "READ_VALIDATION_RECORD" "JOINT_VALIDATION_RECORD" "SCALE_VALIDATION_RECORD" "HYPERON_VALIDATION_RECORD" }
+ ?record p:standard_graph_role "LEARNING_VALIDATION_RECORD"; r:HAS_REVISION ?revision; r:HAS_FRESH_READ ?read . ?revision p:revision_digest ?expected . ?read p:revision_digest ?actual . FILTER(?expected != ?actual) BIND("STALE_FRESH_READ_DIGEST" AS ?reason) }
+  UNION { ?record p:standard_graph_role ?recordRole . VALUES ?recordRole { "LOCAL_VALIDATION_RECORD" "LEARNING_VALIDATION_RECORD" "READ_VALIDATION_RECORD" "JOINT_VALIDATION_RECORD" "SCALE_VALIDATION_RECORD" "HYPERON_VALIDATION_RECORD" }
+ ?record p:standard_graph_role "LEARNING_VALIDATION_RECORD"; r:HAS_REVISION ?revision . ?revision p:revision_status "NO_OP"; p:revision_id ?id; p:parent_revision_id ?parent . FILTER(?id != ?parent) BIND("NO_OP_REVISION_ID_CHANGED" AS ?reason) }
+} ORDER BY ?record ?reason

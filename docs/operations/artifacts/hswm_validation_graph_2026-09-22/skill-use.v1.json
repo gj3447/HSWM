@@ -1,0 +1,53 @@
+{
+  "schema_version": "hswm-validation-skill-use/v1",
+  "observed_on": "2026-09-22",
+  "availability_scope": "Skills advertised in the current session, not an exhaustive scan of all host installations",
+  "dedicated_standard_advanced_graph_engineering_skill_advertised": false,
+  "skills_applied": [
+    {
+      "name": "usl",
+      "authority_class": "LOCAL_WORKFLOW_NOT_W3C_STANDARD",
+      "skill_sha256": "87c38bbec784f28264b8357e139a8fbc3b0442d0ff7e1c50d800e954ed552cae",
+      "source_commit": "3c2c810d52bce9a4249c4e1ecf955d93337d233e",
+      "usage": "Read SKILL.md and operating/context/authority references; generated bounded property-graph context for existing E03/L04/R02/J02/M02/H00 plan tasks."
+    },
+    {
+      "name": "openai-docs",
+      "authority_class": "OPENAI_SYSTEM_SKILL",
+      "skill_sha256": "aa6829e21df2223167c85d2e49b6337a7345c84c1033f1ec10182c7882b36d45",
+      "usage": "Verified the official distinction between available skill metadata, reading selected SKILL.md instructions and actual workflow/tool execution.",
+      "official_source": "https://learn.chatgpt.com/docs/build-skills"
+    }
+  ],
+  "usl_execution": {
+    "command": "node <existing-USL-checkout>/dist/src/cli.js adapt --graph <bounded-input> --namespace hswm.validation.contracts --operation context --focus sym:AbstractNode:hswm-jev-research-work-plan-2026-09-22 --compact --out <local-output>",
+    "version": "0.3.0",
+    "license": "UNLICENSED",
+    "authority_class": "LOCAL_USL_IMPLEMENTATION",
+    "executed_cli_sha256": "76475a68fe7a4f964cfca73228014dc00fcd9198f0d7f715a3327387b479dd69",
+    "input_sha256": "021c8ad1c401b254edb4394e1db589193228c7307d8faa80b953523cc6262495",
+    "output_sha256": "ab5848f37cb942247301c93346636584447502f87b837cc292f6d79741817c16",
+    "source_bundle": "ontology/development/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.v1.json",
+    "source_bundle_sha256": "3db347cee8941b375a23a467c29ed7091779092aa933320fc5c9a639d4d1d8a3",
+    "locator_revision": "afd7cc4c12fb289b839cbd4001dc79c959f156b5",
+    "selected_task_ids": [
+      "E03",
+      "L04",
+      "R02",
+      "J02",
+      "M02",
+      "H00"
+    ],
+    "input_nodes": 7,
+    "input_relations": 13,
+    "source_node_uids_preserved": true,
+    "relation_ids": "Snapshot-scoped projection IDs derived from source relations, which have no original UID field",
+    "resolver_calls": 0,
+    "live_writes": 0,
+    "status": "CONTEXT_GENERATED",
+    "build_freshness": "Existing compiled CLI used; exact executed CLI digest recorded. No claim that repository HEAD alone binds its entire compiled dependency closure."
+  },
+  "new_skills_installed": 0,
+  "new_packages_installed": 0,
+  "nonclaim": "Skill use and graph validation do not establish evidence truth, HSWM cognition, permission, semantic learning, empirical success or full standards conformance."
+}

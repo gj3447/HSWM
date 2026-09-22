@@ -1,0 +1,2295 @@
+{
+  "schema_version": "hswm-kg-bundle/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+  "status": "PLANNED_NOT_EXECUTED",
+  "nonclaim": "FUTURE_VALIDATION_CONTRACT_NOT_ACTUAL_EVIDENCE_OR_EFFICACY",
+  "source_accessed_on": "2026-09-22",
+  "authority_boundary": "SECONDARY_AI planning projection only",
+  "artifact_bindings": [
+    {
+      "path": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+      "sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+    },
+    {
+      "path": "ontology/queries/hswm_validation_graph_2026-09-22/README.md",
+      "sha256": "656c4fd76de7dc78a86c008df98ec0885b0c4969e63f7023c97f849b356d0cc0"
+    },
+    {
+      "path": "docs/operations/HSWM_VALIDATION_GRAPH_2026-09-22.md",
+      "sha256": "1c8b63dde2ff08750ea6ada1ab60e0934b0cda47bffcaebccaf8bd7e0fc734aa"
+    },
+    {
+      "path": "docs/operations/artifacts/hswm_validation_graph_2026-09-22/skill-use.v1.json",
+      "sha256": "70ad0adec54197e367f1dfe32dcae31fad689a2206c869b7839336e2d3d3d9f4"
+    },
+    {
+      "path": "docs/operations/artifacts/hswm_validation_graph_2026-09-22/standard-review.v1.json",
+      "sha256": "f2dbab367f76c9ab099f887242043b89a8848c45f3ef6c3502d44e1370ac5348"
+    },
+    {
+      "path": "ontology/workspace/HSWM_WORKSPACE.v1.json",
+      "sha256": "02f19c5a3c541e10575948c657b1a1da24cb41dc2a41d98c26db3151a408fe68"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "44a3f32fbeb5ad30069b2c82db7fe5e8db95c34a66be603a2e89d82d230c4191"
+    },
+    {
+      "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+      "sha256": "6eb4d0be63fccd71e02e25d86baa1ae81c0ddf31a9eb4d05fc4f0cf655225371"
+    },
+    {
+      "path": "_research/hswm_validation_graph_2026-09-22/fixtures.mjs",
+      "sha256": "ce16e879ec4daded6f916475d387b19c402452951c41bd9d9df79485aa8c94a0"
+    },
+    {
+      "path": "_research/hswm_validation_graph_2026-09-22/build.mts",
+      "sha256": "72fce75344092e0c9cd2ab2c159b24c33c6321764a215a40ce23cabfde31f46b"
+    },
+    {
+      "path": "_research/hswm_validation_graph_2026-09-22/verify.mjs",
+      "sha256": "2d4d040de23b678c716737a0dc9e9459c4525aaca36929cbba98c34bdeb6bd97"
+    },
+    {
+      "path": "_research/jev_research_work_plan_2026-09-22/plan.v1.json",
+      "sha256": "94e054a30b198d772f7ab1800beefe96c2c1cf2bdae57755d76a505a432b7736"
+    },
+    {
+      "path": "ontology/development/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.v1.json",
+      "sha256": "3db347cee8941b375a23a467c29ed7091779092aa933320fc5c9a639d4d1d8a3"
+    },
+    {
+      "path": "ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json",
+      "sha256": "48b7454d902f41237f4d0317a04c75c15624ac6d43d0c0b196dcf723d836d32d"
+    },
+    {
+      "path": "schemas/HSWM_VALIDATION_RECORDS_SHACL_1_0.v1.ttl",
+      "sha256": "c0eac6fd3f3dd1380aab12dde54c239070a308135c83ca1257282445e8b1c108"
+    },
+    {
+      "path": "ontology/queries/hswm_validation_graph_2026-09-22/lineage_violations.rq",
+      "sha256": "22f4806fe8ee1c8ebd0a7a0615d3fb4ccccb7b44276e2c2cabfc5f314aca9c49"
+    },
+    {
+      "path": "ontology/queries/hswm_validation_graph_2026-09-22/split_violations.rq",
+      "sha256": "4df8abd144acdbbb1895e5b850f2613d31b2e13d0875d9740d534817198587ca"
+    },
+    {
+      "path": "ontology/queries/hswm_validation_graph_2026-09-22/accounting_violations.rq",
+      "sha256": "9cae7f879ae5d4c40773049a9daab41d78d7938de2f668a8cbe9659d778d2eae"
+    },
+    {
+      "path": "ontology/queries/hswm_validation_graph_2026-09-22/joint_scale_violations.rq",
+      "sha256": "c794c74cb937c589798750c3531df83f31efa41d297eea57fcfcb46021972d8b"
+    },
+    {
+      "path": "ontology/queries/hswm_validation_graph_2026-09-22/unresolved_evidence.rq",
+      "sha256": "a150014435f400f3c58003f45a134d3379c0cc7969bd8bbd1e7eddeee5e48ad5"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 49,
+    "anchors": 22,
+    "relations": 70
+  },
+  "anchors": [
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-B02",
+      "name": "B02 Jev·Hyperon·대조군 자격",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-E00",
+      "name": "E00 128-case와 의미 변환 fixture",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-E01",
+      "name": "E01 E0/E1/E2 실행·파서 계약",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-E02",
+      "name": "E02 serving 반복성·분모·비용 recorder",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-E03",
+      "name": "E03 oracle 국소 실행 census 판정",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-E04",
+      "name": "E04 확률 보정·적용 범위",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-L00",
+      "name": "L00 revision 후보 언어·변경 분류",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-L01",
+      "name": "L01 world·outcome·대조군 custody",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-L02",
+      "name": "L02 선택·격리 branch·fresh read",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-L03",
+      "name": "L03 pilot·표본 수·확증 규칙 동결",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-L04",
+      "name": "L04 fresh-world 의미 교정 효과",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-R00",
+      "name": "R00 국소 읽기·후속 학습 반례",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-R01",
+      "name": "R01 other/expand·read 후보 정책",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-R02",
+      "name": "R02 국소 정보 가치·충분성 평가",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-J00",
+      "name": "J00 joint law·factor·표현 손실",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-J01",
+      "name": "J01 snapshot scheduling·stale-write",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-J02",
+      "name": "J02 공동 출력·개입 응답 평가",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-J03",
+      "name": "J03 의미 보존 아래 계산 공유 비교",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-M00",
+      "name": "M00 두 scale Step/Learn·world/self 계약",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-M01",
+      "name": "M01 flat/wrapper/학습 parent 구성",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-M02",
+      "name": "M02 두 scale 학습·손상·연속성",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-H00",
+      "name": "H00 Hyperon 동일과제 component 비교",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM validation graph 2026-09-22",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_GRAPH_ROOT",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "claim_ceiling": "DECLARED_RECORD_STRUCTURE_NOT_INDEPENDENCE_CAUSAL_EFFECT_OR_HSWM_EFFICACY",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-209bbfac252f0f7524",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "source_path": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-8102b8d00c2b558cd2",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "ontology/queries/hswm_validation_graph_2026-09-22/README.md",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "ontology/queries/hswm_validation_graph_2026-09-22/README.md",
+        "source_path": "ontology/queries/hswm_validation_graph_2026-09-22/README.md",
+        "source_sha256": "656c4fd76de7dc78a86c008df98ec0885b0c4969e63f7023c97f849b356d0cc0"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-ecf2414a125f8401a6",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "docs/operations/HSWM_VALIDATION_GRAPH_2026-09-22.md",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "docs/operations/HSWM_VALIDATION_GRAPH_2026-09-22.md",
+        "source_path": "docs/operations/HSWM_VALIDATION_GRAPH_2026-09-22.md",
+        "source_sha256": "1c8b63dde2ff08750ea6ada1ab60e0934b0cda47bffcaebccaf8bd7e0fc734aa"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-fb4e29c0e0dcb01f39",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "docs/operations/artifacts/hswm_validation_graph_2026-09-22/skill-use.v1.json",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "docs/operations/artifacts/hswm_validation_graph_2026-09-22/skill-use.v1.json",
+        "source_path": "docs/operations/artifacts/hswm_validation_graph_2026-09-22/skill-use.v1.json",
+        "source_sha256": "70ad0adec54197e367f1dfe32dcae31fad689a2206c869b7839336e2d3d3d9f4"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-c4f2c1432ae0de61b8",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "docs/operations/artifacts/hswm_validation_graph_2026-09-22/standard-review.v1.json",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "docs/operations/artifacts/hswm_validation_graph_2026-09-22/standard-review.v1.json",
+        "source_path": "docs/operations/artifacts/hswm_validation_graph_2026-09-22/standard-review.v1.json",
+        "source_sha256": "f2dbab367f76c9ab099f887242043b89a8848c45f3ef6c3502d44e1370ac5348"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-19d309741fb260425f",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "ontology/workspace/HSWM_WORKSPACE.v1.json",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "ontology/workspace/HSWM_WORKSPACE.v1.json",
+        "source_path": "ontology/workspace/HSWM_WORKSPACE.v1.json",
+        "source_sha256": "02f19c5a3c541e10575948c657b1a1da24cb41dc2a41d98c26db3151a408fe68"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-de16964fb2493fc6de",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "src/hswm/effect-runtime/package-lock.json",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "src/hswm/effect-runtime/package-lock.json",
+        "source_path": "src/hswm/effect-runtime/package-lock.json",
+        "source_sha256": "44a3f32fbeb5ad30069b2c82db7fe5e8db95c34a66be603a2e89d82d230c4191"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-52e395b824f8f0076e",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+        "source_path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+        "source_sha256": "6eb4d0be63fccd71e02e25d86baa1ae81c0ddf31a9eb4d05fc4f0cf655225371"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-80c6e1f64ce984ad0f",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "_research/hswm_validation_graph_2026-09-22/fixtures.mjs",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/fixtures.mjs",
+        "source_path": "_research/hswm_validation_graph_2026-09-22/fixtures.mjs",
+        "source_sha256": "ce16e879ec4daded6f916475d387b19c402452951c41bd9d9df79485aa8c94a0"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-f8f00c6daf83b41f58",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "_research/hswm_validation_graph_2026-09-22/build.mts",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/build.mts",
+        "source_path": "_research/hswm_validation_graph_2026-09-22/build.mts",
+        "source_sha256": "72fce75344092e0c9cd2ab2c159b24c33c6321764a215a40ce23cabfde31f46b"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-163a3e351ac806c565",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "_research/hswm_validation_graph_2026-09-22/verify.mjs",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/verify.mjs",
+        "source_path": "_research/hswm_validation_graph_2026-09-22/verify.mjs",
+        "source_sha256": "2d4d040de23b678c716737a0dc9e9459c4525aaca36929cbba98c34bdeb6bd97"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-eb963abda04a0a9984",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "_research/jev_research_work_plan_2026-09-22/plan.v1.json",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/jev_research_work_plan_2026-09-22/plan.v1.json",
+        "source_path": "_research/jev_research_work_plan_2026-09-22/plan.v1.json",
+        "source_sha256": "94e054a30b198d772f7ab1800beefe96c2c1cf2bdae57755d76a505a432b7736"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-3553258f21103433a6",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "ontology/development/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.v1.json",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "ontology/development/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.v1.json",
+        "source_path": "ontology/development/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.v1.json",
+        "source_sha256": "3db347cee8941b375a23a467c29ed7091779092aa933320fc5c9a639d4d1d8a3"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-6c02e57305d1da8f43",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json",
+        "source_path": "ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json",
+        "source_sha256": "48b7454d902f41237f4d0317a04c75c15624ac6d43d0c0b196dcf723d836d32d"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-17161a26606a7d6f3a",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "schemas/HSWM_VALIDATION_RECORDS_SHACL_1_0.v1.ttl",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "schemas/HSWM_VALIDATION_RECORDS_SHACL_1_0.v1.ttl",
+        "source_path": "schemas/HSWM_VALIDATION_RECORDS_SHACL_1_0.v1.ttl",
+        "source_sha256": "c0eac6fd3f3dd1380aab12dde54c239070a308135c83ca1257282445e8b1c108"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-e548e0c0f5e153e4ab",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "ontology/queries/hswm_validation_graph_2026-09-22/lineage_violations.rq",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "ontology/queries/hswm_validation_graph_2026-09-22/lineage_violations.rq",
+        "source_path": "ontology/queries/hswm_validation_graph_2026-09-22/lineage_violations.rq",
+        "source_sha256": "22f4806fe8ee1c8ebd0a7a0615d3fb4ccccb7b44276e2c2cabfc5f314aca9c49"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-8c20780c0e931a1549",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "ontology/queries/hswm_validation_graph_2026-09-22/split_violations.rq",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "ontology/queries/hswm_validation_graph_2026-09-22/split_violations.rq",
+        "source_path": "ontology/queries/hswm_validation_graph_2026-09-22/split_violations.rq",
+        "source_sha256": "4df8abd144acdbbb1895e5b850f2613d31b2e13d0875d9740d534817198587ca"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-2d96a2ea183ce2f3ef",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "ontology/queries/hswm_validation_graph_2026-09-22/accounting_violations.rq",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "ontology/queries/hswm_validation_graph_2026-09-22/accounting_violations.rq",
+        "source_path": "ontology/queries/hswm_validation_graph_2026-09-22/accounting_violations.rq",
+        "source_sha256": "9cae7f879ae5d4c40773049a9daab41d78d7938de2f668a8cbe9659d778d2eae"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-438e9fe2c9eaec9585",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "ontology/queries/hswm_validation_graph_2026-09-22/joint_scale_violations.rq",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "ontology/queries/hswm_validation_graph_2026-09-22/joint_scale_violations.rq",
+        "source_path": "ontology/queries/hswm_validation_graph_2026-09-22/joint_scale_violations.rq",
+        "source_sha256": "c794c74cb937c589798750c3531df83f31efa41d297eea57fcfcb46021972d8b"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-validation-20260922-b28f14159b02cab09f",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "ontology/queries/hswm_validation_graph_2026-09-22/unresolved_evidence.rq",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "ontology/queries/hswm_validation_graph_2026-09-22/unresolved_evidence.rq",
+        "source_path": "ontology/queries/hswm_validation_graph_2026-09-22/unresolved_evidence.rq",
+        "source_sha256": "a150014435f400f3c58003f45a134d3379c0cc7969bd8bbd1e7eddeee5e48ad5"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-646c19373ac9e27e97",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "LOCAL",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_ASSESSED",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "LOCAL",
+        "contract": "Local semantic execution under a fixed declared protocol.",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-8ba21897594befb6b5",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "E00",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "LOCAL",
+        "task_id": "E00",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-e7e7dd241b31082d32",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "E01",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "LOCAL",
+        "task_id": "E01",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-d134709e21f9215115",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "E02",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "LOCAL",
+        "task_id": "E02",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-1454eab04012fd46a8",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "E03",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "LOCAL",
+        "task_id": "E03",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-bf3d2191e215de96ed",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "E04",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "LOCAL",
+        "task_id": "E04",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-241e4db6fb2c76ce8b",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "LEARNING",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_ASSESSED",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "LEARNING",
+        "contract": "Outcome-bound revision records distinguish NO_OP, evidence, sham, and semantic deltas.",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-eaebb7a215a5a220f5",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "L00",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "LEARNING",
+        "task_id": "L00",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-8e029448a5228c68cb",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "L01",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "LEARNING",
+        "task_id": "L01",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-aa16640dd943508a1c",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "L02",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "LEARNING",
+        "task_id": "L02",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-f3b05c49f671214819",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "L03",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "LEARNING",
+        "task_id": "L03",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-9cabad367c633e0747",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "L04",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "LEARNING",
+        "task_id": "L04",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-3f5637410846d545fb",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "READ",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_ASSESSED",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "READ",
+        "contract": "Read and candidate sufficiency remains separately declared and measured.",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-2d3cbcc1676eba1d2c",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "R00",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "READ",
+        "task_id": "R00",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-e0a64b0b6d837fa4ed",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "R01",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "READ",
+        "task_id": "R01",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-c719df3d28484a1a8c",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "R02",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "READ",
+        "task_id": "R02",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-681e1036690485876c",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "JOINT_SCALE",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_ASSESSED",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "JOINT_SCALE",
+        "contract": "Joint output and two-scale learning are distinct record subtypes within the fourth user track.",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-d9b1d807f49d13900b",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "J00",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "JOINT_SCALE",
+        "task_id": "J00",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-3c91f69c062abf7144",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "J01",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "JOINT_SCALE",
+        "task_id": "J01",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-1691a704f2b84d301d",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "J02",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "JOINT_SCALE",
+        "task_id": "J02",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-f24365b38441ba2a92",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "J03",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "JOINT_SCALE",
+        "task_id": "J03",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-cccf3d518006f6b264",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "M00",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "JOINT_SCALE",
+        "task_id": "M00",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-d968fce424f6218db2",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "M01",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "JOINT_SCALE",
+        "task_id": "M01",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-03864c101b6cb40365",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "M02",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "JOINT_SCALE",
+        "task_id": "M02",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-e959ac4ca0bfe18475",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "HYPERON",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_ASSESSED",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "HYPERON",
+        "contract": "Historical Hyperon comparison requires exact pins before execution.",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-744d1ff06654007506",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "B02",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_EVALUATED",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "HYPERON",
+        "task_id": "B02",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-eebccc13bcca2f7143",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "H00",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_TRACK_TASK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_EVALUATED",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "track_id": "HYPERON",
+        "task_id": "H00",
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-70ce871f8a3d3fb449",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Reusable future evidence record profile",
+        "description": "Declared future validation contract; not a completed run or efficacy evidence.",
+        "standard_graph_role": "VALIDATION_RECORD_PROFILE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "validation_graph_research_2026_09_22",
+        "claim_boundary": "DECLARED_STRUCTURE_NOT_EFFICACY",
+        "projection_nonclaim": "NOT_COGNITION_ROUTING_ADMISSION_OR_LEARNING",
+        "cr_fcl_promotion": false,
+        "status": "NOT_ASSESSED",
+        "source_ref": "_research/hswm_validation_graph_2026-09-22/profile.v1.json",
+        "required_fields": [
+          "evidence_kind",
+          "protocol_id",
+          "protocol_version",
+          "protocol_sha256",
+          "case_id",
+          "world_id",
+          "split_id",
+          "model_pin",
+          "tokenizer_pin",
+          "template_pin",
+          "server_pin",
+          "generation_pin",
+          "snapshot_digest",
+          "relation_digest",
+          "frame_digest",
+          "request_digest",
+          "response_digest",
+          "sealed_prediction_digest",
+          "metrics_plan",
+          "analysis_plan",
+          "prediction_order",
+          "outcome_order"
+        ],
+        "record_roles": [
+          "LOCAL_VALIDATION_RECORD",
+          "LEARNING_VALIDATION_RECORD",
+          "READ_VALIDATION_RECORD",
+          "JOINT_VALIDATION_RECORD",
+          "SCALE_VALIDATION_RECORD",
+          "HYPERON_VALIDATION_RECORD"
+        ],
+        "source_sha256": "2fad36050f9d209c208c8959c69cc96d78456b0c1991689fb72359c63a588312"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-209bbfac252f0f7524",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-8102b8d00c2b558cd2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-ecf2414a125f8401a6",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-fb4e29c0e0dcb01f39",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-c4f2c1432ae0de61b8",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-19d309741fb260425f",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-de16964fb2493fc6de",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-52e395b824f8f0076e",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-80c6e1f64ce984ad0f",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-f8f00c6daf83b41f58",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-163a3e351ac806c565",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-eb963abda04a0a9984",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-3553258f21103433a6",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-6c02e57305d1da8f43",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-17161a26606a7d6f3a",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-e548e0c0f5e153e4ab",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-8c20780c0e931a1549",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-2d96a2ea183ce2f3ef",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-438e9fe2c9eaec9585",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-validation-20260922-b28f14159b02cab09f",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-646c19373ac9e27e97",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-646c19373ac9e27e97",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-8ba21897594befb6b5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-8ba21897594befb6b5",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-E00",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-646c19373ac9e27e97",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-e7e7dd241b31082d32",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-e7e7dd241b31082d32",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-E01",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-646c19373ac9e27e97",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-d134709e21f9215115",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-d134709e21f9215115",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-E02",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-646c19373ac9e27e97",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-1454eab04012fd46a8",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-1454eab04012fd46a8",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-E03",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-646c19373ac9e27e97",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-bf3d2191e215de96ed",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-bf3d2191e215de96ed",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-E04",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-241e4db6fb2c76ce8b",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-241e4db6fb2c76ce8b",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-eaebb7a215a5a220f5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-eaebb7a215a5a220f5",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-L00",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-241e4db6fb2c76ce8b",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-8e029448a5228c68cb",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-8e029448a5228c68cb",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-L01",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-241e4db6fb2c76ce8b",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-aa16640dd943508a1c",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-aa16640dd943508a1c",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-L02",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-241e4db6fb2c76ce8b",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-f3b05c49f671214819",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-f3b05c49f671214819",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-L03",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-241e4db6fb2c76ce8b",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-9cabad367c633e0747",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-9cabad367c633e0747",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-L04",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-3f5637410846d545fb",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-3f5637410846d545fb",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-2d3cbcc1676eba1d2c",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-2d3cbcc1676eba1d2c",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-R00",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-3f5637410846d545fb",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-e0a64b0b6d837fa4ed",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-e0a64b0b6d837fa4ed",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-R01",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-3f5637410846d545fb",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-c719df3d28484a1a8c",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-c719df3d28484a1a8c",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-R02",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-681e1036690485876c",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-681e1036690485876c",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-d9b1d807f49d13900b",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-d9b1d807f49d13900b",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-J00",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-681e1036690485876c",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-3c91f69c062abf7144",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-3c91f69c062abf7144",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-J01",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-681e1036690485876c",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-1691a704f2b84d301d",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-1691a704f2b84d301d",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-J02",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-681e1036690485876c",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-f24365b38441ba2a92",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-f24365b38441ba2a92",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-J03",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-681e1036690485876c",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-cccf3d518006f6b264",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-cccf3d518006f6b264",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-M00",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-681e1036690485876c",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-d968fce424f6218db2",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-d968fce424f6218db2",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-M01",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-681e1036690485876c",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-03864c101b6cb40365",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-03864c101b6cb40365",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-M02",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-e959ac4ca0bfe18475",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-e959ac4ca0bfe18475",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-744d1ff06654007506",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-744d1ff06654007506",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-B02",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-e959ac4ca0bfe18475",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-eebccc13bcca2f7143",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-validation-20260922-eebccc13bcca2f7143",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-H00",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-validation-graph-2026-09-22",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-validation-20260922-70ce871f8a3d3fb449",
+      "authority_class": "SECONDARY_AI",
+      "scope": "FUTURE_VALIDATION_CONTRACT",
+      "status": "NOT_RUN"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT DISTINCT ?record ?reason WHERE {
+ { ?record r:USES_SPLIT ?split; r:USES_PROTOCOL ?protocol; p:split_id ?id; p:case_id ?case; p:world_id ?world .
+   FILTER NOT EXISTS { ?split p:split_id ?id; r:USES_PROTOCOL ?protocol; r:HAS_MEMBER ?member . ?member p:case_id ?case; p:world_id ?world }
+   BIND("CASE_OR_PROTOCOL_SPLIT_MISMATCH" AS ?reason) }
+ UNION { ?record r:USES_SPLIT ?final; r:USES_PROTOCOL ?protocol . ?final p:split_role "FINAL"; r:HAS_MEMBER ?finalCase .
+   ?other r:USES_PROTOCOL ?protocol; p:split_role ?otherRole; r:HAS_MEMBER ?otherCase . VALUES ?otherRole {"SEARCH" "SELECTION" "CALIBRATION"}
+   ?finalCase p:case_id ?case; p:world_id ?world . ?otherCase p:case_id ?case; p:world_id ?world .
+   BIND("FINAL_CASE_EXPOSED_IN_OTHER_SPLIT" AS ?reason) }
+} ORDER BY ?record ?reason

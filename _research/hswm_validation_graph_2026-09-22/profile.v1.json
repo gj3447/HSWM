@@ -1,0 +1,196 @@
+{
+  "schema_version": "hswm-validation-record-profile/v1",
+  "status": "PLANNED_NOT_RUN",
+  "claim_ceiling": "DECLARED_RECORD_STRUCTURE_NOT_INDEPENDENCE_CAUSAL_EFFECT_OR_HSWM_EFFICACY",
+  "evidence_kinds": [
+    "FIXTURE_ONLY",
+    "OBSERVED_DECLARATION"
+  ],
+  "record_roles": [
+    "LOCAL_VALIDATION_RECORD",
+    "LEARNING_VALIDATION_RECORD",
+    "READ_VALIDATION_RECORD",
+    "JOINT_VALIDATION_RECORD",
+    "SCALE_VALIDATION_RECORD",
+    "HYPERON_VALIDATION_RECORD"
+  ],
+  "common_record": {
+    "required_scalar_fields": [
+      "evidence_kind",
+      "protocol_id",
+      "protocol_version",
+      "protocol_sha256",
+      "case_id",
+      "world_id",
+      "split_id",
+      "model_pin",
+      "tokenizer_pin",
+      "template_pin",
+      "server_pin",
+      "generation_pin",
+      "snapshot_digest",
+      "relation_digest",
+      "frame_digest",
+      "request_digest",
+      "response_digest",
+      "sealed_prediction_digest",
+      "metrics_plan",
+      "analysis_plan",
+      "prediction_order",
+      "outcome_order"
+    ],
+    "required_links": {
+      "USES_PROTOCOL": "VALIDATION_PROTOCOL_RECORD",
+      "HAS_EXECUTION": "VALIDATION_EXECUTION_RECORD",
+      "HAS_OUTCOME": "VALIDATION_OUTCOME_RECORD",
+      "USES_SPLIT": "VALIDATION_SPLIT_RECORD",
+      "HAS_COST": "VALIDATION_COST_RECORD",
+      "HAS_PARTICIPATION": "VALIDATION_PARTICIPATION_RECORD"
+    }
+  },
+  "support_records": [
+    "VALIDATION_PROTOCOL_RECORD",
+    "VALIDATION_EXECUTION_RECORD",
+    "VALIDATION_OUTCOME_RECORD",
+    "VALIDATION_SPLIT_RECORD",
+    "VALIDATION_CASE_RECORD",
+    "VALIDATION_COST_RECORD",
+    "VALIDATION_PARTICIPATION_RECORD"
+  ],
+  "conditional_records": [
+    "VALIDATION_REVISION_RECORD",
+    "VALIDATION_FRESH_READ_RECORD",
+    "VALIDATION_JOINT_TUPLE_RECORD",
+    "VALIDATION_SCALE_BINDING_RECORD"
+  ],
+  "track_specific_fields": {
+    "LOCAL": [
+      "family_id",
+      "transform_id",
+      "output_mode",
+      "repeat_id"
+    ],
+    "LEARNING": [
+      "control_arm",
+      "revision_delta",
+      "retention_plan",
+      "HAS_REVISION",
+      "HAS_FRESH_READ"
+    ],
+    "READ": [
+      "read_arm",
+      "sufficiency_kind",
+      "initial_read_digest",
+      "expanded_read_digest",
+      "witness_id",
+      "allowed_observations",
+      "stop_rule"
+    ],
+    "JOINT": [
+      "candidate_space_digest",
+      "probability_status",
+      "dependence_contract",
+      "HAS_JOINT_TUPLE"
+    ],
+    "SCALE": [
+      "scale_arm",
+      "preservation_kind",
+      "HAS_SCALE_BINDING"
+    ],
+    "HYPERON": [
+      "hyperon_component",
+      "hyperon_commit",
+      "hyperon_config_digest",
+      "adapter_digest",
+      "comparison_scope",
+      "information_manifest_digest",
+      "budget_contract_digest",
+      "comparison_status"
+    ]
+  },
+  "protocol_design_remaining": "Case-census membership, transform catalog, exact candidate semantics, split construction, stopping rules, outcome procedure, cost accounting scope, causal estimand, and decision thresholds must be stated in a versioned protocol record before execution. This profile constrains record shape only.",
+  "record_required_fields": [
+    "evidence_kind",
+    "protocol_id",
+    "protocol_version",
+    "protocol_sha256",
+    "case_id",
+    "world_id",
+    "split_id",
+    "model_pin",
+    "tokenizer_pin",
+    "template_pin",
+    "server_pin",
+    "generation_pin",
+    "snapshot_digest",
+    "relation_digest",
+    "frame_digest",
+    "request_digest",
+    "response_digest",
+    "sealed_prediction_digest",
+    "metrics_plan",
+    "analysis_plan",
+    "prediction_order",
+    "outcome_order"
+  ],
+  "tracks": [
+    {
+      "id": "LOCAL",
+      "contract": "Local semantic execution under a fixed declared protocol.",
+      "tasks": [
+        "E00",
+        "E01",
+        "E02",
+        "E03",
+        "E04"
+      ]
+    },
+    {
+      "id": "LEARNING",
+      "contract": "Outcome-bound revision records distinguish NO_OP, evidence, sham, and semantic deltas.",
+      "tasks": [
+        "L00",
+        "L01",
+        "L02",
+        "L03",
+        "L04"
+      ]
+    },
+    {
+      "id": "READ",
+      "contract": "Read and candidate sufficiency remains separately declared and measured.",
+      "tasks": [
+        "R00",
+        "R01",
+        "R02"
+      ]
+    },
+    {
+      "id": "JOINT_SCALE",
+      "record_subtypes": [
+        "JOINT_VALIDATION_RECORD",
+        "SCALE_VALIDATION_RECORD"
+      ],
+      "contract": "Joint output and two-scale learning are distinct record subtypes within the fourth user track.",
+      "tasks": [
+        "J00",
+        "J01",
+        "J02",
+        "J03",
+        "M00",
+        "M01",
+        "M02"
+      ]
+    },
+    {
+      "id": "HYPERON",
+      "contract": "Historical Hyperon comparison requires exact pins before execution.",
+      "tasks": [
+        "B02",
+        "H00"
+      ],
+      "historical_metta_version": "0.2.10",
+      "historical_commit": "3f76dc460da6961f57f69f6c3e550c59c74ada83"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT DISTINCT ?record ?reason WHERE {
+ { ?record p:standard_graph_role "JOINT_VALIDATION_RECORD" . FILTER NOT EXISTS {?record r:HAS_JOINT_TUPLE ?tuple} BIND("MISSING_JOINT_TUPLE" AS ?reason) }
+ UNION { ?record p:standard_graph_role "JOINT_VALIDATION_RECORD"; p:probability_status ?status . FILTER(?status NOT IN ("JOINT_SAMPLES", "JOINT_PROBABILITIES", "UNAVAILABLE")) BIND("INVALID_JOINT_CAPABILITY" AS ?reason) }
+ UNION { ?record p:standard_graph_role "SCALE_VALIDATION_RECORD" . FILTER NOT EXISTS {?record r:HAS_SCALE_BINDING ?binding} BIND("MISSING_SCALE_BINDING" AS ?reason) }
+ UNION { ?record p:standard_graph_role "SCALE_VALIDATION_RECORD"; r:HAS_SCALE_BINDING ?binding . VALUES ?field {p:parent_revision_digest p:child_revision_digest p:summary_digest p:exception_digest p:uncertainty_digest p:lineage_mapping}
+   FILTER NOT EXISTS {?binding ?field ?value} BIND("INCOMPLETE_SCALE_BINDING" AS ?reason) }
+} ORDER BY ?record ?reason

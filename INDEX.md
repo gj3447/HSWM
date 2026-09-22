@@ -1,5 +1,10 @@
 # HSWM — public repository index
 
+2026-09-22 [다섯 검증의 실험 기록 그래프](docs/operations/HSWM_VALIDATION_GRAPH_2026-09-22.md)는
+국소 실행·outcome 학습·작은 읽기·공동 출력/합성·Hyperon 비교의 기록 계약을 연결한다.
+`validation-contracts`에서 출처와 미평가 작업을 조회하며, SHACL/SPARQL 구조 검사와
+fixture 검증을 실제 모델 효능과 구별한다. 적용한 스킬·표준의 범위도 명시한다.
+
 2026-09-22 [KG·작업환경 진입점](docs/operations/HSWM_KG_WORKSPACE_2026-09-22.md)은
 21개 읽기 경로·45개 질의·12개 개발 절차를 native `hswm-workspace`에서 연결한다.
 tracked ontology inventory, snapshot별 UID 발생, 출처 hash 비교, SHACL/SPARQL 실행을 제공하며

@@ -1,0 +1,2 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?track ?task ?status WHERE { ?taskNode p:standard_graph_role "VALIDATION_TRACK_TASK"; p:track_id ?track; p:task_id ?task; p:status ?status . FILTER(?status IN ("NOT_RUN","NOT_ASSESSED","NOT_EVALUATED")) } ORDER BY ?track ?task

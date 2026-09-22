@@ -1,0 +1,10 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?bundle ?path ?status ?expected ?actual WHERE {
+  ?observation p:standard_graph_role "BINDING_OBSERVATION"; p:binding_path ?path; p:binding_status ?status;
+    p:expected_sha256 ?expected .
+  OPTIONAL { ?observation p:actual_sha256 ?actual }
+  ?observation r:ABOUT ?occurrence .
+  ?occurrence p:path ?bundle .
+  FILTER(?status != "MATCH")
+} ORDER BY ?status ?bundle ?path

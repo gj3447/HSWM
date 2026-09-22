@@ -17,6 +17,7 @@ const failure = (detail: string): KgBundleError => new KgBundleError({ detail })
 const attempt = <A>(operation: () => A, detail: string): Effect.Effect<A, KgBundleError> => Effect.try({ try: operation, catch: () => failure(detail) });
 const promised = <A>(operation: () => Promise<A>, detail: string): Effect.Effect<A, KgBundleError> => Effect.tryPromise({ try: operation, catch: () => failure(detail) });
 const term = (value: Term): KgTerm => value.termType === "NamedNode" ? { kind: "iri", value: value.value } : value.termType === "BlankNode" ? { kind: "blank_node", value: value.value } : value.termType === "Literal" ? { kind: "literal", value: value.value, ...(value.language ? { language: value.language } : value.datatype.value === "http://www.w3.org/2001/XMLSchema#string" ? {} : { datatype: value.datatype.value }) } : { kind: "unsupported", value: value.value };
+const optionalTerm = (value: Term | null | undefined): KgTerm | null => value === null || value === undefined ? null : term(value);
 /** Blank comments, quoted strings and IRIs before checking forbidden operations. */
 const sparqlCode = (query: string): string => {
     const result: string[] = [];
@@ -100,7 +101,7 @@ export const validateKgShacl = (projection: KgBundleProjection, shapes: Uint8Arr
         return yield* Effect.fail(failure("only local SHACL Core is supported; extensions and imports are refused"));
     const validator = yield* attempt(() => new SHACLValidator(new Store(shapeQuads), { importGraph: () => Promise.reject(failure("shape imports forbidden")) }), "SHACL engine initialization failed");
     const report = yield* promised(() => validator.validate(union), "SHACL Core validation failed");
-    const results = report.results.map(r => ({ focusNode: term(r.focusNode), path: r.path === undefined ? null : term(r.path), severity: term(r.severity), sourceConstraintComponent: term(r.sourceConstraintComponent), sourceShape: term(r.sourceShape), messages: r.message.map(term) }));
+    const results = report.results.map(r => ({ focusNode: term(r.focusNode), path: optionalTerm(r.path), severity: term(r.severity), sourceConstraintComponent: term(r.sourceConstraintComponent), sourceShape: term(r.sourceShape), messages: r.message.map(term) }));
     return { conforms: report.conforms, results, claim_ceiling: KG_CLAIM_CEILING, engine: "rdf-validate-shacl@0.6.5", profile: "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS" };
 });
 export class NativeKgStandards extends Context.Tag("@hswm/NativeKgStandards")<NativeKgStandards, {

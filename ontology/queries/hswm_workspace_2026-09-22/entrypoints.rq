@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?id ?lane ?title ?bundle WHERE {
+  ?entry p:standard_graph_role "WORKSPACE_ENTRY"; p:entry_id ?id; p:lane ?lane; p:name ?title;
+    r:HAS_BUNDLE_OCCURRENCE ?occurrence .
+  ?occurrence p:path ?bundle .
+} ORDER BY ?lane ?id

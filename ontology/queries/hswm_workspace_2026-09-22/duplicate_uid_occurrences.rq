@@ -1,0 +1,6 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?uid ?path ?bundleUid WHERE {
+  ?duplicate p:standard_graph_role "DUPLICATE_UID_OBSERVATION"; p:uid ?uid; r:HAS_UID_OCCURRENCE ?occurrence .
+  ?occurrence p:path ?path; p:bundle_uid ?bundleUid .
+} ORDER BY ?uid ?path ?bundleUid

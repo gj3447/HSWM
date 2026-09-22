@@ -1,0 +1,869 @@
+{
+  "schema_version": "hswm-workspace-entry-validation/v1",
+  "date": "2026-09-22",
+  "scope": "READ_ONLY_COMPILE_V2_DECLARED_SHACL_AND_REGISTERED_LOCAL_SPARQL",
+  "execution": {
+    "mechanism": "compiled native workspace-process CLI; each validate command compiles the selected bundle v2 before declared SHACL; each query command independently compiles v2 and runs its registered query",
+    "path": "src/hswm/effect-runtime/dist/workspace-process.js"
+  },
+  "claim_ceiling": "STRUCTURAL_USABILITY_ONLY_NOT_SOURCE_BINDING_PROMOTION_OR_SEMANTIC_VALIDATION",
+  "manifest": {
+    "path": "ontology/workspace/HSWM_WORKSPACE.v1.json",
+    "entryCount": 21,
+    "registeredQueryAliasCount": 45,
+    "workflowCount": 12
+  },
+  "summary": {
+    "compiled": 20,
+    "compileFailures": 1,
+    "shapesExecuted": 23,
+    "shapesConform": 23,
+    "shapeFailures": 1,
+    "queriesExecuted": 45,
+    "queryFailures": 0,
+    "zeroRowQueries": [
+      "unsupported-claims",
+      "unsupported",
+      "unsupported",
+      "unsupported",
+      "violations"
+    ],
+    "falseAskQueries": [],
+    "interpretation": "20 native-v2 entries and their 23 executed SHACL checks conform; 45 query aliases execute. The one original strict-v2 compile failure remains recorded and is now explicitly SOURCE_ONLY."
+  },
+  "interpretation": [
+    "Source-binding comparison was observed only as command output and was not used to promote a structural result.",
+    "A zero-row SELECT or false ASK is a query outcome, not semantic validation.",
+    "Historical source compilation failure is reported without rewriting that source."
+  ],
+  "entries": [
+    {
+      "id": "identity",
+      "bundle": "ontology/identity/hswm_core/HSWM_HYPERGRAPH_NEURAL_AI_IDENTITY_ONTOLOGY.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "basic-identity",
+          "path": "ontology/queries/hswm_hypergraph_neural_ai_2026-09-14/basic_identity.rq",
+          "executed": true,
+          "rowCount": 4,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "state-operator",
+      "bundle": "ontology/identity/hswm_core/HSWM_STATE_LOCAL_OPERATOR_HYPERON_ONTOLOGY.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "core-comparator",
+          "path": "ontology/queries/hswm_state_local_operator_hyperon_2026-09-14/core_comparator.rq",
+          "executed": true,
+          "rowCount": 1,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "state-operator",
+          "path": "ontology/queries/hswm_state_local_operator_hyperon_2026-09-14/state_operator.rq",
+          "executed": true,
+          "rowCount": 3,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "fractal",
+      "bundle": "ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json",
+      "compiled": false,
+      "compileFailure": {
+        "tag": "NATIVE_WORKSPACE_CLI_FAILURE",
+        "detail": "{ readonly schema_version: minLength(1); readonly bundle_uid: a string matching the pattern ^sym:[A-Za-z][A-Za-z0-9_]*:[A-Za-z0-9][A-Za-z0-9._-]*$; readonly status: minLength(1); readonly nonclaim: minLength(1); readonly authority_boundary?: minLength(1) | undefined; readonly source_accessed_on?: minLength(1) | undefined; readonly artifact_bindings: minItems(1); readonly expected_counts: { readonly [x: a string matching the pattern ^[a-z][a-z0-9_]*$]: int & nonNegative }; readonly anchors: ReadonlyArray<{ readonly uid: a string matching the pattern ^sym:[A-Za-z][A-Za-z0-9_]*:[A-Za-z0-9][A-Za-z0-9._-]*$; readonly name: minLength(1); readonly required_labels: minItems(1) }>; readonly nodes: minItems(1); readonly relations: ReadonlyArray<{ readonly from_uid: a string matching the pattern ^sym:[A-Za-z][A-Za-z0-9_]*:[A-Za-z0-9][A-Za-z0-9._-]*$; readonly to_uid: a string matching the pattern ^sym:[A-Za-z][A-Za-z0-9_]*:[A-Za-z0-9][A-Za-z0-9._-]*$; readonly type: a string matching the pattern ^[A-Z][A-Z0-9_]*$; readonly authority_class: minLength(1); readonly scope: minLength(1); readonly status: minLength(1) }> }\n└─ [\"created_at\"]\n   └─ is unexpected, expected: \"schema_version\" | \"bundle_uid\" | \"status\" | \"nonclaim\" | \"authority_boundary\" | \"source_accessed_on\" | \"artifact_bindings\" | \"expected_counts\" | \"anchors\" | \"nodes\" | \"relations\"",
+        "exitCode": 2
+      },
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": false,
+          "conforms": null,
+          "resultCount": null,
+          "failure": {
+            "tag": "COMPILE_OR_VALIDATE_FAILED",
+            "detail": "{ readonly schema_version: minLength(1); readonly bundle_uid: a string matching the pattern ^sym:[A-Za-z][A-Za-z0-9_]*:[A-Za-z0-9][A-Za-z0-9._-]*$; readonly status: minLength(1); readonly nonclaim: minLength(1); readonly authority_boundary?: minLength(1) | undefined; readonly source_accessed_on?: minLength(1) | undefined; readonly artifact_bindings: minItems(1); readonly expected_counts: { readonly [x: a string matching the pattern ^[a-z][a-z0-9_]*$]: int & nonNegative }; readonly anchors: ReadonlyArray<{ readonly uid: a string matching the pattern ^sym:[A-Za-z][A-Za-z0-9_]*:[A-Za-z0-9][A-Za-z0-9._-]*$; readonly name: minLength(1); readonly required_labels: minItems(1) }>; readonly nodes: minItems(1); readonly relations: ReadonlyArray<{ readonly from_uid: a string matching the pattern ^sym:[A-Za-z][A-Za-z0-9_]*:[A-Za-z0-9][A-Za-z0-9._-]*$; readonly to_uid: a string matching the pattern ^sym:[A-Za-z][A-Za-z0-9_]*:[A-Za-z0-9][A-Za-z0-9._-]*$; readonly type: a string matching the pattern ^[A-Z][A-Z0-9_]*$; readonly authority_class: minLength(1); readonly scope: minLength(1); readonly status: minLength(1) }> }\n└─ [\"created_at\"]\n   └─ is unexpected, expected: \"schema_version\" | \"bundle_uid\" | \"status\" | \"nonclaim\" | \"authority_boundary\" | \"source_accessed_on\" | \"artifact_bindings\" | \"expected_counts\" | \"anchors\" | \"nodes\" | \"relations\""
+          }
+        }
+      ],
+      "queries": []
+    },
+    {
+      "id": "strategy",
+      "bundle": "ontology/identity/hswm_core/HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": []
+    },
+    {
+      "id": "semantic-theory",
+      "bundle": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "definitions-and-status",
+          "path": "ontology/queries/hswm_semantic_weight_theory_2026-09-14/definitions_and_status.rq",
+          "executed": true,
+          "rowCount": 68,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "methods-to-obligations",
+          "path": "ontology/queries/hswm_semantic_weight_theory_2026-09-14/methods_to_obligations.rq",
+          "executed": true,
+          "rowCount": 23,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "premises-and-counterexamples",
+          "path": "ontology/queries/hswm_semantic_weight_theory_2026-09-14/premises_and_counterexamples.rq",
+          "executed": true,
+          "rowCount": 10,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "semantic-definition",
+      "bundle": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_DEFINITION_ONTOLOGY.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "theorems-and-scopes",
+          "path": "ontology/queries/hswm_semantic_weight_definition_2026-09-14/theorems_and_scopes.rq",
+          "executed": true,
+          "rowCount": 22,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "constructive-proof",
+      "bundle": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_ONTOLOGY.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "theorems-and-open-obligations",
+          "path": "ontology/queries/hswm_semantic_weight_proof_2026-09-14/theorems_and_open_obligations.rq",
+          "executed": true,
+          "rowCount": 194,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "performance-proof",
+      "bundle": "ontology/identity/hswm_core/HSWM_SEMANTIC_PERFORMANCE_PROOF_ONTOLOGY.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "observations-and-transfer",
+          "path": "ontology/queries/hswm_semantic_performance_proof_2026-09-14/observations_and_transfer.rq",
+          "executed": true,
+          "rowCount": 6,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "theorems-and-scopes",
+          "path": "ontology/queries/hswm_semantic_performance_proof_2026-09-14/theorems_and_scopes.rq",
+          "executed": true,
+          "rowCount": 39,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "frontier-proof",
+      "bundle": "ontology/identity/hswm_core/HSWM_SEMANTIC_FRONTIER_PROOF_ONTOLOGY.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "gaps-and-limits",
+          "path": "ontology/queries/hswm_semantic_frontier_proof_2026-09-14/gaps_and_limits.rq",
+          "executed": true,
+          "rowCount": 5,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "theorems-and-scopes",
+          "path": "ontology/queries/hswm_semantic_frontier_proof_2026-09-14/theorems_and_scopes.rq",
+          "executed": true,
+          "rowCount": 72,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "semantic-engine",
+      "bundle": "ontology/development/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "sources-to-open-obligations",
+          "path": "ontology/queries/hswm_llm_semantic_engine_2026-09-14/sources_to_open_obligations.rq",
+          "executed": true,
+          "rowCount": 23,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "semantic-runtime",
+      "bundle": "ontology/development/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "proofs-and-remaining",
+          "path": "ontology/queries/hswm_llm_semantic_graph_2026-09-14/proofs_and_remaining.rq",
+          "executed": true,
+          "rowCount": 58,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "proof-frontier",
+      "bundle": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "sources-to-next-work",
+          "path": "ontology/queries/hswm_next_proof_research_2026-09-15/sources_to_next_work.rq",
+          "executed": true,
+          "rowCount": 17,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "proof-plan",
+      "bundle": "ontology/development/HSWM_SEMANTIC_PROOF_WORK_PLAN_2026-09-15.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        },
+        {
+          "path": "schemas/HSWM_NEXT_DEVELOPMENT_PLAN_SHACL_1_0.v1.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "task-assumptions",
+          "path": "ontology/queries/hswm_semantic_proof_plan_2026-09-15/task_assumptions.rq",
+          "executed": true,
+          "rowCount": 43,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "research-integration",
+      "bundle": "ontology/development/HSWM_RESEARCH_INTEGRATION_2026-09-20.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "claims-and-obligations",
+          "path": "ontology/queries/hswm_research_integration_2026-09-20/claims_and_obligations.rq",
+          "executed": true,
+          "rowCount": 12,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "coverage",
+          "path": "ontology/queries/hswm_research_integration_2026-09-20/coverage.rq",
+          "executed": true,
+          "rowCount": 17,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "observations",
+          "path": "ontology/queries/hswm_research_integration_2026-09-20/observations.rq",
+          "executed": true,
+          "rowCount": 5,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "unsupported-claims",
+          "path": "ontology/queries/hswm_research_integration_2026-09-20/unsupported_claims.rq",
+          "executed": true,
+          "rowCount": 0,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "jev-observations",
+      "bundle": "ontology/development/HSWM_JEV_PRINCIPLES_2026-09-21.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "applications",
+          "path": "ontology/queries/hswm_jev_principles_2026-09-21/applications.rq",
+          "executed": true,
+          "rowCount": 6,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "obligations",
+          "path": "ontology/queries/hswm_jev_principles_2026-09-21/obligations.rq",
+          "executed": true,
+          "rowCount": 16,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "observations",
+          "path": "ontology/queries/hswm_jev_principles_2026-09-21/observations.rq",
+          "executed": true,
+          "rowCount": 12,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "unsupported",
+          "path": "ontology/queries/hswm_jev_principles_2026-09-21/unsupported.rq",
+          "executed": true,
+          "rowCount": 0,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "jev-graph",
+      "bundle": "ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "contracts",
+          "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/contracts.rq",
+          "executed": true,
+          "rowCount": 8,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "inherited-negative",
+          "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/inherited_negative.rq",
+          "executed": true,
+          "rowCount": 1,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "mapping",
+          "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/mapping.rq",
+          "executed": true,
+          "rowCount": 6,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "next-work",
+          "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/next_work.rq",
+          "executed": true,
+          "rowCount": 5,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "unsupported",
+          "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/unsupported.rq",
+          "executed": true,
+          "rowCount": 0,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "deep-research",
+      "bundle": "ontology/development/HSWM_DEEP_RESEARCH_2026-09-22.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "decisions",
+          "path": "ontology/queries/hswm_deep_research_2026-09-22/decisions.rq",
+          "executed": true,
+          "rowCount": 5,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "experiments-not-run",
+          "path": "ontology/queries/hswm_deep_research_2026-09-22/experiments_not_run.rq",
+          "executed": true,
+          "rowCount": 5,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "inherited-negatives",
+          "path": "ontology/queries/hswm_deep_research_2026-09-22/inherited_negatives.rq",
+          "executed": true,
+          "rowCount": 1,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "unsupported",
+          "path": "ontology/queries/hswm_deep_research_2026-09-22/unsupported.rq",
+          "executed": true,
+          "rowCount": 0,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "jev-plan",
+      "bundle": "ontology/development/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        },
+        {
+          "path": "schemas/HSWM_NEXT_DEVELOPMENT_PLAN_SHACL_1_0.v1.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        },
+        {
+          "path": "ontology/queries/hswm_jev_research_work_plan_2026-09-22/plan-root-shape.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "crosswalk",
+          "path": "ontology/queries/hswm_jev_research_work_plan_2026-09-22/crosswalk.rq",
+          "executed": true,
+          "rowCount": 340,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "dependencies",
+          "path": "ontology/queries/hswm_jev_research_work_plan_2026-09-22/dependencies.rq",
+          "executed": true,
+          "rowCount": 195,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "open-conditions",
+          "path": "ontology/queries/hswm_jev_research_work_plan_2026-09-22/open_conditions.rq",
+          "executed": true,
+          "rowCount": 26,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "ready",
+          "path": "ontology/queries/hswm_jev_research_work_plan_2026-09-22/ready_roots.rq",
+          "executed": true,
+          "rowCount": 3,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "task-contracts",
+          "path": "ontology/queries/hswm_jev_research_work_plan_2026-09-22/task_contracts.rq",
+          "executed": true,
+          "rowCount": 219,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "violations",
+          "path": "ontology/queries/hswm_jev_research_work_plan_2026-09-22/violations.rq",
+          "executed": true,
+          "rowCount": 0,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "knowledge-map-0913",
+      "bundle": "ontology/knowledge_map/HSWM_KNOWLEDGE_MAP_2026-09-13.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": [
+        {
+          "id": "q1-topic-states",
+          "path": "ontology/queries/hswm_knowledge_map_2026-09-13/Q1_topic_states.sparql",
+          "executed": true,
+          "rowCount": 13,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "q2-current-entrypoints",
+          "path": "ontology/queries/hswm_knowledge_map_2026-09-13/Q2_current_entrypoints.sparql",
+          "executed": true,
+          "rowCount": 40,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "q3-coverage-obligations",
+          "path": "ontology/queries/hswm_knowledge_map_2026-09-13/Q3_coverage_obligations.sparql",
+          "executed": true,
+          "rowCount": 16,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "q4-source-status-ambiguities",
+          "path": "ontology/queries/hswm_knowledge_map_2026-09-13/Q4_source_status_ambiguities.sparql",
+          "executed": true,
+          "rowCount": 1,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "q5-formal-vs-efficacy",
+          "path": "ontology/queries/hswm_knowledge_map_2026-09-13/Q5_formal_vs_efficacy.sparql",
+          "executed": true,
+          "rowCount": 16,
+          "boolean": null,
+          "failure": null
+        },
+        {
+          "id": "q6-unresolved-source-bundle-uids",
+          "path": "ontology/queries/hswm_knowledge_map_2026-09-13/Q6_unresolved_source_bundle_uids.sparql",
+          "executed": true,
+          "rowCount": 40,
+          "boolean": null,
+          "failure": null
+        }
+      ]
+    },
+    {
+      "id": "engineering-0913",
+      "bundle": "ontology/development/HSWM_NATIVE_ENGINEERING_CHECKPOINT_2026-09-13.v1.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": []
+    },
+    {
+      "id": "graph-contracts",
+      "bundle": "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json",
+      "compiled": true,
+      "compileFailure": null,
+      "structuralIssues": [],
+      "shapes": [
+        {
+          "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+          "executed": true,
+          "conforms": true,
+          "resultCount": 0,
+          "engine": "rdf-validate-shacl@0.6.5",
+          "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+          "failure": null
+        }
+      ],
+      "queries": []
+    }
+  ],
+  "status": "EXECUTABLE_SURFACES_PASS_WITH_DECLARED_SOURCE_ONLY_ENTRY",
+  "initial_profile_finding_preserved": true,
+  "current_capability_resolution": {
+    "id": "fractal",
+    "projection_profile": "SOURCE_ONLY",
+    "reason": "Original created_at field is outside strict native v2. No source rewrite or generic unknown-field removal.",
+    "result": {
+      "schema_version": "hswm-workspace-observation/v1",
+      "scope": "READ_ONLY_WORKTREE_OBSERVATION",
+      "claim_ceiling": "NAVIGATION_AND_ENGINEERING_NOT_HSWM_EFFICACY",
+      "manifest": "ontology/workspace/HSWM_WORKSPACE.v1.json",
+      "id": "fractal",
+      "status": "SOURCE_ONLY_NOT_NATIVE_V2",
+      "reason": "Historical created_at metadata is outside the strict native v2 bundle profile. Preserve the original bytes; use source inspection.",
+      "bindingSummary": {},
+      "interpretation": "This historical format remains available through show, bindings and inventory; no structural conformance is asserted."
+    },
+    "expected_exit_code": 2
+  },
+  "manifest_sha256_at_capability_resolution": "18993a0beef946ad2f8b9caa0bce6f2c7d2089ad52b384f3534a3b5044f71137"
+}

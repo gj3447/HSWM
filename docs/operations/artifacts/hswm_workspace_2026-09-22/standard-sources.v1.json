@@ -1,0 +1,58 @@
+{
+  "schema_version": "hswm-workspace-standard-source-review/v1",
+  "reviewed_on": "2026-09-22",
+  "sources": [
+    {
+      "url": "https://www.w3.org/TR/rdf11-concepts/",
+      "role": "Stable RDF graph/dataset model; occurrence snapshots keep source identity"
+    },
+    {
+      "url": "https://www.w3.org/TR/shacl/",
+      "role": "Stable SHACL Core structural constraints; exact target root and optional resultPath"
+    },
+    {
+      "url": "https://www.w3.org/TR/sparql11-query/",
+      "role": "Bounded read-only local SELECT/ASK; no graph-update route"
+    },
+    {
+      "url": "https://www.w3.org/TR/prov-o/",
+      "role": "Source derivation; not truth, permission or completion"
+    }
+  ],
+  "existing_tools": [
+    {
+      "name": "effect",
+      "version": "3.22.1",
+      "integrity": "sha512-TNoXushmPOBAjJlthF5d2QwnX2xBPEtcNJr5XKNKbRLbDvBcOYkXlYDfvGfSA0zriwLFuCll5MDtNMAdZL17PQ==",
+      "license": "MIT",
+      "authority_class": "OFFICIAL_PROJECT_IMPLEMENTATION",
+      "status": "EXISTING_LOCKED_NO_INSTALL"
+    },
+    {
+      "name": "n3",
+      "version": "2.7.2",
+      "integrity": "sha512-8Y/GU78BFSecvIv7OiJacY28l/zHiLo5/apxM+kyyUNCTWmqWyzzNjLlja4/vbLogoCHDPwCChLuDEZcpOKeDw==",
+      "license": "MIT",
+      "authority_class": "INDEPENDENT_IMPLEMENTATION_NOT_W3C_SDK",
+      "status": "EXISTING_LOCKED_NO_INSTALL"
+    },
+    {
+      "name": "rdf-validate-shacl",
+      "version": "0.6.5",
+      "integrity": "sha512-rwIibopSixDE8ecA9x0c7oTVxdMWxGiJh7h3uJ+WS2h4lq2nx3DZVO7rJvwa5kZpDq9QEFPoyZINAUyfaaoN4Q==",
+      "license": "MIT",
+      "authority_class": "INDEPENDENT_IMPLEMENTATION_NOT_W3C_SDK",
+      "status": "EXISTING_LOCKED_NO_INSTALL"
+    },
+    {
+      "name": "@comunica/query-sparql-rdfjs",
+      "version": "5.3.0",
+      "integrity": "sha512-isXNLwV1PB3hGXtcKXOfV134/X2q53J2ZELS82F07KbHVLoGCwF+DxfQ/gXvPxIatGKO2w0v3At3uAwVPzfZDA==",
+      "license": "MIT",
+      "authority_class": "INDEPENDENT_IMPLEMENTATION_NOT_W3C_SDK",
+      "status": "EXISTING_LOCKED_NO_INSTALL"
+    }
+  ],
+  "new_packages_installed": 0,
+  "claim_ceiling": "Existing qualified tools reused. No whole official-suite requalification or draft-standard adoption claimed."
+}

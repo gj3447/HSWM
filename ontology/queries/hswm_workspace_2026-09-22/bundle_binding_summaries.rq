@@ -1,0 +1,6 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?path ?bundleUid ?sha ?nodes ?anchors ?relations ?match ?differs ?unavailable WHERE {
+  ?bundle p:standard_graph_role "BUNDLE_OCCURRENCE"; p:path ?path; p:bundle_uid ?bundleUid; p:source_sha256 ?sha;
+    p:node_count ?nodes; p:anchor_count ?anchors; p:relation_count ?relations;
+    p:binding_match_count ?match; p:binding_worktree_differs_count ?differs; p:binding_unavailable_count ?unavailable .
+} ORDER BY ?path

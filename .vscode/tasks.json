@@ -17,6 +17,42 @@
       "problemMatcher": ["$tsc"]
     },
     {
+      "label": "HSWM: build native runtime",
+      "type": "process",
+      "command": "npm",
+      "args": ["--prefix", "${workspaceFolder}/src/hswm/effect-runtime", "run", "build"],
+      "group": "build",
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "HSWM: workspace status",
+      "type": "process",
+      "command": "${workspaceFolder}/src/hswm/effect-runtime/bin/hswm-workspace",
+      "args": ["status", "--checkout", "${workspaceFolder}"],
+      "problemMatcher": []
+    },
+    {
+      "label": "HSWM: workspace inventory",
+      "type": "process",
+      "command": "${workspaceFolder}/src/hswm/effect-runtime/bin/hswm-workspace",
+      "args": ["inventory", "--checkout", "${workspaceFolder}"],
+      "problemMatcher": []
+    },
+    {
+      "label": "HSWM: workspace doctor",
+      "type": "process",
+      "command": "${workspaceFolder}/src/hswm/effect-runtime/bin/hswm-workspace",
+      "args": ["doctor", "--checkout", "${workspaceFolder}"],
+      "problemMatcher": []
+    },
+    {
+      "label": "HSWM: Jev plan ready work",
+      "type": "process",
+      "command": "${workspaceFolder}/src/hswm/effect-runtime/bin/hswm-workspace",
+      "args": ["query", "jev-plan", "ready", "--checkout", "${workspaceFolder}"],
+      "problemMatcher": []
+    },
+    {
       "label": "HSWM: changed tests",
       "type": "process",
       "command": "npm",

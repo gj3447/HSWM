@@ -1,0 +1,5 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?id ?surface ?argv ?writes ?network WHERE {
+  ?workflow p:standard_graph_role "DOCUMENTED_WORKFLOW"; p:workflow_id ?id; p:surface ?surface;
+    p:argv ?argv; p:writes ?writes; p:network ?network .
+} ORDER BY ?id

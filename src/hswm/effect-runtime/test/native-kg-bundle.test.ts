@@ -36,6 +36,17 @@ describe("native KG migration: actual published evidence", () => {
     const corrupted = { ...projection, nquads: Buffer.from(changed), descriptor: { ...projection.descriptor, dataset: { sha256: kgSha256(changed), byteLength: Buffer.byteLength(changed) } } }
     expect((await Effect.runPromise(validateKgShacl(corrupted, shapes))).conforms).toBe(false)
   }, 30_000)
+  it("formats a node-shape violation with its optional result path absent", async () => {
+    const projection = compile("fixture", encoded(minimal()))
+    const shapes = Buffer.from(`@prefix sh: <http://www.w3.org/ns/shacl#> .
+<urn:shape> a sh:NodeShape ;
+  sh:targetSubjectsOf <https://hswm.invalid/kg-bundle-rdf/v1/prop/name> ;
+  sh:class <urn:missing-class> .`)
+    const report = await Effect.runPromise(validateKgShacl(projection, shapes))
+    expect(report.conforms).toBe(false)
+    expect(report.results).toHaveLength(1)
+    expect(report.results[0]).toMatchObject({ path: null })
+  })
   it("executes every published SELECT locally with bound projection bytes", async () => {
     for (const fixture of cases) {
       const projection = compile(fixture.id, bytes(fixture.bundle))

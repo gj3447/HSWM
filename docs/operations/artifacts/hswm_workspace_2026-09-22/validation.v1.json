@@ -1,0 +1,85 @@
+{
+  "schema_version": "hswm-workspace-validation/v1",
+  "observed_on": "2026-09-22",
+  "status": "PASS_WITH_DECLARED_SOURCE_ONLY_PROFILE",
+  "scope": "Local workspace implementation and source-bound navigation; not model research efficacy",
+  "checks": [
+    {
+      "command": "npm --prefix src/hswm/effect-runtime run build",
+      "status": "PASS"
+    },
+    {
+      "command": "npm --prefix src/hswm/effect-runtime run check",
+      "status": "PASS",
+      "scope": "TypeScript plus Effect boundaries; rerun after SOURCE_ONLY change"
+    },
+    {
+      "command": "workspace-catalog-domain.test.ts",
+      "status": "PASS",
+      "tests": 4
+    },
+    {
+      "command": "workspace-cli.test.ts",
+      "status": "PASS",
+      "tests": 6,
+      "environment": "Real temporary Git checkouts and production Effect POSIX services, no network or mocked implementation"
+    },
+    {
+      "command": "hswm-dev hswm run --focus ontology",
+      "selected_relation": "relation:ontology-focused",
+      "status": "SUCCEEDED",
+      "tests": 49,
+      "files": 4
+    },
+    {
+      "command": "Registered workspace matrix",
+      "native_v2_entries": 20,
+      "source_only_entries": 1,
+      "shacl_checks_conform": 23,
+      "queries_executed": 45,
+      "query_failures": 0,
+      "details": "entry-validation.v1.json"
+    },
+    {
+      "command": "hswm-workspace doctor",
+      "status": "READY_WITH_DECLARED_LIMITS",
+      "entrypoint_paths": 90,
+      "source_only_entries": [
+        {
+          "id": "fractal",
+          "reason": "Historical created_at metadata is outside the strict native v2 bundle profile. Preserve the original bytes; use source inspection."
+        }
+      ],
+      "node": {
+        "declared": "24.13.0",
+        "observed": "24.20.0",
+        "exactMatch": false
+      }
+    },
+    {
+      "command": "portable Markdown math compilation",
+      "status": "PASS"
+    }
+  ],
+  "development_feedback": {
+    "status": "FEEDBACK_RECORDED",
+    "source_class": "agent(codex)",
+    "scope": "Agent usefulness judgment, not user feedback or causal credit; unrelated pending feedback unchanged."
+  },
+  "graph_validation": "graph-validation.v1.json",
+  "historical_source_policy": "Existing hash-bound snapshots were not rewritten. Current source changes are captured by the new workspace snapshot.",
+  "limitations": [
+    "fractal is intentionally SOURCE_ONLY because historical created_at metadata is outside strict native v2. Original failure preserved.",
+    "Current Node differs from package-declared exact version; successful tested environment is recorded, not silently normalized.",
+    "Metadata inventory format is nodes/relations; it does not claim all legacy formats were normalized.",
+    "Live publication is a discovery note and links; the local metadata graph is not fully replicated by bounded MCP."
+  ],
+  "nonclaims": {
+    "new_model_experiments": 0,
+    "new_packages_installed": 0,
+    "cr_fcl_promotion": false,
+    "canonical_kg_records_overwritten": false,
+    "historical_source_hashes_rewritten": false,
+    "private_raw_runtime_published": false
+  }
+}

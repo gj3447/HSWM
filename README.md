@@ -12,7 +12,7 @@
 [상태·연산자 정의와 비교 원칙](docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md)에
 원문을 보존하며, **OpenCog Hyperon을 필수 핵심 비교 대상**으로 둡니다.
 
-[Semantic Weight·이론 기반](docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md) · [심층 연구·실현 경로](docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md) · [Jev 통합 연구 작업 계획](docs/operations/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.md) · [Jev 연구·그래프 엔지니어링](docs/research/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.md) · [지식 지도·개발 현황](docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md) · [연구 도구·표준 조사](docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md) · [그래프 구조](#graph-model) · [빠른 실행](#quick-start) · [개발 실사용](#development) · [근거와 판정](#evidence) · [전체 문서](INDEX.md)
+[KG·작업환경](docs/operations/HSWM_KG_WORKSPACE_2026-09-22.md) · [Semantic Weight·이론 기반](docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md) · [심층 연구·실현 경로](docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md) · [Jev 통합 연구 작업 계획](docs/operations/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.md) · [Jev 연구·그래프 엔지니어링](docs/research/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.md) · [지식 지도·개발 현황](docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md) · [연구 도구·표준 조사](docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md) · [그래프 구조](#graph-model) · [빠른 실행](#quick-start) · [개발 실사용](#development) · [근거와 판정](#evidence) · [전체 문서](INDEX.md)
 
 > **2026-09-07 · 실사용 가능한 로컬 적응 프로토타입**<br>
 > 실행 → 결과 기록 → 문맥 가중치·조건부 관계 갱신 → 다음 선택이 연결되어 있습니다.

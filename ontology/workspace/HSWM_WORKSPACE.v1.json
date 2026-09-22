@@ -1,0 +1,633 @@
+{
+  "schema_version": "hswm-workspace-manifest/v1",
+  "authority": "SECONDARY_AI_NAVIGATION_ONLY",
+  "entries": [
+    {
+      "id": "identity",
+      "title": "HSWM 네 가지 사용자 정체성",
+      "lane": "IDENTITY",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/identity/hswm_core/HSWM_HYPERGRAPH_NEURAL_AI_IDENTITY_ONTOLOGY.v1.json",
+      "document": "docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md",
+      "queries": [
+        {
+          "id": "basic-identity",
+          "path": "ontology/queries/hswm_hypergraph_neural_ai_2026-09-14/basic_identity.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "state-operator",
+      "title": "큰 그래프 상태·국소 LLM·Hyperon",
+      "lane": "IDENTITY",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/identity/hswm_core/HSWM_STATE_LOCAL_OPERATOR_HYPERON_ONTOLOGY.v1.json",
+      "document": "docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md",
+      "queries": [
+        {
+          "id": "core-comparator",
+          "path": "ontology/queries/hswm_state_local_operator_hyperon_2026-09-14/core_comparator.rq"
+        },
+        {
+          "id": "state-operator",
+          "path": "ontology/queries/hswm_state_local_operator_hyperon_2026-09-14/state_operator.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "fractal",
+      "title": "FCL-1..8와 과학적 연결",
+      "lane": "IDENTITY",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json",
+      "document": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+      "queries": [],
+      "shapes": [],
+      "projection_profile": "SOURCE_ONLY",
+      "projection_reason": "Historical created_at metadata is outside the strict native v2 bundle profile. Preserve the original bytes; use source inspection."
+    },
+    {
+      "id": "strategy",
+      "title": "목표 유지·기전 교체·실패 보존",
+      "lane": "IDENTITY",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/identity/hswm_core/HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json",
+      "document": "docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md",
+      "queries": [],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "semantic-theory",
+      "title": "Semantic Weight 이론·CR 의무",
+      "lane": "THEORY",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_THEORY_ONTOLOGY.v1.json",
+      "document": "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md",
+      "queries": [
+        {
+          "id": "definitions-and-status",
+          "path": "ontology/queries/hswm_semantic_weight_theory_2026-09-14/definitions_and_status.rq"
+        },
+        {
+          "id": "methods-to-obligations",
+          "path": "ontology/queries/hswm_semantic_weight_theory_2026-09-14/methods_to_obligations.rq"
+        },
+        {
+          "id": "premises-and-counterexamples",
+          "path": "ontology/queries/hswm_semantic_weight_theory_2026-09-14/premises_and_counterexamples.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "semantic-definition",
+      "title": "정의·hypergraph 표현·반례",
+      "lane": "THEORY",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_DEFINITION_ONTOLOGY.v1.json",
+      "document": "docs/research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md",
+      "queries": [
+        {
+          "id": "theorems-and-scopes",
+          "path": "ontology/queries/hswm_semantic_weight_definition_2026-09-14/theorems_and_scopes.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "constructive-proof",
+      "title": "유한 learner/refinement와 남은 전제",
+      "lane": "THEORY",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/identity/hswm_core/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_ONTOLOGY.v1.json",
+      "document": "docs/research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md",
+      "queries": [
+        {
+          "id": "theorems-and-open-obligations",
+          "path": "ontology/queries/hswm_semantic_weight_proof_2026-09-14/theorems_and_open_obligations.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "performance-proof",
+      "title": "문헌 결과와 HSWM 전이 의무",
+      "lane": "THEORY",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/identity/hswm_core/HSWM_SEMANTIC_PERFORMANCE_PROOF_ONTOLOGY.v1.json",
+      "document": "docs/research/HSWM_LITERATURE_TO_PERFORMANCE_PROOF_2026-09-14.md",
+      "queries": [
+        {
+          "id": "observations-and-transfer",
+          "path": "ontology/queries/hswm_semantic_performance_proof_2026-09-14/observations_and_transfer.rq"
+        },
+        {
+          "id": "theorems-and-scopes",
+          "path": "ontology/queries/hswm_semantic_performance_proof_2026-09-14/theorems_and_scopes.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "frontier-proof",
+      "title": "상관 오류·관계 생성·재귀 학습",
+      "lane": "THEORY",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/identity/hswm_core/HSWM_SEMANTIC_FRONTIER_PROOF_ONTOLOGY.v1.json",
+      "document": "docs/research/HSWM_SEMANTIC_FRONTIER_PROOFS_2026-09-14.md",
+      "queries": [
+        {
+          "id": "gaps-and-limits",
+          "path": "ontology/queries/hswm_semantic_frontier_proof_2026-09-14/gaps_and_limits.rq"
+        },
+        {
+          "id": "theorems-and-scopes",
+          "path": "ontology/queries/hswm_semantic_frontier_proof_2026-09-14/theorems_and_scopes.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "semantic-engine",
+      "title": "LLM 의미 실행 연구",
+      "lane": "RESEARCH",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/development/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.v1.json",
+      "document": "docs/research/HSWM_LLM_SEMANTIC_ENGINE_RESEARCH_2026-09-14.md",
+      "queries": [
+        {
+          "id": "sources-to-open-obligations",
+          "path": "ontology/queries/hswm_llm_semantic_engine_2026-09-14/sources_to_open_obligations.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "semantic-runtime",
+      "title": "LLM 의미 그래프 구현",
+      "lane": "ENGINEERING",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/development/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.v1.json",
+      "document": "docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md",
+      "queries": [
+        {
+          "id": "proofs-and-remaining",
+          "path": "ontology/queries/hswm_llm_semantic_graph_2026-09-14/proofs_and_remaining.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "proof-frontier",
+      "title": "다음 증명 연구의 미해결 의무",
+      "lane": "RESEARCH",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/development/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.v1.json",
+      "document": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+      "queries": [
+        {
+          "id": "sources-to-next-work",
+          "path": "ontology/queries/hswm_next_proof_research_2026-09-15/sources_to_next_work.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "proof-plan",
+      "title": "기존 22개 증명·통합 작업",
+      "lane": "PLAN",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/development/HSWM_SEMANTIC_PROOF_WORK_PLAN_2026-09-15.v1.json",
+      "document": "docs/operations/HSWM_SEMANTIC_PROOF_WORK_PLAN_2026-09-15.md",
+      "queries": [
+        {
+          "id": "task-assumptions",
+          "path": "ontology/queries/hswm_semantic_proof_plan_2026-09-15/task_assumptions.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+        "schemas/HSWM_NEXT_DEVELOPMENT_PLAN_SHACL_1_0.v1.ttl"
+      ]
+    },
+    {
+      "id": "research-integration",
+      "title": "9/20 Jev·DGX·연구 연결",
+      "lane": "RESEARCH",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/development/HSWM_RESEARCH_INTEGRATION_2026-09-20.v1.json",
+      "document": "docs/research/HSWM_RESEARCH_INTEGRATION_2026-09-20.md",
+      "queries": [
+        {
+          "id": "claims-and-obligations",
+          "path": "ontology/queries/hswm_research_integration_2026-09-20/claims_and_obligations.rq"
+        },
+        {
+          "id": "coverage",
+          "path": "ontology/queries/hswm_research_integration_2026-09-20/coverage.rq"
+        },
+        {
+          "id": "observations",
+          "path": "ontology/queries/hswm_research_integration_2026-09-20/observations.rq"
+        },
+        {
+          "id": "unsupported-claims",
+          "path": "ontology/queries/hswm_research_integration_2026-09-20/unsupported_claims.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "jev-observations",
+      "title": "Jev 원리·9/21 관측과 실패",
+      "lane": "RESEARCH",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/development/HSWM_JEV_PRINCIPLES_2026-09-21.v1.json",
+      "document": "docs/research/HSWM_JEV_PRINCIPLES_2026-09-21.md",
+      "queries": [
+        {
+          "id": "applications",
+          "path": "ontology/queries/hswm_jev_principles_2026-09-21/applications.rq"
+        },
+        {
+          "id": "obligations",
+          "path": "ontology/queries/hswm_jev_principles_2026-09-21/obligations.rq"
+        },
+        {
+          "id": "observations",
+          "path": "ontology/queries/hswm_jev_principles_2026-09-21/observations.rq"
+        },
+        {
+          "id": "unsupported",
+          "path": "ontology/queries/hswm_jev_principles_2026-09-21/unsupported.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "jev-graph",
+      "title": "Jev 표준 그래프 연결",
+      "lane": "RESEARCH",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/development/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.v1.json",
+      "document": "docs/research/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.md",
+      "queries": [
+        {
+          "id": "contracts",
+          "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/contracts.rq"
+        },
+        {
+          "id": "inherited-negative",
+          "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/inherited_negative.rq"
+        },
+        {
+          "id": "mapping",
+          "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/mapping.rq"
+        },
+        {
+          "id": "next-work",
+          "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/next_work.rq"
+        },
+        {
+          "id": "unsupported",
+          "path": "ontology/queries/hswm_jev_graph_engineering_2026-09-22/unsupported.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "deep-research",
+      "title": "W1–W5 심층 연구와 protocol",
+      "lane": "RESEARCH",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/development/HSWM_DEEP_RESEARCH_2026-09-22.v1.json",
+      "document": "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+      "queries": [
+        {
+          "id": "decisions",
+          "path": "ontology/queries/hswm_deep_research_2026-09-22/decisions.rq"
+        },
+        {
+          "id": "experiments-not-run",
+          "path": "ontology/queries/hswm_deep_research_2026-09-22/experiments_not_run.rq"
+        },
+        {
+          "id": "inherited-negatives",
+          "path": "ontology/queries/hswm_deep_research_2026-09-22/inherited_negatives.rq"
+        },
+        {
+          "id": "unsupported",
+          "path": "ontology/queries/hswm_deep_research_2026-09-22/unsupported.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "jev-plan",
+      "title": "Jev 통합 30개 작업과 조건",
+      "lane": "PLAN",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/development/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.v1.json",
+      "document": "docs/operations/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.md",
+      "queries": [
+        {
+          "id": "crosswalk",
+          "path": "ontology/queries/hswm_jev_research_work_plan_2026-09-22/crosswalk.rq"
+        },
+        {
+          "id": "dependencies",
+          "path": "ontology/queries/hswm_jev_research_work_plan_2026-09-22/dependencies.rq"
+        },
+        {
+          "id": "open-conditions",
+          "path": "ontology/queries/hswm_jev_research_work_plan_2026-09-22/open_conditions.rq"
+        },
+        {
+          "id": "ready",
+          "path": "ontology/queries/hswm_jev_research_work_plan_2026-09-22/ready_roots.rq"
+        },
+        {
+          "id": "task-contracts",
+          "path": "ontology/queries/hswm_jev_research_work_plan_2026-09-22/task_contracts.rq"
+        },
+        {
+          "id": "violations",
+          "path": "ontology/queries/hswm_jev_research_work_plan_2026-09-22/violations.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+        "schemas/HSWM_NEXT_DEVELOPMENT_PLAN_SHACL_1_0.v1.ttl",
+        "ontology/queries/hswm_jev_research_work_plan_2026-09-22/plan-root-shape.ttl"
+      ]
+    },
+    {
+      "id": "knowledge-map-0913",
+      "title": "9/13 고정 지식 지도",
+      "lane": "HISTORY",
+      "reading": "DATED_SOURCE_SNAPSHOT; inspect binding drift separately; never infer efficacy from navigation",
+      "bundle": "ontology/knowledge_map/HSWM_KNOWLEDGE_MAP_2026-09-13.v1.json",
+      "document": "docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md",
+      "queries": [
+        {
+          "id": "q1-topic-states",
+          "path": "ontology/queries/hswm_knowledge_map_2026-09-13/Q1_topic_states.sparql"
+        },
+        {
+          "id": "q2-current-entrypoints",
+          "path": "ontology/queries/hswm_knowledge_map_2026-09-13/Q2_current_entrypoints.sparql"
+        },
+        {
+          "id": "q3-coverage-obligations",
+          "path": "ontology/queries/hswm_knowledge_map_2026-09-13/Q3_coverage_obligations.sparql"
+        },
+        {
+          "id": "q4-source-status-ambiguities",
+          "path": "ontology/queries/hswm_knowledge_map_2026-09-13/Q4_source_status_ambiguities.sparql"
+        },
+        {
+          "id": "q5-formal-vs-efficacy",
+          "path": "ontology/queries/hswm_knowledge_map_2026-09-13/Q5_formal_vs_efficacy.sparql"
+        },
+        {
+          "id": "q6-unresolved-source-bundle-uids",
+          "path": "ontology/queries/hswm_knowledge_map_2026-09-13/Q6_unresolved_source_bundle_uids.sparql"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "engineering-0913",
+      "title": "9/13 native engineering snapshot",
+      "lane": "HISTORY",
+      "reading": "DATED_SOURCE_SNAPSHOT; inspect binding drift separately; never infer efficacy from navigation",
+      "bundle": "ontology/development/HSWM_NATIVE_ENGINEERING_CHECKPOINT_2026-09-13.v1.json",
+      "document": "docs/operations/HSWM_NATIVE_ENGINEERING_CHECKPOINT_2026-09-13.md",
+      "queries": [],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    },
+    {
+      "id": "graph-contracts",
+      "title": "기존 그래프·loop engineering v6",
+      "lane": "ENGINEERING",
+      "reading": "CURATED_READING_ENTRY; source authority and scientific ceiling remain in the owning document",
+      "bundle": "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json",
+      "document": "docs/operations/HSWM_STANDARD_TOOLCHAIN_POLICY_2026-09-02.md",
+      "queries": [],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "id": "native-build",
+      "title": "native TypeScript/Effect build",
+      "surface": "ACTIVE_CHECKOUT",
+      "argv": [
+        "npm",
+        "--prefix",
+        "src/hswm/effect-runtime",
+        "run",
+        "build"
+      ],
+      "writes": "src/hswm/effect-runtime/dist; generated build output",
+      "network": "NONE"
+    },
+    {
+      "id": "native-check",
+      "title": "타입·Effect 경계 검사",
+      "surface": "ACTIVE_CHECKOUT",
+      "argv": [
+        "npm",
+        "--prefix",
+        "src/hswm/effect-runtime",
+        "run",
+        "check"
+      ],
+      "writes": "tool cache may change",
+      "network": "NONE"
+    },
+    {
+      "id": "development-plan",
+      "title": "개발 검사 선택",
+      "surface": "ACTIVE_CHECKOUT",
+      "argv": [
+        "src/hswm/effect-runtime/bin/hswm-dev",
+        "hswm",
+        "plan",
+        "--focus",
+        "ontology"
+      ],
+      "writes": "private .hswm-local development state if initialized",
+      "network": "NONE"
+    },
+    {
+      "id": "development-run",
+      "title": "선택한 ontology 검사 실행",
+      "surface": "ACTIVE_CHECKOUT",
+      "argv": [
+        "src/hswm/effect-runtime/bin/hswm-dev",
+        "hswm",
+        "run",
+        "--focus",
+        "ontology",
+        "--task",
+        "<task>"
+      ],
+      "writes": "private .hswm-local episode; tests/cache",
+      "network": "NONE"
+    },
+    {
+      "id": "development-status",
+      "title": "개발 episode 상태",
+      "surface": "ACTIVE_CHECKOUT",
+      "argv": [
+        "src/hswm/effect-runtime/bin/hswm-dev",
+        "hswm",
+        "status"
+      ],
+      "writes": "NONE; private output, not public KG",
+      "network": "NONE"
+    },
+    {
+      "id": "development-feedback",
+      "title": "명시적 검사 유용성 기록",
+      "surface": "ACTIVE_CHECKOUT",
+      "argv": [
+        "src/hswm/effect-runtime/bin/hswm-dev",
+        "hswm",
+        "feedback",
+        "--episode",
+        "<id>",
+        "--success",
+        "true|false",
+        "--source",
+        "agent(<tool>):<judgment>"
+      ],
+      "writes": "private .hswm-local; agent and user feedback distinct",
+      "network": "NONE"
+    },
+    {
+      "id": "ontology-tests",
+      "title": "native ontology 회귀",
+      "surface": "ACTIVE_CHECKOUT",
+      "argv": [
+        "npm",
+        "--prefix",
+        "src/hswm/effect-runtime",
+        "run",
+        "test:ontology"
+      ],
+      "writes": "test cache",
+      "network": "NONE"
+    },
+    {
+      "id": "knowledge-replay",
+      "title": "9/13 지식 지도 exact replay",
+      "surface": "HISTORICAL_REPLAY",
+      "argv": [
+        "src/hswm/effect-runtime/bin/hswm-knowledge-catalog",
+        "knowledge-map",
+        "--checkout",
+        "."
+      ],
+      "writes": "stdout only unless explicit new output directory",
+      "network": "NONE"
+    },
+    {
+      "id": "graph-query",
+      "title": "명시한 snapshot의 표준 질의",
+      "surface": "ACTIVE_CHECKOUT",
+      "argv": [
+        "src/hswm/effect-runtime/bin/hswm-kg-bundle",
+        "query",
+        "--source",
+        "id=<bundle>",
+        "--profile",
+        "v2",
+        "--query",
+        "<query.rq>"
+      ],
+      "writes": "stdout only",
+      "network": "NONE"
+    },
+    {
+      "id": "python-comparison",
+      "title": "Python 비교·legacy 환경",
+      "surface": "PYTHON_COMPARISON",
+      "argv": [
+        "src/hswm/development/bin/hswm-python",
+        "core",
+        "python",
+        "<comparison.py>"
+      ],
+      "writes": "depends on explicitly selected comparison",
+      "network": "Selected program dependent; not run by workspace"
+    },
+    {
+      "id": "portable-math",
+      "title": "게시 전 portable Markdown projection",
+      "surface": "ACTIVE_CHECKOUT",
+      "argv": [
+        "uv",
+        "run",
+        "python",
+        "scripts/compile_portable_markdown_math.py",
+        "README.md",
+        "INDEX.md",
+        "docs/canon",
+        "docs/research",
+        "ontology"
+      ],
+      "writes": "derived projections; preserve historical bytes",
+      "network": "NONE"
+    },
+    {
+      "id": "graph-qualification",
+      "title": "공식 suite qualification workflow",
+      "surface": "CI_ONLY",
+      "argv": [
+        ".github/workflows/graph-standards-requalification.yml"
+      ],
+      "writes": "CI artifacts; workflow permissions apply",
+      "network": "CI-defined external sources; never auto-started"
+    }
+  ]
+}

@@ -4,6 +4,14 @@ This directory is the semantic front door to the repository. The filesystem
 still has one physical location per file, but an ontology can give the same
 file several meanings and connect it to several neighboring concepts.
 
+HSWM's target identity remains one AI with hypergraph neural organization,
+LLM functions as its basic computation units, and hypergraph Semantic Weight
+as its operating organization. Its evolving hypergraph is the shared state
+whose one dynamics plays the living-harness, world/self-model, and continuous-
+learner roles. Repository ontology is a bounded projection and interface to
+that work; it is not the cognition, routing, or learning itself. See the
+[current KG workspace operations](../docs/operations/HSWM_KG_WORKSPACE_2026-09-22.md).
+
 The repository therefore uses two compatible views:
 
 - the **physical view** preserves imports, packages, and path/SHA-bound research
@@ -30,7 +38,7 @@ commands can be recovered without polluting the active checkout with
 |---|---|
 | [`identity/`](identity/) | What is HSWM and why does it exist? |
 | [`substrate/`](substrate/) | What durable world and provenance can it remember? |
-| [`field/`](field/) | What are `H`, `W`, `A`, topology, and the optional sheaf lens? |
+| [`field/`](field/) | Which field, topology, incidence, and optional sheaf concepts are projected? |
 | [`cells/`](cells/) | How do local LLM functions communicate through ports? |
 | [`learning/`](learning/) | When do trajectories become durable learned coordination? |
 | [`boundary/`](boundary/) | Which thin deterministic constraints remain fixed? |
@@ -44,6 +52,9 @@ The machine-readable concept graph is
 defines concepts and relationships; the filesystem and typed-directory
 conventions remain the source of truth for current paths. A checked-in catalog
 of every repository path is intentionally not part of this navigation layer.
+The dated September 13 catalog remains a source-bound historical snapshot;
+the workspace command's dynamic inventory is a read-only checkout observation
+and does not revise that snapshot or any canonical state.
 
 The cross-cutting research rule is defined by the
 [`adaptive research strategy canon`](../docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md)
@@ -60,7 +71,8 @@ repository file into a KG node.
 ## Important boundary
 
 This ontology organizes source and evidence; it is not a hand-written AI
-behavior rulebook. HSWM behavior is intended to be learned from outcome-bound
-token/action/tool trajectories through durable `W`, routing, and `H` changes.
-Turning these folders into another growing set of mandatory cognitive rules
-would reproduce LX3 Ragnarok rather than solve it.
+behavior rulebook. HSWM behavior is intended to be learned through
+outcome-bound, provenance-preserving revisions of its Semantic Weight
+hypergraph, which future local LLM execution reads. Turning these folders into
+another growing set of mandatory cognitive rules would reproduce LX3 Ragnarok
+rather than solve it.

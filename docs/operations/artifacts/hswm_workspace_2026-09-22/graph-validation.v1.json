@@ -1,0 +1,56 @@
+{
+  "schema_version": "hswm-workspace-graph-validation/v1",
+  "status": "PASS",
+  "bundle": {
+    "path": "ontology/development/HSWM_KG_WORKSPACE_2026-09-22.v1.json",
+    "sha256": "1341358b9bf34434fa2c68955e3c3067b241c4db9567d19b3bd48cc0cb71688e",
+    "counts": {
+      "nodes": 991,
+      "anchors": 0,
+      "relations": 2196
+    }
+  },
+  "inventory": {
+    "path": "docs/operations/artifacts/hswm_workspace_2026-09-22/inventory.v1.json",
+    "sha256": "6ed8f86c4658590e709d0fca930e013dca71295c6e44c1324b2aa40975ff8993",
+    "captured_ontology_json_count": 212,
+    "recognized_bundle_count": 101,
+    "duplicate_uid_groups": 48,
+    "uid_occurrences": 6216
+  },
+  "bindings_recomputed": 188,
+  "supplemental_source_hashes_recomputed": 1,
+  "navigation_targets": {
+    "entries": 21,
+    "query_aliases": 45,
+    "documents": 21,
+    "shapes": 3,
+    "workflows": 12
+  },
+  "query_rows": {
+    "entrypoints.rq": 21,
+    "bundle_binding_summaries.rq": 101,
+    "duplicate_uid_occurrences.rq": 146,
+    "command_surfaces.rq": 12,
+    "unresolved_drift_observations.rq": 384
+  },
+  "shacl": [
+    {
+      "conforms": true,
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+    },
+    {
+      "conforms": true,
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+    }
+  ],
+  "negative_probes": [
+    {
+      "name": "wrong-root-role",
+      "conforms": false
+    }
+  ],
+  "limitation": "This validates the new metadata projection and current bound bytes. It does not execute every legacy bundle query or reconstruct historical worktrees."
+}

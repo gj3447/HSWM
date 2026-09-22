@@ -1,5 +1,10 @@
 # HSWM — public repository index
 
+2026-09-22 [KG·작업환경 진입점](docs/operations/HSWM_KG_WORKSPACE_2026-09-22.md)은
+21개 읽기 경로·45개 질의·12개 개발 절차를 native `hswm-workspace`에서 연결한다.
+tracked ontology inventory, snapshot별 UID 발생, 출처 hash 비교, SHACL/SPARQL 실행을 제공하며
+과거 고정 지식 지도·private runtime·현재 작업 파일을 구별한다.
+
 2026-09-22 [Jev 통합 연구 작업 계획](docs/operations/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.md)은
 국소 실행·반례 교정·작은 읽기·공동 출력·두 scale 합성을 30개 작업, 13개 가정, 13개 진행 조건으로 나눈다.
 Jev P1–P6과 기존 22개 작업을 source-bound KG로 연결하고, 최초 착수 B00/B01/B02와

@@ -1,0 +1,271 @@
+{
+  "schema_version": "hswm-deep-research-protocol/v1",
+  "date": "2026-09-22",
+  "authority_class": "SECONDARY_AI",
+  "status": "PROPOSED_NOT_RUN",
+  "claim_ceiling": "RESEARCH_DESIGN_NOT_A_PREREGISTERED_EXECUTION_OR_HSWM_EFFICACY",
+  "source_document": "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+  "inherited_negative": "docs/research/artifacts/hswm_jev_principles_2026-09-21/audit.v1.json",
+  "global_rules": {
+    "preserve_prior_failures": true,
+    "graph_is_hswm_state_llm_is_local_operator": true,
+    "semantic_disposition_evidence_score_and_credit_distinct": true,
+    "new_model_experiments_in_this_review": 0,
+    "cr_fcl_promotion": false,
+    "statistical_unit": "Independent generated task-world; repeated calls and multiple cases within a world are paired/clustered observations, not extra independent worlds.",
+    "split_policy": "Independent mechanism pilot; generation/search train; reusable selection validation; final sealed test. Final-test feedback retires that test for subsequent confirmatory use.",
+    "cost_policy": "Report model/tokenizer/template/server/precision, input and output tokens, model calls, proposal/evaluation/read costs, elapsed service latency and failures. Diagnose capability at unequal compute explicitly; claim equal-cost benefit only on predeclared matched budgets.",
+    "data_policy": "Public source hashes, aggregate outcomes and schema-bound provenance only. Keep private response traces and datasets outside public KG.",
+    "execution_freeze_required": [
+      "source and model pins",
+      "exact prompts and transform bytes",
+      "task generator and split seeds",
+      "outcome observer and metric",
+      "budget",
+      "sample size and stopping rule",
+      "analysis script",
+      "capability allowlist"
+    ]
+  },
+  "experiments": [
+    {
+      "id": "W1",
+      "question": "Can a fixed local LLM faithfully execute the correctly specified relation?",
+      "status": "PROPOSED_DIAGNOSTIC_NOT_RUN",
+      "depends_on": [],
+      "population": "Four existing authored bit-rule families times all 32 input patterns: 128-case finite census. No population-generalization claim.",
+      "conditions": {
+        "E0": "Existing one-token conditional-logprob decision.",
+        "E1": "Generated final bit scored without self-reported-probability consistency as an accuracy gate.",
+        "E2": "Typed intermediate base/context/exception record plus final bit; extra computation explicit.",
+        "E3": "Independent deterministic fixture reference, excluded from HSWM efficacy."
+      },
+      "fixed_transform_classes": [
+        "One original serialization plus two independently prepared and fixture-checked semantic paraphrases.",
+        "One consistent bijective renaming of role/value identifiers, applied to relation and cases together.",
+        "One JSON object-key/enumeration reorder preserving semantic role/ordinal bindings.",
+        "One meaning-changing typed-role exchange with recomputed expected outputs; not an invariance test."
+      ],
+      "replication": "One complete 128-case census for each of six conditions of wording/binding per LLM arm, plus 20 scheduled repetitions of eight fixed sentinel requests per arm (two per family chosen before model calls). Technical repeatability diagnostic, not independent test cases or a confidence guarantee.",
+      "metrics": [
+        "final-bit errors",
+        "refusals and malformed answers",
+        "per-case bit instability",
+        "probability variation where available",
+        "intermediate-record consistency where applicable",
+        "full computation cost"
+      ],
+      "readiness_criterion": "At least one LLM condition has zero errors and refusals on the entire frozen finite census and all declared transform blocks, with no bit instability. E3 must exactly match authored truth tables. This is instrument readiness only; probability stability reported separately.",
+      "failure_action": "Preserve exact failed serving/readout family. Diagnose binding/output/compute/tokenizer problems; reroute local realization or model/operator training. Above-chance alone does not authorize a semantic-learning efficacy conclusion.",
+      "not_yet_frozen": [
+        "model and server pins",
+        "exact paraphrase and transform bytes",
+        "per-condition token caps",
+        "randomized block schedule"
+      ],
+      "related_obligations_not_discharged": [
+        "CR-0"
+      ],
+      "proposed_request_count": "3 LLM arms times (128 cases times 6 fixed transforms plus 8 sentinels times 20 repeats) = 2784 model requests if E2 is one structured-output call. Any repair/proposal/additional calls are extra cost and must be recorded. Reference E3 executions excluded from model-call count.",
+      "transform_denominator": "Six variants total: original, two meaning-preserving paraphrases, one consistent opaque renaming, one enumeration reorder, one meaning-changing role exchange. Exact bytes and bijections remain to be frozen before execution.",
+      "parsing_policy": {
+        "E0": "Source-pinned existing logprob decision; verify candidate token IDs against the pinned tokenizer.",
+        "E1": "Exactly one JSON object with sole key answer and integer value 0 or 1; booleans, additional keys, prose, arrays, missing values and parse failures are invalid. No self-reported probability is requested.",
+        "E2": "Exactly one JSON object with integer 0/1 keys base, context_flip, exception_flip and answer, no extra keys. Score final answer; separately record whether answer equals XOR of intermediate fields and whether intermediates match fixture. No repair or post-hoc extraction.",
+        "invalid_output": "Count as wrong and report separately as refusal/format failure; never exclude from the accuracy denominator.",
+        "label_custody": "Gold outcome, expected answer and reference-evaluator outputs never enter model-visible frames. Correct oracle relation is supplied; current-case labels are evaluator-only."
+      }
+    },
+    {
+      "id": "W2",
+      "question": "Does outcome-bound semantic revision improve fresh execution beyond evidence accumulation and sham edits?",
+      "status": "PROPOSED_CONFIRMATORY_DESIGN_NOT_RUN",
+      "depends_on": [
+        "W1"
+      ],
+      "design_can_proceed_in_parallel": true,
+      "population": "Fresh independently generated worlds with deliberately wrong initial relations; topology fixed. Existing census is an instrument check, not this population.",
+      "candidate_budget_proposal": {
+        "maximum_candidates_including_parent": 4,
+        "maximum_proposal_rounds": 3,
+        "is_optimized_or_power_justified": false
+      },
+      "revision_classes": [
+        "NO_CHANGE",
+        "EVIDENCE_ONLY",
+        "SEMANTIC_PARAMETER",
+        "RELATION_TEXT",
+        "ROLE_OR_EXCEPTION",
+        "TOPOLOGY_EXCLUDED_IN_W2"
+      ],
+      "feedback": "Pre-outcome sealed relation/frame/request/prediction; independently observed outcome; discrepancy; observation uncertainty; retention examples. No final-test labels.",
+      "controls": [
+        "frozen parent",
+        "append-only evidence with parent semantics",
+        "sham meaning-preserving paraphrase with matched evidence",
+        "selected semantic revision with matched evidence"
+      ],
+      "admission": "Selection score ranks proposals only. Canonical admission still follows existing schema, owner and permitted transition semantics; fresh process reads admitted relation version.",
+      "intervention": "Randomized isolated branches from matched initial states and paired task cases. Fix observer/evaluator; no mutable cross-arm state/cache. Correlated provider behavior remains a measured limitation.",
+      "primary_metric": "Held-out task success difference per independent world, equally weighted over worlds, paired against each of three controls.",
+      "success_margin_proposal": "Simultaneous 95% lower confidence bounds exceed +0.05 absolute success probability against all three controls; retention-deterioration upper bound below 0.02. Multiplicity and world clustering must be handled by the frozen analysis.",
+      "no_delta_handling": "NO_CHANGE may be correct. Report all-world intent-to-treat outcome and change frequency. Changed-only analysis is secondary and cannot replace the primary endpoint.",
+      "restore_diagnostic": "Verify canonical version/frame restoration separately from distributional behavioral restoration; no bitwise-output assumption.",
+      "not_yet_frozen": [
+        "independent pilot and population generator",
+        "sample size and confirmation of analysis assumptions",
+        "retention population",
+        "source/model pins and exact prompts",
+        "total cost budget and stopping rule"
+      ],
+      "failure_action": "Insufficient precision is UNDERDETERMINED. A confidence interval excluding the declared practical benefit within fixed scope retires/reroutes that mechanism. Never relabel no-op, extra evidence or extra compute as semantic efficacy.",
+      "related_obligations_not_discharged": [
+        "CR-1",
+        "CR-2",
+        "FCL-1"
+      ],
+      "analysis_proposal": {
+        "independent_unit": "Independent generated task-world, each with matched isolated branches for all four arms. Average fixed cases and fixed technical repeats within each world before any interval.",
+        "estimand": "Equally world-weighted mean paired difference in success probability, selected revision minus each control. Invalid/refused outputs have success zero.",
+        "retention_estimand": "Equally world-weighted success loss on the predeclared retention cases, each control minus selected revision.",
+        "confidence_method": "Six one-sided Bonferroni-adjusted paired-world t bounds: three improvement lower bounds and three retention-loss upper bounds. Per-bound alpha = 0.05/6; df = n_worlds-1. Bound = world mean plus or minus t_(1-alpha,df) * sample_sd/sqrt(n_worlds).",
+        "assumptions": "Independent sampled worlds and approximately normal world-level means, or justified large-sample approximation. Nominal familywise95 percent; not a distribution-free finite-sample coverage theorem. Pilot must check feasibility before this analysis is frozen; failure of assumptions makes confirmatory interpretation unsupported.",
+        "joint_success_rule": "Every improvement lower bound >0.05 absolute probability and every retention-loss upper bound <0.02 absolute probability. No aggregate-only or one-control win.",
+        "replicate_policy": "Predetermined repeat count, averaged within world; no selecting a favorable seed or treating retries as independent worlds.",
+        "stopping_policy": "Fixed n_worlds and no optional early stopping. Pilot sets sample size without final-test observations. Report all worlds intent-to-treat, including no-op, malformed or failed revisions.",
+        "test_retirement": "Final test opened once after protocol/candidate selection freeze; any subsequent tuning makes that test exploratory and requires a newly sealed confirmatory population."
+      }
+    },
+    {
+      "id": "W3",
+      "question": "Can active local reads recover outcome-relevant omitted distinctions under a declared total budget?",
+      "status": "HYPOTHESIS_AND_DIAGNOSTIC_DESIGN_NOT_RUN",
+      "depends_on": [
+        "W1"
+      ],
+      "learning_claim_additionally_depends_on": [
+        "W2"
+      ],
+      "conditions": [
+        "full admissible information diagnostic",
+        "fixed local read",
+        "active local read with other/expand"
+      ],
+      "witness": "Paired states whose initial frames alias while an accessible additional observation separates required answers; also an irreducibly unobservable pair requiring preserved uncertainty.",
+      "endpoints": [
+        "present joint prediction",
+        "action/outcome law",
+        "post-outcome successor prediction",
+        "candidate recall",
+        "cost",
+        "coverage/refusal",
+        "calibration"
+      ],
+      "ceiling": "Task-relative and horizon/budget-relative sufficiency only. No universal constant-size local-state claim.",
+      "not_yet_frozen": [
+        "numerical effect and error margins",
+        "independent world count",
+        "horizon and action/read budget",
+        "read observation model"
+      ],
+      "related_obligations_not_discharged": [
+        "CR-4",
+        "CR-5",
+        "FCL-6",
+        "FCL-7"
+      ]
+    },
+    {
+      "id": "W4",
+      "question": "Does composition retain a joint law that identical marginals cannot identify?",
+      "status": "HYPOTHESIS_AND_DIAGNOSTIC_DESIGN_NOT_RUN",
+      "depends_on": [
+        "W1",
+        "W2",
+        "W3"
+      ],
+      "witness": "Equal-marginal correlated versus anticorrelated two-bit outputs with explicit shared-cause interventions.",
+      "controls": [
+        "independent marginal product",
+        "pair-only projection",
+        "tagged incidence/factor graph with declared joint realization"
+      ],
+      "endpoints": [
+        "joint proper score",
+        "impossible combinations",
+        "intervention response",
+        "cost"
+      ],
+      "not_yet_frozen": [
+        "numerical margins",
+        "sample size",
+        "shared-cause observation and intervention contract"
+      ],
+      "related_obligations_not_discharged": [
+        "CR-3",
+        "CR-4",
+        "CR-6",
+        "FCL-3",
+        "FCL-4"
+      ]
+    },
+    {
+      "id": "W5",
+      "question": "Does a two-scale composition preserve learning, uncertainty, lineage and a useful persistent parent state?",
+      "status": "HYPOTHESIS_AND_DIAGNOSTIC_DESIGN_NOT_RUN",
+      "depends_on": [
+        "W2",
+        "W4"
+      ],
+      "conditions": [
+        "flat system",
+        "static wrapper",
+        "learning persistent parent"
+      ],
+      "interventions": [
+        "child damage",
+        "new exception",
+        "model/member replacement"
+      ],
+      "endpoints": [
+        "world/self prediction",
+        "fresh parent behavior",
+        "successor revision",
+        "recovery and lineage continuity",
+        "resource cost"
+      ],
+      "not_yet_frozen": [
+        "composition operator",
+        "per-scale invariants and rights",
+        "interference/error bounds",
+        "numerical margins and sample size"
+      ],
+      "related_obligations_not_discharged": [
+        "CR-5",
+        "CR-6",
+        "CR-7",
+        "FCL-1",
+        "FCL-2",
+        "FCL-3",
+        "FCL-4",
+        "FCL-5",
+        "FCL-6",
+        "FCL-7",
+        "FCL-8"
+      ]
+    }
+  ],
+  "mandatory_hyperon_comparison": {
+    "implementation": "hyperon-experimental v0.2.10",
+    "commit": "3f76dc460da6961f57f69f6c3e550c59c74ada83",
+    "whitepaper": "July 2026, maturity-separated official architecture",
+    "same_task_parity_required": [
+      "persistent role-bearing graph",
+      "same local LLM",
+      "read/action/feedback budget",
+      "revision and future behavior",
+      "joint and successor semantics"
+    ],
+    "status": "COMPARATOR_REQUIRED_NOT_EXECUTED_NOT_BACKEND_ADOPTION"
+  }
+}

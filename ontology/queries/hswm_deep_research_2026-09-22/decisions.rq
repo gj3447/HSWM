@@ -1,0 +1,5 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?work ?priority ?decision ?status ?source WHERE {
+  ?item p:standard_graph_role "RESEARCH_DECISION"; p:work_id ?work; p:priority ?priority; p:decision ?decision; p:status ?status; p:source_ref ?source; r:DERIVED_FROM ?evidence.
+} ORDER BY ?work

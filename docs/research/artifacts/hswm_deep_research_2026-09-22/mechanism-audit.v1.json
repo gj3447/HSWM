@@ -1,0 +1,58 @@
+{
+  "schema_version": "hswm-deep-research-mechanism-audit/v1",
+  "date": "2026-09-22",
+  "scope": "read-only forensic audit of JEV principles run",
+  "status": "INSTRUMENT_AND_MECHANISM_AUDIT",
+  "claim_ceiling": "NO_HSWM_EFFICACY_CAUSAL_CREDIT_OR_CR_FCL_CLOSURE",
+  "decisive_findings": [
+    {
+      "id": "semantic-revision-noop",
+      "classification": "CODE_AND_SEALED_ARTIFACT_CONFIRMED",
+      "statement": "All four admitted revisions retain all visible semantic fields and learned/evidence-only projected inputs are identical.",
+      "implication": "Learned-versus-evidence-only scores do not identify a visible semantic-revision effect. Identity revision remains a legitimate outcome; a text delta alone would also be insufficient evidence of improvement."
+    },
+    {
+      "id": "oracle-local-execution-failure",
+      "classification": "SEALED_ARTIFACT_CONFIRMED",
+      "statement": "Oracle/direct correct-including-refusals is 27 of 48, while direct has 48 valid responses.",
+      "implication": "Correct relation text did not make the frozen one-token readout a reliable local executor."
+    },
+    {
+      "id": "direct-readout-not-executor",
+      "classification": "CODE_CONFIRMED",
+      "statement": "Direct mode constrains one next token to IDs 15/16 and renormalizes the two reported logprobs.",
+      "implication": "It is conditional candidate-token readout, not symbolic execution or a trained binary head."
+    },
+    {
+      "id": "serving-variation",
+      "classification": "SEALED_ARTIFACT_CONFIRMED_CAUSE_UNKNOWN",
+      "statement": "Byte-identical paired requests have changed prediction objects under temperature 0 and seed 0; one direct test paired-valid bit differs.",
+      "implication": "Single-call arm differences require replicated deterministic-serving validation."
+    }
+  ],
+  "next_gate": {
+    "name": "replicated oracle local semantic execution gate",
+    "progression_condition": "After tokenizer and serving configuration are pinned, a shared-information LLM execution condition completes a near-perfect finite oracle truth-table census and remains stable under predeclared semantic paraphrases and role permutations.",
+    "required_ablations": [
+      "current one-token direct readout",
+      "generation with bit-only extraction, separate from probability conformance",
+      "typed two-stage LLM execution with intermediate evaluation record",
+      "deterministic authored-rule fixture evaluator as task/serialization reference only"
+    ],
+    "learning_precondition": "A study must classify identity revision as NO_SEMANTIC_DELTA or show a predeclared read-back-visible state/disposition witness that changes the next evaluation frame; semantic text delta alone is neither required nor sufficient."
+  },
+  "sources": [
+    {"path":"_research/jev_principles_v1/domain.mts","sha256":"987aa6952e20e5033267df14df7d16e9008054bf359a06064978c05b0998a21f","lines":"3-38"},
+    {"path":"_research/jev_principles_v1/run.mts","sha256":"dd383ec81025b4d3cfccba256c12be54044f3f251b06e028d9857119116c1018","lines":"24-65"},
+    {"path":"_research/jev_principles_v1/analyze.mts","sha256":"820bf5758c39c7a27bdc6033db34c6ed3e91502acf017e11bece625b27a567a3","lines":"13-48"},
+    {"path":"_research/jev_principles_v1/audit.mts","sha256":"f45d7c240045c3b47fb45c7c586c490116c6d5d444d6924867992e0cd210e98d","lines":"24-48"},
+    {"path":"_research/jev_principles_v1/support/domain.mts","sha256":"92f9bfff8a163f6d243a03e7ddc0c61ab2a56eae015d4355d06f7a4b3ad2860a","lines":"5-32,49-66"},
+    {"path":"_research/jev_principles_v1/support/run.mts","sha256":"6adfbacab537dfdc14b4b02e72114c7f0a1b748633a0983ba52c85ee75585091","lines":"32-35,120-180,193-231"},
+    {"path":"_research/jev_principles_v1/store.mts","sha256":"65922c842a16f78b0775455d178f6fac1b82394b7c2c33780b4cf0778c693681","lines":"90-105"},
+    {"path":"_research/jev_principles_v1/source-pins.v1.json","sha256":"6465e5367c451e568e025e4fc99f9fc0577e3cf5ae3dbcc1b2013c552ec4195c","lines":"metadata and bindings"},
+    {"path":"src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts","sha256":"a2302c05c058c855e21cba709e5b90f8e9336534d42c18a347e28f8c0977a1a0","lines":"59-78,136-174,177-207,218-283"},
+    {"path":"src/hswm/effect-runtime/src/semantic-decision-domain.ts","sha256":"5849a88550941f4b8f1e4406cb54d78446a54535f6e505581975b4181d5691b4","lines":"17-73"},
+    {"path":"docs/research/artifacts/hswm_jev_principles_2026-09-21/observations.v1.json","sha256":"6d2e587235986c632bf0b7cf5949d1f5d33d4267ae39267848900d812b401123","lines":"summaries and completion"},
+    {"path":"docs/research/artifacts/hswm_jev_principles_2026-09-21/audit.v1.json","sha256":"00be273a1c4467627a2fc5cfb316dad74599c5692965c7650b04bce7936d1e92","lines":"families and modeTotals"}
+  ]
+}

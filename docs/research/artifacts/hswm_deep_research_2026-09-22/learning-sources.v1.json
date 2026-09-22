@@ -1,0 +1,129 @@
+{
+  "schema_version": "hswm-deep-research-learning-sources/v1",
+  "date": "2026-09-22",
+  "authority_class": "SECONDARY_AI",
+  "scope": "Natural-language semantic relation revision, reflective optimization, and world-model hypothesis learning.",
+  "nonclaim": "LITERATURE_REVIEW_NOT_HSWM_RUNTIME_COGNITION_LEARNING_EFFICACY_OR_CR_FCL_PROMOTION",
+  "hswm_research_order": {
+    "W1": "Oracle local execution is first; demonstrate fresh local LLM use of canonical relation text, ordered typed roles, context and exceptions against predeclared outcome and controls.",
+    "W2": "Candidate-revision schema/evaluator design may proceed in parallel, but W2 efficacy evaluation begins only after W1 passes; no scale/topology intervention may rescue W1 failure."
+  },
+  "sources": [
+    {
+      "id": "vml",
+      "title": "Verbalized Machine Learning: Revisiting Machine Learning with Language Models",
+      "authors": "Tim Z. Xiao; Robert Bamler; Bernhard Schölkopf; Weiyang Liu",
+      "publication_status": "Transactions on Machine Learning Research, 2025; arXiv version",
+      "version_or_date": "arXiv:2406.04344v3, 2025-02-14",
+      "official_url": "https://arxiv.org/html/2406.04344v3",
+      "implementation_url": null,
+      "scope_read": "Full method §3, applications/failure cases, current limitations, and relevant appendices listed by the HTML paper.",
+      "objective_algorithm": "A frozen LLM is a learner function parameterized by natural-language theta; an optimizer LLM consumes batches of inputs, learner predictions, labels, current theta, and optimizer settings to produce revised theta.",
+      "reported_result_population": "Regression and classification case studies, principally low-dimensional inputs; not a relation-revision benchmark.",
+      "assumptions_failures": "Labelled examples and optimizer prompt/model capability; reported variance, context-window limits, local minima, high-dimensional text-encoding difficulty, and failures to learn desired patterns.",
+      "hswm_transfer_obligation": "Treat semanticText/disposition changes as auditable candidate relation revisions with role, exception, evidence, owner and lineage preservation; test independent outcomes rather than relabeling prompt updates as learning.",
+      "priority": 2
+    },
+    {
+      "id": "textgrad",
+      "title": "TextGrad: Automatic Differentiation via Text",
+      "authors": "Mert Yuksekgonul; Federico Bianchi; Joseph Boen; Sheng Liu; Zhi Huang; Carlos Guestrin; James Zou",
+      "publication_status": "Nature article 2025; arXiv method version",
+      "version_or_date": "arXiv:2406.07496v1, 2024-06-11",
+      "official_url": "https://www.nature.com/articles/s41586-025-08661-4",
+      "method_url": "https://arxiv.org/html/2406.07496v1",
+      "implementation_url": "https://github.com/zou-group/textgrad",
+      "scope_read": "Full method, results, and limitations in arXiv HTML; Nature record checked for publication status.",
+      "objective_algorithm": "Build a computation graph, collect LLM textual feedback from each successor context, aggregate it as a textual gradient, then use Textual Gradient Descent to rewrite selected variables.",
+      "reported_result_population": "Task-specific reasoning, coding, molecule and treatment-plan demonstrations; scientific applications are proof-of-concept.",
+      "assumptions_failures": "Feedback quality and LLM optimizer reliability; method calls its scientific applications proof-of-concept and calls for stability/variance reduction and external experimental validation.",
+      "hswm_transfer_obligation": "Use feedback as a proposal diagnostic, not a derivative, truth signal, or causal credit. Bind each revision to independently observed outcome and held-out comparison.",
+      "priority": 3
+    },
+    {
+      "id": "mipro",
+      "title": "Optimizing Instructions and Demonstrations for Multi-Stage Language Model Programs",
+      "authors": "Krista Opsahl-Ong; Michael J. Ryan; Josh Purtell; David Broman; Christopher Potts; Matei Zaharia; Omar Khattab",
+      "publication_status": "EMNLP 2024",
+      "version_or_date": "arXiv:2406.11695v2, 2024-10-06",
+      "official_url": "https://aclanthology.org/2024.emnlp-main.525/",
+      "method_url": "https://arxiv.org/html/2406.11695v2",
+      "implementation_url": "https://github.com/stanfordnlp/dspy",
+      "scope_read": "Full optimization method §§3–4, experiments/findings, and limitations.",
+      "objective_algorithm": "Generate grounded instruction and demonstration candidates per module; use minibatch scores and a TPE Bayesian surrogate to select joint program parameterizations; periodically full-evaluate candidates.",
+      "reported_result_population": "Evaluated on seven multi-stage LM-program settings; results concern instruction/demo optimization, not relation revision.",
+      "assumptions_failures": "Fixed task/proposer models and budgets; handwritten seed prompt; authors state the approach has restricted ability to infer complex governing rules.",
+      "hswm_transfer_obligation": "Separate revision proposal from credit assignment. A global downstream metric is insufficient evidence that one relation semantic delta is useful or causal.",
+      "priority": 4
+    },
+    {
+      "id": "gepa",
+      "title": "GEPA: Reflective Prompt Evolution Can Outperform Reinforcement Learning",
+      "authors": "Lakshya A. Agrawal et al.",
+      "publication_status": "ICLR 2026 Oral; paper also on arXiv",
+      "version_or_date": "arXiv:2507.19457v2, 2026-02-14",
+      "official_url": "https://arxiv.org/pdf/2507.19457v2",
+      "implementation_url": "https://github.com/gepa-ai/gepa",
+      "implementation_version_observed": "GitHub main branch inspected 2026-09-22; no release tag used or claimed.",
+      "scope_read": "Full Algorithm 1/2, feedback/evaluation method, reported result sections, and official implementation README/API surface.",
+      "objective_algorithm": "Execute system candidates on feedback minibatches, combine numeric evaluation with trajectory/evaluator text, reflectively mutate one module prompt, admit minibatch-improved candidates, and select through an instance-wise Pareto frontier held on a separate split.",
+      "reported_result_population": "Six prompt/system optimization tasks; all results are authors' task-metric results, not HSWM evidence.",
+      "assumptions_failures": "Requires a task metric/feedback function and a budgeted train/feedback/Pareto split; reflection and evaluator text do not establish truth, causal attribution, or transferable semantic knowledge.",
+      "hswm_transfer_obligation": "Adopt only the explicit proposal-to-selection ledger and split discipline. Canonical admission still requires owner/provenance/authority checks and independently observed outcome; reflection alone cannot revise HSWM state.",
+      "priority": 1
+    },
+    {
+      "id": "ivml_symbolic_world_models",
+      "title": "Generating Symbolic World Models via Test-time Scaling of Large Language Models",
+      "authors": "Zhouliang Yu et al.",
+      "publication_status": "Transactions on Machine Learning Research, 2025; arXiv version",
+      "version_or_date": "arXiv:2502.04728v2, 2025-05-08",
+      "official_url": "https://arxiv.org/html/2502.04728v2",
+      "implementation_url": "https://vmlpddl.github.io/",
+      "scope_read": "Full proposed method §3, experimental discussion, and stated limitations.",
+      "objective_algorithm": "Use best-of-N log-likelihood selection to initialize candidate PDDL domains, then alternate an LLM optimizer critique and LLM updater to revise PDDL and reasoning text; plan with A* after synthesis.",
+      "reported_result_population": "PDDL synthesis and planning experiments under fully observable, noise-free simulated settings.",
+      "assumptions_failures": "Formal validator checks syntax/executability rather than semantic intent; experiments assume fully observable, noise-free, perfectly executing simulation.",
+      "hswm_transfer_obligation": "A formal fixture can test selected relation constraints, but must not replace relation text, ordered roles, exceptions, evidence, or observed external outcomes with a fixed routing DSL.",
+      "priority": 5
+    },
+    {
+      "id": "pinductor",
+      "title": "Learning POMDP World Models from Observations with Language-Model Priors",
+      "authors": "Valentin Six et al.",
+      "publication_status": "arXiv preprint",
+      "version_or_date": "arXiv:2605.13740v1, 2026-05-13",
+      "official_url": "https://arxiv.org/html/2605.13740v1",
+      "implementation_url": "https://github.com/atomresearch/pinductor",
+      "implementation_version_observed": "GitHub main branch inspected 2026-09-22; repository showed four commits, no release, MIT license. No commit pin was claimed.",
+      "scope_read": "Full methodology §4, Algorithm 1, Appendix-A methodological details, results/limitations, and official repository README.",
+      "objective_algorithm": "LLM proposes executable initial-state, transition, observation, and reward components from state-free trajectories; particle-filtered observation-kernel score, execution diagnostics, and committee disagreement guide UCB-selected candidate refinement and final near-best selection.",
+      "reported_result_population": "Four MiniGrid environments with state-free offline trajectories; no cross-environment or non-MiniGrid evaluation.",
+      "assumptions_failures": "Hand-designed observation distance, manually collected offline trajectories, no cross-environment generalization test, and no evaluation outside MiniGrid. Kernel objective ranks models and is not marginal likelihood or truth.",
+      "hswm_transfer_obligation": "Most direct template for outcome-bound relation hypothesis ranking: retain proposal, score, diagnostic, uncertainty/disagreement, selected revision, and fresh-case test as distinct atoms; do not turn the score into Semantic Weight, evidence mass, or causal credit.",
+      "priority": 1
+    },
+    {
+      "id": "intrinsic_self_correction_negative",
+      "title": "Large Language Models Cannot Self-Correct Reasoning Yet",
+      "authors": "Jie Huang; Xinyun Chen; Swaroop Mishra; Huaixiu Steven Zheng; Adams Wei Yu; Xinying Song; Denny Zhou",
+      "publication_status": "ICLR 2024",
+      "version_or_date": "arXiv:2310.01798v2, 2024-03-14",
+      "official_url": "https://arxiv.org/html/2310.01798v2",
+      "implementation_url": null,
+      "scope_read": "Full experimental setup, oracle versus intrinsic correction results, prompt variants, analysis, and stated scope.",
+      "objective_algorithm": "Compare answer-review-revision with oracle labels that stop when correct versus intrinsic correction that asks the model itself whether to retain/revise.",
+      "reported_result_population": "Across the paper's tested reasoning benchmarks/models, intrinsic correction degraded while oracle stopping accounted for observed improvement.",
+      "assumptions_failures": "Bounded to the paper's 2023-era models, prompts, reasoning tasks, sample sizes and call budgets; it does not prove external-feedback or all future-model correction impossible.",
+      "hswm_transfer_obligation": "Require independently observed outcome/evaluator provenance and make no-op/retain an explicit candidate. Never promote a relation revision because the same LLM supplied its critique and acceptance rationale.",
+      "priority": 1
+    }
+  ],
+  "unresolved_names": [
+    {
+      "name": "VPP",
+      "status": "NOT_INCLUDED_UNDISAMBIGUATED",
+      "reason": "No sufficiently disambiguated current primary source was established in this bounded search; do not infer an expansion or capability."
+    }
+  ]
+}

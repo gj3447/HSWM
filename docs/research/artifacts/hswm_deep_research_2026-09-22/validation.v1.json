@@ -1,0 +1,60 @@
+{
+  "schema_version": "hswm-deep-research-validation/v1",
+  "date": "2026-09-22",
+  "status": "PASS",
+  "authority": "SECONDARY_AI_ENGINEERING_REVIEW",
+  "claim_ceiling": "RESEARCH_SOURCE_BINDINGS_AND_DOCUMENT_GRAPH_CHECKS_NOT_MODEL_EFFICACY_OR_CR_FCL_PROMOTION",
+  "bundle": {
+    "path": "ontology/development/HSWM_DEEP_RESEARCH_2026-09-22.v1.json",
+    "sha256": "d3b8c0b0d7ddc74b441a46171b7e68c97fccc597c13a197fbb7dae932f398da5",
+    "nodes": 58,
+    "anchors": 2,
+    "relations": 112,
+    "artifact_bindings": 25,
+    "primary_paper_metadata_nodes": 17,
+    "official_hyperon_comparator_metadata_nodes": 2
+  },
+  "graph_validation": {
+    "path": "docs/research/artifacts/hswm_deep_research_2026-09-22/graph-validation.v1.json",
+    "sha256": "eeaebe01748b748d2e1474085803c0c51a96eaab15a0d5fcd60640aa0cf23570"
+  },
+  "native_build": {
+    "command": "npm --prefix src/hswm/effect-runtime run build",
+    "status": "PASS"
+  },
+  "hswm_dev": {
+    "episode": "f3339cc2-2167-4347-bafa-0e1c53d5355c",
+    "selected_relation": "relation:docs-focused",
+    "task": "Deep primary-source HSWM mechanism research and falsifiable experimental design",
+    "status": "FEEDBACK_RECORDED",
+    "tests_passed": 8,
+    "test_files_passed": 3,
+    "output_digest": "cf8b30bf1a4c35da2c185d73babed2905d4028a7c76c1a19da2de211697484f7",
+    "feedback_source": "agent(codex): Docs checks usefully verify math rendering without source mutation (8 passed). Literature fidelity and new graph need separate review. Agent judgment, not user feedback or efficacy.",
+    "feedback_is_user_feedback": false,
+    "coverage": "Existing Markdown rendering regressions; new source/link/KG checks reported separately."
+  },
+  "portable_math": {
+    "command": "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology",
+    "status": "PORTABLE_MATH_COMPILED",
+    "documents": 195,
+    "math_fences_seen": 216,
+    "display_fence_rewrites_in_memory": 66,
+    "legacy_compatibility_rewrites_in_memory": 6,
+    "operatorname_rewrites_in_memory": 36,
+    "source_files_rewritten": false
+  },
+  "mechanism_source_hashes_verified": 12,
+  "independent_review": "Mechanism and literature reviewers audited synthesis; root independently verified source/anchor hashes, corrected bisimulation authors against official proceedings and checked primary methods/limitations. Source read scopes are explicit.",
+  "protocol": {
+    "path": "_research/hswm_deep_research_v1/protocol.v1.json",
+    "sha256": "a377b50c846ce6af2f325b79c388a6fc1986a3b5a6821c261da4cc5c6cb0292b",
+    "status": "PROPOSED_NOT_RUN",
+    "remaining_before_execution": "Exact pins/prompts/transforms; independent pilot; sample size and budget; W3-W5 quantitative criteria."
+  },
+  "new_model_experiments": 0,
+  "third_party_implementations_installed": 0,
+  "live_kg_publication": false,
+  "cr_fcl_promotion": false,
+  "local_markdown_links_verified": 21
+}

@@ -1,5 +1,10 @@
 # HSWM — public repository index
 
+2026-09-22 [HSWM 심층 연구·실현 경로](docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md)는
+17편의 원 논문과 Hyperon 공식 자료를 기존 Jev 코드·관측에 연결한다.
+국소 의미 실행, 반례 기반 관계 교정, 능동 읽기, joint law와 두 scale 합성의 대조군·실패 조건을
+[미실행 연구 protocol](_research/hswm_deep_research_v1/protocol.v1.json)로 구체화하며 새 효능 결과와 구분한다.
+
 2026-09-22 [Jev 연구 · 표준 그래프 엔지니어링](docs/research/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.md)은
 기존 P1–P6을 관계 버전·역할·결정·관측·수정 계보로 연결하고,
 의미 변경 부재와 국소 실행 병목에서 다음 연구 과제를 정한다.

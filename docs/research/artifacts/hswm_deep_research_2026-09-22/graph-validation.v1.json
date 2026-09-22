@@ -1,0 +1,103 @@
+{
+  "schema_version": "hswm-deep-research-graph-validation/v1",
+  "date": "2026-09-22",
+  "bundle": {
+    "path": "ontology/development/HSWM_DEEP_RESEARCH_2026-09-22.v1.json",
+    "sha256": "d3b8c0b0d7ddc74b441a46171b7e68c97fccc597c13a197fbb7dae932f398da5",
+    "nodes": 58,
+    "anchors": 2,
+    "relations": 112,
+    "artifact_bindings": 25,
+    "primary_paper_metadata_nodes": 17,
+    "official_hyperon_comparator_metadata_nodes": 2
+  },
+  "shacl": [
+    {
+      "shape": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+      "conforms": true,
+      "results": 0,
+      "raw_result": "/tmp/hswm-deep-graph-base-shacl.json",
+      "coverage": "Base RDF v2 projection structure.",
+      "shape_sha256": "6eb4d0be63fccd71e02e25d86baa1ae81c0ddf31a9eb4d05fc4f0cf655225371",
+      "result_sha256": "c1861a4854a3c4a765ff98c008c0cbbd6bd9c940bd752ae2437c5f593420901e",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle validate --source deep_research=ontology/development/HSWM_DEEP_RESEARCH_2026-09-22.v1.json --profile v2 --shapes schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+    },
+    {
+      "shape": "schemas/HSWM_RESEARCH_INTEGRATION_SHACL_2026-09-20.ttl",
+      "conforms": true,
+      "results": 0,
+      "raw_result": "/tmp/hswm-deep-graph-source-shacl.json",
+      "coverage": "No matching custom target roles in this bundle. Conformance adds no assertion coverage; not a source-shape check.",
+      "shape_sha256": "8482caf0042885c8bada2257322c8ebfd59ff77c35c6db9ccee27b63f331d303",
+      "result_sha256": "c1861a4854a3c4a765ff98c008c0cbbd6bd9c940bd752ae2437c5f593420901e",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle validate --source deep_research=ontology/development/HSWM_DEEP_RESEARCH_2026-09-22.v1.json --profile v2 --shapes schemas/HSWM_RESEARCH_INTEGRATION_SHACL_2026-09-20.ttl",
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+    },
+    {
+      "shape": "schemas/HSWM_DGX_FRONTIER_SHACL_2026-09-20.ttl",
+      "conforms": true,
+      "results": 0,
+      "coverage": "25 RESEARCH_SOURCE targets; candidate and run targets are absent.",
+      "raw_result": "/tmp/hswm-deep-graph-dgx-source-shacl.json",
+      "executed_by": "agent(codex):root",
+      "shape_sha256": "04333e72a6b82242df746e1f15a52015c01d93bc61297af6947348aa28fd2b80",
+      "result_sha256": "c1861a4854a3c4a765ff98c008c0cbbd6bd9c940bd752ae2437c5f593420901e",
+      "command": "src/hswm/effect-runtime/bin/hswm-kg-bundle validate --source deep_research=ontology/development/HSWM_DEEP_RESEARCH_2026-09-22.v1.json --profile v2 --shapes schemas/HSWM_DGX_FRONTIER_SHACL_2026-09-20.ttl",
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+    }
+  ],
+  "queries": {
+    "decisions": {
+      "rows": 5,
+      "raw_result": "/tmp/hswm-deep-graph-decisions.json",
+      "query_sha256": "08051f6e8f85ef3c66f629df495f50f067699601cba213bcfb37f05c4213a0ca",
+      "result_sha256": "ae2a35f9bbb5c514210b25ea9a482eb390588c0801319e854ea310b4989ebe6d"
+    },
+    "inherited_negatives": {
+      "rows": 1,
+      "raw_result": "/tmp/hswm-deep-graph-negatives.json",
+      "query_sha256": "dc903fe2e86794affa5f661eae29ac5567e2376bec683b24df2c65f3be23994b",
+      "result_sha256": "501609dd32818b9a79f9ff8c6e3538f27d031f3620bfc1a2ac934bddd07a3f98"
+    },
+    "experiments_not_run": {
+      "rows": 5,
+      "raw_result": "/tmp/hswm-deep-graph-not-run.json",
+      "query_sha256": "d74ec6a77b52e684786cf4337f5fd20929e24c7433412cedcfb552c604c6604e",
+      "result_sha256": "90683811f71ecd3ff74bb65f622058ae79a5a6df0abe7d5f41ded8a446772c12"
+    },
+    "unsupported": {
+      "rows": 0,
+      "raw_result": "/tmp/hswm-deep-graph-unsupported.json",
+      "query_sha256": "6913fedf8910464add6bb21977ff39a19090b69ded2fdc8dcc09cdb3596348a8",
+      "result_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    }
+  },
+  "negative_mutations": [
+    {
+      "mutation": "remove W2 DERIVED_FROM relation",
+      "rows": 1,
+      "reason": "MISSING_SOURCE",
+      "bundle": "/tmp/hswm-deep-graph-mutation-missing-derived.json",
+      "raw_result": "/tmp/hswm-deep-graph-mutation-missing-derived-result.json",
+      "input_sha256": "36076b31c275a02cfc324f642a5950d1c3e0e7f0a624bc7ec8bbc875c60c359a",
+      "result_sha256": "3bfe26b8eca4a903f566eca224ba5ca01b9745887196b95ee9009814a6f2159a"
+    },
+    {
+      "mutation": "set root cr_fcl_promotion true",
+      "rows": 1,
+      "reason": "MISSING_OR_NONFALSE_CR_FCL_PROMOTION",
+      "bundle": "/tmp/hswm-deep-graph-mutation-promotion.json",
+      "raw_result": "/tmp/hswm-deep-graph-mutation-promotion-result.json",
+      "input_sha256": "b49769d75a6011645b900c63125a12c21a74f12f682dc98cacec43ca57575007",
+      "result_sha256": "55bcdcf9b8e189714c4cac41436ac5a52c8cfc30d41d387f7f3afd2c77987374"
+    }
+  ],
+  "coverage_boundary": "These checks establish only bounded snapshot structure, declared source lineage and query coverage. They do not establish source truth, HSWM runtime realization, learning efficacy, CR/FCL discharge or comparator parity.",
+  "status": "PASS",
+  "root_independent_verification": "25 current source bindings, 2 prior anchors, 58 nonpromotion flags and raw positive/negative query counts verified. Applicable source shape executed separately.",
+  "final_validation_executor": "agent(codex):root repeated shapes, queries and negative mutations against final bytes after removing Markdown trailing whitespace."
+}

@@ -1,0 +1,5 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT DISTINCT ?name ?status ?source ?reroute WHERE {
+  ?item p:standard_graph_role "INHERITED_NEGATIVE_EVIDENCE"; p:name ?name; p:status ?status; p:source_ref ?source; p:reroute_rule ?reroute; r:DERIVED_FROM ?evidence.
+}

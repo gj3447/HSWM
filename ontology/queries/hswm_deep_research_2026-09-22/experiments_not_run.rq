@@ -1,0 +1,4 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?work ?name ?status WHERE {
+  ?item p:standard_graph_role "EMPIRICAL_EXPERIMENT_NOT_RUN"; p:work_id ?work; p:name ?name; p:status ?status.
+} ORDER BY ?work

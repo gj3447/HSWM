@@ -1,0 +1,41 @@
+{
+  "schema_version": "hswm-workspace-live-publication-payload/v1",
+  "status": "PREPARED_NOT_ACKNOWLEDGED",
+  "save_record": {
+    "kind": "NOTE",
+    "name": "hswm-kg-workspace-2026-09-22",
+    "title": "HSWM KG·작업환경 2026-09-22 — 출처별 탐색·검증 안내",
+    "source_ref": "https://github.com/gj3447/HSWM/blob/828949dc922939dc6874f7753571af3c8ba5e2bf/docs/operations/HSWM_KG_WORKSPACE_2026-09-22.md",
+    "body": "2026-09-22 HSWM KG·작업환경의 source-pinned 탐색 안내. SECONDARY_AI / PENDING_OR_PRELIMINARY.\nSource commit: 828949dc922939dc6874f7753571af3c8ba5e2bf\nWorkspace snapshot: ontology/development/HSWM_KG_WORKSPACE_2026-09-22.v1.json\nSnapshot SHA-256: 1341358b9bf34434fa2c68955e3c3067b241c4db9567d19b3bd48cc0cb71688e\nManifest: ontology/workspace/HSWM_WORKSPACE.v1.json\n\nHSWM 정체성·상태/국소 연산자·Semantic Weight 이론·실행·Jev 관측·표준 그래프·심층 연구·30개 작업 계획을 21개 읽기 진입점, 45개 기존 SPARQL 질의 별칭, 12개 명시적 개발 절차로 연결했다. 국소 실행→반례 교정→작은 읽기의 충분성→공동 출력→두 scale 합성의 근거·진행 조건은 기존 계획에서 조회한다.\n\n초기 inventory는 Git-tracked ontology JSON 212개 중 nodes/relations 계약의 bundle 101개, node occurrence 6,216개, 반복 UID 48개 그룹을 관측했다. 원본 노드를 합치지 않고 (source path, source SHA, UID)별 발생을 보존한다. 새 메타데이터 그래프는 991개 노드와 2,196개 관계다. 이 개수는 연구 성과나 인지 능력의 개수가 아니다.\n\n저장소 루트에서:\nnpm --prefix src/hswm/effect-runtime run build\nsrc/hswm/effect-runtime/bin/hswm-workspace status\nsrc/hswm/effect-runtime/bin/hswm-workspace doctor\nsrc/hswm/effect-runtime/bin/hswm-workspace show jev-plan\nsrc/hswm/effect-runtime/bin/hswm-workspace query jev-plan ready\n최초 ready 항목은 B00/B01/B02다. 명령은 관측 결과만 내보내며 모델 실험·설치·DB write·workflow를 자동 실행하지 않는다.\n\n검증: build/type/Effect checks 통과; ontology 49개, workspace domain/integration 10개 tests 통과; 20개 native v2 entry, 23개 SHACL checks, 등록 질의 45개 실행. historical fractal은 created_at 형식 차이로 SOURCE_ONLY: 원문·출처 조회 가능, native query/validate 대상 아님. Node 실제 24.20.0과 package 선언 24.13.0 차이를 기록했다. SHACL node-level null resultPath formatter 오류를 수정했다.\n\n기존 역사적 SHA·실패·USER_PRIMARY 원문·CR/FCL ceiling을 보존했다. 현재 파일 차이는 과거 snapshot의 손상 판정과 구별한다. 이 note는 전체 로컬 KG 복제가 아닌 탐색 연결이다. HSWM 큰 하이퍼그래프가 AI 상태이고 LLM은 국소 내부 연산자라는 목표와, 연구 자료를 정리하는 repository KG를 구별한다. 새 모델 실험이나 CR/FCL 승격은 없다."
+  },
+  "link_records": [
+    {
+      "relation": "ABOUT",
+      "target_uid": "sym:Concept:hswm",
+      "source_uid_resolution": "Use the uid returned by the successful save_record call; do not invent a uid."
+    },
+    {
+      "relation": "REFERENCES",
+      "target_uid": "sym:Repository:hswm",
+      "source_uid_resolution": "Use the uid returned by the successful save_record call; do not invent a uid."
+    },
+    {
+      "relation": "REFERENCES",
+      "target_uid": "sym:AbstractNode:hswm-knowledge-map-discovery-2026-09-13",
+      "source_uid_resolution": "Use the uid returned by the successful save_record call; do not invent a uid."
+    },
+    {
+      "relation": "REFERENCES",
+      "target_uid": "sym:AbstractNode:hswm-jev-principles-2026-09-21",
+      "source_uid_resolution": "Use the uid returned by the successful save_record call; do not invent a uid."
+    }
+  ],
+  "retry_procedure": [
+    "Search the exact note name with include_preliminary=true when the connection is restored.",
+    "If present, get the record and compare the committed payload before any edit; copy target_version to expected_version if a revision is needed.",
+    "If absent in the bounded search, create the note using save_record. Identical content retries are idempotent.",
+    "After successful save, add each proposed reference link sequentially from the returned uid.",
+    "Read back the note and bounded neighbors. Record actual authority and relationship_status without promoting proposed links.",
+    "Update publication.v1.json with actual receipts and publish that follow-up through the normal Git workflow."
+  ]
+}

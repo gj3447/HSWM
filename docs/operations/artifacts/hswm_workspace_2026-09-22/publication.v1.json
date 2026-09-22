@@ -1,7 +1,60 @@
 {
   "schema_version": "hswm-workspace-live-publication/v1",
-  "status": "NOT_YET_PUBLISHED",
+  "status": "WRITE_NOT_ACKNOWLEDGED_DB_UNREACHABLE",
+  "observed_at": "2026-09-22T10:04:03Z",
   "scope": "A source-pinned discovery note and four links; not a full local-to-live KG replication",
-  "authority": "SECONDARY_AI / PENDING_OR_PRELIMINARY",
-  "canonical_records_modified": false
+  "authority_requested": "SECONDARY_AI / PENDING_OR_PRELIMINARY",
+  "source_commit": "828949dc922939dc6874f7753571af3c8ba5e2bf",
+  "source_commit_pushed": true,
+  "source_ref": "https://github.com/gj3447/HSWM/blob/828949dc922939dc6874f7753571af3c8ba5e2bf/docs/operations/HSWM_KG_WORKSPACE_2026-09-22.md",
+  "workspace_bundle": {
+    "path": "ontology/development/HSWM_KG_WORKSPACE_2026-09-22.v1.json",
+    "sha256": "1341358b9bf34434fa2c68955e3c3067b241c4db9567d19b3bd48cc0cb71688e"
+  },
+  "prepared_payload": "publication-payload.v1.json",
+  "attempts": [
+    {
+      "operation": "relay_kg ontology_search",
+      "result": "CONNECTIVITY_TIMEOUT"
+    },
+    {
+      "operation": "native ontology_search",
+      "result": "CONNECTIVITY_TIMEOUT"
+    },
+    {
+      "operation": "relay_kg ontology_save_record",
+      "result": "CONNECTIVITY_TIMEOUT",
+      "request_shape": "Optional domain omitted after tool validation rejected its value."
+    }
+  ],
+  "error_summary": "The KG tools could not establish a Neo4j connection. No saved UID or immutable revision was returned. The live write and readback are not confirmed.",
+  "note_uid": null,
+  "immutable_revision": null,
+  "links": [
+    {
+      "relation": "ABOUT",
+      "target_uid": "sym:Concept:hswm",
+      "status": "NOT_ATTEMPTED_NO_SAVED_SOURCE_UID"
+    },
+    {
+      "relation": "REFERENCES",
+      "target_uid": "sym:Repository:hswm",
+      "status": "NOT_ATTEMPTED_NO_SAVED_SOURCE_UID"
+    },
+    {
+      "relation": "REFERENCES",
+      "target_uid": "sym:AbstractNode:hswm-knowledge-map-discovery-2026-09-13",
+      "status": "NOT_ATTEMPTED_NO_SAVED_SOURCE_UID"
+    },
+    {
+      "relation": "REFERENCES",
+      "target_uid": "sym:AbstractNode:hswm-jev-principles-2026-09-21",
+      "status": "NOT_ATTEMPTED_NO_SAVED_SOURCE_UID"
+    }
+  ],
+  "readback": "NOT_COMPLETED",
+  "canonical_records_modified": false,
+  "scientific_claims_promoted": false,
+  "private_raw_outputs_published": false,
+  "follow_up": "Retry the prepared payload after KG connectivity is restored, then record real note and relationship statuses. Local source-pinned KG, CLI and validation are already committed and pushed."
 }

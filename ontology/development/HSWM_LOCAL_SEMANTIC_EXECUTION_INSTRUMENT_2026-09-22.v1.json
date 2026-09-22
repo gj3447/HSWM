@@ -1,0 +1,902 @@
+{
+  "schema_version": "hswm-kg-bundle/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+  "status": "ENGINEERING_INSTRUMENT_ONLY",
+  "nonclaim": "NO_MODEL_RUN_NO_OBSERVED_OUTPUT_NO_E03_READINESS_NO_EFFICACY_OR_CR_FCL_PROMOTION",
+  "source_accessed_on": "2026-09-22",
+  "authority_boundary": "SECONDARY_AI instrument declaration only",
+  "artifact_bindings": [
+    {
+      "path": "src/hswm/effect-runtime/src/local-semantic-execution-domain.ts",
+      "sha256": "0db55e4557ebe5f4034d91b556d2c3a290726aef5f237742b3341ad81328c1b3"
+    },
+    {
+      "path": "tests/effect-runtime/local-semantic-execution-domain.test.ts",
+      "sha256": "f1e748e044f41bff77d9d3cdeef9e860e18f2b53878539837ab0e01b2f3684b1"
+    },
+    {
+      "path": "tests/research/local-semantic-execution-instrument.test.mts",
+      "sha256": "a8eba1971e5bb826513d615c5050d16cf56b6f598a40cb511848c007cd5bacca"
+    },
+    {
+      "path": "_research/local_semantic_execution_v1/runner.mts",
+      "sha256": "614324d5874d4c96148e7e15e4493126bba29fc9dc1debe7590b192092af9460"
+    },
+    {
+      "path": "_research/local_semantic_execution_v1/analyze.mts",
+      "sha256": "001f49ce679e4f5906304383f4b0bbf737b9d4fdbacc3b5b1cfc2ce29f8b72e1"
+    },
+    {
+      "path": "_research/local_semantic_execution_v1/protocol.v1.json",
+      "sha256": "52b3455f0322207900f1bcfcb9ea1158d772a0d4f7ab8e1861abf4283b0eeeb7"
+    },
+    {
+      "path": "_research/local_semantic_execution_v1/README.md",
+      "sha256": "8537f4451af459791c299be828f0aa1187dc3c12b4ea93f0e8611fa30dc6239b"
+    },
+    {
+      "path": "_research/local_semantic_execution_v1/launch.sh",
+      "sha256": "6aeb99c29293b9f4a26aca31bef7a6bb9977e1efc31148fa788021c6f884db55"
+    },
+    {
+      "path": "_research/local_semantic_execution_v1/graph.mts",
+      "sha256": "c298cc1e080bfa60403d66d4fb722758fb359135f0adafba7181f976d7466928"
+    },
+    {
+      "path": "docs/operations/artifacts/hswm_local_semantic_execution_2026-09-22/verification.v1.json",
+      "sha256": "8d1924c5138f36baee2dc4bd83cd22fa27995e4e18c20d43173e72b99648f664"
+    },
+    {
+      "path": "_research/jev_research_work_plan_2026-09-22/plan.v1.json",
+      "sha256": "94e054a30b198d772f7ab1800beefe96c2c1cf2bdae57755d76a505a432b7736"
+    },
+    {
+      "path": "ontology/development/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.v1.json",
+      "sha256": "3db347cee8941b375a23a467c29ed7091779092aa933320fc5c9a639d4d1d8a3"
+    },
+    {
+      "path": "ontology/development/HSWM_VALIDATION_GRAPH_2026-09-22.v1.json",
+      "sha256": "0c622ce457152760b0a9e42e5a682801512b7e1af949a2d297df9ed3fcff3051"
+    },
+    {
+      "path": "ontology/development/HSWM_JEV_PRINCIPLES_2026-09-21.v1.json",
+      "sha256": "18200d2fbfb9803a3ab9d50461ef5d72dfb0643f49f0d44bdc57544ebb242da7"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_jev_principles_2026-09-21/audit.v1.json",
+      "sha256": "00be273a1c4467627a2fc5cfb316dad74599c5692965c7650b04bce7936d1e92"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_jev_principles_2026-09-21/observations.v1.json",
+      "sha256": "6d2e587235986c632bf0b7cf5949d1f5d33d4267ae39267848900d812b401123"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 20,
+    "anchors": 4,
+    "relations": 25
+  },
+  "anchors": [
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-E01",
+      "name": "E01 E0/E1/E2 실행·파서 계약",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-E02",
+      "name": "E02 serving 반복성·분모·비용 recorder",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:WorkPackage:hswm-jev-plan-20260922-E03",
+      "name": "E03 oracle 국소 실행 census 판정",
+      "required_labels": [
+        "WorkPackage"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-validation-20260922-646c19373ac9e27e97",
+      "name": "LOCAL",
+      "required_labels": [
+        "Concept"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "labels": [
+        "Concept",
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Local semantic execution instrument",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_INSTRUMENT",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/local_semantic_execution_v1/protocol.v1.json",
+        "planned_requests": 384,
+        "case_population": "128_ORIGINAL_CASES_X_E0_E1_E2",
+        "e03_readiness": "NOT_READY",
+        "full_2784_status": "UNCHANGED_NOT_RUN",
+        "local_8001": "REFUSED_DOCUMENTED",
+        "dgx_ssh_5s": "TIMEOUT_DOCUMENTED",
+        "source_sha256": "52b3455f0322207900f1bcfcb9ea1158d772a0d4f7ab8e1861abf4283b0eeeb7"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-52455f5ba551341e01",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "src/hswm/effect-runtime/src/local-semantic-execution-domain.ts",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "src/hswm/effect-runtime/src/local-semantic-execution-domain.ts",
+        "source_path": "src/hswm/effect-runtime/src/local-semantic-execution-domain.ts",
+        "source_sha256": "0db55e4557ebe5f4034d91b556d2c3a290726aef5f237742b3341ad81328c1b3"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-6e199ee0374ec70656",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "tests/effect-runtime/local-semantic-execution-domain.test.ts",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "tests/effect-runtime/local-semantic-execution-domain.test.ts",
+        "source_path": "tests/effect-runtime/local-semantic-execution-domain.test.ts",
+        "source_sha256": "f1e748e044f41bff77d9d3cdeef9e860e18f2b53878539837ab0e01b2f3684b1"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-116d32e9ece2be98aa",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "tests/research/local-semantic-execution-instrument.test.mts",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "tests/research/local-semantic-execution-instrument.test.mts",
+        "source_path": "tests/research/local-semantic-execution-instrument.test.mts",
+        "source_sha256": "a8eba1971e5bb826513d615c5050d16cf56b6f598a40cb511848c007cd5bacca"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-24dcc96474b311f7bf",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "_research/local_semantic_execution_v1/runner.mts",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/local_semantic_execution_v1/runner.mts",
+        "source_path": "_research/local_semantic_execution_v1/runner.mts",
+        "source_sha256": "614324d5874d4c96148e7e15e4493126bba29fc9dc1debe7590b192092af9460"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-e781a541d718961ddd",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "_research/local_semantic_execution_v1/analyze.mts",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/local_semantic_execution_v1/analyze.mts",
+        "source_path": "_research/local_semantic_execution_v1/analyze.mts",
+        "source_sha256": "001f49ce679e4f5906304383f4b0bbf737b9d4fdbacc3b5b1cfc2ce29f8b72e1"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-3d7c71293c944a4ecf",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "_research/local_semantic_execution_v1/protocol.v1.json",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/local_semantic_execution_v1/protocol.v1.json",
+        "source_path": "_research/local_semantic_execution_v1/protocol.v1.json",
+        "source_sha256": "52b3455f0322207900f1bcfcb9ea1158d772a0d4f7ab8e1861abf4283b0eeeb7"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-facc15666be6461729",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "_research/local_semantic_execution_v1/README.md",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/local_semantic_execution_v1/README.md",
+        "source_path": "_research/local_semantic_execution_v1/README.md",
+        "source_sha256": "8537f4451af459791c299be828f0aa1187dc3c12b4ea93f0e8611fa30dc6239b"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-28e7b821aed84d2966",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "_research/local_semantic_execution_v1/launch.sh",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/local_semantic_execution_v1/launch.sh",
+        "source_path": "_research/local_semantic_execution_v1/launch.sh",
+        "source_sha256": "6aeb99c29293b9f4a26aca31bef7a6bb9977e1efc31148fa788021c6f884db55"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-496125e2c8f52d634c",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "_research/local_semantic_execution_v1/graph.mts",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/local_semantic_execution_v1/graph.mts",
+        "source_path": "_research/local_semantic_execution_v1/graph.mts",
+        "source_sha256": "c298cc1e080bfa60403d66d4fb722758fb359135f0adafba7181f976d7466928"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-2b753ee50e92c1c412",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "docs/operations/artifacts/hswm_local_semantic_execution_2026-09-22/verification.v1.json",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "docs/operations/artifacts/hswm_local_semantic_execution_2026-09-22/verification.v1.json",
+        "source_path": "docs/operations/artifacts/hswm_local_semantic_execution_2026-09-22/verification.v1.json",
+        "source_sha256": "8d1924c5138f36baee2dc4bd83cd22fa27995e4e18c20d43173e72b99648f664"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-eb963abda04a0a9984",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "_research/jev_research_work_plan_2026-09-22/plan.v1.json",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/jev_research_work_plan_2026-09-22/plan.v1.json",
+        "source_path": "_research/jev_research_work_plan_2026-09-22/plan.v1.json",
+        "source_sha256": "94e054a30b198d772f7ab1800beefe96c2c1cf2bdae57755d76a505a432b7736"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-3553258f21103433a6",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "ontology/development/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.v1.json",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "ontology/development/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.v1.json",
+        "source_path": "ontology/development/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.v1.json",
+        "source_sha256": "3db347cee8941b375a23a467c29ed7091779092aa933320fc5c9a639d4d1d8a3"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-cb6ddd727dae7de04d",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "ontology/development/HSWM_VALIDATION_GRAPH_2026-09-22.v1.json",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "ontology/development/HSWM_VALIDATION_GRAPH_2026-09-22.v1.json",
+        "source_path": "ontology/development/HSWM_VALIDATION_GRAPH_2026-09-22.v1.json",
+        "source_sha256": "0c622ce457152760b0a9e42e5a682801512b7e1af949a2d297df9ed3fcff3051"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-327f6d899e4c2c6eff",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "ontology/development/HSWM_JEV_PRINCIPLES_2026-09-21.v1.json",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "ontology/development/HSWM_JEV_PRINCIPLES_2026-09-21.v1.json",
+        "source_path": "ontology/development/HSWM_JEV_PRINCIPLES_2026-09-21.v1.json",
+        "source_sha256": "18200d2fbfb9803a3ab9d50461ef5d72dfb0643f49f0d44bdc57544ebb242da7"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-62a144510f70f3cbfa",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "docs/research/artifacts/hswm_jev_principles_2026-09-21/audit.v1.json",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "docs/research/artifacts/hswm_jev_principles_2026-09-21/audit.v1.json",
+        "source_path": "docs/research/artifacts/hswm_jev_principles_2026-09-21/audit.v1.json",
+        "source_sha256": "00be273a1c4467627a2fc5cfb316dad74599c5692965c7650b04bce7936d1e92"
+      }
+    },
+    {
+      "uid": "sym:Reference:hswm-local-exec-20260922-6d4ac66d380ba403f5",
+      "labels": [
+        "Reference"
+      ],
+      "properties": {
+        "name": "docs/research/artifacts/hswm_jev_principles_2026-09-21/observations.v1.json",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "ENGINEERING_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "docs/research/artifacts/hswm_jev_principles_2026-09-21/observations.v1.json",
+        "source_path": "docs/research/artifacts/hswm_jev_principles_2026-09-21/observations.v1.json",
+        "source_sha256": "6d2e587235986c632bf0b7cf5949d1f5d33d4267ae39267848900d812b401123"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-local-exec-20260922-e7e7dd241b31082d32",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "E0/E1/E2 execution and parser contract",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "PARTIAL_READINESS",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/local_semantic_execution_v1/protocol.v1.json",
+        "task_id": "E01",
+        "readiness": "PARTIAL_INSTRUMENT_PREPARED_MODEL_NOT_RUN",
+        "source_sha256": "52b3455f0322207900f1bcfcb9ea1158d772a0d4f7ab8e1861abf4283b0eeeb7"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-local-exec-20260922-d134709e21f9215115",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "serving denominator and cost recorder",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "PARTIAL_READINESS",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "NOT_RUN",
+        "source_ref": "_research/local_semantic_execution_v1/protocol.v1.json",
+        "task_id": "E02",
+        "readiness": "PARTIAL_INSTRUMENT_PREPARED_MODEL_NOT_RUN",
+        "source_sha256": "52b3455f0322207900f1bcfcb9ea1158d772a0d4f7ab8e1861abf4283b0eeeb7"
+      }
+    },
+    {
+      "uid": "sym:Claim:hswm-local-exec-20260922-b7f11f0af9180ad02a",
+      "labels": [
+        "Claim"
+      ],
+      "properties": {
+        "name": "Prior 27/48 oracle direct and zero semantic-revision delta",
+        "description": "Engineering instrument declaration only; no observed model output or efficacy result.",
+        "projection_nonclaim": "ENGINEERING_INSTRUMENT_ONLY_NOT_OBSERVED_EVIDENCE_OR_EFFICACY",
+        "standard_graph_role": "INHERITED_NEGATIVE_EVIDENCE",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_kind_v1": "CONCEPT",
+        "ontology_domain_v1": "ENGINEERING",
+        "ontology_plane_v1": "RESEARCH_PROJECTION",
+        "ontology_canonical_scope_v1": "PENDING",
+        "ontology_epistemic_state_v1": "PENDING",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_review_required_v1": true,
+        "ontology_sensitivity_v1": "NORMAL",
+        "responsibility_owner": "local_semantic_execution_instrument_2026_09_22",
+        "claim_boundary": "ENGINEERING_INSTRUMENT_ONLY",
+        "cr_fcl_promotion": false,
+        "status": "INHERITED_NOT_NEW_MEASUREMENT",
+        "source_ref": "docs/research/artifacts/hswm_jev_principles_2026-09-21/audit.v1.json",
+        "oracle_direct": "27/48",
+        "semantic_revision_delta": "0",
+        "source_sha256": "00be273a1c4467627a2fc5cfb316dad74599c5692965c7650b04bce7936d1e92"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-52455f5ba551341e01",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-6e199ee0374ec70656",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-116d32e9ece2be98aa",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-24dcc96474b311f7bf",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-e781a541d718961ddd",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-3d7c71293c944a4ecf",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-facc15666be6461729",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-28e7b821aed84d2966",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-496125e2c8f52d634c",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-2b753ee50e92c1c412",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-eb963abda04a0a9984",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-3553258f21103433a6",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-cb6ddd727dae7de04d",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-327f6d899e4c2c6eff",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-62a144510f70f3cbfa",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:Reference:hswm-local-exec-20260922-6d4ac66d380ba403f5",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-E01",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-E02",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-E03",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "RELATES_TO",
+      "to_uid": "sym:Concept:hswm-validation-20260922-646c19373ac9e27e97",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-local-exec-20260922-e7e7dd241b31082d32",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-local-exec-20260922-e7e7dd241b31082d32",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-E01",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Concept:hswm-local-exec-20260922-d134709e21f9215115",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-local-exec-20260922-d134709e21f9215115",
+      "type": "ABOUT",
+      "to_uid": "sym:WorkPackage:hswm-jev-plan-20260922-E02",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-local-semantic-execution-instrument-2026-09-22",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:Claim:hswm-local-exec-20260922-b7f11f0af9180ad02a",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ENGINEERING_INSTRUMENT_ONLY",
+      "status": "NOT_RUN"
+    }
+  ]
+}

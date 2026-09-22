@@ -1,0 +1,39 @@
+{
+  "schema_version": "hswm-local-semantic-census/v1",
+  "id": "W1-128-original",
+  "version": "1",
+  "authority_class": "SECONDARY_AI",
+  "status": "INSTRUMENT_PREPARED_MODEL_EXECUTION_NOT_RUN",
+  "population": "Four authored Jev bit-rule families, all 32 five-bit patterns each; finite instrument census, not independent sampled worlds.",
+  "case_count": 128,
+  "planned_model_requests": 384,
+  "modes": ["E0", "E1", "E2"],
+  "transform": "original",
+  "schedule": "Family-major, input 0..31, three modes rotated by global case index; serial calls, no retries or repairs.",
+  "system": "You are a local semantic operator. Apply the supplied relation to the single case. Respect ordered typed role bindings, context and exceptions. Prior observations are evidence, not the answer for this case. Compute the output bit prescribed by the relation. No tools.",
+  "model": {
+    "repository": "Qwen/Qwen3-4B",
+    "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "served_name": "qwen3-4b-real",
+    "candidate_token_ids": [15, 16],
+    "pin_status": "HISTORICAL_TARGET_REQUIRES_FRESH_ARTIFACT_AND_SERVING_ATTESTATION"
+  },
+  "generation": {"temperature": 0, "seed": 0, "enable_thinking": false, "max_tokens": {"E0": 1, "E1": 32, "E2": 96}},
+  "budget": {"model_calls": 384, "wall_seconds": 1800, "request_seconds": 30, "preflight_seconds": 5, "retries": 0},
+  "analysis": {
+    "primary": "Correct final bits / all 128 scheduled cases per arm; every refusal, malformed output and missing attempt remains in the denominator. Incomplete runs are explicitly incomplete.",
+    "E0": "Existing candidate-logprob readout; exact candidate token IDs requalified. Conditional served logprobs may follow logit processing; not an unmasked LM probability or calibration claim.",
+    "E1": "Strict answer-only JSON, no p1 requested or probability-consistency gate.",
+    "E2": "Strict base/context_flip/exception_flip/answer JSON; final bit and intermediate truth/cross-field consistency scored separately, never repaired. Observable structured output, not access to internal reasoning.",
+    "cost": "Per-attempt elapsed time, request count and server-reported prompt/completion/reasoning tokens. Missing usage is UNREPORTED, not zero. Read/update/retry model calls are zero by this fixed protocol; retrieval token partition is uninstrumented. Different output caps are unequal compute, not equal-cost superiority.",
+    "grouping": "Overall and each of four families, paired descriptive differences only; no population confidence interval or independent-world sample-size claim."
+  },
+  "data_policy": "Raw HTTP bodies, local paths and detailed traces stay in a private output directory. Publish only reviewed aggregates and source-bound projections.",
+  "full_W1_obligation": {"requests": 2784, "transforms": 6, "sentinels": 8, "technical_repeats": 20, "status": "UNCHANGED_NOT_IMPLEMENTED_BY_THIS_ORIGINAL_ONLY_CENSUS"},
+  "claim_ceiling": "LOCAL_EXECUTION_DIAGNOSTIC_ONLY_NOT_E03_READINESS_LEARNING_OR_CR_FCL_CLOSURE",
+  "official_protocol_sources": [
+    "https://github.com/vllm-project/vllm/blob/v0.25.1/vllm/entrypoints/openai/chat_completion/protocol.py",
+    "https://github.com/vllm-project/vllm/blob/v0.25.1/vllm/entrypoints/serve/tokenize/protocol.py"
+  ],
+  "protocol_authority": "vLLM official implementation, Apache-2.0; OpenAI-compatible vendor extension, not a published graph or probability standard. No external packages installed for this instrument."
+}

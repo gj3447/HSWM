@@ -1,0 +1,45 @@
+{
+  "schema_version": "hswm-engineering-verification/v1",
+  "date": "2026-09-22",
+  "authority_class": "SECONDARY_AI",
+  "status": "OFFLINE_INSTRUMENT_QUALIFIED_MODEL_EXECUTION_NOT_RUN",
+  "claim_ceiling": "ENGINEERING_CHECKS_NOT_MODEL_FIDELITY_LEARNING_OR_E03_CR_FCL_CLOSURE",
+  "new_real_model_requests": 0,
+  "prepared_scope": {"cases": 128, "modes": ["E0", "E1", "E2"], "planned_requests": 384, "transform": "original"},
+  "full_W1_requests_unchanged": 2784,
+  "checks": [
+    {"command": "npm --prefix src/hswm/effect-runtime run build", "status": "PASS"},
+    {"command": "npm --prefix src/hswm/effect-runtime run check", "status": "PASS"},
+    {"command": "npm --prefix src/hswm/effect-runtime run test -- ../../../tests/effect-runtime/local-semantic-execution-domain.test.ts --maxWorkers=1", "status": "PASS", "tests": 5},
+    {"command": "node --test tests/research/local-semantic-execution-instrument.test.mts", "status": "PASS", "tests": 3, "evidence_kind": "FIXTURE_ONLY"},
+    {"command": "hswm-dev hswm run --focus runtime", "status": "PASS", "tests": 55, "selected_relation": "relation:runtime-focused", "episode_id": "1e93c55f-b5cb-41c7-b5a7-be39ed2e1bfb", "limitation": "Selected adaptive regression tests do not exercise the new W1 instrument; focused checks were run separately."},
+    {"command": "uv run python scripts/compile_portable_markdown_math.py README.md INDEX.md docs/canon docs/research ontology", "status": "PORTABLE_MATH_COMPILED"}
+  ],
+  "corrected_qualification_failures": [
+    "Strict TypeScript build caught unused schedule parameter and index-signature property access; fixed without suppressing diagnostics.",
+    "Full type check caught direct .mts import in the test; NodeNext .mjs mapping preserves comparison to the actual historical fixture.",
+    "Fixture logprobs initially exceeded unit probability mass; corrected fixture and strengthened exact valid/invalid counts.",
+    "Independent review found completion status did not require terminal receipt; analyzer now verifies terminal receipt and tests its absence/mismatch."
+  ],
+  "execution_access": {
+    "current_host_model_port_8001": "CONNECTION_REFUSED",
+    "local_hswm_run": "NOT_FOUND",
+    "documented_dgx_ssh": "BATCHMODE_5_SECOND_CONNECTION_TIMEOUT_BEFORE_AUTHENTICATION",
+    "remote_model_availability": "UNVERIFIED",
+    "server_or_model_downloads_or_launches": 0
+  },
+  "environment": {"actual_node": "v24.20.0", "declared_node": "24.13.0", "effect": "3.22.1", "installed_hf_cli": "1.29.0"},
+  "hub_metadata": {
+    "command": "hf models info Qwen/Qwen3-4B --revision 1cfa9a7208912126459214e8b04321603b3df60c --expand sha,cardData --format json",
+    "returned_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "returned_card_data": {},
+    "claim": "HUB_REVISION_ONLY_NOT_LICENSE_LOCAL_TENSORS_OR_LOADED_ENGINE"
+  },
+  "limitations": [
+    "No canonical graph learning loop or independent observed validation record is created by this fixed local-frame instrument.",
+    "No six-transform or technical-repeat block; E03 remains unassessed.",
+    "Future serving attestation hashes local artifacts but live-engine association and shard-set completeness are operator declarations; mid-run reload is not independently detected.",
+    "Per-run pins cover source, compiled modules, lockfile and actual Node/Effect versions, not every installed dependency byte.",
+    "Raw trace and private serving paths are excluded from the public KG."
+  ]
+}

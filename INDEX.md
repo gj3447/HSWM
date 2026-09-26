@@ -1,5 +1,9 @@
 # HSWM — public repository index
 
+현재 [연구 작업환경](docs/operations/HSWM_RESEARCH_WORKFLOW.md)은 관련 자료 확인 → 변경 →
+필요한 검사 → Git 기록을 기본으로 한다. RDF·SHACL·SPARQL·PROV 기반 작업과 주제별
+참조를 안내하며, 아래 날짜별 기록은 당시 출처와 재현 정보를 보존한다.
+
 2026-09-22 [다섯 검증의 실험 기록 그래프](docs/operations/HSWM_VALIDATION_GRAPH_2026-09-22.md)는
 국소 실행·outcome 학습·작은 읽기·공동 출력/합성·Hyperon 비교의 기록 계약을 연결한다.
 `validation-contracts`에서 출처와 미평가 작업을 조회하며, SHACL/SPARQL 구조 검사와

@@ -2,9 +2,9 @@
 
 Thanks for your interest in contributing!
 
-For the current native TypeScript/Effect CLI, locked Python and graph tooling,
-and local verification commands, see the
-[development workflow guide](docs/operations/HSWM_DEVELOPMENT_WORKFLOW_2026-09-09.md).
+Start with the [research workflow](docs/operations/HSWM_RESEARCH_WORKFLOW.md)
+for setup, standard graph tooling, and focused checks. Ordinary changes use
+Git and relevant validation; adaptive development feedback is optional.
 
 ## Contributor License Agreement (required)
 

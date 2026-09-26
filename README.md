@@ -3,6 +3,9 @@
 **Hypergraph Semantic Weight Map**<br>
 관계를 실행하고, 결과로 관계를 바꾸는 토큰 기반 하이퍼그래프 신경망을 연구합니다.
 
+개발 시작: [연구 작업환경](docs/operations/HSWM_RESEARCH_WORKFLOW.md) — 관련 자료 확인,
+변경, 필요한 검사, Git 기록. 표준 그래프 도구를 사용하며 개발 episode·feedback은 선택 사항입니다.
+
 **기본 개념:** LLM을 기본 계산 단위로 삼고, 하이퍼그래프 Semantic Weight로 작동하여
 전체가 하나의 거대한 AI를 이루는 하이퍼그래프 신경망입니다.
 [사용자 정체성 정의와 KG](docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md)에 기록합니다.
@@ -144,20 +147,21 @@ cd HSWM
 npm --prefix src/hswm/effect-runtime ci --ignore-scripts
 npm --prefix src/hswm/effect-runtime run build
 export PATH="$PWD/src/hswm/effect-runtime/bin:$PATH"
-hswm-dev hswm plan --focus runtime
-hswm-dev hswm run --focus runtime --task '네이티브 TS 런타임 회귀 검사'
-hswm-dev hswm status
+hswm-workspace show identity
+hswm-workspace query identity basic-identity
+hswm-workspace validate identity
 ```
 
-이 예제는 네이티브 TS 런타임 검사를 실행합니다. 결과를 검토한 뒤 출력된 episode ID로
-`hswm-dev hswm feedback --episode <ID> --success true --source 'agent(codex): 구체적인 유용성 판단'`을
-기록합니다. 선택·결과·계수는 `.hswm-local/projects/`의 SQLite에 저장되고 다음 호출에서 이어집니다.
-로컬 상태와 출력은 Git에서 제외합니다. 서버나 별도 그래프 DB 설치는 기본 실행에 필요하지 않습니다.
+이 예제는 기존 정체성 자료를 조회하고 그래프 구조를 검증합니다.
+변경 검사는 [작업별 안내](docs/operations/HSWM_RESEARCH_WORKFLOW.md)를 따라 직접 실행합니다.
+적응형 검사 선택을 써보려면 `hswm-dev hswm plan/run/status/feedback`을 선택적으로 사용합니다.
+그 로컬 상태와 출력은 Git에서 제외합니다. 서버나 별도 그래프 DB 설치는 기본 실행에 필요하지 않습니다.
 LLM manifest, 기존 Python 이력 호환 범위와 함수형 경계는
 [네이티브 런타임 안내](docs/operations/HSWM_NATIVE_EFFECT_ADAPTIVE_RUNTIME_2026-09-08.md)를 참조합니다.
 
 | CLI | 용도 |
 | --- | --- |
+| `hswm-workspace` | 연구 자료·출처 탐색, SPARQL 조회와 SHACL 구조 검사 |
 | `hswm-task` | 조건 해석·후보 생성·관측 제안 preview |
 | `hswm-live` | manifest 기반 실행, 학습, 상태 조회, 피드백, 관계 복원 |
 | `hswm-dev` | 메이플리니지·버엑시·수풀림 개발 profile과 피드백 이력 |
@@ -170,12 +174,13 @@ USL 연결의 구현 범위와 부족한 점은
 
 ## HSWM 자체 · 게임 · 수풀림 · Reluvator에서 사용하기
 
-HSWM 자체 개발도 같은 CLI를 사용합니다. 변경 분야별 검사를 선택·실행하고 명시적 피드백을
-지속 상태에 기록합니다. [자체 개발 지침](docs/operations/HSWM_SELF_DEVELOPMENT_2026-09-08.md)은
+HSWM 자체 개발의 기본 경로는 직접 npm/uv 검사와 Git 기록입니다. 적응형 개발 도구를
+사용할 때는 변경 분야별 검사와 명시적 피드백을 지속 상태에 기록할 수 있습니다.
+[자체 개발 도구 안내](docs/operations/HSWM_SELF_DEVELOPMENT_2026-09-08.md)는
 `runtime`, `usl`, `ontology`, `docs` focus와 사용자·에이전트 피드백 구분을 설명합니다.
 
 ```bash
-# HSWM 루트
+# HSWM 루트; 적응형 개발 기록을 사용할 때 선택적으로 실행
 src/hswm/effect-runtime/bin/hswm-dev hswm run --focus ontology --task 'KG 변경사항 확인'
 ```
 

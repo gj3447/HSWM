@@ -14,14 +14,34 @@ import { PosixFileSystem } from "./effect-posix-filesystem.js"
 const utf8 = new TextDecoder()
 const bytes = new TextEncoder()
 const sha256 = (value: Uint8Array): string => createHash("sha256").update(value).digest("hex")
-const sourceOrder = Object.freeze([
+const threePhilosophiesSourceOrder = Object.freeze([
   "HSWMSemanticWeightDefinition", "HSWMHypergraphRepresentation", "HSWMLocalEnsembleGain",
   "HSWMOutcomeLearningGain", "HSWMSemanticQuotient", "HSWMConstructiveRelationSynthesis",
   "HSWMCorrelatedReliability", "HSWMNoisyFeedback", "HSWMRecursiveLearningComposition",
   "HSWMGeneratedLearningBridge", "HSWMMultiscaleSimulation", "HSWMHypergraphCostConditions",
   "HSWMSemanticSoftware"
 ] as const)
-const newSources = Object.freeze(["HSWMMultiscaleSimulation", "HSWMHypergraphCostConditions", "HSWMSemanticSoftware"] as const)
+const threePhilosophiesAuditedSources = Object.freeze(["HSWMMultiscaleSimulation", "HSWMHypergraphCostConditions", "HSWMSemanticSoftware"] as const)
+const integratedHswmSourceOrder = Object.freeze([...threePhilosophiesSourceOrder,
+  "HSWMLLMSemanticGraph", "HSWMIntegratedClosedLoop", "HSWMClosedLoopEvaluation"] as const)
+const integratedHswmAuditedSources = Object.freeze([...threePhilosophiesAuditedSources,
+  "HSWMIntegratedClosedLoop", "HSWMClosedLoopEvaluation"] as const)
+type ProfileName = "three-philosophies" | "integrated-hswm"
+interface ProofProfile {
+  readonly name: ProfileName
+  readonly sourceOrder: ReadonlyArray<string>
+  readonly auditedSources: ReadonlyArray<string>
+  readonly schemaVersion: string
+  readonly claimCeiling: string
+}
+const profiles: Readonly<Record<ProfileName, ProofProfile>> = Object.freeze({
+  "three-philosophies": Object.freeze({ name: "three-philosophies", sourceOrder: threePhilosophiesSourceOrder,
+    auditedSources: threePhilosophiesAuditedSources, schemaVersion: "hswm-three-philosophies-lean-verification/v1",
+    claimCeiling: "FINITE_CONDITIONAL_FORMAL_WITNESSES_NOT_UNIVERSAL_MINIMUM_COST_OUTERMOST_SIMULATOR_CHU_REALITY_LLM_FIDELITY_OR_HSWM_EFFICACY" }),
+  "integrated-hswm": Object.freeze({ name: "integrated-hswm", sourceOrder: integratedHswmSourceOrder,
+    auditedSources: integratedHswmAuditedSources, schemaVersion: "hswm-integrated-hswm-lean-verification/v1",
+    claimCeiling: "CONDITIONAL_FINITE_CANONICAL_CLOSED_LOOP_NOT_FULL_HSWM_OR_REAL_LLM" })
+})
 const permittedAxioms = Object.freeze(["propext", "Quot.sound", "Classical.choice"] as const)
 const stripLeanComments = (source: string): string => source.replace(/\/\-[\s\S]*?\-\//g, "").replace(/--[^\n]*/g, "")
 const hasForbiddenProofShortcut = (source: string): boolean => {
@@ -41,19 +61,23 @@ export class SemanticPhilosophyProofHost extends Context.Tag("hswm/SemanticPhilo
   readonly environment: Readonly<Record<string, string>>
 }>() {}
 
-interface Options { readonly output: string; readonly lean: string | null }
+interface Options { readonly output: string; readonly lean: string | null; readonly profile: ProofProfile }
 const parse = (argv: ReadonlyArray<string>, cwd: string): Effect.Effect<Options | null, SemanticPhilosophyProofError> => {
   if (argv.length === 1 && argv[0] === "--help") return Effect.succeed(null)
-  if (argv.length !== 2 && argv.length !== 4) return Effect.fail(fail("CLI_INVALID", "Expected --output NEW_DIRECTORY [--lean ABSOLUTE_PATH]"))
+  if (argv.length !== 2 && argv.length !== 4 && argv.length !== 6) return Effect.fail(fail("CLI_INVALID", "Expected --output NEW_DIRECTORY [--profile three-philosophies|integrated-hswm] [--lean ABSOLUTE_PATH]"))
   const pairs = Array.from({ length: argv.length / 2 }, (_, index) => [argv[index * 2], argv[index * 2 + 1]] as const)
   const values = Object.fromEntries(pairs)
-  if (pairs.some(([key, value]) => !["--output", "--lean"].includes(key ?? "") || !value || value.startsWith("--")) ||
+  if (pairs.some(([key, value]) => !["--output", "--lean", "--profile"].includes(key ?? "") || !value || value.startsWith("--")) ||
       pairs.length !== new Set(pairs.map(([key]) => key)).size || typeof values["--output"] !== "string")
     return Effect.fail(fail("CLI_INVALID", "Invalid or duplicate CLI option"))
   const suppliedLean = values["--lean"]
   if (suppliedLean !== undefined && (!isAbsolute(suppliedLean) || suppliedLean.includes("\0")))
     return Effect.fail(fail("CLI_INVALID", "--lean must be an absolute regular-file path"))
-  return Effect.succeed({ output: resolve(cwd, values["--output"]), lean: suppliedLean ?? null })
+  const profileName = values["--profile"] ?? "three-philosophies"
+  if (profileName !== "three-philosophies" && profileName !== "integrated-hswm")
+    return Effect.fail(fail("CLI_INVALID", "--profile must be three-philosophies or integrated-hswm"))
+  const profile = profileName === "integrated-hswm" ? profiles["integrated-hswm"] : profiles["three-philosophies"]
+  return Effect.succeed({ output: resolve(cwd, values["--output"]), lean: suppliedLean ?? null, profile })
 }
 
 const read = (path: string, operation: string) => PosixFileSystem.pipe(Effect.flatMap(fs =>
@@ -116,7 +140,7 @@ export const runSemanticPhilosophyProof = (options: Options) => Effect.gen(funct
   const runnerBefore = yield* read(runnerPath, "semantic-philosophy-runner-before")
   const sourcesBefore = new Map<string, string>()
   const sourceRecords: Array<Record<string, unknown>> = []
-  for (const moduleName of sourceOrder) {
+  for (const moduleName of options.profile.sourceOrder) {
     const relativePath = `formal/${moduleName}.lean`, sourcePath = join(host.repository, relativePath)
     const before = yield* read(sourcePath, "semantic-philosophy-source-before")
     sourcesBefore.set(relativePath, sha256(before.bytes))
@@ -127,7 +151,7 @@ export const runSemanticPhilosophyProof = (options: Options) => Effect.gen(funct
       [lean, "--trust=0", "-o", outputPath, sourcePath], formal, freshEnvironment))
     const after = yield* read(sourcePath, "semantic-philosophy-source-after")
     if (sha256(before.bytes) !== sha256(after.bytes)) return yield* Effect.fail(fail("SOURCE_CHANGED", `Proof source changed while compiling: ${relativePath}`))
-    const isNewSource = newSources.includes(moduleName as typeof newSources[number])
+    const isNewSource = options.profile.auditedSources.includes(moduleName)
     const publicTheorems = isNewSource ? theoremNames(source) : []
     const namespace = namespaceName(source)
     if (isNewSource && (namespace === null || publicTheorems.length === 0))
@@ -147,26 +171,27 @@ export const runSemanticPhilosophyProof = (options: Options) => Effect.gen(funct
       named_theorem_count: publicTheorems.length, named_theorems: qualified, theorem_axioms: theoremAxioms, axioms: axiomList,
       audit_stdout_sha256: audit === null ? null : sha256(audit.stdout), audit_stderr_sha256: audit === null ? null : sha256(audit.stderr) }))
   }
-  yield* Effect.forEach(sourceOrder, moduleName => Effect.gen(function* () {
+  yield* Effect.forEach(options.profile.sourceOrder, moduleName => Effect.gen(function* () {
     const relativePath = `formal/${moduleName}.lean`, current = yield* read(join(host.repository, relativePath), "semantic-philosophy-final-rebind")
     if (sha256(current.bytes) !== sourcesBefore.get(relativePath)) return yield* Effect.fail(fail("SOURCE_CHANGED", `Proof source changed before final report: ${relativePath}`))
   }), { discard: true })
   const runnerAfter = yield* read(runnerPath, "semantic-philosophy-runner-after")
   if (sha256(runnerBefore.bytes) !== sha256(runnerAfter.bytes)) return yield* Effect.fail(fail("SOURCE_CHANGED", "Proof audit runner changed during execution"))
-  const report = Object.freeze({ schema_version: "hswm-three-philosophies-lean-verification/v1", recorded_at: new Date().toISOString(),
-    status: "EXACT_SOURCE_KERNEL_CHECKED", claim_ceiling: "FINITE_CONDITIONAL_FORMAL_WITNESSES_NOT_UNIVERSAL_MINIMUM_COST_OUTERMOST_SIMULATOR_CHU_REALITY_LLM_FIDELITY_OR_HSWM_EFFICACY",
+  const report = Object.freeze({ schema_version: options.profile.schemaVersion, profile: options.profile.name, recorded_at: new Date().toISOString(),
+    status: "EXACT_SOURCE_KERNEL_CHECKED", claim_ceiling: options.profile.claimCeiling,
     toolchain: { name: decoded.toolchain.name, version_output: versionText, source_commit: decoded.toolchain.source_commit,
       lean_binary_sha256: sha256(leanBytes.bytes), lean_path: lean, pin_path: decoded.toolchain.pin_path, pin_sha256: sha256(pin.bytes),
       resolved_by: options.lean === null ? "lake env which lean" : "explicit --lean", execution_binary: lean,
       lean_path_entries: [compiled, join(leanRoot, "src/lean/Std")] },
-    compile_order: sourceOrder, source_records: sourceRecords, allowed_axioms: [...permittedAxioms].sort(),
+    compile_order: options.profile.sourceOrder, audited_sources: options.profile.auditedSources, source_records: sourceRecords, allowed_axioms: [...permittedAxioms].sort(),
     runner_source: { path: "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts", sha256: sha256(runnerBefore.bytes) },
+    auditor_interface: "ADDITIVE_PROFILE_EXTENSION_SUPERSEDES_PRIOR_PRIVATE_AUDITOR_INTERFACE_WITHOUT_MUTATING_HISTORICAL_RECEIPTS",
     statement_semantics_validated: false, new_dependencies_installed: false })
   yield* writeJson(join(options.output, "lean-verification.v1.json"), report)
   return `${JSON.stringify({ output: options.output, status: report.status, sources: sourceRecords.length, claimCeiling: report.claim_ceiling })}\n`
 }).pipe(Effect.catchAll(error => Effect.fail(error)))
 
-const usage = "Usage: semantic-philosophy-proof-process --output NEW_PRIVATE_DIRECTORY [--lean ABSOLUTE_PATH]\n"
+const usage = "Usage: semantic-philosophy-proof-process --output NEW_PRIVATE_DIRECTORY [--profile three-philosophies|integrated-hswm] [--lean ABSOLUTE_PATH]\n"
 export const semanticPhilosophyProofCli = (argv: ReadonlyArray<string>) => Effect.gen(function* () {
   const options = yield* parse(argv, process.cwd())
   if (options === null) return usage

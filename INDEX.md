@@ -785,6 +785,11 @@ M = Map의 실행·학습 보존, 역할 있는 관계의 조건부 표현 비�
 의미 프로그램의 계산된 수정·유한 점수 향상을 기계 검증한다. 사용자 철학 원문과
 이 작은 수학적 번역의 범위를 구별하며 실제 LLM 효능이나 전체 CHU를 증명하지 않는다.
 
+이어진 [통합 폐루프 증명](docs/research/HSWM_INTEGRATED_CLOSED_LOOP_PROOF_2026-09-27.md)은
+문자열 정본 관계와 실행 프로그램을 연결하고, 실제 같은 Step/Learn 모형에서 수정·재실행과
+학습 입력에 겹치지 않는 유한 평가의 향상을 보인다. 같은 학습 기록에 합치하면서 미관측
+영역에서는 악화되는 대안 세계도 증명하므로 전체 HSWM·현실 일반화의 증명으로 확대하지 않는다.
+
 2026-08-20에 사용자는 **Hypergraph Semantic Weight Map 자체와 LLM token으로 작동하는 거대
 hypergraph 학습구조**를 최우선 중심으로 다시 고정했다. 당시 secondary analysis는 본체를
 `token event → sparse role-aware n-ary activation → LLM function cell → external outcome

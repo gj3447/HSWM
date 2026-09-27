@@ -1,0 +1,926 @@
+{
+  "schema_version": "hswm-integrated-hswm-lean-verification/v1",
+  "profile": "integrated-hswm",
+  "recorded_at": "2026-09-27T15:41:45.839Z",
+  "status": "EXACT_SOURCE_KERNEL_CHECKED",
+  "claim_ceiling": "CONDITIONAL_FINITE_CANONICAL_CLOSED_LOOP_NOT_FULL_HSWM_OR_REAL_LLM",
+  "toolchain": {
+    "name": "leanprover/lean4:v4.32.1",
+    "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+    "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+    "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "pin_path": "formal/lean-toolchain",
+    "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+    "resolved_by": "lake env which lean",
+    "execution_binary_same_as_validated": true,
+    "import_path_policy": "FRESH_PRIVATE_OLEAN_DIRECTORY_PLUS_PINNED_TOOLCHAIN_STD"
+  },
+  "compile_order": [
+    "HSWMSemanticWeightDefinition",
+    "HSWMHypergraphRepresentation",
+    "HSWMLocalEnsembleGain",
+    "HSWMOutcomeLearningGain",
+    "HSWMSemanticQuotient",
+    "HSWMConstructiveRelationSynthesis",
+    "HSWMCorrelatedReliability",
+    "HSWMNoisyFeedback",
+    "HSWMRecursiveLearningComposition",
+    "HSWMGeneratedLearningBridge",
+    "HSWMMultiscaleSimulation",
+    "HSWMHypergraphCostConditions",
+    "HSWMSemanticSoftware",
+    "HSWMLLMSemanticGraph",
+    "HSWMIntegratedClosedLoop",
+    "HSWMClosedLoopEvaluation"
+  ],
+  "audited_sources": [
+    "HSWMMultiscaleSimulation",
+    "HSWMHypergraphCostConditions",
+    "HSWMSemanticSoftware",
+    "HSWMIntegratedClosedLoop",
+    "HSWMClosedLoopEvaluation"
+  ],
+  "source_records": [
+    {
+      "path": "formal/HSWMSemanticWeightDefinition.lean",
+      "sha256": "4173e860743f321c3ee87f6d48ef0570eba3f412d4ddca5ab4ff070e5d145ba5",
+      "byteLength": 10246,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 0,
+      "named_theorems": [],
+      "theorem_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/HSWMHypergraphRepresentation.lean",
+      "sha256": "4025a678ce0686ac9bb49b3f4f413ca9650869e897c4d33cc595ac2897cda293",
+      "byteLength": 10808,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 0,
+      "named_theorems": [],
+      "theorem_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/HSWMLocalEnsembleGain.lean",
+      "sha256": "e0166cd149f8bf20ce908d4b3f7f60537dd392baa99d85acb733e57c346f7bb8",
+      "byteLength": 8251,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 0,
+      "named_theorems": [],
+      "theorem_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/HSWMOutcomeLearningGain.lean",
+      "sha256": "625c1046dc991edf035c4b9f42995971dfc9e6b161f35f3ab868eb3f67cb7054",
+      "byteLength": 10532,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 0,
+      "named_theorems": [],
+      "theorem_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/HSWMSemanticQuotient.lean",
+      "sha256": "8dab893fb049284cbfe7b2cffb5abd8a11b6396dfe1422a89a823f41b17a6f52",
+      "byteLength": 11389,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 0,
+      "named_theorems": [],
+      "theorem_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/HSWMConstructiveRelationSynthesis.lean",
+      "sha256": "19c2c246b722f4f89810fb47f34195df7754ee5472e1b8556723aa682b01ddd9",
+      "byteLength": 12140,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 0,
+      "named_theorems": [],
+      "theorem_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/HSWMCorrelatedReliability.lean",
+      "sha256": "12babc171ab65fee19d09e0abff070bf7c9035fe4966552a0f80a5f76f7920d8",
+      "byteLength": 8969,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 0,
+      "named_theorems": [],
+      "theorem_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/HSWMNoisyFeedback.lean",
+      "sha256": "113b7d1faf400dcf03965f8087c447ebef59409fa4d0be91607ec0a19cb83bcc",
+      "byteLength": 6235,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 0,
+      "named_theorems": [],
+      "theorem_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/HSWMRecursiveLearningComposition.lean",
+      "sha256": "0319ab35928ba6db7db86c4d8be775d52ed49df417fd0610fc9712583f300011",
+      "byteLength": 21621,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 0,
+      "named_theorems": [],
+      "theorem_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/HSWMGeneratedLearningBridge.lean",
+      "sha256": "ef9e6ab81021e8dda1b995d99a9c466f65cf104c7dca4abfbd4d82d01e0a51f5",
+      "byteLength": 11732,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 0,
+      "named_theorems": [],
+      "theorem_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/HSWMMultiscaleSimulation.lean",
+      "sha256": "ef0e979f129f18eb3d1e10d56b138e7e212dda4a424a1e6bb8a06902c50d35c5",
+      "byteLength": 6312,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 9,
+      "named_theorems": [
+        "HSWM.MultiscaleSimulation.microToSynaptic_noninjective",
+        "HSWM.MultiscaleSimulation.microToSynapticRefinement",
+        "HSWM.MultiscaleSimulation.synapticToSemanticRefinement",
+        "HSWM.MultiscaleSimulation.physicalSynapticSemanticRefinement",
+        "HSWM.MultiscaleSimulation.physicalSynapticSemantic_trace_preserved",
+        "HSWM.MultiscaleSimulation.concrete_nontrivial_learning_trace",
+        "HSWM.MultiscaleSimulation.concrete_nontrivial_learning_trace_evaluates",
+        "HSWM.MultiscaleSimulation.erasing_predictive_bit_fails",
+        "HSWM.MultiscaleSimulation.erased_predictive_bit_has_loss_trace"
+      ],
+      "theorem_axioms": [
+        {
+          "theorem": "HSWM.MultiscaleSimulation.concrete_nontrivial_learning_trace",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.MultiscaleSimulation.concrete_nontrivial_learning_trace_evaluates",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.MultiscaleSimulation.erased_predictive_bit_has_loss_trace",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.MultiscaleSimulation.erasing_predictive_bit_fails",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.MultiscaleSimulation.microToSynaptic_noninjective",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.MultiscaleSimulation.microToSynapticRefinement",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.MultiscaleSimulation.physicalSynapticSemantic_trace_preserved",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.MultiscaleSimulation.physicalSynapticSemanticRefinement",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.MultiscaleSimulation.synapticToSemanticRefinement",
+          "axioms": [
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "propext"
+      ],
+      "audit_stdout_sha256": "72186067e326406791ffaa8aa603bc01588bc2520296d31d3bca191f776ab03e",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "formal/HSWMHypergraphCostConditions.lean",
+      "sha256": "274ffaf2f98bf27eb6a5fd88ed441c06a75d078a24d5265a64bb3324ef76ba3d",
+      "byteLength": 7718,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 10,
+      "named_theorems": [
+        "HSWM.HypergraphCostConditions.tagged_incidence_is_lossless",
+        "HSWM.HypergraphCostConditions.direct_typed_no_more_expensive_under_field_costs",
+        "HSWM.HypergraphCostConditions.direct_typed_strictly_cheaper_under_header_advantage",
+        "HSWM.HypergraphCostConditions.direct_is_two_choice_minimum",
+        "HSWM.HypergraphCostConditions.direct_and_factor_tie_when_fields_match",
+        "HSWM.HypergraphCostConditions.direct_cost_direction_witness",
+        "HSWM.HypergraphCostConditions.factor_cost_direction_witness",
+        "HSWM.HypergraphCostConditions.not_direct_no_more_expensive_for_every_field_cost_model",
+        "HSWM.HypergraphCostConditions.not_factor_no_more_expensive_for_every_field_cost_model",
+        "HSWM.HypergraphCostConditions.no_universal_cost_direction_from_representation_alone"
+      ],
+      "theorem_axioms": [
+        {
+          "theorem": "HSWM.HypergraphCostConditions.direct_and_factor_tie_when_fields_match",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.HypergraphCostConditions.direct_cost_direction_witness",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.HypergraphCostConditions.direct_is_two_choice_minimum",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.HypergraphCostConditions.direct_typed_no_more_expensive_under_field_costs",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.HypergraphCostConditions.direct_typed_strictly_cheaper_under_header_advantage",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.HypergraphCostConditions.factor_cost_direction_witness",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.HypergraphCostConditions.no_universal_cost_direction_from_representation_alone",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.HypergraphCostConditions.not_direct_no_more_expensive_for_every_field_cost_model",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.HypergraphCostConditions.not_factor_no_more_expensive_for_every_field_cost_model",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.HypergraphCostConditions.tagged_incidence_is_lossless",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "Quot.sound",
+        "propext"
+      ],
+      "audit_stdout_sha256": "d9e72c1125b6ae6d42fc4eb695c20f9d5b3f4ceb863da3ac194d9ec8a44f8f61",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "formal/HSWMSemanticSoftware.lean",
+      "sha256": "0bef96e6e99f9e125ea158bf9e09cf7ecbb976cec1b95d83c485ff9a633c04ea",
+      "byteLength": 8904,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 14,
+      "named_theorems": [
+        "HSWM.SemanticSoftware.addressed_graph_execution",
+        "HSWM.SemanticSoftware.reference_executes_semantic_weight",
+        "HSWM.SemanticSoftware.reference_candidate_execution",
+        "HSWM.SemanticSoftware.computed_revision_selects_generated_program",
+        "HSWM.SemanticSoftware.stored_revision_changes_next_execution",
+        "HSWM.SemanticSoftware.outcome_revised_local_program_has_strict_gain",
+        "HSWM.SemanticSoftware.reference_software_scores",
+        "HSWM.SemanticSoftware.ignored_program_cannot_change_execution",
+        "HSWM.SemanticSoftware.faithful_operator_preserves_execution",
+        "HSWM.SemanticSoftware.faithful_operator_inherits_computed_gain",
+        "HSWM.SemanticSoftware.embedding_preserves_semantic_execution",
+        "HSWM.SemanticSoftware.embedding_preserves_semantic_revision",
+        "HSWM.SemanticSoftware.broader_envelope_has_a_nonsemantic_world",
+        "HSWM.SemanticSoftware.world_variant_really_executes"
+      ],
+      "theorem_axioms": [
+        {
+          "theorem": "HSWM.SemanticSoftware.addressed_graph_execution",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticSoftware.broader_envelope_has_a_nonsemantic_world",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.SemanticSoftware.computed_revision_selects_generated_program",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticSoftware.embedding_preserves_semantic_execution",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.SemanticSoftware.embedding_preserves_semantic_revision",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.SemanticSoftware.faithful_operator_inherits_computed_gain",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticSoftware.faithful_operator_preserves_execution",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.SemanticSoftware.ignored_program_cannot_change_execution",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.SemanticSoftware.outcome_revised_local_program_has_strict_gain",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticSoftware.reference_candidate_execution",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticSoftware.reference_executes_semantic_weight",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticSoftware.reference_software_scores",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticSoftware.stored_revision_changes_next_execution",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticSoftware.world_variant_really_executes",
+          "axioms": []
+        }
+      ],
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "audit_stdout_sha256": "b6b4f5af417637216f13851b14c18943bbe7f771952c737cd62a94a0e186d0af",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "formal/HSWMLLMSemanticGraph.lean",
+      "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+      "byteLength": 14989,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 0,
+      "named_theorems": [],
+      "theorem_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/HSWMIntegratedClosedLoop.lean",
+      "sha256": "a3ddb6eccb1eb5cb1bdfea6bf13dec07f495ea665351ae4fbb26964b2b16a59f",
+      "byteLength": 19631,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 33,
+      "named_theorems": [
+        "HSWM.IntegratedClosedLoop.encode_candidate",
+        "HSWM.IntegratedClosedLoop.encode_baseline",
+        "HSWM.IntegratedClosedLoop.decode_encode_candidate",
+        "HSWM.IntegratedClosedLoop.decode_encode_baseline",
+        "HSWM.IntegratedClosedLoop.unknown_code_falls_back",
+        "HSWM.IntegratedClosedLoop.decode_encode_input_token",
+        "HSWM.IntegratedClosedLoop.concrete_evidence_computes_candidate",
+        "HSWM.IntegratedClosedLoop.concrete_resolver_is_bound",
+        "HSWM.IntegratedClosedLoop.mismatched_evidence_is_refused",
+        "HSWM.IntegratedClosedLoop.mismatched_trace_evidence_is_refused",
+        "HSWM.IntegratedClosedLoop.canonical_predict_uses_actual_step",
+        "HSWM.IntegratedClosedLoop.receipt_relation_decodes_baseline",
+        "HSWM.IntegratedClosedLoop.initial_canonical_state_decodes_baseline",
+        "HSWM.IntegratedClosedLoop.interpreter_execute_uses_serialized_program_and_token",
+        "HSWM.IntegratedClosedLoop.pre_outcome_step_does_not_read_future_evidence",
+        "HSWM.IntegratedClosedLoop.receipt_serialization_is_baseline",
+        "HSWM.IntegratedClosedLoop.bound_outcome_commits_through_llm_learn",
+        "HSWM.IntegratedClosedLoop.mismatched_outcome_retains_canonical_state",
+        "HSWM.IntegratedClosedLoop.mismatched_trace_retains_canonical_state",
+        "HSWM.IntegratedClosedLoop.successor_canonical_text_is_computed_candidate",
+        "HSWM.IntegratedClosedLoop.successor_decodes_same_computed_revision",
+        "HSWM.IntegratedClosedLoop.initialPrediction_eq_forward_baseline",
+        "HSWM.IntegratedClosedLoop.revisedPrediction_eq_forward_candidate",
+        "HSWM.IntegratedClosedLoop.successor_preserves_owner_roles_and_history",
+        "HSWM.IntegratedClosedLoop.successor_frames_unrelated_relation",
+        "HSWM.IntegratedClosedLoop.bound_revision_changes_next_execution",
+        "HSWM.IntegratedClosedLoop.same_canonical_runtime_has_strict_net_gain",
+        "HSWM.IntegratedClosedLoop.exact_constructed_gain_is_ten_to_sixteen",
+        "HSWM.IntegratedClosedLoop.successor_preserves_extra_roles_and_binds_version_evidence",
+        "HSWM.IntegratedClosedLoop.successor_preserves_address_identity",
+        "HSWM.IntegratedClosedLoop.replaying_old_receipt_is_rejected",
+        "HSWM.IntegratedClosedLoop.wrong_trace_receipt_is_rejected",
+        "HSWM.IntegratedClosedLoop.malformed_serialization_is_rejected"
+      ],
+      "theorem_axioms": [
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.bound_outcome_commits_through_llm_learn",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.bound_revision_changes_next_execution",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.canonical_predict_uses_actual_step",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.concrete_evidence_computes_candidate",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.concrete_resolver_is_bound",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.decode_encode_baseline",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.decode_encode_candidate",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.decode_encode_input_token",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.encode_baseline",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.encode_candidate",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.exact_constructed_gain_is_ten_to_sixteen",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.initial_canonical_state_decodes_baseline",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.initialPrediction_eq_forward_baseline",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.interpreter_execute_uses_serialized_program_and_token",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.malformed_serialization_is_rejected",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.mismatched_evidence_is_refused",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.mismatched_outcome_retains_canonical_state",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.mismatched_trace_evidence_is_refused",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.mismatched_trace_retains_canonical_state",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.pre_outcome_step_does_not_read_future_evidence",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.receipt_relation_decodes_baseline",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.receipt_serialization_is_baseline",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.replaying_old_receipt_is_rejected",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.revisedPrediction_eq_forward_candidate",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.same_canonical_runtime_has_strict_net_gain",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.successor_canonical_text_is_computed_candidate",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.successor_decodes_same_computed_revision",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.successor_frames_unrelated_relation",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.successor_preserves_address_identity",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.successor_preserves_extra_roles_and_binds_version_evidence",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.successor_preserves_owner_roles_and_history",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.unknown_code_falls_back",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.IntegratedClosedLoop.wrong_trace_receipt_is_rejected",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "audit_stdout_sha256": "89b45fb91839dd8f35675b47bb7395a69f8a755da3ef88c06e8cf428caa0218d",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "formal/HSWMClosedLoopEvaluation.lean",
+      "sha256": "eb826ee0c5a0d8995932cf2dd324d405c0f389786d252216b283167ec782d935",
+      "byteLength": 7739,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 17,
+      "named_theorems": [
+        "HSWM.ClosedLoopEvaluation.evaluation_outside_training_region",
+        "HSWM.ClosedLoopEvaluation.synthesis_inside_training_region",
+        "HSWM.ClosedLoopEvaluation.evaluation_inputs_disjoint_from_synthesis",
+        "HSWM.ClosedLoopEvaluation.evaluation_mass_and_reference_scores",
+        "HSWM.ClosedLoopEvaluation.alternative_agrees_on_training_region",
+        "HSWM.ClosedLoopEvaluation.alternative_agrees_on_synthesis",
+        "HSWM.ClosedLoopEvaluation.alternative_world_is_distinct",
+        "HSWM.ClosedLoopEvaluation.alternative_reverses_evaluation_scores",
+        "HSWM.ClosedLoopEvaluation.assessment_inside_training_region",
+        "HSWM.ClosedLoopEvaluation.evaluation_inputs_disjoint_from_guard",
+        "HSWM.ClosedLoopEvaluation.alternative_agrees_on_every_guard_input",
+        "HSWM.ClosedLoopEvaluation.identical_training_corruption_in_both_worlds",
+        "HSWM.ClosedLoopEvaluation.canonical_training_scores",
+        "HSWM.ClosedLoopEvaluation.canonical_execution_evaluation_scores",
+        "HSWM.ClosedLoopEvaluation.constructed_canonical_loop_has_disjoint_gain",
+        "HSWM.ClosedLoopEvaluation.same_canonical_update_can_harm_unseen_world",
+        "HSWM.ClosedLoopEvaluation.training_agreement_is_insufficient_for_universal_improvement"
+      ],
+      "theorem_axioms": [
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.alternative_agrees_on_every_guard_input",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.alternative_agrees_on_synthesis",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.alternative_agrees_on_training_region",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.alternative_reverses_evaluation_scores",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.alternative_world_is_distinct",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.assessment_inside_training_region",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.canonical_execution_evaluation_scores",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.canonical_training_scores",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.constructed_canonical_loop_has_disjoint_gain",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.evaluation_inputs_disjoint_from_guard",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.evaluation_inputs_disjoint_from_synthesis",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.evaluation_mass_and_reference_scores",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.evaluation_outside_training_region",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.identical_training_corruption_in_both_worlds",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.same_canonical_update_can_harm_unseen_world",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.synthesis_inside_training_region",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.ClosedLoopEvaluation.training_agreement_is_insufficient_for_universal_improvement",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "audit_stdout_sha256": "abed1db4fec11c140b19e38d35b293bd71e8b26c5e96ac88aab3240337235bc0",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "allowed_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "runner_source": {
+    "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+    "sha256": "7e9aaa121475ea994653223018ee94cde0f3cb48a53cb3f3c2724eb17c85cfd4"
+  },
+  "auditor_interface": "ADDITIVE_PROFILE_EXTENSION_SUPERSEDES_PRIOR_PRIVATE_AUDITOR_INTERFACE_WITHOUT_MUTATING_HISTORICAL_RECEIPTS",
+  "statement_semantics_validated": false,
+  "new_dependencies_installed": false,
+  "public_projection": {
+    "source_receipt_sha256": "b64cee3460425c3046b82925b057f27c53d32901dbb315441e78f6b1e10565ae",
+    "redacted_fields": [
+      "toolchain.lean_path",
+      "toolchain.execution_binary",
+      "toolchain.lean_path_entries"
+    ],
+    "reason": "Remove host-specific absolute paths; source hashes, theorem reports, toolchain identity and observed status unchanged."
+  }
+}

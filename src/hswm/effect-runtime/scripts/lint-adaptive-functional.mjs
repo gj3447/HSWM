@@ -7,7 +7,7 @@ import ts from "typescript"
 const argv = process.argv.slice(2)
 const rootFlag = argv.indexOf("--root")
 const root = resolve(rootFlag < 0 ? "src" : argv[rootFlag + 1] ?? "src")
-const target = (name) => /^(adaptive-|native-|knowledge-).*\.ts$/.test(name) || ["general-json-domain.ts", "research-tooling-domain.ts", "hswm-dev-process.ts", "hswm-live-process.ts", "reluvator-check-process.ts"].includes(name)
+const target = (name) => /^(adaptive-|native-|knowledge-|semantic-lifecycle-).*\.ts$/.test(name) || ["semantic-rule-environment.ts", "general-json-domain.ts", "research-tooling-domain.ts", "hswm-dev-process.ts", "hswm-live-process.ts", "reluvator-check-process.ts"].includes(name)
 const violations = []
 const files = readdirSync(root).filter(target).sort()
 

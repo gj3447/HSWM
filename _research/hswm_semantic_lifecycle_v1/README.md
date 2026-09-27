@@ -18,13 +18,15 @@ user definitions or a proof of the minimum-cost conjecture.
 
 ## Run
 
-Use Node 24 and the existing locked runtime. Build before running, so the source
-and compiled modules agree. The runner records source and compiled hashes and
-refuses source drift during an attempt; this is not a reproducible-build attestation.
+Use Node 24 and the existing locked TypeScript/Effect runtime (Effect 3.22.1).
+Build before running, so the source and compiled modules agree. The runner
+records source and compiled hashes and refuses source drift during an attempt;
+this is not a reproducible-build attestation. The direct executable is the
+compiled TypeScript process; `run.mjs` is only a compatibility launcher.
 
 ```sh
 npm --prefix src/hswm/effect-runtime run build
-node _research/hswm_semantic_lifecycle_v1/run.mjs \
+node src/hswm/effect-runtime/dist/semantic-lifecycle-process.js \
   --output .hswm-local/semantic-lifecycle-new-attempt --transport scripted
 ```
 
@@ -44,7 +46,7 @@ To use a real compatible serving endpoint, supply an explicit private cell file:
 ```
 
 ```sh
-node _research/hswm_semantic_lifecycle_v1/run.mjs \
+node src/hswm/effect-runtime/dist/semantic-lifecycle-process.js \
   --output .hswm-local/semantic-lifecycle-new-http-attempt \
   --transport http --cell /absolute/private/cell.json
 ```
@@ -68,8 +70,9 @@ the local evaluator and scripted transport are not independent scientific observ
    environment's training outcomes and stages a bound outcome. The initial
    hypothesis is that pressing alone opens the door.
 2. After the child exits, the native durable tree is copied into four conditions
-   using the existing archive-preserving copy helper. This preserves internal
-   journal slot/object hard links; ordinary `fs.cp` does not preserve that contract.
+   with `cp -a` through the existing bounded-subprocess Effect service. This
+   preserves internal journal slot/object hard links; ordinary `fs.cp` does not
+   preserve that contract.
 3. Three separate children construct revisions through the existing graph-loop
    admission. `frozen` remains unchanged; `evidence_only` keeps all semantic fields;
    `sham` substitutes a declared equivalent sentence; `learned` uses the configured
@@ -107,16 +110,27 @@ does not produce a canonical Permit, revise public KG or alter CR/FCL status.
 
 - [Pure environment](../../src/hswm/effect-runtime/src/semantic-rule-environment.ts):
   immutable cases, model view, typed evaluator errors and denominator-preserving scoring.
-- `runtime.mjs`: schema, local grants, bootstrap and existing admission adapter.
-- `transport.mjs`: separately labeled scripted/HTTP/control execution and private wire receipts.
-- `worker.mjs`: training, revision, evaluation; model input contains no evaluation labels.
-- `run.mjs`: explicit CLI, imported-source pins, sequential OS-process lifecycle, four conditions.
+- `semantic-lifecycle-domain.ts`: immutable CLI, cell, arm and configuration contracts.
+- `semantic-lifecycle-runtime.ts`: schema, local grants, bootstrap and existing admission adapter.
+- `semantic-lifecycle-transport.ts`: separately labeled scripted/HTTP/control execution and private wire receipts.
+- `semantic-lifecycle-worker.ts`: training, revision and evaluation; model input contains no evaluation labels.
+- `semantic-lifecycle-runner.ts`: source pins for the compiled/source closure,
+  Effect package and lockfile; sequential process lifecycle and four conditions.
+- `semantic-lifecycle-process.ts` and `semantic-lifecycle-worker-process.ts`:
+  parent and child executable composition roots. They supply typed POSIX filesystem
+  and bounded-subprocess services; cancellation and resource cleanup follow the
+  existing Effect service boundary. See the official
+  [Effect resource-management documentation](https://effect.website/docs/v3/resource-management/scope).
+- `run.mjs`: compatibility launcher only; it contains no lifecycle algorithm or I/O.
 
 Focused checks after building:
 
 ```sh
 npm --prefix src/hswm/effect-runtime run test -- \
   ../../../tests/effect-runtime/semantic-rule-environment.test.ts \
+  ../../../tests/effect-runtime/semantic-lifecycle-domain.test.ts \
+  ../../../tests/effect-runtime/semantic-lifecycle-transport.test.ts \
+  ../../../tests/effect-runtime/semantic-lifecycle-runner.test.ts \
   ../../../tests/effect-runtime/canonical-atom-v2-llm-semantic-runtime.test.ts --maxWorkers=1
 src/hswm/development/bin/hswm-python core pytest -q tests/test_hswm_semantic_lifecycle_runner.py
 ```

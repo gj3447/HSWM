@@ -73,8 +73,8 @@ def test_wire_inputs_keep_evaluation_labels_and_split_identity_out(completed) ->
 
 
 def test_bad_batch_and_refusal_stay_in_declared_denominator() -> None:
-    module_url = (ROOT / "_research/hswm_semantic_lifecycle_v1/worker.mjs").as_uri()
-    code = f"import {{assessBatch}} from {json.dumps(module_url)}; console.log(JSON.stringify([assessBatch('heldout',null),assessBatch('heldout','010'),assessBatch('heldout','0101extra')]))"
+    module_url = (ROOT / "src/hswm/effect-runtime/dist/semantic-lifecycle-worker.js").as_uri()
+    code = f"import {{assessBatch}} from {json.dumps(module_url)}; console.log(JSON.stringify([assessBatch('heldout',null).right,assessBatch('heldout','010').right,assessBatch('heldout','0101extra').right]))"
     result = subprocess.run(["node", "--input-type=module", "-e", code], cwd=ROOT,
                             text=True, capture_output=True, check=True, timeout=30)
     for score in json.loads(result.stdout):

@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?relation ?meaning ?authority ?excerpt ?source ?sha256 WHERE {
+  ?sourceNode p:standard_graph_role "USER_DIRECT_SOURCE"; r:HAS_ASSERTION ?facet.
+  ?facet p:name ?meaning; p:authority_class ?authority; p:source_excerpt ?excerpt;
+    p:source_path ?source; p:source_sha256 ?sha256.
+  BIND(r:HAS_ASSERTION AS ?relation)
+} ORDER BY ?meaning

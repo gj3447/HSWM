@@ -1,0 +1,34 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX hswm: <https://hswm.invalid/canonical-atom-v2/rdf/v1/vocab/>
+
+# A bounded, local-union read of the current semantic-relation map view.
+# The HSWM runner deliberately unions its four fixed N-Quads named graphs into
+# a fresh local default graph before evaluating this query; standard SPARQL
+# itself does not imply that union.
+# It reads descriptors and provenance references only: the content payload that
+# describes source/target models, time, actions, or map loss is intentionally
+# absent from this RDF projection.
+SELECT ?relation ?relationKey ?role ?ordinal ?participant ?participantContentSha256
+       ?participantEvidenceSha256 ?participantProvenanceMode
+WHERE {
+  ?relation rdf:type hswm:ReifiedRelationAtomVersion ;
+            hswm:kind "semantic_relation" ;
+            hswm:canonicalKey ?relationKey ;
+            hswm:hasTypedReference ?reference .
+  ?reference rdf:type hswm:TypedReference ;
+             hswm:sourceAtom ?relation ;
+             hswm:referenceType "hswm:semantic:role" ;
+             hswm:role ?role ;
+             hswm:ordinal ?ordinal ;
+             hswm:targetAtom ?participant .
+  ?participant rdf:type hswm:CanonicalAtomVersion ;
+               hswm:kind "semantic_participant" ;
+               hswm:contentSha256 ?participantContentSha256 ;
+               hswm:evidenceSha256 ?participantEvidenceSha256 ;
+               hswm:provenanceMode ?participantProvenanceMode .
+  FILTER NOT EXISTS {
+    ?successor hswm:referenceType "hswm:reference:supersedes" ;
+               hswm:targetAtom ?relation .
+  }
+}
+ORDER BY ?relation ?ordinal

@@ -1,6 +1,12 @@
 # HSWM 층간 Map — 문헌에서 실행 경로까지
 
-2026-09-27 · `SECONDARY_AI_DESIGN / NOT_IMPLEMENTED / EXPERIMENT_NOT_RUN`
+2026-09-27 최초 설계 · `SECONDARY_AI_DESIGN / NOT_IMPLEMENTED / EXPERIMENT_NOT_RUN`
+
+**같은 날 후속 구현:** 아래 설계의 유한 매핑·입력 바인딩·의미 revision 연결을
+[Cross-layer Map v1](../../_research/cross_layer_map_v1/README.md)로 구현했다. 기존 RDF projection,
+SPARQL query, SHACL Core shape를 재사용한다. 이 문서의 단계 설명은 최초 설계이며,
+후속 구현의 검증 범위는 deterministic fixture다. 실제 LLM 성능 비교·외부 simulator·
+MapSpec 자체의 학습은 아직 수행하지 않았다.
 
 **제안: 서로 다른 모델링 층의 상태·관측·개입·시간을 대응시키는 관계를 HSWM의
 Semantic Weight 하이퍼그래프 안에 두고, 그 대응이 실제 outcome에서 유지되는지

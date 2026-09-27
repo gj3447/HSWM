@@ -1,0 +1,59 @@
+@prefix hswm: <https://hswm.invalid/canonical-atom-v2/rdf/v1/vocab/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# The profile validates only the RDF view's reified role/ordinal/descriptors.
+# It cannot validate the raw MapSpec content because payload bytes are outside
+# the projection by contract. Ordinal uniqueness and order are checked by the
+# source-bound projection test, not inferred by this SHACL Core profile.
+hswm:CurrentSemanticMapShape
+  a sh:NodeShape ;
+  sh:targetClass hswm:ReifiedRelationAtomVersion ;
+  sh:property [
+    sh:path hswm:kind ; sh:hasValue "semantic_relation" ; sh:minCount 1 ; sh:maxCount 1
+  ] ;
+  sh:property [
+    sh:path hswm:canonicalKey ; sh:minCount 1 ; sh:maxCount 1
+  ] ;
+  sh:property [
+    sh:path hswm:hasTypedReference ;
+    sh:qualifiedValueShape hswm:SubjectReferenceShape ;
+    sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1
+  ] ;
+  sh:property [
+    sh:path hswm:hasTypedReference ;
+    sh:qualifiedValueShape hswm:ContextReferenceShape ;
+    sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1
+  ] ;
+  sh:property [
+    sh:path hswm:hasTypedReference ;
+    sh:qualifiedValueShape hswm:EvidenceReferenceShape ;
+    sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1
+  ] ;
+  sh:property [
+    sh:path hswm:hasTypedReference ;
+    sh:qualifiedValueShape hswm:ExceptionReferenceShape ;
+    sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1
+  ] .
+
+hswm:SubjectReferenceShape a sh:NodeShape ; sh:property [ sh:path hswm:role ; sh:hasValue "subject" ] ; sh:node hswm:SemanticMapReferenceShape .
+hswm:ContextReferenceShape a sh:NodeShape ; sh:property [ sh:path hswm:role ; sh:hasValue "context" ] ; sh:node hswm:SemanticMapReferenceShape .
+hswm:EvidenceReferenceShape a sh:NodeShape ; sh:property [ sh:path hswm:role ; sh:hasValue "evidence" ] ; sh:node hswm:SemanticMapReferenceShape .
+hswm:ExceptionReferenceShape a sh:NodeShape ; sh:property [ sh:path hswm:role ; sh:hasValue "exception" ] ; sh:node hswm:SemanticMapReferenceShape .
+
+hswm:SemanticMapReferenceShape
+  a sh:NodeShape ;
+  sh:class hswm:TypedReference ;
+  sh:property [ sh:path hswm:referenceType ; sh:hasValue "hswm:semantic:role" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path hswm:sourceAtom ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path hswm:targetAtom ; sh:minCount 1 ; sh:maxCount 1 ; sh:node hswm:SemanticParticipantShape ] ;
+  sh:property [ sh:path hswm:ordinal ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ] .
+
+hswm:SemanticParticipantShape
+  a sh:NodeShape ;
+  sh:class hswm:CanonicalAtomVersion ;
+  sh:property [ sh:path hswm:kind ; sh:hasValue "semantic_participant" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path hswm:contentSha256 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path hswm:evidenceSha256 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path hswm:provenanceMode ; sh:minCount 1 ; sh:maxCount 1 ] .

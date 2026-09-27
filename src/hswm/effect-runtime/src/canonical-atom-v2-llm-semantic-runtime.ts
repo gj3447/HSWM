@@ -120,6 +120,11 @@ export interface LlmSemanticCell {
   readonly max_tokens: number
 }
 
+/** Optional caller profile checked on the exact frame immediately before transport. */
+export type LlmSemanticFrameValidator = (
+  frame: SemanticReadFrame
+) => Either.Either<void, LlmSemanticRuntimeError>
+
 const parseSemantic = (raw: Uint8Array): Either.Either<SemanticRelationContent, LlmSemanticRuntimeError> => {
   return Either.gen(function* () {
     const value = yield* utf8(raw).pipe(Either.flatMap(strictJson))
@@ -192,10 +197,14 @@ const strictRevision = (raw: string, prior: SemanticRelationContent): Either.Eit
 
 const invoke = (cell: LlmSemanticCell, prompt: unknown, http: AdaptiveHttpClientShape) => executeAdaptiveCell({ kind: "llm", cell_id: "semantic-engine", ...cell }, { prompt: JSON.stringify(prompt) }, process.cwd(), 120_000).pipe(Effect.provideService(AdaptiveHttpClient, http), Effect.flatMap((result) => result.status === "SUCCEEDED" ? Effect.succeed(result.output) : Effect.fail(fail("LLM_OUTPUT_INVALID", "LLM transport did not return a completed response"))))
 
-export const executeLlmSemanticRelation = (runtime: CanonicalAtomV2DurableRuntime["Type"], relationUid: string, event: string, cellInput: LlmSemanticCell, http: AdaptiveHttpClientShape) => Effect.gen(function* () {
+export const executeLlmSemanticRelation = (runtime: CanonicalAtomV2DurableRuntime["Type"], relationUid: string, event: string, cellInput: LlmSemanticCell, http: AdaptiveHttpClientShape, frameValidator?: LlmSemanticFrameValidator) => Effect.gen(function* () {
   const cell = yield* snapshotInput(cellInput)
   const executionId = yield* Effect.sync(randomUUID)
   const frame = yield* readLlmSemanticFrame(runtime, relationUid, event)
+  if (frameValidator !== undefined) {
+    const validated = frameValidator(frame)
+    if (Either.isLeft(validated)) return yield* Effect.fail(validated.left)
+  }
   const request = { contract: "hswm-llm-semantic-predict/v1", executionId, frame, requiredOutput: { prediction: "string", uncertainty: "string" } }
   const requestContent = yield* runtime.stageContent("application/vnd.hswm.llm-semantic-request-v1+json", bytes(request))
   const output = yield* invoke(cell, request, http)

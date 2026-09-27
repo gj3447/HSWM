@@ -102,6 +102,7 @@ src/hswm/effect-runtime/bin/hswm-workspace validate identity
 | 의미 상태의 표현 비교·MapSpec RDF 조회 | [실행 안내](../../_research/semantic_map_engineering_v1/README.md): 세 표현의 정확한 왕복, 직렬화 바이트, 명시적인 MapSpec view, 기존 revision 루프 재사용 |
 | 직관·문헌·구현의 연결 KG | [표준 그래프 종합](../research/HSWM_INTUITION_STANDARD_GRAPH_SYNTHESIS_2026-09-27.md): 사용자 가설, 문헌의 제한 조건, 구현 계약과 미해결 질문의 source-bound graph |
 | CHU의 넓은 범위와 LLM 전용 HSWM | [사용자 범위 정의](../canon/USER_PRIMARY_CHU_HSWM_SOFTWARE_SCOPE_2026-09-27.md), [계산 구조·원전·실행 계약](../research/CHU_HSWM_COMPUTATIONAL_ARCHITECTURE_2026-09-27.md): 세계 모델링 능력의 겹침과 조회·검증 가능한 KG |
+| 현재 연구 공백·다음 실행 | [9월 27일 자기점검](../research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md): 실제 LLM 음성 결과, 아직 연결되지 않은 적용, W1 바인딩 교환의 채점 민감도 |
 | 연구 경로 변경·실패 해석 | [적응 연구 전략](../canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md) |
 | Semantic Weight·표현·이론 채택 | [이론 기반](../research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md), [정의와 하이퍼그래프](../research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md) |
 | 실현 가능성·성능 증명 | [구성적 증명](../research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md), [문헌에서 성능으로](../research/HSWM_LITERATURE_TO_PERFORMANCE_PROOF_2026-09-14.md), [bounded 확장](../research/HSWM_SEMANTIC_FRONTIER_PROOFS_2026-09-14.md) |

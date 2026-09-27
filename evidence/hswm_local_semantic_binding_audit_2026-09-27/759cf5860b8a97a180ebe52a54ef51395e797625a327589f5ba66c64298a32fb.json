@@ -1,0 +1,64 @@
+{
+  "schema_version": "hswm-finite-binding-audit-receipt/v1",
+  "date": "2026-09-27",
+  "status": "DESCRIPTIVE_INSTRUMENT_DIAGNOSTIC",
+  "evidence_kind": "AUTHORED_REFERENCE_TABLE_CENSUS_NOT_NEW_MODEL_RUN",
+  "sources": [
+    {
+      "path": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+      "sha256": "9d790d872f6ae8f4075d76d46b20c1276ec0c62d9a32a5b63b5b824388590c6e"
+    },
+    {
+      "path": "results/HSWM_LOCAL_SEMANTIC_BINDING_AUDIT_2026-09-27.json",
+      "sha256": "459adf6e0290c7e02d8583eeb1f144b2285bc5f9685835c3aaac673b2f46e230"
+    },
+    {
+      "path": "_research/local_semantic_binding_audit_v1/run.mjs",
+      "sha256": "8404ba12691aa7974a71aa57610890d9b3d942fd204228d332908c136be06ee3"
+    },
+    {
+      "path": "_research/local_semantic_binding_audit_v1/README.md",
+      "sha256": "c6c0a1a5d5b9ab6a1536ba1057cd31438f9102596e552bbd00a06f29dfe14995"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/local-semantic-execution-domain.ts",
+      "sha256": "0db55e4557ebe5f4034d91b556d2c3a290726aef5f237742b3341ad81328c1b3"
+    },
+    {
+      "path": "_research/local_semantic_execution_v1/protocol.v1.json",
+      "sha256": "52b3455f0322207900f1bcfcb9ea1158d772a0d4f7ab8e1861abf4283b0eeeb7"
+    },
+    {
+      "path": "results/HSWM_JEV_PRINCIPLES_2026-09-21.md",
+      "sha256": "6546f0c1db627ed52da3eb07bb0be05de8da4f0eeb1a9192e550e3a8317aae23"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_jev_principles_2026-09-21/audit.v1.json",
+      "sha256": "00be273a1c4467627a2fc5cfb316dad74599c5692965c7650b04bce7936d1e92"
+    },
+    {
+      "path": "docs/canon/USER_PRIMARY_CHU_HSWM_SOFTWARE_SCOPE_2026-09-27.md",
+      "sha256": "713396619020c3142a9866a6aa03bc88152aa26e5d3a6403102be5b80dcab6e3"
+    },
+    {
+      "path": "_research/hswm_deep_research_v1/protocol.v1.json",
+      "sha256": "a377b50c846ce6af2f325b79c388a6fc1986a3b5a6821c261da4cc5c6cb0292b"
+    }
+  ],
+  "observations": {
+    "cases": 128,
+    "unordered_pairs": 10,
+    "family_pair_rows": 40,
+    "no_final_change_rows": 13,
+    "context_exception_swap": {
+      "total": 128,
+      "actual_input_changed": 64,
+      "final_answer_changed": 0,
+      "intermediate_changed": 64
+    },
+    "model_generation_calls": 0
+  },
+  "interpretation": "Some value-binding swaps are uninformative for final-answer sensitivity in this exact fixture. This neither invalidates unspecified future controls nor revises past model findings. E2 intermediate outputs are observable contract values, not hidden reasoning.",
+  "claim_ceiling": "NOT_MODEL_PERFORMANCE_NOT_SEMANTIC_LEARNING_NOT_CR_FCL_PROMOTION",
+  "reproduce": "node _research/local_semantic_binding_audit_v1/run.mjs"
+}

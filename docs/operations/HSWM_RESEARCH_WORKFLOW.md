@@ -104,6 +104,7 @@ src/hswm/effect-runtime/bin/hswm-workspace validate identity
 | CHU의 넓은 범위와 LLM 전용 HSWM | [사용자 범위 정의](../canon/USER_PRIMARY_CHU_HSWM_SOFTWARE_SCOPE_2026-09-27.md), [계산 구조·원전·실행 계약](../research/CHU_HSWM_COMPUTATIONAL_ARCHITECTURE_2026-09-27.md): 세계 모델링 능력의 겹침과 조회·검증 가능한 KG |
 | 현재 연구 공백·다음 실행 | [9월 27일 자기점검](../research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md): 실제 LLM 음성 결과, 아직 연결되지 않은 적용, W1 바인딩 교환의 채점 민감도 |
 | 진단의 적대적 검토·해결 설계 | [9월 27일 해결안](../research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md): 복사 지름길·관측 부족·수정 no-op의 구분, 실행–관측–수정–재읽기 계약과 기존 W1–W5 연결 |
+| 추가 도구·논문 본문 확인 | [9월 27일 도구·논문 검토](../research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md): 생성 과제·문법 제한·PDF 근거 위치, 검색과 세계 모델 대조군의 전제·소스 버전·적용 순서 |
 | 연구 경로 변경·실패 해석 | [적응 연구 전략](../canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md) |
 | Semantic Weight·표현·이론 채택 | [이론 기반](../research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md), [정의와 하이퍼그래프](../research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md) |
 | 실현 가능성·성능 증명 | [구성적 증명](../research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md), [문헌에서 성능으로](../research/HSWM_LITERATURE_TO_PERFORMANCE_PROOF_2026-09-14.md), [bounded 확장](../research/HSWM_SEMANTIC_FRONTIER_PROOFS_2026-09-14.md) |

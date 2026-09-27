@@ -1,0 +1,347 @@
+{
+  "schema_version": "hswm-tool-paper-review/v1",
+  "review_date": "2026-09-27",
+  "authority": "SECONDARY_AI",
+  "scope": "Literature and official-source review; recommendations only; no new runtime dependencies, model runs or CR/FCL promotion.",
+  "review_document": {
+    "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+    "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e"
+  },
+  "existing_workflow": "docs/operations/HSWM_AI_NATIVE_TOOLS.md",
+  "repositories": [
+    {
+      "id": "docling-project/docling",
+      "authority_class": "OFFICIAL_PROJECT_SOURCE",
+      "url": "https://github.com/docling-project/docling",
+      "observed_ref": "v2.130.0",
+      "commit": "92fc74c36bbd20db9838d7665d38900e5c958319",
+      "ref_resolution": "git ls-remote; dereferenced annotated tag when present",
+      "pinned_url": "https://github.com/docling-project/docling/tree/92fc74c36bbd20db9838d7665d38900e5c958319",
+      "license": {
+        "terms": "MIT",
+        "status": "PINNED_LICENSE_TEXT_CHECKED",
+        "url": "https://raw.githubusercontent.com/docling-project/docling/92fc74c36bbd20db9838d7665d38900e5c958319/LICENSE",
+        "sha256": "edb765d1e3e60d0c7a7d5fba5f2bb2c3c29f7465cecb5c22cf1185c884954e4c"
+      },
+      "decision": "PDF_LAYOUT_INGEST_CANDIDATE",
+      "limit": "Models require separate version, artifact digest and license checks.",
+      "installed_by_this_review": false
+    },
+    {
+      "id": "google/langextract",
+      "authority_class": "OFFICIAL_PROJECT_SOURCE",
+      "url": "https://github.com/google/langextract",
+      "observed_ref": "v1.7.0",
+      "commit": "70cfb988cc25f15d8b04a1e57bd52a777207c0c6",
+      "ref_resolution": "git ls-remote; dereferenced annotated tag when present",
+      "pinned_url": "https://github.com/google/langextract/tree/70cfb988cc25f15d8b04a1e57bd52a777207c0c6",
+      "license": {
+        "terms": "Apache-2.0",
+        "status": "PINNED_LICENSE_TEXT_CHECKED",
+        "url": "https://raw.githubusercontent.com/google/langextract/70cfb988cc25f15d8b04a1e57bd52a777207c0c6/LICENSE",
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      "decision": "DEFER_EXISTING_SPAN_EXTRACTION_OVERLAP",
+      "limit": "Official code/docs reviewed; no research-paper result asserted.",
+      "installed_by_this_review": false
+    },
+    {
+      "id": "open-thought/reasoning-gym",
+      "authority_class": "OFFICIAL_PROJECT_SOURCE",
+      "url": "https://github.com/open-thought/reasoning-gym",
+      "observed_ref": "v0.1.25",
+      "commit": "21e6d2a9a581b3e11aafe711abfd37402f8482d5",
+      "ref_resolution": "git ls-remote; dereferenced annotated tag when present",
+      "pinned_url": "https://github.com/open-thought/reasoning-gym/tree/21e6d2a9a581b3e11aafe711abfd37402f8482d5",
+      "license": {
+        "terms": "Apache-2.0",
+        "status": "PINNED_LICENSE_TEXT_CHECKED",
+        "url": "https://raw.githubusercontent.com/open-thought/reasoning-gym/21e6d2a9a581b3e11aafe711abfd37402f8482d5/LICENSE",
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      },
+      "decision": "FRESH_TASK_GENERATOR_CANDIDATE",
+      "limit": "Generator tasks are not HSWM semantic-revision evidence.",
+      "installed_by_this_review": false
+    },
+    {
+      "id": "mlc-ai/xgrammar",
+      "authority_class": "OFFICIAL_PROJECT_SOURCE",
+      "url": "https://github.com/mlc-ai/xgrammar",
+      "observed_ref": "v0.2.8",
+      "commit": "97787376faee5ed8466cfad57c99855e4ce2f6aa",
+      "ref_resolution": "git ls-remote; dereferenced annotated tag when present",
+      "pinned_url": "https://github.com/mlc-ai/xgrammar/tree/97787376faee5ed8466cfad57c99855e4ce2f6aa",
+      "license": {
+        "terms": "Apache-2.0",
+        "status": "PINNED_LICENSE_TEXT_CHECKED",
+        "url": "https://raw.githubusercontent.com/mlc-ai/xgrammar/97787376faee5ed8466cfad57c99855e4ce2f6aa/LICENSE",
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      },
+      "decision": "CHECK_EXISTING_SERVING_FIRST",
+      "limit": "Remote vLLM backend presence/configuration not checked in this review.",
+      "installed_by_this_review": false
+    },
+    {
+      "id": "pnnl/HyperNetX",
+      "authority_class": "OFFICIAL_PROJECT_SOURCE",
+      "url": "https://github.com/pnnl/HyperNetX",
+      "observed_ref": "v2.4.3",
+      "commit": "cd2a4153896e780366bd688934646310f9568d18",
+      "ref_resolution": "git ls-remote; dereferenced annotated tag when present",
+      "pinned_url": "https://github.com/pnnl/HyperNetX/tree/cd2a4153896e780366bd688934646310f9568d18",
+      "license": {
+        "terms": "3-clause BSD terms in LICENSE.rst",
+        "status": "PINNED_LICENSE_TEXT_CHECKED",
+        "url": "https://raw.githubusercontent.com/pnnl/HyperNetX/cd2a4153896e780366bd688934646310f9568d18/LICENSE.rst",
+        "sha256": "6c180c087a120e85189a7f81090da59246af45d2defb9540587bff0aee9abd5c"
+      },
+      "decision": "READ_ONLY_STRUCTURE_ANALYSIS_CANDIDATE",
+      "limit": "Raw incidence deduplicates edge-node pairs; occurrence projection required for repeated roles. GitHub API SPDX was NOASSERTION.",
+      "installed_by_this_review": false
+    },
+    {
+      "id": "NVIDIA-NeMo/Gym",
+      "authority_class": "OFFICIAL_PROJECT_SOURCE",
+      "url": "https://github.com/NVIDIA-NeMo/Gym",
+      "observed_ref": "v0.6.0",
+      "commit": "3045a793346a31291d7ea4ae6af3f94a35036ce5",
+      "ref_resolution": "git ls-remote; dereferenced annotated tag when present",
+      "pinned_url": "https://github.com/NVIDIA-NeMo/Gym/tree/3045a793346a31291d7ea4ae6af3f94a35036ce5",
+      "license": {
+        "terms": "Apache-2.0",
+        "status": "PINNED_LICENSE_TEXT_CHECKED",
+        "url": "https://raw.githubusercontent.com/NVIDIA-NeMo/Gym/3045a793346a31291d7ea4ae6af3f94a35036ce5/LICENSE",
+        "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      },
+      "decision": "DEFER_UNTIL_STATEFUL_ROLLOUT_NEED",
+      "limit": "Official code/docs review; no HSWM performance result.",
+      "installed_by_this_review": false
+    },
+    {
+      "id": "grobidOrg/grobid",
+      "authority_class": "OFFICIAL_PROJECT_SOURCE",
+      "url": "https://github.com/grobidOrg/grobid",
+      "observed_ref": "0.9.1",
+      "commit": "523bb8e97f357e93682dc4eaa6d22faa8b5b93de",
+      "ref_resolution": "git ls-remote; dereferenced annotated tag when present",
+      "pinned_url": "https://github.com/grobidOrg/grobid/tree/523bb8e97f357e93682dc4eaa6d22faa8b5b93de",
+      "license": {
+        "terms": "Apache-2.0",
+        "status": "PINNED_LICENSE_TEXT_CHECKED",
+        "url": "https://raw.githubusercontent.com/grobidOrg/grobid/523bb8e97f357e93682dc4eaa6d22faa8b5b93de/LICENSE",
+        "sha256": "83559ecf8fcf9685ee83488ade2d84b89d0607659109e00f3f6bb5ad7937be99"
+      },
+      "decision": "SCHOLARLY_PDF_INGEST_CANDIDATE",
+      "limit": "Official code/docs review; TEI output is not a semantic-truth certificate.",
+      "installed_by_this_review": false
+    },
+    {
+      "id": "LHRLAB/HyperGraphRAG",
+      "authority_class": "OFFICIAL_PROJECT_SOURCE",
+      "url": "https://github.com/LHRLAB/HyperGraphRAG",
+      "observed_ref": "HEAD",
+      "commit": "d587cdf8c3fe2be7719557f845324cb3a321f5e2",
+      "ref_resolution": "git ls-remote; dereferenced annotated tag when present",
+      "pinned_url": "https://github.com/LHRLAB/HyperGraphRAG/tree/d587cdf8c3fe2be7719557f845324cb3a321f5e2",
+      "license": {
+        "terms": "MIT",
+        "status": "PINNED_LICENSE_TEXT_CHECKED",
+        "url": "https://raw.githubusercontent.com/LHRLAB/HyperGraphRAG/d587cdf8c3fe2be7719557f845324cb3a321f5e2/LICENSE",
+        "sha256": "b54ba7ea027e607f865b42c7d617a4cbe03344e2a7e8f64b4fab3e8bf58a339e"
+      },
+      "decision": "RETRIEVAL_COMPARATOR_CANDIDATE",
+      "limit": "HEAD resolved on review date; not represented as a tagged release or HSWM implementation.",
+      "installed_by_this_review": false
+    },
+    {
+      "id": "Snowflake-Labs/agent-world-model",
+      "authority_class": "OFFICIAL_PROJECT_SOURCE",
+      "url": "https://github.com/Snowflake-Labs/agent-world-model",
+      "observed_ref": "HEAD",
+      "commit": "85e322f69279e3b3325b7377ec3bab788514e9cb",
+      "ref_resolution": "git ls-remote; dereferenced annotated tag when present",
+      "pinned_url": "https://github.com/Snowflake-Labs/agent-world-model/tree/85e322f69279e3b3325b7377ec3bab788514e9cb",
+      "license": {
+        "terms": null,
+        "status": "NOT_ESTABLISHED",
+        "url": null,
+        "sha256": null
+      },
+      "decision": "METHOD_REVIEW_ONLY",
+      "limit": "LICENSE, COPYING or NOTICE file not found in inspected commit tree; code adoption permission unverified.",
+      "installed_by_this_review": false
+    },
+    {
+      "id": "topwasu/poe-world",
+      "authority_class": "OFFICIAL_PROJECT_SOURCE",
+      "url": "https://github.com/topwasu/poe-world",
+      "observed_ref": "HEAD",
+      "commit": "b499fb16a60793840a8ad97b3739518c7505ca3a",
+      "ref_resolution": "git ls-remote; dereferenced annotated tag when present",
+      "pinned_url": "https://github.com/topwasu/poe-world/tree/b499fb16a60793840a8ad97b3739518c7505ca3a",
+      "license": {
+        "terms": "MIT",
+        "status": "PINNED_LICENSE_TEXT_CHECKED",
+        "url": "https://raw.githubusercontent.com/topwasu/poe-world/b499fb16a60793840a8ad97b3739518c7505ca3a/LICENSE",
+        "sha256": "d18714eaba6f29a6de6389f379025f67149d55002499baa718377ae890c94eb6"
+      },
+      "decision": "WORLD_MODEL_METHOD_COMPARATOR",
+      "limit": "HEAD resolved on review date; paper implementation/version equivalence not established.",
+      "installed_by_this_review": false
+    }
+  ],
+  "papers": [
+    {
+      "id": "reasoning-gym",
+      "authority_class": "PRIMARY_RESEARCH_PAPER",
+      "title": "Reasoning Gym: Reasoning Environments for Reinforcement Learning with Verifiable Rewards",
+      "arxiv_version": "2505.24760v2",
+      "url": "https://arxiv.org/abs/2505.24760v2",
+      "full_text_url": "https://arxiv.org/html/2505.24760v2",
+      "review_status": "MAIN_METHOD_EXPERIMENTS_AND_LIMITS_READ_NOT_INDEPENDENTLY_REPLICATED",
+      "reviewed_sections": [
+        "Sections 2–5",
+        "Tables 1–5",
+        "Section 7"
+      ],
+      "code_refs": [
+        "open-thought/reasoning-gym"
+      ],
+      "transfer_limit": "Single-turn text and i.i.d. tasks; GRPO training includes format reward; negative transfer exists.",
+      "code_release_equivalence_to_paper": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "xgrammar",
+      "authority_class": "PRIMARY_RESEARCH_PAPER",
+      "title": "XGrammar: Flexible and Efficient Structured Generation Engine for Large Language Models",
+      "arxiv_version": "2411.15100v3",
+      "url": "https://arxiv.org/abs/2411.15100v3",
+      "full_text_url": "https://arxiv.org/html/2411.15100v3",
+      "review_status": "MAIN_METHOD_EXPERIMENTS_AND_LIMITS_READ_NOT_INDEPENDENTLY_REPLICATED",
+      "reviewed_sections": [
+        "Grammar design",
+        "Optimization methods",
+        "Serving evaluation"
+      ],
+      "code_refs": [
+        "mlc-ai/xgrammar"
+      ],
+      "transfer_limit": "Constrained decoding efficiency, not semantic correctness or HSWM learning.",
+      "code_release_equivalence_to_paper": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "docling",
+      "authority_class": "PRIMARY_RESEARCH_PAPER",
+      "title": "Docling: An Efficient Open-Source Toolkit for AI-driven Document Conversion",
+      "arxiv_version": "2501.17887v1",
+      "url": "https://arxiv.org/abs/2501.17887v1",
+      "full_text_url": "https://arxiv.org/html/2501.17887v1",
+      "review_status": "MAIN_METHOD_EXPERIMENTS_AND_LIMITS_READ_NOT_INDEPENDENTLY_REPLICATED",
+      "reviewed_sections": [
+        "Sections 3–5",
+        "Section 8"
+      ],
+      "code_refs": [
+        "docling-project/docling"
+      ],
+      "transfer_limit": "Paper benchmark uses Docling 2.5.2; conversion timing does not measure extracted-claim truth.",
+      "code_release_equivalence_to_paper": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "hypergraphrag",
+      "authority_class": "PRIMARY_RESEARCH_PAPER",
+      "title": "HyperGraphRAG: Retrieval-Augmented Generation with Hypergraph-Structured Knowledge Representation",
+      "arxiv_version": "2503.21322v3",
+      "url": "https://arxiv.org/abs/2503.21322v3",
+      "full_text_url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/df55ee6e59f8ac4a625219e11fe9ddba-Paper-Conference.pdf",
+      "review_status": "MAIN_METHOD_EXPERIMENTS_AND_LIMITS_READ_NOT_INDEPENDENTLY_REPLICATED",
+      "reviewed_sections": [
+        "Hypergraph construction",
+        "Retrieval method",
+        "Experiments and ablations"
+      ],
+      "code_refs": [
+        "LHRLAB/HyperGraphRAG"
+      ],
+      "transfer_limit": "Entity-set hyperedges do not establish ordered-role/multiplicity preservation or semantic revision.",
+      "code_release_equivalence_to_paper": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "poe-world",
+      "authority_class": "PRIMARY_RESEARCH_PAPER",
+      "title": "PoE-World: Compositional World Modeling with Products of Programmatic Experts",
+      "arxiv_version": "2505.10819v4",
+      "url": "https://arxiv.org/abs/2505.10819v4",
+      "full_text_url": "https://arxiv.org/html/2505.10819v4",
+      "review_status": "MAIN_METHOD_EXPERIMENTS_AND_LIMITS_READ_NOT_INDEPENDENTLY_REPLICATED",
+      "reviewed_sections": [
+        "Method",
+        "Game experiments",
+        "Section 6",
+        "Object-extraction appendix"
+      ],
+      "code_refs": [
+        "topwasu/poe-world"
+      ],
+      "transfer_limit": "Symbolic object/position/velocity inputs supplied by an external extractor; conditional-independence assumptions.",
+      "code_release_equivalence_to_paper": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "awm",
+      "authority_class": "PRIMARY_RESEARCH_PAPER",
+      "title": "Agent World Model: Infinity Synthetic Environments for Agentic Reinforcement Learning",
+      "arxiv_version": "2602.10090v3",
+      "url": "https://arxiv.org/abs/2602.10090v3",
+      "full_text_url": "https://arxiv.org/html/2602.10090v3",
+      "review_status": "MAIN_METHOD_EXPERIMENTS_AND_LIMITS_READ_NOT_INDEPENDENTLY_REPLICATED",
+      "reviewed_sections": [
+        "Environment synthesis pipeline",
+        "Verification",
+        "Section 6.2",
+        "Appendix B.2 and B.4"
+      ],
+      "code_refs": [
+        "Snowflake-Labs/agent-world-model"
+      ],
+      "transfer_limit": "Database-backed verification includes an LLM judge; synthetic consistency is not physical-world validity.",
+      "code_release_equivalence_to_paper": "NOT_ESTABLISHED"
+    }
+  ],
+  "standards": [
+    {
+      "title": "Web Annotation Data Model",
+      "authority_class": "W3C_RECOMMENDATION",
+      "url": "https://www.w3.org/TR/2017/REC-annotation-model-20170223/",
+      "reviewed_sections": [
+        "4.2.4 Text Quote Selector",
+        "4.2.5 Text Position Selector"
+      ],
+      "use": "Selectors over pinned derived text; separate PDF page/bbox mapping."
+    },
+    {
+      "title": "PROV-O",
+      "authority_class": "W3C_RECOMMENDATION",
+      "url": "https://www.w3.org/TR/2013/REC-prov-o-20130430/",
+      "use": "Conversion entities, activities and derivation; not causal-effect proof."
+    }
+  ],
+  "operational_docs": [
+    {
+      "url": "https://docs.vllm.ai/en/latest/features/structured_outputs/",
+      "authority_class": "OFFICIAL_PROJECT_DOCUMENTATION",
+      "limit": "Rolling documentation; verify against actual serving version before applying."
+    },
+    {
+      "url": "https://grobid.readthedocs.io/en/latest/Frequently-asked-questions/",
+      "authority_class": "OFFICIAL_PROJECT_DOCUMENTATION",
+      "limit": "Rolling documentation; PDF structure and formula/table limitations."
+    }
+  ],
+  "nonclaims": [
+    "No paper result independently replicated.",
+    "No dependency or model weight installed.",
+    "No live KG write or canonical runtime change.",
+    "No claim of HSWM semantic improvement, causal efficacy or CR/FCL closure.",
+    "Repository commits identify inspected sources, not a dependency lockfile or built-artifact digest."
+  ]
+}

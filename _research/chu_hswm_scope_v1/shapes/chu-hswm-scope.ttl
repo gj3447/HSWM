@@ -1,0 +1,51 @@
+@prefix kb: <https://hswm.invalid/kg-bundle-rdf/v1/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# This local profile checks declared conceptual scope only.  It does not make a
+# runtime path executable or establish world-model efficacy.
+
+<urn:hswm:kg:node:sym:AbstractNode:chu-hswm-scope-2026-09-27>
+  a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:chu-hswm-scope-2026-09-27> ;
+  sh:property [ sh:path p:standard_graph_role ; sh:hasValue "SYNTHESIS_BUNDLE" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:minCount 11 ] .
+
+<urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-chu-domain>
+  a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-chu-domain> ;
+  sh:property [ sh:path p:standard_graph_role ; sh:hasValue "CHU_ABSTRACT_DOMAIN" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:llm_required ; sh:hasValue false ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:CONCEPTUALLY_INCLUDES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-hswm-profile> ; sh:minCount 1 ] ;
+  sh:property [ sh:path r:CONCEPTUALLY_INCLUDES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-numeric-world-profile> ; sh:minCount 1 ] .
+
+<urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-hswm-profile>
+  a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-hswm-profile> ;
+  sh:property [ sh:path p:standard_graph_role ; sh:hasValue "HSWM_EXECUTION_PROFILE" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:llm_required ; sh:hasValue true ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:status ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:SPECIALIZES_SCOPE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-chu-domain> ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:REQUIRES_KERNEL ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-llm-kernel> ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAVE_TARGET_CAPABILITY ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-world-model-capability> ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-numeric-world-profile>
+  a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-numeric-world-profile> ;
+  sh:property [ sh:path p:standard_graph_role ; sh:hasValue "NON_LLM_WORLD_MODEL_PROFILE" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:llm_required ; sh:hasValue false ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:status ; sh:hasValue "ILLUSTRATIVE_NOT_INTEGRATED" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:SPECIALIZES_SCOPE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-chu-domain> ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAVE_TARGET_CAPABILITY ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-world-model-capability> ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-llm-kernel>
+  a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-hswm-2026-09-27-llm-kernel> ;
+  sh:property [ sh:path p:standard_graph_role ; sh:hasValue "COMPUTATIONAL_KERNEL" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+[] a sh:NodeShape ;
+  sh:targetClass <https://hswm.invalid/kg-bundle-rdf/v1/role/COMPUTATIONAL_CONTRACT> ;
+  sh:property [ sh:path p:existing_path ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:status ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] .

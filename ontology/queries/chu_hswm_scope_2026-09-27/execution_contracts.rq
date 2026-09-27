@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?contract ?status ?existing_path ?maps_to WHERE {
+  ?contract_node p:standard_graph_role "COMPUTATIONAL_CONTRACT" ;
+    p:name ?contract ; p:status ?status ; p:existing_path ?existing_path .
+  OPTIONAL { ?contract_node r:MAPS_TO ?target . ?target p:name ?maps_to }
+}
+ORDER BY ?contract ?maps_to

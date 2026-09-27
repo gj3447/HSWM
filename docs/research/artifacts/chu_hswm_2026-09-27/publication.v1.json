@@ -1,0 +1,147 @@
+{
+  "schema_version": "chu-hswm-scope-publication/v1",
+  "published_on": "2026-09-27",
+  "status": "LIVE_KG_CREATED_AND_READ_BACK_WITH_LEGACY_LINK_LIMITATION",
+  "source_ref": "docs/research/CHU_HSWM_COMPUTATIONAL_ARCHITECTURE_2026-09-27.md",
+  "source_sha256": "68833d205e06296e6a2fbe0513daa98a1e5cd385593f6232f958ece77b6ec944",
+  "publication_surface": "Relay KG ontology_save_record / ontology_link_records",
+  "verification_surface": "Relay KG ontology_get / ontology_neighbors(include_preliminary=true)",
+  "publication_scope": "Three SECONDARY_AI summary notes and six PROPOSED links; not a full replication of the local 31-node / 73-relation bundle.",
+  "authority_boundary": "USER_PRIMARY originals remain distinct source-bound records in the repository. Live notes remain PENDING_OR_PRELIMINARY. Existing user/canonical properties and legacy authority/lifecycle were not changed.",
+  "nodes": [
+    {
+      "uid": "sym:Note:chatgpt-chu-hswm-scope-20260927",
+      "title": "CHU는 넓은 계산 우주, HSWM은 LLM 기반 AI — 사용자 범위 교정",
+      "target_version": "\"2026-09-27T07:23:46.612Z\"",
+      "body_sha256": "f9a2d6d5977b4561272f74b3e1e9878bf55dadebe1d6a87919151c45158ef88a",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "body_exact_match": true
+    },
+    {
+      "uid": "sym:Note:chatgpt-chu-hswm-contracts-20260927",
+      "title": "CHU·HSWM의 소프트웨어 실행 계약 — 프로그램·연산자·상태·artifact·Map",
+      "target_version": "\"2026-09-27T07:22:28.107Z\"",
+      "body_sha256": "ae8a632fe8a66543cec8a0d8bdad0b772c2af8256e3931125c8dd7e8a9e10535",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "body_exact_match": true
+    },
+    {
+      "uid": "sym:Note:chatgpt-chu-hswm-literature-20260927",
+      "title": "CHU·HSWM 원전 연결 — 저장 프로그램·metagraph 실행·비LLM 세계 모델",
+      "target_version": "\"2026-09-27T07:22:29.017Z\"",
+      "body_sha256": "a75cbfb46175da4257c6ac8124222431101874f0a887c7c3c1e92a1c79ae2760",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "body_exact_match": true
+    }
+  ],
+  "links": [
+    {
+      "source_uid": "sym:Note:chatgpt-chu-hswm-scope-20260927",
+      "target_uid": "sym:Concept:hswm",
+      "relation": "ABOUT",
+      "relationship_status": "PROPOSED",
+      "authority_class": "SECONDARY_AI",
+      "readback_verified": true
+    },
+    {
+      "source_uid": "sym:Note:chatgpt-chu-hswm-scope-20260927",
+      "target_uid": "sym:Note:chatgpt-hswm-minimum-cost-hypergraph-synthesis-20260927",
+      "relation": "REFERENCES",
+      "relationship_status": "PROPOSED",
+      "authority_class": "SECONDARY_AI",
+      "readback_verified": true
+    },
+    {
+      "source_uid": "sym:Note:chatgpt-chu-hswm-scope-20260927",
+      "target_uid": "sym:Note:chatgpt-chu-hswm-contracts-20260927",
+      "relation": "REFERENCES",
+      "relationship_status": "PROPOSED",
+      "authority_class": "SECONDARY_AI",
+      "readback_verified": true
+    },
+    {
+      "source_uid": "sym:Note:chatgpt-chu-hswm-scope-20260927",
+      "target_uid": "sym:Note:chatgpt-chu-hswm-literature-20260927",
+      "relation": "REFERENCES",
+      "relationship_status": "PROPOSED",
+      "authority_class": "SECONDARY_AI",
+      "readback_verified": true
+    },
+    {
+      "source_uid": "sym:Note:chatgpt-chu-hswm-contracts-20260927",
+      "target_uid": "sym:Note:chatgpt-chu-hswm-literature-20260927",
+      "relation": "DERIVED_FROM",
+      "relationship_status": "PROPOSED",
+      "authority_class": "SECONDARY_AI",
+      "readback_verified": true
+    },
+    {
+      "source_uid": "sym:Note:chatgpt-chu-hswm-contracts-20260927",
+      "target_uid": "sym:Repository:hswm",
+      "relation": "ABOUT",
+      "relationship_status": "PROPOSED",
+      "authority_class": "SECONDARY_AI",
+      "readback_verified": true
+    }
+  ],
+  "uncreated_links": [
+    {
+      "source_uid": "sym:Note:chatgpt-chu-hswm-scope-20260927",
+      "target_uid": "sym:Concept:computable_hyper_universe_(chu)",
+      "relation": "ABOUT",
+      "status": "REJECTED_BY_TARGET_ELIGIBILITY",
+      "reported_error": "Target is not available",
+      "exact_eligibility_predicate": "NOT_DISCLOSED_BY_TOOL",
+      "target_read_status": "READABLE_UNSPECIFIED_AUTHORITY_UNKNOWN_LIFECYCLE",
+      "fallback": "Exact legacy UID and source-survey reference preserved in the scope note; no ABOUT edge claimed."
+    }
+  ],
+  "validation_scope": "All three complete description fields compared to submitted text; all six requested successful links read back as PROPOSED. Revision/proposer nodes and edges excluded from counts.",
+  "local_validation": {
+    "schema_version": "chu-hswm-scope-check/v1",
+    "status": "PASS",
+    "bundle": {
+      "path": "ontology/identity/hswm_core/CHU_HSWM_SOFTWARE_SCOPE_ONTOLOGY.v1.json",
+      "sha256": "2839842cc526340afb082e67df2b900782d65e77c3155702fd310d616870946d",
+      "counts": {
+        "nodes": 31,
+        "anchors": 2,
+        "relations": 73
+      }
+    },
+    "artifact_bindings_recomputed": 14,
+    "node_source_bindings_recomputed": 31,
+    "shacl": {
+      "base_conforms": true,
+      "scope_conforms": true
+    },
+    "query_rows": {
+      "scope": 2,
+      "execution_contracts": 6,
+      "sources_and_gaps": 12
+    },
+    "contracts": 6,
+    "literature_connections": 9,
+    "open_research_gaps": 3,
+    "negative_rejections": [
+      "missing_hswm_llm_kernel",
+      "chu_erroneously_llm_required",
+      "missing_hswm_world_model_capability"
+    ],
+    "actual_runtime_execution": false,
+    "claim_ceiling": "DECLARED_SCOPE_AND_READ_ONLY_KG_STRUCTURE_ONLY_NOT_WORLD_MODEL_EFFICACY_NOT_CANONICAL_WRITE_NOT_LLM_RUNTIME_EXECUTION",
+    "native_runtime_build": "PASSED",
+    "ontology_route_tests_passed": 49,
+    "development_episode": "chu-hswm-scope-20260927",
+    "selected_development_relation": "relation:ontology-focused",
+    "feedback_source": "agent(codex)",
+    "feedback_status": "FEEDBACK_RECORDED",
+    "local_markdown_links_verified": 48,
+    "changed_markdown_portable_without_rewrites": 5,
+    "full_requested_math_projection_documents": 210
+  },
+  "scientific_boundary": "Conceptual architecture and executable structure validation only. No full CHU interpreter, generic parallel scheduler, non-LLM world-model adapter, real-LLM gain, universe computability proof, or CR/FCL promotion."
+}

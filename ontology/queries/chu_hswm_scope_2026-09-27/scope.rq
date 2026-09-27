@@ -1,0 +1,12 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?profile ?role ?llm_required ?capability WHERE {
+  ?root p:standard_graph_role "SYNTHESIS_BUNDLE" ;
+    r:HAS_CONCEPT ?chu_domain .
+  ?chu_domain p:standard_graph_role "CHU_ABSTRACT_DOMAIN" ;
+    r:CONCEPTUALLY_INCLUDES ?profile_node .
+  ?profile_node p:standard_graph_role ?role ; p:name ?profile ; p:llm_required ?llm_required .
+  FILTER(?role IN ("HSWM_EXECUTION_PROFILE", "NON_LLM_WORLD_MODEL_PROFILE"))
+  OPTIONAL { ?profile_node r:HAVE_TARGET_CAPABILITY ?capability_node . ?capability_node p:name ?capability }
+}
+ORDER BY ?role ?capability

@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?kind ?name ?status ?source_authority ?url ?boundary WHERE {
+  ?item p:standard_graph_role ?kind ; p:name ?name ; p:status ?status .
+  FILTER(?kind IN ("LITERATURE_CONNECTION", "OPEN_RESEARCH_GAP"))
+  OPTIONAL { ?item p:source_authority ?source_authority }
+  OPTIONAL { ?item p:external_url ?url }
+  OPTIONAL { ?item p:claim_boundary ?boundary }
+}
+ORDER BY ?kind ?name ?url

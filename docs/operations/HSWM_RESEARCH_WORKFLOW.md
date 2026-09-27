@@ -106,6 +106,7 @@ src/hswm/effect-runtime/bin/hswm-workspace validate identity
 | 진단의 적대적 검토·해결 설계 | [9월 27일 해결안](../research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md): 복사 지름길·관측 부족·수정 no-op의 구분, 실행–관측–수정–재읽기 계약과 기존 W1–W5 연결 |
 | 추가 도구·논문 본문 확인 | [9월 27일 도구·논문 검토](../research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md): 생성 과제·문법 제한·PDF 근거 위치, 검색과 세계 모델 대조군의 전제·소스 버전·적용 순서 |
 | 구현할 아키텍처·개발 순서 | [9월 27일 구현 구조](../research/HSWM_IMPLEMENTABLE_ARCHITECTURE_2026-09-27.md): 영속 의미 그래프·국소 LLM·환경 관측·수정·재시작, 현재 코드와 첫 end-to-end 결과물 |
+| 의미 실행·관측·수정·재시작 진단 | [실행 안내](../../_research/hswm_semantic_lifecycle_v1/README.md): 16개 유한 환경, 네 조건, 독립 OS 프로세스 재개방; scripted 연결 검증과 실제 모델 평가를 구분 |
 | 연구 경로 변경·실패 해석 | [적응 연구 전략](../canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md) |
 | Semantic Weight·표현·이론 채택 | [이론 기반](../research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md), [정의와 하이퍼그래프](../research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md) |
 | 실현 가능성·성능 증명 | [구성적 증명](../research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md), [문헌에서 성능으로](../research/HSWM_LITERATURE_TO_PERFORMANCE_PROOF_2026-09-14.md), [bounded 확장](../research/HSWM_SEMANTIC_FRONTIER_PROOFS_2026-09-14.md) |

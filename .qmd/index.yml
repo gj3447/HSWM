@@ -1,0 +1,21 @@
+global_context: HSWM research repository. Retrieve sources before answering. Distinguish user target identity, research hypotheses, historical evidence, and current guides. A search rank is relevance, not scientific authority. Check the current file and its date; cached documents can lag behind edits.
+collections:
+  hswm-canon:
+    path: ./docs/canon
+    pattern: "**/*.md"
+    context:
+      /: HSWM identity and user directions; original sources are linked in each document.
+  hswm-research:
+    path: ./docs/research
+    pattern: "**/*.md"
+    context:
+      /: Dated research, assumptions, proofs, experiments and negative results.
+  hswm-operations:
+    path: ./docs/operations
+    pattern: "**/*.md"
+    context:
+      /: Engineering guides. HSWM_RESEARCH_WORKFLOW.md is the current workflow entrypoint.
+models:
+  embed: hf:ggml-org/embeddinggemma-300M-GGUF/embeddinggemma-300M-Q8_0.gguf
+  generate: hf:tobil/qmd-query-expansion-1.7B-gguf/qmd-query-expansion-1.7B-q4_k_m.gguf
+  rerank: hf:ggml-org/Qwen3-Reranker-0.6B-Q8_0-GGUF/qwen3-reranker-0.6b-q8_0.gguf

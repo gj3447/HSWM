@@ -27,3 +27,15 @@ startup_timeout_sec = 30.0
 tool_timeout_sec = 60.0
 default_tools_approval_mode = "writes"
 enabled_tools = ["describeSqlSchema", "executeSql", "getProjects", "getProject"]
+
+# Optional local document retrieval. QMD discovers the checkout's .qmd/index.yml.
+# Install/version details and refresh commands: docs/operations/HSWM_AI_NATIVE_TOOLS.md.
+[mcp_servers.hswm_docs]
+command = "sh"
+args = ["-c", 'cd "$(git rev-parse --show-toplevel)" && exec src/hswm/development/qmd/node_modules/.bin/qmd mcp']
+enabled = true
+required = false
+startup_timeout_sec = 15.0
+tool_timeout_sec = 60.0
+default_tools_approval_mode = "writes"
+enabled_tools = ["query", "get", "multi_get", "status"]

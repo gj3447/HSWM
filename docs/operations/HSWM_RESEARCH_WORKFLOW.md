@@ -59,6 +59,9 @@ src/hswm/effect-runtime/bin/hswm-workspace validate identity
 과거 snapshot의 hash와 현재 파일이 다르면 원래 Git revision을 확인한다. 과거 hash를
 현재 값으로 덮어쓰지 않는다. CLI 상세는 [KG 탐색 안내](HSWM_KG_WORKSPACE_2026-09-22.md)에 있다.
 
+긴 연구 문서를 찾을 때는 QMD, 저장된 모델 응답 두 군을 비교할 때는 Inspect AI를 선택해서
+사용할 수 있다. 설치·검색·평가 명령은 [AI 연구 도구 안내](HSWM_AI_NATIVE_TOOLS.md)에 있다.
+
 ## 변경에 맞는 검사와 기록
 
 아래에서 해당하는 검사만 고른다. schema나 공통 실행 경로를 바꾸면 관련 회귀 범위까지

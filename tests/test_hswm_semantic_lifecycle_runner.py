@@ -72,6 +72,36 @@ def test_wire_inputs_keep_evaluation_labels_and_split_identity_out(completed) ->
     assert report["heldoutUsedForRevision"] is False
 
 
+def test_selection_adapter_accepts_actual_reopened_development_reports(completed) -> None:
+    """The adapter consumes the actual report schema, not a hand-shaped substitute."""
+    out, report = completed
+    module_url = (ROOT / "src/hswm/effect-runtime/dist/semantic-lifecycle-selection.js").as_uri()
+    code = f"""
+import {{ readFileSync }} from 'node:fs';
+import {{ selectLifecycleCandidate }} from {json.dumps(module_url)};
+const report = JSON.parse(readFileSync(process.argv[1], 'utf8'));
+const development = Object.fromEntries(report.evaluations
+  .filter((row) => row.stage === 'development')
+  .map((row) => [row.arm, row]));
+const revisions = Object.fromEntries(report.revisions.map((row) => [row.arm, row]));
+console.log(JSON.stringify(selectLifecycleCandidate(
+  development.evidence_only, development.learned,
+  revisions.evidence_only, revisions.learned,
+  {{ allowance: '0', debit: '0' }}
+)));
+"""
+    result = subprocess.run(["node", "--input-type=module", "-e", code, str(out / "summary.json")],
+                            cwd=ROOT, text=True, capture_output=True, check=True, timeout=30)
+    selected = json.loads(result.stdout)
+    assert selected["_tag"] == "Right"
+    value = selected["right"]
+    assert value["applicability"] == "APPLICABLE"
+    assert value["selectedArm"] == "learned"
+    assert value["guard"] == {"allowance": "0", "debit": "0", "totalMass": "4",
+                               "currentObservedScore": "3", "candidateObservedScore": "4",
+                               "requiredCandidateObservedScore": "3", "observedGuardPasses": True}
+
+
 def test_bad_batch_and_refusal_stay_in_declared_denominator() -> None:
     module_url = (ROOT / "src/hswm/effect-runtime/dist/semantic-lifecycle-worker.js").as_uri()
     code = f"import {{assessBatch}} from {json.dumps(module_url)}; console.log(JSON.stringify([assessBatch('heldout',null).right,assessBatch('heldout','010').right,assessBatch('heldout','0101extra').right]))"

@@ -780,7 +780,12 @@ architecture-decision conceptual closure candidate는
 `SECONDARY_AI_CONCEPTUAL_CLOSURE_CANDIDATE`다. 이는 구현 판별선의 closure이지 형이상학·
 의식·과학적 효능의 closure가 아니다.
 
-같은 날 사용자는 **Hypergraph Semantic Weight Map 자체와 LLM token으로 작동하는 거대
+2026-09-27의 [세 철학 Lean 번역](docs/research/HSWM_THREE_PHILOSOPHIES_LEAN_2026-09-27.md)은
+M = Map의 실행·학습 보존, 역할 있는 관계의 조건부 표현 비용과 반례,
+의미 프로그램의 계산된 수정·유한 점수 향상을 기계 검증한다. 사용자 철학 원문과
+이 작은 수학적 번역의 범위를 구별하며 실제 LLM 효능이나 전체 CHU를 증명하지 않는다.
+
+2026-08-20에 사용자는 **Hypergraph Semantic Weight Map 자체와 LLM token으로 작동하는 거대
 hypergraph 학습구조**를 최우선 중심으로 다시 고정했다. 당시 secondary analysis는 본체를
 `token event → sparse role-aware n-ary activation → LLM function cell → external outcome
 → causal credit → versioned ΔW/ΔH → changed next activation`으로 형식화했다.

@@ -98,7 +98,7 @@ src/hswm/effect-runtime/bin/hswm-workspace validate identity
 | 프랙탈·다중 규모 합성 | [과학적 연결과 FCL-1..8](../research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md) |
 | 층간 매핑·뇌 모델링·agent의 바깥 역할 | [M = Map 사용자 방향](../canon/USER_PRIMARY_HSWM_CROSS_LAYER_MAP_2026-09-27.md), [매핑의 충분성과 후속 실험](../research/HSWM_CROSS_LAYER_MAP_RESEARCH_2026-09-27.md), [문헌·기존 코드·공학 연결 설계](../research/HSWM_CROSS_LAYER_MAP_ENGINEERING_2026-09-27.md) |
 | 층간 매핑 실행·RDF 조회 | [Cross-layer Map v1 실행 안내](../../_research/cross_layer_map_v1/README.md): 유한 매핑, 명시적 관측 바인딩, 의미 revision, SPARQL/SHACL |
-| 하이퍼그래프의 선택 이유·최소 비용 | [사용자 가설](../canon/USER_PRIMARY_HSWM_MINIMUM_COST_HYPERGRAPH_2026-09-27.md), [페르마·Transformer·Wolfram·ZFC와 비용 비교](../research/HSWM_MINIMUM_COST_HYPERGRAPH_HYPOTHESIS_2026-09-27.md) |
+| 하이퍼그래프의 선택 이유·최소 비용 | [사용자 가설](../canon/USER_PRIMARY_HSWM_MINIMUM_COST_HYPERGRAPH_2026-09-27.md), [주장 판정·최소 예측 상태·비용 비교·표준 그래프 매핑](../research/HSWM_MINIMUM_COST_HYPERGRAPH_HYPOTHESIS_2026-09-27.md) |
 | 연구 경로 변경·실패 해석 | [적응 연구 전략](../canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md) |
 | Semantic Weight·표현·이론 채택 | [이론 기반](../research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md), [정의와 하이퍼그래프](../research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md) |
 | 실현 가능성·성능 증명 | [구성적 증명](../research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md), [문헌에서 성능으로](../research/HSWM_LITERATURE_TO_PERFORMANCE_PROOF_2026-09-14.md), [bounded 확장](../research/HSWM_SEMANTIC_FRONTIER_PROOFS_2026-09-14.md) |

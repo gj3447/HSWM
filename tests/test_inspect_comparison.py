@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import importlib.util
 import json
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import sys
+import threading
 from types import SimpleNamespace
 
 import pytest
@@ -29,6 +31,7 @@ def load_module(name: str):
 
 paired_eval = load_module("paired_eval")
 semantic_locality_adapter = load_module("semantic_locality_adapter")
+live_eval = load_module("live_eval")
 
 
 def write_jsonl(path: Path, records: list[dict[str, str]]) -> None:
@@ -117,4 +120,117 @@ def test_source_adapter_retains_invalid_decision_as_a_failure(tmp_path: Path) ->
     assert pair.baseline == semantic_locality_adapter.INVALID_SAVED_OUTPUT
     baseline, candidate = paired_eval.run(output, tmp_path / "logs")
     assert read_eval_log(baseline.location).results.scores[0].metrics["accuracy"].value == 0.0
+    assert read_eval_log(candidate.location).results.scores[0].metrics["accuracy"].value == 1.0
+
+
+def live_input() -> dict[str, object]:
+    return {
+        "relation": {"semanticText": "original", "disposition": "binary", "uncertainty": "fixture", "exceptionRefs": []},
+        "roles": [
+            {"role": "subject", "ordinal": 0, "referenceType": "LOCAL_SEMANTIC_INPUT"},
+            {"role": "context", "ordinal": 1, "referenceType": "LOCAL_SEMANTIC_INPUT"},
+            {"role": "exception", "ordinal": 2, "referenceType": "LOCAL_SEMANTIC_INPUT"},
+        ],
+        "priorEvidence": [],
+        "fields": {"subject": {"dax": 0, "wug": 1, "zif": 0}, "context": {"pel": 0}, "exception": {"nub": 0}},
+    }
+
+
+def test_live_bridge_callable_hides_evaluator_fields(monkeypatch: pytest.MonkeyPatch) -> None:
+    example = live_eval.LiveExample("heldout-1", "heldout", live_input(), "1")
+    execution = live_eval.Execution("http://127.0.0.1:8001", "qwen3-4b-real", 32, 3, 0)
+    captured: dict[str, object] = {}
+
+    def fake_run(*args, **kwargs):
+        captured.update(json.loads(kwargs["input"]))
+        return SimpleNamespace(
+            returncode=0,
+            stderr="",
+            stdout=json.dumps({
+                "valid": True, "answer": "1", "error_kind": None, "request_sha256": "a" * 64,
+                "response_sha256": "b" * 64, "model": "qwen3-4b-real", "usage": None,
+                "latency_ms": 1.0, "model_calls": 1,
+            }),
+        )
+
+    monkeypatch.setattr(live_eval.subprocess, "run", fake_run)
+    assert live_eval.evaluate_relation("candidate relation", example, execution, ("fake-bridge",))["answer"] == "1"
+    assert set(captured) == {"input", "relation_text", "execution"}
+    assert captured["relation_text"] == "candidate relation"
+    assert "target" not in json.dumps(captured)
+    assert "heldout-1" not in json.dumps(captured)
+
+
+def test_live_preflight_rejects_noninteger_bits_roles_and_execution() -> None:
+    float_bit = live_input()
+    float_bit["fields"]["subject"]["dax"] = 0.0
+    with pytest.raises(ValueError, match="must be 0 or 1"):
+        live_eval.validate_local_semantic_input(float_bit)
+
+    boolean_ordinal = live_input()
+    boolean_ordinal["roles"][0]["ordinal"] = False
+    with pytest.raises(ValueError, match="ordered roles"):
+        live_eval.validate_local_semantic_input(boolean_ordinal)
+
+    with pytest.raises(ValueError, match="bridge range"):
+        live_eval._validate_execution(live_eval.Execution("http://127.0.0.1:8001", "model", 1.0, 3, 0))
+
+
+def test_live_task_scores_invalid_bridge_output_as_failure(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    examples = [
+        live_eval.LiveExample("one", "heldout", live_input(), "1"),
+        live_eval.LiveExample("two", "heldout", live_input(), "0"),
+    ]
+    execution = live_eval.Execution("http://127.0.0.1:8001", "qwen3-4b-real", 32, 3, 0)
+
+    def fake_evaluate(relation, example, execution, bridge_command):
+        if relation == "baseline":
+            return {"valid": False, "answer": None, "error_kind": "HTTP_503", "request_sha256": None, "response_sha256": None, "model": execution.model, "usage": None, "latency_ms": 1.0, "model_calls": 1}
+        return {"valid": True, "answer": example.target, "error_kind": None, "request_sha256": "a" * 64, "response_sha256": "b" * 64, "model": execution.model, "usage": None, "latency_ms": 1.0, "model_calls": 1}
+
+    monkeypatch.setattr(live_eval, "evaluate_relation", fake_evaluate)
+    baseline, candidate = live_eval.run_live(examples, "baseline", "candidate", execution, tmp_path / "logs", ("fake",))
+    assert read_eval_log(baseline.location).results.scores[0].metrics["accuracy"].value == 0.0
+    assert read_eval_log(candidate.location).results.scores[0].metrics["accuracy"].value == 1.0
+
+
+def test_live_inspect_uses_the_actual_typescript_bridge_and_http_fixture(tmp_path: Path) -> None:
+    received: list[dict[str, object]] = []
+
+    class FixtureHandler(BaseHTTPRequestHandler):
+        def do_POST(self):
+            assert self.path == "/v1/chat/completions"
+            body = self.rfile.read(int(self.headers["content-length"]))
+            request = json.loads(body)
+            received.append(request)
+            response = {
+                "model": "fixture-model",
+                "choices": [{"finish_reason": "stop", "message": {"content": '{"answer":1}'}}],
+                "usage": {"prompt_tokens": 3, "completion_tokens": 2, "total_tokens": 5},
+            }
+            encoded = json.dumps(response).encode()
+            self.send_response(200)
+            self.send_header("content-type", "application/json")
+            self.send_header("content-length", str(len(encoded)))
+            self.end_headers()
+            self.wfile.write(encoded)
+
+        def log_message(self, format, *args):
+            pass
+
+    server = ThreadingHTTPServer(("127.0.0.1", 0), FixtureHandler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        example = live_eval.LiveExample("heldout-1", "heldout", live_input(), "1")
+        execution = live_eval.Execution(f"http://127.0.0.1:{server.server_port}", "fixture-model", 32, 3, 0)
+        baseline, candidate = live_eval.run_live([example], "baseline relation", "candidate relation", execution, tmp_path / "logs")
+    finally:
+        server.shutdown()
+        thread.join()
+        server.server_close()
+
+    assert len(received) == 2
+    assert all("target" not in json.dumps(request) and "heldout-1" not in json.dumps(request) for request in received)
+    assert read_eval_log(baseline.location).results.scores[0].metrics["accuracy"].value == 1.0
     assert read_eval_log(candidate.location).results.scores[0].metrics["accuracy"].value == 1.0

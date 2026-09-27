@@ -1,0 +1,11 @@
+[project]
+name = "hswm-serena-tools"
+version = "0.0.0"
+description = "Optional pinned semantic-code MCP for HSWM development; separate from the runtime."
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "serena-agent @ git+https://github.com/oraios/serena@v1.7.0",
+]
+
+[tool.uv]
+package = false

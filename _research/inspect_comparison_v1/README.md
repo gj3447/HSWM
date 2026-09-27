@@ -53,3 +53,45 @@ same-prompt candidate improvement. See the original
 re-score stored observations; they are not a new inference, a real-LLM rerun,
 or HSWM efficacy evidence. Invalid or empty saved decisions are retained as
 deterministic scoring failures rather than omitted.
+
+## Live W1 relation-text comparison
+
+`live_eval.py` evaluates the existing W1 E1 typed local-semantic input through
+`hswm_bridge.mts`. For every case, it replaces only
+`input.relation.semanticText`; ordered roles, fields, context, exceptions, and
+the fixed execution configuration stay the same. This is an isolated
+relation-text execution diagnostic, not a durable canonical revision or a
+canonical learning loop. The target, split, case ID, and arm label remain with
+the evaluator and are never sent to the bridge.
+
+Prepare a new private fixture directory; the destination must not already
+exist. The fixture uses the existing historical family/seed split and replaces
+the W1 oracle relation text with its provisional baseline before either train
+or heldout file is written.
+
+```bash
+cd _research/inspect_comparison_v1
+node prepare_fixture.mts /absolute/private/hswm-w1-fixture 0 0
+```
+
+After the host-side model preflight has succeeded, compare a candidate relation
+text file on the heldout data. The default `--limit 4` is a smoke run, not the
+20-case heldout comparison; increase it deliberately only within the declared
+128 total arm-attempt budget.
+
+```bash
+uv run --locked python live_eval.py \
+  /absolute/private/hswm-w1-fixture/heldout.jsonl \
+  --baseline-relation /absolute/private/hswm-w1-fixture/baseline.txt \
+  --candidate-relation /absolute/private/candidate-relation.txt \
+  --base-url http://127.0.0.1:8001 --model qwen3-4b-real \
+  --max-tokens 32 --timeout-seconds 30 --seed 0 --limit 4
+```
+
+Inspect records this bridge-only evaluation as `none/none` because its provider
+is not called directly. Each sample's `hswm_bridge` metadata binds the actual
+served model name, request/response hashes, usage when reported, latency, and
+the local execution boundary. Invalid model output and HTTP failures remain
+scored failures. A Python-side bridge timeout records at most one possible
+request attempt rather than claiming a confirmed model call. Live `.eval` logs
+default to the ignored checkout `.hswm-local/inspect-live-eval/` directory.

@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+set -eu
+
+hswm_root=$(git rev-parse --show-toplevel)
+export SERENA_HOME="$hswm_root/src/hswm/development/serena/.state-v1"
+if [ ! -x "$hswm_root/src/hswm/development/serena/node_modules/.bin/typescript-language-server" ] || \
+   [ ! -x "$hswm_root/src/hswm/development/serena/.venv/bin/serena" ]; then
+  printf '%s\n' 'Optional Serena is not installed. From the checkout root run:' \
+    'uv sync --locked --project src/hswm/development/serena' \
+    'npm --prefix src/hswm/development/serena ci --ignore-scripts --no-audit --no-fund' >&2
+  exit 78
+fi
+hswm_lsp_modules="$SERENA_HOME/language_servers/static/TypeScriptLanguageServer/ts-lsp/node_modules"
+if [ ! -e "$hswm_lsp_modules" ]; then
+  mkdir -p "$(dirname "$hswm_lsp_modules")"
+  ln -s "$hswm_root/src/hswm/development/serena/node_modules" "$hswm_lsp_modules"
+fi
+if [ ! -f "$SERENA_HOME/serena_config.yml" ]; then
+  mkdir -p "$SERENA_HOME"
+  uv run --locked --no-sync --directory "$hswm_root/src/hswm/development/serena" serena init --language-backend LSP >/dev/null
+fi
+exec uv run --locked --no-sync --directory "$hswm_root/src/hswm/development/serena" \
+  serena start-mcp-server --context=ide --project "$hswm_root" \
+  --enable-web-dashboard false --open-web-dashboard false

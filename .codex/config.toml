@@ -39,3 +39,15 @@ startup_timeout_sec = 15.0
 tool_timeout_sec = 60.0
 default_tools_approval_mode = "writes"
 enabled_tools = ["query", "get", "multi_get", "status"]
+
+# Optional, pinned semantic code navigation. The wrapper fixes this checkout as
+# the project and the project config removes edit, shell, and memory tools.
+[mcp_servers.hswm_code]
+command = "sh"
+args = ["-c", 'cd "$(git rev-parse --show-toplevel)" && exec src/hswm/development/bin/hswm-serena']
+enabled = true
+required = false
+startup_timeout_sec = 30.0
+tool_timeout_sec = 60.0
+default_tools_approval_mode = "writes"
+enabled_tools = ["get_symbols_overview", "find_declaration", "find_referencing_symbols", "get_diagnostics_for_file"]

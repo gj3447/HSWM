@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hswm.local/schema/inspect-live-eval-dataset/v1",
+  "title": "HSWM Inspect local semantic live-evaluation dataset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "split", "input", "target"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "split": {"enum": ["train", "heldout"]},
+    "target": {"enum": ["0", "1"]},
+    "input": {"$ref": "#/$defs/localSemanticInput"}
+  },
+  "$defs": {
+    "bit": {"type": "integer", "enum": [0, 1]},
+    "localSemanticInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relation", "roles", "priorEvidence", "fields"],
+      "properties": {
+        "relation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["semanticText", "disposition", "uncertainty", "exceptionRefs"],
+          "properties": {
+            "semanticText": {"type": "string", "minLength": 1},
+            "disposition": {"type": "string", "minLength": 1},
+            "uncertainty": {"type": "string", "minLength": 1},
+            "exceptionRefs": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "roles": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["role", "ordinal", "referenceType"],
+            "properties": {
+              "role": {"enum": ["subject", "context", "exception"]},
+              "ordinal": {"enum": [0, 1, 2]},
+              "referenceType": {"const": "LOCAL_SEMANTIC_INPUT"}
+            }
+          }
+        },
+        "priorEvidence": {"type": "array", "maxItems": 0},
+        "fields": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["subject", "context", "exception"],
+          "properties": {
+            "subject": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["dax", "wug", "zif"],
+              "properties": {"dax": {"$ref": "#/$defs/bit"}, "wug": {"$ref": "#/$defs/bit"}, "zif": {"$ref": "#/$defs/bit"}}
+            },
+            "context": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["pel"],
+              "properties": {"pel": {"$ref": "#/$defs/bit"}}
+            },
+            "exception": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["nub"],
+              "properties": {"nub": {"$ref": "#/$defs/bit"}}
+            }
+          }
+        }
+      }
+    }
+  }
+}

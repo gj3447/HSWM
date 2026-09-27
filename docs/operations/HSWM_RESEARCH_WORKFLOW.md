@@ -60,7 +60,8 @@ src/hswm/effect-runtime/bin/hswm-workspace validate identity
 현재 값으로 덮어쓰지 않는다. CLI 상세는 [KG 탐색 안내](HSWM_KG_WORKSPACE_2026-09-22.md)에 있다.
 
 긴 연구 문서를 찾을 때는 QMD, 저장된 모델 응답 두 군을 비교할 때는 Inspect AI를 선택해서
-사용할 수 있다. 설치·검색·평가 명령은 [AI 연구 도구 안내](HSWM_AI_NATIVE_TOOLS.md)에 있다.
+사용할 수 있다. 코드 심볼 탐색은 Serena, 관계 설명의 최적화 비교는 GEPA를 사용할 수 있다.
+설치·검색·평가 명령은 [AI 연구 도구 안내](HSWM_AI_NATIVE_TOOLS.md)에 있다.
 
 ## 변경에 맞는 검사와 기록
 

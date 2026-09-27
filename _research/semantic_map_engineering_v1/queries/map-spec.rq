@@ -1,0 +1,37 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX map: <https://hswm.invalid/cross-layer-map-rdf-view/v1/>
+PREFIX hswm: <https://hswm.invalid/canonical-atom-v2/rdf/v1/vocab/>
+
+# Bounded local-union query for the explicitly derived MapSpec view. It does
+# not read canonical payloads or establish that the map is causally correct.
+SELECT ?view ?relationKey ?contextKey ?contextDigest ?sourceRef ?sourceDigest
+       ?targetRef ?targetDigest ?mappingKind ?mappingMethod ?timeUnit ?horizon
+       ?world ?loss ?lossOrdinal ?action ?actionOrdinal ?scopeContext ?scopeContextOrdinal
+       ?observable ?observableOrdinal
+WHERE {
+  ?view a map:DerivedMapSpecView ;
+        map:mapSpec ?map ;
+        map:relation ?relation ;
+        map:contextContentSha256 ?contextDigest .
+  ?relation map:canonicalKeyId ?relationKey .
+  ?view map:derivedFromContext ?context .
+  ?context map:canonicalKeyId ?contextKey .
+  ?map a map:MapSpec ;
+       map:sourceModelRef ?sourceRef ; map:sourceModelSha256 ?sourceDigest ;
+       map:targetModelRef ?targetRef ; map:targetModelSha256 ?targetDigest ;
+       map:mappingKind ?mappingKind ; map:mappingMethod ?mappingMethod ;
+       map:timeUnit ?timeUnit ; map:timeHorizon ?horizon ; map:supportWorld ?world .
+  ?map map:allowedActionEntry ?actionEntry ;
+       map:observableFieldEntry ?observableEntry .
+  ?actionEntry map:ordinal ?actionOrdinal ; map:value ?action .
+  ?observableEntry map:ordinal ?observableOrdinal ; map:value ?observable .
+  OPTIONAL {
+    ?map map:supportContextEntry ?scopeContextEntry .
+    ?scopeContextEntry map:ordinal ?scopeContextOrdinal ; map:value ?scopeContext .
+  }
+  OPTIONAL {
+    ?map map:declaredLossEntry ?lossEntry .
+    ?lossEntry map:ordinal ?lossOrdinal ; map:value ?loss .
+  }
+}
+ORDER BY ?view ?lossOrdinal ?actionOrdinal ?scopeContextOrdinal ?observableOrdinal

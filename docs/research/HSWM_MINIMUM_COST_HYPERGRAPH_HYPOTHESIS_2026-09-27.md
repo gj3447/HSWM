@@ -6,6 +6,11 @@
 AI의 역할과 그 역할에 적합한 표현 구조의 선택 원리를 연결하는 것이다. 아래는 그 주장을
 검토하기 위한 구체화이며, 보편적 최소성의 증명이나 새 실험 결과가 아니다.
 
+후속 공학 구현: [Semantic Map Engineering v1](../../_research/semantic_map_engineering_v1/README.md)은
+아래 설계 중 frame의 세 표현 왕복·직렬화 바이트 비교·명시적인 derived MapSpec RDF 조회를
+실행한다. 아래의 전체 비용·실모델 효능 가설은 여전히 미검증이며, 기존 canonical RDF의
+payload 생략 계약을 바꾸지 않는다.
+
 ## 0. 현재 판단과 이번 심화의 범위
 
 **다자 관계를 유지하는 HSWM 설계에는 근거가 있다. 하이퍼그래프가 우주를 기술하는

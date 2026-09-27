@@ -1,0 +1,64 @@
+@prefix map: <https://hswm.invalid/cross-layer-map-rdf-view/v1/> .
+@prefix hswm: <https://hswm.invalid/canonical-atom-v2/rdf/v1/vocab/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Local SHACL Core validation of exposed derived fields only. It does not
+# validate canonical payloads, causal correspondence, or PROV process truth.
+# SHACL Core has no cross-node value-equality path here: byte/digest equality
+# between this view and its context participant, and ordinal uniqueness, are
+# enforced by the compiler; the manifest dataset digest binds resulting bytes.
+map:DerivedMapSpecViewShape a sh:NodeShape ;
+  sh:targetClass map:DerivedMapSpecView ;
+  sh:property [ sh:path prov:wasDerivedFrom ; sh:minCount 2 ; sh:maxCount 2 ] ;
+  sh:property [ sh:path map:derivedFromContext ; sh:minCount 1 ; sh:maxCount 1 ; sh:node map:ContextCommitmentShape ] ;
+  sh:property [ sh:path map:relation ; sh:minCount 1 ; sh:maxCount 1 ; sh:node map:RelationShape ] ;
+  sh:property [ sh:path map:mapSpec ; sh:minCount 1 ; sh:maxCount 1 ; sh:node map:MapSpecShape ] ;
+  sh:property [ sh:path map:contextContentSha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[a-f0-9]{64}$" ] ;
+  sh:property [ sh:path map:writeBack ; sh:hasValue "FORBIDDEN" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+map:ContextCommitmentShape a sh:NodeShape ;
+  sh:property [ sh:path map:canonicalKeyId ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path hswm:contentSha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[a-f0-9]{64}$" ] .
+
+map:RelationShape a sh:NodeShape ;
+  sh:property [ sh:path rdf:type ; sh:hasValue map:DerivedRelation ] ;
+  sh:property [ sh:path map:canonicalKeyId ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path map:revisionId ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ] ;
+  sh:property [ sh:path map:hasRoleIncidence ; sh:minCount 4 ; sh:maxCount 4 ; sh:node map:RoleIncidenceShape ] .
+
+map:RoleIncidenceShape a sh:NodeShape ;
+  sh:targetClass map:RoleIncidence ;
+  sh:property [ sh:path hswm:role ; sh:in ("subject" "context" "evidence" "exception") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path hswm:referenceType ; sh:hasValue "hswm:semantic:role" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path hswm:ordinal ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ] ;
+  sh:property [ sh:path hswm:sourceAtom ; sh:minCount 1 ; sh:maxCount 1 ; sh:nodeKind sh:IRI ] ;
+  sh:property [ sh:path hswm:targetAtom ; sh:minCount 1 ; sh:maxCount 1 ; sh:node map:CanonicalParticipantShape ] .
+
+map:CanonicalParticipantShape a sh:NodeShape ;
+  sh:property [ sh:path map:canonicalKeyId ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path hswm:contentSha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[a-f0-9]{64}$" ] .
+
+map:OrderedEntryShape a sh:NodeShape ;
+  sh:property [ sh:path map:ordinal ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:nonNegativeInteger ] ;
+  sh:property [ sh:path map:value ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+map:MapSpecShape a sh:NodeShape ;
+  sh:property [ sh:path rdf:type ; sh:hasValue map:MapSpec ] ;
+  sh:property [ sh:path map:sourceModelRef ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path map:sourceModelSha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[a-f0-9]{64}$" ] ;
+  sh:property [ sh:path map:targetModelRef ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path map:targetModelSha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[a-f0-9]{64}$" ] ;
+  sh:property [ sh:path map:mappingKind ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path map:mappingMethod ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path map:timeUnit ; sh:hasValue "tick" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path map:timeHorizon ; sh:hasValue "1"^^xsd:nonNegativeInteger ; sh:datatype xsd:nonNegativeInteger ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path map:supportWorld ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path map:allowedAction ; sh:minCount 1 ] ;
+  sh:property [ sh:path map:allowedActionEntry ; sh:minCount 1 ; sh:node map:OrderedEntryShape ] ;
+  sh:property [ sh:path map:declaredLossEntry ; sh:node map:OrderedEntryShape ] ;
+  sh:property [ sh:path map:supportContextEntry ; sh:node map:OrderedEntryShape ] ;
+  sh:property [ sh:path map:observableField ; sh:minCount 1 ] ;
+  sh:property [ sh:path map:observableFieldEntry ; sh:minCount 1 ; sh:node map:OrderedEntryShape ] .

@@ -3,7 +3,7 @@
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Effect, Either, Layer } from '../../src/hswm/effect-runtime/node_modules/effect/dist/esm/index.js';
 import {
   compareToyMappings, makeToyInputPacket, makeToyMapSpec, readToyFire, transitionToyState
@@ -108,7 +108,8 @@ const graphInput = (runtime, label, outcome) => Effect.gen(function* () {
   };
 });
 
-async function run(output) {
+/** Reusable local lifecycle; importing this file never runs it or writes files. */
+export async function runCrossLayerMapRehearsal(output) {
   // Refuse overwrite before creating the durable runtime.
   await mkdir(dirname(output), { recursive: true });
   await mkdir(output);
@@ -145,6 +146,7 @@ async function run(output) {
     }));
     const relation = atom(relationUid, 'semantic_relation', content, ['subject', 'context', 'evidence', 'exception'].map(role => ({ referenceType: CROSS_LAYER_MAP_ROLE_REFERENCE_TYPE, role, target: participants[role].key })));
     yield* commitAtoms(runtime, [...Object.values(participants), relation], 'map:seed');
+    const initialFrame = yield* readCrossLayerMapFrame(runtime, relationUid, 'event:first');
     const trace = yield* executeCrossLayerMapRelation(runtime, relationUid, 'event:first', cell, http);
     const fire = readToyFire(initialState, 'pulse');
     const outcome = yield* stageLlmSemanticOutcome(runtime, trace, String(fire), 'fixture:finite-toy-rh/v1');
@@ -167,7 +169,7 @@ async function run(output) {
     yield* controller.recordVerification(input.contract.runId, input.verification.decision, input.verification.outcome);
     const bound = yield* controller.submitDelta({ runId: input.contract.runId, transactionId: input.transactionId, affectedKeys: proposal.affectedKeys, evidence: input.evidence, candidate: proposal.candidate });
     check(bound.disposition === 'COMMITTED', 'input binding must commit');
-    return { firstPrediction: trace.prediction, observed: fire, learnedRevision: learnedFrame.frame.relation.key.revisionId, nextSubject: next.participants.subject.key, outcomeStatus: outcome.status };
+    return { firstPrediction: trace.prediction, observed: fire, learnedRevision: learnedFrame.frame.relation.key.revisionId, nextSubject: next.participants.subject.key, outcomeStatus: outcome.status, frames: { initial: initialFrame, learned: learnedFrame } };
   }).pipe(Effect.provide(layer())));
 
   // Reopen from the durable journal, rather than trusting in-memory objects.
@@ -187,26 +189,34 @@ async function run(output) {
     const shacl = yield* validateKgShacl(view, shape);
     check(Array.isArray(rows) && rows.length === 4, 'current map query must return four roles');
     check(shacl.conforms, 'map RDF profile must conform');
-    return { nextPrediction: trace.prediction, relationRevision: current.frame.relation.key.revisionId, projection, rows, shacl };
+    return { nextPrediction: trace.prediction, relationRevision: current.frame.relation.key.revisionId, projection, rows, shacl, frame: current };
   }).pipe(Effect.provide(layer())));
 
   const sourcePaths = [domainPath, 'src/hswm/effect-runtime/src/cross-layer-map-runtime.ts', 'src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts', 'src/hswm/effect-runtime/dist/cross-layer-map-domain.js', 'src/hswm/effect-runtime/dist/cross-layer-map-runtime.js', '_research/cross_layer_map_v1/run.mjs', '_research/cross_layer_map_v1/queries/current-map-roles.rq', '_research/cross_layer_map_v1/shapes/map-profile.ttl', 'src/hswm/effect-runtime/package-lock.json'];
   const sources = await Promise.all(sourcePaths.map(async path => ({ path, sha256: sha(await readFile(join(root, path))) })));
+  const { frames, ...cycleReport } = cycle;
   const report = {
     schema: 'hswm-cross-layer-map-rehearsal/v1', status: 'ENGINEERING_FIXTURE_PASSED',
     evidence: 'SCRIPTED_TRANSPORT_NOT_REAL_LLM_IMPROVEMENT', modelCalls: 0, fixtureTransportCalls: requests.length,
     sources, comparison: compareToyMappings(),
     comparisonInterpretation: 'Readout class consistency over the finite domain; unambiguous rows are not prediction accuracy.',
-    cycle: { ...cycle, interveningAction: { action: 'wait', window: { start: 1, end: 2 } }, nextPrediction: reopened.nextPrediction, relationRevision: reopened.relationRevision },
+    cycle: { ...cycleReport, interveningAction: { action: 'wait', window: { start: 1, end: 2 } }, nextPrediction: reopened.nextPrediction, relationRevision: reopened.relationRevision },
     graph: { currentRoles: reopened.rows, shacl: reopened.shacl, mapping: reopened.projection.projection.manifest.mapping, rdfDatasetOmits: reopened.projection.projection.manifest.rdfDatasetOmits, writeBack: 'FORBIDDEN' }
   };
   await writeFile(join(output, 'graph.nq'), reopened.projection.projection.nquads);
   await writeFile(join(output, 'projection.json'), right(canonicalAtomV2DurableRdfProjectionBytes(reopened.projection)));
   await writeFile(join(output, 'report.json'), JSON.stringify(report, null, 2) + '\n');
-  process.stdout.write(JSON.stringify({ status: report.status, report: join(output, 'report.json'), currentRoles: reopened.rows.length, shaclConforms: reopened.shacl.conforms, modelCalls: 0 }, null, 2) + '\n');
+  return { report, frames: { ...frames, rebound: reopened.frame }, projection: reopened.projection };
 }
 
-const args = process.argv.slice(2);
-if (args.length === 1 && ['--help', '-h'].includes(args[0])) process.stdout.write(usage);
-else if (args.length !== 2 || args[0] !== '--output' || !args[1].trim()) { process.stderr.write(usage); process.exitCode = 2; }
-else await run(resolve(args[1])).catch(error => { process.stderr.write(`${error.message}\n`); process.exitCode = 1; });
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+  const args = process.argv.slice(2);
+  if (args.length === 1 && ['--help', '-h'].includes(args[0])) process.stdout.write(usage);
+  else if (args.length !== 2 || args[0] !== '--output' || !args[1].trim()) { process.stderr.write(usage); process.exitCode = 2; }
+  else {
+    const output = resolve(args[1]);
+    await runCrossLayerMapRehearsal(output).then(({ report }) => {
+      process.stdout.write(JSON.stringify({ status: report.status, report: join(output, 'report.json'), currentRoles: report.graph.currentRoles.length, shaclConforms: report.graph.shacl.conforms, modelCalls: 0 }, null, 2) + '\n');
+    }).catch(error => { process.stderr.write(`${error.message}\n`); process.exitCode = 1; });
+  }
+}

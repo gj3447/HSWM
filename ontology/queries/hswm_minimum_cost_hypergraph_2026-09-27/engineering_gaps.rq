@@ -1,0 +1,6 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?role ?meaning ?status ?boundary WHERE {
+  ?item p:standard_graph_role ?role ; p:name ?meaning ; p:status ?status ; p:claim_boundary ?boundary .
+  FILTER(?role IN ("IMPLEMENTED_CONTRACT", "IMPLEMENTATION_SCOPE", "OPEN_RESEARCH_GAP"))
+}
+ORDER BY ?role ?meaning

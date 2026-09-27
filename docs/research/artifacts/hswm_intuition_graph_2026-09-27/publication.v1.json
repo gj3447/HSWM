@@ -1,0 +1,111 @@
+{
+  "schema_version": "hswm-kg-synthesis-publication/v1",
+  "published_on": "2026-09-27",
+  "status": "LIVE_KG_CREATED_AND_READ_BACK",
+  "source_ref": "docs/research/HSWM_INTUITION_STANDARD_GRAPH_SYNTHESIS_2026-09-27.md",
+  "source_sha256": "0df015feb102bff9f1580542736a5112ea4d7f78171787e63dabc4cc359c7675",
+  "local_bundle": "ontology/identity/hswm_core/HSWM_MINIMUM_COST_HYPERGRAPH_ONTOLOGY.v1.json",
+  "publication_surface": "Relay KG ontology_save_record / ontology_link_records",
+  "verification_surface": "Relay KG ontology_get / ontology_neighbors(include_preliminary=true)",
+  "publication_scope": "Three linked SECONDARY_AI summary notes. Not an exact replication of the local bundle.",
+  "authority_boundary": "USER_PRIMARY originals remain source-bound in the repository. Live notes are SECONDARY_AI / PENDING_OR_PRELIMINARY; five links are PROPOSED, not ratified ACTIVE facts. Existing user/canonical properties were not changed.",
+  "nodes": [
+    {
+      "uid": "sym:Note:chatgpt-hswm-minimum-cost-hypergraph-synthesis-20260927",
+      "title": "HSWM 직관의 표준 그래프 지도 — 양파껍질·Map·최소비용 가설",
+      "target_version": "\"2026-09-27T06:55:27.380Z\"",
+      "body_sha256": "132d84e42c31ad844256977e22464df121a6be3bc20729cf6a0f7c563a4443c3",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "body_exact_match": true
+    },
+    {
+      "uid": "sym:Note:chatgpt-hswm-intuition-literature-20260927",
+      "title": "HSWM 직관과 원전 연결 — 지지 범위·교정·미검증 주장",
+      "target_version": "\"2026-09-27T06:55:29.700Z\"",
+      "body_sha256": "c21eaeb45a3d6e600b26dfb1a7994854d16db3504356e173d7ed471bc3d1b6e4",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "body_exact_match": true
+    },
+    {
+      "uid": "sym:Note:chatgpt-hswm-intuition-engineering-20260927",
+      "title": "HSWM 직관의 구현 계약 — n항 관계·MapSpec·표현 비용·연구 공백",
+      "target_version": "\"2026-09-27T06:55:30.982Z\"",
+      "body_sha256": "a62f671e6bbff35b1f4475d936ac0b10d4907c26e89c0644fd6b6df6e6c122f6",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "body_exact_match": true
+    }
+  ],
+  "links": [
+    {
+      "source_uid": "sym:Note:chatgpt-hswm-minimum-cost-hypergraph-synthesis-20260927",
+      "target_uid": "sym:Concept:hswm",
+      "relation": "ABOUT",
+      "relationship_status": "PROPOSED",
+      "authority_class": "SECONDARY_AI",
+      "readback_verified": true
+    },
+    {
+      "source_uid": "sym:Note:chatgpt-hswm-minimum-cost-hypergraph-synthesis-20260927",
+      "target_uid": "sym:Note:chatgpt-hswm-intuition-literature-20260927",
+      "relation": "REFERENCES",
+      "relationship_status": "PROPOSED",
+      "authority_class": "SECONDARY_AI",
+      "readback_verified": true
+    },
+    {
+      "source_uid": "sym:Note:chatgpt-hswm-minimum-cost-hypergraph-synthesis-20260927",
+      "target_uid": "sym:Note:chatgpt-hswm-intuition-engineering-20260927",
+      "relation": "REFERENCES",
+      "relationship_status": "PROPOSED",
+      "authority_class": "SECONDARY_AI",
+      "readback_verified": true
+    },
+    {
+      "source_uid": "sym:Note:chatgpt-hswm-intuition-engineering-20260927",
+      "target_uid": "sym:Note:chatgpt-hswm-intuition-literature-20260927",
+      "relation": "DERIVED_FROM",
+      "relationship_status": "PROPOSED",
+      "authority_class": "SECONDARY_AI",
+      "readback_verified": true
+    },
+    {
+      "source_uid": "sym:Note:chatgpt-hswm-intuition-engineering-20260927",
+      "target_uid": "sym:Repository:hswm",
+      "relation": "ABOUT",
+      "relationship_status": "PROPOSED",
+      "authority_class": "SECONDARY_AI",
+      "readback_verified": true
+    }
+  ],
+  "validation_scope": "Exact complete description text readback for all three notes; all five requested outgoing links read back with their stored PROPOSED status. Tool-created revision/proposer nodes and edges are outside these counts.",
+  "scientific_boundary": "Literature and engineering synthesis; no new empirical efficacy result, universal minimum-cost proof, CR/FCL promotion, or runtime learning claim.",
+  "local_validation": {
+    "bundle_sha256": "f8eeba36d596ea813d50ce3ab5ac09c4e8c5e16bfe9ef368f882a5d95488cb3e",
+    "counts": {
+      "owned_nodes": 22,
+      "existing_anchors": 3,
+      "relations": 36
+    },
+    "artifact_bindings_verified": 8,
+    "node_source_bindings_verified": 22,
+    "all_owned_nodes_reachable": true,
+    "rdf_profile": "RDF_1_1_N_QUADS_BLANK_NODE_FREE_DETERMINISTIC_PROFILE",
+    "shacl_profile": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+    "shacl_conforms": true,
+    "query_rows": {
+      "user_conjecture": 1,
+      "literature_constraints": 10,
+      "engineering_gaps": 7
+    },
+    "local_markdown_links_verified": 54,
+    "changed_markdown_portable_without_rewrites": 4,
+    "native_runtime_build": "PASSED",
+    "docs_route_tests_passed": 8,
+    "development_episode": "intuition-graph-20260927-docs",
+    "feedback_source": "agent(codex)",
+    "scope": "Structure, source bytes and retrieval only; not proposition truth, minimum cost or HSWM efficacy."
+  }
+}

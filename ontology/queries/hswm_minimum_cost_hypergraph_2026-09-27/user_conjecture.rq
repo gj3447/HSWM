@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?meaning ?status ?source ?sha256 WHERE {
+  ?source_node p:standard_graph_role "USER_DIRECT_SOURCE" ; r:HAS_ASSERTION ?claim .
+  ?claim p:standard_graph_role "USER_PRIMARY_RESEARCH_CONJECTURE" ;
+    p:name ?meaning ; p:status ?status ; p:source_path ?source ; p:source_sha256 ?sha256 .
+}

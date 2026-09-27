@@ -11,6 +11,9 @@ AI의 역할과 그 역할에 적합한 표현 구조의 선택 원리를 연결
 실행한다. 아래의 전체 비용·실모델 효능 가설은 여전히 미검증이며, 기존 canonical RDF의
 payload 생략 계약을 바꾸지 않는다.
 
+사용자 직관·문헌·현재 구현·미해결 질문의 연결과 KG는
+[표준 그래프 종합](HSWM_INTUITION_STANDARD_GRAPH_SYNTHESIS_2026-09-27.md)에 정리한다.
+
 ## 0. 현재 판단과 이번 심화의 범위
 
 **다자 관계를 유지하는 HSWM 설계에는 근거가 있다. 하이퍼그래프가 우주를 기술하는
@@ -176,7 +179,7 @@ RDF projection에는 원본 payload 전체가 없으므로 위 그림에서 LLM 
 | [SPARQL 1.1 Query, 2013-03-21](https://www.w3.org/TR/2013/REC-sparql11-query-20130321/) | W3C Recommendation | 지정한 dataset에서 현재 관계·참여 역할·revision 조회 |
 | [SHACL, 2017-07-20](https://www.w3.org/TR/2017/REC-shacl-20170720/) | W3C Recommendation | RDF로 노출한 구조의 타입·개수·필수 속성 검사 |
 | [JSON-LD 1.1, 2020-07-16](https://www.w3.org/TR/2020/REC-json-ld11-20200716/) | W3C Recommendation | JSON 소비자와 교환할 필요가 생길 때의 선택지; 현재 N-Quads 경로에 중복 도입하지 않음 |
-| [PROV-O, 2013-04-30](https://www.w3.org/TR/2013/REC-prov-o-20130430/) | W3C Recommendation | 외부 provenance 소비자가 필요할 때 Entity/Activity/Agent 등의 명시적 매핑 후보 |
+| [PROV-O, 2013-04-30](https://www.w3.org/TR/2013/REC-prov-o-20130430/) | W3C Recommendation | derived MapSpec view의 Entity·wasDerivedFrom 연결; 전체 PROV 제약 검증을 뜻하지 않음 |
 
 HSWM의 `role`, `ordinal`, `contentSha256` 등은 저장소 소유 어휘다. RDF를 사용한다고
 이 어휘 자체가 W3C 표준이 되거나 현재 provenance가 자동으로 PROV-O를 구현하는 것은 아니다.
@@ -189,8 +192,8 @@ HSWM의 `role`, `ordinal`, `contentSha256` 등은 저장소 소유 어휘다. RD
 | --- | --- | --- |
 | 관계 identity·revision | `semantic_relation` atom, canonical key, supersedes reference | 조회는 supersedes 후속 참조가 없는 leaf를 선택; lineage의 선형성은 canonical schema/runtime의 전제 |
 | 참여자와 역할·순서 | `TypedReference`의 source/target·referenceType·role·ordinal | 순서를 RDF triple의 나열 순서에서 추정하지 않음 |
-| 의미·MapSpec·근거 본문 | 원본 content bytes와 digest, 기존 frame decoder | 현재 RDF에는 content descriptor만 있으며 본문 전체가 없음 |
-| 층 매핑의 모델·시간·개입·손실 | `context`의 버전 있는 MapSpec | JSON payload의 필드는 현재 SPARQL/SHACL 검사 대상이 아님 |
+| 의미·MapSpec·근거 본문 | 원본 content bytes와 digest, 기존 frame decoder | 기존 canonical RDF에는 descriptor가 있고 본문 전체는 생략; 별도 derived view는 선언된 MapSpec 필드만 노출 |
+| 층 매핑의 모델·시간·개입·손실 | `context`의 버전 있는 MapSpec과 derived view | 노출 필드에 SPARQL/SHACL 적용; 원본 bytes·digest 결속과 ordinal 검사는 compiler 계약 |
 | revision의 출처 | 기존 source reference·evidence digest·provenance mode | 기록의 존재와 그 기록이 주장하는 사실의 참은 별도 |
 | 현재 관계 조회와 profile 구조 검사 | `.rq`는 현재 leaf 조회, SHACL Core `.ttl`은 제공된 cross-layer dataset의 모든 `ReifiedRelationAtomVersion`에 적용 | 전체 의미의 정확성·인과성·최소비용은 판정하지 않음 |
 
@@ -204,14 +207,15 @@ HSWM의 `role`, `ordinal`, `contentSha256` 등은 저장소 소유 어휘다. RD
 
 따라서 **추상적인 incidence encoding의 무손실성**과 **현재 RDF projection의 보존 범위**는
 다르다. 후자는 raw payload와 full journal을 생략하는 view이며 전체 canonical state를
-복원하는 무손실 codec이 아니다. 공개 field-level MapSpec 조회가 실제로 필요해지면 원본
-digest에 연결된 versioned derived view를 추가할 수 있다. 이 선택은 canonical write 경로를
-만들거나 숨겨진 payload를 자동 공개하는 변경과 별개다.
+복원하는 무손실 codec이 아니다. 후속 [derived MapSpec view](../../src/hswm/effect-runtime/src/cross-layer-map-rdf-view.ts)는
+원본 digest에 연결된 필드 조회를 구현한다. canonical write 경로를 추가하거나 숨겨진
+payload 전체를 공개하지 않는다. 전체 frame의 무손실성은 별도의 세 codec 왕복 계약이다.
 
 ## 5. 비용 가설의 실험 설계
 
-**설계 후보 / 미실행.** 아래는 현재 연구 과제를 위한 비교안이며 새 개발 gate나 성공 기준의
-완화가 아니다. 구조 도구를 추가하는 것만으로 이 실험을 수행했다고 기록하지 않는다.
+**전체 비용·실모델 효능 실험은 미실행.** 아래 비교안 중 정보 보존 codec과 직렬화 바이트
+비교는 후속 구현에서 실행됐다. 나머지는 연구 제안이며 새 개발 gate나 성공 기준의 완화가
+아니다. 구조 검사와 직렬화 비교만으로 전체 비용 가설을 검증했다고 기록하지 않는다.
 
 | 비교 축 | 최소 비교 구성 | 판정할 질문 |
 | --- | --- | --- |

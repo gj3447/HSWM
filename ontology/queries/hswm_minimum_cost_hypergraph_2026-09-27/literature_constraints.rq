@@ -1,0 +1,6 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?meaning ?source_authority ?status ?boundary ?url WHERE {
+  ?item p:standard_graph_role "LITERATURE_CONSTRAINT" ; p:name ?meaning ;
+    p:source_authority ?source_authority ; p:status ?status ; p:claim_boundary ?boundary ; p:external_url ?url .
+}
+ORDER BY ?meaning ?url

@@ -1,0 +1,719 @@
+{
+  "schema_version": "hswm-adversarial-remediation-plan-kg/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+  "status": "SOURCE_BOUND_PROPOSED_REMEDIATION",
+  "nonclaim": "NOT_LIVE_COGNITION_NOT_RUNTIME_IMPLEMENTATION_NOT_MODEL_EFFICACY",
+  "authority_boundary": "Secondary design review only; original USER_PRIMARY identities, historical failures and CR/FCL ceilings are unchanged. ACTIVE edges support local navigation, not completed work.",
+  "artifact_bindings": [
+    {
+      "path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+      "sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed"
+    },
+    {
+      "path": "_research/hswm_adversarial_remediation_v1/verification.v1.json",
+      "sha256": "d53442c0763b9e3c63408e6e1dee4f79483a5dba3cfb58575ed350b1809dfad6"
+    },
+    {
+      "path": "_research/hswm_adversarial_remediation_v1/counterexamples.mjs",
+      "sha256": "11ebe5b7a917f801eb4bf15e5baebe559ad7ee32ca07d8dde4a2f7bb0bdea94c"
+    },
+    {
+      "path": "_research/hswm_adversarial_remediation_v1/README.md",
+      "sha256": "e2bc2d06de3e9beb7b8b06034bfe0278d58a062f5026b9b683e1f0a5185b3d3d"
+    },
+    {
+      "path": "_research/hswm_adversarial_remediation_v1/queries/attack-remedy.rq",
+      "sha256": "4d29b09c85da7b05291b0d5987f903c6ed25807135cffeb6a96e5fd86a1c176c"
+    },
+    {
+      "path": "_research/hswm_adversarial_remediation_v1/queries/unaddressed-attacks.rq",
+      "sha256": "312e98794081ea44d5ed018b19097cf453e03f3d9b0807c6c3ad28c591e8a870"
+    },
+    {
+      "path": "_research/hswm_deep_research_v1/protocol.v1.json",
+      "sha256": "a377b50c846ce6af2f325b79c388a6fc1986a3b5a6821c261da4cc5c6cb0292b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/local-semantic-execution-domain.ts",
+      "sha256": "0db55e4557ebe5f4034d91b556d2c3a290726aef5f237742b3341ad81328c1b3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+      "sha256": "55c7eea7b7ba3d038783b4dbec92cf29b992487a9d7eaf8ddb50d05a84277d85"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-graph-loop-admission.ts",
+      "sha256": "2480f7685c0b15aab13cf7cdc588ffe2dec09dc78254d431017cb5ecddc3bfd0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-domain.ts",
+      "sha256": "f484bc7115f8e5c7d737739ce4fd98e3f55687609dcdf22d5179d227fc36eeab"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-outcome-judgment.ts",
+      "sha256": "931653232c479fb5154ebdeab7e931ccfd3181387a0eea657e4c1e62cad842c0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-frame-representation.ts",
+      "sha256": "eaef7dad8890d8ffb764d7fd755dad836654c1723bd80fa9f57acc945931701e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-rdf-projection.ts",
+      "sha256": "6bba63be02c36fd245c89a0739afc8def0336015133563be9e89f576007bee41"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/cross-layer-map-runtime.ts",
+      "sha256": "cdecd536396b76e8580e98f52e9e9e9d461e20d1e0ed5bbe27346eb5847a30e8"
+    },
+    {
+      "path": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+      "sha256": "9d790d872f6ae8f4075d76d46b20c1276ec0c62d9a32a5b63b5b824388590c6e"
+    },
+    {
+      "path": "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md",
+      "sha256": "8b1b89e5ef848c3ce76ea6f76d8d60622768e0fc14aeacc7d5177f7ee35967b5"
+    },
+    {
+      "path": "docs/canon/USER_PRIMARY_CHU_HSWM_SOFTWARE_SCOPE_2026-09-27.md",
+      "sha256": "713396619020c3142a9866a6aa03bc88152aa26e5d3a6403102be5b80dcab6e3"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 16,
+    "anchors": 0,
+    "relations": 31
+  },
+  "anchors": [],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM adversarial remediation plan",
+        "description": "Separate representation, relation execution, world fidelity and causal revision benefit; reuse existing graph runtime and W1-W5.",
+        "standard_graph_role": "REMEDIATION_PLAN",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "DESIGN_REVIEW_NOT_MODEL_EFFICACY",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "A1 E2 field copying shortcut",
+        "description": "Copied context/exception fields match all 256 named reference fields; this does not test base/final or complete E2.",
+        "standard_graph_role": "ADVERSARIAL_ATTACK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "IDENTIFIED_DESIGN_RISK",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a2",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "A2 Local information alias",
+        "description": "Identical visible payload can require opposite answers; full and active reads must be distinguished from model capacity.",
+        "standard_graph_role": "ADVERSARIAL_ATTACK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "IDENTIFIED_DESIGN_RISK",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a3",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "A3 No-op and evidence confounding",
+        "description": "A no-op may be rational; changes, more evidence and more compute are not semantic learning efficacy.",
+        "standard_graph_role": "ADVERSARIAL_ATTACK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "IDENTIFIED_DESIGN_RISK",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a4",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "A4 Revision without effective readback",
+        "description": "New keys do not prove changed semantic input; current revision API preserves role and exception references.",
+        "standard_graph_role": "ADVERSARIAL_ATTACK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "IDENTIFIED_DESIGN_RISK",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a5",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "A5 Codec versus model presentation",
+        "description": "Storage codecs restore the same frame; storage-byte differences cannot identify model-input or token effects.",
+        "standard_graph_role": "ADVERSARIAL_ATTACK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "IDENTIFIED_DESIGN_RISK",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a6",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "A6 Self-confirming world gold",
+        "description": "Faithful execution of a supplied law differs from fidelity to independently observed environmental outcomes.",
+        "standard_graph_role": "ADVERSARIAL_ATTACK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "IDENTIFIED_DESIGN_RISK",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a7",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "A7 Scale or backend escape",
+        "description": "Parallel calls, recursive scope and alternative backends cannot rescue an upstream failed mechanism.",
+        "standard_graph_role": "ADVERSARIAL_ATTACK",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "IDENTIFIED_DESIGN_RISK",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "R1 Qualify W1 semantic interventions",
+        "description": "Keep original census and readiness criterion; add separately budgeted asymmetric-law diagnosis and blind label custody.",
+        "standard_graph_role": "PROPOSED_REMEDIATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "PLANNED_NOT_RUN",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH",
+        "implementation_status": "PLANNED_NOT_RUN",
+        "code_path": "src/hswm/effect-runtime/src/local-semantic-execution-domain.ts",
+        "evaluation_endpoint": "Whole-denominator errors/refusals; typed-field accuracy separately; sensitivity and invariance; actual model requests.",
+        "failure_action": "Preserve failure of exact model/serving/readout; reroute local realization without replacing LLM by evaluator."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r2",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "R2 W2 paired semantic revision contrast",
+        "description": "Fixed roles; wrong and distinguishable seeds for positive tasks; matched evidence/sham; separate no-change diagnostics.",
+        "standard_graph_role": "PROPOSED_REMEDIATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "PLANNED_NOT_RUN",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH",
+        "implementation_status": "PLANNED_NOT_RUN",
+        "code_path": "_research/hswm_deep_research_v1/protocol.v1.json",
+        "evaluation_endpoint": "All-world intent-to-treat held-out gain versus all three controls, retention, costs and predeclared precision.",
+        "failure_action": "No gain or inadequate precision is not learning success; keep negative lineage and distinguish UNDERDETERMINED."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r3",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "R3 W3 information-aware reads",
+        "description": "Propose bounded ReadRequest/ReadObservation service; compare full/fixed/active and equal-budget nonadaptive reads.",
+        "standard_graph_role": "PROPOSED_REMEDIATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "PLANNED_NOT_RUN",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH",
+        "implementation_status": "PLANNED_NOT_RUN",
+        "code_path": "src/hswm/effect-runtime/src/semantic-read-observation.ts (PROPOSED_NEW_FILE)",
+        "evaluation_endpoint": "Accessible alias resolution, irreducible alias uncertainty, coverage, proper score and total read/model cost.",
+        "failure_action": "Full failure diagnoses unresolved execution; local-only failure motivates read selection; no universal sufficiency claim."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r4",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "R4 Bind revision and next request",
+        "description": "Reuse runtime/admission/CAS; record semantic-field deltas and actual next input; preserve current exception and role references.",
+        "standard_graph_role": "PROPOSED_REMEDIATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "PLANNED_NOT_RUN",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH",
+        "implementation_status": "PLANNED_NOT_RUN",
+        "code_path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+        "evaluation_endpoint": "Accepted successor readback, actual request/config, separate stale conflict and model failure.",
+        "failure_action": "Same semantic input is not the intended semantic intervention; different bytes alone are not proof either."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r5",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "R5 Compare storage and input separately",
+        "description": "Keep exact codecs; add separate research presentation adapter before claiming model encoding effects.",
+        "standard_graph_role": "PROPOSED_REMEDIATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "PLANNED_NOT_RUN",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH",
+        "implementation_status": "PLANNED_NOT_RUN",
+        "code_path": "src/hswm/effect-runtime/src/semantic-frame-representation.ts",
+        "evaluation_endpoint": "Information preservation; measured storage/read/update/token/inference cost and task success.",
+        "failure_action": "Identical restored frame gives no input intervention; padding is not neutral; unmeasured costs remain unknown."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r6",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "R6 Separate relation gold from world outcome",
+        "description": "Use task-specific observation/evaluator custody and held-out interventions between competing Maps.",
+        "standard_graph_role": "PROPOSED_REMEDIATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "PLANNED_NOT_RUN",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH",
+        "implementation_status": "PLANNED_NOT_RUN",
+        "code_path": "src/hswm/effect-runtime/src/cross-layer-map-runtime.ts",
+        "evaluation_endpoint": "Relation execution score and environmental outcome score separately; horizon/intervention response.",
+        "failure_action": "Authored toy evidence remains toy evidence; separate processes alone do not establish independent world truth."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r7",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "R7 Preserve Hyperon and composition comparison",
+        "description": "Exact Hyperon component/version and W4/W5 joint-successor comparisons at declared budgets; design may proceed in parallel.",
+        "standard_graph_role": "PROPOSED_REMEDIATION",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "source_sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "status": "PLANNED_NOT_RUN",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH",
+        "implementation_status": "PLANNED_NOT_RUN",
+        "code_path": "_research/hswm_deep_research_v1/protocol.v1.json",
+        "evaluation_endpoint": "Joint law, shared-cause intervention, successor behavior and cost; exact comparator maturity.",
+        "failure_action": "No downstream rescue of upstream failure; no backend adoption or completed comparison implied."
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-witness",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Finite adversarial design witnesses",
+        "description": "128-case field-copy equality; authored 16-case law-blind ceiling and two-state read alias under explicit information assumptions.",
+        "standard_graph_role": "FINITE_DESIGN_WITNESS",
+        "authority_class": "SECONDARY_AI",
+        "ontology_authority_class_v1": "SECONDARY_AI",
+        "ontology_record_lifecycle_v1": "ACTIVE",
+        "ontology_sensitivity_v1": "NORMAL",
+        "ontology_review_required_v1": true,
+        "source_path": "_research/hswm_adversarial_remediation_v1/verification.v1.json",
+        "source_sha256": "d53442c0763b9e3c63408e6e1dee4f79483a5dba3cfb58575ed350b1809dfad6",
+        "status": "CHECKED_FINITE_DESIGN_ONLY",
+        "responsibility_owner": "hswm:research:adversarial-remediation",
+        "claim_boundary": "DESIGN_QUALIFICATION_ONLY_NO_MODEL_EFFICACY_NO_CR_FCL_PROMOTION",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_LEARNING_NOT_WORLD_TRUTH"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "HAS_ATTACK",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a1",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a1",
+      "type": "MITIGATED_BY_PLAN",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r1",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "PROPOSES",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r1",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "HAS_ATTACK",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a2",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a2",
+      "type": "MITIGATED_BY_PLAN",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r3",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "PROPOSES",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r2",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "HAS_ATTACK",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a3",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a3",
+      "type": "MITIGATED_BY_PLAN",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r2",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "PROPOSES",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r3",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "HAS_ATTACK",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a4",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a4",
+      "type": "MITIGATED_BY_PLAN",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r4",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "PROPOSES",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r4",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "HAS_ATTACK",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a5",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a5",
+      "type": "MITIGATED_BY_PLAN",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r5",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "PROPOSES",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r5",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "HAS_ATTACK",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a6",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a6",
+      "type": "MITIGATED_BY_PLAN",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r6",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "PROPOSES",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r6",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "HAS_ATTACK",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a7",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a7",
+      "type": "MITIGATED_BY_PLAN",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r7",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "PROPOSES",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r7",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-adversarial-remediation-2026-09-27",
+      "type": "REFERENCES",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-witness",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-witness",
+      "type": "INFORMS",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a1",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-witness",
+      "type": "INFORMS",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-a2",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-witness",
+      "type": "INFORMS",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r1",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-witness",
+      "type": "INFORMS",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r3",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r2",
+      "type": "EFFICACY_CLAIM_DEPENDS_ON",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r1",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r2",
+      "type": "EFFICACY_CLAIM_DEPENDS_ON",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r4",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r3",
+      "type": "EFFICACY_CLAIM_DEPENDS_ON",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r1",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r7",
+      "type": "EFFICACY_CLAIM_DEPENDS_ON",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r2",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r7",
+      "type": "EFFICACY_CLAIM_DEPENDS_ON",
+      "to_uid": "sym:Concept:hswm-adversarial-remediation-2026-09-27-r3",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "scope": "DECLARED_LOCAL_PLAN_NOT_LIVE_COGNITION_OR_COMPLETED_REMEDIATION"
+    }
+  ]
+}

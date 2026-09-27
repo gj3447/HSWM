@@ -1,0 +1,12 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?attack ?name
+WHERE {
+  ?attack p:standard_graph_role "ADVERSARIAL_ATTACK" ; p:name ?name .
+  FILTER NOT EXISTS {
+    ?attack r:MITIGATED_BY_PLAN ?remedy .
+    ?remedy p:standard_graph_role "PROPOSED_REMEDIATION" ;
+            p:implementation_status "PLANNED_NOT_RUN" .
+  }
+}
+ORDER BY ?name

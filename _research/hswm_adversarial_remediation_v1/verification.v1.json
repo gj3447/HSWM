@@ -1,0 +1,129 @@
+{
+  "schema_version": "hswm-adversarial-remediation-counterexamples/v1",
+  "scope": "AUTHORED_FINITE_DESIGN_WITNESSES_ONLY_NO_MODEL_CALLS_NO_WORLD_PREDICTION_NO_LEARNING_OR_EFFICACY_CLAIM",
+  "source": {
+    "local_semantic_domain": "src/hswm/effect-runtime/src/local-semantic-execution-domain.ts",
+    "local_semantic_domain_sha256": "0db55e4557ebe5f4034d91b556d2c3a290726aef5f237742b3341ad81328c1b3",
+    "counterexamples": "_research/hswm_adversarial_remediation_v1/counterexamples.mjs",
+    "counterexamples_sha256": "11ebe5b7a917f801eb4bf15e5baebe559ad7ee32ca07d8dde4a2f7bb0bdea94c",
+    "node_version": "v24.20.0"
+  },
+  "existing_w1_e2_copy_witness": {
+    "source_cases": 128,
+    "copied_named_fields": [
+      "context_flip<-context.pel",
+      "exception_flip<-exception.nub"
+    ],
+    "field_matches": 256,
+    "observation": "EVALUATOR_TABLE_EQUALITY_ONLY_NOT_OBSERVED_MODEL_BEHAVIOR",
+    "nonclaim": "DOES_NOT_CLAIM_BASE_MATCH_FINAL_ANSWER_MATCH_OR_COMPLETE_E2_PASS"
+  },
+  "asymmetric_relation_witness": {
+    "laws": {
+      "A": "e?0:c?1:b",
+      "B": "c?0:e?1:b"
+    },
+    "population": 8,
+    "paired_law_answer_changed": 4,
+    "same_law_context_exception_value_swap_changed": {
+      "A": 4,
+      "B": 4
+    },
+    "law_blind_best_deterministic_correct": 12,
+    "law_blind_population": 16,
+    "assumptions": "UNIFORM_16_CASE_POPULATION;_PREDICTOR_USES_ONLY_b_c_e;_NO_LAW_ID_HISTORY_OR_OTHER_SIDE_CHANNEL",
+    "cases_to_inspect": {
+      "law_difference": [
+        {
+          "b": 0,
+          "c": 0,
+          "e": 1
+        },
+        {
+          "b": 0,
+          "c": 1,
+          "e": 0
+        },
+        {
+          "b": 1,
+          "c": 0,
+          "e": 1
+        },
+        {
+          "b": 1,
+          "c": 1,
+          "e": 0
+        }
+      ],
+      "law_A_swap_difference": [
+        {
+          "b": 0,
+          "c": 0,
+          "e": 1
+        },
+        {
+          "b": 0,
+          "c": 1,
+          "e": 0
+        },
+        {
+          "b": 1,
+          "c": 0,
+          "e": 1
+        },
+        {
+          "b": 1,
+          "c": 1,
+          "e": 0
+        }
+      ],
+      "law_B_swap_difference": [
+        {
+          "b": 0,
+          "c": 0,
+          "e": 1
+        },
+        {
+          "b": 0,
+          "c": 1,
+          "e": 0
+        },
+        {
+          "b": 1,
+          "c": 0,
+          "e": 1
+        },
+        {
+          "b": 1,
+          "c": 1,
+          "e": 0
+        }
+      ]
+    }
+  },
+  "partial_read_alias_witness": {
+    "visible_payload": {
+      "b": 0,
+      "c": 1
+    },
+    "law": "A",
+    "hidden_cases": [
+      {
+        "b": 0,
+        "c": 1,
+        "hidden_e": 0,
+        "answer": 1
+      },
+      {
+        "b": 0,
+        "c": 1,
+        "hidden_e": 1,
+        "answer": 0
+      }
+    ],
+    "best_visible_only_correct": 1,
+    "population": 2,
+    "assumptions": "UNIFORM_TWO_CASE_POPULATION;_ONLY_FIXED_VISIBLE_PAYLOAD_AND_LAW_A;_NO_HISTORY_OR_SIDE_CHANNEL_FOR_e",
+    "caveat": "QUERYING_HIDDEN_E_WOULD_CHANGE_THE_INFORMATION_SET;_NO_ACTIVE_READ_POLICY_IS_IMPLEMENTED"
+  }
+}

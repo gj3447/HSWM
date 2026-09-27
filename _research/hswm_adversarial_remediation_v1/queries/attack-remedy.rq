@@ -1,0 +1,10 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?attackName ?remedyName ?status ?codePath ?endpoint
+WHERE {
+  ?attack p:standard_graph_role "ADVERSARIAL_ATTACK" ;
+          p:name ?attackName ; r:MITIGATED_BY_PLAN ?remedy .
+  ?remedy p:name ?remedyName ; p:implementation_status ?status ;
+          p:code_path ?codePath ; p:evaluation_endpoint ?endpoint .
+}
+ORDER BY ?attackName

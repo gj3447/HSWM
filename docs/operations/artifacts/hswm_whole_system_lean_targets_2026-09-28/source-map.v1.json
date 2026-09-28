@@ -1,0 +1,375 @@
+{
+  "schema_version": "hswm-whole-system-lean-targets-source-map/v1",
+  "recorded_on": "2026-09-28",
+  "authority_class": "SECONDARY_AI_IMPLEMENTATION_PLAN",
+  "status": "PROPOSED_NOT_IMPLEMENTED",
+  "scope": "Source-bound literature map for proposed Lean4 work; it is neither a new proof nor evidence of HSWM or LLM efficacy.",
+  "archive_boundary": {
+    "public_catalogue_path": "_research/source_archive_2026-09-28/catalogue.v1.json",
+    "public_catalogue_sha256": "0fc7d1d4edbe1337b099ab6f5b4430b2ebd9d2d51b3b8290e975be52ebece11c",
+    "private_blob_root": ".hswm-local/research-source-archive-20260928",
+    "private_blob_statement": "Each listed blob SHA-256 was recomputed locally on 2026-09-28; blobs remain private and are not redistributed by this record."
+  },
+  "targets": [
+    {
+      "id": "P1",
+      "name": "Actual semantic lifecycle refinement reusing admission",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "existing_baseline": [
+        "src/hswm/effect-runtime/src/semantic-lifecycle-selection.ts",
+        "src/hswm/effect-runtime/src/semantic-lifecycle-selected-execution.ts",
+        "formal/HSWMLLMSemanticGraph.lean",
+        "formal/HSWMVerifiedAdmissionKernel.lean",
+        "formal/HSWMVerifiedAdmissionWire.lean",
+        "formal/HSWMPersistedVerifiedAdmission.lean",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts"
+      ],
+      "proposed_lean_boundary": "Prove a trace/refinement relation from an admitted canonical revision through the selected execution that reads that exact successor. Reuse admission; do not prove a provider LLM's semantics, outcome truth, or improvement.",
+      "non_claims": [
+        "No automatic commit correctness",
+        "No real LLM efficacy",
+        "No causal credit or fresh-evaluation guarantee"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "P2",
+      "name": "Local-read sufficiency and task-read plan",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "existing_baseline": [
+        "formal/HSWMSemanticWeightDefinition.lean",
+        "docs/research/artifacts/hswm_deep_research_2026-09-22/state-composition-review.md",
+        "formal/HSWMOperationalAbstraction.lean",
+        "formal/HSWMBehavioralMinimality.lean"
+      ],
+      "proposed_lean_boundary": "Instantiate existing FibreCriterion for typed roles, exceptions, evidence and declared read/write sets, preserving Step and Learn guards/results. For approximate preservation separately supply an explicit interface, output error and coupling hypotheses.",
+      "non_claims": [
+        "No claim that small local reads are sufficient for natural language",
+        "No ground-truth world-model claim"
+      ],
+      "depends_on": [
+        "P1"
+      ]
+    },
+    {
+      "id": "P3",
+      "name": "History-conditional adaptive learning beyond the existing frozen round",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "existing_baseline": [
+        "formal/statistical-learning/HSWMStatisticalLearning/CanonicalBridge.lean",
+        "docs/research/HSWM_FRESH_EVALUATION_LEAN_PROOF_2026-09-28.md",
+        "formal/statistical-learning/HSWMStatisticalLearning/Selection.lean",
+        "formal/statistical-learning/HSWMStatisticalLearning/Integration.lean",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-semantic-selected-state.ts"
+      ],
+      "proposed_lean_boundary": "Extend a frozen candidate round only with a filtration/history-conditioned fresh-sampling contract, explicit per-round error budget, contamination model, and candidate-freeze boundary.",
+      "non_claims": [
+        "No inference of independence, contamination rate, or distribution stability from model confidence",
+        "No continual-learning or net-improvement theorem without its premises"
+      ],
+      "depends_on": [
+        "P1"
+      ]
+    },
+    {
+      "id": "P4",
+      "name": "Versioned topology learning with consumer",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "existing_baseline": [
+        "formal/HSWMIntegratedClosedLoop.lean",
+        "src/hswm/effect-runtime/src/semantic-lifecycle-runtime.ts",
+        "formal/HSWMExecutableGraphEncoding.lean"
+      ],
+      "proposed_lean_boundary": "Specify a versioned topology proposal, admission/rejection, lineage-preserving consumer read, and explicit candidate evaluation boundary.",
+      "non_claims": [
+        "No claim that prompt evolution itself learns a canonical semantic weight",
+        "No test-set result transfers to HSWM"
+      ],
+      "depends_on": [
+        "P1",
+        "P2",
+        "P3"
+      ]
+    },
+    {
+      "id": "P5",
+      "name": "Two-scale Step+Learn composition",
+      "status": "PROPOSED_NOT_IMPLEMENTED",
+      "existing_baseline": [
+        "formal/HSWMIntegratedClosedLoop.lean",
+        "formal/HSWMClosedLoopEvaluation.lean",
+        "formal/HSWMCompositionInterference.lean",
+        "formal/HSWMRecursiveLearningComposition.lean",
+        "formal/HSWMSemanticQuotient.lean"
+      ],
+      "proposed_lean_boundary": "Instantiate exact refinement for two cells; preserve Step and Learn, joint outcome, shared causes and conflicts. Model execution order or explicit rejection; retain utility-interference and XOR counterexamples. Approximate abstraction and small-gain contracts require their own stated hypotheses; causal credit is separate.",
+      "non_claims": [
+        "No arbitrary recursive HSWM stability",
+        "No double-credit prevention without an explicit ownership theorem",
+        "No empirical causal learning claim"
+      ],
+      "depends_on": [
+        "P1",
+        "P2",
+        "P3"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "ltt-2110.01052v5",
+      "title": "Learn then Test: Calibrating Predictive Algorithms to Achieve Risk Control",
+      "url": "https://arxiv.org/pdf/2110.01052v5",
+      "archive": {
+        "collection": "supplement-01",
+        "receipt_id": "source-6ccf5fad9974ee50dc19",
+        "public_receipt_path": "_research/source_archive_2026-09-28/receipts/supplement-01.v1.json",
+        "public_receipt_file_sha256": "f81edba784f87fb2ca69a734f44217294092e20c4d64d1ed45340d31d3620b2b",
+        "blob_sha256": "a43d0f089add075ecb4c74f71c9eb6a648e020edc70139b19360d6e717ddc0e2",
+        "size_bytes": 2934353,
+        "blob_sha256_recomputed": true
+      },
+      "relevant_scope": "§1.1; §2.1 Theorem 1; §2.2–2.3",
+      "assumptions": "Fixed candidate family; independent IID calibration set; valid p-values under each null; an FWER-controlling procedure.",
+      "target_ids": [
+        "P3"
+      ],
+      "non_claim": "Controls erroneous selected hypotheses under its premises; it neither creates a useful revision nor licenses reuse of labels used to generate new candidates."
+    },
+    {
+      "id": "huber-robust-confidence-sequences-wang23p",
+      "title": "Huber-Robust Confidence Sequences",
+      "url": "https://proceedings.mlr.press/v206/wang23p/wang23p.pdf",
+      "archive": {
+        "collection": "base",
+        "receipt_id": "source-985d882467e0c5381159",
+        "public_receipt_path": "_research/source_archive_2026-09-28/receipts/base.v1.json",
+        "public_receipt_file_sha256": "f4c5e17a18e04d83b4c4c04e352707b23ecd571a45107fa002b09d8b4e9f7dc4",
+        "blob_sha256": "8caaa68c129acd0bd9961dee3c2a568ca3252038175e6a773f140051b8f52fbf",
+        "size_bytes": 571358,
+        "blob_sha256_recomputed": true
+      },
+      "relevant_scope": "§2; Lemma 3; Theorems 1–2; §4.1",
+      "assumptions": "A clean distribution and observed distribution in a stated total-variation/Huber-contamination neighborhood, known moment bound and contamination parameter; time-uniform supermartingale construction.",
+      "target_ids": [
+        "P3"
+      ],
+      "non_claim": "Its distributional contamination model is not the repository's bounded row-replacement witness and does not establish drift handling, candidate adaptivity, or improvement."
+    },
+    {
+      "id": "approximate-similarity-hsa17",
+      "title": "Verification of General MDPs by Approximate Similarity Relations and Policy Refinement",
+      "url": "https://www.cs.ox.ac.uk/people/alessandro.abate/publications/HSA17.pdf",
+      "archive": {
+        "collection": "base",
+        "receipt_id": "source-3c49adc5577e247600cb",
+        "public_receipt_path": "_research/source_archive_2026-09-28/receipts/base.v1.json",
+        "public_receipt_file_sha256": "f4c5e17a18e04d83b4c4c04e352707b23ecd571a45107fa002b09d8b4e9f7dc4",
+        "blob_sha256": "bcff1a15fda2c5d64aa5a4c567f7d5dfb41b7c598bf5b293c0f1c2f7ee9c445c",
+        "size_bytes": 672050,
+        "blob_sha256_recomputed": true
+      },
+      "relevant_scope": "Definition 9; Theorem 3",
+      "assumptions": "State relation, output error ε, initial and transition liftings/couplings with δ, and an interface/refined policy over the stated gMDPs.",
+      "target_ids": [
+        "P2",
+        "P5"
+      ],
+      "non_claim": "Transfers a bounded finite-horizon specification under supplied couplings; it does not prove an LLM local read is semantically sufficient."
+    },
+    {
+      "id": "small-gain-parametric-contracts-hscc17",
+      "title": "A Small Gain Theorem for Parametric Assume-Guarantee Contracts",
+      "url": "https://people.eecs.berkeley.edu/~sseshia/pubdir/hscc17-gain.pdf",
+      "archive": {
+        "collection": "base",
+        "receipt_id": "source-4722440eef33c1f918b1",
+        "public_receipt_path": "_research/source_archive_2026-09-28/receipts/base.v1.json",
+        "public_receipt_file_sha256": "f4c5e17a18e04d83b4c4c04e352707b23ecd571a45107fa002b09d8b4e9f7dc4",
+        "blob_sha256": "2e8f1083db9b1c22b2ce5ea098183e8ced902175e5eae953867c9c94f2bd8dcd",
+        "size_bytes": 365419,
+        "blob_sha256_recomputed": true
+      },
+      "relevant_scope": "Definition 2; §4.1 Theorems 1–2",
+      "assumptions": "Each component satisfies its parametric contract; guarantees imply feedback assumptions; required external/initial feedback conditions; metric/contraction conditions for the small-gain result.",
+      "target_ids": [
+        "P5"
+      ],
+      "non_claim": "Feedback syntax alone gives no HSWM learning gain, causal credit, or unrestricted recursive stability."
+    },
+    {
+      "id": "rischel21a-causal-abstraction",
+      "title": "Compositional Abstraction Error and a Category of Causal Models",
+      "url": "https://proceedings.mlr.press/v161/rischel21a/rischel21a.pdf",
+      "archive": {
+        "collection": "base",
+        "receipt_id": "source-948516e3e4779111cb0c",
+        "public_receipt_path": "_research/source_archive_2026-09-28/receipts/base.v1.json",
+        "public_receipt_file_sha256": "f4c5e17a18e04d83b4c4c04e352707b23ecd571a45107fa002b09d8b4e9f7dc4",
+        "blob_sha256": "2f424de68e97947b17ba89c5b48ef4becbde6fd4e957e6dcb7547868c8607aac",
+        "size_bytes": 328184,
+        "blob_sha256_recomputed": true
+      },
+      "relevant_scope": "Proposition 2.12 and its Jensen-Shannon-distance compositional abstraction-error construction",
+      "assumptions": "Finite interventional causal models and declared transformations, using the paper's Jensen-Shannon distance; error is relative to a reference model, not ground truth. An arbitrary metric or Learn preservation is not supplied by this proposition.",
+      "target_ids": [
+        "P5"
+      ],
+      "non_claim": "Compositional error bounds do not identify real causes, validate LLM-generated causal models, or prove HSWM improvement."
+    },
+    {
+      "id": "gepa-2507.19457v2",
+      "title": "GEPA: Reflective Prompt Evolution Can Outperform Reinforcement Learning",
+      "url": "https://arxiv.org/pdf/2507.19457v2",
+      "archive": {
+        "collection": "base",
+        "receipt_id": "source-4d2b28f2a8489bdf787a",
+        "public_receipt_path": "_research/source_archive_2026-09-28/receipts/base.v1.json",
+        "public_receipt_file_sha256": "f4c5e17a18e04d83b4c4c04e352707b23ecd571a45107fa002b09d8b4e9f7dc4",
+        "blob_sha256": "ab3a5139bac83f192ad67529368d77b84b0d807e95a8e4fd0daa8d45fd046bec",
+        "size_bytes": 2975112,
+        "blob_sha256_recomputed": true
+      },
+      "relevant_scope": "§§3–4 and reported held-out experimental protocol",
+      "assumptions": "Prompt-level candidate generation/reflection and the paper's benchmark splits, evaluator, budget and selected model configurations.",
+      "target_ids": [
+        "P3",
+        "P4"
+      ],
+      "non_claim": "Experimental prompt optimization is a candidate-generator comparator only; it neither writes HSWM canonical state nor proves topology-learning correctness."
+    },
+    {
+      "id": "hyperon-whitepaper-2026",
+      "title": "Hyperon: The Open-Source Infrastructure for Artificial General Intelligence",
+      "url": "https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf",
+      "archive": {
+        "collection": "base",
+        "receipt_id": "source-3a8424dd8befa0f7121d",
+        "public_receipt_path": "_research/source_archive_2026-09-28/receipts/base.v1.json",
+        "public_receipt_file_sha256": "f4c5e17a18e04d83b4c4c04e352707b23ecd571a45107fa002b09d8b4e9f7dc4",
+        "blob_sha256": "bdb3efb266a35f10fe07addc34c9def68708b4fb123480163c724d8ceec3b5f2",
+        "size_bytes": 925708,
+        "blob_sha256_recomputed": true
+      },
+      "relevant_scope": "§§2, 10.1, 10.3; maturity statements",
+      "target_ids": [
+        "P1",
+        "P2",
+        "P3",
+        "P4",
+        "P5"
+      ],
+      "comparator": {
+        "component": "hyperon-experimental",
+        "version": "v0.2.10",
+        "commit": "3f76dc460da6961f57f69f6c3e550c59c74ada83",
+        "maturity_boundary": "MeTTa/AtomSpace/MORK core is recorded as implementation capability; transformer bridge as prototype/research hypothesis; TECAN as specified design/research programme."
+      },
+      "non_claim": "Mandatory architecture/empirical comparator only; this source map neither adopts Hyperon nor asserts an integrated benchmarked neural closed loop."
+    }
+  ],
+  "source_revision": "6d2d85f1dfc1ec4e5ed516ee153bc92a7fac480c",
+  "local_sources": [
+    {
+      "path": "docs/research/HSWM_FRESH_EVALUATION_LEAN_PROOF_2026-09-28.md",
+      "sha256": "bca6c0fff0d2a7f38a6871c07d61c245236f3434600f616edf1ad912e004744b"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_deep_research_2026-09-22/state-composition-review.md",
+      "sha256": "0d575b567e4fe3c0729abec67d5afcc578d9d3bf00bc4a770ff1eeccc164a161"
+    },
+    {
+      "path": "formal/HSWMBehavioralMinimality.lean",
+      "sha256": "cb96c1acc11c4396ec85bef8fa79eec120e5e32dd87004c8ac519cb3d91eb0b7"
+    },
+    {
+      "path": "formal/HSWMClosedLoopEvaluation.lean",
+      "sha256": "eb826ee0c5a0d8995932cf2dd324d405c0f389786d252216b283167ec782d935"
+    },
+    {
+      "path": "formal/HSWMCompositionInterference.lean",
+      "sha256": "ea61064e08f46a36b98c0e30e103ffc1e130b92a157ed3989e29888416ca87bc"
+    },
+    {
+      "path": "formal/HSWMExecutableGraphEncoding.lean",
+      "sha256": "6dcd113e82a23063c30b91b91766068b3cbff6ba51f224fa410bd1569c59f85e"
+    },
+    {
+      "path": "formal/HSWMIntegratedClosedLoop.lean",
+      "sha256": "a3ddb6eccb1eb5cb1bdfea6bf13dec07f495ea665351ae4fbb26964b2b16a59f"
+    },
+    {
+      "path": "formal/HSWMLLMSemanticGraph.lean",
+      "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a"
+    },
+    {
+      "path": "formal/HSWMOperationalAbstraction.lean",
+      "sha256": "a472db368cd43f61918c3d5506bc5e7dbb27cd6c18ef34d4e6cbed4d92d76612"
+    },
+    {
+      "path": "formal/HSWMPersistedVerifiedAdmission.lean",
+      "sha256": "06b35100ee968692d9be391ced7d84f85873b66089f5f0796b15468f9ab7f166"
+    },
+    {
+      "path": "formal/HSWMRecursiveLearningComposition.lean",
+      "sha256": "0319ab35928ba6db7db86c4d8be775d52ed49df417fd0610fc9712583f300011"
+    },
+    {
+      "path": "formal/HSWMSemanticQuotient.lean",
+      "sha256": "8dab893fb049284cbfe7b2cffb5abd8a11b6396dfe1422a89a823f41b17a6f52"
+    },
+    {
+      "path": "formal/HSWMSemanticWeightDefinition.lean",
+      "sha256": "4173e860743f321c3ee87f6d48ef0570eba3f412d4ddca5ab4ff070e5d145ba5"
+    },
+    {
+      "path": "formal/HSWMVerifiedAdmissionKernel.lean",
+      "sha256": "ac391a438b587923cdeb586d2cceb0e646d366f4ea8df350b3d12aca750889b0"
+    },
+    {
+      "path": "formal/HSWMVerifiedAdmissionWire.lean",
+      "sha256": "7f85b55c32190cee282f7555f59f1c7b5194ea4dea819bb497b8158afb02ebad"
+    },
+    {
+      "path": "formal/statistical-learning/HSWMStatisticalLearning/CanonicalBridge.lean",
+      "sha256": "59c72354a8df08b50abca48154357d341a0552196e7b22b524cf51889e37dfb2"
+    },
+    {
+      "path": "formal/statistical-learning/HSWMStatisticalLearning/Integration.lean",
+      "sha256": "f306db5a5d47dc55d248e42e2dfdf19d1c1ba2811312762eca8fc367d2414b79"
+    },
+    {
+      "path": "formal/statistical-learning/HSWMStatisticalLearning/Selection.lean",
+      "sha256": "f125d399fc97f0528ede61aedc442c5de692184060393082b14bfd11752c5741"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-llm-semantic-runtime.ts",
+      "sha256": "92df930ce95eab43c27445f5ccae0eeda9f5eb44c233bcfe92f428ec703bea9b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-semantic-selected-state.ts",
+      "sha256": "850e2e64ecab8e042af06cf210a05090e6ea1da8b48236a652044ebfbb9609d3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+      "sha256": "76a2e5a1127988d4d889f87ecab9389d61f850bf7d6edf52affbcc235aaee754"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-lifecycle-runtime.ts",
+      "sha256": "76cee17ef6afa8b99b90ce64f08638b4f253ee7bfaa3aa33463155cbb3d37898"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-lifecycle-selected-execution.ts",
+      "sha256": "373de59938e07a2b262dd4adab4459daf0b39ec5ae5a7f9e765e40fac1e21cba"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-lifecycle-selection.ts",
+      "sha256": "8a7fde00e974a9113cfeb8cace09e3f109ba8049c55f42a0600faad589fe4163"
+    }
+  ],
+  "plan_document": {
+    "path": "docs/operations/HSWM_WHOLE_SYSTEM_LEAN_TARGETS_2026-09-28.md",
+    "sha256": "71827c7ef8e40629e27083743ccfccac9c37bec53f5b44cb7df134696ef94e28"
+  }
+}

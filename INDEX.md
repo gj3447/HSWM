@@ -790,6 +790,11 @@ M = Map의 실행·학습 보존, 역할 있는 관계의 조건부 표현 비�
 학습 입력에 겹치지 않는 유한 평가의 향상을 보인다. 같은 학습 기록에 합치하면서 미관측
 영역에서는 악화되는 대안 세계도 증명하므로 전체 HSWM·현실 일반화의 증명으로 확대하지 않는다.
 
+2026-09-28 [학습·합성 증명을 위한 추가 문헌](docs/research/HSWM_LEARNING_COMPOSITION_PROOF_LITERATURE_2026-09-28.md)은
+Learn then Test, robust confidence sequences, simulation/coupling, small-gain 계약과 MetaFlows를
+위 반례 이후의 계산된 통계 경계·실행 오차·두 셀 합성 의무에 연결한다. 문헌 기반 제안이며
+새 Lean 증명이나 실제 LLM 향상 결과는 아니다.
+
 2026-08-20에 사용자는 **Hypergraph Semantic Weight Map 자체와 LLM token으로 작동하는 거대
 hypergraph 학습구조**를 최우선 중심으로 다시 고정했다. 당시 secondary analysis는 본체를
 `token event → sparse role-aware n-ary activation → LLM function cell → external outcome

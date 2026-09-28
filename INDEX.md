@@ -795,6 +795,11 @@ Learn then Test, robust confidence sequences, simulation/coupling, small-gain �
 위 반례 이후의 계산된 통계 경계·실행 오차·두 셀 합성 의무에 연결한다. 문헌 기반 제안이며
 새 Lean 증명이나 실제 LLM 향상 결과는 아니다.
 
+그 첫 구현인 [독립 평가 Lean 증명](docs/research/HSWM_FRESH_EVALUATION_LEAN_PROOF_2026-09-28.md)은
+한 번의 고정 후보 평가에서 독립·유계 표본의 동시 오차 상계, 최대 b개 행 교체의 보정,
+비용 포함 채택 타당성과 검정력을 도출하고 기존 canonical graph Learn/Step에 연결한다.
+실제 LLM 개선·적응 라운드의 조건부 표본·재귀적 HSWM 전체는 아직 증명하지 않는다.
+
 2026-08-20에 사용자는 **Hypergraph Semantic Weight Map 자체와 LLM token으로 작동하는 거대
 hypergraph 학습구조**를 최우선 중심으로 다시 고정했다. 당시 secondary analysis는 본체를
 `token event → sparse role-aware n-ary activation → LLM function cell → external outcome

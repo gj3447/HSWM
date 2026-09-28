@@ -678,6 +678,17 @@ export * from "./canonical-atom-v2-hypergraph-projection.js"
 export * from "./canonical-atom-v2-neo4j-projection.js"
 export * from "./hypergraph-projection-receipt.js"
 export {
+  HSWM_SEMANTIC_SELECTED_STATE_V1,
+  SemanticSelectedStateError,
+  deriveSemanticDurableBranch,
+  selectFrozenSemanticDurableCandidate,
+  reopenSelectedSemanticBranch,
+  type SemanticDurableBranch,
+  type DerivedSemanticBranch,
+  type FrozenSemanticCandidateRound,
+  type SelectedSemanticBranch
+} from "./canonical-atom-v2-semantic-selected-state.js"
+export {
   HSWM_LLM_SEMANTIC_RELATION_MEDIA_TYPE,
   HSWM_LLM_SEMANTIC_TRACE_MEDIA_TYPE,
   HSWM_LLM_SEMANTIC_OUTCOME_MEDIA_TYPE,

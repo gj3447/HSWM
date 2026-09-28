@@ -26,7 +26,13 @@ const integratedHswmSourceOrder = Object.freeze([...threePhilosophiesSourceOrder
   "HSWMLLMSemanticGraph", "HSWMIntegratedClosedLoop", "HSWMClosedLoopEvaluation"] as const)
 const integratedHswmAuditedSources = Object.freeze([...threePhilosophiesAuditedSources,
   "HSWMIntegratedClosedLoop", "HSWMClosedLoopEvaluation"] as const)
-type ProfileName = "three-philosophies" | "integrated-hswm"
+const operationalPhilosophyAuditedSources = Object.freeze([
+  "HSWMOperationalAbstraction", "HSWMBehavioralMinimality", "HSWMExecutableGraphEncoding"
+] as const)
+const operationalPhilosophySourceOrder = Object.freeze([
+  ...threePhilosophiesSourceOrder, ...operationalPhilosophyAuditedSources
+] as const)
+type ProfileName = "three-philosophies" | "integrated-hswm" | "operational-philosophy"
 interface ProofProfile {
   readonly name: ProfileName
   readonly sourceOrder: ReadonlyArray<string>
@@ -40,7 +46,10 @@ const profiles: Readonly<Record<ProfileName, ProofProfile>> = Object.freeze({
     claimCeiling: "FINITE_CONDITIONAL_FORMAL_WITNESSES_NOT_UNIVERSAL_MINIMUM_COST_OUTERMOST_SIMULATOR_CHU_REALITY_LLM_FIDELITY_OR_HSWM_EFFICACY" }),
   "integrated-hswm": Object.freeze({ name: "integrated-hswm", sourceOrder: integratedHswmSourceOrder,
     auditedSources: integratedHswmAuditedSources, schemaVersion: "hswm-integrated-hswm-lean-verification/v1",
-    claimCeiling: "CONDITIONAL_FINITE_CANONICAL_CLOSED_LOOP_NOT_FULL_HSWM_OR_REAL_LLM" })
+    claimCeiling: "CONDITIONAL_FINITE_CANONICAL_CLOSED_LOOP_NOT_FULL_HSWM_OR_REAL_LLM" }),
+  "operational-philosophy": Object.freeze({ name: "operational-philosophy", sourceOrder: operationalPhilosophySourceOrder,
+    auditedSources: operationalPhilosophyAuditedSources, schemaVersion: "hswm-operational-philosophy-lean-verification/v1",
+    claimCeiling: "DECLARED_DETERMINISTIC_ABSTRACTION_BEHAVIORAL_MINIMALITY_AND_STORAGE_EXECUTION_NOT_UNIVERSAL_COST_WORLD_TRUTH_REAL_LLM_OR_FULL_HSWM" })
 })
 const permittedAxioms = Object.freeze(["propext", "Quot.sound", "Classical.choice"] as const)
 const stripLeanComments = (source: string): string => source.replace(/\/\-[\s\S]*?\-\//g, "").replace(/--[^\n]*/g, "")
@@ -64,7 +73,7 @@ export class SemanticPhilosophyProofHost extends Context.Tag("hswm/SemanticPhilo
 interface Options { readonly output: string; readonly lean: string | null; readonly profile: ProofProfile }
 const parse = (argv: ReadonlyArray<string>, cwd: string): Effect.Effect<Options | null, SemanticPhilosophyProofError> => {
   if (argv.length === 1 && argv[0] === "--help") return Effect.succeed(null)
-  if (argv.length !== 2 && argv.length !== 4 && argv.length !== 6) return Effect.fail(fail("CLI_INVALID", "Expected --output NEW_DIRECTORY [--profile three-philosophies|integrated-hswm] [--lean ABSOLUTE_PATH]"))
+  if (argv.length !== 2 && argv.length !== 4 && argv.length !== 6) return Effect.fail(fail("CLI_INVALID", "Expected --output NEW_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy] [--lean ABSOLUTE_PATH]"))
   const pairs = Array.from({ length: argv.length / 2 }, (_, index) => [argv[index * 2], argv[index * 2 + 1]] as const)
   const values = Object.fromEntries(pairs)
   if (pairs.some(([key, value]) => !["--output", "--lean", "--profile"].includes(key ?? "") || !value || value.startsWith("--")) ||
@@ -73,10 +82,10 @@ const parse = (argv: ReadonlyArray<string>, cwd: string): Effect.Effect<Options 
   const suppliedLean = values["--lean"]
   if (suppliedLean !== undefined && (!isAbsolute(suppliedLean) || suppliedLean.includes("\0")))
     return Effect.fail(fail("CLI_INVALID", "--lean must be an absolute regular-file path"))
-  const profileName = values["--profile"] ?? "three-philosophies"
-  if (profileName !== "three-philosophies" && profileName !== "integrated-hswm")
-    return Effect.fail(fail("CLI_INVALID", "--profile must be three-philosophies or integrated-hswm"))
-  const profile = profileName === "integrated-hswm" ? profiles["integrated-hswm"] : profiles["three-philosophies"]
+  const profileName: unknown = values["--profile"] ?? "three-philosophies"
+  if (profileName !== "three-philosophies" && profileName !== "integrated-hswm" && profileName !== "operational-philosophy")
+    return Effect.fail(fail("CLI_INVALID", "--profile must be three-philosophies, integrated-hswm or operational-philosophy"))
+  const profile = profiles[profileName]
   return Effect.succeed({ output: resolve(cwd, values["--output"]), lean: suppliedLean ?? null, profile })
 }
 
@@ -94,7 +103,7 @@ const priorToolchainSchema = Schema.Struct({
   toolchain: Schema.Struct({ name: Schema.String, version_output: Schema.String, source_commit: Schema.String,
     lean_binary_sha256: Schema.String, pin_path: Schema.String, pin_sha256: Schema.String })
 })
-const theoremNames = (source: string): ReadonlyArray<string> => Array.from(source.matchAll(/^\s*theorem\s+([A-Za-z_][A-Za-z0-9_']*)/gm), match => match[1] ?? "")
+const theoremNames = (source: string): ReadonlyArray<string> => Array.from(source.matchAll(/^\s*(?:theorem|lemma)\s+([A-Za-z_][A-Za-z0-9_']*)/gm), match => match[1] ?? "")
   .filter(name => name.length > 0)
 const namespaceName = (source: string): string | null => /^\s*namespace\s+([A-Za-z0-9_.]+)/m.exec(source)?.[1] ?? null
 export interface TheoremAxiomRecord { readonly theorem: string; readonly axioms: ReadonlyArray<string> }
@@ -191,7 +200,7 @@ export const runSemanticPhilosophyProof = (options: Options) => Effect.gen(funct
   return `${JSON.stringify({ output: options.output, status: report.status, sources: sourceRecords.length, claimCeiling: report.claim_ceiling })}\n`
 }).pipe(Effect.catchAll(error => Effect.fail(error)))
 
-const usage = "Usage: semantic-philosophy-proof-process --output NEW_PRIVATE_DIRECTORY [--profile three-philosophies|integrated-hswm] [--lean ABSOLUTE_PATH]\n"
+const usage = "Usage: semantic-philosophy-proof-process --output NEW_PRIVATE_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy] [--lean ABSOLUTE_PATH]\n"
 export const semanticPhilosophyProofCli = (argv: ReadonlyArray<string>) => Effect.gen(function* () {
   const options = yield* parse(argv, process.cwd())
   if (options === null) return usage
@@ -200,6 +209,6 @@ export const semanticPhilosophyProofCli = (argv: ReadonlyArray<string>) => Effec
 export const semanticPhilosophyProofMain = (argv: ReadonlyArray<string>) => {
   const environment = Object.fromEntries(Object.entries(process.env).flatMap(([key, value]) => value === undefined ? [] : [[key, value]]))
   const host = Layer.succeed(SemanticPhilosophyProofHost, { repository: resolve(dirname(fileURLToPath(import.meta.url)), "../../../.."), environment })
-  return runArgvProcessMain({ program: argv => semanticPhilosophyProofCli(argv).pipe(Effect.provide(host)), refusalPrefix: "SEMANTIC_PHILOSOPHY_PROOF_REFUSED", describeFailure: error => error.code }, argv)
+  return runArgvProcessMain({ program: argv => semanticPhilosophyProofCli(argv).pipe(Effect.provide(host)), refusalPrefix: "SEMANTIC_PHILOSOPHY_PROOF_REFUSED", describeFailure: error => `${error.code}: ${error.detail}` }, argv)
 }
 if (import.meta.main) process.exitCode = await semanticPhilosophyProofMain(process.argv.slice(2))

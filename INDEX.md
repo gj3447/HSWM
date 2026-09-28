@@ -800,6 +800,12 @@ Learn then Test, robust confidence sequences, simulation/coupling, small-gain �
 비용 포함 채택 타당성과 검정력을 도출하고 기존 canonical graph Learn/Step에 연결한다.
 실제 LLM 개선·적응 라운드의 조건부 표본·재귀적 HSWM 전체는 아직 증명하지 않는다.
 
+같은 날의 [세 철학의 연산적 증명](docs/research/HSWM_OPERATIONAL_PHILOSOPHY_PROOF_2026-09-28.md)은
+층 연산 존재의 조건, 출력 행동 구분의 최소성, 일반적인 typed n-ary 저장·실행 보존을
+새 정리 27개로 검사한다. TS/Effect에서는 선택된 durable 의미 그래프를 다시 열어
+다음 실행에 연결했다. 출력 동치가 guard까지 보존하지 않는 반례와 이전 codec의
+타입 일반성 정정을 함께 기록하며, 보편 최소비용·실모델 향상·전체 HSWM을 주장하지 않는다.
+
 2026-08-20에 사용자는 **Hypergraph Semantic Weight Map 자체와 LLM token으로 작동하는 거대
 hypergraph 학습구조**를 최우선 중심으로 다시 고정했다. 당시 secondary analysis는 본체를
 `token event → sparse role-aware n-ary activation → LLM function cell → external outcome

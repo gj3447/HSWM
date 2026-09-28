@@ -295,6 +295,13 @@ it.effect("reopens a role-bearing semantic relation and feeds its outcome-condit
         })
         const committed = yield* learnLlmSemanticRelation(runtime, trace, outcome, cell, http, authorizationRef, scope, "2026-09-14T00:01:00.000Z", admission)
         expect(committed.disposition).toBe("COMMITTED")
+        const revisionPrompt = JSON.stringify(prompts[1])
+        expect(revisionPrompt).toContain("hswm-semantic-revision-objective/v1")
+        expect(revisionPrompt).toContain(trace.traceSha256)
+        expect(revisionPrompt).toContain(trace.predictionSha256)
+        expect(revisionPrompt).toContain(outcome.outcomeContent.sha256)
+        expect(revisionPrompt).toContain("prior model prediction is an observation to explain, not ground truth")
+        expect(revisionPrompt).toContain("retain the same hypothesis instead of inventing an edit")
         return { trace, outcome }
       }).pipe(Effect.provide(fileLayer(root)))),
       Effect.flatMap(({ trace, outcome }) => Effect.gen(function* () {

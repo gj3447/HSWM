@@ -13,6 +13,7 @@ import { canonicalJson, parseJson } from "./adaptive-domain.js"
 import { describeCanonicalAtomV2Envelope, makeCanonicalAtomV2ContentBoundInput, type CanonicalAtomV2WriteContentBinding, type CommitCanonicalAtomsV2ContentBound } from "./canonical-atom-v2-content-bound.js"
 import { type CanonicalAtomV2DurableRuntime } from "./canonical-atom-v2-durable-runtime.js"
 import { canonicalAtomV2KeyId, HSWM_CANONICAL_ATOM_V2_CONTRACT_VERSION, HSWM_CANONICAL_TRANSITION_V2_CONTRACT_VERSION, HSWM_SUPERSEDES_REFERENCE_ROLE, HSWM_SUPERSEDES_REFERENCE_TYPE, type CanonicalAtomV2, type CanonicalAtomV2Key } from "./canonical-atom-v2-schema.js"
+import { buildSemanticRevisionObjective } from "./semantic-revision-objective.js"
 
 export const HSWM_LLM_SEMANTIC_RELATION_MEDIA_TYPE = "application/vnd.hswm.llm-semantic-relation-v1+json" as const
 export const HSWM_LLM_SEMANTIC_TRACE_MEDIA_TYPE = "application/vnd.hswm.llm-semantic-trace-v1+json" as const
@@ -252,7 +253,8 @@ export const prepareLlmSemanticRelationRevision = (runtime: CanonicalAtomV2Durab
   const frame = yield* readLlmSemanticFrame(runtime, trace.relationKey.atomUid, trace.event)
   if (!sameKey(frame.relation.key, trace.relationKey)) return yield* Effect.fail(fail("FRAME_STALE", "relation revision changed after prediction"))
   if (frame.frameSha256 !== trace.frameSha256) return yield* Effect.fail(fail("FRAME_STALE", "one pinned participant or semantic read changed after prediction"))
-  const request = { contract: "hswm-llm-semantic-learn/v1", frame, trace: traceRecord, outcome: outcomeRecord, requiredOutput: { semanticText: "string", disposition: "string", uncertainty: "string", exceptionRefs: "exact-input-array" } }
+  const objective = buildSemanticRevisionObjective({ executionTraceSha256: trace.traceSha256, outcomeSha256: outcome.outcomeContent.sha256 })
+  const request = { contract: "hswm-llm-semantic-learn/v1", frame, trace: traceRecord, outcome: outcomeRecord, objective, requiredOutput: { semanticText: "string", disposition: "string", uncertainty: "string", exceptionRefs: "exact-input-array" } }
   const requestContent = yield* runtime.stageContent("application/vnd.hswm.llm-semantic-request-v1+json", bytes(request))
   const output = yield* invoke(cell, request, http)
   const proposed = strictRevision(output, frame.relation.semantic); if (Either.isLeft(proposed)) return yield* Effect.fail(proposed.left)

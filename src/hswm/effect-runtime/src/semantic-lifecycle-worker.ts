@@ -151,17 +151,21 @@ const revise = (config: LifecycleConfig, arm: LifecycleArm, http: import("./adap
   })
 })
 
-const evaluate = (config: LifecycleConfig, stage: Exclude<LifecycleStage, "train" | "revise">, http: import("./adaptive-executor.js").AdaptiveHttpClientShape) => Effect.gen(function* () {
-  const runtime = yield* CanonicalAtomV2DurableRuntime
-  const before = yield* inspectSemanticLifecycleState
+/** Evaluate an explicitly opened runtime; also used after a bound selection decision. */
+export const evaluateLifecycleRuntime = (config: LifecycleConfig, stage: "development" | "heldout", runtime: CanonicalAtomV2DurableRuntime["Type"], http: import("./adaptive-executor.js").AdaptiveHttpClientShape) => Effect.gen(function* () {
+  const inspect = inspectSemanticLifecycleState.pipe(Effect.provideService(CanonicalAtomV2DurableRuntime, runtime))
+  const before = yield* inspect
   const event = yield* actorEvent(stage)
   const attempted = yield* executeLlmSemanticRelation(runtime, relationUid, event, semanticCell(config), http).pipe(Effect.either)
-  const after = yield* inspectSemanticLifecycleState
+  const after = yield* inspect
   if (before.canonicalSha256 !== after.canonicalSha256) return yield* Effect.fail(workerFailure("EVALUATION_MUTATED_CANONICAL", "Evaluation changed canonical state"))
   const trace = Either.isRight(attempted) ? attempted.right : null
   const assessment = yield* assessBatch(stage, trace === null ? null : trace.prediction)
   return Object.freeze({ before, after, canonicalUnchanged: true, trace, assessment, errorCode: Either.isLeft(attempted) ? "code" in attempted.left ? attempted.left.code : "UNCLASSIFIED" : null })
 })
+
+const evaluate = (config: LifecycleConfig, stage: "development" | "heldout", http: import("./adaptive-executor.js").AdaptiveHttpClientShape) =>
+  CanonicalAtomV2DurableRuntime.pipe(Effect.flatMap(runtime => evaluateLifecycleRuntime(config, stage, runtime, http)))
 
 /**
  * One child-process stage. This function performs no unsafe execution itself;

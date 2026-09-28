@@ -5,6 +5,11 @@ files, make the change, run focused checks, and record the result in Git.
 The [research workflow](docs/operations/HSWM_RESEARCH_WORKFLOW.md) is the current
 engineering entrypoint; it supersedes older mandatory development ceremonies.
 
+The user has already supplied HSWM's target and philosophy. Resolve research
+and implementation unknowns through source review, search, and bounded work;
+do not ask the user to restate the direction or stop at an unfinished-status
+report when the next authorized step can be carried out.
+
 ## Research identity
 
 - HSWM targets one large AI organized as a hypergraph neural network, with LLM

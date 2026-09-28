@@ -82,11 +82,19 @@ the local evaluator and scripted transport are not independent scientific observ
    heldout prediction. Before/after canonical digests must match. The prediction
    trace, actual wire request, accepted relation key and role references must agree.
 
-There is one predeclared candidate and **no development-based selection** or
-feedback after development/heldout evaluation. Both phases are diagnostics;
+By default there is one predeclared candidate and **no development-based selection**
+or feedback after development/heldout evaluation. Both phases are diagnostics;
 the fixed heldout split is tiny and contains three manual-release positives
 and one negative. It does not establish broad generalization or a powered W2 result.
 Existing W1 census and W2 success criteria remain unchanged.
+
+The opt-in [selected execution path](../../docs/operations/HSWM_SEMANTIC_SELECTED_EXECUTION.md)
+adds `--allowance NATURAL --debit NATURAL`. It recomputes development scores
+from stored prediction traces, persists the decision, freshly opens the chosen
+branch and executes heldout once. The eight training/revision/development child
+stages remain isolated; selected heldout uses a fresh runtime in the parent.
+Bounds remain caller-declared. Invalid predictions, an uncommitted revision or
+unchanged semantic fields retain the baseline. No heldout-driven reselection.
 
 Invalid/refused evaluation batches receive null predictions for every case and
 remain in the denominator. A typed failed revision is recorded and subsequent
@@ -95,12 +103,15 @@ learners. Such an attempt is `COMPLETED_WITH_REVISION_FAILURES`, with
 `sharedEvidence: false`; equal evidence is asserted only when all three revisions
 commit with the same trace and outcome hashes. A process/setup or training-transport
 failure leaves `failure.json` and no success summary.
-The runner makes no automatic model retries. There are at most 10 model requests
+The runner makes no automatic model retries. In the default diagnostic there are at most 10 model requests
 (one training prediction, one revision, eight evaluation batches), with two
 additional authored control constructions. Calls, latency, raw reported usage and
 actual request/response bytes are recorded; absent usage is not zero cost.
 The learned arm's model revision and the authored controls have different
 construction costs. This is not an equal-compute optimizer comparison.
+The selected path performs at most seven model requests: training, revision,
+four development batches and one selected heldout batch. The declared budget
+of ten is still an upper bound; two authored control constructions add no calls.
 
 `SemanticOutcome.status` remains `CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED`.
 The graph-loop credit field explicitly says `NOT_ESTABLISHED`. This diagnostic

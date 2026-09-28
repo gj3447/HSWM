@@ -37,7 +37,8 @@ export const LifecycleConfigSchema = Schema.Struct({
   transport: Schema.Literal("scripted", "http"), cell: LifecycleCellSchema,
   arms: Schema.Tuple(Schema.Literal("frozen"), Schema.Literal("evidence_only"), Schema.Literal("sham"), Schema.Literal("learned")),
   environmentSha256: Schema.String.pipe(Schema.pattern(/^[a-f0-9]{64}$/)),
-  candidateCount: Schema.Literal(1), developmentUsedForSelection: Schema.Literal(false), heldoutUsedForRevision: Schema.Literal(false),
+  candidateCount: Schema.Literal(1), developmentUsedForSelection: Schema.Boolean, heldoutUsedForRevision: Schema.Literal(false),
+  selection: Schema.optional(Schema.Struct({ allowance: Schema.String.pipe(Schema.pattern(/^(?:0|[1-9][0-9]*)$/)), debit: Schema.String.pipe(Schema.pattern(/^(?:0|[1-9][0-9]*)$/)) })),
   budget: Schema.Struct({ maximumModelRequests: Schema.Literal(10), maximumWorkerMs: Schema.Literal(75000), automaticRetries: Schema.Literal(0) }),
   modelExecutionStatus: Schema.Literal("NO_MODEL", "CALLER_DECLARED_HTTP_ENDPOINT_NOT_INDEPENDENTLY_VERIFIED"),
   claimCeiling: Schema.Literal("SCRIPTED_WIRING_ONLY_NOT_MODEL_EFFICACY", "FINITE_AUTHORED_DIAGNOSTIC_NOT_CONFIRMATORY_EFFICACY")
@@ -47,6 +48,7 @@ export interface LifecycleOptions {
   readonly output: string
   readonly transport: "scripted" | "http"
   readonly cellPath: string | null
+  readonly selection?: Readonly<{ readonly allowance: string; readonly debit: string }> | null
 }
 
 export const parseLifecycleArgs = (argv: ReadonlyArray<string>, cwd: string): Either.Either<LifecycleOptions | null, LifecycleError> => {
@@ -54,7 +56,7 @@ export const parseLifecycleArgs = (argv: ReadonlyArray<string>, cwd: string): Ei
   const parse = (index: number, values: Readonly<Record<string, string>>): Either.Either<Readonly<Record<string, string>>, LifecycleError> => {
     if (index === argv.length) return Either.right(values)
     const option = argv[index], value = argv[index + 1]
-    if (option === undefined || !["--output", "--transport", "--cell"].includes(option) || option in values || !value || value.startsWith("--"))
+    if (option === undefined || !["--output", "--transport", "--cell", "--allowance", "--debit"].includes(option) || option in values || !value || value.startsWith("--"))
       return Either.left(lifecycleFailure("CLI_INVALID", "Invalid or duplicate option"))
     return parse(index + 2, { ...values, [option]: value })
   }
@@ -62,6 +64,8 @@ export const parseLifecycleArgs = (argv: ReadonlyArray<string>, cwd: string): Ei
     const mode = values["--transport"], output = values["--output"], cell = values["--cell"]
     if (!output || (mode !== "scripted" && mode !== "http")) return Either.left(lifecycleFailure("CLI_INVALID", "Explicit new output and transport are required"))
     if ((mode === "http") !== (cell !== undefined)) return Either.left(lifecycleFailure("CLI_INVALID", "Only HTTP mode requires --cell"))
-    return Either.right({ output: resolve(cwd, output), transport: mode, cellPath: cell === undefined ? null : resolve(cwd, cell) })
+    const allowance = values["--allowance"], debit = values["--debit"]
+    if ((allowance === undefined) !== (debit === undefined) || (allowance !== undefined && (!/^(?:0|[1-9][0-9]*)$/.test(allowance) || !/^(?:0|[1-9][0-9]*)$/.test(debit!)))) return Either.left(lifecycleFailure("CLI_INVALID", "--allowance and --debit must be supplied together as exact naturals"))
+    return Either.right({ output: resolve(cwd, output), transport: mode, cellPath: cell === undefined ? null : resolve(cwd, cell), ...(allowance === undefined ? {} : { selection: Object.freeze({ allowance, debit: debit! }) }) })
   }))
 }

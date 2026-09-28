@@ -2,13 +2,16 @@
 import { dirname, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 import { Effect, Layer } from "effect"
+import { AdaptiveHttpClient, NativeAdaptiveHttpClient } from "./adaptive-executor.js"
 import { runArgvProcessMain } from "./effect-process-main.js"
 import { parseLifecycleArgs } from "./semantic-lifecycle-domain.js"
 import { LifecycleHost, runLifecycle } from "./semantic-lifecycle-runner.js"
 
-export const lifecycleUsage = `Usage: node src/hswm/effect-runtime/dist/semantic-lifecycle-process.js --output NEW_PRIVATE_DIRECTORY --transport scripted|http [--cell CELL_JSON]
+export const lifecycleUsage = `Usage: node src/hswm/effect-runtime/dist/semantic-lifecycle-process.js --output NEW_PRIVATE_DIRECTORY --transport scripted|http [--cell CELL_JSON] [--allowance NATURAL --debit NATURAL]
 Build src/hswm/effect-runtime first. Scripted mode performs no network/model calls.
 HTTP mode requires an explicit cell {base_url, model, max_tokens, api_key_env?}.
+Supplying both --allowance and --debit selects from measured development responses
+and executes heldout once on the chosen durable branch. Neither bound is calibrated here.
 On maintainer DGX, use the documented hswm-run preflight and execution wrapper.
 All outputs are a finite authored diagnostic, not HSWM efficacy evidence.\n`
 
@@ -25,7 +28,7 @@ export const semanticLifecycleMain = (argv: ReadonlyArray<string>) => {
   const environment = Object.fromEntries(Object.entries(process.env).flatMap(([key, value]) => value === undefined ? [] : [[key, value]]))
   const host = Layer.succeed(LifecycleHost, { repository: resolve(dirname(fileURLToPath(import.meta.url)), "../../../.."),
     nodeExecutable: process.execPath, nodeVersion: process.version, environment })
-  return runArgvProcessMain({ program: args => lifecycleCli(args, process.cwd()).pipe(Effect.provide(host)),
-    refusalPrefix: "SEMANTIC_LIFECYCLE_REFUSED", describeFailure: error => error.code, failureExitCode: 1 }, argv)
+  return runArgvProcessMain({ program: args => lifecycleCli(args, process.cwd()).pipe(Effect.provide(host), Effect.provideService(AdaptiveHttpClient, NativeAdaptiveHttpClient)),
+    refusalPrefix: "SEMANTIC_LIFECYCLE_REFUSED", describeFailure: error => "code" in error ? error.code : error._tag, failureExitCode: 1 }, argv)
 }
 if (import.meta.main) process.exitCode = await semanticLifecycleMain(process.argv.slice(2))

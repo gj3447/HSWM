@@ -6,6 +6,9 @@ import { BoundedSubprocess } from "./effect-bounded-subprocess.js"
 import { PosixFileSystem, type PosixIoError } from "./effect-posix-filesystem.js"
 import { decodeLifecycleCell, lifecycleArms, lifecycleFailure, type LifecycleConfig, type LifecycleOptions, type LifecycleStage, type LifecycleArm, type LifecycleError } from "./semantic-lifecycle-domain.js"
 import { readLifecycleJson, writeLifecycleJson } from "./semantic-lifecycle-io.js"
+import { prepareLifecycleSelection } from "./semantic-lifecycle-selected-execution.js"
+import { evaluateLifecycleRuntime, SEMANTIC_LIFECYCLE_WORKER_V1 } from "./semantic-lifecycle-worker.js"
+import { createSemanticLifecycleTransport } from "./semantic-lifecycle-transport.js"
 
 export class LifecycleHost extends Context.Tag("hswm/LifecycleHost")<LifecycleHost, {
   readonly repository: string
@@ -62,7 +65,8 @@ const decodeReport = <A, I>(schema: Schema.Schema<A, I>) => (raw: unknown) => Sc
   Effect.mapError(() => lifecycleFailure("REPORT_INVALID", "Worker report did not satisfy lifecycle binding contract")))
 export interface LifecycleLaunch { readonly stage: LifecycleStage; readonly arm: LifecycleArm; readonly childPid: number; readonly exitedBeforeNextStage: true }
 
-export const runLifecycle = (options: LifecycleOptions) => Effect.gen(function* () {
+export const runLifecycle = (input: LifecycleOptions) => Effect.gen(function* () {
+  const options = Object.freeze({ ...input, ...(input.selection == null ? {} : { selection: Object.freeze({ ...input.selection }) }) })
   const fs = yield* PosixFileSystem
   const host = yield* LifecycleHost
   const subprocess = yield* BoundedSubprocess
@@ -78,7 +82,8 @@ export const runLifecycle = (options: LifecycleOptions) => Effect.gen(function* 
   yield* fs.makeDirectory(options.output, { mode: 0o700, operation: "semantic-lifecycle-attempt" })
   const config: LifecycleConfig = {
     contract: "hswm-semantic-lifecycle/v1", root: options.output, transport: options.transport, cell, arms: lifecycleArms, environmentSha256,
-    candidateCount: 1, developmentUsedForSelection: false, heldoutUsedForRevision: false,
+    candidateCount: 1, developmentUsedForSelection: options.selection !== null && options.selection !== undefined, heldoutUsedForRevision: false,
+    ...(options.selection == null ? {} : { selection: options.selection }),
     budget: { maximumModelRequests: 10, maximumWorkerMs: 75000, automaticRetries: 0 },
     modelExecutionStatus: options.transport === "scripted" ? "NO_MODEL" : "CALLER_DECLARED_HTTP_ENDPOINT_NOT_INDEPENDENTLY_VERIFIED",
     claimCeiling: options.transport === "scripted" ? "SCRIPTED_WIRING_ONLY_NOT_MODEL_EFFICACY" : "FINITE_AUTHORED_DIAGNOSTIC_NOT_CONFIRMATORY_EFFICACY"
@@ -106,11 +111,33 @@ export const runLifecycle = (options: LifecycleOptions) => Effect.gen(function* 
     yield* Effect.forEach(lifecycleArms, arm => observe(["cp", "-a", "--", join(options.output, "states/base"), join(options.output, "states", arm)]), { discard: true })
     const revisedArms = ["evidence_only", "sham", "learned"] as const
     yield* Effect.forEach(revisedArms, arm => launch("revise", arm), { discard: true })
-    const evaluationsPlan = (["development", "heldout"] as const).flatMap(stage => lifecycleArms.map(arm => ({ stage, arm })))
-    yield* Effect.forEach(evaluationsPlan, ({ stage, arm }) => launch(stage, arm), { discard: true })
+    const developmentPlan = lifecycleArms.map(arm => ({ stage: "development" as const, arm }))
+    yield* Effect.forEach(developmentPlan, ({ stage, arm }) => launch(stage, arm), { discard: true })
     const training = yield* readLifecycleJson(join(options.output, "train-base.json"))
     const revisions = yield* Effect.forEach(revisedArms, arm => readLifecycleJson(join(options.output, `revise-${arm}.json`)))
-    const evaluations = yield* Effect.forEach(evaluationsPlan, ({ stage, arm }) => readLifecycleJson(join(options.output, `${stage}-${arm}.json`)))
+    const development = yield* Effect.forEach(developmentPlan, ({ stage, arm }) => readLifecycleJson(join(options.output, `${stage}-${arm}.json`)))
+    const selected = options.selection == null ? null : yield* prepareLifecycleSelection(config, {
+      training, baselineDevelopment: development[0], candidateDevelopment: development[3], candidateRevision: revisions[2],
+      allowance: options.selection.allowance, debit: options.selection.debit
+    })
+    const heldoutReports = selected === null ? yield* Effect.gen(function* () {
+      yield* Effect.forEach(lifecycleArms, arm => launch("heldout", arm), { discard: true })
+      return yield* Effect.forEach(lifecycleArms, arm => readLifecycleJson(join(options.output, `heldout-${arm}.json`)))
+    }) : yield* Effect.gen(function* () {
+      // The decision is durable before any heldout call is made. Never revise it from heldout.
+      yield* writeLifecycleJson(join(options.output, "selection.json"), selected.report)
+      yield* verifyLifecyclePins(pins)
+      const transport = yield* createSemanticLifecycleTransport({ mode: config.transport, logRoot: join(options.output, "http", "heldout-selected") })
+      const evaluated = yield* selected.executeNext(runtime => evaluateLifecycleRuntime(config, "heldout", runtime, transport.http)).pipe(
+        Effect.timeoutFail({ duration: config.budget.maximumWorkerMs, onTimeout: () => lifecycleFailure("SELECTED_EXECUTION_TIMEOUT", "Selected execution exceeded the bounded stage time") }))
+      const processInfo = yield* Effect.sync(() => ({ processId: process.pid, parentProcessId: process.ppid }))
+      const report = { contract: SEMANTIC_LIFECYCLE_WORKER_V1, stage: "heldout", arm: selected.selectedArm,
+        ...processInfo, ...evaluated, calls: yield* transport.calls, selectedBeforeHeldout: true,
+        executionBoundary: "FRESH_DURABLE_RUNTIME_IN_PARENT_AFTER_DEVELOPMENT_CHILDREN_EXIT" }
+      yield* writeLifecycleJson(join(options.output, "heldout-selected.json"), report)
+      return [report]
+    })
+    const evaluations = [...development, ...heldoutReports]
     const trainingCheck = yield* decodeReport(TrainingSchema)(training)
     const revisionChecks = yield* Effect.forEach(revisions, decodeReport(RevisionSchema))
     const evaluationChecks = yield* Effect.forEach(evaluations, decodeReport(EvaluationSchema))
@@ -133,6 +160,7 @@ export const runLifecycle = (options: LifecycleOptions) => Effect.gen(function* 
     const callChecks = [trainingCheck, ...revisionChecks, ...evaluationChecks].flatMap(row => row.calls)
     const report = { ...config, status: revisionFailures.length ? "COMPLETED_WITH_REVISION_FAILURES" : "COMPLETED_DIAGNOSTIC",
       launches: yield* Ref.get(launches), sharedEvidence, committedEvidenceBindingsValid, revisionFailures, reopened, training, revisions, evaluations, calls,
+      ...(selected === null ? {} : { selection: selected.report }),
       httpModelRequests: callChecks.filter(row => row.httpModelRequest).length,
       usageStatus: callChecks.filter(row => row.httpModelRequest).every(row => row.usage !== null) ? "RAW_USAGE_PRESENT_OR_NO_HTTP_REQUESTS" : "PARTIALLY_UNAVAILABLE_NOT_ZERO",
       scientificStatus: "NOT_ADJUDICATED", outcomeAuthority: trainingCheck.outcome.status }

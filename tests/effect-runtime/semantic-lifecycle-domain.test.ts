@@ -38,6 +38,26 @@ describe("semantic lifecycle domain", () => {
     ]) expect(errorCode(parseLifecycleArgs(argv, "/work"))).toBe("CLI_INVALID")
   })
 
+  it("enables measured selection only with paired exact-natural bounds", () => {
+    expect(expectRight(parseLifecycleArgs([
+      "--output", "private/attempt", "--transport", "scripted", "--allowance", "0", "--debit", "1"
+    ], "/work"))).toEqual({
+      output: "/work/private/attempt", transport: "scripted", cellPath: null,
+      selection: { allowance: "0", debit: "1" }
+    })
+    // The legacy invocation remains structurally identical: it has no
+    // selection:null field that downstream receipts could misinterpret.
+    expect(expectRight(parseLifecycleArgs(["--output", "private/attempt", "--transport", "scripted"], "/work"))).toEqual({
+      output: "/work/private/attempt", transport: "scripted", cellPath: null
+    })
+    for (const argv of [
+      ["--output", "private/attempt", "--transport", "scripted", "--allowance", "0"],
+      ["--output", "private/attempt", "--transport", "scripted", "--debit", "0"],
+      ["--output", "private/attempt", "--transport", "scripted", "--allowance", "01", "--debit", "0"],
+      ["--output", "private/attempt", "--transport", "scripted", "--allowance", "-1", "--debit", "0"]
+    ]) expect(errorCode(parseLifecycleArgs(argv, "/work"))).toBe("CLI_INVALID")
+  })
+
   it("makes the endpoint cell a bounded public configuration rather than a credential container", () => {
     const cell = expectRight(decodeLifecycleCell({
       base_url: "https://model.example/v1", model: "pinned-model", max_tokens: 512, api_key_env: "HSWM_TOKEN"

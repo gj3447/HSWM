@@ -1,0 +1,151 @@
+{
+  "schema_version": "hswm-graph-program-direction-live-audit/v1",
+  "authority_class": "SECONDARY_AI",
+  "recorded_at": "2026-09-28 08:34:52 UTC",
+  "scope": "BOUNDED_HSWM_IDENTITY_AND_TWO_CHU_NOTES_NOT_FULL_KG_SCAN",
+  "records": [
+    {
+      "uid": "sym:Concept:hswm",
+      "name": "HSWM",
+      "title": null,
+      "authority_class": "USER_PRIMARY",
+      "canonical_scope": "USER_RATIFIED_CANON",
+      "target_version": "\"2026-08-20T04:53:56.594Z\"",
+      "text_fields": [
+        {
+          "encoding": "text",
+          "next_offset": null,
+          "offset": 0,
+          "property": "definition",
+          "sha256": "15c6cf20938a0153120aabe75adde17604d6fe44f09b4cddcb9bf16191f3622e",
+          "text": "HSWM is a persistent token-native macro-neural world model: LLM-executed function cells operate within an evolving Wolframian n-ary hypergraph whose H/W/A/F state plays the roles of living self-describing harness, executable world model, and outcome-bound continuous learner; Pi preserves constitutional boundaries. This is target identity, not demonstrated efficacy.",
+          "total_chars": 367,
+          "truncated": false
+        },
+        {
+          "encoding": "text",
+          "next_offset": null,
+          "offset": 0,
+          "property": "user_canon",
+          "sha256": "c67f915d4c2b6c648fa7b116dad662f4f80a0c80dcec141de9145d2bb2bbf267",
+          "text": "HSWM은 LLM token으로 활성화되는 거시 신경망이며, 능동적으로 변하는 자기기술적 living harness의 역할과 Wolframian evolving-hypergraph world model의 역할을 동시에 수행하고, outcome-bound continuous learning으로 자신의 W/routing/H를 바꾸는 하나의 지속적 인지 객체다.",
+          "total_chars": 200,
+          "truncated": false
+        }
+      ],
+      "source_fields": [
+        {
+          "encoding": "json",
+          "property": "constitution_path",
+          "truncated": false,
+          "value": "\"docs/canon/HSWM_CONSTITUTION_2026-08-20.md\""
+        },
+        {
+          "encoding": "json",
+          "property": "latest_user_source_artifact",
+          "truncated": false,
+          "value": "\"docs/canon/sources/USER_PRIMARY_HSWM_LIVING_HARNESS_WORLD_MODEL_2026-08-20.txt\""
+        },
+        {
+          "encoding": "json",
+          "property": "canon_refs",
+          "truncated": false,
+          "value": "[\"user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23\",\"user-canon-hswm-is-e2e-neural-replacement-of-multiagent-glue-2026-08-03\",\"docs/canon/HSWM_CONSTITUTION_2026-08-20.md\"]"
+        },
+        {
+          "encoding": "json",
+          "property": "latest_user_source_sha256",
+          "truncated": false,
+          "value": "\"35c911a13e7fb17ddcea19ba73303ec800296f25fb585b92300bb4977892a42e\""
+        },
+        {
+          "encoding": "json",
+          "property": "constitution_sha256",
+          "truncated": false,
+          "value": "\"f0089c7bfb9b85969dd01a2d6de63e5976a22bcfaf91fa272059ce18fd86b73a\""
+        },
+        {
+          "encoding": "json",
+          "property": "constitution_uid",
+          "truncated": false,
+          "value": "\"sym:AbstractNode:user-canon-hswm-living-harness-world-model-2026-08-20\""
+        }
+      ]
+    },
+    {
+      "uid": "sym:Note:chatgpt-chu-hswm-contracts-20260927",
+      "name": "chu-hswm-contracts-20260927",
+      "title": "CHU·HSWM의 소프트웨어 실행 계약 — 프로그램·연산자·상태·artifact·Map",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "target_version": "\"2026-09-27T07:22:28.107Z\"",
+      "text_fields": [
+        {
+          "encoding": "text",
+          "next_offset": null,
+          "offset": 0,
+          "property": "description",
+          "sha256": "ae8a632fe8a66543cec8a0d8bdad0b772c2af8256e3931125c8dd7e8a9e10535",
+          "text": "2026-09-27 컴퓨터 구조 대응과 구현 경계.\n\n사용자 비전은 Semantic Weight가 프로그램으로 작동하고, 여러 LLM 함수가 지속 그래프 상태를 읽고 수정하며 하나의 AI를 이루는 것이다. AI 해석에서는 저장 의미, 문맥/역할 조건부 전이 성향, LLM 실현, 측정된 인과 효과를 구분한다.\n\n컴퓨터 구조 대응:\n- 프로그램: 의미 관계·ordered roles·문맥·예외 또는 typed code/rewrite와 revision.\n- 연산자: profile별 kernel. HSWM의 기본 인지 kernel은 LLM. 일반 CHU는 수치·기호·물리 kernel도 수용 가능.\n- ROM 비유: 실행 범위에서 고정된 모델 parameter artifact. 모델 실행 자체는 연산이며 parameter, KV cache, 지속 Semantic Weight 상태는 서로 다르다.\n- 메모리: 지속 graph state와 실행 cache/activation, 큰 외부 artifact를 lifetime과 type으로 연결.\n- 실행: 읽은 graph revision·입력·kernel version·결과·관측 outcome을 결속.\n- 학습: 관측 outcome에 따라 canonical 의미 관계를 revision하고 다음 실행이 그 revision을 읽음. 단순 로그 추가와 구분.\n- 문서/인터넷: graph 정본에서 view를 만들고 주소·서비스·연결을 typed reference로 연결. 원문과 접근 권한·실행 의미는 여전히 필요.\n\n기존 구현 연결:\ngraph-memory → canonical-atom-v2-durable-runtime.ts\nprogram/kernel → canonical-atom-v2-llm-semantic-runtime.ts\nexecution → cross-layer-map-runtime.ts\nartifact → canonical-atom-v2-domain.ts\nview → cross-layer-map-rdf-view.ts\n경로 prefix: src/hswm/effect-runtime/src/\n파일 SHA-256은 로컬 bundle의 artifact_bindings 및 각 node의 source_sha256에 결속했다.\n\n읽기 snapshot을 공유한 병렬 계산은 가능하도록 설계하되 같은 revision의 충돌하는 수정은 CAS/retry 등 명시적 처리 대상이다. 자동 last-write-wins, 무조건 CRDT, confluence나 인과 credit을 가정하지 않는다. 큰 tensor는 형식·shape·digest가 있는 artifact 참조로 연결할 수 있으며 scalar마다 RDF edge를 만드는 것이 필수는 아니다.\n\n실제로 구축한 범위:\nsource-bound concept graph, RDF v2 projection, SPARQL 1.1 세 조회, SHACL 1.0 local profile, node/artifact source 검사.\nscope 두 profile, execution contracts 여섯 개, 문헌 아홉 개와 미해결 gap 세 개를 조회한다.\nCHU를 LLM 필수로 바꿈 / HSWM LLM kernel 삭제 / HSWM world-model target 삭제의 세 오류를 거부한다.\n\n현재 설계 또는 미구현:\n범용 CHU interpreter, 일반 병렬 scheduler, MuJoCo/ONNX/비LLM model adapter.\n기존 finite scripted fixture와 codec/MapSpec를 참조할 뿐 실제 모델 성능·전체 월드모델·CR/FCL의 새로운 실증 결과를 만들지 않았다.\n다음 연구는 구체적 세계 모델 하나에서 상태·관측·개입 의미를 정하고 native 실행과 HSWM 의미 예측을 같은 Map으로 대응시켜 일치·개입 반응·학습 변화·비용을 따로 평가하는 것이다.\n\n출처: docs/research/CHU_HSWM_COMPUTATIONAL_ARCHITECTURE_2026-09-27.md\nSHA-256: 68833d205e06296e6a2fbe0513daa98a1e5cd385593f6232f958ece77b6ec944\n로컬 bundle: ontology/identity/hswm_core/CHU_HSWM_SOFTWARE_SCOPE_ONTOLOGY.v1.json\nbundle SHA-256: 2839842cc526340afb082e67df2b900782d65e77c3155702fd310d616870946d\n권위: 이 노트는 SECONDARY_AI / PENDING_OR_PRELIMINARY 해석이다. 사용자 원문은 저장소에서 별도로 USER_PRIMARY 출처로 보존한다. 기존 사용자·canonical KG 본문을 덮어쓰지 않는다. CR/FCL 상태 및 효능 증거를 승격하지 않는다.",
+          "total_chars": 2365,
+          "truncated": false
+        }
+      ],
+      "source_fields": [
+        {
+          "encoding": "json",
+          "property": "source_ref",
+          "truncated": false,
+          "value": "\"docs/research/CHU_HSWM_COMPUTATIONAL_ARCHITECTURE_2026-09-27.md\""
+        }
+      ]
+    },
+    {
+      "uid": "sym:Note:chatgpt-chu-hswm-scope-20260927",
+      "name": "chu-hswm-scope-20260927",
+      "title": "CHU는 넓은 계산 우주, HSWM은 LLM 기반 AI — 사용자 범위 교정",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "target_version": "\"2026-09-27T07:23:46.612Z\"",
+      "text_fields": [
+        {
+          "encoding": "text",
+          "next_offset": null,
+          "offset": 0,
+          "property": "description",
+          "sha256": "f9a2d6d5977b4561272f74b3e1e9878bf55dadebe1d6a87919151c45158ef88a",
+          "text": "2026-09-27 CHU/HSWM 범위 교정과 출처 결속 구조.\n\n최신 사용자 원문:\n“해당내용 검색해서 구축좀 해줘봐봐 ㅇㅇ 구축 제대로 CHU 개념이랑 합쳐서 HSWM 은 llm 만을 위한 거고 CHU 는 진짜 월즈모델도 포함이고 HSWM 도 포함이고 그런 추상적 개념적으로 거대한거야 뭔말인지 알지 ㅇㅇ? 검색해서 제대로 내용좀 꼼꼼하게 구축해줘봐”\n원문 파일: docs/canon/sources/USER_PRIMARY_CHU_HSWM_SCOPE_2026-09-27.txt\n원문 SHA-256: a9b1ea40876a3e9134a8585bab75742b8e4884038967b4f494da906aa75a0014\n\n앞선 소프트웨어 직관 원문:\ndocs/canon/sources/USER_PRIMARY_CHU_SOFTWARE_ARCHITECTURE_2026-09-27.txt\nSHA-256: a403b110090d748b21bb5db0b0429a582aceda10b23eab92a0dfb2957188c598\n\nAI 공학적 해석:\n1. CHU(Computable Hyper Universe)는 계산 가능한 모델·상태·프로그램·자원·연결을 포괄하려는 추상적 범위다. CHU를 한 HSWM의 메모리/DB로 한정하지 않는다.\n2. HSWM은 CHU 범위에 들어가는 LLM-function 기반 하나의 AI다. 지속 Semantic Weight 하이퍼그래프가 그 AI의 상태이며 LLM은 국소 인지 연산자다. 보조 도구·수치 계산까지 모두 LLM이어야 한다는 뜻은 아니다.\n3. 세계 모델링은 능력/역할이고 HSWM은 계산 구조다. 비LLM 세계 모델도 CHU에 들어가며 HSWM 자체의 world-model 역할도 보존한다.\n4. 추상 CHU, 실행 profile, 유한 구현 인스턴스를 구분한다. CHU 전체의 유한 DB 존재나 물리 우주 계산가능성을 증명한 것이 아니다.\n5. 이전 CHU KG record는 UNSPECIFIED/UNKNOWN이며 오래된 hypergraph DB 설명을 포함한다. 최신 사용자 범위는 이 출처 결속 노트로 연결하며 구기록은 보존한다.\n6. 기존 axiom CHU : Type와 CHUPiece := CHU → Prop만으로 하이퍼그래프 구조, 유한 부호화, 임의 술어의 실행/결정가능성이 따라오지 않는다. 이를 실행 의미로 보완하는 설계가 필요하다.\n\n선언한 그래프:\nCHU llm_required=false; HSWM profile llm_required=true; 비LLM 세계 모델 profile llm_required=false.\n두 profile이 같은 world-model target capability를 가진다.\n로컬 graph 31 nodes, 2 기존 anchors, 73 relations. 라이브 3개 요약 노트는 전체 bundle의 복제가 아니다.\nSHACL와 SPARQL 구조 검증은 개념의 진실이나 HSWM 효능 검증이 아니다.\n\n출처: docs/research/CHU_HSWM_COMPUTATIONAL_ARCHITECTURE_2026-09-27.md\nSHA-256: 68833d205e06296e6a2fbe0513daa98a1e5cd385593f6232f958ece77b6ec944\n로컬 bundle: ontology/identity/hswm_core/CHU_HSWM_SOFTWARE_SCOPE_ONTOLOGY.v1.json\nbundle SHA-256: 2839842cc526340afb082e67df2b900782d65e77c3155702fd310d616870946d\n권위: 이 노트는 SECONDARY_AI / PENDING_OR_PRELIMINARY 해석이다. 사용자 원문은 저장소에서 별도로 USER_PRIMARY 출처로 보존한다. 기존 사용자·canonical KG 본문을 덮어쓰지 않는다. CR/FCL 상태 및 효능 증거를 승격하지 않는다.\n\n기존 CHU 참조 UID: sym:Concept:computable_hyper_universe_(chu)\n라이브 link_records가 이 legacy CHU 대상을 'Target is not available'로 거부하여 ABOUT edge는 생성하지 못했다. 위 UID와 existing-source-survey.v1.json의 출처 참조로 연결을 보존하며, 기존 CHU의 lifecycle이나 권위를 변경하지 않았다. HSWM·이전 직관·공학 계약·문헌 요약의 관계는 별도 게시 기록에서 확인한다.",
+          "total_chars": 2195,
+          "truncated": false
+        }
+      ],
+      "source_fields": [
+        {
+          "encoding": "json",
+          "property": "source_ref",
+          "truncated": false,
+          "value": "\"docs/research/CHU_HSWM_COMPUTATIONAL_ARCHITECTURE_2026-09-27.md\""
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "uid": "sym:Concept:hswm",
+      "property": "definition",
+      "status": "LEGACY_DECOMPOSITION_STILL_PRESENT",
+      "correction_source": "docs/canon/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.md",
+      "mutation": "ORIGINAL_RECORD_NOT_OVERWRITTEN_TOOL_ONLY_EDITS_ITS_OWN_DRAFTS"
+    },
+    {
+      "uid": "sym:Note:chatgpt-chu-hswm-contracts-20260927",
+      "status": "PRESENT_EXACT_DESCRIPTION_MATCHES_20260927_PUBLICATION"
+    },
+    {
+      "uid": "sym:Note:chatgpt-chu-hswm-scope-20260927",
+      "status": "PRESENT_EXACT_DESCRIPTION_MATCHES_20260927_PUBLICATION"
+    }
+  ],
+  "search_boundary": "Searching chatgpt-prefixed UIDs as names returned null; exact UID get found both CHU notes. No missing/deleted record claim.",
+  "claim_history_boundary": "Direct claim-history response for HSWM exposed a USL statement; it did not expose the 2026-08-26 decomposition supersession. Repository source remains the explicit correction evidence."
+}

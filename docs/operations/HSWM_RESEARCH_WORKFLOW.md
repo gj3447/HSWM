@@ -9,6 +9,12 @@ HSWM은 LLM을 기본 계산 단위로 삼고 Semantic Weight 하이퍼그래프
 AI를 목표로 한다. 큰 그래프가 상태이고 LLM은 국소 연산자다. 이번 정리는 작업 절차의
 단순화이며, 기존 CR/FCL 판정·연구 목표·실험 성공 기준을 변경하지 않는다.
 
+학습은 canonical graph의 의미·관계·program revision이다. TS/Effect는 그 내용을 해석하는
+실행기 구현의 정본이며, 학습할 때마다 TS 소스를 수정한다는 뜻이 아니다. 고정 연구용 FSM과
+그래프에 선언된 실행 프로그램, JSON/RDF 표현과 연구 KG projection을 구별한다.
+[그래프 프로그램 방향 재점검](../research/HSWM_GRAPH_PROGRAM_DIRECTION_2026-09-28.md)에
+확인한 오해·라이브 KG의 오래된 정의·구현과 증명의 연결 범위를 둔다.
+
 ## 준비
 
 저장소 루트에서 필요한 환경만 준비한다. Node/npm 기준은

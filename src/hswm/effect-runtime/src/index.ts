@@ -706,6 +706,29 @@ export {
   type SemanticOutcome,
   type LlmSemanticCell
 } from "./canonical-atom-v2-llm-semantic-runtime.js"
+
+export {
+  HSWM_SEMANTIC_PROGRAM_MEDIA_TYPE,
+  HSWM_SEMANTIC_PROGRAM_KIND,
+  HSWM_SEMANTIC_PROGRAM_TARGET_REFERENCE,
+  HSWM_SEMANTIC_PROGRAM_OPCODE,
+  HSWM_SEMANTIC_PROGRAM_MAX_STEPS,
+  HSWM_SEMANTIC_PROGRAM_MAX_BYTES,
+  SemanticProgramError,
+  decodeSemanticProgramContent,
+  resolveSemanticProgram,
+  type SemanticProgramStep,
+  type SemanticProgramContent,
+  type ResolvedSemanticProgramStep,
+  type ResolvedSemanticProgram,
+} from "./canonical-atom-v2-semantic-program.js"
+
+export {
+  runSemanticProgram,
+  type SemanticProgramKernelRegistry,
+  type RunSemanticProgramInput,
+  type SemanticProgramExecution,
+} from "./canonical-atom-v2-semantic-program-runtime.js"
 export {
   makeLlmSemanticGraphLoopAdmission,
   type LlmSemanticGraphLoopAdmissionInput,

@@ -1,0 +1,204 @@
+{
+  "schema_version": "hswm-graph-program-direction-verification/v1",
+  "authority_class": "SECONDARY_AI",
+  "recorded_at": "2026-09-28T08:50:21.113878+00:00",
+  "base_commit": "e3ef8b6797a7bc93c6ae9d2d16fe6f79234c6217",
+  "boundary": "SCRIPTED_DURABLE_GRAPH_PROGRAM_EXECUTION_AND_RESEARCH_KG_STRUCTURE_NOT_LEARNING_EFFICACY_NOT_NEW_LEAN_REFINEMENT",
+  "commands": [
+    {
+      "name": "check",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "cwd": "src/hswm/effect-runtime",
+      "exit_code": 0,
+      "duration_seconds": 27.108,
+      "log_sha256": "01411df4e70ac21ae6384761d4d871814a2fc5b542a07566a8213558d9c4b121"
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "src/hswm/effect-runtime",
+      "exit_code": 0,
+      "duration_seconds": 26.282,
+      "log_sha256": "51a25d8d4c57a1ea08bb66e4ddd0416369a3279c3984f50d06572439b5862db5"
+    },
+    {
+      "name": "pack",
+      "command": [
+        "npm",
+        "pack",
+        "--dry-run"
+      ],
+      "cwd": "src/hswm/effect-runtime",
+      "exit_code": 0,
+      "duration_seconds": 2.239,
+      "log_sha256": "b4200a75948f11863df808afa06e5a7bcba4b71925352d725c38e167571b1e2b"
+    },
+    {
+      "name": "build-dnrd",
+      "command": [
+        "npm",
+        "--prefix",
+        "src/hswm/effect-runtime",
+        "run",
+        "build:dnrd"
+      ],
+      "exit_code": 0,
+      "duration_seconds": 4.667,
+      "log_sha256": "6945bc5a754a1883a538f4e388a1748a91b35e4688df1147fa0ee68a86f43975"
+    }
+  ],
+  "corrected_tool_invocations": [
+    {
+      "command": "npm pack --dry-run --prefix src/hswm/effect-runtime",
+      "result": "ENOENT_ROOT_PACKAGE_JSON",
+      "correction": "Run npm pack --dry-run with cwd src/hswm/effect-runtime; exit 0 above."
+    }
+  ],
+  "runtime_tests": {
+    "command": "npm --prefix src/hswm/effect-runtime run test -- ../../../tests/effect-runtime/canonical-atom-v2-semantic-program.test.ts ../../../tests/effect-runtime/canonical-atom-v2-llm-semantic-runtime.test.ts ../../../tests/effect-runtime/canonical-atom-v2-semantic-selected-state.test.ts --maxWorkers=1 --testTimeout=15000 --reporter=json --outputFile=../../../.hswm-local/graph-program-regression.json",
+    "report_sha256": "f51ea03c51794d14ff73d065f3c7d0717f7c5747bc504d838d94e896eb5fb05e",
+    "total": 13,
+    "passed": 13,
+    "failed": 0,
+    "suites": [
+      {
+        "path": "tests/effect-runtime/canonical-atom-v2-llm-semantic-runtime.test.ts",
+        "status": "passed",
+        "tests": [
+          {
+            "name": "reopens a role-bearing semantic relation and feeds its outcome-conditioned revision back to the next LLM frame",
+            "status": "passed"
+          },
+          {
+            "name": "rejects forged outcomes and LLM revisions that delete or duplicate exception references",
+            "status": "passed"
+          },
+          {
+            "name": "rejects a relation revision that becomes stale while its LLM revision call is pending",
+            "status": "passed"
+          },
+          {
+            "name": "keeps repeated identical predictions as distinct executions and rejects cross-execution outcomes",
+            "status": "passed"
+          },
+          {
+            "name": "does not commit a semantic proposal when caller verifier content is missing",
+            "status": "passed"
+          },
+          {
+            "name": "schedules RETRY then permits its second ACCEPT attempt",
+            "status": "passed"
+          },
+          {
+            "name": "rejects terminally and refuses RETRY beyond the graph-loop attempt budget",
+            "status": "passed"
+          },
+          {
+            "name": "snapshots caller admission input before later mutation",
+            "status": "passed"
+          },
+          {
+            "name": "preserves QUARANTINED when a real file-backed graph-loop snapshot loses a CAS race",
+            "status": "passed"
+          },
+          {
+            "name": "preserves REJECTED for a real durable authorization denial without revising the relation",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "path": "tests/effect-runtime/canonical-atom-v2-semantic-program.test.ts",
+        "status": "passed",
+        "tests": [
+          {
+            "name": "uses a durable program revision to change invocation order after reopen without changing host code",
+            "status": "passed"
+          },
+          {
+            "name": "rejects invalid program content before a network call and stops before a later dispatch when graph state drifts",
+            "status": "passed"
+          }
+        ]
+      },
+      {
+        "path": "tests/effect-runtime/canonical-atom-v2-semantic-selected-state.test.ts",
+        "status": "passed",
+        "tests": [
+          {
+            "name": "selects a real learned durable branch and fresh-executes its selected semantic relation",
+            "status": "passed"
+          }
+        ]
+      }
+    ]
+  },
+  "public_package_export_smoke": {
+    "entrypoint": "src/hswm/effect-runtime/dist/index.js",
+    "exports": [
+      "runSemanticProgram",
+      "decodeSemanticProgramContent",
+      "HSWM_SEMANTIC_PROGRAM_OPCODE"
+    ],
+    "status": "PASS"
+  },
+  "graph_validation": {
+    "bundle_sha256": "ea622bde2e18ff42878ca44c2645aed9775349000f2b41f47321065bbc623e02",
+    "nodes": 10,
+    "anchors": 2,
+    "relations": 13,
+    "shacl_conforms": true,
+    "sparql_rows": 7,
+    "negative_mutations": [
+      {
+        "mutation": "typescript_source_edit_per_learning=true",
+        "rejected": true
+      },
+      {
+        "mutation": "research_kg_canonical_runtime=true",
+        "rejected": true
+      },
+      {
+        "mutation": "retired_fixed_decomposition_endorsed=true",
+        "rejected": true
+      }
+    ],
+    "source_bindings_verified": 16,
+    "rdf_dataset_sha256": "93fd4ffa4d4fb3493dcc98cf7d69d5a77b970a17313779eb7edd511598f8ccd3",
+    "publication_text_and_three_proposed_links_verified": true
+  },
+  "graph_validation_tool": "src/hswm/development/bin/hswm-python graph python; hswm.infrastructure.kg_bundle_graph_view.KgBundleGraphView.from_bundles / validate_shacl / query; each artifact binding SHA checked from disk; three mutated bundles independently rejected",
+  "external_sources": {
+    "archived": 2,
+    "digest_and_size_verified": 2,
+    "receipt": "_research/graph_program_direction_2026-09-28/source-captures.v1.json"
+  },
+  "markdown_compilation": {
+    "documents": 3,
+    "rewrites": 0,
+    "status": "PASS",
+    "command": "src/hswm/development/bin/hswm-python core scripts/compile_portable_markdown_math.py docs/research/HSWM_GRAPH_PROGRAM_DIRECTION_2026-09-28.md docs/operations/HSWM_RESEARCH_WORKFLOW.md INDEX.md --output-dir .hswm-local/graph-program-markdown"
+  },
+  "live_kg": {
+    "uid": "sym:Note:chatgpt-hswm-graph-program-direction-20260928",
+    "authority_class": "SECONDARY_AI",
+    "canonical_scope": "PENDING_OR_PRELIMINARY",
+    "requested_links_verified": 3,
+    "relationship_status": "PROPOSED",
+    "legacy_canonical_body": "UNCHANGED_TOOL_ONLY_EDITS_OWN_DRAFTS"
+  },
+  "nonclaims": [
+    "No actual model performance or autonomous graph-program learning measured",
+    "No complete/general CHU VM or recursive HSWM claim",
+    "No new Lean theorem or refinement for this implementation",
+    "No full repository test suite, standards requalification, GPU run or CR/FCL promotion"
+  ]
+}

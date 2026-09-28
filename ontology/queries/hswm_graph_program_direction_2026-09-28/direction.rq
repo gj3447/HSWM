@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?name ?role ?status ?boundary WHERE {
+  ?node p:name ?name ; p:standard_graph_role ?role ; p:status ?status ; p:claim_boundary ?boundary .
+  FILTER(?role IN ("LEARNING_TARGET", "INTERPRETER_BOUNDARY", "REPRESENTATION_BOUNDARY", "CONTROL_BOUNDARY", "PROJECTION_BOUNDARY", "HISTORICAL_COMPATIBILITY_BOUNDARY", "IMPLEMENTATION_FOLLOWUP"))
+}
+ORDER BY ?role ?name

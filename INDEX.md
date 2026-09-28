@@ -4,6 +4,10 @@
 필요한 검사 → Git 기록을 기본으로 한다. RDF·SHACL·SPARQL·PROV 기반 작업과 주제별
 참조를 안내하며, 아래 날짜별 기록은 당시 출처와 재현 정보를 보존한다.
 
+2026-09-28 [그래프 프로그램과 고정 실행기의 경계](docs/research/HSWM_GRAPH_PROGRAM_DIRECTION_2026-09-28.md)는
+학습에 의한 그래프 revision과 TS/Effect 실행기 개발을 구별한다. 문서·KG의 오래된 분해와
+해석 혼동을 점검하고, 같은 실행기가 DB 안의 프로그램 순서를 읽는 최소 구현을 연결한다.
+
 2026-09-28 [Lean 검증 재점검과 타 연구 비교](docs/research/HSWM_LEAN_VALIDATION_REVIEW_2026-09-28.md)는
 실제 커널 검사와 명제의 의미·runtime 연결·학습효과를 구별한다. 새 소스/공리 재검사,
 추가 fresh replay, 구조 검사기의 범위 확인, SampCert·Q-learning·CompCert 등의 원문을 정리한다.

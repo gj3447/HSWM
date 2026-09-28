@@ -1,0 +1,34 @@
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix direction: <urn:hswm:graph-program-direction:shape:> .
+
+direction:LearningTarget a sh:NodeShape ;
+  sh:targetClass role:LEARNING_TARGET ;
+  sh:property [ sh:path p:learning_target ; sh:hasValue "GRAPH_PROGRAM_AND_STATE_REVISION" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:typescript_source_edit_per_learning ; sh:hasValue false ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+direction:ProjectionBoundary a sh:NodeShape ;
+  sh:targetClass role:PROJECTION_BOUNDARY ;
+  sh:property [ sh:path p:research_kg_canonical_runtime ; sh:hasValue false ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_boundary ; sh:hasValue "READ_ONLY_RESEARCH_PROJECTION" ] .
+
+direction:RepresentationBoundary a sh:NodeShape ;
+  sh:targetClass role:REPRESENTATION_BOUNDARY ;
+  sh:property [ sh:path p:json_role ; sh:hasValue "SERIALIZATION_NOT_EXECUTION_AUTHORITY" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+direction:LegacyBoundary a sh:NodeShape ;
+  sh:targetClass role:HISTORICAL_COMPATIBILITY_BOUNDARY ;
+  sh:property [ sh:path p:retired_fixed_decomposition_endorsed ; sh:hasValue false ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+direction:ImplementationFollowup a sh:NodeShape ;
+  sh:targetClass role:IMPLEMENTATION_FOLLOWUP ;
+  sh:property [ sh:path p:status ; sh:hasValue "BOUNDED_IMPLEMENTATION_VERIFIED" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:implementation_binding_status ; sh:hasValue "FINAL_SOURCE_HASH_BOUND" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+direction:UserSource a sh:NodeShape ;
+  sh:targetClass role:USER_DIRECT_SOURCE ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:minCount 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .

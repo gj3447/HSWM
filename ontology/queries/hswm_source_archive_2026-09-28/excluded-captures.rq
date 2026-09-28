@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?url ?sha ?validity WHERE {
+  ?source p:original_url ?url ; r:RETRIEVED ?attempt .
+  ?attempt r:GENERATED ?content .
+  ?content p:content_sha256 ?sha ; p:source_validity ?validity .
+  FILTER (?validity = "HTML_CHALLENGE_PAGE" || ?validity = "HTML_NOT_FOUND_PAGE")
+}
+ORDER BY ?url

@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?url ?at ?sha ?bytes ?media ?validity WHERE {
+  ?request p:original_url ?url ; r:RETRIEVED ?attempt .
+  ?attempt p:retrieved_at ?at ; r:GENERATED ?content .
+  ?content p:content_sha256 ?sha ; p:byte_length ?bytes ; p:media_type ?media ;
+    p:source_validity ?validity .
+}
+ORDER BY ?url ?at

@@ -1,0 +1,2096 @@
+{
+  "schemaVersion": "hswm-external-source-inventory-correction-map/v1",
+  "createdOn": "2026-09-28",
+  "fromInventory": "inventory.v1.json",
+  "toInventory": "inventory.v2.json",
+  "classification": {
+    "PARSER_MALFORMED": "A v1 URL whose original local citation locator produces a different canonical URL under the v2 parser.",
+    "REAL_EXTERNAL_FAILURE": "Not classified here. This map performs no network I/O; use the archiver fetch receipt for real retrieval failures."
+  },
+  "counts": {
+    "v1Sources": 932,
+    "v2Sources": 852,
+    "unchangedCanonicalUrls": 804,
+    "parserMalformedV1Urls": 128,
+    "newCanonicalV2Urls": 48,
+    "realExternalFailuresClassifiedHere": 0
+  },
+  "parserMalformed": [
+    {
+      "v1Url": "https://aclanthology.org/2022.naacl-industry.24/)가",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://aclanthology.org/2022.naacl-industry.24/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md",
+          "sha256": "b6a88b14a4538685d21eddeb034a6c3a0dfd0e827536a73e57fce1d64465d9f4",
+          "locator": "line:441",
+          "citedUrl": "https://aclanthology.org/2022.naacl-industry.24/)가"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://aclanthology.org/2026.acl-short.47/)를",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://aclanthology.org/2026.acl-short.47/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md",
+          "sha256": "b6a88b14a4538685d21eddeb034a6c3a0dfd0e827536a73e57fce1d64465d9f4",
+          "locator": "line:421",
+          "citedUrl": "https://aclanthology.org/2026.acl-short.47/)를"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/0811.1640v1)에",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/0811.1640v1"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_CONSTRUCTIVE_PROOF_ROUND_1_2026-09-10.md",
+          "sha256": "42679cefd01fa657f1e388e4e6ed1971f6df1c37e129cdff3508c9ac07e673cb",
+          "locator": "line:102",
+          "citedUrl": "https://arxiv.org/abs/0811.1640v1)에"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/1408.1598)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/1408.1598"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_USL_SEMANTIC_ENGINEERING_BRIDGE_2026-09-07.md",
+          "sha256": "dccb1cb15d93be0a19cd24131c2c33570839771e69929a990c5dba1601ca36b5",
+          "locator": "line:50",
+          "citedUrl": "https://arxiv.org/abs/1408.1598)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/1711.10455v3)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/1711.10455v3",
+        "https://arxiv.org/abs/1908.07021v8"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4",
+          "locator": "line:28",
+          "citedUrl": "https://arxiv.org/abs/1711.10455v3)는"
+        },
+        {
+          "path": "docs/research/HSWM_SEMANTIC_FRONTIER_PROOFS_2026-09-14.md",
+          "sha256": "462688e5554c1ea76c1d9997f75e491d7c8abf693b2576a93d4f4c9c188b7e21",
+          "locator": "line:87",
+          "citedUrl": "https://arxiv.org/abs/1711.10455v3)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/1908.07021v8)를",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/1711.10455v3",
+        "https://arxiv.org/abs/1908.07021v8"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_NEXT_PROOF_RESEARCH_2026-09-15.md",
+          "sha256": "f259516997281c5918000c644c85ad696f901e0299ffadca3ff8facd44ecbed4",
+          "locator": "line:28",
+          "citedUrl": "https://arxiv.org/abs/1908.07021v8)를"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/1908.07021v8)에서",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/1908.07021v8"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md",
+          "sha256": "9b746abf743872af6d441de9cac1690030639851a0690884cb5f0c85dc3353b5",
+          "locator": "line:159",
+          "citedUrl": "https://arxiv.org/abs/1908.07021v8)에서"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/2112.08272)·[2026",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2310.18318",
+        "https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_RESEARCH_VIABILITY_AND_POSITIONING_2026-08-30.md",
+          "sha256": "bd5f73d29bf00b220cecff5c85675506eeadb97a0fbd66824427e833c5a18a83",
+          "locator": "line:113",
+          "citedUrl": "https://arxiv.org/abs/2112.08272)·[2026"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/2203.02155v1)다",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2203.02155v1",
+        "https://arxiv.org/abs/2207.05221v1",
+        "https://arxiv.org/html/2507.16806v2",
+        "https://proceedings.mlr.press/v70/guo17a.html"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_RESEARCH_INTEGRATION_2026-09-20.md",
+          "sha256": "b4c0dbcf6c83b3114766831d8dc40d717d5f24531fcf862e88c765cd9964ca47",
+          "locator": "line:35",
+          "citedUrl": "https://arxiv.org/abs/2203.02155v1)다"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/2208.02814)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2208.02814",
+        "https://proceedings.mlr.press/v37/thomas15.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_LEARNING_COMPOSITION_PROOF_LITERATURE_2026-09-28.md",
+          "sha256": "d827893cc2240db5ae84cadf170af6bbebad2af626ff2b1e31838fad5b5c593d",
+          "locator": "line:32",
+          "citedUrl": "https://arxiv.org/abs/2208.02814)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/2303.11366)·[ExpeL",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2303.11366"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_RESEARCH_VIABILITY_AND_POSITIONING_2026-08-30.md",
+          "sha256": "bd5f73d29bf00b220cecff5c85675506eeadb97a0fbd66824427e833c5a18a83",
+          "locator": "line:115",
+          "citedUrl": "https://arxiv.org/abs/2303.11366)·[ExpeL"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/2308.10144)/ACE-style",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2303.11366",
+        "https://arxiv.org/abs/2305.16291",
+        "https://arxiv.org/abs/2308.10144"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_REUSE_FIRST_ARCHITECTURE_2026-08-30.md",
+          "sha256": "d255949b3f0d2f10978ff8ad330289abc8e33ca8e5df1f72028f36c6baf52b95",
+          "locator": "line:60",
+          "citedUrl": "https://arxiv.org/abs/2308.10144)/ACE-style"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/2310.18318)·[MeTTa",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2310.18318",
+        "https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_RESEARCH_VIABILITY_AND_POSITIONING_2026-08-30.md",
+          "sha256": "bd5f73d29bf00b220cecff5c85675506eeadb97a0fbd66824427e833c5a18a83",
+          "locator": "line:113",
+          "citedUrl": "https://arxiv.org/abs/2310.18318)·[MeTTa"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/2312.11385)도",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2312.11385"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_MINIMUM_COST_HYPERGRAPH_HYPOTHESIS_2026-09-27.md",
+          "sha256": "c62be00cda561dfbabe34e29a161a25f73a8c528d4df491a497679ac452d7e31",
+          "locator": "line:48",
+          "citedUrl": "https://arxiv.org/abs/2312.11385)도"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/2406.07496)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2406.07496"
+      ],
+      "citations": [
+        {
+          "path": "docs/operations/HSWM_SEMANTIC_SELECTED_EXECUTION.md",
+          "sha256": "47faad081f73edb80e0d2655b1c1042b825190ab42e82e0b4a3108075e29b2b7",
+          "locator": "line:55",
+          "citedUrl": "https://arxiv.org/abs/2406.07496)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/2503.21322v3)와",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2503.21322v3"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+          "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e",
+          "locator": "line:91",
+          "citedUrl": "https://arxiv.org/abs/2503.21322v3)와"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/2507.19457v2)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2507.19457v2"
+      ],
+      "citations": [
+        {
+          "path": "docs/operations/HSWM_SEMANTIC_SELECTED_EXECUTION.md",
+          "sha256": "47faad081f73edb80e0d2655b1c1042b825190ab42e82e0b4a3108075e29b2b7",
+          "locator": "line:52",
+          "citedUrl": "https://arxiv.org/abs/2507.19457v2)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/2510.04618v3)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2510.04618v3"
+      ],
+      "citations": [
+        {
+          "path": "docs/operations/HSWM_SEMANTIC_SELECTED_EXECUTION.md",
+          "sha256": "47faad081f73edb80e0d2655b1c1042b825190ab42e82e0b4a3108075e29b2b7",
+          "locator": "line:58",
+          "citedUrl": "https://arxiv.org/abs/2510.04618v3)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/abs/math/0406077)과",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/math/0406077"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_MINIMUM_COST_HYPERGRAPH_HYPOTHESIS_2026-09-27.md",
+          "sha256": "c62be00cda561dfbabe34e29a161a25f73a8c528d4df491a497679ac452d7e31",
+          "locator": "line:74",
+          "citedUrl": "https://arxiv.org/abs/math/0406077)과"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/html/2411.15100v3)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/html/2411.15100v3"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+          "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e",
+          "locator": "line:67",
+          "citedUrl": "https://arxiv.org/html/2411.15100v3)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/html/2501.17887v1)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/html/2501.17887v1"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+          "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e",
+          "locator": "line:79",
+          "citedUrl": "https://arxiv.org/html/2501.17887v1)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/html/2505.10819v4)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/html/2505.10819v4"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+          "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e",
+          "locator": "line:103",
+          "citedUrl": "https://arxiv.org/html/2505.10819v4)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/html/2505.24760v2)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/html/2505.24760v2"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+          "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e",
+          "locator": "line:54",
+          "citedUrl": "https://arxiv.org/html/2505.24760v2)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/html/2602.10090v3)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/html/2602.10090v3"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+          "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e",
+          "locator": "line:115",
+          "citedUrl": "https://arxiv.org/html/2602.10090v3)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://arxiv.org/html/2602.14470)도",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/html/2602.14470"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md",
+          "sha256": "b6a88b14a4538685d21eddeb034a6c3a0dfd0e827536a73e57fce1d64465d9f4",
+          "locator": "line:154",
+          "citedUrl": "https://arxiv.org/html/2602.14470)도"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://build.nvidia.com/spark/vllm/agent-ready-models)를",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://build.nvidia.com/spark/vllm/agent-ready-models",
+        "https://github.com/vllm-project/vllm/releases/tag/v0.29.0",
+        "https://huggingface.co/Qwen/Qwen3.8-27B-FP8"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_DGX_FRONTIER_RESEARCH_2026-09-20.md",
+          "sha256": "3510727ad5ad8fc281d6084406f4a5dbf01d2dfb55c2acbfca33ab38459990a4",
+          "locator": "line:48",
+          "citedUrl": "https://build.nvidia.com/spark/vllm/agent-ready-models)를"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://distill.pub/2020/growing-ca/)·[operadic",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2105.12282",
+        "https://distill.pub/2020/growing-ca/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_RESEARCH_VIABILITY_AND_POSITIONING_2026-08-30.md",
+          "sha256": "bd5f73d29bf00b220cecff5c85675506eeadb97a0fbd66824427e833c5a18a83",
+          "locator": "line:120",
+          "citedUrl": "https://distill.pub/2020/growing-ca/)·[operadic"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://docs.mlcommons.org/croissant/)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://docs.mlcommons.org/croissant/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:203",
+          "citedUrl": "https://docs.mlcommons.org/croissant/)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://docs.typesafe.ai/introduction/machine-learning-primer)와",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://docs.typesafe.ai/introduction/machine-learning-primer",
+        "https://docs.typesafe.ai/primitives"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.md",
+          "sha256": "526e150a61efc2464b2c1f966d0a25ce7ab00e49ab9df858ea8cffd72206209c",
+          "locator": "line:19",
+          "citedUrl": "https://docs.typesafe.ai/introduction/machine-learning-primer)와"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://docs.typesafe.ai/introduction/machine-learning-primer)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://docs.typesafe.ai/introduction/machine-learning-primer",
+        "https://docs.typesafe.ai/primitives"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_JEV_PRINCIPLES_2026-09-21.md",
+          "sha256": "9eaeab92e5e1e1abaf4a3217376725e6229a4276d5f601fa033c52b46d95dc66",
+          "locator": "line:11",
+          "citedUrl": "https://docs.typesafe.ai/introduction/machine-learning-primer)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://docs.typesafe.ai/primitives)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://docs.typesafe.ai/introduction/machine-learning-primer",
+        "https://docs.typesafe.ai/primitives"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_JEV_PRINCIPLES_2026-09-21.md",
+          "sha256": "9eaeab92e5e1e1abaf4a3217376725e6229a4276d5f601fa033c52b46d95dc66",
+          "locator": "line:11",
+          "citedUrl": "https://docs.typesafe.ai/primitives)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://docs.typesafe.ai/primitives)를",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://docs.typesafe.ai/introduction/machine-learning-primer",
+        "https://docs.typesafe.ai/primitives"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.md",
+          "sha256": "526e150a61efc2464b2c1f966d0a25ce7ab00e49ab9df858ea8cffd72206209c",
+          "locator": "line:19",
+          "citedUrl": "https://docs.typesafe.ai/primitives)를"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://docs.vllm.ai/en/latest/features/structured_outputs/)에는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://docs.vllm.ai/en/latest/features/structured_outputs/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+          "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e",
+          "locator": "line:70",
+          "citedUrl": "https://docs.vllm.ai/en/latest/features/structured_outputs/)에는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://docs.vllm.ai/en/latest/features/structured_outputs/)이다",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://docs.vllm.ai/en/latest/features/structured_outputs/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_DGX_FRONTIER_RESEARCH_2026-09-20.md",
+          "sha256": "3510727ad5ad8fc281d6084406f4a5dbf01d2dfb55c2acbfca33ab38459990a4",
+          "locator": "line:54",
+          "citedUrl": "https://docs.vllm.ai/en/latest/features/structured_outputs/)이다"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://effect.website/docs/v3/requirements-management/services)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://effect.website/docs/v3/requirements-management/services"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_IMPLEMENTABLE_ARCHITECTURE_2026-09-27.md",
+          "sha256": "afd800d56c27b8536adc245669433e24cbaf9f5453e4f9f23079ccebef4f2c77",
+          "locator": "line:125",
+          "citedUrl": "https://effect.website/docs/v3/requirements-management/services)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://galaxyproject.org/use/)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://galaxyproject.org/use/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:189",
+          "citedUrl": "https://galaxyproject.org/use/)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/EleutherAI/lm-evaluation-harness/releases)에",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/EleutherAI/lm-evaluation-harness/releases"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:144",
+          "citedUrl": "https://github.com/EleutherAI/lm-evaluation-harness/releases)에"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/METR/task-standard/blob/main/README.md)을",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/METR/task-standard/blob/main/README.md"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:138",
+          "citedUrl": "https://github.com/METR/task-standard/blob/main/README.md)을"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/NVIDIA-NeMo/Gym/tree/3045a793346a31291d7ea4ae6af3f94a35036ce5)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/NVIDIA-NeMo/Gym/tree/3045a793346a31291d7ea4ae6af3f94a35036ce5"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+          "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e",
+          "locator": "line:164",
+          "citedUrl": "https://github.com/NVIDIA-NeMo/Gym/tree/3045a793346a31291d7ea4ae6af3f94a35036ce5)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/OSU-NLP-Group/HippoRAG/tree/main/outputs/musique)을",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/OSU-NLP-Group/HippoRAG/tree/main/outputs/musique"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md",
+          "sha256": "b6a88b14a4538685d21eddeb034a6c3a0dfd0e827536a73e57fce1d64465d9f4",
+          "locator": "line:73",
+          "citedUrl": "https://github.com/OSU-NLP-Group/HippoRAG/tree/main/outputs/musique)을"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/Snowflake-Labs/agent-world-model/tree/85e322f69279e3b3325b7377ec3bab788514e9cb)에서",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/Snowflake-Labs/agent-world-model/tree/85e322f69279e3b3325b7377ec3bab788514e9cb"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+          "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e",
+          "locator": "line:124",
+          "citedUrl": "https://github.com/Snowflake-Labs/agent-world-model/tree/85e322f69279e3b3325b7377ec3bab788514e9cb)에서"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/gepa-ai/gepa/releases/tag/v0.1.4)로",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/gepa-ai/gepa/releases/tag/v0.1.4"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_DGX_FRONTIER_RESEARCH_2026-09-20.md",
+          "sha256": "3510727ad5ad8fc281d6084406f4a5dbf01d2dfb55c2acbfca33ab38459990a4",
+          "locator": "line:66",
+          "citedUrl": "https://github.com/gepa-ai/gepa/releases/tag/v0.1.4)로"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/gj3447/HSWM/actions/runs/34082173007)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/gj3447/HSWM/actions/runs/34082173007"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_PHILOSOPHY_KG_REMEDIATION_2026-09-07.md",
+          "sha256": "24da705137e477f0a77ace21df7682dc6cfb2291682c21049e4355ec44ce7871",
+          "locator": "line:48",
+          "citedUrl": "https://github.com/gj3447/HSWM/actions/runs/34082173007)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/gj3447/HSWM/actions/runs/34082173038)에서",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/gj3447/HSWM/actions/runs/34082173038"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_PHILOSOPHY_KG_REMEDIATION_2026-09-07.md",
+          "sha256": "24da705137e477f0a77ace21df7682dc6cfb2291682c21049e4355ec44ce7871",
+          "locator": "line:34",
+          "citedUrl": "https://github.com/gj3447/HSWM/actions/runs/34082173038)에서"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/gj3447/HSWM/blob/c57f39a8c33bb86d19cfcaa40b880b944707e53d/docs/operations/HSWM_OPEN_CONNECTIVITY_CONTRACT_2026-09-05.md",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/gj3447/HSWM/blob/main/docs/operations/HSWM_OPEN_CONNECTIVITY_CONTRACT_2026-09-05.md"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/artifacts/hswm_research_tooling_2026-09-13/source-index.md",
+          "sha256": "efc9ce4ede4e9b53a2b5ba1053e8e0bbec839ab134d0b3293b74928d29ce4b18",
+          "locator": "line:64",
+          "citedUrl": "https://github.com/gj3447/HSWM/blob/c57f39a8c33bb86d19cfcaa40b880b944707e53d/docs/operations/HSWM_OPEN_CONNECTIVITY_CONTRACT_2026-09-05.md"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/gj3447/HSWM/blob/c57f39a8c33bb86d19cfcaa40b880b944707e53d/docs/research/HSWM_G0_OCCURRENCE_INTEGRITY_PROFILE_2026-09-03.md",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/gj3447/HSWM/blob/main/docs/research/HSWM_G0_OCCURRENCE_INTEGRITY_PROFILE_2026-09-03.md"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/artifacts/hswm_research_tooling_2026-09-13/source-index.md",
+          "sha256": "efc9ce4ede4e9b53a2b5ba1053e8e0bbec839ab134d0b3293b74928d29ce4b18",
+          "locator": "line:62",
+          "citedUrl": "https://github.com/gj3447/HSWM/blob/c57f39a8c33bb86d19cfcaa40b880b944707e53d/docs/research/HSWM_G0_OCCURRENCE_INTEGRITY_PROFILE_2026-09-03.md"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/gj3447/HSWM/blob/c57f39a8c33bb86d19cfcaa40b880b944707e53d/src/hswm/evaluation/inspect_outer_runner.py",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/gj3447/HSWM/blob/main/src/hswm/evaluation/inspect_outer_runner.py"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/artifacts/hswm_research_tooling_2026-09-13/source-index.md",
+          "sha256": "efc9ce4ede4e9b53a2b5ba1053e8e0bbec839ab134d0b3293b74928d29ce4b18",
+          "locator": "line:13",
+          "citedUrl": "https://github.com/gj3447/HSWM/blob/c57f39a8c33bb86d19cfcaa40b880b944707e53d/src/hswm/evaluation/inspect_outer_runner.py"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/gj3447/HSWM/blob/c57f39a8c33bb86d19cfcaa40b880b944707e53d/src/hswm/infrastructure/occurrence_publication.py",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/gj3447/HSWM/blob/main/src/hswm/infrastructure/occurrence_publication.py"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/artifacts/hswm_research_tooling_2026-09-13/source-index.md",
+          "sha256": "efc9ce4ede4e9b53a2b5ba1053e8e0bbec839ab134d0b3293b74928d29ce4b18",
+          "locator": "line:63",
+          "citedUrl": "https://github.com/gj3447/HSWM/blob/c57f39a8c33bb86d19cfcaa40b880b944707e53d/src/hswm/infrastructure/occurrence_publication.py"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/google/langextract/tree/70cfb988cc25f15d8b04a1e57bd52a777207c0c6)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/google/langextract/tree/70cfb988cc25f15d8b04a1e57bd52a777207c0c6"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+          "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e",
+          "locator": "line:161",
+          "citedUrl": "https://github.com/google/langextract/tree/70cfb988cc25f15d8b04a1e57bd52a777207c0c6)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/openai/NavierStokesAndEuler/blob/main/README.md)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/openai/NavierStokesAndEuler/blob/main/README.md"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.md",
+          "sha256": "4274b27b876f1d2fecde18131054dbe05b93563c5a74e519fab64e1f78107e98",
+          "locator": "line:34",
+          "citedUrl": "https://github.com/openai/NavierStokesAndEuler/blob/main/README.md)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/opencog/atomspace)다",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/opencog/atomspace"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md",
+          "sha256": "8b1b89e5ef848c3ce76ea6f76d8d60622768e0fc14aeacc7d5177f7ee35967b5",
+          "locator": "line:67",
+          "citedUrl": "https://github.com/opencog/atomspace)다"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/tobi/qmd)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/tobi/qmd"
+      ],
+      "citations": [
+        {
+          "path": "docs/operations/HSWM_AI_NATIVE_TOOLS.md",
+          "sha256": "df2cee9dc40b74c73b064896f109ad3e70f948b875c9c71c244b64e87a99df07",
+          "locator": "line:10",
+          "citedUrl": "https://github.com/tobi/qmd)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/trueagi-io/hyperon-experimental/blob/3f76dc460da6961f57f69f6c3e550c59c74ada83/README.md)도",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/trueagi-io/hyperon-experimental/blob/3f76dc460da6961f57f69f6c3e550c59c74ada83/README.md"
+      ],
+      "citations": [
+        {
+          "path": "docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md",
+          "sha256": "af5490bcb3aa7830dbfcf9c806c0e9d0b966d4c3a4e246ef1140f77bd3d8c32a",
+          "locator": "line:37",
+          "citedUrl": "https://github.com/trueagi-io/hyperon-experimental/blob/3f76dc460da6961f57f69f6c3e550c59c74ada83/README.md)도"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/trueagi-io/hyperon-experimental/blob/3f76dc460da6961f57f69f6c3e550c59c74ada83/README.md)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/trueagi-io/hyperon-experimental/blob/3f76dc460da6961f57f69f6c3e550c59c74ada83/README.md"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_LEARNING_COMPOSITION_PROOF_LITERATURE_2026-09-28.md",
+          "sha256": "d827893cc2240db5ae84cadf170af6bbebad2af626ff2b1e31838fad5b5c593d",
+          "locator": "line:109",
+          "citedUrl": "https://github.com/trueagi-io/hyperon-experimental/blob/3f76dc460da6961f57f69f6c3e550c59c74ada83/README.md)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://github.com/trueagi-io/hyperon-experimental/tree/3f76dc460da6961f57f69f6c3e550c59c74ada83)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/trueagi-io/hyperon-experimental/tree/3f76dc460da6961f57f69f6c3e550c59c74ada83"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_CROSS_LAYER_MAP_ENGINEERING_2026-09-27.md",
+          "sha256": "adf9e1b02207faf26fb5f4705941430ed1115e7c5d2ffae1618077a26ccad243",
+          "locator": "line:236",
+          "citedUrl": "https://github.com/trueagi-io/hyperon-experimental/tree/3f76dc460da6961f57f69f6c3e550c59c74ada83)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://huggingface.co/Qwen/Qwen3.8-27B-FP8)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://build.nvidia.com/spark/vllm/agent-ready-models",
+        "https://github.com/vllm-project/vllm/releases/tag/v0.29.0",
+        "https://huggingface.co/Qwen/Qwen3.8-27B-FP8"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_DGX_FRONTIER_RESEARCH_2026-09-20.md",
+          "sha256": "3510727ad5ad8fc281d6084406f4a5dbf01d2dfb55c2acbfca33ab38459990a4",
+          "locator": "line:48",
+          "citedUrl": "https://huggingface.co/Qwen/Qwen3.8-27B-FP8)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+        "https://huggingface.co/zai-org/GLM-5.3-Flash"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_DGX_FRONTIER_RESEARCH_2026-09-20.md",
+          "sha256": "3510727ad5ad8fc281d6084406f4a5dbf01d2dfb55c2acbfca33ab38459990a4",
+          "locator": "line:50",
+          "citedUrl": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://huggingface.co/zai-org/GLM-5.3-Flash)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+        "https://huggingface.co/zai-org/GLM-5.3-Flash"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_DGX_FRONTIER_RESEARCH_2026-09-20.md",
+          "sha256": "3510727ad5ad8fc281d6084406f4a5dbf01d2dfb55c2acbfca33ab38459990a4",
+          "locator": "line:50",
+          "citedUrl": "https://huggingface.co/zai-org/GLM-5.3-Flash)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md",
+          "sha256": "af5490bcb3aa7830dbfcf9c806c0e9d0b966d4c3a4e246ef1140f77bd3d8c32a",
+          "locator": "line:35",
+          "citedUrl": "https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf)와",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://github.com/trueagi-io/hyperon-experimental/releases/tag/v0.2.10",
+        "https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+          "sha256": "e0bf7984cb2d78abc4ba5051ae73d923f665a674dd47cdd9c39a47e3da478795",
+          "locator": "line:141",
+          "citedUrl": "https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf)와"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md",
+          "sha256": "4fe95878d7be709fc394ed00fd43c99dad646ff88f69abb8977f6c3249db5b2f",
+          "locator": "line:95",
+          "citedUrl": "https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://inspect.aisi.org.uk/)와",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://inspect.aisi.org.uk/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:84",
+          "citedUrl": "https://inspect.aisi.org.uk/)와"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://lean-lang.org/)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://lean-lang.org/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:149",
+          "citedUrl": "https://lean-lang.org/)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://lean-lang.org/doc/reference/latest/ValidatingProofs/)에",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://lean-lang.org/doc/reference/latest/ValidatingProofs/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_OPERATIONAL_PHILOSOPHY_PROOF_2026-09-28.md",
+          "sha256": "d29f9c93903b6b3fd4de85ff82c9945ddc6fcf13a1370b8753de5790ca9efda4",
+          "locator": "line:80",
+          "citedUrl": "https://lean-lang.org/doc/reference/latest/ValidatingProofs/)에"
+        },
+        {
+          "path": "docs/research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md",
+          "sha256": "868c4d358b37a6cb43ffbe129a8d1ee3a7fc7a213e112071b34b5901a7019c37",
+          "locator": "line:146",
+          "citedUrl": "https://lean-lang.org/doc/reference/latest/ValidatingProofs/)에"
+        },
+        {
+          "path": "docs/research/HSWM_THREE_PHILOSOPHIES_LEAN_2026-09-27.md",
+          "sha256": "e2a8b56b6810824e4e2c5efe21cb015fd6f8eb7be9c864e04e5714acdbee9545",
+          "locator": "line:124",
+          "citedUrl": "https://lean-lang.org/doc/reference/latest/ValidatingProofs/)에"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://lean-lang.org/doc/reference/latest/ValidatingProofs/)처럼",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://lean-lang.org/doc/reference/latest/ValidatingProofs/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md",
+          "sha256": "4fe95878d7be709fc394ed00fd43c99dad646ff88f69abb8977f6c3249db5b2f",
+          "locator": "line:112",
+          "citedUrl": "https://lean-lang.org/doc/reference/latest/ValidatingProofs/)처럼"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Computability/MyhillNerode.html)와",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Computability/MyhillNerode.html"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_OPERATIONAL_PHILOSOPHY_PROOF_2026-09-28.md",
+          "sha256": "d29f9c93903b6b3fd4de85ff82c9945ddc6fcf13a1370b8753de5790ca9efda4",
+          "locator": "line:37",
+          "citedUrl": "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Computability/MyhillNerode.html)와"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Probability/Moments/SubGaussian.html)에서",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Probability/Moments/SubGaussian.html"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_LEARNING_COMPOSITION_PROOF_LITERATURE_2026-09-28.md",
+          "sha256": "d827893cc2240db5ae84cadf170af6bbebad2af626ff2b1e31838fad5b5c593d",
+          "locator": "line:97",
+          "citedUrl": "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Probability/Moments/SubGaussian.html)에서"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://learn.chatgpt.com/docs/config-file/config-reference)를",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://learn.chatgpt.com/docs/config-file/config-reference"
+      ],
+      "citations": [
+        {
+          "path": "docs/operations/HSWM_AI_NATIVE_TOOLS.md",
+          "sha256": "df2cee9dc40b74c73b064896f109ad3e70f948b875c9c71c244b64e87a99df07",
+          "locator": "line:34",
+          "citedUrl": "https://learn.chatgpt.com/docs/config-file/config-reference)를"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://link.springer.com/article/10.1007/BF00116829)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://link.springer.com/article/10.1007/BF00116829"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SEMANTIC_FRONTIER_PROOFS_2026-09-14.md",
+          "sha256": "462688e5554c1ea76c1d9997f75e491d7c8abf693b2576a93d4f4c9c188b7e21",
+          "locator": "line:86",
+          "citedUrl": "https://link.springer.com/article/10.1007/BF00116829)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://link.springer.com/content/pdf/10.1023/A:1013689704352.pdf)에",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://link.springer.com/content/pdf/10.1023/A:1013689704352.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.md",
+          "sha256": "4274b27b876f1d2fecde18131054dbe05b93563c5a74e519fab64e1f78107e98",
+          "locator": "line:134",
+          "citedUrl": "https://link.springer.com/content/pdf/10.1023/A:1013689704352.pdf)에"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://metahumotonic.com/apostles/hoh/)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://metahumotonic.com/apostles/hoh/"
+      ],
+      "citations": [
+        {
+          "path": "docs/canon/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md",
+          "sha256": "0cdbdf7f9f9a398c3c51bb3f97a6407a1d31f505632a46da2ab06894585c2435",
+          "locator": "line:248",
+          "citedUrl": "https://metahumotonic.com/apostles/hoh/)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://neo4j.com/docs/cypher-manual/current/schema/constraints/create-constraints/)에",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://neo4j.com/docs/cypher-manual/current/schema/constraints/create-constraints/",
+        "https://www.w3.org/TR/prov-o/",
+        "https://www.w3.org/TR/shacl/",
+        "https://www.w3.org/TR/swbp-n-aryRelations/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_PHILOSOPHY_KG_REMEDIATION_2026-09-07.md",
+          "sha256": "24da705137e477f0a77ace21df7682dc6cfb2291682c21049e4355ec44ce7871",
+          "locator": "line:52",
+          "citedUrl": "https://neo4j.com/docs/cypher-manual/current/schema/constraints/create-constraints/)에"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://neo4j.com/docs/operations-manual/current/database-internals/concurrent-data-access/)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://neo4j.com/docs/operations-manual/current/database-internals/concurrent-data-access/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_PHILOSOPHY_KG_REMEDIATION_2026-09-07.md",
+          "sha256": "24da705137e477f0a77ace21df7682dc6cfb2291682c21049e4355ec44ce7871",
+          "locator": "line:46",
+          "citedUrl": "https://neo4j.com/docs/operations-manual/current/database-internals/concurrent-data-access/)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://nf-co.re/configs/)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://nf-co.re/configs/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:187",
+          "citedUrl": "https://nf-co.re/configs/)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://nf-co.re/contributors)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://nf-co.re/contributors"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:188",
+          "citedUrl": "https://nf-co.re/contributors)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://ojs.aaai.org/index.php/AAAI/article/download/4117/3995)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://ojs.aaai.org/index.php/AAAI/article/download/4117/3995"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_CROSS_LAYER_MAP_RESEARCH_2026-09-27.md",
+          "sha256": "f94aff40c8ba869a086e7d5f57afb2ce843db5405897501b2615768069e917eb",
+          "locator": "line:92",
+          "citedUrl": "https://ojs.aaai.org/index.php/AAAI/article/download/4117/3995)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://openlineage.io/)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://openlineage.io/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:183",
+          "citedUrl": "https://openlineage.io/)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://openlineage.io/docs/spec/facets/)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://openlineage.io/docs/spec/facets/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/PROM_16_WORLD_COMPILER_CERTIFIED_READOUT_ENVELOPE_2026-07-20.md",
+          "sha256": "06ccd7667050e390f59f5ca2de1e85ce373c33282cc438e3c3dd4435a53141fc",
+          "locator": "line:297",
+          "citedUrl": "https://openlineage.io/docs/spec/facets/)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://openreview.net/forum?id=HwCvaJOiCj)이",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://openreview.net/forum?id=HwCvaJOiCj",
+        "https://tridao.me/blog/2026/flash4/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_TRANSFORMER_ARCHITECTURE_AND_MATH_2026-09-14.md",
+          "sha256": "b3c073de798d327448c5c719268305ee57f4b5cea70ed8285ac26c9768bf567f",
+          "locator": "line:39",
+          "citedUrl": "https://openreview.net/forum?id=HwCvaJOiCj)이"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://people.eecs.berkeley.edu/~sseshia/pubdir/asplos06-final.pdf)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://people.eecs.berkeley.edu/~sseshia/pubdir/asplos06-final.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SEMANTIC_FRONTIER_PROOFS_2026-09-14.md",
+          "sha256": "462688e5554c1ea76c1d9997f75e491d7c8abf693b2576a93d4f4c9c188b7e21",
+          "locator": "line:85",
+          "citedUrl": "https://people.eecs.berkeley.edu/~sseshia/pubdir/asplos06-final.pdf)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://proceedings.mlr.press/r6/chandrasekaran08a.html)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://proceedings.mlr.press/r6/chandrasekaran08a.html"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_MINIMUM_COST_HYPERGRAPH_HYPOTHESIS_2026-09-27.md",
+          "sha256": "c62be00cda561dfbabe34e29a161a25f73a8c528d4df491a497679ac452d7e31",
+          "locator": "line:144",
+          "citedUrl": "https://proceedings.mlr.press/r6/chandrasekaran08a.html)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://proceedings.mlr.press/v37/thomas15.pdf)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2208.02814",
+        "https://proceedings.mlr.press/v37/thomas15.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_LEARNING_COMPOSITION_PROOF_LITERATURE_2026-09-28.md",
+          "sha256": "d827893cc2240db5ae84cadf170af6bbebad2af626ff2b1e31838fad5b5c593d",
+          "locator": "line:32",
+          "citedUrl": "https://proceedings.mlr.press/v37/thomas15.pdf)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://proceedings.mlr.press/v70/guo17a.html)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://proceedings.mlr.press/v70/guo17a.html"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_JEV_PRINCIPLES_2026-09-21.md",
+          "sha256": "9eaeab92e5e1e1abaf4a3217376725e6229a4276d5f601fa033c52b46d95dc66",
+          "locator": "line:13",
+          "citedUrl": "https://proceedings.mlr.press/v70/guo17a.html)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://proceedings.neurips.cc/paper/2001/file/1e4d36177d71bbb3558e43af9577d70e-Paper.pdf)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://proceedings.neurips.cc/paper/2001/file/1e4d36177d71bbb3558e43af9577d70e-Paper.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+          "sha256": "9d790d872f6ae8f4075d76d46b20c1276ec0c62d9a32a5b63b5b824388590c6e",
+          "locator": "line:98",
+          "citedUrl": "https://proceedings.neurips.cc/paper/2001/file/1e4d36177d71bbb3558e43af9577d70e-Paper.pdf)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://proceedings.neurips.cc/paper/2001/file/1e4d36177d71bbb3558e43af9577d70e-Paper.pdf)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://proceedings.neurips.cc/paper/2001/file/1e4d36177d71bbb3558e43af9577d70e-Paper.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+          "sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+          "locator": "line:186",
+          "citedUrl": "https://proceedings.neurips.cc/paper/2001/file/1e4d36177d71bbb3558e43af9577d70e-Paper.pdf)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://proceedings.neurips.cc/paper/2015/hash/bad5f33780c42f2588878a9d07405083-Abstract.html)를",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://proceedings.neurips.cc/paper/2015/hash/bad5f33780c42f2588878a9d07405083-Abstract.html"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+          "sha256": "e0bf7984cb2d78abc4ba5051ae73d923f665a674dd47cdd9c39a47e3da478795",
+          "locator": "line:81",
+          "citedUrl": "https://proceedings.neurips.cc/paper/2015/hash/bad5f33780c42f2588878a9d07405083-Abstract.html)를"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/df55ee6e59f8ac4a625219e11fe9ddba-Paper-Conference.pdf)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://proceedings.neurips.cc/paper_files/paper/2025/file/df55ee6e59f8ac4a625219e11fe9ddba-Paper-Conference.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+          "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e",
+          "locator": "line:92",
+          "citedUrl": "https://proceedings.neurips.cc/paper_files/paper/2025/file/df55ee6e59f8ac4a625219e11fe9ddba-Paper-Conference.pdf)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://research.google/pubs/transformers-as-graph-to-graph-models/)와",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://research.google/pubs/transformers-as-graph-to-graph-models/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_MINIMUM_COST_HYPERGRAPH_HYPOTHESIS_2026-09-27.md",
+          "sha256": "c62be00cda561dfbabe34e29a161a25f73a8c528d4df491a497679ac452d7e31",
+          "locator": "line:46",
+          "citedUrl": "https://research.google/pubs/transformers-as-graph-to-graph-models/)와"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://slsa.dev/spec/v1.2/build-provenance)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://slsa.dev/spec/v1.2/build-provenance"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/PROM_16_WORLD_COMPILER_CERTIFIED_READOUT_ENVELOPE_2026-07-20.md",
+          "sha256": "06ccd7667050e390f59f5ca2de1e85ce373c33282cc438e3c3dd4435a53141fc",
+          "locator": "line:296",
+          "citedUrl": "https://slsa.dev/spec/v1.2/build-provenance)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://snakemake.readthedocs.io/en/stable/)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://snakemake.readthedocs.io/en/stable/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:190",
+          "citedUrl": "https://snakemake.readthedocs.io/en/stable/)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://staff.fnwi.uva.nl/j.m.mooij/articles/camera_ready_uai2017.pdf)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://staff.fnwi.uva.nl/j.m.mooij/articles/camera_ready_uai2017.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_CROSS_LAYER_MAP_RESEARCH_2026-09-27.md",
+          "sha256": "f94aff40c8ba869a086e7d5f57afb2ce843db5405897501b2615768069e917eb",
+          "locator": "line:85",
+          "citedUrl": "https://staff.fnwi.uva.nl/j.m.mooij/articles/camera_ready_uai2017.pdf)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://tridao.me/blog/2026/flash4/)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://openreview.net/forum?id=HwCvaJOiCj",
+        "https://tridao.me/blog/2026/flash4/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_TRANSFORMER_ARCHITECTURE_AND_MATH_2026-09-14.md",
+          "sha256": "b3c073de798d327448c5c719268305ee57f4b5cea70ed8285ac26c9768bf567f",
+          "locator": "line:39",
+          "citedUrl": "https://tridao.me/blog/2026/flash4/)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.aisi.gov.uk/blog/releasing-aisis-engineering-playbook)이",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.aisi.gov.uk/blog/releasing-aisis-engineering-playbook"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:125",
+          "citedUrl": "https://www.aisi.gov.uk/blog/releasing-aisis-engineering-playbook)이"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.cis.upenn.edu/~bcpierce/papers/lenses.pdf)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.cis.upenn.edu/~bcpierce/papers/lenses.pdf"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_USL_SEMANTIC_ENGINEERING_BRIDGE_2026-09-07.md",
+          "sha256": "dccb1cb15d93be0a19cd24131c2c33570839771e69929a990c5dba1601ca36b5",
+          "locator": "line:59",
+          "citedUrl": "https://www.cis.upenn.edu/~bcpierce/papers/lenses.pdf)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.isiweb.ee.ethz.ch/papers/arch/aloe-2001-1.pdf)이",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.isiweb.ee.ethz.ch/papers/arch/aloe-2001-1.pdf",
+        "https://www.w3.org/TR/swbp-n-aryRelations/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md",
+          "sha256": "4fe95878d7be709fc394ed00fd43c99dad646ff88f69abb8977f6c3249db5b2f",
+          "locator": "line:83",
+          "citedUrl": "https://www.isiweb.ee.ethz.ch/papers/arch/aloe-2001-1.pdf)이"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.jmlr.org/papers/v26/23-0058.html)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.jmlr.org/papers/v26/23-0058.html"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+          "sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+          "locator": "line:203",
+          "citedUrl": "https://www.jmlr.org/papers/v26/23-0058.html)의"
+        },
+        {
+          "path": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+          "sha256": "9d790d872f6ae8f4075d76d46b20c1276ec0c62d9a32a5b63b5b824388590c6e",
+          "locator": "line:103",
+          "citedUrl": "https://www.jmlr.org/papers/v26/23-0058.html)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.nature.com/articles/s41586-025-08744-2)·[WALL-E",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://arxiv.org/abs/2504.15785",
+        "https://www.nature.com/articles/s41586-025-08744-2"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_RESEARCH_VIABILITY_AND_POSITIONING_2026-08-30.md",
+          "sha256": "bd5f73d29bf00b220cecff5c85675506eeadb97a0fbd66824427e833c5a18a83",
+          "locator": "line:118",
+          "citedUrl": "https://www.nature.com/articles/s41586-025-08744-2)·[WALL-E"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.pywhy.org/dowhy/)가",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.pywhy.org/dowhy/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:208",
+          "citedUrl": "https://www.pywhy.org/dowhy/)가"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.researchobject.org/workflow-run-crate/profiles/)를",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.researchobject.org/workflow-run-crate/profiles/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:172",
+          "citedUrl": "https://www.researchobject.org/workflow-run-crate/profiles/)를"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.rfc-editor.org/rfc/rfc8785.html)로",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.rfc-editor.org/rfc/rfc8785.html"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/PROM_16_WORLD_COMPILER_CERTIFIED_READOUT_ENVELOPE_2026-07-20.md",
+          "sha256": "06ccd7667050e390f59f5ca2de1e85ce373c33282cc438e3c3dd4435a53141fc",
+          "locator": "line:295",
+          "citedUrl": "https://www.rfc-editor.org/rfc/rfc8785.html)로"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.sqlite.org/wal.html)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.sqlite.org/wal.html"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_IMPLEMENTABLE_ARCHITECTURE_2026-09-27.md",
+          "sha256": "afd800d56c27b8536adc245669433e24cbaf9f5453e4f9f23079ccebef4f2c77",
+          "locator": "line:132",
+          "citedUrl": "https://www.sqlite.org/wal.html)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.usenix.org/conference/usenixsecurity25/presentation/zou-poisonedrag)와",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.usenix.org/conference/usenixsecurity25/presentation/zou-poisonedrag"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md",
+          "sha256": "b6a88b14a4538685d21eddeb034a6c3a0dfd0e827536a73e57fce1d64465d9f4",
+          "locator": "line:419",
+          "citedUrl": "https://www.usenix.org/conference/usenixsecurity25/presentation/zou-poisonedrag)와"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/2006/NOTE-swbp-n-aryRelations-20060412/)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/2006/NOTE-swbp-n-aryRelations-20060412/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_INTUITION_STANDARD_GRAPH_SYNTHESIS_2026-09-27.md",
+          "sha256": "0df015feb102bff9f1580542736a5112ea4d7f78171787e63dabc4cc359c7675",
+          "locator": "line:88",
+          "citedUrl": "https://www.w3.org/TR/2006/NOTE-swbp-n-aryRelations-20060412/)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/2013/REC-prov-o-20130430/)를",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/2013/REC-prov-o-20130430/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_INTUITION_STANDARD_GRAPH_SYNTHESIS_2026-09-27.md",
+          "sha256": "0df015feb102bff9f1580542736a5112ea4d7f78171787e63dabc4cc359c7675",
+          "locator": "line:87",
+          "citedUrl": "https://www.w3.org/TR/2013/REC-prov-o-20130430/)를"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/2013/REC-prov-o-20130430/)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/2013/REC-prov-o-20130430/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+          "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e",
+          "locator": "line:145",
+          "citedUrl": "https://www.w3.org/TR/2013/REC-prov-o-20130430/)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/2014/REC-rdf11-concepts-20140225/)과",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/2014/REC-rdf11-concepts-20140225/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_INTUITION_STANDARD_GRAPH_SYNTHESIS_2026-09-27.md",
+          "sha256": "0df015feb102bff9f1580542736a5112ea4d7f78171787e63dabc4cc359c7675",
+          "locator": "line:83",
+          "citedUrl": "https://www.w3.org/TR/2014/REC-rdf11-concepts-20140225/)과"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/2017/REC-annotation-model-20170223/)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/2017/REC-annotation-model-20170223/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_ADDITIONAL_TOOLS_AND_PAPER_REVIEW_2026-09-27.md",
+          "sha256": "6e091defa2dbd2442bcd527f62ca9b06b5c0ba5425c6ddae5de7eff50aca460e",
+          "locator": "line:139",
+          "citedUrl": "https://www.w3.org/TR/2017/REC-annotation-model-20170223/)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/annotation-model/)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/annotation-model/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/PROM_16_WORLD_COMPILER_CERTIFIED_READOUT_ENVELOPE_2026-07-20.md",
+          "sha256": "06ccd7667050e390f59f5ca2de1e85ce373c33282cc438e3c3dd4435a53141fc",
+          "locator": "line:268",
+          "citedUrl": "https://www.w3.org/TR/annotation-model/)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/n-quads/)·[SHACL",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/rdf11-concepts/",
+        "https://www.w3.org/TR/shacl/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md",
+          "sha256": "9b746abf743872af6d441de9cac1690030639851a0690884cb5f0c85dc3353b5",
+          "locator": "line:223",
+          "citedUrl": "https://www.w3.org/TR/n-quads/)·[SHACL"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/prov-o/)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/prov-o/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_CONDITIONAL_CAPABILITY_CONTRACT_2026-09-07.md",
+          "sha256": "62ce830dbaa2d28501b7106f2c0351ea641f69c1920fe76d2cdcf6e2020ea938",
+          "locator": "line:146",
+          "citedUrl": "https://www.w3.org/TR/prov-o/)는"
+        },
+        {
+          "path": "docs/research/HSWM_PHILOSOPHY_KG_STANDARD_AUDIT_2026-09-07.md",
+          "sha256": "bd05b6da52a805afe96ab0d697a0a85db37e50405692eb4231f1386122b44da4",
+          "locator": "line:121",
+          "citedUrl": "https://www.w3.org/TR/prov-o/)는"
+        },
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:70",
+          "citedUrl": "https://www.w3.org/TR/prov-o/)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/prov-o/)를",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/prov-o/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_USL_ADAPTER_ADVERSARIAL_REVIEW_2026-09-08.md",
+          "sha256": "8d7f460fda77ab5bc38f62b221d8392ba536d1ef79501eb1daed650e444202d3",
+          "locator": "line:58",
+          "citedUrl": "https://www.w3.org/TR/prov-o/)를"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/prov-o/)와",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/prov-o/"
+      ],
+      "citations": [
+        {
+          "path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+          "sha256": "6659edbaabb2f915f396ff8fe2b1deca7e398860a8546959f8fa73295346dfca",
+          "locator": "line:39",
+          "citedUrl": "https://www.w3.org/TR/prov-o/)와"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/prov-o/)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/prov-o/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/PROM_16_WORLD_COMPILER_CERTIFIED_READOUT_ENVELOPE_2026-07-20.md",
+          "sha256": "06ccd7667050e390f59f5ca2de1e85ce373c33282cc438e3c3dd4435a53141fc",
+          "locator": "line:294",
+          "citedUrl": "https://www.w3.org/TR/prov-o/)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/rdf11-concepts/)·[N-Quads",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/rdf11-concepts/",
+        "https://www.w3.org/TR/shacl/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md",
+          "sha256": "9b746abf743872af6d441de9cac1690030639851a0690884cb5f0c85dc3353b5",
+          "locator": "line:223",
+          "citedUrl": "https://www.w3.org/TR/rdf11-concepts/)·[N-Quads"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/rdf12-concepts/)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/rdf12-concepts/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.md",
+          "sha256": "526e150a61efc2464b2c1f966d0a25ce7ab00e49ab9df858ea8cffd72206209c",
+          "locator": "line:42",
+          "citedUrl": "https://www.w3.org/TR/rdf12-concepts/)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/rdf12-concepts/)이고",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/rdf12-concepts/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md",
+          "sha256": "b6a88b14a4538685d21eddeb034a6c3a0dfd0e827536a73e57fce1d64465d9f4",
+          "locator": "line:173",
+          "citedUrl": "https://www.w3.org/TR/rdf12-concepts/)이고"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/shacl/)·[PROV-O",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/rdf11-concepts/",
+        "https://www.w3.org/TR/shacl/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md",
+          "sha256": "9b746abf743872af6d441de9cac1690030639851a0690884cb5f0c85dc3353b5",
+          "locator": "line:223",
+          "citedUrl": "https://www.w3.org/TR/shacl/)·[PROV-O"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/shacl/)로",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/shacl/"
+      ],
+      "citations": [
+        {
+          "path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+          "sha256": "6659edbaabb2f915f396ff8fe2b1deca7e398860a8546959f8fa73295346dfca",
+          "locator": "line:37",
+          "citedUrl": "https://www.w3.org/TR/shacl/)로"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/shacl/)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/shacl/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_CONDITIONAL_CAPABILITY_CONTRACT_2026-09-07.md",
+          "sha256": "62ce830dbaa2d28501b7106f2c0351ea641f69c1920fe76d2cdcf6e2020ea938",
+          "locator": "line:147",
+          "citedUrl": "https://www.w3.org/TR/shacl/)은"
+        },
+        {
+          "path": "docs/research/HSWM_PHILOSOPHY_KG_STANDARD_AUDIT_2026-09-07.md",
+          "sha256": "bd05b6da52a805afe96ab0d697a0a85db37e50405692eb4231f1386122b44da4",
+          "locator": "line:120",
+          "citedUrl": "https://www.w3.org/TR/shacl/)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/shacl/)을",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/annotation-model/",
+        "https://www.w3.org/TR/prov-o/",
+        "https://www.w3.org/TR/shacl/",
+        "https://www.w3.org/TR/skos-reference/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_USL_SEMANTIC_ENGINEERING_BRIDGE_2026-09-07.md",
+          "sha256": "dccb1cb15d93be0a19cd24131c2c33570839771e69929a990c5dba1601ca36b5",
+          "locator": "line:117",
+          "citedUrl": "https://www.w3.org/TR/shacl/)을"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/skos-reference/)의",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/skos-reference/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md",
+          "sha256": "b6a88b14a4538685d21eddeb034a6c3a0dfd0e827536a73e57fce1d64465d9f4",
+          "locator": "line:176",
+          "citedUrl": "https://www.w3.org/TR/skos-reference/)의"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/sparql11-query/)로",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/sparql11-query/"
+      ],
+      "citations": [
+        {
+          "path": "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+          "sha256": "6659edbaabb2f915f396ff8fe2b1deca7e398860a8546959f8fa73295346dfca",
+          "locator": "line:38",
+          "citedUrl": "https://www.w3.org/TR/sparql11-query/)로"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/sparql11-query/)을",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/prov-o/",
+        "https://www.w3.org/TR/rdf11-concepts/",
+        "https://www.w3.org/TR/shacl/",
+        "https://www.w3.org/TR/sparql11-query/",
+        "https://www.w3.org/TR/swbp-n-aryRelations/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_FRONTIER_LEARNING_THEORY_KG_2026-09-07.md",
+          "sha256": "594a145527ce7df91a64d9f8fb07b568e989371f045ac9eedb3b65dff8465360",
+          "locator": "line:71",
+          "citedUrl": "https://www.w3.org/TR/sparql11-query/)을"
+        },
+        {
+          "path": "docs/research/HSWM_RESEARCH_INTEGRATION_2026-09-20.md",
+          "sha256": "b4c0dbcf6c83b3114766831d8dc40d717d5f24531fcf862e88c765cd9964ca47",
+          "locator": "line:45",
+          "citedUrl": "https://www.w3.org/TR/sparql11-query/)을"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/swbp-n-aryRelations/)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/swbp-n-aryRelations/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_CONDITIONAL_CAPABILITY_CONTRACT_2026-09-07.md",
+          "sha256": "62ce830dbaa2d28501b7106f2c0351ea641f69c1920fe76d2cdcf6e2020ea938",
+          "locator": "line:148",
+          "citedUrl": "https://www.w3.org/TR/swbp-n-aryRelations/)는"
+        },
+        {
+          "path": "docs/research/HSWM_HYPERGRAPH_LEARNING_PLAN_GRAPH_2026-09-06.md",
+          "sha256": "42d4442f3eeb44ab4e73f4e206b2d0067b2bc109d1b7292937908c498e21705c",
+          "locator": "line:87",
+          "citedUrl": "https://www.w3.org/TR/swbp-n-aryRelations/)는"
+        },
+        {
+          "path": "docs/research/HSWM_PHILOSOPHY_KG_STANDARD_AUDIT_2026-09-07.md",
+          "sha256": "bd05b6da52a805afe96ab0d697a0a85db37e50405692eb4231f1386122b44da4",
+          "locator": "line:117",
+          "citedUrl": "https://www.w3.org/TR/swbp-n-aryRelations/)는"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/swbp-n-aryRelations/)도",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.isiweb.ee.ethz.ch/papers/arch/aloe-2001-1.pdf",
+        "https://www.w3.org/TR/swbp-n-aryRelations/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md",
+          "sha256": "4fe95878d7be709fc394ed00fd43c99dad646ff88f69abb8977f6c3249db5b2f",
+          "locator": "line:83",
+          "citedUrl": "https://www.w3.org/TR/swbp-n-aryRelations/)도"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/swbp-n-aryRelations/)은",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/prov-o/",
+        "https://www.w3.org/TR/rdf11-concepts/",
+        "https://www.w3.org/TR/shacl/",
+        "https://www.w3.org/TR/sparql11-query/",
+        "https://www.w3.org/TR/swbp-n-aryRelations/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_RESEARCH_INTEGRATION_2026-09-20.md",
+          "sha256": "b4c0dbcf6c83b3114766831d8dc40d717d5f24531fcf862e88c765cd9964ca47",
+          "locator": "line:45",
+          "citedUrl": "https://www.w3.org/TR/swbp-n-aryRelations/)은"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/swbp-n-aryRelations/)을",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/swbp-n-aryRelations/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/PROM_16_WORLD_COMPILER_CERTIFIED_READOUT_ENVELOPE_2026-07-20.md",
+          "sha256": "06ccd7667050e390f59f5ca2de1e85ce373c33282cc438e3c3dd4435a53141fc",
+          "locator": "line:289",
+          "citedUrl": "https://www.w3.org/TR/swbp-n-aryRelations/)을"
+        }
+      ]
+    },
+    {
+      "v1Url": "https://www.w3.org/TR/trace-context/)는",
+      "status": "PARSER_MALFORMED",
+      "correctedUrls": [
+        "https://www.w3.org/TR/trace-context/"
+      ],
+      "citations": [
+        {
+          "path": "docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md",
+          "sha256": "cce763b0a01634e56441a56eddcc66f90a3ef75cbd13987f4095872ee95480dc",
+          "locator": "line:93",
+          "citedUrl": "https://www.w3.org/TR/trace-context/)는"
+        }
+      ]
+    }
+  ],
+  "newCanonicalUrls": [
+    "https://aclanthology.org/2022.naacl-industry.24/",
+    "https://aclanthology.org/2026.acl-short.47/",
+    "https://arxiv.org/abs/0811.1640v1",
+    "https://arxiv.org/abs/2203.02155v1",
+    "https://arxiv.org/abs/2208.02814",
+    "https://arxiv.org/abs/2312.11385",
+    "https://arxiv.org/abs/2503.21322v3",
+    "https://arxiv.org/html/2411.15100v3",
+    "https://arxiv.org/html/2501.17887v1",
+    "https://arxiv.org/html/2505.24760v2",
+    "https://arxiv.org/html/2602.10090v3",
+    "https://build.nvidia.com/spark/vllm/agent-ready-models",
+    "https://docs.typesafe.ai/introduction/machine-learning-primer",
+    "https://docs.typesafe.ai/primitives",
+    "https://docs.vllm.ai/en/latest/features/structured_outputs/",
+    "https://effect.website/docs/v3/requirements-management/services",
+    "https://github.com/NVIDIA-NeMo/Gym/tree/3045a793346a31291d7ea4ae6af3f94a35036ce5",
+    "https://github.com/OSU-NLP-Group/HippoRAG/tree/main/outputs/musique",
+    "https://github.com/Snowflake-Labs/agent-world-model/tree/85e322f69279e3b3325b7377ec3bab788514e9cb",
+    "https://github.com/gepa-ai/gepa/releases/tag/v0.1.4",
+    "https://github.com/gj3447/HSWM/actions/runs/34082173007",
+    "https://github.com/gj3447/HSWM/actions/runs/34082173038",
+    "https://github.com/google/langextract/tree/70cfb988cc25f15d8b04a1e57bd52a777207c0c6",
+    "https://github.com/openai/NavierStokesAndEuler/blob/main/README.md",
+    "https://github.com/tobi/qmd",
+    "https://huggingface.co/Qwen/Qwen3.8-27B-FP8",
+    "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+    "https://huggingface.co/zai-org/GLM-5.3-Flash",
+    "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Computability/MyhillNerode.html",
+    "https://leanprover-community.github.io/mathlib4_docs/Mathlib/Probability/Moments/SubGaussian.html",
+    "https://learn.chatgpt.com/docs/config-file/config-reference",
+    "https://link.springer.com/content/pdf/10.1023/A:1013689704352.pdf",
+    "https://metahumotonic.com/apostles/hoh/",
+    "https://neo4j.com/docs/operations-manual/current/database-internals/concurrent-data-access/",
+    "https://ojs.aaai.org/index.php/AAAI/article/download/4117/3995",
+    "https://openreview.net/forum?id=HwCvaJOiCj",
+    "https://proceedings.mlr.press/r6/chandrasekaran08a.html",
+    "https://proceedings.mlr.press/v37/thomas15.pdf",
+    "https://proceedings.neurips.cc/paper/2001/file/1e4d36177d71bbb3558e43af9577d70e-Paper.pdf",
+    "https://proceedings.neurips.cc/paper/2015/hash/bad5f33780c42f2588878a9d07405083-Abstract.html",
+    "https://research.google/pubs/transformers-as-graph-to-graph-models/",
+    "https://tridao.me/blog/2026/flash4/",
+    "https://www.cis.upenn.edu/~bcpierce/papers/lenses.pdf",
+    "https://www.jmlr.org/papers/v26/23-0058.html",
+    "https://www.sqlite.org/wal.html",
+    "https://www.usenix.org/conference/usenixsecurity25/presentation/zou-poisonedrag",
+    "https://www.w3.org/TR/2017/REC-annotation-model-20170223/",
+    "https://www.w3.org/TR/rdf12-concepts/"
+  ],
+  "boundary": "Correction metadata only. It does not alter inventory.v1.json or reclassify fetch outcomes."
+}

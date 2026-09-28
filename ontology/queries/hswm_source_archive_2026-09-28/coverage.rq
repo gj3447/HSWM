@@ -1,0 +1,6 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?status (COUNT(?source) AS ?count) WHERE {
+  ?source p:in_canonical_inventory true ; p:current_capture_status ?status .
+}
+GROUP BY ?status
+ORDER BY ?status

@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?url ?at ?reason WHERE {
+  ?request p:original_url ?url ; r:RETRIEVED ?attempt .
+  ?attempt p:retrieval_status "FAILED" ; p:retrieved_at ?at ; p:failure_reason ?reason .
+}
+ORDER BY ?url ?at

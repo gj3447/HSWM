@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?path ?docSha ?locator ?citedUrl ?retrievalUrl WHERE {
+  ?citation p:standard_graph_role "CITATION_OCCURRENCE" ;
+    p:source_path ?path ; p:source_sha256 ?docSha ;
+    p:citation_locator ?locator ; p:cited_url ?citedUrl ; r:REFERS_TO ?request .
+  ?request p:original_url ?retrievalUrl .
+}
+ORDER BY ?path ?locator ?citedUrl

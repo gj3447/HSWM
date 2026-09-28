@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "hswm-external-source-archive-recovery-candidates/v1",
+  "createdOn": "2026-09-28",
+  "scope": "Proposed supplementary retrieval rows only. No candidate was downloaded or hashed by this file.",
+  "inputArchive": {
+    "root": ".hswm-local/research-source-archive-20260928",
+    "manifestSha256": "dd996ef326c6be5aac3d4c30a0791efc26123da76c48f998c66d10d0ff86ed25"
+  },
+  "selectionBoundary": "Excludes v1 URLs with an unmatched closing parenthesis followed by Korean prose as parser-malformed. The v2 inventory contains their corrected canonical citations separately. A proposed alternate is not asserted byte-identical to the cited URL, and a downloadable page is not a claim that the paper's HSWM application is valid.",
+  "candidates": [
+    {
+      "id": "hcpi-author-pdf",
+      "originalCitationUrl": "https://proceedings.mlr.press/v37/thomas15.pdf",
+      "proposedUrl": "https://psthomas.com/papers/Thomas2015b.pdf",
+      "expectedKind": "pdf",
+      "reason": "The archive's v1 failure was a parser-malformed variant and is excluded as a retrieval failure. This is a key 2026-09-28 proof-literature source; the author-hosted PDF identifies the same title, authors, and ICML 2015 paper.",
+      "versionRelation": "SAME_NAMED_2015_ICML_PUBLICATION_DIFFERENT_HOSTED_HTTP_REPRESENTATION_BYTE_EQUALITY_UNVERIFIED",
+      "sourceLinks": [
+        "https://proceedings.mlr.press/v37/thomas15.html",
+        "https://psthomas.com/papers/Thomas2015b.pdf"
+      ],
+      "localCitations": [
+        {
+          "path": "docs/research/HSWM_LEARNING_COMPOSITION_PROOF_LITERATURE_2026-09-28.md",
+          "sha256": "d827893cc2240db5ae84cadf170af6bbebad2af626ff2b1e31838fad5b5c593d",
+          "locator": "line:32"
+        }
+      ]
+    },
+    {
+      "id": "causal-abstraction-jmlr-pdf",
+      "originalCitationUrl": "https://www.jmlr.org/papers/v26/23-0058.html",
+      "proposedUrl": "https://www.jmlr.org/papers/volume26/23-0058/23-0058.pdf",
+      "expectedKind": "pdf",
+      "reason": "The v1 failure carried a parser-malformed Korean suffix and is excluded as a retrieval failure. The JMLR publisher PDF is an accessible full-text representation of the cited 2025 article used by the 2026-09-27 self-review and adversarial-remediation discussion.",
+      "versionRelation": "SAME_JMLR_VOLUME_26_ARTICLE_83_2025_PUBLISHER_PAGE_TO_PUBLISHER_PDF_BYTE_EQUALITY_UNVERIFIED",
+      "sourceLinks": [
+        "https://www.jmlr.org/papers/v26/23-0058.html",
+        "https://www.jmlr.org/papers/volume26/23-0058/23-0058.pdf"
+      ],
+      "localCitations": [
+        {
+          "path": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+          "sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+          "locator": "line:203"
+        },
+        {
+          "path": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+          "sha256": "9d790d872f6ae8f4075d76d46b20c1276ec0c62d9a32a5b63b5b824388590c6e",
+          "locator": "line:103"
+        }
+      ]
+    },
+    {
+      "id": "hypergt-arxiv-pdf",
+      "originalCitationUrl": "https://arxiv.org/abs/2312.11385",
+      "proposedUrl": "https://arxiv.org/pdf/2312.11385",
+      "expectedKind": "pdf",
+      "reason": "The v1 failure was a parser-malformed variant and is excluded as a retrieval failure. The official arXiv PDF is a full-text representation for the same identifier cited in the 2026-09-27 minimum-cost-hypergraph review.",
+      "versionRelation": "SAME_ARXIV_IDENTIFIER_2312_11385_CURRENT_VERSION_NOT_PINNED_BYTE_EQUALITY_UNVERIFIED",
+      "sourceLinks": [
+        "https://arxiv.org/abs/2312.11385",
+        "https://arxiv.org/pdf/2312.11385"
+      ],
+      "localCitations": [
+        {
+          "path": "docs/research/HSWM_MINIMUM_COST_HYPERGRAPH_HYPOTHESIS_2026-09-27.md",
+          "sha256": "c62be00cda561dfbabe34e29a161a25f73a8c528d4df491a497679ac452d7e31",
+          "locator": "line:48"
+        }
+      ]
+    }
+  ],
+  "unresolvedGenuineFailures": [
+    {
+      "receiptId": "source-693287fbed4bef96d582",
+      "originalCitationUrl": "https://people.maths.ox.ac.uk/zilber/ast-web.pdf",
+      "reason": "Actual PDF retrieval failed with HTTP_FAILED. No same-source official alternate full-text URL was verified in this review; do not substitute a different work."
+    },
+    {
+      "receiptId": "source-e794149b66cde978690d",
+      "originalCitationUrl": "https://www.feynmanlectures.caltech.edu/I_26.html",
+      "reason": "Actual HTML retrieval returned HTTP_403. No same-source official alternate full-text URL was verified in this review; do not treat a mirror or a search snippet as an archived source."
+    }
+  ]
+}

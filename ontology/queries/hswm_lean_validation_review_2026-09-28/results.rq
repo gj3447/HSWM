@@ -1,0 +1,13 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?claimName ?claimSource ?claimSha ?externalSource ?externalUrl ?externalSha ?claimScope WHERE {
+  ?claim p:source_path ?claimSource ;
+         p:source_sha256 ?claimSha ;
+         r:COMPARED_WITH ?external .
+  ?external p:name ?externalSource ;
+            p:source_url ?externalUrl ;
+            p:source_sha256 ?externalSha .
+  ?claim r:COMPARED_WITH ?external .
+  ?claim p:name ?claimName ; p:claim_scope ?claimScope .
+}
+ORDER BY ?claimName ?externalSource

@@ -4,6 +4,10 @@
 필요한 검사 → Git 기록을 기본으로 한다. RDF·SHACL·SPARQL·PROV 기반 작업과 주제별
 참조를 안내하며, 아래 날짜별 기록은 당시 출처와 재현 정보를 보존한다.
 
+2026-09-28 [Lean 검증 재점검과 타 연구 비교](docs/research/HSWM_LEAN_VALIDATION_REVIEW_2026-09-28.md)는
+실제 커널 검사와 명제의 의미·runtime 연결·학습효과를 구별한다. 새 소스/공리 재검사,
+추가 fresh replay, 구조 검사기의 범위 확인, SampCert·Q-learning·CompCert 등의 원문을 정리한다.
+
 2026-09-28 [전체 구현 첫 Lean 증명 라운드](docs/research/HSWM_WHOLE_SYSTEM_LEAN_ROUND_2026-09-28.md)는
 실제 의미 실행 기록의 successor 대응, 역할 read-set의 locality, 유한 과거 이력별 fresh 평가를
 26개 정리·보조정리로 검증했다. 실제 저장소–Lean 연결과 22개 바꿔치기를 검사했으며,

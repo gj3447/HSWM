@@ -1,0 +1,20 @@
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix review: <urn:hswm:lean-validation-review:shape:> .
+
+review:BoundedClaim a sh:NodeShape ;
+  sh:targetClass role:FORMAL_RUNTIME_CORRESPONDENCE, role:FORMAL_LOCALITY_RESULT, role:FORMAL_STATISTICAL_RESULT ;
+  sh:property [ sh:path p:source_path ; sh:minCount 1 ; sh:maxCount 1 ; sh:minLength 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[a-f0-9]{64}$" ] ;
+  sh:property [ sh:path p:claim_scope ; sh:minCount 1 ; sh:maxCount 1 ; sh:minLength 1 ] ;
+  sh:property [ sh:path r:HAS_ASSUMPTION_BOUNDARY ; sh:minCount 1 ; sh:maxCount 1 ; sh:class role:FORMAL_ASSUMPTION_BOUNDARY ] ;
+  sh:property [ sh:path r:COMPARED_WITH ; sh:minCount 1 ; sh:class role:EXTERNAL_PRIMARY_RESEARCH_SOURCE ] .
+
+review:ExternalSource a sh:NodeShape ;
+  sh:targetClass role:EXTERNAL_PRIMARY_RESEARCH_SOURCE ;
+  sh:property [ sh:path p:source_id ; sh:minCount 1 ; sh:maxCount 1 ; sh:minLength 1 ] ;
+  sh:property [ sh:path p:source_url ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^https://" ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[a-f0-9]{64}$" ] ;
+  sh:property [ sh:path p:status ; sh:hasValue "ARCHIVED_NOT_BUILT_HERE" ; sh:minCount 1 ] .

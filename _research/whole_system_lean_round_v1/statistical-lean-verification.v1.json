@@ -1,0 +1,641 @@
+{
+  "schema_version": "hswm-t1-statistical-learning-lean-verification/v1",
+  "recorded_at": "2026-09-28T07:07:51.713Z",
+  "status": "EXACT_SOURCE_KERNEL_CHECKED",
+  "claim_ceiling": "FINITE_IID_BOUNDED_LOSS_CONCENTRATION_UNDER_DECLARED_PREMISES_NOT_REAL_LLM_OR_HSWM_EFFICACY",
+  "statement_semantics_validated": false,
+  "auditor_installs_dependencies": false,
+  "toolchain": {
+    "package_path": "formal/statistical-learning",
+    "pin_path": "formal/statistical-learning/lean-toolchain",
+    "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+    "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+    "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "historical_exact_binary_pin": {
+      "path": "_research/llm_semantic_graph_v1/lean-verification.v1.json",
+      "sha256": "9b600db971fb900b504f185a5742b5e1da46c2141488c63271a3acb93e6583b2",
+      "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+    },
+    "resolved_by": "lake env which lean"
+  },
+  "dependency_boundary": {
+    "lake_manifest_path": "formal/statistical-learning/lake-manifest.json",
+    "lake_manifest_sha256": "a5cb256169f2ace4050cadcced8f1a26e8447b43bf970885bce1bc4d71bd2f48",
+    "lakefile_path": "formal/statistical-learning/lakefile.toml",
+    "lakefile_sha256": "a5841244b06f6c40811257e43358fca212114bbc4938a81df04b09e5492fd04e",
+    "dependency_worktrees_clean_before_and_after": true,
+    "locked_packages": [
+      {
+        "name": "mathlib",
+        "url": "https://github.com/leanprover-community/mathlib4",
+        "revision": "520045ab14e26149ee970e2e617ca04b09bde5d6",
+        "checkout_head": "520045ab14e26149ee970e2e617ca04b09bde5d6",
+        "input_revision": "v4.32.1"
+      },
+      {
+        "name": "plausible",
+        "url": "https://github.com/leanprover-community/plausible",
+        "revision": "e12c1910fe855cbfc38803cd4e55543906d5fa62",
+        "checkout_head": "e12c1910fe855cbfc38803cd4e55543906d5fa62",
+        "input_revision": "main"
+      },
+      {
+        "name": "LeanSearchClient",
+        "url": "https://github.com/leanprover-community/LeanSearchClient",
+        "revision": "c5d5b8fe6e5158def25cd28eb94e4141ad97c843",
+        "checkout_head": "c5d5b8fe6e5158def25cd28eb94e4141ad97c843",
+        "input_revision": "main"
+      },
+      {
+        "name": "importGraph",
+        "url": "https://github.com/leanprover-community/import-graph",
+        "revision": "7e9612bf0b9ee66db3cb5b9988a35afc706f5a12",
+        "checkout_head": "7e9612bf0b9ee66db3cb5b9988a35afc706f5a12",
+        "input_revision": "main"
+      },
+      {
+        "name": "proofwidgets",
+        "url": "https://github.com/leanprover-community/ProofWidgets4",
+        "revision": "6e311e2a844da9b2cc3971187df2fe0066947b93",
+        "checkout_head": "6e311e2a844da9b2cc3971187df2fe0066947b93",
+        "input_revision": "main"
+      },
+      {
+        "name": "aesop",
+        "url": "https://github.com/leanprover-community/aesop",
+        "revision": "a7dbf0c63b694e47f425f3dcddbc0e178bb432d3",
+        "checkout_head": "a7dbf0c63b694e47f425f3dcddbc0e178bb432d3",
+        "input_revision": "master"
+      },
+      {
+        "name": "Qq",
+        "url": "https://github.com/leanprover-community/quote4",
+        "revision": "38d591e778f100aec9762bb582f9c7f55f50e9dc",
+        "checkout_head": "38d591e778f100aec9762bb582f9c7f55f50e9dc",
+        "input_revision": "master"
+      },
+      {
+        "name": "batteries",
+        "url": "https://github.com/leanprover-community/batteries",
+        "revision": "023ce7d62a0531e22a5331e20b587817a80d49ff",
+        "checkout_head": "023ce7d62a0531e22a5331e20b587817a80d49ff",
+        "input_revision": "main"
+      },
+      {
+        "name": "Cli",
+        "url": "https://github.com/leanprover/lean4-cli",
+        "revision": "88679d088c9720c27ebdf2ba4dafe17341747f94",
+        "checkout_head": "88679d088c9720c27ebdf2ba4dafe17341747f94",
+        "input_revision": "v4.32.0"
+      }
+    ],
+    "trusted_import_cache_entries": [
+      "formal/statistical-learning/.lake/packages/Cli/.lake/build/lib/lean",
+      "formal/statistical-learning/.lake/packages/batteries/.lake/build/lib/lean",
+      "formal/statistical-learning/.lake/packages/Qq/.lake/build/lib/lean",
+      "formal/statistical-learning/.lake/packages/aesop/.lake/build/lib/lean",
+      "formal/statistical-learning/.lake/packages/proofwidgets/.lake/build/lib/lean",
+      "formal/statistical-learning/.lake/packages/importGraph/.lake/build/lib/lean",
+      "formal/statistical-learning/.lake/packages/LeanSearchClient/.lake/build/lib/lean",
+      "formal/statistical-learning/.lake/packages/plausible/.lake/build/lib/lean",
+      "formal/statistical-learning/.lake/packages/mathlib/.lake/build/lib/lean",
+      "EXTERNAL_LEAN_TOOLCHAIN_PATH"
+    ],
+    "note": "Pinned compiled imports are a transitive trust boundary; theorem axiom output does not independently re-audit dependency source."
+  },
+  "compile_order": [
+    "HSWMLLMSemanticGraph",
+    "HSWMStatisticalLearning.Concentration",
+    "HSWMStatisticalLearning.Selection",
+    "HSWMStatisticalLearning.Integration",
+    "HSWMStatisticalLearning.CanonicalBridge",
+    "HSWMStatisticalLearning.AdaptiveRounds"
+  ],
+  "audited_modules": [
+    "HSWMStatisticalLearning.Concentration",
+    "HSWMStatisticalLearning.Selection",
+    "HSWMStatisticalLearning.Integration",
+    "HSWMStatisticalLearning.CanonicalBridge",
+    "HSWMStatisticalLearning.AdaptiveRounds"
+  ],
+  "allowed_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "source_records": [
+    {
+      "path": "formal/HSWMLLMSemanticGraph.lean",
+      "module": "HSWMLLMSemanticGraph",
+      "sha256": "1f41b10fca686b5d332ebdfa029f44009540cc8443afe73407d04510292ddf3a",
+      "byte_length": 14989,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_declarations": [],
+      "declaration_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/statistical-learning/HSWMStatisticalLearning/Concentration.lean",
+      "module": "HSWMStatisticalLearning.Concentration",
+      "sha256": "dab247e0f5083f492913aa73557a581e2fb1774cbf84cb72b0a054595ffe14fe",
+      "byte_length": 13867,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_declarations": [
+        "HSWMStatisticalLearning.negativeCenteredSum_eq_neg",
+        "HSWMStatisticalLearning.centered_integral_zero_of_integral_eq",
+        "HSWMStatisticalLearning.centeredSum_upper_tail",
+        "HSWMStatisticalLearning.centeredSum_lower_tail",
+        "HSWMStatisticalLearning.measureReal_iUnion_finset_le",
+        "HSWMStatisticalLearning.simultaneous_centeredSum_upper_tail",
+        "HSWMStatisticalLearning.simultaneous_centeredSum_upper_tail_card",
+        "HSWMStatisticalLearning.simultaneous_centeredSum_abs_tail_card",
+        "HSWMStatisticalLearning.calibratedRadius_nonneg",
+        "HSWMStatisticalLearning.calibratedRadius_failure_eq_delta"
+      ],
+      "declaration_axioms": [
+        {
+          "theorem": "HSWMStatisticalLearning.calibratedRadius_failure_eq_delta",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.calibratedRadius_nonneg",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.centered_integral_zero_of_integral_eq",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.centeredSum_lower_tail",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.centeredSum_upper_tail",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.measureReal_iUnion_finset_le",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.negativeCenteredSum_eq_neg",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.simultaneous_centeredSum_abs_tail_card",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.simultaneous_centeredSum_upper_tail",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.simultaneous_centeredSum_upper_tail_card",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "audit_stdout_sha256": "3b27b58ef25e482d415558dd80bcdf1ea8c59b6767da29ade3876b49291e2043",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "formal/statistical-learning/HSWMStatisticalLearning/Selection.lean",
+      "module": "HSWMStatisticalLearning.Selection",
+      "sha256": "f125d399fc97f0528ede61aedc442c5de692184060393082b14bfd11752c5741",
+      "byte_length": 11579,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_declarations": [
+        "HSWMStatisticalLearning.Selection.mean_replacement_bound",
+        "HSWMStatisticalLearning.Selection.selected_is_certified",
+        "HSWMStatisticalLearning.Selection.observed_mean_error_bound",
+        "HSWMStatisticalLearning.Selection.selected_sound",
+        "HSWMStatisticalLearning.Selection.target_margin_certifies",
+        "HSWMStatisticalLearning.Selection.target_margin_forces_selection",
+        "HSWMStatisticalLearning.Selection.witness_selection_is_nonvacuous",
+        "HSWMStatisticalLearning.Selection.understated_replacement_allowance_can_select_degradation",
+        "HSWMStatisticalLearning.Selection.dirty_row_has_no_zero_replacement_witness"
+      ],
+      "declaration_axioms": [
+        {
+          "theorem": "HSWMStatisticalLearning.Selection.dirty_row_has_no_zero_replacement_witness",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Selection.mean_replacement_bound",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Selection.observed_mean_error_bound",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Selection.selected_is_certified",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Selection.selected_sound",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Selection.target_margin_certifies",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Selection.target_margin_forces_selection",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Selection.understated_replacement_allowance_can_select_degradation",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Selection.witness_selection_is_nonvacuous",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "audit_stdout_sha256": "6faab873cdedce951700adcb41b83cfad753c8806353b751b7f082162b1b7d01",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "formal/statistical-learning/HSWMStatisticalLearning/Integration.lean",
+      "module": "HSWMStatisticalLearning.Integration",
+      "sha256": "f306db5a5d47dc55d248e42e2dfdf19d1c1ba2811312762eca8fc367d2414b79",
+      "byte_length": 8690,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_declarations": [
+        "HSWMStatisticalLearning.Integration.centered_sum_eq_scaled_mean",
+        "HSWMStatisticalLearning.Integration.mean_deviation_implies_centered_deviation",
+        "HSWMStatisticalLearning.Integration.round_works_on_clean_event",
+        "HSWMStatisticalLearning.Integration.failure_subset_clean_deviation",
+        "HSWMStatisticalLearning.Integration.statistical_selection_failure_bound",
+        "HSWMStatisticalLearning.Integration.calibrated_failure_eq_delta",
+        "HSWMStatisticalLearning.Integration.statistical_selection_failure_le_delta"
+      ],
+      "declaration_axioms": [
+        {
+          "theorem": "HSWMStatisticalLearning.Integration.calibrated_failure_eq_delta",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Integration.centered_sum_eq_scaled_mean",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Integration.failure_subset_clean_deviation",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Integration.mean_deviation_implies_centered_deviation",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Integration.round_works_on_clean_event",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Integration.statistical_selection_failure_bound",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.Integration.statistical_selection_failure_le_delta",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "audit_stdout_sha256": "36b94e343450d910416ee2f64a05fe9a891cb390bfcc85da4fd860b7724ad230",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "formal/statistical-learning/HSWMStatisticalLearning/CanonicalBridge.lean",
+      "module": "HSWMStatisticalLearning.CanonicalBridge",
+      "sha256": "59c72354a8df08b50abca48154357d341a0552196e7b22b524cf51889e37dfb2",
+      "byte_length": 11588,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_declarations": [
+        "HSWMStatisticalLearning.CanonicalBridge.candidate_is_bound_learn",
+        "HSWMStatisticalLearning.CanonicalBridge.candidate_reads_proposed_meaning",
+        "HSWMStatisticalLearning.CanonicalBridge.candidate_keeps_owner_and_roles",
+        "HSWMStatisticalLearning.CanonicalBridge.candidate_keeps_prior_history",
+        "HSWMStatisticalLearning.CanonicalBridge.selected_commit_is_exact_candidate",
+        "HSWMStatisticalLearning.CanonicalBridge.rejected_commit_is_exact_baseline",
+        "HSWMStatisticalLearning.CanonicalBridge.future_step_reads_selected_graph",
+        "HSWMStatisticalLearning.CanonicalBridge.graph_gain_bounded",
+        "HSWMStatisticalLearning.CanonicalBridge.selected_commit_gain_is_graph_gain",
+        "HSWMStatisticalLearning.CanonicalBridge.canonical_graph_selection_failure_bound",
+        "HSWMStatisticalLearning.CanonicalBridge.canonical_graph_selection_failure_le_delta"
+      ],
+      "declaration_axioms": [
+        {
+          "theorem": "HSWMStatisticalLearning.CanonicalBridge.candidate_is_bound_learn",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.CanonicalBridge.candidate_keeps_owner_and_roles",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.CanonicalBridge.candidate_keeps_prior_history",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.CanonicalBridge.candidate_reads_proposed_meaning",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.CanonicalBridge.canonical_graph_selection_failure_bound",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.CanonicalBridge.canonical_graph_selection_failure_le_delta",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.CanonicalBridge.future_step_reads_selected_graph",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.CanonicalBridge.graph_gain_bounded",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.CanonicalBridge.rejected_commit_is_exact_baseline",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.CanonicalBridge.selected_commit_gain_is_graph_gain",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.CanonicalBridge.selected_commit_is_exact_candidate",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "audit_stdout_sha256": "e84841bd46a253bb82dbef241f8e4b0702d4897661c64a767b2bbd42d5f7f5db",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "formal/statistical-learning/HSWMStatisticalLearning/AdaptiveRounds.lean",
+      "module": "HSWMStatisticalLearning.AdaptiveRounds",
+      "sha256": "35b64a99b5aebcf691d1371f5c3e30db6856e02ee56a7aabdc0414201c0c6f6c",
+      "byte_length": 11292,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_declarations": [
+        "HSWMStatisticalLearning.AdaptiveRounds.kernelwise_statistical_selection_failure_le_delta",
+        "HSWMStatisticalLearning.AdaptiveRounds.finite_mixture_failure_le",
+        "HSWMStatisticalLearning.AdaptiveRounds.kernelwise_statistical_selection_mixture_failure_le_delta",
+        "HSWMStatisticalLearning.AdaptiveRounds.history_conditional_failure_le",
+        "HSWMStatisticalLearning.AdaptiveRounds.finite_alpha_spending_failure_le",
+        "HSWMStatisticalLearning.AdaptiveRounds.stopped_failure_subset",
+        "HSWMStatisticalLearning.AdaptiveRounds.stopped_failure_le_alpha_spending"
+      ],
+      "declaration_axioms": [
+        {
+          "theorem": "HSWMStatisticalLearning.AdaptiveRounds.finite_alpha_spending_failure_le",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.AdaptiveRounds.finite_mixture_failure_le",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.AdaptiveRounds.history_conditional_failure_le",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.AdaptiveRounds.kernelwise_statistical_selection_failure_le_delta",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.AdaptiveRounds.kernelwise_statistical_selection_mixture_failure_le_delta",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.AdaptiveRounds.stopped_failure_le_alpha_spending",
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWMStatisticalLearning.AdaptiveRounds.stopped_failure_subset",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "audit_stdout_sha256": "ed722b66ebed8508ca984731e029c1b9b8bbe9b9913bd44f03a4692113ea60e4",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "runner_source": {
+    "path": "src/hswm/effect-runtime/src/statistical-learning-proof-process.ts",
+    "sha256": "79f1450971250bb1ef353db988bf54ac9dccd228db24d2053018245b8fe5e4e2"
+  },
+  "parser_source": {
+    "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+    "sha256": "828eefb72755e5e3e6a77bb5be13b812cb073e39360a14a9b597ae344838a49a"
+  },
+  "receipt_visibility": "PRIVATE_RAW_RECEIPT; any public projection must omit absolute host paths",
+  "auditor_interface": "ADDITIVE_ISOLATED_STATISTICAL_LEARNING_AUDITOR; HISTORICAL_RECEIPTS_UNMODIFIED"
+}

@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?name ?source ?sha ?status ?boundary WHERE {
+  ?result p:name ?name ; p:source_path ?source ; p:source_sha256 ?sha ;
+    p:status ?status ; r:HAS_ASSUMPTION_BOUNDARY ?assumptions .
+  ?assumptions p:description ?boundary .
+}
+ORDER BY ?name

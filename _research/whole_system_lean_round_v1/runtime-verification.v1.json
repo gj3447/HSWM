@@ -1,0 +1,96 @@
+{
+  "schema_version": "hswm-whole-system-lean-runtime-verification/v1",
+  "status": "FOCUSED_CHECKS_PASSED",
+  "tests": 6,
+  "focused_runtime_tests": 3,
+  "axiom_parser_tests": 3,
+  "mutations": 22,
+  "mutation_fields_per_branch": [
+    "training event",
+    "outcome trace",
+    "state revision",
+    "role order",
+    "exception refs",
+    "revision semantic text",
+    "retained owner",
+    "predecessor",
+    "selected branch",
+    "next backend",
+    "next event"
+  ],
+  "branches": [
+    "CANDIDATE",
+    "BASELINE"
+  ],
+  "commands": [
+    {
+      "argv": [
+        "lake",
+        "build",
+        "HSWMSemanticLifecycleCli",
+        "HSWMSemanticLifecycleRefinement"
+      ],
+      "cwd": "formal",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "cwd": "src/hswm/effect-runtime",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "src/hswm/effect-runtime",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "npm",
+        "run",
+        "test",
+        "--",
+        "../../../tests/effect-runtime/semantic-lifecycle-refinement.test.ts",
+        "../../../tests/effect-runtime/canonical-atom-v2-semantic-selected-state.test.ts",
+        "../../../tests/effect-runtime/semantic-philosophy-proof-process.test.ts",
+        "--maxWorkers=1"
+      ],
+      "cwd": "src/hswm/effect-runtime",
+      "environment": {
+        "HSWM_RUN_SEMANTIC_LEAN": "1"
+      },
+      "exit_code": 0
+    }
+  ],
+  "test_output_sha256": "2d53d3ecfbd9e87619ea38c6e1c23db1cc1641c6bf3ca32c164329572a57c539",
+  "postrun_command": [
+    "node",
+    "src/hswm/effect-runtime/dist/semantic-lifecycle-refinement-process.js",
+    "--root",
+    ".hswm-local/semantic-selected-20260928-candidate-01",
+    "--output",
+    ".hswm-local/whole-system-lean-runtime-check-02"
+  ],
+  "postrun_report": {
+    "contract": "hswm-semantic-lifecycle-refinement-report/v1",
+    "accepted": true,
+    "witnessSha256": "02b2712353b6ad88110d6387ddd9b4ee98c0327f03e94f63661e36b7691301dd",
+    "checkerInputSha256": "ae3071d0feac227188b0975d65d7e405e35b1fb60c45a489ef196981d23cc663",
+    "checkerSha256": "86f161bb743fd4461457c2a93d94f2544bd18dad560f3cf47b4844d6e8a7a49b",
+    "selectedCandidate": true,
+    "chronologyVerified": false,
+    "checkerIdentity": "LOCAL_BUILD_DIGEST_RECORDED_NOT_COMPILER_VERIFIED",
+    "predecessorRevision": 0,
+    "successorRevision": 1,
+    "nextReadRevision": 1,
+    "claimCeiling": "DECODED_STRUCTURAL_WITNESS_WITH_TESTED_BYTE_ADAPTER_NOT_FULL_TS_PROOF_OR_LLM_EFFICACY"
+  },
+  "claim_boundary": "SCRIPTED_STORAGE_AND_CHECKER_INTEGRATION_NOT_REAL_MODEL_OR_CHRONOLOGY_PROOF"
+}

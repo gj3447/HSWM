@@ -1,0 +1,215 @@
+{
+  "schema_version": "hswm-semantic-lifecycle-lean-verification/v1",
+  "profile": "semantic-lifecycle",
+  "recorded_at": "2026-09-28T07:07:17.326Z",
+  "status": "EXACT_SOURCE_KERNEL_CHECKED",
+  "claim_ceiling": "DECODED_SEMANTIC_SUCCESSOR_AND_ROLE_READ_LOCALITY_NOT_FULL_TS_REFINEMENT_CHRONOLOGY_OR_LLM_EFFICACY",
+  "toolchain": {
+    "name": "leanprover/lean4:v4.32.1",
+    "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+    "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+    "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "lean_path": "/mnt/development/archive/dev-01-offload-20260925/lean-toolchains/leanprover--lean4---v4.32.1/bin/lean",
+    "pin_path": "formal/lean-toolchain",
+    "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+    "resolved_by": "lake env which lean",
+    "execution_binary": "/mnt/development/archive/dev-01-offload-20260925/lean-toolchains/leanprover--lean4---v4.32.1/bin/lean",
+    "lean_path_entries": [
+      "/home/lagyeongjun/CD/HSWM/.hswm-local/whole-system-lean-round-core-01/olean",
+      "/mnt/development/archive/dev-01-offload-20260925/lean-toolchains/leanprover--lean4---v4.32.1/src/lean/Std"
+    ]
+  },
+  "compile_order": [
+    "HSWMSemanticLifecycleRefinement",
+    "HSWMSemanticReadLocality"
+  ],
+  "audited_sources": [
+    "HSWMSemanticLifecycleRefinement",
+    "HSWMSemanticReadLocality"
+  ],
+  "source_records": [
+    {
+      "path": "formal/HSWMSemanticLifecycleRefinement.lean",
+      "sha256": "0388764a330ffb7094330e2a207de16fadd0998216554bd01f11ac5c57e7fe40",
+      "byteLength": 13419,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 12,
+      "named_theorems": [
+        "HSWM.SemanticLifecycleRefinement.key_ext",
+        "HSWM.SemanticLifecycleRefinement.semantic_ext",
+        "HSWM.SemanticLifecycleRefinement.relation_ext",
+        "HSWM.SemanticLifecycleRefinement.state_ext",
+        "HSWM.SemanticLifecycleRefinement.postRunAccepted_iff",
+        "HSWM.SemanticLifecycleRefinement.accepted_projects_exact_revision_binding",
+        "HSWM.SemanticLifecycleRefinement.accepted_after_eq_semanticSuccessor",
+        "HSWM.SemanticLifecycleRefinement.accepted_projects_next_trace_reads_selected_state",
+        "HSWM.SemanticLifecycleRefinement.accepted_preserves_ordered_roles",
+        "HSWM.SemanticLifecycleRefinement.accepted_preserves_ordered_exceptions",
+        "HSWM.SemanticLifecycleRefinement.accepted_retains_exact_predecessor",
+        "HSWM.SemanticLifecycleRefinement.changed_trace_cannot_be_accepted"
+      ],
+      "theorem_axioms": [
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.accepted_after_eq_semanticSuccessor",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.accepted_preserves_ordered_exceptions",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.accepted_preserves_ordered_roles",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.accepted_projects_exact_revision_binding",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.accepted_projects_next_trace_reads_selected_state",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.accepted_retains_exact_predecessor",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.changed_trace_cannot_be_accepted",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.key_ext",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.postRunAccepted_iff",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.relation_ext",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.semantic_ext",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.state_ext",
+          "axioms": [
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "propext"
+      ],
+      "audit_stdout_sha256": "497c36ec6d967e66db9ee7b1c3622ce9d73f7168a68b8bb326edfcfcb3abcf43",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "formal/HSWMSemanticReadLocality.lean",
+      "sha256": "e31ddbe6da0d2a291966a8acc0e06667a408c53c796836ec21a5ba6fef9fc616",
+      "byteLength": 7793,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 7,
+      "named_theorems": [
+        "HSWM.SemanticReadLocality.resolveRoles_locality",
+        "HSWM.SemanticReadLocality.readPlan_locality",
+        "HSWM.SemanticReadLocality.readPlan_fails_when_exception_path_is_absent",
+        "HSWM.SemanticReadLocality.readPlan_fails_when_pinned_role_is_missing",
+        "HSWM.SemanticReadLocality.equal_local_payload_gives_equal_specified_invocation",
+        "HSWM.SemanticReadLocality.erasing_exception_references_loses_a_possible_local_distinction",
+        "HSWM.SemanticReadLocality.role_order_is_observable_by_a_local_read"
+      ],
+      "theorem_axioms": [
+        {
+          "theorem": "HSWM.SemanticReadLocality.equal_local_payload_gives_equal_specified_invocation",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.SemanticReadLocality.erasing_exception_references_loses_a_possible_local_distinction",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticReadLocality.readPlan_fails_when_exception_path_is_absent",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticReadLocality.readPlan_fails_when_pinned_role_is_missing",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticReadLocality.readPlan_locality",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticReadLocality.resolveRoles_locality",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticReadLocality.role_order_is_observable_by_a_local_read",
+          "axioms": [
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "Quot.sound",
+        "propext"
+      ],
+      "audit_stdout_sha256": "12366da05448f2643a96a1a9b08d5ce37498bb837d1f069fd3aaca74d3cd76df",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "allowed_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "runner_source": {
+    "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+    "sha256": "828eefb72755e5e3e6a77bb5be13b812cb073e39360a14a9b597ae344838a49a"
+  },
+  "auditor_interface": "ADDITIVE_PROFILE_EXTENSION_SUPERSEDES_PRIOR_PRIVATE_AUDITOR_INTERFACE_WITHOUT_MUTATING_HISTORICAL_RECEIPTS",
+  "statement_semantics_validated": false,
+  "new_dependencies_installed": false
+}

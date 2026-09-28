@@ -1,0 +1,12 @@
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix proof: <urn:hswm:whole-system-lean-round:shape:> .
+
+proof:Result a sh:NodeShape ;
+  sh:targetClass role:FORMAL_RUNTIME_CORRESPONDENCE, role:FORMAL_LOCALITY_RESULT, role:FORMAL_STATISTICAL_RESULT ;
+  sh:property [ sh:path p:source_path ; sh:minCount 1 ; sh:maxCount 1 ; sh:minLength 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[a-f0-9]{64}$" ] ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:minCount 1 ] ;
+  sh:property [ sh:path r:HAS_ASSUMPTION_BOUNDARY ; sh:minCount 1 ; sh:maxCount 1 ; sh:class role:FORMAL_ASSUMPTION_BOUNDARY ] .

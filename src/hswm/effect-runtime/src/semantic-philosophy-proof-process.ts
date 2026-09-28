@@ -32,7 +32,7 @@ const operationalPhilosophyAuditedSources = Object.freeze([
 const operationalPhilosophySourceOrder = Object.freeze([
   ...threePhilosophiesSourceOrder, ...operationalPhilosophyAuditedSources
 ] as const)
-type ProfileName = "three-philosophies" | "integrated-hswm" | "operational-philosophy"
+type ProfileName = "three-philosophies" | "integrated-hswm" | "operational-philosophy" | "semantic-lifecycle"
 interface ProofProfile {
   readonly name: ProfileName
   readonly sourceOrder: ReadonlyArray<string>
@@ -49,7 +49,12 @@ const profiles: Readonly<Record<ProfileName, ProofProfile>> = Object.freeze({
     claimCeiling: "CONDITIONAL_FINITE_CANONICAL_CLOSED_LOOP_NOT_FULL_HSWM_OR_REAL_LLM" }),
   "operational-philosophy": Object.freeze({ name: "operational-philosophy", sourceOrder: operationalPhilosophySourceOrder,
     auditedSources: operationalPhilosophyAuditedSources, schemaVersion: "hswm-operational-philosophy-lean-verification/v1",
-    claimCeiling: "DECLARED_DETERMINISTIC_ABSTRACTION_BEHAVIORAL_MINIMALITY_AND_STORAGE_EXECUTION_NOT_UNIVERSAL_COST_WORLD_TRUTH_REAL_LLM_OR_FULL_HSWM" })
+    claimCeiling: "DECLARED_DETERMINISTIC_ABSTRACTION_BEHAVIORAL_MINIMALITY_AND_STORAGE_EXECUTION_NOT_UNIVERSAL_COST_WORLD_TRUTH_REAL_LLM_OR_FULL_HSWM" }),
+  "semantic-lifecycle": Object.freeze({ name: "semantic-lifecycle",
+    sourceOrder: ["HSWMSemanticLifecycleRefinement", "HSWMSemanticReadLocality"],
+    auditedSources: ["HSWMSemanticLifecycleRefinement", "HSWMSemanticReadLocality"],
+    schemaVersion: "hswm-semantic-lifecycle-lean-verification/v1",
+    claimCeiling: "DECODED_SEMANTIC_SUCCESSOR_AND_ROLE_READ_LOCALITY_NOT_FULL_TS_REFINEMENT_CHRONOLOGY_OR_LLM_EFFICACY" })
 })
 const permittedAxioms = Object.freeze(["propext", "Quot.sound", "Classical.choice"] as const)
 const stripLeanComments = (source: string): string => source.replace(/\/\-[\s\S]*?\-\//g, "").replace(/--[^\n]*/g, "")
@@ -83,8 +88,8 @@ const parse = (argv: ReadonlyArray<string>, cwd: string): Effect.Effect<Options 
   if (suppliedLean !== undefined && (!isAbsolute(suppliedLean) || suppliedLean.includes("\0")))
     return Effect.fail(fail("CLI_INVALID", "--lean must be an absolute regular-file path"))
   const profileName: unknown = values["--profile"] ?? "three-philosophies"
-  if (profileName !== "three-philosophies" && profileName !== "integrated-hswm" && profileName !== "operational-philosophy")
-    return Effect.fail(fail("CLI_INVALID", "--profile must be three-philosophies, integrated-hswm or operational-philosophy"))
+  if (profileName !== "three-philosophies" && profileName !== "integrated-hswm" && profileName !== "operational-philosophy" && profileName !== "semantic-lifecycle")
+    return Effect.fail(fail("CLI_INVALID", "--profile must be three-philosophies, integrated-hswm, operational-philosophy or semantic-lifecycle"))
   const profile = profiles[profileName]
   return Effect.succeed({ output: resolve(cwd, values["--output"]), lean: suppliedLean ?? null, profile })
 }
@@ -200,7 +205,7 @@ export const runSemanticPhilosophyProof = (options: Options) => Effect.gen(funct
   return `${JSON.stringify({ output: options.output, status: report.status, sources: sourceRecords.length, claimCeiling: report.claim_ceiling })}\n`
 }).pipe(Effect.catchAll(error => Effect.fail(error)))
 
-const usage = "Usage: semantic-philosophy-proof-process --output NEW_PRIVATE_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy] [--lean ABSOLUTE_PATH]\n"
+const usage = "Usage: semantic-philosophy-proof-process --output NEW_PRIVATE_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy|semantic-lifecycle] [--lean ABSOLUTE_PATH]\n"
 export const semanticPhilosophyProofCli = (argv: ReadonlyArray<string>) => Effect.gen(function* () {
   const options = yield* parse(argv, process.cwd())
   if (options === null) return usage

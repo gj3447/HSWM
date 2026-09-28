@@ -22,7 +22,8 @@ const modules = Object.freeze([
   { name: "HSWMStatisticalLearning.Concentration", path: "formal/statistical-learning/HSWMStatisticalLearning/Concentration.lean", audit: true },
   { name: "HSWMStatisticalLearning.Selection", path: "formal/statistical-learning/HSWMStatisticalLearning/Selection.lean", audit: true },
   { name: "HSWMStatisticalLearning.Integration", path: "formal/statistical-learning/HSWMStatisticalLearning/Integration.lean", audit: true },
-  { name: "HSWMStatisticalLearning.CanonicalBridge", path: "formal/statistical-learning/HSWMStatisticalLearning/CanonicalBridge.lean", audit: true }
+  { name: "HSWMStatisticalLearning.CanonicalBridge", path: "formal/statistical-learning/HSWMStatisticalLearning/CanonicalBridge.lean", audit: true },
+  { name: "HSWMStatisticalLearning.AdaptiveRounds", path: "formal/statistical-learning/HSWMStatisticalLearning/AdaptiveRounds.lean", audit: true }
 ] as const)
 interface LockedLakePackage { readonly name: string; readonly url: string; readonly revision: string; readonly inputRevision: string | null }
 

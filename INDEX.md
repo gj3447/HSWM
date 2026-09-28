@@ -4,6 +4,11 @@
 필요한 검사 → Git 기록을 기본으로 한다. RDF·SHACL·SPARQL·PROV 기반 작업과 주제별
 참조를 안내하며, 아래 날짜별 기록은 당시 출처와 재현 정보를 보존한다.
 
+2026-09-28 [전체 구현 첫 Lean 증명 라운드](docs/research/HSWM_WHOLE_SYSTEM_LEAN_ROUND_2026-09-28.md)는
+실제 의미 실행 기록의 successor 대응, 역할 read-set의 locality, 유한 과거 이력별 fresh 평가를
+26개 정리·보조정리로 검증했다. 실제 저장소–Lean 연결과 22개 바꿔치기를 검사했으며,
+decoded 모형·TS adapter 검사·운영 시간 순서·실제 모델 효능의 경계를 구분한다.
+
 2026-09-28 [전체 구현을 위한 Lean 공략점](docs/operations/HSWM_WHOLE_SYSTEM_LEAN_TARGETS_2026-09-28.md)은
 이미 있는 표현·추상화·frozen-round 학습·admission 증명을 실제 의미 실행에 연결하고,
 국소 읽기·지속 학습·구조 변경·두 규모 합성의 구현 순서와 원문 근거를 정리한다.

@@ -1,0 +1,113 @@
+{
+  "schema": "cd-instructions/v1",
+  "owner": "HSWM",
+  "source_provenance": {
+    "original_path": "AGENTS.md",
+    "original_sha256": "35f3402c8051de8fb030ac9faefda9c0cf1e190699fe0b02eceb1946bcb6dfd8",
+    "original_commit": "f18957ee82c01ea092199c13f58242445a11d78e",
+    "markdown_link_rebases": [
+      [
+        "docs/operations/HSWM_RESEARCH_WORKFLOW.md",
+        "../../docs/operations/HSWM_RESEARCH_WORKFLOW.md"
+      ],
+      [
+        "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+        "../../docs/canon/HSWM_CONSTITUTION_2026-08-20.md"
+      ],
+      [
+        "docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md",
+        "../../docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md"
+      ],
+      [
+        "docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md",
+        "../../docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md"
+      ]
+    ],
+    "deliberate_changes": []
+  },
+  "nodes": [
+    {
+      "id": "owner:1",
+      "type": "Source",
+      "path": "docs/agent-rules/OWNER.md",
+      "section": "hswm-working-rules/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "owner:2",
+      "type": "Source",
+      "path": "docs/agent-rules/OWNER.md",
+      "section": "research-identity/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "owner:3",
+      "type": "Source",
+      "path": "docs/agent-rules/OWNER.md",
+      "section": "graph-engineering/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "owner:4",
+      "type": "Source",
+      "path": "docs/agent-rules/OWNER.md",
+      "section": "development/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "owner:5",
+      "type": "Source",
+      "path": "docs/agent-rules/OWNER.md",
+      "section": "usl-workspace-linking/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "owner:usage",
+      "type": "Source",
+      "path": "README.md",
+      "section": "@body"
+    }
+  ],
+  "edges": [
+    {
+      "from": "task:base",
+      "type": "REQUIRES",
+      "to": "owner:1"
+    },
+    {
+      "from": "task:research",
+      "type": "REQUIRES",
+      "to": "owner:2"
+    },
+    {
+      "from": "task:canon",
+      "type": "REQUIRES",
+      "to": "owner:2"
+    },
+    {
+      "from": "task:kg",
+      "type": "REQUIRES",
+      "to": "owner:3"
+    },
+    {
+      "from": "task:code",
+      "type": "REQUIRES",
+      "to": "owner:3"
+    },
+    {
+      "from": "task:edit",
+      "type": "REQUIRES",
+      "to": "owner:4"
+    },
+    {
+      "from": "task:hswm",
+      "type": "REQUIRES",
+      "to": "owner:5"
+    },
+    {
+      "from": "task:cli",
+      "type": "REQUIRES",
+      "to": "owner:usage"
+    }
+  ]
+}

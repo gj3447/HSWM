@@ -1,0 +1,36 @@
+{
+  "schema_version": "hswm-access-interface-publication/v1",
+  "kind": "DESIGN_NOTE_NOT_NEW_IMPLEMENTATION_OR_RESEARCH_RESULT",
+  "source_ref": "docs/operations/HSWM_ACCESS_INTERFACE_2026-09-29.md",
+  "source_sha256": "0a36a29a730f15460f0fe9210fea328e4acb6135214215c821231248114c4c79",
+  "prior_direction_note_rechecked": {
+    "uid": "sym:Note:chatgpt-hswm-graph-program-direction-20260928",
+    "target_version": "\"2026-09-28T08:47:07.349Z\"",
+    "description_sha256": "4d6772400c4ba78afddf0bcc175def6c478f60d0bcdd1aafcc3f933a27feb02a",
+    "full_text_read": true,
+    "previous_publication_hash_matches": true
+  },
+  "uid": "sym:Note:chatgpt-hswm-access-interface-20260929",
+  "target_version": "\"2026-09-29T00:47:01.691Z\"",
+  "authority_class": "SECONDARY_AI",
+  "canonical_scope": "PENDING_OR_PRELIMINARY",
+  "epistemic_state": "PROPOSED",
+  "description_sha256": "0e0d1000895402724221ec50f99a1c215646d6f9f5c2525aac25d5479141de27",
+  "description": "2026-09-29 HSWM 접근 인터페이스 제안. 권위: SECONDARY_AI / PROPOSED_DESIGN.\n\n보존할 기준: 그래프가 AI의 지속 상태와 프로그램이고 TS/Effect는 이를 해석하는 versioned interpreter/I/O 구현이다. 학습은 graph revision이며 매 학습마다 TS 소스를 편집하는 것이 아니다. AGENTS.md에도 이 구분을 명시했다.\n\n9월 28일 정정 노트를 오늘 다시 읽어 description SHA-256 4d6772400c4ba78afddf0bcc175def6c478f60d0bcdd1aafcc3f933a27feb02a가 이전 게시와 일치함을 확인했다. 옛 sym:Concept:hswm 대표 본문은 그대로이며 후속 정정 노트가 연결돼 있다.\n\n사용자는 쿼리 문법, 자연어 변환, AI 직접 사용, Neo4j 같은 DB 사용성 중 어떤 접근이 적절한지 질문했다. 아래는 AI의 설계 제안이며 질문을 사용자 확정 아키텍처로 바꾸지 않는다.\n원문: docs/canon/sources/USER_PRIMARY_HSWM_ACCESS_QUESTION_2026-09-29.txt\n원문 SHA-256: d1d94eb6cecc696808cac3f67ec71fc906e3e006d9508eaea4a84cf580afb2c1\n\n권장:\n1. 조회·실행·관측·수정의 의미와 입력/결과 계약을 먼저 정한다.\n2. AI와 개발자는 같은 typed API로 직접 호출한다. 구조화된 요청 자체가 기계용 문법이다.\n3. 사람의 자연어 요청은 그 API의 요청 후보로 변환해 검사 후 사용한다. 자연어 변환이 모든 호출의 필수 단계는 아니다. 새 수동 승인 절차를 추가하지 않는다.\n4. 저장 계층은 영속성·일관성·revision을 보장하고, HSWM 서비스는 국소 LLM 실행과 outcome 학습도 드러낸다. HSWM 전체는 하나의 AI라는 기존 정체성을 유지한다.\n5. SPARQL은 기존 RDF/KG projection 조회에 사용한다. 현재 Neo4j adapter도 선택적 projection이며 canonical write 경로가 아니다.\n6. 우선 embedded TS/Effect SDK에 얇은 접근 계층을 만들고 필요에 따라 MCP/HTTP를 붙인다. 모든 내부 연산에 MCP 왕복을 강제하지 않는다. 독자 문자열 DSL은 실제 사용에서 필요성이 확인될 때 검토한다.\n\n제안 동작:\nread: schema/lineage와 exact/current 선택을 명시해 bounded 국소 그래프를 반환. n항 relation identity·역할·순서·문맥·예외와 resolved revision을 유지하고 빈 결과와 미완료/부분 결과를 구별.\nrun: graph program·read revision·입력·host budget을 결속해 국소 실행.\nobserve: trace와 외부 outcome을 출처에 따라 연결.\nrevise: base revision·변경 후보·근거를 기존 schema/owner/CAS/admission 경로에 전달. 단순 저장과 outcome-bound learning을 구별.\n조회나 자연어 해석이 암묵적 canonical write 권한이 되지 않는다.\n\n기존 구현: CanonicalAtomV2DurableGraphView; readLlmSemanticFrame; runSemanticProgram; executeLlmSemanticRelation; stageLlmSemanticOutcome; prepareLlmSemanticRelationRevision; learnLlmSemanticRelation.\n현재 program API는 최대 16개 fixed prediction step을 실행하고 event는 step content에 저장된다. 통일 read/run/observe/revise facade와 HSWM MCP/NL 입구는 아직 설계 단계다.\n\n공식 자료 확인:\nMCP Tools 2025-11-25의 inputSchema/structuredContent/outputSchema;\nNeo4j Cypher 공식 manual의 선언적 property graph query;\nHyperon hyperon-experimental v0.2.10 commit 3f76dc460da6961f57f69f6c3e550c59c74ada83의 non-final minimal MeTTa 명세.\n원문 3개 다운로드·hash 고정은 docs/operations/artifacts/hswm_access_interface_2026-09-29/source-captures.v1.json.\n새 의존성 채택, 새 runtime 구현, Lean refinement, LLM 효능 결과 또는 CR/FCL 승격을 주장하지 않는다.\n\n출처: docs/operations/HSWM_ACCESS_INTERFACE_2026-09-29.md\nSHA-256: 0a36a29a730f15460f0fe9210fea328e4acb6135214215c821231248114c4c79",
+  "full_text_readback_match": true,
+  "relationships": [
+    {
+      "predicate": "ABOUT",
+      "target_uid": "sym:Concept:hswm",
+      "status": "PROPOSED",
+      "authority_class": "SECONDARY_AI"
+    },
+    {
+      "predicate": "REFERENCES",
+      "target_uid": "sym:Note:chatgpt-hswm-graph-program-direction-20260928",
+      "status": "PROPOSED",
+      "authority_class": "SECONDARY_AI"
+    }
+  ],
+  "canonical_legacy_body": "NOT_OVERWRITTEN_LINKED_SECONDARY_CORRECTION"
+}

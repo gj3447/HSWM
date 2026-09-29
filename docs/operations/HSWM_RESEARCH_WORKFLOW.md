@@ -14,6 +14,8 @@ AI를 목표로 한다. 큰 그래프가 상태이고 LLM은 국소 연산자다
 그래프에 선언된 실행 프로그램, JSON/RDF 표현과 연구 KG projection을 구별한다.
 [그래프 프로그램 방향 재점검](../research/HSWM_GRAPH_PROGRAM_DIRECTION_2026-09-28.md)에
 확인한 오해·라이브 KG의 오래된 정의·구현과 증명의 연결 범위를 둔다.
+[접근 인터페이스 제안](HSWM_ACCESS_INTERFACE_2026-09-29.md)은 AI의 typed API 직접 호출,
+사람의 자연어 변환, DB 조회와 실행·학습의 경계를 구별한다. API 세부는 설계 제안이다.
 
 ## 준비
 

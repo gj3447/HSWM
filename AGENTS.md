@@ -16,6 +16,9 @@ report when the next authorized step can be carried out.
   functions as its basic computation and hypergraph Semantic Weight as its
   operating mechanism. The graph is the AI state; LLMs act on local inputs.
   Living harness, world model, and continuous learner are roles of this one AI.
+- Learning revises canonical graph state and graph-resident programs. TS/Effect
+  is the versioned interpreter and I/O implementation; routine learning does not
+  edit its source. Preserve this distinction when designing query/tool interfaces.
 - For identity or architecture changes, start with the
   [constitution](docs/canon/HSWM_CONSTITUTION_2026-08-20.md),
   [user definition](docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md),

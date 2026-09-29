@@ -1,0 +1,105 @@
+{
+  "profile": "hswm-like-rule-score/v1",
+  "authority": "SECONDARY_AI",
+  "status": "PROPOSED",
+  "description": "Evidence maturity of HSWM-like rule organization; not HSWM efficacy or canonical authority.",
+  "weights_policy": "Equal weights are an explicit AI proposal, not fitted or user-ratified. Compare only equal profile and declared workload.",
+  "levels": {
+    "0": "Observed absence or violation",
+    "1": "Documented contract",
+    "2": "Static or synthetic structural/reconstruction check",
+    "3": "Observed on representative real tasks",
+    "4": "Predeclared criteria confirmed on independent fresh cases with appropriate controls"
+  },
+  "invariants": {
+    "source_authority_preserved": "Original source and authority unchanged",
+    "conditions_preserved": "Roles, joint conditions and exceptions preserved",
+    "required_sources_loaded": "Applicable required source closure fully loaded",
+    "persistent_changes_authorized": "Persistent changes use existing owner admission, or no persistent change occurs"
+  },
+  "axes": [
+    {
+      "id": "source_fidelity",
+      "label": "원문·출처 보존",
+      "weight": 1,
+      "questions": [
+        "원문 bytes와 source revision을 복원한다.",
+        "사용자 원문과 AI 해석을 분리한다.",
+        "stale source와 출처 없는 주장을 탐지한다."
+      ]
+    },
+    {
+      "id": "multiscale_map",
+      "label": "여러 해상도의 지도",
+      "weight": 1,
+      "questions": [
+        "요약의 원문 범위·손실·해상도를 명시한다.",
+        "선택된 규칙의 조건·예외까지 원문 전체를 읽는다.",
+        "지도 변경이 원문을 덮어쓰지 않는다."
+      ]
+    },
+    {
+      "id": "role_composition",
+      "label": "역할 있는 결합",
+      "weight": 1,
+      "questions": [
+        "관계 ID와 역할·문맥·공동 조건을 보존한다.",
+        "필요한 순서와 예외를 검사한다.",
+        "pairwise projection의 손실을 명시한다."
+      ]
+    },
+    {
+      "id": "context_activation",
+      "label": "문맥별 활성화",
+      "weight": 1,
+      "questions": [
+        "작업·대상·행동에 맞는 required closure를 찾는다.",
+        "required set을 선택 결과와 독립적으로 판정한다.",
+        "낮은 routing score로 필수 규칙을 누락하지 않는다."
+      ]
+    },
+    {
+      "id": "distributed_navigation",
+      "label": "분산 탐색과 비용",
+      "weight": 1,
+      "questions": [
+        "structural degree·arity·candidate fanout·activation을 구분한다.",
+        "coverage와 원문 읽기 비용·tail latency를 함께 비교한다.",
+        "공통 필수 허브와 무관한 broadcast를 구분한다."
+      ]
+    },
+    {
+      "id": "local_adjustability",
+      "label": "국소 조정",
+      "weight": 1,
+      "questions": [
+        "stable UID를 보존하며 placement·relation revision을 조정한다.",
+        "expected revision·write set·owner admission·rollback을 명시한다.",
+        "원문·권위·다른 문맥의 관계를 무단 변경하지 않는다."
+      ]
+    },
+    {
+      "id": "semantic_disposition",
+      "label": "의미적 전이 성향",
+      "weight": 1,
+      "questions": [
+        "disposition과 scalar selection score를 구분한다.",
+        "역할·문맥·interpreter revision을 연결한다.",
+        "activation·causal credit·truth·permission을 구분한다."
+      ]
+    },
+    {
+      "id": "evaluability",
+      "label": "관측 가능한 평가",
+      "weight": 1,
+      "questions": [
+        "평가 대상 revision·workload·evidence·실패를 기록한다.",
+        "unknown과 N/A를 0 또는 만점으로 바꾸지 않는다.",
+        "구조 검사와 실제 성능·인과 주장을 구분한다."
+      ]
+    }
+  ],
+  "unknown_policy": "null rating or invariant => INCOMPLETE and score null",
+  "invalid_policy": "any false invariant => INVALID and score null",
+  "evidence_policy": "Known ratings and invariant verdicts require non-empty evidence references; tool checks structure and arithmetic, not truth."
+}

@@ -1,0 +1,41 @@
+@prefix hlike: <https://hswm.invalid/hswm-like/v1/> .
+@prefix prop: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix rel: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Domain profile only: these shapes do not establish semantic truth or efficacy.
+hlike:Source a sh:NodeShape ; sh:targetClass role:SOURCE_ARTIFACT ;
+  sh:property [ sh:path prop:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prop:exact_user_text ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prop:source_sha256 ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+hlike:Map a sh:NodeShape ; sh:targetClass role:MAP_VIEW ;
+  sh:property [ sh:path prop:loss_declaration ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prop:source_revision ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path rel:HAS_BINDING ; sh:class role:MAP_BINDING ; sh:minCount 1 ] .
+
+hlike:Binding a sh:NodeShape ; sh:targetClass role:MAP_BINDING ;
+  sh:property [ sh:path prop:restore_path ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path rel:BINDS_SOURCE ; sh:class role:SOURCE_ARTIFACT ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+hlike:Relation a sh:NodeShape ; sh:targetClass role:HYPER_RELATION ;
+  sh:property [ sh:path prop:condition_semantics ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prop:order_semantics ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prop:example_status ; sh:hasValue "SYNTHETIC_NOT_EXECUTED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path rel:HAS_PARTICIPATION ; sh:class role:ROLE_PARTICIPATION ; sh:minCount 2 ] .
+
+hlike:Participation a sh:NodeShape ; sh:targetClass role:ROLE_PARTICIPATION ;
+  sh:property [ sh:path [ sh:inversePath rel:HAS_PARTICIPATION ] ; sh:class role:HYPER_RELATION ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path rel:TARGET ; sh:class role:EXAMPLE_VALUE ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prop:role_name ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prop:ordinal ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prop:revision_scope ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+hlike:Axis a sh:NodeShape ; sh:targetClass role:SCORE_AXIS ;
+  sh:property [ sh:path prop:axis_id ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prop:weight ; sh:hasValue 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prop:scale_min ; sh:hasValue 0 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prop:scale_max ; sh:hasValue 4 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path prop:unknown_policy ; sh:hasValue "NULL_NOT_ZERO" ; sh:maxCount 1 ] .

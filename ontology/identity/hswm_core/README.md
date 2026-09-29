@@ -1,5 +1,17 @@
 # HSWM core responsibility ontology
 
+## HSWM-like rule organization (2026-09-29)
+
+[Definition, research and scoring](../../../docs/research/HSWM_LIKE_RULE_ONTOLOGY_AND_EVALUATION_2026-09-29.md)
+bind the original user direction to a proposed multiresolution, role-aware,
+locally adjustable rule profile. [Ontology](HSWM_LIKE_RULE_ACTIVATION_ONTOLOGY.v1.json),
+[rubric](HSWM_LIKE_RULE_SCORE.v1.json) and
+[unmeasured assessment template](HSWM_LIKE_RULE_ASSESSMENT_TEMPLATE.v1.json)
+remain separate from canonical runtime state and measured HSWM efficacy.
+Run `.venv/bin/python scripts/evaluate_hswm_like_rules.py validate` from the
+repository root. Its `score <assessment.json>` command validates submitted
+ratings; it does not judge evidence truth or grant canonical authority.
+
 ## Current adaptive realization strategy
 
 The USER_PRIMARY direction preserves the final HSWM target while its detailed

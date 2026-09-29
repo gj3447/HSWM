@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?item ?name ?status ?basis ?source ?boundary WHERE {
+  ?node p:standard_graph_role "WORK_STATUS_RECORD" ; p:item_id ?item ;
+    p:name ?name ; p:status ?status ; p:evidence_basis ?basis ;
+    p:source_path ?source ; p:claim_boundary ?boundary .
+}
+ORDER BY ?item

@@ -1,0 +1,91 @@
+{
+  "schema_version": "hswm-work-closeout-validation/v1",
+  "recorded_at": "2026-09-29T03:49:14.253474+00:00",
+  "authority_class": "SECONDARY_AI",
+  "base_commit": "f5f252bf357fdddbc04d294b7dc490df56a38829",
+  "validation_scope": "CURRENT_RECORD_STRUCTURE_AND_HASH_CHECKS_NOT_RUNTIME_OR_MODEL_OR_LEAN_REPLAY",
+  "bundle_sha256": "4f8433297b375310b8e0936e2ce11234a1cbb7d60c941221eb5f05d2928d3756",
+  "counts": {
+    "nodes": 12,
+    "anchors": 2,
+    "relations": 13
+  },
+  "shacl_conforms": true,
+  "status_query": {
+    "path": "ontology/queries/hswm_work_closeout_2026-09-29/status.rq",
+    "row_count": 10,
+    "exact_items_statuses_and_sources_verified": true,
+    "expected": {
+      "identity": "DIRECTION_RECORDED",
+      "philosophy": "CONDITIONAL_MODELS_RECORDED",
+      "chu-map": "DESIGN_AND_FINITE_MAPPING_RECORDED",
+      "sources": "ARCHIVED_WITH_UNRESOLVED_URLS",
+      "lean": "CONDITIONAL_CHECKS_RECORDED",
+      "runtime": "BOUNDED_IMPLEMENTATION_VERIFIED",
+      "access-design": "DESIGN_RECORDED",
+      "access-implementation": "NOT_IMPLEMENTED",
+      "efficacy": "NOT_ESTABLISHED",
+      "live-kg": "LINKED_CORRECTION_LEGACY_REMAINS"
+    }
+  },
+  "pending_query": {
+    "path": "ontology/queries/hswm_work_closeout_2026-09-29/pending.rq",
+    "row_count": 3,
+    "expected_items": [
+      "access-implementation",
+      "efficacy",
+      "live-kg"
+    ]
+  },
+  "source_bindings_verified": 23,
+  "node_source_hashes_verified": 12,
+  "domain_range_endpoints_and_relation_types_verified": true,
+  "negative_mutations": [
+    {
+      "target": "bundle",
+      "property": "system_complete",
+      "invalid_value": true,
+      "rejected": true
+    },
+    {
+      "target": "bundle",
+      "property": "state_is_ts_source",
+      "invalid_value": true,
+      "rejected": true
+    },
+    {
+      "target": "access-implementation",
+      "property": "implementation_complete",
+      "invalid_value": true,
+      "rejected": true
+    },
+    {
+      "target": "access-implementation",
+      "property": "status",
+      "invalid_value": "IMPLEMENTED",
+      "rejected": true
+    }
+  ],
+  "rdf_dataset_sha256": "e4b8bf0ff53e869008090af170461bb5a9fa1f14c332ca6e7f68de20d4442fed",
+  "prov_o_sha256": "bda3e6da4cecf875fe13c0c191ba401da3247e8fa95140d211c8bfbca6300e26",
+  "tool": "hswm-python graph: KgBundleGraphView.from_bundles / validate_shacl / query / prov_o_envelope",
+  "prior_runtime_receipt": {
+    "path": "evidence/hswm_graph_program_direction_2026-09-28/a04065b30832d0bc12de34e708d53109284fc636a56ea92a62cbece6f1a2d7fa.json",
+    "filename_hash_matches": true,
+    "current_bound_artifacts_match": 18,
+    "historical_tests_rerun": false
+  },
+  "live_publication": {
+    "uid": "sym:Note:chatgpt-hswm-work-closeout-20260929",
+    "exact_text_match": true,
+    "links_verified": 3,
+    "relationship_status": "PROPOSED",
+    "canonical_legacy_body_overwritten": false
+  },
+  "markdown": {
+    "documents": 2,
+    "status": "PORTABLE_MATH_COMPILED",
+    "rewrites": 0
+  },
+  "nonclaim": "RECORDING_COMPLETE_NOT_WHOLE_HSWM_COMPLETE_NOT_USER_RATIFICATION_NOT_NEW_EFFICACY"
+}

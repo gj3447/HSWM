@@ -4,6 +4,10 @@
 필요한 검사 → Git 기록을 기본으로 한다. RDF·SHACL·SPARQL·PROV 기반 작업과 주제별
 참조를 안내하며, 아래 날짜별 기록은 당시 출처와 재현 정보를 보존한다.
 
+2026-09-29 [작업 기록 마무리](docs/operations/HSWM_WORK_CLOSEOUT_2026-09-29.md)는
+철학·CHU/Map·원문 수집·Lean·그래프 실행기·접근 인터페이스를 10개 상태 기록으로 연결한다.
+구현·과거 검증·설계·미구현을 구별하며, 출처 결속 KG와 SHACL/SPARQL 조회를 제공한다.
+
 2026-09-28 [그래프 프로그램과 고정 실행기의 경계](docs/research/HSWM_GRAPH_PROGRAM_DIRECTION_2026-09-28.md)는
 학습에 의한 그래프 revision과 TS/Effect 실행기 개발을 구별한다. 문서·KG의 오래된 분해와
 해석 혼동을 점검하고, 같은 실행기가 DB 안의 프로그램 순서를 읽는 최소 구현을 연결한다.

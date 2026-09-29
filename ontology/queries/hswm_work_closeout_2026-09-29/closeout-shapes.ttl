@@ -1,0 +1,32 @@
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix c: <urn:hswm:work-closeout:shape:> .
+
+c:Bundle a sh:NodeShape ; sh:targetClass role:CLOSEOUT_BUNDLE ;
+  sh:property [ sh:path p:completion_scope ; sh:hasValue "RECORDING_ONLY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:system_complete ; sh:hasValue false ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:efficacy_established ; sh:hasValue false ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:state_is_ts_source ; sh:hasValue false ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_COMPONENT ; sh:minCount 10 ; sh:maxCount 10 ; sh:class role:WORK_STATUS_RECORD ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:minCount 1 ; sh:maxCount 1 ; sh:class role:USER_DIRECT_SOURCE ] .
+
+c:WorkStatus a sh:NodeShape ; sh:targetClass role:WORK_STATUS_RECORD ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:item_id ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:status ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:source_path ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[a-f0-9]{64}$" ] ;
+  sh:property [ sh:path p:evidence_basis ; sh:minCount 1 ; sh:maxCount 1 ; sh:in ("HISTORICAL_REPORT" "SOURCE_REVIEW_AT_RECORDING" "CURRENT_LIVE_READBACK") ] ;
+  sh:property [ sh:path p:implementation_complete ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:boolean ] .
+
+c:Source a sh:NodeShape ; sh:targetClass role:USER_DIRECT_SOURCE ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[a-f0-9]{64}$" ] .
+
+c:PendingFacade a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-work-closeout-2026-09-29-access-implementation> ;
+  sh:property [ sh:path p:status ; sh:hasValue "NOT_IMPLEMENTED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:implementation_complete ; sh:hasValue false ; sh:maxCount 1 ] .

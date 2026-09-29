@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?item ?status ?source ?boundary WHERE {
+  ?node p:standard_graph_role "WORK_STATUS_RECORD" ; p:item_id ?item ;
+    p:status ?status ; p:source_path ?source ; p:claim_boundary ?boundary .
+  FILTER(?status IN ("NOT_IMPLEMENTED", "NOT_ESTABLISHED", "LINKED_CORRECTION_LEGACY_REMAINS"))
+}
+ORDER BY ?item

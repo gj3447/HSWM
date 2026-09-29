@@ -1,0 +1,137 @@
+{
+  "schema_version": "hswm-work-closeout-live-check/v1",
+  "observed_at": "2026-09-29 03:41:40 UTC",
+  "reader": "ontology_search_then_exact_get_neighbors_claim_history",
+  "scope": "HSWM_CONCEPT_TWO_EXISTING_NOTES_AND_ACCESS_NOTE_ONE_HOP_NOT_FULL_KG",
+  "records": [
+    {
+      "uid": "sym:Note:chatgpt-hswm-graph-program-direction-20260928",
+      "target_version": "\"2026-09-28T08:47:07.349Z\"",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "text_fields": [
+        {
+          "property": "description",
+          "sha256": "4d6772400c4ba78afddf0bcc175def6c478f60d0bcdd1aafcc3f933a27feb02a",
+          "truncated": false,
+          "total_chars": 2809
+        }
+      ],
+      "source_fields": [
+        {
+          "encoding": "json",
+          "property": "source_ref",
+          "truncated": false,
+          "value": "\"docs/research/HSWM_GRAPH_PROGRAM_DIRECTION_2026-09-28.md\""
+        }
+      ]
+    },
+    {
+      "uid": "sym:Note:chatgpt-hswm-access-interface-20260929",
+      "target_version": "\"2026-09-29T00:47:01.691Z\"",
+      "authority_class": "SECONDARY_AI",
+      "canonical_scope": "PENDING_OR_PRELIMINARY",
+      "text_fields": [
+        {
+          "property": "description",
+          "sha256": "0e0d1000895402724221ec50f99a1c215646d6f9f5c2525aac25d5479141de27",
+          "truncated": false,
+          "total_chars": 2474
+        }
+      ],
+      "source_fields": [
+        {
+          "encoding": "json",
+          "property": "source_ref",
+          "truncated": false,
+          "value": "\"docs/operations/HSWM_ACCESS_INTERFACE_2026-09-29.md\""
+        }
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm",
+      "target_version": "\"2026-08-20T04:53:56.594Z\"",
+      "authority_class": "USER_PRIMARY",
+      "canonical_scope": "USER_RATIFIED_CANON",
+      "text_fields": [
+        {
+          "property": "definition",
+          "sha256": "15c6cf20938a0153120aabe75adde17604d6fe44f09b4cddcb9bf16191f3622e",
+          "truncated": false,
+          "total_chars": 367
+        },
+        {
+          "property": "user_canon",
+          "sha256": "c67f915d4c2b6c648fa7b116dad662f4f80a0c80dcec141de9145d2bb2bbf267",
+          "truncated": false,
+          "total_chars": 200
+        }
+      ],
+      "source_fields": [
+        {
+          "encoding": "json",
+          "property": "constitution_path",
+          "truncated": false,
+          "value": "\"docs/canon/HSWM_CONSTITUTION_2026-08-20.md\""
+        },
+        {
+          "encoding": "json",
+          "property": "latest_user_source_artifact",
+          "truncated": false,
+          "value": "\"docs/canon/sources/USER_PRIMARY_HSWM_LIVING_HARNESS_WORLD_MODEL_2026-08-20.txt\""
+        },
+        {
+          "encoding": "json",
+          "property": "canon_refs",
+          "truncated": false,
+          "value": "[\"user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23\",\"user-canon-hswm-is-e2e-neural-replacement-of-multiagent-glue-2026-08-03\",\"docs/canon/HSWM_CONSTITUTION_2026-08-20.md\"]"
+        },
+        {
+          "encoding": "json",
+          "property": "latest_user_source_sha256",
+          "truncated": false,
+          "value": "\"35c911a13e7fb17ddcea19ba73303ec800296f25fb585b92300bb4977892a42e\""
+        },
+        {
+          "encoding": "json",
+          "property": "constitution_sha256",
+          "truncated": false,
+          "value": "\"f0089c7bfb9b85969dd01a2d6de63e5976a22bcfaf91fa272059ce18fd86b73a\""
+        },
+        {
+          "encoding": "json",
+          "property": "constitution_uid",
+          "truncated": false,
+          "value": "\"sym:AbstractNode:user-canon-hswm-living-harness-world-model-2026-08-20\""
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "predicate": "ABOUT",
+      "target_uid": "sym:Concept:hswm",
+      "status": "PROPOSED",
+      "authority_class": "SECONDARY_AI"
+    },
+    {
+      "predicate": "REFERENCES",
+      "target_uid": "sym:Note:chatgpt-hswm-graph-program-direction-20260928",
+      "status": "PROPOSED",
+      "authority_class": "SECONDARY_AI"
+    }
+  ],
+  "claim_history": [
+    {
+      "uid": "sym:UserVerdict:usl-universal-semantic-link-definition-2026-09-07",
+      "version": "\"2026-09-07T04:42:29.455Z\"",
+      "subject_links": [
+        "ASSERTS_ABOUT"
+      ],
+      "authority": "USER_PRIMARY",
+      "decision": null
+    }
+  ],
+  "finding": "DIRECTION_AND_ACCESS_NOTES_PRESENT_NO_COLLISION; OLD_HSWM_DEFINITION_REMAINS; CLAIM_HISTORY_NOT_A_COMPLETE_SUPERSESSION_LOG",
+  "boundary": "CURRENT_RECORD_PRESENCE_CHECK_NOT_RUNTIME_RETEST_OR_USER_RATIFICATION"
+}

@@ -1,0 +1,557 @@
+{
+  "schema": "usl-resource-graph/v1",
+  "resources": [
+    {
+      "id": "source:design",
+      "types": [
+        "urn:hswm:cli-profile:Source"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/main/docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+      "metadata": {
+        "description": "This proposal and its responsibility/identity contracts",
+        "status": "PROPOSED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "source:scope",
+      "types": [
+        "urn:hswm:cli-profile:Source"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/b071d96377cf45c32f64471b4c4547ab44215bb6/docs/canon/USER_PRIMARY_CHU_HSWM_SOFTWARE_SCOPE_2026-09-27.md",
+      "metadata": {
+        "description": "Existing user direction: CHU includes HSWM and other world models",
+        "status": "SOURCE_REFERENCE",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "scope:chu",
+      "types": [
+        "urn:hswm:cli-profile:Scope"
+      ],
+      "locator": "https://github.com/gj3447/USL/blob/06490d08bb610ad68a2ba318e3fb6f2efbc90f38/docs/CHU_CONNECTION.md",
+      "metadata": {
+        "description": "CHU conceptual scope; this is a scoped view, not a new global CHU identity",
+        "status": "USER_DIRECTION_RESTATED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "environment:chu-os",
+      "types": [
+        "urn:hswm:cli-profile:Environment"
+      ],
+      "locator": "https://github.com/gj3447/USL/blob/06490d08bb610ad68a2ba318e3fb6f2efbc90f38/docs/CHU_CONNECTION.md",
+      "metadata": {
+        "description": "Hypergraph OS target; workspace implementation is distinct from full CHU scope",
+        "status": "TARGET_DIRECTION",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "sym:Concept:hswm",
+      "types": [
+        "urn:hswm:cli-profile:AgentModel"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/b071d96377cf45c32f64471b4c4547ab44215bb6/docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md",
+      "metadata": {
+        "description": "HSWM target: persistent Semantic Weight graph and local LLM computation",
+        "status": "TARGET_DIRECTION",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "model:non-llm",
+      "types": [
+        "urn:hswm:cli-profile:WorldModel"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/main/docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+      "metadata": {
+        "description": "Role for non-LLM world models, not a deployed simulator",
+        "status": "ROLE_TEMPLATE",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "sym:Concept:usl",
+      "types": [
+        "urn:hswm:cli-profile:Grammar"
+      ],
+      "locator": "https://github.com/gj3447/USL/blob/06490d08bb610ad68a2ba318e3fb6f2efbc90f38/README.md",
+      "metadata": {
+        "description": "USL role-aware linking grammar and owner binding",
+        "status": "SOURCE_REVIEWED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "profile:tool",
+      "types": [
+        "urn:hswm:cli-profile:Tool"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/main/docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+      "metadata": {
+        "description": "Tool profile variable: independently callable program; not a new executable",
+        "status": "ROLE_TEMPLATE",
+        "authority": "SECONDARY_AI",
+        "instanceKind": "ROLE_TEMPLATE"
+      }
+    },
+    {
+      "id": "profile:entrypoint",
+      "types": [
+        "urn:hswm:cli-profile:CliEntrypoint"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/main/docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+      "metadata": {
+        "description": "Required native CLI surface for a participating tool",
+        "status": "PROPOSED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "profile:capability",
+      "types": [
+        "urn:hswm:cli-profile:Capability"
+      ],
+      "locator": "https://github.com/gj3447/USL/blob/06490d08bb610ad68a2ba318e3fb6f2efbc90f38/docs/CAPABILITY_CATALOG.md",
+      "metadata": {
+        "description": "Meaning, typed input/output, declared effects, scope and limitations",
+        "status": "PROPOSED_ADOPTION",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "contract:usage",
+      "types": [
+        "urn:hswm:cli-profile:UsageBundle"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/main/docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+      "metadata": {
+        "description": "Complete selected operation instructions, prerequisites and revision",
+        "status": "PROPOSED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "contract:execution",
+      "types": [
+        "urn:hswm:cli-profile:Contract"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/main/docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+      "metadata": {
+        "description": "Program build, input/output, environment, diagnostics and effect contract",
+        "status": "PROPOSED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "contract:identity",
+      "types": [
+        "urn:hswm:cli-profile:Contract"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/main/docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+      "metadata": {
+        "description": "Logical resource ID, content CID/revision, representation and invocation remain distinct",
+        "status": "PROPOSED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "contract:result",
+      "types": [
+        "urn:hswm:cli-profile:Contract"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/main/docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+      "metadata": {
+        "description": "Typed result/errors and actual observations; exit 0 is not semantic efficacy",
+        "status": "PROPOSED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "policy:placement",
+      "types": [
+        "urn:hswm:cli-profile:PlacementPolicy"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/main/docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+      "metadata": {
+        "description": "Task-relative grouping and activation policy; does not rewrite source identity",
+        "status": "PROPOSED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "proposal:usl-m-index",
+      "types": [
+        "urn:hswm:cli-profile:IndexProposal"
+      ],
+      "locator": "https://github.com/gj3447/USL/blob/06490d08bb610ad68a2ba318e3fb6f2efbc90f38/docs/SYNTAX_CLI_GRAPH_ARCHITECTURE.md",
+      "metadata": {
+        "description": "Derived resource/role index proposal; weighted evaluation and M-index runtime not implemented",
+        "status": "PROPOSED_NOT_IMPLEMENTED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "concept:hswm-model-map",
+      "types": [
+        "urn:hswm:cli-profile:ModelMap"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/b071d96377cf45c32f64471b4c4547ab44215bb6/docs/research/HSWM_MAP_STATISTICAL_EMERGENCE_2026-09-29.md",
+      "metadata": {
+        "description": "Task-relative cross-model correspondence and preserved/lost information",
+        "status": "RESEARCH_DESIGN",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "concept:hswm-like",
+      "types": [
+        "urn:hswm:cli-profile:Property"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/main/docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+      "metadata": {
+        "description": "General organization property, separate from the named HSWM AI",
+        "status": "USER_DIRECTION_RESTATED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "contract:assessment",
+      "types": [
+        "urn:hswm:cli-profile:Assessment"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/main/docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+      "metadata": {
+        "description": "Separate executability, predictive sufficiency, activation, cost and refinement evidence",
+        "status": "PROPOSED_UNMEASURED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "implementation:usl-cli-host",
+      "types": [
+        "urn:hswm:cli-profile:Host"
+      ],
+      "locator": "https://github.com/gj3447/USL/blob/06490d08bb610ad68a2ba318e3fb6f2efbc90f38/src/cli-host.ts",
+      "metadata": {
+        "description": "Registered entry-node-only local CLI host; not a full workflow engine",
+        "status": "SOURCE_REVIEWED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "implementation:usl-check",
+      "types": [
+        "urn:hswm:cli-profile:ProgramArtifact"
+      ],
+      "locator": "https://github.com/gj3447/USL/blob/06490d08bb610ad68a2ba318e3fb6f2efbc90f38/src/cli.ts",
+      "metadata": {
+        "description": "Existing USL check CLI used by the local host example",
+        "status": "LOCAL_EXAMPLE_EXECUTED",
+        "authority": "SECONDARY_AI"
+      }
+    },
+    {
+      "id": "agent:codex",
+      "types": [
+        "urn:hswm:cli-profile:Agent"
+      ],
+      "locator": "https://github.com/gj3447/HSWM/blob/main/docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+      "metadata": {
+        "description": "Codex authored this secondary interpretation",
+        "status": "AUTHOR",
+        "authority": "SECONDARY_AI"
+      }
+    }
+  ],
+  "meanings": [
+    {
+      "id": "urn:hswm:cli-profile:scope",
+      "description": "Declared conceptual inclusion; source-bound restatement, not a deployment claim"
+    },
+    {
+      "id": "urn:hswm:cli-profile:workspace",
+      "description": "Proposed realization of the broad concept as a hypergraph working environment"
+    },
+    {
+      "id": "urn:hswm:cli-profile:execution_contract",
+      "description": "Proposed n-ary tool contract; all selected roles required"
+    },
+    {
+      "id": "urn:hswm:cli-profile:semantic_binding",
+      "description": "USL joins owner resources while retaining logical ID/content/representation distinctions"
+    },
+    {
+      "id": "urn:hswm:cli-profile:invocation_contract",
+      "description": "Proposed caller/host/tool/result responsibilities; not an invocation event"
+    },
+    {
+      "id": "urn:hswm:cli-profile:placement_contract",
+      "description": "Proposed task-relative placement changes routing while retaining identity and full selected usage"
+    },
+    {
+      "id": "urn:hswm:cli-profile:map_lookup",
+      "description": "Proposed index points to model transformations; the two Maps are not identical"
+    },
+    {
+      "id": "urn:hswm:cli-profile:assessment_contract",
+      "description": "Proposed HSWM-like quality evaluation is separate from CLI availability and source graph validation"
+    },
+    {
+      "id": "urn:hswm:cli-profile:existing_example",
+      "description": "Existing USL host example invoked USL check; no full profile adoption or HSWM learning claim"
+    }
+  ],
+  "links": [
+    {
+      "id": "hswm-cli:scope",
+      "meaning": "urn:hswm:cli-profile:scope",
+      "participants": [
+        {
+          "role": "container",
+          "resource": "scope:chu"
+        },
+        {
+          "role": "llm_ai",
+          "resource": "sym:Concept:hswm"
+        },
+        {
+          "role": "other_model",
+          "resource": "model:non-llm"
+        },
+        {
+          "role": "source",
+          "resource": "source:scope"
+        }
+      ],
+      "metadata": {
+        "authority": "SECONDARY_AI",
+        "status": "PROPOSED",
+        "scope": "DESIGN_RELATION_NOT_EXECUTION",
+        "sourceRef": "source:design"
+      }
+    },
+    {
+      "id": "hswm-cli:workspace",
+      "meaning": "urn:hswm:cli-profile:workspace",
+      "participants": [
+        {
+          "role": "scope",
+          "resource": "scope:chu"
+        },
+        {
+          "role": "environment",
+          "resource": "environment:chu-os"
+        },
+        {
+          "role": "source",
+          "resource": "source:design"
+        }
+      ],
+      "metadata": {
+        "authority": "SECONDARY_AI",
+        "status": "PROPOSED",
+        "scope": "DESIGN_RELATION_NOT_EXECUTION",
+        "sourceRef": "source:design"
+      }
+    },
+    {
+      "id": "hswm-cli:tool_contract",
+      "meaning": "urn:hswm:cli-profile:execution_contract",
+      "participants": [
+        {
+          "role": "tool",
+          "resource": "profile:tool"
+        },
+        {
+          "role": "entrypoint",
+          "resource": "profile:entrypoint"
+        },
+        {
+          "role": "capability",
+          "resource": "profile:capability"
+        },
+        {
+          "role": "usage",
+          "resource": "contract:usage"
+        },
+        {
+          "role": "contract",
+          "resource": "contract:execution"
+        }
+      ],
+      "metadata": {
+        "authority": "SECONDARY_AI",
+        "status": "PROPOSED",
+        "scope": "DESIGN_RELATION_NOT_EXECUTION",
+        "sourceRef": "source:design"
+      }
+    },
+    {
+      "id": "hswm-cli:usl_binding",
+      "meaning": "urn:hswm:cli-profile:semantic_binding",
+      "participants": [
+        {
+          "role": "grammar",
+          "resource": "sym:Concept:usl"
+        },
+        {
+          "role": "tool",
+          "resource": "profile:tool"
+        },
+        {
+          "role": "identity_contract",
+          "resource": "contract:identity"
+        }
+      ],
+      "metadata": {
+        "authority": "SECONDARY_AI",
+        "status": "PROPOSED",
+        "scope": "DESIGN_RELATION_NOT_EXECUTION",
+        "sourceRef": "source:design"
+      }
+    },
+    {
+      "id": "hswm-cli:invocation",
+      "meaning": "urn:hswm:cli-profile:invocation_contract",
+      "participants": [
+        {
+          "role": "agent",
+          "resource": "sym:Concept:hswm"
+        },
+        {
+          "role": "tool",
+          "resource": "profile:tool"
+        },
+        {
+          "role": "host",
+          "resource": "implementation:usl-cli-host"
+        },
+        {
+          "role": "result_contract",
+          "resource": "contract:result"
+        }
+      ],
+      "metadata": {
+        "authority": "SECONDARY_AI",
+        "status": "PROPOSED",
+        "scope": "DESIGN_RELATION_NOT_EXECUTION",
+        "sourceRef": "source:design"
+      }
+    },
+    {
+      "id": "hswm-cli:placement",
+      "meaning": "urn:hswm:cli-profile:placement_contract",
+      "participants": [
+        {
+          "role": "environment",
+          "resource": "environment:chu-os"
+        },
+        {
+          "role": "tool",
+          "resource": "profile:tool"
+        },
+        {
+          "role": "placement_policy",
+          "resource": "policy:placement"
+        },
+        {
+          "role": "usage",
+          "resource": "contract:usage"
+        }
+      ],
+      "metadata": {
+        "authority": "SECONDARY_AI",
+        "status": "PROPOSED",
+        "scope": "DESIGN_RELATION_NOT_EXECUTION",
+        "sourceRef": "source:design"
+      }
+    },
+    {
+      "id": "hswm-cli:map_lookup",
+      "meaning": "urn:hswm:cli-profile:map_lookup",
+      "participants": [
+        {
+          "role": "index_proposal",
+          "resource": "proposal:usl-m-index"
+        },
+        {
+          "role": "model_map",
+          "resource": "concept:hswm-model-map"
+        },
+        {
+          "role": "source",
+          "resource": "source:design"
+        },
+        {
+          "role": "usage",
+          "resource": "contract:usage"
+        }
+      ],
+      "metadata": {
+        "authority": "SECONDARY_AI",
+        "status": "PROPOSED",
+        "scope": "DESIGN_RELATION_NOT_EXECUTION",
+        "sourceRef": "source:design"
+      }
+    },
+    {
+      "id": "hswm-cli:assessment",
+      "meaning": "urn:hswm:cli-profile:assessment_contract",
+      "participants": [
+        {
+          "role": "tool",
+          "resource": "profile:tool"
+        },
+        {
+          "role": "property",
+          "resource": "concept:hswm-like"
+        },
+        {
+          "role": "assessment",
+          "resource": "contract:assessment"
+        }
+      ],
+      "metadata": {
+        "authority": "SECONDARY_AI",
+        "status": "PROPOSED",
+        "scope": "DESIGN_RELATION_NOT_EXECUTION",
+        "sourceRef": "source:design"
+      }
+    },
+    {
+      "id": "hswm-cli:existing_example",
+      "meaning": "urn:hswm:cli-profile:existing_example",
+      "participants": [
+        {
+          "role": "host",
+          "resource": "implementation:usl-cli-host"
+        },
+        {
+          "role": "program",
+          "resource": "implementation:usl-check"
+        },
+        {
+          "role": "source",
+          "resource": "source:design"
+        }
+      ],
+      "metadata": {
+        "authority": "SECONDARY_AI",
+        "status": "PROPOSED",
+        "scope": "DESIGN_RELATION_NOT_EXECUTION",
+        "sourceRef": "source:design"
+      }
+    }
+  ],
+  "provenance": {
+    "sources": [
+      "source:design",
+      "source:scope"
+    ],
+    "agent": "agent:codex"
+  }
+}

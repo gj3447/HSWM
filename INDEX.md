@@ -4,6 +4,10 @@
 필요한 검사 → Git 기록을 기본으로 한다. RDF·SHACL·SPARQL·PROV 기반 작업과 주제별
 참조를 안내하며, 아래 날짜별 기록은 당시 출처와 재현 정보를 보존한다.
 
+2026-09-29 [HSWM-like CLI와 CHU·HSWM·USL 계약](docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md)은
+독립 실행 프로그램·의미 연결·하이퍼그래프 작업환경·국소 AI의 책임을 구분한다.
+기존 USL CLI를 재사용하며, 기능·전체 사용법·identity·배치·평가를 조회 가능한 제안 graph로 연결한다.
+
 2026-09-29 [MAP과 통계적 층 상승](docs/research/HSWM_MAP_STATISTICAL_EMERGENCE_2026-09-29.md)은
 사용자의 양파껍질 통찰을 예측 충분성·재규격화·상위 동역학의 자립성과 연결한다.
 기존 MapSpec·유한 반례·공유 KG에서 이어지며, 평가 질문은 미실행 제안으로 구별한다.

@@ -1,0 +1,326 @@
+{
+  "schema": "usl-domain-profile/v1",
+  "id": "urn:hswm:cli-profile:profile",
+  "version": "1",
+  "closedMeanings": true,
+  "meanings": [
+    {
+      "id": "urn:hswm:cli-profile:scope",
+      "allowExtraRoles": false,
+      "roles": [
+        {
+          "role": "container",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Scope"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "llm_ai",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:AgentModel"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "other_model",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:WorldModel"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "source",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Source"
+          ],
+          "metadata": []
+        }
+      ]
+    },
+    {
+      "id": "urn:hswm:cli-profile:workspace",
+      "allowExtraRoles": false,
+      "roles": [
+        {
+          "role": "scope",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Scope"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "environment",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Environment"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "source",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Source"
+          ],
+          "metadata": []
+        }
+      ]
+    },
+    {
+      "id": "urn:hswm:cli-profile:execution_contract",
+      "allowExtraRoles": false,
+      "roles": [
+        {
+          "role": "tool",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Tool"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "entrypoint",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:CliEntrypoint"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "capability",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Capability"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "usage",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:UsageBundle"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "contract",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Contract"
+          ],
+          "metadata": []
+        }
+      ]
+    },
+    {
+      "id": "urn:hswm:cli-profile:semantic_binding",
+      "allowExtraRoles": false,
+      "roles": [
+        {
+          "role": "grammar",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Grammar"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "tool",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Tool"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "identity_contract",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Contract"
+          ],
+          "metadata": []
+        }
+      ]
+    },
+    {
+      "id": "urn:hswm:cli-profile:invocation_contract",
+      "allowExtraRoles": false,
+      "roles": [
+        {
+          "role": "agent",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:AgentModel"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "tool",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Tool"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "host",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Host"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "result_contract",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Contract"
+          ],
+          "metadata": []
+        }
+      ]
+    },
+    {
+      "id": "urn:hswm:cli-profile:placement_contract",
+      "allowExtraRoles": false,
+      "roles": [
+        {
+          "role": "environment",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Environment"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "tool",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Tool"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "placement_policy",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:PlacementPolicy"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "usage",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:UsageBundle"
+          ],
+          "metadata": []
+        }
+      ]
+    },
+    {
+      "id": "urn:hswm:cli-profile:map_lookup",
+      "allowExtraRoles": false,
+      "roles": [
+        {
+          "role": "index_proposal",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:IndexProposal"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "model_map",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:ModelMap"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "source",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Source"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "usage",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:UsageBundle"
+          ],
+          "metadata": []
+        }
+      ]
+    },
+    {
+      "id": "urn:hswm:cli-profile:assessment_contract",
+      "allowExtraRoles": false,
+      "roles": [
+        {
+          "role": "tool",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Tool"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "property",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Property"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "assessment",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Assessment"
+          ],
+          "metadata": []
+        }
+      ]
+    },
+    {
+      "id": "urn:hswm:cli-profile:existing_example",
+      "allowExtraRoles": false,
+      "roles": [
+        {
+          "role": "host",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Host"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "program",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:ProgramArtifact"
+          ],
+          "metadata": []
+        },
+        {
+          "role": "source",
+          "required": true,
+          "types": [
+            "urn:hswm:cli-profile:Source"
+          ],
+          "metadata": []
+        }
+      ]
+    }
+  ]
+}

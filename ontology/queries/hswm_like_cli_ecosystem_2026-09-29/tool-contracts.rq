@@ -1,0 +1,18 @@
+PREFIX usl: <urn:usl:vocab:>
+
+SELECT ?tool ?entrypoint ?capability ?usage ?contract WHERE {
+  ?relation a usl:Link ; usl:meaning ?meaning ;
+    usl:participant ?pTool, ?pEntry, ?pCapability, ?pUsage, ?pContract .
+  ?meaning usl:nativeId "urn:hswm:cli-profile:execution_contract" .
+  ?pTool usl:role "tool" ; usl:resource ?rTool .
+  ?pEntry usl:role "entrypoint" ; usl:resource ?rEntry .
+  ?pCapability usl:role "capability" ; usl:resource ?rCapability .
+  ?pUsage usl:role "usage" ; usl:resource ?rUsage .
+  ?pContract usl:role "contract" ; usl:resource ?rContract .
+  ?rTool usl:nativeId ?tool .
+  ?rEntry usl:nativeId ?entrypoint .
+  ?rCapability usl:nativeId ?capability .
+  ?rUsage usl:nativeId ?usage .
+  ?rContract usl:nativeId ?contract .
+}
+ORDER BY ?tool

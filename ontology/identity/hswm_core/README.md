@@ -2,6 +2,10 @@
 
 ## HSWM-like rule organization (2026-09-29)
 
+[Program identity versus the general HSWM-like property](../../../docs/research/HSWM_PROGRAM_AND_HSWM_LIKENESS_2026-09-29.md)
+applies the user's subsequent clarification: HSWM-like data and programs are
+distinct from the named HSWM system. The rule score below is one domain profile.
+
 [Definition, research and scoring](../../../docs/research/HSWM_LIKE_RULE_ONTOLOGY_AND_EVALUATION_2026-09-29.md)
 bind the original user direction to a proposed multiresolution, role-aware,
 locally adjustable rule profile. [Ontology](HSWM_LIKE_RULE_ACTIVATION_ONTOLOGY.v1.json),

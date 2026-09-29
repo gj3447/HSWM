@@ -1,5 +1,14 @@
 # HSWM core responsibility ontology
 
+## MAP and statistical emergence (2026-09-29)
+
+[Research connection](../../../docs/research/HSWM_MAP_STATISTICAL_EMERGENCE_2026-09-29.md)
+links the user's statistical layer-emergence insight, primary literature,
+existing cross-layer Map work and shared KG UIDs. It separates model,
+projection, index, placement and evaluation; proposed diagnostics are not
+runtime implementation or measured efficacy. Historical source-bound bundles
+remain unchanged.
+
 ## HSWM-like rule organization (2026-09-29)
 
 [Program identity versus the general HSWM-like property](../../../docs/research/HSWM_PROGRAM_AND_HSWM_LIKENESS_2026-09-29.md)

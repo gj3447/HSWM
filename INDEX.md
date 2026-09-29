@@ -4,6 +4,10 @@
 필요한 검사 → Git 기록을 기본으로 한다. RDF·SHACL·SPARQL·PROV 기반 작업과 주제별
 참조를 안내하며, 아래 날짜별 기록은 당시 출처와 재현 정보를 보존한다.
 
+2026-09-29 [MAP과 통계적 층 상승](docs/research/HSWM_MAP_STATISTICAL_EMERGENCE_2026-09-29.md)은
+사용자의 양파껍질 통찰을 예측 충분성·재규격화·상위 동역학의 자립성과 연결한다.
+기존 MapSpec·유한 반례·공유 KG에서 이어지며, 평가 질문은 미실행 제안으로 구별한다.
+
 2026-09-29 [작업 기록 마무리](docs/operations/HSWM_WORK_CLOSEOUT_2026-09-29.md)는
 철학·CHU/Map·원문 수집·Lean·그래프 실행기·접근 인터페이스를 10개 상태 기록으로 연결한다.
 구현·과거 검증·설계·미구현을 구별하며, 출처 결속 KG와 SHACL/SPARQL 조회를 제공한다.

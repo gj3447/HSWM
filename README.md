@@ -15,6 +15,14 @@
 [상태·연산자 정의와 비교 원칙](docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md)에
 원문을 보존하며, **OpenCog Hyperon을 필수 핵심 비교 대상**으로 둡니다.
 
+**생태계 — CHU · HSWM · USL:** HSWM은 [CHU](https://github.com/gj3447/CHU)(월드모델과 HSWM을 포함하는
+계산가능 하이퍼우주이자 하이퍼그래프 OS) 안의 **LLM 전용** AI입니다
+([범위 정전](docs/canon/USER_PRIMARY_CHU_HSWM_SOFTWARE_SCOPE_2026-09-27.md)).
+[USL](https://github.com/gj3447/USL)은 세 저장소의 자원을 역할 있는 n항 링크로 결속합니다 —
+[USL CHU 연결](https://github.com/gj3447/USL/blob/master/docs/CHU_CONNECTION.md) ·
+[CHU ECOSYSTEM](https://github.com/gj3447/CHU/blob/main/ECOSYSTEM.md) ·
+[CHU AI native 3대원칙](https://github.com/gj3447/CHU/blob/main/canon/AI_NATIVE_THREE_PRINCIPLES.md).
+
 [KG·작업환경](docs/operations/HSWM_KG_WORKSPACE_2026-09-22.md) · [Semantic Weight·이론 기반](docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md) · [심층 연구·실현 경로](docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md) · [Jev 통합 연구 작업 계획](docs/operations/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.md) · [Jev 연구·그래프 엔지니어링](docs/research/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.md) · [지식 지도·개발 현황](docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md) · [연구 도구·표준 조사](docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md) · [그래프 구조](#graph-model) · [빠른 실행](#quick-start) · [개발 실사용](#development) · [근거와 판정](#evidence) · [전체 문서](INDEX.md)
 
 > **2026-09-07 · 실사용 가능한 로컬 적응 프로토타입**<br>

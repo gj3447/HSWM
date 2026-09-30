@@ -1,0 +1,828 @@
+{
+  "schema_version": "hswm-research-map-validation/v1",
+  "checked_at": "2026-09-30T08:42:51.265Z",
+  "toolchain": [
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-bundle-domain.js",
+      "sha256": "09795e276498819aff8b3e3b3a88ea69e5b7c9319ccb5d3bd820c9d61816daad"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-standards.js",
+      "sha256": "859bd404bba5ef0f279e441441d50105a2415419d8974d2218b552e9cff50155"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-vendor.js",
+      "sha256": "6e486bdd5b6c7e6503df2c376c7941570122d2fd83a2cb84efb6e3b80ab64250"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "44a3f32fbeb5ad30069b2c82db7fe5e8db95c34a66be603a2e89d82d230c4191"
+    }
+  ],
+  "bundle_sha256": "27054ad9bc88bd1467e1faac78c9f93bb27e0be5990a89c239f6ad00ef380eab",
+  "node_version": "v24.20.0",
+  "source_revision": "424d18abda36258c8ff47f70b4bd58706378afa1",
+  "scope": "Local graph structure, byte bindings and competency questions. No model runs or Lean replay.",
+  "source_bindings_verified": 45,
+  "shacl": [
+    {
+      "name": "existing-v2",
+      "conforms": true,
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+    },
+    {
+      "name": "research-map",
+      "conforms": true,
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+    }
+  ],
+  "competency_questions": {
+    "q1": {
+      "passed": true,
+      "rows": 9
+    },
+    "q2": {
+      "passed": true,
+      "rows": 34
+    },
+    "q3": {
+      "passed": true,
+      "rows": 6
+    },
+    "q4": {
+      "passed": true,
+      "rows": 16
+    },
+    "q5": {
+      "passed": true,
+      "rows": 6
+    },
+    "q6": {
+      "passed": true,
+      "rows": 0
+    },
+    "q7": {
+      "passed": true,
+      "rows": 5
+    },
+    "q8": {
+      "passed": true,
+      "rows": 1
+    }
+  },
+  "falsification_checks": [
+    "AI summary promoted to USER_PRIMARY",
+    "CR obligation declared discharged",
+    "source derivation removed",
+    "edge silently promoted to ACTIVE",
+    "duplicate owned UID",
+    "dangling relationship endpoint",
+    "duplicate participation ordinal",
+    "unsupported-claim query detects removed source"
+  ],
+  "queries": {
+    "q1": [
+      {
+        "topic": "Semantic Weight와 관계 표현",
+        "records": "2"
+      },
+      {
+        "topic": "outcome 학습과 인과 기여",
+        "records": "2"
+      },
+      {
+        "topic": "프랙탈 합성과 지속성",
+        "records": "2"
+      },
+      {
+        "topic": "CHU USL 및 HSWM-like 도구",
+        "records": "3"
+      },
+      {
+        "topic": "국소 실행과 그래프 프로그램",
+        "records": "4"
+      },
+      {
+        "topic": "대상 정체성과 범위",
+        "records": "4"
+      },
+      {
+        "topic": "층간 Map과 통계적 추상화",
+        "records": "4"
+      },
+      {
+        "topic": "형식 증명과 실제 구현의 연결",
+        "records": "5"
+      },
+      {
+        "topic": "실험과 비교의 판정",
+        "records": "8"
+      }
+    ],
+    "q2": [
+      {
+        "key": "likeness",
+        "title": "HSWM 시스템과 HSWM적인 성질은 별개다",
+        "kind": "THEORY_REFERENCE",
+        "statement": "HSWM-like 데이터나 다른 프로그램은 HSWM 시스템 자체, HSWM 생성물 또는 인터페이스 호환성과 동일하지 않다. 영어 표기는 AI 권고다.",
+        "source": "docs/research/HSWM_PROGRAM_AND_HSWM_LIKENESS_2026-09-29.md",
+        "locator": "## 대상과 성질",
+        "sha256": "ad91cd2ef16e0e4142c756bef5fdaee8294399c82bc54a163b2956ed6b06c461",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "AI_NAMING_AND_SCOPE_INTERPRETATION_NOT_RATIFIED_GENERAL_SCORE"
+      },
+      {
+        "key": "integrated-proof",
+        "title": "같은 학습 기록의 다른 세계는 반대 결과를 낸다",
+        "kind": "FORMAL_RESULT_REFERENCE",
+        "statement": "유한 통합 모형에서 참조 세계는 6/8→8/8, 같은 학습 기록의 대안 세계는 8/8→6/8이다. 관측만으로 보편 일반화를 도출할 수 없다.",
+        "source": "docs/research/HSWM_INTEGRATED_CLOSED_LOOP_PROOF_2026-09-27.md",
+        "locator": "6/8",
+        "sha256": "09a4f9896249e3b3122361dfb9e99751f5bbdb0a2d01f31ffbdb0adc62a915b6",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "AUTHORED_EXACT_INTERPRETER_FINITE_WORLD"
+      },
+      {
+        "key": "usl-instrument",
+        "title": "USL 유한 관계 합성의 측정기 범위",
+        "kind": "MEASURED_RESULT_REFERENCE",
+        "statement": "최종 같은-process finite DSL에서 B 12/12, REMOVE 0/12, RESTORE 12/12였고 같은 정보의 native 학습기도 12/12였다. 중단된 두 시도는 그대로 보존한다.",
+        "source": "results/HSWM_USL_RELATION_INSTRUMENT_RESULTS_2026-09-08.md",
+        "locator": "## 4. 직접 관측한 결과",
+        "sha256": "87778b65f74d4d032dce518e44ef13517f4e3705e717e61193612c385f383a99",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "AUTHORED_FINITE_INSTRUMENT_NOT_LLM_LEARNING_OR_NATIVE_SUPERIORITY"
+      },
+      {
+        "key": "binding-audit",
+        "title": "최종 답만으로 역할 민감도를 판정할 수 없다",
+        "kind": "MEASURED_RESULT_REFERENCE",
+        "statement": "작성된 128사례에서 pel·nub 값 교환은 중간 출력 64/128을 바꾸지만 최종 답은 0/128만 바꾼다. 과제 채점의 민감도 문제다.",
+        "source": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+        "locator": "128",
+        "sha256": "9d790d872f6ae8f4075d76d46b20c1276ec0c62d9a32a5b63b5b824388590c6e",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "AUTHORED_TASK_AUDIT_ZERO_MODEL_CALLS"
+      },
+      {
+        "key": "semantic-runtime",
+        "title": "의미 실행과 관측 결합 수정 경로",
+        "kind": "IMPLEMENTATION_REFERENCE",
+        "statement": "역할별 frame을 LLM에 전달하고 prediction에 outcome을 결합해 같은 canonical 관계의 의미를 수정하고 재읽는 경로가 있다.",
+        "source": "docs/research/HSWM_LLM_SEMANTIC_GRAPH_IMPLEMENTATION_2026-09-14.md",
+        "locator": "HSWM",
+        "sha256": "f18f517ce3141c803ae8c92ebbe72d97196d9640d3f9526bf769e7ed8719704e",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "BOUNDED_IMPLEMENTATION_NOT_MODEL_EFFICACY"
+      },
+      {
+        "key": "legacy-correction",
+        "title": "라이브 대표 정의의 폐기된 분해를 보존된 정정과 함께 읽는다",
+        "kind": "HISTORICAL_CORRECTION",
+        "statement": "대표 sym:Concept:hswm의 오래된 definition에는 H/W/A/F와 Pi가 남아 있다. 최신 헌법과 9월 28일 정정의 출처를 우선 확인하며 원 canonical record는 덮어쓰지 않는다.",
+        "source": "docs/research/HSWM_GRAPH_PROGRAM_DIRECTION_2026-09-28.md",
+        "locator": "## 2. 문서·KG 감사 결과",
+        "sha256": "87d7add4979518ed787e229a6a96bf204fd0754cde82ee9fa5efe7953beb74f3",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "BOUNDED_RECORD_REVIEW_NOT_FULL_KG_AUDIT"
+      },
+      {
+        "key": "constructive-proof",
+        "title": "실행과 학습을 보존하는 유한 구성",
+        "kind": "FORMAL_RESULT_REFERENCE",
+        "statement": "관계 학습기·하이퍼그래프 표현·실행과 학습 보존 정리를 연결한다. 필요한 관측이 없을 때의 식별 불가능성도 함께 둔다.",
+        "source": "docs/research/HSWM_SEMANTIC_WEIGHT_CONSTRUCTIVE_PROOF_2026-09-14.md",
+        "locator": "HSWM",
+        "sha256": "868c4d358b37a6cb43ffbe129a8d1ee3a7fc7a213e112071b34b5901a7019c37",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "CONDITIONAL_FINITE_MODEL_NOT_REAL_LLM_EFFICACY"
+      },
+      {
+        "key": "fresh-proof",
+        "title": "fresh 평가의 조건부 통계 보장",
+        "kind": "FORMAL_RESULT_REFERENCE",
+        "statement": "독립·유계 평가 행과 유한 후보에 대해 동시 오차 상계, 행 교체 보정, 비용을 포함한 선택 타당성을 증명한다.",
+        "source": "docs/research/HSWM_FRESH_EVALUATION_LEAN_PROOF_2026-09-28.md",
+        "locator": "HSWM",
+        "sha256": "bca6c0fff0d2a7f38a6871c07d61c245236f3434600f616edf1ad912e004744b",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "DECLARED_SAMPLING_LAW_ONE_FROZEN_ROUND_NOT_OPERATIONAL_FRESHNESS"
+      },
+      {
+        "key": "runtime-proof",
+        "title": "decoded 전이와 TS byte adapter 검사를 구별한다",
+        "kind": "FORMAL_RESULT_REFERENCE",
+        "statement": "실제 의미 기록의 successor와 read-set locality를 연결했지만, 모든 TS 실행의 refinement나 실제 평가 시간 순서를 증명한 것은 아니다.",
+        "source": "docs/research/HSWM_WHOLE_SYSTEM_LEAN_ROUND_2026-09-28.md",
+        "locator": "HSWM",
+        "sha256": "e972c158613776831a4c0d343b5de6db4d02590b64ca232ca8dadb9390359d57",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "DECODED_MODEL_AND_ADAPTER_TEST_NOT_FULL_RUNTIME_PROOF"
+      },
+      {
+        "key": "weight",
+        "title": "전이 성향과 점수 및 인과 효과의 구별",
+        "kind": "THEORY_REFERENCE",
+        "statement": "Semantic Weight는 역할과 문맥에 조건화된 전이 성향으로 다룬다. scalar score, 관측된 활성, evidence와 식별된 causal effect는 동일하지 않다.",
+        "source": "docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md",
+        "locator": "Semantic Weight",
+        "sha256": "9b746abf743872af6d441de9cac1690030639851a0690884cb5f0c85dc3353b5",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "DEFINITION_AND_ASSUMPTIONS_NOT_EMPIRICAL_CAUSAL_EFFECT"
+      },
+      {
+        "key": "learning-target",
+        "title": "학습의 대상은 그래프 안의 상태와 프로그램",
+        "kind": "TARGET_REFERENCE",
+        "statement": "학습에 의한 graph revision과 TS 실행기 개발을 구별한다. routine learning은 TS 소스 편집을 뜻하지 않는다.",
+        "source": "docs/research/HSWM_GRAPH_PROGRAM_DIRECTION_2026-09-28.md",
+        "locator": "## 1. 바로잡는 설명",
+        "sha256": "87d7add4979518ed787e229a6a96bf204fd0754cde82ee9fa5efe7953beb74f3",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "DIRECTION_NOT_FULL_INTERPRETER_REFINEMENT"
+      },
+      {
+        "key": "map-contract",
+        "title": "전이 보존과 과제 충분성은 다르다",
+        "kind": "THEORY_REFERENCE",
+        "statement": "유한 fixture에서 h만 남긴 Map은 h 전이를 보존하지만 fire에 필요한 r을 잃는다. 관찰·개입·학습 갱신 보존을 별도로 물어야 한다.",
+        "source": "docs/research/HSWM_MAP_STATISTICAL_EMERGENCE_2026-09-29.md",
+        "locator": "## 5. 평가 질문과 실패했을 때의 수정 후보",
+        "sha256": "ebeebdf61331b82f965d63666e84a6c7c8ebfb3bea4ee96f45c3a8d514fbbd21",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "FINITE_COUNTEREXAMPLE_NOT_UNIVERSAL_WORLD_MODEL"
+      },
+      {
+        "key": "dgx-learning",
+        "title": "실제 의미 수정의 정확도 이득 미관측",
+        "kind": "MEASURED_RESULT_REFERENCE",
+        "statement": "v3 learned 155/320, frozen 155/320, evidence-only 156/320, oracle 166/320. canonical 복원은 16/16이지만 의미 수정의 추가 정확도 이득은 없다.",
+        "source": "results/HSWM_DGX_SEMANTIC_LEARNING_2026-09-20.md",
+        "locator": "## 결과",
+        "sha256": "5fe2ed15056349eac1fea168155072d8fb5d996e04d19b4f9a178af8b22ddc09",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "FOUR_AUTHORED_BOOLEAN_FAMILIES_4B_BATCH_PROFILE_NOT_GENERAL_EFFICACY"
+      },
+      {
+        "key": "hyperon",
+        "title": "Hyperon을 핵심 비교 대상으로 유지한다",
+        "kind": "COMPARATOR_REFERENCE",
+        "statement": "백서 설계와 실행 가능한 component를 분리하고 같은 과제·모델 접근·예산에서 비교한다. 기존 v0.2.10·commit 식별은 비교 대상 pin이며 최신 버전 선언이 아니다.",
+        "source": "docs/research/HSWM_GRAPH_PROGRAM_DIRECTION_2026-09-28.md",
+        "locator": "Hyperon 비교는",
+        "sha256": "87d7add4979518ed787e229a6a96bf204fd0754cde82ee9fa5efe7953beb74f3",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "HISTORICAL_COMPONENT_PIN_NOT_NEW_BENCHMARK"
+      },
+      {
+        "key": "p1-red",
+        "title": "scalar slow-weight P1의 RED",
+        "kind": "MEASURED_RESULT_REFERENCE",
+        "statement": "12개 candidate에서 fresh pass·activation 0, A1−A2 0, 456개 rank replay에서 top-10 변화 0이라는 과거 RED를 보존한다.",
+        "source": "F1_R8_RESULTS_LOG.md",
+        "locator": "| 2026-07-23 |",
+        "sha256": "c41a57d748113e4f86f0e3640efc5aa4bba6beb184e5a7e374411711b419af80",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "HISTORICAL_P1_RESULT_NOT_ALL_HSWM_IMPOSSIBILITY"
+      },
+      {
+        "key": "opaque",
+        "title": "opaque v5의 제한된 상태 매개 관측",
+        "kind": "MEASURED_RESULT_REFERENCE",
+        "statement": "v5 ACTIVE·RESTORE 각각 32/32, FORCED_OPPOSITE 0/32. 과거 v3·v4의 실패 terminal은 유지한다. G0-local의 제한된 관측이며 G0 NOT_PASSED, G1 NOT_EVALUATED다.",
+        "source": "results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_RESULTS_2026-09-06.md",
+        "locator": "32/32",
+        "sha256": "9783db58c3fee1a1d92bda0014413a2d5742fbcc1043daf97b21b4fdeeb2a61a",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "LOCAL_IDENTIFIABILITY_NOT_EXTERNAL_EFFICACY_OR_CANONICAL_ADMISSION"
+      },
+      {
+        "key": "semantic-probe",
+        "title": "국소 의미 해석과 제거 대조의 한계",
+        "kind": "MEASURED_RESULT_REFERENCE",
+        "statement": "16입력×5조건·80추론에서 원본 16/16, 의미 제거 15/16이었다. 의미 관계가 더한 효용은 식별되지 않았다.",
+        "source": "results/HSWM_LOCAL_SEMANTIC_PROBE_2026-09-20.md",
+        "locator": "16/16",
+        "sha256": "f92fdb8697f457544b6aa893d25a782949ec473203537d97ce583115ba25de8a",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "LOCAL_INTERPRETATION_NOT_DURABLE_LEARNING"
+      },
+      {
+        "key": "jev-noop",
+        "title": "revision과 의미 학습의 차이",
+        "kind": "MEASURED_RESULT_REFERENCE",
+        "statement": "4개 native revision에서 semanticText·disposition·uncertainty·exceptionRefs가 그대로였다. learned와 evidence-only 요청 bytes도 같아 의미 수정의 인과 효과를 추정할 조건이 성립하지 않았다.",
+        "source": "results/HSWM_JEV_PRINCIPLES_2026-09-21.md",
+        "locator": "## 학습·복원 감사에서 드러난 핵심 실패",
+        "sha256": "6546f0c1db627ed52da3eb07bb0be05de8da4f0eeb1a9192e550e3a8317aae23",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "NO_OP_SEMANTIC_REVISION_NOT_JEV_RLCD_REPRODUCTION"
+      },
+      {
+        "key": "credit-gap",
+        "title": "여러 규모에서 기여를 중복 없이 귀속할 수 있는가",
+        "kind": "OPEN_QUESTION",
+        "statement": "cell·관계·coalition·상위 HSWM의 결과를 실제 개입으로 구별하고 uniform·shuffled credit 대조와 비교할 필요가 있다.",
+        "source": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+        "locator": "FCL-4 multiscale credit",
+        "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "OPEN_CAUSAL_IDENTIFICATION"
+      },
+      {
+        "key": "proof-gap",
+        "title": "정리의 가정과 실제 실행이 연결되는가",
+        "kind": "OPEN_QUESTION",
+        "statement": "read→invoke→observe→revise→admit→reopen의 실제 전이, codec/admission, trace, 평가 표본 가정을 연결해야 한다.",
+        "source": "docs/research/HSWM_LEAN_VALIDATION_REVIEW_2026-09-28.md",
+        "locator": "## 3. HSWM에서 다음에 닫아야 하는 연결",
+        "sha256": "5e31b19c9964059d59a37bdb83462361ae713efdff371d6a7d1bcb100e7a83a5",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "OPEN_REFINEMENT_AND_EXTERNAL_VALIDITY"
+      },
+      {
+        "key": "statistics",
+        "title": "통계적 구조로 상위 모델링 층을 만든다",
+        "kind": "RESEARCH_PROPOSAL",
+        "statement": "과제 관련 통계적 구분·이력으로 상위 상태를 구성하고 필요할 때 원문/세밀한 모델로 돌아가는 후보다. 예측 충분성·총비용·예외 복귀를 별도로 평가한다.",
+        "source": "docs/research/HSWM_MAP_STATISTICAL_EMERGENCE_2026-09-29.md",
+        "locator": "## 4. MAP의 데이터와 선택 정책을 분리하기",
+        "sha256": "ebeebdf61331b82f965d63666e84a6c7c8ebfb3bea4ee96f45c3a8d514fbbd21",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "PROPOSED_EXPERIMENT_NOT_RUN"
+      },
+      {
+        "key": "locality-gap",
+        "title": "작은 읽기가 과제에 충분한가",
+        "kind": "OPEN_QUESTION",
+        "statement": "전체 그래프를 넣지 않고 필요한 역할·공동 문맥·예외를 선택하며, 정보 누락을 탐지할 수 있는지 평가해야 한다.",
+        "source": "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md",
+        "locator": "W3",
+        "sha256": "e0bf7984cb2d78abc4ba5051ae73d923f665a674dd47cdd9c39a47e3da478795",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "PROPOSED_NOT_DISCHARGED"
+      },
+      {
+        "key": "cli-contract",
+        "title": "독립 CLI의 기능 계약을 연결한다",
+        "kind": "RESEARCH_PROPOSAL",
+        "statement": "ProgramArtifact·Capability·UsageBundle·Invocation·Result·Assessment를 분리한다. 전체 도구가 이 profile을 구현하거나 HSWM에 통합된 것은 아니다.",
+        "source": "docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+        "locator": "## 2. CLI가 있어야 한다는 요구의 구체화",
+        "sha256": "fc926867f85bef5b412698d185b21bd6c409b295ddbb7ea245a2667238d8ab63",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "PROPOSED_PROFILE_NOT_IMPLEMENTATION_COMPLETION"
+      },
+      {
+        "key": "incidence",
+        "title": "역할 있는 incidence 표현",
+        "kind": "THEORY_REFERENCE",
+        "statement": "n항 관계의 identity와 참여 역할을 가진 이항 incidence 표현은 가능하다. 관계 identity를 버리는 단순 pairwise 투영과 구별한다.",
+        "source": "docs/research/HSWM_SEMANTIC_WEIGHT_DEFINITION_AND_HYPERGRAPH_2026-09-14.md",
+        "locator": "incidence",
+        "sha256": "4fe95878d7be709fc394ed00fd43c99dad646ff88f69abb8977f6c3249db5b2f",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "REPRESENTATION_NOT_UNIVERSAL_COST_ADVANTAGE"
+      },
+      {
+        "key": "next-evaluation",
+        "title": "실제 의미 실행부터 수정 이득까지 분리해 검증한다",
+        "kind": "OPEN_QUESTION",
+        "statement": "oracle 실행을 통과할 조건에서 의미 필드 변화·request 차이·독립 outcome·held-out 개선·remove/restore·retention·동등 예산 비교를 연결한다.",
+        "source": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md",
+        "locator": "HSWM",
+        "sha256": "6370b8056eaf8faff02e381742b5477ff69a525558347843c409c4975952d8ed",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "RESEARCH_PROPOSAL_NOT_NEW_GATE_OR_EXECUTED_EXPERIMENT"
+      },
+      {
+        "key": "program",
+        "title": "고정 실행기가 그래프 프로그램을 읽는다",
+        "kind": "IMPLEMENTATION_REFERENCE",
+        "statement": "같은 TS/Effect 실행기가 durable program v0 A→B와 수동 revision v1 B→A를 재시작 후 실행한 fixture 검사가 기록돼 있다.",
+        "source": "docs/research/HSWM_GRAPH_PROGRAM_DIRECTION_2026-09-28.md",
+        "locator": "### 구현과 사용 경계",
+        "sha256": "87d7add4979518ed787e229a6a96bf204fd0754cde82ee9fa5efe7953beb74f3",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "SCRIPTED_FIXTURE_NOT_AUTONOMOUS_PROGRAM_LEARNING"
+      },
+      {
+        "key": "jev-readout",
+        "title": "출력 비용 개선과 확률 보정의 한계",
+        "kind": "MEASURED_RESULT_REFERENCE",
+        "statement": "직접 확률 480/480 유효·71.95ms, JSON 389/480·970.71ms. learned 보정 NLL 0.954는 평탄 기준 0.693보다 나쁘다.",
+        "source": "results/HSWM_JEV_PRINCIPLES_2026-09-21.md",
+        "locator": "## 속도와 출력 안정성",
+        "sha256": "6546f0c1db627ed52da3eb07bb0be05de8da4f0eeb1a9192e550e3a8317aae23",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "SERVER_PROFILE_READOUT_COST_NOT_EQUAL_QUALITY_OR_GENERAL_THROUGHPUT"
+      },
+      {
+        "key": "fractal",
+        "title": "작은 HSWM들이 더 큰 HSWM을 이룬다",
+        "kind": "TARGET_REFERENCE",
+        "statement": "인지 능력을 가진 HSWM들의 합성에서도 같은 Step/Learn·invariant·permission·lineage와 분리 가능성을 유지해야 한다. nested graph만으로 충분하지 않다.",
+        "source": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+        "locator": "## 4. 여덟 법칙의 선행 토대",
+        "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "TARGET_AND_AI_OPERATIONAL_CONTRACT_NOT_FCL_PASS"
+      },
+      {
+        "key": "identity",
+        "title": "하나의 AI와 네 가지 정체성",
+        "kind": "TARGET_REFERENCE",
+        "statement": "HSWM은 하나의 AI, 하이퍼그래프 신경망, LLM 기본 계산, Semantic Weight 작동을 함께 목표로 한다.",
+        "source": "docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md",
+        "locator": "## 1. 기본 개념",
+        "sha256": "007344028c946737fa53033cdaf43e14a2850c5d4c4e2ac4e72c940c0c487ce6",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "MIXED_EXPLICIT",
+        "ceiling": "TARGET_NOT_ACHIEVED_EFFICACY"
+      },
+      {
+        "key": "local-operator",
+        "title": "그래프가 상태이고 LLM은 국소 연산자",
+        "kind": "TARGET_REFERENCE",
+        "statement": "큰 지속 그래프를 작은 국소 LLM 입력과 구별한다. 그래프 크기나 도구 수가 목표 실현의 증거는 아니다.",
+        "source": "docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md",
+        "locator": "## 1. 그대로 보존하는 문장",
+        "sha256": "af5490bcb3aa7830dbfcf9c806c0e9d0b966d4c3a4e246ef1140f77bd3d8c32a",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "MIXED_EXPLICIT",
+        "ceiling": "TARGET_NOT_COMPLETE_RUNTIME"
+      },
+      {
+        "key": "owner",
+        "title": "schema에 상대적인 단일 책임 주소",
+        "kind": "TARGET_REFERENCE",
+        "statement": "고정 H/W/A/F/Π 분해는 폐기됐다. canonical atom version마다 schema가 정한 책임 주소를 두며 권한과 분리한다.",
+        "source": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+        "locator": "### 2.1 유일하게 남는 정본 유일성",
+        "sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "MIXED_EXPLICIT",
+        "ceiling": "USER_DIRECTION_WITH_AI_FORMALIZATION"
+      },
+      {
+        "key": "map-direction",
+        "title": "M은 층간 Map이라는 방향",
+        "kind": "TARGET_REFERENCE",
+        "statement": "물리·시냅스·Semantic Weight에서 시작할 수 있고 모델링 층들을 매핑한다. 단일 필수 직렬 순서나 세부 API를 사용자 확정으로 만들지 않는다.",
+        "source": "docs/canon/USER_PRIMARY_HSWM_CROSS_LAYER_MAP_2026-09-27.md",
+        "locator": "Map",
+        "sha256": "83552f084c2107350b4d501b150134d5fca740528918e7367b246653698c0ac4",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "MIXED_EXPLICIT",
+        "ceiling": "USER_DIRECTION_WITH_AI_INTERPRETATION"
+      },
+      {
+        "key": "minimum-cost",
+        "title": "하이퍼그래프의 보편 최소비용은 미증명",
+        "kind": "HYPOTHESIS_REFERENCE",
+        "statement": "동일 과제·정보·오차에서 저장·검색·실행·갱신·복구 비용을 비교해야 한다. 무손실 incidence와 손실 pairwise를 혼동하지 않는다.",
+        "source": "docs/research/HSWM_MINIMUM_COST_HYPERGRAPH_HYPOTHESIS_2026-09-27.md",
+        "locator": "비용",
+        "sha256": "c62be00cda561dfbabe34e29a161a25f73a8c528d4df491a497679ac452d7e31",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "USER_HYPOTHESIS_NOT_ESTABLISHED_THEOREM"
+      },
+      {
+        "key": "chu-usl",
+        "title": "CHU HSWM USL의 범위를 구별한다",
+        "kind": "TARGET_REFERENCE",
+        "statement": "CHU는 HSWM과 비LLM 세계 모델을 포함하는 더 넓은 개념이다. HSWM은 LLM 기반 AI이고 USL은 자원과 표현의 의미·역할 연결을 맡는다.",
+        "source": "docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md",
+        "locator": "## 1. 세 체계와 도구의 책임",
+        "sha256": "fc926867f85bef5b412698d185b21bd6c409b295ddbb7ea245a2667238d8ab63",
+        "authority": "SECONDARY_AI",
+        "sourceAuthority": "SECONDARY_AI",
+        "ceiling": "USER_SCOPE_AND_AI_DESIGN_NOT_INTEGRATED_OS"
+      }
+    ],
+    "q3": [
+      {
+        "key": "p1-red",
+        "finding": "12개 candidate에서 fresh pass·activation 0, A1−A2 0, 456개 rank replay에서 top-10 변화 0이라는 과거 RED를 보존한다.",
+        "eventDate": "2026-07-23",
+        "scope": "HISTORICAL_P1_RESULT_NOT_ALL_HSWM_IMPOSSIBILITY",
+        "source": "F1_R8_RESULTS_LOG.md"
+      },
+      {
+        "key": "semantic-probe",
+        "finding": "16입력×5조건·80추론에서 원본 16/16, 의미 제거 15/16이었다. 의미 관계가 더한 효용은 식별되지 않았다.",
+        "eventDate": "2026-09-20",
+        "scope": "LOCAL_INTERPRETATION_NOT_DURABLE_LEARNING",
+        "source": "results/HSWM_LOCAL_SEMANTIC_PROBE_2026-09-20.md"
+      },
+      {
+        "key": "dgx-learning",
+        "finding": "v3 learned 155/320, frozen 155/320, evidence-only 156/320, oracle 166/320. canonical 복원은 16/16이지만 의미 수정의 추가 정확도 이득은 없다.",
+        "eventDate": "2026-09-20",
+        "scope": "FOUR_AUTHORED_BOOLEAN_FAMILIES_4B_BATCH_PROFILE_NOT_GENERAL_EFFICACY",
+        "source": "results/HSWM_DGX_SEMANTIC_LEARNING_2026-09-20.md"
+      },
+      {
+        "key": "jev-noop",
+        "finding": "4개 native revision에서 semanticText·disposition·uncertainty·exceptionRefs가 그대로였다. learned와 evidence-only 요청 bytes도 같아 의미 수정의 인과 효과를 추정할 조건이 성립하지 않았다.",
+        "eventDate": "2026-09-21",
+        "scope": "NO_OP_SEMANTIC_REVISION_NOT_JEV_RLCD_REPRODUCTION",
+        "source": "results/HSWM_JEV_PRINCIPLES_2026-09-21.md"
+      },
+      {
+        "key": "jev-readout",
+        "finding": "직접 확률 480/480 유효·71.95ms, JSON 389/480·970.71ms. learned 보정 NLL 0.954는 평탄 기준 0.693보다 나쁘다.",
+        "eventDate": "2026-09-21",
+        "scope": "SERVER_PROFILE_READOUT_COST_NOT_EQUAL_QUALITY_OR_GENERAL_THROUGHPUT",
+        "source": "results/HSWM_JEV_PRINCIPLES_2026-09-21.md"
+      },
+      {
+        "key": "binding-audit",
+        "finding": "작성된 128사례에서 pel·nub 값 교환은 중간 출력 64/128을 바꾸지만 최종 답은 0/128만 바꾼다. 과제 채점의 민감도 문제다.",
+        "eventDate": "2026-09-27",
+        "scope": "AUTHORED_TASK_AUDIT_ZERO_MODEL_CALLS",
+        "source": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md"
+      }
+    ],
+    "q4": [
+      {
+        "obligation": "CR-1",
+        "title": "CR-1 Constructive outcome-conditioned improvement",
+        "historicalStatus": "CLASSICAL_PRIMITIVE_DERIVATION_ONLY",
+        "statusDate": "2026-09-10",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+        "source": "ontology/evidence/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.v1.json"
+      },
+      {
+        "obligation": "CR-2",
+        "title": "CR-2 Derived causal identification",
+        "historicalStatus": "OPEN",
+        "statusDate": "2026-09-10",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-2",
+        "source": "ontology/evidence/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.v1.json"
+      },
+      {
+        "obligation": "CR-3",
+        "title": "CR-3 Causal multiscale credit without double counting",
+        "historicalStatus": "OPEN",
+        "statusDate": "2026-09-10",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-3",
+        "source": "ontology/evidence/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.v1.json"
+      },
+      {
+        "obligation": "CR-4",
+        "title": "CR-4 Useful coalition and topology construction/recovery",
+        "historicalStatus": "OPEN",
+        "statusDate": "2026-09-10",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-4",
+        "source": "ontology/evidence/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.v1.json"
+      },
+      {
+        "obligation": "CR-5",
+        "title": "CR-5 Joint world/self prediction and diachronic continuity",
+        "historicalStatus": "OPEN",
+        "statusDate": "2026-09-10",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+        "source": "ontology/evidence/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.v1.json"
+      },
+      {
+        "obligation": "CR-6",
+        "title": "CR-6 Concrete composition, intervention and effect preservation",
+        "historicalStatus": "OPEN",
+        "statusDate": "2026-09-10",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-6",
+        "source": "ontology/evidence/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.v1.json"
+      },
+      {
+        "obligation": "CR-7",
+        "title": "CR-7 One simultaneous witness, runtime refinement and external validity",
+        "historicalStatus": "OPEN",
+        "statusDate": "2026-09-10",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-7",
+        "source": "ontology/evidence/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.v1.json"
+      },
+      {
+        "obligation": "CR-0",
+        "title": "CR-0 Concrete Step/Learn semantics and safety",
+        "historicalStatus": "PARTIAL_EXISTING_FORMAL_MODEL",
+        "statusDate": "2026-09-10",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+        "source": "ontology/evidence/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.v1.json"
+      },
+      {
+        "obligation": "FCL-1",
+        "title": "FCL-1 local causal learning law",
+        "historicalStatus": "UNASSESSED",
+        "statusDate": "2026-08-28",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:Concept:hswm-fractal-law-local-causal-learning",
+        "source": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json"
+      },
+      {
+        "obligation": "FCL-2",
+        "title": "FCL-2 composition preservation law",
+        "historicalStatus": "UNASSESSED",
+        "statusDate": "2026-08-28",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:Concept:hswm-fractal-law-composition-preservation",
+        "source": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json"
+      },
+      {
+        "obligation": "FCL-3",
+        "title": "FCL-3 emergent coalition law",
+        "historicalStatus": "UNASSESSED",
+        "statusDate": "2026-08-28",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:Concept:hswm-fractal-law-emergent-coalition",
+        "source": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json"
+      },
+      {
+        "obligation": "FCL-4",
+        "title": "FCL-4 multiscale credit law",
+        "historicalStatus": "UNASSESSED",
+        "statusDate": "2026-08-28",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:Concept:hswm-fractal-law-multiscale-credit",
+        "source": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json"
+      },
+      {
+        "obligation": "FCL-5",
+        "title": "FCL-5 topology morphogenesis law",
+        "historicalStatus": "UNASSESSED",
+        "statusDate": "2026-08-28",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:Concept:hswm-fractal-law-topology-morphogenesis",
+        "source": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json"
+      },
+      {
+        "obligation": "FCL-6",
+        "title": "FCL-6 world-self co-model law",
+        "historicalStatus": "UNASSESSED",
+        "statusDate": "2026-08-28",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:Concept:hswm-fractal-law-world-self-co-model",
+        "source": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json"
+      },
+      {
+        "obligation": "FCL-7",
+        "title": "FCL-7 diachronic continuity law",
+        "historicalStatus": "UNASSESSED",
+        "statusDate": "2026-08-28",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:Concept:hswm-fractal-law-diachronic-continuity",
+        "source": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json"
+      },
+      {
+        "obligation": "FCL-8",
+        "title": "FCL-8 HSWM-of-HSWMs law",
+        "historicalStatus": "UNASSESSED",
+        "statusDate": "2026-08-28",
+        "currentReferenceStatus": "REFERENCE_ONLY_NOT_DISCHARGED",
+        "originalUid": "sym:Concept:hswm-fractal-law-hswm-of-hswms",
+        "source": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json"
+      }
+    ],
+    "q5": [
+      {
+        "key": "cli-contract",
+        "question": "ProgramArtifact·Capability·UsageBundle·Invocation·Result·Assessment를 분리한다. 전체 도구가 이 profile을 구현하거나 HSWM에 통합된 것은 아니다.",
+        "kind": "RESEARCH_PROPOSAL",
+        "status": "PROPOSED_NOT_COMPLETED",
+        "source": "docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md"
+      },
+      {
+        "key": "credit-gap",
+        "question": "cell·관계·coalition·상위 HSWM의 결과를 실제 개입으로 구별하고 uniform·shuffled credit 대조와 비교할 필요가 있다.",
+        "kind": "OPEN_QUESTION",
+        "status": "PROPOSED_NOT_COMPLETED",
+        "source": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md"
+      },
+      {
+        "key": "locality-gap",
+        "question": "전체 그래프를 넣지 않고 필요한 역할·공동 문맥·예외를 선택하며, 정보 누락을 탐지할 수 있는지 평가해야 한다.",
+        "kind": "OPEN_QUESTION",
+        "status": "PROPOSED_NOT_COMPLETED",
+        "source": "docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md"
+      },
+      {
+        "key": "next-evaluation",
+        "question": "oracle 실행을 통과할 조건에서 의미 필드 변화·request 차이·독립 outcome·held-out 개선·remove/restore·retention·동등 예산 비교를 연결한다.",
+        "kind": "OPEN_QUESTION",
+        "status": "PROPOSED_NOT_COMPLETED",
+        "source": "docs/research/HSWM_ADVERSARIAL_REMEDIATION_PLAN_2026-09-27.md"
+      },
+      {
+        "key": "proof-gap",
+        "question": "read→invoke→observe→revise→admit→reopen의 실제 전이, codec/admission, trace, 평가 표본 가정을 연결해야 한다.",
+        "kind": "OPEN_QUESTION",
+        "status": "PROPOSED_NOT_COMPLETED",
+        "source": "docs/research/HSWM_LEAN_VALIDATION_REVIEW_2026-09-28.md"
+      },
+      {
+        "key": "statistics",
+        "question": "과제 관련 통계적 구분·이력으로 상위 상태를 구성하고 필요할 때 원문/세밀한 모델로 돌아가는 후보다. 예측 충분성·총비용·예외 복귀를 별도로 평가한다.",
+        "kind": "RESEARCH_PROPOSAL",
+        "status": "PROPOSED_NOT_COMPLETED",
+        "source": "docs/research/HSWM_MAP_STATISTICAL_EMERGENCE_2026-09-29.md"
+      }
+    ],
+    "q6": [],
+    "q7": [
+      {
+        "key": "dgx-learning",
+        "slot": "urn:hswm:kg:node:sym:AbstractNode:hswm-research-map-20260930-dgx-learning-slot-0",
+        "roleName": "subject",
+        "ordinal": "0",
+        "targetUid": "sym:Concept:hswm-research-map-20260930-learning",
+        "edgeStatus": "PROPOSED",
+        "edgeScope": "EXACT_ROLE_TARGET"
+      },
+      {
+        "key": "dgx-learning",
+        "slot": "urn:hswm:kg:node:sym:AbstractNode:hswm-research-map-20260930-dgx-learning-slot-1",
+        "roleName": "source",
+        "ordinal": "1",
+        "targetUid": "sym:Reference:hswm-research-map-20260930-53f03a39c4b20b65efb546b9",
+        "edgeStatus": "PROPOSED",
+        "edgeScope": "EXACT_ROLE_TARGET"
+      },
+      {
+        "key": "dgx-learning",
+        "slot": "urn:hswm:kg:node:sym:AbstractNode:hswm-research-map-20260930-dgx-learning-slot-2",
+        "roleName": "obligation",
+        "ordinal": "2",
+        "targetUid": "sym:AbstractNode:hswm-research-map-20260930-CR-1",
+        "edgeStatus": "PROPOSED",
+        "edgeScope": "EXACT_ROLE_TARGET"
+      },
+      {
+        "key": "dgx-learning",
+        "slot": "urn:hswm:kg:node:sym:AbstractNode:hswm-research-map-20260930-dgx-learning-slot-3",
+        "roleName": "obligation",
+        "ordinal": "3",
+        "targetUid": "sym:AbstractNode:hswm-research-map-20260930-CR-2",
+        "edgeStatus": "PROPOSED",
+        "edgeScope": "EXACT_ROLE_TARGET"
+      },
+      {
+        "key": "dgx-learning",
+        "slot": "urn:hswm:kg:node:sym:AbstractNode:hswm-research-map-20260930-dgx-learning-slot-4",
+        "roleName": "obligation",
+        "ordinal": "4",
+        "targetUid": "sym:AbstractNode:hswm-research-map-20260930-FCL-1",
+        "edgeStatus": "PROPOSED",
+        "edgeScope": "EXACT_ROLE_TARGET"
+      }
+    ],
+    "q8": [
+      {
+        "key": "hyperon",
+        "comparator": "Hyperon을 핵심 비교 대상으로 유지한다",
+        "version": "hyperon-experimental v0.2.10",
+        "commit": "3f76dc460da6961f57f69f6c3e550c59c74ada83",
+        "scope": "HISTORICAL_COMPONENT_PIN_NOT_NEW_BENCHMARK",
+        "source": "docs/research/HSWM_GRAPH_PROGRAM_DIRECTION_2026-09-28.md"
+      }
+    ]
+  },
+  "claim_ceiling": "RESEARCH_ORGANIZATION_AND_STRUCTURAL_VALIDATION_ONLY"
+}

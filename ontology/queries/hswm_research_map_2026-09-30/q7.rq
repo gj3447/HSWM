@@ -1,0 +1,12 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?key ?slot ?roleName ?ordinal ?targetUid ?edgeStatus ?edgeScope WHERE {
+ ?c p:record_key ?key ; r:HAS_PARTICIPATION ?slot . FILTER(?key = "dgx-learning")
+ ?slot p:role_name ?roleName ; p:ordinal ?ordinal ; r:REFERENCES ?target .
+ ?target kb:uid ?targetUid .
+ ?edge a kb:Relation ; <https://hswm.invalid/kg-bundle-rdf/v1/from> ?slot ; kb:to ?target ; kb:relationType "REFERENCES" ;
+ kb:status ?edgeStatus ; kb:scope ?edgeScope .
+} ORDER BY ?ordinal

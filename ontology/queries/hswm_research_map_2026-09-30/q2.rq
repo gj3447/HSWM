@@ -1,0 +1,11 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?key ?title ?kind ?statement ?source ?locator ?sha256 ?authority ?sourceAuthority ?ceiling WHERE {
+ ?c a role:RESEARCH_SYNTHESIS ; p:record_key ?key ; p:name ?title ; p:research_kind ?kind ;
+ p:description ?statement ; p:source_locator ?locator ; p:authority_class ?authority ;
+ p:source_authority ?sourceAuthority ; p:claim_boundary ?ceiling ; r:DERIVED_FROM ?s .
+ ?s p:source_path ?source ; p:source_sha256 ?sha256 .
+} ORDER BY ?key

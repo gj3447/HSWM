@@ -4,6 +4,11 @@ This directory is the semantic front door to the repository. The filesystem
 still has one physical location per file, but an ontology can give the same
 file several meanings and connect it to several neighboring concepts.
 
+For the research itself, start with the [September 30 research map](../docs/research/HSWM_RESEARCH_MAP_2026-09-30.md)
+and its [eight source-bound queries](queries/hswm_research_map_2026-09-30/README.md).
+It separates target identity, conditional theory, implementation, measured results,
+and open CR/FCL obligations without replacing their source records.
+
 HSWM's target identity remains one AI with hypergraph neural organization,
 LLM functions as its basic computation units, and hypergraph Semantic Weight
 as its operating organization. Its evolving hypergraph is the shared state

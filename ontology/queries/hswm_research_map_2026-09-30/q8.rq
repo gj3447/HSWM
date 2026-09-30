@@ -1,0 +1,10 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?key ?comparator ?version ?commit ?scope ?source WHERE {
+ ?c a role:RESEARCH_SYNTHESIS ; p:research_kind "COMPARATOR_REFERENCE" ; p:record_key ?key ;
+ p:name ?comparator ; p:comparator_version ?version ; p:comparator_commit ?commit ;
+ p:claim_boundary ?scope ; p:source_path ?source .
+}

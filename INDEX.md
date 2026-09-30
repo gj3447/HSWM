@@ -4,6 +4,10 @@
 필요한 검사 → Git 기록을 기본으로 한다. RDF·SHACL·SPARQL·PROV 기반 작업과 주제별
 참조를 안내하며, 아래 날짜별 기록은 당시 출처와 재현 정보를 보존한다.
 
+2026-09-30 [HSWM 연구 내용과 근거 지도](docs/research/HSWM_RESEARCH_MAP_2026-09-30.md)는
+9개 연구 축의 목표·이론·구현·실측·미해결 질문을 45개 출처와 연결한다.
+CR/FCL의 기존 식별자와 판정을 보존하며, 8개 SPARQL 질문과 SHACL 검사를 제공한다.
+
 2026-09-29 [HSWM-like CLI와 CHU·HSWM·USL 계약](docs/research/HSWM_LIKE_CLI_USL_CHU_CONTRACT_2026-09-29.md)은
 독립 실행 프로그램·의미 연결·하이퍼그래프 작업환경·국소 AI의 책임을 구분한다.
 기존 USL CLI를 재사용하며, 기능·전체 사용법·identity·배치·평가를 조회 가능한 제안 graph로 연결한다.

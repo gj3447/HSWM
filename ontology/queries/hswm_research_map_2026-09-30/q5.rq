@@ -1,0 +1,10 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?key ?question ?kind ?status ?source WHERE {
+ ?c a role:RESEARCH_SYNTHESIS ; p:record_key ?key ; p:description ?question ; p:research_kind ?kind ;
+ p:status ?status ; p:source_path ?source .
+ FILTER(?kind IN ("OPEN_QUESTION", "RESEARCH_PROPOSAL"))
+} ORDER BY ?key

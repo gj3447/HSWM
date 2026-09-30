@@ -1,0 +1,12 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?key WHERE {
+ ?c a role:RESEARCH_SYNTHESIS ; p:record_key ?key .
+ FILTER NOT EXISTS {
+  ?c r:DERIVED_FROM ?s ; p:source_path ?path ; p:source_sha256 ?sha .
+  ?s a role:REPOSITORY_SOURCE ; p:source_path ?path ; p:source_sha256 ?sha .
+ }
+} ORDER BY ?key

@@ -1,0 +1,48 @@
+@prefix kb: <https://hswm.invalid/kg-bundle-rdf/v1/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix map: <urn:hswm:research-map:shape:> .
+
+# Local profile for this bundle only. Existing canonical anchors are not rewritten.
+map:Attribution a sh:NodeShape ; sh:targetClass kb:Node ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:canonical_scope ; sh:hasValue "PENDING_OR_PRELIMINARY" ; sh:minCount 1 ] ;
+ sh:property [ sh:path p:actor ; sh:hasValue "agent:codex" ; sh:minCount 1 ] ;
+ sh:property [ sh:path p:record_lifecycle ; sh:hasValue "ACTIVE" ; sh:minCount 1 ] ;
+ sh:property [ sh:path p:recorded_on ; sh:hasValue "2026-09-30" ; sh:minCount 1 ] .
+
+map:Assertion a sh:NodeShape ; sh:targetClass role:RESEARCH_SYNTHESIS ;
+ sh:property [ sh:path r:ABOUT ; sh:class role:RESEARCH_TOPIC ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:DERIVED_FROM ; sh:class role:REPOSITORY_SOURCE ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_PARTICIPATION ; sh:class role:ROLE_PARTICIPATION ; sh:minCount 2 ] ;
+ sh:property [ sh:path r:RELATES_TO ; sh:class role:EXISTING_OBLIGATION_REFERENCE ] ;
+ sh:property [ sh:path p:source_locator ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:claim_boundary ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:research_kind ; sh:in ("TARGET_REFERENCE" "THEORY_REFERENCE" "IMPLEMENTATION_REFERENCE" "OPEN_QUESTION" "MEASURED_RESULT_REFERENCE" "RESEARCH_PROPOSAL" "HYPOTHESIS_REFERENCE" "FORMAL_RESULT_REFERENCE" "COMPARATOR_REFERENCE" "HISTORICAL_CORRECTION") ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+map:Source a sh:NodeShape ; sh:targetClass role:REPOSITORY_SOURCE ;
+ sh:property [ sh:path p:source_path ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+map:Obligation a sh:NodeShape ; sh:targetClass role:EXISTING_OBLIGATION_REFERENCE ;
+ sh:property [ sh:path p:obligation_id ; sh:pattern "^(CR-[0-7]|FCL-[1-8])$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:discharged_by_this_map ; sh:hasValue false ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:status ; sh:hasValue "REFERENCE_ONLY_NOT_DISCHARGED" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:class kb:Anchor ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:DERIVED_FROM ; sh:class role:REPOSITORY_SOURCE ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+map:Slot a sh:NodeShape ; sh:targetClass role:ROLE_PARTICIPATION ;
+ sh:property [ sh:path p:ordinal ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:role_name ; sh:in ("subject" "source" "original" "implementation" "obligation") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:class kb:Node ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path [ sh:inversePath r:HAS_PARTICIPATION ] ; sh:class role:RESEARCH_SYNTHESIS ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+map:Link a sh:NodeShape ; sh:targetClass kb:Relation ;
+ sh:property [ sh:path kb:status ; sh:hasValue "PROPOSED" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path kb:authorityClass ; sh:hasValue "SECONDARY_AI" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path kb:relationType ; sh:in ("HAS_CONCEPT" "REFERENCES" "ABOUT" "DERIVED_FROM" "RELATES_TO" "HAS_PARTICIPATION") ; sh:minCount 1 ; sh:maxCount 1 ] .

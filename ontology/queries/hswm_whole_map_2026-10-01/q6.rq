@@ -1,0 +1,10 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?topicId ?ordinal ?question ?status WHERE {
+  ?item a role:HISTORICAL_OPEN_QUESTION ;
+    p:ordinal ?ordinal ; p:description ?question ; p:status ?status ;
+    r:ABOUT ?topic .
+  ?topic a role:TOPIC_REFERENCE ; p:topic_id ?topicId .
+} ORDER BY ?topicId ?ordinal

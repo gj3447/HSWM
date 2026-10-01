@@ -1,0 +1,176 @@
+{
+  "schema_version": "hswm-whole-map-additions/v1",
+  "records": [
+    {
+      "key": "runtime-adaptive-local-boundary",
+      "topic": "native_effect_runtime_and_ice",
+      "title": "Local adaptive program boundary",
+      "statement": "The adaptive domain declares observational local adaptation and explicitly excludes effect execution and canonical revision admission.",
+      "kind": "implementation_boundary",
+      "source_path": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+      "source_locator": "guards only; it neither executes an effect nor admits a canonical revision.",
+      "claim_boundary": "This inspected source identifies a bounded local model, not canonical learning, causal credit, or demonstrated efficacy.",
+      "negative": true,
+      "source_status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+      "support_paths": [
+        "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+        "src/hswm/effect-runtime/src/adaptive-executor.ts",
+        "tests/effect-runtime/adaptive-runtime.test.ts"
+      ]
+    },
+    {
+      "key": "runtime-adaptive-selection-update",
+      "topic": "native_effect_runtime_and_ice",
+      "title": "Bounded route selection and outcome update",
+      "statement": "The adaptive domain parses a finite program of router, command, and llm cells and contains pure route-model update logic for supplied success and cost outcomes.",
+      "kind": "implementation",
+      "source_path": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+      "source_locator": "export const updateModel = (model: AdaptiveModel, context: Context, outcome: {",
+      "claim_boundary": "This is source-inspected local selection/update logic; it does not establish independent outcomes, causal attribution, or generalization.",
+      "negative": true,
+      "source_status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+      "support_paths": [
+        "src/hswm/effect-runtime/src/adaptive-store.ts",
+        "tests/effect-runtime/adaptive-store.test.ts",
+        "tests/test_adaptive_learning.py"
+      ]
+    },
+    {
+      "key": "runtime-canonical-v2-schema-journal",
+      "topic": "native_effect_runtime_and_ice",
+      "title": "Canonical Atom v2 representation and journal surface",
+      "statement": "The TypeScript runtime contains decoders for a canonical schema, commit command, and authorization grants, plus a durable-runtime service and state-journal decoding path.",
+      "kind": "implementation",
+      "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-schema.ts",
+      "source_locator": "export const decodeCommitCanonicalAtomsV2Command = Schema.decodeUnknown(",
+      "claim_boundary": "Decoder and runtime-service presence is not evidence that a canonical cognitive loop, admission authority, or learning process ran.",
+      "negative": true,
+      "source_status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+      "support_paths": [
+        "src/hswm/effect-runtime/src/canonical-atom-v2-durable-runtime.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "docs/operations/HSWM_EFFECT_RUNTIME_FUNCTIONAL_BOUNDARY_2026-09-06.md"
+      ]
+    },
+    {
+      "key": "graph-rdf11-readonly-profile",
+      "topic": "graph_engineering_and_standard_interoperability",
+      "title": "RDF 1.1 N-Quads read-only projection",
+      "statement": "The canonical Atom v2 RDF compiler emits a deterministic blank-node-free RDF 1.1 N-Quads profile and labels it as non-RDFC with a no-canonical-state nonclaim.",
+      "kind": "standard_projection",
+      "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-rdf-projection.ts",
+      "source_locator": "A deterministic, blank-node-free RDF 1.1 N-Quads profile; not an RDFC claim.",
+      "claim_boundary": "This is an exchange projection only; it does not establish RDFC, canonical HSWM state, cognition, learning, permission, or efficacy.",
+      "negative": true,
+      "source_status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+      "support_paths": [
+        "src/hswm/effect-runtime/src/canonical-atom-v2-jsonld-view.ts",
+        "src/hswm/effect-runtime/src/native-graph-standards-runtime.ts",
+        "src/hswm/effect-runtime/test/native-graph-standards-runtime.test.ts"
+      ]
+    },
+    {
+      "key": "graph-hypergraph-projection-writeback-forbidden",
+      "topic": "graph_engineering_and_standard_interoperability",
+      "title": "Deterministic hypergraph projection without writeback",
+      "statement": "The hypergraph projection profile forbids writeback and limits its claim ceiling to bounded metadata parity rather than HSWM realization or learning.",
+      "kind": "standard_projection",
+      "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-hypergraph-projection.ts",
+      "source_locator": "claimCeiling: \"BOUNDED_METADATA_PARITY_NOT_HSWM_REALIZATION_OR_LEARNING\"",
+      "claim_boundary": "Projection compilation and self-consistency verification do not authorize a canonical-state write or demonstrate executable graph semantics.",
+      "negative": true,
+      "source_status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+      "support_paths": [
+        "src/hswm/effect-runtime/src/canonical-atom-v2-durable-rdf-projection.ts",
+        "tests/effect-runtime/canonical-atom-v2-hypergraph-projection.test.ts",
+        "docs/operations/HSWM_HYPERGRAPH_PROJECTION_CONTRACT_2026-09-05.md"
+      ]
+    },
+    {
+      "key": "graph-durable-rdf-local-prefix-attestation",
+      "topic": "graph_engineering_and_standard_interoperability",
+      "title": "Bounded durable RDF recovery projection",
+      "statement": "The durable RDF projection records a local POSIX one-recovery-observation prefix attestation and enumerates nonclaims including RDFC, SHACL, PROV, causal credit, and LLM efficacy.",
+      "kind": "provenance_projection",
+      "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-durable-rdf-projection.ts",
+      "source_locator": "LOCAL_POSIX_FILE_RUNTIME_ONE_RECOVERY_OBSERVATION_PREFIX_ATTESTED_GLOBAL_TAIL_AND_ANTIROLLBACK_NOT_ATTESTED",
+      "claim_boundary": "The artifact does not attest a global complete tail, anti-rollback, distributed storage, external notary, canonical state, cognition, learning, permission, or efficacy.",
+      "negative": true,
+      "source_status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+      "support_paths": [
+        "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal-store.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-rdf-projection.ts",
+        "tests/effect-runtime/hypergraph-projection-receipt.test.ts"
+      ]
+    },
+    {
+      "key": "runtime-transition-evidence-noncausal",
+      "topic": "native_effect_runtime_and_ice",
+      "title": "Transition evidence remains non-causal and non-admitting",
+      "statement": "The transition-evidence schema labels represented outcomes as not causal credit and labels represented admission as not admitted, permitted, or learning.",
+      "kind": "evidence_boundary",
+      "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-transition-evidence.ts",
+      "source_locator": "outcomeStatus: Schema.Literal(\"REPRESENTED_NOT_CAUSAL_CREDIT\")",
+      "claim_boundary": "A represented decision, receipt, effect, or outcome must remain an attributed evidence record rather than a permit, external effect, or causal-learning conclusion.",
+      "negative": true,
+      "source_status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+      "support_paths": [
+        "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+        "src/hswm/effect-runtime/src/canonical-atom-v2-outcome-judgment.ts",
+        "docs/operations/HSWM_EFFECT_RUNTIME_FUNCTIONAL_BOUNDARY_2026-09-06.md"
+      ]
+    },
+    {
+      "key": "kg-projection-no-commitback-no-publication",
+      "topic": "research_coordination_and_usl_interfaces",
+      "title": "Repository ontology projection boundary",
+      "statement": "The checked-in core ontology declares its repository-ontology projection unable to commit back to core state and rejects any remote-publication policy other than NOT_AUTHORIZED.",
+      "kind": "knowledge_graph_boundary",
+      "source_path": "src/hswm/effect-runtime/src/hswm-core-ontology.ts",
+      "source_locator": "[\"hswm:projection:repository-ontology\", \"CANNOT_COMMIT_BACK_TO\", \"hswm:concept:core-state\"]",
+      "claim_boundary": "A repository or KG projection is not an HSWM state write path and does not grant remote publication authority.",
+      "negative": true,
+      "source_status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+      "support_paths": [
+        "src/hswm/effect-runtime/src/native-repository-ontology-runtime.ts",
+        "src/hswm/effect-runtime/test/native-repository-ontology.test.ts",
+        "docs/operations/HSWM_KG_WORKSPACE_2026-09-22.md"
+      ]
+    },
+    {
+      "key": "infra-research-fabric-observation-only",
+      "topic": "research_coordination_and_usl_interfaces",
+      "title": "Research-fabric controller is operational observation only",
+      "statement": "The research-fabric domain defines Phoenix and Temporal process control as bounded infrastructure observation and expressly excludes cognition, canonical admission, causal credit, continuous-learning evidence, and efficacy.",
+      "kind": "operational_controller",
+      "source_path": "src/hswm/effect-runtime/src/native-research-fabric-domain.ts",
+      "source_locator": "bounded infrastructure observation; not HSWM cognition, canonical admission, causal credit, continuous-learning evidence, or efficacy",
+      "claim_boundary": "Committed process-control code is not a live service observation or a proof of deployment readiness, HSWM cognition, or learning.",
+      "negative": true,
+      "source_status": "NOT_LIVE_VERIFIED",
+      "support_paths": [
+        "src/hswm/effect-runtime/src/native-research-fabric.ts",
+        "src/hswm/effect-runtime/src/native-research-fabric-runtime.ts",
+        "docs/operations/systemd/hswm-research-fabric.service"
+      ]
+    },
+    {
+      "key": "historical-s2s-production-gate-closed",
+      "topic": "historical_evidence_red_paths_and_projects",
+      "title": "S2S production path remains gate-closed historical work",
+      "statement": "The recorded S2S stage-read/replay checkpoint states that no closed production prepare/assert-upload program and no successful live production Layer issuance existed at that checkpoint.",
+      "kind": "historical_checkpoint",
+      "source_path": "docs/operations/HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md",
+      "source_locator": "no closed production `prepare` or `assert-upload` stage program exists;",
+      "claim_boundary": "This is dated historical engineering evidence, not proof of a current production workflow, external durability, or learned W update.",
+      "negative": true,
+      "source_status": "HISTORICAL_GATE_CLOSED",
+      "event_date": "2026-08-23",
+      "support_paths": [
+        "docs/operations/HSWM_SWM0W_S2S_RUN_AUTHORITY_IMPLEMENTED_NEXT_SESSION_2026-08-22.md",
+        "docs/operations/HSWM_SWM0W_S2S_STAGE_UPLOAD_POSTCONDITION_CODEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md",
+        "src/hswm/effect-runtime/README.md"
+      ]
+    }
+  ]
+}

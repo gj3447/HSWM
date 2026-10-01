@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?obligation ?originalUid ?historicalStatus ?asOf ?discharged WHERE {
+  ?item a role:OBLIGATION_REFERENCE ;
+    p:obligation_id ?obligation ; p:original_uid ?originalUid ;
+    p:source_status ?historicalStatus ; p:source_status_as_of ?asOf ;
+    p:discharged_by_this_map ?discharged .
+} ORDER BY ?obligation

@@ -1,0 +1,10 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?topicId ?title ?design ?engineering ?formal ?efficacy ?asOf WHERE {
+  ?topic a role:TOPIC_REFERENCE ;
+    p:topic_id ?topicId ; p:name ?title ;
+    p:design_status ?design ; p:engineering_status ?engineering ;
+    p:formal_status ?formal ; p:efficacy_status ?efficacy ;
+    p:source_status_as_of ?asOf .
+} ORDER BY ?topicId

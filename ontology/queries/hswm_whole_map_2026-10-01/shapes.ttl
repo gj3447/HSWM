@@ -1,0 +1,78 @@
+@prefix kb: <https://hswm.invalid/kg-bundle-rdf/v1/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix whole: <urn:hswm:whole-map-2026-10-01:shape:> .
+
+# Local SHACL Core profile for the dated, read-only whole-map bundle.  It checks
+# graph structure and declared provenance boundaries, not scientific truth,
+# canonical runtime state, learned credit, or efficacy.
+
+whole:AllNewNodes a sh:NodeShape ; sh:targetClass kb:Node ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:state_plane ; sh:hasValue "INQUIRY" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:runtime_write_path ; sh:hasValue false ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:recorded_on ; sh:hasValue "2026-10-01" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+whole:AllLinks a sh:NodeShape ; sh:targetClass kb:Relation ;
+  sh:property [ sh:path kb:status ; sh:hasValue "PROPOSED" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:authorityClass ; sh:hasValue "SECONDARY_AI" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:relationType ; sh:in ( "HAS_CONTENT" "REFERENCES" "HAS_CONCEPT" "DERIVED_FROM" "HAS_SOURCE" "ABOUT" ) ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+whole:Content a sh:NodeShape ; sh:targetClass role:ARTIFACT_CONTENT ;
+  sh:property [ sh:path p:content_sha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:content_bytes ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+whole:PathOccurrence a sh:NodeShape ; sh:targetClass role:REPOSITORY_PATH_AT_CUT ;
+  sh:property [ sh:path p:source_path ; sh:datatype xsd:string ; sh:pattern "^[^/\\\\].*$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_revision ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:git_blob_oid ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_bytes ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONTENT ; sh:class role:ARTIFACT_CONTENT ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+whole:Topic a sh:NodeShape ; sh:targetClass role:TOPIC_REFERENCE ;
+  sh:property [ sh:path p:topic_id ; sh:datatype xsd:string ; sh:pattern "^[a-z][a-z0-9_]{0,79}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_status_as_of ; sh:datatype xsd:string ; sh:pattern "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:class role:REPOSITORY_PATH_AT_CUT ; sh:minCount 1 ] ;
+  sh:property [ sh:path r:DERIVED_FROM ; sh:class role:REPOSITORY_PATH_AT_CUT ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+whole:HistoricalResearch a sh:NodeShape ; sh:targetClass role:HISTORICAL_RESEARCH_REFERENCE ;
+  sh:property [ sh:path p:record_key ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_boundary ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:DERIVED_FROM ; sh:class role:REPOSITORY_PATH_AT_CUT ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+whole:CuratedAddition a sh:NodeShape ; sh:targetClass role:CURATED_ADDITION ;
+  sh:property [ sh:path p:record_key ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:research_kind ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_status ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_path ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_locator ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_boundary ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:negative_or_limiting_result ; sh:datatype xsd:boolean ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:DERIVED_FROM ; sh:class role:REPOSITORY_PATH_AT_CUT ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:ABOUT ; sh:class role:TOPIC_REFERENCE ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+whole:Obligation a sh:NodeShape ; sh:targetClass role:OBLIGATION_REFERENCE ;
+  sh:property [ sh:path r:DERIVED_FROM ; sh:class role:REPOSITORY_PATH_AT_CUT ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:class kb:Anchor ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:status ; sh:hasValue "REFERENCE_ONLY_NOT_DISCHARGED" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:obligation_id ; sh:pattern "^(CR-[0-7]|FCL-[1-8])$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:original_uid ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_status ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_status_as_of ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:discharged_by_this_map ; sh:hasValue false ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+whole:Coverage a sh:NodeShape ; sh:targetClass role:CORPUS_COVERAGE ;
+  sh:property [ sh:path p:corpus_class ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:tracked_paths ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:selected_sources ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:inventoried_only ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+whole:HistoricalQuestion a sh:NodeShape ; sh:targetClass role:HISTORICAL_OPEN_QUESTION ;
+  sh:property [ sh:path p:ordinal ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:ABOUT ; sh:class role:TOPIC_REFERENCE ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:DERIVED_FROM ; sh:class role:REPOSITORY_PATH_AT_CUT ; sh:minCount 1 ; sh:maxCount 1 ] .

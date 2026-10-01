@@ -1,0 +1,1809 @@
+{
+  "schema_version": "hswm-whole-map-validation/v1",
+  "source_revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+  "checked_at": "2026-10-01T00:22:52.973Z",
+  "node_version": "v24.20.0",
+  "scope": "Fixed subject-corpus cut plus separately SHA-bound post-cut curation, generator, query and toolchain inputs; bundle/corpus equality, local RDF/SHACL/SPARQL structure and negative mutations. No live KG, model, Lean, service, or efficacy run.",
+  "toolchain": [
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-bundle-domain.js",
+      "sha256": "09795e276498819aff8b3e3b3a88ea69e5b7c9319ccb5d3bd820c9d61816daad"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-standards.js",
+      "sha256": "859bd404bba5ef0f279e441441d50105a2415419d8974d2218b552e9cff50155"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-vendor.js",
+      "sha256": "6e486bdd5b6c7e6503df2c376c7941570122d2fd83a2cb84efb6e3b80ab64250"
+    },
+    {
+      "path": "src/hswm/effect-runtime/package-lock.json",
+      "sha256": "44a3f32fbeb5ad30069b2c82db7fe5e8db95c34a66be603a2e89d82d230c4191"
+    }
+  ],
+  "bundle_sha256": "c888bbe4c75cfb883587e291e57e74b0a2007d35c2f7ee52bf8d7fe27dff4b59",
+  "corpus_sha256": "8005c7b6e9d636b64e4f85aa771f00f85c11966937cdaf3e1019d5ce7b31e8eb",
+  "exports": {
+    "rdf/dataset.nq": {
+      "sha256": "ba774159068023534d53b11e44da7d0c1be957ba83040d41aa1f0707bcd3996f",
+      "bytes": 5653899
+    },
+    "rdf/descriptor.json": {
+      "sha256": "2c7a9e0355ad2c5f4383bfcb39fda3ccac0ca064c9bc5fe119e821d4bd53241b",
+      "bytes": 1792
+    },
+    "rdf/provenance.jsonld": {
+      "sha256": "06cf0911684d8f8d42e7a65ea440847b0fcca7752be9b86724e1dec112cef3d7",
+      "bytes": 1033
+    }
+  },
+  "shacl": [
+    {
+      "name": "native-v2",
+      "conforms": true,
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+      "sha256": "6eb4d0be63fccd71e02e25d86baa1ae81c0ddf31a9eb4d05fc4f0cf655225371"
+    },
+    {
+      "name": "whole-map",
+      "conforms": true,
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS",
+      "sha256": "f0b768fe4bb5a0fdf8dea0495393ad3cb388dd4dcea39469675ed4b6ab8bed3e"
+    }
+  ],
+  "competency_questions": {
+    "q1": {
+      "passed": true,
+      "rows": 13
+    },
+    "q2": {
+      "passed": true,
+      "rows": 23
+    },
+    "q3": {
+      "passed": true,
+      "rows": 16
+    },
+    "q4": {
+      "passed": true,
+      "rows": 17
+    },
+    "q5": {
+      "passed": true,
+      "rows": 90
+    },
+    "q6": {
+      "passed": true,
+      "rows": 26
+    },
+    "q7": {
+      "passed": true,
+      "rows": 29
+    },
+    "q8": {
+      "passed": true,
+      "rows": 2
+    }
+  },
+  "queries": {
+    "q1": [
+      {
+        "topicId": "research_coordination_and_usl_interfaces",
+        "title": "Research coordination graph and USL interface boundaries",
+        "design": "Bounded coordination and adapter designs",
+        "engineering": "Local research coordination and USL v2 adapter verified within scope; the earlier semantic-engineering bridge remains a conceptual proposal",
+        "formal": "SHACL and exchange contracts validate structured records, not causal claims",
+        "efficacy": "LOCAL_ENGINEERING_ONLY / NOT_EFFICACY",
+        "asOf": "2026-09-13"
+      },
+      {
+        "topicId": "learning_literature_and_frontier_baselines",
+        "title": "Learning literature, frontier theory, and baseline discipline",
+        "design": "Candidate mechanism and comparator framing",
+        "engineering": "No frontier baseline result is promoted by these reference bundles",
+        "formal": "Literature bridges remain untested",
+        "efficacy": "UNJUDGED",
+        "asOf": "2026-09-13"
+      },
+      {
+        "topicId": "closure_plan_and_adversarial_audit",
+        "title": "Closure plan, bounded v1 done state, and adversarial audit",
+        "design": "Closure plan with user-ratified decisions and remaining open steps",
+        "engineering": "S-2/S-3/S-4 recorded complete; S-5/S-6 remain open",
+        "formal": "Audit and closure graph are source-bound planning records",
+        "efficacy": "G0 NOT_PASSED; G1 LOCKED/NOT_EVALUATED; v1 done state not reached",
+        "asOf": "2026-09-13"
+      },
+      {
+        "topicId": "causal_composition_experiment_spine",
+        "title": "Causal-composition experiment spine and adversarial controls",
+        "design": "Design seeded; gates and controls are proposed tests",
+        "engineering": "Some local instruments exist, but no G1 efficacy evaluation is complete",
+        "formal": "Claim ceilings and control contracts are specified",
+        "efficacy": "G0 NOT_PASSED; G1 NOT_EVALUATED; FCL-1 through FCL-8 UNJUDGED",
+        "asOf": "2026-09-13"
+      },
+      {
+        "topicId": "conceptual_c1_c3_and_conditional_capabilities",
+        "title": "Conceptual C1-C3 work and conditional capability contracts",
+        "design": "Draft/proposed and not stage complete",
+        "engineering": "No capability-contract implementation is asserted by these bundles",
+        "formal": "Conceptual relations and constraints only",
+        "efficacy": "UNJUDGED",
+        "asOf": "2026-09-13"
+      },
+      {
+        "topicId": "graph_engineering_and_standard_interoperability",
+        "title": "Canonical graph engineering and standards interoperability",
+        "design": "Engineering path realized locally with research gates open",
+        "engineering": "Local implementation documented in the v6 successor bundle",
+        "formal": "Standards conformance and local invariants are engineering checks",
+        "efficacy": "SCIENTIFICALLY_UNJUDGED",
+        "asOf": "2026-09-13"
+      },
+      {
+        "topicId": "opaque_identifiability_and_negative_results",
+        "title": "Opaque identifiability experiments and preserved negative results",
+        "design": "Frozen occurrences and successor rule revisions preserved",
+        "engineering": "Local trajectory, local Permit, remove, restore, and receipt mechanics exercised",
+        "formal": "No canonical HSWM admission or external adjudication follows from the local receipts",
+        "efficacy": "NO_EFFICACY_INFERENCE; G0 NOT_PASSED; G1 NOT_EVALUATED",
+        "asOf": "2026-09-13"
+      },
+      {
+        "topicId": "native_effect_runtime_and_ice",
+        "title": "Native Effect runtime and ICE learning remediation",
+        "design": "Implementation work packages and remediation proposals are scoped",
+        "engineering": "WP0-WP3 implemented; bounded workflow verification passed",
+        "formal": "Runtime contracts do not identify causal learning effects",
+        "efficacy": "IMPLEMENTED_LOCAL_ENGINEERING_EFFICACY_UNJUDGED",
+        "asOf": "2026-09-13"
+      },
+      {
+        "topicId": "historical_evidence_red_paths_and_projects",
+        "title": "Historical evidence, RED paths, and parallel research programs",
+        "design": "Mixed historical research programs and retained failure lineage",
+        "engineering": "Historical instruments and diagnostics have heterogeneous closure states",
+        "formal": "Some historical formal artifacts are conditional or off the active efficacy path",
+        "efficacy": "P1 RED_WITHIN_SCOPE; other historical diagnostics do not establish HSWM efficacy",
+        "asOf": "2026-09-13"
+      },
+      {
+        "topicId": "constructive_realizability_and_proof",
+        "title": "Constructive realizability program and bounded proof round",
+        "design": "Prospective program with CR-0 through CR-7 obligations",
+        "engineering": "No runtime realization or LLM efficacy evaluation is supplied by the proof artifacts",
+        "formal": "Conditional finite models checked; full construction open",
+        "efficacy": "UNJUDGED; prior RED preserved",
+        "asOf": "2026-09-13"
+      },
+      {
+        "topicId": "relation_learning_ru1_and_llm_calibration",
+        "title": "Relation learning, RU-1 successor, and LLM calibration",
+        "design": "RU-1 draft candidate; calibration protocol implemented but model configuration absent",
+        "engineering": "TS/Effect runner and transport fixtures implemented; finite DSL instrument completed locally",
+        "formal": "No canonical admission, independent custody, or causal credit is established",
+        "efficacy": "LOCAL_SYNTHETIC_INSTRUMENT_QUALIFICATION_ONLY; G0 NOT_PASSED; G1 NOT_EVALUATED",
+        "asOf": "2026-09-13"
+      },
+      {
+        "topicId": "fractal_composition_and_philosophy",
+        "title": "Fractal cognitive composition and scientific connections",
+        "design": "Target-side operational laws and proposed tests",
+        "engineering": "No two-scale HSWM-of-HSWMs realization is reported",
+        "formal": "Composition syntax and bridge hypotheses exist; integrated closure remains unconstructed",
+        "efficacy": "SCIENTIFICALLY_CONNECTED / INTEGRATED_CLAIM_UNJUDGED",
+        "asOf": "2026-09-13"
+      },
+      {
+        "topicId": "target_identity_and_authority",
+        "title": "Target identity, authority, and adaptive method boundary",
+        "design": "USER_PRIMARY target commitment with SECONDARY_AI formalization",
+        "engineering": "No single current implementation is claimed to realize the target",
+        "formal": "Schema-relative atom, owner, lineage, and transition contracts are conceptual/formal candidates",
+        "efficacy": "UNJUDGED",
+        "asOf": "2026-09-13"
+      }
+    ],
+    "q2": [
+      {
+        "key": "kg-projection-no-commitback-no-publication",
+        "title": "Repository ontology projection boundary",
+        "statement": "The checked-in core ontology declares its repository-ontology projection unable to commit back to core state and rejects any remote-publication policy other than NOT_AUTHORIZED.",
+        "kind": "knowledge_graph_boundary",
+        "status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+        "source": "src/hswm/effect-runtime/src/hswm-core-ontology.ts",
+        "locator": "[\"hswm:projection:repository-ontology\", \"CANNOT_COMMIT_BACK_TO\", \"hswm:concept:core-state\"]",
+        "sha256": "bc3c38a6676cfaf7509f9471559f8e15edbe9475531c25d38bc624de09d5430e",
+        "authority": "SECONDARY_AI",
+        "ceiling": "A repository or KG projection is not an HSWM state write path and does not grant remote publication authority.",
+        "negative": "true"
+      },
+      {
+        "key": "runtime-transition-evidence-noncausal",
+        "title": "Transition evidence remains non-causal and non-admitting",
+        "statement": "The transition-evidence schema labels represented outcomes as not causal credit and labels represented admission as not admitted, permitted, or learning.",
+        "kind": "evidence_boundary",
+        "status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+        "source": "src/hswm/effect-runtime/src/canonical-atom-v2-transition-evidence.ts",
+        "locator": "outcomeStatus: Schema.Literal(\"REPRESENTED_NOT_CAUSAL_CREDIT\")",
+        "sha256": "80ddcd105162d96af48f2662525f947caa49ab126a452f62aeec6e9c137e3e2b",
+        "authority": "SECONDARY_AI",
+        "ceiling": "A represented decision, receipt, effect, or outcome must remain an attributed evidence record rather than a permit, external effect, or causal-learning conclusion.",
+        "negative": "true"
+      },
+      {
+        "key": "relation-learning-calibration-boundary",
+        "title": "관계 기기 검증과 실제 LLM calibration은 구별된다",
+        "statement": "유한 relation instrument는 local transport와 DSL 경로를 확인했지만 information-matched native learner와 동률이었다. RR-1은 representation-only contrast로 거절되고 RU-1은 제안 후보이며, calibration protocol의 실제 LLM call 수는 0이므로 causal credit나 efficacy가 아니다.",
+        "kind": "IMPLEMENTATION_AND_OPEN_EXPERIMENT_REFERENCE",
+        "status": "LOCAL_INSTRUMENT_QUALIFIED_CALIBRATION_NOT_RUN",
+        "source": "docs/research/HSWM_RELATION_LLM_CALIBRATION_PROTOCOL_2026-09-08.md",
+        "locator": "**현재 결론:** 실제 LLM 대조 실험을 실행할 함수형 TS/Effect 경로를 구현했다.",
+        "sha256": "6a613a97e75ea3294280812f03ba28fad397da8f4dde9a28339466b0cb25d672",
+        "authority": "SECONDARY_AI",
+        "ceiling": "CALIBRATION_PROTOCOL_ZERO_CALLS_NOT_EFFICACY",
+        "negative": "false"
+      },
+      {
+        "key": "infra-research-fabric-observation-only",
+        "title": "Research-fabric controller is operational observation only",
+        "statement": "The research-fabric domain defines Phoenix and Temporal process control as bounded infrastructure observation and expressly excludes cognition, canonical admission, causal credit, continuous-learning evidence, and efficacy.",
+        "kind": "operational_controller",
+        "status": "NOT_LIVE_VERIFIED",
+        "source": "src/hswm/effect-runtime/src/native-research-fabric-domain.ts",
+        "locator": "bounded infrastructure observation; not HSWM cognition, canonical admission, causal credit, continuous-learning evidence, or efficacy",
+        "sha256": "19830ad40672b04c16e53ef00e88ba3c50a40b3741c757985d573c6f413a19de",
+        "authority": "SECONDARY_AI",
+        "ceiling": "Committed process-control code is not a live service observation or a proof of deployment readiness, HSWM cognition, or learning.",
+        "negative": "true"
+      },
+      {
+        "key": "runtime-canonical-v2-schema-journal",
+        "title": "Canonical Atom v2 representation and journal surface",
+        "statement": "The TypeScript runtime contains decoders for a canonical schema, commit command, and authorization grants, plus a durable-runtime service and state-journal decoding path.",
+        "kind": "implementation",
+        "status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+        "source": "src/hswm/effect-runtime/src/canonical-atom-v2-schema.ts",
+        "locator": "export const decodeCommitCanonicalAtomsV2Command = Schema.decodeUnknown(",
+        "sha256": "65696f948a410954c12fb93c1fce1fe68e875454002844ff1e3e3688c4da3a78",
+        "authority": "SECONDARY_AI",
+        "ceiling": "Decoder and runtime-service presence is not evidence that a canonical cognitive loop, admission authority, or learning process ran.",
+        "negative": "true"
+      },
+      {
+        "key": "transformer-math-bridges",
+        "title": "Transformer·수학 문헌은 G1–G3 후보 연결이지 HSWM 결과가 아니다",
+        "statement": "attention/연상기억, 저랭크 압축, online update, filtering, causal identification, hypergraph spectrum, causal abstraction과 stability는 G1–G3에 연결할 후보 수학이다. 해당 조사는 구현, 실험 재현, causal admission 또는 HSWM 효능을 보고하지 않으며 문헌 projection을 인지 상태로 취급하지 않는다.",
+        "kind": "LITERATURE_BRIDGE_REFERENCE",
+        "status": "LITERATURE_REVIEW_AND_PROPOSED_APPLICATION_UNJUDGED",
+        "source": "docs/research/HSWM_TRANSFORMER_ARCHITECTURE_AND_MATH_2026-09-14.md",
+        "locator": "## 4. HSWM에 적용 가능한 범위와 우선순위",
+        "sha256": "b3c073de798d327448c5c719268305ee57f4b5cea70ed8285ac26c9768bf567f",
+        "authority": "SECONDARY_AI",
+        "ceiling": "EXTERNAL_LITERATURE_AND_SECONDARY_AI_BRIDGES_NOT_HSWM_EFFICACY",
+        "negative": "false"
+      },
+      {
+        "key": "g1-micro-baseline-saturation",
+        "title": "첫 G1-shaped occurrence는 baseline saturation을 드러냈다",
+        "statement": "2026-08-30의 frozen micro occurrence는 local structural verification을 남겼지만 HSWM learning efficacy, G0 pass 또는 G1 gate result를 세우지 못했다. 기록은 G0 NOT_PASSED, G1 NOT_EVALUATED, powered G1 control family 미실행을 유지하며 treatment-control separation을 다음 조건으로 둔다.",
+        "kind": "NEGATIVE_RESULT_REFERENCE",
+        "status": "NEGATIVE_BASELINE_SATURATION_G0_NOT_PASSED_G1_NOT_EVALUATED",
+        "source": "results/HSWM_G1_MICRO_EXPLORATORY_RESULTS_2026-08-30.md",
+        "locator": "## Scientific boundary and next experiment",
+        "sha256": "28b95a36b28fe5c07477a920e3f27e600d155e90d9310e1576ce4b1f0dece8a1",
+        "authority": "SECONDARY_AI",
+        "ceiling": "FROZEN_EXPLORATORY_OBSERVATION_NO_EFFICACY_INFERENCE",
+        "negative": "true"
+      },
+      {
+        "key": "operational-philosophy-proof-limits",
+        "title": "추상화·행동 최소성·저장 변환 정리는 조건부 kernel 결과다",
+        "statement": "Lean 결과는 명시한 fibre/retraction 조건에서 Step·Learn 보존, 선언된 관측 계약 아래의 정보 구분 최소성, 역할을 보존하는 incidence 저장 변환을 다룬다. 최소성은 byte/token/time 비용 최적성이 아니고, 하이퍼그래프 보편 최소비용은 반례 때문에 증명할 수 없으며 CR/FCL 통합 완료도 아니다.",
+        "kind": "FORMAL_RESULT_REFERENCE",
+        "status": "KERNEL_CHECKED_CONDITIONAL_RESULTS_REMAINING_NOT_COMPLETED",
+        "source": "docs/research/HSWM_OPERATIONAL_PHILOSOPHY_PROOF_2026-09-28.md",
+        "locator": "## 2. 최소 비용 직관: 먼저 최소 정보와 저장 비용을 구별한다",
+        "sha256": "d29f9c93903b6b3fd4de85ff82c9945ddc6fcf13a1370b8753de5790ca9efda4",
+        "authority": "SECONDARY_AI",
+        "ceiling": "KERNEL_CHECKED_CONDITIONAL_MODEL_NOT_FULL_HSWM_OR_COST_OPTIMALITY",
+        "negative": "false"
+      },
+      {
+        "key": "ice-runtime-remediation-boundary",
+        "title": "ICE WP0–3 구현은 local engineering이며 학습 효과는 미식별이다",
+        "statement": "ICE graph의 WP0–3와 bounded workflow verification은 구현 범위로 기록되어 있지만, selection effect, goal effect, learner-v2 비교, stage feedback, revision, real-use efficacy는 구현 또는 식별되지 않았다. 따라서 통과한 workflow 검사를 HSWM 효능으로 확장하지 않는다.",
+        "kind": "IMPLEMENTATION_BOUNDARY_REFERENCE",
+        "status": "IMPLEMENTED_WP0_WP3_EFFICACY_UNJUDGED",
+        "source": "ontology/evidence/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.v1.json",
+        "locator": "hswm-ice-graph-implementation-wp0-3-ontology/v1",
+        "sha256": "76a2410fe1acc54821532574da61f29e87964e54ea251319ca57fc11e31a1215",
+        "authority": "SECONDARY_AI",
+        "ceiling": "LOCAL_ENGINEERING_IMPLEMENTATION_NOT_CAUSAL_EFFICACY",
+        "negative": "false"
+      },
+      {
+        "key": "three-learning-gaps",
+        "title": "G1·G2·G3은 변수 발견, 잘못된 관계 교정, 합성 학습 보존의 열린 간극이다",
+        "statement": "G1은 초기 프로그램 밖 변수 추출기와 조건부 관계를 경험에서 구별해야 하고, G2는 높은 보상 속 잘못된 관계를 intervention·remove·restore로 교정해야 하며, G3는 두 scale에서 예외·공유 오류·불확실성·credit을 보존해야 한다. 세 수용 기준은 OPEN/NOT_RUN 제안이며 기존 RED를 통과로 바꾸지 않는다.",
+        "kind": "RESEARCH_GAP_REFERENCE",
+        "status": "SECONDARY_AI_PROPOSAL_G1_G2_G3_OPEN_CRITERIA_NOT_RUN",
+        "source": "docs/research/HSWM_THREE_LEARNING_GAPS_IMPLEMENTATION_RESEARCH_2026-09-14.md",
+        "locator": "## 3. 합성은 예외·불확실성·학습의 귀속까지 보존한다",
+        "sha256": "617125b47b14a71a1ae6e98db0fe531591d7f8caf2a9693036e65e5677a5db62",
+        "authority": "SECONDARY_AI",
+        "ceiling": "OPEN_RESEARCH_GAPS_AND_ACCEPTANCE_CRITERIA_NOT_RUN",
+        "negative": "false"
+      },
+      {
+        "key": "causal-composition-gates",
+        "title": "G0–G6은 인과 효능 주장에 앞서는 단계형 반증 계약이다",
+        "statement": "G0은 측정 무결성 전제이고 G1은 fresh-task gain, remove, restore, sham, shuffled credit 및 traversal mediation을 요구한다. 이후 gate는 credit, n항 coalition, topology, world/self continuity, 두 scale 합성, 복제·scale stress로 이어지며, 현재 G0 NOT_PASSED와 G1 NOT_EVALUATED를 바꾸지 않는다.",
+        "kind": "EXPERIMENTAL_CONTRACT_REFERENCE",
+        "status": "DESIGN_SEEDED_G0_NOT_PASSED_G1_NOT_EVALUATED",
+        "source": "_research/causal_composition/project.v1.json",
+        "locator": "Minimal outcome-bound causal rung",
+        "sha256": "4956c4d4d8c72672f159361c472b71d91be2b789707b96b5f290899f6d07ded5",
+        "authority": "SECONDARY_AI",
+        "ceiling": "PROPOSED_GATE_CONTRACT_NOT_EFFICACY_EVIDENCE",
+        "negative": "false"
+      },
+      {
+        "key": "hswm-like-rule-evaluation",
+        "title": "HSWM-like rule score는 설계 성질의 미완료 평가이지 정본 판정이 아니다",
+        "statement": "HSWM-like profile은 source fidelity, multiscale map, role composition, context activation, distributed navigation, local adjustability, semantic disposition, evaluability를 평가 축으로 제안한다. 현재 template은 INCOMPLETE와 score null이며 score는 canonical status, confidence, HSWM learning efficacy를 자동 변경하지 않는다.",
+        "kind": "PROPOSED_EVALUATION_PROFILE",
+        "status": "SECONDARY_AI_PROPOSED_INCOMPLETE_SCORE_NULL",
+        "source": "docs/research/HSWM_LIKE_RULE_ONTOLOGY_AND_EVALUATION_2026-09-29.md",
+        "locator": "## 4. HSWM-like rule score v1",
+        "sha256": "365e7c215c292cb8d3774991e2f71e33de3aedc8da1a43a7340f5379190980c1",
+        "authority": "SECONDARY_AI",
+        "ceiling": "PROPOSED_PROFILE_WITH_NULL_SCORE_NOT_CANONICAL_STATUS_OR_EFFICACY",
+        "negative": "false"
+      },
+      {
+        "key": "human-complementation-charter",
+        "title": "인류보완 장기 목표의 권리·검증·비준 경계",
+        "statement": "인류보완/인류보편체 관련 헌장은 USER_PRIMARY 목표 명명과 SECONDARY_AI 규범 초안을 분리한다. 동의·철회·삭제·출구·최강 기준선과 확장 중단을 제안하지만, 포괄 비준·인간 대상 근거·효능·의식의 성취를 주장하지 않는다.",
+        "kind": "NORMATIVE_TARGET_REFERENCE",
+        "status": "PROPOSED_RATIFICATION_REQUIRED_SCIENTIFICALLY_UNJUDGED",
+        "source": "docs/canon/HSWM_HUMAN_COMPLEMENTATION_CHARTER_V0_2026-07-29.md",
+        "locator": "## 5. Ratification gate",
+        "sha256": "836750b16704dba7efc7db086f9040ed982e8bec9d00d9a914b146e479437a34",
+        "authority": "SECONDARY_AI",
+        "ceiling": "PROPOSED_RATIFICATION_REQUIRED_NOT_SCIENTIFIC_OR_LEGAL_COMPLETION",
+        "negative": "false"
+      },
+      {
+        "key": "constructive-realizability-obligations",
+        "title": "CR-0..7 구성 의무는 유한 조건부 증명과 분리된다",
+        "statement": "구성적 실현 프로그램은 CR-0..7을 하나의 runtime witness와 외부 outcome 관측으로 함께 만족시켜야 하는 의무로 둔다. 제한된 formal round의 조건부 모델은 완전 HSWM, causal efficacy 또는 FCL 통과를 뜻하지 않으며 이전 RED를 유지한다.",
+        "kind": "FORMAL_OBLIGATION_REFERENCE",
+        "status": "CONDITIONAL_FINITE_MODELS_FULL_CONSTRUCTION_OPEN_UNJUDGED",
+        "source": "ontology/evidence/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.v1.json",
+        "locator": "hswm-constructive-proof-program-snapshot/v1",
+        "sha256": "79bb6567407a4f0de9dd6fb98ac2860e2298e61f1a40417e25763f92e164a339",
+        "authority": "SECONDARY_AI",
+        "ceiling": "PROSPECTIVE_CONSTRUCTIVE_OBLIGATIONS_NOT_INTEGRATED_REALIZATION",
+        "negative": "false"
+      },
+      {
+        "key": "graph-hypergraph-projection-writeback-forbidden",
+        "title": "Deterministic hypergraph projection without writeback",
+        "statement": "The hypergraph projection profile forbids writeback and limits its claim ceiling to bounded metadata parity rather than HSWM realization or learning.",
+        "kind": "standard_projection",
+        "status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+        "source": "src/hswm/effect-runtime/src/canonical-atom-v2-hypergraph-projection.ts",
+        "locator": "claimCeiling: \"BOUNDED_METADATA_PARITY_NOT_HSWM_REALIZATION_OR_LEARNING\"",
+        "sha256": "ba4251a6a940726fc79705289bb010540d5704351a8419fac90f703b63f33995",
+        "authority": "SECONDARY_AI",
+        "ceiling": "Projection compilation and self-consistency verification do not authorize a canonical-state write or demonstrate executable graph semantics.",
+        "negative": "true"
+      },
+      {
+        "key": "closure-d4-and-g0-split",
+        "title": "D-4 완료 조건과 G0-local/G0-external 분리를 보존한다",
+        "statement": "2026-09-05 closure 계획에서 D-4는 G0-local 아래 outcome, credit, 실제 Atom v2 Permit 경로의 durable revision, changed heldout behavior를 요구한다. G0-external은 제2자 지정과 독립 replay 전 미개시이며, 당시 통합 과학 상태는 G0 NOT_PASSED·G1 LOCKED·UNJUDGED다.",
+        "kind": "CLOSURE_CONTRACT_REFERENCE",
+        "status": "D1_D4_RATIFIED_G0_NOT_PASSED_G1_LOCKED",
+        "source": "docs/research/HSWM_ADVERSARIAL_AUDIT_AND_CLOSURE_PLAN_2026-09-05.md",
+        "locator": "### 5.2 Proposed G0 split",
+        "sha256": "99b75f9ca4a3b7799bedd19d7c3390dfb959ba960cc27b1060371bde5777525e",
+        "authority": "SECONDARY_AI",
+        "ceiling": "RATIFIED_CLOSURE_BOUNDARY_NOT_COMPLETION_EVIDENCE",
+        "negative": "false"
+      },
+      {
+        "key": "standards-projection-boundary",
+        "title": "표준 그래프 투영은 정본 state나 인지의 동의어가 아니다",
+        "statement": "graph-and-loop engineering은 canonical atom, journal, RDF/JSON-LD/PROV-O/SHACL projection과 local enforcement를 연결한다. 이 표준 인터페이스와 검증은 bounded engineering view이며 HSWM cognition, permission, learning 또는 efficacy를 스스로 증명하지 않는다.",
+        "kind": "GRAPH_ENGINEERING_REFERENCE",
+        "status": "LOCAL_GRAPH_ENGINEERING_SCIENTIFICALLY_UNJUDGED",
+        "source": "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json",
+        "locator": "hswm-graph-and-loop-engineering-ontology/v6",
+        "sha256": "cd510a10ae4f7d534dfd202dce2f7b49fbdc47c207ce5f46244512d96d48c545",
+        "authority": "SECONDARY_AI",
+        "ceiling": "STANDARDS_AND_LOCAL_INVARIANTS_NOT_COGNITION_OR_EFFICACY",
+        "negative": "false"
+      },
+      {
+        "key": "graph-durable-rdf-local-prefix-attestation",
+        "title": "Bounded durable RDF recovery projection",
+        "statement": "The durable RDF projection records a local POSIX one-recovery-observation prefix attestation and enumerates nonclaims including RDFC, SHACL, PROV, causal credit, and LLM efficacy.",
+        "kind": "provenance_projection",
+        "status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+        "source": "src/hswm/effect-runtime/src/canonical-atom-v2-durable-rdf-projection.ts",
+        "locator": "LOCAL_POSIX_FILE_RUNTIME_ONE_RECOVERY_OBSERVATION_PREFIX_ATTESTED_GLOBAL_TAIL_AND_ANTIROLLBACK_NOT_ATTESTED",
+        "sha256": "34e2dca8ee36db8b21366bccdc214f6498381c6f6c40319ffdb36a85f371e098",
+        "authority": "SECONDARY_AI",
+        "ceiling": "The artifact does not attest a global complete tail, anti-rollback, distributed storage, external notary, canonical state, cognition, learning, permission, or efficacy.",
+        "negative": "true"
+      },
+      {
+        "key": "runtime-adaptive-local-boundary",
+        "title": "Local adaptive program boundary",
+        "statement": "The adaptive domain declares observational local adaptation and explicitly excludes effect execution and canonical revision admission.",
+        "kind": "implementation_boundary",
+        "status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+        "source": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+        "locator": "guards only; it neither executes an effect nor admits a canonical revision.",
+        "sha256": "0a47ff72b566c6e6f05dc0e62beab21ab5169c19f788d512c01530877d055fb6",
+        "authority": "SECONDARY_AI",
+        "ceiling": "This inspected source identifies a bounded local model, not canonical learning, causal credit, or demonstrated efficacy.",
+        "negative": "true"
+      },
+      {
+        "key": "graph-rdf11-readonly-profile",
+        "title": "RDF 1.1 N-Quads read-only projection",
+        "statement": "The canonical Atom v2 RDF compiler emits a deterministic blank-node-free RDF 1.1 N-Quads profile and labels it as non-RDFC with a no-canonical-state nonclaim.",
+        "kind": "standard_projection",
+        "status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+        "source": "src/hswm/effect-runtime/src/canonical-atom-v2-rdf-projection.ts",
+        "locator": "A deterministic, blank-node-free RDF 1.1 N-Quads profile; not an RDFC claim.",
+        "sha256": "6bba63be02c36fd245c89a0739afc8def0336015133563be9e89f576007bee41",
+        "authority": "SECONDARY_AI",
+        "ceiling": "This is an exchange projection only; it does not establish RDFC, canonical HSWM state, cognition, learning, permission, or efficacy.",
+        "negative": "true"
+      },
+      {
+        "key": "historical-s2s-production-gate-closed",
+        "title": "S2S production path remains gate-closed historical work",
+        "statement": "The recorded S2S stage-read/replay checkpoint states that no closed production prepare/assert-upload program and no successful live production Layer issuance existed at that checkpoint.",
+        "kind": "historical_checkpoint",
+        "status": "HISTORICAL_GATE_CLOSED",
+        "source": "docs/operations/HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md",
+        "locator": "no closed production `prepare` or `assert-upload` stage program exists;",
+        "sha256": "d607d3b4cf8dda4378978f0f430a7e798802416106eaa90122154a4d82eff5b2",
+        "authority": "SECONDARY_AI",
+        "ceiling": "This is dated historical engineering evidence, not proof of a current production workflow, external durability, or learned W update.",
+        "negative": "true"
+      },
+      {
+        "key": "runtime-adaptive-selection-update",
+        "title": "Bounded route selection and outcome update",
+        "statement": "The adaptive domain parses a finite program of router, command, and llm cells and contains pure route-model update logic for supplied success and cost outcomes.",
+        "kind": "implementation",
+        "status": "IMPLEMENTED_SOURCE_INSPECTED_NOT_RUN",
+        "source": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+        "locator": "export const updateModel = (model: AdaptiveModel, context: Context, outcome: {",
+        "sha256": "0a47ff72b566c6e6f05dc0e62beab21ab5169c19f788d512c01530877d055fb6",
+        "authority": "SECONDARY_AI",
+        "ceiling": "This is source-inspected local selection/update logic; it does not establish independent outcomes, causal attribution, or generalization.",
+        "negative": "true"
+      },
+      {
+        "key": "philosophical-constraints",
+        "title": "철학은 구현보다 앞선 제약이며 과학적 완성 주장과 다르다",
+        "statement": "관계·계보·기억과 진리의 구별·생산적 오류·차이 보존적 통일·인과 행위성은 schema-relative owner, Inv, Permit과 권리 경계를 제한하는 철학적 해석이다. 문서는 USER_PRIMARY 철학 우선 방향과 SECONDARY_AI 원리 번역을 구별하며 과학 상태를 UNJUDGED로 둔다.",
+        "kind": "PHILOSOPHICAL_CONSTRAINT_REFERENCE",
+        "status": "USER_PRIMARY_PHILOSOPHICAL_PRECEDENCE_SECONDARY_AI_PROPOSED_SCIENTIFICALLY_UNJUDGED",
+        "source": "docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md",
+        "locator": "## 11. 열 원리가 요구하는 schema-relative 정본 규율",
+        "sha256": "d2cd3becd867a60eca1018868ce0b4ec31f59b334607737ee83b45a1bdfd9507",
+        "authority": "SECONDARY_AI",
+        "ceiling": "USER_PRIMARY_PRECEDENCE_WITH_SECONDARY_AI_INTERPRETATION_NOT_EFFICACY",
+        "negative": "false"
+      }
+    ],
+    "q3": [
+      {
+        "obligation": "FCL-1",
+        "originalUid": "sym:Concept:hswm-fractal-law-local-causal-learning",
+        "historicalStatus": "UNASSESSED",
+        "asOf": "2026-08-28",
+        "discharged": "false"
+      },
+      {
+        "obligation": "FCL-2",
+        "originalUid": "sym:Concept:hswm-fractal-law-composition-preservation",
+        "historicalStatus": "UNASSESSED",
+        "asOf": "2026-08-28",
+        "discharged": "false"
+      },
+      {
+        "obligation": "FCL-3",
+        "originalUid": "sym:Concept:hswm-fractal-law-emergent-coalition",
+        "historicalStatus": "UNASSESSED",
+        "asOf": "2026-08-28",
+        "discharged": "false"
+      },
+      {
+        "obligation": "FCL-4",
+        "originalUid": "sym:Concept:hswm-fractal-law-multiscale-credit",
+        "historicalStatus": "UNASSESSED",
+        "asOf": "2026-08-28",
+        "discharged": "false"
+      },
+      {
+        "obligation": "FCL-5",
+        "originalUid": "sym:Concept:hswm-fractal-law-topology-morphogenesis",
+        "historicalStatus": "UNASSESSED",
+        "asOf": "2026-08-28",
+        "discharged": "false"
+      },
+      {
+        "obligation": "FCL-6",
+        "originalUid": "sym:Concept:hswm-fractal-law-world-self-co-model",
+        "historicalStatus": "UNASSESSED",
+        "asOf": "2026-08-28",
+        "discharged": "false"
+      },
+      {
+        "obligation": "FCL-7",
+        "originalUid": "sym:Concept:hswm-fractal-law-diachronic-continuity",
+        "historicalStatus": "UNASSESSED",
+        "asOf": "2026-08-28",
+        "discharged": "false"
+      },
+      {
+        "obligation": "FCL-8",
+        "originalUid": "sym:Concept:hswm-fractal-law-hswm-of-hswms",
+        "historicalStatus": "UNASSESSED",
+        "asOf": "2026-08-28",
+        "discharged": "false"
+      },
+      {
+        "obligation": "CR-1",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-1",
+        "historicalStatus": "CLASSICAL_PRIMITIVE_DERIVATION_ONLY",
+        "asOf": "2026-09-10",
+        "discharged": "false"
+      },
+      {
+        "obligation": "CR-2",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-2",
+        "historicalStatus": "OPEN",
+        "asOf": "2026-09-10",
+        "discharged": "false"
+      },
+      {
+        "obligation": "CR-3",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-3",
+        "historicalStatus": "OPEN",
+        "asOf": "2026-09-10",
+        "discharged": "false"
+      },
+      {
+        "obligation": "CR-4",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-4",
+        "historicalStatus": "OPEN",
+        "asOf": "2026-09-10",
+        "discharged": "false"
+      },
+      {
+        "obligation": "CR-5",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-5",
+        "historicalStatus": "OPEN",
+        "asOf": "2026-09-10",
+        "discharged": "false"
+      },
+      {
+        "obligation": "CR-6",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-6",
+        "historicalStatus": "OPEN",
+        "asOf": "2026-09-10",
+        "discharged": "false"
+      },
+      {
+        "obligation": "CR-7",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-7",
+        "historicalStatus": "OPEN",
+        "asOf": "2026-09-10",
+        "discharged": "false"
+      },
+      {
+        "obligation": "CR-0",
+        "originalUid": "sym:AbstractNode:hswm-semantic-weight-theory-2026-09-14-CR-0",
+        "historicalStatus": "PARTIAL_EXISTING_FORMAL_MODEL",
+        "asOf": "2026-09-10",
+        "discharged": "false"
+      }
+    ],
+    "q4": [
+      {
+        "key": "kg-projection-no-commitback-no-publication",
+        "title": "Repository ontology projection boundary",
+        "ceiling": "A repository or KG projection is not an HSWM state write path and does not grant remote publication authority.",
+        "role": "CURATED_ADDITION"
+      },
+      {
+        "key": "runtime-transition-evidence-noncausal",
+        "title": "Transition evidence remains non-causal and non-admitting",
+        "ceiling": "A represented decision, receipt, effect, or outcome must remain an attributed evidence record rather than a permit, external effect, or causal-learning conclusion.",
+        "role": "CURATED_ADDITION"
+      },
+      {
+        "key": "binding-audit",
+        "title": "최종 답만으로 역할 민감도를 판정할 수 없다",
+        "ceiling": "AUTHORED_TASK_AUDIT_ZERO_MODEL_CALLS",
+        "role": "HISTORICAL_RESEARCH_REFERENCE"
+      },
+      {
+        "key": "infra-research-fabric-observation-only",
+        "title": "Research-fabric controller is operational observation only",
+        "ceiling": "Committed process-control code is not a live service observation or a proof of deployment readiness, HSWM cognition, or learning.",
+        "role": "CURATED_ADDITION"
+      },
+      {
+        "key": "runtime-canonical-v2-schema-journal",
+        "title": "Canonical Atom v2 representation and journal surface",
+        "ceiling": "Decoder and runtime-service presence is not evidence that a canonical cognitive loop, admission authority, or learning process ran.",
+        "role": "CURATED_ADDITION"
+      },
+      {
+        "key": "dgx-learning",
+        "title": "실제 의미 수정의 정확도 이득 미관측",
+        "ceiling": "FOUR_AUTHORED_BOOLEAN_FAMILIES_4B_BATCH_PROFILE_NOT_GENERAL_EFFICACY",
+        "role": "HISTORICAL_RESEARCH_REFERENCE"
+      },
+      {
+        "key": "g1-micro-baseline-saturation",
+        "title": "첫 G1-shaped occurrence는 baseline saturation을 드러냈다",
+        "ceiling": "FROZEN_EXPLORATORY_OBSERVATION_NO_EFFICACY_INFERENCE",
+        "role": "CURATED_ADDITION"
+      },
+      {
+        "key": "p1-red",
+        "title": "scalar slow-weight P1의 RED",
+        "ceiling": "HISTORICAL_P1_RESULT_NOT_ALL_HSWM_IMPOSSIBILITY",
+        "role": "HISTORICAL_RESEARCH_REFERENCE"
+      },
+      {
+        "key": "semantic-probe",
+        "title": "국소 의미 해석과 제거 대조의 한계",
+        "ceiling": "LOCAL_INTERPRETATION_NOT_DURABLE_LEARNING",
+        "role": "HISTORICAL_RESEARCH_REFERENCE"
+      },
+      {
+        "key": "jev-noop",
+        "title": "revision과 의미 학습의 차이",
+        "ceiling": "NO_OP_SEMANTIC_REVISION_NOT_JEV_RLCD_REPRODUCTION",
+        "role": "HISTORICAL_RESEARCH_REFERENCE"
+      },
+      {
+        "key": "graph-hypergraph-projection-writeback-forbidden",
+        "title": "Deterministic hypergraph projection without writeback",
+        "ceiling": "Projection compilation and self-consistency verification do not authorize a canonical-state write or demonstrate executable graph semantics.",
+        "role": "CURATED_ADDITION"
+      },
+      {
+        "key": "jev-readout",
+        "title": "출력 비용 개선과 확률 보정의 한계",
+        "ceiling": "SERVER_PROFILE_READOUT_COST_NOT_EQUAL_QUALITY_OR_GENERAL_THROUGHPUT",
+        "role": "HISTORICAL_RESEARCH_REFERENCE"
+      },
+      {
+        "key": "graph-durable-rdf-local-prefix-attestation",
+        "title": "Bounded durable RDF recovery projection",
+        "ceiling": "The artifact does not attest a global complete tail, anti-rollback, distributed storage, external notary, canonical state, cognition, learning, permission, or efficacy.",
+        "role": "CURATED_ADDITION"
+      },
+      {
+        "key": "runtime-adaptive-local-boundary",
+        "title": "Local adaptive program boundary",
+        "ceiling": "This inspected source identifies a bounded local model, not canonical learning, causal credit, or demonstrated efficacy.",
+        "role": "CURATED_ADDITION"
+      },
+      {
+        "key": "graph-rdf11-readonly-profile",
+        "title": "RDF 1.1 N-Quads read-only projection",
+        "ceiling": "This is an exchange projection only; it does not establish RDFC, canonical HSWM state, cognition, learning, permission, or efficacy.",
+        "role": "CURATED_ADDITION"
+      },
+      {
+        "key": "historical-s2s-production-gate-closed",
+        "title": "S2S production path remains gate-closed historical work",
+        "ceiling": "This is dated historical engineering evidence, not proof of a current production workflow, external durability, or learned W update.",
+        "role": "CURATED_ADDITION"
+      },
+      {
+        "key": "runtime-adaptive-selection-update",
+        "title": "Bounded route selection and outcome update",
+        "ceiling": "This is source-inspected local selection/update logic; it does not establish independent outcomes, causal attribution, or generalization.",
+        "role": "CURATED_ADDITION"
+      }
+    ],
+    "q5": [
+      {
+        "path": "docs/research/HSWM_THREE_LEARNING_GAPS_IMPLEMENTATION_RESEARCH_2026-09-14.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "0005beadc6f3f487591e56f609fe7808ada741c6",
+        "sha256": "617125b47b14a71a1ae6e98db0fe531591d7f8caf2a9693036e65e5677a5db62",
+        "content": "617125b47b14a71a1ae6e98db0fe531591d7f8caf2a9693036e65e5677a5db62",
+        "bytes": "18439"
+      },
+      {
+        "path": "ontology/identity/hswm_core/HSWM_HYPERGRAPH_LEARNING_PLAN_ONTOLOGY.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "002bb0e59056315644b7260c351629c2d25d7e64",
+        "sha256": "c59ef55784059b111b1c73f140d6530144aec4d75220dd1cffd4295ff3e34356",
+        "content": "c59ef55784059b111b1c73f140d6530144aec4d75220dd1cffd4295ff3e34356",
+        "bytes": "185975"
+      },
+      {
+        "path": "docs/research/HSWM_RELATION_RESEARCH_ROUND_1_2026-09-10.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "012a37d1e12ba8b241c51ba0c5528884af202340",
+        "sha256": "1925af8adfd6ebf0d85248cf74e2153a883e9a4451e2e20e91f63cb431b5b80b",
+        "content": "1925af8adfd6ebf0d85248cf74e2153a883e9a4451e2e20e91f63cb431b5b80b",
+        "bytes": "10752"
+      },
+      {
+        "path": "ontology/identity/hswm_core/HSWM_RAGNAROK_PIDNA_RESEARCH_ONTOLOGY.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "013fe584e567a1a979d1f84322dc4bbbd8f453d8",
+        "sha256": "11ca87ad1e2a3c46c162f19765ffaa71def80d3aafc2e8313dd6b239af3c100d",
+        "content": "11ca87ad1e2a3c46c162f19765ffaa71def80d3aafc2e8313dd6b239af3c100d",
+        "bytes": "60556"
+      },
+      {
+        "path": "results/HSWM_USL_RELATION_INSTRUMENT_RESULTS_2026-09-08.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "03df76a729effc48f9735f6a85d0e8569427b055",
+        "sha256": "87778b65f74d4d032dce518e44ef13517f4e3705e717e61193612c385f383a99",
+        "content": "87778b65f74d4d032dce518e44ef13517f4e3705e717e61193612c385f383a99",
+        "bytes": "14512"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/canonical-atom-v2-durable-runtime.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "0623a1f70ca6e0dfeb2a70fbe99a98ff164482e0",
+        "sha256": "a9b47f528e84516027e78e0dbc246a6a70f054c860b0485918f9ddde2df015a6",
+        "content": "a9b47f528e84516027e78e0dbc246a6a70f054c860b0485918f9ddde2df015a6",
+        "bytes": "39713"
+      },
+      {
+        "path": "ontology/knowledge_map/HSWM_KNOWLEDGE_MAP_2026-09-13.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "0762ba6d1b86db9107df703161ef17387b5beb4d",
+        "sha256": "b539c2f217c960d5e02250ec250aaf7434afb6d5665bd4a577b6ec7ebc045cca",
+        "content": "b539c2f217c960d5e02250ec250aaf7434afb6d5665bd4a577b6ec7ebc045cca",
+        "bytes": "610118"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/native-graph-standards-runtime.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "0df85c456d39c3b7c92470028861dbb12ef43918",
+        "sha256": "7b97776a1b06caf83cb64e46f2839c7b6f59799a0ecd1270b09a9fae48fc6cea",
+        "content": "7b97776a1b06caf83cb64e46f2839c7b6f59799a0ecd1270b09a9fae48fc6cea",
+        "bytes": "18882"
+      },
+      {
+        "path": "_research/causal_composition/project.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "0e1f82d877093273d4e59ec62711a7d940959e42",
+        "sha256": "4956c4d4d8c72672f159361c472b71d91be2b789707b96b5f290899f6d07ded5",
+        "content": "4956c4d4d8c72672f159361c472b71d91be2b789707b96b5f290899f6d07ded5",
+        "bytes": "54419"
+      },
+      {
+        "path": "docs/research/HSWM_REUSE_FIRST_ARCHITECTURE_2026-08-30.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "0f6b95bea6407bb982430c01076f58802094b99f",
+        "sha256": "d255949b3f0d2f10978ff8ad330289abc8e33ca8e5df1f72028f36c6baf52b95",
+        "content": "d255949b3f0d2f10978ff8ad330289abc8e33ca8e5df1f72028f36c6baf52b95",
+        "bytes": "17006"
+      },
+      {
+        "path": "tests/effect-runtime/canonical-atom-v2-hypergraph-projection.test.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "0fda409c6248b28dfaaf2c3187b22aff6436300a",
+        "sha256": "e712639b4be80d3d5be346becc502459392f3f60bf3a0d229f6c335fde48a955",
+        "content": "e712639b4be80d3d5be346becc502459392f3f60bf3a0d229f6c335fde48a955",
+        "bytes": "3425"
+      },
+      {
+        "path": "ontology/identity/hswm_core/HSWM_CAUSAL_COMPOSITION_RESEARCH_ONTOLOGY.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "1427a34a49c0e59176c1e879f416e6f661dfa419",
+        "sha256": "499aaa7535181d711fb340dce4085877e9389e9960c59950e1f0e99b8144f171",
+        "content": "499aaa7535181d711fb340dce4085877e9389e9960c59950e1f0e99b8144f171",
+        "bytes": "314973"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "174191b9828156147acf40cef1378698014d4e63",
+        "sha256": "76a2e5a1127988d4d889f87ecab9389d61f850bf7d6edf52affbcc235aaee754",
+        "content": "76a2e5a1127988d4d889f87ecab9389d61f850bf7d6edf52affbcc235aaee754",
+        "bytes": "21748"
+      },
+      {
+        "path": "ontology/identity/human_universal_body/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_ONTOLOGY.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "1ec1779ab7186deee53293ad5f8961dbf3126c47",
+        "sha256": "81992abe14029ad78a50b9d3b83cf11658846f6dea9d9f2688e058778cdf3422",
+        "content": "81992abe14029ad78a50b9d3b83cf11658846f6dea9d9f2688e058778cdf3422",
+        "bytes": "148631"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/native-research-fabric-runtime.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "20aeabc1d5e29e088cf9d45271ce8ae62710b362",
+        "sha256": "9cad5c83677e9eb262471fea7848ad29eb0f3554def222a18f98a3547c49de81",
+        "content": "9cad5c83677e9eb262471fea7848ad29eb0f3554def222a18f98a3547c49de81",
+        "bytes": "10680"
+      },
+      {
+        "path": "ontology/development/HSWM_OPERATIONAL_PHILOSOPHY_PROOF_2026-09-28.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "20fa0e7ca3ba503f930e293d8e267dfa0968be99",
+        "sha256": "68a9165235a3d75bef1251158a2ef0ba43aa4f3d8f1bbfbcd8a14c1d395ebc1a",
+        "content": "68a9165235a3d75bef1251158a2ef0ba43aa4f3d8f1bbfbcd8a14c1d395ebc1a",
+        "bytes": "36786"
+      },
+      {
+        "path": "ontology/evidence/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "222be962ec5abb148de3b4f9e21a8aa67f0b1e3b",
+        "sha256": "76a2410fe1acc54821532574da61f29e87964e54ea251319ca57fc11e31a1215",
+        "content": "76a2410fe1acc54821532574da61f29e87964e54ea251319ca57fc11e31a1215",
+        "bytes": "91289"
+      },
+      {
+        "path": "ontology/identity/hswm_core/HSWM_CLOSURE_PLAN_ONTOLOGY.v5.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "26f978cb5e20f205796fb55617c2ca87b5f57583",
+        "sha256": "08f45acbfee42750ac2a463db95bd2faa2dd0bbe5b4cf2da262acdcf27757222",
+        "content": "08f45acbfee42750ac2a463db95bd2faa2dd0bbe5b4cf2da262acdcf27757222",
+        "bytes": "328226"
+      },
+      {
+        "path": "ontology/identity/hswm_core/HSWM_ADAPTIVE_RESEARCH_STRATEGY_ONTOLOGY.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "27eb9860831451f09c361a25af6414170c948794",
+        "sha256": "b44c13a76724f545c492a36b5a32cf02339f6fa89846aae5ec218de14d1e6cbb",
+        "content": "b44c13a76724f545c492a36b5a32cf02339f6fa89846aae5ec218de14d1e6cbb",
+        "bytes": "107096"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/native-research-fabric.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "297c5740ba2ba8b89807d5bf79298ffeada66a89",
+        "sha256": "907b71e1ca8101785a9977a6deec50b819a28cbc08a092c105fb341b5a96ca3e",
+        "content": "907b71e1ca8101785a9977a6deec50b819a28cbc08a092c105fb341b5a96ca3e",
+        "bytes": "11798"
+      },
+      {
+        "path": "docs/canon/HSWM_HUMAN_COMPLEMENTATION_CHARTER_V0_2026-07-29.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "3144425d4dee59c5d17060ede40ac7ea50fb2da2",
+        "sha256": "836750b16704dba7efc7db086f9040ed982e8bec9d00d9a914b146e479437a34",
+        "content": "836750b16704dba7efc7db086f9040ed982e8bec9d00d9a914b146e479437a34",
+        "bytes": "14228"
+      },
+      {
+        "path": "results/HSWM_G1_OPAQUE_IDENTIFIABILITY_V5_RESULTS_2026-09-06.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "3195e73d34448317319e2afa0a37dd35476d14fb",
+        "sha256": "9783db58c3fee1a1d92bda0014413a2d5742fbcc1043daf97b21b4fdeeb2a61a",
+        "content": "9783db58c3fee1a1d92bda0014413a2d5742fbcc1043daf97b21b4fdeeb2a61a",
+        "bytes": "7058"
+      },
+      {
+        "path": "docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "31ab7eddc9ef4682e7915f9e4c26e32c80d4469b",
+        "sha256": "4a853906160c7384fb1243484d0f1f69ec378fa9f1b5b0a40ac8f3a529a76ee3",
+        "content": "4a853906160c7384fb1243484d0f1f69ec378fa9f1b5b0a40ac8f3a529a76ee3",
+        "bytes": "15628"
+      },
+      {
+        "path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "31eefd9a28aba9c530ab80d3d560d56e836ceb88",
+        "sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373",
+        "content": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373",
+        "bytes": "25912"
+      },
+      {
+        "path": "docs/operations/HSWM_USL_ADAPTER_V2_2026-09-08.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "3353d6468460d1989f2960060c0832fe9e816305",
+        "sha256": "87502334d140d5cadbb0e2d78d3dac716984b563643b0a57e9042e5394f123c1",
+        "content": "87502334d140d5cadbb0e2d78d3dac716984b563643b0a57e9042e5394f123c1",
+        "bytes": "6090"
+      },
+      {
+        "path": "ontology/development/HSWM_RESEARCH_MAP_2026-09-30.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "382ba2544ca35419ad10bdb92bd18bcae2969e1f",
+        "sha256": "27054ad9bc88bd1467e1faac78c9f93bb27e0be5990a89c239f6ad00ef380eab",
+        "content": "27054ad9bc88bd1467e1faac78c9f93bb27e0be5990a89c239f6ad00ef380eab",
+        "bytes": "474501"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/canonical-atom-v2-schema.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "38f6869d96941f9e14536971020620e076b49e21",
+        "sha256": "65696f948a410954c12fb93c1fce1fe68e875454002844ff1e3e3688c4da3a78",
+        "content": "65696f948a410954c12fb93c1fce1fe68e875454002844ff1e3e3688c4da3a78",
+        "bytes": "12650"
+      },
+      {
+        "path": "docs/operations/HSWM_HYPERGRAPH_PROJECTION_CONTRACT_2026-09-05.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "3b542205dbc9fa8decc9751afeba241a791728d3",
+        "sha256": "4e822ea34b9ea29219840d11a52abc58a2afd62cbe56d41796b732d6eb4cb9f5",
+        "content": "4e822ea34b9ea29219840d11a52abc58a2afd62cbe56d41796b732d6eb4cb9f5",
+        "bytes": "9874"
+      },
+      {
+        "path": "ontology/infrastructure/HSWM_RESEARCH_COORDINATION_2026-09-09.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "4098f0d1a6cfba604e1b27eb2e2898a9bfccc169",
+        "sha256": "5fac8b7679372ba17787fc25af930c8bae39cf8cb147acba15b40bdd2426380e",
+        "content": "5fac8b7679372ba17787fc25af930c8bae39cf8cb147acba15b40bdd2426380e",
+        "bytes": "11748"
+      },
+      {
+        "path": "ontology/identity/hswm_core/HSWM_FRONTIER_LEARNING_THEORY_ONTOLOGY.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "42e565d2d2b29cd049610bd02e6698f607399870",
+        "sha256": "47fe62066a03f7b8556e9d3f5b45cc583d75ab6696d515a59088cd37d462159a",
+        "content": "47fe62066a03f7b8556e9d3f5b45cc583d75ab6696d515a59088cd37d462159a",
+        "bytes": "432618"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/adaptive-domain.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "43a572d1f616913a335200c7bdf0a4ccd92b4068",
+        "sha256": "0a47ff72b566c6e6f05dc0e62beab21ab5169c19f788d512c01530877d055fb6",
+        "content": "0a47ff72b566c6e6f05dc0e62beab21ab5169c19f788d512c01530877d055fb6",
+        "bytes": "33624"
+      },
+      {
+        "path": "docs/research/HSWM_RESEARCH_INSIGHTS_AND_NEXT_EVIDENCE_2026-09-06.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "4b7a1e4f1ecd67812263126acf93fe757d5cb9e1",
+        "sha256": "b851e34c1718d26f5f5281466d1760dcecca4d74919ac8311047bb1ccfe1aad5",
+        "content": "b851e34c1718d26f5f5281466d1760dcecca4d74919ac8311047bb1ccfe1aad5",
+        "bytes": "12021"
+      },
+      {
+        "path": "ontology/identity/hswm_core/HSWM_WORKSHOP_C1_C3_ONTOLOGY.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "53aa0b33b00080b98610d6493e394668f19447dc",
+        "sha256": "e9b4454f404463a157bdaa2cf0db5e6af3ac01d912f8a790a682c70bcae9d0b4",
+        "content": "e9b4454f404463a157bdaa2cf0db5e6af3ac01d912f8a790a682c70bcae9d0b4",
+        "bytes": "86474"
+      },
+      {
+        "path": "ontology/development/HSWM_THREE_LEARNING_GAPS_RESEARCH_2026-09-14.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "53c71be16f077ee605eabc3f04cf0908dba1ae33",
+        "sha256": "af26cbdc8618a106b0659fecb8daba910c803ee4305f77027bc19687038b0292",
+        "content": "af26cbdc8618a106b0659fecb8daba910c803ee4305f77027bc19687038b0292",
+        "bytes": "105628"
+      },
+      {
+        "path": "docs/operations/HSWM_SWM0W_S2S_RUN_AUTHORITY_IMPLEMENTED_NEXT_SESSION_2026-08-22.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "542350acf6313685a30b99cc6be473d1e8203d0c",
+        "sha256": "f94a57c9bb4535e459b39f1e6bde5cecab0d048c3a17bec80bbe4763580a49e4",
+        "content": "f94a57c9bb4535e459b39f1e6bde5cecab0d048c3a17bec80bbe4763580a49e4",
+        "bytes": "14822"
+      },
+      {
+        "path": "docs/research/HSWM_GRAPH_AND_LOOP_ENGINEERING_SYNTHESIS_2026-09-01.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "544502e6912d546c44a42b23bf5525b20fe45115",
+        "sha256": "74eefba25f49af5abd1b1c575f6f2813089e4bdc15984a59d88eb2fe9788fda2",
+        "content": "74eefba25f49af5abd1b1c575f6f2813089e4bdc15984a59d88eb2fe9788fda2",
+        "bytes": "24737"
+      },
+      {
+        "path": "ontology/evidence/HSWM_CONSTRUCTIVE_PROOF_ROUND_1_2026-09-10.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "5524b2ff9b89d92c9ff7dd3213ce9535881d9320",
+        "sha256": "9820309b98cb70a89af9cdebc09d370b6f13c1cafc60f1cdb790d902124f9b77",
+        "content": "9820309b98cb70a89af9cdebc09d370b6f13c1cafc60f1cdb790d902124f9b77",
+        "bytes": "13467"
+      },
+      {
+        "path": "docs/canon/HSWM_ADAPTIVE_RESEARCH_STRATEGY_2026-08-30.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "56f1425897faab8a44155cf1fca6ff3dcbdd7207",
+        "sha256": "64a9436bd83c306db6aa1ecb3d29e3ba1f3fd054f1d37bd164cb948c9da226af",
+        "content": "64a9436bd83c306db6aa1ecb3d29e3ba1f3fd054f1d37bd164cb948c9da226af",
+        "bytes": "9666"
+      },
+      {
+        "path": "docs/operations/HSWM_KG_WORKSPACE_2026-09-22.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "5ec09965e985184263d16d4bca9ea9886e0462bf",
+        "sha256": "11382d5fc662ea1e11f507e1208c7d995ef82f656f053e332dc1d4df9410a385",
+        "content": "11382d5fc662ea1e11f507e1208c7d995ef82f656f053e332dc1d4df9410a385",
+        "bytes": "18268"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/canonical-atom-v2-hypergraph-projection.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "617818665fcb26d2eb85bec2912f30e4431a1126",
+        "sha256": "ba4251a6a940726fc79705289bb010540d5704351a8419fac90f703b63f33995",
+        "content": "ba4251a6a940726fc79705289bb010540d5704351a8419fac90f703b63f33995",
+        "bytes": "16507"
+      },
+      {
+        "path": "ontology/evidence/HSWM_RELATION_RESEARCH_ROUND_1_2026-09-10.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "61a9c8c7af89fa4dc798e2058b98b46c7536c761",
+        "sha256": "ab632b2be6d5fba0b04675fca08060857518b8b70bbe6f133deb646712a3395a",
+        "content": "ab632b2be6d5fba0b04675fca08060857518b8b70bbe6f133deb646712a3395a",
+        "bytes": "10953"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/native-repository-ontology-runtime.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "660047de5fc6d5dbdbdea7d866b1f1a6b11aafe7",
+        "sha256": "3c73ae35e89e81dcf7bcd6343189482f603ceba81ba98025219bb333101ebe6e",
+        "content": "3c73ae35e89e81dcf7bcd6343189482f603ceba81ba98025219bb333101ebe6e",
+        "bytes": "8628"
+      },
+      {
+        "path": "ontology/development/HSWM_TRANSFORMER_ARCHITECTURE_AND_MATH_2026-09-14.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "67ccf0d6464b5b9bc370b2cb2506dd35ffc9386b",
+        "sha256": "9122181221e466361052cfe63012d2a988d50c3d8b8dfaf388d54dbb744f9a75",
+        "content": "9122181221e466361052cfe63012d2a988d50c3d8b8dfaf388d54dbb744f9a75",
+        "bytes": "141258"
+      },
+      {
+        "path": "docs/research/HSWM_TRANSFORMER_ARCHITECTURE_AND_MATH_2026-09-14.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "6b6d7c8e899e368a9e553c669547d5aa45015322",
+        "sha256": "b3c073de798d327448c5c719268305ee57f4b5cea70ed8285ac26c9768bf567f",
+        "content": "b3c073de798d327448c5c719268305ee57f4b5cea70ed8285ac26c9768bf567f",
+        "bytes": "19867"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/canonical-atom-v2-jsonld-view.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "6df01840c9481e493a91b3a15ee488b7da86add9",
+        "sha256": "c7f106cf0c60cb7fa3c78e24987d5517f819a1a609564d2bc07348a11ccbb551",
+        "content": "c7f106cf0c60cb7fa3c78e24987d5517f819a1a609564d2bc07348a11ccbb551",
+        "bytes": "10722"
+      },
+      {
+        "path": "ontology/evidence/HSWM_AI_LEARNING_LITERATURE_REVIEW_2026-09-08.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "7284099c662bafefbf12b8b25d7fff1a0265cefe",
+        "sha256": "e538dbc93a6cfb6458d7024b28298de64a30fdb7cdc01d58d68bcd7d9747ad20",
+        "content": "e538dbc93a6cfb6458d7024b28298de64a30fdb7cdc01d58d68bcd7d9747ad20",
+        "bytes": "54543"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/adaptive-store.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "75d6c6c39976dfedb9eeeb61dee154550c7dacd7",
+        "sha256": "138a7ba30d377239fc55b78c2e19556c84d438b205c8322d84bfc56788b1aa5a",
+        "content": "138a7ba30d377239fc55b78c2e19556c84d438b205c8322d84bfc56788b1aa5a",
+        "bytes": "30373"
+      },
+      {
+        "path": "src/hswm/effect-runtime/test/native-repository-ontology.test.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "7848f29391804309b9ae82c939eb2d0dcef498e5",
+        "sha256": "72a26acdb46718e226f8ef6966b82148c2d5fc008ba042b1e0c51b8acd3b7727",
+        "content": "72a26acdb46718e226f8ef6966b82148c2d5fc008ba042b1e0c51b8acd3b7727",
+        "bytes": "4812"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/adaptive-executor.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "7a22c0aafb2bd9925dd191b5686efe7a540abaee",
+        "sha256": "fb19126f63b8071539d1bdbb4b60fb8a9a30416e4e6d9ffa572ec92e0c988c0b",
+        "content": "fb19126f63b8071539d1bdbb4b60fb8a9a30416e4e6d9ffa572ec92e0c988c0b",
+        "bytes": "17945"
+      },
+      {
+        "path": "docs/operations/HSWM_EFFECT_RUNTIME_FUNCTIONAL_BOUNDARY_2026-09-06.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "8608deb51ce78546717e56b3d87b1668a17c04b5",
+        "sha256": "b9a472b25a43a33adf7f8c28d6d08d32056df733a2f6f39116849760c4113c86",
+        "content": "b9a472b25a43a33adf7f8c28d6d08d32056df733a2f6f39116849760c4113c86",
+        "bytes": "13066"
+      },
+      {
+        "path": "ontology/identity/hswm_core/HSWM_LIKE_RULE_ACTIVATION_ONTOLOGY.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "88372751dcf5e4085d1e78131f09c75dbbd41268",
+        "sha256": "a915e5f146be4e82a24ad822061cc6c49ef51de1263e6fbf53cb8fbb58ae2218",
+        "content": "a915e5f146be4e82a24ad822061cc6c49ef51de1263e6fbf53cb8fbb58ae2218",
+        "bytes": "102924"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/native-research-fabric-domain.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "8b3a142eb4420475071743478e8ca37890c66f99",
+        "sha256": "19830ad40672b04c16e53ef00e88ba3c50a40b3741c757985d573c6f413a19de",
+        "content": "19830ad40672b04c16e53ef00e88ba3c50a40b3741c757985d573c6f413a19de",
+        "bytes": "8082"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/adaptive-runtime.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "8b430fd8270c81304f59c82d6901b3992b6a676a",
+        "sha256": "f1a85ca17c00177e1b9c9293b19b9a383802af61a6636e9ce13eaf8b6b815fa0",
+        "content": "f1a85ca17c00177e1b9c9293b19b9a383802af61a6636e9ce13eaf8b6b815fa0",
+        "bytes": "42858"
+      },
+      {
+        "path": "ontology/evidence/HSWM_ICE_LEARNING_REMEDIATION_2026-09-08.v2.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "9965e1702cc4646e4589f8c1ad39ebad6a3e254e",
+        "sha256": "02ca18a8d83d79fcdf85ec90ba47911ea333b4a2b8f8587a935ed6bab51ef28a",
+        "content": "02ca18a8d83d79fcdf85ec90ba47911ea333b4a2b8f8587a935ed6bab51ef28a",
+        "bytes": "105505"
+      },
+      {
+        "path": "src/hswm/effect-runtime/test/native-graph-standards-runtime.test.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "99e96199fb02760a729568834319fbd3c47c12c9",
+        "sha256": "7f2513497913456ec0c5de6e38172495bcddeed5d5dc9d4c2e29e820724884f2",
+        "content": "7f2513497913456ec0c5de6e38172495bcddeed5d5dc9d4c2e29e820724884f2",
+        "bytes": "12401"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/canonical-atom-v2-rdf-projection.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "9b96a961454c5954069a9a9515dac6a5dcd85e8d",
+        "sha256": "6bba63be02c36fd245c89a0739afc8def0336015133563be9e89f576007bee41",
+        "content": "6bba63be02c36fd245c89a0739afc8def0336015133563be9e89f576007bee41",
+        "bytes": "26568"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal-store.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "a13f5c305c70011e805743a8a3148acc3535dd63",
+        "sha256": "351ef435a1356595e96feebafc01fd5a49d403421c719a89db158e5059f0fd9c",
+        "content": "351ef435a1356595e96feebafc01fd5a49d403421c719a89db158e5059f0fd9c",
+        "bytes": "13081"
+      },
+      {
+        "path": "docs/operations/systemd/hswm-research-fabric.service",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "a2483201b470dd815fc419854401591536bf6af2",
+        "sha256": "add5386c0734314e86f4ffc21f9d5fb93f9272e60ec46c89ee88cbd7e35028ea",
+        "content": "add5386c0734314e86f4ffc21f9d5fb93f9272e60ec46c89ee88cbd7e35028ea",
+        "bytes": "1195"
+      },
+      {
+        "path": "ontology/identity/hswm_core/HSWM_CONDITIONAL_CAPABILITY_CONTRACT_ONTOLOGY.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "a59dda403cf6f90fe5993daa2664e27127be1fa3",
+        "sha256": "e1ac9655753d750f99b6abb9026e235d6744f3be2283b47a82c3786dce8d2942",
+        "content": "e1ac9655753d750f99b6abb9026e235d6744f3be2283b47a82c3786dce8d2942",
+        "bytes": "18782"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/canonical-atom-v2-transition-evidence.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "a61ef35c16f70d283ce0df6c3330d909d353575b",
+        "sha256": "80ddcd105162d96af48f2662525f947caa49ab126a452f62aeec6e9c137e3e2b",
+        "content": "80ddcd105162d96af48f2662525f947caa49ab126a452f62aeec6e9c137e3e2b",
+        "bytes": "48073"
+      },
+      {
+        "path": "docs/research/HSWM_FRACTAL_SCIENTIFIC_CONNECTIONS_2026-08-28.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "a6326c885630fc03e4a47c1d06c455aeb5df7c65",
+        "sha256": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81",
+        "content": "80acb365fa28ff06d4ad95fc0c928e9993c8825a7828310921fea91de5d32c81",
+        "bytes": "26525"
+      },
+      {
+        "path": "docs/research/HSWM_LIKE_RULE_ONTOLOGY_AND_EVALUATION_2026-09-29.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "aba39bf42a0ffa825a8136e8925b597d6940ac84",
+        "sha256": "365e7c215c292cb8d3774991e2f71e33de3aedc8da1a43a7340f5379190980c1",
+        "content": "365e7c215c292cb8d3774991e2f71e33de3aedc8da1a43a7340f5379190980c1",
+        "bytes": "18487"
+      },
+      {
+        "path": "docs/operations/HSWM_ICE_GRAPH_IMPLEMENTATION_WP0_3_2026-09-08.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "abec3ce4ff789c951603db1bf9c999c33b864637",
+        "sha256": "fb9afca2a9b3f36c31564e82aaf286b667e074f66113cd1903d2df161da9c93e",
+        "content": "fb9afca2a9b3f36c31564e82aaf286b667e074f66113cd1903d2df161da9c93e",
+        "bytes": "9956"
+      },
+      {
+        "path": "docs/research/HSWM_ADVERSARIAL_AUDIT_AND_CLOSURE_PLAN_2026-09-05.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "aeeaa8fbbc597a3ac9a9d4f1124e19261887c148",
+        "sha256": "99b75f9ca4a3b7799bedd19d7c3390dfb959ba960cc27b1060371bde5777525e",
+        "content": "99b75f9ca4a3b7799bedd19d7c3390dfb959ba960cc27b1060371bde5777525e",
+        "bytes": "18571"
+      },
+      {
+        "path": "ontology/evidence/HSWM_USL_RELATION_INSTRUMENT_2026-09-08.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "b04beaa494f2b5695ed7f7153b2c72eca1a2793c",
+        "sha256": "11e2d504a612ee51df8683adfc52457ce904a7b299aa2209d57ccc0e195ed788",
+        "content": "11e2d504a612ee51df8683adfc52457ce904a7b299aa2209d57ccc0e195ed788",
+        "bytes": "44436"
+      },
+      {
+        "path": "tests/test_adaptive_learning.py",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "bab6b2a46ce2362621c227dc72d13746473b069c",
+        "sha256": "35e38d125ef82bb058ff6d00b349cc5279adb8fffd71b165453061d42e5e8b6f",
+        "content": "35e38d125ef82bb058ff6d00b349cc5279adb8fffd71b165453061d42e5e8b6f",
+        "bytes": "2839"
+      },
+      {
+        "path": "results/HSWM_G1_MICRO_EXPLORATORY_RESULTS_2026-08-30.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "bd48feec73058f8ebfd714ebead8a63e357f8473",
+        "sha256": "28b95a36b28fe5c07477a920e3f27e600d155e90d9310e1576ce4b1f0dece8a1",
+        "content": "28b95a36b28fe5c07477a920e3f27e600d155e90d9310e1576ce4b1f0dece8a1",
+        "bytes": "7203"
+      },
+      {
+        "path": "docs/research/HSWM_RELATION_LLM_CALIBRATION_PROTOCOL_2026-09-08.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "c07c32ec09dfad1fa3ee7dd20a697b4ba21b9dab",
+        "sha256": "6a613a97e75ea3294280812f03ba28fad397da8f4dde9a28339466b0cb25d672",
+        "content": "6a613a97e75ea3294280812f03ba28fad397da8f4dde9a28339466b0cb25d672",
+        "bytes": "8199"
+      },
+      {
+        "path": "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v6.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "c0e983d8e85f4271d19886921dddeb967751366f",
+        "sha256": "cd510a10ae4f7d534dfd202dce2f7b49fbdc47c207ce5f46244512d96d48c545",
+        "content": "cd510a10ae4f7d534dfd202dce2f7b49fbdc47c207ce5f46244512d96d48c545",
+        "bytes": "370021"
+      },
+      {
+        "path": "tests/effect-runtime/hypergraph-projection-receipt.test.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "c22bfb96fe294a5394dc9e73dc52e4deb692e4ba",
+        "sha256": "c5f4df4cbd967984df795b442c3a0532c3c9d9757a9d760db9ea36cf2c2e81a2",
+        "content": "c5f4df4cbd967984df795b442c3a0532c3c9d9757a9d760db9ea36cf2c2e81a2",
+        "bytes": "3519"
+      },
+      {
+        "path": "docs/research/HSWM_OPERATIONAL_PHILOSOPHY_PROOF_2026-09-28.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "c22e0823d301c81f7c92bab2f444a12bd6018041",
+        "sha256": "d29f9c93903b6b3fd4de85ff82c9945ddc6fcf13a1370b8753de5790ca9efda4",
+        "content": "d29f9c93903b6b3fd4de85ff82c9945ddc6fcf13a1370b8753de5790ca9efda4",
+        "bytes": "12866"
+      },
+      {
+        "path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_FRACTAL_PROJECTION.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "c9a74dbddb38ebff5c22d9ff3edbd6f76743007a",
+        "sha256": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb",
+        "content": "7aaeb1e3fa46f9dc8fc92588588087582d0f7fcc161708b1a44cdd64878d04bb",
+        "bytes": "40296"
+      },
+      {
+        "path": "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "d4d2cb64189adabaf84dea7631a9d05fe0a3e1e2",
+        "sha256": "5e6bd23b833276b7c4c068f4f75150e484b4320e20a2e2f1b28b2e070c22f5ef",
+        "content": "5e6bd23b833276b7c4c068f4f75150e484b4320e20a2e2f1b28b2e070c22f5ef",
+        "bytes": "15127"
+      },
+      {
+        "path": "ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_ONTOLOGY.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "d6623d33f289887850de0165f72bca7f975f67a2",
+        "sha256": "4b7bd2574491c0c6f17f00226db53811311e993e6f995b6e3e076e8f1d457238",
+        "content": "4b7bd2574491c0c6f17f00226db53811311e993e6f995b6e3e076e8f1d457238",
+        "bytes": "139352"
+      },
+      {
+        "path": "src/hswm/effect-runtime/README.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "d9a118273b03494a169fb50bf3d7fc63ebc6fd5e",
+        "sha256": "a4c8d451dc4a212f12d57ef4b9f4c8e40ba4e16ba0692647fbd5496f6f9d8654",
+        "content": "a4c8d451dc4a212f12d57ef4b9f4c8e40ba4e16ba0692647fbd5496f6f9d8654",
+        "bytes": "37177"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/hswm-core-ontology.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "dbc3e803b8da2672ece8307ab34fdff15c98957f",
+        "sha256": "bc3c38a6676cfaf7509f9471559f8e15edbe9475531c25d38bc624de09d5430e",
+        "content": "bc3c38a6676cfaf7509f9471559f8e15edbe9475531c25d38bc624de09d5430e",
+        "bytes": "43549"
+      },
+      {
+        "path": "ontology/evidence/HSWM_RELATION_LLM_CALIBRATION_READINESS_2026-09-08.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "de4715223f7aa5da5ddd6ed86a8799e721835a58",
+        "sha256": "47bfe1f529456f12102dc7d8c2ca65a895dedf39b4d2784ab1e2681516201dbe",
+        "content": "47bfe1f529456f12102dc7d8c2ca65a895dedf39b4d2784ab1e2681516201dbe",
+        "bytes": "13832"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "df28658c0212163f4cff0926e43456d3f6825090",
+        "sha256": "15a04a6daee640f40e4a6b9a484528ae10a949f1f93ee1badc33cad4ded4b0b4",
+        "content": "15a04a6daee640f40e4a6b9a484528ae10a949f1f93ee1badc33cad4ded4b0b4",
+        "bytes": "25571"
+      },
+      {
+        "path": "docs/operations/HSWM_SWM0W_S2S_STAGE_UPLOAD_POSTCONDITION_CODEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "e3ae9306c6b434831523bd0dbfc13b9ef9ff42b4",
+        "sha256": "d4511c4ebdabdba80274d57dfd70fe06eec4fae881a28e21977ecec893fd987e",
+        "content": "d4511c4ebdabdba80274d57dfd70fe06eec4fae881a28e21977ecec893fd987e",
+        "bytes": "12873"
+      },
+      {
+        "path": "ontology/evidence/HSWM_CONSTRUCTIVE_REALIZABILITY_PROGRAM_2026-09-10.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "e51f78dd8d9fc68aac95e0d7d5e21216cb4b6229",
+        "sha256": "79bb6567407a4f0de9dd6fb98ac2860e2298e61f1a40417e25763f92e164a339",
+        "content": "79bb6567407a4f0de9dd6fb98ac2860e2298e61f1a40417e25763f92e164a339",
+        "bytes": "10269"
+      },
+      {
+        "path": "F1_R8_RESULTS_LOG.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "e53ed90506165a840f00fdff90117635243a4093",
+        "sha256": "c41a57d748113e4f86f0e3640efc5aa4bba6beb184e5a7e374411711b419af80",
+        "content": "c41a57d748113e4f86f0e3640efc5aa4bba6beb184e5a7e374411711b419af80",
+        "bytes": "59728"
+      },
+      {
+        "path": "tests/effect-runtime/adaptive-store.test.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "e647d3c616deb1cd6a1468bb71ffdb4b1ce03e28",
+        "sha256": "a5c2bcaef719c1580d980cf84bbf49dbc37d69cd29943ca0d69c712c1d56e57f",
+        "content": "a5c2bcaef719c1580d980cf84bbf49dbc37d69cd29943ca0d69c712c1d56e57f",
+        "bytes": "9047"
+      },
+      {
+        "path": "docs/research/HSWM_USL_LATEST_ADVERSARIAL_REVIEW_2026-09-08.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "eb43d52ec090ac0d7d1b8194c26068c179929141",
+        "sha256": "da2d5602013903176e947a1685fa07c64fa58241752e51196883b4b19784e547",
+        "content": "da2d5602013903176e947a1685fa07c64fa58241752e51196883b4b19784e547",
+        "bytes": "5472"
+      },
+      {
+        "path": "docs/operations/HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "ee0e975d8afac9e6812d3f081ffe03839846cf4a",
+        "sha256": "d607d3b4cf8dda4378978f0f430a7e798802416106eaa90122154a4d82eff5b2",
+        "content": "d607d3b4cf8dda4378978f0f430a7e798802416106eaa90122154a4d82eff5b2",
+        "bytes": "20825"
+      },
+      {
+        "path": "tests/effect-runtime/adaptive-runtime.test.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "f090fe0c2d16758782e07b7bbb905b6b079635bd",
+        "sha256": "bbf4d3c056b5be2e6e6fc57b9b6eca5a17ad25bb1848fd157593e22b43c40c44",
+        "content": "bbf4d3c056b5be2e6e6fc57b9b6eca5a17ad25bb1848fd157593e22b43c40c44",
+        "bytes": "12940"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/canonical-atom-v2-durable-rdf-projection.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "f18cb4b93f837c35ab37a48079ef39fd3915e691",
+        "sha256": "34e2dca8ee36db8b21366bccdc214f6498381c6f6c40319ffdb36a85f371e098",
+        "content": "34e2dca8ee36db8b21366bccdc214f6498381c6f6c40319ffdb36a85f371e098",
+        "bytes": "30295"
+      },
+      {
+        "path": "ontology/identity/hswm_core/HSWM_USL_SEMANTIC_ENGINEERING_BRIDGE.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "f736bc8520b6f05829e39fd411ab40c9b5d478fe",
+        "sha256": "c9d45cfcb16c72caf310ee4d55e972b5c7bda3648a1daedcbc9d439fbb92ceb1",
+        "content": "c9d45cfcb16c72caf310ee4d55e972b5c7bda3648a1daedcbc9d439fbb92ceb1",
+        "bytes": "58878"
+      },
+      {
+        "path": "ontology/knowledge_map/HSWM_KNOWLEDGE_MAP_TOPICS_2026-09-13.v1.json",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "fb8fc0e3aebe3089b5484e6f1cf57691b20847a3",
+        "sha256": "66ffecd8e044618ce54a4cd95a51c440600f7ab6f2e17fd29d92a4c115d839cc",
+        "content": "66ffecd8e044618ce54a4cd95a51c440600f7ab6f2e17fd29d92a4c115d839cc",
+        "bytes": "33718"
+      },
+      {
+        "path": "docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "fba66945769d1ebe8a282005e36197def7ac7882",
+        "sha256": "d2cd3becd867a60eca1018868ce0b4ec31f59b334607737ee83b45a1bdfd9507",
+        "content": "d2cd3becd867a60eca1018868ce0b4ec31f59b334607737ee83b45a1bdfd9507",
+        "bytes": "37636"
+      },
+      {
+        "path": "src/hswm/effect-runtime/src/canonical-atom-v2-outcome-judgment.ts",
+        "revision": "df687475622e0a251a6c0c9124a9f3c92c0b42f3",
+        "blob": "ff16661adf61256b19f01649d4a6c5732d9d60bb",
+        "sha256": "931653232c479fb5154ebdeab7e931ccfd3181387a0eea657e4c1e62cad842c0",
+        "content": "931653232c479fb5154ebdeab7e931ccfd3181387a0eea657e4c1e62cad842c0",
+        "bytes": "24506"
+      }
+    ],
+    "q6": [
+      {
+        "topicId": "fractal_composition_and_philosophy",
+        "ordinal": "0",
+        "question": "Can a macro-state produce a reproducible intervention effect beyond matched micro, wrapper, and central-control alternatives?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "opaque_identifiability_and_negative_results",
+        "ordinal": "0",
+        "question": "Can a non-saturated held-out task identify a causal effect of a durable canonical revision?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "constructive_realizability_and_proof",
+        "ordinal": "0",
+        "question": "Can causal identification, multiscale credit, useful topology, world-self continuity, and composition be constructed rather than assumed?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "native_effect_runtime_and_ice",
+        "ordinal": "0",
+        "question": "Can co-eligible alternatives and outcome-bound feedback identify a local selection effect?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "causal_composition_experiment_spine",
+        "ordinal": "0",
+        "question": "Can one declared mechanism beat strong information- and resource-matched controls on a fresh task?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "graph_engineering_and_standard_interoperability",
+        "ordinal": "0",
+        "question": "Can the implemented canonical path be bound to an independently evaluated outcome and changed behavior?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "research_coordination_and_usl_interfaces",
+        "ordinal": "0",
+        "question": "How can bounded coordination artifacts remain useful without being misreported as HSWM cognition or learning?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "relation_learning_ru1_and_llm_calibration",
+        "ordinal": "0",
+        "question": "What exact model, independent outcome custody, source cutoff, cohort, metric, and total resource accounting will make RU-1 testable?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "conceptual_c1_c3_and_conditional_capabilities",
+        "ordinal": "0",
+        "question": "Which C1-C3 concepts become necessary in a preregistered causal mechanism, rather than remaining design vocabulary?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "historical_evidence_red_paths_and_projects",
+        "ordinal": "0",
+        "question": "Which historical mechanism families are retired, underdetermined, or still eligible for a distinct successor hypothesis?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "target_identity_and_authority",
+        "ordinal": "0",
+        "question": "Which replaceable realization can meet the target without lowering its intervention, outcome, and provenance requirements?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "learning_literature_and_frontier_baselines",
+        "ordinal": "0",
+        "question": "Which strong native, text, program, retrieval, and fixed-orchestration baselines are appropriate for each claimed mechanism?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "closure_plan_and_adversarial_audit",
+        "ordinal": "0",
+        "question": "Who provides the second-party role needed for G0-external, or is that gate explicitly left unstarted?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "relation_learning_ru1_and_llm_calibration",
+        "ordinal": "1",
+        "question": "Can RU-1 beat native history, text, program, and frozen-policy controls with removal, sham, and restoration?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "conceptual_c1_c3_and_conditional_capabilities",
+        "ordinal": "1",
+        "question": "Can a capability boundary be exercised without becoming a canonical-write or learning bypass?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "research_coordination_and_usl_interfaces",
+        "ordinal": "1",
+        "question": "Can a source-authenticated external graph interface support a future experiment without becoming a canonical-write path?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "learning_literature_and_frontier_baselines",
+        "ordinal": "1",
+        "question": "Can any bounded HSWM mechanism retain an effect after those matched alternatives are tested?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "constructive_realizability_and_proof",
+        "ordinal": "1",
+        "question": "Can one simultaneous runtime witness satisfy all required obligations under external outcome evaluation?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "causal_composition_experiment_spine",
+        "ordinal": "1",
+        "question": "Can outcome, credit, revision, and changed behavior be causally identified without leakage or holdout reuse?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "native_effect_runtime_and_ice",
+        "ordinal": "1",
+        "question": "Can remediation proposals be implemented and then compared under matched cost and outcome contracts?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "opaque_identifiability_and_negative_results",
+        "ordinal": "1",
+        "question": "Can the local result be independently replayed and externally adjudicated without changing its frozen protocol?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "fractal_composition_and_philosophy",
+        "ordinal": "1",
+        "question": "Can the same contract be demonstrated at two scales while preserving rights, exit, provenance, and lineage?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "historical_evidence_red_paths_and_projects",
+        "ordinal": "1",
+        "question": "How should negative-result lineage be surfaced in a standard graph without implying a current live learning path?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "target_identity_and_authority",
+        "ordinal": "1",
+        "question": "What finite evidence sequence is sufficient for a bounded v1 milestone while leaving the broader target unclaimed?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "graph_engineering_and_standard_interoperability",
+        "ordinal": "1",
+        "question": "What mapping loss remains when standards-based projections are used as bounded views?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      },
+      {
+        "topicId": "closure_plan_and_adversarial_audit",
+        "ordinal": "1",
+        "question": "What single run will satisfy D-4's outcome-to-real-canonical-revision-to-changed-heldout-behavior contract?",
+        "status": "HISTORICAL_OPEN_QUESTION_NOT_REEVALUATED"
+      }
+    ],
+    "q7": [
+      {
+        "class": "(root)",
+        "tracked": "15",
+        "selected": "1",
+        "inventoryOnly": "14"
+      },
+      {
+        "class": ".agents",
+        "tracked": "2",
+        "selected": "0",
+        "inventoryOnly": "2"
+      },
+      {
+        "class": ".codex",
+        "tracked": "1",
+        "selected": "0",
+        "inventoryOnly": "1"
+      },
+      {
+        "class": ".devcontainer",
+        "tracked": "4",
+        "selected": "0",
+        "inventoryOnly": "4"
+      },
+      {
+        "class": ".github",
+        "tracked": "7",
+        "selected": "0",
+        "inventoryOnly": "7"
+      },
+      {
+        "class": ".qmd",
+        "tracked": "2",
+        "selected": "0",
+        "inventoryOnly": "2"
+      },
+      {
+        "class": ".serena",
+        "tracked": "2",
+        "selected": "0",
+        "inventoryOnly": "2"
+      },
+      {
+        "class": ".vscode",
+        "tracked": "2",
+        "selected": "0",
+        "inventoryOnly": "2"
+      },
+      {
+        "class": "_findings",
+        "tracked": "50",
+        "selected": "0",
+        "inventoryOnly": "50"
+      },
+      {
+        "class": "_research",
+        "tracked": "1954",
+        "selected": "1",
+        "inventoryOnly": "1953"
+      },
+      {
+        "class": "artifacts",
+        "tracked": "14",
+        "selected": "0",
+        "inventoryOnly": "14"
+      },
+      {
+        "class": "docs",
+        "tracked": "469",
+        "selected": "26",
+        "inventoryOnly": "443"
+      },
+      {
+        "class": "evidence",
+        "tracked": "49",
+        "selected": "0",
+        "inventoryOnly": "49"
+      },
+      {
+        "class": "f0_premise_p",
+        "tracked": "13",
+        "selected": "0",
+        "inventoryOnly": "13"
+      },
+      {
+        "class": "formal",
+        "tracked": "75",
+        "selected": "0",
+        "inventoryOnly": "75"
+      },
+      {
+        "class": "manifests",
+        "tracked": "22",
+        "selected": "0",
+        "inventoryOnly": "22"
+      },
+      {
+        "class": "node_modules",
+        "tracked": "1",
+        "selected": "0",
+        "inventoryOnly": "1"
+      },
+      {
+        "class": "ontology",
+        "tracked": "486",
+        "selected": "30",
+        "inventoryOnly": "456"
+      },
+      {
+        "class": "prereg",
+        "tracked": "37",
+        "selected": "0",
+        "inventoryOnly": "37"
+      },
+      {
+        "class": "prom_search_hswm",
+        "tracked": "172",
+        "selected": "0",
+        "inventoryOnly": "172"
+      },
+      {
+        "class": "receipts",
+        "tracked": "107",
+        "selected": "0",
+        "inventoryOnly": "107"
+      },
+      {
+        "class": "research",
+        "tracked": "5",
+        "selected": "0",
+        "inventoryOnly": "5"
+      },
+      {
+        "class": "results",
+        "tracked": "148",
+        "selected": "3",
+        "inventoryOnly": "145"
+      },
+      {
+        "class": "schemas",
+        "tracked": "19",
+        "selected": "0",
+        "inventoryOnly": "19"
+      },
+      {
+        "class": "scripts",
+        "tracked": "40",
+        "selected": "0",
+        "inventoryOnly": "40"
+      },
+      {
+        "class": "src",
+        "tracked": "825",
+        "selected": "24",
+        "inventoryOnly": "801"
+      },
+      {
+        "class": "tests",
+        "tracked": "454",
+        "selected": "5",
+        "inventoryOnly": "449"
+      },
+      {
+        "class": "tools",
+        "tracked": "7",
+        "selected": "0",
+        "inventoryOnly": "7"
+      },
+      {
+        "class": "verification",
+        "tracked": "1",
+        "selected": "0",
+        "inventoryOnly": "1"
+      }
+    ],
+    "q8": [
+      {
+        "uid": "sym:AbstractNode:hswm-research-map-2026-09-30",
+        "name": "HSWM 연구 내용과 근거 지도"
+      },
+      {
+        "uid": "sym:AbstractNode:hswm-knowledge-map-2026-09-13",
+        "name": "HSWM 전체 지식 지도 — 기존 설계·구현·증명·실험·남은 의무"
+      }
+    ]
+  },
+  "rejected_mutations": [
+    "AI summary promoted",
+    "obligation discharged",
+    "addition source removed",
+    "duplicate owned UID",
+    "dangling relationship endpoint",
+    "unknown addition topic",
+    "bad addition locator",
+    "corpus disposition drift",
+    "corpus SHA drift"
+  ],
+  "claim_ceiling": "WHOLE_MAP_STRUCTURE_AND_FIXED_CUT_BYTE_BINDING_ONLY"
+}

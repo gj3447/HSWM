@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?class ?tracked ?selected ?inventoryOnly WHERE {
+  ?coverage a role:CORPUS_COVERAGE ;
+    p:corpus_class ?class ; p:tracked_paths ?tracked ;
+    p:selected_sources ?selected ; p:inventoried_only ?inventoryOnly .
+} ORDER BY ?class

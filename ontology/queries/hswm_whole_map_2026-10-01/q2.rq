@@ -1,0 +1,11 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?key ?title ?statement ?kind ?status ?source ?locator ?sha256 ?authority ?ceiling ?negative WHERE {
+  ?record a role:CURATED_ADDITION ;
+    p:record_key ?key ; p:name ?title ; p:description ?statement ;
+    p:research_kind ?kind ; p:source_status ?status ; p:source_path ?source ;
+    p:source_locator ?locator ; p:source_sha256 ?sha256 ;
+    p:authority_class ?authority ; p:claim_boundary ?ceiling ;
+    p:negative_or_limiting_result ?negative .
+} ORDER BY ?key

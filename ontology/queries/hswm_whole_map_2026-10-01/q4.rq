@@ -1,0 +1,15 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT DISTINCT ?key ?title ?ceiling ?role WHERE {
+  {
+    ?record a role:CURATED_ADDITION .
+  }
+  UNION
+  {
+    ?record a role:HISTORICAL_RESEARCH_REFERENCE .
+  }
+  ?record p:negative_or_limiting_result true ;
+    p:record_key ?key ; p:name ?title ; p:claim_boundary ?ceiling ;
+    p:standard_graph_role ?role .
+} ORDER BY ?role ?key

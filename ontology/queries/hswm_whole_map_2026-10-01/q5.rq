@@ -1,0 +1,11 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?path ?revision ?blob ?sha256 ?content ?bytes WHERE {
+  ?occurrence a role:REPOSITORY_PATH_AT_CUT ;
+    p:source_path ?path ; p:source_revision ?revision ; p:git_blob_oid ?blob ;
+    p:source_sha256 ?sha256 ; p:source_bytes ?bytes ;
+    r:HAS_CONTENT ?artifact .
+  ?artifact a role:ARTIFACT_CONTENT ; p:content_sha256 ?content .
+} ORDER BY ?path

@@ -4,7 +4,13 @@ This directory is the semantic front door to the repository. The filesystem
 still has one physical location per file, but an ontology can give the same
 file several meanings and connect it to several neighboring concepts.
 
-For the research itself, start with the [September 30 research map](../docs/research/HSWM_RESEARCH_MAP_2026-09-30.md)
+For the whole project, start with the [October 1 whole map](../docs/research/HSWM_WHOLE_MAP_2026-10-01.md)
+and its [eight queries](queries/hswm_whole_map_2026-10-01/README.md). It connects the thirteen
+existing topic identities, a fixed-cut file inventory, and curated research/runtime sources.
+`hswm-workspace show whole-map-1001` opens its navigation entry. The inventory is dated
+coverage evidence, not a live navigation registry or a semantic audit of every file.
+
+For the selected research claims, use the [September 30 research map](../docs/research/HSWM_RESEARCH_MAP_2026-09-30.md)
 and its [eight source-bound queries](queries/hswm_research_map_2026-09-30/README.md).
 It separates target identity, conditional theory, implementation, measured results,
 and open CR/FCL obligations without replacing their source records.
@@ -57,7 +63,7 @@ The machine-readable concept graph is
 defines concepts and relationships; the filesystem and typed-directory
 conventions remain the source of truth for current paths. A checked-in catalog
 of every repository path is intentionally not part of this navigation layer.
-The dated September 13 catalog remains a source-bound historical snapshot;
+The dated September 13 catalog and October 1 corpus inventory remain source-bound historical snapshots;
 the workspace command's dynamic inventory is a read-only checkout observation
 and does not revise that snapshot or any canonical state.
 

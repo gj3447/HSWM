@@ -1,0 +1,9 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?uid ?name WHERE {
+  ?bundle a role:WHOLE_MAP ; r:REFERENCES ?anchor .
+  ?anchor a kb:Anchor ; kb:uid ?uid .
+  ?reference a kb:AnchorReference ; kb:anchorTarget ?anchor ; kb:anchorName ?name .
+} ORDER BY ?uid

@@ -1,0 +1,12 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+
+# Runtime/authority audit. A conforming atlas returns zero rows.
+SELECT ?uid ?authority ?runtime_write_path WHERE {
+  ?node a kb:Node ; kb:uid ?uid .
+  OPTIONAL { ?node p:authority_class ?authority . }
+  OPTIONAL { ?node p:runtime_write_path ?runtime_write_path . }
+  FILTER (!BOUND(?authority) || ?authority != "SECONDARY_AI" ||
+          !BOUND(?runtime_write_path) || ?runtime_write_path != false)
+}
+ORDER BY ?uid

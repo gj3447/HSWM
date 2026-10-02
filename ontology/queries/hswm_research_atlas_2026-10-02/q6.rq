@@ -1,0 +1,13 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?bindingUid ?topicId ?path ?unitUid ?sourceId WHERE {
+  ?binding a role:MAP_BINDING ; kb:uid ?bindingUid ;
+    r:IN_TOPIC ?topic ; r:HAS_UNIT ?unitNode ; r:HAS_ORIGINAL ?sourceNode .
+  ?topic a role:TOPIC_VIEW ; p:topic_id ?topicId .
+  ?unitNode a role:RESEARCH_UNIT ; kb:uid ?unitUid ; p:source_path ?path .
+  ?sourceNode a role:SOURCE_VIEW ; kb:uid ?sourceId .
+}
+ORDER BY ?topicId ?path ?bindingUid

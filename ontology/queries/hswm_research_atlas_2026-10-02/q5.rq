@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?source_kind (COUNT(DISTINCT ?source) AS ?sources) (SUM(?byteCount) AS ?bytes) WHERE {
+  ?source a role:SOURCE_VIEW ; p:source_kind ?source_kind ; p:source_bytes ?byteCount .
+}
+GROUP BY ?source_kind
+ORDER BY ?source_kind

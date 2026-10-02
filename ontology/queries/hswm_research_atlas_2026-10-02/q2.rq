@@ -1,0 +1,10 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?path ?title ?summary ?kind ?status ?ceiling ?locator ?sha256 WHERE {
+  ?unit a role:RESEARCH_UNIT ;
+    p:source_path ?path ; p:name ?title ; p:description ?summary ;
+    p:record_kind ?kind ; p:source_status ?status ; p:claim_boundary ?ceiling ;
+    p:source_locator ?locator ; p:source_sha256 ?sha256 .
+}
+ORDER BY ?path

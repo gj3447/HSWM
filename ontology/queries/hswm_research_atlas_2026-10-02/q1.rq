@@ -1,0 +1,12 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?topicId ?title (COUNT(DISTINCT ?unit) AS ?units) WHERE {
+  ?topic a role:TOPIC_VIEW ; p:topic_id ?topicId ; p:name ?title .
+  OPTIONAL {
+    ?binding a role:MAP_BINDING ; r:IN_TOPIC ?topic ; r:HAS_UNIT ?unit .
+  }
+}
+GROUP BY ?topicId ?title
+ORDER BY ?topicId

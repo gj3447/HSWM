@@ -1,0 +1,49 @@
+@prefix kb: <https://hswm.invalid/kg-bundle-rdf/v1/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix atlas: <urn:hswm:research-atlas-2026-10-02:shape:> .
+
+# Local SHACL Core profile.  It validates the source-bound navigation projection,
+# never truth, canonical runtime state, learned W, permit, or efficacy.
+
+atlas:AllOwnedNodes a sh:NodeShape ; sh:targetClass kb:Node ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:canonical_scope ; sh:hasValue "PENDING_OR_PRELIMINARY" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:ontology_plane ; sh:hasValue "INQUIRY" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:recorded_on ; sh:hasValue "2026-10-02" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:runtime_write_path ; sh:hasValue false ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_revision ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+atlas:AllLinks a sh:NodeShape ; sh:targetClass kb:Relation ;
+  sh:property [ sh:path kb:status ; sh:hasValue "PROPOSED" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:authorityClass ; sh:hasValue "SECONDARY_AI" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path kb:relationType ; sh:in ( "HAS_VIEW" "REFERENCES" "HAS_SOURCE" "SUMMARIZES" "IN_TOPIC" "HAS_UNIT" "HAS_ORIGINAL" "CITES" ) ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+atlas:TopicView a sh:NodeShape ; sh:targetClass role:TOPIC_VIEW ;
+  sh:property [ sh:path p:topic_id ; sh:datatype xsd:string ; sh:pattern "^[a-z][a-z0-9_]{0,79}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+atlas:SourceView a sh:NodeShape ; sh:targetClass role:SOURCE_VIEW ;
+  sh:property [ sh:path p:source_id ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_path ; sh:datatype xsd:string ; sh:pattern "^[A-Za-z0-9_]" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_kind ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_bytes ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:canonical_scope ; sh:hasValue "PENDING_OR_PRELIMINARY" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+atlas:ResearchUnit a sh:NodeShape ; sh:targetClass role:RESEARCH_UNIT ;
+  sh:property [ sh:path p:description ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_path ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:record_kind ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_status ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_locator ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_boundary ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:SUMMARIZES ; sh:class role:SOURCE_VIEW ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+atlas:MapBinding a sh:NodeShape ; sh:targetClass role:MAP_BINDING ;
+  sh:property [ sh:path r:IN_TOPIC ; sh:class role:TOPIC_VIEW ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_UNIT ; sh:class role:RESEARCH_UNIT ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_ORIGINAL ; sh:class role:SOURCE_VIEW ; sh:minCount 1 ; sh:maxCount 1 ] .

@@ -4,6 +4,15 @@ This directory is the semantic front door to the repository. The filesystem
 still has one physical location per file, but an ontology can give the same
 file several meanings and connect it to several neighboring concepts.
 
+For all 157 main research documents at the October 2 source cut, start with the
+[research atlas](../docs/research/HSWM_RESEARCH_ATLAS_2026-10-02.md) and its
+[eight queries](queries/hswm_research_atlas_2026-10-02/README.md). Thirteen topic
+views share attributed summaries, role-bearing placements, and original-source
+read paths. The broader 764-document index preserves sections and ontology node
+occurrences. `hswm-workspace show research-atlas-1002` opens this entry; the
+[local reader](../_research/research_atlas_2026-10-02/README.md) supports scoped
+context assembly and exact Git-byte retrieval.
+
 For the whole project, start with the [October 1 whole map](../docs/research/HSWM_WHOLE_MAP_2026-10-01.md)
 and its [eight queries](queries/hswm_whole_map_2026-10-01/README.md). It connects the thirteen
 existing topic identities, a fixed-cut file inventory, and curated research/runtime sources.

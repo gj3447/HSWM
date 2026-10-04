@@ -1,0 +1,8 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?uid ?title ?url ?version ?support ?limit ?scope WHERE {
+  ?source p:standard_graph_role "LITERATURE_REVIEW" ; kb:uid ?uid ; p:name ?title ;
+    p:external_url ?url ; p:source_version ?version ; p:description ?support ;
+    p:limitation ?limit ; p:reviewed_scope ?scope .
+} ORDER BY ?uid

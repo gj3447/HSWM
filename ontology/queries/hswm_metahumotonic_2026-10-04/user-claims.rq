@@ -1,0 +1,8 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?uid ?meaning ?claimType ?verbatim ?source ?sha256 ?status WHERE {
+  ?origin p:standard_graph_role "USER_DIRECT_SOURCE" ; p:utterance_verbatim ?verbatim ; r:HAS_ASSERTION ?claim .
+  ?claim kb:uid ?uid ; p:name ?meaning ; p:claim_type ?claimType ;
+    p:authority_class "USER_PRIMARY" ; p:source_path ?source ; p:source_sha256 ?sha256 ; p:scientific_status ?status .
+} ORDER BY ?uid

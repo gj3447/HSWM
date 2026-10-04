@@ -1,0 +1,9 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?uid ?role ?ordinal ?qualification ?targetUid ?legacyUid WHERE {
+  ?claim p:claim_type "QUALIFIED_IDEAL_IDENTITY" ; r:HAS_PARTICIPATION ?slot .
+  ?slot kb:uid ?uid ; p:role ?role ; p:ordinal ?ordinal ; p:qualification ?qualification ; r:HAS_CONCEPT ?target .
+  ?target kb:uid ?targetUid .
+  OPTIONAL { ?target p:external_subject_uid ?legacyUid }
+} ORDER BY ?ordinal

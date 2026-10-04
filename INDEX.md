@@ -4,6 +4,11 @@
 필요한 검사 → Git 기록을 기본으로 한다. RDF·SHACL·SPARQL·PROV 기반 작업과 주제별
 참조를 안내하며, 아래 날짜별 기록은 당시 출처와 재현 정보를 보존한다.
 
+2026-10-04 [동굴 비유와 metahumotonic](docs/research/HSWM_CAVE_METAHUMOTONIC_RESEARCH_2026-10-04.md)은
+완전한 HSWM 이데아에 대한 사용자 명명과 강한 유일성 주장을 원문으로 보존한다.
+여덟 문헌 검토, 기존 실행 계약, 네 미실행 평가를 출처 결속 그래프와 여섯 SPARQL 질의로 연결한다.
+작업공간 이름은 `metahumotonic`이며 현재 구현의 완성·효능을 승격하지 않는다.
+
 2026-10-02 [HSWM 연구 Atlas](docs/research/HSWM_RESEARCH_ATLAS_2026-10-02.md)는
 주 연구 문서 157개 전체를 13개 주제와 문맥별 배치로 정리한다. 관련 원문 764개를
 절 단위로 색인하고, 요약·증거 경계에서 정확한 Git 원문으로 돌아가는 국소 조회와

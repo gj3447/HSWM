@@ -1,0 +1,8 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?uid ?hypothesis ?contract ?sourcePath ?status WHERE {
+  ?claim p:claim_type "ENGINEERING_HYPOTHESIS" ; kb:uid ?uid ; p:description ?hypothesis ;
+    p:status ?status ; r:HAS_SOURCE ?implementation .
+  ?implementation p:standard_graph_role "ENGINEERING_SOURCE" ; p:name ?contract ; p:source_path ?sourcePath .
+} ORDER BY ?uid

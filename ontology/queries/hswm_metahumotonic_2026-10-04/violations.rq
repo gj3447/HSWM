@@ -1,0 +1,31 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?uid ?violation WHERE {
+  {
+    ?node kb:uid ?uid ; p:authority_class "USER_PRIMARY" ; p:standard_graph_role ?role .
+    FILTER (?role NOT IN ("USER_DIRECT_SOURCE", "CLAIM"))
+    BIND("USER_AUTHORITY_ESCALATION" AS ?violation)
+  } UNION {
+    ?node kb:uid ?uid ; p:standard_graph_role "CLAIM" ; p:scientific_status ?status .
+    FILTER (?status != "NOT_EVALUATED")
+    BIND("UNMEASURED_CLAIM_PROMOTED" AS ?violation)
+  } UNION {
+    ?node kb:uid ?uid ; p:standard_graph_role "EVALUATION_PLAN" ; p:status ?status .
+    FILTER (?status != "NOT_RUN")
+    BIND("PLAN_PROMOTED_TO_RESULT" AS ?violation)
+  } UNION {
+    ?node kb:uid ?uid ; p:standard_graph_role "CLAIM" .
+    FILTER NOT EXISTS { ?node r:HAS_SOURCE ?source }
+    BIND("MISSING_CLAIM_SOURCE" AS ?violation)
+  } UNION {
+    ?claim p:claim_type "QUALIFIED_IDEAL_IDENTITY" ; r:HAS_PARTICIPATION ?node, ?other .
+    ?node kb:uid ?uid ; p:ordinal ?ordinal .
+    ?other p:ordinal ?ordinal .
+    FILTER (?node != ?other)
+    BIND("DUPLICATE_ROLE_ORDINAL" AS ?violation)
+  } UNION {
+    ?node kb:uid ?uid ; <http://www.w3.org/2002/07/owl#sameAs> ?target .
+    BIND("UNQUALIFIED_IDENTITY_MERGE" AS ?violation)
+  }
+} ORDER BY ?uid ?violation

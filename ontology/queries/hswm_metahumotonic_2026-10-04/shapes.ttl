@@ -1,0 +1,76 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix m: <urn:hswm:metahumotonic:shapes:> .
+
+m:Root a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-metahumotonic-idea-2026-10-04> ;
+  sh:class role:SYNTHESIS_BUNDLE ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CLAIM ] ; sh:qualifiedMinCount 6 ; sh:qualifiedMaxCount 6 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:LITERATURE_REVIEW ] ; sh:qualifiedMinCount 8 ; sh:qualifiedMaxCount 8 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:EVALUATION_PLAN ] ; sh:qualifiedMinCount 4 ; sh:qualifiedMaxCount 4 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:qualifiedValueShape [ sh:class role:USER_DIRECT_SOURCE ] ; sh:qualifiedMinCount 2 ; sh:qualifiedMaxCount 2 ] .
+
+m:Sources a sh:NodeShape ; sh:targetClass role:USER_DIRECT_SOURCE ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:utterance_verbatim ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^[0-9a-f]{64}$" ] ;
+  sh:property [ sh:path r:HAS_ASSERTION ; sh:class role:CLAIM ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+m:Claims a sh:NodeShape ; sh:targetClass role:CLAIM ;
+  sh:property [ sh:path p:scientific_status ; sh:hasValue "NOT_EVALUATED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:minCount 1 ] .
+
+m:Ideal a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:Claim:hswm-metahumotonic-ideal-naming-2026-10-04> ;
+  sh:class role:CLAIM ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_type ; sh:hasValue "QUALIFIED_IDEAL_IDENTITY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_PARTICIPATION ; sh:class role:ROLE_PARTICIPATION ; sh:minCount 3 ; sh:maxCount 3 ] .
+
+m:Slots a sh:NodeShape ; sh:targetClass role:ROLE_PARTICIPATION ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:role ; sh:in ("subject" "name" "speaker") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:ordinal ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:maxInclusive 2 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:qualification ; sh:hasValue "COMPLETE_IDEAL_HSWM" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:class role:USER_DIRECT_SOURCE ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+m:Literature a sh:NodeShape ; sh:targetClass role:LITERATURE_REVIEW ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:external_url ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_version ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:limitation ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+m:Plans a sh:NodeShape ; sh:targetClass role:EVALUATION_PLAN ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:status ; sh:hasValue "NOT_RUN" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:observation_status ; sh:hasValue "UNMEASURED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:missing_fields ; sh:minCount 1 ] ;
+  sh:property [ sh:path p:obligation_ids ; sh:minCount 1 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:ENGINEERING_SOURCE ] ; sh:qualifiedMinCount 1 ] .
+
+m:TermReference a sh:NodeShape ; sh:targetClass role:TERM_LOOKUP_OBSERVATION ;
+  sh:property [ sh:path p:external_subject_uid ; sh:hasValue "sym:DefinedTerm:메타휴모토닉" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:external_authority_class ; sh:hasValue "SOURCE_DECLARED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:external_source_provenance ; sh:hasValue "UNRESOLVED" ; sh:maxCount 1 ] .
+
+m:SubjectSlot a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:Concept:hswm-metahumotonic-slot-subject-2026-10-04> ;
+  sh:property [ sh:path p:role ; sh:hasValue "subject" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:ordinal ; sh:hasValue 0 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm> ; sh:maxCount 1 ] .
+
+m:NameSlot a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:Concept:hswm-metahumotonic-slot-name-2026-10-04> ;
+  sh:property [ sh:path p:role ; sh:hasValue "name" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:ordinal ; sh:hasValue 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-metahumotonic-term-readback-2026-10-04> ; sh:maxCount 1 ] .
+
+m:SpeakerSlot a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:Concept:hswm-metahumotonic-slot-speaker-2026-10-04> ;
+  sh:property [ sh:path p:role ; sh:hasValue "speaker" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:ordinal ; sh:hasValue 2 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-metahumotonic-idea-source-2026-10-04> ; sh:maxCount 1 ] .

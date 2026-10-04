@@ -1,0 +1,265 @@
+{
+  "schema_version": "hswm-metahumotonic-graph-contract/v1",
+  "owner": "HSWM",
+  "scope": "Repository research projection; no live registry change or canonical runtime write",
+  "relation_contracts": [
+    {
+      "predicate": "HAS_ASSERTION",
+      "domain_roles": [
+        "USER_DIRECT_SOURCE"
+      ],
+      "range_roles": [
+        "CLAIM"
+      ],
+      "direction": "source -> attributed claim",
+      "cardinality": "0..n",
+      "meaning": "Records that the source contains the attributed assertion; does not assert empirical truth."
+    },
+    {
+      "predicate": "HAS_SOURCE",
+      "domain_roles": [
+        "SYNTHESIS_BUNDLE",
+        "CLAIM",
+        "LITERATURE_REVIEW",
+        "ROLE_PARTICIPATION"
+      ],
+      "range_roles": [
+        "USER_DIRECT_SOURCE",
+        "ENGINEERING_SOURCE",
+        "LITERATURE_REVIEW"
+      ],
+      "direction": "derived record -> source",
+      "cardinality": "1..n for claims",
+      "meaning": "Source or evidence provenance, with the reading scope on the node."
+    },
+    {
+      "predicate": "HAS_CONCEPT",
+      "domain_roles": [
+        "SYNTHESIS_BUNDLE",
+        "CLAIM",
+        "ROLE_PARTICIPATION"
+      ],
+      "range_roles": [
+        "CLAIM",
+        "DECISION",
+        "LITERATURE_REVIEW",
+        "ENGINEERING_SOURCE",
+        "EVALUATION_PLAN",
+        "TERM_LOOKUP_OBSERVATION",
+        "ROLE_PARTICIPATION",
+        "EXTERNAL_ANCHOR",
+        "USER_DIRECT_SOURCE"
+      ],
+      "direction": "container/claim/slot -> referenced record",
+      "cardinality": "1 for participation targets; 0..n otherwise",
+      "meaning": "Typed membership or reference; not subclass, sameAs or causal influence."
+    },
+    {
+      "predicate": "HAS_PARTICIPATION",
+      "domain_roles": [
+        "CLAIM"
+      ],
+      "range_roles": [
+        "ROLE_PARTICIPATION"
+      ],
+      "direction": "qualified claim -> ordered role slot",
+      "cardinality": "exactly 3 on the ideal-naming claim",
+      "meaning": "Preserves subject, name reference and speaker-source roles."
+    },
+    {
+      "predicate": "REFERENCES",
+      "domain_roles": [
+        "CLAIM",
+        "EVALUATION_PLAN",
+        "LITERATURE_REVIEW"
+      ],
+      "range_roles": [
+        "EXTERNAL_ANCHOR",
+        "ENGINEERING_SOURCE",
+        "CLAIM",
+        "LITERATURE_REVIEW"
+      ],
+      "direction": "interpretation/plan -> target",
+      "cardinality": "0..n",
+      "meaning": "Research relevance; no entailment, authority transfer or deployment."
+    },
+    {
+      "predicate": "CONSTRAINS",
+      "domain_roles": [
+        "DECISION",
+        "LITERATURE_REVIEW"
+      ],
+      "range_roles": [
+        "CLAIM",
+        "LITERATURE_REVIEW"
+      ],
+      "direction": "assessment/limitation -> claim/review",
+      "cardinality": "exactly 1 claim per decision",
+      "meaning": "Restricts interpretation or records an assessment; not an overwrite of source."
+    }
+  ],
+  "competency_questions": {
+    "user-claims": [
+      "sym:Claim:hswm-metahumotonic-cave-exclusivity-2026-10-04",
+      "sym:Claim:hswm-metahumotonic-ideal-naming-2026-10-04"
+    ],
+    "identity-roles": [
+      "sym:Concept:hswm-metahumotonic-slot-subject-2026-10-04",
+      "sym:Concept:hswm-metahumotonic-slot-name-2026-10-04",
+      "sym:Concept:hswm-metahumotonic-slot-speaker-2026-10-04"
+    ],
+    "literature": [
+      "sym:Concept:hswm-metahumotonic-source-plato-2026-10-04",
+      "sym:Concept:hswm-metahumotonic-source-prh-2026-10-04",
+      "sym:Concept:hswm-metahumotonic-source-aristotelian-2026-10-04",
+      "sym:Concept:hswm-metahumotonic-source-structure-2026-10-04",
+      "sym:Concept:hswm-metahumotonic-source-causal-2026-10-04",
+      "sym:Concept:hswm-metahumotonic-source-world-2026-10-04",
+      "sym:Concept:hswm-metahumotonic-source-plasticity-2026-10-04",
+      "sym:Concept:hswm-metahumotonic-source-hyperon-2026-10-04"
+    ],
+    "applications": [
+      "sym:Claim:hswm-metahumotonic-hypothesis-representation-2026-10-04",
+      "sym:Claim:hswm-metahumotonic-hypothesis-revision-2026-10-04",
+      "sym:Claim:hswm-metahumotonic-hypothesis-abstraction-2026-10-04",
+      "sym:Claim:hswm-metahumotonic-hypothesis-continuity-2026-10-04"
+    ],
+    "evaluation": [
+      "sym:Concept:hswm-metahumotonic-evaluation-representation-2026-10-04",
+      "sym:Concept:hswm-metahumotonic-evaluation-revision-2026-10-04",
+      "sym:Concept:hswm-metahumotonic-evaluation-abstraction-2026-10-04",
+      "sym:Concept:hswm-metahumotonic-evaluation-continuity-2026-10-04"
+    ],
+    "violations": []
+  },
+  "identity_policy": {
+    "existing_hswm_uid": "sym:Concept:hswm",
+    "existing_philosophy_uid": "sym:DefinedTerm:메타휴모토닉",
+    "term_binding": "external_subject_uid literal on a readback observation; no new synonym entity",
+    "unconditional_same_as": false,
+    "local_uid_profile": "ASCII-only native bundle v2; no silent UID normalization"
+  },
+  "evaluation_plans": [
+    {
+      "id": "representation",
+      "status": "NOT_RUN",
+      "observed_values": {
+        "role_recall": null,
+        "exception_recall": null,
+        "roundtrip_exact": null,
+        "calibrated_local_structure": null,
+        "calibrated_global_structure": null,
+        "calibrated_local_geometry": null,
+        "calibrated_global_geometry": null
+      },
+      "sample_size": null,
+      "seed_count": null,
+      "acceptance_threshold": null,
+      "missing_design_fields": [
+        "task_population",
+        "frozen_model_revision",
+        "independent_outcome_contract",
+        "budget",
+        "sample_size",
+        "seed_count",
+        "thresholds"
+      ],
+      "obligations": [
+        "CR-0",
+        "CR-5"
+      ]
+    },
+    {
+      "id": "revision",
+      "status": "NOT_RUN",
+      "observed_values": {
+        "heldout_success_delta": null,
+        "sham_effect": null,
+        "fresh_process_revision_binding": null,
+        "token_cost": null,
+        "latency": null
+      },
+      "sample_size": null,
+      "seed_count": null,
+      "acceptance_threshold": null,
+      "missing_design_fields": [
+        "task_population",
+        "frozen_model_revision",
+        "independent_outcome_contract",
+        "budget",
+        "sample_size",
+        "seed_count",
+        "thresholds"
+      ],
+      "obligations": [
+        "CR-1",
+        "CR-2",
+        "FCL-1",
+        "FCL-4"
+      ]
+    },
+    {
+      "id": "abstraction",
+      "status": "NOT_RUN",
+      "observed_values": {
+        "intervention_disagreement": null,
+        "next_update_disagreement": null,
+        "declared_projection_loss": null
+      },
+      "sample_size": null,
+      "seed_count": null,
+      "acceptance_threshold": null,
+      "missing_design_fields": [
+        "task_population",
+        "frozen_model_revision",
+        "independent_outcome_contract",
+        "budget",
+        "sample_size",
+        "seed_count",
+        "thresholds"
+      ],
+      "obligations": [
+        "CR-6",
+        "FCL-2",
+        "FCL-8"
+      ]
+    },
+    {
+      "id": "continuity",
+      "status": "NOT_RUN",
+      "observed_values": {
+        "new_task_success": null,
+        "retention": null,
+        "calibration_error": null,
+        "token_cost": null,
+        "latency": null,
+        "storage_bytes": null
+      },
+      "sample_size": null,
+      "seed_count": null,
+      "acceptance_threshold": null,
+      "missing_design_fields": [
+        "task_population",
+        "frozen_model_revision",
+        "independent_outcome_contract",
+        "budget",
+        "sample_size",
+        "seed_count",
+        "thresholds"
+      ],
+      "obligations": [
+        "CR-5",
+        "CR-7",
+        "FCL-6",
+        "FCL-7"
+      ]
+    }
+  ],
+  "dag_policy": "No global acyclicity rule; provenance and plan constraints are scoped.",
+  "rollback": "Revert only this dated bundle, its documents and the added workspace entry; preserve prior sources and other writers.",
+  "publisher": {
+    "status": "LOCAL_REPOSITORY_PROJECTION",
+    "live_kg_applied": false,
+    "reason": "Available shared ontology surface is read-only; inspected owner graph-and-loop publisher only accepts its own deterministic bundle. This new bundle has no supported live publisher binding."
+  }
+}

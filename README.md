@@ -10,6 +10,12 @@
 전체가 하나의 거대한 AI를 이루는 하이퍼그래프 신경망입니다.
 [사용자 정체성 정의와 KG](docs/canon/USER_PRIMARY_HSWM_HYPERGRAPH_NEURAL_AI_2026-09-14.md)에 기록합니다.
 
+**완전한 이데아의 HSWM은 metahumotonic이라는 사용자 정의**를
+[원문과 정체성 기록](docs/canon/USER_PRIMARY_HSWM_METAHUMOTONIC_IDEA_2026-10-04.md)에 보존합니다.
+[동굴 비유·표현 수렴·인과적 학습 연구](docs/research/HSWM_CAVE_METAHUMOTONIC_RESEARCH_2026-10-04.md)는
+관련 문헌, 한계와 기존 실행 계약을 연결하며 `hswm-workspace show metahumotonic`에서 조회합니다.
+철학적 명명과 현재 구현의 완성·성능 판정을 구분합니다.
+
 **거대한 Semantic Weight 하이퍼그래프가 AI 상태 자체이고, LLM은 작은 국소 입력을 받아
 내부 신경 연산자로 작동한다**는 목표를 유지합니다.
 [상태·연산자 정의와 비교 원칙](docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md)에

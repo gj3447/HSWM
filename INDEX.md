@@ -4,6 +4,11 @@
 필요한 검사 → Git 기록을 기본으로 한다. RDF·SHACL·SPARQL·PROV 기반 작업과 주제별
 참조를 안내하며, 아래 날짜별 기록은 당시 출처와 재현 정보를 보존한다.
 
+2026-10-04 [허용·거절을 보존하는 Lean 추상화](docs/research/HSWM_OPERATIONAL_QUOTIENT_LEAN_2026-10-04.md)는
+출력만 관찰하던 기존 동치의 공백을 닫고 Step/Learn 보존과 학습 후 구별되는 반례를 증명한다.
+새 선언 14개와 기존 lifecycle·통계 증명을 재검사했다. 작업공간은 `operational-quotient`이며
+대표 상태를 제공한 결정적 모형의 결과로, 실모델 효능·전체 HSWM·metahumotonic 완성은 미증명이다.
+
 2026-10-04 [동굴 비유와 metahumotonic](docs/research/HSWM_CAVE_METAHUMOTONIC_RESEARCH_2026-10-04.md)은
 완전한 HSWM 이데아에 대한 사용자 명명과 강한 유일성 주장을 원문으로 보존한다.
 여덟 문헌 검토, 기존 실행 계약, 네 미실행 평가를 출처 결속 그래프와 여섯 SPARQL 질의로 연결한다.

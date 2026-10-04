@@ -1,0 +1,345 @@
+{
+  "schema_version": "hswm-operational-quotient-lean-verification/v1",
+  "profile": "operational-quotient",
+  "recorded_at": "2026-10-04T09:48:30.967Z",
+  "status": "EXACT_SOURCE_KERNEL_CHECKED",
+  "claim_ceiling": "GUARD_OBSERVING_DETERMINISTIC_QUOTIENT_WITH_EXPLICIT_SECTION_NOT_RUNTIME_PLANNER_WORLD_IDENTIFICATION_OR_METAHUMOTONIC_COMPLETENESS",
+  "toolchain": {
+    "name": "leanprover/lean4:v4.32.1",
+    "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+    "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+    "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "lean_path": "/mnt/development/archive/dev-01-offload-20260925/lean-toolchains/leanprover--lean4---v4.32.1/bin/lean",
+    "pin_path": "formal/lean-toolchain",
+    "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+    "resolved_by": "lake env which lean",
+    "execution_binary": "/mnt/development/archive/dev-01-offload-20260925/lean-toolchains/leanprover--lean4---v4.32.1/bin/lean",
+    "lean_path_entries": [
+      "/home/lagyeongjun/CD/HSWM/.hswm-local/operational-quotient-20261004-01/olean",
+      "/mnt/development/archive/dev-01-offload-20260925/lean-toolchains/leanprover--lean4---v4.32.1/src/lean/Std"
+    ]
+  },
+  "compile_order": [
+    "HSWMSemanticQuotient",
+    "HSWMOperationalAbstraction",
+    "HSWMBehavioralMinimality",
+    "HSWMOperationalQuotient"
+  ],
+  "audited_sources": [
+    "HSWMOperationalAbstraction",
+    "HSWMBehavioralMinimality",
+    "HSWMOperationalQuotient"
+  ],
+  "source_records": [
+    {
+      "path": "formal/HSWMSemanticQuotient.lean",
+      "sha256": "8dab893fb049284cbfe7b2cffb5abd8a11b6396dfe1422a89a823f41b17a6f52",
+      "byteLength": 11389,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 0,
+      "named_theorems": [],
+      "theorem_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/HSWMOperationalAbstraction.lean",
+      "sha256": "a472db368cd43f61918c3d5506bc5e7dbb27cd6c18ef34d4e6cbed4d92d76612",
+      "byteLength": 8715,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 6,
+      "named_theorems": [
+        "HSWM.OperationalAbstraction.criterion_builds_refinement",
+        "HSWM.OperationalAbstraction.refinement_implies_criterion",
+        "HSWM.OperationalAbstraction.criterion_iff_exists_refinement",
+        "HSWM.OperationalAbstraction.criterion_preserves_run",
+        "HSWM.OperationalAbstraction.step_only_agreement",
+        "HSWM.OperationalAbstraction.step_only_agreement_does_not_refine_learning"
+      ],
+      "theorem_axioms": [
+        {
+          "theorem": "HSWM.OperationalAbstraction.criterion_builds_refinement",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalAbstraction.criterion_iff_exists_refinement",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalAbstraction.criterion_preserves_run",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalAbstraction.refinement_implies_criterion",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalAbstraction.step_only_agreement",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.OperationalAbstraction.step_only_agreement_does_not_refine_learning",
+          "axioms": [
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "propext"
+      ],
+      "audit_stdout_sha256": "07bde7fe144f4e7f87d7e1ebf4574055e254d6b406768dade4dc37296b7880aa",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "formal/HSWMBehavioralMinimality.lean",
+      "sha256": "cb96c1acc11c4396ec85bef8fa79eec120e5e32dd87004c8ac519cb3d91eb0b7",
+      "byteLength": 9636,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 13,
+      "named_theorems": [
+        "HSWM.BehavioralMinimality.behavioral_refl",
+        "HSWM.BehavioralMinimality.behavioral_symm",
+        "HSWM.BehavioralMinimality.behavioral_trans",
+        "HSWM.BehavioralMinimality.behavioralQuotient_eq_iff",
+        "HSWM.BehavioralMinimality.behavioral_advance_output_congruent",
+        "HSWM.BehavioralMinimality.behavioral_advance_successor_congruent",
+        "HSWM.BehavioralMinimality.exact_encoding_collision_is_behaviorally_equivalent",
+        "HSWM.BehavioralMinimality.quotientFactor_on_source",
+        "HSWM.BehavioralMinimality.quotientFactor_surjective",
+        "HSWM.BehavioralMinimality.quotientFactor_unique_on_reachable",
+        "HSWM.BehavioralMinimality.same_step_read_not_behaviorally_sufficient_after_learn",
+        "HSWM.BehavioralMinimality.guard_only_states_are_output_behaviorally_equivalent",
+        "HSWM.BehavioralMinimality.output_behavioral_equivalence_does_not_preserve_learn_guard"
+      ],
+      "theorem_axioms": [
+        {
+          "theorem": "HSWM.BehavioralMinimality.behavioral_advance_output_congruent",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.BehavioralMinimality.behavioral_advance_successor_congruent",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.BehavioralMinimality.behavioral_refl",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.BehavioralMinimality.behavioral_symm",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.BehavioralMinimality.behavioral_trans",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.BehavioralMinimality.behavioralQuotient_eq_iff",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.BehavioralMinimality.exact_encoding_collision_is_behaviorally_equivalent",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.BehavioralMinimality.guard_only_states_are_output_behaviorally_equivalent",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.BehavioralMinimality.output_behavioral_equivalence_does_not_preserve_learn_guard",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.BehavioralMinimality.quotientFactor_on_source",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.BehavioralMinimality.quotientFactor_surjective",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.BehavioralMinimality.quotientFactor_unique_on_reachable",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.BehavioralMinimality.same_step_read_not_behaviorally_sufficient_after_learn",
+          "axioms": [
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "Quot.sound",
+        "propext"
+      ],
+      "audit_stdout_sha256": "80c446ead14fb959c9af636210e63be7a53f0a2a9077c9bd46b1e3e41cbcf027",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "formal/HSWMOperationalQuotient.lean",
+      "sha256": "f751be031628aeab210e166a13112bbb5adca6ec6edc8f7b3259b95479533564",
+      "byteLength": 11893,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 14,
+      "named_theorems": [
+        "HSWM.OperationalQuotient.quotient_eq_iff",
+        "HSWM.OperationalQuotient.equivalent_observation",
+        "HSWM.OperationalQuotient.equivalent_successor",
+        "HSWM.OperationalQuotient.observedTrace_outputs",
+        "HSWM.OperationalQuotient.operational_equivalence_implies_output_equivalence",
+        "HSWM.OperationalQuotient.operational_quotient_fibre_criterion",
+        "HSWM.OperationalQuotient.operational_quotient_refines",
+        "HSWM.OperationalQuotient.operational_quotient_preserves_run",
+        "HSWM.OperationalQuotient.exact_refinement_preserves_observedTrace",
+        "HSWM.OperationalQuotient.exact_refinement_collision_is_operationally_equivalent",
+        "HSWM.OperationalQuotient.distinguishing_trace_refutes_exact_abstraction",
+        "HSWM.OperationalQuotient.refinementFactor_on_source",
+        "HSWM.OperationalQuotient.output_equivalence_does_not_imply_operational_equivalence",
+        "HSWM.OperationalQuotient.visible_bit_has_no_exact_learning_abstraction"
+      ],
+      "theorem_axioms": [
+        {
+          "theorem": "HSWM.OperationalQuotient.distinguishing_trace_refutes_exact_abstraction",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalQuotient.equivalent_observation",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.OperationalQuotient.equivalent_successor",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.OperationalQuotient.exact_refinement_collision_is_operationally_equivalent",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalQuotient.exact_refinement_preserves_observedTrace",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalQuotient.observedTrace_outputs",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalQuotient.operational_equivalence_implies_output_equivalence",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalQuotient.operational_quotient_fibre_criterion",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalQuotient.operational_quotient_preserves_run",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalQuotient.operational_quotient_refines",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalQuotient.output_equivalence_does_not_imply_operational_equivalence",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalQuotient.quotient_eq_iff",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalQuotient.refinementFactor_on_source",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.OperationalQuotient.visible_bit_has_no_exact_learning_abstraction",
+          "axioms": [
+            "Quot.sound",
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "Quot.sound",
+        "propext"
+      ],
+      "audit_stdout_sha256": "615387e2cd79cafa4521a176f9e97cabb3b75557bc5e902272a3f4efd3ea544b",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "allowed_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "runner_source": {
+    "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+    "sha256": "a56766d396f458c231ddc2db8a2ea30a8dddda3521cef3f47894b444df01f53d"
+  },
+  "auditor_interface": "ADDITIVE_PROFILE_EXTENSION_SUPERSEDES_PRIOR_PRIVATE_AUDITOR_INTERFACE_WITHOUT_MUTATING_HISTORICAL_RECEIPTS",
+  "statement_semantics_validated": false,
+  "new_dependencies_installed": false
+}

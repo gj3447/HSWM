@@ -1,0 +1,92 @@
+{
+  "schema_version": "hswm-operational-quotient-graph-contract/v1",
+  "authority": "SECONDARY_AI",
+  "predicates": {
+    "HAS_CONCEPT": {
+      "from": [
+        "FORMAL_RESEARCH_BUNDLE"
+      ],
+      "to": [
+        "FORMAL_RESULT",
+        "FORMAL_ASSUMPTION_BOUNDARY"
+      ],
+      "cardinality": 5
+    },
+    "HAS_SOURCE": {
+      "from": [
+        "FORMAL_RESEARCH_BUNDLE",
+        "FORMAL_RESULT"
+      ],
+      "to": [
+        "PROOF_SOURCE",
+        "VERIFICATION_SOURCE",
+        "PRIOR_RESEARCH_SOURCE"
+      ]
+    },
+    "REFERENCES": {
+      "from": [
+        "FORMAL_RESULT"
+      ],
+      "to": [
+        "EXTERNAL_ABSTRACTION_HYPOTHESIS"
+      ],
+      "cardinality_per_result": 1,
+      "meaning": "Addresses one formal subquestion; does not establish the external hypothesis or its evaluation."
+    },
+    "CONSTRAINS": {
+      "from": [
+        "FORMAL_ASSUMPTION_BOUNDARY"
+      ],
+      "to": [
+        "FORMAL_RESULT"
+      ],
+      "cardinality": 4
+    }
+  },
+  "expected_queries": {
+    "proofs": [
+      {
+        "uid": "sym:Concept:hswm-operational-quotient-criterion-2026-10-04",
+        "theorem": "HSWM.OperationalQuotient.operational_quotient_fibre_criterion",
+        "status": "CONDITIONAL_FORMAL_RESULT",
+        "sourcePath": "formal/HSWMOperationalQuotient.lean",
+        "sourceSha256": "f751be031628aeab210e166a13112bbb5adca6ec6edc8f7b3259b95479533564"
+      },
+      {
+        "uid": "sym:Concept:hswm-operational-quotient-refinement-2026-10-04",
+        "theorem": "HSWM.OperationalQuotient.operational_quotient_refines",
+        "status": "CONDITIONAL_FORMAL_RESULT",
+        "sourcePath": "formal/HSWMOperationalQuotient.lean",
+        "sourceSha256": "f751be031628aeab210e166a13112bbb5adca6ec6edc8f7b3259b95479533564"
+      },
+      {
+        "uid": "sym:Concept:hswm-operational-quotient-obstruction-2026-10-04",
+        "theorem": "HSWM.OperationalQuotient.distinguishing_trace_refutes_exact_abstraction",
+        "status": "CONDITIONAL_FORMAL_RESULT",
+        "sourcePath": "formal/HSWMOperationalQuotient.lean",
+        "sourceSha256": "f751be031628aeab210e166a13112bbb5adca6ec6edc8f7b3259b95479533564"
+      },
+      {
+        "uid": "sym:Concept:hswm-operational-quotient-guard-gap-2026-10-04",
+        "theorem": "HSWM.OperationalQuotient.output_equivalence_does_not_imply_operational_equivalence",
+        "status": "CONDITIONAL_FORMAL_RESULT",
+        "sourcePath": "formal/HSWMOperationalQuotient.lean",
+        "sourceSha256": "f751be031628aeab210e166a13112bbb5adca6ec6edc8f7b3259b95479533564"
+      }
+    ],
+    "gaps": [
+      {
+        "uid": "sym:Concept:hswm-operational-quotient-boundary-2026-10-04",
+        "runtime": "NOT_ESTABLISHED",
+        "efficacy": "NOT_EVALUATED",
+        "ideal": "NOT_PROVED"
+      }
+    ]
+  },
+  "prior_bundle_binding": {
+    "path": "ontology/identity/hswm_core/HSWM_METAHUMOTONIC_IDEA_ONTOLOGY.v1.json",
+    "sha256": "5307e66032a841a16faa43625c7a050795c2cac33d630508177aeac9ceeda7fe"
+  },
+  "nary_projection": "No n-ary identity flattening is introduced; existing user naming and role participation stay in the unchanged prior bundle.",
+  "publication": "REPOSITORY_ONLY_NOT_LIVE_KG"
+}

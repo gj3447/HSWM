@@ -32,7 +32,7 @@ const operationalPhilosophyAuditedSources = Object.freeze([
 const operationalPhilosophySourceOrder = Object.freeze([
   ...threePhilosophiesSourceOrder, ...operationalPhilosophyAuditedSources
 ] as const)
-type ProfileName = "three-philosophies" | "integrated-hswm" | "operational-philosophy" | "semantic-lifecycle"
+type ProfileName = "three-philosophies" | "integrated-hswm" | "operational-philosophy" | "semantic-lifecycle" | "operational-quotient"
 interface ProofProfile {
   readonly name: ProfileName
   readonly sourceOrder: ReadonlyArray<string>
@@ -50,6 +50,11 @@ const profiles: Readonly<Record<ProfileName, ProofProfile>> = Object.freeze({
   "operational-philosophy": Object.freeze({ name: "operational-philosophy", sourceOrder: operationalPhilosophySourceOrder,
     auditedSources: operationalPhilosophyAuditedSources, schemaVersion: "hswm-operational-philosophy-lean-verification/v1",
     claimCeiling: "DECLARED_DETERMINISTIC_ABSTRACTION_BEHAVIORAL_MINIMALITY_AND_STORAGE_EXECUTION_NOT_UNIVERSAL_COST_WORLD_TRUTH_REAL_LLM_OR_FULL_HSWM" }),
+  "operational-quotient": Object.freeze({ name: "operational-quotient",
+    sourceOrder: ["HSWMSemanticQuotient", "HSWMOperationalAbstraction", "HSWMBehavioralMinimality", "HSWMOperationalQuotient"],
+    auditedSources: ["HSWMOperationalAbstraction", "HSWMBehavioralMinimality", "HSWMOperationalQuotient"],
+    schemaVersion: "hswm-operational-quotient-lean-verification/v1",
+    claimCeiling: "GUARD_OBSERVING_DETERMINISTIC_QUOTIENT_WITH_EXPLICIT_SECTION_NOT_RUNTIME_PLANNER_WORLD_IDENTIFICATION_OR_METAHUMOTONIC_COMPLETENESS" }),
   "semantic-lifecycle": Object.freeze({ name: "semantic-lifecycle",
     sourceOrder: ["HSWMSemanticLifecycleRefinement", "HSWMSemanticReadLocality"],
     auditedSources: ["HSWMSemanticLifecycleRefinement", "HSWMSemanticReadLocality"],
@@ -78,7 +83,7 @@ export class SemanticPhilosophyProofHost extends Context.Tag("hswm/SemanticPhilo
 interface Options { readonly output: string; readonly lean: string | null; readonly profile: ProofProfile }
 const parse = (argv: ReadonlyArray<string>, cwd: string): Effect.Effect<Options | null, SemanticPhilosophyProofError> => {
   if (argv.length === 1 && argv[0] === "--help") return Effect.succeed(null)
-  if (argv.length !== 2 && argv.length !== 4 && argv.length !== 6) return Effect.fail(fail("CLI_INVALID", "Expected --output NEW_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy] [--lean ABSOLUTE_PATH]"))
+  if (argv.length !== 2 && argv.length !== 4 && argv.length !== 6) return Effect.fail(fail("CLI_INVALID", "Expected --output NEW_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy|semantic-lifecycle|operational-quotient] [--lean ABSOLUTE_PATH]"))
   const pairs = Array.from({ length: argv.length / 2 }, (_, index) => [argv[index * 2], argv[index * 2 + 1]] as const)
   const values = Object.fromEntries(pairs)
   if (pairs.some(([key, value]) => !["--output", "--lean", "--profile"].includes(key ?? "") || !value || value.startsWith("--")) ||
@@ -88,8 +93,8 @@ const parse = (argv: ReadonlyArray<string>, cwd: string): Effect.Effect<Options 
   if (suppliedLean !== undefined && (!isAbsolute(suppliedLean) || suppliedLean.includes("\0")))
     return Effect.fail(fail("CLI_INVALID", "--lean must be an absolute regular-file path"))
   const profileName: unknown = values["--profile"] ?? "three-philosophies"
-  if (profileName !== "three-philosophies" && profileName !== "integrated-hswm" && profileName !== "operational-philosophy" && profileName !== "semantic-lifecycle")
-    return Effect.fail(fail("CLI_INVALID", "--profile must be three-philosophies, integrated-hswm, operational-philosophy or semantic-lifecycle"))
+  if (profileName !== "three-philosophies" && profileName !== "integrated-hswm" && profileName !== "operational-philosophy" && profileName !== "semantic-lifecycle" && profileName !== "operational-quotient")
+    return Effect.fail(fail("CLI_INVALID", "--profile must be three-philosophies, integrated-hswm, operational-philosophy, semantic-lifecycle or operational-quotient"))
   const profile = profiles[profileName]
   return Effect.succeed({ output: resolve(cwd, values["--output"]), lean: suppliedLean ?? null, profile })
 }
@@ -205,7 +210,7 @@ export const runSemanticPhilosophyProof = (options: Options) => Effect.gen(funct
   return `${JSON.stringify({ output: options.output, status: report.status, sources: sourceRecords.length, claimCeiling: report.claim_ceiling })}\n`
 }).pipe(Effect.catchAll(error => Effect.fail(error)))
 
-const usage = "Usage: semantic-philosophy-proof-process --output NEW_PRIVATE_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy|semantic-lifecycle] [--lean ABSOLUTE_PATH]\n"
+const usage = "Usage: semantic-philosophy-proof-process --output NEW_PRIVATE_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy|semantic-lifecycle|operational-quotient] [--lean ABSOLUTE_PATH]\n"
 export const semanticPhilosophyProofCli = (argv: ReadonlyArray<string>) => Effect.gen(function* () {
   const options = yield* parse(argv, process.cwd())
   if (options === null) return usage

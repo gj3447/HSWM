@@ -1,0 +1,7 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+SELECT ?uid ?runtime ?efficacy ?ideal ?scope WHERE {
+  ?boundary p:standard_graph_role "FORMAL_ASSUMPTION_BOUNDARY" ; kb:uid ?uid ;
+    p:runtime_link ?runtime ; p:efficacy ?efficacy ; p:ideal_completeness ?ideal ; p:description ?scope .
+} ORDER BY ?uid

@@ -1,0 +1,44 @@
+{
+  "schema_version": "hswm-operational-quotient-mutations/v1",
+  "source_path": "formal/HSWMOperationalQuotient.lean",
+  "compiler_argv": [
+    "/mnt/development/archive/dev-01-offload-20260925/lean-toolchains/leanprover--lean4---v4.32.1/bin/lean",
+    "--trust=0",
+    "--stdin"
+  ],
+  "cases": [
+    {
+      "case": "control",
+      "replacement": null,
+      "input_sha256": "f751be031628aeab210e166a13112bbb5adca6ec6edc8f7b3259b95479533564",
+      "exit_code": 0,
+      "expected": "ACCEPT",
+      "diagnostic": "",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "case": "erased_admission",
+      "replacement": {
+        "from": "(eventAllowed dynamics state event,",
+        "to": "(true,"
+      },
+      "input_sha256": "3c144b136625d2afa898d25016b12aec2bc6546e9b3055f416d80faede0e0d15",
+      "exit_code": 1,
+      "expected": "REJECT",
+      "diagnostic": "<stdin>:103:4: error: Type mismatch\n  congrArg Prod.fst (equivalent_observation dynamics ((quotient_eq_iff dynamics).mp same) (Event.step action))\nhas type\n  (observation dynamics left (Event.step action)).fst = (observation dynamics right (Event.step action)).fst\nbut is expected to have type\n  dynamics.stepAllowed left action = dynamics.stepAllowed right action\n<stdin>:106:4: error: Type mismatch\n  congrArg Prod.fst (equivalent_observation dynamics ((quotient_eq_iff dynamics).mp same) (Event.learn evidence))\nhas type\n  (observation dynamics left (Event.learn evidence)).fst = (observation dynamics right (Event.learn evidence)).fst\nbut is expected to have type\n  dynamics.learnAllowed left evidence = dynamics.learnAllowed right evidence\n<stdin>:112:6: error: Type mismatch\n  congrArg Prod.fst obs\nhas type\n  (observation dynamics left (Event.step action)).fst = (observation dynamics right (Event.step action)).fst\nbut is expected to have type\n  dynamics.stepAllowed left action = dynamics.stepAllowed right action\n<stdin>:123:6: error: Type mismatch\n  congrArg Prod.fst (equivalent_observation dynamics equivalent (Event.learn evidence))\nhas type\n  (observation dynamics left (Event.learn evidence)).fst = (observation dynamics right (Event.learn evidence)).fst\nbut is expected to have type\n  dynamics.learnAllowed left evidence = dynamics.learnAllowed right evidence\n<stdin>:169:45: warning: This simp argument is unused:\n  guards\n\nHint: Omit it from the simp argument list.\n  simp only [observedTrace, observation, g\u0335u\u0335a\u0335r\u0335d\u0335s\u0335,\u0335 \u0335outputs]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n<stdin>:211:2: error: unsolved goals\ncase right\nequivalent : OperationallyEquivalent BehavioralMinimality.guardOnlyDynamics false true\nguards : True\n\u22a2 False\n<stdin>:213:23: warning: This simp argument is unused:\n  eventAllowed\n\nHint: Omit it from the simp argument list.\n  simp [observation, e\u0335v\u0335e\u0335n\u0335t\u0335A\u0335l\u0335l\u0335o\u0335w\u0335e\u0335d\u0335,\u0335 \u0335HSWM.BehavioralMinimality.guardOnlyDynamics] at guards\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n",
+      "output_sha256": "a77bae11e222d3bad7828a5f78301cfb3e8de2dada448ab28d87a1da9fa19554"
+    },
+    {
+      "case": "frozen_trace_successor",
+      "replacement": {
+        "from": "observedTrace dynamics (advance dynamics state event).2 events",
+        "to": "observedTrace dynamics state events"
+      },
+      "input_sha256": "f396747a0be88edfe17a9d7d88df638466bcb71863666ef3ef80d5ac2c98f0c7",
+      "exit_code": 1,
+      "expected": "REJECT",
+      "diagnostic": "<stdin>:77:2: error: Type mismatch\n  (List.cons.inj (equivalent (event :: events))).right\nhas type\n  observedTrace dynamics left events = observedTrace dynamics right events\nbut is expected to have type\n  observedTrace dynamics (advance dynamics left event).snd events =\n    observedTrace dynamics (advance dynamics right event).snd events\n<stdin>:84:25: error: unsolved goals\ncase cons\nState Action Output Evidence : Type u\ndynamics : Dynamics State Action Output Evidence\nevent : Event Action Evidence\nevents : List (Event Action Evidence)\nih : \u2200 (state : State), List.map Prod.snd (observedTrace dynamics state events) = (run dynamics state events).fst\nstate : State\n\u22a2 (advance dynamics state event).fst :: (run dynamics state events).fst =\n    (advance dynamics state event).fst :: (run dynamics (advance dynamics state event).snd events).fst\n<stdin>:170:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  q (advance source state event).snd\nin the target expression\n  (eventAllowed target (q state) event, (advance target (q state) event).fst) :: observedTrace target (q state) events =\n    (eventAllowed target (q state) event, (advance target (q state) event).fst) :: observedTrace target (q state) events\n\ncase cons\nState Action Output Evidence Layer : Type u\nsource : Dynamics State Action Output Evidence\ntarget : Dynamics Layer Action Output Evidence\nq : State \u2192 Layer\nrefinement : ExactRefinement source target q id\nevent : Event Action Evidence\nevents : List (Event Action Evidence)\nih : \u2200 (state : State), observedTrace source state events = observedTrace target (q state) events\nstate : State\nadvanced :\n  (Option.map id (advance source state event).fst, q (advance source state event).snd) = advance target (q state) event\noutputs : (advance source state event).fst = (advance target (q state) event).fst\nsuccessors : q (advance source state event).snd = (advance target (q state) event).snd\nguards : eventAllowed source state event = eventAllowed target (q state) event\n\u22a2 (eventAllowed target (q state) event, (advance target (q state) event).fst) :: observedTrace target (q state) events =\n    (eventAllowed target (q state) event, (advance target (q state) event).fst) :: observedTrace target (q state) events\n<stdin>:222:2: error: Tactic `decide` proved that the proposition\n  observedTrace BehavioralMinimality.learnSensitiveDynamics (false, false) [Event.learn true, Event.step ()] \u2260\n    observedTrace BehavioralMinimality.learnSensitiveDynamics (false, true) [Event.learn true, Event.step ()]\nis false\n",
+      "output_sha256": "98e490eebbe6947f2b9ec65866bfac783800ab2b557916f6bd1d2a88fb138174"
+    }
+  ]
+}

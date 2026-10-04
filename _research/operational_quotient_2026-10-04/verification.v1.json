@@ -1,0 +1,141 @@
+{
+  "schema_version": "hswm-operational-quotient-verification/v1",
+  "recorded_at": "2026-10-04T09:56:19.881887+00:00",
+  "base_git_revision": "6ee80139148e3e0c10ff941a9410c30ad78ba154",
+  "status": "SOURCE_AXIOMS_AND_NEW_QUOTIENT_FRESH_REPLAY_PASSED",
+  "claim_ceiling": "DECLARED_DETERMINISTIC_GUARD_AND_OUTPUT_INTERFACE_WITH_EXPLICIT_REPRESENTATIVE_NOT_COMPLETE_HSWM_OR_METAHUMOTONIC",
+  "new_named_theorem_count": 14,
+  "existing_abstraction_named_theorem_count": 19,
+  "lifecycle_rechecked_named_theorem_count": 19,
+  "statistical_rechecked_named_theorem_count": 44,
+  "new_module_axioms": [
+    "Quot.sound",
+    "propext"
+  ],
+  "report_bindings": [
+    {
+      "path": "_research/operational_quotient_2026-10-04/lean-verification.v1.json",
+      "sha256": "fed900d49d9f2b508c792936dc53637dec32feb306b2f477ebb09e6a21f9766e"
+    },
+    {
+      "path": "_research/operational_quotient_2026-10-04/lifecycle-recheck.v1.json",
+      "sha256": "6482f516f1da1160973e33ad0b74f4a776b34ee464c26e01d260f44f729e59b6"
+    },
+    {
+      "path": "_research/operational_quotient_2026-10-04/statistical-recheck.v1.json",
+      "sha256": "c672f8d5cf03c15c41b99190ec768f61ac2c32bfd363469b7c6497d653c5b1c0"
+    },
+    {
+      "path": "_research/operational_quotient_2026-10-04/mutation-checks.v1.json",
+      "sha256": "2ac4a4e91324c17c03ac46c10dece25ca113b485db8f2b75b01d19fbb13e5750"
+    }
+  ],
+  "source_bindings": [
+    {
+      "path": "formal/HSWMOperationalQuotient.lean",
+      "sha256": "f751be031628aeab210e166a13112bbb5adca6ec6edc8f7b3259b95479533564"
+    },
+    {
+      "path": "formal/lean-toolchain",
+      "sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af"
+    },
+    {
+      "path": "formal/lakefile.toml",
+      "sha256": "f2a7e93c8eedef981d5376d8df585ee82e62611d6756c36c7708cee9b1ae38d6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+      "sha256": "a56766d396f458c231ddc2db8a2ea30a8dddda3521cef3f47894b444df01f53d"
+    },
+    {
+      "path": "docs/research/HSWM_OPERATIONAL_QUOTIENT_LEAN_2026-10-04.md",
+      "sha256": "5379d9ad13cf10641a99e04aa921b90c00185741f6a7e887ec7bdaffacc68cda"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_METAHUMOTONIC_IDEA_ONTOLOGY.v1.json",
+      "sha256": "5307e66032a841a16faa43625c7a050795c2cac33d630508177aeac9ceeda7fe"
+    }
+  ],
+  "kernel_replays": [
+    {
+      "argv": [
+        "lake",
+        "env",
+        "leanchecker",
+        "--fresh",
+        "--verbose",
+        "HSWMOperationalQuotient"
+      ],
+      "cwd": "formal",
+      "status": "TIME_LIMIT_REACHED_NOT_COMPLETED",
+      "exit_code": null,
+      "elapsed_seconds": 120.104,
+      "timeout_seconds": 120,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0,
+      "scope": "SAME_LEAN_KERNEL_FRESH_REPLAY_NOT_INDEPENDENT_CHECKER"
+    },
+    {
+      "argv": [
+        "/mnt/development/archive/dev-01-offload-20260925/lean-toolchains/leanprover--lean4---v4.32.1/bin/leanchecker",
+        "--fresh",
+        "--verbose",
+        "HSWMOperationalQuotient"
+      ],
+      "cwd": "formal",
+      "lean_path_entries": [
+        "/home/lagyeongjun/CD/HSWM/.hswm-local/operational-quotient-20261004-01/olean",
+        "/mnt/development/archive/dev-01-offload-20260925/lean-toolchains/leanprover--lean4---v4.32.1/src/lean/Std"
+      ],
+      "checker_sha256": "c7c51e296d28dd443ed60f9414feef41253ede89dea76dbb2adde29768c3ed5f",
+      "status": "PASSED",
+      "exit_code": 0,
+      "elapsed_seconds": 143.452,
+      "timeout_seconds": 300,
+      "log_sha256": "5e85aa732908ebb32d6a62f67417bb99ae990976542fc047d40857f94acd8395",
+      "log_text": "replaying HSWMOperationalQuotient with --fresh\n",
+      "scope": "SAME_LEAN_KERNEL_FRESH_REPLAY_NOT_INDEPENDENT_CHECKER"
+    }
+  ],
+  "checks": [
+    {
+      "command": "lake build",
+      "cwd": "formal",
+      "exit_code": 0,
+      "jobs": 47
+    },
+    {
+      "command": "npm --prefix src/hswm/effect-runtime run check",
+      "cwd": ".",
+      "exit_code": 0
+    },
+    {
+      "command": "npm --prefix src/hswm/effect-runtime run build",
+      "cwd": ".",
+      "exit_code": 0
+    },
+    {
+      "command": "npm --prefix src/hswm/effect-runtime run test -- ../../../tests/effect-runtime/semantic-philosophy-proof-process.test.ts --maxWorkers=1",
+      "cwd": ".",
+      "exit_code": 0,
+      "tests_passed": 3
+    }
+  ],
+  "development_failure": {
+    "command": "lake --dir formal build HSWMOperationalQuotient",
+    "cwd": ".",
+    "selected_lean": "4.34.1",
+    "status": "FAILED_WRONG_TOOLCHAIN",
+    "resolution": "Run lake build from formal with pinned 4.32.1; existing proofs unchanged."
+  },
+  "remaining": {
+    "actual_runtime_dynamics_refinement": "NOT_ESTABLISHED",
+    "automatic_equivalence_decider_or_representative_algorithm": "NOT_IMPLEMENTED",
+    "stochastic_llm": "NOT_MODELLED",
+    "real_model_efficacy": "NOT_EVALUATED",
+    "universal_hswm_superiority": "NOT_PROVED",
+    "metahumotonic_completeness": "NOT_PROVED",
+    "statistical_full_import_fresh_replay_this_round": "NOT_RUN"
+  },
+  "standard_import_boundary": "Lean Std imports; statistical project uses pinned Mathlib compiled imports. No independent kernel/compiler verification."
+}

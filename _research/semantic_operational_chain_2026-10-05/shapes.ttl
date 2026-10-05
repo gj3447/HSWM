@@ -1,0 +1,26 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix s: <urn:hswm:semantic-operational:shapes:> .
+s:Root a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-semantic-operational-2026-10-05> ;
+  sh:class role:FORMAL_RESEARCH_BUNDLE ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:FORMAL_RESULT ] ; sh:qualifiedMinCount 3 ; sh:qualifiedMaxCount 3 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:FORMAL_ASSUMPTION_BOUNDARY ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+s:Result a sh:NodeShape ; sh:targetClass role:FORMAL_RESULT ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:status ; sh:hasValue "CONDITIONAL_FORMAL_RESULT" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:theorem ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:qualifiedValueShape [ sh:class role:PROOF_SOURCE ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:qualifiedValueShape [ sh:class role:VERIFICATION_SOURCE ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm> ; sh:maxCount 1 ] .
+s:Boundary a sh:NodeShape ; sh:targetClass role:FORMAL_ASSUMPTION_BOUNDARY ;
+  sh:property [ sh:path p:runtime_link ; sh:hasValue "PARTIAL_DECODED_RELATION_VIEW" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:efficacy ; sh:hasValue "NOT_EVALUATED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:ideal_completeness ; sh:hasValue "NOT_PROVED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:CONSTRAINS ; sh:class role:FORMAL_RESULT ; sh:minCount 3 ; sh:maxCount 3 ] .
+s:ProofSource a sh:NodeShape ; sh:targetClass role:PROOF_SOURCE ;
+  sh:property [ sh:path p:source_path ; sh:hasValue "formal/HSWMSemanticOperationalBridge.lean" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .

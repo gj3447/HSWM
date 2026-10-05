@@ -1,0 +1,139 @@
+{
+  "schema_version": "hswm-semantic-operational-verification/v1",
+  "recorded_at": "2026-10-05T01:06:46.910065+00:00",
+  "base_git_revision": "8043a83841bf3e89dc4e089adbab012475839fc8",
+  "status": "FORMAL_AND_TARGETED_RUNTIME_PASS_WITH_BASELINE_REGRESSION_FAILURES",
+  "claim_ceiling": "DECODED_RELATION_VIEW_FINITE_CHAIN_NOT_FULL_STORE_REFINEMENT_STATISTICAL_SELECTION_OR_EFFICACY",
+  "new_named_theorem_count": 14,
+  "existing_lifecycle_named_theorem_count": 12,
+  "new_module_axioms": [
+    "propext"
+  ],
+  "source_bindings": [
+    {
+      "path": "formal/HSWMSemanticOperationalBridge.lean",
+      "sha256": "ad63a4e30c160d8e189ca7fa9c35a62a2c948dd37cab5e6ddefab6379aadbea4"
+    },
+    {
+      "path": "formal/HSWMSemanticLifecycleCli.lean",
+      "sha256": "cfb2bb50dc43455d88879e1f72329fd74f92254b20e002f691e272e0f919f3d0"
+    },
+    {
+      "path": "formal/lakefile.toml",
+      "sha256": "a5a36a3d0069e95eb80384b3001a8f341dfbc596935734ed6e2bcba3ac73020c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-lifecycle-chain.ts",
+      "sha256": "6e47232b15cb95248dca17256155fda1c739fec76d039c13d15c268e0eb2b8e7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+      "sha256": "70cbe0bf9e7d689c8e6ac2a0c0aa545a45f4d9bdf701a191faf76942a512385e"
+    },
+    {
+      "path": "tests/effect-runtime/semantic-lifecycle-chain.test.ts",
+      "sha256": "e14079893714af1dc25aeb80fc98c25fa364c05409359cf376228a89542aec97"
+    },
+    {
+      "path": "docs/research/HSWM_SEMANTIC_OPERATIONAL_CHAIN_2026-10-05.md",
+      "sha256": "b224b8c4eefec5a3267dd54ce7b9d7a3752f0ebbbf3d2c474438ef2750e6dd4b"
+    },
+    {
+      "path": "ontology/development/HSWM_SEMANTIC_OPERATIONAL_CHAIN_2026-10-05.v1.json",
+      "sha256": "b87c5d838f506668bb561792519783cb46052e45aaee1886cb9820dbb171c822"
+    }
+  ],
+  "report_bindings": [
+    {
+      "path": "_research/semantic_operational_chain_2026-10-05/lean-verification.v1.json",
+      "sha256": "3202c1111af3fa58e00c8d3c0393be20651391430a474fcaf3e79f7e76b62240"
+    },
+    {
+      "path": "_research/semantic_operational_chain_2026-10-05/runtime-verification.v1.json",
+      "sha256": "9ee8f59cd8470ba53f63db08db662fdef7061ec5d873970d494a00af2bd1000e"
+    },
+    {
+      "path": "_research/semantic_operational_chain_2026-10-05/kernel-replay.v1.json",
+      "sha256": "daa34efaba4c0fc83105a5090e47663543f7442213aaf0b76e0698cf2cdf9535"
+    },
+    {
+      "path": "_research/semantic_operational_chain_2026-10-05/graph-validation.v1.json",
+      "sha256": "db2e3e2ea0518e031af9c4066b96c12e15ceec80f0323efd5c255aeb5bc9a117"
+    },
+    {
+      "path": "_research/semantic_operational_chain_2026-10-05/baseline-check-findings.v1.json",
+      "sha256": "3187a64d518839b34b86e25d0c4cbf2116a10eb513665b0415c885250a9626b0"
+    },
+    {
+      "path": "_research/semantic_operational_chain_2026-10-05/kg-readback.v1.json",
+      "sha256": "efd92b0173a350f3749f635e46342115ac67df16345911ec7eb137c97cafd255"
+    }
+  ],
+  "kernel_replay": {
+    "schema_version": "hswm-semantic-chain-fresh-kernel-replay/v1",
+    "module": "HSWMSemanticOperationalBridge",
+    "flags": [
+      "--fresh",
+      "--verbose"
+    ],
+    "status": "PASSED",
+    "exitCode": 0,
+    "elapsedSeconds": 133.028,
+    "timeoutSeconds": 300,
+    "checkerSha256": "c7c51e296d28dd443ed60f9414feef41253ede89dea76dbb2adde29768c3ed5f",
+    "proofSourceSha256": "ad63a4e30c160d8e189ca7fa9c35a62a2c948dd37cab5e6ddefab6379aadbea4",
+    "logSha256": "becdd61fc73ab24e1d274701d405b6766ba2eaa69a20a617d5af8076003121e3",
+    "scope": "SAME_LEAN_KERNEL_FRESH_REPLAY_NOT_INDEPENDENT_KERNEL_OR_FULL_RUNTIME_PROOF"
+  },
+  "checks": {
+    "lean_build": "PASS",
+    "effect_typecheck_and_lints": "PASS",
+    "effect_build": "PASS",
+    "dnrd_build": "PASS",
+    "npm_pack_dry_run": "PASS",
+    "targeted_tests": {
+      "passed": 10,
+      "files": 4,
+      "semanticLeanEnabled": true
+    },
+    "likeness_verify": {
+      "testsPassed": 200,
+      "files": 22,
+      "typecheck": "PASS",
+      "build": "PASS"
+    },
+    "graph": "BASE_AND_DOMAIN_SHACL_EXACT_SPARQL_3_MUTATIONS_PASS",
+    "markdown_math": "PASS"
+  },
+  "full_runtime_suite": {
+    "passed": 1524,
+    "failed": 2,
+    "skipped": 32,
+    "suite_initialization_failures": 1,
+    "test_files_passed": 249,
+    "test_files_failed": 3,
+    "test_files_skipped": 2,
+    "seconds": 354.08,
+    "status": "NOT_ALL_PASS",
+    "findings": [
+      "Prior empty temporary directory preserved outside package; isolated 3-test source closure then passed.",
+      "Existing semantic lifecycle bootstrap raw submit disagrees with source-wide production boundary test; relevant source/test match base revision.",
+      "Current Node binary does not match existing drand pinned binary; no pin refresh."
+    ]
+  },
+  "runtime_observations": {
+    "rounds": 6,
+    "chains": 2,
+    "roundsPerChain": 3,
+    "rejectedMutations": 14,
+    "realModelCalls": 0
+  },
+  "remaining": {
+    "full_typescript_and_store_refinement": "NOT_PROVED",
+    "statistical_selection_and_independent_outcomes": "NOT_ESTABLISHED_BY_THIS_CHAIN",
+    "topology_and_multi_cell_joint_efficacy": "OPEN",
+    "real_model_gain": "NOT_MEASURED",
+    "whole_hswm": "GAPS_REMAIN",
+    "metahumotonic_completeness": "NOT_PROVED"
+  }
+}

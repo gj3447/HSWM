@@ -1,11 +1,12 @@
 import Lean.Data.Json
-import HSWMSemanticLifecycleRefinement
+import HSWMSemanticOperationalBridge
 
 /-! Stdin/stdout decoder for the post-run structural witness.  It is a report
 tool: false is a successful report, never an admission decision. -/
 
 open Lean
 open HSWM.SemanticLifecycleRefinement
+open HSWM.SemanticOperationalBridge
 
 private def field (j : Json) (n : String) : Except String Json := j.getObjVal? n
 private def str (j : Json) (n : String) : Except String String := do
@@ -44,8 +45,7 @@ private def revision (j : Json) : Except String Revision :=
   return ⟨← str j "semanticText", ← str j "disposition", ← str j "uncertainty", ← strings j "exceptionRefs",
     ← str j "revisionEvidenceSha256", ← str j "traceSha256", ← str j "outcomeSha256", ← str j "backendConfigurationSha256"⟩
 
-private def decode (input : String) : Except String PostRunWire := do
-  let j ← Json.parse input
+private def decodeWire (j : Json) : Except String PostRunWire := do
   let contract ← str j "contract"
   let before ← state (← field j "before")
   let currentFrame ← frame (← field j "frame")
@@ -64,11 +64,21 @@ private def decode (input : String) : Except String PostRunWire := do
 private def response (accepted : Bool) : String :=
   Json.compress (.mkObj [("contract", .str semanticLifecyclePostRunContractVersion), ("accepted", accepted)])
 
+/-- Same decoder/checker, extended to a nonempty chain; no new admission capability. -/
+private def inspect (input : String) : Except String String := do
+  let j ← Json.parse input
+  if (← str j "contract") == chainContract then
+    let wires ← (← arr j "rounds").toList.mapM decodeWire
+    return Json.compress (.mkObj [("contract", .str chainContract),
+      ("accepted", chainAccepted wires), ("roundCount", toJson wires.length)])
+  else
+    return response (postRunAccepted (← decodeWire j))
+
 def main (_ : List String) : IO UInt32 := do
   let input ← IO.getStdin >>= fun h => h.readToEnd
-  match decode input with
-  | .ok wire =>
-      (← IO.getStdout).putStr (response (postRunAccepted wire))
+  match inspect input with
+  | .ok result =>
+      (← IO.getStdout).putStr result
       return 0
   | .error error =>
       IO.eprintln s!"HSWM_SEMANTIC_LIFECYCLE_WIRE_INVALID: {error}"

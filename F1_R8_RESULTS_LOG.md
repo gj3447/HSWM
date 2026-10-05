@@ -80,3 +80,5 @@
 
 프로그램 전체의 과학적 상태는 `UNJUDGED`다. 로컬 테스트 통과는 구조·불변식의 공학적
 closure일 뿐, 효능 승격으로 해석하지 않는다.
+
+| 2026-10-05 | 실제 semantic 기록을 Step/Learn 인스턴스에 연결하고 모든 유한 accepted chain의 출력·선택 상태·역할/예외 순서·revision 증가량을 증명했다. 새 정리 14개·기존 12개 검사, 새 모듈 fresh replay 133.028초 통과. 실제 durable 3라운드 2건·변조 14건·관련 검사 10개 통과. | [연구](docs/research/HSWM_SEMANTIC_OPERATIONAL_CHAIN_2026-10-05.md) · [검증](_research/semantic_operational_chain_2026-10-05/verification.v1.json) · [receipt](evidence/hswm_semantic_operational_chain_2026-10-05/134f5a3ad8d0069164323fd458a28c8009c2efb2fa5a43b0471e195c155377ed.json) · scripted transport이며 실모델 호출 0회. 전체 회귀는 1524 통과·2 실패·suite 초기화 1 실패로 별도 기록; 빈 임시 폴더 보존 후 관련 3개 재검사 통과. 전체 store·독립 효능·CR/FCL 완료 승격 없음. |

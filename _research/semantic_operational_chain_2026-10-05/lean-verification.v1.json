@@ -1,0 +1,278 @@
+{
+  "schema_version": "hswm-semantic-operational-lean-verification/v1",
+  "profile": "semantic-operational",
+  "recorded_at": "2026-10-05T00:51:17.033Z",
+  "status": "EXACT_SOURCE_KERNEL_CHECKED",
+  "claim_ceiling": "DECODED_RELATION_VIEW_STEP_LEARN_AND_FINITE_CHAIN_COMPOSITION_NOT_FULL_TS_STORE_REFINEMENT_STATISTICAL_ADMISSION_OR_LLM_EFFICACY",
+  "toolchain": {
+    "name": "leanprover/lean4:v4.32.1",
+    "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+    "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+    "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "pin_path": "formal/lean-toolchain",
+    "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+    "resolved_by": "lake env which lean"
+  },
+  "compile_order": [
+    "HSWMSemanticQuotient",
+    "HSWMSemanticLifecycleRefinement",
+    "HSWMSemanticOperationalBridge"
+  ],
+  "audited_sources": [
+    "HSWMSemanticLifecycleRefinement",
+    "HSWMSemanticOperationalBridge"
+  ],
+  "source_records": [
+    {
+      "path": "formal/HSWMSemanticQuotient.lean",
+      "sha256": "8dab893fb049284cbfe7b2cffb5abd8a11b6396dfe1422a89a823f41b17a6f52",
+      "byteLength": 11389,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 0,
+      "named_theorems": [],
+      "theorem_axioms": [],
+      "axioms": [],
+      "audit_stdout_sha256": null,
+      "audit_stderr_sha256": null
+    },
+    {
+      "path": "formal/HSWMSemanticLifecycleRefinement.lean",
+      "sha256": "0388764a330ffb7094330e2a207de16fadd0998216554bd01f11ac5c57e7fe40",
+      "byteLength": 13419,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 12,
+      "named_theorems": [
+        "HSWM.SemanticLifecycleRefinement.key_ext",
+        "HSWM.SemanticLifecycleRefinement.semantic_ext",
+        "HSWM.SemanticLifecycleRefinement.relation_ext",
+        "HSWM.SemanticLifecycleRefinement.state_ext",
+        "HSWM.SemanticLifecycleRefinement.postRunAccepted_iff",
+        "HSWM.SemanticLifecycleRefinement.accepted_projects_exact_revision_binding",
+        "HSWM.SemanticLifecycleRefinement.accepted_after_eq_semanticSuccessor",
+        "HSWM.SemanticLifecycleRefinement.accepted_projects_next_trace_reads_selected_state",
+        "HSWM.SemanticLifecycleRefinement.accepted_preserves_ordered_roles",
+        "HSWM.SemanticLifecycleRefinement.accepted_preserves_ordered_exceptions",
+        "HSWM.SemanticLifecycleRefinement.accepted_retains_exact_predecessor",
+        "HSWM.SemanticLifecycleRefinement.changed_trace_cannot_be_accepted"
+      ],
+      "theorem_axioms": [
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.accepted_after_eq_semanticSuccessor",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.accepted_preserves_ordered_exceptions",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.accepted_preserves_ordered_roles",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.accepted_projects_exact_revision_binding",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.accepted_projects_next_trace_reads_selected_state",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.accepted_retains_exact_predecessor",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.changed_trace_cannot_be_accepted",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.key_ext",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.postRunAccepted_iff",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.relation_ext",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.semantic_ext",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticLifecycleRefinement.state_ext",
+          "axioms": [
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "propext"
+      ],
+      "audit_stdout_sha256": "497c36ec6d967e66db9ee7b1c3622ce9d73f7168a68b8bb326edfcfcb3abcf43",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "formal/HSWMSemanticOperationalBridge.lean",
+      "sha256": "ad63a4e30c160d8e189ca7fa9c35a62a2c948dd37cab5e6ddefab6379aadbea4",
+      "byteLength": 10085,
+      "exitCode": 0,
+      "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "named_theorem_count": 14,
+      "named_theorems": [
+        "HSWM.SemanticOperationalBridge.accepted_training_read",
+        "HSWM.SemanticOperationalBridge.accepted_next_read",
+        "HSWM.SemanticOperationalBridge.accepted_learning_bound",
+        "HSWM.SemanticOperationalBridge.accepted_learning_guard",
+        "HSWM.SemanticOperationalBridge.accepted_learning_advance",
+        "HSWM.SemanticOperationalBridge.accepted_round_replays",
+        "HSWM.SemanticOperationalBridge.run_append",
+        "HSWM.SemanticOperationalBridge.accepted_chain_replays",
+        "HSWM.SemanticOperationalBridge.accepted_selected_invariants",
+        "HSWM.SemanticOperationalBridge.accepted_chain_preserves_invariants",
+        "HSWM.SemanticOperationalBridge.stale_round_rejected",
+        "HSWM.SemanticOperationalBridge.empty_chain_not_evidence",
+        "HSWM.SemanticOperationalBridge.accepted_selected_revision",
+        "HSWM.SemanticOperationalBridge.accepted_chain_revision_count"
+      ],
+      "theorem_axioms": [
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.accepted_chain_preserves_invariants",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.accepted_chain_replays",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.accepted_chain_revision_count",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.accepted_learning_advance",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.accepted_learning_bound",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.accepted_learning_guard",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.accepted_next_read",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.accepted_round_replays",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.accepted_selected_invariants",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.accepted_selected_revision",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.accepted_training_read",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.empty_chain_not_evidence",
+          "axioms": []
+        },
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.run_append",
+          "axioms": [
+            "propext"
+          ]
+        },
+        {
+          "theorem": "HSWM.SemanticOperationalBridge.stale_round_rejected",
+          "axioms": [
+            "propext"
+          ]
+        }
+      ],
+      "axioms": [
+        "propext"
+      ],
+      "audit_stdout_sha256": "ab17e5f977d61d0249ee980da4272ba4f064ce0e674dd9bf2458e6fe458c55f4",
+      "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "allowed_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "runner_source": {
+    "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+    "sha256": "70cbe0bf9e7d689c8e6ac2a0c0aa545a45f4d9bdf701a191faf76942a512385e"
+  },
+  "auditor_interface": "ADDITIVE_PROFILE_EXTENSION_SUPERSEDES_PRIOR_PRIVATE_AUDITOR_INTERFACE_WITHOUT_MUTATING_HISTORICAL_RECEIPTS",
+  "statement_semantics_validated": false,
+  "new_dependencies_installed": false,
+  "publication_projection": {
+    "kind": "HOST_PATHS_OMITTED",
+    "private_report_sha256": "26e91401a3c32110ce24ffe6d4f9c1ade04c73dd6c3e4567cf9aaec0a8d92125",
+    "omitted_toolchain_fields": [
+      "lean_path",
+      "execution_binary",
+      "lean_path_entries"
+    ]
+  }
+}

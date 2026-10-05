@@ -1,0 +1,94 @@
+{
+  "schema_version": "hswm-semantic-operational-graph-validation/v1",
+  "status": "PASS_LOCAL_STRUCTURE_AND_EXACT_QUERY_NOT_EFFICACY",
+  "artifactBindingsMatched": 13,
+  "baseShacl": {
+    "conforms": true,
+    "results": [],
+    "claim_ceiling": "KG_BUNDLE_STRUCTURE_AND_BYTE_BINDING_ONLY_NOT_LIVE_KG_STATE_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+    "engine": "rdf-validate-shacl@0.6.5",
+    "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+  },
+  "domainShacl": {
+    "conforms": true,
+    "results": [],
+    "claim_ceiling": "KG_BUNDLE_STRUCTURE_AND_BYTE_BINDING_ONLY_NOT_LIVE_KG_STATE_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+    "engine": "rdf-validate-shacl@0.6.5",
+    "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+  },
+  "exactProofRows": [
+    {
+      "uid": {
+        "kind": "literal",
+        "value": "sym:Concept:hswm-semantic-operational-invariants-2026-10-05"
+      },
+      "theorem": {
+        "kind": "literal",
+        "value": "HSWM.SemanticOperationalBridge.accepted_chain_preserves_invariants"
+      },
+      "status": {
+        "kind": "literal",
+        "value": "CONDITIONAL_FORMAL_RESULT"
+      },
+      "sourcePath": {
+        "kind": "literal",
+        "value": "formal/HSWMSemanticOperationalBridge.lean"
+      },
+      "sourceSha256": {
+        "kind": "literal",
+        "value": "ad63a4e30c160d8e189ca7fa9c35a62a2c948dd37cab5e6ddefab6379aadbea4"
+      }
+    },
+    {
+      "uid": {
+        "kind": "literal",
+        "value": "sym:Concept:hswm-semantic-operational-chain-2026-10-05"
+      },
+      "theorem": {
+        "kind": "literal",
+        "value": "HSWM.SemanticOperationalBridge.accepted_chain_replays"
+      },
+      "status": {
+        "kind": "literal",
+        "value": "CONDITIONAL_FORMAL_RESULT"
+      },
+      "sourcePath": {
+        "kind": "literal",
+        "value": "formal/HSWMSemanticOperationalBridge.lean"
+      },
+      "sourceSha256": {
+        "kind": "literal",
+        "value": "ad63a4e30c160d8e189ca7fa9c35a62a2c948dd37cab5e6ddefab6379aadbea4"
+      }
+    },
+    {
+      "uid": {
+        "kind": "literal",
+        "value": "sym:Concept:hswm-semantic-operational-round-2026-10-05"
+      },
+      "theorem": {
+        "kind": "literal",
+        "value": "HSWM.SemanticOperationalBridge.accepted_round_replays"
+      },
+      "status": {
+        "kind": "literal",
+        "value": "CONDITIONAL_FORMAL_RESULT"
+      },
+      "sourcePath": {
+        "kind": "literal",
+        "value": "formal/HSWMSemanticOperationalBridge.lean"
+      },
+      "sourceSha256": {
+        "kind": "literal",
+        "value": "ad63a4e30c160d8e189ca7fa9c35a62a2c948dd37cab5e6ddefab6379aadbea4"
+      }
+    }
+  ],
+  "rejectedMutations": [
+    "promoted_proof",
+    "removed_proof_source",
+    "changed_source_hash"
+  ],
+  "liveKgWrite": false,
+  "bundleSha256": "b87c5d838f506668bb561792519783cb46052e45aaee1886cb9820dbb171c822"
+}

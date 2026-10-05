@@ -1,0 +1,46 @@
+{
+  "schema_version": "hswm-semantic-chain-baseline-failure-inspection/v1",
+  "sourceComparisons": [
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-lifecycle-runtime.ts",
+      "matchesBase8043a83": true,
+      "sha256": "76cee17ef6afa8b99b90ce64f08638b4f253ee7bfaa3aa33463155cbb3d37898"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/canonical-atom-v2-graph-loop-enforcement-boundary.test.ts",
+      "matchesBase8043a83": true,
+      "sha256": "381ed0effe04f4bd008a03904b3cb0d377886c18303eb5ef56dff457945199b5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-live-drand.ts",
+      "matchesBase8043a83": true,
+      "sha256": "8d8562255884d9650fbdb21bbea686be3f30ae7682bd62af6782d984b26103f2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/dnrd5-source-closure.test.ts",
+      "matchesBase8043a83": true,
+      "sha256": "5fde819c03aa3ebab32f4ffbd4ddc71b965936ec4c280e4160b4c4dea27dbdb2"
+    }
+  ],
+  "drandNodePin": {
+    "expectedSha256": "53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc",
+    "actualSha256": "89af8424dd53e560b1933f87ba650d8bf57c83ca5a04600eefb31f416aabbae7",
+    "nodeVersion": "v24.20.0"
+  },
+  "rawSubmitFinding": {
+    "path": "src/hswm/effect-runtime/src/semantic-lifecycle-runtime.ts",
+    "expression": "runtime.submit(",
+    "context": "seedSemanticLifecycle bootstrap; unchanged since base"
+  },
+  "claim": "BASELINE_SOURCE_AND_LOCAL_TOOLCHAIN_FINDINGS_NOT_PROOF_OF_COMPLETE_REGRESSION_ABSENCE",
+  "oldTemporaryDirectory": {
+    "name": ".dnrd5-source-closure-out-w3NAa0",
+    "modifiedAt": "2026-09-22T16:08:24.075869253Z",
+    "entries": 0,
+    "disposition": "PRESERVED_OUTSIDE_PACKAGE_ROOT"
+  },
+  "isolatedSourceClosureRecheck": {
+    "status": "PASS_AFTER_PRESERVING_STALE_EMPTY_DIRECTORY",
+    "testsPassed": 3
+  }
+}

@@ -1,0 +1,2557 @@
+{
+  "schema_version": "hswm-semantic-chain-runtime-verification/v1",
+  "status": "PASS_SCRIPTED_DURABLE_CHAIN_NOT_EFFICACY",
+  "observedAt": "2026-10-05T00:53:20.696Z",
+  "checkerBinarySha256": "6620a5027e0109b1287dad03670fe5a8e5b9cc3009d1c767b8a8316f6eabc1e0",
+  "observations": [
+    {
+      "decisions": [
+        true,
+        false,
+        true
+      ],
+      "initialRevision": 1,
+      "finalRevision": 3,
+      "singleRoundChecks": 3,
+      "accepted": true,
+      "rejectedMutations": [
+        "empty",
+        "swapped_rounds",
+        "replayed_old_round",
+        "wrong_middle_state",
+        "wrong_middle_outcome",
+        "flipped_selection",
+        "removed_exception"
+      ],
+      "chain": {
+        "contract": "hswm-semantic-lifecycle-chain/v1",
+        "rounds": [
+          {
+            "contract": "hswm-semantic-lifecycle-postrun/v1",
+            "before": {
+              "stateRevision": 1,
+              "relation": {
+                "key": {
+                  "schemaVersion": "hswm:semantic-lifecycle:v1",
+                  "lineageId": "lineage:semantic-lifecycle:v1",
+                  "atomUid": "relation:door",
+                  "revisionId": 0
+                },
+                "owner": "owner:semantic-lifecycle",
+                "semantic": {
+                  "semanticText": "The door opens exactly when pressed is true.",
+                  "disposition": "predict declared door state",
+                  "uncertainty": "fixture hypothesis",
+                  "exceptionRefs": [
+                    "exception:door"
+                  ],
+                  "traceSha256": null,
+                  "outcomeSha256": null,
+                  "revisionEvidenceSha256": null
+                },
+                "roles": [
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "subject",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "subject:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "context",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "context:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "evidence",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "evidence:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "exception",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "exception:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                  }
+                ]
+              }
+            },
+            "frame": {
+              "event": "train-0",
+              "stateRevision": 1,
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 0
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "The door opens exactly when pressed is true.",
+                "disposition": "predict declared door state",
+                "uncertainty": "fixture hypothesis",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": null,
+                "outcomeSha256": null,
+                "revisionEvidenceSha256": null
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ],
+              "frameSha256": "c49cc92cde5b8a5df09527678685a6f4cea14a86aa78968ae780daa6f736dc4e"
+            },
+            "trace": {
+              "traceSha256": "3ea06c95cdc107142e9324c6127fcf4272df66d54e1ac5d3d0c07353986ac550",
+              "frameSha256": "c49cc92cde5b8a5df09527678685a6f4cea14a86aa78968ae780daa6f736dc4e",
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 0
+              },
+              "predictionSha256": "04760bcd507fd6d3b075f7ecc5e3125cc41559029a657f4a2e047c328c98e4d2",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d",
+              "event": "train-0"
+            },
+            "outcome": {
+              "traceSha256": "3ea06c95cdc107142e9324c6127fcf4272df66d54e1ac5d3d0c07353986ac550",
+              "predictionSha256": "04760bcd507fd6d3b075f7ecc5e3125cc41559029a657f4a2e047c328c98e4d2",
+              "outcomeSha256": "0960067a69e3a84d6c8323fabb2eb345d3a77abc7338fd9ec5aa4e31d836494b",
+              "status": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+            },
+            "revision": {
+              "semanticText": "revision from round 0",
+              "disposition": "predict",
+              "uncertainty": "u",
+              "exceptionRefs": [
+                "exception:door"
+              ],
+              "revisionEvidenceSha256": "a4fa8f4ce1bed19e89a04ca3c2629ca29b8b42a3f572b2e6aa553ec5bfc3b14d",
+              "traceSha256": "3ea06c95cdc107142e9324c6127fcf4272df66d54e1ac5d3d0c07353986ac550",
+              "outcomeSha256": "0960067a69e3a84d6c8323fabb2eb345d3a77abc7338fd9ec5aa4e31d836494b",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d"
+            },
+            "after": {
+              "stateRevision": 2,
+              "relation": {
+                "key": {
+                  "schemaVersion": "hswm:semantic-lifecycle:v1",
+                  "lineageId": "lineage:semantic-lifecycle:v1",
+                  "atomUid": "relation:door",
+                  "revisionId": 1
+                },
+                "owner": "owner:semantic-lifecycle",
+                "semantic": {
+                  "semanticText": "revision from round 0",
+                  "disposition": "predict",
+                  "uncertainty": "u",
+                  "exceptionRefs": [
+                    "exception:door"
+                  ],
+                  "traceSha256": "3ea06c95cdc107142e9324c6127fcf4272df66d54e1ac5d3d0c07353986ac550",
+                  "outcomeSha256": "0960067a69e3a84d6c8323fabb2eb345d3a77abc7338fd9ec5aa4e31d836494b",
+                  "revisionEvidenceSha256": "a4fa8f4ce1bed19e89a04ca3c2629ca29b8b42a3f572b2e6aa553ec5bfc3b14d"
+                },
+                "roles": [
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "subject",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "subject:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "context",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "context:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "evidence",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "evidence:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "exception",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "exception:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                  }
+                ]
+              }
+            },
+            "afterPredecessorKey": {
+              "schemaVersion": "hswm:semantic-lifecycle:v1",
+              "lineageId": "lineage:semantic-lifecycle:v1",
+              "atomUid": "relation:door",
+              "revisionId": 0
+            },
+            "retainedBefore": {
+              "key": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 0
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "The door opens exactly when pressed is true.",
+                "disposition": "predict declared door state",
+                "uncertainty": "fixture hypothesis",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": null,
+                "outcomeSha256": null,
+                "revisionEvidenceSha256": null
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ]
+            },
+            "selectedCandidate": true,
+            "nextFrame": {
+              "event": "next-0",
+              "stateRevision": 2,
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "revision from round 0",
+                "disposition": "predict",
+                "uncertainty": "u",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": "3ea06c95cdc107142e9324c6127fcf4272df66d54e1ac5d3d0c07353986ac550",
+                "outcomeSha256": "0960067a69e3a84d6c8323fabb2eb345d3a77abc7338fd9ec5aa4e31d836494b",
+                "revisionEvidenceSha256": "a4fa8f4ce1bed19e89a04ca3c2629ca29b8b42a3f572b2e6aa553ec5bfc3b14d"
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ],
+              "frameSha256": "27663b2fa6382b6496cbdef1870e4a63edf889c09a48e0a7e94e39966bfe93e4"
+            },
+            "nextTrace": {
+              "traceSha256": "78ad6db3ddc52bd9bf99d9f70e85113c4a688f0736b4f758b3c51db07ceb0c6c",
+              "frameSha256": "27663b2fa6382b6496cbdef1870e4a63edf889c09a48e0a7e94e39966bfe93e4",
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "predictionSha256": "2c2cb68a3499b7da36d56f7aa1843566fb7830551d76e679f247dd6b774a137c",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d",
+              "event": "next-0"
+            }
+          },
+          {
+            "contract": "hswm-semantic-lifecycle-postrun/v1",
+            "before": {
+              "stateRevision": 2,
+              "relation": {
+                "key": {
+                  "schemaVersion": "hswm:semantic-lifecycle:v1",
+                  "lineageId": "lineage:semantic-lifecycle:v1",
+                  "atomUid": "relation:door",
+                  "revisionId": 1
+                },
+                "owner": "owner:semantic-lifecycle",
+                "semantic": {
+                  "semanticText": "revision from round 0",
+                  "disposition": "predict",
+                  "uncertainty": "u",
+                  "exceptionRefs": [
+                    "exception:door"
+                  ],
+                  "traceSha256": "3ea06c95cdc107142e9324c6127fcf4272df66d54e1ac5d3d0c07353986ac550",
+                  "outcomeSha256": "0960067a69e3a84d6c8323fabb2eb345d3a77abc7338fd9ec5aa4e31d836494b",
+                  "revisionEvidenceSha256": "a4fa8f4ce1bed19e89a04ca3c2629ca29b8b42a3f572b2e6aa553ec5bfc3b14d"
+                },
+                "roles": [
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "subject",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "subject:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "context",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "context:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "evidence",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "evidence:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "exception",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "exception:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                  }
+                ]
+              }
+            },
+            "frame": {
+              "event": "train-1",
+              "stateRevision": 2,
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "revision from round 0",
+                "disposition": "predict",
+                "uncertainty": "u",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": "3ea06c95cdc107142e9324c6127fcf4272df66d54e1ac5d3d0c07353986ac550",
+                "outcomeSha256": "0960067a69e3a84d6c8323fabb2eb345d3a77abc7338fd9ec5aa4e31d836494b",
+                "revisionEvidenceSha256": "a4fa8f4ce1bed19e89a04ca3c2629ca29b8b42a3f572b2e6aa553ec5bfc3b14d"
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ],
+              "frameSha256": "b9b0d8874ad087e9e58d442c03f5304e528ead2270c6e8a9770d0e671bb6a628"
+            },
+            "trace": {
+              "traceSha256": "7512c3a869ad15a71e8c3a6bf3adb653bfe0cdfdb196bb6ef4d35f3973622ec4",
+              "frameSha256": "b9b0d8874ad087e9e58d442c03f5304e528ead2270c6e8a9770d0e671bb6a628",
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "predictionSha256": "1dee6e3ec67dc8033b3363d93f46f1affea85aa403abe01a03fc6c21cbff1c15",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d",
+              "event": "train-1"
+            },
+            "outcome": {
+              "traceSha256": "7512c3a869ad15a71e8c3a6bf3adb653bfe0cdfdb196bb6ef4d35f3973622ec4",
+              "predictionSha256": "1dee6e3ec67dc8033b3363d93f46f1affea85aa403abe01a03fc6c21cbff1c15",
+              "outcomeSha256": "6cf37f33eee9fdb439228a863a133c443af54c081ca97a59c880c6cbee810b3e",
+              "status": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+            },
+            "revision": {
+              "semanticText": "revision from round 1",
+              "disposition": "predict",
+              "uncertainty": "u",
+              "exceptionRefs": [
+                "exception:door"
+              ],
+              "revisionEvidenceSha256": "cad0f0bd3bd56e3e36702502567cb60c6ce7ac74d6d157e8b777f03211312ecb",
+              "traceSha256": "7512c3a869ad15a71e8c3a6bf3adb653bfe0cdfdb196bb6ef4d35f3973622ec4",
+              "outcomeSha256": "6cf37f33eee9fdb439228a863a133c443af54c081ca97a59c880c6cbee810b3e",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d"
+            },
+            "after": {
+              "stateRevision": 3,
+              "relation": {
+                "key": {
+                  "schemaVersion": "hswm:semantic-lifecycle:v1",
+                  "lineageId": "lineage:semantic-lifecycle:v1",
+                  "atomUid": "relation:door",
+                  "revisionId": 2
+                },
+                "owner": "owner:semantic-lifecycle",
+                "semantic": {
+                  "semanticText": "revision from round 1",
+                  "disposition": "predict",
+                  "uncertainty": "u",
+                  "exceptionRefs": [
+                    "exception:door"
+                  ],
+                  "traceSha256": "7512c3a869ad15a71e8c3a6bf3adb653bfe0cdfdb196bb6ef4d35f3973622ec4",
+                  "outcomeSha256": "6cf37f33eee9fdb439228a863a133c443af54c081ca97a59c880c6cbee810b3e",
+                  "revisionEvidenceSha256": "cad0f0bd3bd56e3e36702502567cb60c6ce7ac74d6d157e8b777f03211312ecb"
+                },
+                "roles": [
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "subject",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "subject:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "context",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "context:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "evidence",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "evidence:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "exception",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "exception:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                  }
+                ]
+              }
+            },
+            "afterPredecessorKey": {
+              "schemaVersion": "hswm:semantic-lifecycle:v1",
+              "lineageId": "lineage:semantic-lifecycle:v1",
+              "atomUid": "relation:door",
+              "revisionId": 1
+            },
+            "retainedBefore": {
+              "key": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "revision from round 0",
+                "disposition": "predict",
+                "uncertainty": "u",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": "3ea06c95cdc107142e9324c6127fcf4272df66d54e1ac5d3d0c07353986ac550",
+                "outcomeSha256": "0960067a69e3a84d6c8323fabb2eb345d3a77abc7338fd9ec5aa4e31d836494b",
+                "revisionEvidenceSha256": "a4fa8f4ce1bed19e89a04ca3c2629ca29b8b42a3f572b2e6aa553ec5bfc3b14d"
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ]
+            },
+            "selectedCandidate": false,
+            "nextFrame": {
+              "event": "next-1",
+              "stateRevision": 2,
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "revision from round 0",
+                "disposition": "predict",
+                "uncertainty": "u",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": "3ea06c95cdc107142e9324c6127fcf4272df66d54e1ac5d3d0c07353986ac550",
+                "outcomeSha256": "0960067a69e3a84d6c8323fabb2eb345d3a77abc7338fd9ec5aa4e31d836494b",
+                "revisionEvidenceSha256": "a4fa8f4ce1bed19e89a04ca3c2629ca29b8b42a3f572b2e6aa553ec5bfc3b14d"
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ],
+              "frameSha256": "967024923aba5d47d028d74126cef6a4eda35e08e1f876f7cb2d87b4449c0674"
+            },
+            "nextTrace": {
+              "traceSha256": "75f28a1de0beeafaf3ba1c5c289ee9258e4018521839a35e0c11a4265015f543",
+              "frameSha256": "967024923aba5d47d028d74126cef6a4eda35e08e1f876f7cb2d87b4449c0674",
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "predictionSha256": "04b27e05aea40db3df0bdf333809eaca63b786749710f932e7c159a3968f29d9",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d",
+              "event": "next-1"
+            }
+          },
+          {
+            "contract": "hswm-semantic-lifecycle-postrun/v1",
+            "before": {
+              "stateRevision": 2,
+              "relation": {
+                "key": {
+                  "schemaVersion": "hswm:semantic-lifecycle:v1",
+                  "lineageId": "lineage:semantic-lifecycle:v1",
+                  "atomUid": "relation:door",
+                  "revisionId": 1
+                },
+                "owner": "owner:semantic-lifecycle",
+                "semantic": {
+                  "semanticText": "revision from round 0",
+                  "disposition": "predict",
+                  "uncertainty": "u",
+                  "exceptionRefs": [
+                    "exception:door"
+                  ],
+                  "traceSha256": "3ea06c95cdc107142e9324c6127fcf4272df66d54e1ac5d3d0c07353986ac550",
+                  "outcomeSha256": "0960067a69e3a84d6c8323fabb2eb345d3a77abc7338fd9ec5aa4e31d836494b",
+                  "revisionEvidenceSha256": "a4fa8f4ce1bed19e89a04ca3c2629ca29b8b42a3f572b2e6aa553ec5bfc3b14d"
+                },
+                "roles": [
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "subject",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "subject:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "context",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "context:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "evidence",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "evidence:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "exception",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "exception:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                  }
+                ]
+              }
+            },
+            "frame": {
+              "event": "train-2",
+              "stateRevision": 2,
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "revision from round 0",
+                "disposition": "predict",
+                "uncertainty": "u",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": "3ea06c95cdc107142e9324c6127fcf4272df66d54e1ac5d3d0c07353986ac550",
+                "outcomeSha256": "0960067a69e3a84d6c8323fabb2eb345d3a77abc7338fd9ec5aa4e31d836494b",
+                "revisionEvidenceSha256": "a4fa8f4ce1bed19e89a04ca3c2629ca29b8b42a3f572b2e6aa553ec5bfc3b14d"
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ],
+              "frameSha256": "f8d38ccaf01dbdad90d965a058ac3f78aba1b0851878a9c562cbbd13f90b87e0"
+            },
+            "trace": {
+              "traceSha256": "e34c34354317f5a4dd59360360eca4ddce2847dbe11f1710ba855dfd8b5143ea",
+              "frameSha256": "f8d38ccaf01dbdad90d965a058ac3f78aba1b0851878a9c562cbbd13f90b87e0",
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "predictionSha256": "b97db4a9f43296157fb1a5d38cebdac478d0e91ed7b8dc1ae2effe1e29e64354",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d",
+              "event": "train-2"
+            },
+            "outcome": {
+              "traceSha256": "e34c34354317f5a4dd59360360eca4ddce2847dbe11f1710ba855dfd8b5143ea",
+              "predictionSha256": "b97db4a9f43296157fb1a5d38cebdac478d0e91ed7b8dc1ae2effe1e29e64354",
+              "outcomeSha256": "62ebe6134ae43936197687e55d30bb98954715b470ade49a0593d6f06416e45f",
+              "status": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+            },
+            "revision": {
+              "semanticText": "revision from round 2",
+              "disposition": "predict",
+              "uncertainty": "u",
+              "exceptionRefs": [
+                "exception:door"
+              ],
+              "revisionEvidenceSha256": "d951f8f71024499be3a8a1b3be946e5bb301f60c7ac7014f6fb49de4e956d7b0",
+              "traceSha256": "e34c34354317f5a4dd59360360eca4ddce2847dbe11f1710ba855dfd8b5143ea",
+              "outcomeSha256": "62ebe6134ae43936197687e55d30bb98954715b470ade49a0593d6f06416e45f",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d"
+            },
+            "after": {
+              "stateRevision": 3,
+              "relation": {
+                "key": {
+                  "schemaVersion": "hswm:semantic-lifecycle:v1",
+                  "lineageId": "lineage:semantic-lifecycle:v1",
+                  "atomUid": "relation:door",
+                  "revisionId": 2
+                },
+                "owner": "owner:semantic-lifecycle",
+                "semantic": {
+                  "semanticText": "revision from round 2",
+                  "disposition": "predict",
+                  "uncertainty": "u",
+                  "exceptionRefs": [
+                    "exception:door"
+                  ],
+                  "traceSha256": "e34c34354317f5a4dd59360360eca4ddce2847dbe11f1710ba855dfd8b5143ea",
+                  "outcomeSha256": "62ebe6134ae43936197687e55d30bb98954715b470ade49a0593d6f06416e45f",
+                  "revisionEvidenceSha256": "d951f8f71024499be3a8a1b3be946e5bb301f60c7ac7014f6fb49de4e956d7b0"
+                },
+                "roles": [
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "subject",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "subject:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "context",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "context:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "evidence",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "evidence:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "exception",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "exception:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                  }
+                ]
+              }
+            },
+            "afterPredecessorKey": {
+              "schemaVersion": "hswm:semantic-lifecycle:v1",
+              "lineageId": "lineage:semantic-lifecycle:v1",
+              "atomUid": "relation:door",
+              "revisionId": 1
+            },
+            "retainedBefore": {
+              "key": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "revision from round 0",
+                "disposition": "predict",
+                "uncertainty": "u",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": "3ea06c95cdc107142e9324c6127fcf4272df66d54e1ac5d3d0c07353986ac550",
+                "outcomeSha256": "0960067a69e3a84d6c8323fabb2eb345d3a77abc7338fd9ec5aa4e31d836494b",
+                "revisionEvidenceSha256": "a4fa8f4ce1bed19e89a04ca3c2629ca29b8b42a3f572b2e6aa553ec5bfc3b14d"
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ]
+            },
+            "selectedCandidate": true,
+            "nextFrame": {
+              "event": "next-2",
+              "stateRevision": 3,
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 2
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "revision from round 2",
+                "disposition": "predict",
+                "uncertainty": "u",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": "e34c34354317f5a4dd59360360eca4ddce2847dbe11f1710ba855dfd8b5143ea",
+                "outcomeSha256": "62ebe6134ae43936197687e55d30bb98954715b470ade49a0593d6f06416e45f",
+                "revisionEvidenceSha256": "d951f8f71024499be3a8a1b3be946e5bb301f60c7ac7014f6fb49de4e956d7b0"
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ],
+              "frameSha256": "32115ccb11993f1040374dfa1f8a8015119c08d95d322bddb24e0baa27faec3c"
+            },
+            "nextTrace": {
+              "traceSha256": "57167007b8690531cfdf05e6c07e9186464a61b95218c98bc1c39a1e61befd4f",
+              "frameSha256": "32115ccb11993f1040374dfa1f8a8015119c08d95d322bddb24e0baa27faec3c",
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 2
+              },
+              "predictionSha256": "19258a4266a9190a1e4730b99efa5e8dfc60023146e9c26766738c0ebf389cf7",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d",
+              "event": "next-2"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "decisions": [
+        false,
+        true,
+        false
+      ],
+      "initialRevision": 1,
+      "finalRevision": 2,
+      "singleRoundChecks": 3,
+      "accepted": true,
+      "rejectedMutations": [
+        "empty",
+        "swapped_rounds",
+        "replayed_old_round",
+        "wrong_middle_state",
+        "wrong_middle_outcome",
+        "flipped_selection",
+        "removed_exception"
+      ],
+      "chain": {
+        "contract": "hswm-semantic-lifecycle-chain/v1",
+        "rounds": [
+          {
+            "contract": "hswm-semantic-lifecycle-postrun/v1",
+            "before": {
+              "stateRevision": 1,
+              "relation": {
+                "key": {
+                  "schemaVersion": "hswm:semantic-lifecycle:v1",
+                  "lineageId": "lineage:semantic-lifecycle:v1",
+                  "atomUid": "relation:door",
+                  "revisionId": 0
+                },
+                "owner": "owner:semantic-lifecycle",
+                "semantic": {
+                  "semanticText": "The door opens exactly when pressed is true.",
+                  "disposition": "predict declared door state",
+                  "uncertainty": "fixture hypothesis",
+                  "exceptionRefs": [
+                    "exception:door"
+                  ],
+                  "traceSha256": null,
+                  "outcomeSha256": null,
+                  "revisionEvidenceSha256": null
+                },
+                "roles": [
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "subject",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "subject:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "context",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "context:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "evidence",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "evidence:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "exception",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "exception:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                  }
+                ]
+              }
+            },
+            "frame": {
+              "event": "train-0",
+              "stateRevision": 1,
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 0
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "The door opens exactly when pressed is true.",
+                "disposition": "predict declared door state",
+                "uncertainty": "fixture hypothesis",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": null,
+                "outcomeSha256": null,
+                "revisionEvidenceSha256": null
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ],
+              "frameSha256": "c49cc92cde5b8a5df09527678685a6f4cea14a86aa78968ae780daa6f736dc4e"
+            },
+            "trace": {
+              "traceSha256": "cb3b047a6a38efc4a5cb70abc8a6c0848bbdb33f6a2902d633abb2942ad48661",
+              "frameSha256": "c49cc92cde5b8a5df09527678685a6f4cea14a86aa78968ae780daa6f736dc4e",
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 0
+              },
+              "predictionSha256": "04760bcd507fd6d3b075f7ecc5e3125cc41559029a657f4a2e047c328c98e4d2",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d",
+              "event": "train-0"
+            },
+            "outcome": {
+              "traceSha256": "cb3b047a6a38efc4a5cb70abc8a6c0848bbdb33f6a2902d633abb2942ad48661",
+              "predictionSha256": "04760bcd507fd6d3b075f7ecc5e3125cc41559029a657f4a2e047c328c98e4d2",
+              "outcomeSha256": "e84f11011d60162b2756e6c7c0f4ca52c009b1463bde44d64bb9562fc58b5260",
+              "status": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+            },
+            "revision": {
+              "semanticText": "revision from round 0",
+              "disposition": "predict",
+              "uncertainty": "u",
+              "exceptionRefs": [
+                "exception:door"
+              ],
+              "revisionEvidenceSha256": "038ce58f88d9edfac513b5ed3bc21e7271f24826bcafb370cf45e53becab643f",
+              "traceSha256": "cb3b047a6a38efc4a5cb70abc8a6c0848bbdb33f6a2902d633abb2942ad48661",
+              "outcomeSha256": "e84f11011d60162b2756e6c7c0f4ca52c009b1463bde44d64bb9562fc58b5260",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d"
+            },
+            "after": {
+              "stateRevision": 2,
+              "relation": {
+                "key": {
+                  "schemaVersion": "hswm:semantic-lifecycle:v1",
+                  "lineageId": "lineage:semantic-lifecycle:v1",
+                  "atomUid": "relation:door",
+                  "revisionId": 1
+                },
+                "owner": "owner:semantic-lifecycle",
+                "semantic": {
+                  "semanticText": "revision from round 0",
+                  "disposition": "predict",
+                  "uncertainty": "u",
+                  "exceptionRefs": [
+                    "exception:door"
+                  ],
+                  "traceSha256": "cb3b047a6a38efc4a5cb70abc8a6c0848bbdb33f6a2902d633abb2942ad48661",
+                  "outcomeSha256": "e84f11011d60162b2756e6c7c0f4ca52c009b1463bde44d64bb9562fc58b5260",
+                  "revisionEvidenceSha256": "038ce58f88d9edfac513b5ed3bc21e7271f24826bcafb370cf45e53becab643f"
+                },
+                "roles": [
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "subject",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "subject:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "context",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "context:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "evidence",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "evidence:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "exception",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "exception:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                  }
+                ]
+              }
+            },
+            "afterPredecessorKey": {
+              "schemaVersion": "hswm:semantic-lifecycle:v1",
+              "lineageId": "lineage:semantic-lifecycle:v1",
+              "atomUid": "relation:door",
+              "revisionId": 0
+            },
+            "retainedBefore": {
+              "key": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 0
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "The door opens exactly when pressed is true.",
+                "disposition": "predict declared door state",
+                "uncertainty": "fixture hypothesis",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": null,
+                "outcomeSha256": null,
+                "revisionEvidenceSha256": null
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ]
+            },
+            "selectedCandidate": false,
+            "nextFrame": {
+              "event": "next-0",
+              "stateRevision": 1,
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 0
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "The door opens exactly when pressed is true.",
+                "disposition": "predict declared door state",
+                "uncertainty": "fixture hypothesis",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": null,
+                "outcomeSha256": null,
+                "revisionEvidenceSha256": null
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ],
+              "frameSha256": "ec12a04f3943e7ca715a5e4da190b3e76303253781fa8b8334039fb705177211"
+            },
+            "nextTrace": {
+              "traceSha256": "0748726d18359b1f2aee62ac3ee7ba00f3cc9fa8e897cbb780f9c90c35b8c4eb",
+              "frameSha256": "ec12a04f3943e7ca715a5e4da190b3e76303253781fa8b8334039fb705177211",
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 0
+              },
+              "predictionSha256": "2c2cb68a3499b7da36d56f7aa1843566fb7830551d76e679f247dd6b774a137c",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d",
+              "event": "next-0"
+            }
+          },
+          {
+            "contract": "hswm-semantic-lifecycle-postrun/v1",
+            "before": {
+              "stateRevision": 1,
+              "relation": {
+                "key": {
+                  "schemaVersion": "hswm:semantic-lifecycle:v1",
+                  "lineageId": "lineage:semantic-lifecycle:v1",
+                  "atomUid": "relation:door",
+                  "revisionId": 0
+                },
+                "owner": "owner:semantic-lifecycle",
+                "semantic": {
+                  "semanticText": "The door opens exactly when pressed is true.",
+                  "disposition": "predict declared door state",
+                  "uncertainty": "fixture hypothesis",
+                  "exceptionRefs": [
+                    "exception:door"
+                  ],
+                  "traceSha256": null,
+                  "outcomeSha256": null,
+                  "revisionEvidenceSha256": null
+                },
+                "roles": [
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "subject",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "subject:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "context",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "context:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "evidence",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "evidence:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "exception",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "exception:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                  }
+                ]
+              }
+            },
+            "frame": {
+              "event": "train-1",
+              "stateRevision": 1,
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 0
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "The door opens exactly when pressed is true.",
+                "disposition": "predict declared door state",
+                "uncertainty": "fixture hypothesis",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": null,
+                "outcomeSha256": null,
+                "revisionEvidenceSha256": null
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ],
+              "frameSha256": "7876178188f4eba2e8b5a4f0405a352fbd2ffd8669157fde46278ad8d21e57fc"
+            },
+            "trace": {
+              "traceSha256": "60f9312d6d80da729c62998be94db3971f822e178f0d90dc6ee8476738dc2cea",
+              "frameSha256": "7876178188f4eba2e8b5a4f0405a352fbd2ffd8669157fde46278ad8d21e57fc",
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 0
+              },
+              "predictionSha256": "1dee6e3ec67dc8033b3363d93f46f1affea85aa403abe01a03fc6c21cbff1c15",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d",
+              "event": "train-1"
+            },
+            "outcome": {
+              "traceSha256": "60f9312d6d80da729c62998be94db3971f822e178f0d90dc6ee8476738dc2cea",
+              "predictionSha256": "1dee6e3ec67dc8033b3363d93f46f1affea85aa403abe01a03fc6c21cbff1c15",
+              "outcomeSha256": "61421bf7fe72cffbf97adc3e613a04291813d4d169082612247667027e50b385",
+              "status": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+            },
+            "revision": {
+              "semanticText": "revision from round 1",
+              "disposition": "predict",
+              "uncertainty": "u",
+              "exceptionRefs": [
+                "exception:door"
+              ],
+              "revisionEvidenceSha256": "f304a1d0e5f31763014ab3f6e5b8b83e9e3c8f651c1707806cff1bfac1a4f112",
+              "traceSha256": "60f9312d6d80da729c62998be94db3971f822e178f0d90dc6ee8476738dc2cea",
+              "outcomeSha256": "61421bf7fe72cffbf97adc3e613a04291813d4d169082612247667027e50b385",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d"
+            },
+            "after": {
+              "stateRevision": 2,
+              "relation": {
+                "key": {
+                  "schemaVersion": "hswm:semantic-lifecycle:v1",
+                  "lineageId": "lineage:semantic-lifecycle:v1",
+                  "atomUid": "relation:door",
+                  "revisionId": 1
+                },
+                "owner": "owner:semantic-lifecycle",
+                "semantic": {
+                  "semanticText": "revision from round 1",
+                  "disposition": "predict",
+                  "uncertainty": "u",
+                  "exceptionRefs": [
+                    "exception:door"
+                  ],
+                  "traceSha256": "60f9312d6d80da729c62998be94db3971f822e178f0d90dc6ee8476738dc2cea",
+                  "outcomeSha256": "61421bf7fe72cffbf97adc3e613a04291813d4d169082612247667027e50b385",
+                  "revisionEvidenceSha256": "f304a1d0e5f31763014ab3f6e5b8b83e9e3c8f651c1707806cff1bfac1a4f112"
+                },
+                "roles": [
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "subject",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "subject:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "context",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "context:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "evidence",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "evidence:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "exception",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "exception:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                  }
+                ]
+              }
+            },
+            "afterPredecessorKey": {
+              "schemaVersion": "hswm:semantic-lifecycle:v1",
+              "lineageId": "lineage:semantic-lifecycle:v1",
+              "atomUid": "relation:door",
+              "revisionId": 0
+            },
+            "retainedBefore": {
+              "key": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 0
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "The door opens exactly when pressed is true.",
+                "disposition": "predict declared door state",
+                "uncertainty": "fixture hypothesis",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": null,
+                "outcomeSha256": null,
+                "revisionEvidenceSha256": null
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ]
+            },
+            "selectedCandidate": true,
+            "nextFrame": {
+              "event": "next-1",
+              "stateRevision": 2,
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "revision from round 1",
+                "disposition": "predict",
+                "uncertainty": "u",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": "60f9312d6d80da729c62998be94db3971f822e178f0d90dc6ee8476738dc2cea",
+                "outcomeSha256": "61421bf7fe72cffbf97adc3e613a04291813d4d169082612247667027e50b385",
+                "revisionEvidenceSha256": "f304a1d0e5f31763014ab3f6e5b8b83e9e3c8f651c1707806cff1bfac1a4f112"
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ],
+              "frameSha256": "23a2b235a2e1c395b406940901bdaa92259cf771e96ec6584c1c10c89a7b0081"
+            },
+            "nextTrace": {
+              "traceSha256": "7cf688c93710fec93fbb2ae3e5d8b87dd02c0cb3c7f77ff49198f79896af0166",
+              "frameSha256": "23a2b235a2e1c395b406940901bdaa92259cf771e96ec6584c1c10c89a7b0081",
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "predictionSha256": "04b27e05aea40db3df0bdf333809eaca63b786749710f932e7c159a3968f29d9",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d",
+              "event": "next-1"
+            }
+          },
+          {
+            "contract": "hswm-semantic-lifecycle-postrun/v1",
+            "before": {
+              "stateRevision": 2,
+              "relation": {
+                "key": {
+                  "schemaVersion": "hswm:semantic-lifecycle:v1",
+                  "lineageId": "lineage:semantic-lifecycle:v1",
+                  "atomUid": "relation:door",
+                  "revisionId": 1
+                },
+                "owner": "owner:semantic-lifecycle",
+                "semantic": {
+                  "semanticText": "revision from round 1",
+                  "disposition": "predict",
+                  "uncertainty": "u",
+                  "exceptionRefs": [
+                    "exception:door"
+                  ],
+                  "traceSha256": "60f9312d6d80da729c62998be94db3971f822e178f0d90dc6ee8476738dc2cea",
+                  "outcomeSha256": "61421bf7fe72cffbf97adc3e613a04291813d4d169082612247667027e50b385",
+                  "revisionEvidenceSha256": "f304a1d0e5f31763014ab3f6e5b8b83e9e3c8f651c1707806cff1bfac1a4f112"
+                },
+                "roles": [
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "subject",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "subject:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "context",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "context:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "evidence",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "evidence:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "exception",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "exception:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                  }
+                ]
+              }
+            },
+            "frame": {
+              "event": "train-2",
+              "stateRevision": 2,
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "revision from round 1",
+                "disposition": "predict",
+                "uncertainty": "u",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": "60f9312d6d80da729c62998be94db3971f822e178f0d90dc6ee8476738dc2cea",
+                "outcomeSha256": "61421bf7fe72cffbf97adc3e613a04291813d4d169082612247667027e50b385",
+                "revisionEvidenceSha256": "f304a1d0e5f31763014ab3f6e5b8b83e9e3c8f651c1707806cff1bfac1a4f112"
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ],
+              "frameSha256": "4e1be3b6e2671b8176292068ce00555d1ab4dc8ad9c9185d8f1fdb80bca80976"
+            },
+            "trace": {
+              "traceSha256": "25226e3a64ea0402920a141f53ebde1f52a72e1d9c9149f1aa21e8516084e08d",
+              "frameSha256": "4e1be3b6e2671b8176292068ce00555d1ab4dc8ad9c9185d8f1fdb80bca80976",
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "predictionSha256": "b97db4a9f43296157fb1a5d38cebdac478d0e91ed7b8dc1ae2effe1e29e64354",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d",
+              "event": "train-2"
+            },
+            "outcome": {
+              "traceSha256": "25226e3a64ea0402920a141f53ebde1f52a72e1d9c9149f1aa21e8516084e08d",
+              "predictionSha256": "b97db4a9f43296157fb1a5d38cebdac478d0e91ed7b8dc1ae2effe1e29e64354",
+              "outcomeSha256": "3da3cf91325f4c6e503c7dc20a9acbf72557a700809861d9d77b4303aa0d231d",
+              "status": "CALLER_DECLARED_NOT_INDEPENDENTLY_VERIFIED"
+            },
+            "revision": {
+              "semanticText": "revision from round 2",
+              "disposition": "predict",
+              "uncertainty": "u",
+              "exceptionRefs": [
+                "exception:door"
+              ],
+              "revisionEvidenceSha256": "2c83ad50380a65c3f13fff2c182ed02c5df647cbc3ffd9005d30a43647d86808",
+              "traceSha256": "25226e3a64ea0402920a141f53ebde1f52a72e1d9c9149f1aa21e8516084e08d",
+              "outcomeSha256": "3da3cf91325f4c6e503c7dc20a9acbf72557a700809861d9d77b4303aa0d231d",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d"
+            },
+            "after": {
+              "stateRevision": 3,
+              "relation": {
+                "key": {
+                  "schemaVersion": "hswm:semantic-lifecycle:v1",
+                  "lineageId": "lineage:semantic-lifecycle:v1",
+                  "atomUid": "relation:door",
+                  "revisionId": 2
+                },
+                "owner": "owner:semantic-lifecycle",
+                "semantic": {
+                  "semanticText": "revision from round 2",
+                  "disposition": "predict",
+                  "uncertainty": "u",
+                  "exceptionRefs": [
+                    "exception:door"
+                  ],
+                  "traceSha256": "25226e3a64ea0402920a141f53ebde1f52a72e1d9c9149f1aa21e8516084e08d",
+                  "outcomeSha256": "3da3cf91325f4c6e503c7dc20a9acbf72557a700809861d9d77b4303aa0d231d",
+                  "revisionEvidenceSha256": "2c83ad50380a65c3f13fff2c182ed02c5df647cbc3ffd9005d30a43647d86808"
+                },
+                "roles": [
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "subject",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "subject:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "context",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "context:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "evidence",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "evidence:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                  },
+                  {
+                    "referenceType": "hswm:semantic:role",
+                    "role": "exception",
+                    "key": {
+                      "schemaVersion": "hswm:semantic-lifecycle:v1",
+                      "lineageId": "lineage:semantic-lifecycle:v1",
+                      "atomUid": "exception:door",
+                      "revisionId": 0
+                    },
+                    "owner": "owner:semantic-lifecycle",
+                    "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                  }
+                ]
+              }
+            },
+            "afterPredecessorKey": {
+              "schemaVersion": "hswm:semantic-lifecycle:v1",
+              "lineageId": "lineage:semantic-lifecycle:v1",
+              "atomUid": "relation:door",
+              "revisionId": 1
+            },
+            "retainedBefore": {
+              "key": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "revision from round 1",
+                "disposition": "predict",
+                "uncertainty": "u",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": "60f9312d6d80da729c62998be94db3971f822e178f0d90dc6ee8476738dc2cea",
+                "outcomeSha256": "61421bf7fe72cffbf97adc3e613a04291813d4d169082612247667027e50b385",
+                "revisionEvidenceSha256": "f304a1d0e5f31763014ab3f6e5b8b83e9e3c8f651c1707806cff1bfac1a4f112"
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ]
+            },
+            "selectedCandidate": false,
+            "nextFrame": {
+              "event": "next-2",
+              "stateRevision": 2,
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "owner": "owner:semantic-lifecycle",
+              "semantic": {
+                "semanticText": "revision from round 1",
+                "disposition": "predict",
+                "uncertainty": "u",
+                "exceptionRefs": [
+                  "exception:door"
+                ],
+                "traceSha256": "60f9312d6d80da729c62998be94db3971f822e178f0d90dc6ee8476738dc2cea",
+                "outcomeSha256": "61421bf7fe72cffbf97adc3e613a04291813d4d169082612247667027e50b385",
+                "revisionEvidenceSha256": "f304a1d0e5f31763014ab3f6e5b8b83e9e3c8f651c1707806cff1bfac1a4f112"
+              },
+              "roles": [
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "subject",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "subject:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "9b5e11d886da14c5e9a91f9132289e1a85ad377743b75f11abd3d3fb6568ca09"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "context",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "context:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "52986cd602bc569305dac436042d18bc9c7f2e79befa787940ac62acfa85a510"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "evidence",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "evidence:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "6e91d805484098752b75ccc2749e5f1d70e72d199f335c4c674fa7e274a397bd"
+                },
+                {
+                  "referenceType": "hswm:semantic:role",
+                  "role": "exception",
+                  "key": {
+                    "schemaVersion": "hswm:semantic-lifecycle:v1",
+                    "lineageId": "lineage:semantic-lifecycle:v1",
+                    "atomUid": "exception:door",
+                    "revisionId": 0
+                  },
+                  "owner": "owner:semantic-lifecycle",
+                  "contentSha256": "a6e2b3efcf08ad4dedcef3008d9395f731d9ab1d10782de800fba56b79171d9e"
+                }
+              ],
+              "frameSha256": "30489ef6f7bffe0d06d83f1381af03832f078991f0a924e9fb2ef16d7672b332"
+            },
+            "nextTrace": {
+              "traceSha256": "ad33ae4c23b01efa0b29d110af862afdb8e6eac5532f4c4d9a589c63e46e4ed2",
+              "frameSha256": "30489ef6f7bffe0d06d83f1381af03832f078991f0a924e9fb2ef16d7672b332",
+              "relationKey": {
+                "schemaVersion": "hswm:semantic-lifecycle:v1",
+                "lineageId": "lineage:semantic-lifecycle:v1",
+                "atomUid": "relation:door",
+                "revisionId": 1
+              },
+              "predictionSha256": "19258a4266a9190a1e4730b99efa5e8dfc60023146e9c26766738c0ebf389cf7",
+              "backendConfigurationSha256": "8f4d6432ec7271139284f90c09e6117e0d2123f18bca1dda7be226462aaf063d",
+              "event": "next-2"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "realModelCalls": 0,
+  "fullStoreRefinementProved": false,
+  "externalOutcomeTruthVerified": false
+}

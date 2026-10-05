@@ -162,6 +162,70 @@ const layer = (root: string) => {
 const stage = (runtime: CanonicalAtomV2DurableRuntime["Type"], value: string) =>
   runtime.stageContent("application/json", utf8(value))
 
+it.effect("genesis requires acceptance, an empty revision-zero state, and a content-bound nonempty write", () =>
+  withRoot((root) => Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const controller = yield* GraphLoopEngineeringController
+    const descriptor = yield* stage(runtime, "genesis-evidence")
+    const seed = atom("graph", descriptor)
+    const candidate = (revision: number, writes: ReadonlyArray<CanonicalAtomV2>, reads: ReadonlyArray<CanonicalAtomV2Key>) =>
+      makeCanonicalAtomV2ContentBoundInput(runtime.schemaContent.content.sha256, command("transition:genesis", revision, writes, reads, null), writes.map(binding))
+    const request = {
+      runId: "run:genesis", transactionId: "transaction:genesis", affectedKeys: [],
+      evidence: { sealedTrajectory: descriptor, outcome: descriptor, credit: descriptor, authorization: descriptor, invariant: descriptor, authorizationStatus: "REFERENCE_AUTHORIZATION_NOT_CANONICAL_PERMIT" as const, conflictPolicy: "SERIALIZABLE_COMPARE_AND_SWAP" as const },
+      candidate: candidate(0, [seed], [])
+    }
+    const contract = { runId: request.runId, triggerId: "trigger:genesis", actorId: "actor:genesis", verifierId: "verifier:genesis", maximumAttempts: 1, maximumActions: 1 }
+    yield* controller.trigger(contract)
+    yield* controller.sealAction(request.runId, descriptor)
+    const unverified = yield* controller.submitDelta(request).pipe(Effect.flip)
+    expect(unverified.reason).toBe("PHASE_INVALID")
+    yield* controller.recordVerification(request.runId, "ACCEPT", descriptor)
+    const before = yield* runtime.snapshot
+    for (const invalid of [candidate(1, [seed], []), candidate(0, [], []), candidate(0, [seed], [seed.key])]) {
+      const rejected = yield* controller.submitDelta({ ...request, candidate: invalid }).pipe(Effect.flip)
+      expect(rejected.reason).toBe("DELTA_INVALID")
+      expect(yield* runtime.snapshot).toEqual(before)
+    }
+    expect((yield* controller.submitDelta(request)).disposition).toBe("COMMITTED")
+    const seeded = yield* runtime.snapshot
+    expect(seeded.canonical.atoms).toEqual([seed])
+    expect(seeded.canonical.revision).toBe(1)
+    const emptyRestore = yield* controller.restore({ runId: request.runId, transactionId: request.transactionId, sourceKeys: [], candidate: request.candidate }).pipe(Effect.flip)
+    expect(emptyRestore.reason).toBe("DELTA_INVALID")
+    yield* controller.trigger({ ...contract, runId: "run:not-genesis" })
+    yield* controller.sealAction("run:not-genesis", descriptor)
+    yield* controller.recordVerification("run:not-genesis", "ACCEPT", descriptor)
+    const nonGenesis = yield* controller.submitDelta({ ...request, runId: "run:not-genesis", candidate: candidate(1, [atom("new", descriptor)], []) }).pipe(Effect.flip)
+    expect(nonGenesis.reason).toBe("DELTA_INVALID")
+    expect(yield* runtime.snapshot).toEqual(seeded)
+  }).pipe(Effect.provide(layer(root))))
+)
+
+it.effect("two accepted genesis snapshots cannot both commit", () =>
+  withRoot((root) => Effect.gen(function* () {
+    const runtime = yield* CanonicalAtomV2DurableRuntime
+    const controller = yield* GraphLoopEngineeringController
+    const descriptor = yield* stage(runtime, "genesis-race-evidence")
+    const seed = atom("graph", descriptor)
+    const request = (runId: string) => ({
+      runId, transactionId: `transaction:${runId}`, affectedKeys: [],
+      evidence: { sealedTrajectory: descriptor, outcome: descriptor, credit: descriptor, authorization: descriptor, invariant: descriptor, authorizationStatus: "REFERENCE_AUTHORIZATION_NOT_CANONICAL_PERMIT" as const, conflictPolicy: "SERIALIZABLE_COMPARE_AND_SWAP" as const },
+      candidate: makeCanonicalAtomV2ContentBoundInput(runtime.schemaContent.content.sha256, command(`transition:${runId}`, 0, [seed], [], null), [binding(seed)])
+    })
+    for (const runId of ["run:first-genesis", "run:stale-genesis"]) {
+      yield* controller.trigger({ runId, triggerId: "trigger:genesis", actorId: "actor:genesis", verifierId: "verifier:genesis", maximumAttempts: 1, maximumActions: 1 })
+      yield* controller.sealAction(runId, descriptor)
+      yield* controller.recordVerification(runId, "ACCEPT", descriptor)
+    }
+    expect((yield* controller.submitDelta(request("run:first-genesis"))).disposition).toBe("COMMITTED")
+    const committed = yield* runtime.snapshot
+    expect((yield* controller.submitDelta(request("run:stale-genesis"))).disposition).toBe("QUARANTINED")
+    expect(yield* runtime.snapshot).toEqual(committed)
+    expect((yield* controller.recover).get("run:stale-genesis")?.phase).toBe("QUARANTINED")
+  }).pipe(Effect.provide(layer(root))))
+)
+
 it.effect("GE-2 commits only after a bounded independently-verifiable loop and restores exact graph payload", () =>
   withRoot((root) => Effect.gen(function* () {
     const runtime = yield* CanonicalAtomV2DurableRuntime

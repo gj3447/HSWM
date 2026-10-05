@@ -60,7 +60,7 @@ export const bytes = (value: string | Readonly<Record<string, unknown>> | Readon
 export const sha = (value: Uint8Array | string): string => createHash("sha256").update(value).digest("hex")
 
 export class SemanticLifecycleRuntimeError extends Data.TaggedError("SemanticLifecycleRuntimeError")<{
-  readonly code: "SCHEMA_INVALID" | "CONTENT_BINDING_INVALID"
+  readonly code: "SCHEMA_INVALID" | "CONTENT_BINDING_INVALID" | "BOOTSTRAP_NOT_COMMITTED"
   readonly detail: string
 }> {}
 
@@ -134,9 +134,10 @@ const contentBinding = (value: CanonicalAtomV2): Either.Either<CanonicalAtomV2Wr
     Either.mapLeft((error) => lifecycleError("CONTENT_BINDING_INVALID", error.detail))
   )
 
-/** Bootstrap is the only direct submit. Every later revision uses graph-loop admission. */
+/** Bootstrap uses the same graph-loop boundary as later revisions; ACCEPT is mechanical only. */
 export const seedSemanticLifecycle = Effect.gen(function* () {
   const runtime = yield* CanonicalAtomV2DurableRuntime
+  const controller = yield* GraphLoopEngineeringController
   const descriptions: ReadonlyArray<readonly [string, Readonly<Record<string, unknown>>]> = [
     ["subject", { role: "subject", description: "A door event is the subject of this bounded fixture." }],
     ["context", { role: "context", booleanFields: { pressed: "Whether the press signal is true.", manualRelease: "Whether the manual-release signal is true.", power: "Whether the power signal is true.", locked: "Whether the lock signal is true." } }],
@@ -155,12 +156,30 @@ export const seedSemanticLifecycle = Effect.gen(function* () {
   })))
   const writes = [...participants.map((participant) => participant.atom), relation]
   const bindings = yield* Either.all(writes.map(contentBinding))
-  return yield* runtime.submit(makeCanonicalAtomV2ContentBoundInput(runtime.schemaContent.content.sha256, {
+  const candidate = makeCanonicalAtomV2ContentBoundInput(runtime.schemaContent.content.sha256, {
     _tag: "CommitCanonicalAtomsV2", contractVersion: HSWM_CANONICAL_TRANSITION_V2_CONTRACT_VERSION,
     transitionId: "seed:semantic-lifecycle", expectedStateRevision: 0, schemaVersion,
     actorClaim: "fixture:semantic-lifecycle", authorizationRef, scope, decidedAt: "2026-09-27T00:00:00.000Z",
     traceRef: null, readSet: [], writes, provenanceSha256: sha(bytes(writes.map((write) => write.key)))
-  }, bindings))
+  }, bindings)
+  const stage = (value: Readonly<Record<string, unknown>>) => runtime.stageContent("application/json", bytes(value))
+  const action = yield* stage({ purpose: "initialize bounded semantic fixture", transitionId: "seed:semantic-lifecycle", writes: writes.map((write) => write.key) })
+  const verifier = yield* stage({ decision: "ACCEPT", check: "mechanical schema and content binding only", semanticCorrectness: "NOT_ADJUDICATED", efficacy: "NOT_ADJUDICATED" })
+  const evidence = yield* stage({ purpose: "local fixture bootstrap", causalCredit: "NOT_ESTABLISHED", authorization: "LOCAL_FIXTURE_REFERENCE_GRANT_NOT_CANONICAL_PERMIT" })
+  const runId = "run:seed:semantic-lifecycle"
+  yield* controller.trigger({ runId, triggerId: "trigger:seed:semantic-lifecycle", actorId: "fixture:semantic-lifecycle", verifierId: "fixture:mechanical-controller", maximumAttempts: 1, maximumActions: 1 })
+  yield* controller.sealAction(runId, action)
+  yield* controller.recordVerification(runId, "ACCEPT", verifier)
+  const result = yield* controller.submitDelta({
+    runId, transactionId: "seed:semantic-lifecycle",
+    affectedKeys: [], // Genesis creates keys; there are no existing match/read keys.
+    candidate,
+    evidence: { sealedTrajectory: evidence, outcome: verifier, credit: evidence, authorization: evidence, invariant: evidence, authorizationStatus: "REFERENCE_AUTHORIZATION_NOT_CANONICAL_PERMIT", conflictPolicy: "SERIALIZABLE_COMPARE_AND_SWAP" }
+  })
+  if (result.disposition !== "COMMITTED" || result.evolution === null) {
+    return yield* lifecycleError("BOOTSTRAP_NOT_COMMITTED", `graph-loop bootstrap disposition: ${result.disposition}`)
+  }
+  return result.evolution
 })
 
 export const inspectSemanticLifecycleState = Effect.gen(function* () {

@@ -200,6 +200,7 @@ export interface GraphDeltaEvidence {
 export interface GraphDeltaRequest {
   readonly runId: string
   readonly transactionId: string
+  /** Existing match keys; empty only for an empty revision-zero genesis. */
   readonly affectedKeys: ReadonlyArray<CanonicalAtomV2Key>
   readonly evidence: GraphDeltaEvidence
   readonly candidate: unknown
@@ -780,10 +781,10 @@ const stateFor = (
   return Either.right(new Map(states))
 }
 
-const sortedKeyIds = (keys: ReadonlyArray<CanonicalAtomV2Key>): Either.Either<ReadonlyArray<string>, GraphLoopControlError> => {
+const sortedKeyIds = (keys: ReadonlyArray<CanonicalAtomV2Key>, allowEmpty = false): Either.Either<ReadonlyArray<string>, GraphLoopControlError> => {
   const ids = keys.map(canonicalAtomV2KeyId).sort()
-  return ids.length === 0 || new Set(ids).size !== ids.length
-    ? Either.left(controlError("DELTA_INVALID", "affected graph keys must be non-empty and unique"))
+  return (!allowEmpty && ids.length === 0) || new Set(ids).size !== ids.length
+    ? Either.left(controlError("DELTA_INVALID", "affected graph keys must be unique and non-empty except at genesis"))
     : Either.right(Object.freeze(ids))
 }
 
@@ -906,6 +907,9 @@ const validateCandidate = (
   const command = candidate.command
   const stateKeys = new Set(state.canonical.atoms.map((atom) => canonicalAtomV2KeyId(atom.key)))
   const readKeys = new Set(command.readSet.map(canonicalAtomV2KeyId))
+  if (affectedKeyIds.length === 0 && (state.canonical.revision !== 0 || stateKeys.size !== 0 || command.readSet.length !== 0)) {
+    return Either.left(controlError("DELTA_INVALID", "an empty match is allowed only for an empty revision-zero genesis with no reads"))
+  }
   if (
     candidate.schemaContentSha256 !== source.schema.content.sha256 ||
     command.schemaVersion !== source.schema.schemaVersion ||
@@ -992,7 +996,7 @@ export const makeGraphLoopEngineeringControllerLayer =
         const state = yield* currentRun(journal, request.runId)
         if (state.phase !== "VERIFIED_ACCEPT" || state.outcome === null || state.terminal) return yield* controlError("PHASE_INVALID", "graph delta requires one accepted independent verification")
         if (!Identifier.test(request.transactionId)) return yield* controlError("DELTA_INVALID", "transaction id is invalid")
-        const affected = sortedKeyIds(request.affectedKeys)
+        const affected = sortedKeyIds(request.affectedKeys, state.snapshot.stateRevision === 0)
         if (Either.isLeft(affected)) return yield* affected.left
         yield* verifyEvidenceDescriptors(runtime, request.evidence, state.outcome)
         const decoded = yield* decodeCanonicalAtomV2ContentBoundInput(request.candidate).pipe(

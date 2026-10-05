@@ -28,6 +28,7 @@ import {
 import { canonicalAtomV2StateSha256 } from "./canonical-atom-v2-state-journal.js"
 import { canonicalJsonBytes, decodeCanonicalJsonBytes, type CanonicalJson } from "./canonical-atom-v2-json.js"
 import { canonicalAtomV2KeyId, type CanonicalAtomV2Key } from "./canonical-atom-v2-schema.js"
+import { graphLoopHeadMatches, graphLoopEmptyMatchAllowed, graphLoopCandidateMatches } from "./canonical-atom-v2-graph-loop-guards.js"
 import {
   NodePosixFileSystem,
   PosixFileSystem,
@@ -867,15 +868,10 @@ const freshSnapshotMatches = (
     Effect.mapError(() => controlError("SNAPSHOT_STALE", "durable canonical state could not be recovered")),
     Effect.flatMap((state) => {
       const digest = canonicalAtomV2StateSha256(state.canonical)
-      const matches = Either.isRight(digest) &&
-        expected.journalLineageId === state.journalLineageId &&
-        expected.stateRevision === state.canonical.revision &&
-        expected.stateSha256 === digest.right &&
-        expected.journalHead.sha256 === state.journalHead.sha256 &&
-        expected.journalHead.byteLength === state.journalHead.byteLength &&
-        expected.journalHead.mediaType === state.journalHead.mediaType &&
-        expected.schema.schemaVersion === state.schema.schemaVersion &&
-        sameDescriptor(expected.schema.content, state.schema.content)
+      const matches = Either.isRight(digest) && graphLoopHeadMatches(expected, {
+        journalLineageId: state.journalLineageId, stateRevision: state.canonical.revision,
+        stateSha256: digest.right, journalHead: state.journalHead, schema: state.schema
+      })
       return matches ? Effect.succeed(state) : Effect.fail(controlError("SNAPSHOT_STALE", "graph delta source snapshot is no longer the canonical head"))
     })
   )
@@ -905,19 +901,16 @@ const validateCandidate = (
   affectedKeyIds: ReadonlyArray<string>
 ): Either.Either<void, GraphLoopControlError> => {
   const command = candidate.command
-  const stateKeys = new Set(state.canonical.atoms.map((atom) => canonicalAtomV2KeyId(atom.key)))
-  const readKeys = new Set(command.readSet.map(canonicalAtomV2KeyId))
-  if (affectedKeyIds.length === 0 && (state.canonical.revision !== 0 || stateKeys.size !== 0 || command.readSet.length !== 0)) {
+  const stateKeys = state.canonical.atoms.map((atom) => canonicalAtomV2KeyId(atom.key))
+  const readKeys = command.readSet.map(canonicalAtomV2KeyId)
+  if (!graphLoopEmptyMatchAllowed(state.canonical.revision, stateKeys, readKeys, affectedKeyIds)) {
     return Either.left(controlError("DELTA_INVALID", "an empty match is allowed only for an empty revision-zero genesis with no reads"))
   }
-  if (
-    candidate.schemaContentSha256 !== source.schema.content.sha256 ||
-    command.schemaVersion !== source.schema.schemaVersion ||
-    command.expectedStateRevision !== source.stateRevision ||
-    command.traceRef !== null || command.writes.length === 0 ||
-    affectedKeyIds.some((key) => !readKeys.has(key)) ||
-    command.readSet.some((key) => !stateKeys.has(canonicalAtomV2KeyId(key)))
-  ) return Either.left(controlError("DELTA_INVALID", "graph delta is not bound to the exact snapshot and match read-set, or asks the current runtime to admit an unsupported trace"))
+  if (!graphLoopCandidateMatches(source, stateKeys, {
+    schemaContentSha256: candidate.schemaContentSha256, schemaVersion: command.schemaVersion,
+    expectedStateRevision: command.expectedStateRevision, traceAbsent: command.traceRef === null,
+    writeCount: command.writes.length, readKeys
+  }, affectedKeyIds)) return Either.left(controlError("DELTA_INVALID", "graph delta is not bound to the exact snapshot and match read-set, or asks the current runtime to admit an unsupported trace"))
   return Either.right(undefined)
 }
 

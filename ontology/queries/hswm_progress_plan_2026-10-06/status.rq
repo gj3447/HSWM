@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?implementation ?evidence ?ceiling ?source ?sha256 WHERE {
+ ?c a role:CLAIM ; p:proof_status_id ?id ; r:HAS_CONCEPT ?d .
+ ?d a role:DECISION ; p:implementation_status ?implementation ; p:evidence_disposition ?evidence ; p:claim_ceiling ?ceiling ; r:HAS_SOURCE ?s .
+ ?s p:source_path ?source ; p:source_sha256 ?sha256 .
+} ORDER BY ?id ?source

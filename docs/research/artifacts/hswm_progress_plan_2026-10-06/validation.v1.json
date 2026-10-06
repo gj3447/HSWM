@@ -1,0 +1,369 @@
+{
+  "schema_version": "hswm-progress-plan-validation/v1",
+  "recorded_on": "2026-10-06",
+  "actor": "agent:codex",
+  "authority_class": "SECONDARY_AI",
+  "claim_ceiling": "GRAPH_STRUCTURE_SOURCE_BINDING_AND_QUERY_ANSWERS_ONLY",
+  "implementation_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+  "bundle_sha256": "7686e3c6dc92899f0a0471ce8aa0d1a8c9aa1ecc51babf40d0e2f94660fbbf24",
+  "counts": {
+    "nodes": 35,
+    "anchors": 7,
+    "relations": 99
+  },
+  "artifact_bindings_matched": 13,
+  "checks": {
+    "unique_uids_and_endpoints": true,
+    "relation_domain_range_and_cardinality": true,
+    "requires_acyclic": true,
+    "historical_claim_anchors_preserved": true,
+    "exact_query_answer_sets": true
+  },
+  "shacl": {
+    "base": {
+      "conforms": true,
+      "results": [],
+      "claim_ceiling": "KG_BUNDLE_STRUCTURE_AND_BYTE_BINDING_ONLY_NOT_LIVE_KG_STATE_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+    },
+    "plan": {
+      "conforms": true,
+      "results": [],
+      "claim_ceiling": "KG_BUNDLE_STRUCTURE_AND_BYTE_BINDING_ONLY_NOT_LIVE_KG_STATE_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+    }
+  },
+  "query_answers": {
+    "status": [
+      {
+        "id": "PS-5",
+        "implementation": "PARTIAL",
+        "evidence": "UNDERDETERMINED",
+        "ceiling": "CAUSAL_CLAIM_PENDING",
+        "source": "results/HSWM_DGX_SEMANTIC_LEARNING_2026-09-20.md",
+        "sha256": "5fe2ed15056349eac1fea168155072d8fb5d996e04d19b4f9a178af8b22ddc09"
+      },
+      {
+        "id": "PS-5",
+        "implementation": "PARTIAL",
+        "evidence": "UNDERDETERMINED",
+        "ceiling": "CAUSAL_CLAIM_PENDING",
+        "source": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+        "sha256": "9d790d872f6ae8f4075d76d46b20c1276ec0c62d9a32a5b63b5b824388590c6e"
+      },
+      {
+        "id": "PS-1",
+        "implementation": "QUALIFIED",
+        "evidence": "SUPPORTED_IN_SCOPE",
+        "ceiling": "FORMAL_MODEL_ONLY",
+        "source": "docs/research/HSWM_CANONICAL_PRESERVATION_2026-10-06.md",
+        "sha256": "35abda73c0cce5a19ec9fadbbee78a23019e610dacae7c055fd73a5c754cf494"
+      },
+      {
+        "id": "PS-1",
+        "implementation": "QUALIFIED",
+        "evidence": "SUPPORTED_IN_SCOPE",
+        "ceiling": "FORMAL_MODEL_ONLY",
+        "source": "docs/research/HSWM_STANDARD_GRAPH_INCIDENCE_LEAN_2026-10-05.md",
+        "sha256": "3bd2acf980e882ca1deddfd5631ad9e358f9fa0e61b6f3764e90d9deec7b896f"
+      },
+      {
+        "id": "PS-1",
+        "implementation": "QUALIFIED",
+        "evidence": "SUPPORTED_IN_SCOPE",
+        "ceiling": "FORMAL_MODEL_ONLY",
+        "source": "docs/research/HSWM_DURABLE_PRESERVATION_2026-10-06.md",
+        "sha256": "4d5a0f1f7bad6a31b8a5e0f578d3973aa1b46d86c1ed69ce9433289ca8cd5cf7"
+      },
+      {
+        "id": "PS-1",
+        "implementation": "QUALIFIED",
+        "evidence": "SUPPORTED_IN_SCOPE",
+        "ceiling": "FORMAL_MODEL_ONLY",
+        "source": "formal/HSWMDurablePreservation.lean",
+        "sha256": "9af180f40ff245210f7c9dc74873a1f777a483c29ad4a85b72228c45d7919090"
+      },
+      {
+        "id": "PS-1",
+        "implementation": "QUALIFIED",
+        "evidence": "SUPPORTED_IN_SCOPE",
+        "ceiling": "FORMAL_MODEL_ONLY",
+        "source": "formal/HSWMCanonicalPreservation.lean",
+        "sha256": "cf3bc1ae3ee7475c8e2c4e9d76d2279124d98a31934fc7d17cc17ebf558cc740"
+      },
+      {
+        "id": "PS-6",
+        "implementation": "PARTIAL",
+        "evidence": "UNDERDETERMINED",
+        "ceiling": "INTEGRATED_CLAIM_UNJUDGED",
+        "source": "results/HSWM_DGX_SEMANTIC_LEARNING_2026-09-20.md",
+        "sha256": "5fe2ed15056349eac1fea168155072d8fb5d996e04d19b4f9a178af8b22ddc09"
+      },
+      {
+        "id": "PS-6",
+        "implementation": "PARTIAL",
+        "evidence": "UNDERDETERMINED",
+        "ceiling": "INTEGRATED_CLAIM_UNJUDGED",
+        "source": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+        "sha256": "9d790d872f6ae8f4075d76d46b20c1276ec0c62d9a32a5b63b5b824388590c6e"
+      },
+      {
+        "id": "PS-2",
+        "implementation": "IMPLEMENTED",
+        "evidence": "SUPPORTED_IN_SCOPE",
+        "ceiling": "LOCAL_RUNTIME_ONLY",
+        "source": "docs/research/HSWM_SEMANTIC_BOOTSTRAP_ADMISSION_2026-10-05.md",
+        "sha256": "099089b59ea30e60020eed8bb90f8946e45856ef28d9882f0e40fcdb47bb2f9c"
+      },
+      {
+        "id": "PS-2",
+        "implementation": "IMPLEMENTED",
+        "evidence": "SUPPORTED_IN_SCOPE",
+        "ceiling": "LOCAL_RUNTIME_ONLY",
+        "source": "docs/research/HSWM_CANONICAL_PRESERVATION_2026-10-06.md",
+        "sha256": "35abda73c0cce5a19ec9fadbbee78a23019e610dacae7c055fd73a5c754cf494"
+      },
+      {
+        "id": "PS-2",
+        "implementation": "IMPLEMENTED",
+        "evidence": "SUPPORTED_IN_SCOPE",
+        "ceiling": "LOCAL_RUNTIME_ONLY",
+        "source": "docs/research/HSWM_DURABLE_PRESERVATION_2026-10-06.md",
+        "sha256": "4d5a0f1f7bad6a31b8a5e0f578d3973aa1b46d86c1ed69ce9433289ca8cd5cf7"
+      },
+      {
+        "id": "PS-2",
+        "implementation": "IMPLEMENTED",
+        "evidence": "SUPPORTED_IN_SCOPE",
+        "ceiling": "LOCAL_RUNTIME_ONLY",
+        "source": "docs/research/HSWM_GRAPH_LOOP_PREFLIGHT_2026-10-05.md",
+        "sha256": "8093e7c39b465d9c86f25436d3d9dc1b0fcb2294571b4392c17407974ecbdad2"
+      },
+      {
+        "id": "PS-4",
+        "implementation": "IMPLEMENTED",
+        "evidence": "SUPPORTED_IN_SCOPE",
+        "ceiling": "LOCAL_RUNTIME_ONLY",
+        "source": "docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md",
+        "sha256": "4a853906160c7384fb1243484d0f1f69ec378fa9f1b5b0a40ac8f3a529a76ee3"
+      },
+      {
+        "id": "PS-4",
+        "implementation": "IMPLEMENTED",
+        "evidence": "SUPPORTED_IN_SCOPE",
+        "ceiling": "LOCAL_RUNTIME_ONLY",
+        "source": "docs/research/HSWM_DURABLE_PRESERVATION_2026-10-06.md",
+        "sha256": "4d5a0f1f7bad6a31b8a5e0f578d3973aa1b46d86c1ed69ce9433289ca8cd5cf7"
+      },
+      {
+        "id": "PS-3",
+        "implementation": "PARTIAL",
+        "evidence": "UNDERDETERMINED",
+        "ceiling": "NO_UNIVERSAL_REFINEMENT_CLAIM",
+        "source": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "sha256": "15a04a6daee640f40e4a6b9a484528ae10a949f1f93ee1badc33cad4ded4b0b4"
+      },
+      {
+        "id": "PS-3",
+        "implementation": "PARTIAL",
+        "evidence": "UNDERDETERMINED",
+        "ceiling": "NO_UNIVERSAL_REFINEMENT_CLAIM",
+        "source": "docs/research/HSWM_CANONICAL_PRESERVATION_2026-10-06.md",
+        "sha256": "35abda73c0cce5a19ec9fadbbee78a23019e610dacae7c055fd73a5c754cf494"
+      },
+      {
+        "id": "PS-3",
+        "implementation": "PARTIAL",
+        "evidence": "UNDERDETERMINED",
+        "ceiling": "NO_UNIVERSAL_REFINEMENT_CLAIM",
+        "source": "docs/research/HSWM_DURABLE_PRESERVATION_2026-10-06.md",
+        "sha256": "4d5a0f1f7bad6a31b8a5e0f578d3973aa1b46d86c1ed69ce9433289ca8cd5cf7"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "T6",
+        "status": "WAITING",
+        "work": "frozen·evidence-only·learned·sham·removed·restored·oracle을 독립 평가한다.",
+        "completion": "train/calibration/heldout 분리, 후보·예산·판정 규칙 고정, 실제 요청에 반영된 의미 변경과 다음 행동을 결속. 불확실성과 비용을 포함해 이득/무효/판단 불가를 보고.",
+        "prerequisite": "T4"
+      },
+      {
+        "id": "T6",
+        "status": "WAITING",
+        "work": "frozen·evidence-only·learned·sham·removed·restored·oracle을 독립 평가한다.",
+        "completion": "train/calibration/heldout 분리, 후보·예산·판정 규칙 고정, 실제 요청에 반영된 의미 변경과 다음 행동을 결속. 불확실성과 비용을 포함해 이득/무효/판단 불가를 보고.",
+        "prerequisite": "T5"
+      },
+      {
+        "id": "T9",
+        "status": "WAITING",
+        "work": "상태·개입·다음 학습을 보존하는 Map과 한 단계 상위 구성을 검증한다.",
+        "completion": "같은 구성에서 역할·순서·문맥·예외·학습 대응 및 비용 확인. CR/FCL 각 의무의 근거를 연결하고 충족한 범위만 갱신.",
+        "prerequisite": "T7"
+      },
+      {
+        "id": "T9",
+        "status": "WAITING",
+        "work": "상태·개입·다음 학습을 보존하는 Map과 한 단계 상위 구성을 검증한다.",
+        "completion": "같은 구성에서 역할·순서·문맥·예외·학습 대응 및 비용 확인. CR/FCL 각 의무의 근거를 연결하고 충족한 범위만 갱신.",
+        "prerequisite": "T8"
+      },
+      {
+        "id": "T8",
+        "status": "WAITING",
+        "work": "같은 snapshot 아래 상보·배타 제약과 stale read, 공동 outcome의 기여를 비교한다.",
+        "completion": "독립 호출을 합친 기준과 비교해 공동 효과 및 불확실성을 측정. 단순 병렬 처리량을 의미적 합성으로 세지 않음.",
+        "prerequisite": "T6"
+      },
+      {
+        "id": "T7",
+        "status": "PLANNED",
+        "work": "필요한 상태의 선택·누락·추가 읽기·원문 복귀를 현재 실행에 연결한다. 인터페이스 설계는 먼저 가능하다.",
+        "completion": "동일 정보·총비용 대조에서 읽기 선택의 기여를 구분. 누락과 불충분한 요약에 대한 반례를 보존.",
+        "prerequisite": "T6"
+      },
+      {
+        "id": "T3",
+        "status": "PLANNED",
+        "work": "v2 journal의 no-replace link·동기화·재복구와 추상 게시 모델을 연결한다.",
+        "completion": "명시한 OS·filesystem에서 v2 전용 별도 프로세스 중단과 경쟁 후 이전 prefix 또는 정확한 successor 복구. 전체 tail rollback·전원 손실은 별도 미검증으로 유지.",
+        "prerequisite": "T1"
+      },
+      {
+        "id": "T4",
+        "status": "WAITING",
+        "work": "같은 실행의 승인→content→journal→재시작→read frame을 하나의 source-bound trace로 만든다.",
+        "completion": "서로 다른 fixture의 성공을 합치지 않고 동일 기록에서 대응 확인. 실제 바이트·source revision·Lean 결과·표준 view의 provenance를 질의할 수 있음.",
+        "prerequisite": "T1"
+      },
+      {
+        "id": "T4",
+        "status": "WAITING",
+        "work": "같은 실행의 승인→content→journal→재시작→read frame을 하나의 source-bound trace로 만든다.",
+        "completion": "서로 다른 fixture의 성공을 합치지 않고 동일 기록에서 대응 확인. 실제 바이트·source revision·Lean 결과·표준 view의 provenance를 질의할 수 있음.",
+        "prerequisite": "T2"
+      },
+      {
+        "id": "T4",
+        "status": "WAITING",
+        "work": "같은 실행의 승인→content→journal→재시작→read frame을 하나의 source-bound trace로 만든다.",
+        "completion": "서로 다른 fixture의 성공을 합치지 않고 동일 기록에서 대응 확인. 실제 바이트·source revision·Lean 결과·표준 view의 provenance를 질의할 수 있음.",
+        "prerequisite": "T3"
+      },
+      {
+        "id": "T1",
+        "status": "NEXT",
+        "work": "`canonical-atom-v2-state-journal.ts`의 byte decode·receipt·전이 replay를 기존 보존 모델에 연결한다.",
+        "completion": "실제 기록의 decode→receipt→native state 대응과 유한 replay 보존을 증명. 잘린 기록·중복 필드·잘못된 revision/descriptor·receipt 바꿔치기의 처리 결과를 명시하고 실제 구현과 대조. JSON decoder 자체의 검증 범위를 별도 표시."
+      },
+      {
+        "id": "T2",
+        "status": "PLANNED",
+        "work": "기존 signed Permit 경로의 key·scope·nonce·clock·head 검사를 현재 참조 grant 경로와 구별해 연결한다.",
+        "completion": "유효/거절 trace가 실제 검증기와 모델에 같은 결과를 냄. trusted key·time·nonce 저장의 외부 전제와 아직 미확립인 조건이 남김없이 표시됨."
+      },
+      {
+        "id": "T5",
+        "status": "PREPARED_NOT_RUN",
+        "work": "현재 모델·tokenizer·template·serving 바인딩 확인 후 기존 384요청 진단. 원본 진단 뒤 기존 W1 변환·sentinel 확장.",
+        "completion": "정답 관계를 주었을 때의 오류·형식·역할 결속·비용을 실제 관측. 384요청 완료와 전체 W1 완료를 구별. 실패하면 국소 실행 조건을 수정하고 동일 조건의 규모 확대를 멈춤."
+      }
+    ],
+    "negative": [
+      {
+        "id": "PS-5",
+        "evidence": "UNDERDETERMINED",
+        "ceiling": "CAUSAL_CLAIM_PENDING",
+        "description": "실제 로컬/합성 관측은 있으나 독립 외부 truth/credit는 미확립.",
+        "source": "results/HSWM_DGX_SEMANTIC_LEARNING_2026-09-20.md"
+      },
+      {
+        "id": "PS-6",
+        "evidence": "UNDERDETERMINED",
+        "ceiling": "INTEGRATED_CLAIM_UNJUDGED",
+        "description": "9월 20일 조건의 learned/frozen 155/320, evidence-only 156/320. 새 W1 준비를 실험 완료로 세지 않음.",
+        "source": "results/HSWM_DGX_SEMANTIC_LEARNING_2026-09-20.md"
+      }
+    ]
+  },
+  "projection": {
+    "dataset_sha256": "eb6680a1dd4bef074e0bce4f4663b843c539836d8f0e1e6abcd1cb0bad1a4290",
+    "provenance_sha256": "8cb61917a97a6383a32252af061b14c88c9827dd8d3a5d9e591287726e89c1cf",
+    "write_back": "FORBIDDEN",
+    "profile": "v2"
+  },
+  "prior_evidence_recheck": {
+    "latest_work_summary_source_files_matched": 10,
+    "lean_reports": [
+      {
+        "profile": "standard-graph-incidence",
+        "recorded_status": "EXACT_SOURCE_KERNEL_CHECKED",
+        "bound_source_bytes_match": true,
+        "recompiled_this_review": false
+      },
+      {
+        "profile": "canonical-preservation",
+        "recorded_status": "EXACT_SOURCE_KERNEL_CHECKED",
+        "bound_source_bytes_match": true,
+        "recompiled_this_review": false
+      },
+      {
+        "profile": "durable-preservation",
+        "recorded_status": "EXACT_SOURCE_KERNEL_CHECKED",
+        "bound_source_bytes_match": true,
+        "recompiled_this_review": false
+      }
+    ],
+    "test_suite_rerun_this_review": false
+  },
+  "model_diagnostic": {
+    "prepared_frames": 128,
+    "prepared_requests": 384,
+    "status": "PREPARED_NOT_RUN",
+    "current_serving_reachability": "NOT_CHECKED_THIS_REVIEW"
+  },
+  "real_model_calls_this_review": 0,
+  "whole_hswm_proved": false,
+  "efficacy_promoted": false,
+  "live_kg_written": false,
+  "bound_verification_inputs": [
+    {
+      "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+      "sha256": "6eb4d0be63fccd71e02e25d86baa1ae81c0ddf31a9eb4d05fc4f0cf655225371"
+    },
+    {
+      "path": "ontology/queries/hswm_progress_plan_2026-10-06/negative.rq",
+      "sha256": "4b8eacb30661c64085276ac9c246ae0829582f6ee3e07fcec71ecee39b8f764c"
+    },
+    {
+      "path": "ontology/queries/hswm_progress_plan_2026-10-06/status.rq",
+      "sha256": "1b5d3f340f61ea6ac4347486f9810d591b7e46f2de3b5b6779a5c20c2a5672eb"
+    },
+    {
+      "path": "ontology/queries/hswm_progress_plan_2026-10-06/tasks.rq",
+      "sha256": "777913e7dbefbbb82b189d66a5df6be41cf6035860a686b0a27270174b17a326"
+    },
+    {
+      "path": "ontology/queries/hswm_progress_plan_2026-10-06/shapes.ttl",
+      "sha256": "2f5f638cbd8799bb93bd7a510c5b800cefdf55be46a009a344980a6a402a3449"
+    }
+  ],
+  "native_compiled_artifacts": [
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-cli.js",
+      "sha256": "8a132fcd2da096a11cf2dedf20668766843db1f643eb5b937803686a2eb6e504"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-bundle-domain.js",
+      "sha256": "09795e276498819aff8b3e3b3a88ea69e5b7c9319ccb5d3bd820c9d61816daad"
+    },
+    {
+      "path": "src/hswm/effect-runtime/dist/native-kg-standards.js",
+      "sha256": "859bd404bba5ef0f279e441441d50105a2415419d8974d2218b552e9cff50155"
+    }
+  ],
+  "dependency_closure_attested": false
+}

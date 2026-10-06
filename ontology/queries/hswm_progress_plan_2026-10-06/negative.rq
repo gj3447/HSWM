@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?evidence ?ceiling ?description ?source WHERE {
+ ?d a role:DECISION ; p:proof_status_id ?id ; p:evidence_disposition ?evidence ; p:claim_ceiling ?ceiling ; p:description ?description ; r:HAS_SOURCE ?s .
+ ?s p:evidence_kind "PRIOR_BOUNDED_NEGATIVE_EXPERIMENT" ; p:source_path ?source .
+} ORDER BY ?id

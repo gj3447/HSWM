@@ -1,0 +1,1791 @@
+{
+  "schema_version": "hswm-progress-plan/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+  "status": "SOURCE_BOUND_REVIEW_AND_PLAN",
+  "authority_boundary": "SECONDARY_AI; current decisions are scoped reviews; historical claims and negative results remain unchanged.",
+  "nonclaim": "READ_ONLY_PROGRESS_PLAN_NOT_CANONICAL_STATE_NOT_PERMISSION_NOT_EFFICACY_NOT_WHOLE_HSWM_PROOF",
+  "source_accessed_on": "2026-10-06",
+  "artifact_bindings": [
+    {
+      "path": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+      "sha256": "2be89634abd09b52ec03648f269b971c5cc8215c8d63413d1cbfd8486a3838ce"
+    },
+    {
+      "path": "docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md",
+      "sha256": "4a853906160c7384fb1243484d0f1f69ec378fa9f1b5b0a40ac8f3a529a76ee3"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json",
+      "sha256": "3ceb3e9a5fefbdecd861caf4613061f7a0a4a63a3b9a3be7b9b68d3ee748084f"
+    },
+    {
+      "path": "docs/research/HSWM_STANDARD_GRAPH_INCIDENCE_LEAN_2026-10-05.md",
+      "sha256": "3bd2acf980e882ca1deddfd5631ad9e358f9fa0e61b6f3764e90d9deec7b896f"
+    },
+    {
+      "path": "docs/research/HSWM_CANONICAL_PRESERVATION_2026-10-06.md",
+      "sha256": "35abda73c0cce5a19ec9fadbbee78a23019e610dacae7c055fd73a5c754cf494"
+    },
+    {
+      "path": "docs/research/HSWM_DURABLE_PRESERVATION_2026-10-06.md",
+      "sha256": "4d5a0f1f7bad6a31b8a5e0f578d3973aa1b46d86c1ed69ce9433289ca8cd5cf7"
+    },
+    {
+      "path": "docs/research/HSWM_GRAPH_LOOP_PREFLIGHT_2026-10-05.md",
+      "sha256": "8093e7c39b465d9c86f25436d3d9dc1b0fcb2294571b4392c17407974ecbdad2"
+    },
+    {
+      "path": "docs/research/HSWM_SEMANTIC_BOOTSTRAP_ADMISSION_2026-10-05.md",
+      "sha256": "099089b59ea30e60020eed8bb90f8946e45856ef28d9882f0e40fcdb47bb2f9c"
+    },
+    {
+      "path": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+      "sha256": "9d790d872f6ae8f4075d76d46b20c1276ec0c62d9a32a5b63b5b824388590c6e"
+    },
+    {
+      "path": "results/HSWM_DGX_SEMANTIC_LEARNING_2026-09-20.md",
+      "sha256": "5fe2ed15056349eac1fea168155072d8fb5d996e04d19b4f9a178af8b22ddc09"
+    },
+    {
+      "path": "formal/HSWMCanonicalPreservation.lean",
+      "sha256": "cf3bc1ae3ee7475c8e2c4e9d76d2279124d98a31934fc7d17cc17ebf558cc740"
+    },
+    {
+      "path": "formal/HSWMDurablePreservation.lean",
+      "sha256": "9af180f40ff245210f7c9dc74873a1f777a483c29ad4a85b72228c45d7919090"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+      "sha256": "15a04a6daee640f40e4a6b9a484528ae10a949f1f93ee1badc33cad4ded4b0b4"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 35,
+    "anchors": 7,
+    "relations": 99
+  },
+  "anchors": [
+    {
+      "uid": "sym:Concept:hswm",
+      "name": "HSWM",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-proof-status-claim-lean-model-theorems-2026-09-02-v5",
+      "name": "Lean model safety and conditional-composition theorems [2026-09-02-v5]",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-proof-status-claim-typescript-lean-local-boundary-2026-09-02-v5",
+      "name": "Tested TypeScript-to-Lean local wire and persisted-decision boundary [2026-09-02-v5]",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-proof-status-claim-universal-typescript-lean-refinement-2026-09-02-v5",
+      "name": "Universal TypeScript/Effect-to-Lean refinement [2026-09-02-v5]",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-proof-status-claim-local-permit-posix-occurrence-2026-09-02-v5",
+      "name": "Local key, time, nonce, Permit, atomic publication, and recovery occurrence [2026-09-02-v5]",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-proof-status-claim-outcome-truth-causal-credit-2026-09-02-v5",
+      "name": "External outcome truth and independent causal credit [2026-09-02-v5]",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-proof-status-claim-revision-real-llm-efficacy-2026-09-02-v5",
+      "name": "Revision-caused improvement in real LLM behavior [2026-09-02-v5]",
+      "required_labels": [
+        "Concept"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM 전체 진행과 기존 의무의 작업 연결",
+        "description": "HSWM 전체 진행과 기존 의무의 작업 연결",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "PLAN",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "implementation_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+        "status": "RECORDED",
+        "whole_hswm_proved": false,
+        "real_model_run_this_review": false,
+        "overall_completion_percent_status": "NOT_DEFINED",
+        "current_runtime_state": false
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-source-plan-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "description": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "EVIDENCE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "source_path": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "source_sha256": "2be89634abd09b52ec03648f269b971c5cc8215c8d63413d1cbfd8486a3838ce",
+        "source_revision": "UNCOMMITTED_NEW_PLAN",
+        "evidence_kind": "SOURCE_ARTIFACT",
+        "occurrence_time": "UNKNOWN_NOT_INFERRED_FROM_REVIEW_TIME"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-source-prior-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md",
+        "description": "docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "EVIDENCE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "source_path": "docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md",
+        "source_sha256": "4a853906160c7384fb1243484d0f1f69ec378fa9f1b5b0a40ac8f3a529a76ee3",
+        "source_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+        "evidence_kind": "SOURCE_ARTIFACT",
+        "occurrence_time": "UNKNOWN_NOT_INFERRED_FROM_REVIEW_TIME"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-source-prior_graph-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json",
+        "description": "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "EVIDENCE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "source_path": "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json",
+        "source_sha256": "3ceb3e9a5fefbdecd861caf4613061f7a0a4a63a3b9a3be7b9b68d3ee748084f",
+        "source_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+        "evidence_kind": "SOURCE_ARTIFACT",
+        "occurrence_time": "UNKNOWN_NOT_INFERRED_FROM_REVIEW_TIME"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-source-incidence-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "docs/research/HSWM_STANDARD_GRAPH_INCIDENCE_LEAN_2026-10-05.md",
+        "description": "docs/research/HSWM_STANDARD_GRAPH_INCIDENCE_LEAN_2026-10-05.md",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "EVIDENCE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "source_path": "docs/research/HSWM_STANDARD_GRAPH_INCIDENCE_LEAN_2026-10-05.md",
+        "source_sha256": "3bd2acf980e882ca1deddfd5631ad9e358f9fa0e61b6f3764e90d9deec7b896f",
+        "source_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+        "evidence_kind": "SOURCE_ARTIFACT",
+        "occurrence_time": "UNKNOWN_NOT_INFERRED_FROM_REVIEW_TIME"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-source-canonical-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "docs/research/HSWM_CANONICAL_PRESERVATION_2026-10-06.md",
+        "description": "docs/research/HSWM_CANONICAL_PRESERVATION_2026-10-06.md",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "EVIDENCE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "source_path": "docs/research/HSWM_CANONICAL_PRESERVATION_2026-10-06.md",
+        "source_sha256": "35abda73c0cce5a19ec9fadbbee78a23019e610dacae7c055fd73a5c754cf494",
+        "source_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+        "evidence_kind": "SOURCE_ARTIFACT",
+        "occurrence_time": "UNKNOWN_NOT_INFERRED_FROM_REVIEW_TIME"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-source-durable-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "docs/research/HSWM_DURABLE_PRESERVATION_2026-10-06.md",
+        "description": "docs/research/HSWM_DURABLE_PRESERVATION_2026-10-06.md",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "EVIDENCE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "source_path": "docs/research/HSWM_DURABLE_PRESERVATION_2026-10-06.md",
+        "source_sha256": "4d5a0f1f7bad6a31b8a5e0f578d3973aa1b46d86c1ed69ce9433289ca8cd5cf7",
+        "source_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+        "evidence_kind": "SOURCE_ARTIFACT",
+        "occurrence_time": "UNKNOWN_NOT_INFERRED_FROM_REVIEW_TIME"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-source-preflight-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "docs/research/HSWM_GRAPH_LOOP_PREFLIGHT_2026-10-05.md",
+        "description": "docs/research/HSWM_GRAPH_LOOP_PREFLIGHT_2026-10-05.md",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "EVIDENCE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "source_path": "docs/research/HSWM_GRAPH_LOOP_PREFLIGHT_2026-10-05.md",
+        "source_sha256": "8093e7c39b465d9c86f25436d3d9dc1b0fcb2294571b4392c17407974ecbdad2",
+        "source_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+        "evidence_kind": "SOURCE_ARTIFACT",
+        "occurrence_time": "UNKNOWN_NOT_INFERRED_FROM_REVIEW_TIME"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-source-bootstrap-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "docs/research/HSWM_SEMANTIC_BOOTSTRAP_ADMISSION_2026-10-05.md",
+        "description": "docs/research/HSWM_SEMANTIC_BOOTSTRAP_ADMISSION_2026-10-05.md",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "EVIDENCE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "source_path": "docs/research/HSWM_SEMANTIC_BOOTSTRAP_ADMISSION_2026-10-05.md",
+        "source_sha256": "099089b59ea30e60020eed8bb90f8946e45856ef28d9882f0e40fcdb47bb2f9c",
+        "source_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+        "evidence_kind": "SOURCE_ARTIFACT",
+        "occurrence_time": "UNKNOWN_NOT_INFERRED_FROM_REVIEW_TIME"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-source-self_review-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+        "description": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "EVIDENCE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "source_path": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+        "source_sha256": "9d790d872f6ae8f4075d76d46b20c1276ec0c62d9a32a5b63b5b824388590c6e",
+        "source_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+        "evidence_kind": "SOURCE_ARTIFACT",
+        "occurrence_time": "UNKNOWN_NOT_INFERRED_FROM_REVIEW_TIME"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-source-experiment-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "results/HSWM_DGX_SEMANTIC_LEARNING_2026-09-20.md",
+        "description": "results/HSWM_DGX_SEMANTIC_LEARNING_2026-09-20.md",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "EVIDENCE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "source_path": "results/HSWM_DGX_SEMANTIC_LEARNING_2026-09-20.md",
+        "source_sha256": "5fe2ed15056349eac1fea168155072d8fb5d996e04d19b4f9a178af8b22ddc09",
+        "source_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+        "evidence_kind": "PRIOR_BOUNDED_NEGATIVE_EXPERIMENT",
+        "occurrence_time": "2026-09-20"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-source-canon_lean-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "formal/HSWMCanonicalPreservation.lean",
+        "description": "formal/HSWMCanonicalPreservation.lean",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "EVIDENCE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "source_path": "formal/HSWMCanonicalPreservation.lean",
+        "source_sha256": "cf3bc1ae3ee7475c8e2c4e9d76d2279124d98a31934fc7d17cc17ebf558cc740",
+        "source_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+        "evidence_kind": "SOURCE_ARTIFACT",
+        "occurrence_time": "UNKNOWN_NOT_INFERRED_FROM_REVIEW_TIME"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-source-durable_lean-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "formal/HSWMDurablePreservation.lean",
+        "description": "formal/HSWMDurablePreservation.lean",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "EVIDENCE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "source_path": "formal/HSWMDurablePreservation.lean",
+        "source_sha256": "9af180f40ff245210f7c9dc74873a1f777a483c29ad4a85b72228c45d7919090",
+        "source_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+        "evidence_kind": "SOURCE_ARTIFACT",
+        "occurrence_time": "UNKNOWN_NOT_INFERRED_FROM_REVIEW_TIME"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-source-journal-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "description": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "EVIDENCE_SOURCE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "source_sha256": "15a04a6daee640f40e4a6b9a484528ae10a949f1f93ee1badc33cad4ded4b0b4",
+        "source_revision": "05fe5d3cfbd89623bf249cf5e0682b3565640e1f",
+        "evidence_kind": "SOURCE_ARTIFACT",
+        "occurrence_time": "UNKNOWN_NOT_INFERRED_FROM_REVIEW_TIME"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-ps-1-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "명시한 Lean 모델의 안전성과 조건부 합성",
+        "description": "명시한 Lean 모델의 안전성과 조건부 합성",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "CLAIM",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "proof_status_id": "PS-1",
+        "current_decision_uid": "sym:Concept:hswm-progress-ps-1-decision-2026-10-06-v1",
+        "status": "OPEN_CROSS_CUTTING_OBLIGATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-ps-1-decision-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "명시한 Lean 모델의 안전성과 조건부 합성 현재 판정",
+        "description": "모델과 가정 안에서 증명. 실제 TypeScript 전체 대응은 별도 의무.",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "DECISION",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "proof_status_id": "PS-1",
+        "assesses_claim_uid": "sym:Concept:hswm-progress-ps-1-2026-10-06-v1",
+        "implementation_status": "QUALIFIED",
+        "evidence_disposition": "SUPPORTED_IN_SCOPE",
+        "claim_ceiling": "FORMAL_MODEL_ONLY",
+        "assessed_on": "2026-10-06",
+        "prior_verdicts_preserved": true
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-ps-2-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "실제 TS와 Lean 기록 및 판정 연결",
+        "description": "실제 TS와 Lean 기록 및 판정 연결",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "CLAIM",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "proof_status_id": "PS-2",
+        "current_decision_uid": "sym:Concept:hswm-progress-ps-2-decision-2026-10-06-v1",
+        "status": "OPEN_CROSS_CUTTING_OBLIGATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-ps-2-decision-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "실제 TS와 Lean 기록 및 판정 연결 현재 판정",
+        "description": "실제 실행 경로와 유한 대조 사례. 모든 입력의 동등성은 미증명.",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "DECISION",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "proof_status_id": "PS-2",
+        "assesses_claim_uid": "sym:Concept:hswm-progress-ps-2-2026-10-06-v1",
+        "implementation_status": "IMPLEMENTED",
+        "evidence_disposition": "SUPPORTED_IN_SCOPE",
+        "claim_ceiling": "LOCAL_RUNTIME_ONLY",
+        "assessed_on": "2026-10-06",
+        "prior_verdicts_preserved": true
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "대상 실행 전체의 Lean 모델 대응",
+        "description": "대상 실행 전체의 Lean 모델 대응",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "CLAIM",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "proof_status_id": "PS-3",
+        "current_decision_uid": "sym:Concept:hswm-progress-ps-3-decision-2026-10-06-v1",
+        "status": "OPEN_CROSS_CUTTING_OBLIGATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-ps-3-decision-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "대상 실행 전체의 Lean 모델 대응 현재 판정",
+        "description": "journal byte decode와 receipt/native replay 연결이 열려 있다.",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "DECISION",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "proof_status_id": "PS-3",
+        "assesses_claim_uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+        "implementation_status": "PARTIAL",
+        "evidence_disposition": "UNDERDETERMINED",
+        "claim_ceiling": "NO_UNIVERSAL_REFINEMENT_CLAIM",
+        "assessed_on": "2026-10-06",
+        "prior_verdicts_preserved": true
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-ps-4-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "실제 권한과 원자적 게시 및 복구",
+        "description": "실제 권한과 원자적 게시 및 복구",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "CLAIM",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "proof_status_id": "PS-4",
+        "current_decision_uid": "sym:Concept:hswm-progress-ps-4-decision-2026-10-06-v1",
+        "status": "OPEN_CROSS_CUTTING_OBLIGATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-ps-4-decision-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "실제 권한과 원자적 게시 및 복구 현재 판정",
+        "description": "참조 grant와 실제 바이트/중단/경쟁 검사. canonical Permit 및 물리적 원자성 전체 증명은 아님.",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "DECISION",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "proof_status_id": "PS-4",
+        "assesses_claim_uid": "sym:Concept:hswm-progress-ps-4-2026-10-06-v1",
+        "implementation_status": "IMPLEMENTED",
+        "evidence_disposition": "SUPPORTED_IN_SCOPE",
+        "claim_ceiling": "LOCAL_RUNTIME_ONLY",
+        "assessed_on": "2026-10-06",
+        "prior_verdicts_preserved": true
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-ps-5-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "외부 outcome 진실성과 독립 인과 기여",
+        "description": "외부 outcome 진실성과 독립 인과 기여",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "CLAIM",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "proof_status_id": "PS-5",
+        "current_decision_uid": "sym:Concept:hswm-progress-ps-5-decision-2026-10-06-v1",
+        "status": "OPEN_CROSS_CUTTING_OBLIGATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-ps-5-decision-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "외부 outcome 진실성과 독립 인과 기여 현재 판정",
+        "description": "실제 로컬/합성 관측은 있으나 독립 외부 truth/credit는 미확립.",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "DECISION",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "proof_status_id": "PS-5",
+        "assesses_claim_uid": "sym:Concept:hswm-progress-ps-5-2026-10-06-v1",
+        "implementation_status": "PARTIAL",
+        "evidence_disposition": "UNDERDETERMINED",
+        "claim_ceiling": "CAUSAL_CLAIM_PENDING",
+        "assessed_on": "2026-10-06",
+        "prior_verdicts_preserved": true
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-ps-6-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "정확한 revision이 실제 LLM을 개선",
+        "description": "정확한 revision이 실제 LLM을 개선",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "CLAIM",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "proof_status_id": "PS-6",
+        "current_decision_uid": "sym:Concept:hswm-progress-ps-6-decision-2026-10-06-v1",
+        "status": "OPEN_CROSS_CUTTING_OBLIGATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-ps-6-decision-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "정확한 revision이 실제 LLM을 개선 현재 판정",
+        "description": "9월 20일 조건의 learned/frozen 155/320, evidence-only 156/320. 새 W1 준비를 실험 완료로 세지 않음.",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "DECISION",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "proof_status_id": "PS-6",
+        "assesses_claim_uid": "sym:Concept:hswm-progress-ps-6-2026-10-06-v1",
+        "implementation_status": "PARTIAL",
+        "evidence_disposition": "UNDERDETERMINED",
+        "claim_ceiling": "INTEGRATED_CLAIM_UNJUDGED",
+        "assessed_on": "2026-10-06",
+        "prior_verdicts_preserved": true
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "T1 Journal decode와 replay 대응",
+        "description": "T1 Journal decode와 replay 대응",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "TASK",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "task_id": "T1",
+        "status": "NEXT",
+        "work": "`canonical-atom-v2-state-journal.ts`의 byte decode·receipt·전이 replay를 기존 보존 모델에 연결한다.",
+        "entry_conditions": "`NEXT`; 바로 진행 가능",
+        "completion_criterion": "실제 기록의 decode→receipt→native state 대응과 유한 replay 보존을 증명. 잘린 기록·중복 필드·잘못된 revision/descriptor·receipt 바꿔치기의 처리 결과를 명시하고 실제 구현과 대조. JSON decoder 자체의 검증 범위를 별도 표시.",
+        "estimate_status": "UNESTIMATED",
+        "execution_status": "NOT_EXECUTED_BY_THIS_PLAN",
+        "source_path": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "source_sha256": "2be89634abd09b52ec03648f269b971c5cc8215c8d63413d1cbfd8486a3838ce"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t2-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "T2 Canonical Permit 연결",
+        "description": "T2 Canonical Permit 연결",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "TASK",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "task_id": "T2",
+        "status": "PLANNED",
+        "work": "기존 signed Permit 경로의 key·scope·nonce·clock·head 검사를 현재 참조 grant 경로와 구별해 연결한다.",
+        "entry_conditions": "`PLANNED`; T1의 모델 범위와 함께 고정",
+        "completion_criterion": "유효/거절 trace가 실제 검증기와 모델에 같은 결과를 냄. trusted key·time·nonce 저장의 외부 전제와 아직 미확립인 조건이 남김없이 표시됨.",
+        "estimate_status": "UNESTIMATED",
+        "execution_status": "NOT_EXECUTED_BY_THIS_PLAN",
+        "source_path": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "source_sha256": "2be89634abd09b52ec03648f269b971c5cc8215c8d63413d1cbfd8486a3838ce"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "T3 실제 게시와 장애 복구 연결",
+        "description": "T3 실제 게시와 장애 복구 연결",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "TASK",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "task_id": "T3",
+        "status": "PLANNED",
+        "work": "v2 journal의 no-replace link·동기화·재복구와 추상 게시 모델을 연결한다.",
+        "entry_conditions": "`PLANNED`; T1에 의존",
+        "completion_criterion": "명시한 OS·filesystem에서 v2 전용 별도 프로세스 중단과 경쟁 후 이전 prefix 또는 정확한 successor 복구. 전체 tail rollback·전원 손실은 별도 미검증으로 유지.",
+        "estimate_status": "UNESTIMATED",
+        "execution_status": "NOT_EXECUTED_BY_THIS_PLAN",
+        "source_path": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "source_sha256": "2be89634abd09b52ec03648f269b971c5cc8215c8d63413d1cbfd8486a3838ce"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "T4 한 실행 기록의 통합 검증",
+        "description": "T4 한 실행 기록의 통합 검증",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "TASK",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "task_id": "T4",
+        "status": "WAITING",
+        "work": "같은 실행의 승인→content→journal→재시작→read frame을 하나의 source-bound trace로 만든다.",
+        "entry_conditions": "`WAITING`; T1·T2·T3에 의존",
+        "completion_criterion": "서로 다른 fixture의 성공을 합치지 않고 동일 기록에서 대응 확인. 실제 바이트·source revision·Lean 결과·표준 view의 provenance를 질의할 수 있음.",
+        "estimate_status": "UNESTIMATED",
+        "execution_status": "NOT_EXECUTED_BY_THIS_PLAN",
+        "source_path": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "source_sha256": "2be89634abd09b52ec03648f269b971c5cc8215c8d63413d1cbfd8486a3838ce"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t5-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "T5 국소 의미 실행 W1",
+        "description": "T5 국소 의미 실행 W1",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "TASK",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "task_id": "T5",
+        "status": "PREPARED_NOT_RUN",
+        "work": "현재 모델·tokenizer·template·serving 바인딩 확인 후 기존 384요청 진단. 원본 진단 뒤 기존 W1 변환·sentinel 확장.",
+        "entry_conditions": "`PREPARED_NOT_RUN`; T1~T4와 독립 준비 가능",
+        "completion_criterion": "정답 관계를 주었을 때의 오류·형식·역할 결속·비용을 실제 관측. 384요청 완료와 전체 W1 완료를 구별. 실패하면 국소 실행 조건을 수정하고 동일 조건의 규모 확대를 멈춤.",
+        "estimate_status": "UNESTIMATED",
+        "execution_status": "NOT_EXECUTED_BY_THIS_PLAN",
+        "source_path": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "source_sha256": "2be89634abd09b52ec03648f269b971c5cc8215c8d63413d1cbfd8486a3838ce"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "T6 의미 수정의 효과 W2",
+        "description": "T6 의미 수정의 효과 W2",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "TASK",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "task_id": "T6",
+        "status": "WAITING",
+        "work": "frozen·evidence-only·learned·sham·removed·restored·oracle을 독립 평가한다.",
+        "entry_conditions": "`WAITING`; T4·T5에 의존",
+        "completion_criterion": "train/calibration/heldout 분리, 후보·예산·판정 규칙 고정, 실제 요청에 반영된 의미 변경과 다음 행동을 결속. 불확실성과 비용을 포함해 이득/무효/판단 불가를 보고.",
+        "estimate_status": "UNESTIMATED",
+        "execution_status": "NOT_EXECUTED_BY_THIS_PLAN",
+        "source_path": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "source_sha256": "2be89634abd09b52ec03648f269b971c5cc8215c8d63413d1cbfd8486a3838ce"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "T7 능동 읽기 W3",
+        "description": "T7 능동 읽기 W3",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "TASK",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "task_id": "T7",
+        "status": "PLANNED",
+        "work": "필요한 상태의 선택·누락·추가 읽기·원문 복귀를 현재 실행에 연결한다. 인터페이스 설계는 먼저 가능하다.",
+        "entry_conditions": "`PLANNED`; 효과 판정은 T6 뒤",
+        "completion_criterion": "동일 정보·총비용 대조에서 읽기 선택의 기여를 구분. 누락과 불충분한 요약에 대한 반례를 보존.",
+        "estimate_status": "UNESTIMATED",
+        "execution_status": "NOT_EXECUTED_BY_THIS_PLAN",
+        "source_path": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "source_sha256": "2be89634abd09b52ec03648f269b971c5cc8215c8d63413d1cbfd8486a3838ce"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "T8 두 셀의 공동 계산 W4",
+        "description": "T8 두 셀의 공동 계산 W4",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "TASK",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "task_id": "T8",
+        "status": "WAITING",
+        "work": "같은 snapshot 아래 상보·배타 제약과 stale read, 공동 outcome의 기여를 비교한다.",
+        "entry_conditions": "`WAITING`; T6에 의존",
+        "completion_criterion": "독립 호출을 합친 기준과 비교해 공동 효과 및 불확실성을 측정. 단순 병렬 처리량을 의미적 합성으로 세지 않음.",
+        "estimate_status": "UNESTIMATED",
+        "execution_status": "NOT_EXECUTED_BY_THIS_PLAN",
+        "source_path": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "source_sha256": "2be89634abd09b52ec03648f269b971c5cc8215c8d63413d1cbfd8486a3838ce"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "T9 층간 Map과 재귀 합성 W5",
+        "description": "T9 층간 Map과 재귀 합성 W5",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PLAN_NOT_CANONICAL_OR_EFFICACY",
+        "standard_graph_role": "TASK",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "canonical_scope": "SECONDARY_RESEARCH_REVIEW",
+        "record_lifecycle": "ACTIVE",
+        "claim_boundary": "SOURCE_BOUND_REVIEW_NOT_WHOLE_HSWM_PROOF_OR_EFFICACY",
+        "task_id": "T9",
+        "status": "WAITING",
+        "work": "상태·개입·다음 학습을 보존하는 Map과 한 단계 상위 구성을 검증한다.",
+        "entry_conditions": "`WAITING`; T7·T8에 의존",
+        "completion_criterion": "같은 구성에서 역할·순서·문맥·예외·학습 대응 및 비용 확인. CR/FCL 각 의무의 근거를 연결하고 충족한 범위만 갱신.",
+        "estimate_status": "UNESTIMATED",
+        "execution_status": "NOT_EXECUTED_BY_THIS_PLAN",
+        "source_path": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "source_sha256": "2be89634abd09b52ec03648f269b971c5cc8215c8d63413d1cbfd8486a3838ce"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEW_SUBJECT_NOT_CANONICAL_WRITE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-1-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TRACKED_OBLIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-1-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-1-decision-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CURRENT_SCOPED_DECISION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-1-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-proof-status-claim-lean-model-theorems-2026-09-02-v5",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SAME_FIXED_QUESTION_PREVIOUS_SNAPSHOT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-1-decision-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-1-2026-10-06-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ASSESSED_CLAIM_CEILING",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-1-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-incidence-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-1-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-incidence-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-1-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-canonical-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-1-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-canonical-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-1-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-durable-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-1-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-durable-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-1-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-canon_lean-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-1-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-canon_lean-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-1-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-durable_lean-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-1-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-durable_lean-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-2-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TRACKED_OBLIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-2-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-2-decision-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CURRENT_SCOPED_DECISION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-2-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-proof-status-claim-typescript-lean-local-boundary-2026-09-02-v5",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SAME_FIXED_QUESTION_PREVIOUS_SNAPSHOT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-2-decision-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-2-2026-10-06-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ASSESSED_CLAIM_CEILING",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-2-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-bootstrap-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-2-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-bootstrap-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-2-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-preflight-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-2-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-preflight-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-2-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-canonical-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-2-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-canonical-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-2-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-durable-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-2-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-durable-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TRACKED_OBLIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-3-decision-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CURRENT_SCOPED_DECISION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-proof-status-claim-universal-typescript-lean-refinement-2026-09-02-v5",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SAME_FIXED_QUESTION_PREVIOUS_SNAPSHOT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-3-decision-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ASSESSED_CLAIM_CEILING",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-3-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-canonical-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-canonical-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-3-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-durable-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-durable-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-3-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-journal-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-journal-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-4-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TRACKED_OBLIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-4-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-4-decision-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CURRENT_SCOPED_DECISION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-4-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-proof-status-claim-local-permit-posix-occurrence-2026-09-02-v5",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SAME_FIXED_QUESTION_PREVIOUS_SNAPSHOT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-4-decision-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-4-2026-10-06-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ASSESSED_CLAIM_CEILING",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-4-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-durable-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-4-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-durable-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-4-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-prior-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-4-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-prior-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-5-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TRACKED_OBLIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-5-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-5-decision-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CURRENT_SCOPED_DECISION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-5-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-proof-status-claim-outcome-truth-causal-credit-2026-09-02-v5",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SAME_FIXED_QUESTION_PREVIOUS_SNAPSHOT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-5-decision-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-5-2026-10-06-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ASSESSED_CLAIM_CEILING",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-5-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-experiment-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-5-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-experiment-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-5-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-self_review-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-5-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-self_review-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-6-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TRACKED_OBLIGATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-6-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-6-decision-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CURRENT_SCOPED_DECISION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-6-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-proof-status-claim-revision-real-llm-efficacy-2026-09-02-v5",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SAME_FIXED_QUESTION_PREVIOUS_SNAPSHOT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-6-decision-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-6-2026-10-06-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ASSESSED_CLAIM_CEILING",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-6-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-experiment-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-6-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-experiment-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-6-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-self_review-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_DECISION_SUPPORT_NOT_INDEPENDENT_REQUALIFICATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-ps-6-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-source-self_review-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CLAIM_SOURCE_NOT_DISCHARGE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PLANNED_WORK_ITEM",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t2-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PLANNED_WORK_ITEM",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t2-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t2-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-4-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PLANNED_WORK_ITEM",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-4-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PLANNED_WORK_ITEM",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-2-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-4-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t5-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PLANNED_WORK_ITEM",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t5-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-6-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PLANNED_WORK_ITEM",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-5-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-6-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PLANNED_WORK_ITEM",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-5-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-6-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PLANNED_WORK_ITEM",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-5-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-6-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PLANNED_WORK_ITEM",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-1-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-3-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-5-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-ps-6-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBLIGATION_TARGET_NOT_DISCHARGED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ACCEPTANCE_DEPENDENCY_DESIGN_MAY_PROCEED_EARLIER",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ACCEPTANCE_DEPENDENCY_DESIGN_MAY_PROCEED_EARLIER",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t2-2026-10-06-v1",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ACCEPTANCE_DEPENDENCY_DESIGN_MAY_PROCEED_EARLIER",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ACCEPTANCE_DEPENDENCY_DESIGN_MAY_PROCEED_EARLIER",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ACCEPTANCE_DEPENDENCY_DESIGN_MAY_PROCEED_EARLIER",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t5-2026-10-06-v1",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ACCEPTANCE_DEPENDENCY_DESIGN_MAY_PROCEED_EARLIER",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ACCEPTANCE_DEPENDENCY_DESIGN_MAY_PROCEED_EARLIER",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ACCEPTANCE_DEPENDENCY_DESIGN_MAY_PROCEED_EARLIER",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ACCEPTANCE_DEPENDENCY_DESIGN_MAY_PROCEED_EARLIER",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+      "type": "REQUIRES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ACCEPTANCE_DEPENDENCY_DESIGN_MAY_PROCEED_EARLIER",
+      "status": "PROPOSED"
+    }
+  ]
+}

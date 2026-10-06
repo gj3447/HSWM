@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?status ?work ?completion ?prerequisite WHERE {
+ ?t a role:TASK ; p:task_id ?id ; p:status ?status ; p:work ?work ; p:completion_criterion ?completion .
+ OPTIONAL { ?t r:REQUIRES ?before . ?before p:task_id ?prerequisite . }
+} ORDER BY ?id ?prerequisite

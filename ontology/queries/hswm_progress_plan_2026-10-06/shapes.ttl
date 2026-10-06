@@ -1,0 +1,54 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix s: <urn:hswm:progress-plan:shapes:> .
+
+s:Authorship a sh:NodeShape ;
+  sh:targetClass role:PLAN, role:CLAIM, role:DECISION, role:TASK, role:EVIDENCE_SOURCE ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:recorded_on ; sh:hasValue "2026-10-06" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:actor ; sh:hasValue "agent:codex" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_boundary ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+s:Plan a sh:NodeShape ; sh:targetClass role:PLAN ;
+  sh:property [ sh:path p:whole_hswm_proved ; sh:hasValue false ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:real_model_run_this_review ; sh:hasValue false ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CLAIM ] ; sh:qualifiedMinCount 6 ; sh:qualifiedMaxCount 6 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TASK ] ; sh:qualifiedMinCount 9 ; sh:qualifiedMaxCount 9 ] .
+
+s:Claim a sh:NodeShape ; sh:targetClass role:CLAIM ;
+  sh:property [ sh:path p:proof_status_id ; sh:in ("PS-1" "PS-2" "PS-3" "PS-4" "PS-5" "PS-6") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:class role:DECISION ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+s:Decision a sh:NodeShape ; sh:targetClass role:DECISION ;
+  sh:property [ sh:path p:implementation_status ; sh:in ("QUALIFIED" "IMPLEMENTED" "PARTIAL") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:evidence_disposition ; sh:in ("SUPPORTED_IN_SCOPE" "UNDERDETERMINED") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_ceiling ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:prior_verdicts_preserved ; sh:hasValue true ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:class role:EVIDENCE_SOURCE ; sh:minCount 1 ] .
+
+s:Source a sh:NodeShape ; sh:targetClass role:EVIDENCE_SOURCE ;
+  sh:property [ sh:path p:source_path ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_revision ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+s:Task a sh:NodeShape ; sh:targetClass role:TASK ;
+  sh:property [ sh:path p:task_id ; sh:pattern "^T[1-9]$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:status ; sh:in ("NEXT" "PLANNED" "WAITING" "PREPARED_NOT_RUN") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:completion_criterion ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:execution_status ; sh:hasValue "NOT_EXECUTED_BY_THIS_PLAN" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:REQUIRES ; sh:class role:TASK ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:class role:CLAIM ; sh:minCount 1 ] .
+
+s:UnprovedRefinement a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:Concept:hswm-progress-ps-3-decision-2026-10-06-v1> ;
+  sh:property [ sh:path p:evidence_disposition ; sh:hasValue "UNDERDETERMINED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_ceiling ; sh:hasValue "NO_UNIVERSAL_REFINEMENT_CLAIM" ; sh:maxCount 1 ] .
+
+s:UnestablishedEfficacy a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:Concept:hswm-progress-ps-6-decision-2026-10-06-v1> ;
+  sh:property [ sh:path p:evidence_disposition ; sh:hasValue "UNDERDETERMINED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_ceiling ; sh:hasValue "INTEGRATED_CLAIM_UNJUDGED" ; sh:maxCount 1 ] .

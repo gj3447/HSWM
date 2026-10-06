@@ -91,7 +91,7 @@ const fail = (
 const compareText = (left: string, right: string): number =>
   left < right ? -1 : left > right ? 1 : 0
 
-const compareKeys = (
+export const compareCanonicalAtomV2Keys = (
   left: CanonicalAtomV2Key,
   right: CanonicalAtomV2Key
 ): number => {
@@ -103,6 +103,8 @@ const compareKeys = (
   if (atom !== 0) return atom
   return left.revisionId - right.revisionId
 }
+
+const compareKeys = compareCanonicalAtomV2Keys
 
 const sameKey = (
   left: CanonicalAtomV2Key,
@@ -132,6 +134,22 @@ export const snapshotCanonicalAtomV2State = (
     bootstrapClosed: state.bootstrapClosed,
     atoms: Object.freeze(state.atoms.map(snapshotCanonicalAtomV2)),
     acceptedTransitionIds: Object.freeze([...state.acceptedTransitionIds])
+  })
+
+/** Construct the deterministic candidate after native validation. This is not
+ * an admission API: callers must still validate and check preservation. */
+export const makeCanonicalAtomV2CandidateState = (
+  state: CanonicalAtomV2State,
+  command: CommitCanonicalAtomsV2Command
+): CanonicalAtomV2State =>
+  snapshotCanonicalAtomV2State({
+    schemaVersion: state.schemaVersion,
+    revision: state.revision + 1,
+    bootstrapClosed: true,
+    atoms: [...state.atoms, ...command.writes].sort((left, right) =>
+      compareKeys(left.key, right.key)
+    ),
+    acceptedTransitionIds: [...state.acceptedTransitionIds, command.transitionId]
   })
 
 export const snapshotCanonicalAtomV2Receipt = (
@@ -770,18 +788,7 @@ const evolveValidatedCanonicalAtomsV2 = (
   ])
   if (Either.isLeft(provenance)) return Either.left(provenance.left)
 
-  const next = snapshotCanonicalAtomV2State({
-    schemaVersion: state.schemaVersion,
-    revision: state.revision + 1,
-    bootstrapClosed: true,
-    atoms: [...state.atoms, ...command.writes].sort((left, right) =>
-      compareKeys(left.key, right.key)
-    ),
-    acceptedTransitionIds: [
-      ...state.acceptedTransitionIds,
-      command.transitionId
-    ]
-  })
+  const next = makeCanonicalAtomV2CandidateState(state, command)
   if (!verifyCanonicalAtomV2Preservation(schema, state, next, command)) {
     return fail("STATE_PRESERVATION_FAILED", "candidate does not preserve the exact schema, immutable atom envelopes, bootstrap closure, revision and ordered transition history")
   }

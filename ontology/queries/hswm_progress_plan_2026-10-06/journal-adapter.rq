@@ -1,0 +1,9 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?task ?status ?next ?evidence ?ceiling ?source ?sha256 WHERE {
+ ?update a role:PROGRESS_UPDATE ; p:task_id ?task ; p:task_status ?status ; p:next_action ?next ; r:HAS_CONCEPT ?claim .
+ ?claim a role:CLAIM ; r:HAS_CONCEPT ?decision .
+ ?decision a role:DECISION ; p:evidence_disposition ?evidence ; p:claim_ceiling ?ceiling ; r:HAS_SOURCE ?artifact .
+ ?artifact p:source_path ?source ; p:source_sha256 ?sha256 .
+} ORDER BY ?source

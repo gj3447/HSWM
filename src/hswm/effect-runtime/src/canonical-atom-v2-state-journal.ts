@@ -3,6 +3,10 @@ import { createHash } from "node:crypto"
 import { Data, Either, Schema } from "effect"
 import { canonicalAtomV2ExactBytes as sameBytes } from "./canonical-atom-v2-durable-guards.js"
 import {
+  canonicalAtomV2JournalEnvelopeMatches,
+  canonicalAtomV2JournalReceiptCommand as receiptCommand
+} from "./canonical-atom-v2-journal-adapter.js"
+import {
   canonicalAtomV2JournalLinkMatches,
   canonicalAtomV2JournalSchemaMatches,
   canonicalAtomV2JournalReceiptHeaderMatches
@@ -450,40 +454,17 @@ const decodeEnvelopeAtoms = (
       bytes = canonical.right
     }
     const binding = bindings[index]!
-    const expected = binding.envelope
-    if (
-      expected.mediaType !== HSWM_CANONICAL_ATOM_ENVELOPE_V2_MEDIA_TYPE ||
-      expected.byteLength !== bytes.byteLength ||
-      expected.sha256 !== sha256(bytes) ||
-      canonicalAtomV2KeyId(atom.key) !== canonicalAtomV2KeyId(binding.key) ||
-      !sameCanonicalAtomV2ContentDescriptor(atom.content, binding.payload)
-    ) {
+    if (!canonicalAtomV2JournalEnvelopeMatches(atom, {
+      mediaType: HSWM_CANONICAL_ATOM_ENVELOPE_V2_MEDIA_TYPE,
+      byteLength: bytes.byteLength,
+      sha256: sha256(bytes)
+    }, binding)) {
       return fail("ENVELOPE_INVALID", "atom envelope does not exactly match its journal binding")
     }
     atoms.push(atom)
   }
   return Either.right(Object.freeze(atoms))
 }
-
-const receiptCommand = (
-  receipt: CanonicalAtomV2EffectReceipt,
-  writes: ReadonlyArray<CanonicalAtomV2>
-) =>
-  Object.freeze({
-    _tag: "CommitCanonicalAtomsV2" as const,
-    contractVersion: "hswm-canonical-transition/v2" as const,
-    transitionId: receipt.transitionId,
-    expectedStateRevision: receipt.previousStateRevision,
-    schemaVersion: receipt.schemaVersion,
-    actorClaim: receipt.actorClaim,
-    authorizationRef: receipt.authorizationRef,
-    scope: receipt.scope,
-    decidedAt: receipt.decidedAt,
-    traceRef: receipt.traceRef,
-    readSet: receipt.readSet,
-    writes,
-    provenanceSha256: receipt.provenanceSha256
-  })
 
 const sameReceipt = (
   left: CanonicalAtomV2EffectReceipt,

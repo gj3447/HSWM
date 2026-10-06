@@ -1,0 +1,828 @@
+{
+  "schema_version": "hswm-journal-adapter-progress/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+  "status": "T1_PARTIAL_PRODUCER_PROVED_REFINEMENT_OPEN",
+  "nonclaim": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+  "source_accessed_on": "2026-10-06",
+  "artifact_bindings": [
+    {
+      "path": "docs/research/HSWM_JOURNAL_ADAPTER_2026-10-06.md",
+      "sha256": "b9f9dd43128c509c202b380cfd8378328eae511b29e6e66dcf4370d4c337cd30"
+    },
+    {
+      "path": "formal/HSWMJournalAdapter.lean",
+      "sha256": "9adefe5cd4f903c5c6af1e4a12345cad68ca5bbb1cdd34e2297a044b59d57018"
+    },
+    {
+      "path": "formal/HSWMJournalAdapterCli.lean",
+      "sha256": "003dbde5624b9df4f7b38bd08103e08e64dd7c14673116d90fbbd1b1dd7e96db"
+    },
+    {
+      "path": "formal/HSWMCanonicalPreservation.lean",
+      "sha256": "cf3bc1ae3ee7475c8e2c4e9d76d2279124d98a31934fc7d17cc17ebf558cc740"
+    },
+    {
+      "path": "formal/HSWMDurablePreservation.lean",
+      "sha256": "9af180f40ff245210f7c9dc74873a1f777a483c29ad4a85b72228c45d7919090"
+    },
+    {
+      "path": "formal/lakefile.toml",
+      "sha256": "7ff7fabbdfca56054462842f31158f3586805e68eb4d6bd35c061d6b1039da8f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-adapter.ts",
+      "sha256": "1986f2f157c3868ae18a76f0a24da9c966538def124d5ab73512e28dc30b1d0b"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-domain.ts",
+      "sha256": "aba77244a83a6f3f5559c3211ccb7040e1576e135b03aaeff775ef59f6068220"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+      "sha256": "7610e9d608218dbe5a61ff0ac6b7a50f48766fea96e824085de37fde6d6a647c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+      "sha256": "c5cfa57d5f582c676ceea7ffed3fa31bbf9c9e5cf02cac4e42cf7b36f64202b7"
+    },
+    {
+      "path": "tests/effect-runtime/journal-adapter.test.ts",
+      "sha256": "931edacb1dfb0512e1dbea79ff0106282b68a7ff871a9c48f6771726e39668b5"
+    },
+    {
+      "path": "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+      "sha256": "7686e3c6dc92899f0a0471ce8aa0d1a8c9aa1ecc51babf40d0e2f94660fbbf24"
+    },
+    {
+      "path": "ontology/development/HSWM_JOURNAL_REPLAY_PROGRESS_2026-10-06.v1.json",
+      "sha256": "448ad46cca884c514352774a6e51243e3c7748880145ac29d97d810eb29ce300"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+      "sha256": "76a2e5a1127988d4d889f87ecab9389d61f850bf7d6edf52affbcc235aaee754"
+    },
+    {
+      "path": "formal/HSWMAdmissionKernelCli.lean",
+      "sha256": "039f4956837f701082da5760dd943962b2eac0f58e64db7a877e7d0ceef4de97"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/canonical-atom-v2-permit-envelope.test.ts",
+      "sha256": "e6f0111f0e638b201bc2f4b2afbc39885507a64a47066bf8276ae6f76165d7b0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/canonical-atom-v2-verified-admission-gateway-v2.test.ts",
+      "sha256": "877936d59d5bd55eedf962d55014045c0c32e22515603ebcefa53856a6994b7e"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 20,
+    "anchors": 3,
+    "relations": 40
+  },
+  "anchors": [
+    {
+      "uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "name": "T1 Journal decode와 replay 대응",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "name": "HSWM 전체 진행과 기존 의무의 작업 연결",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "name": "T1 journal 복구 연결",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "T1 journal envelope·receipt·후속 상태 구성 대응",
+        "description": "T1 journal envelope·receipt·후속 상태 구성 대응",
+        "standard_graph_role": "PROGRESS_UPDATE",
+        "task_id": "T1",
+        "task_status": "PARTIAL_PRODUCER_PROVED_REFINEMENT_OPEN",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "next_action": "T1 strict decoding·native validation 대응; T2 native preflight에서 세 adapterFacts로의 대응",
+        "whole_hswm_proved": false
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "입력 의무에서 직접 계산한 후보 상태 보존과 receipt 재구성",
+        "description": "입력 의무에서 직접 계산한 후보 상태 보존과 receipt 재구성",
+        "standard_graph_role": "CLAIM",
+        "current_decision_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "제한된 producer 정리와 실제 실행 대조",
+        "description": "제한된 producer 정리와 실제 실행 대조",
+        "standard_graph_role": "DECISION",
+        "assesses_claim_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+        "implementation_status": "IMPLEMENTED",
+        "evidence_disposition": "SUPPORTED_IN_SCOPE",
+        "claim_ceiling": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-0-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "docs/research/HSWM_JOURNAL_ADAPTER_2026-10-06.md",
+        "description": "docs/research/HSWM_JOURNAL_ADAPTER_2026-10-06.md",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "docs/research/HSWM_JOURNAL_ADAPTER_2026-10-06.md",
+        "source_sha256": "b9f9dd43128c509c202b380cfd8378328eae511b29e6e66dcf4370d4c337cd30",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-1-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "formal/HSWMJournalAdapter.lean",
+        "description": "formal/HSWMJournalAdapter.lean",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "formal/HSWMJournalAdapter.lean",
+        "source_sha256": "9adefe5cd4f903c5c6af1e4a12345cad68ca5bbb1cdd34e2297a044b59d57018",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-2-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "formal/HSWMJournalAdapterCli.lean",
+        "description": "formal/HSWMJournalAdapterCli.lean",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "formal/HSWMJournalAdapterCli.lean",
+        "source_sha256": "003dbde5624b9df4f7b38bd08103e08e64dd7c14673116d90fbbd1b1dd7e96db",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-3-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "formal/HSWMCanonicalPreservation.lean",
+        "description": "formal/HSWMCanonicalPreservation.lean",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "formal/HSWMCanonicalPreservation.lean",
+        "source_sha256": "cf3bc1ae3ee7475c8e2c4e9d76d2279124d98a31934fc7d17cc17ebf558cc740",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-4-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "formal/HSWMDurablePreservation.lean",
+        "description": "formal/HSWMDurablePreservation.lean",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "formal/HSWMDurablePreservation.lean",
+        "source_sha256": "9af180f40ff245210f7c9dc74873a1f777a483c29ad4a85b72228c45d7919090",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-5-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "formal/lakefile.toml",
+        "description": "formal/lakefile.toml",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "formal/lakefile.toml",
+        "source_sha256": "7ff7fabbdfca56054462842f31158f3586805e68eb4d6bd35c061d6b1039da8f",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-6-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-adapter.ts",
+        "description": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-adapter.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-adapter.ts",
+        "source_sha256": "1986f2f157c3868ae18a76f0a24da9c966538def124d5ab73512e28dc30b1d0b",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-7-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "src/hswm/effect-runtime/src/canonical-atom-v2-domain.ts",
+        "description": "src/hswm/effect-runtime/src/canonical-atom-v2-domain.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-domain.ts",
+        "source_sha256": "aba77244a83a6f3f5559c3211ccb7040e1576e135b03aaeff775ef59f6068220",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-8-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "description": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "source_sha256": "7610e9d608218dbe5a61ff0ac6b7a50f48766fea96e824085de37fde6d6a647c",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-9-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "description": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "source_sha256": "c5cfa57d5f582c676ceea7ffed3fa31bbf9c9e5cf02cac4e42cf7b36f64202b7",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-10-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "tests/effect-runtime/journal-adapter.test.ts",
+        "description": "tests/effect-runtime/journal-adapter.test.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "tests/effect-runtime/journal-adapter.test.ts",
+        "source_sha256": "931edacb1dfb0512e1dbea79ff0106282b68a7ff871a9c48f6771726e39668b5",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-11-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+        "description": "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+        "source_sha256": "7686e3c6dc92899f0a0471ce8aa0d1a8c9aa1ecc51babf40d0e2f94660fbbf24",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-12-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "ontology/development/HSWM_JOURNAL_REPLAY_PROGRESS_2026-10-06.v1.json",
+        "description": "ontology/development/HSWM_JOURNAL_REPLAY_PROGRESS_2026-10-06.v1.json",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "ontology/development/HSWM_JOURNAL_REPLAY_PROGRESS_2026-10-06.v1.json",
+        "source_sha256": "448ad46cca884c514352774a6e51243e3c7748880145ac29d97d810eb29ce300",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-13-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+        "description": "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+        "source_sha256": "76a2e5a1127988d4d889f87ecab9389d61f850bf7d6edf52affbcc235aaee754",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-14-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "formal/HSWMAdmissionKernelCli.lean",
+        "description": "formal/HSWMAdmissionKernelCli.lean",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "formal/HSWMAdmissionKernelCli.lean",
+        "source_sha256": "039f4956837f701082da5760dd943962b2eac0f58e64db7a877e7d0ceef4de97",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-15-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "src/hswm/effect-runtime/test/canonical-atom-v2-permit-envelope.test.ts",
+        "description": "src/hswm/effect-runtime/test/canonical-atom-v2-permit-envelope.test.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "src/hswm/effect-runtime/test/canonical-atom-v2-permit-envelope.test.ts",
+        "source_sha256": "e6f0111f0e638b201bc2f4b2afbc39885507a64a47066bf8276ae6f76165d7b0",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-source-16-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_ENVELOPE_BINDING_RECEIPT_AND_CONCRETE_CANDIDATE_NOT_JSON_NATIVE_VALIDATION_HASH_SIGNATURE_POSIX_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "name": "src/hswm/effect-runtime/test/canonical-atom-v2-verified-admission-gateway-v2.test.ts",
+        "description": "src/hswm/effect-runtime/test/canonical-atom-v2-verified-admission-gateway-v2.test.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "src/hswm/effect-runtime/test/canonical-atom-v2-verified-admission-gateway-v2.test.ts",
+        "source_sha256": "877936d59d5bd55eedf962d55014045c0c32e22515603ebcefa53856a6994b7e",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CONTINUES_EXISTING_TASK_WITHOUT_OVERWRITING_PRIOR_SNAPSHOT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CONTINUES_EXISTING_TASK_WITHOUT_OVERWRITING_PRIOR_SNAPSHOT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CONTINUES_EXISTING_TASK_WITHOUT_OVERWRITING_PRIOR_SNAPSHOT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUNDED_RESULT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CURRENT_SCOPED_DECISION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_CLAIM_CEILING",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-0-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-0-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-1-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-1-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-2-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-2-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-3-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-3-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-4-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-4-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-5-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-5-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-6-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-6-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-7-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-7-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-8-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-8-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-9-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-9-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-10-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-10-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-11-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-11-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-12-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-12-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-13-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-13-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-14-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-14-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-15-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-15-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-16-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-adapter-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-source-16-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT_T2_FILES_INSPECTED_NOT_EXECUTED",
+      "status": "PROPOSED"
+    }
+  ]
+}

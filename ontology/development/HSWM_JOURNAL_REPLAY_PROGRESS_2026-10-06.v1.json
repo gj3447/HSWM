@@ -1,0 +1,493 @@
+{
+  "schema_version": "hswm-journal-replay-progress/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+  "status": "T1_PARTIAL_BOUNDARY_PROVED_REFINEMENT_OPEN",
+  "nonclaim": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF",
+  "source_accessed_on": "2026-10-06",
+  "artifact_bindings": [
+    {
+      "path": "docs/research/HSWM_JOURNAL_REPLAY_2026-10-06.md",
+      "sha256": "984f27b5032231416dae49be441fa5d124f981ee2ecc5c6ac10b6e2f3da525f1"
+    },
+    {
+      "path": "formal/HSWMJournalReplay.lean",
+      "sha256": "c520ed6f5550716dd0a2f36c882333bcdbf3f85927374b2a4e3a2913b1e71c7b"
+    },
+    {
+      "path": "formal/HSWMJournalReplayCli.lean",
+      "sha256": "5beda5b58048adacedda301b3942c6e8cede7a282dfbb87ecea662d71b83215c"
+    },
+    {
+      "path": "formal/lakefile.toml",
+      "sha256": "48d3868a5f7f3b2432f8ff453a00006771f1d160104148d1a91d82fff099220c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-replay-guards.ts",
+      "sha256": "88a5f9d76ab6d4c0d626f87f7e84c9a78eb98c14df5d9fe41cb52a21a1777b30"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+      "sha256": "b5cdcae9c1e71cb297f6fde158c1168b0ddc9defb53a1b9b8c78a425c6f66ede"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+      "sha256": "3fd5e8dd58f386a8d2beb119f1a5f5358f50d7d7c360f18447dd6b51a11d41b8"
+    },
+    {
+      "path": "tests/effect-runtime/journal-replay.test.ts",
+      "sha256": "ba6ab96e251f21e4a30bb5271e809b7b60b1eafe825a4f56007a3bd238648e35"
+    },
+    {
+      "path": "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+      "sha256": "7686e3c6dc92899f0a0471ce8aa0d1a8c9aa1ecc51babf40d0e2f94660fbbf24"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 12,
+    "anchors": 2,
+    "relations": 23
+  },
+  "anchors": [
+    {
+      "uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "name": "T1 Journal decode와 replay 대응",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "name": "HSWM 전체 진행과 기존 의무의 작업 연결",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "T1 journal 복구 연결",
+        "description": "T1 journal 복구 연결",
+        "standard_graph_role": "PROGRESS_UPDATE",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "task_id": "T1",
+        "task_status": "PARTIAL_BOUNDARY_PROVED_REFINEMENT_OPEN",
+        "base_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "next_action": "schema/envelope decoder와 receipt/native evolution adapter 대응; T2 signed Permit 연결",
+        "whole_hswm_proved": false
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "정확 재인코딩과 조건부 유한 journal replay 보존",
+        "description": "정확 재인코딩과 조건부 유한 journal replay 보존",
+        "standard_graph_role": "CLAIM",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "current_decision_uid": "sym:Concept:hswm-journal-replay-decision-2026-10-06-v1"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-journal-replay-decision-2026-10-06-v1",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "제한 범위 증명과 실제 복구 경로 대조",
+        "description": "제한 범위 증명과 실제 복구 경로 대조",
+        "standard_graph_role": "DECISION",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "assesses_claim_uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+        "implementation_status": "IMPLEMENTED",
+        "evidence_disposition": "SUPPORTED_IN_SCOPE",
+        "claim_ceiling": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-replay-source-0-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "docs/research/HSWM_JOURNAL_REPLAY_2026-10-06.md",
+        "description": "docs/research/HSWM_JOURNAL_REPLAY_2026-10-06.md",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "source_path": "docs/research/HSWM_JOURNAL_REPLAY_2026-10-06.md",
+        "source_sha256": "984f27b5032231416dae49be441fa5d124f981ee2ecc5c6ac10b6e2f3da525f1",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-replay-source-1-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "formal/HSWMJournalReplay.lean",
+        "description": "formal/HSWMJournalReplay.lean",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "source_path": "formal/HSWMJournalReplay.lean",
+        "source_sha256": "c520ed6f5550716dd0a2f36c882333bcdbf3f85927374b2a4e3a2913b1e71c7b",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-replay-source-2-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "formal/HSWMJournalReplayCli.lean",
+        "description": "formal/HSWMJournalReplayCli.lean",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "source_path": "formal/HSWMJournalReplayCli.lean",
+        "source_sha256": "5beda5b58048adacedda301b3942c6e8cede7a282dfbb87ecea662d71b83215c",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-replay-source-3-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "formal/lakefile.toml",
+        "description": "formal/lakefile.toml",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "source_path": "formal/lakefile.toml",
+        "source_sha256": "48d3868a5f7f3b2432f8ff453a00006771f1d160104148d1a91d82fff099220c",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-replay-source-4-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-replay-guards.ts",
+        "description": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-replay-guards.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-replay-guards.ts",
+        "source_sha256": "88a5f9d76ab6d4c0d626f87f7e84c9a78eb98c14df5d9fe41cb52a21a1777b30",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-replay-source-5-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "description": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "source_sha256": "b5cdcae9c1e71cb297f6fde158c1168b0ddc9defb53a1b9b8c78a425c6f66ede",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-replay-source-6-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "description": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "source_path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "source_sha256": "3fd5e8dd58f386a8d2beb119f1a5f5358f50d7d7c360f18447dd6b51a11d41b8",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-replay-source-7-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "tests/effect-runtime/journal-replay.test.ts",
+        "description": "tests/effect-runtime/journal-replay.test.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "source_path": "tests/effect-runtime/journal-replay.test.ts",
+        "source_sha256": "ba6ab96e251f21e4a30bb5271e809b7b60b1eafe825a4f56007a3bd238648e35",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-replay-source-8-2026-10-06-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+        "description": "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-06",
+        "actor": "agent:codex",
+        "claim_boundary": "DECODED_REPLAY_BOUNDARY_NOT_PARSER_ENCODER_HASH_ENVELOPE_EVOLUTION_PERMIT_OR_EFFICACY_PROOF",
+        "projection_nonclaim": "READ_ONLY_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_OR_EFFICACY",
+        "source_path": "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+        "source_sha256": "7686e3c6dc92899f0a0471ce8aa0d1a8c9aa1ecc51babf40d0e2f94660fbbf24",
+        "source_revision_status": "WORKTREE_BYTES_PINNED",
+        "base_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "UPDATES_TASK_OBSERVATION_WITHOUT_OVERWRITING_PRIOR_SNAPSHOT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CONTINUES_EXISTING_PLAN",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUNDED_RESULT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-journal-replay-decision-2026-10-06-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CURRENT_SCOPED_DECISION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-decision-2026-10-06-v1",
+      "to_uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_CLAIM_CEILING",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-0-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-0-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-1-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-1-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-2-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-2-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-3-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-3-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-4-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-4-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-5-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-5-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-6-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-6-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-7-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-7-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-claim-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-8-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BOUND_SOURCE_NOT_FULL_TRANSITIVE_DEPENDENCY_ATTESTATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:hswm-journal-replay-decision-2026-10-06-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-source-8-2026-10-06-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECISION_SUPPORT",
+      "status": "PROPOSED"
+    }
+  ]
+}

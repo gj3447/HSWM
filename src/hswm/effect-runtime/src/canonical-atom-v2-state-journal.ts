@@ -1,6 +1,12 @@
 import { createHash } from "node:crypto"
 
 import { Data, Either, Schema } from "effect"
+import { canonicalAtomV2ExactBytes as sameBytes } from "./canonical-atom-v2-durable-guards.js"
+import {
+  canonicalAtomV2JournalLinkMatches,
+  canonicalAtomV2JournalSchemaMatches,
+  canonicalAtomV2JournalReceiptHeaderMatches
+} from "./canonical-atom-v2-journal-replay-guards.js"
 
 import {
   CanonicalAtomV2ContentDescriptorSchema,
@@ -209,9 +215,6 @@ const fail = (
 const sha256 = (bytes: Uint8Array): string =>
   createHash("sha256").update(bytes).digest("hex")
 
-const sameBytes = (left: Uint8Array, right: Uint8Array): boolean =>
-  left.byteLength === right.byteLength && left.every((byte, index) => byte === right[index])
-
 const compareText = (left: string, right: string): number =>
   left < right ? -1 : left > right ? 1 : 0
 
@@ -230,14 +233,6 @@ const bindingsAreStrictlyAscending = (
 const snapshotDescriptor = (
   descriptor: CanonicalAtomV2StateJournalRecordDescriptor
 ): CanonicalAtomV2StateJournalRecordDescriptor => Object.freeze({ ...descriptor })
-
-const sameDescriptor = (
-  left: CanonicalAtomV2StateJournalRecordDescriptor,
-  right: CanonicalAtomV2StateJournalRecordDescriptor
-): boolean =>
-  left.mediaType === right.mediaType &&
-  left.byteLength === right.byteLength &&
-  left.sha256 === right.sha256
 
 const snapshotGenesis = (
   record: CanonicalAtomV2StateJournalGenesis
@@ -521,17 +516,10 @@ export const applyCanonicalAtomV2StateJournalCommit = (
     return fail("RECORD_INVALID", "commit record violates the strict v1 contract")
   }
   const record = decoded.right
-  if (
-    record.journalLineageId !== previous.journalLineageId ||
-    !sameDescriptor(record.predecessor, previous.descriptor) ||
-    record.stateRevision !== previous.state.revision + 1
-  ) {
+  if (!canonicalAtomV2JournalLinkMatches(previous, record)) {
     return fail("PREDECESSOR_INVALID", "commit does not name the exact immediate journal predecessor")
   }
-  if (
-    record.schema.schemaVersion !== previous.schema.schemaVersion ||
-    !sameCanonicalAtomV2ContentDescriptor(record.schema.content, previous.schema.content)
-  ) {
+  if (!canonicalAtomV2JournalSchemaMatches(previous.schema, record.schema)) {
     return fail("SCHEMA_BINDING_INVALID", "commit changes the active schema binding; migration is not implemented")
   }
   const binding = validateSchemaBinding(schema, record.schema)
@@ -541,13 +529,9 @@ export const applyCanonicalAtomV2StateJournalCommit = (
   if (previousDigest.right !== record.previousStateSha256) {
     return fail("STATE_DIGEST_INVALID", "commit previous state digest does not bind the supplied predecessor state")
   }
-  if (
-    record.receipt.previousStateRevision !== previous.state.revision ||
-    record.receipt.nextStateRevision !== record.stateRevision ||
-    record.receipt.schemaVersion !== schema.schemaVersion ||
-    record.receipt.decision !== "ACCEPTED" ||
-    record.receipt.guard.permission !== "REFERENCE_GRANT_MATCHED_NOT_CANONICAL_PERMIT"
-  ) {
+  if (!canonicalAtomV2JournalReceiptHeaderMatches(
+    previous.state.revision, record.stateRevision, schema.schemaVersion, record.receipt
+  )) {
     return fail("RECEIPT_INVALID", "commit receipt does not describe this non-authorizing state transition")
   }
   const atoms = decodeEnvelopeAtoms(envelopes, record.writeBindings)

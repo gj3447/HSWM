@@ -1,3 +1,4 @@
+import { canonicalAtomV2ExactBytes as sameBytes } from "./canonical-atom-v2-durable-guards.js"
 import { randomUUID } from "node:crypto"
 import { dirname, isAbsolute, join, resolve } from "node:path"
 
@@ -66,9 +67,6 @@ const error = (
 const ioFailed = (operation: Operation, detail: string) =>
   <A, R>(program: Effect.Effect<A, StoreFailure, R>): Effect.Effect<A, CanonicalAtomV2ContentStoreError, R> =>
     program.pipe(Effect.catchTag("PosixIoError", () => Effect.fail(error(operation, "IO_FAILED", detail))))
-
-const sameBytes = (left: Uint8Array, right: Uint8Array): boolean =>
-  left.byteLength === right.byteLength && left.every((byte, index) => byte === right[index])
 
 const snapshot = (descriptor: CanonicalAtomV2ContentDescriptor) =>
   Object.freeze({ ...descriptor })

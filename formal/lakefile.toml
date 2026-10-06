@@ -1,5 +1,5 @@
 name = "HSWMCellular"
-defaultTargets = ["HSWMOperationalQuotient", "HSWMCellular", "HSWMRuntime", "HSWMDurableRuntime", "HSWMCanonicalLearning", "HSWMTypeScriptV1Refinement", "HSWMOutcomeJudgment", "HSWMAtomicAdmission", "HSWMAtomicAdmissionConsistency", "HSWMAtomicAdmissionNonEntailment", "HSWMEndToEndRuntimeRefinement", "HSWMCanonicalPermitEnvelope", "HSWMExecutionCertificateWire", "HSWMLocalPermitCommit", "HSWMVerifiedAdmissionKernel", "HSWMVerifiedAdmissionWire", "HSWMPersistedVerifiedAdmission", "HSWMAdmissionKernelCli", "HSWMDnrd5EfficacyBoundary", "HSWMDnrd5ExactSignGate", "HSWMCausalEfficacyBridge", "HSWMSemanticLifecycleRefinement", "HSWMSemanticLifecycleCli", "HSWMStandardGraphIncidence", "HSWMStandardGraphIncidenceCli", "HSWMCanonicalPreservation", "HSWMCanonicalPreservationCli"]
+defaultTargets = ["HSWMOperationalQuotient", "HSWMCellular", "HSWMRuntime", "HSWMDurableRuntime", "HSWMCanonicalLearning", "HSWMTypeScriptV1Refinement", "HSWMOutcomeJudgment", "HSWMAtomicAdmission", "HSWMAtomicAdmissionConsistency", "HSWMAtomicAdmissionNonEntailment", "HSWMEndToEndRuntimeRefinement", "HSWMCanonicalPermitEnvelope", "HSWMExecutionCertificateWire", "HSWMLocalPermitCommit", "HSWMVerifiedAdmissionKernel", "HSWMVerifiedAdmissionWire", "HSWMPersistedVerifiedAdmission", "HSWMAdmissionKernelCli", "HSWMDnrd5EfficacyBoundary", "HSWMDnrd5ExactSignGate", "HSWMCausalEfficacyBridge", "HSWMSemanticLifecycleRefinement", "HSWMSemanticLifecycleCli", "HSWMStandardGraphIncidence", "HSWMStandardGraphIncidenceCli", "HSWMCanonicalPreservation", "HSWMCanonicalPreservationCli", "HSWMDurablePreservation", "HSWMDurablePreservationCli"]
 
 [[lean_lib]]
 name = "HSWMCellular"
@@ -40,3 +40,11 @@ root = "HSWMSemanticLifecycleCli"
 [[lean_lib]]
 name = "HSWMOperationalQuotient"
 roots = ["HSWMSemanticQuotient", "HSWMOperationalAbstraction", "HSWMBehavioralMinimality", "HSWMOperationalQuotient"]
+
+[[lean_lib]]
+name = "HSWMDurablePreservation"
+roots = ["HSWMDurablePreservation"]
+
+[[lean_exe]]
+name = "HSWMDurablePreservationCli"
+root = "HSWMDurablePreservationCli"

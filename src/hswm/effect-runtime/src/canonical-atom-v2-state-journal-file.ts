@@ -1,3 +1,4 @@
+import { canonicalAtomV2ExactBytes as sameBytes, canonicalAtomV2JournalPublicationPlan } from "./canonical-atom-v2-durable-guards.js"
 import { createHash, randomUUID } from "node:crypto"
 import { dirname, isAbsolute, join, resolve } from "node:path"
 
@@ -110,16 +111,6 @@ interface Identity { readonly root: DirectoryIdentity; readonly objects: Directo
 
 const error = makeCanonicalAtomV2StateJournalStoreError
 const hash = (text: string): string => createHash("sha256").update(text, "utf8").digest("hex")
-const sameBytes = (a: Uint8Array, b: Uint8Array): boolean => a.byteLength === b.byteLength && a.every((x, i) => x === b[i])
-const sameDescriptor = (
-  left: CanonicalAtomV2StateJournalRecordDescriptor | null,
-  right: CanonicalAtomV2StateJournalRecordDescriptor | null
-): boolean =>
-  left === null || right === null
-    ? left === right
-    : left.mediaType === right.mediaType &&
-      left.byteLength === right.byteLength &&
-      left.sha256 === right.sha256
 const fromEither = <A>(either: Either.Either<A, StoreError>): Effect.Effect<A, StoreError> =>
   Either.isLeft(either) ? Effect.fail(either.left) : Effect.succeed(either.right)
 const noFault: IoFaultInjectorForTest = () => Effect.void
@@ -567,25 +558,11 @@ const publish = (
     const interrupt = (checkpoint: CanonicalAtomV2StateJournalFilePublicationCheckpointForTest) =>
       interruptPublicationForTest(interruption, checkpoint)
     const before = yield* recover(fs, identity, journalLineageId, schemaContentSha256)
-    const revisionPredecessor = input.stateRevision === 0
-      ? null
-      : before[input.stateRevision - 1]?.descriptor ?? null
-    if (!sameDescriptor(expectedPredecessor, revisionPredecessor)) {
-      return yield* Effect.fail(error("PUBLISH", "PREDECESSOR_MISMATCH", "journal predecessor does not match the exact preceding record descriptor"))
-    }
-    const existing = before[input.stateRevision]
-    if (existing !== undefined) {
-      if (!sameBytes(existing.bytes, bytes)) {
-        return yield* Effect.fail(error("PUBLISH", "CONCURRENT_PUBLICATION_CONFLICT", "journal revision is occupied by different bytes"))
-      }
+    const plan = canonicalAtomV2JournalPublicationPlan(before, { stateRevision: input.stateRevision, expectedPredecessor, bytes })
+    if (plan._tag === "REJECTED") return yield* Effect.fail(error("PUBLISH", plan.reason, plan.detail))
+    if (plan._tag === "ALREADY_COMMITTED") {
       yield* syncKnownCommit(fs, identity, injectIoFault)
       return alreadyCommitted(before)
-    }
-    if (input.stateRevision !== before.length) {
-      return yield* Effect.fail(error("PUBLISH", "REVISION_CONFLICT", "journal revision is not next contiguous slot"))
-    }
-    if (!sameDescriptor(before.at(-1)?.descriptor ?? null, expectedPredecessor)) {
-      return yield* Effect.fail(error("PUBLISH", "PREDECESSOR_MISMATCH", "journal predecessor does not match recovered tail"))
     }
     yield* publishObject(fs, identity.objects, descriptor.sha256, bytes, interruption, injectIoFault)
     const slot = canonicalAtomV2StateJournalSlotName(journalLineageId, schemaContentSha256, input.stateRevision)

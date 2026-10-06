@@ -32,7 +32,7 @@ const operationalPhilosophyAuditedSources = Object.freeze([
 const operationalPhilosophySourceOrder = Object.freeze([
   ...threePhilosophiesSourceOrder, ...operationalPhilosophyAuditedSources
 ] as const)
-type ProfileName = "three-philosophies" | "integrated-hswm" | "operational-philosophy" | "semantic-lifecycle" | "operational-quotient" | "semantic-operational" | "graph-loop-preflight" | "standard-graph-incidence" | "canonical-preservation"
+type ProfileName = "three-philosophies" | "integrated-hswm" | "operational-philosophy" | "semantic-lifecycle" | "operational-quotient" | "semantic-operational" | "graph-loop-preflight" | "standard-graph-incidence" | "canonical-preservation" | "durable-preservation"
 interface ProofProfile {
   readonly name: ProfileName
   readonly sourceOrder: ReadonlyArray<string>
@@ -41,6 +41,10 @@ interface ProofProfile {
   readonly claimCeiling: string
 }
 const profiles: Readonly<Record<ProfileName, ProofProfile>> = Object.freeze({
+  "durable-preservation": Object.freeze({ name: "durable-preservation",
+    sourceOrder: ["HSWMCanonicalPreservation", "HSWMDurablePreservation"], auditedSources: ["HSWMDurablePreservation"],
+    schemaVersion: "hswm-durable-preservation-lean-verification/v1",
+    claimCeiling: "DECODED_REFERENCE_GRANTS_EXACT_BYTES_AND_LINEARIZED_JOURNAL_NOT_CRYPTOGRAPHIC_PERMIT_HASH_SOUNDNESS_POSIX_POWER_LOSS_OR_EFFICACY" }),
   "canonical-preservation": Object.freeze({ name: "canonical-preservation",
     sourceOrder: ["HSWMCanonicalPreservation"], auditedSources: ["HSWMCanonicalPreservation"],
     schemaVersion: "hswm-canonical-preservation-lean-verification/v1",
@@ -102,7 +106,7 @@ export class SemanticPhilosophyProofHost extends Context.Tag("hswm/SemanticPhilo
 interface Options { readonly output: string; readonly lean: string | null; readonly profile: ProofProfile }
 const parse = (argv: ReadonlyArray<string>, cwd: string): Effect.Effect<Options | null, SemanticPhilosophyProofError> => {
   if (argv.length === 1 && argv[0] === "--help") return Effect.succeed(null)
-  if (argv.length !== 2 && argv.length !== 4 && argv.length !== 6) return Effect.fail(fail("CLI_INVALID", "Expected --output NEW_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy|semantic-lifecycle|operational-quotient|semantic-operational|graph-loop-preflight|standard-graph-incidence|canonical-preservation] [--lean ABSOLUTE_PATH]"))
+  if (argv.length !== 2 && argv.length !== 4 && argv.length !== 6) return Effect.fail(fail("CLI_INVALID", "Expected --output NEW_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy|semantic-lifecycle|operational-quotient|semantic-operational|graph-loop-preflight|standard-graph-incidence|canonical-preservation|durable-preservation] [--lean ABSOLUTE_PATH]"))
   const pairs = Array.from({ length: argv.length / 2 }, (_, index) => [argv[index * 2], argv[index * 2 + 1]] as const)
   const values = Object.fromEntries(pairs)
   if (pairs.some(([key, value]) => !["--output", "--lean", "--profile"].includes(key ?? "") || !value || value.startsWith("--")) ||
@@ -112,8 +116,8 @@ const parse = (argv: ReadonlyArray<string>, cwd: string): Effect.Effect<Options 
   if (suppliedLean !== undefined && (!isAbsolute(suppliedLean) || suppliedLean.includes("\0")))
     return Effect.fail(fail("CLI_INVALID", "--lean must be an absolute regular-file path"))
   const profileName: unknown = values["--profile"] ?? "three-philosophies"
-  if (profileName !== "three-philosophies" && profileName !== "integrated-hswm" && profileName !== "operational-philosophy" && profileName !== "semantic-lifecycle" && profileName !== "operational-quotient" && profileName !== "semantic-operational" && profileName !== "graph-loop-preflight" && profileName !== "standard-graph-incidence" && profileName !== "canonical-preservation")
-    return Effect.fail(fail("CLI_INVALID", "--profile must be three-philosophies, integrated-hswm, operational-philosophy, semantic-lifecycle, operational-quotient, semantic-operational, graph-loop-preflight, standard-graph-incidence or canonical-preservation"))
+  if (profileName !== "three-philosophies" && profileName !== "integrated-hswm" && profileName !== "operational-philosophy" && profileName !== "semantic-lifecycle" && profileName !== "operational-quotient" && profileName !== "semantic-operational" && profileName !== "graph-loop-preflight" && profileName !== "standard-graph-incidence" && profileName !== "canonical-preservation" && profileName !== "durable-preservation")
+    return Effect.fail(fail("CLI_INVALID", "--profile must be three-philosophies, integrated-hswm, operational-philosophy, semantic-lifecycle, operational-quotient, semantic-operational, graph-loop-preflight, standard-graph-incidence, canonical-preservation or durable-preservation"))
   const profile = profiles[profileName]
   return Effect.succeed({ output: resolve(cwd, values["--output"]), lean: suppliedLean ?? null, profile })
 }
@@ -229,7 +233,7 @@ export const runSemanticPhilosophyProof = (options: Options) => Effect.gen(funct
   return `${JSON.stringify({ output: options.output, status: report.status, sources: sourceRecords.length, claimCeiling: report.claim_ceiling })}\n`
 }).pipe(Effect.catchAll(error => Effect.fail(error)))
 
-const usage = "Usage: semantic-philosophy-proof-process --output NEW_PRIVATE_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy|semantic-lifecycle|operational-quotient|semantic-operational|graph-loop-preflight|standard-graph-incidence|canonical-preservation] [--lean ABSOLUTE_PATH]\n"
+const usage = "Usage: semantic-philosophy-proof-process --output NEW_PRIVATE_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy|semantic-lifecycle|operational-quotient|semantic-operational|graph-loop-preflight|standard-graph-incidence|canonical-preservation|durable-preservation] [--lean ABSOLUTE_PATH]\n"
 export const semanticPhilosophyProofCli = (argv: ReadonlyArray<string>) => Effect.gen(function* () {
   const options = yield* parse(argv, process.cwd())
   if (options === null) return usage

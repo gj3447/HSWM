@@ -1,3 +1,4 @@
+import { canonicalAtomV2ReferenceGrantDecision } from "./canonical-atom-v2-durable-guards.js"
 import type { ParseResult } from "effect"
 import { Context, Data, Effect, Either, Layer, Ref, Schema } from "effect"
 
@@ -154,63 +155,10 @@ export const makeCanonicalAtomV2ContentAuthorizer = (
   return (
     input: CommitCanonicalAtomsV2ContentBound
   ): Effect.Effect<void, CanonicalAtomV2ContentAuthorizationDenied> => {
-    const command = input.command
-    if (
-      input.schemaContentSha256 !== activeSchema.content.sha256
-    ) {
-      return Effect.fail(
-        new CanonicalAtomV2ContentAuthorizationDenied({
-          reason: "SCHEMA_CONTENT_MISMATCH",
-          authorizationRef: command.authorizationRef
-        })
-      )
-    }
-    const matchingReference = retained.filter(
-      ({ authorizationRef }) =>
-        authorizationRef === command.authorizationRef
+    const reason = canonicalAtomV2ReferenceGrantDecision(activeSchema.content.sha256, retained, input)
+    return reason === null ? Effect.void : Effect.fail(
+      new CanonicalAtomV2ContentAuthorizationDenied({ reason, authorizationRef: input.command.authorizationRef })
     )
-    if (matchingReference.length === 0) {
-      return Effect.fail(
-        new CanonicalAtomV2ContentAuthorizationDenied({
-          reason: "NOT_GRANTED",
-          authorizationRef: command.authorizationRef
-        })
-      )
-    }
-    const matchingSchema = matchingReference.filter(
-      ({ schemaVersion }) => schemaVersion === command.schemaVersion
-    )
-    if (matchingSchema.length === 0) {
-      return Effect.fail(
-        new CanonicalAtomV2ContentAuthorizationDenied({
-          reason: "SCHEMA_MISMATCH",
-          authorizationRef: command.authorizationRef
-        })
-      )
-    }
-    const matchingContent = matchingSchema.filter(
-      ({ schemaContentSha256 }) =>
-        schemaContentSha256 === activeSchema.content.sha256
-    )
-    if (matchingContent.length === 0) {
-      return Effect.fail(
-        new CanonicalAtomV2ContentAuthorizationDenied({
-          reason: "SCHEMA_CONTENT_MISMATCH",
-          authorizationRef: command.authorizationRef
-        })
-      )
-    }
-    if (
-      !matchingContent.some(({ scopes }) => scopes.includes(command.scope))
-    ) {
-      return Effect.fail(
-        new CanonicalAtomV2ContentAuthorizationDenied({
-          reason: "SCOPE_DENIED",
-          authorizationRef: command.authorizationRef
-        })
-      )
-    }
-    return Effect.void
   }
 }
 

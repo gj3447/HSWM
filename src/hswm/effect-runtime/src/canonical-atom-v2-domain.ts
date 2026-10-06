@@ -1,4 +1,5 @@
 import { Data, Either, Schema } from "effect"
+import { verifyCanonicalAtomV2Preservation } from "./canonical-atom-v2-preservation.js"
 
 import {
   CanonicalAtomV2Schema,
@@ -32,6 +33,7 @@ export type CanonicalAtomV2ErrorCode =
   | "PROVENANCE_INVALID"
   | "TRACE_UNSUPPORTED"
   | "MIGRATION_UNSUPPORTED"
+  | "STATE_PRESERVATION_FAILED"
 
 export class CanonicalAtomV2Error extends Data.TaggedError(
   "CanonicalAtomV2Error"
@@ -768,20 +770,22 @@ const evolveValidatedCanonicalAtomsV2 = (
   ])
   if (Either.isLeft(provenance)) return Either.left(provenance.left)
 
-  return Either.right(
-    snapshotCanonicalAtomV2State({
-      schemaVersion: state.schemaVersion,
-      revision: state.revision + 1,
-      bootstrapClosed: true,
-      atoms: [...state.atoms, ...command.writes].sort((left, right) =>
-        compareKeys(left.key, right.key)
-      ),
-      acceptedTransitionIds: [
-        ...state.acceptedTransitionIds,
-        command.transitionId
-      ]
-    })
-  )
+  const next = snapshotCanonicalAtomV2State({
+    schemaVersion: state.schemaVersion,
+    revision: state.revision + 1,
+    bootstrapClosed: true,
+    atoms: [...state.atoms, ...command.writes].sort((left, right) =>
+      compareKeys(left.key, right.key)
+    ),
+    acceptedTransitionIds: [
+      ...state.acceptedTransitionIds,
+      command.transitionId
+    ]
+  })
+  if (!verifyCanonicalAtomV2Preservation(schema, state, next, command)) {
+    return fail("STATE_PRESERVATION_FAILED", "candidate does not preserve the exact schema, immutable atom envelopes, bootstrap closure, revision and ordered transition history")
+  }
+  return Either.right(next)
 }
 
 export const evolveCanonicalAtomsV2 = (

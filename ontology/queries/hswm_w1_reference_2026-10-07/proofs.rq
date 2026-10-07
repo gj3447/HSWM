@@ -1,0 +1,11 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?theorem ?axioms ?scope ?path ?sha256 ?revision WHERE {
+  VALUES ?root { <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-lean-2026-10-07-v1> }
+  ?root a role:FORMAL_REFERENCE_AUDIT ; r:HAS_CONCEPT ?result .
+  ?result a role:W1_REFERENCE_THEOREM ; p:theorem ?theorem ; p:axioms_json ?axioms ;
+    p:description ?scope ; r:HAS_SOURCE ?source .
+  ?source p:evidence_role "PROOF_SOURCE" ; p:source_path ?path ;
+    p:source_sha256 ?sha256 ; p:source_revision ?revision .
+} ORDER BY ?theorem

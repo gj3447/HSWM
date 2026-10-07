@@ -1,0 +1,11 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?priorUid ?path ?sha256 ?revision WHERE {
+  VALUES ?root { <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-lean-2026-10-07-v1> }
+  ?root a role:FORMAL_REFERENCE_AUDIT ; r:REFERENCES ?prior ; r:HAS_SOURCE ?source .
+  ?prior kb:uid ?priorUid .
+  ?source p:evidence_role "PRIOR_PROGRESS" ; p:referenced_uid ?priorUid ;
+    p:source_path ?path ; p:source_sha256 ?sha256 ; p:source_revision ?revision .
+} ORDER BY ?path

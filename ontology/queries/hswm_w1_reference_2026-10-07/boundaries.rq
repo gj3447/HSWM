@@ -1,0 +1,10 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?boundary ?meaning ?modelRequests ?t5 WHERE {
+  VALUES ?root { <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-lean-2026-10-07-v1> }
+  ?root a role:FORMAL_REFERENCE_AUDIT ; p:actual_model_requests ?modelRequests ;
+    p:t5_disposition ?t5 ; r:HAS_CONCEPT ?constraint .
+  ?constraint a role:W1_REFERENCE_BOUNDARY ; p:boundary_id ?boundary ;
+    p:description ?meaning ; r:CONSTRAINS ?root .
+} ORDER BY ?boundary

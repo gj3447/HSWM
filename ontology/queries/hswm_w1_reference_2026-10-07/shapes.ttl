@@ -1,0 +1,189 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:shape:w1-reference-root> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-lean-2026-10-07-v1> ;
+ sh:class role:FORMAL_REFERENCE_AUDIT ;
+ sh:property [ sh:path p:whole_hswm_proved ; sh:hasValue false ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:natural_language_semantics_proved ; sh:hasValue false ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:json_parser_proved ; sh:hasValue false ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:actual_model_requests ; sh:hasValue 0 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:t5_disposition ; sh:hasValue "OPEN" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:trust ; sh:hasValue 0 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:reviewed_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:minCount 32 ; sh:maxCount 32 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W1_REFERENCE_THEOREM ] ; sh:qualifiedMinCount 22 ; sh:qualifiedMaxCount 22 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W1_REFERENCE_COMPARISON ] ; sh:qualifiedMinCount 6 ; sh:qualifiedMaxCount 6 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:W1_REFERENCE_BOUNDARY ] ; sh:qualifiedMinCount 4 ; sh:qualifiedMaxCount 4 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:class role:EVIDENCE_ARTIFACT ; sh:minCount 8 ; sh:maxCount 8 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-progress-2026-10-07-v1> ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-theorems> a sh:NodeShape ; sh:targetClass role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:status ; sh:hasValue "KERNEL_CHECKED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:axioms_json ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-source-0-2026-10-07-v1> ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-source-5-2026-10-07-v1> ; sh:minCount 2 ; sh:maxCount 2 ] .
+
+<urn:shape:w1-reference-comparisons> a sh:NodeShape ; sh:targetClass role:W1_REFERENCE_COMPARISON ;
+ sh:property [ sh:path p:matched_rows ; sh:hasValue 128 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:status ; sh:hasValue "FINITE_CONFORMANCE" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:family_interpretation ; sh:hasValue "AUTHOR_DECLARED_NOT_NLP_PROVED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-source-4-2026-10-07-v1> ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-source-5-2026-10-07-v1> ; sh:minCount 2 ; sh:maxCount 2 ] .
+
+<urn:shape:w1-reference-boundaries> a sh:NodeShape ; sh:targetClass role:W1_REFERENCE_BOUNDARY ;
+ sh:property [ sh:path r:CONSTRAINS ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-lean-2026-10-07-v1> ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:status ; sh:hasValue "OUTSIDE_PROOF_OR_EXPLICIT_ASSUMPTION" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-context_flip_xor> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-context_flip_xor-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.context_flip_xor" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-exception_flip_xor> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-exception_flip_xor-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.exception_flip_xor" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-decode_encode_opaque> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-decode_encode_opaque-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.decode_encode_opaque" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-typed_role_rename_invariant> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-typed_role_rename_invariant-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.typed_role_rename_invariant" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-opaque_rename_reference_invariant> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-opaque_rename_reference_invariant-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.opaque_rename_reference_invariant" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-role_projection_reverse_invariant> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-role_projection_reverse_invariant-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.role_projection_reverse_invariant" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-reorder_reconstructs_same> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-reorder_reconstructs_same-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.reorder_reconstructs_same" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-ordinal_preserving_permutation_invariant> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-ordinal_preserving_permutation_invariant-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.ordinal_preserving_permutation_invariant" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-exchange_involutive> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-exchange_involutive-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.exchange_involutive" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-exchange_eq_self_iff> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-exchange_eq_self_iff-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.exchange_eq_self_iff" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-reference_answer_from_intermediates> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-reference_answer_from_intermediates-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.reference_answer_from_intermediates" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-all_inputs_nodup> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-all_inputs_nodup-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.all_inputs_nodup" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-all_inputs_complete> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-all_inputs_complete-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.all_inputs_complete" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-all_inputs_length> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-all_inputs_length-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.all_inputs_length" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-all_original_cases_length> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-all_original_cases_length-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.all_original_cases_length" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-role_exchange_changed_input_count> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-role_exchange_changed_input_count-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.role_exchange_changed_input_count" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-role_exchange_changed_answer_count> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-role_exchange_changed_answer_count-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.role_exchange_changed_answer_count" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-role_exchange_changed_intermediate_count> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-role_exchange_changed_intermediate_count-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.role_exchange_changed_intermediate_count" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-evaluator_rows_count> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-evaluator_rows_count-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.evaluator_rows_count" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-census_requests_count> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-census_requests_count-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.census_requests_count" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-sentinel_requests_count> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-sentinel_requests_count-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.sentinel_requests_count" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-schedule_cardinality> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-theorem-schedule_cardinality-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_THEOREM ;
+ sh:property [ sh:path p:theorem ; sh:hasValue "HSWMFullW1Reference.schedule_cardinality" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-original> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-comparison-original-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_COMPARISON ;
+ sh:property [ sh:path p:transform ; sh:hasValue "original" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-paraphrase-a> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-comparison-paraphrase-a-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_COMPARISON ;
+ sh:property [ sh:path p:transform ; sh:hasValue "paraphrase-a" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-paraphrase-b> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-comparison-paraphrase-b-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_COMPARISON ;
+ sh:property [ sh:path p:transform ; sh:hasValue "paraphrase-b" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-rename> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-comparison-rename-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_COMPARISON ;
+ sh:property [ sh:path p:transform ; sh:hasValue "rename" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-reorder> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-comparison-reorder-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_COMPARISON ;
+ sh:property [ sh:path p:transform ; sh:hasValue "reorder" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-role-exchange> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-comparison-role-exchange-2026-10-07-v1> ;
+ sh:class role:W1_REFERENCE_COMPARISON ;
+ sh:property [ sh:path p:transform ; sh:hasValue "role-exchange" ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-source-0> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-source-0-2026-10-07-v1> ;
+ sh:class role:EVIDENCE_ARTIFACT ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-source-1> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-source-1-2026-10-07-v1> ;
+ sh:class role:EVIDENCE_ARTIFACT ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-source-2> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-source-2-2026-10-07-v1> ;
+ sh:class role:EVIDENCE_ARTIFACT ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-source-3> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-source-3-2026-10-07-v1> ;
+ sh:class role:EVIDENCE_ARTIFACT ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-source-4> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-source-4-2026-10-07-v1> ;
+ sh:class role:EVIDENCE_ARTIFACT ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-source-5> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-source-5-2026-10-07-v1> ;
+ sh:class role:EVIDENCE_ARTIFACT ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-source-6> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-source-6-2026-10-07-v1> ;
+ sh:class role:EVIDENCE_ARTIFACT ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-reference-source-7> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-source-7-2026-10-07-v1> ;
+ sh:class role:EVIDENCE_ARTIFACT ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .

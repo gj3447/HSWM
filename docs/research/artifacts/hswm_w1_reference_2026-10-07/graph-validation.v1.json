@@ -1,0 +1,96 @@
+{
+  "schema_version": "hswm-w1-reference-graph-validation/v1",
+  "recorded_at": "2026-10-07T07:13:56.951299+00:00",
+  "status": "PASS",
+  "scope": "LOCAL_STAGED_CANDIDATE_CHECKED_BEFORE_GRAPH_PUBLICATION",
+  "authority": "SECONDARY_AI_ENGINEERING_VALIDATION",
+  "research_source_revision": "539f50d3835eed3f075598caef60a23a4d84b1fc",
+  "graph": {
+    "path": "ontology/development/HSWM_W1_REFERENCE_LEAN_2026-10-07.v1.json",
+    "sha256": "b6f58ba5a88ff3a253c57bb32b4ae9e354f8f6acd2a30d113955391a4e800166",
+    "counts": {
+      "nodes": 41,
+      "anchors": 1,
+      "relations": 101
+    }
+  },
+  "input_artifact_binding_summary": {
+    "MATCH": 40
+  },
+  "source_cut_evidence_nodes": 8,
+  "query_results": {
+    "proofs": {
+      "rows": 22,
+      "result_sha256": "e2805ded5a46706b4490bfa2350f5be872706f7f731e5319ffe7982c2abc205c"
+    },
+    "comparison": {
+      "rows": 6,
+      "result_sha256": "645a3ac6425367a0ce82ef9d1a194ada2f6357b0e43d7ce87b769ec34153511a"
+    },
+    "bindings": {
+      "rows": 8,
+      "result_sha256": "079de474eba71794614a380d1e26cb38b3e6d60dc372c797fad72174eab499e8"
+    },
+    "boundaries": {
+      "rows": 4,
+      "result_sha256": "4ce4a11187247e44206ab7fc0c621793becd8116cfc31bbaea9948be454f5d43"
+    },
+    "lineage": {
+      "rows": 1,
+      "result_sha256": "d028499f4694d196a7b543788d7f4e0e3589160f5cbdf96f85d8e1c501618ea5"
+    }
+  },
+  "shacl": [
+    {
+      "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+      "conforms": true,
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+    },
+    {
+      "path": "ontology/queries/hswm_w1_reference_2026-10-07/shapes.ttl",
+      "conforms": true,
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+    }
+  ],
+  "checks": [
+    {
+      "command": "node --test tests/research/full-w1-reference.test.mts tests/research/local-semantic-w1-full-analysis.test.mts tests/research/local-semantic-w1-full-instrument.test.mts",
+      "exit_code": 0,
+      "tests_passed": 12,
+      "log_sha256": "cebd11dba51252eed2ea62a6487e915b9a8bf001e3c712b428c885aa6ae51d09"
+    },
+    {
+      "command": "npm --prefix src/hswm/effect-runtime run test -- ../../../tests/effect-runtime/w1-reference-graph.test.ts ../../../tests/effect-runtime/w1-full-progress.test.ts ../../../tests/effect-runtime/local-semantic-w1-full-domain.test.ts --maxWorkers=1",
+      "exit_code": 0,
+      "tests_passed": 12,
+      "log_sha256": "8546a9e8e56824481f37135730e9fab6c60e7a198e113cb38fd29dadf4458f74"
+    },
+    {
+      "command": "npm --prefix src/hswm/effect-runtime run check",
+      "exit_code": 0,
+      "tests_passed": null,
+      "log_sha256": "18f37d6ae3a34dbabf370d6f64753891c1e6d1755d8fcf484ab621cef7b4b8f0"
+    }
+  ],
+  "portable_math_documents": 3,
+  "frozen_w1_plan_revalidated": {
+    "requests": 2784,
+    "plan_sha256": "34f1300d453c417f7e918f0722392092c395ee37701e46c430c87a187ddf892a"
+  },
+  "negative_graph_checks": [
+    "detached-proof-evidence",
+    "false-theorem-name",
+    "whole-system-promotion",
+    "nlp-promotion",
+    "parser-promotion",
+    "fabricated-model-request",
+    "t5-completion-promotion",
+    "changed-comparison-count",
+    "detached-assumption-boundary"
+  ],
+  "actual_model_requests": 0,
+  "graph_report_is_bound_input": false,
+  "claim_ceiling": "FINITE_AUTHORED_BOOLEAN_REFERENCE_AND_ENGINEERING_CONFORMANCE_NOT_MODEL_EFFICACY_OR_WHOLE_HSWM"
+}

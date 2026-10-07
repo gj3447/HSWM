@@ -1,0 +1,10 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?transform ?matched ?interpretation ?path ?sha256 WHERE {
+  VALUES ?root { <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-reference-lean-2026-10-07-v1> }
+  ?root a role:FORMAL_REFERENCE_AUDIT ; r:HAS_CONCEPT ?comparison .
+  ?comparison a role:W1_REFERENCE_COMPARISON ; p:transform ?transform ;
+    p:matched_rows ?matched ; p:family_interpretation ?interpretation ; r:HAS_SOURCE ?source .
+  ?source p:evidence_role "VERIFICATION_SOURCE" ; p:source_path ?path ; p:source_sha256 ?sha256 .
+} ORDER BY ?transform

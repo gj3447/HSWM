@@ -1,0 +1,81 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+<urn:shape:optimization-root> a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1> ; sh:class role:OPTIMIZATION_CONTRACT_VIEW ;
+  sh:property [ sh:path p:runtime_w_learning_proved ; sh:hasValue false ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:global_optimality_proved ; sh:hasValue false ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:measured_efficacy ; sh:hasValue false ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:minCount 3 ; sh:maxCount 3 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:USER_GOAL ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:AI_GOAL_RESTATEMENT ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:OPTIMIZATION_AUGMENTATION ] ; sh:qualifiedMinCount 6 ; sh:qualifiedMaxCount 6 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:EVALUATION_CONTRACT ] ; sh:qualifiedMinCount 4 ; sh:qualifiedMaxCount 4 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:BOTTLENECK_STAGE ] ; sh:qualifiedMinCount 6 ; sh:qualifiedMaxCount 6 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:FORMAL_REFERENCE ] ; sh:qualifiedMinCount 2 ; sh:qualifiedMaxCount 2 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:OPTIMIZATION_BOUNDARY ] ; sh:qualifiedMinCount 3 ; sh:qualifiedMaxCount 3 ] .
+<urn:shape:optimization-goal> a sh:NodeShape ;
+  sh:targetClass role:USER_GOAL ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:description_origin ; sh:hasValue "SECONDARY_AI_RESTATEMENT_OF_USER_SOURCE" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:statement_kind ; sh:hasValue "USER_EXPECTATION" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:achievement_value ; sh:hasValue "UNKNOWN" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:expectation_status ; sh:hasValue "NOT_OBSERVED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:measurement_status ; sh:hasValue "NOT_MEASURED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:class role:USER_SOURCE ; sh:minCount 1 ; sh:maxCount 1 ] .
+<urn:shape:optimization-rules> a sh:NodeShape ;
+  sh:targetClass role:OPTIMIZATION_AUGMENTATION ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:rule_id ; sh:in ("R1" "R2" "R3" "R4" "R5" "R6") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:CONSTRAINS ; sh:class role:EVALUATION_CONTRACT ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:class role:EVIDENCE_ARTIFACT ; sh:minCount 1 ; sh:maxCount 1 ] .
+<urn:shape:optimization-contracts> a sh:NodeShape ;
+  sh:targetClass role:EVALUATION_CONTRACT ;
+  sh:property [ sh:path p:measurement_status ; sh:hasValue "NOT_MEASURED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:CONSTRAINS ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1> ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:class role:EVIDENCE_ARTIFACT ; sh:minCount 1 ; sh:maxCount 1 ] .
+<urn:shape:optimization-bottlenecks> a sh:NodeShape ;
+  sh:targetClass role:BOTTLENECK_STAGE ;
+  sh:property [ sh:path p:observed_value ; sh:hasValue "unknown" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:measurement_status ; sh:hasValue "NOT_MEASURED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:CONSTRAINS ; sh:class role:EVALUATION_CONTRACT ; sh:minCount 1 ; sh:maxCount 1 ] .
+<urn:shape:optimization-proofs> a sh:NodeShape ;
+  sh:targetClass role:FORMAL_REFERENCE ;
+  sh:property [ sh:path p:status ; sh:hasValue "EXISTING_CONDITIONAL_RESULT_NOT_RECHECKED_THIS_CHANGE" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-lean-source-2026-10-07-v1> ; sh:minCount 1 ; sh:maxCount 1 ] .
+<urn:shape:optimization-boundaries> a sh:NodeShape ;
+  sh:targetClass role:OPTIMIZATION_BOUNDARY ;
+  sh:property [ sh:path p:status ; sh:hasValue "BOUNDARY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:CONSTRAINS ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1> ; sh:maxCount 1 ] .
+<urn:shape:optimization-lean-source> a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-lean-source-2026-10-07-v1> ; sh:class role:EVIDENCE_ARTIFACT ;
+  sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+<urn:shape:optimization-user-source> a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-user-source-2026-10-07-v1> ; sh:class role:USER_SOURCE ;
+  sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:utterance_verbatim ; sh:minCount 1 ; sh:maxCount 1 ] .
+<urn:shape:optimization-evaluation-source> a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-evaluation-source-2026-10-07-v1> ; sh:class role:EVIDENCE_ARTIFACT ;
+  sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+<urn:shape:optimization-r1-base> a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-r1-2026-10-07-v1> ;
+  sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-optimization-r1-2026-10-07> ; sh:maxCount 1 ] .
+<urn:shape:optimization-r2-base> a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-r2-2026-10-07-v1> ;
+  sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-optimization-r2-2026-10-07> ; sh:maxCount 1 ] .
+<urn:shape:optimization-r3-base> a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-r3-2026-10-07-v1> ;
+  sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-optimization-r3-2026-10-07> ; sh:maxCount 1 ] .
+<urn:shape:optimization-r4-base> a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-r4-2026-10-07-v1> ;
+  sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-optimization-r4-2026-10-07> ; sh:maxCount 1 ] .
+<urn:shape:optimization-r5-base> a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-r5-2026-10-07-v1> ;
+  sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-optimization-r5-2026-10-07> ; sh:maxCount 1 ] .
+<urn:shape:optimization-r6-base> a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-r6-2026-10-07-v1> ;
+  sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-optimization-r6-2026-10-07> ; sh:maxCount 1 ] .

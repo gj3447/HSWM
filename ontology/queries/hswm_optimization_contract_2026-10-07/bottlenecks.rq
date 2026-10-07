@@ -1,0 +1,4 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?stage ?value ?status ?sourcePath WHERE { VALUES ?root { <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1> } ?root r:HAS_CONCEPT ?node . ?node a role:BOTTLENECK_STAGE ; p:stage_id ?stage ; p:observed_value ?value ; p:measurement_status ?status ; r:CONSTRAINS ?contract . ?contract a role:EVALUATION_CONTRACT ; r:HAS_SOURCE ?source . ?source a role:EVIDENCE_ARTIFACT ; p:source_path ?sourcePath . } ORDER BY ?stage

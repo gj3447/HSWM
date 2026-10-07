@@ -1,0 +1,4 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?theorem ?status ?path ?sha256 WHERE { VALUES ?root { <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1> } ?root r:HAS_CONCEPT ?node . ?node a role:FORMAL_REFERENCE ; p:theorem ?theorem ; p:status ?status ; r:HAS_SOURCE ?source . ?source a role:EVIDENCE_ARTIFACT ; p:source_path ?path ; p:source_sha256 ?sha256 . } ORDER BY ?theorem

@@ -1,0 +1,4 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?id ?description ?baseRuleUid ?userSource WHERE { VALUES ?root { <urn:hswm:kg:node:sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1> } ?root a role:OPTIMIZATION_CONTRACT_VIEW ; r:HAS_CONCEPT ?node ; r:HAS_SOURCE ?source . ?source a role:USER_SOURCE ; p:source_path ?userSource . ?node a role:OPTIMIZATION_AUGMENTATION ; p:rule_id ?id ; p:description ?description ; r:REFERENCES ?baseRule . BIND(REPLACE(STR(?baseRule), "^urn:hswm:kg:node:", "") AS ?baseRuleUid) } ORDER BY ?id

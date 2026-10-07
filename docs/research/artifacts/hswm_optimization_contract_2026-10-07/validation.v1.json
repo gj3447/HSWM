@@ -1,0 +1,124 @@
+{
+  "schema_version": "hswm-optimization-contract-validation/v1",
+  "recorded_on": "2026-10-07",
+  "authority": "SECONDARY_AI_ENGINEERING_OBSERVATION",
+  "scope": "LOCAL_TASK_ROUTING_AND_SOURCE_BOUND_READ_ONLY_EVALUATION_GRAPH",
+  "source_documents_revision": "5aef7f6b6af3cefa1f9657cdccb1f672d10cb3f5",
+  "bundle": {
+    "path": "ontology/identity/hswm_core/HSWM_OPTIMIZATION_CONTRACT_ONTOLOGY.v1.json",
+    "sha256": "93fb31089cb176c7751c538a84ef7445e04b4b070f5629b9d909ae0d774b8739",
+    "counts": {
+      "nodes": 27,
+      "anchors": 6,
+      "relations": 65
+    }
+  },
+  "manifest": {
+    "path": "ontology/workspace/HSWM_WORKSPACE.v1.json",
+    "sha256": "2a8b8935cc0f25580f4b0c7ac69f31641cdecd812e9c0971797b73c399f95a99",
+    "id": "optimization-contract",
+    "previous_entries_preserved": 36
+  },
+  "checks": {
+    "type_and_effect": {
+      "command": "npm --prefix src/hswm/effect-runtime run check",
+      "exit_code": 0,
+      "effect_boundary_violations": 0,
+      "adaptive_functional_violations": 0
+    },
+    "focused_regression": {
+      "cwd": "src/hswm/effect-runtime",
+      "command": "npm exec vitest run tests/effect-runtime/optimization-rules.test.ts tests/effect-runtime/optimization-contract-graph.test.ts",
+      "exit_code": 0,
+      "files_passed": 2,
+      "tests_passed": 10
+    },
+    "workspace_show": {
+      "command": "src/hswm/effect-runtime/bin/hswm-workspace show optimization-contract",
+      "exit_code": 0,
+      "structural_issues": []
+    },
+    "workspace_validate": {
+      "command": "src/hswm/effect-runtime/bin/hswm-workspace validate optimization-contract",
+      "exit_code": 0,
+      "conforms": true,
+      "shape_profiles_passed": 2,
+      "structural_issues": []
+    },
+    "workspace_bindings": {
+      "command": "src/hswm/effect-runtime/bin/hswm-workspace bindings optimization-contract",
+      "exit_code": 0,
+      "summary": {
+        "MATCH": 17
+      }
+    },
+    "workspace_queries": [
+      {
+        "command": "src/hswm/effect-runtime/bin/hswm-workspace query optimization-contract rules",
+        "exit_code": 0,
+        "rows": 6
+      },
+      {
+        "command": "src/hswm/effect-runtime/bin/hswm-workspace query optimization-contract contracts",
+        "exit_code": 0,
+        "rows": 4
+      },
+      {
+        "command": "src/hswm/effect-runtime/bin/hswm-workspace query optimization-contract bottlenecks",
+        "exit_code": 0,
+        "rows": 6
+      },
+      {
+        "command": "src/hswm/effect-runtime/bin/hswm-workspace query optimization-contract boundaries",
+        "exit_code": 0,
+        "rows": 3
+      },
+      {
+        "command": "src/hswm/effect-runtime/bin/hswm-workspace query optimization-contract proofs",
+        "exit_code": 0,
+        "rows": 2
+      }
+    ],
+    "shared_router": {
+      "observation": "docs/research/artifacts/hswm_optimization_contract_2026-10-07/routing-observation.v1.json",
+      "client_modes": [
+        "codex",
+        "claude",
+        "grok"
+      ],
+      "profiles_passed": 21,
+      "selected_supplement_sections_read_to_completion": 3,
+      "client_app_launches": 0,
+      "graph_digest_is_router_graph_digest_not_file_byte_digest": true
+    },
+    "markdown": {
+      "compiler": "scripts/compile_portable_markdown_math.py",
+      "documents_passed": 3,
+      "source_rewrites": 0
+    },
+    "source_preservation": {
+      "published_base_bundle_unchanged": true,
+      "base_revision": "3ee19832a53ca78b383f46ba06754a543ca486b7",
+      "source_node_git_revisions_checked": 3,
+      "historical_binding_policy": "Retain published bytes; current routes intentionally differ from the base graph snapshot."
+    },
+    "diff_check": {
+      "command": "git diff --cached --check",
+      "exit_code": 0
+    }
+  },
+  "resolved_during_validation": [
+    "Initial graph test TypeScript record-index errors corrected before the final passing checks.",
+    "Existing Lean theorem references corrected to the source namespace HSWM.OperationalQuotient."
+  ],
+  "boundaries": {
+    "actual_model_requests": 0,
+    "fresh_lean_compilation": false,
+    "formal_support": "TWO_EXISTING_CONDITIONAL_REFERENCES_SOURCE_CHECKED_ONLY",
+    "bottleneck_measurement": "NOT_MEASURED",
+    "learned_W": "NOT_ESTABLISHED_BY_THIS_WORK",
+    "global_optimality": "NOT_PROVED",
+    "user_goal": "ATTRIBUTED_EXPECTATION_NOT_OBSERVED_RESULT",
+    "external_publication": false
+  }
+}

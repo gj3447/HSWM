@@ -1,0 +1,1097 @@
+{
+  "schema_version": "hswm-optimization-contract/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+  "status": "EVALUATION_CONTRACT_WITH_UNMEASURED_BOTTLENECKS",
+  "nonclaim": "USER_GOAL_AND_LOCAL_EVALUATION_CONTRACT_NOT_RUNTIME_W_LEARNING_GLOBAL_OPTIMALITY_OR_MEASURED_EFFICACY",
+  "source_accessed_on": "2026-10-07",
+  "artifact_bindings": [
+    {
+      "path": "formal/HSWMOperationalQuotient.lean",
+      "sha256": "f751be031628aeab210e166a13112bbb5adca6ec6edc8f7b3259b95479533564"
+    },
+    {
+      "path": "ontology/identity/hswm_core/HSWM_OPTIMIZATION_RULES_ONTOLOGY.v1.json",
+      "sha256": "4e1fec0b0ab76d7982cf89a067e83ce4bfb602a82e43e4f195217cae6de5e4f3"
+    },
+    {
+      "path": "docs/canon/sources/USER_PRIMARY_HSWM_OPTIMIZATION_REINFORCEMENT_2026-10-07.txt",
+      "sha256": "7b178efdf68a8b6d0c4edd84214dc77f61e00e331b606e054d8134c7c82505f5"
+    },
+    {
+      "path": "docs/agent-rules/OPTIMIZATION_EVALUATION.md",
+      "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005"
+    },
+    {
+      "path": "docs/agent-rules/routes.json",
+      "sha256": "3d4b3b0863d366828c568c6e26071c316b4b0bdbf76ba332cbdd8c3980df04db"
+    },
+    {
+      "path": "docs/agent-rules/OPTIMIZATION.md",
+      "sha256": "c8b7b6d4d215aa5e1b0d2e45e02b15dedd6bff3781d1174d13170e76845b03f3"
+    },
+    {
+      "path": "docs/research/HSWM_OPTIMIZATION_CONTRACT_2026-10-07.md",
+      "sha256": "e723c574b8dbeb82143bfd04e24bcf580d029a166e9eea1e02a4812e023c28fd"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_optimization_contract_2026-10-07/routing-observation.v1.json",
+      "sha256": "d547a2118f1ab095b8519d0d247862c8d137c7908a4fde97050787bd6f94ec74"
+    },
+    {
+      "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+      "sha256": "6eb4d0be63fccd71e02e25d86baa1ae81c0ddf31a9eb4d05fc4f0cf655225371"
+    },
+    {
+      "path": "ontology/queries/hswm_optimization_contract_2026-10-07/README.md",
+      "sha256": "193f557280771116f7e772b605f785e3d3f92adf18978ebf0b542b3971b2f2e2"
+    },
+    {
+      "path": "ontology/queries/hswm_optimization_contract_2026-10-07/bottlenecks.rq",
+      "sha256": "4ff3ad68becefa4fe25f3e38ad11b75835ee775c73c5794b1dda82c18ccad91f"
+    },
+    {
+      "path": "ontology/queries/hswm_optimization_contract_2026-10-07/boundaries.rq",
+      "sha256": "303ca5f79f6085c9344f9d7e356d157af973c26d1b6a198948c4a62a18421b34"
+    },
+    {
+      "path": "ontology/queries/hswm_optimization_contract_2026-10-07/contracts.rq",
+      "sha256": "66e29890e07b62a9823e92a81f2653a6c02834a1bc9ca7d8123942b9c49de4e0"
+    },
+    {
+      "path": "ontology/queries/hswm_optimization_contract_2026-10-07/proofs.rq",
+      "sha256": "cef17abc6351b89ff6e7ee4225e99133b6d72b5f53a0a54a37dc0d8ae12e2bcc"
+    },
+    {
+      "path": "ontology/queries/hswm_optimization_contract_2026-10-07/rules.rq",
+      "sha256": "e82bd015235c4e2ecf8c9581cd7b23b7d7ee7373e8c5265450804ea27abbdb14"
+    },
+    {
+      "path": "ontology/queries/hswm_optimization_contract_2026-10-07/shapes.ttl",
+      "sha256": "e9853206b14249dd6ed13e8ad681c2346d26f936d260cd81465ae656251ec04d"
+    },
+    {
+      "path": "tests/effect-runtime/optimization-contract-graph.test.ts",
+      "sha256": "b2afa21c71abdd2ed1e6b03d26d6b4262a23c1a999be29168307f3e25f17eeef"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 27,
+    "anchors": 6,
+    "relations": 65
+  },
+  "anchors": [
+    {
+      "uid": "sym:Concept:hswm-optimization-r1-2026-10-07",
+      "name": "Base optimization rule R1",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-optimization-r2-2026-10-07",
+      "name": "Base optimization rule R2",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-optimization-r3-2026-10-07",
+      "name": "Base optimization rule R3",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-optimization-r4-2026-10-07",
+      "name": "Base optimization rule R4",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-optimization-r5-2026-10-07",
+      "name": "Base optimization rule R5",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-optimization-r6-2026-10-07",
+      "name": "Base optimization rule R6",
+      "required_labels": [
+        "Concept"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "HSWM optimization reinforcement evaluation contract",
+        "description": "A source-bound evaluation view that keeps the requested optimization goal distinct from measurements and runtime learning.",
+        "standard_graph_role": "OPTIMIZATION_CONTRACT_VIEW",
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "status": "EVALUATION_CONTRACT_WITH_UNMEASURED_BOTTLENECKS",
+        "claim_boundary": "USER_GOAL_NOT_MEASUREMENT_LOCAL_DOCUMENT_GRAPH_NOT_RUNTIME_W_SCOPED_IMPROVEMENT_NOT_GLOBAL_OPTIMALITY",
+        "runtime_w_learning_proved": false,
+        "global_optimality_proved": false,
+        "measured_efficacy": false,
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-user-source-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "User optimization reinforcement utterance",
+        "standard_graph_role": "USER_SOURCE",
+        "authority_class": "USER_PRIMARY",
+        "source_path": "docs/canon/sources/USER_PRIMARY_HSWM_OPTIMIZATION_REINFORCEMENT_2026-10-07.txt",
+        "source_binding_state": "CURRENT_MATCH",
+        "recorded_on": "2026-10-07",
+        "description": "User optimization reinforcement utterance",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE",
+        "source_sha256": "7b178efdf68a8b6d0c4edd84214dc77f61e00e331b606e054d8134c7c82505f5",
+        "source_revision": "5aef7f6b6af3cefa1f9657cdccb1f672d10cb3f5",
+        "utterance_verbatim": "ㅇㅇ 보강좀 해줘볼래 ?? 저렇게 CHU 가 구성되면 병목없이 완전히 최적화된 지능이 될거같아서 ㅇㅇ 보강작업 한다음에 표준그래프 엔지니어링으로 구축좀 해줘봐봐 ㅇㅇ\n"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-lean-source-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "formal/HSWMOperationalQuotient.lean",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "formal/HSWMOperationalQuotient.lean",
+        "source_sha256": "f751be031628aeab210e166a13112bbb5adca6ec6edc8f7b3259b95479533564",
+        "source_revision": "5aef7f6b6af3cefa1f9657cdccb1f672d10cb3f5",
+        "evidence_role": "FORMAL_REFERENCE_SOURCE",
+        "description": "formal/HSWMOperationalQuotient.lean",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-goal-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "User CHU optimization expectation",
+        "description": "User expectation that this constructed CHU becomes fully optimized and bottleneck-free.",
+        "standard_graph_role": "USER_GOAL",
+        "authority_class": "USER_PRIMARY",
+        "expectation_status": "NOT_OBSERVED",
+        "measurement_status": "NOT_MEASURED",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE",
+        "chu_expectation": "FULLY_OPTIMIZED_BOTTLENECK_FREE",
+        "achievement_value": "UNKNOWN",
+        "description_origin": "SECONDARY_AI_RESTATEMENT_OF_USER_SOURCE",
+        "statement_kind": "USER_EXPECTATION",
+        "user_source_uid": "sym:AbstractNode:hswm-optimization-user-source-2026-10-07-v1"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-r1-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "R1 task activation reinforcement",
+        "standard_graph_role": "OPTIMIZATION_AUGMENTATION",
+        "authority_class": "SECONDARY_AI",
+        "rule_id": "R1",
+        "description": "For optimization comparisons, declare task and resource budget; activate applicable rules with prerequisites and exceptions; distinguish static routing from learned selection.",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-r2-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "R2 CLI execution reinforcement",
+        "standard_graph_role": "OPTIMIZATION_AUGMENTATION",
+        "authority_class": "SECONDARY_AI",
+        "rule_id": "R2",
+        "description": "Bind owned CLI execution to actual version, success, failure, timeout and allowed-effect observations.",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-r3-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "R3 CLI usage binding reinforcement",
+        "standard_graph_role": "OPTIMIZATION_AUGMENTATION",
+        "authority_class": "SECONDARY_AI",
+        "rule_id": "R3",
+        "description": "Bind stable CLI identity to implementation version, inputs, outputs, failure behavior and applicable help.",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-r4-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "R4 context granularity reinforcement",
+        "standard_graph_role": "OPTIMIZATION_AUGMENTATION",
+        "authority_class": "SECONDARY_AI",
+        "rule_id": "R4",
+        "description": "Use declared task and resource budgets when splitting context; retain observations, admission and declared future-learning conditions.",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-r5-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "R5 selective connectivity reinforcement",
+        "standard_graph_role": "OPTIMIZATION_AUGMENTATION",
+        "authority_class": "SECONDARY_AI",
+        "rule_id": "R5",
+        "description": "Measure reduced repetition against added traversal, queue waiting and end-to-end critical-path trade-offs.",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-r6-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "R6 semantic contribution reinforcement",
+        "standard_graph_role": "OPTIMIZATION_AUGMENTATION",
+        "authority_class": "SECONDARY_AI",
+        "rule_id": "R6",
+        "description": "Treat representation preservation separately from meaning or weight changes; assess the latter with independent outcomes and later selection changes.",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-contract-resource-task-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Resource and task budget contract",
+        "standard_graph_role": "EVALUATION_CONTRACT",
+        "authority_class": "SECONDARY_AI",
+        "contract_id": "RESOURCE_TASK_BUDGET",
+        "description": "Declare workload, latency, memory, cost and task success criteria before comparing changes.",
+        "measurement_status": "NOT_MEASURED",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-contract-representation-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Representation observation and admission contract",
+        "standard_graph_role": "EVALUATION_CONTRACT",
+        "authority_class": "SECONDARY_AI",
+        "contract_id": "REPRESENTATION_OBSERVATION_ADMISSION",
+        "description": "Record representation observations and admission criteria; future learning remains an explicit obligation.",
+        "measurement_status": "NOT_MEASURED",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-contract-learning-efficacy-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Learning efficacy outcome contract",
+        "standard_graph_role": "EVALUATION_CONTRACT",
+        "authority_class": "SECONDARY_AI",
+        "contract_id": "LEARNING_EFFICACY_OUTCOME",
+        "description": "Compare learning efficacy against independently observed outcomes rather than graph structure alone.",
+        "measurement_status": "NOT_MEASURED",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-contract-end-to-end-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "End-to-end bottleneck and trade-off contract",
+        "standard_graph_role": "EVALUATION_CONTRACT",
+        "authority_class": "SECONDARY_AI",
+        "contract_id": "END_TO_END_BOTTLENECK_TRADEOFF",
+        "description": "Measure stage bottlenecks and trade-offs across an end-to-end run.",
+        "measurement_status": "NOT_MEASURED",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-bottleneck-retrieval-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Retrieval and routing stage",
+        "standard_graph_role": "BOTTLENECK_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "stage_id": "RETRIEVAL_ROUTING",
+        "observed_value": "unknown",
+        "measurement_status": "NOT_MEASURED",
+        "description": "Retrieval and routing stage; queue waiting, service time and failed selection remain unmeasured.",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-bottleneck-input-assembly-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Input assembly stage",
+        "standard_graph_role": "BOTTLENECK_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "stage_id": "INPUT_ASSEMBLY",
+        "observed_value": "unknown",
+        "measurement_status": "NOT_MEASURED",
+        "description": "Input assembly stage",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-bottleneck-llm-inference-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "LLM inference stage",
+        "standard_graph_role": "BOTTLENECK_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "stage_id": "LLM_INFERENCE",
+        "observed_value": "unknown",
+        "measurement_status": "NOT_MEASURED",
+        "description": "LLM inference stage",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-bottleneck-tool-io-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Tool I/O stage",
+        "standard_graph_role": "BOTTLENECK_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "stage_id": "TOOL_IO",
+        "observed_value": "unknown",
+        "measurement_status": "NOT_MEASURED",
+        "description": "Tool I/O stage",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-bottleneck-graph-commit-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Graph commit stage",
+        "standard_graph_role": "BOTTLENECK_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "stage_id": "GRAPH_COMMIT",
+        "observed_value": "unknown",
+        "measurement_status": "NOT_MEASURED",
+        "description": "Graph commit stage",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-bottleneck-learning-evaluation-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Learning and evaluation stage",
+        "standard_graph_role": "BOTTLENECK_STAGE",
+        "authority_class": "SECONDARY_AI",
+        "stage_id": "LEARNING_EVALUATION",
+        "observed_value": "unknown",
+        "measurement_status": "NOT_MEASURED",
+        "description": "Learning and evaluation stage",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-proof-output-equivalence-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Output equivalence does not imply operational equivalence",
+        "standard_graph_role": "FORMAL_REFERENCE",
+        "authority_class": "SECONDARY_AI",
+        "theorem": "HSWM.OperationalQuotient.output_equivalence_does_not_imply_operational_equivalence",
+        "status": "EXISTING_CONDITIONAL_RESULT_NOT_RECHECKED_THIS_CHANGE",
+        "description": "Output equivalence does not imply operational equivalence",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-proof-visible-bit-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Visible bit has no exact learning abstraction",
+        "standard_graph_role": "FORMAL_REFERENCE",
+        "authority_class": "SECONDARY_AI",
+        "theorem": "HSWM.OperationalQuotient.visible_bit_has_no_exact_learning_abstraction",
+        "status": "EXISTING_CONDITIONAL_RESULT_NOT_RECHECKED_THIS_CHANGE",
+        "description": "Visible bit has no exact learning abstraction",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-boundary-user-goal-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "User goal is not a measurement",
+        "standard_graph_role": "OPTIMIZATION_BOUNDARY",
+        "authority_class": "SECONDARY_AI",
+        "boundary_id": "USER_GOAL_NOT_MEASUREMENT",
+        "description": "The goal is attributed expectation and is not an observed efficacy result.",
+        "status": "BOUNDARY",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-boundary-local-doc-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Local document graph is not runtime W",
+        "standard_graph_role": "OPTIMIZATION_BOUNDARY",
+        "authority_class": "SECONDARY_AI",
+        "boundary_id": "LOCAL_DOCUMENT_GRAPH_NOT_RUNTIME_W",
+        "description": "This source-bound document graph does not implement or observe runtime W learning.",
+        "status": "BOUNDARY",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-boundary-scoped-global-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "Scoped improvement is not global optimality",
+        "standard_graph_role": "OPTIMIZATION_BOUNDARY",
+        "authority_class": "SECONDARY_AI",
+        "boundary_id": "SCOPED_IMPROVEMENT_NOT_GLOBAL_OPTIMALITY",
+        "description": "Any future measured scope remains distinct from global optimality.",
+        "status": "BOUNDARY",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-evaluation-source-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "docs/agent-rules/OPTIMIZATION_EVALUATION.md",
+        "description": "Owned evaluation contract guidance for optimization work.",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/agent-rules/OPTIMIZATION_EVALUATION.md",
+        "source_sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+        "evidence_role": "EVALUATION_CONTRACT_SOURCE",
+        "claim_boundary": "DOCUMENTATION_AND_EVALUATION_CONTRACT_NOT_MEASURED_EFFICACY_OR_RUNTIME_LEARNING",
+        "projection_nonclaim": "SOURCE_BOUND_READ_ONLY_GRAPH_NOT_CANONICAL_RUNTIME_STATE",
+        "source_revision": "5aef7f6b6af3cefa1f9657cdccb1f672d10cb3f5"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-optimization-goal-restatement-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "AI goal restatement",
+        "description": "AI restatement: compare bounded optimization claims only against declared measurements and constraints.",
+        "standard_graph_role": "AI_GOAL_RESTATEMENT",
+        "authority_class": "SECONDARY_AI",
+        "claim_boundary": "USER_EXPECTATION_NOT_MEASUREMENT_OR_GLOBAL_OPTIMALITY",
+        "projection_nonclaim": "READ_ONLY_EVALUATION_VIEW_NOT_RUNTIME_W",
+        "status": "NOT_OBSERVED"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-optimization-user-source-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-optimization-lean-source-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-goal-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-optimization-user-source-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-proof-output-equivalence-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-optimization-lean-source-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-proof-visible-bit-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "to_uid": "sym:AbstractNode:hswm-optimization-lean-source-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-goal-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-r1-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-r2-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-r3-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-r4-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-r5-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-r6-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-resource-task-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-representation-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-learning-efficacy-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-end-to-end-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-bottleneck-retrieval-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-bottleneck-input-assembly-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-bottleneck-llm-inference-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-bottleneck-tool-io-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-bottleneck-graph-commit-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-bottleneck-learning-evaluation-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-proof-output-equivalence-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-proof-visible-bit-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-boundary-user-goal-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-boundary-local-doc-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "to_uid": "sym:AbstractNode:hswm-optimization-boundary-scoped-global-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-resource-task-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-representation-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-learning-efficacy-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-end-to-end-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-boundary-user-goal-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-boundary-local-doc-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-boundary-scoped-global-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-bottleneck-retrieval-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-end-to-end-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-bottleneck-input-assembly-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-end-to-end-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-bottleneck-llm-inference-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-end-to-end-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-bottleneck-tool-io-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-end-to-end-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-bottleneck-graph-commit-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-end-to-end-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-bottleneck-learning-evaluation-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-end-to-end-2026-10-07-v1",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OPTIMIZATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r1-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-optimization-r1-2026-10-07",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BASE_RULE_IDENTITY",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r2-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-optimization-r2-2026-10-07",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BASE_RULE_IDENTITY",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r3-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-optimization-r3-2026-10-07",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BASE_RULE_IDENTITY",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r4-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-optimization-r4-2026-10-07",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BASE_RULE_IDENTITY",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r5-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-optimization-r5-2026-10-07",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BASE_RULE_IDENTITY",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r6-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-optimization-r6-2026-10-07",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "BASE_RULE_IDENTITY",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-evaluation-source-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_PROVENANCE",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-resource-task-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-evaluation-source-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_PROVENANCE",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-representation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-evaluation-source-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_PROVENANCE",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-learning-efficacy-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-evaluation-source-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_PROVENANCE",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-end-to-end-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-evaluation-source-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_PROVENANCE",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-resource-task-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-evaluation-source-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_PROVENANCE",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-end-to-end-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-evaluation-source-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_PROVENANCE",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-end-to-end-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-evaluation-source-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_PROVENANCE",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r4-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-representation-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r4-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-evaluation-source-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_PROVENANCE",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r5-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-end-to-end-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r5-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-evaluation-source-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_PROVENANCE",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r6-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-contract-learning-efficacy-2026-10-07-v1",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_CONTRACT",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-r6-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-evaluation-source-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EVALUATION_PROVENANCE",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-contract-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-goal-restatement-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "GOAL_INTERPRETATION",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-optimization-goal-restatement-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-optimization-goal-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "USER_GOAL_ATTRIBUTION",
+      "status": "DOCUMENTED_IMPLEMENTATION"
+    }
+  ]
+}

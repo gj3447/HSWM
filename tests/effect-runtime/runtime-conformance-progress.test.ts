@@ -7,14 +7,15 @@ import { compileKgBundle, kgSha256, type KgBundle, type KgBundleProjection } fro
 import { queryKgBundle, validateKgShacl } from "../../src/hswm/effect-runtime/src/native-kg-standards.js"
 
 const root = resolve(import.meta.dirname, "../..")
-const folder = "ontology/queries/hswm_preflight_refinement_2026-10-07"
-const revision = "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518"
-const primaryPath = "ontology/development/HSWM_PREFLIGHT_REFINEMENT_PROGRESS_2026-10-07.v1.json"
+const folder = "ontology/queries/hswm_runtime_conformance_2026-10-07"
+const revision = (): string => String(role(load()[0]!, "PROGRESS_VIEW")[0]!.properties["reviewed_revision"])
+const primaryPath = "ontology/development/HSWM_RUNTIME_CONFORMANCE_PROGRESS_2026-10-07.v1.json"
 const sourcePaths = [
   "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
   "ontology/development/HSWM_JOURNAL_REPLAY_PROGRESS_2026-10-06.v1.json",
   "ontology/development/HSWM_JOURNAL_ADAPTER_PROGRESS_2026-10-06.v1.json",
   "ontology/development/HSWM_PROGRESS_CONSOLIDATION_2026-10-07.v1.json",
+  "ontology/development/HSWM_PREFLIGHT_REFINEMENT_PROGRESS_2026-10-07.v1.json",
 ] as const
 const bytes = (path: string) => readFileSync(resolve(root, path))
 type Mutable<A> = { -readonly [K in keyof A]: Mutable<A[K]> }
@@ -22,7 +23,7 @@ type Bundle = Mutable<KgBundle>
 const load = () => [primaryPath, ...sourcePaths].map(path => JSON.parse(bytes(path).toString()) as Bundle)
 const encode = (value: unknown) => Buffer.from(JSON.stringify(value))
 const compile = (bundles = load()): KgBundleProjection => {
-  const result = compileKgBundle(bundles.map((bundle, index) => ({ sourceId: ["progress", "plan", "replay", "adapter", "consolidation"][index]!, rawBytes: encode(bundle) })), "v2")
+  const result = compileKgBundle(bundles.map((bundle, index) => ({ sourceId: ["progress", "plan", "replay", "adapter", "consolidation", "preflight"][index]!, rawBytes: encode(bundle) })), "v2")
   if (Either.isLeft(result)) throw result.left
   return result.right
 }
@@ -39,7 +40,7 @@ const observation = (bundles: Bundle[], task: string) => {
 }
 const conforms = async (bundles: Bundle[]) => (await Effect.runPromise(validateKgShacl(compile(bundles), bytes(`${folder}/shapes.ttl`)))).conforms
 
-it("selects the source-bound preflight view without changing historical views", async () => {
+it("selects the source-bound runtime conformance view without changing historical views", async () => {
   const bundles = load(), primary = bundles[0]!
   expect(compile(bundles).descriptor["writeBack"]).toBe("FORBIDDEN")
   expect((await Effect.runPromise(validateKgShacl(compile(bundles), bytes("schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl")))).conforms).toBe(true)
@@ -56,29 +57,35 @@ it("selects the source-bound preflight view without changing historical views", 
     expect(primary.relations.some(edge => edge.from_uid === selector.uid && edge.to_uid === task?.uid && edge.type === "REFERENCES")).toBe(true)
     expect(primary.relations.some(edge => edge.from_uid === selector.uid && edge.to_uid === selected?.uid && edge.type === "REFERENCES")).toBe(true)
   }
-  expect(observation(bundles, "T1").properties["observation_order"]).toBe(3)
-  expect(observation(bundles, "T2").properties["observation_order"]).toBe(1)
+  expect(observation(bundles, "T1").properties["observation_order"]).toBe(4)
+  expect(observation(bundles, "T2").properties["observation_order"]).toBe(2)
 }, 30000)
 
 it("answers current, fixed T1 history, direct evidence, next work, and boundaries", async () => {
   const current = (await query("current")).sort((a, b) => String(a["task"]).localeCompare(String(b["task"])))
   expect(current.map(row => [row["task"], row["status"], row["completion"]])).toEqual([
-    ["T1", "PARTIAL_READ_SET_VALIDATION_PROVED_REFINEMENT_OPEN", "OPEN"], ["T2", "PARTIAL_PREFLIGHT_FACTS_COMPUTED_REFINEMENT_OPEN", "OPEN"],
-    ["T3", "PLANNED", "OPEN"], ["T4", "WAITING", "OPEN"], ["T5", "PREPARED_NOT_RUN", "OPEN"],
+    ["T1", "DECODE_REPLAY_ORIGINAL_CRITERION_VALIDATED", "COMPLETE"], ["T2", "SIGNED_PERMIT_ORIGINAL_CRITERION_VALIDATED", "COMPLETE"],
+    ["T3", "V2_PROCESS_CRASH_AND_RACE_VALIDATED", "COMPLETE"], ["T4", "SAME_RUN_TRACE_RETAINED_AND_QUERYABLE", "COMPLETE"], ["T5", "NOT_READY_CURRENT_MODEL_BINDING_UNESTABLISHED", "OPEN"],
     ["T6", "WAITING", "OPEN"], ["T7", "PLANNED", "OPEN"], ["T8", "WAITING", "OPEN"], ["T9", "WAITING", "OPEN"],
   ])
   const history = (await query("history")).sort((a, b) => Number(a["order"]) - Number(b["order"]))
   expect(history.map(row => [row["order"], row["status"]])).toEqual([
-    ["0", "NEXT"], ["1", "PARTIAL_BOUNDARY_PROVED_REFINEMENT_OPEN"], ["2", "PARTIAL_PRODUCER_PROVED_REFINEMENT_OPEN"], ["3", "PARTIAL_READ_SET_VALIDATION_PROVED_REFINEMENT_OPEN"],
+    ["0", "NEXT"], ["1", "PARTIAL_BOUNDARY_PROVED_REFINEMENT_OPEN"], ["2", "PARTIAL_PRODUCER_PROVED_REFINEMENT_OPEN"], ["3", "PARTIAL_READ_SET_VALIDATION_PROVED_REFINEMENT_OPEN"], ["4", "DECODE_REPLAY_ORIGINAL_CRITERION_VALIDATED"],
   ])
   const bindings = await query("bindings")
-  expect(bindings).toHaveLength(8)
-  expect(bindings.every(row => row["revision"] === revision)).toBe(true)
+  expect(bindings).toHaveLength(13)
+  expect(bindings.every(row => row["revision"] === revision())).toBe(true)
   expect(bindings.some(row => row["roleName"] === "VALIDATION_REPORT")).toBe(true)
   const evidence = await query("evidence")
   expect(evidence.filter(row => row["task"] === "T1")).toHaveLength(5)
-  expect(evidence.filter(row => row["task"] === "T2")).toHaveLength(5)
-  expect((await query("next")).map(row => row["task"])).toEqual(["T1", "T2"])
+  expect(evidence.filter(row => row["task"] === "T2")).toHaveLength(6)
+  expect(evidence.filter(row => row["task"] === "T3")).toHaveLength(5)
+  expect(evidence.filter(row => row["task"] === "T4")).toHaveLength(4)
+  expect(evidence.filter(row => row["task"] === "T5")).toHaveLength(2)
+  expect((await query("blocked")).map(row => [row["task"], row["prerequisite"]]).sort()).toEqual([
+    ["T6", "T5"], ["T7", "T6"], ["T8", "T6"], ["T9", "T7"], ["T9", "T8"]
+  ])
+  expect((await query("next")).map(row => row["task"])).toEqual([])
   const boundaries = (await query("boundaries")).sort((a, b) => String(a["id"]).localeCompare(String(b["id"])))
   expect(boundaries.map(row => [row["id"], row["evidence"]])).toEqual([
     ["PS-1", "SUPPORTED_IN_SCOPE"], ["PS-2", "SUPPORTED_IN_SCOPE"], ["PS-3", "UNDERDETERMINED"],
@@ -97,27 +104,72 @@ it("rejects selector loss, duplicate task selection, completion promotion, and k
   duplicatePrimary.relations.push({ from_uid: duplicatePrimary.bundle_uid, to_uid: copied.uid, type: "HAS_CONCEPT", authority_class: "SECONDARY_AI", scope: "TEST_MUTATION", status: "PROPOSED" })
   duplicatePrimary.expected_counts["nodes"] = duplicatePrimary.nodes.length; duplicatePrimary.expected_counts["relations"] = duplicatePrimary.relations.length
   expect(await conforms(duplicate)).toBe(false)
-  const promoted = load(); observation(promoted, "T1").properties["completion_disposition"] = "COMPLETE"
+  const promoted = load(); observation(promoted, "T5").properties["completion_disposition"] = "COMPLETE"
   expect(await conforms(promoted)).toBe(false)
-  const blocked = load(); observation(blocked, "T3").properties["work_ready"] = true
-  expect((await query("next", blocked)).map(row => row["task"])).toEqual(["T1", "T2"])
+  const blocked = load(); observation(blocked, "T6").properties["work_ready"] = true
+  // A completed task is never next work even if its readiness flag is corrupted.
+  observation(blocked, "T1").properties["work_ready"] = true
+  expect((await query("next", blocked)).map(row => row["task"])).toEqual([])
 }, 30000)
 
 it("pins source evidence to the code revision and graph files to their immutable publication bytes", () => {
   const primary = load()[0]!
   const artifacts = role(primary, "EVIDENCE_ARTIFACT")
-  expect(artifacts).toHaveLength(8)
+  expect(artifacts).toHaveLength(13)
   for (const artifact of artifacts) {
     const properties = artifact.properties
-    expect(properties["source_revision"]).toBe(revision)
-    const path = String(properties["source_path"]), historical = execFileSync("git", ["show", `${revision}:${path}`], { cwd: root, timeout: 20000, maxBuffer: 16 * 1024 * 1024 })
+    expect(properties["source_revision"]).toBe(revision())
+    const path = String(properties["source_path"]), historical = execFileSync("git", ["show", `${revision()}:${path}`], { cwd: root, timeout: 20000, maxBuffer: 16 * 1024 * 1024 })
     expect(kgSha256(historical)).toBe(properties["source_sha256"])
     expect(kgSha256(bytes(path))).toBe(properties["source_sha256"])
   }
   for (const binding of primary.artifact_bindings) {
-    // This is now a historical view: its publication bytes remain auditable
-    // even when the current workspace manifest or test evolves.
-    const published = execFileSync("git", ["show", `b122905e5cbd241e964e705d2c077710c6b37ca5:${binding.path}`], { cwd: root, timeout: 20000, maxBuffer: 16 * 1024 * 1024 })
-    expect(kgSha256(published)).toBe(binding.sha256)
+    expect(kgSha256(bytes(binding.path))).toBe(binding.sha256)
   }
+}, 30000)
+
+it("does not cross a mismatched history hop or infer a missing prerequisite as complete", async () => {
+  const history = load(), selected = observation(history, "T1")
+  const previous = history.flatMap(b => b.nodes).find(n => n.uid === selected.properties["previous_observation_uid"])!
+  previous.properties["task_id"] = "T2"
+  expect((await query("history", history)).map(row => row["order"])).toEqual(["4"])
+  const missing = load(), t6 = selection(missing[0]!, "T6")
+  observation(missing, "T7").properties["work_ready"] = true
+  missing[0]!.relations = missing[0]!.relations.filter(edge => !(edge.from_uid === missing[0]!.bundle_uid && edge.to_uid === t6.uid))
+  missing[0]!.expected_counts["relations"] = missing[0]!.relations.length
+  expect((await query("next", missing)).map(row => row["task"])).not.toContain("T7")
+  expect((await query("blocked", missing)).find(row => row["task"] === "T7")).toMatchObject({ prerequisiteStatus: "UNOBSERVED" })
+  const swapped = load(); selection(swapped[0]!, "T9").properties["task_id"] = "T8"
+  expect(await conforms(swapped)).toBe(false)
+}, 30000)
+
+it("queries exact retained same-run bytes and refuses a detached trace source", async () => {
+  const tracePath = "docs/research/artifacts/hswm_runtime_conformance_2026-10-07/same-run-trace.v1.json"
+  const trace = JSON.parse(bytes(tracePath).toString()) as { source_revision: string; source_sha256: Record<string, string> }
+  const rows = await query("trace")
+  expect(rows).toHaveLength(10)
+  const stages = new Map(rows.map(row => [String(row["stage"]), Buffer.from(String(row["bytesBase64"]), "base64")]))
+  for (const row of rows) {
+    const raw = stages.get(String(row["stage"]))!
+    expect(kgSha256(raw)).toBe(row["bytesSha256"])
+    expect(raw.byteLength).toBe(Number(row["byteLength"]))
+    expect(row["codeRevision"]).toBe(trace.source_revision)
+    expect(row["traceSha256"]).toBe(kgSha256(bytes(tracePath)))
+    expect(row["leanAccepted"]).toBe("true")
+  }
+  const response = JSON.parse(stages.get("lean-response")!.toString()) as { decision: string; request: unknown }
+  expect(response.decision).toBe("accepted")
+  expect(response.request).toEqual(JSON.parse(stages.get("lean-request")!.toString()))
+  expect(stages.get("recovered-state")).toEqual(stages.get("post-state"))
+  for (const [path, digest] of Object.entries(trace.source_sha256)) {
+    const committed = execFileSync("git", ["show", `${trace.source_revision}:${path}`], { cwd: root, timeout: 20000, maxBuffer: 16 * 1024 * 1024 })
+    expect(kgSha256(committed)).toBe(digest)
+  }
+  const detached = load(), run = role(detached[0]!, "EXECUTION_TRACE_RUN")[0]!
+  run.properties["trace_artifact_uid"] = "sym:AbstractNode:wrong-trace"
+  expect(await query("trace", detached)).toEqual([])
+  const missing = load(), run2 = role(missing[0]!, "EXECUTION_TRACE_RUN")[0]!, byte = role(missing[0]!, "TRACE_BYTE_EVIDENCE")[0]!
+  missing[0]!.relations = missing[0]!.relations.filter(edge => !(edge.from_uid === run2.uid && edge.to_uid === byte.uid))
+  missing[0]!.expected_counts["relations"] = missing[0]!.relations.length
+  expect(await conforms(missing)).toBe(false)
 }, 30000)

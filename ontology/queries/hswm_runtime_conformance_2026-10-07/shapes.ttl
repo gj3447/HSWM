@@ -1,0 +1,121 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix n: <urn:hswm:kg:node:> .
+@prefix c: <urn:hswm:runtime-conformance:shapes:> .
+
+c:Root a sh:NodeShape ;
+  sh:targetNode n:sym:AbstractNode:hswm-runtime-conformance-progress-2026-10-07-v1 ;
+  sh:property [ sh:path p:standard_graph_role ; sh:hasValue "PROGRESS_VIEW" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:selection_as_of ; sh:hasValue "2026-10-07" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:reviewed_revision ; sh:hasValue "bd42695da7b0adbb81a2f80b0c6be459f9c70c1e" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:whole_hswm_proved ; sh:hasValue false ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ] ; sh:qualifiedMinCount 9 ; sh:qualifiedMaxCount 9 ] ;
+  sh:property [ sh:path p:source_revision_scope ; sh:hasValue "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:qualifiedValueShape [ sh:class role:EVIDENCE_ARTIFACT ] ; sh:qualifiedMinCount 13 ; sh:qualifiedMaxCount 13 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T1" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T2" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T3" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T4" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T5" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T6" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T7" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T8" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T9" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+
+c:Selector a sh:NodeShape ;
+  sh:targetNode n:sym:AbstractNode:hswm-runtime-conformance-selection-t1-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-selection-t2-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-selection-t3-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-selection-t4-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-selection-t5-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-selection-t6-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-selection-t7-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-selection-t8-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-selection-t9-2026-10-07-v1 ;
+  sh:property [ sh:path p:standard_graph_role ; sh:hasValue "CURRENT_SELECTION" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:task_id ; sh:in ("T1" "T2" "T3" "T4" "T5" "T6" "T7" "T8" "T9") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:task_uid ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:selected_observation_uid ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:reviewed_revision ; sh:hasValue "bd42695da7b0adbb81a2f80b0c6be459f9c70c1e" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:observation_scope ; sh:hasValue "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_revision_scope ; sh:hasValue "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:minCount 2 ; sh:maxCount 2 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:TASK ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:TASK_STATUS_OBSERVATION ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+
+c:Observation a sh:NodeShape ;
+  sh:targetNode n:sym:AbstractNode:hswm-runtime-conformance-observation-t1-4-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-observation-t2-2-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-observation-t3-1-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-observation-t4-1-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-observation-t5-1-2026-10-07-v1 ;
+  sh:property [ sh:path p:standard_graph_role ; sh:hasValue "TASK_STATUS_OBSERVATION" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:completion_disposition ; sh:in ("OPEN" "COMPLETE") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:observation_order ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_revision ; sh:pattern "^[0-9a-f]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_revision ; sh:hasValue "bd42695da7b0adbb81a2f80b0c6be459f9c70c1e" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:reviewed_revision ; sh:hasValue "bd42695da7b0adbb81a2f80b0c6be459f9c70c1e" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:observation_scope ; sh:hasValue "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_revision_scope ; sh:hasValue "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:previous_observation_uid ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_ceiling ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:REQUIRES ; sh:maxCount 0 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:TASK ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+
+c:DispositionT1 a sh:NodeShape ; sh:targetNode n:sym:AbstractNode:hswm-runtime-conformance-observation-t1-4-2026-10-07-v1 ; sh:property [ sh:path p:completion_disposition ; sh:hasValue "COMPLETE" ; sh:maxCount 1 ] .
+c:DispositionT2 a sh:NodeShape ; sh:targetNode n:sym:AbstractNode:hswm-runtime-conformance-observation-t2-2-2026-10-07-v1 ; sh:property [ sh:path p:completion_disposition ; sh:hasValue "COMPLETE" ; sh:maxCount 1 ] .
+c:DispositionT3 a sh:NodeShape ; sh:targetNode n:sym:AbstractNode:hswm-runtime-conformance-observation-t3-1-2026-10-07-v1 ; sh:property [ sh:path p:completion_disposition ; sh:hasValue "COMPLETE" ; sh:maxCount 1 ] .
+c:DispositionT4 a sh:NodeShape ; sh:targetNode n:sym:AbstractNode:hswm-runtime-conformance-observation-t4-1-2026-10-07-v1 ; sh:property [ sh:path p:completion_disposition ; sh:hasValue "COMPLETE" ; sh:maxCount 1 ] .
+c:DispositionT5 a sh:NodeShape ; sh:targetNode n:sym:AbstractNode:hswm-runtime-conformance-observation-t5-1-2026-10-07-v1 ; sh:property [ sh:path p:completion_disposition ; sh:hasValue "OPEN" ; sh:maxCount 1 ] .
+
+c:Artifact a sh:NodeShape ;
+  sh:targetNode n:sym:AbstractNode:hswm-runtime-conformance-source-0-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-source-1-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-source-2-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-source-3-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-source-4-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-source-5-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-source-6-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-source-7-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-source-8-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-source-9-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-source-10-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-source-11-2026-10-07-v1,
+    n:sym:AbstractNode:hswm-runtime-conformance-source-12-2026-10-07-v1 ;
+  sh:property [ sh:path p:standard_graph_role ; sh:hasValue "EVIDENCE_ARTIFACT" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_path ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_revision ; sh:pattern "^[0-9a-f]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:evidence_role ; sh:in ("THEOREM_SOURCE" "RUNTIME_IMPLEMENTATION" "TEST_SOURCE" "RESEARCH_REPORT" "VALIDATION_REPORT" "EXECUTION_TRACE") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:execution_status ; sh:hasValue "SOURCE_BOUND_VALIDATION_RECORDED_SEPARATELY" ; sh:maxCount 1 ] .
+
+c:PS3 a sh:NodeShape ; sh:targetNode n:sym:Concept:hswm-progress-ps-3-decision-2026-10-06-v1 ;
+  sh:property [ sh:path p:evidence_disposition ; sh:hasValue "UNDERDETERMINED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_ceiling ; sh:hasValue "NO_UNIVERSAL_REFINEMENT_CLAIM" ; sh:maxCount 1 ] .
+c:PS5 a sh:NodeShape ; sh:targetNode n:sym:Concept:hswm-progress-ps-5-decision-2026-10-06-v1 ;
+  sh:property [ sh:path p:evidence_disposition ; sh:hasValue "UNDERDETERMINED" ; sh:maxCount 1 ] .
+c:PS6 a sh:NodeShape ; sh:targetNode n:sym:Concept:hswm-progress-ps-6-decision-2026-10-06-v1 ;
+  sh:property [ sh:path p:evidence_disposition ; sh:hasValue "UNDERDETERMINED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_ceiling ; sh:hasValue "INTEGRATED_CLAIM_UNJUDGED" ; sh:maxCount 1 ] .
+
+c:TraceRun a sh:NodeShape ; sh:targetNode n:sym:AbstractNode:hswm-runtime-conformance-trace-run-2026-10-07-v1 ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "EXECUTION_TRACE_RUN" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:synthetic_fixture_only ; sh:hasValue true ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:separate_journals ; sh:hasValue true ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:lean_accepted ; sh:hasValue true ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[0-9a-f]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:lean_executable_sha256 ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:TRACE_BYTE_EVIDENCE ] ; sh:qualifiedMinCount 10 ; sh:qualifiedMaxCount 10 ] .
+c:TraceBytes a sh:NodeShape ; sh:targetNode n:sym:AbstractNode:hswm-runtime-conformance-trace-bytes-signed-envelope-2026-10-07-v1, n:sym:AbstractNode:hswm-runtime-conformance-trace-bytes-public-trust-snapshot-2026-10-07-v1, n:sym:AbstractNode:hswm-runtime-conformance-trace-bytes-pre-state-2026-10-07-v1, n:sym:AbstractNode:hswm-runtime-conformance-trace-bytes-post-state-2026-10-07-v1, n:sym:AbstractNode:hswm-runtime-conformance-trace-bytes-domain-journal-record-2026-10-07-v1, n:sym:AbstractNode:hswm-runtime-conformance-trace-bytes-lean-request-2026-10-07-v1, n:sym:AbstractNode:hswm-runtime-conformance-trace-bytes-lean-response-2026-10-07-v1, n:sym:AbstractNode:hswm-runtime-conformance-trace-bytes-permit-journal-record-2026-10-07-v1, n:sym:AbstractNode:hswm-runtime-conformance-trace-bytes-recovered-state-2026-10-07-v1, n:sym:AbstractNode:hswm-runtime-conformance-trace-bytes-recovered-content-2026-10-07-v1 ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "TRACE_BYTE_EVIDENCE" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:bytes_encoding ; sh:hasValue "BASE64" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:bytes_base64 ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:bytes_sha256 ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:bytes_length ; sh:datatype xsd:integer ; sh:minInclusive 1 ; sh:minCount 1 ; sh:maxCount 1 ] .

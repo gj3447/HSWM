@@ -4,8 +4,81 @@
   "entries": [
     {
       "id": "progress",
-      "title": "HSWM native preflight refinement 진행",
+      "title": "HSWM runtime conformance and remaining obligations",
       "lane": "ENGINEERING",
+      "reading": "SOURCE_BOUND_DECODED_MODEL_AND_FINITE_NATIVE_CONFORMANCE; model/authority/efficacy boundaries preserved.",
+      "bundle": "ontology/development/HSWM_RUNTIME_CONFORMANCE_PROGRESS_2026-10-07.v1.json",
+      "document": "docs/research/HSWM_RUNTIME_CONFORMANCE_2026-10-07.md",
+      "additional_sources": [
+        {
+          "id": "preflight",
+          "bundle": "ontology/development/HSWM_PREFLIGHT_REFINEMENT_PROGRESS_2026-10-07.v1.json",
+          "sha256": "8c2385e1d610b4debea2ea2ca1ccfcb16bdae75e4ceca26dbebb480e515f6fb3"
+        },
+        {
+          "id": "consolidation",
+          "bundle": "ontology/development/HSWM_PROGRESS_CONSOLIDATION_2026-10-07.v1.json",
+          "sha256": "0058400c35543d439043811098cb8e52ed835e0a50c88fc07832972bbbebf17b"
+        },
+        {
+          "id": "plan",
+          "bundle": "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+          "sha256": "7686e3c6dc92899f0a0471ce8aa0d1a8c9aa1ecc51babf40d0e2f94660fbbf24"
+        },
+        {
+          "id": "replay",
+          "bundle": "ontology/development/HSWM_JOURNAL_REPLAY_PROGRESS_2026-10-06.v1.json",
+          "sha256": "448ad46cca884c514352774a6e51243e3c7748880145ac29d97d810eb29ce300"
+        },
+        {
+          "id": "adapter",
+          "bundle": "ontology/development/HSWM_JOURNAL_ADAPTER_PROGRESS_2026-10-06.v1.json",
+          "sha256": "6f9cae1d4359c407cfe497e722e5aadbe3a4766aaf2e52d43bb9427ebfc24391"
+        }
+      ],
+      "queries": [
+        {
+          "id": "current",
+          "path": "ontology/queries/hswm_runtime_conformance_2026-10-07/current.rq"
+        },
+        {
+          "id": "history",
+          "path": "ontology/queries/hswm_runtime_conformance_2026-10-07/history.rq"
+        },
+        {
+          "id": "bindings",
+          "path": "ontology/queries/hswm_runtime_conformance_2026-10-07/bindings.rq"
+        },
+        {
+          "id": "evidence",
+          "path": "ontology/queries/hswm_runtime_conformance_2026-10-07/evidence.rq"
+        },
+        {
+          "id": "next",
+          "path": "ontology/queries/hswm_runtime_conformance_2026-10-07/next.rq"
+        },
+        {
+          "id": "boundaries",
+          "path": "ontology/queries/hswm_runtime_conformance_2026-10-07/boundaries.rq"
+        },
+        {
+          "id": "blocked",
+          "path": "ontology/queries/hswm_runtime_conformance_2026-10-07/blocked.rq"
+        },
+        {
+          "id": "trace",
+          "path": "ontology/queries/hswm_runtime_conformance_2026-10-07/trace.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+        "ontology/queries/hswm_runtime_conformance_2026-10-07/shapes.ttl"
+      ]
+    },
+    {
+      "id": "progress-2026-10-07-preflight",
+      "title": "HSWM 2026-10-07 preflight history",
+      "lane": "HISTORY",
       "reading": "SOURCE_BOUND_T1_T2_PREFLIGHT_REFINEMENT; all tasks remain OPEN. Native read-set validation and preflight fact computation are partial refinement evidence, not whole-runtime, authority, or efficacy proof.",
       "bundle": "ontology/development/HSWM_PREFLIGHT_REFINEMENT_PROGRESS_2026-10-07.v1.json",
       "document": "docs/research/HSWM_NATIVE_PREFLIGHT_REFINEMENT_2026-10-07.md",

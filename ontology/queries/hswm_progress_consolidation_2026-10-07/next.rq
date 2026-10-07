@@ -1,0 +1,33 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+# A task is actionable only when its selected observation says it is ready and
+# every original-plan prerequisite has an exact selected COMPLETE observation.
+# A missing selector, pointer, or completion disposition is therefore blocking.
+SELECT ?task ?status ?next ?criterion WHERE {
+  ?root a role:PROGRESS_VIEW ; r:HAS_CONCEPT ?selector .
+  ?selector a role:CURRENT_SELECTION ; p:task_id ?task ; p:task_uid ?taskUid ;
+    p:selected_observation_uid ?selectedUid ; r:REFERENCES ?observation, ?originalTask .
+  ?observation a role:TASK_STATUS_OBSERVATION ; p:task_id ?task ;
+    p:status ?status ; p:next_action ?next ; p:work_ready true .
+  ?originalTask a role:TASK ; p:task_id ?task ; p:completion_criterion ?criterion .
+  FILTER(STR(?observation) = CONCAT("urn:hswm:kg:node:", ?selectedUid))
+  FILTER(STR(?originalTask) = CONCAT("urn:hswm:kg:node:", ?taskUid))
+  FILTER NOT EXISTS {
+    ?originalTask r:REQUIRES ?prerequisite .
+    FILTER NOT EXISTS {
+      ?prerequisite a role:TASK ; p:task_id ?prerequisiteTask .
+      ?root r:HAS_CONCEPT ?prerequisiteSelector .
+      ?prerequisiteSelector a role:CURRENT_SELECTION ; p:task_id ?prerequisiteTask ;
+        p:task_uid ?prerequisiteTaskUid ; p:selected_observation_uid ?prerequisiteUid ;
+        r:REFERENCES ?prerequisiteObservation, ?selectedPrerequisiteTask .
+      ?prerequisiteObservation a role:TASK_STATUS_OBSERVATION ;
+        p:task_id ?prerequisiteTask ; p:completion_disposition "COMPLETE" .
+      FILTER(STR(?prerequisiteObservation) = CONCAT("urn:hswm:kg:node:", ?prerequisiteUid))
+      FILTER(STR(?selectedPrerequisiteTask) = CONCAT("urn:hswm:kg:node:", ?prerequisiteTaskUid))
+      FILTER(?selectedPrerequisiteTask = ?prerequisite)
+    }
+  }
+}
+ORDER BY ?task

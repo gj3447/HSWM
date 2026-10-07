@@ -1,0 +1,45 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+# The current T1 selection is the adapter observation.  This fixed v1 query
+# follows only its two explicitly paired predecessor links; it intentionally
+# does not use a broad REFERENCES* traversal, which could reach task/source
+# nodes outside the status-observation chain.
+SELECT ?order ?status ?completion ?origin ?bundle ?revision ?previousUid ?next WHERE {
+  ?root a role:PROGRESS_VIEW ; r:HAS_CONCEPT ?selector .
+  ?selector a role:CURRENT_SELECTION ; p:task_id "T1" ;
+    p:selected_observation_uid ?selectedUid ; r:REFERENCES ?selected .
+  ?selected a role:TASK_STATUS_OBSERVATION ; p:task_id "T1" .
+  FILTER(STR(?selected) = CONCAT("urn:hswm:kg:node:", ?selectedUid))
+  {
+    ?selected p:observation_order ?order ; p:status ?status ;
+      p:completion_disposition ?completion ; p:origin_uid ?origin ;
+      p:source_bundle_uid ?bundle ; p:source_revision ?revision ; p:next_action ?next .
+    OPTIONAL { ?selected p:previous_observation_uid ?previousUid }
+  }
+  UNION
+  {
+    ?selected p:previous_observation_uid ?selectedPreviousUid ; r:REFERENCES ?observation .
+    ?observation a role:TASK_STATUS_OBSERVATION ; p:task_id "T1" ;
+      p:observation_order ?order ; p:status ?status ;
+      p:completion_disposition ?completion ; p:origin_uid ?origin ;
+      p:source_bundle_uid ?bundle ; p:source_revision ?revision ; p:next_action ?next .
+    FILTER(STR(?observation) = CONCAT("urn:hswm:kg:node:", ?selectedPreviousUid))
+    OPTIONAL { ?observation p:previous_observation_uid ?previousUid }
+  }
+  UNION
+  {
+    ?selected p:previous_observation_uid ?selectedPreviousUid ; r:REFERENCES ?middle .
+    ?middle a role:TASK_STATUS_OBSERVATION ; p:task_id "T1" ;
+      p:previous_observation_uid ?middlePreviousUid ; r:REFERENCES ?observation .
+    ?observation a role:TASK_STATUS_OBSERVATION ; p:task_id "T1" ;
+      p:observation_order ?order ; p:status ?status ;
+      p:completion_disposition ?completion ; p:origin_uid ?origin ;
+      p:source_bundle_uid ?bundle ; p:source_revision ?revision ; p:next_action ?next .
+    FILTER(STR(?middle) = CONCAT("urn:hswm:kg:node:", ?selectedPreviousUid))
+    FILTER(STR(?observation) = CONCAT("urn:hswm:kg:node:", ?middlePreviousUid))
+    OPTIONAL { ?observation p:previous_observation_uid ?previousUid }
+  }
+}
+ORDER BY ?order

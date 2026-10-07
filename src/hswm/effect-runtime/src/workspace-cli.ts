@@ -5,7 +5,7 @@ import { parseArgs } from "node:util"
 import { Effect, Either } from "effect"
 import { BoundedSubprocess, PosixFileSystem } from "./effect-posix-services.js"
 import { refuse, type ProcessReply } from "./effect-process-main.js"
-import { compileKgBundle } from "./native-kg-bundle-domain.js"
+import { compileKgBundle, type KgBundleSource } from "./native-kg-bundle-domain.js"
 import { queryKgBundle, validateKgShacl } from "./native-kg-standards.js"
 import { inspectWorkspaceBundle, summarizeWorkspaceBundles, type WorkspaceBundleSummary } from "./workspace-catalog-domain.js"
 import { decodeWorkspaceManifest, type WorkspaceEntry } from "./workspace-manifest-domain.js"
@@ -26,7 +26,10 @@ const read = (checkout: string, path: string, maximumBytes = 16 * 1024 * 1024) =
   const target = resolve(checkout, path)
   const actual = yield* fs.realpath(target, "workspace-contained-read")
   if (!contained(checkout, actual)) return yield* Effect.fail(refuse("workspace input resolves outside checkout"))
-  return (yield* fs.readRegularBounded(target, { maximumBytes, minimumBytes: 1, operation: "workspace-read" })).bytes
+  // Read the resolved file, not the original spelling. This narrows a leaf-symlink
+  // swap between resolution and open; it does not claim a hostile parent-directory
+  // replacement proof.
+  return (yield* fs.readRegularBounded(actual, { maximumBytes, minimumBytes: 1, operation: "workspace-read" })).bytes
 })
 const git = (checkout: string, args: readonly string[]) => Effect.gen(function* () {
   const subprocess = yield* BoundedSubprocess
@@ -86,7 +89,7 @@ export const runWorkspaceCli = (argv: readonly string[]) => Effect.gen(function*
   if (command === "doctor") {
     const packageValue = yield* parseJson(yield* read(checkout, "src/hswm/effect-runtime/package.json", 1024 * 1024))
     const pkg = packageValue as { engines?: { node?: string }; bin?: Record<string, string> }
-    const paths = [...new Set(manifest.entries.flatMap(e => [e.bundle, e.document, ...e.queries.map(q => q.path), ...e.shapes]))].sort()
+    const paths = [...new Set(manifest.entries.flatMap(e => [e.bundle, ...(e.additional_sources ?? []).map(source => source.bundle), e.document, ...e.queries.map(q => q.path), ...e.shapes]))].sort()
     const checks = yield* Effect.forEach(paths, path => read(checkout, path).pipe(Effect.map(bytes => ({ path, status: "AVAILABLE", sha256: sha(bytes) })), Effect.catchAll(() => Effect.succeed({ path, status: "UNAVAILABLE", sha256: null }))), { concurrency: 8 })
     const bins = yield* Effect.forEach(Object.entries(pkg.bin ?? {}), ([name, target]) => Effect.gen(function* () {
       const wrapper = yield* fs.identity(resolve(checkout, "src/hswm/effect-runtime/bin", name), "workspace-launcher").pipe(Effect.map(x => x.kind === "FILE"), Effect.catchAll(() => Effect.succeed(false)))
@@ -113,19 +116,29 @@ export const runWorkspaceCli = (argv: readonly string[]) => Effect.gen(function*
     interpretation: "This historical format remains available through show, bindings and inventory; no structural conformance is asserted." }, 2)
   const bundleBytes = yield* read(checkout, entry.bundle)
   if (sha(bundleBytes) !== item.sha256) return yield* Effect.fail(refuse("bundle changed during observation"))
-  const projection = yield* compileKgBundle([{ sourceId: entry.id, rawBytes: bundleBytes }], "v2")
+  const additionalSources = yield* Effect.forEach(entry.additional_sources ?? [], source => Effect.gen(function* () {
+    const rawBytes = yield* read(checkout, source.bundle)
+    if (sha(rawBytes) !== source.sha256) return yield* Effect.fail(refuse(`additional workspace source digest mismatch: ${source.id}`))
+    return { sourceId: source.id, rawBytes, sha256: source.sha256 } satisfies KgBundleSource
+  }), { concurrency: 1 })
+  const sources: readonly KgBundleSource[] = [{ sourceId: entry.id, rawBytes: bundleBytes, sha256: item.sha256 }, ...additionalSources]
+  const selectedSources = sources.map(source => Object.freeze({ id: source.sourceId,
+    bundle: source.sourceId === entry.id ? entry.bundle : entry.additional_sources!.find(candidate => candidate.id === source.sourceId)!.bundle,
+    binding: source.sourceId === entry.id ? "CURRENT_OBSERVED" : "MANIFEST_PINNED",
+    sha256: source.sha256 ?? sha(source.rawBytes) }))
+  const projection = yield* compileKgBundle(sources, "v2")
   if (command === "query") {
     const query = entry.queries.find(q => q.id === queryId)
     if (!query) return yield* Effect.fail(refuse("unknown query alias; use show ID"))
     const result = yield* queryKgBundle(projection, new TextDecoder().decode(yield* read(checkout, query.path, 65536)))
-    return reply({ ...base, id, bundleSha256: item.sha256, query: query.id, bindingSummary: countStatuses(rows), result })
+    return reply({ ...base, id, bundleSha256: item.sha256, selectedSources, query: query.id, bindingSummary: countStatuses(rows), result })
   }
   const shapes = yield* Effect.forEach(entry.shapes, path => Effect.gen(function* () {
     const result = yield* validateKgShacl(projection, yield* read(checkout, path))
     return { path, ...result }
   }))
   const conforms = shapes.length > 0 && shapes.every(s => s.conforms) && item.issues.length === 0
-  return reply({ ...base, id, conforms, structuralIssues: item.issues, shapes, bindingSummary: countStatuses(rows),
+  return reply({ ...base, id, selectedSources, conforms, structuralIssues: item.issues, shapes, bindingSummary: countStatuses(rows),
     worktreeBindingsMatch: rows.length > 0 && rows.every(r => r.status === "MATCH"),
     interpretation: "Exit status reports declared structural checks only. Worktree binding differences are separately reported; not silently repaired." }, conforms ? 0 : 1)
 }).pipe(Effect.mapError(error => error._tag === "ProcessRefusal" ? error : refuse("detail" in error ? String(error.detail) : String(error))))

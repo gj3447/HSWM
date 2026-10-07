@@ -1,0 +1,25 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+# One selected observation per original task.  Aggregation prevents a task
+# with several prerequisites from becoming several "current" result rows.
+SELECT ?task ?status ?completion ?next ?criterion
+       (GROUP_CONCAT(DISTINCT ?prerequisiteId; separator=",") AS ?prerequisites) WHERE {
+  ?root a role:PROGRESS_VIEW ; r:HAS_CONCEPT ?selector .
+  ?selector a role:CURRENT_SELECTION ;
+    p:task_id ?task ; p:task_uid ?taskUid ; p:selected_observation_uid ?selectedUid ;
+    r:REFERENCES ?observation, ?originalTask .
+  ?observation a role:TASK_STATUS_OBSERVATION ;
+    p:task_id ?task ; p:status ?status ; p:completion_disposition ?completion ;
+    p:next_action ?next .
+  ?originalTask a role:TASK ; p:task_id ?task ; p:completion_criterion ?criterion .
+  FILTER(STR(?observation) = CONCAT("urn:hswm:kg:node:", ?selectedUid))
+  FILTER(STR(?originalTask) = CONCAT("urn:hswm:kg:node:", ?taskUid))
+  OPTIONAL {
+    ?originalTask r:REQUIRES ?prerequisite .
+    ?prerequisite p:task_id ?prerequisiteId .
+  }
+}
+GROUP BY ?task ?status ?completion ?next ?criterion
+ORDER BY ?task

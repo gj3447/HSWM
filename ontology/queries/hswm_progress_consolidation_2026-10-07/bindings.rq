@@ -1,0 +1,18 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+# Source occurrence bindings are intentionally retained even when a historical
+# pin differs from the reviewed revision.  Such a difference is provenance,
+# not a failed attempt to rewrite history.
+SELECT ?sourceId ?bundle ?path ?expectedSha256 ?observedSha256 ?bindingState
+       ?sourceRevision ?observedRevision ?roleName ?execution WHERE {
+  ?root a role:PROGRESS_VIEW ; r:HAS_SOURCE ?binding .
+  ?binding a role:SOURCE_BINDING_OBSERVATION ;
+    p:source_id ?sourceId ; p:source_bundle_uid ?bundle ; p:source_path ?path ;
+    p:source_sha256 ?expectedSha256 ; p:observed_sha256 ?observedSha256 ;
+    p:binding_state ?bindingState ; p:source_revision ?sourceRevision ;
+    p:observed_revision ?observedRevision ; p:evidence_role ?roleName ;
+    p:execution_status ?execution .
+}
+ORDER BY ?sourceId ?path

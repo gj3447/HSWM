@@ -1,0 +1,18 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+# Evidence actually attached to the selected T1 observation, with its role.
+# This excludes the older plan/replay occurrence bindings by construction.
+SELECT ?path ?roleName ?bindingState ?expectedSha256 ?observedSha256 ?execution WHERE {
+  ?root a role:PROGRESS_VIEW ; r:HAS_CONCEPT ?selector .
+  ?selector a role:CURRENT_SELECTION ; p:task_id "T1" ;
+    p:selected_observation_uid ?selectedUid ; r:REFERENCES ?observation .
+  ?observation a role:TASK_STATUS_OBSERVATION ; r:HAS_SOURCE ?binding .
+  FILTER(STR(?observation) = CONCAT("urn:hswm:kg:node:", ?selectedUid))
+  ?binding a role:SOURCE_BINDING_OBSERVATION ; p:source_path ?path ;
+    p:evidence_role ?roleName ; p:binding_state ?bindingState ;
+    p:source_sha256 ?expectedSha256 ; p:observed_sha256 ?observedSha256 ;
+    p:execution_status ?execution .
+}
+ORDER BY ?roleName ?path

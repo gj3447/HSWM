@@ -1,0 +1,18 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+# The original plan's six proof-status decisions remain the authority for their
+# ceilings.  Consolidation adds no completion or efficacy promotion.
+SELECT ?id ?implementation ?evidence ?ceiling ?negativeSource WHERE {
+  ?claim a role:CLAIM ; p:proof_status_id ?id ; r:HAS_CONCEPT ?decision .
+  ?decision a role:DECISION ; p:implementation_status ?implementation ;
+    p:evidence_disposition ?evidence ; p:claim_ceiling ?ceiling .
+  FILTER(?id IN ("PS-1", "PS-2", "PS-3", "PS-4", "PS-5", "PS-6"))
+  OPTIONAL {
+    ?decision r:HAS_SOURCE ?negativeArtifact .
+    ?negativeArtifact p:evidence_kind "PRIOR_BOUNDED_NEGATIVE_EXPERIMENT" ;
+      p:source_path ?negativeSource .
+  }
+}
+ORDER BY ?id ?negativeSource

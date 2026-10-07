@@ -8,6 +8,11 @@ const Path = Schema.String.pipe(Schema.filter(value =>
   value.split("/").every(part => part !== "" && part !== "." && part !== "..")
 ))
 const Query = Schema.Struct({ id: Id, path: Path })
+const AdditionalSource = Schema.Struct({
+  id: Id,
+  bundle: Path,
+  sha256: Schema.String.pipe(Schema.pattern(/^[0-9a-f]{64}$/)),
+})
 const Entry = Schema.Struct({
   id: Id, title: Schema.NonEmptyString,
   lane: Schema.Literal("IDENTITY", "THEORY", "RESEARCH", "PLAN", "ENGINEERING", "HISTORY"),
@@ -15,6 +20,7 @@ const Entry = Schema.Struct({
   projection_profile: Schema.optional(Schema.Literal("NATIVE_V2", "SOURCE_ONLY")),
   projection_reason: Schema.optional(Schema.NonEmptyString),
   bundle: Path, document: Path,
+  additional_sources: Schema.optional(Schema.Array(AdditionalSource).pipe(Schema.maxItems(127))),
   queries: Schema.Array(Query).pipe(Schema.maxItems(32)),
   shapes: Schema.Array(Path).pipe(Schema.maxItems(8)),
 })
@@ -39,12 +45,18 @@ export const decodeWorkspaceManifest = (value: unknown): Either.Either<Workspace
   if (manifest.entries.some(e => e.projection_profile === "SOURCE_ONLY" &&
       (e.queries.length !== 0 || e.shapes.length !== 0 || e.projection_reason === undefined)))
     return Either.left(new Error("source-only entries require a reason and no executable queries or shapes"))
+  if (manifest.entries.some(entry => {
+    const sources = [{ id: entry.id, bundle: entry.bundle }, ...(entry.additional_sources ?? [])]
+    return new Set(sources.map(source => source.id)).size !== sources.length ||
+      new Set(sources.map(source => source.bundle)).size !== sources.length
+  })) return Either.left(new Error("additional workspace source IDs and bundle paths must be unique within an entry"))
   if (new Set(manifest.entries.map(e => e.id)).size !== manifest.entries.length ||
       new Set(manifest.workflows.map(w => w.id)).size !== manifest.workflows.length ||
       manifest.entries.some(e => new Set(e.queries.map(q => q.id)).size !== e.queries.length))
     return Either.left(new Error("duplicate workspace entry, query or workflow ID"))
   return Either.right(Object.freeze({ ...manifest,
     entries: Object.freeze(manifest.entries.map(e => Object.freeze({ ...e,
+      ...(e.additional_sources === undefined ? {} : { additional_sources: Object.freeze(e.additional_sources.map(source => Object.freeze({ ...source }))) }),
       queries: Object.freeze(e.queries.map(q => Object.freeze({ ...q }))), shapes: Object.freeze([...e.shapes]),
     }))),
     workflows: Object.freeze(manifest.workflows.map(w => Object.freeze({ ...w, argv: Object.freeze([...w.argv]) }))),

@@ -1,0 +1,3484 @@
+{
+  "schema_version": "hswm-progress-consolidation/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+  "status": "REVIEWED_SELECTION_WITH_OPEN_OBLIGATIONS",
+  "nonclaim": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+  "source_accessed_on": "2026-10-07",
+  "artifact_bindings": [
+    {
+      "path": "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+      "sha256": "7686e3c6dc92899f0a0471ce8aa0d1a8c9aa1ecc51babf40d0e2f94660fbbf24"
+    },
+    {
+      "path": "ontology/development/HSWM_JOURNAL_REPLAY_PROGRESS_2026-10-06.v1.json",
+      "sha256": "448ad46cca884c514352774a6e51243e3c7748880145ac29d97d810eb29ce300"
+    },
+    {
+      "path": "ontology/development/HSWM_JOURNAL_ADAPTER_PROGRESS_2026-10-06.v1.json",
+      "sha256": "6f9cae1d4359c407cfe497e722e5aadbe3a4766aaf2e52d43bb9427ebfc24391"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_progress_plan_2026-10-06/validation.v1.json",
+      "sha256": "abe924a1be85ca772a99c672874be1e04d659a0a921cab2b3dbee31a031ff35c"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_journal_replay_2026-10-06/validation.v1.json",
+      "sha256": "d520b231ea587fd56ba9e05ab5f693a74c884f430f13b73db115475afa469c58"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_journal_adapter_2026-10-06/validation.v1.json",
+      "sha256": "f32df21a2e0677e5a056971400cbd78e527703bf69c9ba1d565ffdc33843b24f"
+    },
+    {
+      "path": "ontology/workspace/HSWM_WORKSPACE.v1.json",
+      "sha256": "64323cbb61ea2eede11daf2752eb7e968b9f7bf57d981b79beb6f1c762fcef60"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_progress_consolidation_2026-10-07/contract.v1.json",
+      "sha256": "61c015b3ef872049fa0bcf61e33e7c6fe5e00064e85797c874b3c77c4c887522"
+    },
+    {
+      "path": "docs/research/HSWM_PROGRESS_CONSOLIDATION_2026-10-07.md",
+      "sha256": "10d9194e6b3e6f7ead73ae5fa153f077bfacab5ccf0cb196036db51b09ac26e7"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/workspace-cli.ts",
+      "sha256": "94ca54a0a48eac97d73762b2812a196c36805772c9cb797770ac0ba7a81d32f9"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/workspace-manifest-domain.ts",
+      "sha256": "f643d768793f8b2a0afa860e68520076ad2e8e47d371bdcf689a0687ccc7577d"
+    },
+    {
+      "path": "tests/effect-runtime/progress-consolidation.test.ts",
+      "sha256": "6dfa480689d1046655ea2086fbcb07d5b849ff020055b956bbefed8538aae8d5"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/workspace-composite.test.ts",
+      "sha256": "fb6e247ebc17c75772628b555ae00eceb6318626d49d268e955415296dde5b8f"
+    },
+    {
+      "path": "ontology/queries/hswm_progress_consolidation_2026-10-07/current.rq",
+      "sha256": "017c26ca0c611a07c307511b6259334fd62a9a6e38ec0219b5e90ba9898ce5f9"
+    },
+    {
+      "path": "ontology/queries/hswm_progress_consolidation_2026-10-07/history.rq",
+      "sha256": "f481fc9415e3ab92b55fbcd46fefe84f5e6f43a3a78a70095aec09d000684b36"
+    },
+    {
+      "path": "ontology/queries/hswm_progress_consolidation_2026-10-07/bindings.rq",
+      "sha256": "683ef9f6dc0d282c323d0936265a0806831ba46ddafbf3009c76cc60ee0ac11e"
+    },
+    {
+      "path": "ontology/queries/hswm_progress_consolidation_2026-10-07/evidence.rq",
+      "sha256": "df937e0cb261dd1a9036c3be7444ea55ebeab4c8d4d030791689892fc9a8f883"
+    },
+    {
+      "path": "ontology/queries/hswm_progress_consolidation_2026-10-07/next.rq",
+      "sha256": "e11674128c9a019a616990f553d68033c6f12c1ce2ebefca09b8e321f0012bb0"
+    },
+    {
+      "path": "ontology/queries/hswm_progress_consolidation_2026-10-07/boundaries.rq",
+      "sha256": "c78131777bc09ad848f84815eb326f577262a82ebef1a95abe5cf3e12c0ea7f9"
+    },
+    {
+      "path": "ontology/queries/hswm_progress_consolidation_2026-10-07/shapes.ttl",
+      "sha256": "9bbc0a70271fed7d6283aadaec0c7f2d63a602563a8ebe9c1b2a00d920ff8f18"
+    },
+    {
+      "path": "ontology/queries/hswm_progress_consolidation_2026-10-07/README.md",
+      "sha256": "90053b6c58b25737a7d96dab4d649e1338068e15e0c86fa34c9985059f8453dd"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 63,
+    "anchors": 12,
+    "relations": 193
+  },
+  "anchors": [
+    {
+      "uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "name": "HSWM 전체 진행과 기존 의무의 작업 연결",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "name": "T1 journal 복구 연결",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "name": "T1 journal envelope·receipt·후속 상태 구성 대응",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "name": "T1 Journal decode와 replay 대응",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t2-2026-10-06-v1",
+      "name": "T2 Canonical Permit 연결",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+      "name": "T3 실제 게시와 장애 복구 연결",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "name": "T4 한 실행 기록의 통합 검증",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t5-2026-10-06-v1",
+      "name": "T5 국소 의미 실행 W1",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+      "name": "T6 의미 수정의 효과 W2",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+      "name": "T7 능동 읽기 W3",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+      "name": "T8 두 셀의 공동 계산 W4",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+      "name": "T9 층간 Map과 재귀 합성 W5",
+      "required_labels": [
+        "Concept"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "HSWM 작업·근거·역사적 버전 통합 조회",
+        "description": "HSWM 작업·근거·역사적 버전 통합 조회",
+        "standard_graph_role": "PROGRESS_VIEW",
+        "selection_as_of": "2026-10-07",
+        "selection_rule": "EXACTLY_ONE_EXPLICIT_OBSERVATION_PER_EXISTING_TASK",
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "whole_hswm_proved": false,
+        "current_runtime_state": false,
+        "real_model_run_this_review": false,
+        "source_revision_status": "REVIEWED_COMMITTED_SOURCE_CUT",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-0-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "plan: docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "description": "plan: docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "plan",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_path": "docs/research/HSWM_STANDARD_GRAPH_PROGRESS_PLAN_2026-10-06.md",
+        "source_sha256": "2be89634abd09b52ec03648f269b971c5cc8215c8d63413d1cbfd8486a3838ce",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "observed_sha256": "2be89634abd09b52ec03648f269b971c5cc8215c8d63413d1cbfd8486a3838ce",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RESEARCH_REPORT",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-1-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "plan: docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md",
+        "description": "plan: docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "plan",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_path": "docs/research/HSWM_PROOF_STATUS_GRAPH_2026-09-02.md",
+        "source_sha256": "4a853906160c7384fb1243484d0f1f69ec378fa9f1b5b0a40ac8f3a529a76ee3",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "observed_sha256": "4a853906160c7384fb1243484d0f1f69ec378fa9f1b5b0a40ac8f3a529a76ee3",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RESEARCH_REPORT",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-2-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "plan: ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json",
+        "description": "plan: ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "plan",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_path": "ontology/identity/hswm_core/HSWM_GRAPH_AND_LOOP_ENGINEERING_ONTOLOGY.v5.json",
+        "source_sha256": "3ceb3e9a5fefbdecd861caf4613061f7a0a4a63a3b9a3be7b9b68d3ee748084f",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "observed_sha256": "3ceb3e9a5fefbdecd861caf4613061f7a0a4a63a3b9a3be7b9b68d3ee748084f",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "PRIOR_GRAPH",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-3-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "plan: docs/research/HSWM_STANDARD_GRAPH_INCIDENCE_LEAN_2026-10-05.md",
+        "description": "plan: docs/research/HSWM_STANDARD_GRAPH_INCIDENCE_LEAN_2026-10-05.md",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "plan",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_path": "docs/research/HSWM_STANDARD_GRAPH_INCIDENCE_LEAN_2026-10-05.md",
+        "source_sha256": "3bd2acf980e882ca1deddfd5631ad9e358f9fa0e61b6f3764e90d9deec7b896f",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "observed_sha256": "3bd2acf980e882ca1deddfd5631ad9e358f9fa0e61b6f3764e90d9deec7b896f",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RESEARCH_REPORT",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-4-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "plan: docs/research/HSWM_CANONICAL_PRESERVATION_2026-10-06.md",
+        "description": "plan: docs/research/HSWM_CANONICAL_PRESERVATION_2026-10-06.md",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "plan",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_path": "docs/research/HSWM_CANONICAL_PRESERVATION_2026-10-06.md",
+        "source_sha256": "35abda73c0cce5a19ec9fadbbee78a23019e610dacae7c055fd73a5c754cf494",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "observed_sha256": "35abda73c0cce5a19ec9fadbbee78a23019e610dacae7c055fd73a5c754cf494",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RESEARCH_REPORT",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-5-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "plan: docs/research/HSWM_DURABLE_PRESERVATION_2026-10-06.md",
+        "description": "plan: docs/research/HSWM_DURABLE_PRESERVATION_2026-10-06.md",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "plan",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_path": "docs/research/HSWM_DURABLE_PRESERVATION_2026-10-06.md",
+        "source_sha256": "4d5a0f1f7bad6a31b8a5e0f578d3973aa1b46d86c1ed69ce9433289ca8cd5cf7",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "observed_sha256": "4d5a0f1f7bad6a31b8a5e0f578d3973aa1b46d86c1ed69ce9433289ca8cd5cf7",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RESEARCH_REPORT",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-6-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "plan: docs/research/HSWM_GRAPH_LOOP_PREFLIGHT_2026-10-05.md",
+        "description": "plan: docs/research/HSWM_GRAPH_LOOP_PREFLIGHT_2026-10-05.md",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "plan",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_path": "docs/research/HSWM_GRAPH_LOOP_PREFLIGHT_2026-10-05.md",
+        "source_sha256": "8093e7c39b465d9c86f25436d3d9dc1b0fcb2294571b4392c17407974ecbdad2",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "observed_sha256": "8093e7c39b465d9c86f25436d3d9dc1b0fcb2294571b4392c17407974ecbdad2",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RESEARCH_REPORT",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-7-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "plan: docs/research/HSWM_SEMANTIC_BOOTSTRAP_ADMISSION_2026-10-05.md",
+        "description": "plan: docs/research/HSWM_SEMANTIC_BOOTSTRAP_ADMISSION_2026-10-05.md",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "plan",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_path": "docs/research/HSWM_SEMANTIC_BOOTSTRAP_ADMISSION_2026-10-05.md",
+        "source_sha256": "099089b59ea30e60020eed8bb90f8946e45856ef28d9882f0e40fcdb47bb2f9c",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "observed_sha256": "099089b59ea30e60020eed8bb90f8946e45856ef28d9882f0e40fcdb47bb2f9c",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RESEARCH_REPORT",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-8-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "plan: docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+        "description": "plan: docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "plan",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_path": "docs/research/HSWM_RESEARCH_SELF_REVIEW_2026-09-27.md",
+        "source_sha256": "9d790d872f6ae8f4075d76d46b20c1276ec0c62d9a32a5b63b5b824388590c6e",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "observed_sha256": "9d790d872f6ae8f4075d76d46b20c1276ec0c62d9a32a5b63b5b824388590c6e",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RESEARCH_REPORT",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-9-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "plan: results/HSWM_DGX_SEMANTIC_LEARNING_2026-09-20.md",
+        "description": "plan: results/HSWM_DGX_SEMANTIC_LEARNING_2026-09-20.md",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "plan",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_path": "results/HSWM_DGX_SEMANTIC_LEARNING_2026-09-20.md",
+        "source_sha256": "5fe2ed15056349eac1fea168155072d8fb5d996e04d19b4f9a178af8b22ddc09",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "observed_sha256": "5fe2ed15056349eac1fea168155072d8fb5d996e04d19b4f9a178af8b22ddc09",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "NEGATIVE_RESULT",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-10-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "plan: formal/HSWMCanonicalPreservation.lean",
+        "description": "plan: formal/HSWMCanonicalPreservation.lean",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "plan",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_path": "formal/HSWMCanonicalPreservation.lean",
+        "source_sha256": "cf3bc1ae3ee7475c8e2c4e9d76d2279124d98a31934fc7d17cc17ebf558cc740",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "observed_sha256": "cf3bc1ae3ee7475c8e2c4e9d76d2279124d98a31934fc7d17cc17ebf558cc740",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "THEOREM_SOURCE",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-11-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "plan: formal/HSWMDurablePreservation.lean",
+        "description": "plan: formal/HSWMDurablePreservation.lean",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "plan",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_path": "formal/HSWMDurablePreservation.lean",
+        "source_sha256": "9af180f40ff245210f7c9dc74873a1f777a483c29ad4a85b72228c45d7919090",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "observed_sha256": "9af180f40ff245210f7c9dc74873a1f777a483c29ad4a85b72228c45d7919090",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "THEOREM_SOURCE",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-12-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "plan: src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "description": "plan: src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "plan",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "source_sha256": "15a04a6daee640f40e4a6b9a484528ae10a949f1f93ee1badc33cad4ded4b0b4",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "observed_sha256": "7610e9d608218dbe5a61ff0ac6b7a50f48766fea96e824085de37fde6d6a647c",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "HISTORICAL_PIN_DRIFT",
+        "historical_match": true,
+        "evidence_role": "RUNTIME_IMPLEMENTATION",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-validation-plan-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "docs/research/artifacts/hswm_progress_plan_2026-10-06/validation.v1.json",
+        "description": "docs/research/artifacts/hswm_progress_plan_2026-10-06/validation.v1.json",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "docs/research/artifacts/hswm_progress_plan_2026-10-06/validation.v1.json",
+        "source_sha256": "abe924a1be85ca772a99c672874be1e04d659a0a921cab2b3dbee31a031ff35c",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "evidence_role": "VALIDATION_REPORT",
+        "execution_status": "HISTORICAL_RECORDED_RESULTS_NOT_REEXECUTED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-0-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "replay: docs/research/HSWM_JOURNAL_REPLAY_2026-10-06.md",
+        "description": "replay: docs/research/HSWM_JOURNAL_REPLAY_2026-10-06.md",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "replay",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+        "source_path": "docs/research/HSWM_JOURNAL_REPLAY_2026-10-06.md",
+        "source_sha256": "984f27b5032231416dae49be441fa5d124f981ee2ecc5c6ac10b6e2f3da525f1",
+        "source_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e",
+        "observed_sha256": "984f27b5032231416dae49be441fa5d124f981ee2ecc5c6ac10b6e2f3da525f1",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RESEARCH_REPORT",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-1-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "replay: formal/HSWMJournalReplay.lean",
+        "description": "replay: formal/HSWMJournalReplay.lean",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "replay",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+        "source_path": "formal/HSWMJournalReplay.lean",
+        "source_sha256": "c520ed6f5550716dd0a2f36c882333bcdbf3f85927374b2a4e3a2913b1e71c7b",
+        "source_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e",
+        "observed_sha256": "c520ed6f5550716dd0a2f36c882333bcdbf3f85927374b2a4e3a2913b1e71c7b",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "THEOREM_SOURCE",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-2-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "replay: formal/HSWMJournalReplayCli.lean",
+        "description": "replay: formal/HSWMJournalReplayCli.lean",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "replay",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+        "source_path": "formal/HSWMJournalReplayCli.lean",
+        "source_sha256": "5beda5b58048adacedda301b3942c6e8cede7a282dfbb87ecea662d71b83215c",
+        "source_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e",
+        "observed_sha256": "5beda5b58048adacedda301b3942c6e8cede7a282dfbb87ecea662d71b83215c",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "COMPARISON_CLI",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-3-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "replay: formal/lakefile.toml",
+        "description": "replay: formal/lakefile.toml",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "replay",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+        "source_path": "formal/lakefile.toml",
+        "source_sha256": "48d3868a5f7f3b2432f8ff453a00006771f1d160104148d1a91d82fff099220c",
+        "source_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e",
+        "observed_sha256": "7ff7fabbdfca56054462842f31158f3586805e68eb4d6bd35c061d6b1039da8f",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "HISTORICAL_PIN_DRIFT",
+        "historical_match": true,
+        "evidence_role": "BUILD_CONFIGURATION",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-4-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "replay: src/hswm/effect-runtime/src/canonical-atom-v2-journal-replay-guards.ts",
+        "description": "replay: src/hswm/effect-runtime/src/canonical-atom-v2-journal-replay-guards.ts",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "replay",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-replay-guards.ts",
+        "source_sha256": "88a5f9d76ab6d4c0d626f87f7e84c9a78eb98c14df5d9fe41cb52a21a1777b30",
+        "source_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e",
+        "observed_sha256": "88a5f9d76ab6d4c0d626f87f7e84c9a78eb98c14df5d9fe41cb52a21a1777b30",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RUNTIME_IMPLEMENTATION",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-5-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "replay: src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "description": "replay: src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "replay",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "source_sha256": "b5cdcae9c1e71cb297f6fde158c1168b0ddc9defb53a1b9b8c78a425c6f66ede",
+        "source_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e",
+        "observed_sha256": "7610e9d608218dbe5a61ff0ac6b7a50f48766fea96e824085de37fde6d6a647c",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "HISTORICAL_PIN_DRIFT",
+        "historical_match": true,
+        "evidence_role": "RUNTIME_IMPLEMENTATION",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-6-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "replay: src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "description": "replay: src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "replay",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+        "source_path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "source_sha256": "3fd5e8dd58f386a8d2beb119f1a5f5358f50d7d7c360f18447dd6b51a11d41b8",
+        "source_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e",
+        "observed_sha256": "c5cfa57d5f582c676ceea7ffed3fa31bbf9c9e5cf02cac4e42cf7b36f64202b7",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "HISTORICAL_PIN_DRIFT",
+        "historical_match": true,
+        "evidence_role": "AUDIT_DRIVER",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-7-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "replay: tests/effect-runtime/journal-replay.test.ts",
+        "description": "replay: tests/effect-runtime/journal-replay.test.ts",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "replay",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+        "source_path": "tests/effect-runtime/journal-replay.test.ts",
+        "source_sha256": "ba6ab96e251f21e4a30bb5271e809b7b60b1eafe825a4f56007a3bd238648e35",
+        "source_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e",
+        "observed_sha256": "ba6ab96e251f21e4a30bb5271e809b7b60b1eafe825a4f56007a3bd238648e35",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RESEARCH_REPORT",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-8-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "replay: ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+        "description": "replay: ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "replay",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+        "source_path": "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+        "source_sha256": "7686e3c6dc92899f0a0471ce8aa0d1a8c9aa1ecc51babf40d0e2f94660fbbf24",
+        "source_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e",
+        "observed_sha256": "7686e3c6dc92899f0a0471ce8aa0d1a8c9aa1ecc51babf40d0e2f94660fbbf24",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "PRIOR_GRAPH",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-validation-replay-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "docs/research/artifacts/hswm_journal_replay_2026-10-06/validation.v1.json",
+        "description": "docs/research/artifacts/hswm_journal_replay_2026-10-06/validation.v1.json",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "docs/research/artifacts/hswm_journal_replay_2026-10-06/validation.v1.json",
+        "source_sha256": "d520b231ea587fd56ba9e05ab5f693a74c884f430f13b73db115475afa469c58",
+        "source_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e",
+        "evidence_role": "VALIDATION_REPORT",
+        "execution_status": "HISTORICAL_RECORDED_RESULTS_NOT_REEXECUTED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-0-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: docs/research/HSWM_JOURNAL_ADAPTER_2026-10-06.md",
+        "description": "adapter: docs/research/HSWM_JOURNAL_ADAPTER_2026-10-06.md",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "docs/research/HSWM_JOURNAL_ADAPTER_2026-10-06.md",
+        "source_sha256": "b9f9dd43128c509c202b380cfd8378328eae511b29e6e66dcf4370d4c337cd30",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "b9f9dd43128c509c202b380cfd8378328eae511b29e6e66dcf4370d4c337cd30",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RESEARCH_REPORT",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-1-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: formal/HSWMJournalAdapter.lean",
+        "description": "adapter: formal/HSWMJournalAdapter.lean",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "formal/HSWMJournalAdapter.lean",
+        "source_sha256": "9adefe5cd4f903c5c6af1e4a12345cad68ca5bbb1cdd34e2297a044b59d57018",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "9adefe5cd4f903c5c6af1e4a12345cad68ca5bbb1cdd34e2297a044b59d57018",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "THEOREM_SOURCE",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-2-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: formal/HSWMJournalAdapterCli.lean",
+        "description": "adapter: formal/HSWMJournalAdapterCli.lean",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "formal/HSWMJournalAdapterCli.lean",
+        "source_sha256": "003dbde5624b9df4f7b38bd08103e08e64dd7c14673116d90fbbd1b1dd7e96db",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "003dbde5624b9df4f7b38bd08103e08e64dd7c14673116d90fbbd1b1dd7e96db",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "COMPARISON_CLI",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-3-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: formal/HSWMCanonicalPreservation.lean",
+        "description": "adapter: formal/HSWMCanonicalPreservation.lean",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "formal/HSWMCanonicalPreservation.lean",
+        "source_sha256": "cf3bc1ae3ee7475c8e2c4e9d76d2279124d98a31934fc7d17cc17ebf558cc740",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "cf3bc1ae3ee7475c8e2c4e9d76d2279124d98a31934fc7d17cc17ebf558cc740",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "THEOREM_SOURCE",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-4-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: formal/HSWMDurablePreservation.lean",
+        "description": "adapter: formal/HSWMDurablePreservation.lean",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "formal/HSWMDurablePreservation.lean",
+        "source_sha256": "9af180f40ff245210f7c9dc74873a1f777a483c29ad4a85b72228c45d7919090",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "9af180f40ff245210f7c9dc74873a1f777a483c29ad4a85b72228c45d7919090",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "THEOREM_SOURCE",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-5-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: formal/lakefile.toml",
+        "description": "adapter: formal/lakefile.toml",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "formal/lakefile.toml",
+        "source_sha256": "7ff7fabbdfca56054462842f31158f3586805e68eb4d6bd35c061d6b1039da8f",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "7ff7fabbdfca56054462842f31158f3586805e68eb4d6bd35c061d6b1039da8f",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "BUILD_CONFIGURATION",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-6-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: src/hswm/effect-runtime/src/canonical-atom-v2-journal-adapter.ts",
+        "description": "adapter: src/hswm/effect-runtime/src/canonical-atom-v2-journal-adapter.ts",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-adapter.ts",
+        "source_sha256": "1986f2f157c3868ae18a76f0a24da9c966538def124d5ab73512e28dc30b1d0b",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "1986f2f157c3868ae18a76f0a24da9c966538def124d5ab73512e28dc30b1d0b",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RUNTIME_IMPLEMENTATION",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-7-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: src/hswm/effect-runtime/src/canonical-atom-v2-domain.ts",
+        "description": "adapter: src/hswm/effect-runtime/src/canonical-atom-v2-domain.ts",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-domain.ts",
+        "source_sha256": "aba77244a83a6f3f5559c3211ccb7040e1576e135b03aaeff775ef59f6068220",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "aba77244a83a6f3f5559c3211ccb7040e1576e135b03aaeff775ef59f6068220",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RUNTIME_IMPLEMENTATION",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-8-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "description": "adapter: src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+        "source_sha256": "7610e9d608218dbe5a61ff0ac6b7a50f48766fea96e824085de37fde6d6a647c",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "7610e9d608218dbe5a61ff0ac6b7a50f48766fea96e824085de37fde6d6a647c",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RUNTIME_IMPLEMENTATION",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-9-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "description": "adapter: src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "source_sha256": "c5cfa57d5f582c676ceea7ffed3fa31bbf9c9e5cf02cac4e42cf7b36f64202b7",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "c5cfa57d5f582c676ceea7ffed3fa31bbf9c9e5cf02cac4e42cf7b36f64202b7",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "AUDIT_DRIVER",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-10-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: tests/effect-runtime/journal-adapter.test.ts",
+        "description": "adapter: tests/effect-runtime/journal-adapter.test.ts",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "tests/effect-runtime/journal-adapter.test.ts",
+        "source_sha256": "931edacb1dfb0512e1dbea79ff0106282b68a7ff871a9c48f6771726e39668b5",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "931edacb1dfb0512e1dbea79ff0106282b68a7ff871a9c48f6771726e39668b5",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "RESEARCH_REPORT",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-11-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+        "description": "adapter: ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+        "source_sha256": "7686e3c6dc92899f0a0471ce8aa0d1a8c9aa1ecc51babf40d0e2f94660fbbf24",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "7686e3c6dc92899f0a0471ce8aa0d1a8c9aa1ecc51babf40d0e2f94660fbbf24",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "PRIOR_GRAPH",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-12-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: ontology/development/HSWM_JOURNAL_REPLAY_PROGRESS_2026-10-06.v1.json",
+        "description": "adapter: ontology/development/HSWM_JOURNAL_REPLAY_PROGRESS_2026-10-06.v1.json",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "ontology/development/HSWM_JOURNAL_REPLAY_PROGRESS_2026-10-06.v1.json",
+        "source_sha256": "448ad46cca884c514352774a6e51243e3c7748880145ac29d97d810eb29ce300",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "448ad46cca884c514352774a6e51243e3c7748880145ac29d97d810eb29ce300",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "PRIOR_GRAPH",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-13-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+        "description": "adapter: src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+        "source_sha256": "76a2e5a1127988d4d889f87ecab9389d61f850bf7d6edf52affbcc235aaee754",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "76a2e5a1127988d4d889f87ecab9389d61f850bf7d6edf52affbcc235aaee754",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "INSPECTION_ONLY",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-14-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: formal/HSWMAdmissionKernelCli.lean",
+        "description": "adapter: formal/HSWMAdmissionKernelCli.lean",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "formal/HSWMAdmissionKernelCli.lean",
+        "source_sha256": "039f4956837f701082da5760dd943962b2eac0f58e64db7a877e7d0ceef4de97",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "039f4956837f701082da5760dd943962b2eac0f58e64db7a877e7d0ceef4de97",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "INSPECTION_ONLY",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-15-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: src/hswm/effect-runtime/test/canonical-atom-v2-permit-envelope.test.ts",
+        "description": "adapter: src/hswm/effect-runtime/test/canonical-atom-v2-permit-envelope.test.ts",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "src/hswm/effect-runtime/test/canonical-atom-v2-permit-envelope.test.ts",
+        "source_sha256": "e6f0111f0e638b201bc2f4b2afbc39885507a64a47066bf8276ae6f76165d7b0",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "e6f0111f0e638b201bc2f4b2afbc39885507a64a47066bf8276ae6f76165d7b0",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "INSPECTION_ONLY",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-16-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "adapter: src/hswm/effect-runtime/test/canonical-atom-v2-verified-admission-gateway-v2.test.ts",
+        "description": "adapter: src/hswm/effect-runtime/test/canonical-atom-v2-verified-admission-gateway-v2.test.ts",
+        "standard_graph_role": "SOURCE_BINDING_OBSERVATION",
+        "source_id": "adapter",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_path": "src/hswm/effect-runtime/test/canonical-atom-v2-verified-admission-gateway-v2.test.ts",
+        "source_sha256": "877936d59d5bd55eedf962d55014045c0c32e22515603ebcefa53856a6994b7e",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observed_sha256": "877936d59d5bd55eedf962d55014045c0c32e22515603ebcefa53856a6994b7e",
+        "observed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "binding_state": "CURRENT_MATCH",
+        "historical_match": true,
+        "evidence_role": "INSPECTION_ONLY",
+        "execution_status": "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-validation-adapter-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "docs/research/artifacts/hswm_journal_adapter_2026-10-06/validation.v1.json",
+        "description": "docs/research/artifacts/hswm_journal_adapter_2026-10-06/validation.v1.json",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "docs/research/artifacts/hswm_journal_adapter_2026-10-06/validation.v1.json",
+        "source_sha256": "f32df21a2e0677e5a056971400cbd78e527703bf69c9ba1d565ffdc33843b24f",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "evidence_role": "VALIDATION_REPORT",
+        "execution_status": "HISTORICAL_RECORDED_RESULTS_NOT_REEXECUTED"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T1 관측 0: NEXT",
+        "description": "T1 관측 0: NEXT",
+        "standard_graph_role": "TASK_STATUS_OBSERVATION",
+        "task_id": "T1",
+        "status": "NEXT",
+        "completion_disposition": "OPEN",
+        "observation_order": 0,
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "origin_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+        "source_recorded_on": "2026-10-06",
+        "next_action": "`canonical-atom-v2-state-journal.ts`의 byte decode·receipt·전이 replay를 기존 보존 모델에 연결한다.",
+        "work_ready": false,
+        "claim_ceiling": "SCOPED_IMPLEMENTATION_ONLY_NOT_TASK_COMPLETION_OR_EFFICACY"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T1 관측 1: PARTIAL_BOUNDARY_PROVED_REFINEMENT_OPEN",
+        "description": "T1 관측 1: PARTIAL_BOUNDARY_PROVED_REFINEMENT_OPEN",
+        "standard_graph_role": "TASK_STATUS_OBSERVATION",
+        "task_id": "T1",
+        "status": "PARTIAL_BOUNDARY_PROVED_REFINEMENT_OPEN",
+        "completion_disposition": "OPEN",
+        "observation_order": 1,
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+        "source_revision": "bfd6891edcf06491b8ab4dde5511ce7ccb3c806e",
+        "origin_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+        "source_recorded_on": "2026-10-06",
+        "next_action": "schema/envelope decoder와 receipt/native evolution adapter 대응; T2 signed Permit 연결",
+        "work_ready": false,
+        "claim_ceiling": "SCOPED_IMPLEMENTATION_ONLY_NOT_TASK_COMPLETION_OR_EFFICACY",
+        "previous_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T1 관측 2: PARTIAL_PRODUCER_PROVED_REFINEMENT_OPEN",
+        "description": "T1 관측 2: PARTIAL_PRODUCER_PROVED_REFINEMENT_OPEN",
+        "standard_graph_role": "TASK_STATUS_OBSERVATION",
+        "task_id": "T1",
+        "status": "PARTIAL_PRODUCER_PROVED_REFINEMENT_OPEN",
+        "completion_disposition": "OPEN",
+        "observation_order": 2,
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "origin_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_recorded_on": "2026-10-06",
+        "next_action": "strict schema/envelope decoding과 전체 native validation의 모델 대응을 이어서 검증",
+        "work_ready": true,
+        "claim_ceiling": "SCOPED_IMPLEMENTATION_ONLY_NOT_TASK_COMPLETION_OR_EFFICACY",
+        "previous_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t1-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T1 현재 조회 선택",
+        "description": "T1 현재 조회 선택",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T1",
+        "task_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T2 관측 0: PLANNED",
+        "description": "T2 관측 0: PLANNED",
+        "standard_graph_role": "TASK_STATUS_OBSERVATION",
+        "task_id": "T2",
+        "status": "PLANNED",
+        "completion_disposition": "OPEN",
+        "observation_order": 0,
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE",
+        "source_bundle_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "origin_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+        "source_recorded_on": "2026-10-06",
+        "next_action": "native preflight 성공과 permitEnvelopeAccepted/stateBytesAccepted/verificationTimeAccepted 세 사실의 대응을 구성·검증",
+        "work_ready": true,
+        "claim_ceiling": "SCOPED_IMPLEMENTATION_ONLY_NOT_TASK_COMPLETION_OR_EFFICACY"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t2-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T2 현재 조회 선택",
+        "description": "T2 현재 조회 선택",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T2",
+        "task_uid": "sym:Concept:hswm-progress-t2-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t3-0-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T3 관측 0: PLANNED",
+        "description": "T3 관측 0: PLANNED",
+        "standard_graph_role": "TASK_STATUS_OBSERVATION",
+        "task_id": "T3",
+        "status": "PLANNED",
+        "completion_disposition": "OPEN",
+        "observation_order": 0,
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "origin_uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+        "source_recorded_on": "2026-10-06",
+        "next_action": "v2 journal의 no-replace link·동기화·재복구와 추상 게시 모델을 연결한다.",
+        "work_ready": false,
+        "claim_ceiling": "SCOPED_IMPLEMENTATION_ONLY_NOT_TASK_COMPLETION_OR_EFFICACY"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t3-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T3 현재 조회 선택",
+        "description": "T3 현재 조회 선택",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T3",
+        "task_uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t3-0-2026-10-07-v1",
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t4-0-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T4 관측 0: WAITING",
+        "description": "T4 관측 0: WAITING",
+        "standard_graph_role": "TASK_STATUS_OBSERVATION",
+        "task_id": "T4",
+        "status": "WAITING",
+        "completion_disposition": "OPEN",
+        "observation_order": 0,
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "origin_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+        "source_recorded_on": "2026-10-06",
+        "next_action": "같은 실행의 승인→content→journal→재시작→read frame을 하나의 source-bound trace로 만든다.",
+        "work_ready": false,
+        "claim_ceiling": "SCOPED_IMPLEMENTATION_ONLY_NOT_TASK_COMPLETION_OR_EFFICACY"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t4-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T4 현재 조회 선택",
+        "description": "T4 현재 조회 선택",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T4",
+        "task_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t4-0-2026-10-07-v1",
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t5-0-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T5 관측 0: PREPARED_NOT_RUN",
+        "description": "T5 관측 0: PREPARED_NOT_RUN",
+        "standard_graph_role": "TASK_STATUS_OBSERVATION",
+        "task_id": "T5",
+        "status": "PREPARED_NOT_RUN",
+        "completion_disposition": "OPEN",
+        "observation_order": 0,
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "origin_uid": "sym:Concept:hswm-progress-t5-2026-10-06-v1",
+        "source_recorded_on": "2026-10-06",
+        "next_action": "기존 준비 입력과 모델·tokenizer·template·serving 바인딩을 먼저 확인; 실제 모델 실행·완료는 미관측",
+        "work_ready": false,
+        "claim_ceiling": "SCOPED_IMPLEMENTATION_ONLY_NOT_TASK_COMPLETION_OR_EFFICACY"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t5-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T5 현재 조회 선택",
+        "description": "T5 현재 조회 선택",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T5",
+        "task_uid": "sym:Concept:hswm-progress-t5-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t5-0-2026-10-07-v1",
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T6 관측 0: WAITING",
+        "description": "T6 관측 0: WAITING",
+        "standard_graph_role": "TASK_STATUS_OBSERVATION",
+        "task_id": "T6",
+        "status": "WAITING",
+        "completion_disposition": "OPEN",
+        "observation_order": 0,
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "origin_uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+        "source_recorded_on": "2026-10-06",
+        "next_action": "frozen·evidence-only·learned·sham·removed·restored·oracle을 독립 평가한다.",
+        "work_ready": false,
+        "claim_ceiling": "SCOPED_IMPLEMENTATION_ONLY_NOT_TASK_COMPLETION_OR_EFFICACY"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t6-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T6 현재 조회 선택",
+        "description": "T6 현재 조회 선택",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T6",
+        "task_uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1",
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t7-0-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T7 관측 0: PLANNED",
+        "description": "T7 관측 0: PLANNED",
+        "standard_graph_role": "TASK_STATUS_OBSERVATION",
+        "task_id": "T7",
+        "status": "PLANNED",
+        "completion_disposition": "OPEN",
+        "observation_order": 0,
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "origin_uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+        "source_recorded_on": "2026-10-06",
+        "next_action": "필요한 상태의 선택·누락·추가 읽기·원문 복귀를 현재 실행에 연결한다. 인터페이스 설계는 먼저 가능하다.",
+        "work_ready": false,
+        "claim_ceiling": "SCOPED_IMPLEMENTATION_ONLY_NOT_TASK_COMPLETION_OR_EFFICACY"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t7-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T7 현재 조회 선택",
+        "description": "T7 현재 조회 선택",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T7",
+        "task_uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t7-0-2026-10-07-v1",
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t8-0-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T8 관측 0: WAITING",
+        "description": "T8 관측 0: WAITING",
+        "standard_graph_role": "TASK_STATUS_OBSERVATION",
+        "task_id": "T8",
+        "status": "WAITING",
+        "completion_disposition": "OPEN",
+        "observation_order": 0,
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "origin_uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+        "source_recorded_on": "2026-10-06",
+        "next_action": "같은 snapshot 아래 상보·배타 제약과 stale read, 공동 outcome의 기여를 비교한다.",
+        "work_ready": false,
+        "claim_ceiling": "SCOPED_IMPLEMENTATION_ONLY_NOT_TASK_COMPLETION_OR_EFFICACY"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t8-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T8 현재 조회 선택",
+        "description": "T8 현재 조회 선택",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T8",
+        "task_uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t8-0-2026-10-07-v1",
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t9-0-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T9 관측 0: WAITING",
+        "description": "T9 관측 0: WAITING",
+        "standard_graph_role": "TASK_STATUS_OBSERVATION",
+        "task_id": "T9",
+        "status": "WAITING",
+        "completion_disposition": "OPEN",
+        "observation_order": 0,
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE",
+        "source_bundle_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+        "source_revision": "c8bf6a9f13db210aa55927947581ac7bc1560bb7",
+        "origin_uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+        "source_recorded_on": "2026-10-06",
+        "next_action": "상태·개입·다음 학습을 보존하는 Map과 한 단계 상위 구성을 검증한다.",
+        "work_ready": false,
+        "claim_ceiling": "SCOPED_IMPLEMENTATION_ONLY_NOT_TASK_COMPLETION_OR_EFFICACY"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t9-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_RESEARCH_PROGRESS_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_SELECTION_AND_EVIDENCE_NOT_CANONICAL_LEARNING",
+        "name": "T9 현재 조회 선택",
+        "description": "T9 현재 조회 선택",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T9",
+        "task_uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t9-0-2026-10-07-v1",
+        "reviewed_revision": "b29cb8268b6f9e110739e40989f5bdf7ba8d3739",
+        "observation_scope": "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "INPUT_BUNDLE_PRESERVED_EXACTLY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-1-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-2-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-3-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-4-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-4-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-5-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-5-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-6-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-6-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-7-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-7-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-8-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-8-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-9-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-9-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-10-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-10-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-11-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-11-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-12-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-12-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-plan-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-plan-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_REPORT_NOT_NEW_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "INPUT_BUNDLE_PRESERVED_EXACTLY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-1-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-2-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-3-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-4-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-4-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-5-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-5-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-6-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-6-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-7-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-7-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-8-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-8-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-replay-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_REPORT_NOT_NEW_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "INPUT_BUNDLE_PRESERVED_EXACTLY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-1-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-2-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-3-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-4-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-4-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-5-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-5-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-6-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-6-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-7-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-7-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-8-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-8-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-9-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-9-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-10-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-10-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-11-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-11-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-12-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-12-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-13-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-13-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-14-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-14-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-15-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-15-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-16-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "REVIEWED_HISTORICAL_AND_CURRENT_SOURCE_BYTES",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-16-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARING_SOURCE_BUNDLE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-adapter-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_REPORT_NOT_NEW_EXECUTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBSERVES_EXISTING_TASK_WITHOUT_REDEFINING_IDENTITY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-3-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-4-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-5-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-6-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-7-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-10-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-11-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-12-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-plan-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_SCOPE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBSERVES_EXISTING_TASK_WITHOUT_REDEFINING_IDENTITY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-replay-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARED_OBSERVATION_OR_ASSESSMENT_SOURCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PREVIOUS_OBSERVATION_ONLY_NOT_AUTHORITY_TRANSFER",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-1-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-2-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-3-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-4-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-5-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-6-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-7-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-replay-8-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-replay-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_SCOPE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBSERVES_EXISTING_TASK_WITHOUT_REDEFINING_IDENTITY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARED_OBSERVATION_OR_ASSESSMENT_SOURCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-1-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "PREVIOUS_OBSERVATION_ONLY_NOT_AUTHORITY_TRANSFER",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-1-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-2-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-3-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-4-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-5-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-6-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-7-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-8-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-9-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-10-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-11-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-12-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-adapter-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_SCOPE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t1-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXPLICIT_CURRENT_TASK_SELECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t1-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SELECTS_FOR_EXISTING_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t2-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBSERVES_EXISTING_TASK_WITHOUT_REDEFINING_IDENTITY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-journal-adapter-progress-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "DECLARED_OBSERVATION_OR_ASSESSMENT_SOURCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-13-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-14-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-15-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-adapter-16-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-adapter-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_SCOPE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t2-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXPLICIT_CURRENT_TASK_SELECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t2-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t2-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SELECTS_FOR_EXISTING_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t3-0-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBSERVES_EXISTING_TASK_WITHOUT_REDEFINING_IDENTITY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t3-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t3-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-5-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t3-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-12-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t3-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-plan-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_SCOPE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t3-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXPLICIT_CURRENT_TASK_SELECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t3-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SELECTS_FOR_EXISTING_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t3-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t4-0-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBSERVES_EXISTING_TASK_WITHOUT_REDEFINING_IDENTITY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t4-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t4-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-4-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t4-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-5-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t4-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-12-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t4-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-plan-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_SCOPE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t4-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXPLICIT_CURRENT_TASK_SELECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t4-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SELECTS_FOR_EXISTING_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t4-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t4-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t5-0-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t5-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBSERVES_EXISTING_TASK_WITHOUT_REDEFINING_IDENTITY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t5-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t5-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-8-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t5-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-9-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t5-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-plan-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_SCOPE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t5-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXPLICIT_CURRENT_TASK_SELECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t5-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t5-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SELECTS_FOR_EXISTING_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t5-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t5-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBSERVES_EXISTING_TASK_WITHOUT_REDEFINING_IDENTITY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-8-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-9-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-plan-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_SCOPE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t6-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXPLICIT_CURRENT_TASK_SELECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t6-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SELECTS_FOR_EXISTING_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t6-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t7-0-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBSERVES_EXISTING_TASK_WITHOUT_REDEFINING_IDENTITY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t7-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t7-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-8-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t7-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-plan-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_SCOPE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t7-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXPLICIT_CURRENT_TASK_SELECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t7-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SELECTS_FOR_EXISTING_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t7-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t7-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t8-0-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBSERVES_EXISTING_TASK_WITHOUT_REDEFINING_IDENTITY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t8-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t8-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-8-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t8-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-plan-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_SCOPE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t8-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXPLICIT_CURRENT_TASK_SELECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t8-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SELECTS_FOR_EXISTING_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t8-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t8-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t9-0-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "OBSERVES_EXISTING_TASK_WITHOUT_REDEFINING_IDENTITY",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t9-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t9-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-binding-plan-8-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "TASK_RELEVANT_SOURCE_OCCURRENCE_WITH_ROLE_AND_EXECUTION_STATUS",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t9-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-validation-plan-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_VALIDATION_SCOPE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t9-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXPLICIT_CURRENT_TASK_SELECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t9-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SELECTS_FOR_EXISTING_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-progress-consolidation-selection-t9-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t9-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix c: <urn:hswm:progress-consolidation:shapes:> .
+
+# This shape set governs only the new consolidation projection.  It does not
+# revise the three source-bound progress snapshots or their historic hashes.
+
+c:Common a sh:NodeShape ;
+  sh:targetClass role:PROGRESS_VIEW, role:CURRENT_SELECTION,
+    role:TASK_STATUS_OBSERVATION, role:SOURCE_BINDING_OBSERVATION ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:recorded_on ; sh:hasValue "2026-10-07" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_boundary ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] .
+
+c:ProgressView a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1> ;
+  sh:property [ sh:path p:standard_graph_role ; sh:hasValue "PROGRESS_VIEW" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:selection_as_of ; sh:hasValue "2026-10-07" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:whole_hswm_proved ; sh:hasValue false ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ;
+    sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ] ;
+    sh:qualifiedMinCount 9 ; sh:qualifiedMaxCount 9 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ;
+    sh:qualifiedValueShape [ sh:class role:SOURCE_BINDING_OBSERVATION ] ;
+    sh:qualifiedMinCount 39 ; sh:qualifiedMaxCount 39 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T1" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T2" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T3" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T4" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T5" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T6" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T7" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T8" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T9" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+
+c:CurrentSelection a sh:NodeShape ;
+  sh:targetClass role:CURRENT_SELECTION ;
+  sh:property [ sh:path p:task_id ; sh:in ("T1" "T2" "T3" "T4" "T5" "T6" "T7" "T8" "T9") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:task_uid ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:selected_observation_uid ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:minCount 2 ; sh:maxCount 2 ] ;
+  sh:property [ sh:path r:REFERENCES ;
+    sh:qualifiedValueShape [ sh:class role:TASK_STATUS_OBSERVATION ] ;
+    sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:REFERENCES ;
+    sh:qualifiedValueShape [ sh:class role:TASK ] ;
+    sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+
+c:ReviewedSelectionScope a sh:NodeShape ;
+  sh:targetClass role:CURRENT_SELECTION, role:TASK_STATUS_OBSERVATION ;
+  sh:property [ sh:path p:reviewed_revision ; sh:hasValue "b29cb8268b6f9e110739e40989f5bdf7ba8d3739" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:observation_scope ; sh:hasValue "AT_REVIEWED_GIT_REVISION_NOT_LIVE_WORKTREE" ; sh:maxCount 1 ] .
+
+c:TaskObservation a sh:NodeShape ;
+  sh:targetClass role:TASK_STATUS_OBSERVATION ;
+  sh:property [ sh:path p:task_id ; sh:in ("T1" "T2" "T3" "T4" "T5" "T6" "T7" "T8" "T9") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:status ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:completion_disposition ; sh:hasValue "OPEN" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:observation_order ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_bundle_uid ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_revision ; sh:pattern "^[0-9a-f]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:origin_uid ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_recorded_on ; sh:hasValue "2026-10-06" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:next_action ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:work_ready ; sh:datatype xsd:boolean ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_ceiling ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:REQUIRES ; sh:maxCount 0 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:TASK ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:qualifiedValueShape [ sh:class role:SOURCE_BINDING_OBSERVATION ] ; sh:qualifiedMinCount 1 ] .
+
+c:SourceBinding a sh:NodeShape ;
+  sh:targetClass role:SOURCE_BINDING_OBSERVATION ;
+  sh:property [ sh:path p:source_id ; sh:in ("plan" "replay" "adapter") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_bundle_uid ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_path ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:observed_sha256 ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_revision ; sh:pattern "^[0-9a-f]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:observed_revision ; sh:hasValue "b29cb8268b6f9e110739e40989f5bdf7ba8d3739" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:binding_state ; sh:in ("CURRENT_MATCH" "HISTORICAL_PIN_DRIFT") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:historical_match ; sh:hasValue true ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:evidence_role ; sh:in (
+    "THEOREM_SOURCE" "COMPARISON_CLI" "RUNTIME_IMPLEMENTATION" "TEST_SOURCE"
+    "INSPECTION_ONLY" "RESEARCH_REPORT" "PRIOR_GRAPH" "BUILD_CONFIGURATION"
+    "AUDIT_DRIVER" "NEGATIVE_RESULT") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:execution_status ; sh:hasValue "HISTORICAL_SOURCE_RECORD_NOT_REEXECUTED" ; sh:maxCount 1 ] .
+
+c:PS3Ceiling a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:Concept:hswm-progress-ps-3-decision-2026-10-06-v1> ;
+  sh:property [ sh:path p:evidence_disposition ; sh:hasValue "UNDERDETERMINED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_ceiling ; sh:hasValue "NO_UNIVERSAL_REFINEMENT_CLAIM" ; sh:maxCount 1 ] .
+
+c:PS5Ceiling a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:Concept:hswm-progress-ps-5-decision-2026-10-06-v1> ;
+  sh:property [ sh:path p:evidence_disposition ; sh:hasValue "UNDERDETERMINED" ; sh:maxCount 1 ] .
+
+c:PS6Ceiling a sh:NodeShape ;
+  sh:targetNode <urn:hswm:kg:node:sym:Concept:hswm-progress-ps-6-decision-2026-10-06-v1> ;
+  sh:property [ sh:path p:evidence_disposition ; sh:hasValue "UNDERDETERMINED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:claim_ceiling ; sh:hasValue "INTEGRATED_CLAIM_UNJUDGED" ; sh:maxCount 1 ] .

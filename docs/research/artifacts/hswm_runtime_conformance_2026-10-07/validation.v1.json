@@ -61,7 +61,7 @@
     },
     {
       "path": "tests/effect-runtime/journal-v2-durability-trace.test.ts",
-      "sha256": "cdb0159498693b72e4226d548ae742098b2d04bdf958e30f9597be2deb46828d"
+      "sha256": "ca4a5486fa378a0ff2efb9f3d4bcc3145dee8f123d885ee017cb3cbb4c78d18a"
     },
     {
       "path": "tests/effect-runtime/fixtures/journal-v2-durability-worker.ts",
@@ -69,7 +69,11 @@
     },
     {
       "path": "docs/research/HSWM_RUNTIME_CONFORMANCE_2026-10-07.md",
-      "sha256": "b266d283ab8cfb9b833114027495e18cd39f58d2ec9a199afd6c0742bd9ff2d6"
+      "sha256": "08c8779d932e6012c38387aa40422e46e0d7c2d311f9f318f7f197757298413b"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_runtime_conformance_2026-10-07/same-run-trace.v1.json",
+      "sha256": "a1d6895f201de07bf4623d228c2f2628f32c4494505e976997190b7b257ea621"
     }
   ],
   "lean_audits": [
@@ -550,8 +554,23 @@
   "runtime_regression": {
     "tests_passed": 103,
     "command": "HSWM_RUN_SEMANTIC_LEAN=1 npm --prefix src/hswm/effect-runtime test -- ../../../tests/effect-runtime/admission-preflight.test.ts ../../../tests/effect-runtime/journal-validation.test.ts ../../../tests/effect-runtime/journal-adapter.test.ts ../../../tests/effect-runtime/journal-replay.test.ts ../../../tests/effect-runtime/semantic-philosophy-proof-process.test.ts test/canonical-atom-v2-runtime.test.ts test/canonical-atom-v2-state-journal-store.test.ts test/canonical-atom-v2-state-journal-file.test.ts test/canonical-atom-v2-state-journal-file-process.test.ts test/canonical-atom-v2-permit-envelope.test.ts test/canonical-atom-v2-local-permit-commit.test.ts test/canonical-atom-v2-local-permit-commit-process.test.ts test/canonical-atom-v2-local-permit-commit-process-crash.test.ts test/canonical-atom-v2-verified-admission-gateway.test.ts test/canonical-atom-v2-verified-admission-gateway-v2.test.ts ../../../tests/effect-runtime/journal-decode.test.ts ../../../tests/effect-runtime/verified-permit-bridge.test.ts ../../../tests/effect-runtime/journal-v2-durability-process.test.ts ../../../tests/effect-runtime/journal-v2-durability-trace.test.ts --maxWorkers=1",
-    "log_sha256": "b7fc42fb1ec87560772ef25586fb09968a45388f069addb126c7408aca2b1303",
+    "log_sha256": "e3c783900f813ae0d3a3c372c30b9a01896b272a7ef87716d0bb2293a5202d54",
     "actual_lean_cli_subprocesses": true
+  },
+  "same_run_trace_export": {
+    "environment_variable": "HSWM_T4_TRACE_OUTPUT",
+    "checkout_relative_target": "docs/research/artifacts/hswm_runtime_conformance_2026-10-07/same-run-trace.v1.json",
+    "sha256": "a1d6895f201de07bf4623d228c2f2628f32c4494505e976997190b7b257ea621",
+    "source_revision": "bc35d6decd1a58feb78005b380652902aea4f92d",
+    "synthetic_fixture_only": true
+  },
+  "original_plan_criteria": {
+    "T1": "COMPLETE_DECODED_MODEL_AND_FINITE_NATIVE_COMPARISON_WITH_EXPLICIT_PARSER_BOUNDARY",
+    "T2": "COMPLETE_CALLER_RELATIVE_SIGNED_PERMIT_TRACE_CONFORMANCE_WITH_EXTERNAL_PREMISES",
+    "T3": "COMPLETE_LINUX_TMPFS_V2_PROCESS_CRASH_AND_RACE",
+    "T4": "COMPLETE_RETAINED_QUERYABLE_SAME_RUN_TRACE_PENDING_GRAPH_VALIDATION",
+    "T5": "NOT_READY_CURRENT_SERVING_BINDING_UNESTABLISHED",
+    "T6_T9": "WAITING_FOR_MEASURED_MODEL_OUTCOMES"
   },
   "execution_binaries": [
     {

@@ -1,0 +1,7 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+SELECT ?uid ?surface ?record ?recordAuthority ?readback ?source ?sha256 WHERE {
+  ?n p:standard_graph_role "PUBLICATION_OBSERVATION" ; kb:uid ?uid ; p:surface ?surface ;
+    p:external_record_id ?record ; p:external_record_authority ?recordAuthority ;
+    p:exact_readback ?readback ; p:source_path ?source ; p:source_sha256 ?sha256 .
+} ORDER BY ?surface

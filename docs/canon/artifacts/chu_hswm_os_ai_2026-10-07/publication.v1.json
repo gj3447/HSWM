@@ -1,0 +1,128 @@
+{
+  "schema_version": "chu-hswm-os-ai-publication/v1",
+  "recorded_on": "2026-10-07",
+  "source": {
+    "path": "docs/canon/sources/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.txt",
+    "sha256": "27e48e1817cf18a3aa76d857943540c606738f3e421ae01516926ee24cdcd68d",
+    "source_channel": "current user conversation",
+    "exact_event_time_known": false
+  },
+  "hspine": {
+    "thread_id": "thread-cadd5257-2328-4683-903b-92fd576396f5",
+    "root_node_id": "intent-cb96fca1-b72c-4e7e-a91d-ebaf95287aa5",
+    "link_node_id": "intent-02003aac-b70d-419d-ae76-43cf3683dee6",
+    "record_kind": "AI_PROPOSAL",
+    "actor": "agent:codex",
+    "visibility": "public",
+    "root_content_sha256": "0316ecd5a11a8e6d5125ebd21fa2c29576681f47bf82be61ca4ff63a222335a6",
+    "root_receipt_sha": "a28c7a31c5bd797873a4bb83bdf85c78c02768a45c1ae036ab181079e0127fea",
+    "link_receipt_sha": "00dc60acde76434d3312b70b0dffc649306b0c23359ca29a36544f7452c3bbbc",
+    "root_created_at": "2026-10-07T01:07:48.678Z",
+    "link_created_at": "2026-10-07T01:08:22.742Z",
+    "source_refs": [
+      {
+        "kind": "node",
+        "ref": "intent-cb96fca1-b72c-4e7e-a91d-ebaf95287aa5"
+      },
+      {
+        "kind": "kg",
+        "ref": "sym:Note:chatgpt-chu-hswm-os-ai-20261007"
+      },
+      {
+        "kind": "kg",
+        "ref": "sym:Concept:hswm"
+      },
+      {
+        "kind": "kg",
+        "ref": "sym:Note:chatgpt-chu-hswm-scope-20260927"
+      }
+    ],
+    "exact_body_readback": true,
+    "integrity": {
+      "ok": true,
+      "checked": 2,
+      "failures": [],
+      "at_head": "00dc60acde76434d3312b70b0dffc649306b0c23359ca29a36544f7452c3bbbc"
+    }
+  },
+  "kg": {
+    "uid": "sym:Note:chatgpt-chu-hswm-os-ai-20261007",
+    "target_version": "\"2026-10-07T01:07:29.255Z\"",
+    "authority_class": "SECONDARY_AI",
+    "canonical_scope": "PENDING_OR_PRELIMINARY",
+    "record_lifecycle": "ACTIVE",
+    "writer_principal": "agent:chatgpt (owner publisher attribution; requester is agent:codex)",
+    "body_sha256": "54ffd41463081c63147bf0806bdf3ca77c0b7b202d03cb5c593a92a151ec4618",
+    "exact_body_readback": true,
+    "uid_match_count": 1,
+    "requested_links": [
+      {
+        "direction": "OUT",
+        "neighbor_authority_class": "USER_PRIMARY",
+        "neighbor_canonical_name": null,
+        "neighbor_canonical_scope": "USER_RATIFIED_CANON",
+        "neighbor_domain": "UNRESOLVED",
+        "neighbor_full_name": null,
+        "neighbor_kind": "CONCEPT",
+        "neighbor_name": "HSWM",
+        "neighbor_plane": "UNRESOLVED",
+        "neighbor_review_required": false,
+        "neighbor_uid": "sym:Concept:hswm",
+        "predicate": "ABOUT",
+        "relationship_authority": "SECONDARY_AI",
+        "relationship_canonical_title": null,
+        "relationship_review_required": true,
+        "relationship_scope": null,
+        "relationship_status": "PROPOSED",
+        "relationship_status_origin": "STORED",
+        "relationship_stored_status": "PROPOSED",
+        "role": null
+      },
+      {
+        "direction": "OUT",
+        "neighbor_authority_class": "SYSTEM_DERIVED",
+        "neighbor_canonical_name": "HSWM repository (gj3447/HSWM)",
+        "neighbor_canonical_scope": "CANONICAL",
+        "neighbor_domain": "OPERATIONS",
+        "neighbor_full_name": null,
+        "neighbor_kind": "ENTITY",
+        "neighbor_name": "hswm",
+        "neighbor_plane": "WORLD",
+        "neighbor_review_required": false,
+        "neighbor_uid": "sym:Repository:hswm",
+        "predicate": "REFERENCES",
+        "relationship_authority": "SECONDARY_AI",
+        "relationship_canonical_title": null,
+        "relationship_review_required": true,
+        "relationship_scope": null,
+        "relationship_status": "PROPOSED",
+        "relationship_status_origin": "STORED",
+        "relationship_stored_status": "PROPOSED",
+        "role": null
+      },
+      {
+        "direction": "OUT",
+        "neighbor_authority_class": "SECONDARY_AI",
+        "neighbor_canonical_name": null,
+        "neighbor_canonical_scope": "PENDING_OR_PRELIMINARY",
+        "neighbor_domain": "ENGINEERING",
+        "neighbor_full_name": null,
+        "neighbor_kind": "STATEMENT",
+        "neighbor_name": "chu-hswm-scope-20260927",
+        "neighbor_plane": "GOVERNANCE",
+        "neighbor_review_required": true,
+        "neighbor_uid": "sym:Note:chatgpt-chu-hswm-scope-20260927",
+        "predicate": "REFERENCES",
+        "relationship_authority": "SECONDARY_AI",
+        "relationship_canonical_title": null,
+        "relationship_review_required": true,
+        "relationship_scope": null,
+        "relationship_status": "PROPOSED",
+        "relationship_status_origin": "STORED",
+        "relationship_stored_status": "PROPOSED",
+        "role": null
+      }
+    ]
+  },
+  "boundary": "HSPINE agent record and KG pending AI note quote the user; neither becomes a HSPINE HUMAN_RAW record, execution permit, runtime admission or efficacy claim."
+}

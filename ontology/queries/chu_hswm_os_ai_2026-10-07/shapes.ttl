@@ -1,0 +1,51 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix s: <urn:hswm:chu-os-ai:shape:> .
+
+s:Source a sh:NodeShape ; sh:targetClass role:USER_DIRECT_SOURCE ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:utterance_verbatim ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:source_sha256 ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_ASSERTION ; sh:class role:CLAIM ; sh:minCount 1 ; sh:maxCount 1 ] .
+s:Claim a sh:NodeShape ; sh:targetClass role:CLAIM ;
+  sh:property [ sh:path p:claim_type ; sh:hasValue "CONDITIONAL_AI_IDENTITY_VIEWPOINT" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:condition_text ; sh:hasValue "CHU 운영체제의 동작방식이 HSWM 으로 이뤄지면" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:consequent_text ; sh:hasValue "그거 자체가 ai 라고 생각해" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:scientific_status ; sh:hasValue "NOT_EVALUATED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:status ; sh:hasValue "USER_VIEWPOINT_RECORDED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:class role:USER_DIRECT_SOURCE ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_PARTICIPATION ; sh:class role:ROLE_PARTICIPATION ; sh:minCount 4 ; sh:maxCount 4 ] .
+s:Interpretation a sh:NodeShape ; sh:targetClass role:AI_INTERPRETATION ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:status ; sh:hasValue "PROPOSED" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:restatement ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:REFERENCES ; sh:qualifiedValueShape [ sh:class role:CLAIM ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+s:Slot a sh:NodeShape ; sh:targetClass role:ROLE_PARTICIPATION ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:role ; sh:in ("subject" "operating-mechanism" "consequent" "speaker-source") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:ordinal ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:maxInclusive 3 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:qualification ; sh:hasValue "WHEN_CHU_OS_OPERATES_THROUGH_HSWM" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path r:HAS_SOURCE ; sh:class role:USER_DIRECT_SOURCE ; sh:minCount 1 ; sh:maxCount 1 ] .
+s:Subject a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-os-ai-slot-subject-2026-10-07> ;
+  sh:property [ sh:path p:role ; sh:hasValue "subject" ] ; sh:property [ sh:path p:ordinal ; sh:hasValue 0 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-os-ai-target-2026-10-07> ] .
+s:Mechanism a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-os-ai-slot-mechanism-2026-10-07> ;
+  sh:property [ sh:path p:role ; sh:hasValue "operating-mechanism" ] ; sh:property [ sh:path p:ordinal ; sh:hasValue 1 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm> ] .
+s:Consequent a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-os-ai-slot-consequent-2026-10-07> ;
+  sh:property [ sh:path p:role ; sh:hasValue "consequent" ] ; sh:property [ sh:path p:ordinal ; sh:hasValue 2 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:hasValue <urn:hswm:kg:node:sym:Claim:chu-os-ai-viewpoint-2026-10-07> ] .
+s:Speaker a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-os-ai-slot-speaker-2026-10-07> ;
+  sh:property [ sh:path p:role ; sh:hasValue "speaker-source" ] ; sh:property [ sh:path p:ordinal ; sh:hasValue 3 ] ;
+  sh:property [ sh:path r:HAS_CONCEPT ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-os-ai-source-2026-10-07> ] .
+s:Publication a sh:NodeShape ; sh:targetClass role:PUBLICATION_OBSERVATION ;
+  sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:surface ; sh:in ("HSPINE" "KG") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:external_record_id ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+  sh:property [ sh:path p:external_record_authority ; sh:in ("AI_PROPOSAL" "SECONDARY_AI/PENDING_OR_PRELIMINARY") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+  sh:property [ sh:path p:exact_readback ; sh:hasValue true ; sh:maxCount 1 ] .

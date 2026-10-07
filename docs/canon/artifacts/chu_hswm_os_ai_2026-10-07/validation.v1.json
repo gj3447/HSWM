@@ -1,0 +1,139 @@
+{
+  "schema_version": "chu-hswm-os-ai-validation/v1",
+  "recorded_on": "2026-10-07",
+  "bundle_sha256": "348101e0d634a6f09358bcf664693939cbe2153a2e3854547c42466db57fb847",
+  "node_count": 12,
+  "relation_count": 36,
+  "source_byte_bindings_verified": 12,
+  "relation_contracts_exact": true,
+  "shacl": [
+    {
+      "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+      "conforms": true,
+      "results": [],
+      "claim_ceiling": "KG_BUNDLE_STRUCTURE_AND_BYTE_BINDING_ONLY_NOT_LIVE_KG_STATE_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+    },
+    {
+      "path": "ontology/queries/chu_hswm_os_ai_2026-10-07/shapes.ttl",
+      "conforms": true,
+      "results": [],
+      "claim_ceiling": "KG_BUNDLE_STRUCTURE_AND_BYTE_BINDING_ONLY_NOT_LIVE_KG_STATE_NOT_PROVENANCE_TRUTH_NOT_CANONICAL_AUTHORITY_NOT_PERMIT_NOT_OUTCOME_TRUTH_NOT_CAUSAL_CREDIT_NOT_LEARNING_NOT_EFFICACY",
+      "engine": "rdf-validate-shacl@0.6.5",
+      "profile": "SHACL_1_0_CORE_NO_IMPORTS_NO_EXTENSIONS"
+    }
+  ],
+  "negative_mutations": [
+    {
+      "case": "removed-condition",
+      "conforms": false,
+      "violations": 1
+    },
+    {
+      "case": "ai-promoted-to-user",
+      "conforms": false,
+      "violations": 1
+    },
+    {
+      "case": "role-swap",
+      "conforms": false,
+      "violations": 1
+    },
+    {
+      "case": "efficacy-promotion",
+      "conforms": false,
+      "violations": 1
+    },
+    {
+      "case": "missing-source-hash",
+      "conforms": false,
+      "violations": 1
+    }
+  ],
+  "competency_queries": {
+    "statement": {
+      "exact_expected_bindings": true,
+      "rows": [
+        {
+          "uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+          "verbatim": "그 CHU 운영체제의 동작방식이 HSWM 으로 이뤄지면 그거 자체가 ai 라고 생각해 이 문장 좀 hspine 이랑 kg 랑 작업환경 표준그래프 엔지니어링으로 정리해서 박아줘봐봐 ㅇㅇ",
+          "condition": "CHU 운영체제의 동작방식이 HSWM 으로 이뤄지면",
+          "consequent": "그거 자체가 ai 라고 생각해",
+          "authority": "USER_PRIMARY",
+          "scientificStatus": "NOT_EVALUATED",
+          "restatement": "CHU 운영체제의 동작 방식이 HSWM으로 이루어진다면, 그렇게 작동하는 CHU 운영체제 자체를 하나의 AI로 본다.",
+          "source": "docs/canon/sources/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.txt",
+          "sha256": "27e48e1817cf18a3aa76d857943540c606738f3e421ae01516926ee24cdcd68d"
+        }
+      ]
+    },
+    "roles": {
+      "exact_expected_bindings": true,
+      "rows": [
+        {
+          "uid": "sym:Concept:chu-os-ai-slot-subject-2026-10-07",
+          "role": "subject",
+          "ordinal": "0",
+          "qualification": "WHEN_CHU_OS_OPERATES_THROUGH_HSWM",
+          "targetUid": "sym:Concept:chu-os-ai-target-2026-10-07",
+          "authority": "SECONDARY_AI"
+        },
+        {
+          "uid": "sym:Concept:chu-os-ai-slot-mechanism-2026-10-07",
+          "role": "operating-mechanism",
+          "ordinal": "1",
+          "qualification": "WHEN_CHU_OS_OPERATES_THROUGH_HSWM",
+          "targetUid": "sym:Concept:hswm",
+          "authority": "SECONDARY_AI"
+        },
+        {
+          "uid": "sym:Concept:chu-os-ai-slot-consequent-2026-10-07",
+          "role": "consequent",
+          "ordinal": "2",
+          "qualification": "WHEN_CHU_OS_OPERATES_THROUGH_HSWM",
+          "targetUid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+          "authority": "SECONDARY_AI"
+        },
+        {
+          "uid": "sym:Concept:chu-os-ai-slot-speaker-2026-10-07",
+          "role": "speaker-source",
+          "ordinal": "3",
+          "qualification": "WHEN_CHU_OS_OPERATES_THROUGH_HSWM",
+          "targetUid": "sym:Concept:chu-os-ai-source-2026-10-07",
+          "authority": "SECONDARY_AI"
+        }
+      ]
+    },
+    "publication": {
+      "exact_expected_bindings": true,
+      "rows": [
+        {
+          "uid": "sym:Concept:chu-os-ai-kg-publication-2026-10-07",
+          "surface": "KG",
+          "record": "sym:Note:chatgpt-chu-hswm-os-ai-20261007",
+          "recordAuthority": "SECONDARY_AI/PENDING_OR_PRELIMINARY",
+          "readback": "true",
+          "source": "docs/canon/artifacts/chu_hswm_os_ai_2026-10-07/publication.v1.json",
+          "sha256": "7afc78149414284b9ce2e371f5241e44ce311248e7df0b6f1883716c7bba2f9d"
+        },
+        {
+          "uid": "sym:Concept:chu-os-ai-hspine-publication-2026-10-07",
+          "surface": "HSPINE",
+          "record": "thread-cadd5257-2328-4683-903b-92fd576396f5",
+          "recordAuthority": "AI_PROPOSAL",
+          "readback": "true",
+          "source": "docs/canon/artifacts/chu_hswm_os_ai_2026-10-07/publication.v1.json",
+          "sha256": "7afc78149414284b9ce2e371f5241e44ce311248e7df0b6f1883716c7bba2f9d"
+        }
+      ]
+    }
+  },
+  "live_publication_readback": {
+    "hspine_body_exact": true,
+    "hspine_integrity_ok": true,
+    "kg_body_exact": true,
+    "kg_links": 3
+  },
+  "claim_limit": "User viewpoint attribution, source integrity, graph structure and exact retrieval only; no runtime/efficacy claim."
+}

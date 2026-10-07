@@ -29,6 +29,10 @@
 [CHU ECOSYSTEM](https://github.com/gj3447/CHU/blob/main/ECOSYSTEM.md) ·
 [CHU AI native 3대원칙](https://github.com/gj3447/CHU/blob/main/canon/AI_NATIVE_THREE_PRINCIPLES.md).
 
+**CHU 운영체제의 동작 방식이 HSWM으로 이루어진다면, 그 작동하는 체계 자체를 AI로 본다**는
+[사용자 관점](docs/canon/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.md)을 원문·조건·AI 해석으로
+구분해 기록합니다. `hswm-workspace show chu-os-ai`에서 HSPINE·KG 연결과 근거를 조회합니다.
+
 [KG·작업환경](docs/operations/HSWM_KG_WORKSPACE_2026-09-22.md) · [Semantic Weight·이론 기반](docs/research/HSWM_SEMANTIC_WEIGHT_THEORETICAL_FOUNDATIONS_2026-09-14.md) · [심층 연구·실현 경로](docs/research/HSWM_DEEP_RESEARCH_AND_REALIZATION_2026-09-22.md) · [Jev 통합 연구 작업 계획](docs/operations/HSWM_JEV_RESEARCH_WORK_PLAN_2026-09-22.md) · [Jev 연구·그래프 엔지니어링](docs/research/HSWM_JEV_GRAPH_ENGINEERING_2026-09-22.md) · [지식 지도·개발 현황](docs/operations/HSWM_KNOWLEDGE_MAP_2026-09-13.md) · [연구 도구·표준 조사](docs/research/HSWM_SCIENTIFIC_RESEARCH_TOOLING_2026-09-13.md) · [그래프 구조](#graph-model) · [빠른 실행](#quick-start) · [개발 실사용](#development) · [근거와 판정](#evidence) · [전체 문서](INDEX.md)
 
 > **2026-09-07 · 실사용 가능한 로컬 적응 프로토타입**<br>

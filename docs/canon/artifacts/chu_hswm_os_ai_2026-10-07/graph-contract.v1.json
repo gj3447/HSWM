@@ -1,0 +1,118 @@
+{
+  "schema_version": "chu-hswm-os-ai-graph-contract/v1",
+  "owner": "HSWM",
+  "scope": "Source-bound repository projection and explicit HSPINE/KG publication; no runtime write",
+  "relation_contracts": [
+    {
+      "predicate": "HAS_ASSERTION",
+      "domain_roles": [
+        "USER_DIRECT_SOURCE"
+      ],
+      "range_roles": [
+        "CLAIM"
+      ],
+      "direction": "source -> attributed claim",
+      "cardinality": "exactly 1",
+      "meaning": "Attribution to an exact utterance, not empirical validation."
+    },
+    {
+      "predicate": "HAS_SOURCE",
+      "domain_roles": [
+        "SYNTHESIS_BUNDLE",
+        "CLAIM",
+        "AI_INTERPRETATION",
+        "ROLE_PARTICIPATION",
+        "PUBLICATION_OBSERVATION"
+      ],
+      "range_roles": [
+        "USER_DIRECT_SOURCE"
+      ],
+      "direction": "record -> source",
+      "cardinality": "exactly 1 per used subject",
+      "meaning": "Provenance of the user statement or derived record."
+    },
+    {
+      "predicate": "HAS_CONCEPT",
+      "domain_roles": [
+        "SYNTHESIS_BUNDLE",
+        "ROLE_PARTICIPATION",
+        "CLAIM"
+      ],
+      "range_roles": [
+        "CLAIM",
+        "AI_INTERPRETATION",
+        "QUALIFIED_SUBJECT",
+        "ROLE_PARTICIPATION",
+        "PUBLICATION_OBSERVATION",
+        "USER_DIRECT_SOURCE",
+        "EXTERNAL_ANCHOR",
+        "DECISION"
+      ],
+      "direction": "bundle/slot -> member/target",
+      "cardinality": "exactly 1 per slot and claim; 1..n for bundle",
+      "meaning": "Role target or collection membership, not sameAs or subclass."
+    },
+    {
+      "predicate": "HAS_PARTICIPATION",
+      "domain_roles": [
+        "CLAIM"
+      ],
+      "range_roles": [
+        "ROLE_PARTICIPATION"
+      ],
+      "direction": "qualified claim -> role-bearing slot",
+      "cardinality": "exactly 4",
+      "meaning": "Subject, mechanism, consequent and speaker-source remain distinct."
+    },
+    {
+      "predicate": "REFERENCES",
+      "domain_roles": [
+        "AI_INTERPRETATION",
+        "QUALIFIED_SUBJECT",
+        "PUBLICATION_OBSERVATION"
+      ],
+      "range_roles": [
+        "CLAIM",
+        "EXTERNAL_ANCHOR"
+      ],
+      "direction": "interpretation/qualified target/publication -> referent",
+      "cardinality": "1..n",
+      "meaning": "Contextual reference without authority transfer, execution or identity equivalence."
+    },
+    {
+      "predicate": "CONSTRAINS",
+      "domain_roles": [
+        "DECISION"
+      ],
+      "range_roles": [
+        "CLAIM"
+      ],
+      "direction": "assessment -> claim",
+      "cardinality": "exactly 1",
+      "meaning": "Records an assessment boundary without rewriting the user viewpoint."
+    }
+  ],
+  "competency_questions": {
+    "statement": [
+      "sym:Claim:chu-os-ai-viewpoint-2026-10-07"
+    ],
+    "roles": [
+      "sym:Concept:chu-os-ai-slot-subject-2026-10-07",
+      "sym:Concept:chu-os-ai-slot-mechanism-2026-10-07",
+      "sym:Concept:chu-os-ai-slot-consequent-2026-10-07",
+      "sym:Concept:chu-os-ai-slot-speaker-2026-10-07"
+    ],
+    "publication": [
+      "sym:Concept:chu-os-ai-hspine-publication-2026-10-07",
+      "sym:Concept:chu-os-ai-kg-publication-2026-10-07"
+    ]
+  },
+  "identity_policy": {
+    "hswm_uid": "sym:Concept:hswm",
+    "chu_uid": "sym:Concept:chu-hswm-2026-09-27-chu-domain",
+    "unconditional_same_as": false,
+    "historical_sources_preserved": true
+  },
+  "dag_policy": "No global DAG constraint; claim/role references may be cyclic.",
+  "rollback": "Revert only this dated local addition and its workspace entry. HSPINE is append-only: append a correction if needed. Revise the KG draft with expected_version; never rewrite prior user sources."
+}

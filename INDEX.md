@@ -65,6 +65,10 @@ decoded 모형·TS adapter 검사·운영 시간 순서·실제 모델 효능의
 `validation-contracts`에서 출처와 미평가 작업을 조회하며, SHACL/SPARQL 구조 검사와
 fixture 검증을 실제 모델 효능과 구별한다. 적용한 스킬·표준의 범위도 명시한다.
 
+2026-10-07 [CHU 운영체제의 HSWM 동작과 AI 정체성](docs/canon/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.md)은
+사용자의 조건부 관점, 정확한 원문, AI 재서술과 HSPINE·공유 KG 게시를 연결한다.
+`hswm-workspace show chu-os-ai`에서 원문·역할·게시 기록을 조회하고 SHACL 구조를 검증한다.
+
 2026-09-22 [KG·작업환경 진입점](docs/operations/HSWM_KG_WORKSPACE_2026-09-22.md)은
 21개 읽기 경로·45개 질의·12개 개발 절차를 native `hswm-workspace`에서 연결한다.
 tracked ontology inventory, snapshot별 UID 발생, 출처 hash 비교, SHACL/SPARQL 실행을 제공하며

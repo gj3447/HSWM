@@ -1,0 +1,638 @@
+{
+  "schema_version": "chu-hswm-os-ai-viewpoint/v1",
+  "bundle_uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+  "status": "USER_CONDITIONAL_VIEWPOINT_RECORDED",
+  "nonclaim": "NOT_CHU_EQUALS_HSWM_NOT_RUNTIME_COMPLETION_NOT_EFFICACY",
+  "authority_boundary": "Verbatim user source and its explicitly conditional viewpoint are USER_PRIMARY attribution. Restatement, role modeling and links are SECONDARY_AI PROPOSED. HSPINE and KG writer roles are preserved separately.",
+  "source_accessed_on": "2026-10-07",
+  "artifact_bindings": [
+    {
+      "path": "docs/canon/sources/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.txt",
+      "sha256": "27e48e1817cf18a3aa76d857943540c606738f3e421ae01516926ee24cdcd68d"
+    },
+    {
+      "path": "docs/canon/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.md",
+      "sha256": "80145f46238258396c3a459f975ef281383914b772cda3f1d5aa07f9c5e7ad70"
+    },
+    {
+      "path": "docs/canon/artifacts/chu_hswm_os_ai_2026-10-07/publication.v1.json",
+      "sha256": "7afc78149414284b9ce2e371f5241e44ce311248e7df0b6f1883716c7bba2f9d"
+    },
+    {
+      "path": "docs/canon/artifacts/chu_hswm_os_ai_2026-10-07/graph-contract.v1.json",
+      "sha256": "87d26e1472ab00b2a832ae44541ffc08e2fcfaef4358843ff1ee48d9ec613098"
+    },
+    {
+      "path": "docs/canon/USER_PRIMARY_CHU_HSWM_SOFTWARE_SCOPE_2026-09-27.md",
+      "sha256": "713396619020c3142a9866a6aa03bc88152aa26e5d3a6403102be5b80dcab6e3"
+    },
+    {
+      "path": "docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md",
+      "sha256": "af5490bcb3aa7830dbfcf9c806c0e9d0b966d4c3a4e246ef1140f77bd3d8c32a"
+    },
+    {
+      "path": "ontology/identity/hswm_core/CHU_HSWM_SOFTWARE_SCOPE_ONTOLOGY.v1.json",
+      "sha256": "2839842cc526340afb082e67df2b900782d65e77c3155702fd310d616870946d"
+    },
+    {
+      "path": "ontology/queries/chu_hswm_os_ai_2026-10-07/README.md",
+      "sha256": "a90f0916102150f4f8dde1ed5027faf659296b34b259e20f2d6099b061edd171"
+    },
+    {
+      "path": "ontology/queries/chu_hswm_os_ai_2026-10-07/publication.rq",
+      "sha256": "be9fef2397584723d36dcfb01b6b161dda3473e2e9f37a4c008401f3156f93e1"
+    },
+    {
+      "path": "ontology/queries/chu_hswm_os_ai_2026-10-07/roles.rq",
+      "sha256": "6f484cb306605600a6a6b1e45924f5ba9b749816d6838953802152589e15ee7b"
+    },
+    {
+      "path": "ontology/queries/chu_hswm_os_ai_2026-10-07/shapes.ttl",
+      "sha256": "e6db71e8a99a8bfaff8dbcf7f9f38c0a40f2fdb4235367041a24abb034172edd"
+    },
+    {
+      "path": "ontology/queries/chu_hswm_os_ai_2026-10-07/statement.rq",
+      "sha256": "93faf6d8c258a9331f4d9d3484786cbb3f254c7154e2baa946fc34d255821877"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 12,
+    "anchors": 2,
+    "relations": 36
+  },
+  "anchors": [
+    {
+      "uid": "sym:Concept:hswm",
+      "name": "Existing HSWM concept; current meaning in bound canon",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:chu-hswm-2026-09-27-chu-domain",
+      "name": "Existing broad CHU scope from 2026-09-27 local snapshot",
+      "required_labels": [
+        "Concept"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "name": "CHU operating through HSWM as AI",
+        "standard_graph_role": "SYNTHESIS_BUNDLE",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/canon/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.md",
+        "source_sha256": "80145f46238258396c3a459f975ef281383914b772cda3f1d5aa07f9c5e7ad70",
+        "responsibility_owner": "HSWM_IDENTITY_PROJECTION",
+        "recorded_on": "2026-10-07",
+        "status": "PROPOSED",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_EFFICACY_NOT_UNCONDITIONAL_IDENTITY",
+        "description": "CHU operating through HSWM as AI",
+        "claim_boundary": "AI_RESTATEMENT_OR_ENGINEERING_OBSERVATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-ai-source-2026-10-07",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Exact user statement and recording request",
+        "standard_graph_role": "USER_DIRECT_SOURCE",
+        "authority_class": "USER_PRIMARY",
+        "source_path": "docs/canon/sources/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.txt",
+        "source_sha256": "27e48e1817cf18a3aa76d857943540c606738f3e421ae01516926ee24cdcd68d",
+        "responsibility_owner": "HSWM_IDENTITY_PROJECTION",
+        "recorded_on": "2026-10-07",
+        "status": "USER_VIEWPOINT_RECORDED",
+        "utterance_verbatim": "그 CHU 운영체제의 동작방식이 HSWM 으로 이뤄지면 그거 자체가 ai 라고 생각해 이 문장 좀 hspine 이랑 kg 랑 작업환경 표준그래프 엔지니어링으로 정리해서 박아줘봐봐 ㅇㅇ",
+        "event_time_known": false,
+        "source_channel": "current user conversation",
+        "serialization": "UTF-8 plus final LF",
+        "description": "그 CHU 운영체제의 동작방식이 HSWM 으로 이뤄지면 그거 자체가 ai 라고 생각해 이 문장 좀 hspine 이랑 kg 랑 작업환경 표준그래프 엔지니어링으로 정리해서 박아줘봐봐 ㅇㅇ",
+        "claim_boundary": "USER_VIEWPOINT_ATTRIBUTION_NOT_EMPIRICAL_EVIDENCE",
+        "projection_nonclaim": "NOT_CANONICAL_RUNTIME_STATE_NOT_EFFICACY_NOT_AUTHORIZATION"
+      }
+    },
+    {
+      "uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "labels": [
+        "Claim"
+      ],
+      "properties": {
+        "name": "Conditional AI identity viewpoint",
+        "standard_graph_role": "CLAIM",
+        "authority_class": "USER_PRIMARY",
+        "source_path": "docs/canon/sources/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.txt",
+        "source_sha256": "27e48e1817cf18a3aa76d857943540c606738f3e421ae01516926ee24cdcd68d",
+        "responsibility_owner": "HSWM_IDENTITY_PROJECTION",
+        "recorded_on": "2026-10-07",
+        "status": "USER_VIEWPOINT_RECORDED",
+        "claim_type": "CONDITIONAL_AI_IDENTITY_VIEWPOINT",
+        "assertion_verbatim": "그 CHU 운영체제의 동작방식이 HSWM 으로 이뤄지면 그거 자체가 ai 라고 생각해",
+        "condition_text": "CHU 운영체제의 동작방식이 HSWM 으로 이뤄지면",
+        "consequent_text": "그거 자체가 ai 라고 생각해",
+        "scientific_status": "NOT_EVALUATED",
+        "description": "그 CHU 운영체제의 동작방식이 HSWM 으로 이뤄지면 그거 자체가 ai 라고 생각해",
+        "claim_boundary": "USER_VIEWPOINT_ATTRIBUTION_NOT_EMPIRICAL_EVIDENCE",
+        "projection_nonclaim": "NOT_CANONICAL_RUNTIME_STATE_NOT_EFFICACY_NOT_AUTHORIZATION",
+        "current_decision_uid": "sym:Concept:chu-os-ai-assessment-2026-10-07"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-ai-interpretation-2026-10-07",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "AI restatement and link to prior scope",
+        "standard_graph_role": "AI_INTERPRETATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/canon/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.md",
+        "source_sha256": "80145f46238258396c3a459f975ef281383914b772cda3f1d5aa07f9c5e7ad70",
+        "responsibility_owner": "HSWM_IDENTITY_PROJECTION",
+        "recorded_on": "2026-10-07",
+        "status": "PROPOSED",
+        "restatement": "CHU 운영체제의 동작 방식이 HSWM으로 이루어진다면, 그렇게 작동하는 CHU 운영체제 자체를 하나의 AI로 본다.",
+        "interpretation_actor": "agent:codex",
+        "description": "CHU broader scope is preserved. The operating system whose dynamics is HSWM is the qualified subject; legacy fixed H/W/A/F/Pi fields are not restored.",
+        "claim_boundary": "AI_RESTATEMENT_OR_ENGINEERING_OBSERVATION",
+        "projection_nonclaim": "NOT_CANONICAL_RUNTIME_STATE_NOT_EFFICACY_NOT_AUTHORIZATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-ai-target-2026-10-07",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "CHU operating system under the stated condition",
+        "standard_graph_role": "QUALIFIED_SUBJECT",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/canon/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.md",
+        "source_sha256": "80145f46238258396c3a459f975ef281383914b772cda3f1d5aa07f9c5e7ad70",
+        "responsibility_owner": "HSWM_IDENTITY_PROJECTION",
+        "recorded_on": "2026-10-07",
+        "status": "PROPOSED",
+        "qualification": "WHEN_CHU_OS_OPERATES_THROUGH_HSWM",
+        "description": "Qualified referent of this claim, not a replacement CHU definition or a new deployed OS instance.",
+        "claim_boundary": "AI_RESTATEMENT_OR_ENGINEERING_OBSERVATION",
+        "projection_nonclaim": "NOT_CANONICAL_RUNTIME_STATE_NOT_EFFICACY_NOT_AUTHORIZATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-ai-slot-subject-2026-10-07",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Claim participation: subject",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/canon/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.md",
+        "source_sha256": "80145f46238258396c3a459f975ef281383914b772cda3f1d5aa07f9c5e7ad70",
+        "responsibility_owner": "HSWM_IDENTITY_PROJECTION",
+        "recorded_on": "2026-10-07",
+        "status": "PROPOSED",
+        "role": "subject",
+        "ordinal": 0,
+        "qualification": "WHEN_CHU_OS_OPERATES_THROUGH_HSWM",
+        "description": "Claim participation: subject",
+        "claim_boundary": "AI_RESTATEMENT_OR_ENGINEERING_OBSERVATION",
+        "projection_nonclaim": "NOT_CANONICAL_RUNTIME_STATE_NOT_EFFICACY_NOT_AUTHORIZATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-ai-slot-mechanism-2026-10-07",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Claim participation: operating-mechanism",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/canon/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.md",
+        "source_sha256": "80145f46238258396c3a459f975ef281383914b772cda3f1d5aa07f9c5e7ad70",
+        "responsibility_owner": "HSWM_IDENTITY_PROJECTION",
+        "recorded_on": "2026-10-07",
+        "status": "PROPOSED",
+        "role": "operating-mechanism",
+        "ordinal": 1,
+        "qualification": "WHEN_CHU_OS_OPERATES_THROUGH_HSWM",
+        "description": "Claim participation: operating-mechanism",
+        "claim_boundary": "AI_RESTATEMENT_OR_ENGINEERING_OBSERVATION",
+        "projection_nonclaim": "NOT_CANONICAL_RUNTIME_STATE_NOT_EFFICACY_NOT_AUTHORIZATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-ai-slot-consequent-2026-10-07",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Claim participation: consequent",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/canon/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.md",
+        "source_sha256": "80145f46238258396c3a459f975ef281383914b772cda3f1d5aa07f9c5e7ad70",
+        "responsibility_owner": "HSWM_IDENTITY_PROJECTION",
+        "recorded_on": "2026-10-07",
+        "status": "PROPOSED",
+        "role": "consequent",
+        "ordinal": 2,
+        "qualification": "WHEN_CHU_OS_OPERATES_THROUGH_HSWM",
+        "description": "Claim participation: consequent",
+        "claim_boundary": "AI_RESTATEMENT_OR_ENGINEERING_OBSERVATION",
+        "projection_nonclaim": "NOT_CANONICAL_RUNTIME_STATE_NOT_EFFICACY_NOT_AUTHORIZATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-ai-slot-speaker-2026-10-07",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Claim participation: speaker-source",
+        "standard_graph_role": "ROLE_PARTICIPATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/canon/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.md",
+        "source_sha256": "80145f46238258396c3a459f975ef281383914b772cda3f1d5aa07f9c5e7ad70",
+        "responsibility_owner": "HSWM_IDENTITY_PROJECTION",
+        "recorded_on": "2026-10-07",
+        "status": "PROPOSED",
+        "role": "speaker-source",
+        "ordinal": 3,
+        "qualification": "WHEN_CHU_OS_OPERATES_THROUGH_HSWM",
+        "description": "Claim participation: speaker-source",
+        "claim_boundary": "AI_RESTATEMENT_OR_ENGINEERING_OBSERVATION",
+        "projection_nonclaim": "NOT_CANONICAL_RUNTIME_STATE_NOT_EFFICACY_NOT_AUTHORIZATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-ai-hspine-publication-2026-10-07",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "HSPINE publication readback",
+        "standard_graph_role": "PUBLICATION_OBSERVATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/canon/artifacts/chu_hswm_os_ai_2026-10-07/publication.v1.json",
+        "source_sha256": "7afc78149414284b9ce2e371f5241e44ce311248e7df0b6f1883716c7bba2f9d",
+        "responsibility_owner": "HSWM_IDENTITY_PROJECTION",
+        "recorded_on": "2026-10-07",
+        "status": "PROPOSED",
+        "surface": "HSPINE",
+        "external_record_id": "thread-cadd5257-2328-4683-903b-92fd576396f5",
+        "external_record_authority": "AI_PROPOSAL",
+        "exact_readback": true,
+        "root_node_id": "intent-cb96fca1-b72c-4e7e-a91d-ebaf95287aa5",
+        "link_node_id": "intent-02003aac-b70d-419d-ae76-43cf3683dee6",
+        "description": "HSPINE publication readback",
+        "claim_boundary": "AI_RESTATEMENT_OR_ENGINEERING_OBSERVATION",
+        "projection_nonclaim": "NOT_CANONICAL_RUNTIME_STATE_NOT_EFFICACY_NOT_AUTHORIZATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-ai-kg-publication-2026-10-07",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "KG note publication readback",
+        "standard_graph_role": "PUBLICATION_OBSERVATION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/canon/artifacts/chu_hswm_os_ai_2026-10-07/publication.v1.json",
+        "source_sha256": "7afc78149414284b9ce2e371f5241e44ce311248e7df0b6f1883716c7bba2f9d",
+        "responsibility_owner": "HSWM_IDENTITY_PROJECTION",
+        "recorded_on": "2026-10-07",
+        "status": "PROPOSED",
+        "surface": "KG",
+        "external_record_id": "sym:Note:chatgpt-chu-hswm-os-ai-20261007",
+        "external_record_authority": "SECONDARY_AI/PENDING_OR_PRELIMINARY",
+        "exact_readback": true,
+        "target_version": "\"2026-10-07T01:07:29.255Z\"",
+        "description": "KG note publication readback",
+        "claim_boundary": "AI_RESTATEMENT_OR_ENGINEERING_OBSERVATION",
+        "projection_nonclaim": "NOT_CANONICAL_RUNTIME_STATE_NOT_EFFICACY_NOT_AUTHORIZATION"
+      }
+    },
+    {
+      "uid": "sym:Concept:chu-os-ai-assessment-2026-10-07",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "Recorded viewpoint without empirical promotion",
+        "standard_graph_role": "DECISION",
+        "authority_class": "SECONDARY_AI",
+        "source_path": "docs/canon/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.md",
+        "source_sha256": "80145f46238258396c3a459f975ef281383914b772cda3f1d5aa07f9c5e7ad70",
+        "responsibility_owner": "HSWM_IDENTITY_PROJECTION",
+        "recorded_on": "2026-10-07",
+        "status": "NOT_EVALUATED",
+        "projection_nonclaim": "NOT_RUNTIME_STATE_NOT_EFFICACY_NOT_UNCONDITIONAL_IDENTITY",
+        "description": "The user viewpoint is recorded; whether the current runtime realizes it is not evaluated by this publication.",
+        "claim_boundary": "AI_RESTATEMENT_OR_ENGINEERING_OBSERVATION",
+        "assesses_claim_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+        "evidence_disposition": "NOT_EVALUATED",
+        "claim_ceiling": "ATTRIBUTION_ONLY_NOT_RUNTIME_COMPLETION"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-slot-subject-2026-10-07",
+      "type": "HAS_PARTICIPATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-slot-subject-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-target-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-slot-subject-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-source-2026-10-07",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-slot-mechanism-2026-10-07",
+      "type": "HAS_PARTICIPATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-slot-mechanism-2026-10-07",
+      "to_uid": "sym:Concept:hswm",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-slot-mechanism-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-source-2026-10-07",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-slot-consequent-2026-10-07",
+      "type": "HAS_PARTICIPATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-slot-consequent-2026-10-07",
+      "to_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-slot-consequent-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-source-2026-10-07",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-slot-speaker-2026-10-07",
+      "type": "HAS_PARTICIPATION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-slot-speaker-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-source-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-slot-speaker-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-source-2026-10-07",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-source-2026-10-07",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "to_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-interpretation-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-target-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-slot-subject-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-slot-mechanism-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-slot-consequent-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-slot-speaker-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-hspine-publication-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-kg-publication-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-source-2026-10-07",
+      "to_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "type": "HAS_ASSERTION",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-source-2026-10-07",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-interpretation-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-source-2026-10-07",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-interpretation-2026-10-07",
+      "to_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-interpretation-2026-10-07",
+      "to_uid": "sym:Concept:hswm",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-interpretation-2026-10-07",
+      "to_uid": "sym:Concept:chu-hswm-2026-09-27-chu-domain",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-target-2026-10-07",
+      "to_uid": "sym:Concept:chu-hswm-2026-09-27-chu-domain",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-hspine-publication-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-source-2026-10-07",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-hspine-publication-2026-10-07",
+      "to_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-kg-publication-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-source-2026-10-07",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-kg-publication-2026-10-07",
+      "to_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:chu-os-ai-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-assessment-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "to_uid": "sym:Concept:chu-os-ai-assessment-2026-10-07",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:Concept:chu-os-ai-assessment-2026-10-07",
+      "to_uid": "sym:Claim:chu-os-ai-viewpoint-2026-10-07",
+      "type": "CONSTRAINS",
+      "authority_class": "SECONDARY_AI",
+      "scope": "CHU_HSWM_OS_AI_SOURCE_BOUND_PROJECTION",
+      "status": "PROPOSED"
+    }
+  ]
+}

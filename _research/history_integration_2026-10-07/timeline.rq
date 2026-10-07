@@ -1,0 +1,5 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?oid ?subject ?committed WHERE {
+ ?x a role:GIT_COMMIT ; p:commit_oid ?oid ; p:name ?subject ; p:committed_at ?committed .
+} ORDER BY ?committed ?oid

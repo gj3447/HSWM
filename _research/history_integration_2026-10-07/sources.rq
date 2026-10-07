@@ -1,0 +1,5 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?repo ?path ?revision ?digest WHERE {
+ ?x a role:SOURCE_VIEW ; p:repository_id ?repo ; p:source_path ?path ; p:source_revision ?revision ; p:source_sha256 ?digest .
+} ORDER BY ?repo ?path

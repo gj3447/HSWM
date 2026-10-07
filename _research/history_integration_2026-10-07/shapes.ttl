@@ -1,0 +1,20 @@
+@prefix kb: <https://hswm.invalid/kg-bundle-rdf/v1/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix h: <urn:hswm:history:shape:> .
+h:Owned a sh:NodeShape ; sh:targetClass kb:Node ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:canonical_scope ; sh:hasValue "PENDING_OR_PRELIMINARY" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:runtime_write_path ; sh:hasValue false ; sh:minCount 1 ; sh:maxCount 1 ] .
+h:Commit a sh:NodeShape ; sh:targetClass role:GIT_COMMIT ;
+ sh:property [ sh:path p:commit_oid ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:git_object_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+h:Source a sh:NodeShape ; sh:targetClass role:SOURCE_VIEW ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_bytes ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] .
+h:Relation a sh:NodeShape ; sh:targetClass kb:Relation ;
+ sh:property [ sh:path kb:status ; sh:hasValue "PROPOSED" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path kb:relationType ; sh:in ( "HAS_VIEW" "HAS_CONTENT" "HAS_SOURCE" "REFERENCES" ) ; sh:minCount 1 ; sh:maxCount 1 ] .

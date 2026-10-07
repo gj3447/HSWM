@@ -3,9 +3,12 @@ import { createHash } from "node:crypto"
 import { Data, Either, Schema } from "effect"
 import { canonicalAtomV2ExactBytes as sameBytes } from "./canonical-atom-v2-durable-guards.js"
 import {
-  canonicalAtomV2JournalEnvelopeMatches,
   canonicalAtomV2JournalReceiptCommand as receiptCommand
 } from "./canonical-atom-v2-journal-adapter.js"
+import {
+  decodeCanonicalAtomV2JournalWriteEnvelopes,
+  type CanonicalAtomV2JournalEnvelopeInput
+} from "./canonical-atom-v2-journal-decode-guards.js"
 import {
   canonicalAtomV2JournalLinkMatches,
   canonicalAtomV2JournalSchemaMatches,
@@ -18,9 +21,7 @@ import {
   type CanonicalAtomV2SchemaContentBinding
 } from "./canonical-atom-v2-content.js"
 import {
-  HSWM_CANONICAL_ATOM_ENVELOPE_V2_MEDIA_TYPE,
   HSWM_CANONICAL_SCHEMA_CONTENT_V2_MEDIA_TYPE,
-  canonicalAtomV2EnvelopeBytes,
   canonicalAtomV2SchemaContentBytes,
   snapshotCanonicalAtomV2SchemaContentBinding,
   snapshotCanonicalAtomV2WriteContentBinding,
@@ -39,10 +40,8 @@ import {
 } from "./canonical-atom-v2-domain.js"
 import {
   HSWM_CANONICAL_RECEIPT_V2_CONTRACT_VERSION,
-  CanonicalAtomV2Schema,
   CanonicalAtomV2KeySchema,
   canonicalAtomV2KeyId,
-  snapshotCanonicalAtomV2,
   snapshotHSWMCanonicalSchemaV2,
   type CanonicalAtomV2,
   type HSWMCanonicalSchemaV2
@@ -414,56 +413,23 @@ export const applyCanonicalAtomV2StateJournalGenesis = (
     : fail("STATE_DIGEST_INVALID", "genesis resulting state digest does not match revision zero")
 }
 
-export type CanonicalAtomV2JournalEnvelopeInput =
-  | ReadonlyArray<CanonicalAtomV2>
-  | ReadonlyArray<Uint8Array>
+export type { CanonicalAtomV2JournalEnvelopeInput } from "./canonical-atom-v2-journal-decode-guards.js"
 
 const decodeEnvelopeAtoms = (
   inputs: CanonicalAtomV2JournalEnvelopeInput,
   bindings: ReadonlyArray<CanonicalAtomV2WriteContentBinding>
 ): Either.Either<ReadonlyArray<CanonicalAtomV2>, CanonicalAtomV2StateJournalError> => {
-  if (inputs.length !== bindings.length) {
-    return fail("ENVELOPE_INVALID", "journal commit must supply exactly one envelope per write binding")
+  const decoded = decodeCanonicalAtomV2JournalWriteEnvelopes(inputs, bindings)
+  if (Either.isRight(decoded)) return Either.right(decoded.right)
+  const detail: Record<typeof decoded.left, string> = {
+    COUNT_MISMATCH: "journal commit must supply exactly one envelope per write binding",
+    JSON_INVALID: "atom envelope bytes are not bounded duplicate-free JSON",
+    ATOM_INVALID: "atom envelope bytes violate the strict atom contract",
+    NOT_CANONICAL: "atom envelope bytes must be exact canonical JSON/v1",
+    OBJECT_CANONICAL_INVALID: "decoded atom has no canonical envelope encoding",
+    BINDING_MISMATCH: "atom envelope does not exactly match its journal binding"
   }
-  const atoms: Array<CanonicalAtomV2> = []
-  for (let index = 0; index < inputs.length; index += 1) {
-    const input = inputs[index]!
-    let atom: CanonicalAtomV2
-    let bytes: Uint8Array
-    if (input instanceof Uint8Array) {
-      const parsed = decodeCanonicalJsonBytes(input)
-      if (Either.isLeft(parsed)) return fail("ENVELOPE_INVALID", "atom envelope bytes are not bounded duplicate-free JSON")
-      const decoded = Schema.decodeUnknownEither(CanonicalAtomV2Schema, {
-        onExcessProperty: "error"
-      })(parsed.right)
-      if (Either.isLeft(decoded)) return fail("ENVELOPE_INVALID", "atom envelope bytes violate the strict atom contract")
-      atom = snapshotCanonicalAtomV2(decoded.right)
-      const canonical = canonicalAtomV2EnvelopeBytes(atom)
-      if (Either.isLeft(canonical) || !sameBytes(input, canonical.right)) {
-        return fail("ENVELOPE_INVALID", "atom envelope bytes must be exact canonical JSON/v1")
-      }
-      bytes = canonical.right
-    } else {
-      const decoded = Schema.decodeUnknownEither(CanonicalAtomV2Schema, {
-        onExcessProperty: "error"
-      })(input)
-      if (Either.isLeft(decoded)) return fail("ENVELOPE_INVALID", "decoded atom envelope violates the strict atom contract")
-      atom = snapshotCanonicalAtomV2(decoded.right)
-      const canonical = canonicalAtomV2EnvelopeBytes(atom)
-      if (Either.isLeft(canonical)) return fail("ENVELOPE_INVALID", "decoded atom has no canonical envelope encoding")
-      bytes = canonical.right
-    }
-    const binding = bindings[index]!
-    if (!canonicalAtomV2JournalEnvelopeMatches(atom, {
-      mediaType: HSWM_CANONICAL_ATOM_ENVELOPE_V2_MEDIA_TYPE,
-      byteLength: bytes.byteLength,
-      sha256: sha256(bytes)
-    }, binding)) {
-      return fail("ENVELOPE_INVALID", "atom envelope does not exactly match its journal binding")
-    }
-    atoms.push(atom)
-  }
-  return Either.right(Object.freeze(atoms))
+  return fail("ENVELOPE_INVALID", detail[decoded.left])
 }
 
 const sameReceipt = (

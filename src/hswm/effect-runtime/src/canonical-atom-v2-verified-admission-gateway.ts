@@ -11,7 +11,9 @@ import {
   makeLocalPermitVerifierContext,
   makeVerifiedAdmissionCommitBackend,
   makeVerifiedAdmissionCommitBackendV2,
+  makeVerifiedAdmissionCommitBackendV2WithCheckpointForTest,
   type LocalPermitCommitReceipt,
+  type LocalPermitCommitPublicationCheckpointForTest,
   type LocalPermitCommitRequest,
   type LocalPermitRecovery,
   type LocalPermitVerifierContext,
@@ -277,11 +279,15 @@ export const makeVerifiedAdmissionGateway = (
  * predecessor view; it never re-runs a potentially changed executable.
  * `submit` takes its per-root lock from the `ProtectedRootLocks` service.
  */
-export const makeVerifiedAdmissionGatewayV2WithProtectedRootLocks = (
+const makeVerifiedAdmissionGatewayV2Configured = (
   rootPath: string,
   verifier: LocalPermitVerifierContext,
   config: VerifiedAdmissionGatewayConfig,
-  clock: () => Date = () => new Date()
+  clock: () => Date = () => new Date(),
+  checkpointForTest: {
+    readonly selected: LocalPermitCommitPublicationCheckpointForTest
+    readonly onCheckpoint: () => void
+  } | undefined = undefined
 ): Either.Either<VerifiedAdmissionGatewayV2<ProtectedRootLocks>, VerifiedAdmissionGatewayError> => {
   if (!isAbsolute(rootPath) || !isAbsolute(config.leanExecutable) || !Number.isSafeInteger(config.timeoutMillis ?? 10_000) || (config.timeoutMillis ?? 10_000) < 1 || (config.timeoutMillis ?? 10_000) > 60_000) {
     return Either.left(new VerifiedAdmissionGatewayError({ code: "CONFIG_INVALID", detail: "gateway requires absolute root and Lean executable plus a 1..60000ms timeout" }))
@@ -318,10 +324,7 @@ export const makeVerifiedAdmissionGatewayV2WithProtectedRootLocks = (
     }
     return Either.right(undefined)
   }
-  const backend = makeVerifiedAdmissionCommitBackendV2(
-    normalizedRoot,
-    verifierSnapshot.right,
-    (preflight, mintApproval) => Effect.gen(function* () {
+  const admission = (preflight: VerifiedAdmissionPreflight, mintApproval: (artifact: VerifiedAdmissionDecisionArtifact) => object) => Effect.gen(function* () {
       if (preflight.view.consumedNonces.length >= 128) {
         return yield* Effect.fail(new LocalPermitCommitError({ code: "PERMIT_VERIFICATION_FAILED", detail: "verified-admission wire refuses more than 128 recovered nonce digests" }))
       }
@@ -348,10 +351,24 @@ export const makeVerifiedAdmissionGatewayV2WithProtectedRootLocks = (
         requestSha256: sha256(encoded.right),
         decisionSha256: sha256(result.stdout)
       }))
-    }),
-    validatePersistedDecision,
-    clock
-  )
+    })
+  const backend = checkpointForTest === undefined
+    ? makeVerifiedAdmissionCommitBackendV2(
+      normalizedRoot,
+      verifierSnapshot.right,
+      admission,
+      validatePersistedDecision,
+      clock
+    )
+    : makeVerifiedAdmissionCommitBackendV2WithCheckpointForTest(
+      normalizedRoot,
+      verifierSnapshot.right,
+      admission,
+      validatePersistedDecision,
+      clock,
+      checkpointForTest.selected,
+      checkpointForTest.onCheckpoint
+    )
   const publish = (request: LocalPermitCommitRequest) => Effect.gen(function* () {
     const frozenRequest: LocalPermitCommitRequest = Object.freeze({
       envelopeBytes: Uint8Array.from(request.envelopeBytes),
@@ -370,6 +387,34 @@ export const makeVerifiedAdmissionGatewayV2WithProtectedRootLocks = (
     })
   }))
 }
+
+export const makeVerifiedAdmissionGatewayV2WithProtectedRootLocks = (
+  rootPath: string,
+  verifier: LocalPermitVerifierContext,
+  config: VerifiedAdmissionGatewayConfig,
+  clock: () => Date = () => new Date()
+): Either.Either<VerifiedAdmissionGatewayV2<ProtectedRootLocks>, VerifiedAdmissionGatewayError> =>
+  makeVerifiedAdmissionGatewayV2Configured(rootPath, verifier, config, clock)
+
+/** Package-private test seam; it changes only the post-fsync crash/race hook. */
+export const makeVerifiedAdmissionGatewayV2WithCheckpointForTest = (
+  rootPath: string,
+  verifier: LocalPermitVerifierContext,
+  config: VerifiedAdmissionGatewayConfig,
+  clock: () => Date,
+  selected: LocalPermitCommitPublicationCheckpointForTest,
+  onCheckpoint: () => void
+): Either.Either<VerifiedAdmissionGatewayV2, VerifiedAdmissionGatewayError> =>
+  Either.map(
+    makeVerifiedAdmissionGatewayV2Configured(rootPath, verifier, config, clock, {
+      selected,
+      onCheckpoint
+    }),
+    (gateway) => Object.freeze({
+      recover: gateway.recover,
+      submit: (request: LocalPermitCommitRequest) => withDefaultProtectedRootLocks(gateway.submit(request))
+    })
+  )
 
 /** V2 with the module-private process-local lock table supplied; signature unchanged. */
 export const makeVerifiedAdmissionGatewayV2 = (

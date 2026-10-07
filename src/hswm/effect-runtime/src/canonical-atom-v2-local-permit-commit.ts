@@ -26,6 +26,7 @@ import {
   type CallerRelativeCanonicalPermitEnvelopeVerification
 } from "./canonical-atom-v2-permit-envelope.js"
 import { admissionPreflightAdapterFacts, type AdmissionPreflightAdapterFacts, type AdmissionPreflightInput } from "./canonical-atom-v2-admission-preflight.js"
+import { verifiedPermitBridgeProjection } from "./canonical-atom-v2-verified-permit-bridge.js"
 import { canonicalJsonBytes, decodeCanonicalJsonBytes } from "./canonical-atom-v2-json.js"
 import {
   NodePosixFileSystem,
@@ -465,13 +466,9 @@ const checkedAdmissionPreflight = (
   preStateBytes: Uint8Array,
   postStateBytes: Uint8Array
 ): VerifiedAdmissionPreflight => {
+  const projection = verifiedPermitBridgeProjection(verified)
   const input: AdmissionPreflightInput = Object.freeze({ ...prepared,
-    verifiedPermit: Object.freeze({ envelopeDigest: verified.envelopeBytesSha256,
-      checkedAt: verified.callerSuppliedVerificationTime,
-      executionIntentDigest: verified.envelope.claims.executionIntentDigest,
-      nonceDigest: verified.envelope.claims.nonceDigest,
-      priorHead: Object.freeze({ ...verified.envelope.claims.priorHead }),
-      expectedNextHead: Object.freeze({ ...verified.envelope.claims.expectedNextHead }) }),
+    verifiedPermit: projection.verifiedPermit,
     preState: Object.freeze({ byteLength: preStateBytes.byteLength, sha256: digest(preStateBytes) }),
     postState: Object.freeze({ byteLength: postStateBytes.byteLength, sha256: digest(postStateBytes) })
   })
@@ -936,13 +933,14 @@ const decodeVerifiedAdmissionRecordV2 = (bytes: Uint8Array): Either.Either<Verif
  * bytes and recovery refuses the slot unless the supplied semantic validator
  * accepts that artifact against the reconstructed predecessor view.
  */
-export const makeVerifiedAdmissionCommitBackendV2 = (
+const makeVerifiedAdmissionCommitBackendV2Internal = (
   rootPath: string,
   verifier: LocalPermitVerifierContext,
   admission: VerifiedAdmissionHookV2,
   validateRecoveredAdmission: VerifiedAdmissionRecoveryValidator,
   clock: () => Date = () => new Date(),
-  fs: PosixFileSystemShape = NodePosixFileSystem
+  fs: PosixFileSystemShape = NodePosixFileSystem,
+  checkpoint: LocalPermitCommitCheckpoint = () => undefined
 ): VerifiedAdmissionCommitBackendV2 => {
   const root = join(rootPath, "verified-admission-commits-v2")
   const commitsRoot = join(root, "commits")
@@ -1055,10 +1053,48 @@ export const makeVerifiedAdmissionCommitBackendV2 = (
       if (Either.isLeft(encoded) || encoded.right.byteLength > MAX_VERIFIED_ADMISSION_RECORD_BYTES) return yield* Effect.fail(failure("INPUT_INVALID", "verified-admission v2 commit record cannot be canonically bounded"))
       yield* publishSlot(fs, {
         rootPath, root, commitsRoot, directory, path, temporaryPath, bytes: encoded.right,
-        maximumBytes: MAX_VERIFIED_ADMISSION_RECORD_BYTES, checkpoint: () => undefined, label: "verified-admission v2"
+        maximumBytes: MAX_VERIFIED_ADMISSION_RECORD_BYTES, checkpoint, label: "verified-admission v2"
       })
       const commit = Object.freeze({ recordSha256: digest(encoded.right), slotPath: path, nonceDigest: claims.nonceDigest, executionIntentDigest: claims.executionIntentDigest, priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead }), verificationTime: verifiedAt, postStateBytes: Uint8Array.from(postState.right), status: HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS })
       return Object.freeze({ commit, decision: artifact })
     })
   })
 }
+
+export const makeVerifiedAdmissionCommitBackendV2 = (
+  rootPath: string,
+  verifier: LocalPermitVerifierContext,
+  admission: VerifiedAdmissionHookV2,
+  validateRecoveredAdmission: VerifiedAdmissionRecoveryValidator,
+  clock: () => Date = () => new Date(),
+  fs: PosixFileSystemShape = NodePosixFileSystem
+): VerifiedAdmissionCommitBackendV2 =>
+  makeVerifiedAdmissionCommitBackendV2Internal(
+    rootPath,
+    verifier,
+    admission,
+    validateRecoveredAdmission,
+    clock,
+    fs
+  )
+
+/** Package-private test seam for actual process-crash and no-replace race witnesses. */
+export const makeVerifiedAdmissionCommitBackendV2WithCheckpointForTest = (
+  rootPath: string,
+  verifier: LocalPermitVerifierContext,
+  admission: VerifiedAdmissionHookV2,
+  validateRecoveredAdmission: VerifiedAdmissionRecoveryValidator,
+  clock: () => Date,
+  selected: LocalPermitCommitPublicationCheckpointForTest,
+  onCheckpoint: () => void,
+  fs: PosixFileSystemShape = NodePosixFileSystem
+): VerifiedAdmissionCommitBackendV2 =>
+  makeVerifiedAdmissionCommitBackendV2Internal(
+    rootPath,
+    verifier,
+    admission,
+    validateRecoveredAdmission,
+    clock,
+    fs,
+    (checkpoint) => { if (checkpoint === selected) onCheckpoint() }
+  )

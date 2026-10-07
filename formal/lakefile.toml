@@ -1,5 +1,5 @@
 name = "HSWMCellular"
-defaultTargets = ["HSWMOperationalQuotient", "HSWMCellular", "HSWMRuntime", "HSWMDurableRuntime", "HSWMCanonicalLearning", "HSWMTypeScriptV1Refinement", "HSWMOutcomeJudgment", "HSWMAtomicAdmission", "HSWMAtomicAdmissionConsistency", "HSWMAtomicAdmissionNonEntailment", "HSWMEndToEndRuntimeRefinement", "HSWMCanonicalPermitEnvelope", "HSWMExecutionCertificateWire", "HSWMLocalPermitCommit", "HSWMVerifiedAdmissionKernel", "HSWMVerifiedAdmissionWire", "HSWMPersistedVerifiedAdmission", "HSWMAdmissionKernelCli", "HSWMDnrd5EfficacyBoundary", "HSWMDnrd5ExactSignGate", "HSWMCausalEfficacyBridge", "HSWMSemanticLifecycleRefinement", "HSWMSemanticLifecycleCli", "HSWMStandardGraphIncidence", "HSWMStandardGraphIncidenceCli", "HSWMCanonicalPreservation", "HSWMCanonicalPreservationCli", "HSWMDurablePreservation", "HSWMDurablePreservationCli", "HSWMJournalReplay", "HSWMJournalReplayCli", "HSWMJournalAdapter", "HSWMJournalAdapterCli", "HSWMJournalValidation", "HSWMJournalValidationCli", "HSWMAdmissionPreflight", "HSWMAdmissionPreflightCli"]
+defaultTargets = ["HSWMOperationalQuotient", "HSWMCellular", "HSWMRuntime", "HSWMDurableRuntime", "HSWMCanonicalLearning", "HSWMTypeScriptV1Refinement", "HSWMOutcomeJudgment", "HSWMAtomicAdmission", "HSWMAtomicAdmissionConsistency", "HSWMAtomicAdmissionNonEntailment", "HSWMEndToEndRuntimeRefinement", "HSWMCanonicalPermitEnvelope", "HSWMExecutionCertificateWire", "HSWMLocalPermitCommit", "HSWMVerifiedAdmissionKernel", "HSWMVerifiedAdmissionWire", "HSWMPersistedVerifiedAdmission", "HSWMAdmissionKernelCli", "HSWMDnrd5EfficacyBoundary", "HSWMDnrd5ExactSignGate", "HSWMCausalEfficacyBridge", "HSWMSemanticLifecycleRefinement", "HSWMSemanticLifecycleCli", "HSWMStandardGraphIncidence", "HSWMStandardGraphIncidenceCli", "HSWMCanonicalPreservation", "HSWMCanonicalPreservationCli", "HSWMDurablePreservation", "HSWMDurablePreservationCli", "HSWMJournalReplay", "HSWMJournalReplayCli", "HSWMJournalAdapter", "HSWMJournalAdapterCli", "HSWMJournalValidation", "HSWMJournalValidationCli", "HSWMAdmissionPreflight", "HSWMAdmissionPreflightCli", "HSWMJournalDecode", "HSWMJournalDecodeCli", "HSWMVerifiedPermitBridge", "HSWMVerifiedPermitBridgeCli"]
 
 [[lean_lib]]
 name = "HSWMCellular"
@@ -80,3 +80,19 @@ roots = ["HSWMAdmissionPreflight"]
 [[lean_exe]]
 name = "HSWMAdmissionPreflightCli"
 root = "HSWMAdmissionPreflightCli"
+
+[[lean_lib]]
+name = "HSWMJournalDecode"
+roots = ["HSWMJournalDecode"]
+
+[[lean_exe]]
+name = "HSWMJournalDecodeCli"
+root = "HSWMJournalDecodeCli"
+
+[[lean_lib]]
+name = "HSWMVerifiedPermitBridge"
+roots = ["HSWMVerifiedPermitBridge"]
+
+[[lean_exe]]
+name = "HSWMVerifiedPermitBridgeCli"
+root = "HSWMVerifiedPermitBridgeCli"

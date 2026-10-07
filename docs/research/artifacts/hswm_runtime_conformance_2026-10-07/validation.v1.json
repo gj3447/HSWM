@@ -1,0 +1,603 @@
+{
+  "schema_version": "hswm-runtime-conformance-validation/v1",
+  "recorded_on": "2026-10-07",
+  "authority": "SECONDARY_AI_LOCAL_EXECUTION_REPORT",
+  "source_bindings": [
+    {
+      "path": "formal/HSWMJournalDecode.lean",
+      "sha256": "283b7b8d9e0026b930ab595c990219dfcf75659a29f3ba18e0a60e819804e098"
+    },
+    {
+      "path": "formal/HSWMJournalDecodeCli.lean",
+      "sha256": "249b20d3b42411052c410bb8b69661b2fc347aba8693009e4d7b8c5b90b6b3aa"
+    },
+    {
+      "path": "formal/HSWMVerifiedPermitBridge.lean",
+      "sha256": "3f41afd15befad9569459ecd17b7bb310e6f43b9b5a3ee6073b62174c73ea278"
+    },
+    {
+      "path": "formal/HSWMVerifiedPermitBridgeCli.lean",
+      "sha256": "752f7dd8bf4133ec1e9e17f4f3a09b90f012c948b48fefee609ff6f87d39aa61"
+    },
+    {
+      "path": "formal/lakefile.toml",
+      "sha256": "3564800e21e7753f924d5b46ac8477229f2871674bb4be95cb5f1de7644e158e"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-decode-guards.ts",
+      "sha256": "a4ed59bd925a15f1e9ed44ae8b6d9e08cfa671c1b4226f8948a459b64d88e2ca"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+      "sha256": "ee7a8365584d8e96f0159b93b5e0cef1d7053715bc8a44fafbcda63019fcd8cf"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-verified-permit-bridge.ts",
+      "sha256": "45729f2a3c73051df8d2ab4418d48ccce0410cc56a3932c32925921023096e62"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit.ts",
+      "sha256": "e101dc09b6a5480efe93ec1d0ed7c35fc36ffa2c5e87712f23ebaf75e5e0d280"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+      "sha256": "936ebc69fda0621ad6a1cc8b228addf7fc06d0fdfd599c2b159726eb5aee58f0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+      "sha256": "4dce4a4009dd5dcf2b600464fc763911b895ac3030c4ac01da75b2d305db7eaa"
+    },
+    {
+      "path": "tests/effect-runtime/journal-decode.test.ts",
+      "sha256": "73130be96d623982afafcee09a0389bf77d943fcecf94b1b6199e9b9ada24d27"
+    },
+    {
+      "path": "tests/effect-runtime/verified-permit-bridge.test.ts",
+      "sha256": "0658a3c0ccca23b7af3851f460ab3aa02627a84f165ad20d8bc0c156dc608a82"
+    },
+    {
+      "path": "tests/effect-runtime/journal-v2-durability-process.test.ts",
+      "sha256": "2f615fcb3427ff44c78f47577239dd466b398a857ed7d59779fde3ed8da5f6d7"
+    },
+    {
+      "path": "tests/effect-runtime/journal-v2-durability-trace.test.ts",
+      "sha256": "cdb0159498693b72e4226d548ae742098b2d04bdf958e30f9597be2deb46828d"
+    },
+    {
+      "path": "tests/effect-runtime/fixtures/journal-v2-durability-worker.ts",
+      "sha256": "b2585b790ae7919a3314d93accc042d6fd58d275e639ce6be6c0e957c84a0dea"
+    },
+    {
+      "path": "docs/research/HSWM_RUNTIME_CONFORMANCE_2026-10-07.md",
+      "sha256": "b266d283ab8cfb9b833114027495e18cd39f58d2ec9a199afd6c0742bd9ff2d6"
+    }
+  ],
+  "lean_audits": [
+    {
+      "schema_version": "hswm-journal-decode-lean-verification/v1",
+      "profile": "journal-decode",
+      "recorded_at": "2026-10-07T05:17:15.915Z",
+      "status": "EXACT_SOURCE_KERNEL_CHECKED",
+      "claim_ceiling": "DECODED_ENVELOPE_EXACT_BYTES_BINDINGS_RECEIPT_AND_REPLAY_COMPOSITION_NOT_PARSER_SCHEMA_HASH_TYPESCRIPT_OR_OS_SOUNDNESS",
+      "toolchain": {
+        "name": "leanprover/lean4:v4.32.1",
+        "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+        "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+        "pin_path": "formal/lean-toolchain",
+        "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+        "resolved_by": "lake env which lean"
+      },
+      "compile_order": [
+        "HSWMCanonicalPreservation",
+        "HSWMDurablePreservation",
+        "HSWMJournalAdapter",
+        "HSWMJournalReplay",
+        "HSWMJournalDecode"
+      ],
+      "audited_sources": [
+        "HSWMJournalDecode"
+      ],
+      "source_records": [
+        {
+          "path": "formal/HSWMCanonicalPreservation.lean",
+          "sha256": "cf3bc1ae3ee7475c8e2c4e9d76d2279124d98a31934fc7d17cc17ebf558cc740",
+          "byteLength": 11813,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMDurablePreservation.lean",
+          "sha256": "9af180f40ff245210f7c9dc74873a1f777a483c29ad4a85b72228c45d7919090",
+          "byteLength": 17413,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMJournalAdapter.lean",
+          "sha256": "9adefe5cd4f903c5c6af1e4a12345cad68ca5bbb1cdd34e2297a044b59d57018",
+          "byteLength": 11474,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMJournalReplay.lean",
+          "sha256": "c520ed6f5550716dd0a2f36c882333bcdbf3f85927374b2a4e3a2913b1e71c7b",
+          "byteLength": 11223,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMJournalDecode.lean",
+          "sha256": "283b7b8d9e0026b930ab595c990219dfcf75659a29f3ba18e0a60e819804e098",
+          "byteLength": 7953,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 13,
+          "named_theorems": [
+            "HSWM.JournalDecode.write_matches_iff",
+            "HSWM.JournalDecode.writes_match_each",
+            "HSWM.JournalDecode.descriptor_substitution_rejected",
+            "HSWM.JournalDecode.accepted_iff",
+            "HSWM.JournalDecode.accepted_receipt_exact",
+            "HSWM.JournalDecode.accepted_preserves",
+            "HSWM.JournalDecode.accepted_write_binding",
+            "HSWM.JournalDecode.accepted_forward",
+            "HSWM.JournalDecode.wrong_revision_rejected",
+            "HSWM.JournalDecode.receipt_bytes_substitution_rejected",
+            "HSWM.JournalDecode.produced_replay_accepted",
+            "HSWM.JournalDecode.produced_decoded_commit_accepted",
+            "HSWM.JournalDecode.bound_write_matches"
+          ],
+          "theorem_axioms": [
+            {
+              "theorem": "HSWM.JournalDecode.accepted_forward",
+              "axioms": [
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalDecode.accepted_iff",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalDecode.accepted_preserves",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalDecode.accepted_receipt_exact",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalDecode.accepted_write_binding",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalDecode.bound_write_matches",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalDecode.descriptor_substitution_rejected",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalDecode.produced_decoded_commit_accepted",
+              "axioms": [
+                "Classical.choice",
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalDecode.produced_replay_accepted",
+              "axioms": [
+                "Classical.choice",
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalDecode.receipt_bytes_substitution_rejected",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalDecode.write_matches_iff",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalDecode.writes_match_each",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalDecode.wrong_revision_rejected",
+              "axioms": [
+                "Quot.sound",
+                "propext"
+              ]
+            }
+          ],
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ],
+          "audit_stdout_sha256": "d8ccea35e761c194f6a322ed8e8e362573a3966fe21f952c4d7a9f918f1b3870",
+          "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "allowed_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "runner_source": {
+        "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "sha256": "4dce4a4009dd5dcf2b600464fc763911b895ac3030c4ac01da75b2d305db7eaa"
+      },
+      "auditor_interface": "ADDITIVE_PROFILE_EXTENSION_SUPERSEDES_PRIOR_PRIVATE_AUDITOR_INTERFACE_WITHOUT_MUTATING_HISTORICAL_RECEIPTS",
+      "statement_semantics_validated": false,
+      "new_dependencies_installed": false
+    },
+    {
+      "schema_version": "hswm-verified-permit-bridge-lean-verification/v1",
+      "profile": "verified-permit-bridge",
+      "recorded_at": "2026-10-07T05:17:23.670Z",
+      "status": "EXACT_SOURCE_KERNEL_CHECKED",
+      "claim_ceiling": "DECODED_SIGNED_PERMIT_TO_PREFLIGHT_KERNEL_WITH_EXPLICIT_NATIVE_CORRESPONDENCE_NOT_CRYPTO_PARSER_TRUST_TIME_OR_GLOBAL_AUTHORITY",
+      "toolchain": {
+        "name": "leanprover/lean4:v4.32.1",
+        "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+        "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+        "pin_path": "formal/lean-toolchain",
+        "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+        "resolved_by": "lake env which lean"
+      },
+      "compile_order": [
+        "HSWMCanonicalLearning",
+        "HSWMOutcomeJudgment",
+        "HSWMAtomicAdmission",
+        "HSWMAtomicAdmissionConsistency",
+        "HSWMAtomicAdmissionNonEntailment",
+        "HSWMEndToEndRuntimeRefinement",
+        "HSWMCanonicalPermitEnvelope",
+        "HSWMExecutionCertificateWire",
+        "HSWMLocalPermitCommit",
+        "HSWMVerifiedAdmissionKernel",
+        "HSWMAdmissionPreflight",
+        "HSWMVerifiedPermitBridge"
+      ],
+      "audited_sources": [
+        "HSWMVerifiedPermitBridge"
+      ],
+      "source_records": [
+        {
+          "path": "formal/HSWMCanonicalLearning.lean",
+          "sha256": "15d040887d3e387942e38c7c9e43637fc707a431075ab8ec7f041790ae1ef31b",
+          "byteLength": 17181,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMOutcomeJudgment.lean",
+          "sha256": "375a18f3368f32076893a89e768a318dd61ac0458b5ae6e4ecbee166f8fee5e8",
+          "byteLength": 11207,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMAtomicAdmission.lean",
+          "sha256": "4118c058adb5184654e8a36a339b5d398ca023cf492d79c7cc233c3c1ea7e661",
+          "byteLength": 25623,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMAtomicAdmissionConsistency.lean",
+          "sha256": "11a6b159a5afb5d233cad71279d662a0f930e73056be26cb00d2cd6dc6b11eda",
+          "byteLength": 10967,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMAtomicAdmissionNonEntailment.lean",
+          "sha256": "f6e8c8beab495a1a456bcc528da6e989989d68a63a03c503759b7e1c96f42d6f",
+          "byteLength": 7028,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMEndToEndRuntimeRefinement.lean",
+          "sha256": "47f6b67c89c5568f51a066e1dc464f200732ef512d0c73522b103bb04a974bf7",
+          "byteLength": 35487,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMCanonicalPermitEnvelope.lean",
+          "sha256": "1046ad2c3a5283d86cc0b26b0033ea64ec017d5e0587b011f4164ea6a2ed0f16",
+          "byteLength": 12613,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMExecutionCertificateWire.lean",
+          "sha256": "049493ade9e7c478aaec4eb1540ee925e6e8d1388407ddc73248320fd0a582b3",
+          "byteLength": 44368,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMLocalPermitCommit.lean",
+          "sha256": "a6e8cdd8528e78e7a86031777f9687dee6973eb6580495c54c06050323f1f974",
+          "byteLength": 12817,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMVerifiedAdmissionKernel.lean",
+          "sha256": "ac391a438b587923cdeb586d2cceb0e646d366f4ea8df350b3d12aca750889b0",
+          "byteLength": 9888,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMAdmissionPreflight.lean",
+          "sha256": "635d93ef6fca98f8397936303789ae221fdf26ce1188fea0e4073356f3b6e788",
+          "byteLength": 13394,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMVerifiedPermitBridge.lean",
+          "sha256": "3f41afd15befad9569459ecd17b7bb310e6f43b9b5a3ee6073b62174c73ea278",
+          "byteLength": 7829,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 6,
+          "named_theorems": [
+            "HSWM.CanonicalLearning.VerifiedPermitBridge.modeledNativeSuccessProjectsPreflightBindings",
+            "HSWM.CanonicalLearning.VerifiedPermitBridge.modeledNativeSuccessProjectsExpectedContext",
+            "HSWM.CanonicalLearning.VerifiedPermitBridge.modeledNativeSuccessJournalConditions",
+            "HSWM.CanonicalLearning.VerifiedPermitBridge.modeledNativeSuccessKernelAccepts",
+            "HSWM.CanonicalLearning.VerifiedPermitBridge.nativeVerifiedPreflightComputesFacts",
+            "HSWM.CanonicalLearning.VerifiedPermitBridge.nativeVerifiedPreflightKernelAccepts"
+          ],
+          "theorem_axioms": [
+            {
+              "theorem": "HSWM.CanonicalLearning.VerifiedPermitBridge.modeledNativeSuccessJournalConditions",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.VerifiedPermitBridge.modeledNativeSuccessKernelAccepts",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.VerifiedPermitBridge.modeledNativeSuccessProjectsExpectedContext",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.VerifiedPermitBridge.modeledNativeSuccessProjectsPreflightBindings",
+              "axioms": []
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.VerifiedPermitBridge.nativeVerifiedPreflightComputesFacts",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.VerifiedPermitBridge.nativeVerifiedPreflightKernelAccepts",
+              "axioms": [
+                "propext"
+              ]
+            }
+          ],
+          "axioms": [
+            "propext"
+          ],
+          "audit_stdout_sha256": "e7469215b015e146ebfedd6a0874d7f3d61845a39f1bbc17f827892c38246a39",
+          "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "allowed_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "runner_source": {
+        "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "sha256": "4dce4a4009dd5dcf2b600464fc763911b895ac3030c4ac01da75b2d305db7eaa"
+      },
+      "auditor_interface": "ADDITIVE_PROFILE_EXTENSION_SUPERSEDES_PRIOR_PRIVATE_AUDITOR_INTERFACE_WITHOUT_MUTATING_HISTORICAL_RECEIPTS",
+      "statement_semantics_validated": false,
+      "new_dependencies_installed": false
+    }
+  ],
+  "new_theorem_count": 19,
+  "runtime_regression": {
+    "tests_passed": 103,
+    "command": "HSWM_RUN_SEMANTIC_LEAN=1 npm --prefix src/hswm/effect-runtime test -- ../../../tests/effect-runtime/admission-preflight.test.ts ../../../tests/effect-runtime/journal-validation.test.ts ../../../tests/effect-runtime/journal-adapter.test.ts ../../../tests/effect-runtime/journal-replay.test.ts ../../../tests/effect-runtime/semantic-philosophy-proof-process.test.ts test/canonical-atom-v2-runtime.test.ts test/canonical-atom-v2-state-journal-store.test.ts test/canonical-atom-v2-state-journal-file.test.ts test/canonical-atom-v2-state-journal-file-process.test.ts test/canonical-atom-v2-permit-envelope.test.ts test/canonical-atom-v2-local-permit-commit.test.ts test/canonical-atom-v2-local-permit-commit-process.test.ts test/canonical-atom-v2-local-permit-commit-process-crash.test.ts test/canonical-atom-v2-verified-admission-gateway.test.ts test/canonical-atom-v2-verified-admission-gateway-v2.test.ts ../../../tests/effect-runtime/journal-decode.test.ts ../../../tests/effect-runtime/verified-permit-bridge.test.ts ../../../tests/effect-runtime/journal-v2-durability-process.test.ts ../../../tests/effect-runtime/journal-v2-durability-trace.test.ts --maxWorkers=1",
+    "log_sha256": "b7fc42fb1ec87560772ef25586fb09968a45388f069addb126c7408aca2b1303",
+    "actual_lean_cli_subprocesses": true
+  },
+  "execution_binaries": [
+    {
+      "path": "formal/.lake/build/bin/HSWMJournalDecodeCli",
+      "sha256": "7288712dcd1a0060b799ca0b20cc9b7a912133e341db2f337416edfe7be8a825"
+    },
+    {
+      "path": "formal/.lake/build/bin/HSWMVerifiedPermitBridgeCli",
+      "sha256": "842877c18215ca7f2db6d025fa7fb86e712551fe4b799e1ca230d894adbdcb5e"
+    },
+    {
+      "path": "formal/.lake/build/bin/HSWMAdmissionKernelCli",
+      "sha256": "416fbb74a4509a5dca874dd58b5b3f8d4e9fc87ec0d1f873ba0c22724972ac04"
+    }
+  ],
+  "verification_commands": {
+    "type_and_effect_check_log_sha256": "6deaa57991f3519da05ab5c266b57cb2b05f4c4ff152289ae1315c5d5c5c6ca9",
+    "build_log_sha256": "51a25d8d4c57a1ea08bb66e4ddd0416369a3279c3984f50d06572439b5862db5"
+  },
+  "model_readiness": {
+    "schema_version": "hswm-model-execution-readiness-observation/v1",
+    "observed_on": "2026-10-07",
+    "checks": {
+      "project_local_usl_mapping_directory_exists": false,
+      "documented_hswm_run_wrapper_exists": false
+    },
+    "scope": "EXACT_DOCUMENTED_PATH_EXISTENCE_ONLY_NO_CREDENTIAL_SCAN_NO_NETWORK_REQUEST",
+    "disposition": "NOT_READY",
+    "unestablished": [
+      "current model/tokenizer/template/checkpoint and serving attestation",
+      "authorized workspace/transport mapping for documented model-serving execution"
+    ],
+    "model_generation_requests": 0,
+    "not_claimed": "Remote DGX availability or absence of every alternative registration."
+  },
+  "prepared_original_W1": {
+    "cases": 128,
+    "requests": 384,
+    "plan_sha256": "40735ab2dc58eac127e4811a4cb5574569eac852849ec796a062e448b22fc83f",
+    "status": "PREPARED_NOT_RUN_NOT_FULL_2784_REQUEST_W1"
+  },
+  "boundaries": [
+    "Fresh Lean kernel checks prove decoded model statements under their displayed premises, not JavaScript/Lean JSON parser or SHA-256/Ed25519 soundness.",
+    "Native trust snapshot and clock remain caller relative; a successful projection is not an unforgeable capability.",
+    "V2 process-crash and race observations apply to Linux/tmpfs on this run, not disk power loss, whole-tail rollback, global nonce persistence or distributed consensus.",
+    "Permit protected journal and reference-grant domain journal remain separate namespaces; equal bytes and ordering do not make their publication one atomic authorization transaction.",
+    "No real model generation, causal efficacy, CR/FCL completion or whole HSWM proof was produced."
+  ]
+}

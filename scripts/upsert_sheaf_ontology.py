@@ -15,6 +15,8 @@ from pathlib import Path
 import re
 from typing import Any
 
+from hswm.infrastructure import kg_legacy_projection
+
 REGISTRY_UID = "sym:KG_INFRA:schema-registry-v1-2026-08-03"
 SAFE_LABEL = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 SAFE_RELATION = re.compile(r"[A-Z][A-Z0-9_]*")
@@ -73,6 +75,8 @@ def validate_data(data: dict[str, Any]) -> None:
     if duplicates:
         raise ValueError(f"duplicate ontology UIDs: {duplicates}")
     concept_uids = {row["uid"] for row in data["concepts"]}
+    if data["module_uid"] not in concept_uids:
+        raise ValueError("module_uid must identify a declared concept")
     source_uids = {row["uid"] for row in data["sources"]}
     for relation in data["concept_relations"]:
         if relation["from_uid"] not in concept_uids or relation["to_uid"] not in concept_uids:
@@ -91,78 +95,19 @@ def cypher_labels(labels: list[str]) -> str:
     return ":".join(labels)
 
 
-def load_ontology(data: dict[str, Any], config: dict[str, str]) -> dict[str, int]:
-    try:
-        from neo4j import GraphDatabase
-    except ImportError as exc:  # pragma: no cover - exercised only with --apply
-        raise RuntimeError("--apply requires the optional `kg` dependency") from exc
-
+def _projection(data: dict[str, Any]) -> dict[str, Any]:
+    validate_data(data)
     binding = data["kg_schema_binding"]
-    wanted_labels, wanted_relations = schema_tokens(data)
-    all_uids = [
-        data["bundle_uid"],
-        *[row["uid"] for row in data["concepts"]],
-        *[row["uid"] for row in data["sources"]],
-        *[row["uid"] for row in data["hswm_mappings"]],
-    ]
-    driver = GraphDatabase.driver(config["uri"], auth=(config["user"], config["password"]))
-    driver.verify_connectivity()
-    try:
-        with driver.session(database=config["database"]) as session:
-            registry = session.run(
-                "MATCH (r:SchemaRegistry {uid:$uid}) "
-                "RETURN r.allowed_labels AS labels, r.allowed_reltypes AS relations",
-                uid=REGISTRY_UID,
-            ).single()
-            if not registry:
-                raise RuntimeError(f"KG schema registry not found: {REGISTRY_UID}")
-            missing_labels = wanted_labels - set(registry["labels"] or [])
-            missing_relations = wanted_relations - set(registry["relations"] or [])
-            if missing_labels or missing_relations:
-                raise RuntimeError(
-                    f"unregistered KG schema tokens: labels={sorted(missing_labels)}, "
-                    f"relations={sorted(missing_relations)}"
-                )
-            found = session.run(
-                "MATCH (n) WHERE n.uid IN $uids RETURN n.uid AS uid, elementId(n) AS eid",
-                uids=all_uids,
-            ).data()
-            counts = Counter(row["uid"] for row in found)
-            duplicates = {uid: count for uid, count in counts.items() if count > 1}
-            if duplicates:
-                raise RuntimeError(f"duplicate KG UIDs before upsert: {duplicates}")
-            existing = {row["uid"]: row["eid"] for row in found}
-            result = session.execute_write(_upsert_transaction, data, binding, existing)
-        return result
-    finally:
-        driver.close()
+    nodes: list[dict[str, Any]] = []
+    relations: dict[tuple[str, str, str], dict[str, Any]] = {}
 
-
-def _upsert_transaction(tx: Any, data: dict[str, Any], binding: dict[str, Any], existing: dict[str, str]) -> dict[str, int]:
-    eids = dict(existing)
-
-    def upsert_rows(rows: list[dict[str, Any]], labels: list[str], properties: list[str]) -> None:
-        label_clause = cypher_labels(labels)
-        old = [{**row, "eid": existing[row["uid"]]} for row in rows if row["uid"] in existing]
-        new = [row for row in rows if row["uid"] not in existing]
-        assignments = ", ".join(f"n.{key}=row.{key}" for key in properties)
-        if old:
-            query = (
-                f"UNWIND $rows AS row MATCH (n) WHERE elementId(n)=row.eid "
-                f"SET n:{label_clause}, {assignments}, n.updatedAt=datetime() "
-                "RETURN n.uid AS uid, elementId(n) AS eid"
-            )
-            for record in tx.run(query, rows=old):
-                eids[record["uid"]] = record["eid"]
-        if new:
-            create_properties = ", ".join(["uid:row.uid", *[f"{key}:row.{key}" for key in properties]])
-            query = (
-                f"UNWIND $rows AS row CREATE (n:{label_clause} {{{create_properties}, "
-                "createdAt:datetime(), updatedAt:datetime()}) "
-                "RETURN n.uid AS uid, elementId(n) AS eid"
-            )
-            for record in tx.run(query, rows=new):
-                eids[record["uid"]] = record["eid"]
+    def add_nodes(rows: list[dict[str, Any]], labels: list[str], properties: list[str]) -> None:
+        for row in rows:
+            node_labels = list(labels)
+            if row["uid"] == data["module_uid"]:
+                node_labels.append(binding["module_extra_label"])
+            nodes.append({"uid": row["uid"], "labels": node_labels,
+                          "properties": {key: row.get(key) for key in properties}})
 
     bundle = [{
         "uid": data["bundle_uid"],
@@ -174,7 +119,7 @@ def _upsert_transaction(tx: Any, data: dict[str, Any], binding: dict[str, Any], 
         "implementation_order": data["implementation_order"],
         "nonclaims": data["nonclaims"],
     }]
-    upsert_rows(bundle, binding["bundle_labels"], [
+    add_nodes(bundle, binding["bundle_labels"], [
         "name", "schema_version", "status", "created_at", "authority_boundary",
         "implementation_order", "nonclaims",
     ])
@@ -184,7 +129,7 @@ def _upsert_transaction(tx: Any, data: dict[str, Any], binding: dict[str, Any], 
         "sheaf_research_definition_v1": row["definition"],
         "sheaf_research_bundle_uid_v1": data["bundle_uid"],
     } for row in data["concepts"]]
-    upsert_rows(concepts, binding["concept_labels"], [
+    add_nodes(concepts, binding["concept_labels"], [
         "name", "sheaf_research_kind_v1", "sheaf_research_definition_v1",
         "sheaf_research_bundle_uid_v1",
     ])
@@ -195,7 +140,7 @@ def _upsert_transaction(tx: Any, data: dict[str, Any], binding: dict[str, Any], 
         "supports_topics": row["supports"],
         "sheaf_research_bundle_uid_v1": data["bundle_uid"],
     } for row in data["sources"]]
-    upsert_rows(source_rows, binding["source_labels"], [
+    add_nodes(source_rows, binding["source_labels"], [
         "name", "title", "authors", "year", "url", "arxiv_id", "publication_status",
         "supports_topics", "sheaf_research_bundle_uid_v1",
     ])
@@ -204,70 +149,64 @@ def _upsert_transaction(tx: Any, data: dict[str, Any], binding: dict[str, Any], 
         "authority": "NONCANONICAL_RESEARCH_MAPPING",
         "sheaf_research_bundle_uid_v1": data["bundle_uid"],
     } for row in data["hswm_mappings"]]
-    upsert_rows(mapping_rows, binding["mapping_labels"], [
+    add_nodes(mapping_rows, binding["mapping_labels"], [
         "name", "hswm_component", "sheaf_concept_uid", "correspondence", "status",
         "caveat", "authority", "sheaf_research_bundle_uid_v1",
     ])
 
-    module_eid = eids[data["module_uid"]]
-    tx.run(
-        f"MATCH (m) WHERE elementId(m)=$eid SET m:{binding['module_extra_label']}",
-        eid=module_eid,
-    ).consume()
+    def add_edge(source: str, kind: str, target: str) -> None:
+        # The historical MERGE projection coalesces aliases onto one pair edge.
+        key = (source, kind, target)
+        relations[key] = {"from_uid": source, "type": kind, "to_uid": target,
+                          "properties": {"ontology_bundle_uid": data["bundle_uid"]}}
 
-    def merge_edges(rows: list[dict[str, str]], rel_type: str) -> None:
-        require_safe_tokens([rel_type], "relationship types", SAFE_RELATION)
-        tx.run(
-            f"UNWIND $rows AS row MATCH (a),(b) "
-            "WHERE elementId(a)=row.from_eid AND elementId(b)=row.to_eid "
-            f"MERGE (a)-[r:{rel_type}]->(b) SET r.ontology_bundle_uid=$bundle_uid",
-            rows=rows,
-            bundle_uid=data["bundle_uid"],
-        ).consume()
-
-    bundle_eid = eids[data["bundle_uid"]]
-    bundle_relations = binding["bundle_relations"]
-    merge_edges([{"from_eid": bundle_eid, "to_eid": eids[row["uid"]]} for row in data["concepts"]], bundle_relations["concept"])
-    merge_edges([{"from_eid": bundle_eid, "to_eid": module_eid}], bundle_relations["module"])
-    merge_edges([{"from_eid": module_eid, "to_eid": eids[row["uid"]]} for row in data["concepts"] if row["uid"] != data["module_uid"]], bundle_relations["concept"])
-    merge_edges([{"from_eid": bundle_eid, "to_eid": eids[row["uid"]]} for row in data["sources"]], bundle_relations["source"])
-    merge_edges([{"from_eid": bundle_eid, "to_eid": eids[row["uid"]]} for row in data["hswm_mappings"]], bundle_relations["mapping"])
-    merge_edges([
-        {"from_eid": eids[row["uid"]], "to_eid": eids[row["sheaf_concept_uid"]]}
-        for row in data["hswm_mappings"]
-    ], binding["mapping_target_relation"])
-
+    bundle_uid = data["bundle_uid"]
+    module_uid = data["module_uid"]
+    for group, role in (("concepts", "concept"), ("sources", "source"), ("hswm_mappings", "mapping")):
+        for row in data[group]:
+            add_edge(bundle_uid, binding["bundle_relations"][role], row["uid"])
+    add_edge(bundle_uid, binding["bundle_relations"]["module"], module_uid)
+    for row in data["concepts"]:
+        if row["uid"] != module_uid:
+            add_edge(module_uid, binding["bundle_relations"]["concept"], row["uid"])
+    for row in data["hswm_mappings"]:
+        add_edge(row["uid"], binding["mapping_target_relation"], row["sheaf_concept_uid"])
     aliases = binding["relationship_type_aliases"]
-    by_type: dict[str, list[dict[str, str]]] = defaultdict(list)
     for row in data["concept_relations"]:
-        kg_type = aliases.get(row["type"], row["type"])
-        by_type[kg_type].append({"from_eid": eids[row["from_uid"]], "to_eid": eids[row["to_uid"]]})
-    for relation_type, rows in by_type.items():
-        merge_edges(rows, relation_type)
-
-    support_rows = [
-        {"from_eid": eids[link["source_uid"]], "to_eid": eids[concept_uid]}
-        for link in data["source_concept_links"] for concept_uid in link["concept_uids"]
-    ]
-    merge_edges(support_rows, binding["source_support_relation"])
+        add_edge(row["from_uid"], aliases.get(row["type"], row["type"]), row["to_uid"])
     sources_by_concept: dict[str, list[str]] = defaultdict(list)
     for link in data["source_concept_links"]:
-        for concept_uid in link["concept_uids"]:
-            sources_by_concept[concept_uid].append(link["source_uid"])
-    mapping_support_rows = [
-        {"from_eid": eids[mapping["uid"]], "to_eid": eids[source_uid]}
-        for mapping in data["hswm_mappings"]
-        for source_uid in sources_by_concept[mapping["sheaf_concept_uid"]]
-    ]
-    merge_edges(mapping_support_rows, binding["mapping_source_relation"])
-    return {
-        "concepts": len(data["concepts"]),
-        "sources": len(data["sources"]),
-        "mappings": len(data["hswm_mappings"]),
-        "concept_relations": len(data["concept_relations"]),
-        "source_concept_links": len(support_rows),
-        "mapping_source_links": len(mapping_support_rows),
-    }
+        for uid in link["concept_uids"]:
+            add_edge(link["source_uid"], binding["source_support_relation"], uid)
+            sources_by_concept[uid].append(link["source_uid"])
+    for mapping in data["hswm_mappings"]:
+        for uid in sources_by_concept[mapping["sheaf_concept_uid"]]:
+            add_edge(mapping["uid"], binding["mapping_source_relation"], uid)
+    projection = {"bundle_uid": bundle_uid, "nodes": nodes, "relations": list(relations.values())}
+    kg_legacy_projection.validate_projection(projection)
+    return projection
+
+
+def load_ontology(data: dict[str, Any], config: dict[str, str]) -> dict[str, int]:
+    projection = _projection(data)
+    try:
+        from neo4j import GraphDatabase
+    except ImportError as exc:  # pragma: no cover
+        raise RuntimeError("--apply requires the optional `kg` dependency") from exc
+    driver = GraphDatabase.driver(config["uri"], auth=(config["user"], config["password"]))
+    try:
+        with driver.session(database=config["database"]) as session:
+            result = session.execute_write(kg_legacy_projection.publish_projection, projection)
+        sources_by_concept: dict[str, list[str]] = defaultdict(list)
+        for link in data["source_concept_links"]:
+            for uid in link["concept_uids"]:
+                sources_by_concept[uid].append(link["source_uid"])
+        return {**result, "concepts": len(data["concepts"]), "sources": len(data["sources"]),
+                "mappings": len(data["hswm_mappings"]), "concept_relations": len(data["concept_relations"]),
+                "source_concept_links": sum(len(link["concept_uids"]) for link in data["source_concept_links"]),
+                "mapping_source_links": sum(len(sources_by_concept[m["sheaf_concept_uid"]]) for m in data["hswm_mappings"])}
+    finally:
+        driver.close()
 
 
 def parse_args() -> argparse.Namespace:
@@ -298,7 +237,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     data = json.loads(args.ontology.read_text(encoding="utf-8"))
-    validate_data(data)
+    _projection(data)
     if not args.apply:
         print(json.dumps({
             "concepts": len(data["concepts"]),

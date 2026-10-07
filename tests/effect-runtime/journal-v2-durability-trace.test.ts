@@ -1,7 +1,8 @@
+import { execFileSync } from "node:child_process"
 import { createHash } from "node:crypto"
-import { existsSync, mkdtempSync, rmSync } from "node:fs"
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
-import { join } from "node:path"
+import { join, resolve } from "node:path"
 
 import { expect, it } from "vitest"
 import { Effect, Either } from "effect"
@@ -10,7 +11,7 @@ import {
   describeCanonicalAtomV2Envelope,
   makeCanonicalAtomV2ContentBoundInput
 } from "../../src/hswm/effect-runtime/src/canonical-atom-v2-content-bound.js"
-import { CanonicalAtomV2DurableRuntime } from "../../src/hswm/effect-runtime/src/canonical-atom-v2-durable-runtime.js"
+import { CanonicalAtomV2DurableRuntime, recoverCanonicalAtomV2DurableForReadOnlyProjectionInternal } from "../../src/hswm/effect-runtime/src/canonical-atom-v2-durable-runtime.js"
 import {
   makeEphemeralLocalPermitIssuer,
   makeLocalPermitVerifierContext,
@@ -18,6 +19,7 @@ import {
 } from "../../src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit.js"
 import {
   describeCanonicalAtomV2StateJournalRecord,
+  canonicalAtomV2StateJournalRecordBytes,
   makeCanonicalAtomV2StateJournalCommit
 } from "../../src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.js"
 import { canonicalJsonBytes } from "../../src/hswm/effect-runtime/src/canonical-atom-v2-json.js"
@@ -46,6 +48,36 @@ const right = <A, E>(value: Either.Either<A, E>): A => {
 }
 const canonicalStateBytes = (state: Parameters<typeof snapshotCanonicalAtomV2State>[0]): Uint8Array =>
   right(canonicalJsonBytes(snapshotCanonicalAtomV2State(state)))
+
+const sourcePaths = [
+  "tests/effect-runtime/journal-v2-durability-trace.test.ts",
+  "src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit.ts",
+  "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+  "src/hswm/effect-runtime/src/canonical-atom-v2-state-journal.ts",
+  "src/hswm/effect-runtime/src/canonical-atom-v2-durable-runtime.ts",
+  "src/hswm/effect-runtime/src/canonical-atom-v2-journal-decode-guards.ts",
+  "src/hswm/effect-runtime/src/canonical-atom-v2-verified-permit-bridge.ts",
+  "src/hswm/effect-runtime/src/canonical-atom-v2-admission-preflight.ts",
+  "src/hswm/effect-runtime/src/canonical-atom-v2-domain.ts",
+  "src/hswm/effect-runtime/src/semantic-lifecycle-runtime.ts",
+  "formal/HSWMVerifiedAdmissionWire.lean",
+  "formal/HSWMAdmissionKernelCli.lean",
+  "formal/HSWMVerifiedAdmissionKernel.lean",
+  "formal/HSWMPersistedVerifiedAdmission.lean"
+] as const
+
+const boundedTraceSources = (): { readonly revision: string; readonly hashes: Readonly<Record<string, string>> } => {
+  const repository = resolve(import.meta.dirname, "../..")
+  const revision = execFileSync("git", ["rev-parse", "HEAD"], { cwd: repository, encoding: "utf8" }).trim()
+  execFileSync("git", ["diff", "--quiet", "HEAD", "--", ...sourcePaths], { cwd: repository })
+  const hashes = Object.freeze(Object.fromEntries(sourcePaths.map((path) => {
+    const working = readFileSync(join(repository, path))
+    const committed = Buffer.from(execFileSync("git", ["show", `${revision}:${path}`], { cwd: repository }))
+    if (!working.equals(committed)) throw new Error(`trace source does not equal ${revision}: ${path}`)
+    return [path, digest(working)] as const
+  })))
+  return Object.freeze({ revision, hashes })
+}
 
 const nonce = (issuer: LocalPermitIssuer): string => {
   const minted = issuer.mintNonce()
@@ -147,7 +179,8 @@ it("binds one native Permit approval to the same durable transition bytes and fr
           beforeBytes,
           afterBytes: predictedState,
           content: evidence,
-          journal: right(describeCanonicalAtomV2StateJournalRecord(predicted))
+          journal: right(describeCanonicalAtomV2StateJournalRecord(predicted)),
+          journalBytes: right(canonicalAtomV2StateJournalRecordBytes(predicted))
         })
       }).pipe(Effect.provide(makeSemanticLifecycleFileLayer(root)))
     )
@@ -231,10 +264,13 @@ it("binds one native Permit approval to the same durable transition bytes and fr
     const restartedFrame = await Effect.runPromise(
       Effect.gen(function* () {
         const runtime = yield* CanonicalAtomV2DurableRuntime
-        const snapshot = yield* runtime.snapshot
-        const history = yield* runtime.history
+        const witness = yield* recoverCanonicalAtomV2DurableForReadOnlyProjectionInternal(runtime, {
+          maximumRecords: 128, maximumRecoveredJournalBytes: 16 * 1024 * 1024
+        })
         const content = yield* runtime.readContent(transition.content)
-        return Object.freeze({ snapshot, history, content })
+        const record = witness.journal.at(-1)
+        if (record === undefined) throw new Error("recovered journal omitted the transition")
+        return Object.freeze({ snapshot: witness.state, history: witness.history, journalBytes: record.bytes, content })
       }).pipe(Effect.provide(makeSemanticLifecycleFileLayer(root)))
     )
 
@@ -246,6 +282,7 @@ it("binds one native Permit approval to the same durable transition bytes and fr
     expect(readPermit.commit.postStateBytes).toEqual(transition.afterBytes)
     expect(restartedFrame.snapshot.canonical).toEqual(committed.snapshot.canonical)
     expect(restartedFrame.snapshot.journalHead).toEqual(transition.journal)
+    expect(restartedFrame.journalBytes).toEqual(transition.journalBytes)
     expect(restartedFrame.history.at(-1)?.record).toEqual(transition.journal)
     expect(restartedFrame.content).toEqual(Uint8Array.from(Buffer.from("journal-v2 trace evidence")))
 
@@ -268,6 +305,61 @@ it("binds one native Permit approval to the same durable transition bytes and fr
       ...observed,
       postStateBytes: Uint8Array.from([...observed.postStateBytes, 0])
     })).toBe(false)
+    expect(matchesDomainTransition(expected, {
+      ...observed,
+      nextRecordDigest: hex("f")
+    })).toBe(false)
+
+    const traceOutput = process.env["HSWM_T4_TRACE_OUTPUT"]
+    if (traceOutput !== undefined && traceOutput !== "") {
+      const sourceHashes = boundedTraceSources()
+      const protectedCommitBytes = Uint8Array.from(readFileSync(published.commit.slotPath))
+      expect(digest(protectedCommitBytes)).toBe(published.commit.recordSha256)
+      expect(digest(transition.journalBytes)).toBe(transition.journal.sha256)
+      const report = Object.freeze({
+        schema: "hswm-t4-same-run-trace/v1",
+        synthetic_fixture_only: true,
+        nonclaims: Object.freeze([
+          "not a production execution or external authorization",
+          "the generic durable journal remains reference-grant authorized",
+          "the protected Permit journal is a separate local namespace",
+          "not a power-loss, cross-process-lock, efficacy, or semantic-correctness claim"
+        ]),
+        source_revision: sourceHashes.revision,
+        source_sha256: sourceHashes.hashes,
+        permit: Object.freeze({
+          signed_envelope_base64url: Buffer.from(issued.right.envelopeBytes).toString("base64url"),
+          expected_bindings: issued.right.expectedBindings,
+          trust_snapshot_base64url: Buffer.from(issuer.right.trustSnapshotBytes).toString("base64url")
+        }),
+        transition: Object.freeze({
+          pre_state_base64: Buffer.from(transition.beforeBytes).toString("base64"),
+          post_state_base64: Buffer.from(transition.afterBytes).toString("base64"),
+          pre_state_sha256: digest(transition.beforeBytes),
+          post_state_sha256: digest(transition.afterBytes),
+          domain_journal_record_base64: Buffer.from(restartedFrame.journalBytes).toString("base64"),
+          domain_journal_descriptor: transition.journal
+        }),
+        protected_permit_journal: Object.freeze({
+          canonical_request_base64: Buffer.from(published.decision.canonicalRequestBytes).toString("base64"),
+          canonical_response_base64: Buffer.from(published.decision.canonicalResponseBytes).toString("base64"),
+          request_sha256: published.decision.requestSha256,
+          decision_sha256: published.decision.decisionSha256,
+          lean_executable_sha256: digest(Uint8Array.from(readFileSync(leanCli))),
+          commit_record_base64: Buffer.from(protectedCommitBytes).toString("base64"),
+          commit_record_sha256: published.commit.recordSha256
+        }),
+        recovered_domain_read_frame: Object.freeze({
+          snapshot: restartedFrame.snapshot,
+          canonical_state_base64: Buffer.from(canonicalStateBytes(restartedFrame.snapshot.canonical)).toString("base64"),
+          canonical_state_sha256: digest(canonicalStateBytes(restartedFrame.snapshot.canonical)),
+          history_tail_record: restartedFrame.history.at(-1)?.record ?? null,
+          content_base64: Buffer.from(restartedFrame.content).toString("base64"),
+          content_sha256: digest(restartedFrame.content)
+        })
+      })
+      writeFileSync(traceOutput, `${JSON.stringify(report)}\n`, { encoding: "utf8", mode: 0o600 })
+    }
   } finally {
     rmSync(root, { recursive: true, force: true })
   }

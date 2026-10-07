@@ -79,6 +79,25 @@ V2 persisted status literal의 `PROCESS_CRASH_NOT_TESTED`는 기존 byte/schema 
 Permit protected journal과 reference-grant domain journal은 별도의 장부다. 관측값과
 순서가 일치해도 두 게시를 하나의 원자적 권한 트랜잭션으로 만드는 정리는 아니다.
 
+## 최초 계획의 완료 범위
+
+T1은 decoded model에서 decode→receipt→state와 유한 replay 보존, 실제 구현의 유한
+거절 대조, JSON decoder 경계의 분리라는 기존 완료 조건을 충족한다. T2도 같은
+유효·거절 trace의 native/Lean 결과 일치와 외부 key·time·nonce 전제 명시라는 조건을
+충족한다. 전체 TypeScript·암호 구현의 보편적 증명은 이 두 작업의 완료 조건에 넣지 않았다.
+T3의 완료 범위는 명시한 Linux/tmpfs의 V2 process crash와 race다.
+
+T4는 한 실행에서 관측한 정확한 바이트와 Lean 교환을
+[보존된 실행 trace](artifacts/hswm_runtime_conformance_2026-10-07/same-run-trace.v1.json)에
+남긴다. trace는 합성 fixture에서 실제 실행한 결과이며, private key는 포함하지 않는다.
+Git source revision·source hashes, signed envelope, domain journal, pre/post state,
+복구된 snapshot·content, 실제 Lean request/response bytes를 결속한다. 표준 진행 view의
+`trace` 질의는 이 실행의 바이트 근거와 결과·출처를 조회한다. 두 장부의 원자적 권한
+통합은 별도 경계이며 이 trace의 완료 조건을 소급해서 확대하지 않는다.
+
+T1–T4 완료는 2026-10-06 계획의 위 기준에 대한 판정이다. 전체 HSWM 증명이나
+PS-3·5·6 및 CR/FCL 효능 판정의 완료를 의미하지 않는다.
+
 ## 검증과 남은 실제 모델 작업
 
 새 모델의 named theorem은 T1 13개, T2 6개다. Lean 4.32.1의 fresh 출력 디렉터리,

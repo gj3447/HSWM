@@ -136,7 +136,7 @@ const sameJson = (left: unknown, right: unknown): boolean => {
 }
 
 const wireRequest = (preflight: VerifiedAdmissionPreflight): Record<string, unknown> => Object.freeze({
-  adapterFacts: Object.freeze({ permitEnvelopeAccepted: true, stateBytesAccepted: true, verificationTimeAccepted: true }),
+  adapterFacts: Object.freeze({ ...preflight.adapterFacts }),
   contractVersion: HSWM_VERIFIED_ADMISSION_WIRE_V1,
   record: Object.freeze({
     committedAt: preflight.record.committedAt,

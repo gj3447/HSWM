@@ -1,0 +1,631 @@
+{
+  "schema_version": "hswm-native-preflight-refinement-validation/v1",
+  "recorded_on": "2026-10-07",
+  "authority": "SECONDARY_AI_LOCAL_EXECUTION_REPORT",
+  "source_base_revision": "1d180cd7583b0f91f61c295e2b05c2460a89dc90",
+  "artifact_bindings": [
+    {
+      "path": "formal/HSWMAdmissionPreflight.lean",
+      "sha256": "635d93ef6fca98f8397936303789ae221fdf26ce1188fea0e4073356f3b6e788"
+    },
+    {
+      "path": "formal/HSWMAdmissionPreflightCli.lean",
+      "sha256": "ae3ac231417805a146494329a18a6b012e4ebce7d56fdacf7168017443db8d5c"
+    },
+    {
+      "path": "formal/HSWMJournalValidation.lean",
+      "sha256": "a6b306b94438889e7970efd5f1f312d92cd51264e2c438fc03959da15b12c30d"
+    },
+    {
+      "path": "formal/HSWMJournalValidationCli.lean",
+      "sha256": "282bd29974352fd88c202c01cd64ac427799863f673bd4e7dd6f7e1468709a68"
+    },
+    {
+      "path": "formal/lakefile.toml",
+      "sha256": "dbff13bb350646b60bcf63ebb6f37ff0b15a557f1400469c57aa9ebc71f8b1b2"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-admission-preflight.ts",
+      "sha256": "48c036eb293b08c9f00912e20a6a03ea5012115ef1b8534a0bde8abe9645e831"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-validation-guards.ts",
+      "sha256": "a28de1a8545b87436b071bf6c24a5d95102b060b4b877c1f6301cd742dce937a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-domain.ts",
+      "sha256": "b514f408f2f14cfa6155391b923cef81415fe14f0f7216dc2094e526634c20eb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-local-permit-commit.ts",
+      "sha256": "40761f3dd90ed6a71ac699c3906627ad631504d5447d3c064147059d87d5cd97"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-verified-admission-gateway.ts",
+      "sha256": "b21a7a6d8f625c40e713458e81071a14676ae33ebb6340010c2b7aaf682f198d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+      "sha256": "9046c7f91da8b50ea33562afcd3db95286ad9c6c676d833fb920c35eefde6048"
+    },
+    {
+      "path": "tests/effect-runtime/admission-preflight.test.ts",
+      "sha256": "622053ce3de71ce0f7ecc8427b1ab161121bf59d09f526025b314591532ee26d"
+    },
+    {
+      "path": "tests/effect-runtime/journal-validation.test.ts",
+      "sha256": "7ec8bc640f9d7691f3d06d15d84d4f4f9a94511b22c380e763ba798de5b47d88"
+    },
+    {
+      "path": "tests/effect-runtime/semantic-philosophy-proof-process.test.ts",
+      "sha256": "d7154a065d1f63a4a1abadfe83326fd0b9ffe3f228b7519c5a021af7d69b5ced"
+    },
+    {
+      "path": "docs/research/HSWM_NATIVE_PREFLIGHT_REFINEMENT_2026-10-07.md",
+      "sha256": "419ab61e63b0e0bc13cc55009f844bd6ad93ee23b63e599d75fc93f131acb090"
+    }
+  ],
+  "lean_audits": {
+    "journal-validation": {
+      "status": "EXACT_SOURCE_KERNEL_CHECKED",
+      "claim_ceiling": "DECODED_NATIVE_STATE_KEY_UNIQUENESS_AND_READ_SET_GATE_NOT_FULL_SCHEMA_JSON_PARSER_PROVENANCE_VALIDATION_AUTHORITY_OR_EFFICACY",
+      "compile_order": [
+        "HSWMCanonicalPreservation",
+        "HSWMDurablePreservation",
+        "HSWMJournalAdapter",
+        "HSWMJournalValidation"
+      ],
+      "audited_sources": [
+        "HSWMJournalValidation"
+      ],
+      "source_records": [
+        {
+          "path": "formal/HSWMCanonicalPreservation.lean",
+          "sha256": "cf3bc1ae3ee7475c8e2c4e9d76d2279124d98a31934fc7d17cc17ebf558cc740",
+          "byteLength": 11813,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMDurablePreservation.lean",
+          "sha256": "9af180f40ff245210f7c9dc74873a1f777a483c29ad4a85b72228c45d7919090",
+          "byteLength": 17413,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMJournalAdapter.lean",
+          "sha256": "9adefe5cd4f903c5c6af1e4a12345cad68ca5bbb1cdd34e2297a044b59d57018",
+          "byteLength": 11474,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMJournalValidation.lean",
+          "sha256": "a6b306b94438889e7970efd5f1f312d92cd51264e2c438fc03959da15b12c30d",
+          "byteLength": 5090,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 14,
+          "named_theorems": [
+            "HSWM.JournalValidation.has_duplicate_iff",
+            "HSWM.JournalValidation.state_duplicate_iff",
+            "HSWM.JournalValidation.duplicate_iff",
+            "HSWM.JournalValidation.missing_iff",
+            "HSWM.JournalValidation.passed_iff",
+            "HSWM.JournalValidation.state_duplicate_precedes_read_failure",
+            "HSWM.JournalValidation.read_duplicate_precedes_missing",
+            "HSWM.JournalValidation.passed_existing_unique",
+            "HSWM.JournalValidation.passed_read_unique",
+            "HSWM.JournalValidation.passed_resolves_every_key",
+            "HSWM.JournalValidation.empty_read_set_passes",
+            "HSWM.JournalValidation.duplicate_existing_rejected",
+            "HSWM.JournalValidation.missing_rejected",
+            "HSWM.JournalValidation.adapter_fresh_and_resolved_passes"
+          ],
+          "theorem_axioms": [
+            {
+              "theorem": "HSWM.JournalValidation.adapter_fresh_and_resolved_passes",
+              "axioms": [
+                "Classical.choice",
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalValidation.duplicate_existing_rejected",
+              "axioms": [
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalValidation.duplicate_iff",
+              "axioms": [
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalValidation.empty_read_set_passes",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalValidation.has_duplicate_iff",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalValidation.missing_iff",
+              "axioms": [
+                "Classical.choice",
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalValidation.missing_rejected",
+              "axioms": [
+                "Classical.choice",
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalValidation.passed_existing_unique",
+              "axioms": [
+                "Classical.choice",
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalValidation.passed_iff",
+              "axioms": [
+                "Classical.choice",
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalValidation.passed_read_unique",
+              "axioms": [
+                "Classical.choice",
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalValidation.passed_resolves_every_key",
+              "axioms": [
+                "Classical.choice",
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalValidation.read_duplicate_precedes_missing",
+              "axioms": [
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalValidation.state_duplicate_iff",
+              "axioms": [
+                "Quot.sound",
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.JournalValidation.state_duplicate_precedes_read_failure",
+              "axioms": [
+                "Quot.sound",
+                "propext"
+              ]
+            }
+          ],
+          "axioms": [
+            "Classical.choice",
+            "Quot.sound",
+            "propext"
+          ],
+          "audit_stdout_sha256": "d6b4a02425abf7e4d10645a344df29d22ad0e1077ad33ba10e3ed6ea2c02b781",
+          "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "allowed_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "runner_source": {
+        "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "sha256": "9046c7f91da8b50ea33562afcd3db95286ad9c6c676d833fb920c35eefde6048"
+      },
+      "statement_semantics_validated": false,
+      "new_dependencies_installed": false,
+      "toolchain": {
+        "name": "leanprover/lean4:v4.32.1",
+        "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+        "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+        "pin_path": "formal/lean-toolchain",
+        "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+        "resolved_by": "lake env which lean"
+      }
+    },
+    "admission-preflight": {
+      "status": "EXACT_SOURCE_KERNEL_CHECKED",
+      "claim_ceiling": "RECORD_AND_STATE_OBSERVATIONS_BOUND_TO_SUPPLIED_NATIVE_VERIFIER_RESULT_NOT_VERIFIER_PARSER_HASH_CRYPTO_TRUST_CLOCK_POSIX_OR_FULL_TYPESCRIPT_REFINEMENT",
+      "compile_order": [
+        "HSWMCanonicalLearning",
+        "HSWMOutcomeJudgment",
+        "HSWMAtomicAdmission",
+        "HSWMAtomicAdmissionConsistency",
+        "HSWMAtomicAdmissionNonEntailment",
+        "HSWMEndToEndRuntimeRefinement",
+        "HSWMCanonicalPermitEnvelope",
+        "HSWMExecutionCertificateWire",
+        "HSWMLocalPermitCommit",
+        "HSWMVerifiedAdmissionKernel",
+        "HSWMAdmissionPreflight"
+      ],
+      "audited_sources": [
+        "HSWMAdmissionPreflight"
+      ],
+      "source_records": [
+        {
+          "path": "formal/HSWMCanonicalLearning.lean",
+          "sha256": "15d040887d3e387942e38c7c9e43637fc707a431075ab8ec7f041790ae1ef31b",
+          "byteLength": 17181,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMOutcomeJudgment.lean",
+          "sha256": "375a18f3368f32076893a89e768a318dd61ac0458b5ae6e4ecbee166f8fee5e8",
+          "byteLength": 11207,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMAtomicAdmission.lean",
+          "sha256": "4118c058adb5184654e8a36a339b5d398ca023cf492d79c7cc233c3c1ea7e661",
+          "byteLength": 25623,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMAtomicAdmissionConsistency.lean",
+          "sha256": "11a6b159a5afb5d233cad71279d662a0f930e73056be26cb00d2cd6dc6b11eda",
+          "byteLength": 10967,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMAtomicAdmissionNonEntailment.lean",
+          "sha256": "f6e8c8beab495a1a456bcc528da6e989989d68a63a03c503759b7e1c96f42d6f",
+          "byteLength": 7028,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMEndToEndRuntimeRefinement.lean",
+          "sha256": "47f6b67c89c5568f51a066e1dc464f200732ef512d0c73522b103bb04a974bf7",
+          "byteLength": 35487,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMCanonicalPermitEnvelope.lean",
+          "sha256": "1046ad2c3a5283d86cc0b26b0033ea64ec017d5e0587b011f4164ea6a2ed0f16",
+          "byteLength": 12613,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMExecutionCertificateWire.lean",
+          "sha256": "049493ade9e7c478aaec4eb1540ee925e6e8d1388407ddc73248320fd0a582b3",
+          "byteLength": 44368,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMLocalPermitCommit.lean",
+          "sha256": "a6e8cdd8528e78e7a86031777f9687dee6973eb6580495c54c06050323f1f974",
+          "byteLength": 12817,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMVerifiedAdmissionKernel.lean",
+          "sha256": "ac391a438b587923cdeb586d2cceb0e646d366f4ea8df350b3d12aca750889b0",
+          "byteLength": 9888,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 0,
+          "named_theorems": [],
+          "theorem_axioms": [],
+          "axioms": [],
+          "audit_stdout_sha256": null,
+          "audit_stderr_sha256": null
+        },
+        {
+          "path": "formal/HSWMAdmissionPreflight.lean",
+          "sha256": "635d93ef6fca98f8397936303789ae221fdf26ce1188fea0e4073356f3b6e788",
+          "byteLength": 13394,
+          "exitCode": 0,
+          "compiler_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "compiler_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "named_theorem_count": 13,
+          "named_theorems": [
+            "HSWM.CanonicalLearning.AdmissionPreflight.constructedPreflightPermitFact",
+            "HSWM.CanonicalLearning.AdmissionPreflight.constructedPreflightTimeFact",
+            "HSWM.CanonicalLearning.AdmissionPreflight.constructedPreflightStateFact",
+            "HSWM.CanonicalLearning.AdmissionPreflight.constructedPreflightComputesFacts",
+            "HSWM.CanonicalLearning.AdmissionPreflight.constructedPreflightKernelAccepts",
+            "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedIsKernelAccepted",
+            "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedRequiresComputedFacts",
+            "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedBindsExactVerifiedPermit",
+            "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedBindsExactVerificationTime",
+            "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedBindsBoundedStateDigests",
+            "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedYieldsBoundedRefinement",
+            "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedPublishesExactSuccessor",
+            "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedConsumesExactNonce"
+          ],
+          "theorem_axioms": [
+            {
+              "theorem": "HSWM.CanonicalLearning.AdmissionPreflight.constructedPreflightComputesFacts",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.AdmissionPreflight.constructedPreflightKernelAccepts",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.AdmissionPreflight.constructedPreflightPermitFact",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.AdmissionPreflight.constructedPreflightStateFact",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.AdmissionPreflight.constructedPreflightTimeFact",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedBindsBoundedStateDigests",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedBindsExactVerificationTime",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedBindsExactVerifiedPermit",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedConsumesExactNonce",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedIsKernelAccepted",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedPublishesExactSuccessor",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedRequiresComputedFacts",
+              "axioms": [
+                "propext"
+              ]
+            },
+            {
+              "theorem": "HSWM.CanonicalLearning.AdmissionPreflight.preflightAcceptedYieldsBoundedRefinement",
+              "axioms": [
+                "propext"
+              ]
+            }
+          ],
+          "axioms": [
+            "propext"
+          ],
+          "audit_stdout_sha256": "849f9dd78d3c97049c1f8e1fcf0465525b500b9438887a6d2e5bf175de925af5",
+          "audit_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "allowed_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "runner_source": {
+        "path": "src/hswm/effect-runtime/src/semantic-philosophy-proof-process.ts",
+        "sha256": "9046c7f91da8b50ea33562afcd3db95286ad9c6c676d833fb920c35eefde6048"
+      },
+      "statement_semantics_validated": false,
+      "new_dependencies_installed": false,
+      "toolchain": {
+        "name": "leanprover/lean4:v4.32.1",
+        "version_output": "Lean (version 4.32.1, x86_64-unknown-linux-gnu, commit f054605aea4b840552cca2e725580bffd1e1b704, Release)",
+        "source_commit": "f054605aea4b840552cca2e725580bffd1e1b704",
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+        "pin_path": "formal/lean-toolchain",
+        "pin_sha256": "8e3538e0ab5f81a3ee04927d8838c8c674e0e112838b4b3ce87ec218143276af",
+        "resolved_by": "lake env which lean"
+      }
+    }
+  },
+  "executed_cli_binaries": [
+    {
+      "path": "formal/.lake/build/bin/HSWMAdmissionPreflightCli",
+      "sha256": "dc16cf63be46ad52194fa7c3e484f734d9de2aaace8033bd8acc7c09c3f3673b"
+    },
+    {
+      "path": "formal/.lake/build/bin/HSWMAdmissionKernelCli",
+      "sha256": "416fbb74a4509a5dca874dd58b5b3f8d4e9fc87ec0d1f873ba0c22724972ac04"
+    },
+    {
+      "path": "formal/.lake/build/bin/HSWMJournalValidationCli",
+      "sha256": "c318e289dcc1dd003d50c47a451b74878a4f9ec6cd8e604d07137e3d350bec0e"
+    }
+  ],
+  "tests": {
+    "files": 15,
+    "passed": 95,
+    "failed": 0,
+    "skipped": 0,
+    "semantic_lean_enabled": true,
+    "log_sha256": "7117c5266fc042a15f9824999d64b2e40c44dc7ed547835d8a9b761646e34bf4",
+    "scope": "admission preflight, journal validation/adapter/replay, audit scanner, runtime, journal storage/process, Permit, local commit/process-crash, gateway/v2",
+    "t2": {
+      "captured_successor_comparisons": 2,
+      "rejected_model_mutations": 16,
+      "consistent_forged_projection_accepted_boundary_cases": 1,
+      "native_pre_hook_rejections": 2,
+      "actual_effect_executed": true,
+      "actual_subprocesses_executed": true
+    },
+    "t1": {
+      "native_lean_gate_comparisons": 7
+    },
+    "not_full_repository_suite": true
+  },
+  "checks": {
+    "typescript_effect": "PASS",
+    "runtime_build": "PASS",
+    "lean_targets_build": "PASS",
+    "check_log_sha256": "70d481d7e8a0fbc0e4c14bfd43c800e8a7c7d7d0870a3a02d3c745fcfc57f9f0",
+    "build_log_sha256": "51a25d8d4c57a1ea08bb66e4ddd0416369a3279c3984f50d06572439b5862db5",
+    "lean_build_log_sha256": "a27fbc78478dbb239c963e8efa7a3243c4c21ce4a581d3cd6b0b1f5f6f143f3a"
+  },
+  "claim_boundaries": {
+    "T1": "PARTIAL_READ_SET_VALIDATION_PROVED_REFINEMENT_OPEN",
+    "T2": "PARTIAL_PREFLIGHT_FACTS_COMPUTED_REFINEMENT_OPEN",
+    "whole_task_completion": "OPEN",
+    "native_verifier_soundness_proved": false,
+    "full_typescript_refinement_proved": false,
+    "json_parser_proved": false,
+    "hash_signature_trust_time_proved": false,
+    "posix_power_loss_proved": false,
+    "real_llm_executed": false,
+    "efficacy_proved": false
+  },
+  "nonclaim": "DECODED_MODEL_THEOREMS_AND_BOUNDED_NATIVE_DIFFERENTIAL_EVIDENCE_NOT_CANONICAL_STATE_WRITE_OR_FULL_HSWM_PROOF"
+}

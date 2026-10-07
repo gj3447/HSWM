@@ -1,8 +1,20 @@
 import { describe, expect, it } from "vitest"
-import { parseTheoremAxioms } from "../../src/hswm/effect-runtime/src/semantic-philosophy-proof-process.js"
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
+import { hasForbiddenProofShortcut, parseTheoremAxioms } from "../../src/hswm/effect-runtime/src/semantic-philosophy-proof-process.js"
 
 describe("Lean theorem axiom report completeness", () => {
   const expected = ["Example.identity", "Example.extensional"]
+
+  it("distinguishes existing admission constructors from proof-hole tactics", () => {
+    expect(hasForbiddenProofShortcut("inductive Accepted : Prop where\n  | admit\n      (h : True) : Accepted\ntheorem use : Accepted := .admit trivial\ntheorem extract (h : Accepted) : True := by\n  cases h with\n  | admit witness => exact witness\n")).toBe(false)
+    for (const source of ["theorem gap : False := by admit", "theorem gap : False := by\n  first\n  | admit\n  | assumption", "theorem gap (h : Accepted) : False := by\n  cases h with\n  | admit witness => admit", "theorem gap : False := by sorry", "axiom gap : False", "theorem gap : True := by native_decide"]) {
+      expect(hasForbiddenProofShortcut(source)).toBe(true)
+    }
+    for (const source of ["HSWMCanonicalLearning", "HSWMOutcomeJudgment", "HSWMAtomicAdmission", "HSWMAtomicAdmissionConsistency", "HSWMEndToEndRuntimeRefinement", "HSWMExecutionCertificateWire"]) {
+      expect(hasForbiddenProofShortcut(readFileSync(resolve(import.meta.dirname, `../../formal/${source}.lean`), "utf8")), source).toBe(false)
+    }
+  })
 
   it("retains both axiom-free and axiom-dependent theorem reports", () => {
     const result = parseTheoremAxioms(

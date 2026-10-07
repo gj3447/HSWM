@@ -32,7 +32,7 @@ const operationalPhilosophyAuditedSources = Object.freeze([
 const operationalPhilosophySourceOrder = Object.freeze([
   ...threePhilosophiesSourceOrder, ...operationalPhilosophyAuditedSources
 ] as const)
-type ProfileName = "three-philosophies" | "integrated-hswm" | "operational-philosophy" | "semantic-lifecycle" | "operational-quotient" | "semantic-operational" | "graph-loop-preflight" | "standard-graph-incidence" | "canonical-preservation" | "durable-preservation" | "journal-replay" | "journal-adapter"
+type ProfileName = "three-philosophies" | "integrated-hswm" | "operational-philosophy" | "semantic-lifecycle" | "operational-quotient" | "semantic-operational" | "graph-loop-preflight" | "standard-graph-incidence" | "canonical-preservation" | "durable-preservation" | "journal-replay" | "journal-adapter" | "journal-validation" | "admission-preflight"
 interface ProofProfile {
   readonly name: ProfileName
   readonly sourceOrder: ReadonlyArray<string>
@@ -41,6 +41,14 @@ interface ProofProfile {
   readonly claimCeiling: string
 }
 const profiles: Readonly<Record<ProfileName, ProofProfile>> = Object.freeze({
+  "journal-validation": Object.freeze({ name: "journal-validation",
+    sourceOrder: ["HSWMCanonicalPreservation", "HSWMDurablePreservation", "HSWMJournalAdapter", "HSWMJournalValidation"], auditedSources: ["HSWMJournalValidation"],
+    schemaVersion: "hswm-journal-validation-lean-verification/v1",
+    claimCeiling: "DECODED_NATIVE_STATE_KEY_UNIQUENESS_AND_READ_SET_GATE_NOT_FULL_SCHEMA_JSON_PARSER_PROVENANCE_VALIDATION_AUTHORITY_OR_EFFICACY" }),
+  "admission-preflight": Object.freeze({ name: "admission-preflight",
+    sourceOrder: ["HSWMCanonicalLearning", "HSWMOutcomeJudgment", "HSWMAtomicAdmission", "HSWMAtomicAdmissionConsistency", "HSWMAtomicAdmissionNonEntailment", "HSWMEndToEndRuntimeRefinement", "HSWMCanonicalPermitEnvelope", "HSWMExecutionCertificateWire", "HSWMLocalPermitCommit", "HSWMVerifiedAdmissionKernel", "HSWMAdmissionPreflight"], auditedSources: ["HSWMAdmissionPreflight"],
+    schemaVersion: "hswm-admission-preflight-lean-verification/v1",
+    claimCeiling: "RECORD_AND_STATE_OBSERVATIONS_BOUND_TO_SUPPLIED_NATIVE_VERIFIER_RESULT_NOT_VERIFIER_PARSER_HASH_CRYPTO_TRUST_CLOCK_POSIX_OR_FULL_TYPESCRIPT_REFINEMENT" }),
   "journal-adapter": Object.freeze({ name: "journal-adapter",
     sourceOrder: ["HSWMCanonicalPreservation", "HSWMDurablePreservation", "HSWMJournalAdapter"], auditedSources: ["HSWMJournalAdapter"],
     schemaVersion: "hswm-journal-adapter-lean-verification/v1",
@@ -94,9 +102,17 @@ const profiles: Readonly<Record<ProfileName, ProofProfile>> = Object.freeze({
 })
 const permittedAxioms = Object.freeze(["propext", "Quot.sound", "Classical.choice"] as const)
 const stripLeanComments = (source: string): string => source.replace(/\/\-[\s\S]*?\-\//g, "").replace(/--[^\n]*/g, "")
-const hasForbiddenProofShortcut = (source: string): boolean => {
+export const hasForbiddenProofShortcut = (source: string): boolean => {
   const code = stripLeanComments(source)
-  return /\b(?:sorry|admit|native_decide)\b/.test(code) ||
+  // Older admission models legitimately name an inductive constructor `admit`.
+  // Exempt only constructor declarations, case patterns and dotted references;
+  // a tactic in a case body remains visible. This is a lexical precheck, not a
+  // Lean parser: the fresh kernel run and transitive #print axioms audit remain
+  // authoritative and still refuse sorryAx and every other unpermitted axiom.
+  const tacticCode = code.replace(/\.admit\b/g, ".admissionConstructor")
+    .replace(/(^|\n)([ \t]*\|[ \t]+)admit(?=\s+\()/g, "$1$2admissionConstructor")
+    .replace(/(^|\n)([ \t]*\|[ \t]+)admit(?=[ \t]+[^\n]*=>)/g, "$1$2admissionConstructor")
+  return /\b(?:sorry|admit|native_decide)\b/.test(tacticCode) ||
     /(^|\n)\s*(?:axiom|opaque|unsafe|meta)\b/.test(code) ||
     /(^|\n)\s*set_option\s+(?!(?:linter\.unusedSimpArgs\s+false)\s*(?:\n|$))/.test(code)
 }
@@ -114,7 +130,7 @@ export class SemanticPhilosophyProofHost extends Context.Tag("hswm/SemanticPhilo
 interface Options { readonly output: string; readonly lean: string | null; readonly profile: ProofProfile }
 const parse = (argv: ReadonlyArray<string>, cwd: string): Effect.Effect<Options | null, SemanticPhilosophyProofError> => {
   if (argv.length === 1 && argv[0] === "--help") return Effect.succeed(null)
-  if (argv.length !== 2 && argv.length !== 4 && argv.length !== 6) return Effect.fail(fail("CLI_INVALID", "Expected --output NEW_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy|semantic-lifecycle|operational-quotient|semantic-operational|graph-loop-preflight|standard-graph-incidence|canonical-preservation|durable-preservation|journal-replay|journal-adapter] [--lean ABSOLUTE_PATH]"))
+  if (argv.length !== 2 && argv.length !== 4 && argv.length !== 6) return Effect.fail(fail("CLI_INVALID", "Expected --output NEW_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy|semantic-lifecycle|operational-quotient|semantic-operational|graph-loop-preflight|standard-graph-incidence|canonical-preservation|durable-preservation|journal-replay|journal-adapter|journal-validation|admission-preflight] [--lean ABSOLUTE_PATH]"))
   const pairs = Array.from({ length: argv.length / 2 }, (_, index) => [argv[index * 2], argv[index * 2 + 1]] as const)
   const values = Object.fromEntries(pairs)
   if (pairs.some(([key, value]) => !["--output", "--lean", "--profile"].includes(key ?? "") || !value || value.startsWith("--")) ||
@@ -124,8 +140,8 @@ const parse = (argv: ReadonlyArray<string>, cwd: string): Effect.Effect<Options 
   if (suppliedLean !== undefined && (!isAbsolute(suppliedLean) || suppliedLean.includes("\0")))
     return Effect.fail(fail("CLI_INVALID", "--lean must be an absolute regular-file path"))
   const profileName: unknown = values["--profile"] ?? "three-philosophies"
-  if (profileName !== "three-philosophies" && profileName !== "integrated-hswm" && profileName !== "operational-philosophy" && profileName !== "semantic-lifecycle" && profileName !== "operational-quotient" && profileName !== "semantic-operational" && profileName !== "graph-loop-preflight" && profileName !== "standard-graph-incidence" && profileName !== "canonical-preservation" && profileName !== "durable-preservation" && profileName !== "journal-replay" && profileName !== "journal-adapter")
-    return Effect.fail(fail("CLI_INVALID", "--profile must be three-philosophies, integrated-hswm, operational-philosophy, semantic-lifecycle, operational-quotient, semantic-operational, graph-loop-preflight, standard-graph-incidence, canonical-preservation, durable-preservation, journal-replay or journal-adapter"))
+  if (profileName !== "three-philosophies" && profileName !== "integrated-hswm" && profileName !== "operational-philosophy" && profileName !== "semantic-lifecycle" && profileName !== "operational-quotient" && profileName !== "semantic-operational" && profileName !== "graph-loop-preflight" && profileName !== "standard-graph-incidence" && profileName !== "canonical-preservation" && profileName !== "durable-preservation" && profileName !== "journal-replay" && profileName !== "journal-adapter" && profileName !== "journal-validation" && profileName !== "admission-preflight")
+    return Effect.fail(fail("CLI_INVALID", "--profile must be three-philosophies, integrated-hswm, operational-philosophy, semantic-lifecycle, operational-quotient, semantic-operational, graph-loop-preflight, standard-graph-incidence, canonical-preservation, durable-preservation, journal-replay, journal-adapter, journal-validation or admission-preflight"))
   const profile = profiles[profileName]
   return Effect.succeed({ output: resolve(cwd, values["--output"]), lean: suppliedLean ?? null, profile })
 }
@@ -241,7 +257,7 @@ export const runSemanticPhilosophyProof = (options: Options) => Effect.gen(funct
   return `${JSON.stringify({ output: options.output, status: report.status, sources: sourceRecords.length, claimCeiling: report.claim_ceiling })}\n`
 }).pipe(Effect.catchAll(error => Effect.fail(error)))
 
-const usage = "Usage: semantic-philosophy-proof-process --output NEW_PRIVATE_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy|semantic-lifecycle|operational-quotient|semantic-operational|graph-loop-preflight|standard-graph-incidence|canonical-preservation|durable-preservation|journal-replay|journal-adapter] [--lean ABSOLUTE_PATH]\n"
+const usage = "Usage: semantic-philosophy-proof-process --output NEW_PRIVATE_DIRECTORY [--profile three-philosophies|integrated-hswm|operational-philosophy|semantic-lifecycle|operational-quotient|semantic-operational|graph-loop-preflight|standard-graph-incidence|canonical-preservation|durable-preservation|journal-replay|journal-adapter|journal-validation|admission-preflight] [--lean ABSOLUTE_PATH]\n"
 export const semanticPhilosophyProofCli = (argv: ReadonlyArray<string>) => Effect.gen(function* () {
   const options = yield* parse(argv, process.cwd())
   if (options === null) return usage

@@ -1,5 +1,6 @@
 import { Data, Either, Schema } from "effect"
 import { verifyCanonicalAtomV2Preservation } from "./canonical-atom-v2-preservation.js"
+import { canonicalAtomV2ReadSetDecision } from "./canonical-atom-v2-journal-validation-guards.js"
 
 import {
   CanonicalAtomV2Schema,
@@ -718,15 +719,16 @@ const evolveValidatedCanonicalAtomsV2 = (
   }
 
   const existingIds = state.atoms.map(({ key }) => canonicalAtomV2KeyId(key))
-  if (hasDuplicates(existingIds)) {
+  const readSetIds = command.readSet.map(canonicalAtomV2KeyId)
+  const readSetDecision = canonicalAtomV2ReadSetDecision(existingIds, readSetIds)
+  if (readSetDecision === "STATE_KEY_DUPLICATE") {
     return fail("STATE_INVALID", "state contains duplicate canonical keys")
   }
   const existingKeyIds = new Set(existingIds)
-  const readSetIds = command.readSet.map(canonicalAtomV2KeyId)
-  if (hasDuplicates(readSetIds)) {
+  if (readSetDecision === "READ_SET_DUPLICATE") {
     return fail("READ_SET_INVALID", "read set contains a duplicate key")
   }
-  if (readSetIds.some((id) => !existingKeyIds.has(id))) {
+  if (readSetDecision === "READ_SET_MISSING") {
     return fail("READ_SET_INVALID", "read set contains a missing atom")
   }
   const readSet = new Set(readSetIds)

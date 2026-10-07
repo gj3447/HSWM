@@ -1,5 +1,5 @@
 name = "HSWMCellular"
-defaultTargets = ["HSWMOperationalQuotient", "HSWMCellular", "HSWMRuntime", "HSWMDurableRuntime", "HSWMCanonicalLearning", "HSWMTypeScriptV1Refinement", "HSWMOutcomeJudgment", "HSWMAtomicAdmission", "HSWMAtomicAdmissionConsistency", "HSWMAtomicAdmissionNonEntailment", "HSWMEndToEndRuntimeRefinement", "HSWMCanonicalPermitEnvelope", "HSWMExecutionCertificateWire", "HSWMLocalPermitCommit", "HSWMVerifiedAdmissionKernel", "HSWMVerifiedAdmissionWire", "HSWMPersistedVerifiedAdmission", "HSWMAdmissionKernelCli", "HSWMDnrd5EfficacyBoundary", "HSWMDnrd5ExactSignGate", "HSWMCausalEfficacyBridge", "HSWMSemanticLifecycleRefinement", "HSWMSemanticLifecycleCli", "HSWMStandardGraphIncidence", "HSWMStandardGraphIncidenceCli", "HSWMCanonicalPreservation", "HSWMCanonicalPreservationCli", "HSWMDurablePreservation", "HSWMDurablePreservationCli", "HSWMJournalReplay", "HSWMJournalReplayCli", "HSWMJournalAdapter", "HSWMJournalAdapterCli"]
+defaultTargets = ["HSWMOperationalQuotient", "HSWMCellular", "HSWMRuntime", "HSWMDurableRuntime", "HSWMCanonicalLearning", "HSWMTypeScriptV1Refinement", "HSWMOutcomeJudgment", "HSWMAtomicAdmission", "HSWMAtomicAdmissionConsistency", "HSWMAtomicAdmissionNonEntailment", "HSWMEndToEndRuntimeRefinement", "HSWMCanonicalPermitEnvelope", "HSWMExecutionCertificateWire", "HSWMLocalPermitCommit", "HSWMVerifiedAdmissionKernel", "HSWMVerifiedAdmissionWire", "HSWMPersistedVerifiedAdmission", "HSWMAdmissionKernelCli", "HSWMDnrd5EfficacyBoundary", "HSWMDnrd5ExactSignGate", "HSWMCausalEfficacyBridge", "HSWMSemanticLifecycleRefinement", "HSWMSemanticLifecycleCli", "HSWMStandardGraphIncidence", "HSWMStandardGraphIncidenceCli", "HSWMCanonicalPreservation", "HSWMCanonicalPreservationCli", "HSWMDurablePreservation", "HSWMDurablePreservationCli", "HSWMJournalReplay", "HSWMJournalReplayCli", "HSWMJournalAdapter", "HSWMJournalAdapterCli", "HSWMJournalValidation", "HSWMJournalValidationCli", "HSWMAdmissionPreflight", "HSWMAdmissionPreflightCli"]
 
 [[lean_lib]]
 name = "HSWMCellular"
@@ -64,3 +64,19 @@ roots = ["HSWMJournalAdapter"]
 [[lean_exe]]
 name = "HSWMJournalAdapterCli"
 root = "HSWMJournalAdapterCli"
+
+[[lean_lib]]
+name = "HSWMJournalValidation"
+roots = ["HSWMJournalValidation"]
+
+[[lean_exe]]
+name = "HSWMJournalValidationCli"
+root = "HSWMJournalValidationCli"
+
+[[lean_lib]]
+name = "HSWMAdmissionPreflight"
+roots = ["HSWMAdmissionPreflight"]
+
+[[lean_exe]]
+name = "HSWMAdmissionPreflightCli"
+root = "HSWMAdmissionPreflightCli"

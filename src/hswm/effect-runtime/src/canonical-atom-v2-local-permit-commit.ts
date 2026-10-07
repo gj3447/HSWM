@@ -22,8 +22,10 @@ import {
   type CanonicalPermitEnvelope,
   type CanonicalPermitExpectedBindings,
   type CanonicalPermitHeadBinding,
-  type CanonicalPermitTrustSnapshot
+  type CanonicalPermitTrustSnapshot,
+  type CallerRelativeCanonicalPermitEnvelopeVerification
 } from "./canonical-atom-v2-permit-envelope.js"
+import { admissionPreflightAdapterFacts, type AdmissionPreflightAdapterFacts, type AdmissionPreflightInput } from "./canonical-atom-v2-admission-preflight.js"
 import { canonicalJsonBytes, decodeCanonicalJsonBytes } from "./canonical-atom-v2-json.js"
 import {
   NodePosixFileSystem,
@@ -450,13 +452,30 @@ export interface VerifiedAdmissionCommitBackend {
   readonly recover: () => Effect.Effect<LocalPermitRecovery, LocalPermitCommitError>
 }
 
-export interface VerifiedAdmissionPreflight {
-  readonly view: { readonly head: CanonicalPermitHeadBinding | null; readonly consumedNonces: ReadonlyArray<string> }
-  readonly record: {
-    readonly committedAt: string; readonly verificationTime: string; readonly envelopeDigest: string
-    readonly executionIntentDigest: string; readonly nonceDigest: string
-    readonly priorHead: CanonicalPermitHeadBinding; readonly expectedNextHead: CanonicalPermitHeadBinding
-  }
+export interface VerifiedAdmissionPreflight extends AdmissionPreflightInput {
+  readonly adapterFacts: AdmissionPreflightAdapterFacts
+}
+
+/** Called only after successful native verification and exact state-byte checks.
+ * Evidence is transient; the established persisted wire format stays unchanged.
+ */
+const checkedAdmissionPreflight = (
+  prepared: Pick<AdmissionPreflightInput, "view" | "record">,
+  verified: CallerRelativeCanonicalPermitEnvelopeVerification,
+  preStateBytes: Uint8Array,
+  postStateBytes: Uint8Array
+): VerifiedAdmissionPreflight => {
+  const input: AdmissionPreflightInput = Object.freeze({ ...prepared,
+    verifiedPermit: Object.freeze({ envelopeDigest: verified.envelopeBytesSha256,
+      checkedAt: verified.callerSuppliedVerificationTime,
+      executionIntentDigest: verified.envelope.claims.executionIntentDigest,
+      nonceDigest: verified.envelope.claims.nonceDigest,
+      priorHead: Object.freeze({ ...verified.envelope.claims.priorHead }),
+      expectedNextHead: Object.freeze({ ...verified.envelope.claims.expectedNextHead }) }),
+    preState: Object.freeze({ byteLength: preStateBytes.byteLength, sha256: digest(preStateBytes) }),
+    postState: Object.freeze({ byteLength: postStateBytes.byteLength, sha256: digest(postStateBytes) })
+  })
+  return Object.freeze({ ...input, adapterFacts: admissionPreflightAdapterFacts(input) })
 }
 
 type VerifiedAdmissionHook = (preflight: VerifiedAdmissionPreflight, mintApproval: () => object) => Effect.Effect<object, LocalPermitCommitError>
@@ -634,7 +653,7 @@ const makeLocalPermitCommitStoreInternal = (
       })
       let admission: object | undefined
       if (verifiedAdmission !== undefined) {
-        const preflight = Object.freeze({
+        const preflight = checkedAdmissionPreflight(Object.freeze({
           view: Object.freeze({
             head: recovered.head === null ? null : Object.freeze({ ...recovered.head }),
             // Lean's state transition prepends each consumed nonce.  Recovery
@@ -647,7 +666,7 @@ const makeLocalPermitCommitStoreInternal = (
             nonceDigest: record.nonceDigest, priorHead: Object.freeze({ ...record.priorHead }),
             expectedNextHead: Object.freeze({ ...record.expectedNextHead })
           })
-        })
+        }), verification.right, preState.right, postState.right)
         const minted = () => {
           // The symbol is a non-public brand; the private WeakMap identity is
           // the actual authenticity check and prevents structural copies.
@@ -962,10 +981,10 @@ export const makeVerifiedAdmissionCommitBackendV2 = (
           return yield* Effect.fail(failure("RECOVERY_INVALID", "verified-admission v2 record does not form a one-shot contiguous local journal"))
         }
         const priorReceipts = receipts.map((entry) => entry.commit)
-        const preflight: VerifiedAdmissionPreflight = Object.freeze({
+        const preflight: VerifiedAdmissionPreflight = checkedAdmissionPreflight(Object.freeze({
           view: Object.freeze({ head: previous === null ? null : Object.freeze({ ...previous.expectedNextHead }), consumedNonces: Object.freeze(priorReceipts.map((entry) => entry.nonceDigest).reverse()) }),
           record: Object.freeze({ committedAt: record.right.committedAt, verificationTime: record.right.verificationTime, envelopeDigest: record.right.envelopeSha256, executionIntentDigest: record.right.executionIntentDigest, nonceDigest: record.right.nonceDigest, priorHead: Object.freeze({ ...record.right.priorHead }), expectedNextHead: Object.freeze({ ...record.right.expectedNextHead }) })
-        })
+        }), verification.right, preState.right, postState.right)
         const semantic = Either.try({
           try: () => validateRecoveredAdmission(preflight, artifact.right),
           catch: () => failure("RECOVERY_INVALID", "verified-admission v2 semantic validator threw during recovery")
@@ -1009,7 +1028,7 @@ export const makeVerifiedAdmissionCommitBackendV2 = (
       const path = join(directory, safeSlotName(claims.expectedNextHead.sequence))
       const temporaryPath = join(directory, `.local-permit-commit-${randomUUID()}.tmp`)
       const baseRecord = Object.freeze({ _tag: "VerifiedAdmissionCommitRecord" as const, contractVersion: HSWM_VERIFIED_ADMISSION_COMMIT_V2, status: HSWM_VERIFIED_ADMISSION_COMMIT_V2_STATUS, committedAt: verifiedAt, verificationTime: verifiedAt, envelopeBytesBase64Url: Buffer.from(request.envelopeBytes).toString("base64url"), envelopeSha256: digest(request.envelopeBytes), preStateBytesBase64Url: Buffer.from(preState.right).toString("base64url"), postStateBytesBase64Url: Buffer.from(postState.right).toString("base64url"), executionIntentDigest: claims.executionIntentDigest, nonceDigest: claims.nonceDigest, priorHead: Object.freeze({ ...claims.priorHead }), expectedNextHead: Object.freeze({ ...claims.expectedNextHead }) })
-      const preflight: VerifiedAdmissionPreflight = Object.freeze({ view: Object.freeze({ head: recovered.head === null ? null : Object.freeze({ ...recovered.head }), consumedNonces: Object.freeze(recovered.commits.map((entry) => entry.commit.nonceDigest).reverse()) }), record: Object.freeze({ committedAt: baseRecord.committedAt, verificationTime: baseRecord.verificationTime, envelopeDigest: baseRecord.envelopeSha256, executionIntentDigest: baseRecord.executionIntentDigest, nonceDigest: baseRecord.nonceDigest, priorHead: Object.freeze({ ...baseRecord.priorHead }), expectedNextHead: Object.freeze({ ...baseRecord.expectedNextHead }) }) })
+      const preflight: VerifiedAdmissionPreflight = checkedAdmissionPreflight(Object.freeze({ view: Object.freeze({ head: recovered.head === null ? null : Object.freeze({ ...recovered.head }), consumedNonces: Object.freeze(recovered.commits.map((entry) => entry.commit.nonceDigest).reverse()) }), record: Object.freeze({ committedAt: baseRecord.committedAt, verificationTime: baseRecord.verificationTime, envelopeDigest: baseRecord.envelopeSha256, executionIntentDigest: baseRecord.executionIntentDigest, nonceDigest: baseRecord.nonceDigest, priorHead: Object.freeze({ ...baseRecord.priorHead }), expectedNextHead: Object.freeze({ ...baseRecord.expectedNextHead }) }) }), verification.right, preState.right, postState.right)
       const minted = (candidate: VerifiedAdmissionDecisionArtifact): object => {
         const artifact = copyVerifiedAdmissionArtifact(candidate, "PERMIT_VERIFICATION_FAILED")
         const token = Object.freeze({ [VERIFIED_ADMISSION_APPROVAL_BRAND]: true })

@@ -1,0 +1,24 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?stage ?bytesBase64 ?bytesSha256 ?byteLength ?codeRevision
+       ?tracePath ?traceSha256 ?leanAccepted ?leanExecutableSha256 WHERE {
+  VALUES ?root { <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-progress-2026-10-07-v1> }
+  ?root a role:PROGRESS_VIEW ; r:HAS_CONCEPT ?selector .
+  ?selector a role:CURRENT_SELECTION ; p:task_id "T4" ;
+    p:selected_observation_uid ?selectedUid ; r:REFERENCES ?observation .
+  ?observation a role:TASK_STATUS_OBSERVATION ; p:task_id "T4" ; r:REFERENCES ?run .
+  FILTER(STR(?observation) = CONCAT("urn:hswm:kg:node:", ?selectedUid))
+  ?run a role:EXECUTION_TRACE_RUN ; p:task_id "T4" ; p:source_revision ?codeRevision ;
+    p:trace_artifact_uid ?artifactUid ; p:synthetic_fixture_only true ; p:separate_journals true ;
+    p:lean_accepted ?leanAccepted ; p:lean_executable_sha256 ?leanExecutableSha256 ;
+    r:HAS_SOURCE ?artifact ; r:HAS_CONCEPT ?bytes .
+  FILTER(STR(?artifact) = CONCAT("urn:hswm:kg:node:", ?artifactUid))
+  ?artifact a role:EVIDENCE_ARTIFACT ; p:evidence_role "EXECUTION_TRACE" ;
+    p:source_path ?tracePath ; p:source_sha256 ?traceSha256 .
+  ?bytes a role:TRACE_BYTE_EVIDENCE ; r:REFERENCES ?artifact ; p:trace_stage ?stage ;
+    p:bytes_encoding "BASE64" ; p:bytes_base64 ?bytesBase64 ;
+    p:bytes_sha256 ?bytesSha256 ; p:bytes_length ?byteLength .
+}
+ORDER BY ?stage

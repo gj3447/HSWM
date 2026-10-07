@@ -1,0 +1,150 @@
+{
+  "schema_version": "hswm-w1-full-instrument-graph-validation/v1",
+  "recorded_on": "2026-10-07T06:45:09.466297+00:00",
+  "authority": "SECONDARY_AI_LOCAL_ENGINEERING_REPORT",
+  "code_revision": "fd180262df63e8890e9a8399050f0deb4d067ffa",
+  "validation_scope": "FINAL_PUBLICATION_BYTES_WITH_CONCURRENT_COMMITTED_NAVIGATION_PRESERVED",
+  "primary": {
+    "path": "ontology/development/HSWM_W1_FULL_INSTRUMENT_PROGRESS_2026-10-07.v1.json",
+    "sha256": "a365c3d089b7782af21d21350221e47a02835058d35e35c774008738cab6c469",
+    "nodes": 20,
+    "anchors": 18,
+    "relations": 47
+  },
+  "source_count": 7,
+  "sources": [
+    {
+      "id": "progress",
+      "bundle": "ontology/development/HSWM_W1_FULL_INSTRUMENT_PROGRESS_2026-10-07.v1.json",
+      "binding": "CURRENT_OBSERVED",
+      "sha256": "a365c3d089b7782af21d21350221e47a02835058d35e35c774008738cab6c469"
+    },
+    {
+      "id": "runtime-conformance",
+      "bundle": "ontology/development/HSWM_RUNTIME_CONFORMANCE_PROGRESS_2026-10-07.v1.json",
+      "binding": "MANIFEST_PINNED",
+      "sha256": "de5a12134e770efba08f489bf90e392a8cc860b52f9d6d7c324fa1fbdbe4c6f4"
+    },
+    {
+      "id": "preflight",
+      "bundle": "ontology/development/HSWM_PREFLIGHT_REFINEMENT_PROGRESS_2026-10-07.v1.json",
+      "binding": "MANIFEST_PINNED",
+      "sha256": "8c2385e1d610b4debea2ea2ca1ccfcb16bdae75e4ceca26dbebb480e515f6fb3"
+    },
+    {
+      "id": "consolidation",
+      "bundle": "ontology/development/HSWM_PROGRESS_CONSOLIDATION_2026-10-07.v1.json",
+      "binding": "MANIFEST_PINNED",
+      "sha256": "0058400c35543d439043811098cb8e52ed835e0a50c88fc07832972bbbebf17b"
+    },
+    {
+      "id": "plan",
+      "bundle": "ontology/development/HSWM_PROGRESS_PLAN_2026-10-06.v1.json",
+      "binding": "MANIFEST_PINNED",
+      "sha256": "7686e3c6dc92899f0a0471ce8aa0d1a8c9aa1ecc51babf40d0e2f94660fbbf24"
+    },
+    {
+      "id": "replay",
+      "bundle": "ontology/development/HSWM_JOURNAL_REPLAY_PROGRESS_2026-10-06.v1.json",
+      "binding": "MANIFEST_PINNED",
+      "sha256": "448ad46cca884c514352774a6e51243e3c7748880145ac29d97d810eb29ce300"
+    },
+    {
+      "id": "adapter",
+      "bundle": "ontology/development/HSWM_JOURNAL_ADAPTER_PROGRESS_2026-10-06.v1.json",
+      "binding": "MANIFEST_PINNED",
+      "sha256": "6f9cae1d4359c407cfe497e722e5aadbe3a4766aaf2e52d43bb9427ebfc24391"
+    }
+  ],
+  "artifact_bindings_matched": 23,
+  "shacl": {
+    "conforms": true,
+    "structural_issues": [],
+    "shapes": [
+      {
+        "path": "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+        "conforms": true,
+        "results": 0
+      },
+      {
+        "path": "ontology/queries/hswm_w1_full_instrument_2026-10-07/shapes.ttl",
+        "conforms": true,
+        "results": 0
+      }
+    ]
+  },
+  "queries": {
+    "current": {
+      "rows": 9,
+      "result_sha256": "2ca0de61e47cb13bfb535c545810ea62cee61bb79679d4f97cf3f68608c3c4a3",
+      "query_sha256": "e088424762f95a0de7251bcbefdfc282fe9011b6a1c5505afd0b715e92e9c675"
+    },
+    "history": {
+      "rows": 3,
+      "result_sha256": "d7100c0b2f9c4c6d1d7b6db95cce80c01c94131b4c620af756f842e9f12c8e66",
+      "query_sha256": "e150651eb399258638017b81fe4b9f20ffd0ccca47fbaf2df3f99b6579caa3a2"
+    },
+    "bindings": {
+      "rows": 9,
+      "result_sha256": "0c227bef6a240bd0d3b2529970c697183d8f4b046fb32b7289c3838ece61c8bb",
+      "query_sha256": "35ca7a49820aa3e3b3735a681e755eeaa5f72f43c76f3db95384d1e30730b03e"
+    },
+    "evidence": {
+      "rows": 29,
+      "result_sha256": "99100157164658721ca2e419e2c5247ab3f88b816fd31408afbad8e6004d563f",
+      "query_sha256": "6c1c58828348a4e7b97a5eb26ce27be6643f78acd22c3f3c86791e9183f940a0"
+    },
+    "next": {
+      "rows": 0,
+      "result_sha256": "4c687b6d28db70ee28ad6058592eaf3210977b70d7952bf69169164b33b0ec0a",
+      "query_sha256": "7d08130c950fabfb8d65e356b878f481b2b6a00d3115fe12c4a16d5e1e1b4cc2"
+    },
+    "blocked": {
+      "rows": 5,
+      "result_sha256": "607d19fb77f9da04fcf08c680d81254d80e25bfdc4fc7fc172a9f8823f4c8776",
+      "query_sha256": "2e52e00ee9f8a265989e6ab1a71035de4627aae97d095c1d0fc8a18c46b87fa8"
+    },
+    "boundaries": {
+      "rows": 6,
+      "result_sha256": "866a651c52d8965a28b6dd634305fe24be89ebb17270a136f1f2bc4b358ecbd5",
+      "query_sha256": "416ae3a3ac89479a91bc1e5274a75116b9091eaeba4d9aad891fa081f7be83bd"
+    },
+    "trace": {
+      "rows": 10,
+      "result_sha256": "f284910dd9ba0f3b6104c6960cb3443ea66c92cbff12bc92b8a2dfd5dfcaf42e",
+      "query_sha256": "72fad8672e1e5c92799a58e3a4efc3667c9f0c24a26eba77c45091b989962b00"
+    }
+  },
+  "regression": {
+    "passed": 31,
+    "command": "HSWM_VERIFY_PROGRESS_HISTORY=1 npm --prefix src/hswm/effect-runtime test -- ../../../tests/effect-runtime/w1-full-progress.test.ts ../../../tests/effect-runtime/runtime-conformance-progress.test.ts ../../../tests/effect-runtime/preflight-progress.test.ts ../../../tests/effect-runtime/progress-consolidation.test.ts ../../../tests/effect-runtime/workspace-cli.test.ts test/workspace-composite.test.ts --maxWorkers=1",
+    "log_sha256": "b32e1a6706cb32d1571d9dfc6516af2f769feb44304cc0a4b4802e4b13721b88",
+    "qualified_rejections": [
+      "missing or duplicated selectors",
+      "T5 false completion promotion",
+      "selected UID mismatch and detached selected link",
+      "removed or inconsistent previous-observation hop"
+    ]
+  },
+  "check": {
+    "exit_code": 0,
+    "log_sha256": "18f37d6ae3a34dbabf370d6f64753891c1e6d1755d8fcf484ab621cef7b4b8f0"
+  },
+  "history_preservation": {
+    "previous_default_now": "progress-2026-10-07-runtime-conformance",
+    "prior_publication": "b739cc8342ec3314962a9c10d801a1d91ac2af81",
+    "unrelated_manifest_entries_preserved": 32,
+    "old_source_bytes_preserved": true,
+    "concurrent_commit_preserved": "020e1ee4aa6e27bb09bf37c78f42463d77988c60"
+  },
+  "original_plan_criteria": {
+    "T1_T4": "COMPLETE_WITHIN_ORIGINAL_PLAN_BOUNDARIES",
+    "T5": "FULL_W1_INSTRUMENT_QUALIFIED_MODEL_BINDING_UNESTABLISHED",
+    "T6_T9": "WAITING_FOR_MEASURED_PRECONDITIONS"
+  },
+  "measured_model_requests": 0,
+  "whole_hswm_proved": false,
+  "nonclaim": "STANDARD_GRAPH_STRUCTURE_AND_SOURCE_BINDINGS_NOT_MODEL_READINESS_OR_LEARNING_EFFICACY",
+  "hash_cycle_policy": "Derived validation report is not an input binding of the primary bundle.",
+  "publication_parent_revision": "020e1ee4aa6e27bb09bf37c78f42463d77988c60"
+}

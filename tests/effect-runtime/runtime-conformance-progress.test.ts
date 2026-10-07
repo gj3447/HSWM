@@ -124,7 +124,8 @@ it("pins source evidence to the code revision and graph files to their immutable
     expect(kgSha256(bytes(path))).toBe(properties["source_sha256"])
   }
   for (const binding of primary.artifact_bindings) {
-    expect(kgSha256(bytes(binding.path))).toBe(binding.sha256)
+    const published = execFileSync("git", ["show", `b739cc8342ec3314962a9c10d801a1d91ac2af81:${binding.path}`], { cwd: root, timeout: 20000, maxBuffer: 16 * 1024 * 1024 })
+    expect(kgSha256(published)).toBe(binding.sha256)
   }
 }, 30000)
 

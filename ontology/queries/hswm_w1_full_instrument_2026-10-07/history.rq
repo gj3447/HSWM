@@ -1,0 +1,31 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?order ?status ?completion ?revision ?previousUid ?next WHERE {
+ VALUES ?root { <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-progress-2026-10-07-v1> }
+ ?root a role:PROGRESS_VIEW ; r:HAS_CONCEPT ?selector .
+ ?selector a role:CURRENT_SELECTION ; p:task_id "T5" ; p:selected_observation_uid ?selectedUid ; r:REFERENCES ?selected .
+ ?selected a role:TASK_STATUS_OBSERVATION ; p:task_id "T5" .
+ FILTER(STR(?selected)=CONCAT("urn:hswm:kg:node:",?selectedUid))
+ {
+  ?selected p:observation_order ?order ; p:status ?status ; p:completion_disposition ?completion ; p:source_revision ?revision ; p:next_action ?next .
+  OPTIONAL { ?selected p:previous_observation_uid ?previousUid }
+ } UNION
+ {
+  ?selected p:previous_observation_uid ?uid1 ; r:REFERENCES ?hop1 .
+  ?hop1 a role:TASK_STATUS_OBSERVATION ; p:task_id "T5" .
+  FILTER(STR(?hop1)=CONCAT("urn:hswm:kg:node:",?uid1))
+  ?hop1 p:observation_order ?order ; p:status ?status ; p:completion_disposition ?completion ; p:source_revision ?revision ; p:next_action ?next .
+  OPTIONAL { ?hop1 p:previous_observation_uid ?previousUid }
+ } UNION
+ {
+  ?selected p:previous_observation_uid ?uid1 ; r:REFERENCES ?hop1 .
+  ?hop1 a role:TASK_STATUS_OBSERVATION ; p:task_id "T5" .
+  FILTER(STR(?hop1)=CONCAT("urn:hswm:kg:node:",?uid1))
+  ?hop1 p:previous_observation_uid ?uid2 ; r:REFERENCES ?hop2 .
+  ?hop2 a role:TASK_STATUS_OBSERVATION ; p:task_id "T5" .
+  FILTER(STR(?hop2)=CONCAT("urn:hswm:kg:node:",?uid2))
+  ?hop2 p:observation_order ?order ; p:status ?status ; p:completion_disposition ?completion ; p:source_revision ?revision ; p:next_action ?next .
+  OPTIONAL { ?hop2 p:previous_observation_uid ?previousUid }
+ }
+} ORDER BY ?order

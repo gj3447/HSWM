@@ -1,0 +1,14 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+SELECT ?task ?path ?roleName ?sha256 ?revision WHERE {
+  VALUES ?root { <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-progress-2026-10-07-v1> }
+  ?root a role:PROGRESS_VIEW ; r:HAS_CONCEPT ?selector .
+  ?selector a role:CURRENT_SELECTION ; p:task_id ?task ; p:selected_observation_uid ?selectedUid ; r:REFERENCES ?observation .
+  ?observation a role:TASK_STATUS_OBSERVATION ; p:task_id ?task ; r:HAS_SOURCE ?artifact .
+  FILTER(STR(?observation) = CONCAT("urn:hswm:kg:node:", ?selectedUid))
+  ?artifact a role:EVIDENCE_ARTIFACT ; p:source_path ?path ; p:evidence_role ?roleName ; p:source_sha256 ?sha256 ; p:source_revision ?revision .
+  FILTER(?task IN ("T1", "T2", "T3", "T4", "T5"))
+}
+ORDER BY ?task ?roleName ?path

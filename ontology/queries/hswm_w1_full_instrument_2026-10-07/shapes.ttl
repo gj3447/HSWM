@@ -1,0 +1,128 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:shape:w1-root> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-progress-2026-10-07-v1> ;
+ sh:property [ sh:path p:whole_hswm_proved ; sh:hasValue false ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:measured_model_requests ; sh:hasValue 0 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ] ; sh:qualifiedMinCount 9 ; sh:qualifiedMaxCount 9 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:qualifiedValueShape [ sh:class role:EVIDENCE_ARTIFACT ] ; sh:qualifiedMinCount 9 ; sh:qualifiedMaxCount 9 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T1" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T2" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T3" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T4" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T5" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T6" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T7" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T8" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CURRENT_SELECTION ; sh:property [ sh:path p:task_id ; sh:hasValue "T9" ] ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] .
+
+<urn:shape:w1-T1> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-selection-t1-2026-10-07-v1> ;
+ sh:property [ sh:path p:task_id ; sh:hasValue "T1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:task_uid ; sh:hasValue "sym:Concept:hswm-progress-t1-2026-10-06-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:selected_observation_uid ; sh:hasValue "sym:AbstractNode:hswm-runtime-conformance-observation-t1-4-2026-10-07-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-progress-t1-2026-10-06-v1> ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-runtime-conformance-observation-t1-4-2026-10-07-v1> ; sh:minCount 2 ; sh:maxCount 2 ] .
+
+<urn:shape:w1-T2> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-selection-t2-2026-10-07-v1> ;
+ sh:property [ sh:path p:task_id ; sh:hasValue "T2" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:task_uid ; sh:hasValue "sym:Concept:hswm-progress-t2-2026-10-06-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:selected_observation_uid ; sh:hasValue "sym:AbstractNode:hswm-runtime-conformance-observation-t2-2-2026-10-07-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-progress-t2-2026-10-06-v1> ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-runtime-conformance-observation-t2-2-2026-10-07-v1> ; sh:minCount 2 ; sh:maxCount 2 ] .
+
+<urn:shape:w1-T3> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-selection-t3-2026-10-07-v1> ;
+ sh:property [ sh:path p:task_id ; sh:hasValue "T3" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:task_uid ; sh:hasValue "sym:Concept:hswm-progress-t3-2026-10-06-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:selected_observation_uid ; sh:hasValue "sym:AbstractNode:hswm-runtime-conformance-observation-t3-1-2026-10-07-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-progress-t3-2026-10-06-v1> ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-runtime-conformance-observation-t3-1-2026-10-07-v1> ; sh:minCount 2 ; sh:maxCount 2 ] .
+
+<urn:shape:w1-T4> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-selection-t4-2026-10-07-v1> ;
+ sh:property [ sh:path p:task_id ; sh:hasValue "T4" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:task_uid ; sh:hasValue "sym:Concept:hswm-progress-t4-2026-10-06-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:selected_observation_uid ; sh:hasValue "sym:AbstractNode:hswm-runtime-conformance-observation-t4-1-2026-10-07-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-progress-t4-2026-10-06-v1> ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-runtime-conformance-observation-t4-1-2026-10-07-v1> ; sh:minCount 2 ; sh:maxCount 2 ] .
+
+<urn:shape:w1-T5> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-selection-t5-2026-10-07-v1> ;
+ sh:property [ sh:path p:task_id ; sh:hasValue "T5" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:task_uid ; sh:hasValue "sym:Concept:hswm-progress-t5-2026-10-06-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:selected_observation_uid ; sh:hasValue "sym:AbstractNode:hswm-w1-full-instrument-observation-t5-2-2026-10-07-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-progress-t5-2026-10-06-v1> ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-observation-t5-2-2026-10-07-v1> ; sh:minCount 2 ; sh:maxCount 2 ] .
+
+<urn:shape:w1-T6> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-selection-t6-2026-10-07-v1> ;
+ sh:property [ sh:path p:task_id ; sh:hasValue "T6" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:task_uid ; sh:hasValue "sym:Concept:hswm-progress-t6-2026-10-06-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:selected_observation_uid ; sh:hasValue "sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-progress-t6-2026-10-06-v1> ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1> ; sh:minCount 2 ; sh:maxCount 2 ] .
+
+<urn:shape:w1-T7> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-selection-t7-2026-10-07-v1> ;
+ sh:property [ sh:path p:task_id ; sh:hasValue "T7" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:task_uid ; sh:hasValue "sym:Concept:hswm-progress-t7-2026-10-06-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:selected_observation_uid ; sh:hasValue "sym:AbstractNode:hswm-progress-consolidation-observation-t7-0-2026-10-07-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-progress-t7-2026-10-06-v1> ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-progress-consolidation-observation-t7-0-2026-10-07-v1> ; sh:minCount 2 ; sh:maxCount 2 ] .
+
+<urn:shape:w1-T8> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-selection-t8-2026-10-07-v1> ;
+ sh:property [ sh:path p:task_id ; sh:hasValue "T8" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:task_uid ; sh:hasValue "sym:Concept:hswm-progress-t8-2026-10-06-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:selected_observation_uid ; sh:hasValue "sym:AbstractNode:hswm-progress-consolidation-observation-t8-0-2026-10-07-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-progress-t8-2026-10-06-v1> ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-progress-consolidation-observation-t8-0-2026-10-07-v1> ; sh:minCount 2 ; sh:maxCount 2 ] .
+
+<urn:shape:w1-T9> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-selection-t9-2026-10-07-v1> ;
+ sh:property [ sh:path p:task_id ; sh:hasValue "T9" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:task_uid ; sh:hasValue "sym:Concept:hswm-progress-t9-2026-10-06-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:selected_observation_uid ; sh:hasValue "sym:AbstractNode:hswm-progress-consolidation-observation-t9-0-2026-10-07-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm-progress-t9-2026-10-06-v1> ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-progress-consolidation-observation-t9-0-2026-10-07-v1> ; sh:minCount 2 ; sh:maxCount 2 ] .
+
+<urn:shape:w1-observation> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-observation-t5-2-2026-10-07-v1> ;
+ sh:property [ sh:path p:completion_disposition ; sh:hasValue "OPEN" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:work_ready ; sh:hasValue false ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:measured_model_requests ; sh:hasValue 0 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:observation_order ; sh:hasValue 2 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:previous_observation_uid ; sh:hasValue "sym:AbstractNode:hswm-runtime-conformance-observation-t5-1-2026-10-07-v1" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:AbstractNode:hswm-runtime-conformance-observation-t5-1-2026-10-07-v1> ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:qualifiedValueShape [ sh:class role:EVIDENCE_ARTIFACT ] ; sh:qualifiedMinCount 9 ; sh:qualifiedMaxCount 9 ] .
+
+<urn:shape:w1-artifact-0> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-source-0-2026-10-07-v1> ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-artifact-1> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-source-1-2026-10-07-v1> ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-artifact-2> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-source-2-2026-10-07-v1> ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-artifact-3> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-source-3-2026-10-07-v1> ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-artifact-4> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-source-4-2026-10-07-v1> ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-artifact-5> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-source-5-2026-10-07-v1> ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-artifact-6> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-source-6-2026-10-07-v1> ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-artifact-7> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-source-7-2026-10-07-v1> ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+<urn:shape:w1-artifact-8> a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:hswm-w1-full-instrument-source-8-2026-10-07-v1> ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_revision ; sh:pattern "^[a-f0-9]{40}$" ; sh:minCount 1 ; sh:maxCount 1 ] .

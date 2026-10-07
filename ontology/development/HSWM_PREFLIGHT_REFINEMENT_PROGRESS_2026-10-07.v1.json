@@ -1,0 +1,1182 @@
+{
+  "schema_version": "hswm-preflight-refinement-progress/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+  "status": "T1_T2_PARTIAL_PREFLIGHT_REFINEMENT_OPEN",
+  "nonclaim": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+  "source_accessed_on": "2026-10-07",
+  "artifact_bindings": [
+    {
+      "path": "formal/HSWMJournalValidation.lean",
+      "sha256": "a6b306b94438889e7970efd5f1f312d92cd51264e2c438fc03959da15b12c30d"
+    },
+    {
+      "path": "formal/HSWMAdmissionPreflight.lean",
+      "sha256": "635d93ef6fca98f8397936303789ae221fdf26ce1188fea0e4073356f3b6e788"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-validation-guards.ts",
+      "sha256": "a28de1a8545b87436b071bf6c24a5d95102b060b4b877c1f6301cd742dce937a"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/canonical-atom-v2-admission-preflight.ts",
+      "sha256": "48c036eb293b08c9f00912e20a6a03ea5012115ef1b8534a0bde8abe9645e831"
+    },
+    {
+      "path": "tests/effect-runtime/journal-validation.test.ts",
+      "sha256": "7ec8bc640f9d7691f3d06d15d84d4f4f9a94511b22c380e763ba798de5b47d88"
+    },
+    {
+      "path": "tests/effect-runtime/admission-preflight.test.ts",
+      "sha256": "622053ce3de71ce0f7ecc8427b1ab161121bf59d09f526025b314591532ee26d"
+    },
+    {
+      "path": "docs/research/HSWM_NATIVE_PREFLIGHT_REFINEMENT_2026-10-07.md",
+      "sha256": "419ab61e63b0e0bc13cc55009f844bd6ad93ee23b63e599d75fc93f131acb090"
+    },
+    {
+      "path": "docs/research/artifacts/hswm_native_preflight_refinement_2026-10-07/validation.v1.json",
+      "sha256": "b9576d639970697a6f7a23a94abe8b0412dfa6aae5aa2e4bf421f7872136e0b6"
+    },
+    {
+      "path": "ontology/queries/hswm_preflight_refinement_2026-10-07/current.rq",
+      "sha256": "cf3d11ed024f4b3d88cb9aff13156f8308265b64c841519b8017b85fd44a42c4"
+    },
+    {
+      "path": "ontology/queries/hswm_preflight_refinement_2026-10-07/history.rq",
+      "sha256": "431a48215c500b9c7447f916fa7344a4b8b86b4bd5e3e1601d6d732fb4c2db0f"
+    },
+    {
+      "path": "ontology/queries/hswm_preflight_refinement_2026-10-07/bindings.rq",
+      "sha256": "2589778b013c7489ae2eaac63e50314cca37e9528a01c1075bc6bd4d834911a9"
+    },
+    {
+      "path": "ontology/queries/hswm_preflight_refinement_2026-10-07/evidence.rq",
+      "sha256": "1de72cf8f7fbdb12c1a6ac179e1f08cf43c8d89367d5eee9ce195208567b6953"
+    },
+    {
+      "path": "ontology/queries/hswm_preflight_refinement_2026-10-07/next.rq",
+      "sha256": "308c3f33e0d829d3aa6a812d23917011140da28b5a94dcd0fe0ecbac274631fc"
+    },
+    {
+      "path": "ontology/queries/hswm_preflight_refinement_2026-10-07/boundaries.rq",
+      "sha256": "9cd97ef806b0389087ff668f6019f2bacaaf3a7fe9368016655973badac92f3e"
+    },
+    {
+      "path": "ontology/queries/hswm_preflight_refinement_2026-10-07/shapes.ttl",
+      "sha256": "c378e359780896e2639984b2a0b00784bccbbba531a8feee27da291ae9f7cc76"
+    },
+    {
+      "path": "ontology/queries/hswm_preflight_refinement_2026-10-07/README.md",
+      "sha256": "f6cfdaf0a1d0981aa4a516ad7cbb94f36ca41793bb87005a4eabfb7fe19c6142"
+    },
+    {
+      "path": "tests/effect-runtime/preflight-progress.test.ts",
+      "sha256": "22da63ec0fe7b16341338f47d37019c781ca1bba9eba886091b54736cea961d1"
+    },
+    {
+      "path": "ontology/workspace/HSWM_WORKSPACE.v1.json",
+      "sha256": "cc340e118a1fbff373394929fce566a996a2fa30067433db288960361a278e77"
+    }
+  ],
+  "expected_counts": {
+    "nodes": 20,
+    "anchors": 19,
+    "relations": 60
+  },
+  "anchors": [
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "name": "Historical reviewed selection",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "name": "T1",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t2-2026-10-06-v1",
+      "name": "T2",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+      "name": "T3",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "name": "T4",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t5-2026-10-06-v1",
+      "name": "T5",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+      "name": "T6",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+      "name": "T7",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+      "name": "T8",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+      "name": "T9",
+      "required_labels": [
+        "Concept"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "name": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+      "name": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t3-0-2026-10-07-v1",
+      "name": "sym:AbstractNode:hswm-progress-consolidation-observation-t3-0-2026-10-07-v1",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t4-0-2026-10-07-v1",
+      "name": "sym:AbstractNode:hswm-progress-consolidation-observation-t4-0-2026-10-07-v1",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t5-0-2026-10-07-v1",
+      "name": "sym:AbstractNode:hswm-progress-consolidation-observation-t5-0-2026-10-07-v1",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1",
+      "name": "sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t7-0-2026-10-07-v1",
+      "name": "sym:AbstractNode:hswm-progress-consolidation-observation-t7-0-2026-10-07-v1",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t8-0-2026-10-07-v1",
+      "name": "sym:AbstractNode:hswm-progress-consolidation-observation-t8-0-2026-10-07-v1",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t9-0-2026-10-07-v1",
+      "name": "sym:AbstractNode:hswm-progress-consolidation-observation-t9-0-2026-10-07-v1",
+      "required_labels": [
+        "AbstractNode"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "HSWM preflight refinement progress",
+        "description": "HSWM preflight refinement progress",
+        "standard_graph_role": "PROGRESS_VIEW",
+        "selection_as_of": "2026-10-07",
+        "whole_hswm_proved": false,
+        "reviewed_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "observation_scope": "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE",
+        "source_revision_scope": "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t1-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "T1 current selection after native preflight refinement",
+        "description": "T1 current selection after native preflight refinement",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T1",
+        "task_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t1-3-2026-10-07-v1",
+        "reviewed_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "observation_scope": "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE",
+        "source_revision_scope": "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t2-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "T2 current selection after native preflight refinement",
+        "description": "T2 current selection after native preflight refinement",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T2",
+        "task_uid": "sym:Concept:hswm-progress-t2-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t2-1-2026-10-07-v1",
+        "reviewed_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "observation_scope": "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE",
+        "source_revision_scope": "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t3-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "T3 current selection after native preflight refinement",
+        "description": "T3 current selection after native preflight refinement",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T3",
+        "task_uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t3-0-2026-10-07-v1",
+        "reviewed_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "observation_scope": "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE",
+        "source_revision_scope": "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t4-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "T4 current selection after native preflight refinement",
+        "description": "T4 current selection after native preflight refinement",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T4",
+        "task_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t4-0-2026-10-07-v1",
+        "reviewed_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "observation_scope": "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE",
+        "source_revision_scope": "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t5-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "T5 current selection after native preflight refinement",
+        "description": "T5 current selection after native preflight refinement",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T5",
+        "task_uid": "sym:Concept:hswm-progress-t5-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t5-0-2026-10-07-v1",
+        "reviewed_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "observation_scope": "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE",
+        "source_revision_scope": "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t6-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "T6 current selection after native preflight refinement",
+        "description": "T6 current selection after native preflight refinement",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T6",
+        "task_uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1",
+        "reviewed_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "observation_scope": "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE",
+        "source_revision_scope": "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t7-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "T7 current selection after native preflight refinement",
+        "description": "T7 current selection after native preflight refinement",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T7",
+        "task_uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t7-0-2026-10-07-v1",
+        "reviewed_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "observation_scope": "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE",
+        "source_revision_scope": "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t8-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "T8 current selection after native preflight refinement",
+        "description": "T8 current selection after native preflight refinement",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T8",
+        "task_uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t8-0-2026-10-07-v1",
+        "reviewed_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "observation_scope": "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE",
+        "source_revision_scope": "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t9-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "T9 current selection after native preflight refinement",
+        "description": "T9 current selection after native preflight refinement",
+        "standard_graph_role": "CURRENT_SELECTION",
+        "task_id": "T9",
+        "task_uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+        "selected_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t9-0-2026-10-07-v1",
+        "reviewed_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "observation_scope": "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE",
+        "source_revision_scope": "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t1-3-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "T1 read-set validation refinement",
+        "description": "T1 read-set validation refinement",
+        "standard_graph_role": "TASK_STATUS_OBSERVATION",
+        "task_id": "T1",
+        "status": "PARTIAL_READ_SET_VALIDATION_PROVED_REFINEMENT_OPEN",
+        "completion_disposition": "OPEN",
+        "observation_order": 3,
+        "reviewed_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "observation_scope": "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE",
+        "source_bundle_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+        "source_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "origin_uid": "sym:AbstractNode:hswm-preflight-refinement-source-7-2026-10-07-v1",
+        "source_recorded_on": "2026-10-07",
+        "previous_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+        "source_revision_scope": "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION",
+        "next_action": "Connect strict decoder and native validation to the modeled read-set boundary.",
+        "work_ready": true,
+        "claim_ceiling": "PARTIAL_READ_SET_VALIDATION_NOT_WHOLE_RUNTIME_REFINEMENT_OR_EFFICACY"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t2-1-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "T2 preflight fact computation refinement",
+        "description": "T2 preflight fact computation refinement",
+        "standard_graph_role": "TASK_STATUS_OBSERVATION",
+        "task_id": "T2",
+        "status": "PARTIAL_PREFLIGHT_FACTS_COMPUTED_REFINEMENT_OPEN",
+        "completion_disposition": "OPEN",
+        "observation_order": 1,
+        "reviewed_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "observation_scope": "AT_SOURCE_BOUND_CODE_REVISION_NOT_LIVE_WORKTREE",
+        "source_bundle_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+        "source_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "origin_uid": "sym:AbstractNode:hswm-preflight-refinement-source-7-2026-10-07-v1",
+        "source_recorded_on": "2026-10-07",
+        "previous_observation_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+        "source_revision_scope": "BOUND_CODE_AND_EVIDENCE_ARTIFACTS_NOT_BUNDLE_PUBLICATION_REVISION",
+        "next_action": "Connect verified preflight facts to the existing signed Permit model without promoting authority or deployment claims.",
+        "work_ready": true,
+        "claim_ceiling": "PARTIAL_PREFLIGHT_FACT_COMPUTATION_NOT_SIGNATURE_TIME_NONCE_OS_OR_EFFICACY"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-source-0-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "formal/HSWMJournalValidation.lean",
+        "description": "formal/HSWMJournalValidation.lean",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "formal/HSWMJournalValidation.lean",
+        "source_sha256": "a6b306b94438889e7970efd5f1f312d92cd51264e2c438fc03959da15b12c30d",
+        "source_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "evidence_role": "THEOREM_SOURCE",
+        "execution_status": "SOURCE_BOUND_VALIDATION_RECORDED_SEPARATELY",
+        "occurrence_time": "2026-10-07"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-source-1-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "formal/HSWMAdmissionPreflight.lean",
+        "description": "formal/HSWMAdmissionPreflight.lean",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "formal/HSWMAdmissionPreflight.lean",
+        "source_sha256": "635d93ef6fca98f8397936303789ae221fdf26ce1188fea0e4073356f3b6e788",
+        "source_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "evidence_role": "THEOREM_SOURCE",
+        "execution_status": "SOURCE_BOUND_VALIDATION_RECORDED_SEPARATELY",
+        "occurrence_time": "2026-10-07"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-source-2-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-validation-guards.ts",
+        "description": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-validation-guards.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-journal-validation-guards.ts",
+        "source_sha256": "a28de1a8545b87436b071bf6c24a5d95102b060b4b877c1f6301cd742dce937a",
+        "source_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "evidence_role": "RUNTIME_IMPLEMENTATION",
+        "execution_status": "SOURCE_BOUND_VALIDATION_RECORDED_SEPARATELY",
+        "occurrence_time": "2026-10-07"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-source-3-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "src/hswm/effect-runtime/src/canonical-atom-v2-admission-preflight.ts",
+        "description": "src/hswm/effect-runtime/src/canonical-atom-v2-admission-preflight.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "src/hswm/effect-runtime/src/canonical-atom-v2-admission-preflight.ts",
+        "source_sha256": "48c036eb293b08c9f00912e20a6a03ea5012115ef1b8534a0bde8abe9645e831",
+        "source_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "evidence_role": "RUNTIME_IMPLEMENTATION",
+        "execution_status": "SOURCE_BOUND_VALIDATION_RECORDED_SEPARATELY",
+        "occurrence_time": "2026-10-07"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-source-4-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "tests/effect-runtime/journal-validation.test.ts",
+        "description": "tests/effect-runtime/journal-validation.test.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "tests/effect-runtime/journal-validation.test.ts",
+        "source_sha256": "7ec8bc640f9d7691f3d06d15d84d4f4f9a94511b22c380e763ba798de5b47d88",
+        "source_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "evidence_role": "TEST_SOURCE",
+        "execution_status": "SOURCE_BOUND_VALIDATION_RECORDED_SEPARATELY",
+        "occurrence_time": "2026-10-07"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-source-5-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "tests/effect-runtime/admission-preflight.test.ts",
+        "description": "tests/effect-runtime/admission-preflight.test.ts",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "tests/effect-runtime/admission-preflight.test.ts",
+        "source_sha256": "622053ce3de71ce0f7ecc8427b1ab161121bf59d09f526025b314591532ee26d",
+        "source_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "evidence_role": "TEST_SOURCE",
+        "execution_status": "SOURCE_BOUND_VALIDATION_RECORDED_SEPARATELY",
+        "occurrence_time": "2026-10-07"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-source-6-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "docs/research/HSWM_NATIVE_PREFLIGHT_REFINEMENT_2026-10-07.md",
+        "description": "docs/research/HSWM_NATIVE_PREFLIGHT_REFINEMENT_2026-10-07.md",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "docs/research/HSWM_NATIVE_PREFLIGHT_REFINEMENT_2026-10-07.md",
+        "source_sha256": "419ab61e63b0e0bc13cc55009f844bd6ad93ee23b63e599d75fc93f131acb090",
+        "source_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "evidence_role": "RESEARCH_REPORT",
+        "execution_status": "SOURCE_BOUND_VALIDATION_RECORDED_SEPARATELY",
+        "occurrence_time": "2026-10-07"
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-preflight-refinement-source-7-2026-10-07-v1",
+      "labels": [
+        "AbstractNode"
+      ],
+      "properties": {
+        "authority_class": "SECONDARY_AI",
+        "recorded_on": "2026-10-07",
+        "actor": "agent:codex",
+        "responsibility_owner": "hswm:research:progress",
+        "claim_boundary": "SCOPED_PREFLIGHT_AND_READ_SET_REFINEMENT_NOT_CANONICAL_STATE_FULL_REFINEMENT_AUTHORITY_OR_EFFICACY",
+        "projection_nonclaim": "READ_ONLY_PROGRESS_VIEW_NOT_CANONICAL_LEARNING_OR_EFFICACY",
+        "name": "docs/research/artifacts/hswm_native_preflight_refinement_2026-10-07/validation.v1.json",
+        "description": "docs/research/artifacts/hswm_native_preflight_refinement_2026-10-07/validation.v1.json",
+        "standard_graph_role": "EVIDENCE_ARTIFACT",
+        "source_path": "docs/research/artifacts/hswm_native_preflight_refinement_2026-10-07/validation.v1.json",
+        "source_sha256": "b9576d639970697a6f7a23a94abe8b0412dfa6aae5aa2e4bf421f7872136e0b6",
+        "source_revision": "f2de5c0c830fd9e5d8642d6bf41f01445cdc0518",
+        "evidence_role": "VALIDATION_REPORT",
+        "execution_status": "SOURCE_BOUND_VALIDATION_RECORDED_SEPARATELY",
+        "occurrence_time": "2026-10-07"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "HISTORICAL_SELECTION_INPUT_NOT_REWRITTEN",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t1-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ONE_CURRENT_SELECTOR_PER_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t1-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ORIGINAL_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t1-3-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t2-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ONE_CURRENT_SELECTOR_PER_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t2-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t2-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ORIGINAL_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t2-1-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t3-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ONE_CURRENT_SELECTOR_PER_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t3-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t3-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ORIGINAL_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t3-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t4-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ONE_CURRENT_SELECTOR_PER_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t4-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t4-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ORIGINAL_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t4-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t4-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t5-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ONE_CURRENT_SELECTOR_PER_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t5-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t5-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ORIGINAL_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t5-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t5-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t6-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ONE_CURRENT_SELECTOR_PER_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t6-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t6-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ORIGINAL_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t6-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t6-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t7-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ONE_CURRENT_SELECTOR_PER_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t7-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t7-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ORIGINAL_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t7-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t7-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t8-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ONE_CURRENT_SELECTOR_PER_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t8-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t8-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ORIGINAL_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t8-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t8-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t9-2026-10-07-v1",
+      "type": "HAS_CONCEPT",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ONE_CURRENT_SELECTOR_PER_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t9-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t9-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_ORIGINAL_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-selection-t9-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t9-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_SELECTED_OBSERVATION",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t1-3-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t1-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ORIGINAL_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t1-3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t1-2-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_PREDECESSOR",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t2-1-2026-10-07-v1",
+      "to_uid": "sym:Concept:hswm-progress-t2-2026-10-06-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "ORIGINAL_TASK",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t2-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-progress-consolidation-observation-t2-0-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_PREDECESSOR",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t1-3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-7-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_VALIDATION_ORIGIN",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t2-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-7-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "EXACT_VALIDATION_ORIGIN",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_REFINEMENT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-source-0-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SUPPORTS_THIS_SCOPED_VIEW",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-1-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_REFINEMENT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-source-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SUPPORTS_THIS_SCOPED_VIEW",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-2-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_REFINEMENT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-source-2-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SUPPORTS_THIS_SCOPED_VIEW",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-3-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_REFINEMENT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-source-3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SUPPORTS_THIS_SCOPED_VIEW",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-4-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_REFINEMENT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-source-4-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SUPPORTS_THIS_SCOPED_VIEW",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-5-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_REFINEMENT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-source-5-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SUPPORTS_THIS_SCOPED_VIEW",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-6-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_REFINEMENT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-source-6-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SUPPORTS_THIS_SCOPED_VIEW",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-7-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SOURCE_BOUND_REFINEMENT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-source-7-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1",
+      "type": "REFERENCES",
+      "authority_class": "SECONDARY_AI",
+      "scope": "SUPPORTS_THIS_SCOPED_VIEW",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t1-3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-0-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "T1_DIRECT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t1-3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-2-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "T1_DIRECT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t1-3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-4-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "T1_DIRECT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t1-3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-6-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "T1_DIRECT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t1-3-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-7-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "T1_DIRECT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t2-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-1-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "T2_DIRECT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t2-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-3-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "T2_DIRECT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t2-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-5-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "T2_DIRECT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t2-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-6-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "T2_DIRECT_EVIDENCE",
+      "status": "PROPOSED"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-preflight-refinement-observation-t2-1-2026-10-07-v1",
+      "to_uid": "sym:AbstractNode:hswm-preflight-refinement-source-7-2026-10-07-v1",
+      "type": "HAS_SOURCE",
+      "authority_class": "SECONDARY_AI",
+      "scope": "T2_DIRECT_EVIDENCE",
+      "status": "PROPOSED"
+    }
+  ]
+}

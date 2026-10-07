@@ -1,0 +1,34 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+# This v1 view has exactly four T1 observations.  Each predecessor hop requires
+# the stored UID and its paired REFERENCES edge, avoiding broad graph traversal.
+SELECT ?order ?status ?completion ?origin ?bundle ?revision ?previousUid ?next WHERE {
+  VALUES ?root { <urn:hswm:kg:node:sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1> }
+  ?root a role:PROGRESS_VIEW ; r:HAS_CONCEPT ?selector .
+  ?selector a role:CURRENT_SELECTION ; p:task_id "T1" ; p:selected_observation_uid ?selectedUid ; r:REFERENCES ?selected .
+  ?selected a role:TASK_STATUS_OBSERVATION ; p:task_id "T1" .
+  FILTER(STR(?selected) = CONCAT("urn:hswm:kg:node:", ?selectedUid))
+  {
+    ?selected p:observation_order ?order ; p:status ?status ; p:completion_disposition ?completion ;
+      p:origin_uid ?origin ; p:source_bundle_uid ?bundle ; p:source_revision ?revision ; p:next_action ?next .
+    OPTIONAL { ?selected p:previous_observation_uid ?previousUid }
+  } UNION {
+    ?selected p:previous_observation_uid ?uid1 ; r:REFERENCES ?one .
+    ?one a role:TASK_STATUS_OBSERVATION ; p:task_id "T1" ; p:observation_order ?order ; p:status ?status ; p:completion_disposition ?completion ; p:origin_uid ?origin ; p:source_bundle_uid ?bundle ; p:source_revision ?revision ; p:next_action ?next .
+    FILTER(STR(?one) = CONCAT("urn:hswm:kg:node:", ?uid1)) OPTIONAL { ?one p:previous_observation_uid ?previousUid }
+  } UNION {
+    ?selected p:previous_observation_uid ?uid1 ; r:REFERENCES ?one .
+    ?one a role:TASK_STATUS_OBSERVATION ; p:task_id "T1" ; p:previous_observation_uid ?uid2 ; r:REFERENCES ?two .
+    ?two a role:TASK_STATUS_OBSERVATION ; p:task_id "T1" ; p:observation_order ?order ; p:status ?status ; p:completion_disposition ?completion ; p:origin_uid ?origin ; p:source_bundle_uid ?bundle ; p:source_revision ?revision ; p:next_action ?next .
+    FILTER(STR(?one) = CONCAT("urn:hswm:kg:node:", ?uid1)) FILTER(STR(?two) = CONCAT("urn:hswm:kg:node:", ?uid2)) OPTIONAL { ?two p:previous_observation_uid ?previousUid }
+  } UNION {
+    ?selected p:previous_observation_uid ?uid1 ; r:REFERENCES ?one .
+    ?one a role:TASK_STATUS_OBSERVATION ; p:task_id "T1" ; p:previous_observation_uid ?uid2 ; r:REFERENCES ?two .
+    ?two a role:TASK_STATUS_OBSERVATION ; p:task_id "T1" ; p:previous_observation_uid ?uid3 ; r:REFERENCES ?three .
+    ?three a role:TASK_STATUS_OBSERVATION ; p:task_id "T1" ; p:observation_order ?order ; p:status ?status ; p:completion_disposition ?completion ; p:origin_uid ?origin ; p:source_bundle_uid ?bundle ; p:source_revision ?revision ; p:next_action ?next .
+    FILTER(STR(?one) = CONCAT("urn:hswm:kg:node:", ?uid1)) FILTER(STR(?two) = CONCAT("urn:hswm:kg:node:", ?uid2)) FILTER(STR(?three) = CONCAT("urn:hswm:kg:node:", ?uid3)) OPTIONAL { ?three p:previous_observation_uid ?previousUid }
+  }
+}
+ORDER BY ?order

@@ -1,0 +1,13 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+
+# These are new source-bound refinement artifacts only.  The historical 39
+# occurrence bindings remain available through the consolidation workspace entry.
+SELECT ?path ?sha256 ?revision ?roleName ?execution WHERE {
+  VALUES ?root { <urn:hswm:kg:node:sym:AbstractNode:hswm-preflight-refinement-progress-2026-10-07-v1> }
+  ?root a role:PROGRESS_VIEW ; r:HAS_SOURCE ?artifact .
+  ?artifact a role:EVIDENCE_ARTIFACT ; p:source_path ?path ; p:source_sha256 ?sha256 ;
+    p:source_revision ?revision ; p:evidence_role ?roleName ; p:execution_status ?execution .
+}
+ORDER BY ?roleName ?path

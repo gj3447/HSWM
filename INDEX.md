@@ -65,6 +65,10 @@ decoded 모형·TS adapter 검사·운영 시간 순서·실제 모델 효능의
 `validation-contracts`에서 출처와 미평가 작업을 조회하며, SHACL/SPARQL 구조 검사와
 fixture 검증을 실제 모델 효능과 구별한다. 적용한 스킬·표준의 범위도 명시한다.
 
+2026-10-07 [CHU의 존재·HSWM의 구조·선의 공리](docs/canon/USER_PRIMARY_CHU_BEING_HSWM_STRUCTURE_2026-10-07.md)는
+후속 사용자 관점과 원문 공리 12개를 AI 구현 대응·열린 질문으로 연결합니다.
+`hswm-workspace show chu-being`에서 조회·검증합니다.
+
 2026-10-07 [CHU 운영체제의 HSWM 동작과 AI 정체성](docs/canon/USER_PRIMARY_CHU_HSWM_OS_AI_2026-10-07.md)은
 사용자의 조건부 관점, 정확한 원문, AI 재서술과 HSPINE·공유 KG 게시를 연결한다.
 `hswm-workspace show chu-os-ai`에서 원문·역할·게시 기록을 조회하고 SHACL 구조를 검증한다.

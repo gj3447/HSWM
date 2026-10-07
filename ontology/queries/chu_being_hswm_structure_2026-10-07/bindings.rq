@@ -1,0 +1,9 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?uid ?ordinal ?definitionUid ?definition ?component ?mapping ?authority ?status ?gapUid ?question WHERE {
+ ?binding a role:AXIOM_BINDING ; kb:uid ?uid ; p:ordinal ?ordinal ; p:target_component ?component ; p:mapping_text ?mapping ; p:authority_class ?authority ; p:mapping_status ?status ; r:HAS_SOURCE ?source ; r:REFERENCES ?gap .
+ ?source a role:SOURCE_DEFINITION ; kb:uid ?definitionUid ; p:definition_verbatim ?definition .
+ ?gap a role:OPEN_QUESTION ; kb:uid ?gapUid ; p:question ?question .
+} ORDER BY ?ordinal

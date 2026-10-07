@@ -1,0 +1,76 @@
+{
+  "schema_version": "chu-being-publication/v1",
+  "recorded_on": "2026-10-07",
+  "kg": {
+    "uid": "sym:Note:chatgpt-chu-hswm-being-axioms-20261007",
+    "target_version": "\"2026-10-07T06:38:41.664Z\"",
+    "authority_class": "SECONDARY_AI",
+    "canonical_scope": "PENDING_OR_PRELIMINARY",
+    "writer_actor": "agent:chatgpt",
+    "body_sha256": "4b833bab0ecb6a7e4e82169e5db0eb63ea8f6176fc9a1ae7b917b9cf7bc646e4",
+    "exact_body_readback": true,
+    "uid_match_count": 1,
+    "uid_collision": false,
+    "links": [
+      {
+        "predicate": "ABOUT",
+        "target_uid": "sym:Concept:hswm",
+        "direction": "OUT",
+        "authority": "SECONDARY_AI",
+        "status": "PROPOSED",
+        "review_required": true
+      },
+      {
+        "predicate": "DERIVED_FROM",
+        "target_uid": "sym:Note:chatgpt-chu-hswm-os-ai-20261007",
+        "direction": "OUT",
+        "authority": "SECONDARY_AI",
+        "status": "PROPOSED",
+        "review_required": true
+      }
+    ],
+    "declined_link": {
+      "predicate": "REFERENCES",
+      "target_uid": "sym:Chapter:선의_공리",
+      "reason": "Target is not available",
+      "created": false,
+      "fallback": "External UID and byte-bound source occurrence preserved in the local graph; no canonical target altered."
+    }
+  },
+  "hspine": {
+    "thread_id": "thread-cadd5257-2328-4683-903b-92fd576396f5",
+    "node_id": "intent-8b7ea177-11d9-4bdb-95bd-c8e110fb3927",
+    "kind": "AI_INTERPRETATION",
+    "actor_id": "agent:codex",
+    "created_at": "2026-10-07T06:38:55.109Z",
+    "receipt_sha256": "37a0c6c07e9396874cf28602a8688d31300e3209e6fcd79d62eada3e0c82fc21",
+    "content_sha256": "9615d28a6d71d1cd3de60e4a6351b3c4ab5e969428bd2097dfc0ce4726891a64",
+    "source_refs": [
+      {
+        "kind": "node",
+        "ref": "intent-cb96fca1-b72c-4e7e-a91d-ebaf95287aa5"
+      },
+      {
+        "kind": "kg",
+        "ref": "sym:Note:chatgpt-chu-hswm-being-axioms-20261007"
+      },
+      {
+        "kind": "kg",
+        "ref": "sym:Concept:hswm"
+      },
+      {
+        "kind": "node",
+        "ref": "intent-02003aac-b70d-419d-ae76-43cf3683dee6"
+      }
+    ],
+    "exact_body_readback": true,
+    "integrity": {
+      "ok": true,
+      "checked": 3,
+      "failures": [],
+      "at_head": "37a0c6c07e9396874cf28602a8688d31300e3209e6fcd79d62eada3e0c82fc21"
+    },
+    "url": "http://127.0.0.1:5510?thread=thread-cadd5257-2328-4683-903b-92fd576396f5"
+  },
+  "authority_boundary": "Quoted user statements have local USER_PRIMARY attribution. Remote publications remain AI records and grant no runtime authorization."
+}

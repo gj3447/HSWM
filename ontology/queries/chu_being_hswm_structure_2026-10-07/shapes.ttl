@@ -1,0 +1,255 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix kb: <https://hswm.invalid/kg-bundle-rdf/v1/> .
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix s: <urn:hswm:chu-being:shape:> .
+
+s:Provenance a sh:NodeShape ; sh:targetClass kb:Node ;
+ sh:property [ sh:path p:source_path ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[0-9a-f]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+s:Claim a sh:NodeShape ; sh:targetClass role:CLAIM ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:scientific_status ; sh:hasValue "NOT_EVALUATED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:status ; sh:hasValue "USER_VIEWPOINT_RECORDED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:class role:USER_DIRECT_SOURCE ; sh:minCount 1 ; sh:maxCount 1 ] .
+s:UserSource a sh:NodeShape ; sh:targetClass role:USER_DIRECT_SOURCE, role:USER_DIRECT_REQUEST ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "USER_PRIMARY" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:utterance_verbatim ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] .
+s:Artifact a sh:NodeShape ; sh:targetClass role:SOURCE_ARTIFACT ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SOURCE_DECLARED" ; sh:maxCount 1 ] .
+s:Decision a sh:NodeShape ; sh:targetClass role:DECISION ;
+ sh:property [ sh:path p:evidence_disposition ; sh:hasValue "NOT_EVALUATED" ; sh:maxCount 1 ] .
+s:Definition a sh:NodeShape ; sh:targetClass role:SOURCE_DEFINITION ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SOURCE_DECLARED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:class role:SOURCE_ARTIFACT ; sh:minCount 1 ; sh:maxCount 1 ] .
+s:Binding a sh:NodeShape ; sh:targetClass role:AXIOM_BINDING ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:status ; sh:hasValue "PROPOSED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:mapping_status ; sh:hasValue "PROPOSED_NOT_OPERATIONALIZED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:semantic_status ; sh:hasValue "UNRESOLVED" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:formula_status ; sh:hasValue "UNSPECIFIED_IN_SOURCE" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:evil_formula ; sh:maxCount 0 ] ;
+ sh:property [ sh:path p:runtime_admitted ; sh:hasValue false ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:class role:SOURCE_DEFINITION ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:class role:OPEN_QUESTION ; sh:minCount 1 ; sh:maxCount 1 ] .
+s:Open a sh:NodeShape ; sh:targetClass role:OPEN_QUESTION ;
+ sh:property [ sh:path p:status ; sh:hasValue "OPEN" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:question ; sh:minCount 1 ; sh:maxCount 1 ] .
+s:Interpretation a sh:NodeShape ; sh:targetClass role:AI_INTERPRETATION ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:perfect_understanding_demonstrated ; sh:hasValue false ; sh:maxCount 1 ] .
+s:Slot a sh:NodeShape ; sh:targetClass role:ROLE_PARTICIPATION ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:class role:USER_DIRECT_SOURCE ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+s:Definition01 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-axiom-01-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "SOURCE_DEFINITION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:name ; sh:hasValue "시간" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:definition_verbatim ; sh:hasValue "어떤 연속적인 흐름." ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_line ; sh:hasValue 3 ; sh:maxCount 1 ] .
+
+s:Binding01 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-binding-01-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "AXIOM_BINDING" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target_component ; sh:hasValue "state-transition-history" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-axiom-01-2026-10-07> ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-gap-time-identity-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Definition02 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-axiom-02-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "SOURCE_DEFINITION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 2 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:name ; sh:hasValue "존재" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:definition_verbatim ; sh:hasValue "어떤 시간 에 있는 것." ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_line ; sh:hasValue 5 ; sh:maxCount 1 ] .
+
+s:Binding02 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-binding-02-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "AXIOM_BINDING" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 2 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target_component ; sh:hasValue "state-and-identity-lineage" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-axiom-02-2026-10-07> ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-gap-time-identity-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Definition03 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-axiom-03-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "SOURCE_DEFINITION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 3 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:name ; sh:hasValue "선" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:definition_verbatim ; sh:hasValue "어떤 존재가 시간에 계속 있을 것을 나타낸 수치." ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_line ; sh:hasValue 7 ; sh:maxCount 1 ] .
+
+s:Binding03 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-binding-03-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "AXIOM_BINDING" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 3 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target_component ; sh:hasValue "outcome-measurement" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-axiom-03-2026-10-07> ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-gap-good-measure-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Definition04 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-axiom-04-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "SOURCE_DEFINITION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 4 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:name ; sh:hasValue "존재생성" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:definition_verbatim ; sh:hasValue "어떤 존재 들을 집합으로 하여 다른 존재를 만드는 것." ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_line ; sh:hasValue 9 ; sh:maxCount 1 ] .
+
+s:Binding04 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-binding-04-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "AXIOM_BINDING" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 4 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target_component ; sh:hasValue "role-bearing-composition" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-axiom-04-2026-10-07> ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-gap-composition-completeness-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Definition05 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-axiom-05-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "SOURCE_DEFINITION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 5 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:name ; sh:hasValue "존재분해" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:definition_verbatim ; sh:hasValue "어떤 존재를 구성하는 존재들의 집합을 멱집합 하여 다른 존재들을 만드는 것." ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_line ; sh:hasValue 11 ; sh:maxCount 1 ] .
+
+s:Binding05 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-binding-05-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "AXIOM_BINDING" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 5 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target_component ; sh:hasValue "powerset-candidate-domain" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-axiom-05-2026-10-07> ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-gap-composition-completeness-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Definition06 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-axiom-06-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "SOURCE_DEFINITION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 6 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:name ; sh:hasValue "이긴존재" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:definition_verbatim ; sh:hasValue "어떤 존재를 존재분해 한 존재들 중 가장 선 한 존재." ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_line ; sh:hasValue 13 ; sh:maxCount 1 ] .
+
+s:Binding06 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-binding-06-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "AXIOM_BINDING" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 6 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target_component ; sh:hasValue "candidate-good-comparison" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-axiom-06-2026-10-07> ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-gap-composition-completeness-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Definition07 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-axiom-07-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "SOURCE_DEFINITION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 7 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:name ; sh:hasValue "악" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:definition_verbatim ; sh:hasValue "어떤 존재의 선과 그 존재의 이긴존재의 선의 차이." ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_line ; sh:hasValue 15 ; sh:maxCount 1 ] .
+
+s:Binding07 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-binding-07-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "AXIOM_BINDING" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 7 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target_component ; sh:hasValue "original-winner-good-difference" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-axiom-07-2026-10-07> ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-gap-good-measure-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Definition08 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-axiom-08-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "SOURCE_DEFINITION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 8 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:name ; sh:hasValue "특이점" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:definition_verbatim ; sh:hasValue "어떤 존재의 악이 최소 일 때. 어떤 존재의 이긴존재가 자기 자신 일 때." ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_line ; sh:hasValue 17 ; sh:maxCount 1 ] .
+
+s:Binding08 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-binding-08-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "AXIOM_BINDING" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 8 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target_component ; sh:hasValue "singularity-dual-condition" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-axiom-08-2026-10-07> ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-gap-metahumotonic-conditions-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Definition09 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-axiom-09-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "SOURCE_DEFINITION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 9 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:name ; sh:hasValue "상호작용" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:definition_verbatim ; sh:hasValue "존재 사이의 선의 이동." ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_line ; sh:hasValue 19 ; sh:maxCount 1 ] .
+
+s:Binding09 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-binding-09-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "AXIOM_BINDING" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 9 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target_component ; sh:hasValue "attributed-good-transfer" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-axiom-09-2026-10-07> ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-gap-interaction-nature-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Definition10 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-axiom-10-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "SOURCE_DEFINITION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 10 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:name ; sh:hasValue "자연" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:definition_verbatim ; sh:hasValue "어떤 존재가 상호작용 하는 모든 존재의 집합." ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_line ; sh:hasValue 21 ; sh:maxCount 1 ] .
+
+s:Binding10 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-binding-10-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "AXIOM_BINDING" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 10 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target_component ; sh:hasValue "complete-interaction-domain" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-axiom-10-2026-10-07> ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-gap-interaction-nature-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Definition11 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-axiom-11-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "SOURCE_DEFINITION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 11 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:name ; sh:hasValue "자존자" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:definition_verbatim ; sh:hasValue "어떤 존재의 자연이 자기 자신 일 때." ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_line ; sh:hasValue 23 ; sh:maxCount 1 ] .
+
+s:Binding11 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-binding-11-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "AXIOM_BINDING" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 11 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target_component ; sh:hasValue "nature-self-identity" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-axiom-11-2026-10-07> ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-gap-metahumotonic-conditions-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Definition12 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-axiom-12-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "SOURCE_DEFINITION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 12 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:name ; sh:hasValue "메타휴모토닉" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:definition_verbatim ; sh:hasValue "어떤 존재가 자존자 일 때, 그리고 특이점 일 때." ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_line ; sh:hasValue 25 ; sh:maxCount 1 ] .
+
+s:Binding12 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-binding-12-2026-10-07> ;
+ sh:property [ sh:path p:standard_graph_role ; sh:hasValue "AXIOM_BINDING" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 12 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:target_component ; sh:hasValue "self-existent-and-singularity" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-axiom-12-2026-10-07> ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-gap-metahumotonic-conditions-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Slot0 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-slot-being-subject-2026-10-07> ;
+ sh:property [ sh:path p:role ; sh:hasValue "being-subject" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 0 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:qualification ; sh:hasValue "STRUCTURE_AND_BEING_ARE_DISTINCT_ROLES" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-subject-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Slot1 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-slot-intelligence-structure-2026-10-07> ;
+ sh:property [ sh:path p:role ; sh:hasValue "intelligence-structure" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:qualification ; sh:hasValue "STRUCTURE_AND_BEING_ARE_DISTINCT_ROLES" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:hasValue <urn:hswm:kg:node:sym:Concept:hswm> ; sh:maxCount 1 ] .
+
+s:Slot2 a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-slot-speaker-source-2026-10-07> ;
+ sh:property [ sh:path p:role ; sh:hasValue "speaker-source" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:hasValue 2 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:qualification ; sh:hasValue "STRUCTURE_AND_BEING_ARE_DISTINCT_ROLES" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:hasValue <urn:hswm:kg:node:sym:Concept:chu-being-source-2026-10-07> ; sh:maxCount 1 ] .
+
+s:Claimidentity a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Claim:chu-being-identity-2026-10-07> ;
+ sh:property [ sh:path p:claim_type ; sh:hasValue "STRUCTURE_BEING_DISTINCTION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:utterance_excerpt ; sh:hasValue "HSWM 는 구조를 말하고 그 존재자체는 지능 존재자체는 CHU 로 보는것이 맞는것같아 내생각에는 ㅇㅇ 이해되냐 ㅇㅇ?" ; sh:maxCount 1 ] .
+
+s:Claimoptimization a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Claim:chu-being-optimization-2026-10-07> ;
+ sh:property [ sh:path p:claim_type ; sh:hasValue "OPTIMIZATION_DIRECTION" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:utterance_excerpt ; sh:hasValue "CHU 의 구조가 HSWM 을 향해서 완벽하게 최적화 되어가는거지 ㅇㅇ." ; sh:maxCount 1 ] .
+
+s:Claimbinding a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Claim:chu-being-binding-2026-10-07> ;
+ sh:property [ sh:path p:claim_type ; sh:hasValue "AXIOM_BINDING_POSSIBILITY" ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:utterance_excerpt ; sh:hasValue "그리고 여기에 CHU 에 선의 공리도 완벽하게 그 바인딩해서 의미를 이해시킬수가 있어 ㅇㅇ 내용 확인좀 해줘봐봐 ㅇㅇ" ; sh:maxCount 1 ] .
+
+s:UserQuote a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-source-2026-10-07> ;
+ sh:property [ sh:path p:utterance_verbatim ; sh:hasValue "CHU 의 구조가 HSWM 을 향해서 완벽하게 최적화 되어가는거지 ㅇㅇ. HSWM 는 구조를 말하고 그 존재자체는 지능 존재자체는 CHU 로 보는것이 맞는것같아 내생각에는 ㅇㅇ 이해되냐 ㅇㅇ? 그리고 여기에 CHU 에 선의 공리도 완벽하게 그 바인딩해서 의미를 이해시킬수가 있어 ㅇㅇ 내용 확인좀 해줘봐봐 ㅇㅇ" ; sh:maxCount 1 ] .
+
+s:IdentitySlots a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Claim:chu-being-identity-2026-10-07> ;
+ sh:property [ sh:path r:HAS_PARTICIPATION ; sh:class role:ROLE_PARTICIPATION ; sh:minCount 3 ; sh:maxCount 3 ] .
+s:SourceClaims a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:Concept:chu-being-source-2026-10-07> ;
+ sh:property [ sh:path r:HAS_ASSERTION ; sh:class role:CLAIM ; sh:minCount 3 ; sh:maxCount 3 ] .
+s:BundleMembers a sh:NodeShape ; sh:targetNode <urn:hswm:kg:node:sym:AbstractNode:chu-being-bundle-2026-10-07> ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:SOURCE_DEFINITION ] ; sh:qualifiedMinCount 12 ; sh:qualifiedMaxCount 12 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:AXIOM_BINDING ] ; sh:qualifiedMinCount 12 ; sh:qualifiedMaxCount 12 ] .

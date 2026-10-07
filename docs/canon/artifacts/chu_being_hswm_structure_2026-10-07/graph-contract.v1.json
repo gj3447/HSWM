@@ -1,0 +1,124 @@
+{
+  "schema_version": "chu-being-graph-contract/v1",
+  "owner": "HSWM",
+  "relation_contracts": [
+    {
+      "predicate": "HAS_ASSERTION",
+      "domain_roles": [
+        "USER_DIRECT_SOURCE"
+      ],
+      "range_roles": [
+        "CLAIM"
+      ],
+      "direction": "source -> attributed claim",
+      "cardinality": "exactly 3 for the user source",
+      "meaning": "Attribution, not verification"
+    },
+    {
+      "predicate": "HAS_SOURCE",
+      "domain_roles": [
+        "AI_INTERPRETATION",
+        "AXIOM_BINDING",
+        "CLAIM",
+        "ROLE_PARTICIPATION",
+        "SOURCE_DEFINITION",
+        "SYNTHESIS_BUNDLE"
+      ],
+      "range_roles": [
+        "SOURCE_ARTIFACT",
+        "SOURCE_DEFINITION",
+        "USER_DIRECT_REQUEST",
+        "USER_DIRECT_SOURCE"
+      ],
+      "direction": "record -> source occurrence",
+      "cardinality": "claim/slot/binding/definition/interpretation: exactly 1; bundle: 3",
+      "meaning": "Provenance, not authority transfer"
+    },
+    {
+      "predicate": "HAS_CONCEPT",
+      "domain_roles": [
+        "CLAIM",
+        "ROLE_PARTICIPATION",
+        "SYNTHESIS_BUNDLE"
+      ],
+      "range_roles": [
+        "AI_INTERPRETATION",
+        "AXIOM_BINDING",
+        "CLAIM",
+        "DECISION",
+        "EXTERNAL_ANCHOR",
+        "OPEN_QUESTION",
+        "QUALIFIED_SUBJECT",
+        "ROLE_PARTICIPATION",
+        "SOURCE_ARTIFACT",
+        "SOURCE_DEFINITION",
+        "USER_DIRECT_REQUEST",
+        "USER_DIRECT_SOURCE"
+      ],
+      "direction": "bundle/claim/slot -> member/decision/participant",
+      "cardinality": "bundle: all owned non-root nodes; claim and slot: exactly 1",
+      "meaning": "Collection/assessment/role target, not equality"
+    },
+    {
+      "predicate": "HAS_PARTICIPATION",
+      "domain_roles": [
+        "CLAIM"
+      ],
+      "range_roles": [
+        "ROLE_PARTICIPATION"
+      ],
+      "direction": "identity claim -> role slot",
+      "cardinality": "identity claim exactly 3; other claims 0",
+      "meaning": "Role, order and qualification preserved"
+    },
+    {
+      "predicate": "REFERENCES",
+      "domain_roles": [
+        "AI_INTERPRETATION",
+        "AXIOM_BINDING",
+        "QUALIFIED_SUBJECT"
+      ],
+      "range_roles": [
+        "CLAIM",
+        "EXTERNAL_ANCHOR",
+        "OPEN_QUESTION"
+      ],
+      "direction": "interpretation/binding/subject -> contextual target",
+      "cardinality": "binding and qualified subject exactly 1; interpretation 5",
+      "meaning": "Reference, not entailment or identity"
+    },
+    {
+      "predicate": "CONSTRAINS",
+      "domain_roles": [
+        "DECISION"
+      ],
+      "range_roles": [
+        "CLAIM"
+      ],
+      "direction": "decision -> claim",
+      "cardinality": "exactly 1",
+      "meaning": "Evidence ceiling for the attributed claim"
+    }
+  ],
+  "competency_queries": [
+    "identity",
+    "roles",
+    "axioms",
+    "bindings",
+    "obligations"
+  ],
+  "source_definition_count": 12,
+  "proposed_binding_count": 12,
+  "global_dag_required": false,
+  "projection_scope": "READ_ONLY_CONTENT_GRAPH",
+  "interpretation_authority": "SECONDARY_AI/PROPOSED",
+  "rollback": "Revert this dated addition and its navigation entry only; preserve earlier sources. Append an HSPINE correction and version the linked KG draft if necessary.",
+  "semantic_nonentailments": [
+    "CHU sameAs HSWM",
+    "HSWM optimization implies Good increase",
+    "partial neighbors equal Nature",
+    "autonomous execution implies SelfExistent",
+    "HSWM naming implies MetaHumotonic",
+    "SHACL conformance implies semantic understanding"
+  ]
+}

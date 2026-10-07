@@ -1,0 +1,7 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?uid ?ordinal ?name ?definition ?line ?sourceHash ?authority WHERE {
+ ?definitionNode a role:SOURCE_DEFINITION ; kb:uid ?uid ; p:ordinal ?ordinal ; p:name ?name ; p:definition_verbatim ?definition ; p:source_line ?line ; p:source_sha256 ?sourceHash ; p:authority_class ?authority .
+} ORDER BY ?ordinal

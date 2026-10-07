@@ -1,0 +1,8 @@
+PREFIX kb: <https://hswm.invalid/kg-bundle-rdf/v1/>
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?uid ?kind ?quote ?authority ?sourceUid ?decision ?status WHERE {
+ ?claim a role:CLAIM ; kb:uid ?uid ; p:claim_type ?kind ; p:utterance_excerpt ?quote ; p:authority_class ?authority ; r:HAS_SOURCE/kb:uid ?sourceUid ; r:HAS_CONCEPT ?assessment .
+ ?assessment a role:DECISION ; kb:uid ?decision ; p:evidence_disposition ?status .
+} ORDER BY ?uid

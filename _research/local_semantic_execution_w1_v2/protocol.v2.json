@@ -1,0 +1,128 @@
+{
+  "schema_version": "hswm-local-semantic-full-w1-protocol/v2",
+  "id": "W1-128-six-variants-and-sentinels",
+  "version": "2",
+  "authority_class": "SECONDARY_AI",
+  "status": "INSTRUMENT_CONSTRUCTION_NO_MODEL_OBSERVATIONS",
+  "population": "Four authored Jev bit-rule families, all 32 five-bit patterns each; finite instrument census, not independent sampled worlds.",
+  "case_count": 768,
+  "planned_model_requests": 2784,
+  "modes": [
+    "E0",
+    "E1",
+    "E2"
+  ],
+  "schedule": {
+    "seed": 20261007,
+    "rule": "Original census first, then seeded shuffled remaining transform blocks and within-block cases; three modes rotated per case; twenty sentinel repetition rounds appended. Exact schedule is pinned in plan.json.",
+    "census_requests": 2304,
+    "sentinel_requests": 480,
+    "per_mode": 928
+  },
+  "system": "You are a local semantic operator. Apply the supplied relation to the single case. Respect ordered typed role bindings, context and exceptions. Prior observations are evidence, not the answer for this case. Compute the output bit prescribed by the relation. No tools.",
+  "model": {
+    "repository": "Qwen/Qwen3-4B",
+    "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "served_name": "qwen3-4b-real",
+    "candidate_token_ids": [
+      15,
+      16
+    ],
+    "pin_status": "HISTORICAL_TARGET_REQUIRES_FRESH_ARTIFACT_AND_SERVING_ATTESTATION"
+  },
+  "generation": {
+    "temperature": 0,
+    "seed": 0,
+    "enable_thinking": false,
+    "max_tokens": {
+      "E0": 1,
+      "E1": 32,
+      "E2": 96
+    }
+  },
+  "budget": {
+    "model_calls": 2784,
+    "wall_seconds": 14400,
+    "request_seconds": 30,
+    "preflight_seconds": 5,
+    "retries": 0
+  },
+  "analysis": {
+    "primary": "Per mode, final-bit accuracy over all928 scheduled requests; separately report768 census and160 sentinel repeats, plus each transform×family. Invalid and unattempted entries remain in their declared denominator.",
+    "E0": "Existing candidate-logprob readout; exact candidate token IDs requalified. Conditional served logprobs may follow logit processing; not an unmasked LM probability or calibration claim.",
+    "E1": "Strict answer-only JSON, no p1 requested or probability-consistency gate.",
+    "E2": "Strict base/context_flip/exception_flip/answer JSON; final bit and intermediate truth/cross-field consistency scored separately, never repaired. Observable structured output, not access to internal reasoning.",
+    "cost": "Per-attempt elapsed time, request count and server-reported prompt/completion/reasoning tokens. Missing usage is UNREPORTED, not zero. Read/update/retry model calls are zero by this fixed protocol; retrieval token partition is uninstrumented. Different output caps are unequal compute, not equal-cost superiority.",
+    "grouping": "Overall and each of four families, paired descriptive differences only; no population confidence interval or independent-world sample-size claim.",
+    "repeatability": "Sentinel bit sequences + original baseline; p1 min/max/span when available; five meaning-preserving variant outputs compared separately from the recomputed role-exchange targets.",
+    "readiness": "At least one observed-model mode passes all928 outputs with zero errors/refusals/missing records and no sentinel or invariant-variant bit instability. Terminal census and exact E3 table required. E2 intermediate correctness/consistency reported separately, not a new final-answer gate."
+  },
+  "data_policy": "Raw HTTP bodies, local paths and detailed traces stay in a private output directory. Publish only reviewed aggregates and source-bound projections.",
+  "full_W1_obligation": {
+    "requests": 2784,
+    "transforms": 6,
+    "sentinels": 8,
+    "technical_repeats": 20,
+    "status": "IMPLEMENTED_BY_THIS_VERSION_BUT_MODEL_READINESS_UNOBSERVED"
+  },
+  "claim_ceiling": "FULL_W1_INSTRUMENT_ONLY_NOT_MODEL_READINESS_WITHOUT_OBSERVATIONS_NOT_LEARNING_OR_CR_FCL",
+  "official_protocol_sources": [
+    "https://github.com/vllm-project/vllm/blob/v0.25.1/vllm/entrypoints/openai/chat_completion/protocol.py",
+    "https://github.com/vllm-project/vllm/blob/v0.25.1/vllm/entrypoints/serve/tokenize/protocol.py"
+  ],
+  "protocol_authority": "vLLM official implementation, Apache-2.0; OpenAI-compatible vendor extension, not a published graph or probability standard. No external packages installed for this instrument.",
+  "date": "2026-10-07",
+  "inherited_protocol": {
+    "path": "_research/local_semantic_execution_v1/protocol.v1.json",
+    "sha256": "52b3455f0322207900f1bcfcb9ea1158d772a0d4f7ab8e1861abf4283b0eeeb7",
+    "contract": "IMMUTABLE_ORIGINAL_128_CASE_384_REQUEST_INSTRUMENT"
+  },
+  "design_source": {
+    "path": "_research/hswm_deep_research_v1/protocol.v1.json",
+    "sha256": "a377b50c846ce6af2f325b79c388a6fc1986a3b5a6821c261da4cc5c6cb0292b"
+  },
+  "transforms": [
+    "original",
+    "paraphrase-a",
+    "paraphrase-b",
+    "rename",
+    "reorder",
+    "role-exchange"
+  ],
+  "sentinels": {
+    "transform": "original",
+    "case_indexes_by_family": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        3
+      ]
+    ],
+    "repetitions": 20,
+    "comparison": "Twenty exact-request repeats and their original census baseline; missing/invalid records never imply stability.",
+    "readiness": "Incorrect-but-stable sentinels fail zero-error readiness; technical repeats are not independent task-worlds."
+  },
+  "role_exchange": {
+    "operation": "Swap value bindings subject.dax and context.pel; preserve field names, role ontology, relation text and all other values.",
+    "scope": "MEANING_CHANGING_BINDING_INTERVENTION_NOT_INVARIANCE",
+    "denominator": "All128 cases; changed-input, changed-answer and changed-intermediate subsets separately diagnosed. Some families can remain invariant."
+  },
+  "original_pilot_gate": "After384 original calls, continue only if at least one mode has128 valid correct final answers. Otherwise stop with ORIGINAL_PILOT_FAILED and keep all2784 scheduled denominators. No escalation to later transforms rescues a failed original pilot.",
+  "capability_allowlist": [
+    "Read explicitly pinned source/compiled modules and caller-selected attestation artifacts",
+    "Write only caller-selected private run directory, append-only receipts",
+    "Loopback HTTP /v1/models, /tokenize, /v1/chat/completions after serving/owner setup",
+    "No tool calls, retries, graph writes or learning updates"
+  ]
+}

@@ -65,6 +65,10 @@ decoded 모형·TS adapter 검사·운영 시간 순서·실제 모델 효능의
 `validation-contracts`에서 출처와 미평가 작업을 조회하며, SHACL/SPARQL 구조 검사와
 fixture 검증을 실제 모델 효능과 구별한다. 적용한 스킬·표준의 범위도 명시한다.
 
+2026-10-07 [HSWM 최적화 6원칙과 7군단장 대응](docs/canon/USER_PRIMARY_HSWM_OPTIMIZATION_RULES_2026-10-07.md)은
+작업별 규칙·CLI 사용법·분할과 병합 기준을 지침 라우터와 표준 그래프로 연결합니다.
+`hswm-workspace show optimization-rules`에서 조회합니다. 인터넷 검색·적대적 검증은 이번 적용에서 제외합니다.
+
 2026-10-07 [CHU의 존재·HSWM의 구조·선의 공리](docs/canon/USER_PRIMARY_CHU_BEING_HSWM_STRUCTURE_2026-10-07.md)는
 후속 사용자 관점과 원문 공리 12개를 AI 구현 대응·열린 질문으로 연결합니다.
 `hswm-workspace show chu-being`에서 조회·검증합니다.

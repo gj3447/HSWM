@@ -1,0 +1,82 @@
+{
+  "schema_version": "hswm-optimization-graph-contract/v1",
+  "owner": "HSWM",
+  "scope": "USER_AUTHORIZED_LOCAL_INSTRUCTION_ROUTING_AND_READ_ONLY_CONTENT_GRAPH",
+  "identity": "Stable dated record UIDs; command_id/task_id/rule_id resolve the current operational entry. Source hashes describe this version.",
+  "relation_contracts": [
+    {
+      "predicate": "HAS_SOURCE",
+      "domain_roles": [
+        "OPTIMIZATION_BUNDLE",
+        "OPTIMIZATION_RULE",
+        "HISTORICAL_ROLE"
+      ],
+      "range_roles": [
+        "USER_SOURCE",
+        "HISTORICAL_SOURCE"
+      ],
+      "meaning": "Attribution to exact source, not transfer of source authority",
+      "cardinality": "root 4; each rule and historical role exactly 1",
+      "direction": "record -> source"
+    },
+    {
+      "predicate": "HAS_CONCEPT",
+      "domain_roles": [
+        "OPTIMIZATION_BUNDLE",
+        "ACTIVATION_GROUP"
+      ],
+      "range_roles": [
+        "ROUTING_TASK",
+        "HISTORICAL_ROLE",
+        "OPTIMIZATION_RULE"
+      ],
+      "meaning": "Root navigation or group rule membership; only ACTIVATION_GROUP membership selects rules",
+      "cardinality": "root 10; context group 4; CLI group 2",
+      "direction": "collection -> member"
+    },
+    {
+      "predicate": "REFERENCES",
+      "domain_roles": [
+        "ROUTING_TASK",
+        "OPTIMIZATION_RULE",
+        "CLI_COMMAND",
+        "HISTORICAL_ROLE"
+      ],
+      "range_roles": [
+        "ROUTING_TASK",
+        "ACTIVATION_GROUP",
+        "CLI_COMMAND",
+        "CLI_USAGE",
+        "OPTIMIZATION_RULE"
+      ],
+      "meaning": "Typed task dependency, command usage, or historical analogy; scope and endpoint roles distinguish them",
+      "cardinality": "task graph/cli 1, instructions 2; rule R2/R3 2, other rules 0; CLI 1; included historical role 1..3, excluded 0",
+      "direction": "referrer -> selected dependency or referenced target"
+    }
+  ],
+  "competency_queries": [
+    "rules",
+    "activation",
+    "cli",
+    "legion"
+  ],
+  "rule_count": 6,
+  "activation_group_count": 2,
+  "historical_role_count": 7,
+  "excluded_workflows": [
+    "WEB_SEARCH",
+    "ADVERSARIAL_VALIDATION"
+  ],
+  "historical_mapping_authority": "SECONDARY_AI_ANALOGY; prior USER_CLAIM/AI_PROPOSAL statuses preserved",
+  "activation_contract": "Shared router interprets routes.json EXTENDS/REQUIRES. RDF is a source-bound navigation projection, never the runtime selector. Only ROUTING_TASK -> REFERENCES+ -> ACTIVATION_GROUP -> HAS_CONCEPT -> OPTIMIZATION_RULE paths describe activation.",
+  "shared_inheritance": "instructions extends cli in the existing shared router; recorded as a scoped reference and checked by live routing probes",
+  "projection_loss": "This scoped bundle omits unrelated shared rules and command implementations; original paths and full selected sections remain authoritative. No n-ary claim or commander identity is collapsed to equality.",
+  "semantic_nonentailments": [
+    "Selected character reduction proves intelligence improvement",
+    "Historical analogy activates a commander workflow",
+    "Representation node count is physical CHU size",
+    "SHACL conformance proves meaning understanding",
+    "Rule selection is learned W dispatch"
+  ],
+  "rollback": "Revert this addition, its route edges and compact CLI source selection; restore owner:usage to README.md. Preserve older records and other writers."
+}

@@ -1,0 +1,40 @@
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix opt: <https://hswm.invalid/optimization-rules/v1/> .
+
+# Structural contracts; historical analogies never activate rules.
+opt:Rule a sh:NodeShape ; sh:targetClass role:OPTIMIZATION_RULE ;
+ sh:property [ sh:path p:rule_id ; sh:in ("R1" "R2" "R3" "R4" "R5" "R6") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:directive ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_section ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:authority_class ; sh:hasValue "SECONDARY_AI" ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:class role:USER_SOURCE ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path [ sh:inversePath r:HAS_CONCEPT ] ; sh:class role:ACTIVATION_GROUP ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+opt:Group a sh:NodeShape ; sh:targetClass role:ACTIVATION_GROUP ;
+ sh:property [ sh:path p:task_id ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:class role:OPTIMIZATION_RULE ; sh:minCount 2 ; sh:maxCount 4 ] .
+
+opt:Cli a sh:NodeShape ; sh:targetClass role:CLI_COMMAND ;
+ sh:property [ sh:path p:launcher_path ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:help_command ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:class role:CLI_USAGE ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+opt:Usage a sh:NodeShape ; sh:targetClass role:CLI_USAGE ;
+ sh:property [ sh:path p:source_path ; sh:hasValue "docs/agent-rules/CLI.md" ] ;
+ sh:property [ sh:path p:source_section ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:usage_text ; sh:datatype xsd:string ; sh:minLength 1 ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+opt:HistoricalRole a sh:NodeShape ; sh:targetClass role:HISTORICAL_ROLE ;
+ sh:property [ sh:path p:historical_status ; sh:in ("USER_CLAIM_2026_07_23" "AI_PROPOSAL") ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_SOURCE ; sh:class role:HISTORICAL_SOURCE ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:or (
+  [ sh:property [ sh:path p:application_disposition ; sh:hasValue "INCLUDED_ANALOGY_ONLY" ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:class role:OPTIMIZATION_RULE ; sh:minCount 1 ; sh:maxCount 3 ] ]
+  [ sh:property [ sh:path p:application_disposition ; sh:hasValue "EXCLUDED_THIS_APPLICATION" ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:maxCount 0 ] ;
+    sh:property [ sh:path p:excluded_workflow ; sh:in ("WEB_SEARCH" "ADVERSARIAL_VALIDATION") ; sh:minCount 1 ; sh:maxCount 1 ] ]
+ ) .

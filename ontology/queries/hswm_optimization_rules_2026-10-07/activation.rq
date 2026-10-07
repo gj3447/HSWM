@@ -1,0 +1,7 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT DISTINCT ?task ?group ?rule WHERE {
+ ?entry a role:ROUTING_TASK ; p:task_id ?task ; r:REFERENCES+ ?activation .
+ ?activation a role:ACTIVATION_GROUP ; p:task_id ?group ; r:HAS_CONCEPT/p:rule_id ?rule .
+} ORDER BY ?task ?rule

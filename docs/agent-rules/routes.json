@@ -23,7 +23,18 @@
         "../../docs/canon/USER_PRIMARY_HSWM_STATE_LOCAL_OPERATOR_HYPERON_2026-09-14.md"
       ]
     ],
-    "deliberate_changes": []
+    "deliberate_changes": [
+      {
+        "date": "2026-10-07",
+        "reason": "User-requested task-scoped HSWM optimization rules and CLI usage binding",
+        "source": "docs/canon/sources/USER_PRIMARY_HSWM_OPTIMIZATION_RULES_APPLY_2026-10-07.txt",
+        "changes": [
+          "Six separately selected rule sections via two task groups",
+          "CLI Source now selects compact owned CLI entry instead of entire README",
+          "Existing owner rules and thin AGENTS entry preserved"
+        ]
+      }
+    ]
   },
   "nodes": [
     {
@@ -64,8 +75,61 @@
     {
       "id": "owner:usage",
       "type": "Source",
-      "path": "README.md",
-      "section": "@body"
+      "path": "docs/agent-rules/CLI.md",
+      "section": "hswm-cli-entry/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "task:hswm-rule-context",
+      "type": "Task",
+      "when": "Design graph granularity, contextual rule activation and selective connectivity; inherited by graph/instructions"
+    },
+    {
+      "id": "task:hswm-rule-cli",
+      "type": "Task",
+      "when": "Bind a selected CLI to its owned help and usage; inherited by cli"
+    },
+    {
+      "id": "owner:optimization-r1",
+      "type": "Source",
+      "path": "docs/agent-rules/OPTIMIZATION.md",
+      "section": "r1-task-activation/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "owner:optimization-r2",
+      "type": "Source",
+      "path": "docs/agent-rules/OPTIMIZATION.md",
+      "section": "r2-cli-execution/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "owner:optimization-r3",
+      "type": "Source",
+      "path": "docs/agent-rules/OPTIMIZATION.md",
+      "section": "r3-cli-usage-binding/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "owner:optimization-r4",
+      "type": "Source",
+      "path": "docs/agent-rules/OPTIMIZATION.md",
+      "section": "r4-context-granularity/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "owner:optimization-r5",
+      "type": "Source",
+      "path": "docs/agent-rules/OPTIMIZATION.md",
+      "section": "r5-selective-connectivity/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "owner:optimization-r6",
+      "type": "Source",
+      "path": "docs/agent-rules/OPTIMIZATION.md",
+      "section": "r6-semantic-contribution/@intro",
+      "content_role": "owner-instruction"
     }
   ],
   "edges": [
@@ -108,6 +172,51 @@
       "from": "task:cli",
       "type": "REQUIRES",
       "to": "owner:usage"
+    },
+    {
+      "from": "task:hswm-rule-context",
+      "type": "REQUIRES",
+      "to": "owner:optimization-r1"
+    },
+    {
+      "from": "task:hswm-rule-cli",
+      "type": "REQUIRES",
+      "to": "owner:optimization-r2"
+    },
+    {
+      "from": "task:hswm-rule-cli",
+      "type": "REQUIRES",
+      "to": "owner:optimization-r3"
+    },
+    {
+      "from": "task:hswm-rule-context",
+      "type": "REQUIRES",
+      "to": "owner:optimization-r4"
+    },
+    {
+      "from": "task:hswm-rule-context",
+      "type": "REQUIRES",
+      "to": "owner:optimization-r5"
+    },
+    {
+      "from": "task:hswm-rule-context",
+      "type": "REQUIRES",
+      "to": "owner:optimization-r6"
+    },
+    {
+      "from": "task:graph",
+      "type": "EXTENDS",
+      "to": "task:hswm-rule-context"
+    },
+    {
+      "from": "task:instructions",
+      "type": "EXTENDS",
+      "to": "task:hswm-rule-context"
+    },
+    {
+      "from": "task:cli",
+      "type": "EXTENDS",
+      "to": "task:hswm-rule-cli"
     }
   ]
 }

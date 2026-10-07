@@ -1,0 +1,850 @@
+{
+  "schema_version": "hswm-optimization-routing-observation/v1",
+  "recorded_on": "2026-10-07",
+  "scope": "Shared instruction router with cwd HSWM, one named task, empty paths; client-mode selection probes, not client application launches.",
+  "measurement": "Sum of selected_chars (Unicode codepoints including headings/whitespace); not tokens or model performance.",
+  "before_client": "codex",
+  "before": [
+    {
+      "task": "base",
+      "tasks": [
+        "task:base"
+      ],
+      "selected_chars": 1629,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "task": "cli",
+      "tasks": [
+        "task:base",
+        "task:cli"
+      ],
+      "selected_chars": 18562,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:usage",
+          "chars": 15398
+        },
+        {
+          "id": "shared:cli",
+          "chars": 1535
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "task": "graph",
+      "tasks": [
+        "task:base",
+        "task:graph",
+        "task:kg"
+      ],
+      "selected_chars": 12125,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:3",
+          "chars": 1167
+        },
+        {
+          "id": "shared:graph-engineering",
+          "chars": 4071
+        },
+        {
+          "id": "shared:kg",
+          "chars": 5258
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "task": "instructions",
+      "tasks": [
+        "task:base",
+        "task:cli",
+        "task:edit",
+        "task:instructions"
+      ],
+      "selected_chars": 27940,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:4",
+          "chars": 2051
+        },
+        {
+          "id": "owner:usage",
+          "chars": 15398
+        },
+        {
+          "id": "shared:cli",
+          "chars": 1535
+        },
+        {
+          "id": "shared:official-tooling",
+          "chars": 3276
+        },
+        {
+          "id": "shared:routing",
+          "chars": 4051
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "after": [
+    {
+      "client": "codex",
+      "task": "base",
+      "tasks": [
+        "task:base"
+      ],
+      "selected_chars": 1629,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "codex",
+      "task": "cli",
+      "tasks": [
+        "task:base",
+        "task:cli",
+        "task:hswm-rule-cli"
+      ],
+      "selected_chars": 4299,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:optimization-r2",
+          "chars": 186
+        },
+        {
+          "id": "owner:optimization-r3",
+          "chars": 230
+        },
+        {
+          "id": "owner:usage",
+          "chars": 719
+        },
+        {
+          "id": "shared:cli",
+          "chars": 1535
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "codex",
+      "task": "graph",
+      "tasks": [
+        "task:base",
+        "task:graph",
+        "task:hswm-rule-context",
+        "task:kg"
+      ],
+      "selected_chars": 12991,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:3",
+          "chars": 1167
+        },
+        {
+          "id": "owner:optimization-r1",
+          "chars": 232
+        },
+        {
+          "id": "owner:optimization-r4",
+          "chars": 190
+        },
+        {
+          "id": "owner:optimization-r5",
+          "chars": 203
+        },
+        {
+          "id": "owner:optimization-r6",
+          "chars": 241
+        },
+        {
+          "id": "shared:graph-engineering",
+          "chars": 4071
+        },
+        {
+          "id": "shared:kg",
+          "chars": 5258
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "codex",
+      "task": "instructions",
+      "tasks": [
+        "task:base",
+        "task:cli",
+        "task:edit",
+        "task:hswm-rule-cli",
+        "task:hswm-rule-context",
+        "task:instructions"
+      ],
+      "selected_chars": 14543,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:4",
+          "chars": 2051
+        },
+        {
+          "id": "owner:optimization-r1",
+          "chars": 232
+        },
+        {
+          "id": "owner:optimization-r2",
+          "chars": 186
+        },
+        {
+          "id": "owner:optimization-r3",
+          "chars": 230
+        },
+        {
+          "id": "owner:optimization-r4",
+          "chars": 190
+        },
+        {
+          "id": "owner:optimization-r5",
+          "chars": 203
+        },
+        {
+          "id": "owner:optimization-r6",
+          "chars": 241
+        },
+        {
+          "id": "owner:usage",
+          "chars": 719
+        },
+        {
+          "id": "shared:cli",
+          "chars": 1535
+        },
+        {
+          "id": "shared:official-tooling",
+          "chars": 3276
+        },
+        {
+          "id": "shared:routing",
+          "chars": 4051
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "codex",
+      "task": "docs",
+      "tasks": [
+        "task:base",
+        "task:docs",
+        "task:edit"
+      ],
+      "selected_chars": 3680,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:4",
+          "chars": 2051
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "codex",
+      "task": "kg",
+      "tasks": [
+        "task:base",
+        "task:kg"
+      ],
+      "selected_chars": 8054,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:3",
+          "chars": 1167
+        },
+        {
+          "id": "shared:kg",
+          "chars": 5258
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "claude",
+      "task": "base",
+      "tasks": [
+        "task:base"
+      ],
+      "selected_chars": 1629,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "claude",
+      "task": "cli",
+      "tasks": [
+        "task:base",
+        "task:cli",
+        "task:hswm-rule-cli"
+      ],
+      "selected_chars": 4299,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:optimization-r2",
+          "chars": 186
+        },
+        {
+          "id": "owner:optimization-r3",
+          "chars": 230
+        },
+        {
+          "id": "owner:usage",
+          "chars": 719
+        },
+        {
+          "id": "shared:cli",
+          "chars": 1535
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "claude",
+      "task": "graph",
+      "tasks": [
+        "task:base",
+        "task:graph",
+        "task:hswm-rule-context",
+        "task:kg"
+      ],
+      "selected_chars": 12991,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:3",
+          "chars": 1167
+        },
+        {
+          "id": "owner:optimization-r1",
+          "chars": 232
+        },
+        {
+          "id": "owner:optimization-r4",
+          "chars": 190
+        },
+        {
+          "id": "owner:optimization-r5",
+          "chars": 203
+        },
+        {
+          "id": "owner:optimization-r6",
+          "chars": 241
+        },
+        {
+          "id": "shared:graph-engineering",
+          "chars": 4071
+        },
+        {
+          "id": "shared:kg",
+          "chars": 5258
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "claude",
+      "task": "instructions",
+      "tasks": [
+        "task:base",
+        "task:cli",
+        "task:edit",
+        "task:hswm-rule-cli",
+        "task:hswm-rule-context",
+        "task:instructions"
+      ],
+      "selected_chars": 14543,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:4",
+          "chars": 2051
+        },
+        {
+          "id": "owner:optimization-r1",
+          "chars": 232
+        },
+        {
+          "id": "owner:optimization-r2",
+          "chars": 186
+        },
+        {
+          "id": "owner:optimization-r3",
+          "chars": 230
+        },
+        {
+          "id": "owner:optimization-r4",
+          "chars": 190
+        },
+        {
+          "id": "owner:optimization-r5",
+          "chars": 203
+        },
+        {
+          "id": "owner:optimization-r6",
+          "chars": 241
+        },
+        {
+          "id": "owner:usage",
+          "chars": 719
+        },
+        {
+          "id": "shared:cli",
+          "chars": 1535
+        },
+        {
+          "id": "shared:official-tooling",
+          "chars": 3276
+        },
+        {
+          "id": "shared:routing",
+          "chars": 4051
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "claude",
+      "task": "docs",
+      "tasks": [
+        "task:base",
+        "task:docs",
+        "task:edit"
+      ],
+      "selected_chars": 3680,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:4",
+          "chars": 2051
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "claude",
+      "task": "kg",
+      "tasks": [
+        "task:base",
+        "task:kg"
+      ],
+      "selected_chars": 8054,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:3",
+          "chars": 1167
+        },
+        {
+          "id": "shared:kg",
+          "chars": 5258
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "grok",
+      "task": "base",
+      "tasks": [
+        "task:base"
+      ],
+      "selected_chars": 1629,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "grok",
+      "task": "cli",
+      "tasks": [
+        "task:base",
+        "task:cli",
+        "task:hswm-rule-cli"
+      ],
+      "selected_chars": 4299,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:optimization-r2",
+          "chars": 186
+        },
+        {
+          "id": "owner:optimization-r3",
+          "chars": 230
+        },
+        {
+          "id": "owner:usage",
+          "chars": 719
+        },
+        {
+          "id": "shared:cli",
+          "chars": 1535
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "grok",
+      "task": "graph",
+      "tasks": [
+        "task:base",
+        "task:graph",
+        "task:hswm-rule-context",
+        "task:kg"
+      ],
+      "selected_chars": 12991,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:3",
+          "chars": 1167
+        },
+        {
+          "id": "owner:optimization-r1",
+          "chars": 232
+        },
+        {
+          "id": "owner:optimization-r4",
+          "chars": 190
+        },
+        {
+          "id": "owner:optimization-r5",
+          "chars": 203
+        },
+        {
+          "id": "owner:optimization-r6",
+          "chars": 241
+        },
+        {
+          "id": "shared:graph-engineering",
+          "chars": 4071
+        },
+        {
+          "id": "shared:kg",
+          "chars": 5258
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "grok",
+      "task": "instructions",
+      "tasks": [
+        "task:base",
+        "task:cli",
+        "task:edit",
+        "task:hswm-rule-cli",
+        "task:hswm-rule-context",
+        "task:instructions"
+      ],
+      "selected_chars": 14543,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:4",
+          "chars": 2051
+        },
+        {
+          "id": "owner:optimization-r1",
+          "chars": 232
+        },
+        {
+          "id": "owner:optimization-r2",
+          "chars": 186
+        },
+        {
+          "id": "owner:optimization-r3",
+          "chars": 230
+        },
+        {
+          "id": "owner:optimization-r4",
+          "chars": 190
+        },
+        {
+          "id": "owner:optimization-r5",
+          "chars": 203
+        },
+        {
+          "id": "owner:optimization-r6",
+          "chars": 241
+        },
+        {
+          "id": "owner:usage",
+          "chars": 719
+        },
+        {
+          "id": "shared:cli",
+          "chars": 1535
+        },
+        {
+          "id": "shared:official-tooling",
+          "chars": 3276
+        },
+        {
+          "id": "shared:routing",
+          "chars": 4051
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "grok",
+      "task": "docs",
+      "tasks": [
+        "task:base",
+        "task:docs",
+        "task:edit"
+      ],
+      "selected_chars": 3680,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:4",
+          "chars": 2051
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    },
+    {
+      "client": "grok",
+      "task": "kg",
+      "tasks": [
+        "task:base",
+        "task:kg"
+      ],
+      "selected_chars": 8054,
+      "sources": [
+        {
+          "id": "owner:1",
+          "chars": 628
+        },
+        {
+          "id": "owner:3",
+          "chars": 1167
+        },
+        {
+          "id": "shared:kg",
+          "chars": 5258
+        },
+        {
+          "id": "native:AGENTS.md",
+          "chars": 1001
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "expected_rules": {
+    "base": [],
+    "docs": [],
+    "kg": [],
+    "cli": [
+      2,
+      3
+    ],
+    "graph": [
+      1,
+      4,
+      5,
+      6
+    ],
+    "instructions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "read_completion": {
+    "sources": [
+      "owner:usage",
+      "owner:optimization-r1",
+      "owner:optimization-r2",
+      "owner:optimization-r3",
+      "owner:optimization-r4",
+      "owner:optimization-r5",
+      "owner:optimization-r6"
+    ],
+    "all_complete": true
+  },
+  "excluded_workflows": [
+    "WEB_SEARCH",
+    "ADVERSARIAL_VALIDATION"
+  ],
+  "cli_selected_chars_reduction": 14263
+}

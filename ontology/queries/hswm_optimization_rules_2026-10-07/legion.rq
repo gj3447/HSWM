@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?commander ?verb ?priorStatus ?disposition ?reason ?rule WHERE {
+ ?role a role:HISTORICAL_ROLE ; p:name ?commander ; p:historical_verb ?verb ;
+   p:historical_status ?priorStatus ; p:application_disposition ?disposition ; p:mapping_reason ?reason .
+ OPTIONAL { ?role r:REFERENCES/p:rule_id ?rule }
+} ORDER BY ?commander ?rule

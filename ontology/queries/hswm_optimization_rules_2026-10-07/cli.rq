@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?command ?launcher ?help ?guide ?section ?usage WHERE {
+ ?cli a role:CLI_COMMAND ; p:command_id ?command ; p:launcher_path ?launcher ;
+   p:help_command ?help ; r:REFERENCES ?binding .
+ ?binding a role:CLI_USAGE ; p:source_path ?guide ; p:source_section ?section ; p:usage_text ?usage .
+} ORDER BY ?command

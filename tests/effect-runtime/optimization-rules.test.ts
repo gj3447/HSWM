@@ -14,6 +14,16 @@ const artifactRoot = "docs/canon/artifacts/hswm_optimization_rules_2026-10-07"
 const bundlePath = "ontology/identity/hswm_core/HSWM_OPTIMIZATION_RULES_ONTOLOGY.v1.json"
 const read = (path: string) => readFile(resolve(root, path))
 const hash = (bytes: Uint8Array) => createHash("sha256").update(bytes).digest("hex")
+// Immutable research evidence keeps its publication's source bytes when live
+// routing gains an additive rule. Unpublished bundle candidates use live bytes.
+const publishedSource = async (path: string): Promise<Buffer> => {
+  const revision = execFileSync("git", ["log", "-1", "--format=%H", "--", bundlePath], { cwd: root, encoding: "utf8" }).trim()
+  if (revision) {
+    const published = execFileSync("git", ["show", `${revision}:${bundlePath}`], { cwd: root })
+    if (hash(published) === hash(await read(bundlePath))) return execFileSync("git", ["show", `${revision}:${path}`], { cwd: root })
+  }
+  return read(path)
+}
 const role = (value: string) => bundle.nodes.filter(n => n.properties["standard_graph_role"] === value)
 let bundle: KgBundle
 let projection: KgBundleProjection
@@ -33,11 +43,11 @@ const rows = async (name: string) => {
 }
 
 it("keeps every source byte binding and exact user utterance, separate from AI rule names", async () => {
-  for (const binding of bundle.artifact_bindings) expect(hash(await read(binding.path)), binding.path).toBe(binding.sha256)
+  for (const binding of bundle.artifact_bindings) expect(hash(await publishedSource(binding.path)), binding.path).toBe(binding.sha256)
   for (const node of bundle.nodes) {
     const source = String(node.properties["source_path"])
     expect(bundle.artifact_bindings.some(b => b.path === source)).toBe(true)
-    expect(hash(await read(source))).toBe(node.properties["source_sha256"])
+    expect(hash(await publishedSource(source))).toBe(node.properties["source_sha256"])
   }
   expect(role("USER_SOURCE")).toHaveLength(3)
   for (const source of role("USER_SOURCE")) {

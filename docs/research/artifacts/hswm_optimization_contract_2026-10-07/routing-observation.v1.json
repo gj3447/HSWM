@@ -1,0 +1,407 @@
+{
+  "schema_version": "hswm-optimization-contract-routing/v1",
+  "recorded_on": "2026-10-07",
+  "authority": "SECONDARY_AI_ENGINEERING_OBSERVATION",
+  "scope": "ACTUAL_SHARED_ROUTER_READS_FOR_THREE_CLIENT_MODES_NOT_CLIENT_APP_LAUNCHES_OR_LEARNED_W",
+  "source_paths": [
+    "docs/agent-rules/routes.json",
+    "docs/agent-rules/OPTIMIZATION_EVALUATION.md",
+    "docs/agent-rules/OPTIMIZATION.md"
+  ],
+  "profiles": [
+    {
+      "client": "codex",
+      "task": "base",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 1629,
+      "base_rules": [],
+      "supplements": []
+    },
+    {
+      "client": "codex",
+      "task": "docs",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 3680,
+      "base_rules": [],
+      "supplements": []
+    },
+    {
+      "client": "codex",
+      "task": "kg",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 8054,
+      "base_rules": [],
+      "supplements": []
+    },
+    {
+      "client": "codex",
+      "task": "cli",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 4589,
+      "base_rules": [
+        "owner:optimization-r2",
+        "owner:optimization-r3"
+      ],
+      "supplements": [
+        {
+          "id": "owner:optimization-cli-evaluation",
+          "section": "cli-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 290
+        }
+      ]
+    },
+    {
+      "client": "codex",
+      "task": "graph",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 13505,
+      "base_rules": [
+        "owner:optimization-r1",
+        "owner:optimization-r4",
+        "owner:optimization-r5",
+        "owner:optimization-r6"
+      ],
+      "supplements": [
+        {
+          "id": "owner:optimization-context-evaluation",
+          "section": "context-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 514
+        }
+      ]
+    },
+    {
+      "client": "codex",
+      "task": "instructions",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 15347,
+      "base_rules": [
+        "owner:optimization-r1",
+        "owner:optimization-r2",
+        "owner:optimization-r3",
+        "owner:optimization-r4",
+        "owner:optimization-r5",
+        "owner:optimization-r6"
+      ],
+      "supplements": [
+        {
+          "id": "owner:optimization-cli-evaluation",
+          "section": "cli-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 290
+        },
+        {
+          "id": "owner:optimization-context-evaluation",
+          "section": "context-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 514
+        }
+      ]
+    },
+    {
+      "client": "codex",
+      "task": "hswm-optimization-evaluation",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 16430,
+      "base_rules": [
+        "owner:optimization-r1",
+        "owner:optimization-r4",
+        "owner:optimization-r5",
+        "owner:optimization-r6"
+      ],
+      "supplements": [
+        {
+          "id": "owner:optimization-comparison-contract",
+          "section": "comparison-contract/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 1318
+        },
+        {
+          "id": "owner:optimization-context-evaluation",
+          "section": "context-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 514
+        }
+      ]
+    },
+    {
+      "client": "claude",
+      "task": "base",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 1629,
+      "base_rules": [],
+      "supplements": []
+    },
+    {
+      "client": "claude",
+      "task": "docs",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 3680,
+      "base_rules": [],
+      "supplements": []
+    },
+    {
+      "client": "claude",
+      "task": "kg",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 8054,
+      "base_rules": [],
+      "supplements": []
+    },
+    {
+      "client": "claude",
+      "task": "cli",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 4589,
+      "base_rules": [
+        "owner:optimization-r2",
+        "owner:optimization-r3"
+      ],
+      "supplements": [
+        {
+          "id": "owner:optimization-cli-evaluation",
+          "section": "cli-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 290
+        }
+      ]
+    },
+    {
+      "client": "claude",
+      "task": "graph",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 13505,
+      "base_rules": [
+        "owner:optimization-r1",
+        "owner:optimization-r4",
+        "owner:optimization-r5",
+        "owner:optimization-r6"
+      ],
+      "supplements": [
+        {
+          "id": "owner:optimization-context-evaluation",
+          "section": "context-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 514
+        }
+      ]
+    },
+    {
+      "client": "claude",
+      "task": "instructions",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 15347,
+      "base_rules": [
+        "owner:optimization-r1",
+        "owner:optimization-r2",
+        "owner:optimization-r3",
+        "owner:optimization-r4",
+        "owner:optimization-r5",
+        "owner:optimization-r6"
+      ],
+      "supplements": [
+        {
+          "id": "owner:optimization-cli-evaluation",
+          "section": "cli-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 290
+        },
+        {
+          "id": "owner:optimization-context-evaluation",
+          "section": "context-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 514
+        }
+      ]
+    },
+    {
+      "client": "claude",
+      "task": "hswm-optimization-evaluation",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 16430,
+      "base_rules": [
+        "owner:optimization-r1",
+        "owner:optimization-r4",
+        "owner:optimization-r5",
+        "owner:optimization-r6"
+      ],
+      "supplements": [
+        {
+          "id": "owner:optimization-comparison-contract",
+          "section": "comparison-contract/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 1318
+        },
+        {
+          "id": "owner:optimization-context-evaluation",
+          "section": "context-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 514
+        }
+      ]
+    },
+    {
+      "client": "grok",
+      "task": "base",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 1629,
+      "base_rules": [],
+      "supplements": []
+    },
+    {
+      "client": "grok",
+      "task": "docs",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 3680,
+      "base_rules": [],
+      "supplements": []
+    },
+    {
+      "client": "grok",
+      "task": "kg",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 8054,
+      "base_rules": [],
+      "supplements": []
+    },
+    {
+      "client": "grok",
+      "task": "cli",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 4589,
+      "base_rules": [
+        "owner:optimization-r2",
+        "owner:optimization-r3"
+      ],
+      "supplements": [
+        {
+          "id": "owner:optimization-cli-evaluation",
+          "section": "cli-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 290
+        }
+      ]
+    },
+    {
+      "client": "grok",
+      "task": "graph",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 13505,
+      "base_rules": [
+        "owner:optimization-r1",
+        "owner:optimization-r4",
+        "owner:optimization-r5",
+        "owner:optimization-r6"
+      ],
+      "supplements": [
+        {
+          "id": "owner:optimization-context-evaluation",
+          "section": "context-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 514
+        }
+      ]
+    },
+    {
+      "client": "grok",
+      "task": "instructions",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 15347,
+      "base_rules": [
+        "owner:optimization-r1",
+        "owner:optimization-r2",
+        "owner:optimization-r3",
+        "owner:optimization-r4",
+        "owner:optimization-r5",
+        "owner:optimization-r6"
+      ],
+      "supplements": [
+        {
+          "id": "owner:optimization-cli-evaluation",
+          "section": "cli-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 290
+        },
+        {
+          "id": "owner:optimization-context-evaluation",
+          "section": "context-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 514
+        }
+      ]
+    },
+    {
+      "client": "grok",
+      "task": "hswm-optimization-evaluation",
+      "graph_sha256": "1c807e1489ce1c4e049659b2530fcb4ad6b7a6032308df493be861e7c551d20a",
+      "issues": [],
+      "selected_chars": 16430,
+      "base_rules": [
+        "owner:optimization-r1",
+        "owner:optimization-r4",
+        "owner:optimization-r5",
+        "owner:optimization-r6"
+      ],
+      "supplements": [
+        {
+          "id": "owner:optimization-comparison-contract",
+          "section": "comparison-contract/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 1318
+        },
+        {
+          "id": "owner:optimization-context-evaluation",
+          "section": "context-evaluation/@intro",
+          "sha256": "dea59ce54eca5128a80a9f5deedf037796b2e1c0988cefb67ac170422fdc5005",
+          "chars": 514
+        }
+      ]
+    }
+  ],
+  "expected_supplements": {
+    "base": [],
+    "docs": [],
+    "kg": [],
+    "cli": [
+      "owner:optimization-cli-evaluation"
+    ],
+    "graph": [
+      "owner:optimization-context-evaluation"
+    ],
+    "instructions": [
+      "owner:optimization-cli-evaluation",
+      "owner:optimization-context-evaluation"
+    ],
+    "hswm-optimization-evaluation": [
+      "owner:optimization-comparison-contract",
+      "owner:optimization-context-evaluation"
+    ]
+  },
+  "source_read_completion": {
+    "context": true,
+    "cli": true,
+    "comparison": true
+  },
+  "actual_model_requests": 0
+}

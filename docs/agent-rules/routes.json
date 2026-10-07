@@ -33,6 +33,16 @@
           "CLI Source now selects compact owned CLI entry instead of entire README",
           "Existing owner rules and thin AGENTS entry preserved"
         ]
+      },
+      {
+        "date": "2026-10-07",
+        "reason": "User-requested optimization reinforcement: fixed budget, preservation and scoped bottleneck evidence",
+        "source": "docs/canon/sources/USER_PRIMARY_HSWM_OPTIMIZATION_REINFORCEMENT_2026-10-07.txt",
+        "changes": [
+          "Keep six rule identities and prior sources unchanged",
+          "Activate context and CLI supplements through their existing task groups",
+          "Read detailed comparison contract only for explicit optimization evaluation"
+        ]
       }
     ]
   },
@@ -130,6 +140,32 @@
       "path": "docs/agent-rules/OPTIMIZATION.md",
       "section": "r6-semantic-contribution/@intro",
       "content_role": "owner-instruction"
+    },
+    {
+      "id": "owner:optimization-context-evaluation",
+      "type": "Source",
+      "path": "docs/agent-rules/OPTIMIZATION_EVALUATION.md",
+      "section": "context-evaluation/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "owner:optimization-cli-evaluation",
+      "type": "Source",
+      "path": "docs/agent-rules/OPTIMIZATION_EVALUATION.md",
+      "section": "cli-evaluation/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "owner:optimization-comparison-contract",
+      "type": "Source",
+      "path": "docs/agent-rules/OPTIMIZATION_EVALUATION.md",
+      "section": "comparison-contract/@intro",
+      "content_role": "owner-instruction"
+    },
+    {
+      "id": "task:hswm-optimization-evaluation",
+      "type": "Task",
+      "when": "Compare CHU optimization candidates, resource budgets, preservation, efficacy or observed bottlenecks; not ordinary lookup or rule editing"
     }
   ],
   "edges": [
@@ -217,6 +253,31 @@
       "from": "task:cli",
       "type": "EXTENDS",
       "to": "task:hswm-rule-cli"
+    },
+    {
+      "from": "task:hswm-rule-context",
+      "type": "REQUIRES",
+      "to": "owner:optimization-context-evaluation"
+    },
+    {
+      "from": "task:hswm-rule-cli",
+      "type": "REQUIRES",
+      "to": "owner:optimization-cli-evaluation"
+    },
+    {
+      "from": "task:hswm-optimization-evaluation",
+      "type": "EXTENDS",
+      "to": "task:graph"
+    },
+    {
+      "from": "task:hswm-optimization-evaluation",
+      "type": "EXTENDS",
+      "to": "task:research"
+    },
+    {
+      "from": "task:hswm-optimization-evaluation",
+      "type": "REQUIRES",
+      "to": "owner:optimization-comparison-contract"
     }
   ]
 }

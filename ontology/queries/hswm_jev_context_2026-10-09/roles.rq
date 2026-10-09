@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?relation ?frameOrdinal ?mandatory ?role ?ordinal ?key ?sha256 WHERE {
+ ?f a role:CONTEXT_FRAME ; p:name ?relation ; p:ordinal ?frameOrdinal ; p:mandatory ?mandatory ; r:HAS_PARTICIPATION ?slot .
+ ?slot p:role ?role ; p:ordinal ?ordinal ; r:REFERENCES ?participant .
+ ?participant p:participant_key_json ?key ; p:content_sha256 ?sha256 .
+} ORDER BY ?frameOrdinal ?ordinal

@@ -1,0 +1,6 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?command ?help ?guide WHERE {
+ ?c a role:CONTEXT_CLI ; p:command ?command ; p:help ?help ; r:REFERENCES/p:source_path ?guide .
+}

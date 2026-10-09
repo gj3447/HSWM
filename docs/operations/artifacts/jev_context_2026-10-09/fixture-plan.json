@@ -1,0 +1,373 @@
+{
+  "contract": "hswm-semantic-context-plan/v1",
+  "spec": {
+    "contract": "hswm-semantic-context-spec/v1",
+    "event": "문을 열 수 있는지 예외까지 확인해",
+    "mandatoryRelationUids": [
+      "relation:mandatory"
+    ],
+    "candidates": [
+      {
+        "id": "door",
+        "summary": "문 열기: 열쇠와 권한, 파손 예외",
+        "relationUids": [
+          "relation:door",
+          "relation:companion"
+        ]
+      },
+      {
+        "id": "calendar",
+        "summary": "일정 날짜 계산",
+        "relationUids": [
+          "relation:calendar"
+        ]
+      }
+    ],
+    "maximumContextBytes": 65536,
+    "minimumConfidence": 0.5,
+    "minimumMargin": 0.1
+  },
+  "stateRevision": 1,
+  "bindings": [
+    {
+      "key": {
+        "schemaVersion": "context-test-v1",
+        "lineageId": "context-fixture",
+        "atomUid": "relation:calendar",
+        "revisionId": 0
+      },
+      "owner": "owner:context-test",
+      "content": {
+        "mediaType": "application/vnd.hswm.llm-semantic-relation-v1+json",
+        "byteLength": 151,
+        "sha256": "0b909111a99257ee7de4b6eb4b6b83821da17b0853cb0a149bd47d584e519dd0"
+      },
+      "participants": [
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "subject",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "calendar:subject",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 51,
+            "sha256": "0689c1f9bcbbc608b75378f3993116cd768fb6f31a6a89d1c9b56651a5282d84"
+          }
+        },
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "context",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "calendar:context",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 51,
+            "sha256": "69ee4caf863bffed4bc1ae3e8c97755d8fec9ab48401fd01c2ba4e0e9c52910e"
+          }
+        },
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "evidence",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "calendar:evidence",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 52,
+            "sha256": "201ac677232a2096bbb98072441403ec525531447f74f838d210c2479002cf3e"
+          }
+        },
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "exception",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "calendar:exception",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 53,
+            "sha256": "8b44ecc6d7998328ea7b9afe33c11e9ee330eb8493efab0061b91c1e70f2300c"
+          }
+        }
+      ]
+    },
+    {
+      "key": {
+        "schemaVersion": "context-test-v1",
+        "lineageId": "context-fixture",
+        "atomUid": "relation:companion",
+        "revisionId": 0
+      },
+      "owner": "owner:context-test",
+      "content": {
+        "mediaType": "application/vnd.hswm.llm-semantic-relation-v1+json",
+        "byteLength": 153,
+        "sha256": "a0155f41e838e18759be6a0cf5d78a7aa32d894d21e821bb1fd7ef357c1b2a90"
+      },
+      "participants": [
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "subject",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "companion:subject",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 52,
+            "sha256": "bb2be4028889a8834ba7098d3ff0b79a76eb6f48eaa5f81b27ba5d81c6120d91"
+          }
+        },
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "context",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "companion:context",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 52,
+            "sha256": "287a389e92ad978149407c0ee058d73c263bd7bb3211f6620dc4a28c32d506b7"
+          }
+        },
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "evidence",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "companion:evidence",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 53,
+            "sha256": "accdf236ef989e6f50d6cd31b101ac56de5f70af9458f85fe44b072e0420799a"
+          }
+        },
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "exception",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "companion:exception",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 54,
+            "sha256": "b7b2e477a0be7edacc5f81563a61ed721c25f721a22c247c627f9d84f4c53e45"
+          }
+        }
+      ]
+    },
+    {
+      "key": {
+        "schemaVersion": "context-test-v1",
+        "lineageId": "context-fixture",
+        "atomUid": "relation:door",
+        "revisionId": 0
+      },
+      "owner": "owner:context-test",
+      "content": {
+        "mediaType": "application/vnd.hswm.llm-semantic-relation-v1+json",
+        "byteLength": 173,
+        "sha256": "a32d88c35aa35b4a87327574a6067a1ccdddc1dbd4df334be1fe272bc222c527"
+      },
+      "participants": [
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "subject",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "door:subject",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 47,
+            "sha256": "614d6bf6ae74c86d0acbb835574e3442685d80c178c9a13f5c6f2a4d72380333"
+          }
+        },
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "context",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "door:context",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 47,
+            "sha256": "8d2d051a986ce51c6413756c3755198d66165becd9fee8deacf031766b4236f8"
+          }
+        },
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "evidence",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "door:evidence",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 48,
+            "sha256": "c57e65447e9b211d0ed898220875742c7fdb1357be80f4d7e4d901a355d85ab1"
+          }
+        },
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "exception",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "door:exception",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 49,
+            "sha256": "3bfbd6156cecca69d294cfb5157c2ac9cd95308b32b89a6ad80b9d2562ee5220"
+          }
+        }
+      ]
+    },
+    {
+      "key": {
+        "schemaVersion": "context-test-v1",
+        "lineageId": "context-fixture",
+        "atomUid": "relation:mandatory",
+        "revisionId": 0
+      },
+      "owner": "owner:context-test",
+      "content": {
+        "mediaType": "application/vnd.hswm.llm-semantic-relation-v1+json",
+        "byteLength": 153,
+        "sha256": "b7136cc46973a396ba16870164a8622cf2ef5bfaed796a4940ddf82fd2fd3244"
+      },
+      "participants": [
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "subject",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "mandatory:subject",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 52,
+            "sha256": "e3d5cc8c689429b756fa195611227ea50910f876259306e2d2b37e70186b5fbf"
+          }
+        },
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "context",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "mandatory:context",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 52,
+            "sha256": "24dd38b86aff23e079d19c59d7b050beeff844bea10a31e73cb30b6ffa21454e"
+          }
+        },
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "evidence",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "mandatory:evidence",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 53,
+            "sha256": "4998eff168cefafa9b2915e74137c72b61073f0ef804c44f68dd4f3ee1ef52f9"
+          }
+        },
+        {
+          "referenceType": "hswm:semantic:role",
+          "role": "exception",
+          "key": {
+            "schemaVersion": "context-test-v1",
+            "lineageId": "context-fixture",
+            "atomUid": "mandatory:exception",
+            "revisionId": 0
+          },
+          "owner": "owner:context-test",
+          "content": {
+            "mediaType": "text/plain",
+            "byteLength": 54,
+            "sha256": "700ec2d6713446aacd398e8cbf5c89af489ec8d50acac352e45d7018b76f349b"
+          }
+        }
+      ]
+    }
+  ],
+  "planSha256": "b54c4e0954921f12b6b73883afbd9ea9484da07816c6b0aaecff4e034ffca8b5",
+  "request": {
+    "schema": "jev-request/v1",
+    "state": "{\"task\":\"문을 열 수 있는지 예외까지 확인해\",\"candidates\":[{\"id\":\"door\",\"summary\":\"문 열기: 열쇠와 권한, 파손 예외\"},{\"id\":\"calendar\",\"summary\":\"일정 날짜 계산\"}],\"planSha256\":\"b54c4e0954921f12b6b73883afbd9ea9484da07816c6b0aaecff4e034ffca8b5\"}",
+    "questions": [
+      {
+        "id": "context",
+        "type": "choice",
+        "instructions": "Choose the context bundle relevant to this task. NONE if no bundle applies. NEED_MORE if descriptions cannot decide. This is relevance, not success or permission.",
+        "options": [
+          "door",
+          "calendar",
+          "NONE",
+          "NEED_MORE"
+        ]
+      }
+    ]
+  },
+  "requestSha256": "061eb7922d040bb3a4ba637c170475a0504ad800adbfe4b7ff1353d63e8038db",
+  "scope": "CALLER_SCOPED_CANDIDATES_NOT_EXHAUSTIVE_GRAPH_SEARCH"
+}

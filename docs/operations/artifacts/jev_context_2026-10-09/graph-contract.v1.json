@@ -1,0 +1,174 @@
+{
+  "contract": "hswm-semantic-context-graph-contract/v1",
+  "authority": "SECONDARY_AI_ENGINEERING_SPECIFICATION",
+  "owner": "HSWM native context interpreter; canonical atom owners retain their authority",
+  "scope": "Local source-bound engineering bundle and caller-scoped context observation; no live KG publication or canonical admission",
+  "competency_questions": [
+    {
+      "query": "contracts",
+      "question": "Which implementation enforces candidate binding, complete roles, abstention, bounds and outcome attribution?",
+      "expected_subjects": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ]
+    },
+    {
+      "query": "cli",
+      "question": "Which owned executable and help page operate this context selector?",
+      "expected_command": "src/hswm/effect-runtime/bin/hswm-context"
+    },
+    {
+      "query": "selection",
+      "question": "What did the scripted advisory receipt select, at which context size?",
+      "expected_candidate": "door",
+      "model": "SCRIPTED_FIXTURE_NOT_MODEL_INFERENCE"
+    },
+    {
+      "query": "roles",
+      "question": "Which exact participant versions fill each ordered role, including mandatory context and exceptions?",
+      "expected_frames": [
+        "relation:mandatory",
+        "relation:door",
+        "relation:companion"
+      ],
+      "expected_roles_per_fixture_frame": [
+        "subject",
+        "context",
+        "evidence",
+        "exception"
+      ]
+    }
+  ],
+  "identity": {
+    "plan": "SHA-256 of JSON.stringify(bound plan); versioned spec, canonical revision and exact candidate/root/participant bindings",
+    "selection": "SHA-256 of JSON.stringify(selection); includes exact request and supplied receipt hashes",
+    "candidate": "SHA-256 of plan hash plus candidate ID",
+    "assembly": "SHA-256 of JSON.stringify(assembly before adding its own digest)",
+    "frame": "Assembly hash plus frame ordinal; retains original frame digest and relation key",
+    "role_occurrence": "Frame UID plus original role ordinal; same participant in different slots never collapses",
+    "participant": "Exact canonical schema, lineage, atom UID and revision key",
+    "engineering": "Root sym:AbstractNode:hswm-jev-context-2026-10-09-root; stable sym:Concept:hswm-jev-context-2026-10-09-{id} members; source paths are attributes, not identity"
+  },
+  "relations": [
+    {
+      "predicate": "HAS_CONCEPT",
+      "scope": "ENGINEERING_MEMBER",
+      "domain": "CONTEXT_ENGINEERING",
+      "range": "CONTEXT_CONTRACT|CONTEXT_CLI|CONTEXT_GUIDE|CONTEXT_OPEN",
+      "direction": "root to member",
+      "cardinality": "one root, one or more members",
+      "meaning": "Navigation membership, no execution authority"
+    },
+    {
+      "predicate": "REFERENCES",
+      "scope": "OWNED_USAGE",
+      "domain": "CONTEXT_CLI",
+      "range": "CONTEXT_GUIDE",
+      "direction": "executable to usage",
+      "cardinality": "exactly one",
+      "meaning": "CLI usage belongs to this executable"
+    },
+    {
+      "predicate": "REFERENCES",
+      "scope": "ORIGINAL_RULE",
+      "domain": "CONTEXT_CONTRACT|CONTEXT_CLI|CONTEXT_OPEN",
+      "range": "Existing optimization-rule UID anchor",
+      "direction": "implementation or open measurement to original rule",
+      "cardinality": "zero or more",
+      "meaning": "Implementation correspondence, no claim of full rule optimization or changed user canon"
+    },
+    {
+      "predicate": "REFERENCES",
+      "scope": "RESEARCH_SOURCE",
+      "domain": "CONTEXT_ENGINEERING",
+      "range": "Existing Jev research bundle UID anchor",
+      "direction": "implementation to prior research",
+      "cardinality": "two in this engineering snapshot",
+      "meaning": "Method provenance; prior negative results and efficacy boundaries remain unchanged"
+    },
+    {
+      "predicate": "HAS_CONCEPT",
+      "scope": "PLAN_DECISION",
+      "domain": "CONTEXT_PLAN",
+      "range": "CONTEXT_SELECTION",
+      "direction": "plan to decision",
+      "cardinality": "exactly one",
+      "meaning": "Advisory observation, never probability of task success"
+    },
+    {
+      "predicate": "HAS_CONCEPT",
+      "scope": "SCOPED_CANDIDATE",
+      "domain": "CONTEXT_PLAN",
+      "range": "CONTEXT_CANDIDATE",
+      "direction": "plan to candidate",
+      "cardinality": "1..8",
+      "meaning": "Caller-authored candidates, no exhaustive discovery claim"
+    },
+    {
+      "predicate": "REFERENCES",
+      "scope": "SELECTED_CANDIDATE",
+      "domain": "CONTEXT_SELECTION",
+      "range": "CONTEXT_CANDIDATE",
+      "direction": "selection to candidate",
+      "cardinality": "SELECTED exactly one; NONE/NEED_MORE zero",
+      "meaning": "Selected root bundle, no write permission"
+    },
+    {
+      "predicate": "HAS_CONCEPT",
+      "scope": "ASSEMBLED_CONTEXT",
+      "domain": "CONTEXT_SELECTION",
+      "range": "CONTEXT_ASSEMBLY",
+      "direction": "selection to assembly",
+      "cardinality": "SELECTED exactly one; NONE/NEED_MORE zero",
+      "meaning": "Complete selected and mandatory context"
+    },
+    {
+      "predicate": "HAS_CONCEPT",
+      "scope": "ORDERED_FRAME",
+      "domain": "CONTEXT_ASSEMBLY",
+      "range": "CONTEXT_FRAME",
+      "direction": "assembly to frame",
+      "cardinality": "1..16",
+      "meaning": "Mandatory first, then selected candidate roots; deduplicate root IDs only"
+    },
+    {
+      "predicate": "HAS_PARTICIPATION",
+      "scope": "PINNED_ROLE_OCCURRENCE",
+      "domain": "CONTEXT_FRAME",
+      "range": "CONTEXT_ROLE",
+      "direction": "frame to slot",
+      "cardinality": "at least subject/context/evidence; preserve every non-supersedes role",
+      "meaning": "N-ary role and order identity; optional exceptions are required when named by exceptionRefs"
+    },
+    {
+      "predicate": "REFERENCES",
+      "scope": "EXACT_PARTICIPANT_VERSION",
+      "domain": "CONTEXT_ROLE",
+      "range": "CONTEXT_PARTICIPANT",
+      "direction": "slot to exact participant",
+      "cardinality": "exactly one per slot; participant can fill many slots",
+      "meaning": "Exact source version, never entity similarity"
+    }
+  ],
+  "validation": {
+    "rdf_profile": "Existing native kg-bundle-rdf/v2 with reified edges and PROV-O derivation",
+    "queries": "ontology/queries/hswm_jev_context_2026-10-09",
+    "shapes": "ontology/queries/hswm_jev_context_2026-10-09/shapes.ttl",
+    "runtime": "Schema decoding and exact native read validate semantic exception references; SHACL validates projected structure, not natural-language truth",
+    "time": "File date is engineering record time; model inference time is unobserved in scripted fixtures",
+    "graph_cycles": "No global DAG assumption; frame/slot ownership cardinality only"
+  },
+  "projection_loss": [
+    "View is selection and assembly, not the complete canonical state or journal.",
+    "Supersedes edges are not role slots; exact relation revision is retained.",
+    "Candidate summaries are caller-authored MAPs; their sufficiency is unknown.",
+    "Execution trace and attributed outcome are separate content-store records linked by hashes, not RDF nodes in this version.",
+    "Context-byte budget excludes HTTP envelope, model tokens, memory and end-to-end latency.",
+    "No model calibration, Semantic Weight update, causal credit, formal proof or superintelligence result follows from this projection."
+  ],
+  "rollback": "Remove new context adapter, workspace entry and navigation links; preserve canonical graph, staged evidence, older sources and other writers."
+}

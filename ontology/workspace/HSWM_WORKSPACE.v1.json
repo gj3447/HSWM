@@ -1049,6 +1049,43 @@
         "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
         "ontology/queries/hswm_optimization_rules_2026-10-07/shapes.ttl"
       ]
+    },
+    {
+      "id": "jev-context",
+      "title": "Jev candidate context selection and exact role assembly",
+      "lane": "ENGINEERING",
+      "reading": "Implemented caller-scoped context selection; SCRIPTED fixture only, real-model efficacy unmeasured. No canonical or W write.",
+      "bundle": "ontology/development/HSWM_JEV_CONTEXT_SELECTION_2026-10-09.v1.json",
+      "document": "docs/operations/HSWM_JEV_CONTEXT_SELECTION_2026-10-09.md",
+      "additional_sources": [
+        {
+          "id": "scripted-context",
+          "bundle": "docs/operations/artifacts/jev_context_2026-10-09/fixture-graph.v1.json",
+          "sha256": "a992bd947441f8854cd14cc476b4715281cbbf28218d8f2b841215c644144c6d"
+        }
+      ],
+      "queries": [
+        {
+          "id": "contracts",
+          "path": "ontology/queries/hswm_jev_context_2026-10-09/contracts.rq"
+        },
+        {
+          "id": "cli",
+          "path": "ontology/queries/hswm_jev_context_2026-10-09/cli.rq"
+        },
+        {
+          "id": "selection",
+          "path": "ontology/queries/hswm_jev_context_2026-10-09/selection.rq"
+        },
+        {
+          "id": "roles",
+          "path": "ontology/queries/hswm_jev_context_2026-10-09/roles.rq"
+        }
+      ],
+      "shapes": [
+        "schemas/HSWM_KG_BUNDLE_RDF_PROJECTION_SHACL_1_0_V2.ttl",
+        "ontology/queries/hswm_jev_context_2026-10-09/shapes.ttl"
+      ]
     }
   ],
   "workflows": [

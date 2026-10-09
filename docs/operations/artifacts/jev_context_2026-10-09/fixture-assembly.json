@@ -1,0 +1,286 @@
+{
+  "selection": {
+    "contract": "hswm-semantic-context-selection/v1",
+    "planSha256": "b54c4e0954921f12b6b73883afbd9ea9484da07816c6b0aaecff4e034ffca8b5",
+    "requestSha256": "061eb7922d040bb3a4ba637c170475a0504ad800adbfe4b7ff1353d63e8038db",
+    "receiptSha256": "d069be7d8019bab150b10b92b9721a8e52c9ddd105117a121618988ec2b58d85",
+    "backend": "kotoba-open-jev",
+    "model": "SCRIPTED_FIXTURE_NOT_MODEL_INFERENCE",
+    "revision": "fixture-v1",
+    "authority": "CALLER_SUPPLIED_RECEIPT_NOT_MODEL_ATTESTATION",
+    "status": "SELECTED",
+    "reason": "ADVISORY_CANDIDATE",
+    "candidateId": "door",
+    "confidence": 0.85,
+    "margin": 0.7999999999999999
+  },
+  "assembly": {
+    "contract": "hswm-semantic-context-assembly/v1",
+    "planSha256": "b54c4e0954921f12b6b73883afbd9ea9484da07816c6b0aaecff4e034ffca8b5",
+    "selection": {
+      "contract": "hswm-semantic-context-selection/v1",
+      "planSha256": "b54c4e0954921f12b6b73883afbd9ea9484da07816c6b0aaecff4e034ffca8b5",
+      "requestSha256": "061eb7922d040bb3a4ba637c170475a0504ad800adbfe4b7ff1353d63e8038db",
+      "receiptSha256": "d069be7d8019bab150b10b92b9721a8e52c9ddd105117a121618988ec2b58d85",
+      "backend": "kotoba-open-jev",
+      "model": "SCRIPTED_FIXTURE_NOT_MODEL_INFERENCE",
+      "revision": "fixture-v1",
+      "authority": "CALLER_SUPPLIED_RECEIPT_NOT_MODEL_ATTESTATION",
+      "status": "SELECTED",
+      "reason": "ADVISORY_CANDIDATE",
+      "candidateId": "door",
+      "confidence": 0.85,
+      "margin": 0.7999999999999999
+    },
+    "payload": {
+      "contract": "hswm-semantic-context-predict/v1",
+      "event": "문을 열 수 있는지 예외까지 확인해",
+      "selectionSha256": "1e478e3de754ebdd6b18e3b428ea79eb575b76ad3eaf6b8cbd160de0de9d554f",
+      "frames": [
+        {
+          "event": "문을 열 수 있는지 예외까지 확인해",
+          "stateRevision": 1,
+          "relation": {
+            "key": {
+              "schemaVersion": "context-test-v1",
+              "lineageId": "context-fixture",
+              "atomUid": "relation:mandatory",
+              "revisionId": 0
+            },
+            "owner": "owner:context-test",
+            "semantic": {
+              "semanticText": "mandatory relation",
+              "disposition": "predict",
+              "uncertainty": "unknown",
+              "exceptionRefs": [
+                "mandatory:exception"
+              ],
+              "trace": null,
+              "outcome": null
+            }
+          },
+          "roles": [
+            {
+              "referenceType": "hswm:semantic:role",
+              "role": "subject",
+              "key": {
+                "schemaVersion": "context-test-v1",
+                "lineageId": "context-fixture",
+                "atomUid": "mandatory:subject",
+                "revisionId": 0
+              },
+              "owner": "owner:context-test",
+              "contentSha256": "e3d5cc8c689429b756fa195611227ea50910f876259306e2d2b37e70186b5fbf",
+              "contentUtf8": "mandatory subject: complete source — 예외 보존"
+            },
+            {
+              "referenceType": "hswm:semantic:role",
+              "role": "context",
+              "key": {
+                "schemaVersion": "context-test-v1",
+                "lineageId": "context-fixture",
+                "atomUid": "mandatory:context",
+                "revisionId": 0
+              },
+              "owner": "owner:context-test",
+              "contentSha256": "24dd38b86aff23e079d19c59d7b050beeff844bea10a31e73cb30b6ffa21454e",
+              "contentUtf8": "mandatory context: complete source — 예외 보존"
+            },
+            {
+              "referenceType": "hswm:semantic:role",
+              "role": "evidence",
+              "key": {
+                "schemaVersion": "context-test-v1",
+                "lineageId": "context-fixture",
+                "atomUid": "mandatory:evidence",
+                "revisionId": 0
+              },
+              "owner": "owner:context-test",
+              "contentSha256": "4998eff168cefafa9b2915e74137c72b61073f0ef804c44f68dd4f3ee1ef52f9",
+              "contentUtf8": "mandatory evidence: complete source — 예외 보존"
+            },
+            {
+              "referenceType": "hswm:semantic:role",
+              "role": "exception",
+              "key": {
+                "schemaVersion": "context-test-v1",
+                "lineageId": "context-fixture",
+                "atomUid": "mandatory:exception",
+                "revisionId": 0
+              },
+              "owner": "owner:context-test",
+              "contentSha256": "700ec2d6713446aacd398e8cbf5c89af489ec8d50acac352e45d7018b76f349b",
+              "contentUtf8": "mandatory exception: complete source — 예외 보존"
+            }
+          ],
+          "priorEvidence": null,
+          "frameSha256": "9f19ecbeaa187b1270b245d5d0e5d0ac8508e9a726c841a2127c46e0f59416fb"
+        },
+        {
+          "event": "문을 열 수 있는지 예외까지 확인해",
+          "stateRevision": 1,
+          "relation": {
+            "key": {
+              "schemaVersion": "context-test-v1",
+              "lineageId": "context-fixture",
+              "atomUid": "relation:door",
+              "revisionId": 0
+            },
+            "owner": "owner:context-test",
+            "semantic": {
+              "semanticText": "Allow only with valid key; deny broken key.",
+              "disposition": "predict",
+              "uncertainty": "unknown",
+              "exceptionRefs": [
+                "door:exception"
+              ],
+              "trace": null,
+              "outcome": null
+            }
+          },
+          "roles": [
+            {
+              "referenceType": "hswm:semantic:role",
+              "role": "subject",
+              "key": {
+                "schemaVersion": "context-test-v1",
+                "lineageId": "context-fixture",
+                "atomUid": "door:subject",
+                "revisionId": 0
+              },
+              "owner": "owner:context-test",
+              "contentSha256": "614d6bf6ae74c86d0acbb835574e3442685d80c178c9a13f5c6f2a4d72380333",
+              "contentUtf8": "door subject: complete source — 예외 보존"
+            },
+            {
+              "referenceType": "hswm:semantic:role",
+              "role": "context",
+              "key": {
+                "schemaVersion": "context-test-v1",
+                "lineageId": "context-fixture",
+                "atomUid": "door:context",
+                "revisionId": 0
+              },
+              "owner": "owner:context-test",
+              "contentSha256": "8d2d051a986ce51c6413756c3755198d66165becd9fee8deacf031766b4236f8",
+              "contentUtf8": "door context: complete source — 예외 보존"
+            },
+            {
+              "referenceType": "hswm:semantic:role",
+              "role": "evidence",
+              "key": {
+                "schemaVersion": "context-test-v1",
+                "lineageId": "context-fixture",
+                "atomUid": "door:evidence",
+                "revisionId": 0
+              },
+              "owner": "owner:context-test",
+              "contentSha256": "c57e65447e9b211d0ed898220875742c7fdb1357be80f4d7e4d901a355d85ab1",
+              "contentUtf8": "door evidence: complete source — 예외 보존"
+            },
+            {
+              "referenceType": "hswm:semantic:role",
+              "role": "exception",
+              "key": {
+                "schemaVersion": "context-test-v1",
+                "lineageId": "context-fixture",
+                "atomUid": "door:exception",
+                "revisionId": 0
+              },
+              "owner": "owner:context-test",
+              "contentSha256": "3bfbd6156cecca69d294cfb5157c2ac9cd95308b32b89a6ad80b9d2562ee5220",
+              "contentUtf8": "door exception: complete source — 예외 보존"
+            }
+          ],
+          "priorEvidence": null,
+          "frameSha256": "87bef20e5e6a5567d3bc05636eeb90c74900d7c49122f54850ebe716d40c9435"
+        },
+        {
+          "event": "문을 열 수 있는지 예외까지 확인해",
+          "stateRevision": 1,
+          "relation": {
+            "key": {
+              "schemaVersion": "context-test-v1",
+              "lineageId": "context-fixture",
+              "atomUid": "relation:companion",
+              "revisionId": 0
+            },
+            "owner": "owner:context-test",
+            "semantic": {
+              "semanticText": "companion relation",
+              "disposition": "predict",
+              "uncertainty": "unknown",
+              "exceptionRefs": [
+                "companion:exception"
+              ],
+              "trace": null,
+              "outcome": null
+            }
+          },
+          "roles": [
+            {
+              "referenceType": "hswm:semantic:role",
+              "role": "subject",
+              "key": {
+                "schemaVersion": "context-test-v1",
+                "lineageId": "context-fixture",
+                "atomUid": "companion:subject",
+                "revisionId": 0
+              },
+              "owner": "owner:context-test",
+              "contentSha256": "bb2be4028889a8834ba7098d3ff0b79a76eb6f48eaa5f81b27ba5d81c6120d91",
+              "contentUtf8": "companion subject: complete source — 예외 보존"
+            },
+            {
+              "referenceType": "hswm:semantic:role",
+              "role": "context",
+              "key": {
+                "schemaVersion": "context-test-v1",
+                "lineageId": "context-fixture",
+                "atomUid": "companion:context",
+                "revisionId": 0
+              },
+              "owner": "owner:context-test",
+              "contentSha256": "287a389e92ad978149407c0ee058d73c263bd7bb3211f6620dc4a28c32d506b7",
+              "contentUtf8": "companion context: complete source — 예외 보존"
+            },
+            {
+              "referenceType": "hswm:semantic:role",
+              "role": "evidence",
+              "key": {
+                "schemaVersion": "context-test-v1",
+                "lineageId": "context-fixture",
+                "atomUid": "companion:evidence",
+                "revisionId": 0
+              },
+              "owner": "owner:context-test",
+              "contentSha256": "accdf236ef989e6f50d6cd31b101ac56de5f70af9458f85fe44b072e0420799a",
+              "contentUtf8": "companion evidence: complete source — 예외 보존"
+            },
+            {
+              "referenceType": "hswm:semantic:role",
+              "role": "exception",
+              "key": {
+                "schemaVersion": "context-test-v1",
+                "lineageId": "context-fixture",
+                "atomUid": "companion:exception",
+                "revisionId": 0
+              },
+              "owner": "owner:context-test",
+              "contentSha256": "b7b2e477a0be7edacc5f81563a61ed721c25f721a22c247c627f9d84f4c53e45",
+              "contentUtf8": "companion exception: complete source — 예외 보존"
+            }
+          ],
+          "priorEvidence": null,
+          "frameSha256": "cb81de7029099a0ac2df8ee367e5b2801aaae5dbbe54d58683956be75e7fd691"
+        }
+      ],
+      "requiredOutput": {
+        "prediction": "string",
+        "uncertainty": "string"
+      }
+    },
+    "contextBytes": 6060,
+    "assemblySha256": "fcd3cf6d546bb4bed1011c67f78abca3db363dafacdb6a4b125439560906bbec"
+  }
+}

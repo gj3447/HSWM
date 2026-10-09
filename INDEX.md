@@ -65,6 +65,11 @@ decoded 모형·TS adapter 검사·운영 시간 순서·실제 모델 효능의
 `validation-contracts`에서 출처와 미평가 작업을 조회하며, SHACL/SPARQL 구조 검사와
 fixture 검증을 실제 모델 효능과 구별한다. 적용한 스킬·표준의 범위도 명시한다.
 
+2026-10-09 [Jev 문맥 선택 구현](docs/operations/HSWM_JEV_CONTEXT_SELECTION_2026-10-09.md)은
+caller-scoped 후보 → Jev 제안 → 필수·선택 관계 원문 → LLM 실행·관측을 연결합니다.
+`hswm-context` CLI와 `hswm-workspace show jev-context`의 SPARQL·SHACL을 제공합니다.
+scripted fixture 검증과 실제 모델 효능을 구별하며 W를 자동 변경하지 않습니다.
+
 2026-10-07 [HSWM 최적화 6원칙과 7군단장 대응](docs/canon/USER_PRIMARY_HSWM_OPTIMIZATION_RULES_2026-10-07.md)은
 작업별 규칙·CLI 사용법·분할과 병합 기준을 지침 라우터와 표준 그래프로 연결합니다.
 `hswm-workspace show optimization-rules`에서 조회합니다. 인터넷 검색·적대적 검증은 이번 적용에서 제외합니다.

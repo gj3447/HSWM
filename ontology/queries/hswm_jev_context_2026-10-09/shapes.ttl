@@ -1,0 +1,58 @@
+@prefix p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/> .
+@prefix r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/> .
+@prefix role: <https://hswm.invalid/kg-bundle-rdf/v1/role/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix ctx: <https://hswm.invalid/semantic-context/v1/> .
+
+ctx:Contract a sh:NodeShape ; sh:targetClass role:CONTEXT_CONTRACT ;
+ sh:property [ sh:path p:name ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:status ; sh:hasValue "IMPLEMENTED_FIXTURE_CHECKED_NOT_MODEL_EFFICACY" ] ;
+ sh:property [ sh:path p:implementation ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:source_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+ctx:Cli a sh:NodeShape ; sh:targetClass role:CONTEXT_CLI ;
+ sh:property [ sh:path p:command ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:help ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:class role:CONTEXT_GUIDE ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+ctx:Plan a sh:NodeShape ; sh:targetClass role:CONTEXT_PLAN ;
+ sh:property [ sh:path p:plan_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:request_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CONTEXT_SELECTION ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 1 ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:qualifiedValueShape [ sh:class role:CONTEXT_CANDIDATE ] ; sh:qualifiedMinCount 1 ; sh:qualifiedMaxCount 8 ] .
+
+ctx:Selection a sh:NodeShape ; sh:targetClass role:CONTEXT_SELECTION ;
+ sh:property [ sh:path p:receipt_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:receipt_authority ; sh:hasValue "CALLER_SUPPLIED_RECEIPT_NOT_MODEL_ATTESTATION" ] ;
+ sh:or (
+  [ sh:property [ sh:path p:status ; sh:hasValue "SELECTED" ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:class role:CONTEXT_CANDIDATE ; sh:minCount 1 ; sh:maxCount 1 ] ;
+    sh:property [ sh:path r:HAS_CONCEPT ; sh:class role:CONTEXT_ASSEMBLY ; sh:minCount 1 ; sh:maxCount 1 ] ]
+  [ sh:property [ sh:path p:status ; sh:in ("NONE" "NEED_MORE") ] ;
+    sh:property [ sh:path r:REFERENCES ; sh:maxCount 0 ] ;
+    sh:property [ sh:path r:HAS_CONCEPT ; sh:maxCount 0 ] ]
+ ) .
+
+ctx:Assembly a sh:NodeShape ; sh:targetClass role:CONTEXT_ASSEMBLY ;
+ sh:property [ sh:path p:context_bytes ; sh:datatype xsd:integer ; sh:minInclusive 1 ; sh:lessThanOrEquals p:maximum_context_bytes ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:truncation ; sh:hasValue "NONE" ] ;
+ sh:property [ sh:path r:HAS_CONCEPT ; sh:class role:CONTEXT_FRAME ; sh:minCount 1 ; sh:maxCount 16 ] .
+
+ctx:Frame a sh:NodeShape ; sh:targetClass role:CONTEXT_FRAME ;
+ sh:property [ sh:path p:frame_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:semantic_json ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:HAS_PARTICIPATION ; sh:class role:CONTEXT_ROLE ; sh:minCount 3 ] .
+
+ctx:Role a sh:NodeShape ; sh:targetClass role:CONTEXT_ROLE ;
+ sh:property [ sh:path p:role ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:ordinal ; sh:datatype xsd:integer ; sh:minInclusive 0 ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:reference_type ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path r:REFERENCES ; sh:class role:CONTEXT_PARTICIPANT ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path [ sh:inversePath r:HAS_PARTICIPATION ] ; sh:class role:CONTEXT_FRAME ; sh:minCount 1 ; sh:maxCount 1 ] .
+
+ctx:Participant a sh:NodeShape ; sh:targetClass role:CONTEXT_PARTICIPANT ;
+ sh:property [ sh:path p:participant_key_json ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:content_sha256 ; sh:pattern "^[a-f0-9]{64}$" ; sh:minCount 1 ; sh:maxCount 1 ] ;
+ sh:property [ sh:path p:content_utf8 ; sh:datatype xsd:string ; sh:minCount 1 ; sh:maxCount 1 ] .

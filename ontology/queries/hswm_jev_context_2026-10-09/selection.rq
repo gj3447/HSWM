@@ -1,0 +1,8 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX r: <https://hswm.invalid/kg-bundle-rdf/v1/rel/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?status ?reason ?backend ?model ?candidate ?bytes WHERE {
+ ?s a role:CONTEXT_SELECTION ; p:status ?status ; p:reason ?reason ; p:backend ?backend ; p:model ?model .
+ OPTIONAL { ?s r:REFERENCES/p:candidate_id ?candidate }
+ OPTIONAL { ?s r:HAS_CONCEPT/p:context_bytes ?bytes }
+}

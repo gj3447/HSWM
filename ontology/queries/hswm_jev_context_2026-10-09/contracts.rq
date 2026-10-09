@@ -1,0 +1,5 @@
+PREFIX p: <https://hswm.invalid/kg-bundle-rdf/v1/prop/>
+PREFIX role: <https://hswm.invalid/kg-bundle-rdf/v1/role/>
+SELECT ?name ?status ?implementation ?source WHERE {
+ ?n a role:CONTEXT_CONTRACT ; p:name ?name ; p:status ?status ; p:implementation ?implementation ; p:source_path ?source .
+} ORDER BY ?name

@@ -1,0 +1,60 @@
+{
+  "schema_version": "symposium-kg-bundle/v1",
+  "bundle_uid": "bundle:hswm-concept-source-reconciliation:2026-10-09:v1",
+  "title": "Reconcile the existing HSWM concept with its current owner constitution",
+  "trigger": {
+    "utterance_date": "2026-08-26",
+    "user_utterance_verbatim": "HWAF 는 폐기하고 “승인된 정본 원자마다 책임 owner가 하나”라는 schema-relative 유일성뿐입니 이거로 생각해서 좀더 과학 철학에 입거해서 HSWM 사고 연구를 진행해줘봐봐 ㅇㅇ",
+    "maintenance_requested_at": "2026-10-09",
+    "maintenance_request_verbatim": "ㅇㅇ 쭉쭉 진행해줘봐봐",
+    "tool": "Codex"
+  },
+  "evidence": [
+    "HSWM/docs/canon/HSWM_CONSTITUTION_2026-08-20.md sha256:cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373",
+    "HSWM/docs/canon/sources/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.txt sha256:2093d9bb68219d6ba859444dc00aeef985a5c9151163e56972516addb2cd0ec6"
+  ],
+  "anchors": [],
+  "defaults": {
+    "ontology_plane": "DESIGN",
+    "ontology_domain": "AI",
+    "ontology_sensitivity": "NORMAL",
+    "record_lifecycle": "ACTIVE",
+    "epistemic_state": "NOT_APPLICABLE",
+    "review_required": false
+  },
+  "nodes": [
+    {
+      "uid": "sym:Concept:hswm",
+      "labels": [
+        "Concept"
+      ],
+      "properties": {
+        "name": "HSWM",
+        "ontology_kind": "CONCEPT",
+        "authority_class": "USER_PRIMARY",
+        "canonical_scope": "USER_RATIFIED_CANON",
+        "semantic_roles": [
+          "CANON",
+          "CONCEPT"
+        ],
+        "user_utterance": "HWAF 는 폐기하고 “승인된 정본 원자마다 책임 owner가 하나”라는 schema-relative 유일성뿐입니 이거로 생각해서 좀더 과학 철학에 입거해서 HSWM 사고 연구를 진행해줘봐봐 ㅇㅇ",
+        "user_utterance_source_path": "docs/canon/sources/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.txt",
+        "user_utterance_source_sha256": "2093d9bb68219d6ba859444dc00aeef985a5c9151163e56972516addb2cd0ec6",
+        "definition": "HSWM is a persistent token-native living harness and world model: LLM-interpreted and generated token streams activate LLM-executed transitions over schema-admitted canonical atoms and typed relations. The evolving hypergraph is its persistent body and world model; outcome-bound continuous learning changes relations, transition dispositions and subsequent behavior. The fixed H/W/A/F/Pi decomposition was retired by the 2026-08-26 user source. Each admitted canonical atom has one schema-relative responsibility owner. This is target identity, not demonstrated efficacy.",
+        "definition_authority": "SECONDARY_AI",
+        "definition_status": "SOURCE_BOUND_SUMMARY_NOT_USER_UTTERANCE",
+        "user_canon": "HSWM은 token stream으로 활성화되는 LLM-executed transition이 schema가 승인한 canonical atom과 typed relation 위에서 작동하는 지속적 living harness이자 world model이다. 고정 H/W/A/F 분해는 폐기되었으며 승인된 정본 원자마다 schema-relative 책임 owner가 하나다. 효능을 입증했다는 주장은 아니다.",
+        "user_canon_authority": "SECONDARY_AI",
+        "constitution_path": "docs/canon/HSWM_CONSTITUTION_2026-08-20.md",
+        "constitution_sha256": "cf43bc034a64d8db54b3444b7eba9ea02c8c5d9e252e14f157637401c68c3373",
+        "definition_source_commit": "c86bda3920a2bd12493f1d1d5919f610c3bfc926",
+        "ownership_supersession_source_artifact": "docs/canon/sources/USER_PRIMARY_HSWM_SCHEMA_RELATIVE_SINGLE_OWNER_2026-08-26.txt",
+        "ownership_supersession_source_sha256": "2093d9bb68219d6ba859444dc00aeef985a5c9151163e56972516addb2cd0ec6",
+        "classification_authority": "SECONDARY_AI",
+        "classification_basis": "DESIGN/AI classifies the source-defined target; existing concept authority and canonical scope are preserved, and the summaries are explicitly secondary interpretations.",
+        "scientific_status": "UNJUDGED"
+      }
+    }
+  ],
+  "relations": []
+}

@@ -1,3 +1,9 @@
+> **License update — 2026-10-07:** New contributions must explicitly confirm
+> permission to publish under [MetaHumotonic License 1.2](LICENSE), subject to
+> [LICENSE-NOTICE.md](LICENSE-NOTICE.md). Earlier license descriptions below
+> concern prior grants. Existing contributor agreements are not retroactively
+> amended; no rights to third-party contributions are presumed.
+
 # Contributing
 
 Thanks for your interest in contributing!

@@ -317,4 +317,10 @@ HSWM 핵심 연구는 **의미 정의 → 명시적 가정 → 구성과 반례 
 
 [기여 안내](CONTRIBUTING.md) · [기여자 계약](CLA.md) · [라이선스 안내](LICENSING.md)
 
-**AGPL-3.0-or-later 또는 별도 상용 라이선스.** [LICENSE](LICENSE)
+## License
+
+**MetaHumotonic License 1.2** — [LICENSE](LICENSE); [scope, prior grants and third-party notices](LICENSE-NOTICE.md).
+
+지정한 하드웨어의 접근권한과 전체 관리 권한을 합의한 명세서에 따라 공유하고, **CHU의 일부가 된다**는 참여 원칙을 적용합니다. 실제 접근에는 별도 승인이 필요합니다.
+
+Source-available; not OSI-approved. Existing grants and separately licensed material remain valid.
